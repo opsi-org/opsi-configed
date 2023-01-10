@@ -2,7 +2,7 @@ package de.uib.configed.type;
 
 import java.util.Calendar;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DateExtendedByVars extends java.sql.Date {
 
@@ -26,7 +26,7 @@ public class DateExtendedByVars extends java.sql.Date {
 	}
 
 	private static String interpretVar(final String s) {
-		logging.debug("OpsiDataDateMatcher interpretVar in " + s);
+		Logging.debug("OpsiDataDateMatcher interpretVar in " + s);
 
 		int i = s.indexOf(varDelimiter);
 
@@ -36,7 +36,7 @@ public class DateExtendedByVars extends java.sql.Date {
 		i++;
 
 		if (i > s.length()) {
-			logging.info("OpsiDataDateMatcher interpretVar \"" + varDelimiter + "\" found at end of string");
+			Logging.info("OpsiDataDateMatcher interpretVar \"" + varDelimiter + "\" found at end of string");
 			return s;
 		}
 
@@ -45,10 +45,10 @@ public class DateExtendedByVars extends java.sql.Date {
 
 		replaceContent = replaceContent.substring(0, i);
 
-		logging.debug("OpsiDataDateMatcher interpretVar replaceContent " + replaceContent);
+		Logging.debug("OpsiDataDateMatcher interpretVar replaceContent " + replaceContent);
 
 		if (!replaceContent.startsWith(MINUS)) {
-			logging.info("OpsiDataDateMatcher interpretVar expected: \"" + MINUS + "\"");
+			Logging.info("OpsiDataDateMatcher interpretVar expected: \"" + MINUS + "\"");
 			return s;
 		}
 
@@ -59,7 +59,7 @@ public class DateExtendedByVars extends java.sql.Date {
 		try {
 			subtrahend = Integer.valueOf(subtrahendS);
 		} catch (NumberFormatException ex) {
-			logging.info("OpsiDataDateMatcher interpretVar not a number: " + subtrahendS + ", error: " + ex);
+			Logging.info("OpsiDataDateMatcher interpretVar not a number: " + subtrahendS + ", error: " + ex);
 			return s;
 		}
 
@@ -71,7 +71,7 @@ public class DateExtendedByVars extends java.sql.Date {
 
 		String timeS = stripTimeFromDay(myTime.toString());
 
-		logging.debug("OpsiDataDateMatcher interpretVar produced time " + timeS);
+		Logging.debug("OpsiDataDateMatcher interpretVar produced time " + timeS);
 
 		String toReplace = varDelimiter + replaceContent + varDelimiter;
 

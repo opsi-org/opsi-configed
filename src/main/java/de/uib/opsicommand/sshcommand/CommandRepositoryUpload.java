@@ -1,10 +1,10 @@
 package de.uib.opsicommand.sshcommand;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHRepositoryUploadDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CommandRepositoryUpload extends CommandSFTPUpload
 // implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand
@@ -45,12 +45,12 @@ public class CommandRepositoryUpload extends CommandSFTPUpload
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.repoupload");
+		return Configed.getResourceValue("SSHConnection.command.repoupload");
 	}
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.repoupload.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.repoupload.tooltip");
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class CommandRepositoryUpload extends CommandSFTPUpload
 
 		if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
 				|| main.getOpsiVersion().compareTo("4.1") < 0) {
-			logging.error(this, configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
+			Logging.error(this, Configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
 		} else
 			dialog = new SSHRepositoryUploadDialog();
 	}

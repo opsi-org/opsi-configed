@@ -72,8 +72,8 @@ public abstract class ControlMultiTablePanel {
 
 		if (change) {
 			int returnedOption = JOptionPane.showOptionDialog(Globals.frame1,
-					configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.text"),
-					configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.title"),
+					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.text"),
+					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.title"),
 					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.YES_OPTION)

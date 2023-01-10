@@ -14,8 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.SensitiveCellEditor {
 
@@ -32,7 +32,7 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 
 			instances.put(key, instance);
 			instance.myKey = "" + key;
-			logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
+			Logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
 					+ instances.size());
 		}
 		return instance;
@@ -45,20 +45,20 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 			String key = "" + table.getValueAt(row, 0);
 			if (Globals.isKeyForSecretValue(key)) {
 				if (Globals.isGlobalReadOnly()) {
-					logging.warning(this, configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
+					Logging.warning(this, Configed.getResourceValue("SensitiveCellEditor.editHiddenText.forbidden"));
 					return null;
 				}
 
 				int returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame,
-						configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
-						Globals.APPNAME + " " + configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"),
+						Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
+						Globals.APPNAME + " " + Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-						new Object[] { configed.getResourceValue("SensitiveCellEditor.editHiddenText.yes"),
-								configed.getResourceValue("SensitiveCellEditor.editHiddenText.no"),
-								configed.getResourceValue("SensitiveCellEditor.editHiddenText.cancel") },
+						new Object[] { Configed.getResourceValue("SensitiveCellEditor.editHiddenText.yes"),
+								Configed.getResourceValue("SensitiveCellEditor.editHiddenText.no"),
+								Configed.getResourceValue("SensitiveCellEditor.editHiddenText.cancel") },
 						JOptionPane.YES_OPTION);
 
-				logging.info(this,
+				Logging.info(this,
 						" getTableCellEditorComponent, celleditor working, returned option " + returnedOption);
 				if (returnedOption != JOptionPane.YES_OPTION) {
 					return null;

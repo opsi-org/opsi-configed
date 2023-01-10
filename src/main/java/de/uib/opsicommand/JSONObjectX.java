@@ -8,7 +8,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class JSONObjectX extends JSONObject {
 	private JSONObject master;
@@ -85,7 +85,7 @@ public class JSONObjectX extends JSONObject {
 				}
 			}
 		} catch (Exception ex) {
-			logging.error(this, "json transform exception: " + ex);
+			Logging.error(this, "json transform exception: " + ex);
 		}
 	}
 

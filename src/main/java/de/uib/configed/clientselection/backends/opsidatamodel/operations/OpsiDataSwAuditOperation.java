@@ -8,7 +8,7 @@ import de.uib.configed.clientselection.SelectOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SWAuditClientEntry;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSwAuditOperation extends SwAuditOperation implements ExecutableOperation {
 
@@ -31,11 +31,11 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 			try {
 				swIdent = controller.getSWident(swIndex);
 				if (swIdent == null || swIndex == null || swIndex == -1) {
-					logging.info(this, "no swIdent for index " + swIndex);
+					Logging.info(this, "no swIdent for index " + swIndex);
 					return false;
 				}
 			} catch (Exception ex) {
-				logging.info(this, "no swIdent for index " + swIndex);
+				Logging.info(this, "no swIdent for index " + swIndex);
 				return false;
 			}
 

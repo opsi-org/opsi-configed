@@ -15,7 +15,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ClientTreeTransferHandler extends TransferHandler {
 	protected ClientTree tree;
@@ -40,7 +40,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		String node = parts[parts.length - 1];
 		result = tree.getGroupNode(node);
 
-		logging.debug(this, "transferRepresentsGroup : " + treeRepresentation + ", result " + result);
+		Logging.debug(this, "transferRepresentsGroup : " + treeRepresentation + ", result " + result);
 
 		return result;
 	}
@@ -48,7 +48,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
 		boolean result = true;
-		logging.debug(this, "----------- can import ??");
+		Logging.debug(this, "----------- can import ??");
 
 		if (Globals.isGlobalReadOnly())
 			return false;
@@ -57,7 +57,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			return false;
 		}
 		JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
-		logging.debug(this, "ClientTreeTransferHandler, dropLocation.getPath() " + dropLocation.getPath());
+		Logging.debug(this, "ClientTreeTransferHandler, dropLocation.getPath() " + dropLocation.getPath());
 
 		if (dropLocation.getPath() == null)
 			return false;
@@ -68,11 +68,11 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			transferData = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
 
 		} catch (java.awt.datatransfer.UnsupportedFlavorException ex) {
-			logging.warning(this, " unsupported data flavor " + ex);
+			Logging.warning(this, " unsupported data flavor " + ex);
 		} catch (java.io.IOException ex) {
-			logging.warning(this, " transferable io exception " + ex);
+			Logging.warning(this, " transferable io exception " + ex);
 		} catch (Exception ex) {
-			logging.warning(this, "canImport " + ex);
+			Logging.warning(this, "canImport " + ex);
 		}
 
 		GroupNode sourceGroupNode = transferRepresentsGroup(transferData);
@@ -90,20 +90,20 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		// debugging the if clause
 
 		if (targetNode != null) {
-			logging.debug(this, "canImport targetNode.isImmutable() " + targetNode.isImmutable());
+			Logging.debug(this, "canImport targetNode.isImmutable() " + targetNode.isImmutable());
 		}
 
-		logging.debug(this, "canImport sourceGroupNode " + sourceGroupNode);
+		Logging.debug(this, "canImport sourceGroupNode " + sourceGroupNode);
 		if (sourceGroupNode != null && targetNode != null) {
-			logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() " + targetNode.allowsOnlyGroupChilds());
-			logging.debug(this, "canImport !targetNode.allowsSubGroups() " + !targetNode.allowsSubGroups());
+			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() " + targetNode.allowsOnlyGroupChilds());
+			Logging.debug(this, "canImport !targetNode.allowsSubGroups() " + !targetNode.allowsSubGroups());
 		}
 		if (sourceGroupNode == null && targetNode != null) {
-			logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() " + targetNode.allowsOnlyGroupChilds());
+			Logging.debug(this, "canImport targetNode.allowsOnlyGroupChilds() " + targetNode.allowsOnlyGroupChilds());
 		}
 
-		logging.debug(this, "canImport, dropOnThis  path " + Arrays.toString(dropObjectPath));
-		logging.debug(this, "canImport source path " + Arrays.toString(sourceObjectPath));
+		Logging.debug(this, "canImport, dropOnThis  path " + Arrays.toString(dropObjectPath));
+		Logging.debug(this, "canImport source path " + Arrays.toString(sourceObjectPath));
 
 		if (targetNode == null || targetNode.isImmutable() || (sourceGroupNode != null // group
 				&& !targetNode.allowsSubGroups()) || (sourceGroupNode == null // no group
@@ -118,9 +118,9 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 			result = false;
 
-		logging.debug(this, "canImport, dropOnThis " + dropOnThis.getUserObject());
+		Logging.debug(this, "canImport, dropOnThis " + dropOnThis.getUserObject());
 
-		logging.debug(this, "----------- can import " + result);
+		Logging.debug(this, "----------- can import " + result);
 
 		return result;
 	}
@@ -128,10 +128,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	@Override
 	public int getSourceActions(JComponent c) {
 
-		logging.debug(this, "getSourceActions,  activePaths " + tree.getActivePaths());
+		Logging.debug(this, "getSourceActions,  activePaths " + tree.getActivePaths());
 
 		if (tree.getActivePaths() == null || tree.getActivePaths().isEmpty()) {
-			logging.debug(this, "getSourceActions no active pathes, TransferHandler.NONE");
+			Logging.debug(this, "getSourceActions no active pathes, TransferHandler.NONE");
 			return TransferHandler.NONE;
 		}
 
@@ -141,17 +141,17 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			GroupNode dropThisVariant = tree.getGroupNode(dropThis.toString());
 
 			if (dropThis != dropThisVariant) {
-				logging.warning(this, "getSourceActions,  dropThis != dropThisVariant");
-				logging.warning(this, "getSourceActions,  dropThis " + dropThis);
-				logging.warning(this, "getSourceActions,  dropThisVariant " + dropThisVariant);
+				Logging.warning(this, "getSourceActions,  dropThis != dropThisVariant");
+				Logging.warning(this, "getSourceActions,  dropThis " + dropThis);
+				Logging.warning(this, "getSourceActions,  dropThisVariant " + dropThisVariant);
 			}
 
 			GroupNode parent = (GroupNode) dropThisVariant.getParent();
 
-			logging.debug(this, "getSourceActions,  dropThis " + dropThis + " parent " + parent);
+			Logging.debug(this, "getSourceActions,  dropThis " + dropThis + " parent " + parent);
 
 			if (parent.isImmutable()) {
-				logging.debug(this, "getSourceActions dropObject is immutable, TransferHandler.NONE");
+				Logging.debug(this, "getSourceActions dropObject is immutable, TransferHandler.NONE");
 				return TransferHandler.NONE;
 			}
 		}
@@ -159,7 +159,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		String nodeString = dropThis.getUserObject().toString();
 
 		if (tree.getGroups().keySet().contains(nodeString)) {
-			logging.debug(this, "getSourceActions object already there, TransferHandler.MOVE");
+			Logging.debug(this, "getSourceActions object already there, TransferHandler.MOVE");
 			return TransferHandler.MOVE;
 		}
 
@@ -172,19 +172,19 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			TreePath path = iterPaths.next();
 
 			if (tree.isChildOfALL((DefaultMutableTreeNode) path.getLastPathComponent())) {
-				logging.debug(this, "getSourceActions path " + path + " childOfALL, should be TransferHandler.COPY");
+				Logging.debug(this, "getSourceActions path " + path + " childOfALL, should be TransferHandler.COPY");
 				return TransferHandler.COPY;
 				// we dont accept to move any item out of ALL
 			}
 
 			if (tree.isInDIRECTORY(path)) {
-				logging.debug(this, "getSourceActions , isInDIRECTORY true");
+				Logging.debug(this, "getSourceActions , isInDIRECTORY true");
 				// action depends additionally from target
 
 			}
 		}
 
-		logging.debug(this, "getSourceActions all remaining, TransferHandler.COPY_OR_MOVE");
+		Logging.debug(this, "getSourceActions all remaining, TransferHandler.COPY_OR_MOVE");
 
 		return TransferHandler.COPY_OR_MOVE;
 	}
@@ -217,9 +217,9 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	private boolean chooseMOVE(TransferHandler.TransferSupport support, String sourceGroupName, TreePath dropPath,
 			boolean isLeaf) {
-		logging.info(this, "chooseMOVE  support " + support);
-		logging.info(this, "chooseMOVE  sourceGroupName, dropPath " + sourceGroupName + " , " + dropPath);
-		logging.info(this,
+		Logging.info(this, "chooseMOVE  support " + support);
+		Logging.info(this, "chooseMOVE  sourceGroupName, dropPath " + sourceGroupName + " , " + dropPath);
+		Logging.info(this,
 				"chooseMOVE support.getUserDropAction() == TransferHandler.MOVE "
 						+ (support.getUserDropAction() == TransferHandler.MOVE) + " support.getUserDropAction() "
 						+ support.getUserDropAction());
@@ -229,7 +229,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		boolean stayInsideDIRECTORY = tree.isInDIRECTORY(sourceGroupName) && tree.isInDIRECTORY(dropPath);
 		boolean stayInsideGROUPS = tree.isInGROUPS(sourceGroupName) && tree.isInGROUPS(dropPath);
 
-		logging.info(this,
+		Logging.info(this,
 				"chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS " + stayInsideDIRECTORY + ", " + stayInsideGROUPS);
 
 		if (stayInsideDIRECTORY || (stayInsideGROUPS && !isLeaf)
@@ -242,7 +242,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			result = true;
 		}
 
-		logging.debug(this, "chooseMOVE  " + result);
+		Logging.debug(this, "chooseMOVE  " + result);
 
 		return result;
 
@@ -253,7 +253,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			String dropParentID)
 
 	{
-		logging.debug(this,
+		Logging.debug(this,
 				"handleClientID importID, sourcePath, sourceParentID, sourceParentNode, dropParentID,  " + importID
 						+ ", " + sourcePath + " , " + sourceParentID + ", " + sourceParentNode + ", " + dropParentID);
 
@@ -268,10 +268,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			String firstDIRECTORYgroupname = null;
 			java.util.Set<GroupNode> locations = tree.getLocationsInDIRECTORY(importID);
 			if (locations != null && !locations.isEmpty()) {
-				logging.debug(this, "handleClientID tree.getLocationsInDIRECTORY 1");
+				Logging.debug(this, "handleClientID tree.getLocationsInDIRECTORY 1");
 				Iterator<GroupNode> iter = tree.getLocationsInDIRECTORY(importID).iterator();
 				firstDIRECTORYgroupname = iter.next().toString();
-				logging.debug(this, "handleClientID tree.getLocationsInDIRECTORY firstDIRECTORYgroupname "
+				Logging.debug(this, "handleClientID tree.getLocationsInDIRECTORY firstDIRECTORYgroupname "
 						+ firstDIRECTORYgroupname);
 				adaptedSourceParentID = firstDIRECTORYgroupname;
 				moving = chooseMOVE(support, firstDIRECTORYgroupname, dropPath, true);
@@ -306,11 +306,11 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		DefaultMutableTreeNode dropParentNode = (DefaultMutableTreeNode) dropPath.getLastPathComponent();
 		String dropParentID = dropParentNode.getUserObject().toString();
 
-		logging.debug(this, "dropPath " + dropPath);
+		Logging.debug(this, "dropPath " + dropPath);
 
 		// what is to be moved/copied
 
-		logging.debug(this, "importData. ++++++++++ getActivePaths(): " + tree.getActivePaths());
+		Logging.debug(this, "importData. ++++++++++ getActivePaths(): " + tree.getActivePaths());
 
 		String[] values = tree.getSelectedClientsInTable().toArray(new String[] {});
 
@@ -326,10 +326,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			}
 		}
 
-		logging.debug(this, "importData, ------------- values " + logging.getStrings(values));
+		Logging.debug(this, "importData, ------------- values " + Logging.getStrings(values));
 
 		TreePath groupPathActivatedByTree = tree.getGroupPathActivatedByTree();
-		logging.debug(this, "importData,  ++++++++++++++++ groupPathActivatedByTree " + groupPathActivatedByTree);
+		Logging.debug(this, "importData,  ++++++++++++++++ groupPathActivatedByTree " + groupPathActivatedByTree);
 
 		// if the source is the tree then we arranged lines for the transfer
 		// the other possible source are lines from the JTable, as well arranged to
@@ -357,13 +357,13 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				}
 
 			} catch (Exception ex) {
-				logging.info(this, " no tree parts got " + ex);
+				Logging.info(this, " no tree parts got " + ex);
 			}
 
-			logging.debug(this, "importData  ----------------   " + i + " values[i] " + importID);
+			Logging.debug(this, "importData  ----------------   " + i + " values[i] " + importID);
 
 			TreePath sourcePath = tree.getActiveTreePath(importID);
-			logging.debug(this, " active source tree path ++++++++++++++ for importID " + importID + ": " + sourcePath);
+			Logging.debug(this, " active source tree path ++++++++++++++ for importID " + importID + ": " + sourcePath);
 
 			GroupNode sourceParentNode = null;
 			GroupNode groupNode = null;
@@ -378,9 +378,9 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			else
 				// coming from table, replace!
 
-				logging.debug(this, "importData, sourceParentID " + sourceParentID);
-			logging.debug(this, "importData, sourceParentNode " + sourceParentNode);
-			logging.debug(this, "importData, groupNode " + groupNode);
+				Logging.debug(this, "importData, sourceParentID " + sourceParentID);
+			Logging.debug(this, "importData, sourceParentNode " + sourceParentNode);
+			Logging.debug(this, "importData, groupNode " + groupNode);
 
 			if (groupNode != null) {
 				// it is a group and it could be moved
@@ -390,19 +390,19 @@ public class ClientTreeTransferHandler extends TransferHandler {
 					tree.moveGroupTo(importID, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
 
 				} else {
-					logging.info(this, "importData: this group will not be moved");
+					Logging.info(this, "importData: this group will not be moved");
 				}
 
 			} else {
 				// client node
-				logging.debug(this, "importData handling client ID " + importID);
+				Logging.debug(this, "importData handling client ID " + importID);
 
 				handleClientID(importID, support, sourcePath, sourceParentNode, sourceParentID, dropPath,
 						dropParentNode, dropParentID);
 
 			}
 
-			logging.debug(this, "importData  ----------------  ready " + i + " importID " + importID);
+			Logging.debug(this, "importData  ----------------  ready " + i + " importID " + importID);
 
 		}
 
@@ -411,7 +411,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public void exportToClipboard(JComponent comp, Clipboard clip, int action) throws IllegalStateException {
-		logging.debug(this, " exportToClipboard " + comp + " , " + clip + ", " + action);
+		Logging.debug(this, " exportToClipboard " + comp + " , " + clip + ", " + action);
 		super.exportToClipboard(comp, clip, action);
 	}
 

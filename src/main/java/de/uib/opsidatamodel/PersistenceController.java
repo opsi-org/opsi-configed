@@ -24,7 +24,7 @@ import java.util.TreeMap;
 import org.json.JSONObject;
 
 import de.uib.configed.ControlDash;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
@@ -45,7 +45,7 @@ import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.Executioner;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataLoadingObservable;
 import de.uib.utilities.observer.DataLoadingObserver;
 import de.uib.utilities.observer.DataRefreshedObservable;
@@ -141,11 +141,11 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String KEY_USER_REGISTER = KEY_USER_ROOT + ".{}.register"; // boolean
 	public static Boolean KEY_USER_REGISTER_VALUE = null;
 
-	public static final String DEPOT_SELECTION_NODEPOTS = configed
+	public static final String DEPOT_SELECTION_NODEPOTS = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS");
-	public static final String DEPOT_SELECTION_ALL = configed
+	public static final String DEPOT_SELECTION_ALL = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL");
-	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = configed
+	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
 	public static final List BOOLEAN_VALUES = new ArrayList<>();
@@ -177,9 +177,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		PROPERTYCLASSES_SERVER.put("software-on-demand",
 				"<html>software on demand configuration,<br />not client specific</html>");
 		PROPERTYCLASSES_SERVER.put(KEY_USER_ROOT,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip"));
 		PROPERTYCLASSES_SERVER.put(KEY_USER_ROLE_ROOT,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip"));
 	}
 
 	public static TreeMap<String, String> PROPERTYCLASSES_CLIENT;
@@ -290,7 +290,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	public void cleanUpAuditSoftware() {
-		logging.error(this, "cleanUpAuditSoftware not implemented");
+		Logging.error(this, "cleanUpAuditSoftware not implemented");
 	}
 
 	// ---------------------------------------------------------------

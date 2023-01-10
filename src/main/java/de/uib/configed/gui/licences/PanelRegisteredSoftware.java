@@ -6,7 +6,7 @@ import java.util.List;
 
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 /**
@@ -32,27 +32,27 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	@Override
 	public void reload() {
 		super.reload();
-		logging.info(this, "reload");
+		Logging.info(this, "reload");
 		controller.setSoftwareIdsFromLicencePool();
 		saveRowSelection = theTable.getSelectedRows();
 	}
 
 	@Override
 	public void reset() {
-		logging.info(this, "reset");
+		Logging.info(this, "reset");
 		super.reset();
 
 	}
 
 	@Override
 	public void commit() {
-		logging.info(this, "commit");
+		Logging.info(this, "commit");
 		super.commit();
 		controller.persist.relations_auditSoftwareToLicencePools_requestRefresh();
 		super.reset();
 
 		if (controller.thePanel.fSoftwarename2LicencePool != null) {
-			logging.info(this, "Panel.fSoftwarename2LicencePool.panelSWnames.reset");
+			Logging.info(this, "Panel.fSoftwarename2LicencePool.panelSWnames.reset");
 
 			// does not solve the task
 			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.reset();
@@ -62,7 +62,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 	@Override
 	public void cancel() {
-		logging.info(this, "cancel");
+		Logging.info(this, "cancel");
 		super.cancel();
 
 		controller.setSoftwareIdsFromLicencePool();
@@ -75,7 +75,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		String nameVal = (String) tableModel.getValueAt(modelrow,
 				getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
 
-		logging.info(this, " got name " + nameVal);
+		Logging.info(this, " got name " + nameVal);
 
 		if (controller.thePanel.fSoftwarename2LicencePool != null)
 			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.moveToValue(nameVal, 0);
@@ -98,7 +98,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void valueChanged(javax.swing.event.ListSelectionEvent e) {
 
 		if (isAwareOfSelectionListener()) {
-			logging.debug(this, "selectionListener valueChanged, aware of selectionlistener");
+			Logging.debug(this, "selectionListener valueChanged, aware of selectionlistener");
 
 		}
 
@@ -126,12 +126,12 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 			tableModel.setCursorRow(theTable.convertRowIndexToModel(mouseRow));
 		} else {
 			if (isAwareOfSelectionListener()) {
-				logging.info(this, "mouse click in table. outside colMarkCursorRow, aware of selectionlistener");
+				Logging.info(this, "mouse click in table. outside colMarkCursorRow, aware of selectionlistener");
 
 				controller.validateWindowsSoftwareKeys();
 
 				if (controller.thePanel.fSoftwarename2LicencePool.isVisible()) {
-					logging.info(this, "selectionListener valueChanged,fSoftwarename2LicencePool.isVisible ");
+					Logging.info(this, "selectionListener valueChanged,fSoftwarename2LicencePool.isVisible ");
 
 					// the data is not refreshed
 				}
@@ -147,7 +147,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (mouseInColumnOfMarkCursor(e.getPoint())) {
-			logging.info(this, "mouseReleased reset saveRowSelection ");
+			Logging.info(this, "mouseReleased reset saveRowSelection ");
 
 			if (saveRowSelection != null)
 				super.setSelection(saveRowSelection);
@@ -156,7 +156,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 		else {
 			saveRowSelection = theTable.getSelectedRows();
-			logging.info(this, "mouseReleased set new saveRowSelection ");
+			Logging.info(this, "mouseReleased set new saveRowSelection ");
 		}
 	}
 
@@ -164,7 +164,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void setDataChanged(boolean b) {
 		if (b && controller.acknowledgeChangeForSWList()) {
 			int col = theTable.getEditingColumn();
-			logging.info(this, "setDataChanged col " + col);
+			Logging.info(this, "setDataChanged col " + col);
 			if (tableModel.gotMarkCursorRow() && col != tableModel.getColMarkCursorRow()) {
 				super.setDataChanged(true);
 			}
@@ -177,7 +177,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	@Override
 	public void rowUpdated(int modelrow) {
 		super.rowUpdated(modelrow);
-		logging.info(this, " rowUpdated to modelrow " + modelrow);
+		Logging.info(this, " rowUpdated to modelrow " + modelrow);
 		callName2Pool(modelrow);
 	}
 

@@ -13,9 +13,9 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DepotsList extends JList<String> implements ComponentListener {
 
@@ -113,7 +113,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		}
 
 		public void setInfo(Map<String, Map<String, Object>> extendedInfo) {
-			logging.debug(this, "setInfo " + extendedInfo);
+			Logging.debug(this, "setInfo " + extendedInfo);
 			this.extendedInfo = extendedInfo;
 		}
 
@@ -152,7 +152,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 				if (!persist.getDepotPermission(depot)) {
 					((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
 					((JLabel) jc).setToolTipText(
-							"Depot " + depot + " " + configed.getResourceValue("Permission.depot.not_accessible"));
+							"Depot " + depot + " " + Configed.getResourceValue("Permission.depot.not_accessible"));
 				} else
 
 					((JLabel) jc).setToolTipText(tooltipText);

@@ -13,12 +13,12 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
@@ -34,14 +34,14 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	private SSHCompletionComboButton completion;
 
 	public SSHOpsiSetRightsParameterDialog() {
-		super(null, configed.getResourceValue("SSHConnection.command.opsisetrights"), false);
+		super(null, Configed.getResourceValue("SSHConnection.command.opsisetrights"), false);
 		commandopsisetrights = new CommandOpsiSetRights();
 		init();
 		initLayout();
 	}
 
 	public SSHOpsiSetRightsParameterDialog(CommandOpsiSetRights command) {
-		super(null, configed.getResourceValue("SSHConnection.command.opsisetrights"), false);
+		super(null, Configed.getResourceValue("SSHConnection.command.opsisetrights"), false);
 		commandopsisetrights = command;
 		init();
 		initLayout();
@@ -58,21 +58,21 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
-		jLabelInfo = new JLabel(configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath"));
+		jLabelInfo = new JLabel(Configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath"));
 		inputPanel.add(jLabelInfo);
 		jButtonDoAction = new JButton();
 		buttonPanel.add(jButtonDoAction);
-		jButtonDoAction.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonDoAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
 			jButtonDoAction.addActionListener(actionEvent -> {
-				logging.info(this, "btn_doAction pressed");
+				Logging.info(this, "btn_doAction pressed");
 				doAction1();
 			});
 
 		JButton jButtonClose = new JButton();
 		buttonPanel.add(jButtonClose);
-		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
@@ -96,7 +96,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	public void doAction1() {
 		try {
 			commandopsisetrights.setDir(completion.comboBoxGetStringItem());
-			logging.info(this, "doAction1 opsi-set-rights with path: " + commandopsisetrights.getDir());
+			Logging.info(this, "doAction1 opsi-set-rights with path: " + commandopsisetrights.getDir());
 			// we are in the event queure
 			new Thread() {
 				@Override
@@ -106,7 +106,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 			}.start();
 
 		} catch (Exception e) {
-			logging.warning(this, "doAction1, exception occurred", e);
+			Logging.warning(this, "doAction1, exception occurred", e);
 		}
 
 	}

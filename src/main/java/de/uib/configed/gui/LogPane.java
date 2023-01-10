@@ -59,8 +59,8 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.View;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
 public class LogPane extends JPanel implements KeyListener, ActionListener {
@@ -161,7 +161,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			// for debugging
-			logging.info(this, "min, max, value " + min + ", " + max + ", " + value + " -- ChangeEvent " + e);
+			Logging.info(this, "min, max, value " + min + ", " + max + ", " + value + " -- ChangeEvent " + e);
 		}
 
 		public void produceLabels(int upTo) {
@@ -178,7 +178,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			try {
 				setLabelTable(new Hashtable<>(levelMap));
 			} catch (Exception ex) {
-				logging.info(this, "setLabelTable levelDict " + levelMap + " ex " + ex);
+				Logging.info(this, "setLabelTable levelDict " + levelMap + " ex " + ex);
 			}
 		}
 	}
@@ -222,20 +222,20 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected Style[] lineStyles;
 
 	protected void reload() {
-		logging.info(this, "reload action");
+		Logging.info(this, "reload action");
 		setLevelWithoutAction(produceInitialMaxShowLevel());
 	}
 
 	protected void save() {
-		logging.debug(this, "save action");
+		Logging.debug(this, "save action");
 	}
 
 	protected void saveAsZip() {
-		logging.debug(this, "save as zip action");
+		Logging.debug(this, "save as zip action");
 	}
 
 	protected void saveAllAsZip(boolean loadMissingDocs) {
-		logging.debug(this, "save all as zip action");
+		Logging.debug(this, "save all as zip action");
 	}
 
 	protected void floatExternal() {
@@ -289,25 +289,25 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		int savedMaxShownLogLevel = 0;
 		try {
-			savedMaxShownLogLevel = Integer.valueOf(configed.savedStates.savedMaxShownLogLevel.deserialize());
+			savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.savedMaxShownLogLevel.deserialize());
 
 		} catch (NumberFormatException ex) {
-			logging.warning(this, "savedMaxShownLogLevel could not be read, value "
-					+ configed.savedStates.savedMaxShownLogLevel.deserialize());
+			Logging.warning(this, "savedMaxShownLogLevel could not be read, value "
+					+ Configed.savedStates.savedMaxShownLogLevel.deserialize());
 		}
 		if (savedMaxShownLogLevel > 0)
 			result = savedMaxShownLogLevel;
 		else
 			result = DEFAULT_MAX_SHOW_LEVEL;
 
-		logging.info(this, "produceInitialMaxShowLevel " + result);
+		Logging.info(this, "produceInitialMaxShowLevel " + result);
 
 		return result;
 	}
 
 	public LogPane(String defaultText, boolean withPopup) {
 		super(new BorderLayout());
-		logging.info(this, "initializing");
+		Logging.info(this, "initializing");
 		title = "";
 		info = "";
 
@@ -374,39 +374,39 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		scrollpane.getViewport().add(jTextPanel);
 		add(scrollpane, BorderLayout.CENTER);
 
-		labelSearch = new JLabel(configed.getResourceValue("TextPane.jLabel_search"));
+		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
 		labelSearch.setFont(Globals.defaultFont);
 
 		jComboBoxSearch = new JComboBox<>();
 		jComboBoxSearch.setEditable(true);
 		jComboBoxSearch.addActionListener(this);
 
-		buttonSearch = new JButton(configed.getResourceValue("TextPane.jButton_search"));
+		buttonSearch = new JButton(Configed.getResourceValue("TextPane.jButton_search"));
 		buttonSearch.setFont(Globals.defaultFont);
 		buttonSearch.addActionListener(this);
 		buttonSearch.addKeyListener(this);
 
-		jCheckBoxCaseSensitive = new JCheckBox(configed.getResourceValue("TextPane.jCheckBoxCaseSensitive"));
-		jCheckBoxCaseSensitive.setToolTipText(configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
+		jCheckBoxCaseSensitive = new JCheckBox(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive"));
+		jCheckBoxCaseSensitive.setToolTipText(Configed.getResourceValue("TextPane.jCheckBoxCaseSensitive.toolTip"));
 		jCheckBoxCaseSensitive.setSelected(false);
 		jCheckBoxCaseSensitive.addActionListener(this);
 
 		buttonFontPlus = new JButton(Globals.createImageIcon("images/font-plus.png", ""));
-		buttonFontPlus.setToolTipText(configed.getResourceValue("TextPane.fontPlus"));
+		buttonFontPlus.setToolTipText(Configed.getResourceValue("TextPane.fontPlus"));
 		buttonFontPlus.addActionListener(this);
 
 		buttonFontMinus = new JButton(Globals.createImageIcon("images/font-minus.png", ""));
-		buttonFontMinus.setToolTipText(configed.getResourceValue("TextPane.fontMinus"));
+		buttonFontMinus.setToolTipText(Configed.getResourceValue("TextPane.fontMinus"));
 		buttonFontMinus.addActionListener(this);
 
-		labelLevel = new JLabel(configed.getResourceValue("TextPane.jLabel_level"));
+		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
 		labelLevel.setFont(Globals.defaultFont);
 
 		int minL = 1;
 		int maxL = 9;
 		int valL = 1;
 
-		logging.info(this, "levels minL, maxL, valL " + minL + ", " + maxL + ", " + valL);
+		Logging.info(this, "levels minL, maxL, valL " + minL + ", " + maxL + ", " + valL);
 
 		sliderLevel = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
 		sliderLevel0 = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
@@ -414,7 +414,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		sliderLevel0.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				logging.info(this, "mouseClicked on sliderLevel0 ");
+				Logging.info(this, "mouseClicked on sliderLevel0 ");
 			}
 		});
 
@@ -426,7 +426,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			JTextField field = ((JSpinner.DefaultEditor) editor).getTextField();
 			field.setForeground(Globals.BACKGROUND_COLOR_7);
 			field.setBackground(Globals.BACKGROUND_COLOR_7);
-			logging.info(this, "spinnerMinLevel set textfield cols 0");
+			Logging.info(this, "spinnerMinLevel set textfield cols 0");
 
 		}
 
@@ -434,20 +434,20 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 
-				logging.debug(this, "change event from sliderLevel, " + sliderLevel.getValue());
+				Logging.debug(this, "change event from sliderLevel, " + sliderLevel.getValue());
 				if (sliderLevel.getValueIsAdjusting())
 					return;
 
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						logging.debug(this, "activateShowLevel call");
+						Logging.debug(this, "activateShowLevel call");
 						Cursor startingCursor = sliderLevel.getCursor();
 						sliderLevel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 						try {
 							activateShowLevel();
 						} catch (Exception ex) {
-							logging.debug(this, "Exception in activateShowLevel " + ex);
+							Logging.debug(this, "Exception in activateShowLevel " + ex);
 						}
 						sliderLevel.setCursor(startingCursor);
 					}
@@ -460,11 +460,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		sliderLevel.addMouseWheelListener(new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				logging.debug(this, "MouseWheelEvent " + e);
+				Logging.debug(this, "MouseWheelEvent " + e);
 
 				int newIndex = levelList.indexOf(sliderLevel.getValue()) - e.getWheelRotation();
 
-				logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
+				Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
 
 				if (newIndex > levels.length - 1)
 					newIndex = levels.length - 1;
@@ -472,7 +472,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				else if (newIndex < 0)
 					newIndex = 0;
 
-				logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
+				Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
 
 				sliderLevel.setValue(levelList.get(newIndex))
 
@@ -480,7 +480,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 		});
 
-		labelDisplayRestriction = new JLabel(configed.getResourceValue("TextPane.EventType"));
+		labelDisplayRestriction = new JLabel(Configed.getResourceValue("TextPane.EventType"));
 		labelDisplayRestriction.setFont(Globals.defaultFont);
 
 		comboModelTypes = new DefaultComboBoxModel<>();
@@ -610,7 +610,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void buildDocument() {
-		logging.debug(this, "building document");
+		Logging.debug(this, "building document");
 		jTextPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		// Switch to an blank document temporarily to avoid repaints
 
@@ -649,7 +649,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				i++;
 			}
 		} catch (BadLocationException e) {
-			logging.warning(this, "BadLocationException thrown in logging: " + e);
+			Logging.warning(this, "BadLocationException thrown in logging: " + e);
 		}
 		jTextPane.setDocument(document);
 		SwingUtilities.invokeLater(() -> jTextPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)));
@@ -657,7 +657,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void setLevelWithoutAction(Object l) {
-		logging.debug(this, "setLevel " + l);
+		Logging.debug(this, "setLevel " + l);
 
 		Integer levelO = sliderLevel.getValue();
 		if (levelO != l && sliderListener != null) {
@@ -677,11 +677,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			return;
 		}
 
-		configed.savedStates.savedMaxShownLogLevel.serialize(level);
+		Configed.savedStates.savedMaxShownLogLevel.serialize(level);
 
 		Integer oldLevel = showLevel;
 		showLevel = level;
-		logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
+		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
 				+ maxExistingLevel);
 
 		if (oldLevel.equals(level) && (level < maxExistingLevel)) {
@@ -932,7 +932,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	public void setText(String s) {
 		if (s == null)
-			logging.info(this, "Setting text");
+			Logging.info(this, "Setting text");
 		lines = s.split("\n");
 
 		parse();
@@ -955,7 +955,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private void setParsedText(final String[] lines, final int[] lineLevels, final Style[] lineStyles,
 			final int[] lineTypes, final List typesList, boolean showTypeRestricted, int selTypeIndex,
 			int maxExistingLevel) {
-		logging.debug(this, "setParsedText");
+		Logging.debug(this, "setParsedText");
 		this.lines = lines;
 		this.lineLevels = lineLevels;
 		this.maxExistingLevel = maxExistingLevel;
@@ -973,7 +973,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void search() {
-		logging.debug(this, "Searching string in log");
+		Logging.debug(this, "Searching string in log");
 		jTextPane.requestFocus();
 		searcher.comp.setCaretPosition(jTextPane.getCaretPosition());
 		// change 08/2015: set lastReturnedOffset to start search at last caretPosition
@@ -998,7 +998,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		logging.debug(this, "KeyEvent " + e);
+		Logging.debug(this, "KeyEvent " + e);
 		if (e.getSource() == buttonSearch) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				search();
@@ -1012,13 +1012,13 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			else if (e.getSource() == jTextPane && (e.getKeyChar() == '+')
 					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
-				logging.info(this, "Ctrl-Plus");
+				Logging.info(this, "Ctrl-Plus");
 				setFontSize("+");
 			}
 
 			else if (e.getSource() == jTextPane && (e.getKeyChar() == '-')
 					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
-				logging.info(this, "Ctrl-Minus");
+				Logging.info(this, "Ctrl-Minus");
 				setFontSize("-");
 			}
 

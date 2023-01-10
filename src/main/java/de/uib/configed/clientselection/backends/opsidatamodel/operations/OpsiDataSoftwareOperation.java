@@ -10,7 +10,7 @@ import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.SelectOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSoftwareOperation extends SoftwareOperation implements ExecutableOperation {
 	protected Map<String, Map<String, String>> productDefaultStates;
@@ -21,14 +21,14 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 		super(operation);
 		controller = de.uib.opsidatamodel.PersistenceControllerFactory.getPersistenceController();
 		if (controller == null)
-			logging.warning(this, "Warning, controller is null!");
+			Logging.warning(this, "Warning, controller is null!");
 		productDefaultStates = controller.getProductDefaultStates();
 		productsWithDefaultValues = new TreeSet<>(productDefaultStates.keySet());
 	}
 
 	@Override
 	public boolean doesMatch(Client client) {
-		logging.debug(this, "doesMatch starting");
+		Logging.debug(this, "doesMatch starting");
 		OpsiDataClient oClient = (OpsiDataClient) client;
 
 		List softwareSet = oClient.getSoftwareList();
@@ -40,18 +40,18 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 		for (Object value : softwareSet) {
 			if (value instanceof Map) {
 				oClient.setCurrentSoftwareValue((Map) value);
-				logging.debug(this,
+				Logging.debug(this,
 						" getChildOperations().get(0) instance of " + (getChildOperations().get(0)).getClass());
 				if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client))
 					return true;
 			} else {
-				logging.error(this, "Software map returned bad value (not a Map)");
+				Logging.error(this, "Software map returned bad value (not a Map)");
 			}
 		}
 
 		for (String product : productsWithDefaultValues_client) {
 			oClient.setCurrentSoftwareValue(productDefaultStates.get(product));
-			logging.debug(this, " getChildOperations().get(0) check default product values, instance of "
+			Logging.debug(this, " getChildOperations().get(0) check default product values, instance of "
 					+ (getChildOperations().get(0)).getClass());
 			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client))
 				return true;

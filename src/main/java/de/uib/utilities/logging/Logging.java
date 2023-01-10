@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -13,11 +14,11 @@ import java.util.Map;
 import javax.swing.JFrame;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FShowList;
 import de.uib.utilities.thread.WaitCursor;
 
-public class logging implements LogEventSubject
+public class Logging implements LogEventSubject
 
 {
 	public static String logDirectoryName = null;
@@ -125,7 +126,7 @@ public class logging implements LogEventSubject
 		try {
 			File logDirectory;
 			if (logDirectoryName == null || logDirectoryName.isEmpty()) {
-				if (System.getenv(logging.windowsEnvVariableAppDataDirectory) != null)
+				if (System.getenv(Logging.windowsEnvVariableAppDataDirectory) != null)
 					// Windows
 					logDirectory = new File(
 							System.getenv(windowsEnvVariableAppDataDirectory) + File.separator + relativeLogDirWindows);
@@ -172,7 +173,7 @@ public class logging implements LogEventSubject
 			LogFileAvailable = true;
 		} catch (Exception ex) {
 			System.out.print(ex);
-			logFilenameInUse = configed.getResourceValue("logging.noFileLogging");
+			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
 		}
 	}
 
@@ -227,9 +228,7 @@ public class logging implements LogEventSubject
 		if (s == null)
 			return null;
 
-		Integer[] t = new Integer[s.length];
-		for (int i = 0; i < s.length; i++)
-			t[i] = s[i];
+		Integer[] t = Arrays.asList(s).toArray(new Integer[0]);
 
 		return getStrings(t);
 	}
@@ -456,7 +455,7 @@ public class logging implements LogEventSubject
 		new Thread() {
 			@Override
 			public void run() {
-				fErrors.setMessage(logging.getErrorListAsLines());
+				fErrors.setMessage(Logging.getErrorListAsLines());
 				fErrors.setAlwaysOnTop(true);
 				fErrors.setVisible(true);
 			}

@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
 */
@@ -37,7 +37,7 @@ public class HostUpdateCollection extends UpdateCollection {
 			}
 
 			catch (ClassCastException ccex) {
-				logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
+				Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 			}
 
 			result = add(new HostUpdate(persis, map));
@@ -47,7 +47,7 @@ public class HostUpdateCollection extends UpdateCollection {
 
 	@Override
 	public void clearElements() {
-		logging.debug(this, "clearElements()");
+		Logging.debug(this, "clearElements()");
 		clear();
 	}
 

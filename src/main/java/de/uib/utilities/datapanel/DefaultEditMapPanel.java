@@ -17,8 +17,8 @@ import javax.swing.JComboBox;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
 public class DefaultEditMapPanel extends AbstractEditMapPanel
@@ -38,14 +38,14 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	protected class DefaultPropertyHandler extends PropertyHandler {
 		@Override
 		public void removeValue(String key) {
-			logging.debug(this, "removing value for key " + key);
+			Logging.debug(this, "removing value for key " + key);
 			mapTableModel.removeEntry(key);
 		}
 
 		@Override
 		public String getRemovalMenuText() {
 			super.getRemovalMenuText();
-			return configed.getResourceValue("EditMapPanel.PopupMenu.RemoveEntry");
+			return Configed.getResourceValue("EditMapPanel.PopupMenu.RemoveEntry");
 		}
 
 	}
@@ -75,7 +75,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 			boolean reloadable) {
 		super(keylistExtendible, keylistEditable, reloadable);
 		this.tableCellRenderer = tableCellRenderer;
-		logging.debug(this, "DefaultEditMapPanel " + keylistExtendible + ",  " + keylistEditable + ",  " + reloadable);
+		Logging.debug(this, "DefaultEditMapPanel " + keylistExtendible + ",  " + keylistEditable + ",  " + reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);

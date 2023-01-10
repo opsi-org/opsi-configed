@@ -10,7 +10,7 @@ package de.uib.utilities;
 
 import javax.swing.JOptionPane;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DataChangedKeeper implements DataChangedObserver {
 	protected boolean dataChanged = false;
@@ -40,7 +40,7 @@ public class DataChangedKeeper implements DataChangedObserver {
 
 	@Override
 	public void dataHaveChanged(Object source) {
-		logging.debug(this, "dataHaveChanged " + source);
+		Logging.debug(this, "dataHaveChanged " + source);
 		dataChanged = true;
 
 		if (actUpon != null)

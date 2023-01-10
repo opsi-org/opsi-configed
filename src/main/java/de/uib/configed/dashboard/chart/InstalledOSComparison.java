@@ -2,7 +2,7 @@ package de.uib.configed.dashboard.chart;
 
 import java.io.IOException;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.ProductData;
 import javafx.fxml.FXML;
@@ -37,7 +37,7 @@ public class InstalledOSComparison extends StackPane implements DataChangeListen
 
 	@Override
 	public void display() {
-		installedOSNoDataText.setText(configed.getResourceValue("Dashboard.noData"));
+		installedOSNoDataText.setText(Configed.getResourceValue("Dashboard.noData"));
 
 		XYChart.Series<String, Number> data = new XYChart.Series<>();
 

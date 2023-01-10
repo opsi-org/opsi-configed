@@ -2,7 +2,7 @@ package de.uib.utilities;
 
 import java.util.Comparator;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class IntComparatorForObjects implements Comparator<Object> {
 
@@ -24,7 +24,7 @@ public class IntComparatorForObjects implements Comparator<Object> {
 		}
 
 		catch (Exception ex) {
-			logging.info("o1 no number " + o1 + " s1: " + s1);
+			Logging.info("o1 no number " + o1 + " s1: " + s1);
 		}
 
 		try {
@@ -35,8 +35,8 @@ public class IntComparatorForObjects implements Comparator<Object> {
 		}
 
 		catch (Exception ex) {
-			logging.info(this, "exception " + ex);
-			logging.info("o2 no number " + o2 + " s2: " + s2);
+			Logging.info(this, "exception " + ex);
+			Logging.info("o2 no number " + o2 + " s2: " + s2);
 		}
 
 		if (i1 < i2)

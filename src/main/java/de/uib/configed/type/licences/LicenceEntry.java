@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import de.uib.utilities.ExtendedInteger;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class LicenceEntry extends TreeMap<String, Object>
 // software license in opsi data base
@@ -77,7 +77,7 @@ public class LicenceEntry extends TreeMap<String, Object>
 
 		}
 
-		logging.warning(this, "illlegal servicetype " + servicetype);
+		Logging.warning(this, "illlegal servicetype " + servicetype);
 		return "";
 	}
 
@@ -87,7 +87,7 @@ public class LicenceEntry extends TreeMap<String, Object>
 			put(idKEY, importedEntry.get(idSERVICEKEY));
 
 		if (get(idKEY) == null)
-			logging.warning(this, "missing primary key in " + importedEntry);
+			Logging.warning(this, "missing primary key in " + importedEntry);
 
 		if (importedEntry.get(maxInstallationsSERVICEKEY) == null) {
 			importedEntry.put(maxInstallationsKEY, ExtendedInteger.ZERO);
@@ -95,7 +95,7 @@ public class LicenceEntry extends TreeMap<String, Object>
 
 		else {
 			if (!(importedEntry.get(maxInstallationsSERVICEKEY) instanceof Integer)) {
-				logging.warning(this, " " + importedEntry.get(idKEY) + " has not an integer for "
+				Logging.warning(this, " " + importedEntry.get(idKEY) + " has not an integer for "
 						+ importedEntry.get(maxInstallationsSERVICEKEY));
 			} else {
 				int val = (Integer) importedEntry.get(maxInstallationsSERVICEKEY);

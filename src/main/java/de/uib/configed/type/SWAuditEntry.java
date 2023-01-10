@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.datastructure.TableEntry;
@@ -102,13 +102,13 @@ public class SWAuditEntry extends TableEntry
 	public static void setLocale() {
 
 		locale.put(id, "ID");
-		locale.put(NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
-		locale.put(VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
+		locale.put(NAME, Configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
+		locale.put(VERSION, Configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
 
-		locale.put(ARCHITECTURE, configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
-		locale.put(LANGUAGE, configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
+		locale.put(ARCHITECTURE, Configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
+		locale.put(LANGUAGE, Configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
 
-		locale.put(WINDOWSsOFTWAREid, configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
+		locale.put(WINDOWSsOFTWAREid, Configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
 	}
 
 	public static List<String> getDisplayKeys() {

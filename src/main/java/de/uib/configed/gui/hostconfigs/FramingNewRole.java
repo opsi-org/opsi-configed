@@ -9,7 +9,7 @@ import java.util.List;
  * Organisation:  uib
  * @author Rupert Röder
  */
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 
 public class FramingNewRole implements FramingTextfieldWithListselection {
@@ -22,7 +22,7 @@ public class FramingNewRole implements FramingTextfieldWithListselection {
 
 	@Override
 	public String getTitle() {
-		title = configed.getResourceValue("FramingNewRole.title");
+		title = Configed.getResourceValue("FramingNewRole.title");
 
 		return title;
 
@@ -31,7 +31,7 @@ public class FramingNewRole implements FramingTextfieldWithListselection {
 	@Override
 	public String getTextfieldLabel() {
 
-		textfieldLabel = configed.getResourceValue("FramingNewRole.textfieldLabel");
+		textfieldLabel = Configed.getResourceValue("FramingNewRole.textfieldLabel");
 
 		return textfieldLabel;
 
@@ -39,14 +39,14 @@ public class FramingNewRole implements FramingTextfieldWithListselection {
 
 	@Override
 	public String getListLabel() {
-		listLabel = configed.getResourceValue("FramingNewRole.listLabel");
+		listLabel = Configed.getResourceValue("FramingNewRole.listLabel");
 
 		return listLabel;
 	}
 
 	@Override
 	public String getListLabelToolTip() {
-		listLabelToolTip = configed.getResourceValue("FramingNewRole.listLabel.ToolTip");
+		listLabelToolTip = Configed.getResourceValue("FramingNewRole.listLabel.ToolTip");
 
 		return listLabelToolTip;
 	}

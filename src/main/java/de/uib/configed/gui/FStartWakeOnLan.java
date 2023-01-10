@@ -34,8 +34,8 @@ import javax.swing.text.InternationalFormatter;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingWorker;
@@ -43,7 +43,7 @@ import de.uib.utilities.thread.WaitingWorker;
 public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.thread.WaitingSleeper {
 
 	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
-			FStartWakeOnLan.class, configed.getResourceValue("RunningInstances.askStop.text"));
+			FStartWakeOnLan.class, Configed.getResourceValue("RunningInstances.askStop.text"));
 
 	String scheduleTitleStarter;
 	private Map<String, Integer> labelledDelays;
@@ -84,7 +84,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	public FStartWakeOnLan(String title, ConfigedMain main) {
 		super(null, title, false, new String[]
 
-		{ configed.getResourceValue("FStartWakeOnLan.start"), configed.getResourceValue("FStartWakeOnLan.cancel") },
+		{ Configed.getResourceValue("FStartWakeOnLan.start"), Configed.getResourceValue("FStartWakeOnLan.cancel") },
 				750, 310);
 		this.main = main;
 
@@ -109,7 +109,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 			clientCount = main.getSelectedClients().length;
 		else
 			clientCount = 0;
-		logging.info(this, "clients count " + clientCount + ", used depots " + usedDepots.size());
+		Logging.info(this, "clients count " + clientCount + ", used depots " + usedDepots.size());
 		fieldClientCount.setText("" + clientCount);
 		fieldInvolvedDepotsCount.setText("" + usedDepots.size());
 	}
@@ -136,7 +136,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 				+ formatNaturalNumber(cal.get(Calendar.DAY_OF_MONTH)) + ") "
 				+ formatNaturalNumber(cal.get(Calendar.HOUR_OF_DAY)) + ":"
 				+ formatNaturalNumber(cal.get(Calendar.MINUTE));
-		logging.info(this, "readTime " + result);
+		Logging.info(this, "readTime " + result);
 
 		return result;
 	}
@@ -168,7 +168,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		setCalToNow();
 
 		if (scheduleTitleStarter == null)
-			scheduleTitleStarter = configed.getResourceValue("FStartWakeOnLan.creation");
+			scheduleTitleStarter = Configed.getResourceValue("FStartWakeOnLan.creation");
 		fieldTaskname.setText(scheduleTitleStarter + " " + readTime(cal));
 
 		spinnerHour.setValue(cal.get(Calendar.HOUR_OF_DAY));
@@ -185,10 +185,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		scrollpane.setViewportView(contentPane);
 
 		labelTimeYetToWait = new JLabel(Globals.giveTimeSpan(0), SwingConstants.RIGHT);
-		labelTimeYetToWait.setToolTipText(configed.getResourceValue("FStartWakeOnLan.timeLeft.toolTip"));
+		labelTimeYetToWait.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.timeLeft.toolTip"));
 
 		waitingProgressBar = new JProgressBar();
-		waitingProgressBar.setToolTipText(configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip"));
+		waitingProgressBar.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.timeElapsed.toolTip"));
 		waitingProgressBar.setValue(0);
 		waitingProgressBar.setEnabled(true);
 
@@ -201,7 +201,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		fieldTaskname.getDocument().addDocumentListener(new DocumentListener() {
 
 			private void actOnChange() {
-				logging.info(this, "changed text");
+				Logging.info(this, "changed text");
 
 			}
 
@@ -241,22 +241,22 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		((DefaultFormatterFactory) textFieldHour.getFormatterFactory()).setDefaultFormatter(internationalFormatter);
 		((DefaultFormatterFactory) textFieldMinute.getFormatterFactory()).setDefaultFormatter(internationalFormatter);
 
-		buttonSetNew = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonSetNew"), "images/reload16.png",
+		buttonSetNew = new IconButton(Configed.getResourceValue("FStartWakeOnLan.buttonSetNew"), "images/reload16.png",
 				"images/reload16_over.png", "images/reload16_disabled.png");
 
-		buttonSetNew.setToolTipText(configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
+		buttonSetNew.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
 
 		buttonSetNew.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.debug(this, "actionPerformed");
+				Logging.debug(this, "actionPerformed");
 				setClients();
 
 			}
 		});
 
-		buttonRefreshTime = new IconButton(configed.getResourceValue("FStartWakeOnLan.buttonRefreshTime"),
+		buttonRefreshTime = new IconButton(Configed.getResourceValue("FStartWakeOnLan.buttonRefreshTime"),
 				"images/clock16.png", "images/clock16.png", "images/clock16.png");
 
 		buttonRefreshTime.setToolTipText("Zeit neu setzen");
@@ -264,7 +264,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		buttonRefreshTime.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.debug(this, "actionPerformed");
+				Logging.debug(this, "actionPerformed");
 				setNowTimeAsTarget();
 			}
 		});
@@ -273,11 +273,11 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		JLabel labelColon = new JLabel(":");
 
-		JLabel labelDelay = new JLabel(configed.getResourceValue("FStartWakeOnLan.delay"));
-		JLabel labelStartdelay = new JLabel(configed.getResourceValue("FStartWakeOnLan.setTime"));
-		JLabel labelStartAt = new JLabel(configed.getResourceValue("FStartWakeOnLan.resultingStartTime"));
-		JLabel labelClientCount = new JLabel(configed.getResourceValue("FStartWakeOnLan.countOfClients"));
-		JLabel labelDepotCount = new JLabel(configed.getResourceValue("FStartWakeOnLan.countOfDepots"));
+		JLabel labelDelay = new JLabel(Configed.getResourceValue("FStartWakeOnLan.delay"));
+		JLabel labelStartdelay = new JLabel(Configed.getResourceValue("FStartWakeOnLan.setTime"));
+		JLabel labelStartAt = new JLabel(Configed.getResourceValue("FStartWakeOnLan.resultingStartTime"));
+		JLabel labelClientCount = new JLabel(Configed.getResourceValue("FStartWakeOnLan.countOfClients"));
+		JLabel labelDepotCount = new JLabel(Configed.getResourceValue("FStartWakeOnLan.countOfDepots"));
 
 		labelStarttime = new JLabel(readTime(cal));
 
@@ -437,7 +437,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		if (waitingTask != null)
 			waitingTask.stop();
 		waitingMode = true;
-		logging.info(this, "startWaiting " + runningInstances);
+		Logging.info(this, "startWaiting " + runningInstances);
 		runningInstances.add(this, scheduleTitle);
 
 		waitingTask = new WaitingWorker(this);
@@ -479,18 +479,18 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
-		return " " + configed.getResourceValue("FStartWakeOnLan.timeLeft") + "  "
+		return " " + Configed.getResourceValue("FStartWakeOnLan.timeLeft") + "  "
 				+ Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
 	}
 
 	@Override
 	public void doAction1() {
 
-		logging.info(this, "doAction1");
+		Logging.info(this, "doAction1");
 
 		if (currentlySelectedClients == null || currentlySelectedClients.length == 0) {
-			JOptionPane.showMessageDialog(this, configed.getResourceValue("FStartWakeOnLan.noClientsSelected.text"),
-					configed.getResourceValue("FStartWakeOnLan.noClientsSelected.title"),
+			JOptionPane.showMessageDialog(this, Configed.getResourceValue("FStartWakeOnLan.noClientsSelected.text"),
+					Configed.getResourceValue("FStartWakeOnLan.noClientsSelected.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
@@ -520,13 +520,13 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	@Override
 	public void leave() {
 		boolean reallyLeave = true;
-		logging.info(this, "leave  with runningInstances " + runningInstances);
-		logging.info(this, "leave  waitingMode  " + waitingMode);
+		Logging.info(this, "leave  with runningInstances " + runningInstances);
+		Logging.info(this, "leave  waitingMode  " + waitingMode);
 
 		if (waitingMode) {
 			int returnedOption = JOptionPane.showOptionDialog(this,
-					configed.getResourceValue("FStartWakeOnLan.allowClose"),
-					configed.getResourceValue("FStartWakeOnLan.allowClose.title"), JOptionPane.YES_NO_OPTION,
+					Configed.getResourceValue("FStartWakeOnLan.allowClose"),
+					Configed.getResourceValue("FStartWakeOnLan.allowClose.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.YES_OPTION)
@@ -536,9 +536,9 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		}
 
-		logging.info(this, "leave  reallyLeave  " + reallyLeave);
+		Logging.info(this, "leave  reallyLeave  " + reallyLeave);
 		if (reallyLeave) {
-			logging.info(this, "waitingTask != null " + (waitingTask != null));
+			Logging.info(this, "waitingTask != null " + (waitingTask != null));
 			if (waitingTask != null) {
 				waitingTask.stop();
 			}
@@ -551,7 +551,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	@Override
 	public void doAction2() {
-		logging.info(this, "doAction2");
+		Logging.info(this, "doAction2");
 		leave();
 	}
 }

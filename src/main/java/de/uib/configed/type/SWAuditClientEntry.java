@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.NavigableMap;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 public class SWAuditClientEntry
 /*
@@ -91,14 +91,14 @@ public class SWAuditClientEntry
 	public static void setLocale() {
 
 		locale.put(SWAuditEntry.id, "ID");
-		locale.put(SWAuditEntry.NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
-		locale.put(SWAuditEntry.VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
+		locale.put(SWAuditEntry.NAME, Configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
+		locale.put(SWAuditEntry.VERSION, Configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
 		// locale.put(subversion,
 
-		locale.put(SWAuditEntry.ARCHITECTURE, configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
-		locale.put(SWAuditEntry.LANGUAGE, configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
-		locale.put(LICENCE_KEY, configed.getResourceValue("PanelSWInfo.tableheader_displayLicenseKey"));
-		locale.put(SWAuditEntry.WINDOWSsOFTWAREid, configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
+		locale.put(SWAuditEntry.ARCHITECTURE, Configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
+		locale.put(SWAuditEntry.LANGUAGE, Configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
+		locale.put(LICENCE_KEY, Configed.getResourceValue("PanelSWInfo.tableheader_displayLicenseKey"));
+		locale.put(SWAuditEntry.WINDOWSsOFTWAREid, Configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
 	}
 
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
@@ -179,26 +179,26 @@ public class SWAuditClientEntry
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))), });
 		} catch (Exception ex) {
-			logging.info("SWAuditClientEntry:: produceSWident keys -- value : " + keys + " -- " + values);
+			Logging.info("SWAuditClientEntry:: produceSWident keys -- value : " + keys + " -- " + values);
 
-			logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.NAME));
-			logging.info("SWAuditClientEntry:: produceSWident value "
+			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.NAME));
+			Logging.info("SWAuditClientEntry:: produceSWident value "
 					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))));
 
-			logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.VERSION));
-			logging.info("SWAuditClientEntry:: produceSWident value "
+			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.VERSION));
+			Logging.info("SWAuditClientEntry:: produceSWident value "
 					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))));
 
-			logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.SUBVERSION));
-			logging.info("SWAuditClientEntry:: produceSWident value "
+			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.SUBVERSION));
+			Logging.info("SWAuditClientEntry:: produceSWident value "
 					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUBVERSION))));
 
-			logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.LANGUAGE));
-			logging.info("SWAuditClientEntry:: produceSWident value "
+			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.LANGUAGE));
+			Logging.info("SWAuditClientEntry:: produceSWident value "
 					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))));
 
-			logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE));
-			logging.info("SWAuditClientEntry:: produceSWident value "
+			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE));
+			Logging.info("SWAuditClientEntry:: produceSWident value "
 					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))));
 
 		}
@@ -207,14 +207,14 @@ public class SWAuditClientEntry
 	}
 
 	protected void updateSoftware() {
-		logging.info(this, "updateSoftware");
+		Logging.info(this, "updateSoftware");
 		if (lastUpdateTime != null && (System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE)) {
 			controller.installedSoftwareInformationRequestRefresh();
 			software = controller.getSoftwareList();
 			lastUpdateTime = System.currentTimeMillis();
 			notFoundSoftwareIDs = new ArrayList<>();
 		} else
-			logging.warning(this, "updateSoftware: doing nothing since we just updated");
+			Logging.warning(this, "updateSoftware: doing nothing since we just updated");
 	}
 
 	private Integer getIndex(List<String> list, String element) {
@@ -222,13 +222,13 @@ public class SWAuditClientEntry
 		int result = -1;
 
 		if (!swIdent.equals(element))
-			logging.warning(this,
+			Logging.warning(this,
 					"getIndex gobal swIdent was assumed to be equal to element " + swIdent + ". " + element);
 
 		Integer j = software2Number.get(element);
 
 		if (j == null) {
-			logging.info(this,
+			Logging.info(this,
 					"getIndex, probably because of an upper-lower case or a null issue, not found for  " + element);
 		} else
 			result = j;
@@ -239,13 +239,13 @@ public class SWAuditClientEntry
 			while (result == -1 && i < list.size()) {
 				if (list.get(i).equalsIgnoreCase(element)) {
 					result = i;
-					logging.warning(this, "indexOfIgnoreCase found equality of " + element + " to entry \n" + i + " : "
+					Logging.warning(this, "indexOfIgnoreCase found equality of " + element + " to entry \n" + i + " : "
 							+ list.get(i));
 				}
 				i++;
 			}
 			if (result == -1) {
-				logging.warning(this, "tried indexOfIgnoreCase in vain for " + element);
+				Logging.warning(this, "tried indexOfIgnoreCase in vain for " + element);
 			}
 		}
 
@@ -255,17 +255,17 @@ public class SWAuditClientEntry
 
 	protected Integer produceSWid() {
 		swId = getIndex(software, swIdent);
-		logging.debug(this, "search index for software with ident " + swIdent + " \nswId " + swId);
+		Logging.debug(this, "search index for software with ident " + swIdent + " \nswId " + swId);
 
 		if (swId == -1) {
-			logging.info(this, "software with ident " + swIdent + " not yet indexed");
+			Logging.info(this, "software with ident " + swIdent + " not yet indexed");
 			if (notFoundSoftwareIDs != null && !notFoundSoftwareIDs.contains(swIdent)) {
 				updateSoftware();
 				swId = getIndex(software, swIdent);
 			}
 
 			if (swId == -1) {
-				logging.warning(this, "swIdent not found in softwarelist: " + swIdent);
+				Logging.warning(this, "swIdent not found in softwarelist: " + swIdent);
 				if (notFoundSoftwareIDs == null)
 					notFoundSoftwareIDs = new ArrayList<>();
 				notFoundSoftwareIDs.add(swIdent);

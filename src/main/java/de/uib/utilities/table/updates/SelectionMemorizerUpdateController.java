@@ -9,7 +9,7 @@
 package de.uib.utilities.table.updates;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.thread.WaitCursor;
@@ -36,16 +36,16 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 
 		WaitCursor waitCursor = new WaitCursor();
 
-		logging.debug(this, "keysPanel is null " + (keysPanel == null));
+		Logging.debug(this, "keysPanel is null " + (keysPanel == null));
 		if (keysPanel.getSelectedRow() < 0) {
 			waitCursor.stop();
-			logging.info(this, "no row selected");
+			Logging.info(this, "no row selected");
 
 			javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer,
-					de.uib.configed.configed
+					de.uib.configed.Configed
 							.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.text"),
 					Globals.APPNAME + "  "
-							+ de.uib.configed.configed
+							+ de.uib.configed.Configed
 									.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.title"),
 					javax.swing.JOptionPane.OK_OPTION);
 
@@ -58,7 +58,7 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 
 		waitCursor.stop();
 
-		logging.checkErrorList(null);
+		Logging.checkErrorList(null);
 
 		return success;
 	}

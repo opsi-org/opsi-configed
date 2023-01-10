@@ -1,6 +1,6 @@
 package de.uib.configed.gui.swinfopage;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToCSV;
 
 /**
@@ -19,9 +19,9 @@ public class SWcsvExporter extends SWExporter {
 	@Override
 	public void export() {
 		String clientName = theHost;
-		logging.info(this, "------------- create csv report swaudit for " + clientName);
+		Logging.info(this, "------------- create csv report swaudit for " + clientName);
 
-		logging.debug("------------- create csv report swaudit for " + clientName);
+		Logging.debug("------------- create csv report swaudit for " + clientName);
 
 		modelSWInfo.setSorting(0, true);
 

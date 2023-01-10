@@ -23,10 +23,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.Autocomplete;
 import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	private JTextField jTextFieldCommand;
@@ -51,7 +51,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			super();
 
 			setBackground(Globals.BACKGROUND_COLOR_7);
-			jButtonClose = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.buttonClose"),
+			jButtonClose = new de.uib.configed.gui.IconButton(Configed.getResourceValue("SSHConnection.buttonClose"),
 					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
 			jButtonClose.addActionListener(closeListener);
 
@@ -99,7 +99,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		closeListener = new DialogCloseListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.debug(this, "actionPerformed " + e);
+				Logging.debug(this, "actionPerformed " + e);
 				terminal.disconnect();
 				cancel();
 				super.actionPerformed(e);
@@ -120,11 +120,11 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
 
-		logging.info(this, "SSHConnectionTerminalDialog build ");
+		Logging.info(this, "SSHConnectionTerminalDialog build ");
 		this.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				logging.info(this, "SSHConnectionTerminalDialog  resized");
+				Logging.info(this, "SSHConnectionTerminalDialog  resized");
 				super.componentResized(e);
 
 				// the ugly effect of wandering
@@ -148,14 +148,14 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	private void setComponentsEnabledRO(boolean value) {
-		logging.info(this, "setComponentsEnabledRO value " + value);
+		Logging.info(this, "setComponentsEnabledRO value " + value);
 		jTextFieldCommand.setEnabled(value);
 		jButtonExecuteCommand.setEnabled(value);
 		jButtonKillProcess.setEnabled(value);
 	}
 
 	private void setCLfocus() {
-		logging.info(this, "setCLfocus");
+		Logging.info(this, "setCLfocus");
 
 		jTextFieldCommand.setCaretPosition(jTextFieldCommand.getText().length());
 		jTextFieldCommand.requestFocus();
@@ -168,7 +168,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				counter++;
 				Globals.threadSleep(this, 100);
 				jTextFieldCommand.requestFocus();
-				logging.info(this, "repeated requestFocus " + counter + " times");
+				Logging.info(this, "repeated requestFocus " + counter + " times");
 			}
 		});
 
@@ -211,7 +211,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void setPrivate(boolean pr) {
-		logging.info(this, "setPrivate " + pr);
+		Logging.info(this, "setPrivate " + pr);
 		if (pr)
 			changeEchoChar('*');
 		else
@@ -225,7 +225,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	public void addToHistory(String co) {
 		if ((co != null) && (!co.trim().equals(""))) {
-			logging.debug(this,
+			Logging.debug(this,
 					"addToHistory \"" + co + "\" at index " + historyAddIndex + " getIndex " + (historyAddIndex + 1));
 			commandHistory.add(historyAddIndex, co);
 			historyAddIndex = historyAddIndex + 1;
@@ -234,7 +234,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public String getPrevCommandUp() {
-		logging.debug(this, "getPrevCommand_up historySize " + commandHistory.size() + " getIndex " + historyGetIndex);
+		Logging.debug(this, "getPrevCommand_up historySize " + commandHistory.size() + " getIndex " + historyGetIndex);
 		if (commandHistory.isEmpty())
 			return "";
 		if (historyGetIndex - 1 < 0) {
@@ -249,7 +249,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public String getPrevCommandDown() {
-		logging.debug(this,
+		Logging.debug(this,
 				"getPrevCommand_down historySize " + commandHistory.size() + " getIndex " + historyGetIndex);
 		if ((historyGetIndex + 1) >= commandHistory.size()) {
 			historyGetIndex = commandHistory.size();
@@ -266,7 +266,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	private void initGUI() {
-		logging.info(this, "initGUI ");
+		Logging.info(this, "initGUI ");
 		jTextFieldCommand = new JPasswordField() {
 			@Override
 			public void addNotify() {
@@ -281,7 +281,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		setCLfocus();
 
-		jComboBoxPrivat = new JCheckBox(configed.getResourceValue("SSHConnection.passwordButtonText"));
+		jComboBoxPrivat = new JCheckBox(Configed.getResourceValue("SSHConnection.passwordButtonText"));
 		jComboBoxPrivat.setPreferredSize(jButtonDimension);
 		if (!(Globals.isGlobalReadOnly()))
 			jComboBoxPrivat.addItemListener(itemEvent -> {
@@ -291,8 +291,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 					passwordMode = false;
 				} else {
 					changeEchoChar((char) 0);
-					if (terminal.commands_compgen != null)
-						setAutocompleteList(terminal.commands_compgen);
+					if (terminal.commandsCompgen != null)
+						setAutocompleteList(terminal.commandsCompgen);
 					passwordMode = true;
 				}
 				setCLfocus();
@@ -309,13 +309,13 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 					.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
 							.doActionParamAdd(jTextFieldCommand));
 		jButtonKillProcess = new de.uib.configed.gui.IconButton(
-				configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
+				Configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
 				"images/edit-delete.png", "images/edit-delete.png", true);
 		jButtonKillProcess.setPreferredSize(jButtonDimension);
-		jButtonKillProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
+		jButtonKillProcess.setToolTipText(Configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
 		jButtonExecuteCommand = new de.uib.configed.gui.IconButton(
-				configed.getResourceValue("SSHConnection.CommandControl.btnExecuteCommand"), "images/execute_blue.png",
+				Configed.getResourceValue("SSHConnection.CommandControl.btnExecuteCommand"), "images/execute_blue.png",
 				"images/execute_blue.png", "images/execute_blue.png", true);
 		jButtonExecuteCommand.setPreferredSize(jButtonDimension);
 		if (!(Globals.isGlobalReadOnly()))
@@ -332,13 +332,13 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			createLayout();
 			setCLfocus();
 		} catch (java.lang.NullPointerException npe) {
-			logging.error("NullPointerException in createLayout ");
-			logging.error("looks like a thread problem");
-			logging.error("" + npe);
+			Logging.error("NullPointerException in createLayout ");
+			Logging.error("looks like a thread problem");
+			Logging.error("" + npe);
 		} catch (Exception e) {
-			logging.error("Exception in createLayout ");
-			logging.error("looks like a thread problem");
-			logging.error("" + e);
+			Logging.error("Exception in createLayout ");
+			Logging.error("looks like a thread problem");
+			Logging.error("" + e);
 		}
 
 		setCenterLayout();
@@ -369,12 +369,12 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	protected void createLayout() {
-		logging.info(this, "createLayout ");
+		Logging.info(this, "createLayout ");
 		jScrollPane.setPreferredSize(output.getMaximumSize());
 
 		int gap = Globals.GAP_SIZE;
 
-		JLabel jLabelCommand = new JLabel(configed.getResourceValue("SSHConnection.commandLine"));
+		JLabel jLabelCommand = new JLabel(Configed.getResourceValue("SSHConnection.commandLine"));
 
 		konsolePanelLayout.setVerticalGroup(konsolePanelLayout.createSequentialGroup().addGap(gap)
 				.addComponent(jScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
@@ -433,9 +433,9 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	public void changeEchoChar(char c) {
 
-		logging.debug(this, "changeEchoChar char " + c);
+		Logging.debug(this, "changeEchoChar char " + c);
 		((JPasswordField) jTextFieldCommand).setEchoChar(c);
-		logging.debug(this, "changeEchoChar checkbox set Selected " + passwordMode);
+		Logging.debug(this, "changeEchoChar checkbox set Selected " + passwordMode);
 		jComboBoxPrivat.setSelected(passwordMode);
 	}
 }

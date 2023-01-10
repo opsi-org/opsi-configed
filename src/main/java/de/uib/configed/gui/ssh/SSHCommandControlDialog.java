@@ -35,16 +35,16 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.opsicommand.sshcommand.SSHCommand_Template;
+import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 
 /**
@@ -119,8 +119,8 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	private int thisHeight = 600;
 
 	private SSHCommandControlDialog(ConfigedMain cm, JFrame owner) {
-		super(null, configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
-		logging.info(this, "SSHCommandControlDialog instance " + instance + " main " + main);
+		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));
+		Logging.info(this, "SSHCommandControlDialog instance " + instance + " main " + main);
 		main = owner;
 		cmain = cm;
 		parameterPanel = new SSHCommandControlParameterMethodsPanel(this, Globals.GAP_SIZE * 3, Globals.GAP_SIZE * 3,
@@ -153,7 +153,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	}
 
 	private void setCenterLayout() {
-		logging.debug(this, "setCenterLayout ");
+		Logging.debug(this, "setCenterLayout ");
 		centerPanelLayout.setAutoCreateGaps(true);
 
 		centerPanelLayout.setHorizontalGroup(
@@ -166,7 +166,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 	/** Init components **/
 	private void init() {
-		logging.debug(this, "init setting up components ");
+		Logging.debug(this, "init setting up components ");
 
 		controlPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -211,35 +211,35 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		jTextPaneommands = new JTextPane();
 
 		buttonTestCommand = new de.uib.configed.gui.IconButton(
-				configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
+				Configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
 				"images/executing_command_red_22.png", "images/executing_command_red_22.png",
 				"images/executing_command_red_22.png", true);
 		buttonDelete = new de.uib.configed.gui.IconButton(
-				configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"), "images/list-remove.png",
+				Configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"), "images/list-remove.png",
 				"images/list-remove.png", "images/list-remove_disabled.png", true);
-		buttonSave = new IconButton(configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
+		buttonSave = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
-		buttonClose = new IconButton(configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
+		buttonClose = new IconButton(Configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
 				"images/cancel-32.png", "images/cancel_over-32.png", " ", true);
 
-		labelMenuText.setText(configed.getResourceValue("SSHConnection.CommandControl.menuText"));
-		labelParentMenuText.setText(configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
-		labelTooltipText.setText(configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));
-		labelPriority.setText(configed.getResourceValue("SSHConnection.CommandControl.priority"));
-		labelNeedSudo.setText(configed.getResourceValue("SSHConnection.CommandControl.needSudo"));
-		labelCommands.setText(configed.getResourceValue("SSHConnection.CommandControl.commands"));
+		labelMenuText.setText(Configed.getResourceValue("SSHConnection.CommandControl.menuText"));
+		labelParentMenuText.setText(Configed.getResourceValue("SSHConnection.CommandControl.parentMenuText"));
+		labelTooltipText.setText(Configed.getResourceValue("SSHConnection.CommandControl.tooltipText"));
+		labelPriority.setText(Configed.getResourceValue("SSHConnection.CommandControl.priority"));
+		labelNeedSudo.setText(Configed.getResourceValue("SSHConnection.CommandControl.needSudo"));
+		labelCommands.setText(Configed.getResourceValue("SSHConnection.CommandControl.commands"));
 
 		jComboBoxParentMenuText.addItem(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS); // parentNull
 		jComboBoxMenuText.addItem(SSHCommandFactory.MENU_NEW);
 
-		jComboBoxMenuText.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
+		jComboBoxMenuText.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.menuText.tooltip"));
 		jTextFieldTooltipText
-				.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.tooltipText.tooltip"));
+				.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.tooltipText.tooltip"));
 
-		jTextFieldPriority.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.priority.tooltip"));
-		jComboBoxNeedSudo.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.needSudo.tooltip"));
-		labelCommands.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
-		jTextPaneommands.setToolTipText(configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
+		jTextFieldPriority.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.priority.tooltip"));
+		jComboBoxNeedSudo.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.needSudo.tooltip"));
+		labelCommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
+		jTextPaneommands.setToolTipText(Configed.getResourceValue("SSHConnection.CommandControl.commands.tooltip"));
 
 		labelMenuText.setPreferredSize(dimensionJTextField);
 		labelParentMenuText.setPreferredSize(dimensionJTextField);
@@ -374,7 +374,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 * @param value False if mode is readonly - setEditable/setEnabled to false
 	 **/
 	private void setComponentsEnabledRO(boolean value) {
-		logging.info(this, "setComponentsEnabledRO value " + value);
+		Logging.info(this, "setComponentsEnabledRO value " + value);
 		jComboBoxNeedSudo.setEnabled(value);
 
 		jComboBoxParentMenuText.setEnabled(value);
@@ -395,7 +395,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 	/** Init grouplayout **/
 	private void initLayout() {
-		logging.debug(this, "initLayout ");
+		Logging.debug(this, "initLayout ");
 		commandlistPanelLayout
 				.setHorizontalGroup(commandlistPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
 						.addGroup(commandlistPanelLayout.createParallelGroup()
@@ -504,7 +504,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 * @param selectedCommand MenuText for setSelectedItem
 	 **/
 	private void updateLists(boolean requestRefresh, String selectedCommand) {
-		logging.info(this, "updateLists requestRefresh " + requestRefresh + " selectedCommand " + selectedCommand);
+		Logging.info(this, "updateLists requestRefresh " + requestRefresh + " selectedCommand " + selectedCommand);
 		if (requestRefresh) {
 			jComboBoxMenuText.removeAllItems();
 			jComboBoxParentMenuText.removeAllItems();
@@ -537,13 +537,13 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 * @param menuText The selected menu text
 	 **/
 	public void updateSelectedCommand(String menuText) {
-		logging.info(this, "updateSelectedCommand menuText " + menuText);
+		Logging.info(this, "updateSelectedCommand menuText " + menuText);
 		if ((menuText != null) && (menuText.equals(SSHCommandFactory.MENU_NEW)))
 			menuText = null;
 		if ((menuText != null) && (menuText.length() > 0)) {
-			SSHCommand_Template thiscommand = factory.getSSHCommandByMenu(menuText);
+			SSHCommandTemplate thiscommand = factory.getSSHCommandByMenu(menuText);
 			if (thiscommand != null) {
-				logging.debug(this, "updateSelectedCommand menu " + thiscommand.getMenuText() + " parent "
+				Logging.debug(this, "updateSelectedCommand menu " + thiscommand.getMenuText() + " parent "
 						+ thiscommand.getParentMenuText());
 				StringBuilder combuf = new StringBuilder("");
 				for (SSHCommand c : thiscommand.getCommands()) {
@@ -583,20 +583,20 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	/* This method is called when button 1 (save) is pressed */
 	@Override
 	public void doAction1() {
-		logging.info(this, "doAction1 savecommand ");
+		Logging.info(this, "doAction1 savecommand ");
 		String menuText = (String) jComboBoxMenuText.getSelectedItem();
-		SSHCommand_Template command = getCommandNow();
+		SSHCommandTemplate command = getCommandNow();
 		if (command == null)
 			return;
-		logging.debug(this, "doAction1 savecommand " + command.toString());
+		Logging.debug(this, "doAction1 savecommand " + command.toString());
 		if (factory.saveSSHCommand(command)) {
 			updateLists(true, menuText);
 			updateSelectedCommand(menuText);
 			factory.reloadServerMenu();
 		} else
 			JOptionPane.showInternalMessageDialog(this,
-					configed.getResourceValue("SSHConnection.CommandControl.couldnotsave.title"),
-					configed.getResourceValue("SSHConnection.CommandControl.couldnotsave"),
+					Configed.getResourceValue("SSHConnection.CommandControl.couldnotsave.title"),
+					Configed.getResourceValue("SSHConnection.CommandControl.couldnotsave"),
 					JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -610,14 +610,14 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	}
 
 	public void doActionTestCommand() {
-		logging.info(this, "doActionTestCommand testCommand building command ...");
-		SSHCommand_Template command = getCommandNow(true /* testing */);
+		Logging.info(this, "doActionTestCommand testCommand building command ...");
+		SSHCommandTemplate command = getCommandNow(true /* testing */);
 		if (command == null)
 			return;
 		if (command.getMenuText() == null)
 			command.setMenuText(SSHCommandFactory.MENU_NEW);
-		logging.debug(this, "doActionTestCommand buildCommand " + command.toString());
-		logging.debug(this, "doActionTestCommand buildCommand commandlist " + command.commandlistToString());
+		Logging.debug(this, "doActionTestCommand buildCommand " + command.toString());
+		Logging.debug(this, "doActionTestCommand buildCommand commandlist " + command.commandlistToString());
 
 		new Thread() {
 			@Override
@@ -632,15 +632,15 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		if (!Globals.isGlobalReadOnly()) {
 			if (jComboBoxMenuText.getSelectedItem() != null) {
 				if (!((String) jComboBoxMenuText.getSelectedItem()).trim().equals(SSHCommandFactory.MENU_NEW)) {
-					logging.info(this, "checkAllTexts menuText " + jComboBoxMenuText.getSelectedItem());
-					SSHCommand_Template tempCommand = getCommandNow();
-					logging.debug(this, "checkAllTexts command " + tempCommand);
+					Logging.info(this, "checkAllTexts menuText " + jComboBoxMenuText.getSelectedItem());
+					SSHCommandTemplate tempCommand = getCommandNow();
+					Logging.debug(this, "checkAllTexts command " + tempCommand);
 					if (tempCommand == null)
 						return;
 					boolean isNotSaved = !factory.isSSHCommandEqualSavedCommand(tempCommand);
-					logging.debug(this, "checkAllTexts factory.isSSHCommandEqualSavedCommand(tmp_com) "
+					Logging.debug(this, "checkAllTexts factory.isSSHCommandEqualSavedCommand(tmp_com) "
 							+ factory.isSSHCommandEqualSavedCommand(tempCommand));
-					logging.debug(this, "checkAllTexts isNotSaved " + isNotSaved);
+					Logging.debug(this, "checkAllTexts isNotSaved " + isNotSaved);
 					buttonSave.setEnabled(isNotSaved);
 				} else
 					buttonSave.setEnabled(false);
@@ -649,12 +649,12 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		}
 	}
 
-	public SSHCommand_Template getCommandNow() {
+	public SSHCommandTemplate getCommandNow() {
 		return getCommandNow(false);
 	}
 
-	public SSHCommand_Template getCommandNow(boolean testing) {
-		logging.debug(this, "getCommandNow ");
+	public SSHCommandTemplate getCommandNow(boolean testing) {
+		Logging.debug(this, "getCommandNow ");
 		String menuText = (String) jComboBoxMenuText.getSelectedItem();
 		if (!testing && menuText.trim().equals(SSHCommandFactory.MENU_NEW))
 			return null;
@@ -663,21 +663,21 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		try {
 			prio = Integer.valueOf(jTextFieldPriority.getText());
 		} catch (Exception e) {
-			logging.warning("Cannot get value from priority field Exception: " + e);
+			Logging.warning("Cannot get value from priority field Exception: " + e);
 		}
 		List<String> coms = new LinkedList<>();
 		for (String c : jTextPaneommands.getText().split("\n"))
 			if (!((c == null) || (c.trim().equals(""))))
 				coms.add(c);
-		SSHCommand_Template tempCommand = factory.buildSSHCommand(
+		SSHCommandTemplate tempCommand = factory.buildSSHCommand(
 				generateId((String) jComboBoxMenuText.getSelectedItem()), parent, menuText,
 				(jTextFieldTooltipText.getText()), prio, jComboBoxNeedSudo.isSelected(), coms);
-		logging.debug(this, "getCommandNow command: " + tempCommand);
+		Logging.debug(this, "getCommandNow command: " + tempCommand);
 		return tempCommand;
 	}
 
 	private void showPanel() {
-		logging.info(this, "showPanel helpPanelStatus always true");
+		Logging.info(this, "showPanel helpPanelStatus always true");
 
 		setCenterLayout();
 		centerPanel.setSize(centerPanel.getWidth(), centerPanel.getHeight() + parameterPanel.getHeight());

@@ -16,7 +16,7 @@ import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
@@ -37,7 +37,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		unfilteredSelection = null;
 
 		if (values == null || descriptions == null || values.size() != descriptions.size()) {
-			logging.error("missing data for List");
+			Logging.error("missing data for List");
 			theValues = new ArrayList<>();
 			theDescriptions = new ArrayList<>();
 			unfilteredV = new ArrayList<>();
@@ -89,7 +89,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public void clearSelection() {
-		logging.info(this, "clearSelection");
+		Logging.info(this, "clearSelection");
 		jList.clearSelection();
 	}
 
@@ -140,7 +140,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public void addSelectedRow(int row) {
-		logging.info(this, "addSelectedRow " + row);
+		Logging.info(this, "addSelectedRow " + row);
 
 		jList.addSelectionInterval(row, row);
 
@@ -162,7 +162,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 		for (int i : selection) {
 			if (i > tableModel.getRowCount() - 1) {
-				logging.warning(this, "tableModel has index (as should be set from selection) " + i);
+				Logging.warning(this, "tableModel has index (as should be set from selection) " + i);
 			} else
 				jList.addSelectionInterval(i, i);
 
@@ -182,7 +182,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public void setFiltered(boolean b) {
-		logging.info(this, "setFiltered " + b + " it was filtered " + filtered);
+		Logging.info(this, "setFiltered " + b + " it was filtered " + filtered);
 
 		if (b == filtered)
 			return;
@@ -219,10 +219,10 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 			} else
 				jList.setSelectionInterval(0, 0);
 		} catch (Exception ex) {
-			logging.warning(this, "selection error " + ex);
+			Logging.warning(this, "selection error " + ex);
 		}
 
-		logging.info(this, "setFilter " + theValues);
+		Logging.info(this, "setFilter " + theValues);
 	}
 
 	@Override

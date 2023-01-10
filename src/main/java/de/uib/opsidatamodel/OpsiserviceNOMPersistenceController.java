@@ -50,8 +50,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.MainFrame;
@@ -102,8 +102,8 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.ExtendedDate;
 import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.logging.logging;
 import de.uib.utilities.table.ListCellOptions;
 
 public class OpsiserviceNOMPersistenceController extends PersistenceController {
@@ -224,13 +224,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		HostGroups addSpecialGroups() {
-			logging.debug(this, "addSpecialGroups check");
+			Logging.debug(this, "addSpecialGroups check");
 			List<StringValuedRelationElement> groups = new ArrayList<>();
 
 			if (get(de.uib.configed.tree.ClientTree.DIRECTORY_PERSISTENT_NAME) == null)
 			// create
 			{
-				logging.debug(this, "addSpecialGroups");
+				Logging.debug(this, "addSpecialGroups");
 				StringValuedRelationElement directoryGroup = new StringValuedRelationElement();
 
 				directoryGroup.put("groupId", de.uib.configed.tree.ClientTree.DIRECTORY_PERSISTENT_NAME);
@@ -243,7 +243,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				put(de.uib.configed.tree.ClientTree.DIRECTORY_PERSISTENT_NAME, directoryGroup);
 
-				logging.debug(this, "addSpecialGroups we have " + this);
+				Logging.debug(this, "addSpecialGroups we have " + this);
 
 			}
 
@@ -251,7 +251,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		void alterToWorkingVersion() {
-			logging.debug(this, "alterToWorkingVersion we have " + this);
+			Logging.debug(this, "alterToWorkingVersion we have " + this);
 
 			for (String groupName : keySet()) {
 				Map<String, String> groupInfo = get(groupName);
@@ -444,7 +444,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		@Override
 		public Map<String, Map<String, Object>> getDepots() {
 			retrieveOpsiHosts();
-			logging.debug(this, "getDepots masterDepots " + masterDepots);
+			Logging.debug(this, "getDepots masterDepots " + masterDepots);
 
 			return masterDepots;
 		}
@@ -469,7 +469,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		@Override
 		public Map<String, HostInfo> getMapOfAllPCInfoMaps() {
-			logging.info(this, "getMapOfAllPCInfoMaps() size " + host2hostInfo.size());
+			Logging.info(this, "getMapOfAllPCInfoMaps() size " + host2hostInfo.size());
 			return host2hostInfo;
 		}
 
@@ -483,7 +483,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// build data
 		@Override
 		protected void retrieveOpsiHosts() {
-			logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null " + (opsiHostNames == null));
+			Logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null " + (opsiHostNames == null));
 
 			int countHosts = 0;
 
@@ -503,7 +503,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				host2hostInfo = new HashMap<>();
 
-				logging.info(this, "retrieveOpsiHosts countHosts " + countClients);
+				Logging.info(this, "retrieveOpsiHosts countHosts " + countClients);
 
 				// find opsi configserver and give it the top position
 				for (Map<String, Object> host : opsiHosts) {
@@ -521,7 +521,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							.equals(HostInfo.HOST_TYPE_VALUE_OPSI_CONFIG_SERVER);
 
 					if (isConfigserver) {
-						logging.info(this, "retrieveOpsiHosts  type opsiconfigserver host " + hideOpsiHostKey(host));
+						Logging.info(this, "retrieveOpsiHosts  type opsiconfigserver host " + hideOpsiHostKey(host));
 
 						configServer = name;
 
@@ -542,40 +542,40 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						if (val != null && !val.equals("")) {
 							try {
 								String filepath = new URL((String) val).getPath();
-								logging.info(this, "retrieveOpsiHosts workbenchpath " + filepath);
+								Logging.info(this, "retrieveOpsiHosts workbenchpath " + filepath);
 
 								configedWORKBENCH_defaultvalue = filepath;
 								packageServerDirectoryS = filepath;
 							} catch (Exception netex) {
-								logging.error("not a correctly formed file URL: " + val);
+								Logging.error("not a correctly formed file URL: " + val);
 							}
 						}
 					}
 
 				}
 
-				logging.info(this, "retrieveOpsiHost found masterDepots " + masterDepots.size());
+				Logging.info(this, "retrieveOpsiHost found masterDepots " + masterDepots.size());
 				if (configServer == null) {
 					StringBuilder messbuff = new StringBuilder();
 					final String baselabel = "PersistenceController.noData";
 
-					messbuff.append(configed.getResourceValue(baselabel + "0"));
+					messbuff.append(Configed.getResourceValue(baselabel + "0"));
 					messbuff.append("\n");
-					messbuff.append(configed.getResourceValue(baselabel + "1") + " " + countHosts);
+					messbuff.append(Configed.getResourceValue(baselabel + "1") + " " + countHosts);
 					messbuff.append("\n");
 					messbuff.append("\n");
 
 					for (int i = 2; i <= 4; i++) {
-						messbuff.append(configed.getResourceValue(baselabel + i));
+						messbuff.append(Configed.getResourceValue(baselabel + i));
 						messbuff.append("\n");
 						messbuff.append("\n");
 					}
 
 					String message = messbuff.toString();
-					logging.error(this, message);
+					Logging.error(this, message);
 
 					FTextArea f = new FTextArea(null, "opsi configed", true,
-							new String[] { configed.getResourceValue("PersistenceController.endApp") }, 500, 400);
+							new String[] { Configed.getResourceValue("PersistenceController.endApp") }, 500, 400);
 					f.setMessage(message);
 
 					f.setVisible(true);
@@ -591,7 +591,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					String name = (String) host.get(HostInfo.HOSTNAME_KEY);
 
 					if (name == null) {
-						logging.info(this, "retrieveOpsiHosts, host  " + host);
+						Logging.info(this, "retrieveOpsiHosts, host  " + host);
 
 					}
 
@@ -622,7 +622,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 						if (getConfigs().get(name) == null || getConfigs().get(name).get(CONFIG_DEPOT_ID) == null
 								|| ((List) (getConfigs().get(name).get(CONFIG_DEPOT_ID))).isEmpty()) {
-							logging.debug(this,
+							Logging.debug(this,
 									"retrieveOpsiHosts client  " + name + " has no config for " + CONFIG_DEPOT_ID);
 						} else {
 							depotId = (String) ((List) (getConfigs().get(name).get(CONFIG_DEPOT_ID))).get(0);
@@ -632,10 +632,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							depotFound = true;
 						} else {
 							if (depotId != null)
-								logging.warning("Host " + name + " is in " + depotId + " which is not a master depot");
+								Logging.warning("Host " + name + " is in " + depotId + " which is not a master depot");
 						}
 
-						logging.debug(this, "getConfigs for " + name);
+						Logging.debug(this, "getConfigs for " + name);
 
 						// Get Install by Shutdown
 
@@ -653,7 +653,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							Boolean tested = null;
 							tested = findBooleanConfigurationComparingToDefaults(name, wanConfiguration);
 
-							logging.debug(this, "host " + name + " wan config " + result);
+							Logging.debug(this, "host " + name + " wan config " + result);
 
 							if (tested != null && tested)
 								result = true;
@@ -665,7 +665,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 									result = false;
 							}
 
-							logging.debug(this, "host " + name + " wan config " + result);
+							Logging.debug(this, "host " + name + " wan config " + result);
 
 							host.put(HostInfo.CLIENT_WAN_CONFIG_KEY, result);
 
@@ -701,7 +701,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 
 				for (String depot : masterDepots.keySet()) {
-					logging.info(this,
+					Logging.info(this,
 							"retrieveOpsiHosts clients in " + depot + ": " + depot2_host2hostInfo.get(depot).size());
 				}
 
@@ -714,9 +714,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				// test for depot_restriction:
 
-				logging.info(this, "retrieveOpsiHosts  HostInfo instances counter " + HostInfo.getInstancesCount());
-				logging.info(this, "retrieveOpsiHosts  hostnames size " + opsiHostNames.size());
-				logging.info(this, "retrieveOpsiHosts   depotNamesList size " + depotNamesList.size());
+				Logging.info(this, "retrieveOpsiHosts  HostInfo instances counter " + HostInfo.getInstancesCount());
+				Logging.info(this, "retrieveOpsiHosts  hostnames size " + opsiHostNames.size());
+				Logging.info(this, "retrieveOpsiHosts   depotNamesList size " + depotNamesList.size());
 
 			}
 		}
@@ -749,7 +749,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		public Map<String, Boolean> getClientListForDepots(String[] depots, Set<String> allowedClients) {
 			retrieveOpsiHosts();
 
-			logging.debug(this, " ------ building pcList");
+			Logging.debug(this, " ------ building pcList");
 			mapPcBelongsToDepot = new HashMap<>();
 
 			mapOfPCs = new HashMap<>();
@@ -764,7 +764,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			for (String depot : depotList) {
 
 				if (depot2_host2hostInfo.get(depot) == null) {
-					logging.info(this, "getPcListForDepots depot " + depot + " is null");
+					Logging.info(this, "getPcListForDepots depot " + depot + " is null");
 				} else {
 
 					for (String clientName : depot2_host2hostInfo.get(depot).keySet()) {
@@ -796,12 +796,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// set in mapPC_Infomap
 			HostInfo hostInfo = mapPC_Infomap.get(clientName);
 
-			logging.info(this, "setDepot, hostinfo for client " + clientName + " : " + mapPC_Infomap.get(clientName));
+			Logging.info(this, "setDepot, hostinfo for client " + clientName + " : " + mapPC_Infomap.get(clientName));
 
 			hostInfo.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
 
 			String oldDepot = mapPcBelongsToDepot.get(clientName);
-			logging.info(this, "setDepot clientName, oldDepot " + clientName + ", " + oldDepot);
+			Logging.info(this, "setDepot clientName, oldDepot " + clientName + ", " + oldDepot);
 			// set in mapPcBelongsToDepot
 			mapPcBelongsToDepot.put(clientName, depotId);
 
@@ -855,7 +855,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		{
 			if (mapPC_Infomap != null && mapPC_Infomap.get(hostId) != null) {
 				mapPC_Infomap.get(hostId).put(property, value);
-				logging.info(this, "updateLocalHostInfo " + hostId + " - " + property + " : " + value);
+				Logging.info(this, "updateLocalHostInfo " + hostId + " - " + property + " : " + value);
 
 			}
 
@@ -863,7 +863,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		@Override
 		public void setLocalHostInfo(String hostId, String depotId, HostInfo hostInfo) {
-			logging.debug(this, "setLocalHostInfo " + " " + hostId + ", " + depotId + ", " + hostInfo);
+			Logging.debug(this, "setLocalHostInfo " + " " + hostId + ", " + depotId + ", " + hostInfo);
 			mapPC_Infomap.put(hostId, hostInfo);
 			depot2_host2hostInfo.get(depotId).put(hostId, hostInfo);
 		}
@@ -872,13 +872,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	// package visibility, the constructor is called by PersistenceControllerFactory
 	OpsiserviceNOMPersistenceController(String server, String user, String password) {
-		logging.info(this, "start construction, \nconnect to " + server + " as " + user
+		Logging.info(this, "start construction, \nconnect to " + server + " as " + user
 
 		);
 		this.connectionServer = server;
 		this.user = user;
 
-		logging.debug(this, "create");
+		Logging.debug(this, "create");
 
 		hostInfoCollections = new DefaultHostInfoCollections();
 
@@ -899,7 +899,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private final boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs)
 	// final in order to avoid deactiviating by override
 	{
-		logging.info(this, "setAgainUserRegistration, userRoles can be used " + withUserRoles);
+		Logging.info(this, "setAgainUserRegistration, userRoles can be used " + withUserRoles);
 
 		boolean resultVal = userRegisterValueFromConfigs;
 
@@ -907,50 +907,50 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return resultVal;
 
 		Boolean locallySavedValueUserRegister = null;
-		if (configed.savedStates == null) {
-			logging.trace(this, "savedStates.saveRegisterUser not initialized");
+		if (Configed.savedStates == null) {
+			Logging.trace(this, "savedStates.saveRegisterUser not initialized");
 
 		} else {
-			locallySavedValueUserRegister = configed.savedStates.saveRegisterUser.deserializeAsBoolean();
-			logging.info(this, "setAgainUserRegistration, userRegister was activated " + locallySavedValueUserRegister);
+			locallySavedValueUserRegister = Configed.savedStates.saveRegisterUser.deserializeAsBoolean();
+			Logging.info(this, "setAgainUserRegistration, userRegister was activated " + locallySavedValueUserRegister);
 
 			if (userRegisterValueFromConfigs) {
 				if (locallySavedValueUserRegister == null || !locallySavedValueUserRegister) {
 					// we save true
-					configed.savedStates.saveRegisterUser.serialize(true);
+					Configed.savedStates.saveRegisterUser.serialize(true);
 
 				}
 			} else {
 				if (locallySavedValueUserRegister != null && locallySavedValueUserRegister) {
 					// if true was locally saved but is not the value from service then we ask
-					logging.warning(this, "setAgainUserRegistration, it seems that user check has been deactivated");
+					Logging.warning(this, "setAgainUserRegistration, it seems that user check has been deactivated");
 
 					FTextArea dialog = new FTextArea(Globals.mainFrame,
-							configed.getResourceValue("RegisterUserWarning.dialog.title"),
+							Configed.getResourceValue("RegisterUserWarning.dialog.title"),
 
 							true,
-							new String[] { configed.getResourceValue("RegisterUserWarning.dialog.button1"),
-									configed.getResourceValue("RegisterUserWarning.dialog.button2"),
-									configed.getResourceValue("RegisterUserWarning.dialog.button3") },
+							new String[] { Configed.getResourceValue("RegisterUserWarning.dialog.button1"),
+									Configed.getResourceValue("RegisterUserWarning.dialog.button2"),
+									Configed.getResourceValue("RegisterUserWarning.dialog.button3") },
 							new Icon[] { (Icon) Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 									(Icon) Globals.createImageIcon("images/edit-delete.png", ""),
 									(Icon) Globals.createImageIcon("images/executing_command_red_16.png", "") },
 							500, 200);
 					StringBuilder msg = new StringBuilder(
 
-							configed.getResourceValue("RegisterUserWarning.dialog.info1"));
-					msg.append("\n" + configed.getResourceValue("RegisterUserWarning.dialog.info2"));// At the moment,
+							Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));// At the moment,
 																										// user control
 																										// is not more
 																										// active!
 					msg.append("\n");
-					msg.append("\n" + configed.getResourceValue("RegisterUserWarning.dialog.option1"));// Ignore warning
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option1"));// Ignore warning
 																										// and
 																										// continue?
-					msg.append("\n" + configed.getResourceValue("RegisterUserWarning.dialog.option2"));// No more
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));// No more
 																										// warning
 																										// (locally)?
-					msg.append("\n" + configed.getResourceValue("RegisterUserWarning.dialog.option3"));// Re-activate
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));// Re-activate
 																										// user check
 																										// (on the opsi
 																										// server)?
@@ -958,21 +958,21 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					dialog.setMessage("" + msg);
 					dialog.setVisible(true);
 					int result = dialog.getResult();
-					logging.info(this, "setAgainUserRegistration, reaction via option " + dialog.getResult());
+					Logging.info(this, "setAgainUserRegistration, reaction via option " + dialog.getResult());
 
 					switch (result) {
 					case 1:
-						logging.info(this, "setAgainUserRegistration ignore ");
+						Logging.info(this, "setAgainUserRegistration ignore ");
 						break;
 
 					case 2:
-						logging.info(this, "setAgainUserRegistration remove warning locally ");
-						configed.savedStates.saveRegisterUser.serialize(null); // remove from store
-						configed.savedStates.store();
+						Logging.info(this, "setAgainUserRegistration remove warning locally ");
+						Configed.savedStates.saveRegisterUser.serialize(null); // remove from store
+						Configed.savedStates.store();
 						break;
 
 					case 3:
-						logging.info(this, "setAgainUserRegistration reactivate user check ");
+						Logging.info(this, "setAgainUserRegistration reactivate user check ");
 						resultVal = true;
 						break;
 					}
@@ -993,7 +993,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		else
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
 
-		logging.info(this, "userConfigPart initialized, " + userConfigPart);
+		Logging.info(this, "userConfigPart initialized, " + userConfigPart);
 
 		return userConfigPart;
 	}
@@ -1001,7 +1001,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public final void checkConfiguration() {
 		retrieveOpsiModules();
-		logging.info(this, "checkConfiguration, modules " + opsiModules);
+		Logging.info(this, "checkConfiguration, modules " + opsiModules);
 		initMembers();
 
 		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
@@ -1046,7 +1046,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				getConfigDefaultValues(), getConfigOptions()).produce();
 
 		if (readyConfigObjects == null) {
-			logging.warning(this, "readyObjects for userparts " + null);
+			Logging.warning(this, "readyObjects for userparts " + null);
 		} else {
 
 			if (!readyConfigObjects.isEmpty()) {
@@ -1057,7 +1057,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				exec.doCall(omc);
 			}
 
-			logging.info(this, "readyObjects for userparts " + readyConfigObjects.size());
+			Logging.info(this, "readyObjects for userparts " + readyConfigObjects.size());
 		}
 
 		checkPermissions();
@@ -1070,11 +1070,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public Executioner retrieveWorkingExec(String depot) {
 
-		logging.debug(this, "retrieveWorkingExec , compare depotname " + depot + " to config server "
+		Logging.debug(this, "retrieveWorkingExec , compare depotname " + depot + " to config server "
 				+ hostInfoCollections.getConfigServer() + " ( named as " + connectionServer + ")");
 
 		if (depot.equals(hostInfoCollections.getConfigServer())) {
-			logging.debug(this, "retrieveWorkingExec for config server");
+			Logging.debug(this, "retrieveWorkingExec for config server");
 			return exec;
 		}
 
@@ -1083,11 +1083,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Executioner exec1 = new JSONthroughHTTPS(depot, depot, password);
 
 		if (makeConnection(exec1)) {
-			logging.info(this, "retrieveWorkingExec new for server " + depot);
+			Logging.info(this, "retrieveWorkingExec new for server " + depot);
 			return exec1;
 		}
 
-		logging.info(this, "no connection to server " + depot);
+		Logging.info(this, "no connection to server " + depot);
 
 		return Executioner.NONE;
 	}
@@ -1101,25 +1101,25 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// set by executioner
 
-		logging.info(this, "trying to make connection");
+		Logging.info(this, "trying to make connection");
 		boolean result = false;
 		try {
 
 			result = exec1.doCall(new OpsiMethodCall("authenticated", new String[] {}));
 
 			if (!result) {
-				logging.info(this, "connection does not work");
+				Logging.info(this, "connection does not work");
 
 			}
 
 		} catch (java.lang.ClassCastException ex) {
-			logging.info(this, "JSONthroughHTTPS failed to make connection");
+			Logging.info(this, "JSONthroughHTTPS failed to make connection");
 
 		}
 
 		result = result && (getConnectionState().equals(ConnectionState.CONNECTED));
 
-		logging.info(this, "tried to make connection result " + result);
+		Logging.info(this, "tried to make connection result " + result);
 
 		return result;
 
@@ -1151,10 +1151,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected boolean checkReadOnlyBySystemuser() {
 		boolean result = false;
 
-		logging.info(this, "checkReadOnly");
+		Logging.info(this, "checkReadOnly");
 		if (exec.getBooleanResult(new OpsiMethodCall("accessControl_userIsReadOnlyUser", new String[] {}))) {
 			result = true;
-			logging.info(this, "checkReadOnly " + globalReadOnly);
+			Logging.info(this, "checkReadOnly " + globalReadOnly);
 
 		}
 
@@ -1183,7 +1183,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private boolean checkFullPermission(Set<String> permittedEntities, // will be produced
 			// final boolean defaultResult,
 			final String keyUseList, final String keyList, final Map<String, List<Object>> serverPropertyMap) {
-		logging.info(this, "checkFullPermission  key name,  defaultResult true " + keyUseList);
+		Logging.info(this, "checkFullPermission  key name,  defaultResult true " + keyUseList);
 
 		boolean fullPermission = true;
 
@@ -1196,12 +1196,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// we didn't configure anything, therefore we revoke the setting
 			{
 				fullPermission = true;
-				logging.info(this, "checkFullPermission not configured keyList " + keyList);
+				Logging.info(this, "checkFullPermission not configured keyList " + keyList);
 			}
 
 		}
 
-		logging.info(this, "checkFullPermission  key for list,  fullPermission " + keyList + ", " + fullPermission);
+		Logging.info(this, "checkFullPermission  key for list,  fullPermission " + keyList + ", " + fullPermission);
 
 		if (!fullPermission && serverPropertyMap.get(keyList) != null)
 		// we didn't configure anything, therefore we revoke the setting
@@ -1211,8 +1211,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.info(this, "checkFullPermission   result " + fullPermission);
-		logging.info(this, "checkFullPermission   produced list " + permittedEntities);
+		Logging.info(this, "checkFullPermission   result " + fullPermission);
+		Logging.info(this, "checkFullPermission   produced list " + permittedEntities);
 
 		return fullPermission;
 	}
@@ -1229,12 +1229,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		{
 			// lookup if we have a config for it and set it though not set by group
 			configKey = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY;
-			logging.info(this, "checkPermissions  configKey " + configKey);
+			Logging.info(this, "checkPermissions  configKey " + configKey);
 			globalReadOnly = (serverPropertyMap.get(configKey) != null)
 					&& (Boolean) (serverPropertyMap.get(configKey).get(0));
 		}
 
-		logging.info(this, " checkPermissions globalReadOnly " + globalReadOnly);
+		Logging.info(this, " checkPermissions globalReadOnly " + globalReadOnly);
 
 		if (globalReadOnly) {
 			serverActionPermission = UserOpsipermission.ActionPrivilege.READ_ONLY;
@@ -1242,15 +1242,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Boolean mayWriteOnOpsiserver = true; // is default!!
 
 			configKey = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_SERVER_READWRITE;
-			logging.info(this, "checkPermissions  configKey " + configKey);
+			Logging.info(this, "checkPermissions  configKey " + configKey);
 
 			if (serverPropertyMap.get(configKey) != null) {
 
-				logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
+				Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
 				mayWriteOnOpsiserver = (Boolean) ((serverPropertyMap.get(configKey)).get(0));
 			}
 
-			logging.info(this, " checkPermissions mayWriteOnOpsiserver " + mayWriteOnOpsiserver);
+			Logging.info(this, " checkPermissions mayWriteOnOpsiserver " + mayWriteOnOpsiserver);
 			if (mayWriteOnOpsiserver) {
 				serverActionPermission = UserOpsipermission.ActionPrivilege.READ_WRITE;
 			} else {
@@ -1261,9 +1261,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		serverFullPermission = (serverActionPermission == UserOpsipermission.ActionPrivilege.READ_WRITE);
 
 		configKey = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_CREATECLIENT;
-		logging.info(this, " checkPermissions key " + configKey);
+		Logging.info(this, " checkPermissions key " + configKey);
 		if (serverPropertyMap.get(configKey) != null && withUserRoles) {
-			logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
+			Logging.info(this, " checkPermissions  value  " + (serverPropertyMap.get(configKey).get(0)));
 			createClientPermission = (Boolean) ((serverPropertyMap.get(configKey)).get(0));
 		}
 
@@ -1277,9 +1277,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		depotsFullPermission = checkFullPermission(depotsPermitted,
 				// true,
 				configKeyUseList, configKeyList, serverPropertyMap);
-		logging.info(this,
+		Logging.info(this,
 				"checkPermissions depotsFullPermission (false means, depots must be specified " + depotsFullPermission);
-		logging.info(this, "checkPermissions depotsPermitted " + depotsPermitted);
+		Logging.info(this, "checkPermissions depotsPermitted " + depotsPermitted);
 
 		configKeyUseList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED;
 		configKeyList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE;
@@ -1292,7 +1292,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (hostgroupsOnlyIfExplicitlyStated)
 			hostgroupsPermitted = null;
 
-		logging.info(this, "checkPermissions hostgroupsPermitted " + hostgroupsPermitted);
+		Logging.info(this, "checkPermissions hostgroupsPermitted " + hostgroupsPermitted);
 
 		configKeyUseList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
 		configKeyList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
@@ -1314,7 +1314,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.info(this, "checkPermissions permittedProducts " + permittedProducts);
+		Logging.info(this, "checkPermissions permittedProducts " + permittedProducts);
 
 	}
 
@@ -1357,7 +1357,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (!hostgroupsOnlyIfExplicitlyStated)
 			result = hostgroupsPermitted;
 
-		logging.info(this, "getHostgroupsPermitted " + result);
+		Logging.info(this, "getHostgroupsPermitted " + result);
 
 		return result;
 	}
@@ -1372,10 +1372,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (hostgroupsPermitted != null)
 			result = hostgroupsPermitted.contains(hostgroupId);
 
-		logging.info(this, "getHostgroupPermission false for " + hostgroupId);
+		Logging.info(this, "getHostgroupPermission false for " + hostgroupId);
 
 		if (!result)
-			logging.info(this, "getHostgroupPermission, permitted " + hostgroupsPermitted);
+			Logging.info(this, "getHostgroupPermission, permitted " + hostgroupsPermitted);
 
 		return result;
 	}
@@ -1407,9 +1407,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		String method = "depot_installPackage";
 
-		logging.notice(this, method);
+		Logging.notice(this, method);
 		boolean result = exec.doCall(new OpsiMethodCall(method, new Object[] { filename, force }));
-		logging.info(this, "installPackage result " + result);
+		Logging.info(this, "installPackage result " + result);
 
 		return result;
 	}
@@ -1417,7 +1417,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public boolean setRights(String path) {
 		String method = "setRights";
-		logging.info(this, "setRights for path " + path);
+		Logging.info(this, "setRights for path " + path);
 
 		String[] args = new String[] { path };
 
@@ -1438,7 +1438,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map callFilter = new HashMap<>();
 
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
-		logging.notice(this, "host_getObjects");
+		Logging.notice(this, "host_getObjects");
 		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("host_getObjects", new Object[] { callAttributes, callFilter }));
 		timer.stop();
@@ -1485,12 +1485,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// !(clientActionRequest != null && ActionRequest.getLabel(
 			// ActionRequest.SETUP).equals( clientActionRequest ))
 			) {
-				logging.debug("getClientsWithOtherProductVersion hit " + m);
+				Logging.debug("getClientsWithOtherProductVersion hit " + m);
 				result.add(client);
 			}
 		}
 
-		logging.info(this, "getClientsWithOtherProductVersion globally " + result.size());
+		Logging.info(this, "getClientsWithOtherProductVersion globally " + result.size());
 
 		// should be done otherwere by preselection of depots
 
@@ -1557,7 +1557,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Boolean isWanConfigured(String host) {
-		logging.info(this, " isWanConfigured wanConfiguration  " + wanConfiguration + " for host " + host);
+		Logging.info(this, " isWanConfigured wanConfiguration  " + wanConfiguration + " for host " + host);
 
 		return findBooleanConfigurationComparingToDefaults(host, wanConfiguration);
 	}
@@ -1599,13 +1599,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private Boolean valueFromConfigStateAsExpected(Map<String, Object> configs, String configKey, boolean expectValue) {
 
-		logging.debug(this, "valueFromConfigStateAsExpected configKey " + configKey);
+		Logging.debug(this, "valueFromConfigStateAsExpected configKey " + configKey);
 
 		boolean result = false;
 
 		if (configs != null && configs.get(configKey) != null && !((List) (configs.get(configKey))).isEmpty()) {
 
-			logging.debug(this, "valueFromConfigStateAsExpected configKey, values " + configKey + ", valueList "
+			Logging.debug(this, "valueFromConfigStateAsExpected configKey, values " + configKey + ", valueList "
 					+ ((List) (configs.get(configKey))) + " expected " + expectValue);
 
 			Object value = ((List) (configs.get(configKey))).get(0);
@@ -1618,10 +1618,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				if (((String) value).equalsIgnoreCase("" + expectValue))
 					result = true;
 			} else {
-				logging.error(this, "it is not a boolean and not a string, how to handle it ? " + " value " + value);
+				Logging.error(this, "it is not a boolean and not a string, how to handle it ? " + " value " + value);
 			}
 
-			logging.debug(this, "valueFromConfigStateAsExpected " + result);
+			Logging.debug(this, "valueFromConfigStateAsExpected " + result);
 
 		}
 		return result;
@@ -1655,7 +1655,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map<String, ConfigOption> allWanConfigOptions = extractSubConfigOptionsByInitial(
 				MetaConfig.CONFIG_KEY + "." + WAN_PARTKEY);
 
-		logging.info(this, " getWANConfigOptions   " + allWanConfigOptions);
+		Logging.info(this, " getWANConfigOptions   " + allWanConfigOptions);
 
 		Map<String, ConfigOption> notWanConfigOptions = extractSubConfigOptionsByInitial(
 				MetaConfig.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + ".");
@@ -1683,9 +1683,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.info(this, "getWANConfigOptions wanConfiguration " + wanConfiguration);
+		Logging.info(this, "getWANConfigOptions wanConfiguration " + wanConfiguration);
 
-		logging.info(this, "getWANConfigOptions notWanConfiguration  " + notWanConfiguration);
+		Logging.info(this, "getWANConfigOptions notWanConfiguration  " + notWanConfiguration);
 
 		return allWanConfigOptions;
 
@@ -1694,18 +1694,18 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private List<Object> addWANConfigStates(String clientId, boolean wan, List<Object> jsonObjects) {
 		getWANConfigOptions();
 
-		logging.debug(this,
+		Logging.debug(this,
 				"addWANConfigState  wanConfiguration " + wanConfiguration + "\n " + wanConfiguration.size());
-		logging.debug(this, "addWANConfigState  wanConfiguration.keySet() " + wanConfiguration.keySet() + "\n "
+		Logging.debug(this, "addWANConfigState  wanConfiguration.keySet() " + wanConfiguration.keySet() + "\n "
 				+ wanConfiguration.keySet().size());
 
-		logging.debug(this,
+		Logging.debug(this,
 				"addWANConfigState  notWanConfiguration " + notWanConfiguration + "\n " + notWanConfiguration.size());
-		logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() " + notWanConfiguration.keySet() + "\n "
+		Logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() " + notWanConfiguration.keySet() + "\n "
 				+ notWanConfiguration.keySet().size());
 
 		setConfig(notWanConfiguration); // set the collection
-		logging.info(this, "set notWanConfiguration members where no entry exists ----------------------------- ");
+		Logging.info(this, "set notWanConfiguration members where no entry exists ----------------------------- ");
 		setConfig(true); // send to opsiserver only new configs
 
 		Map<String, List<Object>> specifiedConfiguration;
@@ -1719,22 +1719,22 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			jsonObjects = new ArrayList<>();
 
 		for (String configId : specifiedConfiguration.keySet()) {
-			logging.info(this, "addWANConfigState configId " + configId);
+			Logging.info(this, "addWANConfigState configId " + configId);
 			Map<String, Object> item = createNOMitem(ConfigStateEntry.TYPE);
 
 			item.put(ConfigStateEntry.CONFIG_ID, configId);
 
-			logging.info(this, "addWANConfigState values " + specifiedConfiguration.get(configId));
+			Logging.info(this, "addWANConfigState values " + specifiedConfiguration.get(configId));
 
 			item.put(ConfigStateEntry.VALUES, Executioner.jsonArray(specifiedConfiguration.get(configId)));
 
 			item.put(ConfigStateEntry.OBJECT_ID, clientId);
 
-			logging.info(this, "addWANConfigState configId, item " + configId + ", " + item);
+			Logging.info(this, "addWANConfigState configId, item " + configId + ", " + item);
 
 			// locally, hopefully the RPC call will work
 			if (getConfigs().get(clientId) == null) {
-				logging.info(this, "addWANConfigState; until now, no config(State) existed for client " + clientId
+				Logging.info(this, "addWANConfigState; until now, no config(State) existed for client " + clientId
 						+ " no local update");
 				getConfigs().put(clientId, new HashMap<>());
 			}
@@ -1752,7 +1752,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public boolean setWANConfigs(String clientId, boolean wan) {
 		boolean result = false;
-		logging.info(this, "setWANConfigs " + clientId + " . " + wan);
+		Logging.info(this, "setWANConfigs " + clientId + " . " + wan);
 
 		List<Object> jsonObjects = addWANConfigStates(clientId, wan, null);
 
@@ -1779,7 +1779,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public boolean configureUefiBoot(String clientId, boolean uefiBoot) {
 		boolean result = false;
 
-		logging.info(this, "configureUefiBoot, clientId " + clientId + " " + uefiBoot);
+		Logging.info(this, "configureUefiBoot, clientId " + clientId + " " + uefiBoot);
 
 		List values = new ArrayList<>();
 
@@ -1809,7 +1809,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (getConfigs().get(clientId) == null)
 				getConfigs().put(clientId, new HashMap<>());
 
-			logging.info(this,
+			Logging.info(this,
 					"configureUefiBoot, configs for clientId " + clientId + " " + getConfigs().get(clientId));
 			getConfigs().get(clientId).put(CONFIG_DHCPD_FILENAME, values);
 		}
@@ -1878,13 +1878,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				itemShI.put(ConfigStateEntry.VALUES, Executioner.jsonArray(valuesShI));
 				itemShI.put(ConfigStateEntry.CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
-				logging.info(this, "create client, config item for shutdownInstall " + itemShI);
+				Logging.info(this, "create client, config item for shutdownInstall " + itemShI);
 
 				configStatesJsonObject.add(Executioner.jsonMap(itemShI));
 			}
 
 			if (group != null && !group.isEmpty()) {
-				logging.info(this, "createClient" + " group " + group);
+				Logging.info(this, "createClient" + " group " + group);
 				Map<String, Object> itemGroup = createNOMitem(Object2GroupEntry.TYPE_NAME);
 				itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 				itemGroup.put(Object2GroupEntry.GROUP_ID_KEY, group);
@@ -1893,7 +1893,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 
 			if (productNetboot != null && !productNetboot.isEmpty()) {
-				logging.info(this, "createClient" + " productNetboot " + productNetboot);
+				Logging.info(this, "createClient" + " productNetboot " + productNetboot);
 				Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
 				itemProducts.put(OpsiPackage.DBkeyPRODUCT_ID, productNetboot);
 				itemProducts.put(OpsiPackage.SERVICEkeyPRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
@@ -2017,7 +2017,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				itemShI.put(ConfigStateEntry.VALUES, Executioner.jsonArray(valuesShI));
 				itemShI.put(ConfigStateEntry.CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
-				logging.info(this, "create client, config item for shutdownInstall " + itemShI);
+				Logging.info(this, "create client, config item for shutdownInstall " + itemShI);
 
 				jsonObjects.add(Executioner.jsonMap(itemShI));
 
@@ -2030,7 +2030,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		if ((result) && ((group != null) && (!group.isEmpty()))) {
-			logging.info(this, "createClient" + " group " + group);
+			Logging.info(this, "createClient" + " group " + group);
 			List<Object> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemGroup = createNOMitem(Object2GroupEntry.TYPE_NAME);
 			itemGroup.put(Object2GroupEntry.GROUP_TYPE_KEY, Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
@@ -2043,7 +2043,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		if ((result) && ((productNetboot != null) && (!productNetboot.isEmpty()))) {
-			logging.info(this, "createClient" + " productNetboot " + productNetboot);
+			Logging.info(this, "createClient" + " productNetboot " + productNetboot);
 			List<Object> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
 			itemProducts.put(OpsiPackage.DBkeyPRODUCT_ID, productNetboot);
@@ -2057,7 +2057,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		if ((result) && ((productLocalboot != null) && (!productLocalboot.isEmpty()))) {
-			logging.info(this, "createClient" + " productLocalboot " + productLocalboot);
+			Logging.info(this, "createClient" + " productLocalboot " + productLocalboot);
 			List<Object> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
 			itemProducts.put(OpsiPackage.DBkeyPRODUCT_ID, productLocalboot);
@@ -2085,7 +2085,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// update Product Tables
 			hostInfoCollections.setLocalHostInfo(newClientId, depotId, hostInfo);
 
-			logging.info(this, " createClient hostInfo " + hostInfo);
+			Logging.info(this, " createClient hostInfo " + hostInfo);
 		}
 
 		return result;
@@ -2136,7 +2136,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			if (error != null) {
 				error = host + ":\t" + error;
-				logging.info(callingMethodName + ",  " + error);
+				Logging.info(callingMethodName + ",  " + error);
 				errors.add(error);
 			}
 
@@ -2188,11 +2188,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map<String, Executioner> executionerForDepots = new HashMap<>();
 
 		for (String depot : hostSeparationByDepot.keySet()) {
-			logging.info(this, "from depot " + depot + " we have hosts " + hostSeparationByDepot.get(depot));
+			Logging.info(this, "from depot " + depot + " we have hosts " + hostSeparationByDepot.get(depot));
 
 			Executioner exec1 = executionerForDepots.get(depot);
 
-			logging.info(this, "working exec for depot " + depot + " " + (exec1 != null));
+			Logging.info(this, "working exec for depot " + depot + " " + (exec1 != null));
 
 			if (exec1 == null) {
 				exec1 = retrieveWorkingExec(depot);
@@ -2226,7 +2226,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				if (execsByDepot.get(depot) != null && execsByDepot.get(depot) != Executioner.NONE
 						&& !hostsToWake.isEmpty()) {
-					logging.debug(this, "wakeOnLan execute for " + hostsToWake);
+					Logging.debug(this, "wakeOnLan execute for " + hostsToWake);
 					OpsiMethodCall omc = new OpsiMethodCall("hostControl_start",
 							new Object[] { hostsToWake.toArray(new String[0]) });
 
@@ -2286,12 +2286,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Map<String, Object> reachableInfo(String[] clientIds) {
-		logging.info(this, "reachableInfo ");
+		Logging.info(this, "reachableInfo ");
 		Object[] callParameters = new Object[] {};
 
 		String methodName = "hostControl_reachable";
 		if (clientIds != null) {
-			logging.info(this, "reachableInfo for clientIds " + clientIds.length);
+			Logging.info(this, "reachableInfo for clientIds " + clientIds.length);
 			callParameters = new Object[] { clientIds };
 			methodName = "hostControlSafe_reachable";
 		}
@@ -2311,7 +2311,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Map<String, Integer> getInstalledOsOverview() {
-		logging.info(this, "getInstalledOsOverview");
+		Logging.info(this, "getInstalledOsOverview");
 
 		Map<String, Object> licensingInfo = getLicensingInfo();
 		Map<String, Integer> map = new HashMap<>();
@@ -2324,7 +2324,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				map.put(key, (Integer) jO.get(key));
 			}
 		} catch (JSONException jex) {
-			logging.error(this, "Exception on getting Map " + jex.toString());
+			Logging.error(this, "Exception on getting Map " + jex.toString());
 		}
 
 		return map;
@@ -2332,7 +2332,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Map<String, Object> getLicensingInfo() {
-		logging.info(this, "getLicensingInfo");
+		Logging.info(this, "getLicensingInfo");
 
 		Object[] callParameters = { true, true, true };
 		String methodName = "backend_getLicensingInfo";
@@ -2344,7 +2344,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public List<Map<String, Object>> getModules() {
-		logging.info(this, "getModules");
+		Logging.info(this, "getModules");
 
 		Map<String, Object> licensingInfo = getLicensingInfo();
 		return JSONReMapper.getListOfMaps((JSONArray) licensingInfo.get("licenses"));
@@ -2533,13 +2533,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				new String[] { "id", "parentGroupId", "description" },
 				new String[] { "groupId", "parentGroupId", "description" }));
 
-		logging.debug(this, "getHostGroups " + hostGroups);
+		Logging.debug(this, "getHostGroups " + hostGroups);
 
 		hostGroups = hostGroups.addSpecialGroups();
-		logging.debug(this, "getHostGroups " + hostGroups);
+		Logging.debug(this, "getHostGroups " + hostGroups);
 		hostGroups.alterToWorkingVersion();
 
-		logging.debug(this, "getHostGroups rebuilt" + hostGroups);
+		Logging.debug(this, "getHostGroups rebuilt" + hostGroups);
 
 		return hostGroups;
 	}
@@ -2657,7 +2657,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (globalReadOnly)
 			return false;
 
-		logging.info(this, "addHosts2Group hosts " + objectIds);
+		Logging.info(this, "addHosts2Group hosts " + objectIds);
 
 		String persistentGroupId = de.uib.configed.tree.ClientTree.translateToPersistentName(groupId);
 
@@ -2671,7 +2671,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			jsonObjects.add(Executioner.jsonMap(item));
 		}
 
-		logging.info(this, "addHosts2Group persistentGroupId " + persistentGroupId);
+		Logging.info(this, "addHosts2Group persistentGroupId " + persistentGroupId);
 
 		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_createObjects",
 				new Object[] { Executioner.jsonArray(jsonObjects) });
@@ -2685,7 +2685,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return false;
 
 		String persistentGroupId = de.uib.configed.tree.ClientTree.translateToPersistentName(groupId);
-		logging.debug(this, "addObject2Group persistentGroupId " + persistentGroupId);
+		Logging.debug(this, "addObject2Group persistentGroupId " + persistentGroupId);
 		OpsiMethodCall omc = new OpsiMethodCall("objectToGroup_create",
 				new String[] { Object2GroupEntry.GROUP_TYPE_HOSTGROUP, persistentGroupId, objectId });
 
@@ -2743,7 +2743,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (!serverFullPermission)
 			return false;
 
-		logging.debug(this, "addGroup : " + newgroup + " requestRefresh " + requestRefresh);
+		Logging.debug(this, "addGroup : " + newgroup + " requestRefresh " + requestRefresh);
 
 		String id = newgroup.get("groupId");
 		String parentId = newgroup.get("parentGroupId");
@@ -2753,7 +2753,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		parentId = de.uib.configed.tree.ClientTree.translateToPersistentName(parentId);
 
 		if (id.equalsIgnoreCase(parentId)) {
-			logging.error(this, "Cannot add group as child to itself, group ID " + id);
+			Logging.error(this, "Cannot add group as child to itself, group ID " + id);
 			return false;
 		}
 
@@ -2808,7 +2808,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		parentGroupId = de.uib.configed.tree.ClientTree.translateToPersistentName(parentGroupId);
 		updateInfo.put("parentGroupId", parentGroupId);
 
-		logging.debug(this, "updateGroup " + parentGroupId);
+		Logging.debug(this, "updateGroup " + parentGroupId);
 
 		OpsiMethodCall omc = new OpsiMethodCall("group_updateObject", new Object[] { Executioner.jsonMap(updateInfo) });
 		return exec.doCall(omc);
@@ -2819,11 +2819,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (!serverFullPermission)
 			return false;
 
-		logging.debug(this, "setProductGroup: groupId " + groupId);
+		Logging.debug(this, "setProductGroup: groupId " + groupId);
 		if (groupId == null)
 			return false;
 
-		logging.info(this, "setProductGroup: groupId " + groupId + " should have members " + productSet);
+		Logging.info(this, "setProductGroup: groupId " + groupId + " should have members " + productSet);
 
 		boolean result = true;
 
@@ -2845,13 +2845,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (groupId != null && getFProductGroup2Members().get(groupId) != null) {
 
 			Set oriSet = getFProductGroup2Members().get(groupId);
-			logging.debug(this, "setProductGroup: oriSet " + oriSet);
+			Logging.debug(this, "setProductGroup: oriSet " + oriSet);
 			inOriSetnotInNewSet = new HashSet<>(oriSet);
 			inOriSetnotInNewSet.removeAll(productSet);
 			inNewSetnotInOriSet.removeAll(oriSet);
 		}
 
-		logging.info(this, "setProductGroup: inOriSetnotInNewSet, inNewSetnotInOriSet. " + inOriSetnotInNewSet + ", "
+		Logging.info(this, "setProductGroup: inOriSetnotInNewSet, inNewSetnotInOriSet. " + inOriSetnotInNewSet + ", "
 				+ inNewSetnotInOriSet);
 
 		final Map typingObject = new HashMap<>();
@@ -2866,7 +2866,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			object2Groups.add(Executioner.jsonMap(m));
 		}
 
-		logging.debug(this, "delete objects " + object2Groups);
+		Logging.debug(this, "delete objects " + object2Groups);
 
 		if (!object2Groups.isEmpty()) {
 			Object jsonArray = Executioner.jsonArray(object2Groups);
@@ -2882,7 +2882,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			object2Groups.add(Executioner.jsonMap(m));
 		}
 
-		logging.debug(this, "create new objects " + object2Groups);
+		Logging.debug(this, "create new objects " + object2Groups);
 
 		if (!object2Groups.isEmpty()) {
 			Object jsonArray = Executioner.jsonArray(object2Groups);
@@ -2926,10 +2926,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		for (Map<String, Object> hwAuditClass : hwAuditConf) {
 			if (!(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)) {
-				logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
+				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
 						+ hwAuditClass.get(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)));
 				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null)
-					logging.warning(this,
+					Logging.warning(this,
 							"getAllHwClassNames illegal hw config item,  hwAuditClass.get Class is of class "
 									+ hwAuditClass.get(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).getClass()));
 
@@ -2951,7 +2951,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					"auditHardware_getConfig", new String[] {})));
 			if (hwAuditConf.get("") == null) {
-				logging.warning(this, "got no hardware config");
+				Logging.warning(this, "got no hardware config");
 			}
 
 		}
@@ -2975,7 +2975,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			opsiHwClassNames = produceHwClasses(getOpsiHWAuditConf());
 		}
 
-		logging.info(this, "getAllHwClassNames, hw classes " + opsiHwClassNames);
+		Logging.info(this, "getAllHwClassNames, hw classes " + opsiHwClassNames);
 
 		return opsiHwClassNames;
 	}
@@ -2996,7 +2996,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public void softwareAuditOnClientsRequestRefresh() {
-		logging.info(this, "softwareAuditOnClientsRequestRefresh");
+		Logging.info(this, "softwareAuditOnClientsRequestRefresh");
 		dataStub.softwareAuditOnClientsRequestRefresh();
 	}
 
@@ -3044,20 +3044,20 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (entry.getSWid() != null) {
 				int i = entry.getSWid();
 
-				logging.debug(this, "getSoftwareAudit,  ID " + i + " for client entry " + entry);
+				Logging.debug(this, "getSoftwareAudit,  ID " + i + " for client entry " + entry);
 				if (i == -1 && withRetry) {
 					{
-						logging.info(this, "getSoftwareAudit,  not found client entry " + entry);
+						Logging.info(this, "getSoftwareAudit,  not found client entry " + entry);
 						int returnedOption = javax.swing.JOptionPane.showOptionDialog(Globals.mainFrame,
 
-								configed.getResourceValue("PersistenceController.reloadSoftwareInformation.message")
+								Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.message")
 										+ " " + entry.getSWident()
-										+ configed.getResourceValue(
+										+ Configed.getResourceValue(
 												"PersistenceController.reloadSoftwareInformation.question")
-										+ configed.getResourceValue(
+										+ Configed.getResourceValue(
 												"PersistenceController.reloadSoftwareInformation.info"),
 
-								configed.getResourceValue("PersistenceController.reloadSoftwareInformation.title"),
+								Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.title"),
 
 								javax.swing.JOptionPane.YES_NO_CANCEL_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE,
 								null, null, null);
@@ -3083,7 +3083,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.info(this, "getSoftwareAuditBase for client, list.size " + clientId + ", " + list.size());
+		Logging.info(this, "getSoftwareAuditBase for client, list.size " + clientId + ", " + list.size());
 		return new DatedRowList(list, dateS);
 	}
 
@@ -3183,7 +3183,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		hwAuditDeviceClasses = new TreeMap<>();
 
 		if (getOpsiHWAuditConf() == null) {
-			logging.error(this, "no hwaudit config found ");
+			Logging.error(this, "no hwaudit config found ");
 			return;
 		}
 
@@ -3192,14 +3192,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null
 					|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)
 					|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) instanceof List)) {
-				logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
+				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
 						+ hwAuditClass.get("Class"));
 				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null)
-					logging.warning(this,
+					Logging.warning(this,
 							"getAllHwClassNames illegal hw config item,  hwAuditClass.get Class is of class "
 									+ hwAuditClass.get("Class").getClass());
 				if (hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) != null)
-					logging.warning(this,
+					Logging.warning(this,
 							"getAllHwClassNames illegal hw config item,  hwAuditClass.get Values is of class "
 									+ hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY).getClass());
 
@@ -3225,11 +3225,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			hwAuditDeviceClass.setWmiQuery((String) (((Map) (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)))
 					.get(OpsiHwAuditDeviceClass.WMI_KEY)));
 
-			logging.info(this, "hw audit class " + hwClass);
+			Logging.info(this, "hw audit class " + hwClass);
 
 			for (Object m : (List) (hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY))) {
 				if (!(m instanceof Map)) {
-					logging.warning(this, "getAllHwClassNames illegal VALUES item, m " + m);
+					Logging.warning(this, "getAllHwClassNames illegal VALUES item, m " + m);
 					continue;
 				}
 
@@ -3259,7 +3259,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 
 				else {
-					logging.warning(this, "getAllHwClassNames illegal value for key " + OpsiHwAuditDeviceClass.SCOPE_KEY
+					Logging.warning(this, "getAllHwClassNames illegal value for key " + OpsiHwAuditDeviceClass.SCOPE_KEY
 							+ " " + ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY));
 				}
 
@@ -3268,18 +3268,18 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			hwAuditDeviceClass.addHostRelatedProperty(firstSeen);
 			hwAuditDeviceClass.addHostRelatedProperty(lastSeen);
 
-			logging.info(this, "hw audit class " + hwAuditDeviceClass);
+			Logging.info(this, "hw audit class " + hwAuditDeviceClass);
 
 		}
 
-		logging.info(this, "produceHwAuditDeviceClasses hwAuditDeviceClasses size " + hwAuditDeviceClasses.size());
+		Logging.info(this, "produceHwAuditDeviceClasses hwAuditDeviceClasses size " + hwAuditDeviceClasses.size());
 
 	}
 
 	@Override
 	public List<String> getHwInfoClassNames() {
 		retrieveClient2HwRowsColumnNames();
-		logging.info(this, "getHwInfoClassNames " + hwInfoClassNames);
+		Logging.info(this, "getHwInfoClassNames " + hwInfoClassNames);
 		return hwInfoClassNames;
 	}
 
@@ -3298,7 +3298,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			result = columnName.substring(hwInfo_DEVICE.length());
 			result = result.substring(0, result.indexOf('.'));
 		} else
-			logging.warning(this, "cutClassName " + "unexpected columnName " + columnName);
+			Logging.warning(this, "cutClassName " + "unexpected columnName " + columnName);
 
 		return result;
 	}
@@ -3306,7 +3306,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected void retrieveClient2HwRowsColumnNames() {
 		getConfigOptions();
 
-		logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null "
+		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null "
 				+ (client2HwRowsColumnNames == null));
 		if (client2HwRowsColumnNames == null || client2HwRowsJavaclassNames == null || hwInfoClassNames == null) {
 
@@ -3343,7 +3343,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Set<String> hwInfoClasses = new HashSet<>();
 
 			for (String columnName : client2HwRowsColumnNames) {
-				logging.info(this, "retrieveClient2HwRowsColumnNames col " + columnName);
+				Logging.info(this, "retrieveClient2HwRowsColumnNames col " + columnName);
 				client2HwRowsJavaclassNames.add("java.lang.String");
 				String className = cutClassName(columnName);
 				if (className != null)
@@ -3352,7 +3352,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			hwInfoClassNames = new ArrayList<>(hwInfoClasses);
 
-			logging.info(this, "retrieveClient2HwRowsColumnNames hwInfoClassNames " + hwInfoClassNames);
+			Logging.info(this, "retrieveClient2HwRowsColumnNames hwInfoClassNames " + hwInfoClassNames);
 		}
 	}
 
@@ -3370,10 +3370,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map<String, Map<String, Object>> client2HwRows = dataStub.getClient2HwRows(hosts);
 
 		for (String host : hosts) {
-			logging.info(this, "getClient2HwRows host " + host);
+			Logging.info(this, "getClient2HwRows host " + host);
 
 			if (client2HwRows.get(host) == null) {
-				logging.info(this, "getClient2HwRows for host " + host + " is null");
+				Logging.info(this, "getClient2HwRows for host " + host + " is null");
 			}
 		}
 
@@ -3387,14 +3387,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (configOptions.get(configKey) != null)
 			oldDefaultValues = configOptions.get(configKey).getDefaultValues();
 
-		logging.info(this, "produceHwAuditColumnConfig " + oldDefaultValues);
+		Logging.info(this, "produceHwAuditColumnConfig " + oldDefaultValues);
 
 		List<Object> possibleValues = new ArrayList<>();
 		for (OpsiHwAuditDevicePropertyType deviceProperty : deviceProperties) {
 			possibleValues.add(deviceProperty.getOpsiDbColumnName());
 		}
 
-		logging.info(this, "produceConfig, possibleValues " + possibleValues);
+		Logging.info(this, "produceConfig, possibleValues " + possibleValues);
 
 		List<Object> newDefaultValues = new ArrayList<>();
 		for (Object value : possibleValues) {
@@ -3418,7 +3418,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				true, // multivalue
 				newDefaultValues, possibleValues);
 
-		logging.info(this, "produceConfig, created an item " + configItem);
+		Logging.info(this, "produceConfig, created an item " + configItem);
 
 		return configItem;
 	}
@@ -3436,12 +3436,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			String configKey = hwAuditDeviceClass.getHostConfigKey();
 			String configIdent = hwClass + "_" + OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE;
 
-			logging.debug(this, " saveHwColumnConfig for HOST configIdent " + configIdent);
+			Logging.debug(this, " saveHwColumnConfig for HOST configIdent " + configIdent);
 
 			Map<String, Boolean> tableConfigUpdates = updateItems.get(configIdent.toUpperCase());
 
 			if (tableConfigUpdates != null)
-				logging.info(this,
+				Logging.info(this,
 						" saveHwColumnConfig tableConfigUpdates  for the host configIdent,  " + tableConfigUpdates);
 
 			if (tableConfigUpdates != null)
@@ -3453,21 +3453,21 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				readyObjects.add(Executioner.jsonMap(configItem));
 
-				logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
+				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
 
 				// save the data locally, we hope that the upload later will work as well
 
 				// now, we have got them in a view model
 
-				logging.info(this, "saveHwColumnConfig, locally saving " // + configOption
+				Logging.info(this, "saveHwColumnConfig, locally saving " // + configOption
 						+ " key " + hwAuditDeviceClass.getHwItemConfigKey());
 
-				logging.info(this,
+				Logging.info(this,
 						"saveHwColumnConfig, old configOption for key" + " " + hwAuditDeviceClass.getHostConfigKey()
 								+ " " + configOptions.get(hwAuditDeviceClass.getHostConfigKey()) + " "
 								+ configOptions.get(hwAuditDeviceClass.getHostConfigKey()).getClass());
 
-				logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
+				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
 
 				ConfigOption configOption = new ConfigOption(configItem);
 
@@ -3479,12 +3479,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			configKey = hwAuditDeviceClass.getHwItemConfigKey();
 			configIdent = hwClass + "_" + OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE;
 
-			logging.debug(this, " saveHwColumnConfig for HW configIdent " + configIdent);
+			Logging.debug(this, " saveHwColumnConfig for HW configIdent " + configIdent);
 
 			tableConfigUpdates = updateItems.get(configIdent.toUpperCase());
 
 			if (tableConfigUpdates != null)
-				logging.info(this,
+				Logging.info(this,
 						" saveHwColumnConfig tableConfigUpdates  for the hw configIdent,  " + tableConfigUpdates);
 
 			if (tableConfigUpdates != null)
@@ -3496,17 +3496,17 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				readyObjects.add(Executioner.jsonMap(configItem));
 
-				logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
+				Logging.info(this, " saveHwColumnConfig, added configItem " + configItem);
 
 				// save the data locally, we hope that the upload later will work as well
 				// now, we have got them in a view model
 
-				logging.info(this, "saveHwColumnConfig, produce a ConfigOption from configItem " + configItem);
+				Logging.info(this, "saveHwColumnConfig, produce a ConfigOption from configItem " + configItem);
 
-				logging.info(this, "saveHwColumnConfig, locally saving " // + configOption
+				Logging.info(this, "saveHwColumnConfig, locally saving " // + configOption
 						+ " key " + hwAuditDeviceClass.getHwItemConfigKey());
 
-				logging.info(this,
+				Logging.info(this,
 						"saveHwColumnConfig, we had configOption for key" + " "
 								+ hwAuditDeviceClass.getHwItemConfigKey() + " "
 								+ configOptions.get(hwAuditDeviceClass.getHwItemConfigKey()) + " "
@@ -3520,7 +3520,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.info(this, "saveHwColumnConfig readyObjects " + readyObjects.size());
+		Logging.info(this, "saveHwColumnConfig readyObjects " + readyObjects.size());
 		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
 				new Object[] { Executioner.jsonArray(readyObjects) });
 
@@ -3558,16 +3558,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		int i = Arrays.asList(Globals.logtypes).indexOf(logtype);
 		if (i < 0) {
-			logging.error("illegal logtype: " + logtype);
+			Logging.error("illegal logtype: " + logtype);
 			return logfiles;
 		}
 
-		logging.debug(this, "------------- getLogfile logtye " + logtype);
+		Logging.debug(this, "------------- getLogfile logtye " + logtype);
 
 		String s = "";
 		try {
 
-			logging.debug(this, "OpsiMethodCall readLog " + logtypes[i] + " max size " + Globals.maxLogSizes[i]);
+			Logging.debug(this, "OpsiMethodCall readLog " + logtypes[i] + " max size " + Globals.maxLogSizes[i]);
 
 			try {
 
@@ -3609,7 +3609,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public void depotChange() {
-		logging.info(this, "depotChange");
+		Logging.info(this, "depotChange");
 		productGlobalInfos = null;
 		possibleActions = null;
 		productIds = null;
@@ -3653,8 +3653,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public List<String> getAllLocalbootProductNames(String depotId) {
-		logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
-		logging.info(this, "getAllLocalbootProductNames, producing " + (localbootProductNames == null));
+		Logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
+		Logging.info(this, "getAllLocalbootProductNames, producing " + (localbootProductNames == null));
 		if (localbootProductNames == null) {
 			// opsi 4.0
 			// localbootProductNames = exec.getListResult( new
@@ -3671,10 +3671,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (notSortedProducts == null)
 				notSortedProducts = new ArrayList<>();
 
-			logging.info(this, "not ordered " + (notSortedProducts.size() - sortedProducts.size()) + "");
+			Logging.info(this, "not ordered " + (notSortedProducts.size() - sortedProducts.size()) + "");
 
 			notSortedProducts.removeAll(sortedProducts);
-			logging.info(this, "missing: " + notSortedProducts);
+			Logging.info(this, "missing: " + notSortedProducts);
 
 			localbootProductNames = sortedProducts;
 			localbootProductNames.addAll(notSortedProducts);
@@ -3687,7 +3687,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.info(this, "localbootProductNames sorted, size " + localbootProductNames.size());
+		Logging.info(this, "localbootProductNames sorted, size " + localbootProductNames.size());
 
 		return localbootProductNames;
 	}
@@ -3703,7 +3703,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	protected void retrieveDepotProducts(String depotId) {
-		logging.debug(this, "retrieveDepotProducts for " + depotId);
+		Logging.debug(this, "retrieveDepotProducts for " + depotId);
 
 		if (dataStub.getDepot2NetbootProducts().get(depotId) != null)
 			netbootProductNames = new ArrayList<>(dataStub.getDepot2NetbootProducts().get(depotId).keySet());
@@ -3726,14 +3726,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<String> result = new ArrayList<>();
 
 		TreeSet<OpsiPackage> first = dataStub.getDepot2Packages().get(depot);
-		logging.info(this, "getAllDepotsWithIdenticalProductStock " + first);
+		Logging.info(this, "getAllDepotsWithIdenticalProductStock " + first);
 
 		for (String testdepot : getHostInfoCollections().getAllDepots().keySet()) {
 			if (depot.equals(testdepot) || (first == null && dataStub.getDepot2Packages().get(testdepot) == null)
 					|| (first != null && first.equals(dataStub.getDepot2Packages().get(testdepot))))
 				result.add(testdepot);
 		}
-		logging.info(this, "getAllDepotsWithIdenticalProductStock  result " + result);
+		Logging.info(this, "getAllDepotsWithIdenticalProductStock  result " + result);
 
 		return result;
 	}
@@ -3790,14 +3790,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private void retrieveProductGlobalInfos(String depotId) {
 
-		logging.info(this, "retrieveProductGlobalInfos , depot " + depotId);
+		Logging.info(this, "retrieveProductGlobalInfos , depot " + depotId);
 
 		productGlobalInfos = new HashMap<>();
 		possibleActions = new HashMap<>();
 
 		for (String productId : dataStub.getProduct2versionInfo2infos().keySet()) {
 			if (dataStub.getProduct2versionInfo2infos().get(productId) == null)
-				logging.warning(this, "retrieveProductGlobalInfos productId == null for product " + productId);
+				Logging.warning(this, "retrieveProductGlobalInfos productId == null for product " + productId);
 
 			if (dataStub.getProduct2versionInfo2infos().get(productId) != null) {
 				String versionInfo = null;
@@ -3855,7 +3855,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					aProductInfo.put(OpsiPackage.SERVICEkeyLOCKED, productInfo.getLockedInfo());
 
-					logging.debug(this, "productInfo " + aProductInfo);
+					Logging.debug(this, "productInfo " + aProductInfo);
 
 					productGlobalInfos.put(productId, aProductInfo);
 
@@ -3863,18 +3863,18 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.info(this, "retrieveProductGlobalInfos  found number  " + productGlobalInfos.size());
+		Logging.info(this, "retrieveProductGlobalInfos  found number  " + productGlobalInfos.size());
 
 	}
 
 	private void checkProductGlobalInfos(String depotId) {
-		logging.info(this, "checkProductGlobalInfos for Depot " + depotId);
+		Logging.info(this, "checkProductGlobalInfos for Depot " + depotId);
 		if (!theDepot.equals(depotId))
-			logging.warning(this, "depot irregular, preset " + theDepot);
+			Logging.warning(this, "depot irregular, preset " + theDepot);
 		if (depotId == null || depotId.equals("")) {
-			logging.notice(this, "checkProductGlobalInfos called for no depot");
+			Logging.notice(this, "checkProductGlobalInfos called for no depot");
 		}
-		logging.debug(this, "checkProductGlobalInfos depotId " + depotId + " productGlobaInfos  = null "
+		Logging.debug(this, "checkProductGlobalInfos depotId " + depotId + " productGlobaInfos  = null "
 				+ (productGlobalInfos == null) + " possibleActions = null " + (possibleActions == null));
 		if (possibleActions == null || productGlobalInfos == null || theDepot == null || !theDepot.equals(depotId)) {
 			retrieveProductGlobalInfos(depotId);
@@ -3885,14 +3885,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public Map<String, List<String>> getPossibleActions(String depotId)
 	// map with key productId
 	{
-		logging.debug(this, "getPossibleActions depot irregular " + !theDepot.equals(depotId));
+		Logging.debug(this, "getPossibleActions depot irregular " + !theDepot.equals(depotId));
 		checkProductGlobalInfos(depotId);
 		return possibleActions;
 	}
 
 	@Override
 	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds) {
-		logging.debug(this, "getMapOfProductStatesAndActions for : " + logging.getStrings(clientIds));
+		Logging.debug(this, "getMapOfProductStatesAndActions for : " + Logging.getStrings(clientIds));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
@@ -3976,7 +3976,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds) {
 
-		logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + logging.getStrings(clientIds));
+		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Logging.getStrings(clientIds));
 
 		if (clientIds == null || clientIds.length == 0)
 			return null;
@@ -4020,7 +4020,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
-		logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + logging.getStrings(clientIds));
+		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Logging.getStrings(clientIds));
 
 		if (clientIds == null || clientIds.length == 0)
 			return null;
@@ -4045,7 +4045,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		values.put("productId", productname);
 		values.putAll(updateValues);
 
-		logging.debug(this, "updateProductOnClient, values " + values);
+		Logging.debug(this, "updateProductOnClient, values " + values);
 		updateItems.add(Executioner.jsonMap(values));
 
 		return true;
@@ -4061,7 +4061,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public boolean updateProductOnClients(List updateItems)
 	// hopefully we get only updateItems for allowed clients
 	{
-		logging.info(this, "updateProductOnClients ");
+		Logging.info(this, "updateProductOnClients ");
 
 		if (globalReadOnly)
 			return false;
@@ -4069,7 +4069,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		boolean result = false;
 
 		if (updateItems != null && !updateItems.isEmpty()) {
-			logging.info(this, "updateProductOnClients  updateItems.size " + updateItems.size());
+			Logging.info(this, "updateProductOnClients  updateItems.size " + updateItems.size());
 
 			OpsiMethodCall omc = new OpsiMethodCall("productOnClient_updateObjects",
 					new Object[] { Executioner.jsonArray(updateItems) });
@@ -4121,11 +4121,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.info(this, "resetLocalbootProducts deleteProductItems.size " + deleteProductItems.size());
+		Logging.info(this, "resetLocalbootProducts deleteProductItems.size " + deleteProductItems.size());
 
 		result = resetProducts(deleteProductItems, withDependencies);
 
-		logging.debug(this, "resetLocalbootProducts result " + result);
+		Logging.debug(this, "resetLocalbootProducts result " + result);
 
 		return result;
 	}
@@ -4149,11 +4149,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.info(this, "resetNetbootProducts deleteProductItems.size " + deleteProductItems.size());
+		Logging.info(this, "resetNetbootProducts deleteProductItems.size " + deleteProductItems.size());
 
 		result = resetProducts(deleteProductItems, withDependencies);
 
-		logging.debug(this, "resetNetbootProducts result " + result);
+		Logging.debug(this, "resetNetbootProducts result " + result);
 
 		return result;
 	}
@@ -4164,7 +4164,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		boolean result = true;
 
-		logging.info(this, "resetProducts productItems.size " + productItems.size());
+		Logging.info(this, "resetProducts productItems.size " + productItems.size());
 
 		if (!productItems.isEmpty()) {
 			OpsiMethodCall omc = new OpsiMethodCall("productOnClient_deleteObjects",
@@ -4172,7 +4172,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			result = exec.doCall(omc);
 
-			logging.debug(this, "resetProducts result " + result);
+			Logging.debug(this, "resetProducts result " + result);
 
 			if (result && withDependencies) {
 				omc = new OpsiMethodCall("productPropertyState_delete",
@@ -4183,7 +4183,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.debug(this, "resetProducts result " + result);
+		Logging.debug(this, "resetProducts result " + result);
 
 		return result;
 	}
@@ -4207,7 +4207,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (productIds == null)
 			getProductIds();
 
-		logging.debug(this, "getProductDefaultStates, count " + productDefaultStates.size());
+		Logging.debug(this, "getProductDefaultStates, count " + productDefaultStates.size());
 		return productDefaultStates;
 	}
 
@@ -4236,7 +4236,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				productDefaultStates.put(productId, productDefault);
 			}
 
-			logging.info(this, "getProductIds size / names " + productIds.size() + " / ... ");
+			Logging.info(this, "getProductIds size / names " + productIds.size() + " / ... ");
 
 		}
 
@@ -4254,7 +4254,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			result = new ArrayList<>();
 		}
 
-		logging.debug(this,
+		Logging.debug(this,
 				"getProductDependencies for depot, product " + depotId + ", " + productId + " , result " + result);
 		return result;
 	}
@@ -4282,9 +4282,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			startResultSet = new HashSet<>(endResultSet);
 
 			for (String prod : notHandled) {
-				logging.info(this, " extendToDependentProducts prod " + prod);
+				Logging.info(this, " extendToDependentProducts prod " + prod);
 				for (Map<String, String> m : getProductDependencies(depot, prod)) {
-					logging.info(this, " extendToDependentProducts m " + m.get("requiredProductId"));
+					Logging.info(this, " extendToDependentProducts m " + m.get("requiredProductId"));
 					endResultSet.add(m.get("requiredProductId"));
 				}
 			}
@@ -4321,7 +4321,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map callFilter, String methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
-		logging.debug(this, "retrieveListOfMapsNOM " + retrieved);
+		Logging.debug(this, "retrieveListOfMapsNOM " + retrieved);
 		return retrieved;
 	}
 
@@ -4334,7 +4334,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * @param String       property
 	 */
 	public List<String> getCommonProductPropertyValues(List<String> clients, String product, String property) {
-		logging.info(this, "getCommonProductPropertyValues for product, property, clients " + product + ", " + property
+		Logging.info(this, "getCommonProductPropertyValues for product, property, clients " + product + ", " + property
 				+ "  -- " + clients);
 		String[] callAttributes = new String[] {};
 		Map callFilter = new HashMap<>();
@@ -4367,7 +4367,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.info(this, "getCommonProductPropertyValues " + resultSet);
+		Logging.info(this, "getCommonProductPropertyValues " + resultSet);
 
 		return new ArrayList<>(resultSet);
 
@@ -4390,10 +4390,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public Map<String, ConfigName2ConfigValue> getDefaultProductProperties(String depotId) {
-		logging.debug(this, "getDefaultProductProperties for depot " + depotId);
+		Logging.debug(this, "getDefaultProductProperties for depot " + depotId);
 		retrieveDepotProductProperties();
 		if (depot2product2properties == null) {
-			logging.error("no product properties ");
+			Logging.error("no product properties ");
 			return null;
 		} else {
 
@@ -4402,7 +4402,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				return new HashMap<>();
 
 			if (!depot2product2properties.get(depotId).isEmpty()) {
-				logging.info(this, "getDefaultProductProperties for depotId " + depotId + " starts with "
+				Logging.info(this, "getDefaultProductProperties for depotId " + depotId + " starts with "
 						+ new ArrayList<>(depot2product2properties.get(depotId).keySet()).get(0));
 			}
 
@@ -4414,7 +4414,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (depot2product2properties != null)
 			return;
 
-		logging.info(this, "retrieveDepotProductProperties, build depot2product2properties");
+		Logging.info(this, "retrieveDepotProductProperties, build depot2product2properties");
 
 		depot2product2properties = new HashMap<>();
 
@@ -4427,7 +4427,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			String host = (String) map.get(ProductPropertyState.OBJECT_ID);
 
 			if (!hostInfoCollections.getDepots().keySet().contains(host)) {
-				logging.warning(this, "should be a productPropertyState for a depot, but host " + host);
+				Logging.warning(this, "should be a productPropertyState for a depot, but host " + host);
 				continue;
 			}
 
@@ -4449,7 +4449,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			properties.getRetrieved().put((String) map.get(ProductPropertyState.PROPERTY_ID),
 					((org.json.JSONArray) map.get(ProductPropertyState.VALUES)).toList());
 
-			logging.debug(this,
+			Logging.debug(this,
 					"retrieveDepotProductProperties product properties " + map.get(ProductPropertyState.PRODUCT_ID));// +
 																																			// "
 																																			// :::
@@ -4515,7 +4515,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.info(this,
+		Logging.info(this,
 				" retrieveProductproperties  productsWithProductPropertyStates " + productsWithProductPropertyStates);
 
 		Map<String, ConfigName2ConfigValue> defaultProperties = getDefaultProductProperties(theDepot);
@@ -4559,7 +4559,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.info(this,
+		Logging.info(this,
 				" retrieveProductproperties productsHavingSpecificProperties " + productsHavingSpecificProperties);
 
 		Map<String, ConfigName2ConfigValue> depotValues = getDefaultProductProperties(theDepot);
@@ -4599,7 +4599,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * @param productname
 	 */
 	public Map<String, Object> getProductproperties(String pcname, String productname) {
-		logging.debug(this, "getProductProperties for product, host " + productname + ", " + pcname);
+		Logging.debug(this, "getProductProperties for product, host " + productname + ", " + pcname);
 
 		Set<String> pcs = new TreeSet<>();
 		pcs.add(pcname);
@@ -4615,7 +4615,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public void setProductproperties(String pcname, String productname, Map properties, List updateCollection,
 			List deleteCollection) {
 		if (!(properties instanceof de.uib.configed.type.ConfigName2ConfigValue)) {
-			logging.warning(this, "! properties instanceof de.uib.configed.type.ConfigName2ConfigValue ");
+			Logging.warning(this, "! properties instanceof de.uib.configed.type.ConfigName2ConfigValue ");
 			return;
 		}
 
@@ -4641,7 +4641,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			if (newValue != oldValue) {
 				if (newValue == de.uib.utilities.datapanel.MapTableModel.nullLIST) {
-					logging.debug(this, "setProductProperties,  requested deletion " + (List) properties.get(key));
+					Logging.debug(this, "setProductProperties,  requested deletion " + (List) properties.get(key));
 					deleteCollection.add(Executioner.jsonMap(state));
 
 					// we hope that the update works and directly update the retrievedConfig
@@ -4651,9 +4651,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				else {
 					state.put("values", Executioner.jsonArray(newValue));
-					logging.debug(this, "setProductProperties,  requested update " + (List) properties.get(key)
+					Logging.debug(this, "setProductProperties,  requested update " + (List) properties.get(key)
 							+ " for oldValue " + oldValue);
-					logging.debug(this, "setProductProperties,  we have new state " + state);
+					Logging.debug(this, "setProductProperties,  we have new state " + state);
 					updateCollection.add(Executioner.jsonMap(state));
 
 					// we hope that the update works and directly update the retrievedConfig
@@ -4690,7 +4690,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	// send productPropertyState updates and clear the collections
 	public void setProductproperties(List updateCollection, List deleteCollection) {
-		logging.debug(this, "setProductproperties() ");
+		Logging.debug(this, "setProductproperties() ");
 
 		if (globalReadOnly)
 			return;
@@ -4731,12 +4731,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		if (dataStub.getDepot2Product2PropertyDefinitions().get(depotId) == null) {
 			result = new HashMap<>();
-			logging.info("getProductPropertyOptionsMap: no productproperty definitions for depot " + depotId);
+			Logging.info("getProductPropertyOptionsMap: no productproperty definitions for depot " + depotId);
 		} else
 			result = dataStub.getDepot2Product2PropertyDefinitions().get(depotId).get(productId);
 
 		if (result == null) {
-			logging.info("getProductPropertyOptionsMap: no productproperty definitions  for depot, product " + depotId
+			Logging.info("getProductPropertyOptionsMap: no productproperty definitions  for depot, product " + depotId
 					+ ", " + productId);
 			result = new HashMap<>();
 		}
@@ -4773,11 +4773,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public String getProductTitle(String product) {
 
-		logging.info(this, "getProductTitle for product " + product + " on depot " + theDepot);
-		logging.info(this, "getProductTitle for productGlobalsInfos found number " + productGlobalInfos.size());
-		logging.info(this, "getProductTitle, productInfos " + productGlobalInfos.get(product));
+		Logging.info(this, "getProductTitle for product " + product + " on depot " + theDepot);
+		Logging.info(this, "getProductTitle for productGlobalsInfos found number " + productGlobalInfos.size());
+		Logging.info(this, "getProductTitle, productInfos " + productGlobalInfos.get(product));
 		Object result = productGlobalInfos.get(product).get(ProductState.KEY_PRODUCT_NAME);
-		logging.info(this, "getProductTitle for product " + result);
+		Logging.info(this, "getProductTitle for product " + result);
 
 		String resultS = null;
 		if (result == null)
@@ -4790,7 +4790,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public String getProductInfo(String product) {
 
 		String result = "" + productGlobalInfos.get(product).get(OpsiProductInfo.SERVICEkeyPRODUCT_DESCRIPTION);
-		logging.debug(this, " getProductInfo for product " + product + ": " + result);
+		Logging.debug(this, " getProductInfo for product " + product + ": " + result);
 
 		return result;
 
@@ -4811,7 +4811,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (result == null)
 			result = EMPTYFIELD;
 
-		logging.debug(this, "getProductVersion which? " + productGlobalInfos.get(product).get("productVersion")
+		Logging.debug(this, "getProductVersion which? " + productGlobalInfos.get(product).get("productVersion")
 				+ " //or//   " + result);
 
 		return result;
@@ -4846,7 +4846,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		else
 			depot = depotId;
 
-		logging.debug(this,
+		Logging.debug(this,
 				"getProductRequirements productname, requirementType  " + productname + ", " + requirementType);
 
 		List<Map<String, String>> dependenciesFor1product = getProductDependencies(depot, productname);
@@ -4856,7 +4856,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		for (Map<String, String> aDependency : dependenciesFor1product) {
 
-			logging.debug(this, " dependency map : " + aDependency);
+			Logging.debug(this, " dependency map : " + aDependency);
 
 			if (requirementType.equals(NAME_REQUIREMENT_TYPE_ON_DEINSTALL)
 					// we demand information for this type,
@@ -4874,7 +4874,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			else {
 
-				logging.debug(this, " dependency map : ");
+				Logging.debug(this, " dependency map : ");
 
 				if (
 
@@ -4903,9 +4903,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.debug(this, "getProductRequirements depot, productname, requirementType  " + depotId + ", "
+		Logging.debug(this, "getProductRequirements depot, productname, requirementType  " + depotId + ", "
 				+ productname + ", " + requirementType);
-		logging.info(this, "getProductRequirements " + result);
+		Logging.info(this, "getProductRequirements " + result);
 
 		return result;
 	}
@@ -4959,7 +4959,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						} else
 							signature.add(element);
 
-						logging.debug(this, "mapOfMethodSignatures  " + i + ":: " + name + ": " + signature);
+						Logging.debug(this, "mapOfMethodSignatures  " + i + ":: " + name + ": " + signature);
 					}
 					mapOfMethodSignatures.put(name, signature);
 
@@ -4967,7 +4967,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.debug(this, "mapOfMethodSignatures " + mapOfMethodSignatures);
+		Logging.debug(this, "mapOfMethodSignatures " + mapOfMethodSignatures);
 
 		if (mapOfMethodSignatures.get(methodname) == null)
 			return NONE_LIST;
@@ -5052,7 +5052,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 						if (configItems == null) // does not occur since getMapFromItem produces at least an empty map
 						{
-							logging.debug(this, "------------------ key " + key + "  config  null");
+							Logging.debug(this, "------------------ key " + key + "  config  null");
 						} else {
 							Iterator configItemsIterator = configItems.keySet().iterator();
 
@@ -5066,7 +5066,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 								try {
 									configVal = jO.toString();
 								} catch (Exception jsonEx) {
-									logging.debug(this, jsonEx.toString());
+									Logging.debug(this, jsonEx.toString());
 								}
 								buf.append("<td bgcolor='" + bgColor + "'>&nbsp;</td>");
 								buf.append("<td width='200px'  bgcolor='" + bgColor
@@ -5103,7 +5103,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		getHwAuditDeviceClasses();
 
 		if (configListCellOptions == null || configOptions == null || configDefaultValues == null) {
-			logging.debug(this, "getConfigOptions() work");
+			Logging.debug(this, "getConfigOptions() work");
 
 			List<Object> deleteItems = new ArrayList<>();
 
@@ -5130,7 +5130,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				List<Map<String, Object>> retrievedList = retrieveListOfMapsNOM("config_getObjects");
 
-				logging.info(this, "configOptions retrieved ");
+				Logging.info(this, "configOptions retrieved ");
 
 				for (Map<String, Object> configItem : retrievedList) {
 					// map to java type
@@ -5151,13 +5151,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					//
 
 					if (key != null && key.startsWith(pseudouserProducedByOldVersion)) {
-						logging.warning(this, "user entry " + key
+						Logging.warning(this, "user entry " + key
 								+ " produced by a still somewhere running old configed version , please delete user entry "
 								+ pseudouserProducedByOldVersion);
 
 						deleteItems.add(Executioner.jsonMap(configItem));
 
-						logging.info(this, "deleteItem " + configItem);
+						Logging.info(this, "deleteItem " + configItem);
 
 						continue;
 					}
@@ -5169,11 +5169,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					configListCellOptions.put(key, (ListCellOptions) configOption);
 
 					if (configOption.getDefaultValues() == null) {
-						logging.warning(this, "default values missing for config  " + key);
+						Logging.warning(this, "default values missing for config  " + key);
 
 						if (tryOnceMoreCounter <= stopRepeatingAtThis) {
 							tryIt = true;
-							logging.warning(this,
+							Logging.warning(this,
 									"repeat loading the values , we repeated  " + tryOnceMoreCounter + " times");
 
 							Globals.threadSleep(this, 1000);
@@ -5192,11 +5192,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				}
 
-				logging.debug(this,
+				Logging.debug(this,
 						" getConfigOptions produced hwAuditDevicePropertyTypes " + hwAuditDevicePropertyTypes);
 			}
 
-			logging.info(this, "{ole deleteItems " + deleteItems.size());
+			Logging.info(this, "{ole deleteItems " + deleteItems.size());
 
 			if (!deleteItems.isEmpty()) {
 				OpsiMethodCall omc = new OpsiMethodCall("config_deleteObjects", new Object[] { deleteItems.toArray() });
@@ -5208,7 +5208,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			getWANConfigOptions();
 
-			logging.debug(this, "getConfigOptions() work finished");
+			Logging.debug(this, "getConfigOptions() work finished");
 		}
 
 		return (Map<String, ListCellOptions>) configListCellOptions;
@@ -5230,7 +5230,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	protected boolean setHostBooleanConfigValue(String configId, String hostName, boolean val) {
 
-		logging.info(this, "setHostBooleanConfigValue " + hostName + " configId " + configId + " val " + val);
+		Logging.info(this, "setHostBooleanConfigValue " + hostName + " configId " + configId + " val " + val);
 
 		List<Object> values = new ArrayList<>();
 		values.add(val);
@@ -5260,7 +5260,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			result = interpretAsBoolean(((List) (getConfigs().get(hostName).get(key))).get(0), (Boolean) null);
 
-			logging.debug(this,
+			Logging.debug(this,
 					"getHostBooleanConfigValue for key, host " + key + ", " + hostName + " giving " + result);
 
 		}
@@ -5268,11 +5268,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (result == null && useGlobalFallback) {
 			result = globalDefault;
 			if (result != null)
-				logging.debug(this, "getHostBooleanConfigValue for key " + key + ", taking global value  " + result);
+				Logging.debug(this, "getHostBooleanConfigValue for key " + key + ", taking global value  " + result);
 		}
 
 		if (result == null) {
-			logging.info(this,
+			Logging.info(this,
 					"got no value for key " + key + " and host " + hostName + " setting default " + defaultVal);
 			result = defaultVal;
 		}
@@ -5286,23 +5286,23 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		Object ob = getConfigOptions().get(key);
 
-		logging.debug(this, "getGlobalBooleanConfigValue key " + key + ", ob " + ob);
+		Logging.debug(this, "getGlobalBooleanConfigValue key " + key + ", ob " + ob);
 		if (ob == null) {
-			logging.warning(this, "getGlobalBooleanConfigValue key " + key + " gives no value, take " + val);
+			Logging.warning(this, "getGlobalBooleanConfigValue key " + key + " gives no value, take " + val);
 		}
 
 		else {
 			ConfigOption option = (ConfigOption) ob;
 
 			if (option.getType() != ConfigOption.TYPE.BoolConfig) {
-				logging.warning(this, "entry for " + key + " should be boolean");
+				Logging.warning(this, "entry for " + key + " should be boolean");
 			} else {
 
 				List li = option.getDefaultValues();
 				if (li != null && !li.isEmpty()) {
 					val = (Boolean) li.get(0);
 				}
-				logging.debug(this, "getGlobalBooleanConfigValue key, defaultValues " + key + ", " + li);
+				Logging.debug(this, "getGlobalBooleanConfigValue key, defaultValues " + key + ", " + li);
 			}
 		}
 
@@ -5336,7 +5336,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public void configOptionsRequestRefresh() {
-		logging.info(this, "configOptionsRequestRefresh");
+		Logging.info(this, "configOptionsRequestRefresh");
 		configOptions = null;
 	}
 
@@ -5382,15 +5382,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			configStateCollection = new ArrayList<>();
 
 		Set<String> currentKeys = settings.keySet();
-		logging.info(this, "setAdditionalConfigurations current keySet size: " + currentKeys.size());
+		Logging.info(this, "setAdditionalConfigurations current keySet size: " + currentKeys.size());
 		if (settings.getRetrieved() != null) {
 			Set<String> retrievedKeys = settings.getRetrieved().keySet();
 
-			logging.info(this, "setAdditionalConfigurations retrieved keys size  " + retrievedKeys.size());
+			Logging.info(this, "setAdditionalConfigurations retrieved keys size  " + retrievedKeys.size());
 
 			Set removedKeys = new HashSet<>(retrievedKeys);
 			removedKeys.removeAll(currentKeys);
-			logging.info(this, "setAdditionalConfigurations removed " + removedKeys);
+			Logging.info(this, "setAdditionalConfigurations removed " + removedKeys);
 
 			if (!removedKeys.isEmpty()) {
 				if (deleteConfigStateItems == null)
@@ -5474,9 +5474,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					doneList.add(configState);
 				}
 			}
-			logging.debug(this, "setAdditionalConfiguration(), usedConfigIds: " + usedConfigIds);
+			Logging.debug(this, "setAdditionalConfiguration(), usedConfigIds: " + usedConfigIds);
 
-			logging.debug(this, "setAdditionalConfiguration(), deleteConfigStateItems  " + deleteConfigStateItems);
+			Logging.debug(this, "setAdditionalConfiguration(), deleteConfigStateItems  " + deleteConfigStateItems);
 			// not used
 			if (!deleteConfigStateItems.isEmpty()) {
 
@@ -5491,13 +5491,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 
 			List existingConfigIds = exec.getListResult(new OpsiMethodCall("config_getIdents", new Object[] {}));
-			logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: " + existingConfigIds.size());
+			Logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: " + existingConfigIds.size());
 
 			Set<String> missingConfigIds = new HashSet<>(usedConfigIds);
 			for (Object configId : existingConfigIds) {
 				missingConfigIds.remove(configId);
 			}
-			logging.debug(this, "setAdditionalConfiguration(), missingConfigIds: " + missingConfigIds);
+			Logging.debug(this, "setAdditionalConfiguration(), missingConfigIds: " + missingConfigIds);
 			List createItems = new ArrayList<>();
 			for (String missingId : missingConfigIds) {
 				Map<String, Object> item = createNOMitem(typesOfUsedConfigIds.get(missingId));
@@ -5543,7 +5543,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					config_forUpdate.put("possibleValues", Executioner.jsonArray(possibleValues));
 
 					// mapping to JSON
-					logging.debug(this, "setAdditionalConfiguation " + config_forUpdate);
+					Logging.debug(this, "setAdditionalConfiguation " + config_forUpdate);
 					callsConfigCollection.add(Executioner.jsonMap(config_forUpdate));
 				}
 
@@ -5552,7 +5552,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				callsConfigName2ConfigValueCollection.add(Executioner.jsonMap((Map) state));
 			}
 
-			logging.debug(this, "callsConfigCollection " + callsConfigCollection);
+			Logging.debug(this, "callsConfigCollection " + callsConfigCollection);
 			if (!callsConfigCollection.isEmpty()) {
 				exec.doCall(new OpsiMethodCall("config_updateObjects",
 						new Object[] { Executioner.jsonArray(callsConfigCollection) }));
@@ -5573,15 +5573,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	// collect config updates
 	@Override
 	public void setConfig(Map<String, List<Object>> settings) {
-		logging.debug(this, "setConfig settings " + settings);
+		Logging.debug(this, "setConfig settings " + settings);
 		if (configCollection == null)
 			configCollection = new ArrayList<>();
 
 		for (String key : settings.keySet()) {
-			logging.debug(this, "setConfig,  key, settings.get(key): " + key + ", " + settings.get(key));
+			Logging.debug(this, "setConfig,  key, settings.get(key): " + key + ", " + settings.get(key));
 
 			if (settings.get(key) != null) {
-				logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): "
+				Logging.debug(this, "setConfig,  settings.get(key), settings.get(key).getClass().getName(): "
 						+ settings.get(key) + " , " + settings.get(key).getClass().getName());
 
 				if (settings.get(key) instanceof List) {
@@ -5590,7 +5590,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					if (configOptions.get(key) != null)
 						oldValue = configOptions.get(key).getDefaultValues();
 
-					logging.info(this, "setConfig, key, oldValue: " + key + ", " + oldValue);
+					Logging.info(this, "setConfig, key, oldValue: " + key + ", " + oldValue);
 
 					List valueList = (List) settings.get(key);
 
@@ -5601,7 +5601,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 						String type = "UnicodeConfig";
 
-						logging.debug(this,
+						Logging.debug(this,
 								"setConfig, key,  configOptions.get(key):  " + key + ", " + configOptions.get(key));
 						if (configOptions.get(key) != null)
 							type = (String) configOptions.get(key).get("type");
@@ -5637,7 +5637,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 
 				else {
-					logging.error("setConfig,  key, settings.get(key): " + key + ", " + settings.get(key)
+					Logging.error("setConfig,  key, settings.get(key): " + key + ", " + settings.get(key)
 							+ " \nUnexpected type");
 				}
 
@@ -5654,9 +5654,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	// send config updates, possibly not updating existing
 
 	protected void setConfig(boolean restrictToMissing) {
-		logging.info(this, "setConfig(),  configCollection null " + (configCollection == null));
+		Logging.info(this, "setConfig(),  configCollection null " + (configCollection == null));
 		if (configCollection != null)
-			logging.info(this, "setConfig(),  configCollection size  " + configCollection.size());
+			Logging.info(this, "setConfig(),  configCollection size  " + configCollection.size());
 
 		if (globalReadOnly)
 			return;
@@ -5671,17 +5671,17 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				typesOfUsedConfigIds.put(ident, (String) ((Map) config).get("type"));
 			}
 
-			logging.debug(this, "setConfig(), usedConfigIds: " + usedConfigIds);
+			Logging.debug(this, "setConfig(), usedConfigIds: " + usedConfigIds);
 
 			List existingConfigIds = exec.getListResult(new OpsiMethodCall("config_getIdents", new Object[] {}));
 
-			logging.info(this, "setConfig(), existingConfigIds: " + existingConfigIds.size());
+			Logging.info(this, "setConfig(), existingConfigIds: " + existingConfigIds.size());
 
 			List<String> missingConfigIds = new ArrayList<>(usedConfigIds);
 			for (Object configId : existingConfigIds) {
 				missingConfigIds.remove(configId);
 			}
-			logging.info(this, "setConfig(), missingConfigIds: " + missingConfigIds);
+			Logging.info(this, "setConfig(), missingConfigIds: " + missingConfigIds);
 			List createItems = new ArrayList<>();
 			for (String missingId : missingConfigIds) {
 				Map<String, Object> item = createNOMitem(typesOfUsedConfigIds.get(missingId));
@@ -5706,7 +5706,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 
 				else {
-					logging.debug(this, "setConfig config with ident " + callConfig.get("ident"));
+					Logging.debug(this, "setConfig config with ident " + callConfig.get("ident"));
 
 					boolean isMissing = missingConfigIds.contains(callConfig.get("ident"));
 
@@ -5720,7 +5720,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 			}
 
-			logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
+			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
 
 			if (!callsConfigDeleteCollection.isEmpty()) {
 				exec.doCall(new OpsiMethodCall("config_deleteObjects",
@@ -5729,7 +5729,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				hostConfigsRequestRefresh(); // because of referential integrity
 			}
 
-			logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
+			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
 
 			if (!callsConfigUpdateCollection.isEmpty()) {
 				exec.doCall(new OpsiMethodCall("config_updateObjects",
@@ -5740,7 +5740,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			getConfigOptions();
 			configCollection.clear();
 
-			logging.info(this, "setConfig(),  configCollection result: " + configCollection);
+			Logging.info(this, "setConfig(),  configCollection result: " + configCollection);
 
 		}
 	}
@@ -5778,9 +5778,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<String> result = new ArrayList<>();
 
 		if (configDefaultValues.get(configedGIVENDOMAINS_key) == null) {
-			logging.info(this, "no values found for   " + configedGIVENDOMAINS_key);
+			Logging.info(this, "no values found for   " + configedGIVENDOMAINS_key);
 		} else {
-			logging.info(this, "getDomains " + configDefaultValues.get(configedGIVENDOMAINS_key));
+			Logging.info(this, "getDomains " + configDefaultValues.get(configedGIVENDOMAINS_key));
 
 			HashMap<String, Integer> numberedValues = new HashMap<>();
 			TreeSet<String> orderedValues = new TreeSet<>();
@@ -5808,7 +5808,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						}
 
 					} catch (NumberFormatException x) {
-						logging.warning(this, "illegal order format for domain entry: " + entry);
+						Logging.warning(this, "illegal order format for domain entry: " + entry);
 						unorderedValues.add(entry);
 					}
 				}
@@ -5826,7 +5826,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.info(this, "getDomains " + result);
+		Logging.info(this, "getDomains " + result);
 		return result;
 	}
 
@@ -5856,7 +5856,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public void setDepot(String depotId) {
-		logging.info(this, "setDepot =========== " + depotId);
+		Logging.info(this, "setDepot =========== " + depotId);
 		theDepot = depotId;
 	}
 
@@ -5866,7 +5866,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public Map<String, SWAuditEntry> getInstalledSoftwareInformation() {
 
-		logging.info(this, "getInstalledSoftwareInformation");
+		Logging.info(this, "getInstalledSoftwareInformation");
 
 		return dataStub.getInstalledSoftwareInformation();
 	}
@@ -5889,7 +5889,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public void installedSoftwareInformationRequestRefresh() {
-		logging.info(this, " call installedSoftwareInformationRequestRefresh()");
+		Logging.info(this, " call installedSoftwareInformationRequestRefresh()");
 		dataStub.installedSoftwareInformationRequestRefresh();
 	}
 
@@ -5934,7 +5934,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return "";
 		String result = "";
 
-		logging.debug(this, "editLicenceContract " + licenseContractId);
+		Logging.debug(this, "editLicenceContract " + licenseContractId);
 
 		if (withLicenceManagement) {
 			OpsiMethodCall omc = new OpsiMethodCall("createLicenseContract", new String[] { licenseContractId, partner,
@@ -5947,7 +5947,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			result = licenseContractId;
 		}
 
-		logging.debug(this, "editLicenceContract result " + result);
+		Logging.debug(this, "editLicenceContract result " + result);
 
 		return result;
 	}
@@ -5984,7 +5984,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public boolean deleteLicencePool(String licensePoolId) {
-		logging.info(this, "deleteLicencePool " + licensePoolId);
+		Logging.info(this, "deleteLicencePool " + licensePoolId);
 
 		if (!serverFullPermission)
 			return false;
@@ -6144,7 +6144,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (withLicenceManagement) {
 			dataStub.licencePoolXOpsiProductRequestRefresh();
 			dataStub.getLicencePoolXOpsiProduct();
-			logging.info(this, "licencePoolXOpsiProduct size " + dataStub.getLicencePoolXOpsiProduct().size());
+			Logging.info(this, "licencePoolXOpsiProduct size " + dataStub.getLicencePoolXOpsiProduct().size());
 
 			for (StringValuedRelationElement element : dataStub.getLicencePoolXOpsiProduct()) {
 				rowsLicencePoolXOpsiProduct
@@ -6154,7 +6154,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.info(this, "rowsLicencePoolXOpsiProduct size " + rowsLicencePoolXOpsiProduct.size());
+		Logging.info(this, "rowsLicencePoolXOpsiProduct size " + rowsLicencePoolXOpsiProduct.size());
 
 		return rowsLicencePoolXOpsiProduct;
 
@@ -6198,7 +6198,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public void retrieveRelationsAuditSoftwareToLicencePools() {
 
-		logging.info(this,
+		Logging.info(this,
 				"retrieveRelationsAuditSoftwareToLicencePools start " + (relationsAuditSoftwareToLicencePools != null));
 
 		if (relationsAuditSoftwareToLicencePools == null)
@@ -6236,7 +6236,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			// build fSoftware2LicencePool
 			if (fSoftware2LicencePool.get(swKEY) != null && !fSoftware2LicencePool.get(swKEY).equals(licencePoolKEY)) {
-				logging.error("software with ident \"" + swKEY + "\" has assigned license pool "
+				Logging.error("software with ident \"" + swKEY + "\" has assigned license pool "
 						+ fSoftware2LicencePool.get(swKEY) + " as well as " + licencePoolKEY);
 			}
 			fSoftware2LicencePool.put(swKEY, licencePoolKEY);
@@ -6248,7 +6248,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			List<String> softwareIds = fLicencePool2SoftwareList.get(licencePoolKEY);
 			if (softwareIds.indexOf(swKEY) == -1) {
 				if (getInstalledSoftwareInformationForLicensing().get(swKEY) == null) {
-					logging.warning(this, "license pool " + licencePoolKEY
+					Logging.warning(this, "license pool " + licencePoolKEY
 							+ " is assigned to a not listed software with ID " + swKEY + " data row " + row);
 					// we serve the fLicencePool2UnknownSoftwareList only in case that a key is
 					// found
@@ -6266,7 +6266,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.info(this, "retrieveRelationsAuditSoftwareToLicencePools,  softwareWithoutAssociatedLicencePool "
+		Logging.info(this, "retrieveRelationsAuditSoftwareToLicencePools,  softwareWithoutAssociatedLicencePool "
 				+ softwareWithoutAssociatedLicencePool.size());
 
 	}
@@ -6332,7 +6332,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public boolean removeAssociations(String licencePoolId, List<String> softwareIds) {
-		logging.info(this, "removeAssociations licensePoolId, softwareIds " + licencePoolId + ", " + softwareIds);
+		Logging.info(this, "removeAssociations licensePoolId, softwareIds " + licencePoolId + ", " + softwareIds);
 
 		if (!serverFullPermission)
 			return false;
@@ -6380,7 +6380,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private boolean setWindowsSoftwareIds2LPool(String licensePoolId, final List<String> softwareToAssign,
 			boolean onlyAdding) {
-		logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:" + licensePoolId + " , "
+		Logging.debug(this, "setWindowsSoftwareIds2LPool  licensePoolId,  softwareToAssign:" + licensePoolId + " , "
 				+ softwareToAssign);
 
 		if (!serverFullPermission)
@@ -6405,8 +6405,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			softwareToAssignTruely.removeAll(oldEntries);
 			oldEntriesTruely.removeAll(softwareToAssign);
 
-			logging.info(this, "setWindowsSoftwareIds2LPool softwareToAssignTruely " + softwareToAssignTruely);
-			logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
+			Logging.info(this, "setWindowsSoftwareIds2LPool softwareToAssignTruely " + softwareToAssignTruely);
+			Logging.info(this, "setWindowsSoftwareIds2LPool oldEntriesTruely " + oldEntriesTruely);
 
 			if (!onlyAdding) {
 				ArrayList<JSONObject> deleteItems = new ArrayList<>();
@@ -6422,11 +6422,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						item.put("type", "AuditSoftwareToLicensePool");
 						deleteItems.add(Executioner.jsonMap(item));
 
-						logging.info(this, "" + instSwI.get(swIdent));
+						Logging.info(this, "" + instSwI.get(swIdent));
 					}
 				}
-				logging.info(this, "entriesToRemove " + entriesToRemove);
-				logging.info(this, "deleteItems " + deleteItems);
+				Logging.info(this, "entriesToRemove " + entriesToRemove);
+				Logging.info(this, "deleteItems " + deleteItems);
 
 				if (!deleteItems.isEmpty()) {
 					OpsiMethodCall omc = new OpsiMethodCall("auditSoftwareToLicensePool_deleteObjects",
@@ -6455,7 +6455,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				createItems.add(Executioner.jsonMap(item));
 			}
 
-			logging.info(this, "setWindowsSoftwareIds2LPool, createItems " + createItems);
+			Logging.info(this, "setWindowsSoftwareIds2LPool, createItems " + createItems);
 
 			OpsiMethodCall omc = new OpsiMethodCall("auditSoftwareToLicensePool_createObjects",
 
@@ -6478,7 +6478,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				softwareWithoutAssociatedLicencePool.addAll(entriesToRemove);
 				softwareWithoutAssociatedLicencePool.removeAll(softwareToAssign);
 
-				logging.info(this, "setWindowsSoftwareIds2LPool licencePool, fLicencePool2SoftwareList " + licensePoolId
+				Logging.info(this, "setWindowsSoftwareIds2LPool licencePool, fLicencePool2SoftwareList " + licensePoolId
 						+ " : " + fLicencePool2SoftwareList.get(licensePoolId));
 
 				for (String ident : newList) {
@@ -6488,7 +6488,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						getName2SWIdents().put(swName, new TreeSet<>());
 					getName2SWIdents().get(swName).add(ident);
 
-					logging.info(this,
+					Logging.info(this,
 							"setWindowsSoftwareIds2LPool, collecting all idents for a name (even if not belonging to the pool), add ident "
 									+ ident + " to set for name " + swName);
 				}
@@ -6512,7 +6512,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		String result = "";
 
 		boolean ok = false;
-		logging.info(this, "editPool2AuditSoftware ");
+		Logging.info(this, "editPool2AuditSoftware ");
 
 		if (withLicenceManagement) {
 
@@ -6525,7 +6525,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				ok = removeAssociations(licensePoolID_old, swIds);
 
 				if (!ok) {
-					logging.warning(this, "editPool2AuditSoftware " + " failed");
+					Logging.warning(this, "editPool2AuditSoftware " + " failed");
 				}
 
 			}
@@ -6553,22 +6553,22 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						new Object[] { Executioner.jsonArray(readyObjects) }
 
 				);
-				logging.info(this, "editPool2AuditSoftware call " + omc);
+				Logging.info(this, "editPool2AuditSoftware call " + omc);
 				if (exec.doCall(omc))
 					ok = true;
 				else
-					logging.warning(this, "editPool2AuditSoftware " + omc + " failed");
+					Logging.warning(this, "editPool2AuditSoftware " + omc + " failed");
 
 			}
 
-			logging.info(this, "editPool2AuditSoftware ok " + ok);
+			Logging.info(this, "editPool2AuditSoftware ok " + ok);
 
 			if (ok) {
 
-				logging.info(this, "fSoftware2LicencePool == null " + (fSoftware2LicencePool == null));
+				Logging.info(this, "fSoftware2LicencePool == null " + (fSoftware2LicencePool == null));
 
 				if (fSoftware2LicencePool != null) {
-					logging.info(this,
+					Logging.info(this,
 							"fSoftware2LicencePool.get( softwareID ) " + fSoftware2LicencePool.get(softwareID));
 					fSoftware2LicencePool.put(softwareID, licencePoolID_new);
 				}
@@ -6576,7 +6576,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				if (fLicencePool2SoftwareList.get(licencePoolID_new) == null)
 					fLicencePool2SoftwareList.put(licencePoolID_new, new ArrayList<>());
 
-				logging.info(this, "fLicencePool2SoftwareList.get( licencePoolID_new ) "
+				Logging.info(this, "fLicencePool2SoftwareList.get( licencePoolID_new ) "
 						+ fLicencePool2SoftwareList.get(licencePoolID_new));
 
 				fLicencePool2SoftwareList.get(licencePoolID_new).add(softwareID);
@@ -6607,7 +6607,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	// poolId -> LicenceStatisticsRow
 	{
 		// side effects of this method: rowsLicencesReconciliation
-		logging.info(this, "produceLicenceStatistics === ");
+		Logging.info(this, "produceLicenceStatistics === ");
 
 		Map<String, List<String>> licencePool2listOfUsingClients_SWInvent = new HashMap<>();
 
@@ -6676,7 +6676,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						licencePool2setOfUsingClients_SWInvent.put(licencePoolId, setOfUsingClients);
 					}
 
-					logging.debug(this,
+					Logging.debug(this,
 							"software " + softwareIdent + " installed on " + swId2clients.get(softwareIdent));
 
 					if (swId2clients.get(softwareIdent) == null)
@@ -6688,7 +6688,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							setOfUsingClients.add(client);
 						}
 					} catch (Exception ex) {
-						logging.warning(" swId2clients.get(softwareIdent) -" + ex);
+						Logging.warning(" swId2clients.get(softwareIdent) -" + ex);
 					}
 
 					licencePoolUsagecount_SWInvent.put(licencePoolId, setOfUsingClients.size());
@@ -6698,7 +6698,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 						if (rowsLicencesReconciliation.get(pseudokey) == null)
 
-							logging.warning(
+							Logging.warning(
 									"client " + client + " or license pool ID " + licencePoolId + " do not exist");
 
 						else
@@ -6714,14 +6714,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map<String, LicencepoolEntry> licencePools = dataStub.getLicencepools();
 
 		// table SOFTWARE_LICENSE
-		logging.info(this, " licences ");
+		Logging.info(this, " licences ");
 
 		// table SOFTWARE_LICENSE_TO_LICENSE_POOL
-		logging.info(this, " licence usabilities ");
+		Logging.info(this, " licence usabilities ");
 		List<LicenceUsableForEntry> licenceUsabilities = dataStub.getLicenceUsabilities();
 
 		// table LICENSE_ON_CLIENT
-		logging.info(this, " licence usages ");
+		Logging.info(this, " licence usages ");
 		List<LicenceUsageEntry> licenceUsages = dataStub.getLicenceUsages();
 
 		// software usage according to audit
@@ -6756,7 +6756,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.debug(this, " pool2allowedUsagesCount " + pool2allowedUsagesCount);
+		Logging.debug(this, " pool2allowedUsagesCount " + pool2allowedUsagesCount);
 
 		TreeMap<String, Integer> pool2opsiUsagesCount = new TreeMap<>();
 
@@ -6793,7 +6793,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// all used licences for pools
 
-		logging.info(this, "  retrieveStatistics  collect pool2installationsCount");
+		Logging.info(this, "  retrieveStatistics  collect pool2installationsCount");
 
 		TreeMap<String, TreeSet<String>> pool2clients = new TreeMap<>();
 		// we take Set since we count only one usage per client
@@ -6805,7 +6805,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		for (StringValuedRelationElement swXpool : auditSoftwareXLicencePool) {
 
-			logging.debug(this, " retrieveStatistics1 relationElement  " + swXpool);
+			Logging.debug(this, " retrieveStatistics1 relationElement  " + swXpool);
 
 			String pool = swXpool.get(LicencepoolEntry.ID_SERVICE_KEY);
 
@@ -6818,10 +6818,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			String swIdent = swXpool.get(AuditSoftwareXLicencePool.SwID);
 
-			logging.debug(this, " retrieveStatistics1 swIdent " + swIdent);
+			Logging.debug(this, " retrieveStatistics1 swIdent " + swIdent);
 
 			if (swId2clients.get(swIdent) != null) {
-				logging.debug(this, "pool " + pool + " serves clients " + swId2clients.get(swIdent));
+				Logging.debug(this, "pool " + pool + " serves clients " + swId2clients.get(swIdent));
 				clientsServedByPool.addAll(swId2clients.get(swIdent));
 
 			}
@@ -6847,14 +6847,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				Set<String> listOfUsingClients = pool2opsiUsages.get(licencePoolId);
 
-				logging.debug(this, "pool  " + licencePoolId + " used_by_opsi on clients : " + listOfUsingClients);
+				Logging.debug(this, "pool  " + licencePoolId + " used_by_opsi on clients : " + listOfUsingClients);
 
 				if (listOfUsingClients != null) {
 					for (String client : listOfUsingClients) {
 						String pseudokey = Globals.pseudokey(new String[] { client, licencePoolId });
 
 						if (rowsLicencesReconciliation.get(pseudokey) == null)
-							logging.warning(
+							Logging.warning(
 									"client " + client + " or license pool ID " + licencePoolId + " do not exist");
 						else
 							rowsLicencesReconciliation.get(pseudokey).put("used_by_opsi", true);
@@ -6865,7 +6865,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.debug(this, "rowsLicenceStatistics " + rowsLicenceStatistics);
+		Logging.debug(this, "rowsLicenceStatistics " + rowsLicenceStatistics);
 
 		return rowsLicenceStatistics;
 
@@ -6898,7 +6898,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	protected void retrieveLicencesUsage() {
-		logging.info(this, "retrieveLicencesUsage with refresh " + (rowsLicencesUsage == null));
+		Logging.info(this, "retrieveLicencesUsage with refresh " + (rowsLicencesUsage == null));
 
 		if (rowsLicencesUsage == null)
 			dataStub.licenceUsagesRequestRefresh();
@@ -7000,7 +7000,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public boolean executeCollectedDeletionsLicenceUsage() {
-		logging.info(this, "executeCollectedDeletionsLicenceUsage itemsDeletionLicenceUsage == null "
+		Logging.info(this, "executeCollectedDeletionsLicenceUsage itemsDeletionLicenceUsage == null "
 				+ (itemsDeletionLicenceUsage == null));
 		if (itemsDeletionLicenceUsage == null)
 			return true;
@@ -7032,7 +7032,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				rowsLicencesUsage.remove(key);
 				fClient2LicencesUsageList.get(hostX).remove(rowmap);
 
-				logging.debug(this,
+				Logging.debug(this,
 						"deleteLicenceUsage check fClient2LicencesUsageList " + fClient2LicencesUsageList.get(hostX));
 
 			}
@@ -7062,7 +7062,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				fClient2LicencesUsageList.get(hostId).remove(rowmap);
 			}
 
-			logging.info(this,
+			Logging.info(this,
 					"deleteLicenceUsage check fClient2LicencesUsageList " + fClient2LicencesUsageList.get(hostId));
 
 		}
@@ -7071,9 +7071,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public void reconciliationInfoRequestRefresh() {
-		logging.info(this, "reconciliationInfoRequestRefresh");
+		Logging.info(this, "reconciliationInfoRequestRefresh");
 		rowsLicencesReconciliation = null;
-		logging.info(this, "reconciliationInfoRequestRefresh installedSoftwareInformationRequestRefresh()");
+		Logging.info(this, "reconciliationInfoRequestRefresh installedSoftwareInformationRequestRefresh()");
 		dataStub.installedSoftwareInformationRequestRefresh();
 
 		relationsAuditSoftwareToLicencePools = null;
@@ -7155,7 +7155,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		item.put("editable", false);
 		item.put("multiValue", true);
 
-		logging.info(this, "produceProductOnClientDisplayfields_localboot");
+		Logging.info(this, "produceProductOnClientDisplayfields_localboot");
 
 		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { Executioner.jsonMap(item) });
 
@@ -7208,7 +7208,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public void userConfigurationRequestReload() {
-		logging.info(this, "userConfigurationRequestReload");
+		Logging.info(this, "userConfigurationRequestReload");
 		KEY_USER_REGISTER_VALUE = null;
 	}
 
@@ -7232,14 +7232,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			javax.swing.SwingUtilities.invokeLater(new Thread() {
 				public void run() {
 					StringBuilder info = new StringBuilder();
-					info.append(configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
-					info.append(configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
-					info.append(configed.getResourceValue("Permission.modules.missing_user_roles.2") + "\n");
+					info.append(Configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
+					info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
+					info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.2") + "\n");
 					info.append(KEY_USER_REGISTER + " "
-							+ configed.getResourceValue("Permission.modules.missing_user_roles.3"));
+							+ Configed.getResourceValue("Permission.modules.missing_user_roles.3"));
 					info.append("\n");
 
-					logging.warning(this,
+					Logging.warning(this,
 							" user role administration configured but not permitted by the modules file " + info);
 
 					FOpsiLicenseMissingText.callInstanceWith(info.toString());
@@ -7266,7 +7266,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.info(this, "applyUserConfiguration result " + KEY_USER_REGISTER_VALUE);
+		Logging.info(this, "applyUserConfiguration result " + KEY_USER_REGISTER_VALUE);
 
 		return KEY_USER_REGISTER_VALUE;
 	}
@@ -7276,7 +7276,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (productOnClients_displayFieldsLocalbootProducts == null) {
 			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 
-			logging.debug(this,
+			Logging.debug(this,
 					"getProductOnClients_displayFieldsLocalbootProducts()  configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT "
 							+ configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
 
@@ -7289,7 +7289,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				possibleValuesAccordingToService = (List<String>) configOptions
 						.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT).get("possibleValues");
 
-			logging.debug(this, "getProductOnClients_displayFieldsLocalbootProducts() possibleValuesAccordingToService "
+			Logging.debug(this, "getProductOnClients_displayFieldsLocalbootProducts() possibleValuesAccordingToService "
 					+ possibleValuesAccordingToService);
 
 			if (configuredByService.isEmpty()
@@ -7333,7 +7333,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public void deleteSavedSearch(String name) {
-		logging.debug(this, "deleteSavedSearch " + name);
+		Logging.debug(this, "deleteSavedSearch " + name);
 
 		List<Object> readyObjects = new ArrayList<>();
 
@@ -7356,7 +7356,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public void saveSearch(SavedSearch ob) {
-		logging.debug(this, "saveSearch " + ob);
+		Logging.debug(this, "saveSearch " + ob);
 
 		List<Object> readyObjects = new ArrayList<>();
 		// entry of serialization string
@@ -7426,7 +7426,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		item.put("editable", false);
 		item.put("multiValue", true);
 
-		logging.info(this, "produceProductOnClientDisplayfields_netboot");
+		Logging.info(this, "produceProductOnClientDisplayfields_netboot");
 
 		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { Executioner.jsonMap(item) });
 
@@ -7486,7 +7486,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private List<String> produceHost_displayFields(List<String> givenList) {
 		boolean createOnServer = true;
 		List<String> result = null;
-		logging.info(this,
+		Logging.info(this,
 				"produceHost_displayFields configOptions.get(key) " + configOptions.get(KEY_HOST_DISPLAYFIELDS));
 
 		List givenPossibleValues = null;
@@ -7582,16 +7582,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public List<String> getOpsiclientdExtraEvents() {
-		logging.debug(this, "getOpsiclientdExtraEvents");
+		Logging.debug(this, "getOpsiclientdExtraEvents");
 		getConfigOptions();
 		if (configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS) == null) {
-			logging.warning(this,
+			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_OPSICLIENTD_EXTRA_EVENTS);
 		}
 
 		List<String> result = Globals.takeAsStringList(configDefaultValues.get(KEY_OPSICLIENTD_EXTRA_EVENTS));
 
-		logging.debug(this, "getOpsiclientdExtraEvents() " + result);
+		Logging.debug(this, "getOpsiclientdExtraEvents() " + result);
 
 		return result;
 	}
@@ -7625,7 +7625,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private boolean checkStandardConfigs() {
 		boolean result = (getConfigOptions() != null);
 
-		logging.info(this, "checkStandardConfigs, already there " + result);
+		Logging.info(this, "checkStandardConfigs, already there " + result);
 
 		if (!result)
 			return false;
@@ -7640,7 +7640,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		key = configedGIVENDOMAINS_key;
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
-			logging.info(this, "checkStandardConfigs: create domain list");
+			Logging.info(this, "checkStandardConfigs: create domain list");
 
 			item = createNOMitem("UnicodeConfig");
 
@@ -7692,7 +7692,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// defaultValues
 		defaultValues = configDefaultValues.get(KEY_PRODUCT_SORT_ALGORITHM);
-		logging.info(this, "checkStandardConfigs:  from server product_sort_algorithm " + defaultValues);
+		Logging.info(this, "checkStandardConfigs:  from server product_sort_algorithm " + defaultValues);
 
 		if (defaultValues == null) {
 			defaultValues = new ArrayList<>();
@@ -7723,7 +7723,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		defaultValues = configDefaultValues.get(KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
 		if (defaultValues == null) {
-			logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
 					+ KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
 			// key not yet configured
 			defaultValues = new ArrayList<>();
@@ -7735,7 +7735,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		item = createNOMitem("UnicodeConfig");
 		item.put("ident", KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
 		item.put("description",
-				configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation.ExtraHostFields"));
+				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation.ExtraHostFields"));
 		item.put("defaultValues", Executioner.jsonArray(defaultValues));
 
 		item.put("possibleValues", Executioner.jsonArray(possibleValues));
@@ -7834,7 +7834,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
-			logging.warning(this,
+			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_DISABLED_CLIENT_ACTIONS);
 			// key not yet configured
 			defaultValues = new ArrayList<>();
@@ -7862,7 +7862,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		Map<String, ConfigOption> wanConfigOptions = getWANConfigOptions();
 		if (wanConfigOptions == null || wanConfigOptions.isEmpty()) {
-			logging.info(this, "build default wanConfigOptions");
+			Logging.info(this, "build default wanConfigOptions");
 			readyObjects = buildWANConfigOptions(readyObjects);
 		}
 
@@ -7910,7 +7910,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
-			logging.warning(this,
+			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_DISABLED_CLIENT_ACTIONS);
 			// key not yet configured
 			defaultValues = new ArrayList<>();
@@ -7935,7 +7935,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		key = KEY_SSH_DEFAULTWINUSER;
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
-			logging.warning(this,
+			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_SSH_DEFAULTWINUSER);
 			readyObjects.add(produceConfigEntry("UnicodeConfig", key, KEY_SSH_DEFAULTWINUSER_defaultvalue,
 					"default windows username for deploy-client-agent-script"));
@@ -7944,7 +7944,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		key = KEY_SSH_DEFAULTWINPW;
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
-			logging.warning(this,
+			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_SSH_DEFAULTWINPW);
 			readyObjects.add(produceConfigEntry("UnicodeConfig", key, KEY_SSH_DEFAULTWINPW_defaultvalue,
 					"default windows password for deploy-client-agent-script"));
@@ -7953,11 +7953,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		key = configedWORKBENCH_key;
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
-			logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 			readyObjects.add(produceConfigEntry("UnicodeConfig", key, configedWORKBENCH_defaultvalue,
 					"default path to opsiproducts"));
 		} else {
-			logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to " + (String) defaultValues.get(0));
+			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to " + (String) defaultValues.get(0));
 			configedWORKBENCH_defaultvalue = (String) defaultValues.get(0);
 		}
 
@@ -7967,7 +7967,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
-			logging.warning(this,
+			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_OPSICLIENTD_EXTRA_EVENTS);
 			// key not yet configured
 			defaultValues = new ArrayList<>();
@@ -8011,7 +8011,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				if (defaultValues != null) {
 					// still existing
-					logging.info(this, "handling ssh config key at old location " + configkey);
+					Logging.info(this, "handling ssh config key at old location " + configkey);
 					Map<String, Object> config = new HashMap<>();
 
 					config.put("id", configkey);
@@ -8030,7 +8030,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				if (defaultValues != null) {
 					// still existing
-					logging.info(this, "removing unwillingly generated entry  " + configkey);
+					Logging.info(this, "removing unwillingly generated entry  " + configkey);
 					Map<String, Object> config = new HashMap<>();
 
 					config.put("id", configkey);
@@ -8043,7 +8043,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		logging.info(this, "defaultUserConfigsObsolete " + defaultUserConfigsObsolete);
+		Logging.info(this, "defaultUserConfigsObsolete " + defaultUserConfigsObsolete);
 
 		if (!defaultUserConfigsObsolete.isEmpty()) {
 			exec.doCall(new OpsiMethodCall("config_deleteObjects",
@@ -8055,13 +8055,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected ExtendedInteger calculateModulePermission(ExtendedInteger globalMaxClients,
 			final Integer specialMaxClientNumber) {
-		logging.info(this, "calculateModulePermission globalMaxClients " + globalMaxClients + " specialMaxClientNumber "
+		Logging.info(this, "calculateModulePermission globalMaxClients " + globalMaxClients + " specialMaxClientNumber "
 				+ specialMaxClientNumber);
 		Integer maxClients = null; // either it remains null or becomes a number
 
 		if (specialMaxClientNumber != null) {
 			int compareResult = globalMaxClients.compareTo(specialMaxClientNumber);
-			logging.info(this, "calculateModulePermission compareResult " + compareResult);
+			Logging.info(this, "calculateModulePermission compareResult " + compareResult);
 
 			if (compareResult < 0)
 			// the global max client count is reduced, a real warning and error limit exists
@@ -8076,7 +8076,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.info(this, "calculateModulePermission returns " + maxClients);
+		Logging.info(this, "calculateModulePermission returns " + maxClients);
 
 		if (maxClients == null)
 			return globalMaxClients;
@@ -8111,11 +8111,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected void retrieveOpsiLicensingInfoVersion() {
 		if (opsiLicensingInfoVersion == null) {
 
-			logging.info(this, "retrieveOpsiLicensingInfoVersion getMethodSignature( backend_getLicensingInfo "
+			Logging.info(this, "retrieveOpsiLicensingInfoVersion getMethodSignature( backend_getLicensingInfo "
 					+ getMethodSignature(backendLicensingInfoMethodname));
 
 			if (getMethodSignature(backendLicensingInfoMethodname) == NONE_LIST) {
-				logging.info(this, "method " + backendLicensingInfoMethodname + " not existing in this opsi service");
+				Logging.info(this, "method " + backendLicensingInfoMethodname + " not existing in this opsi service");
 				opsiLicensingInfoVersion = LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD;
 			} else
 
@@ -8130,7 +8130,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		licensingInfo = null;
 		licInfoMap = null;
 		LicensingInfoMap.requestRefresh();
-		logging.info(this, "request worked");
+		Logging.info(this, "request worked");
 	}
 
 	@Override
@@ -8190,7 +8190,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return "";
 		} else {
 			StringBuilder buf = new StringBuilder("\n");
-			buf.append(configed.getResourceValue("Permission.modules.infoChanged"));
+			buf.append(Configed.getResourceValue("Permission.modules.infoChanged"));
 			buf.append(" \"");
 			buf.append(header);
 			buf.append("\"");
@@ -8222,7 +8222,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// displaying to the user
 
 		getHostInfoCollections().retrieveOpsiHosts(); // for checking number of clients and config states
-		logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
+		Logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
 				.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
 
 		if (licInfoMap == null) {
@@ -8240,17 +8240,17 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (getOpsiLicensingInfoVersion().equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
 			// no action
 		} else if (licInfoMap.warningExists() && licInfoWarnings == null) {
-			licInfoWarnings = new FTextArea(Globals.mainFrame, configed.getResourceValue("Permission.modules.title"),
+			licInfoWarnings = new FTextArea(Globals.mainFrame, Configed.getResourceValue("Permission.modules.title"),
 					false,
-					new String[] { configed.getResourceValue("Dash.close"),
-							configed.getResourceValue("Permission.modules.buttonGoToValidationTable") },
+					new String[] { Configed.getResourceValue("Dash.close"),
+							Configed.getResourceValue("Permission.modules.buttonGoToValidationTable") },
 					new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
 							Globals.createImageIcon("images/edit-table-insert-row-under.png", "") },
 
 					550, 400) {
 				@Override
 				protected boolean wantToBeRegisteredWithRunningInstances() {
-					logging.info(this, "licInfoWarnings wantToBeRegisteredWithRunningInstances");
+					Logging.info(this, "licInfoWarnings wantToBeRegisteredWithRunningInstances");
 					return true;
 				}
 
@@ -8261,25 +8261,25 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			};
 
-			StringBuilder mess = new StringBuilder(configed.getResourceValue("Permission.modules.infoheader"));
+			StringBuilder mess = new StringBuilder(Configed.getResourceValue("Permission.modules.infoheader"));
 
 			mess.append("_______________________________\n");
 
 			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_OVER_LIMIT,
-					configed.getResourceValue("Permission.modules.warning.currentOverLimit")));
+					Configed.getResourceValue("Permission.modules.warning.currentOverLimit")));
 			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_CLOSE_TO_LIMIT,
-					configed.getResourceValue("Permission.modules.warning.currentCloseToLimit")));
+					Configed.getResourceValue("Permission.modules.warning.currentCloseToLimit")));
 			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_TIME_WARNINGS,
-					configed.getResourceValue("Permission.modules.warning.currentTimeWarning")));
+					Configed.getResourceValue("Permission.modules.warning.currentTimeWarning")));
 			mess.append("\n\n");
 
-			mess.append(configed.getResourceValue("Permission.modules.check"));
+			mess.append(Configed.getResourceValue("Permission.modules.check"));
 			mess.append(" ");
-			mess.append(configed.getResourceValue("MainFrame.jMenuHelp"));
+			mess.append(Configed.getResourceValue("MainFrame.jMenuHelp"));
 			mess.append(",\n");
-			mess.append(configed.getResourceValue("Permission.modules.check1"));
+			mess.append(Configed.getResourceValue("Permission.modules.check1"));
 			mess.append(" \"");
-			mess.append(configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
+			mess.append(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 			mess.append("\"\n");
 
 			licInfoWarnings.setMessage(mess.toString());
@@ -8295,7 +8295,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				opsiModules.put(mod, true);
 		}
 
-		logging.info(this, "opsiModules result " + opsiModules);
+		Logging.info(this, "opsiModules result " + opsiModules);
 
 		withLinuxAgent = (opsiModules.get("linux_agent") != null) && (opsiModules.get("linux_agent"));
 		withLicenceManagement = (opsiModules.get("license_management") != null)
@@ -8307,11 +8307,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		withWAN = (opsiModules.get("vpn") != null) && (opsiModules.get("vpn"));
 		withUserRoles = (opsiModules.get("userroles") != null) && (opsiModules.get("userroles"));
 
-		logging.info(this, "produceOpsiModulesInfo withUserRoles " + withUserRoles);
-		logging.info(this, "produceOpsiModulesInfo withUEFI " + withUEFI);
-		logging.info(this, "produceOpsiModulesInfo withWAN " + withWAN);
-		logging.info(this, "produceOpsiModulesInfo withLicenceManagement " + withLicenceManagement);
-		logging.info(this, "produceOpsiModulesInfo withMySQL " + withMySQL);
+		Logging.info(this, "produceOpsiModulesInfo withUserRoles " + withUserRoles);
+		Logging.info(this, "produceOpsiModulesInfo withUEFI " + withUEFI);
+		Logging.info(this, "produceOpsiModulesInfo withWAN " + withWAN);
+		Logging.info(this, "produceOpsiModulesInfo withLicenceManagement " + withLicenceManagement);
+		Logging.info(this, "produceOpsiModulesInfo withMySQL " + withMySQL);
 
 		// sets value to true if we use the mysql backend and informs that we are
 		// underlicensed
@@ -8334,7 +8334,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		try {
 
 			opsiVersion = (String) opsiInformation.get("opsiVersion");
-			logging.info(this, "opsi version information " + opsiVersion);
+			Logging.info(this, "opsi version information " + opsiVersion);
 
 			final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
@@ -8342,7 +8342,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
 
 			opsiModulesInfo.remove("signature");
-			logging.info(this, "opsi module information " + opsiModulesInfo);
+			Logging.info(this, "opsi module information " + opsiModulesInfo);
 			opsiModulesInfo.remove("valid");
 
 			opsiModulesDisplayInfo = new HashMap<>(opsiModulesInfo);
@@ -8363,31 +8363,31 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Calendar nowCal = Calendar.getInstance();
 			nowCal.setTime(today);
 
-			logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
+			Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
 
 			// read in modules
 			for (String key : opsiModulesInfo.keySet()) {
-				logging.info(this, "module from opsiModulesInfo, key " + key);
+				Logging.info(this, "module from opsiModulesInfo, key " + key);
 				ModulePermissionValue modulePermission = new ModulePermissionValue(exec, opsiModulesInfo.get(key),
 						validUntil);
 
-				logging.info(this, "handle modules key, modulePermission  " + modulePermission);
+				Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
 				Boolean permissionCheck = modulePermission.getBoolean();
 				opsiModulesPermissions.put(key, modulePermission); // first try
 				if (permissionCheck != null)
 					opsiModules.put(key, permissionCheck);
 			}
 
-			logging.info(this, "modules resulting step 0  " + opsiModules);
+			Logging.info(this, "modules resulting step 0  " + opsiModules);
 
 			// existing
 			for (String key : opsiCountModules.keySet()) {
 				ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
-				logging.info(this, "handle modules key " + key + " permission was " + modulePermission);
+				Logging.info(this, "handle modules key " + key + " permission was " + modulePermission);
 
 				modulePermission = new ModulePermissionValue(exec, opsiCountModules.get(key), validUntil);
 
-				logging.info(this, "handle modules key " + key + " permission set " + modulePermission);
+				Logging.info(this, "handle modules key " + key + " permission set " + modulePermission);
 				opsiModulesPermissions.put(key, modulePermission); // replace value got from modulesInfo
 
 				if (opsiCountModules.get(key) != null)
@@ -8395,8 +8395,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 																				// opsiCountModules value if it exists)
 			}
 
-			logging.info(this, "modules resulting step 1 " + opsiModules);
-			logging.info(this, "countModules is  " + opsiCountModules);
+			Logging.info(this, "modules resulting step 1 " + opsiModules);
+			Logging.info(this, "countModules is  " + opsiCountModules);
 
 			// set values for modules checked by configed
 			for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
@@ -8406,11 +8406,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				if (modulePermission.getBoolean() != null) {
 					opsiModules.put(key, modulePermission.getBoolean());
-					logging.info(this, " retrieveOpsiModules, set opsiModules for key " + key + ": "
+					Logging.info(this, " retrieveOpsiModules, set opsiModules for key " + key + ": "
 							+ modulePermission.getBoolean());
 				} else {
 					opsiModules.put(key, true);
-					logging.info(this, " retrieveOpsiModules " + key + " " + maxClientsForThisModule.getNumber());
+					Logging.info(this, " retrieveOpsiModules " + key + " " + maxClientsForThisModule.getNumber());
 
 					if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
 						opsiModules.put(key, false);
@@ -8419,16 +8419,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						Integer warningLimit = null;
 						Integer stopLimit = null;
 
-						logging.info(this,
+						Logging.info(this,
 								" retrieveOpsiModules " + key + " up to now globalMaxClients " + globalMaxClients);
 
-						logging.info(this, " retrieveOpsiModules " + key + " maxClientsForThisModule.getNumber "
+						Logging.info(this, " retrieveOpsiModules " + key + " maxClientsForThisModule.getNumber "
 								+ maxClientsForThisModule.getNumber());
 
 						globalMaxClients = calculateModulePermission(globalMaxClients,
 								maxClientsForThisModule.getNumber());
 
-						logging.info(this,
+						Logging.info(this,
 								" retrieveOpsiModules " + key + " result:  globalMaxClients is " + globalMaxClients);
 
 						Integer newGlobalLimit = globalMaxClients.getNumber();
@@ -8441,7 +8441,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
 						}
 
-						logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
+						Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
 								+ " stopLimit " + stopLimit);
 
 						if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
@@ -8463,21 +8463,21 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 			}
 
-			logging.info(this, "modules resulting step 2  " + opsiModules);
-			logging.info(this, "count Modules is  " + opsiCountModules);
+			Logging.info(this, "modules resulting step 2  " + opsiModules);
+			Logging.info(this, "count Modules is  " + opsiCountModules);
 
 			for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
 				int countClientsInThisBlock = countClients;
 
 				// tests
 
-				logging.info(this, "check module " + key + " problem on start " + (!(opsiModules.get(key))));
+				Logging.info(this, "check module " + key + " problem on start " + (!(opsiModules.get(key))));
 				boolean problemToIndicate = true;
 				ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
 				ExtendedInteger maxAllowedClientsForThisModule = modulePermission.getMaxClients();
 				ExtendedDate expiresForThisModule = modulePermission.getExpires();
 
-				logging.info(this, "check  module " + key + " maxAllowedClientsForThisModule "
+				Logging.info(this, "check  module " + key + " maxAllowedClientsForThisModule "
 						+ maxAllowedClientsForThisModule + " expiresForThisModule " + expiresForThisModule);
 
 				if (maxAllowedClientsForThisModule.equals(ExtendedInteger.ZERO))
@@ -8487,10 +8487,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						&& (key.equals("linux_agent") || (key.equals("userroles") && !isUserRegisterActivated())))
 					problemToIndicate = false;
 
-				logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
+				Logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
 
 				if (problemToIndicate) {
-					logging.info(this, "retrieveOpsiModules " + key + " , maxClients " + maxAllowedClientsForThisModule
+					Logging.info(this, "retrieveOpsiModules " + key + " , maxClients " + maxAllowedClientsForThisModule
 							+ " count " + countClientsInThisBlock);
 
 					if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
@@ -8510,36 +8510,36 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
 
 						if (countClientsInThisBlock > stopCount) {
-							logging.info(this, "retrieveOpsiModules " + key + " stopCount " + stopCount
+							Logging.info(this, "retrieveOpsiModules " + key + " stopCount " + stopCount
 									+ " count clients " + countClients);
 
 							String warningText =
 
 									String.format(
 											// locale.
-											configed.getResourceValue("Permission.modules.clientcount.error"),
+											Configed.getResourceValue("Permission.modules.clientcount.error"),
 											"" + countClientsInThisBlock, "" + key,
 											"" + maxAllowedClientsForThisModule.getNumber());
 
 							missingModulesPermissionInfo.add(warningText);
 
-							logging.warning(this, warningText);
+							Logging.warning(this, warningText);
 						}
 
 						else if (countClientsInThisBlock > startWarningCount) {
-							logging.info(this, "retrieveOpsiModules " + key + " startWarningCount " + startWarningCount
+							Logging.info(this, "retrieveOpsiModules " + key + " startWarningCount " + startWarningCount
 									+ " count clients " + countClients);
 
 							String warningText =
 
 									String.format(
 											// locale,
-											configed.getResourceValue("Permission.modules.clientcount.warning"),
+											Configed.getResourceValue("Permission.modules.clientcount.warning"),
 											"" + countClientsInThisBlock, "" + key,
 											"" + maxAllowedClientsForThisModule.getNumber());
 
 							missingModulesPermissionInfo.add(warningText);
-							logging.warning(this, warningText);
+							Logging.warning(this, warningText);
 						}
 
 					}
@@ -8547,9 +8547,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				}
 			}
 
-			logging.info(this, "modules resulting  " + opsiModules);
+			Logging.info(this, "modules resulting  " + opsiModules);
 
-			logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
+			Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
 
 			if (!missingModulesPermissionInfo.isEmpty()) {
 				javax.swing.SwingUtilities.invokeLater(new Thread() {
@@ -8557,14 +8557,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 						StringBuilder info = new StringBuilder("");
 
-						info.append(configed.getResourceValue("Permission.modules.clientcount.2"));
+						info.append(Configed.getResourceValue("Permission.modules.clientcount.2"));
 						info.append(":\n");
 						for (String moduleInfo : missingModulesPermissionInfo) {
 							info.append(moduleInfo);
 							info.append("\n");
 						}
 
-						logging.info(this, "missingModules " + info);
+						Logging.info(this, "missingModules " + info);
 						de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(info.toString());
 
 					}
@@ -8572,7 +8572,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 
 		} catch (Exception ex) {
-			logging.warning("opsi module information problem", ex);
+			Logging.warning("opsi module information problem", ex);
 		}
 
 		{
@@ -8588,15 +8588,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			withUserRoles = (opsiModules.get("userroles") != null) && ((Boolean) opsiModules.get("userroles"));
 		}
 
-		logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
-		logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
-		logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
+		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
+		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
+		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
 
 	}
 
 	@Override
 	public final void retrieveOpsiModules() {
-		logging.info(this, "retrieveOpsiModules ");
+		Logging.info(this, "retrieveOpsiModules ");
 
 		licensingInfo = getOpsiLicensingInfo();
 
@@ -8609,9 +8609,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		logging.info(this, " withMySQL " + withMySQL);
-		logging.info(this, " withLinuxAgent " + withLinuxAgent);
-		logging.info(this, " withUserRoles " + withUserRoles);
+		Logging.info(this, " withMySQL " + withMySQL);
+		Logging.info(this, " withLinuxAgent " + withLinuxAgent);
+		Logging.info(this, " withUserRoles " + withUserRoles);
 
 	}
 
@@ -8659,7 +8659,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return applyUserSpecializedConfig;
 
 		applyUserSpecializedConfig = withUserRoles && KEY_USER_REGISTER_VALUE;
-		logging.info(this, "applyUserSpecializedConfig initialized, " + applyUserSpecializedConfig);
+		Logging.info(this, "applyUserSpecializedConfig initialized, " + applyUserSpecializedConfig);
 
 		return applyUserSpecializedConfig;
 	}
@@ -8686,11 +8686,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public boolean checkSSHCommandMethod(String method) {
 		if (getMethodSignature(method) != NONE_LIST) // method does not exist before opsi 3.4
 		{
-			logging.info(this, "checkSSHCommandMethod " + method + " exists");
+			Logging.info(this, "checkSSHCommandMethod " + method + " exists");
 			return true;
 
 		}
-		logging.info(this, "checkSSHCommandMethod " + method + " does not exists");
+		Logging.info(this, "checkSSHCommandMethod " + method + " does not exists");
 		return false;
 	}
 
@@ -8700,11 +8700,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * @return command objects
 	 */
 	public List<Map<java.lang.String, java.lang.Object>> retrieveCommandList() {
-		logging.info(this, "retrieveCommandList ");
+		Logging.info(this, "retrieveCommandList ");
 
 		List<Map<java.lang.String, java.lang.Object>> sshCommands = exec.getListOfMaps(
 				new OpsiMethodCall("SSHCommand_getObjects", new Object[] { /* callAttributes, callFilter */ }));
-		logging.debug(this, "retrieveCommandList commands " + sshCommands);
+		Logging.debug(this, "retrieveCommandList commands " + sshCommands);
 		return sshCommands;
 	}
 
@@ -8716,12 +8716,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * @return result true if everything is ok
 	 */
 	public boolean doActionSSHCommand(String method, List<Object> jsonObjects) {
-		logging.info(this, "doActionSSHCommand method " + method);
+		Logging.info(this, "doActionSSHCommand method " + method);
 		if (isGlobalReadOnly())
 			return false;
 		OpsiMethodCall omc = new OpsiMethodCall(method, new Object[] { Executioner.jsonArray(jsonObjects) });
 		boolean result = exec.doCall(omc);
-		logging.info(this, "doActionSSHCommand method " + method + " result " + result);
+		Logging.info(this, "doActionSSHCommand method " + method + " result " + result);
 		return result;
 	}
 
@@ -8734,13 +8734,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public boolean deleteSSHCommand(List<String> jsonObjects) {
 
 		// Strings not object!
-		logging.info(this, "deleteSSHCommand ");
+		Logging.info(this, "deleteSSHCommand ");
 		if (isGlobalReadOnly())
 			return false;
 		OpsiMethodCall omc = new OpsiMethodCall("SSHCommand_deleteObjects",
 				new Object[] { Executioner.jsonArray(jsonObjects) });
 		boolean result = exec.doCall(omc);
-		logging.info(this, "deleteSSHCommand result " + result);
+		Logging.info(this, "deleteSSHCommand result " + result);
 		return result;
 	}
 

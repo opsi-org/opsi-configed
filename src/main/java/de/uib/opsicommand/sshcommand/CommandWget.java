@@ -3,11 +3,11 @@ package de.uib.opsicommand.sshcommand;
 import java.util.List;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHWgetParameterDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	private String baseName = "wget ";
@@ -49,9 +49,9 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 		if (d.charAt(d.length() - 1) != '/')
 			d = d + "/";
 		setProduct(d + getFilenameFromUrl(url));
-		logging.debug(this, "CommandWget dir " + dir);
-		logging.debug(this, "CommandWget url " + url);
-		logging.debug(this, "CommandWget product " + getProduct());
+		Logging.debug(this, "CommandWget dir " + dir);
+		Logging.debug(this, "CommandWget url " + url);
+		Logging.debug(this, "CommandWget product " + getProduct());
 		needParameter = false;
 	}
 
@@ -91,7 +91,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.wget");
+		return Configed.getResourceValue("SSHConnection.command.wget");
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.wget.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.wget.tooltip");
 	}
 
 	@Override

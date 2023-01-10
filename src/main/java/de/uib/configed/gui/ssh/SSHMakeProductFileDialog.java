@@ -13,17 +13,17 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
 import de.uib.opsicommand.sshcommand.CommandOpsimakeproductfile;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.opsicommand.sshcommand.SSHCommand_Template;
+import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHMakeProductFileDialog extends FGeneralDialog {
 	// In dieser Klasse gibt es Linux-Befehle (folgend), die zu Konstanten
@@ -66,7 +66,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
 
 	public SSHMakeProductFileDialog(ConfigedMain m) {
-		super(null, configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.title"), false);
+		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.title"), false);
 		main = m;
 		initGUI();
 
@@ -101,7 +101,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private String setOpsiPackageFilename(String path) {
 		filename = path;
 		btn_toPackageManager.setEnabled(true);
-		btn_toPackageManager.setToolTipText(configed.getResourceValue(
+		btn_toPackageManager.setToolTipText(Configed.getResourceValue(
 				"SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip") + " " + filename);
 		return filename;
 	}
@@ -134,7 +134,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			mainpanel.setBorder(BorderFactory.createTitledBorder(""));
 			buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-			lbl_dir = new JLabel(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.serverDir"));
+			lbl_dir = new JLabel(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.serverDir"));
 
 			autocompletion.setCombobox(new SSHCompletionComboBox<>(
 					new DefaultComboBoxModel<>(autocompletion.getDefaultValues().toArray(new String[0]))) {
@@ -156,26 +156,26 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 			lbl_packageVersion = new JLabel();
 			lbl_packageVersion.setText(
-					"    " + configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.packageVersion"));
+					"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.packageVersion"));
 			lbl_productVersion = new JLabel();
 			lbl_productVersion.setText(
-					"    " + configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.productVersion"));
+					"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.productVersion"));
 			lbl_versions_controlfile = new JLabel();
 			lbl_versions = new JLabel();
 			lbl_versions_controlfile.setText(
-					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions_controlfile"));
-			lbl_versions.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions"));
+					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions_controlfile"));
+			lbl_versions.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions"));
 			lbl_setRights = new JLabel();
-			lbl_setRights.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights"));
+			lbl_setRights.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights"));
 			lbl_setRights_now = new JLabel();
 			lbl_setRights_now
-					.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
+					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
 			lbl_removeExistingPackage = new JLabel();
 			lbl_removeExistingPackage
-					.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
+					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
 			lbl_removeExistingPackage2 = new JLabel();
 			lbl_removeExistingPackage2.setText(
-					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting2"));
+					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting2"));
 
 			lbl_productVersion_controlfile = new JLabel();
 			lbl_packageVersion_controlfile = new JLabel();
@@ -187,12 +187,12 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 			lbl_md5sum = new JLabel();
 			lbl_md5sum.setText(
-					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createMd5sum"));
+					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createMd5sum"));
 			cb_md5sum = new JCheckBox();
 			cb_md5sum.setSelected(true);
 			lbl_zsync = new JLabel();
 			lbl_zsync.setText(
-					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createZsync"));
+					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createZsync"));
 			cb_zsync = new JCheckBox();
 			cb_zsync.setSelected(true);
 			cb_overwrite = new JCheckBox();
@@ -202,7 +202,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 			btn_advancedSettings = new JButton();
 			btn_advancedSettings.setText(
-					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
+					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
 
 			if (!(Globals.isGlobalReadOnly()))
 				btn_advancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
@@ -213,17 +213,17 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 			btn_setRights = new JButton();
 			btn_setRights
-					.setText(configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
+					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
 			btn_setRights.setToolTipText(
-					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
+					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
 			if (!(Globals.isGlobalReadOnly()))
 				btn_setRights.addActionListener(actionEvent -> doExecSetRights());
 
 			btn_toPackageManager = new JButton();
 			btn_toPackageManager.setEnabled(false);
 			btn_toPackageManager.setText(
-					configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager"));
-			btn_toPackageManager.setToolTipText(configed
+					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager"));
+			btn_toPackageManager.setToolTipText(Configed
 					.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
 
 			if (!(Globals.isGlobalReadOnly()))
@@ -233,14 +233,14 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				});
 
 			btn_exec = new JButton();
-			btn_exec.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+			btn_exec.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 			btn_exec.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 			btn_exec.setEnabled(false);
 			if (!(Globals.isGlobalReadOnly()))
 				btn_exec.addActionListener(actionEvent -> doAction1());
 
 			btn_cancel = new JButton();
-			btn_cancel.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+			btn_cancel.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 			btn_cancel.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 			btn_cancel.addActionListener(actionEvent -> cancel());
 			buttonPanel.add(btn_exec);
@@ -381,7 +381,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 					.addGap(Globals.GAP_SIZE));
 
 		} catch (Exception e) {
-			logging.error("Error", e);
+			Logging.error("Error", e);
 		}
 	}
 
@@ -399,24 +399,24 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	private String doActionGetVersions() {
 		String dir = cb_mainDir.getEditor().getItem().toString() + "/OPSI/control";
-		logging.info(this, "doActionGetVersions, dir " + dir);
+		Logging.info(this, "doActionGetVersions, dir " + dir);
 		EmptyCommand getVersions = new EmptyCommand(
 				factory.STRING_COMMAND_GET_VERSIONS.replace(factory.STRING_REPLACEMENT_DIRECTORY, dir));
 		SSHConnectExec ssh = new SSHConnectExec();
-		logging.info(this, "doActionGetVersions, command " + getVersions);
+		Logging.info(this, "doActionGetVersions, command " + getVersions);
 		String result = ssh.exec(getVersions, false);
-		logging.info(this, "doActionGetVersions result " + result);
+		Logging.info(this, "doActionGetVersions result " + result);
 
 		if (result == null) {
-			logging.warning(this,
+			Logging.warning(this,
 					"doActionGetVersions, could not find versions in file " + dir
 							+ ".Please check if directory exists and contains the file OPSI/control.\n"
 							+ "Please also check the rights of the file/s.");
 		} else {
 			String[] versions = result.replace("version: ", "").split("\n");
-			logging.info(this, "doActionGetVersions, getDirectories result " + java.util.Arrays.toString(versions));
+			Logging.info(this, "doActionGetVersions, getDirectories result " + java.util.Arrays.toString(versions));
 			if (versions.length < 1) {
-				logging.info(this,
+				Logging.info(this,
 						"doActionGetVersions, not expected versions array " + java.util.Arrays.toString(versions));
 				return "";
 			}
@@ -468,18 +468,18 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	public void doAction1() {
 		if ((lbl_productVersion_controlfile.getText() == null)
 				|| (lbl_productVersion_controlfile.getText().equals(""))) {
-			logging.warning(this, "Please select a valid opsi product directory.");
+			Logging.warning(this, "Please select a valid opsi product directory.");
 			return;
 		}
-		SSHCommand_Template str2exec = new SSHCommand_Template();
+		SSHCommandTemplate str2exec = new SSHCommandTemplate();
 		String dir = cb_mainDir.getEditor().getItem().toString();
 
 		String prodVersion = tf_productVersion.getText();
 		String packVersion = tf_packageVersion.getText();
 		prodVersion = checkVersion(prodVersion,
-				configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"), "");
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"), "");
 		packVersion = checkVersion(packVersion,
-				configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"), "");
+				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.keepVersions"), "");
 		CommandOpsimakeproductfile makeProductFile = new CommandOpsimakeproductfile(dir, packVersion, prodVersion,
 				cb_md5sum.isSelected(), cb_zsync.isSelected());
 		str2exec.setMainName(makeProductFile.getMenuText());
@@ -521,7 +521,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		}
 		str2exec.addCommand(makeProductFile);
 
-		logging.info(this, "SSHConnectExec " + str2exec);
+		Logging.info(this, "SSHConnectExec " + str2exec);
 		new Thread() {
 			@Override
 			public void run() {
@@ -542,7 +542,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 				factory.STRING_COMMAND_CAT_DIRECTORY.replace(factory.STRING_REPLACEMENT_DIRECTORY, dir));
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = ssh.exec(getPackageId, false);
-		logging.debug(this, "getPackageID result " + result);
+		Logging.debug(this, "getPackageID result " + result);
 		if (result != null)
 			return result.replace("id:", "").trim();
 		return "";

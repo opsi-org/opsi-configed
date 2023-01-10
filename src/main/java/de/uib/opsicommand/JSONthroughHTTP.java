@@ -27,10 +27,10 @@ import javax.net.ssl.SSLException;
 import org.json.JSONObject;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
 import utils.Base64OutputStream;
@@ -124,20 +124,20 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				String urlEnc = URLEncoder.encode(json, "UTF8");
 				urlS += "?" + urlEnc;
 			} catch (UnsupportedEncodingException ux) {
-				logging.error(this, ux.toString());
+				Logging.error(this, ux.toString());
 			}
 		}
 
-		logging.debug(this, "we shall try to connect to " + urlS);
+		Logging.debug(this, "we shall try to connect to " + urlS);
 		try {
 			serviceURL = new URL(urlS);
 		} catch (MalformedURLException ex) {
-			logging.error(urlS + " no legal URL, " + ex.toString());
+			Logging.error(urlS + " no legal URL, " + ex.toString());
 		}
 	}
 
 	public void makeURL(OpsiMethodCall omc) {
-		logging.debug(this, "make url for " + omc);
+		Logging.debug(this, "make url for " + omc);
 
 		String urlS = produceBaseURL(makeRpcPath(omc));
 		String json = omc.getJsonString();
@@ -161,9 +161,9 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	}
 
 	public void makeURL(List<OpsiMethodCall> omcList) {
-		logging.debug(this, "make url for " + omcList);
+		Logging.debug(this, "make url for " + omcList);
 		if (omcList == null || omcList.isEmpty()) {
-			logging.error("missing method call");
+			Logging.error("missing method call");
 			return;
 		}
 
@@ -172,7 +172,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 		for (OpsiMethodCall omc : omcList) {
 			String rpcPath = makeRpcPath(omc);
 			if (!rpcPath.equals(rpcPath0)) {
-				logging.error("no common RPC path:  " + rpcPath0 + " cf. " + omcList.get(0));
+				Logging.error("no common RPC path:  " + rpcPath0 + " cf. " + omcList.get(0));
 				return;
 			}
 		}
@@ -210,7 +210,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 	@Override
 	public JSONObject retrieveJSONObject(OpsiMethodCall omc) {
 		boolean background = false;
-		logging.info(this, "retrieveJSONObjects started");
+		Logging.info(this, "retrieveJSONObjects started");
 		WaitCursor waitCursor = null;
 
 		if (omc != null && !omc.isBackground()) {
@@ -245,16 +245,16 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				connection.setRequestMethod("GET");
 			}
 
-			logging.info(this, "retrieveJSONObject by connection " + connection);
-			logging.info(this, "retrieveJSONObject request properties " + connection.getRequestProperties());
-			logging.info(this, "retrieveJSONObject request method " + connection.getRequestMethod());
-			logging.info(this, "https protocols given by system " + configed.SYSTEM_SSL_VERSION);
+			Logging.info(this, "retrieveJSONObject by connection " + connection);
+			Logging.info(this, "retrieveJSONObject request properties " + connection.getRequestProperties());
+			Logging.info(this, "retrieveJSONObject request method " + connection.getRequestMethod());
+			Logging.info(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
 
 			if (sessionId != null) {
 				connection.setRequestProperty("Cookie", sessionId);
 			}
-			logging.info(this, "retrieveJSONObjects request old or " + " new session ");
-			logging.info(this, "retrieveJSONObjects connected " + " new session ");
+			Logging.info(this, "retrieveJSONObjects request old or " + " new session ");
+			Logging.info(this, "retrieveJSONObjects connected " + " new session ");
 
 			try {
 				connection.connect();
@@ -264,26 +264,26 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				if (i > -1) {
 					s = "\n\n" + s.substring(i) + "\n" + "In this SSL configuration, a connection is not possible";
 
-					logging.error(s);
-					logging.checkErrorList(null);
+					Logging.error(s);
+					Logging.checkErrorList(null);
 				}
 
 				throw (ex);
 			}
 
 			if (connection instanceof HttpsURLConnection) {
-				logging.info(this, "connection cipher suite " + ((HttpsURLConnection) connection).getCipherSuite());
+				Logging.info(this, "connection cipher suite " + ((HttpsURLConnection) connection).getCipherSuite());
 			}
 
 			if (requestMethod == POST) {
 				try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), UTF8DEFAULT);
 						BufferedWriter out = new BufferedWriter(writer)) {
 					String json = produceJSONstring(omc);
-					logging.debug(this, "(POST) sending: " + json);
+					Logging.debug(this, "(POST) sending: " + json);
 					out.write(json);
 					out.flush();
 				} catch (IOException iox) {
-					logging.info(this, "exception on writing json request " + iox);
+					Logging.info(this, "exception on writing json request " + iox);
 				}
 			}
 		} catch (SSLException ex) {
@@ -296,25 +296,25 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
 
 			FTextArea fErrorMsg = new FTextArea(Globals.mainFrame,
-					configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
+					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
 							+ ") ",
 					true,
-					new String[] { configed.getResourceValue(configed.getResourceValue("UIManager.cancelButtonText")),
-							configed.getResourceValue("JSONthroughHTTP.alwaysTrust"),
-							configed.getResourceValue("JSONthroughHTTP.trustOnlyOnce") },
+					new String[] { Configed.getResourceValue(Configed.getResourceValue("UIManager.cancelButtonText")),
+							Configed.getResourceValue("JSONthroughHTTP.alwaysTrust"),
+							Configed.getResourceValue("JSONthroughHTTP.trustOnlyOnce") },
 					420, 200);
 			StringBuilder message = new StringBuilder();
 
 			if (!certificateExists) {
-				message.append(configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
-				message.append(configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
+				message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
+				message.append(Configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
 				message.append("\n\n\n");
-				message.append(configed.getResourceValue("JSONthroughHTTP.noCertificateFound"));
+				message.append(Configed.getResourceValue("JSONthroughHTTP.noCertificateFound"));
 			} else {
-				message.append(configed.getResourceValue("JSONthroughHTTP.certificateIsInvalid") + "\n");
-				message.append(configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
+				message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsInvalid") + "\n");
+				message.append(Configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
 				message.append("\n\n\n");
-				message.append(configed.getResourceValue("JSONthroughHTTP.unableToVerify"));
+				message.append(Configed.getResourceValue("JSONthroughHTTP.unableToVerify"));
 			}
 
 			fErrorMsg.setMessage(message.toString());
@@ -340,27 +340,27 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			}
 
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-			logging.error("Exception on connecting, " + ex.toString());
+			Logging.error("Exception on connecting, " + ex.toString());
 
 			return null;
 		}
 
 		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) {
 			try {
-				logging.debug(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage());
+				Logging.debug(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage());
 
 				if (serverVersion[0] == 0) {
 					String server = connection.getHeaderField("Server");
 					Pattern pattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
 					Matcher matcher = pattern.matcher(server);
 					if (matcher.find()) {
-						logging.info(this, "opsi server version: " + matcher.group(1));
+						Logging.info(this, "opsi server version: " + matcher.group(1));
 						String[] versionParts = matcher.group(1).split("\\.");
 						for (int i = 0; i < versionParts.length && i < 4; i++) {
 							try {
 								serverVersion[i] = Integer.parseInt(versionParts[i]);
 							} catch (NumberFormatException nex) {
-								logging.error(this, "value is unparsable to int");
+								Logging.error(this, "value is unparsable to int");
 							}
 						}
 					} else {
@@ -389,12 +389,12 @@ public class JSONthroughHTTP extends JSONExecutioner {
 							errorInfo.append("  ");
 						}
 					} catch (IOException iox) {
-						logging.warning(this, "exception on reading error stream " + iox);
+						Logging.warning(this, "exception on reading error stream " + iox);
 						throw new JSONCommunicationException("error on reading error stream");
 					}
 				}
 
-				logging.debug(this, "response code: " + connection.getResponseCode());
+				Logging.debug(this, "response code: " + connection.getResponseCode());
 
 				if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
 						|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -403,7 +403,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 					conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
 					if (connection.getResponseCode() != HttpURLConnection.HTTP_UNAUTHORIZED) {
 						// this case is handled by the login routine
-						logging.error(this, "Response " + connection.getResponseCode() + " "
+						Logging.error(this, "Response " + connection.getResponseCode() + " "
 								+ connection.getResponseMessage() + " " + errorInfo.toString());
 					}
 
@@ -420,7 +420,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 						boolean gotNewSession = sessionId != null && !sessionId.equals(lastSessionId);
 
 						if (gotNewSession) {
-							logging.info(this, "retrieveJSONObjects " + " got new session ");
+							Logging.info(this, "retrieveJSONObjects " + " got new session ");
 						}
 					}
 
@@ -430,51 +430,51 @@ public class JSONthroughHTTP extends JSONExecutioner {
 
 					if (connection.getHeaderField("Content-Encoding") != null) {
 						gzipped = connection.getHeaderField("Content-Encoding").equalsIgnoreCase("gzip");
-						logging.debug(this, "gzipped " + gzipped);
+						Logging.debug(this, "gzipped " + gzipped);
 						deflated = connection.getHeaderField("Content-Encoding").equalsIgnoreCase("deflate");
-						logging.debug(this, "deflated " + deflated);
+						Logging.debug(this, "deflated " + deflated);
 						lz4compressed = connection.getHeaderField("Content-Encoding").equalsIgnoreCase("lz4");
-						logging.debug(this, "lz4compressed " + lz4compressed);
+						Logging.debug(this, "lz4compressed " + lz4compressed);
 					}
 
 					InputStream stream = null;
-					logging.info(this, "initiating input stream");
+					Logging.info(this, "initiating input stream");
 
 					if (lz4compressed) {
-						logging.info(this, "initiating LZ4FrameInputStream");
+						Logging.info(this, "initiating LZ4FrameInputStream");
 						stream = new LZ4FrameInputStream(connection.getInputStream());
 					} else if (gzipped || deflated) {
 						if (deflated || connection.getHeaderField("Content-Type").startsWith("gzip-application")) {
 							// not valid gzippt, we take inflater
-							logging.info(this, "initiating InflaterInputStream");
+							Logging.info(this, "initiating InflaterInputStream");
 							InputStream str = connection.getInputStream();
 							stream = new InflaterInputStream(str);
 						} else {
-							logging.info(this, "initiating GZIPInputStream");
+							Logging.info(this, "initiating GZIPInputStream");
 							stream = new GZIPInputStream(connection.getInputStream()); // not working, if no GZIP
 						}
 					} else {
-						logging.info(this, "initiating plain input stream");
+						Logging.info(this, "initiating plain input stream");
 						stream = connection.getInputStream();
 					}
 
-					logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
+					Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
 
 					String line;
 					try (BufferedReader in = new BufferedReader(new InputStreamReader(stream, UTF8DEFAULT))) {
 						line = in.readLine();
 
-						logging.info(this, "received line of length " + line.length());
+						Logging.info(this, "received line of length " + line.length());
 						if (line != null) {
 							result = new JSONObject(line);
 						}
 
 						line = in.readLine();
 						if (line != null) {
-							logging.debug(this, "received second line of length " + line.length());
+							Logging.debug(this, "received second line of length " + line.length());
 						}
 					} catch (IOException iox) {
-						logging.warning(this, "exception on receiving json", iox);
+						Logging.warning(this, "exception on receiving json", iox);
 						throw new JSONCommunicationException("receiving json");
 					}
 				}
@@ -483,12 +483,12 @@ public class JSONthroughHTTP extends JSONExecutioner {
 					waitCursor.stop();
 				}
 				WaitCursor.stopAll();
-				logging.error(this, "Exception while data reading, " + ex.toString());
+				Logging.error(this, "Exception while data reading, " + ex.toString());
 			}
 		}
 
 		timeCheck.stop("retrieveJSONObject  got result " + (result != null) + " ");
-		logging.info(this, "retrieveJSONObject ready");
+		Logging.info(this, "retrieveJSONObject ready");
 		if (waitCursor != null) {
 			waitCursor.stop();
 		}

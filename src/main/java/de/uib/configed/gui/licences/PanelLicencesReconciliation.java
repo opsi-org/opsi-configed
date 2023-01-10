@@ -9,7 +9,7 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.ControlPanelLicencesReconciliation;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 /**
@@ -38,7 +38,7 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 	private void initComponents() {
 
 		panelReconciliation = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), tablesMaxWidth, false, // editing
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleReconciliation"), tablesMaxWidth, false, // editing
 				0, // popupPosition
 				true// switchLineColors
 				, null // default popups

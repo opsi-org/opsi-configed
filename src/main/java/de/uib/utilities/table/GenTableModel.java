@@ -21,7 +21,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.utilities.Mapping;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 import de.uib.utilities.table.updates.TableUpdateItemFactory;
@@ -144,10 +144,10 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	protected void initColumns() {
 		columnNames = tableProvider.getColumnNames();
-		logging.info(this, "initColumns " + columnNames);
+		Logging.info(this, "initColumns " + columnNames);
 
 		classNames = tableProvider.getClassNames();
-		logging.info(this, "initColumns  classNames " + classNames);
+		Logging.info(this, "initColumns  classNames " + classNames);
 
 		if (columnNames == null)
 			colsLength = 0;
@@ -218,7 +218,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	private void setFilter(TableModelFilter filter) {
-		logging.info(this, "setFilter " + filter);
+		Logging.info(this, "setFilter " + filter);
 		workingFilter = filter;
 	}
 
@@ -226,7 +226,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	 * define a complete new filter by a TableModelFilterCondition
 	 */
 	public void setFilterCondition(TableModelFilterCondition cond) {
-		logging.info(this, "setFilterCondition " + cond);
+		Logging.info(this, "setFilterCondition " + cond);
 		clearFilter();
 		chainedFilter.set(DEFAULT_FILTER_NAME, new TableModelFilter(cond));
 
@@ -253,7 +253,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	 */
 	public GenTableModel chainFilter(String filterName, TableModelFilter filter) {
 		chainedFilter.set(filterName, filter);
-		logging.info(this, "chainFilter, we have chainedFilter " + chainedFilter);
+		Logging.info(this, "chainFilter, we have chainedFilter " + chainedFilter);
 		return this; // for chaining in notation
 	}
 
@@ -273,21 +273,21 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public void produceRows() {
-		logging.info(this, " ---  produce rows");
+		Logging.info(this, " ---  produce rows");
 		setRows(tableProvider.getRows());
 
-		logging.info(this, "produceRows(): count  " + rows.size());
+		Logging.info(this, "produceRows(): count  " + rows.size());
 
 		rowsLength = rows.size();
 
 		getColumnNames(); // update columns and class names from tableProvider
 
-		logging.info(this, " ---  rows produced, columnNames: " + columnNames);
-		logging.info(this,
+		Logging.info(this, " ---  rows produced, columnNames: " + columnNames);
+		Logging.info(this,
 				"produceRows --- using workingfilter  " + workingFilter.getClass().getName() + " : " + workingFilter);
 
 		if (workingFilter != null && workingFilter.isInUse()) {
-			logging.info(this, " --- using workingfilter  " + workingFilter.getClass().getName());
+			Logging.info(this, " --- using workingfilter  " + workingFilter.getClass().getName());
 			List<List<Object>> filteredRows = new ArrayList<>();
 
 			for (List<Object> row : rows) {
@@ -299,7 +299,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		}
 
-		logging.info(this, "produceRows  filtered size " + rows.size());
+		Logging.info(this, "produceRows  filtered size " + rows.size());
 
 	}
 
@@ -312,7 +312,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			} else
 				this.sorting = sorting;
 
-			logging.info(this, "setSorting: we reset");
+			Logging.info(this, "setSorting: we reset");
 			invalidate();
 			reset();
 
@@ -324,7 +324,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	protected void setRows(List<List<Object>> givenRows) {
-		logging.info(this, "setRows size " + givenRows.size());
+		Logging.info(this, "setRows size " + givenRows.size());
 		if (!sorting)
 			rows = givenRows;
 
@@ -377,17 +377,17 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	public boolean isUsingFilter(String name) {
 		if (name == null) {
-			logging.info(this, "isUsingFilter, name == null");
+			Logging.info(this, "isUsingFilter, name == null");
 			return false;
 		}
 
 		if (chainedFilter == null) {
-			logging.info(this, "isUsingFilter, chainedFilter == null");
+			Logging.info(this, "isUsingFilter, chainedFilter == null");
 			return false;
 		}
 
 		if (chainedFilter.getElement(name) == null) {
-			logging.info(this, "isUsingFilter, chainedFilter.getElement for name " + name + " == null");
+			Logging.info(this, "isUsingFilter, chainedFilter.getElement for name " + name + " == null");
 			return false;
 		}
 
@@ -395,15 +395,15 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public void setUsingFilter(String name, boolean newValue) {
-		logging.info(this, "setUsingFilter " + name + " to " + newValue + " value was " + isUsingFilter(name));
+		Logging.info(this, "setUsingFilter " + name + " to " + newValue + " value was " + isUsingFilter(name));
 		if (isUsingFilter(name) != newValue) {
 			invalidate();
 			chainedFilter.getElement(name).setInUse(newValue);
 			reset();
 		}
 
-		logging.info(this, "setUsingFilter active filter chain: " + chainedFilter.getActiveFilters());
-		logging.info(this, "setUsingFilter we got rows: " + getRowCount());
+		Logging.info(this, "setUsingFilter active filter chain: " + chainedFilter.getActiveFilters());
+		Logging.info(this, "setUsingFilter we got rows: " + getRowCount());
 
 	}
 
@@ -435,7 +435,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	 * recollected) clears update collection
 	 */
 	public void reset() {
-		logging.info(this, "reset()");
+		Logging.info(this, "reset()");
 		requestRefreshDerivedMaps();
 		refresh();
 		clearUpdates();
@@ -559,15 +559,15 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public int getCursorRow() {
-		logging.info(this, "cursorrow " + cursorrow);
+		Logging.info(this, "cursorrow " + cursorrow);
 		return cursorrow;
 	}
 
 	public void setCursorRow(int modelrow) {
 		if (markCursorRow) {
-			logging.info(this, "setCursorRow modelrow " + modelrow + " markCursorRow " + markCursorRow);
+			Logging.info(this, "setCursorRow modelrow " + modelrow + " markCursorRow " + markCursorRow);
 			if (modelrow > 0 && colsLength > 2)
-				logging.info(this, "setCursorRow val at (modelrow,2) ) " + getValueAt(modelrow, 2));
+				Logging.info(this, "setCursorRow val at (modelrow,2) ) " + getValueAt(modelrow, 2));
 		}
 
 		if (markCursorRow) {
@@ -615,8 +615,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		String oldValueString = "" + (rows.get(row)).get(col);
 
-		logging.debug(this, " old value at " + row + ", " + col + " : " + oldValueString);
-		logging.debug(this, " new value at " + row + ", " + col + " : " + value);
+		Logging.debug(this, " old value at " + row + ", " + col + " : " + oldValueString);
+		Logging.debug(this, " new value at " + row + ", " + col + " : " + value);
 
 		String newValueString = "" + value;
 
@@ -641,15 +641,15 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				rows.get(row).set(col, value);
 
 				if (itemFactory == null)
-					logging.info("update item factory missing");
+					Logging.info("update item factory missing");
 				else if (updates == null)
-					logging.info("updates not initialized");
+					Logging.info("updates not initialized");
 				else {
 
 					updates.add(itemFactory.produceUpdateItem(oldValues, rows.get(row)));
 				}
 
-				logging.debug(this, "updated rows add " + row);
+				Logging.debug(this, "updated rows add " + row);
 
 				updatedRows.add(row);
 			}
@@ -659,7 +659,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			{
 				// we should not get any more to this code, since for this condition the value
 				// is marked as not editable
-				logging.warning("key column cannot be edited after saving the data");
+				Logging.warning("key column cannot be edited after saving the data");
 
 				javax.swing.JOptionPane.showMessageDialog(null, "values in this column are fixed after saving the data",
 						"Information", javax.swing.JOptionPane.OK_OPTION);
@@ -691,7 +691,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public void setRow(int row, Object[] a) {
 		int col = 0;
 		if (colsLength != a.length)
-			logging.info("update row values less than than row elements");
+			Logging.info("update row values less than than row elements");
 
 		while (col < colsLength && col < a.length) {
 			setValueAt(a[col], row, col);
@@ -700,7 +700,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public void addRow(List<Object> rowV) {
-		logging.debug(this, "--- addRow size, row " + rowV.size() + ", " + rowV);
+		Logging.debug(this, "--- addRow size, row " + rowV.size() + ", " + rowV);
 
 		rows.add(rowV);
 		addedRows.add(rowsLength);
@@ -712,7 +712,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		try {
 			fireTableRowsInserted(rowsLength - 1, rowsLength - 1);
 		} catch (Exception ex) {
-			logging.warning(this, "addRow exception " + ex + " row " + rowV, ex);
+			Logging.warning(this, "addRow exception " + ex + " row " + rowV, ex);
 		}
 
 		requestRefreshDerivedMaps();
@@ -733,7 +733,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public List<Object> produceValueRowFromSomeEntries(RowMap entries) {
-		logging.debug(this, "produceValueRowFromSomeEntries " + entries);
+		Logging.debug(this, "produceValueRowFromSomeEntries " + entries);
 
 		List<Object> result = new ArrayList<>();
 
@@ -754,7 +754,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			// deletion of added rows is not adequately managed
 			// therefore we reject it
 
-			logging.info(this, "no deletion of added rows");
+			Logging.info(this, "no deletion of added rows");
 
 			javax.swing.JOptionPane.showMessageDialog(null, "no deletion of added rows, please save or cancel editing",
 					"Information", javax.swing.JOptionPane.OK_OPTION);
@@ -766,16 +766,16 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public void deleteRows(int[] selection) {
-		logging.debug(this, "deleteRows " + java.util.Arrays.toString(selection));
+		Logging.debug(this, "deleteRows " + java.util.Arrays.toString(selection));
 
 		if (selection == null || selection.length == 0)
 			return;
 
 		java.util.Arrays.sort(selection);
-		logging.debug(this, "deleteRows, sorted " + java.util.Arrays.toString(selection));
+		Logging.debug(this, "deleteRows, sorted " + java.util.Arrays.toString(selection));
 
 		if (updates == null) {
-			logging.info(this, "updates not initialized");
+			Logging.info(this, "updates not initialized");
 			return;
 		}
 
@@ -787,11 +787,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		// do with original row nums
 		for (int i = 0; i < selection.length; i++) {
 			List oldValues = new ArrayList<>(rows.get(selection[i]));
-			logging.debug(this, "deleteRow values " + oldValues);
+			Logging.debug(this, "deleteRow values " + oldValues);
 			updates.add(itemFactory.produceDeleteItem(oldValues));
 
 			if (updatedRows.indexOf(selection[i]) > -1) {
-				logging.debug(this, "deleteRows, remove from updatedRows  " + updatedRows.indexOf(i));
+				Logging.debug(this, "deleteRows, remove from updatedRows  " + updatedRows.indexOf(i));
 				updatedRows.remove(updatedRows.indexOf(selection[i]));
 			}
 		}
@@ -808,23 +808,23 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public void deleteRow(int rowNum) {
-		logging.debug(this, "deleteRow " + rowNum);
+		Logging.debug(this, "deleteRow " + rowNum);
 
 		if (itemFactory == null) {
-			logging.info("update item factory missing");
+			Logging.info("update item factory missing");
 			return;
 		} else if (updates == null) {
-			logging.info("updates not initialized");
+			Logging.info("updates not initialized");
 			return;
 		}
 
 		if (rows.get(rowNum) == null) {
-			logging.info(this, "delete row null ");
+			Logging.info(this, "delete row null ");
 			return;
 		}
 
 		if (updates == null) {
-			logging.info(this, "updates not initialized");
+			Logging.info(this, "updates not initialized");
 			return;
 		}
 
@@ -832,12 +832,12 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			return;
 
 		List oldValues = new ArrayList<>(rows.get(rowNum));
-		logging.debug(this, "deleteRow values " + oldValues);
+		Logging.debug(this, "deleteRow values " + oldValues);
 		updates.add(itemFactory.produceDeleteItem(oldValues));
 		// we have to delete the source values, not the possibly changed current row
 
 		if (updatedRows.indexOf(rowNum) > -1) {
-			logging.debug(this, "deleteRow, remove from updatedRows  " + updatedRows.indexOf(rowNum));
+			Logging.debug(this, "deleteRow, remove from updatedRows  " + updatedRows.indexOf(rowNum));
 			updatedRows.remove(updatedRows.indexOf(rowNum));
 		}
 
@@ -846,7 +846,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		fireTableRowsDeleted(rowNum, rowNum);
 
 		requestRefreshDerivedMaps();
-		logging.debug(this, "deleted row " + oldValues);
+		Logging.debug(this, "deleted row " + oldValues);
 	}
 
 	public boolean isRowAdded(int rowNum) {
@@ -875,7 +875,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (specialFilterCondition != null) {
 			// activate special filter and reproduce rows
 			TableModelFilter filter = new TableModelFilter(specialFilterCondition);
-			logging.info(this, "buildFunction with filter " + filter);
+			Logging.info(this, "buildFunction with filter " + filter);
 			setFilter(filter);
 			produceRows();
 		}
@@ -1012,7 +1012,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 				primarykeyTranslation.put(key, keyRepresenter.represents(key, getPrimarykey2Rowmap().get(key)));
 			} catch (Exception ex) {
-				logging.info(this, "getPrimarykeyTranslation()  " + getValueAt(i, keyCol) + " " + ex);
+				Logging.info(this, "getPrimarykeyTranslation()  " + getValueAt(i, keyCol) + " " + ex);
 			}
 		}
 

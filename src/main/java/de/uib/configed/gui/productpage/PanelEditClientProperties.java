@@ -22,7 +22,7 @@ import javax.swing.JPanel;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.IconButton;
 
 public class PanelEditClientProperties extends DefaultPanelEditProperties {
@@ -40,12 +40,12 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 	}
 
 	protected void initComponents() {
-		jLabelProductProperties = new JLabel(configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
+		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
 		jLabelProductProperties.setFont(Globals.defaultFontBold);
 		jLabelProductProperties.setForeground(Globals.lightBlack);
 
 		buttonSetValuesFromServerDefaults = new IconButton(
-				configed.getResourceValue("ProductInfoPane.buttonSetValuesFromServerDefaults"),
+				Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromServerDefaults"),
 				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", " ", true);
 
 		buttonSetValuesFromServerDefaults.setPreferredSize(new Dimension(15, 30));
@@ -53,7 +53,7 @@ public class PanelEditClientProperties extends DefaultPanelEditProperties {
 		buttonSetValuesFromServerDefaults.addActionListener((ActionEvent e) -> productPropertiesPanel.resetDefaults());
 
 		buttonRemoveSpecificValues = new IconButton(
-				configed.getResourceValue("ProductInfoPane.buttonRemoveSpecificValues"),
+				Configed.getResourceValue("ProductInfoPane.buttonRemoveSpecificValues"),
 				"images/reset_network_eliminate.png", /* "images/edit-delete.png", */
 				"images/reset_network_eliminate_over.png", /* "images/edit-delete_over.png", */
 				"images/reset_network_eliminate_disabled.png", true);

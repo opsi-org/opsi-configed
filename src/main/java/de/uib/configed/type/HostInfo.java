@@ -9,10 +9,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
 public class HostInfo {
@@ -216,7 +216,7 @@ public class HostInfo {
 		unordered.put(DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, depotOfClient);
 		unordered.put(CLIENT_CONNECTED_KEY, clientConnected);
 
-		logging.debug(this, "getMap clientName " + clientName + " : " + unordered);
+		Logging.debug(this, "getMap clientName " + clientName + " : " + unordered);
 
 		return unordered;
 	}
@@ -251,7 +251,7 @@ public class HostInfo {
 		unordered.put(CLIENT_CONNECTED_KEY, clientConnected);
 		unordered.put(CLIENT_SHUTDOWN_INSTALL_KEY, clientShutdownInstall);
 
-		logging.debug(this, "getMap clientName " + clientName);
+		Logging.debug(this, "getMap clientName " + clientName);
 
 		return unordered;
 	}
@@ -307,7 +307,7 @@ public class HostInfo {
 			break;
 		}
 		default: {
-			logging.warning(this, "key " + key + " not expected");
+			Logging.warning(this, "key " + key + " not expected");
 		}
 		}
 	}
@@ -418,12 +418,12 @@ public class HostInfo {
 
 		// encodeStringFromService is just returning the given value but was used for
 		// switching an encoding
-		clientDescription = showValue(configed.encodeStringFromService((String) pcInfo.get(CLIENT_DESCRIPTION_KEY)));
+		clientDescription = showValue(Configed.encodeStringFromService((String) pcInfo.get(CLIENT_DESCRIPTION_KEY)));
 		clientInventoryNumber = showValue(
-				configed.encodeStringFromService((String) pcInfo.get(CLIENT_INVENTORY_NUMBER_KEY)));
-		clientNotes = showValue(configed.encodeStringFromService((String) pcInfo.get(CLIENT_NOTES_KEY)));
+				Configed.encodeStringFromService((String) pcInfo.get(CLIENT_INVENTORY_NUMBER_KEY)));
+		clientNotes = showValue(Configed.encodeStringFromService((String) pcInfo.get(CLIENT_NOTES_KEY)));
 		clientOneTimePassword = showValue(
-				configed.encodeStringFromService((String) pcInfo.get(CLIENT_ONE_TIME_PASSWORD_KEY)));
+				Configed.encodeStringFromService((String) pcInfo.get(CLIENT_ONE_TIME_PASSWORD_KEY)));
 		clientMacAddress = showValue((String) pcInfo.get(CLIENT_MAC_ADRESS_KEY));
 		clientIpAddress = showValue((String) pcInfo.get(CLIENT_IP_ADDRESS_KEY));
 		hostKey = showValue((String) pcInfo.get(HOST_KEY_KEY));
@@ -472,7 +472,7 @@ public class HostInfo {
 	}
 
 	public void setMap(Map<String, Object> infoMap) {
-		logging.debug(this, "setMap " + infoMap);
+		Logging.debug(this, "setMap " + infoMap);
 		initialize();
 
 		if (infoMap == null) {
@@ -506,7 +506,7 @@ public class HostInfo {
 	}
 
 	public void resetGui(MainFrame mainFrame) {
-		logging.info(this, "resetGui for " + toString());
+		Logging.info(this, "resetGui for " + toString());
 		mainFrame.setClientDescriptionText(clientDescription);
 		mainFrame.setClientInventoryNumberText(clientInventoryNumber);
 		mainFrame.setClientNotesText(clientNotes);
@@ -523,11 +523,11 @@ public class HostInfo {
 	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, MainFrame mainFrame,
 			PersistenceController persist, String client, Map<String, String> sourceOfChanges) {
 		if (client == null || client.equals("")) {
-			logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
+			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
 			return;
 		}
 
-		logging.info(this, "showAndSave client, source " + client + ", " + sourceOfChanges);
+		Logging.info(this, "showAndSave client, source " + client + ", " + sourceOfChanges);
 		int row = findRow(selectionPanel, client);
 
 		if (sourceOfChanges == null)
@@ -536,13 +536,13 @@ public class HostInfo {
 		if (sourceOfChanges.get(CLIENT_DESCRIPTION_KEY) != null) {
 			clientDescription = sourceOfChanges.get(CLIENT_DESCRIPTION_KEY);
 			int col = findCol(selectionPanel,
-					configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
+					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
 			if (col > -1)
 				selectionPanel.getTableModel().setValueAt(clientDescription, row, col);
 
 			mainFrame.setClientDescriptionText(clientDescription); // restoring old value
 
-			persist.setHostDescription(client, configed.encodeStringForService(clientDescription));
+			persist.setHostDescription(client, Configed.encodeStringForService(clientDescription));
 
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_DESCRIPTION_KEY, clientDescription);
 		}
@@ -551,13 +551,13 @@ public class HostInfo {
 			clientInventoryNumber = sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY);
 
 			int col = findCol(selectionPanel,
-					configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
+					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
 			if (col > -1)
 				selectionPanel.getTableModel().setValueAt(clientInventoryNumber, row, col);
 
 			mainFrame.setClientInventoryNumberText(clientInventoryNumber); // restoring old value
 
-			persist.setClientInventoryNumber(client, configed.encodeStringForService(clientInventoryNumber));
+			persist.setClientInventoryNumber(client, Configed.encodeStringForService(clientInventoryNumber));
 
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_INVENTORY_NUMBER_KEY,
 					clientInventoryNumber);
@@ -567,7 +567,7 @@ public class HostInfo {
 			clientOneTimePassword = sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY);
 			mainFrame.setClientOneTimePasswordText(clientOneTimePassword); // restoring old value
 
-			persist.setClientOneTimePassword(client, configed.encodeStringForService(clientOneTimePassword));
+			persist.setClientOneTimePassword(client, Configed.encodeStringForService(clientOneTimePassword));
 
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_ONE_TIME_PASSWORD_KEY,
 					clientOneTimePassword);
@@ -578,7 +578,7 @@ public class HostInfo {
 
 			mainFrame.setClientNotesText(clientNotes); // restoring old value
 
-			persist.setHostNotes(client, configed.encodeStringForService(clientNotes));
+			persist.setHostNotes(client, Configed.encodeStringForService(clientNotes));
 
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
 		}
@@ -588,7 +588,7 @@ public class HostInfo {
 			clientMacAddress = (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim();
 
 			int col = findCol(selectionPanel,
-					configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
+					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 			if (col > -1)
 				selectionPanel.getTableModel().setValueAt(clientMacAddress, row, col);
 
@@ -604,7 +604,7 @@ public class HostInfo {
 			clientIpAddress = (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim();
 
 			int col = findCol(selectionPanel,
-					configed.getResourceValue("ConfigedMain.pclistTableModel.clientIPAddress"));
+					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientIPAddress"));
 			if (col > -1)
 				selectionPanel.getTableModel().setValueAt(clientIpAddress, row, col);
 
@@ -622,7 +622,7 @@ public class HostInfo {
 				shutdownInstall = true;
 			}
 
-			int col = findCol(selectionPanel, configed.getResourceValue(
+			int col = findCol(selectionPanel, Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
 			if (col > -1)
@@ -640,7 +640,7 @@ public class HostInfo {
 				uefiboot = true;
 			}
 
-			int col = findCol(selectionPanel, configed.getResourceValue(
+			int col = findCol(selectionPanel, Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
 
 			if (col > -1)
@@ -658,17 +658,17 @@ public class HostInfo {
 				wanStandard = true;
 			}
 
-			int col = findCol(selectionPanel, configed.getResourceValue(
+			int col = findCol(selectionPanel, Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
-			logging.info(this, "showAndSave found col " + col);
+			Logging.info(this, "showAndSave found col " + col);
 
 			if (col > -1)
 				// write it into the visible table
 				selectionPanel.getTableModel().setValueAt(wanStandard, row, col);
 
 			if (!(persist.setWANConfigs(client, wanStandard)))
-				logging.error(this, "wan settings could not be set");
+				Logging.error(this, "wan settings could not be set");
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_WAN_CONFIG_KEY, wanStandard);
 		}
 

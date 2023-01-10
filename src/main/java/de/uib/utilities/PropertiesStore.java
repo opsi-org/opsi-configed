@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class PropertiesStore
 // is a decorator of a HashMap
@@ -49,7 +49,7 @@ public class PropertiesStore
 			String line = reader.readLine();
 
 			while (line != null) {
-				logging.debug(this, "line: " + line);
+				Logging.debug(this, "line: " + line);
 				String trimmed = line.trim();
 
 				if (trimmed.length() == 0 || trimmed.charAt(0) == '#' || trimmed.charAt(0) == ';') {
@@ -63,7 +63,7 @@ public class PropertiesStore
 						value = line.substring(posSeparator + 1);
 					if (value != null)
 						setProperty(key, value);
-					logging.debug(this, "key, value " + key + ", " + value);
+					Logging.debug(this, "key, value " + key + ", " + value);
 				}
 
 				line = reader.readLine();

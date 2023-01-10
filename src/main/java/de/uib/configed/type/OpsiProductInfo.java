@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 //data source product table
 public class OpsiProductInfo extends OpsiPackage {
@@ -61,13 +61,13 @@ public class OpsiProductInfo extends OpsiPackage {
 		try {
 			priority = Integer.valueOf("" + m.get(SERVICEkeyPRIORITY));
 		} catch (NumberFormatException ex) {
-			logging.info(this, "no priority " + m.get(SERVICEkeyPRIORITY));
+			Logging.info(this, "no priority " + m.get(SERVICEkeyPRIORITY));
 		}
 
 		hasUserLoginScript = (m.get(SERVICEkeyUSER_LOGIN_SCRIPT) != null
 				&& !("" + m.get(SERVICEkeyUSER_LOGIN_SCRIPT)).equals(""));
 
-		logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
+		Logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
 				+ ", hasUserLoginScript " + hasUserLoginScript);
 
 	}

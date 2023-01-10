@@ -14,7 +14,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVParser;
 import de.uib.configed.csv.CSVReader;
@@ -22,7 +22,7 @@ import de.uib.configed.csv.CSVWriter;
 import de.uib.configed.csv.exceptions.CSVException;
 import de.uib.configed.csv.exceptions.CSVFieldCountException;
 import de.uib.configed.csv.exceptions.CSVParserException;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.MapSource;
@@ -86,21 +86,21 @@ public class CSVImportDataModifier {
 				}
 			}
 		} catch (IOException ex) {
-			logging.error(this, "Failed to read CSV file");
+			Logging.error(this, "Failed to read CSV file");
 		} catch (CSVException ex) {
 			String title = "";
 			StringBuilder message = new StringBuilder("");
 
 			if (ex instanceof CSVParserException) {
-				title = configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title");
-				message.append(configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.message"));
+				title = Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.title");
+				message.append(Configed.getResourceValue("CSVImportDataDialog.infoSyntaxErrorsOccurred.message"));
 			} else if (ex instanceof CSVFieldCountException) {
-				title = configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title");
-				message.append(configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
+				title = Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title");
+				message.append(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
 			}
 
 			FTextArea fInfo = new FTextArea(Globals.mainFrame, title + " (" + Globals.APPNAME + ") ", false,
-					new String[] { configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
+					new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
 
 			fInfo.setMessage(message.toString());
 			fInfo.setAlwaysOnTop(true);
@@ -177,7 +177,7 @@ public class CSVImportDataModifier {
 
 				writer.close();
 			} catch (IOException e) {
-				logging.error("Unable to write to the CSV file", e);
+				Logging.error("Unable to write to the CSV file", e);
 			}
 
 			return writer.toString();

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 //a very rough class for simple command interpreting
 public class Interpreter {
@@ -92,7 +92,7 @@ public class Interpreter {
 	public void setValues(Map<String, Object> givenValues) {
 		for (String key : givenValues.keySet()) {
 			if (specialValues.get(key) == null)
-				logging.warning(this, "value set for an unknown key");
+				Logging.warning(this, "value set for an unknown key");
 			else
 				specialValues.put(key, "" + givenValues.get(key));
 		}
@@ -100,11 +100,11 @@ public class Interpreter {
 
 	public String interpret() {
 		for (String key : specialValues.keySet()) {
-			logging.debug(this, "interpret: replace " + key + " by " + specialValues.get(key));
+			Logging.debug(this, "interpret: replace " + key + " by " + specialValues.get(key));
 			command = command.replace(key, (String) specialValues.get(key));
 		}
 
-		logging.debug(this, "produced command " + command);
+		Logging.debug(this, "produced command " + command);
 		return command;
 	}
 

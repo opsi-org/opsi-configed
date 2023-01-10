@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class NavigationPanel extends JPanel implements ActionListener {
 
@@ -51,7 +51,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
 			if (j > -1)
 				buttons.get(j).setVisible(true);
 			else
-				logging.info(this, "button for button name '" + visibleButtons[i] + "' does not exist");
+				Logging.info(this, "button for button name '" + visibleButtons[i] + "' does not exist");
 		}
 	}
 
@@ -67,7 +67,7 @@ public class NavigationPanel extends JPanel implements ActionListener {
 
 	protected void initComponents() {
 
-		logging.info(this, "initComponents");
+		Logging.info(this, "initComponents");
 
 		Dimension navButtonDimension = new Dimension(30, Globals.BUTTON_HEIGHT - 6);
 		nextButton = new JButton();

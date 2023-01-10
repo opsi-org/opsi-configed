@@ -32,7 +32,7 @@ import javax.swing.event.ChangeListener;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.clientselection.SelectData;
 import de.uib.configed.clientselection.SelectElement;
 import de.uib.configed.clientselection.SelectGroupOperation;
@@ -68,7 +68,7 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.LowerCaseTextField;
 import de.uib.utilities.swing.TextInputField;
@@ -108,19 +108,19 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	public ClientSelectionDialog(ConfigedMain main, JTableSelectionPanel selectionPanel,
 			SavedSearchesDialog savedSearchesDialog) {
 		super(null,
-				configed.getResourceValue("ClientSelectionDialog.title")/* "Select clients" */ + " (" + Globals.APPNAME
+				Configed.getResourceValue("ClientSelectionDialog.title")/* "Select clients" */ + " (" + Globals.APPNAME
 						+ ")",
 				false,
-				new String[] { configed.getResourceValue("ClientSelectionDialog.buttonSet"),
-						configed.getResourceValue("ClientSelectionDialog.buttonReset"),
-						configed.getResourceValue("ClientSelectionDialog.buttonClose") },
+				new String[] { Configed.getResourceValue("ClientSelectionDialog.buttonSet"),
+						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
+						Configed.getResourceValue("ClientSelectionDialog.buttonClose") },
 				750, 620);
 
 		PersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 		this.withMySQL = controller.isWithMySQL() && controller.getGlobalBooleanConfigValue(
 				PersistenceController.KEY_SEARCH_BY_SQL, PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
-		logging.info(this, "use mysql " + withMySQL);
+		Logging.info(this, "use mysql " + withMySQL);
 
 		this.main = main;
 		this.selectionPanel = selectionPanel;
@@ -134,7 +134,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				logging.info(this, "ClientSelectionDialog resized");
+				Logging.info(this, "ClientSelectionDialog resized");
 				// move it up and down for fixing the combobox popup vanishing
 				java.awt.Component c = e.getComponent();
 				java.awt.Point point = c.getLocation();
@@ -171,7 +171,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	public void loadSearch(String name) {
-		logging.info(this, "loadSearch " + name);
+		Logging.info(this, "loadSearch " + name);
 		try {
 			manager.loadSearch(name);
 			loadFromManager();
@@ -179,13 +179,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			saveNameField.setText(search.name);
 			saveDescriptionField.setText(search.description);
 		} catch (Exception exc) {
-			logging.error("Could not load search!", exc);
+			Logging.error("Could not load search!", exc);
 		}
 	}
 
 	@Override
 	public void doAction1() {
-		logging.info(this, "doAction1");
+		Logging.info(this, "doAction1");
 		List<String> clients = new ArrayList<>();
 
 		try {
@@ -203,7 +203,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		if (clients == null)
 			return;
-		logging.debug(this, clients.toString());
+		Logging.debug(this, clients.toString());
 		selectionPanel.setSelectedValues(clients);
 	}
 
@@ -221,20 +221,20 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		saveNameField = new LowerCaseTextField();
-		saveNameField.setToolTipText(configed.getResourceValue("ClientSelectionDialog.searchnameFormat"));
+		saveNameField.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.searchnameFormat"));
 
 		saveDescriptionField = new JTextField();
 
-		JLabel saveNameLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.inquiryName"));
+		JLabel saveNameLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryName"));
 		saveNameLabel.setFont(Globals.defaultFont);
-		JLabel saveDescriptionLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.inquiryDescription"));
+		JLabel saveDescriptionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.inquiryDescription"));
 		saveDescriptionLabel.setFont(Globals.defaultFont);
 
-		saveButton = new JButton(configed.getResourceValue("ClientSelectionDialog.inquirySave"));
+		saveButton = new JButton(Configed.getResourceValue("ClientSelectionDialog.inquirySave"));
 		saveButton.setFont(Globals.defaultFont);
 		saveButton.addActionListener(new SaveButtonListener());
 
-		buttonReload = new IconAsButton(configed.getResourceValue("ClientSelectionDialog.buttonReload"),
+		buttonReload = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
@@ -244,7 +244,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		buttonReload.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.info(this, "actionPerformed");
+				Logging.info(this, "actionPerformed");
 				buttonReload.setEnabled(false);
 				buttonRestart.setEnabled(false);
 				Cursor saveCursor = dialog.getCursor();
@@ -260,7 +260,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			}
 		});
 
-		buttonRestart = new IconAsButton(configed.getResourceValue("ClientSelectionDialog.buttonRestart"),
+		buttonRestart = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonRestart"),
 				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
@@ -269,7 +269,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		buttonRestart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.info(this, "actionPerformed");
+				Logging.info(this, "actionPerformed");
 				buttonRestart.setEnabled(false);
 				buttonReload.setEnabled(false);
 				dialog.setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -354,15 +354,15 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		// columns headline
 		Font font = Globals.defaultFontStandardBold;
-		JLabel negationLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.negateColumn"));
+		JLabel negationLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.negateColumn"));
 		negationLabel.setFont(font);
-		JLabel nameLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.nameColumn"));
+		JLabel nameLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.nameColumn"));
 		nameLabel.setFont(font);
 		// JLabel operationLabel = new JLabel(
 
-		JLabel dataLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.dataColumn"));
+		JLabel dataLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.dataColumn"));
 		dataLabel.setFont(font);
-		JLabel connectionLabel = new JLabel(configed.getResourceValue("ClientSelectionDialog.connectionColumn"));
+		JLabel connectionLabel = new JLabel(Configed.getResourceValue("ClientSelectionDialog.connectionColumn"));
 		connectionLabel.setFont(font);
 		// JLabel removeLabel = new JLabel(
 
@@ -379,20 +379,20 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		hGroupConnections.addComponent(connectionLabel, GroupLayout.Alignment.CENTER);
 
 		newElementBox = new JComboBox<>(
-				new String[] { configed.getResourceValue("ClientSelectionDialog.newElementsBox") });
+				new String[] { Configed.getResourceValue("ClientSelectionDialog.newElementsBox") });
 		newElementBox.setFont(Globals.defaultFont);
 
 		newElementBox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
-		newElementBox.addItem(configed.getResourceValue("ClientSelectionDialog.hostName"));
-		newElementBox.addItem(configed.getResourceValue("ClientSelectionDialog.softwareName"));
+		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.hostName"));
+		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.softwareName"));
 
 		// Add properties-Boxes if mysql available
 		if (withMySQL) {
-			newElementBox.addItem(configed.getResourceValue("ClientSelectionDialog.softwarepropertiesonlyName"));
-			newElementBox.addItem(configed.getResourceValue("ClientSelectionDialog.softwarewithpropertiesName"));
+			newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.softwarepropertiesonlyName"));
+			newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.softwarewithpropertiesName"));
 		}
 
-		newElementBox.addItem(configed.getResourceValue("ClientSelectionDialog.swauditName"));
+		newElementBox.addItem(Configed.getResourceValue("ClientSelectionDialog.swauditName"));
 
 		// hardware
 		List<String> hardwareList = new LinkedList<>(manager.getLocalizedHardwareList().keySet());
@@ -418,7 +418,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.element = element;
 		SelectOperation[] operations = element.supportedOperations().toArray(new SelectOperation[0]);
 		if (operations.length == 0) {
-			logging.warning("Elements without any operations are not supported");
+			Logging.warning("Elements without any operations are not supported");
 			return null;
 		}
 
@@ -500,16 +500,16 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private ComplexGroup createHostGroup() {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.HOST_GROUP;
-		result.topLabel.setText(configed.getResourceValue("ClientSelectionDialog.hostGroup") + ":");
+		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.hostGroup") + ":");
 		result.topLabel.setIcon(Globals.createImageIcon("images/client_small.png",
-				configed.getResourceValue("ClientSelectionDialog.client")));
+				Configed.getResourceValue("ClientSelectionDialog.client")));
 		result.topLabel.setFont(Globals.defaultFontStandardBold);
 		result.groupList
 				.add(createSimpleGroup(new GroupElement(manager.getBackend().getGroups().toArray(new String[0]))));
 		result.groupList.add(createSimpleGroup(
 				new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]))));
 		result.groupList.add(createSimpleGroup(
-				new NameElement(configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"))));
+				new NameElement(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"))));
 		result.groupList.add(createSimpleGroup(new IPElement()));
 		result.groupList.add(createSimpleGroup(new DescriptionElement()));
 		result.groupList.getLast().connectionType.setVisible(false);
@@ -520,9 +520,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private ComplexGroup createSoftwareGroup() {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.SOFTWARE_GROUP;
-		result.topLabel.setText(configed.getResourceValue("ClientSelectionDialog.softwareGroup") + ":");
+		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.softwareGroup") + ":");
 		result.topLabel.setIcon(Globals.createImageIcon("images/package.png",
-				configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
+				Configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
 		result.topLabel.setFont(Globals.defaultFontStandardBold);
 
 		result.groupList.add(createSimpleGroup(manager.getNewSoftwareNameElement()));
@@ -548,9 +548,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private ComplexGroup createPropertiesGroup() {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.PROPERTIES_GROUP;
-		result.topLabel.setText(configed.getResourceValue("ClientSelectionDialog.softwarepropertiesonlyGroup"));
+		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.softwarepropertiesonlyGroup"));
 		result.topLabel.setIcon(Globals.createImageIcon("images/package.png",
-				configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
+				Configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
 		result.topLabel.setFont(Globals.defaultFontStandardBold);
 
 		result.groupList.add(createSimpleGroup(manager.getNewSoftwareNameElement()));
@@ -577,9 +577,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private ComplexGroup createSoftwareWithPropertiesGroup() {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.SOFTWARE_WITH_PROPERTIES_GROUP;
-		result.topLabel.setText(configed.getResourceValue("ClientSelectionDialog.softwarewithpropertiesGroup"));
+		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.softwarewithpropertiesGroup"));
 		result.topLabel.setIcon(Globals.createImageIcon("images/package.png",
-				configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
+				Configed.getResourceValue("ClientSelectionDialog.softwareGroup")));
 		result.topLabel.setFont(Globals.defaultFontStandardBold);
 
 		result.groupList.add(createSimpleGroup(manager.getNewSoftwareNameElement()));
@@ -619,7 +619,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.type = GroupType.HARDWARE_GROUP;
 		result.topLabel.setText(hardware);
 		result.topLabel.setIcon(Globals.createImageIcon("images/hwaudit.png",
-				configed.getResourceValue("ClientSelectionDialog.hardwareName")));
+				Configed.getResourceValue("ClientSelectionDialog.hardwareName")));
 		result.topLabel.setFont(Globals.defaultFontStandardBold);
 
 		List<SelectElement> elements = manager.getLocalizedHardwareList().get(hardware);
@@ -636,9 +636,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private ComplexGroup createSwAuditGroup() {
 		ComplexGroup result = createComplexGroup();
 		result.type = GroupType.SW_AUDIT_GROUP;
-		result.topLabel.setText(configed.getResourceValue("ClientSelectionDialog.swAuditGroup") + ":");
+		result.topLabel.setText(Configed.getResourceValue("ClientSelectionDialog.swAuditGroup") + ":");
 		result.topLabel.setIcon(Globals.createImageIcon("images/swaudit.png",
-				configed.getResourceValue("ClientSelectionDialog.swauditName")));
+				Configed.getResourceValue("ClientSelectionDialog.swauditName")));
 		result.topLabel.setFont(Globals.defaultFontStandardBold);
 
 		result.groupList.add(createSimpleGroup(new SwAuditNameElement()));
@@ -776,7 +776,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		info.parenthesisOpen = group.openParenthesis.isVisible();
 		info.parenthesisClose = group.closeParenthesis.isVisible();
 		boolean andSelected = group.connectionType.isAndSelected();
-		logging.debug(this, group.element.getPath() + ": AND selected: " + andSelected);
+		Logging.debug(this, group.element.getPath() + ": AND selected: " + andSelected);
 		boolean notSelected = group.negateButton.isActivated();
 		info.status = getStatus(andSelected, notSelected);
 		return info;
@@ -847,7 +847,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	/* Show the parentheses making sure that or will be evaluated before and. */
 	private void buildParentheses() {
-		logging.debug("BUILDPARENTHESES");
+		Logging.debug("BUILDPARENTHESES");
 		for (ComplexGroup group : complexElements) {
 			showParenthesesForGroup(group.groupList);
 		}
@@ -885,7 +885,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			fieldText.setEditable(true);
 			fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldText.setToolTipText(
-					/* "Use * as wildcard" */configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+					/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 			fieldText.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
 				@Override
 				protected void actOnChange() {
@@ -899,7 +899,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			TextInputField fieldDouble = new TextInputField("");
 			fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDouble.setToolTipText(
-					/* "Use * as wildcard" */configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+					/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 			fieldDouble.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
 				@Override
 				protected void actOnChange() {
@@ -912,7 +912,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 			box.setEditable(true);
-			box.setToolTipText(configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+			box.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
 			box.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
 				@Override
 				protected void actOnChange() {
@@ -971,9 +971,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	 * start the client filtering.
 	 */
 	private void collectData() {
-		logging.info(this, "collectData  complexElements " + complexElements);
+		Logging.info(this, "collectData  complexElements " + complexElements);
 		manager.clearOperations();
-		logging.info(this, "collectData  complexElements " + complexElements);
+		Logging.info(this, "collectData  complexElements " + complexElements);
 		repairParentheses();
 		for (ComplexGroup complex : complexElements) {
 			SelectionManager.OperationWithStatus groupStatus;
@@ -1024,7 +1024,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	 * data fields.
 	 */
 	private void reset() {
-		logging.debug(this, "RESET");
+		Logging.debug(this, "RESET");
 		for (ComplexGroup group : complexElements) {
 			contentPane.remove(group.topLabel);
 			contentPane.remove(group.removeButton);
@@ -1066,7 +1066,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		List<SelectionManager.OperationWithStatus> topList;
 		topList = manager.operationsAsList(null);
-		logging.debug(this, "load: size: " + topList.size());
+		Logging.debug(this, "load: size: " + topList.size());
 		for (int i = 0; i < topList.size(); i++) {
 			SelectionManager.OperationWithStatus ows = topList.get(i);
 			SelectOperation op = ows.operation;
@@ -1089,7 +1089,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				element = createHardwareGroup(
 						getNonGroupOperation((HardwareOperation) op).getElement().getLocalizedPathArray()[0]);
 			else {
-				logging.error("Not a group operation: " + op.getClassName());
+				Logging.error("Not a group operation: " + op.getClassName());
 				reset();
 				return;
 			}
@@ -1098,7 +1098,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			setConnectionTypes(element.connectionType, element.negateButton, ows.status);
 			List<SelectionManager.OperationWithStatus> subList;
 			subList = manager.operationsAsList(((SelectGroupOperation) op).getChildOperations().get(0));
-			logging.debug(this, "subload: " + subList.size());
+			Logging.debug(this, "subload: " + subList.size());
 			setGroupValues(element, subList);
 		}
 		if (!complexElements.isEmpty())
@@ -1125,7 +1125,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 						((JComboBox) simple.operationComponent).setSelectedItem(op.getOperationString());
 					setComponentData(simple.dataComponent, op.getSelectData());
 					setConnectionTypes(simple.connectionType, simple.negateButton, ows.status);
-					logging.debug(this, "simple, open, closed: " + simple.element.getClassName() + ows.parenthesisOpen
+					Logging.debug(this, "simple, open, closed: " + simple.element.getClassName() + ows.parenthesisOpen
 							+ ows.parenthesisClose);
 
 					break;
@@ -1203,7 +1203,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			while (complexIterator.hasNext()) {
 				ComplexGroup group = complexIterator.next();
 
-				logging.info(this, "removing group of type " + group.type);
+				Logging.info(this, "removing group of type " + group.type);
 
 				if (group.removeButton == e.getSource()) {
 					contentPane.remove(group.topLabel);
@@ -1300,7 +1300,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				return;
 			IconAsButton button = (IconAsButton) event.getSource();
 			button.setActivated(!button.isActivated());
-			logging.debug(this, "Negate button is activated: " + button.isActivated());
+			Logging.debug(this, "Negate button is activated: " + button.isActivated());
 		}
 	}
 
@@ -1364,8 +1364,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		public void actionPerformed(ActionEvent e) {
 			String text = saveNameField.getText();
 			if (text.isEmpty()) {
-				JOptionPane.showMessageDialog(saveButton, configed.getResourceValue("ClientSelectionDialog.emptyName"),
-						configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME
+				JOptionPane.showMessageDialog(saveButton, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
+						Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME
 								+ ")",
 						JOptionPane.OK_OPTION);
 

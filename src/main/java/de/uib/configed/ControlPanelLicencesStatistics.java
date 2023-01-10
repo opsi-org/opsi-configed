@@ -6,7 +6,7 @@ import java.util.Map;
 
 import de.uib.configed.gui.licences.PanelLicencesStatistics;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
@@ -62,7 +62,7 @@ public class ControlPanelLicencesStatistics extends ControlMultiTablePanel {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public Map retrieveMap() {
-						logging.info(this, "retrieveMap() for modelStatistics");
+						Logging.info(this, "retrieveMap() for modelStatistics");
 						if (initialized)
 							persist.reconciliationInfoRequestRefresh();
 						else

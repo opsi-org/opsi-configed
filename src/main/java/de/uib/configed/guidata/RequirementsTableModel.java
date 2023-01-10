@@ -12,11 +12,11 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class RequirementsTableModel extends javax.swing.table.AbstractTableModel {
 
@@ -44,7 +44,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	}
 
 	public RequirementsTableModel(PersistenceController persis) {
-		logging.info(this, "creating");
+		Logging.info(this, "creating");
 		perCon = persis;
 		setActualProduct(""); // initializing
 	}
@@ -112,17 +112,17 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		String result = "";
 		switch (col) {
 		case 0:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
+			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
 			break;
 
 		case 1:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
+			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
 			break;
 		case 2:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
+			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
 			break;
 		case 3:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
+			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
 			break;
 
 		}
@@ -149,11 +149,11 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				result = myKey;
 				break;
 			case 1:
-				result = indent + configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+				result = indent + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
 						+ " setup";
 				break;
 			case 2:
-				result = indent + configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+				result = indent + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
 						+ " uninstall";
 				break;
 			}
@@ -239,7 +239,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 				((JLabel) cell).setHorizontalTextPosition(SwingConstants.LEADING);
 
-				((JLabel) cell).setToolTipText(configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
+				((JLabel) cell).setToolTipText(Configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
 
 				return cell;
 

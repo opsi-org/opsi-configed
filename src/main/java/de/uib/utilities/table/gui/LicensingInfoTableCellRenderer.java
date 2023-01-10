@@ -6,9 +6,9 @@ import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CellAlternatingColorizer;
 
 public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
@@ -35,17 +35,17 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		String columnName = licensingInfoMap.getColumnNames().get(column);
 		String rowName = licensingInfoMap.getModules().get(row);
 
-		if (columnName != null && (columnName.equals(configed.getResourceValue("LicensingInfo.modules")))
-				|| columnName.equals(configed.getResourceValue("LicensingInfo.available"))
+		if (columnName != null && (columnName.equals(Configed.getResourceValue("LicensingInfo.modules")))
+				|| columnName.equals(Configed.getResourceValue("LicensingInfo.available"))
 
 		)
 			jc.setToolTipText(value.toString());
 
-		if (columnName != null && columnName.equals(configed.getResourceValue("LicensingInfo.modules"))) {
+		if (columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))) {
 
 		}
 
-		if (columnName != null && columnName.equals(configed.getResourceValue("LicensingInfo.available"))) {
+		if (columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 			jc.setText("");
 
 			if (value.equals(true))
@@ -54,8 +54,8 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			else
 				jc.setIcon(Globals.createImageIcon("images/checked_void.png", ""));
 
-		} else if (columnName != null && !columnName.equals(configed.getResourceValue("LicensingInfo.modules"))
-				&& !columnName.equals(configed.getResourceValue("LicensingInfo.available"))
+		} else if (columnName != null && !columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))
+				&& !columnName.equals(Configed.getResourceValue("LicensingInfo.available"))
 
 		) {
 			Map<String, Map<String, Map<String, Object>>> datesMap = licensingInfoMap.getDatesMap();
@@ -76,17 +76,17 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
 					jc.setBackground(Globals.darkOrange);
 					jc.setToolTipText(
-							"<html>" + configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
+							"<html>" + Configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
 									+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
 					jc.setBackground(Globals.WARNING_COLOR);
-					jc.setToolTipText("<html>" + configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
+					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
 					jc.setBackground(Globals.darkOrange);
-					jc.setToolTipText("<html>" + configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
+					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				}
 
@@ -94,21 +94,21 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 			String prevCol = licensingInfoMap.getColumnNames().get(column - 1);
 			try {
-				if (!prevCol.equals(configed.getResourceValue("LicensingInfo.modules"))
-						&& !prevCol.equals(configed.getResourceValue("LicensingInfo.available"))
+				if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules"))
+						&& !prevCol.equals(Configed.getResourceValue("LicensingInfo.available"))
 
 				) {
 					String clientNum = moduleToDateData.get(LicensingInfoMap.CLIENT_NUMBER).toString();
 					String prevClientNum = datesMap.get(prevCol).get(rowName).get(LicensingInfoMap.CLIENT_NUMBER)
 							.toString();
 
-					if (!prevCol.equals(configed.getResourceValue("LicensingInfo.modules")) && clientNum != null
+					if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules")) && clientNum != null
 							&& prevClientNum != null && !clientNum.equals(prevClientNum))
 						jc.setFont(Globals.defaultFontBold);
 				}
 
 			} catch (Exception ex) {
-				logging.error(this, "Exception thrown: " + ex);
+				Logging.error(this, "Exception thrown: " + ex);
 			}
 		}
 

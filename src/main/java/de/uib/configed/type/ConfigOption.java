@@ -6,7 +6,7 @@ import java.util.Map;
 
 import javax.swing.ListSelectionModel;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ConfigOption extends RetrievedMap implements de.uib.utilities.table.ListCellOptions
 
@@ -45,7 +45,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 		else {
 			if (retrieved.get("defaultValues") instanceof org.json.JSONArray) {
 
-				logging.info(this, "gotdefaultvalues unexpectedly " + retrieved.get("defaultValues").getClass() + " "
+				Logging.info(this, "gotdefaultvalues unexpectedly " + retrieved.get("defaultValues").getClass() + " "
 						+ retrieved.get("defaultValues"));
 				put("defaultValues", ((org.json.JSONArray) retrieved.get("defaultValues")).toList());
 			} else
@@ -59,7 +59,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 			put("description", retrieved.get("description"));
 
 		if (retrieved == null || retrieved.get("type") == null) {
-			logging.debug(this, "set default UnicodeConfig");
+			Logging.debug(this, "set default UnicodeConfig");
 			put("type", "UnicodeConfig");
 			type = TYPE.UnicodeConfig;
 		}

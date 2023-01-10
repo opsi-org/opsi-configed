@@ -27,10 +27,10 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHConnectionOutputDialog extends FGeneralDialog {
 	protected JTextPane output;
@@ -61,7 +61,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	protected class DialogCloseListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			logging.debug(this, "actionPerformed " + e);
+			Logging.debug(this, "actionPerformed " + e);
 			cancel();
 		}
 	}
@@ -70,7 +70,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 	public SSHConnectionOutputDialog(String title) {
 		super(null, "", false);
-		logging.info(this, "\ncreated a SSHConnectionOutputDialog with title " + title + "\n");
+		Logging.info(this, "\ncreated a SSHConnectionOutputDialog with title " + title + "\n");
 		buildFrame = false;
 		closeListener = new DialogCloseListener();
 		initOutputGui();
@@ -91,7 +91,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		if (line.trim().replace("\\t", "").replace(" ", "").startsWith(key)) {
 			linecolor = entry.getValue();
 			line = line.replace(key, "");
-			logging.debug(this,
+			Logging.debug(this,
 					"append parseAnsiCodes found color key " + key + " value " + entry.getValue().toString());
 
 			line = line.replace(ANSI_ESCAPE_1, "").replace(ANSI_ESCAPE_2, "");
@@ -106,7 +106,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			for (Entry<String, Color> entry : ansiCodeColors.entrySet())
 				line = findAnsiCodeColor(entry, entry.getKey(), line);
 
-		logging.debug(this, "line " + line.replace("\n", "") + " color " + linecolor.toString());
+		Logging.debug(this, "line " + line.replace("\n", "") + " color " + linecolor.toString());
 		StyleContext sc = StyleContext.getDefaultStyleContext();
 		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, linecolor);
 		aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
@@ -121,7 +121,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			StyledDocument doc = output.getStyledDocument();
 			doc.insertString(doc.getLength(), caller + line, aset);
 		} catch (Exception e) {
-			logging.warning(this, "append, exception occurred ", e);
+			Logging.warning(this, "append, exception occurred ", e);
 		}
 	}
 
@@ -165,7 +165,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			jScrollPane.setViewportView(output);
 			output.setText("");
 
-			jButtonClose = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.buttonClose"),
+			jButtonClose = new de.uib.configed.gui.IconButton(Configed.getResourceValue("SSHConnection.buttonClose"),
 					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
 
 			jButtonClose.setPreferredSize(jButtonDimension);
@@ -173,7 +173,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			jButtonClose.addActionListener(closeListener);
 
 		} catch (Exception e) {
-			logging.warning(this, "initOutputGui, exception occurred", e);
+			Logging.warning(this, "initOutputGui, exception occurred", e);
 		}
 	}
 
@@ -197,14 +197,14 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 	@Override
 	public void setVisible(boolean b) {
-		logging.info(this, "outputDialog setVisible " + b);
+		Logging.info(this, "outputDialog setVisible " + b);
 
 		super.setVisible(b);
 	}
 
 	public void cancel() {
 		buildFrame = false;
-		logging.debug(this, "cancel");
+		Logging.debug(this, "cancel");
 		super.doAction2();
 	}
 

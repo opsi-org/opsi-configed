@@ -26,7 +26,7 @@ public class CopyrightInfos {
 		infos.add("running on java version " + COMPLETE_VERSION_INFO);
 		infos.add("");
 		infos.add("");
-		infos.add(configed.getResourceValue("CopyrightInfos.thanksTo"));
+		infos.add(Configed.getResourceValue("CopyrightInfos.thanksTo"));
 		infos.add("");
 		infos.add("commons-io Apache library");
 		infos.add("http://www.apache.org/licenses/");

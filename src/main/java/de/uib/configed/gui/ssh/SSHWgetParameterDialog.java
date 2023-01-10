@@ -19,11 +19,11 @@ import javax.swing.event.DocumentListener;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
@@ -54,7 +54,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	public SSHWgetParameterDialog(ConfigedMain m) {
-		super(null, configed.getResourceValue("SSHConnection.ParameterDialog.wget.title"), false);
+		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.wget.title"), false);
 
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		init();
@@ -97,9 +97,9 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setPreferredSize(new java.awt.Dimension(376, 220));
 
-		jLabelURL.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelUrl"));
+		jLabelURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelUrl"));
 		jTextFieldURL = new JTextField();
-		jTextFieldURL.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
+		jTextFieldURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
 		jTextFieldURL.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
@@ -120,22 +120,22 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			@Override
 			public void focusGained(FocusEvent e) {
 				if (jTextFieldURL.getText()
-						.equals(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))) {
+						.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))) {
 					jTextFieldURL.setSelectionStart(0);
 					jTextFieldURL.setSelectionEnd(jTextFieldURL.getText().length());
 				}
 			}
 		});
 
-		jLabelDir.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory"));
+		jLabelDir.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory"));
 		jTextFieldDir = new JTextField();
 
 		jComboBoxDir = completion.getCombobox();
 		jButtonSearchDir = completion.getButton();
 
-		jLabelVerbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
 		jComboBoxVerbosity = new JComboBox<>();
-		jComboBoxVerbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
 		for (int i = 0; i < 5; i++)
 			jComboBoxVerbosity.addItem(i);
 		jComboBoxVerbosity.setSelectedItem(1);
@@ -144,10 +144,10 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			updateCommand();
 		});
 
-		jLabelFreeInput.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
+		jLabelFreeInput.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
 		jTextFieldFreeInput = new JTextField();
 		jTextFieldFreeInput
-				.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
+				.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
 		jTextFieldFreeInput.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
@@ -171,14 +171,14 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
 
 		jButtonHelp = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
-		jButtonHelp.setText(configed.getResourceValue("SSHConnection.buttonParameterInfo"));
-		jButtonHelp.setToolTipText(configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
+		jButtonHelp.setText(Configed.getResourceValue("SSHConnection.buttonParameterInfo"));
+		jButtonHelp.setToolTipText(Configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
 		buttonPanel.add(jButtonHelp);
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
 		jButtonExecute = new JButton();
 		buttonPanel.add(jButtonExecute);
-		jButtonExecute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		jButtonExecute.addActionListener(actionEvent -> {
 			if (!(Globals.isGlobalReadOnly()))
@@ -187,7 +187,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 		JButton jButtonClose = new JButton();
 		buttonPanel.add(jButtonClose);
-		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
@@ -222,9 +222,9 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	@Override
 	public void doAction1() {
 		if ((jTextFieldURL.getText()
-				.equals(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url")))
+				.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url")))
 				|| (jTextFieldURL.getText().equals(""))) {
-			logging.warning(this, "Please enter url.");
+			Logging.warning(this, "Please enter url.");
 			return;
 		}
 
@@ -241,12 +241,12 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 				@Override
 				public void run() {
 					try {
-						logging.info(this, "doAction1 wget ");
+						Logging.info(this, "doAction1 wget ");
 						new SSHConnectExec(commandWget, jButtonExecute);
 						// btn_execute.setEnabled( true ) transferred to SwingWorker.done()
 
 					} catch (Exception e) {
-						logging.warning(this, "doAction1, exception occurred", e);
+						Logging.warning(this, "doAction1, exception occurred", e);
 					}
 				}
 			}.start();

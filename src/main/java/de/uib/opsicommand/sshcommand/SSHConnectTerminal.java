@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JTextField;
@@ -22,10 +22,10 @@ import com.jcraft.jsch.Session;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.configed.gui.ssh.SSHConnectionTerminalDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHConnectTerminal extends SSHConnect {
 	Session session = null;
@@ -42,7 +42,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		super(main);
 		this.dialog = dialog;
 		if (dialog == null)
-			dialog = new SSHConnectionTerminalDialog(configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
+			dialog = new SSHConnectionTerminalDialog(Configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
 					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost(), this,
 					false /* visible = false */
 			);
@@ -52,7 +52,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	public SSHConnectTerminal(ConfigedMain main) {
 		super(main);
 		dialog = new SSHConnectionTerminalDialog(
-				configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
+				Configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
 						+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost(),
 				this, false /* visible = false */
 		);
@@ -79,7 +79,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				String str = new String(buf, off, len, "UTF-8");
 				theDialog.append(str);
 			} catch (UnsupportedEncodingException ue) {
-				logging.warning("UnsupportedEncodingException", ue);
+				Logging.warning("UnsupportedEncodingException", ue);
 			}
 		}
 	}
@@ -87,26 +87,26 @@ public class SSHConnectTerminal extends SSHConnect {
 	@Override
 	public void connect() {
 		if (!isConnectionAllowed()) {
-			logging.error(this, "connection forbidden.");
+			Logging.error(this, "connection forbidden.");
 
 		} else {
 
-			logging.info(this, "connect ...");
+			Logging.info(this, "connect ...");
 			try {
 				JSch jsch = new JSch();
 				SSHConnectionInfo.getInstance().checkUserData();
 				session = jsch.getSession(SSHConnectionInfo.getInstance().getUser(),
 						SSHConnectionInfo.getInstance().getHost(),
 						Integer.valueOf(SSHConnectionInfo.getInstance().getPort()));
-				logging.info(this, "connect user@host " + SSHConnectionInfo.getInstance().getUser() + "@"
+				Logging.info(this, "connect user@host " + SSHConnectionInfo.getInstance().getUser() + "@"
 						+ SSHConnectionInfo.getInstance().getHost());
 				if (SSHConnectionInfo.getInstance().usesKeyfile()) {
 					if (!SSHConnectionInfo.getInstance().getKeyfilePassphrase().equals(""))
 						jsch.addIdentity(SSHConnectionInfo.getInstance().getKeyfilePath(),
 								SSHConnectionInfo.getInstance().getKeyfilePassphrase());
 					jsch.addIdentity(SSHConnectionInfo.getInstance().getKeyfilePath());
-					logging.info(this, "connect this.keyfilepath " + SSHConnectionInfo.getInstance().getKeyfilePath());
-					logging.info(this, "connect useKeyfile " + SSHConnectionInfo.getInstance().usesKeyfile()
+					Logging.info(this, "connect this.keyfilepath " + SSHConnectionInfo.getInstance().getKeyfilePath());
+					Logging.info(this, "connect useKeyfile " + SSHConnectionInfo.getInstance().usesKeyfile()
 							+ " addIdentity " + SSHConnectionInfo.getInstance().getKeyfilePath());
 					session = jsch.getSession(SSHConnectionInfo.getInstance().getUser(),
 							SSHConnectionInfo.getInstance().getHost(),
@@ -116,7 +116,7 @@ public class SSHConnectTerminal extends SSHConnect {
 							SSHConnectionInfo.getInstance().getHost(),
 							Integer.valueOf(SSHConnectionInfo.getInstance().getPort()));
 					session.setPassword(SSHConnectionInfo.getInstance().getPassw());
-					logging.info(this,
+					Logging.info(this,
 							"connect useKeyfile " + SSHConnectionInfo.getInstance().usesKeyfile() + " use password …");
 				}
 				// Do not use StrictHostKeyChecking=no. See JSch SFTP security with
@@ -130,7 +130,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				// naechste zeile activiert den Hinweis, falls die nicht die standard bash
 				// verwendet wird, soll der befehl bash ausgefuehrt werden..
 
-				logging.info(this, "Connect");
+				Logging.info(this, "Connect");
 
 				// a hack for MS-DOS prompt on Windows.
 
@@ -139,14 +139,14 @@ public class SSHConnectTerminal extends SSHConnect {
 				channel.setPtyType("dumb");
 
 				channel.connect();
-				logging.info(this, "connect " + SSHConnectionInfo.getInstance().getUser() + "@"
+				Logging.info(this, "connect " + SSHConnectionInfo.getInstance().getUser() + "@"
 						+ SSHConnectionInfo.getInstance().getHost());
 				dialog.setTitle(
 						SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost());
 				dialog.setVisible(true);
 				dialog.setAutocompleteList(getList(getCompletionList(true, true)));
 
-				logging.info(this, "SSHConnectTerminal connected");
+				Logging.info(this, "SSHConnectTerminal connected");
 
 				initListeners();
 				initInputFieldFromDialog();
@@ -156,32 +156,32 @@ public class SSHConnectTerminal extends SSHConnect {
 
 				exec(SOME_COMMAND + "\n");
 			} catch (Exception e) {
-				logging.error(this, "SSHConnectTerminal connect exception", e);
+				Logging.error(this, "SSHConnectTerminal connect exception", e);
 			}
 		}
 	}
 
 	public final void exec(String text) {
 		if (!isConnectionAllowed()) {
-			logging.warning(this, "connection forbidden.");
+			Logging.warning(this, "connection forbidden.");
 
 		} else {
 
 			try {
-				logging.info(this, "exec out " + out);
-				logging.info(this, "exec text " + text);
+				Logging.info(this, "exec out " + out);
+				Logging.info(this, "exec text " + text);
 				if ((out != null) && (text.trim().length() >= 0)) {
 					SSHCommand command = new EmptyCommand(text);
 					String ntext = SSHCommandFactory.getInstance(main).getParameterHandler()
 							.parseParameterToString(command, this);
 					out.write(ntext.getBytes());
-					logging.debug(this, " exec getPrivateStatus " + dialog.getPrivateStatus());
-					logging.info(this, " exec text " + text);
-					logging.info(this, " exec ntext " + ntext);
+					Logging.debug(this, " exec getPrivateStatus " + dialog.getPrivateStatus());
+					Logging.info(this, " exec text " + text);
+					Logging.info(this, " exec ntext " + ntext);
 					if (!(dialog.getPrivateStatus())) {
 						dialog.setPrivate(false);
 					} else {
-						logging.debug(this, " exec addToHistory " + text);
+						Logging.debug(this, " exec addToHistory " + text);
 						dialog.addToHistory(text.trim());
 					}
 					dialog.setLastHistoryIndex();
@@ -189,11 +189,11 @@ public class SSHConnectTerminal extends SSHConnect {
 				}
 
 			} catch (IOException ioe) {
-				logging.error(this, "SSHConnectTerminal exec ioexception", ioe);
+				Logging.error(this, "SSHConnectTerminal exec ioexception", ioe);
 			} catch (Exception e) {
-				logging.error(this, "SSHConnectTerminal exec exception", e);
+				Logging.error(this, "SSHConnectTerminal exec exception", e);
 			}
-			logging.info(this, " exec finished  " + text);
+			Logging.info(this, " exec finished  " + text);
 
 		}
 	}
@@ -218,15 +218,15 @@ public class SSHConnectTerminal extends SSHConnect {
 	}
 
 	private void initKillProcessButtonFromDialog() {
-		logging.info(this, "initKillProcessButtonFromDialog ");
+		Logging.info(this, "initKillProcessButtonFromDialog ");
 		initListeners();
 		this.dialog.jButtonKillProcess.removeActionListener(connectionKeyListener);
 		this.dialog.jButtonKillProcess.addActionListener(connectionKeyListener);
 	}
 
 	public void initInputFieldFromDialog() {
-		logging.info(this, "initInputFieldFromDialog ");
-		logging.info(this, "initInputFieldFromDialog inputField " + dialog.getInputField());
+		Logging.info(this, "initInputFieldFromDialog ");
+		Logging.info(this, "initInputFieldFromDialog inputField " + dialog.getInputField());
 		initListeners();
 		dialog.getInputField().removeKeyListener(inputKeyListener);
 		dialog.getInputField().addKeyListener(inputKeyListener);
@@ -239,9 +239,9 @@ public class SSHConnectTerminal extends SSHConnect {
 			if (out != null)
 				out.write("\n".getBytes());
 			else
-				logging.warning(this, "Pipe closed");
+				Logging.warning(this, "Pipe closed");
 		} catch (Exception e2) {
-			logging.error("Error", e2);
+			Logging.error("Error", e2);
 		}
 	}
 
@@ -249,7 +249,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		connectionKeyListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.info(this, "interrupt with btn ");
+				Logging.info(this, "interrupt with btn ");
 				exec(new String(new byte[] { 3 }) + "\n");
 			}
 		};
@@ -261,7 +261,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if ((e.getKeyCode() == KeyEvent.VK_C) && ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
-					logging.info(this, "interrupt with keys ");
+					Logging.info(this, "interrupt with keys ");
 					exec(new String(new byte[] { 3 }) + "\n");
 				}
 			}
@@ -272,9 +272,9 @@ public class SSHConnectTerminal extends SSHConnect {
 				JTextField textField = (JTextField) e.getSource();
 
 				if (key == KeyEvent.VK_ENTER) {
-					logging.info(this, "initInputFieldFromDialog keyReleased ENTER ");
-					logging.info(this, "initInputFieldFromDialog inputfield " + textField);
-					logging.info(this, "initInputFieldFromDialog dialog " + dialog);
+					Logging.info(this, "initInputFieldFromDialog keyReleased ENTER ");
+					Logging.info(this, "initInputFieldFromDialog inputfield " + textField);
+					Logging.info(this, "initInputFieldFromDialog dialog " + dialog);
 					if (textField.getText().trim().equalsIgnoreCase("clear")) {
 						clear();
 						((Component) textField).requestFocusInWindow();
@@ -300,7 +300,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		};
 	}
 
-	public List<String> commands_compgen;
+	public List<String> commandsCompgen;
 
 	private String getCompletionList(boolean newCommands, boolean dirchanged) {
 		SSHConnectExec ssh = new SSHConnectExec();
@@ -311,10 +311,11 @@ public class SSHConnectTerminal extends SSHConnect {
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
 					SSHCommandFactory.getInstance().STRING_COMMAND_GET_LINUX_COMMANDS), false, null, true, false);
 			if (result == null)
-				logging.warning(this, "no commands could be found for autocompletion");
-
-			commands_compgen = getList(result);
-			logging.debug(this, "getCompletionList commands compgen -c " + result);
+				Logging.warning(this, "no commands could be found for autocompletion");
+			else {
+				commandsCompgen = getList(result);
+				Logging.debug(this, "getCompletionList commands compgen -c " + result);
+			}
 		}
 
 		return result;
@@ -323,25 +324,24 @@ public class SSHConnectTerminal extends SSHConnect {
 	private List<String> getList(String str) {
 		if (str.equals(""))
 			return null;
+
 		String[] arr = str.split("\n");
-		List<String> result = new ArrayList<>();
-		for (String s : arr)
-			result.add(s);
-		return result;
+
+		return Arrays.asList(arr);
 	}
 
 	@Override
 	public void disconnect() {
-		logging.info(this, "disconnect");
+		Logging.info(this, "disconnect");
 		if (session != null && session.isConnected()) {
-			logging.info(this, "disconnect session");
+			Logging.info(this, "disconnect session");
 			session.disconnect();
 			this.session.disconnect();
 			session = null;
 		}
 
 		if (channel != null && channel.isConnected()) {
-			logging.info(this, "disconnect channel");
+			Logging.info(this, "disconnect channel");
 			channel.disconnect();
 			this.channel.disconnect();
 			channel = null;

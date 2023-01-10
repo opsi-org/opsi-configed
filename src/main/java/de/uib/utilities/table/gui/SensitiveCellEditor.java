@@ -19,7 +19,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.table.DefaultListModelProducer;
 import de.uib.utilities.table.ListModelProducer;
@@ -54,7 +54,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			instances.put(key, instance);
 			instance.myKey = "" + key;
-			logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
+			Logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
 					+ instances.size());
 		}
 		return instance;
@@ -115,7 +115,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
-		logging.debug(this, "  celleditor working in " + row + ", " + column + " with value " + value + ", class "
+		Logging.debug(this, "  celleditor working in " + row + ", " + column + " with value " + value + ", class "
 				+ value.getClass().getName());
 
 		List val = modelProducer.toList(value);
@@ -124,7 +124,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		{
 
 			ListModel model = modelProducer.getListModel(row, column);
-			logging.debug(this,
+			Logging.debug(this,
 					" try list editing, modelproducer tells nullable " + modelProducer.getNullable(row, column));
 			listeditor.setVisible(false);
 			listeditor.setTitle(modelProducer.getCaption(row, column));
@@ -133,7 +133,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 				listeditor.setListModel(modelProducer.getListModel(row, column));
 
-				logging.info(this, "startValue set: " + value);
+				Logging.info(this, "startValue set: " + value);
 
 				listeditor.setSelectionMode(modelProducer.getSelectionMode(row, column));
 				listeditor.setEditable(modelProducer.getEditable(row, column));

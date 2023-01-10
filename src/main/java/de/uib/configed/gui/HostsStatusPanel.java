@@ -7,8 +7,8 @@ import javax.swing.JTextField;
 
 import de.uib.configed.Globals;
 import de.uib.configed.HostsStatusInfo;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 
 public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
@@ -28,7 +28,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 
 	@Override
 	public void setGroupName(String s) {
-		logging.info(this, "setGroupName " + s);
+		Logging.info(this, "setGroupName " + s);
 		resetReportedClients();
 		fieldGroupActivated.setText(s);
 	}
@@ -57,7 +57,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 	}
 
 	private void initializeValues() {
-		labelAllClientsCount.setText(configed.getResourceValue("MainFrame.labelClientsTotal") + " ");
+		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + " ");
 		resetReportedClients();
 		fieldInvolvedDepots.setText("");
 		fieldInvolvedDepots.setToolTipText("");
@@ -66,12 +66,12 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 	@Override
 	public void updateValues(Integer clientsCount, Integer selectedClientsCount, String selectedClientNames,
 			String involvedDepots) {
-		logging.info(this,
+		Logging.info(this,
 				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
-		logging.info(this,
+		Logging.info(this,
 				"updateValues clientsCount, selectedClientsCount " + clientsCount + ", " + selectedClientsCount);
 
-		labelAllClientsCount.setText(configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
+		labelAllClientsCount.setText(Configed.getResourceValue("MainFrame.labelClientsTotal") + "  " + clientsCount);
 
 		setFieldClientsCount(selectedClientsCount);
 
@@ -127,9 +127,9 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		GroupLayout layoutStatusPane = new GroupLayout(this);
 		this.setLayout(layoutStatusPane);
 
-		JLabel labelActivated = new JLabel(configed.getResourceValue("MainFrame.activated"));
+		JLabel labelActivated = new JLabel(Configed.getResourceValue("MainFrame.activated"));
 
-		JLabel labelGroupActivated = new JLabel(configed.getResourceValue("MainFrame.groupActivated"));
+		JLabel labelGroupActivated = new JLabel(Configed.getResourceValue("MainFrame.groupActivated"));
 
 		fieldGroupActivated = new JTextField("");
 
@@ -139,13 +139,13 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		labelAllClientsCount = new JLabel("");
 		labelAllClientsCount.setPreferredSize(Globals.labelDimension);
 
-		JLabel labelSelectedClientsCount = new JLabel(configed.getResourceValue("MainFrame.labelSelected"));
+		JLabel labelSelectedClientsCount = new JLabel(Configed.getResourceValue("MainFrame.labelSelected"));
 
-		JLabel labelSelectedClientsNames = new JLabel(configed.getResourceValue("MainFrame.labelNames"));
+		JLabel labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelNames"));
 
-		JLabel labelInvolvedDepots = new JLabel(configed.getResourceValue("MainFrame.labelInDepot"));
+		JLabel labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
 
-		JLabel labelInvolvedDepots2 = new JLabel(configed.getResourceValue("MainFrame.labelInDepot2"));
+		JLabel labelInvolvedDepots2 = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot2"));
 
 		fieldActivatedClientsCount = new JTextField("");
 		fieldActivatedClientsCount.setPreferredSize(Globals.counterfieldDimension);

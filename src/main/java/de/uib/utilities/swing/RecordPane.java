@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.ObservableSubject;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
@@ -36,7 +36,7 @@ public class RecordPane extends JPanel implements KeyListener {
 		@Override
 		public void notifyObservers() {
 
-			logging.debug("RecordPane: notifyObservers ");
+			Logging.debug("RecordPane: notifyObservers ");
 		}
 	}
 

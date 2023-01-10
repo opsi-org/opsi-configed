@@ -3,7 +3,7 @@ package de.uib.configed.dashboard.chart;
 import java.io.IOException;
 import java.util.List;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.ModuleData;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -35,7 +35,7 @@ public class ModuleStatusComparison extends StackPane implements DataChangeListe
 
 	@Override
 	public void display() {
-		moduleStatusNoDataText.setText(configed.getResourceValue("Dashboard.noData"));
+		moduleStatusNoDataText.setText(Configed.getResourceValue("Dashboard.noData"));
 
 		List<String> activeModules = ModuleData.getActiveModules();
 		List<String> expiredModules = ModuleData.getExpiredModules();
@@ -57,12 +57,12 @@ public class ModuleStatusComparison extends StackPane implements DataChangeListe
 			moduleStatusComparisonPieChart.getData().add(new PieChart.Data("", 0));
 		} else {
 			moduleStatusComparisonPieChart.getData().get(0).nameProperty().bindBidirectional(new SimpleStringProperty(
-					String.format("%s %d", configed.getResourceValue("Dashboard.active"), totalActiveModules)));
+					String.format("%s %d", Configed.getResourceValue("Dashboard.active"), totalActiveModules)));
 			moduleStatusComparisonPieChart.getData().get(0).pieValueProperty()
 					.bindBidirectional(new SimpleIntegerProperty(totalActiveModules));
 
 			moduleStatusComparisonPieChart.getData().get(1).nameProperty().bindBidirectional(new SimpleStringProperty(
-					String.format("%s %d", configed.getResourceValue("Dashboard.expired"), totalExpiredModules)));
+					String.format("%s %d", Configed.getResourceValue("Dashboard.expired"), totalExpiredModules)));
 			moduleStatusComparisonPieChart.getData().get(1).pieValueProperty()
 					.bindBidirectional(new SimpleIntegerProperty(totalExpiredModules));
 		}

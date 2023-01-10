@@ -1,6 +1,6 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 
@@ -17,17 +17,17 @@ public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 		try {
 			date = java.sql.Date.valueOf(data);
 		} catch (Exception ex) {
-			logging.debug(this, "OpsiDataDateMatcher data is not a date! " + date + " " + ex);
+			Logging.debug(this, "OpsiDataDateMatcher data is not a date! " + date + " " + ex);
 			return false;
 		}
 
 		if (realdata == null) {
-			logging.debug(this, "OpsiDataDateMatcher no data found");
+			Logging.debug(this, "OpsiDataDateMatcher no data found");
 			return false;
 		}
 
 		if (!(realdata instanceof String)) {
-			logging.debug(this, "OpsiDataDateMatcher data not a string " + realdata);
+			Logging.debug(this, "OpsiDataDateMatcher data not a string " + realdata);
 			return false;
 		}
 
@@ -48,7 +48,7 @@ public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
 			realdate = java.sql.Date.valueOf(realD);
 			return compare(date, realdate);
 		} catch (Exception ex) {
-			logging.debug(this, "data is not a date! " + realdata + " " + ex);
+			Logging.debug(this, "data is not a date! " + realdata + " " + ex);
 			return false;
 		}
 

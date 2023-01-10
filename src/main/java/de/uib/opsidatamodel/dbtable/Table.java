@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Map;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class Table {
 	protected String highTimestampS = new Timestamp(0).toString();
@@ -52,7 +52,7 @@ public class Table {
 	}
 
 	protected String conjunction(Map<String, String> rowMap, String[] keys) {
-		logging.debug(this, "conjunction keys " + Arrays.toString(keys));
+		Logging.debug(this, "conjunction keys " + Arrays.toString(keys));
 		if (keys == null || keys.length == 0)
 			return null;
 
@@ -66,7 +66,7 @@ public class Table {
 
 		sb.append(")");
 
-		logging.debug(this, "conjunction " + sb.toString());
+		Logging.debug(this, "conjunction " + sb.toString());
 
 		return sb.toString();
 	}

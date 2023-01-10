@@ -8,7 +8,7 @@ import java.util.Set;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class LicenceUsageEntry extends StringValuedRelationElement {
 	/*
@@ -90,7 +90,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		}
 
 		if (get(LICENCE_ID_KEY) == null || get(LICENCE_POOL_ID_KEY) == null)
-			logging.warning(this, "missing values " + entry);
+			Logging.warning(this, "missing values " + entry);
 
 		lic4pool = Globals.pseudokey(new String[] { get(LICENCE_ID_KEY), get(LICENCE_POOL_ID_KEY) });
 	}

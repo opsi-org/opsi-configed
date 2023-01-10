@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class FDialogSubTable extends FGeneralDialog {
 
 	public FDialogSubTable(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight) {
 		super(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, true);
-		logging.info(this, "created ");
+		Logging.info(this, "created ");
 		additionalPaneMaxWidth = Short.MAX_VALUE;
 	}
 
 	@Override
 	protected void allLayout() {
 
-		logging.info(this, "allLayout");
+		Logging.info(this, "allLayout");
 		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		// 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));

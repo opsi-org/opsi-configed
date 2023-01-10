@@ -12,7 +12,7 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.ControlMultiTablePanel;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 /**
@@ -36,7 +36,7 @@ public class PanelEditLicences extends MultiTablePanel {
 	private void initComponents() {
 
 		panelKeys = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 1, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 1, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
@@ -48,7 +48,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		panelKeys.setFiltering(true);
 
 		panelSoftwarelicences = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSoftwarelicence"), 0, true, 2, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSoftwarelicence"), 0, true, 2, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
@@ -59,7 +59,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		panelSoftwarelicences.showFilterIcon(true);
 
 		panelLicencecontracts = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 2, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 2, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane

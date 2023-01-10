@@ -16,7 +16,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.MenuElement;
 
 import de.uib.utilities.DataChangedObserver;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
 public abstract class AbstractEditMapPanel extends JPanel {
@@ -38,15 +38,15 @@ public abstract class AbstractEditMapPanel extends JPanel {
 
 	public static class Actor {
 		protected void reloadData() {
-			logging.info(this, "AbstractEditMapPanel: reloadData");
+			Logging.info(this, "AbstractEditMapPanel: reloadData");
 		}
 
 		protected void saveData() {
-			logging.info(this, "AbstractEditMapPanel: saveData");
+			Logging.info(this, "AbstractEditMapPanel: saveData");
 		}
 
 		protected void deleteData() {
-			logging.info(this, "AbstractEditMapPanel: deleteData");
+			Logging.info(this, "AbstractEditMapPanel: deleteData");
 		}
 	}
 
@@ -61,7 +61,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 
 		public String getRemovalMenuText() {
 			String s = "";
-			logging.debug(this, "getRemovalMenuText " + s);
+			Logging.debug(this, "getRemovalMenuText " + s);
 			return s;
 		}
 
@@ -142,12 +142,12 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	protected void logPopupElements(JPopupMenu popup) {
 		MenuElement[] popupElements = popupmenuAtRow.getSubElements();
 		int size = popupElements.length;
-		logging.debug(this, "logPopupElements " + size);
+		Logging.debug(this, "logPopupElements " + size);
 
 	}
 
 	public void setOptionsEditable(boolean b) {
-		logging.debug(this, "AbstractEditMapPanel.setOptionsEditable " + b);
+		Logging.debug(this, "AbstractEditMapPanel.setOptionsEditable " + b);
 
 		if (b) {
 			popupmenuAtRow = popupEditOptions;
@@ -163,7 +163,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
-		logging.debug(this, "setEditableMap optionsMap == null? " + (optionsMap == null));
+		Logging.debug(this, "setEditableMap optionsMap == null? " + (optionsMap == null));
 	}
 
 	/**

@@ -33,7 +33,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DependenciesTreeModel {
 
@@ -98,7 +98,7 @@ public class DependenciesTreeModel {
 
 	public DefaultMutableTreeNode getTreeNodeForProductDependencies(boolean benoetigt) {
 
-		logging.debug(this, productId + "-tree wird erstellt");
+		Logging.debug(this, productId + "-tree wird erstellt");
 
 		if (graphIsInitialized && productList.contains(productId)) {
 			DefaultMutableTreeNode mainNode;

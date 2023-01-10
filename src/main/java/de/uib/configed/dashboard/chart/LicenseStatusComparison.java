@@ -3,7 +3,7 @@ package de.uib.configed.dashboard.chart;
 import java.io.IOException;
 import java.util.List;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.LicenseData;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -35,7 +35,7 @@ public class LicenseStatusComparison extends StackPane implements DataChangeList
 
 	@Override
 	public void display() {
-		licenseStatusNoDataText.setText(configed.getResourceValue("Dashboard.noData"));
+		licenseStatusNoDataText.setText(Configed.getResourceValue("Dashboard.noData"));
 
 		List<String> expiredLicenses = LicenseData.getExpiredLicenses();
 		List<String> availableLicenses = LicenseData.getLicenses();
@@ -57,12 +57,12 @@ public class LicenseStatusComparison extends StackPane implements DataChangeList
 			licenseStatusComparisonPieChart.getData().add(new PieChart.Data("", 0));
 		} else {
 			licenseStatusComparisonPieChart.getData().get(0).nameProperty().bindBidirectional(new SimpleStringProperty(
-					String.format("%s %d", configed.getResourceValue("Dashboard.active"), totalActiveLicenses)));
+					String.format("%s %d", Configed.getResourceValue("Dashboard.active"), totalActiveLicenses)));
 			licenseStatusComparisonPieChart.getData().get(0).pieValueProperty()
 					.bindBidirectional(new SimpleIntegerProperty(totalActiveLicenses));
 
 			licenseStatusComparisonPieChart.getData().get(1).nameProperty().bindBidirectional(new SimpleStringProperty(
-					String.format("%s %d", configed.getResourceValue("Dashboard.expired"), totalExpiredLicenses)));
+					String.format("%s %d", Configed.getResourceValue("Dashboard.expired"), totalExpiredLicenses)));
 			licenseStatusComparisonPieChart.getData().get(1).pieValueProperty()
 					.bindBidirectional(new SimpleIntegerProperty(totalExpiredLicenses));
 		}

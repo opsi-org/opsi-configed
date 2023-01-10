@@ -20,7 +20,7 @@ import java.awt.event.MouseListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class FEditText extends FEdit implements DocumentListener, MouseListener {
 	protected javax.swing.JScrollPane scrollpane;
@@ -113,7 +113,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	public void mouseClicked(MouseEvent e) {
 
 		if (standalone)
-			logging.debug(getText());
+			Logging.debug(getText());
 	}
 
 	@Override

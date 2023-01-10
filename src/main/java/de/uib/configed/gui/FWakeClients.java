@@ -8,17 +8,17 @@ import java.util.Map;
 import javax.swing.JFrame;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsicommand.Executioner;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class FWakeClients extends FShowList {
 	boolean cancelled = false;
 	PersistenceController persist;
 
 	public FWakeClients(JFrame master, String title, PersistenceController persist) {
-		super(master, title, false, new String[] { configed.getResourceValue("FWakeClients.cancel") });
+		super(master, title, false, new String[] { Configed.getResourceValue("FWakeClients.cancel") });
 		setFont(Globals.defaultFont);
 		setMessage("");
 		setButtonsEnabled(true);
@@ -47,7 +47,7 @@ public class FWakeClients extends FShowList {
 
 			for (String depot : hostSeparationByDepots.keySet()) {
 
-				logging.info(this,
+				Logging.info(this,
 						"act on depot " + depot + ", executioner != NONE  "
 								+ (executionerForDepots.get(depot) != Executioner.NONE) + " counterByDepots.get(depot) "
 								+ counterByDepots.get(depot));
@@ -72,9 +72,9 @@ public class FWakeClients extends FShowList {
 
 						String line = String.format("trying to start up   %s    from depot    %s  ", host, depot);
 						appendLine(line);
-						logging.info(this, "act: " + line);
+						Logging.info(this, "act: " + line);
 						hostsToWakeOnThisTurn.add(host);
-						logging.info(this, "act: hostsToWakeOnThisTurn " + hostsToWakeOnThisTurn);
+						Logging.info(this, "act: hostsToWakeOnThisTurn " + hostsToWakeOnThisTurn);
 						counterByDepots.put(depot, counterByDepots.get(depot) + 1);
 					}
 				}
@@ -86,7 +86,7 @@ public class FWakeClients extends FShowList {
 			turn++;
 		}
 
-		jButton1.setText(configed.getResourceValue("FWakeClients.close"));
+		jButton1.setText(Configed.getResourceValue("FWakeClients.close"));
 	}
 
 	@Override

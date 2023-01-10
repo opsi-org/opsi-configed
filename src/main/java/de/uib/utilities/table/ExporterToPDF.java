@@ -35,8 +35,8 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -99,7 +99,7 @@ public class ExporterToPDF extends ExportTable {
 
 		if (saveAction == null) {
 			if (dialog == null) {
-				dialog = new OpenSaveDialog(configed.getResourceValue("OpenSaveDialog.title"));
+				dialog = new OpenSaveDialog(Configed.getResourceValue("OpenSaveDialog.title"));
 			} else {
 				dialog.setVisible();
 			}
@@ -113,11 +113,11 @@ public class ExporterToPDF extends ExportTable {
 					try {
 						File file = new File(fileName);
 						if (file.isDirectory())
-							logging.error("no valid filename " + fileName);
+							Logging.error("no valid filename " + fileName);
 						else
 							filePath = file.getAbsolutePath();
 					} catch (Exception e) {
-						logging.error("no valid filename " + fileName);
+						Logging.error("no valid filename " + fileName);
 					}
 				}
 
@@ -132,7 +132,7 @@ public class ExporterToPDF extends ExportTable {
 					temp = File.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf");
 					filePath = temp.getAbsolutePath();
 				} catch (IOException e) {
-					logging.error("Failed to create temp file", e);
+					Logging.error("Failed to create temp file", e);
 				}
 			}
 			try {
@@ -150,7 +150,7 @@ public class ExporterToPDF extends ExportTable {
 						event.setHeader(metaData.get("title"));
 					writer.setPageEvent(event);
 				} catch (Exception ex) {
-					logging.error("Error PdfWriter --- " + ex);
+					Logging.error("Error PdfWriter --- " + ex);
 				}
 
 				document.open();
@@ -161,9 +161,9 @@ public class ExporterToPDF extends ExportTable {
 				document.close();
 
 			} catch (FileNotFoundException e) {
-				logging.error("file not found: " + fileName, e);
+				Logging.error("file not found: " + fileName, e);
 			} catch (Exception exp) {
-				logging.error("file not found: " + fileName, exp);
+				Logging.error("file not found: " + fileName, exp);
 			}
 
 			if (!saveAction && (temp.getAbsolutePath() != null)) {
@@ -172,7 +172,7 @@ public class ExporterToPDF extends ExportTable {
 					Desktop.getDesktop().open(temp);
 
 				} catch (Exception e) {
-					logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
+					Logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
 				}
 
 			}
@@ -245,7 +245,7 @@ public class ExporterToPDF extends ExportTable {
 			}
 		}
 
-		content.add(new Paragraph(configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", " //$NON-NLS-3$
+		content.add(new Paragraph(Configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", " //$NON-NLS-3$
 				+ dateFormatter.format(new Date()), //$NON-NLS-2$ //$NON-NLS-3$
 				smallBold));
 		content.add(addEmptyLines(1));
@@ -272,7 +272,7 @@ public class ExporterToPDF extends ExportTable {
 			bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
 			symbol_font = new Font(bf, 11);
 		} catch (Exception e) {
-			logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :" + e);
+			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :" + e);
 			symbol_font = small;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();
@@ -389,9 +389,9 @@ public class ExporterToPDF extends ExportTable {
 			} catch (DocumentException de) {
 				throw new ExceptionConverter(de);
 			} catch (MalformedURLException ex) {
-				logging.error("malformed URL --- " + ex);
+				Logging.error("malformed URL --- " + ex);
 			} catch (IOException e) { // getInstannce
-				logging.error("Error document add footer image --- " + e);
+				Logging.error("Error document add footer image --- " + e);
 			}
 		}
 

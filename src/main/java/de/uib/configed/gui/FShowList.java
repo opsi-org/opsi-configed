@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This class is intended to show a list in text area
@@ -101,7 +101,7 @@ public class FShowList extends FTextArea {
 	@Override
 	public void doAction1() {
 
-		logging.clearErrorList();
+		Logging.clearErrorList();
 		if (owner != null)
 			owner.toFront();
 		super.doAction1();

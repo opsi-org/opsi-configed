@@ -25,9 +25,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.timeedit.FEditDate;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -135,7 +135,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 			if (i > -1)
 				selectedLicencePool = panelLicencepools.getValueAt(i, 0).toString();
 
-			panelLicencepools.setTitle(configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool")
+			panelLicencepools.setTitle(Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool")
 					+ ": " + selectedLicencePool);
 		});
 
@@ -155,15 +155,15 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private boolean check_and_start() {
 		if (panelLicencepools.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(enterLicenceController.mainController.licencesFrame,
-					configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencepool"),
-					configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencepool"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
 		if (panelLicencecontracts.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(enterLicenceController.mainController.licencesFrame,
-					configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencecontract"),
-					configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencecontract"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
@@ -253,21 +253,21 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	private void initComponents() {
 		panelKeys = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 0, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 0, false,
 				new int[] { PanelGenEditTable.POPUP_RELOAD }, false // searchpane
 		);
 
 		panelKeys.setMasterFrame(Globals.frame1);
 
 		panelLicencepools = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), maxHSize, false, 0,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), maxHSize, false, 0,
 				false, new int[] { PanelGenEditTable.POPUP_RELOAD }, true // with tablesearchpane
 		);
 
 		panelLicencepools.setMasterFrame(Globals.frame1);
 
 		panelLicencecontracts = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
@@ -323,11 +323,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						java.awt.Point pointField = jTextField_endOfLicence.getLocationOnScreen();
 						fEditDate.setLocation((int) pointField.getX() + 30, (int) pointField.getY() + 20);
 					} catch (Exception ex) {
-						logging.info(this, "locationOnScreen ex " + ex);
+						Logging.info(this, "locationOnScreen ex " + ex);
 					}
 
 					fEditDate.setTitle(" (" + Globals.APPNAME + ") "
-							+ configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid5"));
+							+ Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid5"));
 
 					fEditDate.setVisible(true);
 				}
@@ -357,47 +357,47 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		panelEnterKey = new JPanel();
 
-		jLabelLicencePool.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Label"));
+		jLabelLicencePool.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Label"));
 
-		jButtonCreateStandard.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.StandardLicense"));
+		jButtonCreateStandard.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.StandardLicense"));
 		jButtonCreateStandard.setToolTipText(
-				configed.getResourceValue("ConfigedMain.Licences.EnterLicense.StandardLicense.ToolTip"));
+				Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.StandardLicense.ToolTip"));
 		jButtonCreateStandard.addActionListener(this);
 
-		jButtonCreateVolume.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.VolumeLicense"));
+		jButtonCreateVolume.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.VolumeLicense"));
 		jButtonCreateVolume
-				.setToolTipText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.VolumeLicense.ToolTip"));
+				.setToolTipText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.VolumeLicense.ToolTip"));
 		jButtonCreateVolume.addActionListener(this);
 
-		jButtonCreateOEM.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.OEMLicense"));
+		jButtonCreateOEM.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.OEMLicense"));
 		jButtonCreateOEM
-				.setToolTipText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.OEMLicense.ToolTip"));
+				.setToolTipText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.OEMLicense.ToolTip"));
 		jButtonCreateOEM.addActionListener(this);
 
 		jButtonCreateConcurrent
-				.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ConcurrentLicense"));
+				.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ConcurrentLicense"));
 		jButtonCreateConcurrent.setToolTipText(
-				configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ConcurrentLicense.ToolTip"));
+				Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ConcurrentLicense.ToolTip"));
 		jButtonCreateConcurrent.addActionListener(this);
 
-		jButtonSend.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Execute"));
+		jButtonSend.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Execute"));
 		jButtonSend.addActionListener(this);
 
-		jLabelTask.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Task") + ":");
+		jLabelTask.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Task") + ":");
 		jLabelTask.setFont(Globals.defaultFontBold);
-		jLabelConfigure.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ChooseType"));
+		jLabelConfigure.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ChooseType"));
 		jLabelConfigure.setFont(Globals.defaultFontStandardBold);
 
 		panelLicenceModel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-		jLabelSLid1.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid1"));
-		jLabelSLid2.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid2"));
-		jLabelSLid3.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3"));
-		jLabelSLid4.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid4"));
-		jLabelSLid5.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid5"));
-		jLabelSLid6.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid6"));
+		jLabelSLid1.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid1"));
+		jLabelSLid2.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid2"));
+		jLabelSLid3.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3"));
+		jLabelSLid4.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid4"));
+		jLabelSLid5.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid5"));
+		jLabelSLid6.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid6"));
 
-		jLabelSLid3info.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3info"));
+		jLabelSLid3info.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid3info"));
 
 		de.uib.utilities.swing.Containership cs = new de.uib.utilities.swing.Containership(this);
 		cs.doForAllContainedCompisOfClass("setFont", new Object[] { Globals.defaultFont }, JTextField.class);
@@ -506,7 +506,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		panelEnterKey.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-		jLabelLKey.setText(configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelLicenseKey"));
+		jLabelLKey.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelLicenseKey"));
 
 		javax.swing.GroupLayout panelEnterKeyLayout = new javax.swing.GroupLayout(panelEnterKey);
 		panelEnterKey.setLayout(panelEnterKeyLayout);

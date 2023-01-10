@@ -17,8 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.JOptionPane;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 /**
  * Allows to produce a static member of a class in order to count instances of
@@ -44,7 +44,7 @@ public class RunningInstances<T> {
 	public RunningInstances(Class type, String askForLeave) {
 		this.classname = type.getName();
 		this.askForLeave = askForLeave;
-		logging.info(this, "created for class " + classname);
+		Logging.info(this, "created for class " + classname);
 		instances = new ConcurrentHashMap<>();
 		observers = new ArrayList<>();
 
@@ -70,13 +70,13 @@ public class RunningInstances<T> {
 
 	public boolean isEmpty() {
 		boolean result = instances.keySet().isEmpty();
-		logging.info(this, " isEmpty " + result);
+		Logging.info(this, " isEmpty " + result);
 		return result;
 	}
 
 	public boolean askStop() {
 		int returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame, askForLeave,
-				Globals.APPNAME + " " + configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"),
+				Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"),
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 		return returnedOption == JOptionPane.YES_OPTION;
@@ -97,7 +97,7 @@ public class RunningInstances<T> {
 	}
 
 	protected void sendChangeEvent() {
-		logging.debug(this, "sendChangeEvent observers: " + observers.size());
+		Logging.debug(this, "sendChangeEvent observers: " + observers.size());
 		for (RunningInstancesObserver aFollower : observers) {
 			aFollower.instancesChanged(getAll());
 		}

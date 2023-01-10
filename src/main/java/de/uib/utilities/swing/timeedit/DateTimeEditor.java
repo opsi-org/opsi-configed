@@ -19,7 +19,7 @@ import javax.swing.SpinnerModel;
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.calendar.DateSelectionModel;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.DateSelectionListener
 
@@ -176,7 +176,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 	@Override
 	public void requestFocus() {
-		logging.debug(this, "requestFocus");
+		Logging.debug(this, "requestFocus");
 		monthView.requestFocus();
 	}
 
@@ -199,7 +199,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 			monthView.getSelectionModel().clearSelection();
 			monthView.commitSelection();
 		}
-		logging.debug(this, " ------- setDate,  hour  " + calendar.get(Calendar.HOUR_OF_DAY) + ", min "
+		Logging.debug(this, " ------- setDate,  hour  " + calendar.get(Calendar.HOUR_OF_DAY) + ", min "
 				+ calendar.get(Calendar.MINUTE));
 		timeSetter.setHour(calendar.get(Calendar.HOUR_OF_DAY));
 		timeSetter.setMin(calendar.get(Calendar.MINUTE));
@@ -215,7 +215,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	public void setSelectionDate(Date d) {
-		logging.debug(this, " setSelectionDate " + d);
+		Logging.debug(this, " setSelectionDate " + d);
 		if (d != null)
 			monthView.ensureDateVisible(d);
 		calendar.setTime(d);

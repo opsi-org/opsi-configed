@@ -5,10 +5,10 @@ import javax.swing.JPanel;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
 
@@ -29,7 +29,7 @@ public class FDriverUpload extends SecondaryFrame {
 
 		define();
 		setGlobals(Globals.getMap());
-		setTitle(Globals.APPNAME + " " + configed.getResourceValue("FDriverUpload.title"));
+		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FDriverUpload.title"));
 
 	}
 
@@ -59,7 +59,7 @@ public class FDriverUpload extends SecondaryFrame {
 	public void setUploadParameters(String byAuditPath) {
 		panelDriverUpload.setByAuditPath(byAuditPath);
 
-		logging.info(this, " setUploadParameters " + main.getSelectedClients()[0]);
+		Logging.info(this, " setUploadParameters " + main.getSelectedClients()[0]);
 
 		if (main.getSelectedClients() != null && main.getSelectedClients().length == 1)
 			panelDriverUpload.setClientName(main.getSelectedClients()[0]);

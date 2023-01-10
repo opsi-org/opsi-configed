@@ -14,7 +14,7 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializer {
 	private PersistenceController controller;
@@ -59,7 +59,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 			if (!parser.next() || parser.getPositionType() != JsonParser.PositionType.OBJECT_BEGIN)
 				return map;
 		} catch (IOException e) {
-			logging.error(this, e.getMessage(), e);
+			Logging.error(this, e.getMessage(), e);
 			return map;
 		}
 		map = parseObject();
@@ -92,11 +92,11 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 			jsonString += createJsonRecursive(data);
 			jsonString += " }";
 		} catch (IllegalArgumentException e) {
-			logging.error(this, "Saving failed: " + e.getMessage(), e);
+			Logging.error(this, "Saving failed: " + e.getMessage(), e);
 			return;
 		}
 
-		logging.info(this, name + ": " + jsonString);
+		Logging.info(this, name + ": " + jsonString);
 		searches.put(name, jsonString);
 		SavedSearch saveObj = new SavedSearch(name, jsonString, description);
 		controller.saveSearch(saveObj);
@@ -191,7 +191,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 				case JSON_NAME:
 					name = parser.getValue();
 					name = name.substring(1, name.length() - 1);
-					logging.debug(this, name);
+					Logging.debug(this, name);
 					break;
 				case JSON_VALUE:
 					result.put(name, stringToObject(parser.getValue(), name));
@@ -228,7 +228,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		} catch (IOException e) {
 			throw new IllegalArgumentException("IOException in parser", e);
 		}
-		logging.debug(this, "parseList " + list);
+		Logging.debug(this, "parseList " + list);
 		if (!done)
 			throw new IllegalArgumentException("Unexpected EOF");
 		if (name.equals("elementPath"))
@@ -237,7 +237,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	}
 
 	private Object stringToObject(String value, String name) {
-		logging.debug(this, "stringToObject: " + name);
+		Logging.debug(this, "stringToObject: " + name);
 		if (value.equals("null"))
 			return null;
 		if (name.equals("data")) {

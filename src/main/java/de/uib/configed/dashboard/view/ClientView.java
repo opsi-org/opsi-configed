@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.dashboard.chart.ClientActivityComparison;
 import de.uib.configed.dashboard.chart.ClientLastSeenComparison;
@@ -98,11 +98,11 @@ public class ClientView implements View {
 		activeClientsNumberLabel.setText(String.valueOf(activeClients.size()));
 		inactiveClientsNumberLabel.setText(String.valueOf(inactiveClients.size()));
 		fourteenOrLowerDaysNumberLabel.setText(
-				String.valueOf(lastSeenData.get(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"))));
+				String.valueOf(lastSeenData.get(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"))));
 		betweenFifteenAndThirtyDaysNumberLabel.setText(String.valueOf(
-				lastSeenData.get(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"))));
+				lastSeenData.get(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"))));
 		moreThanThirtyDaysNumberLabel.setText(
-				String.valueOf(lastSeenData.get(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"))));
+				String.valueOf(lastSeenData.get(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"))));
 
 		hostnameTableColumn.setCellValueFactory(cellData -> cellData.getValue().hostnameProperty());
 		lastSeenTableColumn.setCellValueFactory(cellData -> cellData.getValue().lastSeenProperty());
@@ -110,19 +110,19 @@ public class ClientView implements View {
 		clientActiveTableColumn.setCellFactory(tc -> new CheckBoxTableCell<>());
 
 		List<String> clientStatus = new ArrayList<>();
-		clientStatus.add(configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
-		clientStatus.add(configed.getResourceValue("Dashboard.client.active"));
-		clientStatus.add(configed.getResourceValue("Dashboard.client.inactive"));
+		clientStatus.add(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
+		clientStatus.add(Configed.getResourceValue("Dashboard.client.active"));
+		clientStatus.add(Configed.getResourceValue("Dashboard.client.inactive"));
 		final ObservableList<String> status = new FilteredList<>(FXCollections.observableArrayList(clientStatus));
 		clientActivityStatusChoiceBox.setItems(status);
 		clientActivityStatusChoiceBox.getSelectionModel().selectFirst();
 
 		List<String> clientLastSeenData = new ArrayList<>();
-		clientLastSeenData.add(configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
-		clientLastSeenData.add(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"));
-		clientLastSeenData.add(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"));
-		clientLastSeenData.add(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"));
-		clientLastSeenData.add(configed.getResourceValue("Dashboard.lastSeen.never"));
+		clientLastSeenData.add(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
+		clientLastSeenData.add(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"));
+		clientLastSeenData.add(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"));
+		clientLastSeenData.add(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"));
+		clientLastSeenData.add(Configed.getResourceValue("Dashboard.lastSeen.never"));
 
 		final ObservableList<String> lastSeen = new FilteredList<>(
 				FXCollections.observableArrayList(clientLastSeenData));
@@ -143,39 +143,39 @@ public class ClientView implements View {
 		}, clientSearchbarTextField.textProperty()));
 		lastSeenFilter.bind(Bindings.createObjectBinding(() -> client -> {
 			if (clientLastSeenChoiceBox.getValue() == null || clientLastSeenChoiceBox.getValue()
-					.equals(configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
+					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
 			}
 
 			final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			final LocalDate current = LocalDate.now();
 			final LocalDate lastSeenDate = client.getLastSeen()
-					.equals(configed.getResourceValue("Dashboard.lastSeen.never")) ? LocalDate.parse("9999-12-31", dtf)
+					.equals(Configed.getResourceValue("Dashboard.lastSeen.never")) ? LocalDate.parse("9999-12-31", dtf)
 							: LocalDate.parse(client.getLastSeen().substring(0, 10), dtf);
 			final long days = ChronoUnit.DAYS.between(lastSeenDate, current);
 
 			return clientLastSeenChoiceBox.getValue()
-					.equals(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")) && days <= 14
+					.equals(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")) && days <= 14
 					&& days >= 0
 					|| clientLastSeenChoiceBox.getValue()
-							.equals(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"))
+							.equals(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"))
 							&& days > 14 && days <= 30
 					|| clientLastSeenChoiceBox.getValue()
-							.equals(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")) && days > 30
-					|| clientLastSeenChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.lastSeen.never"))
-							&& client.getLastSeen().equals(configed.getResourceValue("Dashboard.lastSeen.never"));
+							.equals(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")) && days > 30
+					|| clientLastSeenChoiceBox.getValue().equals(Configed.getResourceValue("Dashboard.lastSeen.never"))
+							&& client.getLastSeen().equals(Configed.getResourceValue("Dashboard.lastSeen.never"));
 		}, clientLastSeenChoiceBox.valueProperty()));
 		activeFilter.bind(Bindings.createObjectBinding(() -> client -> {
 			if (clientActivityStatusChoiceBox.getValue() == null || clientActivityStatusChoiceBox.getValue()
-					.equals(configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
+					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
 			}
 
 			return client.getReachable()
 					&& clientActivityStatusChoiceBox.getValue()
-							.equals(configed.getResourceValue("Dashboard.client.active"))
+							.equals(Configed.getResourceValue("Dashboard.client.active"))
 					|| !client.getReachable() && clientActivityStatusChoiceBox.getValue()
-							.equals(configed.getResourceValue("Dashboard.client.inactive"));
+							.equals(Configed.getResourceValue("Dashboard.client.inactive"));
 		}, clientActivityStatusChoiceBox.valueProperty()));
 
 		filteredData.predicateProperty()

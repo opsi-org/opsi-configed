@@ -5,22 +5,22 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsicommand.sshcommand.CommandModulesUpload;
 import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	private JLabel jLabelCopyToModulesD;
 	private JCheckBox jComboBoxCopyToModulesD;
-	private static String title = configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
+	private static String title = Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
 
 	public SSHModulesUploadDialog() {
 		super(title, new CommandModulesUpload());
 		this.setVisible(true);
-		logging.info(this, "SSHModulesUploadDialog build");
+		Logging.info(this, "SSHModulesUploadDialog build");
 		height = 430;
 		showDialog();
 	}
@@ -33,7 +33,7 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	protected void initAdditional() {
 		jLabelCopyToModulesD = new JLabel();
 		jLabelCopyToModulesD.setText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.lbl_copy_to_modules_d"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.lbl_copy_to_modules_d"));
 
 		jComboBoxCopyToModulesD = new JCheckBox();
 		jComboBoxCopyToModulesD.setSelected(false);

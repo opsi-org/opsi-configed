@@ -27,9 +27,9 @@ import javax.swing.JTable;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.guidata.DependenciesModel;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class PanelProductDependencies extends JPanel implements DependenciesModel.DependenciesModelListener {
 
@@ -53,9 +53,9 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 	public void initComponents() {
 
 		JLabel labelInfoProductDependenciesTable = new JLabel(
-				configed.getResourceValue("PanelProductDependencies.labelInfoProductDependenciesTable"));
+				Configed.getResourceValue("PanelProductDependencies.labelInfoProductDependenciesTable"));
 		JLabel labelInfoProductDependenciesTree = new JLabel(
-				configed.getResourceValue("PanelProductDependencies.labelInfoProductDependenciesTree"));
+				Configed.getResourceValue("PanelProductDependencies.labelInfoProductDependenciesTree"));
 		JScrollPane dependenciesPanel = new JScrollPane();
 		dependenciesTable = new JTable();
 
@@ -115,7 +115,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 	public void setEditValues(String productId, String depotId) {
 
-		logging.info(this, "set product  " + productId);
+		Logging.info(this, "set product  " + productId);
 
 		dependenciesModel.setActualProduct(depotId, productId);
 	}
@@ -127,7 +127,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 	@Override
 	public void updateDepot(String depotId) {
-		depotLabel.setText(configed.getResourceValue("PanelProductDependencies.Depot") + ": " + depotId);
+		depotLabel.setText(Configed.getResourceValue("PanelProductDependencies.Depot") + ": " + depotId);
 	}
 
 	public DependenciesTreePanel getDependenciesTree() {

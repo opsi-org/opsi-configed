@@ -1,11 +1,11 @@
 package de.uib.opsicommand.sshcommand;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHPackageManagerUninstallParameterDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
 	protected FGeneralDialog dialog = null;
@@ -29,7 +29,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall");
+		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall");
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall.tooltip");
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 	public boolean checkCommand() {
 		if (opsiproduct == null || opsiproduct.trim().equals("")) {
-			logging.info(this, "no product given");
+			Logging.info(this, "no product given");
 			return false;
 		}
 		return true;

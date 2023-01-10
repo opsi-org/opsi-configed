@@ -6,7 +6,7 @@ import java.util.Map;
 
 import de.uib.utilities.datastructure.Relation;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class LicencePoolXOpsiProduct extends Relation {
 	/*
@@ -59,7 +59,7 @@ public class LicencePoolXOpsiProduct extends Relation {
 				add(rowmap);
 			}
 		} catch (Exception ex) {
-			logging.error("integrateRawFromService " + m + " exception " + ex);
+			Logging.error("integrateRawFromService " + m + " exception " + ex);
 		}
 	}
 }

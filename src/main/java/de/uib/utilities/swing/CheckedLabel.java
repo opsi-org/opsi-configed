@@ -27,7 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 //a class similar to JCheckBox
 public class CheckedLabel extends JPanel implements FocusListener
@@ -65,7 +65,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			logging.info(this, "CheckLabel mouseClicked on " + source);
+			Logging.info(this, "CheckLabel mouseClicked on " + source);
 		}
 	}
 
@@ -174,7 +174,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				logging.info(this, "event " + e);
+				Logging.info(this, "event " + e);
 				if (!isEnabled())
 					return;
 				super.keyPressed(e);

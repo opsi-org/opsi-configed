@@ -16,9 +16,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
 import de.uib.utilities.table.gui.TablesearchPane;
@@ -66,7 +66,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		searchPane.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
 		searchPane.setSearchFields(new Integer[] { 0, 1 });
 		searchPane.setToolTipTextCheckMarkAllColumns(
-				configed.getResourceValue("ValueSelectorList.checkmarkAllColumns.tooltip"));
+				Configed.getResourceValue("ValueSelectorList.checkmarkAllColumns.tooltip"));
 
 		initComponents();
 		layouting();
@@ -110,9 +110,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	private void initComponents() {
 		labelValue = new JLabel();
 		if (multidepot)
-			labelValue.setText(configed.getResourceValue("ValueSelectorList.values"));
+			labelValue.setText(Configed.getResourceValue("ValueSelectorList.values"));
 		else
-			labelValue.setText(configed.getResourceValue("ValueSelectorList.value"));
+			labelValue.setText(Configed.getResourceValue("ValueSelectorList.value"));
 		labelValue.setOpaque(false);
 
 		labelValue.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -120,13 +120,13 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		buttonSelectValuesWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 		buttonSelectValuesWithEqualProperties
-				.setToolTipText(configed.getResourceValue("MainFrame.buttonSelectValuesWithEqualProperties"));
+				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectValuesWithEqualProperties"));
 		Globals.formatButtonSmallText(buttonSelectValuesWithEqualProperties);
 		buttonSelectValuesWithEqualProperties.addActionListener(this);
 		buttonSelectValuesWithEqualProperties.setEnabled(multidepot);
 
 		buttonSelectValuesAll = new JButton("", Globals.createImageIcon("images/plusplus.png", ""));
-		buttonSelectValuesAll.setToolTipText(configed.getResourceValue("MainFrame.buttonSelectValuesAll"));
+		buttonSelectValuesAll.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectValuesAll"));
 		Globals.formatButtonSmallText(buttonSelectValuesAll);
 		buttonSelectValuesAll.addActionListener(this);
 		buttonSelectValuesAll.setEnabled(multidepot);
@@ -176,7 +176,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	boolean filtered = false;
 
 	protected void filterOnSelect() {
-		logging.info(this, "filterOnSelect, we have " + valueList.getListData());
+		Logging.info(this, "filterOnSelect, we have " + valueList.getListData());
 
 		if (!filtered) {
 			unfilteredV = valueList.getListData();
@@ -196,13 +196,13 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == buttonSelectValuesAll) {
-			logging.info(this, "action on buttonSelectValuesAll");
+			Logging.info(this, "action on buttonSelectValuesAll");
 
 			valueList.selectAll();
 		}
 
 		else if (e.getSource() == buttonSelectValuesWithEqualProperties) {
-			logging.info(this, "action on buttonSelectValuesWithEqualProperties");
+			Logging.info(this, "action on buttonSelectValuesWithEqualProperties");
 
 			if (valueList.getSelectedIndex() > -1) {
 				String depotSelected = valueList.getSelectedValue();

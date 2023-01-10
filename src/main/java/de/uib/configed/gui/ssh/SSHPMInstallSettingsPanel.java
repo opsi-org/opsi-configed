@@ -12,11 +12,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
@@ -52,13 +52,13 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private void initComponents() {
 
 		jLabelOn.setText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOn"));
-		jLabelVerbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOn"));
+		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
 		jLabelProperties.setText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.lbl_properties"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.lbl_properties"));
 
 		jButtonDepotselection = new JButton(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
 		jButtonDepotselection.addActionListener(actionEvent -> {
 			initDepots();
 			if (jButtonDepotselection != null)
@@ -70,7 +70,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		jTextFieldSelecteddepots.setEditable(false);
 
 		jComboBoxVerbosity = new JComboBox<>();
-		jComboBoxVerbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
 		for (int i = 0; i < 5; i++)
 			jComboBoxVerbosity.addItem(i);
 		jComboBoxVerbosity.setSelectedItem(1);
@@ -78,11 +78,11 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		jCheckBoxProperties = new JCheckBox();
 		jCheckBoxProperties.setSelected(true);
 		jLabelUpdateInstalled.setText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.updateInstalled"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.updateInstalled"));
 		jCheckBoxUpdateInstalled = new JCheckBox();
 
 		jLabelSetupInstalled.setText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.setupInstalled"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.setupInstalled"));
 		jCheckBoxSetupInstalled = new JCheckBox();
 
 	}
@@ -182,7 +182,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 				result.add(depot);
 		}
 
-		logging.info(this, "getAllowedInstallTargets " + result);
+		Logging.info(this, "getAllowedInstallTargets " + result);
 
 		return result;
 	}
@@ -217,13 +217,13 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 			}
 		}
 
-		logging.info(this, "produce depot parameter " + depotParameter);
+		Logging.info(this, "produce depot parameter " + depotParameter);
 		return depotParameter;
 	}
 
 	protected void initDepots() {
 		depots = getAllowedInstallTargets();
-		logging.info(this, "depots: " + depots.toString());
+		Logging.info(this, "depots: " + depots.toString());
 		fDepotList.setListData(depots);
 		if (depots.isEmpty())
 		// probably no permission
@@ -241,7 +241,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		basicCommand.setUpdateInstalled(jCheckBoxUpdateInstalled.isSelected());
 		basicCommand.setSetupInstalled(jCheckBoxSetupInstalled.isSelected());
 		if (jTextFieldSelecteddepots.getText().contains(
-				configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")))
+				Configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")))
 			basicCommand.setDepotForPInstall("");
 		else
 			basicCommand.setDepotForPInstall(jTextFieldSelecteddepots.getText());

@@ -44,10 +44,10 @@ import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVWriter;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
@@ -72,7 +72,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private List<JCheckBox> headerButtons;
 
 	public CSVTemplateCreatorDialog(List<String> columnNames) {
-		super(Globals.mainFrame, configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
+		super(Globals.mainFrame, Configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
 				new String[] { "ok", "cancel" },
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
@@ -85,7 +85,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	@Override
 	protected void allLayout() {
-		logging.info(this, "allLayout");
+		Logging.info(this, "allLayout");
 
 		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
@@ -153,9 +153,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	protected JPanel initPanel() {
 		format = new CSVFormat();
-		importOptionsLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
+		importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
 		importOptionsLabel.setFont(Globals.defaultFontBold);
-		splittingOptionsLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
+		splittingOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
 		splittingOptionsLabel.setFont(Globals.defaultFontBold);
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
@@ -165,20 +165,20 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
 
-		tabsOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.tabsOption"));
+		tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
 		tabsOption.setActionCommand("\t");
 
-		commaOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.commaOption"));
+		commaOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.commaOption"));
 		commaOption.setActionCommand(",");
 		commaOption.setSelected(true);
 
-		semicolonOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
+		semicolonOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
 		semicolonOption.setActionCommand(";");
 
-		spaceOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.spaceOption"));
+		spaceOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.spaceOption"));
 		spaceOption.setActionCommand(" ");
 
-		otherOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.otherOption"));
+		otherOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.otherOption"));
 		otherOption.setActionCommand("");
 
 		fieldSeparatorOptions = new ButtonGroup();
@@ -192,16 +192,16 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		try {
 			maskFormatter = new MaskFormatter("*");
 		} catch (ParseException e) {
-			logging.debug(this, "INVALID MASK");
+			Logging.debug(this, "INVALID MASK");
 		}
 		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;#+*");
 		maskFormatter.setAllowsInvalid(false);
 		maskFormatter.setCommitsOnValidEdit(true);
 		otherSeparatorInput = new JFormattedTextField(maskFormatter);
-		otherSeparatorInput.setToolTipText(configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
+		otherSeparatorInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherSeparatorInput.setEnabled(false);
 
-		stringSeparatorLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
+		stringSeparatorLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
 		stringSeparatorOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		stringSeparatorOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -236,17 +236,17 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		GroupLayout centerLayout = new GroupLayout(centerPanel);
 		centerPanel.setLayout(centerLayout);
 
-		JLabel dataLabel = new JLabel(configed.getResourceValue("CSVTemplateCreatorDialog.dataOptionsLabel"));
+		JLabel dataLabel = new JLabel(Configed.getResourceValue("CSVTemplateCreatorDialog.dataOptionsLabel"));
 		dataLabel.setFont(Globals.defaultFontBold);
 		JLabel dataSelectionLabel = new JLabel(
-				configed.getResourceValue("CSVTemplateCreatorDialog.dataSelectionLabel"));
-		JLabel csvFormatLabel = new JLabel(configed.getResourceValue("CSVTemplateCreatorDialog.csvFormatLabel"));
+				Configed.getResourceValue("CSVTemplateCreatorDialog.dataSelectionLabel"));
+		JLabel csvFormatLabel = new JLabel(Configed.getResourceValue("CSVTemplateCreatorDialog.csvFormatLabel"));
 		csvFormatLabel.setFont(Globals.defaultFontBold);
 		JLabel fieldSeparatorLabel = new JLabel(
-				configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
+				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
 
 		includeFormatHintOption = new JCheckBox(
-				configed.getResourceValue("CSVTemplateCreatorDialog.includeFormatHintOption"));
+				Configed.getResourceValue("CSVTemplateCreatorDialog.includeFormatHintOption"));
 
 		DefaultListModel<JCheckBox> model = new DefaultListModel<>();
 		headerButtons = new ArrayList<>();
@@ -468,7 +468,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			writer.write(headers);
 			writer.close();
 		} catch (IOException e) {
-			logging.error(this, "Unable to write to file");
+			Logging.error(this, "Unable to write to file");
 		}
 	}
 

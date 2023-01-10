@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.swing.ComboBoxModel;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SessionSaveSet;
 
 public class InstallationStateTableModelFiltered extends InstallationStateTableModel
@@ -40,7 +40,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 		filterSaver.serialize(filterSet);
 
-		logging.info(this, "saveFilterSet " + filterSet);
+		Logging.info(this, "saveFilterSet " + filterSet);
 	}
 
 	public void resetFilter() {
@@ -54,7 +54,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			// A - (A - B) is the intersection
 
 			setFilterFrom(filterSaved);
-			logging.debug(this, "resetFilter " + filterSaved);
+			Logging.debug(this, "resetFilter " + filterSaved);
 		}
 
 	}
@@ -64,7 +64,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 		Set<String> reducedIds = null;
 		if (ids != null) {
-			logging.info(this, "setFilterFrom, save set " + ids.size());
+			Logging.info(this, "setFilterFrom, save set " + ids.size());
 			reducedIds = new HashSet<>(productsV);
 			reducedIds.retainAll(ids);
 		}
@@ -91,7 +91,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	}
 
 	private void setFilter(int[] filter) {
-		logging.info(this, "setFilter " + logging.getStrings(filter));
+		Logging.info(this, "setFilter " + Logging.getStrings(filter));
 		this.filter = filter;
 
 		if (filter == null)
@@ -105,8 +105,8 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 				filterInverse[filter[i]] = i;
 			}
 
-			logging.info(this, "setFilter: filter, filterInverse " + logging.getStrings(filter) + ", "
-					+ logging.getStrings(filterInverse));
+			Logging.info(this, "setFilter: filter, filterInverse " + Logging.getStrings(filter) + ", "
+					+ Logging.getStrings(filterInverse));
 		}
 
 		fireTableDataChanged();
@@ -117,7 +117,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			return i;
 
 		if (i >= filter.length) {
-			logging.info(this, "originRow, error cannot evaluate filter; i, filter.length " + i + ", " + filter.length);
+			Logging.info(this, "originRow, error cannot evaluate filter; i, filter.length " + i + ", " + filter.length);
 			return i;
 		}
 

@@ -7,8 +7,8 @@ import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 public class PopupMenuTrait extends JPopupMenu {
 
@@ -57,7 +57,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		switch (p) {
 		case POPUP_RELOAD:
 			i = listPopups.indexOf(p);
-			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.reload"),
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.reload"),
 					Globals.createImageIcon("images/reload16.png", ""));
 
 			// not work
@@ -68,7 +68,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_FLOATINGCOPY:
 			i = listPopups.indexOf(p);
-			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.floatingInstance"),
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.floatingInstance"),
 					Globals.createImageIcon("images/edit-copy.png", ""));
 
 			// not work
@@ -80,7 +80,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_SAVE:
 			i = listPopups.indexOf(p);
-			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.save"),
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.save"),
 					Globals.createImageIcon("images/save.png", ""));
 
 			// not work
@@ -91,7 +91,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_SAVE_AS_ZIP:
 			i = listPopups.indexOf(p);
-			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.saveAsZip"),
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.saveAsZip"),
 					Globals.createImageIcon("images/zip-icon.png", ""));
 
 			addItem(p);
@@ -100,7 +100,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_SAVE_LOADED_AS_ZIP:
 			i = listPopups.indexOf(p);
-			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.saveLoadedAsZip"),
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.saveLoadedAsZip"),
 					Globals.createImageIcon("images/zip-icon.png", ""));
 
 			addItem(p);
@@ -109,7 +109,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_SAVE_ALL_AS_ZIP:
 			i = listPopups.indexOf(p);
-			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PopupMenuTrait.saveAllAsZip"),
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PopupMenuTrait.saveAllAsZip"),
 					Globals.createImageIcon("images/zip-icon.png", ""));
 
 			addItem(p);
@@ -118,7 +118,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_PDF:
 			i = listPopups.indexOf(p);
-			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("FGeneralDialog.pdf"),
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
 					Globals.createImageIcon("images/acrobat_reader16.png", ""));
 
 			addItem(p);
@@ -127,7 +127,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_EXPORT_CSV:
 			i = listPopups.indexOf(p);
-			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
 
 			);
 
@@ -137,7 +137,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		case POPUP_EXPORT_SELECTED_CSV:
 			i = listPopups.indexOf(p);
-			menuItems[i] = new JMenuItemFormatted(configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
+			menuItems[i] = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
 
 			);
 
@@ -162,7 +162,7 @@ public class PopupMenuTrait extends JPopupMenu {
 			break;
 
 		default:
-			logging.info(this, "popuptype " + p + " not implemented");
+			Logging.info(this, "popuptype " + p + " not implemented");
 
 		}
 	}
@@ -170,7 +170,7 @@ public class PopupMenuTrait extends JPopupMenu {
 	public void setText(int popup, String s) {
 		int i = listPopups.indexOf(popup);
 		if (i < 0) {
-			logging.info(this, "setText - popup " + popup + " not in list");
+			Logging.info(this, "setText - popup " + popup + " not in list");
 			return;
 		}
 
@@ -180,7 +180,7 @@ public class PopupMenuTrait extends JPopupMenu {
 	public void setToolTipText(int popup, String s) {
 		int i = listPopups.indexOf(popup);
 		if (i < 0) {
-			logging.info(this, "setToolTipText - popup " + popup + " not in list");
+			Logging.info(this, "setToolTipText - popup " + popup + " not in list");
 			return;
 		}
 
@@ -204,6 +204,6 @@ public class PopupMenuTrait extends JPopupMenu {
 	public void action(int p)
 	// should be overwritten for specific actions in subclasses
 	{
-		logging.debug(this, "action called for type " + p);
+		Logging.debug(this, "action called for type " + p);
 	}
 }

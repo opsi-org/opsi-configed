@@ -43,7 +43,7 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.guidata.DependenciesTreeModel;
 
 public class DependenciesTreePanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
@@ -132,11 +132,11 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		dependenciesTreeScrollPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 
 		dependenciesNeedsButton = new JRadioButton(
-				configed.getResourceValue("DependenciesTree.dependenciesNeedsButton"));
+				Configed.getResourceValue("DependenciesTree.dependenciesNeedsButton"));
 		dependenciesNeededByButton = new JRadioButton(
-				configed.getResourceValue("DependenciesTree.dependenciesNeededByButton"));
+				Configed.getResourceValue("DependenciesTree.dependenciesNeededByButton"));
 
-		copyListButton = new JButton(configed.getResourceValue("DependenciesTree.copyListButton"));
+		copyListButton = new JButton(Configed.getResourceValue("DependenciesTree.copyListButton"));
 		copyListButton.setFont(Globals.defaultFont);
 		copyListButton.setForeground(Globals.lightBlack);
 

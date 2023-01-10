@@ -10,7 +10,7 @@ import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHPMInstallPanel extends JPanel {
 	public boolean isOpen = false;
@@ -32,7 +32,7 @@ public class SSHPMInstallPanel extends JPanel {
 		additionalDefaultPaths.add(factory.OPSI_PATH_VAR_REPOSITORY);
 		persist = PersistenceControllerFactory.getPersistenceController();
 		if (persist == null)
-			logging.info(this, "init PersistenceController null");
+			Logging.info(this, "init PersistenceController null");
 		workbench = PersistenceController.configedWORKBENCH_defaultvalue;
 		if (workbench.charAt(workbench.length() - 1) != '/')
 			workbench = workbench + "/";

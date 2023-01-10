@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.text.Document;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class JTextEditorField extends javax.swing.JTextField implements KeyListener {
 	String lastSetS = null;
@@ -22,7 +22,7 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 
 	@Override
 	public void setText(String s) {
-		logging.debug(this, "setText " + s);
+		Logging.debug(this, "setText " + s);
 		if (s == null)
 			lastSetS = "";
 		else

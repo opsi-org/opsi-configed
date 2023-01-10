@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class TableCellRendererDate extends ColorTableCellRenderer {
@@ -42,7 +42,7 @@ public class TableCellRendererDate extends ColorTableCellRenderer {
 				java.util.Date d = java.sql.Timestamp.valueOf((String) value);
 				selectedString = dateFormat.format(d);
 			} catch (Exception ex) {
-				logging.debug(this, " time format exception: " + ex);
+				Logging.debug(this, " time format exception: " + ex);
 			}
 
 		} else {

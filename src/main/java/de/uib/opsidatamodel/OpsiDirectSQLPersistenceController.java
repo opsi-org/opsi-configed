@@ -43,7 +43,7 @@ import de.uib.opsicommand.DbConnect;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersistenceController {
 
@@ -62,11 +62,11 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	@Override
 	public List<Map<java.lang.String, java.lang.Object>> HOST_read() {
 
-		logging.info(this, "HOST_read ");
+		Logging.info(this, "HOST_read ");
 		String query = "select *  from HOST";
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
-		logging.notice(this, "HOST_read");
+		Logging.notice(this, "HOST_read");
 		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();
@@ -141,8 +141,8 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 			}
 		} catch (SQLException e) {
-			logging.info(this, "getLocalBootProductStatesNOM sql Error  in:\n" + query);
-			logging.error("getLocalBootProductStatesNOM sql Error " + e.toString());
+			Logging.info(this, "getLocalBootProductStatesNOM sql Error  in:\n" + query);
+			Logging.error("getLocalBootProductStatesNOM sql Error " + e.toString());
 		}
 
 		return result;
@@ -165,7 +165,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		columns = columns.substring(0, columns.length() - 1);
 
 		String query = "select " + columns + " from " + SWAuditClientEntry.DB_TABLE_NAME + " \n" + " where  state = 1 ";
-		logging.info(this, "cleanUpAuditSoftware query " + query);
+		Logging.info(this, "cleanUpAuditSoftware query " + query);
 
 		try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
@@ -198,7 +198,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 					rowsSOFTWARE_ON_CLIENTS.put(ident, rowmap);
 
 					if (logNext) {
-						logging.info(this,
+						Logging.info(this,
 								"retrieveSoftwareAuditOnClients logging first ident: rowmap " + ident + " : " + rowmap);
 						logNext = false;
 					}
@@ -206,13 +206,13 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 				}
 
 			}
-			logging.info(this, "retrieveSoftwareAuditOnClients, entries read " + counter);
-			logging.info(this, "retrieveSoftwareAuditOnClients, idents  " + rowsSOFTWARE_ON_CLIENTS.size());
+			Logging.info(this, "retrieveSoftwareAuditOnClients, entries read " + counter);
+			Logging.info(this, "retrieveSoftwareAuditOnClients, idents  " + rowsSOFTWARE_ON_CLIENTS.size());
 
 		}
 
 		catch (SQLException e) {
-			logging.error("cleanUpAuditSoftware sql Error " + e.toString());
+			Logging.error("cleanUpAuditSoftware sql Error " + e.toString());
 		}
 
 		java.util.Set<String> swIdentsOnClients = rowsSOFTWARE_ON_CLIENTS.keySet();
@@ -221,7 +221,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		query = "select  name, version, subVersion, language, architecture from SOFTWARE";
 
-		logging.info(this, "cleanUpAuditSoftware, select from SOFTWARE " + " using query: " + query);
+		Logging.info(this, "cleanUpAuditSoftware, select from SOFTWARE " + " using query: " + query);
 
 		try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
@@ -248,19 +248,19 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 				}
 
 			}
-			logging.info(this, "retrieveSoftware, entries read " + counter);
-			logging.info(this, "retrieveSoftware, idents size " + rowsSOFTWARE.size());
+			Logging.info(this, "retrieveSoftware, entries read " + counter);
+			Logging.info(this, "retrieveSoftware, idents size " + rowsSOFTWARE.size());
 		}
 
 		catch (SQLException e) {
-			logging.error("cleanUpAuditSoftware sql Error " + e.toString());
+			Logging.error("cleanUpAuditSoftware sql Error " + e.toString());
 		}
 
 		Set<String> swIdentsOnlyInSoftware = rowsSOFTWARE.keySet();
 
 		swIdentsOnlyInSoftware.removeAll(swIdentsOnClients);
 
-		logging.info(this, "cleanUpAuditSoftware  idents in SOFTWARE not on CLIENTS " + swIdentsOnlyInSoftware.size());
+		Logging.info(this, "cleanUpAuditSoftware  idents in SOFTWARE not on CLIENTS " + swIdentsOnlyInSoftware.size());
 
 		int sizeOfAllRemoves = swIdentsOnlyInSoftware.size();
 
@@ -278,7 +278,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		boolean goOn = (sizeOfAllRemoves > 0);
 
 		while (goOn) {
-			logging.info(this, "cleanUpAuditSoftware remove entries from " + portionStart);
+			Logging.info(this, "cleanUpAuditSoftware remove entries from " + portionStart);
 
 			StringBuilder condition = new StringBuilder();
 
@@ -290,7 +290,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 				Map<String, String> rowmap = rowsSOFTWARE.get(ident);
 				if (logNext) {
-					logging.info(this, "cleanUpAuditSoftware  ident in SOFTWARE not on CLIENTS, ident " + ident
+					Logging.info(this, "cleanUpAuditSoftware  ident in SOFTWARE not on CLIENTS, ident " + ident
 							+ " rowmap \n" + rowmap);
 					logNext = false;
 				}
@@ -307,20 +307,20 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 			condition.append(" false ");
 
-			logging.info(this, "cleanUpAuditSoftware, delete SOFTWARE records");
+			Logging.info(this, "cleanUpAuditSoftware, delete SOFTWARE records");
 			query = "delete  from SOFTWARE where " + condition.toString();
-			logging.debug(this, "cleanUpAuditSoftware, delete SOFTWARE records  by query: \n" + query);
+			Logging.debug(this, "cleanUpAuditSoftware, delete SOFTWARE records  by query: \n" + query);
 
 			try (Statement stat = sqlConn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
 					ResultSet.CONCUR_READ_ONLY)) {
 				int affectedRows = stat.executeUpdate(query);
 
-				logging.info(this, "cleanUpAuditSoftware, deleted " + affectedRows + " in Table SOFTWARE");
+				Logging.info(this, "cleanUpAuditSoftware, deleted " + affectedRows + " in Table SOFTWARE");
 
 				stat.close();
 
 			} catch (SQLException e) {
-				logging.error("cleanUpAuditSoftware sql Error " + e.toString());
+				Logging.error("cleanUpAuditSoftware sql Error " + e.toString());
 			}
 
 			goOn = (portionEnd < sizeOfAllRemoves);
@@ -331,7 +331,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			else
 				portionEnd = sizeOfAllRemoves;
 
-			logging.info(this, "cleanUpAuditSoftware removed entries up to (not including) " + portionStart);
+			Logging.info(this, "cleanUpAuditSoftware removed entries up to (not including) " + portionStart);
 
 		}
 

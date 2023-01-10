@@ -11,7 +11,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 
 public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	public static final String LBLUSER = "lbl_user";
@@ -37,9 +37,9 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 
 	private void initComponents() {
 		jLabelNeedAuthentication
-				.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication"));
+				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication"));
 		jLabelNeedAuthentication.setToolTipText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication.tooltip"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication.tooltip"));
 		jCheckBoxNeedAuthentication = new JCheckBox();
 		jCheckBoxNeedAuthentication.addItemListener(itemEvent -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED)
@@ -47,8 +47,8 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 			else
 				instance.close();
 		});
-		jLabeluser.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.username"));
-		jLabelPassword.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.password"));
+		jLabeluser.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.username"));
+		jLabelPassword.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.password"));
 		((JPasswordField) jTextFieldPassword).setEchoChar('*');
 		jTextFieldUser.setText("");
 		jTextFieldPassword.setText("");

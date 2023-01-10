@@ -11,7 +11,7 @@ import java.util.Set;
 
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.type.SWAuditClientEntry;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataClient implements Client {
 	public static final String HOSTINFO_MAP = "HostMap";
@@ -142,7 +142,7 @@ public class OpsiDataClient implements Client {
 			return false;
 
 		hardwareValue = hardwareIterator.next();
-		logging.debug(this, "hardwareIteratorNext: " + hardwareValue.toString());
+		Logging.debug(this, "hardwareIteratorNext: " + hardwareValue.toString());
 		return true;
 	}
 
@@ -154,13 +154,13 @@ public class OpsiDataClient implements Client {
 	/** Get the hardware Map for this string */
 	private Map getHardwareMap(String key) {
 		if (hardwareIterator == null) {
-			logging.debug(this, "getHardwareMap key " + key);
-			logging.debug(this, "getHardwareMap hardwareInfo " + hardwareInfo);
+			Logging.debug(this, "getHardwareMap key " + key);
+			Logging.debug(this, "getHardwareMap hardwareInfo " + hardwareInfo);
 			HashSet<Map<String, Object>> values = new HashSet<>();
 			for (Map<String, Object> map : hardwareInfo)
 				if (key.equals(map.get("hardwareClass")))
 					values.add(map);
-			logging.debug(this, values.toString());
+			Logging.debug(this, values.toString());
 
 			hardwareValue = null;
 			hardwareIterator = values.iterator();

@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class MapSource implements TableSource
 // based on a regular map (rows indexed by a String key)
@@ -46,14 +46,14 @@ public class MapSource implements TableSource
 	}
 
 	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map> table, boolean rowCounting) {
-		logging.info(this, "constructed with cols " + columnNames);
-		logging.info(this, "constructed with classes " + classNames);
+		Logging.info(this, "constructed with cols " + columnNames);
+		Logging.info(this, "constructed with classes " + classNames);
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		setRowCounting(rowCounting);
 		if (rowCounting) {
-			logging.info(this, "completed to cols " + columnNames);
-			logging.info(this, "completed to classes " + classNames);
+			Logging.info(this, "completed to cols " + columnNames);
+			Logging.info(this, "completed to classes " + classNames);
 		}
 		this.table = table;
 		rows = new ArrayList<>();
@@ -84,7 +84,7 @@ public class MapSource implements TableSource
 				Object ob = mRow.get(columnNames.get(i));
 
 				if (key.startsWith("A"))
-					logging.debug(this, "fetchData for A-key " + key + " col  " + columnNames.get(i) + " index " + i
+					Logging.debug(this, "fetchData for A-key " + key + " col  " + columnNames.get(i) + " index " + i
 							+ " val " + ob);
 
 				if (ob != null) {
@@ -96,20 +96,20 @@ public class MapSource implements TableSource
 						if (!dynInstanceOf(ob, cl)) {
 							// Class.forName( classNames.get(i) ) ).isAssignableFrom ( ob.getClass() ) )
 
-							logging.warning(this, "MapSource fetchData(): data type does not fit");
-							logging.info(this, " ob " + ob + " class " + ob.getClass().getName());
-							logging.info(this, "class should be " + cl);
+							Logging.warning(this, "MapSource fetchData(): data type does not fit");
+							Logging.info(this, " ob " + ob + " class " + ob.getClass().getName());
+							Logging.info(this, "class should be " + cl);
 						}
 					} catch (java.lang.NullPointerException ex) {
-						logging.warning(this,
+						Logging.warning(this,
 								" " + ex + ", could not get dyninstance " + i + ", " + columnNames.get(i));
 					} catch (Exception ex) {
-						logging.error("MapSource fetchData(): class " + classNames.get(i) + " not found, " + ex);
+						Logging.error("MapSource fetchData(): class " + classNames.get(i) + " not found, " + ex);
 					}
 
 				} else {
 					if (mRow.containsKey(columnNames.get(i))) {
-						logging.debug(this, "fetchData row " + mRow + " no value in column  " + columnNames.get(i)
+						Logging.debug(this, "fetchData row " + mRow + " no value in column  " + columnNames.get(i)
 								+ " supplement by null");
 						vRow.add(ob); // we complete the row by null
 					} else {
@@ -125,7 +125,7 @@ public class MapSource implements TableSource
 							}
 
 							else {
-								logging.warning(this,
+								Logging.warning(this,
 										"fetchData row " + mRow
 												+ " ob == null, possibly the column name is not correct, column " + i
 												+ ", " + columnNames.get(i));
@@ -137,7 +137,7 @@ public class MapSource implements TableSource
 			}
 
 			if (key.startsWith("A"))
-				logging.debug(this, "fetchData for A-key " + key + " produced row " + vRow);
+				Logging.debug(this, "fetchData for A-key " + key + " produced row " + vRow);
 
 			rows.add(vRow);
 
@@ -158,12 +158,12 @@ public class MapSource implements TableSource
 
 	@Override
 	public List<List<Object>> retrieveRows() {
-		logging.info(this, " -- retrieveRows");
+		Logging.info(this, " -- retrieveRows");
 		if (reloadRequested) {
 			fetchData();
 			reloadRequested = false;
 		}
-		logging.info(this, " -- retrieveRows rows.size() " + rows.size());
+		Logging.info(this, " -- retrieveRows rows.size() " + rows.size());
 		return rows;
 	}
 

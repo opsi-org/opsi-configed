@@ -22,9 +22,9 @@ import java.util.List;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CertificateManager {
 	private CertificateManager() {
@@ -37,11 +37,11 @@ public class CertificateManager {
 			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
 			cert = (X509Certificate) certFactory.generateCertificate(is);
 		} catch (CertificateException e) {
-			logging.error("unable to parse certificate (format is invalid)");
+			Logging.error("unable to parse certificate (format is invalid)");
 		} catch (FileNotFoundException e) {
-			logging.error("unable to find certificate");
+			Logging.error("unable to find certificate");
 		} catch (IOException e) {
-			logging.error("unable to close certificate");
+			Logging.error("unable to close certificate");
 		}
 
 		return cert;
@@ -53,7 +53,7 @@ public class CertificateManager {
 		final List<File> certificateFiles = new ArrayList<>();
 
 		try {
-			Files.walkFileTree(Paths.get(configed.savedStatesLocationName), new SimpleFileVisitor<Path>() {
+			Files.walkFileTree(Paths.get(Configed.savedStatesLocationName), new SimpleFileVisitor<Path>() {
 				@Override
 				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 					if (matcher.matches(file)) {
@@ -78,11 +78,11 @@ public class CertificateManager {
 			}
 
 			Files.copy(certificateFile.toPath(),
-					new File(configed.savedStatesLocationName, dirname + File.separator + Globals.CERTIFICATE_FILE)
+					new File(Configed.savedStatesLocationName, dirname + File.separator + Globals.CERTIFICATE_FILE)
 							.toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
-			logging.error("unable to save certificate");
+			Logging.error("unable to save certificate");
 		}
 	}
 
@@ -122,7 +122,7 @@ public class CertificateManager {
 			writer.write(certificateContent);
 			writer.flush();
 		} catch (IOException e) {
-			logging.error("unable to write to certificate: " + certificateFile.getAbsolutePath());
+			Logging.error("unable to write to certificate: " + certificateFile.getAbsolutePath());
 		}
 	}
 }

@@ -62,7 +62,7 @@ setting setup with dependencies, also for uninstall
 
 */
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
@@ -71,7 +71,7 @@ import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.LastAction;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * Defining the TableModel for the product table for a specific client. Since we
@@ -160,41 +160,41 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	public static String getColumnTitle(String column) {
 		if (columnDict == null) {
 			columnDict = new HashMap<>();
-			columnDict.put("productId", configed.getResourceValue("InstallationStateTableModel.productId"));
+			columnDict.put("productId", Configed.getResourceValue("InstallationStateTableModel.productId"));
 			columnDict.put(ProductState.KEY_PRODUCT_NAME,
-					configed.getResourceValue("InstallationStateTableModel.productName"));
+					Configed.getResourceValue("InstallationStateTableModel.productName"));
 			columnDict.put(ProductState.KEY_TARGET_CONFIGURATION,
-					configed.getResourceValue("InstallationStateTableModel.targetConfiguration"));
+					Configed.getResourceValue("InstallationStateTableModel.targetConfiguration"));
 			columnDict.put(ProductState.KEY_INSTALLATION_STATUS,
-					configed.getResourceValue("InstallationStateTableModel.installationStatus"));
+					Configed.getResourceValue("InstallationStateTableModel.installationStatus"));
 
-			columnDict.put("installationInfo", configed.getResourceValue("InstallationStateTableModel.report"));
+			columnDict.put("installationInfo", Configed.getResourceValue("InstallationStateTableModel.report"));
 			// combines the following three
 			columnDict.put(ProductState.KEY_ACTION_PROGRESS,
-					configed.getResourceValue("InstallationStateTableModel.actionProgress"));
+					Configed.getResourceValue("InstallationStateTableModel.actionProgress"));
 			columnDict.put(ProductState.KEY_ACTION_RESULT,
-					configed.getResourceValue("InstallationStateTableModel.actionResult"));
+					Configed.getResourceValue("InstallationStateTableModel.actionResult"));
 			columnDict.put(ProductState.KEY_LAST_ACTION,
-					configed.getResourceValue("InstallationStateTableModel.lastAction"));
+					Configed.getResourceValue("InstallationStateTableModel.lastAction"));
 
 			columnDict.put(ProductState.KEY_ACTION_REQUEST,
-					configed.getResourceValue("InstallationStateTableModel.actionRequest"));
+					Configed.getResourceValue("InstallationStateTableModel.actionRequest"));
 			columnDict.put(ProductState.KEY_PRODUCT_PRIORITY,
-					configed.getResourceValue("InstallationStateTableModel.priority"));
+					Configed.getResourceValue("InstallationStateTableModel.priority"));
 			columnDict.put(ProductState.KEY_ACTION_SEQUENCE, "actionSequence");
 
 			columnDict.put(ProductState.KEY_POSITION,
-					configed.getResourceValue("InstallationStateTableModel.position"));
+					Configed.getResourceValue("InstallationStateTableModel.position"));
 
 			columnDict.put(ProductState.KEY_VERSION_INFO, "Version");
 			// combines the following two
 			columnDict.put(ProductState.KEY_PRODUCT_VERSION,
-					configed.getResourceValue("InstallationStateTableModel.productVersion"));
+					Configed.getResourceValue("InstallationStateTableModel.productVersion"));
 			columnDict.put(ProductState.KEY_PACKAGE_VERSION,
-					configed.getResourceValue("InstallationStateTableModel.packageVersion"));
+					Configed.getResourceValue("InstallationStateTableModel.packageVersion"));
 
 			columnDict.put(ProductState.KEY_LAST_STATE_CHANGE,
-					configed.getResourceValue("InstallationStateTableModel.lastStateChange"));
+					Configed.getResourceValue("InstallationStateTableModel.lastStateChange"));
 
 		}
 
@@ -220,11 +220,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions, // product-->possibleActions
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
-		logging.info(this, "creating an InstallationStateTableModel ");
+		Logging.info(this, "creating an InstallationStateTableModel ");
 		if (statesAndActions == null)
-			logging.info(this, " statesAndActions null ");
+			Logging.info(this, " statesAndActions null ");
 		else
-			logging.info(this, " statesAndActions " + statesAndActions.size());
+			Logging.info(this, " statesAndActions " + statesAndActions.size());
 
 		this.main = main;
 
@@ -257,7 +257,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		tsProductNames.addAll(productNamesInDeliveryOrder);
 		productsV = new ArrayList<>(tsProductNames);
 
-		logging.debug(this, "tsProductNames " + tsProductNames);
+		Logging.debug(this, "tsProductNames " + tsProductNames);
 
 		initalizeProductStates(statesAndActions);
 	}
@@ -309,7 +309,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				Map<String, String> stateAndAction = allClientsProductStates.get(clientId).get(productId);
 
 				if (stateAndAction == null) {
-					logging.warning(this,
+					Logging.warning(this,
 							"produceVisualStatesFromExistingEntries, no row for " + clientId + ", " + productId);
 					continue;
 				}
@@ -331,7 +331,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				for (String colKey : ProductState.KEYS) {
 
 					if (colKey.equals(ProductState.KEY_ACTION_REQUEST)) {
-						logging.debug(this, " ------------before   mixtovisualstate " + "product " + productId
+						Logging.debug(this, " ------------before   mixtovisualstate " + "product " + productId
 								+ " value " + stateAndAction.get(colKey));
 					}
 
@@ -471,14 +471,14 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		editablePreparedColumns[15] = false;
 
 		if (columnsToDisplay == null) {
-			logging.error(this, "columnsToDisplay are null");
+			Logging.error(this, "columnsToDisplay are null");
 			return;
 		}
 
 		displayColumns = columnsToDisplay;
 
-		logging.info(this, "preparedColumns:  " + preparedColumns);
-		logging.info(this, "columnsToDisplay: " + columnsToDisplay);
+		Logging.info(this, "preparedColumns:  " + preparedColumns);
+		Logging.info(this, "columnsToDisplay: " + columnsToDisplay);
 
 		indexPreparedColumns = new int[columnsToDisplay.size()];
 		columnTitles = new ArrayList<>();
@@ -487,14 +487,14 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		int j = 0;
 		while (iter.hasNext()) {
 			String column = iter.next();
-			logging.debug(this, " ------- treat column " + column);
+			Logging.debug(this, " ------- treat column " + column);
 			int k = preparedColumns.indexOf(column);
 			if (k >= 0) {
 				indexPreparedColumns[j] = k;
-				logging.debug(this, "indexPreparedColumns of displayColumn " + j + " is " + k);
+				Logging.debug(this, "indexPreparedColumns of displayColumn " + j + " is " + k);
 				columnTitles.add(getColumnTitle(column));
 			} else {
-				logging.info(this, "column " + column + " is not prepared");
+				Logging.info(this, "column " + column + " is not prepared");
 				columnTitles.add(column);
 			}
 
@@ -502,7 +502,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		}
 
 		numberOfColumns = displayColumns.size();
-		logging.info(this, " -------- numberOfColumns " + numberOfColumns);
+		Logging.info(this, " -------- numberOfColumns " + numberOfColumns);
 
 	}
 
@@ -533,7 +533,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	private void setInstallationInfo(String clientId, String product, String value) {
-		logging.debug(this,
+		Logging.debug(this,
 				"setInstallationInfo for product, client, value " + product + ", " + clientId + ", " + value);
 
 		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.get(clientId);
@@ -586,16 +586,16 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		}
 
-		logging.debug(this, "checkForContradictingAssignments === product2request " + product2request);
+		Logging.debug(this, "checkForContradictingAssignments === product2request " + product2request);
 
 		String existingRequest = product2request.get(product);
 		String info = " existingRequest " + existingRequest;
 
-		logging.info(this, "checkForContradictingAssignments " + info + " state " + state);
+		Logging.info(this, "checkForContradictingAssignments " + info + " state " + state);
 
 		if (existingRequest == null || existingRequest.equals("")) {
 			product2request.put(product, state);
-			logging.debug(this, "checkForContradictingAssignments client " + clientId + ", actualproduct "
+			Logging.debug(this, "checkForContradictingAssignments client " + clientId + ", actualproduct "
 					+ actualProduct + ", product " + product + ", stateType " + stateType + ", state " + state);
 
 		}
@@ -606,17 +606,17 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					+ " contradicting " + contradicting;
 			if (contradicting) {
 				if (actualProduct.equals(product)) {
-					logging.info(this, "checkForContradictingAssignments new setting for product is " + state);
+					Logging.info(this, "checkForContradictingAssignments new setting for product is " + state);
 					product2request.put(product, state);
 
 					final String infoOfChange = String.format(
-							configed.getResourceValue("InstallationStateTableModel.contradictingProductRequirements3"),
+							Configed.getResourceValue("InstallationStateTableModel.contradictingProductRequirements3"),
 							actualProduct, existingRequest, state);
 					new Thread() {
 						@Override
 						public void run() {
 							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, infoOfChange,
-									configed.getResourceValue(
+									Configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
 						}
@@ -624,7 +624,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 				} else {
 
-					logging.warning(this,
+					Logging.warning(this,
 							"checkForContradictingAssignments " + info + " client " + clientId + ", actualproduct "
 									+ actualProduct + ", product " + product + ", stateType " + stateType + ", state "
 									+ state);
@@ -635,10 +635,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					// but a different product set it to %s
 
 					final String errorInfo = String.format(
-							configed.getResourceValue("InstallationStateTableModel.contradictingProductRequirements1"),
+							Configed.getResourceValue("InstallationStateTableModel.contradictingProductRequirements1"),
 							actualProduct, product, state)
 							+ String.format(
-									configed.getResourceValue(
+									Configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements2"),
 									existingRequest);
 
@@ -646,7 +646,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 						@Override
 						public void run() {
 							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, errorInfo,
-									configed.getResourceValue(
+									Configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
 						}
@@ -657,7 +657,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		}
 
-		logging.info(this, "checkForContradictingAssignments === onGoingCollectiveChangeEventCount: product2request "
+		Logging.info(this, "checkForContradictingAssignments === onGoingCollectiveChangeEventCount: product2request "
 				+ onGoingCollectiveChangeEventCount + ": " + product2request);
 	}
 
@@ -674,7 +674,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			changedStatesForClient.put(product, changedStatesForProduct);
 		}
 
-		logging.info(this, "accumulateProductRequests4event");
+		Logging.info(this, "accumulateProductRequests4event");
 		checkForContradictingAssignments(clientId, product, stateType, state);
 
 		changedStatesForProduct.put(stateType, state);
@@ -699,8 +699,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		if (selectedClients.length == 0) {
 			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
-					configed.getResourceValue("InstallationStateTableModel.noClientsSelected"),
-					configed.getResourceValue("InstallationStateTableModel.noClientsSelected.title"),
+					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected"),
+					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected.title"),
 					javax.swing.JOptionPane.INFORMATION_MESSAGE);
 			return true;
 		}
@@ -716,7 +716,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	@Override
 	public void initCollectiveChange() {
-		logging.debug(this, "initCollectiveChange");
+		Logging.debug(this, "initCollectiveChange");
 		setOnGoingCollectiveChangeCount();
 		missingImplementationForAR.clear();
 	}
@@ -724,15 +724,15 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	private void tellAndClearMissingProducts(String productId) {
 		if (!missingProducts.isEmpty()) {
 
-			logging.info(this, "required by product " + productId + " but missing " + missingProducts);
+			Logging.info(this, "required by product " + productId + " but missing " + missingProducts);
 
 			StringBuilder lines = new StringBuilder();
 
-			lines.append(configed.getResourceValue("InstallationStateTableModel.requiredByProduct"));
+			lines.append(Configed.getResourceValue("InstallationStateTableModel.requiredByProduct"));
 			lines.append("\n");
 			lines.append(productId);
 			lines.append("\n\n");
-			lines.append(configed.getResourceValue("InstallationStateTableModel.missingProducts"));
+			lines.append(Configed.getResourceValue("InstallationStateTableModel.missingProducts"));
 			lines.append("\n");
 
 			for (String p : missingProducts) {
@@ -742,7 +742,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 			final de.uib.configed.gui.FShowList fMissingProducts = new de.uib.configed.gui.FShowList(Globals.mainFrame,
 					Globals.APPNAME + ": "
-							+ configed.getResourceValue("InstallationStateTableModel.missingProducts.title"),
+							+ Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"),
 					true, new String[] { "ok" }, 400, 300);
 			fMissingProducts.setMessage(lines.toString());
 			fMissingProducts.setAlwaysOnTop(true);
@@ -754,9 +754,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	@Override
 	public void finishCollectiveChange() {
-		logging.info(this, "finishCollectiveChange");
+		Logging.info(this, "finishCollectiveChange");
 
-		logging.debug(this, "finishCollectiveChange, changes " + collectChangedStates);
+		Logging.debug(this, "finishCollectiveChange, changes " + collectChangedStates);
 
 		if (!missingImplementationForAR.isEmpty()) {
 
@@ -767,9 +767,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			}
 
 			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
-					configed.getResourceValue("InstallationStateTableModel.missingImplementationForActionRequest")
+					Configed.getResourceValue("InstallationStateTableModel.missingImplementationForActionRequest")
 							+ products,
-					configed.getResourceValue(
+					Configed.getResourceValue(
 							"InstallationStateTableModel.missingImplementationForActionRequest.title"),
 					javax.swing.JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -815,7 +815,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	@Override
 	public void collectiveChangeActionRequest(String productId, ActionRequest ar) {
 
-		logging.info(this, "collectiveChangeActionRequest for product " + productId + " to " + ar);
+		Logging.info(this, "collectiveChangeActionRequest for product " + productId + " to " + ar);
 
 		if (!checkActionIsSupported(productId, ar))
 			return;
@@ -823,25 +823,25 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		initChangeActionRequests();
 
 		if ((possibleActions == null) || ((possibleActions.get(productId).indexOf(ar.toString())) < 0)) {
-			logging.error(" the required action is not supported for " + productId);
+			Logging.error(" the required action is not supported for " + productId);
 			return;
 		}
 
 		for (String clientId : selectedClients) {
-			logging.debug(this, "collectiveChangeActionRequest to " + ar + "  for client " + clientId);
+			Logging.debug(this, "collectiveChangeActionRequest to " + ar + "  for client " + clientId);
 			setActionRequest(ar, productId, clientId);
 			recursivelyChangeActionRequest(clientId, productId, ar);
 		}
 
-		logging.debug(this, "collectiveChangeActionRequest for product, changed products "
+		Logging.debug(this, "collectiveChangeActionRequest for product, changed products "
 				+ product2setOfClientsWithNewAction.keySet());
 
 		// show the new settings for all products after recursion
 
 		for (String prod : product2setOfClientsWithNewAction.keySet()) {
-			logging.debug(this, "collectiveChangeActionRequest for product  " + prod
+			Logging.debug(this, "collectiveChangeActionRequest for product  " + prod
 					+ " changed product for client number : " + product2setOfClientsWithNewAction.get(prod).size());
-			logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.length);
+			Logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.length);
 
 			// all clients " + ar + " for " + prod + " instead of " +
 
@@ -885,7 +885,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	// adds the new value to the collection of changed states
 	// calls the dependencies for the next turn
 	{
-		logging.debug(this, "recursivelyChangeActionRequest " + clientId + ", " + product + ", " + ar);
+		Logging.debug(this, "recursivelyChangeActionRequest " + clientId + ", " + product + ", " + ar);
 
 		setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
 
@@ -901,9 +901,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// of visible action in combined actions
 
 		int modelRow = getRowFromProductID(product);
-		logging.debug(this, "recursivelyChangeActionRequest product " + product + " modelRow " + modelRow);
+		Logging.debug(this, "recursivelyChangeActionRequest product " + product + " modelRow " + modelRow);
 		if (modelRow > -1) {
-			logging.debug(this, "recursivelyChangeActionRequest fire update for row  " + modelRow);
+			Logging.debug(this, "recursivelyChangeActionRequest fire update for row  " + modelRow);
 
 			// tell the table model listeners where a change occurred
 			fireTableRowsUpdated(modelRow, modelRow);
@@ -911,27 +911,27 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			// where a change occurred
 		}
 
-		logging.debug(this, " change action request for client " + clientId + ",  product " + product + " to " + ar);
+		Logging.debug(this, " change action request for client " + clientId + ",  product " + product + " to " + ar);
 		if (ar.getVal() == ActionRequest.NONE) {
 			// don't follow
 		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
-			logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product " + product);
+			Logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product " + product);
 
 			Map<String, String> requirements = persist.getProductDeinstallRequirements(null, product);
-			logging.debug(this, "ProductRequirements for uninstall for " + product + ": " + requirements);
+			Logging.debug(this, "ProductRequirements for uninstall for " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		} else {
 
 			Map<String, String> requirements = persist.getProductPreRequirements(null, product);
-			logging.debug(this, "ProductPreRequirements for  " + product + ": " + requirements);
+			Logging.debug(this, "ProductPreRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 
 			requirements = persist.getProductRequirements(null, product);
-			logging.debug(this, "ProductRequirements for  " + product + ": " + requirements);
+			Logging.debug(this, "ProductRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 
 			requirements = persist.getProductPostRequirements(null, product);
-			logging.debug(this, "ProductPostRequirements for  " + product + ": " + requirements);
+			Logging.debug(this, "ProductPostRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 
 		}
@@ -943,10 +943,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		String requiredAction;
 		String requiredState;
 
-		logging.info(this, "-- followRequirements for client " + clientId + " requirements " + requirements);
+		Logging.info(this, "-- followRequirements for client " + clientId + " requirements " + requirements);
 
 		for (String requiredProduct : requirements.keySet()) {
-			logging.debug(this, "requiredProduct: " + requiredProduct);
+			Logging.debug(this, "requiredProduct: " + requiredProduct);
 			requirement = requirements.get(requiredProduct);
 			requiredAction = ActionRequest.getLabel(ActionRequest.NONE);
 			requiredState = InstallationStatus.getLabel(InstallationStatus.UNDEFINED);
@@ -957,16 +957,16 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				requiredAction = requirement.substring(colonpos + 1);
 			}
 
-			logging.debug(this, "followRequirements, required product: " + requiredProduct);
-			logging.debug(this, "followRequirements, required action: " + requiredAction);
-			logging.debug(this, "followRequirements, required state: " + requiredState);
+			Logging.debug(this, "followRequirements, required product: " + requiredProduct);
+			Logging.debug(this, "followRequirements, required action: " + requiredAction);
+			Logging.debug(this, "followRequirements, required state: " + requiredState);
 
 			if (!tsProductNames.contains(requiredProduct)) {
-				logging.warning("followRequirements: required product: '" + requiredProduct + "' not installable");
+				Logging.warning("followRequirements: required product: '" + requiredProduct + "' not installable");
 				missingProducts.add(requiredProduct);
 			} else {
 				if (getChangedState(clientId, requiredProduct, ActionRequest.KEY) != null) {
-					logging.debug(this,
+					Logging.debug(this,
 							"required product: '" + requiredProduct + "'  has already been treated - stop recursion");
 				}
 
@@ -976,7 +976,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
 				if (productStates != null) {
 					Map<String, String> stateAndAction = productStates.get(requiredProduct);
-					logging.debug(this, "---- stateAndAction " + stateAndAction);
+					Logging.debug(this, "---- stateAndAction " + stateAndAction);
 
 					if (stateAndAction == null)
 						stateAndAction = new ProductState(null);
@@ -984,22 +984,22 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					if (stateAndAction != null) {
 						String actionRequestForRequiredProduct = stateAndAction.get(ActionRequest.KEY);
 
-						logging.debug(this, "---- stateAndAction until now: ActionRequest for requiredProduct "
+						Logging.debug(this, "---- stateAndAction until now: ActionRequest for requiredProduct "
 								+ actionRequestForRequiredProduct);
 
 						String installationStatusOfRequiredProduct = stateAndAction.get(InstallationStatus.KEY);
 
-						logging.debug(this, "---- stateAndAction until now: InstallationStatus for requiredProduct "
+						Logging.debug(this, "---- stateAndAction until now: InstallationStatus for requiredProduct "
 								+ installationStatusOfRequiredProduct);
 
-						logging.debug(this, "requiredAction " + requiredAction);
-						logging.debug(this,
+						Logging.debug(this, "requiredAction " + requiredAction);
+						Logging.debug(this,
 								"ActionRequest.getVal(requiredAction) " + ActionRequest.getVal(requiredAction));
 						int requiredAR = ActionRequest.getVal(requiredAction);
 
 						int requiredIS = InstallationStatus.getVal(requiredState);
 
-						logging.debug(this,
+						Logging.debug(this,
 								" requiredInstallationsStatus " + InstallationStatus.getDisplayLabel(requiredIS));
 
 						// handle state requests
@@ -1011,10 +1011,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 						{
 
 							String requiredStatusS = InstallationStatus.getLabel(requiredIS);
-							logging.debug(this, " requiredStatusS " + requiredStatusS);
+							Logging.debug(this, " requiredStatusS " + requiredStatusS);
 							String neededAction = de.uib.opsidatamodel.productstate.Config
 									.getInstance().requiredActionForStatus.get(requiredStatusS);
-							logging.debug(this, " needed action therefore " + neededAction);
+							Logging.debug(this, " needed action therefore " + neededAction);
 
 							requiredAR = ActionRequest.getVal(neededAction);
 						}
@@ -1030,7 +1030,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 							if (
 							// an action is required and already set
 							ActionRequest.getVal(actionRequestForRequiredProduct) == requiredAR) {
-								logging.info(this, "followRequirements:   no change of action request necessary for "
+								Logging.info(this, "followRequirements:   no change of action request necessary for "
 										+ requiredProduct);
 							}
 
@@ -1039,15 +1039,15 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 										ActionRequest.KEY);
 
 								if (alreadyExistingNewActionRequest != null) {
-									logging.info(this,
+									Logging.info(this,
 											"required product: '" + requiredProduct + "'  has already been treated");
-									logging.info(this, "new action was " + alreadyExistingNewActionRequest);
+									Logging.info(this, "new action was " + alreadyExistingNewActionRequest);
 
 									// already set for clientId, product "
 
 								} else {
 
-									logging.info(this, "ar:   ===== recursion into " + requiredProduct);
+									Logging.info(this, "ar:   ===== recursion into " + requiredProduct);
 									recursivelyChangeActionRequest(clientId, requiredProduct,
 											new ActionRequest(requiredAR));
 								}
@@ -1078,7 +1078,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		if (column == displayColumns.indexOf(ActionRequest.KEY)) // selection of actions
 		{
-			logging.debug(this, " possible actions  " + possibleActions);
+			Logging.debug(this, " possible actions  " + possibleActions);
 			String[] actionsForProduct = null;
 			if (possibleActions != null) {
 				List<String> actionList = new ArrayList<>();
@@ -1102,7 +1102,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 				actionsForProduct = actionList.toArray(new String[0]);
 
-				logging.debug("Possible actions as array  " + actionsForProduct);
+				Logging.debug("Possible actions as array  " + actionsForProduct);
 			}
 
 			if (actionsForProduct == null)
@@ -1323,7 +1323,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	 */
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		logging.debug(this, " actualProduct " + actualProduct + ", set value at " + row + ", " + col);
+		Logging.debug(this, " actualProduct " + actualProduct + ", set value at " + row + ", " + col);
 		changeValueAt(value, row, col);
 		fireTableCellUpdated(row, col);
 
@@ -1334,7 +1334,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		if (value != null)
 			cl = value.getClass().toString();
 
-		logging.debug(this, "actual product " + actualProduct + ", setting value at " + row + "," + col + " to " + value
+		Logging.debug(this, "actual product " + actualProduct + ", setting value at " + row + "," + col + " to " + value
 				+ " (an instance of " + cl + ")");
 
 		infoIfNoClientsSelected();

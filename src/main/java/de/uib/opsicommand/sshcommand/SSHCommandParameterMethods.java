@@ -20,9 +20,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.ValueSelectorList;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
@@ -42,7 +42,7 @@ import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
  */
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
 
 /**
@@ -59,21 +59,21 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	private ConfigedMain main;
 	private static SSHCommandParameterMethods instance;
 
-	public static final String method_interactiveElement = configed
+	public static final String method_interactiveElement = Configed
 			.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv");
-	public static final String method_getSelectedClientNames = configed
+	public static final String method_getSelectedClientNames = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getSelectedClientNames");
-	public static final String method_getSelectedClientIPs = configed
+	public static final String method_getSelectedClientIPs = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getSelectedClientIPs");
-	public static final String method_getSelectedDepotNames = configed
+	public static final String method_getSelectedDepotNames = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getSelectedDepotNames");
-	public static final String method_getSelectedDepotIPs = configed
+	public static final String method_getSelectedDepotIPs = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getSelectedDepotIPs");
-	public static final String method_getConfigServerName = configed
+	public static final String method_getConfigServerName = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getConfigServerName");
-	public static final String method_getConnectedSSHServerName = configed
+	public static final String method_getConnectedSSHServerName = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getConnectedSSHServerName");
-	public static final String method_optionSelection = configed
+	public static final String method_optionSelection = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.optionSelection");
 
 	protected static final Map<String, String> methods = new HashMap<>();
@@ -148,7 +148,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	SSHConnectionOutputDialog outputDia = null;
 
 	public SSHCommand parseParameter(final SSHCommand command, SSHConnect caller) {
-		logging.info(this, "parseParameter command " + command.getCommandRaw());
+		Logging.info(this, "parseParameter command " + command.getCommandRaw());
 		if (caller instanceof SSHConnectExec)
 			outputDia = ((SSHConnectExec) caller).getDialog();
 		else if (caller instanceof SSHConnectTerminal)
@@ -162,16 +162,16 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 					if (result == null) {
 						canceled = true;
 					} else {
-						logging.debug(this, "parseParameter command " + command.getCommandRaw());
-						logging.debug(this, "parseParameter param " + param);
-						logging.debug(this, "parseParameter result " + result);
+						Logging.debug(this, "parseParameter command " + command.getCommandRaw());
+						Logging.debug(this, "parseParameter param " + param);
+						Logging.debug(this, "parseParameter result " + result);
 						(command).setCommand(command.getCommandRaw().replace(param, result));
-						logging.debug(this, "parseParameter command " + command.getCommandRaw());
+						Logging.debug(this, "parseParameter command " + command.getCommandRaw());
 					}
 				}
 
 			}
-		logging.info(this, "parseParameter command " + command.getCommandRaw());
+		Logging.info(this, "parseParameter command " + command.getCommandRaw());
 		return command;
 	}
 
@@ -185,7 +185,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		String result = callMethod(splitted_parameter[0], splitted_parameter[1]);
 		result = result.contains("ssh://") ? result.replace("ssh://", "") : result;
 		if (result == null)
-			return configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
+			return Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
 		return result;
 	}
 
@@ -203,23 +203,23 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	public String[] splitParameter(String m) {
-		logging.info(this, "splitParameter param " + m);
+		Logging.info(this, "splitParameter param " + m);
 		if ((m.startsWith(replacement_default_1)) && (m.contains(replacement_default_2))) {
 			m = m.replace(replacement_default_1, "").replace(replacement_default_2, "");
 		}
 
-		logging.info(this, "splitParameter param " + m);
+		Logging.info(this, "splitParameter param " + m);
 		String[] splitted = new String[2];
 		splitted[0] = m;
 		splitted[1] = "";
 
 		if (m.contains(param_splitter_default)) {
 			splitted[0] = m.split(param_splitter_default)[0];
-			logging.info(this, "splitParameter method " + splitted[0]);
+			Logging.info(this, "splitParameter method " + splitted[0]);
 
-			logging.info(this, "splitParameter method " + splitted[0]);
+			Logging.info(this, "splitParameter method " + splitted[0]);
 			splitted[1] = m.split(param_splitter_default)[1];
-			logging.info(this, "splitParameter format " + splitted[1]);
+			Logging.info(this, "splitParameter format " + splitted[1]);
 		}
 		return splitted;
 
@@ -236,14 +236,14 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	private String callMethod(String method, String format) {
-		logging.info(this, "callMethod method " + method + " format " + format);
+		Logging.info(this, "callMethod method " + method + " format " + format);
 		String result = "";
 		method = method.trim();
 		if (method.equals(methods.get(method_getSelectedClientNames))) {
-			logging.info(this, "getSelected_clientnames " + getSelected_clientnames());
+			Logging.info(this, "getSelected_clientnames " + getSelected_clientnames());
 			result = formatResult(getSelected_clientnames(), format);
 		} else if (method.equals(methods.get(method_getSelectedClientIPs))) {
-			logging.info(this, "getSelected_clientIPs " + getSelected_clientIPs());
+			Logging.info(this, "getSelected_clientIPs " + getSelected_clientIPs());
 			result = formatResult(getSelected_clientIPs(), format);
 		} else if (method.equals(methods.get(method_getSelectedDepotNames))) {
 			result = formatResult(getSelected_depotnames(), format);
@@ -255,10 +255,10 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			result = formatResult(getConfig_sshserverName(), format);
 		} else if (method.contains("ssh://")) {
 			result = getSelectedValue(method);
-			logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
+			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
 		} else if (format.equals("")) {
 			result = getUserText(method, outputDia);
-			logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
+			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
 		}
 
 		return result;
@@ -273,7 +273,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	private String formatResult(String[] result, String format) {
 		String formated_result = "";
 		String f = format.replace(" ", "");
-		logging.info(this, "callMethod format f " + f);
+		Logging.info(this, "callMethod format f " + f);
 		switch (f) {
 		case "xyz":
 		case "xyz...":
@@ -290,38 +290,38 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 		case "'x''y''z'":
 		case "'x''y''z''...'":
-			logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
+			Logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
 			formated_result = createFormattedDataSourceString(result, "'", brackets_none, " ");
 			break;
 		case "'x','y','z'":
 		case "'x','y','z','...'":
-			logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
+			Logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
 			formated_result = createFormattedDataSourceString(result, "'", brackets_none, ",");
 			break;
 		case "\"x\"\"y\"\"z\"":
 		case "\"x\"\"y\"\"z\"\"...\"":
-			logging.info(this, "formatResult switch case [4] " + "\"x\"\"y\"\"z\"\"...\"" + " || " + "\"x\"\"y\"\"z\"");
+			Logging.info(this, "formatResult switch case [4] " + "\"x\"\"y\"\"z\"\"...\"" + " || " + "\"x\"\"y\"\"z\"");
 			formated_result = createFormattedDataSourceString(result, "\"", brackets_none, " ");
 			break;
 		case "\"x\",\"y\",\"z\"":
 		case "\"x\",\"y\",\"z\",\"...\"":
-			logging.info(this,
+			Logging.info(this,
 					"formatResult switch case [5] " + "\"x\",\"y\",\"z\",\"...\"" + " || " + "\"x\",\"y\",\"z\"");
 			formated_result = createFormattedDataSourceString(result, "\"", brackets_none, ",");
 			break;
 		case "['x','y','z']":
 		case "['x','y','z','...']":
-			logging.info(this, "formatResult switch case [5] " + "['x','y','z']" + " || " + "['x','y','z','...']");
+			Logging.info(this, "formatResult switch case [5] " + "['x','y','z']" + " || " + "['x','y','z','...']");
 			formated_result = createFormattedDataSourceString(result, "'", brackets_square, ",");
 			break;
 		case "[\"x\",\"y\",\"z\"]":
 		case "[\"x\",\"y\",\"z\",\"...\"]":
-			logging.info(this,
+			Logging.info(this,
 					"formatResult switch case [5] " + "[\"x\",\"y\",\"z\"]" + " || " + "[\"x\",\"y\",\"z\",\"...\"]");
 			formated_result = createFormattedDataSourceString(result, "\"", brackets_square, ",");
 			break;
 		default:
-			logging.warning(this, "cannot format into \"" + format + "\" with \"" + Arrays.toString(result) + "\"");
+			Logging.warning(this, "cannot format into \"" + format + "\" with \"" + Arrays.toString(result) + "\"");
 			break;
 		}
 		return formated_result;
@@ -335,11 +335,11 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		String formated_result = "!!!Error!!!";
 		try {
 			strArr = replaceElements(strArr, begin_end_element);
-			logging.info(this, "createFormattedDataSourceString[ ]  strArr " + Arrays.toString(strArr));
+			Logging.info(this, "createFormattedDataSourceString[ ]  strArr " + Arrays.toString(strArr));
 			formated_result = createStringOfArray(strArr, begin_end_str, separator);
-			logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formated_result);
+			Logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formated_result);
 		} catch (Exception e) {
-			logging.error("Error", e);
+			Logging.error("Error", e);
 		}
 		return formated_result;
 	}
@@ -348,7 +348,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		for (int i = 0; i < strArrToReplace.length; i++) {
 			strArrToReplace[i] = strArrToReplace[i].replace(strArrToReplace[i],
 					begin_end_ofElement + strArrToReplace[i] + begin_end_ofElement);
-			logging.info(this, "formatResult[] result[i] " + strArrToReplace[i]);
+			Logging.info(this, "formatResult[] result[i] " + strArrToReplace[i]);
 		}
 		return strArrToReplace;
 	}
@@ -356,8 +356,8 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	private String createStringOfArray(String[] strArrToReplace, String begin_end_ofStr, String separator) {
 		String result;
 
-		logging.info(this, "createStringOfArray strArrToReplace " + strArrToReplace);
-		logging.info(this, "createStringOfArray strArrToReplace.length " + strArrToReplace.length + "if statement: "
+		Logging.info(this, "createStringOfArray strArrToReplace " + strArrToReplace);
+		Logging.info(this, "createStringOfArray strArrToReplace.length " + strArrToReplace.length + "if statement: "
 				+ (strArrToReplace.length > 1));
 		if (strArrToReplace.length > 1) {
 			result = Arrays.toString(strArrToReplace).replace("[", begin_end_ofStr.split("x")[0])
@@ -366,7 +366,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			result = Arrays.toString(strArrToReplace).replace("[", begin_end_ofStr.split("x")[0]).replace("]",
 					begin_end_ofStr.split("x")[1]);
 		}
-		logging.info(this, "createStringOfArray result " + result);
+		Logging.info(this, "createStringOfArray result " + result);
 		return result;
 	}
 
@@ -381,7 +381,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	protected String getUserText(String text, Component dialog) {
 		if (dialog == null)
 			dialog = Globals.mainFrame;
-		logging.debug(this, "getUserText text " + text);
+		Logging.debug(this, "getUserText text " + text);
 		final JTextField field = new JTextField();
 
 		final JOptionPane opPane = new JOptionPane(new Object[] { new JLabel(text), field },
@@ -393,7 +393,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			}
 		};
 		final JDialog jdialog = opPane.createDialog(dialog,
-				Globals.APPNAME + " " + configed.getResourceValue("SSHConnection.ParameterDialog.Input"));
+				Globals.APPNAME + " " + Configed.getResourceValue("SSHConnection.ParameterDialog.Input"));
 		jdialog.setSize(400, 150);
 		jdialog.setVisible(true);
 
@@ -407,11 +407,11 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		List<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots)
 			if (depot.startsWith(ConfigedMain.HOST)) {
-				logging.debug(this, "getConfig_serverName " + ConfigedMain.HOST);
+				Logging.debug(this, "getConfig_serverName " + ConfigedMain.HOST);
 				return depot;
 			}
 
-		logging.debug(this, "getConfig_serverName " + ConfigedMain.HOST);
+		Logging.debug(this, "getConfig_serverName " + ConfigedMain.HOST);
 		//// peristancecontroller methods for depot :
 
 		return ConfigedMain.HOST;
@@ -419,18 +419,18 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	@Override
 	public String getConfig_sshserverName() {
-		logging.debug(this, "getConfig_sshserverName " + SSHConnectionInfo.getInstance().getHost());
+		Logging.debug(this, "getConfig_sshserverName " + SSHConnectionInfo.getInstance().getHost());
 		return SSHConnectionInfo.getInstance().getHost();
 	}
 
 	public String[] getSelected_clientIPs() {
-		logging.debug(this, "getSelected_clientIPs " + Arrays.toString(main.getSelectedClients()));
+		Logging.debug(this, "getSelected_clientIPs " + Arrays.toString(main.getSelectedClients()));
 		String[] clientnames = new String[main.getSelectedClients().length];
 		System.arraycopy(main.getSelectedClients(), 0, clientnames, 0, main.getSelectedClients().length);
 		if (clientnames != null)
-			logging.debug(this, "getSelected_clientIPs clientlist != null ");
+			Logging.debug(this, "getSelected_clientIPs clientlist != null ");
 		else
-			logging.debug(this, "getSelected_clientIPs clientlist == null ");
+			Logging.debug(this, "getSelected_clientIPs clientlist == null ");
 		String[] clientIPs = new String[clientnames.length];
 		int counter = 0;
 		for (String name : clientnames) {
@@ -440,7 +440,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 				clientIPs[counter] = hostInfo.getIpAddress();
 				counter++;
 			} else
-				logging.debug(this, "getSelected_clientIPs host " + name + " HostInfo null");
+				Logging.debug(this, "getSelected_clientIPs host " + name + " HostInfo null");
 
 		}
 		return clientIPs;
@@ -448,7 +448,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	@Override
 	public String[] getSelected_clientnames() {
-		logging.debug(this, "getSelected_clientnames  " + Arrays.toString(main.getSelectedClients()));
+		Logging.debug(this, "getSelected_clientnames  " + Arrays.toString(main.getSelectedClients()));
 		String[] clientnames = new String[main.getSelectedClients().length];
 		System.arraycopy(main.getSelectedClients(), 0, clientnames, 0, main.getSelectedClients().length);
 		return clientnames;
@@ -456,24 +456,24 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	@Override
 	public String[] getSelected_depotnames() {
-		logging.debug(this, "getSelected_depotnames  " + main.getSelectedDepots());
+		Logging.debug(this, "getSelected_depotnames  " + main.getSelectedDepots());
 		return main.getSelectedDepots();
 	}
 
 	public String[] getSelected_depotIPs() {
-		logging.debug(this, "getSelected_depotIPs " + main.getSelectedDepots());
+		Logging.debug(this, "getSelected_depotIPs " + main.getSelectedDepots());
 		String[] depotnames = new String[main.getSelectedDepots().length];
 		System.arraycopy(main.getSelectedDepots(), 0, depotnames, 0, main.getSelectedDepots().length);
 		if (depotnames != null)
-			logging.debug(this, "getSelected_depotIPs depotnames != null ");
+			Logging.debug(this, "getSelected_depotIPs depotnames != null ");
 		else
-			logging.debug(this, "getSelected_depotIPs depotnames == null ");
+			Logging.debug(this, "getSelected_depotIPs depotnames == null ");
 		String[] depotIPs = new String[depotnames.length];
 		int counter = 0;
 		for (String name : depotnames) {
 			String depotip = ((String) main.getPersistenceController().getHostInfoCollections().getDepots().get(name)
 					.get(HostInfo.CLIENT_IP_ADDRESS_KEY));
-			logging.info(this, "getSelected_depotIPs host " + name + " depotip " + depotip);
+			Logging.info(this, "getSelected_depotIPs host " + name + " depotip " + depotip);
 			if (depotip != null) {
 				depotIPs[counter] = depotip;
 				counter++;
@@ -559,7 +559,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		final String scriptFile = method.replace("ssh://", "");
 		final LinkedList<String> commands = new LinkedList<>();
 		commands.add(scriptFile);
-		SSHCommand_Template cmd = new SSHCommand_Template("", commands, "", false, "", "", 0);
+		SSHCommandTemplate cmd = new SSHCommandTemplate("", commands, "", false, "", "", 0);
 
 		final SSHCommand cmdScript = parseParameter(cmd, caller);
 		final ScriptExecutioner exe = new ScriptExecutioner(cmdScript);

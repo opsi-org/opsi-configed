@@ -26,10 +26,10 @@ import javax.swing.JPanel;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.NameProducer;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class PanelMountShare extends JPanel {
 	static List<PanelMountShare> instances = new ArrayList<>();
@@ -77,7 +77,7 @@ public class PanelMountShare extends JPanel {
 		buttonMountShare.setPreferredSize(Globals.graphicButtonDimension);
 		if (isWindows)
 			buttonMountShare.setToolTipText(
-					configed.getResourceValue("PanelMountShare.mountShareDescription") + " " + np.produceName());
+					Configed.getResourceValue("PanelMountShare.mountShareDescription") + " " + np.produceName());
 
 		buttonMountShare.setEnabled(isWindows);
 
@@ -91,7 +91,7 @@ public class PanelMountShare extends JPanel {
 		mountShareLabel = new JLabel("");
 
 		mountShareDescriptionLabel = new JLabel(
-				configed.getResourceValue("PanelMountShare.mountShareResult0") + " " + np.getDefaultName());
+				Configed.getResourceValue("PanelMountShare.mountShareResult0") + " " + np.getDefaultName());
 
 		checkConnectionToShare();
 
@@ -150,18 +150,18 @@ public class PanelMountShare extends JPanel {
 		String call;
 		call = "explorer.exe " + " \"" + np.produceName() + "\"";
 
-		logging.info(this, "windows call: " + call);
+		Logging.info(this, "windows call: " + call);
 
 		try {
 			Runtime.getRuntime().exec(new String[] { call });
 		} catch (IOException ioex) {
-			logging.error("io-Error: " + ioex, ioex);
+			Logging.error("io-Error: " + ioex, ioex);
 		} catch (Exception ex) {
-			logging.error("general error on starting net mount " + ex, ex);
+			Logging.error("general error on starting net mount " + ex, ex);
 		}
 
 		mountShareDescriptionLabel
-				.setText(configed.getResourceValue("PanelMountShare.mountShareResult1") + " " + np.produceName());
+				.setText(Configed.getResourceValue("PanelMountShare.mountShareResult1") + " " + np.produceName());
 
 		checkConnectionToShare(240);
 
@@ -177,9 +177,9 @@ public class PanelMountShare extends JPanel {
 	private void setShareMountedInfo(boolean mounted) {
 		if (mounted)
 			mountShareDescriptionLabel
-					.setText(configed.getResourceValue("PanelMountShare.mountShareResult2") + " " + np.produceName());
+					.setText(Configed.getResourceValue("PanelMountShare.mountShareResult2") + " " + np.produceName());
 		else
-			mountShareDescriptionLabel.setText(configed.getResourceValue("PanelMountShare.mountShareResult0"));
+			mountShareDescriptionLabel.setText(Configed.getResourceValue("PanelMountShare.mountShareResult0"));
 
 	}
 
@@ -187,15 +187,15 @@ public class PanelMountShare extends JPanel {
 		boolean found = false;
 
 		if (np.produceName() == null || np.produceName().equals("")) {
-			logging.info(this, "checkConnectionToShare no filename " + np.produceName());
+			Logging.info(this, "checkConnectionToShare no filename " + np.produceName());
 		} else {
 			File f = new File(np.produceName());
 			if (!f.exists()) {
-				logging.info(this, "checkConnectionToShare no existing filename " + np.produceName());
+				Logging.info(this, "checkConnectionToShare no existing filename " + np.produceName());
 			} else {
 				found = f.isDirectory();
 				if (!found) {
-					logging.info(this, "checkConnectionToShare no directory " + np.produceName());
+					Logging.info(this, "checkConnectionToShare no directory " + np.produceName());
 				}
 			}
 		}
@@ -223,13 +223,13 @@ public class PanelMountShare extends JPanel {
 				while (!smbMounted && i < seconds) {
 
 					try {
-						logging.debug(this, "trying to find dir, count " + i);
+						Logging.debug(this, "trying to find dir, count " + i);
 						sleep(1000);
 						i++;
 						checkConnectionToShare();
 						rootFrame.toFront();
 					} catch (Exception ex) {
-						logging.debug(this, "Exception " + ex);
+						Logging.debug(this, "Exception " + ex);
 						Thread.currentThread().interrupt();
 					}
 				}

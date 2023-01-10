@@ -37,8 +37,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
 public class FEditList extends FEditObject implements ListSelectionListener, MouseListener {
@@ -100,7 +100,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 		// we define buttonRemove in a different way since it is used only to clear
 		// selection
 
-		buttonRemove = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
+		buttonRemove = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
 				"images/list-clear.png", "images/list-clear.png", "images/list-clear_disabled.png", true);
 		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
@@ -219,7 +219,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 				addSelectedValues(list);
 			}
 		} else {
-			logging.error(this, "for element adding required instance of DefaultListModel");
+			Logging.error(this, "for element adding required instance of DefaultListModel");
 		}
 
 	}
@@ -254,10 +254,10 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	@Override
 	protected void commit() {
-		logging.debug(this, "FEditList.commit");
+		Logging.debug(this, "FEditList.commit");
 
 		if (Globals.forbidEditingTargetSpecific()) {
-			logging.debug(this, "commit: forbidden");
+			Logging.debug(this, "commit: forbidden");
 			cancel();
 		} else {
 			if (celleditor != null)
@@ -347,7 +347,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	@Override
 	protected void initEditing() {
 		super.initEditing();
-		logging.debug(this, "FEditList.initEditing");
+		Logging.debug(this, "FEditList.initEditing");
 		buttonRemove.setEnabled(true);
 	}
 

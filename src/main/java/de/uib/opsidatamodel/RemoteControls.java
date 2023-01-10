@@ -3,7 +3,7 @@ package de.uib.opsidatamodel;
 import java.util.HashMap;
 
 import de.uib.configed.type.RemoteControl;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class RemoteControls extends HashMap<String, RemoteControl> {
 
@@ -14,7 +14,7 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 		String rcPartOfKey = key.substring(RemoteControl.CONFIG_KEY.length());
 
 		if (rcPartOfKey.length() < 2 || rcPartOfKey.charAt(0) != '.')
-			logging.error("No remote control key given after '" + RemoteControl.CONFIG_KEY + "'");
+			Logging.error("No remote control key given after '" + RemoteControl.CONFIG_KEY + "'");
 		else {
 			rcPartOfKey = rcPartOfKey.substring(1);
 
@@ -55,7 +55,7 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 
 				else
 					// there are no 3rd level keys
-					logging.error("Remote control key has too many parts");
+					Logging.error("Remote control key has too many parts");
 			}
 
 		}

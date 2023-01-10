@@ -9,7 +9,7 @@ import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This class is a little command line tool which can execute saved searches.
@@ -30,8 +30,8 @@ public class SavedSearchQuery {
 	private PersistenceController controller;
 
 	public SavedSearchQuery() {
-		logging.setLogLevelFile(logging.LEVEL_NONE);
-		logging.setLogLevelConsole(logging.LEVEL_NONE);
+		Logging.setLogLevelFile(Logging.LEVEL_NONE);
+		Logging.setLogLevelConsole(Logging.LEVEL_NONE);
 	}
 
 	/*
@@ -69,11 +69,11 @@ public class SavedSearchQuery {
 	}
 
 	public void showUsage() {
-		logging.debug(USAGE);
+		Logging.debug(USAGE);
 	}
 
 	public void setArgs(String host, String user, String password, String searchName) {
-		logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
+		Logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
 		this.host = host;
 		this.user = user;
 		this.password = password;
@@ -96,12 +96,12 @@ public class SavedSearchQuery {
 		controller = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
 
 		if (controller == null) {
-			logging.error("Authentication error.");
+			Logging.error("Authentication error.");
 			System.exit(1);
 		}
 
 		if (controller.getConnectionState().getState() != ConnectionState.CONNECTED) {
-			logging.error("Authentication error.");
+			Logging.error("Authentication error.");
 			System.exit(1);
 		}
 
@@ -118,7 +118,7 @@ public class SavedSearchQuery {
 		}
 
 		if (!searches.contains(searchName)) {
-			logging.error("Search not found.");
+			Logging.error("Search not found.");
 			System.exit(2);
 		}
 
@@ -131,19 +131,19 @@ public class SavedSearchQuery {
 
 	public void populateHostGroup(List<String> hosts, String groupName) {
 		if (controller == null) {
-			logging.error("controller not initialized");
+			Logging.error("controller not initialized");
 			System.exit(3);
 		}
 
 		if (hosts == null) {
-			logging.error("hosts collection not initialized");
+			Logging.error("hosts collection not initialized");
 			System.exit(4);
 		}
 
 		Map<String, Map<String, String>> hostGroups = controller.getHostGroups();
 
 		if (!hostGroups.keySet().contains(groupName)) {
-			logging.error("group not found");
+			Logging.error("group not found");
 			System.exit(5);
 		}
 
@@ -152,17 +152,17 @@ public class SavedSearchQuery {
 				hostGroups.get(groupName));
 
 		if (!controller.deleteGroup(groupName)) {
-			logging.error("delete group error, groupName " + groupName);
+			Logging.error("delete group error, groupName " + groupName);
 			System.exit(6);
 		}
 
 		if (!controller.addGroup(saveGroupRelation)) {
-			logging.error("add group error, group " + saveGroupRelation);
+			Logging.error("add group error, group " + saveGroupRelation);
 			System.exit(7);
 		}
 
 		if (!controller.addHosts2Group(hosts, groupName)) {
-			logging.error("addHosts2Group error, group " + groupName);
+			Logging.error("addHosts2Group error, group " + groupName);
 			System.exit(8);
 		}
 
@@ -181,6 +181,6 @@ public class SavedSearchQuery {
 
 	private void printResult(List<String> result) {
 		for (String line : result)
-			logging.debug(line);
+			Logging.debug(line);
 	}
 }

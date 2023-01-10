@@ -51,12 +51,12 @@ import javax.swing.event.DocumentListener;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.JSONthroughHTTP;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.ProgressBarPainter;
@@ -91,7 +91,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 	private JLabel jLabelVersion = new JLabel();
 	private JLabel jLabelJavaVersion = new JLabel();
-	private JLabel jLabelLabelJavaVersion = new JLabel(configed.getResourceValue("DPassword.jdkVersionBased"));
+	private JLabel jLabelLabelJavaVersion = new JLabel(Configed.getResourceValue("DPassword.jdkVersionBased"));
 
 	private JLabel jLabelUser = new JLabel();
 	private JTextField fieldUser = new JTextField();
@@ -162,16 +162,16 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	}
 
 	private void setActivated(boolean active) {
-		logging.info(this, "------------ activate");
+		Logging.info(this, "------------ activate");
 
 		jProgressBar.setValue(0);
 
-		waitLabel.setText(active ? "" : configed.getResourceValue("DPassword.WaitInfo.label"));
+		waitLabel.setText(active ? "" : Configed.getResourceValue("DPassword.WaitInfo.label"));
 		setEnabled(active);
 	}
 
 	private void guiInit() {
-		MessageFormat messageFormatTitle = new MessageFormat(configed.getResourceValue("DPassword.title"));
+		MessageFormat messageFormatTitle = new MessageFormat(Configed.getResourceValue("DPassword.title"));
 		setTitle(messageFormatTitle.format(new Object[] { Globals.APPNAME }));
 
 		setIconImage(Globals.mainIcon);
@@ -181,7 +181,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		panel.setBorder(padding);
 
-		jLabelHost.setText(configed.getResourceValue("DPassword.jLabelHost"));
+		jLabelHost.setText(Configed.getResourceValue("DPassword.jLabelHost"));
 
 		containership = new Containership(panel);
 
@@ -189,20 +189,20 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		fieldHost.setSelectedItem("");
 		fieldHost.addKeyListener(newKeyListener);
 
-		jLabelUser.setText(configed.getResourceValue("DPassword.jLabelUser"));
+		jLabelUser.setText(Configed.getResourceValue("DPassword.jLabelUser"));
 
 		fieldUser.setText(TESTUSER);
 		fieldUser.addKeyListener(newKeyListener);
 
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
-		jLabelPassword.setText(configed.getResourceValue("DPassword.jLabelPassword"));
+		jLabelPassword.setText(Configed.getResourceValue("DPassword.jLabelPassword"));
 
 		passwordField.setText(TESTPASSWORD);
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
-		JCheckBox checkCompression = new JCheckBox(configed.getResourceValue("DPassword.checkCompression"),
+		JCheckBox checkCompression = new JCheckBox(Configed.getResourceValue("DPassword.checkCompression"),
 				JSONthroughHTTP.compressTransmission);
 		checkCompression.addItemListener(new ItemListener() {
 			@Override
@@ -210,25 +210,25 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 				JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
 
-				logging.debug(this, "itemStateChanged " + de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);
+				Logging.debug(this, "itemStateChanged " + de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);
 			}
 		});
 
-		JCheckBox checkTrySSH = new JCheckBox(configed.getResourceValue("DPassword.checkTrySSH"),
-				configed.sshconnect_onstart);
-		logging.info(this, "checkTrySSH  " + configed.sshconnect_onstart);
+		JCheckBox checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"),
+				Configed.sshconnect_onstart);
+		Logging.info(this, "checkTrySSH  " + Configed.sshconnect_onstart);
 		checkTrySSH.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 
-				configed.sshconnect_onstart = (e.getStateChange() == ItemEvent.SELECTED);
+				Configed.sshconnect_onstart = (e.getStateChange() == ItemEvent.SELECTED);
 
-				logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
+				Logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
 			}
 		});
 
-		final JTextField fieldRefreshMinutes = new JTextField("" + configed.refreshMinutes);
-		fieldRefreshMinutes.setToolTipText(configed.getResourceValue("DPassword.pullReachableInfoTooltip"));
+		final JTextField fieldRefreshMinutes = new JTextField("" + Configed.refreshMinutes);
+		fieldRefreshMinutes.setToolTipText(Configed.getResourceValue("DPassword.pullReachableInfoTooltip"));
 		fieldRefreshMinutes.setPreferredSize(new Dimension(Globals.shortlabelDimension));
 		fieldRefreshMinutes.setHorizontalAlignment(SwingConstants.RIGHT);
 		fieldRefreshMinutes.getDocument().addDocumentListener(new DocumentListener() {
@@ -237,7 +237,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 				String s = fieldRefreshMinutes.getText();
 
 				try {
-					configed.refreshMinutes = Integer.valueOf(s);
+					Configed.refreshMinutes = Integer.valueOf(s);
 
 				} catch (NumberFormatException ex) {
 					fieldRefreshMinutes.setText("");
@@ -274,13 +274,13 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 		jPanelButtons.setLayout(flowLayoutButtons);
 
-		jButtonCommit.setText(configed.getResourceValue("DPassword.jButtonCommit"));
+		jButtonCommit.setText(Configed.getResourceValue("DPassword.jButtonCommit"));
 		jButtonCommit.setMaximumSize(new Dimension(100, 20));
 		jButtonCommit.setPreferredSize(new Dimension(100, 20));
 		jButtonCommit.setSelected(true);
 		jButtonCommit.addActionListener(this::jButtonCommitActionPerformed);
 
-		jButtonCancel.setText(configed.getResourceValue("DPassword.jButtonCancel"));
+		jButtonCancel.setText(Configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.setMaximumSize(new Dimension(100, 20));
 		jButtonCancel.setPreferredSize(new Dimension(100, 20));
 		jButtonCancel.addActionListener(this::jButtonCancelActionPerformed);
@@ -374,15 +374,15 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
 				JPanel.class);
 
-		MessageFormat messageFormatVersion = new MessageFormat(configed.getResourceValue("DPassword.jLabelVersion"));
+		MessageFormat messageFormatVersion = new MessageFormat(Configed.getResourceValue("DPassword.jLabelVersion"));
 		jLabelVersion.setText(messageFormatVersion
 				.format(new Object[] { Globals.VERSION, "(" + Globals.VERDATE + ")", Globals.VERHASHTAG }));
 
-		jLabelJavaVersion.setText(configed.JAVA_VENDOR + " " + configed.JAVA_VERSION);
+		jLabelJavaVersion.setText(Configed.JAVA_VENDOR + " " + Configed.JAVA_VERSION);
 
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
-		logging.notice(" OS " + strOS + "  Version " + osVersion);
+		Logging.notice(" OS " + strOS + "  Version " + osVersion);
 		String host = TESTSERVER; // ""
 
 		pack();
@@ -404,23 +404,23 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED) {
 			// we can finish
-			logging.info(this, "connected with persis " + persis);
+			Logging.info(this, "connected with persis " + persis);
 			main.setPersistenceController(persis);
 
 			MessageFormat messageFormatMainTitle = new MessageFormat(
-					configed.getResourceValue("ConfigedMain.appTitle"));
+					Configed.getResourceValue("ConfigedMain.appTitle"));
 			main.setAppTitle(messageFormatMainTitle
 					.format(new Object[] { Globals.APPNAME, fieldHost.getSelectedItem(), fieldUser.getText() }));
 			main.loadDataAndGo();
 		} else { // return to Passwordfield
 			if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				// return to password dialog
-				logging.info(this, "interrupted");
+				Logging.info(this, "interrupted");
 			} else {
-				logging.info(this, "not connected, timeout or not authorized");
+				Logging.info(this, "not connected, timeout or not authorized");
 
 				MessageFormat messageFormatDialogContent = new MessageFormat(
-						configed.getResourceValue("DPassword.noConnectionMessageDialog.content"));
+						Configed.getResourceValue("DPassword.noConnectionMessageDialog.content"));
 
 				if (waitingWorker != null && waitingWorker.isTimeoutReached())
 					messageFormatDialogContent = new MessageFormat("Timeout in connecting");
@@ -428,13 +428,13 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 				JOptionPane.showMessageDialog(this,
 						messageFormatDialogContent.format(
 								new Object[] { PersistenceControllerFactory.getConnectionState().getMessage() }),
-						configed.getResourceValue("DPassword.noConnectionMessageDialog.title"),
+						Configed.getResourceValue("DPassword.noConnectionMessageDialog.title"),
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 
 			passwordField.setText("");
 			if (PersistenceControllerFactory.getConnectionState().getMessage().indexOf("authorized") > -1) {
-				logging.info(this, "(not) authorized");
+				Logging.info(this, "(not) authorized");
 
 				fieldUser.requestFocus();
 				fieldUser.setCaretPosition(fieldUser.getText().length());
@@ -483,13 +483,13 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		try {
 			containership.doForAllContainedCompis("setCursor", new Object[] { c });
 		} catch (Exception ex) {
-			logging.warning(this, "containership error", ex);
+			Logging.warning(this, "containership error", ex);
 		}
 
 	}
 
 	private void okAction() {
-		logging.info(this, "ok_action");
+		Logging.info(this, "ok_action");
 
 		// we make first a waitCursor and a waitInfo window
 
@@ -503,7 +503,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	}
 
 	public void tryConnecting() {
-		logging.info(this, "started  tryConnecting");
+		Logging.info(this, "started  tryConnecting");
 		setActivated(false);
 
 		waitCursor = new WaitCursor(this, "ok_action");
@@ -511,38 +511,38 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		ConfigedMain.HOST = (String) fieldHost.getSelectedItem();
 		ConfigedMain.USER = fieldUser.getText();
 		ConfigedMain.PASSWORD = String.valueOf(passwordField.getPassword());
-		logging.info(this, "invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", "
+		Logging.info(this, "invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", "
 				+ fieldUser.getText()
 
 		);
 
 		if (waitingWorker != null && !waitingWorker.isReady()) {
 
-			logging.info(this, "old waiting task not ready");
+			Logging.info(this, "old waiting task not ready");
 			return;
 		}
 
-		logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
-		logging.info(this, "  Thread.currentThread() " + Thread.currentThread());
+		Logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
+		Logging.info(this, "  Thread.currentThread() " + Thread.currentThread());
 		boolean localApp = ("" + Thread.currentThread()).indexOf("main]") > -1;
-		logging.info(this, "is local app  " + localApp);
+		Logging.info(this, "is local app  " + localApp);
 		if (localApp) {
 
-			logging.info(this, "start WaitingWorker");
+			Logging.info(this, "start WaitingWorker");
 			waitingWorker = new WaitingWorker(this);
 			waitingWorker.execute();
 
 			new Thread() {
 				@Override
 				public void run() {
-					logging.info(this, "get persis");
+					Logging.info(this, "get persis");
 					persis = PersistenceControllerFactory.getNewPersistenceController(
 							(String) fieldHost.getSelectedItem(), fieldUser.getText(),
 							String.valueOf(passwordField.getPassword()));
 
-					logging.info(this, "got persis, == null " + (persis == null));
+					Logging.info(this, "got persis, == null " + (persis == null));
 
-					logging.info(this, "waitingTask can be set to ready");
+					Logging.info(this, "waitingTask can be set to ready");
 					waitingWorker.setReady();
 
 				}
@@ -563,7 +563,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 			}
 
 			if (waited >= TIMEOUT_MS)
-				logging.error(" no connection");
+				Logging.error(" no connection");
 		}
 
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setUser(fieldUser.getText());

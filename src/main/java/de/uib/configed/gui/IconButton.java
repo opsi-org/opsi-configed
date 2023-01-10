@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitingCycle;
 
 /**
@@ -278,7 +278,7 @@ public class IconButton extends JButton {
 	 * waiting state
 	 */
 	public void setWaitingState(boolean b) {
-		logging.info(this, "setWaitingState " + b + " (imagesForAnimation == null)  " + (imagesForAnimation == null));
+		Logging.info(this, "setWaitingState " + b + " (imagesForAnimation == null)  " + (imagesForAnimation == null));
 		if (imagesForAnimation == null)
 			return;
 
@@ -307,7 +307,7 @@ public class IconButton extends JButton {
 
 		int iconIndex = chunks.get(chunks.size() - 1) % (imagesForAnimation.length);
 
-		logging.debug(this, "workWithWaitingSignals chunks size " + chunks.size());
+		Logging.debug(this, "workWithWaitingSignals chunks size " + chunks.size());
 
 		setDisabledIcon(imagesForAnimation[iconIndex]);
 	}

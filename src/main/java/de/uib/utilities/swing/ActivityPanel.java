@@ -9,7 +9,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitCursor;
 
 public class ActivityPanel extends JPanel implements Runnable {
@@ -77,7 +77,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 			}
 
 		} catch (Exception strange) {
-			logging.warning(this, "strange exception " + strange);
+			Logging.warning(this, "strange exception " + strange);
 			setState(inactive);
 
 		}
@@ -129,7 +129,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 				}
 			}
 		} catch (Exception anyException) {
-			logging.warning(this, "on running, caught some exception", anyException);
+			Logging.warning(this, "on running, caught some exception", anyException);
 
 			if (anyException instanceof InterruptedException)
 				Thread.currentThread().interrupt();
@@ -140,7 +140,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 	protected void initGui() {
 		lineBorderInactive = new javax.swing.border.LineBorder(Globals.BACKGROUND_COLOR_7, 1, true);
 		lineBorderActive = new javax.swing.border.LineBorder(Globals.blueGrey, 1, true);
-		logging.debug(this, "starting");
+		Logging.debug(this, "starting");
 		setOpaque(true);
 		setBorder(lineBorderInactive);
 		colors = new Color[2];
@@ -159,7 +159,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 						super.paint(g);
 					} catch (java.lang.ClassCastException ex) {
 						setActing(false);
-						logging.warning(this, "the ugly well known exception " + ex);
+						Logging.warning(this, "the ugly well known exception " + ex);
 						try {
 							Thread.sleep(10000);
 							WaitCursor.stopAll();

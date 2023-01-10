@@ -12,7 +12,7 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.ControlPanelLicencesUsage;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 /**
@@ -65,17 +65,17 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	private void initSubPanel() {
 
 		panelLicencepools = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), tablesMaxWidth, false, 0,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), tablesMaxWidth, false, 0,
 				false, new int[] { PanelGenEditTable.POPUP_RELOAD });
 
 		panelGetAndAssignSL = new javax.swing.JPanel();
 		labelGetAndAssignSL = new javax.swing.JLabel(
-				configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
+				Configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
 
 		comboClient = new de.uib.utilities.swing.DynamicCombo();
 		comboClient.setFont(Globals.defaultFontBig);
 		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));
-		buttonGet = new javax.swing.JButton(configed.getResourceValue("ConfigedMain.Licences.Usage.AssignLicense"));
+		buttonGet = new javax.swing.JButton(Configed.getResourceValue("ConfigedMain.Licences.Usage.AssignLicense"));
 		buttonGet.addActionListener(this);
 
 		panelGetAndAssignSL.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -112,7 +112,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 	private void initComponents() {
 
-		panelUsage = new PanelGenEditTable(configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), 0,
+		panelUsage = new PanelGenEditTable(Configed.getResourceValue("ConfigedMain.Licences.SectiontitleUsage"), 0,
 				true, 0, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // searchpane

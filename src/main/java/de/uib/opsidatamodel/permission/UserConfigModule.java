@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class UserConfigModule {
 	protected String username;
@@ -26,7 +26,7 @@ public class UserConfigModule {
 	protected UserConfigModule(String userName, UserConfigModule prototype) {
 		this.username = userName;
 
-		logging.info(this, "create UserConfigModule for user named " + username + " with prototype  " + prototype);
+		Logging.info(this, "create UserConfigModule for user named " + username + " with prototype  " + prototype);
 
 		booleanMap = new LinkedHashMap<>();
 		bool_keys = new LinkedHashSet<>();
@@ -44,8 +44,8 @@ public class UserConfigModule {
 			extractKeys(prototype.valuesMap, list_keys);
 		}
 
-		logging.info(this, "for user " + userName + " we got by prototype " + booleanMap + " -- " + valuesMap);
-		logging.info(this, "for user " + userName + " bool keys " + bool_keys + " -- list keys " + list_keys);
+		Logging.info(this, "for user " + userName + " we got by prototype " + booleanMap + " -- " + valuesMap);
+		Logging.info(this, "for user " + userName + " bool keys " + bool_keys + " -- list keys " + list_keys);
 
 	}
 
@@ -85,7 +85,7 @@ public class UserConfigModule {
 
 	public void setBooleanValue(String key, Boolean val) {
 
-		logging.info(this, "for user " + username + " setBooleanValue " + key + " : " + val);
+		Logging.info(this, "for user " + username + " setBooleanValue " + key + " : " + val);
 		booleanMap.put(key, val);
 
 	}
@@ -97,24 +97,24 @@ public class UserConfigModule {
 	}
 
 	public void setValues(String key, List<Object> values) {
-		logging.info(this, "for user " + username + ", key " + key + " setValues " + values);
-		logging.info(this, "we have list_keys " + list_keys);
-		logging.info(this, "we have bool_keys " + bool_keys);
+		Logging.info(this, "for user " + username + ", key " + key + " setValues " + values);
+		Logging.info(this, "we have list_keys " + list_keys);
+		Logging.info(this, "we have bool_keys " + bool_keys);
 
 		if (!list_keys.contains(key))
-			logging.info("UserOpsiPermisson : still missing key " + key);
+			Logging.info("UserOpsiPermisson : still missing key " + key);
 
 		valuesMap.put(key, values);
 
 	}
 
 	public void setPossibleValues(String key, List<Object> possibleValues) {
-		logging.info(this, "for user " + username + ", key " + key + " setPossibleValues " + possibleValues);
-		logging.info(this, "we have list_keys " + list_keys);
-		logging.info(this, "we have bool_keys " + bool_keys);
+		Logging.info(this, "for user " + username + ", key " + key + " setPossibleValues " + possibleValues);
+		Logging.info(this, "we have list_keys " + list_keys);
+		Logging.info(this, "we have bool_keys " + bool_keys);
 
 		if (!list_keys.contains(key))
-			logging.info("UserOpsiPermisson : still missing key " + key);
+			Logging.info("UserOpsiPermisson : still missing key " + key);
 
 		possibleValuesMap.put(key, possibleValues);
 

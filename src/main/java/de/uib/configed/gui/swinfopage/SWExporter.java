@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
@@ -88,7 +88,7 @@ public abstract class SWExporter {
 			finish(de.uib.configed.ErrorCode.CLIENTNAMES_FILENAME_MISSING);
 		}
 
-		File userHome = new File(System.getProperty(logging.envVariableForUserDirectory));
+		File userHome = new File(System.getProperty(Logging.envVariableForUserDirectory));
 		String userHomeS = userHome.toString();
 
 		if (outDir == null)
@@ -113,10 +113,10 @@ public abstract class SWExporter {
 			finish(de.uib.configed.ErrorCode.CONNECTION_ERROR);
 		}
 
-		logging.info(this, "starting");
+		Logging.info(this, "starting");
 
 		try (BufferedReader in = new BufferedReader(new FileReader(clientsFile))) {
-			logging.info(this, " in " + in);
+			Logging.info(this, " in " + in);
 			String line = in.readLine();
 			while (line != null) {
 				// we assume that each line is a hostId
@@ -125,22 +125,22 @@ public abstract class SWExporter {
 
 				setWriteToFile(filepathStart + line + getExtension());
 
-				logging.debug(" outDir: " + outDir);
-				logging.debug(" filePath: " + filepathStart + line + getExtension());
+				Logging.debug(" outDir: " + outDir);
+				Logging.debug(" filePath: " + filepathStart + line + getExtension());
 				export();
 
 				line = in.readLine();
 			}
 
 		} catch (IOException iox) {
-			logging.warning(this, "IOException " + iox);
+			Logging.warning(this, "IOException " + iox);
 		}
 
 	}
 
 	public void finish(int exitcode) {
-		logging.error(de.uib.configed.ErrorCode.tell(exitcode));
-		configed.endApp(exitcode);
+		Logging.error(de.uib.configed.ErrorCode.tell(exitcode));
+		Configed.endApp(exitcode);
 	}
 
 	public void setWriteToFile(String path) {
@@ -169,9 +169,9 @@ public abstract class SWExporter {
 		exportDirectoryS = "";
 		if (exportDirectory == null) {
 			try {
-				exportDirectory = new File(System.getProperty(logging.envVariableForUserDirectory));
+				exportDirectory = new File(System.getProperty(Logging.envVariableForUserDirectory));
 			} catch (Exception ex) {
-				logging.warning(this, "could not define exportDirectory)");
+				Logging.warning(this, "could not define exportDirectory)");
 			}
 		}
 
@@ -194,15 +194,15 @@ public abstract class SWExporter {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public Map<String, Map> retrieveMap() {
-						logging.info(this, "retrieving data for " + theHost);
+						Logging.info(this, "retrieving data for " + theHost);
 						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(theHost);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
-							logging.debug(this, "tableData is empty or null");
+							Logging.debug(this, "tableData is empty or null");
 
-							scanInfo = configed.getResourceValue("PanelSWInfo.noScanResult");
+							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
-							logging.debug(this, "retrieved size  " + tableData.keySet().size());
+							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
 							scanInfo = "Scan " + persist.getLastSoftwareAuditModification(theHost);
 						}
 
@@ -216,13 +216,13 @@ public abstract class SWExporter {
 	protected abstract String getExtension();
 
 	public void updateModel() {
-		logging.info(this, "update++");
+		Logging.info(this, "update++");
 
-		logging.info(this, "update++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.info(this, "update++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
-		logging.info(this, "update++++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.info(this, "update++++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 
 	}
 

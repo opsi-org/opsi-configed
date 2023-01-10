@@ -7,7 +7,7 @@
 
 package de.uib.utilities.observer;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ObservableSubject extends java.util.Observable {
 	@Override
@@ -18,7 +18,7 @@ public class ObservableSubject extends java.util.Observable {
 
 	@Override
 	public void addObserver(java.util.Observer o) {
-		logging.debug(this, "add Observer  " + o);
+		Logging.debug(this, "add Observer  " + o);
 		super.addObserver(o);
 	}
 }

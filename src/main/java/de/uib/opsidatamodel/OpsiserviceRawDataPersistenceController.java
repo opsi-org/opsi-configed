@@ -30,7 +30,7 @@ import java.util.Map;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.dbtable.Host;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersistenceController {
 
@@ -57,7 +57,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 
 				String warning = "limit for mysql backend reached";
 
-				logging.info(this, "missingModules " + warning);
+				Logging.info(this, "missingModules " + warning);
 				de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(warning);
 			});
 		}
@@ -67,7 +67,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 	@Override
 	public List<Map<java.lang.String, java.lang.Object>> HOST_read() {
 
-		logging.debug(this, "HOST_read ");
+		Logging.debug(this, "HOST_read ");
 		String query = "select *  from HOST";
 
 		// test for depot_restriction:
@@ -76,7 +76,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
-		logging.notice(this, "HOST_read, query " + query);
+		Logging.notice(this, "HOST_read, query " + query);
 		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();

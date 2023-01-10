@@ -12,7 +12,7 @@ import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class XTree extends JTree {
 
@@ -66,7 +66,7 @@ public class XTree extends JTree {
 	}
 
 	public void expandRows(List<Integer> rows) {
-		logging.debug(this, "expandRows " + rows.size());
+		Logging.debug(this, "expandRows " + rows.size());
 		for (Integer row : rows) {
 
 			expandRow(row);

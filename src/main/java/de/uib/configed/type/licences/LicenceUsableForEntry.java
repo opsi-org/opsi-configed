@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class LicenceUsableForEntry extends HashMap<String, String> {
 	/*
@@ -37,7 +37,7 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 			entry.put(key, (String) importedEntry.get(key));
 		}
 		if (importedEntry.get(LICENCE_ID_KEY) == null || importedEntry.get(LICENSE_POOL_ID_KEY) == null)
-			logging.warning("LicenceUsableForEntry,  missing primary key in " + importedEntry);
+			Logging.warning("LicenceUsableForEntry,  missing primary key in " + importedEntry);
 
 		String pseudokey = Globals
 				.pseudokey(new String[] { entry.get(LICENCE_ID_KEY), entry.get(LICENSE_POOL_ID_KEY) });

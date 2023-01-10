@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.table.TableCellEditor;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CellEditor4TableText extends DefaultCellEditor implements TableCellEditor
 // , ActionListener
@@ -156,7 +156,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 		try {
 			loc = table.getLocationOnScreen();
 		} catch (Exception ex) {
-			logging.warning(this, "get location error " + ex);
+			Logging.warning(this, "get location error " + ex);
 			loc = new java.awt.Point(50, 50);
 		}
 
@@ -172,14 +172,14 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 
 	@Override
 	public boolean stopCellEditing() {
-		logging.debug(this, "stopCellEditing");
+		Logging.debug(this, "stopCellEditing");
 
 		return super.stopCellEditing();
 	}
 
 	@Override
 	public void cancelCellEditing() {
-		logging.debug(this, "cancelCellEditing");
+		Logging.debug(this, "cancelCellEditing");
 		super.cancelCellEditing();
 	}
 

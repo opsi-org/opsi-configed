@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DefaultTableProvider implements TableProvider {
 	protected TableSource source;
@@ -50,7 +50,7 @@ public class DefaultTableProvider implements TableProvider {
 	// should deliver a copy of the data
 	@Override
 	public List<List<Object>> getRows() {
-		logging.info(this, " -- getRows()");
+		Logging.info(this, " -- getRows()");
 
 		if (rowsCopy == null)
 			resetRows();
@@ -63,7 +63,7 @@ public class DefaultTableProvider implements TableProvider {
 
 	// should set back the copy of the data to the original values
 	protected void resetRows() {
-		logging.info(this, " -- resetRows()");
+		Logging.info(this, " -- resetRows()");
 		if (rowsCopy != null)
 			rowsCopy.clear();
 		else
@@ -73,10 +73,10 @@ public class DefaultTableProvider implements TableProvider {
 			rows = source.retrieveRows();
 		}
 
-		logging.info(this, "resetRows(), rows.size() " + rows.size());
+		Logging.info(this, "resetRows(), rows.size() " + rows.size());
 
 		if (!isDecorated) {
-			logging.info(this, "resetRows decorating rows");
+			Logging.info(this, "resetRows decorating rows");
 			if (rows != null) {
 				for (int i = 0; i < rows.size(); i++) {
 					decorateRow(rows.get(i));
@@ -86,7 +86,7 @@ public class DefaultTableProvider implements TableProvider {
 		}
 
 		if (rows == null) {
-			logging.info(" no data rows retrieved ");
+			Logging.info(" no data rows retrieved ");
 			return;
 		}
 

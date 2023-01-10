@@ -5,7 +5,7 @@ import java.util.Map;
 
 import de.uib.utilities.ExtendedDate;
 import de.uib.utilities.ExtendedInteger;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ModulePermissionValue {
 	de.uib.opsicommand.Executioner exec;
@@ -77,7 +77,7 @@ public class ModulePermissionValue {
 				try {
 					number = Integer.valueOf((String) ob);
 				} catch (NumberFormatException ex) {
-					logging.debug(this, "not a number: " + ob);
+					Logging.debug(this, "not a number: " + ob);
 				}
 				if (number != null)
 					result = new ExtendedInteger(number);
@@ -95,9 +95,9 @@ public class ModulePermissionValue {
 			try {
 				result = new ExtendedDate((String) ob);
 			} catch (ClassCastException ex) {
-				logging.warning(this, "no String: " + ob);
+				Logging.warning(this, "no String: " + ob);
 			} catch (Exception ex) {
-				logging.debug(this, "DateParseException for " + ob);
+				Logging.debug(this, "DateParseException for " + ob);
 			}
 
 		}
@@ -119,16 +119,16 @@ public class ModulePermissionValue {
 
 	public ModulePermissionValue(de.uib.opsicommand.Executioner exec, Object ob, ExtendedDate defaultExpires) {
 		this.exec = exec;
-		logging.info(this, "value object given: " + ob);
+		Logging.info(this, "value object given: " + ob);
 		booleanValue = null;
 		expiresDate = ExtendedDate.ZERO;
 		maxClients = ExtendedInteger.ZERO;
 		if (ob != null) {
 			Map<String, Object> detailled = interpretAsJson(ob);
-			logging.debug(this, "detailled " + detailled);
+			Logging.debug(this, "detailled " + detailled);
 			if (detailled != null) {
 				maxClients = retrieveMaxClients(detailled.get(keyMaxClients));
-				logging.debug(this, "detailled  maxClients " + maxClients);
+				Logging.debug(this, "detailled  maxClients " + maxClients);
 				expiresDate = retrieveExpiresDate(detailled.get(keyExpires));
 			} else {
 				booleanValue = checkBoolean(ob);
@@ -136,7 +136,7 @@ public class ModulePermissionValue {
 				if (booleanValue == null) {
 					expiresDate = retrieveExpiresDate(ob);
 					maxClients = retrieveMaxClients(ob);
-					logging.debug(this, "maxClients directly given " + maxClients);
+					Logging.debug(this, "maxClients directly given " + maxClients);
 				}
 
 				else if (booleanValue) {

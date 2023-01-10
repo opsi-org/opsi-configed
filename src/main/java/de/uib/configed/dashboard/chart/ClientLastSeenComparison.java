@@ -3,7 +3,7 @@ package de.uib.configed.dashboard.chart;
 import java.io.IOException;
 import java.util.Map;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.ClientData;
 import javafx.fxml.FXML;
@@ -37,29 +37,29 @@ public class ClientLastSeenComparison extends StackPane implements DataChangeLis
 		XYChart.Series<Number, String> data = new XYChart.Series<>();
 		Map<String, Integer> lastSeenData = ClientData.getLastSeenData();
 
-		clientsLastSeenNoDataText.setText(configed.getResourceValue("Dashboard.noData"));
-		lastSeenComparisonBarChart.setTitle(configed.getResourceValue("Dashboard.lastSeenTitle"));
+		clientsLastSeenNoDataText.setText(Configed.getResourceValue("Dashboard.noData"));
+		lastSeenComparisonBarChart.setTitle(Configed.getResourceValue("Dashboard.lastSeenTitle"));
 
 		if (lastSeenData.isEmpty()) {
-			lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"), 0);
-			lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"), 0);
-			lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"), 0);
+			lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"), 0);
+			lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"), 0);
+			lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"), 0);
 		}
 
 		clientsLastSeenNoDataText.setVisible(lastSeenData.values().stream().allMatch(v -> v == 0));
 
 		data.getData()
 				.add(new XYChart.Data<>(
-						lastSeenData.get(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")),
-						configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")));
+						lastSeenData.get(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")),
+						Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")));
 		data.getData()
 				.add(new XYChart.Data<>(
-						lastSeenData.get(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays")),
-						configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays")));
+						lastSeenData.get(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays")),
+						Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays")));
 		data.getData()
 				.add(new XYChart.Data<>(
-						lastSeenData.get(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")),
-						configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")));
+						lastSeenData.get(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")),
+						Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")));
 
 		lastSeenComparisonBarChart.getData().clear();
 		lastSeenComparisonBarChart.getData().add(data);

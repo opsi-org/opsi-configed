@@ -15,7 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DataEditListener implements DocumentListener, // for text components
 		ItemListener, // for combo boxes
@@ -31,7 +31,7 @@ public class DataEditListener implements DocumentListener, // for text component
 
 	protected void act() {
 		if (dataChangedSubject == null) {
-			logging.info(this, "dataChangedSubject null");
+			Logging.info(this, "dataChangedSubject null");
 			return;
 		}
 
@@ -44,7 +44,7 @@ public class DataEditListener implements DocumentListener, // for text component
 
 	protected void requestAction(String action) {
 		if (dataChangedSubject == null) {
-			logging.info(this, "dataChangedSubject null");
+			Logging.info(this, "dataChangedSubject null");
 			return;
 		}
 
@@ -58,7 +58,7 @@ public class DataEditListener implements DocumentListener, // for text component
 	}
 
 	public DataEditListener(ObservableSubject subject, Object source, boolean withFocusCheck) {
-		logging.info(this, "constructed , subject  " + subject + ", source " + source);
+		Logging.info(this, "constructed , subject  " + subject + ", source " + source);
 		this.source = source;
 		this.withFocusCheck = withFocusCheck;
 		dataChangedSubject = subject;

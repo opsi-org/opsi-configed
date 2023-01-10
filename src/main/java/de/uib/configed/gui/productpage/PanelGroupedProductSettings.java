@@ -23,7 +23,7 @@ import javax.swing.ListSelectionModel;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.guidata.InstallationStateTableModelFiltered;
 import de.uib.configed.productgroup.ProductgroupPanel;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 
 public class PanelGroupedProductSettings extends PanelProductSettings {
@@ -54,19 +54,19 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 	@Override
 	protected void initTopPane() {
 		if (tableProducts == null) {
-			logging.error(this, " tableProducts == null ");
+			Logging.error(this, " tableProducts == null ");
 			System.exit(0);
 		}
 		topPane = new ProductgroupPanel(this, mainController, tableProducts);
 		topPane.setVisible(true);
 		groupPanel = (ProductgroupPanel) topPane;
 		groupPanel.setReloadActionHandler((ActionEvent ae) -> {
-			logging.info(this, " in top pane we got event reloadAction " + ae);
+			Logging.info(this, " in top pane we got event reloadAction " + ae);
 			reloadAction();
 		});
 
 		groupPanel.setSaveAndExecuteActionHandler((ActionEvent ae) -> {
-			logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
+			Logging.info(this, " in top pane we got event saveAndExecuteAction " + ae);
 			saveAndExecuteAction();
 		});
 
@@ -94,7 +94,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 			if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
 				tableProducts.addRowSelectionInterval(0, 0);
 				// show first product if no product given
-				logging.info(this, "setSelection 0");
+				Logging.info(this, "setSelection 0");
 			} else {
 				for (int row = 0; row < tableProducts.getRowCount(); row++) {
 					Object productId = tableProducts.getValueAt(row, 0);
@@ -126,8 +126,8 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		InstallationStateTableModelFiltered tModel = (InstallationStateTableModelFiltered) tableProducts.getModel();
 		tModel.setFilterFrom(filter);
 
-		logging.info(this, "reduceToSet  " + filter);
-		logging.info(this, "reduceToSet GuiIsFiltered " + groupPanel.getGuiIsFiltered());
+		Logging.info(this, "reduceToSet  " + filter);
+		Logging.info(this, "reduceToSet GuiIsFiltered " + groupPanel.getGuiIsFiltered());
 
 		groupPanel.setGuiIsFiltered(filter != null && !filter.isEmpty());
 
@@ -137,7 +137,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 
 	public void reduceToSelected() {
 		Set<String> selection = getSelectedIDs();
-		logging.debug(this, "reduceToSelected: selectedIds  " + selection);
+		Logging.debug(this, "reduceToSelected: selectedIds  " + selection);
 		reduceToSet(selection);
 		setSelection(selection);
 	}

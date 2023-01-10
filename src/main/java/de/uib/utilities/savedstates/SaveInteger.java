@@ -1,12 +1,12 @@
 package de.uib.utilities.savedstates;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SaveInteger extends SaveState {
 	public SaveInteger(String key, Object defaultValue, SavedStates states) {
 		super(key, defaultValue, states);
 		if (!(defaultValue instanceof Integer))
-			logging.error("default value must be Integer");
+			Logging.error("default value must be Integer");
 	}
 
 	public void serialize(final Integer value, Integer minValue) {
@@ -28,8 +28,8 @@ public class SaveInteger extends SaveState {
 
 	@Override
 	public String deserialize() {
-		logging.info(this, "deserialize states" + states);
-		logging.info(this, "deserialize  getProperty " + states.getProperty(key, defaultValue.toString()));
+		Logging.info(this, "deserialize states" + states);
+		Logging.info(this, "deserialize  getProperty " + states.getProperty(key, defaultValue.toString()));
 		return states.getProperty(key, defaultValue.toString());
 	}
 
@@ -38,7 +38,7 @@ public class SaveInteger extends SaveState {
 		try {
 			result = Integer.valueOf(deserialize());
 		} catch (Exception ex) {
-			logging.warning(this, "deserializeAsInt error " + ex);
+			Logging.warning(this, "deserializeAsInt error " + ex);
 		}
 		if (result == null)
 			result = (Integer) defaultValue;

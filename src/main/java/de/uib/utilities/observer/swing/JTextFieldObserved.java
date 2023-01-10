@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataEditListener;
 import de.uib.utilities.observer.ObservableSubject;
 
@@ -29,7 +29,7 @@ public class JTextFieldObserved extends JTextField implements KeyListener {
 	}
 
 	public void setGlobalObservableSubject(ObservableSubject globalEditingSubject) {
-		logging.debug(this, "setGlobalObservableSubject " + globalEditingSubject);
+		Logging.debug(this, "setGlobalObservableSubject " + globalEditingSubject);
 		this.globalEditingSubject = globalEditingSubject;
 		addKeyListener(new DataEditListener(globalEditingSubject, this));
 		getDocument().addDocumentListener(new DataEditListener(globalEditingSubject, this));

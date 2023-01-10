@@ -17,9 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
 import de.uib.utilities.table.gui.TablesearchPane;
@@ -73,7 +73,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		searchPane.setSearchMode(TablesearchPane.FULL_TEXT_SEARCH);
 		searchPane.setSearchFields(new Integer[] { 0, 1 });
 		searchPane.setToolTipTextCheckMarkAllColumns(
-				configed.getResourceValue("DepotListPresenter.checkmarkAllColumns.tooltip"));
+				Configed.getResourceValue("DepotListPresenter.checkmarkAllColumns.tooltip"));
 
 		initComponents();
 		layouting();
@@ -117,9 +117,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	private void initComponents() {
 		labelDepotServer = new JLabel();
 		if (multidepot)
-			labelDepotServer.setText(configed.getResourceValue("DepotListPresenter.depots"));
+			labelDepotServer.setText(Configed.getResourceValue("DepotListPresenter.depots"));
 		else
-			labelDepotServer.setText(configed.getResourceValue("DepotListPresenter.depot"));
+			labelDepotServer.setText(Configed.getResourceValue("DepotListPresenter.depot"));
 		labelDepotServer.setOpaque(false);
 
 		labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -127,13 +127,13 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties
-				.setToolTipText(configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
+				.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsWithEqualProperties"));
 		Globals.formatButtonSmallText(buttonSelectDepotsWithEqualProperties);
 		buttonSelectDepotsWithEqualProperties.addActionListener(this);
 		buttonSelectDepotsWithEqualProperties.setEnabled(multidepot);
 
 		buttonSelectDepotsAll = new JButton("", Globals.createImageIcon("images/plusplus.png", ""));
-		buttonSelectDepotsAll.setToolTipText(configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
+		buttonSelectDepotsAll.setToolTipText(Configed.getResourceValue("MainFrame.buttonSelectDepotsAll"));
 		Globals.formatButtonSmallText(buttonSelectDepotsAll);
 		buttonSelectDepotsAll.addActionListener(this);
 		buttonSelectDepotsAll.setEnabled(multidepot);
@@ -189,7 +189,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	boolean filtered = false;
 
 	protected void filterOnSelect() {
-		logging.info(this, "filterOnSelect, we have " + depotslist.getListData());
+		Logging.info(this, "filterOnSelect, we have " + depotslist.getListData());
 
 		if (!filtered) {
 			unfilteredV = depotslist.getListData();
@@ -205,13 +205,13 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == buttonSelectDepotsAll) {
-			logging.info(this, "action on buttonSelectDepotsAll");
+			Logging.info(this, "action on buttonSelectDepotsAll");
 
 			depotslist.selectAll();
 		}
 
 		else if (e.getSource() == buttonSelectDepotsWithEqualProperties) {
-			logging.info(this, "action on buttonSelectDepotsWithEqualProperties");
+			Logging.info(this, "action on buttonSelectDepotsWithEqualProperties");
 
 			if (depotslist.getSelectedIndex() > -1) {
 				String depotSelected = depotslist.getSelectedValue();

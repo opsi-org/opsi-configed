@@ -29,10 +29,10 @@ import javax.swing.tree.TreeSelectionModel;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
@@ -187,10 +187,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						floatExternal();
 						break;
 					case PopupMenuTrait.POPUP_PDF:
-						logging.info(this, "------------- create report");
+						Logging.info(this, "------------- create report");
 						// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
 						HashMap<String, String> metaData = new HashMap<>();
-						metaData.put("header", configed.getResourceValue("PanelHWInfo.createPDF.title"));
+						metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
 						title = "";
 						if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
 							title = title + "Depot: " + main.getHostsStatusInfo().getInvolvedDepots();
@@ -224,7 +224,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	/** overwrite in subclasses */
 	protected void reload() {
-		logging.debug(this, "reload action");
+		Logging.debug(this, "reload action");
 	}
 
 	protected void floatExternal() {
@@ -348,12 +348,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			for (int j = 0; j < values.size(); j++) {
 				Map v = (Map) values.get(j);
 				String opsi = (String) v.get("Opsi");
-				logging.debug(this, "opsi " + opsi);
+				Logging.debug(this, "opsi " + opsi);
 				String ui = encodeString((String) v.get("UI")); // table row keys //no encoding needed
 				String unit = null;
 				if (v.containsKey("Unit")) {
 					unit = (String) v.get("Unit");
-					logging.debug(this, "unit  " + unit);
+					Logging.debug(this, "unit  " + unit);
 				}
 				Iterator iter = deviceInfo.keySet().iterator();
 				while (iter.hasNext()) {
@@ -367,7 +367,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						}
 
 						if (reduceScanToByAuditClasses && hwClass != null) {
-							logging.debug(this, "key " + opsi);
+							Logging.debug(this, "key " + opsi);
 
 							if (hwClass.equals(CLASS_COMPUTER_SYSTEM)) {
 								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
@@ -393,7 +393,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						}
 						String[] row = { ui, cv };
 						data.add(row);
-						logging.debug(this, "hwClass row  version 1 " + hwClass + ": " + Arrays.toString(row));
+						Logging.debug(this, "hwClass row  version 1 " + hwClass + ": " + Arrays.toString(row));
 						break;
 					}
 				}
@@ -404,7 +404,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				String key = (String) iter.next();
 				String[] row = { key, (String) deviceInfo.get(key) };
 				data.add(row);
-				logging.debug(this, "hwClass row  " + hwClass + ": " + Arrays.toString(row));
+				Logging.debug(this, "hwClass row  " + hwClass + ": " + Arrays.toString(row));
 			}
 		}
 
@@ -424,7 +424,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return;
 
 		TreePath selectedPath = tree.getSelectionPath();
-		logging.debug(this, "selectedPath " + selectedPath);
+		Logging.debug(this, "selectedPath " + selectedPath);
 		if (!node.isLeaf()) {
 			tree.expandPath(selectedPath);
 		}
@@ -447,7 +447,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
 			if (hwClass != null && (hwClass.equals(CLASS_COMPUTER_SYSTEM) || hwClass.equals(CLASS_BASE_BOARD))) {
-				logging.debug(this, "scanNode found  class_COMPUTER_SYSTEM or class_BASE_BOARD");
+				Logging.debug(this, "scanNode found  class_COMPUTER_SYSTEM or class_BASE_BOARD");
 				getDataForNode(node, true);
 
 				panelByAuditInfo.setByAuditFields(vendorStringComputerSystem, vendorStringBaseBoard, modelString,
@@ -490,12 +490,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		tableModel.setData(new ArrayList<>());
 
 		if (hwConfig == null) {
-			logging.info("hwConfig null");
+			Logging.info("hwConfig null");
 			return;
 		}
 
 		if (hwInfo == null) {
-			logging.info("hwInfo null");
+			Logging.info("hwInfo null");
 			return;
 		}
 
@@ -517,7 +517,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			List devices = (List) hwInfo.get(hwClass);
 			if (devices == null) {
-				logging.debug(this, "No devices of hwclass " + hwClass + " found");
+				Logging.debug(this, "No devices of hwclass " + hwClass + " found");
 				continue;
 			}
 
@@ -660,10 +660,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		List childValues;
 
-		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_hardware"));
-		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_device"));
-		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_name"));
-		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_value"));
+		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_hardware"));
+		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_device"));
+		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_name"));
+		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_value"));
 
 		for (int i = 0; i < treeModel.getChildCount(treeModel.getRoot()); i++) {
 			Object child = treeModel.getChild(treeModel.getRoot(), i);

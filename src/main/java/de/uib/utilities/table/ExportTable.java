@@ -13,9 +13,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FTextArea;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -80,7 +80,7 @@ public abstract class ExportTable {
 
 	public JMenuItemFormatted getMenuItemExport() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(
-				configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
+				Configed.getResourceValue("PanelGenEditTable.exportTableAsCSV")
 
 		);
 		menuItem.addActionListener(actionEvent -> execute(null, false));
@@ -95,12 +95,12 @@ public abstract class ExportTable {
 
 	public JMenuItemFormatted getMenuItemExportSelected() {
 		JMenuItemFormatted menuItem = new JMenuItemFormatted(
-				configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
+				Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
 
 		);
 		menuItem.addActionListener(actionEvent -> {
 			boolean onlySelected = true;
-			logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
+			Logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
 			execute(null, onlySelected);
 		});
 		return menuItem;
@@ -135,29 +135,29 @@ public abstract class ExportTable {
 		Boolean result = onlySelectedRows;
 
 		if (onlySelectedRows) {
-			logging.debug("selectedRows: " + theTable.getSelectedRows().length);
+			Logging.debug("selectedRows: " + theTable.getSelectedRows().length);
 			if (theTable.getRowCount() > 0 && theTable.getSelectedRows().length == 0) {
 
 				FTextArea fChoice = new FTextArea(null,
-						SHORT_APPNAME + " " + configed.getResourceValue("ExportTable.title"), true,
+						SHORT_APPNAME + " " + Configed.getResourceValue("ExportTable.title"), true,
 						new String[] {
-								configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
-								configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCompleteTable"),
-								configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCancel") },
+								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
+								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCompleteTable"),
+								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCancel") },
 
 						500, 200);
 				fChoice.setDefaultResult(3);
-				fChoice.setMessage(configed.getResourceValue("ExportTable.caseNoSelectedRows.info") + "\n\n\n"
-						+ configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly.text")
+				fChoice.setMessage(Configed.getResourceValue("ExportTable.caseNoSelectedRows.info") + "\n\n\n"
+						+ Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly.text")
 						+ "\n\n"
-						+ configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCompleteTable.text")
+						+ Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCompleteTable.text")
 						+ "\n\n");
 				fChoice.setVisible(true);
 
 				int answer = fChoice.getResult();
 
 				result = null;
-				logging.info(this, "checkSelection answered " + answer);
+				Logging.info(this, "checkSelection answered " + answer);
 				switch (answer) {
 				case 1:
 					result = true;
@@ -170,7 +170,7 @@ public abstract class ExportTable {
 			}
 		}
 
-		logging.info(this, "checkSelection gives: onlySelectedRows = " + result);
+		Logging.info(this, "checkSelection gives: onlySelectedRows = " + result);
 
 		return result;
 	}
@@ -184,11 +184,11 @@ public abstract class ExportTable {
 			chooser.setPreferredSize(Globals.filechooserSize);
 
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			chooser.setDialogTitle(SHORT_APPNAME + "    " + configed.getResourceValue("DocumentExport.chooser"));
+			chooser.setDialogTitle(SHORT_APPNAME + "    " + Configed.getResourceValue("DocumentExport.chooser"));
 
 			chooser.setApproveButtonText("ok");
-			chooser.setApproveButtonToolTipText(configed.getResourceValue("ExportTable.approveTooltip"));
-			UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
+			chooser.setApproveButtonToolTipText(Configed.getResourceValue("ExportTable.approveTooltip"));
+			UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 			UIManager.put("FileChooser.cancelButtonToolTipText", "");
 
 			UIManager.put("FileChooser.lookInLabelText", "Suchen in:");
@@ -210,21 +210,21 @@ public abstract class ExportTable {
 							filename = filename + ".csv";
 					}
 
-					logging.debug(this, "filename " + filename);
+					Logging.debug(this, "filename " + filename);
 
 					file = new File(filename);
 
 					if (file.exists() && askForOverwrite) {
 						int option = JOptionPane.showConfirmDialog(Globals.frame1,
-								configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
-								Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.question"),
+								Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
+								Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
 								JOptionPane.OK_CANCEL_OPTION);
 
 						if (option == JOptionPane.CANCEL_OPTION)
 							filename = null;
 					}
 				} catch (Exception fc_e) {
-					logging.error(configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
+					Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
 				}
 			}
 		}
@@ -234,11 +234,11 @@ public abstract class ExportTable {
 				exportDirectory = new File(filename).getParentFile();
 			} catch (Exception e) {
 				filename = null;
-				logging.error("Problem mit dem Verzeichnis von " + filename + " : " + e);
+				Logging.error("Problem mit dem Verzeichnis von " + filename + " : " + e);
 			}
 		}
 
-		logging.debug(this, "export to " + filename);
+		Logging.debug(this, "export to " + filename);
 
 		return filename;
 	}
@@ -246,7 +246,7 @@ public abstract class ExportTable {
 	protected String getFileLocation() {
 		String fileName = null;
 
-		logging.info(this, "getFileLocation with writeToFile " + writeToFile);
+		Logging.info(this, "getFileLocation with writeToFile " + writeToFile);
 
 		File defaultFile = new File(writeToFile);
 
@@ -257,7 +257,7 @@ public abstract class ExportTable {
 
 		chooser.setSelectedFile(defaultFile);
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-		chooser.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.chooser"));
+		chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.chooser"));
 
 		int returnVal = chooser.showDialog(Globals.mainContainer, "OK");
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -269,7 +269,7 @@ public abstract class ExportTable {
 			try {
 				exportDirectory = new File(fileName).getParentFile();
 			} catch (Exception ex) {
-				logging.error("directory not found for " + fileName + " : " + ex);
+				Logging.error("directory not found for " + fileName + " : " + ex);
 			}
 		}
 		return fileName;
@@ -278,7 +278,7 @@ public abstract class ExportTable {
 	protected String checkFileForExistence(String filename) {
 		String result = null;
 		try {
-			logging.info(this, "checkFileForExistence " + filename + " askForOverwrite " + askForOverwrite);
+			Logging.info(this, "checkFileForExistence " + filename + " askForOverwrite " + askForOverwrite);
 
 			if (!askForOverwrite)
 				return filename;
@@ -291,8 +291,8 @@ public abstract class ExportTable {
 				return filename;
 
 			int option = JOptionPane.showConfirmDialog(Globals.mainContainer,
-					configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
-					Globals.APPNAME + " " + configed.getResourceValue("DocumentExport.question"),
+					Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
+					Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
 					JOptionPane.OK_CANCEL_OPTION);
 
 			if (option == JOptionPane.CANCEL_OPTION)
@@ -300,7 +300,7 @@ public abstract class ExportTable {
 			else
 				result = filename;
 		} catch (HeadlessException ex) {
-			logging.error(configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
+			Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
 
 		}
 

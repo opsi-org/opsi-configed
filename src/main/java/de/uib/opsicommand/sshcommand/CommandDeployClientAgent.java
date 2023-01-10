@@ -3,7 +3,7 @@ package de.uib.opsicommand.sshcommand;
 import java.util.List;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHDeployClientAgentParameterDialog;
@@ -103,7 +103,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.deploy-clientagent");
+		return Configed.getResourceValue("SSHConnection.command.deploy-clientagent");
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.deploy-clientagent.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.deploy-clientagent.tooltip");
 	}
 
 	@Override

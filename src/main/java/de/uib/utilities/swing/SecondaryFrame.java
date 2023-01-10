@@ -10,7 +10,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SecondaryFrame extends JFrame implements WindowListener {
 
@@ -19,7 +19,7 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 	public SecondaryFrame() {
 		this.masterFrame = Globals.mainContainer;
 		if (masterFrame == null)
-			logging.warning(this, "masterFrame yet null");
+			Logging.warning(this, "masterFrame yet null");
 		addWindowListener(this);
 	}
 
@@ -32,7 +32,7 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 		setExtendedState(Frame.NORMAL);
 		centerOnParent();
 		setVisible(true);
-		logging.info(this, "started");
+		Logging.info(this, "started");
 	}
 
 	public void centerOnParent() {

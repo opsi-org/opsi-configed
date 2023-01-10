@@ -2,7 +2,7 @@ package de.uib.configed.dashboard;
 
 import java.util.Map;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.collector.ClientData;
 import de.uib.configed.dashboard.collector.DepotData;
 import de.uib.configed.dashboard.collector.ProductData;
@@ -20,8 +20,8 @@ public class DepotInfo implements DataChangeListener {
 	public void display() {
 		if (controller.selectedDepotChoiceBox.getItems().isEmpty()) {
 			controller.selectedDepotChoiceBox.getItems()
-					.add(configed.getResourceValue("Dashboard.selection.allDepots"));
-			controller.selectedDepotChoiceBox.setValue(configed.getResourceValue("Dashboard.selection.allDepots"));
+					.add(Configed.getResourceValue("Dashboard.selection.allDepots"));
+			controller.selectedDepotChoiceBox.setValue(Configed.getResourceValue("Dashboard.selection.allDepots"));
 			controller.selectedDepotChoiceBox.getItems().addAll(DepotData.getDepots().keySet());
 		} else if (controller.selectedDepotChoiceBox.getItems().size() == 1) {
 			controller.selectedDepotChoiceBox.getItems().addAll(DepotData.getDepots().keySet());
@@ -33,7 +33,7 @@ public class DepotInfo implements DataChangeListener {
 		Map<String, Map<String, Object>> depots = DepotData.getDepots();
 
 		if (selectedDepot != null
-				&& !selectedDepot.equals(configed.getResourceValue("Dashboard.selection.allDepots"))) {
+				&& !selectedDepot.equals(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
 			if (depots.get(selectedDepot).get("type") != null
 					|| !depots.get(selectedDepot).get("type").toString().isEmpty())
 				depotType = depots.get(selectedDepot).get("type").toString();

@@ -3,7 +3,7 @@ package de.uib.configed.dashboard.chart;
 import java.io.IOException;
 import java.util.List;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.ProductData;
 import javafx.collections.FXCollections;
@@ -35,7 +35,7 @@ public class ProductComparison extends StackPane implements DataChangeListener {
 
 	@Override
 	public void display() {
-		productsNoDataText.setText(configed.getResourceValue("Dashboard.noData"));
+		productsNoDataText.setText(Configed.getResourceValue("Dashboard.noData"));
 
 		ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
 
@@ -53,9 +53,9 @@ public class ProductComparison extends StackPane implements DataChangeListener {
 		int totalNetbootProducts = netbootProducts.size();
 		int totalLocalbootProducts = localbootProducts.size();
 
-		data.add(new PieChart.Data(String.format("%s %d", configed.getResourceValue("Dashboard.netbootProductsTitle"),
+		data.add(new PieChart.Data(String.format("%s %d", Configed.getResourceValue("Dashboard.netbootProductsTitle"),
 				totalNetbootProducts), totalNetbootProducts));
-		data.add(new PieChart.Data(String.format("%s %d", configed.getResourceValue("Dashboard.localbootProductsTitle"),
+		data.add(new PieChart.Data(String.format("%s %d", Configed.getResourceValue("Dashboard.localbootProductsTitle"),
 				totalLocalbootProducts), totalLocalbootProducts));
 
 		productComparisonPieChart.setData(data);

@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 
 public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
@@ -42,18 +42,18 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 	private void initComponents() {
 
 		jLabelOpsiProduct.setText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOtherPath"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelOtherPath"));
 		jTextFieldProduct = autocompletion.getTextField();
 
 		jComboBoxAutoCompletion = autocompletion.getCombobox();
-		jComboBoxAutoCompletion.setToolTipText(configed
+		jComboBoxAutoCompletion.setToolTipText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage.combo.tooltip"));
 
 		jComboBoxAutoCompletion.setEnabled(true);
 		jButtonAutoCompletion = autocompletion.getButton();
 		jButtonAutoCompletion.setText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage"));
-		jButtonAutoCompletion.setToolTipText(configed
+				Configed.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage"));
+		jButtonAutoCompletion.setToolTipText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.autocompletion.button_andopsipackage.tooltip"));
 	}
 

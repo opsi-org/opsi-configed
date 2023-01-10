@@ -2,22 +2,22 @@ package de.uib.configed.clientselection.elements;
 
 import java.util.Set;
 
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 public class SoftwareNameElement extends GenericTextElement {
 	public SoftwareNameElement() {
 		super(new String[] { de.uib.opsidatamodel.OpsiProduct.NAME, "Name" },
-				new String[] { configed.getResourceValue("ClientSelectionDialog.softwareName"),
-						configed.getResourceValue("InstallationStateTableModel.productId") });
+				new String[] { Configed.getResourceValue("ClientSelectionDialog.softwareName"),
+						Configed.getResourceValue("InstallationStateTableModel.productId") });
 	}
 
 	public SoftwareNameElement(Set<String> proposedData) {
 		super(proposedData, new String[] { de.uib.opsidatamodel.OpsiProduct.NAME, "Name" },
-				new String[] { configed.getResourceValue("ClientSelectionDialog.softwareName"),
-						configed.getResourceValue("InstallationStateTableModel.productId") });
+				new String[] { Configed.getResourceValue("ClientSelectionDialog.softwareName"),
+						Configed.getResourceValue("InstallationStateTableModel.productId") });
 
-		logging.debug(this, "proposed " + proposedData);
+		Logging.debug(this, "proposed " + proposedData);
 	}
 
 }

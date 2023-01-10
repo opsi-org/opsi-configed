@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class BackendMySQL {
 
@@ -36,7 +36,7 @@ public class BackendMySQL {
 
 	public List<String> getListFromSQL(String query) {
 
-		logging.info(this, query);
+		Logging.info(this, query);
 
 		List<List<java.lang.String>> clients = controller.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
@@ -282,7 +282,7 @@ public class BackendMySQL {
 
 		for (int i = 0; i < subgroups.size(); i++) {
 			for (int j = 0; j < 100; j++)
-				logging.info(this, subgroups.get(i));
+				Logging.info(this, subgroups.get(i));
 			clients = union(clients, getGroupWithSubgroup(subgroups.get(i)));
 		}
 
@@ -291,7 +291,7 @@ public class BackendMySQL {
 
 	public void printList(List<String> l) {
 		for (int i = 0; i < l.size(); i++) {
-			logging.info(this, l.get(i));
+			Logging.info(this, l.get(i));
 		}
 	}
 
@@ -327,7 +327,7 @@ public class BackendMySQL {
 
 	public List<String> getClientListFromJSONString(String query) {
 
-		logging.info(this, query);
+		Logging.info(this, query);
 
 		try {
 			JSONObject jsonObject = new JSONObject(query);
@@ -336,7 +336,7 @@ public class BackendMySQL {
 				return getListFromJSONObject(jsonObject.getJSONObject("data"));
 
 		} catch (JSONException e) {
-			logging.warning(this, "" + e);
+			Logging.warning(this, "" + e);
 		}
 
 		return null;
@@ -350,7 +350,7 @@ public class BackendMySQL {
 				return doJSONArray(jsonObject.getJSONArray("children"), newType);
 
 			} catch (Exception e) {
-				logging.warning(this, "" + e);
+				Logging.warning(this, "" + e);
 			}
 
 		} else
@@ -377,7 +377,7 @@ public class BackendMySQL {
 
 				mysql += doJSONObject(jsonObject);
 			} catch (Exception e) {
-				logging.warning(this, "" + e);
+				Logging.warning(this, "" + e);
 			}
 		}
 

@@ -10,7 +10,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.lang.reflect.Method;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class Containership {
 	int debugLevel = 4;
@@ -19,7 +19,7 @@ public class Containership {
 
 	public Containership(java.awt.Container conti) {
 		theContainer = conti;
-		logging.debug("Containership initialized");
+		Logging.debug("Containership initialized");
 	}
 
 	public void doForAllContainedCompis(String methodName, Object[] args) {
@@ -53,20 +53,20 @@ public class Containership {
 
 		cc = in.getComponentCount();
 
-		logging.debug("Number of Comps " + cc);
+		Logging.debug("Number of Comps " + cc);
 
 		for (i = 0; i < cc; i++) {
 			theComp = in.getComponent(i);
 			theCompClass = theComp.getClass();
 
-			logging.debug("  " + i + " " + theComp.getClass().getName() + "\n" + theComp.toString() + "\n");
+			Logging.debug("  " + i + " " + theComp.getClass().getName() + "\n" + theComp.toString() + "\n");
 
 			if (selClass.isInstance(theComp) && !methodName.equals("")) {
 				try {
 					theMethod = theCompClass.getMethod(methodName, theArgsTypes);
 					theMethod.invoke(theComp, args);
 				} catch (Exception ex) {
-					logging.debug(methodName + ": not found >>>>> " + ex.toString() + "\n");
+					Logging.debug(methodName + ": not found >>>>> " + ex.toString() + "\n");
 
 				}
 
@@ -75,7 +75,7 @@ public class Containership {
 			if (theComp instanceof Container)
 			// theComp is an instance of Container
 			{
-				logging.debug("+++ recursion ");
+				Logging.debug("+++ recursion ");
 				doForAllContained(methodName, args, theArgsTypes, selClass, (java.awt.Container) theComp);
 			}
 		}

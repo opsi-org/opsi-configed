@@ -14,10 +14,10 @@
 package de.uib.opsidatamodel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class PersistenceControllerFactory {
 	private static PersistenceController staticPersistControl;
@@ -42,10 +42,10 @@ public class PersistenceControllerFactory {
 	 * method getPersistenceController - or construct a new one
 	 */
 	public static PersistenceController getNewPersistenceController(String server, String user, String password) {
-		logging.info("getNewPersistenceController");
+		Logging.info("getNewPersistenceController");
 		if (staticPersistControl != null
 				&& staticPersistControl.getConnectionState().equals(ConnectionState.CONNECTED)) {
-			logging.info("a PersistenceController exists and we are connected, the existing one will be returned");
+			Logging.info("a PersistenceController exists and we are connected, the existing one will be returned");
 			return staticPersistControl;
 		}
 
@@ -55,11 +55,11 @@ public class PersistenceControllerFactory {
 			// have a try
 
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
-			logging.info("a PersistenceController initiated by option sqlAndGetRows got " + (persistControl == null));
+			Logging.info("a PersistenceController initiated by option sqlAndGetRows got " + (persistControl == null));
 		} else if (avoidSqlRawData) {
 			sqlAndGetRows = false;
 			persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
-			logging.info("a PersistenceController initiated by option avoidSqlRawData got " + (persistControl == null));
+			Logging.info("a PersistenceController initiated by option avoidSqlRawData got " + (persistControl == null));
 		}
 
 		else if (sqlDirect) {
@@ -67,14 +67,14 @@ public class PersistenceControllerFactory {
 			if (directmethodcall.equals(directmethodcall_cleanupAuditsoftware)) {
 				persistControl.cleanUpAuditSoftware();
 			}
-			logging.info("a PersistenceController initiated by option sqlDirect got " + (persistControl == null));
+			Logging.info("a PersistenceController initiated by option sqlDirect got " + (persistControl == null));
 			System.exit(0);
 		}
 
 		else {
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
 			sqlAndGetRows = true;
-			logging.info("a PersistenceController initiated by default, try RawData " + (persistControl == null));
+			Logging.info("a PersistenceController initiated by default, try RawData " + (persistControl == null));
 		}
 
 		boolean connected = persistControl.makeConnection();
@@ -85,9 +85,9 @@ public class PersistenceControllerFactory {
 
 		try {
 			if (connected) {
-				logging.info("factory: check source accepted");
+				Logging.info("factory: check source accepted");
 				boolean sourceAccepted = persistControl.canCallMySQL();
-				logging.info("factory: source accepted " + sourceAccepted);
+				Logging.info("factory: source accepted " + sourceAccepted);
 
 				if (sqlAndGetRows && !sourceAccepted) {
 					sqlAndGetRows = false;
@@ -97,25 +97,25 @@ public class PersistenceControllerFactory {
 				// de.uib.opsicommand.OpsiMethodCall.standardRpcPath = ""; //for compatibility
 
 				if (persistControl.getOpsiVersion().compareTo(Globals.REQUIRED_SERVICE_VERSION) < 0) {
-					String errorInfo = configed.getResourceValue("PersistenceControllerFactory.requiredServiceVersion")
+					String errorInfo = Configed.getResourceValue("PersistenceControllerFactory.requiredServiceVersion")
 							+ " " + Globals.REQUIRED_SERVICE_VERSION + ", " + "\n( "
-							+ configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion") + " "
+							+ Configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion") + " "
 							+ persistControl.getOpsiVersion() + " ) ";
 
 					javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer, errorInfo, Globals.APPNAME,
 							javax.swing.JOptionPane.OK_OPTION);
 
-					configed.endApp(1);
+					Configed.endApp(1);
 
 					return null;
 
 				}
 
 				if (persistControl.getOpsiVersion().compareTo(Globals.MIN_SUPPORTED_OPSI_VERSION) < 0) {
-					String errorInfo = configed
+					String errorInfo = Configed
 							.getResourceValue("PersistenceControllerFactory.supportEndedForThisVersion")
 
-							+ "\n( " + configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion")
+							+ "\n( " + Configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion")
 							+ " " + persistControl.getOpsiVersion() + " ) ";
 
 					new Thread() {
@@ -135,7 +135,7 @@ public class PersistenceControllerFactory {
 								@Override
 								public void doAction1() {
 									super.doAction1();
-									logging.info("== leaving not supported info ");
+									Logging.info("== leaving not supported info ");
 									continuing.value = false;
 									setVisible(false);
 								}
@@ -152,7 +152,7 @@ public class PersistenceControllerFactory {
 
 								infodialog.setVisible(true);
 								Globals.threadSleep(this, 3000);
-								logging.info("== repeating info " + count);
+								Logging.info("== repeating info " + count);
 
 								infodialog.setLocationRelativeTo(Globals.mainFrame);
 
@@ -172,7 +172,7 @@ public class PersistenceControllerFactory {
 				// retrieves host infos because of client counting
 
 				if (sqlAndGetRows && !persistControl.isWithMySQL()) {
-					logging.info(" fall back to  " + OpsiserviceNOMPersistenceController.class);
+					Logging.info(" fall back to  " + OpsiserviceNOMPersistenceController.class);
 					sqlAndGetRows = false;
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 
@@ -185,14 +185,14 @@ public class PersistenceControllerFactory {
 		}
 
 		catch (Exception ex) {
-			logging.error("Error", ex);
+			Logging.error("Error", ex);
 
 			String errorInfo = ex.toString();
 
 			javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer, errorInfo, Globals.APPNAME,
 					javax.swing.JOptionPane.OK_OPTION);
 
-			configed.endApp(2);
+			Configed.endApp(2);
 
 			return null;
 		}
@@ -212,13 +212,13 @@ public class PersistenceControllerFactory {
 
 	public static ConnectionState getConnectionState() {
 		if (staticPersistControl == null) {
-			logging.info("PersistenceControllerFactory getConnectionState, " + " staticPersistControl null");
+			Logging.info("PersistenceControllerFactory getConnectionState, " + " staticPersistControl null");
 
 			return ConnectionState.ConnectionUndefined;
 		}
 
 		ConnectionState result = staticPersistControl.getConnectionState();
-		logging.info("PersistenceControllerFactory getConnectionState " + result);
+		Logging.info("PersistenceControllerFactory getConnectionState " + result);
 
 		return staticPersistControl.getConnectionState();
 	}

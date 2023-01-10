@@ -39,7 +39,7 @@ import javax.swing.text.Position;
 import javax.swing.text.View;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class FEditPane extends FEdit implements DocumentListener, MouseListener, MouseMotionListener {
 	public static final Dimension AREA_DIMENSION = new Dimension(600, 300);
@@ -59,7 +59,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	public FEditPane(String initialText, String hint) {
 		super(initialText, hint);
-		logging.info(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
+		Logging.info(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
 
 		initFEditText();
 		setSingleLine(false);
@@ -110,7 +110,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public void setStartText(String s) {
-		logging.debug(this, " FEeditPane setStartText: " + s);
+		Logging.debug(this, " FEeditPane setStartText: " + s);
 		super.setStartText(s);
 
 		textpane.setText(s);
@@ -250,7 +250,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			String line = getMarkedLine(textpane.viewToModel2D(p));
 
 			if (line != null) {
-				logging.info(this, " got link " + line);
+				Logging.info(this, " got link " + line);
 				cmdLauncher.launch("\"" + line + "\"");
 			}
 		}

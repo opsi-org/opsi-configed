@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.utilities.swing.JTextShowField;
 
 public class PanelHWByAuditDriver extends JPanel {
@@ -61,16 +61,16 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldLabel2 = new JTextShowField();
 		fieldLabel2.setBackground(Globals.BACKGROUND_COLOR_3);
 
-		JLabel labelInfo = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels"));
+		JLabel labelInfo = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabels"));
 
 		JLabel labelSeparator = new JLabel(" / ");
 		JLabel labelSeparator2 = new JLabel(" / ");
-		JLabel labelVendor = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsVendor"));
-		JLabel labelProduct = new JLabel(configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProduct"));
+		JLabel labelVendor = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsVendor"));
+		JLabel labelProduct = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProduct"));
 
 		buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
-		buttonUploadDrivers.setToolTipText(configed.getResourceValue("PanelHWInfo.uploadDrivers"));
+		buttonUploadDrivers.setToolTipText(Configed.getResourceValue("PanelHWInfo.uploadDrivers"));
 
 		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
 

@@ -7,7 +7,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class TreePopupMouseListener extends utils.PopupMouseListener {
 
@@ -58,18 +58,18 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 			return false;
 		}
 
-		logging.debug(this, "checkAccepted clickPath  " + mousePath);
+		Logging.debug(this, "checkAccepted clickPath  " + mousePath);
 
 		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
 
 		String nodeName = clickNode.getUserObject().toString();
 
 		if (tree.getGroupNode(nodeName) != null && clickNode != tree.getGroupNode(nodeName)) {
-			logging.warning(this, "checkAccepted clickNode != tree.getGroupNode(nodeName)");
+			Logging.warning(this, "checkAccepted clickNode != tree.getGroupNode(nodeName)");
 			clickNode = tree.getGroupNode(nodeName);
 		}
 
-		logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
+		Logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
 
 		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) (clickNode.getParent());
 

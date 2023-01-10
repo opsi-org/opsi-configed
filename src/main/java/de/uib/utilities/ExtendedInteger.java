@@ -1,6 +1,6 @@
 package de.uib.utilities;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ExtendedInteger implements Comparable {
 
@@ -52,7 +52,7 @@ public class ExtendedInteger implements Comparable {
 				if (s.equals(sINFINITE) || s.toLowerCase().equals(infiniteImport) || s.equals(displayInfinite))
 					value = sINFINITE;
 				else
-					logging.error("possible values are numbers  or \"" + infiniteImport + "\" resp. \""
+					Logging.error("possible values are numbers  or \"" + infiniteImport + "\" resp. \""
 							+ displayInfinite + "\"");
 			}
 		}

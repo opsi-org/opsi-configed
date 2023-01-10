@@ -16,7 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
 public class FDialogTextfieldWithListSelection extends FGeneralDialog implements ListSelectionListener
@@ -56,7 +56,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 	protected void allLayout() {
 
 		// we could design an adapted layout and infuse it in guiInit
-		logging.info(this, "allLayout");
+		Logging.info(this, "allLayout");
 
 		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		// 

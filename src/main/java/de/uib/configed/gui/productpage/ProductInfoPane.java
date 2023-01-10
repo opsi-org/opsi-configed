@@ -29,10 +29,10 @@ import org.jdesktop.swingx.JXPanel;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ProductInfoPane extends javax.swing.JSplitPane
 		implements de.uib.utilities.DataChangedObserver, ActionListener {
@@ -103,7 +103,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		jLabelProductName.setFont(Globals.defaultFontBold);
 
 		jLabelLabelProductVersion.setFont(Globals.defaultFontBig);
-		jLabelLabelProductVersion.setText(configed.getResourceValue("ProductInfoPane.jLabelProductVersion") + " ");
+		jLabelLabelProductVersion.setText(Configed.getResourceValue("ProductInfoPane.jLabelProductVersion") + " ");
 
 		// do this so that you can mark and copy content of the label
 		jLabelProductVersion.setFont(Globals.defaultFontBold);
@@ -125,7 +125,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		dependenciesTextLabel.setText(configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
+		dependenciesTextLabel.setText(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
 		dependenciesTextLabel.setFont(Globals.defaultFontBold);
 		dependenciesTextLabel.setForeground(Globals.greyed);
 
@@ -325,7 +325,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 			String versionInfo = OpsiPackage.produceVersionInfo(productVersion, packageVersion);
 			OpsiProductInfo info = mainController.getPersistenceController().getProduct2versionInfo2infos()
 					.get(productId).get(versionInfo);
-			logging.info(this,
+			Logging.info(this,
 					"got product infos  productId, versionInfo:  " + productId + ", " + versionInfo + ": " + info);
 
 			setProductName(info.getProductName());

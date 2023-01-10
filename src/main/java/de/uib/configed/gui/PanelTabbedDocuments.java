@@ -13,8 +13,8 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.JFileChooser;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
 
 public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
@@ -52,7 +52,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					if (getInfo() != null) {
 						filename = getInfo().replace('.', '_') + "___" + ident + ".log";
 					}
-					logging.debug(this, "save with filename " + filename);
+					Logging.debug(this, "save with filename " + filename);
 					String pathname = openFile(filename + ".log");
 					if (pathname != null && !pathname.equals(""))
 						saveToFile(pathname, lines);
@@ -61,7 +61,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 				@Override
 				protected void saveAsZip() {
-					logging.info(this, "saveAsZip");
+					Logging.info(this, "saveAsZip");
 
 					String filename = ident;
 					if (getInfo() != null) {
@@ -76,18 +76,18 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 				@Override
 				protected void saveAllAsZip(boolean loadMissingDocs) {
-					logging.info(this, "saveAllAsZip got ident " + ident + " loadMissingDocs " + loadMissingDocs);
+					Logging.info(this, "saveAllAsZip got ident " + ident + " loadMissingDocs " + loadMissingDocs);
 
 					String fname = ident;
 					if (getInfo() != null) {
 						fname = getInfo().replace('.', '_') + "_all";
 					}
 
-					logging.info(this, "saveAllAsZip, start getting pathname");
+					Logging.info(this, "saveAllAsZip, start getting pathname");
 					String pathname = openFile(fname + ".zip");
 
 					if (pathname != null && !pathname.equals("")) {
-						logging.info(this, "saveAllAsZip, got pathname");
+						Logging.info(this, "saveAllAsZip, got pathname");
 
 						if (loadMissingDocs) {
 							for (int logNo = 0; logNo < idents.length; logNo++) {
@@ -96,7 +96,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 									loadDocument(idents[logNo]);
 								}
 
-								logging.info(this, "saveAllAsZip textPanes[" + logNo + "].lines.length "
+								Logging.info(this, "saveAllAsZip textPanes[" + logNo + "].lines.length "
 										+ textPanes[logNo].lines.length);
 
 							}
@@ -120,11 +120,11 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	public void loadDocument(String ident)
 	// override in subclasses
 	{
-		logging.debug(this, "loadDocument ident " + ident);
+		Logging.debug(this, "loadDocument ident " + ident);
 	}
 
 	private void setDocument(int i, final String document, final String info) {
-		logging.info(this, "setDocument " + i + " document == null " + (document == null));
+		Logging.info(this, "setDocument " + i + " document == null " + (document == null));
 		if (i < 0 || i >= idents.length)
 			return;
 
@@ -146,7 +146,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	}
 
 	public void setDocuments(final Map<String, String> documents, final String info) {
-		logging.info(this, " ------------------------------  idents.length " + idents.length + " info: " + info);
+		Logging.info(this, " ------------------------------  idents.length " + idents.length + " info: " + info);
 		for (int i = 0; i < idents.length; i++) {
 			setDocument(idents[i], documents.get(idents[i]), info);
 		}
@@ -164,7 +164,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			chooser.setApproveButtonText("O.K.");
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			chooser.setDialogTitle(
-					Globals.APPNAME + " " + configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
+					Globals.APPNAME + " " + Configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
 		}
 	}
 
@@ -185,7 +185,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				fileName = chooser.getSelectedFile().getAbsolutePath();
 				chooserDirectory = chooser.getCurrentDirectory();
 			} else {
-				logging.error("Not a valid filename: " + fileName);
+				Logging.error("Not a valid filename: " + fileName);
 
 			}
 		}
@@ -198,7 +198,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		try {
 			fWriter = new FileWriter(fn);
 		} catch (IOException ex) {
-			logging.error("Error opening file: " + fn + "\n --- " + ex);
+			Logging.error("Error opening file: " + fn + "\n --- " + ex);
 		}
 		int i = 0;
 		while (i < lines.length) {
@@ -206,14 +206,14 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				fWriter.write(lines[i] + "\n");
 
 			} catch (IOException ex) {
-				logging.error("Error writing file: " + fn + "\n --- " + ex);
+				Logging.error("Error writing file: " + fn + "\n --- " + ex);
 			}
 			i++;
 		}
 		try {
 			fWriter.close();
 		} catch (IOException ex) {
-			logging.error("Error closing file: " + fn + "\n --- " + ex);
+			Logging.error("Error closing file: " + fn + "\n --- " + ex);
 		}
 	}
 
@@ -241,7 +241,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 							out.write(buffer, 0, textPanes[logNo].lines[i].length());
 							out.write(CRLF, 0, 2);
 						} catch (IOException ex) {
-							logging.error("Error writing zip file: " + pn + "\n --- " + ex);
+							Logging.error("Error writing zip file: " + pn + "\n --- " + ex);
 						}
 						i++;
 					}
@@ -249,12 +249,12 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				out.closeEntry();
 			}
 		} catch (IOException ex) {
-			logging.error("Error writing zip file: " + pn + "\n --- " + ex);
+			Logging.error("Error writing zip file: " + pn + "\n --- " + ex);
 		}
 		try {
 			out.close();
 		} catch (IOException ex) {
-			logging.error("Error closing zip file: " + pn + "\n --- " + ex);
+			Logging.error("Error closing zip file: " + pn + "\n --- " + ex);
 		}
 	}
 
@@ -279,18 +279,18 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					out.write(buffer, 0, lines[i].length());
 					out.write(CRLF, 0, 2);
 				} catch (IOException ex) {
-					logging.error("Error writing zip file: " + fn + "\n --- " + ex);
+					Logging.error("Error writing zip file: " + fn + "\n --- " + ex);
 				}
 				i++;
 			}
 			out.closeEntry();
 		} catch (IOException ex) {
-			logging.error("Error writing zip file: " + fn + "\n --- " + ex);
+			Logging.error("Error writing zip file: " + fn + "\n --- " + ex);
 		}
 		try {
 			out.close();
 		} catch (IOException ex) {
-			logging.error("Error closing zip file: " + fn + "\n --- " + ex);
+			Logging.error("Error closing zip file: " + fn + "\n --- " + ex);
 		}
 	}
 

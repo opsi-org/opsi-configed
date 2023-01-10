@@ -27,11 +27,11 @@ import javax.swing.event.TableModelListener;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
@@ -94,7 +94,7 @@ public class LicenseDisplayer {
 		stage = new Stage();
 
 		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Globals.mainIcon), null));
-		stage.setTitle(configed.getResourceValue("Dashboard.license.title"));
+		stage.setTitle(Configed.getResourceValue("Dashboard.license.title"));
 		stage.setScene(scene);
 		stage.show();
 
@@ -115,11 +115,11 @@ public class LicenseDisplayer {
 		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
 		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
 
-		logging.info(this, "contractsExpired " + contractsExpired);
-		logging.info(this, "contractsToNotify " + contractsToNotify);
+		Logging.info(this, "contractsExpired " + contractsExpired);
+		Logging.info(this, "contractsToNotify " + contractsToNotify);
 
 		result.append("  ");
-		result.append(configed.getResourceValue("Dash.expiredContracts"));
+		result.append(Configed.getResourceValue("Dash.expiredContracts"));
 		result.append(":  \n");
 
 		for (Map.Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
@@ -131,7 +131,7 @@ public class LicenseDisplayer {
 		result.append("\n");
 
 		result.append("  ");
-		result.append(configed.getResourceValue("Dash.contractsToNotify"));
+		result.append(Configed.getResourceValue("Dash.contractsToNotify"));
 		result.append(":  \n");
 
 		for (Map.Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
@@ -176,7 +176,7 @@ public class LicenseDisplayer {
 			public void produceRows() {
 				super.produceRows();
 
-				logging.info(this, "producing rows for modelSWnames");
+				Logging.info(this, "producing rows for modelSWnames");
 				int foundVariantLicencepools = 0;
 				namesWithVariantPools.clear();
 
@@ -193,12 +193,12 @@ public class LicenseDisplayer {
 					i++;
 				}
 
-				logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
+				Logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
 			}
 
 			@Override
 			public void reset() {
-				logging.info(this, "reset");
+				Logging.info(this, "reset");
 				super.reset();
 			}
 		};
@@ -207,12 +207,12 @@ public class LicenseDisplayer {
 
 		List<List<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {
-			logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
+			Logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
 		}
 
 		result.append("\n");
 		result.append("  ");
-		result.append(configed.getResourceValue("Dash.similarSWEntriesForLicencePoolExist"));
+		result.append(Configed.getResourceValue("Dash.similarSWEntriesForLicencePoolExist"));
 		result.append(":  \n");
 
 		for (String name : namesWithVariantPools) {
@@ -250,7 +250,7 @@ public class LicenseDisplayer {
 		if (range.size() > 1)
 		// && range.contains( FSoftwarename2LicencePool.valNoLicencepool ))
 		{
-			logging.info(this, "checkExistNamesWithVariantLicencepools, found  for " + name + " :  " + range);
+			Logging.info(this, "checkExistNamesWithVariantLicencepools, found  for " + name + " :  " + range);
 			return true;
 		}
 		return false;

@@ -92,7 +92,7 @@ import de.uib.messages.Messages;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ProductState;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataBackend extends Backend {
 	// data which will be cached
@@ -130,14 +130,14 @@ public class OpsiDataBackend extends Backend {
 	private OpsiDataBackend() {
 		controller = PersistenceControllerFactory.getPersistenceController();
 		if (controller == null)
-			logging.warning(this, "Warning, controller is null!");
+			Logging.warning(this, "Warning, controller is null!");
 		getHardwareConfig();
 
 	}
 
 	@Override
 	protected SelectOperation createOperation(SelectOperation operation) {
-		logging.info(this, "createOperation operation, data, element: " + operation.getClassName() + ", "
+		Logging.info(this, "createOperation operation, data, element: " + operation.getClassName() + ", "
 				+ operation.getData().toString() + ",  " + operation.getElement().getClassName());
 
 		// Host
@@ -267,7 +267,7 @@ public class OpsiDataBackend extends Backend {
 			if (operation instanceof BigIntEqualsOperation)
 				return new OpsiDataBigIntEqualsOperation(map, attr, (Long) data, element);
 		}
-		logging.error("IllegalArgument: The operation " + operation + " was not found on " + element);
+		Logging.error("IllegalArgument: The operation " + operation + " was not found on " + element);
 		throw new IllegalArgumentException("The operation " + operation + " was not found on " + element);
 	}
 
@@ -290,7 +290,7 @@ public class OpsiDataBackend extends Backend {
 		if (operation instanceof HostOperation && operations.size() == 1)
 			return new HostOperation(operations.get(0));
 
-		logging.error(this, "IllegalArgument: The group operation " + operation + " was not found with "
+		Logging.error(this, "IllegalArgument: The group operation " + operation + " was not found with "
 				+ operations.size() + " operations");
 		throw new IllegalArgumentException(
 				"The group operation " + operation + " was not found with " + operations.size() + " operations");
@@ -299,7 +299,7 @@ public class OpsiDataBackend extends Backend {
 
 	@Override
 	public void setReloadRequested() {
-		logging.info(this, "setReloadRequested");
+		Logging.info(this, "setReloadRequested");
 		super.setReloadRequested();
 		clientMaps = null;
 		groups = null;
@@ -316,14 +316,14 @@ public class OpsiDataBackend extends Backend {
 	}
 
 	private void checkInitData() {
-		logging.info(this, "checkInitData ");
+		Logging.info(this, "checkInitData ");
 
 		// gets current data which should be in cache already
 
 		// take always the current host infos
 		{
 			clientMaps = controller.getHostInfoCollections().getMapOfPCInfoMaps();
-			logging.info(this, "client maps size " + clientMaps.size());
+			Logging.info(this, "client maps size " + clientMaps.size());
 		}
 
 		if (groups == null || reloadRequested) {
@@ -341,7 +341,7 @@ public class OpsiDataBackend extends Backend {
 
 			{
 				softwareMap = controller.getMapOfProductStatesAndActions(clientNames);
-				logging.debug(this, "getClients softwareMap ");
+				Logging.debug(this, "getClients softwareMap ");
 
 			}
 		}
@@ -351,7 +351,7 @@ public class OpsiDataBackend extends Backend {
 		}
 		getHardwareConfig();
 
-		logging.debug(this, "getClients hasHardware " + hasHardware);
+		Logging.debug(this, "getClients hasHardware " + hasHardware);
 		if (hasHardware) {
 
 			getHardwareOnClient(clientNames);
@@ -368,10 +368,10 @@ public class OpsiDataBackend extends Backend {
 
 		checkInitData();
 
-		logging.info(this, "getClients hasSoftware " + hasSoftware);
-		logging.info(this, "getClients hasHardware " + hasHardware);
-		logging.info(this, "getClients hasSoftware " + hasSoftware);
-		logging.info(this, "getClients swauditMap != null  " + (swauditMap != null));
+		Logging.info(this, "getClients hasSoftware " + hasSoftware);
+		Logging.info(this, "getClients hasHardware " + hasHardware);
+		Logging.info(this, "getClients hasSoftware " + hasSoftware);
+		Logging.info(this, "getClients swauditMap != null  " + (swauditMap != null));
 
 		for (String clientName : clientMaps.keySet()) {
 			OpsiDataClient client = new OpsiDataClient(clientName);
@@ -432,7 +432,7 @@ public class OpsiDataBackend extends Backend {
 			}
 			result.put(hardwareName, elementList);
 
-			logging.debug(this, "" + elementList);
+			Logging.debug(this, "" + elementList);
 		}
 		return result;
 	}
@@ -466,13 +466,13 @@ public class OpsiDataBackend extends Backend {
 			}
 			result.put(hardwareNameLocalized, elementList);
 
-			logging.debug(this, "" + elementList);
+			Logging.debug(this, "" + elementList);
 		}
 		return result;
 	}
 
 	private String getKey(String[] elementPath) {
-		logging.debug(this, elementPath[0]);
+		Logging.debug(this, elementPath[0]);
 		List values = hwClassToValues.get(hwUiToOpsi.get(elementPath[0]));
 		if (values != null) {
 			for (Object value : values) {
@@ -481,7 +481,7 @@ public class OpsiDataBackend extends Backend {
 					return (String) valueMap.get("Opsi");
 			}
 		}
-		logging.error(this, "Element not found: " + Arrays.toString(elementPath));
+		Logging.error(this, "Element not found: " + Arrays.toString(elementPath));
 		return "";
 	}
 
@@ -493,7 +493,7 @@ public class OpsiDataBackend extends Backend {
 		for (Map<String, Object> map : hardwareOnClient) {
 			String name = (String) map.get(HWAuditClientEntry.hostKEY);
 			if (!clientToHardware.containsKey(name)) {
-				logging.debug(this, "Non-client hostid: " + name);
+				Logging.debug(this, "Non-client hostid: " + name);
 				continue;
 			}
 			clientToHardware.get(name).add(map);
@@ -513,10 +513,10 @@ public class OpsiDataBackend extends Backend {
 
 	private void getHardwareConfig() {
 		String locale = Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry();
-		logging.debug(this, locale);
+		Logging.debug(this, locale);
 		hwConfig = controller.getOpsiHWAuditConf("en_");
 		hwConfigLocalized = controller.getOpsiHWAuditConf(locale);
-		logging.debug(this, "" + hwConfig);
+		Logging.debug(this, "" + hwConfig);
 		hwUiToOpsi = new HashMap<>();
 		hwClassToValues = new HashMap<>();
 

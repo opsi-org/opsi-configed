@@ -7,7 +7,7 @@ import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.SelectElement;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.IntGreaterOrEqualOperation;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataIntGreaterOrEqualOperation extends IntGreaterOrEqualOperation implements ExecutableOperation {
 	private String map;
@@ -25,9 +25,9 @@ public class OpsiDataIntGreaterOrEqualOperation extends IntGreaterOrEqualOperati
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		Map realMap = oClient.getMap(map);
-		logging.debug(this, realMap.toString());
+		Logging.debug(this, realMap.toString());
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-			logging.debug(this, "key " + key + " not found!");
+			Logging.debug(this, "key " + key + " not found!");
 			return false;
 		}
 
@@ -36,7 +36,7 @@ public class OpsiDataIntGreaterOrEqualOperation extends IntGreaterOrEqualOperati
 			if ((Integer) realData >= data)
 				return true;
 		} else {
-			logging.warning(this, "data is no Integer!");
+			Logging.warning(this, "data is no Integer!");
 		}
 		return false;
 	}

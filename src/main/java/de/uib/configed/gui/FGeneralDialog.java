@@ -27,8 +27,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
 
 public class FGeneralDialog extends JDialog implements ActionListener, KeyListener, MouseListener {
@@ -83,7 +83,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		super(owner, false);
 		this.owner = owner;
 
-		logging.info(this, "created by constructor 1, owner " + owner);
+		Logging.info(this, "created by constructor 1, owner " + owner);
 		registerWithRunningInstances();
 		setIconImage(Globals.mainIcon);
 		setTitle(title);
@@ -96,7 +96,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		super(owner, modal);
 		this.owner = owner;
 
-		logging.info(this, "created by constructor 2, owner " + owner);
+		Logging.info(this, "created by constructor 2, owner " + owner);
 		registerWithRunningInstances();
 		setTitle(title);
 		setFont(Globals.defaultFont);
@@ -115,11 +115,11 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	public void registerWithRunningInstances() {
-		logging.info(this, "registerWithRunningInstances " + wantToBeRegisteredWithRunningInstances());
+		Logging.info(this, "registerWithRunningInstances " + wantToBeRegisteredWithRunningInstances());
 		if (wantToBeRegisteredWithRunningInstances()) {
 			FEditObject.runningInstances.add(this, "");
 		}
-		logging.info(this, "running instances " + FEditObject.runningInstances.size());
+		Logging.info(this, "running instances " + FEditObject.runningInstances.size());
 	}
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList) {
@@ -145,7 +145,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		super(owner, modal);
 		this.owner = owner;
-		logging.info(this, "created by constructor 3  owner " + owner);
+		Logging.info(this, "created by constructor 3  owner " + owner);
 
 		construct(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout, addPane);
 	}
@@ -231,12 +231,12 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected void initIcons() {
 		if (icons != null && icons.length != buttonNames.length) {
-			logging.error(this, "icons not correctly specified");
+			Logging.error(this, "icons not correctly specified");
 			icons = null;
 		}
 
 		if (icons == null) {
-			logging.info(this, "init null icons");
+			Logging.info(this, "init null icons");
 			icons = new Icon[buttonNames.length];
 
 			for (int i = 0; i < buttonNames.length; i++) {
@@ -246,7 +246,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	protected void setButtons() {
-		logging.info(this, "setButtons and icons " + java.util.Arrays.asList(buttonNames));
+		Logging.info(this, "setButtons and icons " + java.util.Arrays.asList(buttonNames));
 
 		jButton1.setText(buttonNames[0]);
 		button1Text = buttonNames[0];
@@ -282,7 +282,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 				iconsLog = iconsLog + ((ImageIcon) icon).getDescription() + "    ";
 		}
 
-		logging.info(this, "with icons " + iconsLog);
+		Logging.info(this, "with icons " + iconsLog);
 	}
 
 	public void setContentBackground(java.awt.Color c) {
@@ -353,20 +353,20 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		jButton1.setFont(Globals.defaultFont);
 		jButton1.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
-		jButton1.setText(button1Text == null ? configed.getResourceValue("FGeneralDialog.ok") : button1Text);
+		jButton1.setText(button1Text == null ? Configed.getResourceValue("FGeneralDialog.ok") : button1Text);
 		jPanelButtonGrid.add(jButton1, null);
 
 		if (noOfButtons > 1) {
 			jButton2.setFont(Globals.defaultFont);
 			jButton2.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
-			jButton2.setText(button2Text == null ? configed.getResourceValue("FGeneralDialog.ignore") : button2Text);
+			jButton2.setText(button2Text == null ? Configed.getResourceValue("FGeneralDialog.ignore") : button2Text);
 			jPanelButtonGrid.add(jButton2, null);
 
 		}
 		if (noOfButtons > 2) {
 			jButton3.setFont(Globals.defaultFont);
 			jButton3.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
-			jButton3.setText(button3Text == null ? configed.getResourceValue("FGeneralDialog.empty") : button3Text);
+			jButton3.setText(button3Text == null ? Configed.getResourceValue("FGeneralDialog.empty") : button3Text);
 			jPanelButtonGrid.add(jButton3, null);
 		}
 
@@ -393,25 +393,25 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	public void doAction1() {
-		logging.debug(this, "FGeneralDialog.doAction1");
+		Logging.debug(this, "FGeneralDialog.doAction1");
 		result = 1;
 		leave();
 	}
 
 	public void doAction2() {
-		logging.debug(this, "FGeneralDialog.doAction2");
+		Logging.debug(this, "FGeneralDialog.doAction2");
 		result = 2;
 		leave();
 	}
 
 	public void doAction3() {
-		logging.debug(this, "FGeneralDialog.doAction3");
+		Logging.debug(this, "FGeneralDialog.doAction3");
 		result = 3;
 		leave();
 	}
 
 	public void leave() {
-		logging.debug(this, "FGeneralDialog.leave");
+		Logging.debug(this, "FGeneralDialog.leave");
 		setVisible(false);
 
 		dispose();
@@ -439,7 +439,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-		logging.debug(this, "key event " + e);
+		Logging.debug(this, "key event " + e);
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = true;
 		} else {
@@ -472,40 +472,40 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		logging.debug(this, "mouseClicked");
+		Logging.debug(this, "mouseClicked");
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		logging.debug(this, "mouseEntered");
+		Logging.debug(this, "mouseEntered");
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		logging.debug(this, "mouseExited");
+		Logging.debug(this, "mouseExited");
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		logging.debug(this, "mousePressed");
+		Logging.debug(this, "mousePressed");
 
 		preAction1();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		logging.debug(this, "mouseReleased");
+		Logging.debug(this, "mouseReleased");
 	}
 
 	// activated by mouse and key listener events
 	protected void preAction1() {
-		logging.info(this, "preAction1");
+		Logging.info(this, "preAction1");
 	}
 
 	// executed at the end of action listener event
 	protected void postAction1() {
-		logging.info(this, "postAction1");
+		Logging.info(this, "postAction1");
 	}
 
 	// ActionListener

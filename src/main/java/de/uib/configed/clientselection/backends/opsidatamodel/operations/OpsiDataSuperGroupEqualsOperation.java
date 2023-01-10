@@ -3,7 +3,7 @@ package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.SelectElement;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOperation {
 	private static boolean issuedTreeError = false;
@@ -18,9 +18,9 @@ public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOpera
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		if (oClient.getSuperGroups() == null) {
 			if (!issuedTreeError) {
-				logging.debug(
+				Logging.debug(
 						"Selection by tree structure not possible in headless mode, please remove this selection criterion.");
-				logging.debug("( The tree is built by the visual component.) ");
+				Logging.debug("( The tree is built by the visual component.) ");
 				issuedTreeError = true;
 			}
 			return false;

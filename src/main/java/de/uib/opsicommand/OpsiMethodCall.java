@@ -9,7 +9,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiMethodCall {
 	private Map theCall;
@@ -73,13 +73,13 @@ public class OpsiMethodCall {
 	}
 
 	public static void report() {
-		logging.debug(
+		Logging.debug(
 				"================================================   collected calls, maxCollectSize " + maxCollectSize);
 
 		for (String c : collectedCalls) {
-			logging.debug(c);
+			Logging.debug(c);
 		}
-		logging.debug("================================================");
+		Logging.debug("================================================");
 	}
 
 	public String getRpcPath() {
@@ -87,7 +87,7 @@ public class OpsiMethodCall {
 	}
 
 	public OpsiMethodCall activateExtendedRpcPath() {
-		logging.info(this, "activateExtendedRpcPath");
+		Logging.info(this, "activateExtendedRpcPath");
 		rpcPath = extendRpcPath;
 		return this;
 	}
@@ -201,7 +201,7 @@ public class OpsiMethodCall {
 			result = jO.toString();
 
 		} catch (org.json.JSONException jex) {
-			logging.error(this, "Exception while producing a JSONObject, " + jex.toString());
+			Logging.error(this, "Exception while producing a JSONObject, " + jex.toString());
 		}
 
 		return result;

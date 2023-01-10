@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This class represent a simple single command
@@ -228,14 +228,14 @@ public class EmptyCommand implements SSHCommand {
 		String temp2 = SSHCommandParameterMethods.replacement_default_2;
 		if (command != null && command.contains(temp1) && command.contains(temp2)) {
 			myTmpCommand = getCommandRaw();
-			logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
+			Logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
 			for (int i = 0; i < counterString(getCommandRaw(), temp1); i++) {
 				String plHolder = searchPlaceholder();
 				if (!paramlist.contains(plHolder))
 					paramlist.add(plHolder);
 			}
 		}
-		logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
+		Logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
 		return paramlist;
 	}
 
@@ -249,9 +249,9 @@ public class EmptyCommand implements SSHCommand {
 		String temp2 = SSHCommandParameterMethods.replacement_default_2;
 
 		String splittedText = myTmpCommand.split(temp1, 2)[1].split(temp2, 2)[0];
-		logging.debug(this, "searchPlaceholder found " + temp1 + splittedText + temp2);
+		Logging.debug(this, "searchPlaceholder found " + temp1 + splittedText + temp2);
 		myTmpCommand = myTmpCommand.replace(temp1 + splittedText + temp2, "");
-		logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
+		Logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
 
 		return temp1 + splittedText + temp2;
 	}
@@ -266,7 +266,7 @@ public class EmptyCommand implements SSHCommand {
 			index = s.indexOf(search, index + 1);
 			++times;
 		}
-		logging.debug(this, "counterString placeholders count  " + times);
+		Logging.debug(this, "counterString placeholders count  " + times);
 		return times;
 	}
 

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 //data source table productOnDepot
 public class OpsiPackage implements Comparable {
@@ -78,7 +78,7 @@ public class OpsiPackage implements Comparable {
 		else
 			this.lockedText = "";
 
-		logging.debug(this, "created : " + productId + ", " + productType + ", " + versionInfo);
+		Logging.debug(this, "created : " + productId + ", " + productType + ", " + versionInfo);
 
 		representation = buildRepresentation();
 	}
@@ -86,7 +86,7 @@ public class OpsiPackage implements Comparable {
 	public OpsiPackage(Map<String, Object> m) {
 		this("" + m.get(DBkeyPRODUCT_ID), "" + m.get(SERVICEkeyPRODUCT_VERSION), "" + m.get(SERVICEkeyPACKAGE_VERSION),
 				"" + m.get(SERVICEkeyPRODUCT_TYPE), Globals.interpretAsBoolean(m.get(SERVICEkeyLOCKED)));
-		logging.debug(this, "built from " + m);
+		Logging.debug(this, "built from " + m);
 
 	}
 

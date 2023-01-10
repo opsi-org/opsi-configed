@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHOpsiSetRightsParameterDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
-public class CommandOpsiSetRights extends SSHCommand_Template implements SSHCommandNeedParameter {
+public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHCommandNeedParameter {
 	private static final String BASE_NAME = "opsi-set-rights ";
 	private String command = BASE_NAME;
 
@@ -27,7 +27,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 	private String myTmpCommand;
 
 	public CommandOpsiSetRights() {
-		command = "opsi-set-rights " + configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath")
+		command = "opsi-set-rights " + Configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath")
 				+ " ";
 		sshCommand.add(this);
 	}
@@ -38,7 +38,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 		if (d.length() > 0 && d.charAt(d.length() - 1) != '/')
 			d = d + "/";
 
-		logging.info(this, "CommandOpsiSetRights dir " + dir);
+		Logging.info(this, "CommandOpsiSetRights dir " + dir);
 		sshCommand.add(this);
 		sshCommandOriginal.add(this);
 	}
@@ -65,7 +65,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.opsisetrights");
+		return Configed.getResourceValue("SSHConnection.command.opsisetrights");
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.opsisetrights.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.opsisetrights.tooltip");
 	}
 
 	@Override
@@ -169,14 +169,14 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 		String temp2 = SSHCommandParameterMethods.replacement_default_2;
 		if (command != null && command.contains(temp1) && command.contains(temp2)) {
 			myTmpCommand = getCommandRaw();
-			logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
+			Logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
 			for (int i = 0; i < counterString(getCommandRaw(), temp1); i++) {
 				String plHolder = searchPlaceholder();
 				if (!paramlist.contains(plHolder))
 					paramlist.add(plHolder);
 			}
 		}
-		logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
+		Logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
 		return paramlist;
 	}
 
@@ -190,9 +190,9 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 		String temp2 = SSHCommandParameterMethods.replacement_default_2;
 
 		String splittedText = myTmpCommand.split(temp1, 2)[1].split(temp2, 2)[0];
-		logging.debug(this, "searchPlaceholder found " + temp1 + splittedText + temp2);
+		Logging.debug(this, "searchPlaceholder found " + temp1 + splittedText + temp2);
 		myTmpCommand = myTmpCommand.replace(temp1 + splittedText + temp2, "");
-		logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
+		Logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
 
 		return temp1 + splittedText + temp2;
 	}
@@ -207,7 +207,7 @@ public class CommandOpsiSetRights extends SSHCommand_Template implements SSHComm
 			index = s.indexOf(search, index + 1);
 			++times;
 		}
-		logging.debug(this, "counterString placeholders count  " + times);
+		Logging.debug(this, "counterString placeholders count  " + times);
 		return times;
 	}
 

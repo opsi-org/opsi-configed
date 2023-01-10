@@ -14,9 +14,9 @@ import javax.swing.JMenuItem;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.clientselection.SelectionManager;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.thread.WaitCursor;
@@ -27,7 +27,7 @@ public class SavedSearchesDialog extends FEditList {
 	private DefaultListModel<Object> model;
 
 	public SavedSearchesDialog() {
-		setTitle(configed.getResourceValue("SavedSearchesDialog.title") + " (" + Globals.APPNAME + ")");
+		setTitle(Configed.getResourceValue("SavedSearchesDialog.title") + " (" + Globals.APPNAME + ")");
 		setModal(false);
 		setLeaveOnCommit(false);
 		manager = new SelectionManager(null);
@@ -56,13 +56,13 @@ public class SavedSearchesDialog extends FEditList {
 		super.createComponents();
 
 		// redefine buttonCommit
-		buttonCommit.setToolTipText(configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
+		buttonCommit.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.ExecuteButtonTooltip"));
 		buttonCommit.setIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 		buttonCommit.setSelectedIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 		buttonCommit.setDisabledIcon(Globals.createImageIcon("images/execute_disabled.png", ""));
 		buttonCommit.setPreferredSize(new java.awt.Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 
-		buttonCancel.setToolTipText(configed.getResourceValue("SavedSearchesDialog.CancelButtonTooltip"));
+		buttonCancel.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.CancelButtonTooltip"));
 
 	}
 
@@ -73,18 +73,18 @@ public class SavedSearchesDialog extends FEditList {
 		buttonRemove.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.debug(this, "actionPerformed");
+				Logging.debug(this, "actionPerformed");
 				removeSelectedEntry();
 			}
 		});
 
-		buttonRemove.setToolTipText(configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
+		buttonRemove.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 
 		buttonAdd.setEnabled(true);
 		buttonAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.debug(this, "actionPerformed on buttonAdd ");
+				Logging.debug(this, "actionPerformed on buttonAdd ");
 				addElement();
 			}
 		});
@@ -92,13 +92,13 @@ public class SavedSearchesDialog extends FEditList {
 		JMenuItem reload = new JMenuItemFormatted();
 
 		// find itscontext
-		reload.setText(configed.getResourceValue("ConfigedMain.reloadTable"));
+		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
 		reload.setFont(Globals.defaultFont);
 		reload.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.debug(this, "------------- reload action");
+				Logging.debug(this, "------------- reload action");
 				reloadAction();
 			}
 		});
@@ -107,17 +107,17 @@ public class SavedSearchesDialog extends FEditList {
 		JMenuItem remove = new JMenuItemFormatted();
 
 		// find itscontext
-		remove.setText(configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
+		remove.setText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 
 		remove.setFont(Globals.defaultFont);
 		remove.addActionListener(actionEvent -> {
-			logging.debug(this, "------------- remove action");
+			Logging.debug(this, "------------- remove action");
 			removeSelectedEntry();
 		});
 		popup.add(remove);
 
 		JMenuItem edit = new JMenuItemFormatted();
-		edit.setText(configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
+		edit.setText(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		edit.setFont(Globals.defaultFont);
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue().toString()));
 		popup.add(edit);
@@ -126,7 +126,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	@Override
 	public void setVisible(boolean b) {
-		logging.debug(this, "setVisible " + b);
+		Logging.debug(this, "setVisible " + b);
 		super.setVisible(b);
 	}
 
@@ -140,7 +140,7 @@ public class SavedSearchesDialog extends FEditList {
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		logging.debug(this, "SavedSearchesDialog ListSelectionListener valueChanged " + e);
+		Logging.debug(this, "SavedSearchesDialog ListSelectionListener valueChanged " + e);
 
 		super.valueChanged(e);
 
@@ -191,12 +191,12 @@ public class SavedSearchesDialog extends FEditList {
 
 	private void removeSelectedEntry() {
 		int index = visibleList.getSelectedIndex();
-		logging.debug(this, "remove selected Entry, list index " + index);
+		Logging.debug(this, "remove selected Entry, list index " + index);
 
 		if (index == -1)
 			return;
 
-		logging.debug(this, "remove entry at " + index);
+		Logging.debug(this, "remove entry at " + index);
 
 		removeSavedSearch((String) model.get(index));
 		model.remove(index);
@@ -220,7 +220,7 @@ public class SavedSearchesDialog extends FEditList {
 	}
 
 	public void resetModel() {
-		logging.info(this, "resetModel");
+		Logging.info(this, "resetModel");
 		model.removeAllElements();
 
 		de.uib.opsidatamodel.SavedSearches savedSearches = manager.getSavedSearches();

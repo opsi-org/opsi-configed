@@ -1,6 +1,6 @@
 package de.uib.configed.clientselection;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * Any kind of data needed for the operations.
@@ -17,24 +17,24 @@ public class SelectData {
 		dataType = type;
 		dataObject = data;
 
-		logging.debug(this, "got data, type " + data + ", " + type);
+		Logging.debug(this, "got data, type " + data + ", " + type);
 
 		switch (type) {
 		case TEXT_TYPE:
 			if (!(data instanceof String)) {
-				logging.error(this, "Data is no String");
+				Logging.error(this, "Data is no String");
 				throw new IllegalArgumentException("Data is no String");
 			}
 			break;
 		case INTEGER_TYPE:
 			if (!(data instanceof Integer)) {
-				logging.error(this, "Data is no Integer");
+				Logging.error(this, "Data is no Integer");
 				throw new IllegalArgumentException("Data is no Integer");
 			}
 			break;
 		case BIT_INTEGER_TYPE:
 			if (!(data instanceof Long)) {
-				logging.error(this, "Data is no Long");
+				Logging.error(this, "Data is no Long");
 				throw new IllegalArgumentException("Data is no Long");
 			}
 			break;
@@ -50,13 +50,13 @@ public class SelectData {
 
 		case DOUBLE_TYPE:
 			if (!(data instanceof Double)) {
-				logging.error(this, "Data is no Double");
+				Logging.error(this, "Data is no Double");
 				throw new IllegalArgumentException("Data is no Double");
 			}
 			break;
 		case ENUM_TYPE:
 			if (!(data instanceof String)) {
-				logging.error(this, "Data is no String");
+				Logging.error(this, "Data is no String");
 				throw new IllegalArgumentException("Data is no String");
 			}
 			break;

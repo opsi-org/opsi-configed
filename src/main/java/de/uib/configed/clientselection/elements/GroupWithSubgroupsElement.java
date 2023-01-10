@@ -1,6 +1,6 @@
 package de.uib.configed.clientselection.elements;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 
 public class GroupWithSubgroupsElement
 		// extends GroupElement
@@ -10,6 +10,6 @@ public class GroupWithSubgroupsElement
 
 	public GroupWithSubgroupsElement(String[] enumData) {
 		super(enumData, new String[] { "GroupWithSubgroups" },
-				/* "GroupWithSubgroups" */configed.getResourceValue("ClientSelectionDialog.groupWithSubgroups"));
+				/* "GroupWithSubgroups" */Configed.getResourceValue("ClientSelectionDialog.groupWithSubgroups"));
 	}
 }

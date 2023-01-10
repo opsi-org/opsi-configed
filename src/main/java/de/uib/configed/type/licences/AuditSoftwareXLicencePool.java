@@ -9,7 +9,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.utilities.datastructure.Relation;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class AuditSoftwareXLicencePool extends Relation {
 	/*
@@ -69,13 +69,13 @@ public class AuditSoftwareXLicencePool extends Relation {
 	public static Map<String, String> produceMapFromSWident(String ident) {
 		Map<String, String> m = new HashMap<>();
 		if (ident == null) {
-			logging.warning("produceMapFromSWident, ident null ");
+			Logging.warning("produceMapFromSWident, ident null ");
 			return null;
 		}
 
 		String[] parts = ident.split(";", -1); // give zero length parts as ""
 		if (parts.length < 5)
-			logging.warning("produceMapFromSWident, ident can not be splitted. " + ident);
+			Logging.warning("produceMapFromSWident, ident can not be splitted. " + ident);
 		m.put(SWAuditEntry.NAME, parts[0]);
 		m.put(SWAuditEntry.VERSION, parts[1]);
 		m.put(SWAuditEntry.SUBVERSION, parts[2]);

@@ -3,7 +3,7 @@ package de.uib.opsidatamodel;
 import java.util.HashMap;
 
 import de.uib.configed.type.SavedSearch;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SavedSearches extends HashMap<String, SavedSearch> {
 
@@ -22,7 +22,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 		String rcPartOfKey = key.substring(SavedSearch.CONFIG_KEY.length());
 
 		if (rcPartOfKey.length() < 2 || rcPartOfKey.charAt(0) != '.')
-			logging.error("No name key given after '" + SavedSearch.CONFIG_KEY + "'");
+			Logging.error("No name key given after '" + SavedSearch.CONFIG_KEY + "'");
 		else {
 			rcPartOfKey = rcPartOfKey.substring(1);
 
@@ -57,7 +57,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 
 				else
 					// there are no 3rd level keys
-					logging.error("Remote control key has too many parts");
+					Logging.error("Remote control key has too many parts");
 			}
 
 		}

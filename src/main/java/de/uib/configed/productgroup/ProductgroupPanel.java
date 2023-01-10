@@ -57,13 +57,13 @@ import javax.swing.event.ListSelectionListener;
 */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.table.gui.TablesearchPane;
 
@@ -98,12 +98,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	private int actionType = ActionRequest.INVALID;
 	protected JLabel labelSave;
 
-	static final String NO_GROUP_ID = configed.getResourceValue("GroupPanel.NO_GROUP_ID");
-	static final String SAVE_GROUP_ID = configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
-	static final String NO_GROUP_DESCRIPTION = configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
+	static final String NO_GROUP_ID = Configed.getResourceValue("GroupPanel.NO_GROUP_ID");
+	static final String SAVE_GROUP_ID = Configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
+	static final String NO_GROUP_DESCRIPTION = Configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
 	static final String EMPTIED_GROUPID = "";
-	static final String TEXT_SAVE = configed.getResourceValue("GroupPanel.TEXT_SAVE");
-	static final String TEXT_DELETE = configed.getResourceValue("GroupPanel.TEXT_DELETE");
+	static final String TEXT_SAVE = Configed.getResourceValue("GroupPanel.TEXT_SAVE");
+	static final String TEXT_DELETE = Configed.getResourceValue("GroupPanel.TEXT_DELETE");
 
 	protected Map<String, Map<String, String>> theData;
 
@@ -184,7 +184,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	public void setGuiIsFiltered(boolean b) {
-		logging.debug(this, "setGuiIsFiltered " + b);
+		Logging.debug(this, "setGuiIsFiltered " + b);
 		searchPane.setFilteredMode(b);
 
 	}
@@ -206,12 +206,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	protected void enterExistingGroup() {
-		logging.info(this, "enterExistingGroup" + groupsCombo.getSelectedItem());
+		Logging.info(this, "enterExistingGroup" + groupsCombo.getSelectedItem());
 
 		saveNameEditorShallFollow();
 
 		if (getGuiIsFiltered()) {
-			logging.info(this, "enterExistingGroup, was filtered");
+			Logging.info(this, "enterExistingGroup, was filtered");
 			setGuiIsFiltered(false);
 			associate.noSelection();
 		}
@@ -295,12 +295,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		boolean theSetFound = false;
 
 		if (namesAndDescriptions == null) {
-			logging.info(this, " namesAndDescriptions null ");
+			Logging.info(this, " namesAndDescriptions null ");
 			return;
 		}
 
 		iterNames = namesAndDescriptions.keySet().iterator();
-		logging.info(this, " namesAndDescriptions " + namesAndDescriptions);
+		Logging.info(this, " namesAndDescriptions " + namesAndDescriptions);
 
 		if (set != null) {
 			TreeSetBuddy checkSet = new TreeSetBuddy(set);
@@ -372,14 +372,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		saveNameEditor = new JTextField("");
 
 		saveNameEditor.setEditable(true);
-		saveNameEditor.setToolTipText(configed.getResourceValue("GroupPanel.GroupnameTooltip"));
+		saveNameEditor.setToolTipText(Configed.getResourceValue("GroupPanel.GroupnameTooltip"));
 
 		setMembers();
 		setGroupEditing(false);
 	}
 
 	protected void initComponents() {
-		buttonCommit = new de.uib.configed.gui.IconButton(configed.getResourceValue("GroupPanel.SaveButtonTooltip"), // desc
+		buttonCommit = new de.uib.configed.gui.IconButton(Configed.getResourceValue("GroupPanel.SaveButtonTooltip"), // desc
 				"images/apply.png", // inactive
 				"images/apply_over.png", // over
 				"images/apply_disabled.png", // active
@@ -387,44 +387,44 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		buttonCommit.addActionListener(this);
 		buttonCommit.setPreferredSize(Globals.newSmallButton);
 
-		buttonCancel = new de.uib.configed.gui.IconButton(configed.getResourceValue("GroupPanel.CancelButtonTooltip"),
+		buttonCancel = new de.uib.configed.gui.IconButton(Configed.getResourceValue("GroupPanel.CancelButtonTooltip"),
 				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png");
 		buttonCancel.addActionListener(this);
 		buttonCancel.setPreferredSize(Globals.newSmallButton);
 
-		buttonDelete = new de.uib.configed.gui.IconButton(configed.getResourceValue("GroupPanel.DeleteButtonTooltip"),
+		buttonDelete = new de.uib.configed.gui.IconButton(Configed.getResourceValue("GroupPanel.DeleteButtonTooltip"),
 				"images/edit-delete.png", "images/edit-delete_over.png", "images/edit-delete_disabled.png");
 		buttonDelete.addActionListener(this);
 		buttonDelete.setPreferredSize(Globals.newSmallButton);
 
 		buttonReloadProductStates = new de.uib.configed.gui.IconButton(
-				configed.getResourceValue("GroupPanel.ReloadButtonTooltip"), "images/reload_blue16.png",
+				Configed.getResourceValue("GroupPanel.ReloadButtonTooltip"), "images/reload_blue16.png",
 				"images/reload_blue16.png", " ", true);
 
-		buttonReloadProductStates.setToolTipText(configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
+		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 
 		buttonReloadProductStates.addActionListener(this);
 		buttonReloadProductStates.setPreferredSize(Globals.newSmallButton);
 		buttonReloadProductStates.setVisible(true);
 
 		buttonSaveAndExecute = new de.uib.configed.gui.IconButton(
-				configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
+				Configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
 				"images/executing_command_blue-grey_16.png", "images/executing_command_blue-grey_16.png", " ", true);
 
-		buttonSaveAndExecute.setToolTipText(configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
+		buttonSaveAndExecute.setToolTipText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
 
 		buttonSaveAndExecute.addActionListener(this);
 		buttonSaveAndExecute.setPreferredSize(Globals.newSmallButton);
 		buttonSaveAndExecute.setVisible(true);
 
-		labelCollectiveAction = new JLabel(configed.getResourceValue("GroupPanel.labelAggregateProducts"));
+		labelCollectiveAction = new JLabel(Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 		labelCollectiveAction.setFont(Globals.defaultFont);
 
 		buttonCollectiveAction = new de.uib.configed.gui.IconButton(
-				configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
+				Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
 				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
 
-		buttonCollectiveAction.setToolTipText(configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
+		buttonCollectiveAction.setToolTipText(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
 
 		buttonCollectiveAction.addActionListener(this);
 		buttonCollectiveAction.setPreferredSize(Globals.newSmallButton);
@@ -434,14 +434,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		Map<String, String> values = new LinkedHashMap<>();
 
-		values.put(configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
-				configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
+		values.put(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
+				Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
 
-		values.put(configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"),
-				configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked.tooltip"));
+		values.put(Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"),
+				Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked.tooltip"));
 
-		values.put(configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
-				configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
+		values.put(Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
+				Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
 
 		DefaultListModel<String> modelChooseAction = new DefaultListModel<>(); // put values from Map into
 																				// list
@@ -474,7 +474,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		});
 		listChooseAction.setSelectedIndex(0);
 
-		JLabel labelStrip = new JLabel("  " + configed.getResourceValue("GroupPanel.labelAggregateProducts"));
+		JLabel labelStrip = new JLabel("  " + Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 
 		labelStrip.setBackground(Globals.BACKGROUND_COLOR_7);
 		labelStrip.setOpaque(true);
@@ -503,16 +503,16 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		comboAggregatedEditing.setValues(values);
 		comboAggregatedEditing.setFont(Globals.defaultFont);
 
-		buttonEditDialog = new de.uib.configed.gui.IconButton(configed.getResourceValue("GroupPanel.EditButtonTooltip"),
+		buttonEditDialog = new de.uib.configed.gui.IconButton(Configed.getResourceValue("GroupPanel.EditButtonTooltip"),
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
 				"images/packagegroup_save_disabled.png");
 
-		buttonEditDialog.setToolTips(configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
-				configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
+		buttonEditDialog.setToolTips(Configed.getResourceValue("GroupPanel.EditButtonTooltipInactive"),
+				Configed.getResourceValue("GroupPanel.EditButtonTooltipActive"));
 		buttonEditDialog.addActionListener(this);
 		buttonEditDialog.setPreferredSize(Globals.newSmallButton);
 
-		JLabel labelSelectedGroup = new JLabel(configed.getResourceValue("GroupPanel.selectgroup.label"));
+		JLabel labelSelectedGroup = new JLabel(Configed.getResourceValue("GroupPanel.selectgroup.label"));
 
 		labelSelectedGroup.setFont(Globals.defaultFont);
 
@@ -535,7 +535,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		groupsEditField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-				logging.debug(this, "focus gained on groupsEditField, groupediting");
+				Logging.debug(this, "focus gained on groupsEditField, groupediting");
 				setGroupEditing(true);
 			}
 		});
@@ -557,7 +557,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		descriptionFieldListener = new MyDocumentListener() {
 			@Override
 			public void doAction() {
-				logging.debug(this, "description changed, setgroupediting");
+				Logging.debug(this, "description changed, setgroupediting");
 				updateDescription();
 			}
 		};
@@ -703,7 +703,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			String newDescription = descriptionField.getText();
 			Set<String> selectedProducts = associate.getSelectedIDs();
 
-			logging.debug(this, "save: set groupname, description, assigned_products " + newGroupID + ", "
+			Logging.debug(this, "save: set groupname, description, assigned_products " + newGroupID + ", "
 					+ newDescription + ", " + selectedProducts);
 
 			Set<String> originalSelection = associate.getSelectedIDs();
@@ -715,11 +715,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			if (!addedElements.isEmpty()) {
 
 				FShowList fList = new FShowList(Globals.mainFrame, Globals.APPNAME, true,
-						new String[] { configed.getResourceValue("buttonYES"), configed.getResourceValue("buttonNO") },
+						new String[] { Configed.getResourceValue("buttonYES"), Configed.getResourceValue("buttonNO") },
 						450, 400);
 
 				List<String> outlines = new ArrayList<>();
-				outlines.add(configed.getResourceValue("GroupPanel,addAllDependentProducts"));
+				outlines.add(Configed.getResourceValue("GroupPanel,addAllDependentProducts"));
 				outlines.add("__________");
 				outlines.add("");
 				outlines.addAll(addedElements);
@@ -759,7 +759,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			return;
 		}
 
-		logging.debug(this, "group members " + productGroupMembers.get(groupsCombo.getSelectedItem()));
+		Logging.debug(this, "group members " + productGroupMembers.get(groupsCombo.getSelectedItem()));
 
 		associate.setSelection(productGroupMembers.get(groupsCombo.getSelectedItem()));
 	}
@@ -788,7 +788,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	public void setGroupsData(final Map<String, Map<String, String>> data,
 			final Map<String, Set<String>> productGroupMembers) {
-		logging.debug(this, "setGroupsData " + data);
+		Logging.debug(this, "setGroupsData " + data);
 		setGroupEditing(false);
 
 		this.productGroupMembers = new MapOfProductGroups(productGroupMembers);
@@ -843,25 +843,25 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	protected void handleCollectiveAction(String selected, IFInstallationStateTableModel insTableModel) {
 
-		logging.info(this, "handleCollectiveAction on " + comboAggregatedEditing.getSelectedItem());
+		Logging.info(this, "handleCollectiveAction on " + comboAggregatedEditing.getSelectedItem());
 
 		List<String> saveSelectedProducts = associate.getSelectedProducts();
 
-		logging.info(this, "handleCollectiveAction, selected products " + associate.getSelectedRowsInModelTerms());
-		logging.info(this, "handleCollectiveAction, selected products " + associate.getSelectedProducts());
+		Logging.info(this, "handleCollectiveAction, selected products " + associate.getSelectedRowsInModelTerms());
+		Logging.info(this, "handleCollectiveAction, selected products " + associate.getSelectedProducts());
 
 		if (!insTableModel.infoIfNoClientsSelected()) {
 			insTableModel.initCollectiveChange();
 
-			if (selected.equals(configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked")))
+			if (selected.equals(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked")))
 				actionType = ActionRequest.SETUP;
 
 			else if (selected.equals(
-					de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked")))
+					de.uib.configed.Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked")))
 				actionType = ActionRequest.UNINSTALL;
 
 			else if (selected
-					.equals(de.uib.configed.configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked")))
+					.equals(de.uib.configed.Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked")))
 				actionType = ActionRequest.NONE;
 
 			else
@@ -870,7 +870,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			if (actionType != ActionRequest.INVALID) {
 
 				associate.getSelectedRowsInModelTerms().stream()
-						.peek(x -> logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0)))
+						.peek(x -> Logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0)))
 						.forEach(x -> insTableModel.collectiveChangeActionRequest(
 								(String) insTableModel.getValueAt(x, 0), new ActionRequest(actionType)));
 			}
@@ -897,7 +897,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	// ItemListener
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		logging.info(this, "itemStateChanged ");
+		Logging.info(this, "itemStateChanged ");
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 			if (e.getSource() == groupsCombo)
 				enterExistingGroup();
@@ -990,7 +990,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	public void commit() {
-		logging.debug(this, "commit");
+		Logging.debug(this, "commit");
 		String newGroupID = groupsEditField.getText();
 		if (save()) {
 			clearChanges();

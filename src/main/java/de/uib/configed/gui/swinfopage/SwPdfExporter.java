@@ -2,7 +2,7 @@ package de.uib.configed.gui.swinfopage;
 
 import java.util.HashMap;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -22,9 +22,9 @@ public class SwPdfExporter extends SWExporter {
 	@Override
 	public void export() {
 		String clientName = theHost;
-		logging.info(this, "------------- create pdf report swaudit for " + clientName);
+		Logging.info(this, "------------- create pdf report swaudit for " + clientName);
 
-		logging.debug("------------- create pdf report swaudit for " + clientName);
+		Logging.debug("------------- create pdf report swaudit for " + clientName);
 
 		HashMap<String, String> metaData = new HashMap<>();
 

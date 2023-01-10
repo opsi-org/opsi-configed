@@ -20,7 +20,7 @@ import de.uib.configed.clientselection.serializers.OpsiDataSerializer;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * The SelectionManager is used by the gui to create the tree of operations.
@@ -82,11 +82,11 @@ public class SelectionManager {
 	/** Save this group operation in the manager for a later build. */
 	public void addGroupOperation(String name, OperationWithStatus groupStatus,
 			List<OperationWithStatus> operationsWithStatuses) {
-		logging.debug(this, "Adding group operation " + name + " with " + operationsWithStatuses.toString());
+		Logging.debug(this, "Adding group operation " + name + " with " + operationsWithStatuses.toString());
 
 		LinkedList<SelectOperation> tmpList = new LinkedList<>();
 		tmpList.add(build(operationsWithStatuses, new int[] { 0 }));
-		logging.debug(this, "addGroupOperation: " + name + " " + tmpList.size() + " " + tmpList.get(0));
+		Logging.debug(this, "addGroupOperation: " + name + " " + tmpList.size() + " " + tmpList.get(0));
 		if (name.equals("Software"))
 			groupStatus.operation = new SoftwareOperation(tmpList);
 		else if (name.equals("Properties"))
@@ -147,12 +147,12 @@ public class SelectionManager {
 		if (withMySQL) {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsSQL(controller);
-			logging.notice(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			Logging.notice(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		} else {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsLocal();
-			logging.notice(this, "select Clients without ;MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			Logging.notice(this, "select Clients without ;MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		}
 	}
@@ -176,7 +176,7 @@ public class SelectionManager {
 
 		} catch (Exception e) {
 			for (int i = 0; i < 100; i++)
-				logging.error(this, "EXCEPTION");
+				Logging.error(this, "EXCEPTION");
 		}
 
 		return clientsSelected;
@@ -186,15 +186,15 @@ public class SelectionManager {
 	public List<String> selectClientsLocal() {
 		SelectOperation operation = getTopOperation();
 		if (operation == null) {
-			logging.info(this, "Nothing selected");
+			Logging.info(this, "Nothing selected");
 			return null;
 		} else {
-			logging.info("\n" + operation.printOperation(""));
+			Logging.info("\n" + operation.printOperation(""));
 		}
 
 		ExecutableOperation selectOperation = backend.createExecutableOperation(operation);
-		logging.info(this, "selectClients, operation " + operation.getClassName());
-		logging.info(this, "" + ((SelectGroupOperation) operation).getChildOperations().size());
+		Logging.info(this, "selectClients, operation " + operation.getClassName());
+		Logging.info(this, "" + ((SelectGroupOperation) operation).getChildOperations().size());
 		return backend.checkClients(selectOperation, hasSoftware, hasHardware, hasSwAudit);
 	}
 
@@ -204,10 +204,10 @@ public class SelectionManager {
 
 	/** Save the current operation tree with the serializer */
 	public void saveSearch(String name, String description) {
-		logging.debug(this, "saveSearch " + name);
+		Logging.debug(this, "saveSearch " + name);
 		SelectOperation operation = getTopOperation();
 		if (operation == null)
-			logging.debug(this, "Nothing selected");
+			Logging.debug(this, "Nothing selected");
 		else
 			serializer.save(operation, name, description);
 	}
@@ -236,20 +236,20 @@ public class SelectionManager {
 	 * tree.
 	 */
 	public void setSearch(String serialized) {
-		logging.debug(this, "setSearch " + serialized);
+		Logging.debug(this, "setSearch " + serialized);
 		clearOperations();
 		setSearch(serializer.deserialize(serialized));
 	}
 
 	/** Load the given search. It will replace the current operation tree. */
 	public void loadSearch(String name) {
-		logging.info(this, "loadSearch " + name);
+		Logging.info(this, "loadSearch " + name);
 		clearOperations();
 		if (name == null || name.isEmpty()) {
 			isSerializedLoaded = false;
 			return;
 		}
-		logging.info(this, "setSearch " + name);
+		Logging.info(this, "setSearch " + name);
 		setSearch(serializer.load(name));
 	}
 
@@ -259,8 +259,8 @@ public class SelectionManager {
 
 	/* Build a operation tree from the temporary data given by the UI */
 	private SelectOperation build(List<OperationWithStatus> input, int[] currentPos) {
-		logging.debug(this, "build counter: " + currentPos[0]);
-		logging.debug(this, "input size: " + input.size());
+		Logging.debug(this, "build counter: " + currentPos[0]);
+		Logging.debug(this, "input size: " + input.size());
 		if (input.isEmpty())
 			return null;
 
@@ -270,13 +270,13 @@ public class SelectionManager {
 
 		while (currentPos[0] < input.size()) {
 			OperationWithStatus currentInput = input.get(currentPos[0]);
-			logging.debug("Position: " + currentPos[0]);
-			logging.debug("currentInput: " + currentInput.operation + currentInput.status + currentInput.parenthesisOpen
+			Logging.debug("Position: " + currentPos[0]);
+			Logging.debug("currentInput: " + currentInput.operation + currentInput.status + currentInput.parenthesisOpen
 					+ currentInput.parenthesisClose);
 			if (currentInput.parenthesisOpen) {
 				currentInput.parenthesisOpen = false; // so we don't go one step deeper next time here, too
 				SelectOperation operation = build(input, currentPos);
-				logging.debug("\n" + operation.printOperation(""));
+				Logging.debug("\n" + operation.printOperation(""));
 				currentPos[0]--;
 				currentInput = input.get(currentPos[0]);
 				currentInput.operation = operation;
@@ -300,7 +300,7 @@ public class SelectionManager {
 				break;
 			}
 		}
-		logging.debug(this, "After break: " + currentPos[0]);
+		Logging.debug(this, "After break: " + currentPos[0]);
 		if (andConnections.size() == 1)
 			orConnections.add(andConnections.get(0));
 		else if (!andConnections.isEmpty())

@@ -12,10 +12,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnect;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	protected JButton jButtonClear;
@@ -29,9 +29,9 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	private static SSHConnectionExecDialog instance;
 
 	private SSHConnectionExecDialog() {
-		super(configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput"));
+		super(Configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput"));
 		if (!SSHConnect.isConnectionAllowed()) {
-			logging.warning(this, "Connection forbidden. Close exec dialog.");
+			Logging.warning(this, "Connection forbidden. Close exec dialog.");
 			this.cancel();
 		} else {
 			buildFrame = false;
@@ -41,7 +41,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 			this.setSize(900, 500);
 			this.setLocationRelativeTo(Globals.mainFrame);
-			logging.info(this, "SSHConnectionExecDialog built");
+			Logging.info(this, "SSHConnectionExecDialog built");
 
 			this.setVisible(!SSHCommandFactory.sshAlwaysExecInBackground);
 			buildFrame = true;
@@ -49,7 +49,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	}
 
 	public static SSHConnectionExecDialog getInstance() {
-		logging.info("SSHConnectionExecDialog.getInstance, existing " + instance);
+		Logging.info("SSHConnectionExecDialog.getInstance, existing " + instance);
 
 		if (instance == null) {
 			instance = getNewInstance();
@@ -76,21 +76,21 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	private void initGUI() {
 		try {
 			jButtonKillProcess = new de.uib.configed.gui.IconButton(
-					configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
+					Configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
 					"images/edit-delete.png", "images/edit-delete.png", true);
 			jButtonKillProcess
 					.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
-			jButtonKillProcess.setToolTipText(configed.getResourceValue("SSHConnection.buttonKillProcess"));
+			jButtonKillProcess.setToolTipText(Configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
-			jButtonClear = new de.uib.configed.gui.IconButton(configed.getResourceValue("SSHConnection.btn_clear"),
+			jButtonClear = new de.uib.configed.gui.IconButton(Configed.getResourceValue("SSHConnection.btn_clear"),
 					"images/user-trash.png", "images/user-trash.png", "images/user-trash.png", true);
 			jButtonClear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
-			jButtonClear.setToolTipText(configed.getResourceValue("SSHConnection.btn_clear"));
+			jButtonClear.setToolTipText(Configed.getResourceValue("SSHConnection.btn_clear"));
 			jButtonClear.addActionListener(actionEvent -> clear());
 			createLayout(konsolePanelLayout, jScrollPane, Globals.GAP_SIZE, Globals.GAP_SIZE, true);
 			createLayout(mainPanelLayout, inputPanel, 0, 0, false);
 		} catch (Exception e) {
-			logging.warning(this, "initGui, exception occurred ", e);
+			Logging.warning(this, "initGui, exception occurred ", e);
 		}
 	}
 
@@ -150,7 +150,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 	@Override
 	public void append(String caller, String line) {
-		logging.debug(this, "append " + line);
+		Logging.debug(this, "append " + line);
 		int callerlength = caller.length();
 		for (int i = callerlength; i <= infolength; i++)
 			caller += " ";

@@ -39,12 +39,12 @@ import javax.swing.event.ListSelectionListener;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
 public class PanelEditDepotProperties extends DefaultPanelEditProperties
@@ -92,12 +92,12 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		buttonSelectWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 
 		buttonSelectWithEqualProperties
-				.setToolTipText(configed.getResourceValue("ProductInfoPane.buttonSelectAllWithEqualProperties"));
+				.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAllWithEqualProperties"));
 		Globals.formatButtonSmallText(buttonSelectWithEqualProperties);
 		buttonSelectWithEqualProperties.addActionListener(this);
 
 		buttonSelectAll = new JButton("", Globals.createImageIcon("images/plusplus.png", ""));
-		buttonSelectAll.setToolTipText(configed.getResourceValue("ProductInfoPane.buttonSelectAll"));
+		buttonSelectAll.setToolTipText(Configed.getResourceValue("ProductInfoPane.buttonSelectAll"));
 		Globals.formatButtonSmallText(buttonSelectAll);
 		buttonSelectAll.addActionListener(this);
 
@@ -123,11 +123,11 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 		// jLabelProductProperties = new JLabel (
 
 		jLabelEditDepotProductProperties = new JLabel(
-				configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
+				Configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
 		jLabelEditDepotProductProperties.setFont(Globals.defaultFontBold);
 
 		IconButton buttonSetValuesFromPackage = new IconButton(
-				configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"),
+				Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"),
 				"images/reset_network_defaults.png", "images/reset_network_defaults_over.png", " ", true);
 
 		buttonSetValuesFromPackage.setPreferredSize(new Dimension(15, 30));
@@ -193,13 +193,13 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 
 	public void setDepotListData(List<String> depots, String productEdited) {
 
-		logging.info(this, "setDepotListData");
+		Logging.info(this, "setDepotListData");
 		if (depots == null) {
-			logging.warning(this, "depots list is null here");
+			Logging.warning(this, "depots list is null here");
 			return;
 		}
 
-		logging.info(this, "setDepotListData for count depots " + depots.size());
+		Logging.info(this, "setDepotListData for count depots " + depots.size());
 
 		this.productEdited = productEdited;
 		listDepots.setListData(depots.toArray(new String[0]));
@@ -239,9 +239,9 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 						.getDepot2product2properties().get(depot);
 
 				if (product2properties == null) {
-					logging.info(this, " product2properties null for depot " + depot);
+					Logging.info(this, " product2properties null for depot " + depot);
 				} else if (product2properties.get(productEdited) == null) {
-					logging.info(this, " product2properties null for depot, product " + depot + ", " + productEdited);
+					Logging.info(this, " product2properties null for depot, product " + depot + ", " + productEdited);
 				} else
 					storableProperties.add(product2properties.get(productEdited));
 
@@ -300,7 +300,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 					properties = depot2product2properties.get(depots.get(i)).get(productId);
 
 					if (properties == null) {
-						logging.info(this, "mergeProperties, product on depot has not properties " + productId + " on "
+						Logging.info(this, "mergeProperties, product on depot has not properties " + productId + " on "
 								+ depots.get(i));
 						continue;
 					}
@@ -328,12 +328,12 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	}
 
 	private void saveSelectedDepots() {
-		logging.debug(this, "saveSelectedDepots");
+		Logging.debug(this, "saveSelectedDepots");
 		listSelectedDepots = listDepots.getSelectedValuesList();
 	}
 
 	private void resetSelectedDepots(List<String> baseList) {
-		logging.debug(this, "resetSelectedDepots");
+		Logging.debug(this, "resetSelectedDepots");
 
 		listDepots.setValueIsAdjusting(true);
 
@@ -350,7 +350,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 					n++;
 				}
 			}
-			logging.debug(this, "resetSelectedDepots, n, selection is " + n + ", -- " + logging.getStrings(selection));
+			Logging.debug(this, "resetSelectedDepots, n, selection is " + n + ", -- " + Logging.getStrings(selection));
 
 			for (int i = 0; i < n; i++) {
 				listDepots.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
@@ -382,7 +382,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		logging.info(this, "mouseClicked " + e);
+		Logging.info(this, "mouseClicked " + e);
 		if (e.getSource() == listDepots) {
 			saveSelectedDepots();
 		}
@@ -412,7 +412,7 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 	// ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		logging.debug(this, "actionPerformed " + e);
+		Logging.debug(this, "actionPerformed " + e);
 
 		if (e.getSource() == buttonSelectWithEqualProperties) {
 			selectDepotsWithEqualProperties();

@@ -64,7 +64,7 @@ import javax.swing.table.TableRowSorter;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
@@ -79,7 +79,7 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.ExportTable;
@@ -216,7 +216,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				if (lsm.isSelectionEmpty()) {
-					logging.debug(this, "no rows selected");
+					Logging.debug(this, "no rows selected");
 
 				} else {
 					int selectedRow = lsm.getMinSelectionIndex();
@@ -226,9 +226,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					}
 
 					else {
-						logging.debug(this, "selected " + selectedRow);
-						logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
-						logging.debug(this, "selected  value at "
+						Logging.debug(this, "selected " + selectedRow);
+						Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
+						Logging.debug(this, "selected  value at "
 								+ tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
 						mainController.setProductEdited(
 								(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
@@ -264,7 +264,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					stateChange = "";
 
 				stateChange = table.getValueAt(row, column).toString() + ", "
-						+ configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange;
+						+ Configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange;
 
 				jc.setToolTipText(stateChange);
 
@@ -407,7 +407,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 						String serverProductVersion = "";
 
 						if (istm.getGlobalProductInfos().get(productId) == null)
-							logging.warning(this,
+							Logging.warning(this,
 									" istm.getGlobalProductInfos()).get(productId) == null for productId " + productId);
 						else
 							serverProductVersion = serverProductVersion
@@ -469,7 +469,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		setLeftComponent(leftPane);
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
-		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
+		Logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
@@ -477,19 +477,19 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			@Override
 			protected void reloadData() {
 				super.reloadData();
-				logging.info(this, "we are in PanelProductSettings");
+				Logging.info(this, "we are in PanelProductSettings");
 			}
 
 			@Override
 			protected void saveData() {
 				super.saveData();
-				logging.info(this, "we are in PanelProductSettings");
+				Logging.info(this, "we are in PanelProductSettings");
 			}
 
 			@Override
 			protected void deleteData() {
 				super.deleteData();
-				logging.info(this, "we are in PanelProductSettings");
+				Logging.info(this, "we are in PanelProductSettings");
 			}
 		});
 
@@ -519,13 +519,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		popup = new JPopupMenu("");
 
 		JMenuItem save = new JMenuItemFormatted();
-		save.setText(configed.getResourceValue("ConfigedMain.saveConfiguration"));
+		save.setText(Configed.getResourceValue("ConfigedMain.saveConfiguration"));
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		save.setFont(Globals.defaultFont);
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.debug(this, "actionevent on save-menue");
+				Logging.debug(this, "actionevent on save-menue");
 				mainController.checkSaveAll(false);
 				mainController.requestReloadStatesAndActions();
 			}
@@ -533,7 +533,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		popup.add(save);
 
 		itemOnDemand = new JMenuItemFormatted();
-		itemOnDemand.setText(configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
+		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
 		itemOnDemand.setFont(Globals.defaultFont);
 		itemOnDemand.addActionListener((ActionEvent e) -> mainController
 				.fireOpsiclientdEventOnSelectedClients(PersistenceController.OPSI_CLIENTD_EVENT_on_demand));
@@ -541,7 +541,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		popup.add(itemOnDemand);
 
 		itemSaveAndExecute = new JMenuItemFormatted();
-		itemSaveAndExecute.setText(configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
+		itemSaveAndExecute.setText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
 
 		// dies bit get its intended context
 		itemSaveAndExecute.setIcon(Globals.createImageIcon("images/executing_command_blue_16.png", ""));
@@ -549,7 +549,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		itemSaveAndExecute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.debug(this, "actionevent on save and execute menu item");
+				Logging.debug(this, "actionevent on save and execute menu item");
 				saveAndExecuteAction();
 			}
 		});
@@ -561,26 +561,26 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		JMenuItem reload = new JMenuItemFormatted();
 
 		// find itscontext
-		reload.setText(configed.getResourceValue("ConfigedMain.reloadTable"));
+		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
 		reload.setFont(Globals.defaultFont);
 		reload.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.info(this, "------------- reload action");
+				Logging.info(this, "------------- reload action");
 				reloadAction();
 			}
 		});
 		popup.add(reload);
 
 		JMenuItem createReport = new JMenuItemFormatted();
-		createReport.setText(configed.getResourceValue("PanelProductSettings.pdf"));
+		createReport.setText(Configed.getResourceValue("PanelProductSettings.pdf"));
 		createReport.setIcon(Globals.createImageIcon("images/acrobat_reader16.png", ""));
 		createReport.setFont(Globals.defaultFont);
 		createReport.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.info(this, "------------- create report");
+				Logging.info(this, "------------- create report");
 				HashMap<String, String> metaData = new HashMap<>();
 
 				// TODO: getFilter
@@ -613,7 +613,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		exportTable.addMenuItemsTo(popup);
 
-		JMenu sub = new JMenu(configed.getResourceValue("ConfigedMain.columnVisibility"));
+		JMenu sub = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
 		sub.setFont(Globals.defaultFont);
 		popup.addSeparator();
 		popup.add(sub);
@@ -703,7 +703,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	}
 
 	protected void saveAndExecuteAction() {
-		logging.info(this, "saveAndExecuteAction");
+		Logging.info(this, "saveAndExecuteAction");
 		mainController.checkSaveAll(false);
 		mainController.requestReloadStatesAndActions();
 
@@ -722,18 +722,18 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			result.append(key.getColumn() + ".." + key);
 		}
 		result.append("]");
-		logging.info(this, "infoSortkeys " + result);
+		Logging.info(this, "infoSortkeys " + result);
 		return " (number " + i + ") ";
 
 	}
 
 	public List<? extends RowSorter.SortKey> getSortKeys() {
-		logging.info(this, "getSortKeys : " + infoSortKeys(currentSortKeys));
+		Logging.info(this, "getSortKeys : " + infoSortKeys(currentSortKeys));
 		return currentSortKeys;
 	}
 
 	public void setSortKeys(List<? extends RowSorter.SortKey> currentSortKeys) {
-		logging.info(this, "setSortKeys: " + infoSortKeys(currentSortKeys));
+		Logging.info(this, "setSortKeys: " + infoSortKeys(currentSortKeys));
 		if (currentSortKeys != null)
 			tableProducts.getRowSorter().setSortKeys(currentSortKeys);
 	}
@@ -754,7 +754,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			if (selectedIDs.isEmpty() && tableProducts.getRowCount() > 0) {
 				tableProducts.addRowSelectionInterval(0, 0);
 				// show first product if no product given
-				logging.info(this, "setSelection 0");
+				Logging.info(this, "setSelection 0");
 			} else {
 				for (int row = 0; row < tableProducts.getRowCount(); row++) {
 					Object productId = tableProducts.getValueAt(row, 0);
@@ -814,7 +814,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				try {
 					return super.useToString(column);
 				} catch (Exception ex) {
-					logging.info(this, "------------------- no way to string");
+					Logging.info(this, "------------------- no way to string");
 					return false;
 				}
 			}
@@ -828,7 +828,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 						return super.getComparator(column);
 					}
 				} catch (Exception ex) {
-					logging.info(this, "------------------- not getting comparator ");
+					Logging.info(this, "------------------- not getting comparator ");
 					return null;
 				}
 
@@ -846,11 +846,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		// ---
 
-		logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
+		Logging.debug(this, " tableProducts columns  count " + tableProducts.getColumnCount());
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();
 
 		while (enumer.hasMoreElements())
-			logging.debug(this, " tableProducts column  " + ((TableColumn) enumer.nextElement()).getHeaderValue());
+			Logging.debug(this, " tableProducts column  " + ((TableColumn) enumer.nextElement()).getHeaderValue());
 
 		int colIndex = -1;
 
@@ -1067,9 +1067,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	// RowSorterListener for table row sorter
 	@Override
 	public void sorterChanged(RowSorterEvent e) {
-		logging.info(this, "RowSorterEvent " + e);
+		Logging.info(this, "RowSorterEvent " + e);
 		currentSortKeys = tableProducts.getRowSorter().getSortKeys();
-		logging.info(this, "sorterChanged, sortKeys: " + infoSortKeys(currentSortKeys));
+		Logging.info(this, "sorterChanged, sortKeys: " + infoSortKeys(currentSortKeys));
 
 	}
 
@@ -1084,7 +1084,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			selectedProducts.add((String) tableProducts.getModel().getValueAt(row, 0));
 		}
 
-		logging.info(this, "selectedProducts " + selectedProducts);
+		Logging.info(this, "selectedProducts " + selectedProducts);
 
 		return selectedProducts;
 	}

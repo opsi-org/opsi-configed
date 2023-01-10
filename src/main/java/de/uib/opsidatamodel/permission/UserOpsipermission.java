@@ -7,7 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class UserOpsipermission extends UserConfigModule {
 
@@ -75,7 +75,7 @@ public class UserOpsipermission extends UserConfigModule {
 		BOOL_KEYS.add(PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED);
 		BOOL_KEYS.add(PARTKEY_USER_PRIVILEGE_CREATECLIENT);
 
-		logging.info(" UserOpsipermission BOOL_KEYS " + BOOL_KEYS);
+		Logging.info(" UserOpsipermission BOOL_KEYS " + BOOL_KEYS);
 
 	}
 
@@ -95,16 +95,16 @@ public class UserOpsipermission extends UserConfigModule {
 		for (String key : CORRESPONDENCE_TO_LIST_KEYS.keySet()) {
 			LIST_KEYS.add(CORRESPONDENCE_TO_LIST_KEYS.get(key));
 		}
-		logging.info(" CORRESPONDENCE_TO_LIST_KEYS " + CORRESPONDENCE_TO_LIST_KEYS);
+		Logging.info(" CORRESPONDENCE_TO_LIST_KEYS " + CORRESPONDENCE_TO_LIST_KEYS);
 
-		logging.info(" UserOpsipermission LIST_KEYS " + LIST_KEYS);
+		Logging.info(" UserOpsipermission LIST_KEYS " + LIST_KEYS);
 
 	}
 
 	public static final UserOpsipermission DEFAULT;
 
 	static {
-		logging.info("init ARCHEO for UserOpsipermission");
+		Logging.info("init ARCHEO for UserOpsipermission");
 		DEFAULT = new UserOpsipermission(UserConfig.ARCHEO_ROLE_NAME);
 
 		DEFAULT.setBooleanValue(PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY, false);
@@ -123,7 +123,7 @@ public class UserOpsipermission extends UserConfigModule {
 
 	public UserOpsipermission(String uname) {
 		super(uname);
-		logging.info(this, "created for username " + uname + " with " + booleanMap + " -- " + valuesMap);
+		Logging.info(this, "created for username " + uname + " with " + booleanMap + " -- " + valuesMap);
 
 	}
 

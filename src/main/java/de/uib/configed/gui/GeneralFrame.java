@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class GeneralFrame extends JDialog implements ActionListener {
 	boolean shiftPressed = true;
@@ -75,7 +75,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	protected void doAction1() {
-		logging.debug(this, "doAction1");
+		Logging.debug(this, "doAction1");
 		result = 1;
 		leave();
 	}

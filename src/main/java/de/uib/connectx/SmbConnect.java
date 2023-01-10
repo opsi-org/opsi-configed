@@ -21,7 +21,7 @@ import java.util.Map;
 
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SmbConnect {
 	public static final String[] directoryProducts = new String[] { "var", "lib", "opsi", "depot" };
@@ -70,7 +70,7 @@ public class SmbConnect {
 		String result = "";
 		Map<String, Map<String, Object>> depot2depotMap = persist.getHostInfoCollections().getDepots();
 
-		logging.info(this, "buildSambaTarget for depotserver " + depotserver);
+		Logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 
 		if (depot2depotMap.get(depotserver) == null)
 			return result;
@@ -78,7 +78,7 @@ public class SmbConnect {
 		String depotRemoteUrl = (String) depot2depotMap.get(depotserver).get("depotRemoteUrl");
 
 		if (depotRemoteUrl == null) {
-			logging.warning(this, "buildSambaTarget, depotRemoteUrl null");
+			Logging.warning(this, "buildSambaTarget, depotRemoteUrl null");
 			return result;
 		}
 
@@ -87,14 +87,14 @@ public class SmbConnect {
 
 		if (parts.length > 2) {
 			netbiosName = parts[2];
-			logging.info(this, "buildSambaTarget " + netbiosName);
+			Logging.info(this, "buildSambaTarget " + netbiosName);
 		} else {
-			logging.warning(this, "buildSambaTarget, no splitting for " + depotRemoteUrl);
+			Logging.warning(this, "buildSambaTarget, no splitting for " + depotRemoteUrl);
 		}
 
 		result = File.separator + File.separator + netbiosName + File.separator + share;
 
-		logging.info(this, "buildSambaTarget " + result);
+		Logging.info(this, "buildSambaTarget " + result);
 
 		return result;
 	}

@@ -7,7 +7,7 @@ import java.util.Map;
 import de.uib.utilities.datastructure.Relation;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 
-public class Table_LicenceContracts extends Relation {
+public class TableLicenceContracts extends Relation {
 
 	/*
 	 * describe LICENSE_CONTRACT 
@@ -69,7 +69,7 @@ public class Table_LicenceContracts extends Relation {
 		ALLOWED_ATTRIBUTES.add(TYPE_KEY);
 	}
 
-	public Table_LicenceContracts() {
+	public TableLicenceContracts() {
 		super(INTERFACED_ATTRIBUTES);
 	}
 

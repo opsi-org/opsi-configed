@@ -1,7 +1,7 @@
 package de.uib.opsicommand.sshcommand;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHModulesUploadDialog;
 
@@ -46,12 +46,12 @@ public class CommandModulesUpload extends CommandSFTPUpload
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.modulesupload");
+		return Configed.getResourceValue("SSHConnection.command.modulesupload");
 	}
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.modulesupload.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.modulesupload.tooltip");
 	}
 
 	@Override

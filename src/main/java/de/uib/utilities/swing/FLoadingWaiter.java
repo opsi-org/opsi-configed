@@ -23,8 +23,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitInfoString;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
@@ -38,7 +38,7 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 	protected String info;
 	protected static WaitInfoString waitInfoString;
 
-	protected Object observingMesg = configed.getResourceValue("LoadingObserver.start");
+	protected Object observingMesg = Configed.getResourceValue("LoadingObserver.start");
 
 	int max = 200;
 
@@ -62,13 +62,13 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 	public FLoadingWaiter(Component owner, String title) {
 		this(title);
 
-		logging.info(this, "set Loction of FLoadingWaiter in center of screen of owner");
+		Logging.info(this, "set Loction of FLoadingWaiter in center of screen of owner");
 
 		setLocationRelativeTo(owner);
 		setAlwaysOnTop(true);
 		setVisible(true);
 
-		logging.info(this, "should be visible now");
+		Logging.info(this, "should be visible now");
 	}
 
 	public FLoadingWaiter(Component owner, String title, String startMessage) {
@@ -152,7 +152,7 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 	// WaitingSleeper
 	@Override
 	public void actAfterWaiting() {
-		logging.info(this, "actAfterWaiting");
+		Logging.info(this, "actAfterWaiting");
 		SwingUtilities.invokeLater(
 
 				() -> setVisible(false)
@@ -188,7 +188,7 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
-		logging.debug(this, "setLabellingStrategy millis " + millisLevel);
+		Logging.debug(this, "setLabellingStrategy millis " + millisLevel);
 		return "" + observingMesg + " " + waitInfoString.next(); // ??produces strings with ascii null
 
 	}

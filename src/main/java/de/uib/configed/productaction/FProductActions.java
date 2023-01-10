@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -36,7 +36,7 @@ public class FProductActions extends SecondaryFrame {
 
 		define();
 		setGlobals(Globals.getMap());
-		setTitle(Globals.APPNAME + " " + configed.getResourceValue("FProductAction.title"));
+		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FProductAction.title"));
 	}
 
 	protected void define() {

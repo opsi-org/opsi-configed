@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 
 public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
@@ -34,9 +34,9 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 
 	private void initComponents() {
 		jLabelUploadFrom = new JLabel(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelLocalFrom"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelLocalFrom"));
 		jLabelUploadTo = new JLabel(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelLocalTo"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelLocalTo"));
 		jTextFieldPath = new JTextField();
 		jTextFieldPath.setPreferredSize(Globals.textfieldDimension);
 
@@ -48,7 +48,7 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		JFileChooser jFileChooser = new JFileChooser();
 		jFileChooser.setPreferredSize(Globals.filechooserSize);
 		jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		jFileChooser.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
+		jFileChooser.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 		jFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		jFileChooser.setDialogTitle(Globals.APPNAME);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi-paket (*.opsi) ", "opsi");
@@ -58,7 +58,7 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		jButtonFileChooser.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		jButtonFileChooser.setPreferredSize(Globals.smallButtonDimension);
 		jButtonFileChooser.setToolTipText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.filechooser.tooltip"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener(actionEvent -> {
 			int returnVal = jFileChooser.showOpenDialog(instance);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {

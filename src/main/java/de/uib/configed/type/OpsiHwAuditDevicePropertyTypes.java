@@ -3,7 +3,7 @@ package de.uib.configed.type;
 import java.util.HashMap;
 import java.util.List;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditDeviceClass> {
 	java.util.Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
@@ -17,7 +17,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 		if (!key.startsWith(OpsiHwAuditDeviceClass.CONFIG_KEY))
 			return;
 
-		logging.info(this, "checkIn key " + key + " valuesSet " + valuesSet);
+		Logging.info(this, "checkIn key " + key + " valuesSet " + valuesSet);
 
 		String hwdevicePartOfKey = key.substring(OpsiHwAuditDeviceClass.CONFIG_KEY.length() + 1);
 
@@ -39,12 +39,12 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 		if (tableType == null || hwClass == null)
 			return;
 
-		logging.info(this, "checkIn key " + key + " hwClass " + hwClass + " tableType " + tableType);
+		Logging.info(this, "checkIn key " + key + " hwClass " + hwClass + " tableType " + tableType);
 
 		OpsiHwAuditDeviceClass auditDeviceClass = hwAuditDeviceClasses.get(hwClass.toUpperCase());
 
-		logging.info(this, "checkIn key " + key + " auditDeviceClass " + auditDeviceClass);
-		logging.info(this, "checkIn auditDeviceClasses for keys " + hwAuditDeviceClasses.keySet());
+		Logging.info(this, "checkIn key " + key + " auditDeviceClass " + auditDeviceClass);
+		Logging.info(this, "checkIn auditDeviceClasses for keys " + hwAuditDeviceClasses.keySet());
 		put(key, auditDeviceClass);
 
 		if (tableType.equals(OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE)) {

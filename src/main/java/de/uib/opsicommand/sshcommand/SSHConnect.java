@@ -28,8 +28,8 @@ import com.jcraft.jsch.Session;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This Class creates a SSH connection to a server.
@@ -87,7 +87,7 @@ public class SSHConnect {
 	 **/
 	protected void showMessage(String msg) {
 		JOptionPane.showMessageDialog(null, msg);
-		logging.info(this, "show message: " + msg);
+		Logging.info(this, "show message: " + msg);
 	}
 
 	/**
@@ -101,9 +101,9 @@ public class SSHConnect {
 		if (session != null && session.isConnected())
 			result = true;
 
-		logging.info(this, "isConnected session.isConnected " + result);
+		Logging.info(this, "isConnected session.isConnected " + result);
 		if (!result && SSHCommandFactory.successfulConnectObservedCount > 0)
-			logging.info("No SSH connection after successful connections: "
+			Logging.info("No SSH connection after successful connections: "
 					+ SSHCommandFactory.successfulConnectObservedCount + "\n"
 					+ "check server authentication configuration");
 		return result;
@@ -124,7 +124,7 @@ public class SSHConnect {
 	 * @param newConfirmDialog true for entering new sudo password
 	 **/
 	protected String getSudoPass(Component dialog, boolean rememberPw) {
-		logging.debug(this, "getSudoPass dialog " + dialog + " newConfirmDialog " + rememberPw);
+		Logging.debug(this, "getSudoPass dialog " + dialog + " newConfirmDialog " + rememberPw);
 		if ((rememberPw) && (pwSudo != null))
 			return pwSudo;
 		return getSudoPass(dialog);
@@ -137,17 +137,17 @@ public class SSHConnect {
 	 **/
 	protected String getSudoPass(Component dialog) {
 		if (!isConnectionAllowed()) {
-			logging.error(this, "connection forbidden.");
+			Logging.error(this, "connection forbidden.");
 			return "";
 		}
 		if (dialog == null)
 			dialog = Globals.mainFrame;
-		logging.debug(this, "getSudoPass dialog " + dialog);
+		Logging.debug(this, "getSudoPass dialog " + dialog);
 		final JPasswordField passwordField = new JPasswordField(10);
 		passwordField.setEchoChar('*');
 		final JOptionPane opPane = new JOptionPane(
-				new Object[] { new JLabel(configed.getResourceValue("SSHConnection.sudoPassw1")),
-						new JLabel(configed.getResourceValue("SSHConnection.sudoPassw2")), passwordField },
+				new Object[] { new JLabel(Configed.getResourceValue("SSHConnection.sudoPassw1")),
+						new JLabel(Configed.getResourceValue("SSHConnection.sudoPassw2")), passwordField },
 				JOptionPane.QUESTION_MESSAGE, JOptionPane.OK_CANCEL_OPTION) {
 			@Override
 			public void selectInitialValue() {
@@ -156,10 +156,10 @@ public class SSHConnect {
 			}
 		};
 		final JDialog jdialog = opPane.createDialog(dialog,
-				configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
+				Configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
 		jdialog.setVisible(true);
-		logging.debug(this, "getSudoPass joptiontype value " + opPane.getValue());
-		logging.debug(this, "getSudoPass joptiontype ok option " + JOptionPane.OK_OPTION);
+		Logging.debug(this, "getSudoPass joptiontype value " + opPane.getValue());
+		Logging.debug(this, "getSudoPass joptiontype ok option " + JOptionPane.OK_OPTION);
 		if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION) {
 			pwSudo = String.valueOf(passwordField.getPassword());
 			return pwSudo;
@@ -184,7 +184,7 @@ public class SSHConnect {
 	 * Calls {@link connect(SSHCommand)} with null command.
 	 **/
 	public void connect() {
-		logging.info(this, "connect " + "null");
+		Logging.info(this, "connect " + "null");
 		connect(null);
 	}
 
@@ -201,39 +201,39 @@ public class SSHConnect {
 	 **/
 	public boolean connect(SSHCommand command) {
 		if (!isConnectionAllowed()) {
-			logging.warning(this, "connection forbidden.");
+			Logging.warning(this, "connection forbidden.");
 			return false;
 		}
 		if (command != null)
-			logging.info(this, "connect command " + command.getMenuText());
+			Logging.info(this, "connect command " + command.getMenuText());
 		else
-			logging.info(this, "connect command null");
+			Logging.info(this, "connect command null");
 		try {
 			JSch jsch = new JSch();
 			connectionInfo.checkUserData();
-			logging.info(this, "connect user@host " + connectionInfo.getUser() + "@" + connectionInfo.getHost());
-			logging.debug(this, "connect with password log version " + connectionInfo.getShortPassw());
-			logging.info(this, "connect to login host " + (ConfigedMain.HOST.equals(connectionInfo.getHost())));
-			logging.info(this, "connect user " + connectionInfo.getUser());
+			Logging.info(this, "connect user@host " + connectionInfo.getUser() + "@" + connectionInfo.getHost());
+			Logging.debug(this, "connect with password log version " + connectionInfo.getShortPassw());
+			Logging.info(this, "connect to login host " + (ConfigedMain.HOST.equals(connectionInfo.getHost())));
+			Logging.info(this, "connect user " + connectionInfo.getUser());
 
 			if (connectionInfo.usesKeyfile()) {
 				if (!connectionInfo.getKeyfilePassphrase().equals(""))
 					jsch.addIdentity(connectionInfo.getKeyfilePath(), connectionInfo.getKeyfilePassphrase());
 				jsch.addIdentity(connectionInfo.getKeyfilePath());
-				logging.info(this, "connect this.keyfilepath " + connectionInfo.getKeyfilePath());
-				logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " addIdentity "
+				Logging.info(this, "connect this.keyfilepath " + connectionInfo.getKeyfilePath());
+				Logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " addIdentity "
 						+ connectionInfo.getKeyfilePath());
 				session = jsch.getSession(connectionInfo.getUser(), connectionInfo.getHost(),
 						Integer.valueOf(connectionInfo.getPort()));
 			} else {
 				session = jsch.getSession(connectionInfo.getUser(), connectionInfo.getHost(),
 						Integer.valueOf(connectionInfo.getPort()));
-				logging.info(this, "connect this.password "
+				Logging.info(this, "connect this.password "
 
 						+ SSHCommandFactory.getInstance().CONFIDENTIAL);
 
 				session.setPassword(connectionInfo.getPassw());
-				logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");
+				Logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");
 			}
 
 			Properties config = new Properties();
@@ -247,11 +247,11 @@ public class SSHConnect {
 
 			int timeo = 10000;
 
-			logging.info(this, "we try to connect with timeout " + timeo);
+			Logging.info(this, "we try to connect with timeout " + timeo);
 
 			session.connect(timeo);
-			logging.info(this, "we did connect " + connectionInfo);
-			logging.info(this, "connect " + connectionInfo);
+			Logging.info(this, "we did connect " + connectionInfo);
+			Logging.info(this, "connect " + connectionInfo);
 
 			SSHCommandFactory.successfulConnectObservedCount++;
 
@@ -259,10 +259,10 @@ public class SSHConnect {
 		} catch (com.jcraft.jsch.JSchException authfail) {
 			retriedTimesAuth = retry(retriedTimesAuth, authfail);
 			if (retriedTimesAuth >= 2) {
-				logging.warning(this, "connect Authentication failed. " + authfail);
+				Logging.warning(this, "connect Authentication failed. " + authfail);
 				if (SSHCommandFactory.successfulConnectObservedCount > 0)
 
-					logging.error("authentication failed after successful authentifications: "
+					Logging.error("authentication failed after successful authentifications: "
 							+ SSHCommandFactory.successfulConnectObservedCount + "\n" + "\n"
 							+ "check server authentication configuration" + "\n" + "\n");
 
@@ -273,7 +273,7 @@ public class SSHConnect {
 		} catch (Exception e) {
 			retriedTimesJschex = retry(retriedTimesJschex, e);
 			if (retriedTimesJschex >= 3) {
-				logging.warning(this, "connect error: " + e);
+				Logging.warning(this, "connect error: " + e);
 				return false;
 			} else
 				connect(command);
@@ -285,9 +285,9 @@ public class SSHConnect {
 		if (retriedTimes >= 3) {
 			retriedTimes = 1;
 
-			logging.warning(this, "Error", e);
+			Logging.warning(this, "Error", e);
 		} else {
-			logging.warning(this, "[" + retriedTimes + "] seems to be a session exception " + e);
+			Logging.warning(this, "[" + retriedTimes + "] seems to be a session exception " + e);
 			retriedTimes = retriedTimes + 1;
 		}
 		return retriedTimes;
@@ -302,7 +302,7 @@ public class SSHConnect {
 	 * @return the current jsch.session
 	 */
 	protected Session getSession() {
-		logging.info(this, "getSession " + session);
+		Logging.info(this, "getSession " + session);
 		return session;
 	}
 
@@ -313,13 +313,13 @@ public class SSHConnect {
 	// http://stackoverflow.com/questions/22476506/kill-process-before-disconnecting
 	public void interruptChannel(Channel _channel, boolean kill) {
 		try {
-			logging.info(this, "interruptChannel _channel " + _channel);
+			Logging.info(this, "interruptChannel _channel " + _channel);
 			_channel.sendSignal("2");
 			if (kill)
 				_channel.sendSignal("9");
-			logging.info(this, "interrupted");
+			Logging.info(this, "interrupted");
 		} catch (Exception e) {
-			logging.error("Failed interrupting channel", e);
+			Logging.error("Failed interrupting channel", e);
 		}
 	}
 
@@ -332,6 +332,6 @@ public class SSHConnect {
 			session.disconnect();
 		}
 
-		logging.debug(this, "disconnect");
+		Logging.debug(this, "disconnect");
 	}
 }

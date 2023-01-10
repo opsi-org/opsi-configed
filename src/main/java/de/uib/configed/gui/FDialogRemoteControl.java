@@ -6,8 +6,8 @@ import java.util.Map;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.ListSelectionEvent;
 
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 	Map<String, String> meanings;
@@ -41,11 +41,11 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 	protected void initComponents() {
 		super.initComponents();
 
-		buttonCommit.createIconButton(configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"),
+		buttonCommit.createIconButton(Configed.getResourceValue("FDialogRemoteControl.SaveButtonTooltip"),
 				"images/executing_command_red_22.png", "images/executing_command_red_22_over.png",
 				"images/executing_command_22_disabled.png", true);
 
-		buttonCancel.createIconButton(configed.getResourceValue("FDialogRemoteControl.CancelButtonTooltip"),
+		buttonCancel.createIconButton(Configed.getResourceValue("FDialogRemoteControl.CancelButtonTooltip"),
 				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
 
 		extraField.getDocument().addDocumentListener(this);
@@ -108,8 +108,8 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
 
 		selText = "" + selValue;
 
-		logging.debug(this, "valueChanged, selText " + selText);
-		logging.debug(this, "valueChanged, meanings.get(selText) " + meanings.get(selText));
+		Logging.debug(this, "valueChanged, selText " + selText);
+		Logging.debug(this, "valueChanged, meanings.get(selText) " + meanings.get(selText));
 
 		if (meanings != null && selText != null && meanings.get(selText) != null) {
 			extraField.setText(meanings.get(selText));

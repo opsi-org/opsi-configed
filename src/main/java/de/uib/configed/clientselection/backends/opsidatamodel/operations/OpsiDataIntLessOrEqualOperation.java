@@ -7,7 +7,7 @@ import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.SelectElement;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.IntLessOrEqualOperation;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataIntLessOrEqualOperation extends IntLessOrEqualOperation implements ExecutableOperation {
 	private String map;
@@ -26,7 +26,7 @@ public class OpsiDataIntLessOrEqualOperation extends IntLessOrEqualOperation imp
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		Map realMap = oClient.getMap(map);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-			logging.debug(this, "key " + key + " not found!");
+			Logging.debug(this, "key " + key + " not found!");
 			return false;
 		}
 
@@ -35,7 +35,7 @@ public class OpsiDataIntLessOrEqualOperation extends IntLessOrEqualOperation imp
 			if ((Integer) realData <= data)
 				return true;
 		} else {
-			logging.warning(this, "data is no Integer!");
+			Logging.warning(this, "data is no Integer!");
 		}
 		return false;
 	}

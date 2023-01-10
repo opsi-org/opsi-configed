@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ConfigName2ConfigValue extends RetrievedMap {
 	private Map<String, ConfigOption> configOptions;
@@ -50,8 +50,8 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			// config options
 
 			if (!(retrieved.get(key) instanceof List)) {
-				logging.warning(this, "list expected , for key " + key + " found " + retrieved.get(key));
-				logging.error(this, "list expected , for key " + key);
+				Logging.warning(this, "list expected , for key " + key + " found " + retrieved.get(key));
+				Logging.error(this, "list expected , for key " + key);
 
 				continue;
 			} else
@@ -68,7 +68,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 					put(key, list);
 			} else {
 
-				logging.debug(this, "no config (option) found for key " + key);
+				Logging.debug(this, "no config (option) found for key " + key);
 
 				put(key, list);
 			}

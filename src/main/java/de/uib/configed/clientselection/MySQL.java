@@ -7,7 +7,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class MySQL {
 
@@ -64,7 +64,7 @@ public class MySQL {
 
 	public String getMySQLforJSONObject(JSONObject json) {
 
-		logging.info(this, "json source " + json);
+		Logging.info(this, "json source " + json);
 		try {
 			if (!json.isNull("element")) {
 
@@ -72,7 +72,7 @@ public class MySQL {
 				try {
 					data = json.getString("data");
 				} catch (Exception e) {
-					logging.warning(this, "we did not get json from data " + e);
+					Logging.warning(this, "we did not get json from data " + e);
 				}
 
 				data = data.replace('*', '%');
@@ -199,7 +199,7 @@ public class MySQL {
 
 			}
 		} catch (Exception e) {
-			logging.warning(this, "we did not interpret element selection " + e);
+			Logging.warning(this, "we did not interpret element selection " + e);
 		}
 
 		return "";
@@ -312,7 +312,7 @@ public class MySQL {
 				return Type.NOT;
 			}
 		} catch (Exception e) {
-			logging.warning("we did get type of operation from " + json);
+			Logging.warning("we did get type of operation from " + json);
 		}
 
 		// if not a logical operator

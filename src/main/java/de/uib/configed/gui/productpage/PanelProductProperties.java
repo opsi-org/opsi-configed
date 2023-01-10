@@ -31,7 +31,7 @@ import de.uib.configed.type.OpsiPackage;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.updates.TableUpdateCollection;
@@ -84,7 +84,7 @@ public class PanelProductProperties extends JSplitPane
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
 
-		logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
+		Logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
@@ -111,7 +111,7 @@ public class PanelProductProperties extends JSplitPane
 
 		@Override
 		public void reload() {
-			logging.info(this, "reload()");
+			Logging.info(this, "reload()");
 
 			mainController.getPersistenceController().productPropertyDefinitionsRequestRefresh();
 			mainController.getPersistenceController().productpropertiesRequestRefresh();
@@ -122,7 +122,7 @@ public class PanelProductProperties extends JSplitPane
 		public void valueChanged(ListSelectionEvent e) {
 			super.valueChanged(e);
 
-			logging.debug(this, "valueChanged in paneProducts " + e);
+			Logging.debug(this, "valueChanged in paneProducts " + e);
 
 			if (e.getValueIsAdjusting())
 				return;
@@ -132,7 +132,7 @@ public class PanelProductProperties extends JSplitPane
 
 			if (lsm.isSelectionEmpty()) {
 
-				logging.info(this, "selected  no row ");
+				Logging.info(this, "selected  no row ");
 
 			}
 
@@ -151,12 +151,12 @@ public class PanelProductProperties extends JSplitPane
 		{
 			super.selectedRowChanged();
 
-			logging.debug(this, "selectedRowChanged in paneProducts ");
+			Logging.debug(this, "selectedRowChanged in paneProducts ");
 
 			ListSelectionModel lsm = getListSelectionModel();
 
 			if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
-				logging.info(this, "selected not a unique row ");
+				Logging.info(this, "selected not a unique row ");
 				infoPane.clearEditing();
 				((EditMapPanelX) propertiesPanel).init();
 				panelEditProperties.clearDepotListData();
@@ -167,7 +167,7 @@ public class PanelProductProperties extends JSplitPane
 				infoPane.setGrey(false);
 				int row = lsm.getMinSelectionIndex();
 
-				logging.info(this, "selected  row " + row);
+				Logging.info(this, "selected  row " + row);
 
 				if (row == -1) {
 					depotsOfPackage.clear();
@@ -176,7 +176,7 @@ public class PanelProductProperties extends JSplitPane
 
 					String depotId = "";
 
-					logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
+					Logging.info(this, "selected  depotId, product: " + depotId + ", " + productEdited);
 
 					List<String> depotsOfPackageAsRetrieved = new ArrayList<>();
 
@@ -192,7 +192,7 @@ public class PanelProductProperties extends JSplitPane
 								.getProduct2VersionInfo2Depots()
 								.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
 
-						logging.info(this, "valueChanged  versionInfo (depotsOfPackageAsRetrieved == null)  "
+						Logging.info(this, "valueChanged  versionInfo (depotsOfPackageAsRetrieved == null)  "
 								+ versionInfo + " " + (depotsOfPackageAsRetrieved == null));
 
 					} catch (Exception ex) {
@@ -213,7 +213,7 @@ public class PanelProductProperties extends JSplitPane
 						}
 					}
 
-					logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
+					Logging.debug(this, "selectedRowChanged depotsOfPackage " + depotsOfPackage);
 
 					infoPane.clearEditing();
 					if (depotsOfPackage != null && !depotsOfPackage.isEmpty()) {

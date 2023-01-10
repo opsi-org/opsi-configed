@@ -30,7 +30,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class PanelStateSwitch extends JPanel {
 
@@ -69,7 +69,7 @@ public class PanelStateSwitch extends JPanel {
 	public PanelStateSwitch(String title, Enum startValue, Enum[] values, String[] labels, Class myenum,
 			Enumsetter enumSetter, int hGap, int vGap) {
 
-		logging.info(this, " my enum " + myenum);
+		Logging.info(this, " my enum " + myenum);
 
 		this.title = title;
 
@@ -79,7 +79,7 @@ public class PanelStateSwitch extends JPanel {
 		changeListeners = new ArrayList<>();
 
 		if (labels != null && labels.length < values.length)
-			logging.warning(this, "missing label");
+			Logging.warning(this, "missing label");
 
 		this.labels = new LinkedHashMap<>();
 
@@ -95,22 +95,22 @@ public class PanelStateSwitch extends JPanel {
 		this.enumSetter = enumSetter;
 
 		if (myenumClass != null && myenumClass.isEnum()) {
-			logging.info(this, " type of myenum " + myenumClass.getTypeName());
+			Logging.info(this, " type of myenum " + myenumClass.getTypeName());
 
-			logging.info(this, " enum constants " + Arrays.toString(myenumClass.getEnumConstants()));
+			Logging.info(this, " enum constants " + Arrays.toString(myenumClass.getEnumConstants()));
 
 			int i = 0;
 			for (Object constant : myenumClass.getEnumConstants()) {
 				if (i == 0)
 					producedValue = (Enum) constant;
 				i++;
-				logging.info(this, " enum constant  " + constant + " class " + constant.getClass());
+				Logging.info(this, " enum constant  " + constant + " class " + constant.getClass());
 			}
 		}
 
 		this.startValue = startValue;
 
-		logging.info(this, " string val of start value " + startValue.toString());
+		Logging.info(this, " string val of start value " + startValue.toString());
 
 		initComponents();
 
@@ -129,7 +129,7 @@ public class PanelStateSwitch extends JPanel {
 	}
 
 	protected void notifyChangeListeners(ChangeEvent e) {
-		logging.info(this, "notifyChangeListeners " + e);
+		Logging.info(this, "notifyChangeListeners " + e);
 		for (ChangeListener cl : changeListeners) {
 			cl.stateChanged(e);
 		}
@@ -158,7 +158,7 @@ public class PanelStateSwitch extends JPanel {
 				producedValue = val;
 				if (enumSetter != null)
 					enumSetter.setValue(val);
-				logging.debug(this, "actionEvent with result " + val);
+				Logging.debug(this, "actionEvent with result " + val);
 				notifyChangeListeners(new ChangeEvent(this));
 			})
 
@@ -252,7 +252,7 @@ public class PanelStateSwitch extends JPanel {
 
 		groupedButtons.get(producedValue).setSelected(true);
 
-		logging.info(this, "setValueByString " + producedValue);
+		Logging.info(this, "setValueByString " + producedValue);
 
 		if (enumSetter != null)
 			enumSetter.setValue(producedValue);

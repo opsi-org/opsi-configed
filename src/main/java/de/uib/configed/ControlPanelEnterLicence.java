@@ -165,7 +165,7 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 
 		// --- PopupMenu
 		JMenuItemFormatted menuItemAddContract = new JMenuItemFormatted(
-				configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
+				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
 		menuItemAddContract.addActionListener(e -> {
 			Object[] a = new Object[6];
 			a[0] = "c_" + Globals.getSeconds();

@@ -9,7 +9,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.ListModel;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.DefaultListCellOptions;
 import de.uib.utilities.table.DefaultListModelProducer;
 import de.uib.utilities.table.ListCellOptions;
@@ -55,7 +55,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 	private void mapTypes(final Map currentData) {
 		this.currentData = new HashMap<>();
-		logging.debug(this, "mapTypes  " + currentData);
+		Logging.debug(this, "mapTypes  " + currentData);
 		originalTypes = new HashMap<>();
 		for (Object key : currentData.keySet()) {
 			Object value = currentData.get(key);
@@ -75,7 +75,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 			return listmodels.get(row);
 		}
 
-		logging.info(this, "getListModel, row " + row + ", column " + column);
+		Logging.info(this, "getListModel, row " + row + ", column " + column);
 
 		// build listmodel
 
@@ -84,8 +84,8 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		ListCellOptions options = getListCellOptions(key);
 
 		List values = options.getPossibleValues();
-		logging.info(this, "getListModel key " + key + " the option values " + values);
-		logging.info(this, "getListModel key " + key + " options  " + options);
+		Logging.info(this, "getListModel key " + key + " the option values " + values);
+		Logging.info(this, "getListModel key " + key + " options  " + options);
 
 		DefaultListModel model = new DefaultListModel();
 		Iterator iter = ((List) values).iterator();
