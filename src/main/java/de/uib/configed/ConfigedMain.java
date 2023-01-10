@@ -1217,13 +1217,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
-		// Ignore extra messages.
-		if (e.getValueIsAdjusting()) {
-			return;
+		if (!e.getValueIsAdjusting()) {
+			actOnListSelection();
 		}
-
-		actOnListSelection();
 	}
 
 	// we call this after we have a PersistenceController
@@ -2145,11 +2141,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		TableModel tm = buildClientListTableModel(rebuildTree);
 		logging.info(this,
 				"setRebuiltClientListTableModel --- got model selected " + selectionPanel.getSelectedValues().size());
-		selectionPanel.removeListSelectionListener(this);
+		// selectionPanel.removeListSelectionListener(this);
 
 		selectionPanel.setModel(tm);
 
-		selectionPanel.addListSelectionListener(this);
+		// selectionPanel.addListSelectionListener(this);
 
 		selectionPanel.initColumnNames();
 		logging.debug(this, " --- model set  ");
@@ -3715,8 +3711,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (mainFrame != null) {
 			mainFrame.setChangedDepotSelectionActive(false);
 			SwingUtilities.invokeLater(this::reloadData);
-		} else
+		} else {
 			reloadData();
+		}
 	}
 
 	private void reloadData() {
@@ -3805,7 +3802,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		setEditingTarget(editingTarget); // sets visual view index, therefore:
-		mainFrame.setVisualViewIndex(saveViewIndex);
+		// mainFrame.setVisualViewIndex(saveViewIndex);
 
 		// if depot selection changed, we adapt the clients
 		NavigableSet<String> clientsLeft = new TreeSet<>();
@@ -5258,11 +5255,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		logging.info(this, "setSelectedClientsCollectionOnPanel   selectionPanel.getSelectedValues().size() "
 				+ selectionPanel.getSelectedValues().size());
 
-		if (selected == null)
+		if (selected == null) {
 			setSelectedClientsArray(new String[0]);
-		else
+		} else {
 			setSelectedClientsArray(selected.toArray(new String[selected.size()]));
-
+		}
 	}
 
 	public void setSelectedClientsCollectionOnPanel(Collection<String> selected, boolean renewFilter) {
