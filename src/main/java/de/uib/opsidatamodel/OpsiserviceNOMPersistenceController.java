@@ -1672,7 +1672,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<Object> values = null;
 
 		for (String key : notWanConfigOptions.keySet()) {
-			if (notWanConfigOptions.get(key).getType() != ConfigOption.TYPE.BOOL_CONFIG) {
+			if (notWanConfigOptions.get(key).getType() != ConfigOption.TYPE.BoolConfig) {
 				notWanConfiguration.put(key, null);
 				wanConfiguration.put(key, null);
 			} else {
@@ -3216,11 +3216,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					.get(OpsiHwAuditDeviceClass.OPSI_KEY));
 
 			OpsiHwAuditDevicePropertyType firstSeen = new OpsiHwAuditDevicePropertyType(hwClass);
-			firstSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.FIRST_SEEN_COL_NAME);
+			firstSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.firstseenColName);
 			firstSeen.setOpsiDbColumnType("timestamp");
 			firstSeen.setUiName("first seen");
 			OpsiHwAuditDevicePropertyType lastSeen = new OpsiHwAuditDevicePropertyType(hwClass);
-			lastSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.LAST_SEEN_COL_NAME);
+			lastSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.lastseenColName);
 			lastSeen.setOpsiDbColumnType("timestamp");
 			lastSeen.setUiName("last seen");
 
@@ -3250,7 +3250,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					hwAuditDeviceClass.addHostRelatedProperty(devProperty);
 					hwAuditDeviceClass.setHostConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
-							+ OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE).toLowerCase());
+							+ OpsiHwAuditDeviceClass.hostAssignedTableType).toLowerCase());
 
 				}
 
@@ -3262,7 +3262,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					hwAuditDeviceClass.addHwItemRelatedProperty(devProperty);
 					hwAuditDeviceClass.setHwItemConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
-							+ OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE).toLowerCase());
+							+ OpsiHwAuditDeviceClass.hwItemAssignedTableType).toLowerCase());
 				}
 
 				else {
@@ -3420,7 +3420,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		Map<String, Object> configItem = createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey, // key
+		Map<String, Object> configItem = createJSONConfig(ConfigOption.TYPE.UnicodeConfig, configKey, // key
 				"", false, // editable
 				true, // multivalue
 				newDefaultValues, possibleValues);
@@ -3441,7 +3441,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			// case hostAssignedTableType
 			String configKey = hwAuditDeviceClass.getHostConfigKey();
-			String configIdent = hwClass + "_" + OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE;
+			String configIdent = hwClass + "_" + OpsiHwAuditDeviceClass.hostAssignedTableType;
 
 			logging.debug(this, " saveHwColumnConfig for HOST configIdent " + configIdent);
 
@@ -3484,7 +3484,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			// case hwItemAssignedTableType
 			configKey = hwAuditDeviceClass.getHwItemConfigKey();
-			configIdent = hwClass + "_" + OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE;
+			configIdent = hwClass + "_" + OpsiHwAuditDeviceClass.hwItemAssignedTableType;
 
 			logging.debug(this, " saveHwColumnConfig for HW configIdent " + configIdent);
 
@@ -5304,7 +5304,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		else {
 			ConfigOption option = (ConfigOption) ob;
 
-			if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
+			if (option.getType() != ConfigOption.TYPE.BoolConfig) {
 				logging.warning(this, "entry for " + key + " should be boolean");
 			} else {
 
@@ -7201,7 +7201,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<Object> selectedValuesRole = new ArrayList<>();
 		selectedValuesRole.add(role);
 
-		Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG,
+		Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
 				configkey, "which role should determine this configuration", false, // editable
 				false, // multivalue
 				selectedValuesRole, // defaultValues enry

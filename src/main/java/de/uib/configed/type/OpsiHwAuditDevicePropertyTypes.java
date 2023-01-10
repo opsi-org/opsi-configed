@@ -25,10 +25,10 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 
 		String hwClass = null;
 
-		if (hwdevicePartOfKey.endsWith(OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE_LOWER)) {
-			tableType = OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE;
-		} else if (hwdevicePartOfKey.endsWith(OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE_LOWER)) {
-			tableType = OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE;
+		if (hwdevicePartOfKey.endsWith(OpsiHwAuditDeviceClass.hostAssignedTableTypeLower)) {
+			tableType = OpsiHwAuditDeviceClass.hostAssignedTableType;
+		} else if (hwdevicePartOfKey.endsWith(OpsiHwAuditDeviceClass.hwItemAssignedTableTypeLower)) {
+			tableType = OpsiHwAuditDeviceClass.hwItemAssignedTableType;
 		}
 
 		int i = hwdevicePartOfKey.lastIndexOf("_");
@@ -47,7 +47,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 		logging.info(this, "checkIn auditDeviceClasses for keys " + hwAuditDeviceClasses.keySet());
 		put(key, auditDeviceClass);
 
-		if (tableType.equals(OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE)) {
+		if (tableType.equals(OpsiHwAuditDeviceClass.hostAssignedTableType)) {
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHostProperties())
 				deviceProperty.setDisplayed(valuesSet.contains(deviceProperty.getOpsiDbColumnName()));

@@ -12,7 +12,7 @@ import de.uib.utilities.logging.logging;
 import de.uib.utilities.swing.Containership;
 
 public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
-	public static final int MAX_CLIENT_NAMES_IN_FIELD = 10;
+	public static final int maxClientnamesInField = 10;
 
 	JLabel labelAllClientsCount;
 	JTextField fieldGroupActivated;
