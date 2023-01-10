@@ -3802,7 +3802,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		setEditingTarget(editingTarget); // sets visual view index, therefore:
-		// mainFrame.setVisualViewIndex(saveViewIndex);
+		mainFrame.setVisualViewIndex(saveViewIndex);
 
 		// if depot selection changed, we adapt the clients
 		NavigableSet<String> clientsLeft = new TreeSet<>();
