@@ -309,7 +309,7 @@ public class UserConfigProducing {
 
 			List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
 
-			Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
+			Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG,
 					roleKey, "which role should determine this users configuration", false, // editable
 					false, // multivalue
 					selectedValuesRole, // defaultValues enry
@@ -409,7 +409,7 @@ public class UserConfigProducing {
 				List<Object> selectedValuesRole = new ArrayList<>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
-				Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
+				Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG,
 						configKey, "which role should determine this users configuration", false, // editable
 						false, // multivalue
 						selectedValuesRole, // defaultValues enry
@@ -441,7 +441,7 @@ public class UserConfigProducing {
 
 				userConfig.setValues(partkey, values);
 
-				item = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig, configKey, configKey, // description
+				item = PersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey, configKey, // description
 						false, // editable
 						false, // multivalue
 						values, values // possibleValues

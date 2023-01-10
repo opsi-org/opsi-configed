@@ -51,21 +51,8 @@ public class OpsiPackage implements Comparable {
 		SERVICE_KEYS.add(SERVICEkeyPRODUCT_TYPE);
 	}
 
-	public static final List<String> COLUMN_NAMES;
-	static {
-		COLUMN_NAMES = new ArrayList<>();
-		COLUMN_NAMES.add(DBkeyPRODUCT_ID);
-		COLUMN_NAMES.add(SERVICEkeyPRODUCT_VERSION);
-		COLUMN_NAMES.add(SERVICEkeyPACKAGE_VERSION);
-		COLUMN_NAMES.add(SERVICEkeyPRODUCT_TYPE);
-		COLUMN_NAMES.add(SERVICEkeyLOCKED);
-
-	}
-
 	public static final int TYPE_LOCALBOOT = 0;
 	public static final int TYPE_NETBOOT = 1;
-
-	public static int lastIndex = -1;
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
 		this(productId, productVersion, packageVersion, productType, null); // compatibility to usages without locked

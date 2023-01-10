@@ -87,14 +87,14 @@ public class ControllerHWinfoColumnConfiguration {
 			dbColumnName = tableValue.substring(0, indexCurly).trim();
 			String tableIdent = tableValue.substring(indexCurly + 1);
 
-			String checkType = OpsiHwAuditDeviceClass.hostAssignedTableType + "}";
+			String checkType = OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE + "}";
 
 			if (tableIdent.endsWith(checkType))
-				tableType = OpsiHwAuditDeviceClass.hostAssignedTableType;
+				tableType = OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE;
 			else {
-				checkType = OpsiHwAuditDeviceClass.hwItemAssignedTableType + "}";
+				checkType = OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE + "}";
 				if (tableIdent.endsWith(checkType))
-					tableType = OpsiHwAuditDeviceClass.hwItemAssignedTableType;
+					tableType = OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE;
 			}
 
 			int indexUnderline = tableIdent.lastIndexOf("_");
@@ -364,7 +364,7 @@ public class ControllerHWinfoColumnConfiguration {
 				lineMap = new LinkedHashMap<>();
 				lineMap.put(COL_LINE_NO, formatLineNo(id));
 
-				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.hostAssignedTableType,
+				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE,
 						deviceProperty.getOpsiDbColumnName());
 
 				lineMap.put(COL_OPSI_COLUMN_NAME, columnIdent.produceColumnCellValue());
@@ -391,7 +391,7 @@ public class ControllerHWinfoColumnConfiguration {
 				lineMap = new LinkedHashMap<>();
 				lineMap.put(COL_LINE_NO, formatLineNo(id));
 
-				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.hwItemAssignedTableType,
+				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE,
 						deviceProperty.getOpsiDbColumnName());
 
 				lineMap.put(COL_OPSI_COLUMN_NAME, columnIdent.produceColumnCellValue());

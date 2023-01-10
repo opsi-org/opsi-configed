@@ -394,9 +394,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					if (val.equals(""))
 						return c;
 
-					if (val.equals(InstallationStateTableModel.CONFLICTstring)
-							|| val.equals(InstallationStateTableModel.unequalAddstring
-									+ InstallationStateTableModel.CONFLICTstring)) {
+					if (val.equals(InstallationStateTableModel.CONFLICT_STRING)
+							|| val.equals(InstallationStateTableModel.UNEQUAL_ADD_STRING
+									+ InstallationStateTableModel.CONFLICT_STRING)) {
 						c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR);
 						c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
 					} else {
