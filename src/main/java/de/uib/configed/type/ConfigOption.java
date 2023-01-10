@@ -16,7 +16,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 	public static final String REFERENCE_ID = "configId";
 
 	public enum TYPE {
-		BOOL_CONFIG, UNICODE_CONFIG, UNDEFINED_CONFIG
+		BoolConfig, UnicodeConfig, UndefinedConfig
 	}
 	// UndefinedConfig should not occur
 
