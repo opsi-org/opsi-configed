@@ -23,8 +23,8 @@ public class DataEditListener implements DocumentListener, // for text component
 		KeyListener
 
 {
-	public static final String commitRequest = "COMMIT";
-	public static final String cancelRequest = "CANCEL";
+	public static final String COMMIT_REQUEST = "COMMIT";
+	public static final String CANCEL_REQUEST = "CANCEL";
 	protected Object source;
 	protected ObservableSubject dataChangedSubject;
 	protected boolean withFocusCheck = true;
@@ -50,7 +50,7 @@ public class DataEditListener implements DocumentListener, // for text component
 
 		if (!withFocusCheck || (source instanceof JComponent && ((JComponent) source).hasFocus())) {
 
-			if (!(action.equals(cancelRequest) || action.equals(commitRequest))) {
+			if (!(action.equals(CANCEL_REQUEST) || action.equals(COMMIT_REQUEST))) {
 				dataChangedSubject.setChanged();
 				dataChangedSubject.notifyObservers(action);
 			}
@@ -108,10 +108,10 @@ public class DataEditListener implements DocumentListener, // for text component
 	public void keyPressed(KeyEvent e) {
 
 		if (e.getKeyCode() == 10)// KeyEvent.VK_ENTER)
-			requestAction(commitRequest);
+			requestAction(COMMIT_REQUEST);
 
 		else if (e.getKeyCode() == 27)// KeyEvent.VK_ESCAPE)
-			requestAction(cancelRequest);
+			requestAction(CANCEL_REQUEST);
 
 		else if (!e.isActionKey())
 			act();

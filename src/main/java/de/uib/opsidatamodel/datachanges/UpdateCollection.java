@@ -35,18 +35,16 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
 			Object obj = it.next();
-			if (obj != null) {
-				if (obj instanceof Collection)
-				// a element of the collection is a collection, we do our best to clear
-				// recursively
-				{
-					try {
-						logging.debug(this, "by recursion, we will clear " + obj);
-						((Collection) obj).clear();
+			if (obj instanceof Collection)
+			// a element of the collection is a collection, we do our best to clear
+			// recursively
+			{
+				try {
+					logging.debug(this, "by recursion, we will clear " + obj);
+					((Collection) obj).clear();
 
-					} catch (Exception ex) // perhaps not implemented
-					{
-					}
+				} catch (Exception ex) // perhaps not implemented
+				{
 				}
 			}
 
@@ -64,19 +62,17 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
 			Object obj = it.next();
-			if (obj != null) {
-
-				if (obj instanceof UpdateCollection)
-				// a element of the collection is a collection, we do our best to clear
-				// recursively
+			if (obj instanceof UpdateCollection)
+			// a element of the collection is a collection, we do our best to clear
+			// recursively
+			{
+				try {
+					((UpdateCollection) obj).clearElements();
+				} catch (Exception ex) // perhaps not implemented
 				{
-					try {
-						((UpdateCollection) obj).clearElements();
-					} catch (Exception ex) // perhaps not implemented
-					{
-					}
 				}
 			}
+
 		}
 	}
 

@@ -72,12 +72,9 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() == editorContent) {
-			if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
+		if (e.getSource() == editorContent && (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1)) {
 
-				fEdit.setVisible(true);
-			}
-
+			fEdit.setVisible(true);
 		}
 	}
 
@@ -102,11 +99,8 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		if (e.getSource() == editorContent) {
-			if (e.getKeyCode() == 32)
-				fEdit.setVisible(true);
-		}
-
+		if (e.getSource() == editorContent && e.getKeyCode() == 32)
+			fEdit.setVisible(true);
 	}
 
 	@Override

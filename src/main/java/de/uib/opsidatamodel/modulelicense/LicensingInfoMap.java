@@ -737,44 +737,40 @@ public class LicensingInfoMap {
 	 */
 
 	private String checkFuture(Map<String, Object> moduleInfo, String module, String date) {
-		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)) {
+		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER) && date.equals(findNextChangeDate())) {
+			String state = moduleInfo.get(STATE).toString();
 
-			if (date.equals(findNextChangeDate())) {
-				String state = moduleInfo.get(STATE).toString();
+			if (!state.equals(STATE_UNLICENSED)) {
+				String cNum;
+				String fNum;
 
-				if (!state.equals(STATE_UNLICENSED)) {
-					String cNum;
-					String fNum;
+				if (module.equals(MODULE_MACOS_AGENT)) {
+					cNum = clientNumbersMap.get(MAC_OS).toString();
 
-					if (module.equals(MODULE_MACOS_AGENT)) {
-						cNum = clientNumbersMap.get(MAC_OS).toString();
+				} else if (module.equals(MODULE_LINUX_AGENT)) {
 
-					} else if (module.equals(MODULE_LINUX_AGENT)) {
+					cNum = clientNumbersMap.get(LINUX).toString();
+				} else {
 
-						cNum = clientNumbersMap.get(LINUX).toString();
-					} else {
+					cNum = clientNumbersMap.get(ALL).toString();
 
-						cNum = clientNumbersMap.get(ALL).toString();
-
-					}
-
-					fNum = moduleInfo.get(CLIENT_NUMBER).toString();
-
-					Integer futureNum = Integer.parseInt(fNum);
-					Integer clientNum = Integer.parseInt(cNum);
-
-					Integer diff = futureNum - clientNum;
-
-					if (diff < 0)
-						return STATE_OVER_LIMIT;
-
-					if (diff <= absolutClientLimitWarning
-							| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning))
-						return STATE_CLOSE_TO_LIMIT;
-
-					return STATE_FUTURE_OKAY;
 				}
 
+				fNum = moduleInfo.get(CLIENT_NUMBER).toString();
+
+				Integer futureNum = Integer.parseInt(fNum);
+				Integer clientNum = Integer.parseInt(cNum);
+
+				Integer diff = futureNum - clientNum;
+
+				if (diff < 0)
+					return STATE_OVER_LIMIT;
+
+				if (diff <= absolutClientLimitWarning
+						| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning))
+					return STATE_CLOSE_TO_LIMIT;
+
+				return STATE_FUTURE_OKAY;
 			}
 		}
 
@@ -791,13 +787,10 @@ public class LicensingInfoMap {
 				Map<String, Object> val = mod.getValue();
 				String modKey = mod.getKey();
 
-				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING)) {
-					if (resultMap.get(findNextChangeDate()).get(modKey).get(FUTURE_STATE).toString()
-							.equals(STATE_FUTURE_OKAY)) {
-						val.put(STATE, STATE_DAYS_OKAY);
-						currentTimeWarningModuleList.remove(modKey);
-					}
-
+				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && resultMap.get(findNextChangeDate())
+						.get(modKey).get(FUTURE_STATE).toString().equals(STATE_FUTURE_OKAY)) {
+					val.put(STATE, STATE_DAYS_OKAY);
+					currentTimeWarningModuleList.remove(modKey);
 				}
 			}
 		}

@@ -1573,10 +1573,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (i > 0) {
 			if (n + i < theTable.getRowCount())
 				n = n + i;
-		} else if (i < 0) {
-			if (n + i >= 0)
-				n = n + i;
-		}
+		} else if (i < 0 && n + i >= 0)
+			n = n + i;
 
 		moveToRow(n);
 	}
@@ -1624,12 +1622,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getSource() == theTable) {
-
-			if (e.getKeyCode() == KeyEvent.VK_DELETE)
-				deleteCurrentRow();
-
-		}
+		if (e.getSource() == theTable && e.getKeyCode() == KeyEvent.VK_DELETE)
+			deleteCurrentRow();
 	}
 
 	@Override

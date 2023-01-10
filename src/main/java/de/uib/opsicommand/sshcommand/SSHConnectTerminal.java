@@ -28,7 +28,6 @@ import de.uib.configed.gui.ssh.SSHConnectionTerminalDialog;
 import de.uib.utilities.logging.logging;
 
 public class SSHConnectTerminal extends SSHConnect {
-	private JSch jsch = null;
 	Session session = null;
 	ChannelShell channel = null;
 	private SSHConnectionTerminalDialog dialog;
@@ -62,7 +61,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 	public SSHConnectionOutputDialog getDialog() {
 		if (dialog != null)
-			return (SSHConnectionOutputDialog) dialog;
+			return dialog;
 		return null;
 	}
 
@@ -94,7 +93,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 			logging.info(this, "connect ...");
 			try {
-				jsch = new JSch();
+				JSch jsch = new JSch();
 				SSHConnectionInfo.getInstance().checkUserData();
 				session = jsch.getSession(SSHConnectionInfo.getInstance().getUser(),
 						SSHConnectionInfo.getInstance().getHost(),
@@ -334,19 +333,18 @@ public class SSHConnectTerminal extends SSHConnect {
 	@Override
 	public void disconnect() {
 		logging.info(this, "disconnect");
-		if (session != null)
-			if (session.isConnected()) {
-				logging.info(this, "disconnect session");
-				session.disconnect();
-				this.session.disconnect();
-				session = null;
-			}
-		if (channel != null)
-			if (channel.isConnected()) {
-				logging.info(this, "disconnect channel");
-				channel.disconnect();
-				this.channel.disconnect();
-				channel = null;
-			}
+		if (session != null && session.isConnected()) {
+			logging.info(this, "disconnect session");
+			session.disconnect();
+			this.session.disconnect();
+			session = null;
+		}
+
+		if (channel != null && channel.isConnected()) {
+			logging.info(this, "disconnect channel");
+			channel.disconnect();
+			this.channel.disconnect();
+			channel = null;
+		}
 	}
 }

@@ -1196,10 +1196,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public void keyPressed(KeyEvent e) {
 
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
-			if (!disabledSinceWeAreInFilteredMode()) {
-				if (!fieldSearch.getText().equals(""))
-					markAll();
-			}
+			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals(""))
+				markAll();
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_F8) {
@@ -1209,22 +1207,18 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_F3) {
-			if (!disabledSinceWeAreInFilteredMode()) {
-				if (!fieldSearch.getText().equals(""))
-					searchNextRow(selectMode);
-			}
+			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals(""))
+				searchNextRow(selectMode);
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			logging.debug(this, "key pressed ENTER on fieldSearch, with content " + fieldSearch.getText()
 					+ " searchInputType " + searchInputType);
 
-			if (searchInputType == SearchInputType.LINE) {
-				if (!fieldSearch.getText().equals("")) {
-					switchFilterOff();
-					markAllAndFilter();
-					switchFilterOn();
-				}
+			if (searchInputType == SearchInputType.LINE && !fieldSearch.getText().equals("")) {
+				switchFilterOff();
+				markAllAndFilter();
+				switchFilterOn();
 			}
 
 		}

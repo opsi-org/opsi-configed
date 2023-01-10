@@ -622,17 +622,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		boolean valueChanged = false;
 
-		if (
-
-		((rows.get(row)).get(col) == null && (value == null || value.equals("")))
-
-				||
-
-				(
-
-				oldValueString.equals(newValueString))
-
-		) {
+		if (((rows.get(row)).get(col) == null && (value == null || value.equals("")))
+				|| (oldValueString.equals(newValueString))) {
 			valueChanged = false;
 		} else {
 			valueChanged = true;
@@ -642,28 +633,25 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			valueChanged = false;
 
 		if (valueChanged) {
-			if (addedRows.indexOf(row) == -1)
 			// we dont register updates for already registered rows, since there values are
 			// passed via the row List
-			{
-				if (updatedRows.indexOf(row) == -1) {
-					List oldValues = new ArrayList<>(rows.get(row));
+			if (addedRows.indexOf(row) == -1 && updatedRows.indexOf(row) == -1) {
+				List oldValues = new ArrayList<>(rows.get(row));
 
-					rows.get(row).set(col, value);
+				rows.get(row).set(col, value);
 
-					if (itemFactory == null)
-						logging.info("update item factory missing");
-					else if (updates == null)
-						logging.info("updates not initialized");
-					else {
+				if (itemFactory == null)
+					logging.info("update item factory missing");
+				else if (updates == null)
+					logging.info("updates not initialized");
+				else {
 
-						updates.add(itemFactory.produceUpdateItem(oldValues, rows.get(row)));
-					}
-
-					logging.debug(this, "updated rows add " + row);
-
-					updatedRows.add(row);
+					updates.add(itemFactory.produceUpdateItem(oldValues, rows.get(row)));
 				}
+
+				logging.debug(this, "updated rows add " + row);
+
+				updatedRows.add(row);
 			}
 
 			if (addedRows.indexOf(row) == -1 && finalCols.indexOf(col) > -1)

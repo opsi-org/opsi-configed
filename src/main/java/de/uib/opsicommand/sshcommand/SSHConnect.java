@@ -77,9 +77,7 @@ public class SSHConnect {
 	 * @return True - if result is not an error
 	 **/
 	protected boolean isNotError(String result) {
-		if (result.compareTo("error") == 0)
-			return false;
-		return true;
+		return result.compareTo("error") != 0;
 	}
 
 	/**
@@ -100,11 +98,8 @@ public class SSHConnect {
 	protected boolean isConnected() {
 		boolean result = false;
 
-		if (session != null) {
-			if (session.isConnected()) {
-				result = true;
-			}
-		}
+		if (session != null && session.isConnected())
+			result = true;
 
 		logging.info(this, "isConnected session.isConnected " + result);
 		if (!result && SSHCommandFactory.successfulConnectObservedCount > 0)
@@ -262,8 +257,8 @@ public class SSHConnect {
 
 			return true;
 		} catch (com.jcraft.jsch.JSchException authfail) {
-			retriedTimes_auth = retry(retriedTimes_auth, authfail);
-			if (retriedTimes_auth >= 2) {
+			retriedTimesAuth = retry(retriedTimesAuth, authfail);
+			if (retriedTimesAuth >= 2) {
 				logging.warning(this, "connect Authentication failed. " + authfail);
 				if (SSHCommandFactory.successfulConnectObservedCount > 0)
 
@@ -276,8 +271,8 @@ public class SSHConnect {
 			} else
 				connect(command);
 		} catch (Exception e) {
-			retriedTimes_jschex = retry(retriedTimes_jschex, e);
-			if (retriedTimes_jschex >= 3) {
+			retriedTimesJschex = retry(retriedTimesJschex, e);
+			if (retriedTimesJschex >= 3) {
 				logging.warning(this, "connect error: " + e);
 				return false;
 			} else
@@ -298,8 +293,8 @@ public class SSHConnect {
 		return retriedTimes;
 	}
 
-	private int retriedTimes_jschex = 1;
-	private int retriedTimes_auth = 1;
+	private int retriedTimesJschex = 1;
+	private int retriedTimesAuth = 1;
 
 	/**
 	 * Get current session

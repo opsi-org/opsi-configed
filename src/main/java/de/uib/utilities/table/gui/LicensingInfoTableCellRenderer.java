@@ -13,7 +13,6 @@ import de.uib.utilities.swing.CellAlternatingColorizer;
 
 public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 	LicensingInfoMap licensingInfoMap;
-	private final String CLASSNAME = "LicensingInfoTableCellRenderer";
 
 	public LicensingInfoTableCellRenderer(LicensingInfoMap lInfoMap) {
 		super();
@@ -37,7 +36,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		String rowName = licensingInfoMap.getModules().get(row);
 
 		if (columnName != null && (columnName.equals(configed.getResourceValue("LicensingInfo.modules")))
-				| columnName.equals(configed.getResourceValue("LicensingInfo.available"))
+				|| columnName.equals(configed.getResourceValue("LicensingInfo.available"))
 
 		)
 			jc.setToolTipText(value.toString());
@@ -104,16 +103,13 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 							.toString();
 
 					if (!prevCol.equals(configed.getResourceValue("LicensingInfo.modules")) && clientNum != null
-							&& prevClientNum != null) {
-						if (!clientNum.equals(prevClientNum))
-							jc.setFont(Globals.defaultFontBold);
-					}
+							&& prevClientNum != null && !clientNum.equals(prevClientNum))
+						jc.setFont(Globals.defaultFontBold);
 				}
 
 			} catch (Exception ex) {
-				logging.error(CLASSNAME, ex);
+				logging.error(this, "Exception thrown: " + ex);
 			}
-
 		}
 
 		return jc;

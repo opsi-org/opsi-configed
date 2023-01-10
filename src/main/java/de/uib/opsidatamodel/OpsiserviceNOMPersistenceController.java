@@ -770,12 +770,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					for (String clientName : depot2_host2hostInfo.get(depot).keySet()) {
 						HostInfo hostInfo = depot2_host2hostInfo.get(depot).get(clientName);
 
-						if (allowedClients != null)
-						// we have a client restriction active
-						{
-							if (!allowedClients.contains(clientName))
-								continue;
-						}
+						if (allowedClients != null && !allowedClients.contains(clientName))
+							continue;
 
 						mapOfPCs.put(clientName, false);
 
@@ -1207,13 +1203,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		logging.info(this, "checkFullPermission  key for list,  fullPermission " + keyList + ", " + fullPermission);
 
-		if (!fullPermission) {
-			if (!(serverPropertyMap.get(keyList) == null))
-			// we didn't configure anything, therefore we revoke the setting
-			{
-				for (Object val : serverPropertyMap.get(keyList)) {
-					permittedEntities.add((String) val);
-				}
+		if (!fullPermission && serverPropertyMap.get(keyList) != null)
+		// we didn't configure anything, therefore we revoke the setting
+		{
+			for (Object val : serverPropertyMap.get(keyList)) {
+				permittedEntities.add((String) val);
 			}
 		}
 
@@ -4702,19 +4696,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (globalReadOnly)
 			return;
 
-		if (updateCollection != null && !updateCollection.isEmpty()) {
-			if (exec.doCall(new OpsiMethodCall("productPropertyState_updateObjects",
-					new Object[] { Executioner.jsonArray(updateCollection) }))) {
-				updateCollection.clear();
-			}
-		}
+		if (updateCollection != null && !updateCollection.isEmpty()
+				&& exec.doCall(new OpsiMethodCall("productPropertyState_updateObjects",
+						new Object[] { Executioner.jsonArray(updateCollection) })))
+			updateCollection.clear();
 
-		if (deleteCollection != null && !deleteCollection.isEmpty()) {
-			if (exec.doCall(new OpsiMethodCall("productPropertyState_deleteObjects",
-					new Object[] { Executioner.jsonArray(deleteCollection) }))) {
-				deleteCollection.clear();
-			}
-		}
+		if (deleteCollection != null && !deleteCollection.isEmpty()
+				&& exec.doCall(new OpsiMethodCall("productPropertyState_deleteObjects",
+						new Object[] { Executioner.jsonArray(deleteCollection) })))
+			deleteCollection.clear();
+
 	}
 
 	public void setCommonProductPropertyValue(Set<String> clientNames, String productName, String propertyName,
@@ -5617,10 +5608,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							type = (String) configOptions.get(key).get("type");
 
 						else {
-							if (!valueList.isEmpty()) {
-								if (valueList.get(0) instanceof java.lang.Boolean)
-									type = "BoolConfig";
-							}
+							if (!valueList.isEmpty() && valueList.get(0) instanceof java.lang.Boolean)
+								type = "BoolConfig";
 						}
 
 						config.put("type", type);
@@ -8495,10 +8484,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				if (maxAllowedClientsForThisModule.equals(ExtendedInteger.ZERO))
 					problemToIndicate = false;
 
-				if (problemToIndicate) {
-					if (key.equals("linux_agent") || (key.equals("userroles") && !isUserRegisterActivated()))
-						problemToIndicate = false;
-				}
+				if (problemToIndicate
+						&& (key.equals("linux_agent") || (key.equals("userroles") && !isUserRegisterActivated())))
+					problemToIndicate = false;
 
 				logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
 

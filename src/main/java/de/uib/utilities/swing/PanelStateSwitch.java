@@ -94,20 +94,17 @@ public class PanelStateSwitch extends JPanel {
 		this.values = values;
 		this.enumSetter = enumSetter;
 
-		if (myenumClass != null) {
-			if (myenumClass.isEnum()) {
-				logging.info(this, " type of myenum " + myenumClass.getTypeName());
+		if (myenumClass != null && myenumClass.isEnum()) {
+			logging.info(this, " type of myenum " + myenumClass.getTypeName());
 
-				logging.info(this, " enum constants " + Arrays.toString(myenumClass.getEnumConstants()));
+			logging.info(this, " enum constants " + Arrays.toString(myenumClass.getEnumConstants()));
 
-				int i = 0;
-				for (Object constant : myenumClass.getEnumConstants()) {
-					if (i == 0)
-						producedValue = (Enum) constant;
-					i++;
-					logging.info(this, " enum constant  " + constant + " class " + constant.getClass());
-				}
-
+			int i = 0;
+			for (Object constant : myenumClass.getEnumConstants()) {
+				if (i == 0)
+					producedValue = (Enum) constant;
+				i++;
+				logging.info(this, " enum constant  " + constant + " class " + constant.getClass());
 			}
 		}
 
