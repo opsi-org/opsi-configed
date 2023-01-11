@@ -49,9 +49,9 @@ import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.JSONthroughHTTP;
 import de.uib.opsidatamodel.PersistenceController;
@@ -215,13 +215,13 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		});
 
 		JCheckBox checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"),
-				Configed.sshconnect_onstart);
-		Logging.info(this, "checkTrySSH  " + Configed.sshconnect_onstart);
+				Configed.sshConnectOnStart);
+		Logging.info(this, "checkTrySSH  " + Configed.sshConnectOnStart);
 		checkTrySSH.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 
-				Configed.sshconnect_onstart = (e.getStateChange() == ItemEvent.SELECTED);
+				Configed.sshConnectOnStart = (e.getStateChange() == ItemEvent.SELECTED);
 
 				Logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
 			}

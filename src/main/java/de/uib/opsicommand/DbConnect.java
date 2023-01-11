@@ -11,6 +11,8 @@ public class DbConnect {
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 
 	private String url = "jdbc:mysql://%s";
+
+	// TODO Default values go away!
 	private static final String defaultDB = "opsi";
 	private static final String defaultUser = "opsi";
 	private static final String defaultPassword = "linux123";
@@ -22,6 +24,7 @@ public class DbConnect {
 
 	private DbConnect() {
 		try {
+			// TODO kann weg!
 			Class.forName(DRIVER).getDeclaredConstructor().newInstance();
 
 		}
@@ -51,7 +54,6 @@ public class DbConnect {
 				Logging.error(this, e1.getMessage(), e1);
 				con = null;
 			}
-
 		}
 	}
 

@@ -8,14 +8,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Formatter;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.Properties;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -29,8 +23,8 @@ import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.PropertiesStore;
-import de.uib.utilities.logging.UncaughtExceptionHandler;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.logging.UncaughtExceptionHandler;
 import de.uib.utilities.savedstates.SavedStates;
 
 public class Configed {
@@ -39,7 +33,7 @@ public class Configed {
 
 	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
 
-	public static boolean sshconnect_onstart = false;
+	public static boolean sshConnectOnStart = false;
 
 	public static final String USAGE_INFO = "\n" + "\tconfiged [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
 	/*
@@ -64,7 +58,7 @@ public class Configed {
 	 * "--loglevel L \t\t\t\t\t(Set logging level L, L is a number >= " +
 	 */
 
-	public static final String[][] usageLines = new String[][] {
+	private static final String[][] usageLines = new String[][] {
 			new String[] { "-l LOC", "--locale LOC",
 					"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale" },
 			new String[] { "-h HOST", "--host HOST",
@@ -97,7 +91,7 @@ public class Configed {
 			new String[] { "--gzip [y/n]", "",
 					"Activate compressed transmission of data from opsi server yes/no. DEFAULT: y" },
 			new String[] { "--ssh-immediate-connect [y/n]", "",
-					"Try to create a SSH connection on start. DEFAULT: " + getYNforBoolean(sshconnect_onstart) + "" },
+					"Try to create a SSH connection on start. DEFAULT: " + getYNforBoolean(sshConnectOnStart) + "" },
 			new String[] { "--ssh-key SSHKEY", "",
 					"Full path with filename from sshkey used for authentication on ssh server" },
 			new String[] { "--ssh-passphrase PASSPHRASE", "",
@@ -134,12 +128,10 @@ public class Configed {
 	public static final Charset serverCharset = Charset.forName("UTF-8");
 	public static final String JAVA_VERSION = System.getProperty("java.version");
 	public static final String JAVA_VENDOR = System.getProperty("java.vendor", "");
-	public static final LinkedHashMap<String, Object> javaSysExtraProperties = new LinkedHashMap<>();
 	public static final String SYSTEM_SSL_VERSION = System.getProperty("https.protocols");
 	public static String EXTRA_LOCALIZATION_FILENAME = null;
 	public static PropertiesStore extraLocalization;
 	public static boolean SHOW_LOCALIZATION_STRINGS = false;
-	protected static boolean serverCharset_equals_vm_charset = false;
 
 	public static ConfigedMain cm;
 
@@ -278,47 +270,6 @@ public class Configed {
 		Logging.info(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		Logging.info(" running by java version " + JAVA_VERSION);
 
-		Properties sysProperties = System.getProperties();
-		Set<String> propNames = sysProperties.stringPropertyNames();
-		Set<String> priorizedNames = new HashSet<>();
-
-		LinkedHashSet<String> javaNames = new LinkedHashSet<>();
-
-		String s = "java.version";
-		if (propNames.contains(s)) {
-
-			priorizedNames.add(s);
-		}
-
-		s = "java.vendor";
-		if (propNames.contains(s)) {
-			javaNames.add(s);
-			priorizedNames.add(s);
-		}
-
-		TreeSet<String> sortedJavaNames = new TreeSet<>();
-
-		for (String name : propNames) {
-			if (name.indexOf("java") >= 0 && !priorizedNames.contains(name) && sysProperties.get(name) != null) {
-				sortedJavaNames.add(name);
-			}
-		}
-
-		for (String name : sortedJavaNames) {
-			javaNames.add(name);
-		}
-
-		for (String name : javaNames) {
-			Object value = sysProperties.get(name);
-			String key = name;
-			if (key.length() > 5 && key.substring(0, 5).equals("java."))
-				key = key.substring(5);
-
-			Logging.info(key + ":: " + value);
-
-			javaSysExtraProperties.put(key, value);
-		}
-
 		// Try with resources so that it will be closed in implicit finally statement
 		try (Formatter formatter = new Formatter()) {
 			Logging.info(
@@ -372,7 +323,6 @@ public class Configed {
 		Logging.debug("server charset is configured as " + serverCharset);
 
 		if (serverCharset.equals(Charset.defaultCharset())) {
-			serverCharset_equals_vm_charset = true;
 			Logging.debug("they are equal");
 		}
 
@@ -507,10 +457,10 @@ public class Configed {
 
 					if (isValue(args, i)) {
 						if (args[i].equalsIgnoreCase("Y")) {
-							sshconnect_onstart = true;
+							sshConnectOnStart = true;
 
 						} else if (args[i].equalsIgnoreCase("N")) {
-							sshconnect_onstart = false;
+							sshConnectOnStart = false;
 
 						} else {
 							usage();
@@ -692,10 +642,6 @@ public class Configed {
 
 	public static String encodeStringForService(String s) {
 		return s;
-	}
-
-	public static boolean get_serverCharset_equals_vm_charset() {
-		return serverCharset_equals_vm_charset;
 	}
 
 	public static void endApp(int exitcode) {
