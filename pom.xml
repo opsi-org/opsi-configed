@@ -8,9 +8,9 @@
     <version>4.2.20.1</version>
 
     <properties>
-        <!-- java target jdk in cicd is 18-->
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
+        <!-- use java 11 for backwards compatibility-->
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
