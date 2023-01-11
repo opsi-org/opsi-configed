@@ -5,11 +5,11 @@
 	<groupId>configed</groupId>
 	<artifactId>configed</artifactId>
     <packaging>jar</packaging>
-    <version>4.2.19.8</version>
+    <version>4.2.19.9</version>
 
     <properties>
-        <maven.compiler.source>18</maven.compiler.source>
-        <maven.compiler.target>18</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     </properties>
