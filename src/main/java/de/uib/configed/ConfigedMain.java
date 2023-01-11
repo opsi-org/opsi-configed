@@ -1214,13 +1214,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
-		// Ignore extra messages.
-		if (e.getValueIsAdjusting()) {
-			return;
+		if (!e.getValueIsAdjusting()) {
+			actOnListSelection();
 		}
-
-		actOnListSelection();
 	}
 
 	// we call this after we have a PersistenceController
@@ -2142,11 +2138,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		TableModel tm = buildClientListTableModel(rebuildTree);
 		Logging.info(this,
 				"setRebuiltClientListTableModel --- got model selected " + selectionPanel.getSelectedValues().size());
-		selectionPanel.removeListSelectionListener(this);
+		// selectionPanel.removeListSelectionListener(this);
 
 		selectionPanel.setModel(tm);
 
-		selectionPanel.addListSelectionListener(this);
+		// selectionPanel.addListSelectionListener(this);
 
 		selectionPanel.initColumnNames();
 		Logging.debug(this, " --- model set  ");
@@ -2462,19 +2458,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-	}
-
-	public boolean treeClientsSelectAction(TreePath newSelectedPath) {
-		Logging.info(this, "treeClients_selectAction");
-
-		DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) newSelectedPath.getLastPathComponent());
-		Logging.info(this, "treeClients_selectAction selected node " + selectedNode);
-
-		if (!selectedNode.getAllowsChildren()) {
-			setClientByTree(selectedNode.toString(), newSelectedPath);
-		}
-
-		return true;
 	}
 
 	protected void initTree() {
@@ -3706,8 +3689,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (mainFrame != null) {
 			mainFrame.setChangedDepotSelectionActive(false);
 			SwingUtilities.invokeLater(this::reloadData);
-		} else
+		} else {
 			reloadData();
+		}
 	}
 
 	private void reloadData() {
@@ -5265,11 +5249,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "setSelectedClientsCollectionOnPanel   selectionPanel.getSelectedValues().size() "
 				+ selectionPanel.getSelectedValues().size());
 
-		if (selected == null)
+		if (selected == null) {
 			setSelectedClientsArray(new String[0]);
-		else
+		} else {
 			setSelectedClientsArray(selected.toArray(new String[selected.size()]));
-
+		}
 	}
 
 	public void setSelectedClientsCollectionOnPanel(Collection<String> selected, boolean renewFilter) {
