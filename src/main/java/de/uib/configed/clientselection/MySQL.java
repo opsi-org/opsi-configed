@@ -82,9 +82,6 @@ public class MySQL {
 				// HOST
 				case "GroupElement":
 					group = true;
-					String operation = json.getString("elementPath");
-					if (operation.equals("Group"))
-						return " a.groupId LIKE '" + data + "' ";
 
 					return " a.groupId LIKE '" + data + "' ";
 
@@ -186,7 +183,7 @@ public class MySQL {
 				case "GenericIntegerElement":
 					hardware = true;
 
-					operation = json.getString("operation");
+					String operation = json.getString("operation");
 					operation = getOperationFromElement(operation);
 
 					query = setHardware(json);
