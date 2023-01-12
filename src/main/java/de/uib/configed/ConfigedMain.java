@@ -2003,7 +2003,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "setSelectionPanelCols ");
 
 		final int iconColumnMaxWidth = 100;
-		final int iconColumnPrefWidth = 70;
 
 		if (persist.getHost_displayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL)) {
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
@@ -2012,7 +2011,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 
 			column.setMaxWidth(iconColumnMaxWidth);
-			column.setPreferredWidth(iconColumnPrefWidth);
 
 			column.setCellRenderer(new BooleanIconTableCellRenderer(
 
@@ -2042,7 +2040,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
-				column.setPreferredWidth(iconColumnPrefWidth);
 
 				// column.setCellRenderer(new
 
@@ -2072,7 +2069,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
-				column.setPreferredWidth(iconColumnPrefWidth);
 
 				// column.setCellRenderer(new
 
@@ -2103,7 +2099,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
-				column.setPreferredWidth(iconColumnPrefWidth);
 
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
 						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
