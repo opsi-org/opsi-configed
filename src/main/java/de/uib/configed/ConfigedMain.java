@@ -50,11 +50,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -2144,7 +2146,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				"setRebuiltClientListTableModel --- got model selected " + selectionPanel.getSelectedValues().size());
 		selectionPanel.removeListSelectionListener(this);
 
+		int[] columnWidths = getTableColumnWidths(selectionPanel.getTable());
+
 		selectionPanel.setModel(tm);
+
+		setTableColumnWidths(selectionPanel.getTable(), columnWidths);
 
 		selectionPanel.addListSelectionListener(this);
 
@@ -2850,6 +2856,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			try {
+				int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
 				mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
 				mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
 
@@ -2866,6 +2873,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						.setSearchFields(de.uib.configed.guidata.InstallationStateTableModel
 								.localizeColumns(getLocalbootProductDisplayFieldsList()));
 
+				setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
 			} catch (Exception ex) {
 				Logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
 			}
@@ -2932,6 +2940,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			try {
+				int[] columnWidths = getTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts);
 				mainFrame.panelNetbootProductSettings.setTableModel(istmForSelectedClientsNetboot);
 
 				mainFrame.panelNetbootProductSettings.setSortKeys(currentSortKeysNetbootProducts);
@@ -2944,6 +2953,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				mainFrame.panelNetbootProductSettings.setSelection(oldProductSelection);
 
+				setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
 			} catch (Exception ex) {
 				Logging.error(" setNetbootInstallationStateTableModel,  exception Occurred", ex);
 			}
@@ -2955,6 +2965,23 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return false;
 		}
 
+	}
+
+	private int[] getTableColumnWidths(JTable table) {
+		TableColumnModel columnModel = table.getColumnModel();
+		int[] columnWidths = new int[columnModel.getColumnCount()];
+
+		for (int i = 0; i < columnModel.getColumnCount(); i++) {
+			columnWidths[i] = columnModel.getColumn(i).getPreferredWidth();
+		}
+
+		return columnWidths;
+	}
+
+	private void setTableColumnWidths(JTable table, int[] columnWidths) {
+		for (int i = 0; i < columnWidths.length; i++) {
+			table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+		}
 	}
 
 	private Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
@@ -3706,8 +3733,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (mainFrame != null) {
 			mainFrame.setChangedDepotSelectionActive(false);
 			SwingUtilities.invokeLater(this::reloadData);
-		} else
+		} else {
 			reloadData();
+		}
 	}
 
 	private void reloadData() {
@@ -3782,6 +3810,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			preloadData(); // sets dataReady
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
+
 			setRebuiltClientListTableModel();
 
 			if (mainFrame.controllerHWinfoMultiClients != null)
