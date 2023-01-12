@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
@@ -26,9 +27,9 @@ import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.opsidatamodel.PersistenceController;
@@ -334,16 +335,16 @@ public class ControllerHWinfoColumnConfiguration {
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();
 		int id = 0;
 
-		for (String hwClass : hwAuditDeviceClasses.keySet()) {
+		for (Entry<String, OpsiHwAuditDeviceClass> hwClassEntry : hwAuditDeviceClasses.entrySet()) {
 
-			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClass);
+			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwClassEntry.getValue();
 			List<OpsiHwAuditDevicePropertyType> deviceHostProperties = hwAuditDeviceClass.getDeviceHostProperties();
 			List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties = hwAuditDeviceClass.getDeviceHwItemProperties();
 
 			// hw class line
 			Map<String, Object> lineMap = new LinkedHashMap<>();
 			lineMap.put(COL_LINE_NO, formatLineNo(id));
-			lineMap.put(COL_HW_CLASS, hwClass);
+			lineMap.put(COL_HW_CLASS, hwClassEntry.getKey());
 			lineMap.put(COL_LINUX_QUERY, hwAuditDeviceClass.getLinuxQuery());
 			lineMap.put(COL_WMI_QUERY, hwAuditDeviceClass.getWmiQuery());
 
@@ -364,8 +365,8 @@ public class ControllerHWinfoColumnConfiguration {
 				lineMap = new LinkedHashMap<>();
 				lineMap.put(COL_LINE_NO, formatLineNo(id));
 
-				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE,
-						deviceProperty.getOpsiDbColumnName());
+				ColumnIdent columnIdent = new ColumnIdent(hwClassEntry.getKey(),
+						OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE, deviceProperty.getOpsiDbColumnName());
 
 				lineMap.put(COL_OPSI_COLUMN_NAME, columnIdent.produceColumnCellValue());
 				lineMap.put(COL_OPSI_DB_COLUMN_TYPE, deviceProperty.getOpsiDbColumnType());
@@ -391,8 +392,8 @@ public class ControllerHWinfoColumnConfiguration {
 				lineMap = new LinkedHashMap<>();
 				lineMap.put(COL_LINE_NO, formatLineNo(id));
 
-				ColumnIdent columnIdent = new ColumnIdent(hwClass, OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE,
-						deviceProperty.getOpsiDbColumnName());
+				ColumnIdent columnIdent = new ColumnIdent(hwClassEntry.getKey(),
+						OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE, deviceProperty.getOpsiDbColumnName());
 
 				lineMap.put(COL_OPSI_COLUMN_NAME, columnIdent.produceColumnCellValue());
 

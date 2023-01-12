@@ -8,8 +8,8 @@ import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -28,8 +28,8 @@ public class PanelHostConfig extends JPanel {
 	protected boolean entryRemovable = true;
 	protected boolean reloadable = true;
 
-	public final String propertyClassUser = UserConfig.KEY_USER_ROOT;
-	public final String propertyClassRole = UserConfig.KEY_USER_ROLE_ROOT;
+	public static final String PROPERTY_CLASS_USER = UserConfig.KEY_USER_ROOT;
+	public static final String PROPERTY_CLASS_ROLE = UserConfig.KEY_USER_ROLE_ROOT;
 
 	public PanelHostConfig() {
 
@@ -66,17 +66,17 @@ public class PanelHostConfig extends JPanel {
 		for (Map.Entry<String, Object> entry : configs.entrySet()) {
 			String key = entry.getKey();
 
-			if (key.startsWith(propertyClassRole + ".")) {
+			if (key.startsWith(PROPERTY_CLASS_ROLE + ".")) {
 				String user = key.split("\\.")[2];
 				Logging.info(this,
 						"putUsersToPropertyclassesTreeMap found role (user) " + user + " by config key " + key + "");
-				handleUserInPropertyClass(propertyClassRole, user);
-			} else if (key.startsWith(propertyClassUser + ".")) {
+				handleUserInPropertyClass(PROPERTY_CLASS_ROLE, user);
+			} else if (key.startsWith(PROPERTY_CLASS_USER + ".")) {
 				String user = key.split("\\.")[1];
 				Logging.info(this,
 						"putUsersToPropertyclassesTreeMap found user " + user + " by config key " + key + "");
 				if (!user.equals("{}"))
-					handleUserInPropertyClass(propertyClassUser, user);
+					handleUserInPropertyClass(PROPERTY_CLASS_USER, user);
 			}
 		}
 	}

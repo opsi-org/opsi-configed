@@ -22,9 +22,9 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FPanel;
