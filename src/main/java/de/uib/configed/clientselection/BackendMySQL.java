@@ -18,8 +18,6 @@ public class BackendMySQL {
 
 	private List<String> allHosts;
 
-	private MySQL mySQLRecursion;
-
 	List<Map<String, Object>> hwConfig;
 
 	// For the queries to the opsi-server
@@ -28,8 +26,6 @@ public class BackendMySQL {
 	public BackendMySQL(PersistenceController controller) {
 		this.controller = controller;
 		hwConfig = controller.getOpsiHWAuditConf("en_");
-
-		mySQLRecursion = new MySQL(hwConfig);
 
 		allHosts = getListFromSQL("SELECT hostId FROM HOST;");
 	}
@@ -109,6 +105,8 @@ public class BackendMySQL {
 
 	public List<String> getListFromJSONObject(JSONObject jsonObject) {
 
+		MySQL mySQLRecursion = new MySQL(hwConfig);
+
 		if (jsonObject.isNull("element")) {
 
 			JSONArray children;
@@ -131,7 +129,7 @@ public class BackendMySQL {
 
 			case "SoftwareOperation": // PRODUCT
 
-				String whereClause = doJSONObject(jsonObject);
+				String whereClause = doJSONObject(mySQLRecursion, jsonObject);
 				String innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
 				// This query gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
@@ -154,7 +152,7 @@ public class BackendMySQL {
 
 			case "PropertiesOperation":
 
-				whereClause = doJSONObject(jsonObject);
+				whereClause = doJSONObject(mySQLRecursion, jsonObject);
 
 				// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
 				whereClause = whereClause.replace("d.productId", "h.productId");
@@ -181,7 +179,7 @@ public class BackendMySQL {
 
 			case "SoftwareWithPropertiesOperation":
 
-				whereClause = doJSONObject(jsonObject);
+				whereClause = doJSONObject(mySQLRecursion, jsonObject);
 				innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
 				// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
@@ -234,7 +232,7 @@ public class BackendMySQL {
 				return union(union(list1, list2), union(list3, list4));
 
 			case "HardwareOperation":
-				query = doJSONObject(jsonObject);
+				query = doJSONObject(mySQLRecursion, jsonObject);
 
 				innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
@@ -244,7 +242,7 @@ public class BackendMySQL {
 				return getListFromSQL(query);
 
 			case "SwAuditOperation":
-				query = doJSONObject(jsonObject);
+				query = doJSONObject(mySQLRecursion, jsonObject);
 
 				innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
@@ -342,12 +340,12 @@ public class BackendMySQL {
 		return null;
 	}
 
-	private String doJSONObject(JSONObject jsonObject) {
+	private String doJSONObject(MySQL mySQLRecursion, JSONObject jsonObject) {
 
 		if (jsonObject.isNull("element")) {
 			MySQL.Type newType = MySQL.getType(jsonObject);
 			try {
-				return doJSONArray(jsonObject.getJSONArray("children"), newType);
+				return doJSONArray(mySQLRecursion, jsonObject.getJSONArray("children"), newType);
 
 			} catch (Exception e) {
 				Logging.warning(this, "" + e);
@@ -359,7 +357,7 @@ public class BackendMySQL {
 		return "";
 	}
 
-	private String doJSONArray(JSONArray jsonArray, MySQL.Type type) {
+	private String doJSONArray(MySQL mySQLRecursion, JSONArray jsonArray, MySQL.Type type) {
 		int length = jsonArray.length();
 		String mysql = " ( ";
 
@@ -375,7 +373,7 @@ public class BackendMySQL {
 						mysql += type;
 				}
 
-				mysql += doJSONObject(jsonObject);
+				mysql += doJSONObject(mySQLRecursion, jsonObject);
 			} catch (Exception e) {
 				Logging.warning(this, "" + e);
 			}
