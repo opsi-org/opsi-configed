@@ -3,6 +3,7 @@ package de.uib.configed.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -58,8 +59,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.View;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
@@ -313,7 +314,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		jTextPanel = new JPanel(new BorderLayout());
 		scrollpane = new JScrollPane();
-		jTextPane = new JTextPane();
+		jTextPane = new JTextPane() {
+			@Override
+			public Dimension getPreferredSize() {
+				return getUI().getMinimumSize(this);
+			}
+		};
 		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 		jTextPane.getCaret().setBlinkRate(0);
 

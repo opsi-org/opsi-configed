@@ -12,8 +12,8 @@ import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
 
