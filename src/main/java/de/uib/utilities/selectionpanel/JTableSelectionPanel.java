@@ -46,9 +46,9 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
@@ -580,7 +580,6 @@ public class JTableSelectionPanel extends JPanel
 				+ main.getPersistenceController().getHostInfoCollections().getMapOfAllPCInfoMaps().size());
 
 		table.setModel(tm);
-
 	}
 
 	public DefaultTableModel getSelectedRowsModel() {

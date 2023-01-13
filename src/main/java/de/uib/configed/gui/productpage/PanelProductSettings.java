@@ -62,9 +62,9 @@ import javax.swing.table.TableRowSorter;
  * License, version AGPLv3, as published by the Free Software Foun
  *
  */
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRenderer;
 import de.uib.configed.guidata.ColoredTableCellRendererByIndex;
