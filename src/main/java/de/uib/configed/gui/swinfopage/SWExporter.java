@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
@@ -88,7 +88,7 @@ public abstract class SWExporter {
 			finish(de.uib.configed.ErrorCode.CLIENTNAMES_FILENAME_MISSING);
 		}
 
-		File userHome = new File(System.getProperty(Logging.envVariableForUserDirectory));
+		File userHome = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 		String userHomeS = userHome.toString();
 
 		if (outDir == null)
@@ -169,7 +169,7 @@ public abstract class SWExporter {
 		exportDirectoryS = "";
 		if (exportDirectory == null) {
 			try {
-				exportDirectory = new File(System.getProperty(Logging.envVariableForUserDirectory));
+				exportDirectory = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 			} catch (Exception ex) {
 				Logging.warning(this, "could not define exportDirectory)");
 			}

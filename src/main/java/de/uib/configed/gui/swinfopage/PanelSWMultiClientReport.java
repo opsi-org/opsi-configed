@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.swing.PanelStateSwitch;
@@ -143,7 +143,7 @@ public class PanelSWMultiClientReport extends JPanel {
 			if (found)
 				exportDirectory = new File(exportDirectoryS);
 			else
-				exportDirectory = new File(System.getProperty(Logging.envVariableForUserDirectory));
+				exportDirectory = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 		} catch (Exception ex) {
 			Logging.warning(this, "could not define exportDirectory)");
 		}

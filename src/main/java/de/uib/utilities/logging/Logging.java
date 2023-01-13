@@ -7,14 +7,13 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.utilities.thread.WaitCursor;
 
@@ -26,10 +25,10 @@ public class Logging implements LogEventSubject
 
 	private static String logfileDelimiter = "configed";
 	private static String logfileMarker = null;
-	public static final String windowsEnvVariableAppDataDirectory = "APPDATA";
-	public static final String envVariableForUserDirectory = "user.home";
-	public static final String relativeLogDirWindows = "opsi.org" + File.separator + "log";
-	public static final String relativeLogDirUnix = ".configed";
+	public static final String WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY = "APPDATA";
+	public static final String ENV_VARIABLE_FOR_USER_DIRECTORY = "user.home";
+	public static final String RELATIVE_LOG_DIR_WINDOWS = "opsi.org" + File.separator + "log";
+	public static final String RELATIVE_LOG_DIR_UNIX = ".configed";
 	private static String extension = ".log";
 
 	public static final int LEVEL_SECRET = 9;
@@ -66,15 +65,15 @@ public class Logging implements LogEventSubject
 		return LEVEL_TO_NAME.get(level);
 	}
 
-	private static int MIN_LEVEL_FOR_SHOWING_MESSAGES = LEVEL_ERROR;
+	private static final int MIN_LEVEL_FOR_SHOWING_MESSAGES = LEVEL_ERROR;
 
 	private static int numberOfKeptLogFiles = 3;
 	private static PrintWriter logFileWriter = null;
 	private static boolean LogFileInitialized = false;
 	public static boolean LogFileAvailable = false;
 
-	private static final int maxListedErrors = 20;
-	private static List<String> errorList = new ArrayList<>(maxListedErrors);
+	private static final int MAX_LISTED_ERRORS = 20;
+	private static List<String> errorList = new ArrayList<>(MAX_LISTED_ERRORS);
 
 	public static FShowList fErrors;
 
@@ -126,13 +125,13 @@ public class Logging implements LogEventSubject
 		try {
 			File logDirectory;
 			if (logDirectoryName == null || logDirectoryName.isEmpty()) {
-				if (System.getenv(Logging.windowsEnvVariableAppDataDirectory) != null)
+				if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null)
 					// Windows
-					logDirectory = new File(
-							System.getenv(windowsEnvVariableAppDataDirectory) + File.separator + relativeLogDirWindows);
+					logDirectory = new File(System.getenv(WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator
+							+ RELATIVE_LOG_DIR_WINDOWS);
 				else
-					logDirectory = new File(
-							System.getProperty(envVariableForUserDirectory) + File.separator + relativeLogDirUnix);
+					logDirectory = new File(System.getProperty(ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator
+							+ RELATIVE_LOG_DIR_UNIX);
 			} else {
 				logDirectory = new File(logDirectoryName);
 			}
@@ -195,7 +194,7 @@ public class Logging implements LogEventSubject
 	}
 
 	private static void addErrorToList(String mesg, String time) {
-		while (errorList.size() >= maxListedErrors) {
+		while (errorList.size() >= MAX_LISTED_ERRORS) {
 			errorList.remove(0);
 		}
 		errorList.add(String.format("[%s] %s", time, mesg));
@@ -240,7 +239,7 @@ public class Logging implements LogEventSubject
 		return "" + a.length;
 	}
 
-	public static String getSize(Collection c) {
+	public static String getSize(Collection<String> c) {
 		if (c == null)
 			return null;
 
@@ -426,10 +425,6 @@ public class Logging implements LogEventSubject
 		errorList.clear();
 	}
 
-	private static List getErrorList() {
-		return errorList;
-	}
-
 	public static void checkErrorList(JFrame parentFrame) {
 		// if errors Occurred show a window with the logged errors
 
@@ -439,7 +434,7 @@ public class Logging implements LogEventSubject
 		else
 			f = parentFrame;
 
-		int errorCount = getErrorList().size();
+		int errorCount = errorList.size();
 
 		info("error list size " + errorCount);
 
@@ -473,24 +468,6 @@ public class Logging implements LogEventSubject
 		}
 
 		return result.toString();
-	}
-
-	public static void debugMap(Object caller, Map m) {
-		if (m == null) {
-			debug(caller, " is null");
-			return;
-		}
-
-		Iterator iter = m.keySet().iterator();
-
-		while (iter.hasNext()) {
-			Object key = iter.next();
-
-			Object value = m.get(key);
-
-			debug(caller, " key: " + key + ", class " + key.getClass().getName() + ", value " + value + ", class "
-					+ value.getClass().getName());
-		}
 	}
 
 	// used instead of interface LogEventSubject

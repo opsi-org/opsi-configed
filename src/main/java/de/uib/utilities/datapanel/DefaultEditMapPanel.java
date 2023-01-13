@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JComboBox;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
@@ -25,8 +24,6 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 // works on a map of pairs of type String - List
 {
 	TableCellEditor theCellEditor;
-	JComboBox editorfield;
-	TableCellEditor defaultCellEditor;
 
 	List<String> names;
 	Map<String, ListCellOptions> optionsMap;
@@ -53,23 +50,6 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	protected PropertyHandler propertyHandler;
 
 	protected final PropertyHandler defaultPropertyHandler;
-
-	public DefaultEditMapPanel() {
-		this(null);
-	}
-
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer) {
-		this(tableCellRenderer, false);
-	}
-
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible) {
-		this(tableCellRenderer, keylistExtendible, true);
-	}
-
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
-			boolean keylistEditable) {
-		this(tableCellRenderer, keylistExtendible, keylistEditable, false);
-	}
 
 	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable) {
@@ -155,14 +135,14 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 	}
 
-	public void setValues(Map data) {
+	public void setValues(Map<String, Object> data) {
 
 		if (data == null)
 			return;
 
-		Iterator iter = data.keySet().iterator();
+		Iterator<String> iter = data.keySet().iterator();
 		while (iter.hasNext()) {
-			String key = (String) iter.next();
+			String key = iter.next();
 			mapTableModel.setValue(key, data.get(key));
 		}
 	}

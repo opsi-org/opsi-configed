@@ -18,8 +18,8 @@ public class TimeEditor extends JPanel {
 	JSpinner spinnerHour;
 	JSpinner spinnerMin;
 
-	List hours;
-	List mins;
+	List<String> hours;
+	List<String> mins;
 
 	public TimeEditor() {
 		this(0, 0);

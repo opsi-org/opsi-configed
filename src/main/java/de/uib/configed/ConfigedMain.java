@@ -488,12 +488,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private String getSavedStatesDefaultLocation() {
 		String result = "";
 
-		if (System.getenv(Logging.windowsEnvVariableAppDataDirectory) != null) {
+		if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
 			// Windows
-			result = System.getenv(Logging.windowsEnvVariableAppDataDirectory) + File.separator + "opsi.org"
+			result = System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator + "opsi.org"
 					+ File.separator + "configed";
 		} else {
-			result = System.getProperty(Logging.envVariableForUserDirectory) + File.separator + ".configed";
+			result = System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator + ".configed";
 		}
 
 		return result;

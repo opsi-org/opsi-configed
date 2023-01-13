@@ -20,7 +20,6 @@ public class DefaultTableProvider implements TableProvider {
 	protected List<String> classNames;
 	protected List<List<Object>> rows;
 	protected List<List<Object>> rowsCopy;
-	private boolean isDecorated = false;
 
 	public DefaultTableProvider(TableSource source) {
 		this.source = source;
@@ -58,9 +57,6 @@ public class DefaultTableProvider implements TableProvider {
 		return rowsCopy;
 	}
 
-	protected void decorateRow(List<Object> row) {
-	}
-
 	// should set back the copy of the data to the original values
 	protected void resetRows() {
 		Logging.info(this, " -- resetRows()");
@@ -74,16 +70,6 @@ public class DefaultTableProvider implements TableProvider {
 		}
 
 		Logging.info(this, "resetRows(), rows.size() " + rows.size());
-
-		if (!isDecorated) {
-			Logging.info(this, "resetRows decorating rows");
-			if (rows != null) {
-				for (int i = 0; i < rows.size(); i++) {
-					decorateRow(rows.get(i));
-				}
-			}
-			isDecorated = true;
-		}
 
 		if (rows == null) {
 			Logging.info(" no data rows retrieved ");
@@ -132,7 +118,6 @@ public class DefaultTableProvider implements TableProvider {
 		rows = null;
 		rowsCopy = null;
 		source.requestReload();
-		isDecorated = false;
 	}
 
 	// should initiate reloading the metadata

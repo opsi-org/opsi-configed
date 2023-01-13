@@ -23,9 +23,9 @@ import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -667,7 +667,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
-		String userDirLocation = System.getProperty(Logging.envVariableForUserDirectory);
+		String userDirLocation = System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY);
 		File userDir = new File(userDirLocation);
 		// default to user directory
 		chooser.setCurrentDirectory(userDir);
