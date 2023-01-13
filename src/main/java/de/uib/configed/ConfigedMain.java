@@ -2204,13 +2204,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected Set<String> getDepotsOfSelectedClients() {
 		if (depotsOfSelectedClients == null) {
 			depotsOfSelectedClients = new TreeSet<>();
+		}
 
-			for (int i = 0; i < getSelectedClients().length; i++) {
+		for (int i = 0; i < getSelectedClients().length; i++) {
 
-				if (persist.getHostInfoCollections().getMapPcBelongsToDepot().get(getSelectedClients()[i]) != null)
-					depotsOfSelectedClients.add(
-							persist.getHostInfoCollections().getMapPcBelongsToDepot().get(getSelectedClients()[i]));
-			}
+			if (persist.getHostInfoCollections().getMapPcBelongsToDepot().get(getSelectedClients()[i]) != null)
+				depotsOfSelectedClients
+						.add(persist.getHostInfoCollections().getMapPcBelongsToDepot().get(getSelectedClients()[i]));
 		}
 
 		return depotsOfSelectedClients;
