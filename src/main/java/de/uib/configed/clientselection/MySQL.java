@@ -11,9 +11,7 @@ import de.uib.utilities.logging.Logging;
 
 public class MySQL {
 
-	public enum Type {
-		OR, AND, NOT, NEW
-	}
+	public static final String KEY_OPERATION = "operation";
 
 	private boolean group = false;
 	private boolean product = false;
@@ -68,12 +66,7 @@ public class MySQL {
 		try {
 			if (!json.isNull("element")) {
 
-				String data = "%";
-				try {
-					data = json.getString("data");
-				} catch (Exception e) {
-					Logging.warning(this, "we did not get json from data " + e);
-				}
+				String data = json.getString("data");
 
 				data = data.replace('*', '%');
 
@@ -129,7 +122,7 @@ public class MySQL {
 
 				case "SoftwareModificationTimeElement":
 					product = true;
-					return getMySQLSoftwareModificationTime(json.getString("operation"), data);
+					return getMySQLSoftwareModificationTime(json.getString(KEY_OPERATION), data);
 
 				// Property
 				case "PropertyIdElement":
@@ -183,7 +176,7 @@ public class MySQL {
 				case "GenericIntegerElement":
 					hardware = true;
 
-					String operation = json.getString("operation");
+					String operation = json.getString(KEY_OPERATION);
 					operation = getOperationFromElement(operation);
 
 					query = setHardware(json);
@@ -191,9 +184,13 @@ public class MySQL {
 					return " (" + query + " " + operation + " '" + data + "') ";
 
 				case "GenericDateElement":
+					Logging.error(this, "Date at the moment not supported...");
+					break;
+
+				default:
+					Logging.error(this, "Unexpected value of 'element' in JSON query for producing MySQL-query");
 					break;
 				}
-
 			}
 		} catch (Exception e) {
 			Logging.warning(this, "we did not interpret element selection " + e);
@@ -202,7 +199,7 @@ public class MySQL {
 		return "";
 	}
 
-	private String setHardware(JSONObject json) throws Exception {
+	private String setHardware(JSONObject json) {
 
 		JSONArray elementPath = json.getJSONArray("elementPath");
 		String hardwareType = elementPath.getString(0);
@@ -213,7 +210,7 @@ public class MySQL {
 
 		List<Map<String, String>> values = (List<Map<String, String>>) element.get("Values");
 
-		Map<String, String> spalte = findSpalteInTabelle(column, values);
+		Map<String, String> spalte = findColumnInTable(column, values);
 		String spaltenName = spalte.get("Opsi");
 		String scope = spalte.get("Scope");
 
@@ -224,10 +221,10 @@ public class MySQL {
 																							// ERLAUBEN
 	}
 
-	private Map<String, String> findSpalteInTabelle(String column, List values) {
+	private Map<String, String> findColumnInTable(String column, List<Map<String, String>> values) {
 		for (int i = 0; i < values.size(); i++)
-			if (((Map<String, String>) values.get(i)).get("UI").equals(column))
-				return (Map<String, String>) values.get(i);
+			if (values.get(i).get("UI").equals(column))
+				return values.get(i);
 
 		return new HashMap<>();
 	}
@@ -293,26 +290,12 @@ public class MySQL {
 		case "DateLessThanOperation":
 			expression = "<";
 			break;
+
+		default:
+			Logging.error(this, "unexpected Date Operation");
+			break;
 		}
 
 		return " DATE(d.modificationTime)" + expression + "'" + data + "'";
-	}
-
-	public static Type getType(JSONObject json) {
-		try {
-			switch (json.getString("operation")) {
-			case "OrOperation":
-				return Type.OR;
-			case "AndOperation":
-				return Type.AND;
-			case "NotOperation":
-				return Type.NOT;
-			}
-		} catch (Exception e) {
-			Logging.warning("we did get type of operation from " + json);
-		}
-
-		// if not a logical operator
-		return Type.NEW;
 	}
 }

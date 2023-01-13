@@ -152,7 +152,7 @@ public class SelectionManager {
 		} else {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsLocal();
-			Logging.notice(this, "select Clients without ;MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			Logging.notice(this, "select Clients without MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		}
 	}
@@ -264,8 +264,8 @@ public class SelectionManager {
 		if (input.isEmpty())
 			return null;
 
-		LinkedList<SelectOperation> orConnections = new LinkedList<>();
-		LinkedList<SelectOperation> andConnections = new LinkedList<>();
+		List<SelectOperation> orConnections = new ArrayList<>();
+		List<SelectOperation> andConnections = new ArrayList<>();
 		boolean currentAnd = false;
 
 		while (currentPos[0] < input.size()) {

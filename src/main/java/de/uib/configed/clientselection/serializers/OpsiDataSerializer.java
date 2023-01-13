@@ -69,7 +69,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		else
 			version = Integer.valueOf((String) map.get("version"));
 		searchDataVersion = version;
-		return (Map) map.get("data");
+		return (Map<String, Object>) map.get("data");
 	}
 
 	@Override
@@ -119,11 +119,11 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		if (object instanceof SelectData.DataType)
 			return object.toString();
 		if (object instanceof String[]) {
-			String result = "[ ";
+			StringBuilder result = new StringBuilder("[ ");
 			String[] data = (String[]) object;
 			for (int i = 0; i < data.length - 1; i++) {
-				result += objectToString(data[i]);
-				result += ", ";
+				result.append(objectToString(data[i]));
+				result.append(", ");
 			}
 			return result + objectToString(data[data.length - 1]) + " ]";
 		}
