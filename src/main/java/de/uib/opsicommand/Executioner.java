@@ -48,11 +48,11 @@ public abstract class Executioner {
 
 	public abstract List<Map<String, String>> getListOfStringMaps(OpsiMethodCall omc);
 
-	public abstract Map<String, Object> getMap_Object(OpsiMethodCall omc);
+	public abstract Map<String, Object> getMapObject(OpsiMethodCall omc);
 
-	public abstract Map<String, Map<String, Object>> getMap2_Object(OpsiMethodCall omc);
+	public abstract Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc);
 
-	public abstract Map<String, Map<String, Map<String, Object>>> getMap3_Object(OpsiMethodCall omc);
+	public abstract Map<String, Map<String, Map<String, Object>>> getMap3Object(OpsiMethodCall omc);
 
 	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars, Map<String, String> translateValues);

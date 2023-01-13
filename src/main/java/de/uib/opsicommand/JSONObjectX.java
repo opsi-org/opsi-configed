@@ -94,10 +94,6 @@ public class JSONObjectX extends JSONObject {
 			list = master.names().toList();
 	}
 
-	public List getList() {
-		return list;
-	}
-
 	public void produceString() {
 		if (list.isEmpty()) {
 			value = "";

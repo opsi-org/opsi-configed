@@ -173,14 +173,14 @@ public abstract class JSONExecutioner extends Executioner {
 	}
 
 	@Override
-	public Map<String, Object> getMap_Object(OpsiMethodCall omc)
+	public Map<String, Object> getMapObject(OpsiMethodCall omc)
 	// this method tries to return Java lists in comparison with getMapResult
 	{
-		return JSONReMapper.getMap_Object(retrieveJSONObject(omc));
+		return JSONReMapper.getMapObject(retrieveJSONObject(omc));
 	}
 
 	@Override
-	public Map<String, Map<String, Object>> getMap2_Object(OpsiMethodCall omc)
+	public Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc)
 	// including a conversion of json objects to a standard java object
 
 	{
@@ -198,11 +198,11 @@ public abstract class JSONExecutioner extends Executioner {
 				} else {
 					Logging.debug(this, "map retrieved ");
 
-					Map map0 = jOX.getMap();
+					Map<String, Object> map0 = jOX.getMap();
 
-					Iterator iter0 = map0.keySet().iterator();
+					Iterator<String> iter0 = map0.keySet().iterator();
 					while (iter0.hasNext()) {
-						String key1 = (String) iter0.next();
+						String key1 = iter0.next();
 
 						JSONObjectX jOX1 = new JSONObjectX((JSONObject) map0.get(key1));
 
@@ -224,8 +224,8 @@ public abstract class JSONExecutioner extends Executioner {
 	}
 
 	@Override
-	public Map<String, Map<String, Map<String, Object>>> getMap3_Object(OpsiMethodCall omc) {
-		return JSONReMapper.getMap3_Object(retrieveJSONObject(omc));
+	public Map<String, Map<String, Map<String, Object>>> getMap3Object(OpsiMethodCall omc) {
+		return JSONReMapper.getMap3Object(retrieveJSONObject(omc));
 	}
 
 	@Override
@@ -516,7 +516,8 @@ public abstract class JSONExecutioner extends Executioner {
 				}
 			}
 
-			if (wehavejO && jO != null && jO != JSONObject.NULL) {
+			// Surely jO does not equal null
+			if (wehavejO && jO != JSONObject.NULL) {
 
 				Iterator<String> iter = jO.keys();
 				while (iter.hasNext()) {

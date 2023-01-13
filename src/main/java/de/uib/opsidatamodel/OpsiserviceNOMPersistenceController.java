@@ -2398,7 +2398,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				List sessionlist = (List) (result0.get(key));
 				for (Object element : sessionlist) {
-					Map<String, Object> session = JSONReMapper.getMap_Object((org.json.JSONObject) element);
+					Map<String, Object> session = JSONReMapper.getMapObject((org.json.JSONObject) element);
 
 					String username = "" + session.get("UserName");
 					String logondomain = "" + session.get("LogonDomain");

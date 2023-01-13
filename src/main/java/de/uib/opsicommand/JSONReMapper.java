@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,18 +52,18 @@ public class JSONReMapper {
 
 		try {
 
-			for (String key : result0.keySet()) {
-				JSONObject jO = (JSONObject) (result0.get(key));
+			for (Entry<String, Object> result0Entry : result0.entrySet()) {
+				JSONObject jO = (JSONObject) (result0Entry.getValue());
 				HashMapX response = new HashMapX<>(jO, true);
 
 				if (response.get("error") == null) {
 					List list = (List) response.get("result");
 
-					result.put(key, list);
+					result.put(result0Entry.getKey(), list);
 				} else {
 
 					String str = "" + response.get("error");
-					result.put(key, str);
+					result.put(result0Entry.getKey(), str);
 				}
 
 			}
@@ -124,7 +125,7 @@ public class JSONReMapper {
 		return responseFound;
 	}
 
-	public static Map<String, Map<String, Object>> getMap2_Object(Object retrieved) {
+	public static Map<String, Map<String, Object>> getMap2Object(Object retrieved) {
 		HashMap<String, Map<String, Object>> result = new HashMap<>();
 		HashMap<String, Map<String, Object>> resultNull = new HashMap<>();
 
@@ -139,11 +140,11 @@ public class JSONReMapper {
 				} else {
 					Logging.debug(CLASSNAME + "map retrieved ");
 
-					Map map0 = jOX.getMap();
+					Map<String, Object> map0 = jOX.getMap();
 
-					Iterator iter0 = map0.keySet().iterator();
+					Iterator<String> iter0 = map0.keySet().iterator();
 					while (iter0.hasNext()) {
-						String key1 = (String) iter0.next();
+						String key1 = iter0.next();
 
 						JSONObjectX jOX1 = new JSONObjectX((JSONObject) map0.get(key1));
 
@@ -202,7 +203,7 @@ public class JSONReMapper {
 
 	}
 
-	public static Map<String, Map<String, Map<String, Object>>> getMap3_Object(Object retrieved) {
+	public static Map<String, Map<String, Map<String, Object>>> getMap3Object(Object retrieved) {
 		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<>();
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -462,7 +463,7 @@ public class JSONReMapper {
 		return result;
 	}
 
-	public static Map<String, Object> getMap_Object(JSONObject jo)
+	public static Map<String, Object> getMapObject(JSONObject jo)
 	// this method tries to return Java lists in comparison with getMapResult
 	{
 		Map<String, Object> result = new HashMap<>();
@@ -619,9 +620,9 @@ public class JSONReMapper {
 	}
 
 	public static Map<String, String> giveEmptyForNullString(Map<String, String> m) {
-		for (String key : m.keySet()) {
-			if (isNull(m.get(key)))
-				m.put(key, "");
+		for (Entry<String, String> entry : m.entrySet()) {
+			if (isNull(entry.getValue()))
+				m.put(entry.getKey(), "");
 		}
 
 		return m;
@@ -630,11 +631,11 @@ public class JSONReMapper {
 	public static Map<String, String> giveEmptyForNull(Map<String, Object> m) {
 
 		HashMap<String, String> result = new HashMap<>();
-		for (String key : m.keySet()) {
-			if (isNull(m.get(key)))
-				result.put(key, "");
+		for (Entry<String, Object> entry : m.entrySet()) {
+			if (isNull(entry.getValue()))
+				result.put(entry.getKey(), "");
 			else
-				result.put(key, "" + m.get(key));
+				result.put(entry.getKey(), "" + entry.getValue());
 		}
 
 		return result;

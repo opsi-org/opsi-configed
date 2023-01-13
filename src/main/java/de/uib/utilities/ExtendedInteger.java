@@ -4,11 +4,11 @@ import de.uib.utilities.logging.Logging;
 
 public class ExtendedInteger implements Comparable {
 
-	static final String infiniteImport = "infinite";
-	static final String sINFINITE = "INFINITE";
-	static final String displayInfinite = "\u221E";
+	private static final String INFINITE_IMPORT = "infinite";
+	private static final String S_INFINITE = "INFINITE";
+	private static final String DISPLAY_INFINITE = "\u221E";
 
-	public static final ExtendedInteger INFINITE = new ExtendedInteger(sINFINITE);
+	public static final ExtendedInteger INFINITE = new ExtendedInteger(S_INFINITE);
 	public static final ExtendedInteger ZERO = new ExtendedInteger(0);
 
 	private Integer number;
@@ -40,8 +40,8 @@ public class ExtendedInteger implements Comparable {
 		number = null;
 		value = null;
 
-		if (s.equals(sINFINITE) || s.equals(infiniteImport) || s.equals(displayInfinite)) {
-			value = sINFINITE;
+		if (s.equals(S_INFINITE) || s.equals(INFINITE_IMPORT) || s.equals(DISPLAY_INFINITE)) {
+			value = S_INFINITE;
 
 		} else {
 			try {
@@ -49,11 +49,11 @@ public class ExtendedInteger implements Comparable {
 				// no exception:
 				value = s;
 			} catch (Exception ex) {
-				if (s.equals(sINFINITE) || s.toLowerCase().equals(infiniteImport) || s.equals(displayInfinite))
-					value = sINFINITE;
+				if (s.equals(S_INFINITE) || s.equalsIgnoreCase(INFINITE_IMPORT) || s.equals(DISPLAY_INFINITE))
+					value = S_INFINITE;
 				else
-					Logging.error("possible values are numbers  or \"" + infiniteImport + "\" resp. \""
-							+ displayInfinite + "\"");
+					Logging.error("possible values are numbers  or \"" + INFINITE_IMPORT + "\" resp. \""
+							+ DISPLAY_INFINITE + "\"");
 			}
 		}
 	}
@@ -67,8 +67,8 @@ public class ExtendedInteger implements Comparable {
 	}
 
 	public String getDisplay() {
-		if (value.equals(sINFINITE))
-			return displayInfinite;
+		if (value.equals(S_INFINITE))
+			return DISPLAY_INFINITE;
 		else
 			return value;
 	}

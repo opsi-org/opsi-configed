@@ -82,7 +82,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemFactory itemFactory,
 			de.uib.utilities.table.provider.TableProvider dataProvider, int keyCol, int[] finalColumns,
 			TableModelListener l, de.uib.utilities.table.updates.TableUpdateCollection updates) {
-		this.tableName = tableName;
 		this.keyCol = keyCol;
 		this.updates = updates;
 		this.tableProvider = dataProvider;
