@@ -2747,7 +2747,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		String id = newgroup.get("groupId");
 		String parentId = newgroup.get("parentGroupId");
-		if (parentId == null || parentId.equals(de.uib.configed.tree.ClientTree.GROUPS_NAME))
+		if (parentId == null || parentId.equals(de.uib.configed.tree.ClientTree.ALL_GROUPS_NAME))
 			parentId = null;
 
 		parentId = de.uib.configed.tree.ClientTree.translateToPersistentName(parentId);
@@ -2801,7 +2801,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		updateInfo.put("ident", groupId);
 		updateInfo.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 
-		if (updateInfo.get("parentGroupId").equals(de.uib.configed.tree.ClientTree.GROUPS_NAME))
+		if (updateInfo.get("parentGroupId").equals(de.uib.configed.tree.ClientTree.ALL_GROUPS_NAME))
 			updateInfo.put("parentGroupId", "null");
 
 		String parentGroupId = updateInfo.get("parentGroupId");

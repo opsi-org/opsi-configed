@@ -33,9 +33,9 @@ import javax.swing.UIManager;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
@@ -49,7 +49,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	JButton buttonSelectTmpDir;
 	JFileChooser chooserPackage;
 	JFileChooser chooserTmpDir;
-	JComboBox comboChooseDepot;
+	JComboBox<String> comboChooseDepot;
 	JButton buttonCallExecute;
 
 	String opsiPackagePathToHandleS = null;
@@ -60,9 +60,9 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	JTextField fieldOpsiPackageName;
 	JTextField fieldTmpDir;
 
-	final String defaultTmpDir = "(Default)";
+	private static final String DEFAULT_TEMP_DIRECTORY = "(Default)";
 
-	final String packageShareS = "opsi_workbench";
+	private static final String PAGE_SHARE_S = "opsi_workbench";
 	String opsiWorkBenchDirectoryS;
 	File opsiWorkBenchDirectory;
 	String opsiPackageServerPathS;
@@ -194,7 +194,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			Logging.warning(this, "buildSambaTarget, no splitting for " + depotRemoteUrl);
 		}
 
-		opsiWorkBenchDirectoryS = File.separator + File.separator + netbiosName + File.separator + packageShareS;
+		opsiWorkBenchDirectoryS = File.separator + File.separator + netbiosName + File.separator + PAGE_SHARE_S;
 
 		Logging.info(this, "buildSambaTarget " + opsiWorkBenchDirectoryS);
 
@@ -254,7 +254,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		Logging.debug(this, "defineChoosers, depots: " + persist.getHostInfoCollections().getDepots());
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
 		comboChooseDepot.setEnabled(false); // as long as we did not implement contacting a different depot
 
 		chooserPackage = new JFileChooser();
@@ -302,7 +302,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 	@Override
 	public String getDefaultName() {
-		return packageShareS;
+		return PAGE_SHARE_S;
 	}
 
 	private void initComponents() {
@@ -340,10 +340,10 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
-		fieldTmpDir = new JTextField(defaultTmpDir) {
+		fieldTmpDir = new JTextField(DEFAULT_TEMP_DIRECTORY) {
 			@Override
 			public String getText() {
-				if (super.getText().equals(defaultTmpDir))
+				if (super.getText().equals(DEFAULT_TEMP_DIRECTORY))
 					return "";
 				else
 					return super.getText();
@@ -364,7 +364,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 					fieldTmpDir.setText(tmpDir);
 					fieldTmpDir.setCaretPosition(tmpDir.length());
 				} else {
-					fieldTmpDir.setText(defaultTmpDir);
+					fieldTmpDir.setText(DEFAULT_TEMP_DIRECTORY);
 				}
 
 			}

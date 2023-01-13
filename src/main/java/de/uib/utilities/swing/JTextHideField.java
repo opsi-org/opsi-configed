@@ -10,8 +10,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class JTextHideField extends javax.swing.JPanel {
@@ -44,7 +44,6 @@ public class JTextHideField extends javax.swing.JPanel {
 
 		@Override
 		public void remove(int offs, int len) {
-			return;
 		}
 	}
 

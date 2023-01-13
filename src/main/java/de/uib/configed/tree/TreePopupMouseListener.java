@@ -76,8 +76,9 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		if (
 		// nodeName.equals(ClientTree.FAILED_NAME)
 		// ||
-		nodeName.equals(ClientTree.ALL_NAME) || (((DefaultMutableTreeNode) clickNode.getParent()).getUserObject()
-				.toString().equals(ClientTree.ALL_NAME) && !nodeName.equals(ClientTree.GROUPS_NAME)))
+		nodeName.equals(ClientTree.ALL_CLIENTS_NAME)
+				|| (((DefaultMutableTreeNode) clickNode.getParent()).getUserObject().toString()
+						.equals(ClientTree.ALL_CLIENTS_NAME) && !nodeName.equals(ClientTree.ALL_GROUPS_NAME)))
 
 			return false; // dont show here any menu
 

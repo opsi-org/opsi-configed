@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Set;
 
@@ -101,7 +102,7 @@ public class OpsiDataBackend extends Backend {
 	Map<String, Set<String>> groups; // client -> groups with it
 	Map<String, Set<String>> superGroups; // client -> all groups for which the client belongs to directly or by virtue
 											// of some path
-	Map softwareMap;
+	Map<String, List<Map<String, String>>> softwareMap;
 	Map<String, List<SWAuditClientEntry>> swauditMap;
 	List<Map<String, Object>> hardwareOnClient;
 	Map<String, List<Map<String, Object>>> clientToHardware;
@@ -321,10 +322,9 @@ public class OpsiDataBackend extends Backend {
 		// gets current data which should be in cache already
 
 		// take always the current host infos
-		{
-			clientMaps = controller.getHostInfoCollections().getMapOfPCInfoMaps();
-			Logging.info(this, "client maps size " + clientMaps.size());
-		}
+
+		clientMaps = controller.getHostInfoCollections().getMapOfPCInfoMaps();
+		Logging.info(this, "client maps size " + clientMaps.size());
 
 		if (groups == null || reloadRequested) {
 			groups = controller.getFObject2Groups();
@@ -339,16 +339,12 @@ public class OpsiDataBackend extends Backend {
 
 		if (hasSoftware) {
 
-			{
-				softwareMap = controller.getMapOfProductStatesAndActions(clientNames);
-				Logging.debug(this, "getClients softwareMap ");
-
-			}
+			softwareMap = controller.getMapOfProductStatesAndActions(clientNames);
+			Logging.debug(this, "getClients softwareMap ");
 		}
 
-		{
-			swauditMap = getSwAuditOnClients();
-		}
+		swauditMap = getSwAuditOnClients();
+
 		getHardwareConfig();
 
 		Logging.debug(this, "getClients hasHardware " + hasHardware);
@@ -373,21 +369,22 @@ public class OpsiDataBackend extends Backend {
 		Logging.info(this, "getClients hasSoftware " + hasSoftware);
 		Logging.info(this, "getClients swauditMap != null  " + (swauditMap != null));
 
-		for (String clientName : clientMaps.keySet()) {
-			OpsiDataClient client = new OpsiDataClient(clientName);
-			client.setInfoMap(clientMaps.get(clientName).getMap());
+		for (Entry<String, HostInfo> clientEntry : clientMaps.entrySet()) {
+			OpsiDataClient client = new OpsiDataClient(clientEntry.getKey());
+			client.setInfoMap(clientEntry.getValue().getMap());
 			if (hasHardware)
-				client.setHardwareInfo(clientToHardware.get(clientName));
-			if (groups.containsKey(clientName))
-				client.setGroups(groups.get(clientName));
+				client.setHardwareInfo(clientToHardware.get(clientEntry.getValue()));
+			if (groups.containsKey(clientEntry.getKey()))
+				client.setGroups(groups.get(clientEntry.getKey()));
 
-			if (superGroups.containsKey(clientName))
-				client.setSuperGroups(superGroups.get(clientName));
+			if (superGroups.containsKey(clientEntry.getKey()))
+				client.setSuperGroups(superGroups.get(clientEntry.getKey()));
 
-			if (hasSoftware && softwareMap.containsKey(clientName) && softwareMap.get(clientName) instanceof List)
-				client.setOpsiProductList((List) softwareMap.get(clientName));
-			if (swauditMap != null && swauditMap.containsKey(clientName))
-				client.setSwAuditList(swauditMap.get(clientName));
+			if (hasSoftware && softwareMap.containsKey(clientEntry.getKey())
+					&& softwareMap.get(clientEntry.getKey()) instanceof List)
+				client.setOpsiProductList(softwareMap.get(clientEntry.getKey()));
+			if (swauditMap != null && swauditMap.containsKey(clientEntry.getKey()))
+				client.setSwAuditList(swauditMap.get(clientEntry.getKey()));
 			clients.add(client);
 		}
 		return clients;

@@ -95,7 +95,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	}
 
-	private void startListEditor(final JTable table, final int row, final int column) {
+	private void startListEditor(final int row, final int column) {
 		field.setEditable(false);
 		listeditor.init();
 
@@ -141,7 +141,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				listeditor.setSelectedValues(modelProducer.getSelectedValues(row, column));
 
 				listeditor.enter();
-				startListEditor(table, row, column);
+				startListEditor(row, column);
 
 				editingRow = row;
 				editingColumn = column;
@@ -151,7 +151,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				model = new DefaultListModel();
 
 				listeditor.setListModel(model);
-				startListEditor(table, row, column);
+				startListEditor(row, column);
 
 				listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 				listeditor.setEditable(true);
@@ -216,24 +216,19 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			if (n == 0)
 				return "";
 
-			{
-				StringBuilder buf = new StringBuilder("");
+			StringBuilder buf = new StringBuilder("");
 
-				if (n == 0)
-					return "";
-
-				for (int i = 0; i < n - 1; i++) {
-					buf.append("" + list.get(i) + ",");
-				}
-				buf.append("" + list.get(n - 1));
-
-				String result = buf.toString();
-
-				if (result.equalsIgnoreCase("null"))
-					return org.json.JSONObject.NULL;
-
-				return result;
+			for (int i = 0; i < n - 1; i++) {
+				buf.append("" + list.get(i) + ",");
 			}
+			buf.append("" + list.get(n - 1));
+
+			String result = buf.toString();
+
+			if (result.equalsIgnoreCase("null"))
+				return org.json.JSONObject.NULL;
+
+			return result;
 
 		}
 

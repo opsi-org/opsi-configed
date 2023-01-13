@@ -12,8 +12,8 @@ public class OpsiDataGroupEqualsOperation extends OpsiDataStringEqualsOperation 
 	@Override
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
-		for (Object obj : oClient.getGroups()) {
-			String group = (String) obj;
+		for (String obj : oClient.getGroups()) {
+			String group = obj;
 			if (checkData(group))
 				return true;
 		}

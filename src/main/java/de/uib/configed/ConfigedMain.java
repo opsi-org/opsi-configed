@@ -4573,7 +4573,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (oldGroupSelection != null && activateGroup(oldGroupSelection))
 			Logging.info(this, "old group reset " + oldGroupSelection);
 		else
-			activateGroup(ClientTree.ALL_NAME);
+			activateGroup(ClientTree.ALL_CLIENTS_NAME);
 	}
 
 	protected void initialTreeActivation() {
@@ -4583,7 +4583,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected void refreshClientListActivateALL() {
 		Logging.info(this, "refreshClientListActivateALL");
 		refreshClientList();
-		activateGroup(ClientTree.ALL_NAME);
+		activateGroup(ClientTree.ALL_CLIENTS_NAME);
 	}
 
 	protected void refreshClientList() {
@@ -4710,7 +4710,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// Activate group of created Client (and the group of all clients if no group specified)
 			if (!activateGroup(group))
-				activateGroup(ClientTree.ALL_NAME);
+				activateGroup(ClientTree.ALL_CLIENTS_NAME);
 
 			// Sets the client on the table
 			setClient(newClientID);

@@ -58,8 +58,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.View;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
@@ -71,7 +71,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected JPanel commandpane;
 	protected JLabel labelSearch;
 
-	protected JComboBox jComboBoxSearch;
+	protected JComboBox<String> jComboBoxSearch;
 	protected static final int FIELD_H = Globals.LINE_HEIGHT;
 	protected JButton buttonSearch;
 	protected JCheckBox jCheckBoxCaseSensitive;
@@ -94,11 +94,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected final StyleContext styleContext;
 	protected final Style[] logLevelStyles;
 
-	public Integer[] levels = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	public List<Integer> levelList = Arrays.asList(levels);
+	private static final Integer[] LEVELS = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	private static final List<Integer> levelList = Arrays.asList(LEVELS);
 
-	protected Integer maxLevel = levels[levels.length - 1];
-	protected Integer minLevel = levels[0];
+	protected Integer maxLevel = LEVELS[LEVELS.length - 1];
+	protected Integer minLevel = LEVELS[0];
 	protected Integer maxExistingLevel = minLevel;
 	protected Integer showLevel = minLevel;
 
@@ -134,7 +134,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	protected class AdaptingSlider extends JSlider implements ChangeListener {
-		private Map<Integer, JLabel> levelMap;
 
 		int min;
 		int max;
@@ -166,7 +165,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		public void produceLabels(int upTo) {
 
-			levelMap = new LinkedHashMap<>();
+			Map<Integer, JLabel> levelMap = new LinkedHashMap<>();
 
 			for (int i = min; i <= upTo; i++) {
 				levelMap.put(i, new JLabel("" + i));
@@ -466,8 +465,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 				Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
 
-				if (newIndex > levels.length - 1)
-					newIndex = levels.length - 1;
+				if (newIndex > LEVELS.length - 1)
+					newIndex = LEVELS.length - 1;
 
 				else if (newIndex < 0)
 					newIndex = 0;
@@ -1060,11 +1059,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			search();
 			jTextPane.requestFocusInWindow();
 		} else if (e.getSource() == jCheckBoxCaseSensitive) {
-			if (jCheckBoxCaseSensitive.isSelected()) {
-				searcher.setCaseSensitivity(true);
-			} else {
-				searcher.setCaseSensitivity(false);
-			}
+			searcher.setCaseSensitivity(jCheckBoxCaseSensitive.isSelected());
 		}
 
 		else if (e.getSource() == buttonFontPlus) {
@@ -1074,7 +1069,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		else if (e.getSource() == buttonFontMinus) {
 			setFontSize("-");
 		}
-
 	}
 
 	// A simple class that searches for a word in

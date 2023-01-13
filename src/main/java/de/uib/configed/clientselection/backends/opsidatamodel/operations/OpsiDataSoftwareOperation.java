@@ -31,15 +31,15 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 		Logging.debug(this, "doesMatch starting");
 		OpsiDataClient oClient = (OpsiDataClient) client;
 
-		List softwareSet = oClient.getSoftwareList();
+		List<Map<String, String>> softwareSet = oClient.getSoftwareList();
 		List<String> theProductNames = oClient.getProductNames();
-		TreeSet<String> productsWithDefaultValues_client = new TreeSet<>(productsWithDefaultValues);
+		TreeSet<String> productsWithDefaultValuesClient = new TreeSet<>(productsWithDefaultValues);
 
-		productsWithDefaultValues_client.removeAll(theProductNames);
+		productsWithDefaultValuesClient.removeAll(theProductNames);
 
-		for (Object value : softwareSet) {
+		for (Map<String, String> value : softwareSet) {
 			if (value instanceof Map) {
-				oClient.setCurrentSoftwareValue((Map) value);
+				oClient.setCurrentSoftwareValue(value);
 				Logging.debug(this,
 						" getChildOperations().get(0) instance of " + (getChildOperations().get(0)).getClass());
 				if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client))
@@ -49,7 +49,7 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 			}
 		}
 
-		for (String product : productsWithDefaultValues_client) {
+		for (String product : productsWithDefaultValuesClient) {
 			oClient.setCurrentSoftwareValue(productDefaultStates.get(product));
 			Logging.debug(this, " getChildOperations().get(0) check default product values, instance of "
 					+ (getChildOperations().get(0)).getClass());

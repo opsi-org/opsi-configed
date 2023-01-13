@@ -15,7 +15,6 @@ public class ImagePanel extends JPanel {
 
 	public ImagePanel(Image image) {
 		this.image = image;
-
 	}
 
 	@Override

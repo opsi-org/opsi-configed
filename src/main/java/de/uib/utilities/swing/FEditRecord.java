@@ -10,8 +10,6 @@ package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.JLabel;
@@ -37,10 +35,6 @@ public class FEditRecord extends FEdit {
 			setDataChanged(true);
 		}
 	};
-
-	public FEditRecord() {
-		this(null);
-	}
 
 	public FEditRecord(String hint) {
 		super("", hint);
@@ -71,29 +65,4 @@ public class FEditRecord extends FEdit {
 	public Map<String, String> getData() {
 		return recordPane.getData();
 	}
-
-	// test version
-	public void setRecord() {
-		LinkedHashMap<String, String> testdata = new LinkedHashMap<>();
-		testdata.put("field1", "test1");
-		testdata.put("field2", "test2");
-		testdata.put("field3", "test3");
-
-		HashMap<String, String> labels = new HashMap<>();
-		labels.put("field1", "label1");
-		labels.put("field2", "label2");
-		labels.put("field3", "labelt3");
-
-		HashMap<String, Boolean> editable = new HashMap<>();
-		editable.put("field1", true);
-		editable.put("field2", true);
-		editable.put("field3", true);
-
-		setRecord(testdata, labels, null, editable);
-	}
-
-	public void setObservableSubject(ObservableSubject editingNotifier) {
-		recordPane.setObservableSubject(editingNotifier);
-	}
-
 }

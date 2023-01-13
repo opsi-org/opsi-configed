@@ -19,7 +19,7 @@ public class HostInfo {
 	static int callCounter = 0;
 	private static int numberOfInstances = 0; // an AtomicInteger would be threadsafe
 	private final int instanceNumber;
-	private static Map<String, Integer> ID2InstanceNumber;
+	private static Map<String, Integer> id2InstanceNumber;
 
 	protected String depotOfClient;
 	protected String clientDescription;
@@ -149,10 +149,10 @@ public class HostInfo {
 		}
 
 		if (result) {
-			String found = "";
+			StringBuilder found = new StringBuilder();
 			for (int i = 0; i < proposal.length(); i++) {
 				if (notLegalChars.contains(proposal.charAt(i))) {
-					found += proposal.charAt(i);
+					found.append(proposal.charAt(i));
 				}
 			}
 			if (found.length() > 0) {
@@ -166,7 +166,7 @@ public class HostInfo {
 
 	public static void resetInstancesCount() {
 		numberOfInstances = 0;
-		ID2InstanceNumber = new HashMap<>();
+		id2InstanceNumber = new HashMap<>();
 	}
 
 	public static int getInstancesCount() {
@@ -179,7 +179,7 @@ public class HostInfo {
 	}
 
 	public Integer getInstanceNumber(String key) {
-		return ID2InstanceNumber.get(key);
+		return id2InstanceNumber.get(key);
 	}
 
 	public HostInfo() {
@@ -446,26 +446,26 @@ public class HostInfo {
 			return this;
 
 		// save values which could be mixed
-		Boolean clientWanConfig_save = clientWanConfig;
-		Boolean clientUefiBoot_save = clientUefiBoot;
-		Boolean clientShutdownInstall_save = clientShutdownInstall;
+		Boolean clientWanConfigSave = clientWanConfig;
+		Boolean clientUefiBootSave = clientUefiBoot;
+		Boolean clientShutdownInstallSave = clientShutdownInstall;
 
 		initialize(); // empty everything
 
-		if (!secondInfo.clientWanConfig.equals(clientWanConfig_save))
+		if (!secondInfo.clientWanConfig.equals(clientWanConfigSave))
 			clientWanConfig = null;
 		else
-			clientWanConfig = clientWanConfig_save;
+			clientWanConfig = clientWanConfigSave;
 
-		if (!secondInfo.clientUefiBoot.equals(clientUefiBoot_save))
+		if (!secondInfo.clientUefiBoot.equals(clientUefiBootSave))
 			clientUefiBoot = null;
 		else
-			clientUefiBoot = clientUefiBoot_save;
+			clientUefiBoot = clientUefiBootSave;
 
-		if (!secondInfo.clientShutdownInstall.equals(clientShutdownInstall_save))
+		if (!secondInfo.clientShutdownInstall.equals(clientShutdownInstallSave))
 			clientShutdownInstall = null;
 		else
-			clientShutdownInstall = clientShutdownInstall_save;
+			clientShutdownInstall = clientShutdownInstallSave;
 
 		return this;
 
@@ -676,12 +676,10 @@ public class HostInfo {
 
 	@Override
 	public String toString() {
-		String result = "(" + clientName + ";" + depotOfClient + ";" + clientDescription + ";" + clientInventoryNumber
-				+ ";" + clientOneTimePassword + ";" + clientNotes + ";" + clientMacAddress + ";" + clientIpAddress + ";"
+		return "(" + clientName + ";" + depotOfClient + ";" + clientDescription + ";" + clientInventoryNumber + ";"
+				+ clientOneTimePassword + ";" + clientNotes + ";" + clientMacAddress + ";" + clientIpAddress + ";"
 				+ lastSeen + ";" + created + ";" + clientUefiBoot + ";" + clientWanConfig + ";" + clientShutdownInstall
 				+ ")";
-
-		return result;
 	}
 
 	public void initialize() {

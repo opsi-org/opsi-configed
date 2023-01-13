@@ -11,19 +11,18 @@ import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
 public class ExporterToCSV extends ExportTable {
-	protected String CSVencoding = "UTF8";
+	protected String CSV_ENCODING = "UTF8";
 
-	public static final Character CSVseparator = ';';
-	protected static final String csvSep = "" + CSVseparator;
-	public static final Character stringDelimiter = '"';
-	protected static final String thisExtension = ".csv";
+	protected static final String CSV_SEPARATOR = ";";
+	public static final Character STRING_DELIMITER = '"';
+	protected static final String THIS_EXTENSION = ".csv";
 
 	public ExporterToCSV(javax.swing.JTable table, List<String> classNames) {
 		super(table, classNames);
 		extensionFilter = new javax.swing.filechooser.FileNameExtensionFilter("CSV", "csv");
 
 		defaultExportFilename = "export.csv";
-		extension = thisExtension;
+		extension = THIS_EXTENSION;
 
 	}
 
@@ -36,21 +35,21 @@ public class ExporterToCSV extends ExportTable {
 		if (value == null)
 			return "";
 
-		return ((String) value).replace(stringDelimiter, '\'');
+		return ((String) value).replace(STRING_DELIMITER, '\'');
 	}
 
 	private String removeSeparatorChar(Object value) {
 		if (value == null)
 			return "";
 
-		return ((String) value).replace(csvSep, "\\" + csvSep);
+		return ((String) value).replace(CSV_SEPARATOR, "\\" + CSV_SEPARATOR);
 	}
 
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
 
 		Logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " + "\"" + fileName + "\", " + onlySelectedRows
-				+ "\", " + "\"" + csvSep + "\"");
+				+ "\", " + "\"" + CSV_SEPARATOR + "\"");
 
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null)
@@ -71,11 +70,11 @@ public class ExporterToCSV extends ExportTable {
 				// write header
 				StringBuilder line = new StringBuilder();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
-					line.append(stringDelimiter);
+					line.append(STRING_DELIMITER);
 					line.append(theTable.getColumnName(colI));
-					line.append(stringDelimiter);
+					line.append(STRING_DELIMITER);
 					if (colI < theTable.getColumnCount() - 1) {
-						line.append(csvSep);
+						line.append(CSV_SEPARATOR);
 					}
 				}
 				line.append("\n");
@@ -97,9 +96,9 @@ public class ExporterToCSV extends ExportTable {
 										String val = "" + theTable.getValueAt(rowI, colI);
 										val = removeStringDelimiter(val);
 
-										line.append(stringDelimiter);
+										line.append(STRING_DELIMITER);
 										line.append(val);
-										line.append(stringDelimiter);
+										line.append(STRING_DELIMITER);
 									} else {
 										String val = "" + theTable.getValueAt(rowI, colI);
 										val = removeStringDelimiter(val);
@@ -115,9 +114,9 @@ public class ExporterToCSV extends ExportTable {
 										String inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
 
 										{
-											line.append(stringDelimiter);
+											line.append(STRING_DELIMITER);
 											line.append(inString);
-											line.append(stringDelimiter);
+											line.append(STRING_DELIMITER);
 										}
 									}
 
@@ -163,7 +162,7 @@ public class ExporterToCSV extends ExportTable {
 							}
 
 							if (colI < theTable.getColumnCount() - 1) {
-								line.append(csvSep);
+								line.append(CSV_SEPARATOR);
 							}
 						}
 

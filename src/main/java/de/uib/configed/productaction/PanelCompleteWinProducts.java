@@ -39,9 +39,9 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.NameProducer;
@@ -65,8 +65,8 @@ public class PanelCompleteWinProducts extends JPanel
 
 	int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
 
-	JComboBox comboChooseDepot;
-	JComboBox comboChooseWinProduct;
+	JComboBox<String> comboChooseDepot;
+	JComboBox<String> comboChooseWinProduct;
 	JTextField fieldTargetPath;
 
 	JButton buttonCallSelectFolderWinPE;
@@ -132,7 +132,7 @@ public class PanelCompleteWinProducts extends JPanel
 	private void evaluateWinProducts() {
 		retrieveWinProducts();
 
-		winProduct = "" + comboChooseWinProduct.getSelectedItem();
+		winProduct = (String) comboChooseWinProduct.getSelectedItem();
 		produceTarget();
 	}
 
@@ -152,7 +152,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 		List<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
 
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray()));
+		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
 
 	private void defineChoosers() {
@@ -170,7 +170,7 @@ public class PanelCompleteWinProducts extends JPanel
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
 
 		comboChooseDepot.setEnabled(false);
 
