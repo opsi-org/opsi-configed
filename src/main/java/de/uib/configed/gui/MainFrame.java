@@ -175,20 +175,11 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenuItem jMenuFileLanguage;
 
 	JMenu jMenuClients = new JMenu();
-	JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem();
-	JMenuItem jMenuResetProductOnClient = new JMenuItem();
-	JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem();
-	JMenuItem jMenuResetLocalbootProductOnClient = new JMenuItem();
-	JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem();
-	JMenuItem jMenuResetNetbootProductOnClient = new JMenuItem();
-	JMenuItem jMenuAddClient = new JMenuItem();
-	JMenuItem jMenuDeleteClient = new JMenuItem();
-	JMenuItem jMenuFreeLicences = new JMenuItem();
-	JMenuItem jMenuDeletePackageCaches = new JMenuItem();
-	JMenu jMenuWakeOnLan;
 
+	JMenu jMenuWakeOnLan;
 	JMenuItem jMenuDirectWOL = new JMenuItem();
 	JMenuItem jMenuNewScheduledWOL = new JMenuItem();
+
 	JMenuItem jMenuShowScheduledWOL = new JMenuItem();
 	JMenuItem jMenuOpsiClientdEvent;
 	JMenuItem jMenuShowPopupMessage = new JMenuItem();
@@ -197,6 +188,21 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenuItem jMenuRebootClient = new JMenuItem();
 	JMenuItem jMenuChangeDepot = new JMenuItem();
 	JMenuItem jMenuChangeClientID = new JMenuItem();
+
+	JMenuItem jMenuAddClient = new JMenuItem();
+	JMenuItem jMenuDeleteClient = new JMenuItem();
+
+	JMenu jMenuResetProducts = new JMenu();
+
+	JMenuItem jMenuFreeLicences = new JMenuItem();
+	JMenuItem jMenuDeletePackageCaches = new JMenuItem();
+
+	JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem();
+	JMenuItem jMenuResetProductOnClient = new JMenuItem();
+	JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem();
+	JMenuItem jMenuResetLocalbootProductOnClient = new JMenuItem();
+	JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem();
+	JMenuItem jMenuResetNetbootProductOnClient = new JMenuItem();
 
 	JMenu jMenuServer = new JMenu();
 
@@ -222,9 +228,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem();
 	JMenuItem jMenuRemoteControl = new JMenuItem();
 
-	JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProductOnClientWithStates,
-			jMenuResetProductOnClient, jMenuResetLocalbootProductOnClientWithStates, jMenuResetLocalbootProductOnClient,
-			jMenuResetNetbootProductOnClientWithStates, jMenuResetNetbootProductOnClient, jMenuAddClient,
+	JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuAddClient,
 			jMenuDeleteClient, jMenuFreeLicences, jMenuChangeDepot, jMenuChangeClientID, };
 
 	JMenu jMenuClientselection = new JMenu();
@@ -260,12 +264,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
 
 	JPopupMenu popupClients = new JPopupMenu();
-	JMenuItemFormatted popupResetProductOnClientWithStates = new JMenuItemFormatted();
-	JMenuItemFormatted popupResetProductOnClient = new JMenuItemFormatted();
+
+	JMenu popupResetProducts = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
 	JMenuItemFormatted popupResetLocalbootProductOnClientWithStates = new JMenuItemFormatted();
 	JMenuItemFormatted popupResetLocalbootProductOnClient = new JMenuItemFormatted();
 	JMenuItemFormatted popupResetNetbootProductOnClientWithStates = new JMenuItemFormatted();
 	JMenuItemFormatted popupResetNetbootProductOnClient = new JMenuItemFormatted();
+	JMenuItemFormatted popupResetProductOnClientWithStates = new JMenuItemFormatted();
+	JMenuItemFormatted popupResetProductOnClient = new JMenuItemFormatted();
+
 	JMenuItemFormatted popupAddClient = new JMenuItemFormatted();
 	JMenuItemFormatted popupDeleteClient = new JMenuItemFormatted();
 	JMenuItemFormatted popupFreeLicences = new JMenuItemFormatted();
@@ -283,8 +290,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JMenuItemFormatted popupChangeClientID = new JMenuItemFormatted();
 	JMenuItemFormatted popupRemoteControl = new JMenuItemFormatted();
 
-	JMenuItemFormatted[] clientPopupsDependOnSelectionCount = new JMenuItemFormatted[] { popupResetProductOnClient,
-			popupAddClient, popupDeleteClient, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
+	JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupAddClient,
+			popupDeleteClient, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
 			popupDeletePackageCaches, popupRebootClient, popupShutdownClient, popupChangeDepot, popupChangeClientID,
 			popupRemoteControl };
 
@@ -831,6 +838,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuChangeClientID.addActionListener((ActionEvent e) -> changeClientIDAction());
 
+		jMenuResetProducts.setText(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
+
 		jMenuResetProductOnClientWithStates
 				.setText(Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
 
@@ -964,15 +973,19 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jMenuClients.addSeparator();
 
-		// --
-		jMenuClients.add(jMenuDeleteClient);
 		jMenuClients.add(jMenuAddClient);
-		jMenuClients.add(jMenuResetProductOnClientWithStates);
-		jMenuClients.add(jMenuResetProductOnClient);
-		jMenuClients.add(jMenuResetLocalbootProductOnClientWithStates);
-		jMenuClients.add(jMenuResetLocalbootProductOnClient);
-		jMenuClients.add(jMenuResetNetbootProductOnClientWithStates);
-		jMenuClients.add(jMenuResetNetbootProductOnClient);
+		jMenuClients.add(jMenuDeleteClient);
+
+		jMenuResetProducts.add(jMenuResetLocalbootProductOnClientWithStates);
+		jMenuResetProducts.add(jMenuResetLocalbootProductOnClient);
+		jMenuResetProducts.add(jMenuResetNetbootProductOnClientWithStates);
+		jMenuResetProducts.add(jMenuResetNetbootProductOnClient);
+		jMenuResetProducts.add(jMenuResetProductOnClientWithStates);
+		jMenuResetProducts.add(jMenuResetProductOnClient);
+
+		jMenuClients.add(jMenuResetProducts);
+
+		jMenuClients.add(jMenuFreeLicences);
 		jMenuClients.add(jMenuChangeClientID);
 		if (multidepot)
 			jMenuClients.add(jMenuChangeDepot);
@@ -1498,17 +1511,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		popupChangeClientID.addActionListener((ActionEvent e) -> changeClientIDAction());
 
-		popupResetProductOnClientWithStates
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
-
-		popupResetProductOnClientWithStates
-				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, true, true));
-
-		popupResetProductOnClient
-				.setText(Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
-
-		popupResetProductOnClient.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, true, true));
-
 		popupResetLocalbootProductOnClientWithStates
 				.setText(Configed.getResourceValue("MainFrame.jMenuResetLocalbootProductOnClientWithStates"));
 
@@ -1532,6 +1534,17 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		popupResetNetbootProductOnClient
 				.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, false, true));
+
+		popupResetProductOnClientWithStates
+				.setText(Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithStates"));
+
+		popupResetProductOnClientWithStates
+				.addActionListener((ActionEvent e) -> resetProductOnClientAction(true, true, true));
+
+		popupResetProductOnClient
+				.setText(Configed.getResourceValue("MainFrame.jMenuResetProductOnClientWithoutStates"));
+
+		popupResetProductOnClient.addActionListener((ActionEvent e) -> resetProductOnClientAction(false, true, true));
 
 		popupAddClient.setText(Configed.getResourceValue("MainFrame.jMenuAddClient"));
 
@@ -1643,12 +1656,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		// --
 		popupClients.add(popupAddClient);
 		popupClients.add(popupDeleteClient);
-		popupClients.add(popupResetProductOnClientWithStates);
-		popupClients.add(popupResetProductOnClient);
-		popupClients.add(popupResetLocalbootProductOnClientWithStates);
-		popupClients.add(popupResetLocalbootProductOnClient);
-		popupClients.add(popupResetNetbootProductOnClientWithStates);
-		popupClients.add(popupResetNetbootProductOnClient);
+
+		popupResetProducts.add(popupResetLocalbootProductOnClientWithStates);
+		popupResetProducts.add(popupResetLocalbootProductOnClient);
+		popupResetProducts.add(popupResetNetbootProductOnClientWithStates);
+		popupResetProducts.add(popupResetNetbootProductOnClient);
+		popupResetProducts.add(popupResetProductOnClientWithStates);
+		popupResetProducts.add(popupResetProductOnClient);
+		popupClients.add(popupResetProducts);
+
 		popupClients.add(popupFreeLicences);
 		popupClients.add(popupChangeClientID);
 		if (multidepot)
