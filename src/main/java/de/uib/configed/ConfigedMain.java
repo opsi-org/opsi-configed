@@ -2967,7 +2967,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		int[] columnWidths = new int[columnModel.getColumnCount()];
 
 		for (int i = 0; i < columnModel.getColumnCount(); i++) {
-			columnWidths[i] = columnModel.getColumn(i).getPreferredWidth();
+			columnWidths[i] = columnModel.getColumn(i).getWidth();
 		}
 
 		return columnWidths;
@@ -2976,6 +2976,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private void setTableColumnWidths(JTable table, int[] columnWidths) {
 		for (int i = 0; i < columnWidths.length; i++) {
 			table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+			table.getColumnModel().getColumn(i).setWidth(columnWidths[i]);
 		}
 	}
 
