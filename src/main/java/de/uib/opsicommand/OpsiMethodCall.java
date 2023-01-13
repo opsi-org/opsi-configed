@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiMethodCall {
-	private Map theCall;
+	private Map<String, Object> theCall;
 	private String methodname;
 
 	private Object[] parameters;

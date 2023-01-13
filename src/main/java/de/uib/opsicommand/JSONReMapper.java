@@ -53,7 +53,7 @@ public class JSONReMapper {
 
 			for (String key : result0.keySet()) {
 				JSONObject jO = (JSONObject) (result0.get(key));
-				HashMapX response = new HashMapX(jO, true);
+				HashMapX response = new HashMapX<>(jO, true);
 
 				if (response.get("error") == null) {
 					List list = (List) response.get("result");
