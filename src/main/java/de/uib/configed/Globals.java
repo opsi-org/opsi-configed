@@ -22,8 +22,8 @@ import javafx.stage.Stage;
  */
 
 public class Globals {
-	public static final String VERSION = "4.2.19.10";
-	public static final String VERDATE = "2023-01-13";
+	public static final String VERSION = "4.2.19.11";
+	public static final String VERDATE = "2023-01-20";
 
 	public static final String VERHASHTAG = "";
 

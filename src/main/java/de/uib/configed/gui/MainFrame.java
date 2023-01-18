@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -1419,11 +1420,12 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuClientselectionFailedInPeriod
 				.setText(configed.getResourceValue("MainFrame.jMenuClientselectionFindClientsWithFailedInTimespan"));
 
-		for (final String value : searchedTimeSpansText.values()) {
-			JMenuItem item = new JMenuItemFormatted(value);
+		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
+			JMenuItem item = new JMenuItemFormatted(entry.getValue());
 			item.setFont(Globals.defaultFont);
 
-			item.addActionListener((ActionEvent e) -> main.selectClientsByFailedAtSomeTimeAgo(value));
+			item.addActionListener(
+					(ActionEvent e) -> main.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
 
 			jMenuClientselectionFailedInPeriod.add(item);
 		}
