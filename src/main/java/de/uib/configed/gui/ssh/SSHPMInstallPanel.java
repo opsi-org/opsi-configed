@@ -20,8 +20,6 @@ public class SSHPMInstallPanel extends JPanel {
 	protected GroupLayout.Alignment center = GroupLayout.Alignment.CENTER;
 	protected GroupLayout.Alignment baseline = GroupLayout.Alignment.BASELINE;
 
-	protected SSHCommandFactory factory = SSHCommandFactory.getInstance();
-
 	protected List<String> additionalDefaultPaths = new ArrayList<>();
 
 	PersistenceController persist;
@@ -29,7 +27,7 @@ public class SSHPMInstallPanel extends JPanel {
 
 	public SSHPMInstallPanel() {
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
-		additionalDefaultPaths.add(factory.OPSI_PATH_VAR_REPOSITORY);
+		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_REPOSITORY);
 		persist = PersistenceControllerFactory.getPersistenceController();
 		if (persist == null)
 			Logging.info(this, "init PersistenceController null");

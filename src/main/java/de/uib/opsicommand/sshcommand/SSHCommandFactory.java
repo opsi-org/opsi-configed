@@ -286,10 +286,10 @@ public class SSHCommandFactory {
 			if (map.get(COMMAND_MAP_COMMANDS) != null) {
 				// Achtung Reihenfolge könnte sich ändern !" toList = ArrayList! JsonArray muss
 				// nicht sortiert sein!"
-				List com_commands = new LinkedList<>(((JSONArray) map.get(COMMAND_MAP_COMMANDS)).toList());
-				com_commands.add("echo ... ");
-				com_commands.add("echo READY");
-				com.setCommands(com_commands);
+				List commandCommands = new LinkedList<>(((JSONArray) map.get(COMMAND_MAP_COMMANDS)).toList());
+				commandCommands.add("echo ... ");
+				commandCommands.add("echo READY");
+				com.setCommands(commandCommands);
 			}
 			listKnownMenus.add(com.getMenuText());
 
@@ -360,7 +360,7 @@ public class SSHCommandFactory {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 
 			}
-			List parentList = new LinkedList<>();
+			List<SSHCommandTemplate> parentList = new LinkedList<>();
 			if (sortedComs.containsKey(parent))
 				parentList = sortedComs.get(parent);
 			else

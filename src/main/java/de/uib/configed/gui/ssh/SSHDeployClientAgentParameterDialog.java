@@ -19,9 +19,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandDeployClientAgent;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -119,7 +119,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 				jTextFieldPassword.setEchoChar('*');
 			}
 			jTextFieldPassword.setText((String) resultConfigList.get(0));
-			Logging.info(this, "key_ssh_shell_active " + SSHCommandFactory.getInstance().CONFIDENTIAL);
+			Logging.info(this, "key_ssh_shell_active " + SSHCommandFactory.CONFIDENTIAL);
 
 		}
 	}

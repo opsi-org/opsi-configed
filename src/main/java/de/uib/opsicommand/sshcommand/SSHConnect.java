@@ -26,9 +26,9 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -52,7 +52,6 @@ public class SSHConnect {
 	protected static Session session = null;
 	protected ConfigedMain main;
 
-	SSHCommandFactory factory = SSHCommandFactory.getInstance();
 	SSHConnectionInfo connectionInfo = null;
 
 	/**
@@ -230,7 +229,7 @@ public class SSHConnect {
 						Integer.valueOf(connectionInfo.getPort()));
 				Logging.info(this, "connect this.password "
 
-						+ SSHCommandFactory.getInstance().CONFIDENTIAL);
+						+ SSHCommandFactory.CONFIDENTIAL);
 
 				session.setPassword(connectionInfo.getPassw());
 				Logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " use password …");

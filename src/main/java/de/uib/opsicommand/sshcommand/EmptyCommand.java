@@ -45,8 +45,6 @@ public class EmptyCommand implements SSHCommand {
 	private int position;
 	private String confidentialInformation = null;
 
-	private SSHCommandFactory factory = SSHCommandFactory.getInstance();
-
 	@Override
 	/**
 	 * Sets the command specific error text
@@ -63,7 +61,7 @@ public class EmptyCommand implements SSHCommand {
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().CONFIDENTIAL);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -74,7 +72,7 @@ public class EmptyCommand implements SSHCommand {
 	 * @return SSHCommand_Template instance
 	 */
 	public EmptyCommand(String id, String c, String mt, boolean ns) {
-		position = factory.POSITION_DEFAULT;
+		position = SSHCommandFactory.POSITION_DEFAULT;
 		setId(id);
 		setCommand(c);
 		getParameterList();
@@ -333,12 +331,12 @@ public class EmptyCommand implements SSHCommand {
 	@Override
 	public String toString() {
 		StringBuilder com = new StringBuilder("{");
-		com.append(factory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
-		com.append(factory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText()).append(",");
-		com.append(factory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
-		com.append(factory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
-		com.append(factory.COMMAND_MAP_NEED_SUDO).append(":").append(needSudo()).append(",");
-		com.append(factory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
+		com.append(SSHCommandFactory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_NEED_SUDO).append(":").append(needSudo()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
 		com.append("command:").append(getCommand()).append(";");
 		com.append("}");
 		return com.toString();

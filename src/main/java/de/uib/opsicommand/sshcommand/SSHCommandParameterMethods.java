@@ -427,10 +427,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		Logging.debug(this, "getSelected_clientIPs " + Arrays.toString(main.getSelectedClients()));
 		String[] clientnames = new String[main.getSelectedClients().length];
 		System.arraycopy(main.getSelectedClients(), 0, clientnames, 0, main.getSelectedClients().length);
-		if (clientnames != null)
-			Logging.debug(this, "getSelected_clientIPs clientlist != null ");
-		else
-			Logging.debug(this, "getSelected_clientIPs clientlist == null ");
+
 		String[] clientIPs = new String[clientnames.length];
 		int counter = 0;
 		for (String name : clientnames) {
@@ -464,10 +461,6 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		Logging.debug(this, "getSelected_depotIPs " + main.getSelectedDepots());
 		String[] depotnames = new String[main.getSelectedDepots().length];
 		System.arraycopy(main.getSelectedDepots(), 0, depotnames, 0, main.getSelectedDepots().length);
-		if (depotnames != null)
-			Logging.debug(this, "getSelected_depotIPs depotnames != null ");
-		else
-			Logging.debug(this, "getSelected_depotIPs depotnames == null ");
 		String[] depotIPs = new String[depotnames.length];
 		int counter = 0;
 		for (String name : depotnames) {

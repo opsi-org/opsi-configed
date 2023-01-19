@@ -20,9 +20,9 @@ import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.configed.gui.ssh.SSHConnectionTerminalDialog;
 import de.uib.utilities.logging.Logging;
@@ -309,7 +309,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 			result = ssh.exec(new EmptyCommand(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
-					SSHCommandFactory.getInstance().STRING_COMMAND_GET_LINUX_COMMANDS), false, null, true, false);
+					SSHCommandFactory.STRING_COMMAND_GET_LINUX_COMMANDS), false, null, true, false);
 			if (result == null)
 				Logging.warning(this, "no commands could be found for autocompletion");
 			else {

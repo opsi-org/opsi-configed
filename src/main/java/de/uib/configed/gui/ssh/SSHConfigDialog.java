@@ -169,10 +169,8 @@ public class SSHConfigDialog extends FGeneralDialog {
 		}
 
 		if (jCheckBoxUseOutputColor != null) {
-			SSHCommandFactory.getInstance();
 			Logging.debug(this, "compareStates  (factory.ssh_colored_output != cb_useOutputColor.isSelected()) "
 					+ SSHCommandFactory.sshColoredOutput + " != " + jCheckBoxUseOutputColor.isSelected());
-			SSHCommandFactory.getInstance();
 			if (SSHCommandFactory.sshColoredOutput != jCheckBoxUseOutputColor.isSelected()) {
 				Logging.debug(this, "compareStates 12");
 				return false;
@@ -183,7 +181,6 @@ public class SSHConfigDialog extends FGeneralDialog {
 					"compareStates  (factory.ssh_always_exec_in_background != cb_execInBackground.isSelected()) "
 							+ SSHCommandFactory.sshAlwaysExecInBackground + " != "
 							+ jCheckBoxExecInBackground.isSelected());
-			SSHCommandFactory.getInstance();
 			if (SSHCommandFactory.sshAlwaysExecInBackground != jCheckBoxExecInBackground.isSelected()) {
 				Logging.debug(this, "compareStates 13");
 				return false;

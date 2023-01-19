@@ -65,7 +65,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	protected SSHWgetAuthenticationPanel wgetAuthPanel;
 	protected CommandSFTPUpload command;
 	protected SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
-	protected SSHCommandFactory factory = SSHCommandFactory.getInstance();
 	protected SSHConnectionExecDialog dia;
 	protected ConfigedMain main;
 	protected static String wgetDefText;
@@ -194,8 +193,8 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jButtonClose.addActionListener(actionEvent -> cancel());
 		enableComponents(jRadioButtonFromServer.isSelected());
 
-		new SSHConnectExec().exec(new EmptyCommand(factory.STRING_COMMAND_FILE_EXISTS_NOT_REMOVE
-				.replace(factory.STRING_REPLACEMENT_FILENAME, command.getTargetPath()) // /etc/opsi/modules.d
+		new SSHConnectExec().exec(new EmptyCommand(SSHCommandFactory.STRING_COMMAND_FILE_EXISTS_NOT_REMOVE
+				.replace(SSHCommandFactory.STRING_REPLACEMENT_FILENAME, command.getTargetPath()) // /etc/opsi/modules.d
 		), false);
 
 		initAdditional();

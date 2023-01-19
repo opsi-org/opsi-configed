@@ -12,8 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -48,7 +48,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		additionalDefaultPaths.add(SSHCommandFactory.getInstance().OPSI_PATH_VAR_DEPOT);
+		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_DEPOT);
 		completion = new SSHCompletionComboButton(additionalDefaultPaths);
 
 		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);

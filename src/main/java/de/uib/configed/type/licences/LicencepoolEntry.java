@@ -35,7 +35,7 @@ public class LicencepoolEntry extends TableEntry {
 
 	}
 
-	public LicencepoolEntry(Map entry) {
+	public LicencepoolEntry(Map<String, Object> entry) {
 		super(entry);
 		remap(ID_SERVICE_KEY, ID_KEY);
 		remap(DESCRIPTION_KEY, DESCRIPTION_KEY);

@@ -155,7 +155,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().equals(""))) {
-			SSHCommandFactory.getInstance();
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else
 			return getCommand();

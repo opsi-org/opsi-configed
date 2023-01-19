@@ -4,11 +4,12 @@ import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.CommandModulesUpload;
 import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
+import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.Logging;
 
@@ -39,8 +40,9 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 		jComboBoxCopyToModulesD.setSelected(false);
 
 		SSHConnectExec testFile = new SSHConnectExec();
-		testFile.exec(new EmptyCommand(factory.STRING_COMMAND_FILE_EXISTS_NOT_REMOVE.replace(
-				factory.STRING_REPLACEMENT_FILENAME, ((CommandModulesUpload) command).unofficial_modules_directory) // /etc/opsi/modules.d
+		testFile.exec(new EmptyCommand(SSHCommandFactory.STRING_COMMAND_FILE_EXISTS_NOT_REMOVE.replace(
+				SSHCommandFactory.STRING_REPLACEMENT_FILENAME,
+				((CommandModulesUpload) command).unofficial_modules_directory) // /etc/opsi/modules.d
 		), false);
 
 		jLabelCopyToModulesD.setVisible(false);
