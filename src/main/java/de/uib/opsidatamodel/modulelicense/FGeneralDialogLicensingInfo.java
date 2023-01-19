@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsidatamodel.PersistenceController;
@@ -62,6 +62,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	JLabel checksum = new JLabel();
 	JLabel checksumInfo = new JLabel();
 	JLabel customerTitle = new JLabel();
+	Set customerSet;
 	JLabel customerNames = new JLabel();
 
 	public FGeneralDialogLicensingInfo(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,

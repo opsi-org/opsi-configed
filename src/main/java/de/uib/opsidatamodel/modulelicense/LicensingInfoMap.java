@@ -47,7 +47,7 @@ public class LicensingInfoMap {
 	private Map<String, Map<String, Map<String, Object>>> datesMap;
 	private List<String> columnNames;
 	private List<String> classNames;
-	private Map<String, Map<String, Object>> tableMap;
+	private Map<String, Map> tableMap;
 	private String latestDateString;
 	private String checksum;
 	private List<String> currentCloseToLimitModuleList;
@@ -580,9 +580,8 @@ public class LicensingInfoMap {
 	 * transforms datesMap to be able to use in a table, with dates as columns
 	 * and modules as rows
 	 */
-	private Map<String, Map<String, Object>> produceTableMapFromDatesMap(
-			Map<String, Map<String, Map<String, Object>>> datesM) {
-		Map<String, Map<String, Object>> resultMap = new HashMap<>();
+	private Map<String, Map> produceTableMapFromDatesMap(Map<String, Map<String, Map<String, Object>>> datesM) {
+		Map<String, Map> resultMap = new HashMap<>();
 
 		columnNames = new ArrayList<>();
 		columnNames.add(Configed.getResourceValue("LicensingInfo.modules"));
@@ -622,7 +621,7 @@ public class LicensingInfoMap {
 			Logging.error(CLASSNAME + "getTableMapFromDatesMap() " + ex);
 		}
 
-		return resultMap;
+		return new TreeMap<>(resultMap);
 	}
 
 	/**

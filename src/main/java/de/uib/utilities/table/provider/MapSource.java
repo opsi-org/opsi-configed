@@ -32,7 +32,7 @@ public class MapSource implements TableSource
 
 	protected List<String> classNames;
 
-	protected Map<String, Map<String, Object>> table;
+	protected Map<String, Map> table;
 
 	protected List<List<Object>> rows;
 
@@ -45,8 +45,7 @@ public class MapSource implements TableSource
 		class2defaultValue.put("java.lang.String", "");
 	}
 
-	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map<String, Object>> table,
-			boolean rowCounting) {
+	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map> table, boolean rowCounting) {
 		Logging.info(this, "constructed with cols " + columnNames);
 		Logging.info(this, "constructed with classes " + classNames);
 		this.columnNames = columnNames;
@@ -61,7 +60,7 @@ public class MapSource implements TableSource
 
 	}
 
-	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map<String, Object>> table) {
+	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map> table) {
 		this(columnNames, classNames, table, false);
 	}
 
@@ -75,9 +74,9 @@ public class MapSource implements TableSource
 		int rowCount = 0;
 
 		for (String key : table.keySet()) {
-			List<Object> vRow = new ArrayList<>();
+			List vRow = new ArrayList<>();
 
-			Map<String, Object> mRow = table.get(key);
+			Map mRow = table.get(key);
 
 			// previously we assumed that column 0 hold the key
 
