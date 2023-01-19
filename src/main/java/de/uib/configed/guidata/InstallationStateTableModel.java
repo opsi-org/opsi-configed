@@ -8,15 +8,13 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 
 /*
  * configed - configuration editor for client work stations in opsi
@@ -63,6 +61,8 @@ setting setup with dependencies, also for uninstall
 */
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
@@ -277,16 +277,15 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		// iterate through all clients for which a list of
 		// products/states/actionrequests exist
 
-		for (String clientId : clientAllProductRows.keySet()) {
+		for (Entry<String, List<Map<String, String>>> client : clientAllProductRows.entrySet()) {
 			Map<String, Map<String, String>> productRows = new HashMap<>();
 
-			allClientsProductStates.put(clientId, productRows);
+			allClientsProductStates.put(client.getKey(), productRows);
 			// for each client we build the productstates map
 
-			List<Map<String, String>> productRowsList1client = clientAllProductRows.get(clientId);
+			List<Map<String, String>> productRowsList1client = client.getValue();
 
-			for (int i = 0; i < productRowsList1client.size(); i++) {
-				Map<String, String> stateAndAction = productRowsList1client.get(i);
+			for (Map<String, String> stateAndAction : productRowsList1client) {
 
 				// deep copy, but seems to be not complete, therefore not used
 
@@ -304,13 +303,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			combinedVisualValues.put(key, combinedVisualValuesForOneColumn);
 		}
 
-		for (String clientId : allClientsProductStates.keySet()) {
-			for (String productId : allClientsProductStates.get(clientId).keySet()) {
-				Map<String, String> stateAndAction = allClientsProductStates.get(clientId).get(productId);
+		for (Entry<String, Map<String, Map<String, String>>> client : allClientsProductStates.entrySet()) {
+			for (String productId : client.getValue().keySet()) {
+				Map<String, String> stateAndAction = client.getValue().get(productId);
 
 				if (stateAndAction == null) {
 					Logging.warning(this,
-							"produceVisualStatesFromExistingEntries, no row for " + clientId + ", " + productId);
+							"produceVisualStatesFromExistingEntries, no row for " + client.getKey() + ", " + productId);
 					continue;
 				}
 
@@ -838,12 +837,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		// show the new settings for all products after recursion
 
-		for (String prod : product2setOfClientsWithNewAction.keySet()) {
-			Logging.debug(this, "collectiveChangeActionRequest for product  " + prod
-					+ " changed product for client number : " + product2setOfClientsWithNewAction.get(prod).size());
+		for (Entry<String, Set<String>> product : product2setOfClientsWithNewAction.entrySet()) {
+			Logging.debug(this, "collectiveChangeActionRequest for product  " + product.getKey()
+					+ " changed product for client number : " + product.getValue().size());
 			Logging.debug(this, "collectiveChangeActionRequest we have selected clients  " + selectedClients.length);
-
-			// all clients " + ar + " for " + prod + " instead of " +
 
 			// -- not each client got a new action for this product
 
@@ -854,14 +851,15 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 				if (!started) {
 					started = true;
-					newValUntilNow = getChangedState(clientId, prod, ProductState.KEY_ACTION_REQUEST);
+					newValUntilNow = getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST);
 				} else {
 					if (newValUntilNow == null) {
-						if (getChangedState(clientId, prod, ProductState.KEY_ACTION_REQUEST) != null) {
+						if (getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST) != null) {
 							newValUntilNow = Globals.CONFLICT_STATE_STRING;
 						}
 					} else {
-						if (newValUntilNow.equals(getChangedState(clientId, prod, ProductState.KEY_ACTION_REQUEST))) {
+						if (newValUntilNow
+								.equals(getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST))) {
 							// it remains
 						} else {
 							newValUntilNow = Globals.CONFLICT_STATE_STRING;
@@ -870,7 +868,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				}
 
 			}
-			combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).put(prod, newValUntilNow);
+			combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).put(product.getKey(), newValUntilNow);
 
 		}
 
@@ -933,41 +931,37 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			requirements = persist.getProductPostRequirements(null, product);
 			Logging.debug(this, "ProductPostRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
-
 		}
-
 	}
 
 	private void followRequirements(String clientId, Map<String, String> requirements) {
-		String requirement;
 		String requiredAction;
 		String requiredState;
 
 		Logging.info(this, "-- followRequirements for client " + clientId + " requirements " + requirements);
 
-		for (String requiredProduct : requirements.keySet()) {
-			Logging.debug(this, "requiredProduct: " + requiredProduct);
-			requirement = requirements.get(requiredProduct);
+		for (Entry<String, String> requirement : requirements.entrySet()) {
+			Logging.debug(this, "requiredProduct: " + requirement.getKey());
 			requiredAction = ActionRequest.getLabel(ActionRequest.NONE);
 			requiredState = InstallationStatus.getLabel(InstallationStatus.UNDEFINED);
 
-			int colonpos = requirement.indexOf(":");
+			int colonpos = requirement.getValue().indexOf(":");
 			if (colonpos >= 0) {
-				requiredState = requirement.substring(0, colonpos);
-				requiredAction = requirement.substring(colonpos + 1);
+				requiredState = requirement.getValue().substring(0, colonpos);
+				requiredAction = requirement.getValue().substring(colonpos + 1);
 			}
 
-			Logging.debug(this, "followRequirements, required product: " + requiredProduct);
+			Logging.debug(this, "followRequirements, required product: " + requirement.getKey());
 			Logging.debug(this, "followRequirements, required action: " + requiredAction);
 			Logging.debug(this, "followRequirements, required state: " + requiredState);
 
-			if (!tsProductNames.contains(requiredProduct)) {
-				Logging.warning("followRequirements: required product: '" + requiredProduct + "' not installable");
-				missingProducts.add(requiredProduct);
+			if (!tsProductNames.contains(requirement.getKey())) {
+				Logging.warning("followRequirements: required product: '" + requirement.getKey() + "' not installable");
+				missingProducts.add(requirement.getKey());
 			} else {
-				if (getChangedState(clientId, requiredProduct, ActionRequest.KEY) != null) {
-					Logging.debug(this,
-							"required product: '" + requiredProduct + "'  has already been treated - stop recursion");
+				if (getChangedState(clientId, requirement.getKey(), ActionRequest.KEY) != null) {
+					Logging.debug(this, "required product: '" + requirement.getKey()
+							+ "'  has already been treated - stop recursion");
 				}
 
 				// check required product
@@ -975,7 +969,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				// retrieving the actual state and actionRequest of the required product
 				Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
 				if (productStates != null) {
-					Map<String, String> stateAndAction = productStates.get(requiredProduct);
+					Map<String, String> stateAndAction = productStates.get(requirement.getKey());
 					Logging.debug(this, "---- stateAndAction " + stateAndAction);
 
 					if (stateAndAction == null)
@@ -1024,42 +1018,39 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 						{
 
-							checkForContradictingAssignments(clientId, requiredProduct, ActionRequest.KEY,
+							checkForContradictingAssignments(clientId, requirement.getKey(), ActionRequest.KEY,
 									ActionRequest.getLabel(requiredAR));
 
 							if (
 							// an action is required and already set
 							ActionRequest.getVal(actionRequestForRequiredProduct) == requiredAR) {
 								Logging.info(this, "followRequirements:   no change of action request necessary for "
-										+ requiredProduct);
+										+ requirement.getKey());
 							}
 
 							else {
-								String alreadyExistingNewActionRequest = getChangedState(clientId, requiredProduct,
+								String alreadyExistingNewActionRequest = getChangedState(clientId, requirement.getKey(),
 										ActionRequest.KEY);
 
 								if (alreadyExistingNewActionRequest != null) {
-									Logging.info(this,
-											"required product: '" + requiredProduct + "'  has already been treated");
+									Logging.info(this, "required product: '" + requirement.getKey()
+											+ "'  has already been treated");
 									Logging.info(this, "new action was " + alreadyExistingNewActionRequest);
 
 									// already set for clientId, product "
 
 								} else {
 
-									Logging.info(this, "ar:   ===== recursion into " + requiredProduct);
-									recursivelyChangeActionRequest(clientId, requiredProduct,
+									Logging.info(this, "ar:   ===== recursion into " + requirement.getKey());
+									recursivelyChangeActionRequest(clientId, requirement.getKey(),
 											new ActionRequest(requiredAR));
 								}
-
 							}
 						}
-
 					}
 				}
 			}
 		}
-
 	}
 
 	protected int getRowFromProductID(String id) {
