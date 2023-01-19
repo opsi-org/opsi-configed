@@ -238,14 +238,14 @@ public abstract class Serializer {
 		if (getSearchDataVersion() == 1) {
 			operation = parseOperationVersion1(operationName, element, children);
 		} else {
-			Class operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
+			Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
 			Logging.info(this, "getOperation operationClass  " + operationClass.toString());
 			if (element != null) {
 				Logging.info(this, "getOperation element != null, element  " + element);
 				operation = (SelectOperation) operationClass.getConstructors()[0].newInstance(element);
 			} else // GroupOperation
 			{
-				Class list = Class.forName("java.util.List");
+				Class<?> list = Class.forName("java.util.List");
 				Logging.info(this, "getOperation List name: " + list.toString());
 				operation = (SelectOperation) operationClass.getConstructor(list).newInstance(children);
 			}

@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JOptionPane;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -41,7 +41,7 @@ public class RunningInstances<T> {
 	// the observers
 	private List<RunningInstancesObserver<T>> observers;
 
-	public RunningInstances(Class type, String askForLeave) {
+	public RunningInstances(Class<?> type, String askForLeave) {
 		this.classname = type.getName();
 		this.askForLeave = askForLeave;
 		Logging.info(this, "created for class " + classname);

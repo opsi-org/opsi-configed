@@ -5220,18 +5220,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void callNewClientSelectionDialog() {
-		java.awt.Point oldLocation = null;
 		if (clientSelectionDialog != null) {
-			oldLocation = clientSelectionDialog.getLocationOnScreen();
-			Logging.info(this, "callNewClientSelectionDialog, old location " + oldLocation);
-
 			clientSelectionDialog.leave();
 			clientSelectionDialog = null;
 		}
 		callClientSelectionDialog();
-
-		if (oldLocation != null)
-			clientSelectionDialog.setLocation(oldLocation.x, oldLocation.y);
 	}
 
 	public void callClientSelectionDialog() {
@@ -5243,7 +5236,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		clientSelectionDialog.setLocationRelativeTo(Globals.mainContainer);
 		clientSelectionDialog.setVisible(true);
-
 	}
 
 	public void clearSelectionOnPanel() {
