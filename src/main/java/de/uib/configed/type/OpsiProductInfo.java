@@ -72,7 +72,7 @@ public class OpsiProductInfo extends OpsiPackage {
 
 	}
 
-	public List getPossibleActions() {
+	public List<String> getPossibleActions() {
 		return possibleActions;
 	}
 
