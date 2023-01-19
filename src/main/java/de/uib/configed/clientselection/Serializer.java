@@ -245,7 +245,7 @@ public abstract class Serializer {
 				operation = (SelectOperation) operationClass.getConstructors()[0].newInstance(element);
 			} else // GroupOperation
 			{
-				Class list = Class.forName("List");
+				Class list = Class.forName("java.util.List");
 				Logging.info(this, "getOperation List name: " + list.toString());
 				operation = (SelectOperation) operationClass.getConstructor(list).newInstance(children);
 			}
