@@ -76,28 +76,28 @@ public class MapSource implements TableSource
 		for (String key : table.keySet()) {
 			List<Object> vRow = new ArrayList<>();
 
-			Map<String, String> mRow = table.get(key);
+			Map<String, Object> mRow = table.get(key);
 
 			// previously we assumed that column 0 hold the key
 
 			for (int i = 0; i < columnNames.size(); i++) {
-				String cellName = mRow.get(columnNames.get(i));
+				Object obj = mRow.get(columnNames.get(i));
 
 				if (key.startsWith("A"))
 					Logging.debug(this, "fetchData for A-key " + key + " col  " + columnNames.get(i) + " index " + i
-							+ " val " + cellName);
+							+ " val " + obj);
 
-				if (cellName != null) {
-					vRow.add(cellName);
+				if (obj != null) {
+					vRow.add(obj);
 
 					try {
 
 						Class<?> cl = Class.forName(classNames.get(i));
-						if (!dynInstanceOf(cellName, cl)) {
+						if (!dynInstanceOf(obj, cl)) {
 							// Class.forName( classNames.get(i) ) ).isAssignableFrom ( ob.getClass() ) )
 
 							Logging.warning(this, "MapSource fetchData(): data type does not fit");
-							Logging.info(this, " ob " + cellName + " class " + cellName.getClass().getName());
+							Logging.info(this, " ob " + obj + " class " + obj.getClass().getName());
 							Logging.info(this, "class should be " + cl);
 						}
 					} catch (java.lang.NullPointerException ex) {
@@ -111,7 +111,7 @@ public class MapSource implements TableSource
 					if (mRow.containsKey(columnNames.get(i))) {
 						Logging.debug(this, "fetchData row " + mRow + " no value in column  " + columnNames.get(i)
 								+ " supplement by null");
-						vRow.add(cellName); // we complete the row by null
+						vRow.add(obj); // we complete the row by null
 					} else {
 						String className = classNames.get(i);
 

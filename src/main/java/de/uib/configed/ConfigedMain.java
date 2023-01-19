@@ -146,7 +146,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard disabled
-	public static final boolean DASH_ENABLED = true;
+	public static final boolean DASH_ENABLED = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -3880,10 +3880,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					fAskSaveProductConfiguration
 							.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
 
-					fAskSaveProductConfiguration.setSize(new Dimension(300, 200));
-
+					fAskSaveProductConfiguration.setSize(new Dimension(300, 220));
 				}
 
+				fAskSaveProductConfiguration.setLocationRelativeTo(mainFrame);
 				fAskSaveProductConfiguration.setVisible(true);
 
 				result = (fAskSaveProductConfiguration.getResult() == 1);
@@ -3985,9 +3985,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.YES"),
 									Configed.getResourceValue("MainFrame.SaveChangedValue.NO") });
 					fAskSaveChangedText.setMessage(Configed.getResourceValue("MainFrame.SaveChangedValue"));
-					fAskSaveChangedText.setSize(new Dimension(300, 200));
+					fAskSaveChangedText.setSize(new Dimension(300, 220));
 				}
 
+				fAskSaveChangedText.setLocationRelativeTo(mainFrame);
 				fAskSaveChangedText.setVisible(true);
 				result = (fAskSaveChangedText.getResult() == 1);
 
