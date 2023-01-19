@@ -613,22 +613,22 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		public void componentShown(ComponentEvent e) {
 		}
 
-		private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int min_right_width, int min_left_width,
-				int max_right_width) {
+		private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
+				int maxRightWidth) {
 			if (splitpane == null || rightpane == null)
 				return;
 
 			int dividerLocation = splitpane.getDividerLocation();
 
 			int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
-			int missingSpace = min_right_width - sizeOfRightPanel;
-			if (missingSpace > 0 && dividerLocation > min_left_width) {
+			int missingSpace = minRightWidth - sizeOfRightPanel;
+			if (missingSpace > 0 && dividerLocation > minLeftWidth) {
 				splitpane.setDividerLocation(dividerLocation - missingSpace);
 
 			}
 
-			if (sizeOfRightPanel > max_right_width) {
-				splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - max_right_width));
+			if (sizeOfRightPanel > maxRightWidth) {
+				splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - maxRightWidth));
 			}
 
 		}
@@ -2527,13 +2527,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		setTitle(main.getAppTitle());
 
-		Containership csjPanel_allContent = new Containership(allPane);
+		Containership csJPanelAllContent = new Containership(allPane);
 
-		csjPanel_allContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
+		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
 				new Class[] { boolean.class }, javax.swing.text.JTextComponent.class);
 
 		// set colors of panels
-		csjPanel_allContent.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+		csJPanelAllContent.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
 				JPanel.class);
 
 		depotListPresenter.setBackground(depotListPresenter.getMyColor());

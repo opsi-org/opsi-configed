@@ -31,6 +31,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import de.uib.configed.Configed;
 /**
  * NewClientDialog
  * Copyright:     Copyright (c) 2006-2022
@@ -39,7 +40,6 @@ import javax.swing.filechooser.FileSystemView;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
@@ -186,12 +186,12 @@ public class NewClientDialog extends FGeneralDialog
 		jComboLocalboot.setSelectedIndex(0);
 	}
 
-	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean UEFIisDefault, boolean WANisDefault) {
-		uefibootIsDefault = UEFIisDefault;
-		wanConfigIsDefault = WANisDefault;
+	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean uefiIsDefault, boolean wanIsDefault) {
+		uefibootIsDefault = uefiIsDefault;
+		wanConfigIsDefault = wanIsDefault;
 
-		labelUefiDefault.setValue(UEFIisDefault);
-		labelWanDefault.setValue(WANisDefault);
+		labelUefiDefault.setValue(uefiIsDefault);
+		labelWanDefault.setValue(wanIsDefault);
 		labelShutdownDefault.setValue(shutdownINSTALLIsDefault);
 
 		jCheckUefi.setVisible(!uefibootIsDefault);

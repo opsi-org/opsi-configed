@@ -54,7 +54,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	public static String replacement_default_1 = "<<<";
 	/** default parameter replace id ends with >>> **/
 	public static String replacement_default_2 = ">>>";
-	public static String param_splitter_default = "><";
+	public static String paramSplitterDefault = "><";
 
 	private ConfigedMain main;
 	private static SSHCommandParameterMethods instance;
@@ -157,8 +157,8 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		if ((params != null) && (!params.isEmpty()))
 			for (String param : params) {
 				if (command.getCommandRaw().contains(param)) {
-					String[] splitted_parameter = splitParameter(param);
-					String result = callMethod(splitted_parameter[0], splitted_parameter[1]);
+					String[] splittedParameter = splitParameter(param);
+					String result = callMethod(splittedParameter[0], splittedParameter[1]);
 					if (result == null) {
 						canceled = true;
 					} else {
@@ -181,8 +181,8 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	public String testParameter(String param) {
-		String[] splitted_parameter = splitParameter(param);
-		String result = callMethod(splitted_parameter[0], splitted_parameter[1]);
+		String[] splittedParameter = splitParameter(param);
+		String result = callMethod(splittedParameter[0], splittedParameter[1]);
 		result = result.contains("ssh://") ? result.replace("ssh://", "") : result;
 		if (result == null)
 			return Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
@@ -213,12 +213,12 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		splitted[0] = m;
 		splitted[1] = "";
 
-		if (m.contains(param_splitter_default)) {
-			splitted[0] = m.split(param_splitter_default)[0];
+		if (m.contains(paramSplitterDefault)) {
+			splitted[0] = m.split(paramSplitterDefault)[0];
 			Logging.info(this, "splitParameter method " + splitted[0]);
 
 			Logging.info(this, "splitParameter method " + splitted[0]);
-			splitted[1] = m.split(param_splitter_default)[1];
+			splitted[1] = m.split(paramSplitterDefault)[1];
 			Logging.info(this, "splitParameter format " + splitted[1]);
 		}
 		return splitted;
@@ -330,13 +330,13 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	final String brackets_none = " x ";
 	final String brackets_square = "[x]";
 
-	private String createFormattedDataSourceString(String[] strArr, String begin_end_element, String begin_end_str,
+	private String createFormattedDataSourceString(String[] strArr, String beginEndElement, String beginEndString,
 			String separator) {
 		String formated_result = "!!!Error!!!";
 		try {
-			strArr = replaceElements(strArr, begin_end_element);
+			strArr = replaceElements(strArr, beginEndElement);
 			Logging.info(this, "createFormattedDataSourceString[ ]  strArr " + Arrays.toString(strArr));
-			formated_result = createStringOfArray(strArr, begin_end_str, separator);
+			formated_result = createStringOfArray(strArr, beginEndString, separator);
 			Logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formated_result);
 		} catch (Exception e) {
 			Logging.error("Error", e);
@@ -344,27 +344,27 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return formated_result;
 	}
 
-	private String[] replaceElements(String[] strArrToReplace, String begin_end_ofElement) {
+	private String[] replaceElements(String[] strArrToReplace, String beginEndOfElement) {
 		for (int i = 0; i < strArrToReplace.length; i++) {
 			strArrToReplace[i] = strArrToReplace[i].replace(strArrToReplace[i],
-					begin_end_ofElement + strArrToReplace[i] + begin_end_ofElement);
+					beginEndOfElement + strArrToReplace[i] + beginEndOfElement);
 			Logging.info(this, "formatResult[] result[i] " + strArrToReplace[i]);
 		}
 		return strArrToReplace;
 	}
 
-	private String createStringOfArray(String[] strArrToReplace, String begin_end_ofStr, String separator) {
+	private String createStringOfArray(String[] strArrToReplace, String beginEndOfString, String separator) {
 		String result;
 
 		Logging.info(this, "createStringOfArray strArrToReplace " + strArrToReplace);
 		Logging.info(this, "createStringOfArray strArrToReplace.length " + strArrToReplace.length + "if statement: "
 				+ (strArrToReplace.length > 1));
 		if (strArrToReplace.length > 1) {
-			result = Arrays.toString(strArrToReplace).replace("[", begin_end_ofStr.split("x")[0])
-					.replace(",", separator).replace("]", begin_end_ofStr.split("x")[1]);
+			result = Arrays.toString(strArrToReplace).replace("[", beginEndOfString.split("x")[0])
+					.replace(",", separator).replace("]", beginEndOfString.split("x")[1]);
 		} else {
-			result = Arrays.toString(strArrToReplace).replace("[", begin_end_ofStr.split("x")[0]).replace("]",
-					begin_end_ofStr.split("x")[1]);
+			result = Arrays.toString(strArrToReplace).replace("[", beginEndOfString.split("x")[0]).replace("]",
+					beginEndOfString.split("x")[1]);
 		}
 		Logging.info(this, "createStringOfArray result " + result);
 		return result;

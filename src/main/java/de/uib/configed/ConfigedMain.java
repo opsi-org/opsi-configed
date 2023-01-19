@@ -350,12 +350,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// TabController Interface
 	@Override
-	public Enum getStartTabState() {
+	public LicencesTabStatus getStartTabState() {
 		return LicencesTabStatus.LICENCEPOOL;
 	}
 
 	@Override
-	public TabClient getClient(Enum state) {
+	public TabClient getClient(Enum<LicencesTabStatus> state) {
 		return licencesPanels.get(state);
 	}
 
@@ -363,11 +363,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void addClient(Enum status, TabClient panel) {
 		licencesPanels.put((LicencesTabStatus) status, panel);
 		licencesFrame.addTab(status, licencesPanelsTabNames.get(status), (JComponent) panel);
-	}
-
-	@Override
-	public void removeClient(Enum status) {
-		licencesFrame.removeTab(status);
 	}
 
 	@Override
@@ -384,15 +379,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		return licencesStatus;
-	}
-
-	@Override
-	public boolean exit() {
-		if (licencesFrame != null) {
-			licencesFrame.setVisible(false);// !
-			mainFrame.visualizeLicencesFramesActive(false);
-		}
-		return true;
 	}
 
 	private boolean dataReady = false;
@@ -1372,7 +1358,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		licencesFrame.setTitle(
 				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 
-		licencesStatus = (LicencesTabStatus) getStartTabState();
+		licencesStatus = getStartTabState();
 
 		// global table providers
 		List<String> columnNames = new ArrayList<>();

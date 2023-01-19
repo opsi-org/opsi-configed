@@ -26,8 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
 import de.uib.utilities.logging.Logging;
@@ -213,7 +213,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.param_splitter_default + jComboBoxParameterFormats.getSelectedItem()
+					+ SSHCommandParameterMethods.paramSplitterDefault + jComboBoxParameterFormats.getSelectedItem()
 					+ SSHCommandParameterMethods.replacement_default_2;
 		Logging.debug("PARAM TEXT: " + paramText);
 		try {
@@ -247,7 +247,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.param_splitter_default + jComboBoxParameterFormats.getSelectedItem()
+					+ SSHCommandParameterMethods.paramSplitterDefault + jComboBoxParameterFormats.getSelectedItem()
 					+ SSHCommandParameterMethods.replacement_default_2;
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);
