@@ -1202,9 +1202,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting()) {
-			actOnListSelection();
+
+		// Ignore extra messages.
+		if (e.getValueIsAdjusting()) {
+			return;
 		}
+
+		actOnListSelection();
 	}
 
 	// we call this after we have a PersistenceController
@@ -2122,12 +2126,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this,
 				"setRebuiltClientListTableModel --- got model selected " + selectionPanel.getSelectedValues().size());
 
+		selectionPanel.removeListSelectionListener(this);
 		int[] columnWidths = getTableColumnWidths(selectionPanel.getTable());
 
 		selectionPanel.setModel(tm);
 
 		setTableColumnWidths(selectionPanel.getTable(), columnWidths);
-
 		selectionPanel.addListSelectionListener(this);
 
 		selectionPanel.initColumnNames();
@@ -3697,9 +3701,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (mainFrame != null) {
 			mainFrame.setChangedDepotSelectionActive(false);
 			SwingUtilities.invokeLater(this::reloadData);
-		} else {
+		} else
 			reloadData();
-		}
 	}
 
 	private void reloadData() {
@@ -5251,11 +5254,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "setSelectedClientsCollectionOnPanel   selectionPanel.getSelectedValues().size() "
 				+ selectionPanel.getSelectedValues().size());
 
-		if (selected == null) {
+		if (selected == null)
 			setSelectedClientsArray(new String[0]);
-		} else {
+		else
 			setSelectedClientsArray(selected.toArray(new String[selected.size()]));
-		}
+
 	}
 
 	public void setSelectedClientsCollectionOnPanel(Collection<String> selected, boolean renewFilter) {

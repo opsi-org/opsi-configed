@@ -477,6 +477,14 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
+
+		TreePath selectedPath = getSelectionPath();
+
+		if (selectedPath != null && getSelectionRows().length == 1) {
+			main.treeClientsSelectAction(selectedPath);
+
+		}
+
 	}
 
 	// TreeModelListener
