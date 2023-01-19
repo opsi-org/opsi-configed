@@ -11,7 +11,7 @@ public abstract class SelectOperation {
 	 * Create a new SelectOperation, with this element as the property to
 	 * operate on.
 	 */
-	protected SelectOperation(SelectElement element) {
+	public SelectOperation(SelectElement element) {
 		this.element = element;
 	}
 
