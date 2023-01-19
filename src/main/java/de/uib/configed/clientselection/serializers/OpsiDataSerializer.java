@@ -243,18 +243,18 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		if (name.equals("data")) {
 			value = value.substring(1, value.length() - 1);
 			switch (lastDataType) {
-			case NONE_TYPE:
+			case NoneType:
 				return null;
-			case TEXT_TYPE:
-			case ENUM_TYPE:
+			case TextType:
+			case EnumType:
 				return value;
-			case DOUBLE_TYPE:
+			case DoubleType:
 				return Double.valueOf(value);
-			case INTEGER_TYPE:
+			case IntegerType:
 				return Integer.valueOf(value);
-			case BIT_INTEGER_TYPE:
+			case BigIntegerType:
 				return Long.valueOf(value);
-			case DATE_TYPE:
+			case DateType:
 				return value;
 			default:
 				throw new IllegalArgumentException("Type " + lastDataType + " not expected here");

@@ -10,7 +10,7 @@ public class SelectData {
 	private Object dataObject;
 
 	public enum DataType {
-		TEXT_TYPE, INTEGER_TYPE, BIT_INTEGER_TYPE, DOUBLE_TYPE, ENUM_TYPE, DATE_TYPE, NONE_TYPE
+		TextType, IntegerType, BigIntegerType, DoubleType, EnumType, DateType, NoneType
 	}
 
 	public SelectData(Object data, DataType type) {
@@ -20,26 +20,26 @@ public class SelectData {
 		Logging.debug(this, "got data, type " + data + ", " + type);
 
 		switch (type) {
-		case TEXT_TYPE:
+		case TextType:
 			if (!(data instanceof String)) {
 				Logging.error(this, "Data is no String");
 				throw new IllegalArgumentException("Data is no String");
 			}
 			break;
-		case INTEGER_TYPE:
+		case IntegerType:
 			if (!(data instanceof Integer)) {
 				Logging.error(this, "Data is no Integer");
 				throw new IllegalArgumentException("Data is no Integer");
 			}
 			break;
-		case BIT_INTEGER_TYPE:
+		case BigIntegerType:
 			if (!(data instanceof Long)) {
 				Logging.error(this, "Data is no Long");
 				throw new IllegalArgumentException("Data is no Long");
 			}
 			break;
 
-		case DATE_TYPE: {
+		case DateType: {
 
 			if (!(data instanceof String))
 
@@ -48,19 +48,19 @@ public class SelectData {
 			break;
 		}
 
-		case DOUBLE_TYPE:
+		case DoubleType:
 			if (!(data instanceof Double)) {
 				Logging.error(this, "Data is no Double");
 				throw new IllegalArgumentException("Data is no Double");
 			}
 			break;
-		case ENUM_TYPE:
+		case EnumType:
 			if (!(data instanceof String)) {
 				Logging.error(this, "Data is no String");
 				throw new IllegalArgumentException("Data is no String");
 			}
 			break;
-		case NONE_TYPE:
+		case NoneType:
 			break;
 		}
 	}
