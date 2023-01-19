@@ -409,7 +409,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JPanel showHardwareLogParentOfNotFoundPanel;
 	JPanel showHardwareLog;
 	JLabel labelNoSoftware;
-	Panelreinst panelReinstmgr = new Panelreinst();
 
 	PanelSWInfo panelSWInfo;
 	JPanel showSoftwareLogNotFound;
@@ -3448,10 +3447,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		default:
 			break;
 		}
-	}
-
-	public void producePanelReinstmgr(String pcname, List images) {
-		panelReinstmgr.startFor(pcname, images);
 	}
 
 	public void initHardwareInfo(List config) {
