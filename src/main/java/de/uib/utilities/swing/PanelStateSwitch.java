@@ -36,7 +36,7 @@ public class PanelStateSwitch extends JPanel {
 
 	protected Enum producedValue;
 	protected Enum startValue;
-	protected Class myenumClass;
+	protected Class<?> myenumClass;
 	protected Enum[] values;
 	protected Map<Enum, String> labels;
 	protected String title;
@@ -53,20 +53,20 @@ public class PanelStateSwitch extends JPanel {
 		public void setValue(Enum val);
 	}
 
-	public PanelStateSwitch(Enum startValue, Enum[] values, Class myenum, Enumsetter enumSetter) {
+	public PanelStateSwitch(Enum startValue, Enum[] values, Class<?> myenum, Enumsetter enumSetter) {
 		this(null, startValue, values, null, myenum, enumSetter);
 	}
 
-	public PanelStateSwitch(String title, Enum startValue, Enum[] values, Class myenum, Enumsetter enumSetter) {
+	public PanelStateSwitch(String title, Enum startValue, Enum[] values, Class<?> myenum, Enumsetter enumSetter) {
 		this(title, startValue, values, null, myenum, enumSetter);
 	}
 
-	public PanelStateSwitch(String title, Enum startValue, Enum[] values, String[] labels, Class myenum,
+	public PanelStateSwitch(String title, Enum startValue, Enum[] values, String[] labels, Class<?> myenum,
 			Enumsetter enumSetter) {
 		this(title, startValue, values, labels, myenum, enumSetter, 0, 0);
 	}
 
-	public PanelStateSwitch(String title, Enum startValue, Enum[] values, String[] labels, Class myenum,
+	public PanelStateSwitch(String title, Enum startValue, Enum[] values, String[] labels, Class<?> myenum,
 			Enumsetter enumSetter, int hGap, int vGap) {
 
 		Logging.info(this, " my enum " + myenum);

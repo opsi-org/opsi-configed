@@ -64,7 +64,7 @@ public class MapSource implements TableSource
 		this(columnNames, classNames, table, false);
 	}
 
-	private static boolean dynInstanceOf(Object ob, Class cl) {
+	private static boolean dynInstanceOf(Object ob, Class<?> cl) {
 		return cl.isAssignableFrom(ob.getClass());
 	}
 

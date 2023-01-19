@@ -17,8 +17,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Function;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.DataChangedSubject;
 import de.uib.utilities.logging.Logging;
@@ -304,7 +304,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	 * editor for each cell.
 	 */
 	@Override
-	public Class getColumnClass(int c) {
+	public Class<?> getColumnClass(int c) {
 		switch (c) {
 		case 0:
 			return "".getClass();

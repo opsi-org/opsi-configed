@@ -23,15 +23,15 @@ public class Containership {
 	}
 
 	public void doForAllContainedCompis(String methodName, Object[] args) {
-		Class[] theArgsTypes = new Class[args.length];
+		Class<?>[] theArgsTypes = new Class[args.length];
 		for (int j = 0; j < args.length; j++) {
 			theArgsTypes[j] = args[j].getClass();
 		}
 		doForAllContained(methodName, args, theArgsTypes, Object.class, theContainer);
 	}
 
-	public void doForAllContainedCompisOfClass(String methodName, Object[] args, Class selClass) {
-		Class[] theArgsTypes = new Class[args.length];
+	public void doForAllContainedCompisOfClass(String methodName, Object[] args, Class<?> selClass) {
+		Class<?>[] theArgsTypes = new Class[args.length];
 		for (int j = 0; j < args.length; j++) {
 			theArgsTypes[j] = args[j].getClass();
 		}
@@ -39,14 +39,15 @@ public class Containership {
 		doForAllContained(methodName, args, theArgsTypes, selClass, theContainer);
 	}
 
-	public void doForAllContainedCompisOfClass(String methodName, Object[] args, Class[] theArgsTypes, Class selClass) {
+	public void doForAllContainedCompisOfClass(String methodName, Object[] args, Class<?>[] theArgsTypes,
+			Class<?> selClass) {
 		doForAllContained(methodName, args, theArgsTypes, selClass, theContainer);
 	}
 
-	private void doForAllContained(String methodName, Object[] args, Class[] theArgsTypes, Class selClass,
+	private void doForAllContained(String methodName, Object[] args, Class<?>[] theArgsTypes, Class<?> selClass,
 			java.awt.Container in) {
 		Component theComp;
-		Class theCompClass;
+		Class<?> theCompClass;
 		Method theMethod;
 		int cc = 0;
 		int i = 0;

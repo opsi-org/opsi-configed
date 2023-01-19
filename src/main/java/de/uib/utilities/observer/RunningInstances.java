@@ -98,7 +98,7 @@ public class RunningInstances<T> {
 
 	protected void sendChangeEvent() {
 		Logging.debug(this, "sendChangeEvent observers: " + observers.size());
-		for (RunningInstancesObserver aFollower : observers) {
+		for (RunningInstancesObserver<T> aFollower : observers) {
 			aFollower.instancesChanged(getAll());
 		}
 

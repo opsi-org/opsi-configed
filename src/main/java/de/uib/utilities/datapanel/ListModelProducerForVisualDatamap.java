@@ -145,7 +145,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	}
 
 	@Override
-	public Class getClass(int row, int column) {
+	public Class<?> getClass(int row, int column) {
 
 		String key = (String) table.getValueAt(row, 0);
 

@@ -21,6 +21,6 @@ public interface ListModelProducer {
 
 	public List toList(Object value);
 
-	public Class getClass(int row, int column);
+	public Class<?> getClass(int row, int column);
 
 }

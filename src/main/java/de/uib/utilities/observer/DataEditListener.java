@@ -57,15 +57,10 @@ public class DataEditListener implements DocumentListener, // for text component
 		}
 	}
 
-	public DataEditListener(ObservableSubject subject, Object source, boolean withFocusCheck) {
+	public DataEditListener(ObservableSubject subject, Object source) {
 		Logging.info(this, "constructed , subject  " + subject + ", source " + source);
 		this.source = source;
-		this.withFocusCheck = withFocusCheck;
 		dataChangedSubject = subject;
-	}
-
-	public DataEditListener(ObservableSubject subject, Object source) {
-		this(subject, source, true);
 	}
 
 	public void setWithFocusCheck(boolean b) {

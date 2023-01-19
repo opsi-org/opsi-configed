@@ -42,7 +42,7 @@ public class DefaultListModelProducer implements ListModelProducer {
 	}
 
 	@Override
-	public Class getClass(int row, int column) {
+	public Class<?> getClass(int row, int column) {
 		return Object.class;
 	}
 
