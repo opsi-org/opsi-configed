@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -709,12 +710,13 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 								boolean result = true;
 
 								if (removeKeysFromOtherLicencePool != null) {
-									for (String otherPool : removeKeysFromOtherLicencePool.keySet()) {
-										if (result && !removeKeysFromOtherLicencePool.get(otherPool).isEmpty()) {
-											result = persist.removeAssociations(otherPool,
-													removeKeysFromOtherLicencePool.get(otherPool));
+									for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicencePool
+											.entrySet()) {
+										if (result && !otherStringPoolEntry.getValue().isEmpty()) {
+											result = persist.removeAssociations(otherStringPoolEntry.getKey(),
+													otherStringPoolEntry.getValue());
 											if (result)
-												removeKeysFromOtherLicencePool.remove(otherPool);
+												removeKeysFromOtherLicencePool.remove(otherStringPoolEntry.getKey());
 										}
 									}
 								}

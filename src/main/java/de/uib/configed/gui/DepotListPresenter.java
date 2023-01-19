@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -16,8 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
@@ -59,12 +60,12 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		List<String> descriptions = new ArrayList<>();
 		Map<String, Map<String, Object>> depotInfo = depotsList.getDepotInfo();
 
-		for (String depot : depotInfo.keySet()) {
-			values.add(depot);
-			if (depotInfo.get(depot) == null || depotInfo.get(depot).get("description") == null)
+		for (Entry<String, Map<String, Object>> depotInfoEntry : depotInfo.entrySet()) {
+			values.add(depotInfoEntry.getKey());
+			if (depotInfoEntry.getValue() == null || depotInfoEntry.getValue().get("description") == null)
 				descriptions.add("");
 			else
-				descriptions.add((String) depotInfo.get(depot).get("description"));
+				descriptions.add((String) depotInfoEntry.getValue().get("description"));
 		}
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);

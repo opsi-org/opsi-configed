@@ -3003,9 +3003,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			Map<String, Object> modulesInfo = main.getPersistenceController().getOpsiModulesInfos();
 
 			int count = 0;
-			for (String key : modulesInfo.keySet()) {
+			for (Entry<String, Object> modulesInfoEntry : modulesInfo.entrySet()) {
 				count++;
-				message.append("\n " + key + ": " + modulesInfo.get(key));
+				message.append("\n " + modulesInfoEntry.getKey() + ": " + modulesInfoEntry.getValue());
 			}
 			f.setSize(new Dimension(300, 50 + count * 25));
 

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -15,8 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
@@ -52,12 +53,12 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		List<String> descriptions = new ArrayList<>();
 		Map<String, Map<String, Object>> depotInfo = valueList.getDepotInfo();
 
-		for (String depot : depotInfo.keySet()) {
-			values.add(depot);
-			if (depotInfo.get(depot) == null || depotInfo.get(depot).get("description") == null)
+		for (Entry<String, Map<String, Object>> depotEntry : depotInfo.entrySet()) {
+			values.add(depotEntry.getKey());
+			if (depotEntry.getValue() == null || depotEntry.getValue().get("description") == null)
 				descriptions.add("");
 			else
-				descriptions.add((String) depotInfo.get(depot).get("description"));
+				descriptions.add((String) depotEntry.getValue().get("description"));
 		}
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(valueList, values, descriptions);
