@@ -13,14 +13,11 @@ import java.awt.event.MouseListener;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.TableCellEditor;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
-public class CellEditor4TableText extends DefaultCellEditor implements TableCellEditor
-// , ActionListener
-		, MouseListener, KeyListener, FocusListener
+public class CellEditor4TableText extends DefaultCellEditor implements MouseListener, KeyListener, FocusListener
 
 {
 	String oldValue;

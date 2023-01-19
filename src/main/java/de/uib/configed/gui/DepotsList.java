@@ -12,8 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.Logging;
 
@@ -118,7 +118,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, // value to display
+		public Component getListCellRendererComponent(JList<?> list, Object value, // value to display
 				int index, // cell index
 				boolean isSelected, // is the cell selected
 				boolean cellHasFocus // the list and the cell have the focus
