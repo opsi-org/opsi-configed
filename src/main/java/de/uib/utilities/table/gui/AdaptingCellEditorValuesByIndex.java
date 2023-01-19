@@ -17,7 +17,7 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 
 	JComboBox cc;
 	ComboBoxModeller cbm;
-	ComboBoxModel nullModel;
+	ComboBoxModel<String> nullModel;
 
 	public AdaptingCellEditorValuesByIndex(JComboBox cc, ComboBoxModeller cbm,
 			Map<String, String> universalMapOfStrings, // valid for every possible content of cbm

@@ -2450,6 +2450,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	}
 
+	public boolean treeClientsSelectAction(TreePath newSelectedPath) {
+		Logging.info(this, "treeClientsSelectAction");
+
+		DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) newSelectedPath.getLastPathComponent());
+		Logging.info(this, "treeClientsSelectAction selected node " + selectedNode);
+
+		if (!selectedNode.getAllowsChildren()) {
+			setClientByTree(selectedNode.toString(), newSelectedPath);
+		}
+
+		return true;
+	}
+
 	protected void initTree() {
 		Logging.debug(this, "initTree");
 		activeTreeNodes = new HashMap<>();
