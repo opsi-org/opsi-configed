@@ -243,20 +243,15 @@ public class SSHConnectExec extends SSHConnect {
 	protected boolean FOUND_ERROR = false;
 
 	public String exec(SSHCommand command) {
-		return exec(command, true, null, false, false);
+		return exec(command, true, null, false, false, 1, 1);
 	}
 
 	public String exec(SSHCommand command, boolean withGui) {
 		FOUND_ERROR = false;
-		return exec(command, withGui, null, false, false);
+		return exec(command, withGui, null, false, false, 1, 1);
 	}
 
 	public String exec(SSHCommand command, boolean withGui, SSHConnectionExecDialog dialog) {
-		return exec(command, withGui, dialog, false, false);
-	}
-
-	public String exec(SSHCommand command, boolean withGui, SSHConnectionExecDialog dialog, boolean sequential,
-			boolean rememberPw) {
 		return exec(command, withGui, dialog, false, false, 1, 1);
 	}
 

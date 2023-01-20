@@ -119,8 +119,7 @@ public class SWAuditEntry extends TableEntry
 	private String ident;
 	private String identReduced;
 
-	public SWAuditEntry(StringValuedRelationElement auditSoftwareXLicencePoolElement,
-			AuditSoftwareXLicencePool relation)
+	public SWAuditEntry(StringValuedRelationElement auditSoftwareXLicencePoolElement)
 	// called for RelationElements of AuditSoftwareXLicencePool
 	// the parameter is only requested in order to get a distinction of the
 	// constructors

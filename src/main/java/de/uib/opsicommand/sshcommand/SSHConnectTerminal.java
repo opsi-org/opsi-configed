@@ -307,7 +307,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 			result = ssh.exec(new EmptyCommand(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
-					SSHCommandFactory.STRING_COMMAND_GET_LINUX_COMMANDS), false, null, true, false);
+					SSHCommandFactory.STRING_COMMAND_GET_LINUX_COMMANDS), false, null);
 			if (result == null)
 				Logging.warning(this, "no commands could be found for autocompletion");
 			else {

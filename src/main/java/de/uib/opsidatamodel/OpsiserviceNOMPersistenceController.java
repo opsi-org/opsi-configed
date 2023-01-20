@@ -6202,7 +6202,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicencePools) {
 
-			SWAuditEntry entry = new SWAuditEntry(retrieved, relationsAuditSoftwareToLicencePools);
+			SWAuditEntry entry = new SWAuditEntry(retrieved);
 			String licencePoolKEY = retrieved.get(LicencepoolEntry.ID_SERVICE_KEY);
 			String swKEY = entry.getIdent();
 

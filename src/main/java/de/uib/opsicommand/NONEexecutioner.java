@@ -25,10 +25,6 @@ public class NONEexecutioner extends Executioner {
 		return null;
 	}
 
-	public List<JSONObject> retrieveJSONObjects(List<OpsiMethodCall> omcList) {
-		return null;
-	}
-
 	@Override
 	public Object getValueFromJSONObject(Object o, String key) {
 		return null;
