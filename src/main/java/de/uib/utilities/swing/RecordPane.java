@@ -67,8 +67,8 @@ public class RecordPane extends JPanel implements KeyListener {
 		} else
 			this.editingNotifier = editingNotifier;
 
-		for (String key : datafields.keySet()) {
-			datafields.get(key).setGlobalObservableSubject(this.editingNotifier);
+		for (JTextFieldObserved value : datafields.values()) {
+			value.setGlobalObservableSubject(this.editingNotifier);
 		}
 	}
 

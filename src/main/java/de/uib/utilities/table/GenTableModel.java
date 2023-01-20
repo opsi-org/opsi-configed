@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -1047,9 +1048,10 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		java.util.Map<Integer, Mapping<Integer, String>> xFunction = xFunctions.get(pair);
 		if (xFunction == null) {
 			xFunction = new HashMap<>();
-			for (Object key : function.keySet()) {
-				Integer keyVal = (Integer) key;
-				xFunction.put(keyVal, col2ndMapping.restrictedTo(new HashSet<>((List<Object>) function.get(key))));
+			for (Entry<Object, List<Object>> functionEntry : function.entrySet()) {
+				Integer keyVal = (Integer) functionEntry.getKey();
+				xFunction.put(keyVal,
+						col2ndMapping.restrictedTo(new HashSet<>((List<Object>) functionEntry.getValue())));
 			}
 		}
 

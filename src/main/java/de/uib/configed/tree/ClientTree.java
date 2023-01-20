@@ -842,24 +842,23 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		// produce other nodes
 
-		for (String groupId : groups.keySet()) {
-
-			if (topGroupNames.contains(groupId))
+		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
+			if (topGroupNames.contains(group.getKey()))
 				continue;
 
-			GroupNode node = produceGroupNode(groups.get(groupId));
-			groupNodes.put(groupId, node);
+			GroupNode node = produceGroupNode(group.getValue());
+			groupNodes.put(group.getKey(), node);
 		}
 
 		// now we link them
 
-		for (String groupId : groups.keySet()) {
-			if (topGroupNames.contains(groupId))
+		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
+			if (topGroupNames.contains(group.getKey()))
 				continue;
 
-			DefaultMutableTreeNode node = groupNodes.get(groupId);
+			DefaultMutableTreeNode node = groupNodes.get(group.getKey());
 
-			String parentId = groups.get(groupId).get("parentGroupId");
+			String parentId = group.getValue().get("parentGroupId");
 
 			if (parentId == null || parentId.equalsIgnoreCase("null"))
 				parentId = ALL_GROUPS_NAME;

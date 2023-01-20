@@ -4941,7 +4941,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 							trans.setCommand(cmd);
 
-							HashMap<String, Object> values = new HashMap<>();
+							HashMap<String, String> values = new HashMap<>();
 							values.put("%host%", targetClient);
 							String hostName = targetClient;
 							Logging.info(this, " targetClient " + targetClient);

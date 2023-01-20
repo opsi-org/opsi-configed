@@ -33,8 +33,8 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 
 	public static LicenceUsableForEntry produceFrom(Map<String, Object> importedEntry) {
 		LicenceUsableForEntry entry = new LicenceUsableForEntry();
-		for (String key : importedEntry.keySet()) {
-			entry.put(key, (String) importedEntry.get(key));
+		for (Entry<String, Object> imported : importedEntry.entrySet()) {
+			entry.put(imported.getKey(), (String) imported.getValue());
 		}
 		if (importedEntry.get(LICENCE_ID_KEY) == null || importedEntry.get(LICENSE_POOL_ID_KEY) == null)
 			Logging.warning("LicenceUsableForEntry,  missing primary key in " + importedEntry);

@@ -10,6 +10,7 @@ package de.uib.utilities.table;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class ChainedTableModelFilter extends TableModelFilter {
 	LinkedHashMap<String, TableModelFilter> chain;
@@ -39,8 +40,8 @@ public class ChainedTableModelFilter extends TableModelFilter {
 	public boolean isInUse() {
 		boolean result = false;
 
-		for (String filterName : chain.keySet()) {
-			if (chain.get(filterName).isInUse()) {
+		for (TableModelFilter filter : chain.values()) {
+			if (filter.isInUse()) {
 				result = true;
 				break;
 			}
@@ -56,9 +57,9 @@ public class ChainedTableModelFilter extends TableModelFilter {
 
 		boolean testresult = true;
 
-		for (String filterName : chain.keySet()) {
-			if (chain.get(filterName).isInUse()) {
-				testresult = testresult && chain.get(filterName).test(row);
+		for (TableModelFilter filter : chain.values()) {
+			if (filter.isInUse()) {
+				testresult = testresult && filter.test(row);
 			}
 
 		}
@@ -73,10 +74,10 @@ public class ChainedTableModelFilter extends TableModelFilter {
 	public String getActiveFilters() {
 		StringBuilder result = new StringBuilder();
 
-		for (String filterName : chain.keySet()) {
-			if (chain.get(filterName).isInUse()) {
+		for (Entry<String, TableModelFilter> filterEntry : chain.entrySet()) {
+			if (filterEntry.getValue().isInUse()) {
 				result.append(" - ");
-				result.append(filterName);
+				result.append(filterEntry.getKey());
 			}
 		}
 

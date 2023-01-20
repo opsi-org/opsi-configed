@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import de.uib.utilities.logging.Logging;
 
@@ -73,19 +74,19 @@ public class MapSource implements TableSource
 
 		int rowCount = 0;
 
-		for (String key : table.keySet()) {
+		for (Entry<String, Map> tableEntry : table.entrySet()) {
 			List<Object> vRow = new ArrayList<>();
 
-			Map<String, Object> mRow = table.get(key);
+			Map<String, Object> mRow = tableEntry.getValue();
 
 			// previously we assumed that column 0 hold the key
 
 			for (int i = 0; i < columnNames.size(); i++) {
 				Object obj = mRow.get(columnNames.get(i));
 
-				if (key.startsWith("A"))
-					Logging.debug(this, "fetchData for A-key " + key + " col  " + columnNames.get(i) + " index " + i
-							+ " val " + obj);
+				if (tableEntry.getKey().startsWith("A"))
+					Logging.debug(this, "fetchData for A-key " + tableEntry.getKey() + " col  " + columnNames.get(i)
+							+ " index " + i + " val " + obj);
 
 				if (obj != null) {
 					vRow.add(obj);
@@ -136,8 +137,8 @@ public class MapSource implements TableSource
 
 			}
 
-			if (key.startsWith("A"))
-				Logging.debug(this, "fetchData for A-key " + key + " produced row " + vRow);
+			if (tableEntry.getKey().startsWith("A"))
+				Logging.debug(this, "fetchData for A-key " + tableEntry.getKey() + " produced row " + vRow);
 
 			rows.add(vRow);
 

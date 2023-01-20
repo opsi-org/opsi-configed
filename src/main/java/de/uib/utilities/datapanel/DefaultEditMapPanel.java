@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -102,13 +103,12 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 			defaultsMap = new HashMap<>();
 
 			if (optionsMap != null) {
-				for (String key : optionsMap.keySet()) {
+				for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
+					String description = option.getValue().getDescription();
+					Object defaultvalue = option.getValue().getDefaultValues();
 
-					String description = optionsMap.get(key).getDescription();
-					Object defaultvalue = optionsMap.get(key).getDefaultValues();
-
-					descriptionsMap.put(key, description);
-					defaultsMap.put(key, defaultvalue);
+					descriptionsMap.put(option.getKey(), description);
+					defaultsMap.put(option.getKey(), defaultvalue);
 
 				}
 			}

@@ -20,6 +20,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -467,8 +468,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 		if (optionsMap != null) {
 
-			for (String x : optionsMap.keySet()) {
-				Logging.debug(this, " key " + x + " is nullable " + optionsMap.get(x).isNullable());
+			for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
+				Logging.debug(this, " key " + option.getKey() + " is nullable " + option.getValue().isNullable());
 			}
 
 			modelProducer = new ListModelProducerForVisualDatamap(table, optionsMap, visualdata);

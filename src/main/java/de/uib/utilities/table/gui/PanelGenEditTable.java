@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.swing.DefaultRowSorter;
@@ -846,8 +847,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		else {
 
-			for (Integer col : sortDescriptor.keySet()) {
-				sortKeys.add(new RowSorter.SortKey(col, sortDescriptor.get(col)));
+			for (Entry<Integer, SortOrder> entry : sortDescriptor.entrySet()) {
+				sortKeys.add(new RowSorter.SortKey(entry.getKey(), entry.getValue()));
 			}
 
 		}

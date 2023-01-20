@@ -9,9 +9,9 @@ public class MapOfProductGroups extends HashMap<String, TreeSetBuddy> {
 	public MapOfProductGroups(Map<String, Set<String>> fName2ProductGroup) {
 		super();
 
-		for (String name : fName2ProductGroup.keySet()) {
-			TreeSetBuddy set = new TreeSetBuddy(fName2ProductGroup.get(name));
-			put(name, set);
+		for (Entry<String, Set<String>> product : fName2ProductGroup.entrySet()) {
+			TreeSetBuddy set = new TreeSetBuddy(product.getValue());
+			put(product.getKey(), set);
 		}
 	}
 }

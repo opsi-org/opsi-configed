@@ -34,43 +34,43 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 		} else {
 
-			for (String key : configOptions.keySet()) {
+			for (Entry<String, ConfigOption> option : configOptions.entrySet()) {
 				// fill up by default values
-				if (retrieved.get(key) == null) {
+				if (retrieved.get(option.getKey()) == null) {
 
-					retrieved.put(key, configOptions.get(key).get("defaultValues"));
+					retrieved.put(option.getKey(), option.getValue().get("defaultValues"));
 
 				}
 			}
 		}
 
-		for (String key : retrieved.keySet()) {
+		for (Entry<String, Object> entry : retrieved.entrySet()) {
 			List list = null;
 			// the retrieved object always are lists, we could correct this by observing the
 			// config options
 
-			if (!(retrieved.get(key) instanceof List)) {
-				Logging.warning(this, "list expected , for key " + key + " found " + retrieved.get(key));
-				Logging.error(this, "list expected , for key " + key);
+			if (!(entry.getValue() instanceof List)) {
+				Logging.warning(this, "list expected , for key " + entry.getKey() + " found " + entry.getValue());
+				Logging.error(this, "list expected , for key " + entry.getKey());
 
 				continue;
 			} else
-				list = (List) retrieved.get(key);
+				list = (List) entry.getValue();
 
-			classnames.put(key, "List");
+			classnames.put(entry.getKey(), "List");
 
-			if (configOptions != null && configOptions.get(key) != null) {
-				ConfigOption configOption = configOptions.get(key);
+			if (configOptions != null && configOptions.get(entry.getKey()) != null) {
+				ConfigOption configOption = configOptions.get(entry.getKey());
 
 				if (configOption.get("classname").equals("java.lang.Boolean")) {
-					put(key, list.get(0));
+					put(entry.getKey(), list.get(0));
 				} else
-					put(key, list);
+					put(entry.getKey(), list);
 			} else {
 
-				Logging.debug(this, "no config (option) found for key " + key);
+				Logging.debug(this, "no config (option) found for key " + entry.getKey());
 
-				put(key, list);
+				put(entry.getKey(), list);
 			}
 
 		}

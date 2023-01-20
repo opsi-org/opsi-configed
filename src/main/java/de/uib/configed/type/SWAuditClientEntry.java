@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.NavigableMap;
 
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
 public class SWAuditClientEntry
@@ -40,7 +39,6 @@ public class SWAuditClientEntry
 	public static final String CLIENT_ID = "clientId";
 	public static final String LICENCE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
-	public static final String UNINSTALL_STRING = "uninstallString";
 
 	protected final Map<String, String> data;
 	protected List<String> software;
@@ -88,19 +86,6 @@ public class SWAuditClientEntry
 
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
-	public static void setLocale() {
-
-		locale.put(SWAuditEntry.id, "ID");
-		locale.put(SWAuditEntry.NAME, Configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
-		locale.put(SWAuditEntry.VERSION, Configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
-		// locale.put(subversion,
-
-		locale.put(SWAuditEntry.ARCHITECTURE, Configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
-		locale.put(SWAuditEntry.LANGUAGE, Configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
-		locale.put(LICENCE_KEY, Configed.getResourceValue("PanelSWInfo.tableheader_displayLicenseKey"));
-		locale.put(SWAuditEntry.WINDOWSsOFTWAREid, Configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
-	}
-
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
 	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<>();
@@ -118,8 +103,8 @@ public class SWAuditClientEntry
 
 	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>();
 	static {
-		for (String key : DB_COLUMNS.keySet()) {
-			DB_COLUMN_NAMES.add(DB_COLUMNS.get(key));
+		for (String value : DB_COLUMNS.values()) {
+			DB_COLUMN_NAMES.add(value);
 		}
 	}
 
