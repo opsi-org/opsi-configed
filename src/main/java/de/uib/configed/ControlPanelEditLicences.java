@@ -138,12 +138,12 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 
 		// panelSoftwarelicences
 		columnNames = new ArrayList<>();
-		columnNames.add(LicenceEntry.idKEY);
-		columnNames.add(LicenceEntry.licenceContractIdKEY);
-		columnNames.add(LicenceEntry.typeKEY);
-		columnNames.add(LicenceEntry.maxInstallationsKEY);
-		columnNames.add(LicenceEntry.boundToHostKEY);
-		columnNames.add(LicenceEntry.expirationDateKEY);
+		columnNames.add(LicenceEntry.ID_KEY);
+		columnNames.add(LicenceEntry.LICENCE_CONTRACT_ID_KEY);
+		columnNames.add(LicenceEntry.TYPE_KEY);
+		columnNames.add(LicenceEntry.MAX_INSTALLATIONS_KEY);
+		columnNames.add(LicenceEntry.BOUND_TO_HOST_KEY);
+		columnNames.add(LicenceEntry.EXPIRATION_DATE_KEY);
 		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
 		classNames.add("java.lang.String");

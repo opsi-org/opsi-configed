@@ -160,16 +160,16 @@ public class DataStubRawData extends DataStubNOM {
 					Configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
 
 			StringBuilder cols = new StringBuilder("");
-			cols.append(ProductPropertyState.tableName + "." + ProductPropertyState.PRODUCT_ID);
+			cols.append(ProductPropertyState.TABLE_NAME + "." + ProductPropertyState.PRODUCT_ID);
 			cols.append(", ");
-			cols.append(ProductPropertyState.tableName + "." + ProductPropertyState.PROPERTY_ID);
+			cols.append(ProductPropertyState.TABLE_NAME + "." + ProductPropertyState.PROPERTY_ID);
 			cols.append(", ");
-			cols.append(ProductPropertyState.tableName + "." + ProductPropertyState.OBJECT_ID);
+			cols.append(ProductPropertyState.TABLE_NAME + "." + ProductPropertyState.OBJECT_ID);
 			cols.append(", ");
-			cols.append(ProductPropertyState.tableName + "." + ProductPropertyState.VALUES);
+			cols.append(ProductPropertyState.TABLE_NAME + "." + ProductPropertyState.VALUES);
 
-			String query = "select \n" + cols.toString() + "\n from " + ProductPropertyState.tableName + "\n where "
-					+ giveWhereOR(ProductPropertyState.tableName + ".objectId", newClients);
+			String query = "select \n" + cols.toString() + "\n from " + ProductPropertyState.TABLE_NAME + "\n where "
+					+ giveWhereOR(ProductPropertyState.TABLE_NAME + ".objectId", newClients);
 
 			Logging.info(this, "produceProductPropertyStates query " + query);
 
@@ -443,7 +443,7 @@ public class DataStubRawData extends DataStubNOM {
 		// z.B. hwClass is DISK_PARTITION
 
 		List<String> specificColumns = new ArrayList<>(); // columns specific for the class
-		specificColumns.add(Host.idColumn);
+		specificColumns.add(Host.ID_COLUMN);
 
 		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
 		StringBuilder cols = new StringBuilder("");
@@ -511,7 +511,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		buf.append("\n where ");
 
-		buf.append(Host.idColumn);
+		buf.append(Host.ID_COLUMN);
 		buf.append(" = ");
 		buf.append(configTable);
 		buf.append(persist.HOST_ID_FIELD);
@@ -609,7 +609,7 @@ public class DataStubRawData extends DataStubNOM {
 		// set default rows
 		for (String host : persist.getHostInfoCollections().getOpsiHostNames()) {
 			Map<String, Object> nearlyEmptyHwRow = new HashMap<>();
-			nearlyEmptyHwRow.put(Host.idColumn, host);
+			nearlyEmptyHwRow.put(Host.ID_COLUMN, host);
 
 			String hostDescription = "";
 			String macAddress = "";
@@ -617,8 +617,8 @@ public class DataStubRawData extends DataStubNOM {
 				hostDescription = persist.getHostInfoCollections().getMapOfPCInfoMaps().get(host).getDescription();
 				macAddress = persist.getHostInfoCollections().getMapOfPCInfoMaps().get(host).getMacAddress();
 			}
-			nearlyEmptyHwRow.put(Host.descriptionColumn, hostDescription);
-			nearlyEmptyHwRow.put(Host.hwAddressColumn, macAddress);
+			nearlyEmptyHwRow.put(Host.DESCRIPTION_COLUMN, hostDescription);
+			nearlyEmptyHwRow.put(Host.HW_ADRESS_COLUMN, macAddress);
 
 			client2HwRows.put(host, nearlyEmptyHwRow);
 		}

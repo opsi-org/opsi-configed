@@ -21,7 +21,7 @@ public class PropertiesStore
 {
 	File myStore;
 
-	protected static final String keySeparator = "=";
+	protected static final String KEY_SEPARATOR = "=";
 
 	private Map<String, String> internalStore;
 
@@ -55,7 +55,7 @@ public class PropertiesStore
 				if (trimmed.length() == 0 || trimmed.charAt(0) == '#' || trimmed.charAt(0) == ';') {
 					// continue
 				} else {
-					int posSeparator = line.indexOf(keySeparator);
+					int posSeparator = line.indexOf(KEY_SEPARATOR);
 
 					String key = line.substring(0, posSeparator);
 					String value = null;
@@ -107,7 +107,7 @@ public class PropertiesStore
 
 		for (String key : internalStore.keySet()) {
 			if (getProperty(key) != null)
-				orderedLines.add(key + keySeparator + getProperty(key));
+				orderedLines.add(key + KEY_SEPARATOR + getProperty(key));
 		}
 
 		return orderedLines;

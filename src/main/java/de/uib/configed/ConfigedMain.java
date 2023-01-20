@@ -727,10 +727,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		columnNames.add("productName");
 
 		// from OpsiPackage.appendValues
-		columnNames.add(OpsiPackage.SERVICEkeyPRODUCT_TYPE);
-		columnNames.add(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
-		columnNames.add(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
-		columnNames.add(OpsiPackage.SERVICEkeyLOCKED);
+		columnNames.add(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE);
+		columnNames.add(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
+		columnNames.add(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
+		columnNames.add(OpsiPackage.SERVICE_KEY_LOCKED);
 
 		List<String> classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
@@ -1408,12 +1408,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				new RetrieverMapSource(columnNames, classNames, () -> (Map) persist.getLicenceContracts()));
 
 		columnNames = new ArrayList<>();
-		columnNames.add(LicenceEntry.idKEY);
-		columnNames.add(LicenceEntry.licenceContractIdKEY);
-		columnNames.add(LicenceEntry.typeKEY);
-		columnNames.add(LicenceEntry.maxInstallationsKEY);
-		columnNames.add(LicenceEntry.boundToHostKEY);
-		columnNames.add(LicenceEntry.expirationDateKEY);
+		columnNames.add(LicenceEntry.ID_KEY);
+		columnNames.add(LicenceEntry.LICENCE_CONTRACT_ID_KEY);
+		columnNames.add(LicenceEntry.TYPE_KEY);
+		columnNames.add(LicenceEntry.MAX_INSTALLATIONS_KEY);
+		columnNames.add(LicenceEntry.BOUND_TO_HOST_KEY);
+		columnNames.add(LicenceEntry.EXPIRATION_DATE_KEY);
 
 		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
@@ -5295,10 +5295,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				null);
 
 		if (arg == null || arg.equals("")) {
-			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCHfailedAtAnyTimeS);
+			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
 		} else {
 			String timeAgo = DateExtendedByVars.dayValueOf(arg);
-			String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCHfailedByTimeS, timeAgo);
+			String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
 
 			Logging.info(this, "selectClientsByFailedAtSomeTimeAgo  test " + test);
 			manager.setSearch(test);
@@ -5345,7 +5345,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		de.uib.configed.clientselection.SelectionManager manager = new de.uib.configed.clientselection.SelectionManager(
 				null);
 
-		String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCHfailedProduct, selectedProducts.get(0));
+		String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
 
 		manager.setSearch(test);
 

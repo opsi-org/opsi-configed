@@ -13,8 +13,8 @@
 
 package de.uib.opsidatamodel;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.logging.Logging;
@@ -33,7 +33,7 @@ public class PersistenceControllerFactory {
 	public static boolean sqlDirect = false;
 
 	public static String directmethodcall = "";
-	public static final String directmethodcall_cleanupAuditsoftware = "cleanupAuditsoftware";
+	public static final String DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE = "cleanupAuditsoftware";
 
 	/**
 	 * This creation method constructs a new Controller instance and lets a
@@ -64,7 +64,7 @@ public class PersistenceControllerFactory {
 
 		else if (sqlDirect) {
 			persistControl = new OpsiDirectSQLPersistenceController(server, user, password);
-			if (directmethodcall.equals(directmethodcall_cleanupAuditsoftware)) {
+			if (directmethodcall.equals(DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE)) {
 				persistControl.cleanUpAuditSoftware();
 			}
 			Logging.info("a PersistenceController initiated by option sqlDirect got " + (persistControl == null));

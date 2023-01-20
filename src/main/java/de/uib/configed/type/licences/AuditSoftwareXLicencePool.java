@@ -27,7 +27,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 	public List<String> registeredSoftware;
 
-	public static final String SwID = "swId";
+	public static final String SW_ID = "swId";
 
 	public static final List<String> ATTRIBUTES;
 
@@ -37,7 +37,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 
 		ATTRIBUTES.add(SWAuditEntry.NAME);
 		ATTRIBUTES.add(SWAuditEntry.VERSION);
-		ATTRIBUTES.add(SWAuditEntry.SUBVERSION);
+		ATTRIBUTES.add(SWAuditEntry.SUB_VERSION);
 		ATTRIBUTES.add(SWAuditEntry.LANGUAGE);
 		ATTRIBUTES.add(SWAuditEntry.ARCHITECTURE);
 
@@ -46,11 +46,11 @@ public class AuditSoftwareXLicencePool extends Relation {
 	public static final List<String> INTERFACED_ATTRIBUTES;
 	static {
 		INTERFACED_ATTRIBUTES = new LinkedList<>(ATTRIBUTES);
-		INTERFACED_ATTRIBUTES.add(SwID);
+		INTERFACED_ATTRIBUTES.add(SW_ID);
 	}
 
 	public static final String[] SERVICE_ATTRIBUTES = new String[] { LicencepoolEntry.ID_SERVICE_KEY, SWAuditEntry.NAME,
-			SWAuditEntry.VERSION, SWAuditEntry.SUBVERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE };
+			SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE };
 
 	public AuditSoftwareXLicencePool(List<String> allRegisteredSoftware) {
 		super(ATTRIBUTES);
@@ -61,7 +61,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 	private String produceSWident(Map<String, Object> m) {
 		return Globals.pseudokey(new String[] { Globals.getStringValue(m.get(SWAuditEntry.NAME)),
 				Globals.getStringValue(m.get(SWAuditEntry.VERSION)),
-				Globals.getStringValue(m.get(SWAuditEntry.SUBVERSION)),
+				Globals.getStringValue(m.get(SWAuditEntry.SUB_VERSION)),
 				Globals.getStringValue(m.get(SWAuditEntry.LANGUAGE)),
 				Globals.getStringValue(m.get(SWAuditEntry.ARCHITECTURE)) });
 	}
@@ -78,7 +78,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 			Logging.warning("produceMapFromSWident, ident can not be splitted. " + ident);
 		m.put(SWAuditEntry.NAME, parts[0]);
 		m.put(SWAuditEntry.VERSION, parts[1]);
-		m.put(SWAuditEntry.SUBVERSION, parts[2]);
+		m.put(SWAuditEntry.SUB_VERSION, parts[2]);
 		m.put(SWAuditEntry.LANGUAGE, parts[3]);
 		m.put(SWAuditEntry.ARCHITECTURE, parts[4]);
 
@@ -90,7 +90,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		StringValuedRelationElement rowmap = new StringValuedRelationElement();
 		rowmap.setAllowedAttributes(INTERFACED_ATTRIBUTES);
 		String swIdent = "" + produceSWident(m);
-		rowmap.put(SwID, swIdent);
+		rowmap.put(SW_ID, swIdent);
 
 		rowmap.put(LicencepoolEntry.ID_SERVICE_KEY, Globals.getStringValue(m.get(LicencepoolEntry.ID_SERVICE_KEY)));
 		add(rowmap);

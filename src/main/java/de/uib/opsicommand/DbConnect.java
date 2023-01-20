@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 import de.uib.utilities.logging.Logging;
 
 public class DbConnect {
@@ -24,6 +26,7 @@ public class DbConnect {
 
 	private DbConnect() {
 		try {
+			JOptionPane.showMessageDialog(null, "ÖLAKJFS");
 			// TODO kann weg!
 			Class.forName(DRIVER).getDeclaredConstructor().newInstance();
 

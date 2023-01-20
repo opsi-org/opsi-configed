@@ -1,6 +1,6 @@
 package de.uib.opsidatamodel.permission;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.utilities.ExtendedDate;
@@ -14,13 +14,13 @@ public class ModulePermissionValue {
 	private ExtendedDate expiresDate;
 	private Boolean booleanValue;
 
-	public static final String keyExpires = "expires";
-	public static final String keyMaxClients = "maxclients";
+	public static final String KEY_EXPIRES = "expires";
+	public static final String KEY_MAX_CLIENTS = "maxclients";
 
 	public static final Map<String, Boolean> MODULE_CHECKED;
 	// the modules which are known and should be checked
 	static {
-		MODULE_CHECKED = new LinkedHashMap<>();
+		MODULE_CHECKED = new HashMap<>();
 		MODULE_CHECKED.put("license_management", true);
 		MODULE_CHECKED.put("local_imaging", true);
 		MODULE_CHECKED.put("monitoring", true);
@@ -127,9 +127,9 @@ public class ModulePermissionValue {
 			Map<String, Object> detailled = interpretAsJson(ob);
 			Logging.debug(this, "detailled " + detailled);
 			if (detailled != null) {
-				maxClients = retrieveMaxClients(detailled.get(keyMaxClients));
+				maxClients = retrieveMaxClients(detailled.get(KEY_MAX_CLIENTS));
 				Logging.debug(this, "detailled  maxClients " + maxClients);
-				expiresDate = retrieveExpiresDate(detailled.get(keyExpires));
+				expiresDate = retrieveExpiresDate(detailled.get(KEY_EXPIRES));
 			} else {
 				booleanValue = checkBoolean(ob);
 

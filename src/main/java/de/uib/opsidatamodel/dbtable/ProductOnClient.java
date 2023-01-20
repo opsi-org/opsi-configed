@@ -8,18 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.productstate.ProductState;
+import de.uib.utilities.Mapping;
 
 public class ProductOnClient extends Table {
-	public static final String tableName = "PRODUCT_ON_CLIENT";
 
-	public static final String LOCALBOOTid = "LocalbootProduct";
-	public static final String NETBOOTid = "NetbootProduct";
+	public static final String LOCALBOOT_ID = "LocalbootProduct";
 
-	public static final String CLIENTid = "clientId";
-	public static final String PRODUCTid = "productId";
-	public static final String PRODUCTtype = "productType";
+	public static final String CLIENT_ID = "clientId";
+	public static final String PRODUCT_ID = "productId";
+	public static final String PRODUCT_TYPE = "productType";
 
-	private static final String localFilename = "productstates.configed";
+	private static final String LOCAL_FILE_NAME = "productstates.configed";
 
 	public static List<String> columns;
 	static {
@@ -39,9 +38,9 @@ public class ProductOnClient extends Table {
 	public static String primaryKeyString;
 	static {
 		primaryKey = new ArrayList<>();
-		primaryKey.add(CLIENTid);
-		primaryKey.add(PRODUCTid);
-		primaryKey.add(PRODUCTtype);
+		primaryKey.add(CLIENT_ID);
+		primaryKey.add(PRODUCT_ID);
+		primaryKey.add(PRODUCT_TYPE);
 
 		StringBuilder sb = new StringBuilder("");
 		for (String key : primaryKey) {
@@ -55,12 +54,11 @@ public class ProductOnClient extends Table {
 	static {
 		key2servicekeyX.put("clientId", "clientId");
 	}
-	public static de.uib.utilities.Mapping<String, String> serviceKeyMapping = new de.uib.utilities.Mapping(
-			key2servicekeyX);
+	public static Mapping<String, String> serviceKeyMapping = new Mapping<>(key2servicekeyX);
 
 	public ProductOnClient(String localTablePath) {
 		super(localTablePath);
-		this.localTablePath = localTablePath + File.separator + localFilename;
+		this.localTablePath = localTablePath + File.separator + LOCAL_FILE_NAME;
 	}
 
 	public boolean renew(boolean renew) {

@@ -299,7 +299,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		updateCollection = new TableUpdateCollection();
 
 		columnNamesSWxLicencepool = new ArrayList<>();
-		columnNamesSWxLicencepool.add(AuditSoftwareXLicencePool.SwID);
+		columnNamesSWxLicencepool.add(AuditSoftwareXLicencePool.SW_ID);
 		columnNamesSWxLicencepool.add(LicencepoolEntry.ID_SERVICE_KEY);
 
 		classNamesSWxLicencepool = new ArrayList<>();
@@ -504,7 +504,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {
 			LinkedHashMap<String, String> rowMap = new LinkedHashMap<>();
-			rowMap.put(AuditSoftwareXLicencePool.SwID, swID);
+			rowMap.put(AuditSoftwareXLicencePool.SW_ID, swID);
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
 			if (licpool == null)
@@ -552,7 +552,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						Logging.info(this, "sendUpdate " + rowmap);
 
 						// reloads local data (which are not yet updated)
-						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SwID);
+						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SW_ID);
 						String licensePoolIDOld = persist.getFSoftware2LicencePool(swID);
 						String licensePoolIDNew = (String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY);
 

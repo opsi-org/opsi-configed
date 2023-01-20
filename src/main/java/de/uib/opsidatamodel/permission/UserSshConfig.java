@@ -12,15 +12,15 @@ public class UserSshConfig extends UserConfigModule {
 	// not create new user specific ssh configs (use defaults)
 
 	public static final String KEY_SSH_MENU_ACTIVE = "ssh.menu_serverconsole.active";
-	private static final String KEY_SSH_MENU_ACTIVE_description = Configed
+	private static final String KEY_SSH_MENU_ACTIVE_DESCRIPTION = Configed
 			.getResourceValue("PersistenceController.SSH_MENU_ACTIVE");
 
 	public static final String KEY_SSH_CONFIG_ACTIVE = "ssh.serverconfiguration.active";
-	private static final String KEY_SSH_CONFIG_ACTIVE_description = Configed
+	private static final String KEY_SSH_CONFIG_ACTIVE_DESCRIPTION = Configed
 			.getResourceValue("PersistenceController.SSH_CONFIG_ACTIVE");
 
 	public static final String KEY_SSH_COMMANDCONTROL_ACTIVE = "ssh.commandmanagement.active";
-	private static final String KEY_SSH_COMMANDCONTROL_ACTIVE_description = Configed
+	private static final String KEY_SSH_COMMANDCONTROL_ACTIVE_DESCRIPTION = Configed
 			.getResourceValue("PersistenceController.SSH_CONTROL_ACTIVE");
 
 	public static final String KEY_SSH_COMMANDS_ACTIVE = "ssh.commands.active";
@@ -48,9 +48,9 @@ public class UserSshConfig extends UserConfigModule {
 	public static Map<String, String> configDescription;
 	static {
 		configDescription = new HashMap<>();
-		configDescription.put(KEY_SSH_MENU_ACTIVE, KEY_SSH_MENU_ACTIVE_description);
-		configDescription.put(KEY_SSH_CONFIG_ACTIVE, KEY_SSH_CONFIG_ACTIVE_description);
-		configDescription.put(KEY_SSH_COMMANDCONTROL_ACTIVE, KEY_SSH_COMMANDCONTROL_ACTIVE_description);
+		configDescription.put(KEY_SSH_MENU_ACTIVE, KEY_SSH_MENU_ACTIVE_DESCRIPTION);
+		configDescription.put(KEY_SSH_CONFIG_ACTIVE, KEY_SSH_CONFIG_ACTIVE_DESCRIPTION);
+		configDescription.put(KEY_SSH_COMMANDCONTROL_ACTIVE, KEY_SSH_COMMANDCONTROL_ACTIVE_DESCRIPTION);
 		configDescription.put(KEY_SSH_COMMANDS_ACTIVE, KEY_SSH_COMMANDS_ACTIVE_description);
 	}
 

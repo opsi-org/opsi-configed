@@ -549,19 +549,19 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		// reverse from putting together the values in ProductState
 
-		if (value.equals(InstallationInfo.NONEstring) // we set this in the calling method
-				|| value.equals(InstallationInfo.NONEdisplayString) // this is asked only for formal independence of the
-																	// method
+		if (value.equals(InstallationInfo.NONE_STRING) // we set this in the calling method
+				|| value.equals(InstallationInfo.NONE_DISPLAY_STRING) // this is asked only for formal independence of the
+																		// method
 		) {
 			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.NONEstring);
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.NONE_STRING);
 
-		} else if (value.equals(InstallationInfo.FAILEDdisplayString)) {
+		} else if (value.equals(InstallationInfo.FAILED_DISPLAY_STRING)) {
 			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.FAILED));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.MANUALLY);
-		} else if (value.equals(InstallationInfo.SUCCESSdisplayString)) {
+		} else if (value.equals(InstallationInfo.SUCCESS_DISPLAY_STRING)) {
 			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.SUCCESSFUL));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.MANUALLY);
@@ -1356,8 +1356,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			}
 
 			else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
-				if (value.equals(InstallationInfo.NONEdisplayString))
-					value = InstallationInfo.NONEstring;
+				if (value.equals(InstallationInfo.NONE_DISPLAY_STRING))
+					value = InstallationInfo.NONE_STRING;
 
 				setInstallationInfo(actualProduct, (String) value);
 			}

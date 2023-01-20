@@ -104,13 +104,13 @@ public class DataStubNOM extends DataStub {
 				attribs.add(scriptKey);
 			}
 
-			attribs.add(OpsiProductInfo.SERVICEkeyUSER_LOGIN_SCRIPT);
-			attribs.add(OpsiProductInfo.SERVICEkeyPRIORITY);
+			attribs.add(OpsiProductInfo.SERVICE_KEY_USER_LOGIN_SCRIPT);
+			attribs.add(OpsiProductInfo.SERVICE_KEY_PRIORITY);
 
-			attribs.remove(OpsiPackage.SERVICEkeyPRODUCT_TYPE);
-			attribs.add(OpsiProductInfo.SERVICEkeyPRODUCT_ADVICE);
-			attribs.add(OpsiProductInfo.SERVICEkeyPRODUCT_NAME);
-			attribs.add(OpsiProductInfo.SERVICEkeyPRODUCT_DESCRIPTION);
+			attribs.remove(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE);
+			attribs.add(OpsiProductInfo.SERVICE_KEY_PRODUCT_ADVICE);
+			attribs.add(OpsiProductInfo.SERVICE_KEY_PRODUCT_NAME);
+			attribs.add(OpsiProductInfo.SERVICE_KEY_PRODUCT_DESCRIPTION);
 
 			String[] callAttributes = attribs.toArray(new String[] {});
 
@@ -127,9 +127,9 @@ public class DataStubNOM extends DataStub {
 
 			for (Map<String, Object> m : retrievedList) {
 
-				String productId = "" + m.get(OpsiPackage.SERVICEkeyPRODUCT_ID0);
-				String versionInfo = OpsiPackage.produceVersionInfo("" + m.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION),
-						"" + m.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION));
+				String productId = "" + m.get(OpsiPackage.SERVICE_KEY_PRODUCT_ID0);
+				String versionInfo = OpsiPackage.produceVersionInfo("" + m.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION),
+						"" + m.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION));
 
 				OpsiProductInfo productInfo = new OpsiProductInfo(m);
 				Map<String, OpsiProductInfo> version2productInfos = product2versionInfo2infos.get(productId);
@@ -350,8 +350,8 @@ public class DataStubNOM extends DataStub {
 				String propertyId = (String) retrievedMap.get("propertyId");
 				String productId = (String) retrievedMap.get("productId");
 
-				String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
-				String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
+				String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
+				String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
 
 				if (product2VersionInfo2Depots.get(productId) == null
@@ -424,10 +424,10 @@ public class DataStubNOM extends DataStub {
 					"productDependency_getObjects");
 
 			for (Map<String, Object> dependencyItem : retrievedList) {
-				String productId = "" + dependencyItem.get(OpsiPackage.DBkeyPRODUCT_ID);
+				String productId = "" + dependencyItem.get(OpsiPackage.DB_KEY_PRODUCT_ID);
 
-				String productVersion = "" + dependencyItem.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
-				String packageVersion = "" + dependencyItem.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
+				String productVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
+				String packageVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
 
 				String action = "" + dependencyItem.get("productAction");
@@ -670,10 +670,10 @@ public class DataStubNOM extends DataStub {
 			String[] callAttributes = new String[] { SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME),
 					// element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION),
-					SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION), // key element
+					SWAuditEntry.key2serverKey.get(SWAuditEntry.SUB_VERSION), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE), // key element
 					SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE), // key element
-					SWAuditEntry.key2serverKey.get(SWAuditEntry.WINDOWSsOFTWAREid) };
+					SWAuditEntry.key2serverKey.get(SWAuditEntry.WINDOWS_SOFTWARE_ID) };
 			Map callFilter = new HashMap<>();
 
 			List<Map<String, Object>> li = persist.retrieveListOfMapsNOM(callAttributes, callFilter,
@@ -711,7 +711,7 @@ public class DataStubNOM extends DataStub {
 
 				if (showForLicensing && !linuxSubversionMarkers.isEmpty()) {
 
-					String subversion = entry.get(SWAuditEntry.SUBVERSION);
+					String subversion = entry.get(SWAuditEntry.SUB_VERSION);
 
 					for (String marker : linuxSubversionMarkers) {
 
@@ -764,7 +764,7 @@ public class DataStubNOM extends DataStub {
 					}
 					String licencePoolAssigned = "x " + i;
 
-					infoWithPool.put(SWAuditEntry.id, entry.getIdent());
+					infoWithPool.put(SWAuditEntry.ID, entry.getIdent());
 					infoWithPool.put(LicencepoolEntry.ID_SERVICE_KEY, licencePoolAssigned);
 
 				}

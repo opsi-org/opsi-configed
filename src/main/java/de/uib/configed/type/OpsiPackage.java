@@ -29,14 +29,14 @@ public class OpsiPackage implements Comparable {
 
 	protected String representation;
 	protected String lockedText;
-	public static final String IsLockedINFO = "LOCKED";
+	public static final String IS_LOCKED_INFO = "LOCKED";
 
-	public static final String DBkeyPRODUCT_ID = "productId";
-	public static final String SERVICEkeyPRODUCT_ID0 = "id";
-	public static final String SERVICEkeyPRODUCT_VERSION = "productVersion";
-	public static final String SERVICEkeyPACKAGE_VERSION = "packageVersion";
-	public static final String SERVICEkeyPRODUCT_TYPE = "productType";
-	public static final String SERVICEkeyLOCKED = "locked";
+	public static final String DB_KEY_PRODUCT_ID = "productId";
+	public static final String SERVICE_KEY_PRODUCT_ID0 = "id";
+	public static final String SERVICE_KEY_PRODUCT_VERSION = "productVersion";
+	public static final String SERVICE_KEY_PACKAGE_VERSION = "packageVersion";
+	public static final String SERVICE_KEY_PRODUCT_TYPE = "productType";
+	public static final String SERVICE_KEY_LOCKED = "locked";
 	public static final String VERSION_INFO = "versionInfo";
 
 	public static final String LOCALBOOT_PRODUCT_SERVER_STRING = "LocalbootProduct";
@@ -45,10 +45,10 @@ public class OpsiPackage implements Comparable {
 	public static final List<String> SERVICE_KEYS; // those which form the primary keys
 	static {
 		SERVICE_KEYS = new ArrayList<>();
-		SERVICE_KEYS.add(SERVICEkeyPRODUCT_ID0);
-		SERVICE_KEYS.add(SERVICEkeyPRODUCT_VERSION);
-		SERVICE_KEYS.add(SERVICEkeyPACKAGE_VERSION);
-		SERVICE_KEYS.add(SERVICEkeyPRODUCT_TYPE);
+		SERVICE_KEYS.add(SERVICE_KEY_PRODUCT_ID0);
+		SERVICE_KEYS.add(SERVICE_KEY_PRODUCT_VERSION);
+		SERVICE_KEYS.add(SERVICE_KEY_PACKAGE_VERSION);
+		SERVICE_KEYS.add(SERVICE_KEY_PRODUCT_TYPE);
 	}
 
 	public static final int TYPE_LOCALBOOT = 0;
@@ -74,7 +74,7 @@ public class OpsiPackage implements Comparable {
 			this.productType = -1;
 
 		if (locked != null && locked)
-			this.lockedText = IsLockedINFO;
+			this.lockedText = IS_LOCKED_INFO;
 		else
 			this.lockedText = "";
 
@@ -84,8 +84,9 @@ public class OpsiPackage implements Comparable {
 	}
 
 	public OpsiPackage(Map<String, Object> m) {
-		this("" + m.get(DBkeyPRODUCT_ID), "" + m.get(SERVICEkeyPRODUCT_VERSION), "" + m.get(SERVICEkeyPACKAGE_VERSION),
-				"" + m.get(SERVICEkeyPRODUCT_TYPE), Globals.interpretAsBoolean(m.get(SERVICEkeyLOCKED)));
+		this("" + m.get(DB_KEY_PRODUCT_ID), "" + m.get(SERVICE_KEY_PRODUCT_VERSION),
+				"" + m.get(SERVICE_KEY_PACKAGE_VERSION), "" + m.get(SERVICE_KEY_PRODUCT_TYPE),
+				Globals.interpretAsBoolean(m.get(SERVICE_KEY_LOCKED)));
 		Logging.debug(this, "built from " + m);
 
 	}
@@ -146,7 +147,7 @@ public class OpsiPackage implements Comparable {
 	}
 
 	protected String buildRepresentation() {
-		return "{" + DBkeyPRODUCT_ID + ":\"" + productId + "\";" + SERVICEkeyPRODUCT_TYPE + ":\""
+		return "{" + DB_KEY_PRODUCT_ID + ":\"" + productId + "\";" + SERVICE_KEY_PRODUCT_TYPE + ":\""
 				+ giveProductType(productType) + "\";" + VERSION_INFO + ":\"" + versionInfo + "\"}";
 	}
 

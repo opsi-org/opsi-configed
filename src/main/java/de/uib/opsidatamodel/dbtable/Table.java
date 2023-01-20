@@ -10,8 +10,6 @@ import de.uib.utilities.logging.Logging;
 public class Table {
 	protected String highTimestampS = new Timestamp(0).toString();
 
-	public static final String versionKey = "table version";
-
 	protected String localTablePath;
 	protected String localFileName;
 

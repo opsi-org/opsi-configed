@@ -47,13 +47,13 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 
 	public void saveNewLicence(Map<String, String> m) {
 		WaitCursor waitCursor = new WaitCursor(Globals.container1, mainController.licencesFrame.getCursor());
-		persist.editSoftwareLicence(m.get(LicenceEntry.idKEY), m.get(LicenceEntry.licenceContractIdKEY),
-				m.get(LicenceEntry.typeKEY), m.get(LicenceEntry.maxInstallationsKEY),
-				m.get(LicenceEntry.boundToHostKEY), m.get(LicenceEntry.expirationDateKEY));
+		persist.editSoftwareLicence(m.get(LicenceEntry.ID_KEY), m.get(LicenceEntry.LICENCE_CONTRACT_ID_KEY),
+				m.get(LicenceEntry.TYPE_KEY), m.get(LicenceEntry.MAX_INSTALLATIONS_KEY),
+				m.get(LicenceEntry.BOUND_TO_HOST_KEY), m.get(LicenceEntry.EXPIRATION_DATE_KEY));
 		mainController.softwarelicencesTableProvider.requestReloadRows();
 		// ensure that the visual tables everywhere get the new data when refreshed
 
-		String keyValue = persist.editRelationSoftwareL2LPool(m.get(LicenceEntry.idKEY), m.get("licensePoolId"),
+		String keyValue = persist.editRelationSoftwareL2LPool(m.get(LicenceEntry.ID_KEY), m.get("licensePoolId"),
 				m.get("licenseKey"));
 
 		modelLicencekeys.requestReload();

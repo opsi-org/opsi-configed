@@ -821,8 +821,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		return (comparator.compare(realS.substring(0, part.length()), part) == 0);
 	}
 
-	protected int findViewRowFromValue(int startviewrow, Object value, Set colIndices, boolean fulltext, boolean regex,
-			boolean combineCols) {
+	protected int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
+			boolean regex, boolean combineCols) {
 
 		Logging.debug(this,
 				"findViewRowFromValue(int startviewrow, Object value, Set colIndices, boolean fulltext, boolean regex): "
@@ -872,9 +872,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 					int colJ = targetModel.getColForVisualCol(j);
 
-					Object valJ = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ
-
-					);
+					Object valJ = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ);
 
 					if (valJ != null) {
 						String valSJ = ("" + valJ).toLowerCase();

@@ -48,8 +48,6 @@ public class UserConfig {
 	public static final String ARCHEO_ROLE_NAME = "archeo";
 	public static final String NONE_PROTOTYPE = "";
 
-	public static final String roleBranchPart = KEY_USER_ROLE_ROOT;
-
 	public static final String HAS_ROLE_ATTRIBUT = "has_role";
 	public static final String MODIFICATION_INFO_KEY = "modified";
 

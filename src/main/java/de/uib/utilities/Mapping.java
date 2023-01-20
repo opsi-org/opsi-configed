@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import de.uib.configed.Globals;
@@ -136,7 +137,7 @@ public class Mapping<K, V> {
 		}
 	}
 
-	public Mapping<K, V> restrictedTo(java.util.Set<K> partialDomain) {
+	public Mapping<K, V> restrictedTo(Set<K> partialDomain) {
 		HashMap<K, V> restrictedMap = new HashMap<>();
 		for (K key : partialDomain) {
 			if (domain.contains(key)) {

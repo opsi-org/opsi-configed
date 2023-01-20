@@ -786,13 +786,13 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		// do with original row nums
 		for (int i = 0; i < selection.length; i++) {
-			List oldValues = new ArrayList<>(rows.get(selection[i]));
+			List<Object> oldValues = new ArrayList<>(rows.get(selection[i]));
 			Logging.debug(this, "deleteRow values " + oldValues);
 			updates.add(itemFactory.produceDeleteItem(oldValues));
 
 			if (updatedRows.indexOf(selection[i]) > -1) {
 				Logging.debug(this, "deleteRows, remove from updatedRows  " + updatedRows.indexOf(i));
-				updatedRows.remove(updatedRows.indexOf(selection[i]));
+				updatedRows.remove(selection[i]);
 			}
 		}
 
@@ -831,7 +831,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (!checkDeletionOfAddedRow(rowNum))
 			return;
 
-		List oldValues = new ArrayList<>(rows.get(rowNum));
+		List<Object> oldValues = new ArrayList<>(rows.get(rowNum));
 		Logging.debug(this, "deleteRow values " + oldValues);
 		updates.add(itemFactory.produceDeleteItem(oldValues));
 		// we have to delete the source values, not the possibly changed current row
@@ -1020,7 +1020,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	@Override
-	public de.uib.utilities.Mapping<Integer, String> getPrimarykeyRepresentation() {
+	public Mapping<Integer, String> getPrimarykeyRepresentation() {
 		if (getPrimarykeyTranslation() == null)
 			return null;
 
@@ -1033,8 +1033,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	@Override
-	public java.util.Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd,
-			Mapping col2ndMapping) {
+	public Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd, Mapping col2ndMapping) {
 		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1st, col2nd);
 
 		if (xFunctions == null)

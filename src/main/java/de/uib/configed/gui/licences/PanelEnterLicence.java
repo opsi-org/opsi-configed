@@ -645,13 +645,13 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	public void saveCurrentLicenceData() {
 		HashMap<String, String> m = new HashMap<>();
 
-		m.put(LicenceEntry.idKEY, jTextFieldLicenceID.getText());
-		m.get(LicenceEntry.licenceContractIdKEY);
-		m.put(LicenceEntry.typeKEY, jTextFieldLicenceType.getText());
-		m.put(LicenceEntry.maxInstallationsKEY,
+		m.put(LicenceEntry.ID_KEY, jTextFieldLicenceID.getText());
+		m.get(LicenceEntry.LICENCE_CONTRACT_ID_KEY);
+		m.put(LicenceEntry.TYPE_KEY, jTextFieldLicenceType.getText());
+		m.put(LicenceEntry.MAX_INSTALLATIONS_KEY,
 				LicenceEntry.produceNormalizedCount(jTextFieldMaxInstallations.getText()));
-		m.put(LicenceEntry.boundToHostKEY, comboClient.getSelectedItem().toString());
-		m.put(LicenceEntry.expirationDateKEY, jTextFieldEndOfLicence.getText());
+		m.put(LicenceEntry.BOUND_TO_HOST_KEY, comboClient.getSelectedItem().toString());
+		m.put(LicenceEntry.EXPIRATION_DATE_KEY, jTextFieldEndOfLicence.getText());
 
 		String contractSendValue = jTextFieldLicenceContract.getText();
 		if (contractSendValue.equals("null"))

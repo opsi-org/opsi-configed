@@ -62,26 +62,26 @@ public class SWAuditClientEntry
 	public static List<String> KEYS;
 	static {
 		KEYS = new LinkedList<>();
-		KEYS.add(SWAuditEntry.id);
+		KEYS.add(SWAuditEntry.ID);
 		KEYS.add(SWAuditEntry.NAME);
 		KEYS.add(SWAuditEntry.VERSION);
-		KEYS.add(SWAuditEntry.SUBVERSION);
+		KEYS.add(SWAuditEntry.SUB_VERSION);
 		KEYS.add(SWAuditEntry.ARCHITECTURE);
 		KEYS.add(SWAuditEntry.LANGUAGE);
 		KEYS.add(LICENCE_KEY);
-		KEYS.add(SWAuditEntry.WINDOWSsOFTWAREid);
+		KEYS.add(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 	}
 
 	private static List<String> KEYS_FOR_GUI_TABLES;
 	static {
 		KEYS_FOR_GUI_TABLES = new LinkedList<>();
-		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.id);
+		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.ID);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.NAME);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.VERSION);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.ARCHITECTURE);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.LANGUAGE);
 		KEYS_FOR_GUI_TABLES.add(LICENCE_KEY);
-		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.WINDOWSsOFTWAREid);
+		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 	}
 
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
@@ -93,7 +93,7 @@ public class SWAuditClientEntry
 		DB_COLUMNS.put(CLIENT_ID, DB_TABLE_NAME + "." + "clientId");
 		DB_COLUMNS.put(SWAuditEntry.NAME, DB_TABLE_NAME + "." + "name");
 		DB_COLUMNS.put(SWAuditEntry.VERSION, DB_TABLE_NAME + "." + "version");
-		DB_COLUMNS.put(SWAuditEntry.SUBVERSION, DB_TABLE_NAME + "." + "subVersion");
+		DB_COLUMNS.put(SWAuditEntry.SUB_VERSION, DB_TABLE_NAME + "." + "subVersion");
 		DB_COLUMNS.put(SWAuditEntry.ARCHITECTURE, DB_TABLE_NAME + "." + "architecture");
 		DB_COLUMNS.put(SWAuditEntry.LANGUAGE, DB_TABLE_NAME + "." + "language");
 		DB_COLUMNS.put(LICENCE_KEY, DB_TABLE_NAME + "." + "licenseKey");
@@ -108,8 +108,6 @@ public class SWAuditClientEntry
 		}
 	}
 
-	public static final int columnIndexLastStateChange = DB_COLUMN_NAMES.indexOf("modificationTime");
-
 	public SWAuditClientEntry(final List<String> keys, final List<String> values,
 			de.uib.opsidatamodel.PersistenceController controller) {
 
@@ -117,7 +115,7 @@ public class SWAuditClientEntry
 
 		data = new HashMap<>();
 
-		data.put(SWAuditEntry.id, values.get(keys.indexOf(DB_COLUMNS.get(CLIENT_ID))));
+		data.put(SWAuditEntry.ID, values.get(keys.indexOf(DB_COLUMNS.get(CLIENT_ID))));
 		data.put(LICENCE_KEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCE_KEY))));
 
 		lastModificationS = values.get(keys.indexOf(DB_COLUMNS.get(LAST_MODIFICATION)));
@@ -141,7 +139,7 @@ public class SWAuditClientEntry
 	public SWAuditClientEntry(final Map<String, Object> m, de.uib.opsidatamodel.PersistenceController controller) {
 
 		data = new HashMap<>();
-		data.put(SWAuditEntry.id, Globals.produceNonNull(m.get(CLIENT_ID)));
+		data.put(SWAuditEntry.ID, Globals.produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
 		this.controller = controller;
 		this.software = controller.getSoftwareList();
@@ -160,7 +158,7 @@ public class SWAuditClientEntry
 		try {
 			result = Globals.pseudokey(new String[] { values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.NAME))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))),
-					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUBVERSION))),
+					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUB_VERSION))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.LANGUAGE))),
 					values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE))), });
 		} catch (Exception ex) {
@@ -174,9 +172,9 @@ public class SWAuditClientEntry
 			Logging.info("SWAuditClientEntry:: produceSWident value "
 					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.VERSION))));
 
-			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.SUBVERSION));
+			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.SUB_VERSION));
 			Logging.info("SWAuditClientEntry:: produceSWident value "
-					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUBVERSION))));
+					+ values.get(keys.indexOf(DB_COLUMNS.get(SWAuditEntry.SUB_VERSION))));
 
 			Logging.info("SWAuditClientEntry:: produceSWident key " + DB_COLUMNS.get(SWAuditEntry.LANGUAGE));
 			Logging.info("SWAuditClientEntry:: produceSWident value "
@@ -263,14 +261,14 @@ public class SWAuditClientEntry
 	public static String produceSWident(Map<String, Object> readMap) {
 		return Globals.pseudokey(new String[] { (String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.NAME)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.VERSION)),
-				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUBVERSION)),
+				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.SUB_VERSION)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.LANGUAGE)),
 				(String) readMap.get(SWAuditEntry.key2serverKey.get(SWAuditEntry.ARCHITECTURE)) });
 
 	}
 
 	public String getClientId() {
-		return data.get(SWAuditEntry.id);
+		return data.get(SWAuditEntry.ID);
 	}
 
 	public String getLicenceKey() {

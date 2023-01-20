@@ -20,9 +20,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
@@ -199,7 +199,7 @@ public class PanelSWInfo extends JPanel {
 					}
 				})), -1, finalColumns, null, null);
 
-		indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWSsOFTWAREid);
+		indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES, new TableModelFilter(filterConditionWithMsUpdates));
 		modelSWInfo.reset();
 

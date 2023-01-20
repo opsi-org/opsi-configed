@@ -9,6 +9,7 @@
 package de.uib.utilities.table;
 
 import java.util.List;
+import java.util.Map;
 
 import de.uib.utilities.Mapping;
 
@@ -23,16 +24,16 @@ public interface TableModelFunctions {
 		}
 	}
 
-	java.util.Map<Object, List<Object>> getFunction(int col1, int col2);
+	Map<Object, List<Object>> getFunction(int col1, int col2);
 
-	java.util.Map<Integer, RowStringMap> getPrimarykey2Rowmap();
+	Map<Integer, RowStringMap> getPrimarykey2Rowmap();
 
-	java.util.Map<Integer, String> getPrimarykeyTranslation();
+	Map<Integer, String> getPrimarykeyTranslation();
 	// the defining map for the Mapping of getPrimarykeyRepresentation
 
-	de.uib.utilities.Mapping<Integer, String> getPrimarykeyRepresentation();
+	Mapping<Integer, String> getPrimarykeyRepresentation();
 
-	abstract java.util.Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd,
+	abstract Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd,
 			Mapping<Integer, String> col2ndMapping);
 
 }

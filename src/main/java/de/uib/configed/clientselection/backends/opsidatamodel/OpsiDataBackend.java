@@ -86,7 +86,6 @@ import de.uib.configed.clientselection.operations.OrOperation;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.StringEqualsOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
-import de.uib.configed.type.HWAuditClientEntry;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
@@ -488,7 +487,7 @@ public class OpsiDataBackend extends Backend {
 		for (int i = 0; i < clientNames.length; i++)
 			clientToHardware.put(clientNames[i], new LinkedList<>());
 		for (Map<String, Object> map : hardwareOnClient) {
-			String name = (String) map.get(HWAuditClientEntry.hostKEY);
+			String name = (String) map.get("hostId");
 			if (!clientToHardware.containsKey(name)) {
 				Logging.debug(this, "Non-client hostid: " + name);
 				continue;

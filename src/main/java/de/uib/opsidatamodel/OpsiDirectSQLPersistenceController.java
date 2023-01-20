@@ -180,7 +180,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 				String ident = Globals
 						.pseudokey(new String[] { rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.NAME)),
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.VERSION)),
-								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.SUBVERSION)),
+								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.SUB_VERSION)),
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.LANGUAGE)),
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE)) });
 
@@ -190,7 +190,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 					rowmap.put("name", rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.NAME)));
 
 					rowmap.put("version", rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.VERSION)));
-					rowmap.put("subVersion", rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.SUBVERSION)));
+					rowmap.put("subVersion", rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.SUB_VERSION)));
 					rowmap.put("language", rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.LANGUAGE)));
 					rowmap.put("architecture",
 							rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE)));

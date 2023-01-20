@@ -200,9 +200,9 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public void doActionTestParam(JDialog caller) {
 		String paramText = "";
 		if (((String) jComboBoxParameterMethods.getSelectedItem())
-				.equals(SSHCommandParameterMethods.method_interactiveElement)
+				.equals(SSHCommandParameterMethods.methodInteractiveElement)
 				|| ((String) jComboBoxParameterMethods.getSelectedItem())
-						.equals(SSHCommandParameterMethods.method_optionSelection)) {
+						.equals(SSHCommandParameterMethods.methodOptionSelection)) {
 			Logging.debug("CREATING PARAM TEXT... ");
 			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler()
@@ -236,9 +236,9 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public void doActionParamAdd(JTextComponent component) {
 		String paramText = "";
 		if (((String) jComboBoxParameterMethods.getSelectedItem())
-				.equals(SSHCommandParameterMethods.method_interactiveElement)
+				.equals(SSHCommandParameterMethods.methodInteractiveElement)
 				|| ((String) jComboBoxParameterMethods.getSelectedItem())
-						.equals(SSHCommandParameterMethods.method_optionSelection)) {
+						.equals(SSHCommandParameterMethods.methodOptionSelection)) {
 			paramText = SSHCommandParameterMethods.replacement_default_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())

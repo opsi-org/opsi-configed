@@ -61,6 +61,7 @@ import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.ConfigStateEntry;
 import de.uib.configed.type.DatedRowList;
+import de.uib.configed.type.HWAuditClientEntry;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.MetaConfig;
 import de.uib.configed.type.Object2GroupEntry;
@@ -290,7 +291,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected JSONObject licensingInfo;
 	private LicensingInfoMap licInfoMap;
 	private String opsiLicensingInfoVersion;
-	private static final String backendLicensingInfoMethodname = "backend_getLicensingInfo";
+	private static final String BACKEND_LICENSING_INFO_METHOD_NAME = "backend_getLicensingInfo";
 
 	protected Date expiresDate;
 
@@ -1452,8 +1453,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		String[] callAttributes = new String[] {};
 
 		HashMap<String, String> callFilter = new HashMap<>();
-		callFilter.put(ProductOnClient.PRODUCTid, productId);
-		callFilter.put(ProductOnClient.PRODUCTtype, ProductOnClient.LOCALBOOTid);
+		callFilter.put(ProductOnClient.PRODUCT_ID, productId);
+		callFilter.put(ProductOnClient.PRODUCT_TYPE, ProductOnClient.LOCALBOOT_ID);
 
 		List<Map<String, Object>> retrievedList = retrieveListOfMapsNOM(callAttributes, callFilter,
 				"productOnClient_getObjects");
@@ -1461,10 +1462,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<String> result = new ArrayList<>();
 
 		for (Map<String, Object> m : retrievedList) {
-			String client = (String) m.get(ProductOnClient.CLIENTid);
+			String client = (String) m.get(ProductOnClient.CLIENT_ID);
 
-			String clientProductVersion = (String) m.get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
-			String clientPackageVersion = (String) m.get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
+			String clientProductVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
+			String clientPackageVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 
 			Object clientProductState = m.get(ProductState.KEY_INSTALLATION_STATUS);
 
@@ -1894,8 +1895,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (productNetboot != null && !productNetboot.isEmpty()) {
 				Logging.info(this, "createClient" + " productNetboot " + productNetboot);
 				Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
-				itemProducts.put(OpsiPackage.DBkeyPRODUCT_ID, productNetboot);
-				itemProducts.put(OpsiPackage.SERVICEkeyPRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+				itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productNetboot);
+				itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 				itemProducts.put("clientId", newClientId);
 				itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
 				productsNetbootJsonObject.add(Executioner.jsonMap(itemProducts));
@@ -2045,8 +2046,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Logging.info(this, "createClient" + " productNetboot " + productNetboot);
 			List<Object> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
-			itemProducts.put(OpsiPackage.DBkeyPRODUCT_ID, productNetboot);
-			itemProducts.put(OpsiPackage.SERVICEkeyPRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
+			itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productNetboot);
+			itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 			itemProducts.put("clientId", newClientId);
 			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
 			jsonObjects.add(Executioner.jsonMap(itemProducts));
@@ -2059,8 +2060,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Logging.info(this, "createClient" + " productLocalboot " + productLocalboot);
 			List<Object> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
-			itemProducts.put(OpsiPackage.DBkeyPRODUCT_ID, productLocalboot);
-			itemProducts.put(OpsiPackage.SERVICEkeyPRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
+			itemProducts.put(OpsiPackage.DB_KEY_PRODUCT_ID, productLocalboot);
+			itemProducts.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 			itemProducts.put("clientId", newClientId);
 			itemProducts.put(ProductState.key2servicekey.get(ProductState.KEY_ACTION_REQUEST), "setup");
 			jsonObjects.add(Executioner.jsonMap(itemProducts));
@@ -3310,9 +3311,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			hostColumnNames = new ArrayList<>();
 
-			hostColumnNames.add(Host.idColumn);
-			hostColumnNames.add(Host.descriptionColumn);
-			hostColumnNames.add(Host.hwAddressColumn);
+			hostColumnNames.add(Host.ID_COLUMN);
+			hostColumnNames.add(Host.DESCRIPTION_COLUMN);
+			hostColumnNames.add(Host.HW_ADRESS_COLUMN);
 			hostColumnNames.add(LAST_SEEN_VISIBLE_COL_NAME);
 
 			getConfigOptions();
@@ -3840,9 +3841,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							// OpsiProductInfo.SERVICEkeyPRODUCT_NAME,
 							productInfo.getProductName());
 
-					aProductInfo.put(OpsiProductInfo.SERVICEkeyPRODUCT_DESCRIPTION, productInfo.getDescription());
+					aProductInfo.put(OpsiProductInfo.SERVICE_KEY_PRODUCT_DESCRIPTION, productInfo.getDescription());
 
-					aProductInfo.put(OpsiProductInfo.SERVICEkeyPRODUCT_ADVICE, productInfo.getAdvice());
+					aProductInfo.put(OpsiProductInfo.SERVICE_KEY_PRODUCT_ADVICE, productInfo.getAdvice());
 
 					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_PRODUCT_VERSION,
 							productInfo.getProductVersion());
@@ -3850,7 +3851,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					aProductInfo.put(de.uib.opsidatamodel.productstate.ProductState.KEY_PACKAGE_VERSION,
 							productInfo.getPackageVersion());
 
-					aProductInfo.put(OpsiPackage.SERVICEkeyLOCKED, productInfo.getLockedInfo());
+					aProductInfo.put(OpsiPackage.SERVICE_KEY_LOCKED, productInfo.getLockedInfo());
 
 					Logging.debug(this, "productInfo " + aProductInfo);
 
@@ -3955,7 +3956,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		for (Map m : productOnClients) {
 
-			String client = (String) m.get(ProductOnClient.CLIENTid);
+			String client = (String) m.get(ProductOnClient.CLIENT_ID);
 			List<Map<String, String>> states1Client = result.get(client);
 			if (states1Client == null) {
 				states1Client = new ArrayList<>();
@@ -4784,7 +4785,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public String getProductInfo(String product) {
 
-		String result = "" + productGlobalInfos.get(product).get(OpsiProductInfo.SERVICEkeyPRODUCT_DESCRIPTION);
+		String result = "" + productGlobalInfos.get(product).get(OpsiProductInfo.SERVICE_KEY_PRODUCT_DESCRIPTION);
 		Logging.debug(this, " getProductInfo for product " + product + ": " + result);
 
 		return result;
@@ -4793,7 +4794,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public String getProductHint(String product) {
 
-		return (String) productGlobalInfos.get(product).get(OpsiProductInfo.SERVICEkeyPRODUCT_ADVICE);
+		return (String) productGlobalInfos.get(product).get(OpsiProductInfo.SERVICE_KEY_PRODUCT_ADVICE);
 
 	}
 
@@ -4801,7 +4802,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		productGlobalInfos.get(product).get("productVersion");
 
-		String result = (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
+		String result = (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 
 		if (result == null)
 			result = EMPTYFIELD;
@@ -4814,12 +4815,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public String getProductPackageVersion(String product) {
 
-		return (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
+		return (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
 	}
 
 	public String getProductLockedInfo(String product) {
 
-		return (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICEkeyLOCKED);
+		return (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICE_KEY_LOCKED);
 	}
 
 	public String getProductTimestamp(String product) {
@@ -6616,7 +6617,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					for (String pool : licencePools.keySet()) {
 						HashMap<String, Object> rowMap = new HashMap<>();
 
-						rowMap.put("hostId", clientEntry.getKey());
+						rowMap.put(HWAuditClientEntry.HOST_KEY, clientEntry.getKey());
 
 						for (String fieldName : extraHostFields) {
 							rowMap.put(fieldName, clientEntry.getValue().getMap().get(fieldName));
@@ -6795,7 +6796,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				pool2clients.put(pool, clientsServedByPool);
 			}
 
-			String swIdent = swXpool.get(AuditSoftwareXLicencePool.SwID);
+			String swIdent = swXpool.get(AuditSoftwareXLicencePool.SW_ID);
 
 			Logging.debug(this, " retrieveStatistics1 swIdent " + swIdent);
 
@@ -6921,7 +6922,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		if (resultMap != null && !resultMap.isEmpty())
-			result = Globals.pseudokey(new String[] { "" + resultMap.get("hostId"),
+			result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
 					"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 
 		return result;
@@ -6944,7 +6945,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 
 		if (!resultMap.isEmpty())
-			result = Globals.pseudokey(new String[] { "" + resultMap.get("hostId"),
+			result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
 					"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 
 		return result;
@@ -8091,10 +8092,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (opsiLicensingInfoVersion == null) {
 
 			Logging.info(this, "retrieveOpsiLicensingInfoVersion getMethodSignature( backend_getLicensingInfo "
-					+ getMethodSignature(backendLicensingInfoMethodname));
+					+ getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME));
 
-			if (getMethodSignature(backendLicensingInfoMethodname) == NONE_LIST) {
-				Logging.info(this, "method " + backendLicensingInfoMethodname + " not existing in this opsi service");
+			if (getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME) == NONE_LIST) {
+				Logging.info(this,
+						"method " + BACKEND_LICENSING_INFO_METHOD_NAME + " not existing in this opsi service");
 				opsiLicensingInfoVersion = LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD;
 			} else
 
@@ -8126,7 +8128,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		retrieveOpsiLicensingInfoVersion();
 		if (licensingInfo == null
 				&& !opsiLicensingInfoVersion.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
-			OpsiMethodCall omc = new OpsiMethodCall(backendLicensingInfoMethodname,
+			OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME,
 					new Object[] { true, false, true, false });
 
 			licensingInfo = exec.retrieveJSONObject(omc);
@@ -8308,7 +8310,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		opsiModules = new HashMap<>(); // has the actual signal if a module is active
 
 		Map<String, Object> opsiCountModules = new HashMap<>();
-		String expiresKey = de.uib.opsidatamodel.permission.ModulePermissionValue.keyExpires;
+		String expiresKey = de.uib.opsidatamodel.permission.ModulePermissionValue.KEY_EXPIRES;
 
 		try {
 
