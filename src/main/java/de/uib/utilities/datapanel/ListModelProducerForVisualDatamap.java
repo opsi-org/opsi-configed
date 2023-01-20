@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JTable;
@@ -25,22 +26,22 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 	Map<String, ListCellOptions> optionsMap;
 	Map<String, List> currentData;
-	Map<String, Class> originalTypes;
+	Map<String, Class<?>> originalTypes;
 	JTable table;
 
 	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ListCellOptions> optionsMap,
-			Map currentData) {
+			Map<String, Object> currentData) {
 		this.table = tableVisualizingMap;
 		setData(optionsMap, currentData);
 	}
 
-	public void setData(Map<String, ListCellOptions> optionsMap, Map currentData) {
+	public void setData(Map<String, ListCellOptions> optionsMap, Map<String, Object> currentData) {
 		this.optionsMap = optionsMap;
 
 		mapTypes(currentData);
 	}
 
-	public void updateData(Map currentData) {
+	public void updateData(Map<String, Object> currentData) {
 		mapTypes(currentData);
 	}
 
@@ -53,15 +54,14 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		return options;
 	}
 
-	private void mapTypes(final Map currentData) {
+	private void mapTypes(final Map<String, Object> currentData) {
 		this.currentData = new HashMap<>();
 		Logging.debug(this, "mapTypes  " + currentData);
 		originalTypes = new HashMap<>();
-		for (Object key : currentData.keySet()) {
-			Object value = currentData.get(key);
+		for (Entry<String, Object> dataEntry : currentData.entrySet()) {
 
-			originalTypes.put((String) key, value.getClass());
-			this.currentData.put((String) key, toList(value));
+			originalTypes.put(dataEntry.getKey(), dataEntry.getValue().getClass());
+			this.currentData.put(dataEntry.getKey(), toList(dataEntry.getValue()));
 		}
 
 	}

@@ -20,18 +20,19 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.JSONArray;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigStateEntry;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.dbtable.Host;
 import de.uib.opsidatamodel.dbtable.ProductPropertyState;
-import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.logging.TimeCheck;
 
 public class DataStubRawData extends DataStubNOM {
 
@@ -295,18 +296,16 @@ public class DataStubRawData extends DataStubNOM {
 
 					swIdent = clientEntry.getSWident();
 
-					{
-						java.util.Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
-						if (clientsWithThisSW == null) {
-							clientsWithThisSW = new HashSet<>();
+					java.util.Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
+					if (clientsWithThisSW == null) {
+						clientsWithThisSW = new HashSet<>();
 
-							softwareIdent2clients.put(swIdent, clientsWithThisSW);
-						}
-
-						clientsWithThisSW.add(clientId);
-
-						entries.add(clientEntry);
+						softwareIdent2clients.put(swIdent, clientsWithThisSW);
 					}
+
+					clientsWithThisSW.add(clientId);
+
+					entries.add(clientEntry);
 
 				}
 
@@ -636,17 +635,16 @@ public class DataStubRawData extends DataStubNOM {
 
 			if (client2ClassInfos != null) {
 
-				for (String client : client2ClassInfos.keySet()) {
-					Map<String, Object> allInfosForAClient = client2HwRows.get(client);
+				for (Entry<String, Map<String, Object>> client2ClassInfo : client2ClassInfos.entrySet()) {
+					Map<String, Object> allInfosForAClient = client2HwRows.get(client2ClassInfo.getKey());
 					// find max lastseen time as last scan time
 
 					String lastseen1 = (String) allInfosForAClient.get(persist.lastseenVisibleColName);
-					String lastseen2 = (String) client2ClassInfos.get(client).get(persist.lastseenVisibleColName);
+					String lastseen2 = (String) client2ClassInfo.getValue().get(persist.lastseenVisibleColName);
 					if (lastseen1 != null && lastseen2 != null)
-						client2ClassInfos.get(client).put(persist.lastseenVisibleColName,
-								maxTime(lastseen1, lastseen2));
+						client2ClassInfo.getValue().put(persist.lastseenVisibleColName, maxTime(lastseen1, lastseen2));
 
-					allInfosForAClient.putAll(client2ClassInfos.get(client));
+					allInfosForAClient.putAll(client2ClassInfo.getValue());
 				}
 			}
 		}
