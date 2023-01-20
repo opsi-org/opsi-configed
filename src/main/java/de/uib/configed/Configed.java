@@ -753,7 +753,9 @@ public class Configed {
 					Logging.info("Nimbus look&feel set, by " + info.getClassName());
 
 					UIManager.put("Tree.selectionBackground", UIManager.get("controlHighlight"));
-					
+
+					UIManager.put("TreeUI", de.uib.configed.tree.ClientTreeUI.class.getName());
+
 					found = true;
 					break;
 				}
