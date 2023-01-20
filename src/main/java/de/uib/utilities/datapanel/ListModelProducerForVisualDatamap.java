@@ -88,12 +88,12 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		Logging.info(this, "getListModel key " + key + " options  " + options);
 
 		DefaultListModel model = new DefaultListModel();
-		Iterator iter = ((List) values).iterator();
+		Iterator iter = values.iterator();
 		while (iter.hasNext()) {
 			model.addElement(iter.next());
 		}
 		if (currentData.get(key) instanceof List) {
-			iter = ((List) currentData.get(key)).iterator();
+			iter = currentData.get(key).iterator();
 
 			while (iter.hasNext()) {
 				Object entry = iter.next();
@@ -110,7 +110,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	public List getSelectedValues(int row, int column) {
 
 		String key = (String) table.getValueAt(row, 0);
-		return (List) currentData.get(key);
+		return currentData.get(key);
 	}
 
 	@Override

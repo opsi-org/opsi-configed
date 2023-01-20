@@ -369,12 +369,9 @@ public class UserConfigProducing {
 
 			if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)
 			// there is no formally correct value)
-					|| (prototypeObligatory
-							&& !((Boolean) values.get(0).equals(prototypeConfig.getBooleanValue(partkey)))
+					|| (prototypeObligatory && !values.get(0).equals(prototypeConfig.getBooleanValue(partkey))
 					// the specific values differs from prototype values and must be corrected
-					))
-
-			{
+					)) {
 				Logging.info(this,
 						"supplyPermissionEntriesForAUser. serverconfigValuesMap has no value for key " + configKey);
 				value = prototypeConfig.getBooleanValue(partkey);

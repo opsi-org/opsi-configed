@@ -1049,11 +1049,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			xFunction = new HashMap<>();
 			for (Entry<Object, List<Object>> functionEntry : function.entrySet()) {
 				Integer keyVal = (Integer) functionEntry.getKey();
-				xFunction.put(keyVal,
-						col2ndMapping.restrictedTo(new HashSet<>((List<Object>) functionEntry.getValue())));
+				xFunction.put(keyVal, col2ndMapping.restrictedTo(new HashSet<>(functionEntry.getValue())));
 			}
 		}
-
 		return xFunction;
 	}
 

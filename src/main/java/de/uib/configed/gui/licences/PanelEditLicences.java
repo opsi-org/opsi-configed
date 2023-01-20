@@ -10,9 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ControlMultiTablePanel;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 /**
@@ -79,7 +79,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
 
-		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout((JPanel) topPane);
+		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addGap(10, 10, 10).addGroup(layoutTopPane
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)

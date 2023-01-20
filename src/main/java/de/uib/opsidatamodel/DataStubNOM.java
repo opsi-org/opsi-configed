@@ -377,7 +377,7 @@ public class DataStubNOM extends DataStub {
 							product2PropertyDefinitions.put(productId, propertyDefinitions);
 						}
 
-						propertyDefinitions.put(propertyId, (ListCellOptions) productPropertyMap);
+						propertyDefinitions.put(propertyId, productPropertyMap);
 
 					}
 				}

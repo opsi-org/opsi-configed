@@ -504,7 +504,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		for (int i = 0; i < hwConfig.size(); i++) {
 			Map whc = (Map) hwConfig.get(i);
 			hwClassesUI[i] = (String) ((Map) whc.get("Class")).get("UI");
-			hwClassMapping.put(hwClassesUI[i], (String) ((Map) whc.get("Class")).get("Opsi"));
+			hwClassMapping.put(hwClassesUI[i], ((Map) whc.get("Class")).get("Opsi"));
 
 		}
 

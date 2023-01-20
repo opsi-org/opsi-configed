@@ -562,7 +562,7 @@ public class LicensingInfoMap {
 
 					JSONObjectX moduleInfoX = new JSONObjectX(moduleInfo);
 
-					modulesMapToDate.put((String) currentModule, moduleInfoX.getMap());
+					modulesMapToDate.put(currentModule, moduleInfoX.getMap());
 
 				}
 				resultMap.put(key, new TreeMap<>(modulesMapToDate));

@@ -850,7 +850,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		Enumeration<TableColumn> enumer = tableProducts.getColumnModel().getColumns();
 
 		while (enumer.hasMoreElements())
-			Logging.debug(this, " tableProducts column  " + ((TableColumn) enumer.nextElement()).getHeaderValue());
+			Logging.debug(this, " tableProducts column  " + enumer.nextElement().getHeaderValue());
 
 		int colIndex = -1;
 

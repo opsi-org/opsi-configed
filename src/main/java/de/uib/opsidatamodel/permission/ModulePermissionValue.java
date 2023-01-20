@@ -93,7 +93,7 @@ public class ModulePermissionValue {
 
 		if (ob != null) {
 			try {
-				result = new ExtendedDate((String) ob);
+				result = new ExtendedDate(ob);
 			} catch (ClassCastException ex) {
 				Logging.warning(this, "no String: " + ob);
 			} catch (Exception ex) {

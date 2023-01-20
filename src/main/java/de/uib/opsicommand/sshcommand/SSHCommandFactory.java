@@ -434,8 +434,7 @@ public class SSHCommandFactory {
 		if (listKnownMenus.contains(command.getMenuText())) {
 			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) true");
 			if (main.getPersistenceController().updateSSHCommand(jsonObjects)) {
-				((SSHCommandTemplate) sshCommandList
-						.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText())))).update(command);
+				sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))).update(command);
 				return true;
 			}
 		} else {

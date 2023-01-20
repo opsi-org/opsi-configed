@@ -5403,13 +5403,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			if (retrievedConfig != null)
 				oldValue = retrievedConfig.get(key);
 
-			if ((List) settings.get(key) != oldValue) {
+			if (settings.get(key) != oldValue) {
 
 				configStateCollection.add(state);
 
 				// we hope that the update works and directly update the retrievedConfig
 				if (retrievedConfig != null)
-					retrievedConfig.put(key, (List) settings.get(key));
+					retrievedConfig.put(key, settings.get(key));
 			}
 
 		}
