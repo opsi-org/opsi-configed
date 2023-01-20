@@ -193,7 +193,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 							thePanel.fMissingSoftwareInfo.classNames,
 							// () -> (Map) persist.getInstalledSoftwareInformation()
 							() -> (Map) missingSoftwareMap)),
-					0, new int[] {}, (thePanel.fMissingSoftwareInfo.panelGlobalSoftware), updateCollection));
+					0, new int[] {}, thePanel.fMissingSoftwareInfo.panelGlobalSoftware, updateCollection));
 
 		}
 

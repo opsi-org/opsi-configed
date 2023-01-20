@@ -48,12 +48,10 @@ public class DataEditListener implements DocumentListener, // for text component
 			return;
 		}
 
-		if (!withFocusCheck || (source instanceof JComponent && ((JComponent) source).hasFocus())) {
-
-			if (!(action.equals(CANCEL_REQUEST) || action.equals(COMMIT_REQUEST))) {
-				dataChangedSubject.setChanged();
-				dataChangedSubject.notifyObservers(action);
-			}
+		if ((!withFocusCheck || (source instanceof JComponent && ((JComponent) source).hasFocus()))
+				&& !(action.equals(CANCEL_REQUEST) || action.equals(COMMIT_REQUEST))) {
+			dataChangedSubject.setChanged();
+			dataChangedSubject.notifyObservers(action);
 		}
 	}
 

@@ -13,7 +13,6 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 
 	private boolean ready = false;
 	private boolean stopped = false;
-	private long startActionMillis;
 	private boolean timeoutReached;
 
 	public WaitingCycle(int maxWaitSecs) {
@@ -25,7 +24,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 	public Void doInBackground() {
 		int waitSecs = 0;
 
-		startActionMillis = new GregorianCalendar().getTimeInMillis();
+		long startActionMillis = new GregorianCalendar().getTimeInMillis();
 		Logging.info(this, " doInBackground start " + startActionMillis);
 
 		while (!ready && !timeoutReached && !stopped) {

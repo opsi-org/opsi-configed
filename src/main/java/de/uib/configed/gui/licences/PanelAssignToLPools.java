@@ -12,10 +12,10 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ControlMultiTablePanel;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.type.SWAuditEntry;
@@ -31,9 +31,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 	public JTextField testField; // for test purposes
 
-	private JLabel titleWindowsSoftware;
-	private JLabel titleWindowsSoftware2;
-	private JLabel labelSelectedLicencePoolId;
 	public JLabel fieldSelectedLicencePoolId;
 
 	private JLabel labelCountAssignedStatus;
@@ -41,25 +38,15 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	private JLabel labelCountAssignedInEditing;
 	public JLabel fieldCountAssignedInEditing;
 
-	private JLabel labelCountAllWindowsSoftware;
 	public JLabel fieldCountAllWindowsSoftware;
-	private JLabel labelCountDisplayedWindowsSoftware;
 	public JLabel fieldCountDisplayedWindowsSoftware;
-	private JLabel labelCountNotAssignedSoftware;
 	public JLabel fieldCountNotAssignedSoftware;
 
 	public JButton buttonShowAssignedNotExisting;
 
-	private JLabel labelSupplementSimilar;
 	public JButton buttonSupplementSimilar;
 
-	private JSplitPane splitPane;
-	private JPanel topPane;
-	private JPanel bottomPane;
 	private int splitPaneHMargin = 1;
-
-	private JPanel panelInfoWindowsSoftware;
-	private JPanel panelInfoConfigWindowsSoftware;
 
 	public PanelRegisteredSoftware panelRegisteredSoftware;
 	public PanelGenEditTable panelLicencepools;
@@ -85,29 +72,30 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	private void initComponents() {
 
 		// splitpane
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.7f);
-		topPane = new JPanel();
-		bottomPane = new JPanel();
+
+		JPanel topPane = new JPanel();
+		JPanel bottomPane = new JPanel();
 
 		testField = new JTextField("                     ");
 
 		// construct content panes
-		panelInfoWindowsSoftware = new JPanel();
+		JPanel panelInfoWindowsSoftware = new JPanel();
 		panelInfoWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-		panelInfoConfigWindowsSoftware = new JPanel();
+		JPanel panelInfoConfigWindowsSoftware = new JPanel();
 		panelInfoConfigWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-		titleWindowsSoftware = new JLabel(
+		JLabel titleWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool"));
 		titleWindowsSoftware.setFont(Globals.defaultFontStandardBold);
 
-		titleWindowsSoftware2 = new JLabel(
+		JLabel titleWindowsSoftware2 = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool.supplement"));
 		titleWindowsSoftware2.setFont(Globals.defaultFont);
 
-		labelSelectedLicencePoolId = new JLabel(
+		JLabel labelSelectedLicencePoolId = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelSelectedLicencePoolId"));
 
 		labelSelectedLicencePoolId.setFont(Globals.defaultFont);
@@ -116,7 +104,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldSelectedLicencePoolId.setPreferredSize(new java.awt.Dimension(250, Globals.LINE_HEIGHT));
 		fieldSelectedLicencePoolId.setFont(Globals.defaultFontStandardBold);
 
-		labelCountAllWindowsSoftware = new JLabel(
+		JLabel labelCountAllWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAllWindowsSoftware"));
 
 		labelCountAllWindowsSoftware.setFont(Globals.defaultFont);
@@ -125,7 +113,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldCountAllWindowsSoftware.setPreferredSize(Globals.shortlabelDimension);
 		fieldCountAllWindowsSoftware.setFont(Globals.defaultFont);
 
-		labelCountDisplayedWindowsSoftware = new JLabel(
+		JLabel labelCountDisplayedWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountDisplayedWindowsSoftware"));
 		labelCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
 
@@ -133,7 +121,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldCountDisplayedWindowsSoftware.setPreferredSize(Globals.shortlabelDimension);
 		fieldCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
 
-		labelCountNotAssignedSoftware = new JLabel(
+		JLabel labelCountNotAssignedSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountNotAssignedSoftware"));
 		labelCountNotAssignedSoftware.setFont(Globals.defaultFont);
 
@@ -171,7 +159,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 			fMissingSoftwareInfo.setVisible(true);
 		});
 
-		labelSupplementSimilar = new JLabel(
+		JLabel labelSupplementSimilar = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries"));
 
 		labelSupplementSimilar.setVisible(true);

@@ -54,19 +54,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	private CSVFormat format;
 
-	private ButtonGroup fieldSeparatorOptions;
-	private JRadioButton tabsOption;
-	private JRadioButton commaOption;
-	private JRadioButton semicolonOption;
-	private JRadioButton spaceOption;
-	private JRadioButton otherOption;
-	private JComboBox<Character> stringSeparatorOptions;
 	private JCheckBox includeFormatHintOption;
 
-	private JLabel importOptionsLabel;
-	private JLabel splittingOptionsLabel;
 	private JFormattedTextField otherSeparatorInput;
-	private JLabel stringSeparatorLabel;
 
 	private List<String> columnNames;
 	private List<JCheckBox> headerButtons;
@@ -153,9 +143,12 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	protected JPanel initPanel() {
 		format = new CSVFormat();
-		importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
+
+		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
 		importOptionsLabel.setFont(Globals.defaultFontBold);
-		splittingOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
+
+		JLabel splittingOptionsLabel = new JLabel(
+				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
 		splittingOptionsLabel.setFont(Globals.defaultFontBold);
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
@@ -165,23 +158,24 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
 
-		tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
+		JRadioButton tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
 		tabsOption.setActionCommand("\t");
 
-		commaOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.commaOption"));
+		JRadioButton commaOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.commaOption"));
 		commaOption.setActionCommand(",");
 		commaOption.setSelected(true);
 
-		semicolonOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
+		JRadioButton semicolonOption = new JRadioButton(
+				Configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
 		semicolonOption.setActionCommand(";");
 
-		spaceOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.spaceOption"));
+		JRadioButton spaceOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.spaceOption"));
 		spaceOption.setActionCommand(" ");
 
-		otherOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.otherOption"));
+		JRadioButton otherOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.otherOption"));
 		otherOption.setActionCommand("");
 
-		fieldSeparatorOptions = new ButtonGroup();
+		ButtonGroup fieldSeparatorOptions = new ButtonGroup();
 		fieldSeparatorOptions.add(tabsOption);
 		fieldSeparatorOptions.add(commaOption);
 		fieldSeparatorOptions.add(semicolonOption);
@@ -201,8 +195,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		otherSeparatorInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherSeparatorInput.setEnabled(false);
 
-		stringSeparatorLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
-		stringSeparatorOptions = new JComboBox<>(new Character[] { '"', '\'' });
+		JLabel stringSeparatorLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
+
+		JComboBox<Character> stringSeparatorOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		stringSeparatorOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				format.setStringSeparator(stringSeparatorOptions.getSelectedItem().toString().charAt(0));

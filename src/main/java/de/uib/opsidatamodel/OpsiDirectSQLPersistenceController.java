@@ -42,8 +42,8 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsicommand.DbConnect;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.productstate.ProductState;
-import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.logging.TimeCheck;
 
 public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersistenceController {
 
@@ -316,9 +316,6 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 				int affectedRows = stat.executeUpdate(query);
 
 				Logging.info(this, "cleanUpAuditSoftware, deleted " + affectedRows + " in Table SOFTWARE");
-
-				stat.close();
-
 			} catch (SQLException e) {
 				Logging.error("cleanUpAuditSoftware sql Error " + e.toString());
 			}

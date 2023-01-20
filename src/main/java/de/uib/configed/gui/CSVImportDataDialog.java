@@ -23,8 +23,8 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVParser;
 import de.uib.utilities.logging.Logging;
@@ -44,10 +44,8 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private JRadioButton otherOption;
 	private JComboBox<Character> stringSeparatorOptions;
 
-	private JLabel startLineLabel;
 	private JFormattedTextField startLineInput;
 	private JFormattedTextField otherSeparatorInput;
-	private JLabel stringSeparatorLabel;
 
 	private CSVImportDataModifier modifier;
 
@@ -128,7 +126,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
 
-		startLineLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
+		JLabel startLineLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
 		startLineInput = new JFormattedTextField(formatter);
 
 		tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
@@ -166,7 +164,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		otherSeparatorInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherSeparatorInput.setEnabled(false);
 
-		stringSeparatorLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
+		JLabel stringSeparatorLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
 		stringSeparatorOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		stringSeparatorOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -181,18 +179,13 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			AbstractButton button = iter.nextElement();
 
 			button.addItemListener((ItemEvent e) -> {
-				if (e.getItem() == otherOption) {
-					otherSeparatorInput.setEnabled(true);
-				} else {
-					otherSeparatorInput.setEnabled(false);
+				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
+
+				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().equals("")) {
+					format.setFieldSeparator(button.getActionCommand().charAt(0));
+					modifier.updateTable(parser, startLine, thePanel);
 				}
 
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					if (!button.getActionCommand().equals("")) {
-						format.setFieldSeparator(button.getActionCommand().charAt(0));
-						modifier.updateTable(parser, startLine, thePanel);
-					}
-				}
 			});
 		}
 

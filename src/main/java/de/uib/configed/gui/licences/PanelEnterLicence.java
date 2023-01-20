@@ -17,6 +17,7 @@ import java.util.HashMap;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
@@ -39,9 +40,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	public PanelGenEditTable panelKeys;
 	public PanelGenEditTable panelLicencepools;
 	public PanelGenEditTable panelLicencecontracts;
-	private JSplitPane splitPane;
-	private JPanel topPane;
-	private JPanel bottomPane;
 	private int splitPaneHMargin = 1;
 
 	public String selectedLicencePool = "";
@@ -60,20 +58,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	private javax.swing.JButton jButtonCreateConcurrent;
 	private javax.swing.JButton jButtonSend;
 
-	private javax.swing.JLabel jLabelLKey;
-	private javax.swing.JLabel jLabelLicencePool;
-	private javax.swing.JLabel jLabelTask;
-	private javax.swing.JLabel jLabelConfigure;
-	private javax.swing.JLabel jLabelSLid1;
-	private javax.swing.JLabel jLabelSLid2;
-	private javax.swing.JLabel jLabelSLid3;
-	private javax.swing.JLabel jLabelSLid4;
-	private javax.swing.JLabel jLabelSLid5;
-	private javax.swing.JLabel jLabelSLid6;
-	private javax.swing.JLabel jLabelSLid3info;
-	private javax.swing.JPanel panelTask;
-	private javax.swing.JPanel panelEnterKey;
-	private javax.swing.JPanel panelLicenceModel;
 	private javax.swing.JTextField jTextFieldLicenceID;
 	private javax.swing.JTextField jTextFieldLicenceType;
 
@@ -274,7 +258,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		);
 		panelLicencecontracts.setMasterFrame(Globals.frame1);
 
-		jLabelLicencePool = new javax.swing.JLabel();
+		JLabel jLabelLicencePool = new JLabel();
 		jButtonCreateStandard = new javax.swing.JButton();
 		jButtonCreateStandard.setPreferredSize(Globals.buttonDimension);
 		jButtonCreateVolume = new javax.swing.JButton();
@@ -284,15 +268,15 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jButtonCreateConcurrent = new javax.swing.JButton();
 		jButtonCreateConcurrent.setPreferredSize(Globals.buttonDimension);
 
-		jLabelTask = new javax.swing.JLabel();
-		jLabelConfigure = new javax.swing.JLabel();
-		panelLicenceModel = new javax.swing.JPanel();
-		jLabelSLid1 = new javax.swing.JLabel();
-		jLabelSLid2 = new javax.swing.JLabel();
-		jLabelSLid3 = new javax.swing.JLabel();
-		jLabelSLid4 = new javax.swing.JLabel();
-		jLabelSLid5 = new javax.swing.JLabel();
-		jLabelSLid6 = new javax.swing.JLabel();
+		JLabel jLabelTask = new JLabel();
+		JLabel jLabelConfigure = new JLabel();
+		JPanel panelLicenceModel = new JPanel();
+		JLabel jLabelSLid1 = new JLabel();
+		JLabel jLabelSLid2 = new JLabel();
+		JLabel jLabelSLid3 = new JLabel();
+		JLabel jLabelSLid4 = new JLabel();
+		JLabel jLabelSLid5 = new JLabel();
+		JLabel jLabelSLid6 = new JLabel();
 		jTextFieldLicenceID = new javax.swing.JTextField();
 		jTextFieldLicenceType = new javax.swing.JTextField();
 		jTextFieldMaxInstallations = new javax.swing.JTextField();
@@ -302,7 +286,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));
 
-		jLabelSLid3info = new javax.swing.JLabel();
+		JLabel jLabelSLid3info = new JLabel();
 
 		jTextFieldEndOfLicence = new javax.swing.JTextField();
 
@@ -350,12 +334,13 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		jButtonSend = new javax.swing.JButton();
 		jButtonSend.setPreferredSize(Globals.buttonDimension);
-		jLabelLKey = new javax.swing.JLabel();
+
+		JLabel jLabelLKey = new JLabel();
 		jTextFieldLKey = new javax.swing.JTextField();
 
 		deactivate();
 
-		panelEnterKey = new JPanel();
+		JPanel panelEnterKey = new JPanel();
 
 		jLabelLicencePool.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Label"));
 
@@ -530,7 +515,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 										javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(0, 1, 5)));
 
-		panelTask = new JPanel();
+		JPanel panelTask = new JPanel();
 		panelTask.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		javax.swing.GroupLayout layoutTask = new javax.swing.GroupLayout(panelTask);
@@ -600,11 +585,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(2, 2, 2).addComponent(jButtonSend, 20, 20, 20).addGap(5, 5, 5)));
 
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.3f);
 
-		topPane = new JPanel();
-		bottomPane = new JPanel();
+		JPanel topPane = new JPanel();
+		JPanel bottomPane = new JPanel();
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
 		topPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);

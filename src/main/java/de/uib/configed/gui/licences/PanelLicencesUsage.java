@@ -7,12 +7,15 @@ package de.uib.configed.gui.licences;
 
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelLicencesUsage;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 /**
@@ -27,9 +30,8 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	public PanelGenEditTable panelUsage;
 	public PanelGenEditTable panelLicencepools;
 
-	private javax.swing.JButton buttonGet;
-	private javax.swing.JLabel labelGetAndAssignSL;
-	private javax.swing.JPanel panelGetAndAssignSL;
+	private JButton buttonGet;
+	private JPanel panelGetAndAssignSL;
 	private de.uib.utilities.swing.DynamicCombo comboClient;
 
 	protected int minVSize = 50;
@@ -68,8 +70,8 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), tablesMaxWidth, false, 0,
 				false, new int[] { PanelGenEditTable.POPUP_RELOAD });
 
-		panelGetAndAssignSL = new javax.swing.JPanel();
-		labelGetAndAssignSL = new javax.swing.JLabel(
+		panelGetAndAssignSL = new JPanel();
+		JLabel labelGetAndAssignSL = new JLabel(
 				Configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
 
 		comboClient = new de.uib.utilities.swing.DynamicCombo();

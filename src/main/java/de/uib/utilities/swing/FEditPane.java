@@ -26,6 +26,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -45,8 +47,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	public static final Dimension AREA_DIMENSION = new Dimension(600, 300);
 	public static final String WINDOWS_LINK_INTERPRETER = "explorer.exe";
 	public static final String LINUX_LINK_INTERPRETER = "firefox";
-	private javax.swing.JScrollPane scrollpane;
-	private javax.swing.JTextPane textpane;
+	private JTextPane textpane;
 
 	protected LinkSearcher searcher;
 	protected Highlighter highlighter;
@@ -71,7 +72,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	protected void initFEditText() {
-		scrollpane = new javax.swing.JScrollPane();
+		JScrollPane scrollpane = new javax.swing.JScrollPane();
 		textpane = new javax.swing.JTextPane();
 		scrollpane.setViewportView(textpane);
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);

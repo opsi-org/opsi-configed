@@ -29,19 +29,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	// In dieser Klasse gibt es Linux-Befehle (folgend), die zu Konstanten
 	// ausgelagert werden sollen (noch nicht funktioniert)
 	public JLabel jLabelExitCode = new JLabel();
-	private JLabel jLabelDir = null;
-	private JLabel jLabelProductVersion;
 	private JLabel jLabelProductVersionControlFile;
-	private JLabel jLabelPackageVersion;
 	private JLabel jLabelPackageVersionControlFile;
-	private JLabel jLabelmd5sum;
-	private JLabel jLabelzsync;
-	private JLabel jLabelVersionsControlFile;
-	private JLabel jLabelVersions;
-	private JLabel jLabelSetRightsNow;
-	private JLabel jLabelSetRights;
-	private JLabel jLabelRemoveExistingPackage;
-	private JLabel jLabelRemoveExistingPackage2;
 	private JTextField jTextFieldPckageVersion;
 	private JTextField jTextFieldProductVersion;
 	private JComboBox<String> jComboBoxMainDir;
@@ -49,16 +38,10 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private JCheckBox jCheckBoxzsync;
 	private JCheckBox jCheckBoxOverwrite;
 	private JCheckBox jCheckBoxSetRights;
-	private JPanel workbenchpanel;
 	private JPanel mainpanel;
-	private JPanel buttonPanel;
 
-	private JButton jButtonAdvancedSettings;
-	private JButton jButtonSetRights;
 	private JButton jButtonToPackageManager;
 	private JButton jButtonExec;
-	private JButton jButtonCancel;
-	private JButton jButtonSearchDir;
 	private String filename;
 	private ConfigedMain main = null;
 	boolean isAdvancedOpen = true;
@@ -107,10 +90,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	private void initGUI() {
 		try {
-
-			workbenchpanel = new JPanel();
+			JPanel workbenchpanel = new JPanel();
 			mainpanel = new JPanel();
-			buttonPanel = new JPanel();
+			JPanel buttonPanel = new JPanel();
 			workbenchpanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			mainpanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -133,7 +115,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			mainpanel.setBorder(BorderFactory.createTitledBorder(""));
 			buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 
-			jLabelDir = new JLabel(
+			JLabel jLabelDir = new JLabel(
 					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.serverDir"));
 
 			autocompletion.setCombobox(new SSHCompletionComboBox<>(
@@ -147,34 +129,34 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			autocompletion.initCombobox();
 			jComboBoxMainDir = autocompletion.getCombobox();
 
-			jButtonSearchDir = autocompletion.getButton();
+			JButton jButtonSearchDir = autocompletion.getButton();
 			jButtonSearchDir.removeActionListener(jButtonSearchDir.getActionListeners()[0]);
 			jButtonSearchDir.addActionListener(actionEvent -> {
 				autocompletion.doButtonAction();
 				doSetActionGetVersions();
 			});
 
-			jLabelPackageVersion = new JLabel();
+			JLabel jLabelPackageVersion = new JLabel();
 			jLabelPackageVersion.setText(
 					"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.packageVersion"));
-			jLabelProductVersion = new JLabel();
+			JLabel jLabelProductVersion = new JLabel();
 			jLabelProductVersion.setText(
 					"    " + Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.productVersion"));
-			jLabelVersionsControlFile = new JLabel();
-			jLabelVersions = new JLabel();
+			JLabel jLabelVersionsControlFile = new JLabel();
+			JLabel jLabelVersions = new JLabel();
 			jLabelVersionsControlFile.setText(
 					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions_controlfile"));
 			jLabelVersions.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.versions"));
-			jLabelSetRights = new JLabel();
+			JLabel jLabelSetRights = new JLabel();
 			jLabelSetRights
 					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights"));
-			jLabelSetRightsNow = new JLabel();
+			JLabel jLabelSetRightsNow = new JLabel();
 			jLabelSetRightsNow
 					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.setRights_now"));
-			jLabelRemoveExistingPackage = new JLabel();
+			JLabel jLabelRemoveExistingPackage = new JLabel();
 			jLabelRemoveExistingPackage
 					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting"));
-			jLabelRemoveExistingPackage2 = new JLabel();
+			JLabel jLabelRemoveExistingPackage2 = new JLabel();
 			jLabelRemoveExistingPackage2.setText(
 					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.removeExisting2"));
 
@@ -186,12 +168,12 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 			enableTfVersions(false);
 
-			jLabelmd5sum = new JLabel();
+			JLabel jLabelmd5sum = new JLabel();
 			jLabelmd5sum.setText(
 					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createMd5sum"));
 			jCheckBoxmd5sum = new JCheckBox();
 			jCheckBoxmd5sum.setSelected(true);
-			jLabelzsync = new JLabel();
+			JLabel jLabelzsync = new JLabel();
 			jLabelzsync.setText(
 					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.lbl_createZsync"));
 			jCheckBoxzsync = new JCheckBox();
@@ -201,7 +183,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			jCheckBoxSetRights = new JCheckBox();
 			jCheckBoxSetRights.setSelected(true);
 
-			jButtonAdvancedSettings = new JButton();
+			JButton jButtonAdvancedSettings = new JButton();
 			jButtonAdvancedSettings.setText(
 					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
 
@@ -212,7 +194,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			jTextFieldProductVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
 			jTextFieldPckageVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
 
-			jButtonSetRights = new JButton();
+			JButton jButtonSetRights = new JButton();
 			jButtonSetRights
 					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
 			jButtonSetRights.setToolTipText(
@@ -240,7 +222,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			if (!(Globals.isGlobalReadOnly()))
 				jButtonExec.addActionListener(actionEvent -> doAction1());
 
-			jButtonCancel = new JButton();
+			JButton jButtonCancel = new JButton();
 			jButtonCancel.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 			jButtonCancel.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 			jButtonCancel.addActionListener(actionEvent -> cancel());

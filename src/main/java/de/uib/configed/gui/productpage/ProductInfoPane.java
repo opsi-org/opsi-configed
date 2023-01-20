@@ -27,9 +27,9 @@ import javax.swing.ScrollPaneConstants;
 
 import org.jdesktop.swingx.JXPanel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.utilities.logging.Logging;
@@ -76,10 +76,10 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	}
 
 	private void initComponents() {
-		jLabelProductName = new javax.swing.JLabel();
+		jLabelProductName = new JLabel();
 		jLabelProductID = new javax.swing.JTextField();
 		jLabelProductVersion = new javax.swing.JTextField();
-		jLabelLabelProductVersion = new javax.swing.JLabel();
+		jLabelLabelProductVersion = new JLabel();
 
 		JScrollPane jScrollPaneProductInfo = new javax.swing.JScrollPane();
 		jTextAreaProductInfo = new TextMarkdownPane();

@@ -22,12 +22,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.opsicommand.DbConnect;
-import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.logging.TimeCheck;
 
 public class DataStubDirectSQL extends DataStubRawData
 // only for testing purposes
@@ -123,9 +123,6 @@ public class DataStubDirectSQL extends DataStubRawData
 						entries.add(clientEntry);
 					}
 				}
-
-				stat.close();
-
 				timeCheck.stop("result set  ready ");
 
 				newClients.removeAll(client2software.keySet());
@@ -134,7 +131,6 @@ public class DataStubDirectSQL extends DataStubRawData
 				for (String clientId : newClients) {
 					client2software.put(clientId, new LinkedList<>());
 				}
-
 			}
 
 			catch (SQLException e) {

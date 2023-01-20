@@ -4,12 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
 /**
  * FGlobalSoftwareInfo
  * Copyright:     Copyright (c) 2017
@@ -18,19 +18,15 @@ import javax.swing.ListSelectionModel;
  */
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public PanelGenEditTable panelGlobalSoftware;
-	private GenTableModel model;
 
 	public List<String> columnNames;
 	public List<String> classNames;
@@ -105,20 +101,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	}
 
 	public void setTableModel(GenTableModel model) {
-		if (model == null)
-		// test
-		{
-			this.model = new GenTableModel(null, // no updates
-					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-						persist.installedSoftwareInformationRequestRefresh();
-						return (Map) persist.getInstalledSoftwareInformation();
-					})),
-
-					keyCol, new int[] {}, panelGlobalSoftware, updateCollection);
-		} else
-			this.model = model;
-
-		panelGlobalSoftware.setTableModel(this.model);
+		panelGlobalSoftware.setTableModel(model);
 	}
 
 	@Override

@@ -34,8 +34,8 @@ import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -59,7 +59,6 @@ public class ExporterToPDF extends ExportTable {
 	private float xHeaderTop = 803;
 	private float headerWidth = 527;
 
-	private static BaseFont bf;
 	private static Font catFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
 	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
@@ -269,7 +268,7 @@ public class ExporterToPDF extends ExportTable {
 		BaseColor oddBackground = new BaseColor(250, 250, 250);
 		Font symbol_font;
 		try {
-			bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
+			BaseFont bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
 			symbol_font = new Font(bf, 11);
 		} catch (Exception e) {
 			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :" + e);

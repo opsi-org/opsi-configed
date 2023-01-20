@@ -84,10 +84,7 @@ public class NewClientDialog extends FGeneralDialog
 	private static NewClientDialog instance;
 	private List<String> domains;
 	private boolean uefiboot;
-	private boolean uefibootIsDefault;
 	private boolean wanConfig;
-	private boolean wanConfigIsDefault;
-	private boolean shutdownInstall;
 	protected boolean multidepot;
 
 	private List<String> existingHostNames;
@@ -187,15 +184,12 @@ public class NewClientDialog extends FGeneralDialog
 	}
 
 	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean uefiIsDefault, boolean wanIsDefault) {
-		uefibootIsDefault = uefiIsDefault;
-		wanConfigIsDefault = wanIsDefault;
-
 		labelUefiDefault.setValue(uefiIsDefault);
 		labelWanDefault.setValue(wanIsDefault);
 		labelShutdownDefault.setValue(shutdownINSTALLIsDefault);
 
-		jCheckUefi.setVisible(!uefibootIsDefault);
-		jCheckWan.setVisible(!wanConfigIsDefault);
+		jCheckUefi.setVisible(!uefiIsDefault);
+		jCheckWan.setVisible(!wanIsDefault);
 		jCheckShutdownInstall.setVisible(!shutdownINSTALLIsDefault);
 
 	}
@@ -928,10 +922,7 @@ public class NewClientDialog extends FGeneralDialog
 			}
 		}
 
-		shutdownInstall = false;
-		if (jCheckShutdownInstall.getSelectedObjects() != null) {
-			shutdownInstall = true;
-		}
+		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, macaddress,
 				shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);

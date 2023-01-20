@@ -32,6 +32,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.uib.configed.Configed;
+
 /*
  * configed - configuration editor for client work stations in opsi
  * (open pc server integration) www.opsi.org
@@ -57,7 +59,6 @@ import javax.swing.event.ListSelectionListener;
 */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
@@ -95,7 +96,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	protected JLabel labelCollectiveAction;
 	protected JComboBoxToolTip comboAggregatedEditing;
 
-	private int actionType = ActionRequest.INVALID;
 	protected JLabel labelSave;
 
 	static final String NO_GROUP_ID = Configed.getResourceValue("GroupPanel.NO_GROUP_ID");
@@ -853,6 +853,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		if (!insTableModel.infoIfNoClientsSelected()) {
 			insTableModel.initCollectiveChange();
 
+			int actionType;
 			if (selected.equals(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked")))
 				actionType = ActionRequest.SETUP;
 

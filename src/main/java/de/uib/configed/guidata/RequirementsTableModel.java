@@ -11,8 +11,8 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
@@ -20,7 +20,6 @@ import de.uib.utilities.logging.Logging;
 
 public class RequirementsTableModel extends javax.swing.table.AbstractTableModel {
 
-	final String initString = "";
 	TreeSet keySet;
 	Object[] keyArray;
 	final Object[] zeroArray = new Object[] {};
@@ -167,11 +166,10 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 						result = requMap.get(myKey);
 						break;
 					}
-				} else if (rowTypeIndex == 2) {
-					if (requDeinstallMap != null) {
-						result = requDeinstallMap.get(myKey);
-						break;
-					}
+				} else if (rowTypeIndex == 2 && requDeinstallMap != null) {
+					result = requDeinstallMap.get(myKey);
+					break;
+
 				}
 
 			case 2:
