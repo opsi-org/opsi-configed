@@ -931,9 +931,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							new String[] { Configed.getResourceValue("RegisterUserWarning.dialog.button1"),
 									Configed.getResourceValue("RegisterUserWarning.dialog.button2"),
 									Configed.getResourceValue("RegisterUserWarning.dialog.button3") },
-							new Icon[] { (Icon) Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-									(Icon) Globals.createImageIcon("images/edit-delete.png", ""),
-									(Icon) Globals.createImageIcon("images/executing_command_red_16.png", "") },
+							new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
+									Globals.createImageIcon("images/edit-delete.png", ""),
+									Globals.createImageIcon("images/executing_command_red_16.png", "") },
 							500, 200);
 					StringBuilder msg = new StringBuilder(
 
@@ -1605,9 +1605,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (configs != null && configs.get(configKey) != null && !((List) (configs.get(configKey))).isEmpty()) {
 
 			Logging.debug(this, "valueFromConfigStateAsExpected configKey, values " + configKey + ", valueList "
-					+ ((List) (configs.get(configKey))) + " expected " + expectValue);
+					+ ((configs.get(configKey))) + " expected " + expectValue);
 
-			Object value = ((List) (configs.get(configKey))).get(0);
+			Object value = ((List) configs.get(configKey)).get(0);
 
 			if (value instanceof Boolean) {
 
@@ -1639,7 +1639,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Boolean tested = null;
 		for (Entry<String, List<Object>> configuration : defaultConfiguration.entrySet()) {
 
-			tested = valueFromConfigStateAsExpected((Map<String, Object>) getConfig(host), configuration.getKey(),
+			tested = valueFromConfigStateAsExpected(getConfig(host), configuration.getKey(),
 					(Boolean) (configuration.getValue().get(0)));
 			if (!tested)
 				break;
@@ -2569,7 +2569,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		while (iter.hasNext()) {
 			String key = iter.next();
 
-			Map<String, String> relation = (Map<String, String>) mappedRelation.get(key);
+			Map<String, String> relation = mappedRelation.get(key);
 			String originValue = relation.get(originVar);
 			String imageValue = relation.get(imageVar);
 			if (imageValue != null) {
@@ -3657,9 +3657,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// opsi 4.0
 			// localbootProductNames = exec.getListResult( new
 
-			Map productOrderingResult = (Map) exec.getMapOfLists(new OpsiMethodCall("getProductOrdering",
-
-					new String[] { depotId }));
+			Map productOrderingResult = exec
+					.getMapOfLists(new OpsiMethodCall("getProductOrdering", new String[] { depotId }));
 
 			List<String> sortedProducts = (List<String>) productOrderingResult.get("sorted");
 			if (sortedProducts == null)
@@ -4197,7 +4196,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public Map<String, Object> getProductInfos(String productname) {
 		checkProductGlobalInfos(theDepot);
-		return (Map) productGlobalInfos.get(productname);
+		return productGlobalInfos.get(productname);
 
 	}
 
@@ -4368,7 +4367,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Logging.info(this, "getCommonProductPropertyValues " + resultSet);
 
 		return new ArrayList<>(resultSet);
-
 	}
 
 	/**
@@ -4564,17 +4562,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		for (String product : products) {
 			if (productPropertyDefinitions != null && productPropertyDefinitions.get(product) != null) {
-				ConfigName2ConfigValue productPropertyConfig = (ConfigName2ConfigValue) depotValues.get(product);
+				ConfigName2ConfigValue productPropertyConfig = depotValues.get(product);
 
 				Iterator<String> iterProperties = productPropertyDefinitions.get(product).keySet().iterator();
 				while (iterProperties.hasNext()) {
 					String property = iterProperties.next();
 
 					if (productPropertyConfig == null || productPropertyConfig.get(property) == null) {
-						((ListCellOptions) (productPropertyDefinitions.get(product).get(property)))
-								.setDefaultValues(new ArrayList<>());
+						productPropertyDefinitions.get(product).get(property).setDefaultValues(new ArrayList<>());
 					} else {
-						((ListCellOptions) (productPropertyDefinitions.get(product).get(property)))
+						productPropertyDefinitions.get(product).get(property)
 								.setDefaultValues((List) productPropertyConfig.get(property));
 					}
 				}
@@ -4583,10 +4580,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		productHavingClientSpecificProperties = new HashMap<>();
 		for (String product : products) {
-			productHavingClientSpecificProperties.put(product,
-					(Boolean) productsHavingSpecificProperties.contains(product));
+			productHavingClientSpecificProperties.put(product, productsHavingSpecificProperties.contains(product));
 		}
-
 	}
 
 	/**
@@ -4631,7 +4626,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			List newValue = (List) properties.get(key);
 
-			Map retrievedConfig = ((RetrievedMap) properties).getRetrieved();
+			Map<String, Object> retrievedConfig = ((RetrievedMap) properties).getRetrieved();
 			Object oldValue = null;
 
 			if (retrievedConfig != null)
@@ -4639,7 +4634,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			if (newValue != oldValue) {
 				if (newValue == de.uib.utilities.datapanel.MapTableModel.nullLIST) {
-					Logging.debug(this, "setProductProperties,  requested deletion " + (List) properties.get(key));
+					Logging.debug(this, "setProductProperties,  requested deletion " + properties.get(key));
 					deleteCollection.add(Executioner.jsonMap(state));
 
 					// we hope that the update works and directly update the retrievedConfig
@@ -4649,14 +4644,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				else {
 					state.put("values", Executioner.jsonArray(newValue));
-					Logging.debug(this, "setProductProperties,  requested update " + (List) properties.get(key)
+					Logging.debug(this, "setProductProperties,  requested update " + properties.get(key)
 							+ " for oldValue " + oldValue);
 					Logging.debug(this, "setProductProperties,  we have new state " + state);
 					updateCollection.add(Executioner.jsonMap(state));
 
 					// we hope that the update works and directly update the retrievedConfig
 					if (retrievedConfig != null)
-						retrievedConfig.put(key, (List) properties.get(key));
+						retrievedConfig.put(key, properties.get(key));
 				}
 
 			}
@@ -4860,14 +4855,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					// we demand information for this type,
 					// this is not specified by type in the dependency map
 					// but only by the action value
-					&& ((String) (aDependency.get("action"))).equals(ActionRequest.getLabel(ActionRequest.UNINSTALL))
-
-			)
-
-			{
-				result.put((String) (aDependency.get("requiredProductId")),
-						(String) (aDependency.get("requiredInstallationStatus")) + ":"
-								+ (String) (aDependency.get("requiredAction")));
+					&& aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.UNINSTALL))) {
+				result.put(aDependency.get("requiredProductId"),
+						aDependency.get("requiredInstallationStatus") + ":" + aDependency.get("requiredAction"));
 			}
 
 			else {
@@ -4880,25 +4870,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						|| requirementType.equals(NAME_REQUIREMENT_TYPE_BEFORE)
 						|| requirementType.equals(NAME_REQUIREMENT_TYPE_AFTER))
 
-						&& (((String) (aDependency.get("action"))).equals(ActionRequest.getLabel(ActionRequest.SETUP))
-								|| ((String) (aDependency.get("action")))
-										.equals(ActionRequest.getLabel(ActionRequest.ONCE))
-								|| ((String) (aDependency.get("action")))
-										.equals(ActionRequest.getLabel(ActionRequest.ALWAYS))
-								|| ((String) (aDependency.get("action")))
-										.equals(ActionRequest.getLabel(ActionRequest.CUSTOM)))
+						&& ((aDependency.get("action")).equals(ActionRequest.getLabel(ActionRequest.SETUP))
+								|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ONCE))
+								|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.ALWAYS))
+								|| aDependency.get("action").equals(ActionRequest.getLabel(ActionRequest.CUSTOM)))
 
-						&&
-
-						((String) (aDependency.get("requirementType"))).equals(requirementType)
-
-				) {
-					result.put((String) (aDependency.get("requiredProductId")),
-							(String) (aDependency.get("requiredInstallationStatus")) + ":"
-									+ (String) (aDependency.get("requiredAction")));
+						&& aDependency.get("requirementType").equals(requirementType)) {
+					result.put(aDependency.get("requiredProductId"),
+							aDependency.get("requiredInstallationStatus") + ":" + aDependency.get("requiredAction"));
 				}
 			}
-
 		}
 
 		Logging.debug(this, "getProductRequirements depot, productname, requirementType  " + depotId + ", "
@@ -4934,9 +4915,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	// lazy initializing
 	{
 		if (mapOfMethodSignatures == null) {
-			List methodsList = exec.getListResult(new OpsiMethodCall(
-
-					"getPossibleMethods_listOfHashes", new Object[] {}));
+			List methodsList = exec
+					.getListResult(new OpsiMethodCall("getPossibleMethods_listOfHashes", new Object[] {}));
 
 			if (methodsList != null) {
 				mapOfMethodSignatures = new HashMap<>();
@@ -5165,7 +5145,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					configOptions.put(key, configOption);
 
-					configListCellOptions.put(key, (ListCellOptions) configOption);
+					configListCellOptions.put(key, configOption);
 
 					if (configOption.getDefaultValues() == null) {
 						Logging.warning(this, "default values missing for config  " + key);
@@ -5188,7 +5168,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						savedSearches.checkIn(key, "" + configOption.getDefaultValues().get(0));
 						hwAuditDevicePropertyTypes.checkIn(key, configOption.getDefaultValues());
 					}
-
 				}
 
 				Logging.debug(this,
@@ -5210,7 +5189,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Logging.debug(this, "getConfigOptions() work finished");
 		}
 
-		return (Map<String, ListCellOptions>) configListCellOptions;
+		return configListCellOptions;
 
 	}
 
@@ -5321,7 +5300,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			ConfigOption configOption = createBoolConfig(key, val, description);
 			configOptions.put(key, configOption);
-			configListCellOptions.put(key, (ListCellOptions) configOption);
+			configListCellOptions.put(key, configOption);
 			// entails class cast errors
 
 		}
@@ -5415,7 +5394,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			state.put("configId", key);
 			state.put("values", settings.get(key));
 
-			Map retrievedConfig = ((RetrievedMap) settings).getRetrieved();
+			Map<String, Object> retrievedConfig = settings.getRetrieved();
 			Object oldValue = null;
 
 			if (retrievedConfig != null)
@@ -5528,27 +5507,27 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				if (determineConfigOptions) {
 					ConfigOption configOption = configOptions.get(state.get("configId"));
 
-					Map<String, Object> config_forUpdate = new HashMap<>();
+					Map<String, Object> configForUpdate = new HashMap<>();
 
-					config_forUpdate.put("ident", state.get("configId"));
-					config_forUpdate.put("type", configOption.getRetrieved().get("type"));
-					config_forUpdate.put("defaultValues", Executioner.jsonArray((List) state.get("values")));
+					configForUpdate.put("ident", state.get("configId"));
+					configForUpdate.put("type", configOption.getRetrieved().get("type"));
+					configForUpdate.put("defaultValues", Executioner.jsonArray((List) state.get("values")));
 
 					List possibleValues = (List) configOption.get("possibleValues");
 					for (Object item : (List) state.get("values")) {
 						if (possibleValues.indexOf(item) == -1)
 							possibleValues.add(item);
 					}
-					config_forUpdate.put("possibleValues", Executioner.jsonArray(possibleValues));
+					configForUpdate.put("possibleValues", Executioner.jsonArray(possibleValues));
 
 					// mapping to JSON
-					Logging.debug(this, "setAdditionalConfiguation " + config_forUpdate);
-					callsConfigCollection.add(Executioner.jsonMap(config_forUpdate));
+					Logging.debug(this, "setAdditionalConfiguation " + configForUpdate);
+					callsConfigCollection.add(Executioner.jsonMap(configForUpdate));
 				}
 
 				state.put("values", Executioner.jsonArray((List) state.get("values")));
 
-				callsConfigName2ConfigValueCollection.add(Executioner.jsonMap((Map) state));
+				callsConfigName2ConfigValueCollection.add(Executioner.jsonMap(state));
 			}
 
 			Logging.debug(this, "callsConfigCollection " + callsConfigCollection);
@@ -8576,18 +8555,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Logging.warning("opsi module information problem", ex);
 		}
 
-		{
-			withLinuxAgent = (opsiModules.get("linux_agent") != null) && ((Boolean) opsiModules.get("linux_agent"));
-			withLicenceManagement = (opsiModules.get("license_management") != null)
-					&& ((Boolean) opsiModules.get("license_management"));
-			withLocalImaging = (opsiModules.get("local_imaging") != null)
-					&& ((Boolean) opsiModules.get("local_imaging"));
+		withLinuxAgent = (opsiModules.get("linux_agent") != null) && opsiModules.get("linux_agent");
+		withLicenceManagement = (opsiModules.get("license_management") != null)
+				&& opsiModules.get("license_management");
+		withLocalImaging = (opsiModules.get("local_imaging") != null) && opsiModules.get("local_imaging");
 
-			withMySQL = (opsiModules.get("mysql_backend") != null) && ((Boolean) opsiModules.get("mysql_backend"));
-			withUEFI = (opsiModules.get("uefi") != null) && ((Boolean) opsiModules.get("uefi"));
-			withWAN = (opsiModules.get("vpn") != null) && ((Boolean) opsiModules.get("vpn"));
-			withUserRoles = (opsiModules.get("userroles") != null) && ((Boolean) opsiModules.get("userroles"));
-		}
+		withMySQL = (opsiModules.get("mysql_backend") != null) && opsiModules.get("mysql_backend");
+		withUEFI = (opsiModules.get("uefi") != null) && opsiModules.get("uefi");
+		withWAN = (opsiModules.get("vpn") != null) && opsiModules.get("vpn");
+		withUserRoles = (opsiModules.get("userroles") != null) && opsiModules.get("userroles");
 
 		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
