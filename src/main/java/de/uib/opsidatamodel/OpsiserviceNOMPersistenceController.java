@@ -2216,7 +2216,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public List<String> wakeOnLan(java.util.Set<String> hostIds, Map<String, List<String>> hostSeparationByDepot,
 			Map<String, Executioner> execsByDepot) {
-		Map responses = new HashMap<>();
+		Map<String, Object> responses = new HashMap<>();
 
 		for (Entry<String, List<String>> hostSeparationEntry : hostSeparationByDepot.entrySet()) {
 			if (hostSeparationEntry.getValue() != null && !hostSeparationEntry.getValue().isEmpty()) {
@@ -2430,7 +2430,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		List<Object> updates = new ArrayList<>();
 		for (Map<String, Object> hostUpdateValue : hostUpdates.values()) {
-			updates.add(Executioner.jsonMap((Map) hostUpdateValue));
+			updates.add(Executioner.jsonMap(hostUpdateValue));
 		}
 
 		OpsiMethodCall omc = new OpsiMethodCall("host_updateObjects", new Object[] { updates.toArray() });
@@ -2843,9 +2843,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		HashSet<String> inNewSetnotInOriSet = new HashSet<>(productSet);
 		HashSet<String> inOriSetnotInNewSet = new HashSet<>();
 
-		if (groupId != null && getFProductGroup2Members().get(groupId) != null) {
+		if (getFProductGroup2Members().get(groupId) != null) {
 
-			Set oriSet = getFProductGroup2Members().get(groupId);
+			Set<String> oriSet = getFProductGroup2Members().get(groupId);
 			Logging.debug(this, "setProductGroup: oriSet " + oriSet);
 			inOriSetnotInNewSet = new HashSet<>(oriSet);
 			inOriSetnotInNewSet.removeAll(productSet);
@@ -3285,7 +3285,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	private String cutClassName(String columnName) {
-		String result = null;
+		String result;
 
 		if (columnName.startsWith("HOST"))
 			result = null;
@@ -3431,11 +3431,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<Object> readyObjects = new ArrayList<>();
 
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClass : hwAuditDeviceClasses.entrySet()) {
-			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClass);
+			OpsiHwAuditDeviceClass hwAuditDeviceClass = hwAuditDeviceClasses.get(hwClass.getKey());
 
 			// case hostAssignedTableType
 			String configKey = hwAuditDeviceClass.getHostConfigKey();
-			String configIdent = hwClass + "_" + OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE;
+			String configIdent = hwClass.getKey() + "_" + OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE;
 
 			Logging.debug(this, " saveHwColumnConfig for HOST configIdent " + configIdent);
 
@@ -3478,7 +3478,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			// case hwItemAssignedTableType
 			configKey = hwAuditDeviceClass.getHwItemConfigKey();
-			configIdent = hwClass + "_" + OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE;
+			configIdent = hwClass.getKey() + "_" + OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE;
 
 			Logging.debug(this, " saveHwColumnConfig for HW configIdent " + configIdent);
 
@@ -3530,7 +3530,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public String[] getLogtypes() {
+	public String[] getLogTypes() {
 		if (logtypes == null)
 			logtypes = Globals.logtypes;
 
@@ -3540,7 +3540,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public Map<String, String> getEmptyLogfiles() {
 		logfiles = new HashMap<>();
-		String[] logtypes = getLogtypes();
+		String[] logtypes = getLogTypes();
 
 		for (int i = 0; i < logtypes.length; i++) {
 			logfiles.put(logtypes[i], "");
@@ -3551,7 +3551,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Map<String, String> getLogfiles(String clientId, String logtype) {
-		String[] logtypes = getLogtypes();
+		String[] logtypes = getLogTypes();
 
 		if (logfiles == null) {
 			getEmptyLogfiles();
@@ -3599,7 +3599,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public Map<String, String> getLogfiles(String clientId) {
 		logfiles = new HashMap<>();
 
-		String[] logtypes = getLogtypes();
+		String[] logtypes = getLogTypes();
 
 		for (int i = 0; i < logtypes.length; i++) {
 			getLogfiles(clientId, logtypes[i]);

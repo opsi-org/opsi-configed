@@ -23,8 +23,8 @@ import java.util.TreeMap;
 
 import org.json.JSONObject;
 
-import de.uib.configed.ControlDash;
 import de.uib.configed.Configed;
+import de.uib.configed.ControlDash;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
@@ -527,7 +527,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract boolean saveHwColumnConfig(Map<String, Map<String, Boolean>> updateItems);
 
 	/* log files */
-	public abstract String[] getLogtypes();
+	public abstract String[] getLogTypes();
 
 	public abstract Map<String, String> getEmptyLogfiles();
 
