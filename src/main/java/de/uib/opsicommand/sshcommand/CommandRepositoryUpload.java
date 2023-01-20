@@ -1,7 +1,7 @@
 package de.uib.opsicommand.sshcommand;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHRepositoryUploadDialog;
 import de.uib.utilities.logging.Logging;

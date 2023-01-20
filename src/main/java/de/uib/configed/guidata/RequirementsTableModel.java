@@ -1,5 +1,6 @@
 package de.uib.configed.guidata;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -222,7 +223,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 			java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
 					column);
 
-			colorizer.colorize(cell, isSelected, row, column);
+			colorizer.colorize(cell, row, column);
 
 			if (cell instanceof JComponent)
 				((JComponent) cell).setToolTipText("" + value);
@@ -258,7 +259,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 			cellValue = value;
 		}
 
-		public void colorize(java.awt.Component cell, boolean isSelected, int row, int col) {
+		public void colorize(java.awt.Component cell, int row, int col) {
 			cell.setForeground(Globals.lightBlack);
 
 			int kindOfRow = row % 3;
@@ -285,7 +286,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	}
 
 	protected class MyWarningColorizer {
-		public void colorize(java.awt.Component cell, boolean isSelected, int row, int col) {
+		public void colorize(Component cell) {
 			cell.setBackground(Globals.ACTION_COLOR);
 		}
 	}
@@ -294,11 +295,11 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		MyWarningColorizer colorizer = new MyWarningColorizer();
 
 		@Override
-		public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-				boolean hasFocus, int row, int col) {
-			java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int col) {
+			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 
-			colorizer.colorize(cell, isSelected, row, col);
+			colorizer.colorize(cell);
 
 			if (cell instanceof JComponent)
 				((JComponent) cell).setToolTipText("" + value);

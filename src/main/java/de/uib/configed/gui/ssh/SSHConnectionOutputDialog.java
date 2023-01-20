@@ -26,8 +26,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.Logging;
@@ -177,22 +177,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		}
 	}
 
-	private boolean showResult = true;
-
-	public void setStatusFinish(String s) {
-		if (showResult)
-			setVisible(true);
-		else
-			cancel();
-	}
-
 	public void setStatusFinish() {
-
-		if (showResult)
-			setVisible(true);
-		else
-			cancel();
-
+		setVisible(true);
 	}
 
 	@Override

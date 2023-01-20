@@ -11,8 +11,8 @@ import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.utilities.logging.Logging;
@@ -92,16 +92,6 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		} catch (Exception e) {
 			Logging.warning(this, "initGui, exception occurred ", e);
 		}
-	}
-
-	public boolean showResult = true;
-
-	@Override
-	public void setStatusFinish() {
-		if (showResult)
-			setVisible(true);
-		else
-			cancel();
 	}
 
 	public void addKillProcessListener(ActionListener l) {

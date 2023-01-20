@@ -1606,7 +1606,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (configs != null && configs.get(configKey) != null && !((List) (configs.get(configKey))).isEmpty()) {
 
 			Logging.debug(this, "valueFromConfigStateAsExpected configKey, values " + configKey + ", valueList "
-					+ ((configs.get(configKey))) + " expected " + expectValue);
+					+ configs.get(configKey) + " expected " + expectValue);
 
 			Object value = ((List) configs.get(configKey)).get(0);
 

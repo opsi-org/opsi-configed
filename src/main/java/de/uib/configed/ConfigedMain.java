@@ -994,7 +994,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "startProductActionFrame ");
 
 		if (productActionFrame == null) {
-			productActionFrame = new FProductActions(this, persist, mainFrame);
+			productActionFrame = new FProductActions(this, persist);
 			productActionFrame.setSize(licencesInitDimension);
 			productActionFrame.centerOnParent();
 			allFrames.add(productActionFrame);

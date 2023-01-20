@@ -18,7 +18,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandWget;
@@ -50,10 +49,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private SSHWgetAuthenticationPanel wgetAuthPanel;
 
 	public SSHWgetParameterDialog() {
-		this(null);
-	}
-
-	public SSHWgetParameterDialog(ConfigedMain m) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.wget.title"), false);
 
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
@@ -70,6 +65,8 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		jComboBoxDir.setEnabled(true);
 	}
 
+
+
 	private void setComponentsEnabledRO(boolean value) {
 		jTextFieldURL.setEnabled(value);
 		jTextFieldURL.setEditable(value);
@@ -84,7 +81,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 		jButtonExecute.setEnabled(value);
 		jButtonHelp.setEnabled(value);
-
 	}
 
 	private void init() {

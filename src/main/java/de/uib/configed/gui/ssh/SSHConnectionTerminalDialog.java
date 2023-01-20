@@ -22,8 +22,8 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.Autocomplete;
 import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
 import de.uib.utilities.logging.Logging;
@@ -73,7 +73,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		}
 	}
 
-	public SSHConnectionTerminalDialog(String title, final SSHConnectTerminal terminal, boolean visible) {
+	public SSHConnectionTerminalDialog(String title, SSHConnectTerminal terminal) {
 		super(title);
 		output.setBackground(Globals.lightBlack);
 		output.addMouseListener(new MouseAdapter() {
@@ -135,16 +135,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		setOutSize();
 	}
 
-	public SSHConnectionTerminalDialog(String title, SSHConnectTerminal terminal) {
-		this(title, terminal, true);
-	}
-
-	public SSHConnectionTerminalDialog(String title, boolean visible) {
-		this(title, null, visible);
-	}
-
 	public SSHConnectionTerminalDialog(String title) {
-		this(title, true);
+		this(title, null);
 	}
 
 	private void setComponentsEnabledRO(boolean value) {

@@ -43,9 +43,8 @@ public class SSHConnectTerminal extends SSHConnect {
 		this.dialog = dialog;
 		if (dialog == null)
 			dialog = new SSHConnectionTerminalDialog(Configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
-					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost(), this,
-					false /* visible = false */
-			);
+					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost(),
+					this);
 		connect();
 	}
 
@@ -54,8 +53,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		dialog = new SSHConnectionTerminalDialog(
 				Configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
 						+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost(),
-				this, false /* visible = false */
-		);
+				this);
 		connect();
 	}
 
