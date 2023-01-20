@@ -2,7 +2,6 @@ package de.uib.opsidatamodel.productstate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +33,7 @@ public class ProductState extends HashMap<String, String> {
 		SERVICE_KEYS.add("actionSequence");
 	}
 
-	public static final Map<String, String> DB_COLUMNS = new LinkedHashMap<>();
+	public static final Map<String, String> DB_COLUMNS = new HashMap<>();
 	static {
 		DB_COLUMNS.put("productId", "VARCHAR(50)");
 		DB_COLUMNS.put("productVersion", "VARCHAR(32)");

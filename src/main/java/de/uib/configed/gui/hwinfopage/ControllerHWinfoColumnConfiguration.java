@@ -330,7 +330,7 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	protected Map<String, Map<String, Object>> getHwColumnConfig() {
-		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
+		Map<String, Map<String, Object>> result = new HashMap<>();
 
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();
 		int id = 0;
@@ -342,7 +342,7 @@ public class ControllerHWinfoColumnConfiguration {
 			List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties = hwAuditDeviceClass.getDeviceHwItemProperties();
 
 			// hw class line
-			Map<String, Object> lineMap = new LinkedHashMap<>();
+			Map<String, Object> lineMap = new HashMap<>();
 			lineMap.put(COL_LINE_NO, formatLineNo(id));
 			lineMap.put(COL_HW_CLASS, hwClassEntry.getKey());
 			lineMap.put(COL_LINUX_QUERY, hwAuditDeviceClass.getLinuxQuery());
@@ -352,7 +352,7 @@ public class ControllerHWinfoColumnConfiguration {
 			id++;
 
 			// colHostVsItemAssigned line
-			lineMap = new LinkedHashMap<>();
+			lineMap = new HashMap<>();
 			lineMap.put(COL_LINE_NO, formatLineNo(id));
 
 			lineMap.put(COL_HOST_VS_ITEM_ASSIGNED, VAL_ASSIGNED_TO_HOST);
@@ -362,7 +362,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHostProperties) {
 
-				lineMap = new LinkedHashMap<>();
+				lineMap = new HashMap<>();
 				lineMap.put(COL_LINE_NO, formatLineNo(id));
 
 				ColumnIdent columnIdent = new ColumnIdent(hwClassEntry.getKey(),
@@ -380,7 +380,7 @@ public class ControllerHWinfoColumnConfiguration {
 				id++;
 			}
 
-			lineMap = new LinkedHashMap<>();
+			lineMap = new HashMap<>();
 			lineMap.put(COL_LINE_NO, formatLineNo(id));
 			lineMap.put(COL_HOST_VS_ITEM_ASSIGNED, VAL_ASSIGNED_TO_HW_ITEM);
 
@@ -389,7 +389,7 @@ public class ControllerHWinfoColumnConfiguration {
 			id++;
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHwItemProperties) {
-				lineMap = new LinkedHashMap<>();
+				lineMap = new HashMap<>();
 				lineMap.put(COL_LINE_NO, formatLineNo(id));
 
 				ColumnIdent columnIdent = new ColumnIdent(hwClassEntry.getKey(),

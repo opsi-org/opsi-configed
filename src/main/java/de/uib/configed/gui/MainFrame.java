@@ -654,7 +654,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	private void setupMenuLists() {
 
-		menuItemsHost = new LinkedHashMap<>();
+		menuItemsHost = new HashMap<>();
 		menuItemsHost.put(ITEM_ADD_CLIENT, new ArrayList<>());
 		menuItemsHost.put(ITEM_DELETE_CLIENT, new ArrayList<>());
 		menuItemsHost.put(ITEM_FREE_LICENCES, new ArrayList<>());
@@ -740,7 +740,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		labelledDelays.put("20 min", 1200);
 		labelledDelays.put("1 h", 3600);
 
-		searchedTimeSpans = new LinkedHashMap<>();
+		searchedTimeSpans = new HashMap<>();
 
 		final String TODAY = "today";
 		final String SINCE_YESTERDAY = "since yesterday";

@@ -499,7 +499,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		labelSearchMode = new JLabel(Configed.getResourceValue("SearchPane.searchmode.searchmode"));
 		labelSearchMode.setFont(Globals.defaultFont);
 
-		Map<String, String> tooltipsMap = new LinkedHashMap<>();
+		Map<String, String> tooltipsMap = new HashMap<>();
 
 		tooltipsMap.put(Configed.getResourceValue("SearchPane.searchmode.fulltext"), // Index FULL_TEXT_SEARCH
 				Configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));

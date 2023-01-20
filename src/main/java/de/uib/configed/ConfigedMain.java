@@ -36,7 +36,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -426,9 +425,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected void initGui() {
 		Logging.info(this, "initGui");
 
-		displayFieldsLocalbootProducts = new LinkedHashMap<>(
-				persist.getProductOnClients_displayFieldsLocalbootProducts());
-		displayFieldsNetbootProducts = new LinkedHashMap<>(persist.getProductOnClients_displayFieldsNetbootProducts());
+		displayFieldsLocalbootProducts = new HashMap<>(persist.getProductOnClients_displayFieldsLocalbootProducts());
+		displayFieldsNetbootProducts = new HashMap<>(persist.getProductOnClients_displayFieldsNetbootProducts());
 		// initialization by defaults, it can be edited afterwards
 
 		initTree();
@@ -5009,8 +5007,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Logging.debug(this, "remoteControls " + remoteControls);
 
-			Map<String, String> entries = new LinkedHashMap<>();
-			Map<String, String> tooltips = new LinkedHashMap<>();
+			Map<String, String> entries = new HashMap<>();
+			Map<String, String> tooltips = new HashMap<>();
 			Map<String, String> rcCommands = new HashMap<>();
 			Map<String, Boolean> commandsEditable = new HashMap<>();
 

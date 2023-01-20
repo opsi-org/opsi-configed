@@ -1,7 +1,7 @@
 package de.uib.opsidatamodel.permission;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +28,10 @@ public class UserConfigModule {
 
 		Logging.info(this, "create UserConfigModule for user named " + username + " with prototype  " + prototype);
 
-		booleanMap = new LinkedHashMap<>();
+		booleanMap = new HashMap<>();
 		bool_keys = new LinkedHashSet<>();
-		valuesMap = new LinkedHashMap<>();
-		possibleValuesMap = new LinkedHashMap<>();
+		valuesMap = new HashMap<>();
+		possibleValuesMap = new HashMap<>();
 		list_keys = new LinkedHashSet<>();
 
 		if (prototype != null) {
