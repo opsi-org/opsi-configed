@@ -3285,18 +3285,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	private String cutClassName(String columnName) {
-		String result;
+		String result = null;
 
-		if (columnName.startsWith("HOST"))
-			result = null;
-
-		else if (columnName.startsWith(hwInfo_CONFIG)) {
-			result = columnName.substring(hwInfo_CONFIG.length());
+		if (!columnName.startsWith("HOST") && columnName.startsWith(HW_INFO_CONFIG)) {
+			result = columnName.substring(HW_INFO_CONFIG.length());
 			result = result.substring(0, result.indexOf('.'));
 		}
 
-		else if (columnName.startsWith(hwInfo_DEVICE)) {
-			result = columnName.substring(hwInfo_DEVICE.length());
+		else if (columnName.startsWith(HW_INFO_DEVICE)) {
+			result = columnName.substring(HW_INFO_DEVICE.length());
 			result = result.substring(0, result.indexOf('.'));
 		} else
 			Logging.warning(this, "cutClassName " + "unexpected columnName " + columnName);
@@ -3316,7 +3313,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			hostColumnNames.add(Host.idColumn);
 			hostColumnNames.add(Host.descriptionColumn);
 			hostColumnNames.add(Host.hwAddressColumn);
-			hostColumnNames.add(lastseenVisibleColName);
+			hostColumnNames.add(LAST_SEEN_VISIBLE_COL_NAME);
 
 			getConfigOptions();
 			// there is produced client2HwRowsColumnNames
@@ -3328,14 +3325,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				for (OpsiHwAuditDevicePropertyType deviceProperty : hwAuditDeviceClass.getDeviceHostProperties()) {
 					if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
-						String col = hwInfo_CONFIG + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
+						String col = HW_INFO_CONFIG + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
 						client2HwRowsColumnNames.add(col);
 					}
 				}
 
 				for (OpsiHwAuditDevicePropertyType deviceProperty : hwAuditDeviceClass.getDeviceHwItemProperties()) {
 					if (deviceProperty.getDisplayed() != null && deviceProperty.getDisplayed()) {
-						String col = hwInfo_DEVICE + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
+						String col = HW_INFO_DEVICE + hwClass.getKey() + "." + deviceProperty.getOpsiDbColumnName();
 						client2HwRowsColumnNames.add(col);
 					}
 				}
@@ -5779,16 +5776,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public List<String> getDomains() {
 		List<String> result = new ArrayList<>();
 
-		if (configDefaultValues.get(configedGIVENDOMAINS_key) == null) {
-			Logging.info(this, "no values found for   " + configedGIVENDOMAINS_key);
+		if (configDefaultValues.get(CONFIGED_GIVEN_DOMAINS_KEY) == null) {
+			Logging.info(this, "no values found for   " + CONFIGED_GIVEN_DOMAINS_KEY);
 		} else {
-			Logging.info(this, "getDomains " + configDefaultValues.get(configedGIVENDOMAINS_key));
+			Logging.info(this, "getDomains " + configDefaultValues.get(CONFIGED_GIVEN_DOMAINS_KEY));
 
 			HashMap<String, Integer> numberedValues = new HashMap<>();
 			TreeSet<String> orderedValues = new TreeSet<>();
 			TreeSet<String> unorderedValues = new TreeSet<>();
 
-			for (Object item : configDefaultValues.get(configedGIVENDOMAINS_key)) {
+			for (Object item : configDefaultValues.get(CONFIGED_GIVEN_DOMAINS_KEY)) {
 				String entry = (String) item;
 				int p = entry.indexOf(":");
 				if (p == -1)
@@ -5835,7 +5832,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public void writeDomains(List<Object> domains) {
 
-		String key = configedGIVENDOMAINS_key;
+		String key = CONFIGED_GIVEN_DOMAINS_KEY;
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
 
 		item.put("ident", key);
@@ -6631,7 +6628,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				rowsLicencesReconciliation = new HashMap<>();
 
 				List<String> extraHostFields = getServerConfigStrings(
-						KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
+						KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 
 				Map<String, HostInfo> clientMap = hostInfoCollections.getMapOfAllPCInfoMaps();
 
@@ -7639,7 +7636,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<Object> readyObjects = new ArrayList<>();
 
 		// list of domains for new clients
-		key = configedGIVENDOMAINS_key;
+		key = CONFIGED_GIVEN_DOMAINS_KEY;
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
 			Logging.info(this, "checkStandardConfigs: create domain list");
@@ -7723,10 +7720,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// defaultValues
 
-		defaultValues = configDefaultValues.get(KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
+		defaultValues = configDefaultValues.get(KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 		if (defaultValues == null) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-					+ KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
+					+ KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 			// key not yet configured
 			defaultValues = new ArrayList<>();
 			// example for standard configuration other than empty
@@ -7735,7 +7732,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		// create config for service
 		item = createNOMitem("UnicodeConfig");
-		item.put("ident", KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
+		item.put("ident", KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 		item.put("description",
 				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation.ExtraHostFields"));
 		item.put("defaultValues", Executioner.jsonArray(defaultValues));
@@ -7939,7 +7936,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (defaultValues == null) {
 			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_SSH_DEFAULTWINUSER);
-			readyObjects.add(produceConfigEntry("UnicodeConfig", key, KEY_SSH_DEFAULTWINUSER_defaultvalue,
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key, KEY_SSH_DEFAULTWINUSER_DEFAULT_VALUE,
 					"default windows username for deploy-client-agent-script"));
 		}
 
@@ -7948,11 +7945,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (defaultValues == null) {
 			Logging.warning(this,
 					"checkStandardConfigs:  since no values found setting values for  " + KEY_SSH_DEFAULTWINPW);
-			readyObjects.add(produceConfigEntry("UnicodeConfig", key, KEY_SSH_DEFAULTWINPW_defaultvalue,
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key, KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE,
 					"default windows password for deploy-client-agent-script"));
 		}
 
-		key = configedWORKBENCH_key;
+		key = CONFIGED_WORKBENCH_KEY;
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
@@ -7974,14 +7971,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// key not yet configured
 			defaultValues = new ArrayList<>();
 
-			defaultValues.add(OPSI_CLIENTD_EVENT_on_demand);
+			defaultValues.add(OPSI_CLIENTD_EVENT_ON_DEMAND);
 
 			configDefaultValues.put(key, defaultValues);
 
 			possibleValues = new ArrayList<>();
 
-			possibleValues.add(OPSI_CLIENTD_EVENT_on_demand);
-			possibleValues.add(OPSI_CLIENTD_EVENT_silent_install);
+			possibleValues.add(OPSI_CLIENTD_EVENT_ON_DEMAND);
+			possibleValues.add(OPSI_CLIENTD_EVENT_SILENT_INSTALL);
 
 			item = createNOMitem("UnicodeConfig");
 			item.put("id", key);

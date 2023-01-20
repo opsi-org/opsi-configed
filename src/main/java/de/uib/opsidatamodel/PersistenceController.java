@@ -61,17 +61,17 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	// constants for building hw queries
-	public final String hwInfo_CONFIG = "HARDWARE_CONFIG_";
-	public final String hwInfo_DEVICE = "HARDWARE_DEVICE_";
-	public final String hostIdField = ".hostId";
-	public final String hardwareIdField = ".hardware_id";
-	public final String lastseenColName = "lastseen";
-	public final String lastseenVisibleColName = "HOST.last_scan_time";
+	public static final String HW_INFO_CONFIG = "HARDWARE_CONFIG_";
+	public static final String HW_INFO_DEVICE = "HARDWARE_DEVICE_";
+	public static final String HOST_ID_FIELD = ".hostId";
+	public static final String HARDWARE_ID_FIELD = ".hardware_id";
+	public static final String LAST_SEEN_COL_NAME = "lastseen";
+	public static final String LAST_SEEN_VISIBLE_COL_NAME = "HOST.last_scan_time";
 
 	public static final String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT = "configed.productonclient_displayfields_localboot";
 	public static final String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT = "configed.productonclient_displayfields_netboot";
 	public static final String KEY_HOST_DISPLAYFIELDS = "configed.host_displayfields";
-	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation = "configed.license_inventory_extradisplayfields";
+	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
 	public static final String KEY_SHOW_DASH_ON_PROGRAMSTART = ControlDash.CONFIG_KEY + ".show_dash_on_loaddata";
 	public static final Boolean DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART = false;
@@ -85,31 +85,31 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String KEY_DISABLED_CLIENT_ACTIONS = "configed.host_actions_disabled";
 
 	public static final String KEY_OPSICLIENTD_EXTRA_EVENTS = "configed.opsiclientd_events";
-	public static final String OPSI_CLIENTD_EVENT_on_demand = "on_demand";
-	public static final String OPSI_CLIENTD_EVENT_silent_install = "silent_install";
+	public static final String OPSI_CLIENTD_EVENT_ON_DEMAND = "on_demand";
+	public static final String OPSI_CLIENTD_EVENT_SILENT_INSTALL = "silent_install";
 
 	public static final String KEY_PRODUCT_SORT_ALGORITHM = "product_sort_algorithm";
 
 	public static final String KEY_CHOICES_FOR_WOL_DELAY = "wol_delays_sec";
 
-	public static final String localImageRestoreProductKey = "opsi-local-image-restore";
-	public static final String localImagesListPropertyKey = "imagefiles_list";
-	public static final String localImageToRestorePropertyKey = "imagefile";
+	public static final String LOCAL_IMAGE_RESTORE_PRODUCT_KEY = "opsi-local-image-restore";
+	public static final String LOCAL_IMAGE_LIST_PROPERTY_KEY = "imagefiles_list";
+	public static final String LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY = "imagefile";
 
 	public static final String CONFIG_DEPOT_ID = "clientconfig.depot.id";
 	public static final String KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = "opsiclientd.event_on_shutdown.active";
 	public static final Boolean DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = false;
 
 	public static final String KEY_SSH_DEFAULTWINUSER = "configed.ssh.deploy-client-agent.default.user";
-	public static final String KEY_SSH_DEFAULTWINUSER_defaultvalue = "Administrator";
+	public static final String KEY_SSH_DEFAULTWINUSER_DEFAULT_VALUE = "Administrator";
 	public static final String KEY_SSH_DEFAULTWINPW = "configed.ssh.deploy-client-agent.default.password";
-	public static final String KEY_SSH_DEFAULTWINPW_defaultvalue = "";
+	public static final String KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE = "";
 
-	public static final String configedWORKBENCH_key = "configed.workbench.default";
+	public static final String CONFIGED_WORKBENCH_KEY = "configed.workbench.default";
 	public static String configedWORKBENCH_defaultvalue = "/var/lib/opsi/workbench/";
 	public static String packageServerDirectoryS = configedWORKBENCH_defaultvalue;
 
-	public static final String configedGIVENDOMAINS_key = "configed.domains_given";
+	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
 	// wan meta configuration
 	public static final String WAN_PARTKEY = "wan_";
@@ -148,7 +148,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
-	public static final List BOOLEAN_VALUES = new ArrayList<>();
+	public static final List<Boolean> BOOLEAN_VALUES = new ArrayList<>();
 	static {
 		BOOLEAN_VALUES.add(true);
 		BOOLEAN_VALUES.add(false);

@@ -26,9 +26,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.PersistenceController;
@@ -83,7 +83,8 @@ public class FGroupActions extends SecondaryFrame {
 		List<String> imagesCollection = new ArrayList<>();
 
 		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
-				PersistenceController.localImageRestoreProductKey, PersistenceController.localImagesListPropertyKey)));
+				PersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
+				PersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
 
 		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray(new String[0])));
 	}
@@ -110,14 +111,14 @@ public class FGroupActions extends SecondaryFrame {
 		WaitCursor waitCursor = new WaitCursor(this);
 
 		persist.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
-				PersistenceController.localImageRestoreProductKey, PersistenceController.localImageToRestorePropertyKey,
-				values);
+				PersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
+				PersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_ACTION_REQUEST, "setup");
 
 		persist.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
-				PersistenceController.localImageRestoreProductKey, OpsiPackage.TYPE_NETBOOT, changedValues);
+				PersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT, changedValues);
 
 		waitCursor.stop();
 	}

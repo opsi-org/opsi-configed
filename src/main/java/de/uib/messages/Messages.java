@@ -19,7 +19,6 @@ import utils.ResourceBundleUtf8;
 public class Messages {
 	public static final String APPNAME = "configed";
 	private static final String BUNDLE_NAME = "de/uib/messages/configed";
-	private static final String EXTRA_LOCALE = null;
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 	private static Boolean utf8Hack = null;
 
@@ -51,10 +50,7 @@ public class Messages {
 	}
 
 	public static String getSelectedLocale() {
-		if (EXTRA_LOCALE != null)
-			selectedLocaleString = EXTRA_LOCALE;
-		else
-			selectedLocaleString = findSelectedLocale(myLocale.getLanguage(), myLocale.getCountry());
+		selectedLocaleString = findSelectedLocale(myLocale.getLanguage(), myLocale.getCountry());
 
 		if (selectedLocaleString == null) {
 			// not found, now try again for default locale

@@ -22,14 +22,14 @@ public class ActivityPanel extends JPanel implements Runnable {
 	/** sets height = a0 pixel */
 	public static int h = 10;
 
-	private final int noOfParts = 4;
+	private static final int NO_OF_PARTS = 4;
 	/** an List for panels */
 	ArrayList<JPanel> partPanels = new ArrayList<>();
 
-	public static int sleepingMS = 750;
+	public static final int SLEEPING_IN_MS = 750;
 
 	/** inactive status is -1 */
-	public static int inactive = -1;
+	public static final int INACTIVE = -1;
 	/** a blueGrey LineBorder */
 	public static javax.swing.border.LineBorder lineBorderActive;
 	/** a blackLightBlue LineBorder */
@@ -56,7 +56,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 		for (int j = 0; j < partPanels.size(); j++) {
 			setBorder(lineBorderActive);
 			partPanels.get(j).setBackground(colors[0]);
-			if (i == inactive) {
+			if (i == INACTIVE) {
 				setBorder(lineBorderInactive);
 				partPanels.get(j).setBackground(Globals.BACKGROUND_COLOR_7);
 			} else {
@@ -78,7 +78,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 		} catch (Exception strange) {
 			Logging.warning(this, "strange exception " + strange);
-			setState(inactive);
+			setState(INACTIVE);
 
 		}
 	}
@@ -103,12 +103,12 @@ public class ActivityPanel extends JPanel implements Runnable {
 		boolean forward = true;
 		try {
 			while (true) {
-				Globals.threadSleep(this, sleepingMS);
+				Globals.threadSleep(this, SLEEPING_IN_MS);
 
 				if (acting) {
 					finalizing = true;
 
-					if (i == noOfParts - 1) {
+					if (i == NO_OF_PARTS - 1) {
 						forward = false;
 					} else if (i == 0) {
 						forward = true;
@@ -122,10 +122,10 @@ public class ActivityPanel extends JPanel implements Runnable {
 				} else if (finalizing) {
 					finalizing = false;
 					forward = true;
-					i = inactive;
+					i = INACTIVE;
 					setState(i);
 					i = 0;
-					Globals.threadSleep(this, 2 * sleepingMS);
+					Globals.threadSleep(this, 2 * SLEEPING_IN_MS);
 				}
 			}
 		} catch (Exception anyException) {
@@ -150,7 +150,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 		partPanels = new ArrayList<>();
 
-		for (int j = 0; j < noOfParts; j++) {
+		for (int j = 0; j < NO_OF_PARTS; j++) {
 			partPanels.add(new JPanel() {
 
 				@Override
@@ -179,12 +179,12 @@ public class ActivityPanel extends JPanel implements Runnable {
 		setLayout(layout);
 
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
-		for (int j = 0; j < noOfParts; j++)
-			hGroup.addComponent(partPanels.get(j), w / noOfParts, w / noOfParts, w / noOfParts);
+		for (int j = 0; j < NO_OF_PARTS; j++)
+			hGroup.addComponent(partPanels.get(j), w / NO_OF_PARTS, w / NO_OF_PARTS, w / NO_OF_PARTS);
 		layout.setHorizontalGroup(hGroup);
 
 		GroupLayout.ParallelGroup vGroup = layout.createParallelGroup();
-		for (int j = 0; j < noOfParts; j++)
+		for (int j = 0; j < NO_OF_PARTS; j++)
 			vGroup.addComponent(partPanels.get(j), h - 2, h - 2, h - 2);
 		layout.setVerticalGroup(vGroup);
 	}

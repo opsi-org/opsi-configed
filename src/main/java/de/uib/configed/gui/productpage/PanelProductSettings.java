@@ -536,7 +536,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
 		itemOnDemand.setFont(Globals.defaultFont);
 		itemOnDemand.addActionListener((ActionEvent e) -> mainController
-				.fireOpsiclientdEventOnSelectedClients(PersistenceController.OPSI_CLIENTD_EVENT_on_demand));
+				.fireOpsiclientdEventOnSelectedClients(PersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
 
 		popup.add(itemOnDemand);
 
@@ -707,7 +707,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		mainController.checkSaveAll(false);
 		mainController.requestReloadStatesAndActions();
 
-		mainController.fireOpsiclientdEventOnSelectedClients(PersistenceController.OPSI_CLIENTD_EVENT_on_demand);
+		mainController.fireOpsiclientdEventOnSelectedClients(PersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND);
 
 	}
 

@@ -49,7 +49,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		List<String> classNames;
 
 		List<String> extraHostFields = persist.getServerConfigStrings(
-				PersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
+				PersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 
 		// --- panelLicencesReconciliation
 		columnNames = new ArrayList<>();

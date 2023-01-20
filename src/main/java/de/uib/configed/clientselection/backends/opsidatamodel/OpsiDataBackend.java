@@ -373,7 +373,7 @@ public class OpsiDataBackend extends Backend {
 			OpsiDataClient client = new OpsiDataClient(clientEntry.getKey());
 			client.setInfoMap(clientEntry.getValue().getMap());
 			if (hasHardware)
-				client.setHardwareInfo(clientToHardware.get(clientEntry.getValue()));
+				client.setHardwareInfo(clientToHardware.get(clientEntry.getKey()));
 			if (groups.containsKey(clientEntry.getKey()))
 				client.setGroups(groups.get(clientEntry.getKey()));
 

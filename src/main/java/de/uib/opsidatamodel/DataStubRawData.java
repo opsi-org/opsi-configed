@@ -448,10 +448,10 @@ public class DataStubRawData extends DataStubNOM {
 		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
 		StringBuilder cols = new StringBuilder("");
 
-		String deviceTable = persist.hwInfo_DEVICE + hwClass;
-		String configTable = persist.hwInfo_CONFIG + hwClass;
+		String deviceTable = persist.HW_INFO_DEVICE + hwClass;
+		String configTable = persist.HW_INFO_CONFIG + hwClass;
 
-		String lastseenCol = configTable + "." + persist.lastseenColName;
+		String lastseenCol = configTable + "." + persist.LAST_SEEN_COL_NAME;
 		specificColumns.add(lastseenCol);
 		buf.append(lastseenCol);
 		buf.append(", ");
@@ -460,12 +460,12 @@ public class DataStubRawData extends DataStubNOM {
 
 		// build and collect database columnnames
 		for (String hwInfoCol : persist.getClient2HwRowsColumnNames()) {
-			if (hwInfoCol.startsWith("HOST.") || hwInfoCol.equals(persist.lastseenVisibleColName))
+			if (hwInfoCol.startsWith("HOST.") || hwInfoCol.equals(persist.LAST_SEEN_VISIBLE_COL_NAME))
 				continue; // these already are in the collection
 
-			Logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + persist.hwInfo_DEVICE + " as well as "
-					+ persist.hwInfo_CONFIG);
-			String part0 = hwInfoCol.substring(0, persist.hwInfo_DEVICE.length());
+			Logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + persist.HW_INFO_DEVICE + " as well as "
+					+ persist.HW_INFO_CONFIG);
+			String part0 = hwInfoCol.substring(0, persist.HW_INFO_DEVICE.length());
 
 			boolean colFound = false;
 			// check if colname is from a CONFIG or a DEVICE table
@@ -474,7 +474,7 @@ public class DataStubRawData extends DataStubNOM {
 				// we found a DEVICE column name
 			} else {
 
-				part0 = hwInfoCol.substring(0, persist.hwInfo_CONFIG.length());
+				part0 = hwInfoCol.substring(0, persist.HW_INFO_CONFIG.length());
 
 				if (!hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
 
@@ -514,14 +514,14 @@ public class DataStubRawData extends DataStubNOM {
 		buf.append(Host.idColumn);
 		buf.append(" = ");
 		buf.append(configTable);
-		buf.append(persist.hostIdField);
+		buf.append(persist.HOST_ID_FIELD);
 
 		buf.append("\nAND ");
 		buf.append(configTable);
-		buf.append(persist.hardwareIdField);
+		buf.append(persist.HARDWARE_ID_FIELD);
 		buf.append(" = ");
 		buf.append(deviceTable);
-		buf.append(persist.hardwareIdField);
+		buf.append(persist.HARDWARE_ID_FIELD);
 
 		buf.append("\nAND ");
 		buf.append(configTable);
@@ -564,7 +564,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				if (specificColumns.get(i).equals(lastseenCol)) {
 					String timeS = maxTime((String) value, row.get(i));
-					rowMap.put(persist.lastseenVisibleColName, timeS);
+					rowMap.put(persist.LAST_SEEN_VISIBLE_COL_NAME, timeS);
 				} else
 					rowMap.put(specificColumns.get(i), value);
 
@@ -639,10 +639,11 @@ public class DataStubRawData extends DataStubNOM {
 					Map<String, Object> allInfosForAClient = client2HwRows.get(client2ClassInfo.getKey());
 					// find max lastseen time as last scan time
 
-					String lastseen1 = (String) allInfosForAClient.get(persist.lastseenVisibleColName);
-					String lastseen2 = (String) client2ClassInfo.getValue().get(persist.lastseenVisibleColName);
+					String lastseen1 = (String) allInfosForAClient.get(persist.LAST_SEEN_VISIBLE_COL_NAME);
+					String lastseen2 = (String) client2ClassInfo.getValue().get(persist.LAST_SEEN_VISIBLE_COL_NAME);
 					if (lastseen1 != null && lastseen2 != null)
-						client2ClassInfo.getValue().put(persist.lastseenVisibleColName, maxTime(lastseen1, lastseen2));
+						client2ClassInfo.getValue().put(persist.LAST_SEEN_VISIBLE_COL_NAME,
+								maxTime(lastseen1, lastseen2));
 
 					allInfosForAClient.putAll(client2ClassInfo.getValue());
 				}

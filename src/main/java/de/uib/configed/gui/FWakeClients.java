@@ -84,7 +84,7 @@ public class FWakeClients extends FShowList {
 
 			persist.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
 
-			Globals.threadSleep(this, 1000 * delaySecs);
+			Globals.threadSleep(this, 1000l * delaySecs);
 			turn++;
 		}
 
