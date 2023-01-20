@@ -1,7 +1,7 @@
 package de.uib.utilities.script;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -85,7 +85,7 @@ public class Interpreter {
 	}
 
 	protected void initSpecialValues(String[] specials) {
-		specialValues = new HashMap<>();
+		specialValues = new LinkedHashMap<>();
 		for (int i = 0; i < specials.length; i++)
 			specialValues.put(specials[i], "");
 	}

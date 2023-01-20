@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -734,7 +735,7 @@ public class DataStubNOM extends DataStub {
 					String infoString = "";
 
 					if (identInfoRow == null) {
-						identInfoRow = new HashMap<>();
+						identInfoRow = new LinkedHashMap<>();
 						identInfoRow.put(SWAuditEntry.NAME, swName);
 
 					} else {
@@ -758,7 +759,7 @@ public class DataStubNOM extends DataStub {
 					Map<String, String> infoWithPool = ident2infoWithPool.get(entry.getIdent());
 
 					if (infoWithPool == null) {
-						infoWithPool = new HashMap<>();
+						infoWithPool = new LinkedHashMap<>();
 						ident2infoWithPool.put(entry.getIdent(), infoWithPool);
 					}
 					String licencePoolAssigned = "x " + i;

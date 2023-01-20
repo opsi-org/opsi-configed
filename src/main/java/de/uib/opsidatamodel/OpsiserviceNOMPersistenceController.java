@@ -7279,7 +7279,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				configuredByService = produceProductOnClientDisplayfields_localboot();
 			}
 
-			productOnClients_displayFieldsLocalbootProducts = new HashMap<>();
+			productOnClients_displayFieldsLocalbootProducts = new LinkedHashMap<>();
 
 			// key names from de.uib.opsidatamodel.productstate.ProductState
 			productOnClients_displayFieldsLocalbootProducts.put("productId", true);
@@ -7437,7 +7437,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				configuredByService = produceProductOnClientDisplayfields_netboot();
 			}
 
-			productOnClients_displayFieldsNetbootProducts = new HashMap<>();
+			productOnClients_displayFieldsNetbootProducts = new LinkedHashMap<>();
 
 			// key names from de.uib.opsidatamodel.productstate.ProductState
 			productOnClients_displayFieldsNetbootProducts.put("productId", true);
@@ -7539,7 +7539,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// check if have to initialize the server property
 			configuredByService = produceHost_displayFields(configuredByService);
 
-			host_displayFields = new HashMap<>();
+			host_displayFields = new LinkedHashMap<>();
 			host_displayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 			// always shown, we put it here because of ordering and repeat the statement
 			// after the loop if it has been set to false

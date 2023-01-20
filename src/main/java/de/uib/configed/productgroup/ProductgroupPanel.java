@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -431,7 +432,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		comboAggregatedEditing = new JComboBoxToolTip();
 
-		Map<String, String> values = new HashMap<>();
+		Map<String, String> values = new LinkedHashMap<>();
 
 		values.put(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"),
 				Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked.tooltip"));
@@ -765,14 +766,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	protected void setInternalGroupsData() {
 
-		namesAndDescriptionsSave = new HashMap<>();
+		namesAndDescriptionsSave = new LinkedHashMap<>();
 		namesAndDescriptionsSave.put(SAVE_GROUP_ID, NO_GROUP_DESCRIPTION);
 		for (String id : new TreeSet<>(theData.keySet())) {
 
 			namesAndDescriptionsSave.put(id, theData.get(id).get("description"));
 		}
 
-		namesAndDescriptions = new HashMap<>();
+		namesAndDescriptions = new LinkedHashMap<>();
 		namesAndDescriptions.put(NO_GROUP_ID, "");
 		for (String id : new TreeSet<>(theData.keySet())) {
 

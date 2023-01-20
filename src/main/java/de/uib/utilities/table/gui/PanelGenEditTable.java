@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -814,7 +815,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		else if (sortDescriptor == null)
 		// default sorting
 		{
-			sortDescriptor = new HashMap<>();
+			sortDescriptor = new LinkedHashMap<>();
 
 			if (tableModel.getKeyCol() > -1) {
 				try {

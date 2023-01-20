@@ -1,8 +1,8 @@
 package de.uib.configed.gui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -503,7 +503,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		TreeMap<String, Map<String, String>> result = new TreeMap<>();
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {
-			Map<String, String> rowMap = new HashMap<>();
+			LinkedHashMap<String, String> rowMap = new LinkedHashMap<>();
 			rowMap.put(AuditSoftwareXLicencePool.SW_ID, swID);
 			String licpool = persist.getFSoftware2LicencePool(swID);
 

@@ -15,7 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,7 +81,7 @@ public class PanelStateSwitch extends JPanel {
 		if (labels != null && labels.length < values.length)
 			Logging.warning(this, "missing label");
 
-		this.labels = new HashMap<>();
+		this.labels = new LinkedHashMap<>();
 
 		for (int i = 0; i < values.length; i++) {
 			if (labels == null || i > labels.length - 1)
@@ -138,7 +138,7 @@ public class PanelStateSwitch extends JPanel {
 	protected void initComponents() {
 		primaryFont = Globals.defaultFont;
 		ButtonGroup buttonGroup = new ButtonGroup();
-		groupedButtons = new HashMap<>();
+		groupedButtons = new LinkedHashMap<>();
 
 		ImageIcon activatedIcon = Globals.createImageIcon("images/checked_withoutbox.png", "");
 		ImageIcon deactivatedIcon = Globals.createImageIcon("images/checked_empty_withoutbox.png", "");

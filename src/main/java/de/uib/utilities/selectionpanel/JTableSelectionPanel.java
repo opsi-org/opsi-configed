@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -215,7 +216,7 @@ public class JTableSelectionPanel extends JPanel
 
 		comboSearchMode = new JComboBoxToolTip();
 
-		Map<String, String> tooltipsMap = new HashMap<>();
+		Map<String, String> tooltipsMap = new LinkedHashMap<>();
 		tooltipsMap.put(Configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives"),
 				Configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives.tooltip"));
 

@@ -1030,7 +1030,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		String groupId = node.toString();
 
-		Map<String, String> groupData = new HashMap<>();
+		Map<String, String> groupData = new LinkedHashMap<>();
 		groupData.put("groupname", groupId);
 		groupData.put("description", groups.get(groupId).get("description"));
 		HashMap<String, String> labels = new HashMap<>();

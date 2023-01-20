@@ -20,9 +20,9 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -166,7 +166,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		public void produceLabels(int upTo) {
 
-			Map<Integer, JLabel> levelMap = new HashMap<>();
+			Map<Integer, JLabel> levelMap = new LinkedHashMap<>();
 
 			for (int i = min; i <= upTo; i++) {
 				levelMap.put(i, new JLabel("" + i));

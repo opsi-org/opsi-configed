@@ -1,7 +1,7 @@
 package de.uib.opsidatamodel.permission;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -152,9 +152,9 @@ public class UserConfig {
 	public UserConfig(String userName) {
 		Logging.info(this, "create for " + userName);
 		this.username = userName;
-		booleanMap = new HashMap<>();
-		valuesMap = new HashMap<>();
-		possibleValuesMap = new HashMap<>();
+		booleanMap = new LinkedHashMap<>();
+		valuesMap = new LinkedHashMap<>();
+		possibleValuesMap = new LinkedHashMap<>();
 	}
 
 	public String getUserName() {
