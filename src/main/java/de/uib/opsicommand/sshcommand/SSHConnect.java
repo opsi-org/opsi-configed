@@ -305,17 +305,17 @@ public class SSHConnect {
 		return session;
 	}
 
-	public void interruptChannel(Channel _channel) {
-		interruptChannel(_channel, true);
+	public void interruptChannel(Channel channel) {
+		interruptChannel(channel, true);
 	}
 
 	// http://stackoverflow.com/questions/22476506/kill-process-before-disconnecting
-	public void interruptChannel(Channel _channel, boolean kill) {
+	public void interruptChannel(Channel channel, boolean kill) {
 		try {
-			Logging.info(this, "interruptChannel _channel " + _channel);
-			_channel.sendSignal("2");
+			Logging.info(this, "interruptChannel _channel " + channel);
+			channel.sendSignal("2");
 			if (kill)
-				_channel.sendSignal("9");
+				channel.sendSignal("9");
 			Logging.info(this, "interrupted");
 		} catch (Exception e) {
 			Logging.error("Failed interrupting channel", e);

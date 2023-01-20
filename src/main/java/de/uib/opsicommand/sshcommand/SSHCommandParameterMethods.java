@@ -271,60 +271,60 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	private String formatResult(String[] result, String format) {
-		String formated_result = "";
+		String formatedResult = "";
 		String f = format.replace(" ", "");
 		Logging.info(this, "callMethod format f " + f);
 		switch (f) {
 		case "xyz":
 		case "xyz...":
-			formated_result = Arrays.toString(result).replace("[", "").replace(",", " ").replace("]", "");
+			formatedResult = Arrays.toString(result).replace("[", "").replace(",", " ").replace("]", "");
 			break;
 		case "x,y,z":
 		case "x,y,z,...":
-			formated_result = Arrays.toString(result).replace("[", "").replace("]", "");
+			formatedResult = Arrays.toString(result).replace("[", "").replace("]", "");
 			break;
 		case "[x,y,z]":
 		case "[x,y,z,...]":
-			formated_result = Arrays.toString(result);
+			formatedResult = Arrays.toString(result);
 			break;
 
 		case "'x''y''z'":
 		case "'x''y''z''...'":
 			Logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
-			formated_result = createFormattedDataSourceString(result, "'", brackets_none, " ");
+			formatedResult = createFormattedDataSourceString(result, "'", brackets_none, " ");
 			break;
 		case "'x','y','z'":
 		case "'x','y','z','...'":
 			Logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
-			formated_result = createFormattedDataSourceString(result, "'", brackets_none, ",");
+			formatedResult = createFormattedDataSourceString(result, "'", brackets_none, ",");
 			break;
 		case "\"x\"\"y\"\"z\"":
 		case "\"x\"\"y\"\"z\"\"...\"":
 			Logging.info(this, "formatResult switch case [4] " + "\"x\"\"y\"\"z\"\"...\"" + " || " + "\"x\"\"y\"\"z\"");
-			formated_result = createFormattedDataSourceString(result, "\"", brackets_none, " ");
+			formatedResult = createFormattedDataSourceString(result, "\"", brackets_none, " ");
 			break;
 		case "\"x\",\"y\",\"z\"":
 		case "\"x\",\"y\",\"z\",\"...\"":
 			Logging.info(this,
 					"formatResult switch case [5] " + "\"x\",\"y\",\"z\",\"...\"" + " || " + "\"x\",\"y\",\"z\"");
-			formated_result = createFormattedDataSourceString(result, "\"", brackets_none, ",");
+			formatedResult = createFormattedDataSourceString(result, "\"", brackets_none, ",");
 			break;
 		case "['x','y','z']":
 		case "['x','y','z','...']":
 			Logging.info(this, "formatResult switch case [5] " + "['x','y','z']" + " || " + "['x','y','z','...']");
-			formated_result = createFormattedDataSourceString(result, "'", brackets_square, ",");
+			formatedResult = createFormattedDataSourceString(result, "'", brackets_square, ",");
 			break;
 		case "[\"x\",\"y\",\"z\"]":
 		case "[\"x\",\"y\",\"z\",\"...\"]":
 			Logging.info(this,
 					"formatResult switch case [5] " + "[\"x\",\"y\",\"z\"]" + " || " + "[\"x\",\"y\",\"z\",\"...\"]");
-			formated_result = createFormattedDataSourceString(result, "\"", brackets_square, ",");
+			formatedResult = createFormattedDataSourceString(result, "\"", brackets_square, ",");
 			break;
 		default:
 			Logging.warning(this, "cannot format into \"" + format + "\" with \"" + Arrays.toString(result) + "\"");
 			break;
 		}
-		return formated_result;
+		return formatedResult;
 	}
 
 	final String brackets_none = " x ";
@@ -332,16 +332,16 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	private String createFormattedDataSourceString(String[] strArr, String beginEndElement, String beginEndString,
 			String separator) {
-		String formated_result = "!!!Error!!!";
+		String formatedResult = "!!!Error!!!";
 		try {
 			strArr = replaceElements(strArr, beginEndElement);
 			Logging.info(this, "createFormattedDataSourceString[ ]  strArr " + Arrays.toString(strArr));
-			formated_result = createStringOfArray(strArr, beginEndString, separator);
-			Logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formated_result);
+			formatedResult = createStringOfArray(strArr, beginEndString, separator);
+			Logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formatedResult);
 		} catch (Exception e) {
 			Logging.error("Error", e);
 		}
-		return formated_result;
+		return formatedResult;
 	}
 
 	private String[] replaceElements(String[] strArrToReplace, String beginEndOfElement) {

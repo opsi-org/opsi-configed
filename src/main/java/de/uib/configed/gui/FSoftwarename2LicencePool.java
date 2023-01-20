@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
+import de.uib.configed.Configed;
 /**
  * FSoftwarename2LicencePool
  * Copyright:     Copyright (c) 2020
@@ -26,7 +27,6 @@ import javax.swing.event.ListSelectionEvent;
  */
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.configed.type.licences.LicencepoolEntry;
@@ -553,13 +553,13 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SwID);
-						String licensePoolID_old = persist.getFSoftware2LicencePool(swID);
-						String licensePoolID_new = (String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY);
+						String licensePoolIDOld = persist.getFSoftware2LicencePool(swID);
+						String licensePoolIDNew = (String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY);
 
-						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolID_new))
-							setSWInfo(swID, licensePoolID_new);
+						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolIDNew))
+							setSWInfo(swID, licensePoolIDNew);
 
-						return persist.editPool2AuditSoftware(swID, licensePoolID_old, licensePoolID_new);
+						return persist.editPool2AuditSoftware(swID, licensePoolIDOld, licensePoolIDNew);
 
 					}
 

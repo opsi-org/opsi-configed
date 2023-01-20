@@ -266,13 +266,13 @@ public class ExporterToPDF extends ExportTable {
 		BaseColor headerBackground = new BaseColor(150, 150, 150);
 		BaseColor evenBackground = new BaseColor(230, 230, 230);
 		BaseColor oddBackground = new BaseColor(250, 250, 250);
-		Font symbol_font;
+		Font symbolFont;
 		try {
 			BaseFont bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
-			symbol_font = new Font(bf, 11);
+			symbolFont = new Font(bf, 11);
 		} catch (Exception e) {
 			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :" + e);
-			symbol_font = small;
+			symbolFont = small;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();
 		defaultCell.setBackgroundColor(new BaseColor(100, 100, 100));
@@ -299,10 +299,10 @@ public class ExporterToPDF extends ExportTable {
 					}
 					switch (s) {
 					case "∞":
-						value = new PdfPCell(new Phrase("\u221e", symbol_font));
+						value = new PdfPCell(new Phrase("\u221e", symbolFont));
 						break;
 					case "true":
-						value = new PdfPCell(new Phrase("\u221a", symbol_font)); // radic
+						value = new PdfPCell(new Phrase("\u221a", symbolFont)); // radic
 						break;
 					case "false":
 						break;
@@ -367,7 +367,7 @@ public class ExporterToPDF extends ExportTable {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
 
-			java.net.URL opsi_image_URL = Globals.getImageResourceURL("images/opsi_full.png");
+			java.net.URL opsiImageURL = Globals.getImageResourceURL("images/opsi_full.png");
 			try {
 				// add header table with page number
 				table.setWidths(new int[] { 24, 24, 2 });
@@ -383,7 +383,7 @@ public class ExporterToPDF extends ExportTable {
 				table.addCell(cell);
 				table.writeSelectedRows(0, -1, 34, xHeaderTop, writer.getDirectContent());
 				// add footer image
-				document.add(createElement(opsi_image_URL, 25, 25));
+				document.add(createElement(opsiImageURL, 25, 25));
 
 			} catch (DocumentException de) {
 				throw new ExceptionConverter(de);

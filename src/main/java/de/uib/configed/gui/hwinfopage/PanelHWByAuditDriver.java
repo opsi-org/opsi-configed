@@ -9,9 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.utilities.swing.JTextShowField;
 
 public class PanelHWByAuditDriver extends JPanel {
@@ -175,12 +175,12 @@ public class PanelHWByAuditDriver extends JPanel {
 		return new String(chars);
 	}
 
-	public void setByAuditFields(String vendorStringCOMPUTER_SYSTEM, String vendorStringBASE_BOARD, String modelString,
+	public void setByAuditFields(String vendorStringComputerSystem, String vendorStringBaseBoard, String modelString,
 			String productString) {
-		fieldVendor.setText(vendorStringCOMPUTER_SYSTEM);
+		fieldVendor.setText(vendorStringComputerSystem);
 		fieldLabel.setText(modelString);
 
-		fieldVendor2.setText(vendorStringBASE_BOARD);
+		fieldVendor2.setText(vendorStringBaseBoard);
 		fieldLabel2.setText(productString);
 
 		if (fDriverUpload != null)

@@ -213,12 +213,12 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 			user = "";
 	}
 
-	public void setVerbosity(int v_sum) {
+	public void setVerbosity(int vSum) {
 		String v = "";
-		for (int i = 0; i < v_sum; i++)
+		for (int i = 0; i < vSum; i++)
 			v = v + "v";
 		verbosity = " -" + v + " ";
-		if (v_sum == 0)
+		if (vSum == 0)
 			verbosity = "";
 	}
 

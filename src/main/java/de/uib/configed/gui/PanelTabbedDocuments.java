@@ -220,9 +220,9 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	private void saveAllToZipFile(String pn) {
 		ZipOutputStream out = null;
 
-		byte[] CRLF = new byte[2];
-		CRLF[0] = '\r';
-		CRLF[1] = '\n';
+		byte[] crlf = new byte[2];
+		crlf[0] = '\r';
+		crlf[1] = '\n';
 
 		byte[] buffer;
 		try {
@@ -239,7 +239,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 						try {
 							buffer = textPanes[logNo].lines[i].getBytes();
 							out.write(buffer, 0, textPanes[logNo].lines[i].length());
-							out.write(CRLF, 0, 2);
+							out.write(crlf, 0, 2);
 						} catch (IOException ex) {
 							Logging.error("Error writing zip file: " + pn + "\n --- " + ex);
 						}
@@ -262,9 +262,9 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		ZipOutputStream out = null;
 
-		byte[] CRLF = new byte[2];
-		CRLF[0] = '\r';
-		CRLF[1] = '\n';
+		byte[] crlf = new byte[2];
+		crlf[0] = '\r';
+		crlf[1] = '\n';
 		byte[] buffer;
 		try {
 			out = new ZipOutputStream(new FileOutputStream(pn));
@@ -277,7 +277,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 					buffer = lines[i].getBytes();
 					out.write(buffer, 0, lines[i].length());
-					out.write(CRLF, 0, 2);
+					out.write(crlf, 0, 2);
 				} catch (IOException ex) {
 					Logging.error("Error writing zip file: " + fn + "\n --- " + ex);
 				}

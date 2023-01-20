@@ -1,7 +1,7 @@
 package de.uib.opsicommand.sshcommand;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHPackageManagerInstallParameterDialog;
@@ -112,9 +112,9 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 			depot = "";
 	}
 
-	public void setVerbosity(int v_sum) {
+	public void setVerbosity(int vSum) {
 		String v = "v";
-		for (int i = 0; i < v_sum; i++)
+		for (int i = 0; i < vSum; i++)
 			v = v + "v";
 		verbosity = " -" + v + " ";
 	}
@@ -127,8 +127,8 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 		return !opsiproduct.equals("");
 	}
 
-	public void setProperty(boolean keep_depot_defaults) {
-		if (keep_depot_defaults)
+	public void setProperty(boolean keepDepotDefaults) {
+		if (keepDepotDefaults)
 			property = " -p keep ";
 		else
 			property = " -p package ";

@@ -113,11 +113,11 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	/**
 	 * Sets the given commandlist
 	 * 
-	 * @param c_list: LinkedList<String>
+	 * @param cList: List<String>
 	 **/
-	public void setCommands(List<String> c_list) {
-		if (c_list != null) {
-			for (String c : c_list) {
+	public void setCommands(List<String> cList) {
+		if (cList != null) {
+			for (String c : cList) {
 
 				SSHCommand sshc = new EmptyCommand(getId(), c, getMenuText(), needSudo());
 				sshCommand.add(sshc);

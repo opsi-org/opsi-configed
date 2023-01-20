@@ -142,14 +142,15 @@ public class DependenciesTreeModel {
 	 */
 	private class Graph {
 
-		private final int V;
+		private final int NUMBER_OF_ELEMENTS;
 		private final List<List<Integer>> adj;
 
-		public Graph(int V) {
-			this.V = V;
-			adj = new ArrayList<>(V);
+		public Graph(int numberOfElements) {
+			NUMBER_OF_ELEMENTS = numberOfElements;
 
-			for (int i = 0; i < V; i++)
+			adj = new ArrayList<>(NUMBER_OF_ELEMENTS);
+
+			for (int i = 0; i < NUMBER_OF_ELEMENTS; i++)
 				adj.add(new LinkedList<>());
 		}
 
@@ -205,7 +206,7 @@ public class DependenciesTreeModel {
 
 			int product = productMap.get(node.toString());
 
-			for (int i = 0; i < V; i++) {
+			for (int i = 0; i < NUMBER_OF_ELEMENTS; i++) {
 				if (adj.get(i).contains(product)) {
 					String productId = productList.get(i);
 

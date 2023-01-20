@@ -3971,6 +3971,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds) {
 
 		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Logging.getStrings(clientIds));
@@ -4016,6 +4017,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
 		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Logging.getStrings(clientIds));
 
@@ -4482,7 +4484,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return;
 
 		productproperties = new HashMap<>();
-		Map<String, Map<String, Map<String, Object>>> productproperties_retrieved = new HashMap<>();
+		Map<String, Map<String, Map<String, Object>>> productPropertiesRetrieved = new HashMap<>();
 
 		dataStub.fillProductPropertyStates(clientNames);
 		List<Map<String, Object>> retrieved = dataStub.getProductPropertyStates();
@@ -4494,11 +4496,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			productsWithProductPropertyStates.add((String) map.get("productId"));
 
-			Map<String, Map<String, Object>> productproperties1Client = productproperties_retrieved.get(host);
+			Map<String, Map<String, Object>> productproperties1Client = productPropertiesRetrieved.get(host);
 
 			if (productproperties1Client == null) {
 				productproperties1Client = new HashMap<>();
-				productproperties_retrieved.put(host, productproperties1Client);
+				productPropertiesRetrieved.put(host, productproperties1Client);
 			}
 
 			Map<String, Object> properties = productproperties1Client.get(map.get("productId"));
@@ -4515,16 +4517,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				" retrieveProductproperties  productsWithProductPropertyStates " + productsWithProductPropertyStates);
 
 		Map<String, ConfigName2ConfigValue> defaultProperties = getDefaultProductProperties(theDepot);
-		Map<String, Map<String, Object>> defaultProperties_retrieved = new HashMap<>();
+		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>();
 		if (defaultProperties == null) {
 			// should not occur
 		} else {
 			for (Entry<String, ConfigName2ConfigValue> defaultProperty : defaultProperties.entrySet()) {
-				defaultProperties_retrieved.put(defaultProperty.getKey(), defaultProperty.getValue());
+				defaultPropertiesRetrieved.put(defaultProperty.getKey(), defaultProperty.getValue());
 			}
 		}
 
-		Set<String> products = defaultProperties_retrieved.keySet();
+		Set<String> products = defaultPropertiesRetrieved.keySet();
 
 		productsHavingSpecificProperties = new TreeSet<>(products);
 
@@ -4532,15 +4534,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			HashMap<String, ConfigName2ConfigValue> productproperties1Client = new HashMap<>();
 			productproperties.put(host, productproperties1Client);
 
-			Map<String, Map<String, Object>> retrievedProperties = productproperties_retrieved.get(host);
+			Map<String, Map<String, Object>> retrievedProperties = productPropertiesRetrieved.get(host);
 			if (retrievedProperties == null) {
-				retrievedProperties = defaultProperties_retrieved;
+				retrievedProperties = defaultPropertiesRetrieved;
 				productsHavingSpecificProperties.clear();
 			}
 
 			for (String product : products) {
 				Map<String, Object> retrievedProperties1Product = retrievedProperties.get(product);
-				Map<String, Object> properties1Product = new HashMap<>(defaultProperties_retrieved.get(product)); // complete set of default values
+				Map<String, Object> properties1Product = new HashMap<>(defaultPropertiesRetrieved.get(product)); // complete set of default values
 
 				if (retrievedProperties1Product == null) {
 					productsHavingSpecificProperties.remove(product);
@@ -6480,7 +6482,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public String editPool2AuditSoftware(String softwareID, String licensePoolID_old, String licencePoolID_new)
+	public String editPool2AuditSoftware(String softwareID, String licensePoolIDOld, String licencePoolIDNew)
 	// we have got a SW from software table, therefore we do not serve the unknown
 	// software list
 	{
@@ -6494,13 +6496,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		if (withLicenceManagement) {
 
-			if (licensePoolID_old != null
-					&& !licensePoolID_old.equals(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL)) {
+			if (licensePoolIDOld != null && !licensePoolIDOld.equals(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL)) {
 				// there was an association, we delete it)
 
 				List<String> swIds = new ArrayList<>();
 				swIds.add(softwareID);
-				ok = removeAssociations(licensePoolID_old, swIds);
+				ok = removeAssociations(licensePoolIDOld, swIds);
 
 				if (!ok) {
 					Logging.warning(this, "editPool2AuditSoftware " + " failed");
@@ -6508,7 +6509,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			}
 
-			if (FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL.equals(licencePoolID_new)) {
+			if (FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL.equals(licencePoolIDNew)) {
 				// nothing to do, we deleted the entry
 				ok = true;
 			}
@@ -6519,7 +6520,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				Map<String, Object> item;
 
 				Map<String, String> swMap = AuditSoftwareXLicencePool.produceMapFromSWident(softwareID);
-				swMap.put(LicencepoolEntry.ID_SERVICE_KEY, licencePoolID_new);
+				swMap.put(LicencepoolEntry.ID_SERVICE_KEY, licencePoolIDNew);
 
 				item = createNOMitem("AuditSoftwareToLicensePool");
 				item.putAll(swMap);
@@ -6548,16 +6549,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				if (fSoftware2LicencePool != null) {
 					Logging.info(this,
 							"fSoftware2LicencePool.get( softwareID ) " + fSoftware2LicencePool.get(softwareID));
-					fSoftware2LicencePool.put(softwareID, licencePoolID_new);
+					fSoftware2LicencePool.put(softwareID, licencePoolIDNew);
 				}
 
-				if (fLicencePool2SoftwareList.get(licencePoolID_new) == null)
-					fLicencePool2SoftwareList.put(licencePoolID_new, new ArrayList<>());
+				if (fLicencePool2SoftwareList.get(licencePoolIDNew) == null)
+					fLicencePool2SoftwareList.put(licencePoolIDNew, new ArrayList<>());
 
-				Logging.info(this, "fLicencePool2SoftwareList.get( licencePoolID_new ) "
-						+ fLicencePool2SoftwareList.get(licencePoolID_new));
+				Logging.info(this, "fLicencePool2SoftwareList.get( licencePoolIDNew ) "
+						+ fLicencePool2SoftwareList.get(licencePoolIDNew));
 
-				fLicencePool2SoftwareList.get(licencePoolID_new).add(softwareID);
+				fLicencePool2SoftwareList.get(licencePoolIDNew).add(softwareID);
 
 			}
 
@@ -6587,12 +6588,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// side effects of this method: rowsLicencesReconciliation
 		Logging.info(this, "produceLicenceStatistics === ");
 
-		Map<String, List<String>> licencePool2listOfUsingClients_SWInvent = new HashMap<>();
+		Map<String, List<String>> licencePool2listOfUsingClientsSWInvent = new HashMap<>();
 
-		Map<String, Set<String>> licencePool2setOfUsingClients_SWInvent = new HashMap<>();
+		Map<String, Set<String>> licencePool2setOfUsingClientsSWInvent = new HashMap<>();
 
 		// result
-		Map<String, Integer> licencePoolUsagecount_SWInvent = new HashMap<>();
+		Map<String, Integer> licencePoolUsagecountSWInvent = new HashMap<>();
 
 		fillClient2Software(getHostInfoCollections().getOpsiHostNames()); // now we have audit software on client data
 																			// for all clients
@@ -6641,17 +6642,17 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				if (licencePoolId != null) {
 
-					List<String> listOfUsingClients = licencePool2listOfUsingClients_SWInvent.get(licencePoolId);
-					Set<String> setOfUsingClients = licencePool2setOfUsingClients_SWInvent.get(licencePoolId);
+					List<String> listOfUsingClients = licencePool2listOfUsingClientsSWInvent.get(licencePoolId);
+					Set<String> setOfUsingClients = licencePool2setOfUsingClientsSWInvent.get(licencePoolId);
 
 					if (listOfUsingClients == null) {
 						listOfUsingClients = new ArrayList<>();
-						licencePool2listOfUsingClients_SWInvent.put(licencePoolId, listOfUsingClients);
+						licencePool2listOfUsingClientsSWInvent.put(licencePoolId, listOfUsingClients);
 					}
 
 					if (setOfUsingClients == null) {
 						setOfUsingClients = new HashSet<>();
-						licencePool2setOfUsingClients_SWInvent.put(licencePoolId, setOfUsingClients);
+						licencePool2setOfUsingClientsSWInvent.put(licencePoolId, setOfUsingClients);
 					}
 
 					Logging.debug(this,
@@ -6669,7 +6670,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						Logging.warning(" swId2clients.get(softwareIdent) -" + ex);
 					}
 
-					licencePoolUsagecount_SWInvent.put(licencePoolId, setOfUsingClients.size());
+					licencePoolUsagecountSWInvent.put(licencePoolId, setOfUsingClients.size());
 
 					for (String client : swId2clients.get(softwareIdent)) {
 						String pseudokey = Globals.pseudokey(new String[] { client, licencePoolId });
@@ -7574,11 +7575,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
-	private Object produceConfigEntry(String NOMtype, String key, Object value, String description) {
-		return produceConfigEntry(NOMtype, key, value, description, true);
+	private Object produceConfigEntry(String nomType, String key, Object value, String description) {
+		return produceConfigEntry(nomType, key, value, description, true);
 	}
 
-	private Object produceConfigEntry(String NOMtype, String key, Object value, String description, boolean editable) {
+	private Object produceConfigEntry(String nomType, String key, Object value, String description, boolean editable) {
 		List possibleValues = new ArrayList<>();
 		possibleValues.add(value);
 
@@ -7589,7 +7590,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		// create config for service
 		Map<String, Object> item;
 
-		item = createNOMitem(NOMtype);
+		item = createNOMitem(nomType);
 		item.put("ident", key);
 		item.put("description", description);
 		item.put("defaultValues", Executioner.jsonArray(defaultValues));

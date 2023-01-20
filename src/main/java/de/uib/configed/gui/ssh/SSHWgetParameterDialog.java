@@ -17,9 +17,9 @@ import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
@@ -42,7 +42,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JTextField jTextFieldURL;
 	private JTextField jTextFieldDir;
 	private JComboBox<String> jComboBoxDir;
-	private JComboBox jComboBoxVerbosity;
+	private JComboBox<Integer> jComboBoxVerbosity;
 	private JTextField jTextFieldFreeInput;
 
 	CommandWget commandWget = new CommandWget();
@@ -265,34 +265,45 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		int PREF = GroupLayout.PREFERRED_SIZE;
-		int MAX = Short.MAX_VALUE;
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup()
 
 				.addGap(Globals.GAP_SIZE)
 
-				.addGroup(inputPanelLayout.createParallelGroup().addGroup(inputPanelLayout.createSequentialGroup()
-						.addGroup(inputPanelLayout.createParallelGroup().addComponent(jLabelURL, PREF, PREF, PREF)
-								.addComponent(jLabelDir, PREF, PREF, PREF)
-								.addComponent(jLabelVerbosity, PREF, PREF, PREF)
-								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF,
-										PREF)
-								.addComponent(jLabelFreeInput, PREF, PREF, PREF))
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(inputPanelLayout.createParallelGroup()
-								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jTextFieldURL, PREF,
-										PREF, Short.MAX_VALUE))
-								.addGroup(inputPanelLayout.createSequentialGroup()
-										.addComponent(jComboBoxDir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												Short.MAX_VALUE)
-										.addComponent(jButtonSearchDir, PREF, PREF, PREF))
-								.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-										GroupLayout.Alignment.LEADING, PREF, PREF, PREF)
-								.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Short.MAX_VALUE)))
-						.addComponent(wgetAuthPanel, PREF, PREF, MAX))
+				.addGroup(inputPanelLayout.createParallelGroup()
+						.addGroup(inputPanelLayout.createSequentialGroup()
+								.addGroup(inputPanelLayout
+										.createParallelGroup()
+										.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(
+												wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(inputPanelLayout.createParallelGroup()
+										.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jTextFieldURL,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												Short.MAX_VALUE))
+										.addGroup(inputPanelLayout.createSequentialGroup()
+												.addComponent(jComboBoxDir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+														Short.MAX_VALUE)
+												.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING,
+												Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+										.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+												GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												Short.MAX_VALUE)))
+						.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
 				.addGap(Globals.GAP_SIZE));
 
 		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
@@ -319,7 +330,8 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
 								GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
-				.addComponent(wgetAuthPanel, PREF, PREF, PREF)
+				.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)

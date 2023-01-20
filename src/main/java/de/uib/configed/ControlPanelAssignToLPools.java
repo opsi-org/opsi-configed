@@ -950,10 +950,10 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	}
 
 	public void setSoftwareShowAllMeans(SoftwareShowAllMeans meaning) {
-		SoftwareShowAllMeans softwareShowAllMeans_old = softwareShowAllMeans;
+		SoftwareShowAllMeans softwareShowAllMeansOld = softwareShowAllMeans;
 		softwareShowAllMeans = meaning;
 
-		if (softwareShowAllMeans_old != softwareShowAllMeans) {
+		if (softwareShowAllMeansOld != softwareShowAllMeans) {
 			boolean tableChangeAware = thePanel.panelRegisteredSoftware.isAwareOfTableChangedListener();
 			thePanel.panelRegisteredSoftware.setAwareOfTableChangedListener(false);
 

@@ -823,8 +823,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract boolean addWindowsSoftwareIds2LPool(String licensePoolId, List<String> softwareToAssign);
 
-	public abstract String editPool2AuditSoftware(String softwareID, String licensePoolID_old,
-			String licensePoolID_new);
+	public abstract String editPool2AuditSoftware(String softwareID, String licensePoolIDOld, String licensePoolIDNew);
 
 	public abstract Map<String, LicenceStatisticsRow> getLicenceStatistics();
 

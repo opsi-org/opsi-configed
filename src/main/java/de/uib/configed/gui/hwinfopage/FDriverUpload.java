@@ -3,9 +3,9 @@ package de.uib.configed.gui.hwinfopage;
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.logging.Logging;
@@ -47,11 +47,11 @@ public class FDriverUpload extends SecondaryFrame {
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(panelDriverUpload, 100,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		Containership cs_all = new Containership(getContentPane());
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+		Containership containerShipAll = new Containership(getContentPane());
+		containerShipAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
 				JPanel.class);
 
-		cs_all.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
+		containerShipAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
 				javax.swing.text.JTextComponent.class);
 
 	}

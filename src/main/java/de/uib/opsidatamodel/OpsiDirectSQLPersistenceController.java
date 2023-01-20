@@ -158,7 +158,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	public void cleanUpAuditSoftware() {
 		java.sql.Connection sqlConn = DbConnect.getConnection();
 
-		TreeMap<String, Map<String, String>> rowsSOFTWARE_ON_CLIENTS = new TreeMap<>();
+		TreeMap<String, Map<String, String>> rowsSoftwareOnClients = new TreeMap<>();
 
 		String columns = SWAuditClientEntry.DB_COLUMN_NAMES.toString();
 		columns = columns.substring(1);
@@ -184,7 +184,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.LANGUAGE)),
 								rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE)) });
 
-				if (rowsSOFTWARE_ON_CLIENTS.get(ident) == null) {
+				if (rowsSoftwareOnClients.get(ident) == null) {
 					Map<String, String> rowmap = new HashMap<>();
 
 					rowmap.put("name", rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.NAME)));
@@ -195,7 +195,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 					rowmap.put("architecture",
 							rs.getString(SWAuditClientEntry.DB_COLUMNS.get(SWAuditEntry.ARCHITECTURE)));
 
-					rowsSOFTWARE_ON_CLIENTS.put(ident, rowmap);
+					rowsSoftwareOnClients.put(ident, rowmap);
 
 					if (logNext) {
 						Logging.info(this,
@@ -207,7 +207,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 			}
 			Logging.info(this, "retrieveSoftwareAuditOnClients, entries read " + counter);
-			Logging.info(this, "retrieveSoftwareAuditOnClients, idents  " + rowsSOFTWARE_ON_CLIENTS.size());
+			Logging.info(this, "retrieveSoftwareAuditOnClients, idents  " + rowsSoftwareOnClients.size());
 
 		}
 
@@ -215,7 +215,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			Logging.error("cleanUpAuditSoftware sql Error " + e.toString());
 		}
 
-		java.util.Set<String> swIdentsOnClients = rowsSOFTWARE_ON_CLIENTS.keySet();
+		java.util.Set<String> swIdentsOnClients = rowsSoftwareOnClients.keySet();
 
 		TreeMap<String, Map<String, String>> rowsSOFTWARE = new TreeMap<>();
 

@@ -12,8 +12,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -223,7 +223,7 @@ public abstract class ExportTable {
 						if (option == JOptionPane.CANCEL_OPTION)
 							filename = null;
 					}
-				} catch (Exception fc_e) {
+				} catch (Exception exception) {
 					Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
 				}
 			}

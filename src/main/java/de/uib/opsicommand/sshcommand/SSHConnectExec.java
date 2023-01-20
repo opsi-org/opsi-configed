@@ -167,7 +167,7 @@ public class SSHConnectExec extends SSHConnect {
 				multiDialog = SSHConnectionExecDialog.getInstance();
 			}
 			outputDialog = multiDialog;
-			final SSHConnectionExecDialog final_dia = multiDialog;
+			final SSHConnectionExecDialog finalDialog = multiDialog;
 
 			String defaultCommandsString = "";
 			int anzahlCommands = ((SSHCommandTemplate) commands).getOriginalCommands().size();
@@ -184,12 +184,13 @@ public class SSHConnectExec extends SSHConnect {
 			}
 			try {
 
-				final_dia.appendLater("\n\n\n" + new Date());
-				final_dia.appendLater("\n[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim()
-						+ "]\n" + defaultCommandsString + "\n\n");
+				finalDialog.appendLater("\n\n\n" + new Date());
+				finalDialog
+						.appendLater("\n[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim()
+								+ "]\n" + defaultCommandsString + "\n\n");
 				if (SSHCommandFactory.sshAlwaysExecInBackground) {
 					multiDialog.setVisible(false);
-					final_dia.setVisible(false);
+					finalDialog.setVisible(false);
 				}
 
 				final SSHMultiCommand commandToExec = commands;
@@ -201,8 +202,8 @@ public class SSHConnectExec extends SSHConnect {
 				FOUND_ERROR = false;
 
 				if (!SSHCommandFactory.sshAlwaysExecInBackground) {
-					final_dia.setLocationRelativeTo(Globals.mainFrame);
-					final_dia.setVisible(true);
+					finalDialog.setLocationRelativeTo(Globals.mainFrame);
+					finalDialog.setVisible(true);
 				}
 
 				pmethodHandler.canceled = false;
@@ -216,17 +217,17 @@ public class SSHConnectExec extends SSHConnect {
 						if (!pmethodHandler.canceled) {
 							if (co instanceof SSHSFTPCommand) {
 								SSHConnectSCP sftp = new SSHConnectSCP(commandInfoName);
-								sftp.exec(co, withGui, final_dia, sequential, rememberPw, commandList.indexOf(co) + 1,
+								sftp.exec(co, withGui, finalDialog, sequential, rememberPw, commandList.indexOf(co) + 1,
 										commandList.size());
 							} else
-								exec(co, withGui, final_dia, sequential, rememberPw, commandList.indexOf(co) + 1,
+								exec(co, withGui, finalDialog, sequential, rememberPw, commandList.indexOf(co) + 1,
 										commandList.size());
 						} else
 							foundError = true;
 					}
 				}
 				if (foundError) {
-					final_dia.appendLater("[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist")
+					finalDialog.appendLater("[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist")
 							+ "]     " + "" + Configed.getResourceValue("SSHConnection.Exec.exitClosed"));
 				}
 

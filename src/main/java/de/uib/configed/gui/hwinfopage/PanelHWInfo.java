@@ -27,9 +27,9 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
 import de.uib.utilities.logging.Logging;
@@ -477,12 +477,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return;
 		}
 
-		List hwInfo_special = (List) hwInfo.get(SCANPROPERTYNAME);
+		List hwInfoSpecial = (List) hwInfo.get(SCANPROPERTYNAME);
 		String rootname = "";
 
-		if (hwInfo_special != null && !hwInfo_special.isEmpty() && hwInfo_special.get(0) != null
-				&& ((Map) hwInfo_special.get(0)).get(SCANTIME) != null) {
-			rootname = "Scan " + (String) ((Map) hwInfo_special.get(0)).get(SCANTIME);
+		if (hwInfoSpecial != null && !hwInfoSpecial.isEmpty() && hwInfoSpecial.get(0) != null
+				&& ((Map) hwInfoSpecial.get(0)).get(SCANTIME) != null) {
+			rootname = "Scan " + (String) ((Map) hwInfoSpecial.get(0)).get(SCANTIME);
 		}
 		title = rootname;
 
@@ -669,30 +669,30 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			Object child = treeModel.getChild(treeModel.getRoot(), i);
 			// get ArrayList
 			List al = (List) hwInfo.get(hwClassMapping.get(child.toString()));
-			Iterator<Map> al_itr = al.iterator();
+			Iterator<Map> alIterator = al.iterator();
 
 			boolean first = true;
-			while (al_itr.hasNext()) {
-				Map hm = al_itr.next();
+			while (alIterator.hasNext()) {
+				Map hm = alIterator.next();
 				if (first) { // second column, first element
 					childValues = new ArrayList<>();
 					childValues.add(child.toString()); // first column
 					childValues.add(hm.get("displayName").toString());
-					Iterator hm_iter = hm.keySet().iterator();
+					Iterator hmIterator = hm.keySet().iterator();
 					boolean firstValue = true;
-					while (hm_iter.hasNext()) {
-						String hm_key = (String) hm_iter.next();
-						if (!hm_key.equals("displayName") && !hm_key.equals("type")) { //
+					while (hmIterator.hasNext()) {
+						String hmKey = (String) hmIterator.next();
+						if (!hmKey.equals("displayName") && !hmKey.equals("type")) { //
 							if (firstValue) {
-								childValues.add(hwOpsiToUI.get(hm_key));
-								childValues.add(hm.get(hm_key));
+								childValues.add(hwOpsiToUI.get(hmKey));
+								childValues.add(hm.get(hmKey));
 								firstValue = false;
 							} else {
 								childValues = new ArrayList<>();
 								childValues.add("");
 								childValues.add("");
-								childValues.add(hwOpsiToUI.get(hm_key));
-								childValues.add(hm.get(hm_key));
+								childValues.add(hwOpsiToUI.get(hmKey));
+								childValues.add(hm.get(hmKey));
 							}
 							tableModelComplete.addRow(childValues.toArray());
 						}
@@ -703,21 +703,21 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					childValues = new ArrayList<>();
 					childValues.add(""); // first column empty
 					childValues.add(hm.get("displayName").toString());
-					Iterator hm_iter = hm.keySet().iterator();
+					Iterator hmIterator = hm.keySet().iterator();
 					boolean firstValue = true;
-					while (hm_iter.hasNext()) {
-						String hm_key = (String) hm_iter.next();
-						if (!hm_key.equals("displayName") && !hm_key.equals("type")) {
+					while (hmIterator.hasNext()) {
+						String hmKey = (String) hmIterator.next();
+						if (!hmKey.equals("displayName") && !hmKey.equals("type")) {
 							if (firstValue) {
 								firstValue = false;
-								childValues.add(hwOpsiToUI.get(hm_key));
-								childValues.add(hm.get(hm_key));
+								childValues.add(hwOpsiToUI.get(hmKey));
+								childValues.add(hm.get(hmKey));
 							} else {
 								childValues = new ArrayList<>();
 								childValues.add("");
 								childValues.add("");
-								childValues.add(hwOpsiToUI.get(hm_key));
-								childValues.add(hm.get(hm_key));
+								childValues.add(hwOpsiToUI.get(hmKey));
+								childValues.add(hm.get(hmKey));
 							}
 							tableModelComplete.addRow(childValues.toArray());
 						}

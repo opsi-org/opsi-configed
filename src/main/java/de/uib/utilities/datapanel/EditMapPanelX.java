@@ -253,7 +253,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					}
 				};
 
-				ActionListener listenerForRemoval_REMOVE_SPECIFIC = actionEvent -> {
+				ActionListener listenerForRemovalRemoveSpecific = actionEvent -> {
 					Logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 
@@ -272,7 +272,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					}
 				};
 
-				ActionListener listenerForRemoval_SET_DEFAULT_AS_SPECIFIC = actionEvent -> {
+				ActionListener listenerForRemovalSetDefaultAsSpecific = actionEvent -> {
 					Logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 
@@ -300,13 +300,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				popupItemDeleteEntry1 = new JMenuItemFormatted(
 						removingSpecificValuesPropertyHandler.getRemovalMenuText(),
 						Globals.createImageIcon("images/no-value.png", ""));
-				popupItemDeleteEntry1.addActionListener(listenerForRemoval_REMOVE_SPECIFIC);
+				popupItemDeleteEntry1.addActionListener(listenerForRemovalRemoveSpecific);
 
 				popupNoEditOptions.add(popupItemDeleteEntry1);
 
 				popupItemDeleteEntry2 = new JMenuItemFormatted(settingDefaultValuesPropertyHandler.getRemovalMenuText(),
 						Globals.createImageIcon("images/fixed-value.png", ""));
-				popupItemDeleteEntry2.addActionListener(listenerForRemoval_SET_DEFAULT_AS_SPECIFIC);
+				popupItemDeleteEntry2.addActionListener(listenerForRemovalSetDefaultAsSpecific);
 
 				popupNoEditOptions.add(popupItemDeleteEntry2);
 

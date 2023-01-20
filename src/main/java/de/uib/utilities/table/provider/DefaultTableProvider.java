@@ -130,13 +130,13 @@ public class DefaultTableProvider implements TableProvider {
 
 	// yields a column as ordered List
 	@Override
-	public List<String> getOrderedColumn(int col, boolean empty_allowed) {
+	public List<String> getOrderedColumn(int col, boolean emptyAllowed) {
 
 		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsCopy.size(); row++) {
 			String val = (String) rowsCopy.get(row).get(col);
 
-			if (empty_allowed || val != null && !val.equals("")) {
+			if (emptyAllowed || val != null && !val.equals("")) {
 
 				set.add((String) rowsCopy.get(row).get(col));
 			}
