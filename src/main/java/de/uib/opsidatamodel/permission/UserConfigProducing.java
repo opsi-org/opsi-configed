@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.Executioner;
 import de.uib.opsidatamodel.PersistenceController;
@@ -568,11 +568,11 @@ public class UserConfigProducing {
 
 		if (prototypeObligatory) {
 			possibleValuesHostgroup = prototypeConfig.getPossibleValues(partkey);
-			currentPossibleValuesHostgroupListed = new LinkedHashSet<>(possibleValuesHostgroup);
+			currentPossibleValuesHostgroupListed = new HashSet<>(possibleValuesHostgroup);
 		} else {
 			Set<Object> posVals = new TreeSet<>(existingHostgroups);
 			posVals.addAll(oldPossibleValuesHostgroup);
-			currentPossibleValuesHostgroupListed = new LinkedHashSet<>(posVals);
+			currentPossibleValuesHostgroupListed = new HashSet<>(posVals);
 
 		}
 
