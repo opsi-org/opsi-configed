@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -258,7 +258,7 @@ public class LicensingInfoMap {
 	}
 
 	private Set<String> produceCustomerIDSet() {
-		Set<String> customerIDs = new HashSet<>();
+		Set<String> customerIDs = new LinkedHashSet<>();
 
 		try {
 			JSONArray licenses = jOResult.getJSONArray(LICENSES);
@@ -276,7 +276,7 @@ public class LicensingInfoMap {
 	}
 
 	private Set<String> produceCustomerNameSet() {
-		Set<String> customerNames = new HashSet<>();
+		Set<String> customerNames = new LinkedHashSet<>();
 
 		try {
 
@@ -488,9 +488,9 @@ public class LicensingInfoMap {
 		if (futureOverLimitModuleList == null)
 			futureOverLimitModuleList = new ArrayList<>();
 		if (allCloseToLimitModules == null)
-			allCloseToLimitModules = new HashSet<>();
+			allCloseToLimitModules = new LinkedHashSet<>();
 		if (allOverLimitModules == null)
-			allOverLimitModules = new HashSet<>();
+			allOverLimitModules = new LinkedHashSet<>();
 
 		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
 
