@@ -386,9 +386,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private boolean filterClientList = false;
 
 	public static String host = null;
-	public static String USER = null;
+	public static String user = null;
 	public static String password = null;
-	public static String SSHKEY = null;
+	public static String sshKey = null;
 	public static String sshKeyPass = null;
 
 	public enum EditingTarget {
@@ -400,22 +400,22 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public ConfigedMain(String host, String user, String password) {
 		if (host == null) {
-			host = host;
+			this.host = host;
 		}
-		if (USER == null) {
-			USER = user;
+		if (user == null) {
+			this.user = user;
 		}
 		if (password == null) {
-			password = password;
+			this.password = password;
 		}
-		SSHKEY = Configed.sshkey;
+		sshKey = Configed.sshkey;
 		sshKeyPass = Configed.sshkeypassphrase;
 
 		SSHConnectionInfo.getInstance().setHost(host);
-		SSHConnectionInfo.getInstance().setUser(USER);
+		SSHConnectionInfo.getInstance().setUser(user);
 		SSHConnectionInfo.getInstance().setPassw(password);
-		SSHConnectionInfo.getInstance().useKeyfile(SSHKEY != null, SSHKEY != null ? SSHKEY : "",
-				SSHKEY != null ? sshKeyPass : "");
+		SSHConnectionInfo.getInstance().useKeyfile(sshKey != null, sshKey != null ? sshKey : "",
+				sshKey != null ? sshKeyPass : "");
 		Logging.registLogEventObserver(this);
 	}
 
@@ -1499,8 +1499,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (host != null && !host.equals("")) {
 			dpass.setHost(host);
 		}
-		if (USER != null) {
-			dpass.setUser(USER);
+		if (user != null) {
+			dpass.setUser(user);
 		}
 		if (password != null) {
 			dpass.setPassword(password);
@@ -1516,7 +1516,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// This must be called last, so that  loading frame for connection is called last
 		// and on top of the login-frame
-		if ((host != null && USER != null && password != null)) {
+		if ((host != null && user != null && password != null)) {
 			// Auto login
 			Logging.info(this, "start with given credentials");
 

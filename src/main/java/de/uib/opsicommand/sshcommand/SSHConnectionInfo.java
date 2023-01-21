@@ -122,7 +122,7 @@ public class SSHConnectionInfo {
 			setPort(SSHConnect.PORT_SSH);
 
 		if (getUser() == null)
-			setUser(ConfigedMain.USER);
+			setUser(ConfigedMain.user);
 
 		if ((getPassw() == null) && (!usesKeyfile()))
 			setPassw(ConfigedMain.password);

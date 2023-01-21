@@ -68,20 +68,20 @@ public class UserConfigProducing {
 		java.util.Set<String> roleparts = new TreeSet<>();
 		produceRoleAndUserParts(userparts, roleparts);
 
-		if (ConfigedMain.USER == null) {
-			ConfigedMain.USER = Configed.user;
+		if (ConfigedMain.user == null) {
+			ConfigedMain.user = Configed.user;
 		}
 
-		Logging.info(this, "we have got logged in user " + ConfigedMain.USER + " and configure based on it "
+		Logging.info(this, "we have got logged in user " + ConfigedMain.user + " and configure based on it "
 				+ notUsingDefaultUser);
 
-		if (notUsingDefaultUser && ConfigedMain.USER != null && !userparts.contains(ConfigedMain.USER)) {
+		if (notUsingDefaultUser && ConfigedMain.user != null && !userparts.contains(ConfigedMain.user)) {
 			Logging.info(this, "supply logged in user");
-			userparts.add(ConfigedMain.USER);
-			String propertyclass = UserConfig.START_USER_KEY + ConfigedMain.USER + '}';
+			userparts.add(ConfigedMain.user);
+			String propertyclass = UserConfig.START_USER_KEY + ConfigedMain.user + '}';
 
 			if (!PersistenceController.PROPERTYCLASSES_SERVER.containsKey(propertyclass)) {
-				Logging.info(this, "createUserPropertySubclass for logged in user " + ConfigedMain.USER);
+				Logging.info(this, "createUserPropertySubclass for logged in user " + ConfigedMain.user);
 				PersistenceController.PROPERTYCLASSES_SERVER.put(propertyclass, "");
 			}
 
@@ -329,7 +329,7 @@ public class UserConfigProducing {
 		Logging.info(this, "readyObjects for userparts " + readyObjects.size());
 
 		if (notUsingDefaultUser)
-			UserConfig.setCurrentConfig(userConfigs.get(ConfigedMain.USER));
+			UserConfig.setCurrentConfig(userConfigs.get(ConfigedMain.user));
 		else
 			UserConfig.setCurrentConfig(defaultUserConfig);
 

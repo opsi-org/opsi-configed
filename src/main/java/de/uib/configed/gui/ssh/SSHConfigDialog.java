@@ -134,7 +134,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 				Logging.debug(this, "compareStates 6");
 				return false;
 			}
-			if (!connectionInfo.getUser().equals(ConfigedMain.USER)) {
+			if (!connectionInfo.getUser().equals(ConfigedMain.user)) {
 				Logging.debug(this, "compareStates 7");
 				return false;
 			}
@@ -610,7 +610,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 			if (!jComboBoxUseDefaultState)
 			// state has changed
 			{
-				connectionInfo.setUserData(ConfigedMain.host, ConfigedMain.USER, ConfigedMain.password,
+				connectionInfo.setUserData(ConfigedMain.host, ConfigedMain.user, ConfigedMain.password,
 						SSHConnect.PORT_SSH);
 			}
 
@@ -688,7 +688,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 			connectionInfo.setUserData(
 
 					ConfigedMain.host, // persist.getHostInfoCollections().getConfigServer(),
-					ConfigedMain.USER, ConfigedMain.password, SSHConnect.PORT_SSH);
+					ConfigedMain.user, ConfigedMain.password, SSHConnect.PORT_SSH);
 
 		}
 		jComboBoxHost.setSelectedItem(connectionInfo.getHost());
