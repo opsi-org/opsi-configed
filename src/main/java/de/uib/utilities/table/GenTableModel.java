@@ -813,18 +813,15 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (itemFactory == null) {
 			Logging.info("update item factory missing");
 			return;
-		} else if (updates == null) {
+		}
+
+		if (updates == null) {
 			Logging.info("updates not initialized");
 			return;
 		}
 
 		if (rows.get(rowNum) == null) {
 			Logging.info(this, "delete row null ");
-			return;
-		}
-
-		if (updates == null) {
-			Logging.info(this, "updates not initialized");
 			return;
 		}
 

@@ -289,7 +289,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		// TODO: nano, micro
 		if (v.compareTo(BigInteger.valueOf((long) mult * mult * mult)) >= 0) {
 			return ((float) Math.round(v.floatValue() * 1000 / ((long) mult * mult * mult)) / 1000) + " G" + unit;
-		} else if (v.compareTo(BigInteger.valueOf(mult * mult)) >= 0) {
+		} else if (v.compareTo(BigInteger.valueOf((long) mult * mult)) >= 0) {
 			return ((float) Math.round(v.floatValue() * 1000 / (mult * mult)) / 1000) + " M" + unit;
 		} else if (v.compareTo(BigInteger.valueOf(mult)) >= 0) {
 			return ((float) Math.round(v.floatValue() * 1000 / (mult)) / 1000) + " k" + unit;

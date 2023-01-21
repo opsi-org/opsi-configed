@@ -81,8 +81,10 @@ public abstract class Serializer {
 	 * reproduce a search
 	 */
 	public SelectOperation deserialize(Map<String, Object> data) {
-		if (data == null)
+		if (data == null) {
 			Logging.warning(this, "data in Serializer.deserialize is null");
+			return null;
+		}
 
 		Logging.info(this, "deserialize data " + data);
 		if (data.get(KEY_ELEMENT_PATH) != null) {

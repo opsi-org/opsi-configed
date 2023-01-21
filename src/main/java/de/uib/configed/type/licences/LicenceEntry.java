@@ -42,7 +42,6 @@ public class LicenceEntry extends TreeMap<String, Object>
 		KEYS.add(MAX_INSTALLATIONS_KEY);
 		KEYS.add(EXPIRATION_DATE_KEY);
 		KEYS.add(TYPE_KEY);
-
 	}
 
 	public static final String VOLUME = "VOLUME";

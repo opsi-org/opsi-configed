@@ -181,12 +181,18 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 			while (parser.next()) {
 				switch (parser.getPositionType()) {
 				case OBJECT_BEGIN:
-					result.put(name, parseObject());
+					if (name == null) {
+						Logging.warning(this, "name is null, in case OBJECT_BEGIN");
+					} else
+						result.put(name, parseObject());
 					break;
 				case OBJECT_END:
 					return result;
 				case LIST_BEGIN:
-					result.put(name, parseList(name));
+					if (name == null) {
+						Logging.warning(this, "name is null, in case LIST_BEGIN");
+					} else
+						result.put(name, parseList(name));
 					break;
 				case JSON_NAME:
 					name = parser.getValue();
@@ -194,7 +200,10 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 					Logging.debug(this, name);
 					break;
 				case JSON_VALUE:
-					result.put(name, stringToObject(parser.getValue(), name));
+					if (name == null) {
+						Logging.warning(this, "name is null, in case JSON_VALUE");
+					} else
+						result.put(name, stringToObject(parser.getValue(), name));
 					break;
 				default:
 					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");

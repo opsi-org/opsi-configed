@@ -4800,15 +4800,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	public String getProductVersion(String product) {
 
-		productGlobalInfos.get(product).get("productVersion");
-
 		String result = (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 
 		if (result == null)
 			result = EMPTYFIELD;
 
-		Logging.debug(this, "getProductVersion which? " + productGlobalInfos.get(product).get("productVersion")
-				+ " //or//   " + result);
+		Logging.debug(this, "getProductVersion which? " + result + " for product: " + product);
 
 		return result;
 	}

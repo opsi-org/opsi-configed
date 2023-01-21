@@ -25,11 +25,6 @@ public class NavigationPanel extends JPanel implements ActionListener {
 	protected boolean hasPrevious;
 
 	public NavigationPanel() {
-		this(null);
-		// everything visible
-	}
-
-	public NavigationPanel(String[] visibleButtons) {
 		initComponents();
 
 		buttons = new ArrayList<>();
@@ -37,22 +32,6 @@ public class NavigationPanel extends JPanel implements ActionListener {
 		buttons.add(previousButton);
 		buttons.add(firstButton);
 		buttons.add(lastButton);
-
-		if (visibleButtons == null)
-			return;
-
-		// set each one to not visible
-		for (JButton button : buttons)
-			button.setVisible(false);
-
-		// set visible for given names
-		for (int i = 0; i < visibleButtons.length; i++) {
-			int j = buttons.indexOf(visibleButtons[i]);
-			if (j > -1)
-				buttons.get(j).setVisible(true);
-			else
-				Logging.info(this, "button for button name '" + visibleButtons[i] + "' does not exist");
-		}
 	}
 
 	@Override

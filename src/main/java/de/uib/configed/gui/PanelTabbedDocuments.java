@@ -171,6 +171,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	private String openFile(String typename) {
 		String fileName = null;
 
+		// Guarantee that chooser is not null
 		if (chooser == null) {
 			setFileChooser("");
 			chooserDirectory = chooser.getCurrentDirectory();
@@ -181,13 +182,8 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		int returnVal = chooser.showSaveDialog(Globals.frame1);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			if (chooser != null) {
-				fileName = chooser.getSelectedFile().getAbsolutePath();
-				chooserDirectory = chooser.getCurrentDirectory();
-			} else {
-				Logging.error("Not a valid filename: " + fileName);
-
-			}
+			fileName = chooser.getSelectedFile().getAbsolutePath();
+			chooserDirectory = chooser.getCurrentDirectory();
 		}
 
 		return fileName;

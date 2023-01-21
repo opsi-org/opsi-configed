@@ -56,6 +56,7 @@ public class Autocomplete implements DocumentListener {
 			content = textField.getText(0, pos + 1);
 		} catch (BadLocationException e) {
 			Logging.error("Failed to get text", e);
+			return;
 		}
 
 		// Find where the word starts
