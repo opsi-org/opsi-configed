@@ -48,7 +48,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	public void commit() {
 		Logging.info(this, "commit");
 		super.commit();
-		controller.persist.relations_auditSoftwareToLicencePools_requestRefresh();
+		controller.persist.relationsAuditSoftwareToLicencePoolsRequestRefresh();
 		super.reset();
 
 		if (controller.thePanel.fSoftwarename2LicencePool != null) {

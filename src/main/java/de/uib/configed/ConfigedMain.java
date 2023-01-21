@@ -774,7 +774,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.productGroupsRequestRefresh();
 
-		hostDisplayFields = persist.getHost_displayFields();
+		hostDisplayFields = persist.getHostDisplayFields();
 		persist.getProductOnClientsDisplayFieldsNetbootProducts();
 		persist.getProductOnClientsDisplayFieldsLocalbootProducts();
 		persist.configOptionsRequestRefresh();
@@ -814,8 +814,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnIPAddress() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -827,8 +827,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnHardwareAddress() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -839,13 +839,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void setColumnSessionInfo(boolean b) {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 		if (visible == b) {
 			return;
 		}
 
 		Logging.info(this, "setColumnSessionInfo " + b);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, b);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, b);
 
 		mainFrame.combinedMenuItemSessionInfoColumn.show(b);
 		setRebuiltClientListTableModel(false);
@@ -856,7 +856,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnSessionInfo() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 
 		setColumnSessionInfo(!visible);
 
@@ -864,8 +864,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnInventoryNumber() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -877,8 +877,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnCreated() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CREATED_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CREATED_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -890,8 +890,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnWANactive() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -903,8 +903,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnUEFIactive() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -916,13 +916,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnInstallByShutdownActive() {
-		Boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
+		Boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 		if (visible == null) {
 			JOptionPane.showMessageDialog(mainFrame, "An older configed is running in the network", "Information",
 					JOptionPane.OK_OPTION);
 			// == null can occur if an old configed runs somewhere
 		} else {
-			persist.getHost_displayFields().put(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, !visible);
+			persist.getHostDisplayFields().put(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, !visible);
 
 			setRebuiltClientListTableModel(false);
 			selectionPanel.initSortKeys();
@@ -935,8 +935,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnDepot() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -1716,7 +1716,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Map<String, HostInfo> pcinfos = persist.getHostInfoCollections().getMapOfPCInfoMaps();
 
 		if (pclist != null) {
-			hostDisplayFields = persist.getHost_displayFields();
+			hostDisplayFields = persist.getHostDisplayFields();
 
 			// test
 
@@ -1990,7 +1990,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		final int iconColumnMaxWidth = 100;
 
-		if (persist.getHost_displayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL)) {
+		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL)) {
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
 
@@ -2006,7 +2006,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		}
 
-		if (persist.getHost_displayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL)) {
+		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL)) {
 
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
@@ -2037,7 +2037,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-		if (persist.getHost_displayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL)) {
+		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL)) {
 
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
@@ -2066,7 +2066,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		}
 
-		if (persist.getHost_displayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL)) {
+		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL)) {
 
 			List<String> columns = new ArrayList<>();
 
@@ -3654,7 +3654,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (dataReady) {
 
 			persist.licencesUsageRequestRefresh();
-			persist.relations_auditSoftwareToLicencePools_requestRefresh();
+			persist.relationsAuditSoftwareToLicencePoolsRequestRefresh();
 			persist.reconciliationInfoRequestRefresh();
 
 			Iterator<ControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
@@ -4148,7 +4148,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						// we catch exceptions especially if we are on some updating process for the
 						// model
 
-						if (persist.getHost_displayFields().get("clientConnected")) {
+						if (persist.getHostDisplayFields().get("clientConnected")) {
 							Map<String, Object> saveReachableInfo = reachableInfo;
 
 							reachableInfo = persist.reachableInfo(null);
@@ -4253,7 +4253,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				mainFrame.iconButtonReachableInfo.setEnabled(true);
 
 				// update column
-				if (persist.getHost_displayFields().get("clientConnected")) {
+				if (persist.getHostDisplayFields().get("clientConnected")) {
 					javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
 
 					int col = model
@@ -4335,7 +4335,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 								mainFrame.iconButtonSessionInfo.setEnabled(true);
 
 								// update column
-								if (persist.getHost_displayFields().get("clientSessionInfo")) {
+								if (persist.getHostDisplayFields().get("clientSessionInfo")) {
 									javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
 
 									int col = model.findColumn(Configed

@@ -489,7 +489,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			int countHosts = 0;
 
 			if (opsiHostNames == null) {
-				List<Map<java.lang.String, java.lang.Object>> opsiHosts = HOST_read();
+				List<Map<java.lang.String, java.lang.Object>> opsiHosts = hostRead();
 				HostInfo.resetInstancesCount();
 
 				opsiHostNames = new ArrayList<>();
@@ -1433,7 +1433,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public List<Map<java.lang.String, java.lang.Object>> HOST_read() {
+	public List<Map<java.lang.String, java.lang.Object>> hostRead() {
 		String[] callAttributes = new String[] {};
 		Map callFilter = new HashMap<>();
 
@@ -6249,7 +6249,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return softwareWithoutAssociatedLicencePool;
 	}
 
-	public void relations_auditSoftwareToLicencePools_requestRefresh() {
+	public void relationsAuditSoftwareToLicencePoolsRequestRefresh() {
 
 		relationsAuditSoftwareToLicencePools = null;
 		softwareWithoutAssociatedLicencePool = null;
@@ -6298,7 +6298,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	// old
-	public void relations_windowsSoftwareId2LPool_requestRefresh() {
+	public void relationsWindowsSoftwareId2LPoolRequestRefresh() {
 
 	}
 
@@ -7070,31 +7070,23 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return false;
 	}
 
-	private List<String> getPossibleValuesProductOnClientDisplayfields_localboot() {
+	private List<String> getPossibleValuesProductOnClientDisplayFieldsLocalboot() {
 		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add("productId");
 		possibleValues.add(ProductState.KEY_PRODUCT_NAME);
 		possibleValues.add(ProductState.KEY_INSTALLATION_STATUS);
 		possibleValues.add(ProductState.KEY_INSTALLATION_INFO);
-		// combines
-		// ProductState.KEY_actionProgress
-		// ProductState.KEY_actionResult
-		// ProductState.KEY_lastAction
 		possibleValues.add(ProductState.KEY_ACTION_REQUEST);
 		possibleValues.add(ProductState.KEY_PRODUCT_PRIORITY);
 		possibleValues.add(ProductState.KEY_POSITION);
 		possibleValues.add(ProductState.KEY_LAST_STATE_CHANGE);
-		// ProductState.KEY_actionSequence
 		possibleValues.add(ProductState.KEY_TARGET_CONFIGURATION);
 		possibleValues.add(ProductState.KEY_VERSION_INFO);
-		// combines
-		// ProductState.KEY_productVersion
-		// ProductState.KEY_packageVersion
 
 		return possibleValues;
 	}
 
-	private List<String> getDefaultValuesProductOnClientDisplayfields_localboot() {
+	private List<String> getDefaultValuesProductOnClientDisplayfieldsLocalboot() {
 		List<String> result = new ArrayList<>();
 
 		result.add("productId");
@@ -7108,13 +7100,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
-	private List<String> produceProductOnClientDisplayfields_localboot() {
+	private List<String> produceProductOnClientDisplayfieldsLocalboot() {
 		if (globalReadOnly)
 			return null;
 
-		List<String> result = getDefaultValuesProductOnClientDisplayfields_localboot();
+		List<String> result = getDefaultValuesProductOnClientDisplayfieldsLocalboot();
 
-		List<String> possibleValues = getPossibleValuesProductOnClientDisplayfields_localboot();
+		List<String> possibleValues = getPossibleValuesProductOnClientDisplayFieldsLocalboot();
 
 		// create config for service
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
@@ -7263,10 +7255,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					+ possibleValuesAccordingToService);
 
 			if (configuredByService.isEmpty()
-					|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayfields_localboot()))
+					|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayFieldsLocalboot()))
 							.equals(new HashSet<>(possibleValuesAccordingToService)))) {
 				// we did not initialize server property
-				configuredByService = produceProductOnClientDisplayfields_localboot();
+				configuredByService = produceProductOnClientDisplayfieldsLocalboot();
 			}
 
 			productOnClientsDisplayFieldsLocalbootProducts = new LinkedHashMap<>();
@@ -7520,7 +7512,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
-	public Map<String, Boolean> getHost_displayFields() {
+	public Map<String, Boolean> getHostDisplayFields() {
 		if (hostDisplayFields == null) {
 			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 

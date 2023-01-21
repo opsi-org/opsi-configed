@@ -755,7 +755,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 						ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
 						pdfExportTable.setMetaData(metaData);
-						pdfExportTable.setPageSizeA4_Landscape();
+						pdfExportTable.setPageSizeA4Landscape();
 						pdfExportTable.execute(null, true);
 
 					} catch (Exception ex) {

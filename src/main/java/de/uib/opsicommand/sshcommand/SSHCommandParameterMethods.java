@@ -240,19 +240,19 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		String result = "";
 		method = method.trim();
 		if (method.equals(methods.get(methodGetSelectedClientNames))) {
-			Logging.info(this, "getSelected_clientnames " + getSelected_clientnames());
-			result = formatResult(getSelected_clientnames(), format);
+			Logging.info(this, "getSelected_clientnames " + getSelectedClientNames());
+			result = formatResult(getSelectedClientNames(), format);
 		} else if (method.equals(methods.get(methodGetSelectedClientIPs))) {
-			Logging.info(this, "getSelected_clientIPs " + getSelected_clientIPs());
-			result = formatResult(getSelected_clientIPs(), format);
+			Logging.info(this, "getSelected_clientIPs " + getSelectedClientIPs());
+			result = formatResult(getSelectedClientIPs(), format);
 		} else if (method.equals(methods.get(methodGetSelectedDepotNames))) {
-			result = formatResult(getSelected_depotnames(), format);
+			result = formatResult(getSelectedDepotNames(), format);
 		} else if (method.equals(methods.get(methodGetSelectedDepotIPs))) {
 			result = formatResult(getSelected_depotIPs(), format);
 		} else if (method.equals(methods.get(methodGetConfigServerName))) {
-			result = formatResult(getConfig_serverName(), format);
+			result = formatResult(getConfigServerName(), format);
 		} else if (method.equals(methods.get(methodGetConnectedSSHServerName))) {
-			result = formatResult(getConfig_sshserverName(), format);
+			result = formatResult(getConfigSSHServerName(), format);
 		} else if (method.contains("ssh://")) {
 			result = getSelectedValue(method);
 			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
@@ -403,7 +403,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	@Override
-	public String getConfig_serverName() {
+	public String getConfigServerName() {
 		List<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots)
 			if (depot.startsWith(ConfigedMain.HOST)) {
@@ -418,12 +418,12 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	@Override
-	public String getConfig_sshserverName() {
+	public String getConfigSSHServerName() {
 		Logging.debug(this, "getConfig_sshserverName " + SSHConnectionInfo.getInstance().getHost());
 		return SSHConnectionInfo.getInstance().getHost();
 	}
 
-	public String[] getSelected_clientIPs() {
+	public String[] getSelectedClientIPs() {
 		Logging.debug(this, "getSelected_clientIPs " + Arrays.toString(main.getSelectedClients()));
 		String[] clientnames = new String[main.getSelectedClients().length];
 		System.arraycopy(main.getSelectedClients(), 0, clientnames, 0, main.getSelectedClients().length);
@@ -444,7 +444,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	@Override
-	public String[] getSelected_clientnames() {
+	public String[] getSelectedClientNames() {
 		Logging.debug(this, "getSelected_clientnames  " + Arrays.toString(main.getSelectedClients()));
 		String[] clientnames = new String[main.getSelectedClients().length];
 		System.arraycopy(main.getSelectedClients(), 0, clientnames, 0, main.getSelectedClients().length);
@@ -452,7 +452,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	}
 
 	@Override
-	public String[] getSelected_depotnames() {
+	public String[] getSelectedDepotNames() {
 		Logging.debug(this, "getSelected_depotnames  " + main.getSelectedDepots());
 		return main.getSelectedDepots();
 	}

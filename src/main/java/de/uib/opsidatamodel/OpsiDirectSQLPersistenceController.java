@@ -58,7 +58,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	}
 
 	@Override
-	public List<Map<java.lang.String, java.lang.Object>> HOST_read() {
+	public List<Map<java.lang.String, java.lang.Object>> hostRead() {
 
 		Logging.info(this, "HOST_read ");
 		String query = "select *  from HOST";

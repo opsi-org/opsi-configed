@@ -467,7 +467,7 @@ public class PanelSWInfo extends JPanel {
 		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable);
 		pdfExportTable.setClient(hostId);
 		pdfExportTable.setMetaData(metaData);
-		pdfExportTable.setPageSizeA4_Landscape();
+		pdfExportTable.setPageSizeA4Landscape();
 		pdfExportTable.execute(exportFilename, false);
 
 	}

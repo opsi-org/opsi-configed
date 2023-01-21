@@ -83,7 +83,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	/**
 	 * Sets the command specific error text
 	 **/
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 

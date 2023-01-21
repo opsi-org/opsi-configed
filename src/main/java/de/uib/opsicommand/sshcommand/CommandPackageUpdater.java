@@ -55,7 +55,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	/**
 	 * Sets the command specific error text
 	 **/
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 

@@ -51,5 +51,5 @@ public abstract interface SSHCommand {
 	/** @return the command dialog(parameter) **/
 	public abstract FGeneralDialog getDialog();
 
-	public abstract String get_ERROR_TEXT();
+	public abstract String getErrorText();
 }

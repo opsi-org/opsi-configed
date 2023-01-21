@@ -63,7 +63,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 	}
 
 	@Override
-	public List<Map<java.lang.String, java.lang.Object>> HOST_read() {
+	public List<Map<java.lang.String, java.lang.Object>> hostRead() {
 
 		Logging.debug(this, "HOST_read ");
 		String query = "select *  from HOST";

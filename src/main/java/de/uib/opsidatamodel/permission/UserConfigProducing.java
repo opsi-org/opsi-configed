@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.Executioner;
 import de.uib.opsidatamodel.PersistenceController;
@@ -394,7 +394,7 @@ public class UserConfigProducing {
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig.getUserStringValueKeys "
 				+ UserConfig.getUserStringValueKeys());
 		Logging.info(this, "supplyPermissionEntriesForAUser UserConfig.getUserStringValueKeys_withoutRole "
-				+ UserConfig.getUserStringValueKeys_withoutRole());
+				+ UserConfig.getUserStringValueKeysWithoutRole());
 
 		// role entry, will be removed for the next run, if not obligatory
 		if (!prototypeObligatory) {
@@ -416,7 +416,7 @@ public class UserConfigProducing {
 			}
 		}
 
-		for (String partkey : UserConfig.getUserStringValueKeys_withoutRole()) {
+		for (String partkey : UserConfig.getUserStringValueKeysWithoutRole()) {
 
 			configKey = startkey + partkey;
 			// String configKey = startkey +

@@ -62,7 +62,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	@Override
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 

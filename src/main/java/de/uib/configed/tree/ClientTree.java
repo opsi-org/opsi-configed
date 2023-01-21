@@ -585,7 +585,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return produceGroupNode(group.get("groupId"), description);
 	}
 
-	private void createDIRECTORY_NOT_ASSIGNED() {
+	private void createDirectoryNotAssigned() {
 		groupNodeDirectoryNotAssigned = produceGroupNode(DIRECTORY_NOT_ASSIGNED_NAME,
 
 				Configed.getResourceValue("ClientTree.NOTASSIGNEDdescription"));
@@ -824,7 +824,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		this.groups = new TreeMap<>(importedGroups);
 		// we need a local copy since we add virtual groups
 
-		createDIRECTORY_NOT_ASSIGNED();
+		createDirectoryNotAssigned();
 
 		groupNodes = new HashMap<>();
 

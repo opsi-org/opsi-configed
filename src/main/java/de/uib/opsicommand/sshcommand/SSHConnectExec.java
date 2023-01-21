@@ -264,7 +264,7 @@ public class SSHConnectExec extends SSHConnect {
 
 		if (foundError) {
 			Logging.warning(this, "exec found error.");
-			return command.get_ERROR_TEXT();
+			return command.getErrorText();
 		}
 
 		Logging.info(this, "exec command " + command.getSecuredCommand());

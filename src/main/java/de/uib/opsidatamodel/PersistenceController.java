@@ -356,7 +356,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	/* relating to the PC list */
 
-	public abstract List<Map<java.lang.String, java.lang.Object>> HOST_read();
+	public abstract List<Map<java.lang.String, java.lang.Object>> hostRead();
 
 	public abstract HostInfoCollections getHostInfoCollections();
 
@@ -801,9 +801,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void retrieveRelationsAuditSoftwareToLicencePools();
 
-	public abstract void relations_windowsSoftwareId2LPool_requestRefresh();
+	public abstract void relationsWindowsSoftwareId2LPoolRequestRefresh();
 
-	public abstract void relations_auditSoftwareToLicencePools_requestRefresh();
+	public abstract void relationsAuditSoftwareToLicencePoolsRequestRefresh();
 
 	public abstract List<String> getSoftwareListByLicencePool(String licencePoolId);
 
@@ -859,7 +859,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract Map<String, Boolean> getProductOnClientsDisplayFieldsNetbootProducts();
 
-	public abstract Map<String, Boolean> getHost_displayFields();
+	public abstract Map<String, Boolean> getHostDisplayFields();
 
 	// menu configuration
 	public abstract List<String> getDisabledClientMenuEntries();

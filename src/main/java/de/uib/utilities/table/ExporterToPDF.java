@@ -86,7 +86,7 @@ public class ExporterToPDF extends ExportTable {
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
 		document = new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
-		setPageSizeA4_Landscape();
+		setPageSizeA4Landscape();
 
 		if (fileName != null)
 			saveAction = true;
@@ -203,7 +203,7 @@ public class ExporterToPDF extends ExportTable {
 		xHeaderTop = 803;
 	}
 
-	public void setPageSizeA4_Landscape() {
+	public void setPageSizeA4Landscape() {
 		document.setPageSize(PageSize.A4.rotate());
 		headerWidth = 770;
 		xHeaderTop = 555;

@@ -199,9 +199,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						metaData.put("title", title);
 						metaData.put("keywords", "hardware infos");
 
-						ExporterToPDF pdfExportTable = new ExporterToPDF(CreateHWInfoTableModelComplete());
+						ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
 						pdfExportTable.setMetaData(metaData);
-						pdfExportTable.setPageSizeA4_Landscape();
+						pdfExportTable.setPageSizeA4Landscape();
 						pdfExportTable.execute(null, false); // create pdf // no filename, onlyselectedRows=false
 
 						break;
@@ -650,7 +650,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	}
 
-	private JTable CreateHWInfoTableModelComplete() {
+	private JTable createHWInfoTableModelComplete() {
 		getLocalizedHashMap();
 		// TODO
 		DefaultTableModel tableModelComplete = new DefaultTableModel();

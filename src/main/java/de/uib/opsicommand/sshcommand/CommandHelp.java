@@ -49,7 +49,7 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 	/**
 	 * Sets the command specific error text
 	 **/
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 

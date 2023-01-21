@@ -96,14 +96,14 @@ public class UserConfig {
 
 	public static LinkedHashSet<String> getUserStringValueKeys() {
 		if (USER_STRINGVALUE_KEYS == null) {
-			USER_STRINGVALUE_KEYS = new LinkedHashSet<>(getUserStringValueKeys_withoutRole());
+			USER_STRINGVALUE_KEYS = new LinkedHashSet<>(getUserStringValueKeysWithoutRole());
 			USER_STRINGVALUE_KEYS.add(HAS_ROLE_ATTRIBUT);
 		}
 
 		return USER_STRINGVALUE_KEYS;
 	}
 
-	public static LinkedHashSet<String> getUserStringValueKeys_withoutRole() {
+	public static LinkedHashSet<String> getUserStringValueKeysWithoutRole() {
 		if (USER_STRINGVALUE_KEYS_WITHOUT_ROLE == null) {
 			USER_STRINGVALUE_KEYS_WITHOUT_ROLE = new LinkedHashSet<>();
 			USER_STRINGVALUE_KEYS_WITHOUT_ROLE.add(MODIFICATION_INFO_KEY);

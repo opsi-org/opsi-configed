@@ -134,7 +134,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jButtonSend.setEnabled(false);
 	}
 
-	private boolean check_and_start() {
+	private boolean checkAndStart() {
 		if (panelLicencepools.getSelectedRow() == -1) {
 			JOptionPane.showMessageDialog(enterLicenceController.mainController.licencesFrame,
 					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencepool"),
@@ -167,7 +167,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void startStandard() {
-		if (!check_and_start())
+		if (!checkAndStart())
 			return;
 
 		jTextFieldLicenceType.setEnabled(true);
@@ -183,7 +183,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void startVolume() {
-		if (!check_and_start())
+		if (!checkAndStart())
 			return;
 
 		jTextFieldLicenceType.setEnabled(true);
@@ -199,7 +199,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void startOEM() {
-		if (!check_and_start())
+		if (!checkAndStart())
 			return;
 
 		jTextFieldLicenceType.setEnabled(true);
@@ -216,7 +216,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void startConcurrent() {
-		if (!check_and_start())
+		if (!checkAndStart())
 			return;
 
 		jTextFieldLicenceID.setEnabled(true);

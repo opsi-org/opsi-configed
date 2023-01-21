@@ -1722,7 +1722,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			ExporterToPDF pdfExportTable = new ExporterToPDF(panelClientlist.getTable());
 
 			pdfExportTable.setMetaData(metaData);
-			pdfExportTable.setPageSizeA4_Landscape();
+			pdfExportTable.setPageSizeA4Landscape();
 			pdfExportTable.execute(null, jTable.getSelectedRowCount() != 0);
 
 		} catch (Exception ex) {
@@ -2048,7 +2048,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		jButtonSaveList.setText(Configed.getResourceValue("MainFrame.jButtonSaveList"));
 		jButtonSaveList.setBackground(Globals.BACKGROUND_COLOR_6);
-		jButtonSaveList.addActionListener(this::jButtonSaveList_actionPerformed);
+		jButtonSaveList.addActionListener(this::jButtonSaveListActionPerformed);
 
 		jRadioRequiredAll.setMargin(new Insets(0, 0, 0, 0));
 		jRadioRequiredAll.setAlignmentY((float) 0.0);
@@ -3052,7 +3052,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	// ----------------------------------------------------------------------------------------
 
-	void jButtonSaveList_actionPerformed(ActionEvent e) {
+	void jButtonSaveListActionPerformed(ActionEvent e) {
 		main.checkSaveAll(false);
 	}
 

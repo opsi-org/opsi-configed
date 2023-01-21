@@ -13,8 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTextField;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
@@ -212,7 +212,7 @@ public class SSHCompletionComboButton {
 							.replace(factory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
 						/** Sets the command specific error text **/
 						@Override
-						public String get_ERROR_TEXT() {
+						public String getErrorText() {
 							return ROOT_DIRECTORY;
 						}
 					};
@@ -246,7 +246,7 @@ public class SSHCompletionComboButton {
 							.replace(factory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
 						/** Sets the command specific error text **/
 						@Override
-						public String get_ERROR_TEXT() {
+						public String getErrorText() {
 							return ROOT_DIRECTORY; // no file found
 						}
 					};

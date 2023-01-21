@@ -604,7 +604,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				ExporterToPDF pdfExportTable = new ExporterToPDF(strippTable(tableProducts));
 
 				pdfExportTable.setMetaData(metaData);
-				pdfExportTable.setPageSizeA4_Landscape();
+				pdfExportTable.setPageSizeA4Landscape();
 				pdfExportTable.execute(null, false); // create pdf // no filename, onlySelectedRows = false
 
 			}
