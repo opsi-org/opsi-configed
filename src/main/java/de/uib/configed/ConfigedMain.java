@@ -2958,13 +2958,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return columnWidths;
 	}
 
-	// TODO this breaks if you remove a column in the table;
-	// should only be called if number of table columns not changed
+	// only has an effect if number of table columns not changed
 	private void setTableColumnWidths(JTable table, int[] columnWidths) {
-		/*for (int i = 0; i < columnWidths.length; i++) {
-			table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
-			table.getColumnModel().getColumn(i).setWidth(columnWidths[i]);
-		}*/
+
+		// Only do it if number of columns didn't change
+		if (columnWidths.length == table.getColumnModel().getColumnCount())
+			for (int i = 0; i < columnWidths.length; i++) {
+				table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+				table.getColumnModel().getColumn(i).setWidth(columnWidths[i]);
+			}
 	}
 
 	private Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
