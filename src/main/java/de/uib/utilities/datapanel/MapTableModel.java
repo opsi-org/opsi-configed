@@ -136,10 +136,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	 */
 	public void setStoreData(Collection<Map<String, Object>> data) {
 		if (data == null)
-			Logging.debug(this, "setStoreData null ");
-		else {
-
-		}
+			Logging.debug(this, "setStoreData, data is null ");
 
 		setNew();
 		storeData = data;
@@ -422,22 +419,15 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		Logging.info(this, "Setting value in table at " + row + "," + col + " to " + value + " (an instance of "
 				+ value.getClass() + ")");
 
-		if (getValueAt(row, col).equals(value) || getValueAt(row, col).toString().equals(value.toString())) {
-
-		} else {
+		if (!getValueAt(row, col).equals(value) && !getValueAt(row, col).toString().equals(value.toString())) {
 
 			if (col == 1)
 			// check not necessary since, by virtue of the method isCellEditable (int,int),
 			// we can only have come to here in this case
 			{
-				if (keys == null) // perhaps everything has changed to null in the meantime
-				{
-
-				} else {
+				if (keys != null) {
 					String myKey = keys.get(row);
 					Object o = value;
-
-					// data.get(myKey).getClass().getName()
 
 					// the internal view data:
 					data.put(myKey, o);

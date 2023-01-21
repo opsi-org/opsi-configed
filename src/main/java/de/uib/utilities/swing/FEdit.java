@@ -22,8 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class FEdit extends JDialog implements ActionListener, KeyListener {
@@ -269,7 +269,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-
+			// TODO what to do here?
 		}
 
 		super.processWindowEvent(e);

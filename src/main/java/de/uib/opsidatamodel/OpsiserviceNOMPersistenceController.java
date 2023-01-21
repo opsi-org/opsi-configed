@@ -1587,14 +1587,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		else
-
-		{
-
-		}
-
 		return result;
-
 	}
 
 	private Boolean valueFromConfigStateAsExpected(Map<String, Object> configs, String configKey, boolean expectValue) {

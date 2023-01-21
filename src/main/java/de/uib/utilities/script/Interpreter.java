@@ -55,10 +55,7 @@ public class Interpreter {
 
 				}
 			} else if (blankDelims.indexOf(s) > -1) {
-				if (partBuff == null)
-				// no buff started, real split
-				{
-				} else
+				if (partBuff != null)
 					// buff started
 					partBuff.append(s);
 			} else

@@ -152,8 +152,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		Logging.debug(this, "produceProductPropertyStates, new hosts " + clients);
 
-		if (newClients.isEmpty()) {
-		} else {
+		if (!newClients.isEmpty()) {
 			hosts.addAll(newClients);
 
 			persist.notifyDataLoadingObservers(
@@ -448,10 +447,10 @@ public class DataStubRawData extends DataStubNOM {
 		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
 		StringBuilder cols = new StringBuilder("");
 
-		String deviceTable = persist.HW_INFO_DEVICE + hwClass;
-		String configTable = persist.HW_INFO_CONFIG + hwClass;
+		String deviceTable = PersistenceController.HW_INFO_DEVICE + hwClass;
+		String configTable = PersistenceController.HW_INFO_CONFIG + hwClass;
 
-		String lastseenCol = configTable + "." + persist.LAST_SEEN_COL_NAME;
+		String lastseenCol = configTable + "." + PersistenceController.LAST_SEEN_COL_NAME;
 		specificColumns.add(lastseenCol);
 		buf.append(lastseenCol);
 		buf.append(", ");
@@ -460,12 +459,12 @@ public class DataStubRawData extends DataStubNOM {
 
 		// build and collect database columnnames
 		for (String hwInfoCol : persist.getClient2HwRowsColumnNames()) {
-			if (hwInfoCol.startsWith("HOST.") || hwInfoCol.equals(persist.LAST_SEEN_VISIBLE_COL_NAME))
+			if (hwInfoCol.startsWith("HOST.") || hwInfoCol.equals(PersistenceController.LAST_SEEN_VISIBLE_COL_NAME))
 				continue; // these already are in the collection
 
-			Logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + persist.HW_INFO_DEVICE + " as well as "
-					+ persist.HW_INFO_CONFIG);
-			String part0 = hwInfoCol.substring(0, persist.HW_INFO_DEVICE.length());
+			Logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + PersistenceController.HW_INFO_DEVICE
+					+ " as well as " + PersistenceController.HW_INFO_CONFIG);
+			String part0 = hwInfoCol.substring(0, PersistenceController.HW_INFO_DEVICE.length());
 
 			boolean colFound = false;
 			// check if colname is from a CONFIG or a DEVICE table
@@ -473,12 +472,9 @@ public class DataStubRawData extends DataStubNOM {
 				colFound = true;
 				// we found a DEVICE column name
 			} else {
+				part0 = hwInfoCol.substring(0, PersistenceController.HW_INFO_CONFIG.length());
 
-				part0 = hwInfoCol.substring(0, persist.HW_INFO_CONFIG.length());
-
-				if (!hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
-
-				} else {
+				if (hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
 					colFound = true;
 					// we found a CONFIG column name
 				}
@@ -514,14 +510,14 @@ public class DataStubRawData extends DataStubNOM {
 		buf.append(Host.ID_COLUMN);
 		buf.append(" = ");
 		buf.append(configTable);
-		buf.append(persist.HOST_ID_FIELD);
+		buf.append(PersistenceController.HOST_ID_FIELD);
 
 		buf.append("\nAND ");
 		buf.append(configTable);
-		buf.append(persist.HARDWARE_ID_FIELD);
+		buf.append(PersistenceController.HARDWARE_ID_FIELD);
 		buf.append(" = ");
 		buf.append(deviceTable);
-		buf.append(persist.HARDWARE_ID_FIELD);
+		buf.append(PersistenceController.HARDWARE_ID_FIELD);
 
 		buf.append("\nAND ");
 		buf.append(configTable);
@@ -564,7 +560,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				if (specificColumns.get(i).equals(lastseenCol)) {
 					String timeS = maxTime((String) value, row.get(i));
-					rowMap.put(persist.LAST_SEEN_VISIBLE_COL_NAME, timeS);
+					rowMap.put(PersistenceController.LAST_SEEN_VISIBLE_COL_NAME, timeS);
 				} else
 					rowMap.put(specificColumns.get(i), value);
 
@@ -639,10 +635,12 @@ public class DataStubRawData extends DataStubNOM {
 					Map<String, Object> allInfosForAClient = client2HwRows.get(client2ClassInfo.getKey());
 					// find max lastseen time as last scan time
 
-					String lastseen1 = (String) allInfosForAClient.get(persist.LAST_SEEN_VISIBLE_COL_NAME);
-					String lastseen2 = (String) client2ClassInfo.getValue().get(persist.LAST_SEEN_VISIBLE_COL_NAME);
+					String lastseen1 = (String) allInfosForAClient
+							.get(PersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
+					String lastseen2 = (String) client2ClassInfo.getValue()
+							.get(PersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
 					if (lastseen1 != null && lastseen2 != null)
-						client2ClassInfo.getValue().put(persist.LAST_SEEN_VISIBLE_COL_NAME,
+						client2ClassInfo.getValue().put(PersistenceController.LAST_SEEN_VISIBLE_COL_NAME,
 								maxTime(lastseen1, lastseen2));
 
 					allInfosForAClient.putAll(client2ClassInfo.getValue());

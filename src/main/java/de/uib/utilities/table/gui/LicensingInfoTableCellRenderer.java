@@ -5,8 +5,8 @@ import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CellAlternatingColorizer;
@@ -42,7 +42,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			jc.setToolTipText(value.toString());
 
 		if (columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))) {
-
+			// TODO what shall I do here?
 		}
 
 		if (columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {

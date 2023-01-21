@@ -947,10 +947,6 @@ public class NewClientDialog extends FGeneralDialog
 		else {
 			Logging.info(this, "keyPressed source " + e.getSource());
 
-			if (e.getSource() == jButton1) {
-
-			}
-
 			super.keyPressed(e);
 		}
 	}

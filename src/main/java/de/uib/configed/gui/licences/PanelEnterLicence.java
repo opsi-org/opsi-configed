@@ -97,9 +97,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 			ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
 
-			if (lsm.isSelectionEmpty()) {
-
-			} else {
+			if (!lsm.isSelectionEmpty()) {
 				int selectedRow = lsm.getMinSelectionIndex();
 				String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
 

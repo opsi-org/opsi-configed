@@ -64,11 +64,8 @@ public class FShowList extends FTextArea {
 
 	@Override
 	public void setFont(Font f) {
-		if (jTextArea1 == null) {
-
-		} else {
+		if (jTextArea1 != null)
 			jTextArea1.setFont(f);
-		}
 	}
 
 	public void setLineWrap(boolean b) {

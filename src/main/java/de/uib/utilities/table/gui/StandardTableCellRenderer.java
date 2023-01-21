@@ -52,10 +52,6 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 				tooltipText = Globals.fillStringToLength(value + " ", FILL_LENGTH);
 
 			((JLabel) jc).setToolTipText(tooltipText);
-
-			if (row == currentRow) {
-
-			}
 		}
 
 		return jc;

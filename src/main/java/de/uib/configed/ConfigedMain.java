@@ -2398,10 +2398,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						}
 
 						else if ((mouseEvent.getModifiersEx()
-								& InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
-
-						} else {
-
+								& InputEvent.CTRL_DOWN_MASK) != InputEvent.CTRL_DOWN_MASK) {
 							clearTree();
 						}
 					}
@@ -2769,12 +2766,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return result;
 	}
 
-	private void freeMemoryFromSearchData() {
-		if (clientSelectionDialog != null) {
-
-		}
-	}
-
 	protected boolean setLocalbootProductsPage() {
 		Logging.debug(this, "setLocalbootProductsPage() with filter "
 				+ Configed.savedStates.saveLocalbootproductFilter.deserialize());
@@ -2873,8 +2864,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (!setDepotRepresentative())
 			return false;
-
-		freeMemoryFromSearchData();
 
 		try {
 
@@ -3692,9 +3681,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			refreshClientList();
 			activateGroup(oldGroupSelection);
-
-			freeMemoryFromSearchData(); // we have to observe the changed client selection
-
 		}
 
 	}
