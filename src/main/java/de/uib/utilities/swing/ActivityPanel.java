@@ -125,7 +125,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 					i = INACTIVE;
 					setState(i);
 					i = 0;
-					Globals.threadSleep(this, 2 * SLEEPING_IN_MS);
+					Globals.threadSleep(this, 2l * SLEEPING_IN_MS);
 				}
 			}
 		} catch (Exception anyException) {
