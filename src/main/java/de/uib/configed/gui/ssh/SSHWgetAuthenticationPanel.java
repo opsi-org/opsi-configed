@@ -10,8 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 
 public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	public static final String LBLUSER = "lbl_user";
@@ -101,9 +101,13 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
 						.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
-								.addComponent(jLabeluser, PREF, PREF, PREF).addGap(Globals.GAP_SIZE))
+								.addComponent(jLabeluser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE))
 						.addGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
-								.addComponent(jLabelPassword, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)))
+								.addComponent(jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE)))
 				.addGroup(layout.createParallelGroup()
 						.addComponent(jTextFieldUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH * 2)

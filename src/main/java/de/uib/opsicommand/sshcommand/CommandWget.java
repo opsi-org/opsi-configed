@@ -10,25 +10,26 @@ import de.uib.configed.gui.ssh.SSHWgetParameterDialog;
 import de.uib.utilities.logging.Logging;
 
 public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
-	private String baseName = "wget ";
+	private static final String BASE_NAME = "wget ";
+	private static final boolean NEED_SUDO = false;
+	private static final boolean IS_MULTI_COMMAND = false;
+	private static final int PRIORITY = 110;
+
 	private String command = "wget ";
-	protected FGeneralDialog dialog = null;
-	private boolean needSudo = false;
 	private boolean needParameter = true;
-	private boolean isMultiCommand = false;
-	private int priority = 110;
 
 	private String url = " ";
 	private String authentication = " ";
-	private String additional_url = " ";
+	private String additionalURL = " ";
 	private String dir = " ";
 	private String product = " ";
-	private String filename = " ";
+	private String fileName = " ";
 	private String verbosity = " ";
 	private String freeInput = " ";
 
+	protected FGeneralDialog dialog = null;
+
 	public CommandWget() {
-		command = "wget ";
 	}
 
 	public CommandWget(String d, String u, String au, String auth) {
@@ -38,7 +39,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	public CommandWget(String d, String u, String au) {
 		this(d, u);
-		additional_url = au;
+		additionalURL = au;
 	}
 
 	public CommandWget(String d, String u) {
@@ -55,9 +56,9 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 		needParameter = false;
 	}
 
-	public void setFilename(String newFilename) {
+	public void setFileName(String newFilename) {
 		if ((newFilename != null) && (!newFilename.trim().equals("")))
-			filename = " --output-document=" + newFilename + " ";
+			fileName = " --output-document=" + newFilename + " ";
 	}
 
 	@Override
@@ -76,7 +77,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public boolean isMultiCommand() {
-		return isMultiCommand;
+		return IS_MULTI_COMMAND;
 	}
 
 	@Override
@@ -86,7 +87,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getBasicName() {
-		return baseName;
+		return BASE_NAME;
 	}
 
 	@Override
@@ -107,9 +108,9 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	@Override
 	public String getCommand() {
 		if (!freeInput.equals(""))
-			command = "wget " + authentication + filename + freeInput + verbosity + dir + url + " " + additional_url;
+			command = "wget " + authentication + fileName + freeInput + verbosity + dir + url + " " + additionalURL;
 		else
-			command = "wget " + authentication + filename + verbosity + dir + url + " " + additional_url;
+			command = "wget " + authentication + fileName + verbosity + dir + url + " " + additionalURL;
 		if (needSudo())
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
@@ -135,12 +136,12 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public boolean needSudo() {
-		return needSudo;
+		return NEED_SUDO;
 	}
 
 	@Override
 	public int getPriority() {
-		return priority;
+		return PRIORITY;
 	}
 
 	@Override

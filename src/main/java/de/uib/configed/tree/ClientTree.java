@@ -517,20 +517,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public void mouseDragged(MouseEvent e) {
 	}
 
-	boolean mouse_ready = true;
-
 	// interface MouseListener
 	@Override
 	public void mousePressed(final MouseEvent e) {
 		Logging.debug(this, "mousePressed event " + e);
-
-		if (!mouse_ready) {
-			// only occures if we start a thread for the reactions
-
-			return;
-		}
-
-		mouse_ready = true;
 
 		final java.awt.Cursor initialCursor = getCursor();
 		final JTree theTree = this;

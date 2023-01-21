@@ -427,8 +427,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "initGui");
 
 		displayFieldsLocalbootProducts = new LinkedHashMap<>(
-				persist.getProductOnClients_displayFieldsLocalbootProducts());
-		displayFieldsNetbootProducts = new LinkedHashMap<>(persist.getProductOnClients_displayFieldsNetbootProducts());
+				persist.getProductOnClientsDisplayFieldsLocalbootProducts());
+		displayFieldsNetbootProducts = new LinkedHashMap<>(persist.getProductOnClientsDisplayFieldsNetbootProducts());
 		// initialization by defaults, it can be edited afterwards
 
 		initTree();
@@ -775,8 +775,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		persist.productGroupsRequestRefresh();
 
 		hostDisplayFields = persist.getHost_displayFields();
-		persist.getProductOnClients_displayFieldsNetbootProducts();
-		persist.getProductOnClients_displayFieldsLocalbootProducts();
+		persist.getProductOnClientsDisplayFieldsNetbootProducts();
+		persist.getProductOnClientsDisplayFieldsLocalbootProducts();
 		persist.configOptionsRequestRefresh();
 
 		if (savedSearchesDialog != null) {

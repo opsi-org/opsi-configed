@@ -319,9 +319,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected RemoteControls remoteControls;
 	protected SavedSearches savedSearches;
 
-	protected Map<String, Boolean> productOnClients_displayFieldsNetbootProducts;
-	protected Map<String, Boolean> productOnClients_displayFieldsLocalbootProducts;
-	protected Map<String, Boolean> host_displayFields;
+	protected Map<String, Boolean> productOnClientsDisplayFieldsNetbootProducts;
+	protected Map<String, Boolean> productOnClientsDisplayFieldsLocalbootProducts;
+	protected Map<String, Boolean> hostDisplayFields;
 
 	protected List configStateCollection;
 	protected List deleteConfigStateItems;
@@ -380,12 +380,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		protected Map<String, Map<String, Object>> masterDepots;
 		protected Map<String, Map<String, Object>> allDepots;
-		protected Map<String, Map<String, HostInfo>> depot2_host2hostInfo;
+		protected Map<String, Map<String, HostInfo>> depot2Host2HostInfo;
 		protected java.util.LinkedList<String> depotNamesList;
 
 		protected Map<String, Boolean> mapOfPCs;
 
-		protected Map<String, HostInfo> mapPC_Infomap; // for some depots
+		protected Map<String, HostInfo> mapPCInfomap; // for some depots
 		protected Map<String, HostInfo> host2hostInfo; // all hosts
 		protected Map<String, Set<String>> fNode2Treeparents; // essentially client --> all groups with it
 		protected Map<String, String> mapPcBelongsToDepot;
@@ -465,7 +465,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		@Override
 		public Map<String, HostInfo> getMapOfPCInfoMaps() {
 
-			return mapPC_Infomap;
+			return mapPCInfomap;
 		}
 
 		@Override
@@ -583,8 +583,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					System.exit(1);
 				}
 
-				depot2_host2hostInfo = new TreeMap<>();
-				depot2_host2hostInfo.put(configServer, new TreeMap<>());
+				depot2Host2HostInfo = new TreeMap<>();
+				depot2Host2HostInfo.put(configServer, new TreeMap<>());
 
 				// find depots and build entries for them
 				for (Map<String, Object> host : opsiHosts) {
@@ -608,7 +608,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							Map<String, Object> hostMap = new HashMap<>(host);
 							masterDepots.put(name, hostMap);
 
-							depot2_host2hostInfo.put(name, new TreeMap<>());
+							depot2Host2HostInfo.put(name, new TreeMap<>());
 						}
 					}
 				}
@@ -694,7 +694,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						}
 
 						host2hostInfo.put(name, hostInfo);
-						depot2_host2hostInfo.get(myDepot).put(name, hostInfo);
+						depot2Host2HostInfo.get(myDepot).put(name, hostInfo);
 
 					}
 
@@ -702,7 +702,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				for (String depot : masterDepots.keySet()) {
 					Logging.info(this,
-							"retrieveOpsiHosts clients in " + depot + ": " + depot2_host2hostInfo.get(depot).size());
+							"retrieveOpsiHosts clients in " + depot + ": " + depot2Host2HostInfo.get(depot).size());
 				}
 
 				TreeSet<String> depotNamesSorted = new TreeSet<>(masterDepots.keySet());
@@ -753,7 +753,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			mapPcBelongsToDepot = new HashMap<>();
 
 			mapOfPCs = new HashMap<>();
-			mapPC_Infomap = new HashMap<>();
+			mapPCInfomap = new HashMap<>();
 
 			List<String> depotList = new ArrayList<>();
 			for (String depot : depots) {
@@ -763,19 +763,19 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			for (String depot : depotList) {
 
-				if (depot2_host2hostInfo.get(depot) == null) {
+				if (depot2Host2HostInfo.get(depot) == null) {
 					Logging.info(this, "getPcListForDepots depot " + depot + " is null");
 				} else {
 
-					for (String clientName : depot2_host2hostInfo.get(depot).keySet()) {
-						HostInfo hostInfo = depot2_host2hostInfo.get(depot).get(clientName);
+					for (String clientName : depot2Host2HostInfo.get(depot).keySet()) {
+						HostInfo hostInfo = depot2Host2HostInfo.get(depot).get(clientName);
 
 						if (allowedClients != null && !allowedClients.contains(clientName))
 							continue;
 
 						mapOfPCs.put(clientName, false);
 
-						mapPC_Infomap.put(clientName, hostInfo);
+						mapPCInfomap.put(clientName, hostInfo);
 						mapPcBelongsToDepot.put(clientName, depot);
 					}
 				}
@@ -794,9 +794,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			getConfigs().get(clientName).put(CONFIG_DEPOT_ID, depotList);
 
 			// set in mapPC_Infomap
-			HostInfo hostInfo = mapPC_Infomap.get(clientName);
+			HostInfo hostInfo = mapPCInfomap.get(clientName);
 
-			Logging.info(this, "setDepot, hostinfo for client " + clientName + " : " + mapPC_Infomap.get(clientName));
+			Logging.info(this, "setDepot, hostinfo for client " + clientName + " : " + mapPCInfomap.get(clientName));
 
 			hostInfo.put(HostInfo.DEPOT_OF_CLIENT_KEY, depotId);
 
@@ -805,8 +805,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// set in mapPcBelongsToDepot
 			mapPcBelongsToDepot.put(clientName, depotId);
 
-			depot2_host2hostInfo.get(oldDepot).remove(clientName);
-			depot2_host2hostInfo.get(depotId).put(clientName, hostInfo);
+			depot2Host2HostInfo.get(oldDepot).remove(clientName);
+			depot2Host2HostInfo.get(depotId).put(clientName, hostInfo);
 		}
 
 		@Override
@@ -853,8 +853,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		public void updateLocalHostInfo(String hostId, String property, Object value)
 		// for table
 		{
-			if (mapPC_Infomap != null && mapPC_Infomap.get(hostId) != null) {
-				mapPC_Infomap.get(hostId).put(property, value);
+			if (mapPCInfomap != null && mapPCInfomap.get(hostId) != null) {
+				mapPCInfomap.get(hostId).put(property, value);
 				Logging.info(this, "updateLocalHostInfo " + hostId + " - " + property + " : " + value);
 
 			}
@@ -864,8 +864,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		@Override
 		public void setLocalHostInfo(String hostId, String depotId, HostInfo hostInfo) {
 			Logging.debug(this, "setLocalHostInfo " + " " + hostId + ", " + depotId + ", " + hostInfo);
-			mapPC_Infomap.put(hostId, hostInfo);
-			depot2_host2hostInfo.get(depotId).put(hostId, hostInfo);
+			mapPCInfomap.put(hostId, hostInfo);
+			depot2Host2HostInfo.get(depotId).put(hostId, hostInfo);
 		}
 
 	}
@@ -7248,9 +7248,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return KEY_USER_REGISTER_VALUE;
 	}
 
-	public Map<String, Boolean> getProductOnClients_displayFieldsLocalbootProducts() {
+	public Map<String, Boolean> getProductOnClientsDisplayFieldsLocalbootProducts() {
 
-		if (productOnClients_displayFieldsLocalbootProducts == null) {
+		if (productOnClientsDisplayFieldsLocalbootProducts == null) {
 			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 
 			Logging.debug(this,
@@ -7276,37 +7276,37 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				configuredByService = produceProductOnClientDisplayfields_localboot();
 			}
 
-			productOnClients_displayFieldsLocalbootProducts = new LinkedHashMap<>();
+			productOnClientsDisplayFieldsLocalbootProducts = new LinkedHashMap<>();
 
 			// key names from de.uib.opsidatamodel.productstate.ProductState
-			productOnClients_displayFieldsLocalbootProducts.put("productId", true);
+			productOnClientsDisplayFieldsLocalbootProducts.put("productId", true);
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_NAME,
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_NAME,
 					(configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1));
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION,
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION,
 					(configuredByService.indexOf(ProductState.KEY_TARGET_CONFIGURATION) > -1));
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
 					(configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1));
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_PRIORITY,
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_PRIORITY,
 					(configuredByService.indexOf(ProductState.KEY_PRODUCT_PRIORITY) > -1));
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_POSITION,
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_POSITION,
 					(configuredByService.indexOf(ProductState.KEY_POSITION) > -1));
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
 					(configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1));
 
-			productOnClients_displayFieldsLocalbootProducts.put(ProductState.KEY_VERSION_INFO, true);
+			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_VERSION_INFO, true);
 
 		}
 
-		return productOnClients_displayFieldsLocalbootProducts;
+		return productOnClientsDisplayFieldsLocalbootProducts;
 	}
 
 	public void deleteSavedSearch(String name) {
@@ -7412,8 +7412,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
-	public Map<String, Boolean> getProductOnClients_displayFieldsNetbootProducts() {
-		if (productOnClients_displayFieldsNetbootProducts == null) {
+	public Map<String, Boolean> getProductOnClientsDisplayFieldsNetbootProducts() {
+		if (productOnClientsDisplayFieldsNetbootProducts == null) {
 			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 
 			List<String> configuredByService = Globals
@@ -7434,30 +7434,30 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				configuredByService = produceProductOnClientDisplayfields_netboot();
 			}
 
-			productOnClients_displayFieldsNetbootProducts = new LinkedHashMap<>();
+			productOnClientsDisplayFieldsNetbootProducts = new LinkedHashMap<>();
 
 			// key names from de.uib.opsidatamodel.productstate.ProductState
-			productOnClients_displayFieldsNetbootProducts.put("productId", true);
+			productOnClientsDisplayFieldsNetbootProducts.put("productId", true);
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_PRODUCT_NAME,
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_PRODUCT_NAME,
 					(configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1));
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION, false);
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION, false);
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
 					(configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1));
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
 					(configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1));
 
-			productOnClients_displayFieldsNetbootProducts.put(ProductState.KEY_VERSION_INFO, true);
+			productOnClientsDisplayFieldsNetbootProducts.put(ProductState.KEY_VERSION_INFO, true);
 
 		}
 
-		return productOnClients_displayFieldsNetbootProducts;
+		return productOnClientsDisplayFieldsNetbootProducts;
 	}
 
 	private List<String> produceHost_displayFields(List<String> givenList) {
@@ -7528,7 +7528,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	public Map<String, Boolean> getHost_displayFields() {
-		if (host_displayFields == null) {
+		if (hostDisplayFields == null) {
 			Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 
 			List<String> configuredByService = Globals.takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
@@ -7536,20 +7536,20 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// check if have to initialize the server property
 			configuredByService = produceHost_displayFields(configuredByService);
 
-			host_displayFields = new LinkedHashMap<>();
-			host_displayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
+			hostDisplayFields = new LinkedHashMap<>();
+			hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 			// always shown, we put it here because of ordering and repeat the statement
 			// after the loop if it has been set to false
 
 			for (String field : HostInfo.ORDERING_DISPLAY_FIELDS) {
-				host_displayFields.put(field, (configuredByService.indexOf(field) > -1));
+				hostDisplayFields.put(field, (configuredByService.indexOf(field) > -1));
 			}
 
-			host_displayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
+			hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);
 
 		}
 
-		return host_displayFields;
+		return hostDisplayFields;
 	}
 
 	public List<String> getDisabledClientMenuEntries() {

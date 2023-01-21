@@ -11,8 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsidatamodel.PersistenceController;
@@ -114,56 +114,66 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		GroupLayout layout = new GroupLayout(this);
 
 		this.setLayout(layout);
-		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addGroup(layout.createParallelGroup(center)
+		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addGroup(layout.createSequentialGroup().addGroup(layout.createParallelGroup()
 								.addGroup(layout.createSequentialGroup()
-										.addGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
-												.addComponent(jLabelOn, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)
-												.addComponent(jTextFieldSelecteddepots, PREF, PREF, Short.MAX_VALUE))
-												.addComponent(jLabelVerbosity, PREF, PREF, PREF)
-												.addComponent(jLabelProperties, PREF, PREF, PREF)
-												.addComponent(jLabelSetupInstalled, PREF, PREF, PREF)
-												.addComponent(jLabelUpdateInstalled, PREF, PREF, PREF))
-										.addGap(Globals.GAP_SIZE)
-										.addGroup(layout.createParallelGroup()
-												.addComponent(jButtonDepotselection, PREF, PREF, PREF)
+										.addComponent(jLabelOn, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addGap(Globals.GAP_SIZE).addComponent(jTextFieldSelecteddepots,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												Short.MAX_VALUE))
+								.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelProperties, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelSetupInstalled, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabelUpdateInstalled, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(Globals.GAP_SIZE)
+								.addGroup(layout.createParallelGroup()
+										.addComponent(jButtonDepotselection, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
-												.addComponent(jComboBoxVerbosity, Globals.ICON_WIDTH,
-														Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-												.addComponent(jCheckBoxProperties, PREF, PREF, PREF)
-												.addComponent(jCheckBoxSetupInstalled, PREF, PREF, PREF)
-												.addComponent(jCheckBoxUpdateInstalled, PREF, PREF, PREF))
-										.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, MAX)))
-						.addGap(Globals.GAP_SIZE));
+										.addComponent(jComboBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+												Globals.ICON_WIDTH)
+										.addComponent(jCheckBoxProperties, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jCheckBoxSetupInstalled, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jCheckBoxUpdateInstalled, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)))
+				.addGap(Globals.GAP_SIZE));
 
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup(center)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelOn, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(jTextFieldSelecteddepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
 						.addComponent(jButtonDepotselection, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(center)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelVerbosity, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(jComboBoxVerbosity, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(center)
+						.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelProperties, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(jCheckBoxProperties, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(center)
+						.addComponent(jCheckBoxProperties, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelSetupInstalled, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(jCheckBoxSetupInstalled, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(center)
+						.addComponent(jCheckBoxSetupInstalled, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelUpdateInstalled, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(jCheckBoxUpdateInstalled, leading, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-								Globals.BUTTON_HEIGHT))
+						.addComponent(jCheckBoxUpdateInstalled, GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT,
+								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
 				.addGap(Globals.GAP_SIZE));
 	}
 

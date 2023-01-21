@@ -12,8 +12,8 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.utilities.logging.Logging;
@@ -183,7 +183,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 					Logging.info(this, "2. publish");
 				}
 			} else if ((exitCode != 0) && (exitCode != -1)) {
-				FOUND_ERROR = true;
+				foundError = true;
 				Logging.info(this, "exec exit code " + exitCode + ".");
 				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitError")
 						+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
@@ -200,7 +200,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 					publishInfo(Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
 				}
 			} else {
-				FOUND_ERROR = true;
+				foundError = true;
 				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
 				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
 				if (withGui) {
@@ -254,7 +254,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				checkExitCode(channel.getExitStatus(), withGui, channel);
 				if ((channel.getExitStatus() != 0) && (channel.getExitStatus() != -1)) {
 					Logging.info(this, "exec ready (2)");
-					FOUND_ERROR = true;
+					foundError = true;
 					if (outputDialog != null)
 						outputDialog.setStatusFinish();
 					return null;
@@ -269,7 +269,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 					retriedTimes = 1;
 					Logging.warning(this, "jsch exception ", jschex);
 					publishError(jschex.toString());
-					FOUND_ERROR = true;
+					foundError = true;
 					return "";
 				} else {
 					Logging.warning(this, "jsch exception ", jschex);
@@ -279,11 +279,11 @@ public class SSHConnectSCP extends SSHConnectExec {
 				}
 			} catch (IOException ex) {
 				Logging.warning(this, "SSH IOException", ex);
-				FOUND_ERROR = true;
+				foundError = true;
 				publishError(ex.toString());
 			} catch (Exception e) {
 				Logging.warning(this, "SSH Exception", e);
-				FOUND_ERROR = true;
+				foundError = true;
 				publishError(e.getMessage());
 				Thread.currentThread().interrupt();
 			}

@@ -29,12 +29,10 @@ import java.util.Map;
 
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.dbtable.Host;
-import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.logging.TimeCheck;
 
 public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersistenceController {
-
-	java.sql.Time PRODUCT_ON_CLIENT_last_read = null;
 
 	OpsiserviceRawDataPersistenceController(String server, String user, String password) {
 		super(server, user, password);

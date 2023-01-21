@@ -91,8 +91,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	protected boolean withPopup;
 
-	private final List EMPTY = new ArrayList<>();
-
 	ConfigedMain main;
 
 	public PanelHWInfo(ConfigedMain main) {
@@ -305,18 +303,18 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		tree.setSelectionInterval(row, row);
 	}
 
-	private List getDataForNode(IconNode node) {
+	private List<String[]> getDataForNode(IconNode node) {
 		return getDataForNode(node, false);
 	}
 
-	private List getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
+	private List<String[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
 
 		if (node == null || !node.isLeaf())
-			return EMPTY;
+			return new ArrayList<>();
 
 		TreeNode[] path = node.getPath();
 		if (path.length < 3) {
-			return EMPTY;
+			return new ArrayList<>();
 		}
 
 		String hwClassUI = path[1].toString();
@@ -328,7 +326,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		List devices = (List) hwInfo.get(hwClass);
 		Map deviceInfo = node.getDeviceInfo();
 		if ((devices == null) || (deviceInfo == null)) {
-			return EMPTY;
+			return new ArrayList<>();
 		}
 
 		List values = null;
@@ -343,7 +341,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			} catch (NullPointerException ex) {
 			}
 		}
-		List data = new ArrayList<>();
+		List<String[]> data = new ArrayList<>();
 		if (values != null) {
 			for (int j = 0; j < values.size(); j++) {
 				Map v = (Map) values.get(j);
@@ -473,7 +471,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		if (hwInfo == null) {
 			createRoot(treeRootTitle);
-			tableModel.setData(EMPTY);
+			tableModel.setData(new ArrayList<>());
 			return;
 		}
 
@@ -593,7 +591,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	private class HWInfoTableModel extends AbstractTableModel {
-		private List data;
+		private List<String[]> data;
 		private final String[] header = { "Name", "Wert" };
 
 		public HWInfoTableModel() {
@@ -601,7 +599,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			data = new ArrayList<>();
 		}
 
-		public void setData(List data) {
+		public void setData(List<String[]> data) {
 			this.data = data;
 			fireTableDataChanged();
 		}
@@ -623,7 +621,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		@Override
 		public Object getValueAt(int row, int col) {
-			return ((String[]) data.get(row))[col];
+			return data.get(row)[col];
 		}
 	}
 

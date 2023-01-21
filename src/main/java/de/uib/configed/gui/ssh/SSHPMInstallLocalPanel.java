@@ -10,8 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 
 public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
@@ -92,15 +92,23 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
 
-				.addGroup(layout.createParallelGroup().addComponent(jLabelUploadFrom, PREF, PREF, PREF)
-						.addComponent(jLabelUploadTo, PREF, PREF, PREF))
+				.addGroup(layout.createParallelGroup()
+						.addComponent(jLabelUploadFrom, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelUploadTo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
-						.addGroup(layout.createSequentialGroup().addComponent(jTextFieldPath, PREF, PREF, MAX)
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(jTextFieldPath, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE)
 								.addComponent(jButtonFileChooser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 										Globals.BUTTON_WIDTH))
-						.addGroup(layout.createSequentialGroup().addComponent(jComboBoxAutoCompletion, PREF, PREF, MAX)
-								.addComponent(jButtonAutoCompletion, PREF, PREF, PREF)))
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(jComboBoxAutoCompletion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(2 * Globals.GAP_SIZE));
 
 	}

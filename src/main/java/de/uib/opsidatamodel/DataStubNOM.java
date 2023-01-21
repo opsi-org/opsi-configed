@@ -797,8 +797,6 @@ public class DataStubNOM extends DataStub {
 	protected Map<String, List<SWAuditClientEntry>> client2software;
 	protected Map<String, java.util.Set<String>> softwareIdent2clients;
 
-	protected java.sql.Time SOFTWARE_CONFIG_last_entry = null;
-
 	@Override
 	public void softwareAuditOnClientsRequestRefresh() {
 		Logging.info(this, "softwareAuditOnClientsRequestRefresh");
@@ -996,7 +994,6 @@ public class DataStubNOM extends DataStub {
 	}
 
 	protected Map<String, Map<String, Object>> hostConfigs;
-	protected java.sql.Time CONFIG_STATE_last_entry = null;
 
 	@Override
 	public void hostConfigsRequestRefresh() {
@@ -1340,7 +1337,6 @@ public class DataStubNOM extends DataStub {
 	}
 
 	protected Map<String, Map<String, Object>> client2HwRows;
-	protected java.sql.Time HW_INFO_last_entry = null;
 
 	@Override
 	public void client2HwRowsRequestRefresh() {

@@ -219,29 +219,45 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 										Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
 										Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-						.addGroup(layout.createParallelGroup(baseline).addComponent(wgetAuthPanel, PREF, PREF, PREF))
+						.addGroup(layout.createParallelGroup(baseline).addComponent(wgetAuthPanel,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(2 * Globals.GAP_SIZE));
 
 		layout.setHorizontalGroup(layout.createParallelGroup().addGroup(layout.createSequentialGroup()
 				.addGap(2 * Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(jLabelURL, PREF, PREF, PREF)
-						.addComponent(jLabelDir, PREF, PREF, PREF).addComponent(jLabelIncludeZsync, PREF, PREF, PREF)
-						.addComponent(jLabelCompareMD5Sum, PREF, PREF, PREF)
-						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF, PREF))
+				.addGroup(layout.createParallelGroup()
+						.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelIncludeZsync, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelCompareMD5Sum, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
 						.addGroup(layout.createSequentialGroup().addComponent(jTextFieldURL, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH, MAX))
+								Globals.BUTTON_WIDTH, Short.MAX_VALUE))
 						.addGroup(layout.createSequentialGroup()
-								.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, MAX)
-								.addComponent(jButtonAutoCompletion, PREF, PREF, PREF))
-						.addGroup(layout.createSequentialGroup().addComponent(jCheckBoxIncludeZSync, PREF, PREF, PREF)
-								.addGap(Globals.GAP_SIZE).addComponent(jLabelIncludeZSync2, PREF, PREF, PREF))
-						.addGroup(layout.createSequentialGroup().addComponent(jCheckBoxCompareMD5, PREF, PREF, PREF))
+								.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Short.MAX_VALUE)
+								.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(jCheckBoxIncludeZSync, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.GAP_SIZE).addComponent(jLabelIncludeZSync2, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addGroup(layout.createSequentialGroup().addComponent(jCheckBoxCompareMD5,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(layout.createSequentialGroup().addComponent(
-								wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), PREF, PREF, PREF)))
+								wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.GAP_SIZE))
-				.addGroup(layout.createSequentialGroup().addComponent(wgetAuthPanel, PREF, PREF, MAX))
+				.addGroup(layout.createSequentialGroup().addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				.addGap(Globals.GAP_SIZE));
 	}
 }

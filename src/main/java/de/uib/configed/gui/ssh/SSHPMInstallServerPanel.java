@@ -6,8 +6,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 
 public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
@@ -64,13 +64,13 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 
 		this.setLayout(layout);
 		layout.setVerticalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE).addGroup(layout
-				.createParallelGroup(center)
+				.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(jLabelServerDir, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 				.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 						Globals.BUTTON_HEIGHT)
 				.addComponent(jButtonAutoCompletion, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 						Globals.BUTTON_HEIGHT))
-				.addGroup(layout.createParallelGroup(center)
+				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
 						.addComponent(jLabelOpsiProduct, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
 						.addComponent(jTextFieldProduct, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
@@ -78,15 +78,20 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 				.addGap(2 * Globals.GAP_SIZE));
 
 		layout.setHorizontalGroup(layout.createSequentialGroup().addGap(2 * Globals.GAP_SIZE)
-				.addGroup(layout.createParallelGroup().addComponent(jLabelServerDir, PREF, PREF, PREF)
-						.addGroup(layout.createSequentialGroup().addComponent(jLabelOpsiProduct, PREF, PREF, PREF)))
+				.addGroup(layout.createParallelGroup()
+						.addComponent(jLabelServerDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGroup(layout.createSequentialGroup().addComponent(jLabelOpsiProduct,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(layout.createParallelGroup()
 						.addGroup(layout.createSequentialGroup()
-								.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, MAX)
-								.addComponent(jButtonAutoCompletion, PREF, PREF, PREF))
+								.addComponent(jComboBoxAutoCompletion, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+										Short.MAX_VALUE)
+								.addComponent(jButtonAutoCompletion, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(layout.createSequentialGroup().addComponent(jTextFieldProduct, Globals.BUTTON_WIDTH,
-								Globals.BUTTON_WIDTH, MAX)))
+								Globals.BUTTON_WIDTH, Short.MAX_VALUE)))
 				.addGap(2 * Globals.GAP_SIZE));
 	}
 

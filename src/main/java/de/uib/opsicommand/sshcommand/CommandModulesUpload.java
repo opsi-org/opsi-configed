@@ -1,15 +1,17 @@
 package de.uib.opsicommand.sshcommand;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHModulesUploadDialog;
 
 public class CommandModulesUpload extends CommandSFTPUpload
 // implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand
 {
-	public String actually_modules_directory = "/etc/opsi/";
-	public String unofficial_modules_directory = "/etc/opsi/modules.d/";
+
+	// TODO Why are there two directories?
+	public static final String ACTUAL_MODULES_DIRECTORY = "/etc/opsi/";
+	public static final String UNOFFICIAL_MODULES_DIRECTORY = "/etc/opsi/modules.d/";
 	public static String DEFAULT_FILENAME = "modules";
 
 	public CommandModulesUpload(String title) {

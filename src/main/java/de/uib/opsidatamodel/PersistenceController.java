@@ -855,9 +855,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract boolean deleteLicencesReconciliation(String clientId, String licensePoolId);
 
 	// configurations and algorithms
-	public abstract Map<String, Boolean> getProductOnClients_displayFieldsLocalbootProducts();
+	public abstract Map<String, Boolean> getProductOnClientsDisplayFieldsLocalbootProducts();
 
-	public abstract Map<String, Boolean> getProductOnClients_displayFieldsNetbootProducts();
+	public abstract Map<String, Boolean> getProductOnClientsDisplayFieldsNetbootProducts();
 
 	public abstract Map<String, Boolean> getHost_displayFields();
 

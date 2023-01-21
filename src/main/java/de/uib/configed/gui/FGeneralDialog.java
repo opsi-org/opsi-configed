@@ -26,8 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
 
@@ -44,7 +44,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected IconButton jButton1 = new IconButton();
 	protected JButton jButton2 = new JButton();
 	protected JButton jButton3 = new JButton();
-	private int DEFAULT = 1;
+	private int defaultResult = 1;
 	static final int OK = 1;
 	static final int NO = 2;
 
@@ -111,7 +111,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	public void setDefaultResult(int d) {
-		DEFAULT = d;
+		defaultResult = d;
 	}
 
 	public void registerWithRunningInstances() {
@@ -430,7 +430,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			result = DEFAULT;
+			result = defaultResult;
 			leave();
 		} else
 			super.processWindowEvent(e);

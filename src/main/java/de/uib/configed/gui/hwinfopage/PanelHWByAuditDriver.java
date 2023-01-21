@@ -24,8 +24,8 @@ public class PanelHWByAuditDriver extends JPanel {
 	protected String byAuditPath;
 
 	ButtonGroup selectionGroup;
-	JRadioButton selectionCOMPUTER_SYSTEN;
-	JRadioButton selectionBASE_BOARD;
+	JRadioButton selectionComputerSystem;
+	JRadioButton selectionBaseBoard;
 
 	protected JTextField fieldVendor;
 	protected JTextField fieldLabel;
@@ -74,11 +74,11 @@ public class PanelHWByAuditDriver extends JPanel {
 
 		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
 
-		selectionCOMPUTER_SYSTEN = new JRadioButton("", true);
-		selectionBASE_BOARD = new JRadioButton("");
+		selectionComputerSystem = new JRadioButton("", true);
+		selectionBaseBoard = new JRadioButton("");
 		selectionGroup = new ButtonGroup();
-		selectionGroup.add(selectionCOMPUTER_SYSTEN);
-		selectionGroup.add(selectionBASE_BOARD);
+		selectionGroup.add(selectionComputerSystem);
+		selectionGroup.add(selectionBaseBoard);
 
 		GroupLayout layoutByAuditInfo = new GroupLayout(this);
 		this.setLayout(layoutByAuditInfo);
@@ -89,15 +89,14 @@ public class PanelHWByAuditDriver extends JPanel {
 						.addGap(hGap, hGap, hGap).addComponent(buttonUploadDrivers, lh, lh, lh))
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addGap(hGap / 2 + 1, hGap / 2 + 1, hGap / 2 + 1)
-								.addComponent(selectionCOMPUTER_SYSTEN))
+								.addGap(hGap / 2 + 1, hGap / 2 + 1, hGap / 2 + 1).addComponent(selectionComputerSystem))
 						.addComponent(fieldVendor, lh, lh, lh).addComponent(labelSeparator, lh, lh, lh)
 						.addComponent(fieldLabel, lh, lh, lh)
 
 				).addGap(vGap / 2, vGap / 2, vGap / 2).addGroup(layoutByAuditInfo.createParallelGroup()
 
 						.addGroup(layoutByAuditInfo.createSequentialGroup()
-								.addGap(hGap / 2 + 1, hGap / 2 + 1, hGap / 2 + 1).addComponent(selectionBASE_BOARD))
+								.addGap(hGap / 2 + 1, hGap / 2 + 1, hGap / 2 + 1).addComponent(selectionBaseBoard))
 						.addComponent(fieldVendor2, lh, lh, lh).addComponent(labelSeparator2, lh, lh, lh)
 						.addComponent(fieldLabel2, lh, lh, lh)
 
@@ -109,9 +108,9 @@ public class PanelHWByAuditDriver extends JPanel {
 						.addComponent(labelInfo, 5, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(2, hGap * 4, hGap * 4)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
-						.addComponent(selectionCOMPUTER_SYSTEN, 2, GroupLayout.PREFERRED_SIZE,
+						.addComponent(selectionComputerSystem, 2, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addComponent(selectionBASE_BOARD, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(selectionBaseBoard, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(hGap, hGap, hGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup()
 						.addGroup(layoutByAuditInfo.createSequentialGroup().addGap(2, 2, 2).addComponent(labelVendor,
@@ -189,7 +188,7 @@ public class PanelHWByAuditDriver extends JPanel {
 	}
 
 	private void startDriverUploadFrame() {
-		if (selectionBASE_BOARD.isSelected()) {
+		if (selectionBaseBoard.isSelected()) {
 			byAuditPath = eliminateIllegalPathChars(fieldVendor2.getText()) + "/"
 					+ eliminateIllegalPathChars(fieldLabel2.getText());
 		} else {

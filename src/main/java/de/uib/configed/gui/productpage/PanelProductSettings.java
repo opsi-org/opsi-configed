@@ -108,19 +108,19 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected int hMin = 200;
 
-	final int fwidth_lefthanded = 1100;
-	final int fheight = 450;
+	private static final int FRAME_WIDTH_LEFTHANDED = 1100;
+	final int FRAME_HEIGHT = 450;
 
-	final int fwidth_column_productname = 170;
-	final int fwidth_column_productcompletename = 170;
-	final int fwidth_column_productstate = 60;
-	final int fwidth_column_productposition = 40;
+	final int WIDTH_COLUMN_PRODUCT_NAME = 170;
+	final int WIDTH_COLUMN_PRODUCT_COMPLETE_NAME = 170;
+	final int WIDTH_COLUMN_PRODUCT_STATE = 60;
+	final int WIDTH_COLUMN_PRODUCT_POSITION = 40;
 
-	final int fwidth_column_productsequence = fwidth_column_productposition;
-	final int fwidth_column_versionInfo = fwidth_column_productstate;
-	final int fwidth_column_productversion = fwidth_column_productstate;
-	final int fwidth_column_packageversion = fwidth_column_productstate;
-	final int fwidth_column_installationInfo = fwidth_column_productstate;
+	final int WIDTH_COLUMN_PRODUCT_SEQUENCE = WIDTH_COLUMN_PRODUCT_POSITION;
+	final int WIDTH_COLUMN_VERSION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
+	final int WIDTH_COLUMN_PRODUCT_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
+	final int WIDTH_COLUMN_PACKAGE_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
+	final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
 
 	ListCellRenderer standardListCellRenderer;
 
@@ -196,7 +196,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts = new JScrollPane();
 
 		paneProducts.getViewport().add(tableProducts);
-		paneProducts.setPreferredSize(new Dimension(fwidth_lefthanded, fheight + 40));
+		paneProducts.setPreferredSize(new Dimension(FRAME_WIDTH_LEFTHANDED, FRAME_HEIGHT + 40));
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		tableProducts.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
@@ -856,13 +856,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_ID)) > -1) {
 			TableColumn nameColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			nameColumn.setPreferredWidth(fwidth_column_productname);
+			nameColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_NAME);
 			nameColumn.setCellRenderer(productNameTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_NAME)) > -1) {
 			TableColumn completeNameColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			completeNameColumn.setPreferredWidth(fwidth_column_productcompletename);
+			completeNameColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_COMPLETE_NAME);
 			completeNameColumn.setCellRenderer(productCompleteNameTableCellRenderer);
 		}
 
@@ -878,7 +878,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm,
 					de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir));
-			targetColumn.setPreferredWidth(fwidth_column_productstate);
+			targetColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			targetColumn.setCellRenderer(targetConfigurationTableCellRenderer);
 		}
 
@@ -894,26 +894,26 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm,
 					de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir));
-			statusColumn.setPreferredWidth(fwidth_column_productstate);
+			statusColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			statusColumn.setCellRenderer(installationStatusTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_PROGRESS)) > -1) {
 			TableColumn progressColumn = tableProducts.getColumnModel().getColumn(colIndex);
 
-			progressColumn.setPreferredWidth(fwidth_column_productstate);
+			progressColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			progressColumn.setCellRenderer(actionProgressTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_LAST_ACTION)) > -1) {
 			TableColumn lastactionColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			lastactionColumn.setPreferredWidth(fwidth_column_productstate);
+			lastactionColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			lastactionColumn.setCellRenderer(lastActionTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_RESULT)) > -1) {
 			TableColumn actionresultColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			actionresultColumn.setPreferredWidth(fwidth_column_productstate);
+			actionresultColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			actionresultColumn.setCellRenderer(actionResultTableCellRenderer);
 		}
 
@@ -929,13 +929,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			actionsCombo.setRenderer(standardListCellRenderer);
 			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm,
 					de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir));
-			actionColumn.setPreferredWidth(fwidth_column_productstate);
+			actionColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			actionColumn.setCellRenderer(actionRequestTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_LAST_STATE_CHANGE)) > -1) {
 			TableColumn laststatechangeColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			laststatechangeColumn.setPreferredWidth(fwidth_column_productsequence);
+			laststatechangeColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE);
 
 			laststatechangeColumn.setCellRenderer(lastStateChangeTableCellRenderer);
 
@@ -943,7 +943,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_ACTION_SEQUENCE)) > -1) {
 			TableColumn priorityclassColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			priorityclassColumn.setPreferredWidth(fwidth_column_productsequence);
+			priorityclassColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE);
 
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
@@ -958,7 +958,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_PRIORITY)) > -1) {
 			TableColumn priorityclassColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			priorityclassColumn.setPreferredWidth(fwidth_column_productsequence);
+			priorityclassColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE);
 
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
@@ -970,7 +970,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_POSITION)) > -1) {
 			TableColumn productsequenceColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			productsequenceColumn.setPreferredWidth(fwidth_column_productsequence);
+			productsequenceColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_SEQUENCE);
 
 			productsequenceTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			productsequenceColumn.setCellRenderer(productsequenceTableCellRenderer);
@@ -981,20 +981,20 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PRODUCT_VERSION)) > -1) {
 			TableColumn productversionColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			productversionColumn.setPreferredWidth(fwidth_column_productversion);
+			productversionColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_VERSION);
 			productversionColumn.setCellRenderer(productversionTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_PACKAGE_VERSION)) > -1) {
 
 			TableColumn packageversionColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			packageversionColumn.setPreferredWidth(fwidth_column_packageversion);
+			packageversionColumn.setPreferredWidth(WIDTH_COLUMN_PACKAGE_VERSION);
 			packageversionColumn.setCellRenderer(packageversionTableCellRenderer);
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_VERSION_INFO)) > -1) {
 			TableColumn versionInfoColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			versionInfoColumn.setPreferredWidth(fwidth_column_versionInfo);
+			versionInfoColumn.setPreferredWidth(WIDTH_COLUMN_VERSION_INFO);
 			versionInfoColumn.setCellRenderer(versionInfoTableCellRenderer);
 
 			((DefaultRowSorter) sorter).setComparator(colIndex, new StringComparator());
@@ -1003,7 +1003,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_INSTALLATION_INFO)) > -1) {
 			TableColumn installationInfoColumn = tableProducts.getColumnModel().getColumn(colIndex);
-			installationInfoColumn.setPreferredWidth(fwidth_column_installationInfo);
+			installationInfoColumn.setPreferredWidth(WIDTH_COLUMN_INSTALLATION_INFO);
 			installationInfoColumn.setCellRenderer(installationInfoTableCellRenderer);
 
 			JComboBox installationInfoCombo = new JComboBox<>();

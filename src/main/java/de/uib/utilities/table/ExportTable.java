@@ -45,8 +45,6 @@ public abstract class ExportTable {
 
 	DecimalFormat f = new DecimalFormat("#0.00");
 
-	protected final String SHORT_APPNAME = Globals.APPNAME;
-
 	public ExportTable(javax.swing.JTable table, List<String> classNames) {
 		this.theTable = table;
 		this.classNames = classNames;
@@ -139,7 +137,7 @@ public abstract class ExportTable {
 			if (theTable.getRowCount() > 0 && theTable.getSelectedRows().length == 0) {
 
 				FTextArea fChoice = new FTextArea(null,
-						SHORT_APPNAME + " " + Configed.getResourceValue("ExportTable.title"), true,
+						Globals.APPNAME + " " + Configed.getResourceValue("ExportTable.title"), true,
 						new String[] {
 								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
 								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCompleteTable"),
@@ -184,7 +182,7 @@ public abstract class ExportTable {
 			chooser.setPreferredSize(Globals.filechooserSize);
 
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			chooser.setDialogTitle(SHORT_APPNAME + "    " + Configed.getResourceValue("DocumentExport.chooser"));
+			chooser.setDialogTitle(Globals.APPNAME + "    " + Configed.getResourceValue("DocumentExport.chooser"));
 
 			chooser.setApproveButtonText("ok");
 			chooser.setApproveButtonToolTipText(Configed.getResourceValue("ExportTable.approveTooltip"));

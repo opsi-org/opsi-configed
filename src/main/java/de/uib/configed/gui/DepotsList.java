@@ -101,7 +101,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	}
 
 	class MyListCellRenderer extends DefaultListCellRenderer {
-		protected int FILL_LENGTH = 30;
+		private static final int FILL_LENGTH = 30;
 
 		Map<String, Map<String, Object>> extendedInfo;
 

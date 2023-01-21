@@ -291,34 +291,34 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		case "'x''y''z'":
 		case "'x''y''z''...'":
 			Logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
-			formatedResult = createFormattedDataSourceString(result, "'", brackets_none, " ");
+			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_NONE, " ");
 			break;
 		case "'x','y','z'":
 		case "'x','y','z','...'":
 			Logging.info(this, "formatResult switch case [3] " + "'x''y''z''...'" + " || " + "'x''y''z'");
-			formatedResult = createFormattedDataSourceString(result, "'", brackets_none, ",");
+			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_NONE, ",");
 			break;
 		case "\"x\"\"y\"\"z\"":
 		case "\"x\"\"y\"\"z\"\"...\"":
 			Logging.info(this, "formatResult switch case [4] " + "\"x\"\"y\"\"z\"\"...\"" + " || " + "\"x\"\"y\"\"z\"");
-			formatedResult = createFormattedDataSourceString(result, "\"", brackets_none, " ");
+			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_NONE, " ");
 			break;
 		case "\"x\",\"y\",\"z\"":
 		case "\"x\",\"y\",\"z\",\"...\"":
 			Logging.info(this,
 					"formatResult switch case [5] " + "\"x\",\"y\",\"z\",\"...\"" + " || " + "\"x\",\"y\",\"z\"");
-			formatedResult = createFormattedDataSourceString(result, "\"", brackets_none, ",");
+			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_NONE, ",");
 			break;
 		case "['x','y','z']":
 		case "['x','y','z','...']":
 			Logging.info(this, "formatResult switch case [5] " + "['x','y','z']" + " || " + "['x','y','z','...']");
-			formatedResult = createFormattedDataSourceString(result, "'", brackets_square, ",");
+			formatedResult = createFormattedDataSourceString(result, "'", BRACKETS_SQUARE, ",");
 			break;
 		case "[\"x\",\"y\",\"z\"]":
 		case "[\"x\",\"y\",\"z\",\"...\"]":
 			Logging.info(this,
 					"formatResult switch case [5] " + "[\"x\",\"y\",\"z\"]" + " || " + "[\"x\",\"y\",\"z\",\"...\"]");
-			formatedResult = createFormattedDataSourceString(result, "\"", brackets_square, ",");
+			formatedResult = createFormattedDataSourceString(result, "\"", BRACKETS_SQUARE, ",");
 			break;
 		default:
 			Logging.warning(this, "cannot format into \"" + format + "\" with \"" + Arrays.toString(result) + "\"");
@@ -327,8 +327,8 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return formatedResult;
 	}
 
-	final String brackets_none = " x ";
-	final String brackets_square = "[x]";
+	private static final String BRACKETS_NONE = " x ";
+	private static final String BRACKETS_SQUARE = "[x]";
 
 	private String createFormattedDataSourceString(String[] strArr, String beginEndElement, String beginEndString,
 			String separator) {

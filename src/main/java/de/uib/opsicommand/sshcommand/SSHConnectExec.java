@@ -45,7 +45,7 @@ public class SSHConnectExec extends SSHConnect {
 
 	public SSHConnectExec(ConfigedMain m) {
 		super(m);
-		FOUND_ERROR = false;
+		foundError = false;
 		main = m;
 
 	}
@@ -56,7 +56,7 @@ public class SSHConnectExec extends SSHConnect {
 
 	public SSHConnectExec(ConfigedMain m, SSHCommand sshcommand, JButton responseButton) {
 		super(m);
-		FOUND_ERROR = false;
+		foundError = false;
 		main = m;
 
 		Logging.info(this, "SSHConnectExec main " + main);
@@ -199,7 +199,7 @@ public class SSHConnectExec extends SSHConnect {
 				final SSHCommandParameterMethods pmethodHandler = SSHCommandFactory.getInstance(main)
 						.getParameterHandler();
 				final SSHConnectExec caller = this;
-				FOUND_ERROR = false;
+				foundError = false;
 
 				if (!SSHCommandFactory.sshAlwaysExecInBackground) {
 					finalDialog.setLocationRelativeTo(Globals.mainFrame);
@@ -240,14 +240,14 @@ public class SSHConnectExec extends SSHConnect {
 		}
 	}
 
-	protected boolean FOUND_ERROR = false;
+	protected boolean foundError = false;
 
 	public String exec(SSHCommand command) {
 		return exec(command, true, null, false, false, 1, 1);
 	}
 
 	public String exec(SSHCommand command, boolean withGui) {
-		FOUND_ERROR = false;
+		foundError = false;
 		return exec(command, withGui, null, false, false, 1, 1);
 	}
 
@@ -262,7 +262,7 @@ public class SSHConnectExec extends SSHConnect {
 			return null;
 		}
 
-		if (FOUND_ERROR) {
+		if (foundError) {
 			Logging.warning(this, "exec found error.");
 			return command.get_ERROR_TEXT();
 		}
@@ -409,7 +409,7 @@ public class SSHConnectExec extends SSHConnect {
 					Logging.info(this, "2. publish");
 				}
 			} else if (exitCode != 0) {
-				FOUND_ERROR = true;
+				foundError = true;
 				Logging.info(this, "exec exit code " + exitCode + ".");
 				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitError") + " "
 						+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
@@ -418,7 +418,7 @@ public class SSHConnectExec extends SSHConnect {
 							+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
 				}
 			} else {
-				FOUND_ERROR = true;
+				foundError = true;
 				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
 				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
 				if (withGui) {
@@ -495,7 +495,7 @@ public class SSHConnectExec extends SSHConnect {
 
 							if (pw == null) {
 								Logging.info(this, "exec ready (1)");
-								FOUND_ERROR = true;
+								foundError = true;
 								publish(Configed.getResourceValue("SSHConnection.Exec.exitClosed"));
 								if (outputDialog != null)
 									outputDialog.setStatusFinish();
@@ -528,7 +528,7 @@ public class SSHConnectExec extends SSHConnect {
 						checkExitCode(channel.getExitStatus(), withGui, channel);
 						if (channel.getExitStatus() != 0) {
 							Logging.info(this, "exec ready (2)");
-							FOUND_ERROR = true;
+							foundError = true;
 							if (outputDialog != null)
 								outputDialog.setStatusFinish();
 							return null;

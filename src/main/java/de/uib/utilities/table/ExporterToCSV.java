@@ -7,26 +7,28 @@ import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
 public class ExporterToCSV extends ExportTable {
-	protected String CSV_ENCODING = "UTF8";
 
 	protected static final String CSV_SEPARATOR = ";";
 	public static final Character STRING_DELIMITER = '"';
 	protected static final String THIS_EXTENSION = ".csv";
 
-	public ExporterToCSV(javax.swing.JTable table, List<String> classNames) {
+	public ExporterToCSV(JTable table, List<String> classNames) {
 		super(table, classNames);
-		extensionFilter = new javax.swing.filechooser.FileNameExtensionFilter("CSV", "csv");
+		extensionFilter = new FileNameExtensionFilter("CSV", "csv");
 
 		defaultExportFilename = "export.csv";
 		extension = THIS_EXTENSION;
 
 	}
 
-	public ExporterToCSV(javax.swing.JTable table) {
+	public ExporterToCSV(JTable table) {
 		this(table, null);
 
 	}

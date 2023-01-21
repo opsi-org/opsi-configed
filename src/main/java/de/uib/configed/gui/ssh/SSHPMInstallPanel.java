@@ -14,9 +14,7 @@ import de.uib.utilities.logging.Logging;
 
 public class SSHPMInstallPanel extends JPanel {
 	public boolean isOpen = false;
-	protected int PREF = GroupLayout.PREFERRED_SIZE;
-	protected int MAX = Short.MAX_VALUE;
-	protected GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
+
 	protected GroupLayout.Alignment center = GroupLayout.Alignment.CENTER;
 	protected GroupLayout.Alignment baseline = GroupLayout.Alignment.BASELINE;
 

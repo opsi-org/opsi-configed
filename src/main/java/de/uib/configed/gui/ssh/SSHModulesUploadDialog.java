@@ -41,8 +41,7 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 
 		SSHConnectExec testFile = new SSHConnectExec();
 		testFile.exec(new EmptyCommand(SSHCommandFactory.STRING_COMMAND_FILE_EXISTS_NOT_REMOVE.replace(
-				SSHCommandFactory.STRING_REPLACEMENT_FILENAME,
-				((CommandModulesUpload) command).unofficial_modules_directory) // /etc/opsi/modules.d
+				SSHCommandFactory.STRING_REPLACEMENT_FILENAME, CommandModulesUpload.UNOFFICIAL_MODULES_DIRECTORY) // /etc/opsi/modules.d
 		), false);
 
 		jLabelCopyToModulesD.setVisible(false);
@@ -57,11 +56,17 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	 */
 	@Override
 	protected void initGUIAdditional() {
-		horizontalParallelGroup = inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout
-				.createParallelGroup()
-				.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelmodulesFrom, PREF, PREF, PREF))
-				.addComponent(jLabelSetRights, PREF, PREF, PREF).addComponent(jLabelOverwriteExisting, PREF, PREF, PREF)
-				.addComponent(jLabelCopyToModulesD, PREF, PREF, PREF)).addGap(Globals.GAP_SIZE)
+		horizontalParallelGroup = inputPanelLayout.createSequentialGroup()
+				.addGroup(inputPanelLayout.createParallelGroup()
+						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelmodulesFrom,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelOverwriteExisting, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelCopyToModulesD, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup()
 						.addComponent(jComboBoxSetRights, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 						.addComponent(jCheckBoxOverwriteExisting, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
@@ -69,19 +74,21 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 						.addComponent(jComboBoxCopyToModulesD, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 								Globals.ICON_WIDTH));
 		verticalParallelGroup = inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addComponent(jLabelCopyToModulesD, PREF, PREF, PREF)
-				.addComponent(jComboBoxCopyToModulesD, PREF, PREF, PREF);
+				.addComponent(jLabelCopyToModulesD, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jComboBoxCopyToModulesD, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE);
 	}
 
 	@Override
 	protected String doAction1AdditionalSetPath() {
-		String modulesServerPath = ((CommandModulesUpload) command).actually_modules_directory;
+		String modulesServerPath = CommandModulesUpload.ACTUAL_MODULES_DIRECTORY;
 		if (jComboBoxCopyToModulesD.isVisible() && jComboBoxCopyToModulesD.isSelected()) {
-			modulesServerPath = ((CommandModulesUpload) command).unofficial_modules_directory;
+			modulesServerPath = CommandModulesUpload.UNOFFICIAL_MODULES_DIRECTORY;
 			command.setTargetPath(modulesServerPath);
 			command.setTargetFilename(jFileChooserLocal.getSelectedFile().getName());
 		} else {
-			command.setTargetPath(((CommandModulesUpload) command).actually_modules_directory);
+			command.setTargetPath(CommandModulesUpload.ACTUAL_MODULES_DIRECTORY);
 			command.setTargetFilename(CommandModulesUpload.DEFAULT_FILENAME);
 		}
 		return modulesServerPath;
@@ -92,7 +99,7 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 		if (jComboBoxCopyToModulesD.isVisible() && jComboBoxCopyToModulesD.isSelected())
 			c.setDir(path + command.getTargetFilename());
 		else
-			c.setFilename(path + command.getTargetFilename());
+			c.setFileName(path + command.getTargetFilename());
 		return c;
 	}
 

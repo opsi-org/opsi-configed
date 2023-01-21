@@ -401,39 +401,44 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 
 	private void initLayout() {
-		int pref = GroupLayout.PREFERRED_SIZE;
-		GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
-		GroupLayout.Alignment center = GroupLayout.Alignment.CENTER;
 		GroupLayout winAuthPanelLayout = new GroupLayout(winAuthPanel);
 		winAuthPanel.setLayout(winAuthPanelLayout);
 
-		winAuthPanelLayout.setHorizontalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(winAuthPanelLayout.createParallelGroup(leading).addGroup(winAuthPanelLayout
-						.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addComponent(jLabelUser, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
-						.addGap(Globals.GAP_SIZE)
-						.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-						.addGap(Globals.GAP_SIZE).addGap(Globals.ICON_WIDTH).addGap(Globals.GAP_SIZE))
-						.addGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-								.addComponent(jLabelPassword, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Globals.BUTTON_WIDTH)
-								.addGap(Globals.GAP_SIZE)
-								.addComponent(jTextFieldPassword, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Short.MAX_VALUE)
-								.addGap(Globals.GAP_SIZE).addComponent(jButtonShowPassword, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-								.addGap(Globals.GAP_SIZE)))
-				.addGap(Globals.GAP_SIZE));
+		winAuthPanelLayout
+				.setHorizontalGroup(
+						winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+								.addGroup(
+										winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+												.addGroup(winAuthPanelLayout.createSequentialGroup()
+														.addGap(Globals.GAP_SIZE)
+														.addComponent(jLabelUser, Globals.BUTTON_WIDTH,
+																Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+														.addGap(Globals.GAP_SIZE)
+														.addComponent(jTextFieldUser, GroupLayout.PREFERRED_SIZE,
+																GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+														.addGap(Globals.GAP_SIZE).addGap(Globals.ICON_WIDTH)
+														.addGap(Globals.GAP_SIZE))
+												.addGroup(winAuthPanelLayout.createSequentialGroup()
+														.addGap(Globals.GAP_SIZE)
+														.addComponent(jLabelPassword, Globals.BUTTON_WIDTH,
+																Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH)
+														.addGap(Globals.GAP_SIZE)
+														.addComponent(jTextFieldPassword, Globals.BUTTON_WIDTH,
+																Globals.BUTTON_WIDTH, Short.MAX_VALUE)
+														.addGap(Globals.GAP_SIZE)
+														.addComponent(jButtonShowPassword, Globals.ICON_WIDTH,
+																Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+														.addGap(Globals.GAP_SIZE)))
+								.addGap(Globals.GAP_SIZE));
 		winAuthPanelLayout
 				.setVerticalGroup(winAuthPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-						.addGroup(winAuthPanelLayout.createParallelGroup(center)
+						.addGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(jLabelUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)
 								.addComponent(jTextFieldUser, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT))
 						.addGap(Globals.GAP_SIZE)
-						.addGroup(winAuthPanelLayout.createParallelGroup(center)
+						.addGroup(winAuthPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 								.addComponent(jLabelPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 										Globals.BUTTON_HEIGHT)
 								.addComponent(jTextFieldPassword, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
@@ -445,31 +450,37 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-				.addGroup(inputPanelLayout.createParallelGroup()
-						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelClient, pref, pref, pref)
-								.addGap(Globals.GAP_SIZE).addComponent(jTextFieldClient, pref, pref, Short.MAX_VALUE))
+				.addGroup(inputPanelLayout.createParallelGroup().addGroup(inputPanelLayout.createSequentialGroup()
+						.addComponent(jLabelClient, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.GAP_SIZE).addComponent(jTextFieldClient, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 						.addGap(Globals.GAP_SIZE)
-						.addGroup(
-								inputPanelLayout.createSequentialGroup().addComponent(jLabelUserData, pref, pref, pref))
+						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelUserData,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jButtonCopySelectedClients,
-								pref, pref, pref))
-						.addComponent(winAuthPanel, pref, pref, Short.MAX_VALUE)
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(winAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
 
-						.addGroup(
-								inputPanelLayout.createSequentialGroup()
-										.addGroup(inputPanelLayout.createParallelGroup()
-												.addComponent(jLabelFinalize, pref, pref, pref)
-												.addComponent(jLabelApplySudo, pref, pref, pref)
-												.addComponent(jLabelVerbosity, pref, pref, pref)
-												.addComponent(jLabelIgnorePing, pref, pref, pref))
-										.addGap(2 * Globals.GAP_SIZE)
-										.addGroup(inputPanelLayout.createParallelGroup().addComponent(panelFinalAction)
-												.addComponent(jCheckBoxApplySudo, Globals.ICON_WIDTH,
-														Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-												.addComponent(jCheckBoxIgnorePing, Globals.ICON_WIDTH,
-														Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-												.addComponent(jCheckBoxVerbosity, Globals.ICON_WIDTH,
-														Globals.ICON_WIDTH, Globals.ICON_WIDTH))
+						.addGroup(inputPanelLayout.createSequentialGroup()
+								.addGroup(inputPanelLayout.createParallelGroup()
+										.addComponent(jLabelFinalize, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelApplySudo, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelIgnorePing, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(2 * Globals.GAP_SIZE)
+								.addGroup(inputPanelLayout.createParallelGroup().addComponent(panelFinalAction)
+										.addComponent(jCheckBoxApplySudo, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+												Globals.ICON_WIDTH)
+										.addComponent(jCheckBoxIgnorePing, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+												Globals.ICON_WIDTH)
+										.addComponent(jCheckBoxVerbosity, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
+												Globals.ICON_WIDTH))
 
 						)));
 
@@ -485,9 +496,11 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 								jButtonCopySelectedClients, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
 						.addGap(Globals.GAP_SIZE * 2)
-						.addGroup(inputPanelLayout.createParallelGroup(leading).addComponent(jLabelUserData,
-								Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
-						.addGap(Globals.GAP_SIZE).addComponent(winAuthPanel, pref, pref, pref)
+						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
+								jLabelUserData, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT))
+						.addGap(Globals.GAP_SIZE)
+						.addComponent(winAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE * 2)
 
 						.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)

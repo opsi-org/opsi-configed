@@ -47,8 +47,6 @@ import de.uib.utilities.logging.TimeCheck;
 
 public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersistenceController {
 
-	java.sql.Time PRODUCT_ON_CLIENT_last_read = null;
-
 	OpsiDirectSQLPersistenceController(String server, String user, String password) {
 		super(server, user, password);
 		DbConnect.getConnection(server, user, password);
