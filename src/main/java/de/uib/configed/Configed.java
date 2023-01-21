@@ -129,9 +129,9 @@ public class Configed {
 	public static final String JAVA_VERSION = System.getProperty("java.version");
 	public static final String JAVA_VENDOR = System.getProperty("java.vendor", "");
 	public static final String SYSTEM_SSL_VERSION = System.getProperty("https.protocols");
-	public static String EXTRA_LOCALIZATION_FILENAME = null;
+	public static String extraLocalizationFileName = null;
 	public static PropertiesStore extraLocalization;
-	public static boolean SHOW_LOCALIZATION_STRINGS = false;
+	public static boolean showLocalizationStrings = false;
 
 	public static ConfigedMain cm;
 
@@ -553,30 +553,30 @@ public class Configed {
 					}
 					i = i + 2;
 				} else if (args[i].equals("--localizationfile")) {
-					EXTRA_LOCALIZATION_FILENAME = getArg(args, i);
+					extraLocalizationFileName = getArg(args, i);
 
 					boolean success = false;
 
 					String[] parts = null;
 
 					try {
-						File extraLocalizationFile = new File(EXTRA_LOCALIZATION_FILENAME);
+						File extraLocalizationFile = new File(extraLocalizationFileName);
 						if (!extraLocalizationFile.exists()) {
-							Logging.debug("File not found: " + EXTRA_LOCALIZATION_FILENAME);
+							Logging.debug("File not found: " + extraLocalizationFileName);
 						} else if (!extraLocalizationFile.canRead()) {
-							Logging.debug("File not readable " + EXTRA_LOCALIZATION_FILENAME);
+							Logging.debug("File not readable " + extraLocalizationFileName);
 						} else
 
 						{
 							Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
-									+ EXTRA_LOCALIZATION_FILENAME.matches("configed_...*\\.properties") + " --  "
-									+ EXTRA_LOCALIZATION_FILENAME.matches(LOCALIZATION_FILENAME_REGEX));
+									+ extraLocalizationFileName.matches("configed_...*\\.properties") + " --  "
+									+ extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX));
 
-							parts = EXTRA_LOCALIZATION_FILENAME.split("_");
+							parts = extraLocalizationFileName.split("_");
 
 							Logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
 
-							if (!EXTRA_LOCALIZATION_FILENAME.matches(LOCALIZATION_FILENAME_REGEX)) {
+							if (!extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX)) {
 								Logging.debug("localization file does not have the expected format " + Messages.APPNAME
 										+ "_LOCALE.properties");
 							} else {
@@ -587,7 +587,7 @@ public class Configed {
 							}
 						}
 					} catch (Exception ex) {
-						Logging.error(EXTRA_LOCALIZATION_FILENAME + " problem", ex);
+						Logging.error(extraLocalizationFileName + " problem", ex);
 					}
 
 					i = i + 2;
@@ -596,7 +596,7 @@ public class Configed {
 						endApp(ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
 					}
 				} else if (args[i].equals("--localizationstrings")) {
-					SHOW_LOCALIZATION_STRINGS = true;
+					showLocalizationStrings = true;
 					i = i + 1;
 				} else if (args[i].equals("--swaudit-pdf")) {
 					optionCLISwAuditPDF = true;
@@ -678,7 +678,7 @@ public class Configed {
 				result = Messages.messages.getString(key);
 			}
 
-			if (SHOW_LOCALIZATION_STRINGS) {
+			if (showLocalizationStrings) {
 				Logging.info("LOCALIZE " + key + " by " + result);
 				result = "" + result + "[[" + key + "]]";
 
@@ -690,7 +690,7 @@ public class Configed {
 			try {
 				result = Messages.messagesEN.getString(key);
 
-				if (SHOW_LOCALIZATION_STRINGS) {
+				if (showLocalizationStrings) {
 					Logging.info("LOCALIZE " + key + " by " + result);
 					result = "" + result + "?? [[" + key + "]]";
 

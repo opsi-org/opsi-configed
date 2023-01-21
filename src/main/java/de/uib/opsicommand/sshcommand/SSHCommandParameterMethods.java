@@ -406,15 +406,15 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	public String getConfigServerName() {
 		List<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots)
-			if (depot.startsWith(ConfigedMain.HOST)) {
-				Logging.debug(this, "getConfig_serverName " + ConfigedMain.HOST);
+			if (depot.startsWith(ConfigedMain.host)) {
+				Logging.debug(this, "getConfig_serverName " + ConfigedMain.host);
 				return depot;
 			}
 
-		Logging.debug(this, "getConfig_serverName " + ConfigedMain.HOST);
+		Logging.debug(this, "getConfig_serverName " + ConfigedMain.host);
 		//// peristancecontroller methods for depot :
 
-		return ConfigedMain.HOST;
+		return ConfigedMain.host;
 	}
 
 	@Override

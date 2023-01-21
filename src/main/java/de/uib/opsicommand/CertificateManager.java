@@ -20,9 +20,9 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -71,7 +71,7 @@ public class CertificateManager {
 
 	public static void saveCertificate(File certificateFile) {
 		try {
-			String dirname = ConfigedMain.HOST;
+			String dirname = ConfigedMain.host;
 
 			if (dirname.contains(":")) {
 				dirname = dirname.replace(":", "_");

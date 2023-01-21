@@ -125,9 +125,9 @@ public class SSHConfigDialog extends FGeneralDialog {
 			}
 		} else {
 
-			if (!connectionInfo.getHost().equals(ConfigedMain.HOST)) {
+			if (!connectionInfo.getHost().equals(ConfigedMain.host)) {
 				Logging.info(this,
-						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + ConfigedMain.HOST + "<");
+						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + ConfigedMain.host + "<");
 				return false;
 			}
 			if (!connectionInfo.getPort().equals(jTextFieldPort.getText())) {
@@ -138,7 +138,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 				Logging.debug(this, "compareStates 7");
 				return false;
 			}
-			if ((!connectionInfo.getPassw().equals(ConfigedMain.PASSWORD)) && (!connectionInfo.usesKeyfile())) {
+			if ((!connectionInfo.getPassw().equals(ConfigedMain.password)) && (!connectionInfo.usesKeyfile())) {
 				Logging.debug(this, "compareStates 8");
 				return false;
 			}
@@ -237,7 +237,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		jComboBoxHost = new JComboBox<>();
 		String host = connectionInfo.getHost();
 		if (host == null)
-			host = ConfigedMain.HOST;
+			host = ConfigedMain.host;
 		jComboBoxHost.addItem(host);
 
 		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
@@ -610,7 +610,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 			if (!jComboBoxUseDefaultState)
 			// state has changed
 			{
-				connectionInfo.setUserData(ConfigedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
+				connectionInfo.setUserData(ConfigedMain.host, ConfigedMain.USER, ConfigedMain.password,
 						SSHConnect.PORT_SSH);
 			}
 
@@ -687,8 +687,8 @@ public class SSHConfigDialog extends FGeneralDialog {
 		if (jCheckBoxDefault.isSelected()) {
 			connectionInfo.setUserData(
 
-					ConfigedMain.HOST, // persist.getHostInfoCollections().getConfigServer(),
-					ConfigedMain.USER, ConfigedMain.PASSWORD, SSHConnect.PORT_SSH);
+					ConfigedMain.host, // persist.getHostInfoCollections().getConfigServer(),
+					ConfigedMain.USER, ConfigedMain.password, SSHConnect.PORT_SSH);
 
 		}
 		jComboBoxHost.setSelectedItem(connectionInfo.getHost());

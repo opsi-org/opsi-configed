@@ -514,9 +514,9 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 		waitCursor = new WaitCursor(this, "ok_action");
 
-		ConfigedMain.HOST = (String) fieldHost.getSelectedItem();
+		ConfigedMain.host = (String) fieldHost.getSelectedItem();
 		ConfigedMain.USER = fieldUser.getText();
-		ConfigedMain.PASSWORD = String.valueOf(passwordField.getPassword());
+		ConfigedMain.password = String.valueOf(passwordField.getPassword());
 		Logging.info(this, "invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", "
 				+ fieldUser.getText()
 

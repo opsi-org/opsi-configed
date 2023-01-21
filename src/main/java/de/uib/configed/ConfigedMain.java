@@ -385,11 +385,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private boolean filterClientList = false;
 
-	public static String HOST = null;
+	public static String host = null;
 	public static String USER = null;
-	public static String PASSWORD = null;
+	public static String password = null;
 	public static String SSHKEY = null;
-	public static String SSHKEYPASS = null;
+	public static String sshKeyPass = null;
 
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER
@@ -399,23 +399,23 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
 	public ConfigedMain(String host, String user, String password) {
-		if (HOST == null) {
-			HOST = host;
+		if (host == null) {
+			host = host;
 		}
 		if (USER == null) {
 			USER = user;
 		}
-		if (PASSWORD == null) {
-			PASSWORD = password;
+		if (password == null) {
+			password = password;
 		}
 		SSHKEY = Configed.sshkey;
-		SSHKEYPASS = Configed.sshkeypassphrase;
+		sshKeyPass = Configed.sshkeypassphrase;
 
-		SSHConnectionInfo.getInstance().setHost(HOST);
+		SSHConnectionInfo.getInstance().setHost(host);
 		SSHConnectionInfo.getInstance().setUser(USER);
-		SSHConnectionInfo.getInstance().setPassw(PASSWORD);
+		SSHConnectionInfo.getInstance().setPassw(password);
 		SSHConnectionInfo.getInstance().useKeyfile(SSHKEY != null, SSHKEY != null ? SSHKEY : "",
-				SSHKEY != null ? SSHKEYPASS : "");
+				SSHKEY != null ? sshKeyPass : "");
 		Logging.registLogEventObserver(this);
 	}
 
@@ -486,7 +486,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private String getSavedStatesDirectoryName(String locationName) {
-		return locationName + File.separator + HOST.replace(":", "_");
+		return locationName + File.separator + host.replace(":", "_");
 	}
 
 	private void initSavedStates() {
@@ -599,8 +599,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Set<String> sshAllowedHosts = new HashSet<>();
 
 		if (persist.isDepotsFullPermission()) {
-			Logging.info(this, "set ssh allowed hosts " + HOST);
-			sshAllowedHosts.add(HOST);
+			Logging.info(this, "set ssh allowed hosts " + host);
+			sshAllowedHosts.add(host);
 			sshAllowedHosts.addAll(persist.getHostInfoCollections().getDepots().keySet());
 		} else {
 			sshAllowedHosts.addAll(persist.getDepotPropertiesForPermittedDepots().keySet());
@@ -1496,14 +1496,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		// check if we started with preferred values
-		if (HOST != null && !HOST.equals("")) {
-			dpass.setHost(HOST);
+		if (host != null && !host.equals("")) {
+			dpass.setHost(host);
 		}
 		if (USER != null) {
 			dpass.setUser(USER);
 		}
-		if (PASSWORD != null) {
-			dpass.setPassword(PASSWORD);
+		if (password != null) {
+			dpass.setPassword(password);
 		}
 
 		if (persist == null || persist.getConnectionState().getState() != ConnectionState.CONNECTED) {
@@ -1516,7 +1516,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// This must be called last, so that  loading frame for connection is called last
 		// and on top of the login-frame
-		if ((HOST != null && USER != null && PASSWORD != null)) {
+		if ((host != null && USER != null && password != null)) {
 			// Auto login
 			Logging.info(this, "start with given credentials");
 

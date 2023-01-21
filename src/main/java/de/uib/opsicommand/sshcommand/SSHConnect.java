@@ -212,7 +212,7 @@ public class SSHConnect {
 			connectionInfo.checkUserData();
 			Logging.info(this, "connect user@host " + connectionInfo.getUser() + "@" + connectionInfo.getHost());
 			Logging.debug(this, "connect with password log version " + connectionInfo.getShortPassw());
-			Logging.info(this, "connect to login host " + (ConfigedMain.HOST.equals(connectionInfo.getHost())));
+			Logging.info(this, "connect to login host " + (ConfigedMain.host.equals(connectionInfo.getHost())));
 			Logging.info(this, "connect user " + connectionInfo.getUser());
 
 			if (connectionInfo.usesKeyfile()) {

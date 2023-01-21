@@ -7191,22 +7191,19 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (KEY_USER_REGISTER_VALUE && !withUserRoles) {
 			KEY_USER_REGISTER_VALUE = false;
 
-			javax.swing.SwingUtilities.invokeLater(new Thread() {
-				public void run() {
-					StringBuilder info = new StringBuilder();
-					info.append(Configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
-					info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
-					info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.2") + "\n");
-					info.append(KEY_USER_REGISTER + " "
-							+ Configed.getResourceValue("Permission.modules.missing_user_roles.3"));
-					info.append("\n");
+			javax.swing.SwingUtilities.invokeLater(() -> {
+				StringBuilder info = new StringBuilder();
+				info.append(Configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
+				info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
+				info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.2") + "\n");
+				info.append(
+						KEY_USER_REGISTER + " " + Configed.getResourceValue("Permission.modules.missing_user_roles.3"));
+				info.append("\n");
 
-					Logging.warning(this,
-							" user role administration configured but not permitted by the modules file " + info);
+				Logging.warning(this,
+						" user role administration configured but not permitted by the modules file " + info);
 
-					FOpsiLicenseMissingText.callInstanceWith(info.toString());
-
-				}
+				FOpsiLicenseMissingText.callInstanceWith(info.toString());
 			});
 		}
 
@@ -8517,22 +8514,20 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
 
 			if (!missingModulesPermissionInfo.isEmpty()) {
-				javax.swing.SwingUtilities.invokeLater(new Thread() {
-					public void run() {
+				javax.swing.SwingUtilities.invokeLater(() -> {
 
-						StringBuilder info = new StringBuilder("");
+					StringBuilder info = new StringBuilder("");
 
-						info.append(Configed.getResourceValue("Permission.modules.clientcount.2"));
-						info.append(":\n");
-						for (String moduleInfo : missingModulesPermissionInfo) {
-							info.append(moduleInfo);
-							info.append("\n");
-						}
-
-						Logging.info(this, "missingModules " + info);
-						de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(info.toString());
-
+					info.append(Configed.getResourceValue("Permission.modules.clientcount.2"));
+					info.append(":\n");
+					for (String moduleInfo : missingModulesPermissionInfo) {
+						info.append(moduleInfo);
+						info.append("\n");
 					}
+
+					Logging.info(this, "missingModules " + info);
+					de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(info.toString());
+
 				});
 			}
 

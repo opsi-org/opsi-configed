@@ -116,7 +116,7 @@ public class SSHConnectionInfo {
 
 	public void checkUserData() {
 		if (getHost() == null)
-			setHost(ConfigedMain.HOST);
+			setHost(ConfigedMain.host);
 
 		if (getPort() == null)
 			setPort(SSHConnect.PORT_SSH);
@@ -125,7 +125,7 @@ public class SSHConnectionInfo {
 			setUser(ConfigedMain.USER);
 
 		if ((getPassw() == null) && (!usesKeyfile()))
-			setPassw(ConfigedMain.PASSWORD);
+			setPassw(ConfigedMain.password);
 
 		else if (getPassw() == null)
 			setPassw("");
