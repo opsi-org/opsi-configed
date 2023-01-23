@@ -1217,9 +1217,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		if (!e.getValueIsAdjusting()) {
-			actOnListSelection();
+		if (e.getValueIsAdjusting()) {
+			return;
 		}
+
+		actOnListSelection();
 	}
 
 	// we call this after we have a PersistenceController
@@ -2392,9 +2394,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					// on client activation a group activation is ended
 					{
 						clearTree();
-					}
-
-					else {
+					} else {
 						if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
 
 							clearTree();
@@ -2408,13 +2408,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 								activePaths.add(selTreePaths[i]);
 								treeClients.collectParentIDsFrom(selNode);
 							}
-						}
-
-						else if ((mouseEvent.getModifiersEx()
-								& InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
-
 						} else {
-
 							clearTree();
 						}
 					}
@@ -2436,7 +2430,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							getSelectedClientsString(), clientInDepot);
 
 					// restore keys, do not rebuild tree, select clientsFilteredByTree
-
 				}
 
 			} else {
@@ -2461,6 +2454,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
+	}
+
+	public boolean treeClientsSelectAction(TreePath newSelectedPath) {
+		logging.info(this, "treeClients_selectAction");
+
+		DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) newSelectedPath.getLastPathComponent());
+		logging.info(this, "treeClients_selectAction selected node " + selectedNode);
+
+		if (!selectedNode.getAllowsChildren()) {
+			setClientByTree(selectedNode.toString(), newSelectedPath);
+		}
+
+		return true;
 	}
 
 	protected void initTree() {

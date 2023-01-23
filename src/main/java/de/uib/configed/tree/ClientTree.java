@@ -89,6 +89,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public static Map<String, String> translationsFromPersistentNames;
 	public static java.util.Set<String> topGroupNames;
 
+	private boolean mouseClicked;
+
 	static {
 		ALL_NAME = configed.getResourceValue("ClientTree.ALLname");
 
@@ -449,6 +451,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		mouseClicked = false;
 
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			TreePath selectedPath = getSelectionPath();
@@ -465,18 +468,25 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			main.clearSelectionOnPanel();
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+		} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			// don't go backwards by this key
 			e.consume();
 		}
-
 	}
 
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
+		if (mouseClicked) {
+			mouseClicked = false;
+			return;
+		}
+
+		TreePath selectedPath = getSelectionPath();
+
+		if (selectedPath != null && getSelectionRows().length == 1) {
+			main.treeClientsSelectAction(selectedPath);
+		}
 	}
 
 	// TreeModelListener
@@ -523,6 +533,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 
 		mouse_ready = true;
+		mouseClicked = true;
 
 		final java.awt.Cursor initialCursor = getCursor();
 		final JTree theTree = this;
