@@ -1,10 +1,8 @@
 package de.uib.opsidatamodel.permission;
 
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
+import java.util.Set;
 
-import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
 public class UserSshConfig extends UserConfigModule {
@@ -12,26 +10,17 @@ public class UserSshConfig extends UserConfigModule {
 	// not create new user specific ssh configs (use defaults)
 
 	public static final String KEY_SSH_MENU_ACTIVE = "ssh.menu_serverconsole.active";
-	private static final String KEY_SSH_MENU_ACTIVE_DESCRIPTION = Configed
-			.getResourceValue("PersistenceController.SSH_MENU_ACTIVE");
 
 	public static final String KEY_SSH_CONFIG_ACTIVE = "ssh.serverconfiguration.active";
-	private static final String KEY_SSH_CONFIG_ACTIVE_DESCRIPTION = Configed
-			.getResourceValue("PersistenceController.SSH_CONFIG_ACTIVE");
 
 	public static final String KEY_SSH_COMMANDCONTROL_ACTIVE = "ssh.commandmanagement.active";
-	private static final String KEY_SSH_COMMANDCONTROL_ACTIVE_DESCRIPTION = Configed
-			.getResourceValue("PersistenceController.SSH_CONTROL_ACTIVE");
 
 	public static final String KEY_SSH_COMMANDS_ACTIVE = "ssh.commands.active";
-	private static final String KEY_SSH_COMMANDS_ACTIVE_description = Configed
-			.getResourceValue("PersistenceController.SSH_COMMANDS_ACTIVE");
 	// activate menus of all executable commands in menu server-console
 
 	// addToBoolKeys
-	public static LinkedHashSet<String> BOOL_KEYS;
+	public static final Set<String> BOOL_KEYS = new LinkedHashSet<>();
 	{
-		BOOL_KEYS = new LinkedHashSet<>();
 		BOOL_KEYS.add(KEY_SSH_MENU_ACTIVE);
 		BOOL_KEYS.add(KEY_SSH_CONFIG_ACTIVE);
 		BOOL_KEYS.add(KEY_SSH_COMMANDCONTROL_ACTIVE);
@@ -40,19 +29,7 @@ public class UserSshConfig extends UserConfigModule {
 		Logging.info(" UserSshConfig BOOL_KEYS " + BOOL_KEYS);
 	}
 
-	public static final LinkedHashSet<String> LIST_KEYS;
-	static {
-		LIST_KEYS = new LinkedHashSet<>();
-	}
-
-	public static Map<String, String> configDescription;
-	static {
-		configDescription = new HashMap<>();
-		configDescription.put(KEY_SSH_MENU_ACTIVE, KEY_SSH_MENU_ACTIVE_DESCRIPTION);
-		configDescription.put(KEY_SSH_CONFIG_ACTIVE, KEY_SSH_CONFIG_ACTIVE_DESCRIPTION);
-		configDescription.put(KEY_SSH_COMMANDCONTROL_ACTIVE, KEY_SSH_COMMANDCONTROL_ACTIVE_DESCRIPTION);
-		configDescription.put(KEY_SSH_COMMANDS_ACTIVE, KEY_SSH_COMMANDS_ACTIVE_description);
-	}
+	public static final Set<String> LIST_KEYS = new LinkedHashSet<>();;
 
 	public static final UserSshConfig DEFAULT;
 

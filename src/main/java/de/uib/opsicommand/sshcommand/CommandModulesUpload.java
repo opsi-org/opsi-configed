@@ -12,7 +12,7 @@ public class CommandModulesUpload extends CommandSFTPUpload
 	// TODO Why are there two directories?
 	public static final String ACTUAL_MODULES_DIRECTORY = "/etc/opsi/";
 	public static final String UNOFFICIAL_MODULES_DIRECTORY = "/etc/opsi/modules.d/";
-	public static String DEFAULT_FILENAME = "modules";
+	public static final String DEFAULT_FILENAME = "modules";
 
 	public CommandModulesUpload(String title) {
 		setTitle(title);

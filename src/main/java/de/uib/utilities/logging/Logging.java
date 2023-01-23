@@ -55,10 +55,10 @@ public class Logging implements LogEventSubject
 
 	private static String logFormat = "[%d] [%s] [%-15s] %s";
 
-	public static Integer LOG_LEVEL_CONSOLE = LEVEL_WARNING;
-	public static Integer LOG_LEVEL_FILE = LEVEL_WARNING;
+	public static Integer logLevelConsole = LEVEL_WARNING;
+	public static Integer logLevelFile = LEVEL_WARNING;
 
-	private static final java.text.SimpleDateFormat loggingDateFormat = new java.text.SimpleDateFormat(
+	private static final java.text.SimpleDateFormat LOGGING_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss.SSS");
 
 	public static final String levelText(int level) {
@@ -69,8 +69,7 @@ public class Logging implements LogEventSubject
 
 	private static int numberOfKeptLogFiles = 3;
 	private static PrintWriter logFileWriter = null;
-	private static boolean LogFileInitialized = false;
-	public static boolean LogFileAvailable = false;
+	private static boolean logFileInitialized = false;
 
 	private static final int MAX_LISTED_ERRORS = 20;
 	private static List<String> errorList = new ArrayList<>(MAX_LISTED_ERRORS);
@@ -88,7 +87,7 @@ public class Logging implements LogEventSubject
 			newLevel = LEVEL_NONE;
 		else if (newLevel > LEVEL_SECRET)
 			newLevel = LEVEL_SECRET;
-		LOG_LEVEL_CONSOLE = newLevel;
+		logLevelConsole = newLevel;
 	}
 
 	public static void setLogLevelFile(int newLevel) {
@@ -96,7 +95,7 @@ public class Logging implements LogEventSubject
 			newLevel = LEVEL_NONE;
 		else if (newLevel > LEVEL_SECRET)
 			newLevel = LEVEL_SECRET;
-		LOG_LEVEL_FILE = newLevel;
+		logLevelFile = newLevel;
 	}
 
 	public static void setLogLevel(int newLevel) {
@@ -118,8 +117,7 @@ public class Logging implements LogEventSubject
 	}
 
 	private static final void initLogFile() {
-		LogFileInitialized = true; // Try to initialize only once!
-		LogFileAvailable = false;
+		logFileInitialized = true; // Try to initialize only once!
 		String logFilename = "";
 
 		try {
@@ -169,7 +167,6 @@ public class Logging implements LogEventSubject
 
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename));
 			logFilenameInUse = logFilename;
-			LogFileAvailable = true;
 		} catch (Exception ex) {
 			System.out.print(ex);
 			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
@@ -190,7 +187,7 @@ public class Logging implements LogEventSubject
 
 	private static String now() {
 
-		return loggingDateFormat.format(new java.util.Date());
+		return LOGGING_DATE_FORMAT.format(new java.util.Date());
 	}
 
 	private static void addErrorToList(String mesg, String time) {
@@ -266,7 +263,7 @@ public class Logging implements LogEventSubject
 	}
 
 	public static synchronized void log(int level, String mesg, Object caller, Throwable ex) {
-		if (level > LOG_LEVEL_CONSOLE && level > LOG_LEVEL_FILE) {
+		if (level > logLevelConsole && level > logLevelFile) {
 			return;
 		}
 
@@ -283,14 +280,14 @@ public class Logging implements LogEventSubject
 			exMesg = "\n" + sw.toString();
 		}
 
-		if (level <= LOG_LEVEL_CONSOLE) {
+		if (level <= logLevelConsole) {
 			String format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}",
 					"\033[0m");
 
 			System.err.println(String.format(format, level, curTime, context, mesg) + exMesg);
 		}
-		if (level <= LOG_LEVEL_FILE) {
-			if (!LogFileInitialized) {
+		if (level <= logLevelFile) {
+			if (!logFileInitialized) {
 				initLogFile();
 			}
 			if (logFileWriter != null) {

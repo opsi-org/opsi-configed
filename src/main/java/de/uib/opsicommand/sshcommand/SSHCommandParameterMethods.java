@@ -51,29 +51,29 @@ import de.uib.utilities.ssh.SSHOutputCollector;
 public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstractFacade {
 
 	/** default parameter replace id beginns with <<< **/
-	public static String replacement_default_1 = "<<<";
+	public static final String REPLACEMENT_DEFAULT_1 = "<<<";
 	/** default parameter replace id ends with >>> **/
-	public static String replacement_default_2 = ">>>";
-	public static String paramSplitterDefault = "><";
+	public static final String REPLACEMENT_DEFAULT_2 = ">>>";
+	public static final String PARAM_SPLITTER_DEFAULT = "><";
 
 	private ConfigedMain main;
 	private static SSHCommandParameterMethods instance;
 
-	public static final String methodInteractiveElement = Configed
+	public static final String METHOD_INTERACTIVE_ELEMENT = Configed
 			.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv");
-	public static final String methodGetSelectedClientNames = Configed
+	public static final String METHOD_GET_SELECTED_CLIENT_NAMES = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getSelectedClientNames");
-	public static final String methodGetSelectedClientIPs = Configed
+	public static final String METHOD_GET_SELECTED_CLIENT_IPS = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getSelectedClientIPs");
-	public static final String methodGetSelectedDepotNames = Configed
+	public static final String METHOD_GET_SELECTED_DEPOT_NAMES = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getSelectedDepotNames");
-	public static final String methodGetSelectedDepotIPs = Configed
+	public static final String METHOD_GET_SELECTED_DEPOT_IPS = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getSelectedDepotIPs");
-	public static final String methodGetConfigServerName = Configed
+	public static final String METHOD_GET_CONFIG_SERVER_NAME = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getConfigServerName");
-	public static final String methodGetConnectedSSHServerName = Configed
+	public static final String METHOD_GET_CONNECTED_SSH_SERVER_NAME = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.getConnectedSSHServerName");
-	public static final String methodOptionSelection = Configed
+	public static final String METHOD_OPTION_SELECTION = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.optionSelection");
 
 	protected static final Map<String, String> methods = new HashMap<>();
@@ -81,14 +81,14 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	private String[] formats;
 
 	private SSHCommandParameterMethods(ConfigedMain main) {
-		methods.put(methodInteractiveElement, methodInteractiveElement);
-		methods.put(methodGetSelectedClientNames, "getSelectedClientNames");
-		methods.put(methodGetSelectedClientIPs, "getSelectedClientIPs");
-		methods.put(methodGetSelectedDepotNames, "getSelectedDepotNames");
-		methods.put(methodGetSelectedDepotIPs, "getSelectedDepotIPs");
-		methods.put(methodGetConfigServerName, "getConfigServerName");
-		methods.put(methodGetConnectedSSHServerName, "getConnectedSSHServerName");
-		methods.put(methodOptionSelection, "ssh://path/to/file");
+		methods.put(METHOD_INTERACTIVE_ELEMENT, METHOD_INTERACTIVE_ELEMENT);
+		methods.put(METHOD_GET_SELECTED_CLIENT_NAMES, "getSelectedClientNames");
+		methods.put(METHOD_GET_SELECTED_CLIENT_IPS, "getSelectedClientIPs");
+		methods.put(METHOD_GET_SELECTED_DEPOT_NAMES, "getSelectedDepotNames");
+		methods.put(METHOD_GET_SELECTED_DEPOT_IPS, "getSelectedDepotIPs");
+		methods.put(METHOD_GET_CONFIG_SERVER_NAME, "getConfigServerName");
+		methods.put(METHOD_GET_CONNECTED_SSH_SERVER_NAME, "getConnectedSSHServerName");
+		methods.put(METHOD_OPTION_SELECTION, "ssh://path/to/file");
 
 		this.main = main;
 		instance = this;
@@ -204,8 +204,8 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	public String[] splitParameter(String m) {
 		Logging.info(this, "splitParameter param " + m);
-		if ((m.startsWith(replacement_default_1)) && (m.contains(replacement_default_2))) {
-			m = m.replace(replacement_default_1, "").replace(replacement_default_2, "");
+		if ((m.startsWith(REPLACEMENT_DEFAULT_1)) && (m.contains(REPLACEMENT_DEFAULT_2))) {
+			m = m.replace(REPLACEMENT_DEFAULT_1, "").replace(REPLACEMENT_DEFAULT_2, "");
 		}
 
 		Logging.info(this, "splitParameter param " + m);
@@ -213,12 +213,12 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		splitted[0] = m;
 		splitted[1] = "";
 
-		if (m.contains(paramSplitterDefault)) {
-			splitted[0] = m.split(paramSplitterDefault)[0];
+		if (m.contains(PARAM_SPLITTER_DEFAULT)) {
+			splitted[0] = m.split(PARAM_SPLITTER_DEFAULT)[0];
 			Logging.info(this, "splitParameter method " + splitted[0]);
 
 			Logging.info(this, "splitParameter method " + splitted[0]);
-			splitted[1] = m.split(paramSplitterDefault)[1];
+			splitted[1] = m.split(PARAM_SPLITTER_DEFAULT)[1];
 			Logging.info(this, "splitParameter format " + splitted[1]);
 		}
 		return splitted;
@@ -239,19 +239,19 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		Logging.info(this, "callMethod method " + method + " format " + format);
 		String result = "";
 		method = method.trim();
-		if (method.equals(methods.get(methodGetSelectedClientNames))) {
+		if (method.equals(methods.get(METHOD_GET_SELECTED_CLIENT_NAMES))) {
 			Logging.info(this, "getSelected_clientnames " + getSelectedClientNames());
 			result = formatResult(getSelectedClientNames(), format);
-		} else if (method.equals(methods.get(methodGetSelectedClientIPs))) {
+		} else if (method.equals(methods.get(METHOD_GET_SELECTED_CLIENT_IPS))) {
 			Logging.info(this, "getSelected_clientIPs " + getSelectedClientIPs());
 			result = formatResult(getSelectedClientIPs(), format);
-		} else if (method.equals(methods.get(methodGetSelectedDepotNames))) {
+		} else if (method.equals(methods.get(METHOD_GET_SELECTED_DEPOT_NAMES))) {
 			result = formatResult(getSelectedDepotNames(), format);
-		} else if (method.equals(methods.get(methodGetSelectedDepotIPs))) {
+		} else if (method.equals(methods.get(METHOD_GET_SELECTED_DEPOT_IPS))) {
 			result = formatResult(getSelected_depotIPs(), format);
-		} else if (method.equals(methods.get(methodGetConfigServerName))) {
+		} else if (method.equals(methods.get(METHOD_GET_CONFIG_SERVER_NAME))) {
 			result = formatResult(getConfigServerName(), format);
-		} else if (method.equals(methods.get(methodGetConnectedSSHServerName))) {
+		} else if (method.equals(methods.get(METHOD_GET_CONNECTED_SSH_SERVER_NAME))) {
 			result = formatResult(getConfigSSHServerName(), format);
 		} else if (method.contains("ssh://")) {
 			result = getSelectedValue(method);

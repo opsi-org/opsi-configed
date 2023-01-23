@@ -106,8 +106,8 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE = "";
 
 	public static final String CONFIGED_WORKBENCH_KEY = "configed.workbench.default";
-	public static String configedWORKBENCH_defaultvalue = "/var/lib/opsi/workbench/";
-	public static String packageServerDirectoryS = configedWORKBENCH_defaultvalue;
+	public static String configedWorkbenchDefaultValue = "/var/lib/opsi/workbench/";
+	public static String packageServerDirectoryS = configedWorkbenchDefaultValue;
 
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
@@ -139,7 +139,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";// UserConfig.
 
 	public static final String KEY_USER_REGISTER = KEY_USER_ROOT + ".{}.register"; // boolean
-	public static Boolean KEY_USER_REGISTER_VALUE = null;
+	public static Boolean keyUserRegisterValue = null;
 
 	public static final String DEPOT_SELECTION_NODEPOTS = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS");
@@ -154,37 +154,35 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		BOOLEAN_VALUES.add(false);
 	}
 
-	public static TreeMap<String, String> PROPERTYCLASSES_SERVER;
+	public static NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();;
 	static {
-		PROPERTYCLASSES_SERVER = new TreeMap<>();
-		PROPERTYCLASSES_SERVER.put("", "general configuration items");
-		PROPERTYCLASSES_SERVER.put("clientconfig", "network configuration");
-		PROPERTYCLASSES_SERVER.put(de.uib.opsidatamodel.modulelicense.LicensingInfoMap.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put("", "general configuration items");
+		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
+		PROPERTY_CLASSES_SERVER.put(de.uib.opsidatamodel.modulelicense.LicensingInfoMap.CONFIG_KEY,
 				"opsi module status display");
-		PROPERTYCLASSES_SERVER.put(ControlDash.CONFIG_KEY, "dash configuration");
-		PROPERTYCLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put(ControlDash.CONFIG_KEY, "dash configuration");
+		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
-		PROPERTYCLASSES_SERVER.put(MetaConfig.CONFIG_KEY, "default configuration for other properties");
-		PROPERTYCLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put(MetaConfig.CONFIG_KEY, "default configuration for other properties");
+		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
 				"<html><p>saved search configurations ,<br />do not edit here <br />- editing via the search form</p></html>");
-		PROPERTYCLASSES_SERVER.put(RemoteControl.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY,
 				"<html><p>remote control calls,<br />i.e. calls to tools on the local computer<br />typically targeting at a selected client</p></html>");
-		PROPERTYCLASSES_SERVER.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
 				"<html><p>configuration for hw overview table,<br />- best editing via the helper function<br />at the hw overview table!)</p></html>");
-		PROPERTYCLASSES_SERVER.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
+		PROPERTY_CLASSES_SERVER.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
 
-		PROPERTYCLASSES_SERVER.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
-		PROPERTYCLASSES_SERVER.put("software-on-demand",
+		PROPERTY_CLASSES_SERVER.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
+		PROPERTY_CLASSES_SERVER.put("software-on-demand",
 				"<html>software on demand configuration,<br />not client specific</html>");
-		PROPERTYCLASSES_SERVER.put(KEY_USER_ROOT,
+		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROOT,
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip"));
-		PROPERTYCLASSES_SERVER.put(KEY_USER_ROLE_ROOT,
+		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROLE_ROOT,
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip"));
 	}
 
-	public static TreeMap<String, String> PROPERTYCLASSES_CLIENT;
+	public static final NavigableMap<String, String> PROPERTYCLASSES_CLIENT = new TreeMap<>();;
 	static {
-		PROPERTYCLASSES_CLIENT = new TreeMap<>();
 		PROPERTYCLASSES_CLIENT.put("", "general configuration items");
 		PROPERTYCLASSES_CLIENT.put("clientconfig", "network configuration");
 		PROPERTYCLASSES_CLIENT.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
@@ -194,24 +192,12 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 				"<html>software on demand configuration,<br />not client specific</html>");
 	}
 
-	public static TreeMap<String, String> PROPERTY_EDITOPTIONS_CLIENT;
+	public static Set<String> CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS;
 	static {
-		PROPERTY_EDITOPTIONS_CLIENT = new TreeMap<>();
-
-	}
-
-	public static TreeMap<String, String> PROPERTY_EDITOPTIONS_SERVER;
-	static {
-		PROPERTY_EDITOPTIONS_SERVER = new TreeMap<>();
-
-	}
-
-	public static Set<String> CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS;
-	static {
-		CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS = new HashSet<>(PROPERTYCLASSES_SERVER.keySet());
-		CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS.removeAll(PROPERTYCLASSES_CLIENT.keySet());
-		CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS.add(KEY_PRODUCT_SORT_ALGORITHM);
-		CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS.add("configed");
+		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS = new HashSet<>(PROPERTY_CLASSES_SERVER.keySet());
+		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.removeAll(PROPERTYCLASSES_CLIENT.keySet());
+		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.add(KEY_PRODUCT_SORT_ALGORITHM);
+		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.add("configed");
 	}
 
 	/**
@@ -869,8 +855,8 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	// table sources
 
 	// opsi module information
-	public static int CLIENT_COUNT_WARNING_LIMIT = 10;
-	public static int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
+	public static final int CLIENT_COUNT_WARNING_LIMIT = 10;
+	public static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
 
 	public abstract void opsiInformationRequestRefresh();
 

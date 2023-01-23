@@ -9,9 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
@@ -38,7 +38,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	protected String defaultProduct = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultProduct");
 	protected String defaultDepot = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultDepot");
 
-	protected String opsiProd = PersistenceController.configedWORKBENCH_defaultvalue;
+	protected String opsiProd = PersistenceController.configedWorkbenchDefaultValue;
 	protected String opsiRepo = "/var/lib/opsi/repository/";
 
 	private String configRepo = "repositoryLocalUrl";

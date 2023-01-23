@@ -375,7 +375,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 							mixToVisualState(combinedVisualValues.get(key), productId, priority);
 						} else {
 							mixToVisualState(combinedVisualValues.get(key), productId,
-									ProductState.getDEFAULT().get(key));
+									ProductState.getDefaultProductState().get(key));
 						}
 					}
 

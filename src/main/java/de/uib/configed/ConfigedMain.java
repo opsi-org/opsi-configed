@@ -3101,7 +3101,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						(Map) additionalConfigs.get(0), persist.getConfigOptions(), additionalConfigs,
 						additionalconfigurationUpdateCollection, true,
 						// editableOptions
-						PersistenceController.PROPERTYCLASSES_SERVER);
+						PersistenceController.PROPERTY_CLASSES_SERVER);
 			}
 
 			else {
@@ -3128,7 +3128,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				Map<String, de.uib.utilities.table.ListCellOptions> configOptions = persist.getConfigOptions();
 
-				removeKeysStartingWith(mergedVisualMap, PersistenceController.CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS);
+				removeKeysStartingWith(mergedVisualMap, PersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 
 				mainFrame.panelHostConfig.initEditing("  " + getSelectedClientsString(), // "",
 						mergedVisualMap, configOptions, additionalConfigs, additionalconfigurationUpdateCollection,

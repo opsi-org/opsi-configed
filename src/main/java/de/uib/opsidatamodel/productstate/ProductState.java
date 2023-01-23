@@ -10,12 +10,12 @@ import de.uib.configed.Globals;
 
 public class ProductState extends HashMap<String, String> {
 
-	private static ProductState DEFAULT;
+	private static ProductState defaultProductState;
 
-	public static ProductState getDEFAULT() {
-		if (DEFAULT == null)
-			DEFAULT = new ProductState(null);
-		return DEFAULT;
+	public static ProductState getDefaultProductState() {
+		if (defaultProductState == null)
+			defaultProductState = new ProductState(null);
+		return defaultProductState;
 	}
 
 	public static final List<String> SERVICE_KEYS = new ArrayList<>();

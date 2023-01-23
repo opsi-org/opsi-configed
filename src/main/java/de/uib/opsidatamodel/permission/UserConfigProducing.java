@@ -80,9 +80,9 @@ public class UserConfigProducing {
 			userparts.add(ConfigedMain.user);
 			String propertyclass = UserConfig.START_USER_KEY + ConfigedMain.user + '}';
 
-			if (!PersistenceController.PROPERTYCLASSES_SERVER.containsKey(propertyclass)) {
+			if (!PersistenceController.PROPERTY_CLASSES_SERVER.containsKey(propertyclass)) {
 				Logging.info(this, "createUserPropertySubclass for logged in user " + ConfigedMain.user);
-				PersistenceController.PROPERTYCLASSES_SERVER.put(propertyclass, "");
+				PersistenceController.PROPERTY_CLASSES_SERVER.put(propertyclass, "");
 			}
 
 		}
@@ -116,9 +116,9 @@ public class UserConfigProducing {
 
 					String propertyclass = startRoleKey + rolename + '}';
 
-					if (!PersistenceController.PROPERTYCLASSES_SERVER.containsKey(propertyclass)) {
+					if (!PersistenceController.PROPERTY_CLASSES_SERVER.containsKey(propertyclass)) {
 						Logging.info(this, "createRolePropertySubclass for role  " + rolename);
-						PersistenceController.PROPERTYCLASSES_SERVER.put(propertyclass, "");
+						PersistenceController.PROPERTY_CLASSES_SERVER.put(propertyclass, "");
 					}
 
 				} else {
@@ -139,10 +139,10 @@ public class UserConfigProducing {
 						Logging.debug(this, "usernames, add " + username + " for key " + key);
 						String propertyclass = UserConfig.START_USER_KEY + username + '}';
 
-						if (!PersistenceController.PROPERTYCLASSES_SERVER.containsKey(propertyclass)) {
+						if (!PersistenceController.PROPERTY_CLASSES_SERVER.containsKey(propertyclass)) {
 
 							Logging.info(this, "createUserPropertySubclass for user  " + username);
-							PersistenceController.PROPERTYCLASSES_SERVER.put(propertyclass, "");
+							PersistenceController.PROPERTY_CLASSES_SERVER.put(propertyclass, "");
 						}
 
 					} else

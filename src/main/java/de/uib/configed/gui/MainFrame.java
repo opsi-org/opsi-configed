@@ -1350,7 +1350,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			rbLoglevelItems[i] = new JRadioButtonMenuItem("[" + i + "] " + Logging.levelText(i).toLowerCase());
 
 			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
-			if (i == Logging.LOG_LEVEL_CONSOLE)
+			if (i == Logging.logLevelConsole)
 				rbLoglevelItems[i].setSelected(true);
 
 			rbLoglevelItems[i].addActionListener(selectLoglevelListener);

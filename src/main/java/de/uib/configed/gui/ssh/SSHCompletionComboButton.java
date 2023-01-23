@@ -83,7 +83,7 @@ public class SSHCompletionComboButton {
 		if (persist == null)
 			Logging.info(this, "init PersistenceController null");
 		else
-			opsiRepo = PersistenceController.configedWORKBENCH_defaultvalue;
+			opsiRepo = PersistenceController.configedWorkbenchDefaultValue;
 		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/')
 			opsiRepo = opsiRepo + "/";
 		if (comboboxDefaultPath != null) {

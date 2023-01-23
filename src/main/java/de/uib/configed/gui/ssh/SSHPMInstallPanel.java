@@ -29,7 +29,7 @@ public class SSHPMInstallPanel extends JPanel {
 		persist = PersistenceControllerFactory.getPersistenceController();
 		if (persist == null)
 			Logging.info(this, "init PersistenceController null");
-		workbench = PersistenceController.configedWORKBENCH_defaultvalue;
+		workbench = PersistenceController.configedWorkbenchDefaultValue;
 		if (workbench.charAt(workbench.length() - 1) != '/')
 			workbench = workbench + "/";
 	}

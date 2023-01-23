@@ -165,8 +165,8 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	@Override
 	public List<String> getParameterList() {
 		List<String> paramlist = new ArrayList<>();
-		String temp1 = SSHCommandParameterMethods.replacement_default_1;
-		String temp2 = SSHCommandParameterMethods.replacement_default_2;
+		String temp1 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1;
+		String temp2 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 		if (command != null && command.contains(temp1) && command.contains(temp2)) {
 			myTmpCommand = getCommandRaw();
 			Logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
@@ -186,8 +186,8 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	 * @return String with and between "<<<" and ">>>"
 	 */
 	private String searchPlaceholder() {
-		String temp1 = SSHCommandParameterMethods.replacement_default_1;
-		String temp2 = SSHCommandParameterMethods.replacement_default_2;
+		String temp1 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1;
+		String temp2 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 
 		String splittedText = myTmpCommand.split(temp1, 2)[1].split(temp2, 2)[0];
 		Logging.debug(this, "searchPlaceholder found " + temp1 + splittedText + temp2);

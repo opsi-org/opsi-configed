@@ -544,7 +544,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 								String filepath = new URL((String) val).getPath();
 								Logging.info(this, "retrieveOpsiHosts workbenchpath " + filepath);
 
-								configedWORKBENCH_defaultvalue = filepath;
+								configedWorkbenchDefaultValue = filepath;
 								packageServerDirectoryS = filepath;
 							} catch (Exception netex) {
 								Logging.error("not a correctly formed file URL: " + val);
@@ -1014,20 +1014,20 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		productgroupsFullPermission = true;
 		createClientPermission = true;
 
-		KEY_USER_REGISTER_VALUE = isUserRegisterActivated();
-		boolean correctedUserRegisterVal = setAgainUserRegistration(KEY_USER_REGISTER_VALUE);
+		keyUserRegisterValue = isUserRegisterActivated();
+		boolean correctedUserRegisterVal = setAgainUserRegistration(keyUserRegisterValue);
 
-		boolean setUserRegisterVal = !KEY_USER_REGISTER_VALUE && correctedUserRegisterVal;
+		boolean setUserRegisterVal = !keyUserRegisterValue && correctedUserRegisterVal;
 
 		if (setUserRegisterVal)
-			KEY_USER_REGISTER_VALUE = true;
+			keyUserRegisterValue = true;
 
-		if (KEY_USER_REGISTER_VALUE)
-			KEY_USER_REGISTER_VALUE = checkUserRolesModule();
+		if (keyUserRegisterValue)
+			keyUserRegisterValue = checkUserRolesModule();
 
 		if (serverPropertyMap.get(KEY_USER_REGISTER) == null || setUserRegisterVal) {
 			List<Object> readyObjects = new ArrayList<>();
-			Map<String, Object> item = createJSONBoolConfig(KEY_USER_REGISTER, KEY_USER_REGISTER_VALUE,
+			Map<String, Object> item = createJSONBoolConfig(KEY_USER_REGISTER, keyUserRegisterValue,
 					"without given values the primary value setting is false");
 			readyObjects.add(Executioner.jsonMap(item));
 
@@ -7171,7 +7171,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public void userConfigurationRequestReload() {
 		Logging.info(this, "userConfigurationRequestReload");
-		KEY_USER_REGISTER_VALUE = null;
+		keyUserRegisterValue = null;
 	}
 
 	private final boolean isUserRegisterActivated() {
@@ -7188,8 +7188,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private final boolean checkUserRolesModule() {
 
-		if (KEY_USER_REGISTER_VALUE && !withUserRoles) {
-			KEY_USER_REGISTER_VALUE = false;
+		if (keyUserRegisterValue && !withUserRoles) {
+			keyUserRegisterValue = false;
 
 			javax.swing.SwingUtilities.invokeLater(() -> {
 				StringBuilder info = new StringBuilder();
@@ -7207,7 +7207,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			});
 		}
 
-		return KEY_USER_REGISTER_VALUE;
+		return keyUserRegisterValue;
 	}
 
 	// configurations and algorithms
@@ -7217,17 +7217,17 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	{
 		// do it only once
 
-		if (KEY_USER_REGISTER_VALUE == null) {
-			KEY_USER_REGISTER_VALUE = isUserRegisterActivated();
+		if (keyUserRegisterValue == null) {
+			keyUserRegisterValue = isUserRegisterActivated();
 
-			if (KEY_USER_REGISTER_VALUE)
-				KEY_USER_REGISTER_VALUE = checkUserRolesModule();
+			if (keyUserRegisterValue)
+				keyUserRegisterValue = checkUserRolesModule();
 
 		}
 
-		Logging.info(this, "applyUserConfiguration result " + KEY_USER_REGISTER_VALUE);
+		Logging.info(this, "applyUserConfiguration result " + keyUserRegisterValue);
 
-		return KEY_USER_REGISTER_VALUE;
+		return keyUserRegisterValue;
 	}
 
 	public Map<String, Boolean> getProductOnClientsDisplayFieldsLocalbootProducts() {
@@ -7913,11 +7913,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
 			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
-			readyObjects.add(produceConfigEntry("UnicodeConfig", key, configedWORKBENCH_defaultvalue,
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key, configedWorkbenchDefaultValue,
 					"default path to opsiproducts"));
 		} else {
 			Logging.info(this, "checkStandardConfigs set WORKBENCH_defaultvalue to " + (String) defaultValues.get(0));
-			configedWORKBENCH_defaultvalue = (String) defaultValues.get(0);
+			configedWorkbenchDefaultValue = (String) defaultValues.get(0);
 		}
 
 		// configuration of opsiclientd extra events
@@ -8615,7 +8615,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (applyUserSpecializedConfig != null)
 			return applyUserSpecializedConfig;
 
-		applyUserSpecializedConfig = withUserRoles && KEY_USER_REGISTER_VALUE;
+		applyUserSpecializedConfig = withUserRoles && keyUserRegisterValue;
 		Logging.info(this, "applyUserSpecializedConfig initialized, " + applyUserSpecializedConfig);
 
 		return applyUserSpecializedConfig;

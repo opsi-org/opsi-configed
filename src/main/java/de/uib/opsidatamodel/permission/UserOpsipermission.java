@@ -17,52 +17,51 @@ public class UserOpsipermission extends UserConfigModule {
 		READ_ONLY, READ_WRITE
 	}
 
-	public static String CONFIGKEY_STR_USER = "user";
-	public static String CONFIGKEY_STR_HOST = "host";
-	public static String CONFIGKEY_STR_PRODUCT = "product";
-	public static String CONFIGKEY_STR_PRIVILEGE = "privilege";
-	public static String CONFIGKEY_STR_DEPOT = "depotaccess";
-	public static String CONFIGKEY_STR_DEPOTLIST = "depots";
-	public static String CONFIGKEY_STR_HOSTGROUP = "groupaccess";
-	public static String CONFIGKEY_STR_HOSTGROUPLIST = "hostgroups";
-	public static String CONFIGKEY_STR_PRODUCTGROUP = "groupaccess";
-	public static String CONFIGKEY_STR_PRODUCTGROUPLIST = "productgroups";
-	public static String CONFIGKEY_STR_ACCESSCONTROLLED = "configured";
-	public static String CONFIGKEY_STR_SERVER = "opsiserver";
-	public static String CONFIGKEY_STR_READWRITE = "write";
-	public static String CONFIGKEY_STR_ALLHOSTS = "all";
-	public static String CONFIGKEY_STR_CREATECLIENT = "createclient";
-	public static String CONFIGKEY_STR_READONLY = "registered_readonly";
+	private static final String CONFIG_KEY_STR_HOST = "host";
+	private static final String CONFIG_KEY_STR_PRODUCT = "product";
+	private static final String CONFIG_KEY_STR_PRIVILEGE = "privilege";
+	private static final String CONFIG_KEY_STR_DEPOT = "depotaccess";
+	private static final String CONFIG_KEY_STR_DEPOTLIST = "depots";
+	private static final String CONFIG_KEY_STR_HOSTGROUP = "groupaccess";
+	private static final String CONFIG_KEY_STR_HOSTGROUPLIST = "hostgroups";
+	private static final String CONFIG_KEY_STR_PRODUCTGROUP = "groupaccess";
+	private static final String CONFIG_KEY_STR_PRODUCTGROUPLIST = "productgroups";
+	private static final String CONFIG_KEY_STR_ACCESSCONTROLLED = "configured";
+	private static final String CONFIG_KEY_STR_SERVER = "opsiserver";
+	private static final String CONFIG_KEY_STR_READWRITE = "write";
+	private static final String CONFIG_KEY_STR_ALLHOSTS = "all";
+	private static final String CONFIG_KEY_STR_CREATECLIENT = "createclient";
+	private static final String CONFIG_KEY_STR_READONLY = "registered_readonly";
 
-	public static final String PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY = CONFIGKEY_STR_PRIVILEGE + "."
-			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_ALLHOSTS + "." + CONFIGKEY_STR_READONLY;
+	public static final String PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY = CONFIG_KEY_STR_PRIVILEGE + "."
+			+ CONFIG_KEY_STR_HOST + "." + CONFIG_KEY_STR_ALLHOSTS + "." + CONFIG_KEY_STR_READONLY;
 	// privilege.host.all.readonly : boolean
-	public static final String PARTKEY_USER_PRIVILEGE_SERVER_READWRITE = CONFIGKEY_STR_PRIVILEGE + "."
-			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_SERVER + "." + CONFIGKEY_STR_READWRITE;
+	public static final String PARTKEY_USER_PRIVILEGE_SERVER_READWRITE = CONFIG_KEY_STR_PRIVILEGE + "."
+			+ CONFIG_KEY_STR_HOST + "." + CONFIG_KEY_STR_SERVER + "." + CONFIG_KEY_STR_READWRITE;
 	// privilege.host.opsiserver.readwrite boolean
 
-	public static final String PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE + "."
-			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_DEPOT + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
+	public static final String PARTKEY_USER_PRIVILEGE_DEPOTACCESS_ONLY_AS_SPECIFIED = CONFIG_KEY_STR_PRIVILEGE + "."
+			+ CONFIG_KEY_STR_HOST + "." + CONFIG_KEY_STR_DEPOT + "." + CONFIG_KEY_STR_ACCESSCONTROLLED;
 
-	public static final String PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
-			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_DEPOT + "." + CONFIGKEY_STR_DEPOTLIST;
+	public static final String PARTKEY_USER_PRIVILEGE_DEPOTS_ACCESSIBLE = CONFIG_KEY_STR_PRIVILEGE + "."
+			+ CONFIG_KEY_STR_HOST + "." + CONFIG_KEY_STR_DEPOT + "." + CONFIG_KEY_STR_DEPOTLIST;
 	// privilege.host.depotaccess.depots : multivalue
 
-	public static final String PARTKEY_USER_PRIVILEGE_CREATECLIENT = CONFIGKEY_STR_PRIVILEGE + "." + CONFIGKEY_STR_HOST
-			+ "." + CONFIGKEY_STR_CREATECLIENT;
+	public static final String PARTKEY_USER_PRIVILEGE_CREATECLIENT = CONFIG_KEY_STR_PRIVILEGE + "."
+			+ CONFIG_KEY_STR_HOST + "." + CONFIG_KEY_STR_CREATECLIENT;
 
-	public static final String PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE + "."
-			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_HOSTGROUP + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
+	public static final String PARTKEY_USER_PRIVILEGE_HOSTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIG_KEY_STR_PRIVILEGE + "."
+			+ CONFIG_KEY_STR_HOST + "." + CONFIG_KEY_STR_HOSTGROUP + "." + CONFIG_KEY_STR_ACCESSCONTROLLED;
 
-	public static final String PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
-			+ CONFIGKEY_STR_HOST + "." + CONFIGKEY_STR_HOSTGROUP + "." + CONFIGKEY_STR_HOSTGROUPLIST;
+	public static final String PARTKEY_USER_PRIVILEGE_HOSTGROUPS_ACCESSIBLE = CONFIG_KEY_STR_PRIVILEGE + "."
+			+ CONFIG_KEY_STR_HOST + "." + CONFIG_KEY_STR_HOSTGROUP + "." + CONFIG_KEY_STR_HOSTGROUPLIST;
 	// privilege.host.groupaccess.hostgroups : multivalue
 
-	public static final String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIGKEY_STR_PRIVILEGE
-			+ "." + CONFIGKEY_STR_PRODUCT + "." + CONFIGKEY_STR_PRODUCTGROUP + "." + CONFIGKEY_STR_ACCESSCONTROLLED;
+	public static final String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED = CONFIG_KEY_STR_PRIVILEGE
+			+ "." + CONFIG_KEY_STR_PRODUCT + "." + CONFIG_KEY_STR_PRODUCTGROUP + "." + CONFIG_KEY_STR_ACCESSCONTROLLED;
 
-	public static final String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE = CONFIGKEY_STR_PRIVILEGE + "."
-			+ CONFIGKEY_STR_PRODUCT + "." + CONFIGKEY_STR_PRODUCTGROUP + "." + CONFIGKEY_STR_PRODUCTGROUPLIST;
+	public static final String PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE = CONFIG_KEY_STR_PRIVILEGE + "."
+			+ CONFIG_KEY_STR_PRODUCT + "." + CONFIG_KEY_STR_PRODUCTGROUP + "." + CONFIG_KEY_STR_PRODUCTGROUPLIST;
 	// privilege.product.groupaccess.productgroups : multivalue
 
 	public static final LinkedHashSet<String> BOOL_KEYS;

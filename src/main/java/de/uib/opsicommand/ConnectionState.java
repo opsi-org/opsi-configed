@@ -13,7 +13,7 @@ public class ConnectionState {
 	public static final int ERROR = 10;
 	protected int myState = NOT_CONNECTED;
 
-	public static ConnectionState ConnectionUndefined = new ConnectionState(UNDEFINED, "not initialized");
+	public static final ConnectionState ConnectionUndefined = new ConnectionState(UNDEFINED, "not initialized");
 
 	protected String message = "";
 

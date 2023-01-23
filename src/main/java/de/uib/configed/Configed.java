@@ -103,7 +103,7 @@ public class Configed {
 			new String[] { "--help", "", "Give this help" },
 			new String[] { "--loglevel L", "",
 					"Set logging level L, L is a number >= " + Logging.LEVEL_NONE + ", <= " + Logging.LEVEL_SECRET
-							+ " . DEFAULT: " + Logging.LOG_LEVEL_CONSOLE },
+							+ " . DEFAULT: " + Logging.logLevelConsole },
 			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code" },
 
 			// implemented in PersistenceController,
@@ -139,8 +139,8 @@ public class Configed {
 	private static String host = null;
 	public static String user = null;
 	private static String password = null;
-	private static int loglevelConsole = Logging.LOG_LEVEL_CONSOLE;
-	private static int loglevelFile = Logging.LOG_LEVEL_FILE;
+	private static int loglevelConsole = Logging.logLevelConsole;
+	private static int loglevelFile = Logging.logLevelFile;
 
 	public static String sshkey = null;
 	public static String sshkeypassphrase = null;

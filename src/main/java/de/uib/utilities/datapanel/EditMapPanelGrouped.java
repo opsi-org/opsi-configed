@@ -31,8 +31,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
@@ -47,9 +47,9 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 // works on a map of pairs of type String - List
 {
+	private static final int INITIAL_DIVIDER_LOCATION = 350;
 
 	protected JSplitPane splitPane;
-	final int initialSplitLoc = 350;
 	protected XTree tree;
 	protected JPanel rightPane;
 	protected JLabel labelForRightPane;
@@ -87,7 +87,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	}
 
 	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable, TreeMap<String, String> classesMap) {
+			boolean reloadable, NavigableMap<String, String> classesMap) {
 		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, classesMap,
 				(AbstractEditMapPanel.Actor) null);
 	}
@@ -98,7 +98,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	}
 
 	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable, TreeMap<String, String> classesMap, final AbstractEditMapPanel.Actor actor) {
+			boolean reloadable, NavigableMap<String, String> classesMap, final AbstractEditMapPanel.Actor actor) {
 		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable);
 		buildPanel();
 		this.actor = actor;
@@ -278,7 +278,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		splitPane.setLeftComponent(jScrollPaneTree);
 		splitPane.setRightComponent(rightPane);
-		splitPane.setDividerLocation(initialSplitLoc);
+		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);

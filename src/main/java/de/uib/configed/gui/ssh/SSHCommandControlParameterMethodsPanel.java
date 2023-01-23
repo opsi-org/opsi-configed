@@ -200,21 +200,21 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public void doActionTestParam(JDialog caller) {
 		String paramText = "";
 		if (((String) jComboBoxParameterMethods.getSelectedItem())
-				.equals(SSHCommandParameterMethods.methodInteractiveElement)
+				.equals(SSHCommandParameterMethods.METHOD_INTERACTIVE_ELEMENT)
 				|| ((String) jComboBoxParameterMethods.getSelectedItem())
-						.equals(SSHCommandParameterMethods.methodOptionSelection)) {
+						.equals(SSHCommandParameterMethods.METHOD_OPTION_SELECTION)) {
 			Logging.debug("CREATING PARAM TEXT... ");
-			paramText = SSHCommandParameterMethods.replacement_default_1
+			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.replacement_default_2;
+					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 			Logging.debug("CREATED PARAM TEXT: " + paramText);
 		} else
-			paramText = SSHCommandParameterMethods.replacement_default_1
+			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.paramSplitterDefault + jComboBoxParameterFormats.getSelectedItem()
-					+ SSHCommandParameterMethods.replacement_default_2;
+					+ SSHCommandParameterMethods.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
+					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 		Logging.debug("PARAM TEXT: " + paramText);
 		try {
 			Logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
@@ -236,19 +236,19 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public void doActionParamAdd(JTextComponent component) {
 		String paramText = "";
 		if (((String) jComboBoxParameterMethods.getSelectedItem())
-				.equals(SSHCommandParameterMethods.methodInteractiveElement)
+				.equals(SSHCommandParameterMethods.METHOD_INTERACTIVE_ELEMENT)
 				|| ((String) jComboBoxParameterMethods.getSelectedItem())
-						.equals(SSHCommandParameterMethods.methodOptionSelection)) {
-			paramText = SSHCommandParameterMethods.replacement_default_1
+						.equals(SSHCommandParameterMethods.METHOD_OPTION_SELECTION)) {
+			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.replacement_default_2;
+					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 		} else
-			paramText = SSHCommandParameterMethods.replacement_default_1
+			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.paramSplitterDefault + jComboBoxParameterFormats.getSelectedItem()
-					+ SSHCommandParameterMethods.replacement_default_2;
+					+ SSHCommandParameterMethods.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
+					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);
 		} catch (BadLocationException ble) {

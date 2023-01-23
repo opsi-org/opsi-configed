@@ -52,10 +52,10 @@ public class PanelHostConfig extends JPanel {
 
 		String newpropertyclass = superclass + "." + user;
 
-		if (!de.uib.opsidatamodel.PersistenceController.PROPERTYCLASSES_SERVER.containsKey(newpropertyclass)) {
+		if (!de.uib.opsidatamodel.PersistenceController.PROPERTY_CLASSES_SERVER.containsKey(newpropertyclass)) {
 			Logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
 					+ newpropertyclass + "]");
-			de.uib.opsidatamodel.PersistenceController.PROPERTYCLASSES_SERVER.put(newpropertyclass, "");
+			de.uib.opsidatamodel.PersistenceController.PROPERTY_CLASSES_SERVER.put(newpropertyclass, "");
 		}
 	}
 
