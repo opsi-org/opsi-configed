@@ -106,21 +106,20 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	protected DefaultPanelEditProperties panelEditProperties;
 	AbstractEditMapPanel propertiesPanel;
 
-	protected int hMin = 200;
+	private static final int HEIGHT_MIN = 200;
 
 	private static final int FRAME_WIDTH_LEFTHANDED = 1100;
-	final int FRAME_HEIGHT = 450;
+	private static final int FRAME_HEIGHT = 490;
 
-	final int WIDTH_COLUMN_PRODUCT_NAME = 170;
-	final int WIDTH_COLUMN_PRODUCT_COMPLETE_NAME = 170;
-	final int WIDTH_COLUMN_PRODUCT_STATE = 60;
-	final int WIDTH_COLUMN_PRODUCT_POSITION = 40;
+	private static final int WIDTH_COLUMN_PRODUCT_NAME = 170;
+	private static final int WIDTH_COLUMN_PRODUCT_COMPLETE_NAME = 170;
+	private static final int WIDTH_COLUMN_PRODUCT_STATE = 60;
 
-	final int WIDTH_COLUMN_PRODUCT_SEQUENCE = WIDTH_COLUMN_PRODUCT_POSITION;
-	final int WIDTH_COLUMN_VERSION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
-	final int WIDTH_COLUMN_PRODUCT_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
-	final int WIDTH_COLUMN_PACKAGE_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
-	final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
+	private static final int WIDTH_COLUMN_PRODUCT_SEQUENCE = 40;
+	private static final int WIDTH_COLUMN_VERSION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
+	private static final int WIDTH_COLUMN_PRODUCT_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
+	private static final int WIDTH_COLUMN_PACKAGE_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
+	private static final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
 
 	ListCellRenderer standardListCellRenderer;
 
@@ -196,7 +195,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts = new JScrollPane();
 
 		paneProducts.getViewport().add(tableProducts);
-		paneProducts.setPreferredSize(new Dimension(FRAME_WIDTH_LEFTHANDED, FRAME_HEIGHT + 40));
+		paneProducts.setPreferredSize(new Dimension(FRAME_WIDTH_LEFTHANDED, FRAME_HEIGHT));
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		tableProducts.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
@@ -458,8 +457,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		leftPane.setLayout(layoutLeftPane);
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(topPane, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(paneProducts, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(topPane, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(paneProducts, HEIGHT_MIN, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
 				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,

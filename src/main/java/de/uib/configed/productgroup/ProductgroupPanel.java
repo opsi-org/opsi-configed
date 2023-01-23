@@ -127,9 +127,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	protected boolean groupEditing = false;
 	protected boolean deleted = false;
 
-	private final int minFieldWidth = 30;
-	private final int maxComboWidth = 200;
-	private final int minComboWidth = 30;
+	private static final int MIN_FIELD_WIDTH = 30;
+	private static final int MAX_COMBO_WIDTH = 200;
+	private static final int MIN_COMBO_WIDTH = 30;
 
 	abstract class MyDocumentListener implements DocumentListener {
 
@@ -596,9 +596,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				.addGroup(layoutPanelEdit.createSequentialGroup()
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(saveNameEditor, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								maxComboWidth)
+								MAX_COMBO_WIDTH)
 						.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-						.addComponent(descriptionField, minFieldWidth, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(descriptionField, MIN_FIELD_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.MIN_GAP_SIZE, Globals.MIN_GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(buttonDelete, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -664,7 +664,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 								.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 
-								.addComponent(surroundScrollChooseAction, minComboWidth, GroupLayout.PREFERRED_SIZE,
+								.addComponent(surroundScrollChooseAction, MIN_COMBO_WIDTH, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE)
 
 								.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Short.MAX_VALUE)
@@ -672,7 +672,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 								.addComponent(labelSelectedGroup, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.MIN_GAP_SIZE / 2, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-								.addComponent(groupsCombo, minComboWidth, GroupLayout.PREFERRED_SIZE, maxComboWidth)
+								.addComponent(groupsCombo, MIN_COMBO_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_COMBO_WIDTH)
 								.addGap(0, Globals.MIN_GAP_SIZE / 2, Globals.GAP_SIZE / 2)
 								.addComponent(buttonEditDialog, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)

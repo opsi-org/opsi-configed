@@ -34,8 +34,6 @@ public abstract class SWExporter {
 	protected boolean askForOverwrite = false;
 	protected String filenamePrefix = "report_swaudit_";
 
-	protected final String usage = "\n" + "configed_exporter [OPTIONS] [NAME]\n\n";
-
 	protected PersistenceController persist;
 
 	protected GenTableModel modelSWInfo;
