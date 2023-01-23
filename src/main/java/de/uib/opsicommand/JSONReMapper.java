@@ -20,6 +20,11 @@ import de.uib.utilities.logging.Logging;
  */
 
 public class JSONReMapper {
+
+	// private constructor to hide the implicit public one
+	private JSONReMapper() {
+	}
+
 	private static final String CLASSNAME = JSONReMapper.class.getName();
 
 	public static final String NULL_REPRESENTER = "null";

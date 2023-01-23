@@ -12,7 +12,7 @@ public class LicencepoolEntry extends TableEntry {
 	public static final String ID_KEY = "id";
 	public static final String DESCRIPTION_KEY = "description";
 
-	private static final List<String> KEYS = new ArrayList<>();;
+	private static final List<String> KEYS = new ArrayList<>();
 	static {
 		KEYS.add(ID_SERVICE_KEY);
 		KEYS.add(DESCRIPTION_KEY);

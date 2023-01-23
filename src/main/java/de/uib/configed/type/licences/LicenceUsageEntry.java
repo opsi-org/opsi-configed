@@ -34,7 +34,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 
 	private String lic4pool;
 
-	private static final List<String> KEYS = new ArrayList<>();;
+	private static final List<String> KEYS = new ArrayList<>();
 	static {
 		KEYS.add(ID_KEY);
 		KEYS.add(LICENCE_POOL_ID_KEY);

@@ -3,6 +3,11 @@ package de.uib.opsidatamodel.productstate;
 import java.util.LinkedHashSet;
 
 public class InstallationInfo {
+
+	// private constructor to hide the implicit public one
+	private InstallationInfo() {
+	}
+
 	// TODO WHICH values are still needed? some nowhere used
 	public static final String KEY = "installationInfo";
 

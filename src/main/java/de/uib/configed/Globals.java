@@ -60,6 +60,10 @@ public class Globals {
 
 	public static class ProductPackageVersionSeparator {
 
+		// private constructor to hide the implicit public one
+		private ProductPackageVersionSeparator() {
+		}
+
 		public static String forDisplay() {
 			return "-";
 		}

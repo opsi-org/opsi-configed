@@ -4,6 +4,10 @@ import java.io.File;
 
 public class FileX {
 
+	// private constructor to hide the implicit public one
+	private FileX() {
+	}
+
 	public static String getPath(String[] parts, boolean absolute, String separator) {
 		if (parts == null || parts.length == 0)
 			return "";

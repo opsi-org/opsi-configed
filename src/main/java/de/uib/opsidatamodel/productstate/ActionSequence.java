@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ActionSequence {
+	// private constructor to hide the implicit public one
+	private ActionSequence() {
+	}
+
 	public static final String KEY = "actionSequence";
 
 	private static Map<String, String> displayLabel2label;

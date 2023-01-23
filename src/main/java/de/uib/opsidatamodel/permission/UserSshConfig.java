@@ -29,7 +29,7 @@ public class UserSshConfig extends UserConfigModule {
 		Logging.info(" UserSshConfig BOOL_KEYS " + BOOL_KEYS);
 	}
 
-	public static final Set<String> LIST_KEYS = new LinkedHashSet<>();;
+	public static final Set<String> LIST_KEYS = new LinkedHashSet<>();
 
 	public static final UserSshConfig DEFAULT;
 

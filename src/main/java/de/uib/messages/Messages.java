@@ -17,6 +17,11 @@ import de.uib.utilities.logging.Logging;
 import utils.ResourceBundleUtf8;
 
 public class Messages {
+
+	// private constructor to hide the implicit public one
+	private Messages() {
+	}
+
 	public static final String APPNAME = "configed";
 	private static final String BUNDLE_NAME = "de/uib/messages/configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";

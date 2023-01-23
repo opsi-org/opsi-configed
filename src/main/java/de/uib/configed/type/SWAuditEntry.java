@@ -41,7 +41,7 @@ public class SWAuditEntry extends TableEntry
 
 	public static final String EXISTING_IDS = "(variants)";
 
-	private static final List<String> KEYS = new LinkedList<>();;
+	private static final List<String> KEYS = new LinkedList<>();
 	static {
 		KEYS.add(ID);
 		KEYS.add(NAME);
@@ -53,7 +53,7 @@ public class SWAuditEntry extends TableEntry
 		KEYS.add(WINDOWS_SOFTWARE_ID);
 	}
 
-	private static final List<String> KEYS_FOR_GUI_TABLES = new LinkedList<>();;
+	private static final List<String> KEYS_FOR_GUI_TABLES = new LinkedList<>();
 	static {
 		KEYS_FOR_GUI_TABLES.add(ID);
 		KEYS_FOR_GUI_TABLES.add(NAME);
@@ -74,7 +74,7 @@ public class SWAuditEntry extends TableEntry
 		KEYS_FOR_IDENT.add(ARCHITECTURE);
 	}
 
-	public static final List<String> ID_VARIANTS_COLS = new ArrayList<>();;
+	public static final List<String> ID_VARIANTS_COLS = new ArrayList<>();
 	static {
 		ID_VARIANTS_COLS.add(NAME);
 		ID_VARIANTS_COLS.add(EXISTING_IDS);

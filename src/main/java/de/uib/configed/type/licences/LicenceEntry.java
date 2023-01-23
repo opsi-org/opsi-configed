@@ -33,7 +33,7 @@ public class LicenceEntry extends TreeMap<String, Object>
 	public static final String EXPIRATION_DATE_KEY = "expirationDate";
 	public static final String TYPE_KEY = "licenseType";
 
-	private static final List<String> KEYS = new ArrayList<>();;
+	private static final List<String> KEYS = new ArrayList<>();
 	static {
 		KEYS.add(ID_KEY);
 		KEYS.add(LICENCE_CONTRACT_ID_KEY);

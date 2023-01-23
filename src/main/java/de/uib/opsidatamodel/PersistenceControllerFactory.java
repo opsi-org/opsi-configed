@@ -20,19 +20,19 @@ import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.logging.Logging;
 
 public class PersistenceControllerFactory {
+
+	// private constructor to hide the implicit public one
+	private PersistenceControllerFactory() {
+	}
+
 	private static PersistenceController staticPersistControl;
-
-	public static boolean localDB = false;
-	public static boolean localDBResync = false;
-
-	public static boolean synced = false;
 
 	public static boolean sqlAndGetRows = false;
 	public static boolean avoidSqlRawData = false;
 	public static boolean sqlAndGetHashes = false;
 	public static boolean sqlDirect = false;
-
 	public static String directmethodcall = "";
+
 	public static final String DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE = "cleanupAuditsoftware";
 
 	/**

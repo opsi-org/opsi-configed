@@ -154,7 +154,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		BOOLEAN_VALUES.add(false);
 	}
 
-	public static NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();;
+	public static NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
 	static {
 		PROPERTY_CLASSES_SERVER.put("", "general configuration items");
 		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
@@ -181,7 +181,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip"));
 	}
 
-	public static final NavigableMap<String, String> PROPERTYCLASSES_CLIENT = new TreeMap<>();;
+	public static final NavigableMap<String, String> PROPERTYCLASSES_CLIENT = new TreeMap<>();
 	static {
 		PROPERTYCLASSES_CLIENT.put("", "general configuration items");
 		PROPERTYCLASSES_CLIENT.put("clientconfig", "network configuration");
