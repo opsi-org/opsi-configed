@@ -399,13 +399,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
 	public ConfigedMain(String host, String user, String password) {
-		if (host == null) {
+		if (this.host == null) {
 			this.host = host;
 		}
-		if (user == null) {
+		if (this.user == null) {
 			this.user = user;
 		}
-		if (password == null) {
+		if (this.password == null) {
 			this.password = password;
 		}
 		sshKey = Configed.sshkey;
