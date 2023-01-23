@@ -29,6 +29,7 @@ public class UserSshConfig extends UserConfigModule {
 		Logging.info(" UserSshConfig BOOL_KEYS " + BOOL_KEYS);
 	}
 
+	// TODO this set is empty, nowhere elements will be added... what to do with it?
 	public static final Set<String> LIST_KEYS = new LinkedHashSet<>();
 
 	public static final UserSshConfig DEFAULT;

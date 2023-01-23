@@ -1,6 +1,7 @@
 package de.uib.opsidatamodel.productstate;
 
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class InstallationInfo {
 
@@ -25,7 +26,7 @@ public class InstallationInfo {
 
 	public static final String MANUALLY = "manually set";
 
-	public static final LinkedHashSet<String> defaultDisplayValues = new LinkedHashSet<>();
+	public static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
 	static {
 		defaultDisplayValues.add(NONE_DISPLAY_STRING);
 		defaultDisplayValues.add(SUCCESS_DISPLAY_STRING);

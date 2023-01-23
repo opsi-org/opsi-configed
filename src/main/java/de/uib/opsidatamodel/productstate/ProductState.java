@@ -18,21 +18,9 @@ public class ProductState extends HashMap<String, String> {
 		return defaultProductState;
 	}
 
-	public static final List<String> SERVICE_KEYS = new ArrayList<>();
-	static {// from 30_configed.conf
-		SERVICE_KEYS.add("modificationTime");
-		SERVICE_KEYS.add("productId");
-		SERVICE_KEYS.add("productVersion");
-		SERVICE_KEYS.add("packageVersion");
-		SERVICE_KEYS.add("targetConfiguration");
-		SERVICE_KEYS.add("lastAction");
-		SERVICE_KEYS.add("installationStatus");
-		SERVICE_KEYS.add("actionRequest");
-		SERVICE_KEYS.add("actionProgress");
-		SERVICE_KEYS.add("actionResult");
-		SERVICE_KEYS.add("priority");
-		SERVICE_KEYS.add("actionSequence");
-	}
+	public static final List<String> SERVICE_KEYS = List.of("modificationTime", "productId", "productVersion",
+			"packageVersion", "targetConfiguration", "lastAction", "installationStatus", "actionRequest",
+			"actionProgress", "actionResult", "priority", "actionSequence");
 
 	public static final Map<String, String> DB_COLUMNS = new LinkedHashMap<>();
 	static {

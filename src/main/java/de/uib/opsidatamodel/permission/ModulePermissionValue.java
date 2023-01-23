@@ -1,6 +1,5 @@
 package de.uib.opsidatamodel.permission;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.utilities.ExtendedDate;
@@ -17,26 +16,12 @@ public class ModulePermissionValue {
 	public static final String KEY_EXPIRES = "expires";
 	public static final String KEY_MAX_CLIENTS = "maxclients";
 
-	public static final Map<String, Boolean> MODULE_CHECKED;
-	// the modules which are known and should be checked
-	static {
-		MODULE_CHECKED = new HashMap<>();
-		MODULE_CHECKED.put("license_management", true);
-		MODULE_CHECKED.put("local_imaging", true);
-		MODULE_CHECKED.put("monitoring", true);
-		MODULE_CHECKED.put("wim-capture", true);
-		MODULE_CHECKED.put("scalability1", true);
-		MODULE_CHECKED.put("linux_agent", true);
-		MODULE_CHECKED.put("vpn", true);
-		MODULE_CHECKED.put("mysql_backend", true);
-		MODULE_CHECKED.put("uefi", true);
-		MODULE_CHECKED.put("userroles", true);
-		MODULE_CHECKED.put("directory-connector", true);
-		MODULE_CHECKED.put("macos_agent", true);
-		MODULE_CHECKED.put("secureboot", true);
-		MODULE_CHECKED.put("win-vhd", true);
-		MODULE_CHECKED.put("os_install_by_wlan", true);
-	}
+	public static final Map<String, Boolean> MODULE_CHECKED = Map.ofEntries(Map.entry("license_management", true),
+			Map.entry("local_imaging", true), Map.entry("monitoring", true), Map.entry("wim-capture", true),
+			Map.entry("scalability1", true), Map.entry("linux_agent", true), Map.entry("vpn", true),
+			Map.entry("mysql_backend", true), Map.entry("uefi", true), Map.entry("userroles", true),
+			Map.entry("directory-connector", true), Map.entry("macos_agent", true), Map.entry("secureboot", true),
+			Map.entry("win-vhd", true), Map.entry("os_install_by_wlan", true));
 
 	private Boolean checkBoolean(Object ob) {
 
