@@ -41,9 +41,8 @@ public class SWAuditEntry extends TableEntry
 
 	public static final String EXISTING_IDS = "(variants)";
 
-	private static List<String> KEYS;
+	private static final List<String> KEYS = new LinkedList<>();;
 	static {
-		KEYS = new LinkedList<>();
 		KEYS.add(ID);
 		KEYS.add(NAME);
 		KEYS.add(VERSION);
@@ -54,9 +53,8 @@ public class SWAuditEntry extends TableEntry
 		KEYS.add(WINDOWS_SOFTWARE_ID);
 	}
 
-	private static List<String> KEYS_FOR_GUI_TABLES;
+	private static final List<String> KEYS_FOR_GUI_TABLES = new LinkedList<>();;
 	static {
-		KEYS_FOR_GUI_TABLES = new LinkedList<>();
 		KEYS_FOR_GUI_TABLES.add(ID);
 		KEYS_FOR_GUI_TABLES.add(NAME);
 		KEYS_FOR_GUI_TABLES.add(VERSION);
@@ -67,9 +65,8 @@ public class SWAuditEntry extends TableEntry
 		KEYS_FOR_GUI_TABLES.add(WINDOWS_SOFTWARE_ID);
 	}
 
-	public static List<String> KEYS_FOR_IDENT;
+	public static final List<String> KEYS_FOR_IDENT = new ArrayList<>();
 	static {
-		KEYS_FOR_IDENT = new ArrayList<>();
 		KEYS_FOR_IDENT.add(NAME);
 		KEYS_FOR_IDENT.add(VERSION);
 		KEYS_FOR_IDENT.add("subversion");
@@ -77,9 +74,8 @@ public class SWAuditEntry extends TableEntry
 		KEYS_FOR_IDENT.add(ARCHITECTURE);
 	}
 
-	public static List<String> ID_VARIANTS_COLS;
+	public static final List<String> ID_VARIANTS_COLS = new ArrayList<>();;
 	static {
-		ID_VARIANTS_COLS = new ArrayList<>();
 		ID_VARIANTS_COLS.add(NAME);
 		ID_VARIANTS_COLS.add(EXISTING_IDS);
 

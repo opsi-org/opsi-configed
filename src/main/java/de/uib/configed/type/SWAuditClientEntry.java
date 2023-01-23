@@ -59,9 +59,8 @@ public class SWAuditClientEntry
 
 	de.uib.opsidatamodel.PersistenceController controller; // for retrieving softwarelist
 
-	public static List<String> KEYS;
+	public static final List<String> KEYS = new LinkedList<>();
 	static {
-		KEYS = new LinkedList<>();
 		KEYS.add(SWAuditEntry.ID);
 		KEYS.add(SWAuditEntry.NAME);
 		KEYS.add(SWAuditEntry.VERSION);
@@ -72,9 +71,8 @@ public class SWAuditClientEntry
 		KEYS.add(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 	}
 
-	private static List<String> KEYS_FOR_GUI_TABLES;
+	private static final List<String> KEYS_FOR_GUI_TABLES = new LinkedList<>();
 	static {
-		KEYS_FOR_GUI_TABLES = new LinkedList<>();
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.ID);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.NAME);
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.VERSION);
@@ -88,7 +86,7 @@ public class SWAuditClientEntry
 
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
-	public static final LinkedHashMap<String, String> DB_COLUMNS = new LinkedHashMap<>();
+	public static final Map<String, String> DB_COLUMNS = new LinkedHashMap<>();
 	static {
 		DB_COLUMNS.put(CLIENT_ID, DB_TABLE_NAME + "." + "clientId");
 		DB_COLUMNS.put(SWAuditEntry.NAME, DB_TABLE_NAME + "." + "name");
