@@ -2001,8 +2001,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			column.setCellRenderer(new BooleanIconTableCellRenderer(
 
 					Globals.createImageIcon("images/new_network-connect2.png", ""),
-					Globals.createImageIcon("images/new_network-disconnect.png", ""),
-					Globals.createImageIcon("images/new_network-empty22.png", ""), false));
+					Globals.createImageIcon("images/new_network-disconnect.png", ""), false));
 
 		}
 
@@ -3795,7 +3794,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		setEditingTarget(editingTarget); // sets visual view index, therefore:
-		// mainFrame.setVisualViewIndex(saveViewIndex);
 
 		// if depot selection changed, we adapt the clients
 		NavigableSet<String> clientsLeft = new TreeSet<>();

@@ -274,8 +274,8 @@ public class ControllerHWinfoColumnConfiguration {
 		Icon iconUnchecked = Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
 		Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
 
-		col.setCellRenderer(new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(iconChecked, iconUnchecked,
-				iconEmpty, true));
+		col.setCellRenderer(
+				new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(iconChecked, iconUnchecked, true));
 
 		JCheckBox useCheck = new JCheckBox(iconEmpty);
 

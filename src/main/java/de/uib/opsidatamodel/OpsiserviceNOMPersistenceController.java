@@ -741,10 +741,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			}
 		}
 
-		public Map<String, Boolean> getPrototypesForDepots(String[] depots) {
-			return null;
-		}
-
 		@Override
 		public Map<String, Boolean> getClientListForDepots(String[] depots, Set<String> allowedClients) {
 			retrieveOpsiHosts();
@@ -1400,10 +1396,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public boolean installPackage(String filename) {
-		return installPackage(filename, true, new Object[] {}, "");
+		return installPackage(filename, true, "");
 	}
 
-	public boolean installPackage(String filename, boolean force, Object propertyDefaultValues, String tempDir) {
+	public boolean installPackage(String filename, boolean force, String tempDir) {
 
 		String method = "depot_installPackage";
 
@@ -2172,10 +2168,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public List<String> wakeOnLan(String[] hostIds) {
-		return wakeOnLan(hostIds, getHostSeparationByDepots(hostIds));
+		return wakeOnLan(getHostSeparationByDepots(hostIds));
 	}
 
-	protected List<String> wakeOnLan(String[] hostIds, Map<String, List<String>> hostSeparationByDepot) {
+	protected List<String> wakeOnLan(Map<String, List<String>> hostSeparationByDepot) {
 		Map responses = new HashMap<>();
 
 		Map<String, Executioner> executionerForDepots = new HashMap<>();
@@ -3372,7 +3368,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return client2HwRows;
 	}
 
-	private Map<String, Object> produceHwAuditColumnConfig(String configKey, OpsiHwAuditDeviceClass hwAuditDeviceClass,
+	private Map<String, Object> produceHwAuditColumnConfig(String configKey,
 			List<OpsiHwAuditDevicePropertyType> deviceProperties, Map<String, Boolean> tableConfigUpdates) {
 		List<Object> oldDefaultValues = new ArrayList<>();
 
@@ -3440,7 +3436,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// we have got updates for this table configuration
 			{
 
-				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey, hwAuditDeviceClass,
+				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHostProperties(), tableConfigUpdates);
 
 				readyObjects.add(Executioner.jsonMap(configItem));
@@ -3483,7 +3479,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// we have got updates for this table configuration
 			{
 
-				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey, hwAuditDeviceClass,
+				Map<String, Object> configItem = produceHwAuditColumnConfig(configKey,
 						hwAuditDeviceClass.getDeviceHwItemProperties(), tableConfigUpdates);
 
 				readyObjects.add(Executioner.jsonMap(configItem));

@@ -281,7 +281,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		int mult = 1000;
-		if (unit.toLowerCase().equals("byte")) {
+		if (unit.equalsIgnoreCase("byte")) {
 			mult = 1024;
 		}
 		// TODO: nano, micro

@@ -52,9 +52,7 @@ public class ExtendedDate {
 
 		if (ob instanceof Date) {
 			setFromDate((Date) ob);
-			return;
 		}
-
 	}
 
 	@Override

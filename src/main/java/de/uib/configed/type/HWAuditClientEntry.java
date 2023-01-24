@@ -1,6 +1,10 @@
 package de.uib.configed.type;
 
 public class HWAuditClientEntry {
+	// private constructor to hide the implicit public one
+	private HWAuditClientEntry() {
+	}
+
 	// TODO What is the use for this class???????
 
 	public static final String HOST_KEY = "hostId";
@@ -15,5 +19,4 @@ public class HWAuditClientEntry {
 
 	public static final String TYPE_KEY = "type";
 	public static final String OPSI_NOM_TYPE = "AuditHardwareOnHost";
-
 }

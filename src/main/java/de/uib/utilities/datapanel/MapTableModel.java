@@ -165,10 +165,6 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		keysOfReadOnlyEntries = keys;
 	}
 
-	public java.util.Set<String> getReadOnlyEntries(java.util.Set<String> keys) {
-		return keysOfReadOnlyEntries;
-	}
-
 	public void setEditDenier(Function<String, Boolean> disallow) {
 		editDenier = disallow;
 	}
@@ -419,37 +415,31 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		Logging.info(this, "Setting value in table at " + row + "," + col + " to " + value + " (an instance of "
 				+ value.getClass() + ")");
 
-		if (!getValueAt(row, col).equals(value) && !getValueAt(row, col).toString().equals(value.toString())) {
+		// check not necessary since, by virtue of the method isCellEditable (int,int),
+		// we can only have come to here in this case
+		if (!getValueAt(row, col).equals(value) && !getValueAt(row, col).toString().equals(value.toString()) && col == 1
+				&& keys != null) {
+			String myKey = keys.get(row);
+			Object o = value;
 
-			if (col == 1)
-			// check not necessary since, by virtue of the method isCellEditable (int,int),
-			// we can only have come to here in this case
-			{
-				if (keys != null) {
-					String myKey = keys.get(row);
-					Object o = value;
+			// the internal view data:
+			data.put(myKey, o);
+			// the external view data
+			oridata.put(myKey, o);
+			Logging.debug(this, "put into oridata for myKey o " + myKey + ": " + o);
+			// the data sources:
 
-					// the internal view data:
-					data.put(myKey, o);
-					// the external view data
-					oridata.put(myKey, o);
-					Logging.debug(this, "put into oridata for myKey o " + myKey + ": " + o);
-					// the data sources:
+			modelProducer.updateData(oridata);
 
-					modelProducer.updateData(oridata);
+			if (writeData) {
+				Logging.debug(this, " -------  storeData " + value + " (class : " + value.getClass());
+				putEntryIntoStoredMaps(myKey, value);
 
-					if (writeData) {
-						Logging.debug(this, " -------  storeData " + value + " (class : " + value.getClass());
-						putEntryIntoStoredMaps(myKey, value);
+				modifiedKey = getModifiedKey();
+				// produces as well rowModiTime
 
-						modifiedKey = getModifiedKey();
-						// produces as well rowModiTime
-
-						if (rowModiTime > -1 && row != rowModiTime) {
-							setValueAt(Globals.getNowTimeListValue(), rowModiTime, 1);
-						}
-
-					}
+				if (rowModiTime > -1 && row != rowModiTime) {
+					setValueAt(Globals.getNowTimeListValue(), rowModiTime, 1);
 				}
 			}
 		}

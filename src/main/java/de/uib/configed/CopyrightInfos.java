@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public class CopyrightInfos {
-	static String discard, major, minor, update, build;
+
 	static final String COMPLETE_VERSION_INFO = System.getProperty("java.runtime.version");
 
 	private static final List<String> infos;

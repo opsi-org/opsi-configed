@@ -95,7 +95,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	}
 
-	private void startListEditor(final int row, final int column) {
+	private void startListEditor() {
 		field.setEditable(false);
 		listeditor.init();
 
@@ -123,7 +123,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		if (val instanceof List) // is now always
 		{
 
-			ListModel model = modelProducer.getListModel(row, column);
+			ListModel<Object> model = modelProducer.getListModel(row, column);
 			Logging.debug(this,
 					" try list editing, modelproducer tells nullable " + modelProducer.getNullable(row, column));
 			listeditor.setVisible(false);
@@ -141,17 +141,17 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				listeditor.setSelectedValues(modelProducer.getSelectedValues(row, column));
 
 				listeditor.enter();
-				startListEditor(row, column);
+				startListEditor();
 
 				editingRow = row;
 				editingColumn = column;
 			}
 
 			else {
-				model = new DefaultListModel();
+				model = new DefaultListModel<>();
 
 				listeditor.setListModel(model);
-				startListEditor(row, column);
+				startListEditor();
 
 				listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 				listeditor.setEditable(true);

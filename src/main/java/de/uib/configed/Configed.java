@@ -631,7 +631,7 @@ public class Configed {
 		Logging.init();
 		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch)
-			Logging.setSuppressConsole(true);
+			Logging.setSuppressConsole();
 	}
 
 	public static String encodeStringFromService(String s) {

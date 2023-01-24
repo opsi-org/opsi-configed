@@ -26,8 +26,7 @@ public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOpera
 			return false;
 		}
 
-		for (Object obj : oClient.getSuperGroups()) {
-			String group = (String) obj;
+		for (String group : oClient.getSuperGroups()) {
 			if (checkData(group))
 				return true;
 		}

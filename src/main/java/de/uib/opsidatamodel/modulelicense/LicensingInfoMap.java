@@ -543,8 +543,7 @@ public class LicensingInfoMap {
 							currentOverLimitModuleList.add(currentModule);
 					}
 
-					else if (key.equals(getLatestDate())
-							&& checkTimeLeft(tmp.getMap(), currentModule).equals(STATE_DAYS_WARNING)) {
+					else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_WARNING)) {
 						moduleInfo.put(STATE, STATE_DAYS_WARNING);
 						currentTimeWarningModuleList.add(currentModule);
 					}
@@ -708,7 +707,7 @@ public class LicensingInfoMap {
 		return null;
 	}
 
-	private String checkTimeLeft(Map<String, Object> moduleInfo, String module) {
+	private String checkTimeLeft(Map<String, Object> moduleInfo) {
 		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
 				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
 
@@ -716,7 +715,6 @@ public class LicensingInfoMap {
 			String validUntil;
 
 			for (int i = 0; i < lics.size(); i++) {
-
 				validUntil = licenses.get(lics.get(i)).get(VALID_UNTIL).toString();
 
 				Long timeLeft = getDaysLeftUntil(validUntil);

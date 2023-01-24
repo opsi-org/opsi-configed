@@ -52,17 +52,11 @@ public class CSVParser {
 		}
 
 		for (char c : line.toCharArray()) {
-			if (c == format.getStringSeparator()) {
+			if (c == format.getStringSeparator())
 				inQuotes = !inQuotes;
-				continue;
-			}
 		}
 
-		if (inQuotes) {
-			return true;
-		}
-
-		return false;
+		return inQuotes;
 	}
 
 	public List<String> parse(List<CSVToken> tokens) throws CSVException {
@@ -153,12 +147,8 @@ public class CSVParser {
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream()
 				.max(Map.Entry.comparingByValue()).get().getKey();
 
-		if (pendingFieldCount == 0
-				&& !numberOfFieldsPerLine.stream().allMatch(lineFieldCount -> lineFieldCount == commonFieldCount)) {
-			return false;
-		}
-
-		return true;
+		return pendingFieldCount != 0
+				|| numberOfFieldsPerLine.stream().allMatch(lineFieldCount -> lineFieldCount == commonFieldCount);
 	}
 
 	public CSVFormat getFormat() {

@@ -78,7 +78,7 @@ public class Logging implements LogEventSubject
 
 	protected static List<LogEventObserver> logEventObservers = new ArrayList<>();
 
-	public static void setSuppressConsole(boolean b) {
+	public static void setSuppressConsole() {
 		setLogLevelConsole(LEVEL_NONE);
 	}
 

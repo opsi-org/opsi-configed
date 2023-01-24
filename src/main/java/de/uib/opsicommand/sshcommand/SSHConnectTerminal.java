@@ -142,7 +142,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				dialog.setTitle(
 						SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost());
 				dialog.setVisible(true);
-				dialog.setAutocompleteList(getList(getCompletionList(true, true)));
+				dialog.setAutocompleteList(getList(getCompletionList(true)));
 
 				Logging.info(this, "SSHConnectTerminal connected");
 
@@ -197,10 +197,6 @@ public class SSHConnectTerminal extends SSHConnect {
 	}
 
 	private ChannelShell setStreams(ChannelShell ch) throws IOException {
-		return setStreams(ch, false);
-	}
-
-	private ChannelShell setStreams(ChannelShell ch, boolean silent) throws IOException {
 		ch.setInputStream(new FilterInputStream(System.in) {
 			@Override
 			public int read(byte[] b, int off, int len) throws IOException {
@@ -300,7 +296,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 	public List<String> commandsCompgen;
 
-	private String getCompletionList(boolean newCommands, boolean dirchanged) {
+	private String getCompletionList(boolean newCommands) {
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = "";
 		if (newCommands) {

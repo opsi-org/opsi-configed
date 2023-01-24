@@ -190,7 +190,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		popupNoEditOptions = definePopup();
 		popupmenuAtRow = popupEditOptions;
 
-		logPopupElements(popupmenuAtRow);
+		logPopupElements();
 
 		popupNoEditOptionsListener = new utils.PopupMouseListener(popupNoEditOptions);
 		table.addMouseListener(popupNoEditOptionsListener);

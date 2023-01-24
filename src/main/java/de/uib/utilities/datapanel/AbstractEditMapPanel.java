@@ -139,7 +139,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		mapTableModel.setEditDenier(disallow);
 	}
 
-	protected void logPopupElements(JPopupMenu popup) {
+	protected void logPopupElements() {
 		MenuElement[] popupElements = popupmenuAtRow.getSubElements();
 		int size = popupElements.length;
 		Logging.debug(this, "logPopupElements " + size);
