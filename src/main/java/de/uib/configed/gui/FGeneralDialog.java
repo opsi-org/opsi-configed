@@ -344,8 +344,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	private void guiInit() {
-		initComponents();
-		allLayout();
 
 		jPanelButtonGrid.setLayout(gridLayout1);
 		jPanelButtonGrid.setOpaque(false);
@@ -377,9 +375,10 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jButton2.addActionListener(this);
 		jButton3.addActionListener(this);
 
-		allpane.add(southPanel, BorderLayout.SOUTH);
+		initComponents();
+		allLayout();
 
-		getContentPane().add(allpane);
+		allpane.add(southPanel, BorderLayout.SOUTH);
 
 		pack();
 		setLocationRelativeTo(owner);
