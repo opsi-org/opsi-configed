@@ -304,8 +304,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public TabbedFrame licencesFrame;
 
-	public FGroupActions groupActionFrame;
-	public FProductActions productActionFrame;
+	private FGroupActions groupActionFrame;
+	private FProductActions productActionFrame;
 
 	ControlPanelEnterLicence controlPanelEnterLicence;
 	ControlPanelEditLicences controlPanelEditLicences;

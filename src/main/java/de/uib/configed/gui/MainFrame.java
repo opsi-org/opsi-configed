@@ -2753,10 +2753,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		fList.init();
 
 		// TODO should this location remain here?
-		fList.setLocation(this.getX() + 40, this.getY() + 40);
 		fList.setSize(F_WIDTH / 2, this.getHeight());
-
 		fList.setModal(true);
+		fList.setLocationRelativeTo(this);
 		fList.setVisible(true);
 
 		Logging.debug(this, "fList getSelectedValue " + fList.getSelectedList());
@@ -3124,6 +3123,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	}
 
+	// TODO: kann das weg? arrange dialogs for opsi-client wake on LAN...
 	protected void arrangeWs(Set<JDialog> frames) {
 		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
 		// Can iconify, but not deiconify a modal JDialog

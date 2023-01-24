@@ -95,7 +95,6 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-
 		if (e.getSource() == editorContent && e.getKeyCode() == 32)
 			fEdit.setVisible(true);
 	}

@@ -26,11 +26,12 @@ import javax.net.ssl.SSLException;
 
 import org.json.JSONObject;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
-import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
 import utils.Base64OutputStream;
@@ -319,6 +320,10 @@ public class JSONthroughHTTP extends JSONExecutioner {
 
 			fErrorMsg.setMessage(message.toString());
 			fErrorMsg.setAlwaysOnTop(true);
+
+			if (Globals.mainFrame == null && ConfigedMain.dpass != null)
+				fErrorMsg.setLocationRelativeTo(ConfigedMain.dpass);
+
 			fErrorMsg.setVisible(true);
 
 			if (fErrorMsg.getResult() == 1) {

@@ -2343,7 +2343,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Map<String, String> sessionInfo(String[] clientIds) {
-		Map result = new HashMap<>();
+		Map<String, String> result = new HashMap<>();
 
 		Object[] callParameters = new Object[] {};
 		if (clientIds != null && clientIds.length > 0) {
@@ -2362,26 +2362,26 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				)));
 
 		for (Entry<String, Object> resultEntry : result0.entrySet()) {
-			String value = "";
+			StringBuilder value = new StringBuilder();
 
 			if (resultEntry.getValue() instanceof String) {
 				// error
 
 				String errorStr = (String) resultEntry.getValue();
-				value = "no response";
+				value = new StringBuilder("no response");
 				if (errorStr.indexOf("Opsi timeout") > -1) {
 					int i = errorStr.indexOf("(");
 					if (i > -1) {
-						value = value + "   " + errorStr.substring(i + 1, errorStr.length() - 1);
+						value.append("   " + errorStr.substring(i + 1, errorStr.length() - 1));
 					} else
-						value = value + " (opsi timeout)";
+						value.append(" (opsi timeout)");
 				}
 
 				else if (errorStr.indexOf(methodname) > -1)
-					value = value + "  (" + methodname + " not valid)";
+					value.append("  (" + methodname + " not valid)");
 
 				else if (errorStr.indexOf("Name or service not known") > -1)
-					value = value + " (name or service not known)";
+					value.append(" (name or service not known)");
 			}
 
 			else if (resultEntry.getValue() instanceof List) {
@@ -2394,14 +2394,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					String username = "" + session.get("UserName");
 					String logondomain = "" + session.get("LogonDomain");
 
-					if (!value.equals(""))
-						value = value + "; ";
+					if (!value.toString().equals(""))
+						value.append("; ");
 
-					value = value + username + " (" + logondomain + "\\" + username + ")";
+					value.append(username + " (" + logondomain + "\\" + username + ")");
 				}
 			}
 
-			result.put(resultEntry.getKey(), value);
+			result.put(resultEntry.getKey(), value.toString());
 		}
 
 		return result;
