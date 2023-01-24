@@ -323,12 +323,8 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		if (col < 1) {
 			return false;
 		} else {
-			if (keysOfReadOnlyEntries != null && keysOfReadOnlyEntries.contains(keys.get(row)) ||
-
-					editDenier != null && editDenier.apply(keys.get(row)))
-				return false;
-			else
-				return true;
+			return (keysOfReadOnlyEntries == null || !keysOfReadOnlyEntries.contains(keys.get(row)))
+					&& (editDenier == null || !editDenier.apply(keys.get(row)));
 		}
 	}
 

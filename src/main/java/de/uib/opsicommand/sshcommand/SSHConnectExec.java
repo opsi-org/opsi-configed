@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -169,7 +168,7 @@ public class SSHConnectExec extends SSHConnect {
 			outputDialog = multiDialog;
 			final SSHConnectionExecDialog finalDialog = multiDialog;
 
-			String defaultCommandsString = "";
+			StringBuilder defaultCommandsString = new StringBuilder();
 			int anzahlCommands = ((SSHCommandTemplate) commands).getOriginalCommands().size();
 			Logging.info(this, "exec_list, anzahlCommands " + anzahlCommands);
 
@@ -179,8 +178,7 @@ public class SSHConnectExec extends SSHConnect {
 
 				// else
 
-				defaultCommandsString = defaultCommandsString + com + "   \n";
-
+				defaultCommandsString.append(com + "   \n");
 			}
 			try {
 
@@ -208,7 +206,7 @@ public class SSHConnectExec extends SSHConnect {
 
 				pmethodHandler.canceled = false;
 				boolean foundError = false;
-				LinkedList<SSHCommand> commandList = commandToExec.getCommands();
+				List<SSHCommand> commandList = commandToExec.getCommands();
 				for (SSHCommand co : commandToExec.getCommands()) {
 					if (!foundError) {
 

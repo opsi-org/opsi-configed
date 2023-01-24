@@ -1,12 +1,11 @@
 package de.uib.utilities.table;
 
 import java.util.List;
-import java.util.NavigableSet;
-import java.util.TreeSet;
+import java.util.Set;
 
 public class DefaultTableModelFilterCondition implements TableModelFilterCondition {
 
-	protected NavigableSet<? extends Object> filterSet;
+	protected Set<? extends Object> filterSet;
 	protected int keyCol = -1;
 	protected String filterLabel = "";
 
@@ -29,7 +28,7 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 	}
 
 	@Override
-	public void setFilter(TreeSet<Object> filterParam) {
+	public void setFilter(Set<Object> filterParam) {
 		filterSet = filterParam;
 	}
 
@@ -42,12 +41,7 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 		if (keyCol == -1)
 			return true;
 
-		boolean result = filterSet.contains(row.get(keyCol));
-
-		return result;
-	}
-
-	public void setFilter(int[] rowNoFilter, final List<List<Object>> row) {
+		return filterSet.contains(row.get(keyCol));
 	}
 
 	@Override

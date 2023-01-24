@@ -8236,12 +8236,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		List<String> availableModules = licInfoMap.getAvailableModules();
 
-		for (String mod : licInfoMap.getModules()) {
-			if (availableModules.indexOf(mod) == -1)
-				opsiModules.put(mod, false);
-			else
-				opsiModules.put(mod, true);
-		}
+		for (String mod : licInfoMap.getModules())
+			opsiModules.put(mod, availableModules.indexOf(mod) != -1);
 
 		Logging.info(this, "opsiModules result " + opsiModules);
 

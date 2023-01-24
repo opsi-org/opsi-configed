@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.Set;
 
 import javax.swing.JTable;
 
@@ -21,7 +21,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 	}
 
 	@Override
-	public void setFilter(TreeSet<Object> filter) {
+	public void setFilter(Set<Object> filter) {
 	}
 
 	public void setFilter(int[] modelRowNoFilter, final List<List<Object>> rows) {

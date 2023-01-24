@@ -113,9 +113,9 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public void setVerbosity(int vSum) {
-		String v = "v";
+		StringBuilder v = new StringBuilder("v");
 		for (int i = 0; i < vSum; i++)
-			v = v + "v";
+			v.append("v");
 		verbosity = " -" + v + " ";
 	}
 

@@ -14,7 +14,7 @@ package de.uib.configed.gui.hwinfopage;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.JButton;
@@ -62,10 +62,10 @@ public class ControllerHWinfoMultiClients {
 	SecondaryFrame fTable;
 
 	de.uib.utilities.table.TableModelFilterCondition filterConditionHwForSelectedHosts = new de.uib.utilities.table.TableModelFilterCondition() {
-		private NavigableSet<Object> filter;
+		private Set<Object> filter;
 
 		@Override
-		public void setFilter(TreeSet<Object> filter) {
+		public void setFilter(Set<Object> filter) {
 			this.filter = filter;
 		}
 

@@ -142,8 +142,11 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	public void append(String caller, String line) {
 		Logging.debug(this, "append " + line);
 		int callerlength = caller.length();
+
+		StringBuilder callerBuilder = new StringBuilder(caller);
 		for (int i = callerlength; i <= infolength; i++)
-			caller += " ";
-		super.append(caller, line);
+			callerBuilder.append(" ");
+
+		super.append(callerBuilder.toString(), line);
 	}
 }

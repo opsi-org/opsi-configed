@@ -3240,11 +3240,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public boolean logfileExists(String logtype) {
-		if (logfiles == null || logfiles.get(logtype) == null || logfiles.get(logtype).equals("")
-				|| logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient")))
-			return false;
-
-		return true;
+		return logfiles != null && logfiles.get(logtype) != null && !logfiles.get(logtype).equals("")
+				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 	}
 
 	public Map<String, String> getLogfilesUpdating(String logtypeToUpdate) {

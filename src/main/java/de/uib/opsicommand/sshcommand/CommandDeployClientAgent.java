@@ -214,9 +214,10 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public void setVerbosity(int vSum) {
-		String v = "";
+		StringBuilder v = new StringBuilder();
 		for (int i = 0; i < vSum; i++)
-			v = v + "v";
+			v.append("v");
+
 		verbosity = " -" + v + " ";
 		if (vSum == 0)
 			verbosity = "";
@@ -237,13 +238,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public boolean checkCommand() {
-		if (client.equals(""))
-			return false;
-
-		if (passw.equals(""))
-			return false;
-
-		return true;
+		return !client.equals("") && !passw.equals("");
 	}
 
 	@Override

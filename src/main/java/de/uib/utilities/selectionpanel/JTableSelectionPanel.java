@@ -585,7 +585,7 @@ public class JTableSelectionPanel extends JPanel
 	public DefaultTableModel getSelectedRowsModel() {
 		final Map<Integer, Integer> selectionMap = getSelectionMap();
 
-		DefaultTableModel m = new DefaultTableModel() {
+		return new DefaultTableModel() {
 			@Override
 			public Object getValueAt(int row, int col) {
 				return table.getValueAt(selectionMap.get(row), col);
@@ -601,8 +601,6 @@ public class JTableSelectionPanel extends JPanel
 				return table.getColumnCount();
 			}
 		};
-
-		return m;
 	}
 
 	public DefaultTableModel getTableModel() {

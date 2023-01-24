@@ -62,7 +62,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected String[] buttonNames;
 	protected Icon[] icons;
-	protected String iconsLog;
 
 	protected int noOfButtons = 3;
 
@@ -273,13 +272,13 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			}
 		}
 
-		iconsLog = "";
+		StringBuilder iconsLog = new StringBuilder();
 
 		for (Icon icon : icons) {
 			if (icon == null)
-				iconsLog = iconsLog + icon + "  ";
+				iconsLog.append(icon + "  ");
 			else
-				iconsLog = iconsLog + ((ImageIcon) icon).getDescription() + "    ";
+				iconsLog.append(((ImageIcon) icon).getDescription() + "    ");
 		}
 
 		Logging.info(this, "with icons " + iconsLog);

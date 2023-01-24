@@ -64,7 +64,7 @@ public class UserOpsipermission extends UserConfigModule {
 			+ CONFIG_KEY_STR_PRODUCT + "." + CONFIG_KEY_STR_PRODUCTGROUP + "." + CONFIG_KEY_STR_PRODUCTGROUPLIST;
 	// privilege.product.groupaccess.productgroups : multivalue
 
-	public static final LinkedHashSet<String> BOOL_KEYS;
+	public static final Set<String> BOOL_KEYS;
 	static {
 		BOOL_KEYS = new LinkedHashSet<>();
 		BOOL_KEYS.add(PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY);

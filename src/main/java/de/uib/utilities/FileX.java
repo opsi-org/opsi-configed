@@ -12,16 +12,16 @@ public class FileX {
 		if (parts == null || parts.length == 0)
 			return "";
 
-		String result = parts[0];
+		StringBuilder result = new StringBuilder(parts[0]);
 
 		if (absolute)
-			result = separator + result;
+			result.insert(0, separator);
 
 		for (int i = 1; i < parts.length; i++) {
-			result = result + separator + parts[i];
+			result.append(separator + parts[i]);
 		}
 
-		return result;
+		return result.toString();
 	}
 
 	public static String getLocalsystemPath(String[] parts) {
@@ -33,15 +33,15 @@ public class FileX {
 		if (parts == null || parts.length == 0)
 			return "";
 
-		String result = File.separator + File.separator + server + File.separator + share;
+		StringBuilder result = new StringBuilder(File.separator + File.separator + server + File.separator + share);
 
 		for (int i = 0; i < parts.length; i++) {
-			result = result + File.separator + parts[i];
+			result.append(File.separator + parts[i]);
 		}
 
 		// mount
 
-		return result;
+		return result.toString();
 	}
 
 }

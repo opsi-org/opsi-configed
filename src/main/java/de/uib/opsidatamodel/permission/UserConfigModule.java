@@ -12,8 +12,8 @@ import de.uib.utilities.logging.Logging;
 public class UserConfigModule {
 	protected String username;
 
-	public LinkedHashSet<String> boolKeys;
-	public LinkedHashSet<String> listKeys;
+	private Set<String> boolKeys;
+	private Set<String> listKeys;
 
 	public Map<String, Boolean> booleanMap;
 	public Map<String, List<Object>> valuesMap;

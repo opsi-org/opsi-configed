@@ -182,9 +182,10 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setVerbosity(int vSum) {
-		String v = "";
+		StringBuilder v = new StringBuilder();
 		for (int i = 0; i < vSum; i++)
-			v = v + "v";
+			v.append("v");
+
 		verbosity = " -" + v + " ";
 		if (vSum == 0)
 			verbosity = "";

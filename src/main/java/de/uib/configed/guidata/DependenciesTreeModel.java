@@ -126,14 +126,14 @@ public class DependenciesTreeModel {
 		List<String> sortedList = new LinkedList<>(setOfTreeNodes);
 		Collections.sort(sortedList);
 
-		String listAsString = "";
+		StringBuilder listAsString = new StringBuilder();
 		if (!sortedList.isEmpty())
-			listAsString += sortedList.remove(0);
+			listAsString.append(sortedList.remove(0));
 
 		for (String productId : sortedList)
-			listAsString += "\n" + productId;
+			listAsString.append("\n" + productId);
 
-		return listAsString;
+		return listAsString.toString();
 	}
 
 	/*

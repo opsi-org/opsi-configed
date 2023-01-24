@@ -3,7 +3,7 @@ package de.uib.configed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.Set;
 
 import de.uib.configed.gui.licences.PanelLicencesReconciliation;
 import de.uib.opsidatamodel.PersistenceController;
@@ -96,7 +96,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		// filter which guarantees that clients are only shown when they have entries
 		modelLicencesReconciliation.setFilterCondition(new TableModelFilterCondition() {
 			@Override
-			public void setFilter(TreeSet<Object> filterParam) {
+			public void setFilter(Set<Object> filterParam) {
 				// Implementing TableModelFilterCondition
 			}
 

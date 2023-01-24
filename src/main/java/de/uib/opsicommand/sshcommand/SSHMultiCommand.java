@@ -1,11 +1,11 @@
 package de.uib.opsicommand.sshcommand;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public interface SSHMultiCommand {
-	public LinkedList<SSHCommand> getCommands();
+	public List<SSHCommand> getCommands();
 
-	public LinkedList<String> getCommandsRaw();
+	public List<String> getCommandsRaw();
 
 	public String getMainName();
 }

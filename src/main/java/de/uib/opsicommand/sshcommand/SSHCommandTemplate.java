@@ -264,7 +264,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 * @return List of SSHCommand
 	 **/
 	@Override
-	public LinkedList<SSHCommand> getCommands() {
+	public List<SSHCommand> getCommands() {
 		return sshCommand;
 	}
 
@@ -304,8 +304,8 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 * @return LinkedList<String> with the commands
 	 **/
 	@Override
-	public LinkedList<String> getCommandsRaw() {
-		LinkedList<String> commandsStringList = new LinkedList<>();
+	public List<String> getCommandsRaw() {
+		List<String> commandsStringList = new LinkedList<>();
 		for (SSHCommand c : sshCommand) {
 			String comstr = c.getCommandRaw();
 			if (!((comstr == null) || (comstr.trim().equals(""))))

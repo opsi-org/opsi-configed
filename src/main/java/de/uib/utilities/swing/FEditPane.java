@@ -143,12 +143,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		if (linkpos < 0)
 			return false;
 
-		linkpos++;
-		if (s0.length() <= linkpos)
-			// s0 has : but ends there
-			return false;
-
-		return true;
+		// s0 has : but ends there
+		return linkpos + 1 < s0.length();
 
 	}
 

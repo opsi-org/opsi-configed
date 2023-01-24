@@ -123,7 +123,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	}
 
 	@Override
-	public LinkedList<SSHCommand> getCommands() {
+	public List<SSHCommand> getCommands() {
 		return sshCommand;
 	}
 

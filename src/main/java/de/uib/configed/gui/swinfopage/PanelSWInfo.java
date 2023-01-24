@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -89,7 +89,7 @@ public class PanelSWInfo extends JPanel {
 
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates = new de.uib.utilities.table.TableModelFilterCondition() {
 		@Override
-		public void setFilter(TreeSet<Object> filter) {
+		public void setFilter(Set<Object> filter) {
 		}
 
 		@Override
@@ -110,7 +110,7 @@ public class PanelSWInfo extends JPanel {
 
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates2 = new de.uib.utilities.table.TableModelFilterCondition() {
 		@Override
-		public void setFilter(TreeSet<Object> filter) {
+		public void setFilter(Set<Object> filter) {
 		}
 
 		@Override

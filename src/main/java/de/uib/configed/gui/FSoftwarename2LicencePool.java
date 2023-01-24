@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -310,7 +309,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		showOnlyNamesWithVariantLicences = new DefaultTableModelFilterCondition(
 				"" + Softwarename2LicencepoolRestriction.SHOW_ONLY_NAMES_WITH_VARIANT_LICENCEPOOLS) {
 			@Override
-			public void setFilter(TreeSet<Object> filter) {
+			public void setFilter(Set<Object> filter) {
 			}
 
 			@Override
@@ -323,7 +322,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		showOnlyNamesWithoutLicences = new DefaultTableModelFilterCondition(
 				"" + Softwarename2LicencepoolRestriction.SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENCEPOOL) {
 			@Override
-			public void setFilter(TreeSet<Object> filter) {
+			public void setFilter(Set<Object> filter) {
 			}
 
 			@Override
