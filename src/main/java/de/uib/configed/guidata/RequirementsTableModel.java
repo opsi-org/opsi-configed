@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
@@ -21,14 +22,14 @@ import de.uib.utilities.logging.Logging;
 
 public class RequirementsTableModel extends javax.swing.table.AbstractTableModel {
 
-	TreeSet keySet;
+	Set<String> keySet;
 	Object[] keyArray;
 	final Object[] zeroArray = new Object[] {};
 
-	Map requMap;
-	Map requBeforeMap;
-	Map requAfterMap;
-	Map requDeinstallMap;
+	Map<String, String> requMap;
+	Map<String, String> requBeforeMap;
+	Map<String, String> requAfterMap;
+	Map<String, String> requDeinstallMap;
 
 	PersistenceController perCon;
 
@@ -76,7 +77,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		if (product != null && !product.trim().equals("")) {
 			retrieveRequirements(depotId, product);
 
-			keySet = new TreeSet();
+			keySet = new TreeSet<>();
 			if (requMap != null && requMap.keySet() != null) {
 				keySet.addAll(requMap.keySet());
 			}
@@ -197,17 +198,6 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 		}
 		return result;
-	}
-
-	// TODO when is a cell editable? This returns always true...
-	@Override
-	public boolean isCellEditable(int row, int col) {
-		int rowTypeIndex = row % noOfRowTypes;
-		if (rowTypeIndex == 1 && col == 0)
-			return false;
-		if (rowTypeIndex == 2 && col == 0)
-			return false;
-		return false;
 	}
 
 	public MyTableCellRenderer getTableCellRenderer() {

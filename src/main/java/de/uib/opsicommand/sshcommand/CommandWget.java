@@ -71,10 +71,6 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 			authentication = a;
 	}
 
-	public String getAuthentication() {
-		return authentication;
-	}
-
 	@Override
 	public boolean isMultiCommand() {
 		return IS_MULTI_COMMAND;

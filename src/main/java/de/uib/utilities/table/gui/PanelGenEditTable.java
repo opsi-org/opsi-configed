@@ -194,26 +194,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		return result;
 	}
 
-	public static final int[] POPUPS_EDITABLE_TABLE = new int[] { POPUP_NEW_ROW, POPUP_COPY_ROW, POPUP_DELETE_ROW,
-			POPUP_SAVE, POPUP_CANCEL,
-			// POPUP_EXPORT_SELECTED_EXCEL,
-			// POPUP_EXPORT_EXCEL,
-			POPUP_RELOAD, POPUP_SORT_AGAIN
-			// ,
-			// POPUP_PDF
-	};
-	public static final int[] POPUPS_EDITABLE_TABLE_PRINTABLE = new int[] { POPUP_NEW_ROW, POPUP_COPY_ROW,
-			POPUP_DELETE_ROW, POPUP_SAVE, POPUP_CANCEL, POPUP_PRINT, POPUP_PDF,
-			// POPUP_EXPORT_SELECTED_EXCEL,
-			// POPUP_EXPORT_EXCEL,
-			POPUP_RELOAD, POPUP_SORT_AGAIN
-			// ,
-			// POPUP_PDF
-	};
-	public static final int[] POPUPS_NOT_EDITABLE_TABLE = new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN };
 	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PDF = new int[] { POPUP_RELOAD, POPUP_PDF, POPUP_SORT_AGAIN };
-	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PRINTABLE = new int[] { POPUP_PRINT, POPUP_PDF, POPUP_RELOAD,
-			POPUP_SORT_AGAIN };
 	public static final int[] POPUPS_MINIMAL = new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN
 
 	};
@@ -935,7 +916,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	/**
 	 * set special comparator for a column
 	 */
-	public void setComparator(String colName, Comparator comparator) {
+	public void setComparator(String colName, Comparator<Object> comparator) {
 		Logging.info(this, "setComparator " + colName + " compare by " + comparator);
 		int modelCol = tableModel.getColumnNames().indexOf(colName);
 
@@ -1593,17 +1574,15 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			Logging.debug(this,
 					"tableChanged,  whereas tableModel.getColMarkCursorRow() is " + tableModel.getColMarkCursorRow());
 
-		if (!awareOfTableChangedListener || tableModel == null
-				|| ((tableModel.getColMarkCursorRow() > -1) && (e.getColumn() == tableModel.getColMarkCursorRow())))
-			return;
-		else {
+		if (awareOfTableChangedListener && tableModel != null
+				&& !((tableModel.getColMarkCursorRow() > -1) && (e.getColumn() == tableModel.getColMarkCursorRow()))) {
+
 			Logging.info(this, " tableChanged, datachanged set to true");
 			setDataChanged(true);
 			if (tableModel != null && oldrowcount != tableModel.getRowCount()) {
 				oldrowcount = tableModel.getRowCount();
 			}
 		}
-
 	}
 
 	//
@@ -1619,7 +1598,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	}
 
-	//
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {

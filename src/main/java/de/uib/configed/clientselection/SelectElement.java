@@ -17,7 +17,7 @@ public abstract class SelectElement {
 	 * element is in any group (like a hardware group) and the name of the
 	 * Element.
 	 */
-	public SelectElement(String[] path, String... localizedPath) {
+	protected SelectElement(String[] path, String... localizedPath) {
 		this.path = path;
 		this.localizedPath = localizedPath;
 	}

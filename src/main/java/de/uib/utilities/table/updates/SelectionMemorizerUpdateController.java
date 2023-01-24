@@ -21,7 +21,7 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 	GenTableModel tablemodel;
 	StrList2BooleanFunction updater;
 
-	public SelectionMemorizerUpdateController(PanelGenEditTable keysPanel, int keyCol, PanelGenEditTable panel,
+	protected SelectionMemorizerUpdateController(PanelGenEditTable keysPanel, int keyCol, PanelGenEditTable panel,
 			GenTableModel tablemodel, StrList2BooleanFunction updater) {
 		this.keysPanel = keysPanel;
 		this.keyCol = keyCol;

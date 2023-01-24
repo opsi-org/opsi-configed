@@ -746,9 +746,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired();
 	// date in sql time format, contrad ID
 
-	public abstract NavigableMap<String, NavigableSet<String>> getLicenceContractsToNotify();
-	// date in sql time format, contrad ID
-
 	// returns the ID of the edited data record
 	public abstract String editLicenceContract(String licenseContractId, String partner, String conclusionDate,
 			String notificationDate, String expirationDate, String notes);

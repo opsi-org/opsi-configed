@@ -118,7 +118,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	}
 
 	@Override
-	public LinkedList<SSHCommand> getOriginalCommands() {
+	public List<SSHCommand> getOriginalCommands() {
 		return sshCommandOriginal;
 	}
 

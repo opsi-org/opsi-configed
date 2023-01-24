@@ -5756,10 +5756,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			for (Object item : configDefaultValues.get(CONFIGED_GIVEN_DOMAINS_KEY)) {
 				String entry = (String) item;
 				int p = entry.indexOf(":");
-				if (p == -1)
+				if (p == -1 || p == 0)
 					unorderedValues.add(entry);
-				else if (p == 0)
-					unorderedValues.add(entry.substring(0));
 				else if (p > 0) // the only regular case
 				{
 					int orderNumber = -1;
@@ -5880,13 +5878,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired() {
-		dataStub.licenceContractsRequestRefresh();
-		return dataStub.getLicenceContractsToNotify();
-	}
-
-	@Override
-	public NavigableMap<String, NavigableSet<String>> getLicenceContractsToNotify()
+	public NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired()
 	// date in sql time format, contrad ID
 	{
 		dataStub.licenceContractsRequestRefresh();
@@ -7328,7 +7320,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		exec.doCall(omc);
 	}
 
-	private List<String> getPossibleValuesProductOnClientDisplayfields_netboot() {
+	private List<String> getPossibleValuesProductOnClientDisplayfieldsNetboot() {
 		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add("productId");
 		possibleValues.add(ProductState.KEY_PRODUCT_NAME);
@@ -7353,7 +7345,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return possibleValues;
 	}
 
-	private List<String> getDefaultValuesProductOnClientDisplayfields_netboot() {
+	private List<String> getDefaultValuesProductOnClientDisplayfieldsNetboot() {
 		List<String> result = new ArrayList<>();
 
 		result.add("productId");
@@ -7367,10 +7359,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
-	private List<String> produceProductOnClientDisplayfields_netboot() {
-		List<String> result = getDefaultValuesProductOnClientDisplayfields_netboot();
+	private List<String> produceProductOnClientDisplayfieldsNetboot() {
+		List<String> result = getDefaultValuesProductOnClientDisplayfieldsNetboot();
 
-		List<String> possibleValues = getPossibleValuesProductOnClientDisplayfields_netboot();
+		List<String> possibleValues = getPossibleValuesProductOnClientDisplayfieldsNetboot();
 
 		// create config for service
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
@@ -7404,12 +7396,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT).get("possibleValues");
 
 			if (configuredByService.isEmpty()
-					|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayfields_netboot()))
+					|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayfieldsNetboot()))
 							.equals(new HashSet<>(possibleValuesAccordingToService)))
 
 			) {
 				// we did not initialize server property
-				configuredByService = produceProductOnClientDisplayfields_netboot();
+				configuredByService = produceProductOnClientDisplayfieldsNetboot();
 			}
 
 			productOnClientsDisplayFieldsNetbootProducts = new LinkedHashMap<>();
@@ -7438,7 +7430,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return productOnClientsDisplayFieldsNetbootProducts;
 	}
 
-	private List<String> produceHost_displayFields(List<String> givenList) {
+	private List<String> produceHostDisplayFields(List<String> givenList) {
 		boolean createOnServer = true;
 		List<String> result = null;
 		Logging.info(this,
@@ -7512,7 +7504,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			List<String> configuredByService = Globals.takeAsStringList(serverPropertyMap.get(KEY_HOST_DISPLAYFIELDS));
 
 			// check if have to initialize the server property
-			configuredByService = produceHost_displayFields(configuredByService);
+			configuredByService = produceHostDisplayFields(configuredByService);
 
 			hostDisplayFields = new LinkedHashMap<>();
 			hostDisplayFields.put(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL, true);

@@ -45,13 +45,13 @@ public abstract class ExportTable {
 
 	DecimalFormat f = new DecimalFormat("#0.00");
 
-	public ExportTable(javax.swing.JTable table, List<String> classNames) {
+	protected ExportTable(javax.swing.JTable table, List<String> classNames) {
 		this.theTable = table;
 		this.classNames = classNames;
 		askForOverwrite = true;
 	}
 
-	public ExportTable(javax.swing.JTable table) {
+	protected ExportTable(javax.swing.JTable table) {
 		this(table, null);
 	}
 

@@ -25,9 +25,9 @@ import java.util.TreeSet;
 
 import javax.swing.event.TableModelListener;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -112,8 +112,10 @@ public class LicenseDisplayer {
 
 	protected String showLicenceContractWarnings() {
 		StringBuilder result = new StringBuilder();
+
+		// TODO why is this doing the same to both?
 		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsExpired();
 
 		Logging.info(this, "contractsExpired " + contractsExpired);
 		Logging.info(this, "contractsToNotify " + contractsToNotify);

@@ -10,7 +10,7 @@ public abstract class MapUpdate implements UpdateCommand {
 
 	PersistenceController persis;
 
-	public MapUpdate(PersistenceController persis, Map newdata) {
+	protected MapUpdate(PersistenceController persis, Map newdata) {
 		this.newdata = newdata;
 		setController(persis);
 	}

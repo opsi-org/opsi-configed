@@ -11,8 +11,8 @@ import de.uib.configed.clientselection.operations.StringEqualsOperation;
 public class SoftwareVersionElement extends SelectElement {
 	public SoftwareVersionElement() {
 		super(new String[] { de.uib.opsidatamodel.OpsiProduct.NAME, "Version" },
-				new String[] { Configed.getResourceValue("ClientSelectionDialog.softwareName"),
-						Configed.getResourceValue("ClientSelectionDialog.softwareProductVersion") });
+				Configed.getResourceValue("ClientSelectionDialog.softwareName"),
+				Configed.getResourceValue("ClientSelectionDialog.softwareProductVersion"));
 	}
 
 	@Override

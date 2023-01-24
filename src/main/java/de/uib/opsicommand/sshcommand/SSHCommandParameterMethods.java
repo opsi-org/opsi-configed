@@ -248,7 +248,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		} else if (method.equals(methods.get(METHOD_GET_SELECTED_DEPOT_NAMES))) {
 			result = formatResult(getSelectedDepotNames(), format);
 		} else if (method.equals(methods.get(METHOD_GET_SELECTED_DEPOT_IPS))) {
-			result = formatResult(getSelected_depotIPs(), format);
+			result = formatResult(getSelectedDepotIPs(), format);
 		} else if (method.equals(methods.get(METHOD_GET_CONFIG_SERVER_NAME))) {
 			result = formatResult(getConfigServerName(), format);
 		} else if (method.equals(methods.get(METHOD_GET_CONNECTED_SSH_SERVER_NAME))) {
@@ -457,7 +457,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return main.getSelectedDepots();
 	}
 
-	public String[] getSelected_depotIPs() {
+	public String[] getSelectedDepotIPs() {
 		Logging.debug(this, "getSelected_depotIPs " + main.getSelectedDepots());
 		String[] depotnames = new String[main.getSelectedDepots().length];
 		System.arraycopy(main.getSelectedDepots(), 0, depotnames, 0, main.getSelectedDepots().length);

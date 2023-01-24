@@ -180,9 +180,10 @@ public class ControlDash {
 
 		StringBuilder result = new StringBuilder();
 
+		// TODO why do the same thing twice?
 		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
 
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsExpired();
 
 		Logging.info(this, "contractsExpired " + contractsExpired);
 

@@ -439,7 +439,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		Logging.info(this, "setPreselectionForName2Pool, we did a reset for modelSWnames with " + val);
 	}
 
-	private java.util.Set<String> getRangeSWxLicencepool(String swName)
+	private Set<String> getRangeSWxLicencepool(String swName)
 	// nearly done in produceModelSWxLicencepool, but we collect the range of the
 	// model-map
 	{
@@ -458,10 +458,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	private boolean checkExistNamesWithVariantLicencepools(String name) {
-		java.util.Set<String> range = getRangeSWxLicencepool(name);
-		if (range.size() == 1 && range.contains(VALUE_NO_LICENCE_POOL))
-			return true;
-		return false;
+		Set<String> range = getRangeSWxLicencepool(name);
+
+		return range.size() == 1 && range.contains(VALUE_NO_LICENCE_POOL);
 	}
 
 	public boolean checkExistNamesWithVariantLicencepools() {
@@ -530,6 +529,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		modelSWxLicencepool = new GenTableModel(updateItemFactoySWxLicencepool, new DefaultTableProvider(
 				new RetrieverMapSource(columnNamesSWxLicencepool, classNamesSWxLicencepool, new MapRetriever() {
+
 					@Override
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap for swName " + swName);

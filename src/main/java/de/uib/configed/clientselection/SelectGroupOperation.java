@@ -9,7 +9,7 @@ import java.util.List;
 public abstract class SelectGroupOperation extends SelectOperation {
 	private List<SelectOperation> childOperations;
 
-	public SelectGroupOperation() {
+	protected SelectGroupOperation() {
 		super(null);
 		childOperations = new LinkedList<>();
 	}

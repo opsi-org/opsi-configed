@@ -198,17 +198,14 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		@Override
 		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-			return;
 		}
 
 		@Override
 		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-			return;
 		}
 
 		@Override
 		public void remove(int offs, int len) throws BadLocationException {
-			return;
 		}
 
 	}

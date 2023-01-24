@@ -268,7 +268,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		return sshCommand;
 	}
 
-	public LinkedList<SSHCommand> getOriginalCommands() {
+	public List<SSHCommand> getOriginalCommands() {
 		return sshCommandOriginal;
 	}
 
