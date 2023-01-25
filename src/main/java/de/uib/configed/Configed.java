@@ -675,7 +675,7 @@ public class Configed {
 			}
 
 			if (result == null) {
-				result = Messages.messages.getString(key);
+				result = Messages.messagesBundle.getString(key);
 			}
 
 			if (showLocalizationStrings) {
@@ -688,7 +688,7 @@ public class Configed {
 			Logging.debug("Problem: " + mre.toString());
 
 			try {
-				result = Messages.messagesEN.getString(key);
+				result = Messages.messagesEnBundle.getString(key);
 
 				if (showLocalizationStrings) {
 					Logging.info("LOCALIZE " + key + " by " + result);

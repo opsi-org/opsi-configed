@@ -32,8 +32,8 @@ public class Messages {
 	static java.util.Map<String, String> localeInfo;
 	static String selectedLocaleString;
 	static Locale myLocale = null;
-	public static ResourceBundle messages;
-	public static ResourceBundle messagesEN;
+	public static ResourceBundle messagesBundle;
+	public static ResourceBundle messagesEnBundle;
 	static List<String> myLocaleCharacteristics;
 	static List<String> myLocaleCharacteristicsEN;
 
@@ -120,31 +120,31 @@ public class Messages {
 		try {
 			Logging.info("Messages, getResource from " + BUNDLE_NAME);
 			if (utf8Hack)
-				messages = ResourceBundleUtf8.getBundle(BUNDLE_NAME, myLocale);
+				messagesBundle = ResourceBundleUtf8.getBundle(BUNDLE_NAME, myLocale);
 			else
-				messages = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
+				messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
 
-			Logging.debug("Messages messages " + messages);
+			Logging.debug("Messages messages " + messagesBundle);
 
 		} catch (MissingResourceException ex) {
-			messages = getResourceEN();
+			messagesBundle = getResourceEN();
 		}
-		return messages;
+		return messagesBundle;
 	}
 
 	public static ResourceBundle getResourceEN() throws MissingResourceException {
 		checkUTF8();
 
 		if (utf8Hack)
-			messagesEN = ResourceBundleUtf8.getBundle(BUNDLE_NAME,
+			messagesEnBundle = ResourceBundleUtf8.getBundle(BUNDLE_NAME,
 					new Locale.Builder().setLanguage("en").setRegion("US").build());
 		else
-			messagesEN = ResourceBundle.getBundle(BUNDLE_NAME,
+			messagesEnBundle = ResourceBundle.getBundle(BUNDLE_NAME,
 					new Locale.Builder().setLanguage("en").setRegion("US").build());
 		myLocaleCharacteristicsEN = new ArrayList<>();
 		myLocaleCharacteristicsEN.add("en_US");
 		myLocaleCharacteristicsEN.add("en");
-		return messagesEN;
+		return messagesEnBundle;
 	}
 
 	private static Locale giveLocale(String selection) {
@@ -209,8 +209,8 @@ public class Messages {
 			loc = produceLocale();
 
 		try {
-			messages = getResource();
-			messagesEN = getResourceEN();
+			messagesBundle = getResource();
+			messagesEnBundle = getResourceEN();
 		} catch (MissingResourceException e) {
 			Logging.info("Missing messages for locale EN");
 		}

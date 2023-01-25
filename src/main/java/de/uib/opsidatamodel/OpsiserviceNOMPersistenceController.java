@@ -2916,7 +2916,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null)
 					Logging.warning(this,
 							"getAllHwClassNames illegal hw config item,  hwAuditClass.get Class is of class "
-									+ hwAuditClass.get(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).getClass()));
+									+ hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).getClass());
 
 				continue;
 			}

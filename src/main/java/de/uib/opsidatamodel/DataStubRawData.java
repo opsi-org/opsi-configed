@@ -468,13 +468,13 @@ public class DataStubRawData extends DataStubNOM {
 
 			boolean colFound = false;
 			// check if colname is from a CONFIG or a DEVICE table
-			if (hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
+			if (hwInfoCol.startsWith(hwClass, part0.length())) {
 				colFound = true;
 				// we found a DEVICE column name
 			} else {
 				part0 = hwInfoCol.substring(0, PersistenceController.HW_INFO_CONFIG.length());
 
-				if (hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
+				if (hwInfoCol.startsWith(hwClass, part0.length())) {
 					colFound = true;
 					// we found a CONFIG column name
 				}
