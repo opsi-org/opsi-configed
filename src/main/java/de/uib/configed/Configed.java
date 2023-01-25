@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
 import java.util.MissingResourceException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -125,7 +127,7 @@ public class Configed {
 
 	};
 
-	public static final Charset serverCharset = Charset.forName("UTF-8");
+	public static final Charset serverCharset = StandardCharsets.UTF_8;
 	public static final String JAVA_VERSION = System.getProperty("java.version");
 	public static final String JAVA_VENDOR = System.getProperty("java.vendor", "");
 	public static final String SYSTEM_SSL_VERSION = System.getProperty("https.protocols");
@@ -314,6 +316,8 @@ public class Configed {
 	/** construct the application */
 	public Configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
 			final String paramClient, final String paramClientgroup, final Integer paramTab) {
+
+		JOptionPane.showMessageDialog(null, serverCharset);
 
 		UncaughtExceptionHandler errorHandler = new UncaughtExceptionHandlerLocalized();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);

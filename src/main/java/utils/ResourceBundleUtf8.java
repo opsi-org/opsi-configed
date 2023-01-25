@@ -1,6 +1,6 @@
 package utils;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -42,14 +42,7 @@ public class ResourceBundleUtf8 {
 			for (Enumeration<String> keys = pBundle.getKeys(); keys.hasMoreElements();) {
 				String key = keys.nextElement();
 				String valueRaw = pBundle.getString(key);
-				String value;
-
-				try {
-					value = new String(valueRaw.getBytes("ISO-8859-1"), "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					throw new MissingResourceException(
-							"could not load UTF-8 property resource bundle [" + pBundle + "]", "", "");
-				}
+				String value = new String(valueRaw.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
 				if (pValueByKey.put(key, value) != null) {
 					throw new MissingResourceException(

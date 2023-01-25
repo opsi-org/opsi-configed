@@ -10,7 +10,7 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -73,12 +73,8 @@ public class SSHConnectTerminal extends SSHConnect {
 
 		@Override
 		public void write(byte[] buf, int off, int len) {
-			try {
-				String str = new String(buf, off, len, "UTF-8");
-				theDialog.append(str);
-			} catch (UnsupportedEncodingException ue) {
-				Logging.warning("UnsupportedEncodingException", ue);
-			}
+			String str = new String(buf, off, len, StandardCharsets.UTF_8);
+			theDialog.append(str);
 		}
 	}
 

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -482,7 +483,7 @@ public class SSHConnectExec extends SSHConnect {
 
 						if (i < 0)
 							break;
-						String str = new String(tmp, 0, i, "UTF-8");
+						String str = new String(tmp, 0, i, StandardCharsets.UTF_8);
 
 						if ((command.needSudo()) && (str.contains(SSHCommandFactory.SUDO_FAILED_TEXT))) {
 							String pw = "";
