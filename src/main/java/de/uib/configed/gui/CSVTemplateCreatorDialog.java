@@ -407,7 +407,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	private class InputListener implements DocumentListener {
 		public void performAction() {
-		}
+			/* Should be overridden in actual implementation */}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
@@ -421,7 +421,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-		}
+			/* Not needed */}
 	}
 
 	@Override

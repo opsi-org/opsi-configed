@@ -461,12 +461,11 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
 		}
-
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	// MouseListener
 	@Override

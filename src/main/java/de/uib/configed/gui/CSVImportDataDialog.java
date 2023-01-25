@@ -156,6 +156,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			maskFormatter = new MaskFormatter("*");
 		} catch (ParseException e) {
 			Logging.debug(this, "INVALID MASK");
+			return null;
 		}
 		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;#+*");
 		maskFormatter.setAllowsInvalid(false);
@@ -368,7 +369,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	private class InputListener implements DocumentListener {
 		public void performAction() {
-		}
+			/* Should be overridden in actual implementation */}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
@@ -382,7 +383,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-		}
+			/* Not needed */}
 	}
 
 	public CSVImportDataModifier getModifier() {

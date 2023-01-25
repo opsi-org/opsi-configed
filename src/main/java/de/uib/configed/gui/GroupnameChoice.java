@@ -15,8 +15,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.swing.SurroundPanel;
 import de.uib.utilities.swing.VerticalPositioner;
 import de.uib.utilities.swing.XList;
@@ -126,7 +126,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-	}
+		/* Not needed */}
 
 	// ListSelectionListener
 	@Override

@@ -36,13 +36,11 @@ public class Autocomplete implements DocumentListener {
 
 	@Override
 	public void changedUpdate(DocumentEvent ev) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void removeUpdate(DocumentEvent ev) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void insertUpdate(DocumentEvent ev) {

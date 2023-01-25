@@ -58,11 +58,11 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	// interface ComponentListene
 	@Override
 	public void componentHidden(ComponentEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void componentResized(ComponentEvent e) {

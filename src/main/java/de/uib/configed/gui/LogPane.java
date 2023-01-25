@@ -180,36 +180,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
-	protected class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
-		ImmutableDefaultStyledDocument() {
-			super();
-		}
-
-		ImmutableDefaultStyledDocument(StyleContext styles) {
-			super(styles);
-		}
-
-		public void insertStringTruely(int offs, String str, AttributeSet a) throws BadLocationException {
-			super.insertString(offs, str, a);
-		}
-
-		@Override
-		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-		}
-
-		@Override
-		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-		}
-
-		@Override
-		public void remove(int offs, int len) throws BadLocationException {
-		}
-
-	}
-
 	protected PopupMenuTrait popupMenu;
 
-	protected ImmutableDefaultStyledDocument document;
+	protected DefaultStyledDocument document;
 
 	protected String[] lines;
 	protected int[] lineLevels;
@@ -602,7 +575,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		// Switch to an blank document temporarily to avoid repaints
 
-		document = new ImmutableDefaultStyledDocument(styleContext);
+		document = new DefaultStyledDocument(styleContext);
 
 		int selLevel = levelList.indexOf(sliderLevel.getValue()) + 1;
 
@@ -630,7 +603,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					lineCount2docLinestartPosition.put(i, document.getLength());
 
 					String no = "(" + i + ")";
-					document.insertStringTruely(document.getLength(), String.format("%-10s", no) + lines[i] + '\n',
+					document.insertString(document.getLength(), String.format("%-10s", no) + lines[i] + '\n',
 							lineStyles[i]);
 				}
 
@@ -641,7 +614,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 		jTextPane.setDocument(document);
 		SwingUtilities.invokeLater(() -> jTextPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)));
-
 	}
 
 	private void setLevelWithoutAction(Object l) {

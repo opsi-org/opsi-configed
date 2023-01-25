@@ -310,7 +310,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 				"" + Softwarename2LicencepoolRestriction.SHOW_ONLY_NAMES_WITH_VARIANT_LICENCEPOOLS) {
 			@Override
 			public void setFilter(Set<Object> filter) {
-			}
+				/* Should be empty, but is not empty in superclass */}
 
 			@Override
 			public boolean test(List<Object> row) {
@@ -321,9 +321,10 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		showOnlyNamesWithoutLicences = new DefaultTableModelFilterCondition(
 				"" + Softwarename2LicencepoolRestriction.SHOW_ONLY_NAMES_WITHOUT_ASSIGNED_LICENCEPOOL) {
+
 			@Override
 			public void setFilter(Set<Object> filter) {
-			}
+				/* Should be empty, but is not empty in superclass */}
 
 			@Override
 			public boolean test(List<Object> row) {
