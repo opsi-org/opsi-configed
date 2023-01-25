@@ -672,7 +672,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
 				+ maxExistingLevel);
 
-		if (oldLevel.equals(level) && (level < maxExistingLevel)) {
+		if (!oldLevel.equals(level) && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
 
 			int caretPosition = jTextPane.getCaretPosition();
 
@@ -718,6 +718,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				jTextPane.getCaret().setVisible(true);
 				highlighter.removeAllHighlights();
 			} catch (BadLocationException e) {
+				Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
 			}
 
 		}
