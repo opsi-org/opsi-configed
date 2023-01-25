@@ -3,7 +3,7 @@ package de.uib.configed.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * Select AND or OR Created for the ClientSelectionDialog.
@@ -17,12 +17,12 @@ public class AndOrSelectButtonByIcon extends IconAsButton {
 	}
 
 	public boolean isAndSelected() {
-		logging.debug(this, "isEnabled " + isEnabled());
+		Logging.debug(this, "isEnabled " + isEnabled());
 		return !isActivated();
 	}
 
 	public boolean isOrSelected() {
-		logging.debug(this, "isEnabled " + isEnabled());
+		Logging.debug(this, "isEnabled " + isEnabled());
 		return isActivated();
 	}
 
@@ -37,7 +37,7 @@ public class AndOrSelectButtonByIcon extends IconAsButton {
 	private class ButtonActionListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			logging.debug(this, "actionPerformed  " + e + " activated " + activated);
+			Logging.debug(this, "actionPerformed  " + e + " activated " + activated);
 			setActivated(!activated);
 
 		}

@@ -34,10 +34,6 @@ public class MapDeliveryItem extends MapBasedTableEditItem {
 		if (oldValues == null)
 			return true;
 
-		if (oldValues.get(keyCol).toString().equals(rowV.get(keyCol).toString())) {
-			return true;
-		}
-
-		return false;
+		return oldValues.get(keyCol).toString().equals(rowV.get(keyCol).toString());
 	}
 }

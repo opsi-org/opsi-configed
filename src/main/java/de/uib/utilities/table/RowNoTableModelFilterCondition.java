@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.Set;
 
 import javax.swing.JTable;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class RowNoTableModelFilterCondition implements TableModelFilterCondition {
 
@@ -21,13 +21,13 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 	}
 
 	@Override
-	public void setFilter(TreeSet<Object> filter) {
+	public void setFilter(Set<Object> filter) {
 	}
 
 	public void setFilter(int[] modelRowNoFilter, final List<List<Object>> rows) {
-		logging.info(this, "setFilter int[]  " + modelRowNoFilter);
+		Logging.info(this, "setFilter int[]  " + modelRowNoFilter);
 		if (modelRowNoFilter != null)
-			logging.info(this, "setFilter as string " + Arrays.toString(modelRowNoFilter));
+			Logging.info(this, "setFilter as string " + Arrays.toString(modelRowNoFilter));
 
 		if (rows == null || modelRowNoFilter == null || modelRowNoFilter.length == 0) {
 			selectionInfo = null;
@@ -38,7 +38,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 
 		for (int i : modelRowNoFilter) {
 			if (i >= rows.size())
-				logging.warning(this, "setFilter: impossible selection index " + i);
+				Logging.warning(this, "setFilter: impossible selection index " + i);
 			else
 
 				selectionInfo.put(rows.get(i), true);

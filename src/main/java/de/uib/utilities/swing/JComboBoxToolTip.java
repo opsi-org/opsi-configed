@@ -11,7 +11,7 @@ import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class JComboBoxToolTip extends JComboBox<String> {
 
@@ -41,7 +41,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 			if (isSelected) {
 				setBackground(listBackgroundColorSelected);
 				setForeground(listForegroundColor);
-				logging.debug(this, "index, tooltips " + index + ", " + tooltips);
+				Logging.debug(this, "index, tooltips " + index + ", " + tooltips);
 				if (-1 < index && index < tooltips.size() // we had an error only on linux with openjdk 8
 				) {
 					list.setToolTipText(tooltips.get(index));

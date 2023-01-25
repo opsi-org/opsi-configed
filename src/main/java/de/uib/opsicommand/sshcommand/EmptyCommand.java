@@ -18,12 +18,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This class represent a simple single command
  **/
-public class Empty_Command implements SSHCommand {
+public class EmptyCommand implements SSHCommand {
 	public static final String TESTCOMMAND = "pwd";
 	/** boolean needParameter = false **/
 	private boolean needParameter = false;
@@ -43,27 +43,25 @@ public class Empty_Command implements SSHCommand {
 	private String tooltipText = "";
 	/** integer position **/
 	private int position;
-	private String confidential_information = null;
-
-	private SSHCommandFactory factory = SSHCommandFactory.getInstance();
+	private String confidentialInformation = null;
 
 	@Override
 	/**
 	 * Sets the command specific error text
 	 **/
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 
 	@Override
 	public String getSecureInfoInCommand() {
-		return confidential_information;
+		return confidentialInformation;
 	}
 
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -73,8 +71,8 @@ public class Empty_Command implements SSHCommand {
 	 * 
 	 * @return SSHCommand_Template instance
 	 */
-	public Empty_Command(String id, String c, String mt, boolean ns) {
-		position = factory.position_default;
+	public EmptyCommand(String id, String c, String mt, boolean ns) {
+		position = SSHCommandFactory.POSITION_DEFAULT;
 		setId(id);
 		setCommand(c);
 		getParameterList();
@@ -82,7 +80,7 @@ public class Empty_Command implements SSHCommand {
 		setNeedSudo(ns);
 	}
 
-	public Empty_Command(String c) {
+	public EmptyCommand(String c) {
 
 		setCommand(c);
 		getParameterList();
@@ -92,7 +90,7 @@ public class Empty_Command implements SSHCommand {
 	/**
 	 * Empty constuctor for creatiing empty instances
 	 */
-	public Empty_Command() {
+	public EmptyCommand() {
 	}
 
 	/**
@@ -224,19 +222,18 @@ public class Empty_Command implements SSHCommand {
 	@Override
 	public List<String> getParameterList() {
 		List<String> paramlist = new ArrayList<>();
-		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
-		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
-		if (command != null)
-			if ((command.contains(tmp_1)) && (command.contains(tmp_2))) {
-				myTmpCommand = getCommandRaw();
-				logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
-				for (int i = 0; i < counterString(getCommandRaw(), tmp_1); i++) {
-					String plHolder = searchPlaceholder();
-					if (!paramlist.contains(plHolder))
-						paramlist.add(plHolder);
-				}
+		String temp1 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1;
+		String temp2 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
+		if (command != null && command.contains(temp1) && command.contains(temp2)) {
+			myTmpCommand = getCommandRaw();
+			Logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
+			for (int i = 0; i < counterString(getCommandRaw(), temp1); i++) {
+				String plHolder = searchPlaceholder();
+				if (!paramlist.contains(plHolder))
+					paramlist.add(plHolder);
 			}
-		logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
+		}
+		Logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
 		return paramlist;
 	}
 
@@ -246,15 +243,15 @@ public class Empty_Command implements SSHCommand {
 	 * @return String with and between "<<<" and ">>>"
 	 */
 	private String searchPlaceholder() {
-		String tmp_1 = SSHCommandParameterMethods.replacement_default_1;
-		String tmp_2 = SSHCommandParameterMethods.replacement_default_2;
+		String temp1 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1;
+		String temp2 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 
-		String splitted_text = myTmpCommand.split(tmp_1, 2)[1].split(tmp_2, 2)[0];
-		logging.debug(this, "searchPlaceholder found " + tmp_1 + splitted_text + tmp_2);
-		myTmpCommand = myTmpCommand.replace(tmp_1 + splitted_text + tmp_2, "");
-		logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
+		String splittedText = myTmpCommand.split(temp1, 2)[1].split(temp2, 2)[0];
+		Logging.debug(this, "searchPlaceholder found " + temp1 + splittedText + temp2);
+		myTmpCommand = myTmpCommand.replace(temp1 + splittedText + temp2, "");
+		Logging.debug(this, "searchPlaceholder myCommand_tmp " + myTmpCommand);
 
-		return tmp_1 + splitted_text + tmp_2;
+		return temp1 + splittedText + temp2;
 	}
 
 	/**
@@ -267,7 +264,7 @@ public class Empty_Command implements SSHCommand {
 			index = s.indexOf(search, index + 1);
 			++times;
 		}
-		logging.debug(this, "counterString placeholders count  " + times);
+		Logging.debug(this, "counterString placeholders count  " + times);
 		return times;
 	}
 
@@ -306,9 +303,9 @@ public class Empty_Command implements SSHCommand {
 
 		if (needSudo()) {
 			if (command.contains("2>&1"))
-				result = SSHCommandFactory.sudo_text + " " + command;
+				result = SSHCommandFactory.SUDO_TEXT + " " + command;
 			else
-				result = SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+				result = SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		} else {
 			if (command.contains("2>&1"))
 				result = command;
@@ -334,12 +331,12 @@ public class Empty_Command implements SSHCommand {
 	@Override
 	public String toString() {
 		StringBuilder com = new StringBuilder("{");
-		com.append(factory.command_map_id).append(":").append(getId()).append(",");
-		com.append(factory.command_map_parentMenuText).append(":").append(getParentMenuText()).append(",");
-		com.append(factory.command_map_menuText).append(":").append(getMenuText()).append(",");
-		com.append(factory.command_map_tooltipText).append(":").append(getToolTipText()).append(",");
-		com.append(factory.command_map_needSudo).append(":").append(needSudo()).append(",");
-		com.append(factory.command_map_position).append(":").append(getPriority()).append(", ");
+		com.append(SSHCommandFactory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_NEED_SUDO).append(":").append(needSudo()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
 		com.append("command:").append(getCommand()).append(";");
 		com.append("}");
 		return com.toString();

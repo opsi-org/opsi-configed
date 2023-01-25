@@ -25,10 +25,6 @@ public class NONEexecutioner extends Executioner {
 		return null;
 	}
 
-	public List<JSONObject> retrieveJSONObjects(List<OpsiMethodCall> omcList) {
-		return null;
-	}
-
 	@Override
 	public Object getValueFromJSONObject(Object o, String key) {
 		return null;
@@ -75,17 +71,17 @@ public class NONEexecutioner extends Executioner {
 	}
 
 	@Override
-	public Map<String, Object> getMap_Object(OpsiMethodCall omc) {
+	public Map<String, Object> getMapObject(OpsiMethodCall omc) {
 		return null;
 	}
 
 	@Override
-	public Map<String, Map<String, Object>> getMap2_Object(OpsiMethodCall omc) {
+	public Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc) {
 		return null;
 	}
 
 	@Override
-	public Map<String, Map<String, Map<String, Object>>> getMap3_Object(OpsiMethodCall omc) {
+	public Map<String, Map<String, Map<String, Object>>> getMap3Object(OpsiMethodCall omc) {
 		return null;
 	}
 

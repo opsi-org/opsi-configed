@@ -10,9 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ControlMultiTablePanel;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 /**
@@ -36,7 +36,7 @@ public class PanelEditLicences extends MultiTablePanel {
 	private void initComponents() {
 
 		panelKeys = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 1, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicenceOptionsView"), 0, true, 1, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
@@ -48,7 +48,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		panelKeys.setFiltering(true);
 
 		panelSoftwarelicences = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSoftwarelicence"), 0, true, 2, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSoftwarelicence"), 0, true, 2, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
@@ -59,7 +59,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		panelSoftwarelicences.showFilterIcon(true);
 
 		panelLicencecontracts = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 2, false,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 2, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
@@ -79,7 +79,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
 
-		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout((JPanel) topPane);
+		javax.swing.GroupLayout layoutTopPane = new javax.swing.GroupLayout(topPane);
 		topPane.setLayout(layoutTopPane);
 		layoutTopPane.setHorizontalGroup(layoutTopPane.createSequentialGroup().addGap(10, 10, 10).addGroup(layoutTopPane
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)

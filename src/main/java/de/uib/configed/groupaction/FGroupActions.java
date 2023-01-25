@@ -26,13 +26,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
 import de.uib.utilities.thread.WaitCursor;
@@ -64,7 +64,7 @@ public class FGroupActions extends SecondaryFrame {
 		define();
 		reload();
 		setGlobals(Globals.getMap());
-		setTitle(Globals.APPNAME + " " + configed.getResourceValue("FGroupAction.title"));
+		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FGroupAction.title"));
 
 	}
 
@@ -83,7 +83,8 @@ public class FGroupActions extends SecondaryFrame {
 		List<String> imagesCollection = new ArrayList<>();
 
 		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
-				PersistenceController.localImageRestoreProductKey, PersistenceController.localImagesListPropertyKey)));
+				PersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
+				PersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
 
 		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray(new String[0])));
 	}
@@ -97,7 +98,7 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	protected void replay() {
-		logging.debug(this, "replay " + comboSelectImage.getSelectedItem());
+		Logging.debug(this, "replay " + comboSelectImage.getSelectedItem());
 
 		if (comboSelectImage.getSelectedItem() == null)
 			return;
@@ -110,14 +111,14 @@ public class FGroupActions extends SecondaryFrame {
 		WaitCursor waitCursor = new WaitCursor(this);
 
 		persist.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
-				PersistenceController.localImageRestoreProductKey, PersistenceController.localImageToRestorePropertyKey,
-				values);
+				PersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
+				PersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_ACTION_REQUEST, "setup");
 
 		persist.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
-				PersistenceController.localImageRestoreProductKey, OpsiPackage.TYPE_NETBOOT, changedValues);
+				PersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT, changedValues);
 
 		waitCursor.stop();
 	}
@@ -155,18 +156,18 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	private void defineImageActionPanel(JPanel panel) {
-		JLabel labelCombo = new JLabel(configed.getResourceValue("FGroupAction.existingImages"));
+		JLabel labelCombo = new JLabel(Configed.getResourceValue("FGroupAction.existingImages"));
 
 		comboSelectImage = new JComboBox<>();
 
-		JLabel topicLabel = new JLabel(configed.getResourceValue("FGroupAction.replayImage"));
+		JLabel topicLabel = new JLabel(Configed.getResourceValue("FGroupAction.replayImage"));
 
-		JButton buttonSetup = new JButton(configed.getResourceValue("FGroupAction.buttonSetup"));
-		buttonSetup.setToolTipText(configed.getResourceValue("FGroupAction.buttonSetup.tooltip"));
+		JButton buttonSetup = new JButton(Configed.getResourceValue("FGroupAction.buttonSetup"));
+		buttonSetup.setToolTipText(Configed.getResourceValue("FGroupAction.buttonSetup.tooltip"));
 
 		buttonSetup.addActionListener(actionEvent -> replay());
 
-		IconButton buttonReload = new IconButton(configed.getResourceValue("FGroupAction.buttonReload"),
+		IconButton buttonReload = new IconButton(Configed.getResourceValue("FGroupAction.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16_disabled.png", true);
 
 		buttonReload.addActionListener(actionEvent -> reload());
@@ -211,9 +212,9 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	private void defineTopPanel(JPanel panel) {
-		JLabel groupNameLabel = new JLabel(configed.getResourceValue("FGroupAction.groupname"));
+		JLabel groupNameLabel = new JLabel(Configed.getResourceValue("FGroupAction.groupname"));
 
-		JLabel clientsCountLabel = new JLabel(configed.getResourceValue("FGroupAction.clientcounter"));
+		JLabel clientsCountLabel = new JLabel(Configed.getResourceValue("FGroupAction.clientcounter"));
 
 		fieldGroupname = new JTextField();
 		fieldGroupname.setPreferredSize(Globals.counterfieldDimension);

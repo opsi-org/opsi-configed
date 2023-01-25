@@ -17,7 +17,7 @@ import java.util.Scanner;
 import javax.swing.ImageIcon;
 
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -31,7 +31,7 @@ public class Globals {
 	}
 
 	public static final String VERSION = "4.2.20.1";
-	public static final String VERDATE = "2022-12-15";
+	public static final String VERDATE = "2022-01-23";
 
 	public static final String VERHASHTAG = "";
 
@@ -59,6 +59,10 @@ public class Globals {
 	public static final String CERTIFICATE_FILE = CERTIFICATE_FILE_NAME + "." + CERTIFICATE_FILE_EXTENSION;
 
 	public static class ProductPackageVersionSeparator {
+
+		// private constructor to hide the implicit public one
+		private ProductPackageVersionSeparator() {
+		}
 
 		public static String forDisplay() {
 			return "-";
@@ -467,7 +471,7 @@ public class Globals {
 			DIALOG_FRAME_DEFAULT_HEIGHT);
 
 	public static String getResourceValue(String key) {
-		return configed.getResourceValue(key);
+		return Configed.getResourceValue(key);
 	}
 
 	public static boolean isWindows() {
@@ -499,7 +503,7 @@ public class Globals {
 		if (imgURL != null) {
 			return imgURL;
 		} else {
-			logging.warning("Couldn't find file  " + relPath);
+			Logging.warning("Couldn't find file  " + relPath);
 			return null;
 		}
 	}
@@ -518,11 +522,11 @@ public class Globals {
 			if (imgURL != null) {
 				return java.awt.Toolkit.getDefaultToolkit().createImage(imgURL);
 			} else {
-				logging.info("Couldn't find file: " + path);
+				Logging.info("Couldn't find file: " + path);
 				return null;
 			}
 		} catch (Exception ex) {
-			logging.info("createImageIcon " + path + " : " + ex);
+			Logging.info("createImageIcon " + path + " : " + ex);
 
 		}
 
@@ -543,11 +547,11 @@ public class Globals {
 			if (imgURL != null) {
 				return new ImageIcon(imgURL, description);
 			} else {
-				logging.info("Couldn't find file: " + path);
+				Logging.info("Couldn't find file: " + path);
 				return null;
 			}
 		} catch (Exception ex) {
-			logging.info("createImageIcon " + path + " : " + ex);
+			Logging.info("createImageIcon " + path + " : " + ex);
 
 		}
 
@@ -600,7 +604,7 @@ public class Globals {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException ie) {
-			logging.info(caller, "sleeping interrupted: " + ie);
+			Logging.info(caller, "sleeping interrupted: " + ie);
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -665,7 +669,7 @@ public class Globals {
 		else
 			result.add(now);
 
-		logging.info("getNowTimeListValue" + result);
+		Logging.info("getNowTimeListValue" + result);
 
 		return result;
 	}
@@ -702,7 +706,7 @@ public class Globals {
 		StringBuilder result = new StringBuilder("<html>");
 		String remainder = s;
 		while (remainder.length() > 0) {
-			logging.debug("Globals, remainder " + remainder);
+			Logging.debug("Globals, remainder " + remainder);
 			if (remainder.length() <= TOOLTIP_LINE_LENGTH) {
 				result.append(remainder.replace("\\n", "<br />"));
 				break;
@@ -715,7 +719,7 @@ public class Globals {
 
 			boolean found = false;
 			int i = 0;
-			logging.debug("Globals, separationString " + separationString);
+			Logging.debug("Globals, separationString " + separationString);
 
 			while (!found && i < testspan) {
 				if (separationString.charAt(i) == ' ' || separationString.charAt(i) == '\n'
@@ -766,11 +770,11 @@ public class Globals {
 			} else if (c instanceof Map) {
 
 			} else {
-				logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
+				Logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
 				result = false;
 			}
 		} else
-			logging.debug(source.getClass().getName() + " " + cName + " is null");
+			Logging.debug(source.getClass().getName() + " " + cName + " is null");
 
 		return result;
 	}
@@ -913,7 +917,6 @@ public class Globals {
 
 	}
 
-
 	public static String usedMemory() {
 		long total = Runtime.getRuntime().totalMemory();
 		long free = Runtime.getRuntime().freeMemory();
@@ -936,7 +939,7 @@ public class Globals {
 	public static boolean isGlobalReadOnly() {
 		boolean result = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
 
-		logging.info("Globals got readonly " + result);
+		Logging.info("Globals got readonly " + result);
 
 		return result;
 	}
@@ -952,7 +955,7 @@ public class Globals {
 	public static boolean forbidEditingTargetSpecific() {
 		boolean forbidEditing = false;
 
-		logging.debug("forbidEditing for target " + ConfigedMain.getEditingTarget() + "?");
+		Logging.debug("forbidEditing for target " + ConfigedMain.getEditingTarget() + "?");
 
 		if (ConfigedMain.getEditingTarget() == ConfigedMain.EditingTarget.SERVER) {
 			forbidEditing
@@ -964,7 +967,7 @@ public class Globals {
 			forbidEditing = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
 		}
 
-		logging.debug("forbidEditing " + forbidEditing);
+		Logging.debug("forbidEditing " + forbidEditing);
 
 		return forbidEditing;
 	}

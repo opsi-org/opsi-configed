@@ -14,7 +14,7 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializer {
 	private PersistenceController controller;
@@ -59,7 +59,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 			if (!parser.next() || parser.getPositionType() != JsonParser.PositionType.OBJECT_BEGIN)
 				return map;
 		} catch (IOException e) {
-			logging.error(this, e.getMessage(), e);
+			Logging.error(this, e.getMessage(), e);
 			return map;
 		}
 		map = parseObject();
@@ -69,7 +69,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		else
 			version = Integer.valueOf((String) map.get("version"));
 		searchDataVersion = version;
-		return (Map) map.get("data");
+		return (Map<String, Object>) map.get("data");
 	}
 
 	@Override
@@ -92,11 +92,11 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 			jsonString += createJsonRecursive(data);
 			jsonString += " }";
 		} catch (IllegalArgumentException e) {
-			logging.error(this, "Saving failed: " + e.getMessage(), e);
+			Logging.error(this, "Saving failed: " + e.getMessage(), e);
 			return;
 		}
 
-		logging.info(this, name + ": " + jsonString);
+		Logging.info(this, name + ": " + jsonString);
 		searches.put(name, jsonString);
 		SavedSearch saveObj = new SavedSearch(name, jsonString, description);
 		controller.saveSearch(saveObj);
@@ -119,11 +119,11 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		if (object instanceof SelectData.DataType)
 			return object.toString();
 		if (object instanceof String[]) {
-			String result = "[ ";
+			StringBuilder result = new StringBuilder("[ ");
 			String[] data = (String[]) object;
 			for (int i = 0; i < data.length - 1; i++) {
-				result += objectToString(data[i]);
-				result += ", ";
+				result.append(objectToString(data[i]));
+				result.append(", ");
 			}
 			return result + objectToString(data[data.length - 1]) + " ]";
 		}
@@ -181,20 +181,29 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 			while (parser.next()) {
 				switch (parser.getPositionType()) {
 				case OBJECT_BEGIN:
-					result.put(name, parseObject());
+					if (name == null) {
+						Logging.warning(this, "name is null, in case OBJECT_BEGIN");
+					} else
+						result.put(name, parseObject());
 					break;
 				case OBJECT_END:
 					return result;
 				case LIST_BEGIN:
-					result.put(name, parseList(name));
+					if (name == null) {
+						Logging.warning(this, "name is null, in case LIST_BEGIN");
+					} else
+						result.put(name, parseList(name));
 					break;
 				case JSON_NAME:
 					name = parser.getValue();
 					name = name.substring(1, name.length() - 1);
-					logging.debug(this, name);
+					Logging.debug(this, name);
 					break;
 				case JSON_VALUE:
-					result.put(name, stringToObject(parser.getValue(), name));
+					if (name == null) {
+						Logging.warning(this, "name is null, in case JSON_VALUE");
+					} else
+						result.put(name, stringToObject(parser.getValue(), name));
 					break;
 				default:
 					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
@@ -228,7 +237,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 		} catch (IOException e) {
 			throw new IllegalArgumentException("IOException in parser", e);
 		}
-		logging.debug(this, "parseList " + list);
+		Logging.debug(this, "parseList " + list);
 		if (!done)
 			throw new IllegalArgumentException("Unexpected EOF");
 		if (name.equals("elementPath"))
@@ -237,24 +246,24 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializ
 	}
 
 	private Object stringToObject(String value, String name) {
-		logging.debug(this, "stringToObject: " + name);
+		Logging.debug(this, "stringToObject: " + name);
 		if (value.equals("null"))
 			return null;
 		if (name.equals("data")) {
 			value = value.substring(1, value.length() - 1);
 			switch (lastDataType) {
-			case NONE_TYPE:
+			case NoneType:
 				return null;
-			case TEXT_TYPE:
-			case ENUM_TYPE:
+			case TextType:
+			case EnumType:
 				return value;
-			case DOUBLE_TYPE:
+			case DoubleType:
 				return Double.valueOf(value);
-			case INTEGER_TYPE:
+			case IntegerType:
 				return Integer.valueOf(value);
-			case BIT_INTEGER_TYPE:
+			case BigIntegerType:
 				return Long.valueOf(value);
-			case DATE_TYPE:
+			case DateType:
 				return value;
 			default:
 				throw new IllegalArgumentException("Type " + lastDataType + " not expected here");

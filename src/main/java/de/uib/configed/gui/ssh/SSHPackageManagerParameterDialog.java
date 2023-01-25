@@ -9,15 +9,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
@@ -35,10 +35,10 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	protected JButton jButtonReload;
 	protected JButton jButtonClose;
 
-	protected String defaultProduct = configed.getResourceValue("SSHConnection.ParameterDialog.defaultProduct");
-	protected String defaultDepot = configed.getResourceValue("SSHConnection.ParameterDialog.defaultDepot");
+	protected String defaultProduct = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultProduct");
+	protected String defaultDepot = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultDepot");
 
-	protected String opsiProd = PersistenceController.configedWORKBENCH_defaultvalue;
+	protected String opsiProd = PersistenceController.configedWorkbenchDefaultValue;
 	protected String opsiRepo = "/var/lib/opsi/repository/";
 
 	private String configRepo = "repositoryLocalUrl";
@@ -67,47 +67,47 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	}
 
 	protected void getRepositoriesFromConfigs(String depot) {
-		logging.info(this, "getRepositoriesFromConfigs depot " + depot);
+		Logging.info(this, "getRepositoriesFromConfigs depot " + depot);
 		NavigableMap<String, Map<String, Object>> depotProperties = (NavigableMap<String, Map<String, Object>>) persist
 				.getHostInfoCollections().getAllDepots();
-		logging.info(this, "getRepositoriesFromConfigs depotProperties " + depotProperties);
+		Logging.info(this, "getRepositoriesFromConfigs depotProperties " + depotProperties);
 
 		Map<String, Object> firstDepot;
 		if (depot == null || depot.equals(defaultDepot) || depot.equals("all"))
 			firstDepot = depotProperties.get(depotProperties.firstKey());
 		else
 			firstDepot = depotProperties.get(depot);
-		logging.info(this, "getRepositoriesFromConfigs firstDepot " + firstDepot);
+		Logging.info(this, "getRepositoriesFromConfigs firstDepot " + firstDepot);
 
 		String oRepo = ((String) firstDepot.get(configRepo)).replace("file://", "");
 		if (oRepo != null && !oRepo.equals("null") && !oRepo.trim().equals(""))
 			opsiRepo = oRepo + "/";
 
-		logging.info(this, "getRepositoriesFromConfigs o_repo " + oRepo);
-		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
+		Logging.info(this, "getRepositoriesFromConfigs o_repo " + oRepo);
+		Logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
 
 		// try
 
-		logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
-		logging.info(this, "getRepositoriesFromConfigs opsiProd " + opsiProd);
+		Logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
+		Logging.info(this, "getRepositoriesFromConfigs opsiProd " + opsiProd);
 
 	}
 
 	protected void initLabels() {
-		jLabelVerbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
-		jLabelFreeInput.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
+		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+		jLabelFreeInput.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
 	}
 
 	protected void initButtons(final SSHPackageManagerParameterDialog caller) {
 
 		jButtonHelp = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
-		jButtonHelp.setText(configed.getResourceValue("SSHConnection.buttonHelp"));
+		jButtonHelp.setText(Configed.getResourceValue("SSHConnection.buttonHelp"));
 
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp(caller));
 
 		jButtonExecute = new JButton();
 		buttonPanel.add(jButtonExecute);
-		jButtonExecute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
 			jButtonExecute.addActionListener(actionEvent -> {
@@ -118,19 +118,19 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 			});
 		jButtonReload = new JButton();
 		buttonPanel.add(jButtonReload);
-		jButtonReload.setText(configed.getResourceValue("SSHConnection.buttonPackagesReload"));
+		jButtonReload.setText(Configed.getResourceValue("SSHConnection.buttonPackagesReload"));
 		jButtonReload.setIcon(Globals.createImageIcon("images/reloadcomplete16.png", ""));
-		jButtonReload.setToolTipText(configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
+		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
 		if (!(Globals.isGlobalReadOnly()))
 			jButtonReload.addActionListener(actionEvent -> {
-				logging.debug(this, "ActionEvent on btn_reload");
+				Logging.debug(this, "ActionEvent on btn_reload");
 				main.reload();
 				consolidate();
 			});
 
 		jButtonClose = new JButton();
 		buttonPanel.add(jButtonClose);
-		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 

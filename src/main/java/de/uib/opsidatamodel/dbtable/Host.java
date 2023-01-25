@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.utilities.Mapping;
+
 public class Host extends Table {
-	public static final String tableName = "HOST";
-	public static final String idColumn = tableName + ".hostId";
-	public static final String hwAddressColumn = tableName + ".hardwareAdress";
-	public static final String descriptionColumn = tableName + ".description";
+	public static final String TABLE_NAME = "HOST";
+	public static final String ID_COLUMN = TABLE_NAME + ".hostId";
+	public static final String HW_ADRESS_COLUMN = TABLE_NAME + ".hardwareAdress";
+	public static final String DESCRIPTION_COLUMN = TABLE_NAME + ".description";
 
 	public static List<String> columns;
 	static {
@@ -46,7 +48,7 @@ public class Host extends Table {
 	static {
 		StringBuilder buf = new StringBuilder();
 		for (String col : columns) {
-			buf.append(tableName);
+			buf.append(TABLE_NAME);
 			buf.append(".");
 			buf.append(col);
 			buf.append(",");
@@ -69,8 +71,7 @@ public class Host extends Table {
 		}
 		key2servicekey.put("hostId", "id");
 	}
-	public static de.uib.utilities.Mapping<String, String> serviceKeyMapping = new de.uib.utilities.Mapping(
-			key2servicekey);
+	public static Mapping<String, String> serviceKeyMapping = new Mapping<>(key2servicekey);
 
 	public Host(String localTablePath) {
 		super(localTablePath);

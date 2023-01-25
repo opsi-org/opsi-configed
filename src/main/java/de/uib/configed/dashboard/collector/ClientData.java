@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ClientData {
 	private static Map<String, List<Client>> clients = new HashMap<>();
@@ -68,7 +68,7 @@ public class ClientData {
 		}
 
 		List<Client> allClients = Helper.combineListsFromMap(clients);
-		clients.put(configed.getResourceValue("Dashboard.selection.allDepots"), allClients);
+		clients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allClients);
 	}
 
 	public static List<String> getActiveClients() {
@@ -122,10 +122,10 @@ public class ClientData {
 		}
 
 		List<String> allActiveClients = Helper.combineListsFromMap(activeClients);
-		activeClients.put(configed.getResourceValue("Dashboard.selection.allDepots"), allActiveClients);
+		activeClients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allActiveClients);
 
 		List<String> allInactiveClients = Helper.combineListsFromMap(inactiveClients);
-		inactiveClients.put(configed.getResourceValue("Dashboard.selection.allDepots"), allInactiveClients);
+		inactiveClients.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allInactiveClients);
 	}
 
 	public static Map<String, Integer> getLastSeenData() {
@@ -175,16 +175,16 @@ public class ClientData {
 							moreThanThirtyDays++;
 						}
 					} catch (DateTimeParseException ex) {
-						logging.info("Date couldn't be parsed: " + date);
+						Logging.info("Date couldn't be parsed: " + date);
 					}
 
 				}
 
-				lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"),
+				lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays"),
 						fourteenOrLowerDays);
-				lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"),
+				lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"),
 						betweenFifteenAndThirtyDays);
-				lastSeenData.put(configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"),
+				lastSeenData.put(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays"),
 						moreThanThirtyDays);
 			}
 
@@ -192,7 +192,7 @@ public class ClientData {
 		}
 
 		Map<String, Integer> allClientLastSeen = Helper.combineMapsFromMap(clientLastSeen);
-		clientLastSeen.put(configed.getResourceValue("Dashboard.selection.allDepots"), allClientLastSeen);
+		clientLastSeen.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allClientLastSeen);
 	}
 
 	public static void clear() {

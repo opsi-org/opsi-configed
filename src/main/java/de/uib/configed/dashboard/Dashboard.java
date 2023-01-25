@@ -9,12 +9,12 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.view.ClientView;
 import de.uib.configed.dashboard.view.MainView;
 import de.uib.configed.dashboard.view.ProductView;
 import de.uib.configed.dashboard.view.ViewManager;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
@@ -34,7 +34,7 @@ public class Dashboard {
 		final JFXPanel fxPanel = new JFXPanel();
 		frame.add(fxPanel);
 		frame.setIconImage(Globals.mainIcon);
-		frame.setTitle(configed.getResourceValue("Dashboard.title"));
+		frame.setTitle(Configed.getResourceValue("Dashboard.title"));
 		frame.setMinimumSize(new Dimension(WINDOW_HEIGHT, WINDOW_WIDTH));
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -51,7 +51,7 @@ public class Dashboard {
 			try {
 				initFX(fxPanel);
 			} catch (IOException ioE) {
-				logging.error(this, "Unable to open fxml file", ioE);
+				Logging.error(this, "Unable to open fxml file", ioE);
 			}
 		});
 	}

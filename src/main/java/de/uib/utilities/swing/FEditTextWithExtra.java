@@ -10,24 +10,22 @@ import javax.swing.JTextField;
 
 public class FEditTextWithExtra extends FEditText {
 
-	protected JPanel extra_panel;
-	protected JLabel extra_label;
-	protected JTextField extra_field;
+	JTextField extraField;
 
-	public FEditTextWithExtra(String initialText, String hint, String extra_name) {
+	public FEditTextWithExtra(String initialText, String hint, String extraName) {
 		super(initialText, hint);
-		initFEditTextWithExtra(extra_name);
+		initFEditTextWithExtra(extraName);
 		setSingleLine(false);
 	}
 
-	protected void initFEditTextWithExtra(String extra_name) {
-		extra_panel = new JPanel();
-		extra_label = new JLabel(extra_name);
-		extra_field = new JTextField();
-		extra_field.setColumns(20);
-		extra_panel.add(extra_label);
-		extra_panel.add(extra_field);
-		editingArea.add(extra_panel, BorderLayout.NORTH);
+	protected void initFEditTextWithExtra(String extraName) {
+		JPanel extraPanel = new JPanel();
+		JLabel extraLabel = new JLabel(extraName);
+		extraField = new JTextField();
+		extraField.setColumns(20);
+		extraPanel.add(extraLabel);
+		extraPanel.add(extraField);
+		editingArea.add(extraPanel, BorderLayout.NORTH);
 
 		scrollpane = new JScrollPane();
 		textarea = new JTextArea();
@@ -41,6 +39,6 @@ public class FEditTextWithExtra extends FEditText {
 	}
 
 	public String getExtra() {
-		return extra_field.getText();
+		return extraField.getText();
 	}
 }

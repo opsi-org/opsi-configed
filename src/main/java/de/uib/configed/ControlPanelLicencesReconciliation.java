@@ -3,11 +3,11 @@ package de.uib.configed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.Set;
 
 import de.uib.configed.gui.licences.PanelLicencesReconciliation;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilterCondition;
@@ -49,7 +49,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		List<String> classNames;
 
 		List<String> extraHostFields = persist.getServerConfigStrings(
-				PersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation);
+				PersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 
 		// --- panelLicencesReconciliation
 		columnNames = new ArrayList<>();
@@ -67,8 +67,8 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		final int index_used_by_opsi = columnNames.size() - 1;
 		columnNames.add("SWinventory_used");
 		final int index_SWinventory_used = columnNames.size() - 1;
-		logging.debug(this, "columnNames: " + columnNames);
-		logging.debug(this, "cols index_used_by_opsi  " + index_used_by_opsi + " , " + index_SWinventory_used);
+		Logging.debug(this, "columnNames: " + columnNames);
+		Logging.debug(this, "cols index_used_by_opsi  " + index_used_by_opsi + " , " + index_SWinventory_used);
 
 		classNames.add("java.lang.String");
 
@@ -81,7 +81,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public Map retrieveMap() {
-						logging.debug(this, "retrieveMap");
+						Logging.debug(this, "retrieveMap");
 						if (initialized)
 							persist.reconciliationInfoRequestRefresh();
 						initialized = true;
@@ -96,7 +96,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		// filter which guarantees that clients are only shown when they have entries
 		modelLicencesReconciliation.setFilterCondition(new TableModelFilterCondition() {
 			@Override
-			public void setFilter(TreeSet<Object> filterParam) {
+			public void setFilter(Set<Object> filterParam) {
 				// Implementing TableModelFilterCondition
 			}
 

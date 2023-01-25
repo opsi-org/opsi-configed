@@ -31,6 +31,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import de.uib.configed.Configed;
 /**
  * NewClientDialog
  * Copyright:     Copyright (c) 2006-2022
@@ -39,9 +40,8 @@ import javax.swing.filechooser.FileSystemView;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.csv.CSVFormat;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.LabelChecked;
 import de.uib.utilities.swing.SeparatedDocument;
@@ -84,10 +84,7 @@ public class NewClientDialog extends FGeneralDialog
 	private static NewClientDialog instance;
 	private List<String> domains;
 	private boolean uefiboot;
-	private boolean uefibootIsDefault;
 	private boolean wanConfig;
-	private boolean wanConfigIsDefault;
-	private boolean shutdownInstall;
 	protected boolean multidepot;
 
 	private List<String> existingHostNames;
@@ -95,9 +92,9 @@ public class NewClientDialog extends FGeneralDialog
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
 	private NewClientDialog(ConfigedMain main, List<String> depots) {
-		super(Globals.mainFrame, configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")",
-				false, new String[] { configed.getResourceValue("NewClientDialog.buttonCreate"),
-						configed.getResourceValue("NewClientDialog.buttonClose") },
+		super(Globals.mainFrame, Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")",
+				false, new String[] { Configed.getResourceValue("NewClientDialog.buttonCreate"),
+						Configed.getResourceValue("NewClientDialog.buttonClose") },
 				700, 600);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.main = main;
@@ -186,16 +183,13 @@ public class NewClientDialog extends FGeneralDialog
 		jComboLocalboot.setSelectedIndex(0);
 	}
 
-	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean UEFIisDefault, boolean WANisDefault) {
-		uefibootIsDefault = UEFIisDefault;
-		wanConfigIsDefault = WANisDefault;
-
-		labelUefiDefault.setValue(UEFIisDefault);
-		labelWanDefault.setValue(WANisDefault);
+	public void useConfigDefaults(Boolean shutdownINSTALLIsDefault, Boolean uefiIsDefault, boolean wanIsDefault) {
+		labelUefiDefault.setValue(uefiIsDefault);
+		labelWanDefault.setValue(wanIsDefault);
 		labelShutdownDefault.setValue(shutdownINSTALLIsDefault);
 
-		jCheckUefi.setVisible(!uefibootIsDefault);
-		jCheckWan.setVisible(!wanConfigIsDefault);
+		jCheckUefi.setVisible(!uefiIsDefault);
+		jCheckWan.setVisible(!wanIsDefault);
 		jCheckShutdownInstall.setVisible(!shutdownINSTALLIsDefault);
 
 	}
@@ -207,59 +201,59 @@ public class NewClientDialog extends FGeneralDialog
 		panel.setLayout(gpl);
 		panel.setBackground(Globals.BACKGROUND_COLOR_7);
 
-		jCSVTemplateLabel = new JLabel(configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
-		jCSVTemplateButton = new JButton(configed.getResourceValue("NewClientDialog.csvTemplateButton"));
+		jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
+		jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
 		jCSVTemplateButton.addActionListener((ActionEvent e) -> createCSVTemplate());
 
-		jImportLabel = new JLabel(configed.getResourceValue("NewClientDialog.importLabel"));
-		jImportButton = new JButton(configed.getResourceValue("NewClientDialog.importButton"));
+		jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
+		jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
 		jImportButton.addActionListener((ActionEvent e) -> importCSV());
 
 		JLabel jLabelHostname = new JLabel();
-		jLabelHostname.setText(configed.getResourceValue("NewClientDialog.hostname"));
+		jLabelHostname.setText(Configed.getResourceValue("NewClientDialog.hostname"));
 		jTextHostname = new JTextField(new CheckedDocument(/* allowedChars */ new char[] { '-', '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
 				'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }, -1), "", 17);
-		jTextHostname.setToolTipText(configed.getResourceValue("NewClientDialog.hostnameRules"));
+		jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
 
 		JLabel jLabelDomainname = new JLabel();
-		jLabelDomainname.setText(configed.getResourceValue("NewClientDialog.domain"));
+		jLabelDomainname.setText(Configed.getResourceValue("NewClientDialog.domain"));
 		jComboDomain = new JComboBox<>();
 		jComboDomain.setEditable(true);
 
 		JLabel jLabelDescription = new JLabel();
-		jLabelDescription.setText(configed.getResourceValue("NewClientDialog.description"));
+		jLabelDescription.setText(Configed.getResourceValue("NewClientDialog.description"));
 		jTextDescription = new JTextField();
 
 		JLabel jLabelInventoryNumber = new JLabel();
-		jLabelInventoryNumber.setText(configed.getResourceValue("NewClientDialog.inventorynumber"));
+		jLabelInventoryNumber.setText(Configed.getResourceValue("NewClientDialog.inventorynumber"));
 		jTextInventoryNumber = new JTextField();
 
 		JLabel jLabelDepot = new JLabel();
-		jLabelDepot.setText(configed.getResourceValue("NewClientDialog.belongsToDepot"));
+		jLabelDepot.setText(Configed.getResourceValue("NewClientDialog.belongsToDepot"));
 		jComboDepots = new JComboBox<>(depots.toArray(new String[0]));
 		jComboDepots.setFont(Globals.defaultFontBig);
 
-		JLabel labelPrimaryGroup = new JLabel(configed.getResourceValue("NewClientDialog.primaryGroup"));
+		JLabel labelPrimaryGroup = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
 		jComboPrimaryGroup = new JComboBox<>(new String[] { "a", "ab" });
 		jComboPrimaryGroup.setMaximumRowCount(10);
 		jComboPrimaryGroup.setFont(Globals.defaultFontBig);
 
 		JLabel jLabelNetboot = new JLabel();
-		jLabelNetboot.setText(configed.getResourceValue("NewClientDialog.netbootProduct"));
+		jLabelNetboot.setText(Configed.getResourceValue("NewClientDialog.netbootProduct"));
 		jComboNetboot = new JComboBox<>(new String[] { "a", "ab" });
 		jComboNetboot.setMaximumRowCount(10);
 		jComboNetboot.setFont(Globals.defaultFontBig);
 
 		JLabel jLabelLocalboot = new JLabel();
-		jLabelLocalboot.setText(configed.getResourceValue("NewClientDialog.localbootProduct"));
+		jLabelLocalboot.setText(Configed.getResourceValue("NewClientDialog.localbootProduct"));
 		jComboLocalboot = new JComboBox<>(new String[] { "a", "ab" });
 		jComboLocalboot.setMaximumRowCount(10);
 		jComboLocalboot.setFont(Globals.defaultFontBig);
 		jComboLocalboot.setEnabled(false);
 
 		JLabel jLabelNotes = new JLabel();
-		jLabelNotes.setText(configed.getResourceValue("NewClientDialog.notes"));
+		jLabelNotes.setText(Configed.getResourceValue("NewClientDialog.notes"));
 		jTextNotes = new JTextArea();
 		jTextNotes.addFocusListener(new FocusListener() {
 			@Override
@@ -289,7 +283,7 @@ public class NewClientDialog extends FGeneralDialog
 				try {
 
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
-					logging.debug(this, " --------->" + newPiece + "<");
+					Logging.debug(this, " --------->" + newPiece + "<");
 
 					if (newPiece.equals("\t")) {
 
@@ -307,65 +301,65 @@ public class NewClientDialog extends FGeneralDialog
 
 		jTextNotes.setBorder(BorderFactory.createLineBorder(Globals.NEW_CLIENT_DIALOG_BORDER_COLOR));
 
-		JLabel labelInfoMac = new JLabel(configed.getResourceValue("NewClientDialog.infoMac"));
+		JLabel labelInfoMac = new JLabel(Configed.getResourceValue("NewClientDialog.infoMac"));
 		labelInfoMac.setFont(Globals.defaultFontBig);
 
-		JLabel labelInfoIP = new JLabel(configed.getResourceValue("NewClientDialog.infoIpAddress"));
+		JLabel labelInfoIP = new JLabel(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
 		labelInfoIP.setFont(Globals.defaultFontBig);
 
 		JLabel jLabelMacAddress = new JLabel();
-		jLabelMacAddress.setText(configed.getResourceValue("NewClientDialog.HardwareAddress"));
+		jLabelMacAddress.setText(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
 		macAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
 
 		JLabel jLabelIpAddress = new JLabel();
-		jLabelIpAddress.setText(configed.getResourceValue("NewClientDialog.IpAddress"));
+		jLabelIpAddress.setText(Configed.getResourceValue("NewClientDialog.IpAddress"));
 		ipAddressField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', '.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
 				"", 24);
 
 		labelShutdownDefault = new LabelChecked();
-		labelShutdownDefault.setText(configed.getResourceValue("NewClientDialog.installByShutdown") + " "
-				+ configed.getResourceValue("NewClientDialog.serverDefault"));
+		labelShutdownDefault.setText(Configed.getResourceValue("NewClientDialog.installByShutdown") + " "
+				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
 
 		jCheckShutdownInstall = new JCheckBox();
-		jCheckShutdownInstall.setText(configed.getResourceValue("NewClientDialog.installByShutdown"));
+		jCheckShutdownInstall.setText(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
 		labelUefiDefault = new LabelChecked();
-		labelUefiDefault.setText(configed.getResourceValue("NewClientDialog.boottype") + " "
-				+ configed.getResourceValue("NewClientDialog.serverDefault"));
+		labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
+				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
 
 		if (!main.getPersistenceController().isWithUEFI()) {
-			labelUefiDefault.setText(configed.getResourceValue("NewClientDialog.boottype_not_activated"));
+			labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			labelUefiDefault.setEnabled(false);
 
 		}
 
 		jCheckShutdownInstall = new JCheckBox();
-		jCheckShutdownInstall.setText(configed.getResourceValue("NewClientDialog.installByShutdown"));
+		jCheckShutdownInstall.setText(Configed.getResourceValue("NewClientDialog.installByShutdown"));
 
 		jCheckUefi = new JCheckBox();
-		jCheckUefi.setText(configed.getResourceValue("NewClientDialog.boottype") + " "
-				+ configed.getResourceValue("NewClientDialog.clientspecific"));
+		jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
+				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
 
 		if (!main.getPersistenceController().isWithUEFI()) {
-			jCheckUefi.setText(configed.getResourceValue("NewClientDialog.boottype_not_activated"));
+			jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			jCheckUefi.setEnabled(false);
 		}
 
 		labelWanDefault = new LabelChecked();
-		labelWanDefault.setText(configed.getResourceValue("NewClientDialog.wanConfig") + " "
-				+ configed.getResourceValue("NewClientDialog.serverDefault"));
+		labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
+				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
 
 		if (!main.getPersistenceController().isWithWAN()) {
-			labelWanDefault.setText(configed.getResourceValue("NewClientDialog.wan_not_activated"));
+			labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 		}
 
 		jCheckWan = new JCheckBox();
-		jCheckWan.setText(configed.getResourceValue("NewClientDialog.wanConfig") + " "
-				+ configed.getResourceValue("NewClientDialog.clientspecific"));
+		jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
+				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
 		if (!main.getPersistenceController().isWithWAN()) {
-			jCheckWan.setText(configed.getResourceValue("NewClientDialog.wan_not_activated"));
+			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 			jCheckWan.setEnabled(false);
 		}
 
@@ -610,12 +604,12 @@ public class NewClientDialog extends FGeneralDialog
 			if (!isBoolean((String) client.get(11)) || !isBoolean((String) client.get(12))
 					|| !isBoolean((String) client.get(13))) {
 				FTextArea fInfo = new FTextArea(Globals.mainFrame,
-						configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " (" + Globals.APPNAME
+						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " (" + Globals.APPNAME
 								+ ") ",
-						false, new String[] { configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
+						false, new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
 
 				StringBuilder message = new StringBuilder("");
-				message.append(configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
+				message.append(Configed.getResourceValue("NewClientDialog.nonBooleanValue.message"));
 				fInfo.setMessage(message.toString());
 				fInfo.setAlwaysOnTop(true);
 				fInfo.setVisible(true);
@@ -660,7 +654,7 @@ public class NewClientDialog extends FGeneralDialog
 		int order = 0;
 		saveDomains.add("" + order + ":" + selectedDomain);
 		editableDomains.add(selectedDomain);
-		logging.info(this, "createClient domains" + domains);
+		Logging.info(this, "createClient domains" + domains);
 
 		domains.remove(selectedDomain);
 
@@ -671,11 +665,11 @@ public class NewClientDialog extends FGeneralDialog
 			editableDomains.add(domain);
 		}
 
-		logging.debug(this, "createClient editableDomains " + editableDomains);
+		Logging.debug(this, "createClient editableDomains " + editableDomains);
 		main.setEditableDomains(editableDomains);
 		setDomains(editableDomains);
 
-		logging.debug(this, "createClient saveDomains " + saveDomains);
+		Logging.debug(this, "createClient saveDomains " + saveDomains);
 		main.getPersistenceController().writeDomains(saveDomains);
 	}
 
@@ -694,24 +688,24 @@ public class NewClientDialog extends FGeneralDialog
 
 			if (depots.contains(opsiHostKey)) {
 				JOptionPane.showMessageDialog(this,
-						opsiHostKey + "\n" + configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"),
-						configed.getResourceValue("NewClientDialog.OverwriteDepot.Title") + " (" + Globals.APPNAME
+						opsiHostKey + "\n" + Configed.getResourceValue("NewClientDialog.OverwriteDepot.Message"),
+						Configed.getResourceValue("NewClientDialog.OverwriteDepot.Title") + " (" + Globals.APPNAME
 								+ ")",
 						JOptionPane.WARNING_MESSAGE);
 				goOn = false;
 			}
 
 			FTextArea fQuestion = new FTextArea(Globals.mainFrame,
-					configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
+					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
 							+ ") ",
-					true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
-							configed.getResourceValue("FGeneralDialog.yes") });
+					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
+							Configed.getResourceValue("FGeneralDialog.yes") });
 			StringBuilder message = new StringBuilder("");
-			message.append(configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
+			message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
 			message.append(" \"");
 			message.append(opsiHostKey);
 			message.append("\" \n");
-			message.append(configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
+			message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
 			fQuestion.setMessage(message.toString());
 			fQuestion.setLocationRelativeTo(this);
 			fQuestion.setAlwaysOnTop(true);
@@ -724,12 +718,12 @@ public class NewClientDialog extends FGeneralDialog
 
 		if (goOn && hostname.length() > 15) {
 			FTextArea fQuestion = new FTextArea(Globals.mainFrame,
-					configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
+					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
-					true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
-							configed.getResourceValue("FGeneralDialog.yes") });
+					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
+							Configed.getResourceValue("FGeneralDialog.yes") });
 			StringBuilder message = new StringBuilder("");
-			message.append(configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
+			message.append(Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Message"));
 			fQuestion.setMessage(message.toString());
 			fQuestion.setLocationRelativeTo(this);
 			fQuestion.setAlwaysOnTop(true);
@@ -749,13 +743,13 @@ public class NewClientDialog extends FGeneralDialog
 
 		if (goOn && onlyNumbers) {
 			FTextArea fQuestion = new FTextArea(Globals.mainFrame,
-					configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question") + " ("
+					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
-					true, new String[] { configed.getResourceValue("FGeneralDialog.no"),
-							configed.getResourceValue("FGeneralDialog.yes") },
+					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
+							Configed.getResourceValue("FGeneralDialog.yes") },
 					350, 100);
 			StringBuilder message = new StringBuilder("");
-			message.append(configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
+			message.append(Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Message"));
 			fQuestion.setMessage(message.toString());
 			fQuestion.setLocationRelativeTo(this);
 			fQuestion.setAlwaysOnTop(true);
@@ -805,7 +799,7 @@ public class NewClientDialog extends FGeneralDialog
 				format.detectFormat(csvFile);
 			}
 		} catch (IOException e) {
-			logging.error(this, "Unable to read CSV file");
+			Logging.error(this, "Unable to read CSV file");
 		}
 
 		List<String> columnNames = new ArrayList<>();
@@ -827,11 +821,11 @@ public class NewClientDialog extends FGeneralDialog
 
 		if (format.hasHeader() && !format.hasExpectedHeaderNames(columnNames)) {
 			FTextArea fInfo = new FTextArea(Globals.mainFrame,
-					configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title") + " ("
+					Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title") + " ("
 							+ Globals.APPNAME + ") ",
-					false, new String[] { configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
+					false, new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
 			StringBuilder message = new StringBuilder("");
-			message.append(configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
+			message.append(Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.message") + " "
 					+ columnNames.toString().replace("[", "").replace("]", ""));
 			fInfo.setMessage(message.toString());
 			fInfo.setLocationRelativeTo(this);
@@ -898,7 +892,7 @@ public class NewClientDialog extends FGeneralDialog
 	/* This method is called when button 1 is pressed */
 	@Override
 	public void doAction1() {
-		logging.info(this, "doAction1");
+		Logging.info(this, "doAction1");
 
 		result = 1;
 
@@ -928,10 +922,7 @@ public class NewClientDialog extends FGeneralDialog
 			}
 		}
 
-		shutdownInstall = false;
-		if (jCheckShutdownInstall.getSelectedObjects() != null) {
-			shutdownInstall = true;
-		}
+		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, macaddress,
 				shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
@@ -954,11 +945,7 @@ public class NewClientDialog extends FGeneralDialog
 		}
 
 		else {
-			logging.info(this, "keyPressed source " + e.getSource());
-
-			if (e.getSource() == jButton1) {
-
-			}
+			Logging.info(this, "keyPressed source " + e.getSource());
 
 			super.keyPressed(e);
 		}

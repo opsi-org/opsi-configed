@@ -3,7 +3,7 @@ package de.uib.opsidatamodel.datachanges;
 import java.util.Collection;
 import java.util.Iterator;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
 */
@@ -22,7 +22,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		Iterator it = c.iterator();
 		while (it.hasNext() && success) {
 			Object ob = it.next();
-			logging.debug(this, "addAll, element of Collection: " + ob);
+			Logging.debug(this, "addAll, element of Collection: " + ob);
 			if (!add(ob))
 				success = false;
 		}
@@ -31,29 +31,27 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 
 	@Override
 	public void clear() {
-		logging.debug(this, "clear()");
+		Logging.debug(this, "clear()");
 		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
 			Object obj = it.next();
-			if (obj != null) {
-				if (obj instanceof Collection)
-				// a element of the collection is a collection, we do our best to clear
-				// recursively
-				{
-					try {
-						logging.debug(this, "by recursion, we will clear " + obj);
-						((Collection) obj).clear();
+			if (obj instanceof Collection)
+			// a element of the collection is a collection, we do our best to clear
+			// recursively
+			{
+				try {
+					Logging.debug(this, "by recursion, we will clear " + obj);
+					((Collection) obj).clear();
 
-					} catch (Exception ex) // perhaps not implemented
-					{
-					}
+				} catch (Exception ex) // perhaps not implemented
+				{
 				}
 			}
 
 		}
-		logging.debug(this, "to clear elements of implementor " + implementor);
+		Logging.debug(this, "to clear elements of implementor " + implementor);
 		implementor.clear();
-		logging.debug(this, "cleared: elements of implementor " + implementor.size());
+		Logging.debug(this, "cleared: elements of implementor " + implementor.size());
 	}
 
 	public void clearElements()
@@ -64,24 +62,22 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
 			Object obj = it.next();
-			if (obj != null) {
-
-				if (obj instanceof UpdateCollection)
-				// a element of the collection is a collection, we do our best to clear
-				// recursively
+			if (obj instanceof UpdateCollection)
+			// a element of the collection is a collection, we do our best to clear
+			// recursively
+			{
+				try {
+					((UpdateCollection) obj).clearElements();
+				} catch (Exception ex) // perhaps not implemented
 				{
-					try {
-						((UpdateCollection) obj).clearElements();
-					} catch (Exception ex) // perhaps not implemented
-					{
-					}
 				}
 			}
+
 		}
 	}
 
 	public void revert() {
-		logging.info(this, "revert()");
+		Logging.info(this, "revert()");
 
 		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
@@ -165,9 +161,9 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	@Override
 	@SuppressWarnings("unused")
 	public boolean add(Object obj) {
-		logging.debug(this, "###### UpdateCollection add Object  " + obj);
+		Logging.debug(this, "###### UpdateCollection add Object  " + obj);
 		if (!(obj instanceof UpdateCommand)) {
-			logging.error("Wrong element type, found" + obj.getClass().getName() + ", expected an UpdateCommand");
+			Logging.error("Wrong element type, found" + obj.getClass().getName() + ", expected an UpdateCommand");
 
 			return false;
 		}
@@ -222,7 +218,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	 */
 	@Override
 	public void doCall() {
-		logging.debug(this, "doCall, element count: " + size());
+		Logging.debug(this, "doCall, element count: " + size());
 
 		if (size() == 0)
 			return;

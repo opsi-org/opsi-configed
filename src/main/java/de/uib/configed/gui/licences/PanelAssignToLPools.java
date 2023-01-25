@@ -12,14 +12,14 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ControlMultiTablePanel;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelStateSwitch;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -31,9 +31,6 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 	public JTextField testField; // for test purposes
 
-	private JLabel titleWindowsSoftware;
-	private JLabel titleWindowsSoftware2;
-	private JLabel labelSelectedLicencePoolId;
 	public JLabel fieldSelectedLicencePoolId;
 
 	private JLabel labelCountAssignedStatus;
@@ -41,25 +38,15 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	private JLabel labelCountAssignedInEditing;
 	public JLabel fieldCountAssignedInEditing;
 
-	private JLabel labelCountAllWindowsSoftware;
 	public JLabel fieldCountAllWindowsSoftware;
-	private JLabel labelCountDisplayedWindowsSoftware;
 	public JLabel fieldCountDisplayedWindowsSoftware;
-	private JLabel labelCountNotAssignedSoftware;
 	public JLabel fieldCountNotAssignedSoftware;
 
 	public JButton buttonShowAssignedNotExisting;
 
-	private JLabel labelSupplementSimilar;
 	public JButton buttonSupplementSimilar;
 
-	private JSplitPane splitPane;
-	private JPanel topPane;
-	private JPanel bottomPane;
 	private int splitPaneHMargin = 1;
-
-	private JPanel panelInfoWindowsSoftware;
-	private JPanel panelInfoConfigWindowsSoftware;
 
 	public PanelRegisteredSoftware panelRegisteredSoftware;
 	public PanelGenEditTable panelLicencepools;
@@ -85,30 +72,31 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	private void initComponents() {
 
 		// splitpane
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setResizeWeight(0.7f);
-		topPane = new JPanel();
-		bottomPane = new JPanel();
+
+		JPanel topPane = new JPanel();
+		JPanel bottomPane = new JPanel();
 
 		testField = new JTextField("                     ");
 
 		// construct content panes
-		panelInfoWindowsSoftware = new JPanel();
+		JPanel panelInfoWindowsSoftware = new JPanel();
 		panelInfoWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-		panelInfoConfigWindowsSoftware = new JPanel();
+		JPanel panelInfoConfigWindowsSoftware = new JPanel();
 		panelInfoConfigWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-		titleWindowsSoftware = new JLabel(
-				configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool"));
+		JLabel titleWindowsSoftware = new JLabel(
+				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool"));
 		titleWindowsSoftware.setFont(Globals.defaultFontStandardBold);
 
-		titleWindowsSoftware2 = new JLabel(
-				configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool.supplement"));
+		JLabel titleWindowsSoftware2 = new JLabel(
+				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool.supplement"));
 		titleWindowsSoftware2.setFont(Globals.defaultFont);
 
-		labelSelectedLicencePoolId = new JLabel(
-				configed.getResourceValue("PanelAssignToLPools.labelSelectedLicencePoolId"));
+		JLabel labelSelectedLicencePoolId = new JLabel(
+				Configed.getResourceValue("PanelAssignToLPools.labelSelectedLicencePoolId"));
 
 		labelSelectedLicencePoolId.setFont(Globals.defaultFont);
 
@@ -116,8 +104,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldSelectedLicencePoolId.setPreferredSize(new java.awt.Dimension(250, Globals.LINE_HEIGHT));
 		fieldSelectedLicencePoolId.setFont(Globals.defaultFontStandardBold);
 
-		labelCountAllWindowsSoftware = new JLabel(
-				configed.getResourceValue("PanelAssignToLPools.labelCountAllWindowsSoftware"));
+		JLabel labelCountAllWindowsSoftware = new JLabel(
+				Configed.getResourceValue("PanelAssignToLPools.labelCountAllWindowsSoftware"));
 
 		labelCountAllWindowsSoftware.setFont(Globals.defaultFont);
 
@@ -125,16 +113,16 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldCountAllWindowsSoftware.setPreferredSize(Globals.shortlabelDimension);
 		fieldCountAllWindowsSoftware.setFont(Globals.defaultFont);
 
-		labelCountDisplayedWindowsSoftware = new JLabel(
-				configed.getResourceValue("PanelAssignToLPools.labelCountDisplayedWindowsSoftware"));
+		JLabel labelCountDisplayedWindowsSoftware = new JLabel(
+				Configed.getResourceValue("PanelAssignToLPools.labelCountDisplayedWindowsSoftware"));
 		labelCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
 
 		fieldCountDisplayedWindowsSoftware = new JLabel("");
 		fieldCountDisplayedWindowsSoftware.setPreferredSize(Globals.shortlabelDimension);
 		fieldCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
 
-		labelCountNotAssignedSoftware = new JLabel(
-				configed.getResourceValue("PanelAssignToLPools.labelCountNotAssignedSoftware"));
+		JLabel labelCountNotAssignedSoftware = new JLabel(
+				Configed.getResourceValue("PanelAssignToLPools.labelCountNotAssignedSoftware"));
 		labelCountNotAssignedSoftware.setFont(Globals.defaultFont);
 
 		fieldCountNotAssignedSoftware = new JLabel("");
@@ -142,7 +130,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldCountNotAssignedSoftware.setFont(Globals.defaultFont);
 
 		labelCountAssignedStatus = new JLabel(
-				configed.getResourceValue("PanelAssignToLPools.labelCountAssignedStatus"));
+				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedStatus"));
 
 		labelCountAssignedStatus.setFont(Globals.defaultFont);
 
@@ -151,7 +139,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldCountAssignedStatus.setFont(Globals.defaultFontStandardBold);
 
 		labelCountAssignedInEditing = new JLabel(
-				configed.getResourceValue("PanelAssignToLPools.labelCountAssignedInEditing"));
+				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedInEditing"));
 
 		labelCountAssignedInEditing.setFont(Globals.defaultFont);
 
@@ -160,29 +148,29 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldCountAssignedInEditing.setFont(Globals.defaultFontStandardBold);
 
 		buttonShowAssignedNotExisting = new JButton(
-				configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing"),
+				Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing"),
 				Globals.createImageIcon("images/edit-table-delete-row-16x16.png", ""));
 
 		buttonShowAssignedNotExisting
-				.setToolTipText(configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
+				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
 		buttonShowAssignedNotExisting.setFont(Globals.defaultFont);
 		buttonShowAssignedNotExisting.addActionListener(actionEvent -> {
 			fMissingSoftwareInfo.setLocationRelativeTo(Globals.frame1);
 			fMissingSoftwareInfo.setVisible(true);
 		});
 
-		labelSupplementSimilar = new JLabel(
-				configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries"));
+		JLabel labelSupplementSimilar = new JLabel(
+				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries"));
 
 		labelSupplementSimilar.setVisible(true);
 		labelSupplementSimilar.setFont(Globals.defaultFont);
 
 		buttonSupplementSimilar = new JButton(
-				configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.button"),
+				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.button"),
 				Globals.createImageIcon("images/edit-table-insert-row-under.png", ""));
 
 		buttonSupplementSimilar.setToolTipText(
-				configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.tooltip"));
+				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.tooltip"));
 		buttonSupplementSimilar.setFont(Globals.defaultFont);
 
 		buttonSupplementSimilar.addActionListener(new ActionListener() {
@@ -192,7 +180,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				if (!fSoftwarename2LicencePool.isVisible())
 					fSoftwarename2LicencePool.setLocationRelativeTo(Globals.frame1);
 
-				logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected "
+				Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected "
 						+ panelRadiobuttonsPreselectionForName2Pool.getValue());
 				fSoftwarename2LicencePool.setPreselectionForName2Pool(
 						(FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction) panelRadiobuttonsPreselectionForName2Pool
@@ -213,11 +201,11 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				null, FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.SHOW_ALL_NAMES, // start value
 				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.values(),
 				new String[] {
-						configed.getResourceValue(
+						Configed.getResourceValue(
 								"PanelAssignToLPools.Licences.supplementSimilarSWEntries.showAllSwNames"),
-						configed.getResourceValue(
+						Configed.getResourceValue(
 								"PanelAssignToLPools.Licences.supplementSimilarSWEntries.showOnlyNamesWithNotUniformAssignments"),
-						configed.getResourceValue(
+						Configed.getResourceValue(
 								"PanelAssignToLPools.Licences.supplementSimilarSWEntries.showOnlyNamesWithoutAssignments") },
 
 				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.class, null) {
@@ -266,17 +254,17 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						.addGap(Globals.HGAP_SIZE / 2)));
 
 		PanelStateSwitch panelRadiobuttonsDirectionOfAssignment = new PanelStateSwitch(
-				configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.title"),
+				Configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.title"),
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE, // start value
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.values(),
 				new String[] {
-						configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE"),
-						configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.SOFTWARE2POOL") },
+						Configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE"),
+						Configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.SOFTWARE2POOL") },
 
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.class,
 
 				val -> {
-					logging.info(this, " produced " + val);
+					Logging.info(this, " produced " + val);
 					((ControlPanelAssignToLPools) controller).setSoftwareDirectionOfAssignment(
 							(ControlPanelAssignToLPools.SoftwareDirectionOfAssignment) val);
 				});
@@ -359,14 +347,14 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				ControlPanelAssignToLPools.SoftwareShowAllMeans.ALL,
 				ControlPanelAssignToLPools.SoftwareShowAllMeans.values(),
 
-				new String[] { configed.getResourceValue("PanelAssignToLPools.radiobuttonALL"),
-						configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_OR_ASSIGNED_TO_NOTHING"),
-						configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_TO_NOTHING") },
+				new String[] { Configed.getResourceValue("PanelAssignToLPools.radiobuttonALL"),
+						Configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_OR_ASSIGNED_TO_NOTHING"),
+						Configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_TO_NOTHING") },
 
 				ControlPanelAssignToLPools.SoftwareShowAllMeans.class,
 
 				val -> {
-					logging.info(this, " produced " + val);
+					Logging.info(this, " produced " + val);
 					((ControlPanelAssignToLPools) controller)
 							.setSoftwareShowAllMeans((ControlPanelAssignToLPools.SoftwareShowAllMeans) val);
 				});
@@ -456,7 +444,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.addContainerGap());
 
 		panelLicencepools = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), TABLES_MAX_WIDTH, true, 1, // position of general popups
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleLicencepools"), TABLES_MAX_WIDTH, true, 1, // position of general popups
 				false, // switchLineColors //does not matter
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
@@ -466,7 +454,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		panelLicencepools.setMasterFrame(Globals.frame1);
 
 		panelProductId2LPool = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"), TABLES_MAX_WIDTH, true,
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleProductId2LPool"), TABLES_MAX_WIDTH, true,
 				1, false, new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
 				true // with tablesearchpane
@@ -545,27 +533,27 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	}
 
 	public void setDisplaySimilarExist(boolean b) {
-		logging.info(this, "setDisplaySimilarExist " + b);
+		Logging.info(this, "setDisplaySimilarExist " + b);
 		if (b) {
 			labelSimilarEntriesExist.setIcon(Globals.createImageIcon("images/checked_box_filled_i_14.png", ""));
 			labelSimilarEntriesExist
-					.setToolTipText(configed.getResourceValue("PanelAssignToLPools.Licences.similarSWEntriesExist"));
+					.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.Licences.similarSWEntriesExist"));
 		} else {
 			labelSimilarEntriesExist.setIcon(Globals.createImageIcon("images/checked_box_blue_empty_14.png", ""));
 			labelSimilarEntriesExist.setToolTipText(
-					configed.getResourceValue("PanelAssignToLPools.Licences.similarSWEntriesDontExist"));
+					Configed.getResourceValue("PanelAssignToLPools.Licences.similarSWEntriesDontExist"));
 		}
 	}
 
 	// implement ChengeListener
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		logging.info(this, " stateChanged " + e);
-		logging.info(this,
+		Logging.info(this, " stateChanged " + e);
+		Logging.info(this,
 				" stateChanged modelSWnames filterinfo " + fSoftwarename2LicencePool.modelSWnames.getFilterInfo());
 		String resetToSWname = (String) panelRegisteredSoftware.getValueAt(panelRegisteredSoftware.getSelectedRow(),
 				panelRegisteredSoftware.getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
-		logging.info(this, " stateChanged modelSWnames swname  >>" + resetToSWname + "<<");
+		Logging.info(this, " stateChanged modelSWnames swname  >>" + resetToSWname + "<<");
 		fSoftwarename2LicencePool.modelSWnames.requestReload();
 		fSoftwarename2LicencePool.modelSWnames.reset();
 		if (fSoftwarename2LicencePool.modelSWxLicencepool == null)

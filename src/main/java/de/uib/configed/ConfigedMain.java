@@ -50,11 +50,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.RowSorter;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
@@ -112,7 +114,7 @@ import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.logging.LogEvent;
 import de.uib.utilities.logging.LogEventObserver;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.FLoadingWaiter;
@@ -144,7 +146,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard disabled
-	public static final boolean DASH_ENABLED = true;
+	public static final boolean DASH_ENABLED = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -302,8 +304,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public TabbedFrame licencesFrame;
 
-	public FGroupActions groupActionFrame;
-	public FProductActions productActionFrame;
+	private FGroupActions groupActionFrame;
+	private FProductActions productActionFrame;
 
 	ControlPanelEnterLicence controlPanelEnterLicence;
 	ControlPanelEditLicences controlPanelEditLicences;
@@ -348,12 +350,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// TabController Interface
 	@Override
-	public Enum getStartTabState() {
+	public LicencesTabStatus getStartTabState() {
 		return LicencesTabStatus.LICENCEPOOL;
 	}
 
 	@Override
-	public TabClient getClient(Enum state) {
+	public TabClient getClient(Enum<LicencesTabStatus> state) {
 		return licencesPanels.get(state);
 	}
 
@@ -364,22 +366,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	@Override
-	public void removeClient(Enum status) {
-		licencesFrame.removeTab(status);
-	}
-
-	@Override
 	public Enum reactToStateChangeRequest(Enum newState) {
-		logging.debug(this, "reactToStateChangeRequest( newState: " + newState + "), current state " + licencesStatus);
-		if (newState != licencesStatus) {
-			if (getClient(licencesStatus).mayLeave()) {
-				licencesStatus = (LicencesTabStatus) newState;
+		Logging.debug(this, "reactToStateChangeRequest( newState: " + newState + "), current state " + licencesStatus);
+		if (newState != licencesStatus && getClient(licencesStatus).mayLeave()) {
+			licencesStatus = (LicencesTabStatus) newState;
 
-				if (getClient(licencesStatus) != null) {
-					licencesPanels.get(licencesStatus).reset();
-				}
+			if (getClient(licencesStatus) != null) {
+				licencesPanels.get(licencesStatus).reset();
 			}
-
 			// otherwise we return the old status
 
 		}
@@ -387,24 +381,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return licencesStatus;
 	}
 
-	@Override
-	public boolean exit() {
-		if (licencesFrame != null) {
-			licencesFrame.setVisible(false);// !
-			mainFrame.visualizeLicencesFramesActive(false);
-		}
-		return true;
-	}
-
 	private boolean dataReady = false;
 
 	private boolean filterClientList = false;
 
-	public static String HOST = null;
-	public static String USER = null;
-	public static String PASSWORD = null;
-	public static String SSHKEY = null;
-	public static String SSHKEYPASS = null;
+	public static String host = null;
+	public static String user = null;
+	public static String password = null;
+	public static String sshKey = null;
+	public static String sshKeyPass = null;
 
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER
@@ -414,24 +399,24 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
 	public ConfigedMain(String host, String user, String password) {
-		if (HOST == null) {
-			HOST = host;
+		if (this.host == null) {
+			this.host = host;
 		}
-		if (USER == null) {
-			USER = user;
+		if (this.user == null) {
+			this.user = user;
 		}
-		if (PASSWORD == null) {
-			PASSWORD = password;
+		if (this.password == null) {
+			this.password = password;
 		}
-		SSHKEY = configed.sshkey;
-		SSHKEYPASS = configed.sshkeypassphrase;
+		sshKey = Configed.sshkey;
+		sshKeyPass = Configed.sshkeypassphrase;
 
-		SSHConnectionInfo.getInstance().setHost(HOST);
-		SSHConnectionInfo.getInstance().setUser(USER);
-		SSHConnectionInfo.getInstance().setPassw(PASSWORD);
-		SSHConnectionInfo.getInstance().useKeyfile(SSHKEY != null, SSHKEY != null ? SSHKEY : "",
-				SSHKEY != null ? SSHKEYPASS : "");
-		logging.registLogEventObserver(this);
+		SSHConnectionInfo.getInstance().setHost(host);
+		SSHConnectionInfo.getInstance().setUser(user);
+		SSHConnectionInfo.getInstance().setPassw(password);
+		SSHConnectionInfo.getInstance().useKeyfile(sshKey != null, sshKey != null ? sshKey : "",
+				sshKey != null ? sshKeyPass : "");
+		Logging.registLogEventObserver(this);
 	}
 
 	public static ConfigedMain.EditingTarget getEditingTarget() {
@@ -439,11 +424,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void initGui() {
-		logging.info(this, "initGui");
+		Logging.info(this, "initGui");
 
 		displayFieldsLocalbootProducts = new LinkedHashMap<>(
-				persist.getProductOnClients_displayFieldsLocalbootProducts());
-		displayFieldsNetbootProducts = new LinkedHashMap<>(persist.getProductOnClients_displayFieldsNetbootProducts());
+				persist.getProductOnClientsDisplayFieldsLocalbootProducts());
+		displayFieldsNetbootProducts = new LinkedHashMap<>(persist.getProductOnClientsDisplayFieldsNetbootProducts());
 		// initialization by defaults, it can be edited afterwards
 
 		initTree();
@@ -468,12 +453,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setRebuiltClientListTableModel();
 
-		logging.debug(this, "initialTreeActivation\u0009"); // \u0009 is tab
+		Logging.debug(this, "initialTreeActivation\u0009"); // \u0009 is tab
 
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
-			if (configed.fProgress != null) {
-				configed.fProgress.actAfterWaiting();
+			if (Configed.fProgress != null) {
+				Configed.fProgress.actAfterWaiting();
 			}
 
 			if (Boolean.TRUE
@@ -483,70 +468,70 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		});
 
-		reachableUpdater.setInterval(configed.refreshMinutes);
+		reachableUpdater.setInterval(Configed.refreshMinutes);
 	}
 
 	private String getSavedStatesDefaultLocation() {
 		String result = "";
 
-		if (System.getenv(logging.windowsEnvVariableAppDataDirectory) != null) {
+		if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
 			// Windows
-			result = System.getenv(logging.windowsEnvVariableAppDataDirectory) + File.separator + "opsi.org"
+			result = System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator + "opsi.org"
 					+ File.separator + "configed";
 		} else {
-			result = System.getProperty(logging.envVariableForUserDirectory) + File.separator + ".configed";
+			result = System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator + ".configed";
 		}
 
 		return result;
 	}
 
 	private String getSavedStatesDirectoryName(String locationName) {
-		return locationName + File.separator + HOST.replace(":", "_");
+		return locationName + File.separator + host.replace(":", "_");
 	}
 
 	private void initSavedStates() {
 		File savedStatesDir = null;
 		boolean success = true;
 
-		if (configed.savedStatesLocationName != null) {
-			logging.info(this, "trying to write saved states to " + configed.savedStatesLocationName);
+		if (Configed.savedStatesLocationName != null) {
+			Logging.info(this, "trying to write saved states to " + Configed.savedStatesLocationName);
 			try {
-				String directoryName = getSavedStatesDirectoryName(configed.savedStatesLocationName);
+				String directoryName = getSavedStatesDirectoryName(Configed.savedStatesLocationName);
 				savedStatesDir = new File(directoryName);
-				logging.info(this, "writing saved states, created file " + success);
+				Logging.info(this, "writing saved states, created file " + success);
 				savedStatesDir.mkdirs();
-				logging.info(this, "writing saved states, got dirs " + success);
+				Logging.info(this, "writing saved states, got dirs " + success);
 				savedStatesDir.setWritable(true, true);
-				logging.info(this, "writing saved states, set writable ");
-				configed.savedStates = new de.uib.utilities.savedstates.SavedStates(
-						new File(savedStatesDir.toString() + File.separator + configed.SAVED_STATES_FILENAME));
+				Logging.info(this, "writing saved states, set writable ");
+				Configed.savedStates = new de.uib.utilities.savedstates.SavedStates(
+						new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
 			} catch (Exception ex) {
-				logging.warning(this, "saved states exception " + ex);
+				Logging.warning(this, "saved states exception " + ex);
 				success = false;
 			}
 		}
 
 		if (!success) {
-			logging.error(this, "cannot not write saved states into " + configed.savedStatesLocationName);
+			Logging.error(this, "cannot not write saved states into " + Configed.savedStatesLocationName);
 		}
 
-		if (configed.savedStatesLocationName == null || configed.savedStates == null || (!success)) {
-			logging.info(this, "writing saved states to " + getSavedStatesDefaultLocation());
+		if (Configed.savedStatesLocationName == null || Configed.savedStates == null || (!success)) {
+			Logging.info(this, "writing saved states to " + getSavedStatesDefaultLocation());
 			savedStatesDir = new File(getSavedStatesDirectoryName(getSavedStatesDefaultLocation()));
 			savedStatesDir.mkdirs();
 			savedStatesDir.setWritable(true, true);
-			configed.savedStates = new de.uib.utilities.savedstates.SavedStates(
-					new File(savedStatesDir.toString() + File.separator + configed.SAVED_STATES_FILENAME));
+			Configed.savedStates = new de.uib.utilities.savedstates.SavedStates(
+					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
 		}
 
 		try {
-			configed.savedStates.load();
+			Configed.savedStates.load();
 		} catch (IOException iox) {
-			logging.info(this, "saved states file could not be loaded");
+			Logging.info(this, "saved states file could not be loaded");
 		}
 
-		Integer oldUsageCount = Integer.valueOf(configed.savedStates.saveUsageCount.deserialize());
-		configed.savedStates.saveUsageCount.serialize(oldUsageCount + 1);
+		Integer oldUsageCount = Integer.valueOf(Configed.savedStates.saveUsageCount.deserialize());
+		Configed.savedStates.saveUsageCount.serialize(oldUsageCount + 1);
 	}
 
 	private List<String> readLocallySavedServerNames() {
@@ -557,10 +542,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		boolean success = true;
 
-		if (configed.savedStatesLocationName != null) {
-			logging.info(this, "trying to find saved states in " + configed.savedStatesLocationName);
+		if (Configed.savedStatesLocationName != null) {
+			Logging.info(this, "trying to find saved states in " + Configed.savedStatesLocationName);
 			try {
-				savedStatesLocation = new File(configed.savedStatesLocationName);
+				savedStatesLocation = new File(Configed.savedStatesLocationName);
 				savedStatesLocation.mkdirs();
 				success = success && savedStatesLocation.setReadable(true);
 			} catch (Exception ex) {
@@ -569,17 +554,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		if (!success) {
-			logging.warning(this, "cannot not find saved states in " + configed.savedStatesLocationName);
+			Logging.warning(this, "cannot not find saved states in " + Configed.savedStatesLocationName);
 		}
 
-		if (configed.savedStatesLocationName == null || (!success)) {
-			logging.info(this, "searching saved states in " + getSavedStatesDefaultLocation());
-			configed.savedStatesLocationName = getSavedStatesDefaultLocation();
+		if (Configed.savedStatesLocationName == null || (!success)) {
+			Logging.info(this, "searching saved states in " + getSavedStatesDefaultLocation());
+			Configed.savedStatesLocationName = getSavedStatesDefaultLocation();
 			savedStatesLocation = new File(getSavedStatesDefaultLocation());
 			savedStatesLocation.mkdirs();
 		}
 
-		logging.info(this, "saved states location " + savedStatesLocation);
+		Logging.info(this, "saved states location " + savedStatesLocation);
 
 		File[] subdirs = null;
 
@@ -587,7 +572,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			subdirs = savedStatesLocation.listFiles(File::isDirectory);
 
 			for (File folder : subdirs) {
-				File checkFile = new File(folder + File.separator + configed.SAVED_STATES_FILENAME);
+				File checkFile = new File(folder + File.separator + Configed.SAVED_STATES_FILENAME);
 				String folderPath = folder.getPath();
 				String elementname = folderPath.substring(folderPath.lastIndexOf(File.separator) + 1);
 
@@ -598,14 +583,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				sortingmap.put(new java.sql.Timestamp(checkFile.lastModified()), elementname);
 			}
 		} catch (SecurityException ex) {
-			logging.warning("could not read file: " + ex);
+			Logging.warning("could not read file: " + ex);
 		}
 
 		for (Date date : sortingmap.descendingKeySet()) {
 			result.add(sortingmap.get(date));
 		}
 
-		logging.info(this, "readLocallySavedServerNames  result " + result);
+		Logging.info(this, "readLocallySavedServerNames  result " + result);
 
 		return result;
 	}
@@ -614,24 +599,24 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Set<String> sshAllowedHosts = new HashSet<>();
 
 		if (persist.isDepotsFullPermission()) {
-			logging.info(this, "set ssh allowed hosts " + HOST);
-			sshAllowedHosts.add(HOST);
+			Logging.info(this, "set ssh allowed hosts " + host);
+			sshAllowedHosts.add(host);
 			sshAllowedHosts.addAll(persist.getHostInfoCollections().getDepots().keySet());
 		} else {
 			sshAllowedHosts.addAll(persist.getDepotPropertiesForPermittedDepots().keySet());
 		}
 
 		SSHCommandFactory.getInstance(this).setAllowedHosts(sshAllowedHosts);
-		logging.info(this, "ssh allowed hosts" + sshAllowedHosts);
+		Logging.info(this, "ssh allowed hosts" + sshAllowedHosts);
 	}
 
 	public void initDashInfo() {
 		if (!DASH_ENABLED) {
-			logging.info(this, "initDashInfo not enabled");
+			Logging.info(this, "initDashInfo not enabled");
 			return;
 		}
 
-		logging.info(this, "initDashboard " + dashboard);
+		Logging.info(this, "initDashboard " + dashboard);
 		if (dashboard == null) {
 			dashboard = new Dashboard();
 			dashboard.initAndShowGUI();
@@ -643,29 +628,29 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void loadDataAndGo() {
 		dpass.setVisible(false);
 
-		logging.clearErrorList();
+		Logging.clearErrorList();
 
 		// errors are already handled in login
-		logging.info(this, " we got persist " + persist);
+		Logging.info(this, " we got persist " + persist);
 
 		setSSHallowedHosts();
 
-		logging.info(this, "call initData");
+		Logging.info(this, "call initData");
 		initData();
 		initSavedStates();
-		oldSelectedDepots = configed.savedStates.saveDepotSelection.deserialize();
+		oldSelectedDepots = Configed.savedStates.saveDepotSelection.deserialize();
 
 		Date opsiExpiresDate = persist.getOpsiExpiresDate();
 
-		logging.info(this, " opsi modules file expires " + opsiExpiresDate);
+		Logging.info(this, " opsi modules file expires " + opsiExpiresDate);
 
 		// too early, raises a NPE, if the user entry does not exist
 
 		persist.syncTables();
 
-		configed.fProgress = new FLoadingWaiter(dpass,
-				Globals.APPNAME + " " + configed.getResourceValue("FWaitProgress.title"));
-		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(configed.fProgress);
+		Configed.fProgress = new FLoadingWaiter(dpass,
+				Globals.APPNAME + " " + Configed.getResourceValue("FWaitProgress.title"));
+		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(Configed.fProgress);
 
 		if (opsiExpiresDate != null) {
 			Calendar nowCal = Calendar.getInstance();
@@ -677,15 +662,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			noticeCal.add(Calendar.DAY_OF_MONTH, -14);
 
 			if (nowCal.after(noticeCal)) {
-				logging.info(this, "show notice of expiring module");
-				FTextArea fMessage = new FTextArea(mainFrame, configed.getResourceValue("Permission.modules.title"),
+				Logging.info(this, "show notice of expiring module");
+				FTextArea fMessage = new FTextArea(mainFrame, Configed.getResourceValue("Permission.modules.title"),
 						false, new String[] { "ok" }, 350, 150);
-				fMessage.setMessage(configed.getResourceValue("Permission.modules.expires") + "\n" + opsiExpiresDate);
+				fMessage.setMessage(Configed.getResourceValue("Permission.modules.expires") + "\n" + opsiExpiresDate);
 				fMessage.setVisible(true);
 			}
 		}
 
-		configed.fProgress.startWaiting();
+		Configed.fProgress.startWaiting();
 
 		new Thread() {
 			@Override
@@ -696,11 +681,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				waitCursorInitGui.stop();
 				checkErrorList();
-				if (configed.fProgress == null) {
-					logging.warning(this, "configed.fProgress == null although it should have been started");
+				if (Configed.fProgress == null) {
+					Logging.warning(this, "configed.fProgress == null although it should have been started");
 				} else {
-					configed.fProgress.setReady();
-					configed.fProgress.actAfterWaiting();
+					Configed.fProgress.setReady();
+					Configed.fProgress.actAfterWaiting();
 				}
 
 			}
@@ -709,7 +694,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void init() {
-		logging.debug(this, "init");
+		Logging.debug(this, "init");
 
 		// we start with a language
 
@@ -742,10 +727,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		columnNames.add("productName");
 
 		// from OpsiPackage.appendValues
-		columnNames.add(OpsiPackage.SERVICEkeyPRODUCT_TYPE);
-		columnNames.add(OpsiPackage.SERVICEkeyPRODUCT_VERSION);
-		columnNames.add(OpsiPackage.SERVICEkeyPACKAGE_VERSION);
-		columnNames.add(OpsiPackage.SERVICEkeyLOCKED);
+		columnNames.add(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE);
+		columnNames.add(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
+		columnNames.add(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
+		columnNames.add(OpsiPackage.SERVICE_KEY_LOCKED);
 
 		List<String> classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
@@ -789,9 +774,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.productGroupsRequestRefresh();
 
-		hostDisplayFields = persist.getHost_displayFields();
-		persist.getProductOnClients_displayFieldsNetbootProducts();
-		persist.getProductOnClients_displayFieldsLocalbootProducts();
+		hostDisplayFields = persist.getHostDisplayFields();
+		persist.getProductOnClientsDisplayFieldsNetbootProducts();
+		persist.getProductOnClientsDisplayFieldsLocalbootProducts();
 		persist.configOptionsRequestRefresh();
 
 		if (savedSearchesDialog != null) {
@@ -804,7 +789,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		hwAuditConfig = persist
 				.getOpsiHWAuditConf(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
 		mainFrame.initHardwareInfo(hwAuditConfig);
-		logging.info(this, "preloadData, hw classes " + persist.getAllHwClassNames());
+		Logging.info(this, "preloadData, hw classes " + persist.getAllHwClassNames());
 		mainFrame.updateHostCheckboxenText();
 
 		persist.retrieveProducts();
@@ -829,8 +814,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnIPAddress() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -842,8 +827,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnHardwareAddress() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -854,13 +839,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void setColumnSessionInfo(boolean b) {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 		if (visible == b) {
 			return;
 		}
 
-		logging.info(this, "setColumnSessionInfo " + b);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, b);
+		Logging.info(this, "setColumnSessionInfo " + b);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, b);
 
 		mainFrame.combinedMenuItemSessionInfoColumn.show(b);
 		setRebuiltClientListTableModel(false);
@@ -871,7 +856,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnSessionInfo() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL);
 
 		setColumnSessionInfo(!visible);
 
@@ -879,8 +864,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnInventoryNumber() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -892,8 +877,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnCreated() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CREATED_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CREATED_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -905,8 +890,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnWANactive() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -918,8 +903,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnUEFIactive() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -931,13 +916,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnInstallByShutdownActive() {
-		Boolean visible = persist.getHost_displayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
+		Boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 		if (visible == null) {
 			JOptionPane.showMessageDialog(mainFrame, "An older configed is running in the network", "Information",
 					JOptionPane.OK_OPTION);
 			// == null can occur if an old configed runs somewhere
 		} else {
-			persist.getHost_displayFields().put(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, !visible);
+			persist.getHostDisplayFields().put(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL, !visible);
 
 			setRebuiltClientListTableModel(false);
 			selectionPanel.initSortKeys();
@@ -950,8 +935,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleColumnDepot() {
-		boolean visible = persist.getHost_displayFields().get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
-		persist.getHost_displayFields().put(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, !visible);
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL, !visible);
 
 		setRebuiltClientListTableModel(false);
 		selectionPanel.initSortKeys();
@@ -979,7 +964,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void startGroupActionFrame() {
-		logging.info(this, "startGroupActionFrame clientsFilteredByTree " + activatedGroupModel.getAssociatedClients()
+		Logging.info(this, "startGroupActionFrame clientsFilteredByTree " + activatedGroupModel.getAssociatedClients()
 				+ " active " + activatedGroupModel.isActive());
 
 		if (!activatedGroupModel.isActive()) {
@@ -1008,10 +993,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void startProductActionFrame() {
-		logging.info(this, "startProductActionFrame ");
+		Logging.info(this, "startProductActionFrame ");
 
 		if (productActionFrame == null) {
-			productActionFrame = new FProductActions(this, persist, mainFrame);
+			productActionFrame = new FProductActions(this, persist);
 			productActionFrame.setSize(licencesInitDimension);
 			productActionFrame.centerOnParent();
 			allFrames.add(productActionFrame);
@@ -1021,14 +1006,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void handleLicencesManagementRequest() {
-		logging.info(this, "handleLicencesManagementRequest called");
+		Logging.info(this, "handleLicencesManagementRequest called");
 		persist.retrieveOpsiModules();
 
 		if (persist.isWithLicenceManagement()) {
 			toggleLicencesFrame();
 		} else {
 			de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText
-					.callInstanceWith(configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
+					.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
 
 		}
 	}
@@ -1043,28 +1028,28 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 		}
 
-		logging.info(this, "toggleLicencesFrame is visible" + licencesFrame.isVisible());
+		Logging.info(this, "toggleLicencesFrame is visible" + licencesFrame.isVisible());
 		licencesFrame.setVisible(true);
 		mainFrame.visualizeLicencesFramesActive(licencesFrame.isVisible());
 	}
 
 	public void setEditingTarget(EditingTarget t) {
-		logging.info(this, "setEditingTarget " + t);
+		Logging.info(this, "setEditingTarget " + t);
 		editingTarget = t;
 		mainFrame.visualizeEditingTarget(t);
 		// what else to do:
 		switch (t) {
 		case CLIENTS:
-			logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+			Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
 			mainFrame.setConfigPanesEnabled(true);
 			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
+					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
 			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
+					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
 			mainFrame.setVisualViewIndex(saveClientsViewIndex);
 
-			logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+			Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
 			if (!reachableUpdater.isInterrupted())
 				reachableUpdater.interrupt();
@@ -1074,7 +1059,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			break;
 		case DEPOTS:
-			logging.info(this, "setEditingTarget  DEPOTS");
+			Logging.info(this, "setEditingTarget  DEPOTS");
 
 			if (!reachableUpdater.isInterrupted())
 				reachableUpdater.interrupt();
@@ -1083,12 +1068,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mainFrame.setConfigPanesEnabled(false);
 
 			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
+					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
 			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
+					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
 
-			logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
-					+ mainFrame.getTabIndex(configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+			Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
+					+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
 
 			mainFrame.setVisualViewIndex(saveDepotsViewIndex);
 
@@ -1101,7 +1086,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mainFrame.setConfigPanesEnabled(false);
 
 			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
 
 			mainFrame.setVisualViewIndex(saveServerViewIndex);
 			break;
@@ -1115,19 +1100,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	int shutdowncount = 0;
 
 	protected void actOnListSelection() {
-		logging.info(this, "actOnListSelection");
+		Logging.info(this, "actOnListSelection");
 
 		checkSaveAll(true);
 
 		checkErrorList();
 
-		logging.info(this, "selectionPanel.getSelectedValues().size(): " + selectionPanel.getSelectedValues().size());
+		Logging.info(this, "selectionPanel.getSelectedValues().size(): " + selectionPanel.getSelectedValues().size());
 
 		boolean groupingExists = selectionPanel.getSelectedValues().size() > 1;
 
 		if (mainFrame != null) // when initializing the program the frame may not exist
 		{
-			logging.info(this, "ListSelectionListener valueChanged selectionPanel.isSelectionEmpty() "
+			Logging.info(this, "ListSelectionListener valueChanged selectionPanel.isSelectionEmpty() "
 					+ selectionPanel.isSelectionEmpty());
 
 			mainFrame.saveGroupSetEnabled(groupingExists);
@@ -1147,15 +1132,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Map<String, HostInfo> pcinfos = persist.getHostInfoCollections().getMapOfPCInfoMaps();
 
-			logging.info(this,
+			Logging.info(this,
 					"actOnListSelection, produce hostInfo  getSelectedClients().length " + getSelectedClients().length);
 
 			if (getSelectedClients().length > 0) {
 				String selClient = getSelectedClients()[0];
 				hostInfo.setBy(pcinfos.get(selClient).getMap());
 
-				logging.debug(this, "actOnListSelection, produce hostInfo first selClient " + selClient);
-				logging.debug(this, "actOnListSelection, produce hostInfo  " + hostInfo);
+				Logging.debug(this, "actOnListSelection, produce hostInfo first selClient " + selClient);
+				Logging.debug(this, "actOnListSelection, produce hostInfo  " + hostInfo);
 
 				HostInfo secondInfo = new HostInfo();
 
@@ -1171,19 +1156,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mainFrame.setClientInfoediting(getSelectedClients().length == 1);
 
 			depotsOfSelectedClients = null; // initialize the following method
-			Set depots = getDepotsOfSelectedClients();
-			Iterator iter = depots.iterator();
+			Set<String> depots = getDepotsOfSelectedClients();
+			Iterator<String> iter = depots.iterator();
 			StringBuilder depotsAdded = new StringBuilder("");
 
 			String singleDepot = "";
 
 			if (iter.hasNext()) {
-				singleDepot = (String) iter.next();
+				singleDepot = iter.next();
 				depotsAdded.append(singleDepot);
 			}
 
 			while (iter.hasNext()) {
-				String appS = (String) iter.next();
+				String appS = iter.next();
 				depotsAdded.append(";\n");
 				depotsAdded.append(appS);
 			}
@@ -1200,11 +1185,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			mainFrame.enableMenuItemsForClients(getSelectedClients().length);
 
-			logging.info(this, "actOnListSelection update hosts status selectedClients " + getSelectedClients().length
+			Logging.info(this, "actOnListSelection update hosts status selectedClients " + getSelectedClients().length
 					+ " as well as " + selectionPanel.getSelectedValues().size());
 
 			mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
-					getSelectedClientsStringWithMaxLength(HostsStatusPanel.maxClientnamesInField), clientInDepot);
+					getSelectedClientsStringWithMaxLength(HostsStatusPanel.MAX_CLIENT_NAMES_IN_FIELD), clientInDepot);
 
 			activatedGroupModel.setActive(getSelectedClients().length <= 0);
 
@@ -1217,6 +1202,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// ListSelectionListener for client list
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
+
+		// Ignore extra messages.
 		if (e.getValueIsAdjusting()) {
 			return;
 		}
@@ -1233,14 +1220,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		depotsList = new DepotsList(persist);
 
 		if (depotsListSelectionListener == null) {
-			logging.info(this, "create depotsListSelectionListener");
+			Logging.info(this, "create depotsListSelectionListener");
 			depotsListSelectionListener = new ListSelectionListener() {
 				private int counter = 0;
 
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					counter++;
-					logging.info(this, "============ depotSelection event count  " + counter);
+					Logging.info(this, "============ depotSelection event count  " + counter);
 
 					if (!e.getValueIsAdjusting()) {
 						depotsListValueChanged();
@@ -1300,7 +1287,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					startRemoteControlForSelectedClients();
 
 				} else if (e.getKeyCode() == KeyEvent.VK_F10) {
-					logging.debug(this, "keypressed: f10");
+					Logging.debug(this, "keypressed: f10");
 					mainFrame.showPopupClients();
 				}
 
@@ -1334,16 +1321,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		locateAndDisplay();
 
 		// init visual states
-		logging.debug(this, "mainframe nearly initialized");
+		Logging.debug(this, "mainframe nearly initialized");
 
 		mainFrame.saveGroupSetEnabled(false);
 
 	}
 
 	private void locateAndDisplay() {
-		Rectangle screenRectangle = configed.fProgress.getGraphicsConfiguration().getBounds();
+		Rectangle screenRectangle = Configed.fProgress.getGraphicsConfiguration().getBounds();
 
-		logging.info(this, "set size and location of mainFrame");
+		Logging.info(this, "set size and location of mainFrame");
 
 		// weird formula for size
 		mainFrame.setSize(screenRectangle.width * 19 / 20 - 100, screenRectangle.height * 19 / 20 - 100);
@@ -1352,7 +1339,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.setLocation((int) (screenRectangle.getCenterX() - mainFrame.getSize().getWidth() / 2),
 				(int) (screenRectangle.getCenterY() - mainFrame.getSize().getHeight() / 2));
 
-		logging.info(this, "setting mainframe visible");
+		Logging.info(this, "setting mainframe visible");
 		mainFrame.setVisible(true);
 
 		mainFrame.panelLocalbootProductSettings.setDividerLocation(mainFrame.getSize().width - 600);
@@ -1361,7 +1348,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected void initLicencesFrame() {
 		long startmillis = System.currentTimeMillis();
-		logging.info(this, "initLicencesFrame start " + new Date(startmillis));
+		Logging.info(this, "initLicencesFrame start " + new Date(startmillis));
 		WaitCursor waitCursor = new WaitCursor(mainFrame.retrieveBasePane(), mainFrame.getCursor(),
 				"initLicencesFrame");
 		// general
@@ -1373,9 +1360,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		licencesFrame.setGlobals(Globals.getMap());
 		licencesFrame.setTitle(
-				Globals.APPNAME + "  " + myServer + ":  " + configed.getResourceValue("ConfigedMain.Licences"));
+				Globals.APPNAME + "  " + myServer + ":  " + Configed.getResourceValue("ConfigedMain.Licences"));
 
-		licencesStatus = (LicencesTabStatus) getStartTabState();
+		licencesStatus = getStartTabState();
 
 		// global table providers
 		List<String> columnNames = new ArrayList<>();
@@ -1421,12 +1408,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				new RetrieverMapSource(columnNames, classNames, () -> (Map) persist.getLicenceContracts()));
 
 		columnNames = new ArrayList<>();
-		columnNames.add(LicenceEntry.idKEY);
-		columnNames.add(LicenceEntry.licenceContractIdKEY);
-		columnNames.add(LicenceEntry.typeKEY);
-		columnNames.add(LicenceEntry.maxInstallationsKEY);
-		columnNames.add(LicenceEntry.boundToHostKEY);
-		columnNames.add(LicenceEntry.expirationDateKEY);
+		columnNames.add(LicenceEntry.ID_KEY);
+		columnNames.add(LicenceEntry.LICENCE_CONTRACT_ID_KEY);
+		columnNames.add(LicenceEntry.TYPE_KEY);
+		columnNames.add(LicenceEntry.MAX_INSTALLATIONS_KEY);
+		columnNames.add(LicenceEntry.BOUND_TO_HOST_KEY);
+		columnNames.add(LicenceEntry.EXPIRATION_DATE_KEY);
 
 		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
@@ -1441,49 +1428,49 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// panelAssignToLPools
 		licencesPanelsTabNames.put(LicencesTabStatus.LICENCEPOOL,
-				configed.getResourceValue("ConfigedMain.Licences.TabLicencepools"));
+				Configed.getResourceValue("ConfigedMain.Licences.TabLicencepools"));
 		controlPanelAssignToLPools = new ControlPanelAssignToLPools(persist, this);
 		addClient(LicencesTabStatus.LICENCEPOOL, controlPanelAssignToLPools.getTabClient());
 		allControlMultiTablePanels.add(controlPanelAssignToLPools);
 
 		// panelEnterLicence
 		licencesPanelsTabNames.put(LicencesTabStatus.ENTER_LICENCE,
-				configed.getResourceValue("ConfigedMain.Licences.TabNewLicence"));
+				Configed.getResourceValue("ConfigedMain.Licences.TabNewLicence"));
 		controlPanelEnterLicence = new ControlPanelEnterLicence(persist, this);
 		addClient(LicencesTabStatus.ENTER_LICENCE, controlPanelEnterLicence.getTabClient());
 		allControlMultiTablePanels.add(controlPanelEnterLicence);
 
 		// panelEditLicence
 		licencesPanelsTabNames.put(LicencesTabStatus.EDIT_LICENCE,
-				configed.getResourceValue("ConfigedMain.Licences.TabEditLicence"));
+				Configed.getResourceValue("ConfigedMain.Licences.TabEditLicence"));
 		controlPanelEditLicences = new ControlPanelEditLicences(persist, this);
 		addClient(LicencesTabStatus.EDIT_LICENCE, controlPanelEditLicences.getTabClient());
 		allControlMultiTablePanels.add(controlPanelEditLicences);
 
 		// panelUsage
 		licencesPanelsTabNames.put(LicencesTabStatus.USAGE,
-				configed.getResourceValue("ConfigedMain.Licences.TabLicenceUsage"));
+				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceUsage"));
 		controlPanelLicencesUsage = new ControlPanelLicencesUsage(persist, this);
 		addClient(LicencesTabStatus.USAGE, controlPanelLicencesUsage.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesUsage);
 
 		// panelReconciliation
 		licencesPanelsTabNames.put(LicencesTabStatus.RECONCILIATION,
-				configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation"));
+				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation"));
 		controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation(persist, this);
 		addClient(LicencesTabStatus.RECONCILIATION, controlPanelLicencesReconciliation.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesReconciliation);
 
 		// panelStatistics
 		licencesPanelsTabNames.put(LicencesTabStatus.STATISTICS,
-				configed.getResourceValue("ConfigedMain.Licences.TabStatistics"));
+				Configed.getResourceValue("ConfigedMain.Licences.TabStatistics"));
 		controlPanelLicencesStatistics = new ControlPanelLicencesStatistics(persist);
 		addClient(LicencesTabStatus.STATISTICS, controlPanelLicencesStatistics.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesStatistics);
 
 		licencesFrame.start();
 
-		logging.info(this, "set size and location of licencesFrame");
+		Logging.info(this, "set size and location of licencesFrame");
 
 		licencesFrame.setSize(licencesInitDimension);
 
@@ -1493,14 +1480,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		waitCursor.stop();
 
 		long endmillis = System.currentTimeMillis();
-		logging.info(this, "initLicencesFrame " + new Date(endmillis) + " diff " + (endmillis - startmillis));
+		Logging.info(this, "initLicencesFrame " + new Date(endmillis) + " diff " + (endmillis - startmillis));
 	}
 
 	protected void login(List<String> savedServers)
 	// returns true if we have a PersistenceController and are connected
 	{
 
-		logging.debug(this, " create password dialog ");
+		Logging.debug(this, " create password dialog ");
 		dpass = new DPassword(this);
 
 		// set list of saved servers
@@ -1509,18 +1496,18 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		// check if we started with preferred values
-		if (HOST != null && !HOST.equals("")) {
-			dpass.setHost(HOST);
+		if (host != null && !host.equals("")) {
+			dpass.setHost(host);
 		}
-		if (USER != null) {
-			dpass.setUser(USER);
+		if (user != null) {
+			dpass.setUser(user);
 		}
-		if (PASSWORD != null) {
-			dpass.setPassword(PASSWORD);
+		if (password != null) {
+			dpass.setPassword(password);
 		}
 
 		if (persist == null || persist.getConnectionState().getState() != ConnectionState.CONNECTED) {
-			logging.info(this, "become interactive");
+			Logging.info(this, "become interactive");
 
 			dpass.setAlwaysOnTop(true);
 			dpass.setVisible(true);
@@ -1529,9 +1516,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// This must be called last, so that  loading frame for connection is called last
 		// and on top of the login-frame
-		if ((HOST != null && USER != null && PASSWORD != null)) {
+		if ((host != null && user != null && password != null)) {
 			// Auto login
-			logging.info(this, "start with given credentials");
+			Logging.info(this, "start with given credentials");
 
 			dpass.tryConnecting();
 		}
@@ -1559,7 +1546,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected Map<String, Boolean> produceClientListForDepots(String[] depots, Set<String> allowedClients) {
-		logging.info(this, " producePcListForDepots " + logging.getStrings(depots) + " running with allowedClients "
+		Logging.info(this, " producePcListForDepots " + Logging.getStrings(depots) + " running with allowedClients "
 				+ allowedClients);
 		Map<String, Boolean> m = persist.getHostInfoCollections().getClientListForDepots(depots, allowedClients);
 
@@ -1600,7 +1587,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private int buildPclistTableModelCounter = 0;
 
 	protected TableModel buildClientListTableModel(boolean rebuildTree) {
-		logging.debug(this, " --------- buildPclistTableModel rebuildTree " + rebuildTree);
+		Logging.debug(this, " --------- buildPclistTableModel rebuildTree " + rebuildTree);
 		DefaultTableModel model = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1616,26 +1603,26 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Set<String> permittedHostGroups = null;
 
 		if (!persist.accessToHostgroupsOnlyIfExplicitlyStated()) {
-			logging.info(this, " --------- buildPclistTableModel not full hostgroups permission");
+			Logging.info(this, " --------- buildPclistTableModel not full hostgroups permission");
 
 			permittedHostGroups = persist.getHostgroupsPermitted();
 		}
 
 		Map<String, Boolean> unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
 
-		logging.debug(this, " unfilteredList ");
+		Logging.debug(this, " unfilteredList ");
 
 		buildPclistTableModelCounter++;
-		logging.info(this,
+		Logging.info(this,
 				"buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  " + rebuildTree);
 
 		if (rebuildTree) {
-			logging.info(this, "------------ buildPclistTableModel, rebuildTree " + rebuildTree);
+			Logging.info(this, "------------ buildPclistTableModel, rebuildTree " + rebuildTree);
 
 			unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
 			String[] allPCs = new TreeMap<>(unfilteredList).keySet().toArray(new String[] {});
 
-			logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + logging.getStrings(allPCs));
+			Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Logging.getStrings(allPCs));
 
 			treeClients.clear();
 			treeClients.setClientInfo(persist.getHostInfoCollections().getMapOfAllPCInfoMaps());
@@ -1644,13 +1631,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			treeClients.produceAndLinkGroups(persist.getHostGroups());
 
-			logging.info(this, "------------ buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
-			logging.info(this, "------------ buildPclistTableModel, allPCs " + allPCs.length);
+			Logging.info(this, "------------ buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
+			Logging.info(this, "------------ buildPclistTableModel, allPCs " + allPCs.length);
 			allowedClients = treeClients.associateClientsToGroups(allPCs, persist.getFObject2Groups(),
 					permittedHostGroups);
 
 			if (allowedClients != null)
-				logging.info(this, "------------ buildPclistTableModel, allowedClients " + allowedClients.size());
+				Logging.info(this, "------------ buildPclistTableModel, allowedClients " + allowedClients.size());
 
 		}
 
@@ -1659,28 +1646,28 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		{
 			unfilteredList = produceClientListForDepots(getSelectedDepots(), allowedClients);
 
-			logging.info(this, " unfilteredList " + unfilteredList.size());
+			Logging.info(this, " unfilteredList " + unfilteredList.size());
 
 			buildPclistTableModelCounter++;
-			logging.info(this, "buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  "
+			Logging.info(this, "buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  "
 					+ rebuildTree);
 
 			if (rebuildTree) {
-				logging.info(this, "------------ buildPclistTableModel, rebuildTree " + rebuildTree);
+				Logging.info(this, "------------ buildPclistTableModel, rebuildTree " + rebuildTree);
 				String[] allPCs = new TreeMap<>(unfilteredList).keySet().toArray(new String[] {});
 
-				logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + logging.getStrings(allPCs));
+				Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Logging.getStrings(allPCs));
 
 				treeClients.clear();
 				treeClients.setClientInfo(persist.getHostInfoCollections().getMapOfAllPCInfoMaps());
 
 				treeClients.produceTreeForALL(allPCs);
 
-				logging.info(this, "----------- buildPclistTableModel, directly allowed groups "
+				Logging.info(this, "----------- buildPclistTableModel, directly allowed groups "
 						+ treeClients.getDirectlyAllowedGroups());
 				treeClients.produceAndLinkGroups(persist.getHostGroups());
 
-				logging.info(this, "------------ buildPclistTableModel, allPCs (2) " + allPCs.length);
+				Logging.info(this, "------------ buildPclistTableModel, allPCs (2) " + allPCs.length);
 
 				treeClients.associateClientsToGroups(allPCs, persist.getFObject2Groups(), null // we got already
 																								// allowedClients,
@@ -1689,21 +1676,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 																								// hostgroupsPermitted
 				);
 
-				logging.info(this, "tree produced");
+				Logging.info(this, "tree produced");
 
 			}
 		}
 
 		Map<String, Boolean> pclist0 = filterMap(unfilteredList, clientsFilteredByTree);
 
-		logging.info(this, " filterClientList " + filterClientList);
+		Logging.info(this, " filterClientList " + filterClientList);
 
 		if (filterClientList) {
 
 			if (pclist0 != null) {
 				Object[] pcEntries = pclist0.entrySet().toArray();
 
-				logging.info(this,
+				Logging.info(this,
 						"buildPclistTableModel with filterCLientList " + "selected pcs " + getSelectedClients().length);
 
 				for (int i = 0; i < pcEntries.length; i++) {
@@ -1729,17 +1716,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Map<String, HostInfo> pcinfos = persist.getHostInfoCollections().getMapOfPCInfoMaps();
 
 		if (pclist != null) {
-			hostDisplayFields = persist.getHost_displayFields();
+			hostDisplayFields = persist.getHostDisplayFields();
 
 			// test
 
 			for (Map.Entry<String, Boolean> entry : hostDisplayFields.entrySet()) {
 				if (Boolean.TRUE.equals(entry.getValue())) {
-					model.addColumn(configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey()));
+					model.addColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel." + entry.getKey()));
 				}
 			}
 
-			logging.info(this, "buildPclistTableModel host_displayFields " + hostDisplayFields);
+			Logging.info(this, "buildPclistTableModel host_displayFields " + hostDisplayFields);
 
 			for (String key : pclist.keySet()) {
 
@@ -1765,17 +1752,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 
 				if (key.equals("fscnoteb1.uib.local")) {
-					logging.info(this, "*** host_displayFields size, content " + hostDisplayFields.size() + ": "
+					Logging.info(this, "*** host_displayFields size, content " + hostDisplayFields.size() + ": "
 							+ hostDisplayFields);
-					logging.info(this, "*** rowmap size, content " + rowmap.size() + ": " + rowmap);
-					logging.info(this, "*** rowItems size, content " + rowItems.size() + ": " + rowItems);
+					Logging.info(this, "*** rowmap size, content " + rowmap.size() + ": " + rowmap);
+					Logging.info(this, "*** rowItems size, content " + rowItems.size() + ": " + rowItems);
 				}
 
 				model.addRow(rowItems.toArray());
 			}
 		}
 
-		logging.info(this, "buildPclistTableModel, model column count " + model.getColumnCount());
+		Logging.info(this, "buildPclistTableModel, model column count " + model.getColumnCount());
 
 		return model;
 	}
@@ -1786,7 +1773,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * @param clientName
 	 */
 	public void setClient(String clientName) {
-		logging.info(this, "setClient " + clientName);
+		Logging.info(this, "setClient " + clientName);
 
 		if (clientName == null)
 			setSelectedClientsOnPanel(new String[] {});
@@ -1799,7 +1786,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void setClients(String[] clientNames) {
-		logging.info(this, "setClients " + clientNames);
+		Logging.info(this, "setClients " + clientNames);
 
 		if (clientNames == null)
 			setSelectedClientsOnPanel(new String[] {});
@@ -1817,13 +1804,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * @param groupname
 	 */
 	public boolean activateGroup(String groupname) {
-		logging.info(this, "activateGroup  " + groupname);
+		Logging.info(this, "activateGroup  " + groupname);
 		if (groupname == null) {
 			return false;
 		}
 
 		if (!treeClients.groupNodesExists() || treeClients.getGroupNode(groupname) == null) {
-			logging.warning("no group " + groupname);
+			Logging.warning("no group " + groupname);
 			return false;
 		}
 
@@ -1832,7 +1819,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		activateGroupByTree(false, node, path);
 
-		logging.info(this, "expand activated  path " + path);
+		Logging.info(this, "expand activated  path " + path);
 		treeClients.expandPath(path);
 
 		return true;
@@ -1844,7 +1831,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * @param groupname
 	 */
 	public void setGroup(String groupname) {
-		logging.info(this, "setGroup " + groupname);
+		Logging.info(this, "setGroup " + groupname);
 		if (!activateGroup(groupname)) {
 			return;
 		}
@@ -1853,7 +1840,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void requestRefreshDataForClientSelection() {
-		logging.info(this, "requestRefreshDataForClientSelection");
+		Logging.info(this, "requestRefreshDataForClientSelection");
 		requestReloadStatesAndActions();
 		hostConfigs = null;
 		persist.getEmptyLogfiles();
@@ -1868,7 +1855,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void requestReloadStatesAndActions(boolean onlyUpdate) {
-		logging.info(this, "requestReloadStatesAndActions , only updating " + onlyUpdate);
+		Logging.info(this, "requestReloadStatesAndActions , only updating " + onlyUpdate);
 
 		persist.productpropertiesRequestRefresh();
 
@@ -1890,8 +1877,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (a == null)
 			return;
 
-		logging.info(this, "setSelectedClientsArray " + a.length);
-		logging.info(this, "selectedClients up to now size " + logging.getSize(selectedClients));
+		Logging.info(this, "setSelectedClientsArray " + a.length);
+		Logging.info(this, "selectedClients up to now size " + Logging.getSize(selectedClients));
 
 		selectedClients = a;
 		if (selectedClients.length == 0)
@@ -1899,7 +1886,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		else
 			firstSelectedClient = selectedClients[0];
 
-		logging.info(this, "setSelectedClientsArray produced firstSelectedClient " + firstSelectedClient);
+		Logging.info(this, "setSelectedClientsArray produced firstSelectedClient " + firstSelectedClient);
 
 		mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
 				getSelectedClientsString(), clientInDepot);
@@ -1918,9 +1905,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void setSelectedClients(List<String> clientNames) {
 		if (clientNames == null) {
-			logging.info(this, "setSelectedClients clientNames null");
+			Logging.info(this, "setSelectedClients clientNames null");
 		} else {
-			logging.info(this, "setSelectedClients clientNames size " + clientNames.size());
+			Logging.info(this, "setSelectedClients clientNames size " + clientNames.size());
 		}
 
 		if (clientNames == null) {
@@ -1928,7 +1915,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		if (clientNames.equals(saveSelectedClients)) {
-			logging.info(this, "setSelectedClients clientNames.equals(saveSelectedClients)");
+			Logging.info(this, "setSelectedClients clientNames.equals(saveSelectedClients)");
 
 		}
 
@@ -1950,7 +1937,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (getViewIndex() != VIEW_CLIENTS) // change in selection not via clientpage (i.e. via tree)
 		{
-			logging.debug(this, "getSelectedClients  " + logging.getStrings(getSelectedClients())
+			Logging.debug(this, "getSelectedClients  " + Logging.getStrings(getSelectedClients())
 					+ " ,  getViewIndex, viewClients: " + getViewIndex() + ", " + VIEW_CLIENTS);
 			int newViewIndex = getViewIndex();
 			resetView(newViewIndex);
@@ -1971,7 +1958,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public void toggleFilterClientList() {
 		changeListByToggleShowSelection = true;
-		logging.info(this, "toggleFilterClientList   " + filterClientList);
+		Logging.info(this, "toggleFilterClientList   " + filterClientList);
 		setFilterClientList(!filterClientList);
 		changeListByToggleShowSelection = false;
 	}
@@ -1982,12 +1969,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (filterClientList)
 			toggleFilterClientList();
 
-		logging.info(this, "invertClientselection selected " + selectionPanel.getSelectedValues());
+		Logging.info(this, "invertClientselection selected " + selectionPanel.getSelectedValues());
 		List<String> selectedValues = new ArrayList<>(selectionPanel.getInvertedSet());
 
 		String[] selected = selectedValues.toArray(new String[selectedValues.size()]);
 
-		logging.info(this, "new selection " + Arrays.toString(selected));
+		Logging.info(this, "new selection " + Arrays.toString(selected));
 
 		selectionPanel.setSelectedValues(selected);
 		setSelectedClientsArray(selected);
@@ -1999,49 +1986,45 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void setSelectionPanelCols() {
-		logging.info(this, "setSelectionPanelCols ");
+		Logging.info(this, "setSelectionPanelCols ");
 
 		final int iconColumnMaxWidth = 100;
-		final int iconColumnPrefWidth = 70;
 
-		if (persist.getHost_displayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL)) {
-			int col = selectionPanel.getTableModel().findColumn(configed.getResourceValue(
+		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL)) {
+			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
 
 			javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 
 			column.setMaxWidth(iconColumnMaxWidth);
-			column.setPreferredWidth(iconColumnPrefWidth);
 
 			column.setCellRenderer(new BooleanIconTableCellRenderer(
 
 					Globals.createImageIcon("images/new_network-connect2.png", ""),
-					Globals.createImageIcon("images/new_network-disconnect.png", ""),
-					Globals.createImageIcon("images/new_network-empty22.png", ""), false));
+					Globals.createImageIcon("images/new_network-disconnect.png", ""), false));
 
 		}
 
-		if (persist.getHost_displayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL)) {
+		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL)) {
 
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
 			}
-			logging.info(this, "showAndSave columns are " + columns + ", search for "
+			Logging.info(this, "showAndSave columns are " + columns + ", search for "
 					+ HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);
 
-			int col = selectionPanel.getTableModel().findColumn(configed.getResourceValue(
+			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL));
 
-			logging.info(this, "setSelectionPanelCols ,  found col " + col);
+			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
-			logging.info(this, "showAndSave found col " + col);
+			Logging.info(this, "showAndSave found col " + col);
 
 			if (col > -1) {
 				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
-				logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
+				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
-				column.setPreferredWidth(iconColumnPrefWidth);
 
 				// column.setCellRenderer(new
 
@@ -2053,25 +2036,24 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-		if (persist.getHost_displayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL)) {
+		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL)) {
 
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
 			}
-			logging.info(this, "showAndSave columns are " + columns + ", search for "
+			Logging.info(this, "showAndSave columns are " + columns + ", search for "
 					+ HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
 
-			int col = selectionPanel.getTableModel().findColumn(configed.getResourceValue(
+			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL));
 
-			logging.info(this, "setSelectionPanelCols ,  found col " + col);
+			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
 			if (col > -1) {
 				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
-				logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
+				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
-				column.setPreferredWidth(iconColumnPrefWidth);
 
 				// column.setCellRenderer(new
 
@@ -2083,26 +2065,25 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		}
 
-		if (persist.getHost_displayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL)) {
+		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL)) {
 
 			List<String> columns = new ArrayList<>();
 
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
 				columns.add(selectionPanel.getTableModel().getColumnName(i));
 			}
-			logging.info(this, "showAndSave columns are " + columns + ", search for "
+			Logging.info(this, "showAndSave columns are " + columns + ", search for "
 					+ HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL);
 
-			int col = selectionPanel.getTableModel().findColumn(configed.getResourceValue(
+			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL));
 
-			logging.info(this, "setSelectionPanelCols ,  found col " + col);
+			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
 			if (col > -1) {
 				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
-				logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
+				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
-				column.setPreferredWidth(iconColumnPrefWidth);
 
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
 						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
@@ -2117,7 +2098,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void setRebuiltClientListTableModel(boolean restoreSortKeys) {
-		logging.info(this, "setRebuiltClientListTableModel, we have selected Set : " + selectionPanel.getSelectedSet());
+		Logging.info(this, "setRebuiltClientListTableModel, we have selected Set : " + selectionPanel.getSelectedSet());
 
 		setRebuiltClientListTableModel(restoreSortKeys, true, selectionPanel.getSelectedSet());
 	}
@@ -2126,10 +2107,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
 			Set<String> selectValues) {
-		logging.info(this,
+		Logging.info(this,
 				"setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree, Set selectValues)  : "
 						+ restoreSortKeys + ", " + rebuildTree + ",  selectValues.size() "
-						+ logging.getSize(selectValues));
+						+ Logging.getSize(selectValues));
 
 		List<String> valuesToSelect = null;
 		if (selectValues != null)
@@ -2137,39 +2118,42 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		List<? extends RowSorter.SortKey> saveSortKeys = selectionPanel.getSortKeys();
 
-		logging.info(this, " setRebuiltClientListTableModel--- set model new, selected "
+		Logging.info(this, " setRebuiltClientListTableModel--- set model new, selected "
 				+ selectionPanel.getSelectedValues().size());
 
 		TableModel tm = buildClientListTableModel(rebuildTree);
-		logging.info(this,
+		Logging.info(this,
 				"setRebuiltClientListTableModel --- got model selected " + selectionPanel.getSelectedValues().size());
-		// selectionPanel.removeListSelectionListener(this);
+
+		selectionPanel.removeListSelectionListener(this);
+		int[] columnWidths = getTableColumnWidths(selectionPanel.getTable());
 
 		selectionPanel.setModel(tm);
 
-		// selectionPanel.addListSelectionListener(this);
+		setTableColumnWidths(selectionPanel.getTable(), columnWidths);
+		selectionPanel.addListSelectionListener(this);
 
 		selectionPanel.initColumnNames();
-		logging.debug(this, " --- model set  ");
+		Logging.debug(this, " --- model set  ");
 		setSelectionPanelCols();
 
 		if (restoreSortKeys)
 			selectionPanel.setSortKeys(saveSortKeys);
 
-		logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() "
-				+ logging.getSize(valuesToSelect));
-		logging.info(this, "setRebuiltClientListTableModel selected in selection panel"
-				+ logging.getSize(selectionPanel.getSelectedValues()));
+		Logging.info(this, "setRebuiltClientListTableModel set selected values in setRebuiltClientListTableModel() "
+				+ Logging.getSize(valuesToSelect));
+		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel"
+				+ Logging.getSize(selectionPanel.getSelectedValues()));
 
 		setSelectionPanelCols();
 
 		setSelectedClientsCollectionOnPanel(valuesToSelect); // did lose the selection since last setting
 
-		logging.info(this, "setRebuiltClientListTableModel selected in selection panel "
-				+ logging.getSize(selectionPanel.getSelectedValues()));
+		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel "
+				+ Logging.getSize(selectionPanel.getSelectedValues()));
 
 		reloadCounter++;
-		logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
+		Logging.info(this, "setRebuiltClientListTableModel  reloadCounter " + reloadCounter);
 	}
 
 	public void setFilterClientList(boolean b) {
@@ -2209,13 +2193,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected Set<String> getDepotsOfSelectedClients() {
 		if (depotsOfSelectedClients == null) {
 			depotsOfSelectedClients = new TreeSet<>();
+		}
 
-			for (int i = 0; i < getSelectedClients().length; i++) {
+		for (int i = 0; i < getSelectedClients().length; i++) {
 
-				if (persist.getHostInfoCollections().getMapPcBelongsToDepot().get(getSelectedClients()[i]) != null)
-					depotsOfSelectedClients.add(
-							persist.getHostInfoCollections().getMapPcBelongsToDepot().get(getSelectedClients()[i]));
-			}
+			if (persist.getHostInfoCollections().getMapPcBelongsToDepot().get(getSelectedClients()[i]) != null)
+				depotsOfSelectedClients
+						.add(persist.getHostInfoCollections().getMapPcBelongsToDepot().get(getSelectedClients()[i]));
 		}
 
 		return depotsOfSelectedClients;
@@ -2228,7 +2212,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// all selected clients
 
 	{
-		logging.info(this, "collectTheProductProperties for " + productEdited);
+		Logging.info(this, "collectTheProductProperties for " + productEdited);
 		mergedProductProperties = new HashMap<>();
 		productProperties = new ArrayList<>(getSelectedClients().length);
 
@@ -2299,7 +2283,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void setProductEdited(String productname)
 	// called from ProductSettings
 	{
-		logging.debug(this, "setProductEdited " + productname);
+		Logging.debug(this, "setProductEdited " + productname);
 
 		productEdited = productname;
 
@@ -2330,9 +2314,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		dependenciesModel.setActualProduct(productEdited);
 
-		logging.debug(this, " --- mergedProductProperties " + mergedProductProperties);
+		Logging.debug(this, " --- mergedProductProperties " + mergedProductProperties);
 
-		logging.debug(this, "setProductEdited " + productname + " client specific properties "
+		Logging.debug(this, "setProductEdited " + productname + " client specific properties "
 				+ persist.hasClientSpecificProperties(productname));
 
 		mainFrame.panelLocalbootProductSettings.initEditing(productEdited, persist.getProductTitle(productEdited),
@@ -2368,7 +2352,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void treeClientsMouseAction(boolean clicked, MouseEvent mouseEvent) {
-		logging.debug(this, "treeClients_mouseAction");
+		Logging.debug(this, "treeClients_mouseAction");
 
 		if (!treeClients.isEnabled())
 			return;
@@ -2417,7 +2401,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 					setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
 
-					logging.info(this,
+					Logging.info(this,
 							" treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
 
 					if (getSelectedClients().length == 1) {
@@ -2443,8 +2427,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		if (mouseEvent.getClickCount() == 2) {
-			logging.debug(this, "treeClients: double click on tree row " + mouseRow + " getting path " + mousePath);
-			logging.debug(this, "treeClients: mouseNode instanceof GroupNode " + mouseNode + " "
+			Logging.debug(this, "treeClients: double click on tree row " + mouseRow + " getting path " + mousePath);
+			Logging.debug(this, "treeClients: mouseNode instanceof GroupNode " + mouseNode + " "
 					+ (mouseNode instanceof GroupNode));
 
 			if (mouseNode instanceof GroupNode) {
@@ -2457,10 +2441,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public boolean treeClientsSelectAction(TreePath newSelectedPath) {
-		logging.info(this, "treeClients_selectAction");
+		Logging.info(this, "treeClientsSelectAction");
 
 		DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) newSelectedPath.getLastPathComponent());
-		logging.info(this, "treeClients_selectAction selected node " + selectedNode);
+		Logging.info(this, "treeClientsSelectAction selected node " + selectedNode);
 
 		if (!selectedNode.getAllowsChildren()) {
 			setClientByTree(selectedNode.toString(), newSelectedPath);
@@ -2470,7 +2454,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void initTree() {
-		logging.debug(this, "initTree");
+		Logging.debug(this, "initTree");
 		activeTreeNodes = new HashMap<>();
 		activePaths = new ArrayList<>();
 
@@ -2501,7 +2485,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void activateClientByTree(String nodeObject, TreePath pathToNode) {
-		logging.info(this, "activateClientByTree, nodeObject: " + nodeObject + ", pathToNode: " + pathToNode);
+		Logging.info(this, "activateClientByTree, nodeObject: " + nodeObject + ", pathToNode: " + pathToNode);
 		activeTreeNodes.put(nodeObject, pathToNode);
 		activePaths.add(pathToNode);
 
@@ -2509,9 +2493,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		treeClients.repaint();
 
-		logging.debug(this, "activateClientByTree, activeTreeNodes " + activeTreeNodes);
+		Logging.debug(this, "activateClientByTree, activeTreeNodes " + activeTreeNodes);
 		clientsFilteredByTree = activeTreeNodes.keySet();
-		logging.debug(this, "activateClientByTree, clientsFilteredByTree " + clientsFilteredByTree);
+		Logging.debug(this, "activateClientByTree, clientsFilteredByTree " + clientsFilteredByTree);
 
 		// since we select based on the tree view we disable the filter
 		if (filterClientList)
@@ -2527,7 +2511,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void setGroupByTree(DefaultMutableTreeNode node, TreePath pathToNode) {
-		logging.info(this, "setGroupByTree node, pathToNode " + node + ", " + pathToNode);
+		Logging.info(this, "setGroupByTree node, pathToNode " + node + ", " + pathToNode);
 		clearTree();
 		activeTreeNodes.put((String) node.getUserObject(), pathToNode);
 		activePaths.add(pathToNode);
@@ -2538,7 +2522,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void activateGroupByTree(boolean preferringOldSelection, DefaultMutableTreeNode node, TreePath pathToNode) {
-		logging.info(this, "activateGroupByTree, node: " + node + ", pathToNode : " + pathToNode);
+		Logging.info(this, "activateGroupByTree, node: " + node + ", pathToNode : " + pathToNode);
 
 		setGroupByTree(node, pathToNode);
 
@@ -2559,7 +2543,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
 			activatedGroupModel.setActive(true);
 		} catch (Exception ex) {
-			logging.info(this, "activateGroupByTree, node: " + node + " exception : " + ex);
+			Logging.info(this, "activateGroupByTree, node: " + node + " exception : " + ex);
 		}
 
 	}
@@ -2613,7 +2597,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 		}
 
-		logging.info(this, "----    depotsList selection changed");
+		Logging.info(this, "----    depotsList selection changed");
 
 		changeDepotSelection();
 
@@ -2628,18 +2612,18 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		selectedDepots = depotsList.getSelectedValuesList().toArray(new String[0]);
 		selectedDepotsV = new ArrayList<>(depotsList.getSelectedValuesList());
 
-		logging.debug(this, "--------------------  selectedDepotsV         " + selectedDepotsV);
+		Logging.debug(this, "--------------------  selectedDepotsV         " + selectedDepotsV);
 
-		configed.savedStates.saveDepotSelection.serialize(selectedDepots);
+		Configed.savedStates.saveDepotSelection.serialize(selectedDepots);
 
 		try {
-			logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
+			Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
 
 			if (selectionPanel != null)
 				initialTreeActivation();
 
 		} catch (Exception ex) {
-			logging.error(this, "Tree cannot be activated", ex);
+			Logging.error(this, "Tree cannot be activated", ex);
 		}
 
 	}
@@ -2647,9 +2631,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private boolean checkSynchronous(Set depots) {
 
 		if (depots.size() > 1 && !persist.areDepotsSynchronous(depots)) {
-			JOptionPane.showMessageDialog(mainFrame, configed.getResourceValue("ConfigedMain.notSynchronous.text"), // "not
+			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"), // "not
 					// synchronous",
-					configed.getResourceValue("ConfigedMain.notSynchronous.title"), JOptionPane.OK_OPTION);
+					Configed.getResourceValue("ConfigedMain.notSynchronous.title"), JOptionPane.OK_OPTION);
 
 			return false;
 		}
@@ -2658,7 +2642,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected boolean setDepotRepresentative() {
-		logging.debug(this, "setDepotRepresentative");
+		Logging.debug(this, "setDepotRepresentative");
 
 		boolean result = true;
 
@@ -2667,29 +2651,29 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				depotRepresentative = myServer;
 		} else {
 			Set<String> depots = getDepotsOfSelectedClients();
-			logging.info(this, "depots of selected clients:" + depots);
+			Logging.info(this, "depots of selected clients:" + depots);
 
 			String oldRepresentative = depotRepresentative;
 
-			logging.debug(this, "setDepotRepresentative(), old representative: " + depotRepresentative + " should be ");
+			Logging.debug(this, "setDepotRepresentative(), old representative: " + depotRepresentative + " should be ");
 
 			if (!checkSynchronous(depots))
 				result = false;
 
 			else {
-				logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
+				Logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
 						+ depotRepresentative + " equal " + oldRepresentative.equals(depotRepresentative));
 
 				depotRepresentative = null;
 
-				logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + getDepotsOfSelectedClients());
+				Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + getDepotsOfSelectedClients());
 
 				Iterator<String> depotsIterator = getDepotsOfSelectedClients().iterator();
 
 				if (!depotsIterator.hasNext()) {
 					depotRepresentative = myServer;
 
-					logging.debug(this,
+					Logging.debug(this,
 							"setDepotRepresentative  without next change depotRepresentative " + " up to now "
 									+ oldRepresentative + " new " + depotRepresentative + " equal "
 									+ oldRepresentative.equals(depotRepresentative));
@@ -2706,15 +2690,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					}
 				}
 
-				logging.debug(this, " --------------- depotRepresentative " + depotRepresentative);
+				Logging.debug(this, " --------------- depotRepresentative " + depotRepresentative);
 
-				logging.info(this,
+				Logging.info(this,
 						"setDepotRepresentative  change depotRepresentative " + " up to now " + oldRepresentative
 								+ " new " + depotRepresentative + " equal "
 								+ oldRepresentative.equals(depotRepresentative));
 
 				if (!oldRepresentative.equals(depotRepresentative)) {
-					logging.info(this, " new depotRepresentative " + depotRepresentative);
+					Logging.info(this, " new depotRepresentative " + depotRepresentative);
 					persist.setDepot(depotRepresentative);
 
 					// everything
@@ -2764,7 +2748,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private boolean checkOneClientSelected()
 	// enables and disables tabs depending if they make sense in other cases
 	{
-		logging.debug(this, "checkOneClientSelected() selectedClients " + logging.getStrings(getSelectedClients()));
+		Logging.debug(this, "checkOneClientSelected() selectedClients " + Logging.getStrings(getSelectedClients()));
 		boolean result = true;
 
 		if (getSelectedClients().length != 1) {
@@ -2775,17 +2759,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return result;
 	}
 
-	private void freeMemoryFromSearchData() {
-		if (clientSelectionDialog != null) {
-
-		}
-	}
-
 	protected boolean setLocalbootProductsPage() {
-		logging.debug(this, "setLocalbootProductsPage() with filter "
-				+ configed.savedStates.saveLocalbootproductFilter.deserialize());
+		Logging.debug(this, "setLocalbootProductsPage() with filter "
+				+ Configed.savedStates.saveLocalbootproductFilter.deserialize());
 
-		Set<String> savedFilter = configed.savedStates.saveLocalbootproductFilter.deserialize();
+		Set<String> savedFilter = Configed.savedStates.saveLocalbootproductFilter.deserialize();
 
 		if (!setDepotRepresentative())
 			return false;
@@ -2810,7 +2788,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			clientProductpropertiesUpdateCollections = new HashMap<>();
 			mainFrame.panelLocalbootProductSettings.initAllProperties();
 
-			logging.debug(this, "setLocalbootProductsPage,  depotRepresentative:" + depotRepresentative);
+			Logging.debug(this, "setLocalbootProductsPage,  depotRepresentative:" + depotRepresentative);
 			possibleActions = persist.getPossibleActions(depotRepresentative);
 
 			// we retrieve the properties for all clients and products
@@ -2825,9 +2803,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panelLocalbootProductSettings
 					.getSortKeys();
 
-			logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
+			Logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
 
-			logging.debug(this,
+			Logging.debug(this,
 					"setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
 
 			if (istmForSelectedClientsLocalboot == null) {
@@ -2836,36 +2814,38 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						collectChangedLocalbootStates, persist.getAllLocalbootProductNames(depotRepresentative),
 						localbootStatesAndActions, possibleActions, // persist.getPossibleActions(depotRepresentative),
 						persist.getProductGlobalInfos(depotRepresentative), getLocalbootProductDisplayFieldsList(),
-						configed.savedStates.saveLocalbootproductFilter
+						Configed.savedStates.saveLocalbootproductFilter
 
 				);
 			}
 
 			try {
+				int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
 				mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
 				mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
 
 				mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 
-				logging.info(this, "resetFilter " + configed.savedStates.saveLocalbootproductFilter.deserialize());
+				Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
 
 				(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
 
-				logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
+				Logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
 				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection); // (*)
 
 				mainFrame.panelLocalbootProductSettings
 						.setSearchFields(de.uib.configed.guidata.InstallationStateTableModel
 								.localizeColumns(getLocalbootProductDisplayFieldsList()));
 
+				setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
 			} catch (Exception ex) {
-				logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
+				Logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
 			}
 
 			return true;
 		} catch (Exception ex) {
 
-			logging.error("Error in setLocalbootProductsPage: " + ex, ex);
+			Logging.error("Error in setLocalbootProductsPage: " + ex, ex);
 			return false;
 		}
 
@@ -2873,19 +2853,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected boolean setNetbootProductsPage() {
 
-		Set<String> savedFilter = configed.savedStates.saveNetbootproductFilter.deserialize();
+		Set<String> savedFilter = Configed.savedStates.saveNetbootproductFilter.deserialize();
 
 		if (!setDepotRepresentative())
 			return false;
-
-		freeMemoryFromSearchData();
 
 		try {
 
 			clearProductEditing();
 
 			long startmillis = System.currentTimeMillis();
-			logging.debug(this,
+			Logging.debug(this,
 					"setLocalbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  start "
 							+ startmillis);
 
@@ -2896,7 +2874,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				istmForSelectedClientsNetboot = null;
 			}
 			long endmillis = System.currentTimeMillis();
-			logging.debug(this,
+			Logging.debug(this,
 					"setNetbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  end "
 							+ endmillis + " diff " + (endmillis - startmillis));
 
@@ -2920,33 +2898,57 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						getSelectedClients(), this, collectChangedNetbootStates,
 						persist.getAllNetbootProductNames(depotRepresentative), netbootStatesAndActions,
 						possibleActions, persist.getProductGlobalInfos(depotRepresentative),
-						getNetbootProductDisplayFieldsList(), configed.savedStates.saveNetbootproductFilter);
+						getNetbootProductDisplayFieldsList(), Configed.savedStates.saveNetbootproductFilter);
 			}
 
 			try {
+				int[] columnWidths = getTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts);
 				mainFrame.panelNetbootProductSettings.setTableModel(istmForSelectedClientsNetboot);
 
 				mainFrame.panelNetbootProductSettings.setSortKeys(currentSortKeysNetbootProducts);
 
 				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 
-				logging.info(this, "resetFilter " + configed.savedStates.saveLocalbootproductFilter.deserialize());
+				Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
 
 				mainFrame.panelNetbootProductSettings.reduceToSet(savedFilter);
 
 				mainFrame.panelNetbootProductSettings.setSelection(oldProductSelection);
 
+				setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
 			} catch (Exception ex) {
-				logging.error(" setNetbootInstallationStateTableModel,  exception Occurred", ex);
+				Logging.error(" setNetbootInstallationStateTableModel,  exception Occurred", ex);
 			}
 
 			return true;
 		} catch (Exception ex) {
 
-			logging.error("Error in setNetbootProductsPage: " + ex, ex);
+			Logging.error("Error in setNetbootProductsPage: " + ex, ex);
 			return false;
 		}
 
+	}
+
+	private int[] getTableColumnWidths(JTable table) {
+		TableColumnModel columnModel = table.getColumnModel();
+		int[] columnWidths = new int[columnModel.getColumnCount()];
+
+		for (int i = 0; i < columnModel.getColumnCount(); i++) {
+			columnWidths[i] = columnModel.getColumn(i).getWidth();
+		}
+
+		return columnWidths;
+	}
+
+	// only has an effect if number of table columns not changed
+	private void setTableColumnWidths(JTable table, int[] columnWidths) {
+
+		// Only do it if number of columns didn't change
+		if (columnWidths.length == table.getColumnModel().getColumnCount())
+			for (int i = 0; i < columnWidths.length; i++) {
+				table.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+				table.getColumnModel().getColumn(i).setWidth(columnWidths[i]);
+			}
 	}
 
 	private Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
@@ -2956,31 +2958,31 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Map<String, Object> mergeIn = collection.get(0);
 
-		for (String key : mergeIn.keySet()) {
-			List value = (List) mergeIn.get(key);
+		for (Entry<String, Object> entry : mergeIn.entrySet()) {
+			List value = (List) entry.getValue();
 			ListMerger merger = new ListMerger(value);
-			mergedMap.put(key, merger);
+			mergedMap.put(entry.getKey(), merger);
 		}
 
 		// merge the other maps
 		for (int i = 1; i < collection.size(); i++) {
 			mergeIn = collection.get(i);
 
-			for (String key : mergeIn.keySet()) {
-				List value = (List) mergeIn.get(key);
+			for (Entry<String, Object> mergeInEntry : mergeIn.entrySet()) {
+				List value = (List) mergeInEntry.getValue();
 
-				if (mergedMap.get(key) == null)
+				if (mergedMap.get(mergeInEntry.getKey()) == null)
 
 				{
 					ListMerger merger = new ListMerger(value);
 					merger.setHavingNoCommonValue();
-					mergedMap.put(key, merger);
+					mergedMap.put(mergeInEntry.getKey(), merger);
 				}
 
 				else {
-					ListMerger merger = (ListMerger) mergedMap.get(key);
+					ListMerger merger = (ListMerger) mergedMap.get(mergeInEntry.getKey());
 					ListMerger mergedValue = merger.merge(value);
-					mergedMap.put(key, mergedValue);
+					mergedMap.put(mergeInEntry.getKey(), mergedValue);
 				}
 			}
 		}
@@ -2989,7 +2991,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected boolean setProductPropertiesPage() {
-		logging.debug(this, "setProductPropertiesPage");
+		Logging.debug(this, "setProductPropertiesPage");
 
 		if (editingTarget == EditingTarget.DEPOTS) {
 			int saveSelectedRow = mainFrame.panelProductProperties.paneProducts.getSelectedRow();
@@ -3010,7 +3012,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected boolean setHostPropertiesPage() {
-		logging.debug(this, "setHostPropertiesPage");
+		Logging.debug(this, "setHostPropertiesPage");
 
 		try {
 			if (editingTarget == EditingTarget.DEPOTS) {
@@ -3025,7 +3027,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				addToGlobalUpdateCollection(hostUpdateCollection);
 
 				mainFrame.panelHostProperties.initMultipleHostsEditing(
-						configed.getResourceValue("PanelHostProperties.SelectHost"),
+						Configed.getResourceValue("PanelHostProperties.SelectHost"),
 						new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
 						depotPropertiesForPermittedDepots, hostUpdateCollection,
 						PersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT
@@ -3037,7 +3039,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return true;
 		} catch (Exception ex) {
 
-			logging.error("Error in setHostPropertiesPage: " + ex, ex);
+			Logging.error("Error in setHostPropertiesPage: " + ex, ex);
 			return false;
 		}
 
@@ -3059,8 +3061,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public boolean setNetworkconfigurationPage() {
-		logging.info(this, "setNetworkconfigurationPage ");
-		logging.info(this,
+		Logging.info(this, "setNetworkconfigurationPage ");
+		Logging.info(this,
 				"setNetworkconfigurationPage  getSelectedClients() " + Arrays.toString(getSelectedClients()));
 
 		try {
@@ -3092,7 +3094,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						(Map) additionalConfigs.get(0), persist.getConfigOptions(), additionalConfigs,
 						additionalconfigurationUpdateCollection, true,
 						// editableOptions
-						PersistenceController.PROPERTYCLASSES_SERVER);
+						PersistenceController.PROPERTY_CLASSES_SERVER);
 			}
 
 			else {
@@ -3107,7 +3109,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					}
 				}
 
-				logging.info(this, "additionalConfig fetch for " + Arrays.toString(getSelectedClients()));
+				Logging.info(this, "additionalConfig fetch for " + Arrays.toString(getSelectedClients()));
 
 				for (int i = 0; i < getSelectedClients().length; i++) {
 					additionalConfigs.add(persist.getConfig(getSelectedClients()[i]));
@@ -3119,7 +3121,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				Map<String, de.uib.utilities.table.ListCellOptions> configOptions = persist.getConfigOptions();
 
-				removeKeysStartingWith(mergedVisualMap, PersistenceController.CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS);
+				removeKeysStartingWith(mergedVisualMap, PersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 
 				mainFrame.panelHostConfig.initEditing("  " + getSelectedClientsString(), // "",
 						mergedVisualMap, configOptions, additionalConfigs, additionalconfigurationUpdateCollection,
@@ -3131,7 +3133,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return true;
 		} catch (Exception ex) {
 
-			logging.error("Error in setNetworkConfigurationPage: " + ex, ex);
+			Logging.error("Error in setNetworkConfigurationPage: " + ex, ex);
 			return false;
 		}
 
@@ -3148,16 +3150,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected boolean setHardwareInfoPage() {
-		logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().length);
+		Logging.info(this, "setHardwareInfoPage for, clients count " + getSelectedClients().length);
 
 		try {
 
 			if (firstSelectedClient == null || getSelectedClients().length == 0) {
-				mainFrame.setHardwareInfoNotPossible(configed.getResourceValue("MainFrame.noClientSelected1"), null);
+				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.noClientSelected1"), null);
 			} else if (getSelectedClients().length > 1) {
 				if (!PersistenceControllerFactory.sqlAndGetRows) {
-					mainFrame.setHardwareInfoNotPossible(configed.getResourceValue("MainFrame.backendSQLrequired1"),
-							configed.getResourceValue("MainFrame.backendSQLrequired2"));
+					mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.backendSQLrequired1"),
+							Configed.getResourceValue("MainFrame.backendSQLrequired2"));
 				} else {
 					mainFrame.setHardwareInfoMultiClients(getSelectedClients());
 				}
@@ -3174,7 +3176,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return true;
 		} catch (Exception ex) {
 
-			logging.error("Error in setHardwareInfoPage: " + ex, ex);
+			Logging.error("Error in setHardwareInfoPage: " + ex, ex);
 			return false;
 		}
 	}
@@ -3188,7 +3190,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected boolean setSoftwareInfoPage() {
-		logging.info(this, "setSoftwareInfoPage() firstSelectedClient, checkOneClientSelected " + firstSelectedClient
+		Logging.info(this, "setSoftwareInfoPage() firstSelectedClient, checkOneClientSelected " + firstSelectedClient
 				+ ", " + checkOneClientSelected());
 
 		try {
@@ -3203,7 +3205,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return true;
 		} catch (Exception ex) {
 
-			logging.error("Error in setSoftwareInfoPage: " + ex, ex);
+			Logging.error("Error in setSoftwareInfoPage: " + ex, ex);
 			return false;
 		}
 	}
@@ -3215,7 +3217,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public boolean updateLogPage(String logtype) {
 
 		try {
-			logging.debug(this, "updatelogpage");
+			Logging.debug(this, "updatelogpage");
 
 			if (!checkOneClientSelected())
 				return false;
@@ -3224,7 +3226,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		} catch (Exception ex) {
 
-			logging.error("Error in updateLogPage: " + ex, ex);
+			Logging.error("Error in updateLogPage: " + ex, ex);
 
 			return false;
 		}
@@ -3232,19 +3234,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public boolean logfileExists(String logtype) {
-		if (logfiles == null || logfiles.get(logtype) == null || logfiles.get(logtype).equals("")
-				|| logfiles.get(logtype).equals(configed.getResourceValue("MainFrame.TabActiveForSingleClient")))
-			return false;
-
-		return true;
+		return logfiles != null && logfiles.get(logtype) != null && !logfiles.get(logtype).equals("")
+				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 	}
 
 	public Map<String, String> getLogfilesUpdating(String logtypeToUpdate) {
-		logging.info(this, "getLogfilesUpdating " + logtypeToUpdate);
+		Logging.info(this, "getLogfilesUpdating " + logtypeToUpdate);
 
 		if (!checkOneClientSelected()) {
-			for (int i = 0; i < persist.getLogtypes().length; i++) {
-				logfiles.put(persist.getLogtypes()[i], configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+			for (int i = 0; i < persist.getLogTypes().length; i++) {
+				logfiles.put(persist.getLogTypes()[i], Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 
 			mainFrame.setLogfilePanel(logfiles);
@@ -3256,10 +3255,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				logfiles = persist.getLogfiles(firstSelectedClient, logtypeToUpdate);
 				waitCursor.stop();
 
-				logging.debug(this, "log pages set");
+				Logging.debug(this, "log pages set");
 			} catch (Exception ex) {
 
-				logging.error("Error in setLogPage: " + ex, ex);
+				Logging.error("Error in setLogPage: " + ex, ex);
 			}
 		}
 
@@ -3268,7 +3267,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected boolean setLogPage() {
 
-		logging.debug(this, "setLogPage(), selected clients: " + logging.getStrings(getSelectedClients()));
+		Logging.debug(this, "setLogPage(), selected clients: " + Logging.getStrings(getSelectedClients()));
 
 		try {
 
@@ -3280,7 +3279,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		} catch (Exception ex) {
 
-			logging.error("Error in setLogPage: " + ex, ex);
+			Logging.error("Error in setLogPage: " + ex, ex);
 			return false;
 		}
 	}
@@ -3299,7 +3298,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public boolean resetView(int viewIndex) {
 
-		logging.info(this, "resetView to " + viewIndex + "  getSelectedClients " + getSelectedClients().length);
+		Logging.info(this, "resetView to " + viewIndex + "  getSelectedClients " + getSelectedClients().length);
 
 		boolean result = true;
 
@@ -3362,7 +3361,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void setViewIndex(int visualViewIndex) {
 		int oldViewIndex = viewIndex;
 
-		logging.info(this, " visualViewIndex " + visualViewIndex + ", (old) viewIndex " + viewIndex);
+		Logging.info(this, " visualViewIndex " + visualViewIndex + ", (old) viewIndex " + viewIndex);
 
 		boolean problem = false;
 
@@ -3371,7 +3370,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// if we are leaving some tab we check first if we possibly have to save
 		// something
 
-		logging.info(this, "setViewIndex anyDataChanged " + anyDataChanged);
+		Logging.info(this, "setViewIndex anyDataChanged " + anyDataChanged);
 
 		if (anyDataChanged && (viewIndex == VIEW_LOCALBOOT_PRODUCTS || viewIndex == VIEW_NETBOOT_PRODUCTS)) {
 			if (depotsListSelectionChanged) {
@@ -3386,27 +3385,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// we will only leave view 0 if a PC is selected
 
 		// check if change of view index to the value of visualViewIndex can be allowed
-		if (visualViewIndex != VIEW_CLIENTS) {
+		if (visualViewIndex != VIEW_CLIENTS && (!((visualViewIndex == VIEW_CLIENTS)
+				|| ((visualViewIndex == VIEW_NETWORK_CONFIGURATION) && (editingTarget == EditingTarget.SERVER))
+				|| ((visualViewIndex == VIEW_HOST_PROPERTIES) && (editingTarget == EditingTarget.DEPOTS))))) {
+			Logging.debug(this, " selected clients " + Logging.getStrings(getSelectedClients()));
 
-			if (!((visualViewIndex == VIEW_CLIENTS)
-					|| ((visualViewIndex == VIEW_NETWORK_CONFIGURATION) && (editingTarget == EditingTarget.SERVER))
-					|| ((visualViewIndex == VIEW_HOST_PROPERTIES) && (editingTarget == EditingTarget.DEPOTS)))) {
-				logging.debug(this, " selected clients " + logging.getStrings(getSelectedClients()));
+			if (getSelectedClients() == null)
+			// should not occur
+			{
+				Logging.debug(this, " getSelectedClients()  null");
 
-				if (getSelectedClients() == null)
-				// should not occur
-				{
-					logging.debug(this, " getSelectedClients()  null");
-
-					problem = true;
-					JOptionPane.showMessageDialog(mainFrame,
-							configed.getResourceValue("ConfigedMain.pleaseSelectPc.text"),
-							configed.getResourceValue("ConfigedMain.pleaseSelectPc.title"), JOptionPane.OK_OPTION);
-					viewIndex = VIEW_CLIENTS;
-				}
-
+				problem = true;
+				JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.pleaseSelectPc.text"),
+						Configed.getResourceValue("ConfigedMain.pleaseSelectPc.title"), JOptionPane.OK_OPTION);
+				viewIndex = VIEW_CLIENTS;
 			}
-
 		}
 
 		if (!problem && dataReady) // we have loaded the data
@@ -3419,7 +3412,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			}
 
-			logging.debug(this, "switch to viewIndex " + viewIndex);
+			Logging.debug(this, "switch to viewIndex " + viewIndex);
 
 			boolean result = true;
 
@@ -3430,7 +3423,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			if (!result) {
 				viewIndex = oldViewIndex;
-				logging.debug(" tab index could not be changed");
+				Logging.debug(" tab index could not be changed");
 			}
 
 			if (viewIndex == VIEW_CLIENTS) {
@@ -3465,7 +3458,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected void updateLocalbootProductStates() {
 		// localboot products
-		logging.info(this, "updateProductStates: collectChangedLocalbootStates  " + collectChangedLocalbootStates);
+		Logging.info(this, "updateProductStates: collectChangedLocalbootStates  " + collectChangedLocalbootStates);
 
 		if (collectChangedLocalbootStates != null && collectChangedLocalbootStates.keySet() != null
 				&& !collectChangedLocalbootStates.keySet().isEmpty()) {
@@ -3476,7 +3469,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				String client = it0.next();
 				Map<String, Map<String, String>> clientValues = collectChangedLocalbootStates.get(client);
 
-				logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client " + client + " values "
+				Logging.debug(this, "updateProductStates, collectChangedLocalbootStates , client " + client + " values "
 						+ clientValues);
 
 				if (clientValues.keySet() == null || clientValues.keySet().isEmpty())
@@ -3498,7 +3491,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected void updateNetbootProductStates() {
 		// netboot products
-		logging.debug(this, "collectChangedNetbootStates  " + collectChangedNetbootStates);
+		Logging.debug(this, "collectChangedNetbootStates  " + collectChangedNetbootStates);
 		if (collectChangedNetbootStates != null && collectChangedNetbootStates.keySet() != null
 				&& !collectChangedNetbootStates.keySet().isEmpty()) {
 			Iterator<String> it0 = collectChangedNetbootStates.keySet().iterator();
@@ -3538,9 +3531,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void initServer() {
 		checkSaveAll(true);
 		preSaveSelectedClients = saveSelectedClients;
-		logging.debug(this, "initServer() preSaveSelectedClients " + preSaveSelectedClients);
+		Logging.debug(this, "initServer() preSaveSelectedClients " + preSaveSelectedClients);
 		setSelectedClients((List<String>) null);
-		logging.debug(this, "set selected values in initServer()");
+		Logging.debug(this, "set selected values in initServer()");
 
 	}
 
@@ -3574,7 +3567,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		List<String> productnames = new ArrayList<>(localbootProductnames);
 		productnames.addAll(netbootProductnames);
 
-		logging.info(this, "productnames " + productnames);
+		Logging.info(this, "productnames " + productnames);
 
 		return productnames;
 	}
@@ -3587,7 +3580,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void fetchDepots() {
-		logging.info(this, "fetchDepots");
+		Logging.info(this, "fetchDepots");
 
 		// for testing activated in 4.0.6.0.9
 		if (depotsList.getListSelectionListeners().length > 0)
@@ -3601,18 +3594,18 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		depotNamesLinked = persist.getHostInfoCollections().getDepotNamesList();
 
-		logging.debug(this, "fetchDepots sorted depots " + depotNamesLinked);
+		Logging.debug(this, "fetchDepots sorted depots " + depotNamesLinked);
 
 		if (depots.size() == 1)
 			multiDepot = false;
 		else
 			multiDepot = true;
 
-		logging.debug(this, "we have multidepot " + multiDepot);
+		Logging.debug(this, "we have multidepot " + multiDepot);
 
 		depotsList.setListData(getLinkedDepots());
 
-		logging.debug(this, " ----------  selected after fetch " + getSelectedDepots().length);
+		Logging.debug(this, " ----------  selected after fetch " + getSelectedDepots().length);
 
 		boolean[] depotsListIsSelected = new boolean[depotsList.getModel().getSize()];
 
@@ -3647,11 +3640,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void reloadLicensesData() {
-		logging.info(this, " reloadLicensesData _______________________________ ");
+		Logging.info(this, " reloadLicensesData _______________________________ ");
 		if (dataReady) {
 
 			persist.licencesUsageRequestRefresh();
-			persist.relations_auditSoftwareToLicencePools_requestRefresh();
+			persist.relationsAuditSoftwareToLicencePoolsRequestRefresh();
 			persist.reconciliationInfoRequestRefresh();
 
 			Iterator<ControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
@@ -3674,19 +3667,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		{
 
 			String oldGroupSelection = activatedGroupModel.getGroupName();
-			logging.info(this, " ==== refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
+			Logging.info(this, " ==== refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
 			refreshClientList();
 			activateGroup(oldGroupSelection);
-
-			freeMemoryFromSearchData(); // we have to observe the changed client selection
-
 		}
 
 	}
 
 	private void changeDepotSelection() {
-		logging.info(this, "changeDepotSelection");
+		Logging.info(this, "changeDepotSelection");
 		if (mainFrame != null) {
 			// by starting a thread the visual marker of changing in progress works
 			SwingUtilities.invokeLater(() -> {
@@ -3704,22 +3694,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (mainFrame != null) {
 			mainFrame.setChangedDepotSelectionActive(false);
 			SwingUtilities.invokeLater(this::reloadData);
-		} else {
+		} else
 			reloadData();
-		}
 	}
 
 	private void reloadData() {
 		checkSaveAll(true);
 		int saveViewIndex = getViewIndex();
 
-		logging.info(this, " reloadData _______________________________  saveViewIndex " + saveViewIndex);
+		Logging.info(this, " reloadData _______________________________  saveViewIndex " + saveViewIndex);
 
 		WaitCursor.stopAll(); // stop all old waiting threads if there should be any left
 
 		List<String> selValuesList = selectionPanel.getSelectedValues();
 
-		logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
+		Logging.info(this, "reloadData, selValuesList.size " + selValuesList.size());
 
 		String[] savedSelectedValues = selValuesList.toArray(new String[selValuesList.size()]);
 
@@ -3743,17 +3732,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.hwAuditConfRequestRefresh();
 			persist.client2HwRowsRequestRefresh();
 
-			logging.info(this, "call installedSoftwareInformationRequestRefresh()");
+			Logging.info(this, "call installedSoftwareInformationRequestRefresh()");
 			persist.installedSoftwareInformationRequestRefresh();
 			persist.softwareAuditOnClientsRequestRefresh();
 
 			persist.productDataRequestRefresh();
 
-			logging.info(this, "reloadData _1");
+			Logging.info(this, "reloadData _1");
 
 			// calls again persist.productDataRequestRefresh()
 			mainFrame.panelProductProperties.paneProducts.reload();
-			logging.info(this, "reloadData _2");
+			Logging.info(this, "reloadData _2");
 
 			// if variable modelDataValid in GenTableModel has no function , the following
 			// statement is sufficient:
@@ -3780,7 +3769,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			preloadData(); // sets dataReady
 
-			logging.info(this, " in reload, we are in thread " + Thread.currentThread());
+			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
+
 			setRebuiltClientListTableModel();
 
 			if (mainFrame.controllerHWinfoMultiClients != null)
@@ -3795,7 +3785,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		setEditingTarget(editingTarget); // sets visual view index, therefore:
-		mainFrame.setVisualViewIndex(saveViewIndex);
 
 		// if depot selection changed, we adapt the clients
 		NavigableSet<String> clientsLeft = new TreeSet<>();
@@ -3810,13 +3799,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-		logging.info(this, "reloadData, selected clients now " + logging.getSize(clientsLeft));
+		Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
 
 		if (selectionPanel != null) // no action before gui initialized
 		{
 			// reactivate selection listener
 
-			logging.debug(this, " reset the values, particularly in list ");
+			Logging.debug(this, " reset the values, particularly in list ");
 
 			selectionPanel.addListSelectionListener(this);
 			setSelectedClientsCollectionOnPanel(clientsLeft);
@@ -3826,7 +3815,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		}
 
-		logging.info(this, "reloadData, selected clients now, after resetting " + logging.getSize(selectedClients));
+		Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
 
 		mainFrame.reloadServerMenu();
 	}
@@ -3858,7 +3847,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		@Override
 		public void dataHaveChanged(Object source) {
 			super.dataHaveChanged(source);
-			logging.info(this, "dataHaveChanged from " + source);
+			Logging.info(this, "dataHaveChanged from " + source);
 			setDataChanged(super.isDataChanged()); // anyDataChanged in ConfigedMain
 		}
 
@@ -3867,15 +3856,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (this.dataChanged) {
 				if (fAskSaveProductConfiguration == null) {
 					fAskSaveProductConfiguration = new FTextArea(mainFrame, Globals.APPNAME, true,
-							new String[] { configed.getResourceValue("MainFrame.SaveChangedValue.YES"),
-									configed.getResourceValue("MainFrame.SaveChangedValue.NO") });
+							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.YES"),
+									Configed.getResourceValue("MainFrame.SaveChangedValue.NO") });
 					fAskSaveProductConfiguration
-							.setMessage(configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
+							.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
 
-					fAskSaveProductConfiguration.setSize(new Dimension(300, 200));
-
+					fAskSaveProductConfiguration.setSize(new Dimension(300, 220));
 				}
 
+				fAskSaveProductConfiguration.setLocationRelativeTo(mainFrame);
 				fAskSaveProductConfiguration.setVisible(true);
 
 				result = (fAskSaveProductConfiguration.getResult() == 1);
@@ -3897,7 +3886,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		public void cancel() {
-			logging.info(this, "cancel");
+			Logging.info(this, "cancel");
 			this.dataChanged = false;
 
 			updateCollection.cancel();
@@ -3945,27 +3934,28 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			this.source = (Map<String, Map<String, String>>) source1;
 
-			logging.debug(this, "dataHaveChanged source " + source);
+			Logging.debug(this, "dataHaveChanged source " + source);
 
 			if (source == null)
-				logging.info(this, "dataHaveChanged null");
+				Logging.info(this, "dataHaveChanged null");
 			else {
-				for (String client : source.keySet()) {
-					logging.debug(this, "dataHaveChanged for client " + client + source.get(client));
+				for (Entry<String, Map<String, String>> clientEntry : source.entrySet()) {
+					Logging.debug(this, "dataHaveChanged for client " + clientEntry.getKey() + " with values"
+							+ clientEntry.getValue());
 				}
 			}
 
 			super.dataHaveChanged(source);
 
-			logging.debug(this, "dataHaveChanged dataChanged " + dataChanged);
+			Logging.debug(this, "dataHaveChanged dataChanged " + dataChanged);
 
 			setDataChanged(super.isDataChanged());
 
-			logging.debug(this, "dataHaveChanged dataChanged " + dataChanged);
+			Logging.debug(this, "dataHaveChanged dataChanged " + dataChanged);
 
 			// anyDataChanged in ConfigedMain
 
-			logging.info(this, "dataHaveChanged dataChanged " + dataChanged);
+			Logging.info(this, "dataHaveChanged dataChanged " + dataChanged);
 		}
 
 		public boolean askSave() {
@@ -3973,12 +3963,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (this.dataChanged) {
 				if (fAskSaveChangedText == null) {
 					fAskSaveChangedText = new FTextArea(mainFrame, Globals.APPNAME, true,
-							new String[] { configed.getResourceValue("MainFrame.SaveChangedValue.YES"),
-									configed.getResourceValue("MainFrame.SaveChangedValue.NO") });
-					fAskSaveChangedText.setMessage(configed.getResourceValue("MainFrame.SaveChangedValue"));
-					fAskSaveChangedText.setSize(new Dimension(300, 200));
+							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.YES"),
+									Configed.getResourceValue("MainFrame.SaveChangedValue.NO") });
+					fAskSaveChangedText.setMessage(Configed.getResourceValue("MainFrame.SaveChangedValue"));
+					fAskSaveChangedText.setSize(new Dimension(300, 220));
 				}
 
+				fAskSaveChangedText.setLocationRelativeTo(mainFrame);
 				fAskSaveChangedText.setVisible(true);
 				result = (fAskSaveChangedText.getResult() == 1);
 
@@ -3990,12 +3981,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		public void save() {
-			logging.info(this, "save , dataChanged " + dataChanged + " source " + source);
+			Logging.info(this, "save , dataChanged " + dataChanged + " source " + source);
 			if (this.dataChanged && source != null && getSelectedClients() != null
 
 			) {
 
-				logging.info(this, "save for clients " + getSelectedClients().length);
+				Logging.info(this, "save for clients " + getSelectedClients().length);
 
 				for (String client : getSelectedClients()) {
 					hostInfo.showAndSaveInternally(selectionPanel, mainFrame, persist, client, source.get(client));
@@ -4022,7 +4013,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void setDataChanged(boolean b, boolean show) {
-		logging.info(this, "setDataChanged " + b + ", showing " + show);
+		Logging.info(this, "setDataChanged " + b + ", showing " + show);
 		anyDataChanged = b;
 
 		if (show && mainFrame != null)
@@ -4030,7 +4021,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void cancelChanges() {
-		logging.info(this, "cancelChanges ");
+		Logging.info(this, "cancelChanges ");
 		setDataChanged(false);
 		generalDataChangedKeeper.cancel();
 	}
@@ -4040,19 +4031,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (anyDataChanged) {
 			result = JOptionPane.showOptionDialog(mainFrame,
-					configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
-					Globals.APPNAME + " " + configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
+					Configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
+					Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 		}
 
-		logging.debug(this, "checkClose result " + result);
+		Logging.debug(this, "checkClose result " + result);
 		return result;
 	}
 
 	// if data are changed then save or - after asking - abandon changes
 	protected void saveIfIndicated() {
-		logging.info(this, "---------------- saveIfIndicated : anyDataChanged, " + anyDataChanged);
+		Logging.info(this, "---------------- saveIfIndicated : anyDataChanged, " + anyDataChanged);
 
 		if (!anyDataChanged)
 			return;
@@ -4083,7 +4074,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// save if not otherwise stated
 	public void checkSaveAll(boolean ask) {
-		logging.debug(this, "----------------  checkSaveAll: anyDataChanged, ask  " + anyDataChanged + ", " + ask);
+		Logging.debug(this, "----------------  checkSaveAll: anyDataChanged, ask  " + anyDataChanged + ", " + ask);
 
 		if (anyDataChanged) {
 			setDataChanged(false, false); // without showing, but must be on first place since we run in this method
@@ -4134,7 +4125,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		@Override
 		public void run() {
 			while (true) {
-				logging.debug(this, " " + " suspended , editingTarget, viewIndex " +
+				Logging.debug(this, " " + " suspended , editingTarget, viewIndex " +
 
 						suspended + ", " + editingTarget + ", " + viewIndex
 
@@ -4146,7 +4137,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						// we catch exceptions especially if we are on some updating process for the
 						// model
 
-						if (persist.getHost_displayFields().get("clientConnected")) {
+						if (persist.getHostDisplayFields().get("clientConnected")) {
 							Map<String, Object> saveReachableInfo = reachableInfo;
 
 							reachableInfo = persist.reachableInfo(null);
@@ -4157,7 +4148,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
 
 							int col = model.findColumn(
-									configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+									Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
 
 							for (int row = 0; row < model.getRowCount(); row++) {
 								String clientId = (String) model.getValueAt(row, 0);
@@ -4186,7 +4177,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						}
 
 					} catch (Exception ex) {
-						logging.info(this, "we could not update the model");
+						Logging.info(this, "we could not update the model");
 					}
 
 				}
@@ -4194,10 +4185,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				try {
 
 					int millisecs = interval * 60 * 1000;
-					logging.debug(this, "Thread going to sleep for ms " + millisecs);
+					Logging.debug(this, "Thread going to sleep for ms " + millisecs);
 					sleep(millisecs);
 				} catch (InterruptedException ex) {
-					logging.info(this, "Thread interrupted ");
+					Logging.info(this, "Thread interrupted ");
 					Thread.currentThread().interrupt();
 				}
 			}
@@ -4210,7 +4201,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public void getReachableInfo(final boolean onlySelectedClients) {
 		final String[] selClients = selectedClients;
-		logging.info(this, "we have sel clients " + selClients.length);
+		Logging.info(this, "we have sel clients " + selClients.length);
 
 		// we put this into a thread since it may never end in case of a name resolving
 		// problem
@@ -4220,9 +4211,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				if (fShowReachableInfo == null)
 					fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
-							new String[] { configed.getResourceValue("ConfigedMain.reachableInfoCancel") }, 350, 100);
+							new String[] { Configed.getResourceValue("ConfigedMain.reachableInfoCancel") }, 350, 100);
 
-				fShowReachableInfo.setMessage(configed.getResourceValue("ConfigedMain.reachableInfoRequested"));
+				fShowReachableInfo.setMessage(Configed.getResourceValue("ConfigedMain.reachableInfoRequested"));
 
 				fShowReachableInfo.setAlwaysOnTop(true);
 				fShowReachableInfo.setSize(Globals.REACHABLE_INFO_FRAME_WIDTH, Globals.REACHABLE_INFO_FRAME_HEIGHT);
@@ -4232,7 +4223,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				reachableInfo = new HashMap<>();
 
 				if (onlySelectedClients) {
-					logging.info(this, "we have sel clients " + selClients.length);
+					Logging.info(this, "we have sel clients " + selClients.length);
 
 					reachableInfo.putAll(persist.reachableInfo(getSelectedClients()));
 				} else {
@@ -4251,11 +4242,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				mainFrame.iconButtonReachableInfo.setEnabled(true);
 
 				// update column
-				if (persist.getHost_displayFields().get("clientConnected")) {
+				if (persist.getHostDisplayFields().get("clientConnected")) {
 					javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
 
 					int col = model
-							.findColumn(configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+							.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
 
 					for (int row = 0; row < model.getRowCount(); row++) {
 						String clientId = (String) model.getValueAt(row, 0);
@@ -4284,7 +4275,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		final String[] selClients = selectedClients;
 		sessioninfoFinished = false;
 
-		logging.info(this, "getSessionInfo start, onlySelectedClients " + onlySelectedClients);
+		Logging.info(this, "getSessionInfo start, onlySelectedClients " + onlySelectedClients);
 
 		mainFrame.iconButtonSessionInfo.setWaitingState(true);
 
@@ -4299,7 +4290,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					try {
 						SwingUtilities.invokeAndWait(() -> mainFrame.iconButtonSessionInfo.setEnabled(false));
 					} catch (InvocationTargetException ex) {
-						logging.info(this,
+						Logging.info(this,
 								"invocation target or interrupt ex at  iconButtonSessionInfo.setEnabled(false) " + ex);
 					} catch (InterruptedException ie) {
 						Thread.currentThread().interrupt();
@@ -4313,13 +4304,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						public void run() {
 							int waitSecs = 0;
 
-							logging.info(this, "counting thread started");
+							Logging.info(this, "counting thread started");
 							while (!sessioninfoFinished && waitSecs <= maxWaitSecs) {
-								logging.debug(this, "wait secs for session infoi " + waitSecs);
+								Logging.debug(this, "wait secs for session infoi " + waitSecs);
 								try {
 									sleep(1000);
 								} catch (InterruptedException iex) {
-									logging.info(this, "interrupt at " + waitSecs);
+									Logging.info(this, "interrupt at " + waitSecs);
 									Thread.currentThread().interrupt();
 								}
 								waitSecs++;
@@ -4327,16 +4318,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 							// finishing the task
 							SwingUtilities.invokeLater(() -> {
-								logging.info(this, "when sessioninfoFinished");
+								Logging.info(this, "when sessioninfoFinished");
 								mainFrame.iconButtonSessionInfo.setWaitingState(false);
 
 								mainFrame.iconButtonSessionInfo.setEnabled(true);
 
 								// update column
-								if (persist.getHost_displayFields().get("clientSessionInfo")) {
+								if (persist.getHostDisplayFields().get("clientSessionInfo")) {
 									javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
 
-									int col = model.findColumn(configed
+									int col = model.findColumn(Configed
 											.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));
 
 									for (int row = 0; row < model.getRowCount(); row++) {
@@ -4358,7 +4349,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					new Thread() {
 						@Override
 						public void run() {
-							logging.info(this, "thread started");
+							Logging.info(this, "thread started");
 
 							if (onlySelectedClients) {
 								sessionInfo.putAll(persist.sessionInfo(getSelectedClients()));
@@ -4376,7 +4367,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}.start();
 		} catch (Exception ex) {
-			logging.info(this, "getSessionInfo Exception " + ex);
+			Logging.info(this, "getSessionInfo Exception " + ex);
 		}
 
 	}
@@ -4393,26 +4384,42 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return persist.getRemoteControls();
 	}
 
-	public void resetProductsForSelectedClients(boolean withDependencies) {
+	public void resetProductsForSelectedClients(boolean withDependencies, boolean resetLocalbootProducts,
+			boolean resetNetbootProducts) {
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return;
 
-		if (!confirmActionForSelectedClients(configed.getResourceValue("ConfigedMain.confirmResetProducts.question")))
+		String confirmInfo = "";
+
+		if (resetLocalbootProducts && resetNetbootProducts) {
+			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetProducts.question");
+		} else if (resetLocalbootProducts) {
+			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetLocalbootProducts.question");
+		} else if (resetNetbootProducts) {
+			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetNetbootProducts.question");
+		}
+
+		if (!confirmActionForSelectedClients(confirmInfo))
 			return;
 
-		persist.resetLocalbootProducts(getSelectedClients(), withDependencies);
+		if (resetLocalbootProducts) {
+			persist.resetLocalbootProducts(getSelectedClients(), withDependencies);
+		}
+
+		if (resetNetbootProducts) {
+			persist.resetNetbootProducts(getSelectedClients(), withDependencies);
+		}
 
 		requestReloadStatesAndActions(true);
-
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
-		logging.info(this, "freeAllPossibleLicencesForSelectedClients, count " + getSelectedClients().length);
+		Logging.info(this, "freeAllPossibleLicencesForSelectedClients, count " + getSelectedClients().length);
 
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return true;
 
-		if (!confirmActionForSelectedClients(configed.getResourceValue("ConfigedMain.confirmFreeLicences.question"))) {
+		if (!confirmActionForSelectedClients(Configed.getResourceValue("ConfigedMain.confirmFreeLicences.question"))) {
 			return false;
 		}
 
@@ -4465,7 +4472,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				String newID = getText();
 
-				logging.debug(this, "new name " + newID);
+				Logging.debug(this, "new name " + newID);
 
 				persist.renameClient(getSelectedClients()[0], newID);
 
@@ -4474,7 +4481,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		};
 
 		fEdit.init();
-		fEdit.setTitle(configed.getResourceValue("ConfigedMain.fChangeClientID.title") + " (" + Globals.APPNAME + ")");
+		fEdit.setTitle(Configed.getResourceValue("ConfigedMain.fChangeClientID.title") + " (" + Globals.APPNAME + ")");
 		fEdit.setSize(Globals.WIDTH_FRAME_RENAME_CLIENT, Globals.HEIGHT_FRAME_RENAME_CLIENT);
 		fEdit.setLocationRelativeTo(Globals.mainContainer);
 		fEdit.setSingleLine(true);
@@ -4489,15 +4496,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 
 		FShowListWithComboSelect fChangeDepotForClients = new FShowListWithComboSelect(mainFrame,
-				Globals.APPNAME + " " + configed.getResourceValue("ConfigedMain.fChangeDepotForClients.title"), true,
-				configed.getResourceValue("ConfigedMain.fChangeDepotForClients.newDepot"), getDepotArray(),
-				new String[] { configed.getResourceValue("ConfigedMain.fChangeDepotForClients.OptionNO"),
-						configed.getResourceValue("ConfigedMain.fChangeDepotForClients.OptionYES") });
+				Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.title"), true,
+				Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.newDepot"), getDepotArray(),
+				new String[] { Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.OptionNO"),
+						Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.OptionYES") });
 
 		fChangeDepotForClients.setLineWrap(false);
 
 		StringBuilder messageBuffer = new StringBuilder(
-				"\n" + configed.getResourceValue("ConfigedMain.fChangeDepotForClients.Moving") + ": \n\n");
+				"\n" + Configed.getResourceValue("ConfigedMain.fChangeDepotForClients.Moving") + ": \n\n");
 
 		for (int i = 0; i < getSelectedClients().length; i++) {
 			messageBuffer.append(getSelectedClients()[i]);
@@ -4506,7 +4513,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				messageBuffer
 						.append(persist.getHostInfoCollections().getMapPcBelongsToDepot().get(getSelectedClients()[i]));
 			} catch (Exception e) {
-				logging.warning(this, "changeDepot for " + getSelectedClients()[i] + " " + e);
+				Logging.warning(this, "changeDepot for " + getSelectedClients()[i] + " " + e);
 			}
 
 			messageBuffer.append(") ");
@@ -4527,7 +4534,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (targetDepot == null || targetDepot.equals(""))
 			return;
 
-		logging.debug(this, " start moving to another depot");
+		Logging.debug(this, " start moving to another depot");
 
 		persist.getHostInfoCollections().setDepotForClients(getSelectedClients(), targetDepot);
 
@@ -4538,17 +4545,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void initialTreeActivation(final String groupName) {
-		logging.info(this, "initialTreeActivation");
+		Logging.info(this, "initialTreeActivation");
 		treeClients.expandPath(treeClients.getPathToALL());
 
 		String oldGroupSelection = groupName;
 		if (oldGroupSelection == null)
-			oldGroupSelection = configed.savedStates.saveGroupSelection.deserialize();
+			oldGroupSelection = Configed.savedStates.saveGroupSelection.deserialize();
 
 		if (oldGroupSelection != null && activateGroup(oldGroupSelection))
-			logging.info(this, "old group reset " + oldGroupSelection);
+			Logging.info(this, "old group reset " + oldGroupSelection);
 		else
-			activateGroup(ClientTree.ALL_NAME);
+			activateGroup(ClientTree.ALL_CLIENTS_NAME);
 	}
 
 	protected void initialTreeActivation() {
@@ -4556,13 +4563,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void refreshClientListActivateALL() {
-		logging.info(this, "refreshClientListActivateALL");
+		Logging.info(this, "refreshClientListActivateALL");
 		refreshClientList();
-		activateGroup(ClientTree.ALL_NAME);
+		activateGroup(ClientTree.ALL_CLIENTS_NAME);
 	}
 
 	protected void refreshClientList() {
-		logging.info(this, "refreshClientList");
+		Logging.info(this, "refreshClientList");
 
 		produceClientListForDepots(getSelectedDepots(), allowedClients);
 
@@ -4571,28 +4578,28 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void refreshClientList(String selectClient) {
-		logging.info(this, "refreshClientList " + selectClient);
+		Logging.info(this, "refreshClientList " + selectClient);
 		refreshClientListActivateALL();
 
 		if (selectClient != null) {
-			logging.debug(this, "set client refreshClientList");
+			Logging.debug(this, "set client refreshClientList");
 
 			setClient(selectClient);
 		}
 	}
 
 	protected void refreshClientList(String[] selectClients) {
-		logging.info(this, "refreshClientList " + selectClients);
+		Logging.info(this, "refreshClientList " + selectClients);
 		refreshClientListActivateALL();
 
 		if (selectClients != null) {
-			logging.debug(this, "set client refreshClientList");
+			Logging.debug(this, "set client refreshClientList");
 			setClients(selectClients);
 		}
 	}
 
 	protected void refreshClientList(boolean resetSelection) {
-		logging.info(this, "refreshClientList  resetSelecton " + resetSelection);
+		Logging.info(this, "refreshClientList  resetSelecton " + resetSelection);
 		refreshClientListActivateALL();
 
 		if (resetSelection)
@@ -4649,7 +4656,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void createClients(List<List<Object>> clients) {
 		if (persist.createClients(clients)) {
 
-			logging.debug(this, "createClients" + clients);
+			Logging.debug(this, "createClients" + clients);
 			checkErrorList();
 
 			String[] createdClientNames = clients.stream().map(v -> (String) v.get(0) + "." + v.get(1))
@@ -4668,7 +4675,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			final String macaddress, final boolean shutdownInstall, final boolean uefiBoot, final boolean wanConfig,
 			final String group, final String productNetboot, final String productLocalboot) {
 
-		logging.debug(this,
+		Logging.debug(this,
 				"createClient " + hostname + ", " + domainname + ", " + depotID + ", " + description + ", "
 						+ inventorynumber + ", " + notes + shutdownInstall + ", " + uefiBoot + ", " + wanConfig + ", "
 						+ group + ", " + productNetboot + ", " + productLocalboot);
@@ -4685,7 +4692,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// Activate group of created Client (and the group of all clients if no group specified)
 			if (!activateGroup(group))
-				activateGroup(ClientTree.ALL_NAME);
+				activateGroup(ClientTree.ALL_CLIENTS_NAME);
 
 			// Sets the client on the table
 			setClient(newClientID);
@@ -4738,11 +4745,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (clients == null)
 			return;
 
-		logging.info(this, "wakeUp " + clients.length + " clients: " + startInfo);
+		Logging.info(this, "wakeUp " + clients.length + " clients: " + startInfo);
 		if (clients.length == 0)
 			return;
 
-		new ErrorListProducer(configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
+		new ErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
 			@Override
 			protected List<String> getErrors() {
 				return persist.wakeOnLan(clients);
@@ -4759,13 +4766,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (clients == null)
 			return;
 
-		logging.info(this, "wakeUpWithDelay " + clients.length + " clients: " + startInfo + " delay secs " + delaySecs);
+		Logging.info(this, "wakeUpWithDelay " + clients.length + " clients: " + startInfo + " delay secs " + delaySecs);
 
 		if (clients.length == 0)
 			return;
 
 		final FWakeClients result = new FWakeClients(mainFrame,
-				Globals.APPNAME + ": " + configed.getResourceValue("FWakeClients.title") + " " + startInfo, persist);
+				Globals.APPNAME + ": " + Configed.getResourceValue("FWakeClients.title") + " " + startInfo, persist);
 
 		new Thread() {
 			@Override
@@ -4783,7 +4790,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return;
 
-		new ErrorListProducer(configed.getResourceValue("ConfigedMain.infoDeletePackageCaches")) {
+		new ErrorListProducer(Configed.getResourceValue("ConfigedMain.infoDeletePackageCaches")) {
 			@Override
 			protected List<String> getErrors() {
 				return persist.deletePackageCaches(getSelectedClients());
@@ -4811,7 +4818,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return;
 
-		new ErrorListProducer(configed.getResourceValue("ConfigedMain.infoPopup") + " " + message) {
+		new ErrorListProducer(Configed.getResourceValue("ConfigedMain.infoPopup") + " " + message) {
 			@Override
 			protected List<String> getErrors() {
 				return persist.showPopupOnClients(message, getSelectedClients(), seconds);
@@ -4823,15 +4830,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void initSavedSearchesDialog() {
 		if (savedSearchesDialog == null) {
-			logging.debug(this, "create SavedSearchesDialog");
+			Logging.debug(this, "create SavedSearchesDialog");
 			savedSearchesDialog = new SavedSearchesDialog() {
 				@Override
 				protected void commit() {
 					super.commit();
 					List<String> result = (List<String>) super.getValue();
-					logging.info(this, "commit result == null " + (result == null));
+					Logging.info(this, "commit result == null " + (result == null));
 					if (result != null) {
-						logging.info(this, "result size " + result.size());
+						Logging.info(this, "result size " + result.size());
 						selectionPanel.setSelectedValues(result);
 					}
 
@@ -4867,7 +4874,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void clientSelectionGetSavedSearch() {
-		logging.debug(this, "clientSelectionGetSavedSearch");
+		Logging.debug(this, "clientSelectionGetSavedSearch");
 		initSavedSearchesDialog();
 
 		savedSearchesDialog.setLocationRelativeTo(mainFrame);
@@ -4892,7 +4899,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			super.commit();
 			setVisible(true);
 
-			logging.debug(this, "getSelectedValue " + getSelectedList());
+			Logging.debug(this, "getSelectedValue " + getSelectedList());
 
 			appendLog(null);
 
@@ -4913,13 +4920,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 							trans.setCommand(cmd);
 
-							HashMap<String, Object> values = new HashMap<>();
+							HashMap<String, String> values = new HashMap<>();
 							values.put("%host%", targetClient);
 							String hostName = targetClient;
-							logging.info(this, " targetClient " + targetClient);
+							Logging.info(this, " targetClient " + targetClient);
 							if (targetClient.indexOf(".") > 0) {
 								String[] parts = targetClient.split("\\.");
-								logging.info(this, " targetClient " + Arrays.toString(parts));
+								Logging.info(this, " targetClient " + Arrays.toString(parts));
 								hostName = parts[0];
 							}
 
@@ -4945,7 +4952,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							List<String> parts = de.uib.utilities.script.Interpreter.splitToList(cmd);
 
 							try {
-								logging.debug(this,
+								Logging.debug(this,
 										"startRemoteControlForSelectedClients, cmd: " + cmd + " splitted to " + parts);
 
 								ProcessBuilder pb = new ProcessBuilder(parts);
@@ -4962,7 +4969,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 								}
 
 							} catch (Exception ex) {
-								logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
+								Logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
 							}
 						}
 					}.start();
@@ -4979,25 +4986,24 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (remoteControls != getRemoteControls()) {
 			remoteControls = getRemoteControls();
 
-			logging.debug(this, "remoteControls " + remoteControls);
+			Logging.debug(this, "remoteControls " + remoteControls);
 
 			Map<String, String> entries = new LinkedHashMap<>();
 			Map<String, String> tooltips = new LinkedHashMap<>();
 			Map<String, String> rcCommands = new HashMap<>();
 			Map<String, Boolean> commandsEditable = new HashMap<>();
 
-			for (String key : remoteControls.keySet()) {
-				entries.put(key, key);
-				RemoteControl rc = remoteControls.get(key);
+			for (Entry<String, RemoteControl> entry : remoteControls.entrySet()) {
+				entries.put(entry.getKey(), entry.getKey());
+				RemoteControl rc = entry.getValue();
 				if (rc.getDescription() != null && rc.getDescription().length() > 0)
-					tooltips.put(key, rc.getDescription());
+					tooltips.put(entry.getKey(), rc.getDescription());
 				else
-					tooltips.put(key, rc.getCommand());
-				rcCommands.put(key, rc.getCommand());
+					tooltips.put(entry.getKey(), rc.getCommand());
+				rcCommands.put(entry.getKey(), rc.getCommand());
 				Boolean editable = Boolean.valueOf(rc.getEditable());
 
-				commandsEditable.put(key, editable);
-
+				commandsEditable.put(entry.getKey(), editable);
 			}
 
 			dialogRemoteControl.setMeanings(rcCommands);
@@ -5005,10 +5011,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(remoteControls.keySet().toArray()));
 
-			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, -1, false, ""));
+			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, false, ""));
 
 			dialogRemoteControl
-					.setTitle(Globals.APPNAME + ":  " + configed.getResourceValue("MainFrame.jMenuRemoteControl"));
+					.setTitle(Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.jMenuRemoteControl"));
 			dialogRemoteControl.setModal(false);
 			dialogRemoteControl.init();
 
@@ -5034,7 +5040,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 */
 	public void startSSHOpsiServerExec(final SSHCommand command) {
 
-		logging.info(this, "startSSHOpsiServerExec isReadOnly false");
+		Logging.info(this, "startSSHOpsiServerExec isReadOnly false");
 		final ConfigedMain m = this;
 		new Thread() {
 			@Override
@@ -5074,7 +5080,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private boolean confirmActionForSelectedClients(String confirmInfo) {
 		FShowList fConfirmActionForClients = new FShowList(mainFrame, Globals.APPNAME, true,
-				new String[] { configed.getResourceValue("buttonNO"), configed.getResourceValue("buttonYES") }, 350,
+				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 350,
 				400);
 
 		fConfirmActionForClients.setMessage(confirmInfo + "\n\n" + getSelectedClientsString().replace(";", ""));
@@ -5091,8 +5097,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 
 		if (confirmActionForSelectedClients(
-				configed.getResourceValue("ConfigedMain.ConfirmShutdownClients.question"))) {
-			new ErrorListProducer(configed.getResourceValue("ConfigedMain.infoShutdownClients")) {
+				Configed.getResourceValue("ConfigedMain.ConfirmShutdownClients.question"))) {
+			new ErrorListProducer(Configed.getResourceValue("ConfigedMain.infoShutdownClients")) {
 				@Override
 				protected List<String> getErrors() {
 					return persist.shutdownClients(getSelectedClients());
@@ -5106,8 +5112,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return;
 
-		if (confirmActionForSelectedClients(configed.getResourceValue("ConfigedMain.ConfirmRebootClients.question"))) {
-			new ErrorListProducer(configed.getResourceValue("ConfigedMain.infoRebootClients")) {
+		if (confirmActionForSelectedClients(Configed.getResourceValue("ConfigedMain.ConfirmRebootClients.question"))) {
+			new ErrorListProducer(Configed.getResourceValue("ConfigedMain.infoRebootClients")) {
 				@Override
 				protected List<String> getErrors() {
 					return persist.rebootClients(getSelectedClients());
@@ -5120,7 +5126,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return;
 
-		if (!confirmActionForSelectedClients(configed.getResourceValue("ConfigedMain.ConfirmDeleteClients.question")))
+		if (!confirmActionForSelectedClients(Configed.getResourceValue("ConfigedMain.ConfirmDeleteClients.question")))
 			return;
 
 		persist.deleteClients(getSelectedClients());
@@ -5148,7 +5154,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			i = 0;
 		}
 
-		GroupnameChoice choiceDialog = new GroupnameChoice(configed.getResourceValue("ConfigedMain.saveGroup"),
+		GroupnameChoice choiceDialog = new GroupnameChoice(Configed.getResourceValue("ConfigedMain.saveGroup"),
 				groupSelectionIds, i);
 
 		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().equals("")) {
@@ -5177,7 +5183,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		int i = groupSelectionIds.indexOf(groupname);
 
-		GroupnameChoice choiceDialog = new GroupnameChoice(configed.getResourceValue("ConfigedMain.deleteGroup"),
+		GroupnameChoice choiceDialog = new GroupnameChoice(Configed.getResourceValue("ConfigedMain.deleteGroup"),
 				groupSelectionIds, i);
 
 		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().equals("")) {
@@ -5196,18 +5202,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void callNewClientSelectionDialog() {
-		java.awt.Point oldLocation = null;
 		if (clientSelectionDialog != null) {
-			oldLocation = clientSelectionDialog.getLocationOnScreen();
-			logging.info(this, "callNewClientSelectionDialog, old location " + oldLocation);
-
 			clientSelectionDialog.leave();
 			clientSelectionDialog = null;
 		}
 		callClientSelectionDialog();
-
-		if (oldLocation != null)
-			clientSelectionDialog.setLocation(oldLocation.x, oldLocation.y);
 	}
 
 	public void callClientSelectionDialog() {
@@ -5219,7 +5218,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		clientSelectionDialog.setLocationRelativeTo(Globals.mainContainer);
 		clientSelectionDialog.setVisible(true);
-
 	}
 
 	public void clearSelectionOnPanel() {
@@ -5228,9 +5226,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void setSelectedClientsOnPanel(String[] selected) {
 		if (selected != null) {
-			logging.info(this, " setSelectedClientsOnPanel clients count " + selected.length);
+			Logging.info(this, " setSelectedClientsOnPanel clients count " + selected.length);
 		} else
-			logging.info(this, " setSelectedClientsOnPanel selected null");
+			Logging.info(this, " setSelectedClientsOnPanel selected null");
 
 		selectionPanel.removeListSelectionListener(this);
 		selectionPanel.setSelectedValues(selected);
@@ -5240,19 +5238,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void setSelectedClientsCollectionOnPanel(Collection<String> selected) {
 		if (selected != null) {
-			logging.info(this, "setSelectedClientsCollectionOnPanel clients count " + selected.size());
+			Logging.info(this, "setSelectedClientsCollectionOnPanel clients count " + selected.size());
 		}
 
 		selectionPanel.setSelectedValues(selected);
 
-		logging.info(this, "setSelectedClientsCollectionOnPanel   selectionPanel.getSelectedValues().size() "
+		Logging.info(this, "setSelectedClientsCollectionOnPanel   selectionPanel.getSelectedValues().size() "
 				+ selectionPanel.getSelectedValues().size());
 
-		if (selected == null) {
+		if (selected == null)
 			setSelectedClientsArray(new String[0]);
-		} else {
+		else
 			setSelectedClientsArray(selected.toArray(new String[selected.size()]));
-		}
+
 	}
 
 	public void setSelectedClientsCollectionOnPanel(Collection<String> selected, boolean renewFilter) {
@@ -5276,12 +5274,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				null);
 
 		if (arg == null || arg.equals("")) {
-			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCHfailedAtAnyTimeS);
+			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
 		} else {
 			String timeAgo = DateExtendedByVars.dayValueOf(arg);
-			String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCHfailedByTimeS, timeAgo);
+			String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_BY_TIMES, timeAgo);
 
-			logging.info(this, "selectClientsByFailedAtSomeTimeAgo  test " + test);
+			Logging.info(this, "selectClientsByFailedAtSomeTimeAgo  test " + test);
 			manager.setSearch(test);
 		}
 
@@ -5293,7 +5291,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public void selectClientsNotCurrentProductInstalled(List<String> selectedProducts,
 			boolean includeClientsWithBrokenInstallation) {
-		logging.debug(this, "selectClientsNotCurrentProductInstalled, products " + selectedProducts);
+		Logging.debug(this, "selectClientsNotCurrentProductInstalled, products " + selectedProducts);
 		if (selectedProducts == null || selectedProducts.size() != 1)
 			return;
 
@@ -5301,17 +5299,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String productVersion = persist.getProductVersion(productId);
 		String packageVersion = persist.getProductPackageVersion(productId);
 
-		logging.debug(this, "selectClientsNotCurrentProductInstalled product " + productId + ", " + productVersion
+		Logging.debug(this, "selectClientsNotCurrentProductInstalled product " + productId + ", " + productVersion
 				+ ", " + packageVersion);
 
 		List<String> clientsToSelect = persist.getClientsWithOtherProductVersion(productId, productVersion,
 				packageVersion, includeClientsWithBrokenInstallation);
 
-		logging.info(this, "selectClientsNotCurrentProductInstalled clients found globally " + clientsToSelect.size());
+		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found globally " + clientsToSelect.size());
 
 		clientsToSelect.retainAll(selectionPanel.getColumnValues(0));
 
-		logging.info(this, "selectClientsNotCurrentProductInstalled clients found for displayed client list "
+		Logging.info(this, "selectClientsNotCurrentProductInstalled clients found for displayed client list "
 				+ clientsToSelect.size());
 
 		setSelectedClientsCollectionOnPanel(clientsToSelect, true);
@@ -5319,20 +5317,20 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void selectClientsWithFailedProduct(List<String> selectedProducts) {
-		logging.debug(this, "selectClientsWithFailedProduct, products " + selectedProducts);
+		Logging.debug(this, "selectClientsWithFailedProduct, products " + selectedProducts);
 		if (selectedProducts == null || selectedProducts.size() != 1)
 			return;
 
 		de.uib.configed.clientselection.SelectionManager manager = new de.uib.configed.clientselection.SelectionManager(
 				null);
 
-		String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCHfailedProduct, selectedProducts.get(0));
+		String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
 
 		manager.setSearch(test);
 
 		List<String> result = manager.selectClients();
 
-		logging.info(this, "selected: " + result);
+		Logging.info(this, "selected: " + result);
 		setSelectedClientsCollectionOnPanel(result, true);
 	}
 
@@ -5348,7 +5346,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		selectionPanel.clearSelection();
 
 		Map<String, Boolean> clientList = produceClientListForDepots(getSelectedDepots(), null);
-		logging.debug(this, "setClientGroup pclist " + clientList);
+		Logging.debug(this, "setClientGroup pclist " + clientList);
 
 		if (clientList != null) {
 			Object[] clients = clientList.entrySet().toArray();
@@ -5363,7 +5361,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 
-			logging.debug(this, "set selected values in setClientGroup " + selectedList);
+			Logging.debug(this, "set selected values in setClientGroup " + selectedList);
 			setSelectedClientsCollectionOnPanel(selectedList, true);
 		}
 
@@ -5386,28 +5384,28 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		for (JFrame f : allFrames) {
 			if (f != null) {
-				logging.debug(this, "log event occurred in frame f , is focused " + f.isFocused() + " " + f);
+				Logging.debug(this, "log event occurred in frame f , is focused " + f.isFocused() + " " + f);
 
-				logging.checkErrorList(f);
+				Logging.checkErrorList(f);
 				found = true;
 				break;
 			} else
-				logging.warning(this, "a frame is null here");
+				Logging.warning(this, "a frame is null here");
 		}
 
 		if (!found) {
-			logging.checkErrorList(mainFrame);
+			Logging.checkErrorList(mainFrame);
 		}
 	}
 
 	protected void saveConfigs() {
 
-		logging.info(this, " --------  saveConfigs ");
+		Logging.info(this, " --------  saveConfigs ");
 
 		updateProductStates();
-		logging.debug(this, "saveConfigs: collectChangedLocalbootStates " + collectChangedLocalbootStates);
+		Logging.debug(this, "saveConfigs: collectChangedLocalbootStates " + collectChangedLocalbootStates);
 
-		logging.info(this,
+		Logging.info(this,
 				" ------- we should now start working on the update collection of size  " + updateCollection.size());
 
 		updateCollection.doCall();
@@ -5417,13 +5415,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void clearUpdateCollectionAndTell() {
-		logging.info(this, " --- we clear the update collection " + updateCollection.getClass());
+		Logging.info(this, " --- we clear the update collection " + updateCollection.getClass());
 
 		updateCollection.clearElements();
 	}
 
 	protected void checkErrorList() {
-		logging.checkErrorList(mainFrame);
+		Logging.checkErrorList(mainFrame);
 	}
 
 	protected boolean checkSavedLicencesFrame() {
@@ -5446,8 +5444,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (change) {
 			int returnedOption = JOptionPane.showOptionDialog(Globals.mainContainer,
-					configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp"),
-					configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"), JOptionPane.YES_NO_OPTION,
+					Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp"),
+					Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (returnedOption == JOptionPane.YES_OPTION) {
@@ -5462,7 +5460,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public boolean closeInstance(boolean checkdirty) {
-		logging.info(this, "start closing instance, checkdirty " + checkdirty);
+		Logging.info(this, "start closing instance, checkdirty " + checkdirty);
 
 		boolean result = true;
 
@@ -5499,14 +5497,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			result = false;
 		}
 
-		logging.info(this, "close instance result " + result);
+		Logging.info(this, "close instance result " + result);
 
 		return result;
 	}
 
 	public void finishApp(boolean checkdirty, int exitcode) {
 		if (closeInstance(checkdirty))
-			configed.endApp(exitcode);
+			Configed.endApp(exitcode);
 	}
 
 }

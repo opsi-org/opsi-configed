@@ -12,21 +12,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import javax.swing.JComboBox;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
 public class DefaultEditMapPanel extends AbstractEditMapPanel
 // works on a map of pairs of type String - List
 {
 	TableCellEditor theCellEditor;
-	JComboBox editorfield;
-	TableCellEditor defaultCellEditor;
 
 	List<String> names;
 	Map<String, ListCellOptions> optionsMap;
@@ -38,14 +36,14 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	protected class DefaultPropertyHandler extends PropertyHandler {
 		@Override
 		public void removeValue(String key) {
-			logging.debug(this, "removing value for key " + key);
+			Logging.debug(this, "removing value for key " + key);
 			mapTableModel.removeEntry(key);
 		}
 
 		@Override
 		public String getRemovalMenuText() {
 			super.getRemovalMenuText();
-			return configed.getResourceValue("EditMapPanel.PopupMenu.RemoveEntry");
+			return Configed.getResourceValue("EditMapPanel.PopupMenu.RemoveEntry");
 		}
 
 	}
@@ -54,28 +52,11 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 	protected final PropertyHandler defaultPropertyHandler;
 
-	public DefaultEditMapPanel() {
-		this(null);
-	}
-
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer) {
-		this(tableCellRenderer, false);
-	}
-
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible) {
-		this(tableCellRenderer, keylistExtendible, true);
-	}
-
-	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
-			boolean keylistEditable) {
-		this(tableCellRenderer, keylistExtendible, keylistEditable, false);
-	}
-
 	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable) {
 		super(keylistExtendible, keylistEditable, reloadable);
 		this.tableCellRenderer = tableCellRenderer;
-		logging.debug(this, "DefaultEditMapPanel " + keylistExtendible + ",  " + keylistEditable + ",  " + reloadable);
+		Logging.debug(this, "DefaultEditMapPanel " + keylistExtendible + ",  " + keylistEditable + ",  " + reloadable);
 
 		defaultPropertyHandler = new DefaultPropertyHandler();
 		defaultPropertyHandler.setMapTableModel(mapTableModel);
@@ -122,13 +103,12 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 			defaultsMap = new HashMap<>();
 
 			if (optionsMap != null) {
-				for (String key : optionsMap.keySet()) {
+				for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
+					String description = option.getValue().getDescription();
+					Object defaultvalue = option.getValue().getDefaultValues();
 
-					String description = optionsMap.get(key).getDescription();
-					Object defaultvalue = optionsMap.get(key).getDefaultValues();
-
-					descriptionsMap.put(key, description);
-					defaultsMap.put(key, defaultvalue);
+					descriptionsMap.put(option.getKey(), description);
+					defaultsMap.put(option.getKey(), defaultvalue);
 
 				}
 			}
@@ -155,14 +135,14 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 	}
 
-	public void setValues(Map data) {
+	public void setValues(Map<String, Object> data) {
 
 		if (data == null)
 			return;
 
-		Iterator iter = data.keySet().iterator();
+		Iterator<String> iter = data.keySet().iterator();
 		while (iter.hasNext()) {
-			String key = (String) iter.next();
+			String key = iter.next();
 			mapTableModel.setValue(key, data.get(key));
 		}
 	}

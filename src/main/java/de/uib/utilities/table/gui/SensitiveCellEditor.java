@@ -19,7 +19,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.table.DefaultListModelProducer;
 import de.uib.utilities.table.ListModelProducer;
@@ -54,7 +54,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			instances.put(key, instance);
 			instance.myKey = "" + key;
-			logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
+			Logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
 					+ instances.size());
 		}
 		return instance;
@@ -95,7 +95,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	}
 
-	private void startListEditor(final JTable table, final int row, final int column) {
+	private void startListEditor() {
 		field.setEditable(false);
 		listeditor.init();
 
@@ -115,7 +115,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 
-		logging.debug(this, "  celleditor working in " + row + ", " + column + " with value " + value + ", class "
+		Logging.debug(this, "  celleditor working in " + row + ", " + column + " with value " + value + ", class "
 				+ value.getClass().getName());
 
 		List val = modelProducer.toList(value);
@@ -123,8 +123,8 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		if (val instanceof List) // is now always
 		{
 
-			ListModel model = modelProducer.getListModel(row, column);
-			logging.debug(this,
+			ListModel<Object> model = modelProducer.getListModel(row, column);
+			Logging.debug(this,
 					" try list editing, modelproducer tells nullable " + modelProducer.getNullable(row, column));
 			listeditor.setVisible(false);
 			listeditor.setTitle(modelProducer.getCaption(row, column));
@@ -133,7 +133,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 				listeditor.setListModel(modelProducer.getListModel(row, column));
 
-				logging.info(this, "startValue set: " + value);
+				Logging.info(this, "startValue set: " + value);
 
 				listeditor.setSelectionMode(modelProducer.getSelectionMode(row, column));
 				listeditor.setEditable(modelProducer.getEditable(row, column));
@@ -141,17 +141,17 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				listeditor.setSelectedValues(modelProducer.getSelectedValues(row, column));
 
 				listeditor.enter();
-				startListEditor(table, row, column);
+				startListEditor();
 
 				editingRow = row;
 				editingColumn = column;
 			}
 
 			else {
-				model = new DefaultListModel();
+				model = new DefaultListModel<>();
 
 				listeditor.setListModel(model);
-				startListEditor(table, row, column);
+				startListEditor();
 
 				listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 				listeditor.setEditable(true);
@@ -216,24 +216,19 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			if (n == 0)
 				return "";
 
-			{
-				StringBuilder buf = new StringBuilder("");
+			StringBuilder buf = new StringBuilder("");
 
-				if (n == 0)
-					return "";
-
-				for (int i = 0; i < n - 1; i++) {
-					buf.append("" + list.get(i) + ",");
-				}
-				buf.append("" + list.get(n - 1));
-
-				String result = buf.toString();
-
-				if (result.equalsIgnoreCase("null"))
-					return org.json.JSONObject.NULL;
-
-				return result;
+			for (int i = 0; i < n - 1; i++) {
+				buf.append("" + list.get(i) + ",");
 			}
+			buf.append("" + list.get(n - 1));
+
+			String result = buf.toString();
+
+			if (result.equalsIgnoreCase("null"))
+				return org.json.JSONObject.NULL;
+
+			return result;
 
 		}
 

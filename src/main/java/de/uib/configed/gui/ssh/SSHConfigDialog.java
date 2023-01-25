@@ -23,9 +23,9 @@ import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -33,7 +33,7 @@ import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 
 public class SSHConfigDialog extends FGeneralDialog {
@@ -62,7 +62,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 	private static SSHConnectionInfo connectionInfo = null;
 
 	private SSHConfigDialog(ConfigedMain cmain) {
-		super(null, configed.getResourceValue("MainFrame.jMenuSSHConfig"), false);
+		super(null, Configed.getResourceValue("MainFrame.jMenuSSHConfig"), false);
 		configedMain = cmain;
 		connectionInfo = SSHConnectionInfo.getInstance();
 
@@ -91,101 +91,98 @@ public class SSHConfigDialog extends FGeneralDialog {
 
 	private void checkComponentStates() {
 		boolean state = compareStates();
-		logging.debug(this, "checkComponentStates  identical " + state);
+		Logging.debug(this, "checkComponentStates  identical " + state);
 
 		setSSHState();
 	}
 
 	private boolean compareStates() {
-		logging.info(this, "compareStates ");
+		Logging.info(this, "compareStates ");
 
 		if (connectionInfo.getHost() == null) {
-			logging.info(this, "probably host not in hostsAllowed");
+			Logging.info(this, "probably host not in hostsAllowed");
 			return false;
 		}
 
 		if (!jCheckBoxDefault.isSelected()) {
 			if (!connectionInfo.getHost().equals(jComboBoxHost.getSelectedItem())) {
-				logging.debug(this, "compareStates 1");
+				Logging.debug(this, "compareStates 1");
 				return false;
 			}
 			if (!connectionInfo.getUser().equals(jTextFieldUser.getText())) {
-				logging.debug(this, "compareStates 2");
+				Logging.debug(this, "compareStates 2");
 				return false;
 			}
 			if (!connectionInfo.getPassw().equals(new String(jTextFieldPassword.getPassword()))) {
-				logging.debug(this, "compareStates 3");
-				logging.debug(this, "connection.getPW " + connectionInfo.getPassw());
-				logging.debug(this, "tf.getPW " + new String(jTextFieldPassword.getPassword()));
+				Logging.debug(this, "compareStates 3");
+				Logging.debug(this, "connection.getPW " + connectionInfo.getPassw());
+				Logging.debug(this, "tf.getPW " + new String(jTextFieldPassword.getPassword()));
 				return false;
 			}
 			if ((!connectionInfo.getPort().equals(jTextFieldPort.getText())) && (!connectionInfo.usesKeyfile())) {
-				logging.debug(this, "compareStates 4");
+				Logging.debug(this, "compareStates 4");
 				return false;
 			}
 		} else {
 
-			if (!connectionInfo.getHost().equals(ConfigedMain.HOST)) {
-				logging.info(this,
-						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + ConfigedMain.HOST + "<");
+			if (!connectionInfo.getHost().equals(ConfigedMain.host)) {
+				Logging.info(this,
+						"compareStates 5 >" + connectionInfo.getHost() + "<     <>    >" + ConfigedMain.host + "<");
 				return false;
 			}
 			if (!connectionInfo.getPort().equals(jTextFieldPort.getText())) {
-				logging.debug(this, "compareStates 6");
+				Logging.debug(this, "compareStates 6");
 				return false;
 			}
-			if (!connectionInfo.getUser().equals(ConfigedMain.USER)) {
-				logging.debug(this, "compareStates 7");
+			if (!connectionInfo.getUser().equals(ConfigedMain.user)) {
+				Logging.debug(this, "compareStates 7");
 				return false;
 			}
-			if ((!connectionInfo.getPassw().equals(ConfigedMain.PASSWORD)) && (!connectionInfo.usesKeyfile())) {
-				logging.debug(this, "compareStates 8");
+			if ((!connectionInfo.getPassw().equals(ConfigedMain.password)) && (!connectionInfo.usesKeyfile())) {
+				Logging.debug(this, "compareStates 8");
 				return false;
 			}
 		}
 
-		logging.debug(this, "compareStates until now == ");
+		Logging.debug(this, "compareStates until now == ");
 
 		if (connectionInfo.usesKeyfile() != (jCheckBoxUseKeyFile.isSelected())) {
-			logging.info(this, "compareStates 9");
+			Logging.info(this, "compareStates 9");
 			return false;
 		} else if (jCheckBoxUseKeyFile.isSelected()) {
 			try {
 
 				if (!connectionInfo.getKeyfilePath().equals(jTextFieldKeyFile.getText())) {
-					logging.debug(this, "compareStates 10");
+					Logging.debug(this, "compareStates 10");
 					return false;
 				}
 
 				String pp = Arrays.toString(jTextFieldPassphrase.getPassword());
 
 				if (!connectionInfo.getKeyfilePassphrase().equals(pp)) {
-					logging.debug(this, "compareStates 11");
+					Logging.debug(this, "compareStates 11");
 					return false;
 				}
 			} catch (Exception e) {
-				logging.warning(this, "Error", e);
+				Logging.warning(this, "Error", e);
 			}
 		}
 
 		if (jCheckBoxUseOutputColor != null) {
-			SSHCommandFactory.getInstance();
-			logging.debug(this, "compareStates  (factory.ssh_colored_output != cb_useOutputColor.isSelected()) "
-					+ SSHCommandFactory.ssh_colored_output + " != " + jCheckBoxUseOutputColor.isSelected());
-			SSHCommandFactory.getInstance();
-			if (SSHCommandFactory.ssh_colored_output != jCheckBoxUseOutputColor.isSelected()) {
-				logging.debug(this, "compareStates 12");
+			Logging.debug(this, "compareStates  (factory.ssh_colored_output != cb_useOutputColor.isSelected()) "
+					+ SSHCommandFactory.sshColoredOutput + " != " + jCheckBoxUseOutputColor.isSelected());
+			if (SSHCommandFactory.sshColoredOutput != jCheckBoxUseOutputColor.isSelected()) {
+				Logging.debug(this, "compareStates 12");
 				return false;
 			}
 		}
 		if (jCheckBoxExecInBackground != null) {
-			logging.debug(this,
+			Logging.debug(this,
 					"compareStates  (factory.ssh_always_exec_in_background != cb_execInBackground.isSelected()) "
-							+ SSHCommandFactory.ssh_always_exec_in_background + " != "
+							+ SSHCommandFactory.sshAlwaysExecInBackground + " != "
 							+ jCheckBoxExecInBackground.isSelected());
-			SSHCommandFactory.getInstance();
-			if (SSHCommandFactory.ssh_always_exec_in_background != jCheckBoxExecInBackground.isSelected()) {
-				logging.debug(this, "compareStates 13");
+			if (SSHCommandFactory.sshAlwaysExecInBackground != jCheckBoxExecInBackground.isSelected()) {
+				Logging.debug(this, "compareStates 13");
 				return false;
 			}
 		}
@@ -195,7 +192,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 
 	private void setSSHState() {
 		String str = SSHCommandFactory.getInstance().getConnectionState();
-		logging.info(this, "setSSHState " + str);
+		Logging.info(this, "setSSHState " + str);
 		String labeltext = "<html><font color='blue'>" + str + "</font></html>";
 
 		jButtonSave.setEnabled(!str.equals(SSHCommandFactory.CONNECTED));
@@ -208,11 +205,11 @@ public class SSHConfigDialog extends FGeneralDialog {
 				labeltext = "<html><font color='red'>" + str + "</font></html>";
 		}
 		jLabelConnectionState.setText(labeltext);
-		logging.debug(this, "setSSHState setText " + labeltext);
+		Logging.debug(this, "setSSHState setText " + labeltext);
 	}
 
 	protected void init() {
-		logging.info(this, "init ");
+		Logging.info(this, "init ");
 		connectionPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		settingsPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -228,19 +225,19 @@ public class SSHConfigDialog extends FGeneralDialog {
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 
 		connectionPanel.setBorder(
-				BorderFactory.createTitledBorder(configed.getResourceValue("SSHConnection.Config.serverPanelTitle")));
+				BorderFactory.createTitledBorder(Configed.getResourceValue("SSHConnection.Config.serverPanelTitle")));
 		connectionPanel.setPreferredSize(new java.awt.Dimension(400, 350));
 
 		settingsPanel.setBorder(
-				BorderFactory.createTitledBorder(configed.getResourceValue("SSHConnection.Config.settingsPanelTitle")));
+				BorderFactory.createTitledBorder(Configed.getResourceValue("SSHConnection.Config.settingsPanelTitle")));
 
 		JLabel jLabelHost = new JLabel();
-		jLabelHost.setText(configed.getResourceValue("SSHConnection.Config.jLabelHost"));
+		jLabelHost.setText(Configed.getResourceValue("SSHConnection.Config.jLabelHost"));
 
 		jComboBoxHost = new JComboBox<>();
 		String host = connectionInfo.getHost();
 		if (host == null)
-			host = ConfigedMain.HOST;
+			host = ConfigedMain.host;
 		jComboBoxHost.addItem(host);
 
 		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
@@ -250,13 +247,13 @@ public class SSHConfigDialog extends FGeneralDialog {
 			jComboBoxHost.addItem(depot);
 		}
 
-		logging.debug(this, "init host " + host);
+		Logging.debug(this, "init host " + host);
 		jComboBoxHost.setSelectedItem(host);
 
 		jComboBoxHost.addItemListener(itemEvent -> checkComponentStates());
 
 		JLabel jLabelPort = new JLabel();
-		jLabelPort.setText(configed.getResourceValue("SSHConnection.Config.jLabelPort"));
+		jLabelPort.setText(Configed.getResourceValue("SSHConnection.Config.jLabelPort"));
 		jTextFieldPort = new JTextField(new CheckedDocument(/* allowedChars */
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', }, 5), String.valueOf("22"), 1);
 		jTextFieldPort.getDocument().addDocumentListener(new DocumentListener() {
@@ -277,7 +274,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		});
 
 		JLabel jLabelUser = new JLabel();
-		jLabelUser.setText(configed.getResourceValue("SSHConnection.Config.jLabelUser"));
+		jLabelUser.setText(Configed.getResourceValue("SSHConnection.Config.jLabelUser"));
 		jTextFieldUser = new JTextField();
 		jTextFieldUser.setText(connectionInfo.getUser());
 		jTextFieldUser.getDocument().addDocumentListener(new DocumentListener() {
@@ -298,7 +295,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		});
 
 		JLabel jLabelPassword = new JLabel();
-		jLabelPassword.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
+		jLabelPassword.setText(Configed.getResourceValue("SSHConnection.Config.jLabelPassword"));
 
 		jTextFieldPassword = new JPasswordField();
 		jTextFieldPassword.setText(connectionInfo.getPassw());
@@ -320,15 +317,15 @@ public class SSHConfigDialog extends FGeneralDialog {
 			}
 		});
 
-		jButtonSave = new IconButton(configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
+		jButtonSave = new IconButton(Configed.getResourceValue("SSHConnection.Config.SaveConfiguration"),
 				"images/apply.png", "images/apply.png", "images/apply_disabled.png", false);
 		jButtonSave.setPreferredSize(Globals.smallButtonDimension);
 
-		IconButton jButtonClose = new IconButton(configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
+		IconButton jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.Config.CancelConfiguration"),
 				"images/cancel.png", "images/cancel_over.png", " ", true);
 		jButtonClose.setPreferredSize(Globals.smallButtonDimension);
 
-		jButtonKill = new IconButton(configed.getResourceValue("SSHConnection.Config.StopUsing"),
+		jButtonKill = new IconButton(Configed.getResourceValue("SSHConnection.Config.StopUsing"),
 				"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete_disabled.png", false);
 		jButtonKill.setPreferredSize(Globals.smallButtonDimension);
 
@@ -337,7 +334,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 			public void actionPerformed(ActionEvent e) {
 				jButtonKill.setEnabled(false);
 
-				logging.info(this,
+				Logging.info(this,
 						"actionPerformed on btn_kill " + SSHCommandFactory.getInstance().getConnectionState());
 
 				SSHCommandFactory.getInstance().unsetConnection();
@@ -352,19 +349,19 @@ public class SSHConfigDialog extends FGeneralDialog {
 
 		buttonPanel.add(new JLabel("            "));
 
-		logging.info(this, "actionlistener for button1 " + Globals.isGlobalReadOnly());
+		Logging.info(this, "actionlistener for button1 " + Globals.isGlobalReadOnly());
 		if (!(Globals.isGlobalReadOnly())) {
 			jButtonSave.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					logging.debug(this, "actionPerformed on button1");
+					Logging.debug(this, "actionPerformed on button1");
 					doAction1();
 				}
 			});
 		}
 
 		IconButton iconButtonOpenChooser = new IconButton(
-				configed.getResourceValue("SSHConnection.Config.SelectKeyFile"), "images/folder_16.png", " ",
+				Configed.getResourceValue("SSHConnection.Config.SelectKeyFile"), "images/folder_16.png", " ",
 				"images/folder_16.png", true);
 		iconButtonOpenChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
 		if (!(Globals.isGlobalReadOnly()))
@@ -374,7 +371,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		jButtonClose.addActionListener(actionEvent -> doAction2());
 
 		JLabel jLabelKeyFile = new JLabel();
-		jLabelKeyFile.setText(configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
+		jLabelKeyFile.setText(Configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
 		jTextFieldKeyFile = new JTextField();
 		jTextFieldKeyFile.setText(connectionInfo.getKeyfilePath());
 		jTextFieldKeyFile.getDocument().addDocumentListener(new DocumentListener() {
@@ -395,7 +392,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		});
 
 		JLabel jLabelPassphrase = new JLabel();
-		jLabelPassphrase.setText(configed.getResourceValue("SSHConnection.Config.jLabelPassphrase"));
+		jLabelPassphrase.setText(Configed.getResourceValue("SSHConnection.Config.jLabelPassphrase"));
 		jTextFieldPassphrase = new JPasswordField();
 		jTextFieldPassphrase.setEnabled(false);
 		jTextFieldPassphrase.setText(connectionInfo.getKeyfilePassphrase());
@@ -417,7 +414,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		});
 
 		jCheckBoxUseKeyFile = new JCheckBox();
-		jCheckBoxUseKeyFile.setText(configed.getResourceValue("SSHConnection.Config.useKeyfile"));
+		jCheckBoxUseKeyFile.setText(Configed.getResourceValue("SSHConnection.Config.useKeyfile"));
 		jCheckBoxUseKeyFile.setSelected(false);
 		jTextFieldPassword.setEnabled(false);
 		jTextFieldKeyFile.setEnabled(false);
@@ -435,7 +432,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		});
 
 		jCheckBoxDefault = new JCheckBox();
-		jCheckBoxDefault.setText(configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));
+		jCheckBoxDefault.setText(Configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));
 		jCheckBoxDefault.setSelected(true);
 
 		setComponentsEditable(false);
@@ -455,20 +452,20 @@ public class SSHConfigDialog extends FGeneralDialog {
 			jCheckBoxUseKeyFile.setSelected(true);
 
 		jCheckBoxUseOutputColor = new JCheckBox();
-		jCheckBoxUseOutputColor.setText(configed.getResourceValue("SSHConnection.Config.coloredOutput"));
-		jCheckBoxUseOutputColor.setToolTipText(configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
+		jCheckBoxUseOutputColor.setText(Configed.getResourceValue("SSHConnection.Config.coloredOutput"));
+		jCheckBoxUseOutputColor.setToolTipText(Configed.getResourceValue("SSHConnection.Config.coloredOutput.tooltip"));
 		jCheckBoxUseOutputColor.setSelected(true);
-		SSHCommandFactory.ssh_colored_output = true;
+		SSHCommandFactory.sshColoredOutput = true;
 		jCheckBoxUseOutputColor.addItemListener(itemEvent -> checkComponentStates());
 
 		jCheckBoxExecInBackground = new JCheckBox();
-		jCheckBoxExecInBackground.setText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
+		jCheckBoxExecInBackground.setText(Configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground"));
 		jCheckBoxExecInBackground
-				.setToolTipText(configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground.tooltip"));
-		jCheckBoxExecInBackground.setSelected(SSHCommandFactory.ssh_always_exec_in_background);
+				.setToolTipText(Configed.getResourceValue("SSHConnection.Config.AlwaysExecBackground.tooltip"));
+		jCheckBoxExecInBackground.setSelected(SSHCommandFactory.sshAlwaysExecInBackground);
 		jCheckBoxExecInBackground.addItemListener(itemEvent -> checkComponentStates());
 
-		logging.debug(this, "sshConfigDialog building layout ");
+		Logging.debug(this, "sshConfigDialog building layout ");
 		connectionPanelLayout.setHorizontalGroup(connectionPanelLayout.createSequentialGroup()
 				.addGroup(connectionPanelLayout.createParallelGroup()
 						.addComponent(jCheckBoxDefault, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -605,16 +602,16 @@ public class SSHConfigDialog extends FGeneralDialog {
 	/* This method is called when button 1 is pressed */
 	@Override
 	public void doAction1() {
-		logging.info(this, "doAction1  ");
+		Logging.info(this, "doAction1  ");
 		setSSHState();
 
 		if (jCheckBoxDefault.isSelected()) {
-			logging.info(this, "doAction1  cb_useDefault.isSelected true");
+			Logging.info(this, "doAction1  cb_useDefault.isSelected true");
 			if (!jComboBoxUseDefaultState)
 			// state has changed
 			{
-				connectionInfo.setUserData(ConfigedMain.HOST, ConfigedMain.USER, ConfigedMain.PASSWORD,
-						SSHConnect.portSSH);
+				connectionInfo.setUserData(ConfigedMain.host, ConfigedMain.user, ConfigedMain.password,
+						SSHConnect.PORT_SSH);
 			}
 
 			jComboBoxHost.setSelectedItem(connectionInfo.getHost());
@@ -622,17 +619,17 @@ public class SSHConfigDialog extends FGeneralDialog {
 			jTextFieldPort.setText(connectionInfo.getPort());
 			jTextFieldPassword.setText(connectionInfo.getPassw());
 		} else {
-			logging.info(this, "doAction1  cb_useDefault.isSelected false");
+			Logging.info(this, "doAction1  cb_useDefault.isSelected false");
 			String host = (String) jComboBoxHost.getSelectedItem();
-			logging.info(this, "doAction1 host " + host);
+			Logging.info(this, "doAction1 host " + host);
 
 			connectionInfo.setUserData(host, jTextFieldUser.getText(), new String(jTextFieldPassword.getPassword()),
 					jTextFieldPort.getText());
 		}
 		connectionInfo.useKeyfile(false);
 		if (jCheckBoxUseKeyFile.isSelected()) {
-			logging.info(this, "doAction1  cb_useKeyfile.isSelected true");
-			logging.info(this, "set keyfile true keyfile " + jTextFieldKeyFile.getText());
+			Logging.info(this, "doAction1  cb_useKeyfile.isSelected true");
+			Logging.info(this, "set keyfile true keyfile " + jTextFieldKeyFile.getText());
 			connectionInfo.useKeyfile(true, jTextFieldKeyFile.getText(),
 					new String(jTextFieldPassphrase.getPassword()));
 			jTextFieldPassword.setText("");
@@ -646,17 +643,17 @@ public class SSHConfigDialog extends FGeneralDialog {
 
 		factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
 
-		SSHCommandFactory.ssh_colored_output = jCheckBoxUseOutputColor.isSelected();
-		SSHCommandFactory.ssh_always_exec_in_background = jCheckBoxExecInBackground.isSelected();
+		SSHCommandFactory.sshColoredOutput = jCheckBoxUseOutputColor.isSelected();
+		SSHCommandFactory.sshAlwaysExecInBackground = jCheckBoxExecInBackground.isSelected();
 		jComboBoxUseDefaultState = jCheckBoxDefault.isSelected();
 		checkComponentStates();
-		logging.info(this, "request focus");
+		Logging.info(this, "request focus");
 	}
 
 	/* This method gets called when button 2 is pressed */
 	@Override
 	public void doAction2() {
-		logging.info(this, "doAction2 cb_host.getSelectedItem() " + jComboBoxHost.getSelectedItem());
+		Logging.info(this, "doAction2 cb_host.getSelectedItem() " + jComboBoxHost.getSelectedItem());
 
 		super.doAction2();
 	}
@@ -667,7 +664,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
-		String userDirLocation = System.getProperty(logging.envVariableForUserDirectory);
+		String userDirLocation = System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY);
 		File userDir = new File(userDirLocation);
 		// default to user directory
 		chooser.setCurrentDirectory(userDir);
@@ -682,7 +679,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 			String inputVerzStr = inputVerzFile.getPath();
 			jTextFieldKeyFile.setText(inputVerzStr);
 		}
-		logging.info(this, "doActionOeffnen canceled");
+		Logging.info(this, "doActionOeffnen canceled");
 		chooser.setVisible(false);
 	}
 
@@ -690,8 +687,8 @@ public class SSHConfigDialog extends FGeneralDialog {
 		if (jCheckBoxDefault.isSelected()) {
 			connectionInfo.setUserData(
 
-					ConfigedMain.HOST, // persist.getHostInfoCollections().getConfigServer(),
-					ConfigedMain.USER, ConfigedMain.PASSWORD, SSHConnect.portSSH);
+					ConfigedMain.host, // persist.getHostInfoCollections().getConfigServer(),
+					ConfigedMain.user, ConfigedMain.password, SSHConnect.PORT_SSH);
 
 		}
 		jComboBoxHost.setSelectedItem(connectionInfo.getHost());

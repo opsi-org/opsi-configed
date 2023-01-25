@@ -10,7 +10,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.lang.reflect.Method;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class Containership {
 	int debugLevel = 4;
@@ -19,19 +19,19 @@ public class Containership {
 
 	public Containership(java.awt.Container conti) {
 		theContainer = conti;
-		logging.debug("Containership initialized");
+		Logging.debug("Containership initialized");
 	}
 
 	public void doForAllContainedCompis(String methodName, Object[] args) {
-		Class[] theArgsTypes = new Class[args.length];
+		Class<?>[] theArgsTypes = new Class[args.length];
 		for (int j = 0; j < args.length; j++) {
 			theArgsTypes[j] = args[j].getClass();
 		}
 		doForAllContained(methodName, args, theArgsTypes, Object.class, theContainer);
 	}
 
-	public void doForAllContainedCompisOfClass(String methodName, Object[] args, Class selClass) {
-		Class[] theArgsTypes = new Class[args.length];
+	public void doForAllContainedCompisOfClass(String methodName, Object[] args, Class<?> selClass) {
+		Class<?>[] theArgsTypes = new Class[args.length];
 		for (int j = 0; j < args.length; j++) {
 			theArgsTypes[j] = args[j].getClass();
 		}
@@ -39,34 +39,35 @@ public class Containership {
 		doForAllContained(methodName, args, theArgsTypes, selClass, theContainer);
 	}
 
-	public void doForAllContainedCompisOfClass(String methodName, Object[] args, Class[] theArgsTypes, Class selClass) {
+	public void doForAllContainedCompisOfClass(String methodName, Object[] args, Class<?>[] theArgsTypes,
+			Class<?> selClass) {
 		doForAllContained(methodName, args, theArgsTypes, selClass, theContainer);
 	}
 
-	private void doForAllContained(String methodName, Object[] args, Class[] theArgsTypes, Class selClass,
+	private void doForAllContained(String methodName, Object[] args, Class<?>[] theArgsTypes, Class<?> selClass,
 			java.awt.Container in) {
 		Component theComp;
-		Class theCompClass;
+		Class<?> theCompClass;
 		Method theMethod;
 		int cc = 0;
 		int i = 0;
 
 		cc = in.getComponentCount();
 
-		logging.debug("Number of Comps " + cc);
+		Logging.debug("Number of Comps " + cc);
 
 		for (i = 0; i < cc; i++) {
 			theComp = in.getComponent(i);
 			theCompClass = theComp.getClass();
 
-			logging.debug("  " + i + " " + theComp.getClass().getName() + "\n" + theComp.toString() + "\n");
+			Logging.debug("  " + i + " " + theComp.getClass().getName() + "\n" + theComp.toString() + "\n");
 
 			if (selClass.isInstance(theComp) && !methodName.equals("")) {
 				try {
 					theMethod = theCompClass.getMethod(methodName, theArgsTypes);
 					theMethod.invoke(theComp, args);
 				} catch (Exception ex) {
-					logging.debug(methodName + ": not found >>>>> " + ex.toString() + "\n");
+					Logging.debug(methodName + ": not found >>>>> " + ex.toString() + "\n");
 
 				}
 
@@ -75,7 +76,7 @@ public class Containership {
 			if (theComp instanceof Container)
 			// theComp is an instance of Container
 			{
-				logging.debug("+++ recursion ");
+				Logging.debug("+++ recursion ");
 				doForAllContained(methodName, args, theArgsTypes, selClass, (java.awt.Container) theComp);
 			}
 		}

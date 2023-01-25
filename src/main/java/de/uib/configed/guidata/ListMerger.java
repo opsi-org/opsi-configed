@@ -36,26 +36,17 @@ public class ListMerger extends ArrayList {
 		if (list1 == null && list2 == null)
 			return true;
 
-		if (list1 == null && list2 != null)
+		if (list1 == null || list2 == null)
 			return false;
 
-		if (list1 != null && list2 == null)
-			return false;
-
-		if (list1.containsAll(list2) && list2.containsAll(list1))
-			return true;
-
-		return false;
+		return list1.containsAll(list2) && list2.containsAll(list1);
 	}
 
 	public ListMerger merge(List listToMergeIn) {
-		if (havingCommonValue) // we were yet in the state of a unique value
-		{
-			if (!equals(listValue, listToMergeIn)) {
-				havingCommonValue = false;
+		if (havingCommonValue && !equals(listValue, listToMergeIn)) {
+			havingCommonValue = false;
 
-				listValue = NO_COMMON_VALUE;
-			}
+			listValue = NO_COMMON_VALUE;
 		}
 
 		if (!havingCommonValue)

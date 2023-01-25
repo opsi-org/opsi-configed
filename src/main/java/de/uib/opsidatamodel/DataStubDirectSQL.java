@@ -22,12 +22,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.opsicommand.DbConnect;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.logging.logging;
 
 public class DataStubDirectSQL extends DataStubRawData
 // only for testing purposes
@@ -40,21 +40,21 @@ public class DataStubDirectSQL extends DataStubRawData
 
 	@Override
 	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
-		logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 		retrieveInstalledSoftwareInformation();
-		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
+		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
 
 		List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
-			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
+			Logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
 					+ client2software.keySet().size());
 
 			newClients.removeAll(client2software.keySet());
 		}
 
-		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
+		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  new clients count  ====== " + newClients.size());
 
 		if (client2software == null || !newClients.isEmpty()) {
@@ -71,9 +71,9 @@ public class DataStubDirectSQL extends DataStubRawData
 				client2software = new HashMap<>();
 
 			persist.notifyDataLoadingObservers(
-					configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
+					Configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
 
-			logging.info(this, "retrieveSoftwareAuditOnClients/ SOFTWARE_CONFIG, start a request");
+			Logging.info(this, "retrieveSoftwareAuditOnClients/ SOFTWARE_CONFIG, start a request");
 
 			String columns = SWAuditClientEntry.DB_COLUMN_NAMES.toString();
 			columns = columns.substring(1);
@@ -82,7 +82,7 @@ public class DataStubDirectSQL extends DataStubRawData
 			String query = "select " + columns + " from " + SWAuditClientEntry.DB_TABLE_NAME + " \n"
 					+ " where  state = 1 " + clientSelection;
 
-			logging.info(this, "retrieveSoftwareAuditOnClients, query " + query);
+			Logging.info(this, "retrieveSoftwareAuditOnClients, query " + query);
 
 			Connection sqlConn = DbConnect.getConnection();
 
@@ -115,7 +115,7 @@ public class DataStubDirectSQL extends DataStubRawData
 							persist);
 
 					if (clientEntry.getSWid() == -1) {
-						logging.info("Missing auditSoftware entry for swIdent " + SWAuditClientEntry.DB_COLUMN_NAMES
+						Logging.info("Missing auditSoftware entry for swIdent " + SWAuditClientEntry.DB_COLUMN_NAMES
 								+ "for values"
 								+ SWAuditClientEntry.produceSWident(SWAuditClientEntry.DB_COLUMN_NAMES, row));
 
@@ -123,9 +123,6 @@ public class DataStubDirectSQL extends DataStubRawData
 						entries.add(clientEntry);
 					}
 				}
-
-				stat.close();
-
 				timeCheck.stop("result set  ready ");
 
 				newClients.removeAll(client2software.keySet());
@@ -134,15 +131,14 @@ public class DataStubDirectSQL extends DataStubRawData
 				for (String clientId : newClients) {
 					client2software.put(clientId, new LinkedList<>());
 				}
-
 			}
 
 			catch (SQLException e) {
-				logging.info(this, "retrieveSoftwareAuditOnClients sql Error  in:\n" + query);
-				logging.error("retrieveSoftwareAuditOnClients sql Error " + e.toString());
+				Logging.info(this, "retrieveSoftwareAuditOnClients sql Error  in:\n" + query);
+				Logging.error("retrieveSoftwareAuditOnClients sql Error " + e.toString());
 			}
 
-			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
+			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end " + Globals.usedMemory());
 
 			persist.notifyDataRefreshedObservers("softwareConfig");
 		}

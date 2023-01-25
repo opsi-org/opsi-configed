@@ -12,8 +12,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class MapSource implements TableSource
 // based on a regular map (rows indexed by a String key)
@@ -46,14 +47,14 @@ public class MapSource implements TableSource
 	}
 
 	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map> table, boolean rowCounting) {
-		logging.info(this, "constructed with cols " + columnNames);
-		logging.info(this, "constructed with classes " + classNames);
+		Logging.info(this, "constructed with cols " + columnNames);
+		Logging.info(this, "constructed with classes " + classNames);
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		setRowCounting(rowCounting);
 		if (rowCounting) {
-			logging.info(this, "completed to cols " + columnNames);
-			logging.info(this, "completed to classes " + classNames);
+			Logging.info(this, "completed to cols " + columnNames);
+			Logging.info(this, "completed to classes " + classNames);
 		}
 		this.table = table;
 		rows = new ArrayList<>();
@@ -64,7 +65,7 @@ public class MapSource implements TableSource
 		this(columnNames, classNames, table, false);
 	}
 
-	private static boolean dynInstanceOf(Object ob, Class cl) {
+	private static boolean dynInstanceOf(Object ob, Class<?> cl) {
 		return cl.isAssignableFrom(ob.getClass());
 	}
 
@@ -73,45 +74,45 @@ public class MapSource implements TableSource
 
 		int rowCount = 0;
 
-		for (String key : table.keySet()) {
-			List vRow = new ArrayList<>();
+		for (Entry<String, Map> tableEntry : table.entrySet()) {
+			List<Object> vRow = new ArrayList<>();
 
-			Map mRow = table.get(key);
+			Map<String, Object> mRow = tableEntry.getValue();
 
 			// previously we assumed that column 0 hold the key
 
 			for (int i = 0; i < columnNames.size(); i++) {
-				Object ob = mRow.get(columnNames.get(i));
+				Object obj = mRow.get(columnNames.get(i));
 
-				if (key.startsWith("A"))
-					logging.debug(this, "fetchData for A-key " + key + " col  " + columnNames.get(i) + " index " + i
-							+ " val " + ob);
+				if (tableEntry.getKey().startsWith("A"))
+					Logging.debug(this, "fetchData for A-key " + tableEntry.getKey() + " col  " + columnNames.get(i)
+							+ " index " + i + " val " + obj);
 
-				if (ob != null) {
-					vRow.add(ob);
+				if (obj != null) {
+					vRow.add(obj);
 
 					try {
 
-						Class cl = Class.forName(classNames.get(i));
-						if (!dynInstanceOf(ob, cl)) {
+						Class<?> cl = Class.forName(classNames.get(i));
+						if (!dynInstanceOf(obj, cl)) {
 							// Class.forName( classNames.get(i) ) ).isAssignableFrom ( ob.getClass() ) )
 
-							logging.warning(this, "MapSource fetchData(): data type does not fit");
-							logging.info(this, " ob " + ob + " class " + ob.getClass().getName());
-							logging.info(this, "class should be " + cl);
+							Logging.warning(this, "MapSource fetchData(): data type does not fit");
+							Logging.info(this, " ob " + obj + " class " + obj.getClass().getName());
+							Logging.info(this, "class should be " + cl);
 						}
 					} catch (java.lang.NullPointerException ex) {
-						logging.warning(this,
+						Logging.warning(this,
 								" " + ex + ", could not get dyninstance " + i + ", " + columnNames.get(i));
 					} catch (Exception ex) {
-						logging.error("MapSource fetchData(): class " + classNames.get(i) + " not found, " + ex);
+						Logging.error("MapSource fetchData(): class " + classNames.get(i) + " not found, " + ex);
 					}
 
 				} else {
 					if (mRow.containsKey(columnNames.get(i))) {
-						logging.debug(this, "fetchData row " + mRow + " no value in column  " + columnNames.get(i)
+						Logging.debug(this, "fetchData row " + mRow + " no value in column  " + columnNames.get(i)
 								+ " supplement by null");
-						vRow.add(ob); // we complete the row by null
+						vRow.add(obj); // we complete the row by null
 					} else {
 						String className = classNames.get(i);
 
@@ -125,7 +126,7 @@ public class MapSource implements TableSource
 							}
 
 							else {
-								logging.warning(this,
+								Logging.warning(this,
 										"fetchData row " + mRow
 												+ " ob == null, possibly the column name is not correct, column " + i
 												+ ", " + columnNames.get(i));
@@ -136,8 +137,8 @@ public class MapSource implements TableSource
 
 			}
 
-			if (key.startsWith("A"))
-				logging.debug(this, "fetchData for A-key " + key + " produced row " + vRow);
+			if (tableEntry.getKey().startsWith("A"))
+				Logging.debug(this, "fetchData for A-key " + tableEntry.getKey() + " produced row " + vRow);
 
 			rows.add(vRow);
 
@@ -158,12 +159,12 @@ public class MapSource implements TableSource
 
 	@Override
 	public List<List<Object>> retrieveRows() {
-		logging.info(this, " -- retrieveRows");
+		Logging.info(this, " -- retrieveRows");
 		if (reloadRequested) {
 			fetchData();
 			reloadRequested = false;
 		}
-		logging.info(this, " -- retrieveRows rows.size() " + rows.size());
+		Logging.info(this, " -- retrieveRows rows.size() " + rows.size());
 		return rows;
 	}
 

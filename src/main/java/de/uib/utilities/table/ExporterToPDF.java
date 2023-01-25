@@ -34,9 +34,9 @@ import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -59,7 +59,6 @@ public class ExporterToPDF extends ExportTable {
 	private float xHeaderTop = 803;
 	private float headerWidth = 527;
 
-	private static BaseFont bf;
 	private static Font catFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
 	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
@@ -87,7 +86,7 @@ public class ExporterToPDF extends ExportTable {
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
 		document = new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
-		setPageSizeA4_Landscape();
+		setPageSizeA4Landscape();
 
 		if (fileName != null)
 			saveAction = true;
@@ -99,7 +98,7 @@ public class ExporterToPDF extends ExportTable {
 
 		if (saveAction == null) {
 			if (dialog == null) {
-				dialog = new OpenSaveDialog(configed.getResourceValue("OpenSaveDialog.title"));
+				dialog = new OpenSaveDialog(Configed.getResourceValue("OpenSaveDialog.title"));
 			} else {
 				dialog.setVisible();
 			}
@@ -113,11 +112,11 @@ public class ExporterToPDF extends ExportTable {
 					try {
 						File file = new File(fileName);
 						if (file.isDirectory())
-							logging.error("no valid filename " + fileName);
+							Logging.error("no valid filename " + fileName);
 						else
 							filePath = file.getAbsolutePath();
 					} catch (Exception e) {
-						logging.error("no valid filename " + fileName);
+						Logging.error("no valid filename " + fileName);
 					}
 				}
 
@@ -132,7 +131,7 @@ public class ExporterToPDF extends ExportTable {
 					temp = File.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf");
 					filePath = temp.getAbsolutePath();
 				} catch (IOException e) {
-					logging.error("Failed to create temp file", e);
+					Logging.error("Failed to create temp file", e);
 				}
 			}
 			try {
@@ -150,7 +149,7 @@ public class ExporterToPDF extends ExportTable {
 						event.setHeader(metaData.get("title"));
 					writer.setPageEvent(event);
 				} catch (Exception ex) {
-					logging.error("Error PdfWriter --- " + ex);
+					Logging.error("Error PdfWriter --- " + ex);
 				}
 
 				document.open();
@@ -161,9 +160,9 @@ public class ExporterToPDF extends ExportTable {
 				document.close();
 
 			} catch (FileNotFoundException e) {
-				logging.error("file not found: " + fileName, e);
+				Logging.error("file not found: " + fileName, e);
 			} catch (Exception exp) {
-				logging.error("file not found: " + fileName, exp);
+				Logging.error("file not found: " + fileName, exp);
 			}
 
 			if (!saveAction && (temp.getAbsolutePath() != null)) {
@@ -172,7 +171,7 @@ public class ExporterToPDF extends ExportTable {
 					Desktop.getDesktop().open(temp);
 
 				} catch (Exception e) {
-					logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
+					Logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
 				}
 
 			}
@@ -204,7 +203,7 @@ public class ExporterToPDF extends ExportTable {
 		xHeaderTop = 803;
 	}
 
-	public void setPageSizeA4_Landscape() {
+	public void setPageSizeA4Landscape() {
 		document.setPageSize(PageSize.A4.rotate());
 		headerWidth = 770;
 		xHeaderTop = 555;
@@ -245,7 +244,7 @@ public class ExporterToPDF extends ExportTable {
 			}
 		}
 
-		content.add(new Paragraph(configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", " //$NON-NLS-3$
+		content.add(new Paragraph(Configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", " //$NON-NLS-3$
 				+ dateFormatter.format(new Date()), //$NON-NLS-2$ //$NON-NLS-3$
 				smallBold));
 		content.add(addEmptyLines(1));
@@ -267,13 +266,13 @@ public class ExporterToPDF extends ExportTable {
 		BaseColor headerBackground = new BaseColor(150, 150, 150);
 		BaseColor evenBackground = new BaseColor(230, 230, 230);
 		BaseColor oddBackground = new BaseColor(250, 250, 250);
-		Font symbol_font;
+		Font symbolFont;
 		try {
-			bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
-			symbol_font = new Font(bf, 11);
+			BaseFont bf = BaseFont.createFont(BaseFont.SYMBOL, BaseFont.SYMBOL, BaseFont.EMBEDDED);
+			symbolFont = new Font(bf, 11);
 		} catch (Exception e) {
-			logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :" + e);
-			symbol_font = small;
+			Logging.warning("ExporterToPDF::createTableDataElement", " BaseFont can't be created :" + e);
+			symbolFont = small;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();
 		defaultCell.setBackgroundColor(new BaseColor(100, 100, 100));
@@ -300,10 +299,10 @@ public class ExporterToPDF extends ExportTable {
 					}
 					switch (s) {
 					case "∞":
-						value = new PdfPCell(new Phrase("\u221e", symbol_font));
+						value = new PdfPCell(new Phrase("\u221e", symbolFont));
 						break;
 					case "true":
-						value = new PdfPCell(new Phrase("\u221a", symbol_font)); // radic
+						value = new PdfPCell(new Phrase("\u221a", symbolFont)); // radic
 						break;
 					case "false":
 						break;
@@ -368,7 +367,7 @@ public class ExporterToPDF extends ExportTable {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
 
-			java.net.URL opsi_image_URL = Globals.getImageResourceURL("images/opsi_full.png");
+			java.net.URL opsiImageURL = Globals.getImageResourceURL("images/opsi_full.png");
 			try {
 				// add header table with page number
 				table.setWidths(new int[] { 24, 24, 2 });
@@ -384,14 +383,14 @@ public class ExporterToPDF extends ExportTable {
 				table.addCell(cell);
 				table.writeSelectedRows(0, -1, 34, xHeaderTop, writer.getDirectContent());
 				// add footer image
-				document.add(createElement(opsi_image_URL, 25, 25));
+				document.add(createElement(opsiImageURL, 25, 25));
 
 			} catch (DocumentException de) {
 				throw new ExceptionConverter(de);
 			} catch (MalformedURLException ex) {
-				logging.error("malformed URL --- " + ex);
+				Logging.error("malformed URL --- " + ex);
 			} catch (IOException e) { // getInstannce
-				logging.error("Error document add footer image --- " + e);
+				Logging.error("Error document add footer image --- " + e);
 			}
 		}
 

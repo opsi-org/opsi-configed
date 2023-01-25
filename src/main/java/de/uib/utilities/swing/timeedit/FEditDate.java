@@ -17,7 +17,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEdit;
 
 public class FEditDate extends FEdit implements /* DateEventObserver, */
@@ -53,7 +53,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	public void setStartText(String s) {
 		super.setStartText(s);
 
-		logging.info(this, "setStartText(): " + s);
+		Logging.info(this, "setStartText(): " + s);
 		setDataChanged(false);
 
 		if (s == null || s.equals("")) {
@@ -74,12 +74,12 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 					if (s1.indexOf(' ') == -1)
 						s1 = s1 + " 00:00:00";
 					newDate = java.sql.Timestamp.valueOf(s1);
-					logging.info(this, "after supplement setStartText(): " + s1);
+					Logging.info(this, "after supplement setStartText(): " + s1);
 					dateEditor.setSelectionDate(newDate);
 
 					setDataChanged(false);
 				} catch (IllegalArgumentException ex) {
-					logging.warning("not valid date: " + s1);
+					Logging.warning("not valid date: " + s1);
 					dateEditor.setDate();
 					setDataChanged(true);
 				}
@@ -100,7 +100,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	}
 
 	private String getSelectedDateTime() {
-		logging.debug(this, " getSelectedDateTime() : " + dateEditor.getSelectedSqlTime());
+		Logging.debug(this, " getSelectedDateTime() : " + dateEditor.getSelectedSqlTime());
 
 		if (dateEditor.getSelectedSqlTime() == null)
 			return "";
@@ -118,16 +118,16 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	@Override
 	public String getText() {
 		String oldText = initialText;
-		logging.info(this, "getText initialText was " + oldText);
+		Logging.info(this, "getText initialText was " + oldText);
 		initialText = getSelectedDateString(); // set new initial text for use in processWindowEvent
-		logging.info(this, "getText initialText changed to  " + initialText);
+		Logging.info(this, "getText initialText changed to  " + initialText);
 		return initialText;
 	}
 
 	// DateSelectionListener
 	@Override
 	public void valueChanged(org.jdesktop.swingx.event.DateSelectionEvent ev) {
-		logging.info(this, "valueChanged dateSelectionEvent");
+		Logging.info(this, "valueChanged dateSelectionEvent");
 
 		setDataChanged(true);
 
@@ -137,7 +137,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-		logging.debug(this, " key event " + e);
+		Logging.debug(this, " key event " + e);
 		super.keyPressed(e);
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			cancel();

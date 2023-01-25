@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import de.uib.configed.gui.licences.PanelLicencesUsage;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
@@ -42,8 +42,8 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 	public String getSoftwareLicenceReservation(String clientId) {
 		if (clientId == null || clientId.equals("")) {
 			JOptionPane.showMessageDialog(mainController.licencesFrame,
-					configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectClient"),
-					configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectClient"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 
 			return "";
 		}
@@ -52,8 +52,8 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 		if (selectedLPoolIds == null || selectedLPoolIds.size() != 1) {
 			JOptionPane.showMessageDialog(mainController.licencesFrame,
-					configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectOneLicencepool"),
-					configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectOneLicencepool"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 
 			return "";
 		}
@@ -176,7 +176,7 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 
 				choicesAllHosts.set(0, "");
 
-				logging.debug(this, "choicesAllHosts " + choicesAllHosts);
+				Logging.debug(this, "choicesAllHosts " + choicesAllHosts);
 
 				return new DefaultComboBoxModel<>(choicesAllHosts.toArray(String[]::new));
 			}

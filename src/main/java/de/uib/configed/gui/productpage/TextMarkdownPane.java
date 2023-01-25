@@ -21,7 +21,7 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
@@ -49,7 +49,7 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
 	@Override
 	public void hyperlinkUpdate(HyperlinkEvent event) {
-		logging.info(this, "Hyperlinkevent in Markdown, inputevent: " + event.getInputEvent());
+		Logging.info(this, "Hyperlinkevent in Markdown, inputevent: " + event.getInputEvent());
 
 		String link = event.getURL().toString();
 

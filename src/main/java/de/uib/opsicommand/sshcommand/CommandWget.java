@@ -2,33 +2,34 @@ package de.uib.opsicommand.sshcommand;
 
 import java.util.List;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHWgetParameterDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
-	private String baseName = "wget ";
+	private static final String BASE_NAME = "wget ";
+	private static final boolean NEED_SUDO = false;
+	private static final boolean IS_MULTI_COMMAND = false;
+	private static final int PRIORITY = 110;
+
 	private String command = "wget ";
-	protected FGeneralDialog dialog = null;
-	private boolean needSudo = false;
 	private boolean needParameter = true;
-	private boolean isMultiCommand = false;
-	private int priority = 110;
 
 	private String url = " ";
 	private String authentication = " ";
-	private String additional_url = " ";
+	private String additionalURL = " ";
 	private String dir = " ";
 	private String product = " ";
-	private String filename = " ";
+	private String fileName = " ";
 	private String verbosity = " ";
 	private String freeInput = " ";
 
+	protected FGeneralDialog dialog = null;
+
 	public CommandWget() {
-		command = "wget ";
 	}
 
 	public CommandWget(String d, String u, String au, String auth) {
@@ -38,7 +39,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	public CommandWget(String d, String u, String au) {
 		this(d, u);
-		additional_url = au;
+		additionalURL = au;
 	}
 
 	public CommandWget(String d, String u) {
@@ -49,19 +50,19 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 		if (d.charAt(d.length() - 1) != '/')
 			d = d + "/";
 		setProduct(d + getFilenameFromUrl(url));
-		logging.debug(this, "CommandWget dir " + dir);
-		logging.debug(this, "CommandWget url " + url);
-		logging.debug(this, "CommandWget product " + getProduct());
+		Logging.debug(this, "CommandWget dir " + dir);
+		Logging.debug(this, "CommandWget url " + url);
+		Logging.debug(this, "CommandWget product " + getProduct());
 		needParameter = false;
 	}
 
-	public void setFilename(String newFilename) {
+	public void setFileName(String newFilename) {
 		if ((newFilename != null) && (!newFilename.trim().equals("")))
-			filename = " --output-document=" + newFilename + " ";
+			fileName = " --output-document=" + newFilename + " ";
 	}
 
 	@Override
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 
@@ -70,13 +71,9 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 			authentication = a;
 	}
 
-	public String getAuthentication() {
-		return authentication;
-	}
-
 	@Override
 	public boolean isMultiCommand() {
-		return isMultiCommand;
+		return IS_MULTI_COMMAND;
 	}
 
 	@Override
@@ -86,12 +83,12 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getBasicName() {
-		return baseName;
+		return BASE_NAME;
 	}
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.wget");
+		return Configed.getResourceValue("SSHConnection.command.wget");
 	}
 
 	@Override
@@ -101,17 +98,17 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.wget.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.wget.tooltip");
 	}
 
 	@Override
 	public String getCommand() {
 		if (!freeInput.equals(""))
-			command = "wget " + authentication + filename + freeInput + verbosity + dir + url + " " + additional_url;
+			command = "wget " + authentication + fileName + freeInput + verbosity + dir + url + " " + additionalURL;
 		else
-			command = "wget " + authentication + filename + verbosity + dir + url + " " + additional_url;
+			command = "wget " + authentication + fileName + verbosity + dir + url + " " + additionalURL;
 		if (needSudo())
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 
@@ -123,7 +120,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -135,12 +132,12 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public boolean needSudo() {
-		return needSudo;
+		return NEED_SUDO;
 	}
 
 	@Override
 	public int getPriority() {
-		return priority;
+		return PRIORITY;
 	}
 
 	@Override
@@ -155,7 +152,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public void startParameterGui(ConfigedMain main) {
-		dialog = new SSHWgetParameterDialog(main);
+		dialog = new SSHWgetParameterDialog();
 	}
 
 	@Override
@@ -184,12 +181,13 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 			url = "";
 	}
 
-	public void setVerbosity(int v_sum) {
-		String v = "";
-		for (int i = 0; i < v_sum; i++)
-			v = v + "v";
+	public void setVerbosity(int vSum) {
+		StringBuilder v = new StringBuilder();
+		for (int i = 0; i < vSum; i++)
+			v.append("v");
+
 		verbosity = " -" + v + " ";
-		if (v_sum == 0)
+		if (vSum == 0)
 			verbosity = "";
 	}
 

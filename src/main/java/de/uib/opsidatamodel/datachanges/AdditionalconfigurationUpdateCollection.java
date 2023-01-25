@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
 */
@@ -34,8 +34,8 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 
 		if (result && (c.size() != objectIds.length)) {
 			result = false;
-			logging.warning(this, "object ids (not fitting to edited item) " + Arrays.toString(objectIds));
-			logging.error("list of data has size " + c.size() + " differs from  length of objectIds list  "
+			Logging.warning(this, "object ids (not fitting to edited item) " + Arrays.toString(objectIds));
+			Logging.error("list of data has size " + c.size() + " differs from  length of objectIds list  "
 					+ objectIds.length);
 
 		}
@@ -52,16 +52,16 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 				}
 
 				catch (ClassCastException ccex) {
-					logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
+					Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 				}
 
-				logging.debug(this, "addAll for one obj, map " + map);
+				Logging.debug(this, "addAll for one obj, map " + map);
 
 				if (masterConfig) {
-					logging.debug(this, "adding ConfigUpdate");
+					Logging.debug(this, "adding ConfigUpdate");
 					result = add(new ConfigUpdate(persis, map));
 				} else {
-					logging.debug(this, "adding AdditionalconfigurationUpdate");
+					Logging.debug(this, "adding AdditionalconfigurationUpdate");
 					result = add(new AdditionalconfigurationUpdate(persis, objectIds[i], map));
 				}
 				i++;
@@ -73,14 +73,14 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 
 	@Override
 	public void clearElements() {
-		logging.debug(this, "clearElements()");
+		Logging.debug(this, "clearElements()");
 		clear();
 	}
 
 	@Override
 	public void doCall() {
 		super.doCall();
-		logging.debug(this, "doCall, after recursion, element count: " + size());
+		Logging.debug(this, "doCall, after recursion, element count: " + size());
 		if (masterConfig)
 			persis.setConfig();
 		else

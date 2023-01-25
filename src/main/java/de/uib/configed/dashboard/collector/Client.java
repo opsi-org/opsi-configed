@@ -1,6 +1,6 @@
 package de.uib.configed.dashboard.collector;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,7 +24,7 @@ public class Client {
 	}
 
 	public final String getLastSeen() {
-		return lastSeen.get().isEmpty() ? configed.getResourceValue("Dashboard.lastSeen.never") : lastSeen.get();
+		return lastSeen.get().isEmpty() ? Configed.getResourceValue("Dashboard.lastSeen.never") : lastSeen.get();
 	}
 
 	public final void setLastSeen(String value) {
@@ -33,7 +33,7 @@ public class Client {
 
 	public StringProperty lastSeenProperty() {
 		if (lastSeen.get().isEmpty()) {
-			lastSeen.set(configed.getResourceValue("Dashboard.lastSeen.never"));
+			lastSeen.set(Configed.getResourceValue("Dashboard.lastSeen.never"));
 		}
 
 		return lastSeen;

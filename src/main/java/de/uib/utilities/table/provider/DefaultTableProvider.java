@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DefaultTableProvider implements TableProvider {
 	protected TableSource source;
@@ -20,7 +20,6 @@ public class DefaultTableProvider implements TableProvider {
 	protected List<String> classNames;
 	protected List<List<Object>> rows;
 	protected List<List<Object>> rowsCopy;
-	private boolean isDecorated = false;
 
 	public DefaultTableProvider(TableSource source) {
 		this.source = source;
@@ -50,7 +49,7 @@ public class DefaultTableProvider implements TableProvider {
 	// should deliver a copy of the data
 	@Override
 	public List<List<Object>> getRows() {
-		logging.info(this, " -- getRows()");
+		Logging.info(this, " -- getRows()");
 
 		if (rowsCopy == null)
 			resetRows();
@@ -58,12 +57,9 @@ public class DefaultTableProvider implements TableProvider {
 		return rowsCopy;
 	}
 
-	protected void decorateRow(List<Object> row) {
-	}
-
 	// should set back the copy of the data to the original values
 	protected void resetRows() {
-		logging.info(this, " -- resetRows()");
+		Logging.info(this, " -- resetRows()");
 		if (rowsCopy != null)
 			rowsCopy.clear();
 		else
@@ -73,20 +69,10 @@ public class DefaultTableProvider implements TableProvider {
 			rows = source.retrieveRows();
 		}
 
-		logging.info(this, "resetRows(), rows.size() " + rows.size());
-
-		if (!isDecorated) {
-			logging.info(this, "resetRows decorating rows");
-			if (rows != null) {
-				for (int i = 0; i < rows.size(); i++) {
-					decorateRow(rows.get(i));
-				}
-			}
-			isDecorated = true;
-		}
+		Logging.info(this, "resetRows(), rows.size() " + rows.size());
 
 		if (rows == null) {
-			logging.info(" no data rows retrieved ");
+			Logging.info(" no data rows retrieved ");
 			return;
 		}
 
@@ -132,7 +118,6 @@ public class DefaultTableProvider implements TableProvider {
 		rows = null;
 		rowsCopy = null;
 		source.requestReload();
-		isDecorated = false;
 	}
 
 	// should initiate reloading the metadata
@@ -145,13 +130,13 @@ public class DefaultTableProvider implements TableProvider {
 
 	// yields a column as ordered List
 	@Override
-	public List<String> getOrderedColumn(int col, boolean empty_allowed) {
+	public List<String> getOrderedColumn(int col, boolean emptyAllowed) {
 
 		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsCopy.size(); row++) {
 			String val = (String) rowsCopy.get(row).get(col);
 
-			if (empty_allowed || val != null && !val.equals("")) {
+			if (emptyAllowed || val != null && !val.equals("")) {
 
 				set.add((String) rowsCopy.get(row).get(col));
 			}

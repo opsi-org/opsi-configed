@@ -25,14 +25,10 @@ public class ExporterToTerminal extends ExportTable {
 			if (!selectedOnly || theTable.isRowSelected(rowI)) {
 				List<String> rowV = new ArrayList<>();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
-					if (theTable.getValueAt(rowI, colI) != null) {
-						if (classNames == null || classNames.isEmpty()) {
-							if (theTable.getValueAt(rowI, colI) instanceof String) {
+					if (theTable.getValueAt(rowI, colI) != null && ((classNames == null || classNames.isEmpty())
+							&& theTable.getValueAt(rowI, colI) instanceof String)) {
 
-								rowV.add((String) theTable.getValueAt(rowI, colI));
-
-							}
-						}
+						rowV.add((String) theTable.getValueAt(rowI, colI));
 					}
 				}
 				for (int i = 0; i < rowV.size(); i++) {

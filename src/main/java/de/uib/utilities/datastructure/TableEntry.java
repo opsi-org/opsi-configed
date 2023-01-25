@@ -3,8 +3,8 @@ package de.uib.utilities.datastructure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 public abstract class TableEntry extends LinkedHashMap<String, String> {
 	// very similar to RelationElement
@@ -41,8 +41,8 @@ public abstract class TableEntry extends LinkedHashMap<String, String> {
 					put(key, "");
 			}
 		} catch (Exception ex) {
-			logging.debug(this, "remap keyRetrieved, exception " + ex);
-			logging.debug(this, "remap keyRetrieved " + keyRetrieved + ", value " + pureEntry.get(keyRetrieved)
+			Logging.debug(this, "remap keyRetrieved, exception " + ex);
+			Logging.debug(this, "remap keyRetrieved " + keyRetrieved + ", value " + pureEntry.get(keyRetrieved)
 					+ ", class " + pureEntry.get(keyRetrieved).getClass());
 			put(key, "");
 		}
@@ -50,7 +50,7 @@ public abstract class TableEntry extends LinkedHashMap<String, String> {
 	}
 
 	protected String encodeString(String s) {
-		return configed.encodeStringFromService(s);
+		return Configed.encodeStringFromService(s);
 	}
 
 }

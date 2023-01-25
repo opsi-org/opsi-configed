@@ -6,18 +6,20 @@ import java.util.Map;
 
 import javax.swing.ListSelectionModel;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
+import de.uib.utilities.table.ListCellOptions;
 
-public class ConfigOption extends RetrievedMap implements de.uib.utilities.table.ListCellOptions
+public class ConfigOption extends RetrievedMap implements ListCellOptions
 
 // has a problem with type of defaultValues
 {
 
-	public static final String referenceID = "configId";
+	public static final String REFERENCE_ID = "configId";
 
 	public enum TYPE {
 		BoolConfig, UnicodeConfig, UndefinedConfig
 	}
+
 	// UndefinedConfig should not occur
 
 	public static final String BOOL_TYPE = TYPE.BoolConfig.toString();
@@ -44,7 +46,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 		else {
 			if (retrieved.get("defaultValues") instanceof org.json.JSONArray) {
 
-				logging.info(this, "gotdefaultvalues unexpectedly " + retrieved.get("defaultValues").getClass() + " "
+				Logging.info(this, "gotdefaultvalues unexpectedly " + retrieved.get("defaultValues").getClass() + " "
 						+ retrieved.get("defaultValues"));
 				put("defaultValues", ((org.json.JSONArray) retrieved.get("defaultValues")).toList());
 			} else
@@ -58,7 +60,7 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 			put("description", retrieved.get("description"));
 
 		if (retrieved == null || retrieved.get("type") == null) {
-			logging.debug(this, "set default UnicodeConfig");
+			Logging.debug(this, "set default UnicodeConfig");
 			put("type", "UnicodeConfig");
 			type = TYPE.UnicodeConfig;
 		}
@@ -95,10 +97,8 @@ public class ConfigOption extends RetrievedMap implements de.uib.utilities.table
 			put("editable", true);
 		else if (retrieved.get("editable") == null)
 			put("editable", false);
-		else if ((Boolean) retrieved.get("editable"))
-			put("editable", true);
 		else
-			put("editable", false);
+			put("editable", (boolean) retrieved.get("editable"));
 
 		if (type != TYPE.BoolConfig)
 			put("nullable", false);

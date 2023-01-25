@@ -11,7 +11,7 @@ public class BigIntLessOrEqualOperation extends SelectOperation {
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.BIT_INTEGER_TYPE;
+		return SelectData.DataType.BigIntegerType;
 	}
 
 	@Override

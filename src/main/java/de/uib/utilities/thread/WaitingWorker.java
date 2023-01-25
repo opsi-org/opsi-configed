@@ -8,7 +8,7 @@ import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class WaitingWorker extends SwingWorker<Void, Long> {
 	//
@@ -41,7 +41,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	}
 
 	public void stop() {
-		logging.info(this, "stop");
+		Logging.info(this, "stop");
 		stopped = true;
 		cancel(true);
 	}
@@ -53,7 +53,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		long timeStepMillis = 500;
 
-		logging.debug(this, " doInBackground waitingMillis " + waitingSleeper.getWaitingMillis());
+		Logging.debug(this, " doInBackground waitingMillis " + waitingSleeper.getWaitingMillis());
 
 		long elapsedMillis = 0;
 		long elapsedMins = 0;
@@ -67,8 +67,8 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 			elapsedMillis = nowMillis - startActionMillis;
 			elapsedMins = (elapsedMillis / 1000) / 60;
 
-			logging.debug(this, " doInBackgroudnd progress  elapsedMillis " + elapsedMillis);
-			logging.debug(this, " doInBackground progress totalTimeElapsed  [min] " + elapsedMins);
+			Logging.debug(this, " doInBackgroudnd progress  elapsedMillis " + elapsedMillis);
+			Logging.debug(this, " doInBackground progress totalTimeElapsed  [min] " + elapsedMins);
 
 			publish(elapsedMillis);
 
@@ -76,12 +76,12 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		}
 
-		logging.info(this,
+		Logging.info(this,
 				" doInBackground finished: ready, stopped, elapsedMillis < waitingSleeper.getWaitingMillis() " + ready
 						+ ", " + stopped + ", " + (elapsedMillis >= waitingSleeper.getWaitingMillis()));
 
 		if (timeoutReached)
-			logging.warning(this, " doInBackground finished, timeoutReached");
+			Logging.warning(this, " doInBackground finished, timeoutReached");
 
 		return null;
 	}
@@ -92,7 +92,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	@Override
 	protected void process(List<Long> listOfMillis) {
 		// update the steps which are done
-		logging.debug(this, "process, we have got list " + listOfMillis);
+		Logging.debug(this, "process, we have got list " + listOfMillis);
 
 		long millis = listOfMillis.get(listOfMillis.size() - 1);
 
@@ -102,14 +102,14 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();
 
-		logging.debug(this, "process, millis " + millis);
+		Logging.debug(this, "process, millis " + millis);
 		double proportion = ((double) millis) / (double) waitingSleeper.getOneProgressBarLengthWaitingMillis();
-		logging.info(this, "process, millis/estimatedTotalWaitMillis  " + proportion);
+		Logging.info(this, "process, millis/estimatedTotalWaitMillis  " + proportion);
 
 		int portion = (int) (barLength * proportion);
 		portion = portion % barLength;
 
-		logging.debug(this, "portion " + portion + " barLength  " + barLength);
+		Logging.debug(this, "portion " + portion + " barLength  " + barLength);
 
 		progressBar.setValue(progressBar.getMinimum() + portion);
 	}
@@ -119,7 +119,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	//
 	@Override
 	public void done() {
-		logging.info(this, "done,  stopped is " + stopped);
+		Logging.info(this, "done,  stopped is " + stopped);
 		if (!stopped)
 			waitingSleeper.actAfterWaiting();
 	}

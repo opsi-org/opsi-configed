@@ -18,7 +18,7 @@ import javax.swing.WindowConstants;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.IconAsButton;
@@ -26,7 +26,7 @@ import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxSimpleToolTip;
 import de.uib.utilities.thread.WaitCursor;
 
@@ -65,13 +65,13 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	public SSHPackageManagerUninstallParameterDialog(ConfigedMain m) {
 		super(Globals.APPNAME + "  "
-				+ configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"));
+				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"));
 		frameWidth = 850;
 		frameHeight = 350;
 
 		persist = PersistenceControllerFactory.getPersistenceController();
 		if (persist == null)
-			logging.info(this, "init PersistenceController null");
+			Logging.info(this, "init PersistenceController null");
 
 		WaitCursor waitCursor = new WaitCursor(this.getContentPane());
 		main = m;
@@ -127,7 +127,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		String depotParameter = "";
 		List<String> selectedDepots = fDepotList.getSelectedDepots();
 
-		logging.debug(this, "produceDepotParameter, selectedDepots " + selectedDepots);
+		Logging.debug(this, "produceDepotParameter, selectedDepots " + selectedDepots);
 
 		if (selectedDepots.isEmpty()) {
 			if (persist.isDepotsFullPermission()) {
@@ -164,7 +164,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			}
 		}
 
-		logging.info(this, "produce depot parameter " + depotParameter);
+		Logging.info(this, "produce depot parameter " + depotParameter);
 
 		return depotParameter;
 	}
@@ -182,21 +182,19 @@ public class SSHPackageManagerUninstallParameterDialog
 			textFieldSelectedDepots.setEditable(false);
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
-			if (persist.getDepotPermission(depot)) {
-
-				if ((persist.getDepot2LocalbootProducts().get(depot) != null
-						&& persist.getDepot2LocalbootProducts().get(depot).keySet().contains(selectedProduct))
-						|| (persist.getDepot2NetbootProducts().get(depot) != null
-								&& persist.getDepot2NetbootProducts().get(depot).keySet().contains(selectedProduct))) {
-					logging.info(this, "taking this depot " + depot);
-					result.add(depot);
-				}
+			if (persist.getDepotPermission(depot) && ((persist.getDepot2LocalbootProducts().get(depot) != null
+					&& persist.getDepot2LocalbootProducts().get(depot).keySet().contains(selectedProduct))
+					|| (persist.getDepot2NetbootProducts().get(depot) != null
+							&& persist.getDepot2NetbootProducts().get(depot).keySet().contains(selectedProduct)))) {
+				Logging.info(this, "taking this depot " + depot);
+				result.add(depot);
 			}
 		}
 
-		logging.info(this, "getPossibleDepots " + result);
+		Logging.info(this, "getPossibleDepots " + result);
 
 		return result;
+
 	}
 
 	protected void initDepots() {
@@ -221,23 +219,23 @@ public class SSHPackageManagerUninstallParameterDialog
 		uninstallPanel.setBorder(BorderFactory.createTitledBorder(""));
 		uninstallPanel.setPreferredSize(new java.awt.Dimension(376, 220));
 
-		jLabelUninstall.setText(configed
+		jLabelUninstall.setText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelUninstall"));
 
 		jComboBoxVerbosity = new JComboBox<>();
-		jComboBoxVerbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
 		for (int i = 0; i < 5; i++)
 			jComboBoxVerbosity.addItem(i);
 		jComboBoxVerbosity.setSelectedItem(1);
 		jComboBoxVerbosity.addItemListener(itemEvent -> changeVerbosity());
 
-		jLabelKeepFiles.setText(configed
+		jLabelKeepFiles.setText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelKeepFiles"));
 		checkBoxKeepFiles = new JCheckBox();
 		checkBoxKeepFiles.addItemListener(itemEvent -> changeKeepFiles());
 
 		jLabelProduct.setText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelProduct"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelProduct"));
 
 		textFieldProduct = new JTextField();
 		textFieldProduct.setBackground(Globals.BACKGROUND_COLOR_9);
@@ -257,19 +255,19 @@ public class SSHPackageManagerUninstallParameterDialog
 		IconAsButton iconButtonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png",
 				"images/reload16.png", "images/reload16.png", "images/reload16.png");
 		iconButtonUpdateList.setBackground(Globals.BACKGROUND_COLOR_3);
-		iconButtonUpdateList.setToolTipText(configed.getResourceValue(
+		iconButtonUpdateList.setToolTipText(Configed.getResourceValue(
 				"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
 
 		iconButtonUpdateList.addActionListener(actionEvent -> {
-			logging.info(this, "actionPerformed");
+			Logging.info(this, "actionPerformed");
 			resetProducts();
 		});
 
 		jLabelOn.setText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn"));
 
 		jButtonDepotSelection = new JButton(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
 		jButtonDepotSelection.addActionListener(actionEvent -> {
 			initDepots();
 			if (jButtonDepotSelection != null)
@@ -296,10 +294,10 @@ public class SSHPackageManagerUninstallParameterDialog
 	}
 
 	private void resetProducts() {
-		logging.info(this, "resetProducts in cb_opsiproducts");
+		Logging.info(this, "resetProducts in cb_opsiproducts");
 		jComboBoxOpsiProducts.removeAllItems();
 		if (persist == null)
-			logging.error(this, "resetProducts PersistenceController null");
+			Logging.error(this, "resetProducts PersistenceController null");
 		else {
 			NavigableSet<String> productnames = persist.getProductIds();
 			for (String item : productnames)
@@ -318,9 +316,9 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	private void changeDepot() {
 		if (textFieldSelectedDepots.getText()
-				.equals(configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")))
+				.equals(Configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")))
 			commandPMUninstall.setDepot(null);
-		else if (textFieldSelectedDepots.getText().equals(configed
+		else if (textFieldSelectedDepots.getText().equals(Configed
 				.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED")))
 			commandPMUninstall.setDepot("all");
 		else
@@ -330,7 +328,7 @@ public class SSHPackageManagerUninstallParameterDialog
 	}
 
 	private void changeVerbosity() {
-		logging.info(this, "changeVerbosity , selected " + jComboBoxVerbosity.getSelectedItem());
+		Logging.info(this, "changeVerbosity , selected " + jComboBoxVerbosity.getSelectedItem());
 		commandPMUninstall.setVerbosity((int) jComboBoxVerbosity.getSelectedItem());
 		updateCommand();
 	}
@@ -346,14 +344,14 @@ public class SSHPackageManagerUninstallParameterDialog
 	private boolean confirmAction() {
 		FShowList fConfirmAction = new FShowList(Globals.mainFrame,
 				Globals.APPNAME + " "
-						+ configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"),
-				true, new String[] { configed.getResourceValue("buttonCANCEL"), configed.getResourceValue("buttonOK") },
+						+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"),
+				true, new String[] { Configed.getResourceValue("buttonCANCEL"), Configed.getResourceValue("buttonOK") },
 				400, 200);
 
 		fConfirmAction.setMessage(
-				configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.confirm") + "\n"
+				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.confirm") + "\n"
 						+ textFieldProduct.getText() + "\n\n"
-						+ configed
+						+ Configed
 								.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelOn")
 
 						+ "\n\n" + textFieldSelectedDepots.getText());
@@ -369,7 +367,7 @@ public class SSHPackageManagerUninstallParameterDialog
 	public void doAction1() {
 		changeDepot();
 		final String prod = textFieldProduct.getText();
-		logging.info(this, "doAction1 uninstall  " + prod);
+		Logging.info(this, "doAction1 uninstall  " + prod);
 
 		changeProduct(prod);
 
@@ -383,14 +381,14 @@ public class SSHPackageManagerUninstallParameterDialog
 			@Override
 			public void run() {
 				try {
-					logging.info(this, "start exec thread ");
+					Logging.info(this, "start exec thread ");
 
 					new SSHConnectExec(commandPMUninstall);
 
 					execFinished = true;
-					logging.debug(this, "end exec thread");
+					Logging.debug(this, "end exec thread");
 				} catch (Exception e) {
-					logging.warning(this, "doAction1, exception occurred", e);
+					Logging.warning(this, "doAction1, exception occurred", e);
 				}
 			}
 		};
@@ -399,7 +397,7 @@ public class SSHPackageManagerUninstallParameterDialog
 			execThread.start();
 
 		} catch (Exception e) {
-			logging.warning(this, "doAction1, exception occurred", e);
+			Logging.warning(this, "doAction1, exception occurred", e);
 		}
 	}
 

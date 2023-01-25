@@ -29,12 +29,10 @@ import java.util.Map;
 
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.dbtable.Host;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.logging.logging;
 
 public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersistenceController {
-
-	java.sql.Time PRODUCT_ON_CLIENT_last_read = null;
 
 	OpsiserviceRawDataPersistenceController(String server, String user, String password) {
 		super(server, user, password);
@@ -57,7 +55,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 
 				String warning = "limit for mysql backend reached";
 
-				logging.info(this, "missingModules " + warning);
+				Logging.info(this, "missingModules " + warning);
 				de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.callInstanceWith(warning);
 			});
 		}
@@ -65,9 +63,9 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 	}
 
 	@Override
-	public List<Map<java.lang.String, java.lang.Object>> HOST_read() {
+	public List<Map<java.lang.String, java.lang.Object>> hostRead() {
 
-		logging.debug(this, "HOST_read ");
+		Logging.debug(this, "HOST_read ");
 		String query = "select *  from HOST";
 
 		// test for depot_restriction:
@@ -76,7 +74,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
-		logging.notice(this, "HOST_read, query " + query);
+		Logging.notice(this, "HOST_read, query " + query);
 		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
 				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();

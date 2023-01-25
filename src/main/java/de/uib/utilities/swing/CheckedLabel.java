@@ -27,7 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 //a class similar to JCheckBox
 public class CheckedLabel extends JPanel implements FocusListener
@@ -49,7 +49,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 	// I didn't get work this, couldn't fix the Generics issues
 
-	protected Map defaultTextAttributes;
+	protected Map<TextAttribute, ?> defaultTextAttributes;
 	protected Map focusedTextAttributes;
 
 	protected Boolean selected;
@@ -65,7 +65,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			logging.info(this, "CheckLabel mouseClicked on " + source);
+			Logging.info(this, "CheckLabel mouseClicked on " + source);
 		}
 	}
 
@@ -129,7 +129,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 	}
 
 	protected void addInternalListeners() {
-		final CheckedLabel ME = this;
+		final CheckedLabel me = this;
 		textLabel.addMouseListener(new GeneralMouseListener("textLabel"));
 		selectedLabel.addMouseListener(new GeneralMouseListener("selectedLabel") {
 			@Override
@@ -138,9 +138,9 @@ public class CheckedLabel extends JPanel implements FocusListener
 					return;
 				super.mouseClicked(e);
 				if (changeStateAutonomously)
-					ME.setSelected(false);
+					me.setSelected(false);
 				notifyActionListeners(
-						new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, new java.util.Date().getTime(), 0));
+						new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, new java.util.Date().getTime(), 0));
 			}
 		});
 
@@ -151,9 +151,9 @@ public class CheckedLabel extends JPanel implements FocusListener
 					return;
 				super.mouseClicked(e);
 				if (changeStateAutonomously)
-					ME.setSelected(true);
+					me.setSelected(true);
 				notifyActionListeners(
-						new ActionEvent(ME, SET_CHECKED_ON, CMD_SET_CHECKED_ON, new java.util.Date().getTime(), 0));
+						new ActionEvent(me, SET_CHECKED_ON, CMD_SET_CHECKED_ON, new java.util.Date().getTime(), 0));
 			}
 		});
 
@@ -164,9 +164,9 @@ public class CheckedLabel extends JPanel implements FocusListener
 					return;
 				super.mouseClicked(e);
 				if (changeStateAutonomously)
-					ME.setSelected(false);
+					me.setSelected(false);
 				notifyActionListeners(
-						new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, new java.util.Date().getTime(), 0));
+						new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, new java.util.Date().getTime(), 0));
 			}
 		});
 
@@ -174,19 +174,19 @@ public class CheckedLabel extends JPanel implements FocusListener
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				logging.info(this, "event " + e);
+				Logging.info(this, "event " + e);
 				if (!isEnabled())
 					return;
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 					if (selected == null || selected) {
 
-						ME.setSelected(false);
-						notifyActionListeners(new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF,
+						me.setSelected(false);
+						notifyActionListeners(new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF,
 								new java.util.Date().getTime(), 0));
 					} else {
-						ME.setSelected(true);
-						notifyActionListeners(new ActionEvent(ME, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF,
+						me.setSelected(true);
+						notifyActionListeners(new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF,
 								new java.util.Date().getTime(), 0));
 					}
 				}

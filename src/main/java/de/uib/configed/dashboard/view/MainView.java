@@ -17,7 +17,7 @@ import de.uib.configed.dashboard.collector.LicenseData;
 import de.uib.configed.dashboard.collector.ModuleData;
 import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.messages.Messages;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -210,7 +210,7 @@ public class MainView implements View {
 				licenseDisplayer = new LicenseDisplayer();
 				licenseDisplayer.initAndShowGUI();
 			} catch (IOException ioE) {
-				logging.debug(this, "Unable to open FXML file.");
+				Logging.debug(this, "Unable to open FXML file.");
 			}
 		} else {
 			licenseDisplayer.display();

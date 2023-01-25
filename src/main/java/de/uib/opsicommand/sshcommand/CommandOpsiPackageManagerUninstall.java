@@ -1,11 +1,11 @@
 package de.uib.opsicommand.sshcommand;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHPackageManagerUninstallParameterDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
 	protected FGeneralDialog dialog = null;
@@ -29,7 +29,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall");
+		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall");
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager_uninstall.tooltip");
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	public String getCommand() {
 		command = "opsi-package-manager -q " + verbosity + keepFiles + depots + freeInput + opsiproduct;
 		if (needSudo())
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 
@@ -112,10 +112,11 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 			depots = " ";
 	}
 
-	public void setVerbosity(int v_sum) {
-		String v = "v";
-		for (int i = 0; i < v_sum; i++)
-			v = v + "v";
+	public void setVerbosity(int vSum) {
+		StringBuilder v = new StringBuilder("v");
+		for (int i = 0; i < vSum; i++)
+			v.append("v");
+
 		verbosity = " -" + v + " ";
 	}
 
@@ -125,7 +126,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 	public boolean checkCommand() {
 		if (opsiproduct == null || opsiproduct.trim().equals("")) {
-			logging.info(this, "no product given");
+			Logging.info(this, "no product given");
 			return false;
 		}
 		return true;

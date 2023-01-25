@@ -1,6 +1,6 @@
 package de.uib.opsicommand;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ConnectionState {
 	public static final int UNDEFINED = 0;
@@ -13,7 +13,7 @@ public class ConnectionState {
 	public static final int ERROR = 10;
 	protected int myState = NOT_CONNECTED;
 
-	public static ConnectionState ConnectionUndefined = new ConnectionState(UNDEFINED, "not initialized");
+	public static final ConnectionState ConnectionUndefined = new ConnectionState(UNDEFINED, "not initialized");
 
 	protected String message = "";
 
@@ -122,11 +122,11 @@ public class ConnectionState {
 			try {
 				countWait++;
 				Thread.sleep(waitMs);
-				logging.debug(this, "countWait " + countWait + " waited, thread " + Thread.currentThread().getName()
+				Logging.debug(this, "countWait " + countWait + " waited, thread " + Thread.currentThread().getName()
 						+ " " + this.toString());
 				secsWaited = countWait / divisorSeconds;
 			} catch (InterruptedException ex) {
-				logging.info(this, "Thread interrupted exception: " + ex);
+				Logging.info(this, "Thread interrupted exception: " + ex);
 				Thread.currentThread().interrupt();
 			}
 		}

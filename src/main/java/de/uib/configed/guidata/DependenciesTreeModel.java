@@ -33,7 +33,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DependenciesTreeModel {
 
@@ -98,7 +98,7 @@ public class DependenciesTreeModel {
 
 	public DefaultMutableTreeNode getTreeNodeForProductDependencies(boolean benoetigt) {
 
-		logging.debug(this, productId + "-tree wird erstellt");
+		Logging.debug(this, productId + "-tree wird erstellt");
 
 		if (graphIsInitialized && productList.contains(productId)) {
 			DefaultMutableTreeNode mainNode;
@@ -126,14 +126,14 @@ public class DependenciesTreeModel {
 		List<String> sortedList = new LinkedList<>(setOfTreeNodes);
 		Collections.sort(sortedList);
 
-		String listAsString = "";
+		StringBuilder listAsString = new StringBuilder();
 		if (!sortedList.isEmpty())
-			listAsString += sortedList.remove(0);
+			listAsString.append(sortedList.remove(0));
 
 		for (String productId : sortedList)
-			listAsString += "\n" + productId;
+			listAsString.append("\n" + productId);
 
-		return listAsString;
+		return listAsString.toString();
 	}
 
 	/*
@@ -142,14 +142,15 @@ public class DependenciesTreeModel {
 	 */
 	private class Graph {
 
-		private final int V;
+		private final int numberOfElements;
 		private final List<List<Integer>> adj;
 
-		public Graph(int V) {
-			this.V = V;
-			adj = new ArrayList<>(V);
+		public Graph(int numberOfElements) {
+			this.numberOfElements = numberOfElements;
 
-			for (int i = 0; i < V; i++)
+			adj = new ArrayList<>(numberOfElements);
+
+			for (int i = 0; i < numberOfElements; i++)
 				adj.add(new LinkedList<>());
 		}
 
@@ -205,7 +206,7 @@ public class DependenciesTreeModel {
 
 			int product = productMap.get(node.toString());
 
-			for (int i = 0; i < V; i++) {
+			for (int i = 0; i < numberOfElements; i++) {
 				if (adj.get(i).contains(product)) {
 					String productId = productList.get(i);
 

@@ -1,11 +1,10 @@
 package de.uib.opsidatamodel.permission;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import de.uib.utilities.ExtendedDate;
 import de.uib.utilities.ExtendedInteger;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ModulePermissionValue {
 	de.uib.opsicommand.Executioner exec;
@@ -14,29 +13,15 @@ public class ModulePermissionValue {
 	private ExtendedDate expiresDate;
 	private Boolean booleanValue;
 
-	public static final String keyExpires = "expires";
-	public static final String keyMaxClients = "maxclients";
+	public static final String KEY_EXPIRES = "expires";
+	public static final String KEY_MAX_CLIENTS = "maxclients";
 
-	public static final Map<String, Boolean> MODULE_CHECKED;
-	// the modules which are known and should be checked
-	static {
-		MODULE_CHECKED = new LinkedHashMap<>();
-		MODULE_CHECKED.put("license_management", true);
-		MODULE_CHECKED.put("local_imaging", true);
-		MODULE_CHECKED.put("monitoring", true);
-		MODULE_CHECKED.put("wim-capture", true);
-		MODULE_CHECKED.put("scalability1", true);
-		MODULE_CHECKED.put("linux_agent", true);
-		MODULE_CHECKED.put("vpn", true);
-		MODULE_CHECKED.put("mysql_backend", true);
-		MODULE_CHECKED.put("uefi", true);
-		MODULE_CHECKED.put("userroles", true);
-		MODULE_CHECKED.put("directory-connector", true);
-		MODULE_CHECKED.put("macos_agent", true);
-		MODULE_CHECKED.put("secureboot", true);
-		MODULE_CHECKED.put("win-vhd", true);
-		MODULE_CHECKED.put("os_install_by_wlan", true);
-	}
+	public static final Map<String, Boolean> MODULE_CHECKED = Map.ofEntries(Map.entry("license_management", true),
+			Map.entry("local_imaging", true), Map.entry("monitoring", true), Map.entry("wim-capture", true),
+			Map.entry("scalability1", true), Map.entry("linux_agent", true), Map.entry("vpn", true),
+			Map.entry("mysql_backend", true), Map.entry("uefi", true), Map.entry("userroles", true),
+			Map.entry("directory-connector", true), Map.entry("macos_agent", true), Map.entry("secureboot", true),
+			Map.entry("win-vhd", true), Map.entry("os_install_by_wlan", true));
 
 	private Boolean checkBoolean(Object ob) {
 
@@ -77,7 +62,7 @@ public class ModulePermissionValue {
 				try {
 					number = Integer.valueOf((String) ob);
 				} catch (NumberFormatException ex) {
-					logging.debug(this, "not a number: " + ob);
+					Logging.debug(this, "not a number: " + ob);
 				}
 				if (number != null)
 					result = new ExtendedInteger(number);
@@ -93,11 +78,11 @@ public class ModulePermissionValue {
 
 		if (ob != null) {
 			try {
-				result = new ExtendedDate((String) ob);
+				result = new ExtendedDate(ob);
 			} catch (ClassCastException ex) {
-				logging.warning(this, "no String: " + ob);
+				Logging.warning(this, "no String: " + ob);
 			} catch (Exception ex) {
-				logging.debug(this, "DateParseException for " + ob);
+				Logging.debug(this, "DateParseException for " + ob);
 			}
 
 		}
@@ -119,24 +104,24 @@ public class ModulePermissionValue {
 
 	public ModulePermissionValue(de.uib.opsicommand.Executioner exec, Object ob, ExtendedDate defaultExpires) {
 		this.exec = exec;
-		logging.info(this, "value object given: " + ob);
+		Logging.info(this, "value object given: " + ob);
 		booleanValue = null;
 		expiresDate = ExtendedDate.ZERO;
 		maxClients = ExtendedInteger.ZERO;
 		if (ob != null) {
 			Map<String, Object> detailled = interpretAsJson(ob);
-			logging.debug(this, "detailled " + detailled);
+			Logging.debug(this, "detailled " + detailled);
 			if (detailled != null) {
-				maxClients = retrieveMaxClients(detailled.get(keyMaxClients));
-				logging.debug(this, "detailled  maxClients " + maxClients);
-				expiresDate = retrieveExpiresDate(detailled.get(keyExpires));
+				maxClients = retrieveMaxClients(detailled.get(KEY_MAX_CLIENTS));
+				Logging.debug(this, "detailled  maxClients " + maxClients);
+				expiresDate = retrieveExpiresDate(detailled.get(KEY_EXPIRES));
 			} else {
 				booleanValue = checkBoolean(ob);
 
 				if (booleanValue == null) {
 					expiresDate = retrieveExpiresDate(ob);
 					maxClients = retrieveMaxClients(ob);
-					logging.debug(this, "maxClients directly given " + maxClients);
+					Logging.debug(this, "maxClients directly given " + maxClients);
 				}
 
 				else if (booleanValue) {

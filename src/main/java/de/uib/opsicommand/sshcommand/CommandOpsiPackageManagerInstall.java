@@ -1,11 +1,11 @@
 package de.uib.opsicommand.sshcommand;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHPackageManagerInstallParameterDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
 	private String command;
@@ -38,7 +38,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.opsipackagemanager_install");
+		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager_install");
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.opsipackagemanager_install.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager_install.tooltip");
 	}
 
 	@Override
@@ -60,9 +60,9 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	public String getCommand() {
 		command = "opsi-package-manager  --force -q " + verbosity + updateInstalled + setupInstalled + property + depot
 				+ freeInput + opsiproduct;
-		logging.info(this, "got command " + command);
+		Logging.info(this, "got command " + command);
 		if (needSudo())
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 
@@ -112,10 +112,10 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 			depot = "";
 	}
 
-	public void setVerbosity(int v_sum) {
-		String v = "v";
-		for (int i = 0; i < v_sum; i++)
-			v = v + "v";
+	public void setVerbosity(int vSum) {
+		StringBuilder v = new StringBuilder("v");
+		for (int i = 0; i < vSum; i++)
+			v.append("v");
 		verbosity = " -" + v + " ";
 	}
 
@@ -127,8 +127,8 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 		return !opsiproduct.equals("");
 	}
 
-	public void setProperty(boolean keep_depot_defaults) {
-		if (keep_depot_defaults)
+	public void setProperty(boolean keepDepotDefaults) {
+		if (keepDepotDefaults)
 			property = " -p keep ";
 		else
 			property = " -p package ";

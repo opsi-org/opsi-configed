@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This class contains utility methods for remapping JSON data
@@ -19,9 +20,14 @@ import de.uib.utilities.logging.logging;
  */
 
 public class JSONReMapper {
+
+	// private constructor to hide the implicit public one
+	private JSONReMapper() {
+	}
+
 	private static final String CLASSNAME = JSONReMapper.class.getName();
 
-	public static final String NullRepresenter = "null";
+	public static final String NULL_REPRESENTER = "null";
 
 	public static String getErrorFromResponse(JSONObject retrieved) {
 		String errorMessage = null;
@@ -51,28 +57,28 @@ public class JSONReMapper {
 
 		try {
 
-			for (String key : result0.keySet()) {
-				JSONObject jO = (JSONObject) (result0.get(key));
-				HashMapX response = new HashMapX(jO, true);
+			for (Entry<String, Object> result0Entry : result0.entrySet()) {
+				JSONObject jO = (JSONObject) (result0Entry.getValue());
+				HashMapX response = new HashMapX<>(jO, true);
 
 				if (response.get("error") == null) {
 					List list = (List) response.get("result");
 
-					result.put(key, list);
+					result.put(result0Entry.getKey(), list);
 				} else {
 
 					String str = "" + response.get("error");
-					result.put(key, str);
+					result.put(result0Entry.getKey(), str);
 				}
 
 			}
 		}
 
 		catch (Exception ex) {
-			logging.error("JSONReMapper getResponses " + ex);
+			Logging.error("JSONReMapper getResponses " + ex);
 		}
 
-		logging.debug("JSONReMapper getResponses  result " + result);
+		Logging.debug("JSONReMapper getResponses  result " + result);
 
 		return result;
 	}
@@ -82,7 +88,7 @@ public class JSONReMapper {
 		if (retrieved != null && getErrorFromResponse(retrieved) != null
 				&& getErrorFromResponse(retrieved).indexOf("Opsi rpc error: Method") > -1
 				&& getErrorFromResponse(retrieved).endsWith("is not valid")) {
-			logging.info("JSONReMapper: checkForNotValidOpsiMethod " + getErrorFromResponse(retrieved));
+			Logging.info("JSONReMapper: checkForNotValidOpsiMethod " + getErrorFromResponse(retrieved));
 			return false;
 		}
 
@@ -92,7 +98,7 @@ public class JSONReMapper {
 	public static boolean checkResponse(JSONObject retrieved) {
 		boolean responseFound = true;
 
-		logging.debug(CLASSNAME + ".checkResponse " + logging.LEVEL_DEBUG);
+		Logging.debug(CLASSNAME + ".checkResponse " + Logging.LEVEL_DEBUG);
 
 		if (retrieved == null) {
 			responseFound = false;
@@ -106,17 +112,17 @@ public class JSONReMapper {
 				if (errorMessage != null) {
 
 					String logMessage = "Opsi service error: " + errorMessage;
-					logging.error(logMessage);
+					Logging.error(logMessage);
 				} else {
 					resultValue = retrieved.get("result");
 
 				}
 			} catch (JSONException jex) {
-				logging.error("JSON Error on retrieving result value,  " + jex.toString());
+				Logging.error("JSON Error on retrieving result value,  " + jex.toString());
 			}
 
 			if (resultValue == null) {
-				logging.debug(CLASSNAME + ": " + " checkResponse " + logging.LEVEL_DEBUG, "Null result in response ");
+				Logging.debug(CLASSNAME + ": " + " checkResponse " + Logging.LEVEL_DEBUG, "Null result in response ");
 				responseFound = false;
 			}
 		}
@@ -124,7 +130,7 @@ public class JSONReMapper {
 		return responseFound;
 	}
 
-	public static Map<String, Map<String, Object>> getMap2_Object(Object retrieved) {
+	public static Map<String, Map<String, Object>> getMap2Object(Object retrieved) {
 		HashMap<String, Map<String, Object>> result = new HashMap<>();
 		HashMap<String, Map<String, Object>> resultNull = new HashMap<>();
 
@@ -135,20 +141,20 @@ public class JSONReMapper {
 				JSONObjectX jOX = new JSONObjectX(jOResult);
 
 				if (!jOX.isMap()) {
-					logging.error(CLASSNAME + "map expected " + jOX);
+					Logging.error(CLASSNAME + "map expected " + jOX);
 				} else {
-					logging.debug(CLASSNAME + "map retrieved ");
+					Logging.debug(CLASSNAME + "map retrieved ");
 
-					Map map0 = jOX.getMap();
+					Map<String, Object> map0 = jOX.getMap();
 
-					Iterator iter0 = map0.keySet().iterator();
+					Iterator<String> iter0 = map0.keySet().iterator();
 					while (iter0.hasNext()) {
-						String key1 = (String) iter0.next();
+						String key1 = iter0.next();
 
 						JSONObjectX jOX1 = new JSONObjectX((JSONObject) map0.get(key1));
 
 						if (!jOX1.isMap()) {
-							logging.error(CLASSNAME + "map expected in level 2 " + jOX1);
+							Logging.error(CLASSNAME + "map expected in level 2 " + jOX1);
 							result = resultNull;
 						} else {
 							result.put(key1, jOX1.getMap());
@@ -157,7 +163,7 @@ public class JSONReMapper {
 				}
 			}
 		} catch (Exception ex) {
-			logging.error("this, getMap2_Object : " + ex.toString());
+			Logging.error("this, getMap2_Object : " + ex.toString());
 		}
 
 		return result;
@@ -195,14 +201,14 @@ public class JSONReMapper {
 				result.put(key1, map1R);
 			}
 		} catch (Exception ex) {
-			logging.debug(CLASSNAME + ".getMap3_String: " + ex.toString());
+			Logging.debug(CLASSNAME + ".getMap3_String: " + ex.toString());
 		}
 
 		return result;
 
 	}
 
-	public static Map<String, Map<String, Map<String, Object>>> getMap3_Object(Object retrieved) {
+	public static Map<String, Map<String, Map<String, Object>>> getMap3Object(Object retrieved) {
 		HashMap<String, Map<String, Map<String, Object>>> result = new HashMap<>();
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -238,7 +244,7 @@ public class JSONReMapper {
 				}
 			}
 		} catch (Exception ex) {
-			logging.debug(CLASSNAME + ".getMap3_String: " + ex.toString());
+			Logging.debug(CLASSNAME + ".getMap3_String: " + ex.toString());
 		}
 
 		return result;
@@ -254,7 +260,7 @@ public class JSONReMapper {
 				jsonList = getJsonList(jO, "result");
 			}
 		} catch (Exception ex) {
-			logging.error("JSONReMapper: Exception on getting list for key \"result\" " + ex.toString());
+			Logging.error("JSONReMapper: Exception on getting list for key \"result\" " + ex.toString());
 		}
 
 		JSONObject item = null;
@@ -272,7 +278,7 @@ public class JSONReMapper {
 			assert jsonList.size() == result.size()
 					: " getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped " + result.size();
 		} catch (Exception ex) {
-			logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
+			Logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
 		}
 
 		return result;
@@ -294,7 +300,7 @@ public class JSONReMapper {
 			}
 
 		} catch (JSONException jex) {
-			logging.error("JSONReMapper: Exception on getting list " + jex.toString());
+			Logging.error("JSONReMapper: Exception on getting list " + jex.toString());
 		}
 
 		JSONObject item = null;
@@ -312,7 +318,7 @@ public class JSONReMapper {
 			assert jsonList.size() == result.size()
 					: " getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped " + result.size();
 		} catch (Exception ex) {
-			logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
+			Logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
 		}
 
 		return result;
@@ -328,7 +334,7 @@ public class JSONReMapper {
 				jsonList = getJsonList(jO, "result");
 			}
 		} catch (Exception ex) {
-			logging.error("JSONReMapper: Exception on getting list for key \"result\" " + ex.toString());
+			Logging.error("JSONReMapper: Exception on getting list for key \"result\" " + ex.toString());
 		}
 
 		JSONObject item = null;
@@ -346,7 +352,7 @@ public class JSONReMapper {
 			assert jsonList.size() == result.size()
 					: " getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped " + result.size();
 		} catch (Exception ex) {
-			logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
+			Logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
 		}
 
 		return result;
@@ -372,7 +378,7 @@ public class JSONReMapper {
 				list0.add(list1);
 			}
 		} catch (JSONException jex) {
-			logging.error("JSONReMapper: Exception on getting list of lists of JSONObjects " + jex.toString());
+			Logging.error("JSONReMapper: Exception on getting list of lists of JSONObjects " + jex.toString());
 		}
 
 		return list0;
@@ -404,7 +410,7 @@ public class JSONReMapper {
 				}
 			}
 		} catch (JSONException jex) {
-			logging.error("JSONReMapper: Exception on getting list of stringlists " + jex.toString());
+			Logging.error("JSONReMapper: Exception on getting list of stringlists " + jex.toString());
 		}
 
 		return result;
@@ -424,7 +430,7 @@ public class JSONReMapper {
 			}
 
 		} catch (JSONException jex) {
-			logging.error("JSONReMapper: Exception on getting list " + jex.toString());
+			Logging.error("JSONReMapper: Exception on getting list " + jex.toString());
 		}
 
 		return result;
@@ -443,7 +449,7 @@ public class JSONReMapper {
 			}
 
 		} catch (JSONException jex) {
-			logging.error("JSONReMapper: Exception on getting list " + jex.toString());
+			Logging.error("JSONReMapper: Exception on getting list " + jex.toString());
 		}
 
 		return result;
@@ -456,13 +462,13 @@ public class JSONReMapper {
 				result = JSONReMapper.getJsonList(jO, "result");
 			}
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + "Exception on getting list for key \"result\" " + ex.toString());
+			Logging.error(CLASSNAME + "Exception on getting list for key \"result\" " + ex.toString());
 		}
 
 		return result;
 	}
 
-	public static Map<String, Object> getMap_Object(JSONObject jo)
+	public static Map<String, Object> getMapObject(JSONObject jo)
 	// this method tries to return Java lists in comparison with getMapResult
 	{
 		Map<String, Object> result = new HashMap<>();
@@ -471,12 +477,12 @@ public class JSONReMapper {
 			JSONObjectX jOX = new JSONObjectX(jo);
 
 			if (!jOX.isMap()) {
-				logging.error("JSONReMapper map expected " + jOX);
+				Logging.error("JSONReMapper map expected " + jOX);
 			} else
 				result = jOX.getMap();
 
 		} catch (Exception ex) {
-			logging.error("JSONReMapper  getMap_Object : " + ex.toString());
+			Logging.error("JSONReMapper  getMap_Object : " + ex.toString());
 		}
 
 		return result;
@@ -499,7 +505,7 @@ public class JSONReMapper {
 				}
 			}
 		} catch (JSONException jex) {
-			logging.error(CLASSNAME + "Exception on getting Map " + jex.toString());
+			Logging.error(CLASSNAME + "Exception on getting Map " + jex.toString());
 		}
 		return result;
 	}
@@ -512,7 +518,7 @@ public class JSONReMapper {
 			}
 
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + "Exception on getting list for key \"result\" " + ex.toString());
+			Logging.error(CLASSNAME + "Exception on getting list for key \"result\" " + ex.toString());
 		}
 
 		return result;
@@ -526,7 +532,7 @@ public class JSONReMapper {
 			}
 
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + "Exception on getting list for key \"result\" " + ex.toString());
+			Logging.error(CLASSNAME + "Exception on getting list for key \"result\" " + ex.toString());
 		}
 
 		return result;
@@ -555,7 +561,7 @@ public class JSONReMapper {
 					}
 				}
 			} catch (Exception ex) {
-				logging.error(CLASSNAME + "json transform exception: " + ex);
+				Logging.error(CLASSNAME + "json transform exception: " + ex);
 			}
 		}
 	}
@@ -593,7 +599,7 @@ public class JSONReMapper {
 					}
 					// make recursive
 				} catch (Exception ex) {
-					logging.error("deriveStandard, key " + key + ", value " + value + ", " + ex);
+					Logging.error("deriveStandard, key " + key + ", value " + value + ", " + ex);
 				}
 			}
 			return map;
@@ -619,9 +625,9 @@ public class JSONReMapper {
 	}
 
 	public static Map<String, String> giveEmptyForNullString(Map<String, String> m) {
-		for (String key : m.keySet()) {
-			if (isNull(m.get(key)))
-				m.put(key, "");
+		for (Entry<String, String> entry : m.entrySet()) {
+			if (isNull(entry.getValue()))
+				m.put(entry.getKey(), "");
 		}
 
 		return m;
@@ -630,11 +636,11 @@ public class JSONReMapper {
 	public static Map<String, String> giveEmptyForNull(Map<String, Object> m) {
 
 		HashMap<String, String> result = new HashMap<>();
-		for (String key : m.keySet()) {
-			if (isNull(m.get(key)))
-				result.put(key, "");
+		for (Entry<String, Object> entry : m.entrySet()) {
+			if (isNull(entry.getValue()))
+				result.put(entry.getKey(), "");
 			else
-				result.put(key, "" + m.get(key));
+				result.put(entry.getKey(), "" + entry.getValue());
 		}
 
 		return result;

@@ -4,12 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
 /**
  * FGlobalSoftwareInfo
  * Copyright:     Copyright (c) 2017
@@ -18,19 +18,15 @@ import javax.swing.ListSelectionModel;
  */
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.provider.DefaultTableProvider;
-import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public PanelGenEditTable panelGlobalSoftware;
-	private GenTableModel model;
 
 	public List<String> columnNames;
 	public List<String> classNames;
@@ -45,9 +41,9 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public FGlobalSoftwareInfo(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(
 
-				owner, configed.getResourceValue("FGlobalSoftwareInfo.title"), false,
-				new String[] { configed.getResourceValue("FGlobalSoftwareInfo.buttonRemove"),
-						configed.getResourceValue("FGlobalSoftwareInfo.buttonClose") },
+				owner, Configed.getResourceValue("FGlobalSoftwareInfo.title"), false,
+				new String[] { Configed.getResourceValue("FGlobalSoftwareInfo.buttonRemove"),
+						Configed.getResourceValue("FGlobalSoftwareInfo.buttonClose") },
 				10, 10); // initial size of super frame
 
 		this.myController = myController;
@@ -62,7 +58,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		);
 
 		allpane.add(panelGlobalSoftware, BorderLayout.CENTER);
-		JLabel infoLabel = new JLabel(configed.getResourceValue("FGlobalSoftwareInfo.info"));
+		JLabel infoLabel = new JLabel(Configed.getResourceValue("FGlobalSoftwareInfo.info"));
 		additionalPane.add(infoLabel);
 		additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		additionalPane.setVisible(true);
@@ -105,27 +101,14 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	}
 
 	public void setTableModel(GenTableModel model) {
-		if (model == null)
-		// test
-		{
-			this.model = new GenTableModel(null, // no updates
-					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-						persist.installedSoftwareInformationRequestRefresh();
-						return (Map) persist.getInstalledSoftwareInformation();
-					})),
-
-					keyCol, new int[] {}, panelGlobalSoftware, updateCollection);
-		} else
-			this.model = model;
-
-		panelGlobalSoftware.setTableModel(this.model);
+		panelGlobalSoftware.setTableModel(model);
 	}
 
 	@Override
 	public void doAction1() {
-		logging.debug(this, "doAction1");
+		Logging.debug(this, "doAction1");
 
-		logging.info(this, "removeAssociations for " + " licencePool " + myController.getSelectedLicencePool()
+		Logging.info(this, "removeAssociations for " + " licencePool " + myController.getSelectedLicencePool()
 				+ " selected SW keys " + panelGlobalSoftware.getSelectedKeys());
 
 		boolean success = persist.removeAssociations(myController.getSelectedLicencePool(),
@@ -134,8 +117,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		if (success) {
 			for (String key : panelGlobalSoftware.getSelectedKeys()) {
 				int row = panelGlobalSoftware.findViewRowFromValue(key, keyCol);
-				logging.info(this, "doAction1 key, " + key + ", row " + row);
-				logging.info(this,
+				Logging.info(this, "doAction1 key, " + key + ", row " + row);
+				Logging.info(this,
 						"doAction1 model row " + panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
 				panelGlobalSoftware.getTableModel()
 						.deleteRow(panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
@@ -147,7 +130,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 	@Override
 	public void doAction2() {
-		logging.debug(this, "doAction2");
+		Logging.debug(this, "doAction2");
 		result = 2;
 		owner.setVisible(true);
 		leave();

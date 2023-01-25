@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FTextArea;
 
 public class FOpsiLicenseMissingText extends FTextArea {
@@ -22,7 +22,7 @@ public class FOpsiLicenseMissingText extends FTextArea {
 	private static List<String> messages = new ArrayList<>();
 
 	public FOpsiLicenseMissingText() {
-		super(Globals.mainFrame, configed.getResourceValue("Permission.modules.title"), false, new String[] { "ok" },
+		super(Globals.mainFrame, Configed.getResourceValue("Permission.modules.title"), false, new String[] { "ok" },
 				450, 250);
 	}
 
@@ -39,7 +39,7 @@ public class FOpsiLicenseMissingText extends FTextArea {
 
 	public static void callInstanceWith(String message) {
 		if (messages.isEmpty()) {
-			messages.add(configed.getResourceValue("Permission.modules.infoheader"));
+			messages.add(Configed.getResourceValue("Permission.modules.infoheader"));
 		}
 
 		if (messages.indexOf(message) == -1) {

@@ -2,7 +2,7 @@ package de.uib.configed.type;
 
 import java.util.Calendar;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DateExtendedByVars extends java.sql.Date {
 
@@ -10,8 +10,8 @@ public class DateExtendedByVars extends java.sql.Date {
 		super(date);
 	}
 
-	public static String MINUS = "minus";
-	public static char varDelimiter = '%';
+	public static final String MINUS = "minus";
+	public static final char CHAR_DELIMITER = '%';
 
 	private static String stripTimeFromDay(String datetime) {
 
@@ -26,9 +26,9 @@ public class DateExtendedByVars extends java.sql.Date {
 	}
 
 	private static String interpretVar(final String s) {
-		logging.debug("OpsiDataDateMatcher interpretVar in " + s);
+		Logging.debug("OpsiDataDateMatcher interpretVar in " + s);
 
-		int i = s.indexOf(varDelimiter);
+		int i = s.indexOf(CHAR_DELIMITER);
 
 		if (i == -1)
 			return s;
@@ -36,19 +36,19 @@ public class DateExtendedByVars extends java.sql.Date {
 		i++;
 
 		if (i > s.length()) {
-			logging.info("OpsiDataDateMatcher interpretVar \"" + varDelimiter + "\" found at end of string");
+			Logging.info("OpsiDataDateMatcher interpretVar \"" + CHAR_DELIMITER + "\" found at end of string");
 			return s;
 		}
 
 		String replaceContent = s.substring(i);
-		i = replaceContent.indexOf(varDelimiter);
+		i = replaceContent.indexOf(CHAR_DELIMITER);
 
 		replaceContent = replaceContent.substring(0, i);
 
-		logging.debug("OpsiDataDateMatcher interpretVar replaceContent " + replaceContent);
+		Logging.debug("OpsiDataDateMatcher interpretVar replaceContent " + replaceContent);
 
 		if (!replaceContent.startsWith(MINUS)) {
-			logging.info("OpsiDataDateMatcher interpretVar expected: \"" + MINUS + "\"");
+			Logging.info("OpsiDataDateMatcher interpretVar expected: \"" + MINUS + "\"");
 			return s;
 		}
 
@@ -59,7 +59,7 @@ public class DateExtendedByVars extends java.sql.Date {
 		try {
 			subtrahend = Integer.valueOf(subtrahendS);
 		} catch (NumberFormatException ex) {
-			logging.info("OpsiDataDateMatcher interpretVar not a number: " + subtrahendS + ", error: " + ex);
+			Logging.info("OpsiDataDateMatcher interpretVar not a number: " + subtrahendS + ", error: " + ex);
 			return s;
 		}
 
@@ -71,9 +71,9 @@ public class DateExtendedByVars extends java.sql.Date {
 
 		String timeS = stripTimeFromDay(myTime.toString());
 
-		logging.debug("OpsiDataDateMatcher interpretVar produced time " + timeS);
+		Logging.debug("OpsiDataDateMatcher interpretVar produced time " + timeS);
 
-		String toReplace = varDelimiter + replaceContent + varDelimiter;
+		String toReplace = CHAR_DELIMITER + replaceContent + CHAR_DELIMITER;
 
 		return s.replace(toReplace, timeS);
 	}

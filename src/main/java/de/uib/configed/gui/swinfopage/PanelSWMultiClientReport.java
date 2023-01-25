@@ -15,9 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.swing.PanelStateSwitch;
 
@@ -49,7 +49,7 @@ public class PanelSWMultiClientReport extends JPanel {
 	}
 
 	public void setActionListenerForStart(ActionListener li) {
-		logging.info(this, "setActionListenerForStart " + li);
+		Logging.info(this, "setActionListenerForStart " + li);
 		if (actionListenerForStart != null)
 			buttonStart.removeActionListener(actionListenerForStart);
 		if (li != null) {
@@ -89,20 +89,20 @@ public class PanelSWMultiClientReport extends JPanel {
 		this.setLayout(glGlobal);
 
 		JLabel labelSwauditMultiClientReport1 = new JLabel(
-				configed.getResourceValue("PanelSWMultiClientReport.title1"));
+				Configed.getResourceValue("PanelSWMultiClientReport.title1"));
 		labelSwauditMultiClientReport1.setFont(Globals.defaultFontBig);
 
 		JLabel labelSwauditMultiClientReport2 = new JLabel(
-				configed.getResourceValue("PanelSWMultiClientReport.title2"));
+				Configed.getResourceValue("PanelSWMultiClientReport.title2"));
 		labelSwauditMultiClientReport2.setFont(Globals.defaultFontBold);
 
 		JLabel labelFilenamePrefix = new JLabel(
-				configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
+				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
 
-		String filenamePrefix = configed.savedStates.saveSWauditExportFilePrefix.deserialize();
+		String filenamePrefix = Configed.savedStates.saveSWauditExportFilePrefix.deserialize();
 
 		if (filenamePrefix == null || filenamePrefix.length() == 0)
-			filenamePrefix = configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix");
+			filenamePrefix = Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix");
 
 		if (filenamePrefix == null)
 			filenamePrefix = FILENAME_PREFIX_DEFAULT;
@@ -110,9 +110,9 @@ public class PanelSWMultiClientReport extends JPanel {
 		fieldFilenamePrefix = new JTextShowField(filenamePrefix);
 		fieldFilenamePrefix.setEditable(true);
 		JLabel labelFilenameInformation = new JLabel(
-				configed.getResourceValue("PanelSWMultiClientReport.labelFilenameInformation"));
+				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenameInformation"));
 
-		JLabel labelAskForOverwrite = new JLabel(configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
+		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
 		labelAskForOverwrite.setFont(Globals.defaultFont);
 		checkAskForOverwrite = new JCheckBox("", askForOverwrite);
 
@@ -120,15 +120,15 @@ public class PanelSWMultiClientReport extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				askForOverwrite = checkAskForOverwrite.isSelected();
-				logging.info(this, "askForOverwrite new value : " + askForOverwrite);
+				Logging.info(this, "askForOverwrite new value : " + askForOverwrite);
 			}
 		});
 
-		buttonStart = new JButton(configed.getResourceValue("PanelSWMultiClientReport.start"));
+		buttonStart = new JButton(Configed.getResourceValue("PanelSWMultiClientReport.start"));
 
 		exportDirectory = null;
 
-		exportDirectoryS = configed.savedStates.saveSWauditExportDir.deserialize();
+		exportDirectoryS = Configed.savedStates.saveSWauditExportDir.deserialize();
 		if (exportDirectoryS == null)
 			exportDirectoryS = "";
 
@@ -143,16 +143,16 @@ public class PanelSWMultiClientReport extends JPanel {
 			if (found)
 				exportDirectory = new File(exportDirectoryS);
 			else
-				exportDirectory = new File(System.getProperty(logging.envVariableForUserDirectory));
+				exportDirectory = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 		} catch (Exception ex) {
-			logging.warning(this, "could not define exportDirectory)");
+			Logging.warning(this, "could not define exportDirectory)");
 		}
 
 		chooserDirectory = new JFileChooser();
 		chooserDirectory.setPreferredSize(Globals.filechooserSize);
 		chooserDirectory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooserDirectory.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
+		chooserDirectory.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
+		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserDirectory);
 
 		fieldExportDirectory = new JTextShowField(exportDirectoryS);
@@ -160,14 +160,14 @@ public class PanelSWMultiClientReport extends JPanel {
 		final JPanel panel = this;
 
 		JLabel labelExportDirectory = new JLabel(
-				configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
+				Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 		exportDirectoryS = "";
 
 		JButton buttonCallSelectExportDirectory = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectExportDirectory.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectExportDirectory.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectExportDirectory
-				.setToolTipText(configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
+				.setToolTipText(Configed.getResourceValue("PanelSWMultiClientReport.labelExportDirectory"));
 
 		buttonCallSelectExportDirectory.addActionListener(new ActionListener() {
 			@Override
@@ -178,7 +178,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					exportDirectory = chooserDirectory.getSelectedFile();
-					logging.info(this, "selected directory " + exportDirectory);
+					Logging.info(this, "selected directory " + exportDirectory);
 
 					if (exportDirectory != null) {
 						exportDirectoryS = exportDirectory.toString();
@@ -186,16 +186,16 @@ public class PanelSWMultiClientReport extends JPanel {
 
 					fieldExportDirectory.setText(exportDirectoryS);
 
-					configed.savedStates.saveSWauditExportDir.serialize(exportDirectoryS);
+					Configed.savedStates.saveSWauditExportDir.serialize(exportDirectoryS);
 
 				}
 
 			}
 		});
 
-		JLabel labelWithMsUpdates = new JLabel(configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates"));
+		JLabel labelWithMsUpdates = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates"));
 		labelWithMsUpdates.setFont(Globals.defaultFont);
-		JLabel labelWithMsUpdates2 = new JLabel(configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates2"));
+		JLabel labelWithMsUpdates2 = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates2"));
 		labelWithMsUpdates2.setFont(Globals.defaultFont);
 
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
@@ -203,7 +203,7 @@ public class PanelSWMultiClientReport extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				withMsUpdates = checkWithMsUpdates.isSelected();
-				logging.info(this, "withMsUpdates new value : " + withMsUpdates);
+				Logging.info(this, "withMsUpdates new value : " + withMsUpdates);
 			}
 		});
 
@@ -212,25 +212,25 @@ public class PanelSWMultiClientReport extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				withMsUpdates2 = checkWithMsUpdates2.isSelected();
-				logging.info(this, "withMsUpdates2 new value : " + withMsUpdates2);
+				Logging.info(this, "withMsUpdates2 new value : " + withMsUpdates2);
 			}
 		});
 
 		panelSelectExportType = new PanelStateSwitch(
-				configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), PanelSWInfo.KindOfExport.PDF,
+				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), PanelSWInfo.KindOfExport.PDF,
 				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, (val -> {
-					logging.info(this, "change to " + val);
+					Logging.info(this, "change to " + val);
 					kindOfExport = (PanelSWInfo.KindOfExport) val;
-					configed.savedStates.saveSWauditKindOfExport.serialize("" + val);
+					Configed.savedStates.saveSWauditKindOfExport.serialize("" + val);
 				}));
 
-		String koe = configed.savedStates.saveSWauditKindOfExport.deserialize();
+		String koe = Configed.savedStates.saveSWauditKindOfExport.deserialize();
 		panelSelectExportType.setValueByString(koe);
 
 		kindOfExport = (PanelSWInfo.KindOfExport) panelSelectExportType.getValue();
 
-		logging.info(this, "kindOfExport set from savedStates  " + koe);
-		logging.info(this, "kindOfExport   " + kindOfExport);
+		Logging.info(this, "kindOfExport set from savedStates  " + koe);
+		Logging.info(this, "kindOfExport   " + kindOfExport);
 
 		JPanel subpanelPreConfig = new JPanel();
 		subpanelPreConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);

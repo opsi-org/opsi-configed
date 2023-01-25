@@ -7,12 +7,12 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 public class LicenceContractEntry extends StringValuedRelationElement {
 	public LicenceContractEntry() {
 		super();
-		allowedAttributes = Table_LicenceContracts.ALLOWED_ATTRIBUTES;
+		allowedAttributes = TableLicenceContracts.ALLOWED_ATTRIBUTES;
 	}
 
 	public LicenceContractEntry(Map<String, Object> m) {
 		super();
-		setAllowedAttributes(Table_LicenceContracts.ALLOWED_ATTRIBUTES);
+		setAllowedAttributes(TableLicenceContracts.ALLOWED_ATTRIBUTES);
 		produceFrom(m);
 	}
 
@@ -30,18 +30,18 @@ public class LicenceContractEntry extends StringValuedRelationElement {
 	protected void produceFrom(Map<String, ? extends Object> map) {
 		super.produceFrom(map);
 
-		put(Table_LicenceContracts.idDBKEY, get(Table_LicenceContracts.idKEY));
-		remove(Table_LicenceContracts.typeKEY);
-		remove(Table_LicenceContracts.identKEY);
+		put(TableLicenceContracts.ID_DB_KEY, get(TableLicenceContracts.ID_KEY));
+		remove(TableLicenceContracts.TYPE_KEY);
+		remove(TableLicenceContracts.IDENT_KEY);
 
-		put(Table_LicenceContracts.conclusionDateKEY, removeTime(get(Table_LicenceContracts.conclusionDateKEY)));
+		put(TableLicenceContracts.CONCLUSION_DATE_KEY, removeTime(get(TableLicenceContracts.CONCLUSION_DATE_KEY)));
 
-		put(Table_LicenceContracts.notificationDateKEY, removeTime(get(Table_LicenceContracts.notificationDateKEY)));
-		put(Table_LicenceContracts.expirationDateKEY, removeTime(get(Table_LicenceContracts.expirationDateKEY)));
+		put(TableLicenceContracts.NOTIFICATION_DATE_KEY, removeTime(get(TableLicenceContracts.NOTIFICATION_DATE_KEY)));
+		put(TableLicenceContracts.EXPIRATION_DATE_KEY, removeTime(get(TableLicenceContracts.EXPIRATION_DATE_KEY)));
 
 	}
 
 	public String getId() {
-		return get(Table_LicenceContracts.idDBKEY);
+		return get(TableLicenceContracts.ID_DB_KEY);
 	}
 }

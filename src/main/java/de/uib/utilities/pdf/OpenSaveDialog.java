@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 
 public class OpenSaveDialog implements ActionListener {
 
@@ -23,12 +23,12 @@ public class OpenSaveDialog implements ActionListener {
 
 	public OpenSaveDialog(String title) {
 
-		saveBtn = new JButton(configed.getResourceValue("OpenSaveDialog.save"));
+		saveBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.save"));
 		saveBtn.setFont(Globals.defaultFont);
 
 		saveBtn.addActionListener(this);
 
-		openBtn = new JButton(configed.getResourceValue("OpenSaveDialog.open"));
+		openBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.open"));
 
 		openBtn.setFont(Globals.defaultFont);
 		openBtn.addActionListener(this);

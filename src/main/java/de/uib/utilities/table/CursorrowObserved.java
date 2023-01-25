@@ -10,7 +10,7 @@ package de.uib.utilities.table;
 
 import java.util.HashSet;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CursorrowObserved {
 	java.util.Set<CursorrowObserver> observers = new HashSet<>();
@@ -28,14 +28,14 @@ public class CursorrowObserved {
 	}
 
 	public void notifyObservers(int newrow) {
-		logging.info(this, "notify Observers with " + newrow);
+		Logging.info(this, "notify Observers with " + newrow);
 		for (CursorrowObserver o : observers) {
 			o.rowUpdated(newrow);
 		}
 	}
 
 	public void addObserver(CursorrowObserver o) {
-		logging.debug(this, "add Observer  " + o);
+		Logging.debug(this, "add Observer  " + o);
 		observers.add(o);
 	}
 }

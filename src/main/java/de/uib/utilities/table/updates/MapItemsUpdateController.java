@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.thread.WaitCursor;
@@ -34,7 +34,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 	@Override
 	public boolean saveChanges() {
 
-		logging.debug(this, "saveChanges");
+		Logging.debug(this, "saveChanges");
 
 		WaitCursor waitCursor = new WaitCursor();
 
@@ -50,7 +50,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 			MapBasedTableEditItem updateItem = (MapBasedTableEditItem) iter.next();
 
-			logging.debug(this, " handling updateItem " + updateItem);
+			Logging.debug(this, " handling updateItem " + updateItem);
 
 			if (updateItem.getSource() == this.tablemodel) {
 
@@ -70,7 +70,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 				}
 
 				else {
-					logging.error("update item type not supported");
+					Logging.error("update item type not supported");
 					success = false;
 				}
 			}
@@ -88,11 +88,11 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 				}
 			}
 
-			logging.info(this, " we start with the new data set, reload request  " + tablemodel.isReloadRequested());
+			Logging.info(this, " we start with the new data set, reload request  " + tablemodel.isReloadRequested());
 			tablemodel.startWithCurrentData();
 			tablemodel.reset();
 
-			logging.info(this, "saveChanges lastKeyValue " + lastKeyValue);
+			Logging.info(this, "saveChanges lastKeyValue " + lastKeyValue);
 			panel.moveToKeyValue(lastKeyValue);
 
 			waitCursor.stop();
@@ -114,7 +114,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 			}
 
 			waitCursor.stop();
-			logging.checkErrorList(null);
+			Logging.checkErrorList(null);
 
 		}
 

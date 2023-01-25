@@ -17,10 +17,10 @@ public class OpsiHwAuditDeviceClass {
 
 	public static final String CONFIG_KEY = "configed.usecolumns_hwaudit";
 
-	public static final String hostAssignedTableType = "CONFIG";
-	public static final String hostAssignedTableTypeLower = hostAssignedTableType.toLowerCase();
-	public static final String hwItemAssignedTableType = "DEVICE";
-	public static final String hwItemAssignedTableTypeLower = hwItemAssignedTableType.toLowerCase();
+	public static final String HOST_ASSIGNED_TABLE_TYPE = "CONFIG";
+	public static final String HOST_ASSIGNED_TABLE_TYPE_LOWER = HOST_ASSIGNED_TABLE_TYPE.toLowerCase();
+	public static final String HW_ITEM_ASSIGNED_TABLE_TYPE = "DEVICE";
+	public static final String HW_ITEM_ASSIGNED_TABLE_TYPE_LOWER = HW_ITEM_ASSIGNED_TABLE_TYPE.toLowerCase();
 
 	public static final String CLASS_KEY = "Class";
 	public static final String OPSI_KEY = "Opsi";
@@ -31,8 +31,8 @@ public class OpsiHwAuditDeviceClass {
 	public static final String LIST_KEY = "Values";
 	public static final String SCOPE_KEY = "Scope";
 
-	public static final String firstseenColName = "firstseen";
-	public static final String lastseenColName = "lastseen";
+	public static final String FIRST_SEEN_COL_NAME = "firstseen";
+	public static final String LAST_SEEN_COL_NAME = "lastseen";
 
 	protected String hwClassName;
 	protected String opsiDbTableIdentifier;

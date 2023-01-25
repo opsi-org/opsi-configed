@@ -14,14 +14,14 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class PropertiesStore
 // is a decorator of a HashMap
 {
 	File myStore;
 
-	protected static final String keySeparator = "=";
+	protected static final String KEY_SEPARATOR = "=";
 
 	private Map<String, String> internalStore;
 
@@ -49,13 +49,13 @@ public class PropertiesStore
 			String line = reader.readLine();
 
 			while (line != null) {
-				logging.debug(this, "line: " + line);
+				Logging.debug(this, "line: " + line);
 				String trimmed = line.trim();
 
 				if (trimmed.length() == 0 || trimmed.charAt(0) == '#' || trimmed.charAt(0) == ';') {
 					// continue
 				} else {
-					int posSeparator = line.indexOf(keySeparator);
+					int posSeparator = line.indexOf(KEY_SEPARATOR);
 
 					String key = line.substring(0, posSeparator);
 					String value = null;
@@ -63,7 +63,7 @@ public class PropertiesStore
 						value = line.substring(posSeparator + 1);
 					if (value != null)
 						setProperty(key, value);
-					logging.debug(this, "key, value " + key + ", " + value);
+					Logging.debug(this, "key, value " + key + ", " + value);
 				}
 
 				line = reader.readLine();
@@ -107,7 +107,7 @@ public class PropertiesStore
 
 		for (String key : internalStore.keySet()) {
 			if (getProperty(key) != null)
-				orderedLines.add(key + keySeparator + getProperty(key));
+				orderedLines.add(key + KEY_SEPARATOR + getProperty(key));
 		}
 
 		return orderedLines;

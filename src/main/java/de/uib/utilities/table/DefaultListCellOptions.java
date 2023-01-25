@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.ListSelectionModel;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DefaultListCellOptions implements ListCellOptions {
 	List possibleValues;
@@ -22,7 +22,7 @@ public class DefaultListCellOptions implements ListCellOptions {
 		editable = true;
 		nullable = true;
 		description = "";
-		logging.info(this, "constructed " + possibleValues + ", " + defaultValues + ", " + selectionMode + ", "
+		Logging.info(this, "constructed " + possibleValues + ", " + defaultValues + ", " + selectionMode + ", "
 				+ editable + ", " + nullable);
 	}
 
@@ -39,12 +39,12 @@ public class DefaultListCellOptions implements ListCellOptions {
 			this.description = "";
 		else
 			this.description = description;
-		logging.info(this, "constructed with given " + possibleValues + ", " + defaultValues + ", " + selectionMode
+		Logging.info(this, "constructed with given " + possibleValues + ", " + defaultValues + ", " + selectionMode
 				+ ", " + editable + ", " + nullable);
 	}
 
 	public static ListCellOptions getNewBooleanListCellOptions() {
-		logging.info("getNewBooleanListCellOptions");
+		Logging.info("getNewBooleanListCellOptions");
 		List possibleValues = new ArrayList<>();
 		possibleValues.add(true);
 		possibleValues.add(false);
@@ -57,7 +57,7 @@ public class DefaultListCellOptions implements ListCellOptions {
 	}
 
 	public static ListCellOptions getNewEmptyListCellOptions() {
-		logging.info("getNewEmptyListCellOptions");
+		Logging.info("getNewEmptyListCellOptions");
 		List possibleValues = new ArrayList<>();
 		boolean editable = true;
 		boolean nullable = true;
@@ -66,7 +66,7 @@ public class DefaultListCellOptions implements ListCellOptions {
 	}
 
 	public static ListCellOptions getNewEmptyListCellOptionsMultiSelection() {
-		logging.info("getNewBooleanListCellOptionsMultiSelection");
+		Logging.info("getNewBooleanListCellOptionsMultiSelection");
 		List possibleValues = new ArrayList<>();
 		boolean editable = true;
 		boolean nullable = true;

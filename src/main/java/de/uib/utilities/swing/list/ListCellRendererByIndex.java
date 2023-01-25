@@ -30,16 +30,15 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 	protected Map<String, String> mapOfStrings;
 	protected Map<String, String> mapOfTooltips;
 	protected Map<String, ImageIcon> mapOfImages;
-	static final int imageDefaultWidth = 30;
 	protected boolean showOnlyIcon = false;
 
 	public ListCellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
 			String tooltipPrefix) {
-		this(mapOfStringValues, mapOfDescriptions, null, 0, false, tooltipPrefix);
+		this(mapOfStringValues, mapOfDescriptions, null, false, tooltipPrefix);
 	}
 
 	public ListCellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
-			String imagesBase, int imageWidth, boolean showOnlyIcon, String tooltipPrefix)
+			String imagesBase, boolean showOnlyIcon, String tooltipPrefix)
 
 	{
 		super(tooltipPrefix);
@@ -83,14 +82,14 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 	}
 
 	@Override
-	public Component getListCellRendererComponent(JList list, Object value, // value to display
+	public Component getListCellRendererComponent(JList<?> list, Object value, // value to display
 			int index, // cell index
 			boolean isSelected, // is the cell selected
 			boolean cellHasFocus) // the list and the cell have the focus
 	{
 		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-		if (c == null || !(c instanceof JComponent))
+		if (!(c instanceof JComponent))
 			return c;
 
 		if (value == null) {

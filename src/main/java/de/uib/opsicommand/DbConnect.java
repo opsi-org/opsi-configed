@@ -5,12 +5,16 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.uib.utilities.logging.logging;
+import javax.swing.JOptionPane;
+
+import de.uib.utilities.logging.Logging;
 
 public class DbConnect {
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 
 	private String url = "jdbc:mysql://%s";
+
+	// TODO Default values go away!
 	private static final String defaultDB = "opsi";
 	private static final String defaultUser = "opsi";
 	private static final String defaultPassword = "linux123";
@@ -22,12 +26,14 @@ public class DbConnect {
 
 	private DbConnect() {
 		try {
+			JOptionPane.showMessageDialog(null, "ÖLAKJFS");
+			// TODO kann weg!
 			Class.forName(DRIVER).getDeclaredConstructor().newInstance();
 
 		}
 
 		catch (Exception e) {
-			logging.error("Error", e);
+			Logging.error("Error", e);
 			return;
 		}
 
@@ -35,23 +41,22 @@ public class DbConnect {
 			server = server + "/" + defaultDB;
 
 		url = String.format(url, server);
-		logging.info("db url " + url);
+		Logging.info("db url " + url);
 
 		try {
 			con = DriverManager.getConnection(url, user, password);
 			con.setAutoCommit(true);
 		} catch (SQLException e) {
-			logging.error(this, e.getMessage(), e);
+			Logging.error(this, e.getMessage(), e);
 			con = null;
 
 			try {
 				con = DriverManager.getConnection(url, defaultUser, defaultPassword);
 				con.setAutoCommit(true);
 			} catch (SQLException e1) {
-				logging.error(this, e1.getMessage(), e1);
+				Logging.error(this, e1.getMessage(), e1);
 				con = null;
 			}
-
 		}
 	}
 
@@ -79,7 +84,7 @@ public class DbConnect {
 
 	public static Connection getConnection() {
 		if (con == null) {
-			logging.warning("try default connections parameters");
+			Logging.warning("try default connections parameters");
 
 			return getConnection(null, null, null);
 		}
@@ -90,18 +95,18 @@ public class DbConnect {
 		try {
 			con.close();
 		} catch (SQLException e) {
-			logging.error("DbConnect: " + e.getMessage(), e);
+			Logging.error("DbConnect: " + e.getMessage(), e);
 		}
 		con = null;
 	}
 
 	public static boolean checkForExistence(String sql) {
-		logging.debug("DbConnect: " + sql);
+		Logging.debug("DbConnect: " + sql);
 		try (ResultSet reply = getConnection().createStatement().executeQuery(sql)) {
 			if (reply.next())
 				return true;
 		} catch (Exception e) {
-			logging.error("DbConnect: " + e.getMessage(), e);
+			Logging.error("DbConnect: " + e.getMessage(), e);
 		}
 		return false;
 	}

@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.ListModel;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.DefaultListCellOptions;
 import de.uib.utilities.table.DefaultListModelProducer;
 import de.uib.utilities.table.ListCellOptions;
@@ -25,22 +26,22 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 	Map<String, ListCellOptions> optionsMap;
 	Map<String, List> currentData;
-	Map<String, Class> originalTypes;
+	Map<String, Class<?>> originalTypes;
 	JTable table;
 
 	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ListCellOptions> optionsMap,
-			Map currentData) {
+			Map<String, Object> currentData) {
 		this.table = tableVisualizingMap;
 		setData(optionsMap, currentData);
 	}
 
-	public void setData(Map<String, ListCellOptions> optionsMap, Map currentData) {
+	public void setData(Map<String, ListCellOptions> optionsMap, Map<String, Object> currentData) {
 		this.optionsMap = optionsMap;
 
 		mapTypes(currentData);
 	}
 
-	public void updateData(Map currentData) {
+	public void updateData(Map<String, Object> currentData) {
 		mapTypes(currentData);
 	}
 
@@ -53,15 +54,14 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		return options;
 	}
 
-	private void mapTypes(final Map currentData) {
+	private void mapTypes(final Map<String, Object> currentData) {
 		this.currentData = new HashMap<>();
-		logging.debug(this, "mapTypes  " + currentData);
+		Logging.debug(this, "mapTypes  " + currentData);
 		originalTypes = new HashMap<>();
-		for (Object key : currentData.keySet()) {
-			Object value = currentData.get(key);
+		for (Entry<String, Object> dataEntry : currentData.entrySet()) {
 
-			originalTypes.put((String) key, value.getClass());
-			this.currentData.put((String) key, toList(value));
+			originalTypes.put(dataEntry.getKey(), dataEntry.getValue().getClass());
+			this.currentData.put(dataEntry.getKey(), toList(dataEntry.getValue()));
 		}
 
 	}
@@ -75,7 +75,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 			return listmodels.get(row);
 		}
 
-		logging.info(this, "getListModel, row " + row + ", column " + column);
+		Logging.info(this, "getListModel, row " + row + ", column " + column);
 
 		// build listmodel
 
@@ -84,16 +84,16 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 		ListCellOptions options = getListCellOptions(key);
 
 		List values = options.getPossibleValues();
-		logging.info(this, "getListModel key " + key + " the option values " + values);
-		logging.info(this, "getListModel key " + key + " options  " + options);
+		Logging.info(this, "getListModel key " + key + " the option values " + values);
+		Logging.info(this, "getListModel key " + key + " options  " + options);
 
 		DefaultListModel model = new DefaultListModel();
-		Iterator iter = ((List) values).iterator();
+		Iterator iter = values.iterator();
 		while (iter.hasNext()) {
 			model.addElement(iter.next());
 		}
-		if (currentData.get(key) != null && currentData.get(key) instanceof List) {
-			iter = ((List) currentData.get(key)).iterator();
+		if (currentData.get(key) instanceof List) {
+			iter = currentData.get(key).iterator();
 
 			while (iter.hasNext()) {
 				Object entry = iter.next();
@@ -110,7 +110,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	public List getSelectedValues(int row, int column) {
 
 		String key = (String) table.getValueAt(row, 0);
-		return (List) currentData.get(key);
+		return currentData.get(key);
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	}
 
 	@Override
-	public Class getClass(int row, int column) {
+	public Class<?> getClass(int row, int column) {
 
 		String key = (String) table.getValueAt(row, 0);
 

@@ -10,7 +10,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SimpleTreeModel extends DefaultTreeModel {
 	java.util.LinkedHashMap<String, Object> virtualLines;
@@ -25,7 +25,7 @@ public class SimpleTreeModel extends DefaultTreeModel {
 	public SimpleTreeModel(java.util.Set<String> dottedKeys, Map<String, String> tooltips) {
 		super(new SimpleIconNode(""));
 
-		logging.debug(this, "SimpleTreeModel created for " + dottedKeys);
+		Logging.debug(this, "SimpleTreeModel created for " + dottedKeys);
 		setAsksAllowsChildren(true);
 
 		rootNode = (SimpleIconNode) getRoot();
@@ -76,7 +76,7 @@ public class SimpleTreeModel extends DefaultTreeModel {
 			}
 		}
 
-		logging.debug(this, "generateFrom allPathes " + allPathes);
+		Logging.debug(this, "generateFrom allPathes " + allPathes);
 
 		for (SimpleTreePath path : allPathes) {
 			SimpleIconNode parent = rootNode;
@@ -110,6 +110,6 @@ public class SimpleTreeModel extends DefaultTreeModel {
 			}
 		}
 
-		logging.debug(this, "generateFrom allPathes ready");
+		Logging.debug(this, "generateFrom allPathes ready");
 	}
 }

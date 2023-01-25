@@ -3,7 +3,7 @@ package de.uib.opsicommand.sshcommand;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 
 public class CommandOpsiPackageManager implements SSHCommand {
@@ -24,7 +24,7 @@ public class CommandOpsiPackageManager implements SSHCommand {
 	/**
 	 * Sets the command specific error text
 	 **/
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 
@@ -36,7 +36,7 @@ public class CommandOpsiPackageManager implements SSHCommand {
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -48,7 +48,7 @@ public class CommandOpsiPackageManager implements SSHCommand {
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.opsipackagemanager");
+		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager");
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class CommandOpsiPackageManager implements SSHCommand {
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.opsipackagemanager.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.opsipackagemanager.tooltip");
 	}
 
 	@Override

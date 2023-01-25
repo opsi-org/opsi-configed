@@ -11,7 +11,7 @@ import java.util.Set;
 
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.type.SWAuditClientEntry;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataClient implements Client {
 	public static final String HOSTINFO_MAP = "HostMap";
@@ -19,18 +19,18 @@ public class OpsiDataClient implements Client {
 	public static final String SWAUDIT_MAP = "SwAuditMap";
 
 	private String hostId;
-	private Map infoMap;
+	private Map<String, Object> infoMap;
 	private Set<String> groupsSet; // The opsi groups for the client
 	private Set<String> superGroupsSet; // The opsi groups in which the client is contained (directly or indirectly)
 	private List<Map<String, Object>> hardwareInfo;
-	private List productList; // The products (a list of maps)
+	private List<Map<String, String>> productList; // The products (a list of maps)
 	private List<String> productNames; // Like above, but just the productIDs
 	private List<SWAuditClientEntry> swauditList;
 
-	private Map softwareValue; // current software to be checked
-	private Map swauditValue; // current swaudit to be checked
+	private Map<String, String> softwareValue; // current software to be checked
+	private Map<String, String> swauditValue; // current swaudit to be checked
 	private Iterator<Map<String, Object>> hardwareIterator = null;
-	private Map hardwareValue = null; // current hardware to be checked
+	private Map<String, Object> hardwareValue = null; // current hardware to be checked
 
 	public OpsiDataClient(String id) {
 		hostId = id;
@@ -42,7 +42,7 @@ public class OpsiDataClient implements Client {
 	}
 
 	/** Set the map with the information about hosts */
-	public void setInfoMap(Map map) {
+	public void setInfoMap(Map<String, Object> map) {
 		infoMap = map;
 	}
 
@@ -60,11 +60,11 @@ public class OpsiDataClient implements Client {
 	}
 
 	/** Set the list of opsi products */
-	public void setOpsiProductList(List productList) {
+	public void setOpsiProductList(List<Map<String, String>> productList) {
 		this.productList = productList;
 
-		for (Object element : productList) {
-			productNames.add((String) ((Map) element).get("productId"));
+		for (Map<String, String> element : productList) {
+			productNames.add(element.get("productId"));
 		}
 	}
 
@@ -97,7 +97,7 @@ public class OpsiDataClient implements Client {
 	}
 
 	/** Get the list of opsi products */
-	public List getSoftwareList() {
+	public List<Map<String, String>> getSoftwareList() {
 		return productList;
 	}
 
@@ -112,22 +112,22 @@ public class OpsiDataClient implements Client {
 	}
 
 	/** Get the opsi client groups */
-	public Set getGroups() {
+	public Set<String> getGroups() {
 		return groupsSet;
 	}
 
 	/** Get the groups for which or a supergroup of it a client belongs to */
-	public Set getSuperGroups() {
+	public Set<String> getSuperGroups() {
 		return superGroupsSet;
 	}
 
 	/** Set the current opsi software value */
-	public void setCurrentSoftwareValue(Map value) {
+	public void setCurrentSoftwareValue(Map<String, String> value) {
 		softwareValue = value;
 	}
 
 	/** Set the current software audit value */
-	public void setCurrentSwAuditValue(Map value) {
+	public void setCurrentSwAuditValue(Map<String, String> value) {
 		swauditValue = value;
 	}
 
@@ -142,7 +142,7 @@ public class OpsiDataClient implements Client {
 			return false;
 
 		hardwareValue = hardwareIterator.next();
-		logging.debug(this, "hardwareIteratorNext: " + hardwareValue.toString());
+		Logging.debug(this, "hardwareIteratorNext: " + hardwareValue.toString());
 		return true;
 	}
 
@@ -152,15 +152,15 @@ public class OpsiDataClient implements Client {
 	}
 
 	/** Get the hardware Map for this string */
-	private Map getHardwareMap(String key) {
+	private Map<String, Object> getHardwareMap(String key) {
 		if (hardwareIterator == null) {
-			logging.debug(this, "getHardwareMap key " + key);
-			logging.debug(this, "getHardwareMap hardwareInfo " + hardwareInfo);
+			Logging.debug(this, "getHardwareMap key " + key);
+			Logging.debug(this, "getHardwareMap hardwareInfo " + hardwareInfo);
 			HashSet<Map<String, Object>> values = new HashSet<>();
 			for (Map<String, Object> map : hardwareInfo)
 				if (key.equals(map.get("hardwareClass")))
 					values.add(map);
-			logging.debug(this, values.toString());
+			Logging.debug(this, values.toString());
 
 			hardwareValue = null;
 			hardwareIterator = values.iterator();

@@ -6,12 +6,12 @@ import de.uib.utilities.ExtendedInteger;
 
 public class LicenceStatisticsRow extends HashMap<String, String> {
 	// callkeys
-	public static final String idKEY = "licensePoolId";
-	public static final String licenseOptionsKEY = "licence_options";
-	public static final String usedByOpsiKEY = "used_by_opsi";
-	public static final String remainingOpsiKEY = "remaining_opsi";
-	public static final String swInventoryUsedKEY = "SWinventory_used";
-	public static final String swinventoryRemainingKEY = "SWinventory_remaining";
+	public static final String ID_KEY = "licensePoolId";
+	public static final String LICENSE_OPTIONS_KEY = "licence_options";
+	public static final String USED_BY_OPSI_KEY = "used_by_opsi";
+	public static final String REMAINING_OPSI_KEY = "remaining_opsi";
+	public static final String SW_INVENTORY_USED_KEY = "SWinventory_used";
+	public static final String SW_INVENTORY_REMAINING_KEY = "SWinventory_remaining";
 
 	private static final String ZERO = "0";
 
@@ -21,12 +21,12 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 
 	public LicenceStatisticsRow(String licencePool) {
 		super();
-		put(usedByOpsiKEY, ZERO);
-		put(idKEY, licencePool);
-		put(licenseOptionsKEY, ZERO);
-		put(remainingOpsiKEY, ZERO);
-		put(swInventoryUsedKEY, ZERO);
-		put(swinventoryRemainingKEY, ZERO);
+		put(USED_BY_OPSI_KEY, ZERO);
+		put(ID_KEY, licencePool);
+		put(LICENSE_OPTIONS_KEY, ZERO);
+		put(REMAINING_OPSI_KEY, ZERO);
+		put(SW_INVENTORY_USED_KEY, ZERO);
+		put(SW_INVENTORY_REMAINING_KEY, ZERO);
 		allowedUsages = ExtendedInteger.ZERO;
 		opsiUsages = 0;
 		swInventoryUsages = 0;
@@ -38,26 +38,26 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 
 			String value = count.getDisplay();
 			allowedUsages = count;
-			put(licenseOptionsKEY, value);
-			put(remainingOpsiKEY, value);
-			put(swinventoryRemainingKEY, value);
+			put(LICENSE_OPTIONS_KEY, value);
+			put(REMAINING_OPSI_KEY, value);
+			put(SW_INVENTORY_REMAINING_KEY, value);
 
 		}
 	}
 
 	public void setOpsiUsagesCount(Integer count) {
 		if (count != null) {
-			put(usedByOpsiKEY, count.toString());
+			put(USED_BY_OPSI_KEY, count.toString());
 			opsiUsages = count;
-			put(remainingOpsiKEY, (allowedUsages.add(-count)).getDisplay());
+			put(REMAINING_OPSI_KEY, (allowedUsages.add(-count)).getDisplay());
 		}
 	}
 
 	public void setSWauditUsagesCount(Integer count) {
 		if (count != null) {
-			put(swInventoryUsedKEY, count.toString());
+			put(SW_INVENTORY_USED_KEY, count.toString());
 			swInventoryUsages = count;
-			put(swinventoryRemainingKEY, (allowedUsages.add(-count)).getDisplay());
+			put(SW_INVENTORY_REMAINING_KEY, (allowedUsages.add(-count)).getDisplay());
 		}
 	}
 

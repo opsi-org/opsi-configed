@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.productstate.ActionRequest;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 //data source product table
 public class OpsiProductInfo extends OpsiPackage {
@@ -28,12 +28,11 @@ public class OpsiProductInfo extends OpsiPackage {
 
 	public static final int NO_PRIORITY = -101;
 
-	public static final String SERVICEkeyPRIORITY = "priority";
-	public static final String SERVICEkeyUSER_LOGIN_SCRIPT = "userLoginScript";
-	public static final String SERVICEkeyPRODUCT_TYPE = "type";
-	public static final String SERVICEkeyPRODUCT_ADVICE = "advice";
-	public static final String SERVICEkeyPRODUCT_DESCRIPTION = "description";
-	public static final String SERVICEkeyPRODUCT_NAME = "name";
+	public static final String SERVICE_KEY_PRIORITY = "priority";
+	public static final String SERVICE_KEY_USER_LOGIN_SCRIPT = "userLoginScript";
+	public static final String SERVICE_KEY_PRODUCT_ADVICE = "advice";
+	public static final String SERVICE_KEY_PRODUCT_DESCRIPTION = "description";
+	public static final String SERVICE_KEY_PRODUCT_NAME = "name";
 
 	public OpsiProductInfo(Map<String, Object> m) {
 		super(m);
@@ -47,27 +46,27 @@ public class OpsiProductInfo extends OpsiPackage {
 		}
 
 		productName = "";
-		if (m.get(SERVICEkeyPRODUCT_NAME) != null)
-			productName = "" + m.get(SERVICEkeyPRODUCT_NAME);
+		if (m.get(SERVICE_KEY_PRODUCT_NAME) != null)
+			productName = "" + m.get(SERVICE_KEY_PRODUCT_NAME);
 
 		description = "";
-		if (m.get(SERVICEkeyPRODUCT_DESCRIPTION) != null)
-			description = "" + m.get(SERVICEkeyPRODUCT_DESCRIPTION);
+		if (m.get(SERVICE_KEY_PRODUCT_DESCRIPTION) != null)
+			description = "" + m.get(SERVICE_KEY_PRODUCT_DESCRIPTION);
 
 		advice = "";
-		if (m.get(SERVICEkeyPRODUCT_ADVICE) != null)
-			advice = "" + m.get(SERVICEkeyPRODUCT_ADVICE);
+		if (m.get(SERVICE_KEY_PRODUCT_ADVICE) != null)
+			advice = "" + m.get(SERVICE_KEY_PRODUCT_ADVICE);
 
 		try {
-			priority = Integer.valueOf("" + m.get(SERVICEkeyPRIORITY));
+			priority = Integer.valueOf("" + m.get(SERVICE_KEY_PRIORITY));
 		} catch (NumberFormatException ex) {
-			logging.info(this, "no priority " + m.get(SERVICEkeyPRIORITY));
+			Logging.info(this, "no priority " + m.get(SERVICE_KEY_PRIORITY));
 		}
 
-		hasUserLoginScript = (m.get(SERVICEkeyUSER_LOGIN_SCRIPT) != null
-				&& !("" + m.get(SERVICEkeyUSER_LOGIN_SCRIPT)).equals(""));
+		hasUserLoginScript = (m.get(SERVICE_KEY_USER_LOGIN_SCRIPT) != null
+				&& !("" + m.get(SERVICE_KEY_USER_LOGIN_SCRIPT)).equals(""));
 
-		logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
+		Logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
 				+ ", hasUserLoginScript " + hasUserLoginScript);
 
 	}

@@ -12,11 +12,11 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /***
 if more then one command have to be executed (e.g. also a set-rights) use SSHConnectExec. 
@@ -50,11 +50,11 @@ public class SSHConnectSCP extends SSHConnectExec {
 	}
 
 	public String start(SSHSFTPCommand command, SSHConnectionExecDialog outDia) {
-		logging.debug(this, "starting, create SSHConnectionExecDialog");
-		logging.info(this, "execsftp command " + command.getDescription());
-		logging.debug(this, "execsftp withGui " + command.getShowOutputDialog());
-		logging.debug(this, "execsftp dialog " + outDia);
-		logging.debug(this, "execsftp isConnected " + isConnected());
+		Logging.debug(this, "starting, create SSHConnectionExecDialog");
+		Logging.info(this, "execsftp command " + command.getDescription());
+		Logging.debug(this, "execsftp withGui " + command.getShowOutputDialog());
+		Logging.debug(this, "execsftp dialog " + outDia);
+		Logging.debug(this, "execsftp isConnected " + isConnected());
 
 		if (!(isConnected()))
 			connect();
@@ -66,25 +66,25 @@ public class SSHConnectSCP extends SSHConnectExec {
 				setDialog(SSHConnectionExecDialog.getInstance());
 			outputDialog = getDialog();
 
-			if (SSHCommandFactory.ssh_always_exec_in_background) {
+			if (SSHCommandFactory.sshAlwaysExecInBackground) {
 				outputDialog.setVisible(false);
 			}
 		}
 
 		try {
-			logging.info(this, "exec isConnected " + isConnected());
+			Logging.info(this, "exec isConnected " + isConnected());
 			SshSFTPCommandWorker task = new SshSFTPCommandWorker(command, outputDialog, command.getShowOutputDialog());
 			task.execute();
-			logging.info(this, "execute was called");
+			Logging.info(this, "execute was called");
 
-			if (SSHCommandFactory.ssh_always_exec_in_background)
+			if (SSHCommandFactory.sshAlwaysExecInBackground)
 				outputDialog.setVisible(command.getShowOutputDialog());
 
 			return task.get();
 		} catch (ExecutionException e) {
-			logging.error(this, "exec Exception", e);
+			Logging.error(this, "exec Exception", e);
 		} catch (InterruptedException e) {
-			logging.error(this, "interrupted Exception", e);
+			Logging.error(this, "interrupted Exception", e);
 			Thread.currentThread().interrupt();
 		}
 		return null;
@@ -105,26 +105,26 @@ public class SSHConnectSCP extends SSHConnectExec {
 			boolean rememberPw, int commandnumber, int maxcommandnumber) {
 		try {
 			SSHSFTPCommand command = (SSHSFTPCommand) com;
-			logging.info(this, "exec isConnected " + isConnected());
+			Logging.info(this, "exec isConnected " + isConnected());
 			SshSFTPCommandWorker task = new SshSFTPCommandWorker(command, dialog, withGui);
 			task.setMaxCommandNumber(maxcommandnumber);
 			task.setCommandNumber(commandnumber);
 			task.execute();
-			logging.info(this, "execute was called");
+			Logging.info(this, "execute was called");
 
 			if (sequential)
 				return task.get();
 
-			if (SSHCommandFactory.ssh_always_exec_in_background)
+			if (SSHCommandFactory.sshAlwaysExecInBackground)
 				dialog.setVisible(withGui);
 
 			return task.get();
 		} catch (java.lang.NullPointerException npe) {
-			logging.error(this, "exec NullPointerException", npe);
+			Logging.error(this, "exec NullPointerException", npe);
 		} catch (ExecutionException e) {
-			logging.error(this, "exec Exception", e);
+			Logging.error(this, "exec Exception", e);
 		} catch (InterruptedException e) {
-			logging.error(this, "interrupted Exception", e);
+			Logging.error(this, "interrupted Exception", e);
 			Thread.currentThread().interrupt();
 		}
 		return "end of method";
@@ -167,45 +167,45 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 		private void checkExitCode(int exitCode, boolean withGui, Channel channel) {
 			String s = "checkExitCode " + exitCode;
-			logging.debug(this, "publish " + s);
+			Logging.debug(this, "publish " + s);
 			publishInfo(
 					"---------------------------------------------------------------------------------------------------------------------------------------------------");
 			if (this.commandNumber != -1 && this.maxCommandNumber != -1)
-				publishInfo(configed.getResourceValue("SSHConnection.Exec.commandcountertext")
+				publishInfo(Configed.getResourceValue("SSHConnection.Exec.commandcountertext")
 						.replace("xX0Xx", Integer.toString(this.commandNumber))
 						.replace("xX1Xx", Integer.toString(this.maxCommandNumber)));
 			publishInfo(s.replace("-1", "0"));
 			if (exitCode == 127) {
-				logging.info(this, "exec exit code 127 (command does not exists).");
-				logging.debug(configed.getResourceValue("SSHConnection.Exec.exit127"));
+				Logging.info(this, "exec exit code 127 (command does not exists).");
+				Logging.debug(Configed.getResourceValue("SSHConnection.Exec.exit127"));
 				if (withGui) {
-					publishError(configed.getResourceValue("SSHConnection.Exec.exit127"));
-					logging.info(this, "2. publish");
+					publishError(Configed.getResourceValue("SSHConnection.Exec.exit127"));
+					Logging.info(this, "2. publish");
 				}
 			} else if ((exitCode != 0) && (exitCode != -1)) {
-				FOUND_ERROR = true;
-				logging.info(this, "exec exit code " + exitCode + ".");
-				logging.debug(this, configed.getResourceValue("SSHConnection.Exec.exitError")
-						+ configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
+				foundError = true;
+				Logging.info(this, "exec exit code " + exitCode + ".");
+				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitError")
+						+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
 				if (withGui) {
-					publishError(configed.getResourceValue("SSHConnection.Exec.exitError")
-							+ configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
+					publishError(Configed.getResourceValue("SSHConnection.Exec.exitError")
+							+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
 				}
 			} else if ((exitCode == 0) || (exitCode == -1)) {
-				logging.info(this, "exec exit code 0");
-				logging.debug(this, configed.getResourceValue("SSHConnection.Exec.exitNoError"));
-				logging.debug(this, configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
+				Logging.info(this, "exec exit code 0");
+				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitNoError"));
+				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
 				if (withGui) {
-					publishInfo(configed.getResourceValue("SSHConnection.Exec.exitNoError"));
-					publishInfo(configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
+					publishInfo(Configed.getResourceValue("SSHConnection.Exec.exitNoError"));
+					publishInfo(Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
 				}
 			} else {
-				FOUND_ERROR = true;
-				logging.debug(this, configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
-				logging.debug(this, configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
+				foundError = true;
+				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
+				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
 				if (withGui) {
-					publishError(configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
-					publishError(configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
+					publishError(Configed.getResourceValue("SSHConnection.Exec.exitUnknown"));
+					publishError(Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
 				}
 			}
 			if (interruptChannel && caller != null) {
@@ -223,16 +223,16 @@ public class SSHConnectSCP extends SSHConnectExec {
 			StringBuilder buf = new StringBuilder();
 			File sourcefile = new File(command.getFullSourcePath());
 			try (FileInputStream fis = new FileInputStream(sourcefile)) {
-				logging.info(this, "doInBackground getSession " + getSession());
+				Logging.info(this, "doInBackground getSession " + getSession());
 
 				if (!(isConnected()))
 					connect();
 
 				final Channel channel = getSession().openChannel("sftp");
-				logging.info(this, "doInBackground channel openchannel " + channel);
+				Logging.info(this, "doInBackground channel openchannel " + channel);
 				channel.connect();
 
-				logging.info(this, "doInBackground channel connect " + channel);
+				Logging.info(this, "doInBackground channel connect " + channel);
 				final ChannelSftp channelsftp = (ChannelSftp) channel;
 
 				channelsftp.cd(command.getTargetPath());
@@ -253,37 +253,37 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 				checkExitCode(channel.getExitStatus(), withGui, channel);
 				if ((channel.getExitStatus() != 0) && (channel.getExitStatus() != -1)) {
-					logging.info(this, "exec ready (2)");
-					FOUND_ERROR = true;
+					Logging.info(this, "exec ready (2)");
+					foundError = true;
 					if (outputDialog != null)
 						outputDialog.setStatusFinish();
 					return null;
 				}
 
 				setDialog(outputDialog);
-				logging.info(this, "exec ready (0)");
+				Logging.info(this, "exec ready (0)");
 			}
 
 			catch (JSchException jschex) {
 				if (retriedTimes >= 3) {
 					retriedTimes = 1;
-					logging.warning(this, "jsch exception ", jschex);
+					Logging.warning(this, "jsch exception ", jschex);
 					publishError(jschex.toString());
-					FOUND_ERROR = true;
+					foundError = true;
 					return "";
 				} else {
-					logging.warning(this, "jsch exception ", jschex);
+					Logging.warning(this, "jsch exception ", jschex);
 					retriedTimes = retriedTimes + 1;
 					connect();
 					doInBackground();
 				}
 			} catch (IOException ex) {
-				logging.warning(this, "SSH IOException", ex);
-				FOUND_ERROR = true;
+				Logging.warning(this, "SSH IOException", ex);
+				foundError = true;
 				publishError(ex.toString());
 			} catch (Exception e) {
-				logging.warning(this, "SSH Exception", e);
-				FOUND_ERROR = true;
+				Logging.warning(this, "SSH Exception", e);
+				foundError = true;
 				publishError(e.getMessage());
 				Thread.currentThread().interrupt();
 			}
@@ -297,11 +297,11 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 		@Override
 		protected void process(List<String> chunks) {
-			logging.debug(this, "chunks " + chunks.size());
+			Logging.debug(this, "chunks " + chunks.size());
 			if (outputDialog != null) {
 
 				for (String line : chunks) {
-					logging.debug(this, "process " + line);
+					Logging.debug(this, "process " + line);
 					outputDialog.append(getCommandName(), line + "\n");
 				}
 			}
@@ -320,7 +320,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 		@Override
 		protected void done() {
-			logging.info(this, "done");
+			Logging.info(this, "done");
 		}
 
 		private String getCommandName() {

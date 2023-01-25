@@ -1,7 +1,7 @@
 package de.uib.opsicommand.sshcommand;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHConnectionInfo {
 	private boolean sshenabled = true;
@@ -9,7 +9,7 @@ public class SSHConnectionInfo {
 	private String sshConnectionPassword = "";
 	private String sshConnectionHost = "";
 	/** Port for server to connected as **/
-	private String sshConnectionPost = SSHConnect.portSSH;
+	private String sshConnectionPost = SSHConnect.PORT_SSH;
 	private boolean useKeyfile;
 	private String keyfilepath = "";
 	private String keyfilepassphrase = "";
@@ -19,7 +19,7 @@ public class SSHConnectionInfo {
 	}
 
 	public static SSHConnectionInfo getInstance() {
-		logging.info("SSHConnectionInfo getInstance, until now instance " + instance);
+		Logging.info("SSHConnectionInfo getInstance, until now instance " + instance);
 		if (instance == null)
 			instance = new SSHConnectionInfo();
 		return instance;
@@ -70,7 +70,7 @@ public class SSHConnectionInfo {
 	}
 
 	public void setHost(String host) {
-		logging.info(this, "setHost, instance is " + instance);
+		Logging.info(this, "setHost, instance is " + instance);
 		sshConnectionHost = getHostnameFromOpsihost(host);
 	}
 
@@ -98,11 +98,11 @@ public class SSHConnectionInfo {
 		useKeyfile = v;
 		keyfilepath = (k == null) ? "" : k;
 		keyfilepassphrase = (p == null) ? "" : p;
-		logging.info("useKeyfile " + v + " now keyfilepath " + keyfilepath);
+		Logging.info("useKeyfile " + v + " now keyfilepath " + keyfilepath);
 	}
 
 	public void setUserData(String h, String u, String ps, String p) {
-		logging.info(this, "setUserData " + h + ", " + u + ", password " + (ps != null && ps.equals("")));
+		Logging.info(this, "setUserData " + h + ", " + u + ", password " + (ps != null && ps.equals("")));
 		setHost(getHostnameFromOpsihost(h));
 		setPort(p);
 		setUser(u);
@@ -111,34 +111,34 @@ public class SSHConnectionInfo {
 	}
 
 	public void setDefaultPort() {
-		setPort(SSHConnect.portSSH);
+		setPort(SSHConnect.PORT_SSH);
 	}
 
 	public void checkUserData() {
 		if (getHost() == null)
-			setHost(ConfigedMain.HOST);
+			setHost(ConfigedMain.host);
 
 		if (getPort() == null)
-			setPort(SSHConnect.portSSH);
+			setPort(SSHConnect.PORT_SSH);
 
 		if (getUser() == null)
-			setUser(ConfigedMain.USER);
+			setUser(ConfigedMain.user);
 
 		if ((getPassw() == null) && (!usesKeyfile()))
-			setPassw(ConfigedMain.PASSWORD);
+			setPassw(ConfigedMain.password);
 
 		else if (getPassw() == null)
 			setPassw("");
 
-		logging.info(this, "checkUserData " + this.toString());
+		Logging.info(this, "checkUserData " + this.toString());
 	}
 
 	private static String getHostnameFromOpsihost(String host) {
 		String result = host;
-		logging.info("SSHConnectionInfo  getHostnameFromOpsihost " + host);
+		Logging.info("SSHConnectionInfo  getHostnameFromOpsihost " + host);
 		if (host != null && host.indexOf(":") > -1)
 			result = host.substring(0, host.indexOf(":"));
-		logging.info("SSHConnectionInfo  getHostnameFromOpsihost result " + result);
+		Logging.info("SSHConnectionInfo  getHostnameFromOpsihost result " + result);
 
 		return result;
 	}

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public abstract class OpsiDataMatcher {
 	protected String map;
@@ -12,7 +12,7 @@ public abstract class OpsiDataMatcher {
 	protected String data;
 
 	protected OpsiDataMatcher(String map, String key, String data) {
-		logging.debug(this, "created:  maptype, key, data: " + map + ", " + key + ", " + data);
+		Logging.debug(this, "created:  maptype, key, data: " + map + ", " + key + ", " + data);
 
 		this.map = map;
 		this.key = key;
@@ -21,7 +21,7 @@ public abstract class OpsiDataMatcher {
 
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
-		logging.debug(this, "doesMatch client " + oClient);
+		Logging.debug(this, "doesMatch client " + oClient);
 
 		Map realMap = oClient.getMap(map);
 

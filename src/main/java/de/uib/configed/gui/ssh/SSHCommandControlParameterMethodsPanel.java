@@ -26,11 +26,11 @@ import javax.swing.JPanel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	private GroupLayout thisLayout;
@@ -47,7 +47,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner, int lg, int rg, int ug, int og) {
 		super();
-		logging.info(this, "SSHCommandControlParameterMethodsPane  main " + main);
+		Logging.info(this, "SSHCommandControlParameterMethodsPane  main " + main);
 		main = owner;
 		init();
 		setGapSize(lg, rg, ug, og);
@@ -57,7 +57,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner) {
 		super();
-		logging.info(this, "SSHCommandControlParameterMethodsPane  main " + main);
+		Logging.info(this, "SSHCommandControlParameterMethodsPane  main " + main);
 		main = owner;
 		init();
 
@@ -73,24 +73,24 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	/** Init components **/
 	private void init() {
-		logging.debug(this, "init setting up components ");
+		Logging.debug(this, "init setting up components ");
 		Dimension jComboBoxDim = new Dimension(Globals.FIRST_LABEL_WIDTH + Globals.GAP_SIZE, Globals.BUTTON_HEIGHT);
 		Dimension jButtonDim = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT);
 
 		jLabelEmpty.setPreferredSize(jComboBoxDim);
-		jLabelParamMethods.setText(configed.getResourceValue("SSHConnection.CommandControl.parameterMethods"));
+		jLabelParamMethods.setText(Configed.getResourceValue("SSHConnection.CommandControl.parameterMethods"));
 
-		jLabelParamFormats.setText(configed.getResourceValue("SSHConnection.CommandControl.parameterFormats"));
+		jLabelParamFormats.setText(Configed.getResourceValue("SSHConnection.CommandControl.parameterFormats"));
 
 		jComboBoxParameterFormats = new JComboBox<>(factory.getParameterHandler().getParameterFormats());
-		logging.info(this, "cb_parameter_formats lightweight " + jComboBoxParameterFormats.isLightWeightPopupEnabled());
+		Logging.info(this, "cb_parameter_formats lightweight " + jComboBoxParameterFormats.isLightWeightPopupEnabled());
 
 		jComboBoxParameterFormats.setPreferredSize(jComboBoxDim);
 		jComboBoxParameterFormats.setMaximumRowCount(5); // we have to delimit it so that is constrained to the component (in
 		// Windows) 
 		jComboBoxParameterMethods = new JComboBox<>(factory.getParameterHandler().getParameterMethodLocalNames());
 		jComboBoxParameterMethods
-				.setSelectedItem(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"));
+				.setSelectedItem(Configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"));
 		jComboBoxParameterMethods.setPreferredSize(jComboBoxDim);
 		jComboBoxParameterMethods.setMaximumRowCount(5);
 
@@ -98,21 +98,21 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 		jComboBoxParameterMethods.addItemListener(itemEvent -> {
 			boolean enabled = ((String) jComboBoxParameterMethods.getSelectedItem())
-					.equals(configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"))
+					.equals(Configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"))
 					|| ((String) jComboBoxParameterMethods.getSelectedItem())
-							.equals(configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection"));
+							.equals(Configed.getResourceValue("SSHConnection.CommandControl.method.optionSelection"));
 
 			jComboBoxParameterFormats.setEnabled(enabled);
 
 		});
 
 		jButtonTestParam = new de.uib.configed.gui.IconButton(
-				configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),
+				Configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),
 				"images/executing_command.png", "images/executing_command.png", "images/executing_command.png", true);
 		jButtonTestParam.setPreferredSize(jButtonDim);
 
 		jButtonAddParam = new de.uib.configed.gui.IconButton(
-				configed.getResourceValue("SSHConnection.CommandControl.btnAddParamMethod"), "images/list-add.png",
+				Configed.getResourceValue("SSHConnection.CommandControl.btnAddParamMethod"), "images/list-add.png",
 				"images/list-add.png", "images/list-add_disabled.png", true);
 		jButtonAddParam.setSize(jButtonDim);
 		jButtonAddParam.setPreferredSize(jButtonDim);
@@ -138,7 +138,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	int oGap = Globals.GAP_SIZE;
 
 	public void setGapSize(int lgap, int rgap, int ugap, int ogap) {
-		logging.info(this, "setGapSize lgap  " + lgap + " rgap " + rgap + " ugap " + ugap + " ogap " + ogap);
+		Logging.info(this, "setGapSize lgap  " + lgap + " rgap " + rgap + " ugap " + ugap + " ogap " + ogap);
 		this.lGap = lgap;
 		this.rGap = rgap;
 		this.uGap = ugap;
@@ -146,7 +146,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	}
 
 	public void initLayout() {
-		logging.debug(this, "initLayout ");
+		Logging.debug(this, "initLayout ");
 		setBackground(Globals.BACKGROUND_COLOR_7);
 		thisLayout = new GroupLayout(this);
 		setLayout(thisLayout);
@@ -200,34 +200,34 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public void doActionTestParam(JDialog caller) {
 		String paramText = "";
 		if (((String) jComboBoxParameterMethods.getSelectedItem())
-				.equals(SSHCommandParameterMethods.method_interactiveElement)
+				.equals(SSHCommandParameterMethods.METHOD_INTERACTIVE_ELEMENT)
 				|| ((String) jComboBoxParameterMethods.getSelectedItem())
-						.equals(SSHCommandParameterMethods.method_optionSelection)) {
-			logging.debug("CREATING PARAM TEXT... ");
-			paramText = SSHCommandParameterMethods.replacement_default_1
+						.equals(SSHCommandParameterMethods.METHOD_OPTION_SELECTION)) {
+			Logging.debug("CREATING PARAM TEXT... ");
+			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.replacement_default_2;
-			logging.debug("CREATED PARAM TEXT: " + paramText);
+					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
+			Logging.debug("CREATED PARAM TEXT: " + paramText);
 		} else
-			paramText = SSHCommandParameterMethods.replacement_default_1
+			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.param_splitter_default + jComboBoxParameterFormats.getSelectedItem()
-					+ SSHCommandParameterMethods.replacement_default_2;
-		logging.debug("PARAM TEXT: " + paramText);
+					+ SSHCommandParameterMethods.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
+					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
+		Logging.debug("PARAM TEXT: " + paramText);
 		try {
-			logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
+			Logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
 			String result = "echo \"{0}\"".replace("{0}", factory.getParameterHandler().testParameter(paramText));
-			logging.info(this, "actionPerformed(testParamMethod) result " + result);
+			Logging.info(this, "actionPerformed(testParamMethod) result " + result);
 			String showThisText = "echo \"{0}\"".replace("{0}", paramText) + ":\n" + result;
-			if (result.equals(configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed")))
-				showThisText = configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
+			if (result.equals(Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed")))
+				showThisText = Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
 			JOptionPane.showMessageDialog(main, showThisText,
-					configed.getResourceValue("SSHConnection.CommandControl.parameterTest.title"),
+					Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception ble) {
-			logging.warning(this, "Testing parameter-method failed.", ble);
+			Logging.warning(this, "Testing parameter-method failed.", ble);
 		}
 		if (caller != null)
 			caller.setVisible(true);
@@ -236,23 +236,23 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public void doActionParamAdd(JTextComponent component) {
 		String paramText = "";
 		if (((String) jComboBoxParameterMethods.getSelectedItem())
-				.equals(SSHCommandParameterMethods.method_interactiveElement)
+				.equals(SSHCommandParameterMethods.METHOD_INTERACTIVE_ELEMENT)
 				|| ((String) jComboBoxParameterMethods.getSelectedItem())
-						.equals(SSHCommandParameterMethods.method_optionSelection)) {
-			paramText = SSHCommandParameterMethods.replacement_default_1
+						.equals(SSHCommandParameterMethods.METHOD_OPTION_SELECTION)) {
+			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.replacement_default_2;
+					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 		} else
-			paramText = SSHCommandParameterMethods.replacement_default_1
+			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
-					+ SSHCommandParameterMethods.param_splitter_default + jComboBoxParameterFormats.getSelectedItem()
-					+ SSHCommandParameterMethods.replacement_default_2;
+					+ SSHCommandParameterMethods.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
+					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);
 		} catch (BadLocationException ble) {
-			logging.warning(this, " BadLocationException  add parameter method to command failed.");
+			Logging.warning(this, " BadLocationException  add parameter method to command failed.");
 		}
 	}
 }

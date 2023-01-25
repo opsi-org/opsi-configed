@@ -17,13 +17,12 @@ import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JPanel inputPanel = new JPanel();
@@ -42,7 +41,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JTextField jTextFieldURL;
 	private JTextField jTextFieldDir;
 	private JComboBox<String> jComboBoxDir;
-	private JComboBox jComboBoxVerbosity;
+	private JComboBox<Integer> jComboBoxVerbosity;
 	private JTextField jTextFieldFreeInput;
 
 	CommandWget commandWget = new CommandWget();
@@ -50,11 +49,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private SSHWgetAuthenticationPanel wgetAuthPanel;
 
 	public SSHWgetParameterDialog() {
-		this(null);
-	}
-
-	public SSHWgetParameterDialog(ConfigedMain m) {
-		super(null, configed.getResourceValue("SSHConnection.ParameterDialog.wget.title"), false);
+		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.wget.title"), false);
 
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		init();
@@ -70,6 +65,8 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		jComboBoxDir.setEnabled(true);
 	}
 
+
+
 	private void setComponentsEnabledRO(boolean value) {
 		jTextFieldURL.setEnabled(value);
 		jTextFieldURL.setEditable(value);
@@ -84,7 +81,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 		jButtonExecute.setEnabled(value);
 		jButtonHelp.setEnabled(value);
-
 	}
 
 	private void init() {
@@ -97,9 +93,9 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setPreferredSize(new java.awt.Dimension(376, 220));
 
-		jLabelURL.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelUrl"));
+		jLabelURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelUrl"));
 		jTextFieldURL = new JTextField();
-		jTextFieldURL.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
+		jTextFieldURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"));
 		jTextFieldURL.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
@@ -120,22 +116,22 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			@Override
 			public void focusGained(FocusEvent e) {
 				if (jTextFieldURL.getText()
-						.equals(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))) {
+						.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))) {
 					jTextFieldURL.setSelectionStart(0);
 					jTextFieldURL.setSelectionEnd(jTextFieldURL.getText().length());
 				}
 			}
 		});
 
-		jLabelDir.setText(configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory"));
+		jLabelDir.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory"));
 		jTextFieldDir = new JTextField();
 
 		jComboBoxDir = completion.getCombobox();
 		jButtonSearchDir = completion.getButton();
 
-		jLabelVerbosity.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
+		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
 		jComboBoxVerbosity = new JComboBox<>();
-		jComboBoxVerbosity.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
+		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
 		for (int i = 0; i < 5; i++)
 			jComboBoxVerbosity.addItem(i);
 		jComboBoxVerbosity.setSelectedItem(1);
@@ -144,10 +140,10 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 			updateCommand();
 		});
 
-		jLabelFreeInput.setText(configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
+		jLabelFreeInput.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelFreeInput"));
 		jTextFieldFreeInput = new JTextField();
 		jTextFieldFreeInput
-				.setToolTipText(configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
+				.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.freeInput"));
 		jTextFieldFreeInput.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void changedUpdate(DocumentEvent documentEvent) {
@@ -171,14 +167,14 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 67, Globals.BUTTON_HEIGHT);
 
 		jButtonHelp = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
-		jButtonHelp.setText(configed.getResourceValue("SSHConnection.buttonParameterInfo"));
-		jButtonHelp.setToolTipText(configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
+		jButtonHelp.setText(Configed.getResourceValue("SSHConnection.buttonParameterInfo"));
+		jButtonHelp.setToolTipText(Configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
 		buttonPanel.add(jButtonHelp);
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
 		jButtonExecute = new JButton();
 		buttonPanel.add(jButtonExecute);
-		jButtonExecute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		jButtonExecute.addActionListener(actionEvent -> {
 			if (!(Globals.isGlobalReadOnly()))
@@ -187,7 +183,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 		JButton jButtonClose = new JButton();
 		buttonPanel.add(jButtonClose);
-		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 
@@ -222,9 +218,9 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	@Override
 	public void doAction1() {
 		if ((jTextFieldURL.getText()
-				.equals(configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url")))
+				.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url")))
 				|| (jTextFieldURL.getText().equals(""))) {
-			logging.warning(this, "Please enter url.");
+			Logging.warning(this, "Please enter url.");
 			return;
 		}
 
@@ -241,12 +237,12 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 				@Override
 				public void run() {
 					try {
-						logging.info(this, "doAction1 wget ");
+						Logging.info(this, "doAction1 wget ");
 						new SSHConnectExec(commandWget, jButtonExecute);
 						// btn_execute.setEnabled( true ) transferred to SwingWorker.done()
 
 					} catch (Exception e) {
-						logging.warning(this, "doAction1, exception occurred", e);
+						Logging.warning(this, "doAction1, exception occurred", e);
 					}
 				}
 			}.start();
@@ -265,34 +261,45 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private void initLayout() {
 		GroupLayout inputPanelLayout = new GroupLayout(inputPanel);
 		inputPanel.setLayout(inputPanelLayout);
-		int PREF = GroupLayout.PREFERRED_SIZE;
-		int MAX = Short.MAX_VALUE;
 		inputPanelLayout.setHorizontalGroup(inputPanelLayout.createSequentialGroup()
 
 				.addGap(Globals.GAP_SIZE)
 
-				.addGroup(inputPanelLayout.createParallelGroup().addGroup(inputPanelLayout.createSequentialGroup()
-						.addGroup(inputPanelLayout.createParallelGroup().addComponent(jLabelURL, PREF, PREF, PREF)
-								.addComponent(jLabelDir, PREF, PREF, PREF)
-								.addComponent(jLabelVerbosity, PREF, PREF, PREF)
-								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF,
-										PREF)
-								.addComponent(jLabelFreeInput, PREF, PREF, PREF))
-						.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(inputPanelLayout.createParallelGroup()
-								.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jTextFieldURL, PREF,
-										PREF, Short.MAX_VALUE))
-								.addGroup(inputPanelLayout.createSequentialGroup()
-										.addComponent(jComboBoxDir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-												Short.MAX_VALUE)
-										.addComponent(jButtonSearchDir, PREF, PREF, PREF))
-								.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING, Globals.ICON_WIDTH,
-										Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-								.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-										GroupLayout.Alignment.LEADING, PREF, PREF, PREF)
-								.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
-										Short.MAX_VALUE)))
-						.addComponent(wgetAuthPanel, PREF, PREF, MAX))
+				.addGroup(inputPanelLayout.createParallelGroup()
+						.addGroup(inputPanelLayout.createSequentialGroup()
+								.addGroup(inputPanelLayout
+										.createParallelGroup()
+										.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelDir, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelVerbosity, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(
+												wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addComponent(jLabelFreeInput, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(inputPanelLayout.createParallelGroup()
+										.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jTextFieldURL,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+												Short.MAX_VALUE))
+										.addGroup(inputPanelLayout.createSequentialGroup()
+												.addComponent(jComboBoxDir, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+														Short.MAX_VALUE)
+												.addComponent(jButtonSearchDir, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addComponent(jComboBoxVerbosity, GroupLayout.Alignment.LEADING,
+												Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
+										.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+												GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jTextFieldFreeInput, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
+												Short.MAX_VALUE)))
+						.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
 				.addGap(Globals.GAP_SIZE));
 
 		inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
@@ -319,7 +326,8 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 						.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
 								GroupLayout.Alignment.LEADING, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
-				.addComponent(wgetAuthPanel, PREF, PREF, PREF)
+				.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
 				.addGap(Globals.GAP_SIZE)
 				.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)

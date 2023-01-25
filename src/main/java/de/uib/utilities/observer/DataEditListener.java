@@ -15,7 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DataEditListener implements DocumentListener, // for text components
 		ItemListener, // for combo boxes
@@ -23,15 +23,15 @@ public class DataEditListener implements DocumentListener, // for text component
 		KeyListener
 
 {
-	public static final String commitRequest = "COMMIT";
-	public static final String cancelRequest = "CANCEL";
+	public static final String COMMIT_REQUEST = "COMMIT";
+	public static final String CANCEL_REQUEST = "CANCEL";
 	protected Object source;
 	protected ObservableSubject dataChangedSubject;
 	protected boolean withFocusCheck = true;
 
 	protected void act() {
 		if (dataChangedSubject == null) {
-			logging.info(this, "dataChangedSubject null");
+			Logging.info(this, "dataChangedSubject null");
 			return;
 		}
 
@@ -44,28 +44,21 @@ public class DataEditListener implements DocumentListener, // for text component
 
 	protected void requestAction(String action) {
 		if (dataChangedSubject == null) {
-			logging.info(this, "dataChangedSubject null");
+			Logging.info(this, "dataChangedSubject null");
 			return;
 		}
 
-		if (!withFocusCheck || (source instanceof JComponent && ((JComponent) source).hasFocus())) {
-
-			if (!(action.equals(cancelRequest) || action.equals(commitRequest))) {
-				dataChangedSubject.setChanged();
-				dataChangedSubject.notifyObservers(action);
-			}
+		if ((!withFocusCheck || (source instanceof JComponent && ((JComponent) source).hasFocus()))
+				&& !(action.equals(CANCEL_REQUEST) || action.equals(COMMIT_REQUEST))) {
+			dataChangedSubject.setChanged();
+			dataChangedSubject.notifyObservers(action);
 		}
 	}
 
-	public DataEditListener(ObservableSubject subject, Object source, boolean withFocusCheck) {
-		logging.info(this, "constructed , subject  " + subject + ", source " + source);
-		this.source = source;
-		this.withFocusCheck = withFocusCheck;
-		dataChangedSubject = subject;
-	}
-
 	public DataEditListener(ObservableSubject subject, Object source) {
-		this(subject, source, true);
+		Logging.info(this, "constructed , subject  " + subject + ", source " + source);
+		this.source = source;
+		dataChangedSubject = subject;
 	}
 
 	public void setWithFocusCheck(boolean b) {
@@ -108,10 +101,10 @@ public class DataEditListener implements DocumentListener, // for text component
 	public void keyPressed(KeyEvent e) {
 
 		if (e.getKeyCode() == 10)// KeyEvent.VK_ENTER)
-			requestAction(commitRequest);
+			requestAction(COMMIT_REQUEST);
 
 		else if (e.getKeyCode() == 27)// KeyEvent.VK_ESCAPE)
-			requestAction(cancelRequest);
+			requestAction(CANCEL_REQUEST);
 
 		else if (!e.isActionKey())
 			act();

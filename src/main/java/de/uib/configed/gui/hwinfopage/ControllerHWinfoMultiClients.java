@@ -14,7 +14,7 @@ package de.uib.configed.gui.hwinfopage;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.JButton;
@@ -22,11 +22,11 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FPanel;
 import de.uib.utilities.swing.SecondaryFrame;
 import de.uib.utilities.table.GenTableModel;
@@ -62,10 +62,10 @@ public class ControllerHWinfoMultiClients {
 	SecondaryFrame fTable;
 
 	de.uib.utilities.table.TableModelFilterCondition filterConditionHwForSelectedHosts = new de.uib.utilities.table.TableModelFilterCondition() {
-		private NavigableSet<Object> filter;
+		private Set<Object> filter;
 
 		@Override
-		public void setFilter(TreeSet<Object> filter) {
+		public void setFilter(Set<Object> filter) {
 			this.filter = filter;
 		}
 
@@ -115,7 +115,7 @@ public class ControllerHWinfoMultiClients {
 	}
 
 	public void requestResetFilter() {
-		logging.info(this, "requestResetFilter");
+		Logging.info(this, "requestResetFilter");
 
 		setFilter();
 
@@ -157,7 +157,7 @@ public class ControllerHWinfoMultiClients {
 
 		columnNames = persist.getClient2HwRowsColumnNames();
 		classNames = persist.getClient2HwRowsJavaclassNames();
-		logging.info(this, "initmodel: columns " + columnNames);
+		Logging.info(this, "initmodel: columns " + columnNames);
 		hosts = new String[0];
 
 		// GenericTableUpdateItemFactory updateItemFactory = new
@@ -169,7 +169,7 @@ public class ControllerHWinfoMultiClients {
 				// tableProvider
 
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					logging.info(this, "retrieveMap: getClient2HwRows");
+					Logging.info(this, "retrieveMap: getClient2HwRows");
 
 					return (Map) persist.getClient2HwRows(hosts);
 				})),
@@ -210,21 +210,21 @@ public class ControllerHWinfoMultiClients {
 		// Icon iconConfigure =
 
 		buttonConfigureColumns = new JButton("", Globals.createImageIcon("images/configure16.png", ""));
-		buttonConfigureColumns.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.configure"));
+		buttonConfigureColumns.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.configure"));
 		buttonConfigureColumns.setPreferredSize(Globals.smallButtonDimension);
 
 		buttonReload = new JButton("", Globals.createImageIcon("images/reload16.png", ""));
-		buttonReload.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.loadNewConfiguration"));
+		buttonReload.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.loadNewConfiguration"));
 
 		buttonReload.setPreferredSize(Globals.smallButtonDimension);
 
 		buttonReload.addActionListener(actionEvent -> {
-			logging.info(this, "action performed " + actionEvent);
+			Logging.info(this, "action performed " + actionEvent);
 			rebuildModel();
 		});
 
 		buttonConfigureColumns.addActionListener(actionEvent -> {
-			logging.info(this, "action performed " + actionEvent);
+			Logging.info(this, "action performed " + actionEvent);
 
 			ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration(
 					main, persist);
@@ -246,7 +246,7 @@ public class ControllerHWinfoMultiClients {
 		buttonCopySelection.setPreferredSize(Globals.smallButtonDimension);
 		buttonCopySelection.setEnabled(false);
 
-		buttonCopySelection.setToolTipText(configed.getResourceValue("PanelHWInfo.overview.getSelection"));
+		buttonCopySelection.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.getSelection"));
 
 		buttonCopySelection.addActionListener(
 				actionEvent -> main.setSelectedClientsCollectionOnPanel(panel.getSelectedKeys(), true));
@@ -261,13 +261,13 @@ public class ControllerHWinfoMultiClients {
 
 		javax.swing.table.TableColumn col;
 		col = panel.getColumnModel().getColumn(0);
-		col.setHeaderValue(configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"));
+		col.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"));
 		col = panel.getColumnModel().getColumn(1);
-		col.setHeaderValue(configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
+		col.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
 		col = panel.getColumnModel().getColumn(2);
-		col.setHeaderValue(configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
+		col.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
 		col = panel.getColumnModel().getColumn(3);
-		col.setHeaderValue(configed.getResourceValue("PanelHWInfo.lastScanTime"));
+		col.setHeaderValue(Configed.getResourceValue("PanelHWInfo.lastScanTime"));
 
 	}
 

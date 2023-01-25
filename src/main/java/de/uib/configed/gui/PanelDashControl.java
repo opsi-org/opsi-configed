@@ -9,8 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 public class PanelDashControl extends JPanel {
 
@@ -35,7 +35,7 @@ public class PanelDashControl extends JPanel {
 		scrollpaneMessages.setBackground(Globals.BACKGROUND_COLOR_7);
 		messages.setBackground(Globals.BACKGROUND_COLOR_7);
 
-		showDashOnStartup = new JCheckBox(configed.getResourceValue("Dash.showOnProgramStart"), true);
+		showDashOnStartup = new JCheckBox(Configed.getResourceValue("Dash.showOnProgramStart"), true);
 		showDashOnStartup.setFont(Globals.defaultFontSmall);
 
 		showDashOnStartup.addActionListener(ae -> {
@@ -43,7 +43,7 @@ public class PanelDashControl extends JPanel {
 			showDashOnStartupWasSetTo(source.isSelected());
 		});
 
-		showDashOnLicencesActivation = new JCheckBox(configed.getResourceValue("Dash.showOnLicencesLoad"), true);
+		showDashOnLicencesActivation = new JCheckBox(Configed.getResourceValue("Dash.showOnLicencesLoad"), true);
 		showDashOnLicencesActivation.setFont(Globals.defaultFontSmall);
 
 		showDashOnLicencesActivation.addActionListener(ae -> {
@@ -72,7 +72,7 @@ public class PanelDashControl extends JPanel {
 	}
 
 	protected void showDashOnStartupWasSetTo(boolean b) {
-		logging.info(this, "showDashOnStartup was set " + b);
+		Logging.info(this, "showDashOnStartup was set " + b);
 	}
 
 	public void setShowDashOnLicencesActivation(boolean b) {
@@ -80,7 +80,7 @@ public class PanelDashControl extends JPanel {
 	}
 
 	protected void showDashOnLicencesActivationWasSetTo(boolean b) {
-		logging.info(this, "showDashOnLicencesActivation was set " + b);
+		Logging.info(this, "showDashOnLicencesActivation was set " + b);
 	}
 
 }

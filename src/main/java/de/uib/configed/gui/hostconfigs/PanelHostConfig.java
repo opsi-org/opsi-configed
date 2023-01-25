@@ -8,15 +8,15 @@ import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
 public class PanelHostConfig extends JPanel {
@@ -28,8 +28,8 @@ public class PanelHostConfig extends JPanel {
 	protected boolean entryRemovable = true;
 	protected boolean reloadable = true;
 
-	public final String propertyClassUser = UserConfig.KEY_USER_ROOT;
-	public final String propertyClassRole = UserConfig.KEY_USER_ROLE_ROOT;
+	public static final String PROPERTY_CLASS_USER = UserConfig.KEY_USER_ROOT;
+	public static final String PROPERTY_CLASS_ROLE = UserConfig.KEY_USER_ROLE_ROOT;
 
 	public PanelHostConfig() {
 
@@ -38,24 +38,24 @@ public class PanelHostConfig extends JPanel {
 
 	// overwrite in subclasses
 	protected void reloadHostConfig() {
-		logging.info(this, " in PanelHostConfig: reloadHostConfig");
+		Logging.info(this, " in PanelHostConfig: reloadHostConfig");
 
 	}
 
 	// overwrite in subclasses
 	protected void saveHostConfig() {
-		logging.debug(this, "saveHostConfig");
+		Logging.debug(this, "saveHostConfig");
 	}
 
 	private void handleUserInPropertyClass(String superclass, String user) {
-		logging.info(this, "handleUserInPropertyClass " + user + " in class " + superclass);
+		Logging.info(this, "handleUserInPropertyClass " + user + " in class " + superclass);
 
 		String newpropertyclass = superclass + "." + user;
 
-		if (!de.uib.opsidatamodel.PersistenceController.PROPERTYCLASSES_SERVER.containsKey(newpropertyclass)) {
-			logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
+		if (!de.uib.opsidatamodel.PersistenceController.PROPERTY_CLASSES_SERVER.containsKey(newpropertyclass)) {
+			Logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
 					+ newpropertyclass + "]");
-			de.uib.opsidatamodel.PersistenceController.PROPERTYCLASSES_SERVER.put(newpropertyclass, "");
+			de.uib.opsidatamodel.PersistenceController.PROPERTY_CLASSES_SERVER.put(newpropertyclass, "");
 		}
 	}
 
@@ -66,17 +66,17 @@ public class PanelHostConfig extends JPanel {
 		for (Map.Entry<String, Object> entry : configs.entrySet()) {
 			String key = entry.getKey();
 
-			if (key.startsWith(propertyClassRole + ".")) {
+			if (key.startsWith(PROPERTY_CLASS_ROLE + ".")) {
 				String user = key.split("\\.")[2];
-				logging.info(this,
+				Logging.info(this,
 						"putUsersToPropertyclassesTreeMap found role (user) " + user + " by config key " + key + "");
-				handleUserInPropertyClass(propertyClassRole, user);
-			} else if (key.startsWith(propertyClassUser + ".")) {
+				handleUserInPropertyClass(PROPERTY_CLASS_ROLE, user);
+			} else if (key.startsWith(PROPERTY_CLASS_USER + ".")) {
 				String user = key.split("\\.")[1];
-				logging.info(this,
+				Logging.info(this,
 						"putUsersToPropertyclassesTreeMap found user " + user + " by config key " + key + "");
 				if (!user.equals("{}"))
-					handleUserInPropertyClass(propertyClassUser, user);
+					handleUserInPropertyClass(PROPERTY_CLASS_USER, user);
 			}
 		}
 	}
@@ -84,7 +84,7 @@ public class PanelHostConfig extends JPanel {
 	protected void buildPanel() {
 		// boolean serverEditing = (ConfigedMain.getEditingTarget() ==
 
-		label = new JLabel(configed.getResourceValue("MainFrame.jLabel_Config"));
+		label = new JLabel(Configed.getResourceValue("MainFrame.jLabel_Config"));
 
 		PersistenceControllerFactory.getPersistenceController().checkConfiguration();
 		putUsersToPropertyclassesTreeMap();
@@ -127,7 +127,7 @@ public class PanelHostConfig extends JPanel {
 			NavigableMap<String, String> classesMap) {
 		label.setText(labeltext);
 
-		logging.info(this, "initEditing "
+		Logging.info(this, "initEditing "
 
 				+ " optionsEditable " + optionsEditable);
 		editMapPanel.setSubpanelClasses(classesMap);

@@ -25,7 +25,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.opsicommand.Executioner;
@@ -34,7 +34,7 @@ import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
 public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapanel.EditMapPanelGrouped
@@ -165,52 +165,52 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		// text for reload
 		popupForUserpath.setText(PopupMenuTrait.POPUP_RELOAD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
 
 		popupForUserpathes.setText(PopupMenuTrait.POPUP_RELOAD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
 
 		popupForRolepath.setText(PopupMenuTrait.POPUP_RELOAD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
 
 		popupForRolepathes.setText(PopupMenuTrait.POPUP_RELOAD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.reconstructUsers"));
 
 		popupForUserpath.setText(PopupMenuTrait.POPUP_ADD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser"));
 
 		popupForUserpath.setToolTipText(PopupMenuTrait.POPUP_ADD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser.ToolTip"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser.ToolTip"));
 
 		popupForUserpathes.setText(PopupMenuTrait.POPUP_DELETE,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser"));
 
 		popupForUserpathes.setToolTipText(PopupMenuTrait.POPUP_DELETE,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser.ToolTip"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForUser.ToolTip"));
 
 		popupForRolepathes.setText(PopupMenuTrait.POPUP_DELETE,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole"));
 
 		popupForRolepathes.setToolTipText(PopupMenuTrait.POPUP_DELETE,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole.ToolTip"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.removeValuesForRole.ToolTip"));
 
 		popupForUserpathes.setText(PopupMenuTrait.POPUP_ADD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser"));
 
 		popupForUserpathes.setToolTipText(PopupMenuTrait.POPUP_ADD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser.ToolTip"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addUser.ToolTip"));
 
 		popupForRolepath.setText(PopupMenuTrait.POPUP_ADD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole"));
 
 		popupForRolepath.setToolTipText(PopupMenuTrait.POPUP_ADD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
 
 		popupForRolepathes.setText(PopupMenuTrait.POPUP_ADD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole"));
 
 		popupForRolepathes.setToolTipText(PopupMenuTrait.POPUP_ADD,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
 
 		MouseListener popupListenerForUserpathes = new utils.PopupMouseListener(popupForUserpathes) {
 			@Override
@@ -230,7 +230,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			protected void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-					logging.info(this, " sel path " + selPath);
+					Logging.info(this, " sel path " + selPath);
 					if (selPath != null && isUserRoot(selPath))
 						super.maybeShowPopup(e);
 				}
@@ -243,7 +243,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			protected void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-					logging.info(this, " sel path " + selPath);
+					Logging.info(this, " sel path " + selPath);
 					if (selPath != null && isRolePath(selPath, false))
 						super.maybeShowPopup(e);
 				}
@@ -256,7 +256,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			protected void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger()) {
 					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-					logging.info(this, " sel path " + selPath);
+					Logging.info(this, " sel path " + selPath);
 					if (selPath != null && isRolePath(selPath, true))
 						super.maybeShowPopup(e);
 				}
@@ -276,7 +276,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		theRoles.add(UserConfig.NONE_PROTOTYPE);
 
 		for (String classkey : new TreeSet<>(partialPanels.keySet())) {
-			logging.info(this, "classkey " + classkey);
+			Logging.info(this, "classkey " + classkey);
 
 			String role = roleFromRolerootKey(classkey);
 
@@ -291,13 +291,13 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 		}
 
-		logging.info(this, "theRoles found " + theRoles);
-		logging.info(this, "theUsers found " + theUsers);
+		Logging.info(this, "theRoles found " + theRoles);
+		Logging.info(this, "theUsers found " + theUsers);
 
 		for (Entry<String, AbstractEditMapPanel> entry : partialPanels.entrySet()) {
 			entry.getValue().setEditDenier(key -> {
 
-				logging.info(this, "entry " + entry + " key " + key);
+				Logging.info(this, "entry " + entry + " key " + key);
 
 				Boolean result = false;
 
@@ -305,7 +305,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					result = true;
 
 					JOptionPane.showMessageDialog(Globals.mainFrame,
-							configed.getResourceValue("EditMapPanelGrouped.noManualEditing"), key,
+							Configed.getResourceValue("EditMapPanelGrouped.noManualEditing"), key,
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					String user = UserConfig.getUserFromKey(key);
@@ -331,7 +331,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 							if (obeyToRole) {
 								result = true;
-								JOptionPane.showMessageDialog(Globals.mainFrame, configed.getResourceValue(
+								JOptionPane.showMessageDialog(Globals.mainFrame, Configed.getResourceValue(
 										"EditMapPanelGroupedForHostConfigs.noManualEditingWhereRoleDefined")
 
 										, key, JOptionPane.INFORMATION_MESSAGE);
@@ -342,7 +342,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					}
 				}
 
-				logging.info(this, "key denied ? " + key + " : " + result);
+				Logging.info(this, "key denied ? " + key + " : " + result);
 				return result;
 			}
 
@@ -390,7 +390,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				&& path.getPathComponent(2).toString().equals(UserConfig.ROLE)
 
 		) {
-			logging.debug(this, "recognized role path " + path);
+			Logging.debug(this, "recognized role path " + path);
 			return true;
 		}
 
@@ -409,7 +409,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	protected void rebuildTree() {
-		logging.info(this, "rebuild tree, hopefully");
+		Logging.info(this, "rebuild tree, hopefully");
 		buildUserConfig();
 
 		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
@@ -435,8 +435,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				"add user", // title
 				false, // modal
 
-				new String[] { configed.getResourceValue("FGeneralDialog.ok"),
-						configed.getResourceValue("FGeneralDialog.cancel") },
+				new String[] { Configed.getResourceValue("FGeneralDialog.ok"),
+						Configed.getResourceValue("FGeneralDialog.cancel") },
 
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
@@ -449,10 +449,10 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 			@Override
 			public void doAction1() {
-				logging.info(this, "doAction1");
+				Logging.info(this, "doAction1");
 				super.doAction1();
-				logging.info(this, "addUser action, result Text " + getResultText());
-				logging.info(this, "addUser action, result listelement " + getSelectedListelement());
+				Logging.info(this, "addUser action, result Text " + getResultText());
+				Logging.info(this, "addUser action, result listelement " + getSelectedListelement());
 
 				setUserConfig(getResultText(), getSelectedListelement());
 			}
@@ -476,10 +476,10 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		f.setSize(new Dimension(500, 400));
 		f.setVisible(true);
 
-		logging.info(this, "addUser finished, result " + f.getResult());
+		Logging.info(this, "addUser finished, result " + f.getResult());
 
 		if (f.getResult() == 1) {
-			logging.info(this, "addUser ok");
+			Logging.info(this, "addUser ok");
 		}
 
 	}
@@ -503,7 +503,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		List<Object> newData = up.produce();
 
 		if (newData == null) {
-			logging.warning(this, "readyObjects for userparts " + null);
+			Logging.warning(this, "readyObjects for userparts " + null);
 		} else {
 
 			if (!newData.isEmpty()) {
@@ -514,7 +514,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				persist.exec.doCall(omc);
 			}
 
-			logging.info(this, "readyObjects for userparts " + newData.size());
+			Logging.info(this, "readyObjects for userparts " + newData.size());
 		}
 	}
 
@@ -524,8 +524,8 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				"add role", // title
 				false, // modal
 
-				new String[] { configed.getResourceValue("FGeneralDialog.ok"),
-						configed.getResourceValue("FGeneralDialog.cancel") },
+				new String[] { Configed.getResourceValue("FGeneralDialog.ok"),
+						Configed.getResourceValue("FGeneralDialog.cancel") },
 
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
@@ -536,10 +536,10 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 			@Override
 			public void doAction1() {
-				logging.info(this, "doAction1");
+				Logging.info(this, "doAction1");
 				super.doAction1();
-				logging.info(this, "addUser action, result Text " + getResultText());
-				logging.info(this, "addUser action, result listelement " + getSelectedListelement());
+				Logging.info(this, "addUser action, result Text " + getResultText());
+				Logging.info(this, "addUser action, result listelement " + getSelectedListelement());
 
 				setRoleConfig(getResultText(), getSelectedListelement());
 			}
@@ -570,7 +570,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		javax.swing.tree.TreePath p = tree.getSelectionPath();
 
 		if (p != null) {
-			logging.info(this, "deleteUser path " + p);
+			Logging.info(this, "deleteUser path " + p);
 
 			int startComponentI = USER_START_INDEX;
 			StringBuilder keyB = new StringBuilder(p.getPathComponent(startComponentI).toString());
@@ -580,10 +580,10 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				keyB.append(p.getPathComponent(i).toString());
 			}
 			String key = keyB.toString();
-			logging.info(this, "deleteUser, selected user key " + key);
+			Logging.info(this, "deleteUser, selected user key " + key);
 
 			List<String> propertyNames = partialPanels.get(key).getNames();
-			logging.info(this, "deleteUser, property names " + propertyNames);
+			Logging.info(this, "deleteUser, property names " + propertyNames);
 			for (String name : propertyNames) {
 				((de.uib.utilities.datapanel.EditMapPanelX) partialPanels.get(key)).removeProperty(name);
 			}
@@ -600,12 +600,12 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	protected void setRoleConfig(String name, String rolename) {
-		logging.info(this, "setRoleConfig " + name + "," + rolename);
+		Logging.info(this, "setRoleConfig " + name + "," + rolename);
 		PersistenceControllerFactory.getPersistenceController().addRoleConfig(name, rolename);
 	}
 
 	protected void setUserConfig(String name, String rolename) {
-		logging.info(this, "setUserConfig " + name + "," + rolename);
+		Logging.info(this, "setUserConfig " + name + "," + rolename);
 		PersistenceControllerFactory.getPersistenceController().addUserConfig(name, rolename);
 	}
 

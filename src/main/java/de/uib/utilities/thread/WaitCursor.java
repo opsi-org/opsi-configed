@@ -5,7 +5,7 @@ import java.awt.Cursor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ActivityPanel;
 
 public class WaitCursor {
@@ -49,13 +49,13 @@ public class WaitCursor {
 			try {
 				c = Globals.mainContainer;
 			} catch (Exception ex) {
-				logging.info(this, "retrieveBasePane " + ex);
+				Logging.info(this, "retrieveBasePane " + ex);
 				c = null;
 			}
 		} else
 			c = componentCalling;
 
-		logging.debug(this,
+		Logging.debug(this,
 				"adding instance " + objectNo + "-- call location at (" + callLocation + ") on component " + c);
 
 		if (java.awt.EventQueue.isDispatchThread()) {
@@ -82,7 +82,7 @@ public class WaitCursor {
 	}
 
 	public void stop() {
-		logging.info(this, " stop wait cursor " + objectNo + ", was located at (" + callLocation + ")");
+		Logging.info(this, " stop wait cursor " + objectNo + ", was located at (" + callLocation + ")");
 		ready = true;
 
 		javax.swing.SwingUtilities.invokeLater(() -> {
@@ -92,14 +92,14 @@ public class WaitCursor {
 
 			if (isStopped()) {
 				objectCounting.decrementAndGet();
-				logging.debug(this, "removing instance " + objectNo);
+				Logging.debug(this, "removing instance " + objectNo);
 				if (objectCounting.get() <= 0)
 
 				{
-					logging.info(this, "seemed to be last living instance");
+					Logging.info(this, "seemed to be last living instance");
 					ActivityPanel.setActing(false);
 				} else {
-					logging.debug(this, " stopped wait cursor " + " instance " + objectNo + ", " + " still active  "
+					Logging.debug(this, " stopped wait cursor " + " instance " + objectNo + ", " + " still active  "
 							+ objectCounting + " the stopped cursor was initiated from " + callLocation);
 				}
 			}

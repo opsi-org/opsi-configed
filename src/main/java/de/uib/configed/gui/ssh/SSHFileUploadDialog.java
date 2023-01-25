@@ -17,18 +17,18 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 import de.uib.opsicommand.sshcommand.CommandWget;
-import de.uib.opsicommand.sshcommand.Empty_Command;
+import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.opsicommand.sshcommand.SSHCommand_Template;
+import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHFileUploadDialog extends FGeneralDialog {
 	protected GroupLayout layout;
@@ -58,14 +58,11 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 	protected GroupLayout.Group horizontalParallelGroup;
 	protected GroupLayout.Group verticalParallelGroup;
-	protected int PREF = GroupLayout.PREFERRED_SIZE;
-	protected int MAX = Short.MAX_VALUE;
 	protected GroupLayout inputPanelLayout;
 
 	protected SSHWgetAuthenticationPanel wgetAuthPanel;
 	protected CommandSFTPUpload command;
 	protected SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
-	protected SSHCommandFactory factory = SSHCommandFactory.getInstance();
 	protected SSHConnectionExecDialog dia;
 	protected ConfigedMain main;
 	protected static String wgetDefText;
@@ -74,7 +71,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	protected int width = 700;
 
 	public SSHFileUploadDialog() {
-		this(configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.title"), null);
+		this(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.title"), null);
 	}
 
 	public SSHFileUploadDialog(String title, CommandSFTPUpload com) {
@@ -83,7 +80,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		if (this.command == null)
 			command = new CommandSFTPUpload();
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
-		wgetDefText = configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
+		wgetDefText = Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		init();
 		initGUI();
 		this.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
@@ -92,13 +89,13 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
-		logging.info(this, "SSHFileUploadDialog build");
+		Logging.info(this, "SSHFileUploadDialog build");
 	}
 
 	protected void showDialog() {
 		this.setSize(width, height);
 		this.setVisible(true);
-		logging.info(this, "SSHFileUploadDialog show");
+		Logging.info(this, "SSHFileUploadDialog show");
 	}
 
 	protected void init() {
@@ -112,27 +109,27 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 		ButtonGroup group = new ButtonGroup();
 		jRadioButtonFromServer = new JRadioButton(
-				configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.rb_from_server"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.rb_from_server"));
 		group.add(jRadioButtonFromServer);
 		addListener(jRadioButtonFromServer);
 		jRadioButtonLocal = new JRadioButton(
-				configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.rb_local"), true);
+				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.rb_local"), true);
 		group.add(jRadioButtonLocal);
 		addListener(jRadioButtonLocal);
 
 		jLabelURL = new JLabel();
 		wgetAuthPanel.setLabelSizes(Globals.BUTTON_WIDTH + 90, Globals.BUTTON_HEIGHT);
 
-		jLabelURL.setText(configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_url"));
+		jLabelURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_url"));
 		jLabelOverwriteExisting = new JLabel();
 		jLabelOverwriteExisting
-				.setText(configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_overwriteExisting"));
+				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_overwriteExisting"));
 
 		jLabelSetRights = new JLabel();
-		jLabelSetRights.setText(configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_setRights"));
+		jLabelSetRights.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_setRights"));
 		jLabelmodulesFrom = new JLabel();
 		jLabelmodulesFrom
-				.setText(configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_modules_from"));
+				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.lbl_modules_from"));
 
 		jTextFieldURL = new JTextField();
 		jTextFieldURL.setText(wgetDefText);
@@ -156,17 +153,17 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 		jFileChooserLocal = new JFileChooser();
 		jFileChooserLocal.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		jFileChooserLocal.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
+		jFileChooserLocal.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
 
 		jFileChooserLocal.setDialogType(JFileChooser.OPEN_DIALOG);
 		jFileChooserLocal.setDialogTitle(Globals.APPNAME + " "
-				+ configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.title"));
+				+ Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.title"));
 
 		jButtonFileChooser = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		jButtonFileChooser.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		jButtonFileChooser.setPreferredSize(Globals.smallButtonDimension);
 		jButtonFileChooser.setToolTipText(
-				configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.tooltip"));
+				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.tooltip"));
 		jButtonFileChooser.addActionListener(actionEvent -> {
 			int returnVal = jFileChooserLocal.showOpenDialog(inputPanel);
 
@@ -182,20 +179,20 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		});
 		jButtonExecute = new JButton();
 		buttonPanel.add(jButtonExecute);
-		jButtonExecute.setText(configed.getResourceValue("SSHConnection.buttonExec"));
+		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
 			jButtonExecute.addActionListener(actionEvent -> doAction1());
 
 		jButtonClose = new JButton();
 		buttonPanel.add(jButtonClose);
-		jButtonClose.setText(configed.getResourceValue("SSHConnection.buttonClose"));
+		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
 		enableComponents(jRadioButtonFromServer.isSelected());
 
-		new SSHConnectExec().exec(new Empty_Command(factory.str_command_fileexists_notremove
-				.replace(factory.str_replacement_filename, command.getTargetPath()) // /etc/opsi/modules.d
+		new SSHConnectExec().exec(new EmptyCommand(SSHCommandFactory.STRING_COMMAND_FILE_EXISTS_NOT_REMOVE
+				.replace(SSHCommandFactory.STRING_REPLACEMENT_FILENAME, command.getTargetPath()) // /etc/opsi/modules.d
 		), false);
 
 		initAdditional();
@@ -212,11 +209,15 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	protected void initGUIAdditional() {
-		horizontalParallelGroup = inputPanelLayout.createSequentialGroup().addGroup(inputPanelLayout
-				.createParallelGroup()
-				.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelmodulesFrom, PREF, PREF, PREF))
-				.addComponent(jLabelSetRights, PREF, PREF, PREF)
-				.addComponent(jLabelOverwriteExisting, PREF, PREF, PREF)).addGap(Globals.GAP_SIZE).addGroup(
+		horizontalParallelGroup = inputPanelLayout.createSequentialGroup()
+				.addGroup(inputPanelLayout.createParallelGroup()
+						.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jLabelmodulesFrom,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelOverwriteExisting, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.GAP_SIZE).addGroup(
 						inputPanelLayout.createParallelGroup()
 								.addComponent(jComboBoxSetRights, Globals.ICON_WIDTH, Globals.ICON_WIDTH,
 										Globals.ICON_WIDTH)
@@ -236,72 +237,105 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 			inputPanelLayout.setHorizontalGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE)
 					.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 2)
 							.addGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE * 2)
-									.addGroup(inputPanelLayout.createSequentialGroup()
-											.addComponent(jRadioButtonLocal, PREF, PREF, MAX))
+									.addGroup(inputPanelLayout.createSequentialGroup().addComponent(jRadioButtonLocal,
+											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 									.addGap(Globals.GAP_SIZE * 2)
-									.addGroup(inputPanelLayout.createSequentialGroup()
-											.addComponent(jRadioButtonFromServer, PREF, PREF, MAX))
+									.addGroup(inputPanelLayout.createSequentialGroup().addComponent(
+											jRadioButtonFromServer, GroupLayout.PREFERRED_SIZE,
+											GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 									.addGroup(inputPanelLayout.createSequentialGroup().addGroup(horizontalParallelGroup) // parallelGroup can be overwritten by child
-																																																																																																																																																									// classes
+																																																																																																																																																																																					// classes
 									)).addGap(Globals.GAP_SIZE))
 					.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 							.addGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE * 2)
 									.addGroup(GroupLayout.Alignment.LEADING,
 											inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
 													.addComponent(jTextFieldLocalPath, Globals.BUTTON_WIDTH,
-															Globals.BUTTON_WIDTH, MAX)
+															Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 													.addGap(Globals.GAP_SIZE)
-													.addComponent(jButtonFileChooser, PREF, PREF, PREF)
+													.addComponent(jButtonFileChooser, GroupLayout.PREFERRED_SIZE,
+															GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 													.addGap(Globals.GAP_SIZE))
 									.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE * 3)
 											.addGroup(inputPanelLayout.createParallelGroup()
-													.addComponent(jLabelURL, PREF, PREF, PREF).addComponent(
+													.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE,
+															GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+													.addComponent(
 															wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
-															PREF, PREF, PREF))
+															GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+															GroupLayout.PREFERRED_SIZE))
 											.addGap(Globals.GAP_SIZE)
 											.addGroup(inputPanelLayout.createParallelGroup()
 													.addComponent(jTextFieldURL, Globals.BUTTON_WIDTH,
-															Globals.BUTTON_WIDTH, MAX)
+															Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 													.addComponent(
 															wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
-															PREF, PREF, PREF)))
+															GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+															GroupLayout.PREFERRED_SIZE)))
 									.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-											.addComponent(wgetAuthPanel, PREF, PREF, MAX)))
+											.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
 							.addGap(Globals.GAP_SIZE))
 					.addGap(Globals.GAP_SIZE));
-			inputPanelLayout.setVerticalGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
-					.addComponent(jLabelmodulesFrom, PREF, PREF, PREF).addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
-					.addComponent(jRadioButtonLocal, PREF, PREF, PREF).addGap(Globals.GAP_SIZE)
-					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addGap(Globals.GAP_SIZE * 3).addComponent(jTextFieldLocalPath, PREF, PREF, PREF)
-							.addComponent(jButtonFileChooser, PREF, PREF, PREF).addGap(Globals.GAP_SIZE * 3))
-					.addGap(Globals.GAP_SIZE).addComponent(jRadioButtonFromServer, PREF, PREF, PREF)
-					.addGap(Globals.GAP_SIZE)
-					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addGap(Globals.GAP_SIZE * 3).addComponent(jTextFieldURL, PREF, PREF, PREF)
-							.addComponent(jLabelURL, PREF, PREF, PREF).addGap(Globals.GAP_SIZE * 3))
-					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addGap(Globals.GAP_SIZE * 3)
-							.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH), PREF, PREF, PREF)
-							.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH), PREF, PREF, PREF)
-							.addGap(Globals.GAP_SIZE * 3))
-					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+			inputPanelLayout
+					.setVerticalGroup(
+							inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
+									.addComponent(jLabelmodulesFrom, GroupLayout.PREFERRED_SIZE,
+											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(Globals.GAP_SIZE).addGap(Globals.GAP_SIZE)
+									.addComponent(jRadioButtonLocal, GroupLayout.PREFERRED_SIZE,
+											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(Globals.GAP_SIZE)
+									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+											.addGap(Globals.GAP_SIZE * 3)
+											.addComponent(jTextFieldLocalPath, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addComponent(jButtonFileChooser, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addGap(Globals.GAP_SIZE * 3))
+									.addGap(Globals.GAP_SIZE)
+									.addComponent(jRadioButtonFromServer, GroupLayout.PREFERRED_SIZE,
+											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(Globals.GAP_SIZE)
+									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+											.addGap(Globals.GAP_SIZE * 3)
+											.addComponent(jTextFieldURL, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addComponent(jLabelURL, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addGap(Globals.GAP_SIZE * 3))
+									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+											.addGap(Globals.GAP_SIZE * 3)
+											.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.LBLNEEDAUTH),
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE)
+											.addComponent(wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH),
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE)
+											.addGap(Globals.GAP_SIZE * 3))
+									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 
-							.addGap(Globals.GAP_SIZE).addComponent(wgetAuthPanel, PREF, PREF, PREF))
-					.addGap(Globals.GAP_SIZE * 2)
-					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addComponent(jLabelSetRights, PREF, PREF, PREF)
-							.addComponent(jComboBoxSetRights, PREF, PREF, PREF))
-					.addGap(Globals.GAP_SIZE)
-					.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-							.addComponent(jLabelOverwriteExisting, PREF, PREF, PREF)
-							.addComponent(jCheckBoxOverwriteExisting, PREF, PREF, PREF))
-					.addGap(Globals.GAP_SIZE)
+											.addGap(Globals.GAP_SIZE)
+											.addComponent(wgetAuthPanel, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addGap(Globals.GAP_SIZE * 2)
+									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+											.addComponent(jLabelSetRights, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addComponent(jComboBoxSetRights, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addGap(Globals.GAP_SIZE)
+									.addGroup(inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+											.addComponent(jLabelOverwriteExisting, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addComponent(jCheckBoxOverwriteExisting, GroupLayout.PREFERRED_SIZE,
+													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addGap(Globals.GAP_SIZE)
 
-					.addGroup(verticalParallelGroup) // parallelGroup can be overwritten by child classes
-			);
+									.addGroup(verticalParallelGroup) // parallelGroup can be overwritten by child classes
+					);
 		} catch (Exception e) {
-			logging.error("Error", e);
+			Logging.error("Error", e);
 		}
 	}
 
@@ -313,21 +347,21 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	/* This method is called when button 1 is pressed */
 	@Override
 	public void doAction1() {
-		logging.info(this, "doAction1 upload ");
+		Logging.info(this, "doAction1 upload ");
 		if (jRadioButtonLocal.isSelected()) {
 			if (jTextFieldLocalPath.getText().equals("")) {
-				logging.warning(this, "Please select local file.");
+				Logging.warning(this, "Please select local file.");
 				return;
 			}
 		} else if (jRadioButtonFromServer.isSelected()
 				&& (jTextFieldURL.getText().equals("") || (jTextFieldURL.getText().equals(wgetDefText)))) {
-			logging.warning(this, "Please enter url to file.");
+			Logging.warning(this, "Please enter url to file.");
 			return;
 		}
 
 		String modulesServerPath = doAction1AdditionalSetPath();
 		try {
-			SSHCommand_Template fullcommand = new SSHCommand_Template();
+			SSHCommandTemplate fullcommand = new SSHCommandTemplate();
 			fullcommand.setMainName("FileUpload");
 			if (jRadioButtonFromServer.isSelected()) {
 				CommandWget wget = new CommandWget();
@@ -350,12 +384,12 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 				fullcommand.addCommand((new CommandOpsiSetRights("")));
 			new SSHConnectExec(fullcommand);
 		} catch (Exception e) {
-			logging.warning(this, "doAction1, exception occurred", e);
+			Logging.warning(this, "doAction1, exception occurred", e);
 		}
 	}
 
 	protected CommandWget doAction1AdditionalSetWget(CommandWget c, String path) {
-		c.setFilename(path);
+		c.setFileName(path);
 		return c;
 	}
 

@@ -4,12 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This class represent a ssh-command
  **/
-public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Template>, SSHMultiCommand {
+public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemplate>, SSHMultiCommand {
 	/** boolean needParameter = false **/
 	private boolean needParameter = false;
 	/** boolean isMultiCommand = true **/
@@ -19,8 +19,8 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	/** String unique menu text **/
 	private String menuText;
 	/** LinkedList<SSHCommand> ssh_command **/
-	private LinkedList<SSHCommand> ssh_command = new LinkedList<>();
-	private LinkedList<SSHCommand> ssh_command_original = new LinkedList<>();
+	private LinkedList<SSHCommand> sshCommand = new LinkedList<>();
+	private LinkedList<SSHCommand> sshCommandOriginal = new LinkedList<>();
 	/** boolean needSudo state **/
 	private boolean needSudo = false;
 	/** String parent menu text **/
@@ -29,17 +29,16 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	private String tooltipText = "";
 	/** integer position **/
 	private int position;
-	/** instance of SSHCommandFactory */
-	private SSHCommandFactory factory = SSHCommandFactory.getInstance();
-	private String confidential_information = null;
+
+	private static final String CONFIDENTIAL_INFORMATION = null;
 
 	/**
 	 * Creates an empty SSHCommand_Template instance
 	 * 
 	 * @return SSHCommand_Template instance
 	 */
-	public SSHCommand_Template() {
-		position = factory.position_default;
+	public SSHCommandTemplate() {
+		position = SSHCommandFactory.POSITION_DEFAULT;
 	}
 
 	/**
@@ -54,8 +53,8 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * @param p   (position): int
 	 * @return SSHCommand_Template instance
 	 */
-	public SSHCommand_Template(String id, List<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
-		position = SSHCommandFactory.getInstance().position_default;
+	public SSHCommandTemplate(String id, List<String> c, String mt, boolean ns, String pmt, String ttt, int p) {
+		position = SSHCommandFactory.POSITION_DEFAULT;
 		setId(id);
 		setMenuText(mt);
 		setNeedSudo(ns);
@@ -63,29 +62,29 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 		setTooltipText(ttt);
 		setPriority(p);
 		setCommands(c);
-		logging.debug(this, "SSHCommand_Template this " + this.toString());
-		logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
+		Logging.debug(this, "SSHCommand_Template this " + this.toString());
+		Logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
 	}
 
-	public SSHCommand_Template(SSHCommand orig, List<String> commandlist) {
+	public SSHCommandTemplate(SSHCommand orig, List<String> commandlist) {
 		this(orig.getId(), commandlist, orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(),
 				orig.getToolTipText(), orig.getPriority());
-		logging.debug(this, "SSHCommand_Template this " + this.toString());
-		logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
+		Logging.debug(this, "SSHCommand_Template this " + this.toString());
+		Logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
 	}
 
-	public SSHCommand_Template(SSHCommand_Template orig) {
+	public SSHCommandTemplate(SSHCommandTemplate orig) {
 		this(orig.getId(), orig.getCommandsRaw(), orig.getMenuText(), orig.needSudo(), orig.getParentMenuText(),
 				orig.getToolTipText(), orig.getPriority());
-		logging.debug(this, "SSHCommand_Template this " + this.toString());
-		logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
+		Logging.debug(this, "SSHCommand_Template this " + this.toString());
+		Logging.debug(this, "SSHCommand_Template commandlist" + this.commandlistToString());
 	}
 
 	@Override
 	/**
 	 * Sets the command specific error text
 	 **/
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 
@@ -114,16 +113,16 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	/**
 	 * Sets the given commandlist
 	 * 
-	 * @param c_list: LinkedList<String>
+	 * @param cList: List<String>
 	 **/
-	public void setCommands(List<String> c_list) {
-		if (c_list != null) {
-			for (String c : c_list) {
+	public void setCommands(List<String> cList) {
+		if (cList != null) {
+			for (String c : cList) {
 
-				SSHCommand sshc = new Empty_Command(getId(), c, getMenuText(), needSudo());
-				ssh_command.add(sshc);
+				SSHCommand sshc = new EmptyCommand(getId(), c, getMenuText(), needSudo());
+				sshCommand.add(sshc);
 				if (firstInitCommands)
-					ssh_command_original.add(sshc);
+					sshCommandOriginal.add(sshc);
 			}
 			firstInitCommands = false;
 		}
@@ -144,20 +143,20 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * @param sshc: SSHCommand
 	 **/
 	public void addCommand(SSHCommand sshc) {
-		ssh_command.add(sshc);
-		ssh_command_original.add(sshc);
+		sshCommand.add(sshc);
+		sshCommandOriginal.add(sshc);
 	}
 
 	@Override
 	public String getSecureInfoInCommand() {
-		return confidential_information;
+		return CONFIDENTIAL_INFORMATION;
 	}
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
-		else
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().equals(""))) {
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
+		} else
 			return getCommand();
 	}
 
@@ -265,12 +264,12 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * @return List of SSHCommand
 	 **/
 	@Override
-	public LinkedList<SSHCommand> getCommands() {
-		return ssh_command;
+	public List<SSHCommand> getCommands() {
+		return sshCommand;
 	}
 
-	public LinkedList<SSHCommand> getOriginalCommands() {
-		return ssh_command_original;
+	public List<SSHCommand> getOriginalCommands() {
+		return sshCommandOriginal;
 	}
 
 	/**
@@ -305,15 +304,15 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * @return LinkedList<String> with the commands
 	 **/
 	@Override
-	public LinkedList<String> getCommandsRaw() {
-		LinkedList<String> commands_string_list = new LinkedList<>();
-		for (SSHCommand c : ssh_command) {
+	public List<String> getCommandsRaw() {
+		List<String> commandsStringList = new LinkedList<>();
+		for (SSHCommand c : sshCommand) {
 			String comstr = c.getCommandRaw();
 			if (!((comstr == null) || (comstr.trim().equals(""))))
-				commands_string_list.add(c.getCommandRaw());
+				commandsStringList.add(c.getCommandRaw());
 		}
 
-		return commands_string_list;
+		return commandsStringList;
 	}
 
 	/**
@@ -346,13 +345,13 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	@Override
 	public String toString() {
 		StringBuilder com = new StringBuilder("{");
-		com.append(factory.command_map_id).append(":").append(getId()).append(",");
-		com.append(factory.command_map_parentMenuText).append(":").append(getParentMenuText()).append(",");
-		com.append(factory.command_map_menuText).append(":").append(getMenuText()).append(",");
-		com.append(factory.command_map_tooltipText).append(":").append(getToolTipText()).append(",");
-		com.append(factory.command_map_needSudo).append(":").append(needSudo()).append(",");
-		com.append(factory.command_map_position).append(":").append(getPriority()).append(", ");
-		com.append(factory.command_map_commands).append(":").append("[");
+		com.append(SSHCommandFactory.COMMAND_MAP_ID).append(":").append(getId()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_PARENT_MENU_TEXT).append(":").append(getParentMenuText()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_MENU_TEXT).append(":").append(getMenuText()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_TOOLTIP_TEXT).append(":").append(getToolTipText()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_NEED_SUDO).append(":").append(needSudo()).append(",");
+		com.append(SSHCommandFactory.COMMAND_MAP_POSITION).append(":").append(getPriority()).append(", ");
+		com.append(SSHCommandFactory.COMMAND_MAP_COMMANDS).append(":").append("[");
 		for (int i = 0; i < getCommandsRaw().size(); i++) {
 			String c = getCommandsRaw().get(i);
 			if (i == getCommandsRaw().size() - 1)
@@ -368,7 +367,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	public String commandlistToString() {
 		StringBuilder commandString = new StringBuilder("[");
 		for (int i = 0; i < getCommands().size(); i++) {
-			String c = ((Empty_Command) getCommands().get(i)).commandToString();
+			String c = ((EmptyCommand) getCommands().get(i)).commandToString();
 			if (i == getCommands().size() - 1)
 				commandString.append(c);
 			else
@@ -386,7 +385,7 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	 * @return difference
 	 */
 	@Override
-	public int compareTo(SSHCommand_Template compareCom) {
+	public int compareTo(SSHCommandTemplate compareCom) {
 		int dif = this.position - compareCom.getPriority();
 		if (dif == 0)
 			return this.menuText.compareTo(compareCom.getMenuText());
@@ -396,12 +395,12 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 	/**
 	 * Update all fields of this command to the fields of given command
 	 * 
-	 * @param SSHCommand_Template com
+	 * @param SSHCommandTemplate com
 	 * @return the updated command (this)
 	 */
-	public SSHCommand_Template update(SSHCommand_Template com) {
+	public SSHCommandTemplate update(SSHCommandTemplate com) {
 		if (this.id.equals(com.getId())) {
-			logging.debug(this, "update this (" + this.toString() + ") with (" + com.toString() + ")");
+			Logging.debug(this, "update this (" + this.toString() + ") with (" + com.toString() + ")");
 			setCommands(com.getCommandsRaw());
 			setMenuText(com.getMenuText());
 			setNeedSudo(com.needSudo());
@@ -409,51 +408,51 @@ public class SSHCommand_Template implements SSHCommand, Comparable<SSHCommand_Te
 			setTooltipText(com.getToolTipText());
 			setPriority(com.getPriority());
 		}
-		logging.info(this, "updated command: " + this.toString());
+		Logging.info(this, "updated command: " + this.toString());
 		return this;
 	}
 
-	public boolean equals(SSHCommand_Template com) {
+	public boolean equals(SSHCommandTemplate com) {
 		if (!this.getId().trim().equals(com.getId().trim())) {
-			logging.debug(this, "equals different id's " + this.getId() + " != " + com.getId() + "");
+			Logging.debug(this, "equals different id's " + this.getId() + " != " + com.getId() + "");
 			return false;
 		}
 		if (!this.getMenuText().trim().equals(com.getMenuText().trim())) {
-			logging.debug(this, "equals different menuText's " + this.getMenuText() + " != " + com.getMenuText() + "");
+			Logging.debug(this, "equals different menuText's " + this.getMenuText() + " != " + com.getMenuText() + "");
 			return false;
 		}
 		if (!this.getParentMenuText().trim().equals(com.getParentMenuText().trim())) {
-			logging.debug(this, "equals different parentMenuText's " + this.getParentMenuText() + " != "
+			Logging.debug(this, "equals different parentMenuText's " + this.getParentMenuText() + " != "
 					+ com.getParentMenuText() + "");
 			return false;
 		}
 		if (!this.getToolTipText().trim().equals(com.getToolTipText().trim())) {
-			logging.debug(this,
+			Logging.debug(this,
 					"equals different toolTipText's " + this.getToolTipText() + " != " + com.getToolTipText() + "");
 			return false;
 		}
 		if (this.getPriority() != com.getPriority()) {
-			logging.debug(this, "equals different priorities " + this.getPriority() + " != " + com.getPriority() + "");
+			Logging.debug(this, "equals different priorities " + this.getPriority() + " != " + com.getPriority() + "");
 			return false;
 		}
 		if (this.needSudo() != com.needSudo()) {
-			logging.debug(this, "equals different needSudo " + this.needSudo() + " != " + com.needSudo() + "");
+			Logging.debug(this, "equals different needSudo " + this.needSudo() + " != " + com.needSudo() + "");
 			return false;
 		}
 		if (this.getCommandsRaw().size() != com.getCommandsRaw().size()) {
-			logging.debug(this, "equals different commandlist length " + this.getCommandsRaw().size() + " != "
+			Logging.debug(this, "equals different commandlist length " + this.getCommandsRaw().size() + " != "
 					+ com.getCommandsRaw().size() + "");
 			return false;
 		}
 
 		for (int i = 0; i < this.getCommandsRaw().size(); i++) {
 			if (!this.getCommandsRaw().get(i).equals(com.getCommandsRaw().get(i))) {
-				logging.debug(this,
+				Logging.debug(this,
 						"equals different commands " + this.getCommandsRaw() + " != " + com.getCommandsRaw() + "");
 				return false;
 			}
 		}
-		logging.debug(this, "equals commands are equal");
+		Logging.debug(this, "equals commands are equal");
 		return true;
 
 	}

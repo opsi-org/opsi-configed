@@ -11,7 +11,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class Autocomplete implements DocumentListener {
 
@@ -55,7 +55,8 @@ public class Autocomplete implements DocumentListener {
 		try {
 			content = textField.getText(0, pos + 1);
 		} catch (BadLocationException e) {
-			logging.error("Failed to get text", e);
+			Logging.error("Failed to get text", e);
+			return;
 		}
 
 		// Find where the word starts

@@ -18,8 +18,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.HostsStatusInfo;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 public class ActivatedGroupModel {
 	protected String groupName;
@@ -38,14 +38,14 @@ public class ActivatedGroupModel {
 	}
 
 	public void setActive(boolean b) {
-		logging.info(this, "setActive " + b);
+		Logging.info(this, "setActive " + b);
 
 		active = b;
 
 		if (b && groupName != null) {
 			hostsInfo.setGroupName(groupName);
 			hostsInfo.setGroupClientsCount(associatedClients.size());
-			configed.savedStates.saveGroupSelection.serialize(groupName);
+			Configed.savedStates.saveGroupSelection.serialize(groupName);
 		}
 
 	}
@@ -55,7 +55,7 @@ public class ActivatedGroupModel {
 	}
 
 	public void setNode(String name, DefaultMutableTreeNode n, TreePath p) {
-		logging.info(this, "setNode " + name);
+		Logging.info(this, "setNode " + name);
 		groupName = name;
 		node = n;
 		path = p;

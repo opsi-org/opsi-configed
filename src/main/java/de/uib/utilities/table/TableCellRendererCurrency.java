@@ -13,7 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class TableCellRendererCurrency extends ColorTableCellRenderer {
@@ -34,13 +34,13 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 		String selectedString = "";
 		ImageIcon selectedIcon = null;
 
-		if (value != null && value instanceof String && !((String) value).equals("")) {
+		if (value instanceof String && !((String) value).equals("")) {
 
 			try {
-				double number = Double.valueOf((String) value);
+				double number = Double.parseDouble((String) value);
 				selectedString = decimalFormat.format(number);
 			} catch (Exception ex) {
-				logging.warning(this, " format exception", ex);
+				Logging.warning(this, " format exception", ex);
 			}
 
 		} else {

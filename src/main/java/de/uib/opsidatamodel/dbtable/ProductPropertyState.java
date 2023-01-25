@@ -4,12 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uib.configed.Globals;
-
 public class ProductPropertyState extends Table {
-	public static final String tableName = "PRODUCT_PROPERTY_STATE";
-
-	public static final String version = ProductPropertyState.class.getName() + " " + Globals.VERSION;
+	public static final String TABLE_NAME = "PRODUCT_PROPERTY_STATE";
 
 	public static final String PRODUCT_ID = "productId";
 	public static final String PROPERTY_ID = "propertyId";

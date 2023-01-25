@@ -11,7 +11,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 
 public class SearchTargetModelFromInstallationStateTable implements SearchTargetModel {
@@ -34,7 +34,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	public void setTable(JTable table) {
 		this.table = table;
-		logging.info(this, "setTable null? " + (table == null));
+		Logging.info(this, "setTable null? " + (table == null));
 
 	}
 
@@ -107,7 +107,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void setCursorRow(int row) {
-		logging.debug(this, "setCursorRow row, produced modelrow, produced viewrow, not implemented ");
+		Logging.debug(this, "setCursorRow row, produced modelrow, produced viewrow, not implemented ");
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void addSelectedRow(int row) {
-		logging.debug(this, "addSelectedRow " + row);
+		Logging.debug(this, "addSelectedRow " + row);
 
 		if (table.getRowCount() == 0)
 			return;
@@ -149,7 +149,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void setSelection(int[] selection) {
-		logging.info(this, "setSelection --- " + java.util.Arrays.toString(selection));
+		Logging.info(this, "setSelection --- " + java.util.Arrays.toString(selection));
 		table.getSelectionModel().clearSelection();
 		for (int i = 0; i < selection.length; i++) {
 			table.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
@@ -170,7 +170,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 				modelRowFilter[i] = table.convertRowIndexToModel(viewRowfilter[i]);
 			}
 
-			logging.info(this, "setFiltered modelRowFilter " + java.util.Arrays.toString(modelRowFilter));
+			Logging.info(this, "setFiltered modelRowFilter " + java.util.Arrays.toString(modelRowFilter));
 
 			panelProductSettings.reduceToSelected();
 

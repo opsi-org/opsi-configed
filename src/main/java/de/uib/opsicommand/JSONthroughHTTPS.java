@@ -35,7 +35,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * @author Rupert Roeder, Naglis Vidziunas
@@ -58,7 +58,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	 */
 	@Override
 	protected HttpURLConnection produceConnection() throws IOException {
-		logging.info(this, "produceConnection, url; " + serviceURL);
+		Logging.info(this, "produceConnection, url; " + serviceURL);
 		HttpURLConnection connection = (HttpURLConnection) serviceURL.openConnection();
 		SSLSocketFactory sslFactory = null;
 		if (DISABLE_CERTIFICATE_VERIFICATION) {
@@ -84,7 +84,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		@SuppressWarnings("squid:S1192")
 		public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(s, host, port, autoClose);
-			logging.debug(this, "createSocket host, port: " + host + "," + port + " autoClose " + autoClose
+			Logging.debug(this, "createSocket host, port: " + host + "," + port + " autoClose " + autoClose
 					+ " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
 
 			if (null != this.handshakeListener) {
@@ -97,7 +97,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		@Override
 		public Socket createSocket() throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket();
-			logging.debug(this,
+			Logging.debug(this,
 					"createSocket " + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
 			// on some connections there is, after some time, a javax.net.ssl.SSLException:
 			// SSL peer shut down incorrectl
@@ -113,7 +113,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		@Override
 		public Socket createSocket(InetAddress host, int port) throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(host, port);
-			logging.debug(this, "createSocket host, port: " + host + "," + port + " enabled cipher suites "
+			Logging.debug(this, "createSocket host, port: " + host + "," + port + " enabled cipher suites "
 					+ Arrays.toString(socket.getEnabledCipherSuites()));
 
 			if (null != this.handshakeListener) {
@@ -127,7 +127,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort)
 				throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(address, port, localAddress, localPort);
-			logging.debug(this,
+			Logging.debug(this,
 					"createSocket adress, port, localAddress, localPort: " + address + "," + port + "," + localAddress
 							+ "," + localPort + " enabled cipher suites "
 							+ Arrays.toString(socket.getEnabledCipherSuites()));
@@ -142,7 +142,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		@Override
 		public Socket createSocket(String host, int port) throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(host, port);
-			logging.debug(this, "createSocket host, port: " + host + "," + port + " enabled cipher suites "
+			Logging.debug(this, "createSocket host, port: " + host + "," + port + " enabled cipher suites "
 					+ Arrays.toString(socket.getEnabledCipherSuites()));
 
 			if (null != this.handshakeListener) {
@@ -155,7 +155,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		@Override
 		public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
 			SSLSocket socket = (SSLSocket) this.delegate.createSocket(host, port, localHost, localPort);
-			logging.debug(this, "createSocket host, port, localHost, localPort: " + host + "," + port + "," + localHost
+			Logging.debug(this, "createSocket host, port, localHost, localPort: " + host + "," + port + "," + localHost
 					+ "," + localPort + " enabled cipher suites " + Arrays.toString(socket.getEnabledCipherSuites()));
 
 			if (null != this.handshakeListener) {
@@ -187,11 +187,11 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			try {
 				peerName = session.getPeerPrincipal().getName();
 			} catch (SSLPeerUnverifiedException e) {
-				logging.error(this, "peer's identity wasn't verified");
+				Logging.error(this, "peer's identity wasn't verified");
 			}
 
-			logging.info(this, "protocol " + protocol + "  peerName " + peerName);
-			logging.info(this, "cipher suite " + cipherSuite);
+			Logging.info(this, "protocol " + protocol + "  peerName " + peerName);
+			Logging.info(this, "cipher suite " + cipherSuite);
 		}
 	}
 
@@ -216,17 +216,17 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (CertificateException e) {
-			logging.error(this, "something is wrong with the certificate");
+			Logging.error(this, "something is wrong with the certificate");
 		} catch (KeyStoreException e) {
-			logging.error(this, "keystore wasn't initialized");
+			Logging.error(this, "keystore wasn't initialized");
 		} catch (NoSuchAlgorithmException e) {
-			logging.error(this, "provider doesn't support algorithm");
+			Logging.error(this, "provider doesn't support algorithm");
 		} catch (UnrecoverableKeyException e) {
-			logging.error(this, "unable to provide key");
+			Logging.error(this, "unable to provide key");
 		} catch (KeyManagementException e) {
-			logging.error(this, "failed to initialize SSL context");
+			Logging.error(this, "failed to initialize SSL context");
 		} catch (IOException e) {
-			logging.error(this, "something is wrong with the keystore data");
+			Logging.error(this, "something is wrong with the keystore data");
 		}
 
 		return sslFactory;
@@ -272,7 +272,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			String alias = certificateFile.getParentFile().getName();
 			ks.setCertificateEntry(alias, certificate);
 		} catch (KeyStoreException e) {
-			logging.error(this, "unable to load certificate into a keystore");
+			Logging.error(this, "unable to load certificate into a keystore");
 		}
 	}
 
@@ -287,9 +287,9 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			url = new URL(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
 			tempCertFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION);
 		} catch (MalformedURLException e) {
-			logging.error(this, "url is malformed: " + url);
+			Logging.error(this, "url is malformed: " + url);
 		} catch (IOException e) {
-			logging.error(this, "unable to create tmp certificate file");
+			Logging.error(this, "unable to create tmp certificate file");
 		}
 
 		if (url == null) {
@@ -300,7 +300,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 				FileOutputStream fos = new FileOutputStream(tempCertFile)) {
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		} catch (IOException e) {
-			logging.error(this, "unable to download certificate's content from specified url: " + url.toString());
+			Logging.error(this, "unable to download certificate's content from specified url: " + url.toString());
 		}
 
 		return tempCertFile;
@@ -333,9 +333,9 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			sslContext.init(null, trustAllCerts, new SecureRandom());
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (NoSuchAlgorithmException e) {
-			logging.error(this, "provider doesn't support algorithm");
+			Logging.error(this, "provider doesn't support algorithm");
 		} catch (KeyManagementException e) {
-			logging.error(this, "failed to initialize SSL context");
+			Logging.error(this, "failed to initialize SSL context");
 		}
 
 		return sslFactory;

@@ -62,11 +62,6 @@ public class TabbedPaneX extends JPanel {
 
 	}
 
-	public void callExit() {
-
-		controller.exit();
-	}
-
 	/**
 	 * adds a tab to the incorporated JTabbedMain, with an icon and a tooltip
 	 */

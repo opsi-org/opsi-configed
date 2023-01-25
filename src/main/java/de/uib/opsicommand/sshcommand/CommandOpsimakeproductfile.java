@@ -2,13 +2,13 @@ package de.uib.opsicommand.sshcommand;
 
 import java.util.List;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHMakeProductFileDialog;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedParameter {
 	private String baseName = "opsi-makeproductfile ";
@@ -33,9 +33,9 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 		setProductVersion(prv);
 		setMd5sum(m);
 		setZsync(z);
-		logging.info(this, "CommandOpsimakeproductfile dir " + dir);
-		logging.info(this, "CommandOpsimakeproductfile packageVersion " + packageVersion);
-		logging.info(this, "CommandOpsimakeproductfile productVersion " + productVersion);
+		Logging.info(this, "CommandOpsimakeproductfile dir " + dir);
+		Logging.info(this, "CommandOpsimakeproductfile packageVersion " + packageVersion);
+		Logging.info(this, "CommandOpsimakeproductfile productVersion " + productVersion);
 	}
 
 	public CommandOpsimakeproductfile(String d, String pav, String prv) {
@@ -58,11 +58,11 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	 */
 	private void setCommandName() {
 		if (!PersistenceControllerFactory.getPersistenceController().handleVersionOlderThan("4.1")) {
-			logging.info(this, "set CommandOpsimakeproductfile name to 'opsi-makepackage'");
+			Logging.info(this, "set CommandOpsimakeproductfile name to 'opsi-makepackage'");
 			baseName = "opsi-makepackage";
 			command = "opsi-makepackage";
 		} else {
-			logging.info(this, "let CommandOpsimakeproductfile named as 'opsi-makeproductfile'");
+			Logging.info(this, "let CommandOpsimakeproductfile named as 'opsi-makeproductfile'");
 		}
 	}
 
@@ -74,7 +74,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -83,7 +83,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	/**
 	 * Sets the command specific error text
 	 **/
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 
@@ -120,7 +120,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile");
+		return Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile");
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.tooltip");
+		return Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.tooltip");
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 		command = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
 				+ " " + md5sum + " " + zsync + " ";
 		if (needSudo())
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 

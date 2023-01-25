@@ -16,10 +16,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeSet;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class Mapping<K, V> {
 	protected Map<K, V> map;
@@ -129,14 +130,14 @@ public class Mapping<K, V> {
 			K k = iter.next();
 			V v = map.get(k);
 			if (v == null)
-				logging.info(this, " " + k + " mapped to null in map " + m);
+				Logging.info(this, " " + k + " mapped to null in map " + m);
 			else
 
 				addPair(k, v);
 		}
 	}
 
-	public Mapping<K, V> restrictedTo(java.util.Set<K> partialDomain) {
+	public Mapping<K, V> restrictedTo(Set<K> partialDomain) {
 		HashMap<K, V> restrictedMap = new HashMap<>();
 		for (K key : partialDomain) {
 			if (domain.contains(key)) {

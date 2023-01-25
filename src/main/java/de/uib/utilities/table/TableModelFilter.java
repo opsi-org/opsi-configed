@@ -10,7 +10,7 @@ package de.uib.utilities.table;
 
 import java.util.List;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class TableModelFilter {
 	TableModelFilterCondition condition;
@@ -27,7 +27,7 @@ public class TableModelFilter {
 		this.inverted = inverted;
 		this.inUse = used;
 
-		logging.info(this, "TableModelFilter constructed : " + this);
+		Logging.info(this, "TableModelFilter constructed : " + this);
 	}
 
 	public TableModelFilter() {

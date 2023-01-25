@@ -23,8 +23,8 @@ import java.util.TreeMap;
 
 import org.json.JSONObject;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ControlDash;
-import de.uib.configed.configed;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
@@ -45,7 +45,7 @@ import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.Executioner;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataLoadingObservable;
 import de.uib.utilities.observer.DataLoadingObserver;
 import de.uib.utilities.observer.DataRefreshedObservable;
@@ -61,17 +61,17 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	// constants for building hw queries
-	public final String hwInfo_CONFIG = "HARDWARE_CONFIG_";
-	public final String hwInfo_DEVICE = "HARDWARE_DEVICE_";
-	public final String hostIdField = ".hostId";
-	public final String hardwareIdField = ".hardware_id";
-	public final String lastseenColName = "lastseen";
-	public final String lastseenVisibleColName = "HOST.last_scan_time";
+	public static final String HW_INFO_CONFIG = "HARDWARE_CONFIG_";
+	public static final String HW_INFO_DEVICE = "HARDWARE_DEVICE_";
+	public static final String HOST_ID_FIELD = ".hostId";
+	public static final String HARDWARE_ID_FIELD = ".hardware_id";
+	public static final String LAST_SEEN_COL_NAME = "lastseen";
+	public static final String LAST_SEEN_VISIBLE_COL_NAME = "HOST.last_scan_time";
 
 	public static final String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT = "configed.productonclient_displayfields_localboot";
 	public static final String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT = "configed.productonclient_displayfields_netboot";
 	public static final String KEY_HOST_DISPLAYFIELDS = "configed.host_displayfields";
-	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PanelLicencesReconciliation = "configed.license_inventory_extradisplayfields";
+	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
 	public static final String KEY_SHOW_DASH_ON_PROGRAMSTART = ControlDash.CONFIG_KEY + ".show_dash_on_loaddata";
 	public static final Boolean DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART = false;
@@ -85,31 +85,31 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String KEY_DISABLED_CLIENT_ACTIONS = "configed.host_actions_disabled";
 
 	public static final String KEY_OPSICLIENTD_EXTRA_EVENTS = "configed.opsiclientd_events";
-	public static final String OPSI_CLIENTD_EVENT_on_demand = "on_demand";
-	public static final String OPSI_CLIENTD_EVENT_silent_install = "silent_install";
+	public static final String OPSI_CLIENTD_EVENT_ON_DEMAND = "on_demand";
+	public static final String OPSI_CLIENTD_EVENT_SILENT_INSTALL = "silent_install";
 
 	public static final String KEY_PRODUCT_SORT_ALGORITHM = "product_sort_algorithm";
 
 	public static final String KEY_CHOICES_FOR_WOL_DELAY = "wol_delays_sec";
 
-	public static final String localImageRestoreProductKey = "opsi-local-image-restore";
-	public static final String localImagesListPropertyKey = "imagefiles_list";
-	public static final String localImageToRestorePropertyKey = "imagefile";
+	public static final String LOCAL_IMAGE_RESTORE_PRODUCT_KEY = "opsi-local-image-restore";
+	public static final String LOCAL_IMAGE_LIST_PROPERTY_KEY = "imagefiles_list";
+	public static final String LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY = "imagefile";
 
 	public static final String CONFIG_DEPOT_ID = "clientconfig.depot.id";
 	public static final String KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = "opsiclientd.event_on_shutdown.active";
 	public static final Boolean DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN = false;
 
 	public static final String KEY_SSH_DEFAULTWINUSER = "configed.ssh.deploy-client-agent.default.user";
-	public static final String KEY_SSH_DEFAULTWINUSER_defaultvalue = "Administrator";
+	public static final String KEY_SSH_DEFAULTWINUSER_DEFAULT_VALUE = "Administrator";
 	public static final String KEY_SSH_DEFAULTWINPW = "configed.ssh.deploy-client-agent.default.password";
-	public static final String KEY_SSH_DEFAULTWINPW_defaultvalue = "";
+	public static final String KEY_SSH_DEFAULTWINPW_DEFAULT_VALUE = "";
 
-	public static final String configedWORKBENCH_key = "configed.workbench.default";
-	public static String configedWORKBENCH_defaultvalue = "/var/lib/opsi/workbench/";
-	public static String packageServerDirectoryS = configedWORKBENCH_defaultvalue;
+	public static final String CONFIGED_WORKBENCH_KEY = "configed.workbench.default";
+	public static String configedWorkbenchDefaultValue = "/var/lib/opsi/workbench/";
+	public static String packageServerDirectoryS = configedWorkbenchDefaultValue;
 
-	public static final String configedGIVENDOMAINS_key = "configed.domains_given";
+	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
 	// wan meta configuration
 	public static final String WAN_PARTKEY = "wan_";
@@ -139,52 +139,50 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";// UserConfig.
 
 	public static final String KEY_USER_REGISTER = KEY_USER_ROOT + ".{}.register"; // boolean
-	public static Boolean KEY_USER_REGISTER_VALUE = null;
+	public static Boolean keyUserRegisterValue = null;
 
-	public static final String DEPOT_SELECTION_NODEPOTS = configed
+	public static final String DEPOT_SELECTION_NODEPOTS = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS");
-	public static final String DEPOT_SELECTION_ALL = configed
+	public static final String DEPOT_SELECTION_ALL = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL");
-	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = configed
+	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
-	public static final List BOOLEAN_VALUES = new ArrayList<>();
+	public static final List<Boolean> BOOLEAN_VALUES = new ArrayList<>();
 	static {
 		BOOLEAN_VALUES.add(true);
 		BOOLEAN_VALUES.add(false);
 	}
 
-	public static TreeMap<String, String> PROPERTYCLASSES_SERVER;
+	public static NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
 	static {
-		PROPERTYCLASSES_SERVER = new TreeMap<>();
-		PROPERTYCLASSES_SERVER.put("", "general configuration items");
-		PROPERTYCLASSES_SERVER.put("clientconfig", "network configuration");
-		PROPERTYCLASSES_SERVER.put(de.uib.opsidatamodel.modulelicense.LicensingInfoMap.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put("", "general configuration items");
+		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
+		PROPERTY_CLASSES_SERVER.put(de.uib.opsidatamodel.modulelicense.LicensingInfoMap.CONFIG_KEY,
 				"opsi module status display");
-		PROPERTYCLASSES_SERVER.put(ControlDash.CONFIG_KEY, "dash configuration");
-		PROPERTYCLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put(ControlDash.CONFIG_KEY, "dash configuration");
+		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
-		PROPERTYCLASSES_SERVER.put(MetaConfig.CONFIG_KEY, "default configuration for other properties");
-		PROPERTYCLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put(MetaConfig.CONFIG_KEY, "default configuration for other properties");
+		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
 				"<html><p>saved search configurations ,<br />do not edit here <br />- editing via the search form</p></html>");
-		PROPERTYCLASSES_SERVER.put(RemoteControl.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY,
 				"<html><p>remote control calls,<br />i.e. calls to tools on the local computer<br />typically targeting at a selected client</p></html>");
-		PROPERTYCLASSES_SERVER.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
+		PROPERTY_CLASSES_SERVER.put(OpsiHwAuditDeviceClass.CONFIG_KEY,
 				"<html><p>configuration for hw overview table,<br />- best editing via the helper function<br />at the hw overview table!)</p></html>");
-		PROPERTYCLASSES_SERVER.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
+		PROPERTY_CLASSES_SERVER.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
 
-		PROPERTYCLASSES_SERVER.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
-		PROPERTYCLASSES_SERVER.put("software-on-demand",
+		PROPERTY_CLASSES_SERVER.put("opsi-script", "<html>parameters for opsi-script on a client</html>");
+		PROPERTY_CLASSES_SERVER.put("software-on-demand",
 				"<html>software on demand configuration,<br />not client specific</html>");
-		PROPERTYCLASSES_SERVER.put(KEY_USER_ROOT,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip"));
-		PROPERTYCLASSES_SERVER.put(KEY_USER_ROLE_ROOT,
-				configed.getResourceValue("EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip"));
+		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROOT,
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.userPrivilegesConfiguration.ToolTip"));
+		PROPERTY_CLASSES_SERVER.put(KEY_USER_ROLE_ROOT,
+				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.roleConfiguration.ToolTip"));
 	}
 
-	public static TreeMap<String, String> PROPERTYCLASSES_CLIENT;
+	public static final NavigableMap<String, String> PROPERTYCLASSES_CLIENT = new TreeMap<>();
 	static {
-		PROPERTYCLASSES_CLIENT = new TreeMap<>();
 		PROPERTYCLASSES_CLIENT.put("", "general configuration items");
 		PROPERTYCLASSES_CLIENT.put("clientconfig", "network configuration");
 		PROPERTYCLASSES_CLIENT.put("opsiclientd", "<html>entries for the opsiclientd.conf</html>");
@@ -194,24 +192,12 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 				"<html>software on demand configuration,<br />not client specific</html>");
 	}
 
-	public static TreeMap<String, String> PROPERTY_EDITOPTIONS_CLIENT;
+	public static Set<String> CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS;
 	static {
-		PROPERTY_EDITOPTIONS_CLIENT = new TreeMap<>();
-
-	}
-
-	public static TreeMap<String, String> PROPERTY_EDITOPTIONS_SERVER;
-	static {
-		PROPERTY_EDITOPTIONS_SERVER = new TreeMap<>();
-
-	}
-
-	public static Set<String> CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS;
-	static {
-		CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS = new HashSet<>(PROPERTYCLASSES_SERVER.keySet());
-		CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS.removeAll(PROPERTYCLASSES_CLIENT.keySet());
-		CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS.add(KEY_PRODUCT_SORT_ALGORITHM);
-		CONFIG_KEYSTARTERS_NOT_FOR_CLIENTS.add("configed");
+		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS = new HashSet<>(PROPERTY_CLASSES_SERVER.keySet());
+		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.removeAll(PROPERTYCLASSES_CLIENT.keySet());
+		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.add(KEY_PRODUCT_SORT_ALGORITHM);
+		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.add("configed");
 	}
 
 	/**
@@ -290,7 +276,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	}
 
 	public void cleanUpAuditSoftware() {
-		logging.error(this, "cleanUpAuditSoftware not implemented");
+		Logging.error(this, "cleanUpAuditSoftware not implemented");
 	}
 
 	// ---------------------------------------------------------------
@@ -356,7 +342,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	/* relating to the PC list */
 
-	public abstract List<Map<java.lang.String, java.lang.Object>> HOST_read();
+	public abstract List<Map<java.lang.String, java.lang.Object>> hostRead();
 
 	public abstract HostInfoCollections getHostInfoCollections();
 
@@ -527,7 +513,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract boolean saveHwColumnConfig(Map<String, Map<String, Boolean>> updateItems);
 
 	/* log files */
-	public abstract String[] getLogtypes();
+	public abstract String[] getLogTypes();
 
 	public abstract Map<String, String> getEmptyLogfiles();
 
@@ -640,6 +626,10 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 			Map<String, String> changedValues);
 
 	public abstract boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies);
+
+	public abstract boolean resetNetbootProducts(String[] selectedClients, boolean withDependencies);
+
+	public abstract boolean resetProducts(List<Map<String, Object>> productItems, boolean withDependencies);
 
 	public abstract Map<String, String> getProductPreRequirements(String depotId, String productname);
 
@@ -756,9 +746,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired();
 	// date in sql time format, contrad ID
 
-	public abstract NavigableMap<String, NavigableSet<String>> getLicenceContractsToNotify();
-	// date in sql time format, contrad ID
-
 	// returns the ID of the edited data record
 	public abstract String editLicenceContract(String licenseContractId, String partner, String conclusionDate,
 			String notificationDate, String expirationDate, String notes);
@@ -797,9 +784,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void retrieveRelationsAuditSoftwareToLicencePools();
 
-	public abstract void relations_windowsSoftwareId2LPool_requestRefresh();
+	public abstract void relationsWindowsSoftwareId2LPoolRequestRefresh();
 
-	public abstract void relations_auditSoftwareToLicencePools_requestRefresh();
+	public abstract void relationsAuditSoftwareToLicencePoolsRequestRefresh();
 
 	public abstract List<String> getSoftwareListByLicencePool(String licencePoolId);
 
@@ -819,8 +806,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract boolean addWindowsSoftwareIds2LPool(String licensePoolId, List<String> softwareToAssign);
 
-	public abstract String editPool2AuditSoftware(String softwareID, String licensePoolID_old,
-			String licensePoolID_new);
+	public abstract String editPool2AuditSoftware(String softwareID, String licensePoolIDOld, String licensePoolIDNew);
 
 	public abstract Map<String, LicenceStatisticsRow> getLicenceStatistics();
 
@@ -852,11 +838,11 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract boolean deleteLicencesReconciliation(String clientId, String licensePoolId);
 
 	// configurations and algorithms
-	public abstract Map<String, Boolean> getProductOnClients_displayFieldsLocalbootProducts();
+	public abstract Map<String, Boolean> getProductOnClientsDisplayFieldsLocalbootProducts();
 
-	public abstract Map<String, Boolean> getProductOnClients_displayFieldsNetbootProducts();
+	public abstract Map<String, Boolean> getProductOnClientsDisplayFieldsNetbootProducts();
 
-	public abstract Map<String, Boolean> getHost_displayFields();
+	public abstract Map<String, Boolean> getHostDisplayFields();
 
 	// menu configuration
 	public abstract List<String> getDisabledClientMenuEntries();
@@ -866,8 +852,8 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	// table sources
 
 	// opsi module information
-	public static int CLIENT_COUNT_WARNING_LIMIT = 10;
-	public static int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
+	public static final int CLIENT_COUNT_WARNING_LIMIT = 10;
+	public static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
 
 	public abstract void opsiInformationRequestRefresh();
 

@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class GeneralFrame extends JDialog implements ActionListener {
 	boolean shiftPressed = true;
@@ -35,7 +35,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 	protected int noOfButtons = 1;
 	protected int result = -1;
-	protected int DEFAULT = 0;
+	protected int defaultResult = 0;
 
 	protected JPanel jPanelButtonGrid = new JPanel();
 	protected GridLayout gridLayout1 = new GridLayout();
@@ -75,7 +75,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	protected void doAction1() {
-		logging.debug(this, "doAction1");
+		Logging.debug(this, "doAction1");
 		result = 1;
 		leave();
 	}
@@ -91,7 +91,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-			result = DEFAULT;
+			result = defaultResult;
 			leave();
 		}
 		super.processWindowEvent(e);

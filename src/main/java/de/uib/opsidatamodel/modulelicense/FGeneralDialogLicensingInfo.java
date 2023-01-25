@@ -17,12 +17,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.LicensingInfoPanelGenEditTable;
@@ -152,7 +152,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	}
 
 	private void retrieveData() {
-		logging.info(this, "retrieveData extendedView " + extendedView);
+		Logging.info(this, "retrieveData extendedView " + extendedView);
 		LicensingInfoMap.setReduced(!extendedView);
 		licenseMap = LicensingInfoMap.getInstance();
 
@@ -161,21 +161,21 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		theSourceMap = licenseMap.getTableMap();
 
 		clientNumbers = licenseMap.getClientNumbersMap();
-		clientTitle.setText("<html>" + configed.getResourceValue("LicensingInfo.client.title") + "  ("
+		clientTitle.setText("<html>" + Configed.getResourceValue("LicensingInfo.client.title") + "  ("
 				+ persist.getHostInfoCollections().getConfigServer() + ") </html>");
-		allClient.setText(configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
+		allClient.setText(Configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
 		allClientNum.setText(clientNumbers.get(LicensingInfoMap.ALL).toString());
-		macos.setText(configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");
+		macos.setText(Configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");
 		macosNum.setText(clientNumbers.get(LicensingInfoMap.MAC_OS).toString());
-		linux.setText(configed.getResourceValue("LicensingInfo.client.linux_clients") + ": ");
+		linux.setText(Configed.getResourceValue("LicensingInfo.client.linux_clients") + ": ");
 		linuxNum.setText(clientNumbers.get(LicensingInfoMap.LINUX).toString());
-		windows.setText(configed.getResourceValue("LicensingInfo.client.windows_clients") + ": ");
+		windows.setText(Configed.getResourceValue("LicensingInfo.client.windows_clients") + ": ");
 		windowsNum.setText(clientNumbers.get(LicensingInfoMap.WINDOWS).toString());
-		checksumTitle.setText(configed.getResourceValue("LicensingInfo.client.checksum"));
+		checksumTitle.setText(Configed.getResourceValue("LicensingInfo.client.checksum"));
 		checksum.setText(licenseMap.getCheckSum());
-		checksumInfo.setText("<html>" + configed.getResourceValue("LicensingInfo.client.checksum.info") + "</html>");
+		checksumInfo.setText("<html>" + Configed.getResourceValue("LicensingInfo.client.checksum.info") + "</html>");
 
-		customerTitle.setText(configed.getResourceValue("LicensingInfo.customer.data"));
+		customerTitle.setText(Configed.getResourceValue("LicensingInfo.customer.data"));
 		Set customerSet = licenseMap.getCustomerNamesSet();
 		customerNames
 				.setText(customerSet.toString().replace("[", "<html>").replace(", ", "<br>").replace("]", "</html>"));
@@ -202,7 +202,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 			@Override
 			public void reload() {
 
-				logging.info(this,
+				Logging.info(this,
 						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
 				persist.configOptionsRequestRefresh();
 				persist.opsiLicensingInfoRequestRefresh();
@@ -244,62 +244,62 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		retrieveData();
 
 		JLabel orangeWarningLabel = new JLabel(
-				"<html>" + configed.getResourceValue("LicensingInfo.warning") + "</html>");
+				"<html>" + Configed.getResourceValue("LicensingInfo.warning") + "</html>");
 		orangeWarningLabel.setIcon(Globals.createImageIcon("images/warning_orange.png", ""));
 
 		JLabel redWarningLabel = new JLabel(
-				"<html>" + configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
+				"<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "</html>");
 		redWarningLabel.setIcon(Globals.createImageIcon("images/warning_red.png", ""));
 
 		JLabel warningLevelAbsolute = new JLabel(
-				"<html>" + configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": "
+				"<html>" + Configed.getResourceValue("LicensingInfo.warning.levels.client_absolute") + ": "
 						+ licenseMap.getClientLimitWarningAbsolute() + "</html>");
 		JLabel warningLevelPercent = new JLabel(
-				"<html>" + configed.getResourceValue("LicensingInfo.warning.levels.client_percent") + ": "
+				"<html>" + Configed.getResourceValue("LicensingInfo.warning.levels.client_percent") + ": "
 						+ licenseMap.getClientLimitWarningPercent() + "</html>");
-		JLabel warningLevelDays = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.warning.levels.days")
+		JLabel warningLevelDays = new JLabel("<html>" + Configed.getResourceValue("LicensingInfo.warning.levels.days")
 				+ ": " + licenseMap.getClientLimitWarningDays() + "</html>");
 
 		Map<String, Object> clientNumbers = licenseMap.getClientNumbersMap();
-		JLabel clientTitle = new JLabel("<html>" + configed.getResourceValue("LicensingInfo.client.title") + "  ("
+		JLabel clientTitle = new JLabel("<html>" + Configed.getResourceValue("LicensingInfo.client.title") + "  ("
 				+ persist.getHostInfoCollections().getConfigServer() + ") </html>");
-		JLabel allClient = new JLabel(configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
+		JLabel allClient = new JLabel(Configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
 		JLabel allClientNum = new JLabel(clientNumbers.get(LicensingInfoMap.ALL).toString());
-		JLabel macos = new JLabel(configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");
+		JLabel macos = new JLabel(Configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");
 		JLabel macosNum = new JLabel(clientNumbers.get(LicensingInfoMap.MAC_OS).toString());
-		JLabel linux = new JLabel(configed.getResourceValue("LicensingInfo.client.linux_clients") + ": ");
+		JLabel linux = new JLabel(Configed.getResourceValue("LicensingInfo.client.linux_clients") + ": ");
 		JLabel linuxNum = new JLabel(clientNumbers.get(LicensingInfoMap.LINUX).toString());
-		JLabel windows = new JLabel(configed.getResourceValue("LicensingInfo.client.windows_clients") + ": ");
+		JLabel windows = new JLabel(Configed.getResourceValue("LicensingInfo.client.windows_clients") + ": ");
 		JLabel windowsNum = new JLabel(clientNumbers.get(LicensingInfoMap.WINDOWS).toString());
-		JLabel checksumTitle = new JLabel(configed.getResourceValue("LicensingInfo.client.checksum"));
+		JLabel checksumTitle = new JLabel(Configed.getResourceValue("LicensingInfo.client.checksum"));
 		JLabel checksum = new JLabel(licenseMap.getCheckSum());
 
-		JLabel customerTitle = new JLabel(configed.getResourceValue("LicensingInfo.customer.data"));
+		JLabel customerTitle = new JLabel(Configed.getResourceValue("LicensingInfo.customer.data"));
 		Set customerSet = licenseMap.getCustomerNamesSet();
 		JLabel customerNames = new JLabel(
 				customerSet.toString().replace("[", "<html>").replace(", ", "<br>").replace("]", "</html>"));
 
 		clientTitle.setFont(Globals.defaultFontBold);
 		checksumTitle.setFont(Globals.defaultFontBold);
-		checksumTitle.setToolTipText(configed.getResourceValue("LicensingInfo.client.checksum.info"));
+		checksumTitle.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
 		checksum.setFont(Globals.defaultFontBold);
-		checksum.setToolTipText(configed.getResourceValue("LicensingInfo.client.checksum.info"));
+		checksum.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
 		customerTitle.setFont(Globals.defaultFontBold);
 
-		JLabel labelExtendedView = new JLabel(configed.getResourceValue("LicensingInfo.buttonExtendedView"));
+		JLabel labelExtendedView = new JLabel(Configed.getResourceValue("LicensingInfo.buttonExtendedView"));
 		JCheckBox checkExtendedView = new JCheckBox(""
 
 				, extendedView);
 
 		checkExtendedView.addActionListener(actionEvent -> {
 			extendedView = checkExtendedView.isSelected();
-			logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
+			Logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
 			LicensingInfoMap.setReduced(!extendedView);
 			LicensingInfoMap.requestRefresh();
 			thePanel.reload();
 		});
 
-		IconAsButton buttonReload = new IconAsButton(configed.getResourceValue("ClientSelectionDialog.buttonReload"),
+		IconAsButton buttonReload = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonReload"),
 				"images/reload_blue16.png", "images/reload_blue16.png", "images/reload_blue16.png",
 				"images/reload_blue16.png");
 

@@ -6,14 +6,13 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class WaitingCycle extends SwingWorker<Void, Integer> {
 	private int maxWaitSecs;
 
 	private boolean ready = false;
 	private boolean stopped = false;
-	private long startActionMillis;
 	private boolean timeoutReached;
 
 	public WaitingCycle(int maxWaitSecs) {
@@ -25,11 +24,11 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 	public Void doInBackground() {
 		int waitSecs = 0;
 
-		startActionMillis = new GregorianCalendar().getTimeInMillis();
-		logging.info(this, " doInBackground start " + startActionMillis);
+		long startActionMillis = new GregorianCalendar().getTimeInMillis();
+		Logging.info(this, " doInBackground start " + startActionMillis);
 
 		while (!ready && !timeoutReached && !stopped) {
-			logging.debug(this, " WaitingCycle waits signal " + waitSecs);
+			Logging.debug(this, " WaitingCycle waits signal " + waitSecs);
 			// === serves like an external task
 			waitSecs++;
 			Globals.threadSleep(this, 1000);
@@ -42,13 +41,13 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 
 		}
 
-		logging.info(this, " doInBackground finish time in millis " + new GregorianCalendar().getTimeInMillis());
+		Logging.info(this, " doInBackground finish time in millis " + new GregorianCalendar().getTimeInMillis());
 
-		logging.info(this,
+		Logging.info(this,
 				" doInBackground finished: ready, stopped, waitSecs " + ready + ", " + stopped + ", " + waitSecs);
 
 		if (timeoutReached)
-			logging.warning(this, " doInBackground finished, timeoutReached");
+			Logging.warning(this, " doInBackground finished, timeoutReached");
 
 		return null;
 
@@ -67,7 +66,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 	//
 	@Override
 	public void done() {
-		logging.info(this, "done resp. is stopped ");
+		Logging.info(this, "done resp. is stopped ");
 	}
 
 	// own methods
@@ -81,7 +80,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 	}
 
 	public void stop() {
-		logging.info(this, "stop");
+		Logging.info(this, "stop");
 		stopped = true;
 		cancel(true);
 	}

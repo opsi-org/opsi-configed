@@ -7,7 +7,7 @@ import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.SelectElement;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.BigIntGreaterThanOperation;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiDataBigIntGreaterThanOperation extends BigIntGreaterThanOperation implements ExecutableOperation {
 	private String map;
@@ -26,7 +26,7 @@ public class OpsiDataBigIntGreaterThanOperation extends BigIntGreaterThanOperati
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		Map realMap = oClient.getMap(map);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
-			logging.debug(this, "key " + key + " not found!");
+			Logging.debug(this, "key " + key + " not found!");
 			return false;
 		}
 
@@ -39,7 +39,7 @@ public class OpsiDataBigIntGreaterThanOperation extends BigIntGreaterThanOperati
 				if ((Integer) realData > data)
 					return true;
 			} else {
-				logging.error(this, "data is no BigInteger!" + realData);
+				Logging.error(this, "data is no BigInteger!" + realData);
 			}
 		}
 		return false;

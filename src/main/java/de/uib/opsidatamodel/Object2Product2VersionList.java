@@ -3,7 +3,7 @@ package de.uib.opsidatamodel;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class Object2Product2VersionList extends java.util.HashMap<String, Product2VersionList> {
 	public void addPackage(String depot, String productName, String versionInfo) {
@@ -23,7 +23,7 @@ public class Object2Product2VersionList extends java.util.HashMap<String, Produc
 			versions.add(versionInfo);
 
 		if (versions.size() != 1) {
-			logging.warning(this,
+			Logging.warning(this,
 					"addPackage " + productName + " on depot " + depot + " has not got one version, but " + versions);
 		}
 	}

@@ -26,6 +26,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -39,14 +41,13 @@ import javax.swing.text.Position;
 import javax.swing.text.View;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class FEditPane extends FEdit implements DocumentListener, MouseListener, MouseMotionListener {
 	public static final Dimension AREA_DIMENSION = new Dimension(600, 300);
 	public static final String WINDOWS_LINK_INTERPRETER = "explorer.exe";
 	public static final String LINUX_LINK_INTERPRETER = "firefox";
-	private javax.swing.JScrollPane scrollpane;
-	private javax.swing.JTextPane textpane;
+	private JTextPane textpane;
 
 	protected LinkSearcher searcher;
 	protected Highlighter highlighter;
@@ -59,7 +60,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	public FEditPane(String initialText, String hint) {
 		super(initialText, hint);
-		logging.info(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
+		Logging.info(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
 
 		initFEditText();
 		setSingleLine(false);
@@ -71,7 +72,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	protected void initFEditText() {
-		scrollpane = new javax.swing.JScrollPane();
+		JScrollPane scrollpane = new javax.swing.JScrollPane();
 		textpane = new javax.swing.JTextPane();
 		scrollpane.setViewportView(textpane);
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -110,7 +111,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public void setStartText(String s) {
-		logging.debug(this, " FEeditPane setStartText: " + s);
+		Logging.debug(this, " FEeditPane setStartText: " + s);
 		super.setStartText(s);
 
 		textpane.setText(s);
@@ -142,12 +143,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		if (linkpos < 0)
 			return false;
 
-		linkpos++;
-		if (s0.length() <= linkpos)
-			// s0 has : but ends there
-			return false;
-
-		return true;
+		// s0 has : but ends there
+		return linkpos + 1 < s0.length();
 
 	}
 
@@ -250,7 +247,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			String line = getMarkedLine(textpane.viewToModel2D(p));
 
 			if (line != null) {
-				logging.info(this, " got link " + line);
+				Logging.info(this, " got link " + line);
 				cmdLauncher.launch("\"" + line + "\"");
 			}
 		}

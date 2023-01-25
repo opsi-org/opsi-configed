@@ -1,8 +1,10 @@
 package de.uib.configed.guidata;
 
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.swing.JComponent;
@@ -11,24 +13,23 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class RequirementsTableModel extends javax.swing.table.AbstractTableModel {
 
-	final String initString = "";
-	TreeSet keySet;
+	Set<String> keySet;
 	Object[] keyArray;
 	final Object[] zeroArray = new Object[] {};
 
-	Map requMap;
-	Map requBeforeMap;
-	Map requAfterMap;
-	Map requDeinstallMap;
+	Map<String, String> requMap;
+	Map<String, String> requBeforeMap;
+	Map<String, String> requAfterMap;
+	Map<String, String> requDeinstallMap;
 
 	PersistenceController perCon;
 
@@ -44,7 +45,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	}
 
 	public RequirementsTableModel(PersistenceController persis) {
-		logging.info(this, "creating");
+		Logging.info(this, "creating");
 		perCon = persis;
 		setActualProduct(""); // initializing
 	}
@@ -76,7 +77,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		if (product != null && !product.trim().equals("")) {
 			retrieveRequirements(depotId, product);
 
-			keySet = new TreeSet();
+			keySet = new TreeSet<>();
 			if (requMap != null && requMap.keySet() != null) {
 				keySet.addAll(requMap.keySet());
 			}
@@ -112,17 +113,17 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		String result = "";
 		switch (col) {
 		case 0:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
+			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requiredProduct");
 			break;
 
 		case 1:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
+			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeDefault");
 			break;
 		case 2:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
+			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeBefore");
 			break;
 		case 3:
-			result = configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
+			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
 			break;
 
 		}
@@ -149,11 +150,11 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				result = myKey;
 				break;
 			case 1:
-				result = indent + configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+				result = indent + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
 						+ " setup";
 				break;
 			case 2:
-				result = indent + configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
+				result = indent + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
 						+ " uninstall";
 				break;
 			}
@@ -167,11 +168,10 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 						result = requMap.get(myKey);
 						break;
 					}
-				} else if (rowTypeIndex == 2) {
-					if (requDeinstallMap != null) {
-						result = requDeinstallMap.get(myKey);
-						break;
-					}
+				} else if (rowTypeIndex == 2 && requDeinstallMap != null) {
+					result = requDeinstallMap.get(myKey);
+					break;
+
 				}
 
 			case 2:
@@ -200,17 +200,6 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		return result;
 	}
 
-	// TODO when is a cell editable? This returns always true...
-	@Override
-	public boolean isCellEditable(int row, int col) {
-		int rowTypeIndex = row % noOfRowTypes;
-		if (rowTypeIndex == 1 && col == 0)
-			return false;
-		if (rowTypeIndex == 2 && col == 0)
-			return false;
-		return false;
-	}
-
 	public MyTableCellRenderer getTableCellRenderer() {
 		return new MyTableCellRenderer();
 	}
@@ -224,7 +213,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 			java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
 					column);
 
-			colorizer.colorize(cell, isSelected, row, column);
+			colorizer.colorize(cell, row, column);
 
 			if (cell instanceof JComponent)
 				((JComponent) cell).setToolTipText("" + value);
@@ -239,7 +228,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 				((JLabel) cell).setHorizontalTextPosition(SwingConstants.LEADING);
 
-				((JLabel) cell).setToolTipText(configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
+				((JLabel) cell).setToolTipText(Configed.getResourceValue("ProductInfoPane.RequirementsTable.warning"));
 
 				return cell;
 
@@ -260,7 +249,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 			cellValue = value;
 		}
 
-		public void colorize(java.awt.Component cell, boolean isSelected, int row, int col) {
+		public void colorize(java.awt.Component cell, int row, int col) {
 			cell.setForeground(Globals.lightBlack);
 
 			int kindOfRow = row % 3;
@@ -287,7 +276,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	}
 
 	protected class MyWarningColorizer {
-		public void colorize(java.awt.Component cell, boolean isSelected, int row, int col) {
+		public void colorize(Component cell) {
 			cell.setBackground(Globals.ACTION_COLOR);
 		}
 	}
@@ -296,11 +285,11 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		MyWarningColorizer colorizer = new MyWarningColorizer();
 
 		@Override
-		public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-				boolean hasFocus, int row, int col) {
-			java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int col) {
+			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
 
-			colorizer.colorize(cell, isSelected, row, col);
+			colorizer.colorize(cell);
 
 			if (cell instanceof JComponent)
 				((JComponent) cell).setToolTipText("" + value);

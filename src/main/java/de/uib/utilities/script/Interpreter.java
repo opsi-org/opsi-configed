@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 //a very rough class for simple command interpreting
 public class Interpreter {
 
-	protected Map<String, Object> specialValues;
+	protected Map<String, String> specialValues;
 
 	private String command;
 
@@ -54,10 +55,7 @@ public class Interpreter {
 
 				}
 			} else if (blankDelims.indexOf(s) > -1) {
-				if (partBuff == null)
-				// no buff started, real split
-				{
-				} else
+				if (partBuff != null)
 					// buff started
 					partBuff.append(s);
 			} else
@@ -89,22 +87,22 @@ public class Interpreter {
 			specialValues.put(specials[i], "");
 	}
 
-	public void setValues(Map<String, Object> givenValues) {
-		for (String key : givenValues.keySet()) {
-			if (specialValues.get(key) == null)
-				logging.warning(this, "value set for an unknown key");
+	public void setValues(Map<String, String> givenValues) {
+		for (Entry<String, String> givenEntry : givenValues.entrySet()) {
+			if (specialValues.get(givenEntry.getKey()) == null)
+				Logging.warning(this, "value set for an unknown key");
 			else
-				specialValues.put(key, "" + givenValues.get(key));
+				specialValues.put(givenEntry.getKey(), givenEntry.getValue());
 		}
 	}
 
 	public String interpret() {
-		for (String key : specialValues.keySet()) {
-			logging.debug(this, "interpret: replace " + key + " by " + specialValues.get(key));
-			command = command.replace(key, (String) specialValues.get(key));
+		for (Entry<String, String> specialEntry : specialValues.entrySet()) {
+			Logging.debug(this, "interpret: replace " + specialEntry.getKey() + " by " + specialEntry.getValue());
+			command = command.replace(specialEntry.getKey(), specialEntry.getValue());
 		}
 
-		logging.debug(this, "produced command " + command);
+		Logging.debug(this, "produced command " + command);
 		return command;
 	}
 

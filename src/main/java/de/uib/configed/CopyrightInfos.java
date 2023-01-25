@@ -9,7 +9,7 @@ import java.util.List;
  */
 
 public class CopyrightInfos {
-	static String discard, major, minor, update, build;
+
 	static final String COMPLETE_VERSION_INFO = System.getProperty("java.runtime.version");
 
 	private static final List<String> infos;
@@ -26,7 +26,7 @@ public class CopyrightInfos {
 		infos.add("running on java version " + COMPLETE_VERSION_INFO);
 		infos.add("");
 		infos.add("");
-		infos.add(configed.getResourceValue("CopyrightInfos.thanksTo"));
+		infos.add(Configed.getResourceValue("CopyrightInfos.thanksTo"));
 		infos.add("");
 		infos.add("commons-io Apache library");
 		infos.add("http://www.apache.org/licenses/");

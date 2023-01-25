@@ -30,7 +30,7 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 		Component result = super.getTableCellRendererComponent(table, sValue, isSelected, hasFocus, row, column);
 
 		if (column == 1)
-			merge_colorize(result, value);
+			mergeColorize(result, value);
 
 		return result;
 	}
@@ -48,7 +48,7 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 		return result;
 	}
 
-	protected void merge_colorize(Component comp, Object value) {
+	protected void mergeColorize(Component comp, Object value) {
 
 		if // ( value instanceof ListMerger && !((ListMerger)value).hasCommonValue() )
 		(value == ListMerger.NO_COMMON_VALUE) {

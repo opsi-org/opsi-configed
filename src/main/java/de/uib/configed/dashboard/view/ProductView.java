@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.dashboard.chart.ProductComparison;
 import de.uib.configed.dashboard.chart.ProductStatusComparison;
@@ -91,10 +91,10 @@ public class ProductView implements View {
 		unusedProductsNumberLabel.setText(String.valueOf(ProductData.getUnusedProducts().size()));
 
 		productStatusChoiceBox.getItems().clear();
-		productStatusChoiceBox.getItems().add(configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
-		productStatusChoiceBox.getItems().add(configed.getResourceValue("Dashboard.products.installed"));
-		productStatusChoiceBox.getItems().add(configed.getResourceValue("Dashboard.products.failed"));
-		productStatusChoiceBox.getItems().add(configed.getResourceValue("Dashboard.products.unused"));
+		productStatusChoiceBox.getItems().add(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
+		productStatusChoiceBox.getItems().add(Configed.getResourceValue("Dashboard.products.installed"));
+		productStatusChoiceBox.getItems().add(Configed.getResourceValue("Dashboard.products.failed"));
+		productStatusChoiceBox.getItems().add(Configed.getResourceValue("Dashboard.products.unused"));
 		productStatusChoiceBox.getSelectionModel().selectFirst();
 
 		productIdTableColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
@@ -120,16 +120,16 @@ public class ProductView implements View {
 		}, productSearchbarTextField.textProperty()));
 		productStatusFilter.bind(Bindings.createObjectBinding(() -> product -> {
 			if (productStatusChoiceBox.getValue() == null || productStatusChoiceBox.getValue()
-					.equals(configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
+					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
 			}
 
-			return productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.installed"))
-					&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.installed"))
-					|| productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.failed"))
-							&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.failed"))
-					|| productStatusChoiceBox.getValue().equals(configed.getResourceValue("Dashboard.products.unused"))
-							&& product.getStatus().equals(configed.getResourceValue("Dashboard.products.unused"));
+			return productStatusChoiceBox.getValue().equals(Configed.getResourceValue("Dashboard.products.installed"))
+					&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.installed"))
+					|| productStatusChoiceBox.getValue().equals(Configed.getResourceValue("Dashboard.products.failed"))
+							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.failed"))
+					|| productStatusChoiceBox.getValue().equals(Configed.getResourceValue("Dashboard.products.unused"))
+							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.unused"));
 		}, productStatusChoiceBox.valueProperty()));
 
 		filteredData.predicateProperty().bind(Bindings.createObjectBinding(

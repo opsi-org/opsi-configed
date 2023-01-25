@@ -10,9 +10,9 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class JTextHideField extends javax.swing.JPanel {
 	JPasswordField invisibleField;
@@ -44,7 +44,6 @@ public class JTextHideField extends javax.swing.JPanel {
 
 		@Override
 		public void remove(int offs, int len) {
-			return;
 		}
 	}
 
@@ -71,7 +70,7 @@ public class JTextHideField extends javax.swing.JPanel {
 			if (!multiValue)
 				toggleHidden();
 		});
-		button.setToolTipText(configed.getResourceValue("JTextHideField.toggleHide"));
+		button.setToolTipText(Configed.getResourceValue("JTextHideField.toggleHide"));
 
 		setupPanel();
 		setEnabled(false);
@@ -85,14 +84,13 @@ public class JTextHideField extends javax.swing.JPanel {
 				.addGroup(layout.createParallelGroup()
 						.addComponent(invisibleField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE)
 						.addComponent(visibleField, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, Short.MAX_VALUE))
-				.addComponent(button, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-				.addGap(0, Globals.ICON_WIDTH, Globals.BUTTON_WIDTH)));
+				.addComponent(button, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)));
 
 		layout.setVerticalGroup(layout.createParallelGroup()
 				.addGroup(layout.createParallelGroup()
 						.addComponent(invisibleField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(visibleField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
-				.addComponent(button, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2));
+				.addComponent(button, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
 	}
 
 	public void setHidden() {
@@ -108,7 +106,7 @@ public class JTextHideField extends javax.swing.JPanel {
 	}
 
 	public void setMultiValue(boolean b) {
-		logging.info(this, "************+ setMultiValue " + b);
+		Logging.info(this, "************+ setMultiValue " + b);
 		multiValue = b;
 		if (multiValue) {
 			setText("");

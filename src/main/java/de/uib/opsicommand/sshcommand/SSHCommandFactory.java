@@ -14,6 +14,7 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import de.uib.configed.Configed;
 /*
  * configed - configuration editor for client work stations in opsi
  * (open pc server integration) www.opsi.org
@@ -30,31 +31,27 @@ import org.json.JSONObject;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.MainFrame;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This Class handles SSHCommands.
  **/
 public class SSHCommandFactory {
 	/** final string commands for linux terminal **/
-	public final String str_replacement_dir = "*.dir.*";
+	public static final String STRING_REPLACEMENT_DIRECTORY = "*.dir.*";
 	// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
-	public final String str_command_getLinuxCommands = "COMMANDS=`echo -n $PATH | xargs -d : -I {} find {} -maxdepth 1 -executable -type f -printf '%P\\n'` ; ALIASES=`alias | cut -d '=' -f 1`; echo \"$COMMANDS\"$'\\n'\"$ALIASES\" | sort -u ";
-	public final String str_command_getDirectories = "ls --color=never -d *.dir.*/*/";
-	public final String str_command_getOpsiFiles = "ls --color=never *.dir.*/*.opsi";
-	public final String str_command_getVersions = "grep version: *.dir.* --max-count=2  ";
-	public final String str_command_catDir = "cat *.dir.*OPSI/control | grep \"id: \"";
-	public final String str_command_fileexists = "[ -f .filename. ] &&  rm .filename. && echo \"File .filename. removed\" || echo \"File did not exist\"";
-	public final String str_command_fileexists_notremove = "[ -d .filename. ] && echo \"File exists\" || echo \"File not exist\"";
+	public static final String STRING_COMMAND_GET_LINUX_COMMANDS = "COMMANDS=`echo -n $PATH | xargs -d : -I {} find {} -maxdepth 1 -executable -type f -printf '%P\\n'` ; ALIASES=`alias | cut -d '=' -f 1`; echo \"$COMMANDS\"$'\\n'\"$ALIASES\" | sort -u ";
+	public static final String STRING_COMMAND_GET_DIRECTORIES = "ls --color=never -d *.dir.*/*/";
+	public static final String STRING_COMMAND_GET_OPSI_FILES = "ls --color=never *.dir.*/*.opsi";
+	public static final String STRING_COMMAND_GET_VERSIONS = "grep version: *.dir.* --max-count=2  ";
+	public static final String STRING_COMMAND_CAT_DIRECTORY = "cat *.dir.*OPSI/control | grep \"id: \"";
+	public static final String STRING_COMMAND_FILE_EXISTS_NOT_REMOVE = "[ -d .filename. ] && echo \"File exists\" || echo \"File not exist\"";
 
-	public final String str_replacement_filename = ".filename.";
-	public final String str_file_exists = "File exists";
-	public final String str_file_not_exists = "File not exists";
+	public static final String STRING_REPLACEMENT_FILENAME = ".filename.";
 
-	public final String opsipathVarRepository = "/var/lib/opsi/repository/";
-	public final String opsipathVarDepot = "/var/lib/opsi/depot/";
+	public static final String OPSI_PATH_VAR_REPOSITORY = "/var/lib/opsi/repository/";
+	public static final String OPSI_PATH_VAR_DEPOT = "/var/lib/opsi/depot/";
 
 	/** ConfigedMain instance **/
 	private ConfigedMain main;
@@ -66,24 +63,24 @@ public class SSHCommandFactory {
 	 **/
 	private List<Map<java.lang.String, java.lang.Object>> commandlist;
 	/** List<SSHCommand_Template> list elements are sshcommands **/
-	private List<SSHCommand_Template> sshcommand_list;
+	private List<SSHCommandTemplate> sshCommandList;
 	/** list of known menus **/
-	private List<String> list_knownMenus;
+	private List<String> listKnownMenus;
 	/** list of known parent menus **/
-	private List<String> list_knownParents;
+	private List<String> listKnownParents;
 
 	/** static String for parent null ("Server-Konsole") **/
-	public static final String parentNull = configed.getResourceValue("MainFrame.jMenuServer");
+	public static final String PARENT_NULL = Configed.getResourceValue("MainFrame.jMenuServer");
 	/**
 	 * static String defined as language independent parent for own commands
 	 **/
-	public static final String parentdefaultForOwnCommands = "...";
+	public static final String PARENT_DEFAULT_FOR_OWN_COMMANDS = "...";
 	/** static String for specific parent ("opsi") **/
-	public static final String parentOpsi = configed.getResourceValue("MainFrame.jMenuOpsi");
+	public static final String PARENT_OPSI = Configed.getResourceValue("MainFrame.jMenuOpsi");
 	/** static String for new command ("<Neuer Befehl>") **/
-	public static final String menuNew = configed.getResourceValue("SSHConnection.CommandControl.menuText_newCommand");
+	public static final String MENU_NEW = Configed.getResourceValue("SSHConnection.CommandControl.menuText_newCommand");
 	/** default position is 0 **/
-	public final int position_default = 0;
+	public static final int POSITION_DEFAULT = 0;
 
 	public static int successfulConnectObservedCount = 0;
 
@@ -92,42 +89,42 @@ public class SSHCommandFactory {
 	/** default parameter replace id ends with >>> **/
 
 	/** setting ssh_colored_output per default true **/
-	public static boolean ssh_colored_output = true;
+	public static boolean sshColoredOutput = true;
 	/** setting ssh_always_exec_in_background per default false **/
-	public static boolean ssh_always_exec_in_background = false;
+	public static boolean sshAlwaysExecInBackground = false;
 	/** all static commands which need run-time parameter **/
-	public static List<de.uib.opsicommand.sshcommand.SSHCommand> ssh_commands_param = new LinkedList<>();
+	public static List<de.uib.opsicommand.sshcommand.SSHCommand> sshCommandsParam = new ArrayList<>();
 
 	/** static final name of field "id" */
-	public final String command_map_id = "id";
+	public static final String COMMAND_MAP_ID = "id";
 	/** static final name of field "menuText" */
-	public final String command_map_menuText = "menuText";
+	public static final String COMMAND_MAP_MENU_TEXT = "menuText";
 	/** static final name of field "parentMenuText" */
-	public final String command_map_parentMenuText = "parentMenuText";
+	public static final String COMMAND_MAP_PARENT_MENU_TEXT = "parentMenuText";
 	/** static final name of field "tooltipText" */
-	public final String command_map_tooltipText = "tooltipText";
+	public static final String COMMAND_MAP_TOOLTIP_TEXT = "tooltipText";
 	/** static final name of field "position" */
-	public final String command_map_position = "position";
+	public static final String COMMAND_MAP_POSITION = "position";
 	/** static final name of field "needSudo" */
-	public final String command_map_needSudo = "needSudo";
+	public static final String COMMAND_MAP_NEED_SUDO = "needSudo";
 	/** static final name of field "commands" */
-	public final String command_map_commands = "commands";
+	public static final String COMMAND_MAP_COMMANDS = "commands";
 
 	SSHConnectExec connection = null;
-	public static final String CONNECTED = configed.getResourceValue("SSHConnection.connected");
-	public static final String CONNECTION_NOT_ALLOWED = configed
+	public static final String CONNECTED = Configed.getResourceValue("SSHConnection.connected");
+	public static final String CONNECTION_NOT_ALLOWED = Configed
 			.getResourceValue("SSHConnection.CONNECTION_NOT_ALLOWED");
-	public static final String UNKNOWN = configed.getResourceValue("SSHConnection.unknown");
-	public static final String NOT_CONNECTED = configed.getResourceValue("SSHConnection.not_connected");
+	public static final String UNKNOWN = Configed.getResourceValue("SSHConnection.unknown");
+	public static final String NOT_CONNECTED = Configed.getResourceValue("SSHConnection.not_connected");
 
 	// SSHCommandFactory.getInstance().sudo_text
-	public static String sudo_failed_text = configed.getResourceValue("SSHConnection.sudoFailedText");
-	public static String sudo_text = "sudo -S -p \"" + sudo_failed_text + "\" ";
+	public static final String SUDO_FAILED_TEXT = Configed.getResourceValue("SSHConnection.sudoFailedText");
+	public static final String SUDO_TEXT = "sudo -S -p \"" + SUDO_FAILED_TEXT + "\" ";
 
-	public final String sshusr = "<<!sshuser!>>";
-	public final String sshhst = "<<!sshhost!>>";
+	public static final String SSH_USER = "<<!sshuser!>>";
+	public static final String SSH_HOST = "<<!sshhost!>>";
 
-	public final String confidential = "***confidential***";
+	public static final String CONFIDENTIAL = "***confidential***";
 	List<String> createdProducts = new ArrayList<>();
 
 	SSHCommandParameterMethods pmethodHandler = null;
@@ -140,7 +137,7 @@ public class SSHCommandFactory {
 	 **/
 	private SSHCommandFactory(ConfigedMain main) {
 		this.main = main;
-		logging.info(this, "SSHComandFactory new instance");
+		Logging.info(this, "SSHComandFactory new instance");
 		instance = this;
 		addAditionalParamCommands();
 		connection = new SSHConnectExec(this.main);
@@ -186,19 +183,19 @@ public class SSHCommandFactory {
 	private void addAditionalParamCommands() {
 		if (!(main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
 				|| main.getOpsiVersion().compareTo("4.1") < 0))
-			ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandPackageUpdater());
-		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall());
-		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall());
-		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandOpsimakeproductfile());
-		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandWget());
-		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandModulesUpload());
+			sshCommandsParam.add(new de.uib.opsicommand.sshcommand.CommandPackageUpdater());
+		sshCommandsParam.add(new de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall());
+		sshCommandsParam.add(new de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall());
+		sshCommandsParam.add(new de.uib.opsicommand.sshcommand.CommandOpsimakeproductfile());
+		sshCommandsParam.add(new de.uib.opsicommand.sshcommand.CommandWget());
+		sshCommandsParam.add(new de.uib.opsicommand.sshcommand.CommandModulesUpload());
 		if (!(main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
 				|| main.getOpsiVersion().compareTo("4.1") < 0))
-			ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandRepositoryUpload());
+			sshCommandsParam.add(new de.uib.opsicommand.sshcommand.CommandRepositoryUpload());
 
-		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandOpsiSetRights());
+		sshCommandsParam.add(new de.uib.opsicommand.sshcommand.CommandOpsiSetRights());
 
-		ssh_commands_param.add(new de.uib.opsicommand.sshcommand.CommandDeployClientAgent());
+		sshCommandsParam.add(new de.uib.opsicommand.sshcommand.CommandDeployClientAgent());
 
 	}
 
@@ -237,7 +234,7 @@ public class SSHCommandFactory {
 	 * Sets the commandlist to null
 	 **/
 	public void retrieveSSHCommandListRequestRefresh() {
-		logging.info(this, "retrieveSSHCommandListRequestRefresh commandlist null");
+		Logging.info(this, "retrieveSSHCommandListRequestRefresh commandlist null");
 		commandlist = null;
 	}
 
@@ -253,9 +250,9 @@ public class SSHCommandFactory {
 	 * @param c   (commands): LinkedList<String>
 	 * @return new SSHCommand_Template
 	 **/
-	public SSHCommand_Template buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
+	public SSHCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
 			List<String> c) {
-		SSHCommand_Template com = new SSHCommand_Template(id, c, // Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
+		SSHCommandTemplate com = new SSHCommandTemplate(id, c, // Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
 				// ArrayList! JsonArray muss nicht sortiert sein!"
 				mt, ns, pmt, ttt, p);
 		return com;
@@ -267,51 +264,51 @@ public class SSHCommandFactory {
 	 * 
 	 * @return List<SSHCommand_Template>
 	 **/
-	public List<SSHCommand_Template> retrieveSSHCommandList() {
-		logging.info(this, "retrieveSSHCommandList ");
+	public List<SSHCommandTemplate> retrieveSSHCommandList() {
+		Logging.info(this, "retrieveSSHCommandList ");
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
 
-		sshcommand_list = new ArrayList<>();
-		list_knownMenus = new ArrayList<>();
-		list_knownParents = new ArrayList<>();
+		sshCommandList = new ArrayList<>();
+		listKnownMenus = new ArrayList<>();
+		listKnownParents = new ArrayList<>();
 
 		if (!commandlist.isEmpty())
-			list_knownParents.add(parentdefaultForOwnCommands);
+			listKnownParents.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
 
-		list_knownMenus.add(parentdefaultForOwnCommands);
+		listKnownMenus.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
 
 		for (Map<java.lang.String, java.lang.Object> map : commandlist) {
-			SSHCommand_Template com = buildSSHCommand(((String) map.get(command_map_id)),
-					((String) map.get(command_map_parentMenuText)), ((String) map.get(command_map_menuText)),
-					((String) map.get(command_map_tooltipText)), ((int) map.get(command_map_position)),
-					((boolean) map.get(command_map_needSudo)), null);
-			if (map.get(command_map_commands) != null) {
+			SSHCommandTemplate com = buildSSHCommand(((String) map.get(COMMAND_MAP_ID)),
+					((String) map.get(COMMAND_MAP_PARENT_MENU_TEXT)), ((String) map.get(COMMAND_MAP_MENU_TEXT)),
+					((String) map.get(COMMAND_MAP_TOOLTIP_TEXT)), ((int) map.get(COMMAND_MAP_POSITION)),
+					((boolean) map.get(COMMAND_MAP_NEED_SUDO)), null);
+			if (map.get(COMMAND_MAP_COMMANDS) != null) {
 				// Achtung Reihenfolge könnte sich ändern !" toList = ArrayList! JsonArray muss
 				// nicht sortiert sein!"
-				List com_commands = new LinkedList<>(((JSONArray) map.get(command_map_commands)).toList());
-				com_commands.add("echo ... ");
-				com_commands.add("echo READY");
-				com.setCommands(com_commands);
+				List commandCommands = new LinkedList<>(((JSONArray) map.get(COMMAND_MAP_COMMANDS)).toList());
+				commandCommands.add("echo ... ");
+				commandCommands.add("echo READY");
+				com.setCommands(commandCommands);
 			}
-			list_knownMenus.add(com.getMenuText());
+			listKnownMenus.add(com.getMenuText());
 
 			String parent = com.getParentMenuText();
 
-			logging.info(this, "parent menu text " + parent);
+			Logging.info(this, "parent menu text " + parent);
 
-			if (parent == null || parent.equalsIgnoreCase("null") || parent.equals(parentdefaultForOwnCommands))
-				parent = parentdefaultForOwnCommands;
-			if (!list_knownParents.contains(parent))
-				list_knownParents.add(parent);
+			if (parent == null || parent.equalsIgnoreCase("null") || parent.equals(PARENT_DEFAULT_FOR_OWN_COMMANDS))
+				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
+			if (!listKnownParents.contains(parent))
+				listKnownParents.add(parent);
 
-			logging.info(this, "parent menu text changed  " + parent);
+			Logging.info(this, "parent menu text changed  " + parent);
 
-			logging.info(this, "list_knownParents " + list_knownParents);
+			Logging.info(this, "list_knownParents " + listKnownParents);
 
-			sshcommand_list.add(com);
+			sshCommandList.add(com);
 		}
-		return sshcommand_list;
+		return sshCommandList;
 	}
 
 	/**
@@ -322,8 +319,8 @@ public class SSHCommandFactory {
 	public List<String> getSSHCommandMenuNames() {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
-		Collections.sort(list_knownMenus, (String s1, String s2) -> s1.compareToIgnoreCase(s2));
-		return list_knownMenus;
+		Collections.sort(listKnownMenus, (String s1, String s2) -> s1.compareToIgnoreCase(s2));
+		return listKnownMenus;
 	}
 
 	/**
@@ -334,8 +331,8 @@ public class SSHCommandFactory {
 	public List<String> getSSHCommandMenuParents() {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
-		Collections.sort(list_knownParents, (String s1, String s2) -> s1.compareToIgnoreCase(s2));
-		return list_knownParents;
+		Collections.sort(listKnownParents, (String s1, String s2) -> s1.compareToIgnoreCase(s2));
+		return listKnownParents;
 	}
 
 	/**
@@ -345,25 +342,25 @@ public class SSHCommandFactory {
 	 * @return java.util.LinkedHashMap<String,List<SSHCommand_Template>>
 	 *         sortedComs
 	 **/
-	public Map<String, List<SSHCommand_Template>> getSSHCommandMapSortedByParent() {
+	public Map<String, List<SSHCommandTemplate>> getSSHCommandMapSortedByParent() {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
 
-		logging.info(this, "getSSHCommandMapSortedByParent sorting commands ");
-		Collections.sort(sshcommand_list);
+		Logging.info(this, "getSSHCommandMapSortedByParent sorting commands ");
+		Collections.sort(sshCommandList);
 
-		java.util.LinkedHashMap<String, List<SSHCommand_Template>> sortedComs = new LinkedHashMap<>();
+		java.util.LinkedHashMap<String, List<SSHCommandTemplate>> sortedComs = new LinkedHashMap<>();
 
-		sortedComs.put(parentdefaultForOwnCommands, new LinkedList<>());
-		sortedComs.put(parentOpsi, new LinkedList<>());
+		sortedComs.put(PARENT_DEFAULT_FOR_OWN_COMMANDS, new LinkedList<>());
+		sortedComs.put(PARENT_OPSI, new LinkedList<>());
 
-		for (SSHCommand_Template com : sshcommand_list) {
+		for (SSHCommandTemplate com : sshCommandList) {
 			String parent = com.getParentMenuText();
 			if ((parent == null) || (parent.trim().equals(""))) {
-				parent = parentdefaultForOwnCommands;
+				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 
 			}
-			List parentList = new LinkedList<>();
+			List<SSHCommandTemplate> parentList = new LinkedList<>();
 			if (sortedComs.containsKey(parent))
 				parentList = sortedComs.get(parent);
 			else
@@ -381,8 +378,8 @@ public class SSHCommandFactory {
 	 * @return List<SSHCommand> ssh_commands_param
 	 **/
 	public List<SSHCommand> getSSHCommandParameterList() {
-		logging.info(this, "getSSHCommandParameterList ");
-		return ssh_commands_param;
+		Logging.info(this, "getSSHCommandParameterList ");
+		return sshCommandsParam;
 	}
 
 	/**
@@ -391,10 +388,10 @@ public class SSHCommandFactory {
 	 * @param menu
 	 * @return SSHCommand_Template
 	 **/
-	public SSHCommand_Template getSSHCommandByMenu(String menu) {
-		if (sshcommand_list == null)
+	public SSHCommandTemplate getSSHCommandByMenu(String menu) {
+		if (sshCommandList == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
-		for (SSHCommand_Template c : sshcommand_list)
+		for (SSHCommandTemplate c : sshCommandList)
 			if (c.getMenuText().equals(menu))
 				return c;
 		return null;
@@ -403,86 +400,83 @@ public class SSHCommandFactory {
 	/**
 	 * Build an Map of key-value-pairs from a SSHCommand_Template
 	 * 
-	 * @param SSHCommand_Template
+	 * @param SSHCommandTemplate
 	 * @return Map<String,Object> command
 	 **/
-	private Map<String, Object> buildCommandMap(SSHCommand_Template c) {
+	private Map<String, Object> buildCommandMap(SSHCommandTemplate c) {
 		Map<String, Object> com = new HashMap<>();
 
-		com.put(command_map_menuText, c.getMenuText());
-		com.put(command_map_parentMenuText, c.getParentMenuText());
-		com.put(command_map_tooltipText, c.getToolTipText());
-		com.put(command_map_position, c.getPriority());
-		com.put(command_map_needSudo, c.needSudo());
+		com.put(COMMAND_MAP_MENU_TEXT, c.getMenuText());
+		com.put(COMMAND_MAP_PARENT_MENU_TEXT, c.getParentMenuText());
+		com.put(COMMAND_MAP_TOOLTIP_TEXT, c.getToolTipText());
+		com.put(COMMAND_MAP_POSITION, c.getPriority());
+		com.put(COMMAND_MAP_NEED_SUDO, c.needSudo());
 		return com;
 	}
 
 	/**
 	 * Create or update an command (update local lists)
 	 * 
-	 * @param SSHCommand_Template command
+	 * @param SSHCommandTemplate command
 	 **/
-	public boolean saveSSHCommand(SSHCommand_Template command) {
-		logging.info(this, "saveSSHCommand command " + command.toString());
+	public boolean saveSSHCommand(SSHCommandTemplate command) {
+		Logging.info(this, "saveSSHCommand command " + command.toString());
 		List<Object> jsonObjects = new ArrayList<>();
 		try {
 			JSONObject jsComMap = new JSONObject(buildCommandMap(command));
 			JSONArray jsComArrCom = new JSONArray(((SSHMultiCommand) command).getCommandsRaw());
-			jsComMap.put(command_map_commands, jsComArrCom);
+			jsComMap.put(COMMAND_MAP_COMMANDS, jsComArrCom);
 			jsonObjects.add(jsComMap);
 		} catch (Exception e) {
-			logging.warning(this, "saveSSHCommand, exception occurred", e);
+			Logging.warning(this, "saveSSHCommand, exception occurred", e);
 		}
 
-		if (list_knownMenus.contains(command.getMenuText())) {
-			logging.info(this, "saveSSHCommand sshcommand_list.contains(command) true");
+		if (listKnownMenus.contains(command.getMenuText())) {
+			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) true");
 			if (main.getPersistenceController().updateSSHCommand(jsonObjects)) {
-				((SSHCommand_Template) sshcommand_list
-						.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText())))).update(command);
+				sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))).update(command);
 				return true;
 			}
 		} else {
-			logging.info(this, "saveSSHCommand sshcommand_list.contains(command) false");
+			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) false");
 			if (main.getPersistenceController().createSSHCommand(jsonObjects)) {
-				sshcommand_list.add(command);
-				list_knownMenus.add(command.getMenuText());
+				sshCommandList.add(command);
+				listKnownMenus.add(command.getMenuText());
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public boolean isSSHCommandEqualSavedCommand(SSHCommand_Template command) {
-		if (list_knownMenus.contains(command.getMenuText())) {
-			logging.info(this, "isSSHCommandEqualSavedCommand compare command " + command.toString());
-			if (sshcommand_list == null) {
-				logging.info(this, "isSSHCommandEqualSavedCommand  command_list == null ");
+	public boolean isSSHCommandEqualSavedCommand(SSHCommandTemplate command) {
+		if (listKnownMenus.contains(command.getMenuText())) {
+			Logging.info(this, "isSSHCommandEqualSavedCommand compare command " + command.toString());
+			if (sshCommandList == null) {
+				Logging.info(this, "isSSHCommandEqualSavedCommand  command_list == null ");
 				return false;
 			}
-			if (sshcommand_list.isEmpty()) {
-				logging.info(this, "isSSHCommandEqualSavedCommand  command_list has no elements ");
+			if (sshCommandList.isEmpty()) {
+				Logging.info(this, "isSSHCommandEqualSavedCommand  command_list has no elements ");
 				return false;
 			}
 
 			if (getSSHCommandByMenu(command.getMenuText()) == null) {
-				logging.info(this,
+				Logging.info(this,
 						" isSSHCommandEqualSavedCommand getSSHCommandByMenu( command.getMenuText() ) is null ");
 				return false;
 			}
 
-			logging.info(this, "isSSHCommandEqualSavedCommand  command_list " + (sshcommand_list));
+			Logging.info(this, "isSSHCommandEqualSavedCommand  command_list " + (sshCommandList));
 
-			logging.info(this, "isSSHCommandEqualSavedCommand with found " + ((SSHCommand_Template) sshcommand_list
-					.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText())))));
-			logging.info(this, "isSSHCommandEqualSavedCommand equals " + ((SSHCommand_Template) sshcommand_list
-					.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText())))).equals(command));
+			Logging.info(this, "isSSHCommandEqualSavedCommand with found "
+					+ sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))));
+			Logging.info(this, "isSSHCommandEqualSavedCommand equals " + sshCommandList
+					.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))).equals(command));
 
-			if (((SSHCommand_Template) sshcommand_list
-					.get(sshcommand_list.indexOf(getSSHCommandByMenu(command.getMenuText())))).equals(command)) {
-				return true;
-			} else
-				return false;
+			return sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText())))
+					.equals(command);
 		}
+
 		return false;
 	}
 
@@ -492,13 +486,13 @@ public class SSHCommandFactory {
 	 * @param String menu
 	 **/
 	public void deleteSSHCommandByMenu(String menu) {
-		logging.info(this, "deleteSSHCommand menu " + menu);
+		Logging.info(this, "deleteSSHCommand menu " + menu);
 		// return
 		List<String> jsonObjects = new ArrayList<>();
 		jsonObjects.add(menu);
 		if (main.getPersistenceController().deleteSSHCommand(jsonObjects)) {
-			sshcommand_list.remove(getSSHCommandByMenu(menu));
-			list_knownMenus.remove(menu);
+			sshCommandList.remove(getSSHCommandByMenu(menu));
+			listKnownMenus.remove(menu);
 		}
 	}
 
@@ -534,40 +528,40 @@ public class SSHCommandFactory {
 	}
 
 	public void testConnection(String user, String host) {
-		SSHCommand command = new Empty_Command(Empty_Command.TESTCOMMAND, Empty_Command.TESTCOMMAND, "", false);
+		SSHCommand command = new EmptyCommand(EmptyCommand.TESTCOMMAND, EmptyCommand.TESTCOMMAND, "", false);
 		connectionState = UNKNOWN;
 		try {
 			if (connection.connect(command)) {
 				String result = connection.exec(command, false);
-				logging.info(this, "connection.exec produces " + result);
+				Logging.info(this, "connection.exec produces " + result);
 				if (result == null || result.trim().equals("")) {
-					logging.info(this, "testConnection not allowed");
+					Logging.info(this, "testConnection not allowed");
 					connectionState = CONNECTION_NOT_ALLOWED;
-					logging.warning(this, "cannot connect to " + user + "@" + host);
+					Logging.warning(this, "cannot connect to " + user + "@" + host);
 				} else {
-					logging.info(this, "testConnection connected");
+					Logging.info(this, "testConnection connected");
 					connectionState = CONNECTED;
 				}
 			} else {
-				logging.info(this, "testConnection not connected");
+				Logging.info(this, "testConnection not connected");
 				connectionState = NOT_CONNECTED;
-				logging.warning(this, "cannot connect to " + user + "@" + host);
+				Logging.warning(this, "cannot connect to " + user + "@" + host);
 			}
 
 		} catch (Exception e) {
-			logging.info(this, "testConnection not connected");
+			Logging.info(this, "testConnection not connected");
 			connectionState = NOT_CONNECTED;
-			logging.warning(this, "cannot connect to " + user + "@" + host);
+			Logging.warning(this, "cannot connect to " + user + "@" + host);
 		}
 		updateConnectionInfo(connectionState);
-		logging.info(this, "testConnection connection state " + connectionState);
+		Logging.info(this, "testConnection connection state " + connectionState);
 	}
 
 	public void updateConnectionInfo(String status) {
-		logging.info(this, "mainFrame " + mainFrame);
-		logging.info(this, "Globals.mainFrame " + Globals.mainFrame);
+		Logging.info(this, "mainFrame " + mainFrame);
+		Logging.info(this, "Globals.mainFrame " + Globals.mainFrame);
 
-		logging.info(this, "status " + status);
+		Logging.info(this, "status " + status);
 		if (mainFrame == null)
 			((MainFrame) Globals.mainFrame).updateSSHConnectedInfoMenu(status);
 		else

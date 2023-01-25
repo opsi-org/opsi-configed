@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
@@ -30,7 +31,7 @@ import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.PanelDashControl;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
@@ -59,7 +60,7 @@ public class ControlDash {
 	}
 
 	private ControlDash(PersistenceController persis) {
-		logging.info(this, "ControlDash constructed");
+		Logging.info(this, "ControlDash constructed");
 		persist = persis;
 		loadData();
 	}
@@ -72,12 +73,12 @@ public class ControlDash {
 
 			StringBuilder mess = new StringBuilder();
 
-			mess.append(configed.getResourceValue("Dash.topicLicences1"));
+			mess.append(Configed.getResourceValue("Dash.topicLicences1"));
 			mess.append("\n");
 			mess.append("\n");
 
 			if (!persist.isWithLicenceManagement())
-				mess.append(configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
+				mess.append(Configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
 			else {
 				mess.append(showLicenceContractWarnings());
 				mess.append(calculateVariantLicencepools());
@@ -116,8 +117,8 @@ public class ControlDash {
 					persist.getGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
 							PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT));
 
-			String[] options = new String[] { configed.getResourceValue("Dash.reload"),
-					configed.getResourceValue("Dash.close") };
+			String[] options = new String[] { Configed.getResourceValue("Dash.reload"),
+					Configed.getResourceValue("Dash.close") };
 
 			Icon[] icons = new Icon[] { Globals.createImageIcon("images/reload16.png", "reload"),
 					Globals.createImageIcon("images/cancel16.png", "cancel") };
@@ -130,9 +131,9 @@ public class ControlDash {
 
 				@Override
 				public void doAction1() {
-					logging.debug(this, "doAction1");
+					Logging.debug(this, "doAction1");
 					loadData();
-					logging.info(this, "update data ");
+					Logging.info(this, "update data ");
 					panelDash.setShowDashOnLicencesActivation(persist.getGlobalBooleanConfigValue(
 							PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
 							PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT));
@@ -143,7 +144,7 @@ public class ControlDash {
 
 				@Override
 				public void doAction2() {
-					logging.debug(this, "doAction2");
+					Logging.debug(this, "doAction2");
 					super.doAction2();
 				}
 
@@ -156,7 +157,7 @@ public class ControlDash {
 
 				@Override
 				public void leave() {
-					logging.debug(this, "leave");
+					Logging.debug(this, "leave");
 					setVisible(false);
 				}
 
@@ -179,33 +180,34 @@ public class ControlDash {
 
 		StringBuilder result = new StringBuilder();
 
+		// TODO why do the same thing twice?
 		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
 
-		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsToNotify();
+		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsExpired();
 
-		logging.info(this, "contractsExpired " + contractsExpired);
+		Logging.info(this, "contractsExpired " + contractsExpired);
 
-		logging.info(this, "contractsToNotify " + contractsToNotify);
+		Logging.info(this, "contractsToNotify " + contractsToNotify);
 
 		result.append("  ");
-		result.append(configed.getResourceValue("Dash.expiredContracts"));
+		result.append(Configed.getResourceValue("Dash.expiredContracts"));
 		result.append(":  \n");
 
-		for (String date : contractsExpired.keySet()) {
-			for (String ID : contractsExpired.get(date)) {
-				result.append(date + ": " + ID);
+		for (Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
+			for (String ID : entry.getValue()) {
+				result.append(entry.getKey() + ": " + ID);
 				result.append("\n");
 			}
 		}
 		result.append("\n");
 
 		result.append("  ");
-		result.append(configed.getResourceValue("Dash.contractsToNotify"));
+		result.append(Configed.getResourceValue("Dash.contractsToNotify"));
 		result.append(":  \n");
 
-		for (String date : contractsToNotify.keySet()) {
-			for (String ID : contractsToNotify.get(date)) {
-				result.append(date + ": " + ID);
+		for (Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
+			for (String ID : entry.getValue()) {
+				result.append(entry.getKey() + ": " + ID);
 				result.append("\n");
 			}
 		}
@@ -246,7 +248,7 @@ public class ControlDash {
 			public void produceRows() {
 				super.produceRows();
 
-				logging.info(this, "producing rows for modelSWnames");
+				Logging.info(this, "producing rows for modelSWnames");
 				int foundVariantLicencepools = 0;
 				namesWithVariantPools.clear();
 
@@ -262,12 +264,12 @@ public class ControlDash {
 					i++;
 				}
 
-				logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
+				Logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
 			}
 
 			@Override
 			public void reset() {
-				logging.info(this, "reset");
+				Logging.info(this, "reset");
 				super.reset();
 			}
 		};
@@ -275,12 +277,12 @@ public class ControlDash {
 
 		List<List<Object>> specialrows = modelSWnames.getRows();
 		if (specialrows != null) {
-			logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
+			Logging.info(this, "initDashInfo, modelSWnames.getRows() size " + specialrows.size());
 		}
 
 		result.append("\n");
 		result.append("  ");
-		result.append(configed.getResourceValue("Dash.similarSWEntriesForLicencePoolExist"));
+		result.append(Configed.getResourceValue("Dash.similarSWEntriesForLicencePoolExist"));
 		result.append(":  \n");
 
 		for (String name : namesWithVariantPools) {
@@ -317,7 +319,7 @@ public class ControlDash {
 		java.util.Set<String> range = getRangeSWxLicencepool(name);
 
 		if (range.size() > 1) {
-			logging.info(this, "checkExistNamesWithVariantLicencepools, found  for " + name + " :  " + range);
+			Logging.info(this, "checkExistNamesWithVariantLicencepools, found  for " + name + " :  " + range);
 			return true;
 		}
 		return false;

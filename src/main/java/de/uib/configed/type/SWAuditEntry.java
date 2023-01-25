@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.datastructure.TableEntry;
@@ -31,45 +31,42 @@ public class SWAuditEntry extends TableEntry
  */
 
 {
-	public static final String id = "ID";
+	public static final String ID = "ID";
 	public static final String NAME = "name";
 	public static final String VERSION = "version";
-	public static final String SUBVERSION = "subVersion";
+	public static final String SUB_VERSION = "subVersion";
 	public static final String ARCHITECTURE = "architecture";
 	public static final String LANGUAGE = "language";
-	public static final String WINDOWSsOFTWAREid = "windowsSoftwareID";
+	public static final String WINDOWS_SOFTWARE_ID = "windowsSoftwareID";
 
 	public static final String EXISTING_IDS = "(variants)";
 
-	private static List<String> KEYS;
+	private static final List<String> KEYS = new LinkedList<>();
 	static {
-		KEYS = new LinkedList<>();
-		KEYS.add(id);
+		KEYS.add(ID);
 		KEYS.add(NAME);
 		KEYS.add(VERSION);
 		KEYS.add("subversion");
 		KEYS.add(ARCHITECTURE);
 		KEYS.add(LANGUAGE);
 
-		KEYS.add(WINDOWSsOFTWAREid);
+		KEYS.add(WINDOWS_SOFTWARE_ID);
 	}
 
-	private static List<String> KEYS_FOR_GUI_TABLES;
+	private static final List<String> KEYS_FOR_GUI_TABLES = new LinkedList<>();
 	static {
-		KEYS_FOR_GUI_TABLES = new LinkedList<>();
-		KEYS_FOR_GUI_TABLES.add(id);
+		KEYS_FOR_GUI_TABLES.add(ID);
 		KEYS_FOR_GUI_TABLES.add(NAME);
 		KEYS_FOR_GUI_TABLES.add(VERSION);
-		KEYS_FOR_GUI_TABLES.add(SUBVERSION);
+		KEYS_FOR_GUI_TABLES.add(SUB_VERSION);
 		KEYS_FOR_GUI_TABLES.add(ARCHITECTURE);
 		KEYS_FOR_GUI_TABLES.add(LANGUAGE);
 
-		KEYS_FOR_GUI_TABLES.add(WINDOWSsOFTWAREid);
+		KEYS_FOR_GUI_TABLES.add(WINDOWS_SOFTWARE_ID);
 	}
 
-	public static List<String> KEYS_FOR_IDENT;
+	public static final List<String> KEYS_FOR_IDENT = new ArrayList<>();
 	static {
-		KEYS_FOR_IDENT = new ArrayList<>();
 		KEYS_FOR_IDENT.add(NAME);
 		KEYS_FOR_IDENT.add(VERSION);
 		KEYS_FOR_IDENT.add("subversion");
@@ -77,9 +74,8 @@ public class SWAuditEntry extends TableEntry
 		KEYS_FOR_IDENT.add(ARCHITECTURE);
 	}
 
-	public static List<String> ID_VARIANTS_COLS;
+	public static final List<String> ID_VARIANTS_COLS = new ArrayList<>();
 	static {
-		ID_VARIANTS_COLS = new ArrayList<>();
 		ID_VARIANTS_COLS.add(NAME);
 		ID_VARIANTS_COLS.add(EXISTING_IDS);
 
@@ -90,25 +86,25 @@ public class SWAuditEntry extends TableEntry
 		key2serverKey = new HashMap<>();
 		key2serverKey.put(NAME, "name");
 		key2serverKey.put(VERSION, "version");
-		key2serverKey.put(SUBVERSION, "subVersion");
+		key2serverKey.put(SUB_VERSION, "subVersion");
 		key2serverKey.put(ARCHITECTURE, "architecture");
 		key2serverKey.put(LANGUAGE, "language");
 
-		key2serverKey.put(WINDOWSsOFTWAREid, "windowsSoftwareId");
+		key2serverKey.put(WINDOWS_SOFTWARE_ID, "windowsSoftwareId");
 	}
 
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static void setLocale() {
 
-		locale.put(id, "ID");
-		locale.put(NAME, configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
-		locale.put(VERSION, configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
+		locale.put(ID, "ID");
+		locale.put(NAME, Configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
+		locale.put(VERSION, Configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
 
-		locale.put(ARCHITECTURE, configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
-		locale.put(LANGUAGE, configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
+		locale.put(ARCHITECTURE, Configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
+		locale.put(LANGUAGE, Configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
 
-		locale.put(WINDOWSsOFTWAREid, configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
+		locale.put(WINDOWS_SOFTWARE_ID, Configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
 	}
 
 	public static List<String> getDisplayKeys() {
@@ -119,14 +115,13 @@ public class SWAuditEntry extends TableEntry
 	private String ident;
 	private String identReduced;
 
-	public SWAuditEntry(StringValuedRelationElement auditSoftwareXlicencePool_element,
-			AuditSoftwareXLicencePool relation)
+	public SWAuditEntry(StringValuedRelationElement auditSoftwareXLicencePoolElement)
 	// called for RelationElements of AuditSoftwareXLicencePool
 	// the parameter is only requested in order to get a distinction of the
 	// constructors
 	{
-		super(auditSoftwareXlicencePool_element);
-		ident = auditSoftwareXlicencePool_element.get(AuditSoftwareXLicencePool.SwID);
+		super(auditSoftwareXLicencePoolElement);
+		ident = auditSoftwareXLicencePoolElement.get(AuditSoftwareXLicencePool.SW_ID);
 	}
 
 	public SWAuditEntry(Map<String, Object> entry) {
@@ -138,14 +133,14 @@ public class SWAuditEntry extends TableEntry
 		remap(ARCHITECTURE, key2serverKey.get(ARCHITECTURE));
 		remap(LANGUAGE, key2serverKey.get(LANGUAGE));
 
-		remap(WINDOWSsOFTWAREid, "windowsSoftwareId");
+		remap(WINDOWS_SOFTWARE_ID, "windowsSoftwareId");
 
 		String subversion // not included in key-values
-				= entryRetrieved.get(key2serverKey.get(SUBVERSION));
+				= entryRetrieved.get(key2serverKey.get(SUB_VERSION));
 
 		if (subversion == null)
 			subversion = "";
-		put(key2serverKey.get(SUBVERSION), subversion);
+		put(key2serverKey.get(SUB_VERSION), subversion);
 
 		ident = Globals.pseudokey(new String[] { get(NAME), // KEYS_FOR_IDENT.get(0) ...
 				get(VERSION), subversion, get(LANGUAGE), get(ARCHITECTURE) });
@@ -155,7 +150,7 @@ public class SWAuditEntry extends TableEntry
 		if (entry.get("lastseen") != null)
 			lastseen = entry.get("lastseen").toString();
 
-		put(id, ident);
+		put(ID, ident);
 
 	}
 

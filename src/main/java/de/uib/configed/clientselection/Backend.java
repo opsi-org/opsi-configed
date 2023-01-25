@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * Each backend represents a data source, which can be used find out which
@@ -30,12 +30,12 @@ public abstract class Backend {
 	 */
 	public List<String> checkClients(ExecutableOperation operation, boolean hasSoftware, boolean hasHardware,
 			boolean hasSwAudit) {
-		logging.debug(this, "Starting the filtering.. , operation " + operation);
+		Logging.debug(this, "Starting the filtering.. , operation " + operation);
 		this.hasSoftware = hasSoftware;
 		this.hasHardware = hasHardware;
 		this.hasSwAudit = hasSwAudit;
 		List<Client> clients = getClients();
-		logging.debug(this, "Number of clients to filter: " + clients.size());
+		Logging.debug(this, "Number of clients to filter: " + clients.size());
 
 		List<String> matchingClients = new LinkedList<>();
 		for (Client client : clients) {
@@ -54,7 +54,7 @@ public abstract class Backend {
 	 * with their backend-specific executable operations.
 	 */
 	public ExecutableOperation createExecutableOperation(SelectOperation operation) {
-		logging.debug(this, "createFromOperationData " + operation.getClassName());
+		Logging.debug(this, "createFromOperationData " + operation.getClassName());
 
 		if (operation instanceof SelectGroupOperation) {
 			SelectGroupOperation groupOperation = (SelectGroupOperation) operation;

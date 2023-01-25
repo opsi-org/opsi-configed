@@ -13,14 +13,11 @@ import java.awt.event.MouseListener;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.table.TableCellEditor;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
-public class CellEditor4TableText extends DefaultCellEditor implements TableCellEditor
-// , ActionListener
-		, MouseListener, KeyListener, FocusListener
+public class CellEditor4TableText extends DefaultCellEditor implements MouseListener, KeyListener, FocusListener
 
 {
 	String oldValue;
@@ -72,12 +69,9 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() == editorContent) {
-			if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
+		if (e.getSource() == editorContent && (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1)) {
 
-				fEdit.setVisible(true);
-			}
-
+			fEdit.setVisible(true);
 		}
 	}
 
@@ -101,12 +95,8 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-
-		if (e.getSource() == editorContent) {
-			if (e.getKeyCode() == 32)
-				fEdit.setVisible(true);
-		}
-
+		if (e.getSource() == editorContent && e.getKeyCode() == 32)
+			fEdit.setVisible(true);
 	}
 
 	@Override
@@ -162,7 +152,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 		try {
 			loc = table.getLocationOnScreen();
 		} catch (Exception ex) {
-			logging.warning(this, "get location error " + ex);
+			Logging.warning(this, "get location error " + ex);
 			loc = new java.awt.Point(50, 50);
 		}
 
@@ -178,14 +168,14 @@ public class CellEditor4TableText extends DefaultCellEditor implements TableCell
 
 	@Override
 	public boolean stopCellEditing() {
-		logging.debug(this, "stopCellEditing");
+		Logging.debug(this, "stopCellEditing");
 
 		return super.stopCellEditing();
 	}
 
 	@Override
 	public void cancelCellEditing() {
-		logging.debug(this, "cancelCellEditing");
+		Logging.debug(this, "cancelCellEditing");
 		super.cancelCellEditing();
 	}
 

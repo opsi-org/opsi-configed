@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.PersistenceController;
@@ -49,13 +49,13 @@ public class ProductData {
 		}
 
 		for (String depot : depots) {
-			if (products.containsKey(configed.getResourceValue("Dashboard.selection.allDepots"))) {
+			if (products.containsKey(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
 				List<String> allDepotProducts = products
-						.get(configed.getResourceValue("Dashboard.selection.allDepots"));
+						.get(Configed.getResourceValue("Dashboard.selection.allDepots"));
 				allDepotProducts.addAll(persist.getAllProductNames(depot));
-				products.put(configed.getResourceValue("Dashboard.selection.allDepots"), allDepotProducts);
+				products.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allDepotProducts);
 			} else {
-				products.put(configed.getResourceValue("Dashboard.selection.allDepots"),
+				products.put(Configed.getResourceValue("Dashboard.selection.allDepots"),
 						persist.getAllProductNames(depot));
 			}
 
@@ -82,7 +82,7 @@ public class ProductData {
 		}
 
 		List<String> allNetbootProducts = Helper.combineListsFromMap(netbootProducts);
-		netbootProducts.put(configed.getResourceValue("Dashboard.selection.allDepots"), allNetbootProducts);
+		netbootProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allNetbootProducts);
 	}
 
 	public static List<String> getLocalbootProducts() {
@@ -104,7 +104,7 @@ public class ProductData {
 		}
 
 		List<String> allLocalbootProducts = Helper.combineListsFromMap(localbootProducts);
-		localbootProducts.put(configed.getResourceValue("Dashboard.selection.allDepots"), allLocalbootProducts);
+		localbootProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allLocalbootProducts);
 	}
 
 	public static Map<Product, Product> getInstalledProducts() {
@@ -165,11 +165,11 @@ public class ProductData {
 						product.setDepot(depot);
 
 						if (productInfo.get("installationStatus").equals("installed")) {
-							product.setStatus(configed.getResourceValue("Dashboard.products.installed"));
+							product.setStatus(Configed.getResourceValue("Dashboard.products.installed"));
 
 							Optional<Product> matchedProduct = installedProductsList.keySet().stream()
 									.filter(p -> p.getId().equals(productId) && p.getStatus()
-											.equals(configed.getResourceValue("Dashboard.products.installed")))
+											.equals(Configed.getResourceValue("Dashboard.products.installed")))
 									.findFirst();
 
 							if (matchedProduct.isPresent()) {
@@ -186,11 +186,11 @@ public class ProductData {
 
 							allUnusedProducts.remove(productId);
 						} else if (productInfo.get("actionResult").equals("failed")) {
-							product.setStatus(configed.getResourceValue("Dashboard.products.failed"));
+							product.setStatus(Configed.getResourceValue("Dashboard.products.failed"));
 
 							Optional<Product> matchedProduct = failedProductsList.keySet().stream()
 									.filter(p -> p.getId().equals(productId) && p.getStatus()
-											.equals(configed.getResourceValue("Dashboard.products.failed")))
+											.equals(Configed.getResourceValue("Dashboard.products.failed")))
 									.findFirst();
 
 							if (matchedProduct.isPresent()) {
@@ -221,7 +221,7 @@ public class ProductData {
 						Product product = new Product();
 						product.setId(productId);
 						product.setDepot(depot);
-						product.setStatus(configed.getResourceValue("Dashboard.products.unused"));
+						product.setStatus(Configed.getResourceValue("Dashboard.products.unused"));
 						product.setClients(new ArrayList<>());
 
 						unusedProductsList.put(product, product);
@@ -238,9 +238,9 @@ public class ProductData {
 		Map<Product, Product> allFailedProducts = Helper.combineMapsFromMap2(failedProducts);
 		Map<Product, Product> allUnusedProducts = Helper.combineMapsFromMap2(unusedProducts);
 
-		installedProducts.put(configed.getResourceValue("Dashboard.selection.allDepots"), allInstalledProducts);
-		failedProducts.put(configed.getResourceValue("Dashboard.selection.allDepots"), allFailedProducts);
-		unusedProducts.put(configed.getResourceValue("Dashboard.selection.allDepots"), allUnusedProducts);
+		installedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allInstalledProducts);
+		failedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allFailedProducts);
+		unusedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allUnusedProducts);
 	}
 
 	public static void retrieveUnusedProducts() {
@@ -258,11 +258,11 @@ public class ProductData {
 					Product product = new Product();
 					product.setDepot(depot);
 					product.setId(productId);
-					product.setStatus(configed.getResourceValue("Dashboard.products.unused"));
+					product.setStatus(Configed.getResourceValue("Dashboard.products.unused"));
 
 					Optional<Product> matchedProduct = unusedProductsList.keySet().stream()
 							.filter(p -> p.getId().equals(productId)
-									&& p.getStatus().equals(configed.getResourceValue("Dashboard.products.unused")))
+									&& p.getStatus().equals(Configed.getResourceValue("Dashboard.products.unused")))
 							.findFirst();
 
 					if (matchedProduct.isPresent()) {

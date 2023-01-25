@@ -46,10 +46,10 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -148,14 +148,14 @@ public class JTableSelectionPanel extends JPanel
 
 		JPanel topPane = new JPanel();
 
-		labelSearch = new JLabel(configed.getResourceValue("SearchPane.search"));
+		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
 
 		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
 		Icon selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_x.png", "");
 
 		checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
-		checkmarkSearch.setToolTipText(configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
+		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
 		checkmarkSearch.addActionListener(this);
 		checkmarkSearch.setChangeStateAutonomously(false);
 
@@ -181,20 +181,20 @@ public class JTableSelectionPanel extends JPanel
 		searchMenu.add(popupMarkHits);
 		searchMenu.add(popupEmptySearchfield);
 
-		popupSearch.setText(configed.getResourceValue("JTableSelectionPanel.search"));
+		popupSearch.setText(Configed.getResourceValue("JTableSelectionPanel.search"));
 		popupSearch.addActionListener(actionEvent -> searchTheRow());
 
-		popupSearchNext.setText(configed.getResourceValue("JTableSelectionPanel.searchnext") + " ( F3 ) ");
+		popupSearchNext.setText(Configed.getResourceValue("JTableSelectionPanel.searchnext") + " ( F3 ) ");
 		popupSearchNext.addActionListener(actionEvent -> searchTheNextRow());
 
-		popupNewSearch.setText(configed.getResourceValue("JTableSelectionPanel.searchnew"));
+		popupNewSearch.setText(Configed.getResourceValue("JTableSelectionPanel.searchnew"));
 		popupNewSearch.addActionListener(actionEvent -> searchTheRow(0));
 
-		popupMarkHits.setText(configed.getResourceValue("SearchPane.popup.markall"));
+		popupMarkHits.setText(Configed.getResourceValue("SearchPane.popup.markall"));
 
 		popupMarkHits.addActionListener(actionEvent -> markAll());
 
-		popupEmptySearchfield.setText(configed.getResourceValue("JTableSelectionPanel.searchempty"));
+		popupEmptySearchfield.setText(Configed.getResourceValue("JTableSelectionPanel.searchempty"));
 		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
 
 		fieldSearch.setComponentPopupMenu(searchMenu);
@@ -204,42 +204,42 @@ public class JTableSelectionPanel extends JPanel
 		Icon markAllIcon = Globals.createImageIcon("images/selection-all.png", "");
 		Icon invertSelectionIcon = Globals.createImageIcon("images/selection-invert.png", "");
 		buttonMarkAll = new JButton("", markAllIcon);
-		buttonMarkAll.setToolTipText(configed.getResourceValue("SearchPane.popup.markall"));
+		buttonMarkAll.setToolTipText(Configed.getResourceValue("SearchPane.popup.markall"));
 		buttonInvertSelection = new JButton("", invertSelectionIcon);
-		buttonInvertSelection.setToolTipText(configed.getResourceValue("SearchPane.invertselection"));
+		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
 
 		buttonMarkAll.addActionListener((ActionEvent e) -> markAll());
 
 		buttonInvertSelection.addActionListener((ActionEvent e) -> main.invertClientselection());
 
-		JLabel labelSearchMode = new JLabel(configed.getResourceValue("JTableSelectionPanel.searchmode"));
+		JLabel labelSearchMode = new JLabel(Configed.getResourceValue("JTableSelectionPanel.searchmode"));
 
 		comboSearchMode = new JComboBoxToolTip();
 
 		Map<String, String> tooltipsMap = new LinkedHashMap<>();
-		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives"),
-				configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives.tooltip"));
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives"),
+				Configed.getResourceValue("SearchPane.SearchMode.fulltext_with_alternatives.tooltip"));
 
-		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.fulltext_one_string"),
-				configed.getResourceValue("SearchPane.SearchMode.fulltext_one_string.tooltip"));
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.SearchMode.fulltext_one_string"),
+				Configed.getResourceValue("SearchPane.SearchMode.fulltext_one_string.tooltip"));
 
-		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.starttext"),
-				configed.getResourceValue("SearchPane.SearchMode.starttext.tooltip"));
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.SearchMode.starttext"),
+				Configed.getResourceValue("SearchPane.SearchMode.starttext.tooltip"));
 
-		tooltipsMap.put(configed.getResourceValue("SearchPane.SearchMode.regex"),
-				configed.getResourceValue("SearchPane.SearchMode.regex.tooltip"));
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.SearchMode.regex"),
+				Configed.getResourceValue("SearchPane.SearchMode.regex.tooltip"));
 
-		logging.info(this, " comboSearchMode tooltipsMap " + tooltipsMap);
+		Logging.info(this, " comboSearchMode tooltipsMap " + tooltipsMap);
 
 		comboSearchMode.setValues(tooltipsMap);
 		comboSearchMode.setSelectedIndex(searchMode.ordinal());
 
-		logging.info(this, "comboSearchMode set index to " + searchMode.ordinal());
+		Logging.info(this, "comboSearchMode set index to " + searchMode.ordinal());
 
 		comboSearchMode.setPreferredSize(Globals.buttonDimension);
 
 		comboSearch = new JComboBox<>(
-				new String[] { configed.getResourceValue("ConfigedMain.pclistTableModel.allfields") });
+				new String[] { Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields") });
 		comboSearch.setPreferredSize(Globals.buttonDimension);
 
 		GroupLayout layoutTopPane = new GroupLayout(topPane);
@@ -312,10 +312,10 @@ public class JTableSelectionPanel extends JPanel
 		if (b) {
 			JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
 
-			JLabel missingData1 = new JLabel(configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
+			JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
 			missingData1.setFont(Globals.defaultFontTitle);
 
-			JLabel missingData2 = new JLabel(configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
+			JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 
 			JPanel mdPanel = new JPanel();
 			mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -422,14 +422,14 @@ public class JTableSelectionPanel extends JPanel
 
 		String oldSelected = (String) comboSearch.getSelectedItem();
 		List<String> comboSearchItems = new ArrayList<>();
-		comboSearchItems.add(configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
+		comboSearchItems.add(Configed.getResourceValue("ConfigedMain.pclistTableModel.allfields"));
 
 		try {
-			logging.info(this, "initColumnNames columncount " + table.getColumnCount());
+			Logging.info(this, "initColumnNames columncount " + table.getColumnCount());
 
 			for (int j = 0; j < table.getColumnCount(); j++) {
-				logging.info(this, "initColumnName col " + j);
-				logging.info(this, "initColumnName name  " + table.getColumnName(j));
+				Logging.info(this, "initColumnName col " + j);
+				Logging.info(this, "initColumnName name  " + table.getColumnName(j));
 				comboSearchItems.add(table.getColumnName(j));
 			}
 
@@ -438,7 +438,7 @@ public class JTableSelectionPanel extends JPanel
 			if (oldSelected != null)
 				comboSearch.setSelectedItem(oldSelected);
 		} catch (Exception ex) {
-			logging.info(this, "initColumnNames " + ex);
+			Logging.info(this, "initColumnNames " + ex);
 		}
 	}
 
@@ -464,7 +464,7 @@ public class JTableSelectionPanel extends JPanel
 		String valuesListS = null;
 		if (valuesList != null)
 			valuesListS = "" + valuesList.size();
-		logging.info(this, "setSelectedValues " + valuesListS);
+		Logging.info(this, "setSelectedValues " + valuesListS);
 		ListSelectionModel lsm = table.getSelectionModel();
 		lsm.clearSelection();
 
@@ -474,7 +474,7 @@ public class JTableSelectionPanel extends JPanel
 		TreeSet<String> valuesSet = new TreeSet<>(valuesList);
 		// because of ordering , we create a TreeSet view of the list
 
-		logging.info(this, "setSelectedValues, (ordered) set of values, size " + valuesSet.size());
+		Logging.info(this, "setSelectedValues, (ordered) set of values, size " + valuesSet.size());
 
 		int lastAddedI = -1;
 
@@ -485,15 +485,15 @@ public class JTableSelectionPanel extends JPanel
 			lsm.removeListSelectionListener(listeners[l]);
 		}
 
-		logging.info(this, "setSelectedValues, table.getRowCount() " + table.getRowCount());
+		Logging.info(this, "setSelectedValues, table.getRowCount() " + table.getRowCount());
 
 		for (int i = 0; i < table.getRowCount(); i++) {
-			logging.debug(this, "setSelectedValues checkValue for i " + i + ": " + (String) table.getValueAt(i, 0));
+			Logging.debug(this, "setSelectedValues checkValue for i " + i + ": " + (String) table.getValueAt(i, 0));
 
 			if (valuesSet.contains(table.getValueAt(i, 0))) {
 				lsm.addSelectionInterval(i, i);
 				lastAddedI = i;
-				logging.debug(this, "setSelectedValues add interval " + i);
+				Logging.debug(this, "setSelectedValues add interval " + i);
 			}
 		}
 
@@ -517,7 +517,7 @@ public class JTableSelectionPanel extends JPanel
 			moveToValue(valueToFind, 0);
 		}
 
-		logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
+		Logging.info(this, "setSelectedValues  produced " + getSelectedValues().size());
 
 	}
 
@@ -570,23 +570,22 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public void setModel(TableModel tm) {
-		logging.info(this, "set model with column count " + tm.getColumnCount());
+		Logging.info(this, "set model with column count " + tm.getColumnCount());
 
-		logging.info(this, " [JTableSelectionPanel] setModel with row count " + tm.getRowCount());
+		Logging.info(this, " [JTableSelectionPanel] setModel with row count " + tm.getRowCount());
 
 		tm.addTableModelListener(table);
 
-		logging.info(this, "setModel all hosts size "
+		Logging.info(this, "setModel all hosts size "
 				+ main.getPersistenceController().getHostInfoCollections().getMapOfAllPCInfoMaps().size());
 
 		table.setModel(tm);
-
 	}
 
 	public DefaultTableModel getSelectedRowsModel() {
 		final Map<Integer, Integer> selectionMap = getSelectionMap();
 
-		DefaultTableModel m = new DefaultTableModel() {
+		return new DefaultTableModel() {
 			@Override
 			public Object getValueAt(int row, int col) {
 				return table.getValueAt(selectionMap.get(row), col);
@@ -602,8 +601,6 @@ public class JTableSelectionPanel extends JPanel
 				return table.getColumnCount();
 			}
 		};
-
-		return m;
 	}
 
 	public DefaultTableModel getTableModel() {
@@ -681,7 +678,7 @@ public class JTableSelectionPanel extends JPanel
 	protected int findViewRowFromValue(final int startviewrow, Object value, Set<Integer> colIndices,
 			TablesearchPane.SearchMode searchMode) {
 
-		logging.info(this, "findViewRowFromValue(int startviewrow, Object value, Set colIndices, searchMode: "
+		Logging.info(this, "findViewRowFromValue(int startviewrow, Object value, Set colIndices, searchMode: "
 				+ startviewrow + ", " + value + ", " + colIndices + ", " + searchMode);
 
 		if (value == null)
@@ -712,7 +709,7 @@ public class JTableSelectionPanel extends JPanel
 					val = ".*" + val + ".*";
 				pattern = Pattern.compile(val);
 			} catch (java.util.regex.PatternSyntaxException ex) {
-				logging.error(this, "pattern problem " + ex);
+				Logging.error(this, "pattern problem " + ex);
 				return -1;
 			}
 		}

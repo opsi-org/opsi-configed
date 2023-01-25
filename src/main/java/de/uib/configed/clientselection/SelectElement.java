@@ -17,24 +17,24 @@ public abstract class SelectElement {
 	 * element is in any group (like a hardware group) and the name of the
 	 * Element.
 	 */
-	public SelectElement(String[] path, String... localizedPath) {
+	protected SelectElement(String[] path, String... localizedPath) {
 		this.path = path;
 		this.localizedPath = localizedPath;
 	}
 
 	/** Get the non-localized path joined with '/' */
 	public String getPath() {
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		for (int i = 0; i < path.length; i++)
-			s += path[i] + '/';
+			s.append(path[i] + '/');
 		return s.substring(0, s.length() - 1);
 	}
 
 	/** Get the localized path joined with '/' */
 	public String getLocalizedPath() {
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		for (int i = 0; i < localizedPath.length; i++)
-			s += localizedPath[i] + '/';
+			s.append(localizedPath[i] + '/');
 		return s.substring(0, s.length() - 1);
 	}
 

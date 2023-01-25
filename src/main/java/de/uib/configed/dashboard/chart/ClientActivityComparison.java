@@ -3,7 +3,7 @@ package de.uib.configed.dashboard.chart;
 import java.io.IOException;
 import java.util.List;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.ClientData;
 import javafx.collections.FXCollections;
@@ -35,8 +35,8 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 
 	@Override
 	public void display() {
-		clientsActivityNoDataText.setText(configed.getResourceValue("Dashboard.noData"));
-		clientActivityComparisonPieChart.setTitle(configed.getResourceValue("Dashboard.clientActivityTitle"));
+		clientsActivityNoDataText.setText(Configed.getResourceValue("Dashboard.noData"));
+		clientActivityComparisonPieChart.setTitle(Configed.getResourceValue("Dashboard.clientActivityTitle"));
 
 		ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
 		List<String> activeClients = ClientData.getActiveClients();
@@ -54,10 +54,10 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 		int totalInactiveClients = inactiveClients.size();
 
 		data.add(new PieChart.Data(
-				String.format("%s %d", configed.getResourceValue("Dashboard.client.active"), totalActiveClients),
+				String.format("%s %d", Configed.getResourceValue("Dashboard.client.active"), totalActiveClients),
 				totalActiveClients));
 		data.add(new PieChart.Data(
-				String.format("%s %d", configed.getResourceValue("Dashboard.client.inactive"), totalInactiveClients),
+				String.format("%s %d", Configed.getResourceValue("Dashboard.client.inactive"), totalInactiveClients),
 				totalInactiveClients));
 
 		clientActivityComparisonPieChart.setData(data);

@@ -35,10 +35,10 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.utilities.Mapping;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SaveInteger;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
@@ -156,11 +156,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private void initSavedStates(String savedStatesObject) {
 		if (savedStatesObject != null) {
 			saveSearchpaneProgressiveSearch = new SaveInteger(savedStatesObject + ".progressiveSearch", 0,
-					configed.savedStates);
+					Configed.savedStates);
 			saveSearchpaneAllColumnsSearch = new SaveInteger(savedStatesObject + ".allColumnsSearch", 0,
-					configed.savedStates);
+					Configed.savedStates);
 			saveSearchpaneFullTextSearch = new SaveInteger(savedStatesObject + ".fullTextSearch", 0,
-					configed.savedStates);
+					Configed.savedStates);
 		}
 	}
 
@@ -279,9 +279,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private boolean disabledSinceWeAreInFilteredMode() {
 		if (filteredMode) {
-			logging.info(this, "disabledSinceWeAreInFilteredMode masterFrame " + masterFrame);
-			JOptionPane.showOptionDialog(masterFrame, configed.getResourceValue("SearchPane.filterIsSet.message"),
-					configed.getResourceValue("SearchPane.filterIsSet.title"), JOptionPane.OK_CANCEL_OPTION,
+			Logging.info(this, "disabledSinceWeAreInFilteredMode masterFrame " + masterFrame);
+			JOptionPane.showOptionDialog(masterFrame, Configed.getResourceValue("SearchPane.filterIsSet.message"),
+					Configed.getResourceValue("SearchPane.filterIsSet.title"), JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
 		}
@@ -373,7 +373,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		markReload = new CheckedLabel(iconReload, true);
 		markReload.setVisible(false); // in the moment, it's a proof of concept
 
-		labelSearch = new JLabel(configed.getResourceValue("SearchPane.search"));
+		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
 
 		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
@@ -382,11 +382,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		try {
 			checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
 		} catch (ClassCastException ex) {
-			logging.warning(this, "strange nimbus exception, retry creating");
+			Logging.warning(this, "strange nimbus exception, retry creating");
 			checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
 		}
 
-		checkmarkSearch.setToolTipText(configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
+		checkmarkSearch.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearch.tooltip"));
 		checkmarkSearch.addActionListener(this);
 		checkmarkSearch.setChangeStateAutonomously(false);
 
@@ -406,7 +406,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkSearchProgressive.addActionListener(this);
 		checkmarkSearchProgressive.setChangeStateAutonomously(true);
 		checkmarkSearchProgressive
-				.setToolTipText(configed.getResourceValue("SearchPane.checkmarkSearchProgressive.tooltip"));
+				.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkSearchProgressive.tooltip"));
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
@@ -415,7 +415,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 
 		fieldSearch.getCaret().setBlinkRate(blinkrate);
-		fieldSearch.setToolTipText(configed.getResourceValue("SearchPane.searchField.toolTip"));
+		fieldSearch.setToolTipText(Configed.getResourceValue("SearchPane.searchField.toolTip"));
 
 		fieldSearch.getDocument().addDocumentListener(this);
 
@@ -452,11 +452,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		popupSearch.setText("Suchen");
 		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
 
-		popupSearchNext.setText(configed.getResourceValue("SearchPane.popup.searchnext"));
+		popupSearchNext.setText(Configed.getResourceValue("SearchPane.popup.searchnext"));
 
 		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
 
-		popupNewSearch.setText(configed.getResourceValue("SearchPane.popup.searchnew"));
+		popupNewSearch.setText(Configed.getResourceValue("SearchPane.popup.searchnew"));
 
 		popupNewSearch.addActionListener(actionEvent -> {
 
@@ -466,14 +466,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			searchTheRow(0, selectMode);
 		});
 
-		popupMarkHits.setText(configed.getResourceValue("SearchPane.popup.markall"));
+		popupMarkHits.setText(Configed.getResourceValue("SearchPane.popup.markall"));
 
 		popupMarkHits.addActionListener(actionEvent -> {
 			if (!fieldSearch.getText().equals(""))
 				markAll();
 		});
 
-		popupMarkAndFilter.setText(configed.getResourceValue("SearchPane.popup.markAndFilter"));
+		popupMarkAndFilter.setText(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
 
 		popupMarkAndFilter.addActionListener(actionEvent -> {
 			switchFilterOff();
@@ -481,7 +481,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			switchFilterOn();
 		});
 
-		popupEmptySearchfield.setText(configed.getResourceValue("SearchPane.popup.empty"));
+		popupEmptySearchfield.setText(Configed.getResourceValue("SearchPane.popup.empty"));
 
 		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
 
@@ -490,24 +490,24 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				searchNextRow(selectMode);
 		});
 
-		comboSearchFields = new JComboBox<>(new String[] { configed.getResourceValue("SearchPane.search.allfields") });
+		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.lowerButtonDimension);
 		comboSearchFields.setFont(Globals.defaultFont);
 
 		setSearchFieldsAll();
 
-		labelSearchMode = new JLabel(configed.getResourceValue("SearchPane.searchmode.searchmode"));
+		labelSearchMode = new JLabel(Configed.getResourceValue("SearchPane.searchmode.searchmode"));
 		labelSearchMode.setFont(Globals.defaultFont);
 
 		Map<String, String> tooltipsMap = new LinkedHashMap<>();
 
-		tooltipsMap.put(configed.getResourceValue("SearchPane.searchmode.fulltext"), // Index FULL_TEXT_SEARCH
-				configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
-		tooltipsMap.put(configed.getResourceValue("SearchPane.mode.starttext"), // Index START_TEXT_SEARCH
-				configed.getResourceValue("SearchPane.mode.starttext.tooltip"));
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.searchmode.fulltext"), // Index FULL_TEXT_SEARCH
+				Configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.starttext"), // Index START_TEXT_SEARCH
+				Configed.getResourceValue("SearchPane.mode.starttext.tooltip"));
 		if (withRegEx)
-			tooltipsMap.put(configed.getResourceValue("SearchPane.mode.regex"),
-					configed.getResourceValue("SearchPane.mode.regex.tooltip"));
+			tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.regex"),
+					Configed.getResourceValue("SearchPane.mode.regex.tooltip"));
 
 		try {
 
@@ -515,7 +515,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			comboSearchFieldsMode.setFont(Globals.defaultFont);
 		} catch (Exception ex) {
 
-			logging.warning(this, "strange nimbus exception, retry creating JComboBox " + ex);
+			Logging.warning(this, "strange nimbus exception, retry creating JComboBox " + ex);
 
 			comboSearchFieldsMode = new JComboBoxToolTip();
 			comboSearchFieldsMode.setFont(Globals.defaultFont);
@@ -531,7 +531,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Icon nullIconFilter = Globals.createImageIcon("images/filter_14x14_inwork.png", "");
 
 		filtermark = new CheckedLabel("", selectedIconFilter, unselectedIconFilter, nullIconFilter, false);
-		filtermark.setToolTipText(configed.getResourceValue("SearchPane.filtermark.tooltip"));
+		filtermark.setToolTipText(Configed.getResourceValue("SearchPane.filtermark.tooltip"));
 		filtermark.addActionListener(this);
 
 		labelFilterMarkGap = new JLabel("");
@@ -550,7 +550,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		checkmarkAllColumns = new CheckedLabel(selectedIcon, unselectedIcon, active);
 
-		checkmarkAllColumns.setToolTipText(configed.getResourceValue("SearchPane.checkmarkAllColumns.tooltip"));
+		checkmarkAllColumns.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkAllColumns.tooltip"));
 		checkmarkAllColumns.addActionListener(this);
 
 		unselectedIcon = Globals.createImageIcon("images/loupe_light_16_starttextsearch.png", "");
@@ -567,7 +567,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		else
 			comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
 
-		checkmarkFullText.setToolTipText(configed.getResourceValue("SearchPane.checkmarkFullText.tooltip"));
+		checkmarkFullText.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkFullText.tooltip"));
 		checkmarkFullText.addActionListener(this);
 
 		GroupLayout layoutTablesearchPane = new GroupLayout(this);
@@ -637,14 +637,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void buildMenuSearchfield() {
-		logging.info(this, "buildMenuSearchfield");
+		Logging.info(this, "buildMenuSearchfield");
 		searchMenu = new JPopupMenu();
 		for (Entry<JMenuItemFormatted, Boolean> searchMenuEntry : searchMenuEntries.entrySet()) {
 			if (searchMenuEntry.getValue())
 				searchMenu.add(searchMenuEntry.getKey());
 		}
 		fieldSearch.setComponentPopupMenu(searchMenu);
-		logging.info(this, "buildMenuSearchfield " + searchMenu);
+		Logging.info(this, "buildMenuSearchfield " + searchMenu);
 	}
 
 	public void setSearchFields(Integer[] cols) {
@@ -654,9 +654,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setSearchFieldsAll() {
-		logging.debug(this, "setSearchFieldsAll " + targetModel);
+		Logging.debug(this, "setSearchFieldsAll " + targetModel);
 		if (targetModel != null) {
-			logging.debug(this, "setSearchFieldsAll target model col count " + targetModel.getColumnCount());
+			Logging.debug(this, "setSearchFieldsAll target model col count " + targetModel.getColumnCount());
 
 			for (int i = 0; i < targetModel.getColumnCount(); i++) {
 				String colname = targetModel.getColumnName(i);
@@ -821,10 +821,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		return (comparator.compare(realS.substring(0, part.length()), part) == 0);
 	}
 
-	protected int findViewRowFromValue(int startviewrow, Object value, Set colIndices, boolean fulltext, boolean regex,
-			boolean combineCols) {
+	protected int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
+			boolean regex, boolean combineCols) {
 
-		logging.debug(this,
+		Logging.debug(this,
 				"findViewRowFromValue(int startviewrow, Object value, Set colIndices, boolean fulltext, boolean regex): "
 						+ startviewrow + ", " + value + ", " + colIndices + ", " + fulltext + ", " + regex + ", "
 						+ combineCols);
@@ -854,7 +854,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					val = ".*" + val + ".*";
 				pattern = Pattern.compile(val);
 			} catch (java.util.regex.PatternSyntaxException ex) {
-				logging.info(this, "pattern problem " + ex);
+				Logging.info(this, "pattern problem " + ex);
 				return -1;
 			}
 		}
@@ -872,9 +872,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 					int colJ = targetModel.getColForVisualCol(j);
 
-					Object valJ = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ
-
-					);
+					Object valJ = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ);
 
 					if (valJ != null) {
 						String valSJ = ("" + valJ).toLowerCase();
@@ -976,7 +974,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * select all rows with value from searchfield
 	 */
 	public void markAll() {
-		logging.info(this, "markAll");
+		Logging.info(this, "markAll");
 		targetModel.setValueIsAdjusting(true);
 		targetModel.clearSelection();
 		searchTheRow(0, true);
@@ -997,7 +995,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * select all rows with value form searchfield, checks the filter
 	 */
 	private void markAllAndFilter() {
-		logging.info(this, " markAllAndFilter filtering, disabledSinceWeAreInFilteredModel " + filtering + ", "
+		Logging.info(this, " markAllAndFilter filtering, disabledSinceWeAreInFilteredModel " + filtering + ", "
 				+ disabledSinceWeAreInFilteredMode());
 		if (!filtering)
 			return;
@@ -1133,7 +1131,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			targetModel.setFiltered(false);
 			setFilteredMode(false);
-
 		}
 	}
 
@@ -1149,7 +1146,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	// DocumentListener interface
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-
 		if (e.getDocument() == fieldSearch.getDocument()) {
 
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
@@ -1159,12 +1155,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				searchTheRow(selectMode);
 			}
 		}
-
 	}
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-
 		if (e.getDocument() == fieldSearch.getDocument()) {
 			checkmarkSearch.setSelected(fieldSearch.getText().length() > 0);
 
@@ -1173,7 +1167,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				searchTheRow(selectMode);
 			}
 		}
-
 	}
 
 	@Override
@@ -1186,9 +1179,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			setRow(0, false, selectMode);
 			// go back to start when editing is restarted
-
 		}
-
 	}
 
 	// KeyListener interface
@@ -1196,10 +1187,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public void keyPressed(KeyEvent e) {
 
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
-			if (!disabledSinceWeAreInFilteredMode()) {
-				if (!fieldSearch.getText().equals(""))
-					markAll();
-			}
+			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals(""))
+				markAll();
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_F8) {
@@ -1209,26 +1198,20 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_F3) {
-			if (!disabledSinceWeAreInFilteredMode()) {
-				if (!fieldSearch.getText().equals(""))
-					searchNextRow(selectMode);
-			}
+			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals(""))
+				searchNextRow(selectMode);
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			logging.debug(this, "key pressed ENTER on fieldSearch, with content " + fieldSearch.getText()
+			Logging.debug(this, "key pressed ENTER on fieldSearch, with content " + fieldSearch.getText()
 					+ " searchInputType " + searchInputType);
 
-			if (searchInputType == SearchInputType.LINE) {
-				if (!fieldSearch.getText().equals("")) {
-					switchFilterOff();
-					markAllAndFilter();
-					switchFilterOn();
-				}
+			if (searchInputType == SearchInputType.LINE && !fieldSearch.getText().equals("")) {
+				switchFilterOff();
+				markAllAndFilter();
+				switchFilterOn();
 			}
-
 		}
-
 	}
 
 	@Override
@@ -1244,7 +1227,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == checkmarkAllColumns) {
-			logging.debug(this, "actionPerformed on checkmarkAllColumns");
+			Logging.debug(this, "actionPerformed on checkmarkAllColumns");
 
 			if (checkmarkAllColumns.isSelected()) {
 				comboSearchFields.setSelectedIndex(0); // all columns
@@ -1259,7 +1242,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		else if (e.getSource() == checkmarkFullText) {
-			logging.debug(this, "actionPerformed on checkmarkFullText");
+			Logging.debug(this, "actionPerformed on checkmarkFullText");
 
 			if (checkmarkFullText.isSelected()) {
 				comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
@@ -1270,11 +1253,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				if (saveSearchpaneFullTextSearch != null)
 					saveSearchpaneFullTextSearch.serialize(1);
 			}
-
 		}
 
 		else if (e.getSource() == filtermark) {
-			logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
+			Logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
 
 			if (targetModel.isFiltered()) {
 
@@ -1291,18 +1273,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 				switchFilterOn();
 			}
-
 		}
 
 		else if (e.getSource() == checkmarkSearch) {
-			logging.debug(this,
+			Logging.debug(this,
 					"actionPerformed on checkmarkSearch, targetModel.isFiltered " + targetModel.isFiltered());
 
 			fieldSearch.setText("");
 		}
 
 		else if (e.getSource() == checkmarkSearchProgressive) {
-			logging.debug(this,
+			Logging.debug(this,
 					"actionPerformed on checkmarkSearchProgressiv, set to  " + checkmarkSearchProgressive.isSelected());
 			if (checkmarkSearchProgressive.isSelected()) {
 				searchInputType = SearchInputType.PROGRESSIVE;
@@ -1314,14 +1295,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					saveSearchpaneProgressiveSearch.serialize(1);
 			}
 
-			logging.debug(this,
+			Logging.debug(this,
 					"actionPerformed on checkmarkSearchProgressiv, searchInputType set to " + searchInputType);
 		}
-
 	}
 
 	public void setReloadActionHandler(ActionListener al) {
 		checkmarkSearch.addActionListener(al);
 	}
-
 }

@@ -5,7 +5,7 @@ import java.io.StringReader;
 import java.util.Deque;
 import java.util.LinkedList;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This is a small parser for the JSON-like syntax of the OpsiDataSerializer.
@@ -33,7 +33,7 @@ class JsonParser {
 
 		while ((i = reader.read()) != -1) {
 
-			logging.debug(this, (char) i + " " + currentPosition.toString());
+			Logging.debug(this, (char) i + " " + currentPosition.toString());
 			managePosition();
 			char c = (char) i;
 			if (Character.isWhitespace(c))
@@ -118,7 +118,7 @@ class JsonParser {
 		} else if (currentPosition == PositionType.OBJECT_END || currentPosition == PositionType.LIST_END) {
 			stack.pop();
 			currentPosition = stack.peek();
-			logging.debug(this, "managePosition: " + currentPosition.toString());
+			Logging.debug(this, "managePosition: " + currentPosition.toString());
 			if (currentPosition == PositionType.OBJECT_BEGIN) {
 				inList = false;
 			} else {

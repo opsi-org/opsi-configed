@@ -29,8 +29,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 
 public class FEditObject extends javax.swing.JDialog implements ActionListener, KeyListener, DocumentListener {
@@ -54,7 +54,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected de.uib.configed.gui.IconButton buttonAdd;
 	protected de.uib.configed.gui.IconButton buttonRemove;
 
-	protected String tooltipCommit = configed.getResourceValue("FEditObject.SaveButtonTooltip");
+	protected String tooltipCommit = Configed.getResourceValue("FEditObject.SaveButtonTooltip");
 
 	protected boolean dataChanged = false;
 	protected boolean editable = true;
@@ -93,21 +93,21 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
-		buttonCommit = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.SaveButtonTooltip"),
+		buttonCommit = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.SaveButtonTooltip"),
 				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png", true);
 		buttonCommit.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 
-		buttonCancel = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.CancelButtonTooltip"),
+		buttonCancel = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.CancelButtonTooltip"),
 				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
 		buttonCancel.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
-		buttonRemove = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
+		buttonRemove = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
 				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
 		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 
-		buttonAdd = new de.uib.configed.gui.IconButton(configed.getResourceValue("FEditObject.AddButtonTooltip"),
+		buttonAdd = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.AddButtonTooltip"),
 				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
 		buttonAdd.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 		buttonAdd.setVisible(false);
@@ -245,13 +245,13 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	@Override
 	public void setModal(boolean b) {
 		super.setModal(b);
-		logging.debug(this, "setModal " + b);
+		Logging.debug(this, "setModal " + b);
 		if (b)
 			setAlwaysOnTop(true);
 	}
 
 	public void setDataChanged(boolean b) {
-		logging.debug(this, "setDataChanged " + b);
+		Logging.debug(this, "setDataChanged " + b);
 
 		if (Globals.forbidEditingTargetSpecific() && b)
 			return;
@@ -277,7 +277,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	public boolean init(Dimension usableAreaSize) {
 		if (editingArea.getComponentCount() != 1) {
-			logging.error(" editing area not filled with component");
+			Logging.error(" editing area not filled with component");
 			return false;
 		}
 
@@ -288,7 +288,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	}
 
 	protected void initEditing() {
-		logging.debug(this, "FEditObject.initEditing");
+		Logging.debug(this, "FEditObject.initEditing");
 		setDataChanged(false);
 		buttonAdd.setEnabled(false);
 		buttonRemove.setEnabled(false);
@@ -313,7 +313,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	}
 
 	public void enter() {
-		logging.debug(this, "enter");
+		Logging.debug(this, "enter");
 
 	}
 
@@ -353,7 +353,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	}
 
 	protected void commit() {
-		logging.debug(this, "FEditObject.commit");
+		Logging.debug(this, "FEditObject.commit");
 
 		if (Globals.forbidEditingTargetSpecific())
 			cancel();
@@ -374,7 +374,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	// interface ActionListener
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
-		logging.debug(this, "actionPerformed");
+		Logging.debug(this, "actionPerformed");
 
 		if (e.getSource() == buttonCommit) {
 			commit();

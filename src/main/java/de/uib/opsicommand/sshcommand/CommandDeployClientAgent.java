@@ -2,8 +2,8 @@ package de.uib.opsicommand.sshcommand;
 
 import java.util.List;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHDeployClientAgentParameterDialog;
@@ -37,7 +37,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -46,7 +46,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	/**
 	 * Sets the command specific error text
 	 **/
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 
@@ -103,7 +103,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.deploy-clientagent");
+		return Configed.getResourceValue("SSHConnection.command.deploy-clientagent");
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.deploy-clientagent.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.deploy-clientagent.tooltip");
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 		command = baseName + " " + verbosity + user + passw + finishAction + keepClientOnFailure + getPingOption()
 				+ client;
 		if (needSudo())
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1";
 	}
 
@@ -213,12 +213,13 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 			user = "";
 	}
 
-	public void setVerbosity(int v_sum) {
-		String v = "";
-		for (int i = 0; i < v_sum; i++)
-			v = v + "v";
+	public void setVerbosity(int vSum) {
+		StringBuilder v = new StringBuilder();
+		for (int i = 0; i < vSum; i++)
+			v.append("v");
+
 		verbosity = " -" + v + " ";
-		if (v_sum == 0)
+		if (vSum == 0)
 			verbosity = "";
 	}
 
@@ -237,13 +238,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public boolean checkCommand() {
-		if (client.equals(""))
-			return false;
-
-		if (passw.equals(""))
-			return false;
-
-		return true;
+		return !client.equals("") && !passw.equals("");
 	}
 
 	@Override

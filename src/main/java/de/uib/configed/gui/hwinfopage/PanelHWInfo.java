@@ -27,30 +27,30 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.tree.IconNode;
 import de.uib.configed.tree.IconNodeRenderer;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.tree.XTree;
 
 public class PanelHWInfo extends JPanel implements TreeSelectionListener {
-	public static final String class_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
-	public static final String class_BASE_BOARD = "BASE_BOARD";
+	private static final String CLASS_COMPUTER_SYSTEM = "COMPUTER_SYSTEM";
+	private static final String CLASS_BASE_BOARD = "BASE_BOARD";
 
-	public static final List<String> hwClassesForByAudit = new ArrayList<>();
+	private static final List<String> hwClassesForByAudit = new ArrayList<>();
 	static {
-		hwClassesForByAudit.add(class_COMPUTER_SYSTEM);
-		hwClassesForByAudit.add(class_BASE_BOARD);
+		hwClassesForByAudit.add(CLASS_COMPUTER_SYSTEM);
+		hwClassesForByAudit.add(CLASS_BASE_BOARD);
 	}
 
-	public static final String key_VENDOR = "vendor";
-	public static final String key_MODEL = "model";
-	public static final String key_PRODUCT = "product";
+	private static final String KEY_VENDOR = "vendor";
+	private static final String KEY_MODEL = "model";
+	private static final String KEY_PRODUCT = "product";
 
 	protected Map hwInfo;
 	protected String treeRootTitle;
@@ -74,8 +74,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
 	protected static final String SCANTIME = "scantime";
 
-	protected String vendorStringCOMPUTER_SYSTEM;
-	protected String vendorStringBASE_BOARD;
+	protected String vendorStringComputerSystem;
+	protected String vendorStringBaseBoard;
 	protected String modelString;
 	protected String productString;
 
@@ -90,8 +90,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	protected IconNode selectedNode;
 
 	protected boolean withPopup;
-
-	private final List EMPTY = new ArrayList<>();
 
 	ConfigedMain main;
 
@@ -187,10 +185,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						floatExternal();
 						break;
 					case PopupMenuTrait.POPUP_PDF:
-						logging.info(this, "------------- create report");
+						Logging.info(this, "------------- create report");
 						// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
 						HashMap<String, String> metaData = new HashMap<>();
-						metaData.put("header", configed.getResourceValue("PanelHWInfo.createPDF.title"));
+						metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
 						title = "";
 						if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
 							title = title + "Depot: " + main.getHostsStatusInfo().getInvolvedDepots();
@@ -201,9 +199,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						metaData.put("title", title);
 						metaData.put("keywords", "hardware infos");
 
-						ExporterToPDF pdfExportTable = new ExporterToPDF(CreateHWInfoTableModelComplete());
+						ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
 						pdfExportTable.setMetaData(metaData);
-						pdfExportTable.setPageSizeA4_Landscape();
+						pdfExportTable.setPageSizeA4Landscape();
 						pdfExportTable.execute(null, false); // create pdf // no filename, onlyselectedRows=false
 
 						break;
@@ -224,7 +222,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	/** overwrite in subclasses */
 	protected void reload() {
-		logging.debug(this, "reload action");
+		Logging.debug(this, "reload action");
 	}
 
 	protected void floatExternal() {
@@ -283,13 +281,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		int mult = 1000;
-		if (unit.toLowerCase().equals("byte")) {
+		if (unit.equalsIgnoreCase("byte")) {
 			mult = 1024;
 		}
 		// TODO: nano, micro
-		if (v.compareTo(BigInteger.valueOf(mult * mult * mult)) >= 0) {
-			return ((float) Math.round(v.floatValue() * 1000 / (mult * mult * mult)) / 1000) + " G" + unit;
-		} else if (v.compareTo(BigInteger.valueOf(mult * mult)) >= 0) {
+		if (v.compareTo(BigInteger.valueOf((long) mult * mult * mult)) >= 0) {
+			return ((float) Math.round(v.floatValue() * 1000 / ((long) mult * mult * mult)) / 1000) + " G" + unit;
+		} else if (v.compareTo(BigInteger.valueOf((long) mult * mult)) >= 0) {
 			return ((float) Math.round(v.floatValue() * 1000 / (mult * mult)) / 1000) + " M" + unit;
 		} else if (v.compareTo(BigInteger.valueOf(mult)) >= 0) {
 			return ((float) Math.round(v.floatValue() * 1000 / (mult)) / 1000) + " k" + unit;
@@ -305,18 +303,18 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		tree.setSelectionInterval(row, row);
 	}
 
-	private List getDataForNode(IconNode node) {
+	private List<String[]> getDataForNode(IconNode node) {
 		return getDataForNode(node, false);
 	}
 
-	private List getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
+	private List<String[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
 
 		if (node == null || !node.isLeaf())
-			return EMPTY;
+			return new ArrayList<>();
 
 		TreeNode[] path = node.getPath();
 		if (path.length < 3) {
-			return EMPTY;
+			return new ArrayList<>();
 		}
 
 		String hwClassUI = path[1].toString();
@@ -328,7 +326,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		List devices = (List) hwInfo.get(hwClass);
 		Map deviceInfo = node.getDeviceInfo();
 		if ((devices == null) || (deviceInfo == null)) {
-			return EMPTY;
+			return new ArrayList<>();
 		}
 
 		List values = null;
@@ -343,17 +341,17 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			} catch (NullPointerException ex) {
 			}
 		}
-		List data = new ArrayList<>();
+		List<String[]> data = new ArrayList<>();
 		if (values != null) {
 			for (int j = 0; j < values.size(); j++) {
 				Map v = (Map) values.get(j);
 				String opsi = (String) v.get("Opsi");
-				logging.debug(this, "opsi " + opsi);
+				Logging.debug(this, "opsi " + opsi);
 				String ui = encodeString((String) v.get("UI")); // table row keys //no encoding needed
 				String unit = null;
 				if (v.containsKey("Unit")) {
 					unit = (String) v.get("Unit");
-					logging.debug(this, "unit  " + unit);
+					Logging.debug(this, "unit  " + unit);
 				}
 				Iterator iter = deviceInfo.keySet().iterator();
 				while (iter.hasNext()) {
@@ -367,21 +365,21 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						}
 
 						if (reduceScanToByAuditClasses && hwClass != null) {
-							logging.debug(this, "key " + opsi);
+							Logging.debug(this, "key " + opsi);
 
-							if (hwClass.equals(class_COMPUTER_SYSTEM)) {
-								if (opsi.equalsIgnoreCase(key_VENDOR)) {
-									vendorStringCOMPUTER_SYSTEM = cv;
+							if (hwClass.equals(CLASS_COMPUTER_SYSTEM)) {
+								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
+									vendorStringComputerSystem = cv;
 
-								} else if (opsi.equalsIgnoreCase(key_MODEL)) {
+								} else if (opsi.equalsIgnoreCase(KEY_MODEL)) {
 									modelString = cv;
 
 								}
-							} else if (hwClass.equals(class_BASE_BOARD)) {
-								if (opsi.equalsIgnoreCase(key_VENDOR)) {
-									vendorStringBASE_BOARD = cv;
+							} else if (hwClass.equals(CLASS_BASE_BOARD)) {
+								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
+									vendorStringBaseBoard = cv;
 
-								} else if (opsi.equalsIgnoreCase(key_PRODUCT)) {
+								} else if (opsi.equalsIgnoreCase(KEY_PRODUCT)) {
 									productString = cv;
 
 								}
@@ -393,7 +391,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						}
 						String[] row = { ui, cv };
 						data.add(row);
-						logging.debug(this, "hwClass row  version 1 " + hwClass + ": " + Arrays.toString(row));
+						Logging.debug(this, "hwClass row  version 1 " + hwClass + ": " + Arrays.toString(row));
 						break;
 					}
 				}
@@ -404,7 +402,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				String key = (String) iter.next();
 				String[] row = { key, (String) deviceInfo.get(key) };
 				data.add(row);
-				logging.debug(this, "hwClass row  " + hwClass + ": " + Arrays.toString(row));
+				Logging.debug(this, "hwClass row  " + hwClass + ": " + Arrays.toString(row));
 			}
 		}
 
@@ -424,7 +422,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return;
 
 		TreePath selectedPath = tree.getSelectionPath();
-		logging.debug(this, "selectedPath " + selectedPath);
+		Logging.debug(this, "selectedPath " + selectedPath);
 		if (!node.isLeaf()) {
 			tree.expandPath(selectedPath);
 		}
@@ -446,11 +444,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClassUI = path[1].toString();
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-			if (hwClass != null && (hwClass.equals(class_COMPUTER_SYSTEM) || hwClass.equals(class_BASE_BOARD))) {
-				logging.debug(this, "scanNode found  class_COMPUTER_SYSTEM or class_BASE_BOARD");
+			if (hwClass != null && (hwClass.equals(CLASS_COMPUTER_SYSTEM) || hwClass.equals(CLASS_BASE_BOARD))) {
+				Logging.debug(this, "scanNode found  class_COMPUTER_SYSTEM or class_BASE_BOARD");
 				getDataForNode(node, true);
 
-				panelByAuditInfo.setByAuditFields(vendorStringCOMPUTER_SYSTEM, vendorStringBASE_BOARD, modelString,
+				panelByAuditInfo.setByAuditFields(vendorStringComputerSystem, vendorStringBaseBoard, modelString,
 						productString);
 			}
 
@@ -458,8 +456,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	protected void initByAuditStrings() {
-		vendorStringCOMPUTER_SYSTEM = "";
-		vendorStringBASE_BOARD = "";
+		vendorStringComputerSystem = "";
+		vendorStringBaseBoard = "";
 		modelString = "";
 		productString = "";
 	}
@@ -473,17 +471,16 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		if (hwInfo == null) {
 			createRoot(treeRootTitle);
-			tableModel.setData(EMPTY);
+			tableModel.setData(new ArrayList<>());
 			return;
 		}
 
-		List hwInfo_special = (List) hwInfo.get(SCANPROPERTYNAME);
+		List hwInfoSpecial = (List) hwInfo.get(SCANPROPERTYNAME);
 		String rootname = "";
 
-		if (hwInfo_special != null && !hwInfo_special.isEmpty()) {
-			if (hwInfo_special.get(0) != null && ((Map) hwInfo_special.get(0)).get(SCANTIME) != null) {
-				rootname = "Scan " + (String) ((Map) hwInfo_special.get(0)).get(SCANTIME);
-			}
+		if (hwInfoSpecial != null && !hwInfoSpecial.isEmpty() && hwInfoSpecial.get(0) != null
+				&& ((Map) hwInfoSpecial.get(0)).get(SCANTIME) != null) {
+			rootname = "Scan " + (String) ((Map) hwInfoSpecial.get(0)).get(SCANTIME);
 		}
 		title = rootname;
 
@@ -491,12 +488,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		tableModel.setData(new ArrayList<>());
 
 		if (hwConfig == null) {
-			logging.info("hwConfig null");
+			Logging.info("hwConfig null");
 			return;
 		}
 
 		if (hwInfo == null) {
-			logging.info("hwInfo null");
+			Logging.info("hwInfo null");
 			return;
 		}
 
@@ -505,7 +502,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		for (int i = 0; i < hwConfig.size(); i++) {
 			Map whc = (Map) hwConfig.get(i);
 			hwClassesUI[i] = (String) ((Map) whc.get("Class")).get("UI");
-			hwClassMapping.put(hwClassesUI[i], (String) ((Map) whc.get("Class")).get("Opsi"));
+			hwClassMapping.put(hwClassesUI[i], ((Map) whc.get("Class")).get("Opsi"));
 
 		}
 
@@ -518,7 +515,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			List devices = (List) hwInfo.get(hwClass);
 			if (devices == null) {
-				logging.debug(this, "No devices of hwclass " + hwClass + " found");
+				Logging.debug(this, "No devices of hwclass " + hwClass + " found");
 				continue;
 			}
 
@@ -594,7 +591,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	private class HWInfoTableModel extends AbstractTableModel {
-		private List data;
+		private List<String[]> data;
 		private final String[] header = { "Name", "Wert" };
 
 		public HWInfoTableModel() {
@@ -602,7 +599,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			data = new ArrayList<>();
 		}
 
-		public void setData(List data) {
+		public void setData(List<String[]> data) {
 			this.data = data;
 			fireTableDataChanged();
 		}
@@ -624,7 +621,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		@Override
 		public Object getValueAt(int row, int col) {
-			return ((String[]) data.get(row))[col];
+			return data.get(row)[col];
 		}
 	}
 
@@ -653,7 +650,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	}
 
-	private JTable CreateHWInfoTableModelComplete() {
+	private JTable createHWInfoTableModelComplete() {
 		getLocalizedHashMap();
 		// TODO
 		DefaultTableModel tableModelComplete = new DefaultTableModel();
@@ -661,39 +658,39 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		List childValues;
 
-		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_hardware"));
-		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_device"));
-		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_name"));
-		tableModelComplete.addColumn(configed.getResourceValue("PanelHWInfo.createPDF.column_value"));
+		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_hardware"));
+		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_device"));
+		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_name"));
+		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_value"));
 
 		for (int i = 0; i < treeModel.getChildCount(treeModel.getRoot()); i++) {
 			Object child = treeModel.getChild(treeModel.getRoot(), i);
 			// get ArrayList
 			List al = (List) hwInfo.get(hwClassMapping.get(child.toString()));
-			Iterator<Map> al_itr = al.iterator();
+			Iterator<Map> alIterator = al.iterator();
 
 			boolean first = true;
-			while (al_itr.hasNext()) {
-				Map hm = al_itr.next();
+			while (alIterator.hasNext()) {
+				Map hm = alIterator.next();
 				if (first) { // second column, first element
 					childValues = new ArrayList<>();
 					childValues.add(child.toString()); // first column
 					childValues.add(hm.get("displayName").toString());
-					Iterator hm_iter = hm.keySet().iterator();
+					Iterator hmIterator = hm.keySet().iterator();
 					boolean firstValue = true;
-					while (hm_iter.hasNext()) {
-						String hm_key = (String) hm_iter.next();
-						if (!hm_key.equals("displayName") && !hm_key.equals("type")) { //
+					while (hmIterator.hasNext()) {
+						String hmKey = (String) hmIterator.next();
+						if (!hmKey.equals("displayName") && !hmKey.equals("type")) { //
 							if (firstValue) {
-								childValues.add(hwOpsiToUI.get(hm_key));
-								childValues.add(hm.get(hm_key));
+								childValues.add(hwOpsiToUI.get(hmKey));
+								childValues.add(hm.get(hmKey));
 								firstValue = false;
 							} else {
 								childValues = new ArrayList<>();
 								childValues.add("");
 								childValues.add("");
-								childValues.add(hwOpsiToUI.get(hm_key));
-								childValues.add(hm.get(hm_key));
+								childValues.add(hwOpsiToUI.get(hmKey));
+								childValues.add(hm.get(hmKey));
 							}
 							tableModelComplete.addRow(childValues.toArray());
 						}
@@ -704,21 +701,21 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					childValues = new ArrayList<>();
 					childValues.add(""); // first column empty
 					childValues.add(hm.get("displayName").toString());
-					Iterator hm_iter = hm.keySet().iterator();
+					Iterator hmIterator = hm.keySet().iterator();
 					boolean firstValue = true;
-					while (hm_iter.hasNext()) {
-						String hm_key = (String) hm_iter.next();
-						if (!hm_key.equals("displayName") && !hm_key.equals("type")) {
+					while (hmIterator.hasNext()) {
+						String hmKey = (String) hmIterator.next();
+						if (!hmKey.equals("displayName") && !hmKey.equals("type")) {
 							if (firstValue) {
 								firstValue = false;
-								childValues.add(hwOpsiToUI.get(hm_key));
-								childValues.add(hm.get(hm_key));
+								childValues.add(hwOpsiToUI.get(hmKey));
+								childValues.add(hm.get(hmKey));
 							} else {
 								childValues = new ArrayList<>();
 								childValues.add("");
 								childValues.add("");
-								childValues.add(hwOpsiToUI.get(hm_key));
-								childValues.add(hm.get(hm_key));
+								childValues.add(hwOpsiToUI.get(hmKey));
+								childValues.add(hm.get(hmKey));
 							}
 							tableModelComplete.addRow(childValues.toArray());
 						}

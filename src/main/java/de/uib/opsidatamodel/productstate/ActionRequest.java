@@ -3,7 +3,6 @@ package de.uib.opsidatamodel.productstate;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +35,6 @@ public class ActionRequest {
 	private static Map<String, String> label2displayLabel;
 	private static Map<String, String> displayLabel2label;
 	private static Map<String, Color> label2textColor;
-	private static Map<String, Integer> serviceValue2state;
 
 	private static List<Integer> states;
 	private static List<Integer> possibleRequests;
@@ -98,7 +96,7 @@ public class ActionRequest {
 		state2label.put(ONCE, "once");
 		state2label.put(CUSTOM, "custom");
 
-		serviceValue2state = new LinkedHashMap<>();
+		Map<String, Integer> serviceValue2state = new HashMap<>();
 		serviceValue2state.put("setup", SETUP);
 		serviceValue2state.put("update", UPDATE);
 		serviceValue2state.put("uninstall", UNINSTALL);

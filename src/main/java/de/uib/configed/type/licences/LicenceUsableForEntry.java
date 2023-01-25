@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class LicenceUsableForEntry extends HashMap<String, String> {
 	/*
@@ -18,45 +18,45 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 	 * 
 	 */
 
-	public static final String idKEY = "id";
-	public static final String licenceIdKEY = "softwareLicenseId";
-	public static final String licencePoolIdKEY = "licensePoolId";
-	public static final String licencekeyKEY = "licenseKey";
+	public static final String ID_KEY = "id";
+	public static final String LICENCE_ID_KEY = "softwareLicenseId";
+	public static final String LICENSE_POOL_ID_KEY = "licensePoolId";
+	public static final String LICENCE_KEY_KEY = "licenseKey";
 
-	private static List<String> KEYS;
+	private static final List<String> KEYS = new ArrayList<>();
 	static {
-		KEYS = new ArrayList<>();
-		KEYS.add(licenceIdKEY);
-		KEYS.add(licencePoolIdKEY);
-		KEYS.add(licencekeyKEY);
+		KEYS.add(LICENCE_ID_KEY);
+		KEYS.add(LICENSE_POOL_ID_KEY);
+		KEYS.add(LICENCE_KEY_KEY);
 	}
 
 	public static LicenceUsableForEntry produceFrom(Map<String, Object> importedEntry) {
 		LicenceUsableForEntry entry = new LicenceUsableForEntry();
-		for (String key : importedEntry.keySet()) {
-			entry.put(key, (String) importedEntry.get(key));
+		for (Entry<String, Object> imported : importedEntry.entrySet()) {
+			entry.put(imported.getKey(), (String) imported.getValue());
 		}
-		if (importedEntry.get(licenceIdKEY) == null || importedEntry.get(licencePoolIdKEY) == null)
-			logging.warning("LicenceUsableForEntry,  missing primary key in " + importedEntry);
+		if (importedEntry.get(LICENCE_ID_KEY) == null || importedEntry.get(LICENSE_POOL_ID_KEY) == null)
+			Logging.warning("LicenceUsableForEntry,  missing primary key in " + importedEntry);
 
-		String pseudokey = Globals.pseudokey(new String[] { entry.get(licenceIdKEY), entry.get(licencePoolIdKEY) });
+		String pseudokey = Globals
+				.pseudokey(new String[] { entry.get(LICENCE_ID_KEY), entry.get(LICENSE_POOL_ID_KEY) });
 
-		entry.put(idKEY, pseudokey);
+		entry.put(ID_KEY, pseudokey);
 
 		return entry;
 
 	}
 
 	public String getId() {
-		return get(idKEY);
+		return get(ID_KEY);
 	}
 
 	public String getLicenceId() {
-		return get(licenceIdKEY);
+		return get(LICENCE_ID_KEY);
 	}
 
 	public String getLicencePoolId() {
-		return get(licencePoolIdKEY);
+		return get(LICENSE_POOL_ID_KEY);
 	}
 
 }

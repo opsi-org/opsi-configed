@@ -9,7 +9,7 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.ControlMultiTablePanel;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 /**
@@ -32,7 +32,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 	private void initComponents() {
 
 		panelStatistics = new PanelGenEditTable(
-				configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, // editing
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleStatistics"), 1000, false, // editing
 				0, // popupPosition
 				true // switchLineColors
 				, null, true // searchpane

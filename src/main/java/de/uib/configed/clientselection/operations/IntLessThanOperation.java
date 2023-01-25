@@ -11,7 +11,7 @@ public class IntLessThanOperation extends SelectOperation {
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.INTEGER_TYPE;
+		return SelectData.DataType.IntegerType;
 	}
 
 	@Override

@@ -18,9 +18,9 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsicommand.JSONObjectX;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class LicensingInfoMap {
 
@@ -116,7 +116,7 @@ public class LicensingInfoMap {
 
 	public static LicensingInfoMap getInstance(JSONObject jsonObj, Map<String, List<Object>> configVals,
 			Boolean reduced) {
-		logging.info("reduced, instance here " + reduced + ", " + instance);
+		Logging.info("reduced, instance here " + reduced + ", " + instance);
 
 		if (instance == null || instanceComplete == null || instanceReduced == null) {
 			instanceComplete = new LicensingInfoMap(jsonObj, configVals, false);
@@ -134,8 +134,8 @@ public class LicensingInfoMap {
 	}
 
 	public static void setReduced(boolean reduced) {
-		logging.info("setReduced instanceReduced " + instanceReduced + " cols " + instanceReduced.getColumnNames());
-		logging.info("setReduced instanceComplete " + instanceComplete + " cols " + instanceComplete.getColumnNames());
+		Logging.info("setReduced instanceReduced " + instanceReduced + " cols " + instanceReduced.getColumnNames());
+		Logging.info("setReduced instanceComplete " + instanceComplete + " cols " + instanceComplete.getColumnNames());
 
 		reducedView = reduced;
 		if (reduced) {
@@ -146,7 +146,7 @@ public class LicensingInfoMap {
 	}
 
 	public static LicensingInfoMap getInstance(JSONObject jsonObj, Map<String, List<Object>> configVals) {
-		logging.info("instance here reducedView " + reducedView + ", instance " + instance);
+		Logging.info("instance here reducedView " + reducedView + ", instance " + instance);
 		if (instance == null) {
 			instance = getInstance(jsonObj, configVals, reducedView);
 		}
@@ -156,7 +156,7 @@ public class LicensingInfoMap {
 
 	public static LicensingInfoMap getInstance() {
 		if (instance == null)
-			logging.error(CLASSNAME + " instance  not initialized");
+			Logging.error(CLASSNAME + " instance  not initialized");
 
 		return instance;
 	}
@@ -166,13 +166,13 @@ public class LicensingInfoMap {
 	}
 
 	private LicensingInfoMap(JSONObject jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
-		logging.info(this, "generate with reducedView " + reduced + " at the moment ignored, we set false");
+		Logging.info(this, "generate with reducedView " + reduced + " at the moment ignored, we set false");
 		reducedView = reduced;
 
 		try {
 			jOResult = jsonObj.getJSONObject(RESULT);
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " constructor " + ex);
+			Logging.error(CLASSNAME + " constructor " + ex);
 		}
 		datesKeys = new ArrayList<>();
 		configs = configVals;
@@ -203,14 +203,14 @@ public class LicensingInfoMap {
 			JSONObjectX clientX = new JSONObjectX(client);
 
 			if (!clientX.isMap()) {
-				logging.error(CLASSNAME + " map expected " + clientX);
+				Logging.error(CLASSNAME + " map expected " + clientX);
 			} else {
-				logging.debug(CLASSNAME + " map retrieved");
+				Logging.debug(CLASSNAME + " map retrieved");
 
 				result = clientX.getMap();
 			}
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " getClientNumersMap : " + ex.toString());
+			Logging.error(CLASSNAME + " getClientNumersMap : " + ex.toString());
 		}
 
 		return result;
@@ -251,7 +251,7 @@ public class LicensingInfoMap {
 			}
 
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " produceLicenses " + ex.toString());
+			Logging.error(CLASSNAME + " produceLicenses " + ex.toString());
 		}
 
 		return result;
@@ -269,7 +269,7 @@ public class LicensingInfoMap {
 			}
 
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " produceCustomerIdSet " + ex.toString());
+			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex.toString());
 		}
 
 		return customerIDs;
@@ -293,7 +293,7 @@ public class LicensingInfoMap {
 			}
 
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " produceCustomerIdSet " + ex.toString());
+			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex.toString());
 		}
 
 		return customerNames;
@@ -311,7 +311,7 @@ public class LicensingInfoMap {
 				result.add(jsResult.getString(i));
 			}
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " getAvailableModules : " + ex);
+			Logging.error(CLASSNAME + " getAvailableModules : " + ex);
 		}
 
 		Collections.sort(result);
@@ -335,7 +335,7 @@ public class LicensingInfoMap {
 				result = availableModules;
 			}
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " produceKnownModules " + ex);
+			Logging.error(CLASSNAME + " produceKnownModules " + ex);
 		}
 
 		Collections.sort(result);
@@ -358,7 +358,7 @@ public class LicensingInfoMap {
 				return null;
 			}
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " produceObsoleteModules " + ex);
+			Logging.error(CLASSNAME + " produceObsoleteModules " + ex);
 		}
 
 		Collections.sort(result);
@@ -423,7 +423,7 @@ public class LicensingInfoMap {
 			}
 
 		} catch (Exception ex) {
-			logging.error(this, " produceConfigs " + ex);
+			Logging.error(this, " produceConfigs " + ex);
 		}
 	}
 
@@ -434,7 +434,7 @@ public class LicensingInfoMap {
 			checksum = jOResult.getString(CHECKSUM);
 			checksum = jOResult.get("licenses_checksum").toString();
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " produceChecksum : " + ex);
+			Logging.error(CLASSNAME + " produceChecksum : " + ex);
 		}
 
 		return checksum;
@@ -469,7 +469,7 @@ public class LicensingInfoMap {
 			}
 
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " produceDatesKeys : " + ex.toString() + ", ");
+			Logging.error(CLASSNAME + " produceDatesKeys : " + ex.toString() + ", ");
 		}
 
 		return dates;
@@ -543,8 +543,7 @@ public class LicensingInfoMap {
 							currentOverLimitModuleList.add(currentModule);
 					}
 
-					else if (key.equals(getLatestDate())
-							&& checkTimeLeft(tmp.getMap(), currentModule).equals(STATE_DAYS_WARNING)) {
+					else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_WARNING)) {
 						moduleInfo.put(STATE, STATE_DAYS_WARNING);
 						currentTimeWarningModuleList.add(currentModule);
 					}
@@ -562,7 +561,7 @@ public class LicensingInfoMap {
 
 					JSONObjectX moduleInfoX = new JSONObjectX(moduleInfo);
 
-					modulesMapToDate.put((String) currentModule, moduleInfoX.getMap());
+					modulesMapToDate.put(currentModule, moduleInfoX.getMap());
 
 				}
 				resultMap.put(key, new TreeMap<>(modulesMapToDate));
@@ -570,7 +569,7 @@ public class LicensingInfoMap {
 			}
 
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + " produceDatesMap : " + ex.toString() + ", ");
+			Logging.error(CLASSNAME + " produceDatesMap : " + ex.toString() + ", ");
 		}
 
 		return new TreeMap<>(checkTimeWarning(resultMap));
@@ -584,8 +583,8 @@ public class LicensingInfoMap {
 		Map<String, Map> resultMap = new HashMap<>();
 
 		columnNames = new ArrayList<>();
-		columnNames.add(configed.getResourceValue("LicensingInfo.modules"));
-		columnNames.add(configed.getResourceValue("LicensingInfo.available"));
+		columnNames.add(Configed.getResourceValue("LicensingInfo.modules"));
+		columnNames.add(Configed.getResourceValue("LicensingInfo.available"));
 
 		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
@@ -602,12 +601,12 @@ public class LicensingInfoMap {
 				Map<String, Object> line = new HashMap<>();
 
 				// 1st column
-				line.put(configed.getResourceValue("LicensingInfo.modules"), currentModule);
+				line.put(Configed.getResourceValue("LicensingInfo.modules"), currentModule);
 
 				// 2nd column
 
 				// 3rd column
-				line.put(configed.getResourceValue("LicensingInfo.available"),
+				line.put(Configed.getResourceValue("LicensingInfo.available"),
 						availableModules.contains(currentModule));
 
 				// rest columns
@@ -618,7 +617,7 @@ public class LicensingInfoMap {
 				resultMap.put(currentModule, line);
 			}
 		} catch (Exception ex) {
-			logging.error(CLASSNAME + "getTableMapFromDatesMap() " + ex);
+			Logging.error(CLASSNAME + "getTableMapFromDatesMap() " + ex);
 		}
 
 		return new TreeMap<>(resultMap);
@@ -645,7 +644,7 @@ public class LicensingInfoMap {
 
 			}
 		} catch (ParseException ex) {
-			logging.error(CLASSNAME + " getCurrentlyActiveLicense " + ex);
+			Logging.error(CLASSNAME + " getCurrentlyActiveLicense " + ex);
 		}
 
 		return newest;
@@ -669,7 +668,7 @@ public class LicensingInfoMap {
 
 			}
 		} catch (ParseException ex) {
-			logging.error(CLASSNAME + " findLatestChangeDate" + ex);
+			Logging.error(CLASSNAME + " findLatestChangeDate" + ex);
 		}
 
 		return newest;
@@ -684,7 +683,7 @@ public class LicensingInfoMap {
 					return key;
 			}
 		} catch (ParseException ex) {
-			logging.error(CLASSNAME + " findNextChangeDate " + ex);
+			Logging.error(CLASSNAME + " findNextChangeDate " + ex);
 		}
 
 		return null;
@@ -702,13 +701,13 @@ public class LicensingInfoMap {
 
 			return diff;
 		} catch (ParseException ex) {
-			logging.error(CLASSNAME + " getDaysLeftUntilNextChange " + ex);
+			Logging.error(CLASSNAME + " getDaysLeftUntilNextChange " + ex);
 		}
 
 		return null;
 	}
 
-	private String checkTimeLeft(Map<String, Object> moduleInfo, String module) {
+	private String checkTimeLeft(Map<String, Object> moduleInfo) {
 		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
 				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
 
@@ -716,7 +715,6 @@ public class LicensingInfoMap {
 			String validUntil;
 
 			for (int i = 0; i < lics.size(); i++) {
-
 				validUntil = licenses.get(lics.get(i)).get(VALID_UNTIL).toString();
 
 				Long timeLeft = getDaysLeftUntil(validUntil);
@@ -737,44 +735,40 @@ public class LicensingInfoMap {
 	 */
 
 	private String checkFuture(Map<String, Object> moduleInfo, String module, String date) {
-		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)) {
+		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER) && date.equals(findNextChangeDate())) {
+			String state = moduleInfo.get(STATE).toString();
 
-			if (date.equals(findNextChangeDate())) {
-				String state = moduleInfo.get(STATE).toString();
+			if (!state.equals(STATE_UNLICENSED)) {
+				String cNum;
+				String fNum;
 
-				if (!state.equals(STATE_UNLICENSED)) {
-					String cNum;
-					String fNum;
+				if (module.equals(MODULE_MACOS_AGENT)) {
+					cNum = clientNumbersMap.get(MAC_OS).toString();
 
-					if (module.equals(MODULE_MACOS_AGENT)) {
-						cNum = clientNumbersMap.get(MAC_OS).toString();
+				} else if (module.equals(MODULE_LINUX_AGENT)) {
 
-					} else if (module.equals(MODULE_LINUX_AGENT)) {
+					cNum = clientNumbersMap.get(LINUX).toString();
+				} else {
 
-						cNum = clientNumbersMap.get(LINUX).toString();
-					} else {
+					cNum = clientNumbersMap.get(ALL).toString();
 
-						cNum = clientNumbersMap.get(ALL).toString();
-
-					}
-
-					fNum = moduleInfo.get(CLIENT_NUMBER).toString();
-
-					Integer futureNum = Integer.parseInt(fNum);
-					Integer clientNum = Integer.parseInt(cNum);
-
-					Integer diff = futureNum - clientNum;
-
-					if (diff < 0)
-						return STATE_OVER_LIMIT;
-
-					if (diff <= absolutClientLimitWarning
-							| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning))
-						return STATE_CLOSE_TO_LIMIT;
-
-					return STATE_FUTURE_OKAY;
 				}
 
+				fNum = moduleInfo.get(CLIENT_NUMBER).toString();
+
+				Integer futureNum = Integer.parseInt(fNum);
+				Integer clientNum = Integer.parseInt(cNum);
+
+				Integer diff = futureNum - clientNum;
+
+				if (diff < 0)
+					return STATE_OVER_LIMIT;
+
+				if (diff <= absolutClientLimitWarning
+						| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning))
+					return STATE_CLOSE_TO_LIMIT;
+
+				return STATE_FUTURE_OKAY;
 			}
 		}
 
@@ -791,13 +785,10 @@ public class LicensingInfoMap {
 				Map<String, Object> val = mod.getValue();
 				String modKey = mod.getKey();
 
-				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING)) {
-					if (resultMap.get(findNextChangeDate()).get(modKey).get(FUTURE_STATE).toString()
-							.equals(STATE_FUTURE_OKAY)) {
-						val.put(STATE, STATE_DAYS_OKAY);
-						currentTimeWarningModuleList.remove(modKey);
-					}
-
+				if (val.get(STATE).toString().equals(STATE_DAYS_WARNING) && resultMap.get(findNextChangeDate())
+						.get(modKey).get(FUTURE_STATE).toString().equals(STATE_FUTURE_OKAY)) {
+					val.put(STATE, STATE_DAYS_OKAY);
+					currentTimeWarningModuleList.remove(modKey);
 				}
 			}
 		}
@@ -850,20 +841,20 @@ public class LicensingInfoMap {
 	}
 
 	public boolean warningExists() {
-		logging.info(this, "warning exists? ");
+		Logging.info(this, "warning exists? ");
 
 		boolean result = false;
 
-		logging.info(this, "warnings currentOverLimitModuleList? " + currentOverLimitModuleList.size());
-		logging.info(this, "warnings currentCloseToLimitModuleList? " + currentCloseToLimitModuleList.size());
-		logging.info(this, "warnings currentTimeWarningModuleList? " + currentTimeWarningModuleList.size());
-		logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
-		logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
+		Logging.info(this, "warnings currentOverLimitModuleList? " + currentOverLimitModuleList.size());
+		Logging.info(this, "warnings currentCloseToLimitModuleList? " + currentCloseToLimitModuleList.size());
+		Logging.info(this, "warnings currentTimeWarningModuleList? " + currentTimeWarningModuleList.size());
+		Logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
+		Logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
 
 		result = !currentOverLimitModuleList.isEmpty() || !currentCloseToLimitModuleList.isEmpty()
 				|| !currentTimeWarningModuleList.isEmpty();
 
-		logging.info(this, "warning exists " + result);
+		Logging.info(this, "warning exists " + result);
 
 		return result;
 	}

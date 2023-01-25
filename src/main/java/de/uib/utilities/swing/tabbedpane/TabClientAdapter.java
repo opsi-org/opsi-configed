@@ -2,7 +2,7 @@ package de.uib.utilities.swing.tabbedpane;
 
 import javax.swing.JPanel;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class TabClientAdapter extends JPanel implements TabClient {
 
@@ -13,13 +13,13 @@ public class TabClientAdapter extends JPanel implements TabClient {
 
 	@Override
 	public void reset() {
-		logging.info(this, "TabClientAdapter.reset() ");
+		Logging.info(this, "TabClientAdapter.reset() ");
 	}
 
 	@Override
 	public boolean mayLeave() {
 		boolean result = true;
-		logging.debug(this, "TabClientAdapter.mayLeave() " + result);
+		Logging.debug(this, "TabClientAdapter.mayLeave() " + result);
 		return result;
 	}
 

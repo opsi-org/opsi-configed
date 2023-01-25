@@ -2,7 +2,7 @@ package de.uib.utilities;
 
 import java.util.Comparator;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class IntComparatorForStrings implements Comparator<String> {
 
@@ -17,7 +17,7 @@ public class IntComparatorForStrings implements Comparator<String> {
 		}
 
 		catch (NumberFormatException ex) {
-			logging.debug("o1 no number " + o1);
+			Logging.debug("o1 no number " + o1);
 		}
 
 		try {
@@ -25,7 +25,7 @@ public class IntComparatorForStrings implements Comparator<String> {
 		}
 
 		catch (NumberFormatException ex) {
-			logging.debug("o2 no number " + o2);
+			Logging.debug("o2 no number " + o2);
 		}
 
 		if (i1 < i2)

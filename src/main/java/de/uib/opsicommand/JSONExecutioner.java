@@ -11,7 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * This class extends the Executioner abstract class in such a way that the data
@@ -53,9 +53,9 @@ public abstract class JSONExecutioner extends Executioner {
 		try {
 			value = ((JSONObject) o).get(key);
 		} catch (JSONException jex) {
-			logging.error("json error on getting value,  " + jex.toString());
+			Logging.error("json error on getting value,  " + jex.toString());
 		} catch (Exception ex) {
-			logging.error("error on getting value,  " + ex.toString());
+			Logging.error("error on getting value,  " + ex.toString());
 		}
 
 		return value;
@@ -103,7 +103,7 @@ public abstract class JSONExecutioner extends Executioner {
 				}
 			}
 		} catch (Exception ex) {
-			logging.error("Exception on getting Map " + ex.toString());
+			Logging.error("Exception on getting Map " + ex.toString());
 		}
 		return result;
 	}
@@ -130,7 +130,7 @@ public abstract class JSONExecutioner extends Executioner {
 				}
 			}
 		} catch (Exception ex) {
-			logging.error(this, "Exception on getting Map " + ex.toString());
+			Logging.error(this, "Exception on getting Map " + ex.toString());
 		}
 		return result;
 	}
@@ -167,20 +167,20 @@ public abstract class JSONExecutioner extends Executioner {
 				}
 			}
 		} catch (Exception ex) {
-			logging.error(this, "Exception on getting Map " + ex.toString());
+			Logging.error(this, "Exception on getting Map " + ex.toString());
 		}
 		return result;
 	}
 
 	@Override
-	public Map<String, Object> getMap_Object(OpsiMethodCall omc)
+	public Map<String, Object> getMapObject(OpsiMethodCall omc)
 	// this method tries to return Java lists in comparison with getMapResult
 	{
-		return JSONReMapper.getMap_Object(retrieveJSONObject(omc));
+		return JSONReMapper.getMapObject(retrieveJSONObject(omc));
 	}
 
 	@Override
-	public Map<String, Map<String, Object>> getMap2_Object(OpsiMethodCall omc)
+	public Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc)
 	// including a conversion of json objects to a standard java object
 
 	{
@@ -194,20 +194,20 @@ public abstract class JSONExecutioner extends Executioner {
 				JSONObjectX jOX = new JSONObjectX(jOResult);
 
 				if (!jOX.isMap()) {
-					logging.error(this, "map expected " + jOX);
+					Logging.error(this, "map expected " + jOX);
 				} else {
-					logging.debug(this, "map retrieved ");
+					Logging.debug(this, "map retrieved ");
 
-					Map map0 = jOX.getMap();
+					Map<String, Object> map0 = jOX.getMap();
 
-					Iterator iter0 = map0.keySet().iterator();
+					Iterator<String> iter0 = map0.keySet().iterator();
 					while (iter0.hasNext()) {
-						String key1 = (String) iter0.next();
+						String key1 = iter0.next();
 
 						JSONObjectX jOX1 = new JSONObjectX((JSONObject) map0.get(key1));
 
 						if (!jOX1.isMap()) {
-							logging.error(this, "map expected in level 2 " + jOX1);
+							Logging.error(this, "map expected in level 2 " + jOX1);
 							result = resultNull;
 						} else {
 							result.put(key1, jOX1.getMap());
@@ -216,7 +216,7 @@ public abstract class JSONExecutioner extends Executioner {
 				}
 			}
 		} catch (Exception ex) {
-			logging.error("this, getMap2_Object : " + ex.toString());
+			Logging.error("this, getMap2_Object : " + ex.toString());
 		}
 
 		return result;
@@ -224,8 +224,8 @@ public abstract class JSONExecutioner extends Executioner {
 	}
 
 	@Override
-	public Map<String, Map<String, Map<String, Object>>> getMap3_Object(OpsiMethodCall omc) {
-		return JSONReMapper.getMap3_Object(retrieveJSONObject(omc));
+	public Map<String, Map<String, Map<String, Object>>> getMap3Object(OpsiMethodCall omc) {
+		return JSONReMapper.getMap3Object(retrieveJSONObject(omc));
 	}
 
 	@Override
@@ -255,7 +255,7 @@ public abstract class JSONExecutioner extends Executioner {
 			}
 
 		} catch (Exception ex) {
-			logging.error(this, "Exception on getting list for key \"result\" " + ex.toString());
+			Logging.error(this, "Exception on getting list for key \"result\" " + ex.toString());
 		}
 
 		// extract key
@@ -269,7 +269,7 @@ public abstract class JSONExecutioner extends Executioner {
 					String keyOfItem = null;
 
 					if (jO.get(key) == null) {
-						logging.error(this, "Missing key " + key + " in output list for " + omc);
+						Logging.error(this, "Missing key " + key + " in output list for " + omc);
 						continue;
 					}
 
@@ -302,7 +302,7 @@ public abstract class JSONExecutioner extends Executioner {
 							}
 						} else {
 							if (targetVars.length != sourceVars.length)
-								logging.warning(this, "getStringMappedObjectsByKey targetVars not assignable");
+								Logging.warning(this, "getStringMappedObjectsByKey targetVars not assignable");
 
 							for (int i = 0; i < sourceVars.length; i++) {
 								String value = sourceVars[i];
@@ -324,7 +324,7 @@ public abstract class JSONExecutioner extends Executioner {
 				} // loop through list elements
 
 			} catch (Exception ex) {
-				logging.error(this, "Exception on building string maps  " + ex.toString());
+				Logging.error(this, "Exception on building string maps  " + ex.toString());
 			}
 		}
 
@@ -367,7 +367,7 @@ public abstract class JSONExecutioner extends Executioner {
 				}
 			}
 		} catch (Exception ex) {
-			logging.error(this, "Exception on getting Map " + ex.toString());
+			Logging.error(this, "Exception on getting Map " + ex.toString());
 		}
 		return result;
 	}
@@ -439,7 +439,7 @@ public abstract class JSONExecutioner extends Executioner {
 				}
 			}
 		} catch (Exception ex) {
-			logging.error(this, "Exception on getting ListOfMapsOfListsOfMaps " + ex.toString());
+			Logging.error(this, "Exception on getting ListOfMapsOfListsOfMaps " + ex.toString());
 		}
 		return result;
 	}
@@ -510,13 +510,14 @@ public abstract class JSONExecutioner extends Executioner {
 				try {
 					jO = new JSONObject("" + s);
 				} catch (Exception ex) {
-					logging.warning("JSONExecutioner.getMapFromItem \"" + s + "\"  "
+					Logging.warning("JSONExecutioner.getMapFromItem \"" + s + "\"  "
 							+ " cannot be interpreted as a JSON Object, " + ex);
 					wehavejO = false;
 				}
 			}
 
-			if (wehavejO && jO != null && jO != JSONObject.NULL) {
+			// Surely jO does not equal null
+			if (wehavejO && jO != JSONObject.NULL) {
 
 				Iterator<String> iter = jO.keys();
 				while (iter.hasNext()) {
@@ -529,18 +530,18 @@ public abstract class JSONExecutioner extends Executioner {
 
 			if (!wehavejO || jO == JSONObject.NULL) {
 				if (s == JSONObject.NULL) {
-					logging.warning("JSONExecutioner.getMapFromItem \"" + s
+					Logging.warning("JSONExecutioner.getMapFromItem \"" + s
 							+ "\" is  JSONObject.NULL and cannot be cast to a JSON Object");
 				}
 
 				else {
 
-					logging.warning("JSONExecutioner.getMapFromItem \"" + s + "\" has class " + s.getClass().getName()
+					Logging.warning("JSONExecutioner.getMapFromItem \"" + s + "\" has class " + s.getClass().getName()
 							+ " cannot be cast to a JSON Object");
 				}
 			}
 		} catch (Exception ex) {
-			logging.error(this, "Exception on getting map from item  " + s + " : " + ex.toString());
+			Logging.error(this, "Exception on getting map from item  " + s + " : " + ex.toString());
 		}
 
 		return result;
@@ -559,7 +560,7 @@ public abstract class JSONExecutioner extends Executioner {
 				result.add(ar.get(i));
 			}
 		} catch (Exception ex) {
-			logging.error(this, "Exception on getting list from item    " + s + " : " + ex.toString());
+			Logging.error(this, "Exception on getting list from item    " + s + " : " + ex.toString());
 		}
 
 		return result;

@@ -7,9 +7,9 @@ import javax.swing.JDialog;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class FDepotselectionList extends FGeneralDialog {
 	private DepotsList depotsList;
@@ -19,9 +19,9 @@ public class FDepotselectionList extends FGeneralDialog {
 	public FDepotselectionList(JDialog masterWindow) {
 		super(
 
-				masterWindow, configed.getResourceValue("FDepotselectionList.title"),
-				new String[] { configed.getResourceValue("FDepotselectionList.buttontake"),
-						configed.getResourceValue("FDepotselectionList.buttonclose") },
+				masterWindow, Configed.getResourceValue("FDepotselectionList.title"),
+				new String[] { Configed.getResourceValue("FDepotselectionList.buttontake"),
+						Configed.getResourceValue("FDepotselectionList.buttonclose") },
 				500, 300);
 		depotsList = new DepotsList(PersistenceControllerFactory.getPersistenceController());
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -46,7 +46,7 @@ public class FDepotselectionList extends FGeneralDialog {
 	}
 
 	public List<String> getListData() {
-		logging.info(this, "getListData() : " + depotsList.getListData());
+		Logging.info(this, "getListData() : " + depotsList.getListData());
 		return depotsList.getListData();
 	}
 
@@ -60,7 +60,7 @@ public class FDepotselectionList extends FGeneralDialog {
 
 	@Override
 	public void doAction1() {
-		logging.debug(this, "doAction1");
+		Logging.debug(this, "doAction1");
 		result = 1;
 		masterWindow.setVisible(true);
 		leave();
@@ -68,7 +68,7 @@ public class FDepotselectionList extends FGeneralDialog {
 
 	@Override
 	public void doAction2() {
-		logging.debug(this, "doAction2");
+		Logging.debug(this, "doAction2");
 		result = 2;
 		masterWindow.setVisible(true);
 		leave();

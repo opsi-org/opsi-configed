@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
+import java.util.Set;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -20,15 +20,15 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
@@ -89,7 +89,7 @@ public class PanelSWInfo extends JPanel {
 
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates = new de.uib.utilities.table.TableModelFilterCondition() {
 		@Override
-		public void setFilter(TreeSet<Object> filter) {
+		public void setFilter(Set<Object> filter) {
 		}
 
 		@Override
@@ -110,7 +110,7 @@ public class PanelSWInfo extends JPanel {
 
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates2 = new de.uib.utilities.table.TableModelFilterCondition() {
 		@Override
-		public void setFilter(TreeSet<Object> filter) {
+		public void setFilter(Set<Object> filter) {
 		}
 
 		@Override
@@ -178,14 +178,14 @@ public class PanelSWInfo extends JPanel {
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public Map<String, Map> retrieveMap() {
-						logging.info(this, "retrieving data for " + hostId);
+						Logging.info(this, "retrieving data for " + hostId);
 						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(hostId);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
-							scanInfo = configed.getResourceValue("PanelSWInfo.noScanResult");
+							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 							title = scanInfo;
 						} else {
-							logging.debug(this, "retrieved size  " + tableData.keySet().size());
+							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
 							scanInfo = "Scan " + persist.getLastSoftwareAuditModification(hostId);
 							title = scanInfo;
 
@@ -193,13 +193,13 @@ public class PanelSWInfo extends JPanel {
 
 						setSuperTitle(scanInfo);
 
-						logging.debug(this, " got scanInfo " + scanInfo);
+						Logging.debug(this, " got scanInfo " + scanInfo);
 
 						return tableData;
 					}
 				})), -1, finalColumns, null, null);
 
-		indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWSsOFTWAREid);
+		indexOfColWindowsSoftwareID = columnNames.indexOf(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 		modelSWInfo.chainFilter(FILTER_MS_UPDATES, new TableModelFilter(filterConditionWithMsUpdates));
 		modelSWInfo.reset();
 
@@ -220,8 +220,8 @@ public class PanelSWInfo extends JPanel {
 
 		subPanelTitle = new JPanel();
 
-		JLabel labelWithMSUpdates = new JLabel(configed.getResourceValue("PanelSWInfo.withMsUpdates"));
-		JLabel labelWithMSUpdates2 = new JLabel(configed.getResourceValue("PanelSWInfo.withMsUpdates2"));
+		JLabel labelWithMSUpdates = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates"));
+		JLabel labelWithMSUpdates2 = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates2"));
 
 		subPanelTitle.setBackground(Globals.BACKGROUND_COLOR_7);
 
@@ -436,7 +436,7 @@ public class PanelSWInfo extends JPanel {
 		String exportPath = exportFilename;
 		switch (kindOfExport) {
 		case CSV:
-			logging.info(this, "export to " + exportPath);
+			Logging.info(this, "export to " + exportPath);
 			csvExportTable.execute(exportPath, false);
 			break;
 
@@ -455,7 +455,7 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void sendToPDF() {
-		logging.info(this, "------------- create report swaudit for " + hostId + " check");
+		Logging.info(this, "------------- create report swaudit for " + hostId + " check");
 
 		HashMap<String, String> metaData = new HashMap<>();
 
@@ -467,21 +467,21 @@ public class PanelSWInfo extends JPanel {
 		ExporterToPDF pdfExportTable = new ExporterToPDF(panelTable);
 		pdfExportTable.setClient(hostId);
 		pdfExportTable.setMetaData(metaData);
-		pdfExportTable.setPageSizeA4_Landscape();
+		pdfExportTable.setPageSizeA4Landscape();
 		pdfExportTable.execute(exportFilename, false);
 
 	}
 
 	private void setSuperTitle(String s) {
 		supertitle = "" + s;
-		logging.info(this, "setSuperTitle " + s);
+		Logging.info(this, "setSuperTitle " + s);
 		labelSuperTitle.setText(supertitle);
 
 	}
 
 	/** overwrite in subclasses */
 	protected void reload() {
-		logging.debug(this, "reload action");
+		Logging.debug(this, "reload action");
 	}
 
 	protected void floatExternalX() {
@@ -503,9 +503,9 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void updateModel() {
-		logging.info(this, "update+++++");
+		Logging.info(this, "update+++++");
 
-		logging.info(this, "update+++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
+		Logging.info(this, "update+++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
@@ -513,7 +513,7 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void setSoftwareNullInfo(String hostId) {
-		logging.info(this, "setSoftwareNullInfo,  " + hostId + " -- ");
+		Logging.info(this, "setSoftwareNullInfo,  " + hostId + " -- ");
 
 		this.hostId = "" + hostId;
 		title = this.hostId;
@@ -528,7 +528,7 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void setHost(String hostId) {
-		logging.info(this, "setHost" + hostId + " -- ");
+		Logging.info(this, "setHost" + hostId + " -- ");
 
 		this.hostId = "" + hostId;
 	}

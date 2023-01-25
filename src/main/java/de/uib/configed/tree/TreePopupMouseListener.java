@@ -7,7 +7,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class TreePopupMouseListener extends utils.PopupMouseListener {
 
@@ -58,29 +58,27 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 			return false;
 		}
 
-		logging.debug(this, "checkAccepted clickPath  " + mousePath);
+		Logging.debug(this, "checkAccepted clickPath  " + mousePath);
 
 		DefaultMutableTreeNode clickNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
 
 		String nodeName = clickNode.getUserObject().toString();
 
-		if (tree.getGroupNode(nodeName) != null) {
-
-			if (clickNode != tree.getGroupNode(nodeName)) {
-				logging.warning(this, "checkAccepted clickNode != tree.getGroupNode(nodeName)");
-				clickNode = tree.getGroupNode(nodeName);
-			}
+		if (tree.getGroupNode(nodeName) != null && clickNode != tree.getGroupNode(nodeName)) {
+			Logging.warning(this, "checkAccepted clickNode != tree.getGroupNode(nodeName)");
+			clickNode = tree.getGroupNode(nodeName);
 		}
 
-		logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
+		Logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
 
 		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) (clickNode.getParent());
 
 		if (
 		// nodeName.equals(ClientTree.FAILED_NAME)
 		// ||
-		nodeName.equals(ClientTree.ALL_NAME) || (((DefaultMutableTreeNode) clickNode.getParent()).getUserObject()
-				.toString().equals(ClientTree.ALL_NAME) && !nodeName.equals(ClientTree.GROUPS_NAME)))
+		nodeName.equals(ClientTree.ALL_CLIENTS_NAME)
+				|| (((DefaultMutableTreeNode) clickNode.getParent()).getUserObject().toString()
+						.equals(ClientTree.ALL_CLIENTS_NAME) && !nodeName.equals(ClientTree.ALL_GROUPS_NAME)))
 
 			return false; // dont show here any menu
 
@@ -113,10 +111,8 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 				countVisibleItems++;
 			}
 
-			{
-				((JMenuItem) myMenu.getSubElements()[activateElementsPosition]).setVisible(true); // activate elements
-				countVisibleItems++;
-			}
+			((JMenuItem) myMenu.getSubElements()[activateElementsPosition]).setVisible(true); // activate elements
+			countVisibleItems++;
 
 			if (!(((GroupNode) clickNode).isFixed())) {
 				((JMenuItem) myMenu.getSubElements()[removeElementsPosition]).setVisible(true); // delete non-groupnode

@@ -23,11 +23,11 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVParser;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class CSVImportDataDialog extends FGeneralDialog {
@@ -37,7 +37,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private CSVFormat format;
 	private CSVParser parser;
 
-	private ButtonGroup fieldSeparatorOptions;
 	private JRadioButton tabsOption;
 	private JRadioButton commaOption;
 	private JRadioButton semicolonOption;
@@ -45,17 +44,13 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private JRadioButton otherOption;
 	private JComboBox<Character> stringSeparatorOptions;
 
-	private JLabel importOptionsLabel;
-	private JLabel splittingOptionsLabel;
-	private JLabel startLineLabel;
 	private JFormattedTextField startLineInput;
 	private JFormattedTextField otherSeparatorInput;
-	private JLabel stringSeparatorLabel;
 
 	private CSVImportDataModifier modifier;
 
 	public CSVImportDataDialog(CSVImportDataModifier modifier, CSVFormat format) {
-		super(Globals.mainFrame, configed.getResourceValue("CSVImportDataDialog.title"), true,
+		super(Globals.mainFrame, Configed.getResourceValue("CSVImportDataDialog.title"), true,
 				new String[] { "ok", "cancel" },
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
@@ -70,7 +65,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	@Override
 	protected void allLayout() {
-		logging.info(this, "allLayout");
+		Logging.info(this, "allLayout");
 
 		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
@@ -118,9 +113,10 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		northPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		northPanel.setOpaque(true);
 
-		importOptionsLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
+		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
 		importOptionsLabel.setFont(Globals.defaultFontBold);
-		splittingOptionsLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
+		JLabel splittingOptionsLabel = new JLabel(
+				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
 		splittingOptionsLabel.setFont(Globals.defaultFontBold);
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
@@ -130,25 +126,25 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
 
-		startLineLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
+		JLabel startLineLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
 		startLineInput = new JFormattedTextField(formatter);
 
-		tabsOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.tabsOption"));
+		tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
 		tabsOption.setActionCommand("\t");
 
-		commaOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.commaOption"));
+		commaOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.commaOption"));
 		commaOption.setActionCommand(",");
 
-		semicolonOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
+		semicolonOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.semicolonOption"));
 		semicolonOption.setActionCommand(";");
 
-		spaceOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.spaceOption"));
+		spaceOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.spaceOption"));
 		spaceOption.setActionCommand(" ");
 
-		otherOption = new JRadioButton(configed.getResourceValue("CSVImportDataDialog.otherOption"));
+		otherOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.otherOption"));
 		otherOption.setActionCommand("");
 
-		fieldSeparatorOptions = new ButtonGroup();
+		ButtonGroup fieldSeparatorOptions = new ButtonGroup();
 		fieldSeparatorOptions.add(tabsOption);
 		fieldSeparatorOptions.add(commaOption);
 		fieldSeparatorOptions.add(semicolonOption);
@@ -159,16 +155,16 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		try {
 			maskFormatter = new MaskFormatter("*");
 		} catch (ParseException e) {
-			logging.debug(this, "INVALID MASK");
+			Logging.debug(this, "INVALID MASK");
 		}
 		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;#+*");
 		maskFormatter.setAllowsInvalid(false);
 		maskFormatter.setCommitsOnValidEdit(true);
 		otherSeparatorInput = new JFormattedTextField(maskFormatter);
-		otherSeparatorInput.setToolTipText(configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
+		otherSeparatorInput.setToolTipText(Configed.getResourceValue("CSVImportDataDialog.allowedCharacters.tooltip"));
 		otherSeparatorInput.setEnabled(false);
 
-		stringSeparatorLabel = new JLabel(configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
+		JLabel stringSeparatorLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.stringSeparatorLabel"));
 		stringSeparatorOptions = new JComboBox<>(new Character[] { '"', '\'' });
 		stringSeparatorOptions.addItemListener((ItemEvent e) -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -183,18 +179,13 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			AbstractButton button = iter.nextElement();
 
 			button.addItemListener((ItemEvent e) -> {
-				if (e.getItem() == otherOption) {
-					otherSeparatorInput.setEnabled(true);
-				} else {
-					otherSeparatorInput.setEnabled(false);
+				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
+
+				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().equals("")) {
+					format.setFieldSeparator(button.getActionCommand().charAt(0));
+					modifier.updateTable(parser, startLine, thePanel);
 				}
 
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					if (!button.getActionCommand().equals("")) {
-						format.setFieldSeparator(button.getActionCommand().charAt(0));
-						modifier.updateTable(parser, startLine, thePanel);
-					}
-				}
 			});
 		}
 

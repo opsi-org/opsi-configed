@@ -1,21 +1,28 @@
 package de.uib.utilities.swing;
 
+import java.awt.Color;
+import java.awt.Component;
+
 import de.uib.configed.Globals;
 
 public class CellAlternatingColorizer {
-	static java.awt.Color selectedEven = Globals.defaultTableSelectedRowDark;
-	static java.awt.Color selectedUneven = Globals.defaultTableSelectedRowBright;
-	static java.awt.Color unselectedEven = Globals.defaultTableCellBgColor2;
-	static java.awt.Color unselectedUneven = Globals.defaultTableCellBgColor1;
+	// private constructor to hide the implicit public one
+	private CellAlternatingColorizer() {
+	}
 
-	public static void colorize(java.awt.Component cell, boolean isSelected, boolean isEven, boolean textColoring) {
+	static Color selectedEven = Globals.defaultTableSelectedRowDark;
+	static Color selectedUneven = Globals.defaultTableSelectedRowBright;
+	static Color unselectedEven = Globals.defaultTableCellBgColor2;
+	static Color unselectedUneven = Globals.defaultTableCellBgColor1;
+
+	public static void colorize(Component cell, boolean isSelected, boolean isEven, boolean textColoring) {
 		colorize(cell, isSelected, isEven, textColoring, selectedEven, selectedUneven, unselectedEven,
 				unselectedUneven);
 	}
 
-	public static void colorize(java.awt.Component cell, boolean isSelected, boolean isEven, boolean textColoring,
-			java.awt.Color selectedEvenColor, java.awt.Color selectedUnevenColor, java.awt.Color unselectedEvenColor,
-			java.awt.Color unselectedUnevenColor) {
+	public static void colorize(Component cell, boolean isSelected, boolean isEven, boolean textColoring,
+			Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,
+			Color unselectedUnevenColor) {
 		if (textColoring)
 			cell.setForeground(Globals.lightBlack);
 
@@ -69,6 +76,5 @@ public class CellAlternatingColorizer {
 				cell.setBackground(Globals.defaultTableCellBgColor11);
 			}
 		}
-
 	}
 }

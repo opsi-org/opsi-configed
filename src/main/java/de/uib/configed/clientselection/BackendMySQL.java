@@ -12,13 +12,23 @@ import org.json.JSONObject;
 
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class BackendMySQL {
 
-	private List<String> allHosts;
+	private static final String KEY_CHILDREN = "children";
+	private static final String STRING_MYSQL_WHERE = " WHERE ";
+	private static final String STRING_MYSQL_BASIC_SELECT_STATEMENT = "SELECT DISTINCT HOST.hostId FROM HOST ";
 
-	private MySQL mySQLRecursion;
+	private static final String KEY_DEFAULT_VALUE_NOT_INSTALLED = "'not_installed'";
+	private static final String KEY_DEFAULT_VALUE_NONE = "'none'";
+	private static final String KEY_DEFAULT_VALUE_EMPTY = "''";
+
+	private enum Type {
+		OR, AND, NOT, NEW
+	}
+
+	private List<String> allHosts;
 
 	List<Map<String, Object>> hwConfig;
 
@@ -29,14 +39,12 @@ public class BackendMySQL {
 		this.controller = controller;
 		hwConfig = controller.getOpsiHWAuditConf("en_");
 
-		mySQLRecursion = new MySQL(hwConfig);
-
 		allHosts = getListFromSQL("SELECT hostId FROM HOST;");
 	}
 
 	public List<String> getListFromSQL(String query) {
 
-		logging.info(this, query);
+		Logging.info(this, query);
 
 		List<List<java.lang.String>> clients = controller.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
@@ -109,33 +117,36 @@ public class BackendMySQL {
 
 	public List<String> getListFromJSONObject(JSONObject jsonObject) {
 
+		MySQL mySQLRecursion = new MySQL(hwConfig);
+
 		if (jsonObject.isNull("element")) {
 
 			JSONArray children;
 
 			switch (jsonObject.getString("operation")) {
 			case "OrOperation":
-				children = jsonObject.getJSONArray("children");
+				children = jsonObject.getJSONArray(KEY_CHILDREN);
 
 				return or(children);
 
 			case "AndOperation":
-				children = jsonObject.getJSONArray("children");
+				children = jsonObject.getJSONArray(KEY_CHILDREN);
 
 				return and(children);
 
 			case "NotOperation":
-				children = jsonObject.getJSONArray("children");
+				children = jsonObject.getJSONArray(KEY_CHILDREN);
 
 				return not(children);
 
 			case "SoftwareOperation": // PRODUCT
 
-				String whereClause = doJSONObject(jsonObject);
+				String whereClause = doJSONObject(mySQLRecursion, jsonObject);
 				String innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
 				// This query gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
-				String query = "SELECT DISTINCT HOST.hostId FROM HOST " + innerJoins + " WHERE " + whereClause + ";";
+				String query = STRING_MYSQL_BASIC_SELECT_STATEMENT + innerJoins + STRING_MYSQL_WHERE + whereClause
+						+ ";";
 
 				String whereClause2 = getWhereClauseDefaultProduct(whereClause);
 
@@ -154,7 +165,7 @@ public class BackendMySQL {
 
 			case "PropertiesOperation":
 
-				whereClause = doJSONObject(jsonObject);
+				whereClause = doJSONObject(mySQLRecursion, jsonObject);
 
 				// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
 				whereClause = whereClause.replace("d.productId", "h.productId");
@@ -181,11 +192,11 @@ public class BackendMySQL {
 
 			case "SoftwareWithPropertiesOperation":
 
-				whereClause = doJSONObject(jsonObject);
+				whereClause = doJSONObject(mySQLRecursion, jsonObject);
 				innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
 				// Gives all hostIds that have a 'fitting' product in PRODUCT_ON_CLIENT
-				query = "SELECT DISTINCT HOST.hostId FROM HOST " + innerJoins + " WHERE " + whereClause + ";";
+				query = STRING_MYSQL_BASIC_SELECT_STATEMENT + innerJoins + STRING_MYSQL_WHERE + whereClause + ";";
 
 				whereClause2 = getWhereClauseDefaultProduct(whereClause);
 				String whereClause3 = getWhereClauseDefaultProductProperty(whereClause);
@@ -234,31 +245,30 @@ public class BackendMySQL {
 				return union(union(list1, list2), union(list3, list4));
 
 			case "HardwareOperation":
-				query = doJSONObject(jsonObject);
+				query = doJSONObject(mySQLRecursion, jsonObject);
 
 				innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
-				query = "SELECT DISTINCT HOST.hostId FROM HOST " + innerJoins + " WHERE i.state LIKE 1 AND (" + query
-						+ ")";
+				query = STRING_MYSQL_BASIC_SELECT_STATEMENT + innerJoins + " WHERE i.state LIKE 1 AND (" + query + ")";
 
 				return getListFromSQL(query);
 
 			case "SwAuditOperation":
-				query = doJSONObject(jsonObject);
+				query = doJSONObject(mySQLRecursion, jsonObject);
 
 				innerJoins = mySQLRecursion.getMySQLInnerJoins();
 
-				query = "SELECT DISTINCT HOST.hostId FROM HOST " + innerJoins + " WHERE " + query;
+				query = STRING_MYSQL_BASIC_SELECT_STATEMENT + innerJoins + STRING_MYSQL_WHERE + query;
 
 				return getListFromSQL(query);
 
 			default:
-				JSONArray jsonArray = jsonObject.getJSONArray("children");
+				JSONArray jsonArray = jsonObject.getJSONArray(KEY_CHILDREN);
 				return getListFromJSONObject((JSONObject) jsonArray.get(0));
 			}
 		} else if (jsonObject.getJSONArray("elementPath").getString(0).equals("GroupWithSubgroups")) { // Group with
 																										// subgroups
-			return getGroupWithSubgroup(jsonObject.getString("data"));
+			return getGroupWithSubgroup(jsonObject.getString("data").replace("*", "%"));
 		} else {
 
 			MySQL mySQL = new MySQL(hwConfig);
@@ -266,7 +276,7 @@ public class BackendMySQL {
 
 			String innerJoins = mySQL.getMySQLInnerJoins();
 
-			query = "SELECT DISTINCT HOST.hostId FROM HOST " + innerJoins + " WHERE " + query;
+			query = STRING_MYSQL_BASIC_SELECT_STATEMENT + innerJoins + STRING_MYSQL_WHERE + query;
 
 			return getListFromSQL(query);
 		}
@@ -281,8 +291,6 @@ public class BackendMySQL {
 						+ groupname + "'");
 
 		for (int i = 0; i < subgroups.size(); i++) {
-			for (int j = 0; j < 100; j++)
-				logging.info(this, subgroups.get(i));
 			clients = union(clients, getGroupWithSubgroup(subgroups.get(i)));
 		}
 
@@ -291,19 +299,19 @@ public class BackendMySQL {
 
 	public void printList(List<String> l) {
 		for (int i = 0; i < l.size(); i++) {
-			logging.info(this, l.get(i));
+			Logging.info(this, l.get(i));
 		}
 	}
 
 	// For replacing it with the standard values
 	public String getWhereClauseDefaultProduct(String query) {
-		query = query.replace("d.installationStatus", "'not_installed'");
-		query = query.replace("d.actionResult", "'none'");
-		query = query.replace("d.actionRequest", "'none'");
-		query = query.replace("d.actionProgress", "''");
-		query = query.replace("d.lastAction", "'none'");
-		query = query.replace("d.productVersion", "''");
-		query = query.replace("d.packageVersion", "''");
+		query = query.replace("d.installationStatus", KEY_DEFAULT_VALUE_NOT_INSTALLED);
+		query = query.replace("d.actionResult", KEY_DEFAULT_VALUE_NONE);
+		query = query.replace("d.actionRequest", KEY_DEFAULT_VALUE_NONE);
+		query = query.replace("d.actionProgress", KEY_DEFAULT_VALUE_EMPTY);
+		query = query.replace("d.lastAction", KEY_DEFAULT_VALUE_NONE);
+		query = query.replace("d.productVersion", KEY_DEFAULT_VALUE_EMPTY);
+		query = query.replace("d.packageVersion", KEY_DEFAULT_VALUE_EMPTY);
 
 		// TODO Date
 		query = query.replace("DATE(d.modificationTime)", "'IRGENDWAS MIT DATUM'");
@@ -327,7 +335,7 @@ public class BackendMySQL {
 
 	public List<String> getClientListFromJSONString(String query) {
 
-		logging.info(this, query);
+		Logging.info(this, query);
 
 		try {
 			JSONObject jsonObject = new JSONObject(query);
@@ -336,21 +344,21 @@ public class BackendMySQL {
 				return getListFromJSONObject(jsonObject.getJSONObject("data"));
 
 		} catch (JSONException e) {
-			logging.warning(this, "" + e);
+			Logging.warning(this, "" + e);
 		}
 
 		return null;
 	}
 
-	private String doJSONObject(JSONObject jsonObject) {
+	private String doJSONObject(MySQL mySQLRecursion, JSONObject jsonObject) {
 
 		if (jsonObject.isNull("element")) {
-			MySQL.Type newType = MySQL.getType(jsonObject);
+			Type newType = getType(jsonObject);
 			try {
-				return doJSONArray(jsonObject.getJSONArray("children"), newType);
+				return doJSONArray(mySQLRecursion, jsonObject.getJSONArray(KEY_CHILDREN), newType);
 
 			} catch (Exception e) {
-				logging.warning(this, "" + e);
+				Logging.warning(this, "" + e);
 			}
 
 		} else
@@ -359,28 +367,45 @@ public class BackendMySQL {
 		return "";
 	}
 
-	private String doJSONArray(JSONArray jsonArray, MySQL.Type type) {
+	private String doJSONArray(MySQL mySQLRecursion, JSONArray jsonArray, Type type) {
 		int length = jsonArray.length();
-		String mysql = " ( ";
+		StringBuilder mysql = new StringBuilder(" ( ");
 
 		for (int i = 0; i < length; i++) {
 			try {
-				JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 
 				if (i == 0) {
-					if (type == MySQL.Type.NOT)
-						mysql += " " + type;
+					if (type == Type.NOT)
+						mysql.append(" " + type);
 				} else {
-					if (type == MySQL.Type.AND || type == MySQL.Type.OR)
-						mysql += type;
+					if (type == Type.AND || type == Type.OR)
+						mysql.append(type);
 				}
 
-				mysql += doJSONObject(jsonObject);
+				mysql.append(doJSONObject(mySQLRecursion, (JSONObject) jsonArray.get(i)));
 			} catch (Exception e) {
-				logging.warning(this, "" + e);
+				Logging.warning(this, "" + e);
 			}
 		}
 
 		return mysql + " ) ";
+	}
+
+	private Type getType(JSONObject json) {
+		try {
+			switch (json.getString(MySQL.KEY_OPERATION)) {
+			case "OrOperation":
+				return Type.OR;
+			case "AndOperation":
+				return Type.AND;
+			case "NotOperation":
+				return Type.NOT;
+			default:
+				return Type.NEW;
+			}
+		} catch (JSONException e) {
+			Logging.warning("we did get type of operation from " + json);
+			return Type.NEW;
+		}
 	}
 }

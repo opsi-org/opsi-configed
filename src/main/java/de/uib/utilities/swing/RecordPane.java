@@ -13,13 +13,14 @@ import java.awt.event.KeyListener;
 */
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.ObservableSubject;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
@@ -36,7 +37,7 @@ public class RecordPane extends JPanel implements KeyListener {
 		@Override
 		public void notifyObservers() {
 
-			logging.debug("RecordPane: notifyObservers ");
+			Logging.debug("RecordPane: notifyObservers ");
 		}
 	}
 
@@ -67,8 +68,8 @@ public class RecordPane extends JPanel implements KeyListener {
 		} else
 			this.editingNotifier = editingNotifier;
 
-		for (String key : datafields.keySet()) {
-			datafields.get(key).setGlobalObservableSubject(this.editingNotifier);
+		for (JTextFieldObserved value : datafields.values()) {
+			value.setGlobalObservableSubject(this.editingNotifier);
 		}
 	}
 
@@ -101,20 +102,20 @@ public class RecordPane extends JPanel implements KeyListener {
 		if (data == null)
 			return;
 
-		for (String key : data.keySet()) {
+		for (Entry<String, String> dataEntry : data.entrySet()) {
 			JLabel jLabel = new JLabel();
 
-			if (labels == null || labels.get(key) == null)
+			if (labels == null || labels.get(dataEntry.getKey()) == null)
 				jLabel.setText("");
 			else
-				jLabel.setText(labels.get(key));
+				jLabel.setText(labels.get(dataEntry.getKey()));
 
 			jLabel.setFont(Globals.defaultFontBig);
-			labelfields.put(key, jLabel);
+			labelfields.put(dataEntry.getKey(), jLabel);
 
 			JTextFieldObserved jTextField = new JTextFieldObserved();
-			if (data.get(key) != null)
-				jTextField.setText("" + data.get(key));
+			if (dataEntry.getValue() != null)
+				jTextField.setText("" + dataEntry.getValue());
 			else
 				jTextField.setText("");
 
@@ -122,11 +123,11 @@ public class RecordPane extends JPanel implements KeyListener {
 			jTextField.getCaret().setBlinkRate(0);
 
 			if (hints != null)
-				jTextField.setToolTipText(hints.get(key));
+				jTextField.setToolTipText(hints.get(dataEntry.getKey()));
 
-			if (editable != null && editable.get(key) != null) {
-				jTextField.setEditable(editable.get(key));
-				jTextField.setEnabled(editable.get(key));
+			if (editable != null && editable.get(dataEntry.getKey()) != null) {
+				jTextField.setEditable(editable.get(dataEntry.getKey()));
+				jTextField.setEnabled(editable.get(dataEntry.getKey()));
 			} else {
 				jTextField.setEditable(false);
 				jTextField.setEnabled(false);
@@ -134,7 +135,7 @@ public class RecordPane extends JPanel implements KeyListener {
 
 			jTextField.addKeyListener(this);
 
-			datafields.put(key, jTextField);
+			datafields.put(dataEntry.getKey(), jTextField);
 		}
 
 		GroupLayout.ParallelGroup hGroup = baseLayout.createParallelGroup();

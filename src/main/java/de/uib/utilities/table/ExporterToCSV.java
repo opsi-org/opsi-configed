@@ -7,27 +7,28 @@ import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.List;
 
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 
 public class ExporterToCSV extends ExportTable {
-	protected String CSVencoding = "UTF8";
 
-	public static final Character CSVseparator = ';';
-	protected static final String csvSep = "" + CSVseparator;
-	public static final Character stringDelimiter = '"';
-	protected static final String thisExtension = ".csv";
+	protected static final String CSV_SEPARATOR = ";";
+	public static final Character STRING_DELIMITER = '"';
+	protected static final String THIS_EXTENSION = ".csv";
 
-	public ExporterToCSV(javax.swing.JTable table, List<String> classNames) {
+	public ExporterToCSV(JTable table, List<String> classNames) {
 		super(table, classNames);
-		extensionFilter = new javax.swing.filechooser.FileNameExtensionFilter("CSV", "csv");
+		extensionFilter = new FileNameExtensionFilter("CSV", "csv");
 
 		defaultExportFilename = "export.csv";
-		extension = thisExtension;
+		extension = THIS_EXTENSION;
 
 	}
 
-	public ExporterToCSV(javax.swing.JTable table) {
+	public ExporterToCSV(JTable table) {
 		this(table, null);
 
 	}
@@ -36,21 +37,21 @@ public class ExporterToCSV extends ExportTable {
 		if (value == null)
 			return "";
 
-		return ((String) value).replace(stringDelimiter, '\'');
+		return ((String) value).replace(STRING_DELIMITER, '\'');
 	}
 
 	private String removeSeparatorChar(Object value) {
 		if (value == null)
 			return "";
 
-		return ((String) value).replace(csvSep, "\\" + csvSep);
+		return ((String) value).replace(CSV_SEPARATOR, "\\" + CSV_SEPARATOR);
 	}
 
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
 
-		logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " + "\"" + fileName + "\", " + onlySelectedRows
-				+ "\", " + "\"" + csvSep + "\"");
+		Logging.info(this, "toCSV fileName, onlySelectedRows, csvSep " + "\"" + fileName + "\", " + onlySelectedRows
+				+ "\", " + "\"" + CSV_SEPARATOR + "\"");
 
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
 		if (selectedOnly == null)
@@ -71,11 +72,11 @@ public class ExporterToCSV extends ExportTable {
 				// write header
 				StringBuilder line = new StringBuilder();
 				for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
-					line.append(stringDelimiter);
+					line.append(STRING_DELIMITER);
 					line.append(theTable.getColumnName(colI));
-					line.append(stringDelimiter);
+					line.append(STRING_DELIMITER);
 					if (colI < theTable.getColumnCount() - 1) {
-						line.append(csvSep);
+						line.append(CSV_SEPARATOR);
 					}
 				}
 				line.append("\n");
@@ -83,7 +84,7 @@ public class ExporterToCSV extends ExportTable {
 				bw.flush();
 				// write rows
 				for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
-					logging.debug(this, "toCsv, handle row " + rowI + " selected " + theTable.isRowSelected(rowI)
+					Logging.debug(this, "toCsv, handle row " + rowI + " selected " + theTable.isRowSelected(rowI)
 							+ " selectedOnly " + selectedOnly);
 
 					if (!selectedOnly || theTable.isRowSelected(rowI)) {
@@ -97,9 +98,9 @@ public class ExporterToCSV extends ExportTable {
 										String val = "" + theTable.getValueAt(rowI, colI);
 										val = removeStringDelimiter(val);
 
-										line.append(stringDelimiter);
+										line.append(STRING_DELIMITER);
 										line.append(val);
-										line.append(stringDelimiter);
+										line.append(STRING_DELIMITER);
 									} else {
 										String val = "" + theTable.getValueAt(rowI, colI);
 										val = removeStringDelimiter(val);
@@ -115,24 +116,24 @@ public class ExporterToCSV extends ExportTable {
 										String inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
 
 										{
-											line.append(stringDelimiter);
+											line.append(STRING_DELIMITER);
 											line.append(inString);
-											line.append(stringDelimiter);
+											line.append(STRING_DELIMITER);
 										}
 									}
 
 									else if (classNames.get(colI).equals("java.lang.Integer")) {
 										line.append(theTable.getValueAt(rowI, colI));
 									} else if (classNames.get(colI).equals("java.lang.Double")) {
-										logging.debug(this,
+										Logging.debug(this,
 												"decimal place --- double: " + theTable.getValueAt(rowI, colI));
 										line.append(theTable.getValueAt(rowI, colI));
 									} else if (classNames.get(colI).equals("java.lang.Float")) {
-										logging.debug(this,
+										Logging.debug(this,
 												"decimal place --- float: " + theTable.getValueAt(rowI, colI));
 										line.append(theTable.getValueAt(rowI, colI));
 									} else if (classNames.get(colI).equals("java.math.BigDecimal")) {
-										logging.debug(this,
+										Logging.debug(this,
 												"decimal place --- bigdecimal: " + theTable.getValueAt(rowI, colI));
 										line.append(f.format(
 												Double.parseDouble(theTable.getValueAt(rowI, colI).toString())));
@@ -149,7 +150,7 @@ public class ExporterToCSV extends ExportTable {
 														.valueOf((String) theTable.getValueAt(rowI, colI));
 
 											} catch (Exception ex2) {
-												logging.error("Error in date format:" + ex2);
+												Logging.error("Error in date format:" + ex2);
 											}
 											if (date1 != null) {
 												line.append("" + date1);
@@ -163,7 +164,7 @@ public class ExporterToCSV extends ExportTable {
 							}
 
 							if (colI < theTable.getColumnCount() - 1) {
-								line.append(csvSep);
+								line.append(CSV_SEPARATOR);
 							}
 						}
 
@@ -176,7 +177,7 @@ public class ExporterToCSV extends ExportTable {
 				}
 
 			} catch (Exception ex) {
-				logging.error(configed.getResourceValue("ExportTable.error") + " " + ex.toString());
+				Logging.error(Configed.getResourceValue("ExportTable.error") + " " + ex.toString());
 			}
 		}
 

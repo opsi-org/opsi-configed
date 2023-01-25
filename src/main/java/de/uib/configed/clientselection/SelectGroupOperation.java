@@ -9,7 +9,7 @@ import java.util.List;
 public abstract class SelectGroupOperation extends SelectOperation {
 	private List<SelectOperation> childOperations;
 
-	public SelectGroupOperation() {
+	protected SelectGroupOperation() {
 		super(null);
 		childOperations = new LinkedList<>();
 	}
@@ -26,7 +26,7 @@ public abstract class SelectGroupOperation extends SelectOperation {
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.NONE_TYPE;
+		return SelectData.DataType.NoneType;
 	}
 
 	@Override
@@ -36,9 +36,9 @@ public abstract class SelectGroupOperation extends SelectOperation {
 
 	@Override
 	public String printOperation(String indent) {
-		String result = indent + getClassName() + " {\n";
+		StringBuilder result = new StringBuilder(indent + getClassName() + " {\n");
 		for (SelectOperation op : childOperations)
-			result += op.printOperation(indent + "\t") + "\n";
+			result.append(op.printOperation(indent + "\t") + "\n");
 		return result + indent + "}";
 	}
 }

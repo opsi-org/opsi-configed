@@ -1,16 +1,16 @@
 package de.uib.configed.gui.ssh;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsicommand.sshcommand.CommandRepositoryUpload;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHRepositoryUploadDialog extends SSHFileUploadDialog {
-	private static String title = configed.getResourceValue("SSHConnection.ParameterDialog.repoupload.title");
+	private static String title = Configed.getResourceValue("SSHConnection.ParameterDialog.repoupload.title");
 
 	public SSHRepositoryUploadDialog() {
 		super(title, new CommandRepositoryUpload());
 		this.setVisible(true);
-		logging.info(this, "SSHRepositoryUploadDialog build");
+		Logging.info(this, "SSHRepositoryUploadDialog build");
 		height = 400;
 		showDialog();
 	}

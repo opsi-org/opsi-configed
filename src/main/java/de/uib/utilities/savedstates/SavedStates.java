@@ -7,7 +7,7 @@ import java.util.Map;
 
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.PropertiesStore;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SavedStates extends PropertiesStore {
 	public SaveInteger savedMaxShownLogLevel;
@@ -50,7 +50,7 @@ public class SavedStates extends PropertiesStore {
 		try {
 			super.store(null);
 		} catch (IOException iox) {
-			logging.warning(this, "could not store saved states, " + iox);
+			Logging.warning(this, "could not store saved states, " + iox);
 		}
 	}
 

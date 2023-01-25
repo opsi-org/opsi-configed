@@ -33,12 +33,12 @@ import javax.swing.UIManager;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.NameProducer;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitCursor;
 
 public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
@@ -49,7 +49,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	JButton buttonSelectTmpDir;
 	JFileChooser chooserPackage;
 	JFileChooser chooserTmpDir;
-	JComboBox comboChooseDepot;
+	JComboBox<String> comboChooseDepot;
 	JButton buttonCallExecute;
 
 	String opsiPackagePathToHandleS = null;
@@ -60,9 +60,9 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	JTextField fieldOpsiPackageName;
 	JTextField fieldTmpDir;
 
-	final String defaultTmpDir = "(Default)";
+	private static final String DEFAULT_TEMP_DIRECTORY = "(Default)";
 
-	final String packageShareS = "opsi_workbench";
+	private static final String PAGE_SHARE_S = "opsi_workbench";
 	String opsiWorkBenchDirectoryS;
 	File opsiWorkBenchDirectory;
 	String opsiPackageServerPathS;
@@ -110,7 +110,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 			opsiPackageOnWorkbenchS = opsiWorkBenchDirectoryS + File.separator + opsiPackageNameS;
 
-			logging.debug(this, "getProductToWorkbench  target " + opsiPackageOnWorkbenchS);
+			Logging.debug(this, "getProductToWorkbench  target " + opsiPackageOnWorkbenchS);
 
 			opsiPackageOnWorkbench = new File(opsiPackageOnWorkbenchS);
 
@@ -122,11 +122,11 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 				if (opsiPackageOnWorkbench.exists()) {
 
 					int returnedOption = JOptionPane.showOptionDialog(rootFrame,
-							configed.getResourceValue("InstallOpsiPackage.packageReinstall") + " "
+							Configed.getResourceValue("InstallOpsiPackage.packageReinstall") + " "
 									+ opsiWorkBenchDirectoryS + " "
-									+ configed.getResourceValue("InstallOpsiPackage.packageReinstall2"),
+									+ Configed.getResourceValue("InstallOpsiPackage.packageReinstall2"),
 							Globals.APPNAME + " "
-									+ configed.getResourceValue("InstallOpsiPackage.packageReinstallTitle"),
+									+ Configed.getResourceValue("InstallOpsiPackage.packageReinstallTitle"),
 							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 					return returnedOption == JOptionPane.YES_OPTION;
@@ -141,10 +141,10 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 						// we start at a local directory
 					} catch (Exception ex) {
-						logging.info(this, "trying to build file " + opsiWorkBenchDirectoryS + " : " + ex);
+						Logging.info(this, "trying to build file " + opsiWorkBenchDirectoryS + " : " + ex);
 					}
 
-					logging.debug(this,
+					Logging.debug(this,
 							"getProductToWorkbench copy " + opsiPackagePathToHandle + ", " + opsiWorkBenchDirectory);
 					FileUtils.copyFileToDirectory(opsiPackagePathToHandle, opsiWorkBenchDirectory);
 					waitCursor.stop();
@@ -155,7 +155,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		} catch (Exception ex) {
 			if (waitCursor != null)
 				waitCursor.stop();
-			logging.error("library missing or path problem " + ex, ex);
+			Logging.error("library missing or path problem " + ex, ex);
 		}
 
 		return false;
@@ -163,16 +163,16 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private void produceServerPath() {
-		logging.debug(this, "produceServerPath ");
+		Logging.debug(this, "produceServerPath ");
 
 		opsiPackageServerPathS = PersistenceController.packageServerDirectoryS + opsiPackageNameS;
-		logging.debug(this, "produceServerPath " + opsiPackageServerPathS);
+		Logging.debug(this, "produceServerPath " + opsiPackageServerPathS);
 	}
 
 	private void buildSambaTarget(String depotserver) {
 		Map<String, Map<String, Object>> depot2depotMap = persist.getHostInfoCollections().getDepots();
 
-		logging.info(this, "buildSambaTarget for depotserver " + depotserver);
+		Logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 
 		if (depot2depotMap.get(depotserver) == null)
 			return;
@@ -180,7 +180,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		String depotRemoteUrl = (String) depot2depotMap.get(depotserver).get("depotRemoteUrl");
 
 		if (depotRemoteUrl == null) {
-			logging.warning(this, "buildSambaTarget, depotRemoteUrl null");
+			Logging.warning(this, "buildSambaTarget, depotRemoteUrl null");
 			return;
 		}
 
@@ -189,14 +189,14 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		if (parts.length > 2) {
 			netbiosName = parts[2];
-			logging.info(this, "buildSambaTarget " + netbiosName);
+			Logging.info(this, "buildSambaTarget " + netbiosName);
 		} else {
-			logging.warning(this, "buildSambaTarget, no splitting for " + depotRemoteUrl);
+			Logging.warning(this, "buildSambaTarget, no splitting for " + depotRemoteUrl);
 		}
 
-		opsiWorkBenchDirectoryS = File.separator + File.separator + netbiosName + File.separator + packageShareS;
+		opsiWorkBenchDirectoryS = File.separator + File.separator + netbiosName + File.separator + PAGE_SHARE_S;
 
-		logging.info(this, "buildSambaTarget " + opsiWorkBenchDirectoryS);
+		Logging.info(this, "buildSambaTarget " + opsiWorkBenchDirectoryS);
 
 		smbMounted = new File(opsiWorkBenchDirectoryS).exists();
 
@@ -211,18 +211,18 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			boolean result = persist.installPackage(opsiPackageServerPathS);
 			waitCursor.stop();
 
-			logging.info(this, "installPackage wrongly reporesult " + result);
+			Logging.info(this, "installPackage wrongly reporesult " + result);
 
 			if (result)
 				JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
-						configed.getResourceValue("InstallOpsiPackage.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
+						Configed.getResourceValue("InstallOpsiPackage.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 
 		}
 	}
 
 	private void choosePackage() {
 
-		logging.debug(this, "buttonCallChooserPackage action  starting ");
+		Logging.debug(this, "buttonCallChooserPackage action  starting ");
 
 		int returnVal = chooserPackage.showOpenDialog(this);
 
@@ -252,9 +252,9 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		logging.debug(this, "defineChoosers, depots: " + persist.getHostInfoCollections().getDepots());
+		Logging.debug(this, "defineChoosers, depots: " + persist.getHostInfoCollections().getDepots());
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
 		comboChooseDepot.setEnabled(false); // as long as we did not implement contacting a different depot
 
 		chooserPackage = new JFileChooser();
@@ -264,33 +264,33 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 				"opsi package", "opsi");
 		chooserPackage.addChoosableFileFilter(filter);
 		chooserPackage.setFileFilter(filter);
-		chooserPackage.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
+		chooserPackage.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
+		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserPackage);
 
 		chooserPackage.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooserPackage.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("InstallOpsiPackage.chooser"));
+		chooserPackage.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("InstallOpsiPackage.chooser"));
 
 		chooserTmpDir = new JFileChooser();
 		chooserTmpDir.setPreferredSize(Globals.filechooserSize);
 		chooserTmpDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooserTmpDir.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
+		chooserTmpDir.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
+		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserTmpDir);
 
 		chooserTmpDir.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooserTmpDir.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("InstallOpsiPackage.chooser"));
+		chooserTmpDir.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("InstallOpsiPackage.chooser"));
 
 		chooserServerpath = new JFileChooser();
 		chooserServerpath.setPreferredSize(Globals.filechooserSize);
 		chooserServerpath.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooserServerpath.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
+		chooserServerpath.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
+		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserServerpath);
 
 		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserServerpath.setDialogTitle(
-				Globals.APPNAME + " " + configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
+				Globals.APPNAME + " " + Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 
 	}
 
@@ -302,7 +302,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 	@Override
 	public String getDefaultName() {
-		return packageShareS;
+		return PAGE_SHARE_S;
 	}
 
 	private void initComponents() {
@@ -319,14 +319,14 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallChooserPackage = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserPackage.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserPackage.setPreferredSize(Globals.graphicButtonDimension);
-		buttonCallChooserPackage.setToolTipText(configed.getResourceValue("InstallOpsiPackage.chooserPackage"));
+		buttonCallChooserPackage.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserPackage"));
 
 		buttonCallChooserPackage.addActionListener(actionEvent -> choosePackage());
 
 		buttonSelectTmpDir = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonSelectTmpDir.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonSelectTmpDir.setPreferredSize(Globals.graphicButtonDimension);
-		buttonSelectTmpDir.setToolTipText(configed.getResourceValue("InstallOpsiPackage.chooserTmpDir"));
+		buttonSelectTmpDir.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserTmpDir"));
 
 		fieldServerPath = new JTextField(opsiWorkBenchDirectoryS);
 		fieldServerPath.setForeground(Globals.greyed);
@@ -336,14 +336,14 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallChooserServerpath = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
-		buttonCallChooserServerpath.setToolTipText(configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
+		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
 
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
-		fieldTmpDir = new JTextField(defaultTmpDir) {
+		fieldTmpDir = new JTextField(DEFAULT_TEMP_DIRECTORY) {
 			@Override
 			public String getText() {
-				if (super.getText().equals(defaultTmpDir))
+				if (super.getText().equals(DEFAULT_TEMP_DIRECTORY))
 					return "";
 				else
 					return super.getText();
@@ -360,11 +360,11 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					String tmpDir = chooserTmpDir.getSelectedFile().getPath();
-					logging.info(this, "file chosen : " + tmpDir);
+					Logging.info(this, "file chosen : " + tmpDir);
 					fieldTmpDir.setText(tmpDir);
 					fieldTmpDir.setCaretPosition(tmpDir.length());
 				} else {
-					fieldTmpDir.setText(defaultTmpDir);
+					fieldTmpDir.setText(DEFAULT_TEMP_DIRECTORY);
 				}
 
 			}
@@ -374,7 +374,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		buttonCallExecute.setSelectedIcon(Globals.createImageIcon("images/installpackage.png", ""));
 		buttonCallExecute.setPreferredSize(Globals.graphicButtonDimension);
-		buttonCallExecute.setToolTipText(configed.getResourceValue("InstallOpsiPackage.execute"));
+		buttonCallExecute.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.execute"));
 
 		buttonCallExecute.addActionListener(new ActionListener() {
 			@Override
@@ -383,7 +383,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 
-				logging.info(this, "actionPerformed on buttonCallExecute opsiPackageGotPathS,  depot:  "
+				Logging.info(this, "actionPerformed on buttonCallExecute opsiPackageGotPathS,  depot:  "
 						+ fieldOpsiPackageName.getText() + ", " + comboChooseDepot.getSelectedItem());
 
 				execute();
@@ -397,12 +397,12 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	public void defineLayout() {
 		setBorder(Globals.createPanelBorder());
 
-		JLabel topicLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.topic"));
-		JLabel infoLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.info"));
+		JLabel topicLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.topic"));
+		JLabel infoLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.info"));
 
-		JLabel serverLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.chooseDepot"));
+		JLabel serverLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.chooseDepot"));
 
-		JLabel serverPathLabel = new JLabel(configed.getResourceValue("InstallOpsiPackage.serverpath"));
+		JLabel serverPathLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.serverpath"));
 
 		if (isWindows) {
 			serverPathLabel.setForeground(Globals.greyed);

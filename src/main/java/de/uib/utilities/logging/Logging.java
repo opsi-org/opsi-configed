@@ -5,19 +5,19 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFrame;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FShowList;
 import de.uib.utilities.thread.WaitCursor;
 
-public class logging implements LogEventSubject
+public class Logging implements LogEventSubject
 
 {
 	public static String logDirectoryName = null;
@@ -25,10 +25,10 @@ public class logging implements LogEventSubject
 
 	private static String logfileDelimiter = "configed";
 	private static String logfileMarker = null;
-	public static final String windowsEnvVariableAppDataDirectory = "APPDATA";
-	public static final String envVariableForUserDirectory = "user.home";
-	public static final String relativeLogDirWindows = "opsi.org" + File.separator + "log";
-	public static final String relativeLogDirUnix = ".configed";
+	public static final String WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY = "APPDATA";
+	public static final String ENV_VARIABLE_FOR_USER_DIRECTORY = "user.home";
+	public static final String RELATIVE_LOG_DIR_WINDOWS = "opsi.org" + File.separator + "log";
+	public static final String RELATIVE_LOG_DIR_UNIX = ".configed";
 	private static String extension = ".log";
 
 	public static final int LEVEL_SECRET = 9;
@@ -51,35 +51,34 @@ public class logging implements LogEventSubject
 			LEVEL_WARNING, "\033[1;33m", LEVEL_ERROR, "\033[0;31m", LEVEL_CRITICAL, "\033[1;31m", LEVEL_ESSENTIAL,
 			"\033[1;36m");
 
-	public static String LOG_FORMAT = "[%d] [%s] [%-15s] %s";
-	public static String COLORED_LOG_FORMAT = "{color}[%d] [%s]{reset} [%-15s] %s";
+	private static final String COLORED_LOG_FORMAT = "{color}[%d] [%s]{reset} [%-15s] %s";
 
-	public static boolean COLOR_LOG = true;
-	public static Integer LOG_LEVEL_CONSOLE = LEVEL_WARNING;
-	public static Integer LOG_LEVEL_FILE = LEVEL_WARNING;
+	private static String logFormat = "[%d] [%s] [%-15s] %s";
 
-	private static final java.text.SimpleDateFormat loggingDateFormat = new java.text.SimpleDateFormat(
+	public static Integer logLevelConsole = LEVEL_WARNING;
+	public static Integer logLevelFile = LEVEL_WARNING;
+
+	private static final java.text.SimpleDateFormat LOGGING_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss.SSS");
 
 	public static final String levelText(int level) {
 		return LEVEL_TO_NAME.get(level);
 	}
 
-	private static int MIN_LEVEL_FOR_SHOWING_MESSAGES = LEVEL_ERROR;
+	private static final int MIN_LEVEL_FOR_SHOWING_MESSAGES = LEVEL_ERROR;
 
 	private static int numberOfKeptLogFiles = 3;
 	private static PrintWriter logFileWriter = null;
-	private static boolean LogFileInitialized = false;
-	public static boolean LogFileAvailable = false;
+	private static boolean logFileInitialized = false;
 
-	private static final int maxListedErrors = 20;
-	private static List<String> errorList = new ArrayList<String>(maxListedErrors);
+	private static final int MAX_LISTED_ERRORS = 20;
+	private static List<String> errorList = new ArrayList<>(MAX_LISTED_ERRORS);
 
 	public static FShowList fErrors;
 
-	protected static List<LogEventObserver> logEventObservers = new ArrayList<LogEventObserver>();
+	protected static List<LogEventObserver> logEventObservers = new ArrayList<>();
 
-	public static void setSuppressConsole(boolean b) {
+	public static void setSuppressConsole() {
 		setLogLevelConsole(LEVEL_NONE);
 	}
 
@@ -88,7 +87,7 @@ public class logging implements LogEventSubject
 			newLevel = LEVEL_NONE;
 		else if (newLevel > LEVEL_SECRET)
 			newLevel = LEVEL_SECRET;
-		LOG_LEVEL_CONSOLE = newLevel;
+		logLevelConsole = newLevel;
 	}
 
 	public static void setLogLevelFile(int newLevel) {
@@ -96,7 +95,7 @@ public class logging implements LogEventSubject
 			newLevel = LEVEL_NONE;
 		else if (newLevel > LEVEL_SECRET)
 			newLevel = LEVEL_SECRET;
-		LOG_LEVEL_FILE = newLevel;
+		logLevelFile = newLevel;
 	}
 
 	public static void setLogLevel(int newLevel) {
@@ -118,20 +117,19 @@ public class logging implements LogEventSubject
 	}
 
 	private static final void initLogFile() {
-		LogFileInitialized = true; // Try to initialize only once!
-		LogFileAvailable = false;
+		logFileInitialized = true; // Try to initialize only once!
 		String logFilename = "";
 
 		try {
 			File logDirectory;
 			if (logDirectoryName == null || logDirectoryName.isEmpty()) {
-				if (System.getenv(logging.windowsEnvVariableAppDataDirectory) != null)
+				if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null)
 					// Windows
-					logDirectory = new File(
-							System.getenv(windowsEnvVariableAppDataDirectory) + File.separator + relativeLogDirWindows);
+					logDirectory = new File(System.getenv(WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator
+							+ RELATIVE_LOG_DIR_WINDOWS);
 				else
-					logDirectory = new File(
-							System.getProperty(envVariableForUserDirectory) + File.separator + relativeLogDirUnix);
+					logDirectory = new File(System.getProperty(ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator
+							+ RELATIVE_LOG_DIR_UNIX);
 			} else {
 				logDirectory = new File(logDirectoryName);
 			}
@@ -169,10 +167,9 @@ public class logging implements LogEventSubject
 
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename));
 			logFilenameInUse = logFilename;
-			LogFileAvailable = true;
 		} catch (Exception ex) {
 			System.out.print(ex);
-			logFilenameInUse = configed.getResourceValue("logging.noFileLogging");
+			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
 		}
 	}
 
@@ -190,11 +187,11 @@ public class logging implements LogEventSubject
 
 	private static String now() {
 
-		return loggingDateFormat.format(new java.util.Date());
+		return LOGGING_DATE_FORMAT.format(new java.util.Date());
 	}
 
 	private static void addErrorToList(String mesg, String time) {
-		while (errorList.size() >= maxListedErrors) {
+		while (errorList.size() >= MAX_LISTED_ERRORS) {
 			errorList.remove(0);
 		}
 		errorList.add(String.format("[%s] %s", time, mesg));
@@ -227,9 +224,7 @@ public class logging implements LogEventSubject
 		if (s == null)
 			return null;
 
-		Integer[] t = new Integer[s.length];
-		for (int i = 0; i < s.length; i++)
-			t[i] = s[i];
+		Integer[] t = Arrays.asList(s).toArray(new Integer[0]);
 
 		return getStrings(t);
 	}
@@ -241,7 +236,7 @@ public class logging implements LogEventSubject
 		return "" + a.length;
 	}
 
-	public static String getSize(Collection c) {
+	public static String getSize(Collection<String> c) {
 		if (c == null)
 			return null;
 
@@ -268,7 +263,7 @@ public class logging implements LogEventSubject
 	}
 
 	public static synchronized void log(int level, String mesg, Object caller, Throwable ex) {
-		if (level > LOG_LEVEL_CONSOLE && level > LOG_LEVEL_FILE) {
+		if (level > logLevelConsole && level > logLevelFile) {
 			return;
 		}
 
@@ -285,19 +280,18 @@ public class logging implements LogEventSubject
 			exMesg = "\n" + sw.toString();
 		}
 
-		if (level <= LOG_LEVEL_CONSOLE) {
-			String format = LOG_FORMAT;
-			if (COLOR_LOG) {
-				format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}", "\033[0m");
-			}
+		if (level <= logLevelConsole) {
+			String format = COLORED_LOG_FORMAT.replace("{color}", LEVEL_TO_COLOR.get(level)).replace("{reset}",
+					"\033[0m");
+
 			System.err.println(String.format(format, level, curTime, context, mesg) + exMesg);
 		}
-		if (level <= LOG_LEVEL_FILE) {
-			if (!LogFileInitialized) {
+		if (level <= logLevelFile) {
+			if (!logFileInitialized) {
 				initLogFile();
 			}
 			if (logFileWriter != null) {
-				logFileWriter.println(String.format(LOG_FORMAT, level, curTime, context, mesg) + exMesg);
+				logFileWriter.println(String.format(logFormat, level, curTime, context, mesg) + exMesg);
 				logFileWriter.flush();
 			}
 		}
@@ -428,10 +422,6 @@ public class logging implements LogEventSubject
 		errorList.clear();
 	}
 
-	private static List getErrorList() {
-		return errorList;
-	}
-
 	public static void checkErrorList(JFrame parentFrame) {
 		// if errors Occurred show a window with the logged errors
 
@@ -441,7 +431,7 @@ public class logging implements LogEventSubject
 		else
 			f = parentFrame;
 
-		int errorCount = getErrorList().size();
+		int errorCount = errorList.size();
 
 		info("error list size " + errorCount);
 
@@ -457,7 +447,7 @@ public class logging implements LogEventSubject
 		new Thread() {
 			@Override
 			public void run() {
-				fErrors.setMessage(logging.getErrorListAsLines());
+				fErrors.setMessage(Logging.getErrorListAsLines());
 				fErrors.setAlwaysOnTop(true);
 				fErrors.setVisible(true);
 			}
@@ -475,24 +465,6 @@ public class logging implements LogEventSubject
 		}
 
 		return result.toString();
-	}
-
-	public static void debugMap(Object caller, Map m) {
-		if (m == null) {
-			debug(caller, " is null");
-			return;
-		}
-
-		Iterator iter = m.keySet().iterator();
-
-		while (iter.hasNext()) {
-			Object key = iter.next();
-
-			Object value = m.get(key);
-
-			debug(caller, " key: " + key + ", class " + key.getClass().getName() + ", value " + value + ", class "
-					+ value.getClass().getName());
-		}
 	}
 
 	// used instead of interface LogEventSubject

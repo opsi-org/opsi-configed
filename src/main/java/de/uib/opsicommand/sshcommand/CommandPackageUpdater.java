@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.configed;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHPackageUpdaterDialog;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParameter {
 	private String command;
@@ -31,11 +31,11 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	public CommandPackageUpdater() {
 		command = baseName;
 		actionlist.add("list");
-		actionhash.put(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"), "list");
+		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"), "list");
 		actionlist.add("install");
-		actionhash.put(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.install"), "install");
+		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.install"), "install");
 		actionlist.add("update");
-		actionhash.put(configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.update"), "update");
+		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.update"), "update");
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	@Override
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.getInstance().confidential);
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		else
 			return getCommand();
 	}
@@ -55,7 +55,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	/**
 	 * Sets the command specific error text
 	 **/
-	public String get_ERROR_TEXT() {
+	public String getErrorText() {
 		return "ERROR";
 	}
 
@@ -76,7 +76,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public String getMenuText() {
-		return configed.getResourceValue("SSHConnection.command.opsipackageupdater");
+		return Configed.getResourceValue("SSHConnection.command.opsipackageupdater");
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public String getToolTipText() {
-		return configed.getResourceValue("SSHConnection.command.opsipackageupdater.tooltip");
+		return Configed.getResourceValue("SSHConnection.command.opsipackageupdater.tooltip");
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		}
 		setCommand(baseName + verbosity + repo + action);
 		if (needSudo() && !action.equals("list"))
-			return SSHCommandFactory.sudo_text + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		return command + " 2>&1"; // the output redirection semms not to produce a jsch input
 	}
 
@@ -141,7 +141,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 		if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
 				|| main.getOpsiVersion().compareTo("4.1") < 0) {
-			logging.error(this, configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
+			Logging.error(this, Configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
 		} else
 			dialog = new SSHPackageUpdaterDialog();
 
@@ -162,9 +162,10 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	}
 
 	public void setVerbosity(int vSum) {
-		String v = "";
+		StringBuilder v = new StringBuilder();
 		for (int i = 0; i < vSum; i++)
-			v = v + "v";
+			v.append("v");
+
 		verbosity = " -" + v + " ";
 		if (vSum == 0)
 			verbosity = "";

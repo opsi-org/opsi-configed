@@ -16,13 +16,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.DefaultListCellOptions;
 import de.uib.utilities.table.ListCellOptions;
 
@@ -39,12 +39,12 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	}
 
 	protected void buildPanel() {
-		label = new JLabel(configed.getResourceValue("MainFrame.jLabel_Config"));
+		label = new JLabel(Configed.getResourceValue("MainFrame.jLabel_Config"));
 		combo = new JComboBox<>();
 		combo.setVisible(false);
 		combo.addItemListener(this);
 		de.uib.configed.gui.helper.PropertiesTableCellRenderer cellRenderer = new de.uib.configed.gui.helper.PropertiesTableCellRenderer();
-		logging.info(this, "buildPanel, produce editMapPanel");
+		Logging.info(this, "buildPanel, produce editMapPanel");
 		editMapPanel = new EditMapPanelX(cellRenderer, false, false);
 		((EditMapPanelX) editMapPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
@@ -85,7 +85,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		label.setText(labeltext);
 		activateCombo(comboModel);
 
-		logging.debug(this, "initMultipleHosts " + " configs  " + (multipleMaps)
+		Logging.debug(this, "initMultipleHosts " + " configs  " + (multipleMaps)
 
 		);
 
@@ -125,7 +125,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 			else
 				cellOptions = DefaultListCellOptions.getNewEmptyListCellOptions();
 
-			logging.debug(this, "cellOptions: " + cellOptions);
+			Logging.debug(this, "cellOptions: " + cellOptions);
 
 			result.put(entry.getKey(), cellOptions);
 		}
@@ -136,7 +136,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	protected void setMap(String selectedItem) {
 		List editedMaps = new ArrayList<>(1);
 		editedMaps.add(multipleMaps.get(selectedItem));
-		logging.debug(this, "setMap " + multipleMaps.get(selectedItem));
+		Logging.debug(this, "setMap " + multipleMaps.get(selectedItem));
 		editMapPanel.setEditableMap(multipleMaps.get(selectedItem), deriveOptionsMap(multipleMaps.get(selectedItem)));
 		editMapPanel.setStoreData(editedMaps);
 	}

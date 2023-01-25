@@ -54,8 +54,8 @@ import javax.swing.filechooser.FileFilter;
 public class ExampleFileFilter extends FileFilter {
 
 	private Map<String, Object> filters = null;
-	private String description = null;
-	private String fullDescription = null;
+	private StringBuilder description = null;
+	private StringBuilder fullDescription = null;
 	private boolean useExtensionsInDescription = true;
 
 	/**
@@ -189,21 +189,21 @@ public class ExampleFileFilter extends FileFilter {
 	public String getDescription() {
 		if (fullDescription == null) {
 			if (description == null || isExtensionListInDescription()) {
-				fullDescription = description == null ? "(" : description + " (";
+				fullDescription = description == null ? new StringBuilder("(") : new StringBuilder(description + " (");
 				// build the description from the extension list
 				Iterator<String> extensions = filters.keySet().iterator();
 				if (extensions != null) {
-					fullDescription += "." + extensions.next();
+					fullDescription.append("." + extensions.next());
 					while (extensions.hasNext()) {
-						fullDescription += ", " + extensions.next();
+						fullDescription.append(", " + extensions.next());
 					}
 				}
-				fullDescription += ")";
+				fullDescription.append(")");
 			} else {
 				fullDescription = description;
 			}
 		}
-		return fullDescription;
+		return fullDescription.toString();
 	}
 
 	/**
@@ -215,7 +215,7 @@ public class ExampleFileFilter extends FileFilter {
 	 * @see isExtensionListInDescription
 	 */
 	public void setDescription(String description) {
-		this.description = description;
+		this.description = new StringBuilder(description);
 		fullDescription = null;
 	}
 

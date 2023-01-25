@@ -18,7 +18,7 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.clientselection.serializers.OpsiDataSerializer;
 import de.uib.configed.clientselection.serializers.WrongVersionException;
 import de.uib.opsidatamodel.SavedSearches;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
  * A serializer is able to save and load searches.
@@ -47,7 +47,7 @@ public abstract class Serializer {
 	 */
 	public void save(SelectOperation topOperation, String name, String description) {
 		Map<String, Object> data = produceData(topOperation);
-		logging.info(this, "save data " + data);
+		Logging.info(this, "save data " + data);
 		saveData(name, description, data);
 	}
 
@@ -70,7 +70,7 @@ public abstract class Serializer {
 			jsonString += OpsiDataSerializer.createJsonRecursive(data);
 			jsonString += " }";
 		} catch (IllegalArgumentException e) {
-			logging.error(this, "Saving failed: " + e.getMessage(), e);
+			Logging.error(this, "Saving failed: " + e.getMessage(), e);
 			return null;
 		}
 
@@ -81,12 +81,14 @@ public abstract class Serializer {
 	 * reproduce a search
 	 */
 	public SelectOperation deserialize(Map<String, Object> data) {
-		if (data == null)
-			logging.warning(this, "data in Serializer.deserialize is null");
+		if (data == null) {
+			Logging.warning(this, "data in Serializer.deserialize is null");
+			return null;
+		}
 
-		logging.info(this, "deserialize data " + data);
+		Logging.info(this, "deserialize data " + data);
 		if (data.get(KEY_ELEMENT_PATH) != null) {
-			logging.info("deserialize, elementPath " + Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH)));
+			Logging.info("deserialize, elementPath " + Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH)));
 		}
 
 		try {
@@ -96,7 +98,7 @@ public abstract class Serializer {
 			}
 			return operation;
 		} catch (Exception e) {
-			logging.error("deserialize error for data " + data + " message " + e.getMessage(), e);
+			Logging.error("deserialize error for data " + data + " message " + e.getMessage(), e);
 			return null;
 		}
 	}
@@ -106,14 +108,14 @@ public abstract class Serializer {
 	 */
 
 	public SelectOperation deserialize(String serialized) {
-		logging.info(this, "deserialize serialized " + serialized);
+		Logging.info(this, "deserialize serialized " + serialized);
 		SelectOperation result = null;
 
 		try {
 			Map<String, Object> data = decipher(serialized);
 			result = deserialize(data);
 		} catch (Exception e) {
-			logging.error("deserialize error " + e.getMessage(), e);
+			Logging.error("deserialize error " + e.getMessage(), e);
 		}
 
 		return result;
@@ -123,14 +125,14 @@ public abstract class Serializer {
 	 * Get one search from searches map
 	 */
 	public SelectOperation load(String name) {
-		logging.info(this, "load " + name);
+		Logging.info(this, "load " + name);
 		try {
 			Map<String, Object> data = getData(name);
 			return deserialize(data);
 		}
 
 		catch (Exception e) {
-			logging.error(e.getMessage(), e);
+			Logging.error(e.getMessage(), e);
 			return null;
 		}
 	}
@@ -160,17 +162,17 @@ public abstract class Serializer {
 	 */
 	private SelectOperation getOperation(Map<String, Object> data, Map<String, List<SelectElement>> hardware)
 			throws Exception {
-		logging.info(this, "getOperation for map " + data + "; hardware " + hardware);
+		Logging.info(this, "getOperation for map " + data + "; hardware " + hardware);
 
 		String elementPathS = null;
 		if (data.get(KEY_ELEMENT_PATH) != null) {
 			elementPathS = Arrays.toString((String[]) data.get(KEY_ELEMENT_PATH));
-			logging.info(this, "getOperation, elementPath in data " + elementPathS);
+			Logging.info(this, "getOperation, elementPath in data " + elementPathS);
 		}
 		// Element
 		SelectElement element = null;
 		String elementName = (String) data.get(KEY_ELEMENT_NAME);
-		logging.info(this, "Element name: " + elementName);
+		Logging.info(this, "Element name: " + elementName);
 
 		if (elementName != null && !(elementName.isEmpty())) {
 			String subelementName = (String) data.get(KEY_SUBELEMENT_NAME);
@@ -196,11 +198,11 @@ public abstract class Serializer {
 				if (hardware == null) {
 					hardware = manager.getBackend().getHardwareList();
 				}
-				logging.info(this, "getOperation elementPath[0] " + elementPath[0]);
+				Logging.info(this, "getOperation elementPath[0] " + elementPath[0]);
 				List<SelectElement> elements = hardware.get(elementPath[0]);
 
 				for (SelectElement possibleElement : elements) {
-					logging.info(this,
+					Logging.info(this,
 							"getOperation possibleElement.getClassName() " + possibleElement
 									+ " compare with elementName " + elementName + " or perhaps with elementPathS "
 									+ elementPathS);
@@ -220,7 +222,7 @@ public abstract class Serializer {
 
 		if (element != null) {
 			String elS = "" + element + " class " + element.getClass() + " path " + element.getPath();
-			logging.info(this, "getOperation element " + elS);
+			Logging.info(this, "getOperation element " + elS);
 		}
 
 		// Children
@@ -232,32 +234,32 @@ public abstract class Serializer {
 
 		// Operation
 		String operationName = (String) data.get(KEY_OPERATION);
-		logging.info(this, "getOperation Operation name: " + operationName);
+		Logging.info(this, "getOperation Operation name: " + operationName);
 		SelectOperation operation;
 
 		if (getSearchDataVersion() == 1) {
 			operation = parseOperationVersion1(operationName, element, children);
 		} else {
-			Class operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
-			logging.info(this, "getOperation operationClass  " + operationClass.toString());
+			Class<?> operationClass = Class.forName("de.uib.configed.clientselection.operations." + operationName);
+			Logging.info(this, "getOperation operationClass  " + operationClass.toString());
 			if (element != null) {
-				logging.info(this, "getOperation element != null, element  " + element);
+				Logging.info(this, "getOperation element != null, element  " + element);
 				operation = (SelectOperation) operationClass.getConstructors()[0].newInstance(element);
 			} else // GroupOperation
 			{
-				Class list = Class.forName("List");
-				logging.info(this, "getOperation List name: " + list.toString());
+				Class<?> list = Class.forName("java.util.List");
+				Logging.info(this, "getOperation List name: " + list.toString());
 				operation = (SelectOperation) operationClass.getConstructor(list).newInstance(children);
 			}
 		}
 
-		logging.info(this, "getOperation  " + operation);
+		Logging.info(this, "getOperation  " + operation);
 
 		// Data
 		SelectData.DataType dataType = (SelectData.DataType) data.get(KEY_DATA_TYPE);
-		logging.info(this, "getOperation dataType " + dataType);
+		Logging.info(this, "getOperation dataType " + dataType);
 		Object realData = data.get("data");
-		logging.info(this, "getOperation realData " + realData);
+		Logging.info(this, "getOperation realData " + realData);
 		SelectData selectData;
 		if (dataType == null || data == null)
 			selectData = null;
@@ -303,13 +305,13 @@ public abstract class Serializer {
 		} else {
 			map.put("children", null);
 		}
-		logging.info(this, "produced " + map);
+		Logging.info(this, "produced " + map);
 		return map;
 	}
 
 	/* Parse the operations with the old (version 1) operation names */
 	private SelectOperation parseOperationVersion1(String name, SelectElement element, List<SelectOperation> children) {
-		logging.info(this, "parseOperationVersion1");
+		Logging.info(this, "parseOperationVersion1");
 
 		if (element != null) {
 			for (SelectOperation operation : element.supportedOperations()) {
@@ -339,7 +341,7 @@ public abstract class Serializer {
 	 */
 	private SelectOperation checkForHostGroup(SelectOperation operation) {
 		if (!(operation instanceof SelectGroupOperation)) {
-			logging.debug("No group: " + operation.getClassName() + ", element path size: "
+			Logging.debug("No group: " + operation.getClassName() + ", element path size: "
 					+ operation.getElement().getPathArray().length);
 			if (operation.getElement().getPathArray().length == 1)
 				return new HostOperation(operation);

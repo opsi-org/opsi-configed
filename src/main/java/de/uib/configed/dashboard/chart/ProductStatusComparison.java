@@ -3,7 +3,7 @@ package de.uib.configed.dashboard.chart;
 import java.io.IOException;
 import java.util.Map;
 
-import de.uib.configed.configed;
+import de.uib.configed.Configed;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.Product;
 import de.uib.configed.dashboard.collector.ProductData;
@@ -35,7 +35,7 @@ public class ProductStatusComparison extends StackPane implements DataChangeList
 
 	@Override
 	public void display() {
-		productStatusNoDataText.setText(configed.getResourceValue("Dashboard.noData"));
+		productStatusNoDataText.setText(Configed.getResourceValue("Dashboard.noData"));
 
 		Map<Product, Product> installedProducts = ProductData.getInstalledProducts();
 		Map<Product, Product> failedProducts = ProductData.getFailedProducts();
@@ -51,11 +51,11 @@ public class ProductStatusComparison extends StackPane implements DataChangeList
 		XYChart.Series<String, Number> data = new XYChart.Series<>();
 
 		data.getData().add(
-				new XYChart.Data<>(configed.getResourceValue("Dashboard.products.installed"), totalInstalledProducts));
+				new XYChart.Data<>(Configed.getResourceValue("Dashboard.products.installed"), totalInstalledProducts));
 		data.getData()
-				.add(new XYChart.Data<>(configed.getResourceValue("Dashboard.products.failed"), totalFailedProducts));
+				.add(new XYChart.Data<>(Configed.getResourceValue("Dashboard.products.failed"), totalFailedProducts));
 		data.getData()
-				.add(new XYChart.Data<>(configed.getResourceValue("Dashboard.products.unused"), totalUnusedProducts));
+				.add(new XYChart.Data<>(Configed.getResourceValue("Dashboard.products.unused"), totalUnusedProducts));
 
 		productStatusComparisonBarChart.getData().clear();
 		productStatusComparisonBarChart.getData().add(data);

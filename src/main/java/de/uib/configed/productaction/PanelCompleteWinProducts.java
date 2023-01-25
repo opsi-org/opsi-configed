@@ -39,13 +39,13 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.utilities.NameProducer;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitCursor;
 
 public class PanelCompleteWinProducts extends JPanel
@@ -65,8 +65,8 @@ public class PanelCompleteWinProducts extends JPanel
 
 	int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
 
-	JComboBox comboChooseDepot;
-	JComboBox comboChooseWinProduct;
+	JComboBox<String> comboChooseDepot;
+	JComboBox<String> comboChooseWinProduct;
 	JTextField fieldTargetPath;
 
 	JButton buttonCallSelectFolderWinPE;
@@ -132,7 +132,7 @@ public class PanelCompleteWinProducts extends JPanel
 	private void evaluateWinProducts() {
 		retrieveWinProducts();
 
-		winProduct = "" + comboChooseWinProduct.getSelectedItem();
+		winProduct = (String) comboChooseWinProduct.getSelectedItem();
 		produceTarget();
 	}
 
@@ -152,7 +152,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 		List<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
 
-		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray()));
+		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
 
 	private void defineChoosers() {
@@ -160,23 +160,23 @@ public class PanelCompleteWinProducts extends JPanel
 		chooserFolder.setPreferredSize(Globals.filechooserSize);
 		chooserFolder.setPreferredSize(Globals.filechooserSize);
 		chooserFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooserFolder.setApproveButtonText(configed.getResourceValue("FileChooser.approve"));
-		UIManager.put("FileChooser.cancelButtonText", configed.getResourceValue("FileChooser.cancel"));
+		chooserFolder.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));
+		UIManager.put("FileChooser.cancelButtonText", Configed.getResourceValue("FileChooser.cancel"));
 		SwingUtilities.updateComponentTreeUI(chooserFolder);
 
 		chooserFolder.setDialogType(JFileChooser.OPEN_DIALOG);
-		chooserFolder.setDialogTitle(Globals.APPNAME + " " + configed.getResourceValue("CompleteWinProducts.chooser"));
+		chooserFolder.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("CompleteWinProducts.chooser"));
 
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray()));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
 
 		comboChooseDepot.setEnabled(false);
 
 		comboChooseDepot.addActionListener(actionEvent -> {
 			selectedDepot = "" + comboChooseDepot.getSelectedItem();
-			logging.info(this, "actionPerformed  depot selected " + selectedDepot);
+			Logging.info(this, "actionPerformed  depot selected " + selectedDepot);
 			depots.clear();
 			depots.add(selectedDepot);
 			SmbConnect.getInstance().buildSambaTarget(selectedDepot, de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW);
@@ -212,7 +212,7 @@ public class PanelCompleteWinProducts extends JPanel
 	// implements NameProducer
 	@Override
 	public String produceName() {
-		logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory " + fieldTargetPath + " , "
+		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory " + fieldTargetPath + " , "
 				+ depotProductDirectory);
 		if (fieldTargetPath == null || fieldTargetPath.getText().equals("")
 				|| fieldTargetPath.getText().startsWith(depotProductDirectory))
@@ -258,7 +258,7 @@ public class PanelCompleteWinProducts extends JPanel
 		buttonCallSelectFolderWinPE = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderWinPE.setPreferredSize(Globals.graphicButtonDimension);
-		buttonCallSelectFolderWinPE.setToolTipText(configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
+		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
 		buttonCallSelectFolderWinPE.addActionListener(actionEvent -> {
 
@@ -277,7 +277,7 @@ public class PanelCompleteWinProducts extends JPanel
 		buttonCallSelectFolderInstallFiles.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectFolderInstallFiles.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectFolderInstallFiles
-				.setToolTipText(configed.getResourceValue("CompleteWinProducts.chooserFolderInstallFiles"));
+				.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderInstallFiles"));
 
 		fieldPathInstallFiles = new JTextField();
 
@@ -297,14 +297,14 @@ public class PanelCompleteWinProducts extends JPanel
 		buttonCallExecute = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
 		buttonCallExecute.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
 		buttonCallExecute.setPreferredSize(Globals.graphicButtonDimension);
-		buttonCallExecute.setToolTipText(configed.getResourceValue("CompleteWinProducts.execute"));
+		buttonCallExecute.setToolTipText(Configed.getResourceValue("CompleteWinProducts.execute"));
 
 		buttonCallExecute.setEnabled(false);
 
 		buttonCallExecute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				logging.debug(this,
+				Logging.debug(this,
 						"actionPerformed on buttonCallExecute pathWinPE, pathInstallFiles, productKey, winproduct "
 								+ fieldPathWinPE.getText() + ", " + fieldPathInstallFiles.getText() + ", "
 								+ fieldProductKey.getText() + ", " + comboChooseWinProduct.getSelectedItem());
@@ -332,7 +332,7 @@ public class PanelCompleteWinProducts extends JPanel
 			File targetDirectory = null;
 
 			String pathWinPE = fieldPathWinPE.getText().trim();
-			logging.debug(this, "copy  " + pathWinPE + " to " + targetDirectory);
+			Logging.debug(this, "copy  " + pathWinPE + " to " + targetDirectory);
 
 			if (!pathWinPE.equals("")) {
 				targetDirectory = new File(fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_PE);
@@ -340,7 +340,7 @@ public class PanelCompleteWinProducts extends JPanel
 			}
 
 			String pathInstallFiles = fieldPathInstallFiles.getText().trim();
-			logging.debug(this, "copy  " + pathInstallFiles + " to " + targetDirectory);
+			Logging.debug(this, "copy  " + pathInstallFiles + " to " + targetDirectory);
 			if (!pathInstallFiles.equals("")) {
 				targetDirectory = new File(
 						fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_INSTALL_FILES);
@@ -354,7 +354,7 @@ public class PanelCompleteWinProducts extends JPanel
 			waitCursor.stop();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
-					configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
+					Configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
 
 			List<String> values = new ArrayList<>();
 
@@ -363,7 +363,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 			// check if product key is new and should be changed
 			Map<String, Object> propsMap = persist.getProductproperties(server, winProduct);
-			logging.debug(this, " getProductproperties " + propsMap);
+			Logging.debug(this, " getProductproperties " + propsMap);
 
 			String oldProductKey = null;
 
@@ -381,13 +381,13 @@ public class PanelCompleteWinProducts extends JPanel
 			if (!oldProductKey.equals(productKey)) {
 
 				int returnedOption = JOptionPane.showOptionDialog(rootFrame,
-						configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
-						configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),
+						Configed.getResourceValue("CompleteWinProducts.setChangedProductKey"),
+						Configed.getResourceValue("CompleteWinProducts.questionSetProductKey"),
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					waitCursor = new WaitCursor(rootFrame);
-					logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
+					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
 					persist.setCommonProductPropertyValue(depots, winProduct, "productkey", values);
 
 					waitCursor.stop();
@@ -396,21 +396,21 @@ public class PanelCompleteWinProducts extends JPanel
 
 		} catch (Exception ex) {
 			waitCursor.stop();
-			logging.error("copy error:\n" + ex, ex);
+			Logging.error("copy error:\n" + ex, ex);
 		}
 	}
 
 	public void defineLayout() {
 		setBorder(Globals.createPanelBorder());
-		JLabel topicLabel = new JLabel(configed.getResourceValue("CompleteWinProducts.topic"));
+		JLabel topicLabel = new JLabel(Configed.getResourceValue("CompleteWinProducts.topic"));
 
-		JLabel labelServer = new JLabel(configed.getResourceValue("CompleteWinProducts.labelServer"));
-		JLabel labelWinProduct = new JLabel(configed.getResourceValue("CompleteWinProducts.labelWinProduct"));
-		JLabel labelFolderWinPE = new JLabel(configed.getResourceValue("CompleteWinProducts.labelFolderWinPE"));
+		JLabel labelServer = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelServer"));
+		JLabel labelWinProduct = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelWinProduct"));
+		JLabel labelFolderWinPE = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelFolderWinPE"));
 		JLabel labelFolderInstallFiles = new JLabel(
-				configed.getResourceValue("CompleteWinProducts.labelFolderInstallFiles"));
-		JLabel labelTargetPath = new JLabel(configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
-		JLabel labelProductKey = new JLabel(configed.getResourceValue("CompleteWinProducts.labelProductKey"));
+				Configed.getResourceValue("CompleteWinProducts.labelFolderInstallFiles"));
+		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
+		JLabel labelProductKey = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelProductKey"));
 
 		JPanel panel = this;
 		GroupLayout layout = new GroupLayout(panel);

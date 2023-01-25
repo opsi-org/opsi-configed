@@ -3,10 +3,10 @@ package de.uib.utilities;
 import java.util.Date;
 
 public class ExtendedDate {
-	static final String infiniteImport = "never";
-	static final String sINFINITE = "INFINITE";
+	static final String INFINITE_IMPORT = "never";
+	static final String STRING_INFINITE = "INFINITE";
 
-	public static final ExtendedDate INFINITE = new ExtendedDate(sINFINITE);
+	public static final ExtendedDate INFINITE = new ExtendedDate(STRING_INFINITE);
 	public static final ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");
 
 	private Date date;
@@ -33,8 +33,8 @@ public class ExtendedDate {
 
 		if (ob instanceof String) {
 			String value = ((String) ob).trim();
-			if (value.equalsIgnoreCase(infiniteImport) || value.equalsIgnoreCase(sINFINITE)) {
-				sDate = sINFINITE;
+			if (value.equalsIgnoreCase(INFINITE_IMPORT) || value.equalsIgnoreCase(STRING_INFINITE)) {
+				sDate = STRING_INFINITE;
 			} else {
 
 				// extend
@@ -52,9 +52,7 @@ public class ExtendedDate {
 
 		if (ob instanceof Date) {
 			setFromDate((Date) ob);
-			return;
 		}
-
 	}
 
 	@Override

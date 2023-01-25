@@ -28,10 +28,10 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 	}
 
 	public BooleanIconTableCellRenderer(Icon trueIcon, Icon falseIcon) {
-		this(trueIcon, falseIcon, null, false);
+		this(trueIcon, falseIcon, false);
 	}
 
-	public BooleanIconTableCellRenderer(Icon trueIcon, Icon falseIcon, Icon nullIcon, boolean allowingString) {
+	public BooleanIconTableCellRenderer(Icon trueIcon, Icon falseIcon, boolean allowingString) {
 		super();
 		this.allowingString = allowingString;
 		this.trueIcon = trueIcon;

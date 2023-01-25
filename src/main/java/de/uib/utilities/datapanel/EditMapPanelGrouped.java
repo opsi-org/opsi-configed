@@ -31,10 +31,10 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.guidata.ListMerger;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.ListCellOptions;
@@ -47,9 +47,9 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 // works on a map of pairs of type String - List
 {
+	private static final int INITIAL_DIVIDER_LOCATION = 350;
 
 	protected JSplitPane splitPane;
-	final int initialSplitLoc = 350;
 	protected XTree tree;
 	protected JPanel rightPane;
 	protected JLabel labelForRightPane;
@@ -87,7 +87,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	}
 
 	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable, TreeMap<String, String> classesMap) {
+			boolean reloadable, NavigableMap<String, String> classesMap) {
 		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, classesMap,
 				(AbstractEditMapPanel.Actor) null);
 	}
@@ -98,7 +98,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	}
 
 	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable, TreeMap<String, String> classesMap, final AbstractEditMapPanel.Actor actor) {
+			boolean reloadable, NavigableMap<String, String> classesMap, final AbstractEditMapPanel.Actor actor) {
 		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable);
 		buildPanel();
 		this.actor = actor;
@@ -107,7 +107,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		popupmenuAtRow = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD }) {
 			@Override
 			public void action(int p) {
-				logging.debug(this, "( EditMapPanelGrouped ) popup " + p);
+				Logging.debug(this, "( EditMapPanelGrouped ) popup " + p);
 
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
@@ -129,7 +129,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	}
 
 	protected void removeSubpanelClass(String key) {
-		logging.info(this, "remove " + key + " from " + givenClasses);
+		Logging.info(this, "remove " + key + " from " + givenClasses);
 		givenClasses.remove(key);
 	}
 
@@ -146,7 +146,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 					int row = tree.getRowForPath(p);
 
 					actor.reloadData();
-					logging.info(this, "reloaded, return to " + p);
+					Logging.info(this, "reloaded, return to " + p);
 					if (p != null) {
 
 						tree.setExpandsSelectedPaths(true);
@@ -157,7 +157,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 				@Override
 				protected JPopupMenu definePopup() {
-					logging.debug(this, " (EditMapPanelGrouped) definePopup ");
+					Logging.debug(this, " (EditMapPanelGrouped) definePopup ");
 					return new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_SAVE, PopupMenuTrait.POPUP_RELOAD,
 							PopupMenuTrait.POPUP_PDF })
 
@@ -194,12 +194,12 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		client = tree.getSelectionPath().getPathComponent(0).toString().trim(); // client name
 		// TODO get Depotname
-		logging.info(this, "------------- create report");
+		Logging.info(this, "------------- create report");
 		HashMap<String, String> metaData = new HashMap<>();
-		metaData.put("header", configed.getResourceValue("EditMapPanelGrouped.createPDF.title"));
-		metaData.put("title", configed.getResourceValue("Client: " + client));
+		metaData.put("header", Configed.getResourceValue("EditMapPanelGrouped.createPDF.title"));
+		metaData.put("title", Configed.getResourceValue("Client: " + client));
 		metaData.put("subject", "report of table");
-		metaData.put("keywords", configed.getResourceValue("EditMapPanelGrouped.createPDF.title") + " " + client);
+		metaData.put("keywords", Configed.getResourceValue("EditMapPanelGrouped.createPDF.title") + " " + client);
 
 		ExporterToPDF pdfExportTable = new ExporterToPDF(createJTableForPDF());
 		pdfExportTable.setClient(client);
@@ -214,11 +214,11 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		JTable jTable = new JTable(tableModel);
 		List<String> values;
 
-		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_name"));
-		tableModel.addColumn(configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_value"));
+		tableModel.addColumn(Configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_name"));
+		tableModel.addColumn(Configed.getResourceValue("EditMapPanelGrouped.createJTableForPDF.property_value"));
 
 		List<String> keys = mapTableModel.getKeys();
-		logging.info(this, "createJTableForPDF keys " + keys);
+		Logging.info(this, "createJTableForPDF keys " + keys);
 		for (String key : keys) {
 			String property = "";
 
@@ -239,12 +239,12 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	}
 
 	protected void reload() {
-		logging.info(this, "reload");
+		Logging.info(this, "reload");
 		javax.swing.tree.TreePath p = tree.getSelectionPath();
 		int row = tree.getRowForPath(p);
 
 		actor.reloadData();
-		logging.debug(this, "reloaded, return to " + p);
+		Logging.debug(this, "reloaded, return to " + p);
 		if (p != null) {
 
 			tree.setExpandsSelectedPaths(true);
@@ -278,7 +278,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		splitPane.setLeftComponent(jScrollPaneTree);
 		splitPane.setRightComponent(rightPane);
-		splitPane.setDividerLocation(initialSplitLoc);
+		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
@@ -307,12 +307,12 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		NavigableSet<String> classIdsDescending = classIds.descendingSet();
 
 		for (String key : new TreeSet<>(data.keySet()).descendingSet()) {
-			logging.debug(this, "classify key ------- " + key);
+			Logging.debug(this, "classify key ------- " + key);
 			boolean foundClass = false;
 			for (String idCollect : classIdsDescending) {
 				if (key.startsWith(idCollect)) {
 					virtualLines.get(idCollect).put(key, data.get(key));
-					logging.debug(this, "classify idCollect -------- " + idCollect);
+					Logging.debug(this, "classify idCollect -------- " + idCollect);
 					foundClass = true;
 					break;
 				}
@@ -335,7 +335,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	@Override
 	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
 		super.setEditableMap(visualdata, optionsMap);
-		logging.debug(this, " setEditableMap, visualdata keys " + visualdata);
+		Logging.debug(this, " setEditableMap, visualdata keys " + visualdata);
 		if (visualdata != null) {
 
 			treemodel = new SimpleTreeModel(givenClasses.keySet(), tooltips4Keys);

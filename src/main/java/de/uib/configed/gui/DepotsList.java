@@ -12,10 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class DepotsList extends JList<String> implements ComponentListener {
 
@@ -101,7 +101,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	}
 
 	class MyListCellRenderer extends DefaultListCellRenderer {
-		protected int FILL_LENGTH = 30;
+		private static final int FILL_LENGTH = 30;
 
 		Map<String, Map<String, Object>> extendedInfo;
 
@@ -113,12 +113,12 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		}
 
 		public void setInfo(Map<String, Map<String, Object>> extendedInfo) {
-			logging.debug(this, "setInfo " + extendedInfo);
+			Logging.debug(this, "setInfo " + extendedInfo);
 			this.extendedInfo = extendedInfo;
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, // value to display
+		public Component getListCellRendererComponent(JList<?> list, Object value, // value to display
 				int index, // cell index
 				boolean isSelected, // is the cell selected
 				boolean cellHasFocus // the list and the cell have the focus
@@ -152,7 +152,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 				if (!persist.getDepotPermission(depot)) {
 					((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
 					((JLabel) jc).setToolTipText(
-							"Depot " + depot + " " + configed.getResourceValue("Permission.depot.not_accessible"));
+							"Depot " + depot + " " + Configed.getResourceValue("Permission.depot.not_accessible"));
 				} else
 
 					((JLabel) jc).setToolTipText(tooltipText);

@@ -20,18 +20,19 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.json.JSONArray;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
 import de.uib.configed.type.ConfigStateEntry;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.dbtable.Host;
 import de.uib.opsidatamodel.dbtable.ProductPropertyState;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
-import de.uib.utilities.logging.logging;
 
 public class DataStubRawData extends DataStubNOM {
 
@@ -68,7 +69,7 @@ public class DataStubRawData extends DataStubNOM {
 		List<List<java.lang.String>> rows = persist.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 		for (List<String> row : rows) {
-			logging.info(this, "sql produced row " + row);
+			Logging.info(this, "sql produced row " + row);
 		}
 
 		return null;
@@ -83,11 +84,11 @@ public class DataStubRawData extends DataStubNOM {
 
 		String query = "select  *  from " + SWAuditClientEntry.DB_TABLE_NAME + " LIMIT 1 ";
 
-		logging.info(this, "test, query " + query);
+		Logging.info(this, "test, query " + query);
 
 		result = persist.exec.doCall(new OpsiMethodCall("getRawData", new Object[] { query }));
 
-		logging.info(this, "test result " + result);
+		Logging.info(this, "test result " + result);
 		return result;
 	}
 
@@ -133,7 +134,7 @@ public class DataStubRawData extends DataStubNOM {
 	@Override
 	protected List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
 			java.util.Set<String> hosts) {
-		logging.debug(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
+		Logging.debug(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
 
 		List<Map<String, Object>> result = new ArrayList<>();
 
@@ -149,33 +150,32 @@ public class DataStubRawData extends DataStubNOM {
 			newClients.removeAll(hosts);
 		}
 
-		logging.debug(this, "produceProductPropertyStates, new hosts " + clients);
+		Logging.debug(this, "produceProductPropertyStates, new hosts " + clients);
 
-		if (newClients.isEmpty()) {
-		} else {
+		if (!newClients.isEmpty()) {
 			hosts.addAll(newClients);
 
 			persist.notifyDataLoadingObservers(
-					configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
+					Configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
 
 			StringBuilder cols = new StringBuilder("");
-			cols.append(ProductPropertyState.tableName + "." + ProductPropertyState.PRODUCT_ID);
+			cols.append(ProductPropertyState.TABLE_NAME + "." + ProductPropertyState.PRODUCT_ID);
 			cols.append(", ");
-			cols.append(ProductPropertyState.tableName + "." + ProductPropertyState.PROPERTY_ID);
+			cols.append(ProductPropertyState.TABLE_NAME + "." + ProductPropertyState.PROPERTY_ID);
 			cols.append(", ");
-			cols.append(ProductPropertyState.tableName + "." + ProductPropertyState.OBJECT_ID);
+			cols.append(ProductPropertyState.TABLE_NAME + "." + ProductPropertyState.OBJECT_ID);
 			cols.append(", ");
-			cols.append(ProductPropertyState.tableName + "." + ProductPropertyState.VALUES);
+			cols.append(ProductPropertyState.TABLE_NAME + "." + ProductPropertyState.VALUES);
 
-			String query = "select \n" + cols.toString() + "\n from " + ProductPropertyState.tableName + "\n where "
-					+ giveWhereOR(ProductPropertyState.tableName + ".objectId", newClients);
+			String query = "select \n" + cols.toString() + "\n from " + ProductPropertyState.TABLE_NAME + "\n where "
+					+ giveWhereOR(ProductPropertyState.TABLE_NAME + ".objectId", newClients);
 
-			logging.info(this, "produceProductPropertyStates query " + query);
+			Logging.info(this, "produceProductPropertyStates query " + query);
 
 			List<List<java.lang.String>> rows = persist.exec
 					.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 
-			logging.info(this, "produceProductPropertyStates got rows " + rows.size());
+			Logging.info(this, "produceProductPropertyStates got rows " + rows.size());
 			int counter = 0;
 
 			for (List<String> row : rows) {
@@ -191,7 +191,7 @@ public class DataStubRawData extends DataStubNOM {
 				try {
 					values = new org.json.JSONArray(row.get(3));
 				} catch (Exception ex) {
-					logging.warning(this, "produceProductPropertyStates, error when json parsing database string \n"
+					Logging.warning(this, "produceProductPropertyStates, error when json parsing database string \n"
 							+ row.get(3) + " for propertyId " + row.get(1));
 				}
 
@@ -200,7 +200,7 @@ public class DataStubRawData extends DataStubNOM {
 				counter++;
 			}
 
-			logging.info(this, "produceProductPropertyStates produced  items " + counter);
+			Logging.info(this, "produceProductPropertyStates produced  items " + counter);
 
 		}
 
@@ -209,22 +209,22 @@ public class DataStubRawData extends DataStubNOM {
 
 	@Override
 	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
-		logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 
 		retrieveInstalledSoftwareInformation();
-		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
+		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  clients count ======  " + clients.size());
 
 		List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
-			logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
+			Logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
 					+ client2software.keySet().size());
 
 			newClients.removeAll(client2software.keySet());
 		}
 
-		logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
+		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  new clients count  ====== " + newClients.size());
 
 		int missingEntries = 0;
@@ -249,9 +249,9 @@ public class DataStubRawData extends DataStubNOM {
 				softwareIdent2clients = new HashMap<>();
 
 			persist.notifyDataLoadingObservers(
-					configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
+					Configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
 
-			logging.info(this, "retrieveSoftwareAuditOnClients/ SOFTWARE_CONFIG, start a request");
+			Logging.info(this, "retrieveSoftwareAuditOnClients/ SOFTWARE_CONFIG, start a request");
 
 			String columns = SWAuditClientEntry.DB_COLUMN_NAMES.toString();
 			columns = columns.substring(1);
@@ -260,18 +260,18 @@ public class DataStubRawData extends DataStubNOM {
 			String query = "select " + columns + " from " + SWAuditClientEntry.DB_TABLE_NAME + " \n"
 					+ " where  state = 1 " + clientSelection + " order by clientId ";
 
-			logging.info(this, "retrieveSoftwareAuditOnClients, query " + query);
+			Logging.info(this, "retrieveSoftwareAuditOnClients, query " + query);
 
 			List<List<java.lang.String>> rows = persist.exec
 					.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 
-			logging.info(this, "retrieveSoftwareAuditOnClients, finished a request");
+			Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request");
 
 			if (rows == null || rows.isEmpty()) {
-				logging.notice(this, "no auditSoftwareOnClient");
+				Logging.notice(this, "no auditSoftwareOnClient");
 			} else {
 
-				logging.info(this, "retrieveSoftwareAuditOnClients rows size " + rows.size());
+				Logging.info(this, "retrieveSoftwareAuditOnClients rows size " + rows.size());
 
 				if (fetchAll)
 					client2software.clear();
@@ -295,24 +295,22 @@ public class DataStubRawData extends DataStubNOM {
 
 					swIdent = clientEntry.getSWident();
 
-					{
-						java.util.Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
-						if (clientsWithThisSW == null) {
-							clientsWithThisSW = new HashSet<>();
+					java.util.Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
+					if (clientsWithThisSW == null) {
+						clientsWithThisSW = new HashSet<>();
 
-							softwareIdent2clients.put(swIdent, clientsWithThisSW);
-						}
-
-						clientsWithThisSW.add(clientId);
-
-						entries.add(clientEntry);
+						softwareIdent2clients.put(swIdent, clientsWithThisSW);
 					}
+
+					clientsWithThisSW.add(clientId);
+
+					entries.add(clientEntry);
 
 				}
 
-				logging.info(this, "retrieveSoftwareAuditOnClients needed for 1st part of constructing entries "
+				Logging.info(this, "retrieveSoftwareAuditOnClients needed for 1st part of constructing entries "
 						+ SWAuditClientEntry.summillis1stPartOfConstructor);
-				logging.info(this, "retrieveSoftwareAuditOnClients needed for 2nd part of constructing entries "
+				Logging.info(this, "retrieveSoftwareAuditOnClients needed for 2nd part of constructing entries "
 						+ SWAuditClientEntry.summillis2ndPartOfConstructor);
 
 				newClients.removeAll(client2software.keySet());
@@ -324,13 +322,13 @@ public class DataStubRawData extends DataStubNOM {
 
 			}
 
-			logging.info(this, "retrieveSoftwareAuditOnClients used memory on end "
+			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end "
 					+ Runtime.getRuntime().totalMemory() / 1000000 + " MB");
 
 			persist.notifyDataRefreshedObservers("softwareConfig");
 		}
 
-		logging.info(this, " retrieveSoftwareAuditOnClients reports missingEntries " + missingEntries
+		Logging.info(this, " retrieveSoftwareAuditOnClients reports missingEntries " + missingEntries
 				+ " whereas softwareList has entries " + softwareList.size());
 	}
 
@@ -348,13 +346,13 @@ public class DataStubRawData extends DataStubNOM {
 		if (hostConfigs != null)
 			return;
 
-		logging.info(this, "retrieveHostConfigs classCounter:" + classCounter);
+		Logging.info(this, "retrieveHostConfigs classCounter:" + classCounter);
 
-		persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " config state");
+		persist.notifyDataLoadingObservers(Configed.getResourceValue("LoadingObserver.loadtable") + " config state");
 
 		TimeCheck timeCheck = new TimeCheck(this, " retrieveHostConfigs");
 		timeCheck.start();
-		logging.info(this, "  retrieveHostConfigs ( CONFIG_STATE )  start a request");
+		Logging.info(this, "  retrieveHostConfigs ( CONFIG_STATE )  start a request");
 
 		// json parsing for integer value false thereforw we omit the ID column
 
@@ -364,21 +362,21 @@ public class DataStubRawData extends DataStubNOM {
 
 		String query = "select " + columns + " from " + ConfigStateEntry.DB_TABLE_NAME + " ";
 
-		logging.info(this, "retrieveHostConfigs, query " + query);
+		Logging.info(this, "retrieveHostConfigs, query " + query);
 
 		List<List<java.lang.String>> rows = persist.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query })
 
 				);
 
-		logging.info(this, "retrieveHostConfigs, finished a request");
+		Logging.info(this, "retrieveHostConfigs, finished a request");
 
 		hostConfigs = new HashMap<>();
 
 		if (rows == null || rows.isEmpty()) {
-			logging.warning(this, "no host config rows " + rows);
+			Logging.warning(this, "no host config rows " + rows);
 		} else {
-			logging.info(this, "retrieveHostConfigs rows size " + rows.size());
+			Logging.info(this, "retrieveHostConfigs rows size " + rows.size());
 
 			for (List<String> row : rows) {
 				String hostId = row.get(0);
@@ -401,7 +399,7 @@ public class DataStubRawData extends DataStubNOM {
 					values = (new JSONArray(valueString)).toList();
 
 				} catch (Exception ex) {
-					logging.warning(this, "retrieveHostConfigs, error when json parsing database string \n"
+					Logging.warning(this, "retrieveHostConfigs, error when json parsing database string \n"
 							+ valueString + " for configId " + configId);
 				}
 
@@ -414,7 +412,7 @@ public class DataStubRawData extends DataStubNOM {
 		}
 
 		timeCheck.stop();
-		logging.info(this, "retrieveHostConfigs retrieved ");
+		Logging.info(this, "retrieveHostConfigs retrieved ");
 		persist.notifyDataRefreshedObservers("configState");
 
 	}
@@ -436,7 +434,7 @@ public class DataStubRawData extends DataStubNOM {
 	}
 
 	private Map<String, Map<String, Object>> client2HwRowsForHwClass(String hwClass) {
-		logging.info(this, "client2HwRowsForHwClass " + hwClass);
+		Logging.info(this, "client2HwRowsForHwClass " + hwClass);
 
 		if (client2HwRows == null)
 			return null;
@@ -444,15 +442,15 @@ public class DataStubRawData extends DataStubNOM {
 		// z.B. hwClass is DISK_PARTITION
 
 		List<String> specificColumns = new ArrayList<>(); // columns specific for the class
-		specificColumns.add(Host.idColumn);
+		specificColumns.add(Host.ID_COLUMN);
 
 		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
 		StringBuilder cols = new StringBuilder("");
 
-		String deviceTable = persist.hwInfo_DEVICE + hwClass;
-		String configTable = persist.hwInfo_CONFIG + hwClass;
+		String deviceTable = PersistenceController.HW_INFO_DEVICE + hwClass;
+		String configTable = PersistenceController.HW_INFO_CONFIG + hwClass;
 
-		String lastseenCol = configTable + "." + persist.lastseenColName;
+		String lastseenCol = configTable + "." + PersistenceController.LAST_SEEN_COL_NAME;
 		specificColumns.add(lastseenCol);
 		buf.append(lastseenCol);
 		buf.append(", ");
@@ -461,25 +459,22 @@ public class DataStubRawData extends DataStubNOM {
 
 		// build and collect database columnnames
 		for (String hwInfoCol : persist.getClient2HwRowsColumnNames()) {
-			if (hwInfoCol.startsWith("HOST.") || hwInfoCol.equals(persist.lastseenVisibleColName))
+			if (hwInfoCol.startsWith("HOST.") || hwInfoCol.equals(PersistenceController.LAST_SEEN_VISIBLE_COL_NAME))
 				continue; // these already are in the collection
 
-			logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + persist.hwInfo_DEVICE + " as well as "
-					+ persist.hwInfo_CONFIG);
-			String part0 = hwInfoCol.substring(0, persist.hwInfo_DEVICE.length());
+			Logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + PersistenceController.HW_INFO_DEVICE
+					+ " as well as " + PersistenceController.HW_INFO_CONFIG);
+			String part0 = hwInfoCol.substring(0, PersistenceController.HW_INFO_DEVICE.length());
 
 			boolean colFound = false;
 			// check if colname is from a CONFIG or a DEVICE table
-			if (hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
+			if (hwInfoCol.startsWith(hwClass, part0.length())) {
 				colFound = true;
 				// we found a DEVICE column name
 			} else {
+				part0 = hwInfoCol.substring(0, PersistenceController.HW_INFO_CONFIG.length());
 
-				part0 = hwInfoCol.substring(0, persist.hwInfo_CONFIG.length());
-
-				if (!hwInfoCol.substring(part0.length()).startsWith(hwClass)) {
-
-				} else {
+				if (hwInfoCol.startsWith(hwClass, part0.length())) {
 					colFound = true;
 					// we found a CONFIG column name
 				}
@@ -496,7 +491,7 @@ public class DataStubRawData extends DataStubNOM {
 		}
 
 		if (!foundAnEntry) {
-			logging.info(this, "no columns found for hwClass " + hwClass);
+			Logging.info(this, "no columns found for hwClass " + hwClass);
 			return null;
 		}
 
@@ -512,17 +507,17 @@ public class DataStubRawData extends DataStubNOM {
 
 		buf.append("\n where ");
 
-		buf.append(Host.idColumn);
+		buf.append(Host.ID_COLUMN);
 		buf.append(" = ");
 		buf.append(configTable);
-		buf.append(persist.hostIdField);
+		buf.append(PersistenceController.HOST_ID_FIELD);
 
 		buf.append("\nAND ");
 		buf.append(configTable);
-		buf.append(persist.hardwareIdField);
+		buf.append(PersistenceController.HARDWARE_ID_FIELD);
 		buf.append(" = ");
 		buf.append(deviceTable);
-		buf.append(persist.hardwareIdField);
+		buf.append(PersistenceController.HARDWARE_ID_FIELD);
 
 		buf.append("\nAND ");
 		buf.append(configTable);
@@ -530,15 +525,15 @@ public class DataStubRawData extends DataStubNOM {
 
 		String query = buf.toString();
 
-		logging.info(this, "retrieveClient2HwRows, query " + query);
+		Logging.info(this, "retrieveClient2HwRows, query " + query);
 
 		List<List<java.lang.String>> rows = persist.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query })
 
 				);
-		logging.info(this, "retrieveClient2HwRows, finished a request");
-		logging.info(this, "retrieveClient2HwRows, got rows for class " + hwClass);
-		logging.info(this, "retrieveClient2HwRows, got rows,  size  " + rows.size());
+		Logging.info(this, "retrieveClient2HwRows, finished a request");
+		Logging.info(this, "retrieveClient2HwRows, got rows for class " + hwClass);
+		Logging.info(this, "retrieveClient2HwRows, got rows,  size  " + rows.size());
 
 		// shrink to one line per client
 
@@ -565,7 +560,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				if (specificColumns.get(i).equals(lastseenCol)) {
 					String timeS = maxTime((String) value, row.get(i));
-					rowMap.put(persist.lastseenVisibleColName, timeS);
+					rowMap.put(PersistenceController.LAST_SEEN_VISIBLE_COL_NAME, timeS);
 				} else
 					rowMap.put(specificColumns.get(i), value);
 
@@ -573,7 +568,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		}
 
-		logging.info(this, "retrieveClient2HwRows, got clientInfo, with size " + clientInfo.size());
+		Logging.info(this, "retrieveClient2HwRows, got clientInfo, with size " + clientInfo.size());
 		return clientInfo;
 
 		/*
@@ -598,10 +593,10 @@ public class DataStubRawData extends DataStubNOM {
 
 	@Override
 	protected void retrieveClient2HwRows(String[] hosts) {
-		logging.info(this, "retrieveClient2HwRows( hosts )  for hosts " + hosts.length);
+		Logging.info(this, "retrieveClient2HwRows( hosts )  for hosts " + hosts.length);
 
 		if (client2HwRows != null) {
-			logging.info(this, "retrieveClient2HwRows client2HwRows.size() " + client2HwRows.size());
+			Logging.info(this, "retrieveClient2HwRows client2HwRows.size() " + client2HwRows.size());
 			return;
 		}
 
@@ -610,7 +605,7 @@ public class DataStubRawData extends DataStubNOM {
 		// set default rows
 		for (String host : persist.getHostInfoCollections().getOpsiHostNames()) {
 			Map<String, Object> nearlyEmptyHwRow = new HashMap<>();
-			nearlyEmptyHwRow.put(Host.idColumn, host);
+			nearlyEmptyHwRow.put(Host.ID_COLUMN, host);
 
 			String hostDescription = "";
 			String macAddress = "";
@@ -618,43 +613,45 @@ public class DataStubRawData extends DataStubNOM {
 				hostDescription = persist.getHostInfoCollections().getMapOfPCInfoMaps().get(host).getDescription();
 				macAddress = persist.getHostInfoCollections().getMapOfPCInfoMaps().get(host).getMacAddress();
 			}
-			nearlyEmptyHwRow.put(Host.descriptionColumn, hostDescription);
-			nearlyEmptyHwRow.put(Host.hwAddressColumn, macAddress);
+			nearlyEmptyHwRow.put(Host.DESCRIPTION_COLUMN, hostDescription);
+			nearlyEmptyHwRow.put(Host.HW_ADRESS_COLUMN, macAddress);
 
 			client2HwRows.put(host, nearlyEmptyHwRow);
 		}
 
-		persist.notifyDataLoadingObservers(configed.getResourceValue("LoadingObserver.loadtable") + " hardware");
+		persist.notifyDataLoadingObservers(Configed.getResourceValue("LoadingObserver.loadtable") + " hardware");
 
 		TimeCheck timeCheck = new TimeCheck(this, " retrieveClient2HwRows all ");
 		timeCheck.start();
 
 		for (String hwClass : persist.getHwInfoClassNames()) {
-			logging.info(this, "retrieveClient2HwRows hwClass " + hwClass);
+			Logging.info(this, "retrieveClient2HwRows hwClass " + hwClass);
 
 			Map<String, Map<String, Object>> client2ClassInfos = client2HwRowsForHwClass(hwClass);
 
 			if (client2ClassInfos != null) {
 
-				for (String client : client2ClassInfos.keySet()) {
-					Map<String, Object> allInfosForAClient = client2HwRows.get(client);
+				for (Entry<String, Map<String, Object>> client2ClassInfo : client2ClassInfos.entrySet()) {
+					Map<String, Object> allInfosForAClient = client2HwRows.get(client2ClassInfo.getKey());
 					// find max lastseen time as last scan time
 
-					String lastseen1 = (String) allInfosForAClient.get(persist.lastseenVisibleColName);
-					String lastseen2 = (String) client2ClassInfos.get(client).get(persist.lastseenVisibleColName);
+					String lastseen1 = (String) allInfosForAClient
+							.get(PersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
+					String lastseen2 = (String) client2ClassInfo.getValue()
+							.get(PersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
 					if (lastseen1 != null && lastseen2 != null)
-						client2ClassInfos.get(client).put(persist.lastseenVisibleColName,
+						client2ClassInfo.getValue().put(PersistenceController.LAST_SEEN_VISIBLE_COL_NAME,
 								maxTime(lastseen1, lastseen2));
 
-					allInfosForAClient.putAll(client2ClassInfos.get(client));
+					allInfosForAClient.putAll(client2ClassInfo.getValue());
 				}
 			}
 		}
 
-		logging.info(this, "retrieveClient2HwRows result size " + client2HwRows.size());
+		Logging.info(this, "retrieveClient2HwRows result size " + client2HwRows.size());
 
 		timeCheck.stop();
-		logging.info(this, "retrieveClient2HwRows finished  ");
+		Logging.info(this, "retrieveClient2HwRows finished  ");
 		persist.notifyDataRefreshedObservers("client2HwRows");
 
 	}

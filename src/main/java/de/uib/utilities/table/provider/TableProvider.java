@@ -34,5 +34,5 @@ public interface TableProvider {
 	void structureChanged();
 
 	// yields a column as ordered List
-	List<String> getOrderedColumn(int col, boolean empty_allowed);
+	List<String> getOrderedColumn(int col, boolean emptyAllowed);
 }

@@ -14,7 +14,7 @@ public class SeparatedDocument extends CheckedDocument {
 		this.separator = "" + separatingChar;
 		this.partsLength = partsLength;
 		this.checkMask = checkMask;
-		this.size = realSize + (int) (realSize / partsLength - 1);
+		this.size = realSize + (int) ((double) realSize / partsLength - 1);
 	}
 
 	@Override

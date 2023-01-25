@@ -9,7 +9,7 @@ import de.uib.configed.Globals;
 
 public class JComboBoxSimpleToolTip extends javax.swing.JComboBox<String> {
 
-	protected int FILL_LENGTH = 40;
+	private static final int FILL_LENGTH = 40;
 
 	public JComboBoxSimpleToolTip() {
 		super(); // as it is

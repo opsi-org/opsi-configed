@@ -10,17 +10,13 @@ import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class SSHPMInstallPanel extends JPanel {
 	public boolean isOpen = false;
-	protected int PREF = GroupLayout.PREFERRED_SIZE;
-	protected int MAX = Short.MAX_VALUE;
-	protected GroupLayout.Alignment leading = GroupLayout.Alignment.LEADING;
+
 	protected GroupLayout.Alignment center = GroupLayout.Alignment.CENTER;
 	protected GroupLayout.Alignment baseline = GroupLayout.Alignment.BASELINE;
-
-	protected SSHCommandFactory factory = SSHCommandFactory.getInstance();
 
 	protected List<String> additionalDefaultPaths = new ArrayList<>();
 
@@ -29,11 +25,11 @@ public class SSHPMInstallPanel extends JPanel {
 
 	public SSHPMInstallPanel() {
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
-		additionalDefaultPaths.add(factory.opsipathVarRepository);
+		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_REPOSITORY);
 		persist = PersistenceControllerFactory.getPersistenceController();
 		if (persist == null)
-			logging.info(this, "init PersistenceController null");
-		workbench = PersistenceController.configedWORKBENCH_defaultvalue;
+			Logging.info(this, "init PersistenceController null");
+		workbench = PersistenceController.configedWorkbenchDefaultValue;
 		if (workbench.charAt(workbench.length() - 1) != '/')
 			workbench = workbench + "/";
 	}

@@ -9,22 +9,22 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class OpsiMethodCall {
-	private Map theCall;
+	private Map<String, Object> theCall;
 	private String methodname;
 
 	private Object[] parameters;
 	public static final boolean BACKGROUND = true;
 	private boolean background;
 
-	protected static final int defaultJsonId = 1;
+	protected static final int DEFAULT_JSON_ID = 1;
 
-	public static String extendRpcPath = "extend/configed";
+	private static String extendRpcPath = "extend/configed";
 	private String rpcPath = "";
 
-	public static final List<String> collectedCalls = new ArrayList<>();
+	private static final List<String> collectedCalls = new ArrayList<>();
 	public static int maxCollectSize = -1;
 
 	/**
@@ -73,13 +73,13 @@ public class OpsiMethodCall {
 	}
 
 	public static void report() {
-		logging.debug(
+		Logging.debug(
 				"================================================   collected calls, maxCollectSize " + maxCollectSize);
 
 		for (String c : collectedCalls) {
-			logging.debug(c);
+			Logging.debug(c);
 		}
-		logging.debug("================================================");
+		Logging.debug("================================================");
 	}
 
 	public String getRpcPath() {
@@ -87,7 +87,7 @@ public class OpsiMethodCall {
 	}
 
 	public OpsiMethodCall activateExtendedRpcPath() {
-		logging.info(this, "activateExtendedRpcPath");
+		Logging.info(this, "activateExtendedRpcPath");
 		rpcPath = extendRpcPath;
 		return this;
 	}
@@ -195,13 +195,13 @@ public class OpsiMethodCall {
 
 			}
 
-			jO.put("id", defaultJsonId);
+			jO.put("id", DEFAULT_JSON_ID);
 			jO.put("method", methodname);
 			jO.put("params", joParams);
 			result = jO.toString();
 
 		} catch (org.json.JSONException jex) {
-			logging.error(this, "Exception while producing a JSONObject, " + jex.toString());
+			Logging.error(this, "Exception while producing a JSONObject, " + jex.toString());
 		}
 
 		return result;

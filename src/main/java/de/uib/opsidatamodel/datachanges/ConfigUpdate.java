@@ -3,7 +3,7 @@ package de.uib.opsidatamodel.datachanges;
 import java.util.Map;
 
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 public class ConfigUpdate implements UpdateCommand {
 	String objectId;
@@ -28,7 +28,7 @@ public class ConfigUpdate implements UpdateCommand {
 
 	@Override
 	public void doCall() {
-		logging.info(this, "doCall, setting class " + newdata.getClass() + ", the new data is " + newdata);
+		Logging.info(this, "doCall, setting class " + newdata.getClass() + ", the new data is " + newdata);
 
 		persis.setConfig(newdata);
 	}

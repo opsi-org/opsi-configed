@@ -16,8 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.configed.configed;
-import de.uib.utilities.logging.logging;
+import de.uib.configed.Configed;
+import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -53,7 +53,7 @@ public class FPanel extends SecondaryFrame {
 	}
 
 	protected void registerWithRunningInstances() {
-		logging.info(this, "registerWithRunningInstances");
+		Logging.info(this, "registerWithRunningInstances");
 		if (wantToBeRegisteredWithRunningInstances())
 			FPanel.runningInstances.add(this, "");
 	}
@@ -80,8 +80,8 @@ public class FPanel extends SecondaryFrame {
 
 			if (editPanel.isDataChanged()) {
 				int returnedOption = JOptionPane.showOptionDialog(masterFrame,
-						configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
-						Globals.APPNAME + " " + configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
+						Configed.getResourceValue("ConfigedMain.saveBeforeCloseText"),
+						Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.saveBeforeCloseTitle"),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 				switch (returnedOption) {
@@ -103,13 +103,13 @@ public class FPanel extends SecondaryFrame {
 		} else
 			result = true;
 
-		logging.info(this, "--------leaveChecked " + result);
+		Logging.info(this, "--------leaveChecked " + result);
 		return result;
 
 	}
 
 	public void leave() {
-		logging.info(this, "leave ");
+		Logging.info(this, "leave ");
 		setVisible(false);
 		dispose();
 		left = true;

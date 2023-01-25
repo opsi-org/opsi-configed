@@ -9,7 +9,7 @@ import java.util.Map;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.opsidatamodel.PersistenceController;
-import de.uib.utilities.logging.logging;
+import de.uib.utilities.logging.Logging;
 
 /**
 */
@@ -49,14 +49,14 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		if (!c.isEmpty()) {
 			Iterator it = c.iterator();
 			Object ob = it.next();
-			logging.info(this, "addAll on collection of size " + c.size() + " of type " + ob.getClass()
+			Logging.info(this, "addAll on collection of size " + c.size() + " of type " + ob.getClass()
 					+ " should produce values for all " + clients.size() + " hosts");
 		}
 
 		if (result && (c.size() != clients.size())) {
 			result = false;
 
-			logging.error(
+			Logging.error(
 					"list of data has size " + c.size() + " differs from  length of clients list  " + clients.size());
 
 		}
@@ -68,14 +68,14 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 				Map map = null;
 				Object obj = it.next();
 
-				logging.debug(this, "addAll, element of Collection: " + obj);
+				Logging.debug(this, "addAll, element of Collection: " + obj);
 
 				try {
 					map = (Map) obj;
 				}
 
 				catch (ClassCastException ccex) {
-					logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
+					Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 				}
 
 				result = add(new ProductpropertiesUpdate(persis, clients.get(i), productname, map));
@@ -88,14 +88,14 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 	@Override
 	public void clearElements() {
-		logging.debug(this, "clearElements()");
+		Logging.debug(this, "clearElements()");
 		clear();
 	}
 
 	@Override
 	public void doCall() {
 		super.doCall();
-		logging.debug(this, "doCall, after recursion");
+		Logging.debug(this, "doCall, after recursion");
 		persis.setProductproperties();
 
 	}
@@ -106,7 +106,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 			if (ob instanceof ProductpropertiesUpdate) {
 				((ProductpropertiesUpdate) ob).revert();
 			} else {
-				logging.info(this, "revert: not a ProductpropertiesUpdate : " + ob);
+				Logging.info(this, "revert: not a ProductpropertiesUpdate : " + ob);
 			}
 		}
 	}
