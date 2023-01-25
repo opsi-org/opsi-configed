@@ -14,8 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
@@ -80,7 +78,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected JButton buttonFontMinus;
 	protected JLabel labelLevel;
 	protected AdaptingSlider sliderLevel;
-	protected AdaptingSlider sliderLevel0;
 	protected static final int SLIDER_H = 35;
 	protected static final int SLIDER_W = 180;
 	protected ChangeListener sliderListener;
@@ -411,14 +408,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		Logging.info(this, "levels minL, maxL, valL " + minL + ", " + maxL + ", " + valL);
 
 		sliderLevel = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
-		sliderLevel0 = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
-		sliderLevel0.setVisible(false); // to develop
-		sliderLevel0.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Logging.info(this, "mouseClicked on sliderLevel0 ");
-			}
-		});
 
 		JSpinner spinnerMinLevel = new JSpinner(new SpinnerNumberModel(valL, minL, maxL, 1));
 
@@ -545,9 +534,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layoutCommandpane.createParallelGroup()
-								.addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
-								.addComponent(sliderLevel0, SLIDER_W, SLIDER_W, SLIDER_W))
+						.addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
 
 		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup()
@@ -570,7 +557,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(sliderLevel, SLIDER_H, SLIDER_H, SLIDER_H)
-						.addComponent(sliderLevel0, SLIDER_H, SLIDER_H, SLIDER_H)
 
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
@@ -955,7 +941,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void setParsedText(final String[] lines, final int[] lineLevels, final Style[] lineStyles,
-			final int[] lineTypes, final List typesList, boolean showTypeRestricted, int selTypeIndex,
+			final int[] lineTypes, final List<String> typesList, boolean showTypeRestricted, int selTypeIndex,
 			int maxExistingLevel) {
 		Logging.debug(this, "setParsedText");
 		this.lines = lines;
