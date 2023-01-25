@@ -142,9 +142,7 @@ public class DefaultTableProvider implements TableProvider {
 			}
 		}
 
-		List<String> result = new ArrayList<>(set);
-
-		return result;
+		return new ArrayList<>(set);
 	}
 
 }

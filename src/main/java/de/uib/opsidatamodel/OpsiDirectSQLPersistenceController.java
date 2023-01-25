@@ -148,8 +148,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 	private String sqlQuote(String r) {
 		String s = r.replace("'", "''");
-		String t = s.replace("\\", "\\\\");
-		return t;
+		return s.replace("\\", "\\\\");
 	}
 
 	@Override

@@ -697,9 +697,10 @@ public class LicensingInfoMap {
 			Date date = sdf.parse(d);
 
 			long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());
-			long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-			return diff;
+			// return the difference
+			return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
 		} catch (ParseException ex) {
 			Logging.error(CLASSNAME + " getDaysLeftUntilNextChange " + ex);
 		}

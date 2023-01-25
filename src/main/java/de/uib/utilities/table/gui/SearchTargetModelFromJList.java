@@ -54,7 +54,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	protected AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
 
-		AbstractTableModel tableModel = new AbstractTableModel() {
+		return new AbstractTableModel() {
 			@Override
 			public int getRowCount() {
 				return values.size();
@@ -73,8 +73,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 					return "" + descriptions.get(row);
 			}
 		};
-
-		return tableModel;
 	}
 
 	@Override

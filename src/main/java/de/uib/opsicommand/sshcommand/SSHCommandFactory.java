@@ -82,12 +82,6 @@ public class SSHCommandFactory {
 	/** default position is 0 **/
 	public static final int POSITION_DEFAULT = 0;
 
-	public static int successfulConnectObservedCount = 0;
-
-	/** default parameter replace id beginns with <<< **/
-
-	/** default parameter replace id ends with >>> **/
-
 	/** setting ssh_colored_output per default true **/
 	public static boolean sshColoredOutput = true;
 	/** setting ssh_always_exec_in_background per default false **/
@@ -252,10 +246,10 @@ public class SSHCommandFactory {
 	 **/
 	public SSHCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
 			List<String> c) {
-		SSHCommandTemplate com = new SSHCommandTemplate(id, c, // Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
+
+		return new SSHCommandTemplate(id, c, // Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
 				// ArrayList! JsonArray muss nicht sortiert sein!"
 				mt, ns, pmt, ttt, p);
-		return com;
 	}
 
 	/**

@@ -1420,12 +1420,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (path == null)
 			args = new String[] {};
 
-		boolean result = exec.getBooleanResult(new OpsiMethodCall(
-
-				method, args));
-
-		return result;
-
+		return exec.getBooleanResult(new OpsiMethodCall(method, args));
 	}
 
 	@Override
@@ -1497,9 +1492,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public boolean areDepotsSynchronous(Set depots) {
 		OpsiMethodCall omc = new OpsiMethodCall("areDepotsSynchronous", new Object[] { depots.toArray() });
 
-		boolean result = exec.getBooleanResult(omc);
-
-		return result;
+		return exec.getBooleanResult(omc);
 	}
 
 	protected Map<String, ConfigOption> extractSubConfigOptionsByInitial(final String s) {
@@ -2287,17 +2280,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			methodName = "hostControlSafe_reachable";
 		}
 
-		Map<String, Object> result = exec
-				/* Background */.getMapResult(new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND // background
-																														// call,
-																														// do
-																														// not
-																														// show
-																														// waiting
-																														// info
-				));
-
-		return result;
+		// background call, do not show waiting info
+		return exec.getMapResult(new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND));
 	}
 
 	@Override
@@ -3892,13 +3876,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
-	private Map<String, List<Map<String, String>>> getLocalBootProductStates(String[] clientIds
-	// Map<String, List<Map<String, String>>> currentMap
-	) {
+	private Map<String, List<Map<String, String>>> getLocalBootProductStates(String[] clientIds) {
 
-		Map<String, List<Map<String, String>>> result = getLocalBootProductStatesNOM(clientIds);
-
-		return result;
+		return getLocalBootProductStatesNOM(clientIds);
 	}
 
 	protected Map<String, List<Map<String, String>>> getProductStatesNOM(String[] clientIds) {
