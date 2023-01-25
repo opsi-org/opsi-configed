@@ -110,6 +110,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
@@ -343,6 +344,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	JButton jButtonDash;
 	JButton jButtonLicences;
+	JButton jButtonOpsiLicenses;
 
 	JPanel iconPane1;
 
@@ -420,6 +422,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	JPanel jPanelSchalterstellung;
 
 	public de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
+	LicensingInfoMap licensingInfoMap;
 
 	JTextField jTextFieldConfigdir = new JTextField();
 	JButton jButtonFileChooserConfigdir = new JButton();
@@ -2177,6 +2180,26 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jButtonDash.setVisible(ConfigedMain.DASH_ENABLED);
 		jButtonDash.addActionListener(this);
 
+		if (!main.getPersistenceController().getOpsiLicensingInfoVersion()
+				.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD) && licensingInfoMap == null) {
+			licensingInfoMap = LicensingInfoMap.getInstance(main.getPersistenceController().getOpsiLicensingInfo(),
+					main.getPersistenceController().getConfigDefaultValues(),
+					!FGeneralDialogLicensingInfo.extendedView);
+
+			if (licensingInfoMap.warningExists()) {
+				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses-warning.png", ""));
+			}
+
+		} else {
+
+			jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
+
+		}
+
+		jButtonOpsiLicenses.setPreferredSize(Globals.modeSwitchDimension);
+		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelOpsiLicenses"));
+		jButtonOpsiLicenses.addActionListener(this);
+
 		iconPaneTargets = new JPanel();
 		iconPaneTargets.setBorder(new LineBorder(Globals.blueGrey, 1, true));
 
@@ -2226,6 +2249,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 								.addComponent(jButtonDash, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(jButtonLicences, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
@@ -2239,6 +2265,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 										.addComponent(jButtonWorkOnProducts, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jButtonDash, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+										.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jButtonLicences, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -3368,8 +3396,14 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		else if (e.getSource() == jButtonWorkOnProducts || e.getSource() == jMenuFrameWorkOnProducts) {
 			main.handleProductActionRequest();
 
-		} else if (e.getSource() == jButtonDash) {
+		}
+
+		else if (e.getSource() == jButtonDash) {
 			main.initDashInfo();
+		}
+
+		else if (e.getSource() == jButtonOpsiLicenses) {
+			showOpsiModules();
 		}
 
 	}
