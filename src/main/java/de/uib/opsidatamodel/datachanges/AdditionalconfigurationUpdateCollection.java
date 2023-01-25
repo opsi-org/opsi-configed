@@ -32,12 +32,11 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	public boolean addAll(Collection c) {
 		boolean result = true;
 
-		if (result && (c.size() != objectIds.length)) {
+		if (c.size() != objectIds.length) {
 			result = false;
 			Logging.warning(this, "object ids (not fitting to edited item) " + Arrays.toString(objectIds));
 			Logging.error("list of data has size " + c.size() + " differs from  length of objectIds list  "
 					+ objectIds.length);
-
 		}
 
 		if (result) {

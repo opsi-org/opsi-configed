@@ -601,8 +601,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract String getProductLockedInfo(String product);
 
-	public abstract String getProductTimestamp(String product);
-
 	/* PC specific listings of products and their states and updatings */
 
 	// methods requires java 8:

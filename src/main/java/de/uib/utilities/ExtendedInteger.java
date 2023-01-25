@@ -40,7 +40,7 @@ public class ExtendedInteger implements Comparable {
 		number = null;
 		value = null;
 
-		if (s.equals(S_INFINITE) || s.equals(INFINITE_IMPORT) || s.equals(DISPLAY_INFINITE)) {
+		if (s.equals(S_INFINITE) || s.equalsIgnoreCase(INFINITE_IMPORT) || s.equals(DISPLAY_INFINITE)) {
 			value = S_INFINITE;
 
 		} else {
@@ -49,11 +49,8 @@ public class ExtendedInteger implements Comparable {
 				// no exception:
 				value = s;
 			} catch (Exception ex) {
-				if (s.equals(S_INFINITE) || s.equalsIgnoreCase(INFINITE_IMPORT) || s.equals(DISPLAY_INFINITE))
-					value = S_INFINITE;
-				else
-					Logging.error("possible values are numbers  or \"" + INFINITE_IMPORT + "\" resp. \""
-							+ DISPLAY_INFINITE + "\"");
+				Logging.error("possible values are numbers  or \"" + INFINITE_IMPORT + "\" resp. \"" + DISPLAY_INFINITE
+						+ "\"");
 			}
 		}
 	}

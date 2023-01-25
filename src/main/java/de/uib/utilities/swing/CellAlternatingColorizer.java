@@ -66,13 +66,13 @@ public class CellAlternatingColorizer {
 			if (rowEven && colEven) // 0,0
 			{
 				cell.setBackground(Globals.defaultTableCellBgColor00);
-			} else if (rowEven && !colEven) // 0,1
+			} else if (rowEven) // 0,1
 			{
 				cell.setBackground(Globals.defaultTableCellBgColor01);
-			} else if (!rowEven && colEven) // 1,0
+			} else if (colEven) // 1,0
 			{
 				cell.setBackground(Globals.defaultTableCellBgColor10);
-			} else {
+			} else { // 1,1
 				cell.setBackground(Globals.defaultTableCellBgColor11);
 			}
 		}

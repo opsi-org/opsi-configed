@@ -4783,16 +4783,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return (String) productGlobalInfos.get(product).get(OpsiPackage.SERVICE_KEY_LOCKED);
 	}
 
-	public String getProductTimestamp(String product) {
-
-		// String result = exec.getStringValueFromItem ( ((Map)
-
-		String result = null;
-		if (result == null)
-			result = EMPTYFIELD;
-		return result;
-	}
-
 	private Map<String, String> getProductRequirements(String depotId, String productname, String requirementType) {
 		Map<String, String> result = new HashMap<>();
 
@@ -7405,16 +7395,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	private List<String> produceHostDisplayFields(List<String> givenList) {
-		boolean createOnServer = true;
 		List<String> result = null;
 		Logging.info(this,
 				"produceHost_displayFields configOptions.get(key) " + configOptions.get(KEY_HOST_DISPLAYFIELDS));
-
-		List givenPossibleValues = null;
-
-		if (configOptions.get(KEY_HOST_DISPLAYFIELDS) != null) {
-			givenPossibleValues = configOptions.get(KEY_HOST_DISPLAYFIELDS).getPossibleValues();
-		}
 
 		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
@@ -7447,20 +7430,18 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// but not if we want to change the default values:
 		}
 
-		if (createOnServer) {
-			// create config for service
-			Map<String, Object> item = createNOMitem("UnicodeConfig");
-			item.put("ident", KEY_HOST_DISPLAYFIELDS);
-			item.put("description", "");
-			item.put("defaultValues", Executioner.jsonArray(result));
-			item.put("possibleValues", Executioner.jsonArray(possibleValues));
-			item.put("editable", false);
-			item.put("multiValue", true);
+		// create config for service
+		Map<String, Object> item = createNOMitem("UnicodeConfig");
+		item.put("ident", KEY_HOST_DISPLAYFIELDS);
+		item.put("description", "");
+		item.put("defaultValues", Executioner.jsonArray(result));
+		item.put("possibleValues", Executioner.jsonArray(possibleValues));
+		item.put("editable", false);
+		item.put("multiValue", true);
 
-			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { Executioner.jsonMap(item) });
+		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects", new Object[] { Executioner.jsonMap(item) });
 
-			exec.doCall(omc);
-		}
+		exec.doCall(omc);
 
 		return result;
 	}

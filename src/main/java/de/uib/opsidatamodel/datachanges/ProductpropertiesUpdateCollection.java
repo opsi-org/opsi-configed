@@ -53,7 +53,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 					+ " should produce values for all " + clients.size() + " hosts");
 		}
 
-		if (result && (c.size() != clients.size())) {
+		if (c.size() != clients.size()) {
 			result = false;
 
 			Logging.error(
