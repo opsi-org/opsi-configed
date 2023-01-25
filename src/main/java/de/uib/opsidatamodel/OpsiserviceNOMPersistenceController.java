@@ -7431,10 +7431,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		possibleValues.add(HostInfo.CREATED_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.DEPOT_OF_CLIENT_DISPLAY_FIELD_LABEL);
 
-		if (givenPossibleValues == null || !givenPossibleValues.equals(possibleValues)) {
-			createOnServer = true;
-		}
-
 		List<String> defaultValues = new ArrayList<>();
 		defaultValues.add(HostInfo.HOST_NAME_DISPLAY_FIELD_LABEL);
 		defaultValues.add(HostInfo.CLIENT_DESCRIPTION_DISPLAY_FIELD_LABEL);
@@ -7446,11 +7442,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				|| givenList.isEmpty() // bad configuration
 		) {
 			result = defaultValues;
-			createOnServer = true;
 		} else {
 			result = givenList;
 			// but not if we want to change the default values:
-
 		}
 
 		if (createOnServer) {

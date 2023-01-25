@@ -876,12 +876,8 @@ public class JTableSelectionPanel extends JPanel
 			selectedCols.add(getTableModel().findColumn((String) comboSearch.getSelectedItem()));
 		}
 
-		searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
 		switch (comboSearchMode.getSelectedIndex()) {
 
-		case 0:
-			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
-			break;
 		case 1:
 			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING;
 			break;
@@ -890,6 +886,9 @@ public class JTableSelectionPanel extends JPanel
 			break;
 		case 3:
 			searchMode = TablesearchPane.SearchMode.REGEX_SEARCHING;
+			break;
+		default:
+			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
 			break;
 		}
 

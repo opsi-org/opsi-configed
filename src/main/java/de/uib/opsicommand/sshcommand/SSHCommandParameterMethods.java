@@ -334,7 +334,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			String separator) {
 		String formatedResult = "!!!Error!!!";
 		try {
-			strArr = replaceElements(strArr, beginEndElement);
+			replaceElements(strArr, beginEndElement);
 			Logging.info(this, "createFormattedDataSourceString[ ]  strArr " + Arrays.toString(strArr));
 			formatedResult = createStringOfArray(strArr, beginEndString, separator);
 			Logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formatedResult);
@@ -344,13 +344,12 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return formatedResult;
 	}
 
-	private String[] replaceElements(String[] strArrToReplace, String beginEndOfElement) {
+	private void replaceElements(String[] strArrToReplace, String beginEndOfElement) {
 		for (int i = 0; i < strArrToReplace.length; i++) {
 			strArrToReplace[i] = strArrToReplace[i].replace(strArrToReplace[i],
 					beginEndOfElement + strArrToReplace[i] + beginEndOfElement);
 			Logging.info(this, "formatResult[] result[i] " + strArrToReplace[i]);
 		}
-		return strArrToReplace;
 	}
 
 	private String createStringOfArray(String[] strArrToReplace, String beginEndOfString, String separator) {
