@@ -140,10 +140,13 @@ public class OpsiPackage implements Comparable {
 		switch (type) {
 		case TYPE_LOCALBOOT:
 			return LOCALBOOT_PRODUCT_SERVER_STRING;
+
 		case TYPE_NETBOOT:
 			return NETBOOT_PRODUCT_SERVER_STRING;
+
+		default:
+			return "error";
 		}
-		return "error";
 	}
 
 	protected String buildRepresentation() {

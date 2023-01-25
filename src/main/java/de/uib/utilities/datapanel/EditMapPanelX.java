@@ -328,16 +328,15 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				@Override
 				public void action(int p) {
 					super.action(p);
-					switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
+					if (p == PopupMenuTrait.POPUP_RELOAD)
 						actor.reloadData();
-						break;
-					}
 				}
+
 			};
 		}
 
 		return result;
+
 	}
 
 	@Override

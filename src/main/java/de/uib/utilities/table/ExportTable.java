@@ -156,21 +156,16 @@ public abstract class ExportTable {
 
 				result = null;
 				Logging.info(this, "checkSelection answered " + answer);
-				switch (answer) {
-				case 1:
+				if (answer == 1)
 					result = true;
-					break;
-				case 2:
+				else if (answer == 2)
 					result = false;
-					break;
-				}
-
 			}
 		}
-
 		Logging.info(this, "checkSelection gives: onlySelectedRows = " + result);
 
 		return result;
+
 	}
 
 	protected String checkFile(String filename, javax.swing.filechooser.FileNameExtensionFilter exFilter) {

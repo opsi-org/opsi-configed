@@ -434,16 +434,11 @@ public class PanelSWInfo extends JPanel {
 	public void export() {
 		csvExportTable.setAskForOverwrite(askForOverwrite);
 		String exportPath = exportFilename;
-		switch (kindOfExport) {
-		case CSV:
+		if (kindOfExport == KindOfExport.CSV) {
 			Logging.info(this, "export to " + exportPath);
 			csvExportTable.execute(exportPath, false);
-			break;
-
-		case PDF:
+		} else if (kindOfExport == KindOfExport.PDF)
 			sendToPDF();
-			break;
-		}
 	}
 
 	public void sendToCSV() {

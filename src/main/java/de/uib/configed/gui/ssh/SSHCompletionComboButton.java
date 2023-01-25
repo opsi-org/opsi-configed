@@ -208,8 +208,8 @@ public class SSHCompletionComboButton {
 			@Override
 			public void run() {
 				try {
-					EmptyCommand getDirectories = new EmptyCommand(factory.STRING_COMMAND_GET_DIRECTORIES
-							.replace(factory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
+					EmptyCommand getDirectories = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
+							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
 						/** Sets the command specific error text **/
 						@Override
 						public String getErrorText() {
@@ -235,15 +235,15 @@ public class SSHCompletionComboButton {
 			@Override
 			public void run() {
 				try {
-					EmptyCommand getFiles = new EmptyCommand(factory.STRING_COMMAND_GET_DIRECTORIES
-							.replace(factory.STRING_REPLACEMENT_DIRECTORY, curdir));
+					EmptyCommand getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
+							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
 					SSHConnectExec ssh = new SSHConnectExec();
 					String result = ssh.exec(getFiles, false);
 					if (result == null || result.equals(""))
 						result = ROOT_DIRECTORY;
 
-					getFiles = new EmptyCommand(factory.STRING_COMMAND_GET_OPSI_FILES
-							.replace(factory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
+					getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_OPSI_FILES
+							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
 						/** Sets the command specific error text **/
 						@Override
 						public String getErrorText() {

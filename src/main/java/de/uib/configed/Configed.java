@@ -12,7 +12,6 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.MissingResourceException;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -316,8 +315,6 @@ public class Configed {
 	/** construct the application */
 	public Configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
 			final String paramClient, final String paramClientgroup, final Integer paramTab) {
-
-		JOptionPane.showMessageDialog(null, serverCharset);
 
 		UncaughtExceptionHandler errorHandler = new UncaughtExceptionHandlerLocalized();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);

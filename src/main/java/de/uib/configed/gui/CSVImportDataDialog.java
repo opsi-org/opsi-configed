@@ -343,14 +343,11 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			break;
 		}
 
-		switch (format.getStringSeparator()) {
-		case '\'':
+		char separator = format.getStringSeparator();
+		if (separator == '\'')
 			stringSeparatorOptions.setSelectedItem('\'');
-			break;
-		case '"':
+		else if (separator == '"')
 			stringSeparatorOptions.setSelectedItem('"');
-			break;
-		}
 	}
 
 	protected JPanel initPanel() {

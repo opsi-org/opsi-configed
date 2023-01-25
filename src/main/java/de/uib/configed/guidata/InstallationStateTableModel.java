@@ -66,6 +66,7 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
+import de.uib.opsidatamodel.productstate.Config;
 import de.uib.opsidatamodel.productstate.InstallationInfo;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.LastAction;
@@ -1006,8 +1007,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 							String requiredStatusS = InstallationStatus.getLabel(requiredIS);
 							Logging.debug(this, " requiredStatusS " + requiredStatusS);
-							String neededAction = de.uib.opsidatamodel.productstate.Config
-									.getInstance().requiredActionForStatus.get(requiredStatusS);
+
+							String neededAction = Config.requiredActionForStatus.get(requiredStatusS);
 							Logging.debug(this, " needed action therefore " + neededAction);
 
 							requiredAR = ActionRequest.getVal(neededAction);

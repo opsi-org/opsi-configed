@@ -205,7 +205,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 		jTextFieldPriority = new JTextField(new CheckedDocument(/* allowedChars */
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
-				String.valueOf(factory.POSITION_DEFAULT), 1);
+				String.valueOf(SSHCommandFactory.POSITION_DEFAULT), 1);
 		labelNeedSudo = new JLabel();
 		labelCommands = new JLabel();
 		jTextPaneommands = new JTextPane();
@@ -556,7 +556,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			}
 		} else
 			updateComponents(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS/* parentNull */, "",
-					factory.POSITION_DEFAULT, false, "");
+					SSHCommandFactory.POSITION_DEFAULT, false, "");
 	}
 
 	/**

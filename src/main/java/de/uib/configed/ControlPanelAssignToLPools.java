@@ -974,23 +974,18 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		this.softwareDirectionOfAssignment = direction;
 
 		if (oldDirection != direction) {
-			switch (direction) {
-			case POOL2SOFTWARE:
+			if (direction == SoftwareDirectionOfAssignment.POOL2SOFTWARE)
 				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(true);
 
-				break;
-
-			case SOFTWARE2POOL:
+			else if (direction == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
 				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(false);
 				resetCounters(null);
 				thePanel.fieldCountAssignedInEditing.setText("");
-				break;
 			}
 
 			Logging.info(this, "switched to " + direction);
 			initializeVisualSettings();
 		}
-
 	}
 
 	public SoftwareDirectionOfAssignment getSoftwareDirectionOfAssignment() {
