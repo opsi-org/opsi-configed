@@ -2352,14 +2352,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		String methodname = "hostControl_getActiveSessions";
 
 		Map<String, Object> result0 = de.uib.opsicommand.JSONReMapper.getResponses(
-				exec.retrieveJSONObject(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND // background
-																																															// call,
-																																															// do
-																																															// not
-																																															// show
-																																															// waiting
-																																															// info
-				)));
+				exec.retrieveJSONObject(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND // background																																									
+				))); // call, do not show waiting info
 
 		for (Entry<String, Object> resultEntry : result0.entrySet()) {
 			StringBuilder value = new StringBuilder();
