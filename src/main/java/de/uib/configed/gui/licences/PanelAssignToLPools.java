@@ -8,7 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -29,13 +28,10 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  * @author roeder
  */
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
-	public JTextField testField; // for test purposes
 
 	public JLabel fieldSelectedLicencePoolId;
 
-	private JLabel labelCountAssignedStatus;
 	public JLabel fieldCountAssignedStatus;
-	private JLabel labelCountAssignedInEditing;
 	public JLabel fieldCountAssignedInEditing;
 
 	public JLabel fieldCountAllWindowsSoftware;
@@ -44,9 +40,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	public JButton buttonShowAssignedNotExisting;
 
-	public JButton buttonSupplementSimilar;
-
-	private int splitPaneHMargin = 1;
+	private static final int SPLIT_PANE_H_MARGIN = 1;
 
 	public PanelRegisteredSoftware panelRegisteredSoftware;
 	public PanelGenEditTable panelLicencepools;
@@ -77,8 +71,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		JPanel topPane = new JPanel();
 		JPanel bottomPane = new JPanel();
-
-		testField = new JTextField("                     ");
 
 		// construct content panes
 		JPanel panelInfoWindowsSoftware = new JPanel();
@@ -129,7 +121,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldCountNotAssignedSoftware.setPreferredSize(Globals.shortlabelDimension);
 		fieldCountNotAssignedSoftware.setFont(Globals.defaultFont);
 
-		labelCountAssignedStatus = new JLabel(
+		JLabel labelCountAssignedStatus = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedStatus"));
 
 		labelCountAssignedStatus.setFont(Globals.defaultFont);
@@ -138,7 +130,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		fieldCountAssignedStatus.setPreferredSize(Globals.shortlabelDimension);
 		fieldCountAssignedStatus.setFont(Globals.defaultFontStandardBold);
 
-		labelCountAssignedInEditing = new JLabel(
+		JLabel labelCountAssignedInEditing = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedInEditing"));
 
 		labelCountAssignedInEditing.setFont(Globals.defaultFont);
@@ -165,7 +157,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		labelSupplementSimilar.setVisible(true);
 		labelSupplementSimilar.setFont(Globals.defaultFont);
 
-		buttonSupplementSimilar = new JButton(
+		JButton buttonSupplementSimilar = new JButton(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.button"),
 				Globals.createImageIcon("images/edit-table-insert-row-under.png", ""));
 
@@ -523,10 +515,10 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(
-				layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
+				layout.createSequentialGroup().addGap(SPLIT_PANE_H_MARGIN, SPLIT_PANE_H_MARGIN, SPLIT_PANE_H_MARGIN)
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addContainerGap().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+						.addContainerGap().addGap(SPLIT_PANE_H_MARGIN, SPLIT_PANE_H_MARGIN, SPLIT_PANE_H_MARGIN));
 
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));

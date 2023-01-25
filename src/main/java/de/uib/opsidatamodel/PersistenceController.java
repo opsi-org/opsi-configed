@@ -349,7 +349,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations);
 
-	public abstract boolean areDepotsSynchronous(Set depots);
+	public abstract boolean areDepotsSynchronous(Set<String> depots);
 
 	public abstract Boolean isInstallByShutdownConfigured(String host);
 

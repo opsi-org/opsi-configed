@@ -187,7 +187,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			maskFormatter = new MaskFormatter("*");
 		} catch (ParseException e) {
 			Logging.debug(this, "INVALID MASK");
+			return null;
 		}
+
 		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;#+*");
 		maskFormatter.setAllowsInvalid(false);
 		maskFormatter.setCommitsOnValidEdit(true);
@@ -360,7 +362,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			add(scroll);
 		}
 
-		private class CheckBoxList extends JList {
+		private class CheckBoxList extends JList<JCheckBox> {
 			protected Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
 			public CheckBoxList() {
@@ -372,7 +374,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						int index = locationToIndex(e.getPoint());
 
 						if (index != -1) {
-							JCheckBox checkbox = (JCheckBox) getModel().getElementAt(index);
+							JCheckBox checkbox = getModel().getElementAt(index);
 							checkbox.setSelected(!checkbox.isSelected());
 							repaint();
 						}
@@ -385,11 +387,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				setModel(model);
 			}
 
-			protected class CellRenderer implements ListCellRenderer {
+			protected class CellRenderer implements ListCellRenderer<JCheckBox> {
 				@Override
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-						boolean cellHasFocus) {
-					JCheckBox checkbox = (JCheckBox) value;
+				public Component getListCellRendererComponent(JList<? extends JCheckBox> list, JCheckBox checkbox,
+						int index, boolean isSelected, boolean cellHasFocus) {
 					checkbox.setBackground(isSelected ? getSelectionBackground() : getBackground());
 					checkbox.setForeground(isSelected ? getSelectionForeground() : getForeground());
 					checkbox.setEnabled(isEnabled());
@@ -397,7 +398,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 					checkbox.setFocusPainted(false);
 					checkbox.setBorderPainted(true);
 					checkbox.setBorder(noFocusBorder);
-					// checkbox.setBorder(isSelected ?
 
 					return checkbox;
 				}

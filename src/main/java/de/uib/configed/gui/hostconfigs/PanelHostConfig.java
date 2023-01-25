@@ -17,7 +17,6 @@ import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ListCellOptions;
 
 public class PanelHostConfig extends JPanel {
 	// delegate
@@ -145,9 +144,4 @@ public class PanelHostConfig extends JPanel {
 	public void registerDataChangedObserver(DataChangedObserver o) {
 		editMapPanel.registerDataChangedObserver(o);
 	}
-
-	protected void setEditableMap(Map visualdata, Map<String, ListCellOptions> optionsMap) {
-		editMapPanel.setEditableMap(visualdata, optionsMap);
-	}
-
 }

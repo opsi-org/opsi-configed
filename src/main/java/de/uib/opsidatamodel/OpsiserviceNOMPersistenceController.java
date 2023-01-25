@@ -1489,7 +1489,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public boolean areDepotsSynchronous(Set depots) {
+	public boolean areDepotsSynchronous(Set<String> depots) {
 		OpsiMethodCall omc = new OpsiMethodCall("areDepotsSynchronous", new Object[] { depots.toArray() });
 
 		return exec.getBooleanResult(omc);

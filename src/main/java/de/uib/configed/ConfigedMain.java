@@ -2628,7 +2628,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	}
 
-	private boolean checkSynchronous(Set depots) {
+	private boolean checkSynchronous(Set<String> depots) {
 
 		if (depots.size() > 1 && !persist.areDepotsSynchronous(depots)) {
 			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"), // "not
@@ -3082,7 +3082,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			if (editingTarget == EditingTarget.SERVER) {
 
-				List additionalConfigs = new ArrayList<>(1);
+				List<Map<String, List<Object>>> additionalConfigs = new ArrayList<>(1);
 
 				Map<String, List<Object>> defaultValuesMap = persist.getConfigDefaultValues();
 
@@ -3099,7 +3099,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			else {
 
-				ArrayList<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
+				List<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
 
 				if (hostConfigs == null) {
 					hostConfigs = new HashMap<>(); // serves as marker
@@ -3123,9 +3123,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				removeKeysStartingWith(mergedVisualMap, PersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 
-				mainFrame.panelHostConfig.initEditing("  " + getSelectedClientsString(), // "",
-						mergedVisualMap, configOptions, additionalConfigs, additionalconfigurationUpdateCollection,
-						false, // editableOptions
+				mainFrame.panelHostConfig.initEditing("  " + getSelectedClientsString(), mergedVisualMap, configOptions,
+						additionalConfigs, additionalconfigurationUpdateCollection, false, // editableOptions
 						PersistenceController.PROPERTYCLASSES_CLIENT);
 
 			}
@@ -5349,16 +5348,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.debug(this, "setClientGroup pclist " + clientList);
 
 		if (clientList != null) {
-			Object[] clients = clientList.entrySet().toArray();
 			TreeSet<String> selectedList = new TreeSet<>();
-			for (int i = 0; i < clients.length; i++) {
-				Map.Entry ob = (Map.Entry) clients[i];
-
-				if (Boolean.TRUE.equals(ob.getValue())) {
-
-					selectedList.add((String) ob.getKey());
-
-				}
+			for (Entry<String, Boolean> ob : clientList.entrySet()) {
+				if (Boolean.TRUE.equals(ob.getValue()))
+					selectedList.add(ob.getKey());
 			}
 
 			Logging.debug(this, "set selected values in setClientGroup " + selectedList);
@@ -5367,11 +5360,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (wasFiltered) {
 			filterClientList = true;
-
 			setRebuiltClientListTableModel();
-
 		}
-
 	}
 
 	// interface LogEventObserver
