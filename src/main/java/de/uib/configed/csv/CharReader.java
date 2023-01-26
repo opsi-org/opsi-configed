@@ -1,7 +1,5 @@
 package de.uib.configed.csv;
 
-import java.io.IOException;
-
 public class CharReader {
 	private char[] buff;
 	private int size = 0;
@@ -16,7 +14,7 @@ public class CharReader {
 		this.buff = buff;
 	}
 
-	public char consume() throws IOException {
+	public char consume() {
 		char item = peek();
 		peeked = false;
 
