@@ -134,7 +134,6 @@ import de.uib.utilities.thread.WaitCursor;
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver
 
 {
-
 	public static final int VIEW_CLIENTS = 0;
 	public static final int VIEW_LOCALBOOT_PRODUCTS = 1;
 	public static final int VIEW_NETBOOT_PRODUCTS = 2;

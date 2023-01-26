@@ -35,7 +35,6 @@ public class SSHCompletionComboButton {
 	private static final String HOME_DIRECTORY = "~";
 	private String opsiRepo = "/"; // will be overwritten with config
 
-	private SSHCommandFactory factory = SSHCommandFactory.getInstance();
 	private PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 	public SSHCompletionComboButton() {

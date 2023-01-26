@@ -1,6 +1,7 @@
 package de.uib.configed;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -225,45 +227,44 @@ public class Globals {
 	public static final Color INSTALLATION_STATUS_INSTALLED_COLOR = OK_COLOR;
 	public static final Color INSTALLATION_STATUS_UNKNOWN_COLOR = UNKNOWN_COLOR;
 
-	public static final Map<String, Color> SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS = new HashMap<>() {
-		{
-			put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
-			put("[0;error;0m", Globals.ACTION_COLOR);
-			put("[0;30;40m", PRIMARY_FOREGROUND_COLOR);
+	public static final Map<String, Color> SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS = new HashMap<>();
+	static {
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;error;0m", Globals.ACTION_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;30;40m", PRIMARY_FOREGROUND_COLOR);
 
-			put("[1;30;40m", PRIMARY_FOREGROUND_COLOR);
-			put("[0;40;40m", PRIMARY_FOREGROUND_COLOR);
-			put("[1;40;40m", PRIMARY_FOREGROUND_COLOR);
-			put("[0;31;40m", Globals.ACTION_COLOR);
-			put("[1;31;40m", Globals.ACTION_COLOR);
-			put("[0;41;40m", Globals.ACTION_COLOR);
-			put("[1;41;40m", Globals.ACTION_COLOR);
-			put("[0;32;40m", Globals.OK_COLOR);
-			put("[1;32;40m", Globals.OK_COLOR);
-			put("[0;42;40m", Globals.OK_COLOR);
-			put("[1;42;40m", Globals.OK_COLOR);
-			put("[0;33;40m", Globals.darkOrange);
-			put("[1;33;40m", Globals.darkOrange);
-			put("[0;43;40m", Globals.darkOrange);
-			put("[1;43;40m", Globals.darkOrange);
-			put("[0;34;40m", Globals.blue);
-			put("[1;34;40m", Globals.blue);
-			put("[0;44;40m", Globals.blue);
-			put("[1;44;40m", Globals.blue);
-			put("[0;35;40m", Color.MAGENTA);
-			put("[1;35;40m", Color.MAGENTA);
-			put("[0;45;40m", Color.MAGENTA);
-			put("[1;45;40m", Color.MAGENTA);
-			put("[0;36;40m", Color.CYAN);
-			put("[1;36;40m", Color.CYAN);
-			put("[0;46;40m", Color.CYAN);
-			put("[1;46;40m", Color.CYAN);
-			put("[0;37;40m", Globals.lightBlack);
-			put("[1;37;40m", Globals.lightBlack);
-			put("[0;47;40m", Globals.lightBlack);
-			put("[1;47;40m", Globals.lightBlack);
-		}
-	};
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;30;40m", PRIMARY_FOREGROUND_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;40;40m", PRIMARY_FOREGROUND_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;40;40m", PRIMARY_FOREGROUND_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;31;40m", Globals.ACTION_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;31;40m", Globals.ACTION_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;41;40m", Globals.ACTION_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;41;40m", Globals.ACTION_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;32;40m", Globals.OK_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;32;40m", Globals.OK_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;42;40m", Globals.OK_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;42;40m", Globals.OK_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;33;40m", Globals.darkOrange);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;33;40m", Globals.darkOrange);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;43;40m", Globals.darkOrange);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;43;40m", Globals.darkOrange);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;34;40m", Globals.blue);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;34;40m", Globals.blue);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;44;40m", Globals.blue);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;44;40m", Globals.blue);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;35;40m", Color.MAGENTA);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;35;40m", Color.MAGENTA);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;45;40m", Color.MAGENTA);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;45;40m", Color.MAGENTA);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;36;40m", Color.CYAN);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;36;40m", Color.CYAN);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;46;40m", Color.CYAN);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;46;40m", Color.CYAN);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;37;40m", Globals.lightBlack);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;37;40m", Globals.lightBlack);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;47;40m", Globals.lightBlack);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;47;40m", Globals.lightBlack);
+	}
 
 	public static final Color LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR = Globals.BACKGROUND_COLOR_4;
 	public static final Color LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR = Globals.BACKGROUND_COLOR_4;
@@ -444,25 +445,25 @@ public class Globals {
 		if (alphaCollator == null) {
 			alphaCollator = Collator.getInstance();
 
-			alphaCollator.setStrength(java.text.Collator.IDENTICAL);
+			alphaCollator.setStrength(Collator.IDENTICAL);
 
 		}
 		return alphaCollator;
 	}
 
-	public static java.awt.Container mainContainer; // transparent for appletHandling // masterFrame
-	public static javax.swing.JFrame mainFrame; // fixed
-	public static javax.swing.JFrame frame1; // can be changed
-	public static java.awt.Container container1; // can be changed
+	public static Container mainContainer; // transparent for appletHandling // masterFrame
+	public static JFrame mainFrame; // fixed
+	public static JFrame frame1; // can be changed
+	public static Container container1; // can be changed
 
-	public static final java.awt.Dimension helperFormDimension = new java.awt.Dimension(1100, 600);
+	public static final Dimension helperFormDimension = new Dimension(1100, 600);
 
 	public static final int LOCATION_DISTANCE_X = 150;
 	public static final int LOCATION_DISTANCE_Y = 150;
 
 	public static final int DIALOG_FRAME_DEFAULT_HEIGHT = 400;
 	public static final int DIALOG_FRAME_DEFAULT_WIDTH = 800;
-	public static final java.awt.Dimension dialogFrameDefaultSize = new java.awt.Dimension(DIALOG_FRAME_DEFAULT_WIDTH,
+	public static final Dimension dialogFrameDefaultSize = new Dimension(DIALOG_FRAME_DEFAULT_WIDTH,
 			DIALOG_FRAME_DEFAULT_HEIGHT);
 
 	public static String getResourceValue(String key) {

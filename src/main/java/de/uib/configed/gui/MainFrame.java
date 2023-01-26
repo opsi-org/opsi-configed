@@ -216,8 +216,6 @@ public class MainFrame extends JFrame
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
 
-	// JCheckBoxMenuItem jCheckBoxMenuItem_displayClientList = new
-
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowCreatedColumn = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem jCheckBoxMenuItemShowWANactiveColumn = new JCheckBoxMenuItem();
 	JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem();
