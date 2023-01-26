@@ -114,14 +114,6 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	}
 
 	@Override
-	public void setSelectedValues(List newValues, int row, int column) {
-
-		String key = (String) table.getValueAt(row, 0);
-		currentData.put(key, newValues);
-		table.setValueAt(newValues, row, 1);
-	}
-
-	@Override
 	public int getSelectionMode(int row, int column) {
 		String key = (String) table.getValueAt(row, 0);
 		return getListCellOptions(key).getSelectionMode();

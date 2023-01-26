@@ -12,9 +12,6 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 
 	public static final String SEARCH_FAILED_AT_ANY_TIME = "{ \"version\" : \"2\", \"data\" : { \"element\" : null, \"elementPath\" : null, \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] } }";
 
-	public SavedSearches() {
-	}
-
 	public void checkIn(String key, Object value) {
 		if (!key.startsWith(SavedSearch.CONFIG_KEY))
 			return;

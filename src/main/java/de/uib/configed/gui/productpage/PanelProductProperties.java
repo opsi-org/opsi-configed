@@ -149,8 +149,6 @@ public class PanelProductProperties extends JSplitPane
 		public void selectedRowChanged()
 		// if we got a new selection
 		{
-			super.selectedRowChanged();
-
 			Logging.debug(this, "selectedRowChanged in paneProducts ");
 
 			ListSelectionModel lsm = getListSelectionModel();

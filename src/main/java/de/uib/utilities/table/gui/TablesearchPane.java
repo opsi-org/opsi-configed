@@ -1207,11 +1207,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	// ActionListener implementation
 	@Override

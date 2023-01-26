@@ -15,8 +15,6 @@ public interface ListModelProducer {
 
 	public List getSelectedValues(int row, int column);
 
-	public void setSelectedValues(List newValues, int row, int column);
-
 	public String getCaption(int row, int column);
 
 	public List toList(Object value);

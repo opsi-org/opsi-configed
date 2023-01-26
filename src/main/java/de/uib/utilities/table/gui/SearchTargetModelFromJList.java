@@ -117,13 +117,11 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-		// jList.locationToIndex
-
-	}
+		/* Should do nothing in this class */}
 
 	@Override
 	public void setCursorRow(int row) {
-	}
+		/* Should do nothing in this class */}
 
 	@Override
 	public void setSelectedRow(int row) {

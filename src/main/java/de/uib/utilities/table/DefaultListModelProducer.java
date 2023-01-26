@@ -33,10 +33,6 @@ public class DefaultListModelProducer implements ListModelProducer {
 	}
 
 	@Override
-	public void setSelectedValues(List newValues, int row, int column) {
-	}
-
-	@Override
 	public String getCaption(int row, int column) {
 		return "";
 	}

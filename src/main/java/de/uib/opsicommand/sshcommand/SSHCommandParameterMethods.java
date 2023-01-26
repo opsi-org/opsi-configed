@@ -165,7 +165,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 						Logging.debug(this, "parseParameter command " + command.getCommandRaw());
 						Logging.debug(this, "parseParameter param " + param);
 						Logging.debug(this, "parseParameter result " + result);
-						(command).setCommand(command.getCommandRaw().replace(param, result));
+						command.setCommand(command.getCommandRaw().replace(param, result));
 						Logging.debug(this, "parseParameter command " + command.getCommandRaw());
 					}
 				}

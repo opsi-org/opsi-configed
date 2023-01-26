@@ -1278,8 +1278,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void selectedRowChanged() {
-
-	}
+		/* To be implemented in subclass */}
 
 	public void setAwareOfSelectionListener(boolean b) {
 		Logging.debug(this, "setAwareOfSelectionListener  " + b);
@@ -1607,13 +1606,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-
-	}
+		/* Not needed */}
 
 	//
 	// ListSelectionListener
@@ -1661,42 +1658,42 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	// MouseListener, hook for subclasses
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
-	}
+		/* For implementation in subclass */}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-	}
+		/* For implementation in subclass */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
+		/* For implementation in subclass */}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-	}
+		/* For implementation in subclass */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
+		/* For implementation in subclass */}
 
 	// ComponentListener for table
-	@Override
-	public void componentHidden(ComponentEvent e) {
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent e) {
-	}
-
-	@Override
-	public void componentShown(ComponentEvent e) {
-	}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		showSelectedRow();
 	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		/* Not needed */}
 
 	// CursorrowObserver
 	@Override
@@ -1728,5 +1725,4 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		externalView.setVisible(true);
 	}
-
 }

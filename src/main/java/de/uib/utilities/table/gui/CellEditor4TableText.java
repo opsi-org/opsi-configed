@@ -77,19 +77,19 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	// interface
 	// KeyListener
@@ -101,11 +101,11 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	// interface
 	// FocusListener
@@ -115,10 +115,6 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 
 			editorContent.setText(fEdit.getText());
 		}
-	}
-
-	@Override
-	public void focusLost(FocusEvent e) {
 	}
 
 	// Implement the one CellEditor method that AbstractCellEditor doesn't.
@@ -131,6 +127,10 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 
 		return currentValue;
 	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		/* Not needed */}
 
 	// Implement the one method defined by TableCellEditor.
 	@Override
