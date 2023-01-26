@@ -246,7 +246,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		inputKeyListener = new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-			}
+				/* Not needed */}
 
 			@Override
 			public void keyPressed(KeyEvent e) {

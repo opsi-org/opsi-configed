@@ -822,8 +822,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getSelectedClients().length > 0) {
 			selectionPanel.moveToValue(getSelectedClients()[0], 0);
 		}
-
-		mainFrame.showIPAddressColumn(!visible);
 	}
 
 	public void toggleColumnHardwareAddress() {
@@ -4840,7 +4838,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						Logging.info(this, "result size " + result.size());
 						selectionPanel.setSelectedValues(result);
 					}
-
 				}
 
 				@Override

@@ -210,7 +210,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 
 	@Override
 	public void setController(Object cont) {
-	}
+		/* Not needed */}
 
 	/**
 	 * doCall calls doCall on all members. This will give a recursion for

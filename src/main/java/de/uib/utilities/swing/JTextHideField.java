@@ -41,10 +41,6 @@ public class JTextHideField extends javax.swing.JPanel {
 			super.insertString(0, fixed, a);
 
 		}
-
-		@Override
-		public void remove(int offs, int len) {
-		}
 	}
 
 	public JTextHideField() {

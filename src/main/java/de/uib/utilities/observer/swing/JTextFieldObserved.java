@@ -59,10 +59,10 @@ public class JTextFieldObserved extends JTextField implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 }

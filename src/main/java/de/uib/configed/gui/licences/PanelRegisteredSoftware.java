@@ -111,12 +111,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	}
 
 	// MouseListener
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-
-	}
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		java.awt.Point mousePoint = e.getPoint();
@@ -141,7 +135,6 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 			}
 		}
 		super.mouseClicked(e);
-
 	}
 
 	@Override

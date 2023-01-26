@@ -13,7 +13,7 @@ public class NONEexecutioner extends Executioner {
 
 	@Override
 	public void setConnectionState(ConnectionState state) {
-	}
+		/* Do nothing, because this Executioner should do nothing */}
 
 	@Override
 	public boolean doCall(OpsiMethodCall omc) {

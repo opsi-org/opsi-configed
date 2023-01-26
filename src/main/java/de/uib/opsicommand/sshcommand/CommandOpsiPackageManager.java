@@ -17,9 +17,6 @@ public class CommandOpsiPackageManager implements SSHCommand {
 	protected int helpColumns = 3;
 	protected int priority = 100;
 
-	public CommandOpsiPackageManager() {
-	}
-
 	@Override
 	/**
 	 * Sets the command specific error text

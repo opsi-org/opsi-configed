@@ -16,7 +16,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -40,8 +39,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTree;
 import javax.swing.ToolTipManager;
 import javax.swing.TransferHandler;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -63,8 +60,8 @@ import de.uib.utilities.swing.FEditRecord;
 import de.uib.utilities.thread.WaitCursor;
 import de.uib.utilities.tree.SimpleTreePath;
 
-public class ClientTree extends JTree implements TreeSelectionListener, MouseListener, MouseMotionListener, // for debugging
-		TreeModelListener, KeyListener
+public class ClientTree extends JTree implements TreeSelectionListener, MouseListener, // for debugging
+		KeyListener
 
 {
 
@@ -85,9 +82,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public static final String DIRECTORY_NAME;
 	public static final String DIRECTORY_PERSISTENT_NAME;
 	public static final String DIRECTORY_NOT_ASSIGNED_NAME;
-	public static Map<String, String> translationsToPersistentNames;
-	public static Map<String, String> translationsFromPersistentNames;
-	public static Set<String> topGroupNames;
+	private static Map<String, String> translationsToPersistentNames;
+	private static Set<String> topGroupNames;
+
+	private static final Map<String, String> translationsFromPersistentNames;
 
 	private boolean mouseClicked;
 
@@ -109,6 +107,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		topGroupNames.add(DIRECTORY_NAME);
 		topGroupNames.add(DIRECTORY_NOT_ASSIGNED_NAME);
 
+	}
+
+	public static Map<String, String> getTranslationsFromPersistentNames() {
+		return translationsFromPersistentNames;
 	}
 
 	public static String translateToPersistentName(String name) {
@@ -293,8 +295,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// (If it allows children, it is not a leaf node, even if no children are
 		// present.)
 
-		model.addTreeModelListener(this);
-
 		selectionmodel = new DefaultTreeSelectionModel();
 
 		// comment is not more valid:
@@ -442,14 +442,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// interface KeyListener
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
-
-	@Override
 	public void keyPressed(KeyEvent e) {
 		mouseClicked = false;
 
@@ -474,6 +466,14 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 	}
 
+	@Override
+	public void keyReleased(KeyEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		/* Not needed */}
+
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
@@ -487,36 +487,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		if (selectedPath != null && getSelectionRows().length == 1) {
 			main.treeClientsSelectAction(selectedPath);
 		}
-	}
-
-	// TreeModelListener
-	@Override
-	public void treeNodesChanged(TreeModelEvent e) {
-
-	}
-
-	@Override
-	public void treeNodesInserted(TreeModelEvent e) {
-	}
-
-	@Override
-	public void treeNodesRemoved(TreeModelEvent e) {
-
-	}
-
-	@Override
-	public void treeStructureChanged(TreeModelEvent e) {
-
-	}
-
-	// interface MouseMotionListener
-	@Override
-	public void mouseMoved(MouseEvent e) {
-
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
 	}
 
 	// interface MouseListener
@@ -538,22 +508,19 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	private IconNode produceClientNode(Object x) {
 		IconNode n = new IconNode(x, false);

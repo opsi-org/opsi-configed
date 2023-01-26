@@ -16,10 +16,10 @@ import de.uib.utilities.logging.Logging;
 public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 	private JLabel jLabelCopyToModulesD;
 	private JCheckBox jComboBoxCopyToModulesD;
-	private static String title = Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
+	private static final String TITLE = Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
 
 	public SSHModulesUploadDialog() {
-		super(title, new CommandModulesUpload());
+		super(TITLE, new CommandModulesUpload());
 		this.setVisible(true);
 		Logging.info(this, "SSHModulesUploadDialog build");
 		height = 430;

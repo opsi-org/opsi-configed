@@ -256,24 +256,24 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	// MouseMotionListener
 	@Override
 	public void mouseDragged(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {

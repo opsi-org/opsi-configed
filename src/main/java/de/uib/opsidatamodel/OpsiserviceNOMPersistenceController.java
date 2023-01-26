@@ -2612,7 +2612,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					exec.getStringMappedObjectsByKey(new OpsiMethodCall("objectToGroup_getObjects", new String[] {}),
 							"ident", new String[] { "objectId", "groupId" }, new String[] { "clientId", "groupId" },
-							de.uib.configed.tree.ClientTree.translationsFromPersistentNames);
+							de.uib.configed.tree.ClientTree.getTranslationsFromPersistentNames());
 
 			fObject2Groups = projectToFunction(mappedRelations, "clientId", "groupId");
 
@@ -6247,11 +6247,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public void setFSoftware2LicencePool(String softwareIdent, String licencePoolId) {
 		fSoftware2LicencePool.put(softwareIdent, licencePoolId);
-	}
-
-	// old
-	public void relationsWindowsSoftwareId2LPoolRequestRefresh() {
-
 	}
 
 	public boolean removeAssociations(String licencePoolId, List<String> softwareIds) {

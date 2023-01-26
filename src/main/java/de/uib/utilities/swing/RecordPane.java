@@ -1,6 +1,5 @@
 package de.uib.utilities.swing;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 /*
 * RecordPane.java
@@ -24,7 +23,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.ObservableSubject;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
-public class RecordPane extends JPanel implements KeyListener {
+public abstract class RecordPane extends JPanel implements KeyListener {
 	protected int lineHeight = Globals.LINE_HEIGHT;
 	protected int vGapSize = Globals.VGAP_SIZE;
 	protected int hGapSize = Globals.HGAP_SIZE;
@@ -171,21 +170,6 @@ public class RecordPane extends JPanel implements KeyListener {
 			data.put(key, datafields.get(key).getText());
 		}
 		return data;
-	}
-
-	// interface
-	// KeyListener
-	@Override
-	public void keyPressed(KeyEvent e) {
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
 	}
 
 }

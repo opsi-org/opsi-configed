@@ -22,7 +22,7 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 
 	@Override
 	public void setFilter(Set<Object> filter) {
-	}
+		/* Not needed */}
 
 	public void setFilter(int[] modelRowNoFilter, final List<List<Object>> rows) {
 		Logging.info(this, "setFilter int[]  " + modelRowNoFilter);

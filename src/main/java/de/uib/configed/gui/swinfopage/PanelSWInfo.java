@@ -90,7 +90,7 @@ public class PanelSWInfo extends JPanel {
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates = new de.uib.utilities.table.TableModelFilterCondition() {
 		@Override
 		public void setFilter(Set<Object> filter) {
-		}
+			/* Not needed */}
 
 		@Override
 		public boolean test(List<Object> row) {
@@ -99,7 +99,6 @@ public class PanelSWInfo extends JPanel {
 
 			return !isKb;
 			// on filtering active everything is taken if not isKb
-
 		}
 	};
 
@@ -111,7 +110,7 @@ public class PanelSWInfo extends JPanel {
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates2 = new de.uib.utilities.table.TableModelFilterCondition() {
 		@Override
 		public void setFilter(Set<Object> filter) {
-		}
+			/* Not needed */}
 
 		@Override
 		public boolean test(List<Object> row) {
@@ -120,7 +119,6 @@ public class PanelSWInfo extends JPanel {
 
 			return !isKb;
 			// on filtering active everything is taken if not isKb
-
 		}
 	};
 

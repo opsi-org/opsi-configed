@@ -336,34 +336,25 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		navPane = new NavigationPanel() {
-			@Override
-			public void setActivation() {
-				setHasNext(associatedPanel.canNavigate() && !associatedPanel.isLastRow());
-				setHasPrevious(associatedPanel.canNavigate() && !associatedPanel.isFirstRow());
-			}
 
 			@Override
 			public void next() {
 				associatedPanel.advanceCursor(+1);
-
 			}
 
 			@Override
 			public void previous() {
 				associatedPanel.advanceCursor(-1);
-
 			}
 
 			@Override
 			public void first() {
 				associatedPanel.setCursorToFirstRow();
-
 			}
 
 			@Override
 			public void last() {
 				associatedPanel.setCursorToLastRow();
-
 			}
 		};
 

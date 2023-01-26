@@ -112,9 +112,10 @@ public class DataEditListener implements DocumentListener, // for text component
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
+
 }

@@ -24,8 +24,6 @@ public interface SearchTargetModel {
 
 	public int getRowForVisualRow(int visualRow);
 
-	public void setRenderAsCurrentRow(int currentRow);
-
 	public void clearSelection();
 
 	public int getSelectedRow();

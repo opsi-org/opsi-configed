@@ -6,10 +6,14 @@
 
 package de.uib.utilities.swing;
 
+import javax.swing.JComboBox;
+import javax.swing.JTable;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.table.DefaultTableModel;
 
 import de.uib.configed.Globals;
+import de.uib.utilities.table.gui.AdaptingCellEditor;
 
 /**
  * @author roeder
@@ -34,9 +38,9 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 	private void initComponents() {
 
-		table = new javax.swing.JTable();
+		table = new JTable();
 
-		tablemodel = new javax.swing.table.DefaultTableModel(new String[] { "column 0" }, 0);
+		tablemodel = new DefaultTableModel(new String[] { "column 0" }, 0);
 
 		tablemodel.addRow(new String[] { "" });
 
@@ -48,15 +52,14 @@ public class DynamicCombo extends javax.swing.JPanel {
 		col = table.getColumnModel().getColumn(0);
 		col.setHeaderRenderer(null);
 
-		combo = new javax.swing.JComboBox();
+		combo = new JComboBox<>();
 
 		combo.setBorder(null);
 
 		combo.addPopupMenuListener(new PopupMenuListener() {
 			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
-
-			}
+				/* Not needed */ }
 
 			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
@@ -68,13 +71,10 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-
-			}
+				/* Not needed */ }
 		});
 
-		col.setCellEditor(
-
-				new de.uib.utilities.table.gui.AdaptingCellEditor(combo, modelsource));
+		col.setCellEditor(new AdaptingCellEditor(combo, modelsource));
 
 		setLayout(new java.awt.BorderLayout());
 

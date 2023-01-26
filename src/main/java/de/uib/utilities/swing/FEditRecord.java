@@ -47,10 +47,16 @@ public class FEditRecord extends FEdit {
 				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					cancel();
 				}
-
 			}
-		};
 
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				/* Not needed */}
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				/* Not needed */}
+		};
 	}
 
 	public void setRecord(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,

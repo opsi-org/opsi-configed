@@ -199,7 +199,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	protected void initAdditional() {
-	}
+		/* To be implemented in subclass(es) */}
 
 	protected void enableComponents(boolean isSelected) {
 		((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).setEnabled(isSelected);

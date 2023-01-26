@@ -953,6 +953,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				jTextPane.getCaret().setVisible(true);
 				searcher.comp.setCaretPosition(offset);
 			} catch (BadLocationException e) {
+				Logging.warning(this, "error with setting the caret in LogPane: " + e);
 			}
 		}
 	}
@@ -989,8 +990,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {

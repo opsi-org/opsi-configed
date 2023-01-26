@@ -82,11 +82,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	}
 
 	@Override
-	public void setRenderAsCurrentRow(int row) {
-
-	}
-
-	@Override
 	public void clearSelection() {
 		table.clearSelection();
 	}

@@ -28,8 +28,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 
@@ -37,7 +37,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	public static final RunningInstances<JDialog> runningInstances = new RunningInstances<>(JDialog.class,
 			"leaving dialog");
 
-	public Dimension areaDimension = new Dimension(300, 240);
+	private Dimension areaDimension = new Dimension(300, 240);
 
 	protected Object initialValue = "";
 	protected boolean leaveOnCommit = true;
@@ -399,11 +399,12 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
+
 	// -------------
 
 	protected void extraFieldChanged(boolean b) {

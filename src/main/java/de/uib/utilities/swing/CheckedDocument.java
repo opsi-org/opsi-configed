@@ -58,7 +58,7 @@ public class CheckedDocument extends PlainDocument {
 	}
 
 	protected void applyMask(AttributeSet a) throws BadLocationException {
-	}
+		/* To implement in subclass */}
 
 	protected void insertStringPlain(int offs, String s, AttributeSet a) throws BadLocationException {
 

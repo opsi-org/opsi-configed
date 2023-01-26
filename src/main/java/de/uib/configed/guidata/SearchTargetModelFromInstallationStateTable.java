@@ -79,11 +79,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	}
 
 	@Override
-	public void setRenderAsCurrentRow(int row) {
-
-	}
-
-	@Override
 	public void clearSelection() {
 		table.clearSelection();
 	}

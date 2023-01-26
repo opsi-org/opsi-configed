@@ -135,7 +135,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 **/
 	@Override
 	public void setCommand(String c) {
-	}
+		/* Not needed here */}
 
 	/**
 	 * Add given SSHCommand to commandlist

@@ -7,8 +7,6 @@
 package de.uib.configed.gui.licences;
 
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
@@ -79,14 +77,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		this.enterLicenceController = enterLicenceController;
 		initComponents();
 		defineListeners();
-
-		addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-
-			}
-		});
-
 	}
 
 	protected void defineListeners() {
@@ -319,7 +309,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextFieldEndOfLicence.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent e) {
-			}
+				/* Not needed */}
 
 			@Override
 			public void focusLost(FocusEvent e) {

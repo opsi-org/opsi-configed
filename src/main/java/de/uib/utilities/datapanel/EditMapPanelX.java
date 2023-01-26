@@ -32,8 +32,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.ToolTipManager;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -124,20 +122,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 	protected final PropertyHandler removingSpecificValuesPropertyHandler;
 	protected final PropertyHandler settingDefaultValuesPropertyHandler;
-
-	protected class DatadependentPopupMenuListener implements PopupMenuListener {
-		@Override
-		public void popupMenuCanceled(PopupMenuEvent e) {
-		}
-
-		@Override
-		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-		}
-
-		@Override
-		public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-		}
-	}
 
 	protected boolean markDeviation = true;
 
@@ -654,16 +638,15 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	}
 
 	// FocusListener
-	@Override
-	public void focusGained(FocusEvent e) {
-
-	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
-
 		stopEditing();
 	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		/* Not needed */}
 
 	protected void setSelectedRow(int row) {
 		table.setRowSelectionInterval(row, row);

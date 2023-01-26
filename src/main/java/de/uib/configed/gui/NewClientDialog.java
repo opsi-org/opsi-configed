@@ -264,8 +264,7 @@ public class NewClientDialog extends FGeneralDialog
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-
-			}
+				/* Not needed */}
 
 		});
 
@@ -274,9 +273,6 @@ public class NewClientDialog extends FGeneralDialog
 		// handle backtab (below)
 
 		jTextNotes.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
@@ -295,8 +291,13 @@ public class NewClientDialog extends FGeneralDialog
 			}
 
 			@Override
+			public void changedUpdate(DocumentEvent e) {
+				/* Not needed */}
+
+			@Override
 			public void removeUpdate(DocumentEvent e) {
-			}
+				/* Not needed */}
+
 		});
 
 		jTextNotes.setBorder(BorderFactory.createLineBorder(Globals.NEW_CLIENT_DIALOG_BORDER_COLOR));

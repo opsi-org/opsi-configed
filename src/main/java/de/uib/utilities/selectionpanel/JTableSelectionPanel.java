@@ -957,9 +957,8 @@ public class JTableSelectionPanel extends JPanel
 		}
 	}
 
-	// for overwriting in subclass
 	protected void keyPressedOnTable(KeyEvent e) {
-	}
+		/* for overwriting in subclass */}
 
 	// KeyListener interface
 	@Override
@@ -987,11 +986,11 @@ public class JTableSelectionPanel extends JPanel
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	// ActionListener implementation
 	@Override

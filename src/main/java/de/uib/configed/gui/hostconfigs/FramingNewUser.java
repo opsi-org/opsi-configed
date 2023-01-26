@@ -20,15 +20,11 @@ public class FramingNewUser implements FramingTextfieldWithListselection {
 	String listLabel;
 	String listLabelToolTip;
 
-	public FramingNewUser() {
-	}
-
 	@Override
 	public String getTitle() {
 		title = Configed.getResourceValue("FramingNewUser.title");
 
 		return title;
-
 	}
 
 	@Override

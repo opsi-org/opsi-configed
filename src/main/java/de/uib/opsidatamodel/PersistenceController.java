@@ -782,8 +782,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void retrieveRelationsAuditSoftwareToLicencePools();
 
-	public abstract void relationsWindowsSoftwareId2LPoolRequestRefresh();
-
 	public abstract void relationsAuditSoftwareToLicencePoolsRequestRefresh();
 
 	public abstract List<String> getSoftwareListByLicencePool(String licencePoolId);

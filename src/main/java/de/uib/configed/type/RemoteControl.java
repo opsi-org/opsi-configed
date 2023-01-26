@@ -7,13 +7,10 @@ public class RemoteControl {
 	public static final String DESCRIPTION_KEY = "description";
 	public static final String EDITABLE_KEY = "editable";
 
-	public String name = "";
-	public String command = "";
-	public String description = "";
-	public String editable = "true";
-
-	public RemoteControl() {
-	}
+	private String name = "";
+	private String command = "";
+	private String description = "";
+	private String editable = "true";
 
 	public void setName(Object s) {
 		name = "" + s;

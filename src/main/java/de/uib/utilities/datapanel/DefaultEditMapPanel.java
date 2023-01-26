@@ -124,7 +124,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 	@Override
 	public void setLabel(String s) {
-	}
+		/* Not needed */}
 
 	public void cancelOldCellEditing() {
 

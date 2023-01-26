@@ -36,8 +36,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.JTextComponent;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
@@ -294,16 +294,13 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	// interface MouseListener
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -313,16 +310,20 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	}
 
 	@Override
+	public void mousePressed(MouseEvent e) {
+		/* Not needed */}
+
+	@Override
 	public void mouseEntered(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public boolean init() {

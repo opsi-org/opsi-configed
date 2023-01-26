@@ -135,8 +135,8 @@ import de.uib.utilities.thread.WaitCursor;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
-		RunningInstancesObserver<JDialog>, ComponentListener {
+public class MainFrame extends JFrame
+		implements WindowListener, KeyListener, MouseListener, ActionListener, RunningInstancesObserver<JDialog> {
 
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
 	protected int minHSizeTreePanel = 150;
@@ -536,7 +536,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		depotListPresenter = new DepotListPresenter(depotsList, multidepot, main.getPersistenceController());
 
 		this.main = main;
-		addComponentListener(this);
 
 		baseContainer = this.getContentPane();
 
@@ -590,11 +589,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		@Override
 		public void componentHidden(ComponentEvent e) {
-		}
+			/* Not needed */}
 
 		@Override
 		public void componentMoved(ComponentEvent e) {
-		}
+			/* Not needed */}
+
+		@Override
+		public void componentShown(ComponentEvent e) {
+			/* Not needed */}
 
 		@Override
 		public void componentResized(ComponentEvent e) {
@@ -606,11 +609,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				Logging.info(this, "componentResized " + ex);
 			}
 			Logging.debug(this, "componentResized ready");
-
-		}
-
-		@Override
-		public void componentShown(ComponentEvent e) {
 		}
 
 		private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
@@ -630,7 +628,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			if (sizeOfRightPanel > maxRightWidth) {
 				splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - maxRightWidth));
 			}
-
 		}
 
 		public void repairSizes() {
@@ -2895,14 +2892,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	// ------------------- set visual toggle items
 
-	public void showWANactiveColumn(Boolean b) {
-
-	}
-
-	public void showIPAddressColumn(Boolean b) {
-
-	}
-
 	// -------------------
 
 	public void resetProductOnClientAction(boolean withProductProperties, boolean resetLocalbootProducts,
@@ -3055,23 +3044,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		main.checkSaveAll(false);
 	}
 
-	// ComponentListener
-	@Override
-	public void componentHidden(ComponentEvent e) {
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent e) {
-	}
-
-	@Override
-	public void componentResized(ComponentEvent e) {
-	}
-
-	@Override
-	public void componentShown(ComponentEvent e) {
-	}
-
 	/* WindowListener implementation */
 	@Override
 	public void windowClosing(WindowEvent e) {
@@ -3080,33 +3052,27 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	@Override
 	public void windowOpened(WindowEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void windowActivated(WindowEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
-
-	}
+		/* Not needed */}
 
 	private Map<String, String> getChangedClientInfoFor(String client) {
 		if (changedClientInfos == null)
@@ -3259,25 +3225,24 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	// KeyListener implementation
 	@Override
 	public void keyPressed(KeyEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -3288,7 +3253,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	// ActionListener implementation
 	@Override
@@ -3357,7 +3322,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					licenseDash.show();
 				}
 			}
-
 		}
 
 		else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {

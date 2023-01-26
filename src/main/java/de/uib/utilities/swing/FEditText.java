@@ -117,25 +117,23 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	@Override
 	public void removeUpdate(DocumentEvent e) {
-
 		setDataChanged(true);
 	}
 
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		/* Not needed */}
 }
