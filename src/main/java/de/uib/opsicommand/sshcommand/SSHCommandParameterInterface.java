@@ -18,7 +18,7 @@ package de.uib.opsicommand.sshcommand;
 /**
  * This interface handles SSHCommands.
  **/
-public interface SSHCommandParameterMethodsAbstractFacade {
+public interface SSHCommandParameterInterface {
 
 	public abstract String[] getSelectedClientNames();
 

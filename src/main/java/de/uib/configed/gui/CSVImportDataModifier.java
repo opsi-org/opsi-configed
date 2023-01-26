@@ -13,8 +13,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVParser;
 import de.uib.configed.csv.CSVReader;
@@ -142,7 +142,7 @@ public class CSVImportDataModifier {
 		return model;
 	}
 
-	private class CSVFileDataUpdater extends MapBasedUpdater {
+	private class CSVFileDataUpdater implements MapBasedUpdater {
 		private String csvFile;
 		private GenTableModel model;
 		private CSVFormat format;

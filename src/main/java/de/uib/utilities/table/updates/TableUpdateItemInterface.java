@@ -10,7 +10,7 @@ package de.uib.utilities.table.updates;
 
 import java.util.List;
 
-public abstract class TableUpdateItemFactory {
+public interface TableUpdateItemInterface {
 	public abstract TableEditItem produceUpdateItem(List oldValues, List rowV);
 
 	public abstract TableEditItem produceInsertItem(List rowV);

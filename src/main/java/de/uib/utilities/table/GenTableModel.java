@@ -25,7 +25,7 @@ import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.table.updates.TableUpdateCollection;
-import de.uib.utilities.table.updates.TableUpdateItemFactory;
+import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
 public class GenTableModel extends AbstractTableModel implements TableModelFunctions {
 
@@ -54,7 +54,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	protected boolean modelStructureValid;
 
 	protected TableProvider tableProvider;
-	protected TableUpdateItemFactory itemFactory;
+	protected TableUpdateItemInterface itemFactory;
 	protected int saveUpdatesSize;
 
 	protected final ChainedTableModelFilter chainedFilter;
@@ -79,7 +79,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	CursorrowObserved cursorrowObservable;
 
-	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemFactory itemFactory,
+	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemInterface itemFactory,
 			de.uib.utilities.table.provider.TableProvider dataProvider, int keyCol, int[] finalColumns,
 			TableModelListener l, de.uib.utilities.table.updates.TableUpdateCollection updates) {
 		this.keyCol = keyCol;
@@ -121,7 +121,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	}
 
-	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemFactory itemFactory,
+	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemInterface itemFactory,
 			de.uib.utilities.table.provider.TableProvider dataProvider, int keyCol, TableModelListener l,
 			de.uib.utilities.table.updates.TableUpdateCollection updates) {
 		this(itemFactory, dataProvider, keyCol, null, l, updates);

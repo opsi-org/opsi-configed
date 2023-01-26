@@ -10,6 +10,6 @@ package de.uib.utilities.table.updates;
 
 import java.util.List;
 
-public abstract class StrList2BooleanFunction {
-	public abstract boolean sendUpdate(String id, List list);
+public interface StrList2BooleanFunction {
+	public abstract boolean sendUpdate(String id, List<String> list);
 }

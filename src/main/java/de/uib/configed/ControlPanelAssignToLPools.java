@@ -690,7 +690,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				.setUpdateController(new SelectionMemorizerUpdateController(thePanel.panelLicencepools, 0,
 						thePanel.panelRegisteredSoftware, modelWindowsSoftwareIds, new StrList2BooleanFunction() {
 							@Override
-							public boolean sendUpdate(String poolId, List softwareIds) {
+							public boolean sendUpdate(String poolId, List<String> softwareIds) {
 
 								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
 								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
@@ -759,8 +759,8 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 									persist.getFSoftware2LicencePool().remove(swId);
 								}
 								// set the current ones
-								for (Object ident : softwareIds) {
-									persist.setFSoftware2LicencePool((String) ident, poolId);
+								for (String ident : softwareIds) {
+									persist.setFSoftware2LicencePool(ident, poolId);
 								}
 
 								if (thePanel.fSoftwarename2LicencePool != null) {

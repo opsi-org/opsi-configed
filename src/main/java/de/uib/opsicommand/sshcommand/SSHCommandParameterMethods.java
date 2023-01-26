@@ -48,7 +48,7 @@ import de.uib.utilities.ssh.SSHOutputCollector;
 /**
  * This Class handles SSHCommands.
  **/
-public class SSHCommandParameterMethods implements SSHCommandParameterMethodsAbstractFacade {
+public class SSHCommandParameterMethods implements SSHCommandParameterInterface {
 
 	/** default parameter replace id beginns with <<< **/
 	public static final String REPLACEMENT_DEFAULT_1 = "<<<";
