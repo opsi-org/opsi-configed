@@ -8167,18 +8167,19 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
 				.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
 
+		/* 
 		if (licInfoMap == null) {
 			if (licInfoWarnings != null) {
 				licInfoWarnings.leave();
 			}
-
+		
 			licInfoWarnings = null;
-
+		
 			licInfoMap = LicensingInfoMap.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(),
 					!FGeneralDialogLicensingInfo.extendedView);
-
+		
 		}
-
+		
 		if (getOpsiLicensingInfoVersion().equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
 			// no action
 		} else if (licInfoMap.warningExists() && licInfoWarnings == null) {
@@ -8188,25 +8189,27 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							Configed.getResourceValue("Permission.modules.buttonGoToValidationTable") },
 					new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
 							Globals.createImageIcon("images/edit-table-insert-row-under.png", "") },
-
+		
 					550, 400) {
 				@Override
 				protected boolean wantToBeRegisteredWithRunningInstances() {
 					Logging.info(this, "licInfoWarnings wantToBeRegisteredWithRunningInstances");
 					return true;
 				}
-
+		
 				@Override
 				public void doAction2() {
 					((de.uib.configed.gui.MainFrame) Globals.mainFrame).callOpsiLicensingInfo();
 				}
-
+		
 			};
-
+		
+			
+		
 			StringBuilder mess = new StringBuilder(Configed.getResourceValue("Permission.modules.infoheader"));
-
+		
 			mess.append("_______________________________\n");
-
+		
 			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_OVER_LIMIT,
 					Configed.getResourceValue("Permission.modules.warning.currentOverLimit")));
 			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_CLOSE_TO_LIMIT,
@@ -8214,7 +8217,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_TIME_WARNINGS,
 					Configed.getResourceValue("Permission.modules.warning.currentTimeWarning")));
 			mess.append("\n\n");
-
+		
 			mess.append(Configed.getResourceValue("Permission.modules.check"));
 			mess.append(" ");
 			mess.append(Configed.getResourceValue("MainFrame.jMenuHelp"));
@@ -8223,10 +8226,17 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			mess.append(" \"");
 			mess.append(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
 			mess.append("\"\n");
-
+		
 			licInfoWarnings.setMessage(mess.toString());
-
+		
 		}
+		
+		*/
+
+		licInfoWarnings = null;
+
+		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(),
+				!FGeneralDialogLicensingInfo.extendedView);
 
 		List<String> availableModules = licInfoMap.getAvailableModules();
 
