@@ -65,7 +65,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
 
 	// maps for TableModelFunctions
-	protected KeyRepresenter<Integer> keyRepresenter;
 	protected Map<TableModelFunctions.PairOfInt, Map<Object, List<Object>>> functions;
 	protected Map<Integer, RowStringMap> primarykey2Rowmap;
 	protected Map<Integer, String> primarykeyTranslation;
@@ -988,45 +987,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		}
 
 		return primarykey2Rowmap;
-	}
-
-	@Override
-	public java.util.Map<Integer, String> getPrimarykeyTranslation() {
-		if (keyCol < 0)
-			return null;
-
-		if (keyRepresenter == null)
-			return null;
-
-		if (primarykeyTranslation != null)
-			return primarykeyTranslation;
-
-		primarykeyTranslation = new HashMap<>();
-
-		for (int i = 0; i < rows.size(); i++) {
-			try {
-				Integer key = Integer.valueOf((String) getValueAt(i, keyCol));
-
-				primarykeyTranslation.put(key, keyRepresenter.represents(key, getPrimarykey2Rowmap().get(key)));
-			} catch (Exception ex) {
-				Logging.info(this, "getPrimarykeyTranslation()  " + getValueAt(i, keyCol) + " " + ex);
-			}
-		}
-
-		return primarykeyTranslation;
-	}
-
-	@Override
-	public Mapping<Integer, String> getPrimarykeyRepresentation() {
-		if (getPrimarykeyTranslation() == null)
-			return null;
-
-		if (primarykeyRepresentation != null)
-			return primarykeyRepresentation;
-
-		primarykeyRepresentation = new Mapping<>(primarykeyTranslation);
-
-		return primarykeyRepresentation;
 	}
 
 	@Override
