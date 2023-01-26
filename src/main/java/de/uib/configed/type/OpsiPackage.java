@@ -64,7 +64,7 @@ public class OpsiPackage implements Comparable {
 		this.productId = productId;
 		this.productVersion = productVersion;
 		this.packageVersion = packageVersion;
-		this.versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
+		this.versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 		if (productType.equals(LOCALBOOT_PRODUCT_SERVER_STRING))
 			this.productType = 0;
@@ -112,7 +112,7 @@ public class OpsiPackage implements Comparable {
 	}
 
 	public static String produceVersionInfo(String productVersion, String packageVersion) {
-		return productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
+		return productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 	}
 
 	public int getProductType() {

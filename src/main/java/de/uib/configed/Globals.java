@@ -60,29 +60,24 @@ public class Globals {
 
 	public static class ProductPackageVersionSeparator {
 
+		public static final String FOR_DISPLAY = "-";
+		public static final String FOR_KEY = ";";
+
 		// private constructor to hide the implicit public one
 		private ProductPackageVersionSeparator() {
-		}
-
-		public static String forDisplay() {
-			return "-";
-		}
-
-		public static String forKey() {
-			return ";";
 		}
 
 		public static String formatKeyForDisplay(String key) {
 			if (key == null)
 				return null;
 
-			int i = key.indexOf(forKey());
+			int i = key.indexOf(FOR_KEY);
 			if (i == -1)
 				return key;
 
 			String result = key.substring(0, i);
 			if (i < key.length())
-				result = result + forDisplay() + key.substring(i + 1);
+				result = result + FOR_DISPLAY + key.substring(i + 1);
 
 			return result;
 		}

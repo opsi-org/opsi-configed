@@ -2319,7 +2319,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		mainFrame.panelLocalbootProductSettings.initEditing(productEdited, persist.getProductTitle(productEdited),
 				persist.getProductInfo(productEdited), persist.getProductHint(productEdited),
-				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.forDisplay()
+				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
 						+ persist.getProductPackageVersion(productEdited) + "   "
 						+ persist.getProductLockedInfo(productEdited),
 				productProperties, // List of the properties map of all selected clients
@@ -2332,7 +2332,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		mainFrame.panelNetbootProductSettings.initEditing(productEdited, persist.getProductTitle(productEdited),
 				persist.getProductInfo(productEdited), persist.getProductHint(productEdited),
-				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.forDisplay()
+				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
 						+ persist.getProductPackageVersion(productEdited) + "   "
 						+ persist.getProductLockedInfo(productEdited),
 				productProperties, // array of the properties map of all selected clients
@@ -3089,7 +3089,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				additionalconfigurationUpdateCollection.setMasterConfig(true);
 
 				mainFrame.panelHostConfig.initEditing("  " + myServer + " (configuration server)",
-						(Map) additionalConfigs.get(0), persist.getConfigOptions(), additionalConfigs,
+						additionalConfigs.get(0), persist.getConfigOptions(), additionalConfigs,
 						additionalconfigurationUpdateCollection, true,
 						// editableOptions
 						PersistenceController.PROPERTY_CLASSES_SERVER);

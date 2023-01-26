@@ -35,6 +35,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
@@ -145,7 +146,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected Map<String, Boolean> productDisplayFields;
 
-	protected List<? extends RowSorter.SortKey> currentSortKeys;
+	protected List<? extends SortKey> currentSortKeys;
 
 	protected ArrayList<String> selectedProducts;
 
@@ -726,12 +727,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	}
 
-	public List<? extends RowSorter.SortKey> getSortKeys() {
+	public List<? extends SortKey> getSortKeys() {
 		Logging.info(this, "getSortKeys : " + infoSortKeys(currentSortKeys));
 		return currentSortKeys;
 	}
 
-	public void setSortKeys(List<? extends RowSorter.SortKey> currentSortKeys) {
+	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
 		Logging.info(this, "setSortKeys: " + infoSortKeys(currentSortKeys));
 		if (currentSortKeys != null)
 			tableProducts.getRowSorter().setSortKeys(currentSortKeys);

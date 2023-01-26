@@ -533,7 +533,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					@Override
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap for swName " + swName);
-						return (Map) produceModelSWxLicencepool(swName);
+						return produceModelSWxLicencepool(swName);
 					}
 				})),
 

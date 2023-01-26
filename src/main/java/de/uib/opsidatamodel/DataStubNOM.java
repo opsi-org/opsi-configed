@@ -352,7 +352,7 @@ public class DataStubNOM extends DataStub {
 
 				String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 				String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
+				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 				if (product2VersionInfo2Depots.get(productId) == null
 						|| product2VersionInfo2Depots.get(productId).get(versionInfo) == null) {
@@ -428,7 +428,7 @@ public class DataStubNOM extends DataStub {
 
 				String productVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 				String packageVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
+				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 				String action = "" + dependencyItem.get("productAction");
 				String requirementType = "";

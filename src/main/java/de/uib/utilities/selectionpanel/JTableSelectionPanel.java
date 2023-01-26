@@ -36,6 +36,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -535,7 +536,7 @@ public class JTableSelectionPanel extends JPanel
 		table.getRowSorter().setSortKeys(primaryOrderingKeys);
 	}
 
-	public List<? extends RowSorter.SortKey> getSortKeys() {
+	public List<? extends SortKey> getSortKeys() {
 		return table.getRowSorter().getSortKeys();
 	}
 
