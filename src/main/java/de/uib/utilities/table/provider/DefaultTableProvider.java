@@ -123,7 +123,6 @@ public class DefaultTableProvider implements TableProvider {
 	// should initiate reloading the metadata
 	@Override
 	public void structureChanged() {
-		source.structureChanged();
 		classNames = null;
 		columnNames = null;
 	}

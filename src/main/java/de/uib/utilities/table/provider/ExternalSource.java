@@ -55,26 +55,15 @@ public class ExternalSource implements TableSource
 
 	@Override
 	public String getRowCounterName() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isRowCounting() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void setRowCounting(boolean b) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void structureChanged() {
-		// TODO Auto-generated method stub
-
-	}
-
+		/* Not needed */}
 }
