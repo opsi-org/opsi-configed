@@ -17,31 +17,31 @@ public class FTextArea extends FGeneralDialog {
 
 	public FTextArea(JFrame owner, String title, boolean modal) {
 		super(owner, title, modal);
-		init();
+		initFTextArea();
 	}
 
 	public FTextArea(JFrame owner, String title, String message, boolean modal) {
-		this(owner, title, modal);
-		init();
+		super(owner, title, modal);
+		initFTextArea();
 		setMessage(message);
 	}
 
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList) {
 		super(owner, title, modal, buttonList);
-		init();
+		initFTextArea();
 	}
 
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
 		super(owner, title, modal, buttonList, preferredWidth, preferredHeight);
-		init(preferredWidth, preferredHeight);
+		initFTextArea(preferredWidth, preferredHeight);
 	}
 
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons, int preferredWidth,
 			int preferredHeight) {
 
 		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight);
-		init(preferredWidth, preferredHeight);
+		initFTextArea(preferredWidth, preferredHeight);
 	}
 
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons, int preferredWidth,
@@ -49,7 +49,7 @@ public class FTextArea extends FGeneralDialog {
 		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false,
 				addPane);
 		checkAdditionalPane();
-		init(preferredWidth, preferredHeight);
+		initFTextArea(preferredWidth, preferredHeight);
 
 	}
 
@@ -62,8 +62,8 @@ public class FTextArea extends FGeneralDialog {
 		return jTextArea1;
 	}
 
-	private void init() {
-		init(Globals.DEFAULT_FTEXTAREA_WIDTH, Globals.DEFAULT_FTEXTAREA_HEIGHT);
+	private void initFTextArea() {
+		initFTextArea(Globals.DEFAULT_FTEXTAREA_WIDTH, Globals.DEFAULT_FTEXTAREA_HEIGHT);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class FTextArea extends FGeneralDialog {
 		return false;
 	}
 
-	private void init(int preferredWidth, int preferredHeight) {
+	private void initFTextArea(int preferredWidth, int preferredHeight) {
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);

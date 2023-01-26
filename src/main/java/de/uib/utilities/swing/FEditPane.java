@@ -320,6 +320,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			}
 
 			String content = null;
+
 			try {
 				Document d = comp.getDocument();
 
@@ -328,7 +329,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 				else
 					content = d.getText(0, d.getLength()).toLowerCase();
 			} catch (BadLocationException e) {
-				// Cannot happen
+				Logging.warning(this, "Exception thrown when getting Document: " + e);
+				return -1;
 			}
 
 			linesplits = content.split("\n");

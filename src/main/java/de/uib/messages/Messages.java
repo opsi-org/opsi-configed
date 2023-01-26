@@ -100,6 +100,10 @@ public class Messages {
 	private static void checkUTF8() {
 		if (utf8Hack == null) {
 			String javaVersionOnlyNumbers0 = System.getProperty("java.version");
+			if (javaVersionOnlyNumbers0 == null) {
+				Logging.error("gotten Java version from System.getProperty is null");
+				return;
+			}
 
 			Logging.debug("java version " + javaVersionOnlyNumbers0);
 			String javaVersionOnlyNumbers = javaVersionOnlyNumbers0.substring(0, lastIntIndex(javaVersionOnlyNumbers0));

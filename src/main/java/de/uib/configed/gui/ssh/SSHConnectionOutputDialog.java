@@ -100,9 +100,12 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	}
 
 	public void append(String caller, String line) {
+		if (line == null) {
+			Logging.error(this, "cannot append to string, since it is null");
+			return;
+		}
 
-		if (SSHCommandFactory.sshColoredOutput && (line != null)
-				&& (!line.trim().replace("\\t", "").replace(" ", "").equals("")))
+		if (SSHCommandFactory.sshColoredOutput && (!line.trim().replace("\\t", "").replace(" ", "").equals("")))
 			for (Entry<String, Color> entry : ansiCodeColors.entrySet())
 				line = findAnsiCodeColor(entry, entry.getKey(), line);
 

@@ -1193,7 +1193,6 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	private Object retrieveValueAt(int row, int displayCol) {
 
-		Object result = null;
 		actualProduct = productsV.get(row);
 
 		if (displayCol >= indexPreparedColumns.length)
@@ -1203,89 +1202,68 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		switch (col) {
 		case 0:
-			result = actualProduct;
-			break;
+			return actualProduct;
 
 		case 1:
-			result = globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
-
-			// there we have not got the value
-			break;
+			return globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
 
 		case 2:
-			result = combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).get(actualProduct);
 
 		case 3:
 			InstallationStatus is = InstallationStatus.produceFromLabel(
 					combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
-			result = InstallationStatus.getDisplayLabel(is.getVal());
-			break;
+			return InstallationStatus.getDisplayLabel(is.getVal());
 
 		case 4:
-			result = combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).get(actualProduct);
 
 		case 5:
-			result = combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).get(actualProduct);
 
 		case 6:
-			result = combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).get(actualProduct);
 
 		case 7:
-			result = combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
 
 		case 8:
 
 			ActionRequest ar = ActionRequest
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
-			result = ActionRequest.getDisplayLabel(ar.getVal());
-
-			break;
+			return ActionRequest.getDisplayLabel(ar.getVal());
 
 		case 9:
-			result = combinedVisualValues.get(ProductState.KEY_PRODUCT_PRIORITY).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_PRODUCT_PRIORITY).get(actualProduct);
 
 		case 10:
-			result = combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
-
-			break;
+			return combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
 
 		case 11:
-			result = productNamesInDeliveryOrder.indexOf(actualProduct); // ProductState.KEY_position
-
-			break;
+			return productNamesInDeliveryOrder.indexOf(actualProduct); // ProductState.KEY_position
 
 		case 12:
 			String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
 					.get(de.uib.opsidatamodel.productstate.ProductState.KEY_VERSION_INFO);
-			result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
+			String result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
 			if (result != null && !(result.equals("")) && serverProductVersion != null
 					&& !(serverProductVersion.equals(result)))
-				result = UNEQUAL_ADD_STRING + result;
-
-			break;
+				return UNEQUAL_ADD_STRING + result;
+			else
+				return result;
 
 		case 13:
-			result = combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
 
 		case 14:
-			result = combinedVisualValues.get(ProductState.KEY_PACKAGE_VERSION).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_PACKAGE_VERSION).get(actualProduct);
 
 		case 15:
-			result = combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
+			return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
 
-			break;
-
+		default:
+			return null;
 		}
-
-		return result;
 	}
 
 	/*
@@ -1322,9 +1300,12 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	protected void changeValueAt(Object value, int row, int col) {
-		String cl = "nul";
-		if (value != null)
-			cl = value.getClass().toString();
+		if (value == null) {
+			Logging.error(this, "value to set is null");
+			return;
+		}
+
+		String cl = value.getClass().toString();
 
 		Logging.debug(this, "actual product " + actualProduct + ", setting value at " + row + "," + col + " to " + value
 				+ " (an instance of " + cl + ")");
@@ -1336,7 +1317,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		if (combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct) == null)
 			return; // not a product in our depot
 
-		if (!((String) retrieveValueAt(row, col)).equals(value)) {
+		Object retrieveValue = retrieveValueAt(row, col);
+		if (retrieveValue == null) {
+			Logging.error(this, "value received from retrieveValueAt(...) is null");
+			return;
+		}
+
+		if (!((String) retrieveValue).equals(value)) {
 			if (indexPreparedColumns[col] == preparedColumns.indexOf(InstallationStatus.KEY)) {
 				combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, InstallationStatus.KEY, (String) value);

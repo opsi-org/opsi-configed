@@ -146,11 +146,12 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		this.owner = owner;
 		Logging.info(this, "created by constructor 3  owner " + owner);
 
-		construct(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout, addPane);
+		initFGeneralDialog(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
+				addPane);
 	}
 
-	private void construct(String title, String[] buttonList, Icon[] icons, int lastButtonNo, int preferredWidth,
-			int preferredHeight, boolean lazyLayout, JPanel addPane) {
+	private void initFGeneralDialog(String title, String[] buttonList, Icon[] icons, int lastButtonNo,
+			int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		registerWithRunningInstances();
 
 		setIconImage(Globals.mainIcon);
@@ -188,7 +189,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	public FGeneralDialog(java.awt.Window owner, String title, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
 		super(owner);
-		construct(title, buttonList, null, -1, preferredWidth, preferredHeight, false, null);
+		initFGeneralDialog(title, buttonList, null, -1, preferredWidth, preferredHeight, false, null);
 	}
 
 	public int getResult() {

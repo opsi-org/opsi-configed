@@ -29,7 +29,7 @@ public class CSVToken {
 		return token;
 	}
 
-	public boolean equals(String token) {
+	public boolean tokenEquals(String token) {
 		return token.equals(this.token);
 	}
 

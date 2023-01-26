@@ -446,7 +446,6 @@ public class Globals {
 			alphaCollator = Collator.getInstance();
 
 			alphaCollator.setStrength(Collator.IDENTICAL);
-
 		}
 		return alphaCollator;
 	}

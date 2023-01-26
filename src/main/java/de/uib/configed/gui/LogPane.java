@@ -892,8 +892,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void setText(String s) {
-		if (s == null)
-			Logging.info(this, "Setting text");
+		if (s == null) {
+			Logging.warning(this, "String in setting text is null");
+			return;
+		}
+
+		Logging.info(this, "Setting text");
 		lines = s.split("\n");
 
 		parse();

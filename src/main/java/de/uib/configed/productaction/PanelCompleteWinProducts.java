@@ -323,12 +323,9 @@ public class PanelCompleteWinProducts extends JPanel
 
 	protected void execute() {
 
-		WaitCursor waitCursor = null;
+		WaitCursor waitCursor = new WaitCursor(rootFrame);
 
 		try {
-
-			waitCursor = new WaitCursor(rootFrame);
-
 			File targetDirectory = null;
 
 			String pathWinPE = fieldPathWinPE.getText().trim();

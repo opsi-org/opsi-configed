@@ -418,8 +418,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.element = element;
 		SelectOperation[] operations = element.supportedOperations().toArray(new SelectOperation[0]);
 		if (operations.length == 0) {
-			Logging.warning("Elements without any operations are not supported");
-			return null;
+			Logging.warning("Elements without any operations: " + result);
+			return result;
 		}
 
 		result.negateButton = new IconAsButton("" /* configed.getResourceValue("ClientSelectionDialog.not") */,

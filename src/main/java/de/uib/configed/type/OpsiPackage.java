@@ -167,7 +167,7 @@ public class OpsiPackage implements Comparable {
 
 	@Override
 	public boolean equals(Object o) {
-		return representation.equals(o.toString());
+		return o == null || representation.equals(o.toString());
 	}
 
 }

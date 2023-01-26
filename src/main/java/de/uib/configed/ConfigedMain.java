@@ -115,6 +115,7 @@ import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.logging.LogEvent;
 import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.savedstates.SavedStates;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.FLoadingWaiter;
@@ -497,11 +498,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			try {
 				String directoryName = getSavedStatesDirectoryName(Configed.savedStatesLocationName);
 				savedStatesDir = new File(directoryName);
-				Logging.info(this, "writing saved states, created file " + success);
-				savedStatesDir.mkdirs();
-				Logging.info(this, "writing saved states, got dirs " + success);
-				savedStatesDir.setWritable(true, true);
-				Logging.info(this, "writing saved states, set writable ");
+				Logging.info(this, "writing saved states, created file " + savedStatesDir);
+
+				if (!savedStatesDir.mkdirs())
+					Logging.warning(this, "mkdirs for saved states failed");
+
+				Logging.info(this, "writing saved states, got dirs");
+
+				if (!savedStatesDir.setWritable(true, true))
+					Logging.warning(this, "setting file savedStatesDir writable failed");
+
+				Logging.info(this, "writing saved states, set writable, success: " + success);
 				Configed.savedStates = new de.uib.utilities.savedstates.SavedStates(
 						new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
 			} catch (Exception ex) {
@@ -514,12 +521,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.error(this, "cannot not write saved states into " + Configed.savedStatesLocationName);
 		}
 
-		if (Configed.savedStatesLocationName == null || Configed.savedStates == null || (!success)) {
+		if (Configed.savedStatesLocationName == null || Configed.savedStates == null || !success) {
 			Logging.info(this, "writing saved states to " + getSavedStatesDefaultLocation());
 			savedStatesDir = new File(getSavedStatesDirectoryName(getSavedStatesDefaultLocation()));
-			savedStatesDir.mkdirs();
-			savedStatesDir.setWritable(true, true);
-			Configed.savedStates = new de.uib.utilities.savedstates.SavedStates(
+
+			if (!savedStatesDir.mkdirs())
+				Logging.warning(this, "mkdirs for saved states failed, in savedStatesDefaultLocation");
+
+			if (!savedStatesDir.setWritable(true, true))
+				Logging.warning(this, "setting file savedStatesDir writable failed");
+
+			Configed.savedStates = new SavedStates(
 					new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
 		}
 
