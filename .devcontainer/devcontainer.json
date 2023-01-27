@@ -40,9 +40,10 @@
     "containerEnv": {
         "DISPLAY": ":0", // Linux
         // "DISPLAY": "docker.for.mac.host.internal:0", // Mac
-        // "DISPLAY": "host.docker.internal:0", // Windows
+        // "DISPLAY": "host.docker.internal:0", // Windows // install MobaXterm (see readme)
         "JAVA_HOME": "/usr/lib/jvm/java-19-openjdk-amd64"
     },
+    // disable "mounts" on windows:
     "mounts": [
         "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached"
     ],

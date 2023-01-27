@@ -1,6 +1,15 @@
 # configed ausprobieren
 
+## devcontainer on windows
+* install MobaXterm and start it
+* configure X Server: 
+* un/comment lones in devcontainerjson
+    * set DISPLAY to "host.docker.internal:0"
+    * disable "mounts" part
+* reopen in container
+* start configed: run `mvn package` and `java -jar target/configed-<VERSION>-jar-with-dependencies.jar`
 
+(Source: https://stackoverflow.com/a/36190462)
 
 ## Getting started
 
