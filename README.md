@@ -2,8 +2,8 @@
 
 ## devcontainer on windows
 * install MobaXterm and start it
-* configure X Server: 
-* un/comment lones in devcontainerjson
+* Configure X server: Settings -> X11 (tab) -> set X11 Remote Access to full
+* un/comment lones in devcontainer.json
     * set DISPLAY to "host.docker.internal:0"
     * disable "mounts" part
 * reopen in container
