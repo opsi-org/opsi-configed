@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.Globals;
+import de.uib.utilities.logging.Logging;
 
 public class ProductState extends HashMap<String, String> {
 
@@ -157,8 +158,11 @@ public class ProductState extends HashMap<String, String> {
 
 	@Override
 	public String put(String key, String value) {
-		assert !(KEYS.indexOf(key) < 0) : "key " + key + " not known, value was " + value + " , " + KEYS;
-		return super.put(key, value);
+		if (KEYS.indexOf(key) < 0) {
+			Logging.error(this, "key " + key + " not known, value was " + value + " , " + KEYS);
+			return null;
+		} else
+			return super.put(key, value);
 	}
 
 	private void setTransforms() {
