@@ -5,34 +5,12 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
 
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.DataEditListener;
-import de.uib.utilities.observer.ObservableSubject;
-
 public class JTextFieldObserved extends JTextField implements KeyListener {
 	protected String startText = "";
 
-	protected ObservableSubject globalEditingSubject;
-
 	public JTextFieldObserved() {
-		this(null);
-	}
-
-	public JTextFieldObserved(ObservableSubject globalEditingSubject) {
-		this("", globalEditingSubject);
-	}
-
-	public JTextFieldObserved(String s, ObservableSubject globalEditingSubject) {
-		super(s);
+		super("");
 		addKeyListener(this);
-		setGlobalObservableSubject(globalEditingSubject);
-	}
-
-	public void setGlobalObservableSubject(ObservableSubject globalEditingSubject) {
-		Logging.debug(this, "setGlobalObservableSubject " + globalEditingSubject);
-		this.globalEditingSubject = globalEditingSubject;
-		addKeyListener(new DataEditListener(globalEditingSubject, this));
-		getDocument().addDocumentListener(new DataEditListener(globalEditingSubject, this));
 	}
 
 	@Override
@@ -41,7 +19,6 @@ public class JTextFieldObserved extends JTextField implements KeyListener {
 		super.setText(s);
 		startText = s;
 		setCaretPosition(0);
-
 	}
 
 	// KeyListener

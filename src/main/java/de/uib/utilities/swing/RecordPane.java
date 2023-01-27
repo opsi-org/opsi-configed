@@ -19,8 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.ObservableSubject;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
 public abstract class RecordPane extends JPanel implements KeyListener {
@@ -31,16 +29,6 @@ public abstract class RecordPane extends JPanel implements KeyListener {
 	protected int maxFieldWidth = Short.MAX_VALUE;
 	protected int minLabelWidth = 30;
 	protected int maxLabelWidth = 100;
-
-	protected class TheObservableSubject extends ObservableSubject {
-		@Override
-		public void notifyObservers() {
-
-			Logging.debug("RecordPane: notifyObservers ");
-		}
-	}
-
-	protected ObservableSubject editingNotifier;
 
 	// GUI
 	protected Map<String, JLabel> labelfields;
@@ -58,17 +46,6 @@ public abstract class RecordPane extends JPanel implements KeyListener {
 	protected RecordPane(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		init(data, labels, hints, editable);
-	}
-
-	public void setObservableSubject(ObservableSubject editingNotifier) {
-		if (editingNotifier == null) {
-			this.editingNotifier = new TheObservableSubject();
-		} else
-			this.editingNotifier = editingNotifier;
-
-		for (JTextFieldObserved value : datafields.values()) {
-			value.setGlobalObservableSubject(this.editingNotifier);
-		}
 	}
 
 	public void setData(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,

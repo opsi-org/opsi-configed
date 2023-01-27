@@ -15,8 +15,6 @@ import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import de.uib.utilities.observer.ObservableSubject;
-
 public class FEditRecord extends FEdit {
 	protected RecordPane recordPane;
 
@@ -25,16 +23,6 @@ public class FEditRecord extends FEdit {
 	protected Map<String, String> data;
 	protected Map<String, String> hints;
 	protected Map<String, Boolean> editable;
-
-	final ObservableSubject myObservable = new ObservableSubject() {
-
-		@Override
-		public void setChanged() {
-
-			super.setChanged();
-			setDataChanged(true);
-		}
-	};
 
 	public FEditRecord(String hint) {
 		super("", hint);
@@ -62,8 +50,6 @@ public class FEditRecord extends FEdit {
 	public void setRecord(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		recordPane.setData(data, labels, hints, editable);
-
-		recordPane.setObservableSubject(myObservable);
 
 		editingArea.add(recordPane, BorderLayout.CENTER);
 	}
