@@ -2300,6 +2300,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			try {
 				updateCollection.remove(clientProductpropertiesUpdateCollection);
 			} catch (Exception ex) {
+				Logging.error(this, "removing ProductpropertiesUpdateCollection from updateCollection failed", ex);
 			}
 		}
 		clientProductpropertiesUpdateCollection = null;
@@ -3084,6 +3085,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				try {
 					updateCollection.remove(additionalconfigurationUpdateCollection);
 				} catch (Exception ex) {
+					Logging.error(this, "removing additionalconfigurationUpdateCollection from updateCollection failed",
+							ex);
 				}
 			}
 			additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(persist, objectIds);

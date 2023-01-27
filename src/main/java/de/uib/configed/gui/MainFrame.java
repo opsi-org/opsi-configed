@@ -3497,6 +3497,7 @@ public class MainFrame extends JFrame
 			shutdownValueX = (List) main.getPersistenceController().getProductproperties(clientID, "opsi-client-agent")
 					.get("on_shutdown_install");
 		} catch (Exception ex) {
+			Logging.error("cannot get product property  on_shutdown_install for client " + clientID, ex);
 		}
 
 		final List<String> shutdownValue = shutdownValueX;
@@ -3558,7 +3559,6 @@ public class MainFrame extends JFrame
 
 			if (fObsolete.getResult() != 1)
 				goOn = false;
-
 		}
 
 		return goOn;

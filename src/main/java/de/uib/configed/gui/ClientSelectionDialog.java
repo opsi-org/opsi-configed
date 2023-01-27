@@ -188,21 +188,17 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		Logging.info(this, "doAction1");
 		List<String> clients = new ArrayList<>();
 
-		try {
+		collectData();
 
-			collectData();
+		main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
+															// client view
 
-			main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
-																// client view
-
-			if (manager != null)
-				clients = manager.selectClients();
-		} finally {
-
-		}
+		if (manager != null)
+			clients = manager.selectClients();
 
 		if (clients == null)
 			return;
+
 		Logging.debug(this, clients.toString());
 		selectionPanel.setSelectedValues(clients);
 	}

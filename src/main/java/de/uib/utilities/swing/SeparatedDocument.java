@@ -3,6 +3,8 @@ package de.uib.utilities.swing;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 
+import de.uib.utilities.logging.Logging;
+
 public class SeparatedDocument extends CheckedDocument {
 	int partsLength;
 	String separator;
@@ -33,6 +35,7 @@ public class SeparatedDocument extends CheckedDocument {
 
 					remove(offset, 1); // remove one char of existing chars
 				} catch (BadLocationException ex) {
+					Logging.warning(this, "Exception with location in giveAllowedCharacters", ex);
 				}
 			}
 		}

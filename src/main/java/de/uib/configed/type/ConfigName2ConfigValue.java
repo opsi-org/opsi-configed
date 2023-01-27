@@ -30,10 +30,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			retrieved = new HashMap<>();
 		}
 
-		if (configOptions == null) {
-
-		} else {
-
+		if (configOptions != null) {
 			for (Entry<String, ConfigOption> option : configOptions.entrySet()) {
 				// fill up by default values
 				if (retrieved.get(option.getKey()) == null) {
@@ -42,6 +39,8 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 				}
 			}
+		} else {
+			Logging.warning(this, "configOptions is null, cannot execute buildX()");
 		}
 
 		for (Entry<String, Object> entry : retrieved.entrySet()) {

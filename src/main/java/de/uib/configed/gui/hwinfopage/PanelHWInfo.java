@@ -339,6 +339,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					break;
 				}
 			} catch (NullPointerException ex) {
+				Logging.error("NullpointerException thrown on trying to get Values: ", ex);
 			}
 		}
 		List<String[]> data = new ArrayList<>();

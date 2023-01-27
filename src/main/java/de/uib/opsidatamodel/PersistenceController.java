@@ -148,12 +148,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
-	public static final List<Boolean> BOOLEAN_VALUES = new ArrayList<>();
-	static {
-		BOOLEAN_VALUES.add(true);
-		BOOLEAN_VALUES.add(false);
-	}
-
 	public static NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
 	static {
 		PROPERTY_CLASSES_SERVER.put("", "general configuration items");

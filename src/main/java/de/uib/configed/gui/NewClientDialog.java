@@ -30,6 +30,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.text.BadLocationException;
 
 import de.uib.configed.Configed;
 /**
@@ -285,7 +286,8 @@ public class NewClientDialog extends FGeneralDialog
 
 						macAddressField.requestFocus();
 					}
-				} catch (javax.swing.text.BadLocationException ex) {
+				} catch (BadLocationException ex) {
+					Logging.warning(this, "BadLocationException thrown: ", ex);
 				}
 
 			}

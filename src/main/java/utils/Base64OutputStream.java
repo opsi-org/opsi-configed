@@ -5,6 +5,8 @@ import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import de.uib.utilities.logging.Logging;
+
 /**
  * Dieser Stream-Filter konvertiert einen Strom von Bytes in deren
  * Base64-Kodierung. Base64-Kodierung verschlüsselt 3 Bytes in 4 Zeichen:
@@ -30,7 +32,8 @@ public class Base64OutputStream extends FilterOutputStream {
 		try {
 			out.write(s.getBytes());
 			out.flush();
-		} catch (IOException exception) {
+		} catch (IOException ex) {
+			Logging.warning("error in encoding String " + s + " Base64OutputStream", ex);
 		}
 		return bOut.toString();
 	}

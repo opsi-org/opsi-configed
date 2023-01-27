@@ -453,9 +453,9 @@ public abstract class JSONExecutioner extends Executioner {
 		if (checkResponse(jO)) {
 			try {
 				result = (String) jO.get("result");
-			} catch (Exception jsonEx) {
+			} catch (JSONException jsonEx) {
+				Logging.warning(this, "Cannot get 'result' from jsonobject in getStringResult", jsonEx);
 			}
-
 		}
 
 		return result;
@@ -475,6 +475,7 @@ public abstract class JSONExecutioner extends Executioner {
 				try {
 					result = (Boolean) jO.get("result");
 				} catch (Exception jsonEx) {
+					Logging.warning(this, "Cannot get 'result' from jsonobject in getStringResult", jsonEx);
 				}
 
 			}

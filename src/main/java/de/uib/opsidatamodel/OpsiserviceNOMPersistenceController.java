@@ -4014,6 +4014,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return true;
 	}
 
+	@Override
 	public boolean updateProductOnClient(String pcname, String productname, int producttype, Map updateValues) {
 		if (updateProductOnClientItems == null)
 			updateProductOnClientItems = new ArrayList<>();
@@ -6872,18 +6873,18 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return null;
 
 		String result = null;
-		Map resultMap = null;
+		Map<String, Object> resultMap = null;
 
 		if (withLicenceManagement) {
 			OpsiMethodCall omc = new OpsiMethodCall("setSoftwareLicenseUsage",
 					new String[] { hostId, licensePoolId, softwareLicenseId, licenseKey, notes });
 
 			resultMap = exec.getMapResult(omc);
-		}
 
-		if (!resultMap.isEmpty())
-			result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
-					"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
+			if (resultMap != null && !resultMap.isEmpty())
+				result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
+						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
+		}
 
 		return result;
 	}
@@ -7207,29 +7208,34 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			productOnClientsDisplayFieldsLocalbootProducts = new LinkedHashMap<>();
 
+			if (configuredByService == null) {
+				Logging.warning(this, "configuredByService is null");
+				return productOnClientsDisplayFieldsLocalbootProducts;
+			}
+
 			// key names from de.uib.opsidatamodel.productstate.ProductState
 			productOnClientsDisplayFieldsLocalbootProducts.put("productId", true);
 
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_NAME,
-					(configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1));
+					configuredByService.indexOf(ProductState.KEY_PRODUCT_NAME) > -1);
 
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_TARGET_CONFIGURATION,
-					(configuredByService.indexOf(ProductState.KEY_TARGET_CONFIGURATION) > -1));
+					configuredByService.indexOf(ProductState.KEY_TARGET_CONFIGURATION) > -1);
 
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_STATUS, true);
 
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_INSTALLATION_INFO,
-					(configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1));
+					configuredByService.indexOf(ProductState.KEY_INSTALLATION_INFO) > -1);
 
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_ACTION_REQUEST, true);
 
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_PRODUCT_PRIORITY,
-					(configuredByService.indexOf(ProductState.KEY_PRODUCT_PRIORITY) > -1));
+					configuredByService.indexOf(ProductState.KEY_PRODUCT_PRIORITY) > -1);
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_POSITION,
-					(configuredByService.indexOf(ProductState.KEY_POSITION) > -1));
+					configuredByService.indexOf(ProductState.KEY_POSITION) > -1);
 
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_LAST_STATE_CHANGE,
-					(configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1));
+					configuredByService.indexOf(ProductState.KEY_LAST_STATE_CHANGE) > -1);
 
 			productOnClientsDisplayFieldsLocalbootProducts.put(ProductState.KEY_VERSION_INFO, true);
 

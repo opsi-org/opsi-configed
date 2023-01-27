@@ -165,7 +165,7 @@ public class ExporterToPDF extends ExportTable {
 				Logging.error("file not found: " + fileName, exp);
 			}
 
-			if (!saveAction && (temp.getAbsolutePath() != null)) {
+			if (!saveAction && temp != null && temp.getAbsolutePath() != null) {
 				try {
 
 					Desktop.getDesktop().open(temp);
@@ -173,11 +173,8 @@ public class ExporterToPDF extends ExportTable {
 				} catch (Exception e) {
 					Logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
 				}
-
 			}
-
 		}
-
 	}
 
 	public void addMetaData(Map<String, String> metaData) {
@@ -287,7 +284,7 @@ public class ExporterToPDF extends ExportTable {
 
 		for (int j = 0; j < theTable.getRowCount(); j++)
 
-			if (!onlySelectedRows | theTable.isRowSelected(j)) {
+			if (!onlySelectedRows || theTable.isRowSelected(j)) {
 
 				for (int i = 0; i < theTable.getColumnCount(); i++) {
 					value = new PdfPCell(new Phrase(" "));
@@ -324,7 +321,6 @@ public class ExporterToPDF extends ExportTable {
 			}
 
 		return table;
-
 	}
 
 	/**
