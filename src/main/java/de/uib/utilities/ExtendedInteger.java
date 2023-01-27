@@ -2,7 +2,7 @@ package de.uib.utilities;
 
 import de.uib.utilities.logging.Logging;
 
-public class ExtendedInteger implements Comparable {
+public class ExtendedInteger implements Comparable<Integer> {
 
 	private static final String INFINITE_IMPORT = "infinite";
 	private static final String S_INFINITE = "INFINITE";
@@ -108,37 +108,14 @@ public class ExtendedInteger implements Comparable {
 
 	// Interface Comparable
 	@Override
-	public int compareTo(Object o) // throws NotComparableException
-	{
-		ExtendedInteger comparedWithMe = null;
+	public int compareTo(Integer integer) {
 
-		if (o instanceof ExtendedInteger)
-			comparedWithMe = (ExtendedInteger) (o);
+		if (this.equals(INFINITE))
+			return -1;
 
-		else if (o instanceof Integer)
-			comparedWithMe = new ExtendedInteger((Integer) o);
+		else
+			return getNumber() - integer;
 
-		if (this.equals(INFINITE)) {
-			if (comparedWithMe.equals(INFINITE))
-				return 0;
-			else
-				return -1;
-		} else {
-			if (comparedWithMe.equals(INFINITE))
-				return 1;
-			else
-				return (getNumber() - comparedWithMe.getNumber());
-
-			// a < b <==> a - b < 0
-		}
-	}
-
-	public Boolean isLessThan(Object o) {
-		return compareTo(o) < 0;
-	}
-
-	public Boolean isGreaterThan(Object o) {
-		return compareTo(o) > 0;
 	}
 
 	@Override

@@ -51,6 +51,7 @@ import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.IconButton;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -73,18 +74,19 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
 	javax.swing.JFrame masterFrame = Globals.mainFrame;
 
+	// TODO are these used somewhere?
 	protected Comparator[] comparators;
 
-	protected javax.swing.JScrollPane scrollpane;
-	protected javax.swing.JTable theTable;
-	protected de.uib.utilities.table.GenTableModel tableModel;
+	protected JScrollPane scrollpane;
+	protected JTable theTable;
+	protected GenTableModel tableModel;
 
-	protected de.uib.configed.gui.IconButton buttonCommit;
-	protected de.uib.configed.gui.IconButton buttonCancel;
-	protected javax.swing.JLabel label;
+	protected IconButton buttonCommit;
+	protected IconButton buttonCancel;
+	protected JLabel label;
 
-	protected javax.swing.JLabel labelRowCount;
-	protected javax.swing.JLabel labelMarkedCount;
+	protected JLabel labelRowCount;
+	protected JLabel labelMarkedCount;
 	protected String textMarkedCount = "selected";
 	protected JPanel titlePane;
 
@@ -523,7 +525,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 
 			setSortOrder(sortDescriptor);
-			((javax.swing.DefaultRowSorter) getRowSorter()).sort();
+			((DefaultRowSorter) getRowSorter()).sort();
 			setSorter();
 
 			if (selVal != null) {
@@ -928,7 +930,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (sorter == null)
 			Logging.warning(this, "no sorter");
 
-		sorter.setComparator(modelCol, comparator);
+		else
+			sorter.setComparator(modelCol, comparator);
 	}
 
 	/**
