@@ -238,7 +238,6 @@ public class MainFrame extends JFrame
 	JMenuItem jMenuClientselectionFailedProduct = new JMenuItem();
 	JMenu jMenuClientselectionFailedInPeriod = new JMenu();
 
-	JMenuItem jMenuClientselectionDeselect = new JMenuItem();
 	JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem();
 
 	JMenu jMenuFrames = new JMenu();
@@ -307,7 +306,6 @@ public class MainFrame extends JFrame
 	JMenuItemFormatted popupSelectionGetGroup = new JMenuItemFormatted();
 	JMenuItemFormatted popupSelectionGetSavedSearch = new JMenuItemFormatted();
 
-	JMenuItemFormatted popupSelectionDeselect = new JMenuItemFormatted();
 	JCheckBoxMenuItem popupSelectionToggleClientFilter = new JCheckBoxMenuItem();
 
 	JMenuItemFormatted popupRebuildClientList = new JMenuItemFormatted(
@@ -1252,7 +1250,6 @@ public class MainFrame extends JFrame
 
 		// ----------
 		jMenuClientselection.addSeparator();
-		jMenuClientselection.add(jMenuClientselectionDeselect);
 		jMenuClientselection.add(jMenuClientselectionToggleClientFilter);
 	}
 
@@ -1683,7 +1680,6 @@ public class MainFrame extends JFrame
 		popupClients.add(popupSelectionGetSavedSearch);
 
 		popupClients.addSeparator();
-		popupClients.add(popupSelectionDeselect);
 		popupClients.add(popupSelectionToggleClientFilter);
 
 		popupClients.add(popupRebuildClientList);
@@ -2788,10 +2784,6 @@ public class MainFrame extends JFrame
 
 	public void deleteGroupAction() {
 		main.callDeleteGroupDialog();
-	}
-
-	public void deselectSetEnabled(boolean b) {
-		jMenuClientselectionDeselect.setEnabled(b);
 	}
 
 	public void menuClientSelectionSetEnabled(boolean b) {
