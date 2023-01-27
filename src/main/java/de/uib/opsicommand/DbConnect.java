@@ -1,9 +1,6 @@
 package de.uib.opsicommand;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import de.uib.utilities.logging.Logging;
 
@@ -23,30 +20,31 @@ public class DbConnect {
 	private static String password;
 
 	private DbConnect() {
-		try {
+		Logging.critical(this, "DATABASE NOT SUPPORTED ANY MORE...");
+		/*try {
 			// TODO kann weg!
 			Class.forName(DRIVER).getDeclaredConstructor().newInstance();
-
+		
 		}
-
+		
 		catch (Exception e) {
 			Logging.error("Error", e);
 			return;
 		}
-
+		
 		if (server != null && server.indexOf("/") == -1)
 			server = server + "/" + defaultDB;
-
+		
 		url = String.format(url, server);
 		Logging.info("db url " + url);
-
+		
 		try {
 			con = DriverManager.getConnection(url, user, password);
 			con.setAutoCommit(true);
 		} catch (SQLException e) {
 			Logging.error(this, e.getMessage(), e);
 			con = null;
-
+		
 			try {
 				con = DriverManager.getConnection(url, defaultUser, defaultPassword);
 				con.setAutoCommit(true);
@@ -54,7 +52,7 @@ public class DbConnect {
 				Logging.error(this, e1.getMessage(), e1);
 				con = null;
 			}
-		}
+		}*/
 	}
 
 	public static Connection getConnection(String serverParameter, String userParameter, String passwordParameter) {
@@ -86,25 +84,5 @@ public class DbConnect {
 			return getConnection(null, null, null);
 		}
 		return con;
-	}
-
-	public static void closeConnection() {
-		try {
-			con.close();
-		} catch (SQLException e) {
-			Logging.error("DbConnect: " + e.getMessage(), e);
-		}
-		con = null;
-	}
-
-	public static boolean checkForExistence(String sql) {
-		Logging.debug("DbConnect: " + sql);
-		try (ResultSet reply = getConnection().createStatement().executeQuery(sql)) {
-			if (reply.next())
-				return true;
-		} catch (Exception e) {
-			Logging.error("DbConnect: " + e.getMessage(), e);
-		}
-		return false;
 	}
 }

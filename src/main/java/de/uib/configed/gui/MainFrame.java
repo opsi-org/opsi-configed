@@ -1345,7 +1345,7 @@ public class MainFrame extends JFrame
 			rbLoglevelItems[i] = new JRadioButtonMenuItem("[" + i + "] " + Logging.levelText(i).toLowerCase());
 
 			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
-			if (i == Logging.logLevelConsole)
+			if (i == Logging.getLogLevelConsole())
 				rbLoglevelItems[i].setSelected(true);
 
 			rbLoglevelItems[i].addActionListener(selectLoglevelListener);

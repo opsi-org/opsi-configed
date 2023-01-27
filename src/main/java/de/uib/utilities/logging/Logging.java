@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -55,10 +56,10 @@ public class Logging implements LogEventSubject
 
 	private static String logFormat = "[%d] [%s] [%-15s] %s";
 
-	public static Integer logLevelConsole = LEVEL_WARNING;
-	public static Integer logLevelFile = LEVEL_WARNING;
+	private static Integer logLevelConsole = LEVEL_WARNING;
+	private static Integer logLevelFile = LEVEL_WARNING;
 
-	private static final java.text.SimpleDateFormat LOGGING_DATE_FORMAT = new java.text.SimpleDateFormat(
+	private static final SimpleDateFormat LOGGING_DATE_FORMAT = new java.text.SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss.SSS");
 
 	public static final String levelText(int level) {
@@ -82,12 +83,20 @@ public class Logging implements LogEventSubject
 		setLogLevelConsole(LEVEL_NONE);
 	}
 
+	public static Integer getLogLevelConsole() {
+		return logLevelConsole;
+	}
+
 	public static void setLogLevelConsole(int newLevel) {
 		if (newLevel < LEVEL_NONE)
 			newLevel = LEVEL_NONE;
 		else if (newLevel > LEVEL_SECRET)
 			newLevel = LEVEL_SECRET;
 		logLevelConsole = newLevel;
+	}
+
+	public static Integer getLogLevelFile() {
+		return logLevelFile;
 	}
 
 	public static void setLogLevelFile(int newLevel) {

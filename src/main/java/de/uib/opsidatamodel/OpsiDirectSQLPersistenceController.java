@@ -153,7 +153,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 	@Override
 	public void cleanUpAuditSoftware() {
-		java.sql.Connection sqlConn = DbConnect.getConnection();
+		Connection sqlConn = DbConnect.getConnection();
 
 		TreeMap<String, Map<String, String>> rowsSoftwareOnClients = new TreeMap<>();
 
