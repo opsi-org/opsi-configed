@@ -44,7 +44,7 @@ public class PersistenceControllerFactory {
 	public static PersistenceController getNewPersistenceController(String server, String user, String password) {
 		Logging.info("getNewPersistenceController");
 		if (staticPersistControl != null
-				&& staticPersistControl.getConnectionState().equals(ConnectionState.CONNECTED)) {
+				&& staticPersistControl.getConnectionState().getState() == ConnectionState.CONNECTED) {
 			Logging.info("a PersistenceController exists and we are connected, the existing one will be returned");
 			return staticPersistControl;
 		}
