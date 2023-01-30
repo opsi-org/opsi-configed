@@ -11,6 +11,7 @@ import javax.swing.JTable;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.AdaptingCellEditor;
@@ -20,12 +21,12 @@ import de.uib.utilities.table.gui.AdaptingCellEditor;
  */
 public class DynamicCombo extends javax.swing.JPanel {
 
-	protected javax.swing.JTable table;
-	protected javax.swing.table.DefaultTableModel tablemodel;
-	protected javax.swing.JComboBox combo;
+	protected JTable table;
+	protected DefaultTableModel tablemodel;
+	protected JComboBox combo;
 	protected de.uib.utilities.ComboBoxModeller modelsource;
 
-	protected javax.swing.table.TableColumn col;
+	protected TableColumn col;
 
 	public DynamicCombo(de.uib.utilities.ComboBoxModeller modelsource) {
 		this.modelsource = modelsource;
