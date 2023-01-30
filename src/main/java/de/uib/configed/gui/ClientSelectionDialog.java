@@ -1161,15 +1161,15 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class SimpleGroup {
-		public SelectElement element;
-		public IconAsButton negateButton;
-		public AndOrSelectButtonByIcon connectionType;
-		public JLabel elementLabel;
-		public JComponent operationComponent; // may be JLabel or JComboBox
-		public JComponent dataComponent;
-		public GroupLayout.ParallelGroup vRow;
-		public IconAsButton openParenthesis;
-		public IconAsButton closeParenthesis;
+		private SelectElement element;
+		private IconAsButton negateButton;
+		private AndOrSelectButtonByIcon connectionType;
+		private JLabel elementLabel;
+		private JComponent operationComponent; // may be JLabel or JComboBox
+		private JComponent dataComponent;
+		private GroupLayout.ParallelGroup vRow;
+		private IconAsButton openParenthesis;
+		private IconAsButton closeParenthesis;
 	}
 
 	private enum GroupType {

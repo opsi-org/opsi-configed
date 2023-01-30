@@ -19,6 +19,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import de.uib.configed.gui.FTextArea;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.JSONthroughHTTP;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -128,11 +129,11 @@ public class Configed {
 	public static final String JAVA_VERSION = System.getProperty("java.version");
 	public static final String JAVA_VENDOR = System.getProperty("java.vendor", "");
 	public static final String SYSTEM_SSL_VERSION = System.getProperty("https.protocols");
-	public static String extraLocalizationFileName = null;
-	public static PropertiesStore extraLocalization;
-	public static boolean showLocalizationStrings = false;
 
-	public static ConfigedMain cm;
+	private static PropertiesStore extraLocalization;
+	private static boolean showLocalizationStrings = false;
+
+	private static ConfigedMain configedMain;
 
 	private static String locale = null;
 	private static String host = null;
@@ -278,26 +279,26 @@ public class Configed {
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		cm = new ConfigedMain(paramHost, paramUser, paramPassword);
+		configedMain = new ConfigedMain(paramHost, paramUser, paramPassword);
 
-		SwingUtilities.invokeLater(() -> cm.init());
+		SwingUtilities.invokeLater(() -> configedMain.init());
 
 		try {
 
 			SwingUtilities.invokeAndWait(() -> {
 				if (paramClient != null || paramClientgroup != null) {
 					if (paramClientgroup != null) {
-						cm.setGroup(paramClientgroup);
+						configedMain.setGroup(paramClientgroup);
 					}
 
 					if (paramClient != null) {
-						cm.setClient(paramClient);
+						configedMain.setClient(paramClient);
 					}
 
 					Logging.info("set client " + paramClient);
 
 					if (paramTab != null) {
-						cm.setVisualViewIndex(paramTab);
+						configedMain.setVisualViewIndex(paramTab);
 					}
 				}
 			});
@@ -356,13 +357,13 @@ public class Configed {
 	}
 
 	protected void revalidate() {
-		cm.initialTreeActivation();
+		configedMain.initialTreeActivation();
 	}
 
 	protected static void processArgs(String[] args) {
 		Logging.debug("args " + Arrays.toString(args));
 
-		de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
+		JSONthroughHTTP.compressTransmission = true;
 
 		if (args.length == 2 && args[0].equals("--args")) {
 			args = args[1].split(";;");
@@ -552,7 +553,7 @@ public class Configed {
 					}
 					i = i + 2;
 				} else if (args[i].equals("--localizationfile")) {
-					extraLocalizationFileName = getArg(args, i);
+					String extraLocalizationFileName = getArg(args, i);
 
 					boolean success = false;
 
