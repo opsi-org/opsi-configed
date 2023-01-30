@@ -111,9 +111,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				Configed.getResourceValue("ClientSelectionDialog.title")/* "Select clients" */ + " (" + Globals.APPNAME
 						+ ")",
 				false,
-				new String[] { Configed.getResourceValue("ClientSelectionDialog.buttonSet"),
+				new String[] { Configed.getResourceValue("ClientSelectionDialog.buttonClose"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
-						Configed.getResourceValue("ClientSelectionDialog.buttonClose") },
+						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
 				750, 620);
 
 		PersistenceController controller = PersistenceControllerFactory.getPersistenceController();
@@ -184,8 +184,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	@Override
-	public void doAction1() {
-		Logging.info(this, "doAction1");
+	public void doAction3() {
+		Logging.info(this, "doAction3");
 		List<String> clients = new ArrayList<>();
 
 		collectData();

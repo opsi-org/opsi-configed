@@ -64,7 +64,6 @@ public class SavedSearchesDialog extends FEditList {
 		buttonCommit.setPreferredSize(new java.awt.Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
 
 		buttonCancel.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.CancelButtonTooltip"));
-
 	}
 
 	@Override

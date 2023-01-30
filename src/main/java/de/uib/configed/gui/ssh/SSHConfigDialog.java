@@ -2,8 +2,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.Arrays;
@@ -329,35 +327,16 @@ public class SSHConfigDialog extends FGeneralDialog {
 				"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete_disabled.png", false);
 		jButtonKill.setPreferredSize(Globals.smallButtonDimension);
 
-		jButtonKill.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				jButtonKill.setEnabled(false);
+		jButtonKill.addActionListener(actionEvent -> doAction2());
 
-				Logging.info(this,
-						"actionPerformed on btn_kill " + SSHCommandFactory.getInstance().getConnectionState());
-
-				SSHCommandFactory.getInstance().unsetConnection();
-
-				// there seems to be nothing got disconnect
-				setSSHState();
-			}
-		});
-
-		buttonPanel.add(jButtonSave);
-		buttonPanel.add(jButtonKill);
+		buttonPanel.add(jButtonClose);
+		jButtonClose.addActionListener(actionEvent -> doAction1());
 
 		buttonPanel.add(new JLabel("            "));
 
 		Logging.info(this, "actionlistener for button1 " + Globals.isGlobalReadOnly());
 		if (!(Globals.isGlobalReadOnly())) {
-			jButtonSave.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					Logging.debug(this, "actionPerformed on button1");
-					doAction1();
-				}
-			});
+			jButtonSave.addActionListener(actionEvent -> doAction3());
 		}
 
 		IconButton iconButtonOpenChooser = new IconButton(
@@ -367,8 +346,8 @@ public class SSHConfigDialog extends FGeneralDialog {
 		if (!(Globals.isGlobalReadOnly()))
 			iconButtonOpenChooser.addActionListener(actionEvent -> doActionOeffnen());
 
-		buttonPanel.add(jButtonClose);
-		jButtonClose.addActionListener(actionEvent -> doAction2());
+		buttonPanel.add(jButtonKill);
+		buttonPanel.add(jButtonSave);
 
 		JLabel jLabelKeyFile = new JLabel();
 		jLabelKeyFile.setText(Configed.getResourceValue("SSHConnection.Config.jLabelKeyfile"));
@@ -599,14 +578,35 @@ public class SSHConfigDialog extends FGeneralDialog {
 			jTextFieldPassword.setEnabled(false);
 	}
 
-	/* This method is called when button 1 is pressed */
+	/* This method gets called when button 1 is pressed */
 	@Override
 	public void doAction1() {
-		Logging.info(this, "doAction1  ");
+		Logging.info(this, "doAction1 cb_host.getSelectedItem() " + jComboBoxHost.getSelectedItem());
+
+		super.doAction1();
+	}
+
+	/* This method is called when button 2 is pressed */
+	@Override
+	public void doAction2() {
+		jButtonKill.setEnabled(false);
+
+		Logging.info(this, "actionPerformed on btn_kill " + SSHCommandFactory.getInstance().getConnectionState());
+
+		SSHCommandFactory.getInstance().unsetConnection();
+
+		// there seems to be nothing got disconnect
+		setSSHState();
+	}
+
+	/* This method is called when button 3 is pressed */
+	@Override
+	public void doAction3() {
+		Logging.info(this, "doAction3  ");
 		setSSHState();
 
 		if (jCheckBoxDefault.isSelected()) {
-			Logging.info(this, "doAction1  cb_useDefault.isSelected true");
+			Logging.info(this, "doAction3  cb_useDefault.isSelected true");
 			if (!jComboBoxUseDefaultState)
 			// state has changed
 			{
@@ -619,16 +619,16 @@ public class SSHConfigDialog extends FGeneralDialog {
 			jTextFieldPort.setText(connectionInfo.getPort());
 			jTextFieldPassword.setText(connectionInfo.getPassw());
 		} else {
-			Logging.info(this, "doAction1  cb_useDefault.isSelected false");
+			Logging.info(this, "doAction3  cb_useDefault.isSelected false");
 			String host = (String) jComboBoxHost.getSelectedItem();
-			Logging.info(this, "doAction1 host " + host);
+			Logging.info(this, "doAction3 host " + host);
 
 			connectionInfo.setUserData(host, jTextFieldUser.getText(), new String(jTextFieldPassword.getPassword()),
 					jTextFieldPort.getText());
 		}
 		connectionInfo.useKeyfile(false);
 		if (jCheckBoxUseKeyFile.isSelected()) {
-			Logging.info(this, "doAction1  cb_useKeyfile.isSelected true");
+			Logging.info(this, "doAction3  cb_useKeyfile.isSelected true");
 			Logging.info(this, "set keyfile true keyfile " + jTextFieldKeyFile.getText());
 			connectionInfo.useKeyfile(true, jTextFieldKeyFile.getText(),
 					new String(jTextFieldPassphrase.getPassword()));
@@ -648,14 +648,6 @@ public class SSHConfigDialog extends FGeneralDialog {
 		jComboBoxUseDefaultState = jCheckBoxDefault.isSelected();
 		checkComponentStates();
 		Logging.info(this, "request focus");
-	}
-
-	/* This method gets called when button 2 is pressed */
-	@Override
-	public void doAction2() {
-		Logging.info(this, "doAction2 cb_host.getSelectedItem() " + jComboBoxHost.getSelectedItem());
-
-		super.doAction2();
 	}
 
 	public void doActionOeffnen() {

@@ -63,9 +63,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	public CSVTemplateCreatorDialog(List<String> columnNames) {
 		super(Globals.mainFrame, Configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
-				new String[] { "ok", "cancel" },
-				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "") },
+				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
+						Configed.getResourceValue("FGeneralDialog.ok") },
+				new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
+						Globals.createImageIcon("images/checked_withoutbox_blue14.png", "") },
 				2, 1000, 400, true, null);
 
 		this.columnNames = columnNames;
@@ -425,8 +426,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	}
 
 	@Override
-	public void doAction1() {
-		result = 1;
+	public void doAction2() {
+		result = 2;
 
 		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV (.csv)", "csv");

@@ -178,17 +178,19 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 			}
 		});
 		jButtonExecute = new JButton();
-		buttonPanel.add(jButtonExecute);
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
-			jButtonExecute.addActionListener(actionEvent -> doAction1());
+			jButtonExecute.addActionListener(actionEvent -> doAction2());
 
 		jButtonClose = new JButton();
-		buttonPanel.add(jButtonClose);
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
+
+		buttonPanel.add(jButtonClose);
+		buttonPanel.add(jButtonExecute);
+
 		enableComponents(jRadioButtonFromServer.isSelected());
 
 		new SSHConnectExec().exec(new EmptyCommand(SSHCommandFactory.STRING_COMMAND_FILE_EXISTS_NOT_REMOVE
@@ -339,15 +341,15 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		}
 	}
 
-	// // /* This method gets called when button 2 is pressed */
+	// // /* This method gets called when button 1 is pressed */
 	public void cancel() {
-		super.doAction2();
+		super.doAction1();
 	}
 
-	/* This method is called when button 1 is pressed */
+	/* This method is called when button 2 is pressed */
 	@Override
-	public void doAction1() {
-		Logging.info(this, "doAction1 upload ");
+	public void doAction2() {
+		Logging.info(this, "doAction2 upload ");
 		if (jRadioButtonLocal.isSelected()) {
 			if (jTextFieldLocalPath.getText().equals("")) {
 				Logging.warning(this, "Please select local file.");
@@ -384,7 +386,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 				fullcommand.addCommand((new CommandOpsiSetRights("")));
 			new SSHConnectExec(fullcommand);
 		} catch (Exception e) {
-			Logging.warning(this, "doAction1, exception occurred", e);
+			Logging.warning(this, "doAction2, exception occurred", e);
 		}
 	}
 

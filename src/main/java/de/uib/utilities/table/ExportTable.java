@@ -138,10 +138,10 @@ public abstract class ExportTable {
 
 				FTextArea fChoice = new FTextArea(null,
 						Globals.APPNAME + " " + Configed.getResourceValue("ExportTable.title"), true,
-						new String[] {
+						new String[] { Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCancel"),
 								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
-								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCompleteTable"),
-								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCancel") },
+								Configed.getResourceValue(
+										"ExportTable.caseNoSelectedRows.option.exportCompleteTable") },
 
 						500, 200);
 				fChoice.setDefaultResult(3);

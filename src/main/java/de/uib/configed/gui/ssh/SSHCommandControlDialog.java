@@ -357,11 +357,11 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			});
 
 		if (!(Globals.isGlobalReadOnly()))
-			buttonSave.addActionListener(actionEvent -> doAction1());
-		buttonClose.addActionListener(actionEvent -> doAction2());
+			buttonSave.addActionListener(actionEvent -> doAction2());
+		buttonClose.addActionListener(actionEvent -> doAction1());
 
-		buttonPanel.add(buttonSave);
 		buttonPanel.add(buttonClose);
+		buttonPanel.add(buttonSave);
 
 		initLayout();
 
@@ -580,15 +580,15 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		jTextPaneommands.setText(coms);
 	}
 
-	/* This method is called when button 1 (save) is pressed */
+	/* This method is called when button 2 (save) is pressed */
 	@Override
-	public void doAction1() {
-		Logging.info(this, "doAction1 savecommand ");
+	public void doAction2() {
+		Logging.info(this, "doAction2 savecommand ");
 		String menuText = (String) jComboBoxMenuText.getSelectedItem();
 		SSHCommandTemplate command = getCommandNow();
 		if (command == null)
 			return;
-		Logging.debug(this, "doAction1 savecommand " + command.toString());
+		Logging.debug(this, "doAction2 savecommand " + command.toString());
 		if (factory.saveSSHCommand(command)) {
 			updateLists(true, menuText);
 			updateSelectedCommand(menuText);

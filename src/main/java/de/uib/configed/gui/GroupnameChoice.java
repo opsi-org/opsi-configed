@@ -33,7 +33,9 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 	JTextField groupnameField;
 
 	public GroupnameChoice(String extraTitle, List<String> v, int selectedIndex) {
-		super(null, extraTitle + " (" + Globals.APPNAME + ")", true, new String[] { "ok", "Close" }, 300, 200);
+		super(null, extraTitle + " (" + Globals.APPNAME + ")", true, new String[] {
+				Configed.getResourceValue("FGeneralDialog.cancel"), Configed.getResourceValue("FGeneralDialog.ok") },
+				300, 200);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		try // in an applet context this is not possible without a security problem
 		{
@@ -90,14 +92,14 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 	@Override
 	public void doAction1() {
 		result = 1;
-		resultString = groupnameField.getText();
+		resultString = "";
 		leave();
 	}
 
 	@Override
 	public void doAction2() {
 		result = -1;
-		resultString = "";
+		resultString = groupnameField.getText();
 		leave();
 	}
 

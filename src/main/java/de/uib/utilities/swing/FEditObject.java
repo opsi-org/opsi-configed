@@ -155,9 +155,9 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addComponent(editingArea, 60, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addGroup(layout1.createSequentialGroup()
-										.addComponent(buttonCommit, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addComponent(buttonCancel, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addComponent(buttonCommit, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE)
 										.addComponent(buttonRemove, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -176,9 +176,9 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

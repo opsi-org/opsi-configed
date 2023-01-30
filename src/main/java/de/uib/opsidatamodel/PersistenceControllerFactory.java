@@ -131,7 +131,7 @@ public class PersistenceControllerFactory {
 
 							de.uib.configed.gui.FTextArea infodialog = new de.uib.configed.gui.FTextArea(
 									Globals.mainFrame, Globals.APPNAME, false, // we are not modal
-									new String[] { "ok" }, 300, 200) {
+									new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 300, 200) {
 								@Override
 								public void doAction1() {
 									super.doAction1();

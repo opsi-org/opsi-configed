@@ -94,8 +94,8 @@ public class NewClientDialog extends FGeneralDialog
 
 	private NewClientDialog(ConfigedMain main, List<String> depots) {
 		super(Globals.mainFrame, Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")",
-				false, new String[] { Configed.getResourceValue("NewClientDialog.buttonCreate"),
-						Configed.getResourceValue("NewClientDialog.buttonClose") },
+				false, new String[] { Configed.getResourceValue("NewClientDialog.buttonClose"),
+						Configed.getResourceValue("NewClientDialog.buttonCreate") },
 				700, 600);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.main = main;
@@ -892,12 +892,19 @@ public class NewClientDialog extends FGeneralDialog
 		jButton1.setIcon(jButton1.getDefaultIcon());
 	}
 
-	/* This method is called when button 1 is pressed */
+	/* This method gets called when button 1 is pressed */
 	@Override
 	public void doAction1() {
-		Logging.info(this, "doAction1");
-
 		result = 1;
+		setVisible(false);
+	}
+
+	/* This method is called when button 2 is pressed */
+	@Override
+	public void doAction2() {
+		Logging.info(this, "doAction2");
+
+		result = 2;
 
 		String hostname = jTextHostname.getText();
 		String selectedDomain = (String) jComboDomain.getSelectedItem();
@@ -929,13 +936,6 @@ public class NewClientDialog extends FGeneralDialog
 
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, macaddress,
 				shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
-	}
-
-	/* This method gets called when button 2 is pressed */
-	@Override
-	public void doAction2() {
-		result = 2;
-		setVisible(false);
 	}
 
 	@Override

@@ -82,7 +82,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 					.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
 			jButtonKillProcess.setToolTipText(Configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
-			jButtonClear = new de.uib.configed.gui.IconButton(Configed.getResourceValue("SSHConnection.btn_clear"),
+			jButtonClear = new de.uib.configed.gui.IconButton(Configed.getResourceValue("SSHConnection.buttonClear"),
 					"images/user-trash.png", "images/user-trash.png", "images/user-trash.png", true);
 			jButtonClear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
 			jButtonClear.setToolTipText(Configed.getResourceValue("SSHConnection.btn_clear"));
@@ -111,17 +111,17 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		verticalGroup.addGap(vgap).addComponent(comp);
 		if (addInputField)
 			verticalGroup.addGroup(layout.createParallelGroup().addGap(vgap, vgap, vgap)
-					.addComponent(jButtonClear, pref, pref, pref).addComponent(jButtonKillProcess, pref, pref, pref)
-					.addComponent(jButtonClose, pref, pref, pref).addGap(vgap));
+					.addComponent(jButtonClose, pref, pref, pref).addComponent(jButtonClear, pref, pref, pref)
+					.addComponent(jButtonKillProcess, pref, pref, pref).addGap(vgap));
 		verticalGroup.addGap(vgap);
 
 		ParallelGroup horizontalGroup = layout.createParallelGroup();
 		horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap).addComponent(comp).addGap(hgap));
 		if (addInputField)
 			horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap, hgap, max)
+					.addComponent(jButtonClose, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 					.addComponent(jButtonClear, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 					.addComponent(jButtonKillProcess, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
-					.addComponent(jButtonClose, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 					.addGap(hgap));
 
 		layout.setVerticalGroup(verticalGroup);

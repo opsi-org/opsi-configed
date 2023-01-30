@@ -65,8 +65,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		jComboBoxDir.setEnabled(true);
 	}
 
-
-
 	private void setComponentsEnabledRO(boolean value) {
 		jTextFieldURL.setEnabled(value);
 		jTextFieldURL.setEditable(value);
@@ -169,23 +167,24 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		jButtonHelp = new JButton("", Globals.createImageIcon("images/help-about.png", ""));
 		jButtonHelp.setText(Configed.getResourceValue("SSHConnection.buttonParameterInfo"));
 		jButtonHelp.setToolTipText(Configed.getResourceValue("SSHConnection.buttonParameterInfo.tooltip"));
-		buttonPanel.add(jButtonHelp);
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
 		jButtonExecute = new JButton();
-		buttonPanel.add(jButtonExecute);
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		jButtonExecute.addActionListener(actionEvent -> {
 			if (!(Globals.isGlobalReadOnly()))
-				doAction1();
+				doAction3();
 		});
 
 		JButton jButtonClose = new JButton();
-		buttonPanel.add(jButtonClose);
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
+
+		buttonPanel.add(jButtonClose);
+		buttonPanel.add(jButtonHelp);
+		buttonPanel.add(jButtonExecute);
 
 		jLabelFullCommand.setText("wget ");
 
@@ -214,9 +213,9 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		updateCommand();
 	}
 
-	/* This method is called when button 1 is pressed */
+	/* This method is called when button 3 is pressed */
 	@Override
-	public void doAction1() {
+	public void doAction3() {
 		if ((jTextFieldURL.getText()
 				.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url")))
 				|| (jTextFieldURL.getText().equals(""))) {
@@ -237,12 +236,12 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 				@Override
 				public void run() {
 					try {
-						Logging.info(this, "doAction1 wget ");
+						Logging.info(this, "doAction3 wget ");
 						new SSHConnectExec(commandWget, jButtonExecute);
 						// btn_execute.setEnabled( true ) transferred to SwingWorker.done()
 
 					} catch (Exception e) {
-						Logging.warning(this, "doAction1, exception occurred", e);
+						Logging.warning(this, "doAction3, exception occurred", e);
 					}
 				}
 			}.start();
@@ -255,7 +254,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	public void cancel() {
-		super.doAction2();
+		super.doAction1();
 	}
 
 	private void initLayout() {

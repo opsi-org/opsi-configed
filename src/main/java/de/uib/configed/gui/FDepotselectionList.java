@@ -6,8 +6,8 @@ import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.ListSelectionModel;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -20,8 +20,8 @@ public class FDepotselectionList extends FGeneralDialog {
 		super(
 
 				masterWindow, Configed.getResourceValue("FDepotselectionList.title"),
-				new String[] { Configed.getResourceValue("FDepotselectionList.buttontake"),
-						Configed.getResourceValue("FDepotselectionList.buttonclose") },
+				new String[] { Configed.getResourceValue("FDepotselectionList.buttonclose"),
+						Configed.getResourceValue("FDepotselectionList.buttontake") },
 				500, 300);
 		depotsList = new DepotsList(PersistenceControllerFactory.getPersistenceController());
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -36,8 +36,8 @@ public class FDepotselectionList extends FGeneralDialog {
 	}
 
 	private void init() {
-		jButton1.setIcon(Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""));
-		jButton2.setIcon(Globals.createImageIcon("images/cancel16.png", ""));
+		jButton1.setIcon(Globals.createImageIcon("images/cancel16.png", ""));
+		jButton2.setIcon(Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""));
 		scrollpane.getViewport().add(depotsList);
 	}
 

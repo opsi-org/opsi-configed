@@ -2912,8 +2912,8 @@ public class MainFrame extends JFrame
 	}
 
 	private void showAboutAction() {
-		FTextArea info = new FTextArea(this, Globals.APPNAME + " Copyright Information", true, new String[] { "ok" },
-				700, 300);
+		FTextArea info = new FTextArea(this, Globals.APPNAME + " Copyright Information", true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 700, 300);
 
 		StringBuilder message = new StringBuilder();
 
@@ -2931,9 +2931,9 @@ public class MainFrame extends JFrame
 
 		FTextArea info = new FTextArea(this,
 				Globals.APPNAME + " " + Configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
-				new String[] { Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
-						Configed.getResourceValue("MainFrame.showLogFileOpen"),
-						Configed.getResourceValue("MainFrame.showLogFileClose") },
+				new String[] { Configed.getResourceValue("MainFrame.showLogFileClose"),
+						Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
+						Configed.getResourceValue("MainFrame.showLogFileOpen") },
 				new Icon[] { null, Globals.createImageIcon("images/document-view16.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
 				Globals.WIDTH_INFO_LOG_FILE, Globals.HEIGHT_INFO_LOG_FILE) {
@@ -3513,7 +3513,9 @@ public class MainFrame extends JFrame
 
 			FTextArea fObsolete = new FTextArea(Globals.frame1,
 					Configed.getResourceValue("NewClientDialog.installByShutdown"), true,
-					new String[] { "ok", "cancel" }, 300, 200) {
+					new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
+							Configed.getResourceValue("FGeneralDialog.ok") },
+					300, 200) {
 				@Override
 				protected boolean wantToBeRegisteredWithRunningInstances() {
 					return false;

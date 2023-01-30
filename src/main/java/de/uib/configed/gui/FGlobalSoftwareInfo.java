@@ -42,8 +42,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		super(
 
 				owner, Configed.getResourceValue("FGlobalSoftwareInfo.title"), false,
-				new String[] { Configed.getResourceValue("FGlobalSoftwareInfo.buttonRemove"),
-						Configed.getResourceValue("FGlobalSoftwareInfo.buttonClose") },
+				new String[] { Configed.getResourceValue("FGlobalSoftwareInfo.buttonClose"),
+						Configed.getResourceValue("FGlobalSoftwareInfo.buttonRemove") },
 				10, 10); // initial size of super frame
 
 		this.myController = myController;
@@ -67,8 +67,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		owner.setVisible(true);
 
 		jButton1.setEnabled(false);
-		jButton1.setIcon(Globals.createImageIcon("images/edit-delete.png", ""));
-		jButton2.setIcon(Globals.createImageIcon("images/cancel.png", ""));
+		jButton1.setIcon(Globals.createImageIcon("images/cancel.png", ""));
+		jButton2.setIcon(Globals.createImageIcon("images/edit-delete.png", ""));
 
 		initDataStructure();
 
@@ -107,6 +107,14 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	@Override
 	public void doAction1() {
 		Logging.debug(this, "doAction1");
+		result = 1;
+		owner.setVisible(true);
+		leave();
+	}
+
+	@Override
+	public void doAction2() {
+		Logging.debug(this, "doAction2");
 
 		Logging.info(this, "removeAssociations for " + " licencePool " + myController.getSelectedLicencePool()
 				+ " selected SW keys " + panelGlobalSoftware.getSelectedKeys());
@@ -117,23 +125,15 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		if (success) {
 			for (String key : panelGlobalSoftware.getSelectedKeys()) {
 				int row = panelGlobalSoftware.findViewRowFromValue(key, keyCol);
-				Logging.info(this, "doAction1 key, " + key + ", row " + row);
+				Logging.info(this, "doAction2 key, " + key + ", row " + row);
 				Logging.info(this,
-						"doAction1 model row " + panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
+						"doAction2 model row " + panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
 				panelGlobalSoftware.getTableModel()
 						.deleteRow(panelGlobalSoftware.getTheTable().convertRowIndexToModel(row));
 			}
-			result = 1;
+			result = 2;
 		}
 
-	}
-
-	@Override
-	public void doAction2() {
-		Logging.debug(this, "doAction2");
-		result = 2;
-		owner.setVisible(true);
-		leave();
 	}
 
 	@Override

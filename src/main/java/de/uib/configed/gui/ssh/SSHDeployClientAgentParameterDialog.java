@@ -289,17 +289,18 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp());
 
 		jButtonExecute = new JButton();
-		buttonPanel.add(jButtonExecute);
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
-			jButtonExecute.addActionListener(actionEvent -> doAction1());
+			jButtonExecute.addActionListener(actionEvent -> doAction2());
 
 		JButton jButtonClose = new JButton();
-		buttonPanel.add(jButtonClose);
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
+
+		buttonPanel.add(jButtonClose);
+		buttonPanel.add(jButtonExecute);
 
 		jLabelFullCommand.setText("opsi-deploy-client-agent ");
 		updateCommand();
@@ -359,17 +360,17 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jTextFieldPassword.setEnabled(value);
 	}
 
-	// /* This method gets called when button 2 is pressed */
+	// /* This method gets called when button 1 is pressed */
 	public void cancel() {
-		super.doAction2();
+		super.doAction1();
 	}
 
 	// 
 
-	/* This method is called when button 1 is pressed */
+	/* This method is called when button 2 is pressed */
 	@Override
-	public void doAction1() {
-		Logging.info(this, "doAction1 deploy-clientagent ");
+	public void doAction2() {
+		Logging.info(this, "doAction2 deploy-clientagent ");
 		if (jTextFieldClient.getText().equals("")) {
 			Logging.warning(this, "Client name(s) missing.");
 			return;
@@ -379,7 +380,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		try {
 			new SSHConnectExec(commandDeployClientAgent);
 		} catch (Exception e) {
-			Logging.warning(this, "doAction1, exception occurred", e);
+			Logging.warning(this, "doAction2, exception occurred", e);
 		}
 	}
 

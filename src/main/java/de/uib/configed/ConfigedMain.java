@@ -675,7 +675,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (nowCal.after(noticeCal)) {
 				Logging.info(this, "show notice of expiring module");
 				FTextArea fMessage = new FTextArea(mainFrame, Configed.getResourceValue("Permission.modules.title"),
-						false, new String[] { "ok" }, 350, 150);
+						false, new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 350, 150);
 				fMessage.setMessage(Configed.getResourceValue("Permission.modules.expires") + "\n" + opsiExpiresDate);
 				fMessage.setVisible(true);
 			}
@@ -3867,8 +3867,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (this.dataChanged) {
 				if (fAskSaveProductConfiguration == null) {
 					fAskSaveProductConfiguration = new FTextArea(mainFrame, Globals.APPNAME, true,
-							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.YES"),
-									Configed.getResourceValue("MainFrame.SaveChangedValue.NO") });
+							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.NO"),
+									Configed.getResourceValue("MainFrame.SaveChangedValue.YES") });
 					fAskSaveProductConfiguration
 							.setMessage(Configed.getResourceValue("ConfigedMain.reminderSaveConfig"));
 
@@ -3974,8 +3974,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (this.dataChanged) {
 				if (fAskSaveChangedText == null) {
 					fAskSaveChangedText = new FTextArea(mainFrame, Globals.APPNAME, true,
-							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.YES"),
-									Configed.getResourceValue("MainFrame.SaveChangedValue.NO") });
+							new String[] { Configed.getResourceValue("MainFrame.SaveChangedValue.NO"),
+									Configed.getResourceValue("MainFrame.SaveChangedValue.YES") });
 					fAskSaveChangedText.setMessage(Configed.getResourceValue("MainFrame.SaveChangedValue"));
 					fAskSaveChangedText.setSize(new Dimension(300, 220));
 				}

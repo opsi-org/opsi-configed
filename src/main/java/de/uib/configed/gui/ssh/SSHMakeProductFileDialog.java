@@ -220,15 +220,15 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			jButtonExec.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 			jButtonExec.setEnabled(false);
 			if (!(Globals.isGlobalReadOnly()))
-				jButtonExec.addActionListener(actionEvent -> doAction1());
+				jButtonExec.addActionListener(actionEvent -> doAction2());
 
 			JButton jButtonCancel = new JButton();
 			jButtonCancel.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 			jButtonCancel.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 			jButtonCancel.addActionListener(actionEvent -> cancel());
-			buttonPanel.add(jButtonExec);
-			buttonPanel.add(jButtonToPackageManager);
 			buttonPanel.add(jButtonCancel);
+			buttonPanel.add(jButtonToPackageManager);
+			buttonPanel.add(jButtonExec);
 
 			workbenchpanelLayout
 					.setHorizontalGroup(workbenchpanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
@@ -448,11 +448,11 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	public void cancel() {
-		super.doAction2();
+		super.doAction1();
 	}
 
 	@Override
-	public void doAction1() {
+	public void doAction2() {
 		if ((jLabelProductVersionControlFile.getText() == null)
 				|| (jLabelProductVersionControlFile.getText().equals(""))) {
 			Logging.warning(this, "Please select a valid opsi product directory.");

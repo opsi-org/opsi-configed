@@ -117,8 +117,8 @@ public class ControlDash {
 					persist.getGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
 							PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT));
 
-			String[] options = new String[] { Configed.getResourceValue("Dash.reload"),
-					Configed.getResourceValue("Dash.close") };
+			String[] options = new String[] { Configed.getResourceValue("Dash.close"),
+					Configed.getResourceValue("Dash.reload") };
 
 			Icon[] icons = new Icon[] { Globals.createImageIcon("images/reload16.png", "reload"),
 					Globals.createImageIcon("images/cancel16.png", "cancel") };

@@ -26,6 +26,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.InternationalFormatter;
 
+import de.uib.configed.Configed;
 /**
  * FStartWakeOnLan
  * Copyright:     Copyright (c) 2015-2016
@@ -34,7 +35,6 @@ import javax.swing.text.InternationalFormatter;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.swing.ProgressBarPainter;
@@ -82,10 +82,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	ConfigedMain main;
 
 	public FStartWakeOnLan(String title, ConfigedMain main) {
-		super(null, title, false, new String[]
-
-		{ Configed.getResourceValue("FStartWakeOnLan.start"), Configed.getResourceValue("FStartWakeOnLan.cancel") },
-				750, 310);
+		super(null, title, false, new String[] { Configed.getResourceValue("FStartWakeOnLan.cancel"),
+				Configed.getResourceValue("FStartWakeOnLan.start") }, 750, 310);
 		this.main = main;
 
 		setCalToNow();
@@ -115,7 +113,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	protected void disableSettingOfTimes() {
-		jButton1.setEnabled(false);
+		jButton2.setEnabled(false);
 		spinnerDelay.setEnabled(false);
 		spinnerDelay.setEnabled(false);
 		buttonRefreshTime.setEnabled(false);
@@ -484,9 +482,9 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	@Override
-	public void doAction1() {
+	public void doAction2() {
 
-		Logging.info(this, "doAction1");
+		Logging.info(this, "doAction2");
 
 		if (currentlySelectedClients == null || currentlySelectedClients.length == 0) {
 			JOptionPane.showMessageDialog(this, Configed.getResourceValue("FStartWakeOnLan.noClientsSelected.text"),
@@ -550,7 +548,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	@Override
-	public void doAction2() {
+	public void doAction1() {
 		Logging.info(this, "doAction2");
 		leave();
 	}
