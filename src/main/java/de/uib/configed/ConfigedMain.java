@@ -500,8 +500,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				savedStatesDir = new File(directoryName);
 				Logging.info(this, "writing saved states, created file " + savedStatesDir);
 
-				if (!savedStatesDir.mkdirs())
-					Logging.warning(this, "mkdirs for saved states failed");
+				if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
+					Logging.warning(this, "mkdirs for saved states failed, for File " + savedStatesDir);
+				}
 
 				Logging.info(this, "writing saved states, got dirs");
 
@@ -525,7 +526,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "writing saved states to " + getSavedStatesDefaultLocation());
 			savedStatesDir = new File(getSavedStatesDirectoryName(getSavedStatesDefaultLocation()));
 
-			if (!savedStatesDir.mkdirs())
+			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs())
 				Logging.warning(this, "mkdirs for saved states failed, in savedStatesDefaultLocation");
 
 			if (!savedStatesDir.setWritable(true, true))
@@ -538,7 +539,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		try {
 			Configed.savedStates.load();
 		} catch (IOException iox) {
-			Logging.info(this, "saved states file could not be loaded");
+			Logging.warning(this, "saved states file could not be loaded");
 		}
 
 		Integer oldUsageCount = Integer.valueOf(Configed.savedStates.saveUsageCount.deserialize());
