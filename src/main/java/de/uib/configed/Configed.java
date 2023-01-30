@@ -30,8 +30,6 @@ import de.uib.utilities.savedstates.SavedStates;
 
 public class Configed {
 
-	public static de.uib.utilities.swing.FLoadingWaiter fProgress;
-
 	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
 
 	public static boolean sshConnectOnStart = false;

@@ -42,12 +42,9 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -224,42 +221,6 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 				Configed.sshConnectOnStart = (e.getStateChange() == ItemEvent.SELECTED);
 
 				Logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
-			}
-		});
-
-		final JTextField fieldRefreshMinutes = new JTextField("" + Configed.refreshMinutes);
-		fieldRefreshMinutes.setToolTipText(Configed.getResourceValue("DPassword.pullReachableInfoTooltip"));
-		fieldRefreshMinutes.setPreferredSize(new Dimension(Globals.shortlabelDimension));
-		fieldRefreshMinutes.setHorizontalAlignment(SwingConstants.RIGHT);
-		fieldRefreshMinutes.getDocument().addDocumentListener(new DocumentListener() {
-
-			private void setRefreshMinutes() {
-				String s = fieldRefreshMinutes.getText();
-
-				try {
-					Configed.refreshMinutes = Integer.valueOf(s);
-
-				} catch (NumberFormatException ex) {
-					fieldRefreshMinutes.setText("");
-				}
-			}
-
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-
-				setRefreshMinutes();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-
-				setRefreshMinutes();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-
-				setRefreshMinutes();
 			}
 		});
 
