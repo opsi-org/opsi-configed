@@ -139,7 +139,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";// UserConfig.
 
 	public static final String KEY_USER_REGISTER = KEY_USER_ROOT + ".{}.register"; // boolean
-	public static Boolean keyUserRegisterValue = null;
 
 	public static final String DEPOT_SELECTION_NODEPOTS = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS");

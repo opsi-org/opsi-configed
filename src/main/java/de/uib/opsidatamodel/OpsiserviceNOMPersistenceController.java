@@ -150,6 +150,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private String userConfigPart;
 	private Boolean applyUserSpecializedConfig;
 
+	private static Boolean keyUserRegisterValue = null;
+
 	protected Map<String, List<String>> mapOfMethodSignatures;
 
 	protected List<OpsiProductInfo> productInfos;
@@ -221,7 +223,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	protected List<String> hwTableNames;
 
 	class HostGroups extends TreeMap<String, Map<String, String>> {
-		public HostGroups(Map source) {
+		public HostGroups(Map<String, Map<String, String>> source) {
 			super(source);
 		}
 
@@ -2470,7 +2472,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return productGroups;
 
 		String[] callAttributes = new String[] {};
-		Map callFilter = new HashMap<>();
+		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 
 		Map<String, Map<String, String>> result = exec.getStringMappedObjectsByKey(
@@ -2494,7 +2496,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			return hostGroups;
 
 		String[] callAttributes = new String[] {};
-		Map callFilter = new HashMap<>();
+		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("type", Object2GroupEntry.GROUP_TYPE_HOSTGROUP);
 
 		hostGroups = new HostGroups(exec.getStringMappedObjectsByKey(
@@ -2580,7 +2582,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	// to the group
 	{
 		String[] callAttributes = new String[] {};
-		Map callFilter = new HashMap<>();
+		Map<String, String> callFilter = new HashMap<>();
 		callFilter.put("groupType", groupType);
 
 		Map<String, Map<String, String>> mappedRelations =
@@ -3907,7 +3909,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected Map<String, List<Map<String, String>>> getLocalBootProductStatesNOM(String[] clientIds) {
 		String[] callAttributes = new String[] {};
-		Map callFilter = new HashMap<>();
+		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", Executioner.jsonArray(java.util.Arrays.asList(clientIds)));
 		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
@@ -3917,7 +3919,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
-		for (Map m : productOnClients) {
+		for (Map<String, Object> m : productOnClients) {
 
 			String client = (String) m.get(ProductOnClient.CLIENT_ID);
 			List<Map<String, String>> states1Client = result.get(client);
@@ -3958,7 +3960,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds) {
 		String[] callAttributes = new String[] {};
-		Map callFilter = new HashMap<>();
+		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("type", "ProductOnClient");
 		callFilter.put("clientId", Executioner.jsonArray(java.util.Arrays.asList(clientIds)));
 		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
@@ -3967,7 +3969,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				new OpsiMethodCall("productOnClient_getHashes", new Object[] { callAttributes, callFilter }));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
-		for (Map m : productOnClients) {
+		for (Map<String, Object> m : productOnClients) {
 
 			String client = (String) m.get("clientId");
 			List<Map<String, String>> states1Client = result.get(client);
@@ -4047,10 +4049,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public boolean updateProductOnClients() {
 		return updateProductOnClients(updateProductOnClientItems);
 	}
 
+	@Override
 	public boolean updateProductOnClients(Set<String> clients, String productName, int productType,
 			Map<String, String> changedValues) {
 		List updateCollection = new ArrayList<>();
@@ -4066,6 +4070,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result && updateProductOnClients(updateCollection);
 	}
 
+	@Override
 	public boolean resetLocalbootProducts(String[] selectedClients, boolean withDependencies) {
 		if (globalReadOnly)
 			return false;
@@ -4094,6 +4099,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public boolean resetNetbootProducts(String[] selectedClients, boolean withDependencies) {
 		if (globalReadOnly)
 			return false;
@@ -4122,6 +4128,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public boolean resetProducts(List<Map<String, Object>> productItems, boolean withDependencies) {
 		if (globalReadOnly)
 			return false;
@@ -4152,10 +4159,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public void retrieveProductDependencies() {
 		dataStub.getDepot2product2dependencyInfos();
 	}
 
+	@Override
 	public Map<String, Map<String, Object>> getProductGlobalInfos(String depotId) {
 		checkProductGlobalInfos(depotId);
 		return productGlobalInfos;
@@ -4167,6 +4176,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	}
 
+	@Override
 	public Map<String, Map<String, String>> getProductDefaultStates() {
 		if (productIds == null)
 			getProductIds();
@@ -4185,6 +4195,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return dataStub.getProduct2VersionInfo2Depots();
 	}
 
+	@Override
 	public NavigableSet<String> getProductIds() {
 		dataStub.getProduct2versionInfo2infos();
 
@@ -4223,6 +4234,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return result;
 	}
 
+	@Override
 	public Map<String, List<Map<String, String>>> getProductDependencies(String depotId) {
 
 		Map<String, List<Map<String, String>>> result = null;
@@ -4268,10 +4280,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return productsHavingSpecificProperties;
 	}
 
+	@Override
 	public Boolean hasClientSpecificProperties(String productname) {
 		return productHavingClientSpecificProperties.get(productname);
 	}
 
+	@Override
 	public Map<String, Boolean> getProductHavingClientSpecificProperties() {
 		return productHavingClientSpecificProperties;
 	}
@@ -4297,11 +4311,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * @param String       product
 	 * @param String       property
 	 */
+	@Override
 	public List<String> getCommonProductPropertyValues(List<String> clients, String product, String property) {
 		Logging.info(this, "getCommonProductPropertyValues for product, property, clients " + product + ", " + property
 				+ "  -- " + clients);
 		String[] callAttributes = new String[] {};
-		Map callFilter = new HashMap<>();
+		Map<String, Object> callFilter = new HashMap<>();
 		callFilter.put("objectId", Executioner.jsonArray(clients));
 		callFilter.put("productId", product);
 		callFilter.put("propertyId", property);
@@ -4343,15 +4358,18 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 * 
 	 * @param clientNames -
 	 */
+	@Override
 	public void retrieveProductproperties(List<String> clientNames) {
 		retrieveProductproperties(new HashSet<>(clientNames));
 	}
 
+	@Override
 	public Map<String, Map<String, ConfigName2ConfigValue>> getDepot2product2properties() {
 		retrieveDepotProductProperties();
 		return depot2product2properties;
 	}
 
+	@Override
 	public Map<String, ConfigName2ConfigValue> getDefaultProductProperties(String depotId) {
 		Logging.debug(this, "getDefaultProductProperties for depot " + depotId);
 		retrieveDepotProductProperties();
@@ -4373,6 +4391,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		}
 	}
 
+	@Override
 	public void retrieveDepotProductProperties() {
 		if (depot2product2properties != null)
 			return;
@@ -4558,6 +4577,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	 *                    to null.
 	 * @param productname
 	 */
+	@Override
 	public Map<String, Object> getProductproperties(String pcname, String productname) {
 		Logging.debug(this, "getProductProperties for product, host " + productname + ", " + pcname);
 
@@ -4628,6 +4648,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	// collect productPropertyState updates and deletions in standard lists
+	@Override
 	public void setProductproperties(String pcname, String productname, Map properties) {
 		// old version
 
