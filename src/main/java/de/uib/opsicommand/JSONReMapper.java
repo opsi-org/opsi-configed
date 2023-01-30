@@ -263,6 +263,11 @@ public class JSONReMapper {
 			Logging.error("JSONReMapper: Exception on getting list for key \"result\" " + ex.toString());
 		}
 
+		if (jsonList == null) {
+			Logging.error("JSONReMapper: Error on getting list for key \"result\": jsonList is null");
+			return null;
+		}
+
 		JSONObject item = null;
 
 		try {
@@ -337,6 +342,11 @@ public class JSONReMapper {
 			}
 		} catch (Exception ex) {
 			Logging.error("JSONReMapper: Exception on getting list for key \"result\" " + ex.toString());
+		}
+
+		if (jsonList == null) {
+			Logging.error("JSONReMapper: Error on getting list for key \"result\": jsonList is null");
+			return null;
 		}
 
 		JSONObject item = null;

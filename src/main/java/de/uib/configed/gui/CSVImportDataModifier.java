@@ -178,6 +178,7 @@ public class CSVImportDataModifier {
 				writer.close();
 			} catch (IOException e) {
 				Logging.error("Unable to write to the CSV file", e);
+				return null;
 			}
 
 			return writer.toString();

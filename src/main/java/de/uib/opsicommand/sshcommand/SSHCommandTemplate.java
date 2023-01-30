@@ -378,7 +378,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	}
 
 	/**
-	 * Compares the position of SSHCommand_Templates. If it is equal compare by
+	 * Compares the position of SSHCommandTemplates. If it is equal compare by
 	 * menuText
 	 * 
 	 * @param compareCom Compares the compareCom to this command
@@ -386,6 +386,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 */
 	@Override
 	public int compareTo(SSHCommandTemplate compareCom) {
+
 		int dif = this.position - compareCom.getPriority();
 		if (dif == 0)
 			return this.menuText.compareTo(compareCom.getMenuText());
@@ -413,6 +414,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	}
 
 	public boolean equals(SSHCommandTemplate com) {
+
 		if (!this.getId().trim().equals(com.getId().trim())) {
 			Logging.debug(this, "equals different id's " + this.getId() + " != " + com.getId() + "");
 			return false;

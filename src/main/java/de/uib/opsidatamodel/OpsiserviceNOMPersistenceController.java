@@ -1115,7 +1115,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		result = result && (getConnectionState().equals(ConnectionState.CONNECTED));
+		result = result && getConnectionState().getState() == ConnectionState.CONNECTED;
 
 		Logging.info(this, "tried to make connection result " + result);
 
@@ -2917,10 +2917,14 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public List<Map<String, Object>> getOpsiHWAuditConf() {
-		if (hwAuditConf == null || !hwAuditConf.containsKey("")) {
-			hwAuditConf.put("", exec.getListOfMapsOfListsOfMaps(new OpsiMethodCall(
+		if (hwAuditConf == null) {
+			Logging.warning("hwAuditConf is null in getOpsiHWAuditConf");
+			return null;
+		}
 
-					"auditHardware_getConfig", new String[] {})));
+		else if (!hwAuditConf.containsKey("")) {
+			hwAuditConf.put("",
+					exec.getListOfMapsOfListsOfMaps(new OpsiMethodCall("auditHardware_getConfig", new String[] {})));
 			if (hwAuditConf.get("") == null) {
 				Logging.warning(this, "got no hardware config");
 			}
@@ -2931,11 +2935,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public List<Map<String, Object>> getOpsiHWAuditConf(String locale) {
-		if (!hwAuditConf.containsKey(locale)) {
-			hwAuditConf.put(locale, exec.getListOfMapsOfListsOfMaps(new OpsiMethodCall(
-
-					"auditHardware_getConfig", new String[] { locale })));
-		}
+		hwAuditConf.putIfAbsent(locale, exec
+				.getListOfMapsOfListsOfMaps(new OpsiMethodCall("auditHardware_getConfig", new String[] { locale })));
 
 		return hwAuditConf.get(locale);
 	}
@@ -4665,6 +4666,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	// send productPropertyState updates and clear the collections for standard
 	// collections
+	@Override
 	public void setProductproperties() {
 		setProductproperties(productPropertyStateUpdateCollection, productPropertyStateDeleteCollection);
 	}
