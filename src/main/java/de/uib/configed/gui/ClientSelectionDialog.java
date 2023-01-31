@@ -176,8 +176,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			manager.loadSearch(name);
 			loadFromManager();
 			SavedSearch search = manager.getSavedSearches().get(name);
-			saveNameField.setText(search.name);
-			saveDescriptionField.setText(search.description);
+			saveNameField.setText(search.getName());
+			saveDescriptionField.setText(search.getDescription());
 		} catch (Exception exc) {
 			Logging.error("Could not load search!", exc);
 		}

@@ -50,7 +50,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 	protected boolean getAttention;
 	protected boolean mouseOver;
 	protected List<ActionListener> actionListeners;
-	public String description;
+	private String description;
 
 	/**
 	 * @param desc           : a description used for tooltips and event action

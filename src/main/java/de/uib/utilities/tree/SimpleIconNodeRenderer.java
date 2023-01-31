@@ -11,11 +11,11 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import de.uib.configed.Globals;
 
 public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
-	public static int labelWidth = 300;
-	public static int labelHeight = 22;
+	private static final int LABEL_WIDTH = 300;
+	private static final int LABEL_HEIGHT = 22;
+
 	protected Font emphasized;
 	protected Font standard;
-	public static Dimension preferred = new Dimension(labelWidth, labelHeight);
 
 	public SimpleIconNodeRenderer() {
 		super();
@@ -31,7 +31,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		setTextSelectionColor(Globals.lightBlack);
 		setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
-		setPreferredSize(preferred);
+		setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
 	}
 
 	@Override

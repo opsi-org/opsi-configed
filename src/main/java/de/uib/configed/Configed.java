@@ -189,7 +189,7 @@ public class Configed {
 
 	// --------------------------------------------------------------------------------------------------------
 
-	private static String getYNforBoolean(Boolean b) {
+	private static String getYNforBoolean(boolean b) {
 		if (b)
 			return "y";
 		else
@@ -315,6 +315,8 @@ public class Configed {
 	public Configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
 			final String paramClient, final String paramClientgroup, final Integer paramTab) {
 
+		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
+
 		UncaughtExceptionHandler errorHandler = new UncaughtExceptionHandlerLocalized();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
@@ -346,14 +348,18 @@ public class Configed {
 		Logging.info("getLocales: " + existingLocales);
 		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
 
+		startWithLocale();
+	}
+
+	private static void setParamValues(String paramHost, String paramUser, String paramPassword, Integer paramTab,
+			String paramClient, String paramClientgroup) {
+
 		Configed.paramHost = paramHost;
 		Configed.paramUser = paramUser;
 		Configed.paramPassword = paramPassword;
 		Configed.paramTab = paramTab;
 		Configed.paramClient = paramClient;
 		Configed.paramClientgroup = paramClientgroup;
-
-		startWithLocale();
 	}
 
 	protected void revalidate() {
@@ -476,16 +482,16 @@ public class Configed {
 					i = i + 2;
 				} else if (args[i].equals("--gzip")) {
 
-					de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
+					JSONthroughHTTP.compressTransmission = true;
 					i = i + 1;
 
 					if (isValue(args, i)) {
 
 						if (args[i].equalsIgnoreCase("Y")) {
 
-							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
+							JSONthroughHTTP.compressTransmission = true;
 						} else if (args[i].equalsIgnoreCase("N")) {
-							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = false;
+							JSONthroughHTTP.compressTransmission = false;
 
 						} else {
 							usage();

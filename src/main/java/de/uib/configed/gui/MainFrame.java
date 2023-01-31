@@ -388,7 +388,7 @@ public class MainFrame extends JFrame
 	BorderLayout borderLayout1 = new BorderLayout();
 	GroupLayout contentLayout;
 	JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
-	public JSplitPane panelClientSelection;
+	private JSplitPane panelClientSelection;
 
 	private HostsStatusPanel statusPane;
 
@@ -480,7 +480,7 @@ public class MainFrame extends JFrame
 	int prefClientPaneW = 100;
 	int clientPaneW;
 
-	public Container baseContainer;
+	private Container baseContainer;
 
 	private LicenseDash licenseDash;
 

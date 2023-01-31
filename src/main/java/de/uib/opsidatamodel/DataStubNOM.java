@@ -982,7 +982,7 @@ public class DataStubNOM extends DataStub {
 				AuditSoftwareXLicencePool.SERVICE_ATTRIBUTES, new HashMap<>(), // callFilter
 				"auditSoftwareToLicensePool_getObjects");
 
-		auditSoftwareXLicencePool = new AuditSoftwareXLicencePool(getSoftwareList());
+		auditSoftwareXLicencePool = new AuditSoftwareXLicencePool();
 
 		for (Map<String, Object> map : retrieved) {
 
