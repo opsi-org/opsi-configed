@@ -16,13 +16,13 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	private String title = "File Upload";
 	private String baseName = "File Upload";
-	public String description = "# write file to opsi-server";
-	public String targetPath = "";
-	public String targetFilename = "";
-	public String sourcePath = "";
-	public String fullSourcePath = "";
-	public String sourceFilename = "";
-	public boolean overwriteMode = true;
+	private String description = "# write file to opsi-server";
+	private String targetPath = "";
+	private String targetFilename = "";
+	private String sourcePath = "";
+	private String fullSourcePath = "";
+	private String sourceFilename = "";
+	private boolean overwriteMode = true;
 
 	boolean showOutputDialog = true;
 

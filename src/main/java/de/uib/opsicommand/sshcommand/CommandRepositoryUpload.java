@@ -14,17 +14,9 @@ public class CommandRepositoryUpload extends CommandSFTPUpload
 		setTitle("Repo-file Upload");
 		setBaseName("Repo-file Upload");
 		command = "Repo-file Upload (via sftp)";
-		description = "# write Repo-file file to opsi-server";
-		targetPath = "/etc/opsi/package-updater.repos.d/";
-		targetFilename = "";
-	}
-
-	@Override
-	public String getDescription() {
-		if (description.equals(""))
-			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
-					+ " on connected server";
-		return description;
+		setDescription("# write Repo-file file to opsi-server");
+		setTargetPath("/etc/opsi/package-updater.repos.d/");
+		setTargetFilename("");
 	}
 
 	@Override

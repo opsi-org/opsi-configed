@@ -18,17 +18,9 @@ public class CommandModulesUpload extends CommandSFTPUpload
 		setTitle("Modules Upload");
 		setBaseName("Modules Upload");
 		command = "Modules Upload (via sftp)";
-		description = "# write modules file to opsi-server";
-		targetPath = "/etc/opsi/";
-		targetFilename = DEFAULT_FILENAME;
-	}
-
-	@Override
-	public String getDescription() {
-		if (description.equals(""))
-			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
-					+ " on connected server";
-		return description;
+		setDescription("# write modules file to opsi-server");
+		setTargetPath("/etc/opsi/");
+		setTargetFilename(DEFAULT_FILENAME);
 	}
 
 	@Override

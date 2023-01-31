@@ -50,7 +50,7 @@ public class DataStubNOM extends DataStub {
 
 	OpsiserviceNOMPersistenceController persist;
 
-	public static Integer classCounter = 0;
+	protected static Integer classCounter = 0;
 
 	public DataStubNOM(OpsiserviceNOMPersistenceController controller) {
 		this.persist = controller;
@@ -1079,7 +1079,7 @@ public class DataStubNOM extends DataStub {
 
 		licencepools = new TreeMap<>();
 
-		if (persist.withLicenceManagement) {
+		if (persist.isWithLicenceManagement()) {
 			String[] attributes = new String[] { LicencepoolEntry.ID_KEY, LicencepoolEntry.DESCRIPTION_KEY };
 
 			persist.notifyDataLoadingObservers(
@@ -1145,7 +1145,7 @@ public class DataStubNOM extends DataStub {
 		contractsToNotify = new TreeMap<>();
 		contractsExpired = new TreeMap<>();
 
-		if (persist.withLicenceManagement) {
+		if (persist.isWithLicenceManagement()) {
 			persist.notifyDataLoadingObservers(
 					Configed.getResourceValue("LoadingObserver.loadtable") + " software license");
 
@@ -1209,7 +1209,7 @@ public class DataStubNOM extends DataStub {
 
 		licences = new HashMap<>();
 
-		if (persist.withLicenceManagement) {
+		if (persist.isWithLicenceManagement()) {
 			persist.notifyDataLoadingObservers(
 					Configed.getResourceValue("LoadingObserver.loadtable") + " software license");
 
@@ -1244,7 +1244,7 @@ public class DataStubNOM extends DataStub {
 
 		licenceUsabilities = new ArrayList<>();
 
-		if (persist.withLicenceManagement) {
+		if (persist.isWithLicenceManagement()) {
 			persist.notifyDataLoadingObservers(
 					Configed.getResourceValue("LoadingObserver.loadtable") + " software_license_TO_license_pool");
 
@@ -1282,7 +1282,7 @@ public class DataStubNOM extends DataStub {
 
 		licenceUsages = new ArrayList<>();
 
-		if (persist.withLicenceManagement) {
+		if (persist.isWithLicenceManagement()) {
 			persist.notifyDataLoadingObservers(
 					Configed.getResourceValue("LoadingObserver.loadtable") + " license_on_client");
 

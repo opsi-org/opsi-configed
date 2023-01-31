@@ -303,7 +303,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected String opsiVersion;
 
-	public boolean withLicenceManagement = false;
+	protected boolean withLicenceManagement = false;
 	protected boolean withLocalImaging = false;
 
 	protected boolean withMySQL = false;
