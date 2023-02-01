@@ -789,9 +789,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			Logging.debug(this, "deleteRow values " + oldValues);
 			updates.add(itemFactory.produceDeleteItem(oldValues));
 
-			if (updatedRows.indexOf(selection[i]) > -1) {
-				Logging.debug(this, "deleteRows, remove from updatedRows  " + updatedRows.indexOf(i));
-				updatedRows.remove(selection[i]);
+			if (updatedRows.contains(selection[i])) {
+				Logging.debug(this, "deleteRows, remove from updatedRows  " + selection[i]);
+				updatedRows.remove((Integer) selection[i]);
 			}
 		}
 

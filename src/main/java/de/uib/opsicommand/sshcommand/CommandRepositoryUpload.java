@@ -10,32 +10,13 @@ public class CommandRepositoryUpload extends CommandSFTPUpload
 // implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand
 {
 
-	public CommandRepositoryUpload(String title) {
-		super();
-		setTitle(title);
-		title = "Repo-file Upload";
-		baseName = "Repo-file Upload";
-		command = "Repo-file Upload (via sftp)";
-		description = "# write Repo-file file to opsi-server";
-		targetPath = "/etc/opsi/package-updater.repos.d/";
-		targetFilename = "";
-	}
-
 	public CommandRepositoryUpload() {
-		this("");
-	}
-
-	@Override
-	public String getTitle() {
-		return title;
-	}
-
-	@Override
-	public String getDescription() {
-		if (description.equals(""))
-			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
-					+ " on connected server";
-		return description;
+		setTitle("Repo-file Upload");
+		setBaseName("Repo-file Upload");
+		command = "Repo-file Upload (via sftp)";
+		setDescription("# write Repo-file file to opsi-server");
+		setTargetPath("/etc/opsi/package-updater.repos.d/");
+		setTargetFilename("");
 	}
 
 	@Override

@@ -35,7 +35,6 @@ public class CheckedDocument extends PlainDocument {
 				s.append(cCorrected);
 				result = true;
 				break;
-
 			}
 		}
 
@@ -83,5 +82,4 @@ public class CheckedDocument extends PlainDocument {
 		if (checkMask)
 			applyMask(a);
 	}
-
 }

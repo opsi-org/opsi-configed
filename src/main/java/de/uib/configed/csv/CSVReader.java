@@ -69,7 +69,7 @@ public class CSVReader {
 		for (List<CSVToken> lineOfCSVToken : tokens) {
 			String[] parsedLine = parser.parseLine(lineOfCSVToken);
 
-			if (parser.isMultiLine) {
+			if (parser.isParserMultiLine()) {
 				pendingLine = joinArrays(pendingLine, parsedLine);
 			} else {
 				if (pendingLine != null && pendingLine.length != 0) {

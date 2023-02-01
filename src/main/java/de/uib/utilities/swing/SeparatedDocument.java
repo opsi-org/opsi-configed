@@ -1,3 +1,10 @@
+/**
+ * SeparatedDocument.java
+ * Copyright:     Copyright (c) 2006-2015
+ * Organisation:  uib
+ * @author Rupert Roeder, Anna Sucher
+ */
+
 package de.uib.utilities.swing;
 
 import javax.swing.text.AttributeSet;
@@ -11,7 +18,6 @@ public class SeparatedDocument extends CheckedDocument {
 
 	public SeparatedDocument(char[] allowedChars, int realSize, char separatingChar, int partsLength,
 			boolean checkMask) {
-		super();
 		this.allowedChars = allowedChars;
 		this.separator = "" + separatingChar;
 		this.partsLength = partsLength;
@@ -33,7 +39,6 @@ public class SeparatedDocument extends CheckedDocument {
 					if (checkMask && (getText(offset, 1).equals(separator)))
 						remove(offset, 1); // remove old separators
 
-					remove(offset, 1); // remove one char of existing chars
 				} catch (BadLocationException ex) {
 					Logging.warning(this, "Exception with location in giveAllowedCharacters", ex);
 				}
@@ -41,7 +46,6 @@ public class SeparatedDocument extends CheckedDocument {
 		}
 
 		return textBuf.toString();
-		//
 	}
 
 	@Override

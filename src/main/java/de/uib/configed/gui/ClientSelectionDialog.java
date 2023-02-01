@@ -176,8 +176,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			manager.loadSearch(name);
 			loadFromManager();
 			SavedSearch search = manager.getSavedSearches().get(name);
-			saveNameField.setText(search.name);
-			saveDescriptionField.setText(search.description);
+			saveNameField.setText(search.getName());
+			saveDescriptionField.setText(search.getDescription());
 		} catch (Exception exc) {
 			Logging.error("Could not load search!", exc);
 		}
@@ -1161,15 +1161,15 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class SimpleGroup {
-		public SelectElement element;
-		public IconAsButton negateButton;
-		public AndOrSelectButtonByIcon connectionType;
-		public JLabel elementLabel;
-		public JComponent operationComponent; // may be JLabel or JComboBox
-		public JComponent dataComponent;
-		public GroupLayout.ParallelGroup vRow;
-		public IconAsButton openParenthesis;
-		public IconAsButton closeParenthesis;
+		private SelectElement element;
+		private IconAsButton negateButton;
+		private AndOrSelectButtonByIcon connectionType;
+		private JLabel elementLabel;
+		private JComponent operationComponent; // may be JLabel or JComboBox
+		private JComponent dataComponent;
+		private GroupLayout.ParallelGroup vRow;
+		private IconAsButton openParenthesis;
+		private IconAsButton closeParenthesis;
 	}
 
 	private enum GroupType {

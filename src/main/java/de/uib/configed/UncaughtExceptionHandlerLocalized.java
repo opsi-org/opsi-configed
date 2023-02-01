@@ -8,14 +8,7 @@ public class UncaughtExceptionHandlerLocalized extends de.uib.utilities.logging.
 	public void uncaughtException(Thread t, Throwable e) {
 		WaitCursor.stopAll();
 
-		if (Configed.fProgress != null) {
-			try {
-				Configed.fProgress.stopWaiting();
-				Configed.fProgress = null;
-			} catch (Exception ex) {
-				Logging.debug(this, "Exception " + ex);
-			}
-		}
+		ConfigedMain.setProgressComponentStopWaiting();
 
 		if (e instanceof Exception) {
 			Logging.warning("Error in thread " + t, e);

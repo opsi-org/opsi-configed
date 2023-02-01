@@ -21,7 +21,7 @@ public class CSVParser {
 	private CSVFormat format;
 
 	private boolean inQuotes = false;
-	public boolean isMultiLine = false;
+	private boolean isMultiLine = false;
 
 	private boolean ignoreErrors = false;
 
@@ -165,19 +165,12 @@ public class CSVParser {
 		return format;
 	}
 
-	public void setFormat(CSVFormat format) {
-		this.format = format;
-	}
-
-	public boolean getIgnoreErrors() {
-		return ignoreErrors;
-	}
-
 	public void setIgnoreErrors(boolean ignoreErrors) {
 		this.ignoreErrors = ignoreErrors;
 	}
 
-	public boolean getIsMultiLine() {
+	public boolean isParserMultiLine() {
 		return isMultiLine;
 	}
+
 }

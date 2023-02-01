@@ -165,18 +165,20 @@ public class Logging implements LogEventSubject
 				}
 
 				for (int i = numberOfKeptLogFiles - 1; i > 0; i--) {
-					if (logFiles[i - 1].exists()) {
-						logFiles[i - 1].renameTo(logFiles[i]);
-					}
+					if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i]))
+						Logging.warning("renaming logfile failed for file: " + logFiles[i - 1]);
+
 				}
 
-				if (logFile.exists())
-					logFile.renameTo(logFiles[0]);
+				if (logFile.exists() && !logFile.renameTo(logFiles[0]))
+					Logging.warning("renaming logfile failed for file: " + logFiles[0]);
 			}
 
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename));
 			logFilenameInUse = logFilename;
-		} catch (Exception ex) {
+		} catch (
+
+		Exception ex) {
 			System.out.print(ex);
 			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
 		}

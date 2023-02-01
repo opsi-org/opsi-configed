@@ -28,7 +28,6 @@ import de.uib.utilities.logging.Logging;
 public class SSHMakeProductFileDialog extends FGeneralDialog {
 	// In dieser Klasse gibt es Linux-Befehle (folgend), die zu Konstanten
 	// ausgelagert werden sollen (noch nicht funktioniert)
-	public JLabel jLabelExitCode = new JLabel();
 	private JLabel jLabelProductVersionControlFile;
 	private JLabel jLabelPackageVersionControlFile;
 	private JTextField jTextFieldPckageVersion;

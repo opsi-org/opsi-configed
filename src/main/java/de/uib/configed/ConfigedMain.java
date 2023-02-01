@@ -152,6 +152,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	static final String TEMPGROUPNAME = "";
 
+	private static FLoadingWaiter fProgress;
+
 	PersistenceController persist;
 
 	// global table providers for licence management
@@ -457,8 +459,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
-			if (Configed.fProgress != null) {
-				Configed.fProgress.actAfterWaiting();
+			if (fProgress != null) {
+				fProgress.actAfterWaiting();
 			}
 
 			if (Boolean.TRUE
@@ -500,8 +502,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				savedStatesDir = new File(directoryName);
 				Logging.info(this, "writing saved states, created file " + savedStatesDir);
 
-				if (!savedStatesDir.mkdirs())
-					Logging.warning(this, "mkdirs for saved states failed");
+				if (!savedStatesDir.exists() && !savedStatesDir.mkdirs()) {
+					Logging.warning(this, "mkdirs for saved states failed, for File " + savedStatesDir);
+				}
 
 				Logging.info(this, "writing saved states, got dirs");
 
@@ -525,7 +528,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "writing saved states to " + getSavedStatesDefaultLocation());
 			savedStatesDir = new File(getSavedStatesDirectoryName(getSavedStatesDefaultLocation()));
 
-			if (!savedStatesDir.mkdirs())
+			if (!savedStatesDir.exists() && !savedStatesDir.mkdirs())
 				Logging.warning(this, "mkdirs for saved states failed, in savedStatesDefaultLocation");
 
 			if (!savedStatesDir.setWritable(true, true))
@@ -538,7 +541,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		try {
 			Configed.savedStates.load();
 		} catch (IOException iox) {
-			Logging.info(this, "saved states file could not be loaded");
+			Logging.warning(this, "saved states file could not be loaded");
 		}
 
 		Integer oldUsageCount = Integer.valueOf(Configed.savedStates.saveUsageCount.deserialize());
@@ -659,9 +662,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.syncTables();
 
-		Configed.fProgress = new FLoadingWaiter(dpass,
-				Globals.APPNAME + " " + Configed.getResourceValue("FWaitProgress.title"));
-		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(Configed.fProgress);
+		fProgress = new FLoadingWaiter(dpass, Globals.APPNAME + " " + Configed.getResourceValue("FWaitProgress.title"));
+		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(fProgress);
 
 		if (opsiExpiresDate != null) {
 			Calendar nowCal = Calendar.getInstance();
@@ -681,7 +683,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-		Configed.fProgress.startWaiting();
+		fProgress.startWaiting();
 
 		new Thread() {
 			@Override
@@ -692,11 +694,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				waitCursorInitGui.stop();
 				checkErrorList();
-				if (Configed.fProgress == null) {
+				if (fProgress == null) {
 					Logging.warning(this, "configed.fProgress == null although it should have been started");
 				} else {
-					Configed.fProgress.setReady();
-					Configed.fProgress.actAfterWaiting();
+					fProgress.setReady();
+					fProgress.actAfterWaiting();
 				}
 
 			}
@@ -1337,7 +1339,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void locateAndDisplay() {
-		Rectangle screenRectangle = Configed.fProgress.getGraphicsConfiguration().getBounds();
+		Rectangle screenRectangle = fProgress.getGraphicsConfiguration().getBounds();
 
 		Logging.info(this, "set size and location of mainFrame");
 
@@ -3148,6 +3150,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return false;
 		}
 
+	}
+
+	public static void setProgressComponentStopWaiting() {
+		if (fProgress != null) {
+			try {
+				fProgress.stopWaiting();
+				fProgress = null;
+			} catch (Exception ex) {
+				Logging.debug("Exception " + ex);
+			}
+		}
 	}
 
 	protected void checkHwInfo() {

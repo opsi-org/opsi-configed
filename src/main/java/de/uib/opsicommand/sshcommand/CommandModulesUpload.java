@@ -14,31 +14,13 @@ public class CommandModulesUpload extends CommandSFTPUpload
 	public static final String UNOFFICIAL_MODULES_DIRECTORY = "/etc/opsi/modules.d/";
 	public static final String DEFAULT_FILENAME = "modules";
 
-	public CommandModulesUpload(String title) {
-		setTitle(title);
-		title = "Modules Upload";
-		baseName = "Modules Upload";
-		command = "Modules Upload (via sftp)";
-		description = "# write modules file to opsi-server";
-		targetPath = "/etc/opsi/";
-		targetFilename = DEFAULT_FILENAME;
-	}
-
 	public CommandModulesUpload() {
-		this("");
-	}
-
-	@Override
-	public String getTitle() {
-		return title;
-	}
-
-	@Override
-	public String getDescription() {
-		if (description.equals(""))
-			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
-					+ " on connected server";
-		return description;
+		setTitle("Modules Upload");
+		setBaseName("Modules Upload");
+		command = "Modules Upload (via sftp)";
+		setDescription("# write modules file to opsi-server");
+		setTargetPath("/etc/opsi/");
+		setTargetFilename(DEFAULT_FILENAME);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
@@ -18,9 +19,9 @@ public class ActivityPanel extends JPanel implements Runnable {
 	Thread colorSwitching;
 
 	/** sets width = 30 pixel */
-	public static int w = 30;
+	private static final int WIDTH = 30;
 	/** sets height = a0 pixel */
-	public static int h = 10;
+	private static final int HEIGHT = 10;
 
 	private static final int NO_OF_PARTS = 4;
 	/** an List for panels */
@@ -31,9 +32,10 @@ public class ActivityPanel extends JPanel implements Runnable {
 	/** inactive status is -1 */
 	public static final int INACTIVE = -1;
 	/** a blueGrey LineBorder */
-	public static javax.swing.border.LineBorder lineBorderActive;
+	private static final LineBorder lineBorderActive = new LineBorder(Globals.blueGrey, 1, true);
+
 	/** a blackLightBlue LineBorder */
-	public static javax.swing.border.LineBorder lineBorderInactive;
+	private static final LineBorder lineBorderInactive = new LineBorder(Globals.BACKGROUND_COLOR_7, 1, true);
 
 	/**
 	 * call the "initGui" method
@@ -73,7 +75,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 			{
 
-				paintImmediately(0, 0, w, h); // class cast exceptions mit sleepingMS = 50 if not event dispatch thread
+				paintImmediately(0, 0, WIDTH, HEIGHT); // class cast exceptions mit sleepingMS = 50 if not event dispatch thread
 			}
 
 		} catch (Exception strange) {
@@ -138,15 +140,13 @@ public class ActivityPanel extends JPanel implements Runnable {
 	}
 
 	protected void initGui() {
-		lineBorderInactive = new javax.swing.border.LineBorder(Globals.BACKGROUND_COLOR_7, 1, true);
-		lineBorderActive = new javax.swing.border.LineBorder(Globals.blueGrey, 1, true);
 		Logging.debug(this, "starting");
 		setOpaque(true);
 		setBorder(lineBorderInactive);
 		colors = new Color[2];
 		colors[1] = Globals.opsiLogoBlue;
 		colors[0] = Globals.opsiLogoLightBlue;
-		setPreferredSize(new Dimension(w, h));
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
 		partPanels = new ArrayList<>();
 
@@ -180,12 +180,12 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
 		for (int j = 0; j < NO_OF_PARTS; j++)
-			hGroup.addComponent(partPanels.get(j), w / NO_OF_PARTS, w / NO_OF_PARTS, w / NO_OF_PARTS);
+			hGroup.addComponent(partPanels.get(j), WIDTH / NO_OF_PARTS, WIDTH / NO_OF_PARTS, WIDTH / NO_OF_PARTS);
 		layout.setHorizontalGroup(hGroup);
 
 		GroupLayout.ParallelGroup vGroup = layout.createParallelGroup();
 		for (int j = 0; j < NO_OF_PARTS; j++)
-			vGroup.addComponent(partPanels.get(j), h - 2, h - 2, h - 2);
+			vGroup.addComponent(partPanels.get(j), HEIGHT - 2, HEIGHT - 2, HEIGHT - 2);
 		layout.setVerticalGroup(vGroup);
 	}
 

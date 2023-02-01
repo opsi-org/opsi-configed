@@ -1,6 +1,7 @@
 package de.uib.configed.tree;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Insets;
 
 import javax.swing.JTree;
@@ -9,8 +10,8 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import de.uib.configed.Globals;
 
 public class IconNodeRenderer extends DefaultTreeCellRenderer {
-	public static int labelWidth = 200;
-	public static int labelHeight = 20;
+	protected static final int LABEL_WIDTH = 200;
+	protected static final int LABEL_HEIGHT = 20;
 
 	public IconNodeRenderer() {
 		super();
@@ -19,7 +20,7 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 		setTextSelectionColor(Globals.lightBlack);
 		setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
-		setPreferredSize(new java.awt.Dimension(labelWidth, labelHeight));
+		setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
 	}
 
 	@Override
