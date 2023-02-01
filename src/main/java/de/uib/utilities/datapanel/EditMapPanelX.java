@@ -54,7 +54,7 @@ import de.uib.utilities.table.gui.SensitiveCellEditor;
 public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 // works on a map of pairs of type String - List
 {
-	public static Integer objectCounter = 0;
+	private static Integer objectCounter = 0;
 	JScrollPane jScrollPane;
 	JTable table;
 
@@ -320,7 +320,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		}
 
 		return result;
-
 	}
 
 	@Override

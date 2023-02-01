@@ -84,7 +84,7 @@ public class PanelProductProperties extends JSplitPane
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, false, false);
 
-		Logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
+		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());

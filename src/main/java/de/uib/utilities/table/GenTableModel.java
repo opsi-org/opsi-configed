@@ -419,16 +419,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			saveUpdatesSize = updates.size();
 	}
 
-	public void threadedReset(final de.uib.utilities.thread.ReadyFlag flag) {
-		new Thread() {
-			@Override
-			public void run() {
-				reset();
-				flag.ready = true;
-			}
-		}.start();
-	}
-
 	/**
 	 * sets data to the source values (if model is not valid they are
 	 * recollected) clears update collection

@@ -15,9 +15,9 @@ public class UserConfigModule {
 	private Set<String> boolKeys;
 	private Set<String> listKeys;
 
-	public Map<String, Boolean> booleanMap;
-	public Map<String, List<Object>> valuesMap;
-	public Map<String, List<Object>> possibleValuesMap;
+	private Map<String, Boolean> booleanMap;
+	private Map<String, List<Object>> valuesMap;
+	private Map<String, List<Object>> possibleValuesMap;
 
 	protected UserConfigModule(String userName) {
 		this(userName, null);
@@ -87,7 +87,10 @@ public class UserConfigModule {
 
 		Logging.info(this, "for user " + username + " setBooleanValue " + key + " : " + val);
 		booleanMap.put(key, val);
+	}
 
+	public Map<String, Boolean> getBooleanMap() {
+		return booleanMap;
 	}
 
 	private void extractKeys(final Map<String, ? extends Object> map, Set<String> result) {
@@ -105,7 +108,10 @@ public class UserConfigModule {
 			Logging.info("UserOpsiPermisson : still missing key " + key);
 
 		valuesMap.put(key, values);
+	}
 
+	public Map<String, List<Object>> getValuesMap() {
+		return valuesMap;
 	}
 
 	public void setPossibleValues(String key, List<Object> possibleValues) {
@@ -117,7 +123,10 @@ public class UserConfigModule {
 			Logging.info("UserOpsiPermisson : still missing key " + key);
 
 		possibleValuesMap.put(key, possibleValues);
+	}
 
+	public Map<String, List<Object>> getPossibleValuesMap() {
+		return possibleValuesMap;
 	}
 
 }

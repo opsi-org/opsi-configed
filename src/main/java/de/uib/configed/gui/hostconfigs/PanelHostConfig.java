@@ -81,7 +81,6 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	protected void buildPanel() {
-		// boolean serverEditing = (ConfigedMain.getEditingTarget() ==
 
 		label = new JLabel(Configed.getResourceValue("MainFrame.jLabel_Config"));
 
