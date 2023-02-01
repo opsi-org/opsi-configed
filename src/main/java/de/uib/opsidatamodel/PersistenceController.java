@@ -506,7 +506,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract boolean saveHwColumnConfig(Map<String, Map<String, Boolean>> updateItems);
 
 	/* log files */
-	public abstract String[] getLogTypes();
 
 	public abstract Map<String, String> getEmptyLogfiles();
 

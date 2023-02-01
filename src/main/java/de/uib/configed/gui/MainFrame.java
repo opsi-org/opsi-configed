@@ -2452,7 +2452,7 @@ public class MainFrame extends JFrame
 				Globals.createImageIcon("images/swaudit.png", ""), showSoftwareLog,
 				Configed.getResourceValue("MainFrame.jPanel_softwareLog"), ConfigedMain.VIEW_SOFTWARE_INFO);
 
-		showLogfiles = new PanelTabbedDocuments(Globals.logtypes,
+		showLogfiles = new PanelTabbedDocuments(Globals.getLogTypes(),
 				Configed.getResourceValue("MainFrame.DefaultTextForLogfiles")) {
 			@Override
 			public void loadDocument(String logtype) {
@@ -2472,7 +2472,7 @@ public class MainFrame extends JFrame
 
 				Logging.debug(this, " new logfiles tabindex " + showLogfiles.getSelectedIndex());
 
-				String logtype = Globals.logtypes[showLogfiles.getSelectedIndex()];
+				String logtype = Globals.getLogType(showLogfiles.getSelectedIndex());
 
 				// logfile empty?
 				if (!configedMain.logfileExists(logtype))
@@ -3676,7 +3676,7 @@ public class MainFrame extends JFrame
 	}
 
 	public void setLogview(String logtype) {
-		int i = Arrays.asList(Globals.logtypes).indexOf(logtype);
+		int i = Arrays.asList(Globals.getLogTypes()).indexOf(logtype);
 		if (i < 0)
 			return;
 

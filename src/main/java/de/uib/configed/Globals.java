@@ -413,10 +413,33 @@ public class Globals {
 	public static final int HFIRST_GAP = HGAP_SIZE * 3;
 	public static final int FIRST_LABEL_WIDTH = 250;
 
-	public static final String[] logtypes = new String[] { "clientconnect", "instlog", "userlogin", "bootimage",
+	private static final String[] logTypes = new String[] { "clientconnect", "instlog", "userlogin", "bootimage",
 			"opsiconfd" };
-	public static final int[] maxLogSizes = new int[] { 4 * 1024 * 1024, 8 * 1024 * 1024, 8 * 1024 * 1024, 0,
+
+	public static String[] getLogTypes() {
+		return logTypes;
+	}
+
+	public static String getLogType(int index) {
+		if (index < 0 || index >= logTypes.length)
+			return "";
+
+		else
+			return logTypes[index];
+	}
+
+	private static final int[] maxLogSizes = new int[] { 4 * 1024 * 1024, 8 * 1024 * 1024, 8 * 1024 * 1024, 0,
 			1 * 1024 * 1024 };
+
+	public static int getMaxLogSize(int index) {
+		if (index < 0 || index >= maxLogSizes.length) {
+			Logging.warning("error with index for maxLogSizes");
+			return -1;
+		}
+
+		else
+			return maxLogSizes[index];
+	}
 
 	// be given
 

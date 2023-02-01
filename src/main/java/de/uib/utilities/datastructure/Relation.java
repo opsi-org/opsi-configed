@@ -2,28 +2,19 @@ package de.uib.utilities.datastructure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Relation extends ArrayList<StringValuedRelationElement> {
 	protected final List<String> attributes;
-	protected final Set<String> attributeSet;
 
 	protected Map<String, Map<String, Relation>> functionByAttribute;
 
 	public Relation(List<String> attributes) {
 		super();
 		this.attributes = attributes;
-		attributeSet = new HashSet<>(attributes);
 
 		functionByAttribute = new HashMap<>();
-
-	}
-
-	public Set<String> getAttributeSet() {
-		return attributeSet;
 	}
 
 	public List<String> getAttributes() {
@@ -57,7 +48,5 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 		}
 
 		return function;
-
 	}
-
 }

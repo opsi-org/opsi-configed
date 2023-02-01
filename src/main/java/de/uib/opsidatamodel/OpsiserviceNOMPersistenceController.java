@@ -179,8 +179,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private Map<String, List<String>> possibleActions; // product-->possibleActions
 
-	protected String[] logtypes;
-
 	protected List<Map<String, Object>> softwareAuditOnClients;
 
 	// key --> rowmap for auditSoftware
@@ -3488,17 +3486,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	@Override
-	public String[] getLogTypes() {
-		if (logtypes == null)
-			logtypes = Globals.logtypes;
-
-		return logtypes;
-	}
-
-	@Override
 	public Map<String, String> getEmptyLogfiles() {
 		logfiles = new HashMap<>();
-		String[] logtypes = getLogTypes();
+		String[] logtypes = Globals.getLogTypes();
 
 		for (int i = 0; i < logtypes.length; i++) {
 			logfiles.put(logtypes[i], "");
@@ -3509,13 +3499,13 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Map<String, String> getLogfiles(String clientId, String logtype) {
-		String[] logtypes = getLogTypes();
+		String[] logtypes = Globals.getLogTypes();
 
 		if (logfiles == null) {
 			getEmptyLogfiles();
 		}
 
-		int i = Arrays.asList(Globals.logtypes).indexOf(logtype);
+		int i = Arrays.asList(Globals.getLogTypes()).indexOf(logtype);
 		if (i < 0) {
 			Logging.error("illegal logtype: " + logtype);
 			return logfiles;
@@ -3526,15 +3516,15 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		String s = "";
 		try {
 
-			Logging.debug(this, "OpsiMethodCall readLog " + logtypes[i] + " max size " + Globals.maxLogSizes[i]);
+			Logging.debug(this, "OpsiMethodCall readLog " + logtypes[i] + " max size " + Globals.getMaxLogSize(i));
 
 			try {
 
-				if (Globals.maxLogSizes[i] == 0) {
+				if (Globals.getMaxLogSize(i) == 0) {
 					s = exec.getStringResult(new OpsiMethodCall("readLog", new String[] { logtype, clientId }));
 				} else {
 					s = exec.getStringResult(new OpsiMethodCall("readLog",
-							new String[] { logtype, clientId, String.valueOf(Globals.maxLogSizes[i]) }));
+							new String[] { logtype, clientId, String.valueOf(Globals.getMaxLogSize(i)) }));
 				}
 
 			} catch (java.lang.OutOfMemoryError e) {
@@ -3555,7 +3545,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public Map<String, String> getLogfiles(String clientId) {
 		logfiles = new HashMap<>();
 
-		String[] logtypes = getLogTypes();
+		String[] logtypes = Globals.getLogTypes();
 
 		for (int i = 0; i < logtypes.length; i++) {
 			getLogfiles(clientId, logtypes[i]);

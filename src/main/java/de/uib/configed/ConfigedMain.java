@@ -3261,8 +3261,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "getLogfilesUpdating " + logtypeToUpdate);
 
 		if (!checkOneClientSelected()) {
-			for (int i = 0; i < persist.getLogTypes().length; i++) {
-				logfiles.put(persist.getLogTypes()[i], Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
+			for (int i = 0; i < Globals.getLogTypes().length; i++) {
+				logfiles.put(Globals.getLogType(i), Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 			}
 
 			mainFrame.setLogfilePanel(logfiles);

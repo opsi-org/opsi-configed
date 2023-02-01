@@ -20,7 +20,7 @@ public class UserSshConfig extends UserConfigModule {
 
 	// addToBoolKeys
 	public static final Set<String> BOOL_KEYS = new LinkedHashSet<>();
-	{
+	static {
 		BOOL_KEYS.add(KEY_SSH_MENU_ACTIVE);
 		BOOL_KEYS.add(KEY_SSH_CONFIG_ACTIVE);
 		BOOL_KEYS.add(KEY_SSH_COMMANDCONTROL_ACTIVE);

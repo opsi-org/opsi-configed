@@ -50,8 +50,7 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 
 	protected void mergeColorize(Component comp, Object value) {
 
-		if // ( value instanceof ListMerger && !((ListMerger)value).hasCommonValue() )
-		(value == ListMerger.NO_COMMON_VALUE) {
+		if (value == ListMerger.NO_COMMON_VALUE) {
 
 			comp.setBackground(Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR);
 			comp.setForeground(Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR);
