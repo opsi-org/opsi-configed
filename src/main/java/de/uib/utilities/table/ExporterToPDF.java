@@ -68,7 +68,7 @@ public class ExporterToPDF extends ExportTable {
 		super(table, classNames);
 		extension = FILE_EXTENSION;
 		writeToFile = defaultFilename;
-		new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
+		document = new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
 	}
 
 	public ExporterToPDF(PanelGenEditTable table, List<String> classNames) {
@@ -110,6 +110,7 @@ public class ExporterToPDF extends ExportTable {
 			if (saveAction) {
 				if (fileName != null) {
 					try {
+						Logging.info(this, "filename for saving PDF: " + fileName);
 						File file = new File(fileName);
 						if (file.isDirectory())
 							Logging.error("no valid filename " + fileName);
