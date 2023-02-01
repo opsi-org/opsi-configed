@@ -336,14 +336,16 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		TreePopupMouseListener.deleteNodePosition = 2;
 
-		menuItemDeleteNode.addActionListener(actionEvent -> deleteNodes(getSelectionPaths()));
+		menuItemDeleteNode.addActionListener(actionEvent -> deleteNode(treePopupMouseListener.getPopupSourcePath()));
 		popupMenu.add(menuItemDeleteNode);
 
 		JMenuItem menuItemDeleteGroupNode = new JMenuItem(Configed.getResourceValue("ClientTree.deleteGroupNode"));
 
 		TreePopupMouseListener.deleteGroupNodePosition = 3;
 
-		menuItemDeleteGroupNode.addActionListener(actionEvent -> deleteNodes(getSelectionPaths()));
+		menuItemDeleteGroupNode
+				.addActionListener(actionEvent -> deleteNode(treePopupMouseListener.getPopupSourcePath()));
+
 		popupMenu.add(menuItemDeleteGroupNode);
 
 		JMenuItem menuItemActivateElements = new JMenuItem(Configed.getResourceValue("ClientTree.selectAllElements"));
@@ -641,53 +643,51 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 	}
 
-	protected boolean deleteNodes(TreePath[] paths) {
+	protected boolean deleteNode(TreePath path) {
 
-		if (paths == null || paths.length == 0)
+		if (path == null)
 			return false;
 
-		for (TreePath path : paths) {
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
 
-			String nodeID = (String) node.getUserObject();
+		String nodeID = (String) node.getUserObject();
 
-			GroupNode parent = (GroupNode) node.getParent();
+		GroupNode parent = (GroupNode) node.getParent();
 
-			if (groupNodes.get(nodeID) != null && groupNodes.get(nodeID).getParent() != parent) {
-				Logging.warning(this, "groupNodes.get(nodeID).getParent() != parent");
-				parent = (GroupNode) groupNodes.get(nodeID).getParent();
-			}
-
-			String parentID = (String) parent.getUserObject();
-
-			if (groupNodes.get(nodeID) != null) {
-
-				// found a group
-				int returnedOption = JOptionPane.showOptionDialog(Globals.mainContainer,
-						Configed.getResourceValue("ClientTree.deleteGroupWarning"),
-						Globals.APPNAME + " " + Configed.getResourceValue("ClientTree.deleteGroupWarningTitle"),
-						JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
-
-				if (returnedOption == JOptionPane.OK_OPTION) {
-					groupNodes.remove(nodeID);
-					groups.remove(nodeID);
-
-					deleteGroupWithSubgroups(node);
-					parent.remove(node);
-
-					getActivePaths().remove(path);
-					getActivePaths().add(path.getParentPath());
-
-					getModel().nodeStructureChanged(parent);
-				}
-
-			} else {
-				// client node
-				removeClientInternally(nodeID, parent);
-				removeObject2Group(nodeID, parentID);
-			}
+		if (groupNodes.get(nodeID) != null && groupNodes.get(nodeID).getParent() != parent) {
+			Logging.warning(this, "groupNodes.get(nodeID).getParent() != parent");
+			parent = (GroupNode) groupNodes.get(nodeID).getParent();
 		}
 
+		String parentID = (String) parent.getUserObject();
+
+		if (groupNodes.get(nodeID) != null) {
+
+			// found a group
+			int returnedOption = JOptionPane.showOptionDialog(Globals.mainContainer,
+					Configed.getResourceValue("ClientTree.deleteGroupWarning"),
+					Globals.APPNAME + " " + Configed.getResourceValue("ClientTree.deleteGroupWarningTitle"),
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+
+			if (returnedOption == JOptionPane.OK_OPTION) {
+				groupNodes.remove(nodeID);
+				groups.remove(nodeID);
+
+				deleteGroupWithSubgroups(node);
+				parent.remove(node);
+
+				getActivePaths().remove(path);
+				getActivePaths().add(path.getParentPath());
+
+				getModel().nodeStructureChanged(parent);
+			}
+
+		} else {
+			// client node
+			removeClientInternally(nodeID, parent);
+			removeObject2Group(nodeID, parentID);
+
+		}
 		return true;
 	}
 
