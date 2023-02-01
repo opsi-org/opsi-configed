@@ -1832,9 +1832,10 @@ public class MainFrame extends JFrame
 		macAddressField.addKeyListener(this);
 		macAddressField.addMouseListener(this);
 
-		ipAddressField = new JTextEditorField(new SeparatedDocument(
-				/* allowedChars */ new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.' }, 12, '.', 3,
-				false), "", 24);
+		ipAddressField = new JTextEditorField(
+				new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+						'.', 'a', 'b', 'c', 'd', 'e', 'f', ':' }, 28, Character.MIN_VALUE, 4, false),
+				"", 24);
 		ipAddressField.addKeyListener(this);
 		ipAddressField.addMouseListener(this);
 
