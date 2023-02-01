@@ -346,11 +346,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		for (String clientId : selectedClients) {
 
 			// check if productstates exist
+			allClientsProductStates.putIfAbsent(clientId, new HashMap<>());
 			Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
-			if (productStates == null) {
-				productStates = new HashMap<>();
-				allClientsProductStates.put(clientId, productStates);
-			}
 
 			// check if products for clients exist
 			for (int j = 0; j < productsV.size(); j++) {
@@ -536,17 +533,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		Logging.debug(this,
 				"setInstallationInfo for product, client, value " + product + ", " + clientId + ", " + value);
 
-		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.get(clientId);
-		if (changedStatesForClient == null) {
-			changedStatesForClient = new HashMap<>();
-			collectChangedStates.put(clientId, changedStatesForClient);
-		}
+		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.computeIfAbsent(clientId,
+				arg -> new HashMap<>());
 
-		Map<String, String> changedStatesForProduct = changedStatesForClient.get(product);
-		if (changedStatesForProduct == null) {
-			changedStatesForProduct = new HashMap<>();
-			changedStatesForClient.put(product, changedStatesForProduct);
-		}
+		Map<String, String> changedStatesForProduct = changedStatesForClient.computeIfAbsent(product,
+				arg -> new HashMap<>());
 
 		// reverse from putting together the values in ProductState
 
@@ -578,13 +569,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		if (changeEventCount2product2request == null)
 			changeEventCount2product2request = new HashMap<>();
 
-		Map<String, String> product2request = changeEventCount2product2request.get(onGoingCollectiveChangeEventCount);
-
-		if (product2request == null) {
-			product2request = new HashMap<>();
-			changeEventCount2product2request.put(onGoingCollectiveChangeEventCount, product2request);
-
-		}
+		Map<String, String> product2request = changeEventCount2product2request
+				.computeIfAbsent(onGoingCollectiveChangeEventCount, arg -> new HashMap<>());
 
 		Logging.debug(this, "checkForContradictingAssignments === product2request " + product2request);
 
@@ -662,17 +648,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	private void setChangedState(String clientId, String product, String stateType, String state) {
-		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.get(clientId);
-		if (changedStatesForClient == null) {
-			changedStatesForClient = new HashMap<>();
-			collectChangedStates.put(clientId, changedStatesForClient);
-		}
+		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.computeIfAbsent(clientId,
+				arg -> new HashMap<>());
 
-		Map<String, String> changedStatesForProduct = changedStatesForClient.get(product);
-		if (changedStatesForProduct == null) {
-			changedStatesForProduct = new HashMap<>();
-			changedStatesForClient.put(product, changedStatesForProduct);
-		}
+		Map<String, String> changedStatesForProduct = changedStatesForClient.computeIfAbsent(product,
+				arg -> new HashMap<>());
 
 		Logging.info(this, "accumulateProductRequests4event");
 		checkForContradictingAssignments(clientId, product, stateType, state);
@@ -789,18 +769,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	protected void setActionRequest(ActionRequest ar, String productId, String clientId) {
 
-		Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
-		if (productStates == null) {
-			productStates = new HashMap<>();
-			allClientsProductStates.put(clientId, productStates);
-		}
+		Map<String, Map<String, String>> productStates = allClientsProductStates.computeIfAbsent(clientId,
+				arg -> new HashMap<>());
 
-		Map<String, String> rowMapForaClient = productStates.get(productId);
-		if (rowMapForaClient == null) {
-			rowMapForaClient = new HashMap<>();
-			productStates.put(productId, rowMapForaClient);
-		}
-		rowMapForaClient.put(ProductState.KEY_ACTION_REQUEST, ar.toString());
+		productStates.computeIfAbsent(productId, arg -> new HashMap<>()).put(ProductState.KEY_ACTION_REQUEST,
+				ar.toString());
 
 	}
 

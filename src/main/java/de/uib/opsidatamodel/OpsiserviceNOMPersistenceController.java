@@ -2148,10 +2148,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		for (String hostId : hostIds) {
 			String depotId = getHostInfoCollections().getMapPcBelongsToDepot().get(hostId);
 
-			if (hostSeparationByDepots.get(depotId) == null)
-				hostSeparationByDepots.put(depotId, new HashSet<>());
-
-			hostSeparationByDepots.get(depotId).add(hostId);
+			hostSeparationByDepots.computeIfAbsent(depotId, arg -> new HashSet<>()).add(hostId);
 		}
 
 		Map<String, List<String>> result = new HashMap<>();
@@ -2544,15 +2541,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			String originValue = relation.get(originVar);
 			String imageValue = relation.get(imageVar);
 			if (imageValue != null) {
-				Set<String> assignedSet = result.get(originValue);
-				if (assignedSet == null) // no assignment yet
-				{
-					assignedSet = new TreeSet<>();
-				}
+				Set<String> assignedSet = result.computeIfAbsent(originValue, arg -> new TreeSet<>());
 
 				assignedSet.add(imageValue);
-				result.put(originValue, assignedSet);
-
 			}
 		}
 
@@ -3868,7 +3859,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map<String, List<Map<String, String>>> states = getProductStatesNOM(clientIds);
 
 		if (states != null) {
-
 			return states;
 		}
 
@@ -3894,13 +3884,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		for (Map<String, Object> m : productOnClients) {
 			String client = (String) m.get("clientId");
-			List<Map<String, String>> states1Client = result.get(client);
-			if (states1Client == null) {
-				states1Client = new ArrayList<>();
-				result.put(client, states1Client);
-			}
 
-			states1Client.add(new ProductState(JSONReMapper.giveEmptyForNull(m), true));
+			result.computeIfAbsent(client, arg -> new ArrayList<>())
+					.add(new ProductState(JSONReMapper.giveEmptyForNull(m), true));
 		}
 		return result;
 	}
@@ -3920,14 +3906,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		for (Map<String, Object> m : productOnClients) {
 
 			String client = (String) m.get(ProductOnClient.CLIENT_ID);
-			List<Map<String, String>> states1Client = result.get(client);
-			if (states1Client == null) {
-				states1Client = new ArrayList<>();
-				result.put(client, states1Client);
-			}
+			List<Map<String, String>> states1Client = result.computeIfAbsent(client, arg -> new ArrayList<>());
 
 			Map<String, String> aState = new ProductState(JSONReMapper.giveEmptyForNull(m), true);
-
 			states1Client.add(aState);
 
 		}
@@ -3970,13 +3951,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		for (Map<String, Object> m : productOnClients) {
 
 			String client = (String) m.get("clientId");
-			List<Map<String, String>> states1Client = result.get(client);
-			if (states1Client == null) {
-				states1Client = new ArrayList<>();
-				result.put(client, states1Client);
-			}
+			result.computeIfAbsent(client, arg -> new ArrayList<>())
+					.add(new ProductState(JSONReMapper.giveEmptyForNull(m), true));
 
-			states1Client.add(new ProductState(JSONReMapper.giveEmptyForNull(m), true));
 		}
 		return result;
 	}
@@ -4411,18 +4388,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				continue;
 			}
 
-			Map<String, ConfigName2ConfigValue> productproperties1Host = depot2product2properties.get(host);
+			Map<String, ConfigName2ConfigValue> productproperties1Host = depot2product2properties.computeIfAbsent(host,
+					arg -> new HashMap<>());
 
-			if (productproperties1Host == null) {
-				productproperties1Host = new HashMap<>();
-				depot2product2properties.put(host, productproperties1Host);
-			}
-
-			ConfigName2ConfigValue properties = productproperties1Host.get(map.get(ProductPropertyState.PRODUCT_ID));
-			if (properties == null) {
-				properties = new ConfigName2ConfigValue(new HashMap<>());
-				productproperties1Host.put((String) map.get(ProductPropertyState.PRODUCT_ID), properties);
-			}
+			ConfigName2ConfigValue properties = productproperties1Host.computeIfAbsent(
+					(String) map.get(ProductPropertyState.PRODUCT_ID),
+					arg -> new ConfigName2ConfigValue(new HashMap<>()));
 
 			properties.put((String) map.get(ProductPropertyState.PROPERTY_ID),
 					((org.json.JSONArray) map.get(ProductPropertyState.VALUES)).toList());
@@ -6330,11 +6301,9 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (withLicenceManagement) {
 			Map<String, SWAuditEntry> instSwI = getInstalledSoftwareInformationForLicensing();
 
-			List<String> oldEntries = fLicencePool2SoftwareList.get(licensePoolId);
-			if (oldEntries == null) {
-				oldEntries = new ArrayList<>();
-				fLicencePool2SoftwareList.put(licensePoolId, oldEntries);
-			}
+			List<String> oldEntries = fLicencePool2SoftwareList.computeIfAbsent(licensePoolId,
+					arg -> new ArrayList<>());
+
 			List<String> oldEntriesTruely = new ArrayList<>(oldEntries); // local copy
 			List<String> softwareToAssignTruely = new ArrayList<>(softwareToAssign); // local copy
 
@@ -6510,19 +6479,16 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 							"fSoftware2LicencePool.get( softwareID ) " + fSoftware2LicencePool.get(softwareID));
 					fSoftware2LicencePool.put(softwareID, licencePoolIDNew);
 				}
+				List<String> fLicencePoolSoftwareList = fLicencePool2SoftwareList.computeIfAbsent(licencePoolIDNew,
+						arg -> new ArrayList<>());
 
-				if (fLicencePool2SoftwareList.get(licencePoolIDNew) == null)
-					fLicencePool2SoftwareList.put(licencePoolIDNew, new ArrayList<>());
+				Logging.info(this, "fLicencePool2SoftwareList.get( licencePoolIDNew ) " + fLicencePoolSoftwareList);
 
-				Logging.info(this, "fLicencePool2SoftwareList.get( licencePoolIDNew ) "
-						+ fLicencePool2SoftwareList.get(licencePoolIDNew));
-
-				fLicencePool2SoftwareList.get(licencePoolIDNew).add(softwareID);
+				fLicencePoolSoftwareList.add(softwareID);
 
 			}
 
 			return result;
-
 		}
 
 		return "???";

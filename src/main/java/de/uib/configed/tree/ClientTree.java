@@ -225,12 +225,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 
 		public void add(String leafname, SimpleTreePath simpleTreePath) {
-
-			if (invertedSimpleClientPaths.get(leafname) == null)
-				invertedSimpleClientPaths.put(leafname, new ArrayList<>());
-
-			invertedSimpleClientPaths.get(leafname).add(simpleTreePath);
-
+			invertedSimpleClientPaths.computeIfAbsent(leafname, arg -> new ArrayList<>()).add(simpleTreePath);
 		}
 
 		public void add(String leafname, TreePath clientPath) {
@@ -612,12 +607,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	private void produceDIRECTORYinfo(TreePath clientPath, DefaultMutableTreeNode node) {
 		if (isInDIRECTORY(clientPath)) {
 			String nodeID = (String) node.getUserObject();
-			if (locationsInDIRECTORY.get(nodeID) == null) {
-				locationsInDIRECTORY.put(nodeID, new TreeSet<>(new NodeComparator()));
-			}
-
-			java.util.Set<GroupNode> hostingGroups = locationsInDIRECTORY.get(nodeID);
-			hostingGroups.add((GroupNode) node.getParent());
+			locationsInDIRECTORY.computeIfAbsent(nodeID, arg -> new TreeSet<>(new NodeComparator()))
+					.add((GroupNode) node.getParent());
 		}
 	}
 

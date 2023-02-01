@@ -46,12 +46,7 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 	}
 
 	private ListCellOptions getListCellOptions(String key) {
-		ListCellOptions options = optionsMap.get(key);
-		if (options == null) {
-			options = new DefaultListCellOptions();
-			optionsMap.put(key, options);
-		}
-		return options;
+		return optionsMap.computeIfAbsent(key, arg -> new DefaultListCellOptions());
 	}
 
 	private void mapTypes(final Map<String, Object> currentData) {

@@ -877,12 +877,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		for (int row = 0; row < getRowCount(); row++) {
 			Object val1 = getValueAt(row, col1);
 
-			List<Object> associatedValues = result.get(val1);
-
-			if (associatedValues == null) {
-				associatedValues = new ArrayList<>();
-				result.put(val1, associatedValues);
-			}
+			List<Object> associatedValues = result.computeIfAbsent(val1, arg -> new ArrayList<>());
 
 			Object val2 = getValueAt(row, col2);
 			if (associatedValues.indexOf(val2) == -1)

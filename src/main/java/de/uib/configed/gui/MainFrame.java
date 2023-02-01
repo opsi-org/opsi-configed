@@ -3059,14 +3059,7 @@ public class MainFrame extends JFrame
 		if (changedClientInfos == null)
 			changedClientInfos = new HashMap<>();
 
-		Map<String, String> changedClientInfo = changedClientInfos.get(client);
-
-		if (changedClientInfo == null) {
-			changedClientInfo = new HashMap<>();
-			changedClientInfos.put(client, changedClientInfo);
-		}
-
-		return changedClientInfo;
+		return changedClientInfos.computeIfAbsent(client, arg -> new HashMap<>());
 
 	}
 

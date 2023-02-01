@@ -88,30 +88,21 @@ public class ResourceBundleUtf8 {
 		ResourceBundle bundle = null;
 
 		synchronized (bundleByClassLoaderByBaseNameByLocale) {
-			bundleByBaseNameByLocale = bundleByClassLoaderByBaseNameByLocale.get(pLoader);
-			if (bundleByBaseNameByLocale == null) {
-				bundleByBaseNameByLocale = new HashMap<>();
-				bundleByClassLoaderByBaseNameByLocale.put(pLoader, bundleByBaseNameByLocale);
-			}
+			bundleByBaseNameByLocale = bundleByClassLoaderByBaseNameByLocale.computeIfAbsent(pLoader,
+					arg -> new HashMap<>());
 		}
 
 		synchronized (bundleByBaseNameByLocale) {
-			bundleByLocale = bundleByBaseNameByLocale.get(pBaseName);
-			if (bundleByLocale == null) {
-				bundleByLocale = new HashMap<>();
-				bundleByBaseNameByLocale.put(pBaseName, bundleByLocale);
-			}
+			bundleByLocale = bundleByBaseNameByLocale.computeIfAbsent(pBaseName, arg -> new HashMap<>());
 		}
 
 		synchronized (bundleByLocale) {
-			bundle = bundleByLocale.get(pLocale);
-			if (bundle == null) {
-				bundle = ResourceBundle.getBundle(pBaseName, pLocale);
-				bundle = createUtf8PropertyResourceBundle(bundle);
-				bundleByLocale.put(pLocale, bundle);
-			}
-		}
+			bundle = bundleByLocale.computeIfAbsent(pLocale, arg -> {
 
+				ResourceBundle newBundle = ResourceBundle.getBundle(pBaseName, pLocale);
+				return createUtf8PropertyResourceBundle(newBundle);
+			});
+		}
 		return bundle;
 	}
 

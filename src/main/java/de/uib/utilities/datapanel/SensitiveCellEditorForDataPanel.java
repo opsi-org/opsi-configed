@@ -25,18 +25,14 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 	public static synchronized SensitiveCellEditorForDataPanel getInstance(Object key) {
 
 		// Zu key gehörige Instanz aus Map holen
-		SensitiveCellEditorForDataPanel instance = instances.get(key);
+		return instances.computeIfAbsent(key, arg -> {
 
-		if (instance == null) {
-			// Lazy Creation, falls keine Instanz gefunden
-			instance = new SensitiveCellEditorForDataPanel();
-
-			instances.put(key, instance);
-			instance.myKey = "" + key;
-			Logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
-					+ instances.size());
-		}
-		return instance;
+			SensitiveCellEditorForDataPanel newInstance = new SensitiveCellEditorForDataPanel();
+			newInstance.myKey = "" + key;
+			Logging.debug(newInstance.getClass().getName() + " produced instance for key " + key
+					+ " ; size of instances " + instances.size());
+			return newInstance;
+		});
 	}
 
 	@Override

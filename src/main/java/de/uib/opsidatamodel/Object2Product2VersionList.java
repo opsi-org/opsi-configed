@@ -13,11 +13,7 @@ public class Object2Product2VersionList extends java.util.HashMap<String, Produc
 			put(depot, pVersions);
 		}
 
-		List<String> versions = pVersions.get(productName);
-		if (versions == null) {
-			versions = new ArrayList<>();
-			pVersions.put(productName, versions);
-		}
+		List<String> versions = pVersions.computeIfAbsent(productName, arg -> new ArrayList<>());
 
 		if (!versions.contains(versionInfo))
 			versions.add(versionInfo);

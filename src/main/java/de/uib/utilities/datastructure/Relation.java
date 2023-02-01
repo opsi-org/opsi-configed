@@ -51,15 +51,9 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 
 		for (StringValuedRelationElement element : this) {
 			String valueTakenAsKey = element.get(attribute);
-			Relation valueList = function.get(valueTakenAsKey);
-
-			if (valueList == null) {
-				valueList = new Relation(attributes);
-				function.put(valueTakenAsKey, valueList);
-			}
+			Relation valueList = function.computeIfAbsent(valueTakenAsKey, arg -> new Relation(attributes));
 
 			valueList.add(element);
-
 		}
 
 		return function;

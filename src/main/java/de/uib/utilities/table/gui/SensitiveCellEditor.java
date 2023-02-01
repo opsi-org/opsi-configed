@@ -46,18 +46,16 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	public static synchronized SensitiveCellEditor getInstance(Object key) {
 
 		// Zu key gehörige Instanz aus Map holen
-		SensitiveCellEditor instance = instances.get(key);
+		return instances.computeIfAbsent(key, arg -> {
 
-		if (instance == null) {
-			// Lazy Creation, falls keine Instanz gefunden
-			instance = new SensitiveCellEditor();
+			SensitiveCellEditor newInstance = new SensitiveCellEditor();
 
-			instances.put(key, instance);
-			instance.myKey = "" + key;
-			Logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
-					+ instances.size());
-		}
-		return instance;
+			newInstance.myKey = "" + key;
+			Logging.debug(newInstance.getClass().getName() + " produced instance for key " + key
+					+ " ; size of instances " + instances.size());
+
+			return newInstance;
+		});
 	}
 
 	protected SensitiveCellEditor(ListModelProducer modelProducer) {

@@ -133,14 +133,10 @@ public class DataStubNOM extends DataStub {
 						"" + m.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION));
 
 				OpsiProductInfo productInfo = new OpsiProductInfo(m);
-				Map<String, OpsiProductInfo> version2productInfos = product2versionInfo2infos.get(productId);
+				Map<String, OpsiProductInfo> version2productInfos = product2versionInfo2infos.computeIfAbsent(productId,
+						arg -> new HashMap<>());
 
-				if (version2productInfos == null) {
-					version2productInfos = new HashMap<>();
-					product2versionInfo2infos.put(productId, version2productInfos);
-				}
 				version2productInfos.put(versionInfo, productInfo);
-
 			}
 
 			Logging.debug(this, "retrieveProductInfos " + product2versionInfo2infos);
@@ -1029,11 +1025,7 @@ public class DataStubNOM extends DataStub {
 
 			if (id instanceof String && !id.equals("")) {
 				String hostId = (String) id;
-				Map<String, Object> configs1Host = hostConfigs.get(id);
-				if (configs1Host == null) {
-					configs1Host = new HashMap<>();
-					hostConfigs.put(hostId, configs1Host);
-				}
+				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostId, arg -> new HashMap<>());
 
 				Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + listElement);
 
