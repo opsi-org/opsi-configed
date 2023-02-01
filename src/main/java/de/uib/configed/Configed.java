@@ -142,8 +142,8 @@ public class Configed {
 	private static int loglevelConsole = Logging.getLogLevelConsole();
 	private static int loglevelFile = Logging.getLogLevelFile();
 
-	public static String sshkey = null;
-	public static String sshkeypassphrase = null;
+	private static String sshKey = null;
+	private static String sshKeyPass = null;
 	private static String client = null;
 	private static String clientgroup = null;
 	private static Integer tab = null;
@@ -279,7 +279,7 @@ public class Configed {
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		configedMain = new ConfigedMain(paramHost, paramUser, paramPassword);
+		configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
 
 		SwingUtilities.invokeLater(() -> configedMain.init());
 
@@ -475,10 +475,10 @@ public class Configed {
 					}
 					i = i + 1;
 				} else if (args[i].equals("--ssh-key")) {
-					sshkey = getArg(args, i);
+					sshKey = getArg(args, i);
 					i = i + 2;
 				} else if (args[i].equals("--ssh-passphrase")) {
-					sshkeypassphrase = getArg(args, i);
+					sshKeyPass = getArg(args, i);
 					i = i + 2;
 				} else if (args[i].equals("--gzip")) {
 
@@ -638,16 +638,6 @@ public class Configed {
 		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch)
 			Logging.setSuppressConsole();
-	}
-
-	public static String encodeStringFromService(String s) {
-
-		return s;
-
-	}
-
-	public static String encodeStringForService(String s) {
-		return s;
 	}
 
 	public static void endApp(int exitcode) {

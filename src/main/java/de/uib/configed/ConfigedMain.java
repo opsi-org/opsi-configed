@@ -394,8 +394,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static String host = null;
 	public static String user = null;
 	public static String password = null;
-	public static String sshKey = null;
-	public static String sshKeyPass = null;
 
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER
@@ -404,7 +402,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
-	public ConfigedMain(String host, String user, String password) {
+	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
 			ConfigedMain.host = host;
 		}
@@ -414,8 +412,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (ConfigedMain.password == null) {
 			ConfigedMain.password = password;
 		}
-		sshKey = Configed.sshkey;
-		sshKeyPass = Configed.sshkeypassphrase;
 
 		SSHConnectionInfo.getInstance().setHost(host);
 		SSHConnectionInfo.getInstance().setUser(user);
