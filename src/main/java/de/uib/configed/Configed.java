@@ -24,6 +24,7 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
+import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.PropertiesStore;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.UncaughtExceptionHandler;
@@ -164,7 +165,7 @@ public class Configed {
 	public static String savedStatesLocationName;
 	public static final String SAVED_STATES_FILENAME = "configedStates.prop";
 
-	public static Integer refreshMinutes = 0;
+	private static Integer refreshMinutes = 0;
 
 	private static String paramHost;
 	private static String paramUser;
@@ -364,6 +365,10 @@ public class Configed {
 
 	protected void revalidate() {
 		configedMain.initialTreeActivation();
+	}
+
+	public static Integer getRefreshMinutes() {
+		return refreshMinutes;
 	}
 
 	protected static void processArgs(String[] args) {
@@ -867,10 +872,7 @@ public class Configed {
 			PersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host, user,
 					password);
 
-			de.uib.opsidatamodel.permission.UserConfigProducing up = new de.uib.opsidatamodel.permission.UserConfigProducing(
-					false, // boolean notUsingDefaultUser,
-
-					host, // String configserver,
+			UserConfigProducing up = new UserConfigProducing(false, host,
 					persist.getHostInfoCollections().getDepotNamesList(), persist.getHostGroupIds(),
 					persist.getProductGroups().keySet(),
 

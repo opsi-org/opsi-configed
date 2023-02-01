@@ -230,7 +230,6 @@ public class ControllerHWinfoMultiClients {
 					main, persist);
 			if (fTable == null || ((FPanel) fTable).isLeft()) {
 				fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel,
-						// testpanel,
 						true);
 
 				fTable.setSize(new java.awt.Dimension(ConfigedMain.getMainFrame().getSize().width - 50,

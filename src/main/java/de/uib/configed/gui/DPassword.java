@@ -466,7 +466,6 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		// correctly
 
 		tryConnecting();
-
 	}
 
 	public void tryConnecting() {

@@ -15,8 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -45,7 +45,6 @@ public class FPanel extends SecondaryFrame {
 		centerOnParent();
 
 		setVisible(true);
-
 	}
 
 	protected boolean wantToBeRegisteredWithRunningInstances() {

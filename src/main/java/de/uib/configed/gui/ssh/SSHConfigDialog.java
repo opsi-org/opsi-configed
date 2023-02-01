@@ -677,10 +677,8 @@ public class SSHConfigDialog extends FGeneralDialog {
 
 	private static void checkComponents() {
 		if (jCheckBoxDefault.isSelected()) {
-			connectionInfo.setUserData(
-
-					ConfigedMain.host, // persist.getHostInfoCollections().getConfigServer(),
-					ConfigedMain.user, ConfigedMain.password, SSHConnect.PORT_SSH);
+			connectionInfo.setUserData(ConfigedMain.host, ConfigedMain.user, ConfigedMain.password,
+					SSHConnect.PORT_SSH);
 
 		}
 		jComboBoxHost.setSelectedItem(connectionInfo.getHost());

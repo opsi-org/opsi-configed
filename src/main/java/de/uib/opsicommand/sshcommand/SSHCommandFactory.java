@@ -141,7 +141,7 @@ public class SSHCommandFactory {
 	/**
 	 * Method allows only one instance Design: Singelton-Pattern
 	 * 
-	 * @param main {@link de.uib.configed.ConfigedMain} class
+	 * @param configedMain {@link de.uib.configed.ConfigedMain} class
 	 * @return SSHCommandFactory instance
 	 **/
 	public static SSHCommandFactory getInstance(ConfigedMain m) {

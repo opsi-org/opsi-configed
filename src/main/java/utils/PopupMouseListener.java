@@ -15,9 +15,7 @@ public class PopupMouseListener extends MouseAdapter {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-
 		maybeShowPopup(e);
-
 	}
 
 	@Override

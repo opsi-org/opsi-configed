@@ -470,7 +470,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		});
 
-		reachableUpdater.setInterval(Configed.refreshMinutes);
+		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 	}
 
 	private String getSavedStatesDefaultLocation() {
@@ -3800,7 +3800,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// configuratio
 			persist.getHostInfoCollections().getAllDepots();
 			persist.checkConfiguration(); // we do this again since we reloaded the configuration
-
 		}
 
 		setEditingTarget(editingTarget); // sets visual view index, therefore:
