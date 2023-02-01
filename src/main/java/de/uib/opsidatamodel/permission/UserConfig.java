@@ -139,11 +139,11 @@ public class UserConfig {
 		getUserBoolKeys();
 		getUserListKeys();
 
-		archeoPrototypeConfig.booleanMap.putAll(UserSshConfig.DEFAULT.booleanMap);
-		archeoPrototypeConfig.booleanMap.putAll(UserOpsipermission.DEFAULT.booleanMap);
+		archeoPrototypeConfig.booleanMap.putAll(UserSshConfig.DEFAULT.getBooleanMap());
+		archeoPrototypeConfig.booleanMap.putAll(UserOpsipermission.DEFAULT.getBooleanMap());
 
-		archeoPrototypeConfig.valuesMap.putAll(UserOpsipermission.DEFAULT.valuesMap);
-		archeoPrototypeConfig.possibleValuesMap.putAll(UserOpsipermission.DEFAULT.possibleValuesMap);
+		archeoPrototypeConfig.valuesMap.putAll(UserOpsipermission.DEFAULT.getValuesMap());
+		archeoPrototypeConfig.possibleValuesMap.putAll(UserOpsipermission.DEFAULT.getPossibleValuesMap());
 
 		archeoPrototypeConfig.setValues(MODIFICATION_INFO_KEY, ZERO_TIME);
 

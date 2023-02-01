@@ -3929,6 +3929,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * ===========================================
 	 */
 	public class HostConfigsDataChangedKeeper extends GeneralDataChangedKeeper {
+		// TODO remove? Because it actually does not change anything
 		public HostConfigsDataChangedKeeper() {
 
 			super();

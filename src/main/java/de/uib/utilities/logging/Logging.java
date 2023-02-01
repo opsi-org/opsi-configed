@@ -22,7 +22,7 @@ public class Logging implements LogEventSubject
 
 {
 	public static String logDirectoryName = null;
-	public static String logFilenameInUse = null;
+	private static String logFilenameInUse = null;
 
 	private static String logfileDelimiter = "configed";
 	private static String logfileMarker = null;
@@ -75,7 +75,7 @@ public class Logging implements LogEventSubject
 	private static final int MAX_LISTED_ERRORS = 20;
 	private static List<String> errorList = new ArrayList<>(MAX_LISTED_ERRORS);
 
-	public static FShowList fErrors;
+	private static FShowList fErrors;
 
 	protected static List<LogEventObserver> logEventObservers = new ArrayList<>();
 
