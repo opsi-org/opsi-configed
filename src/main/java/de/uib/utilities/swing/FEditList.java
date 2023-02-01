@@ -51,7 +51,6 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	private JTextComponent tracker;
 
-	private ListModel<Object> initialModel;
 	private List<Object> initiallySelected;
 
 	protected Object selValue = "";
@@ -118,9 +117,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	}
 
 	public void setListModel(ListModel<Object> model) {
-
 		visibleList.setModel(model);
-		initialModel = model;
 	}
 
 	public void setSelectionMode(int selectionMode) {
@@ -243,7 +240,6 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	@Override
 	protected void cancel() {
-		setListModel(initialModel);
 		setSelectedValues(initiallySelected);
 
 		super.cancel();
