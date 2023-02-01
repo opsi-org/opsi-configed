@@ -533,10 +533,6 @@ public class MainFrame extends JFrame
 
 		this.main = main;
 
-		baseContainer = this.getContentPane();
-
-		Globals.mainContainer = baseContainer;
-
 		glass = new GlassPane();
 
 		guiInit();
@@ -3479,7 +3475,7 @@ public class MainFrame extends JFrame
 				jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog")),
 				showSoftwareLog);
 
-		SwingUtilities.invokeLater(() -> Globals.mainContainer.repaint());
+		SwingUtilities.invokeLater(() -> Globals.mainFrame.repaint());
 	}
 
 	protected boolean handleInstallByShutdownChange(final boolean wantActive) {

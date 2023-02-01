@@ -507,7 +507,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			if (names.indexOf(s) > -1) {
 				ok =
 
-						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(Globals.mainContainer,
+						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(Globals.mainFrame,
 								"Ein Eintrag mit diesem Namen existiert bereits. Überschreiben des bisherigen Eintrags?",
 								Globals.APPNAME, JOptionPane.OK_CANCEL_OPTION));
 			}
@@ -569,7 +569,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			}
 		}
 		if (!located)
-			fed.setLocationRelativeTo(Globals.mainContainer);
+			fed.setLocationRelativeTo(Globals.mainFrame);
 
 		fed.setVisible(true);
 	}

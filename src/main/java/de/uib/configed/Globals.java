@@ -450,7 +450,7 @@ public class Globals {
 		return alphaCollator;
 	}
 
-	public static Container mainContainer; // transparent for appletHandling // masterFrame
+
 	public static JFrame mainFrame; // fixed
 	public static JFrame frame1; // can be changed
 	public static Container container1; // can be changed

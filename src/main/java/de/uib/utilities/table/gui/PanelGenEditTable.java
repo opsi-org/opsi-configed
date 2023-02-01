@@ -676,7 +676,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemDeleteRelation.setEnabled(false);
 				menuItemDeleteRelation.addActionListener(actionEvent -> {
 					if (getSelectedRowCount() == 0) {
-						JOptionPane.showMessageDialog(Globals.mainContainer,
+						JOptionPane.showMessageDialog(Globals.mainFrame,
 								Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
 								Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 

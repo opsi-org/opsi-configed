@@ -664,7 +664,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		if (groupNodes.get(nodeID) != null) {
 
 			// found a group
-			int returnedOption = JOptionPane.showOptionDialog(Globals.mainContainer,
+			int returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame,
 					Configed.getResourceValue("ClientTree.deleteGroupWarning"),
 					Globals.APPNAME + " " + Configed.getResourceValue("ClientTree.deleteGroupWarningTitle"),
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
@@ -838,7 +838,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			} catch (IllegalArgumentException ex) {
 				Logging.error(this, "Cannot add node to parent " + node + ", " + parent + ": " + ex, ex);
-				JOptionPane.showMessageDialog(Globals.mainContainer,
+				JOptionPane.showMessageDialog(Globals.mainFrame,
 						Configed.getResourceValue("ClientTree.cannot_add_node.text") + " " + node + " in  " + parent
 								+ "(" + ex + ")",
 						Configed.getResourceValue("ClientTree.cannot_add_node.title"), JOptionPane.ERROR_MESSAGE);
@@ -1006,7 +1006,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		fEdit.setTitle(Configed.getResourceValue("ClientTree.editNode.title") + " (" + Globals.APPNAME + ")");
 		fEdit.init();
 		fEdit.setSize(450, 250);
-		fEdit.setLocationRelativeTo(Globals.mainContainer);
+		fEdit.setLocationRelativeTo(Globals.mainFrame);
 
 		fEdit.setModal(true);
 
@@ -1038,7 +1038,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		if (node.getAllowsChildren()) {
 			if (!node.toString().equals(ALL_GROUPS_NAME) && main.getOpsiVersion().compareTo("3.4.9") < 0) {
-				JOptionPane.showMessageDialog(Globals.mainContainer,
+				JOptionPane.showMessageDialog(Globals.mainFrame,
 						"group in group not supported for opsiVersion < 3.4.9, \nopsiVersion is "
 								+ main.getOpsiVersion(),
 						"opsi info ",
@@ -1070,7 +1070,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			fEdit.setTitle(Configed.getResourceValue("ClientTree.addNode.title") + " (" + Globals.APPNAME + ")");
 			fEdit.init();
 			fEdit.setSize(450, 250);
-			fEdit.setLocationRelativeTo(Globals.mainContainer);
+			fEdit.setLocationRelativeTo(Globals.mainFrame);
 
 			fEdit.setModal(true);
 
@@ -1357,7 +1357,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 					+ " <<, " + Configed.getResourceValue("ClientTree.selectCorrectLocation"));
 			fList.init(new java.awt.Dimension(640, 60));
 
-			fList.setLocationRelativeTo(Globals.mainContainer);
+			fList.setLocationRelativeTo(Globals.mainFrame);
 			fList.setModal(true);
 
 			if (preSelected != null) {
@@ -1368,7 +1368,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			fList.setVisible(true);
 
 			if (fList.getSelectedList().isEmpty()) {
-				int returnedOption = JOptionPane.showOptionDialog(Globals.mainContainer,
+				int returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame,
 						Configed.getResourceValue("ClientTree.abandonUniqueLocation"),
 						Globals.APPNAME + " " + Configed.getResourceValue("ClientTree.requestInformation"), //
 						-1, JOptionPane.WARNING_MESSAGE, null,

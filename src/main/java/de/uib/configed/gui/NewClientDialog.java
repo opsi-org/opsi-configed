@@ -591,7 +591,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		scrollpane.getViewport().add(panel);
 		pack();
-		setLocationRelativeTo(Globals.mainContainer);
+		setLocationRelativeTo(Globals.mainFrame);
 	}
 
 	private void createClients(List<List<Object>> clients) {

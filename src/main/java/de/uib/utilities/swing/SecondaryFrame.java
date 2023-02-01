@@ -17,7 +17,7 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 	protected Container masterFrame;
 
 	public SecondaryFrame() {
-		this.masterFrame = Globals.mainContainer;
+		this.masterFrame = Globals.mainFrame;
 		if (masterFrame == null)
 			Logging.warning(this, "masterFrame yet null");
 		addWindowListener(this);

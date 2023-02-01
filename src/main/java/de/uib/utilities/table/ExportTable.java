@@ -252,7 +252,7 @@ public abstract class ExportTable {
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.chooser"));
 
-		int returnVal = chooser.showDialog(Globals.mainContainer, "OK");
+		int returnVal = chooser.showDialog(Globals.mainFrame, "OK");
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 
@@ -283,7 +283,7 @@ public abstract class ExportTable {
 			if (!fileExists)
 				return filename;
 
-			int option = JOptionPane.showConfirmDialog(Globals.mainContainer,
+			int option = JOptionPane.showConfirmDialog(Globals.mainFrame,
 					Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
 					Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
 					JOptionPane.OK_CANCEL_OPTION);

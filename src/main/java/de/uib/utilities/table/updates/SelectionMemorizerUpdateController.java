@@ -41,7 +41,7 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 			waitCursor.stop();
 			Logging.info(this, "no row selected");
 
-			javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer,
+			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
 					de.uib.configed.Configed
 							.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.text"),
 					Globals.APPNAME + "  "

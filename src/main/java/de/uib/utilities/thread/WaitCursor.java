@@ -47,7 +47,7 @@ public class WaitCursor {
 
 		if (componentCalling == null) {
 			try {
-				c = Globals.mainContainer;
+				c = Globals.mainFrame;
 			} catch (Exception ex) {
 				Logging.info(this, "retrieveBasePane " + ex);
 				c = null;

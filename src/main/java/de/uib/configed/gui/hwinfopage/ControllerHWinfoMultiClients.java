@@ -233,8 +233,8 @@ public class ControllerHWinfoMultiClients {
 						// testpanel,
 						true);
 
-				fTable.setSize(new java.awt.Dimension(Globals.mainContainer.getSize().width - 50,
-						Globals.mainContainer.getSize().height / 2));
+				fTable.setSize(new java.awt.Dimension(Globals.mainFrame.getSize().width - 50,
+						Globals.mainFrame.getSize().height / 2));
 			}
 
 			fTable.centerOnParent();

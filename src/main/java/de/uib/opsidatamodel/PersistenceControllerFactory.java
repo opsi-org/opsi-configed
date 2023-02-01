@@ -102,7 +102,7 @@ public class PersistenceControllerFactory {
 							+ Configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion") + " "
 							+ persistControl.getOpsiVersion() + " ) ";
 
-					javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer, errorInfo, Globals.APPNAME,
+					javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, errorInfo, Globals.APPNAME,
 							javax.swing.JOptionPane.OK_OPTION);
 
 					Configed.endApp(1);
@@ -189,7 +189,7 @@ public class PersistenceControllerFactory {
 
 			String errorInfo = ex.toString();
 
-			javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer, errorInfo, Globals.APPNAME,
+			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, errorInfo, Globals.APPNAME,
 					javax.swing.JOptionPane.OK_OPTION);
 
 			Configed.endApp(2);

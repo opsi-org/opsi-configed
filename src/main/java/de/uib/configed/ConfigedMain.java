@@ -1319,7 +1319,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// setting the similar global values as well
 
 		Globals.container1 = mainFrame;
-		Globals.mainContainer = mainFrame;
 
 		mainFrame.enableMenuItemsForClients(0);
 
@@ -3275,7 +3274,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			try {
 
-				WaitCursor waitCursor = new WaitCursor(Globals.mainContainer, "getLogfilesUpdating");
+				WaitCursor waitCursor = new WaitCursor(Globals.mainFrame, "getLogfilesUpdating");
 				logfiles = persist.getLogfiles(firstSelectedClient, logtypeToUpdate);
 				waitCursor.stop();
 
@@ -4242,7 +4241,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				fShowReachableInfo.setAlwaysOnTop(true);
 				fShowReachableInfo.setSize(Globals.REACHABLE_INFO_FRAME_WIDTH, Globals.REACHABLE_INFO_FRAME_HEIGHT);
-				fShowReachableInfo.setLocationRelativeTo(Globals.mainContainer);
+				fShowReachableInfo.setLocationRelativeTo(Globals.mainFrame);
 				fShowReachableInfo.setVisible(true);
 				fShowReachableInfo.toFront();
 				reachableInfo = new HashMap<>();
@@ -4508,7 +4507,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		fEdit.init();
 		fEdit.setTitle(Configed.getResourceValue("ConfigedMain.fChangeClientID.title") + " (" + Globals.APPNAME + ")");
 		fEdit.setSize(Globals.WIDTH_FRAME_RENAME_CLIENT, Globals.HEIGHT_FRAME_RENAME_CLIENT);
-		fEdit.setLocationRelativeTo(Globals.mainContainer);
+		fEdit.setLocationRelativeTo(Globals.mainFrame);
 		fEdit.setSingleLine(true);
 		fEdit.setModal(true);
 		fEdit.setAlwaysOnTop(true);
@@ -5109,7 +5108,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		fConfirmActionForClients.setMessage(confirmInfo + "\n\n" + getSelectedClientsString().replace(";", ""));
 
-		fConfirmActionForClients.setLocationRelativeTo(Globals.mainContainer);
+		fConfirmActionForClients.setLocationRelativeTo(Globals.mainFrame);
 		fConfirmActionForClients.setAlwaysOnTop(true);
 		fConfirmActionForClients.setVisible(true);
 
@@ -5240,7 +5239,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			clientSelectionDialog = new ClientSelectionDialog(this, selectionPanel, savedSearchesDialog);
 		}
 
-		clientSelectionDialog.setLocationRelativeTo(Globals.mainContainer);
+		clientSelectionDialog.setLocationRelativeTo(Globals.mainFrame);
 		clientSelectionDialog.setVisible(true);
 	}
 
@@ -5458,7 +5457,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		if (change) {
-			int returnedOption = JOptionPane.showOptionDialog(Globals.mainContainer,
+			int returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame,
 					Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp"),
 					Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
