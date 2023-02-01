@@ -24,6 +24,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HWAuditClientEntry;
@@ -617,7 +618,7 @@ public class DataStubNOM extends DataStub {
 			boolean infoFound = false;
 
 			// try reloading?
-			int returnedOption = javax.swing.JOptionPane.showOptionDialog(Globals.mainFrame,
+			int returnedOption = javax.swing.JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
 					Configed.getResourceValue("DataStub.reloadSoftwareInformation.title"),
 					javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, null, null);

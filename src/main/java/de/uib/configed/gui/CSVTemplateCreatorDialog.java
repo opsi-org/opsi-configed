@@ -44,6 +44,7 @@ import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVWriter;
@@ -62,7 +63,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private List<JCheckBox> headerButtons;
 
 	public CSVTemplateCreatorDialog(List<String> columnNames) {
-		super(Globals.mainFrame, Configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
 				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
 						Configed.getResourceValue("FGeneralDialog.ok") },
 				new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
@@ -434,7 +435,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		jFileChooser.addChoosableFileFilter(fileFilter);
 		jFileChooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = jFileChooser.showSaveDialog(Globals.mainFrame);
+		int returnValue = jFileChooser.showSaveDialog(ConfigedMain.getMainFrame());
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();

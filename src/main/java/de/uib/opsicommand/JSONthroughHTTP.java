@@ -296,7 +296,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			}
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
 
-			FTextArea fErrorMsg = new FTextArea(Globals.mainFrame,
+			FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
 							+ ") ",
 					true,
@@ -321,7 +321,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			fErrorMsg.setMessage(message.toString());
 			fErrorMsg.setAlwaysOnTop(true);
 
-			if (Globals.mainFrame == null && ConfigedMain.dpass != null)
+			if (ConfigedMain.getMainFrame() == null && ConfigedMain.dpass != null)
 				fErrorMsg.setLocationRelativeTo(ConfigedMain.dpass);
 
 			fErrorMsg.setVisible(true);

@@ -11,8 +11,8 @@ package de.uib.opsidatamodel.modulelicense;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FTextArea;
 
 public class FOpsiLicenseMissingText extends FTextArea {
@@ -22,8 +22,8 @@ public class FOpsiLicenseMissingText extends FTextArea {
 	private static List<String> messages = new ArrayList<>();
 
 	public FOpsiLicenseMissingText() {
-		super(Globals.mainFrame, Configed.getResourceValue("Permission.modules.title"), false, new String[] { "ok" },
-				450, 250);
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("Permission.modules.title"), false,
+				new String[] { "ok" }, 450, 250);
 	}
 
 	private static FOpsiLicenseMissingText getInstance() {
@@ -58,7 +58,7 @@ public class FOpsiLicenseMissingText extends FTextArea {
 		getInstance().setMessage(combined.toString());
 		getInstance().setVisible(true);
 
-		getInstance().setLocationRelativeTo(Globals.mainFrame);
+		getInstance().setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	public static void reset() {

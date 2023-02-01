@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
@@ -252,7 +253,7 @@ public abstract class ExportTable {
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.chooser"));
 
-		int returnVal = chooser.showDialog(Globals.mainFrame, "OK");
+		int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), "OK");
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 
@@ -283,7 +284,7 @@ public abstract class ExportTable {
 			if (!fileExists)
 				return filename;
 
-			int option = JOptionPane.showConfirmDialog(Globals.mainFrame,
+			int option = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
 					Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
 					JOptionPane.OK_CANCEL_OPTION);

@@ -58,6 +58,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.View;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
@@ -220,7 +221,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(Globals.mainFrame);
+		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		copyOfMe.setLevelWithoutAction(showLevel);
 		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,

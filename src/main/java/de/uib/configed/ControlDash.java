@@ -165,9 +165,9 @@ public class ControlDash {
 
 			fDash.checkAdditionalPane();
 
-			if (Globals.mainFrame != null) {
-				fDash.setLocation(Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X,
-						Globals.mainFrame.getY() + Globals.LOCATION_DISTANCE_Y);
+			if (ConfigedMain.getMainFrame() != null) {
+				fDash.setLocation(ConfigedMain.getMainFrame().getX() + Globals.LOCATION_DISTANCE_X,
+						ConfigedMain.getMainFrame().getY() + Globals.LOCATION_DISTANCE_Y);
 			}
 
 		}

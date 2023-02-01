@@ -84,7 +84,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		init();
 		initGUI();
 		this.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
-		this.setLocationRelativeTo(Globals.mainFrame);
+		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		wgetAuthPanel.isOpen = true;

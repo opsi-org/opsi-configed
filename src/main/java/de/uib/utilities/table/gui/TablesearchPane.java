@@ -36,6 +36,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
@@ -46,7 +47,7 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.NavigationPanel;
 
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
-	javax.swing.JFrame masterFrame = Globals.mainFrame;
+	javax.swing.JFrame masterFrame = ConfigedMain.getMainFrame();
 
 	JTextField fieldSearch;
 

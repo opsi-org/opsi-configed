@@ -175,7 +175,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 		};
 
-		panel.setMasterFrame(Globals.mainFrame);
+		panel.setMasterFrame(ConfigedMain.getMainFrame());
 		panel.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered

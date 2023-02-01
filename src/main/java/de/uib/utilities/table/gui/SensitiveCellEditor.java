@@ -18,7 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
-import de.uib.configed.Globals;
+import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.table.DefaultListModelProducer;
@@ -101,7 +101,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 		SwingUtilities.invokeLater(() -> {
 			// center on mainFrame
-			listeditor.setLocationRelativeTo(Globals.mainFrame);
+			listeditor.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			listeditor.setVisible(true);
 		});
 

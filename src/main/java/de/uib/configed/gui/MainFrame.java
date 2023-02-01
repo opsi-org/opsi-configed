@@ -3475,7 +3475,7 @@ public class MainFrame extends JFrame
 				jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog")),
 				showSoftwareLog);
 
-		SwingUtilities.invokeLater(() -> Globals.mainFrame.repaint());
+		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().repaint());
 	}
 
 	protected boolean handleInstallByShutdownChange(final boolean wantActive) {

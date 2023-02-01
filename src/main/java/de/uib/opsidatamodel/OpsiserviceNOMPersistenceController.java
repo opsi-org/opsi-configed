@@ -52,6 +52,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
@@ -923,7 +924,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 					// if true was locally saved but is not the value from service then we ask
 					Logging.warning(this, "setAgainUserRegistration, it seems that user check has been deactivated");
 
-					FTextArea dialog = new FTextArea(Globals.mainFrame,
+					FTextArea dialog = new FTextArea(ConfigedMain.getMainFrame(),
 							Configed.getResourceValue("RegisterUserWarning.dialog.title"),
 
 							true,
@@ -3020,7 +3021,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				if (i == -1 && withRetry) {
 					{
 						Logging.info(this, "getSoftwareAudit,  not found client entry " + entry);
-						int returnedOption = javax.swing.JOptionPane.showOptionDialog(Globals.mainFrame,
+						int returnedOption = javax.swing.JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 
 								Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.message")
 										+ " " + entry.getSWident()
@@ -8129,7 +8130,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public void showLicInfoWarnings() {
 		if (licInfoMap != null && licInfoMap.warningExists() && licInfoWarnings != null) {
 			licInfoWarnings.setVisible(true);
-			licInfoWarnings.setLocationRelativeTo(Globals.mainFrame);
+			licInfoWarnings.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		}
 	}
 
@@ -8161,8 +8162,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (getOpsiLicensingInfoVersion().equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
 			// no action
 		} else if (licInfoMap.warningExists() && licInfoWarnings == null) {
-			licInfoWarnings = new FTextArea(Globals.mainFrame, Configed.getResourceValue("Permission.modules.title"),
-					false,
+			licInfoWarnings = new FTextArea(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("Permission.modules.title"), false,
 					new String[] { Configed.getResourceValue("Dash.close"),
 							Configed.getResourceValue("Permission.modules.buttonGoToValidationTable") },
 					new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
@@ -8177,7 +8178,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				@Override
 				public void doAction2() {
-					((de.uib.configed.gui.MainFrame) Globals.mainFrame).callOpsiLicensingInfo();
+					((de.uib.configed.gui.MainFrame) ConfigedMain.getMainFrame()).callOpsiLicensingInfo();
 				}
 
 			};

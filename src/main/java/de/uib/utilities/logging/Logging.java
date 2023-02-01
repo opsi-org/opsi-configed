@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.utilities.thread.WaitCursor;
@@ -438,7 +439,7 @@ public class Logging implements LogEventSubject
 
 		final JFrame f;
 		if (parentFrame == null)
-			f = Globals.mainFrame;
+			f = ConfigedMain.getMainFrame();
 		else
 			f = parentFrame;
 

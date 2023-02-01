@@ -8,6 +8,7 @@
 
 package de.uib.utilities.table.updates;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -41,7 +42,7 @@ public abstract class SelectionMemorizerUpdateController implements de.uib.utili
 			waitCursor.stop();
 			Logging.info(this, "no row selected");
 
-			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
+			javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					de.uib.configed.Configed
 							.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.text"),
 					Globals.APPNAME + "  "

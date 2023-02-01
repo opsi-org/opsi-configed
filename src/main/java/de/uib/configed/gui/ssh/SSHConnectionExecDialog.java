@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnect;
@@ -40,7 +41,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 			this.setSize(900, 500);
-			this.setLocationRelativeTo(Globals.mainFrame);
+			this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			Logging.info(this, "SSHConnectionExecDialog built");
 
 			this.setVisible(!SSHCommandFactory.sshAlwaysExecInBackground);
@@ -67,7 +68,7 @@ public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 		instance = new SSHConnectionExecDialog();
 		SwingUtilities.invokeLater(() -> {
-			instance.setLocationRelativeTo(Globals.mainFrame);
+			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			instance.setVisible(true);
 		});
 		return instance;

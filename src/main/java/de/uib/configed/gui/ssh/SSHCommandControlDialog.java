@@ -139,7 +139,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 * @return SSHCommandControlDialog instance
 	 **/
 	public static SSHCommandControlDialog getInstance(ConfigedMain cm) {
-		return getInstance(cm, Globals.mainFrame);
+		return getInstance(cm, ConfigedMain.getMainFrame());
 	}
 
 	public static SSHCommandControlDialog getInstance(ConfigedMain cm, JFrame fr) {

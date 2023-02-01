@@ -342,7 +342,7 @@ public class SSHPackageManagerUninstallParameterDialog
 	/* This method is called when button 1 is pressed */
 
 	private boolean confirmAction() {
-		FShowList fConfirmAction = new FShowList(Globals.mainFrame,
+		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
 				Globals.APPNAME + " "
 						+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"),
 				true, new String[] { Configed.getResourceValue("buttonCANCEL"), Configed.getResourceValue("buttonOK") },

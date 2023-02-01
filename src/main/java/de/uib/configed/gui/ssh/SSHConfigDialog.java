@@ -68,7 +68,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		init();
 
 		this.setSize(500, 535);
-		setLocationRelativeTo(Globals.mainFrame);
+		setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setVisible(true);
 		jComboBoxUseDefaultState = jCheckBoxDefault.isSelected();
 		if (Globals.isGlobalReadOnly()) {
@@ -80,7 +80,7 @@ public class SSHConfigDialog extends FGeneralDialog {
 		if (instance == null)
 			instance = new SSHConfigDialog(cmain);
 		else
-			instance.setLocationRelativeTo(Globals.mainFrame);
+			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		instance.setVisible(true);
 		checkComponents();

@@ -553,11 +553,11 @@ public class SSHCommandFactory {
 
 	public void updateConnectionInfo(String status) {
 		Logging.info(this, "mainFrame " + mainFrame);
-		Logging.info(this, "Globals.mainFrame " + Globals.mainFrame);
+		Logging.info(this, "ConfigedMain.getMainFrame() " + ConfigedMain.getMainFrame());
 
 		Logging.info(this, "status " + status);
 		if (mainFrame == null)
-			((MainFrame) Globals.mainFrame).updateSSHConnectedInfoMenu(status);
+			((MainFrame) ConfigedMain.getMainFrame()).updateSSHConnectedInfoMenu(status);
 		else
 			mainFrame.updateSSHConnectedInfoMenu(status);
 	}

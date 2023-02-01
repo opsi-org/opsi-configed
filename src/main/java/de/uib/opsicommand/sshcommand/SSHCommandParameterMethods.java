@@ -379,7 +379,7 @@ public class SSHCommandParameterMethods implements SSHCommandParameterInterface 
 
 	protected String getUserText(String text, Component dialog) {
 		if (dialog == null)
-			dialog = Globals.mainFrame;
+			dialog = ConfigedMain.getMainFrame();
 		Logging.debug(this, "getUserText text " + text);
 		final JTextField field = new JTextField();
 

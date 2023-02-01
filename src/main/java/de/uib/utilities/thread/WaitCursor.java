@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ActivityPanel;
@@ -47,7 +48,7 @@ public class WaitCursor {
 
 		if (componentCalling == null) {
 			try {
-				c = Globals.mainFrame;
+				c = ConfigedMain.getMainFrame();
 			} catch (Exception ex) {
 				Logging.info(this, "retrieveBasePane " + ex);
 				c = null;

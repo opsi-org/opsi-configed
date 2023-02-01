@@ -51,7 +51,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		main = m;
 		initGUI();
 
-		this.setLocationRelativeTo(Globals.mainFrame);
+		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		filename = "";

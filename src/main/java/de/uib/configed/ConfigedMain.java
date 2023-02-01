@@ -298,7 +298,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private String depotRepresentative;
 	ListSelectionListener depotsListSelectionListener;
 
-	private MainFrame mainFrame;
+	private static MainFrame mainFrame;
 
 	private ReachableUpdater reachableUpdater = new ReachableUpdater(0);
 
@@ -349,6 +349,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected LicencesTabStatus licencesStatus;
 
 	protected Map<LicencesTabStatus, String> licencesPanelsTabNames = new EnumMap<>(LicencesTabStatus.class);
+
+	public static MainFrame getMainFrame() {
+		return mainFrame;
+	}
 
 	// TabController Interface
 	@Override
@@ -1312,9 +1316,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		selectionPanel.initSortKeys();
 
 		mainFrame = new MainFrame(this, selectionPanel, depotsList, treeClients, multiDepot);
-
-		// for passing it to message frames everywhere
-		Globals.mainFrame = mainFrame;
 
 		// setting the similar global values as well
 
@@ -3274,7 +3275,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			try {
 
-				WaitCursor waitCursor = new WaitCursor(Globals.mainFrame, "getLogfilesUpdating");
+				WaitCursor waitCursor = new WaitCursor(ConfigedMain.getMainFrame(), "getLogfilesUpdating");
 				logfiles = persist.getLogfiles(firstSelectedClient, logtypeToUpdate);
 				waitCursor.stop();
 
@@ -4241,7 +4242,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				fShowReachableInfo.setAlwaysOnTop(true);
 				fShowReachableInfo.setSize(Globals.REACHABLE_INFO_FRAME_WIDTH, Globals.REACHABLE_INFO_FRAME_HEIGHT);
-				fShowReachableInfo.setLocationRelativeTo(Globals.mainFrame);
+				fShowReachableInfo.setLocationRelativeTo(ConfigedMain.getMainFrame());
 				fShowReachableInfo.setVisible(true);
 				fShowReachableInfo.toFront();
 				reachableInfo = new HashMap<>();
@@ -4507,7 +4508,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		fEdit.init();
 		fEdit.setTitle(Configed.getResourceValue("ConfigedMain.fChangeClientID.title") + " (" + Globals.APPNAME + ")");
 		fEdit.setSize(Globals.WIDTH_FRAME_RENAME_CLIENT, Globals.HEIGHT_FRAME_RENAME_CLIENT);
-		fEdit.setLocationRelativeTo(Globals.mainFrame);
+		fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		fEdit.setSingleLine(true);
 		fEdit.setModal(true);
 		fEdit.setAlwaysOnTop(true);
@@ -5108,7 +5109,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		fConfirmActionForClients.setMessage(confirmInfo + "\n\n" + getSelectedClientsString().replace(";", ""));
 
-		fConfirmActionForClients.setLocationRelativeTo(Globals.mainFrame);
+		fConfirmActionForClients.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		fConfirmActionForClients.setAlwaysOnTop(true);
 		fConfirmActionForClients.setVisible(true);
 
@@ -5239,7 +5240,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			clientSelectionDialog = new ClientSelectionDialog(this, selectionPanel, savedSearchesDialog);
 		}
 
-		clientSelectionDialog.setLocationRelativeTo(Globals.mainFrame);
+		clientSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		clientSelectionDialog.setVisible(true);
 	}
 
@@ -5457,7 +5458,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		if (change) {
-			int returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame,
+			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp"),
 					Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);

@@ -145,7 +145,7 @@ public class ControllerHWinfoMultiClients {
 			}
 		};
 
-		panel.setMasterFrame(Globals.mainFrame);
+		panel.setMasterFrame(ConfigedMain.getMainFrame());
 		panel.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
@@ -233,8 +233,8 @@ public class ControllerHWinfoMultiClients {
 						// testpanel,
 						true);
 
-				fTable.setSize(new java.awt.Dimension(Globals.mainFrame.getSize().width - 50,
-						Globals.mainFrame.getSize().height / 2));
+				fTable.setSize(new java.awt.Dimension(ConfigedMain.getMainFrame().getSize().width - 50,
+						ConfigedMain.getMainFrame().getSize().height / 2));
 			}
 
 			fTable.centerOnParent();

@@ -24,6 +24,7 @@ import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVParser;
@@ -50,7 +51,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private CSVImportDataModifier modifier;
 
 	public CSVImportDataDialog(CSVImportDataModifier modifier, CSVFormat format) {
-		super(Globals.mainFrame, Configed.getResourceValue("CSVImportDataDialog.title"), true,
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true,
 				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
 						Configed.getResourceValue("FGeneralDialog.ok") },
 				new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),

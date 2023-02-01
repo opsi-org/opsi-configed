@@ -23,6 +23,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.Autocomplete;
 import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
@@ -112,7 +113,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		initGUI();
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		this.setLocationRelativeTo(Globals.mainFrame);
+		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setSize(this.thissize);
 		this.setMaximumSize(new Dimension(900, 700));
 

@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandPackageUpdater;
@@ -189,7 +190,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 						.addGap(2 * Globals.GAP_SIZE));
 
 		this.setSize(600, 210);
-		this.setLocationRelativeTo(Globals.mainFrame);
+		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);

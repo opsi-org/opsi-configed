@@ -14,6 +14,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVParser;
@@ -99,7 +100,7 @@ public class CSVImportDataModifier {
 				message.append(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
 			}
 
-			FTextArea fInfo = new FTextArea(Globals.mainFrame, title + " (" + Globals.APPNAME + ") ", false,
+			FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title + " (" + Globals.APPNAME + ") ", false,
 					new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
 
 			fInfo.setMessage(message.toString());

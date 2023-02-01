@@ -9,7 +9,7 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 
-import de.uib.configed.Globals;
+import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
 public class SecondaryFrame extends JFrame implements WindowListener {
@@ -17,7 +17,7 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 	protected Container masterFrame;
 
 	public SecondaryFrame() {
-		this.masterFrame = Globals.mainFrame;
+		this.masterFrame = ConfigedMain.getMainFrame();
 		if (masterFrame == null)
 			Logging.warning(this, "masterFrame yet null");
 		addWindowListener(this);

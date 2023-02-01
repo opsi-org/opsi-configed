@@ -18,6 +18,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandWget;
@@ -56,7 +57,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		initLayout();
 		pack();
 		setSize(Globals.dialogFrameDefaultSize);
-		this.setLocationRelativeTo(Globals.mainFrame);
+		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);

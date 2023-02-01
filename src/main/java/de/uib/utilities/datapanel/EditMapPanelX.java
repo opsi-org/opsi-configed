@@ -37,6 +37,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
@@ -507,7 +508,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			if (names.indexOf(s) > -1) {
 				ok =
 
-						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(Globals.mainFrame,
+						(JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 								"Ein Eintrag mit diesem Namen existiert bereits. Überschreiben des bisherigen Eintrags?",
 								Globals.APPNAME, JOptionPane.OK_CANCEL_OPTION));
 			}
@@ -569,7 +570,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			}
 		}
 		if (!located)
-			fed.setLocationRelativeTo(Globals.mainFrame);
+			fed.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		fed.setVisible(true);
 	}

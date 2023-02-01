@@ -615,7 +615,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					new Thread() {
 						@Override
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, infoOfChange,
+							javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), infoOfChange,
 									Configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -645,7 +645,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					new Thread() {
 						@Override
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, errorInfo,
+							javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo,
 									Configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -698,7 +698,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	public boolean infoIfNoClientsSelected() {
 
 		if (selectedClients.length == 0) {
-			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
+			javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected"),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected.title"),
 					javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -740,7 +740,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				lines.append(p);
 			}
 
-			final de.uib.configed.gui.FShowList fMissingProducts = new de.uib.configed.gui.FShowList(Globals.mainFrame,
+			final de.uib.configed.gui.FShowList fMissingProducts = new de.uib.configed.gui.FShowList(
+					ConfigedMain.getMainFrame(),
 					Globals.APPNAME + ": "
 							+ Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"),
 					true, new String[] { "ok" }, 400, 300);
@@ -766,7 +767,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				products.append("\n");
 			}
 
-			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
+			javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("InstallationStateTableModel.missingImplementationForActionRequest")
 							+ products,
 					Configed.getResourceValue(

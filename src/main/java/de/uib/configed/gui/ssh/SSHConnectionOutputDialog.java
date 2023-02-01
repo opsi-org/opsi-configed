@@ -27,6 +27,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -75,7 +76,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		closeListener = new DialogCloseListener();
 		initOutputGui();
 		this.setSize(700, 400);
-		this.setLocationRelativeTo(Globals.mainFrame);
+		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 

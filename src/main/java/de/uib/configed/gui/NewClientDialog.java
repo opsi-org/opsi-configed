@@ -93,8 +93,9 @@ public class NewClientDialog extends FGeneralDialog
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
 	private NewClientDialog(ConfigedMain main, List<String> depots) {
-		super(Globals.mainFrame, Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")",
-				false, new String[] { Configed.getResourceValue("NewClientDialog.buttonClose"),
+		super(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")", false,
+				new String[] { Configed.getResourceValue("NewClientDialog.buttonClose"),
 						Configed.getResourceValue("NewClientDialog.buttonCreate") },
 				700, 600);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
@@ -121,7 +122,7 @@ public class NewClientDialog extends FGeneralDialog
 			instance = new NewClientDialog(main, depots);
 			instance.init();
 		} else
-			instance.setLocationRelativeTo(Globals.mainFrame);
+			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		return instance;
 	}
@@ -591,7 +592,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		scrollpane.getViewport().add(panel);
 		pack();
-		setLocationRelativeTo(Globals.mainFrame);
+		setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	private void createClients(List<List<Object>> clients) {
@@ -606,7 +607,7 @@ public class NewClientDialog extends FGeneralDialog
 
 			if (!isBoolean((String) client.get(11)) || !isBoolean((String) client.get(12))
 					|| !isBoolean((String) client.get(13))) {
-				FTextArea fInfo = new FTextArea(Globals.mainFrame,
+				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " (" + Globals.APPNAME
 								+ ") ",
 						false, new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
@@ -698,7 +699,7 @@ public class NewClientDialog extends FGeneralDialog
 				goOn = false;
 			}
 
-			FTextArea fQuestion = new FTextArea(Globals.mainFrame,
+			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
 							+ ") ",
 					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
@@ -720,7 +721,7 @@ public class NewClientDialog extends FGeneralDialog
 		}
 
 		if (goOn && hostname.length() > 15) {
-			FTextArea fQuestion = new FTextArea(Globals.mainFrame,
+			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
 					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
@@ -745,7 +746,7 @@ public class NewClientDialog extends FGeneralDialog
 		}
 
 		if (goOn && onlyNumbers) {
-			FTextArea fQuestion = new FTextArea(Globals.mainFrame,
+			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
 					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
@@ -771,7 +772,7 @@ public class NewClientDialog extends FGeneralDialog
 		jFileChooser.addChoosableFileFilter(fileFilter);
 		jFileChooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = jFileChooser.showOpenDialog(Globals.mainFrame);
+		int returnValue = jFileChooser.showOpenDialog(ConfigedMain.getMainFrame());
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();
@@ -823,7 +824,7 @@ public class NewClientDialog extends FGeneralDialog
 		columnNames.add("shutdownInstall");
 
 		if (format.hasHeader() && !format.hasExpectedHeaderNames(columnNames)) {
-			FTextArea fInfo = new FTextArea(Globals.mainFrame,
+			FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title") + " ("
 							+ Globals.APPNAME + ") ",
 					false, new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);

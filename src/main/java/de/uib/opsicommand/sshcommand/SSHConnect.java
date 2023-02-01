@@ -140,7 +140,7 @@ public class SSHConnect {
 			return "";
 		}
 		if (dialog == null)
-			dialog = Globals.mainFrame;
+			dialog = ConfigedMain.getMainFrame();
 		Logging.debug(this, "getSudoPass dialog " + dialog);
 		final JPasswordField passwordField = new JPasswordField(10);
 		passwordField.setEchoChar('*');

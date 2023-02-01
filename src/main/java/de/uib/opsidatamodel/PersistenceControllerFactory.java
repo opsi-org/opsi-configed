@@ -14,6 +14,7 @@
 package de.uib.opsidatamodel;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
@@ -102,7 +103,7 @@ public class PersistenceControllerFactory {
 							+ Configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion") + " "
 							+ persistControl.getOpsiVersion() + " ) ";
 
-					javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, errorInfo, Globals.APPNAME,
+					javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo, Globals.APPNAME,
 							javax.swing.JOptionPane.OK_OPTION);
 
 					Configed.endApp(1);
@@ -130,7 +131,7 @@ public class PersistenceControllerFactory {
 							continuing.value = true;
 
 							de.uib.configed.gui.FTextArea infodialog = new de.uib.configed.gui.FTextArea(
-									Globals.mainFrame, Globals.APPNAME, false, // we are not modal
+									ConfigedMain.getMainFrame(), Globals.APPNAME, false, // we are not modal
 									new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 300, 200) {
 								@Override
 								public void doAction1() {
@@ -141,7 +142,7 @@ public class PersistenceControllerFactory {
 								}
 							};
 
-							infodialog.setLocationRelativeTo(Globals.mainFrame);
+							infodialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 							infodialog.setMessage(errorInfo);
 							infodialog.setVisible(true);
 
@@ -154,7 +155,7 @@ public class PersistenceControllerFactory {
 								Globals.threadSleep(this, 3000);
 								Logging.info("== repeating info " + count);
 
-								infodialog.setLocationRelativeTo(Globals.mainFrame);
+								infodialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 							}
 
@@ -189,7 +190,7 @@ public class PersistenceControllerFactory {
 
 			String errorInfo = ex.toString();
 
-			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, errorInfo, Globals.APPNAME,
+			javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo, Globals.APPNAME,
 					javax.swing.JOptionPane.OK_OPTION);
 
 			Configed.endApp(2);

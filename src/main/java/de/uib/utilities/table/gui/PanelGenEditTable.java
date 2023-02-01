@@ -50,6 +50,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.utilities.Mapping;
@@ -72,7 +73,7 @@ import de.uib.utilities.thread.WaitCursor;
 
 public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
 		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
-	javax.swing.JFrame masterFrame = Globals.mainFrame;
+	javax.swing.JFrame masterFrame = ConfigedMain.getMainFrame();
 
 	// TODO are these used somewhere?
 	protected Comparator[] comparators;
@@ -676,7 +677,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemDeleteRelation.setEnabled(false);
 				menuItemDeleteRelation.addActionListener(actionEvent -> {
 					if (getSelectedRowCount() == 0) {
-						JOptionPane.showMessageDialog(Globals.mainFrame,
+						JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 								Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
 								Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 
@@ -1724,7 +1725,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(Globals.mainFrame);
+		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		externalView.setVisible(true);
 	}
