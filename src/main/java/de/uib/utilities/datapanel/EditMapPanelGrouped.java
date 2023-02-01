@@ -169,6 +169,10 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 							case PopupMenuTrait.POPUP_PDF:
 								createPDF();
 								break;
+
+							default:
+								Logging.warning(this, "no case found for JPopupMenu in definePopup");
+								break;
 							}
 
 						}

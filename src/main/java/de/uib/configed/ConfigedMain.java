@@ -3322,51 +3322,45 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		boolean result = true;
 
 		switch (viewIndex) {
-		case VIEW_CLIENTS: {
+		case VIEW_CLIENTS:
 			break;
-		}
 
-		case VIEW_LOCALBOOT_PRODUCTS: {
+		case VIEW_LOCALBOOT_PRODUCTS:
 			result = setLocalbootProductsPage();
 			break;
-		}
 
-		case VIEW_NETBOOT_PRODUCTS: {
+		case VIEW_NETBOOT_PRODUCTS:
 			result = setNetbootProductsPage();
 			break;
-		}
 
-		case VIEW_NETWORK_CONFIGURATION: {
+		case VIEW_NETWORK_CONFIGURATION:
 			result = setNetworkconfigurationPage();
 			break;
-		}
 
-		case VIEW_HARDWARE_INFO: {
+		case VIEW_HARDWARE_INFO:
 			result = setHardwareInfoPage();
 			break;
-		}
 
-		case VIEW_SOFTWARE_INFO: {
+		case VIEW_SOFTWARE_INFO:
 			result = setSoftwareInfoPage();
 			break;
-		}
 
-		case VIEW_LOG: {
+		case VIEW_LOG:
 			result = setLogPage();
 			break;
-		}
 
-		case VIEW_PRODUCT_PROPERTIES: {
+		case VIEW_PRODUCT_PROPERTIES:
 			result = setProductPropertiesPage();
 
 			break;
-		}
 
-		case VIEW_HOST_PROPERTIES: {
+		case VIEW_HOST_PROPERTIES:
 			result = setHostPropertiesPage();
 			break;
-		}
 
+		default:
+			Logging.warning(this, "resetting View failed, no index for viewIndex: '" + viewIndex + "' found");
+			break;
 		}
 
 		return result;

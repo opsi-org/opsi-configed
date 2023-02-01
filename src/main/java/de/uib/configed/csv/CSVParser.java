@@ -133,6 +133,11 @@ public class CSVParser {
 					fieldCount = 0;
 				}
 				break;
+
+			default:
+				Logging.warning(this,
+						"no case for name of token could be found trying to parse CSV: " + token.getName());
+				break;
 			}
 		}
 

@@ -205,6 +205,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						pdfExportTable.execute(null, false); // create pdf // no filename, onlyselectedRows=false
 
 						break;
+
+					default:
+						Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
+						break;
 					}
 				}
 			};

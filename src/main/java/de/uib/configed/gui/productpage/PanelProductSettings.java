@@ -662,7 +662,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					s = "";
 				}
 				actCol[i] = s;
-				jTable.getColumnName(i);
+
 				switch (jTable.getColumnName(i)) {
 				case "Stand":
 					if (!s.equals("not_installed"))
@@ -676,7 +676,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					if (!s.equals("none"))
 						dontStrippIt = true;
 					break;
-
+				default:
+					Logging.warning(this, "no case found for columnName in jTable");
+					break;
 				}
 			}
 			if (dontStrippIt) {

@@ -94,6 +94,9 @@ public class FPanel extends SecondaryFrame {
 					break;
 				case JOptionPane.CANCEL_OPTION:
 					break;
+				default:
+					Logging.warning(this, "no case found for returnedOption in leaveChecked");
+					break;
 				}
 			}
 

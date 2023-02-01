@@ -562,6 +562,10 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					case PopupMenuTrait.POPUP_FLOATINGCOPY:
 						floatExternal();
 						break;
+
+					default:
+						Logging.warning(this, "no case found for popupMenuTrait in LogPane");
+						break;
 					}
 
 				}

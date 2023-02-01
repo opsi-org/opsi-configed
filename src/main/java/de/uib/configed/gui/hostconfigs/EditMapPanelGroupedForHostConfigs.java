@@ -84,6 +84,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					deleteUser();
 					break;
 
+				default:
+					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpathes");
+					break;
 				}
 
 			}
@@ -106,7 +109,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				case PopupMenuTrait.POPUP_ADD:
 					addUser();
 					break;
-
+				default:
+					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpath");
+					break;
 				}
 
 			}
@@ -136,6 +141,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					deleteUser();
 					break;
 
+				default:
+					Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepathes");
+					break;
 				}
 
 			}
@@ -159,6 +167,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					addRole();
 					break;
 
+				default:
+					Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepath");
+					break;
 				}
 
 			}

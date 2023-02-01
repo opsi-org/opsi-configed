@@ -125,7 +125,9 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		case 3:
 			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
 			break;
-
+		default:
+			Logging.warning(this, "no case found for col in getColumnName");
+			break;
 		}
 
 		return result;
@@ -156,6 +158,9 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				result = indent + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
 						+ " uninstall";
 				break;
+			default:
+				Logging.warning(this, "no case found for rowTypeIndex in getValueAt");
+				break;
 			}
 		}
 
@@ -183,6 +188,9 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 					result = requAfterMap.get(myKey);
 					break;
 				} // otherwise, result will remain null
+			default:
+				Logging.warning(this, "no case found for col in getValueAt");
+				break;
 			}
 
 			if (result != null)
@@ -254,8 +262,10 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				cell.setBackground(Globals.BACKGROUND_COLOR_8);
 				break;
 			case 2:
-
 				cell.setBackground(Globals.BACKGROUND_COLOR_8);
+				break;
+			default:
+				Logging.warning(this, "no case found for kindOfRow in colorize");
 				break;
 			}
 

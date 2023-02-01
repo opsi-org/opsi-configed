@@ -972,8 +972,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						Logging.info(this, "setAgainUserRegistration reactivate user check ");
 						resultVal = true;
 						break;
-					}
 
+					default:
+						Logging.warning(this, "no case found for result in setAgainUserRegistration");
+						break;
+					}
 				}
 			}
 		}
@@ -3034,6 +3037,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 					case javax.swing.JOptionPane.CANCEL_OPTION:
 						return null;
+
+					default:
+						Logging.warning(this, "no case found for returnedOption in getSoftwareAuditOnce");
+						break;
 					}
 
 				} else {

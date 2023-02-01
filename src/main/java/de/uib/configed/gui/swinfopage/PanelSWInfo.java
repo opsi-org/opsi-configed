@@ -321,12 +321,10 @@ public class PanelSWInfo extends JPanel {
 				.addGap(vGap, vGap, vGap));
 
 		if (withPopup) {
-			PopupMenuTrait popupTrait = new PopupMenuTrait(
-					new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+			PopupMenuTrait popupTrait = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV,
+					PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
+					PopupMenuTrait.POPUP_FLOATINGCOPY }) {
 
-							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
-
-							PopupMenuTrait.POPUP_FLOATINGCOPY }) {
 				@Override
 				public void action(int p) {
 
@@ -351,6 +349,8 @@ public class PanelSWInfo extends JPanel {
 						sendToCSVonlySelected();
 						break;
 
+					default:
+						Logging.warning(this, "no case found for popupmenutrait");
 					}
 				}
 

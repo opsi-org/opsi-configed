@@ -750,6 +750,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				addPopupItem(menuItemPDF);
 
 				break;
+
+			default:
+				Logging.warning(this, "no case found for popuptype in addPopupmenuStandardpart");
+				break;
 			}
 		}
 	}
