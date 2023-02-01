@@ -447,7 +447,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		anyDataChanged = false;
 
-		waitCursorInitGui = new WaitCursor(mainFrame.retrieveBasePane(), mainFrame.getCursor(), "initGui");
+		waitCursorInitGui = new WaitCursor(mainFrame.getContentPane(), mainFrame.getCursor(), "initGui");
 
 		preloadData();
 
@@ -767,7 +767,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected void preloadData()
 	// sets dataReady = true when finished
 	{
-		WaitCursor waitCursor = new WaitCursor(mainFrame.retrieveBasePane(), "preloadData");
+		WaitCursor waitCursor = new WaitCursor(mainFrame.getContentPane(), "preloadData");
 
 		persist.retrieveOpsiModules();
 
@@ -1356,8 +1356,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected void initLicencesFrame() {
 		long startmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicencesFrame start " + new Date(startmillis));
-		WaitCursor waitCursor = new WaitCursor(mainFrame.retrieveBasePane(), mainFrame.getCursor(),
-				"initLicencesFrame");
+		WaitCursor waitCursor = new WaitCursor(mainFrame.getContentPane(), mainFrame.getCursor(), "initLicencesFrame");
 		// general
 
 		licencesFrame = new TabbedFrame(this);

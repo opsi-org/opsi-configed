@@ -2,7 +2,6 @@ package de.uib.configed.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -133,6 +132,7 @@ import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.thread.WaitCursor;
 import javafx.application.Platform;
+import javafx.css.Size;
 import javafx.embed.swing.JFXPanel;
 
 public class MainFrame extends JFrame
@@ -156,8 +156,6 @@ public class MainFrame extends JFrame
 	private ExportTable exportTable;
 
 	private ConfigedMain main;
-
-	private SizeListeningPanel allPane;
 
 	// menu system
 
@@ -480,8 +478,6 @@ public class MainFrame extends JFrame
 	int prefClientPaneW = 100;
 	int clientPaneW;
 
-	private Container baseContainer;
-
 	private LicenseDash licenseDash;
 
 	class GlassPane extends JComponent {
@@ -557,12 +553,6 @@ public class MainFrame extends JFrame
 
 	public HostsStatusInfo getHostsStatusInfo() {
 		return statusPane;
-	}
-
-	public Container retrieveBasePane()
-	// for setting cursor
-	{
-		return baseContainer;
 	}
 
 	// This shall be called after MainFrame is made visible
@@ -1720,10 +1710,6 @@ public class MainFrame extends JFrame
 	// ------------------------------------------------------------------------------------------
 	// ------------------------------------------------------------------------------------------
 
-	public void clear() {
-		baseContainer.remove(allPane);
-	}
-
 	public void updateHostCheckboxenText() {
 		if (main.getPersistenceController().isWithUEFI()) {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
@@ -1745,11 +1731,11 @@ public class MainFrame extends JFrame
 		this.setFont(Globals.defaultFont);
 		this.setIconImage(Globals.mainIcon);
 
-		allPane = new SizeListeningPanel();
+		SizeListeningPanel allPane = new SizeListeningPanel();
 
 		allPane.setLayout(borderLayout1);
 
-		baseContainer.add(allPane);
+		getContentPane().add(allPane);
 
 		initMenuData();
 
