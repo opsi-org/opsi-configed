@@ -132,7 +132,6 @@ import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.thread.WaitCursor;
 import javafx.application.Platform;
-import javafx.css.Size;
 import javafx.embed.swing.JFXPanel;
 
 public class MainFrame extends JFrame
@@ -357,10 +356,10 @@ public class MainFrame extends JFrame
 	public CombinedMenuItem combinedMenuItemWANactiveColumn = new CombinedMenuItem(jCheckBoxMenuItemShowWANactiveColumn,
 			popupShowWANactiveColumn);
 
-	public CombinedMenuItem combinedMenuItemIPAddressColumn = new CombinedMenuItem(jCheckBoxMenuItemShowIPAddressColumn,
-			popupShowIPAddressColumn);
+	private CombinedMenuItem combinedMenuItemIPAddressColumn = new CombinedMenuItem(
+			jCheckBoxMenuItemShowIPAddressColumn, popupShowIPAddressColumn);
 
-	public CombinedMenuItem combinedMenuItemHardwareAddressColumn = new CombinedMenuItem(
+	private CombinedMenuItem combinedMenuItemHardwareAddressColumn = new CombinedMenuItem(
 			jCheckBoxMenuItemShowHardwareAddressColumn, popupShowHardwareAddressColumn);
 
 	public CombinedMenuItem combinedMenuItemSessionInfoColumn = new CombinedMenuItem(
