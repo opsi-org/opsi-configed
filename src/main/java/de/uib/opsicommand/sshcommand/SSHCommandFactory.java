@@ -30,7 +30,6 @@ import de.uib.configed.Configed;
  * @version 1.0
  */
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.MainFrame;
 import de.uib.utilities.logging.Logging;
 
@@ -557,7 +556,7 @@ public class SSHCommandFactory {
 
 		Logging.info(this, "status " + status);
 		if (mainFrame == null)
-			((MainFrame) ConfigedMain.getMainFrame()).updateSSHConnectedInfoMenu(status);
+			ConfigedMain.getMainFrame().updateSSHConnectedInfoMenu(status);
 		else
 			mainFrame.updateSSHConnectedInfoMenu(status);
 	}

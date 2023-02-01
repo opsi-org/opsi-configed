@@ -72,16 +72,10 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 		}
 		try {
-
-			{
-
-				paintImmediately(0, 0, WIDTH, HEIGHT); // class cast exceptions mit sleepingMS = 50 if not event dispatch thread
-			}
-
+			paintImmediately(0, 0, WIDTH, HEIGHT); // class cast exceptions mit sleepingMS = 50 if not event dispatch thread
 		} catch (Exception strange) {
 			Logging.warning(this, "strange exception " + strange);
 			setState(INACTIVE);
-
 		}
 	}
 

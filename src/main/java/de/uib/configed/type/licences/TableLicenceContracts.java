@@ -77,9 +77,9 @@ public class TableLicenceContracts extends Relation {
 	public StringValuedRelationElement integrateRaw(Map<String, Object> m) {
 		StringValuedRelationElement rowmap = new StringValuedRelationElement();
 		rowmap.setAllowedAttributes(INTERFACED_ATTRIBUTES);
-		{
-			rowmap.put(ID_DB_KEY, rowmap.get(ID_KEY));
-		}
+
+		rowmap.put(ID_DB_KEY, rowmap.get(ID_KEY));
+
 		rowmap.remove(TYPE_KEY);
 		rowmap.remove(IDENT_KEY);
 

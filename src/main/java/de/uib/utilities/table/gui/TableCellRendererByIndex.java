@@ -29,36 +29,34 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 		mapOfStrings = mapOfStringValues;
 		mapOfImages = new HashMap<>();
 		// Load the item values
-		{
-			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
-			while (iter.hasNext()) {
-				Entry<String, String> entry = iter.next();
-				String key = entry.getKey();
-				String stringval = entry.getValue();
 
-				ImageIcon image = null;
+		Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
+		while (iter.hasNext()) {
+			Entry<String, String> entry = iter.next();
+			String key = entry.getKey();
+			String stringval = entry.getValue();
 
-				if (imagesBase != null && key != null && stringval != null) {
-					String imageFileString = imagesBase + "/" + key + ".png";
+			ImageIcon image = null;
+
+			if (imagesBase != null && key != null && stringval != null) {
+				String imageFileString = imagesBase + "/" + key + ".png";
+
+				image = Globals.createImageIcon(imageFileString, stringval);
+
+				if (image == null)
+				// try with gif
+				{
+					imageFileString = imagesBase + "/" + stringval + ".gif";
 
 					image = Globals.createImageIcon(imageFileString, stringval);
 
-					if (image == null)
-					// try with gif
-					{
-						imageFileString = imagesBase + "/" + stringval + ".gif";
-
-						image = Globals.createImageIcon(imageFileString, stringval);
-
-					}
-
-					if (image != null)
-						mapOfImages.put(key, image);
-
 				}
+
+				if (image != null)
+					mapOfImages.put(key, image);
+
 			}
 		}
-
 	}
 
 	@Override

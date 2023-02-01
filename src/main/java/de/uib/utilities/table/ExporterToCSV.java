@@ -115,11 +115,10 @@ public class ExporterToCSV extends ExportTable {
 
 										String inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
 
-										{
-											line.append(STRING_DELIMITER);
-											line.append(inString);
-											line.append(STRING_DELIMITER);
-										}
+										line.append(STRING_DELIMITER);
+										line.append(inString);
+										line.append(STRING_DELIMITER);
+
 									}
 
 									else if (classNames.get(colI).equals("java.lang.Integer")) {

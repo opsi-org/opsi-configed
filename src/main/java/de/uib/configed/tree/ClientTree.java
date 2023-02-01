@@ -867,25 +867,18 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			if (fObject2Groups.get(clientId) != null) {
 				Set<String> belongingTo = fObject2Groups.get(clientId);
 
-				{
-					for (String groupId : belongingTo) {
+				for (String groupId : belongingTo) {
 
-						// )
-						{
-							List<String> memberList = group2Members.get(groupId);
+					List<String> memberList = group2Members.get(groupId);
 
-							if (memberList == null) {
-								memberList = new ArrayList<>();
-							}
-
-							memberList.add(clientId);
-							group2Members.put(groupId, memberList);
-						}
+					if (memberList == null) {
+						memberList = new ArrayList<>();
 					}
+
+					memberList.add(clientId);
+					group2Members.put(groupId, memberList);
 				}
-
 			}
-
 		}
 
 		List<String> membersOfDirectoryNotAssigned = new ArrayList<>();

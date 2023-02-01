@@ -98,19 +98,18 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		}
 
 		// derive from optionsMap, opsi 4.0
-		{
-			descriptionsMap = new HashMap<>();
-			defaultsMap = new HashMap<>();
 
-			if (optionsMap != null) {
-				for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
-					String description = option.getValue().getDescription();
-					Object defaultvalue = option.getValue().getDefaultValues();
+		descriptionsMap = new HashMap<>();
+		defaultsMap = new HashMap<>();
 
-					descriptionsMap.put(option.getKey(), description);
-					defaultsMap.put(option.getKey(), defaultvalue);
+		if (optionsMap != null) {
+			for (Entry<String, ListCellOptions> option : optionsMap.entrySet()) {
+				String description = option.getValue().getDescription();
+				Object defaultvalue = option.getValue().getDefaultValues();
 
-				}
+				descriptionsMap.put(option.getKey(), description);
+				defaultsMap.put(option.getKey(), defaultvalue);
+
 			}
 		}
 
@@ -119,7 +118,6 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 				defaultsMap);
 
 		cancelOldCellEditing();
-
 	}
 
 	@Override

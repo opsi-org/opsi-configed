@@ -963,9 +963,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
-			{
-				((DefaultRowSorter) sorter).setComparator(colIndex, new de.uib.utilities.IntComparatorForStrings());
-			}
+			((DefaultRowSorter) sorter).setComparator(colIndex, new de.uib.utilities.IntComparatorForStrings());
+
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_POSITION)) > -1) {

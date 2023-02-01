@@ -3019,36 +3019,34 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				Logging.debug(this, "getSoftwareAudit,  ID " + i + " for client entry " + entry);
 				if (i == -1 && withRetry) {
-					{
-						Logging.info(this, "getSoftwareAudit,  not found client entry " + entry);
-						int returnedOption = javax.swing.JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 
-								Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.message")
-										+ " " + entry.getSWident()
-										+ Configed.getResourceValue(
-												"PersistenceController.reloadSoftwareInformation.question")
-										+ Configed.getResourceValue(
-												"PersistenceController.reloadSoftwareInformation.info"),
+					Logging.info(this, "getSoftwareAudit,  not found client entry " + entry);
+					int returnedOption = javax.swing.JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 
-								Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.title"),
+							Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.message") + " "
+									+ entry.getSWident()
+									+ Configed.getResourceValue(
+											"PersistenceController.reloadSoftwareInformation.question")
+									+ Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.info"),
 
-								javax.swing.JOptionPane.YES_NO_CANCEL_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE,
-								null, null, null);
+							Configed.getResourceValue("PersistenceController.reloadSoftwareInformation.title"),
 
-						switch (returnedOption) {
-						case javax.swing.JOptionPane.NO_OPTION:
-							break;
+							javax.swing.JOptionPane.YES_NO_CANCEL_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE,
+							null, null, null);
 
-						case javax.swing.JOptionPane.YES_OPTION:
-							installedSoftwareInformationRequestRefresh();
-							softwareAuditOnClientsRequestRefresh();
-							return null;
+					switch (returnedOption) {
+					case javax.swing.JOptionPane.NO_OPTION:
+						break;
 
-						case javax.swing.JOptionPane.CANCEL_OPTION:
-							return null;
-						}
+					case javax.swing.JOptionPane.YES_OPTION:
+						installedSoftwareInformationRequestRefresh();
+						softwareAuditOnClientsRequestRefresh();
+						return null;
 
+					case javax.swing.JOptionPane.CANCEL_OPTION:
+						return null;
 					}
+
 				} else {
 					if (i != -1)
 						list.add(entry.getExpandedData(getInstalledSoftwareInformation(), getSWident(i)));
@@ -3541,13 +3539,11 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			try {
 
-				{
-					if (Globals.maxLogSizes[i] == 0) {
-						s = exec.getStringResult(new OpsiMethodCall("readLog", new String[] { logtype, clientId }));
-					} else {
-						s = exec.getStringResult(new OpsiMethodCall("readLog",
-								new String[] { logtype, clientId, String.valueOf(Globals.maxLogSizes[i]) }));
-					}
+				if (Globals.maxLogSizes[i] == 0) {
+					s = exec.getStringResult(new OpsiMethodCall("readLog", new String[] { logtype, clientId }));
+				} else {
+					s = exec.getStringResult(new OpsiMethodCall("readLog",
+							new String[] { logtype, clientId, String.valueOf(Globals.maxLogSizes[i]) }));
 				}
 
 			} catch (java.lang.OutOfMemoryError e) {
@@ -8178,7 +8174,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 				@Override
 				public void doAction2() {
-					((de.uib.configed.gui.MainFrame) ConfigedMain.getMainFrame()).callOpsiLicensingInfo();
+					ConfigedMain.getMainFrame().callOpsiLicensingInfo();
 				}
 
 			};

@@ -69,8 +69,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 	/** Save Button instance **/
 	private JButton buttonSave;
-	/** Close Button instance **/
-	private JButton buttonClose;
 
 	/** JLabel menu text instance **/
 	private JLabel labelMenuText = new JLabel();
@@ -219,7 +217,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 				"images/list-remove.png", "images/list-remove_disabled.png", true);
 		buttonSave = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
-		buttonClose = new IconButton(Configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
+		JButton buttonClose = new IconButton(Configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
 				"images/cancel-32.png", "images/cancel_over-32.png", " ", true);
 
 		labelMenuText.setText(Configed.getResourceValue("SSHConnection.CommandControl.menuText"));

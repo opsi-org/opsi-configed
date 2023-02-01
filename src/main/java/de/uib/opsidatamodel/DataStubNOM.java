@@ -929,15 +929,13 @@ public class DataStubNOM extends DataStub {
 
 					clientsWithThisSW.add(clientId);
 
+					if (clientId != null) // null not allowed in mysql
 					{
-						if (clientId != null) // null not allowed in mysql
-						{
-							List<SWAuditClientEntry> entries = client2software.get(clientId);
+						List<SWAuditClientEntry> entries = client2software.get(clientId);
 
-							entries.add(clientEntry);
-						}
-
+						entries.add(clientEntry);
 					}
+
 				}
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
