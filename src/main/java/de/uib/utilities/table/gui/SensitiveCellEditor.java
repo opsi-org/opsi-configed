@@ -131,7 +131,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			if (model != null) {
 
-				listeditor.setListModel(modelProducer.getListModel(row, column));
+				listeditor.setListModel(model);
 
 				Logging.info(this, "startValue set: " + value);
 
@@ -145,13 +145,10 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 				editingRow = row;
 				editingColumn = column;
-			}
-
-			else {
+			} else {
 				model = new DefaultListModel<>();
 
 				listeditor.setListModel(model);
-				startListEditor();
 
 				listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 				listeditor.setEditable(true);
@@ -159,6 +156,8 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 				listeditor.enter();
 				listeditor.setStartValue("");
+
+				startListEditor();
 
 				editingRow = -1;
 				editingColumn = -1;
@@ -233,11 +232,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		}
 
 		return listeditor.getValue();
-	}
-
-	public void finish() {
-		if (listeditor != null)
-			listeditor.deactivate();
 	}
 
 	// MouseListener for textfield
