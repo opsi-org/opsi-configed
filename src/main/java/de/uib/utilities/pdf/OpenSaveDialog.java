@@ -18,10 +18,6 @@ public class OpenSaveDialog implements ActionListener {
 	Boolean saveAction;
 	de.uib.configed.gui.GeneralFrame dialogView;
 
-	public OpenSaveDialog() {
-		this("PDF erzeugen");
-	}
-
 	public OpenSaveDialog(String title) {
 
 		saveBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.save"));
@@ -45,7 +41,6 @@ public class OpenSaveDialog implements ActionListener {
 		dialogView.setSize(new Dimension(400, 90));
 		dialogView.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		dialogView.setVisible(true);
-
 	}
 
 	public Boolean getSaveAction() {

@@ -3921,9 +3921,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		public HostConfigsDataChangedKeeper() {
 
 			super();
-
 		}
-
 	}
 
 	/* ============================================ */

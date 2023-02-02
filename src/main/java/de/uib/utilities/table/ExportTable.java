@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -36,7 +37,6 @@ public abstract class ExportTable {
 	protected boolean askForOverwrite;
 
 	protected String writeToFile;
-	protected JFileChooser chooser;
 
 	protected String client;
 	protected String title;
@@ -169,7 +169,7 @@ public abstract class ExportTable {
 
 	}
 
-	protected String checkFile(String filename, javax.swing.filechooser.FileNameExtensionFilter exFilter) {
+	protected String checkFile(String filename, FileNameExtensionFilter exFilter) {
 		if (filename == null) {
 			JFileChooser chooser = new JFileChooser(exportDirectory);
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -189,7 +189,7 @@ public abstract class ExportTable {
 
 			SwingUtilities.updateComponentTreeUI(chooser);
 
-			int returnVal = chooser.showDialog(Globals.frame1, null);
+			int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), null);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
 					filename = chooser.getSelectedFile().getAbsolutePath();
@@ -221,9 +221,7 @@ public abstract class ExportTable {
 					Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
 				}
 			}
-		}
-
-		if (filename != null) {
+		} else {
 			try {
 				exportDirectory = new File(filename).getParentFile();
 			} catch (Exception e) {
@@ -244,7 +242,7 @@ public abstract class ExportTable {
 
 		File defaultFile = new File(writeToFile);
 
-		chooser = new JFileChooser(exportDirectory);
+		JFileChooser chooser = new JFileChooser(exportDirectory);
 		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PDF", "pdf"));
@@ -256,7 +254,7 @@ public abstract class ExportTable {
 		int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), "OK");
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
-
+			Logging.info(this, "clicked ok on JFileChosser, get now fileName: " + fileName);
 		}
 
 		if (fileName != null) {

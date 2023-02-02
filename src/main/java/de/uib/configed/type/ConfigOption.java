@@ -13,7 +13,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions
 
 // has a problem with type of defaultValues
 {
-
 	public static final String REFERENCE_ID = "configId";
 
 	public enum TYPE {

@@ -41,21 +41,24 @@ import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class ExporterToPDF extends ExportTable {
+
+	// TODO why static fields here everywhere?
 	protected static Document document;
 	protected static PdfWriter writer;
 
 	protected OpenSaveDialog dialog;
-	protected Boolean saveAction;
+	private Boolean saveAction;
 
 	protected String defaultFilename = "report.pdf";
 	protected boolean askForOverwrite = true;
 
 	protected static final String FILE_EXTENSION = ".pdf";
 
-	private static float mLeft = 36;
-	private static float mRight = 36;
-	private static float mTop = 74; // with header
-	private static float mBottom = 54;
+	private static final float M_LEFT = 36;
+	private static final float M_RIGHT = 36;
+	private static final float M_TOP = 74; // with header
+	private static final float M_BOTTOM = 54;
+
 	private float xHeaderTop = 803;
 	private float headerWidth = 527;
 
@@ -64,28 +67,23 @@ public class ExporterToPDF extends ExportTable {
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	private static List<Integer> leftAlignmentlist = new ArrayList<>();
 
-	public ExporterToPDF(javax.swing.JTable table, List<String> classNames) {
+	public ExporterToPDF(JTable table, List<String> classNames) {
 		super(table, classNames);
 		extension = FILE_EXTENSION;
 		writeToFile = defaultFilename;
-		document = new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
-	}
-
-	public ExporterToPDF(PanelGenEditTable table, List<String> classNames) {
-		this(table.getTheTable(), classNames);
+		document = new Document(PageSize.A4, M_LEFT, M_RIGHT, M_TOP, M_BOTTOM);
 	}
 
 	public ExporterToPDF(PanelGenEditTable table) {
 		this(table.getTheTable(), null);
 	}
 
-	public ExporterToPDF(javax.swing.JTable table) {
+	public ExporterToPDF(JTable table) {
 		this(table, null);
 	}
 
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
-		document = new Document(PageSize.A4, mLeft, mRight, mTop, mBottom);
 		setPageSizeA4Landscape();
 
 		if (fileName != null)
@@ -104,11 +102,20 @@ public class ExporterToPDF extends ExportTable {
 			}
 
 			saveAction = dialog.getSaveAction();
+			Logging.info(this, "saveAction was null, now has value " + saveAction);
 		}
 
 		if (saveAction != null) {
-			if (saveAction) {
-				if (fileName != null) {
+			if (Boolean.TRUE.equals(saveAction)) {
+
+				if (fileName == null)
+					fileName = getFileLocation();
+
+				// FileName is null if nothing chosen, then we do nothing
+				if (fileName == null)
+					return;
+
+				else {
 					try {
 						Logging.info(this, "filename for saving PDF: " + fileName);
 						File file = new File(fileName);
@@ -119,13 +126,12 @@ public class ExporterToPDF extends ExportTable {
 					} catch (Exception e) {
 						Logging.error("no valid filename " + fileName);
 					}
+
+					Logging.notice(this, "selected fileName is: " + fileName);
+					fileName = checkExtension(fileName);
+					Logging.notice(this, "after checkExtension(..), fileName is now: " + fileName);
+					fileName = checkFile(fileName, extensionFilter);
 				}
-
-				if (fileName == null)
-					fileName = getFileLocation();
-
-				fileName = checkExtension(fileName);
-				fileName = checkFile(fileName, extensionFilter);
 
 			} else {
 				try {
@@ -135,6 +141,8 @@ public class ExporterToPDF extends ExportTable {
 					Logging.error("Failed to create temp file", e);
 				}
 			}
+
+			// Write file now
 			try {
 				if (filePath == null) {
 					writer = PdfWriter.getInstance(document, new FileOutputStream(defaultFilename));
@@ -166,11 +174,10 @@ public class ExporterToPDF extends ExportTable {
 				Logging.error("file not found: " + fileName, exp);
 			}
 
-			if (!saveAction && temp != null && temp.getAbsolutePath() != null) {
+			// saveAction is not null here, open PDF if created only temp file
+			if (Boolean.FALSE.equals(saveAction) && temp != null && temp.getAbsolutePath() != null) {
 				try {
-
 					Desktop.getDesktop().open(temp);
-
 				} catch (Exception e) {
 					Logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
 				}
@@ -205,10 +212,6 @@ public class ExporterToPDF extends ExportTable {
 		document.setPageSize(PageSize.A4.rotate());
 		headerWidth = 770;
 		xHeaderTop = 555;
-	}
-
-	public void setSaveAction(boolean action) {
-		saveAction = action;
 	}
 
 	public static Paragraph addEmptyLines(int number) {
@@ -250,10 +253,7 @@ public class ExporterToPDF extends ExportTable {
 	}
 
 	protected PdfPTable createTableDataElement(JTable theTable) {
-		Boolean onlySelectedRows = false;
-
-		if (theTable.getSelectedRowCount() > 0)
-			onlySelectedRows = true;
+		boolean onlySelectedRows = theTable.getSelectedRowCount() > 0;
 
 		PdfPTable table = new PdfPTable(theTable.getColumnCount());
 		PdfPCell h;
