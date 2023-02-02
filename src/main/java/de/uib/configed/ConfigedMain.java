@@ -3879,7 +3879,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				fAskSaveProductConfiguration.setLocationRelativeTo(mainFrame);
 				fAskSaveProductConfiguration.setVisible(true);
 
-				result = (fAskSaveProductConfiguration.getResult() == 1);
+				result = (fAskSaveProductConfiguration.getResult() == 2);
 
 				fAskSaveProductConfiguration.setVisible(false);
 
@@ -3984,7 +3984,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				fAskSaveChangedText.setLocationRelativeTo(mainFrame);
 				fAskSaveChangedText.setVisible(true);
-				result = (fAskSaveChangedText.getResult() == 1);
+				result = (fAskSaveChangedText.getResult() == 2);
 
 				fAskSaveChangedText.setVisible(false);
 
