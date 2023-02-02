@@ -1,9 +1,10 @@
 package de.uib.configed;
 
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.logging.UncaughtExceptionHandler;
 import de.uib.utilities.thread.WaitCursor;
 
-public class UncaughtExceptionHandlerLocalized extends de.uib.utilities.logging.UncaughtExceptionHandler {
+public class UncaughtExceptionHandlerLocalized extends UncaughtExceptionHandler {
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
 		WaitCursor.stopAll();

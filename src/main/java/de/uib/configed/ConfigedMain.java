@@ -3589,7 +3589,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (depots == null)
 			return new String[] {};
 
-		return new ArrayList<>(depots.keySet()).toArray(new String[0]);
+		return depots.keySet().toArray(new String[0]);
 	}
 
 	protected void fetchDepots() {

@@ -55,7 +55,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String CLIENT_GLOBAL_SEPARATOR = "/";
 
 	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = new HashSet<>();
-	{
+	static {
 		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("type");
 		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("id");
 	}
@@ -147,7 +147,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
-	public static NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
+	public static final NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
 	static {
 		PROPERTY_CLASSES_SERVER.put("", "general configuration items");
 		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
@@ -185,7 +185,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 				"<html>software on demand configuration,<br />not client specific</html>");
 	}
 
-	public static Set<String> CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS;
+	public static final Set<String> CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS;
 	static {
 		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS = new HashSet<>(PROPERTY_CLASSES_SERVER.keySet());
 		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.removeAll(PROPERTYCLASSES_CLIENT.keySet());

@@ -27,7 +27,6 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.PropertiesStore;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.UncaughtExceptionHandler;
 import de.uib.utilities.savedstates.SavedStates;
 
 public class Configed {
@@ -318,7 +317,7 @@ public class Configed {
 
 		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
 
-		UncaughtExceptionHandler errorHandler = new UncaughtExceptionHandlerLocalized();
+		UncaughtExceptionHandlerLocalized errorHandler = new UncaughtExceptionHandlerLocalized();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
 		Logging.debug("starting " + getClass().getName());

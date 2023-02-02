@@ -1,18 +1,20 @@
 package de.uib.messages;
 
+import de.uib.utilities.logging.Logging;
+
 public class LocaleRepresentation
 // a String separated by '='
 {
 	private String value = "";
 
-	public LocaleRepresentation(String name) throws Exception {
+	public LocaleRepresentation(String name) {
 		if (name == null)
-			throw new Exception("LocaleRepresentation name must not be null");
+			Logging.error(this, "name must not be null");
 
 		value = name;
 	}
 
-	public LocaleRepresentation(String name, String iconName) throws Exception {
+	public LocaleRepresentation(String name, String iconName) {
 		this(name);
 		if (iconName != null)
 			value = value + "=" + iconName;
