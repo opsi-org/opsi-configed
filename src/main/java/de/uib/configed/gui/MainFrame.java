@@ -344,7 +344,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 	JButton jButtonDash;
 	JButton jButtonLicences;
-	JButton jButtonOpsiLicenses;
+	public JButton jButtonOpsiLicenses;
 
 	JPanel iconPane1;
 
@@ -2182,12 +2182,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		if (!main.getPersistenceController().getOpsiLicensingInfoVersion()
 				.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD) && licensingInfoMap == null) {
+
 			licensingInfoMap = LicensingInfoMap.getInstance(main.getPersistenceController().getOpsiLicensingInfo(),
 					main.getPersistenceController().getConfigDefaultValues(),
 					!FGeneralDialogLicensingInfo.extendedView);
 
 			if (licensingInfoMap.warningExists()) {
-				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses-warning.png", ""));
+				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses-error.png", ""));
 			} else {
 				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
 			}

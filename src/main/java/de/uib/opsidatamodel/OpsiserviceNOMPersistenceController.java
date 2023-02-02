@@ -8204,7 +8204,10 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		
 			};
 		
-			
+						licInfoWarnings = null;
+		
+			licInfoMap = LicensingInfoMap.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(),
+					!FGeneralDialogLicensingInfo.extendedView);
 		
 			StringBuilder mess = new StringBuilder(Configed.getResourceValue("Permission.modules.infoheader"));
 		
