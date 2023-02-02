@@ -1315,7 +1315,7 @@ public class MainFrame extends JFrame
 		jMenuHelp.add(jMenuHelpInternalConfiguration);
 
 		ActionListener selectLoglevelListener = (ActionEvent e) -> {
-			for (int i = 0; i < Logging.LEVEL_SECRET; i++) {
+			for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
 				if (e.getSource() == rbLoglevelItems[i]) {
 					rbLoglevelItems[i].setSelected(true);
 					Logging.setLogLevel(i);
