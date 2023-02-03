@@ -217,14 +217,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 				// which get associated to different menu items (and they are handled each
 				// therefore in a specific manner)
 
-				ActionListener listenerForRemoval = actopmEvent -> {
+				ActionListener listenerForRemoval = actionEvent -> {
 					Logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 
-						FTextArea fAsk = new FTextArea(null, Globals.APPNAME, "", true);
-						fAsk.setSize(new Dimension(200, 200));
-						fAsk.setModal(true);
-						fAsk.setMessage(Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
+						FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
+								Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
+								new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
 
 						fAsk.setVisible(true);
 					} else {
@@ -240,10 +239,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					Logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 
-						FTextArea fAsk = new FTextArea(null, Globals.APPNAME, "", true);
-						fAsk.setSize(new Dimension(200, 200));
-						fAsk.setModal(true);
-						fAsk.setMessage(Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
+						FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
+								Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
+								new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
 
 						fAsk.setVisible(true);
 					} else {
@@ -259,10 +257,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 					Logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 
-						FTextArea fAsk = new FTextArea(null, Globals.APPNAME, "", true);
-						fAsk.setSize(new Dimension(200, 200));
-						fAsk.setModal(true);
-						fAsk.setMessage(Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"));
+						FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
+								Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
+								new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
 
 						fAsk.setVisible(true);
 					} else {

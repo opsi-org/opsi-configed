@@ -37,6 +37,13 @@ public class FTextArea extends FGeneralDialog {
 		initFTextArea(preferredWidth, preferredHeight);
 	}
 
+	public FTextArea(JFrame owner, String title, String message, boolean modal, String[] buttonList, int preferredWidth,
+			int preferredHeight) {
+		super(owner, title, modal, buttonList, preferredWidth, preferredHeight);
+		initFTextArea(preferredWidth, preferredHeight);
+		setMessage(message);
+	}
+
 	public FTextArea(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons, int preferredWidth,
 			int preferredHeight) {
 
