@@ -128,9 +128,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 		if (theCellEditor != null) {
 			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
-
 		}
-
 	}
 
 	public void setValues(Map<String, Object> data) {

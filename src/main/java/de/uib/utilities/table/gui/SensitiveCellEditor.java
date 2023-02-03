@@ -184,7 +184,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 					list.remove(element);
 				}
-
 			}
 
 			int n = list.size();
@@ -226,7 +225,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				return org.json.JSONObject.NULL;
 
 			return result;
-
 		}
 
 		return listeditor.getValue();

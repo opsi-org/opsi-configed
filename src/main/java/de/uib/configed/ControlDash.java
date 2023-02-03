@@ -165,6 +165,7 @@ public class ControlDash {
 
 			fDash.checkAdditionalPane();
 
+			// TODO when is this panel needed?, put it on center of mainFrame
 			if (ConfigedMain.getMainFrame() != null) {
 				fDash.setLocation(ConfigedMain.getMainFrame().getX() + Globals.LOCATION_DISTANCE_X,
 						ConfigedMain.getMainFrame().getY() + Globals.LOCATION_DISTANCE_Y);

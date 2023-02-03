@@ -11,8 +11,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -487,16 +485,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 	@Override
 	public void cancelOldCellEditing() {
+		super.cancelOldCellEditing();
 
-		if (theCellEditor != null) // && data != null)
-		{
-			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
-
-			if (theCellEditor instanceof SensitiveCellEditor)
-				((SensitiveCellEditor) theCellEditor).hideListEditor();
-
-		}
-
+		if (theCellEditor instanceof SensitiveCellEditor)
+			((SensitiveCellEditor) theCellEditor).hideListEditor();
 	}
 
 	private boolean checkKey(String s) {
@@ -555,23 +547,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		fed.select(0, initial.length());
 		fed.setTitle(Globals.APPNAME);
 		fed.init(new Dimension(300, 50));
-		boolean located = false;
 
-		if (row > -1) {
-			try {
-				Rectangle rect = table.getCellRect(row, 0, true);
-				Point tablePoint = table.getLocationOnScreen();
-
-				fed.setLocation((int) tablePoint.getX() + (int) rect.getX() + 50,
-						(int) tablePoint.getY() + (int) rect.getY() + Globals.LINE_HEIGHT);
-				located = true;
-			} catch (Exception ex) {
-				Logging.warning(this, "get location error " + ex);
-			}
-		}
-		if (!located)
-			fed.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
+		Logging.info(this, "locate frame fed on center of mainFrame and then make it visible");
+		fed.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		fed.setVisible(true);
 	}
 
