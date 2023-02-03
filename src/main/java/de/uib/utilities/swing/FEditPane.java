@@ -50,7 +50,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private JTextPane textpane;
 
 	protected LinkSearcher searcher;
-	protected Highlighter highlighter;
 	protected de.uib.utilities.script.CmdLauncher cmdLauncher;
 
 	protected String[] linesplits;
@@ -90,7 +89,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 		searcher = new LinkSearcher(textpane);
 		searcher.setCaseSensitivity(true);
-		highlighter = new UnderlineHighlighter(null);
+		Highlighter highlighter = new UnderlineHighlighter(null);
 		textpane.setHighlighter(highlighter);
 		setDataChanged(false);
 

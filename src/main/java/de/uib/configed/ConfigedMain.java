@@ -28,7 +28,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -654,34 +653,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		initSavedStates();
 		oldSelectedDepots = Configed.savedStates.saveDepotSelection.deserialize();
 
-		Date opsiExpiresDate = persist.getOpsiExpiresDate();
-
-		Logging.info(this, " opsi modules file expires " + opsiExpiresDate);
-
 		// too early, raises a NPE, if the user entry does not exist
 
 		persist.syncTables();
 
 		fProgress = new FLoadingWaiter(dpass, Globals.APPNAME + " " + Configed.getResourceValue("FWaitProgress.title"));
 		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(fProgress);
-
-		if (opsiExpiresDate != null) {
-			Calendar nowCal = Calendar.getInstance();
-			nowCal.setTime(new Date());
-
-			Calendar noticeCal = Calendar.getInstance();
-			noticeCal.setTime(opsiExpiresDate);
-
-			noticeCal.add(Calendar.DAY_OF_MONTH, -14);
-
-			if (nowCal.after(noticeCal)) {
-				Logging.info(this, "show notice of expiring module");
-				FTextArea fMessage = new FTextArea(mainFrame, Configed.getResourceValue("Permission.modules.title"),
-						false, new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 350, 150);
-				fMessage.setMessage(Configed.getResourceValue("Permission.modules.expires") + "\n" + opsiExpiresDate);
-				fMessage.setVisible(true);
-			}
-		}
 
 		fProgress.startWaiting();
 

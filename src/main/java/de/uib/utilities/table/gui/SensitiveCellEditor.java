@@ -235,6 +235,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == field && usingListEditor && e.getClickCount() > 1)
 			listeditor.setVisible(true);
+
 	}
 
 	@Override

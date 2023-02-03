@@ -294,8 +294,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	private String opsiLicensingInfoVersion;
 	private static final String BACKEND_LICENSING_INFO_METHOD_NAME = "backend_getLicensingInfo";
 
-	protected Date expiresDate;
-
 	protected Map<String, Object> opsiModulesInfo; // the may as read in
 	protected Map<String, Object> opsiModulesDisplayInfo; // the infos that are displayed in the gui
 	protected Map<String, Boolean> opsiModules; // the resulting info about permission
@@ -7968,12 +7966,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	@Override
 	public void opsiInformationRequestRefresh() {
 		opsiInformation = null;
-	}
-
-	@Override
-	public Date getOpsiExpiresDate() {
-		retrieveOpsiModules();
-		return expiresDate;
 	}
 
 	@Override

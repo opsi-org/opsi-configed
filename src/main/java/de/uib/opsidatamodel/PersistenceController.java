@@ -11,7 +11,6 @@
 package de.uib.opsidatamodel;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -844,8 +843,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
 
 	public abstract void opsiInformationRequestRefresh();
-
-	public abstract Date getOpsiExpiresDate();
 
 	public abstract void retrieveOpsiModules();
 
