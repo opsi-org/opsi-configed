@@ -790,14 +790,12 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	protected List<Map<String, Object>> softwareAuditOnClients;
 	protected Map<String, List<SWAuditClientEntry>> client2software;
 	protected Map<String, java.util.Set<String>> softwareIdent2clients;
 
 	@Override
 	public void softwareAuditOnClientsRequestRefresh() {
 		Logging.info(this, "softwareAuditOnClientsRequestRefresh");
-		softwareAuditOnClients = null;
 		client2software = null;
 		softwareIdent2clients = null;
 

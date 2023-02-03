@@ -1149,9 +1149,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	@Override
 	public String getLastStateChange(int row) {
-		String actualProduct = productsV.get(row);
+		String product = productsV.get(row);
 
-		return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
+		return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(product);
 	}
 
 	protected void setOnGoingCollectiveChangeCount() {

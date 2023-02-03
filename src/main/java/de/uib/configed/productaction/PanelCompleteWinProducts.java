@@ -55,42 +55,39 @@ public class PanelCompleteWinProducts extends JPanel
 
 	// file name conventions
 
-	String winProduct = "";
-	String server = "";
-	String selectedDepot = null;
-	Set<String> depots = new HashSet<>();
+	private String winProduct = "";
+	private String server = "";
+	private String selectedDepot = null;
+	private Set<String> depots = new HashSet<>();
 
-	String depotProductDirectory;
-	boolean smbMounted;
+	private String depotProductDirectory;
+	private boolean smbMounted;
 
-	int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
+	private int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
 
-	JComboBox<String> comboChooseDepot;
-	JComboBox<String> comboChooseWinProduct;
-	JTextField fieldTargetPath;
+	private JComboBox<String> comboChooseDepot;
+	private JComboBox<String> comboChooseWinProduct;
+	private JTextField fieldTargetPath;
 
-	JButton buttonCallSelectFolderWinPE;
-	JButton buttonCallSelectFolderInstallFiles;
-	JTextField fieldProductKey;
+	private JButton buttonCallSelectFolderWinPE;
+	private JButton buttonCallSelectFolderInstallFiles;
+	private JTextField fieldProductKey;
 
-	JTextField fieldPathWinPE;
-	JTextField fieldPathInstallFiles;
+	private JTextField fieldPathWinPE;
+	private JTextField fieldPathInstallFiles;
 
-	PanelMountShare panelMountShare;
+	private PanelMountShare panelMountShare;
 
-	JButton buttonCallExecute;
-	JTextField fieldResult;
+	private JButton buttonCallExecute;
 
-	JFileChooser chooserFolder;
+	private JFileChooser chooserFolder;
 
-	PersistenceController persist;
-	ConfigedMain main;
-	JFrame rootFrame;
-
-	List<String> winProducts;
+	private PersistenceController persist;
+	private ConfigedMain configedMain;
+	private JFrame rootFrame;
 
 	public PanelCompleteWinProducts(ConfigedMain main, PersistenceController persist, JFrame root) {
-		this.main = main;
+		this.configedMain = main;
 		this.persist = persist;
 		this.rootFrame = root;
 		server = main.getConfigserver();
@@ -170,7 +167,7 @@ public class PanelCompleteWinProducts extends JPanel
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
+		comboChooseDepot.setModel(new DefaultComboBoxModel<>(configedMain.getLinkedDepots().toArray(new String[0])));
 
 		comboChooseDepot.setEnabled(false);
 

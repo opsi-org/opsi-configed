@@ -207,8 +207,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	protected NavigableMap<String, LicenceStatisticsRow> rowsLicenceStatistics;
 
-	protected Map<String, Set<String>> swId2clients;
-
 	protected Map<String, List<Map<String, Object>>> hwAuditConf;
 
 	protected List<String> opsiHwClassNames;
