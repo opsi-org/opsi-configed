@@ -71,7 +71,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		listeditor.init();
 
 		setModelProducer(modelProducer);
-
 	}
 
 	public void reInit() {

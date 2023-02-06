@@ -14,6 +14,7 @@ package de.uib.utilities.swing.list;
  */
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
@@ -78,6 +79,9 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 			((JLabel) jc).setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
 		}
 
+		Dimension prefDimension = jc.getPreferredSize();
+		prefDimension.setSize(prefDimension.getWidth(), 20);
+		jc.setPreferredSize(prefDimension);
 		return jc;
 	}
 
