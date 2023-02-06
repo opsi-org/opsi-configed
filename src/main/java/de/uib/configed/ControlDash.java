@@ -132,6 +132,12 @@ public class ControlDash {
 				@Override
 				public void doAction1() {
 					Logging.debug(this, "doAction1");
+					super.doAction1();
+				}
+
+				@Override
+				public void doAction2() {
+					Logging.debug(this, "doAction2");
 					loadData();
 					Logging.info(this, "update data ");
 					panelDash.setShowDashOnLicencesActivation(persist.getGlobalBooleanConfigValue(
@@ -140,12 +146,6 @@ public class ControlDash {
 					panelDash.setShowDashOnStartup(
 							persist.getGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART,
 									PersistenceController.DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART));
-				}
-
-				@Override
-				public void doAction2() {
-					Logging.debug(this, "doAction2");
-					super.doAction2();
 				}
 
 				@Override

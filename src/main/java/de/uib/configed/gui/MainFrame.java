@@ -2929,21 +2929,19 @@ public class MainFrame extends JFrame
 						Globals.createImageIcon("images/cancel16_small.png", "") },
 				Globals.WIDTH_INFO_LOG_FILE, Globals.HEIGHT_INFO_LOG_FILE) {
 			@Override
-			public void doAction1() {
+			public void doAction2() {
 				getTextComponent().copy();
 			}
 
 			@Override
-			public void doAction2() {
+			public void doAction3() {
 				try {
 					Desktop.getDesktop().open(new java.io.File(Logging.getCurrentLogfilePath()));
 				} catch (Exception e) {
 					Logging.error("cannot open: " + Logging.getCurrentLogfilePath() + " :\n " + e);
 				}
 				super.doAction2();
-
 			}
-
 		};
 
 		StringBuilder message = new StringBuilder();
@@ -3508,15 +3506,15 @@ public class MainFrame extends JFrame
 
 				@Override
 				public void doAction1() {
-					Logging.info(this, "set property and call setup for the opsi-clientagent");
-					handle(activate);
+					Logging.info(this, "cancel");
 					result = 1;
 					leave();
 				}
 
 				@Override
 				public void doAction2() {
-					Logging.info(this, "cancel");
+					Logging.info(this, "set property and call setup for the opsi-clientagent");
+					handle(activate);
 					result = 2;
 					leave();
 				}
