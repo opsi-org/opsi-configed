@@ -19,7 +19,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -43,8 +42,8 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected JPanel centerPanel;
 	protected JPanel southPanel;
 	protected IconButton jButton1 = new IconButton();
-	protected JButton jButton2 = new JButton();
-	protected JButton jButton3 = new JButton();
+	protected IconButton jButton2 = new IconButton();
+	protected IconButton jButton3 = new IconButton();
 	private int defaultResult = 1;
 	static final int OK = 1;
 	static final int NO = 2;
@@ -491,6 +490,8 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		Logging.debug(this, "mousePressed");
 
 		preAction1();
+		preAction2();
+		preAction3();
 	}
 
 	@Override
@@ -508,6 +509,26 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		Logging.info(this, "postAction1");
 	}
 
+	// activated by mouse and key listener events
+	protected void preAction2() {
+		Logging.info(this, "preAction2");
+	}
+
+	// executed at the end of action listener event
+	protected void postAction2() {
+		Logging.info(this, "postAction2");
+	}
+
+	// activated by mouse and key listener events
+	protected void preAction3() {
+		Logging.info(this, "preAction3");
+	}
+
+	// executed at the end of action listener event
+	protected void postAction3() {
+		Logging.info(this, "postAction3");
+	}
+
 	// ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -515,12 +536,14 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			preAction1();
 			doAction1();
 			postAction1();
-		}
-
-		else if (e.getSource() == jButton2) {
+		} else if (e.getSource() == jButton2) {
+			preAction2();
 			doAction2();
+			postAction2();
 		} else if (e.getSource() == jButton3) {
+			preAction3();
 			doAction3();
+			postAction3();
 		}
 	}
 

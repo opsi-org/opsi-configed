@@ -101,12 +101,12 @@ public class NewClientDialog extends FGeneralDialog
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.main = main;
 
-		jButton1.addMouseListener(this);
-		jButton1.addKeyListener(this);
-		jButton1.setDefaultIcon("images/client_small.png");
-		jButton1.setIcon(jButton1.getDefaultIcon());
+		jButton2.addMouseListener(this);
+		jButton2.addKeyListener(this);
+		jButton2.setDefaultIcon("images/client_small.png");
+		jButton2.setIcon(jButton2.getDefaultIcon());
 
-		jButton1.setRunningActionIcon("images/waitingcircle_16.png");
+		jButton2.setRunningActionIcon("images/waitingcircle_16.png");
 
 		if (depots != null && depots.size() > 1) {
 			multidepot = true;
@@ -784,7 +784,7 @@ public class NewClientDialog extends FGeneralDialog
 				return;
 			}
 
-			if (csvImportDataDialog.getResult() == 1) {
+			if (csvImportDataDialog.getResult() == 2) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
 				List<List<Object>> rows = modifier.getRows();
 
@@ -881,16 +881,16 @@ public class NewClientDialog extends FGeneralDialog
 	}
 
 	@Override
-	protected void preAction1() {
-		super.preAction1();
-		jButton1.setIcon(jButton1.getRunningActionIcon());
+	protected void preAction2() {
+		super.preAction2();
+		jButton2.setIcon(jButton2.getRunningActionIcon());
 
 	}
 
 	@Override
-	protected void postAction1() {
-		super.postAction1();
-		jButton1.setIcon(jButton1.getDefaultIcon());
+	protected void postAction2() {
+		super.postAction2();
+		jButton2.setIcon(jButton2.getDefaultIcon());
 	}
 
 	/* This method gets called when button 1 is pressed */
