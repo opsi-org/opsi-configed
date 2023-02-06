@@ -97,7 +97,7 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions
 		else if (retrieved.get("editable") == null)
 			put("editable", false);
 		else
-			put("editable", (boolean) retrieved.get("editable"));
+			put("editable", retrieved.get("editable"));
 
 		if (type != TYPE.BoolConfig)
 			put("nullable", false);

@@ -142,8 +142,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public static final String NAME_REQUIREMENT_TYPE_NEUTRAL = "";
 	public static final String NAME_REQUIREMENT_TYPE_ON_DEINSTALL = "on_deinstall";
 
-	public static final String[] LICENSE_TYPES = new String[] { "VOLUME", "OEM", "RETAIL", "CONCURRENT" };
-
 	protected FTextArea licInfoWarnings;
 
 	protected String connectionServer;
@@ -7602,7 +7600,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			// key not yet configured
 			defaultValues = new ArrayList<>();
 			// example for standard configuration other than empty
-
 		}
 
 		// create config for service
@@ -7702,35 +7699,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		readyObjects.add(produceConfigEntry("UnicodeConfig",
 				AdditionalQuery.CONFIG_KEY + "." + key + "." + AdditionalQuery.DESCRIPTION_KEY, description, ""));
 
-		// configuration of host menus
-
-		key = KEY_DISABLED_CLIENT_ACTIONS;
-
-		defaultValues = configDefaultValues.get(key);
-		if (defaultValues == null) {
-			Logging.warning(this,
-					"checkStandardConfigs:  since no values found setting values for  " + KEY_DISABLED_CLIENT_ACTIONS);
-			// key not yet configured
-			defaultValues = new ArrayList<>();
-			configDefaultValues.put(key, defaultValues);
-		}
-
-		possibleValues = new ArrayList<>();
-		possibleValues.add(MainFrame.ITEM_ADD_CLIENT);
-		possibleValues.add(MainFrame.ITEM_DELETE_CLIENT);
-		possibleValues.add(MainFrame.ITEM_FREE_LICENCES);
-
-		item = createNOMitem("UnicodeConfig");
-		item.put("id", key);
-		item.put("description", "");
-		item.put("defaultValues", Executioner.jsonArray(defaultValues));
-
-		item.put("possibleValues", Executioner.jsonArray(possibleValues));
-		item.put("editable", false);
-		item.put("multiValue", true);
-
-		readyObjects.add(Executioner.jsonMap(item));
-
 		// WAN_CONFIGURATION
 		// does it exist?
 
@@ -7794,6 +7762,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		possibleValues = new ArrayList<>();
 		possibleValues.add(MainFrame.ITEM_ADD_CLIENT);
 		possibleValues.add(MainFrame.ITEM_DELETE_CLIENT);
+		possibleValues.add(MainFrame.ITEM_FREE_LICENCES);
 
 		item = createNOMitem("UnicodeConfig");
 		item.put("id", key);
