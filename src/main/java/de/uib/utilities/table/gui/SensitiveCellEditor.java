@@ -90,7 +90,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		{
 			modelProducer = new DefaultListModelProducer();
 		}
-
 	}
 
 	private void startListEditor() {
@@ -108,6 +107,16 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	public void hideListEditor() {
 		SwingUtilities.invokeLater(() -> listeditor.setVisible(false));
+	}
+
+	@Override
+	public boolean stopCellEditing() {
+		super.cancelCellEditing();
+		return super.stopCellEditing();
+	}
+
+	public boolean stopEditingAndSave() {
+		return super.stopCellEditing();
 	}
 
 	@Override
@@ -160,7 +169,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				editingRow = -1;
 				editingColumn = -1;
 			}
-
 		}
 
 		field.setText("" + value);

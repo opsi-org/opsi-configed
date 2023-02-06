@@ -25,7 +25,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
@@ -40,6 +39,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
+import de.uib.utilities.table.gui.SensitiveCellEditor;
 
 public class FEditList extends FEditObject implements ListSelectionListener, MouseListener {
 	private javax.swing.JScrollPane scrollpane;
@@ -57,7 +57,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	protected JPopupMenu popup;
 
-	private CellEditor celleditor;
+	private SensitiveCellEditor celleditor;
 
 	boolean singleSelectionMode;
 	boolean nullable;
@@ -70,7 +70,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 		this(tracker, null);
 	}
 
-	public FEditList(JTextComponent tracker, CellEditor celleditor) {
+	public FEditList(JTextComponent tracker, SensitiveCellEditor celleditor) {
 		super("");
 		this.tracker = tracker;
 		this.celleditor = celleditor;
@@ -245,7 +245,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 		super.cancel();
 
 		if (celleditor != null)
-			celleditor.stopCellEditing();
+			celleditor.stopEditingAndSave();
 	}
 
 	@Override
@@ -257,7 +257,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 			cancel();
 		} else {
 			if (celleditor != null)
-				celleditor.stopCellEditing();
+				celleditor.stopEditingAndSave();
 
 			if (leaveOnCommit)
 				leave();
