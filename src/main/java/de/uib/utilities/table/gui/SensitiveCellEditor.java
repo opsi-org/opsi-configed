@@ -100,6 +100,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			// center on mainFrame
 			listeditor.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			listeditor.setVisible(true);
+			listeditor.repaint();
 		});
 
 		usingListEditor = true;
@@ -241,9 +242,10 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	// MouseListener for textfield
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() == field && usingListEditor && e.getClickCount() > 1)
+		if (e.getSource() == field && usingListEditor && e.getClickCount() > 1) {
 			listeditor.setVisible(true);
-
+			listeditor.repaint();
+		}
 	}
 
 	@Override

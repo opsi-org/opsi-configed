@@ -1037,9 +1037,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		List<Object> readyConfigObjects = new UserConfigProducing(applyUserSpecializedConfig(),
 				getHostInfoCollections().getConfigServer(), getHostInfoCollections().getDepotNamesList(),
-				getHostGroupIds(), getProductGroups().keySet(),
-
-				getConfigDefaultValues(), getConfigOptions()).produce();
+				getHostGroupIds(), getProductGroups().keySet(), getConfigDefaultValues(), getConfigOptions()).produce();
 
 		if (readyConfigObjects == null) {
 			Logging.warning(this, "readyObjects for userparts " + null);
