@@ -148,7 +148,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				c.repaint();
 			}
 		});
-
 	}
 
 	public void setReloadRequested() {
@@ -275,9 +274,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 					main.callNewClientSelectionDialog();
 					// we lose all components of this dialog, there is nothing to reset
-
 				});
-
 			}
 		});
 

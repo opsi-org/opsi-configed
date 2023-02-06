@@ -28,6 +28,10 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 
 	protected String tooltipPrefix = "";
 
+	// this is the normal preferred height for components with content.
+	// We want this height also for empty components
+	private static final int CELL_HEIGHT = 20;
+
 	protected static final int FILL_LENGTH = 20;
 
 	protected Color uniformColor = null;
@@ -55,6 +59,10 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 	{
 		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
+		Dimension prefDimension = c.getPreferredSize();
+		prefDimension.setSize(prefDimension.getWidth(), CELL_HEIGHT);
+		c.setPreferredSize(prefDimension);
+
 		// condition true if c is null
 		if (!(c instanceof JComponent))
 			return c;
@@ -66,7 +74,6 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 					unselectedEven, unselectedUneven);
 
 		else {
-
 			if (isSelected)
 				jc.setBackground(uniformSelectedColor);
 			else
@@ -79,9 +86,6 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 			((JLabel) jc).setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
 		}
 
-		Dimension prefDimension = jc.getPreferredSize();
-		prefDimension.setSize(prefDimension.getWidth(), 20);
-		jc.setPreferredSize(prefDimension);
 		return jc;
 	}
 
@@ -99,5 +103,4 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		unselectedEven = unselectedEvenColor;
 		unselectedUneven = unselectedUnevenColor;
 	}
-
 }

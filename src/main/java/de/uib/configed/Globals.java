@@ -499,14 +499,12 @@ public class Globals {
 		if (s.length() > len)
 			return s;
 
-		StringBuilder buff = new StringBuilder(len);
-		for (int i = 0; i < s.length(); i++)
-			buff.append(s.charAt(i));
+		StringBuilder result = new StringBuilder(s);
 
 		for (int i = s.length(); i < len; i++)
-			buff.append(' ');
+			result.append(' ');
 
-		return buff.toString();
+		return result.toString();
 	}
 
 	private static final String IMAGE_BASE = "de/uib/configed/gui/";
