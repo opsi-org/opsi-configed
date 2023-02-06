@@ -61,7 +61,7 @@ public class SavedSearchesDialog extends FEditList {
 		buttonCommit.setIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 		buttonCommit.setSelectedIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 		buttonCommit.setDisabledIcon(Globals.createImageIcon("images/execute_disabled.png", ""));
-		buttonCommit.setPreferredSize(new java.awt.Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
+		buttonCommit.setPreferredSize(new java.awt.Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
 		buttonCancel.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.CancelButtonTooltip"));
 	}

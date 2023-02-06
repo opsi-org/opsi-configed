@@ -101,7 +101,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 		buttonRemove = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
 				"images/list-clear.png", "images/list-clear.png", "images/list-clear_disabled.png", true);
-		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
+		buttonRemove.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 	}
 
