@@ -66,7 +66,6 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 			if (type.equals("file_upload_result")) {
 				String filePath = (String) data.get("path");
 
-				// Map<String, Object> data = new HashMap<>();
 				data.clear();
 				data.put("type", "terminal_data_write");
 				data.put("id", UUID.randomUUID().toString());

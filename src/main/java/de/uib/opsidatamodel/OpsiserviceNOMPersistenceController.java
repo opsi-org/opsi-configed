@@ -362,7 +362,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (ob instanceof String)
 			return ((String) ob).equals("1");
 
-		return null; // not foreseen value
+		Logging.warning("could not find boolean in interpretAsBoolean, returning false");
+		return false; // not foreseen value
 	}
 
 	protected class CheckingEntryMapOfMaps extends LinkedHashMap<String, Map<String, Object>> {}

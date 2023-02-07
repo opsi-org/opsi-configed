@@ -777,11 +777,7 @@ public class Globals {
 	public static boolean checkCollection(Object source, String cName, Object c) {
 		boolean result = (c != null);
 		if (result) {
-			if (c instanceof Collection) {
-
-			} else if (c instanceof Map) {
-
-			} else {
+			if (!(c instanceof Collection) && !(c instanceof Map)) {
 				Logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
 				result = false;
 			}
