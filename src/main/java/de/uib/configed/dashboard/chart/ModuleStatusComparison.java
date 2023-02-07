@@ -3,7 +3,10 @@ package de.uib.configed.dashboard.chart;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.UIManager;
+
 import de.uib.configed.Configed;
+import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.ModuleData;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -66,6 +69,10 @@ public class ModuleStatusComparison extends StackPane implements DataChangeListe
 			moduleStatusComparisonPieChart.getData().get(1).pieValueProperty()
 					.bindBidirectional(new SimpleIntegerProperty(totalExpiredModules));
 		}
+
+		ComponentStyler.stylePieChartComponent(moduleStatusComparisonPieChart);
+		moduleStatusNoDataText
+				.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 	}
 
 	@Override

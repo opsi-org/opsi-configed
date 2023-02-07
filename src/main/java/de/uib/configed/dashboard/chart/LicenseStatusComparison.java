@@ -3,7 +3,10 @@ package de.uib.configed.dashboard.chart;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.UIManager;
+
 import de.uib.configed.Configed;
+import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.LicenseData;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -66,6 +69,10 @@ public class LicenseStatusComparison extends StackPane implements DataChangeList
 			licenseStatusComparisonPieChart.getData().get(1).pieValueProperty()
 					.bindBidirectional(new SimpleIntegerProperty(totalExpiredLicenses));
 		}
+
+		ComponentStyler.stylePieChartComponent(licenseStatusComparisonPieChart);
+		licenseStatusNoDataText
+				.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 	}
 
 	@Override

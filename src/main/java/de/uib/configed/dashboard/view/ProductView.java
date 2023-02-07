@@ -1,13 +1,19 @@
 package de.uib.configed.dashboard.view;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
 
+import javax.swing.UIManager;
+
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.uib.configed.Configed;
+import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.Dashboard;
+import de.uib.configed.dashboard.Helper;
 import de.uib.configed.dashboard.chart.ProductComparison;
 import de.uib.configed.dashboard.chart.ProductStatusComparison;
 import de.uib.configed.dashboard.collector.Product;
@@ -26,12 +32,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 public class ProductView implements View {
 	@FXML
@@ -47,11 +57,37 @@ public class ProductView implements View {
 	@FXML
 	private Label unusedProductsNumberLabel;
 	@FXML
+	private Label productStatusLabel;
+	@FXML
+	private BorderPane productNumberArea;
+	@FXML
+	private BorderPane localbootProductNumberArea;
+	@FXML
+	private BorderPane netbootProductNumberArea;
+	@FXML
+	private BorderPane installedProductNumberArea;
+	@FXML
+	private BorderPane failedProductNumberArea;
+	@FXML
+	private BorderPane unusedProductNumberArea;
+	@FXML
+	private Text productNumberTitleText;
+	@FXML
+	private Text localbootProductNumberTitleText;
+	@FXML
+	private Text netbootProductNumberTitleText;
+	@FXML
+	private Text installedProductNumberTitleText;
+	@FXML
+	private Text failedProductNumberTitleText;
+	@FXML
+	private Text unusedProductNumberTitleText;
+	@FXML
 	private TextField clientSearchbarTextField;
 	@FXML
 	private TextField productSearchbarTextField;
 	@FXML
-	private ChoiceBox<String> productStatusChoiceBox;
+	private ComboBox<String> productStatusComboBox;
 	@FXML
 	private ListView<String> clientListView;
 	@FXML
@@ -68,6 +104,14 @@ public class ProductView implements View {
 	private ProductComparison productComparison;
 	@FXML
 	private ProductStatusComparison productStatusComparison;
+	@FXML
+	private AnchorPane productViewAnchorPane;
+	@FXML
+	private HBox productStatusArea;
+	@FXML
+	private HBox productChartArea;
+	@FXML
+	private FontAwesomeIconView backButtonIcon;
 
 	private JFXPanel fxPanel;
 	private Scene scene;
@@ -90,12 +134,12 @@ public class ProductView implements View {
 		failedProductsNumberLabel.setText(String.valueOf(ProductData.getFailedProducts().size()));
 		unusedProductsNumberLabel.setText(String.valueOf(ProductData.getUnusedProducts().size()));
 
-		productStatusChoiceBox.getItems().clear();
-		productStatusChoiceBox.getItems().add(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
-		productStatusChoiceBox.getItems().add(Configed.getResourceValue("Dashboard.products.installed"));
-		productStatusChoiceBox.getItems().add(Configed.getResourceValue("Dashboard.products.failed"));
-		productStatusChoiceBox.getItems().add(Configed.getResourceValue("Dashboard.products.unused"));
-		productStatusChoiceBox.getSelectionModel().selectFirst();
+		productStatusComboBox.getItems().clear();
+		productStatusComboBox.getItems().add(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
+		productStatusComboBox.getItems().add(Configed.getResourceValue("Dashboard.products.installed"));
+		productStatusComboBox.getItems().add(Configed.getResourceValue("Dashboard.products.failed"));
+		productStatusComboBox.getItems().add(Configed.getResourceValue("Dashboard.products.unused"));
+		productStatusComboBox.getSelectionModel().selectFirst();
 
 		productIdTableColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
 		productStatusTableColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
@@ -119,18 +163,18 @@ public class ProductView implements View {
 			return product.getId().contains(productSearchbarTextField.getText());
 		}, productSearchbarTextField.textProperty()));
 		productStatusFilter.bind(Bindings.createObjectBinding(() -> product -> {
-			if (productStatusChoiceBox.getValue() == null || productStatusChoiceBox.getValue()
+			if (productStatusComboBox.getValue() == null || productStatusComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
 			}
 
-			return productStatusChoiceBox.getValue().equals(Configed.getResourceValue("Dashboard.products.installed"))
+			return productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.installed"))
 					&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.installed"))
-					|| productStatusChoiceBox.getValue().equals(Configed.getResourceValue("Dashboard.products.failed"))
+					|| productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.failed"))
 							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.failed"))
-					|| productStatusChoiceBox.getValue().equals(Configed.getResourceValue("Dashboard.products.unused"))
+					|| productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.unused"))
 							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.unused"));
-		}, productStatusChoiceBox.valueProperty()));
+		}, productStatusComboBox.valueProperty()));
 
 		filteredData.predicateProperty().bind(Bindings.createObjectBinding(
 				() -> productIdFilter.get().and(productStatusFilter.get()), productIdFilter, productStatusFilter));
@@ -176,7 +220,56 @@ public class ProductView implements View {
 
 	@Override
 	public void display() {
-		Platform.runLater(() -> fxPanel.setScene(scene));
-		loadData();
+		Platform.runLater(() -> {
+			fxPanel.setScene(scene);
+			loadData();
+			styleAccordingToSelectedTheme();
+		});
+	}
+
+	private void styleAccordingToSelectedTheme() {
+		String foregroundColor = ComponentStyler.getHexColor(UIManager.getColor("Label.foreground"));
+		productNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		localbootProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		netbootProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		installedProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		failedProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		unusedProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+
+		productsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		netbootProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		localbootProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		installedProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		failedProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		unusedProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+
+		backButton.setStyle("-fx-text-fill: #" + foregroundColor);
+		Color iconColor = UIManager.getColor("Label.foreground");
+		backButtonIcon
+				.setFill(javafx.scene.paint.Color.rgb(iconColor.getRed(), iconColor.getGreen(), iconColor.getBlue()));
+
+		String lighterBackgroundColor = ComponentStyler
+				.getHexColor(Helper.adjustColorBrightness(UIManager.getColor("Panel.background")));
+		String backgroundColor = ComponentStyler.getHexColor(UIManager.getColor("Panel.background"));
+		fxPanel.setBackground(UIManager.getColor("Panel.background"));
+		productViewAnchorPane.setStyle("-fx-background-color: #" + backgroundColor);
+		productStatusArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		productChartArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+
+		String labelForegroundColor = ComponentStyler.getHexColor(UIManager.getColor("Label.foreground"));
+		productStatusLabel.setStyle("-fx-text-fill: #" + labelForegroundColor);
+
+		productNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		netbootProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		localbootProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		installedProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		unusedProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		failedProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+
+		ComponentStyler.styleTableViewComponent(productTableView);
+		ComponentStyler.styleListViewComponent(clientListView);
+		ComponentStyler.styleTextFieldComponent(productSearchbarTextField);
+		ComponentStyler.styleTextFieldComponent(clientSearchbarTextField);
+		ComponentStyler.styleComboBoxComponent(productStatusComboBox);
 	}
 }

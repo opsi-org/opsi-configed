@@ -1,5 +1,7 @@
 package de.uib.configed.dashboard;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -86,6 +88,25 @@ public class Helper {
 			return (BufferedImage) img;
 		}
 
-		return new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bufferedImage = new BufferedImage(img.getWidth(null), img.getHeight(null),
+				BufferedImage.TYPE_INT_ARGB);
+
+		Graphics2D graphics2D = bufferedImage.createGraphics();
+		graphics2D.drawImage(img, 0, 0, null);
+		graphics2D.dispose();
+
+		return bufferedImage;
+	}
+
+	public static Color adjustColorBrightness(Color color) {
+		float[] colorHSB = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+
+		if (colorHSB[2] < 0.5f) {
+			colorHSB[2] += 0.10f;
+		} else {
+			colorHSB[2] -= 0.10f;
+		}
+
+		return new Color(Color.HSBtoRGB(colorHSB[0], colorHSB[1], colorHSB[2]));
 	}
 }

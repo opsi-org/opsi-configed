@@ -8,8 +8,8 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.dashboard.view.ClientView;
 import de.uib.configed.dashboard.view.MainView;
 import de.uib.configed.dashboard.view.ProductView;

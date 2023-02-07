@@ -3,7 +3,10 @@ package de.uib.configed.dashboard.chart;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.UIManager;
+
 import de.uib.configed.Configed;
+import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.DataChangeListener;
 import de.uib.configed.dashboard.collector.ClientData;
 import javafx.collections.FXCollections;
@@ -61,6 +64,10 @@ public class ClientActivityComparison extends StackPane implements DataChangeLis
 				totalInactiveClients));
 
 		clientActivityComparisonPieChart.setData(data);
+
+		ComponentStyler.stylePieChartComponent(clientActivityComparisonPieChart);
+		clientsActivityNoDataText
+				.setStyle("-fx-fill: #" + ComponentStyler.getHexColor(UIManager.getColor("Label.foreground")));
 	}
 
 	@Override

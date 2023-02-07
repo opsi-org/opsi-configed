@@ -72,7 +72,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableModel;
@@ -478,7 +477,7 @@ public class MainFrame extends JFrame
 	int prefClientPaneW = 100;
 	int clientPaneW;
 
-	private LicenseDash licenseDash;
+	private LicenseDisplayer licenseDisplayer;
 
 	class GlassPane extends JComponent {
 		GlassPane() {
@@ -3237,7 +3236,6 @@ public class MainFrame extends JFrame
 	// ActionListener implementation
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		Logging.debug(this, "actionPerformed on " + e.getSource());
 		if (e.getSource() == cbInstallByShutdown) {
 			Logging.info(this, "actionPerformed on cbInstallByShutdown");
@@ -3251,9 +3249,7 @@ public class MainFrame extends JFrame
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
 
-		}
-
-		else if (e.getSource() == cbUefiBoot) {
+		} else if (e.getSource() == cbUefiBoot) {
 			Logging.info(this, "actionPerformed on cbUefiBoot");
 
 			for (String client : configedMain.getSelectedClients()) {
@@ -3263,9 +3259,7 @@ public class MainFrame extends JFrame
 
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
-		}
-
-		else if (e.getSource() == cbWANConfig) {
+		} else if (e.getSource() == cbWANConfig) {
 			Logging.info(this, "actionPerformed on cbWANConfig");
 
 			for (String client : configedMain.getSelectedClients()) {
@@ -3276,78 +3270,42 @@ public class MainFrame extends JFrame
 			}
 		} else if (e.getSource() == jButtonClientsConfiguration) {
 			configedMain.setEditingTarget(ConfigedMain.EditingTarget.CLIENTS);
-		}
-
-		else if (e.getSource() == jButtonDepotsConfiguration) {
+		} else if (e.getSource() == jButtonDepotsConfiguration) {
 			configedMain.setEditingTarget(ConfigedMain.EditingTarget.DEPOTS);
-		}
-
-		else if (e.getSource() == jButtonServerConfiguration) {
+		} else if (e.getSource() == jButtonServerConfiguration) {
 			configedMain.setEditingTarget(ConfigedMain.EditingTarget.SERVER);
-		}
-
-		else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
+		} else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
 			configedMain.handleLicencesManagementRequest();
 			if (Boolean.TRUE.equals(configedMain.getPersistenceController().getGlobalBooleanConfigValue(
 					PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
 					PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
+				// Starting JavaFX-Thread by creating a new JFXPanel, but not
+				// using it since it is not needed.
+				new JFXPanel();
 
-				if (licenseDash == null) {
-					licenseDash = new LicenseDash();
-					licenseDash.initAndShowGUI();
-				} else {
-					licenseDash.show();
-				}
+				Platform.runLater(() -> {
+					if (licenseDisplayer == null) {
+						try {
+							licenseDisplayer = new LicenseDisplayer();
+							licenseDisplayer.initAndShowGUI();
+						} catch (IOException ioE) {
+							Logging.debug(this, "Unable to open FXML file.");
+						}
+					} else {
+						licenseDisplayer.display();
+					}
+				});
 			}
-		}
-
-		else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
+		} else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
 			configedMain.handleGroupActionRequest();
 
-		}
-
-		else if (e.getSource() == jButtonWorkOnProducts || e.getSource() == jMenuFrameWorkOnProducts) {
+		} else if (e.getSource() == jButtonWorkOnProducts || e.getSource() == jMenuFrameWorkOnProducts) {
 			configedMain.handleProductActionRequest();
 
 		} else if (e.getSource() == jButtonDashboard || e.getSource() == jMenuFrameDashboard) {
 			configedMain.initDashInfo();
 		}
 
-	}
-
-	public class LicenseDash {
-		private final JFrame frame = new JFrame();
-		private LicenseDisplayer licenseDisplayer;
-
-		public void initAndShowGUI() {
-			final JFXPanel fxPanel = new JFXPanel();
-			frame.add(fxPanel);
-			frame.setIconImage(Globals.mainIcon);
-			frame.setTitle(Configed.getResourceValue("Dashboard.licenseTitle"));
-			frame.setVisible(true);
-			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-			Platform.runLater(() -> {
-				try {
-					initFX();
-				} catch (IOException ioE) {
-					Logging.error(this, "Unable to open fxml file");
-				}
-			});
-		}
-
-		public void initFX() throws IOException {
-			try {
-				licenseDisplayer = new LicenseDisplayer();
-				licenseDisplayer.initAndShowGUI();
-			} catch (IOException ioE) {
-				Logging.debug(this, "Unable to open FXML file.");
-			}
-		}
-
-		public void show() {
-			licenseDisplayer.display();
-		}
 	}
 
 	public void enableAfterLoading() {
