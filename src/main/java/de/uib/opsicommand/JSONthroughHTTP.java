@@ -1,6 +1,8 @@
 package de.uib.opsicommand;
 
 import java.awt.Cursor;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -8,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,6 +26,7 @@ import java.util.zip.InflaterInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
+import javax.swing.SwingUtilities;
 
 import org.json.JSONObject;
 
@@ -296,15 +300,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			}
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
 
-			FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
-							+ ") ",
-					true,
-					new String[] { Configed.getResourceValue(Configed.getResourceValue("UIManager.cancelButtonText")),
-							Configed.getResourceValue("JSONthroughHTTP.alwaysTrust"),
-							Configed.getResourceValue("JSONthroughHTTP.trustOnlyOnce") },
-					420, 200);
-			StringBuilder message = new StringBuilder();
+			final StringBuilder message = new StringBuilder();
 
 			if (!certificateExists) {
 				message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
@@ -318,13 +314,43 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				message.append(Configed.getResourceValue("JSONthroughHTTP.unableToVerify"));
 			}
 
-			fErrorMsg.setMessage(message.toString());
-			fErrorMsg.setAlwaysOnTop(true);
+			final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("JSONthroughHTTP.failedServerVerification") + " (" + Globals.APPNAME
+							+ ") ",
+					true,
+					new String[] { Configed.getResourceValue(Configed.getResourceValue("UIManager.cancelButtonText")),
+							Configed.getResourceValue("JSONthroughHTTP.alwaysTrust"),
+							Configed.getResourceValue("JSONthroughHTTP.trustOnlyOnce") },
+					420, 200);
 
-			if (ConfigedMain.getMainFrame() == null && ConfigedMain.dpass != null)
-				fErrorMsg.setLocationRelativeTo(ConfigedMain.dpass);
+			try {
+				SwingUtilities.invokeAndWait(() -> {
+					fErrorMsg.setMessage(message.toString());
+					fErrorMsg.setAlwaysOnTop(true);
+					fErrorMsg.addWindowListener(new WindowAdapter() {
+						@Override
+						public void windowOpened(WindowEvent event) {
+							// For some unknown reason the paint method isn't
+							// called, when dialog is initialized in Windows
+							// OS. To fix that we call paint method manually
+							// by requesting the dialog to be repainted, when
+							// it is opened.
+							fErrorMsg.repaint();
+						}
+					});
 
-			fErrorMsg.setVisible(true);
+					if (ConfigedMain.getMainFrame() == null && ConfigedMain.dpass != null) {
+						fErrorMsg.setLocationRelativeTo(ConfigedMain.dpass);
+					}
+
+					fErrorMsg.setVisible(true);
+				});
+			} catch (InterruptedException e) {
+				Logging.info("Thread was interrupted");
+				Thread.currentThread().interrupt();
+			} catch (InvocationTargetException e) {
+				Logging.debug("exception thrown during doRun");
+			}
 
 			if (fErrorMsg.getResult() == 1) {
 				conStat = new ConnectionState(ConnectionState.INTERRUPTED);
@@ -335,6 +361,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				trustOnlyOnce = true;
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 			}
+
 			return null;
 		} catch (IOException ex) {
 			if (!background) {
