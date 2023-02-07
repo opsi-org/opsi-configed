@@ -190,10 +190,11 @@ public class Configed {
 	// --------------------------------------------------------------------------------------------------------
 
 	private static String getYNforBoolean(boolean b) {
-		if (b)
+		if (b) {
 			return "y";
-		else
+		} else {
 			return "n";
+		}
 	}
 
 	private static String tabs(int count) {
@@ -392,8 +393,8 @@ public class Configed {
 		int i = 0;
 		while (i < args.length) {
 
-			if (args[i].charAt(0) != '-') // no option
-			{
+			// no option
+			if (args[i].charAt(0) != '-') {
 				if (i < firstPossibleNonOptionIndex) {
 					usage();
 					endApp(NO_ERROR);

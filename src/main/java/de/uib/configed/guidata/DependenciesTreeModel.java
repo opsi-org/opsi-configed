@@ -58,8 +58,9 @@ public class DependenciesTreeModel {
 
 	private void initGraph(String depotId) {
 
-		if (depotId == null)
+		if (depotId == null) {
 			depotId = pc.getDepot();
+		}
 
 		// Erstmal die Dependencies laden
 		Map<String, List<Map<String, String>>> dependencies = pc.getProductDependencies(depotId);
@@ -103,21 +104,25 @@ public class DependenciesTreeModel {
 		if (graphIsInitialized && productList.contains(mainProductId)) {
 			DefaultMutableTreeNode mainNode;
 
-			if (benoetigt)
+			if (benoetigt) {
 				mainNode = graph.getTreeDerBenoetigtenProdukte(mainProductId);
-			else
+			} else {
 				mainNode = graph.getTreeDerAbhaengigenProdukte(mainProductId);
+			}
 
 			// Return only if taller than null
-			if (mainNode.getChildCount() > 0)
+			if (mainNode.getChildCount() > 0) {
 				return mainNode;
+			}
 
-			else
+			else {
 				return null;
+			}
 		}
 
-		else
+		else {
 			return null;
+		}
 	}
 
 	public String getListOfTreeNodes(DefaultMutableTreeNode root) {
@@ -127,11 +132,13 @@ public class DependenciesTreeModel {
 		Collections.sort(sortedList);
 
 		StringBuilder listAsString = new StringBuilder();
-		if (!sortedList.isEmpty())
+		if (!sortedList.isEmpty()) {
 			listAsString.append(sortedList.remove(0));
+		}
 
-		for (String productId : sortedList)
+		for (String productId : sortedList) {
 			listAsString.append("\n" + productId);
+		}
 
 		return listAsString.toString();
 	}
@@ -150,8 +157,9 @@ public class DependenciesTreeModel {
 
 			adj = new ArrayList<>(numberOfElements);
 
-			for (int i = 0; i < numberOfElements; i++)
+			for (int i = 0; i < numberOfElements; i++) {
 				adj.add(new LinkedList<>());
+			}
 		}
 
 		// Fügt eine (gerichtete) Kante an den Graphen hinzu
@@ -163,16 +171,18 @@ public class DependenciesTreeModel {
 			for (Map.Entry<String, List<Map<String, String>>> entry : dependencies.entrySet()) {
 				Object fst = productMap.get(entry.getKey());
 
-				if (fst == null)
+				if (fst == null) {
 					continue;
+				}
 
 				int first = (int) fst;
 
 				for (Map<String, String> dependenciesElement : entry.getValue()) {
 					Object sec = productMap.get(dependenciesElement.get("requiredProductId"));
 
-					if (sec == null)
+					if (sec == null) {
 						continue;
+					}
 
 					int second = (int) sec;
 
@@ -184,8 +194,9 @@ public class DependenciesTreeModel {
 
 		public boolean isPartOfPath(DefaultMutableTreeNode node, String productId) {
 			while (node != null) {
-				if (node.getUserObject().equals(productId))
+				if (node.getUserObject().equals(productId)) {
 					return true;
+				}
 
 				node = (DefaultMutableTreeNode) node.getParent();
 			}
@@ -210,8 +221,9 @@ public class DependenciesTreeModel {
 				if (adj.get(i).contains(product)) {
 					String productId = productList.get(i);
 
-					if (!isPartOfPath(node, productId))
+					if (!isPartOfPath(node, productId)) {
 						childStrings.add(productId);
+					}
 				}
 			}
 
@@ -239,8 +251,9 @@ public class DependenciesTreeModel {
 			for (int i : adj.get(productMap.get(node.toString()))) {
 				String productId = productList.get(i);
 
-				if (!isPartOfPath(node, productId))
+				if (!isPartOfPath(node, productId)) {
 					childStrings.add(productId);
+				}
 			}
 			// Sort list alphabetically
 			childStrings.sort(Comparator.naturalOrder());

@@ -227,8 +227,9 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	}
 
 	private void setTracker(Object s) {
-		if (tracker != null)
+		if (tracker != null) {
 			tracker.setText("" + s);
+		}
 	}
 
 	@Override
@@ -244,8 +245,9 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 		super.cancel();
 
-		if (celleditor != null)
+		if (celleditor != null) {
 			celleditor.stopEditingAndSave();
+		}
 	}
 
 	@Override
@@ -256,11 +258,13 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 			Logging.debug(this, "commit: forbidden");
 			cancel();
 		} else {
-			if (celleditor != null)
+			if (celleditor != null) {
 				celleditor.stopEditingAndSave();
+			}
 
-			if (leaveOnCommit)
+			if (leaveOnCommit) {
 				leave();
+			}
 		}
 	}
 
@@ -300,8 +304,9 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getClickCount() > 1)
+		if (e.getClickCount() > 1) {
 			setExtraFieldToListValueAt(e.getPoint());
+		}
 	}
 
 	@Override
@@ -333,8 +338,9 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 		for (int i = 0; i < model.getSize(); i++) {
 			Object element = model.getElementAt(i);
-			if (visibleList.isSelectedIndex(i))
+			if (visibleList.isSelectedIndex(i)) {
 				result.add(element);
+			}
 		}
 
 		return result;

@@ -178,23 +178,26 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				}
 
 			case 2:
+				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requBeforeMap != null) {
 					result = requBeforeMap.get(myKey);
 					break;
-				} // otherwise, result will remain null
+				}
 
 			case 3:
+				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requAfterMap != null) {
 					result = requAfterMap.get(myKey);
 					break;
-				} // otherwise, result will remain null
+				}
 			default:
 				Logging.warning(this, "no case found for col in getValueAt");
 				break;
 			}
 
-			if (result != null)
+			if (result != null) {
 				result = "(" + result + ")";
+			}
 
 		}
 		return result;
@@ -233,9 +236,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				return cell;
 
 			} else {
-
 				((JLabel) cell).setIcon(null);
-
 			}
 
 			return cell;
@@ -269,8 +270,9 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				break;
 			}
 
-			if (kindOfRow == 2 && col > 1)
+			if (kindOfRow == 2 && col > 1) {
 				cell.setBackground(Globals.BACKGROUND_COLOR_4);
+			}
 
 		}
 	}
@@ -291,8 +293,9 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 			colorizer.colorize(cell);
 
-			if (cell instanceof JComponent)
+			if (cell instanceof JComponent) {
 				((JComponent) cell).setToolTipText("" + value);
+			}
 
 			return cell;
 		}

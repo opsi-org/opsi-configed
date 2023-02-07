@@ -43,7 +43,8 @@ public class PanelProductProperties extends JSplitPane
 	public PanelGenEditTable paneProducts;
 	private List<String> depotsOfPackage;
 
-	private ProductInfoPane infoPane; // right pane
+	// right pane
+	private ProductInfoPane infoPane;
 	protected PanelEditDepotProperties panelEditProperties;
 	public AbstractEditMapPanel propertiesPanel;
 

@@ -42,8 +42,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.guidata.DependenciesTreeModel;
 
 public class DependenciesTreePanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
@@ -85,10 +85,11 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 				JLabel label = new JLabel(value.toString()); // (JLabel)
 
-				if (sel)
+				if (sel) {
 					label.setBorder(BorderFactory.createLineBorder(Globals.DEPENDENCIES_TREE_PANEL_BORDER_COLOR, 1));
-				else
+				} else {
 					label.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+				}
 
 				return label;
 			}
@@ -105,15 +106,17 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 				for (int i = 0; i < dependenciesTree.getRowCount(); i++) {
 					TreePath path = dependenciesTree.getPathForRow(i);
 
-					if (path.getLastPathComponent().toString().equals(productIdOfSelectedPath))
+					if (path.getLastPathComponent().toString().equals(productIdOfSelectedPath)) {
 						dependenciesTree.addSelectionPath(path);
+					}
 				}
 			}
 
 			@Override
 			public void setSelectionPath(TreePath path) {
-				if (dependenciesTree.isPathSelected(path))
+				if (dependenciesTree.isPathSelected(path)) {
 					clearSelection();
+				}
 
 				else {
 					clearSelection();
@@ -235,8 +238,9 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		dependenciesTree.setModel(new DefaultTreeModel(dependenciesTreeNode));
 
 		// Expand the whole tree
-		for (int i = 0; i < dependenciesTree.getRowCount(); i++)
+		for (int i = 0; i < dependenciesTree.getRowCount(); i++) {
 			dependenciesTree.expandRow(i);
+		}
 	}
 
 	private void setPathLabel(TreePath path) {
@@ -248,8 +252,9 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 			pathString = pathString.replace(", ", " ▸ "); // ↦
 
 			dependenciesTreePathLabel.setText(" " + pathString);
-		} else
+		} else {
 			clearPathLabel();
+		}
 	}
 
 	private void clearPathLabel() {
