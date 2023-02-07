@@ -145,7 +145,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard disabled
-	public static final boolean DASH_ENABLED = false;
+	public static final boolean OPSI_4_3 = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -624,7 +624,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void initDashInfo() {
-		if (!DASH_ENABLED) {
+		if (!OPSI_4_3) {
 			Logging.info(this, "initDashInfo not enabled");
 			return;
 		}
@@ -677,7 +677,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					fProgress.setReady();
 					fProgress.actAfterWaiting();
 				}
-
+				mainFrame.toFront();
 			}
 		}.start();
 

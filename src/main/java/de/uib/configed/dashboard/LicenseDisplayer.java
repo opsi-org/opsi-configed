@@ -104,7 +104,7 @@ public class LicenseDisplayer {
 	}
 
 	public void display() {
-		if (ConfigedMain.DASH_ENABLED)
+		if (ConfigedMain.OPSI_4_3)
 			stage.show();
 
 		loadData();

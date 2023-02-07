@@ -238,9 +238,10 @@ public class MainFrame extends JFrame
 	JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem();
 
 	JMenu jMenuFrames = new JMenu();
-	JMenuItem jMenuFrameLicences = new JMenuItem();
-	JMenuItem jMenuFrameWorkOnProducts = new JMenuItem();
 	JMenuItem jMenuFrameWorkOnGroups = new JMenuItem();
+	JMenuItem jMenuFrameWorkOnProducts = new JMenuItem();
+	JMenuItem jMenuFrameDashboard = new JMenuItem();
+	JMenuItem jMenuFrameLicences = new JMenuItem();
 	JMenuItem jMenuFrameShowDialogs = new JMenuItem();
 
 	JMenu jMenuHelp = new JMenu();
@@ -334,7 +335,7 @@ public class MainFrame extends JFrame
 
 	JPanel iconPaneExtraFrames;
 
-	JButton jButtonDash;
+	JButton jButtonDashboard;
 	JButton jButtonLicences;
 
 	JPanel iconPane1;
@@ -1246,16 +1247,20 @@ public class MainFrame extends JFrame
 	private void setupMenuFrames() {
 		jMenuFrames.setText(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
-		jMenuFrameLicences.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicences"));
-		jMenuFrameLicences.setEnabled(false);
-		jMenuFrameLicences.addActionListener(this);
+		jMenuFrameWorkOnGroups.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
+		jMenuFrameWorkOnGroups.setVisible(configedMain.getPersistenceController().isWithLocalImaging());
+		jMenuFrameWorkOnGroups.addActionListener(this);
 
 		jMenuFrameWorkOnProducts.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
 		jMenuFrameWorkOnProducts.addActionListener(this);
 
-		jMenuFrameWorkOnGroups.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jMenuFrameWorkOnGroups.setVisible(configedMain.getPersistenceController().isWithLocalImaging());
-		jMenuFrameWorkOnGroups.addActionListener(this);
+		jMenuFrameDashboard.setText(Configed.getResourceValue("Dashboard.title"));
+		jMenuFrameDashboard.addActionListener(this);
+		jMenuFrameDashboard.setVisible(ConfigedMain.OPSI_4_3);
+
+		jMenuFrameLicences.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicences"));
+		jMenuFrameLicences.setEnabled(false);
+		jMenuFrameLicences.addActionListener(this);
 
 		jMenuFrameShowDialogs.setText(Configed.getResourceValue("MainFrame.jMenuFrameShowDialogs"));
 		jMenuFrameShowDialogs.setEnabled(false);
@@ -1265,12 +1270,12 @@ public class MainFrame extends JFrame
 				Logging.info(this, "actionPerformed");
 				executeCommandOnInstances("arrange", FEditObject.runningInstances.getAll());
 			}
-
 		});
 
-		jMenuFrames.add(jMenuFrameLicences);
-		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
+		jMenuFrames.add(jMenuFrameWorkOnProducts);
+		jMenuFrames.add(jMenuFrameDashboard);
+		jMenuFrames.add(jMenuFrameLicences);
 		jMenuFrames.addSeparator();
 		jMenuFrames.add(jMenuFrameShowDialogs);
 
@@ -2149,14 +2154,14 @@ public class MainFrame extends JFrame
 
 		jButtonWorkOnProducts.addActionListener(this);
 
-		jButtonDash = new JButton("", Globals.createImageIcon("images/dash_unselected.png", ""));
-		jButtonDash.setSelectedIcon(Globals.createImageIcon("images/dash_selected.png", ""));
-		jButtonDash.setPreferredSize(Globals.modeSwitchDimension);
-		jButtonDash.setToolTipText("Dashboard");
+		jButtonDashboard = new JButton("", Globals.createImageIcon("images/dash_unselected.png", ""));
+		jButtonDashboard.setSelectedIcon(Globals.createImageIcon("images/dash_selected.png", ""));
+		jButtonDashboard.setPreferredSize(Globals.modeSwitchDimension);
+		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 
-		jButtonDash.setEnabled(ConfigedMain.DASH_ENABLED);
-		jButtonDash.setVisible(ConfigedMain.DASH_ENABLED);
-		jButtonDash.addActionListener(this);
+		jButtonDashboard.setEnabled(ConfigedMain.OPSI_4_3);
+		jButtonDashboard.setVisible(ConfigedMain.OPSI_4_3);
+		jButtonDashboard.addActionListener(this);
 
 		iconPaneTargets = new JPanel();
 		iconPaneTargets.setBorder(new LineBorder(Globals.blueGrey, 1, true));
@@ -2204,9 +2209,11 @@ public class MainFrame extends JFrame
 								.addComponent(jButtonWorkOnProducts, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-								.addComponent(jButtonDash, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+								.addGap(ConfigedMain.OPSI_4_3 ? Globals.HGAP_SIZE : 0,
+										ConfigedMain.OPSI_4_3 ? Globals.HGAP_SIZE : 0,
+										ConfigedMain.OPSI_4_3 ? Globals.HGAP_SIZE : 0)
 								.addComponent(jButtonLicences, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
@@ -2219,7 +2226,7 @@ public class MainFrame extends JFrame
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jButtonWorkOnProducts, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addComponent(jButtonDash, GroupLayout.PREFERRED_SIZE,
+										.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(jButtonLicences, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -3283,9 +3290,7 @@ public class MainFrame extends JFrame
 			configedMain.handleLicencesManagementRequest();
 			if (configedMain.getPersistenceController().getGlobalBooleanConfigValue(
 					PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
-					PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT)
-
-			) {
+					PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT)) {
 
 				if (licenseDash == null) {
 					licenseDash = new LicenseDash();
@@ -3304,7 +3309,7 @@ public class MainFrame extends JFrame
 		else if (e.getSource() == jButtonWorkOnProducts || e.getSource() == jMenuFrameWorkOnProducts) {
 			configedMain.handleProductActionRequest();
 
-		} else if (e.getSource() == jButtonDash) {
+		} else if (e.getSource() == jButtonDashboard || e.getSource() == jMenuFrameDashboard) {
 			configedMain.initDashInfo();
 		}
 
