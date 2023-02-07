@@ -28,6 +28,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1284,14 +1285,21 @@ public class MainFrame extends JFrame
 				}
 
 				messagebus.connectTerminal();
-			} catch (Exception e1) {
-				Logging.error(this, "cannot open terminal");
+			} catch (InterruptedException ex) {
+				Logging.error(this, "cannot open terminal, thread interrupted", ex);
+				Thread.currentThread().interrupt();
+			} catch (URISyntaxException ex) {
+				Logging.error(this, "cannot open terminal, Exception thrown", ex);
 			}
 		});
 
-		jMenuFrames.add(jMenuFrameLicences);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
+		jMenuFrames.add(jMenuFrameWorkOnProducts);
+		if (ConfigedMain.OPSI_4_3) {
+			jMenuFrames.add(jMenuFrameDashboard);
+		}
+		jMenuFrames.add(jMenuFrameLicences);
 		if (ConfigedMain.OPSI_4_3) {
 			jMenuFrames.add(jMenuFrameTerminal);
 		}
@@ -2759,8 +2767,7 @@ public class MainFrame extends JFrame
 		fList.setTitle(Globals.APPNAME + ": " + Configed.getResourceValue("MainFrame.productSelection"));
 		fList.init();
 
-		// TODO should this location remain here?
-		fList.setSize(F_WIDTH / 2, this.getHeight());
+		fList.setSize(F_WIDTH / 2, this.getHeight() - 100);
 		fList.setModal(true);
 		fList.setLocationRelativeTo(this);
 		fList.setVisible(true);
