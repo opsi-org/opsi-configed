@@ -731,7 +731,7 @@ public class LicensingInfoMap {
 				for (int i = 0; i < lics.size(); i++) {
 					validUntil = licenses.get(lics.get(i)).get(VALID_UNTIL).toString();
 
-					if (dateNow.after(sdf.parse("2023-02-03")))
+					if (dateNow.after(sdf.parse(validUntil)))
 						return STATE_DAYS_OVER;
 
 					Long timeLeft = getDaysLeftUntil(validUntil);
