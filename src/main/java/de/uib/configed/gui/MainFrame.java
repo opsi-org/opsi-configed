@@ -2272,12 +2272,12 @@ public class MainFrame extends JFrame
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-								.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(ConfigedMain.OPSI_4_3 ? Globals.HGAP_SIZE : 0,
 										ConfigedMain.OPSI_4_3 ? Globals.HGAP_SIZE : 0,
 										ConfigedMain.OPSI_4_3 ? Globals.HGAP_SIZE : 0)
+								.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(jButtonLicences, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
@@ -3128,8 +3128,9 @@ public class MainFrame extends JFrame
 		/* Not needed */}
 
 	private Map<String, String> getChangedClientInfoFor(String client) {
-		if (changedClientInfos == null)
+		if (changedClientInfos == null) {
 			changedClientInfos = new HashMap<>();
+		}
 
 		return changedClientInfos.computeIfAbsent(client, arg -> new HashMap<>());
 

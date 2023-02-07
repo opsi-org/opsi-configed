@@ -132,9 +132,8 @@ import de.uib.utilities.table.provider.RowsProvider;
 import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.thread.WaitCursor;
 
-public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver
+public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
 
-{
 	public static final int VIEW_CLIENTS = 0;
 	public static final int VIEW_LOCALBOOT_PRODUCTS = 1;
 	public static final int VIEW_NETBOOT_PRODUCTS = 2;
@@ -146,7 +145,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard and other features for opsi 4.3 disabled
-	public static final boolean OPSI_4_3 = true;
+	public static final boolean OPSI_4_3 = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
