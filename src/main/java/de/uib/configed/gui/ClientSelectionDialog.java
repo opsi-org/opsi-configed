@@ -530,8 +530,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.add(createSimpleGroup(new SoftwareLastActionElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareVersionElement()));
 		result.groupList.add(createSimpleGroup(new SoftwarePackageVersionElement()));
-		// TODO, removed because it's not working (in MySQL)
-		//result.groupList.add(createSimpleGroup(new SoftwareModificationTimeElement()));
+		result.groupList.add(createSimpleGroup(new SoftwareModificationTimeElement()));
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		createComplexBottom(result);
@@ -1358,7 +1357,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			String text = saveNameField.getText();
 			if (text.isEmpty()) {
 				JOptionPane.showMessageDialog(saveButton, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
-						Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME + ")",
+						Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME
+								+ ")",
 						JOptionPane.OK_OPTION);
 
 				toFront();
