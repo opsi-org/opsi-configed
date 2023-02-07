@@ -1358,8 +1358,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			String text = saveNameField.getText();
 			if (text.isEmpty()) {
 				JOptionPane.showMessageDialog(saveButton, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
-						Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME
-								+ ")",
+						Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME + ")",
 						JOptionPane.OK_OPTION);
 
 				toFront();

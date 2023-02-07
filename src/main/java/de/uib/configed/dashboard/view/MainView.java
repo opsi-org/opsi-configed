@@ -2,9 +2,13 @@ package de.uib.configed.dashboard.view;
 
 import java.io.IOException;
 
+import javax.swing.UIManager;
+
+import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.dashboard.DataObserver;
 import de.uib.configed.dashboard.DepotInfo;
+import de.uib.configed.dashboard.Helper;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.dashboard.chart.ClientLastSeenComparison;
 import de.uib.configed.dashboard.chart.InstalledOSComparison;
@@ -26,9 +30,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -44,13 +51,17 @@ public class MainView implements View {
 	@FXML
 	private ProductStatusComparison productStatusComparison;
 	@FXML
-	public ChoiceBox<String> selectedDepotChoiceBox;
+	public ComboBox<String> selectedDepotComboBox;
 	@FXML
 	private VBox dashboardSceneVBox;
+	@FXML
+	private VBox depotDataDisplayAreaVBox;
 	@FXML
 	private VBox clientDataDisplayAreaVBox;
 	@FXML
 	private VBox productDataDisplayAreaVBox;
+	@FXML
+	private VBox installedOSDataDisplayAreaVBox;
 	@FXML
 	private VBox moduleDataDisplayAreaVBox;
 	@FXML
@@ -72,11 +83,67 @@ public class MainView implements View {
 	@FXML
 	public Label licensesNumberLabel;
 	@FXML
+	public Label depotTypeLabel;
+	@FXML
+	public Label depotDescriptionLabel;
+	@FXML
+	public BorderPane depotNumberArea;
+	@FXML
+	public BorderPane clientNumberArea;
+	@FXML
+	public BorderPane productNumberArea;
+	@FXML
+	public BorderPane localbootProductNumberArea;
+	@FXML
+	public BorderPane netbootProductNumberArea;
+	@FXML
+	public BorderPane installedOSNumberArea;
+	@FXML
+	public BorderPane moduleNumberArea;
+	@FXML
+	public BorderPane licenseNumberArea;
+	@FXML
+	private Text depotNumberTitleText;
+	@FXML
+	private Text productNumberTitleText;
+	@FXML
+	private Text localbootProductNumberTitleText;
+	@FXML
+	private Text netbootProductNumberTitleText;
+	@FXML
+	private Text clientNumberTitleText;
+	@FXML
+	private Text installedOSNumberTitleText;
+	@FXML
+	private Text moduleNumberTitleText;
+	@FXML
+	private Text licenseNumberTitleText;
+	@FXML
 	public Text depotTypeText;
 	@FXML
 	public Text depotDescriptionText;
 	@FXML
+	public Text selectedDepotText;
+	@FXML
+	public Text reloadingText;
+	@FXML
 	public VBox dataLoadingScreenVBox;
+	@FXML
+	private Text depotTitleText;
+	@FXML
+	private Text productTitleText;
+	@FXML
+	private Text clientTitleText;
+	@FXML
+	private Text installedOSTitleText;
+	@FXML
+	private Text moduleTitleText;
+	@FXML
+	private Text licenseTitleText;
+	@FXML
+	private AnchorPane anchorPane;
+	@FXML
+	private ProgressBar statusProgressBar;
 
 	protected static final String DATA_CHANGED_SERVICE = "changed";
 	protected static final String NEW_DEPOT_SELECTED_SERVICE = "selectedDepot";
@@ -137,7 +204,7 @@ public class MainView implements View {
 					};
 
 					extraDataRetrieverThread.setOnSucceeded(
-							e2 -> observer.notify(DATA_CHANGED_SERVICE, selectedDepotChoiceBox.getValue()));
+							e2 -> observer.notify(DATA_CHANGED_SERVICE, selectedDepotComboBox.getValue()));
 					extraDataRetrieverThread.start();
 				});
 				return dataRetriever;
@@ -159,7 +226,7 @@ public class MainView implements View {
 			setBlurriness(5);
 			dataLoadingScreenVBox.setVisible(true);
 
-			observer.notify(DATA_CHANGED_SERVICE, selectedDepotChoiceBox.getValue());
+			observer.notify(DATA_CHANGED_SERVICE, selectedDepotComboBox.getValue());
 
 			dataLoadingScreenVBox.setVisible(false);
 			setBlurriness(0);
@@ -188,13 +255,16 @@ public class MainView implements View {
 		clientDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.CLIENT_VIEW));
 		productDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.PRODUCT_VIEW));
 		licenseDataDisplayAreaVBox.setOnMouseClicked(e -> displayLicenseInfo());
-		selectedDepotChoiceBox.getSelectionModel().selectedItemProperty().addListener(
+		selectedDepotComboBox.getSelectionModel().selectedItemProperty().addListener(
 				(observableValue, oldValue, newValue) -> observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue));
 	}
 
 	@Override
 	public void display() {
-		Platform.runLater(() -> fxPanel.setScene(scene));
+		Platform.runLater(() -> {
+			fxPanel.setScene(scene);
+			styleAccordingToSelectedTheme();
+		});
 		loadData();
 	}
 
@@ -215,5 +285,66 @@ public class MainView implements View {
 		} else {
 			licenseDisplayer.display();
 		}
+	}
+
+	private void styleAccordingToSelectedTheme() {
+		String foregroundColor = ComponentStyler.getHexColor(UIManager.getColor("Label.foreground"));
+		depotTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		productTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		clientTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		installedOSTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		moduleTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		licenseTitleText.setStyle("-fx-fill: #" + foregroundColor);
+
+		depotTypeText.setStyle("-fx-fill: #" + foregroundColor);
+		depotDescriptionText.setStyle("-fx-fill: #" + foregroundColor);
+		selectedDepotText.setStyle("-fx-fill: #" + foregroundColor);
+		reloadingText.setStyle("-fx-fill: #" + foregroundColor);
+
+		depotNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		productNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		localbootProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		netbootProductNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		clientNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		installedOSNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		moduleNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		licenseNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+
+		depotsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		clientsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		productsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		netbootProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		localbootProductsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		installedOSsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		modulesNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		licensesNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+
+		depotTypeLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		depotDescriptionLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+
+		String lighterBackgroundColor = ComponentStyler
+				.getHexColor(Helper.adjustColorBrightness(UIManager.getColor("Panel.background")));
+		String backgroundColor = ComponentStyler.getHexColor(UIManager.getColor("Panel.background"));
+		fxPanel.setBackground(UIManager.getColor("Panel.background"));
+		anchorPane.setStyle("-fx-background-color: #" + backgroundColor);
+		dashboardSceneVBox.setStyle("-fx-background-color: #" + backgroundColor);
+		depotDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		clientDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		productDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		installedOSDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		moduleDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		licenseDataDisplayAreaVBox.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+
+		depotNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		clientNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		productNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		netbootProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		localbootProductNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		installedOSNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		moduleNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		licenseNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+
+		ComponentStyler.styleProgressBarComponent(statusProgressBar);
+		ComponentStyler.styleComboBoxComponent(selectedDepotComboBox);
 	}
 }
