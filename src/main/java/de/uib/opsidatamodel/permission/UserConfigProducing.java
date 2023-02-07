@@ -334,7 +334,7 @@ public class UserConfigProducing {
 	}
 
 	private void supplyPermissionEntriesForAUser(final String username, final String startkey,
-			final Boolean prototypeObligatory, final UserConfig prototypeConfig, UserConfig userConfig) {
+			final boolean prototypeObligatory, final UserConfig prototypeConfig, UserConfig userConfig) {
 		Logging.info(this, "supplyPermissionEntriesForAUser for user " + username + " with startkey " + startkey);
 		Logging.info(this, "supplyPermissionEntriesForAUser for user, prototypeConfig " + prototypeConfig);
 

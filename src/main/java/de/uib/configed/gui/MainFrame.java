@@ -3288,9 +3288,9 @@ public class MainFrame extends JFrame
 
 		else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
 			configedMain.handleLicencesManagementRequest();
-			if (configedMain.getPersistenceController().getGlobalBooleanConfigValue(
+			if (Boolean.TRUE.equals(configedMain.getPersistenceController().getGlobalBooleanConfigValue(
 					PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
-					PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT)) {
+					PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
 
 				if (licenseDash == null) {
 					licenseDash = new LicenseDash();

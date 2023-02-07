@@ -187,7 +187,7 @@ public class SelectionManager {
 		SelectOperation operation = getTopOperation();
 		if (operation == null) {
 			Logging.info(this, "Nothing selected");
-			return null;
+			return new ArrayList<>();
 		} else {
 			Logging.info("\n" + operation.printOperation(""));
 		}

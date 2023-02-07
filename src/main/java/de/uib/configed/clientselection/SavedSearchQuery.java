@@ -1,5 +1,6 @@
 package de.uib.configed.clientselection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -90,7 +91,7 @@ public class SavedSearchQuery {
 	}
 
 	public List<String> runSearch(boolean printing) {
-		List<String> result = null;
+		List<String> result = new ArrayList<>();
 
 		Messages.setLocale("en");
 		controller = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
@@ -114,7 +115,7 @@ public class SavedSearchQuery {
 		List<String> searches = manager.getSavedSearchesNames();
 		if (searchName == null && printing) {
 			printResult(searches);
-			return null;
+			return new ArrayList<>();
 		}
 
 		if (!searches.contains(searchName)) {

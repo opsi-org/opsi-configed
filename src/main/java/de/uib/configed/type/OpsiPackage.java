@@ -55,12 +55,12 @@ public class OpsiPackage implements Comparable {
 	public static final int TYPE_NETBOOT = 1;
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
-		this(productId, productVersion, packageVersion, productType, null); // compatibility to usages without locked
-																			// parameter
+		this(productId, productVersion, packageVersion, productType, false); // compatibility to usages without locked
+																				// parameter
 	}
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType,
-			Boolean locked) {
+			boolean locked) {
 		this.productId = productId;
 		this.productVersion = productVersion;
 		this.packageVersion = packageVersion;
@@ -73,7 +73,7 @@ public class OpsiPackage implements Comparable {
 		else
 			this.productType = -1;
 
-		if (locked != null && locked)
+		if (locked)
 			this.lockedText = IS_LOCKED_INFO;
 		else
 			this.lockedText = "";

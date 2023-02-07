@@ -265,7 +265,7 @@ public class JSONReMapper {
 
 		if (jsonList == null) {
 			Logging.error("JSONReMapper: Error on getting list for key \"result\": jsonList is null");
-			return null;
+			return new ArrayList<>();
 		}
 
 		JSONObject item = null;

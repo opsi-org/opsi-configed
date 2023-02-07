@@ -72,7 +72,7 @@ public class DataStubRawData extends DataStubNOM {
 			Logging.info(this, "sql produced row " + row);
 		}
 
-		return null;
+		return new ArrayList<>();
 
 	}
 
@@ -267,7 +267,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request");
 
-			if (rows == null || rows.isEmpty()) {
+			if (rows.isEmpty()) {
 				Logging.notice(this, "no auditSoftwareOnClient");
 			} else {
 
@@ -373,7 +373,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		hostConfigs = new HashMap<>();
 
-		if (rows == null || rows.isEmpty()) {
+		if (rows.isEmpty()) {
 			Logging.warning(this, "no host config rows " + rows);
 		} else {
 			Logging.info(this, "retrieveHostConfigs rows size " + rows.size());
@@ -437,7 +437,7 @@ public class DataStubRawData extends DataStubNOM {
 		Logging.info(this, "client2HwRowsForHwClass " + hwClass);
 
 		if (client2HwRows == null)
-			return null;
+			return new HashMap<>();
 
 		// z.B. hwClass is DISK_PARTITION
 
@@ -492,7 +492,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		if (!foundAnEntry) {
 			Logging.info(this, "no columns found for hwClass " + hwClass);
-			return null;
+			return new HashMap<>();
 		}
 
 		String colsS = cols.toString();
@@ -629,8 +629,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			Map<String, Map<String, Object>> client2ClassInfos = client2HwRowsForHwClass(hwClass);
 
-			if (client2ClassInfos != null) {
-
+			if (!client2ClassInfos.isEmpty()) {
 				for (Entry<String, Map<String, Object>> client2ClassInfo : client2ClassInfos.entrySet()) {
 					Map<String, Object> allInfosForAClient = client2HwRows.get(client2ClassInfo.getKey());
 					// find max lastseen time as last scan time

@@ -1,5 +1,6 @@
 package de.uib.opsidatamodel.permission;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.utilities.ExtendedDate;
@@ -97,7 +98,7 @@ public class ModulePermissionValue {
 		Map<String, Object> result = exec.getMapFromItem(ob);
 
 		if (result.entrySet().isEmpty())
-			return null;
+			return new HashMap<>();
 
 		return result;
 	}
@@ -111,7 +112,7 @@ public class ModulePermissionValue {
 		if (ob != null) {
 			Map<String, Object> detailled = interpretAsJson(ob);
 			Logging.debug(this, "detailled " + detailled);
-			if (detailled != null) {
+			if (!detailled.isEmpty()) {
 				maxClients = retrieveMaxClients(detailled.get(KEY_MAX_CLIENTS));
 				Logging.debug(this, "detailled  maxClients " + maxClients);
 				expiresDate = retrieveExpiresDate(detailled.get(KEY_EXPIRES));
@@ -122,9 +123,7 @@ public class ModulePermissionValue {
 					expiresDate = retrieveExpiresDate(ob);
 					maxClients = retrieveMaxClients(ob);
 					Logging.debug(this, "maxClients directly given " + maxClients);
-				}
-
-				else if (booleanValue) {
+				} else if (Boolean.TRUE.equals(booleanValue)) {
 					maxClients = ExtendedInteger.INFINITE;
 				} else {
 					maxClients = ExtendedInteger.ZERO;

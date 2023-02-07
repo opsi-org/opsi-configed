@@ -798,7 +798,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
 
 		if (tableModel.getColumnCount() == 0)
-			return null;
+			return new ArrayList<>();
 
 		else if (sortDescriptor == null)
 		// default sorting

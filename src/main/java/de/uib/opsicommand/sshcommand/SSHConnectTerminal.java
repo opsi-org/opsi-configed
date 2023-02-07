@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -313,7 +314,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 	private List<String> getList(String str) {
 		if (str.equals(""))
-			return null;
+			return new ArrayList<>();
 
 		String[] arr = str.split("\n");
 

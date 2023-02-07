@@ -1,5 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -460,10 +461,10 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	}
 
 	/**
-	 * @return null
+	 * @return empty list
 	 */
 	@Override
 	public List<String> getParameterList() {
-		return null;
+		return new ArrayList<>();
 	}
 }

@@ -325,7 +325,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		String hwClass = (String) hwClassMapping.get(hwClassUI);
 
 		if (hwClass != null && reduceScanToByAuditClasses && !hwClassesForByAudit.contains(hwClass))
-			return null;
+			return new ArrayList<>();
 
 		List devices = (List) hwInfo.get(hwClass);
 		Map deviceInfo = node.getDeviceInfo();

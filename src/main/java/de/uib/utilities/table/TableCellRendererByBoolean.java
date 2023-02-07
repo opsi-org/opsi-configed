@@ -39,7 +39,7 @@ public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 		if (value != null) {
 			if (!value.toString().equals("")) {
 				if (value instanceof Boolean) {
-					if ((Boolean) value)
+					if (Boolean.TRUE.equals(value))
 						selectedString = "ja";
 					else
 						selectedString = "nein";

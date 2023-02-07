@@ -206,6 +206,6 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public List<String> getParameterList() {
-		return null;
+		return new ArrayList<>();
 	}
 }

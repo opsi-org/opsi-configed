@@ -157,7 +157,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	@Override
 	protected void commit() {
-		result = null;
+		result = new LinkedList<>();
 
 		buttonCommit.setEnabled(false);
 		buttonCancel.setEnabled(false);
@@ -184,7 +184,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	@Override
 	protected void cancel() {
-		result = null;
+		result = new LinkedList<>();
 
 		super.cancel();
 	}

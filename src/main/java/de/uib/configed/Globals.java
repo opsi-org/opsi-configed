@@ -97,18 +97,16 @@ public class Globals {
 	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;
 	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
 
-	public static Boolean interpretAsBoolean(Object value) {
+	public static boolean interpretAsBoolean(Object value) {
 
 		if (value == null)
-			return null;
+			return false;
 
 		if (value instanceof Boolean) {
-
 			return (Boolean) value;
 		}
 
 		if (value instanceof Integer) {
-
 			int val = (Integer) value;
 			if (val == 1)
 				return true;
@@ -124,7 +122,7 @@ public class Globals {
 			String val = ((String) value).toLowerCase();
 
 			if (val.equals(""))
-				return null;
+				return false;
 
 			if (val.equals("true"))
 				return true;

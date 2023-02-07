@@ -8,7 +8,7 @@ import javax.swing.ListSelectionModel;
 
 public class DefaultListModelProducer implements ListModelProducer {
 	@Override
-	public ListModel getListModel(int row, int column) {
+	public ListModel<Object> getListModel(int row, int column) {
 		return null;
 	}
 
@@ -28,7 +28,7 @@ public class DefaultListModelProducer implements ListModelProducer {
 	}
 
 	@Override
-	public List getSelectedValues(int row, int column) {
+	public List<Object> getSelectedValues(int row, int column) {
 		return new ArrayList<>();
 	}
 
@@ -43,14 +43,14 @@ public class DefaultListModelProducer implements ListModelProducer {
 	}
 
 	@Override
-	public List toList(Object value) {
+	public List<Object> toList(Object value) {
 		if (value == null)
-			return null;
+			return new ArrayList<>();
 
 		if (value instanceof List)
 			return (List) value;
 
-		List list = new ArrayList<>();
+		List<Object> list = new ArrayList<>();
 		list.add(value);
 
 		return list;
