@@ -111,6 +111,7 @@ import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.logging.LogEvent;
 import de.uib.utilities.logging.LogEventObserver;
@@ -338,6 +339,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected Map<String, String> logfiles;
 
 	public Map<String, Boolean> hostDisplayFields;
+
+	LicensingInfoMap licensingInfoMap;
 
 	public enum LicencesTabStatus {
 		LICENCEPOOL, ENTER_LICENCE, EDIT_LICENCE, USAGE, RECONCILIATION, STATISTICS
@@ -806,7 +809,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		waitCursor.stop();
 		mainFrame.enableAfterLoading();
 
-		persist.showLicInfoWarnings();
 	}
 
 	public void setGroupLoading(boolean b) {

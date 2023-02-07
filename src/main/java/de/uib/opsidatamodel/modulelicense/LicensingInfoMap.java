@@ -53,6 +53,7 @@ public class LicensingInfoMap {
 	private List<String> currentCloseToLimitModuleList;
 	private List<String> currentOverLimitModuleList;
 	private List<String> currentTimeWarningModuleList;
+	private List<String> currentTimeOverModuleList;
 	private List<String> futureOverLimitModuleList;
 	private List<String> futureCloseToLimitModuleList;
 	private Set<String> allCloseToLimitModules;
@@ -90,13 +91,16 @@ public class LicensingInfoMap {
 	public static final String STATE_OVER_LIMIT = "over_limit";
 	public static final String STATE_FUTURE_OKAY = "future_okay";
 	public static final String STATE_DAYS_WARNING = "days_warning";
+	public static final String STATE_DAYS_OVER = "days_over";
 	public static final String STATE_DAYS_OKAY = "days_okay";
 	public static final String STATE_IGNORE_WARNING = "ignore_warning";
+	public static final String STATE_OKAY = "state_okay";
 	public static final String CLIENT_NUMBER = "client_number";
 	public static final String UNLIMITED_NUMBER = "999999999";
 	public static final String CURRENT_OVER_LIMIT = "current_over_limit";
 	public static final String CURRENT_CLOSE_TO_LIMIT = "current_close_to_limit";
 	public static final String CURRENT_TIME_WARNINGS = "current_time_warnings";
+	public static final String CURRENT_TIME_OVER = "current_time_over";
 	public static final String FUTURE_OVER_LIMIT = "future_over_limit";
 	public static final String FUTURE_CLOSE_TO_LIMIT = "future_close_to_limit";
 	public static final String FUTURE_STATE = "future_state";
@@ -483,6 +487,8 @@ public class LicensingInfoMap {
 			currentOverLimitModuleList = new ArrayList<>();
 		if (currentTimeWarningModuleList == null)
 			currentTimeWarningModuleList = new ArrayList<>();
+		if (currentTimeOverModuleList == null)
+			currentTimeOverModuleList = new ArrayList<>();
 		if (futureCloseToLimitModuleList == null)
 			futureCloseToLimitModuleList = new ArrayList<>();
 		if (futureOverLimitModuleList == null)
@@ -546,6 +552,11 @@ public class LicensingInfoMap {
 					else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_WARNING)) {
 						moduleInfo.put(STATE, STATE_DAYS_WARNING);
 						currentTimeWarningModuleList.add(currentModule);
+					}
+
+					else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_OVER)) {
+						moduleInfo.put(STATE, STATE_DAYS_OVER);
+						currentTimeOverModuleList.add(currentModule);
 					}
 
 					String futureCheck = checkFuture(tmp.getMap(), currentModule, key);
@@ -697,9 +708,9 @@ public class LicensingInfoMap {
 			Date date = sdf.parse(d);
 
 			long diffInMillies = Math.abs(date.getTime() - dateNow.getTime());
-			long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-			return diff;
+			return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
 		} catch (ParseException ex) {
 			Logging.error(CLASSNAME + " getDaysLeftUntilNextChange " + ex);
 		}
@@ -713,15 +724,26 @@ public class LicensingInfoMap {
 
 			List lics = (List) moduleInfo.get(LICENSE_IDS);
 			String validUntil;
+			LocalDate now = LocalDate.now();
+			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-			for (int i = 0; i < lics.size(); i++) {
-				validUntil = licenses.get(lics.get(i)).get(VALID_UNTIL).toString();
+			try {
+				for (int i = 0; i < lics.size(); i++) {
+					validUntil = licenses.get(lics.get(i)).get(VALID_UNTIL).toString();
 
-				Long timeLeft = getDaysLeftUntil(validUntil);
+					if (dateNow.after(sdf.parse("2023-02-03")))
+						return STATE_DAYS_OVER;
 
-				if (timeLeft <= daysClientLimitWarning)
-					return STATE_DAYS_WARNING;
+					Long timeLeft = getDaysLeftUntil(validUntil);
+
+					if (timeLeft <= daysClientLimitWarning)
+						return STATE_DAYS_WARNING;
+
+				}
+			} catch (ParseException ex) {
+				Logging.error(CLASSNAME + " checkTimeLeft " + ex);
 			}
+
 		}
 
 		return STATE_DAYS_OKAY;
@@ -789,6 +811,7 @@ public class LicensingInfoMap {
 						.get(modKey).get(FUTURE_STATE).toString().equals(STATE_FUTURE_OKAY)) {
 					val.put(STATE, STATE_DAYS_OKAY);
 					currentTimeWarningModuleList.remove(modKey);
+					currentTimeOverModuleList.remove(modKey);
 				}
 			}
 		}
@@ -820,6 +843,10 @@ public class LicensingInfoMap {
 		return currentTimeWarningModuleList;
 	}
 
+	public List<String> getCurrentDaysOverModuleList() {
+		return currentTimeOverModuleList;
+	}
+
 	/**
 	 * @return list of modules for every possible warning state (4)
 	 */
@@ -827,13 +854,14 @@ public class LicensingInfoMap {
 		Map<String, List<String>> result = new HashMap<>();
 
 		if (currentCloseToLimitModuleList.isEmpty() && currentOverLimitModuleList.isEmpty()
-				&& currentTimeWarningModuleList.isEmpty() && futureCloseToLimitModuleList.isEmpty()
-				&& futureOverLimitModuleList.isEmpty())
+				&& currentTimeWarningModuleList.isEmpty() && currentTimeOverModuleList.isEmpty()
+				&& futureCloseToLimitModuleList.isEmpty() && futureOverLimitModuleList.isEmpty())
 			return null;
 
 		result.put(CURRENT_OVER_LIMIT, currentOverLimitModuleList);
 		result.put(CURRENT_CLOSE_TO_LIMIT, currentCloseToLimitModuleList);
 		result.put(CURRENT_TIME_WARNINGS, currentTimeWarningModuleList);
+		result.put(CURRENT_TIME_OVER, currentTimeOverModuleList);
 		result.put(FUTURE_OVER_LIMIT, futureOverLimitModuleList);
 		result.put(FUTURE_CLOSE_TO_LIMIT, futureCloseToLimitModuleList);
 
@@ -848,15 +876,26 @@ public class LicensingInfoMap {
 		Logging.info(this, "warnings currentOverLimitModuleList? " + currentOverLimitModuleList.size());
 		Logging.info(this, "warnings currentCloseToLimitModuleList? " + currentCloseToLimitModuleList.size());
 		Logging.info(this, "warnings currentTimeWarningModuleList? " + currentTimeWarningModuleList.size());
+		Logging.info(this, "warnings currentTimeOverModuleList? " + currentTimeOverModuleList.size());
 		Logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
 		Logging.info(this, "warnings futureOverLimitModuleList? " + futureOverLimitModuleList.size());
 
 		result = !currentOverLimitModuleList.isEmpty() || !currentCloseToLimitModuleList.isEmpty()
-				|| !currentTimeWarningModuleList.isEmpty();
+				|| !currentTimeWarningModuleList.isEmpty() || !currentTimeOverModuleList.isEmpty();
 
 		Logging.info(this, "warning exists " + result);
 
 		return result;
+	}
+
+	public String getWarningLevel() {
+		if (!currentOverLimitModuleList.isEmpty() || !currentTimeOverModuleList.isEmpty())
+			return STATE_OVER_LIMIT;
+		if (!currentCloseToLimitModuleList.isEmpty() || !currentTimeWarningModuleList.isEmpty())
+			return STATE_CLOSE_TO_LIMIT;
+
+		return STATE_OKAY;
+
 	}
 
 	public Set<String> getModulesListWithCloseToLimitWarnings() {

@@ -88,6 +88,11 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 					jc.setBackground(Globals.darkOrange);
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
+
+				} else if (state.equals(LicensingInfoMap.STATE_DAYS_OVER)) {
+					jc.setBackground(Globals.WARNING_COLOR);
+					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
+							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				}
 
 			}

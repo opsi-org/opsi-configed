@@ -2188,7 +2188,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 					!FGeneralDialogLicensingInfo.extendedView);
 
 			if (licensingInfoMap.warningExists()) {
-				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses-error.png", ""));
+				if (licensingInfoMap.getWarningLevel().equals(LicensingInfoMap.STATE_OVER_LIMIT))
+					jButtonOpsiLicenses = new JButton("",
+							Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
+				if (licensingInfoMap.getWarningLevel().equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT))
+					jButtonOpsiLicenses = new JButton("",
+							Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
+
 			} else {
 				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
 			}
