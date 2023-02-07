@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.uib.configed.Configed;
@@ -175,7 +176,7 @@ public class LicensingInfoMap {
 
 		try {
 			jOResult = jsonObj.getJSONObject(RESULT);
-		} catch (Exception ex) {
+		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " constructor " + ex);
 		}
 		datesKeys = new ArrayList<>();
@@ -213,7 +214,7 @@ public class LicensingInfoMap {
 
 				result = clientX.getMap();
 			}
-		} catch (Exception ex) {
+		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " getClientNumersMap : " + ex.toString());
 		}
 
@@ -254,7 +255,7 @@ public class LicensingInfoMap {
 				result.put(obj.get(ID).toString(), tmp);
 			}
 
-		} catch (Exception ex) {
+		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " produceLicenses " + ex.toString());
 		}
 
@@ -272,7 +273,7 @@ public class LicensingInfoMap {
 				customerIDs.add(l.get(CUSTOMER_ID).toString());
 			}
 
-		} catch (Exception ex) {
+		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex.toString());
 		}
 
@@ -296,7 +297,7 @@ public class LicensingInfoMap {
 
 			}
 
-		} catch (Exception ex) {
+		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex.toString());
 		}
 
@@ -314,7 +315,7 @@ public class LicensingInfoMap {
 			for (int i = 0; i < jsResult.length(); i++) {
 				result.add(jsResult.getString(i));
 			}
-		} catch (Exception ex) {
+		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " getAvailableModules : " + ex);
 		}
 
@@ -338,7 +339,7 @@ public class LicensingInfoMap {
 			} else {
 				result = availableModules;
 			}
-		} catch (Exception ex) {
+		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " produceKnownModules " + ex);
 		}
 
@@ -361,7 +362,7 @@ public class LicensingInfoMap {
 			} else {
 				return new ArrayList<>();
 			}
-		} catch (Exception ex) {
+		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " produceObsoleteModules " + ex);
 		}
 
@@ -426,22 +427,21 @@ public class LicensingInfoMap {
 					daysClientLimitWarning = 30;
 			}
 
-		} catch (Exception ex) {
+		} catch (NumberFormatException ex) {
 			Logging.error(this, " produceConfigs " + ex);
 		}
 	}
 
 	private String produceChecksum() {
-		String checksum = "";
+		String newChecksum = "";
 
 		try {
-			checksum = jOResult.getString(CHECKSUM);
-			checksum = jOResult.get("licenses_checksum").toString();
-		} catch (Exception ex) {
+			newChecksum = jOResult.getString(CHECKSUM);
+		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " produceChecksum : " + ex);
 		}
 
-		return checksum;
+		return newChecksum;
 	}
 
 	private List<String> produceDatesKeys() {
@@ -472,7 +472,7 @@ public class LicensingInfoMap {
 				dates = reducedDatesKeys;
 			}
 
-		} catch (Exception ex) {
+		} catch (ParseException ex) {
 			Logging.error(CLASSNAME + " produceDatesKeys : " + ex.toString() + ", ");
 		}
 
@@ -579,7 +579,7 @@ public class LicensingInfoMap {
 
 			}
 
-		} catch (Exception ex) {
+		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " produceDatesMap : " + ex.toString() + ", ");
 		}
 
