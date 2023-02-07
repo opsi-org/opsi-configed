@@ -1088,7 +1088,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	protected boolean makeConnection(Executioner exec1) {
-
 		// set by executioner
 
 		Logging.info(this, "trying to make connection");

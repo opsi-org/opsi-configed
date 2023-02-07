@@ -298,7 +298,11 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				}
 				WaitCursor.stopAll();
 			}
-			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
+
+			if (conStat.getState() == ConnectionState.INTERRUPTED) {
+				return null;
+			}
+
 
 			final StringBuilder message = new StringBuilder();
 
@@ -315,8 +319,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			}
 
 			final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("JSONthroughHTTP.failedServerVerification") + " (" + Globals.APPNAME
-							+ ") ",
+					Configed.getResourceValue("JSONthroughHTTP.failedServerVerification"),
 					true,
 					new String[] { Configed.getResourceValue(Configed.getResourceValue("UIManager.cancelButtonText")),
 							Configed.getResourceValue("JSONthroughHTTP.alwaysTrust"),
@@ -339,6 +342,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 						}
 					});
 
+
 					if (ConfigedMain.getMainFrame() == null && ConfigedMain.dpass != null) {
 						fErrorMsg.setLocationRelativeTo(ConfigedMain.dpass);
 					}
@@ -352,12 +356,14 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				Logging.debug("exception thrown during doRun");
 			}
 
-			if (fErrorMsg.getResult() == 1) {
+			int choice = fErrorMsg.getResult();
+
+			if (choice == 1) {
 				conStat = new ConnectionState(ConnectionState.INTERRUPTED);
-			} else if (fErrorMsg.getResult() == 2) {
+			} else if (choice == 2) {
 				trustAlways = true;
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
-			} else if (fErrorMsg.getResult() == 3) {
+			} else if (choice == 3) {
 				trustOnlyOnce = true;
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 			}
