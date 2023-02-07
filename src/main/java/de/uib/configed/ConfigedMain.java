@@ -144,7 +144,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_PRODUCT_PROPERTIES = 7;
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
-	// Dashboard disabled
+	// Dashboard and other features for opsi 4.3 disabled
 	public static final boolean OPSI_4_3 = true;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
