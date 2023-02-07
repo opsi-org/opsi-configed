@@ -6820,14 +6820,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			resultMap = exec.getMapResult(omc0);
 
+			if (!resultMap.isEmpty())
+				result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
+						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 		}
 
-		if (!resultMap.isEmpty())
-			result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
-					"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
-
 		return result;
-
 	}
 
 	public String editLicenceUsage(String hostId, String softwareLicenseId, String licensePoolId, String licenseKey,
