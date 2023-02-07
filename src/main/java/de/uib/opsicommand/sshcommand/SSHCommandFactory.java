@@ -290,10 +290,12 @@ public class SSHCommandFactory {
 
 			Logging.info(this, "parent menu text " + parent);
 
-			if (parent == null || parent.equalsIgnoreCase("null") || parent.equals(PARENT_DEFAULT_FOR_OWN_COMMANDS))
+			if (parent == null || parent.equalsIgnoreCase("null") || parent.equals(PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
-			if (!listKnownParents.contains(parent))
+			}
+			if (!listKnownParents.contains(parent)) {
 				listKnownParents.add(parent);
+			}
 
 			Logging.info(this, "parent menu text changed  " + parent);
 
@@ -310,9 +312,10 @@ public class SSHCommandFactory {
 	 * @return List<String> sorted list_knownMenus
 	 **/
 	public List<String> getSSHCommandMenuNames() {
-		if (commandlist == null)
+		if (commandlist == null) {
 			commandlist = main.getPersistenceController().retrieveCommandList();
-		Collections.sort(listKnownMenus, (String s1, String s2) -> s1.compareToIgnoreCase(s2));
+		}
+		Collections.sort(listKnownMenus, String::compareToIgnoreCase);
 		return listKnownMenus;
 	}
 
@@ -324,7 +327,7 @@ public class SSHCommandFactory {
 	public List<String> getSSHCommandMenuParents() {
 		if (commandlist == null)
 			commandlist = main.getPersistenceController().retrieveCommandList();
-		Collections.sort(listKnownParents, (String s1, String s2) -> s1.compareToIgnoreCase(s2));
+		Collections.sort(listKnownParents, String::compareToIgnoreCase);
 		return listKnownParents;
 	}
 

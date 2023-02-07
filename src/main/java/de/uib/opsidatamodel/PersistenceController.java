@@ -846,8 +846,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void retrieveOpsiModules();
 
-	public abstract void showLicInfoWarnings();
-
 	public abstract Map<String, Object> getOpsiModulesInfos();
 
 	public abstract String getOpsiLicensingInfoVersion();

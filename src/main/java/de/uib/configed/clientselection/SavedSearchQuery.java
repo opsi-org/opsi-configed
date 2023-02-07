@@ -82,16 +82,18 @@ public class SavedSearchQuery {
 	}
 
 	public void addMissingArgs() {
-		if (host == null)
+		if (host == null) {
 			host = Globals.getCLIparam("Host: ", false);
-		if (user == null)
+		}
+		if (user == null) {
 			user = Globals.getCLIparam("User: ", false);
-		if (password == null)
+		}
+		if (password == null) {
 			password = Globals.getCLIparam("Password: ", true);
+		}
 	}
 
 	public List<String> runSearch(boolean printing) {
-		List<String> result = new ArrayList<>();
 
 		Messages.setLocale("en");
 		controller = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
@@ -124,7 +126,8 @@ public class SavedSearchQuery {
 		}
 
 		manager.loadSearch(searchName);
-		result = manager.selectClients();
+
+		List<String> result = manager.selectClients();
 		if (printing)
 			printResult(result);
 		return result;

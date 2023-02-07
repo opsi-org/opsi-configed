@@ -8009,33 +8009,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return opsiInformation;
 	}
 
-	private String modulesWithWarning(String typeOfMessage, String header) {
-		if (licInfoMap.getWarnings().get(typeOfMessage).isEmpty()) {
-			return "";
-		} else {
-			StringBuilder buf = new StringBuilder("\n");
-			buf.append(Configed.getResourceValue("Permission.modules.infoChanged"));
-			buf.append(" \"");
-			buf.append(header);
-			buf.append("\"");
-			buf.append("\n--------------------------------------------------------------\n");
-			for (String problemModule : licInfoMap.getWarnings().get(typeOfMessage)) {
-				buf.append(problemModule);
-				buf.append("\n");
-			}
-
-			return buf.toString();
-		}
-	}
-
-	@Override
-	public void showLicInfoWarnings() {
-		if (licInfoMap != null && licInfoMap.warningExists() && licInfoWarnings != null) {
-			licInfoWarnings.setVisible(true);
-			licInfoWarnings.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		}
-	}
-
 	private void produceOpsiModulesInfo() {
 		produceOpsiInformation();
 
@@ -8048,75 +8021,6 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		getHostInfoCollections().retrieveOpsiHosts(); // for checking number of clients and config states
 		Logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
 				.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
-
-		/* 
-		if (licInfoMap == null) {
-			if (licInfoWarnings != null) {
-				licInfoWarnings.leave();
-			}
-		
-			licInfoWarnings = null;
-		
-			licInfoMap = LicensingInfoMap.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(),
-					!FGeneralDialogLicensingInfo.extendedView);
-		
-		}
-		
-		if (getOpsiLicensingInfoVersion().equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
-			// no action
-		} else if (licInfoMap.warningExists() && licInfoWarnings == null) {
-			licInfoWarnings = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("Permission.modules.title"), false,
-					new String[] { Configed.getResourceValue("Dash.close"),
-							Configed.getResourceValue("Permission.modules.buttonGoToValidationTable") },
-					new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
-							Globals.createImageIcon("images/edit-table-insert-row-under.png", "") },
-		
-					550, 400) {
-				@Override
-				protected boolean wantToBeRegisteredWithRunningInstances() {
-					Logging.info(this, "licInfoWarnings wantToBeRegisteredWithRunningInstances");
-					return true;
-				}
-		
-				@Override
-				public void doAction2() {
-					ConfigedMain.getMainFrame().callOpsiLicensingInfo();
-				}
-		
-			};
-		
-						licInfoWarnings = null;
-		
-			licInfoMap = LicensingInfoMap.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(),
-					!FGeneralDialogLicensingInfo.extendedView);
-		
-			StringBuilder mess = new StringBuilder(Configed.getResourceValue("Permission.modules.infoheader"));
-		
-			mess.append("_______________________________\n");
-		
-			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_OVER_LIMIT,
-					Configed.getResourceValue("Permission.modules.warning.currentOverLimit")));
-			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_CLOSE_TO_LIMIT,
-					Configed.getResourceValue("Permission.modules.warning.currentCloseToLimit")));
-			mess.append(modulesWithWarning(LicensingInfoMap.CURRENT_TIME_WARNINGS,
-					Configed.getResourceValue("Permission.modules.warning.currentTimeWarning")));
-			mess.append("\n\n");
-		
-			mess.append(Configed.getResourceValue("Permission.modules.check"));
-			mess.append(" ");
-			mess.append(Configed.getResourceValue("MainFrame.jMenuHelp"));
-			mess.append(",\n");
-			mess.append(Configed.getResourceValue("Permission.modules.check1"));
-			mess.append(" \"");
-			mess.append(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-			mess.append("\"\n");
-		
-			licInfoWarnings.setMessage(mess.toString());
-		
-		}
-		
-		*/
 
 		licInfoWarnings = null;
 
