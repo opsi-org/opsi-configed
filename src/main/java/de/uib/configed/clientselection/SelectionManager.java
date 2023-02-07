@@ -144,23 +144,30 @@ public class SelectionManager {
 		boolean withMySQL = controller.isWithMySQL() && controller.getGlobalBooleanConfigValue(
 				PersistenceController.KEY_SEARCH_BY_SQL, PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
+		SelectOperation operation = getTopOperation();
+		if (operation == null) {
+			Logging.info(this, "Nothing selected");
+			return new ArrayList<>();
+		} else {
+			Logging.info("\n" + operation.printOperation(""));
+		}
+
 		if (withMySQL) {
 			long startTime = System.nanoTime();
-			List<String> l = selectClientsSQL(controller);
+			List<String> l = selectClientsSQL(controller, operation);
 			Logging.notice(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		} else {
 			long startTime = System.nanoTime();
-			List<String> l = selectClientsLocal();
+			List<String> l = selectClientsLocal(operation);
 			Logging.notice(this, "select Clients without MySQL " + ((System.nanoTime() - startTime) / 1000000));
 			return l;
 		}
 	}
 
 	// Filter the clients and get the matching clients back with MySQL backend
-	public List<String> selectClientsSQL(PersistenceController controller) {
+	public List<String> selectClientsSQL(PersistenceController controller, SelectOperation operation) {
 
-		SelectOperation operation = getTopOperation();
 		String json = serializer.getJson(operation);
 
 		List<String> clientsSelected = new ArrayList<>();
@@ -182,15 +189,9 @@ public class SelectionManager {
 		return clientsSelected;
 	}
 
-	// Filter the clients and get the matching clients back with old backend
-	public List<String> selectClientsLocal() {
-		SelectOperation operation = getTopOperation();
-		if (operation == null) {
-			Logging.info(this, "Nothing selected");
-			return new ArrayList<>();
-		} else {
-			Logging.info("\n" + operation.printOperation(""));
-		}
+	// Filter the clients and get the matching clients back with old backend,
+	// it should be checked before if operation is null
+	public List<String> selectClientsLocal(SelectOperation operation) {
 
 		ExecutableOperation selectOperation = backend.createExecutableOperation(operation);
 		Logging.info(this, "selectClients, operation " + operation.getClassName());
