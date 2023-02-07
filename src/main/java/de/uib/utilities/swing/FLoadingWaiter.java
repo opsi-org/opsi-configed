@@ -153,9 +153,7 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 	@Override
 	public void actAfterWaiting() {
 		Logging.info(this, "actAfterWaiting");
-		SwingUtilities.invokeLater(
-
-				() -> setVisible(false));
+		SwingUtilities.invokeLater(() -> setVisible(false));
 	}
 
 	@Override

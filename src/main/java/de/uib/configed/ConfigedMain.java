@@ -678,6 +678,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					fProgress.actAfterWaiting();
 				}
 				mainFrame.toFront();
+				mainFrame.requestFocus();
 			}
 		}.start();
 
