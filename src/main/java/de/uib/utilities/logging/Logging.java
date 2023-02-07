@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,8 +61,7 @@ public class Logging implements LogEventSubject
 	private static Integer logLevelConsole = LEVEL_WARNING;
 	private static Integer logLevelFile = LEVEL_WARNING;
 
-	private static final SimpleDateFormat LOGGING_DATE_FORMAT = new java.text.SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss.SSS");
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
 	public static final String levelText(int level) {
 		return LEVEL_TO_NAME.get(level);
@@ -198,8 +198,7 @@ public class Logging implements LogEventSubject
 	}
 
 	private static String now() {
-
-		return LOGGING_DATE_FORMAT.format(new java.util.Date());
+		return formatter.format(LocalDateTime.now());
 	}
 
 	private static void addErrorToList(String mesg, String time) {
