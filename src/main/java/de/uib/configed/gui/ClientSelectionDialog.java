@@ -77,6 +77,10 @@ import de.uib.utilities.swing.TextInputField;
  * This dialog shows a number of options you can use to select specific clients.
  */
 public class ClientSelectionDialog extends FGeneralDialog {
+
+	private static final int FRAME_WIDTH = 750;
+	private static final int FRAME_HEIGHT = 650;
+
 	private GroupLayout layout;
 	private GroupLayout.SequentialGroup vGroup;
 	private GroupLayout.ParallelGroup hGroupParenthesisClose;
@@ -114,7 +118,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				new String[] { Configed.getResourceValue("ClientSelectionDialog.buttonClose"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
-				750, 620);
+				FRAME_WIDTH, FRAME_HEIGHT);
 
 		PersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 		this.withMySQL = controller.isWithMySQL() && controller.getGlobalBooleanConfigValue(
