@@ -123,7 +123,6 @@ public class DefaultTableProvider implements TableProvider {
 	// should initiate reloading the metadata
 	@Override
 	public void structureChanged() {
-		source.structureChanged();
 		classNames = null;
 		columnNames = null;
 	}
@@ -142,9 +141,7 @@ public class DefaultTableProvider implements TableProvider {
 			}
 		}
 
-		List<String> result = new ArrayList<>(set);
-
-		return result;
+		return new ArrayList<>(set);
 	}
 
 }

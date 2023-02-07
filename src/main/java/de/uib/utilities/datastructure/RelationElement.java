@@ -3,6 +3,8 @@ package de.uib.utilities.datastructure;
 import java.util.HashMap;
 import java.util.List;
 
+import de.uib.utilities.logging.Logging;
+
 //very similar to TableEntry
 public class RelationElement<S, O> extends HashMap<S, O> {
 
@@ -23,11 +25,11 @@ public class RelationElement<S, O> extends HashMap<S, O> {
 
 	@Override
 	public O get(Object key) {
-		assert allowedAttributes == null || allowedAttributes.indexOf(key) >= 0 : /*
-																					 * if not, we get the error message:
-																					 */ "key " + key + " not allowed";
-
-		return super.get(key);
+		if (allowedAttributes != null && allowedAttributes.indexOf(key) < 0) {
+			Logging.error(this, "key " + key + " not allowed");
+			return null;
+		} else
+			return super.get(key);
 	}
 
 	public List<S> getAllowedAttributes() {

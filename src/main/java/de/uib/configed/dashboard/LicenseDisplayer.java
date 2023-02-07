@@ -23,10 +23,10 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.swing.UIManager;
 import javax.swing.event.TableModelListener;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.opsidatamodel.PersistenceController;
@@ -45,6 +45,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollBar;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -54,6 +58,12 @@ public class LicenseDisplayer {
 	private TextFlow textflow;
 	@FXML
 	private Button closeButton;
+	@FXML
+	private AnchorPane mainAnchorPane;
+	@FXML
+	private BorderPane mainBorderPane;
+	@FXML
+	private ScrollPane scrollPane;
 
 	private String message = "";
 	private PersistenceController persist;
@@ -66,18 +76,16 @@ public class LicenseDisplayer {
 	}
 
 	public void loadData() {
-		Platform.runLater(() -> {
-			message = "";
-			showInfo();
+		message = "";
+		showInfo();
 
-			StringBuilder mess = new StringBuilder();
+		StringBuilder mess = new StringBuilder();
 
-			mess.append(showLicenceContractWarnings());
-			mess.append(calculateVariantLicencepools());
+		mess.append(showLicenceContractWarnings());
+		mess.append(calculateVariantLicencepools());
 
-			message = mess.toString();
-			showInfo();
-		});
+		message = mess.toString();
+		showInfo();
 	}
 
 	private void showInfo() {
@@ -100,20 +108,38 @@ public class LicenseDisplayer {
 
 		controller = fxmlLoader.getController();
 
-		loadData();
+		Platform.runLater(() -> {
+			loadData();
+			styleAccordingToSelectedTheme();
+		});
+	}
+
+	private void styleAccordingToSelectedTheme() {
+		String panelBackgroundColor = ComponentStyler.getHexColor(UIManager.getColor("Panel.background"));
+		controller.mainAnchorPane.setStyle("-fx-background-color: #" + panelBackgroundColor);
+		controller.mainBorderPane.setStyle("-fx-background-color: #" + panelBackgroundColor);
+
+		ComponentStyler.styleTextFlowComponent(controller.textflow);
+		ComponentStyler.styleButtonComponent(controller.closeButton);
+
+		Set<Node> scrollBars = controller.scrollPane.lookupAll(".scroll-bar");
+
+		if (scrollBars.isEmpty()) {
+			System.out.println("no scrollbars were found");
+		}
+
+		for (Node scrollBar : scrollBars) {
+			ComponentStyler.styleScrollBarComponent((ScrollBar) scrollBar);
+		}
 	}
 
 	public void display() {
-		if (ConfigedMain.DASH_ENABLED)
-			stage.show();
-
+		stage.show();
 		loadData();
 	}
 
 	protected String showLicenceContractWarnings() {
 		StringBuilder result = new StringBuilder();
-
-		// TODO why is this doing the same to both?
 		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
 		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsExpired();
 

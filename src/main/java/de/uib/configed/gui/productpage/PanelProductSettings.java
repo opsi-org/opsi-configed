@@ -35,6 +35,7 @@ import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
@@ -145,7 +146,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected Map<String, Boolean> productDisplayFields;
 
-	protected List<? extends RowSorter.SortKey> currentSortKeys;
+	protected List<? extends SortKey> currentSortKeys;
 
 	protected ArrayList<String> selectedProducts;
 
@@ -468,7 +469,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		setLeftComponent(leftPane);
 
 		propertiesPanel = new EditMapPanelX(new PropertiesTableCellRenderer(), false, true, false);
-		Logging.info(this, " created properties Panel, is  EditMapPanelX instance No. " + EditMapPanelX.objectCounter);
+		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
@@ -661,7 +662,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					s = "";
 				}
 				actCol[i] = s;
-				jTable.getColumnName(i);
+
 				switch (jTable.getColumnName(i)) {
 				case "Stand":
 					if (!s.equals("not_installed"))
@@ -675,7 +676,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					if (!s.equals("none"))
 						dontStrippIt = true;
 					break;
-
+				default:
+					Logging.warning(this, "no case found for columnName in jTable");
+					break;
 				}
 			}
 			if (dontStrippIt) {
@@ -726,12 +729,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	}
 
-	public List<? extends RowSorter.SortKey> getSortKeys() {
+	public List<? extends SortKey> getSortKeys() {
 		Logging.info(this, "getSortKeys : " + infoSortKeys(currentSortKeys));
 		return currentSortKeys;
 	}
 
-	public void setSortKeys(List<? extends RowSorter.SortKey> currentSortKeys) {
+	public void setSortKeys(List<? extends SortKey> currentSortKeys) {
 		Logging.info(this, "setSortKeys: " + infoSortKeys(currentSortKeys));
 		if (currentSortKeys != null)
 			tableProducts.getRowSorter().setSortKeys(currentSortKeys);
@@ -962,9 +965,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
-			{
-				((DefaultRowSorter) sorter).setComparator(colIndex, new de.uib.utilities.IntComparatorForStrings());
-			}
+			((DefaultRowSorter) sorter).setComparator(colIndex, new de.uib.utilities.IntComparatorForStrings());
+
 		}
 
 		if ((colIndex = istm.getColumnIndex(ProductState.KEY_POSITION)) > -1) {

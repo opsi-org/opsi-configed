@@ -31,7 +31,7 @@ public class LicensingInfoMap {
 	public static final String DISPLAY_INFINITE = "\u221E";
 	final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-	private static Boolean reducedView = !FGeneralDialogLicensingInfo.extendedView;
+	private static boolean reducedView = !FGeneralDialogLicensingInfo.extendedView;
 	private JSONObject jOResult;
 	Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
@@ -119,7 +119,7 @@ public class LicensingInfoMap {
 	private static LicensingInfoMap instanceReduced;
 
 	public static LicensingInfoMap getInstance(JSONObject jsonObj, Map<String, List<Object>> configVals,
-			Boolean reduced) {
+			boolean reduced) {
 		Logging.info("reduced, instance here " + reduced + ", " + instance);
 
 		if (instance == null || instanceComplete == null || instanceReduced == null) {
@@ -359,7 +359,7 @@ public class LicensingInfoMap {
 					result.add(jsResult.getString(i));
 				}
 			} else {
-				return null;
+				return new ArrayList<>();
 			}
 		} catch (Exception ex) {
 			Logging.error(CLASSNAME + " produceObsoleteModules " + ex);
@@ -787,7 +787,7 @@ public class LicensingInfoMap {
 					return STATE_OVER_LIMIT;
 
 				if (diff <= absolutClientLimitWarning
-						| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning))
+						|| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning))
 					return STATE_CLOSE_TO_LIMIT;
 
 				return STATE_FUTURE_OKAY;
@@ -855,8 +855,9 @@ public class LicensingInfoMap {
 
 		if (currentCloseToLimitModuleList.isEmpty() && currentOverLimitModuleList.isEmpty()
 				&& currentTimeWarningModuleList.isEmpty() && currentTimeOverModuleList.isEmpty()
-				&& futureCloseToLimitModuleList.isEmpty() && futureOverLimitModuleList.isEmpty())
-			return null;
+				&& futureCloseToLimitModuleList.isEmpty() && futureOverLimitModuleList.isEmpty()) {
+			return new HashMap<>();
+		}
 
 		result.put(CURRENT_OVER_LIMIT, currentOverLimitModuleList);
 		result.put(CURRENT_CLOSE_TO_LIMIT, currentCloseToLimitModuleList);

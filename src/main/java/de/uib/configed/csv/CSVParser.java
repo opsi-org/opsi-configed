@@ -3,12 +3,15 @@ package de.uib.configed.csv;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import de.uib.configed.csv.exceptions.CSVException;
 import de.uib.configed.csv.exceptions.CSVFieldCountException;
 import de.uib.configed.csv.exceptions.CSVParserException;
+import de.uib.utilities.logging.Logging;
 
 public class CSVParser {
 	private static final CSVFormat DEFAULT_FORMAT = new CSVFormat();
@@ -18,7 +21,7 @@ public class CSVParser {
 	private CSVFormat format;
 
 	private boolean inQuotes = false;
-	public boolean isMultiLine = false;
+	private boolean isMultiLine = false;
 
 	private boolean ignoreErrors = false;
 
@@ -82,15 +85,17 @@ public class CSVParser {
 				boolean fieldStart = false;
 				boolean fieldEnd = false;
 
-				if (tokens.get(i - 1).equals(CSVToken.FIELD_SEPARATOR)
-						&& (tokens.get(i + 1).equals(CSVToken.FIELD) || tokens.get(i + 1).equals(CSVToken.NEW_LINE)
-								|| tokens.get(i + 1).equals(CSVToken.EMBEDDED_QUOTE))) {
+				if (tokens.get(i - 1).tokenEquals(CSVToken.FIELD_SEPARATOR)
+						&& (tokens.get(i + 1).tokenEquals(CSVToken.FIELD)
+								|| tokens.get(i + 1).tokenEquals(CSVToken.NEW_LINE)
+								|| tokens.get(i + 1).tokenEquals(CSVToken.EMBEDDED_QUOTE))) {
 					fieldStart = true;
 				}
 
-				if (((tokens.get(i - 1).equals(CSVToken.FIELD) || tokens.get(i - 1).equals(CSVToken.EMBEDDED_QUOTE))
-						&& (tokens.get(i + 1).equals(CSVToken.FIELD_SEPARATOR)
-								|| tokens.get(i + 1).equals(CSVToken.LINE_END)))) {
+				if (((tokens.get(i - 1).tokenEquals(CSVToken.FIELD)
+						|| tokens.get(i - 1).tokenEquals(CSVToken.EMBEDDED_QUOTE))
+						&& (tokens.get(i + 1).tokenEquals(CSVToken.FIELD_SEPARATOR)
+								|| tokens.get(i + 1).tokenEquals(CSVToken.LINE_END)))) {
 					fieldEnd = true;
 				}
 
@@ -128,6 +133,11 @@ public class CSVParser {
 					fieldCount = 0;
 				}
 				break;
+
+			default:
+				Logging.warning(this,
+						"no case for name of token could be found trying to parse CSV: " + token.getName());
+				break;
 			}
 		}
 
@@ -142,32 +152,30 @@ public class CSVParser {
 		if (numberOfFieldsPerLine.isEmpty()) {
 			return true;
 		}
-
-		long commonFieldCount = numberOfFieldsPerLine.stream()
+		Optional<Entry<Integer, Long>> optional = numberOfFieldsPerLine.stream()
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream()
-				.max(Map.Entry.comparingByValue()).get().getKey();
+				.max(Map.Entry.comparingByValue());
 
-		return pendingFieldCount != 0
-				|| numberOfFieldsPerLine.stream().allMatch(lineFieldCount -> lineFieldCount == commonFieldCount);
+		if (optional.isPresent())
+			return pendingFieldCount != 0 || numberOfFieldsPerLine.stream()
+					.allMatch(lineFieldCount -> lineFieldCount.equals(optional.get().getKey()));
+
+		else {
+			Logging.error(this, "value not present in equalFields");
+			return false;
+		}
 	}
 
 	public CSVFormat getFormat() {
 		return format;
 	}
 
-	public void setFormat(CSVFormat format) {
-		this.format = format;
-	}
-
-	public boolean getIgnoreErrors() {
-		return ignoreErrors;
-	}
-
 	public void setIgnoreErrors(boolean ignoreErrors) {
 		this.ignoreErrors = ignoreErrors;
 	}
 
-	public boolean getIsMultiLine() {
+	public boolean isParserMultiLine() {
 		return isMultiLine;
 	}
+
 }

@@ -77,6 +77,10 @@ import de.uib.utilities.swing.TextInputField;
  * This dialog shows a number of options you can use to select specific clients.
  */
 public class ClientSelectionDialog extends FGeneralDialog {
+
+	private static final int FRAME_WIDTH = 750;
+	private static final int FRAME_HEIGHT = 650;
+
 	private GroupLayout layout;
 	private GroupLayout.SequentialGroup vGroup;
 	private GroupLayout.ParallelGroup hGroupParenthesisClose;
@@ -111,10 +115,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				Configed.getResourceValue("ClientSelectionDialog.title")/* "Select clients" */ + " (" + Globals.APPNAME
 						+ ")",
 				false,
-				new String[] { Configed.getResourceValue("ClientSelectionDialog.buttonSet"),
+				new String[] { Configed.getResourceValue("ClientSelectionDialog.buttonClose"),
 						Configed.getResourceValue("ClientSelectionDialog.buttonReset"),
-						Configed.getResourceValue("ClientSelectionDialog.buttonClose") },
-				750, 620);
+						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
+				FRAME_WIDTH, FRAME_HEIGHT);
 
 		PersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 		this.withMySQL = controller.isWithMySQL() && controller.getGlobalBooleanConfigValue(
@@ -148,7 +152,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				c.repaint();
 			}
 		});
-
 	}
 
 	public void setReloadRequested() {
@@ -176,33 +179,29 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			manager.loadSearch(name);
 			loadFromManager();
 			SavedSearch search = manager.getSavedSearches().get(name);
-			saveNameField.setText(search.name);
-			saveDescriptionField.setText(search.description);
+			saveNameField.setText(search.getName());
+			saveDescriptionField.setText(search.getDescription());
 		} catch (Exception exc) {
 			Logging.error("Could not load search!", exc);
 		}
 	}
 
 	@Override
-	public void doAction1() {
-		Logging.info(this, "doAction1");
+	public void doAction3() {
+		Logging.info(this, "doAction3");
 		List<String> clients = new ArrayList<>();
 
-		try {
+		collectData();
 
-			collectData();
+		main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
+															// client view
 
-			main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
-																// client view
-
-			if (manager != null)
-				clients = manager.selectClients();
-		} finally {
-
-		}
+		if (manager != null)
+			clients = manager.selectClients();
 
 		if (clients == null)
 			return;
+
 		Logging.debug(this, clients.toString());
 		selectionPanel.setSelectedValues(clients);
 	}
@@ -279,9 +278,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 					main.callNewClientSelectionDialog();
 					// we lose all components of this dialog, there is nothing to reset
-
 				});
-
 			}
 		});
 
@@ -418,8 +415,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.element = element;
 		SelectOperation[] operations = element.supportedOperations().toArray(new SelectOperation[0]);
 		if (operations.length == 0) {
-			Logging.warning("Elements without any operations are not supported");
-			return null;
+			Logging.warning("Elements without any operations: " + result);
+			return result;
 		}
 
 		result.negateButton = new IconAsButton("" /* configed.getResourceValue("ClientSelectionDialog.not") */,
@@ -537,8 +534,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.add(createSimpleGroup(new SoftwareLastActionElement()));
 		result.groupList.add(createSimpleGroup(new SoftwareVersionElement()));
 		result.groupList.add(createSimpleGroup(new SoftwarePackageVersionElement()));
-		// TODO, removed because it's not working (in MySQL)
-		//result.groupList.add(createSimpleGroup(new SoftwareModificationTimeElement()));
+		result.groupList.add(createSimpleGroup(new SoftwareModificationTimeElement()));
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		createComplexBottom(result);
@@ -1165,15 +1161,15 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class SimpleGroup {
-		public SelectElement element;
-		public IconAsButton negateButton;
-		public AndOrSelectButtonByIcon connectionType;
-		public JLabel elementLabel;
-		public JComponent operationComponent; // may be JLabel or JComboBox
-		public JComponent dataComponent;
-		public GroupLayout.ParallelGroup vRow;
-		public IconAsButton openParenthesis;
-		public IconAsButton closeParenthesis;
+		private SelectElement element;
+		private IconAsButton negateButton;
+		private AndOrSelectButtonByIcon connectionType;
+		private JLabel elementLabel;
+		private JComponent operationComponent; // may be JLabel or JComboBox
+		private JComponent dataComponent;
+		private GroupLayout.ParallelGroup vRow;
+		private IconAsButton openParenthesis;
+		private IconAsButton closeParenthesis;
 	}
 
 	private enum GroupType {

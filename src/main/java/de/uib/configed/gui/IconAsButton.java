@@ -50,7 +50,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 	protected boolean getAttention;
 	protected boolean mouseOver;
 	protected List<ActionListener> actionListeners;
-	public String description;
+	private String description;
 
 	/**
 	 * @param desc           : a description used for tooltips and event action
@@ -244,13 +244,11 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	@Override
 	public void mousePressed(java.awt.event.MouseEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseEntered(java.awt.event.MouseEvent e) {

@@ -1,7 +1,6 @@
 package de.uib.utilities.thread;
 
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import javax.swing.SwingWorker;
 
@@ -50,14 +49,6 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 			Logging.warning(this, " doInBackground finished, timeoutReached");
 
 		return null;
-
-	}
-
-	//
-	// Executed in event dispatching thread, override it
-	//
-	@Override
-	protected void process(List<Integer> chunks) {
 
 	}
 

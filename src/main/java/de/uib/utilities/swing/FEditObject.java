@@ -28,8 +28,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 
@@ -37,7 +37,9 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	public static final RunningInstances<JDialog> runningInstances = new RunningInstances<>(JDialog.class,
 			"leaving dialog");
 
-	public Dimension areaDimension = new Dimension(300, 240);
+	private Dimension areaDimension = new Dimension(300, 240);
+
+	protected static final int BUTTON_WIDTH = 30;
 
 	protected Object initialValue = "";
 	protected boolean leaveOnCommit = true;
@@ -59,7 +61,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected boolean dataChanged = false;
 	protected boolean editable = true;
 	protected boolean finished = false;
-	protected int buttonWidth = 30;
 
 	protected JTextField extraField;
 	protected JLabel extraLabel;
@@ -95,21 +96,21 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		buttonCommit = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.SaveButtonTooltip"),
 				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png", true);
-		buttonCommit.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
+		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
 		buttonCancel = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.CancelButtonTooltip"),
 				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
-		buttonCancel.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
+		buttonCancel.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
 		buttonRemove = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
 				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
-		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
+		buttonRemove.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 
 		buttonAdd = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.AddButtonTooltip"),
 				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
-		buttonAdd.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
+		buttonAdd.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonAdd.setVisible(false);
 
 		extraField = new JTextField("");
@@ -155,9 +156,9 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addComponent(editingArea, 60, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addGroup(layout1.createSequentialGroup()
-										.addComponent(buttonCommit, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addComponent(buttonCancel, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addComponent(buttonCommit, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
 										.addGap(Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE)
 										.addComponent(buttonRemove, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -176,9 +177,9 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -399,11 +400,12 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
+
 	// -------------
 
 	protected void extraFieldChanged(boolean b) {

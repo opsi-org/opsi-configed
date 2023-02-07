@@ -69,8 +69,6 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 	/** Save Button instance **/
 	private JButton buttonSave;
-	/** Close Button instance **/
-	private JButton buttonClose;
 
 	/** JLabel menu text instance **/
 	private JLabel labelMenuText = new JLabel();
@@ -139,7 +137,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 	 * @return SSHCommandControlDialog instance
 	 **/
 	public static SSHCommandControlDialog getInstance(ConfigedMain cm) {
-		return getInstance(cm, Globals.mainFrame);
+		return getInstance(cm, ConfigedMain.getMainFrame());
 	}
 
 	public static SSHCommandControlDialog getInstance(ConfigedMain cm, JFrame fr) {
@@ -205,7 +203,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 
 		jTextFieldPriority = new JTextField(new CheckedDocument(/* allowedChars */
 				new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-' }, 5),
-				String.valueOf(factory.POSITION_DEFAULT), 1);
+				String.valueOf(SSHCommandFactory.POSITION_DEFAULT), 1);
 		labelNeedSudo = new JLabel();
 		labelCommands = new JLabel();
 		jTextPaneommands = new JTextPane();
@@ -219,7 +217,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 				"images/list-remove.png", "images/list-remove_disabled.png", true);
 		buttonSave = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
-		buttonClose = new IconButton(Configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
+		JButton buttonClose = new IconButton(Configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
 				"images/cancel-32.png", "images/cancel_over-32.png", " ", true);
 
 		labelMenuText.setText(Configed.getResourceValue("SSHConnection.CommandControl.menuText"));
@@ -357,11 +355,11 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			});
 
 		if (!(Globals.isGlobalReadOnly()))
-			buttonSave.addActionListener(actionEvent -> doAction1());
-		buttonClose.addActionListener(actionEvent -> doAction2());
+			buttonSave.addActionListener(actionEvent -> doAction2());
+		buttonClose.addActionListener(actionEvent -> doAction1());
 
-		buttonPanel.add(buttonSave);
 		buttonPanel.add(buttonClose);
+		buttonPanel.add(buttonSave);
 
 		initLayout();
 
@@ -556,7 +554,7 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 			}
 		} else
 			updateComponents(SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS/* parentNull */, "",
-					factory.POSITION_DEFAULT, false, "");
+					SSHCommandFactory.POSITION_DEFAULT, false, "");
 	}
 
 	/**
@@ -580,15 +578,15 @@ public class SSHCommandControlDialog extends FGeneralDialog {
 		jTextPaneommands.setText(coms);
 	}
 
-	/* This method is called when button 1 (save) is pressed */
+	/* This method is called when button 2 (save) is pressed */
 	@Override
-	public void doAction1() {
-		Logging.info(this, "doAction1 savecommand ");
+	public void doAction2() {
+		Logging.info(this, "doAction2 savecommand ");
 		String menuText = (String) jComboBoxMenuText.getSelectedItem();
 		SSHCommandTemplate command = getCommandNow();
 		if (command == null)
 			return;
-		Logging.debug(this, "doAction1 savecommand " + command.toString());
+		Logging.debug(this, "doAction2 savecommand " + command.toString());
 		if (factory.saveSSHCommand(command)) {
 			updateLists(true, menuText);
 			updateSelectedCommand(menuText);

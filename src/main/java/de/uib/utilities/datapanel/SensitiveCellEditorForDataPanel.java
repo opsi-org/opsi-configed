@@ -13,8 +13,9 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.SensitiveCellEditor {
@@ -24,18 +25,14 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 	public static synchronized SensitiveCellEditorForDataPanel getInstance(Object key) {
 
 		// Zu key gehörige Instanz aus Map holen
-		SensitiveCellEditorForDataPanel instance = instances.get(key);
+		return instances.computeIfAbsent(key, arg -> {
 
-		if (instance == null) {
-			// Lazy Creation, falls keine Instanz gefunden
-			instance = new SensitiveCellEditorForDataPanel();
-
-			instances.put(key, instance);
-			instance.myKey = "" + key;
-			Logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
-					+ instances.size());
-		}
-		return instance;
+			SensitiveCellEditorForDataPanel newInstance = new SensitiveCellEditorForDataPanel();
+			newInstance.myKey = "" + key;
+			Logging.debug(newInstance.getClass().getName() + " produced instance for key " + key
+					+ " ; size of instances " + instances.size());
+			return newInstance;
+		});
 	}
 
 	@Override
@@ -49,7 +46,7 @@ public class SensitiveCellEditorForDataPanel extends de.uib.utilities.table.gui.
 					return null;
 				}
 
-				int returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame,
+				int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("SensitiveCellEditor.editHiddenText.text"),
 						Globals.APPNAME + " " + Configed.getResourceValue("SensitiveCellEditor.editHiddenText.title"),
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,

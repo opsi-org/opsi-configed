@@ -53,7 +53,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		setIconImage(Globals.mainIcon);
 
 		this.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
-		this.setLocationRelativeTo(Globals.mainFrame);
+		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -106,18 +106,16 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		jButtonHelp.addActionListener(actionEvent -> doActionHelp(caller));
 
 		jButtonExecute = new JButton();
-		buttonPanel.add(jButtonExecute);
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
 			jButtonExecute.addActionListener(actionEvent -> {
 				if (caller instanceof SSHPackageManagerUninstallParameterDialog)
-					((SSHPackageManagerUninstallParameterDialog) caller).doAction1();
+					((SSHPackageManagerUninstallParameterDialog) caller).doAction2();
 				else if (caller instanceof SSHPackageManagerInstallParameterDialog)
-					((SSHPackageManagerInstallParameterDialog) caller).doAction1();
+					((SSHPackageManagerInstallParameterDialog) caller).doAction2();
 			});
 		jButtonReload = new JButton();
-		buttonPanel.add(jButtonReload);
 		jButtonReload.setText(Configed.getResourceValue("SSHConnection.buttonPackagesReload"));
 		jButtonReload.setIcon(Globals.createImageIcon("images/reloadcomplete16.png", ""));
 		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
@@ -129,10 +127,13 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 			});
 
 		jButtonClose = new JButton();
-		buttonPanel.add(jButtonClose);
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
+
+		buttonPanel.add(jButtonClose);
+		buttonPanel.add(jButtonReload);
+		buttonPanel.add(jButtonExecute);
 
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 	}
@@ -154,6 +155,6 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	}
 
 	public void cancel() {
-		super.doAction2();
+		super.doAction1();
 	}
 }

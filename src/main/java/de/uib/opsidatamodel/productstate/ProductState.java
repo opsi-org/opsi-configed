@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.Globals;
+import de.uib.utilities.logging.Logging;
 
 public class ProductState extends HashMap<String, String> {
 
@@ -157,8 +158,11 @@ public class ProductState extends HashMap<String, String> {
 
 	@Override
 	public String put(String key, String value) {
-		assert !(KEYS.indexOf(key) < 0) : "key " + key + " not known, value was " + value + " , " + KEYS;
-		return super.put(key, value);
+		if (KEYS.indexOf(key) < 0) {
+			Logging.error(this, "key " + key + " not known, value was " + value + " , " + KEYS);
+			return null;
+		} else
+			return super.put(key, value);
 	}
 
 	private void setTransforms() {
@@ -207,7 +211,7 @@ public class ProductState extends HashMap<String, String> {
 		String versionInfo = "";
 
 		if (!get(KEY_PRODUCT_VERSION).equals(""))
-			versionInfo = get(KEY_PRODUCT_VERSION) + Globals.ProductPackageVersionSeparator.forDisplay()
+			versionInfo = get(KEY_PRODUCT_VERSION) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
 					+ get(KEY_PACKAGE_VERSION);
 
 		put(KEY_VERSION_INFO, versionInfo);
@@ -239,7 +243,10 @@ public class ProductState extends HashMap<String, String> {
 
 	private String getRetrievedValue(String key) {
 
-		assert !(SERVICE_KEYS.indexOf(key) < 0) : "service key " + key + " not known";
+		if (SERVICE_KEYS.indexOf(key) < 0) {
+			Logging.warning("service key " + key + " not known");
+			return "";
+		}
 
 		if (retrieved.get(key) == null || (retrieved.get(key) instanceof String && retrieved.get(key).equals("null")))
 			return "";

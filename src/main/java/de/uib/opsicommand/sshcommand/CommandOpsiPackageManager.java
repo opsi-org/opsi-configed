@@ -1,5 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,9 +17,6 @@ public class CommandOpsiPackageManager implements SSHCommand {
 	private boolean isMultiCommand = false;
 	protected int helpColumns = 3;
 	protected int priority = 100;
-
-	public CommandOpsiPackageManager() {
-	}
 
 	@Override
 	/**
@@ -88,7 +86,7 @@ public class CommandOpsiPackageManager implements SSHCommand {
 	 **/
 	@Override
 	public void setCommand(String c) {
-	}
+		/* Not needed in this class */}
 
 	@Override
 	public boolean needParameter() {
@@ -107,6 +105,6 @@ public class CommandOpsiPackageManager implements SSHCommand {
 
 	@Override
 	public List<String> getParameterList() {
-		return null;
+		return new ArrayList<>();
 	}
 }

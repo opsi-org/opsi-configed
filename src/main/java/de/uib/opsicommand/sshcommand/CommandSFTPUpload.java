@@ -1,5 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.ConfigedMain;
@@ -14,15 +15,16 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	String command = "";
 	int priority = 0;
 
-	public String title = "File Upload";
-	public String baseName = "File Upload";
-	public String description = "# write file to opsi-server";
-	public String targetPath = "";
-	public String targetFilename = "";
-	public String sourcePath = "";
-	public String fullSourcePath = "";
-	public String sourceFilename = "";
-	public boolean overwriteMode = true;
+	private String title = "File Upload";
+	private String baseName = "File Upload";
+	private String description = "# write file to opsi-server";
+	private String targetPath = "";
+	private String targetFilename = "";
+	private String sourcePath = "";
+	private String fullSourcePath = "";
+	private String sourceFilename = "";
+	private boolean overwriteMode = true;
+
 	boolean showOutputDialog = true;
 
 	public CommandSFTPUpload(String title) {
@@ -91,6 +93,10 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	@Override
 	public void setTitle(String t) {
 		title = t;
+	}
+
+	public void setBaseName(String b) {
+		baseName = b;
 	}
 
 	@Override
@@ -215,13 +221,11 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	@Override
 	public void startParameterGui() {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void startParameterGui(ConfigedMain main) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
@@ -235,7 +239,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	@Override
 	public List<String> getParameterList() {
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override

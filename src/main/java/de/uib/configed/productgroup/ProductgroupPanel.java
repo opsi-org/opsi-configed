@@ -714,7 +714,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 			if (!addedElements.isEmpty()) {
 
-				FShowList fList = new FShowList(Globals.mainFrame, Globals.APPNAME, true,
+				FShowList fList = new FShowList(ConfigedMain.getMainFrame(), Globals.APPNAME, true,
 						new String[] { Configed.getResourceValue("buttonYES"), Configed.getResourceValue("buttonNO") },
 						450, 400);
 

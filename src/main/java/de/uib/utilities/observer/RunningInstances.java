@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.JOptionPane;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -75,7 +76,7 @@ public class RunningInstances<T> {
 	}
 
 	public boolean askStop() {
-		int returnedOption = JOptionPane.showOptionDialog(Globals.mainFrame, askForLeave,
+		int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(), askForLeave,
 				Globals.APPNAME + " " + Configed.getResourceValue("ConfigedMain.Licences.AllowLeaveApp.title"),
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 

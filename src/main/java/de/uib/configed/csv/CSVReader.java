@@ -41,7 +41,7 @@ public class CSVReader {
 	}
 
 	public CSVReader(Reader reader, CSVParser parser, int startLine, List<String> headerNames) {
-		this.reader = (reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader));
+		this.reader = reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
 		this.parser = parser;
 		this.format = parser.getFormat();
 		this.scanner = new CSVScanner(this.reader, format);
@@ -69,7 +69,7 @@ public class CSVReader {
 		for (List<CSVToken> lineOfCSVToken : tokens) {
 			String[] parsedLine = parser.parseLine(lineOfCSVToken);
 
-			if (parser.isMultiLine) {
+			if (parser.isParserMultiLine()) {
 				pendingLine = joinArrays(pendingLine, parsedLine);
 			} else {
 				if (pendingLine != null && pendingLine.length != 0) {

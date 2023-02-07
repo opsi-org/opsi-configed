@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiSetRights;
@@ -61,20 +62,22 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		jLabelInfo = new JLabel(Configed.getResourceValue("SSHConnection.command.opsisetrights.additionalPath"));
 		inputPanel.add(jLabelInfo);
 		jButtonDoAction = new JButton();
-		buttonPanel.add(jButtonDoAction);
 		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonDoAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly()))
 			jButtonDoAction.addActionListener(actionEvent -> {
 				Logging.info(this, "btn_doAction pressed");
-				doAction1();
+				doAction2();
 			});
 
 		JButton jButtonClose = new JButton();
-		buttonPanel.add(jButtonClose);
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());
+
+		buttonPanel.add(jButtonClose);
+		buttonPanel.add(jButtonDoAction);
+
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 
 		jButtonSearchDir = completion.getButton();
@@ -91,12 +94,12 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		jButtonDoAction.setEnabled(value);
 	}
 
-	/* This method is called when button 1 is pressed */
+	/* This method is called when button 2 is pressed */
 	@Override
-	public void doAction1() {
+	public void doAction2() {
 		try {
 			commandopsisetrights.setDir(completion.comboBoxGetStringItem());
-			Logging.info(this, "doAction1 opsi-set-rights with path: " + commandopsisetrights.getDir());
+			Logging.info(this, "doAction2 opsi-set-rights with path: " + commandopsisetrights.getDir());
 			// we are in the event queure
 			new Thread() {
 				@Override
@@ -106,14 +109,14 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 			}.start();
 
 		} catch (Exception e) {
-			Logging.warning(this, "doAction1, exception occurred", e);
+			Logging.warning(this, "doAction2, exception occurred", e);
 		}
 
 	}
 
 	// /* This method gets called when button 2 is pressed */
 	public void cancel() {
-		super.doAction2();
+		super.doAction1();
 	}
 
 	private void initLayout() {
@@ -144,7 +147,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 				.addGap(Globals.GAP_SIZE));
 
 		this.setSize(600, 200);
-		this.setLocationRelativeTo(Globals.mainFrame);
+		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setBackground(Globals.BACKGROUND_COLOR_7);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);

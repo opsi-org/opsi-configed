@@ -8,8 +8,9 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.dashboard.view.ClientView;
 import de.uib.configed.dashboard.view.MainView;
 import de.uib.configed.dashboard.view.ProductView;
@@ -36,6 +37,7 @@ public class Dashboard {
 		frame.setIconImage(Globals.mainIcon);
 		frame.setTitle(Configed.getResourceValue("Dashboard.title"));
 		frame.setMinimumSize(new Dimension(WINDOW_HEIGHT, WINDOW_WIDTH));
+		frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -70,6 +72,7 @@ public class Dashboard {
 	}
 
 	public void show() {
+		frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		frame.setVisible(true);
 
 		if (mainView != null) {

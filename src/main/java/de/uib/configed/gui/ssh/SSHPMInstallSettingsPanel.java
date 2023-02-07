@@ -101,9 +101,9 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 			}
 
 			@Override
-			public void doAction1() {
+			public void doAction2() {
 				jTextFieldSelecteddepots.setText(produceDepotParameter());
-				super.doAction1();
+				super.doAction2();
 			}
 		};
 	}

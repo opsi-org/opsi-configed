@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.utilities.datastructure.TableEntry;
+import de.uib.utilities.logging.Logging;
 
 public class LicencepoolEntry extends TableEntry {
 
@@ -24,14 +25,11 @@ public class LicencepoolEntry extends TableEntry {
 
 	@Override
 	public String put(String key, String value) {
-		assert KEYS.indexOf(key) > -1 : "not valid key " + key;
-
-		if (KEYS.indexOf(key) > -1) {
+		if (KEYS.indexOf(key) <= -1) {
+			Logging.error(this, "not valid key: " + key);
+			return null;
+		} else
 			return super.put(key, value);
-		}
-
-		return null;
-
 	}
 
 	public LicencepoolEntry(Map<String, Object> entry) {

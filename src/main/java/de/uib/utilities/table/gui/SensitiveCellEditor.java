@@ -18,7 +18,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
-import de.uib.configed.Globals;
+import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.table.DefaultListModelProducer;
@@ -46,18 +46,16 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	public static synchronized SensitiveCellEditor getInstance(Object key) {
 
 		// Zu key gehörige Instanz aus Map holen
-		SensitiveCellEditor instance = instances.get(key);
+		return instances.computeIfAbsent(key, arg -> {
 
-		if (instance == null) {
-			// Lazy Creation, falls keine Instanz gefunden
-			instance = new SensitiveCellEditor();
+			SensitiveCellEditor newInstance = new SensitiveCellEditor();
 
-			instances.put(key, instance);
-			instance.myKey = "" + key;
-			Logging.debug(instance.getClass().getName() + " produced instance for key " + key + " ; size of instances "
-					+ instances.size());
-		}
-		return instance;
+			newInstance.myKey = "" + key;
+			Logging.debug(newInstance.getClass().getName() + " produced instance for key " + key
+					+ " ; size of instances " + instances.size());
+
+			return newInstance;
+		});
 	}
 
 	protected SensitiveCellEditor(ListModelProducer modelProducer) {
@@ -73,7 +71,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		listeditor.init();
 
 		setModelProducer(modelProducer);
-
 	}
 
 	public void reInit() {
@@ -92,7 +89,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		{
 			modelProducer = new DefaultListModelProducer();
 		}
-
 	}
 
 	private void startListEditor() {
@@ -101,8 +97,9 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 		SwingUtilities.invokeLater(() -> {
 			// center on mainFrame
-			listeditor.setLocationRelativeTo(Globals.mainFrame);
+			listeditor.setLocationRelativeTo(ConfigedMain.getMainFrame());
 			listeditor.setVisible(true);
+			listeditor.repaint();
 		});
 
 		usingListEditor = true;
@@ -110,6 +107,16 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 	public void hideListEditor() {
 		SwingUtilities.invokeLater(() -> listeditor.setVisible(false));
+	}
+
+	@Override
+	public boolean stopCellEditing() {
+		super.cancelCellEditing();
+		return super.stopCellEditing();
+	}
+
+	public boolean stopEditingAndSave() {
+		return super.stopCellEditing();
 	}
 
 	@Override
@@ -131,7 +138,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			if (model != null) {
 
-				listeditor.setListModel(modelProducer.getListModel(row, column));
+				listeditor.setListModel(model);
 
 				Logging.info(this, "startValue set: " + value);
 
@@ -145,13 +152,10 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 				editingRow = row;
 				editingColumn = column;
-			}
-
-			else {
+			} else {
 				model = new DefaultListModel<>();
 
 				listeditor.setListModel(model);
-				startListEditor();
 
 				listeditor.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 				listeditor.setEditable(true);
@@ -160,10 +164,11 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				listeditor.enter();
 				listeditor.setStartValue("");
 
+				startListEditor();
+
 				editingRow = -1;
 				editingColumn = -1;
 			}
-
 		}
 
 		field.setText("" + value);
@@ -187,7 +192,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 					list.remove(element);
 				}
-
 			}
 
 			int n = list.size();
@@ -229,38 +233,33 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				return org.json.JSONObject.NULL;
 
 			return result;
-
 		}
 
 		return listeditor.getValue();
 	}
 
-	public void finish() {
-		if (listeditor != null)
-			listeditor.deactivate();
-	}
-
 	// MouseListener for textfield
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if (e.getSource() == field && usingListEditor && e.getClickCount() > 1)
+		if (e.getSource() == field && usingListEditor && e.getClickCount() > 1) {
 			listeditor.setVisible(true);
+			listeditor.repaint();
+		}
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
-
+		/* Not needed */}
 }

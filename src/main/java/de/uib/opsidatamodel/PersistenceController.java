@@ -11,7 +11,6 @@
 package de.uib.opsidatamodel;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -55,7 +54,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String CLIENT_GLOBAL_SEPARATOR = "/";
 
 	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = new HashSet<>();
-	{
+	static {
 		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("type");
 		KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT.add("id");
 	}
@@ -139,7 +138,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String ALL_USER_KEY_START = KEY_USER_ROOT + ".{}.";// UserConfig.
 
 	public static final String KEY_USER_REGISTER = KEY_USER_ROOT + ".{}.register"; // boolean
-	public static Boolean keyUserRegisterValue = null;
 
 	public static final String DEPOT_SELECTION_NODEPOTS = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS");
@@ -148,13 +146,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
-	public static final List<Boolean> BOOLEAN_VALUES = new ArrayList<>();
-	static {
-		BOOLEAN_VALUES.add(true);
-		BOOLEAN_VALUES.add(false);
-	}
-
-	public static NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
+	public static final NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
 	static {
 		PROPERTY_CLASSES_SERVER.put("", "general configuration items");
 		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
@@ -192,7 +184,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 				"<html>software on demand configuration,<br />not client specific</html>");
 	}
 
-	public static Set<String> CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS;
+	public static final Set<String> CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS;
 	static {
 		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS = new HashSet<>(PROPERTY_CLASSES_SERVER.keySet());
 		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.removeAll(PROPERTYCLASSES_CLIENT.keySet());
@@ -349,7 +341,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations);
 
-	public abstract boolean areDepotsSynchronous(Set depots);
+	public abstract boolean areDepotsSynchronous(Set<String> depots);
 
 	public abstract Boolean isInstallByShutdownConfigured(String host);
 
@@ -513,7 +505,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract boolean saveHwColumnConfig(Map<String, Map<String, Boolean>> updateItems);
 
 	/* log files */
-	public abstract String[] getLogTypes();
 
 	public abstract Map<String, String> getEmptyLogfiles();
 
@@ -600,8 +591,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract String getProductPackageVersion(String product);
 
 	public abstract String getProductLockedInfo(String product);
-
-	public abstract String getProductTimestamp(String product);
 
 	/* PC specific listings of products and their states and updatings */
 
@@ -784,8 +773,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract void retrieveRelationsAuditSoftwareToLicencePools();
 
-	public abstract void relationsWindowsSoftwareId2LPoolRequestRefresh();
-
 	public abstract void relationsAuditSoftwareToLicencePoolsRequestRefresh();
 
 	public abstract List<String> getSoftwareListByLicencePool(String licencePoolId);
@@ -856,8 +843,6 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
 
 	public abstract void opsiInformationRequestRefresh();
-
-	public abstract Date getOpsiExpiresDate();
 
 	public abstract void retrieveOpsiModules();
 

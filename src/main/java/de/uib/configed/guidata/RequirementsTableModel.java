@@ -125,7 +125,9 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		case 3:
 			result = Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementTypeAfter");
 			break;
-
+		default:
+			Logging.warning(this, "no case found for col in getColumnName");
+			break;
 		}
 
 		return result;
@@ -141,7 +143,6 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 		Object result = null;
 		String indent = "     ";
-		String impossible = null;
 
 		if (col == 0) {
 			switch (rowTypeIndex) {
@@ -157,6 +158,9 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				result = indent + Configed.getResourceValue("ProductInfoPane.RequirementsTable.requirementCondition")
 						+ " uninstall";
 				break;
+			default:
+				Logging.warning(this, "no case found for rowTypeIndex in getValueAt");
+				break;
 			}
 		}
 
@@ -171,26 +175,22 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				} else if (rowTypeIndex == 2 && requDeinstallMap != null) {
 					result = requDeinstallMap.get(myKey);
 					break;
-
 				}
 
 			case 2:
-				if (rowTypeIndex == 1) {
-					if (requBeforeMap != null) {
-						result = requBeforeMap.get(myKey);
-						break;
-					}
-				} else if (rowTypeIndex == 2)
-					result = impossible;
+				if (rowTypeIndex == 1 && requBeforeMap != null) {
+					result = requBeforeMap.get(myKey);
+					break;
+				} // otherwise, result will remain null
 
 			case 3:
-				if (rowTypeIndex == 1) {
-					if (requAfterMap != null) {
-						result = requAfterMap.get(myKey);
-						break;
-					}
-				} else if (rowTypeIndex == 2)
-					result = impossible;
+				if (rowTypeIndex == 1 && requAfterMap != null) {
+					result = requAfterMap.get(myKey);
+					break;
+				} // otherwise, result will remain null
+			default:
+				Logging.warning(this, "no case found for col in getValueAt");
+				break;
 			}
 
 			if (result != null)
@@ -254,19 +254,19 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 			int kindOfRow = row % 3;
 
-			{
-				switch (kindOfRow) {
-				case 0:
-					cell.setBackground(Globals.BACKGROUND_COLOR_7);
-					break;
-				case 1:
-					cell.setBackground(Globals.BACKGROUND_COLOR_8);
-					break;
-				case 2:
-
-					cell.setBackground(Globals.BACKGROUND_COLOR_8);
-					break;
-				}
+			switch (kindOfRow) {
+			case 0:
+				cell.setBackground(Globals.BACKGROUND_COLOR_7);
+				break;
+			case 1:
+				cell.setBackground(Globals.BACKGROUND_COLOR_8);
+				break;
+			case 2:
+				cell.setBackground(Globals.BACKGROUND_COLOR_8);
+				break;
+			default:
+				Logging.warning(this, "no case found for kindOfRow in colorize");
+				break;
 			}
 
 			if (kindOfRow == 2 && col > 1)

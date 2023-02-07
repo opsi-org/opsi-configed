@@ -1,80 +1,16 @@
 package de.uib.opsidatamodel.dbtable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import de.uib.utilities.Mapping;
-
+// TODO what is the need of this class? only static values are accessed, never instanciated
 public class Host extends Table {
 	public static final String TABLE_NAME = "HOST";
 	public static final String ID_COLUMN = TABLE_NAME + ".hostId";
 	public static final String HW_ADRESS_COLUMN = TABLE_NAME + ".hardwareAdress";
 	public static final String DESCRIPTION_COLUMN = TABLE_NAME + ".description";
 
-	public static List<String> columns;
-	static {
-		columns = new ArrayList<>();
-		columns.add("hostId");
-		columns.add("type");
-		columns.add("description");
-		columns.add("notes");
-		columns.add("hardwareAddress");
-		columns.add("ipAddress");
-		columns.add("inventoryNumber");
-		columns.add("created");
-		columns.add("lastSeen");
-		columns.add("opsiHostKey");
-		columns.add("oneTimePassword");
-		columns.add("maxBandwidth");
-		columns.add("depotLocalUrl");
-		columns.add("depotRemoteUrl");
-		columns.add("depotWebdavUrl");
-		columns.add("repositoryRemoteUrl");
-		columns.add("isMasterDepot");
-		columns.add("masterDepotId");
-	}
-
-	public static String columnsString;
-	static {
-		columnsString = Arrays.toString(columns.toArray(new String[] {}));
-		columnsString = columnsString.substring(1);
-		columnsString = columnsString.substring(0, columnsString.length() - 1);
-	}
-
-	public static String dbColumnsString;
-	static {
-		StringBuilder buf = new StringBuilder();
-		for (String col : columns) {
-			buf.append(TABLE_NAME);
-			buf.append(".");
-			buf.append(col);
-			buf.append(",");
-		}
-		dbColumnsString = buf.toString().substring(0, columnsString.length() - 1);
-	}
-
-	public static List<String> primaryKey;
-	public static String primaryKeyString;
-	static {
-		primaryKey = new ArrayList<>();
-		primaryKey.add("hostId");
-		primaryKeyString = primaryKey.get(0);
-	}
-
-	private static Map<String, String> key2servicekey = new HashMap<>();
-	static {
-		for (String key : columns) {
-			key2servicekey.put(key, key);
-		}
-		key2servicekey.put("hostId", "id");
-	}
-	public static Mapping<String, String> serviceKeyMapping = new Mapping<>(key2servicekey);
-
-	public Host(String localTablePath) {
-		super(localTablePath);
+	private Host() {
+		super("");
 	}
 
 	public static Map<java.lang.String, java.lang.Object> db2ServiceRowMap(
@@ -85,5 +21,4 @@ public class Host extends Table {
 
 		return map;
 	}
-
 }

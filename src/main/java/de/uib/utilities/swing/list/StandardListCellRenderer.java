@@ -12,7 +12,9 @@ package de.uib.utilities.swing.list;
  * version 2.1 of the License, or (at your option) any later version.
  *
  */
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComponent;
@@ -26,15 +28,19 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 
 	protected String tooltipPrefix = "";
 
+	// this is the normal preferred height for components with content.
+	// We want this height also for empty components
+	private static final int CELL_HEIGHT = 20;
+
 	protected static final int FILL_LENGTH = 20;
 
-	protected java.awt.Color uniformColor = null;
-	protected java.awt.Color uniformSelectedColor = null;
+	protected Color uniformColor = null;
+	protected Color uniformSelectedColor = null;
 
-	protected java.awt.Color selectedEven = Globals.defaultTableSelectedRowDark;
-	protected java.awt.Color selectedUneven = Globals.defaultTableSelectedRowBright;
-	protected java.awt.Color unselectedEven = Globals.defaultTableCellBgColor2;
-	protected java.awt.Color unselectedUneven = Globals.defaultTableCellBgColor1;
+	protected Color selectedEven = Globals.defaultTableSelectedRowDark;
+	protected Color selectedUneven = Globals.defaultTableSelectedRowBright;
+	protected Color unselectedEven = Globals.defaultTableCellBgColor2;
+	protected Color unselectedUneven = Globals.defaultTableCellBgColor1;
 
 	public StandardListCellRenderer() {
 		super();
@@ -53,6 +59,10 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 	{
 		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
+		Dimension prefDimension = c.getPreferredSize();
+		prefDimension.setSize(prefDimension.getWidth(), CELL_HEIGHT);
+		c.setPreferredSize(prefDimension);
+
 		// condition true if c is null
 		if (!(c instanceof JComponent))
 			return c;
@@ -64,7 +74,6 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 					unselectedEven, unselectedUneven);
 
 		else {
-
 			if (isSelected)
 				jc.setBackground(uniformSelectedColor);
 			else
@@ -80,19 +89,18 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		return jc;
 	}
 
-	public void setUniformColors(java.awt.Color c, java.awt.Color cSelected)
+	public void setUniformColors(Color c, Color cSelected)
 	// ignore the inherited alterna
 	{
 		uniformColor = c;
 		uniformSelectedColor = cSelected;
 	}
 
-	public void setAlternatingColors(java.awt.Color selectedEvenColor, java.awt.Color selectedUnevenColor,
-			java.awt.Color unselectedEvenColor, java.awt.Color unselectedUnevenColor) {
+	public void setAlternatingColors(Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,
+			Color unselectedUnevenColor) {
 		selectedEven = selectedEvenColor;
 		selectedUneven = selectedUnevenColor;
 		unselectedEven = unselectedEvenColor;
 		unselectedUneven = unselectedUnevenColor;
 	}
-
 }

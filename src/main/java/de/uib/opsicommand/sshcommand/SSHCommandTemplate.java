@@ -1,5 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -135,7 +136,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 **/
 	@Override
 	public void setCommand(String c) {
-	}
+		/* Not needed here */}
 
 	/**
 	 * Add given SSHCommand to commandlist
@@ -378,7 +379,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	}
 
 	/**
-	 * Compares the position of SSHCommand_Templates. If it is equal compare by
+	 * Compares the position of SSHCommandTemplates. If it is equal compare by
 	 * menuText
 	 * 
 	 * @param compareCom Compares the compareCom to this command
@@ -386,6 +387,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 */
 	@Override
 	public int compareTo(SSHCommandTemplate compareCom) {
+
 		int dif = this.position - compareCom.getPriority();
 		if (dif == 0)
 			return this.menuText.compareTo(compareCom.getMenuText());
@@ -413,6 +415,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	}
 
 	public boolean equals(SSHCommandTemplate com) {
+
 		if (!this.getId().trim().equals(com.getId().trim())) {
 			Logging.debug(this, "equals different id's " + this.getId() + " != " + com.getId() + "");
 			return false;
@@ -458,10 +461,10 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	}
 
 	/**
-	 * @return null
+	 * @return empty list
 	 */
 	@Override
 	public List<String> getParameterList() {
-		return null;
+		return new ArrayList<>();
 	}
 }

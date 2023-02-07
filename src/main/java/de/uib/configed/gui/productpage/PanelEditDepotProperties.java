@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -25,6 +26,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.uib.configed.Configed;
 /*
  * configed - configuration editor for client work stations in opsi
  * (open pc server integration) www.opsi.org
@@ -39,7 +41,6 @@ import javax.swing.event.ListSelectionListener;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -445,12 +446,10 @@ public class PanelEditDepotProperties extends DefaultPanelEditProperties
 			ConfigName2ConfigValue compareProperties = mainController.getPersistenceController()
 					.getDefaultProductProperties(compareDepot).get(productEdited);
 
-			if ((properties0 == null && compareProperties == null) || properties0.equals(compareProperties)) {
-
+			// True if both objects are equal or both null
+			if (Objects.equals(properties0, compareProperties))
 				listDepots.addSelectionInterval(i, i);
-			}
+
 		}
-
 	}
-
 }

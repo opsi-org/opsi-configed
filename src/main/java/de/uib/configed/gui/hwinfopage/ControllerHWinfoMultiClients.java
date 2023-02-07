@@ -47,7 +47,7 @@ public class ControllerHWinfoMultiClients {
 	List<String> columnNames;
 	List<String> classNames;
 
-	TreeSet theFilterSet;
+	TreeSet<Object> theFilterSet;
 
 	String[] hosts;
 	ConfigedMain main;
@@ -145,7 +145,7 @@ public class ControllerHWinfoMultiClients {
 			}
 		};
 
-		panel.setMasterFrame(Globals.mainFrame);
+		panel.setMasterFrame(ConfigedMain.getMainFrame());
 		panel.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
@@ -230,11 +230,10 @@ public class ControllerHWinfoMultiClients {
 					main, persist);
 			if (fTable == null || ((FPanel) fTable).isLeft()) {
 				fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel,
-						// testpanel,
 						true);
 
-				fTable.setSize(new java.awt.Dimension(Globals.mainContainer.getSize().width - 50,
-						Globals.mainContainer.getSize().height / 2));
+				fTable.setSize(new java.awt.Dimension(ConfigedMain.getMainFrame().getSize().width - 50,
+						ConfigedMain.getMainFrame().getSize().height / 2));
 			}
 
 			fTable.centerOnParent();

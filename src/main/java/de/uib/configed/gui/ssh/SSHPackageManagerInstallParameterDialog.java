@@ -61,7 +61,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 
 		pack();
 		this.setSize(new Dimension(frameWidth, frameHeight));
-		this.setLocationRelativeTo(Globals.mainFrame);
+		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		this.setVisible(true);
 		waitCursor.stop();
 	}
@@ -190,8 +190,8 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	}
 
 	@Override
-	public void doAction1() {
-		Logging.info(this, " doAction1 install ");
+	public void doAction3() {
+		Logging.info(this, " doAction3 install ");
 		boolean sequential = false;
 		final SSHConnectExec ssh = new SSHConnectExec();
 		SSHCommandTemplate commands = new SSHCommandTemplate();
@@ -244,9 +244,9 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		try {
 			ssh.execTemplate(commands, sequential);
 			ssh.getDialog().setVisible(true);
-			Logging.info(this, "doAction1 end ");
+			Logging.info(this, "doAction3 end ");
 		} catch (Exception e) {
-			Logging.error(this, "doAction1 Exception while exec_template", e);
+			Logging.error(this, "doAction3 Exception while exec_template", e);
 		}
 	}
 

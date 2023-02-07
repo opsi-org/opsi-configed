@@ -7,13 +7,10 @@ public class AdditionalQuery {
 	public static final String DESCRIPTION_KEY = "description";
 	public static final String EDITABLE_KEY = "editable";
 
-	public String name = "";
-	public String query = "";
-	public String description = "";
-	public String editable = "true";
-
-	public AdditionalQuery() {
-	}
+	private String name = "";
+	private String query = "";
+	private String description = "";
+	private String editable = "true";
 
 	public void setName(Object s) {
 		name = "" + s;

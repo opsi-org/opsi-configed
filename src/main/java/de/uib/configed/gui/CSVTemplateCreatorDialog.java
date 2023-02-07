@@ -44,6 +44,7 @@ import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVWriter;
@@ -62,10 +63,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private List<JCheckBox> headerButtons;
 
 	public CSVTemplateCreatorDialog(List<String> columnNames) {
-		super(Globals.mainFrame, Configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
-				new String[] { "ok", "cancel" },
-				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "") },
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
+				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
+						Configed.getResourceValue("FGeneralDialog.ok") },
+				new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
+						Globals.createImageIcon("images/checked_withoutbox_blue14.png", "") },
 				2, 1000, 400, true, null);
 
 		this.columnNames = columnNames;
@@ -187,7 +189,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			maskFormatter = new MaskFormatter("*");
 		} catch (ParseException e) {
 			Logging.debug(this, "INVALID MASK");
+			return null;
 		}
+
 		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;#+*");
 		maskFormatter.setAllowsInvalid(false);
 		maskFormatter.setCommitsOnValidEdit(true);
@@ -360,7 +364,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			add(scroll);
 		}
 
-		private class CheckBoxList extends JList {
+		private class CheckBoxList extends JList<JCheckBox> {
 			protected Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
 			public CheckBoxList() {
@@ -372,7 +376,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						int index = locationToIndex(e.getPoint());
 
 						if (index != -1) {
-							JCheckBox checkbox = (JCheckBox) getModel().getElementAt(index);
+							JCheckBox checkbox = getModel().getElementAt(index);
 							checkbox.setSelected(!checkbox.isSelected());
 							repaint();
 						}
@@ -385,11 +389,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				setModel(model);
 			}
 
-			protected class CellRenderer implements ListCellRenderer {
+			protected class CellRenderer implements ListCellRenderer<JCheckBox> {
 				@Override
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-						boolean cellHasFocus) {
-					JCheckBox checkbox = (JCheckBox) value;
+				public Component getListCellRendererComponent(JList<? extends JCheckBox> list, JCheckBox checkbox,
+						int index, boolean isSelected, boolean cellHasFocus) {
 					checkbox.setBackground(isSelected ? getSelectionBackground() : getBackground());
 					checkbox.setForeground(isSelected ? getSelectionForeground() : getForeground());
 					checkbox.setEnabled(isEnabled());
@@ -397,7 +400,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 					checkbox.setFocusPainted(false);
 					checkbox.setBorderPainted(true);
 					checkbox.setBorder(noFocusBorder);
-					// checkbox.setBorder(isSelected ?
 
 					return checkbox;
 				}
@@ -407,7 +409,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	private class InputListener implements DocumentListener {
 		public void performAction() {
-		}
+			/* Should be overridden in actual implementation */}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
@@ -421,19 +423,19 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-		}
+			/* Not needed */}
 	}
 
 	@Override
-	public void doAction1() {
-		result = 1;
+	public void doAction2() {
+		result = 2;
 
 		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("CSV (.csv)", "csv");
 		jFileChooser.addChoosableFileFilter(fileFilter);
 		jFileChooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = jFileChooser.showSaveDialog(Globals.mainFrame);
+		int returnValue = jFileChooser.showSaveDialog(ConfigedMain.getMainFrame());
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();

@@ -14,8 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
@@ -60,6 +58,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.text.View;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
@@ -80,7 +79,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected JButton buttonFontMinus;
 	protected JLabel labelLevel;
 	protected AdaptingSlider sliderLevel;
-	protected AdaptingSlider sliderLevel0;
 	protected static final int SLIDER_H = 35;
 	protected static final int SLIDER_W = 180;
 	protected ChangeListener sliderListener;
@@ -183,36 +181,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
-	protected class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
-		ImmutableDefaultStyledDocument() {
-			super();
-		}
-
-		ImmutableDefaultStyledDocument(StyleContext styles) {
-			super(styles);
-		}
-
-		public void insertStringTruely(int offs, String str, AttributeSet a) throws BadLocationException {
-			super.insertString(offs, str, a);
-		}
-
-		@Override
-		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-		}
-
-		@Override
-		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-		}
-
-		@Override
-		public void remove(int offs, int len) throws BadLocationException {
-		}
-
-	}
-
 	protected PopupMenuTrait popupMenu;
 
-	protected ImmutableDefaultStyledDocument document;
+	protected DefaultStyledDocument document;
 
 	protected String[] lines;
 	protected int[] lineLevels;
@@ -250,7 +221,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(Globals.mainFrame);
+		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		copyOfMe.setLevelWithoutAction(showLevel);
 		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,
@@ -411,14 +382,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		Logging.info(this, "levels minL, maxL, valL " + minL + ", " + maxL + ", " + valL);
 
 		sliderLevel = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
-		sliderLevel0 = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
-		sliderLevel0.setVisible(false); // to develop
-		sliderLevel0.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Logging.info(this, "mouseClicked on sliderLevel0 ");
-			}
-		});
 
 		JSpinner spinnerMinLevel = new JSpinner(new SpinnerNumberModel(valL, minL, maxL, 1));
 
@@ -545,9 +508,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGroup(layoutCommandpane.createParallelGroup()
-								.addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
-								.addComponent(sliderLevel0, SLIDER_W, SLIDER_W, SLIDER_W))
+						.addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
 
 		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup()
@@ -570,7 +531,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(sliderLevel, SLIDER_H, SLIDER_H, SLIDER_H)
-						.addComponent(sliderLevel0, SLIDER_H, SLIDER_H, SLIDER_H)
 
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
@@ -602,6 +562,10 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					case PopupMenuTrait.POPUP_FLOATINGCOPY:
 						floatExternal();
 						break;
+
+					default:
+						Logging.warning(this, "no case found for popupMenuTrait in LogPane");
+						break;
 					}
 
 				}
@@ -616,7 +580,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		// Switch to an blank document temporarily to avoid repaints
 
-		document = new ImmutableDefaultStyledDocument(styleContext);
+		document = new DefaultStyledDocument(styleContext);
 
 		int selLevel = levelList.indexOf(sliderLevel.getValue()) + 1;
 
@@ -644,7 +608,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					lineCount2docLinestartPosition.put(i, document.getLength());
 
 					String no = "(" + i + ")";
-					document.insertStringTruely(document.getLength(), String.format("%-10s", no) + lines[i] + '\n',
+					document.insertString(document.getLength(), String.format("%-10s", no) + lines[i] + '\n',
 							lineStyles[i]);
 				}
 
@@ -655,7 +619,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 		jTextPane.setDocument(document);
 		SwingUtilities.invokeLater(() -> jTextPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR)));
-
 	}
 
 	private void setLevelWithoutAction(Object l) {
@@ -686,7 +649,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		Logging.info(this, "activateShowLevel level, oldLevel, maxExistingLevel " + level + " , " + oldLevel + ", "
 				+ maxExistingLevel);
 
-		if (oldLevel.equals(level) && (level < maxExistingLevel)) {
+		if (!oldLevel.equals(level) && (level < maxExistingLevel || oldLevel < maxExistingLevel)) {
 
 			int caretPosition = jTextPane.getCaretPosition();
 
@@ -732,6 +695,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				jTextPane.getCaret().setVisible(true);
 				highlighter.removeAllHighlights();
 			} catch (BadLocationException e) {
+				Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
 			}
 
 		}
@@ -933,8 +897,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void setText(String s) {
-		if (s == null)
-			Logging.info(this, "Setting text");
+		if (s == null) {
+			Logging.warning(this, "String in setting text is null");
+			return;
+		}
+
+		Logging.info(this, "Setting text");
 		lines = s.split("\n");
 
 		parse();
@@ -955,7 +923,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void setParsedText(final String[] lines, final int[] lineLevels, final Style[] lineStyles,
-			final int[] lineTypes, final List typesList, boolean showTypeRestricted, int selTypeIndex,
+			final int[] lineTypes, final List<String> typesList, boolean showTypeRestricted, int selTypeIndex,
 			int maxExistingLevel) {
 		Logging.debug(this, "setParsedText");
 		this.lines = lines;
@@ -994,6 +962,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				jTextPane.getCaret().setVisible(true);
 				searcher.comp.setCaretPosition(offset);
 			} catch (BadLocationException e) {
+				Logging.warning(this, "error with setting the caret in LogPane: " + e);
 			}
 		}
 	}
@@ -1030,8 +999,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {

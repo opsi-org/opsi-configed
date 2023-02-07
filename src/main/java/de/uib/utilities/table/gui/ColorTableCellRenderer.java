@@ -15,7 +15,7 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 			boolean hasFocus, int row, int column) {
 		java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		CellAlternatingColorizer.colorize(cell, isSelected, (row % 2 == 0), /* (column % 2 == 0), */ true);
+		CellAlternatingColorizer.colorize(cell, isSelected, (row % 2 == 0), true);
 
 		return cell;
 

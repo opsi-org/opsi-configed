@@ -36,6 +36,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
@@ -46,7 +47,7 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.NavigationPanel;
 
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
-	javax.swing.JFrame masterFrame = Globals.mainFrame;
+	javax.swing.JFrame masterFrame = ConfigedMain.getMainFrame();
 
 	JTextField fieldSearch;
 
@@ -336,34 +337,25 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		navPane = new NavigationPanel() {
-			@Override
-			public void setActivation() {
-				setHasNext(associatedPanel.canNavigate() && !associatedPanel.isLastRow());
-				setHasPrevious(associatedPanel.canNavigate() && !associatedPanel.isFirstRow());
-			}
 
 			@Override
 			public void next() {
 				associatedPanel.advanceCursor(+1);
-
 			}
 
 			@Override
 			public void previous() {
 				associatedPanel.advanceCursor(-1);
-
 			}
 
 			@Override
 			public void first() {
 				associatedPanel.setCursorToFirstRow();
-
 			}
 
 			@Override
 			public void last() {
 				associatedPanel.setCursorToLastRow();
-
 			}
 		};
 
@@ -640,7 +632,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Logging.info(this, "buildMenuSearchfield");
 		searchMenu = new JPopupMenu();
 		for (Entry<JMenuItemFormatted, Boolean> searchMenuEntry : searchMenuEntries.entrySet()) {
-			if (searchMenuEntry.getValue())
+			if (Boolean.TRUE.equals(searchMenuEntry.getValue()))
 				searchMenu.add(searchMenuEntry.getKey());
 		}
 		fieldSearch.setComponentPopupMenu(searchMenu);
@@ -1216,20 +1208,19 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	// ActionListener implementation
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		if (e.getSource() == checkmarkAllColumns) {
 			Logging.debug(this, "actionPerformed on checkmarkAllColumns");
 
-			if (checkmarkAllColumns.isSelected()) {
+			if (Boolean.TRUE.equals(checkmarkAllColumns.isSelected())) {
 				comboSearchFields.setSelectedIndex(0); // all columns
 				if (saveSearchpaneAllColumnsSearch != null)
 					saveSearchpaneAllColumnsSearch.serialize(0);
@@ -1238,13 +1229,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				if (saveSearchpaneAllColumnsSearch != null)
 					saveSearchpaneAllColumnsSearch.serialize(1);
 			}
-
-		}
-
-		else if (e.getSource() == checkmarkFullText) {
+		} else if (e.getSource() == checkmarkFullText) {
 			Logging.debug(this, "actionPerformed on checkmarkFullText");
 
-			if (checkmarkFullText.isSelected()) {
+			if (Boolean.TRUE.equals(checkmarkFullText.isSelected())) {
 				comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
 				if (saveSearchpaneFullTextSearch != null)
 					saveSearchpaneFullTextSearch.serialize(0);
@@ -1253,9 +1241,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				if (saveSearchpaneFullTextSearch != null)
 					saveSearchpaneFullTextSearch.serialize(1);
 			}
-		}
-
-		else if (e.getSource() == filtermark) {
+		} else if (e.getSource() == filtermark) {
 			Logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
 
 			if (targetModel.isFiltered()) {
@@ -1265,27 +1251,21 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				targetModel.setFiltered(false);
 				setFilteredMode(false);
 
-				if (unfilteredSelection != null) {
+				if (unfilteredSelection.length != 0) {
 					targetModel.setSelection(unfilteredSelection);
 				}
-
 			} else {
-
 				switchFilterOn();
 			}
-		}
-
-		else if (e.getSource() == checkmarkSearch) {
+		} else if (e.getSource() == checkmarkSearch) {
 			Logging.debug(this,
 					"actionPerformed on checkmarkSearch, targetModel.isFiltered " + targetModel.isFiltered());
 
 			fieldSearch.setText("");
-		}
-
-		else if (e.getSource() == checkmarkSearchProgressive) {
+		} else if (e.getSource() == checkmarkSearchProgressive) {
 			Logging.debug(this,
 					"actionPerformed on checkmarkSearchProgressiv, set to  " + checkmarkSearchProgressive.isSelected());
-			if (checkmarkSearchProgressive.isSelected()) {
+			if (Boolean.TRUE.equals(checkmarkSearchProgressive.isSelected())) {
 				searchInputType = SearchInputType.PROGRESSIVE;
 				if (saveSearchpaneProgressiveSearch != null)
 					saveSearchpaneProgressiveSearch.serialize(0);

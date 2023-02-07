@@ -30,6 +30,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+import javax.swing.text.BadLocationException;
 
 import de.uib.configed.Configed;
 /**
@@ -92,19 +93,20 @@ public class NewClientDialog extends FGeneralDialog
 	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
 	private NewClientDialog(ConfigedMain main, List<String> depots) {
-		super(Globals.mainFrame, Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")",
-				false, new String[] { Configed.getResourceValue("NewClientDialog.buttonCreate"),
-						Configed.getResourceValue("NewClientDialog.buttonClose") },
+		super(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")", false,
+				new String[] { Configed.getResourceValue("NewClientDialog.buttonClose"),
+						Configed.getResourceValue("NewClientDialog.buttonCreate") },
 				700, 600);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.main = main;
 
-		jButton1.addMouseListener(this);
-		jButton1.addKeyListener(this);
-		jButton1.setDefaultIcon("images/client_small.png");
-		jButton1.setIcon(jButton1.getDefaultIcon());
+		jButton2.addMouseListener(this);
+		jButton2.addKeyListener(this);
+		jButton2.setDefaultIcon("images/client_small.png");
+		jButton2.setIcon(jButton2.getDefaultIcon());
 
-		jButton1.setRunningActionIcon("images/waitingcircle_16.png");
+		jButton2.setRunningActionIcon("images/waitingcircle_16.png");
 
 		if (depots != null && depots.size() > 1) {
 			multidepot = true;
@@ -120,7 +122,7 @@ public class NewClientDialog extends FGeneralDialog
 			instance = new NewClientDialog(main, depots);
 			instance.init();
 		} else
-			instance.setLocationRelativeTo(Globals.mainFrame);
+			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		return instance;
 	}
@@ -264,8 +266,7 @@ public class NewClientDialog extends FGeneralDialog
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-
-			}
+				/* Not needed */}
 
 		});
 
@@ -274,9 +275,6 @@ public class NewClientDialog extends FGeneralDialog
 		// handle backtab (below)
 
 		jTextNotes.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-			}
 
 			@Override
 			public void insertUpdate(DocumentEvent e) {
@@ -289,14 +287,20 @@ public class NewClientDialog extends FGeneralDialog
 
 						macAddressField.requestFocus();
 					}
-				} catch (javax.swing.text.BadLocationException ex) {
+				} catch (BadLocationException ex) {
+					Logging.warning(this, "BadLocationException thrown: ", ex);
 				}
 
 			}
 
 			@Override
+			public void changedUpdate(DocumentEvent e) {
+				/* Not needed */}
+
+			@Override
 			public void removeUpdate(DocumentEvent e) {
-			}
+				/* Not needed */}
+
 		});
 
 		jTextNotes.setBorder(BorderFactory.createLineBorder(Globals.NEW_CLIENT_DIALOG_BORDER_COLOR));
@@ -588,7 +592,7 @@ public class NewClientDialog extends FGeneralDialog
 
 		scrollpane.getViewport().add(panel);
 		pack();
-		setLocationRelativeTo(Globals.mainContainer);
+		setLocationRelativeTo(ConfigedMain.getMainFrame());
 	}
 
 	private void createClients(List<List<Object>> clients) {
@@ -603,7 +607,7 @@ public class NewClientDialog extends FGeneralDialog
 
 			if (!isBoolean((String) client.get(11)) || !isBoolean((String) client.get(12))
 					|| !isBoolean((String) client.get(13))) {
-				FTextArea fInfo = new FTextArea(Globals.mainFrame,
+				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " (" + Globals.APPNAME
 								+ ") ",
 						false, new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
@@ -695,7 +699,7 @@ public class NewClientDialog extends FGeneralDialog
 				goOn = false;
 			}
 
-			FTextArea fQuestion = new FTextArea(Globals.mainFrame,
+			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
 							+ ") ",
 					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
@@ -717,7 +721,7 @@ public class NewClientDialog extends FGeneralDialog
 		}
 
 		if (goOn && hostname.length() > 15) {
-			FTextArea fQuestion = new FTextArea(Globals.mainFrame,
+			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.IgnoreNetbiosRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
 					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
@@ -742,7 +746,7 @@ public class NewClientDialog extends FGeneralDialog
 		}
 
 		if (goOn && onlyNumbers) {
-			FTextArea fQuestion = new FTextArea(Globals.mainFrame,
+			FTextArea fQuestion = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("NewClientDialog.IgnoreOnlyDigitsRequirement.Question") + " ("
 							+ Globals.APPNAME + ") ",
 					true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
@@ -768,7 +772,7 @@ public class NewClientDialog extends FGeneralDialog
 		jFileChooser.addChoosableFileFilter(fileFilter);
 		jFileChooser.setAcceptAllFileFilterUsed(false);
 
-		int returnValue = jFileChooser.showOpenDialog(Globals.mainFrame);
+		int returnValue = jFileChooser.showOpenDialog(ConfigedMain.getMainFrame());
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();
@@ -780,7 +784,7 @@ public class NewClientDialog extends FGeneralDialog
 				return;
 			}
 
-			if (csvImportDataDialog.getResult() == 1) {
+			if (csvImportDataDialog.getResult() == 2) {
 				CSVImportDataModifier modifier = csvImportDataDialog.getModifier();
 				List<List<Object>> rows = modifier.getRows();
 
@@ -820,7 +824,7 @@ public class NewClientDialog extends FGeneralDialog
 		columnNames.add("shutdownInstall");
 
 		if (format.hasHeader() && !format.hasExpectedHeaderNames(columnNames)) {
-			FTextArea fInfo = new FTextArea(Globals.mainFrame,
+			FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("CSVImportDataDialog.infoExpectedHeaderNames.title") + " ("
 							+ Globals.APPNAME + ") ",
 					false, new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
@@ -877,24 +881,31 @@ public class NewClientDialog extends FGeneralDialog
 	}
 
 	@Override
-	protected void preAction1() {
-		super.preAction1();
-		jButton1.setIcon(jButton1.getRunningActionIcon());
+	protected void preAction2() {
+		super.preAction2();
+		jButton2.setIcon(jButton2.getRunningActionIcon());
 
 	}
 
 	@Override
-	protected void postAction1() {
-		super.postAction1();
-		jButton1.setIcon(jButton1.getDefaultIcon());
+	protected void postAction2() {
+		super.postAction2();
+		jButton2.setIcon(jButton2.getDefaultIcon());
 	}
 
-	/* This method is called when button 1 is pressed */
+	/* This method gets called when button 1 is pressed */
 	@Override
 	public void doAction1() {
-		Logging.info(this, "doAction1");
-
 		result = 1;
+		setVisible(false);
+	}
+
+	/* This method is called when button 2 is pressed */
+	@Override
+	public void doAction2() {
+		Logging.info(this, "doAction2");
+
+		result = 2;
 
 		String hostname = jTextHostname.getText();
 		String selectedDomain = (String) jComboDomain.getSelectedItem();
@@ -926,13 +937,6 @@ public class NewClientDialog extends FGeneralDialog
 
 		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, macaddress,
 				shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
-	}
-
-	/* This method gets called when button 2 is pressed */
-	@Override
-	public void doAction2() {
-		result = 2;
-		setVisible(false);
 	}
 
 	@Override

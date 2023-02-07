@@ -18,13 +18,12 @@ public class DepotInfo implements DataChangeListener {
 
 	@Override
 	public void display() {
-		if (controller.selectedDepotChoiceBox.getItems().isEmpty()) {
-			controller.selectedDepotChoiceBox.getItems()
-					.add(Configed.getResourceValue("Dashboard.selection.allDepots"));
-			controller.selectedDepotChoiceBox.setValue(Configed.getResourceValue("Dashboard.selection.allDepots"));
-			controller.selectedDepotChoiceBox.getItems().addAll(DepotData.getDepots().keySet());
-		} else if (controller.selectedDepotChoiceBox.getItems().size() == 1) {
-			controller.selectedDepotChoiceBox.getItems().addAll(DepotData.getDepots().keySet());
+		if (controller.selectedDepotComboBox.getItems().isEmpty()) {
+			controller.selectedDepotComboBox.getItems().add(Configed.getResourceValue("Dashboard.selection.allDepots"));
+			controller.selectedDepotComboBox.setValue(Configed.getResourceValue("Dashboard.selection.allDepots"));
+			controller.selectedDepotComboBox.getItems().addAll(DepotData.getDepots().keySet());
+		} else if (controller.selectedDepotComboBox.getItems().size() == 1) {
+			controller.selectedDepotComboBox.getItems().addAll(DepotData.getDepots().keySet());
 		}
 
 		String depotType = "-";

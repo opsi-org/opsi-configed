@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -17,7 +18,6 @@ import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.ListCellOptions;
 
 public class PanelHostConfig extends JPanel {
 	// delegate
@@ -51,12 +51,11 @@ public class PanelHostConfig extends JPanel {
 		Logging.info(this, "handleUserInPropertyClass " + user + " in class " + superclass);
 
 		String newpropertyclass = superclass + "." + user;
-
-		if (!de.uib.opsidatamodel.PersistenceController.PROPERTY_CLASSES_SERVER.containsKey(newpropertyclass)) {
+		PersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(newpropertyclass, arg -> {
 			Logging.debug(this, "putUsersToPropertyclassesTreeMap found another user named " + user + " ["
 					+ newpropertyclass + "]");
-			de.uib.opsidatamodel.PersistenceController.PROPERTY_CLASSES_SERVER.put(newpropertyclass, "");
-		}
+			return "";
+		});
 	}
 
 	private void putUsersToPropertyclassesTreeMap() {
@@ -82,7 +81,6 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	protected void buildPanel() {
-		// boolean serverEditing = (ConfigedMain.getEditingTarget() ==
 
 		label = new JLabel(Configed.getResourceValue("MainFrame.jLabel_Config"));
 
@@ -145,9 +143,4 @@ public class PanelHostConfig extends JPanel {
 	public void registerDataChangedObserver(DataChangedObserver o) {
 		editMapPanel.registerDataChangedObserver(o);
 	}
-
-	protected void setEditableMap(Map visualdata, Map<String, ListCellOptions> optionsMap) {
-		editMapPanel.setEditableMap(visualdata, optionsMap);
-	}
-
 }

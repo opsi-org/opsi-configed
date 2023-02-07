@@ -418,12 +418,10 @@ public class HostInfo {
 
 		// encodeStringFromService is just returning the given value but was used for
 		// switching an encoding
-		clientDescription = showValue(Configed.encodeStringFromService((String) pcInfo.get(CLIENT_DESCRIPTION_KEY)));
-		clientInventoryNumber = showValue(
-				Configed.encodeStringFromService((String) pcInfo.get(CLIENT_INVENTORY_NUMBER_KEY)));
-		clientNotes = showValue(Configed.encodeStringFromService((String) pcInfo.get(CLIENT_NOTES_KEY)));
-		clientOneTimePassword = showValue(
-				Configed.encodeStringFromService((String) pcInfo.get(CLIENT_ONE_TIME_PASSWORD_KEY)));
+		clientDescription = showValue((String) pcInfo.get(CLIENT_DESCRIPTION_KEY));
+		clientInventoryNumber = showValue((String) pcInfo.get(CLIENT_INVENTORY_NUMBER_KEY));
+		clientNotes = showValue((String) pcInfo.get(CLIENT_NOTES_KEY));
+		clientOneTimePassword = showValue((String) pcInfo.get(CLIENT_ONE_TIME_PASSWORD_KEY));
 		clientMacAddress = showValue((String) pcInfo.get(CLIENT_MAC_ADRESS_KEY));
 		clientIpAddress = showValue((String) pcInfo.get(CLIENT_IP_ADDRESS_KEY));
 		hostKey = showValue((String) pcInfo.get(HOST_KEY_KEY));
@@ -542,7 +540,7 @@ public class HostInfo {
 
 			mainFrame.setClientDescriptionText(clientDescription); // restoring old value
 
-			persist.setHostDescription(client, Configed.encodeStringForService(clientDescription));
+			persist.setHostDescription(client, clientDescription);
 
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_DESCRIPTION_KEY, clientDescription);
 		}
@@ -557,7 +555,7 @@ public class HostInfo {
 
 			mainFrame.setClientInventoryNumberText(clientInventoryNumber); // restoring old value
 
-			persist.setClientInventoryNumber(client, Configed.encodeStringForService(clientInventoryNumber));
+			persist.setClientInventoryNumber(client, clientInventoryNumber);
 
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_INVENTORY_NUMBER_KEY,
 					clientInventoryNumber);
@@ -567,7 +565,7 @@ public class HostInfo {
 			clientOneTimePassword = sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY);
 			mainFrame.setClientOneTimePasswordText(clientOneTimePassword); // restoring old value
 
-			persist.setClientOneTimePassword(client, Configed.encodeStringForService(clientOneTimePassword));
+			persist.setClientOneTimePassword(client, clientOneTimePassword);
 
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_ONE_TIME_PASSWORD_KEY,
 					clientOneTimePassword);
@@ -578,7 +576,7 @@ public class HostInfo {
 
 			mainFrame.setClientNotesText(clientNotes); // restoring old value
 
-			persist.setHostNotes(client, Configed.encodeStringForService(clientNotes));
+			persist.setHostNotes(client, clientNotes);
 
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
 		}

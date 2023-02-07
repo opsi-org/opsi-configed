@@ -11,8 +11,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
@@ -35,7 +37,6 @@ public abstract class ExportTable {
 	protected boolean askForOverwrite;
 
 	protected String writeToFile;
-	protected JFileChooser chooser;
 
 	protected String client;
 	protected String title;
@@ -138,10 +139,10 @@ public abstract class ExportTable {
 
 				FTextArea fChoice = new FTextArea(null,
 						Globals.APPNAME + " " + Configed.getResourceValue("ExportTable.title"), true,
-						new String[] {
+						new String[] { Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCancel"),
 								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportHeaderOnly"),
-								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCompleteTable"),
-								Configed.getResourceValue("ExportTable.caseNoSelectedRows.option.exportCancel") },
+								Configed.getResourceValue(
+										"ExportTable.caseNoSelectedRows.option.exportCompleteTable") },
 
 						500, 200);
 				fChoice.setDefaultResult(3);
@@ -156,24 +157,19 @@ public abstract class ExportTable {
 
 				result = null;
 				Logging.info(this, "checkSelection answered " + answer);
-				switch (answer) {
-				case 1:
+				if (answer == 1)
 					result = true;
-					break;
-				case 2:
+				else if (answer == 2)
 					result = false;
-					break;
-				}
-
 			}
 		}
-
 		Logging.info(this, "checkSelection gives: onlySelectedRows = " + result);
 
 		return result;
+
 	}
 
-	protected String checkFile(String filename, javax.swing.filechooser.FileNameExtensionFilter exFilter) {
+	protected String checkFile(String filename, FileNameExtensionFilter exFilter) {
 		if (filename == null) {
 			JFileChooser chooser = new JFileChooser(exportDirectory);
 			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -193,7 +189,7 @@ public abstract class ExportTable {
 
 			SwingUtilities.updateComponentTreeUI(chooser);
 
-			int returnVal = chooser.showDialog(Globals.frame1, null);
+			int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), null);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				try {
 					filename = chooser.getSelectedFile().getAbsolutePath();
@@ -225,9 +221,7 @@ public abstract class ExportTable {
 					Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
 				}
 			}
-		}
-
-		if (filename != null) {
+		} else {
 			try {
 				exportDirectory = new File(filename).getParentFile();
 			} catch (Exception e) {
@@ -248,7 +242,7 @@ public abstract class ExportTable {
 
 		File defaultFile = new File(writeToFile);
 
-		chooser = new JFileChooser(exportDirectory);
+		JFileChooser chooser = new JFileChooser(exportDirectory);
 		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PDF", "pdf"));
@@ -257,10 +251,10 @@ public abstract class ExportTable {
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.chooser"));
 
-		int returnVal = chooser.showDialog(Globals.mainContainer, "OK");
+		int returnVal = chooser.showDialog(ConfigedMain.getMainFrame(), "OK");
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
-
+			Logging.info(this, "clicked ok on JFileChosser, get now fileName: " + fileName);
 		}
 
 		if (fileName != null) {
@@ -288,7 +282,7 @@ public abstract class ExportTable {
 			if (!fileExists)
 				return filename;
 
-			int option = JOptionPane.showConfirmDialog(Globals.mainContainer,
+			int option = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
 					Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
 					JOptionPane.OK_CANCEL_OPTION);

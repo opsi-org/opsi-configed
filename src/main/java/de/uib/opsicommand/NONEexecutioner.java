@@ -1,5 +1,7 @@
 package de.uib.opsicommand;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +15,7 @@ public class NONEexecutioner extends Executioner {
 
 	@Override
 	public void setConnectionState(ConnectionState state) {
-	}
+		/* Do nothing, because this Executioner should do nothing */}
 
 	@Override
 	public boolean doCall(OpsiMethodCall omc) {
@@ -32,84 +34,84 @@ public class NONEexecutioner extends Executioner {
 
 	@Override
 	public List getListResult(OpsiMethodCall omc) {
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
 	public List<String> getStringListResult(OpsiMethodCall omc) {
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
 	public List<List<String>> getListOfStringLists(OpsiMethodCall omc) {
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
 	public Map getMapResult(OpsiMethodCall omc) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public Map getMapOfLists(OpsiMethodCall omc) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public Map getMapOfMaps(OpsiMethodCall omc) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc) {
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
 	public List<Map<String, String>> getListOfStringMaps(OpsiMethodCall omc) {
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
 	public Map<String, Object> getMapObject(OpsiMethodCall omc) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public Map<String, Map<String, Map<String, Object>>> getMap3Object(OpsiMethodCall omc) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public Map getMapOfListsOfMaps(OpsiMethodCall omc) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public List getListOfMapsOfListsOfMaps(OpsiMethodCall omc) {
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -124,12 +126,12 @@ public class NONEexecutioner extends Executioner {
 
 	@Override
 	public Map getMapFromItem(Object s) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
 	public List getListFromItem(String s) {
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override

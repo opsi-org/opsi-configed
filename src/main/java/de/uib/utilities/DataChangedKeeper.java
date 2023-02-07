@@ -24,10 +24,6 @@ public class DataChangedKeeper implements DataChangedObserver {
 		}
 	}
 
-	public DataChangedKeeper() {
-
-	}
-
 	public void setActingOnSource(ActUpon actUpon) {
 		if (actUpon != null)
 			this.actUpon = actUpon;

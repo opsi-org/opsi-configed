@@ -25,8 +25,6 @@ public class AuditSoftwareXLicencePool extends Relation {
 	 * 
 	 */
 
-	public List<String> registeredSoftware;
-
 	public static final String SW_ID = "swId";
 
 	public static final List<String> ATTRIBUTES;
@@ -52,10 +50,8 @@ public class AuditSoftwareXLicencePool extends Relation {
 	public static final String[] SERVICE_ATTRIBUTES = new String[] { LicencepoolEntry.ID_SERVICE_KEY, SWAuditEntry.NAME,
 			SWAuditEntry.VERSION, SWAuditEntry.SUB_VERSION, SWAuditEntry.LANGUAGE, SWAuditEntry.ARCHITECTURE };
 
-	public AuditSoftwareXLicencePool(List<String> allRegisteredSoftware) {
+	public AuditSoftwareXLicencePool() {
 		super(ATTRIBUTES);
-		registeredSoftware = allRegisteredSoftware;
-
 	}
 
 	private String produceSWident(Map<String, Object> m) {
@@ -70,7 +66,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		Map<String, String> m = new HashMap<>();
 		if (ident == null) {
 			Logging.warning("produceMapFromSWident, ident null ");
-			return null;
+			return new HashMap<>();
 		}
 
 		String[] parts = ident.split(";", -1); // give zero length parts as ""

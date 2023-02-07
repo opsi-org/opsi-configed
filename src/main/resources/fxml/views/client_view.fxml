@@ -5,9 +5,9 @@
 <?import de.uib.configed.dashboard.chart.ClientLastSeenComparison?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TableColumn?>
@@ -21,7 +21,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="684.0" prefWidth="1614.0" styleClass="primary-background" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="clientViewAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="684.0" prefWidth="1614.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -29,7 +29,7 @@
                <children>
                   <Button fx:id="backButton" mnemonicParsing="false" styleClass="btn" text="%Dashboard.goBackText">
                      <graphic>
-                        <FontAwesomeIconView glyphName="ANGLE_LEFT" />
+                        <FontAwesomeIconView fx:id="backButtonIcon" glyphName="ANGLE_LEFT" />
                      </graphic>
                      <font>
                         <Font size="16.0" />
@@ -37,7 +37,7 @@
                   </Button>
                   <HBox prefHeight="71.0" prefWidth="514.0" spacing="20.0">
                      <children>
-                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
+                        <BorderPane fx:id="clientNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="clientsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                                  <font>
@@ -46,10 +46,10 @@
                               </Label>
                            </center>
                            <bottom>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.clientTitle" BorderPane.alignment="CENTER" />
+                              <Text fx:id="clientNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.clientTitle" BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
+                        <BorderPane fx:id="activeClientNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="activeClientsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                                  <font>
@@ -58,10 +58,10 @@
                               </Label>
                            </center>
                            <bottom>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.client.active" BorderPane.alignment="CENTER" />
+                              <Text fx:id="activeClientNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.client.active" BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
+                        <BorderPane fx:id="inactiveClientNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="inactiveClientsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                                  <font>
@@ -70,10 +70,10 @@
                               </Label>
                            </center>
                            <bottom>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.client.inactive" BorderPane.alignment="CENTER" />
+                              <Text fx:id="inactiveClientNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.client.inactive" BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
+                        <BorderPane fx:id="fourteenOrLowerDaysNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="fourteenOrLowerDaysNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                                  <font>
@@ -82,10 +82,10 @@
                               </Label>
                            </center>
                            <bottom>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.lastSeen.fourteenOrLowerDays" BorderPane.alignment="CENTER" />
+                              <Text fx:id="fourteenOrLowerDaysNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.lastSeen.fourteenOrLowerDays" BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
+                        <BorderPane fx:id="betweenFifteenAndThirtyDaysNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="betweenFifteenAndThirtyDaysNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                                  <font>
@@ -94,10 +94,10 @@
                               </Label>
                            </center>
                            <bottom>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.lastSeen.betweenFifteenAndThirtyDays" BorderPane.alignment="CENTER" />
+                              <Text fx:id="betweenFifteenAndThirtyDaysNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.lastSeen.betweenFifteenAndThirtyDays" BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
-                        <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
+                        <BorderPane fx:id="moreThanThirtyDaysNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane" HBox.hgrow="ALWAYS">
                            <center>
                               <Label fx:id="moreThanThirtyDaysNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                                  <font>
@@ -106,23 +106,31 @@
                               </Label>
                            </center>
                            <bottom>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.lastSeen.moreThanThirtyDays" BorderPane.alignment="CENTER" />
+                              <Text fx:id="moreThanThirtyDaysNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.lastSeen.moreThanThirtyDays" BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
                      </children>
                   </HBox>
                   <HBox spacing="20.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <VBox spacing="10.0" styleClass="pane" HBox.hgrow="ALWAYS">
+                        <VBox fx:id="clientTableArea" spacing="10.0" styleClass="pane" HBox.hgrow="ALWAYS">
                            <children>
                               <VBox spacing="10.0">
                                  <children>
-                                    <HBox prefHeight="0.0" prefWidth="548.0" spacing="20.0" VBox.vgrow="ALWAYS" alignment="CENTER">
+                                    <HBox alignment="CENTER" prefHeight="0.0" prefWidth="548.0" spacing="20.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <Label mnemonicParsing="false" text="%Dashboard.clientActivityTitle" HBox.hgrow="ALWAYS" />
-                                          <ChoiceBox fx:id="clientActivityStatusChoiceBox" disable="false" prefWidth="150.0" HBox.hgrow="ALWAYS" />
-                                          <Label mnemonicParsing="false" text="%Dashboard.lastSeenTitle" HBox.hgrow="ALWAYS" />
-                                          <ChoiceBox fx:id="clientLastSeenChoiceBox" disable="false" prefHeight="24.0" prefWidth="173.0" HBox.hgrow="ALWAYS" />
+                                          <Label fx:id="clientActivityLabel" mnemonicParsing="false" text="%Dashboard.clientActivityTitle" HBox.hgrow="ALWAYS" />
+                                          <ComboBox fx:id="clientActivityStatusComboBox" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                             <cursor>
+                                                <Cursor fx:constant="NONE" />
+                                             </cursor>
+                                          </ComboBox>
+                                          <Label fx:id="clientLastSeenLabel" mnemonicParsing="false" text="%Dashboard.lastSeenTitle" HBox.hgrow="ALWAYS" />
+                                          <ComboBox fx:id="clientLastSeenComboBox" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                             <cursor>
+                                                <Cursor fx:constant="NONE" />
+                                             </cursor>
+                                          </ComboBox>
                                        </children>
                                     </HBox>
                                     <TextField fx:id="clientSearchbarTextField" />
@@ -140,7 +148,7 @@
                               </TableView>
                            </children>
                         </VBox>
-                        <VBox prefHeight="519.0" prefWidth="496.0" spacing="20.0" styleClass="pane" HBox.hgrow="ALWAYS">
+                        <VBox fx:id="clientChartArea" prefHeight="519.0" prefWidth="496.0" spacing="20.0" styleClass="pane" HBox.hgrow="ALWAYS">
                            <children>
                               <ClientActivityComparison fx:id="clientActivityComparison" VBox.vgrow="ALWAYS" />
                               <ClientLastSeenComparison fx:id="clientLastSeenComparison" VBox.vgrow="ALWAYS" />

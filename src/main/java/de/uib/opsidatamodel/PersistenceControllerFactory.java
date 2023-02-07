@@ -13,14 +13,16 @@
 
 package de.uib.opsidatamodel;
 
+import javax.swing.JOptionPane;
+
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.logging.Logging;
 
 public class PersistenceControllerFactory {
-
 	// private constructor to hide the implicit public one
 	private PersistenceControllerFactory() {
 	}
@@ -44,7 +46,7 @@ public class PersistenceControllerFactory {
 	public static PersistenceController getNewPersistenceController(String server, String user, String password) {
 		Logging.info("getNewPersistenceController");
 		if (staticPersistControl != null
-				&& staticPersistControl.getConnectionState().equals(ConnectionState.CONNECTED)) {
+				&& staticPersistControl.getConnectionState().getState() == ConnectionState.CONNECTED) {
 			Logging.info("a PersistenceController exists and we are connected, the existing one will be returned");
 			return staticPersistControl;
 		}
@@ -52,26 +54,20 @@ public class PersistenceControllerFactory {
 		PersistenceController persistControl;
 
 		if (sqlAndGetRows) {
-			// have a try
-
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
 			Logging.info("a PersistenceController initiated by option sqlAndGetRows got " + (persistControl == null));
 		} else if (avoidSqlRawData) {
 			sqlAndGetRows = false;
 			persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 			Logging.info("a PersistenceController initiated by option avoidSqlRawData got " + (persistControl == null));
-		}
-
-		else if (sqlDirect) {
+		} else if (sqlDirect) {
 			persistControl = new OpsiDirectSQLPersistenceController(server, user, password);
 			if (directmethodcall.equals(DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE)) {
 				persistControl.cleanUpAuditSoftware();
 			}
 			Logging.info("a PersistenceController initiated by option sqlDirect got " + (persistControl == null));
 			System.exit(0);
-		}
-
-		else {
+		} else {
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
 			sqlAndGetRows = true;
 			Logging.info("a PersistenceController initiated by default, try RawData " + (persistControl == null));
@@ -79,7 +75,7 @@ public class PersistenceControllerFactory {
 
 		boolean connected = persistControl.makeConnection();
 
-		if (persistControl.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
+		while (persistControl.getConnectionState().getState() == ConnectionState.RETRY_CONNECTION) {
 			connected = persistControl.makeConnection();
 		}
 
@@ -94,21 +90,18 @@ public class PersistenceControllerFactory {
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 				}
 
-				// de.uib.opsicommand.OpsiMethodCall.standardRpcPath = ""; //for compatibility
-
 				if (persistControl.getOpsiVersion().compareTo(Globals.REQUIRED_SERVICE_VERSION) < 0) {
 					String errorInfo = Configed.getResourceValue("PersistenceControllerFactory.requiredServiceVersion")
 							+ " " + Globals.REQUIRED_SERVICE_VERSION + ", " + "\n( "
 							+ Configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion") + " "
 							+ persistControl.getOpsiVersion() + " ) ";
 
-					javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer, errorInfo, Globals.APPNAME,
+					javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo, Globals.APPNAME,
 							javax.swing.JOptionPane.OK_OPTION);
 
 					Configed.endApp(1);
 
 					return null;
-
 				}
 
 				if (persistControl.getOpsiVersion().compareTo(Globals.MIN_SUPPORTED_OPSI_VERSION) < 0) {
@@ -119,57 +112,46 @@ public class PersistenceControllerFactory {
 							+ " " + persistControl.getOpsiVersion() + " ) ";
 
 					new Thread() {
-
-						class Continuing {
-							boolean value;
-						}
+						private boolean proceed;
 
 						@Override
 						public void run() {
-							final Continuing continuing = new Continuing();
-							continuing.value = true;
+							proceed = true;
 
 							de.uib.configed.gui.FTextArea infodialog = new de.uib.configed.gui.FTextArea(
-									Globals.mainFrame, Globals.APPNAME, false, // we are not modal
-									new String[] { "ok" }, 300, 200) {
+									ConfigedMain.getMainFrame(), Globals.APPNAME, false, // we are not modal
+									new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 300, 200) {
 								@Override
 								public void doAction1() {
 									super.doAction1();
 									Logging.info("== leaving not supported info ");
-									continuing.value = false;
+									proceed = false;
 									setVisible(false);
 								}
 							};
 
-							infodialog.setLocationRelativeTo(Globals.mainFrame);
+							infodialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 							infodialog.setMessage(errorInfo);
 							infodialog.setVisible(true);
 
 							int count = 0;
 
-							while (continuing.value) {
+							while (proceed) {
 								count++;
 
 								infodialog.setVisible(true);
 								Globals.threadSleep(this, 3000);
 								Logging.info("== repeating info " + count);
 
-								infodialog.setLocationRelativeTo(Globals.mainFrame);
-
+								infodialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 							}
-
 						}
-
 					}.start();
-
 				}
 
 				persistControl.makeConnection();
 				persistControl.checkConfiguration();
 				persistControl.retrieveOpsiModules();
-				// retrieves host infos because of client counting
-
-				// retrieves host infos because of client counting
 
 				if (sqlAndGetRows && !persistControl.isWithMySQL()) {
 					Logging.info(" fall back to  " + OpsiserviceNOMPersistenceController.class);
@@ -179,18 +161,15 @@ public class PersistenceControllerFactory {
 					persistControl.makeConnection();
 					persistControl.checkConfiguration();
 					persistControl.retrieveOpsiModules();
-
 				}
 			}
-		}
-
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			Logging.error("Error", ex);
 
 			String errorInfo = ex.toString();
 
-			javax.swing.JOptionPane.showMessageDialog(Globals.mainContainer, errorInfo, Globals.APPNAME,
-					javax.swing.JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo, Globals.APPNAME,
+					JOptionPane.OK_OPTION);
 
 			Configed.endApp(2);
 
@@ -222,5 +201,4 @@ public class PersistenceControllerFactory {
 
 		return staticPersistControl.getConnectionState();
 	}
-
 }

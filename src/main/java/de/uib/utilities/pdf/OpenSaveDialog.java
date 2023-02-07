@@ -7,8 +7,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 
 public class OpenSaveDialog implements ActionListener {
 
@@ -16,10 +17,6 @@ public class OpenSaveDialog implements ActionListener {
 	JButton saveBtn;
 	Boolean saveAction;
 	de.uib.configed.gui.GeneralFrame dialogView;
-
-	public OpenSaveDialog() {
-		this("PDF erzeugen");
-	}
 
 	public OpenSaveDialog(String title) {
 
@@ -42,9 +39,8 @@ public class OpenSaveDialog implements ActionListener {
 		dialogView = new de.uib.configed.gui.GeneralFrame(null, Globals.APPNAME + " " + title, true); // modal
 		dialogView.addPanel(qPanel);
 		dialogView.setSize(new Dimension(400, 90));
-		dialogView.setLocationRelativeTo(Globals.mainFrame);
+		dialogView.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		dialogView.setVisible(true);
-
 	}
 
 	public Boolean getSaveAction() {

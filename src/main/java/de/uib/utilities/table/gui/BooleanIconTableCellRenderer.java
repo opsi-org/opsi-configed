@@ -59,33 +59,19 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 		label.setIcon(null);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 
-		Boolean val = null;
-
-		if (value != null) {
-			if (value instanceof Boolean)
-				val = (Boolean) value;
-
-			else // (value instanceof String)
-			{
-				if (((String) value).equalsIgnoreCase("true"))
-					val = true;
-				else if (((String) value).equalsIgnoreCase("false"))
-					val = false;
-			}
-		}
-
-		if (val == null) {
-
-			if (nullIcon != null)
+		if (value == null) {
+			if (nullIcon != null) {
 				label.setIcon(nullIcon);
+			}
 		} else {
-
-			if (val) {
-				if (trueIcon != null)
+			if (Boolean.TRUE.equals(value)) {
+				if (trueIcon != null) {
 					label.setIcon(trueIcon);
+				}
 			} else {
-				if (falseIcon != null)
+				if (falseIcon != null) {
 					label.setIcon(falseIcon);
+				}
 			}
 		}
 

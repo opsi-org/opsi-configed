@@ -96,7 +96,6 @@ public class SWAuditClientEntry
 		DB_COLUMNS.put(SWAuditEntry.LANGUAGE, DB_TABLE_NAME + "." + "language");
 		DB_COLUMNS.put(LICENCE_KEY, DB_TABLE_NAME + "." + "licenseKey");
 		DB_COLUMNS.put(LAST_MODIFICATION, DB_TABLE_NAME + "." + "lastseen");
-
 	}
 
 	public static final List<String> DB_COLUMN_NAMES = new ArrayList<>();

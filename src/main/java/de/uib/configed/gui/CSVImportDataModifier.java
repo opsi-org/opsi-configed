@@ -13,8 +13,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVParser;
 import de.uib.configed.csv.CSVReader;
@@ -99,7 +100,7 @@ public class CSVImportDataModifier {
 				message.append(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
 			}
 
-			FTextArea fInfo = new FTextArea(Globals.mainFrame, title + " (" + Globals.APPNAME + ") ", false,
+			FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title + " (" + Globals.APPNAME + ") ", false,
 					new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 400, 200);
 
 			fInfo.setMessage(message.toString());
@@ -142,7 +143,7 @@ public class CSVImportDataModifier {
 		return model;
 	}
 
-	private class CSVFileDataUpdater extends MapBasedUpdater {
+	private class CSVFileDataUpdater implements MapBasedUpdater {
 		private String csvFile;
 		private GenTableModel model;
 		private CSVFormat format;
@@ -178,6 +179,7 @@ public class CSVImportDataModifier {
 				writer.close();
 			} catch (IOException e) {
 				Logging.error("Unable to write to the CSV file", e);
+				return null;
 			}
 
 			return writer.toString();

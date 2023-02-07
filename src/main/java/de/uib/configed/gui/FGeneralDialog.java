@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -18,7 +19,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,8 +42,8 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected JPanel centerPanel;
 	protected JPanel southPanel;
 	protected IconButton jButton1 = new IconButton();
-	protected JButton jButton2 = new JButton();
-	protected JButton jButton3 = new JButton();
+	protected IconButton jButton2 = new IconButton();
+	protected IconButton jButton3 = new IconButton();
 	private int defaultResult = 1;
 	static final int OK = 1;
 	static final int NO = 2;
@@ -74,7 +74,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected GridLayout gridLayout1 = new GridLayout();
 	protected FlowLayout flowLayout1 = new FlowLayout();
 
-	protected java.awt.Window owner;
+	protected Window owner;
 
 	protected JProgressBar waitingProgressBar; // for use in derived classes
 
@@ -146,11 +146,12 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		this.owner = owner;
 		Logging.info(this, "created by constructor 3  owner " + owner);
 
-		construct(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout, addPane);
+		initFGeneralDialog(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
+				addPane);
 	}
 
-	private void construct(String title, String[] buttonList, Icon[] icons, int lastButtonNo, int preferredWidth,
-			int preferredHeight, boolean lazyLayout, JPanel addPane) {
+	private void initFGeneralDialog(String title, String[] buttonList, Icon[] icons, int lastButtonNo,
+			int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		registerWithRunningInstances();
 
 		setIconImage(Globals.mainIcon);
@@ -188,7 +189,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	public FGeneralDialog(java.awt.Window owner, String title, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
 		super(owner);
-		construct(title, buttonList, null, -1, preferredWidth, preferredHeight, false, null);
+		initFGeneralDialog(title, buttonList, null, -1, preferredWidth, preferredHeight, false, null);
 	}
 
 	public int getResult() {
@@ -461,12 +462,11 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
 		}
-
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	// MouseListener
 	@Override
@@ -490,6 +490,8 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		Logging.debug(this, "mousePressed");
 
 		preAction1();
+		preAction2();
+		preAction3();
 	}
 
 	@Override
@@ -507,6 +509,26 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		Logging.info(this, "postAction1");
 	}
 
+	// activated by mouse and key listener events
+	protected void preAction2() {
+		Logging.info(this, "preAction2");
+	}
+
+	// executed at the end of action listener event
+	protected void postAction2() {
+		Logging.info(this, "postAction2");
+	}
+
+	// activated by mouse and key listener events
+	protected void preAction3() {
+		Logging.info(this, "preAction3");
+	}
+
+	// executed at the end of action listener event
+	protected void postAction3() {
+		Logging.info(this, "postAction3");
+	}
+
 	// ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -514,12 +536,14 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			preAction1();
 			doAction1();
 			postAction1();
-		}
-
-		else if (e.getSource() == jButton2) {
+		} else if (e.getSource() == jButton2) {
+			preAction2();
 			doAction2();
+			postAction2();
 		} else if (e.getSource() == jButton3) {
+			preAction3();
 			doAction3();
+			postAction3();
 		}
 	}
 

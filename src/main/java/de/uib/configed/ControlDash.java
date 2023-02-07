@@ -117,8 +117,8 @@ public class ControlDash {
 					persist.getGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
 							PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT));
 
-			String[] options = new String[] { Configed.getResourceValue("Dash.reload"),
-					Configed.getResourceValue("Dash.close") };
+			String[] options = new String[] { Configed.getResourceValue("Dash.close"),
+					Configed.getResourceValue("Dash.reload") };
 
 			Icon[] icons = new Icon[] { Globals.createImageIcon("images/reload16.png", "reload"),
 					Globals.createImageIcon("images/cancel16.png", "cancel") };
@@ -132,6 +132,12 @@ public class ControlDash {
 				@Override
 				public void doAction1() {
 					Logging.debug(this, "doAction1");
+					super.doAction1();
+				}
+
+				@Override
+				public void doAction2() {
+					Logging.debug(this, "doAction2");
 					loadData();
 					Logging.info(this, "update data ");
 					panelDash.setShowDashOnLicencesActivation(persist.getGlobalBooleanConfigValue(
@@ -140,12 +146,6 @@ public class ControlDash {
 					panelDash.setShowDashOnStartup(
 							persist.getGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART,
 									PersistenceController.DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART));
-				}
-
-				@Override
-				public void doAction2() {
-					Logging.debug(this, "doAction2");
-					super.doAction2();
 				}
 
 				@Override
@@ -165,9 +165,10 @@ public class ControlDash {
 
 			fDash.checkAdditionalPane();
 
-			if (Globals.mainFrame != null) {
-				fDash.setLocation(Globals.mainFrame.getX() + Globals.LOCATION_DISTANCE_X,
-						Globals.mainFrame.getY() + Globals.LOCATION_DISTANCE_Y);
+			// TODO when is this panel needed?, put it on center of mainFrame
+			if (ConfigedMain.getMainFrame() != null) {
+				fDash.setLocation(ConfigedMain.getMainFrame().getX() + Globals.LOCATION_DISTANCE_X,
+						ConfigedMain.getMainFrame().getY() + Globals.LOCATION_DISTANCE_Y);
 			}
 
 		}

@@ -234,18 +234,16 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 	@Override
 	public String getColumnName(int col) {
-		String result = "";
 		switch (col) {
 		case 0:
-			result = Configed.getResourceValue("EditMapPanel.ColumnHeaderName");
-			break;
+			return Configed.getResourceValue("EditMapPanel.ColumnHeaderName");
+
 		case 1:
-			result = Configed.getResourceValue("EditMapPanel.ColumnHeaderValue");
-			break;
+			return Configed.getResourceValue("EditMapPanel.ColumnHeaderValue");
+
+		default:
+			return "";
 		}
-
-		return result;
-
 	}
 
 	@Override
@@ -258,21 +256,16 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		try {
 			key = keys.get(row);
 		} catch (Exception ex) {
-			result = "keys " + keys + " row " + row + " : " + ex.toString();
+			return "keys " + keys + " row " + row + " : " + ex.toString();
 		}
 
-		if (result != null)
-			return result;
-
-		switch (col) {
-		case 0:
+		if (col == 0)
 			result = key;
-			break;
-		case 1:
+
+		else if (col == 1) {
 			result = data.get(key);
 
 			// deliver the default value
-
 			if (result instanceof List) {
 				List li = (List) result;
 				if (!li.isEmpty() && li.get(0) == null && optionsMap != null) {
@@ -281,9 +274,6 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 							"getValueAt " + row + ", " + col + " result corrected for key  " + key + ": " + result);
 				}
 			}
-
-			break;
-
 		}
 
 		if (result == null)
@@ -301,10 +291,14 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		switch (c) {
 		case 0:
 			return "".getClass();
+
 		case 1:
 			return List.class;
+
+		default:
+
+			return Object.class;
 		}
-		return Object.class;
 
 	}
 

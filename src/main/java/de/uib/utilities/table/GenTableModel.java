@@ -25,7 +25,7 @@ import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.table.updates.TableUpdateCollection;
-import de.uib.utilities.table.updates.TableUpdateItemFactory;
+import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
 public class GenTableModel extends AbstractTableModel implements TableModelFunctions {
 
@@ -54,7 +54,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	protected boolean modelStructureValid;
 
 	protected TableProvider tableProvider;
-	protected TableUpdateItemFactory itemFactory;
+	protected TableUpdateItemInterface itemFactory;
 	protected int saveUpdatesSize;
 
 	protected final ChainedTableModelFilter chainedFilter;
@@ -65,7 +65,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
 
 	// maps for TableModelFunctions
-	protected KeyRepresenter<Integer> keyRepresenter;
 	protected Map<TableModelFunctions.PairOfInt, Map<Object, List<Object>>> functions;
 	protected Map<Integer, RowStringMap> primarykey2Rowmap;
 	protected Map<Integer, String> primarykeyTranslation;
@@ -80,7 +79,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	CursorrowObserved cursorrowObservable;
 
-	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemFactory itemFactory,
+	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemInterface itemFactory,
 			de.uib.utilities.table.provider.TableProvider dataProvider, int keyCol, int[] finalColumns,
 			TableModelListener l, de.uib.utilities.table.updates.TableUpdateCollection updates) {
 		this.keyCol = keyCol;
@@ -122,7 +121,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	}
 
-	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemFactory itemFactory,
+	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemInterface itemFactory,
 			de.uib.utilities.table.provider.TableProvider dataProvider, int keyCol, TableModelListener l,
 			de.uib.utilities.table.updates.TableUpdateCollection updates) {
 		this(itemFactory, dataProvider, keyCol, null, l, updates);
@@ -261,7 +260,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		int keycol = getKeyCol();
 
 		if (keycol < 0)
-			return null;
+			return new HashSet<>();
 
 		TreeSet<Object> result = new TreeSet<>();
 		for (int row = 0; row < getRowCount(); row++) {
@@ -418,16 +417,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			saveUpdatesSize = 0;
 		else
 			saveUpdatesSize = updates.size();
-	}
-
-	public void threadedReset(final de.uib.utilities.thread.ReadyFlag flag) {
-		new Thread() {
-			@Override
-			public void run() {
-				reset();
-				flag.ready = true;
-			}
-		}.start();
 	}
 
 	/**
@@ -790,9 +779,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			Logging.debug(this, "deleteRow values " + oldValues);
 			updates.add(itemFactory.produceDeleteItem(oldValues));
 
-			if (updatedRows.indexOf(selection[i]) > -1) {
-				Logging.debug(this, "deleteRows, remove from updatedRows  " + updatedRows.indexOf(i));
-				updatedRows.remove(selection[i]);
+			if (updatedRows.contains(selection[i])) {
+				Logging.debug(this, "deleteRows, remove from updatedRows  " + selection[i]);
+				updatedRows.remove((Integer) selection[i]);
 			}
 		}
 
@@ -888,12 +877,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		for (int row = 0; row < getRowCount(); row++) {
 			Object val1 = getValueAt(row, col1);
 
-			List<Object> associatedValues = result.get(val1);
-
-			if (associatedValues == null) {
-				associatedValues = new ArrayList<>();
-				result.put(val1, associatedValues);
-			}
+			List<Object> associatedValues = result.computeIfAbsent(val1, arg -> new ArrayList<>());
 
 			Object val2 = getValueAt(row, col2);
 			if (associatedValues.indexOf(val2) == -1)
@@ -975,7 +959,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	@Override
 	public java.util.Map<Integer, RowStringMap> getPrimarykey2Rowmap() {
 		if (keyCol < 0)
-			return null;
+			return new HashMap<>();
 
 		if (primarykey2Rowmap != null)
 			return primarykey2Rowmap;
@@ -991,45 +975,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	@Override
-	public java.util.Map<Integer, String> getPrimarykeyTranslation() {
-		if (keyCol < 0)
-			return null;
-
-		if (keyRepresenter == null)
-			return null;
-
-		if (primarykeyTranslation != null)
-			return primarykeyTranslation;
-
-		primarykeyTranslation = new HashMap<>();
-
-		for (int i = 0; i < rows.size(); i++) {
-			try {
-				Integer key = Integer.valueOf((String) getValueAt(i, keyCol));
-
-				primarykeyTranslation.put(key, keyRepresenter.represents(key, getPrimarykey2Rowmap().get(key)));
-			} catch (Exception ex) {
-				Logging.info(this, "getPrimarykeyTranslation()  " + getValueAt(i, keyCol) + " " + ex);
-			}
-		}
-
-		return primarykeyTranslation;
-	}
-
-	@Override
-	public Mapping<Integer, String> getPrimarykeyRepresentation() {
-		if (getPrimarykeyTranslation() == null)
-			return null;
-
-		if (primarykeyRepresentation != null)
-			return primarykeyRepresentation;
-
-		primarykeyRepresentation = new Mapping<>(primarykeyTranslation);
-
-		return primarykeyRepresentation;
-	}
-
-	@Override
 	public Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd, Mapping col2ndMapping) {
 		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1st, col2nd);
 
@@ -1039,7 +984,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		java.util.Map<Object, List<Object>> function = getFunction(col1st, col2nd);
 
 		if (function == null)
-			return null;
+			return new HashMap<>();
 
 		java.util.Map<Integer, Mapping<Integer, String>> xFunction = xFunctions.get(pair);
 		if (xFunction == null) {

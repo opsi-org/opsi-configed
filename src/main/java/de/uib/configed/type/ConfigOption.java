@@ -13,7 +13,6 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions
 
 // has a problem with type of defaultValues
 {
-
 	public static final String REFERENCE_ID = "configId";
 
 	public enum TYPE {
@@ -85,7 +84,7 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions
 			put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
 
 		else {
-			if ((Boolean) retrieved.get("multiValue"))
+			if (Boolean.TRUE.equals(retrieved.get("multiValue")))
 				put("selectionMode", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 			else
 				put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
@@ -98,7 +97,7 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions
 		else if (retrieved.get("editable") == null)
 			put("editable", false);
 		else
-			put("editable", (boolean) retrieved.get("editable"));
+			put("editable", retrieved.get("editable"));
 
 		if (type != TYPE.BoolConfig)
 			put("nullable", false);

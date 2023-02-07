@@ -48,7 +48,7 @@ import de.uib.utilities.ssh.SSHOutputCollector;
 /**
  * This Class handles SSHCommands.
  **/
-public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstractFacade {
+public class SSHCommandParameterMethods implements SSHCommandParameterInterface {
 
 	/** default parameter replace id beginns with <<< **/
 	public static final String REPLACEMENT_DEFAULT_1 = "<<<";
@@ -141,7 +141,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 	public String[] getParameterFormats() {
 		if (formats != null)
 			return formats;
-		return null;
+		return new String[0];
 	}
 
 	public boolean canceled;
@@ -154,7 +154,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		else if (caller instanceof SSHConnectTerminal)
 			outputDia = ((SSHConnectTerminal) caller).getDialog();
 		List<String> params = command.getParameterList();
-		if ((params != null) && (!params.isEmpty()))
+		if (!params.isEmpty())
 			for (String param : params) {
 				if (command.getCommandRaw().contains(param)) {
 					String[] splittedParameter = splitParameter(param);
@@ -165,7 +165,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 						Logging.debug(this, "parseParameter command " + command.getCommandRaw());
 						Logging.debug(this, "parseParameter param " + param);
 						Logging.debug(this, "parseParameter result " + result);
-						(command).setCommand(command.getCommandRaw().replace(param, result));
+						command.setCommand(command.getCommandRaw().replace(param, result));
 						Logging.debug(this, "parseParameter command " + command.getCommandRaw());
 					}
 				}
@@ -334,7 +334,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 			String separator) {
 		String formatedResult = "!!!Error!!!";
 		try {
-			strArr = replaceElements(strArr, beginEndElement);
+			replaceElements(strArr, beginEndElement);
 			Logging.info(this, "createFormattedDataSourceString[ ]  strArr " + Arrays.toString(strArr));
 			formatedResult = createStringOfArray(strArr, beginEndString, separator);
 			Logging.info(this, "createFormattedDataSourceString[ ] formated_result " + formatedResult);
@@ -344,13 +344,12 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 		return formatedResult;
 	}
 
-	private String[] replaceElements(String[] strArrToReplace, String beginEndOfElement) {
+	private void replaceElements(String[] strArrToReplace, String beginEndOfElement) {
 		for (int i = 0; i < strArrToReplace.length; i++) {
 			strArrToReplace[i] = strArrToReplace[i].replace(strArrToReplace[i],
 					beginEndOfElement + strArrToReplace[i] + beginEndOfElement);
 			Logging.info(this, "formatResult[] result[i] " + strArrToReplace[i]);
 		}
-		return strArrToReplace;
 	}
 
 	private String createStringOfArray(String[] strArrToReplace, String beginEndOfString, String separator) {
@@ -380,7 +379,7 @@ public class SSHCommandParameterMethods extends SSHCommandParameterMethodsAbstra
 
 	protected String getUserText(String text, Component dialog) {
 		if (dialog == null)
-			dialog = Globals.mainFrame;
+			dialog = ConfigedMain.getMainFrame();
 		Logging.debug(this, "getUserText text " + text);
 		final JTextField field = new JTextField();
 

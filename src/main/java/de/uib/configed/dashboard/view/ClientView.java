@@ -1,5 +1,6 @@
 package de.uib.configed.dashboard.view;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,8 +11,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import javax.swing.UIManager;
+
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.uib.configed.Configed;
+import de.uib.configed.dashboard.ComponentStyler;
 import de.uib.configed.dashboard.Dashboard;
+import de.uib.configed.dashboard.Helper;
 import de.uib.configed.dashboard.chart.ClientActivityComparison;
 import de.uib.configed.dashboard.chart.ClientLastSeenComparison;
 import de.uib.configed.dashboard.collector.Client;
@@ -31,13 +37,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class ClientView implements View {
 	@FXML
@@ -53,9 +63,37 @@ public class ClientView implements View {
 	@FXML
 	private Label moreThanThirtyDaysNumberLabel;
 	@FXML
-	private ChoiceBox<String> clientActivityStatusChoiceBox;
+	private Label clientActivityLabel;
 	@FXML
-	private ChoiceBox<String> clientLastSeenChoiceBox;
+	private Label clientLastSeenLabel;
+	@FXML
+	private BorderPane clientNumberArea;
+	@FXML
+	private BorderPane activeClientNumberArea;
+	@FXML
+	private BorderPane inactiveClientNumberArea;
+	@FXML
+	private BorderPane fourteenOrLowerDaysNumberArea;
+	@FXML
+	private BorderPane betweenFifteenAndThirtyDaysNumberArea;
+	@FXML
+	private BorderPane moreThanThirtyDaysNumberArea;
+	@FXML
+	private Text clientNumberTitleText;
+	@FXML
+	private Text activeClientNumberTitleText;
+	@FXML
+	private Text inactiveClientNumberTitleText;
+	@FXML
+	private Text fourteenOrLowerDaysNumberTitleText;
+	@FXML
+	private Text betweenFifteenAndThirtyDaysNumberTitleText;
+	@FXML
+	private Text moreThanThirtyDaysNumberTitleText;
+	@FXML
+	private ComboBox<String> clientActivityStatusComboBox;
+	@FXML
+	private ComboBox<String> clientLastSeenComboBox;
 	@FXML
 	private ListView<String> clientListView;
 	@FXML
@@ -74,6 +112,14 @@ public class ClientView implements View {
 	private ClientLastSeenComparison clientLastSeenComparison;
 	@FXML
 	private Button backButton;
+	@FXML
+	private AnchorPane clientViewAnchorPane;
+	@FXML
+	private VBox clientTableArea;
+	@FXML
+	private VBox clientChartArea;
+	@FXML
+	private FontAwesomeIconView backButtonIcon;
 
 	private JFXPanel fxPanel;
 	private Scene scene;
@@ -86,6 +132,7 @@ public class ClientView implements View {
 		Parent root = fxmlLoader.load();
 		this.scene = new Scene(root);
 		this.fxPanel = fxPanel;
+
 	}
 
 	private void loadData() {
@@ -114,8 +161,8 @@ public class ClientView implements View {
 		clientStatus.add(Configed.getResourceValue("Dashboard.client.active"));
 		clientStatus.add(Configed.getResourceValue("Dashboard.client.inactive"));
 		final ObservableList<String> status = new FilteredList<>(FXCollections.observableArrayList(clientStatus));
-		clientActivityStatusChoiceBox.setItems(status);
-		clientActivityStatusChoiceBox.getSelectionModel().selectFirst();
+		clientActivityStatusComboBox.setItems(status);
+		clientActivityStatusComboBox.getSelectionModel().selectFirst();
 
 		List<String> clientLastSeenData = new ArrayList<>();
 		clientLastSeenData.add(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"));
@@ -126,8 +173,8 @@ public class ClientView implements View {
 
 		final ObservableList<String> lastSeen = new FilteredList<>(
 				FXCollections.observableArrayList(clientLastSeenData));
-		clientLastSeenChoiceBox.setItems(lastSeen);
-		clientLastSeenChoiceBox.getSelectionModel().selectFirst();
+		clientLastSeenComboBox.setItems(lastSeen);
+		clientLastSeenComboBox.getSelectionModel().selectFirst();
 
 		final FilteredList<Client> filteredData = new FilteredList<>(FXCollections.observableArrayList(clients));
 
@@ -142,7 +189,7 @@ public class ClientView implements View {
 					.contains(clientSearchbarTextField.getText().toLowerCase(Locale.ROOT));
 		}, clientSearchbarTextField.textProperty()));
 		lastSeenFilter.bind(Bindings.createObjectBinding(() -> client -> {
-			if (clientLastSeenChoiceBox.getValue() == null || clientLastSeenChoiceBox.getValue()
+			if (clientLastSeenComboBox.getValue() == null || clientLastSeenComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
 			}
@@ -154,29 +201,29 @@ public class ClientView implements View {
 							: LocalDate.parse(client.getLastSeen().substring(0, 10), dtf);
 			final long days = ChronoUnit.DAYS.between(lastSeenDate, current);
 
-			return clientLastSeenChoiceBox.getValue()
+			return clientLastSeenComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")) && days <= 14
 					&& days >= 0
-					|| clientLastSeenChoiceBox.getValue()
+					|| clientLastSeenComboBox.getValue()
 							.equals(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"))
 							&& days > 14 && days <= 30
-					|| clientLastSeenChoiceBox.getValue()
+					|| clientLastSeenComboBox.getValue()
 							.equals(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")) && days > 30
-					|| clientLastSeenChoiceBox.getValue().equals(Configed.getResourceValue("Dashboard.lastSeen.never"))
+					|| clientLastSeenComboBox.getValue().equals(Configed.getResourceValue("Dashboard.lastSeen.never"))
 							&& client.getLastSeen().equals(Configed.getResourceValue("Dashboard.lastSeen.never"));
-		}, clientLastSeenChoiceBox.valueProperty()));
+		}, clientLastSeenComboBox.valueProperty()));
 		activeFilter.bind(Bindings.createObjectBinding(() -> client -> {
-			if (clientActivityStatusChoiceBox.getValue() == null || clientActivityStatusChoiceBox.getValue()
+			if (clientActivityStatusComboBox.getValue() == null || clientActivityStatusComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
 			}
 
 			return client.getReachable()
-					&& clientActivityStatusChoiceBox.getValue()
+					&& clientActivityStatusComboBox.getValue()
 							.equals(Configed.getResourceValue("Dashboard.client.active"))
-					|| !client.getReachable() && clientActivityStatusChoiceBox.getValue()
+					|| !client.getReachable() && clientActivityStatusComboBox.getValue()
 							.equals(Configed.getResourceValue("Dashboard.client.inactive"));
-		}, clientActivityStatusChoiceBox.valueProperty()));
+		}, clientActivityStatusComboBox.valueProperty()));
 
 		filteredData.predicateProperty()
 				.bind(Bindings.createObjectBinding(
@@ -195,7 +242,58 @@ public class ClientView implements View {
 
 	@Override
 	public void display() {
-		Platform.runLater(() -> fxPanel.setScene(scene));
-		loadData();
+		Platform.runLater(() -> {
+			fxPanel.setScene(scene);
+			loadData();
+			styleAccordingToSelectedTheme();
+		});
+	}
+
+	private void styleAccordingToSelectedTheme() {
+		String foregroundColor = Integer.toHexString(UIManager.getColor("Label.foreground").getRGB()).substring(2);
+		clientNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		activeClientNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		inactiveClientNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		fourteenOrLowerDaysNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		betweenFifteenAndThirtyDaysNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+		moreThanThirtyDaysNumberTitleText.setStyle("-fx-fill: #" + foregroundColor);
+
+		clientsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		activeClientsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		inactiveClientsNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		fourteenOrLowerDaysNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		betweenFifteenAndThirtyDaysNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+		moreThanThirtyDaysNumberLabel.setStyle("-fx-text-fill: #" + foregroundColor);
+
+		backButton.setStyle("-fx-text-fill: #" + foregroundColor);
+		Color iconColor = UIManager.getColor("Label.foreground");
+		backButtonIcon
+				.setFill(javafx.scene.paint.Color.rgb(iconColor.getRed(), iconColor.getGreen(), iconColor.getBlue()));
+
+		String lighterBackgroundColor = Integer
+				.toHexString(Helper.adjustColorBrightness(UIManager.getColor("Panel.background")).getRGB())
+				.substring(2);
+		String backgroundColor = Integer.toHexString(UIManager.getColor("Panel.background").getRGB()).substring(2);
+		fxPanel.setBackground(UIManager.getColor("Panel.background"));
+		clientViewAnchorPane.setStyle("-fx-background-color: #" + backgroundColor);
+		clientTableArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		clientChartArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+
+		String labelForegroundColor = Integer.toHexString(UIManager.getColor("Label.foreground").getRGB()).substring(2);
+		clientActivityLabel.setStyle("-fx-text-fill: #" + labelForegroundColor);
+		clientLastSeenLabel.setStyle("-fx-text-fill: #" + labelForegroundColor);
+
+		clientNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		activeClientNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		inactiveClientNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		fourteenOrLowerDaysNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		betweenFifteenAndThirtyDaysNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+		moreThanThirtyDaysNumberArea.setStyle("-fx-background-color: #" + lighterBackgroundColor);
+
+		ComponentStyler.styleTableViewComponent(clientTableView);
+		ComponentStyler.styleTextFieldComponent(clientSearchbarTextField);
+		ComponentStyler.styleComboBoxComponent(clientLastSeenComboBox);
+		ComponentStyler.styleComboBoxComponent(clientActivityStatusComboBox);
+
 	}
 }

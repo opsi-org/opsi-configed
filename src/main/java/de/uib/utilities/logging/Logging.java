@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,6 +15,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.utilities.thread.WaitCursor;
@@ -21,7 +24,7 @@ public class Logging implements LogEventSubject
 
 {
 	public static String logDirectoryName = null;
-	public static String logFilenameInUse = null;
+	private static String logFilenameInUse = null;
 
 	private static String logfileDelimiter = "configed";
 	private static String logfileMarker = null;
@@ -55,11 +58,10 @@ public class Logging implements LogEventSubject
 
 	private static String logFormat = "[%d] [%s] [%-15s] %s";
 
-	public static Integer logLevelConsole = LEVEL_WARNING;
-	public static Integer logLevelFile = LEVEL_WARNING;
+	private static Integer logLevelConsole = LEVEL_WARNING;
+	private static Integer logLevelFile = LEVEL_WARNING;
 
-	private static final java.text.SimpleDateFormat LOGGING_DATE_FORMAT = new java.text.SimpleDateFormat(
-			"yyyy-MM-dd HH:mm:ss.SSS");
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
 	public static final String levelText(int level) {
 		return LEVEL_TO_NAME.get(level);
@@ -74,12 +76,16 @@ public class Logging implements LogEventSubject
 	private static final int MAX_LISTED_ERRORS = 20;
 	private static List<String> errorList = new ArrayList<>(MAX_LISTED_ERRORS);
 
-	public static FShowList fErrors;
+	private static FShowList fErrors;
 
 	protected static List<LogEventObserver> logEventObservers = new ArrayList<>();
 
 	public static void setSuppressConsole() {
 		setLogLevelConsole(LEVEL_NONE);
+	}
+
+	public static Integer getLogLevelConsole() {
+		return logLevelConsole;
 	}
 
 	public static void setLogLevelConsole(int newLevel) {
@@ -88,6 +94,10 @@ public class Logging implements LogEventSubject
 		else if (newLevel > LEVEL_SECRET)
 			newLevel = LEVEL_SECRET;
 		logLevelConsole = newLevel;
+	}
+
+	public static Integer getLogLevelFile() {
+		return logLevelFile;
 	}
 
 	public static void setLogLevelFile(int newLevel) {
@@ -156,18 +166,20 @@ public class Logging implements LogEventSubject
 				}
 
 				for (int i = numberOfKeptLogFiles - 1; i > 0; i--) {
-					if (logFiles[i - 1].exists()) {
-						logFiles[i - 1].renameTo(logFiles[i]);
-					}
+					if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i]))
+						Logging.warning("renaming logfile failed for file: " + logFiles[i - 1]);
+
 				}
 
-				if (logFile.exists())
-					logFile.renameTo(logFiles[0]);
+				if (logFile.exists() && !logFile.renameTo(logFiles[0]))
+					Logging.warning("renaming logfile failed for file: " + logFiles[0]);
 			}
 
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename));
 			logFilenameInUse = logFilename;
-		} catch (Exception ex) {
+		} catch (
+
+		Exception ex) {
 			System.out.print(ex);
 			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
 		}
@@ -186,8 +198,7 @@ public class Logging implements LogEventSubject
 	}
 
 	private static String now() {
-
-		return LOGGING_DATE_FORMAT.format(new java.util.Date());
+		return formatter.format(LocalDateTime.now());
 	}
 
 	private static void addErrorToList(String mesg, String time) {
@@ -427,7 +438,7 @@ public class Logging implements LogEventSubject
 
 		final JFrame f;
 		if (parentFrame == null)
-			f = Globals.mainFrame;
+			f = ConfigedMain.getMainFrame();
 		else
 			f = parentFrame;
 

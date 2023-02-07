@@ -1,6 +1,7 @@
 package de.uib.configed;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -31,7 +33,7 @@ public class Globals {
 	}
 
 	public static final String VERSION = "4.2.20.1";
-	public static final String VERDATE = "2022-01-23";
+	public static final String VERDATE = "2023-01-23";
 
 	public static final String VERHASHTAG = "";
 
@@ -60,29 +62,24 @@ public class Globals {
 
 	public static class ProductPackageVersionSeparator {
 
+		public static final String FOR_DISPLAY = "-";
+		public static final String FOR_KEY = ";";
+
 		// private constructor to hide the implicit public one
 		private ProductPackageVersionSeparator() {
-		}
-
-		public static String forDisplay() {
-			return "-";
-		}
-
-		public static String forKey() {
-			return ";";
 		}
 
 		public static String formatKeyForDisplay(String key) {
 			if (key == null)
 				return null;
 
-			int i = key.indexOf(forKey());
+			int i = key.indexOf(FOR_KEY);
 			if (i == -1)
 				return key;
 
 			String result = key.substring(0, i);
 			if (i < key.length())
-				result = result + forDisplay() + key.substring(i + 1);
+				result = result + FOR_DISPLAY + key.substring(i + 1);
 
 			return result;
 		}
@@ -100,18 +97,16 @@ public class Globals {
 	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;
 	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
 
-	public static Boolean interpretAsBoolean(Object value) {
+	public static boolean interpretAsBoolean(Object value) {
 
 		if (value == null)
-			return null;
+			return false;
 
 		if (value instanceof Boolean) {
-
 			return (Boolean) value;
 		}
 
 		if (value instanceof Integer) {
-
 			int val = (Integer) value;
 			if (val == 1)
 				return true;
@@ -127,7 +122,7 @@ public class Globals {
 			String val = ((String) value).toLowerCase();
 
 			if (val.equals(""))
-				return null;
+				return false;
 
 			if (val.equals("true"))
 				return true;
@@ -230,45 +225,44 @@ public class Globals {
 	public static final Color INSTALLATION_STATUS_INSTALLED_COLOR = OK_COLOR;
 	public static final Color INSTALLATION_STATUS_UNKNOWN_COLOR = UNKNOWN_COLOR;
 
-	public static final Map<String, Color> SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS = new HashMap<>() {
-		{
-			put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
-			put("[0;error;0m", Globals.ACTION_COLOR);
-			put("[0;30;40m", PRIMARY_FOREGROUND_COLOR);
+	public static final Map<String, Color> SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS = new HashMap<>();
+	static {
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;error;0m", Globals.ACTION_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;30;40m", PRIMARY_FOREGROUND_COLOR);
 
-			put("[1;30;40m", PRIMARY_FOREGROUND_COLOR);
-			put("[0;40;40m", PRIMARY_FOREGROUND_COLOR);
-			put("[1;40;40m", PRIMARY_FOREGROUND_COLOR);
-			put("[0;31;40m", Globals.ACTION_COLOR);
-			put("[1;31;40m", Globals.ACTION_COLOR);
-			put("[0;41;40m", Globals.ACTION_COLOR);
-			put("[1;41;40m", Globals.ACTION_COLOR);
-			put("[0;32;40m", Globals.OK_COLOR);
-			put("[1;32;40m", Globals.OK_COLOR);
-			put("[0;42;40m", Globals.OK_COLOR);
-			put("[1;42;40m", Globals.OK_COLOR);
-			put("[0;33;40m", Globals.darkOrange);
-			put("[1;33;40m", Globals.darkOrange);
-			put("[0;43;40m", Globals.darkOrange);
-			put("[1;43;40m", Globals.darkOrange);
-			put("[0;34;40m", Globals.blue);
-			put("[1;34;40m", Globals.blue);
-			put("[0;44;40m", Globals.blue);
-			put("[1;44;40m", Globals.blue);
-			put("[0;35;40m", Color.MAGENTA);
-			put("[1;35;40m", Color.MAGENTA);
-			put("[0;45;40m", Color.MAGENTA);
-			put("[1;45;40m", Color.MAGENTA);
-			put("[0;36;40m", Color.CYAN);
-			put("[1;36;40m", Color.CYAN);
-			put("[0;46;40m", Color.CYAN);
-			put("[1;46;40m", Color.CYAN);
-			put("[0;37;40m", Globals.lightBlack);
-			put("[1;37;40m", Globals.lightBlack);
-			put("[0;47;40m", Globals.lightBlack);
-			put("[1;47;40m", Globals.lightBlack);
-		}
-	};
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;30;40m", PRIMARY_FOREGROUND_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;40;40m", PRIMARY_FOREGROUND_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;40;40m", PRIMARY_FOREGROUND_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;31;40m", Globals.ACTION_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;31;40m", Globals.ACTION_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;41;40m", Globals.ACTION_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;41;40m", Globals.ACTION_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;32;40m", Globals.OK_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;32;40m", Globals.OK_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;42;40m", Globals.OK_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;42;40m", Globals.OK_COLOR);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;33;40m", Globals.darkOrange);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;33;40m", Globals.darkOrange);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;43;40m", Globals.darkOrange);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;43;40m", Globals.darkOrange);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;34;40m", Globals.blue);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;34;40m", Globals.blue);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;44;40m", Globals.blue);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;44;40m", Globals.blue);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;35;40m", Color.MAGENTA);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;35;40m", Color.MAGENTA);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;45;40m", Color.MAGENTA);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;45;40m", Color.MAGENTA);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;36;40m", Color.CYAN);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;36;40m", Color.CYAN);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;46;40m", Color.CYAN);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;46;40m", Color.CYAN);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;37;40m", Globals.lightBlack);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;37;40m", Globals.lightBlack);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;47;40m", Globals.lightBlack);
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[1;47;40m", Globals.lightBlack);
+	}
 
 	public static final Color LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR = Globals.BACKGROUND_COLOR_4;
 	public static final Color LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR = Globals.BACKGROUND_COLOR_4;
@@ -417,10 +411,33 @@ public class Globals {
 	public static final int HFIRST_GAP = HGAP_SIZE * 3;
 	public static final int FIRST_LABEL_WIDTH = 250;
 
-	public static final String[] logtypes = new String[] { "clientconnect", "instlog", "userlogin", "bootimage",
+	private static final String[] logTypes = new String[] { "clientconnect", "instlog", "userlogin", "bootimage",
 			"opsiconfd" };
-	public static final int[] maxLogSizes = new int[] { 4 * 1024 * 1024, 8 * 1024 * 1024, 8 * 1024 * 1024, 0,
+
+	public static String[] getLogTypes() {
+		return logTypes;
+	}
+
+	public static String getLogType(int index) {
+		if (index < 0 || index >= logTypes.length)
+			return "";
+
+		else
+			return logTypes[index];
+	}
+
+	private static final int[] maxLogSizes = new int[] { 4 * 1024 * 1024, 8 * 1024 * 1024, 8 * 1024 * 1024, 0,
 			1 * 1024 * 1024 };
+
+	public static int getMaxLogSize(int index) {
+		if (index < 0 || index >= maxLogSizes.length) {
+			Logging.warning("error with index for maxLogSizes");
+			return -1;
+		}
+
+		else
+			return maxLogSizes[index];
+	}
 
 	// be given
 
@@ -449,25 +466,22 @@ public class Globals {
 		if (alphaCollator == null) {
 			alphaCollator = Collator.getInstance();
 
-			alphaCollator.setStrength(java.text.Collator.IDENTICAL);
-
+			alphaCollator.setStrength(Collator.IDENTICAL);
 		}
 		return alphaCollator;
 	}
 
-	public static java.awt.Container mainContainer; // transparent for appletHandling // masterFrame
-	public static javax.swing.JFrame mainFrame; // fixed
-	public static javax.swing.JFrame frame1; // can be changed
-	public static java.awt.Container container1; // can be changed
+	public static JFrame frame1; // can be changed
+	public static Container container1; // can be changed
 
-	public static final java.awt.Dimension helperFormDimension = new java.awt.Dimension(1100, 600);
+	public static final Dimension helperFormDimension = new Dimension(1100, 600);
 
 	public static final int LOCATION_DISTANCE_X = 150;
 	public static final int LOCATION_DISTANCE_Y = 150;
 
 	public static final int DIALOG_FRAME_DEFAULT_HEIGHT = 400;
 	public static final int DIALOG_FRAME_DEFAULT_WIDTH = 800;
-	public static final java.awt.Dimension dialogFrameDefaultSize = new java.awt.Dimension(DIALOG_FRAME_DEFAULT_WIDTH,
+	public static final Dimension dialogFrameDefaultSize = new Dimension(DIALOG_FRAME_DEFAULT_WIDTH,
 			DIALOG_FRAME_DEFAULT_HEIGHT);
 
 	public static String getResourceValue(String key) {
@@ -483,14 +497,12 @@ public class Globals {
 		if (s.length() > len)
 			return s;
 
-		StringBuilder buff = new StringBuilder(len);
-		for (int i = 0; i < s.length(); i++)
-			buff.append(s.charAt(i));
+		StringBuilder result = new StringBuilder(s);
 
 		for (int i = s.length(); i < len; i++)
-			buff.append(' ');
+			result.append(' ');
 
-		return buff.toString();
+		return result.toString();
 	}
 
 	private static final String IMAGE_BASE = "de/uib/configed/gui/";
@@ -765,11 +777,7 @@ public class Globals {
 	public static boolean checkCollection(Object source, String cName, Object c) {
 		boolean result = (c != null);
 		if (result) {
-			if (c instanceof Collection) {
-
-			} else if (c instanceof Map) {
-
-			} else {
+			if (!(c instanceof Collection) && !(c instanceof Map)) {
 				Logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
 				result = false;
 			}

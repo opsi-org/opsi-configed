@@ -54,7 +54,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	protected AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
 
-		AbstractTableModel tableModel = new AbstractTableModel() {
+		return new AbstractTableModel() {
 			@Override
 			public int getRowCount() {
 				return values.size();
@@ -73,8 +73,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 					return "" + descriptions.get(row);
 			}
 		};
-
-		return tableModel;
 	}
 
 	@Override
@@ -119,13 +117,11 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public void ensureRowIsVisible(int row) {
-		// jList.locationToIndex
-
-	}
+		/* Should do nothing in this class */}
 
 	@Override
 	public void setCursorRow(int row) {
-	}
+		/* Should do nothing in this class */}
 
 	@Override
 	public void setSelectedRow(int row) {
@@ -149,8 +145,9 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public int[] getUnfilteredSelection() {
-		if (unfilteredV == null || unfilteredSelection == null)
-			return null;
+		if (unfilteredV == null || unfilteredSelection == null) {
+			return new int[0];
+		}
 
 		return unfilteredSelection;
 	}

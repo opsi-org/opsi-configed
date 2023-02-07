@@ -50,7 +50,9 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.IconButton;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -71,20 +73,21 @@ import de.uib.utilities.thread.WaitCursor;
 
 public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
 		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
-	javax.swing.JFrame masterFrame = Globals.mainFrame;
+	javax.swing.JFrame masterFrame = ConfigedMain.getMainFrame();
 
+	// TODO are these used somewhere?
 	protected Comparator[] comparators;
 
-	protected javax.swing.JScrollPane scrollpane;
-	protected javax.swing.JTable theTable;
-	protected de.uib.utilities.table.GenTableModel tableModel;
+	protected JScrollPane scrollpane;
+	protected JTable theTable;
+	protected GenTableModel tableModel;
 
-	protected de.uib.configed.gui.IconButton buttonCommit;
-	protected de.uib.configed.gui.IconButton buttonCancel;
-	protected javax.swing.JLabel label;
+	protected IconButton buttonCommit;
+	protected IconButton buttonCancel;
+	protected JLabel label;
 
-	protected javax.swing.JLabel labelRowCount;
-	protected javax.swing.JLabel labelMarkedCount;
+	protected JLabel labelRowCount;
+	protected JLabel labelMarkedCount;
 	protected String textMarkedCount = "selected";
 	protected JPanel titlePane;
 
@@ -466,10 +469,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 								javax.swing.GroupLayout.PREFERRED_SIZE, maxTableWidth)// Short.MAX_VALUE)
 						.addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 100, maxTableWidth)
 						.addGroup(layout.createSequentialGroup()
-								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)));
@@ -485,10 +488,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 						.addComponent(scrollpane, 20, 100, Short.MAX_VALUE)
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
+								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
@@ -523,7 +526,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 
 			setSortOrder(sortDescriptor);
-			((javax.swing.DefaultRowSorter) getRowSorter()).sort();
+			((DefaultRowSorter) getRowSorter()).sort();
 			setSorter();
 
 			if (selVal != null) {
@@ -674,7 +677,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemDeleteRelation.setEnabled(false);
 				menuItemDeleteRelation.addActionListener(actionEvent -> {
 					if (getSelectedRowCount() == 0) {
-						JOptionPane.showMessageDialog(Globals.mainContainer,
+						JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 								Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
 								Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 
@@ -747,6 +750,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				addPopupItem(menuItemPDF);
 
 				break;
+
+			default:
+				Logging.warning(this, "no case found for popuptype in addPopupmenuStandardpart");
+				break;
 			}
 		}
 	}
@@ -791,7 +798,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
 
 		if (tableModel.getColumnCount() == 0)
-			return null;
+			return new ArrayList<>();
 
 		else if (sortDescriptor == null)
 		// default sorting
@@ -928,7 +935,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (sorter == null)
 			Logging.warning(this, "no sorter");
 
-		sorter.setComparator(modelCol, comparator);
+		else
+			sorter.setComparator(modelCol, comparator);
 	}
 
 	/**
@@ -1278,8 +1286,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void selectedRowChanged() {
-
-	}
+		/* To be implemented in subclass */}
 
 	public void setAwareOfSelectionListener(boolean b) {
 		Logging.debug(this, "setAwareOfSelectionListener  " + b);
@@ -1607,13 +1614,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-
-	}
+		/* Not needed */}
 
 	//
 	// ListSelectionListener
@@ -1661,42 +1666,42 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	// MouseListener, hook for subclasses
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
-	}
+		/* For implementation in subclass */}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-	}
+		/* For implementation in subclass */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
+		/* For implementation in subclass */}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-	}
+		/* For implementation in subclass */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
+		/* For implementation in subclass */}
 
 	// ComponentListener for table
-	@Override
-	public void componentHidden(ComponentEvent e) {
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent e) {
-	}
-
-	@Override
-	public void componentShown(ComponentEvent e) {
-	}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
 		showSelectedRow();
 	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		/* Not needed */}
 
 	// CursorrowObserver
 	@Override
@@ -1724,9 +1729,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(Globals.mainFrame);
+		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		externalView.setVisible(true);
 	}
-
 }

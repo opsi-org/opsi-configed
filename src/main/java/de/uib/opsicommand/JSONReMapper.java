@@ -84,10 +84,10 @@ public class JSONReMapper {
 	}
 
 	public static boolean checkForNotValidOpsiMethod(JSONObject retrieved) {
+		String errorFromResponse = getErrorFromResponse(retrieved);
 
-		if (retrieved != null && getErrorFromResponse(retrieved) != null
-				&& getErrorFromResponse(retrieved).indexOf("Opsi rpc error: Method") > -1
-				&& getErrorFromResponse(retrieved).endsWith("is not valid")) {
+		if (errorFromResponse != null && errorFromResponse.indexOf("Opsi rpc error: Method") > -1
+				&& errorFromResponse.endsWith("is not valid")) {
 			Logging.info("JSONReMapper: checkForNotValidOpsiMethod " + getErrorFromResponse(retrieved));
 			return false;
 		}
@@ -263,6 +263,11 @@ public class JSONReMapper {
 			Logging.error("JSONReMapper: Exception on getting list for key \"result\" " + ex.toString());
 		}
 
+		if (jsonList == null) {
+			Logging.error("JSONReMapper: Error on getting list for key \"result\": jsonList is null");
+			return new ArrayList<>();
+		}
+
 		JSONObject item = null;
 
 		try {
@@ -275,8 +280,9 @@ public class JSONReMapper {
 				result.add(mapItem);
 
 			}
-			assert jsonList.size() == result.size()
-					: " getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped " + result.size();
+			if (jsonList.size() != result.size())
+				Logging.warning(" getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped "
+						+ result.size());
 		} catch (Exception ex) {
 			Logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
 		}
@@ -315,8 +321,9 @@ public class JSONReMapper {
 				result.add(mapItem);
 
 			}
-			assert jsonList.size() == result.size()
-					: " getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped " + result.size();
+			if (jsonList.size() == result.size())
+				Logging.warning(" getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped "
+						+ result.size());
 		} catch (Exception ex) {
 			Logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
 		}
@@ -337,6 +344,11 @@ public class JSONReMapper {
 			Logging.error("JSONReMapper: Exception on getting list for key \"result\" " + ex.toString());
 		}
 
+		if (jsonList == null) {
+			Logging.error("JSONReMapper: Error on getting list for key \"result\": jsonList is null");
+			return null;
+		}
+
 		JSONObject item = null;
 
 		try {
@@ -349,8 +361,9 @@ public class JSONReMapper {
 				result.add(mapItem);
 
 			}
-			assert jsonList.size() == result.size()
-					: " getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped " + result.size();
+			if (jsonList.size() != result.size())
+				Logging.warning(" getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped "
+						+ result.size());
 		} catch (Exception ex) {
 			Logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
 		}

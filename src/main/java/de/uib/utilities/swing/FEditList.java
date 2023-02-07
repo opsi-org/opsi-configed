@@ -25,7 +25,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.CellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
@@ -36,10 +35,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.text.JTextComponent;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
+import de.uib.utilities.table.gui.SensitiveCellEditor;
 
 public class FEditList extends FEditObject implements ListSelectionListener, MouseListener {
 	private javax.swing.JScrollPane scrollpane;
@@ -51,14 +51,13 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	private JTextComponent tracker;
 
-	private ListModel<Object> initialModel;
 	private List<Object> initiallySelected;
 
 	protected Object selValue = "";
 
 	protected JPopupMenu popup;
 
-	private CellEditor celleditor;
+	private SensitiveCellEditor celleditor;
 
 	boolean singleSelectionMode;
 	boolean nullable;
@@ -71,7 +70,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 		this(tracker, null);
 	}
 
-	public FEditList(JTextComponent tracker, CellEditor celleditor) {
+	public FEditList(JTextComponent tracker, SensitiveCellEditor celleditor) {
 		super("");
 		this.tracker = tracker;
 		this.celleditor = celleditor;
@@ -102,7 +101,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 		buttonRemove = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
 				"images/list-clear.png", "images/list-clear.png", "images/list-clear_disabled.png", true);
-		buttonRemove.setPreferredSize(new Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
+		buttonRemove.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 	}
 
@@ -118,9 +117,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	}
 
 	public void setListModel(ListModel<Object> model) {
-
 		visibleList.setModel(model);
-		initialModel = model;
 	}
 
 	public void setSelectionMode(int selectionMode) {
@@ -243,13 +240,12 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	@Override
 	protected void cancel() {
-		setListModel(initialModel);
 		setSelectedValues(initiallySelected);
 
 		super.cancel();
 
 		if (celleditor != null)
-			celleditor.stopCellEditing();
+			celleditor.stopEditingAndSave();
 	}
 
 	@Override
@@ -261,7 +257,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 			cancel();
 		} else {
 			if (celleditor != null)
-				celleditor.stopCellEditing();
+				celleditor.stopEditingAndSave();
 
 			if (leaveOnCommit)
 				leave();
@@ -294,35 +290,35 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	// interface MouseListener
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		if (e.getClickCount() > 1)
 			setExtraFieldToListValueAt(e.getPoint());
-
 	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		/* Not needed */}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public boolean init() {

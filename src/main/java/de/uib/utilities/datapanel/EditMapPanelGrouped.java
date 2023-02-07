@@ -109,17 +109,11 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			public void action(int p) {
 				Logging.debug(this, "( EditMapPanelGrouped ) popup " + p);
 
-				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
+				if (p == PopupMenuTrait.POPUP_RELOAD)
 					reload();
 
-					break;
-
-				case PopupMenuTrait.POPUP_SAVE:
+				else if (p == PopupMenuTrait.POPUP_SAVE)
 					actor.saveData();
-					break;
-				}
-
 			}
 		};
 	}
@@ -174,6 +168,10 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 								break;
 							case PopupMenuTrait.POPUP_PDF:
 								createPDF();
+								break;
+
+							default:
+								Logging.warning(this, "no case found for JPopupMenu in definePopup");
 								break;
 							}
 

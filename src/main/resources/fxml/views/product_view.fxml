@@ -5,9 +5,9 @@
 <?import de.uib.configed.dashboard.chart.ProductStatusComparison?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
@@ -20,21 +20,21 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="684.0" prefWidth="1065.0" styleClass="primary-background" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="productViewAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="684.0" prefWidth="1065.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Button fx:id="backButton" mnemonicParsing="false" styleClass="btn" text="%Dashboard.goBackText">
-               <graphic>
-                  <FontAwesomeIconView glyphName="ANGLE_LEFT" />
-               </graphic>
                <font>
                   <Font size="16.0" />
                </font>
+               <graphic>
+                  <FontAwesomeIconView fx:id="backButtonIcon" glyphName="ANGLE_LEFT" />
+               </graphic>
             </Button>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                <children>
-                  <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                  <BorderPane fx:id="productNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
                      <center>
                         <Label fx:id="productsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                            <font>
@@ -43,10 +43,10 @@
                         </Label>
                      </center>
                      <bottom>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.productTitle" BorderPane.alignment="CENTER" />
+                        <Text fx:id="productNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.productTitle" BorderPane.alignment="CENTER" />
                      </bottom>
                   </BorderPane>
-                  <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                  <BorderPane fx:id="localbootProductNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
                      <center>
                         <Label fx:id="localbootProductsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                            <font>
@@ -55,10 +55,10 @@
                         </Label>
                      </center>
                      <bottom>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.localbootProductsTitle" BorderPane.alignment="CENTER" />
+                        <Text fx:id="localbootProductNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.localbootProductsTitle" BorderPane.alignment="CENTER" />
                      </bottom>
                   </BorderPane>
-                  <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                  <BorderPane fx:id="netbootProductNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
                      <center>
                         <Label fx:id="netbootProductsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                            <font>
@@ -67,10 +67,10 @@
                         </Label>
                      </center>
                      <bottom>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.netbootProductsTitle" BorderPane.alignment="CENTER" />
+                        <Text fx:id="netbootProductNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.netbootProductsTitle" BorderPane.alignment="CENTER" />
                      </bottom>
                   </BorderPane>
-                  <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                  <BorderPane fx:id="installedProductNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
                      <center>
                         <Label fx:id="installedProductsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                            <font>
@@ -79,10 +79,10 @@
                         </Label>
                      </center>
                      <bottom>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.products.installed" BorderPane.alignment="CENTER" />
+                        <Text fx:id="installedProductNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.products.installed" BorderPane.alignment="CENTER" />
                      </bottom>
                   </BorderPane>
-                  <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                  <BorderPane fx:id="failedProductNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
                      <center>
                         <Label fx:id="failedProductsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                            <font>
@@ -91,10 +91,10 @@
                         </Label>
                      </center>
                      <bottom>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.products.failed" BorderPane.alignment="CENTER" />
+                        <Text fx:id="failedProductNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.products.failed" BorderPane.alignment="CENTER" />
                      </bottom>
                   </BorderPane>
-                  <BorderPane prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
+                  <BorderPane fx:id="unusedProductNumberArea" prefHeight="52.0" prefWidth="322.0" styleClass="border-pane">
                      <center>
                         <Label fx:id="unusedProductsNumberLabel" text="0" wrapText="true" BorderPane.alignment="CENTER">
                            <font>
@@ -103,23 +103,27 @@
                         </Label>
                      </center>
                      <bottom>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.products.unused" BorderPane.alignment="CENTER" />
+                        <Text fx:id="unusedProductNumberTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="%Dashboard.products.unused" BorderPane.alignment="CENTER" />
                      </bottom>
                   </BorderPane>
                </children>
             </HBox>
-            <HBox spacing="20.0" styleClass="pane" VBox.vgrow="ALWAYS">
+            <HBox fx:id="productStatusArea" spacing="20.0" styleClass="pane" VBox.vgrow="ALWAYS">
                <children>
                   <VBox prefHeight="148.0" prefWidth="381.0" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <HBox spacing="10.0" alignment="CENTER">
+                        <HBox alignment="CENTER" spacing="10.0">
                            <children>
-                              <Label mnemonicParsing="false" text="%Dashboard.product.status" />
-                              <ChoiceBox fx:id="productStatusChoiceBox" prefWidth="150.0" />
+                              <Label fx:id="productStatusLabel" mnemonicParsing="false" text="%Dashboard.product.status" />
+                              <ComboBox fx:id="productStatusComboBox" prefWidth="150.0" HBox.hgrow="ALWAYS">
+                                 <cursor>
+                                    <Cursor fx:constant="NONE" />
+                                 </cursor>
+                              </ComboBox>
                               <TextField fx:id="productSearchbarTextField" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
-                        <TableView fx:id="productTableView" prefHeight="200.0" prefWidth="200.0">
+                        <TableView fx:id="productTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                           <columns>
                             <TableColumn fx:id="productIdTableColumn" prefWidth="75.0" text="%Dashboard.product.id" />
                             <TableColumn fx:id="productStatusTableColumn" prefWidth="75.0" text="%Dashboard.product.status" />
@@ -139,7 +143,7 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="292.0" prefWidth="1025.0" spacing="20.0" styleClass="hbox" VBox.vgrow="ALWAYS">
+            <HBox fx:id="productChartArea" prefHeight="292.0" prefWidth="1025.0" spacing="20.0" styleClass="hbox" VBox.vgrow="ALWAYS">
                <children>
                   <ProductComparison fx:id="productComparison" HBox.hgrow="ALWAYS" />
                   <ProductStatusComparison fx:id="productStatusComparison" HBox.hgrow="ALWAYS" />

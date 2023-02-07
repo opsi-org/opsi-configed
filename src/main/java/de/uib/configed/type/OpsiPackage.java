@@ -55,16 +55,16 @@ public class OpsiPackage implements Comparable {
 	public static final int TYPE_NETBOOT = 1;
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
-		this(productId, productVersion, packageVersion, productType, null); // compatibility to usages without locked
-																			// parameter
+		this(productId, productVersion, packageVersion, productType, false); // compatibility to usages without locked
+																				// parameter
 	}
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType,
-			Boolean locked) {
+			boolean locked) {
 		this.productId = productId;
 		this.productVersion = productVersion;
 		this.packageVersion = packageVersion;
-		this.versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
+		this.versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 		if (productType.equals(LOCALBOOT_PRODUCT_SERVER_STRING))
 			this.productType = 0;
@@ -73,7 +73,7 @@ public class OpsiPackage implements Comparable {
 		else
 			this.productType = -1;
 
-		if (locked != null && locked)
+		if (locked)
 			this.lockedText = IS_LOCKED_INFO;
 		else
 			this.lockedText = "";
@@ -112,7 +112,7 @@ public class OpsiPackage implements Comparable {
 	}
 
 	public static String produceVersionInfo(String productVersion, String packageVersion) {
-		return productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
+		return productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 	}
 
 	public int getProductType() {
@@ -140,10 +140,13 @@ public class OpsiPackage implements Comparable {
 		switch (type) {
 		case TYPE_LOCALBOOT:
 			return LOCALBOOT_PRODUCT_SERVER_STRING;
+
 		case TYPE_NETBOOT:
 			return NETBOOT_PRODUCT_SERVER_STRING;
+
+		default:
+			return "error";
 		}
-		return "error";
 	}
 
 	protected String buildRepresentation() {
@@ -164,7 +167,7 @@ public class OpsiPackage implements Comparable {
 
 	@Override
 	public boolean equals(Object o) {
-		return representation.equals(o.toString());
+		return o == null || representation.equals(o.toString());
 	}
 
 }

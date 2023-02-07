@@ -2,28 +2,19 @@ package de.uib.utilities.datastructure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Relation extends ArrayList<StringValuedRelationElement> {
 	protected final List<String> attributes;
-	protected final Set<String> attributeSet;
 
 	protected Map<String, Map<String, Relation>> functionByAttribute;
 
 	public Relation(List<String> attributes) {
 		super();
 		this.attributes = attributes;
-		attributeSet = new HashSet<>(attributes);
 
 		functionByAttribute = new HashMap<>();
-
-	}
-
-	public Set<String> getAttributeSet() {
-		return attributeSet;
 	}
 
 	public List<String> getAttributes() {
@@ -51,19 +42,11 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 
 		for (StringValuedRelationElement element : this) {
 			String valueTakenAsKey = element.get(attribute);
-			Relation valueList = function.get(valueTakenAsKey);
-
-			if (valueList == null) {
-				valueList = new Relation(attributes);
-				function.put(valueTakenAsKey, valueList);
-			}
+			Relation valueList = function.computeIfAbsent(valueTakenAsKey, arg -> new Relation(attributes));
 
 			valueList.add(element);
-
 		}
 
 		return function;
-
 	}
-
 }

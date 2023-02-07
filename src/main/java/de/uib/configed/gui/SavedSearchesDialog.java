@@ -13,12 +13,13 @@ import javax.swing.DefaultListModel;
 import javax.swing.JMenuItem;
 import javax.swing.event.ListSelectionEvent;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.swing.JMenuItemFormatted;
+import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.thread.WaitCursor;
 
 public class SavedSearchesDialog extends FEditList {
@@ -60,10 +61,9 @@ public class SavedSearchesDialog extends FEditList {
 		buttonCommit.setIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 		buttonCommit.setSelectedIcon(Globals.createImageIcon("images/executing_command_red_22.png", ""));
 		buttonCommit.setDisabledIcon(Globals.createImageIcon("images/execute_disabled.png", ""));
-		buttonCommit.setPreferredSize(new java.awt.Dimension(buttonWidth, Globals.BUTTON_HEIGHT));
+		buttonCommit.setPreferredSize(new java.awt.Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
 		buttonCancel.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.CancelButtonTooltip"));
-
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	@Override
 	protected void commit() {
-		result = null;
+		result = new LinkedList<>();
 
 		buttonCommit.setEnabled(false);
 		buttonCancel.setEnabled(false);
@@ -184,7 +184,7 @@ public class SavedSearchesDialog extends FEditList {
 
 	@Override
 	protected void cancel() {
-		result = null;
+		result = new LinkedList<>();
 
 		super.cancel();
 	}
@@ -207,17 +207,16 @@ public class SavedSearchesDialog extends FEditList {
 		manager.removeSearch(name);
 	}
 
-	// overwrite to implement
 	protected void reloadAction() {
-	}
+		/*override in subclass to implement */}
 
 	// overwrite to implement
 	protected void addElement() {
-	}
+		/*override in subclass to implement */}
 
 	// overwrite to implement
 	protected void editSearch(String name) {
-	}
+		/*override in subclass to implement */}
 
 	public void resetModel() {
 		Logging.info(this, "resetModel");
@@ -234,36 +233,34 @@ public class SavedSearchesDialog extends FEditList {
 			descMap.put(ele, savedSearches.get(ele).getDescription());
 		}
 
-		setCellRenderer(new de.uib.utilities.swing.list.ListCellRendererByIndex(valueMap, descMap, null, false, ""));
+		setCellRenderer(new ListCellRendererByIndex(valueMap, descMap, null, false, ""));
 
 		initSelection();
-
 	}
 
 	// interface MouseListener
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
 		if (e.getClickCount() > 1) {
 			commit();
 		}
-
 	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		/* Not needed */}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
+		/* Not needed */}
 
 }

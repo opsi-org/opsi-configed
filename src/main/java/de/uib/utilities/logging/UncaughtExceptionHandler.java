@@ -17,7 +17,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 
 			Logging.warning("Thread " + t + " (RunTime Error)  " + e);
 
-			if (e instanceof java.lang.OutOfMemoryError && !lastException.equals(e.toString())) {
+			if (e instanceof OutOfMemoryError && !lastException.equals(e.toString())) {
 				lastException = e.toString();
 				Logging.error("Error: out of memory");
 			}

@@ -123,15 +123,15 @@ public class OpsiMethodCall {
 					sb.append(Arrays.toString((Object[]) paramI));
 				}
 
-				else if (paramI instanceof java.util.Map) {
+				else if (paramI instanceof Map) {
 					sb.append("{");
 
-					for (Object key : ((java.util.Map) paramI).keySet()) {
+					for (Object key : ((Map) paramI).keySet()) {
 						sb.append("" + key + ": ");
-						if (((java.util.Map) paramI).get(key) instanceof Object[]) {
-							sb.append(Arrays.toString((Object[]) ((java.util.Map) paramI).get(key)));
+						if (((Map) paramI).get(key) instanceof Object[]) {
+							sb.append(Arrays.toString((Object[]) ((Map) paramI).get(key)));
 						} else {
-							sb.append("" + ((java.util.Map) paramI).get(key));
+							sb.append("" + ((Map) paramI).get(key));
 						}
 						sb.append(" ");
 					}

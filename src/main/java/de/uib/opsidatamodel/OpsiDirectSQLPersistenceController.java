@@ -148,13 +148,12 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 	private String sqlQuote(String r) {
 		String s = r.replace("'", "''");
-		String t = s.replace("\\", "\\\\");
-		return t;
+		return s.replace("\\", "\\\\");
 	}
 
 	@Override
 	public void cleanUpAuditSoftware() {
-		java.sql.Connection sqlConn = DbConnect.getConnection();
+		Connection sqlConn = DbConnect.getConnection();
 
 		TreeMap<String, Map<String, String>> rowsSoftwareOnClients = new TreeMap<>();
 

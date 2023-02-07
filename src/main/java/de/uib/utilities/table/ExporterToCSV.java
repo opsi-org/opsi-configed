@@ -87,7 +87,7 @@ public class ExporterToCSV extends ExportTable {
 					Logging.debug(this, "toCsv, handle row " + rowI + " selected " + theTable.isRowSelected(rowI)
 							+ " selectedOnly " + selectedOnly);
 
-					if (!selectedOnly || theTable.isRowSelected(rowI)) {
+					if (Boolean.TRUE.equals(!selectedOnly) || theTable.isRowSelected(rowI)) {
 						line = new StringBuilder();
 						for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
 							date1 = null; // reset
@@ -115,11 +115,10 @@ public class ExporterToCSV extends ExportTable {
 
 										String inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
 
-										{
-											line.append(STRING_DELIMITER);
-											line.append(inString);
-											line.append(STRING_DELIMITER);
-										}
+										line.append(STRING_DELIMITER);
+										line.append(inString);
+										line.append(STRING_DELIMITER);
+
 									}
 
 									else if (classNames.get(colI).equals("java.lang.Integer")) {

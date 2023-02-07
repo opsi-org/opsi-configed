@@ -3,7 +3,6 @@ package de.uib.utilities.datastructure;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
 public abstract class TableEntry extends LinkedHashMap<String, String> {
@@ -46,11 +45,5 @@ public abstract class TableEntry extends LinkedHashMap<String, String> {
 					+ ", class " + pureEntry.get(keyRetrieved).getClass());
 			put(key, "");
 		}
-
 	}
-
-	protected String encodeString(String s) {
-		return Configed.encodeStringFromService(s);
-	}
-
 }

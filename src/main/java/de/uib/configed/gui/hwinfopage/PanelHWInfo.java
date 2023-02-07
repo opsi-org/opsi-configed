@@ -205,6 +205,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						pdfExportTable.execute(null, false); // create pdf // no filename, onlyselectedRows=false
 
 						break;
+
+					default:
+						Logging.warning(this, "no case for PopupMenuTrait found in popupMenu");
+						break;
 					}
 				}
 			};
@@ -240,7 +244,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(Globals.mainFrame);
+		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		externalView.setVisible(true);
 	}
@@ -321,7 +325,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		String hwClass = (String) hwClassMapping.get(hwClassUI);
 
 		if (hwClass != null && reduceScanToByAuditClasses && !hwClassesForByAudit.contains(hwClass))
-			return null;
+			return new ArrayList<>();
 
 		List devices = (List) hwInfo.get(hwClass);
 		Map deviceInfo = node.getDeviceInfo();
@@ -339,6 +343,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					break;
 				}
 			} catch (NullPointerException ex) {
+				Logging.error("NullpointerException thrown on trying to get Values: ", ex);
 			}
 		}
 		List<String[]> data = new ArrayList<>();
@@ -636,16 +641,15 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				Map valuesMap = (Map) values.get(j);
 				String type = (String) valuesMap.get("Opsi");
 				String name = (String) valuesMap.get("UI");
-				if (!hwOpsiToUI.containsKey(type))
-					hwOpsiToUI.put(type, name);
+				hwOpsiToUI.putIfAbsent(type, name);
 			}
 		}
 		for (Object obj : hwConfig) {
 			Map hardwareMap = (Map) obj;
 			String hardwareName = (String) ((Map) hardwareMap.get("Class")).get("UI");
 			String hardwareOpsi = (String) ((Map) hardwareMap.get("Class")).get("Opsi");
-			if (!hwOpsiToUI.containsKey(hardwareOpsi))
-				hwOpsiToUI.put(hardwareOpsi, hardwareName);
+
+			hwOpsiToUI.putIfAbsent(hardwareOpsi, hardwareName);
 		}
 
 	}

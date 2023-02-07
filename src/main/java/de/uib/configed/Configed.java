@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
@@ -18,18 +19,17 @@ import javax.swing.UnsupportedLookAndFeelException;
 import de.uib.configed.gui.FTextArea;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.JSONthroughHTTP;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
+import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.PropertiesStore;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.logging.UncaughtExceptionHandler;
 import de.uib.utilities.savedstates.SavedStates;
 
 public class Configed {
-
-	public static de.uib.utilities.swing.FLoadingWaiter fProgress;
 
 	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
 
@@ -103,7 +103,7 @@ public class Configed {
 			new String[] { "--help", "", "Give this help" },
 			new String[] { "--loglevel L", "",
 					"Set logging level L, L is a number >= " + Logging.LEVEL_NONE + ", <= " + Logging.LEVEL_SECRET
-							+ " . DEFAULT: " + Logging.logLevelConsole },
+							+ " . DEFAULT: " + Logging.getLogLevelConsole() },
 			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code" },
 
 			// implemented in PersistenceController,
@@ -125,25 +125,25 @@ public class Configed {
 
 	};
 
-	public static final Charset serverCharset = Charset.forName("UTF-8");
+	public static final Charset serverCharset = StandardCharsets.UTF_8;
 	public static final String JAVA_VERSION = System.getProperty("java.version");
 	public static final String JAVA_VENDOR = System.getProperty("java.vendor", "");
 	public static final String SYSTEM_SSL_VERSION = System.getProperty("https.protocols");
-	public static String extraLocalizationFileName = null;
-	public static PropertiesStore extraLocalization;
-	public static boolean showLocalizationStrings = false;
 
-	public static ConfigedMain cm;
+	private static PropertiesStore extraLocalization;
+	private static boolean showLocalizationStrings = false;
+
+	private static ConfigedMain configedMain;
 
 	private static String locale = null;
 	private static String host = null;
 	public static String user = null;
 	private static String password = null;
-	private static int loglevelConsole = Logging.logLevelConsole;
-	private static int loglevelFile = Logging.logLevelFile;
+	private static int loglevelConsole = Logging.getLogLevelConsole();
+	private static int loglevelFile = Logging.getLogLevelFile();
 
-	public static String sshkey = null;
-	public static String sshkeypassphrase = null;
+	private static String sshKey = null;
+	private static String sshKeyPass = null;
 	private static String client = null;
 	private static String clientgroup = null;
 	private static Integer tab = null;
@@ -164,7 +164,7 @@ public class Configed {
 	public static String savedStatesLocationName;
 	public static final String SAVED_STATES_FILENAME = "configedStates.prop";
 
-	public static Integer refreshMinutes = 0;
+	private static Integer refreshMinutes = 0;
 
 	private static String paramHost;
 	private static String paramUser;
@@ -189,7 +189,7 @@ public class Configed {
 
 	// --------------------------------------------------------------------------------------------------------
 
-	private static String getYNforBoolean(Boolean b) {
+	private static String getYNforBoolean(boolean b) {
 		if (b)
 			return "y";
 		else
@@ -279,26 +279,26 @@ public class Configed {
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		cm = new ConfigedMain(paramHost, paramUser, paramPassword);
+		configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
 
-		SwingUtilities.invokeLater(() -> cm.init());
+		SwingUtilities.invokeLater(() -> configedMain.init());
 
 		try {
 
 			SwingUtilities.invokeAndWait(() -> {
 				if (paramClient != null || paramClientgroup != null) {
 					if (paramClientgroup != null) {
-						cm.setGroup(paramClientgroup);
+						configedMain.setGroup(paramClientgroup);
 					}
 
 					if (paramClient != null) {
-						cm.setClient(paramClient);
+						configedMain.setClient(paramClient);
 					}
 
 					Logging.info("set client " + paramClient);
 
 					if (paramTab != null) {
-						cm.setVisualViewIndex(paramTab);
+						configedMain.setVisualViewIndex(paramTab);
 					}
 				}
 			});
@@ -315,7 +315,9 @@ public class Configed {
 	public Configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
 			final String paramClient, final String paramClientgroup, final Integer paramTab) {
 
-		UncaughtExceptionHandler errorHandler = new UncaughtExceptionHandlerLocalized();
+		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
+
+		UncaughtExceptionHandlerLocalized errorHandler = new UncaughtExceptionHandlerLocalized();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
 		Logging.debug("starting " + getClass().getName());
@@ -346,24 +348,32 @@ public class Configed {
 		Logging.info("getLocales: " + existingLocales);
 		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
 
+		startWithLocale();
+	}
+
+	private static void setParamValues(String paramHost, String paramUser, String paramPassword, Integer paramTab,
+			String paramClient, String paramClientgroup) {
+
 		Configed.paramHost = paramHost;
 		Configed.paramUser = paramUser;
 		Configed.paramPassword = paramPassword;
 		Configed.paramTab = paramTab;
 		Configed.paramClient = paramClient;
 		Configed.paramClientgroup = paramClientgroup;
-
-		startWithLocale();
 	}
 
 	protected void revalidate() {
-		cm.initialTreeActivation();
+		configedMain.initialTreeActivation();
+	}
+
+	public static Integer getRefreshMinutes() {
+		return refreshMinutes;
 	}
 
 	protected static void processArgs(String[] args) {
 		Logging.debug("args " + Arrays.toString(args));
 
-		de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
+		JSONthroughHTTP.compressTransmission = true;
 
 		if (args.length == 2 && args[0].equals("--args")) {
 			args = args[1].split(";;");
@@ -469,23 +479,23 @@ public class Configed {
 					}
 					i = i + 1;
 				} else if (args[i].equals("--ssh-key")) {
-					sshkey = getArg(args, i);
+					sshKey = getArg(args, i);
 					i = i + 2;
 				} else if (args[i].equals("--ssh-passphrase")) {
-					sshkeypassphrase = getArg(args, i);
+					sshKeyPass = getArg(args, i);
 					i = i + 2;
 				} else if (args[i].equals("--gzip")) {
 
-					de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
+					JSONthroughHTTP.compressTransmission = true;
 					i = i + 1;
 
 					if (isValue(args, i)) {
 
 						if (args[i].equalsIgnoreCase("Y")) {
 
-							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = true;
+							JSONthroughHTTP.compressTransmission = true;
 						} else if (args[i].equalsIgnoreCase("N")) {
-							de.uib.opsicommand.JSONthroughHTTP.compressTransmission = false;
+							JSONthroughHTTP.compressTransmission = false;
 
 						} else {
 							usage();
@@ -553,7 +563,7 @@ public class Configed {
 					}
 					i = i + 2;
 				} else if (args[i].equals("--localizationfile")) {
-					extraLocalizationFileName = getArg(args, i);
+					String extraLocalizationFileName = getArg(args, i);
 
 					boolean success = false;
 
@@ -632,16 +642,6 @@ public class Configed {
 		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch)
 			Logging.setSuppressConsole();
-	}
-
-	public static String encodeStringFromService(String s) {
-
-		return s;
-
-	}
-
-	public static String encodeStringForService(String s) {
-		return s;
 	}
 
 	public static void endApp(int exitcode) {
@@ -871,10 +871,7 @@ public class Configed {
 			PersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host, user,
 					password);
 
-			de.uib.opsidatamodel.permission.UserConfigProducing up = new de.uib.opsidatamodel.permission.UserConfigProducing(
-					false, // boolean notUsingDefaultUser,
-
-					host, // String configserver,
+			UserConfigProducing up = new UserConfigProducing(false, host,
 					persist.getHostInfoCollections().getDepotNamesList(), persist.getHostGroupIds(),
 					persist.getProductGroups().keySet(),
 

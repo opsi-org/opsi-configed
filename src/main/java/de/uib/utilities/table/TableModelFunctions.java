@@ -28,11 +28,6 @@ public interface TableModelFunctions {
 
 	Map<Integer, RowStringMap> getPrimarykey2Rowmap();
 
-	Map<Integer, String> getPrimarykeyTranslation();
-	// the defining map for the Mapping of getPrimarykeyRepresentation
-
-	Mapping<Integer, String> getPrimarykeyRepresentation();
-
 	abstract Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd,
 			Mapping<Integer, String> col2ndMapping);
 

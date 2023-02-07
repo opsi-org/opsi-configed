@@ -69,7 +69,9 @@ public class LicenceEntry extends TreeMap<String, Object>
 			return RETAIL;
 		case CONCURRENT_SERVICE:
 			return CONCURRENT;
-
+		default:
+			Logging.warning(this, "no case found for servicetype in translateTypeFromService");
+			break;
 		}
 
 		Logging.warning(this, "illlegal servicetype " + servicetype);

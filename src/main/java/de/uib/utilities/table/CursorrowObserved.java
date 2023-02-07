@@ -9,23 +9,12 @@
 package de.uib.utilities.table;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import de.uib.utilities.logging.Logging;
 
 public class CursorrowObserved {
-	java.util.Set<CursorrowObserver> observers = new HashSet<>();
-
-	public void setChanged() {
-
-	}
-
-	public void clearChanged() {
-
-	}
-
-	public void notifyObservers() {
-
-	}
+	Set<CursorrowObserver> observers = new HashSet<>();
 
 	public void notifyObservers(int newrow) {
 		Logging.info(this, "notify Observers with " + newrow);

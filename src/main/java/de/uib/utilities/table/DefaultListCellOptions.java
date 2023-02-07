@@ -61,8 +61,8 @@ public class DefaultListCellOptions implements ListCellOptions {
 		List possibleValues = new ArrayList<>();
 		boolean editable = true;
 		boolean nullable = true;
-		return new DefaultListCellOptions(possibleValues, null, // defaultValues,
-				ListSelectionModel.SINGLE_SELECTION, editable, nullable, "");
+		return new DefaultListCellOptions(possibleValues, null, ListSelectionModel.SINGLE_SELECTION, editable, nullable,
+				"");
 	}
 
 	public static ListCellOptions getNewEmptyListCellOptionsMultiSelection() {
@@ -70,8 +70,8 @@ public class DefaultListCellOptions implements ListCellOptions {
 		List possibleValues = new ArrayList<>();
 		boolean editable = true;
 		boolean nullable = true;
-		return new DefaultListCellOptions(possibleValues, null, // defaultValues,
-				ListSelectionModel.MULTIPLE_INTERVAL_SELECTION, editable, nullable, "");
+		return new DefaultListCellOptions(possibleValues, null, ListSelectionModel.MULTIPLE_INTERVAL_SELECTION,
+				editable, nullable, "");
 	}
 
 	@Override

@@ -66,6 +66,7 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
+import de.uib.opsidatamodel.productstate.Config;
 import de.uib.opsidatamodel.productstate.InstallationInfo;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.LastAction;
@@ -345,11 +346,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		for (String clientId : selectedClients) {
 
 			// check if productstates exist
+			allClientsProductStates.putIfAbsent(clientId, new HashMap<>());
 			Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
-			if (productStates == null) {
-				productStates = new HashMap<>();
-				allClientsProductStates.put(clientId, productStates);
-			}
 
 			// check if products for clients exist
 			for (int j = 0; j < productsV.size(); j++) {
@@ -403,9 +401,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		return resultValue;
 	}
 
-	private Boolean preparedColumnIsEditable(int j) {
+	private boolean preparedColumnIsEditable(int j) {
 		if (editablePreparedColumns == null || j < 0 || j >= editablePreparedColumns.length)
-			return null;
+			return false;
 
 		if (Globals.isGlobalReadOnly())
 			return false;
@@ -535,17 +533,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		Logging.debug(this,
 				"setInstallationInfo for product, client, value " + product + ", " + clientId + ", " + value);
 
-		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.get(clientId);
-		if (changedStatesForClient == null) {
-			changedStatesForClient = new HashMap<>();
-			collectChangedStates.put(clientId, changedStatesForClient);
-		}
+		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.computeIfAbsent(clientId,
+				arg -> new HashMap<>());
 
-		Map<String, String> changedStatesForProduct = changedStatesForClient.get(product);
-		if (changedStatesForProduct == null) {
-			changedStatesForProduct = new HashMap<>();
-			changedStatesForClient.put(product, changedStatesForProduct);
-		}
+		Map<String, String> changedStatesForProduct = changedStatesForClient.computeIfAbsent(product,
+				arg -> new HashMap<>());
 
 		// reverse from putting together the values in ProductState
 
@@ -577,13 +569,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		if (changeEventCount2product2request == null)
 			changeEventCount2product2request = new HashMap<>();
 
-		Map<String, String> product2request = changeEventCount2product2request.get(onGoingCollectiveChangeEventCount);
-
-		if (product2request == null) {
-			product2request = new HashMap<>();
-			changeEventCount2product2request.put(onGoingCollectiveChangeEventCount, product2request);
-
-		}
+		Map<String, String> product2request = changeEventCount2product2request
+				.computeIfAbsent(onGoingCollectiveChangeEventCount, arg -> new HashMap<>());
 
 		Logging.debug(this, "checkForContradictingAssignments === product2request " + product2request);
 
@@ -614,7 +601,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					new Thread() {
 						@Override
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, infoOfChange,
+							javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), infoOfChange,
 									Configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -644,7 +631,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					new Thread() {
 						@Override
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame, errorInfo,
+							javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo,
 									Configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -661,17 +648,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	private void setChangedState(String clientId, String product, String stateType, String state) {
-		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.get(clientId);
-		if (changedStatesForClient == null) {
-			changedStatesForClient = new HashMap<>();
-			collectChangedStates.put(clientId, changedStatesForClient);
-		}
+		Map<String, Map<String, String>> changedStatesForClient = collectChangedStates.computeIfAbsent(clientId,
+				arg -> new HashMap<>());
 
-		Map<String, String> changedStatesForProduct = changedStatesForClient.get(product);
-		if (changedStatesForProduct == null) {
-			changedStatesForProduct = new HashMap<>();
-			changedStatesForClient.put(product, changedStatesForProduct);
-		}
+		Map<String, String> changedStatesForProduct = changedStatesForClient.computeIfAbsent(product,
+				arg -> new HashMap<>());
 
 		Logging.info(this, "accumulateProductRequests4event");
 		checkForContradictingAssignments(clientId, product, stateType, state);
@@ -697,7 +678,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	public boolean infoIfNoClientsSelected() {
 
 		if (selectedClients.length == 0) {
-			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
+			javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected"),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected.title"),
 					javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -739,7 +720,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				lines.append(p);
 			}
 
-			final de.uib.configed.gui.FShowList fMissingProducts = new de.uib.configed.gui.FShowList(Globals.mainFrame,
+			final de.uib.configed.gui.FShowList fMissingProducts = new de.uib.configed.gui.FShowList(
+					ConfigedMain.getMainFrame(),
 					Globals.APPNAME + ": "
 							+ Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"),
 					true, new String[] { "ok" }, 400, 300);
@@ -765,7 +747,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				products.append("\n");
 			}
 
-			javax.swing.JOptionPane.showMessageDialog(Globals.mainFrame,
+			javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("InstallationStateTableModel.missingImplementationForActionRequest")
 							+ products,
 					Configed.getResourceValue(
@@ -787,18 +769,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	protected void setActionRequest(ActionRequest ar, String productId, String clientId) {
 
-		Map<String, Map<String, String>> productStates = allClientsProductStates.get(clientId);
-		if (productStates == null) {
-			productStates = new HashMap<>();
-			allClientsProductStates.put(clientId, productStates);
-		}
+		Map<String, Map<String, String>> productStates = allClientsProductStates.computeIfAbsent(clientId,
+				arg -> new HashMap<>());
 
-		Map<String, String> rowMapForaClient = productStates.get(productId);
-		if (rowMapForaClient == null) {
-			rowMapForaClient = new HashMap<>();
-			productStates.put(productId, rowMapForaClient);
-		}
-		rowMapForaClient.put(ProductState.KEY_ACTION_REQUEST, ar.toString());
+		productStates.computeIfAbsent(productId, arg -> new HashMap<>()).put(ProductState.KEY_ACTION_REQUEST,
+				ar.toString());
 
 	}
 
@@ -1006,8 +981,8 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 							String requiredStatusS = InstallationStatus.getLabel(requiredIS);
 							Logging.debug(this, " requiredStatusS " + requiredStatusS);
-							String neededAction = de.uib.opsidatamodel.productstate.Config
-									.getInstance().requiredActionForStatus.get(requiredStatusS);
+
+							String neededAction = Config.requiredActionForStatus.get(requiredStatusS);
 							Logging.debug(this, " needed action therefore " + neededAction);
 
 							requiredAR = ActionRequest.getVal(neededAction);
@@ -1174,9 +1149,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	@Override
 	public String getLastStateChange(int row) {
-		String actualProduct = productsV.get(row);
+		String product = productsV.get(row);
 
-		return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
+		return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(product);
 	}
 
 	protected void setOnGoingCollectiveChangeCount() {
@@ -1192,7 +1167,6 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	private Object retrieveValueAt(int row, int displayCol) {
 
-		Object result = null;
 		actualProduct = productsV.get(row);
 
 		if (displayCol >= indexPreparedColumns.length)
@@ -1202,89 +1176,68 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		switch (col) {
 		case 0:
-			result = actualProduct;
-			break;
+			return actualProduct;
 
 		case 1:
-			result = globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
-
-			// there we have not got the value
-			break;
+			return globalProductInfos.get(actualProduct).get(ProductState.KEY_PRODUCT_NAME);
 
 		case 2:
-			result = combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).get(actualProduct);
 
 		case 3:
 			InstallationStatus is = InstallationStatus.produceFromLabel(
 					combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct));
-			result = InstallationStatus.getDisplayLabel(is.getVal());
-			break;
+			return InstallationStatus.getDisplayLabel(is.getVal());
 
 		case 4:
-			result = combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).get(actualProduct);
 
 		case 5:
-			result = combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_ACTION_PROGRESS).get(actualProduct);
 
 		case 6:
-			result = combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_ACTION_RESULT).get(actualProduct);
 
 		case 7:
-			result = combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_LAST_ACTION).get(actualProduct);
 
 		case 8:
 
 			ActionRequest ar = ActionRequest
 					.produceFromLabel(combinedVisualValues.get(ProductState.KEY_ACTION_REQUEST).get(actualProduct));
-			result = ActionRequest.getDisplayLabel(ar.getVal());
-
-			break;
+			return ActionRequest.getDisplayLabel(ar.getVal());
 
 		case 9:
-			result = combinedVisualValues.get(ProductState.KEY_PRODUCT_PRIORITY).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_PRODUCT_PRIORITY).get(actualProduct);
 
 		case 10:
-			result = combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
-
-			break;
+			return combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
 
 		case 11:
-			result = productNamesInDeliveryOrder.indexOf(actualProduct); // ProductState.KEY_position
-
-			break;
+			return productNamesInDeliveryOrder.indexOf(actualProduct); // ProductState.KEY_position
 
 		case 12:
 			String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
 					.get(de.uib.opsidatamodel.productstate.ProductState.KEY_VERSION_INFO);
-			result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
+			String result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
 			if (result != null && !(result.equals("")) && serverProductVersion != null
 					&& !(serverProductVersion.equals(result)))
-				result = UNEQUAL_ADD_STRING + result;
-
-			break;
+				return UNEQUAL_ADD_STRING + result;
+			else
+				return result;
 
 		case 13:
-			result = combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
 
 		case 14:
-			result = combinedVisualValues.get(ProductState.KEY_PACKAGE_VERSION).get(actualProduct);
-			break;
+			return combinedVisualValues.get(ProductState.KEY_PACKAGE_VERSION).get(actualProduct);
 
 		case 15:
-			result = combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
+			return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(actualProduct);
 
-			break;
-
+		default:
+			return null;
 		}
-
-		return result;
 	}
 
 	/*
@@ -1321,9 +1274,12 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	protected void changeValueAt(Object value, int row, int col) {
-		String cl = "nul";
-		if (value != null)
-			cl = value.getClass().toString();
+		if (value == null) {
+			Logging.error(this, "value to set is null");
+			return;
+		}
+
+		String cl = value.getClass().toString();
 
 		Logging.debug(this, "actual product " + actualProduct + ", setting value at " + row + "," + col + " to " + value
 				+ " (an instance of " + cl + ")");
@@ -1335,7 +1291,13 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		if (combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct) == null)
 			return; // not a product in our depot
 
-		if (!((String) retrieveValueAt(row, col)).equals(value)) {
+		Object retrieveValue = retrieveValueAt(row, col);
+		if (retrieveValue == null) {
+			Logging.error(this, "value received from retrieveValueAt(...) is null");
+			return;
+		}
+
+		if (!((String) retrieveValue).equals(value)) {
 			if (indexPreparedColumns[col] == preparedColumns.indexOf(InstallationStatus.KEY)) {
 				combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, InstallationStatus.KEY, (String) value);

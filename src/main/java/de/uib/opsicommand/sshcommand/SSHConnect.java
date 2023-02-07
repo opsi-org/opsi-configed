@@ -28,7 +28,6 @@ import com.jcraft.jsch.Session;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -53,6 +52,7 @@ public class SSHConnect {
 	protected ConfigedMain main;
 
 	SSHConnectionInfo connectionInfo = null;
+	private static int successfulConnectObservedCount = 0;
 
 	/**
 	 * Instanz for SSH connection {@link de.uib.configed.ConfigedMain}
@@ -101,9 +101,8 @@ public class SSHConnect {
 			result = true;
 
 		Logging.info(this, "isConnected session.isConnected " + result);
-		if (!result && SSHCommandFactory.successfulConnectObservedCount > 0)
-			Logging.info("No SSH connection after successful connections: "
-					+ SSHCommandFactory.successfulConnectObservedCount + "\n"
+		if (!result && successfulConnectObservedCount > 0)
+			Logging.info("No SSH connection after successful connections: " + successfulConnectObservedCount + "\n"
 					+ "check server authentication configuration");
 		return result;
 	}
@@ -140,7 +139,7 @@ public class SSHConnect {
 			return "";
 		}
 		if (dialog == null)
-			dialog = Globals.mainFrame;
+			dialog = ConfigedMain.getMainFrame();
 		Logging.debug(this, "getSudoPass dialog " + dialog);
 		final JPasswordField passwordField = new JPasswordField(10);
 		passwordField.setEchoChar('*');
@@ -252,18 +251,18 @@ public class SSHConnect {
 			Logging.info(this, "we did connect " + connectionInfo);
 			Logging.info(this, "connect " + connectionInfo);
 
-			SSHCommandFactory.successfulConnectObservedCount++;
+			successfulConnectObservedCount++;
 
 			return true;
 		} catch (com.jcraft.jsch.JSchException authfail) {
 			retriedTimesAuth = retry(retriedTimesAuth, authfail);
 			if (retriedTimesAuth >= 2) {
 				Logging.warning(this, "connect Authentication failed. " + authfail);
-				if (SSHCommandFactory.successfulConnectObservedCount > 0)
+				if (successfulConnectObservedCount > 0)
 
 					Logging.error("authentication failed after successful authentifications: "
-							+ SSHCommandFactory.successfulConnectObservedCount + "\n" + "\n"
-							+ "check server authentication configuration" + "\n" + "\n");
+							+ successfulConnectObservedCount + "\n" + "\n" + "check server authentication configuration"
+							+ "\n" + "\n");
 
 				return false;
 

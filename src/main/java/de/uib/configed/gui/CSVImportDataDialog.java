@@ -24,6 +24,7 @@ import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
 import de.uib.configed.csv.CSVParser;
@@ -50,10 +51,11 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private CSVImportDataModifier modifier;
 
 	public CSVImportDataDialog(CSVImportDataModifier modifier, CSVFormat format) {
-		super(Globals.mainFrame, Configed.getResourceValue("CSVImportDataDialog.title"), true,
-				new String[] { "ok", "cancel" },
-				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "") },
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
+						Configed.getResourceValue("FGeneralDialog.ok") },
+				new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""),
+						Globals.createImageIcon("images/checked_withoutbox_blue14.png", "") },
 				2, 1000, 600, true, null);
 
 		this.format = format;
@@ -156,6 +158,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			maskFormatter = new MaskFormatter("*");
 		} catch (ParseException e) {
 			Logging.debug(this, "INVALID MASK");
+			return null;
 		}
 		maskFormatter.setValidCharacters(",.-|?@~!$%&/\\=_:;#+*");
 		maskFormatter.setAllowsInvalid(false);
@@ -343,14 +346,11 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			break;
 		}
 
-		switch (format.getStringSeparator()) {
-		case '\'':
+		char separator = format.getStringSeparator();
+		if (separator == '\'')
 			stringSeparatorOptions.setSelectedItem('\'');
-			break;
-		case '"':
+		else if (separator == '"')
 			stringSeparatorOptions.setSelectedItem('"');
-			break;
-		}
 	}
 
 	protected JPanel initPanel() {
@@ -371,7 +371,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	private class InputListener implements DocumentListener {
 		public void performAction() {
-		}
+			/* Should be overridden in actual implementation */}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
@@ -385,7 +385,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-		}
+			/* Not needed */}
 	}
 
 	public CSVImportDataModifier getModifier() {

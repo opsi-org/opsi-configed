@@ -14,8 +14,8 @@ public class SelectData {
 	}
 
 	public SelectData(Object data, DataType type) {
-		dataType = type;
 		dataObject = data;
+		dataType = type;
 
 		Logging.debug(this, "got data, type " + data + ", " + type);
 

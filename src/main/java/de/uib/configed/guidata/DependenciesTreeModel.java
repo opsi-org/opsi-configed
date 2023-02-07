@@ -42,7 +42,7 @@ public class DependenciesTreeModel {
 	private List<String> productList;
 	private Map<String, Integer> productMap;
 
-	private String productId = "";
+	private String mainProductId = "";
 
 	private boolean graphIsInitialized;
 
@@ -91,22 +91,22 @@ public class DependenciesTreeModel {
 	}
 
 	public void setActualProduct(String depotId, String productId) {
-		this.productId = productId;
+		this.mainProductId = productId;
 
 		initGraph(depotId);
 	}
 
 	public DefaultMutableTreeNode getTreeNodeForProductDependencies(boolean benoetigt) {
 
-		Logging.debug(this, productId + "-tree wird erstellt");
+		Logging.debug(this, mainProductId + "-tree wird erstellt");
 
-		if (graphIsInitialized && productList.contains(productId)) {
+		if (graphIsInitialized && productList.contains(mainProductId)) {
 			DefaultMutableTreeNode mainNode;
 
 			if (benoetigt)
-				mainNode = graph.getTreeDerBenoetigtenProdukte(productId);
+				mainNode = graph.getTreeDerBenoetigtenProdukte(mainProductId);
 			else
-				mainNode = graph.getTreeDerAbhaengigenProdukte(productId);
+				mainNode = graph.getTreeDerAbhaengigenProdukte(mainProductId);
 
 			// Return only if taller than null
 			if (mainNode.getChildCount() > 0)

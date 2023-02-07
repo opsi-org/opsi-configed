@@ -30,12 +30,12 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 
 		if (cell instanceof JComponent) {
 			JComponent jc = (JComponent) cell;
-			{
-				if (value != null) {
-					String val1 = "" + modifyValue(value);
-					jc.setToolTipText(val1);
-				}
+
+			if (value != null) {
+				String val1 = "" + modifyValue(value);
+				jc.setToolTipText(val1);
 			}
+
 		}
 
 		return cell;

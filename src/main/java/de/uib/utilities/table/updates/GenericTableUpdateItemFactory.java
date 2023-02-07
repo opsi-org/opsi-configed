@@ -10,7 +10,7 @@ package de.uib.utilities.table.updates;
 
 import java.util.List;
 
-public class GenericTableUpdateItemFactory extends TableUpdateItemFactory {
+public class GenericTableUpdateItemFactory implements TableUpdateItemInterface {
 	protected List<String> columnNames;
 	protected List<String> classNames;
 	protected int keyCol;

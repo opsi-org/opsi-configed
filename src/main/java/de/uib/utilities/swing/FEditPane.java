@@ -50,7 +50,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private JTextPane textpane;
 
 	protected LinkSearcher searcher;
-	protected Highlighter highlighter;
 	protected de.uib.utilities.script.CmdLauncher cmdLauncher;
 
 	protected String[] linesplits;
@@ -90,7 +89,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 		searcher = new LinkSearcher(textpane);
 		searcher.setCaseSensitivity(true);
-		highlighter = new UnderlineHighlighter(null);
+		Highlighter highlighter = new UnderlineHighlighter(null);
 		textpane.setHighlighter(highlighter);
 		setDataChanged(false);
 
@@ -256,24 +255,24 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	// MouseMotionListener
 	@Override
 	public void mouseDragged(MouseEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
@@ -320,6 +319,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			}
 
 			String content = null;
+
 			try {
 				Document d = comp.getDocument();
 
@@ -328,7 +328,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 				else
 					content = d.getText(0, d.getLength()).toLowerCase();
 			} catch (BadLocationException e) {
-				// Cannot happen
+				Logging.warning(this, "Exception thrown when getting Document: " + e);
+				return -1;
 			}
 
 			linesplits = content.split("\n");

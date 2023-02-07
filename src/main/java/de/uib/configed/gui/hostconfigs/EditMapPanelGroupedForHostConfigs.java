@@ -24,8 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.TreePath;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.opsicommand.Executioner;
@@ -83,6 +84,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					deleteUser();
 					break;
 
+				default:
+					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpathes");
+					break;
 				}
 
 			}
@@ -105,7 +109,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				case PopupMenuTrait.POPUP_ADD:
 					addUser();
 					break;
-
+				default:
+					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpath");
+					break;
 				}
 
 			}
@@ -135,6 +141,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					deleteUser();
 					break;
 
+				default:
+					Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepathes");
+					break;
 				}
 
 			}
@@ -158,6 +167,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 					addRole();
 					break;
 
+				default:
+					Logging.warning(this, "no case for PopupMenuTrait found in popupForRolepath");
+					break;
 				}
 
 			}
@@ -304,7 +316,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				if (key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
 					result = true;
 
-					JOptionPane.showMessageDialog(Globals.mainFrame,
+					JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 							Configed.getResourceValue("EditMapPanelGrouped.noManualEditing"), key,
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
@@ -331,7 +343,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 							if (obeyToRole) {
 								result = true;
-								JOptionPane.showMessageDialog(Globals.mainFrame, Configed.getResourceValue(
+								JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue(
 										"EditMapPanelGroupedForHostConfigs.noManualEditingWhereRoleDefined")
 
 										, key, JOptionPane.INFORMATION_MESSAGE);

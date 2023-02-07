@@ -90,7 +90,7 @@ public class PanelSWInfo extends JPanel {
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates = new de.uib.utilities.table.TableModelFilterCondition() {
 		@Override
 		public void setFilter(Set<Object> filter) {
-		}
+			/* Not needed */}
 
 		@Override
 		public boolean test(List<Object> row) {
@@ -99,7 +99,6 @@ public class PanelSWInfo extends JPanel {
 
 			return !isKb;
 			// on filtering active everything is taken if not isKb
-
 		}
 	};
 
@@ -111,7 +110,7 @@ public class PanelSWInfo extends JPanel {
 	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates2 = new de.uib.utilities.table.TableModelFilterCondition() {
 		@Override
 		public void setFilter(Set<Object> filter) {
-		}
+			/* Not needed */}
 
 		@Override
 		public boolean test(List<Object> row) {
@@ -120,7 +119,6 @@ public class PanelSWInfo extends JPanel {
 
 			return !isKb;
 			// on filtering active everything is taken if not isKb
-
 		}
 	};
 
@@ -323,12 +321,10 @@ public class PanelSWInfo extends JPanel {
 				.addGap(vGap, vGap, vGap));
 
 		if (withPopup) {
-			PopupMenuTrait popupTrait = new PopupMenuTrait(
-					new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV, PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV,
+			PopupMenuTrait popupTrait = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_EXPORT_CSV,
+					PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV, PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
+					PopupMenuTrait.POPUP_FLOATINGCOPY }) {
 
-							PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
-
-							PopupMenuTrait.POPUP_FLOATINGCOPY }) {
 				@Override
 				public void action(int p) {
 
@@ -353,6 +349,8 @@ public class PanelSWInfo extends JPanel {
 						sendToCSVonlySelected();
 						break;
 
+					default:
+						Logging.warning(this, "no case found for popupmenutrait");
 					}
 				}
 
@@ -434,16 +432,11 @@ public class PanelSWInfo extends JPanel {
 	public void export() {
 		csvExportTable.setAskForOverwrite(askForOverwrite);
 		String exportPath = exportFilename;
-		switch (kindOfExport) {
-		case CSV:
+		if (kindOfExport == KindOfExport.CSV) {
 			Logging.info(this, "export to " + exportPath);
 			csvExportTable.execute(exportPath, false);
-			break;
-
-		case PDF:
+		} else if (kindOfExport == KindOfExport.PDF)
 			sendToPDF();
-			break;
-		}
 	}
 
 	public void sendToCSV() {
@@ -497,7 +490,7 @@ public class PanelSWInfo extends JPanel {
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(Globals.mainFrame);
+		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
 
 		externalView.setVisible(true);
 	}

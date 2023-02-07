@@ -42,10 +42,6 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 	}
 
 	// KeyListener
-	@Override
-	public void keyTyped(KeyEvent e) {
-
-	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -56,7 +52,10 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-	}
+	public void keyTyped(KeyEvent e) {
+		/* Not needed */}
 
+	@Override
+	public void keyReleased(KeyEvent e) {
+		/* Not needed */}
 }

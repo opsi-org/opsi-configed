@@ -80,11 +80,10 @@ public class UserConfigProducing {
 			userparts.add(ConfigedMain.user);
 			String propertyclass = UserConfig.START_USER_KEY + ConfigedMain.user + '}';
 
-			if (!PersistenceController.PROPERTY_CLASSES_SERVER.containsKey(propertyclass)) {
+			PersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
 				Logging.info(this, "createUserPropertySubclass for logged in user " + ConfigedMain.user);
-				PersistenceController.PROPERTY_CLASSES_SERVER.put(propertyclass, "");
-			}
-
+				return "";
+			});
 		}
 
 		supplyAllPermissionEntries(userparts, roleparts);
@@ -116,11 +115,11 @@ public class UserConfigProducing {
 
 					String propertyclass = startRoleKey + rolename + '}';
 
-					if (!PersistenceController.PROPERTY_CLASSES_SERVER.containsKey(propertyclass)) {
-						Logging.info(this, "createRolePropertySubclass for role  " + rolename);
-						PersistenceController.PROPERTY_CLASSES_SERVER.put(propertyclass, "");
-					}
-
+					final String role = rolename;
+					PersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
+						Logging.info(this, "createRolePropertySubclass for role  " + role);
+						return "";
+					});
 				} else {
 					Logging.warning(this, "rolePart without proper rolename found " + key);
 				}
@@ -139,11 +138,10 @@ public class UserConfigProducing {
 						Logging.debug(this, "usernames, add " + username + " for key " + key);
 						String propertyclass = UserConfig.START_USER_KEY + username + '}';
 
-						if (!PersistenceController.PROPERTY_CLASSES_SERVER.containsKey(propertyclass)) {
-
+						PersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
 							Logging.info(this, "createUserPropertySubclass for user  " + username);
-							PersistenceController.PROPERTY_CLASSES_SERVER.put(propertyclass, "");
-						}
+							return "";
+						});
 
 					} else
 						Logging.warning(this, "username not specified in key " + key);
@@ -336,7 +334,7 @@ public class UserConfigProducing {
 	}
 
 	private void supplyPermissionEntriesForAUser(final String username, final String startkey,
-			final Boolean prototypeObligatory, final UserConfig prototypeConfig, UserConfig userConfig) {
+			final boolean prototypeObligatory, final UserConfig prototypeConfig, UserConfig userConfig) {
 		Logging.info(this, "supplyPermissionEntriesForAUser for user " + username + " with startkey " + startkey);
 		Logging.info(this, "supplyPermissionEntriesForAUser for user, prototypeConfig " + prototypeConfig);
 

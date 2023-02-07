@@ -191,14 +191,6 @@ public class MapSource implements TableSource
 			classNames.add("java.lang.Integer");
 			// has the effect that IntComparatorForStrings is applied
 			columnNames.add(ROW_COUNTER_NAME);
-			structureChanged();
 		}
 	}
-
-	@Override
-	public void structureChanged() {
-		// TODO Auto-generated method stub
-
-	}
-
 }

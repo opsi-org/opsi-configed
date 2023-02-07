@@ -6,9 +6,9 @@ public class SavedSearch {
 	public static final String NAME_KEY = "name";
 	public static final String DESCRIPTION_KEY = "description";
 
-	public String name = "";
-	public String serialization = "";
-	public String description = "";
+	private String name = "";
+	private String serialization = "";
+	private String description = "";
 
 	public SavedSearch() {
 	}

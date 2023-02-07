@@ -690,7 +690,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				.setUpdateController(new SelectionMemorizerUpdateController(thePanel.panelLicencepools, 0,
 						thePanel.panelRegisteredSoftware, modelWindowsSoftwareIds, new StrList2BooleanFunction() {
 							@Override
-							public boolean sendUpdate(String poolId, List softwareIds) {
+							public boolean sendUpdate(String poolId, List<String> softwareIds) {
 
 								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
 								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
@@ -759,8 +759,8 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 									persist.getFSoftware2LicencePool().remove(swId);
 								}
 								// set the current ones
-								for (Object ident : softwareIds) {
-									persist.setFSoftware2LicencePool((String) ident, poolId);
+								for (String ident : softwareIds) {
+									persist.setFSoftware2LicencePool(ident, poolId);
 								}
 
 								if (thePanel.fSoftwarename2LicencePool != null) {
@@ -974,23 +974,18 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		this.softwareDirectionOfAssignment = direction;
 
 		if (oldDirection != direction) {
-			switch (direction) {
-			case POOL2SOFTWARE:
+			if (direction == SoftwareDirectionOfAssignment.POOL2SOFTWARE)
 				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(true);
 
-				break;
-
-			case SOFTWARE2POOL:
+			else if (direction == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
 				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(false);
 				resetCounters(null);
 				thePanel.fieldCountAssignedInEditing.setText("");
-				break;
 			}
 
 			Logging.info(this, "switched to " + direction);
 			initializeVisualSettings();
 		}
-
 	}
 
 	public SoftwareDirectionOfAssignment getSoftwareDirectionOfAssignment() {

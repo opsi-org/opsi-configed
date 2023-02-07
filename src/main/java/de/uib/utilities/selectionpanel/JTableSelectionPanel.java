@@ -36,6 +36,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
+import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -535,7 +536,7 @@ public class JTableSelectionPanel extends JPanel
 		table.getRowSorter().setSortKeys(primaryOrderingKeys);
 	}
 
-	public List<? extends RowSorter.SortKey> getSortKeys() {
+	public List<? extends SortKey> getSortKeys() {
 		return table.getRowSorter().getSortKeys();
 	}
 
@@ -876,12 +877,8 @@ public class JTableSelectionPanel extends JPanel
 			selectedCols.add(getTableModel().findColumn((String) comboSearch.getSelectedItem()));
 		}
 
-		searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
 		switch (comboSearchMode.getSelectedIndex()) {
 
-		case 0:
-			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
-			break;
 		case 1:
 			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING;
 			break;
@@ -890,6 +887,9 @@ public class JTableSelectionPanel extends JPanel
 			break;
 		case 3:
 			searchMode = TablesearchPane.SearchMode.REGEX_SEARCHING;
+			break;
+		default:
+			searchMode = TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES;
 			break;
 		}
 
@@ -958,9 +958,8 @@ public class JTableSelectionPanel extends JPanel
 		}
 	}
 
-	// for overwriting in subclass
 	protected void keyPressedOnTable(KeyEvent e) {
-	}
+		/* for overwriting in subclass */}
 
 	// KeyListener interface
 	@Override
@@ -988,11 +987,11 @@ public class JTableSelectionPanel extends JPanel
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	// ActionListener implementation
 	@Override

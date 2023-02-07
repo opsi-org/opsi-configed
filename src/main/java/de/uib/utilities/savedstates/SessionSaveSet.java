@@ -5,9 +5,6 @@ import java.util.Set;
 public class SessionSaveSet<T> extends SaveState {
 	Set<T> saveObject;
 
-	public SessionSaveSet() {
-	}
-
 	@Override
 	public void serialize(Object ob) {
 		if (ob == null)

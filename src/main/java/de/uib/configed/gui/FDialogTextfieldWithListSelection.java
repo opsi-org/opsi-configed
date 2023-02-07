@@ -185,7 +185,6 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-
-	}
+		/* Not needed */}
 
 }

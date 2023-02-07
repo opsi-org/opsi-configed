@@ -20,27 +20,25 @@ public class FShowList extends FTextArea {
 
 	public FShowList(JFrame owner, String title, boolean modal) {
 		super(owner, title, modal);
-		init();
+		initFShowList();
 	}
 
 	public FShowList(JFrame owner, String title, String message, boolean modal) {
 		this(owner, title, modal);
 		this.owner = owner;
-		init();
 		setMessage(message);
 	}
 
 	public FShowList(JFrame owner, String title, boolean modal, String[] buttonList) {
 		super(owner, title, modal, buttonList);
-		this.owner = owner;
-		init();
+		initFShowList();
 	}
 
 	public FShowList(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {
 		super(owner, title, modal, buttonList);
 		this.owner = owner;
-		init(preferredWidth, preferredHeight);
+		initFShowList(preferredWidth, preferredHeight);
 	}
 
 	@Override
@@ -72,11 +70,11 @@ public class FShowList extends FTextArea {
 		jTextArea1.setLineWrap(b);
 	}
 
-	private void init() {
-		init(800, 100);
+	private void initFShowList() {
+		initFShowList(800, 100);
 	}
 
-	private void init(int preferredWidth, int preferredHeight) {
+	private void initFShowList(int preferredWidth, int preferredHeight) {
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);
@@ -92,7 +90,6 @@ public class FShowList extends FTextArea {
 		jTextArea1.addKeyListener(this);
 
 		pack();
-
 	}
 
 	@Override

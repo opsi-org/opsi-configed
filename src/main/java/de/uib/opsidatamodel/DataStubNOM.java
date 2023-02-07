@@ -24,6 +24,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.HWAuditClientEntry;
@@ -50,7 +51,7 @@ public class DataStubNOM extends DataStub {
 
 	OpsiserviceNOMPersistenceController persist;
 
-	public static Integer classCounter = 0;
+	protected static Integer classCounter = 0;
 
 	public DataStubNOM(OpsiserviceNOMPersistenceController controller) {
 		this.persist = controller;
@@ -132,14 +133,10 @@ public class DataStubNOM extends DataStub {
 						"" + m.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION));
 
 				OpsiProductInfo productInfo = new OpsiProductInfo(m);
-				Map<String, OpsiProductInfo> version2productInfos = product2versionInfo2infos.get(productId);
+				Map<String, OpsiProductInfo> version2productInfos = product2versionInfo2infos.computeIfAbsent(productId,
+						arg -> new HashMap<>());
 
-				if (version2productInfos == null) {
-					version2productInfos = new HashMap<>();
-					product2versionInfo2infos.put(productId, version2productInfos);
-				}
 				version2productInfos.put(versionInfo, productInfo);
-
 			}
 
 			Logging.debug(this, "retrieveProductInfos " + product2versionInfo2infos);
@@ -352,7 +349,7 @@ public class DataStubNOM extends DataStub {
 
 				String productVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 				String packageVersion = (String) retrievedMap.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
+				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 				if (product2VersionInfo2Depots.get(productId) == null
 						|| product2VersionInfo2Depots.get(productId).get(versionInfo) == null) {
@@ -428,7 +425,7 @@ public class DataStubNOM extends DataStub {
 
 				String productVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 				String packageVersion = "" + dependencyItem.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
-				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.forKey() + packageVersion;
+				String versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
 				String action = "" + dependencyItem.get("productAction");
 				String requirementType = "";
@@ -617,7 +614,7 @@ public class DataStubNOM extends DataStub {
 			boolean infoFound = false;
 
 			// try reloading?
-			int returnedOption = javax.swing.JOptionPane.showOptionDialog(Globals.mainFrame,
+			int returnedOption = javax.swing.JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
 					Configed.getResourceValue("DataStub.reloadSoftwareInformation.title"),
 					javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, null, null);
@@ -793,14 +790,12 @@ public class DataStubNOM extends DataStub {
 		}
 	}
 
-	protected List<Map<String, Object>> softwareAuditOnClients;
 	protected Map<String, List<SWAuditClientEntry>> client2software;
 	protected Map<String, java.util.Set<String>> softwareIdent2clients;
 
 	@Override
 	public void softwareAuditOnClientsRequestRefresh() {
 		Logging.info(this, "softwareAuditOnClientsRequestRefresh");
-		softwareAuditOnClients = null;
 		client2software = null;
 		softwareIdent2clients = null;
 
@@ -928,15 +923,13 @@ public class DataStubNOM extends DataStub {
 
 					clientsWithThisSW.add(clientId);
 
+					if (clientId != null) // null not allowed in mysql
 					{
-						if (clientId != null) // null not allowed in mysql
-						{
-							List<SWAuditClientEntry> entries = client2software.get(clientId);
+						List<SWAuditClientEntry> entries = client2software.get(clientId);
 
-							entries.add(clientEntry);
-						}
-
+						entries.add(clientEntry);
 					}
+
 				}
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients client2software ");
@@ -982,7 +975,7 @@ public class DataStubNOM extends DataStub {
 				AuditSoftwareXLicencePool.SERVICE_ATTRIBUTES, new HashMap<>(), // callFilter
 				"auditSoftwareToLicensePool_getObjects");
 
-		auditSoftwareXLicencePool = new AuditSoftwareXLicencePool(getSoftwareList());
+		auditSoftwareXLicencePool = new AuditSoftwareXLicencePool();
 
 		for (Map<String, Object> map : retrieved) {
 
@@ -1030,11 +1023,7 @@ public class DataStubNOM extends DataStub {
 
 			if (id instanceof String && !id.equals("")) {
 				String hostId = (String) id;
-				Map<String, Object> configs1Host = hostConfigs.get(id);
-				if (configs1Host == null) {
-					configs1Host = new HashMap<>();
-					hostConfigs.put(hostId, configs1Host);
-				}
+				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostId, arg -> new HashMap<>());
 
 				Logging.debug(this, "retrieveHostConfigs objectId,  element " + id + ": " + listElement);
 
@@ -1079,7 +1068,7 @@ public class DataStubNOM extends DataStub {
 
 		licencepools = new TreeMap<>();
 
-		if (persist.withLicenceManagement) {
+		if (persist.isWithLicenceManagement()) {
 			String[] attributes = new String[] { LicencepoolEntry.ID_KEY, LicencepoolEntry.DESCRIPTION_KEY };
 
 			persist.notifyDataLoadingObservers(
@@ -1145,7 +1134,7 @@ public class DataStubNOM extends DataStub {
 		contractsToNotify = new TreeMap<>();
 		contractsExpired = new TreeMap<>();
 
-		if (persist.withLicenceManagement) {
+		if (persist.isWithLicenceManagement()) {
 			persist.notifyDataLoadingObservers(
 					Configed.getResourceValue("LoadingObserver.loadtable") + " software license");
 
@@ -1209,7 +1198,7 @@ public class DataStubNOM extends DataStub {
 
 		licences = new HashMap<>();
 
-		if (persist.withLicenceManagement) {
+		if (persist.isWithLicenceManagement()) {
 			persist.notifyDataLoadingObservers(
 					Configed.getResourceValue("LoadingObserver.loadtable") + " software license");
 
@@ -1244,7 +1233,7 @@ public class DataStubNOM extends DataStub {
 
 		licenceUsabilities = new ArrayList<>();
 
-		if (persist.withLicenceManagement) {
+		if (persist.isWithLicenceManagement()) {
 			persist.notifyDataLoadingObservers(
 					Configed.getResourceValue("LoadingObserver.loadtable") + " software_license_TO_license_pool");
 
@@ -1282,7 +1271,7 @@ public class DataStubNOM extends DataStub {
 
 		licenceUsages = new ArrayList<>();
 
-		if (persist.withLicenceManagement) {
+		if (persist.isWithLicenceManagement()) {
 			persist.notifyDataLoadingObservers(
 					Configed.getResourceValue("LoadingObserver.loadtable") + " license_on_client");
 

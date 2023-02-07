@@ -16,9 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.IconAsButton;
@@ -89,10 +89,10 @@ public class SSHPackageManagerUninstallParameterDialog
 			}
 
 			@Override
-			public void doAction1() {
+			public void doAction2() {
 
 				textFieldSelectedDepots.setText(produceDepotParameter());
-				super.doAction1();
+				super.doAction2();
 			}
 		};
 
@@ -342,7 +342,7 @@ public class SSHPackageManagerUninstallParameterDialog
 	/* This method is called when button 1 is pressed */
 
 	private boolean confirmAction() {
-		FShowList fConfirmAction = new FShowList(Globals.mainFrame,
+		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
 				Globals.APPNAME + " "
 						+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.title"),
 				true, new String[] { Configed.getResourceValue("buttonCANCEL"), Configed.getResourceValue("buttonOK") },
@@ -364,10 +364,10 @@ public class SSHPackageManagerUninstallParameterDialog
 	}
 
 	@Override
-	public void doAction1() {
+	public void doAction3() {
 		changeDepot();
 		final String prod = textFieldProduct.getText();
-		Logging.info(this, "doAction1 uninstall  " + prod);
+		Logging.info(this, "doAction3 uninstall  " + prod);
 
 		changeProduct(prod);
 
@@ -388,7 +388,7 @@ public class SSHPackageManagerUninstallParameterDialog
 					execFinished = true;
 					Logging.debug(this, "end exec thread");
 				} catch (Exception e) {
-					Logging.warning(this, "doAction1, exception occurred", e);
+					Logging.warning(this, "doAction3, exception occurred", e);
 				}
 			}
 		};
@@ -397,13 +397,12 @@ public class SSHPackageManagerUninstallParameterDialog
 			execThread.start();
 
 		} catch (Exception e) {
-			Logging.warning(this, "doAction1, exception occurred", e);
+			Logging.warning(this, "doAction3, exception occurred", e);
 		}
 	}
 
 	@Override
-	public void doAction2() {
-
+	public void doAction1() {
 		execFinished = true;
 		this.setVisible(false);
 		this.dispose();

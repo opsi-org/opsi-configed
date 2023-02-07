@@ -14,9 +14,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 	protected ConfigedMain main;
 
-	public static int labelWidth = 200;
-	public static int labelHeight = 20;
-
 	VisualClientNodeNameModifier modifier = new VisualClientNodeNameModifierFactory().getModifier();
 
 	public IconNodeRendererClientTree(ConfigedMain main) {
@@ -26,7 +23,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 		setTextSelectionColor(Globals.lightBlack);
 		setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
-		setPreferredSize(new java.awt.Dimension(labelWidth, labelHeight));
 	}
 
 	@Override

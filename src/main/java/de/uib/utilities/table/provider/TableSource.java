@@ -20,8 +20,6 @@ public interface TableSource {
 	// we get a new version
 	List<List<Object>> retrieveRows();
 
-	// Map<String, List<String>> getFunction(Integer defIndex, Integer
-
 	void setRowCounting(boolean b);
 
 	boolean isRowCounting();
@@ -29,6 +27,4 @@ public interface TableSource {
 	String getRowCounterName();
 
 	void requestReload();
-
-	void structureChanged();
 }
