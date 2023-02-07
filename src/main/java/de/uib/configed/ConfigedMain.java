@@ -1232,7 +1232,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// String[] oldSelectedDepots =
 
-		if (oldSelectedDepots == null) {
+		if (oldSelectedDepots.length == 0) {
 			depotsList.setSelectedValue(myServer, true);
 		} else {
 			ArrayList<Integer> savedSelectedDepots = new ArrayList<>();
@@ -1974,7 +1974,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		final int iconColumnMaxWidth = 100;
 
-		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL)) {
+		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL))) {
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
 
@@ -1989,7 +1989,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		}
 
-		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL)) {
+		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL))) {
 
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
@@ -2020,7 +2020,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL)) {
+		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL))) {
 
 			List<String> columns = new ArrayList<>();
 			for (int i = 0; i < selectionPanel.getTableModel().getColumnCount(); i++) {
@@ -2049,7 +2049,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		}
 
-		if (persist.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL)) {
+		if (Boolean.TRUE
+				.equals(persist.getHostDisplayFields().get(HostInfo.CLIENT_INSTALL_BY_SHUTDOWN_DISPLAY_FIELD_LABEL))) {
 
 			List<String> columns = new ArrayList<>();
 
@@ -4126,7 +4127,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						// we catch exceptions especially if we are on some updating process for the
 						// model
 
-						if (persist.getHostDisplayFields().get("clientConnected")) {
+						if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientConnected"))) {
 							Map<String, Object> saveReachableInfo = reachableInfo;
 
 							reachableInfo = persist.reachableInfo(null);
@@ -4231,7 +4232,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				mainFrame.iconButtonReachableInfo.setEnabled(true);
 
 				// update column
-				if (persist.getHostDisplayFields().get("clientConnected")) {
+				if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientConnected"))) {
 					javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
 
 					int col = model
@@ -4313,7 +4314,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 								mainFrame.iconButtonSessionInfo.setEnabled(true);
 
 								// update column
-								if (persist.getHostDisplayFields().get("clientSessionInfo")) {
+								if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientSessionInfo"))) {
 									javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
 
 									int col = model.findColumn(Configed

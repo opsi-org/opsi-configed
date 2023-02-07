@@ -334,7 +334,6 @@ public class BackendMySQL {
 	}
 
 	public List<String> getClientListFromJSONString(String query) {
-
 		Logging.info(this, query);
 
 		try {
@@ -342,12 +341,11 @@ public class BackendMySQL {
 
 			if (jsonObject.has("data"))
 				return getListFromJSONObject(jsonObject.getJSONObject("data"));
-
 		} catch (JSONException e) {
 			Logging.warning(this, "" + e);
 		}
 
-		return null;
+		return new ArrayList<>();
 	}
 
 	private String doJSONObject(MySQL mySQLRecursion, JSONObject jsonObject) {

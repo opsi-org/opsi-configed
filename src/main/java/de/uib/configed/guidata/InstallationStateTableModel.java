@@ -401,9 +401,9 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		return resultValue;
 	}
 
-	private Boolean preparedColumnIsEditable(int j) {
+	private boolean preparedColumnIsEditable(int j) {
 		if (editablePreparedColumns == null || j < 0 || j >= editablePreparedColumns.length)
-			return null;
+			return false;
 
 		if (Globals.isGlobalReadOnly())
 			return false;

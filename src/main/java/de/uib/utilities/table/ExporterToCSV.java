@@ -87,7 +87,7 @@ public class ExporterToCSV extends ExportTable {
 					Logging.debug(this, "toCsv, handle row " + rowI + " selected " + theTable.isRowSelected(rowI)
 							+ " selectedOnly " + selectedOnly);
 
-					if (!selectedOnly || theTable.isRowSelected(rowI)) {
+					if (Boolean.TRUE.equals(!selectedOnly) || theTable.isRowSelected(rowI)) {
 						line = new StringBuilder();
 						for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
 							date1 = null; // reset

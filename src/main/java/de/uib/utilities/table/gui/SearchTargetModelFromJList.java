@@ -145,8 +145,9 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public int[] getUnfilteredSelection() {
-		if (unfilteredV == null || unfilteredSelection == null)
-			return null;
+		if (unfilteredV == null || unfilteredSelection == null) {
+			return new int[0];
+		}
 
 		return unfilteredSelection;
 	}

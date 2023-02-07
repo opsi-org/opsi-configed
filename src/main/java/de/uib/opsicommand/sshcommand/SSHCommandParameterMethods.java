@@ -141,7 +141,7 @@ public class SSHCommandParameterMethods implements SSHCommandParameterInterface 
 	public String[] getParameterFormats() {
 		if (formats != null)
 			return formats;
-		return null;
+		return new String[0];
 	}
 
 	public boolean canceled;
@@ -154,7 +154,7 @@ public class SSHCommandParameterMethods implements SSHCommandParameterInterface 
 		else if (caller instanceof SSHConnectTerminal)
 			outputDia = ((SSHConnectTerminal) caller).getDialog();
 		List<String> params = command.getParameterList();
-		if ((params != null) && (!params.isEmpty()))
+		if (!params.isEmpty())
 			for (String param : params) {
 				if (command.getCommandRaw().contains(param)) {
 					String[] splittedParameter = splitParameter(param);

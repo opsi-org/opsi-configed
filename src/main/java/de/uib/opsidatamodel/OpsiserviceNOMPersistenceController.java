@@ -284,7 +284,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
 
-	protected Map<String, Object> opsiInformation;
+	protected Map<String, Object> opsiInformation = new HashMap<>();
 	protected JSONObject licensingInfo;
 	private LicensingInfoMap licInfoMap;
 	private String opsiLicensingInfoVersion;
@@ -644,20 +644,18 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 						if (getConfig(name) != null) {
 
 							Boolean result = false;
-
-							Boolean tested = null;
-							tested = findBooleanConfigurationComparingToDefaults(name, wanConfiguration);
+							boolean tested = findBooleanConfigurationComparingToDefaults(name, wanConfiguration);
 
 							Logging.debug(this, "host " + name + " wan config " + result);
 
-							if (tested != null && tested)
+							if (tested) {
 								result = true;
-
-							else {
+							} else {
 								tested = findBooleanConfigurationComparingToDefaults(name, notWanConfiguration);
 
-								if (tested != null && tested)
+								if (tested) {
 									result = false;
+								}
 							}
 
 							Logging.debug(this, "host " + name + " wan config " + result);
@@ -1016,7 +1014,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (setUserRegisterVal)
 			keyUserRegisterValue = true;
 
-		if (keyUserRegisterValue)
+		if (Boolean.TRUE.equals(keyUserRegisterValue))
 			keyUserRegisterValue = checkUserRolesModule();
 
 		if (serverPropertyMap.get(KEY_USER_REGISTER) == null || setUserRegisterVal) {
@@ -1231,7 +1229,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (globalReadOnly) {
 			serverActionPermission = UserOpsipermission.ActionPrivilege.READ_ONLY;
 		} else {
-			Boolean mayWriteOnOpsiserver = true; // is default!!
+			boolean mayWriteOnOpsiserver = true; // is default!!
 
 			configKey = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_SERVER_READWRITE;
 			Logging.info(this, "checkPermissions  configKey " + configKey);
@@ -1610,12 +1608,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		return setHostBooleanConfigValue(KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, clientId, shutdownInstall);
 	}
 
-	protected Boolean findBooleanConfigurationComparingToDefaults(String host,
+	protected boolean findBooleanConfigurationComparingToDefaults(String host,
 			Map<String, List<Object>> defaultConfiguration)
 	// for checking if WAN default configuration is set
 	{
 
-		Boolean tested = null;
+		boolean tested = false;
 		for (Entry<String, List<Object>> configuration : defaultConfiguration.entrySet()) {
 
 			tested = valueFromConfigStateAsExpected(getConfig(host), configuration.getKey(),
@@ -2904,10 +2902,8 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	public List<Map<String, Object>> getOpsiHWAuditConf() {
 		if (hwAuditConf == null) {
 			Logging.warning("hwAuditConf is null in getOpsiHWAuditConf");
-			return null;
-		}
-
-		else if (!hwAuditConf.containsKey("")) {
+			return new ArrayList<>();
+		} else if (!hwAuditConf.containsKey("")) {
 			hwAuditConf.put("",
 					exec.getListOfMapsOfListsOfMaps(new OpsiMethodCall("auditHardware_getConfig", new String[] {})));
 			if (hwAuditConf.get("") == null) {
@@ -2948,7 +2944,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	@Override
 	public Map getSoftwareInfo(String clientId) {
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
@@ -3141,7 +3137,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		hwAuditDeviceClasses = new TreeMap<>();
 
-		if (getOpsiHWAuditConf() == null) {
+		if (getOpsiHWAuditConf().isEmpty()) {
 			Logging.error(this, "no hwaudit config found ");
 			return;
 		}
@@ -3355,7 +3351,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		List<Object> newDefaultValues = new ArrayList<>();
 		for (Object value : possibleValues) {
 			if (oldDefaultValues.contains(value)) {
-				if ((tableConfigUpdates.get(value) == null) || (tableConfigUpdates.get(value)))
+				if ((tableConfigUpdates.get(value) == null) || Boolean.TRUE.equals(tableConfigUpdates.get(value)))
 				// was in default values and no change, or value is in (old) default values and
 				// set again
 				{
@@ -4339,7 +4335,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		retrieveDepotProductProperties();
 		if (depot2product2properties == null) {
 			Logging.error("no product properties ");
-			return null;
+			return new HashMap<>();
 		} else {
 
 			if (depot2product2properties.get(depotId) == null)
@@ -4460,9 +4456,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		Map<String, ConfigName2ConfigValue> defaultProperties = getDefaultProductProperties(theDepot);
 		Map<String, Map<String, Object>> defaultPropertiesRetrieved = new HashMap<>();
-		if (defaultProperties == null) {
-			// should not occur
-		} else {
+		if (!defaultProperties.isEmpty()) {
 			for (Entry<String, ConfigName2ConfigValue> defaultProperty : defaultProperties.entrySet()) {
 				defaultPropertiesRetrieved.put(defaultProperty.getKey(), defaultProperty.getValue());
 			}
@@ -4512,7 +4506,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 				while (iterProperties.hasNext()) {
 					String property = iterProperties.next();
 
-					if (productPropertyConfig == null || productPropertyConfig.get(property) == null) {
+					if (productPropertyConfig.isEmpty() || productPropertyConfig.get(property) == null) {
 						productPropertyDefinitions.get(product).get(property).setDefaultValues(new ArrayList<>());
 					} else {
 						productPropertyDefinitions.get(product).get(property)
@@ -4852,7 +4846,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			List methodsList = exec
 					.getListResult(new OpsiMethodCall("getPossibleMethods_listOfHashes", new Object[] {}));
 
-			if (methodsList != null) {
+			if (!methodsList.isEmpty()) {
 				mapOfMethodSignatures = new HashMap<>();
 
 				Iterator iter = methodsList.iterator();
@@ -4962,10 +4956,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 						Map configItems = exec.getMapFromItem(value);
 
-						if (configItems == null) // does not occur since getMapFromItem produces at least an empty map
-						{
-							Logging.debug(this, "------------------ key " + key + "  config  null");
-						} else {
+						if (!configItems.isEmpty()) {
 							Iterator configItemsIterator = configItems.keySet().iterator();
 
 							while (configItemsIterator.hasNext()) {
@@ -5165,7 +5156,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			Boolean defaultVal) {
 		Boolean result = null;
 
-		Boolean globalDefault = getGlobalBooleanConfigValue(key, null);
+		boolean globalDefault = getGlobalBooleanConfigValue(key, null);
 
 		if (getConfigs().get(hostName) != null && getConfigs().get(hostName).get(key) != null
 				&& !((List) (getConfigs().get(hostName).get(key))).isEmpty()) {
@@ -5201,15 +5192,12 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		Logging.debug(this, "getGlobalBooleanConfigValue key " + key + ", ob " + ob);
 		if (ob == null) {
 			Logging.warning(this, "getGlobalBooleanConfigValue key " + key + " gives no value, take " + val);
-		}
-
-		else {
+		} else {
 			ConfigOption option = (ConfigOption) ob;
 
 			if (option.getType() != ConfigOption.TYPE.BoolConfig) {
 				Logging.warning(this, "entry for " + key + " should be boolean");
 			} else {
-
 				List li = option.getDefaultValues();
 				if (li != null && !li.isEmpty()) {
 					val = (Boolean) li.get(0);
@@ -6834,7 +6822,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		}
 
-		if (resultMap != null && !resultMap.isEmpty())
+		if (!resultMap.isEmpty())
 			result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
 					"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 
@@ -6856,7 +6844,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 			resultMap = exec.getMapResult(omc);
 
-			if (resultMap != null && !resultMap.isEmpty())
+			if (!resultMap.isEmpty())
 				result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
 						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 		}
@@ -7111,7 +7099,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 	private final boolean checkUserRolesModule() {
 
-		if (keyUserRegisterValue && !withUserRoles) {
+		if (Boolean.TRUE.equals(keyUserRegisterValue) && !withUserRoles) {
 			keyUserRegisterValue = false;
 
 			javax.swing.SwingUtilities.invokeLater(() -> {
@@ -7143,7 +7131,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 		if (keyUserRegisterValue == null) {
 			keyUserRegisterValue = isUserRegisterActivated();
 
-			if (keyUserRegisterValue)
+			if (Boolean.TRUE.equals(keyUserRegisterValue))
 				keyUserRegisterValue = checkUserRolesModule();
 
 		}
@@ -7930,7 +7918,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	// opsi module information
 	@Override
 	public void opsiInformationRequestRefresh() {
-		opsiInformation = null;
+		opsiInformation = new HashMap<>();
 	}
 
 	@Override
@@ -8001,7 +7989,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 	}
 
 	private Map<String, Object> produceOpsiInformation() {
-		if (opsiInformation != null) // we are initialized
+		if (!opsiInformation.isEmpty()) // we are initialized
 			return opsiInformation;
 
 		OpsiMethodCall omc = new OpsiMethodCall("backend_info", new String[] {});
@@ -8014,7 +8002,7 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 
 		opsiVersion = "4";
 
-		if (opsiInformation != null) {
+		if (!opsiInformation.isEmpty()) {
 			String value = (String) opsiInformation.get("opsiVersion");
 			if (value != null)
 				opsiVersion = value;

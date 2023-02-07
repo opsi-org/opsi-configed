@@ -1,5 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -104,6 +105,6 @@ public class CommandOpsiPackageManager implements SSHCommand {
 
 	@Override
 	public List<String> getParameterList() {
-		return null;
+		return new ArrayList<>();
 	}
 }

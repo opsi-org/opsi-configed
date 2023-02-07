@@ -338,7 +338,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void setAutocompleteList(List<String> list) {
-		if (list == null)
+		if (list.isEmpty())
 			return;
 		final String COMMIT_ACTION = "commit";
 		// Without this, cursor always leaves text field

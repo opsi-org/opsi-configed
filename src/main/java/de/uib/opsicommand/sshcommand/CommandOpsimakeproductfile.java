@@ -1,5 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.uib.configed.Configed;
@@ -233,6 +234,6 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 
 	@Override
 	public List<String> getParameterList() {
-		return null;
+		return new ArrayList<>();
 	}
 }

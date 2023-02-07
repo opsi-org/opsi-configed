@@ -260,7 +260,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		int keycol = getKeyCol();
 
 		if (keycol < 0)
-			return null;
+			return new HashSet<>();
 
 		TreeSet<Object> result = new TreeSet<>();
 		for (int row = 0; row < getRowCount(); row++) {
@@ -959,7 +959,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	@Override
 	public java.util.Map<Integer, RowStringMap> getPrimarykey2Rowmap() {
 		if (keyCol < 0)
-			return null;
+			return new HashMap<>();
 
 		if (primarykey2Rowmap != null)
 			return primarykey2Rowmap;
@@ -984,7 +984,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		java.util.Map<Object, List<Object>> function = getFunction(col1st, col2nd);
 
 		if (function == null)
-			return null;
+			return new HashMap<>();
 
 		java.util.Map<Integer, Mapping<Integer, String>> xFunction = xFunctions.get(pair);
 		if (xFunction == null) {

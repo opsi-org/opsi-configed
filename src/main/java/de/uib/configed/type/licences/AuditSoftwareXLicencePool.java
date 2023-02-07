@@ -66,7 +66,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		Map<String, String> m = new HashMap<>();
 		if (ident == null) {
 			Logging.warning("produceMapFromSWident, ident null ");
-			return null;
+			return new HashMap<>();
 		}
 
 		String[] parts = ident.split(";", -1); // give zero length parts as ""
