@@ -100,6 +100,7 @@ import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
+import de.uib.configed.messagebus.Messagebus;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messages.Messages;
@@ -242,6 +243,7 @@ public class MainFrame extends JFrame
 	JMenuItem jMenuFrameDashboard = new JMenuItem();
 	JMenuItem jMenuFrameLicences = new JMenuItem();
 	JMenuItem jMenuFrameShowDialogs = new JMenuItem();
+	JMenuItem jMenuFrameTerminal = new JMenuItem();
 
 	JMenu jMenuHelp = new JMenu();
 	JMenuItem jMenuHelpSupport = new JMenuItem();
@@ -1271,10 +1273,28 @@ public class MainFrame extends JFrame
 			}
 		});
 
-		jMenuFrames.add(jMenuFrameWorkOnGroups);
-		jMenuFrames.add(jMenuFrameWorkOnProducts);
-		jMenuFrames.add(jMenuFrameDashboard);
+		jMenuFrameTerminal.setText("Terminal");
+		jMenuFrameTerminal.setEnabled(true);
+		jMenuFrameTerminal.addActionListener(e -> {
+			try {
+				Messagebus messagebus = new Messagebus();
+				boolean connected = messagebus.connect();
+				if (!connected) {
+					return;
+				}
+
+				messagebus.connectTerminal();
+			} catch (Exception e1) {
+				Logging.error(this, "cannot open terminal");
+			}
+		});
+
 		jMenuFrames.add(jMenuFrameLicences);
+		jMenuFrames.add(jMenuFrameWorkOnProducts);
+		jMenuFrames.add(jMenuFrameWorkOnGroups);
+		if (ConfigedMain.OPSI_4_3) {
+			jMenuFrames.add(jMenuFrameTerminal);
+		}
 		jMenuFrames.addSeparator();
 		jMenuFrames.add(jMenuFrameShowDialogs);
 
