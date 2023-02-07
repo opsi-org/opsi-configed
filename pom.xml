@@ -135,6 +135,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>19</version>
+	    <classifier>win</classifier>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
@@ -142,6 +143,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>19</version>
+	    <classifier>win</classifier>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
@@ -149,6 +151,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
             <version>19</version>
+	    <classifier>win</classifier>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
@@ -156,6 +159,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>19</version>
+	    <classifier>win</classifier>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
@@ -163,6 +167,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>19</version>
+	    <classifier>win</classifier>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
