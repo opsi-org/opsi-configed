@@ -3745,8 +3745,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			persist.configOptionsRequestRefresh();
 
-			if (mainFrame != null && mainFrame.fDialogOpsiLicensingInfo != null)
+			if (mainFrame != null && mainFrame.fDialogOpsiLicensingInfo != null) {
 				mainFrame.fDialogOpsiLicensingInfo.thePanel.reload();
+			}
 
 			requestRefreshDataForClientSelection();
 

@@ -3070,7 +3070,7 @@ public class MainFrame extends JFrame
 
 		if (fDialogOpsiLicensingInfo == null) {
 
-			fDialogOpsiLicensingInfo = new de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo(null, // owner frame
+			fDialogOpsiLicensingInfo = new de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo(this, // owner frame
 					// title
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false, // modal
 
@@ -3085,8 +3085,10 @@ public class MainFrame extends JFrame
 					// layout
 					null // addPanel predefined
 			);
-		} else
+		} else {
+			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
 			fDialogOpsiLicensingInfo.setVisible(true);
+		}
 	}
 
 	// ----------------------------------------------------------------------------------------

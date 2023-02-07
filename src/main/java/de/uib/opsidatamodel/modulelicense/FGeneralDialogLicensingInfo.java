@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsidatamodel.PersistenceController;
@@ -49,22 +49,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	public static boolean extendedView = false;
 
-	JLabel clientTitle = new JLabel();
-	JLabel allClient = new JLabel();
-	JLabel allClientNum = new JLabel();
-	JLabel macos = new JLabel();
-	JLabel macosNum = new JLabel();
-	JLabel linux = new JLabel();
-	JLabel linuxNum = new JLabel();
-	JLabel windows = new JLabel();
-	JLabel windowsNum = new JLabel();
-	JLabel checksumTitle = new JLabel();
-	JLabel checksum = new JLabel();
-	JLabel checksumInfo = new JLabel();
-	JLabel customerTitle = new JLabel();
-	Set customerSet;
-	JLabel customerNames = new JLabel();
-
 	public FGeneralDialogLicensingInfo(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {
 		super(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
@@ -94,8 +78,9 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
-		if (centerPanel == null)
+		if (centerPanel == null) {
 			centerPanel = new JPanel();
+		}
 
 		centerPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
 		centerPanel.setOpaque(true);
@@ -159,26 +144,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		columnNames = licenseMap.getColumnNames();
 		classNames = licenseMap.getClassNames();
 		theSourceMap = licenseMap.getTableMap();
-
-		clientNumbers = licenseMap.getClientNumbersMap();
-		clientTitle.setText("<html>" + Configed.getResourceValue("LicensingInfo.client.title") + "  ("
-				+ persist.getHostInfoCollections().getConfigServer() + ") </html>");
-		allClient.setText(Configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
-		allClientNum.setText(clientNumbers.get(LicensingInfoMap.ALL).toString());
-		macos.setText(Configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");
-		macosNum.setText(clientNumbers.get(LicensingInfoMap.MAC_OS).toString());
-		linux.setText(Configed.getResourceValue("LicensingInfo.client.linux_clients") + ": ");
-		linuxNum.setText(clientNumbers.get(LicensingInfoMap.LINUX).toString());
-		windows.setText(Configed.getResourceValue("LicensingInfo.client.windows_clients") + ": ");
-		windowsNum.setText(clientNumbers.get(LicensingInfoMap.WINDOWS).toString());
-		checksumTitle.setText(Configed.getResourceValue("LicensingInfo.client.checksum"));
-		checksum.setText(licenseMap.getCheckSum());
-		checksumInfo.setText("<html>" + Configed.getResourceValue("LicensingInfo.client.checksum.info") + "</html>");
-
-		customerTitle.setText(Configed.getResourceValue("LicensingInfo.customer.data"));
-		Set customerSet = licenseMap.getCustomerNamesSet();
-		customerNames
-				.setText(customerSet.toString().replace("[", "<html>").replace(", ", "<br>").replace("]", "</html>"));
 	}
 
 	protected PanelGenEditTable initMainPanel() {
@@ -193,10 +158,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 				new int[] { PanelGenEditTable.POPUP_PRINT, PanelGenEditTable.POPUP_PDF,
 						PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_EXPORT_CSV,
-						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD }
-
-				, false // with tableSearchPane
-
+						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD },
+				false // with tableSearchPane
 		) {
 
 			@Override
@@ -275,7 +238,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JLabel checksum = new JLabel(licenseMap.getCheckSum());
 
 		JLabel customerTitle = new JLabel(Configed.getResourceValue("LicensingInfo.customer.data"));
-		Set customerSet = licenseMap.getCustomerNamesSet();
+		Set<String> customerSet = licenseMap.getCustomerNamesSet();
 		JLabel customerNames = new JLabel(
 				customerSet.toString().replace("[", "<html>").replace(", ", "<br>").replace("]", "</html>"));
 
