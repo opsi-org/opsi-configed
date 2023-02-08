@@ -2,7 +2,7 @@ package de.uib.opsidatamodel.productstate;
 
 import java.util.Map;
 
-public class Config {
+public final class Config {
 
 	public static final Map<String, String> requiredActionForStatus = Map.ofEntries(Map.entry("installed", "setup"),
 			Map.entry("not_installed", "uninstall"));

@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 import de.uib.utilities.logging.Logging;
 
-public class DbConnect {
+public final class DbConnect {
 	private static final String DRIVER = "com.mysql.jdbc.Driver";
 
 	private String url = "jdbc:mysql://%s";

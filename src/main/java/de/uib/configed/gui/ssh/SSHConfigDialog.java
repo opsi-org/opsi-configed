@@ -34,7 +34,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 
-public class SSHConfigDialog extends FGeneralDialog {
+public final class SSHConfigDialog extends FGeneralDialog {
 	private JPanel connectionPanel = new JPanel();
 	private JPanel settingsPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();

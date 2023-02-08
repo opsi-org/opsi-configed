@@ -37,7 +37,7 @@ import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class ControlDash {
+public final class ControlDash {
 	AbstractPersistenceController persist;
 
 	public static final String CONFIG_KEY = "configed.dash_config";

@@ -3,7 +3,7 @@ package de.uib.opsidatamodel.dbtable;
 import java.util.Map;
 
 // TODO what is the need of this class? only static values are accessed, never instanciated
-public class Host extends Table {
+public final class Host extends Table {
 	public static final String TABLE_NAME = "HOST";
 	public static final String ID_COLUMN = TABLE_NAME + ".hostId";
 	public static final String HW_ADRESS_COLUMN = TABLE_NAME + ".hardwareAdress";

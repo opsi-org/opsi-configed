@@ -13,7 +13,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
-public class ProductData {
+public final class ProductData {
 	private static Map<String, List<String>> products = new HashMap<>();
 	private static Map<String, List<String>> netbootProducts = new HashMap<>();
 	private static Map<String, List<String>> localbootProducts = new HashMap<>();

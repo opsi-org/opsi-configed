@@ -5,7 +5,7 @@ import java.awt.Component;
 
 import de.uib.configed.Globals;
 
-public class CellAlternatingColorizer {
+public final class CellAlternatingColorizer {
 	// private constructor to hide the implicit public one
 	private CellAlternatingColorizer() {
 	}

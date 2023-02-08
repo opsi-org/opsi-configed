@@ -22,7 +22,7 @@ import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.logging.Logging;
 
-public class PersistenceControllerFactory {
+public final class PersistenceControllerFactory {
 	// private constructor to hide the implicit public one
 	private PersistenceControllerFactory() {
 	}

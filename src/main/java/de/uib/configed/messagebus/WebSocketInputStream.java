@@ -6,7 +6,7 @@ import java.io.PipedOutputStream;
 
 import de.uib.utilities.logging.Logging;
 
-public class WebSocketInputStream {
+public final class WebSocketInputStream {
 	private static WebSocketInputStream instance;
 
 	private static PipedOutputStream writer;

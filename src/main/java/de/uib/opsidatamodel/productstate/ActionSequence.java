@@ -3,7 +3,7 @@ package de.uib.opsidatamodel.productstate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ActionSequence {
+public final class ActionSequence {
 	// private constructor to hide the implicit public one
 	private ActionSequence() {
 	}

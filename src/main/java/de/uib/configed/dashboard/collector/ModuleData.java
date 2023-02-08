@@ -7,7 +7,7 @@ import java.util.Map;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
-public class ModuleData {
+public final class ModuleData {
 	private static List<String> modules = new ArrayList<>();
 	private static List<String> activeModules = new ArrayList<>();
 	private static List<String> expiredModules = new ArrayList<>();

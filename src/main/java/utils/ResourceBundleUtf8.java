@@ -16,13 +16,13 @@ import java.util.ResourceBundle;
  *
  * @author Marc Neumann
  */
-public class ResourceBundleUtf8 {
+public final class ResourceBundleUtf8 {
 
 	// private constructor to hide the implicit public one
 	private ResourceBundleUtf8() {
 	}
 
-	private static class PropertyResourceBundleUtf8 extends ResourceBundle {
+	private static final class PropertyResourceBundleUtf8 extends ResourceBundle {
 
 		private final Map<String, String> valueByKey = new HashMap<>();
 

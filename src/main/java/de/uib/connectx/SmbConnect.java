@@ -23,7 +23,7 @@ import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
-public class SmbConnect {
+public final class SmbConnect {
 	public static final String[] directoryProducts = new String[] { "var", "lib", "opsi", "depot" };
 	public static final String PRODUCT_SHARE_RW = "opsi_depot_rw";
 

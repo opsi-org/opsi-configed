@@ -94,7 +94,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.Logging;
 
-public class OpsiDataBackend extends Backend {
+public final class OpsiDataBackend extends Backend {
 	// data which will be cached
 	List<Client> clients;
 	Map<String, HostInfo> clientMaps;
