@@ -82,8 +82,9 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	protected void initDataStructure() {
 		columnNames = new ArrayList<>();
 		columnNames.add("ID");
-		for (String key : de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT)
+		for (String key : de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT) {
 			columnNames.add(key);
+		}
 
 		classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
@@ -95,8 +96,9 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		panelGlobalSoftware.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
 		panelGlobalSoftware.addListSelectionListener(listSelectionEvent -> {
-			if (!listSelectionEvent.getValueIsAdjusting())
+			if (!listSelectionEvent.getValueIsAdjusting()) {
 				jButton1.setEnabled(panelGlobalSoftware.getTheTable().getSelectedRowCount() > 0);
+			}
 		});
 	}
 

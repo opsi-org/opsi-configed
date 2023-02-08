@@ -82,8 +82,9 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 					@Override
 					public Map retrieveMap() {
 						Logging.debug(this, "retrieveMap");
-						if (initialized)
+						if (initialized) {
 							persist.reconciliationInfoRequestRefresh();
+						}
 						initialized = true;
 						return persist.getLicencesReconciliation();
 					}

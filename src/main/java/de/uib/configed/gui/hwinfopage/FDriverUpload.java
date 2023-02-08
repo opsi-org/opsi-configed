@@ -61,10 +61,11 @@ public class FDriverUpload extends SecondaryFrame {
 
 		Logging.info(this, " setUploadParameters " + main.getSelectedClients()[0]);
 
-		if (main.getSelectedClients() != null && main.getSelectedClients().length == 1)
+		if (main.getSelectedClients() != null && main.getSelectedClients().length == 1) {
 			panelDriverUpload.setClientName(main.getSelectedClients()[0]);
-		else
+		} else {
 			panelDriverUpload.setClientName("");
+		}
 
 		panelDriverUpload.setDepot(main.getConfigserver());
 	}

@@ -63,10 +63,11 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 					@Override
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap() for modelStatistics");
-						if (initialized)
+						if (initialized) {
 							persist.reconciliationInfoRequestRefresh();
-						else
+						} else {
 							initialized = true;
+						}
 						return persist.getLicenceStatistics();
 					}
 				})), 0, thePanel.panelStatistics, updateCollection);

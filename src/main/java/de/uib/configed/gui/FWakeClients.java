@@ -38,8 +38,9 @@ public class FWakeClients extends FShowList {
 
 		for (Entry<String, List<String>> depotEntry : hostSeparationByDepots.entrySet()) {
 			counterByDepots.put(depotEntry.getKey(), 0);
-			if (depotEntry.getValue().size() > maxSize)
+			if (depotEntry.getValue().size() > maxSize) {
 				maxSize = depotEntry.getValue().size();
+			}
 		}
 
 		int turn = 0;
@@ -63,8 +64,9 @@ public class FWakeClients extends FShowList {
 
 						executionerForDepots.put(depotEntry.getKey(), exec1); // may be Executioner.NONE
 
-						if (exec1 == AbstractExecutioner.NONE)
+						if (exec1 == AbstractExecutioner.NONE) {
 							appendLine("!! giving up connecting to  " + depotEntry.getKey());
+						}
 
 					}
 

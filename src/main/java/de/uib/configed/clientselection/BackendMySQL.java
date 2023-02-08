@@ -270,7 +270,6 @@ public class BackendMySQL {
 																										// subgroups
 			return getGroupWithSubgroup(jsonObject.getString("data").replace("*", "%"));
 		} else {
-
 			MySQL mySQL = new MySQL(hwConfig);
 			String query = mySQL.getMySQLforJSONObject(jsonObject);
 
@@ -339,8 +338,9 @@ public class BackendMySQL {
 		try {
 			JSONObject jsonObject = new JSONObject(query);
 
-			if (jsonObject.has("data"))
+			if (jsonObject.has("data")) {
 				return getListFromJSONObject(jsonObject.getJSONObject("data"));
+			}
 		} catch (JSONException e) {
 			Logging.warning(this, "" + e);
 		}
@@ -358,9 +358,9 @@ public class BackendMySQL {
 			} catch (Exception e) {
 				Logging.warning(this, "" + e);
 			}
-
-		} else
+		} else {
 			return mySQLRecursion.getMySQLforJSONObject(jsonObject);
+		}
 
 		return "";
 	}
@@ -372,12 +372,10 @@ public class BackendMySQL {
 		for (int i = 0; i < length; i++) {
 			try {
 
-				if (i == 0) {
-					if (type == Type.NOT)
-						mysql.append(" " + type);
-				} else {
-					if (type == Type.AND || type == Type.OR)
-						mysql.append(type);
+				if (i == 0 && type == Type.NOT) {
+					mysql.append(" " + type);
+				} else if (type == Type.AND || type == Type.OR) {
+					mysql.append(type);
 				}
 
 				mysql.append(doJSONObject(mySQLRecursion, (JSONObject) jsonArray.get(i)));

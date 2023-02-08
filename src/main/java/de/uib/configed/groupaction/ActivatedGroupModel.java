@@ -17,8 +17,8 @@ import java.util.Set;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
-import de.uib.configed.HostsStatusInfo;
 import de.uib.configed.Configed;
+import de.uib.configed.HostsStatusInfo;
 import de.uib.utilities.logging.Logging;
 
 public class ActivatedGroupModel {
@@ -76,8 +76,9 @@ public class ActivatedGroupModel {
 	}
 
 	public int getNumberOfClients() {
-		if (associatedClients == null)
+		if (associatedClients == null) {
 			return 0;
+		}
 
 		return associatedClients.size();
 	}
@@ -88,20 +89,11 @@ public class ActivatedGroupModel {
 
 	public String getLabel() {
 		if (groupName != null && groupDescription != null && !groupDescription.equals(groupName)
-				&& !groupDescription.equals(""))
-			return
+				&& !groupDescription.equals("")) {
+			return groupName + "  (" + groupDescription + ") ";
+		}
 
-			groupName
-
-					+ "  (" + groupDescription + ") "
-			// + </html>"
-			;
-
-		return ""
-				// + <html><b>"
-				+ groupName
-
-		;
+		return "" + groupName;
 	}
 
 	public String getGroupDescription() {

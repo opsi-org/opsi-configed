@@ -11,8 +11,10 @@ public final class ErrorCode {
 
 	public static String tell(int n) {
 		String result = "";
-		if (n > 0)
+		if (n > 0) {
 			result = "problem type " + n + ": ";
+		}
+
 		switch (n) {
 		case NO_ERROR:
 			result = result + "no error occured";

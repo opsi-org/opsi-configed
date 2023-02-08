@@ -166,8 +166,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					if (group.element instanceof GroupElement) {
 						JComboBox<String> box = (JComboBox<String>) group.dataComponent;
 						box.removeAllItems();
-						for (String data : group.element.getEnumData())
+						for (String data : group.element.getEnumData()) {
 							box.addItem(data);
+						}
 					}
 				}
 			}
@@ -197,11 +198,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
 															// client view
 
-		if (manager != null)
+		if (manager != null) {
 			clients = manager.selectClients();
+		}
 
-		if (clients == null)
+		if (clients == null) {
 			return;
+		}
 
 		Logging.debug(this, clients.toString());
 		selectionPanel.setSelectedValues(clients);
@@ -395,8 +398,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		// hardware
 		List<String> hardwareList = new LinkedList<>(manager.getLocalizedHardwareList().keySet());
 		Collections.sort(hardwareList);
-		for (String hardware : hardwareList)
+		for (String hardware : hardwareList) {
 			newElementBox.addItem(hardware);
+		}
 
 		newElementBox.addActionListener(new AddElementListener());
 
@@ -435,11 +439,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				result.connectionType.getPreferredSize().height));
 		if (operations.length > 1) {
 			JComboBox<String> box = new JComboBox<>();
-			for (SelectOperation op : operations)
+			for (SelectOperation op : operations) {
 				box.addItem(op.getOperationString());
+			}
 			result.operationComponent = box;
-		} else
+		} else {
 			result.operationComponent = new JLabel(operations[0].getOperationString(), SwingConstants.CENTER);
+		}
 		result.operationComponent.setMaximumSize(new Dimension(result.operationComponent.getMaximumSize().width,
 				result.operationComponent.getPreferredSize().height));
 		result.dataComponent = new JLabel(); // to reserve the place
@@ -716,10 +722,11 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	/* Gets the selected operation and adds the given data to it. */
 	private SelectOperation getOperation(SimpleGroup group) {
 		int operationIndex;
-		if (group.operationComponent instanceof JComboBox)
+		if (group.operationComponent instanceof JComboBox) {
 			operationIndex = ((JComboBox) group.operationComponent).getSelectedIndex();
-		else
+		} else {
 			operationIndex = 0;
+		}
 
 		SelectOperation operation = group.element.supportedOperations().get(operationIndex);
 
@@ -732,27 +739,31 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		case TextType:
 		case DateType:
 			text = ((TextInputField) (group.dataComponent)).getText();
-			if (text.isEmpty())
+			if (text.isEmpty()) {
 				return null;
+			}
 			data = text;
 			break;
 		case IntegerType:
 			Integer value = (Integer) ((JSpinner) group.dataComponent).getValue();
-			if (value == 0)
+			if (value == 0) {
 				return null;
+			}
 			data = value;
 			break;
 		case BigIntegerType:
 			Long value2 = ((SpinnerWithExt) group.dataComponent).getValue();
-			if (value2 == 0)
+			if (value2 == 0) {
 				return null;
+			}
 			data = value2;
 			break;
 		case EnumType:
 
 			String textEnum = ((TextInputField) group.dataComponent).getText();
-			if (textEnum.isEmpty())
+			if (textEnum.isEmpty()) {
 				return null;
+			}
 			data = textEnum;
 			break;
 		case NoneType:
@@ -793,15 +804,17 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private SelectionManager.ConnectionStatus getStatus(boolean andSelected, boolean notSelected) {
 		SelectionManager.ConnectionStatus conStatus;
 		if (andSelected) {
-			if (notSelected)
+			if (notSelected) {
 				conStatus = SelectionManager.ConnectionStatus.AND_NOT;
-			else
+			} else {
 				conStatus = SelectionManager.ConnectionStatus.AND;
+			}
 		} else {
-			if (notSelected)
+			if (notSelected) {
 				conStatus = SelectionManager.ConnectionStatus.OR_NOT;
-			else
+			} else {
 				conStatus = SelectionManager.ConnectionStatus.OR;
+			}
 		}
 		return conStatus;
 	}
@@ -812,8 +825,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		contentPane.remove(group.connectionType);
 		contentPane.remove(group.elementLabel);
 		contentPane.remove(group.operationComponent);
-		if (group.dataComponent != null)
+		if (group.dataComponent != null) {
 			contentPane.remove(group.dataComponent);
+		}
 		contentPane.remove(group.openParenthesis);
 		contentPane.remove(group.closeParenthesis);
 		contentPane.revalidate();
@@ -825,17 +839,21 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		for (SimpleGroup group : groups) {
 			group.openParenthesis.setVisible(false);
 			group.closeParenthesis.setVisible(false);
-			if (getOperation(group) == null)
+			if (getOperation(group) == null) {
 				continue;
+			}
+
 			if (group.connectionType.isAndSelected() && inOr) {
 				inOr = false;
 				group.closeParenthesis.setVisible(true);
 			}
+
 			if (group.connectionType.isOrSelected() && !inOr) {
 				inOr = true;
 				group.openParenthesis.setVisible(true);
 			}
 		}
+
 		if (inOr) {
 			SimpleGroup group = groups.getLast();
 			group.closeParenthesis.setVisible(true);
@@ -856,17 +874,20 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			if (complex.openParenthesis.isActivated() && complex.closeParenthesis.isActivated()) {
 				complex.openParenthesis.setActivated(false);
 				complex.closeParenthesis.setActivated(false);
-			} else if (complex.openParenthesis.isActivated())
+			} else if (complex.openParenthesis.isActivated()) {
 				stack.push(complex);
-			else if (complex.closeParenthesis.isActivated()) {
-				if (!stack.isEmpty())
+			} else if (complex.closeParenthesis.isActivated()) {
+				if (!stack.isEmpty()) {
 					stack.pop();
-				else
+				} else {
 					complex.closeParenthesis.setActivated(false);
+				}
 			}
 		}
-		for (ComplexGroup stackElement : stack)
+
+		for (ComplexGroup stackElement : stack) {
 			stackElement.openParenthesis.setActivated(false);
+		}
 	}
 
 	/*
@@ -874,8 +895,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	 * operation.
 	 */
 	private void addDataComponent(SimpleGroup sourceGroup, int operationIndex) {
-		if (operationIndex == -1)
+		if (operationIndex == -1) {
 			return;
+		}
 		switch (sourceGroup.element.supportedOperations().get(operationIndex).getDataType()) {
 		case TextType:
 			TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
@@ -1072,20 +1094,20 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				return;
 			}
 			ComplexGroup element;
-			if (op instanceof HostOperation)
+			if (op instanceof HostOperation) {
 				element = createHostGroup();
-			else if (op instanceof SoftwareOperation)
+			} else if (op instanceof SoftwareOperation) {
 				element = createSoftwareGroup();
-			else if (op instanceof PropertiesOperation)
+			} else if (op instanceof PropertiesOperation) {
 				element = createPropertiesGroup();
-			else if (op instanceof SoftwareWithPropertiesOperation)
+			} else if (op instanceof SoftwareWithPropertiesOperation) {
 				element = createSoftwareWithPropertiesGroup();
-			else if (op instanceof SwAuditOperation)
+			} else if (op instanceof SwAuditOperation) {
 				element = createSwAuditGroup();
-			else if (op instanceof HardwareOperation)
+			} else if (op instanceof HardwareOperation) {
 				element = createHardwareGroup(
 						getNonGroupOperation((HardwareOperation) op).getElement().getLocalizedPathArray()[0]);
-			else {
+			} else {
 				Logging.error("Not a group operation: " + op.getClassName());
 				reset();
 				return;
@@ -1098,8 +1120,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			Logging.debug(this, "subload: " + subList.size());
 			setGroupValues(element, subList);
 		}
-		if (!complexElements.isEmpty())
+		if (!complexElements.isEmpty()) {
 			complexElements.getLast().connectionType.setVisible(false);
+		}
 		buildParentheses();
 		contentPane.revalidate();
 		contentPane.repaint();
@@ -1107,8 +1130,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private SelectOperation getNonGroupOperation(SelectGroupOperation operation) {
 		SelectOperation child = operation.getChildOperations().get(0);
-		while (child instanceof SelectGroupOperation)
+		while (child instanceof SelectGroupOperation) {
 			child = ((SelectGroupOperation) child).getChildOperations().get(0);
+		}
 		return child;
 	}
 
@@ -1118,8 +1142,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				SelectionManager.OperationWithStatus ows = owsList.get(i);
 				SelectOperation op = ows.operation;
 				if (op.getElement().getPath().equals(simple.element.getPath())) {
-					if (op.getElement().supportedOperations().size() > 1)
+					if (op.getElement().supportedOperations().size() > 1) {
 						((JComboBox) simple.operationComponent).setSelectedItem(op.getOperationString());
+					}
 					setComponentData(simple.dataComponent, op.getSelectData());
 					setConnectionTypes(simple.connectionType, simple.negateButton, ows.status);
 					Logging.debug(this, "simple, open, closed: " + simple.element.getClassName() + ows.parenthesisOpen
@@ -1132,14 +1157,17 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private void setComponentData(JComponent component, SelectData data) {
-		if (data == null || data.getData() == null)
+		if (data == null || data.getData() == null) {
 			return;
-		if (component instanceof TextInputField)
+		}
+
+		if (component instanceof TextInputField) {
 			((TextInputField) component).setText(data.getData().toString());
-		else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BigIntegerType)
+		} else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BigIntegerType) {
 			((SpinnerWithExt) component).setValue((Long) data.getData());
-		else if (component instanceof JSpinner && data.getType() == SelectData.DataType.IntegerType)
+		} else if (component instanceof JSpinner && data.getType() == SelectData.DataType.IntegerType) {
 			((JSpinner) component).setValue(data.getData());
+		}
 	}
 
 	private void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not,
@@ -1209,8 +1237,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					contentPane.remove(group.negateButton);
 					contentPane.remove(group.openParenthesis);
 					contentPane.remove(group.closeParenthesis);
-					for (SimpleGroup simple : group.groupList)
+					for (SimpleGroup simple : group.groupList) {
 						removeGroup(simple);
+					}
 					contentPane.revalidate();
 					contentPane.repaint();
 					complexIterator.remove();
@@ -1218,31 +1247,37 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					break;
 				}
 			}
-			if (!complexElements.isEmpty())
+
+			if (!complexElements.isEmpty()) {
 				complexElements.getLast().connectionType.setVisible(false);
+			}
 		}
 	}
 
 	private class AddElementListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (!complexElements.isEmpty())
+			if (!complexElements.isEmpty()) {
 				complexElements.getLast().connectionType.setVisible(true);
+			}
+
 			int index = newElementBox.getSelectedIndex();
-			if (index == 0)
+
+			if (index == 0) {
 				return;
-			if (index == 1)
+			} else if (index == 1) {
 				complexElements.add(createHostGroup());
-			else if (index == 2)
+			} else if (index == 2) {
 				complexElements.add(createSoftwareGroup());
-			else if (index == 3 && withMySQL)
+			} else if (index == 3 && withMySQL) {
 				complexElements.add(createPropertiesGroup());
-			else if (index == 4 && withMySQL)
+			} else if (index == 4 && withMySQL) {
 				complexElements.add(createSoftwareWithPropertiesGroup());
-			else if (index == 5)
+			} else if (index == 5) {
 				complexElements.add(createSwAuditGroup());
-			else
+			} else {
 				complexElements.add(createHardwareGroup(newElementBox.getSelectedItem().toString()));
+			}
 
 			contentPane.revalidate();
 			contentPane.repaint();
@@ -1265,11 +1300,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 						break;
 					}
 				}
-				if (source != null)
+				if (source != null) {
 					break;
+				}
 			}
-			if (source == null)
+			if (source == null) {
 				return;
+			}
 
 			if (sourceGroup.dataComponent != null) {
 				contentPane.remove(sourceGroup.dataComponent);
@@ -1277,10 +1314,11 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			}
 
 			int index = 0;
-			if (source instanceof JComboBox)
+			if (source instanceof JComboBox) {
 				index = ((JComboBox) source).getSelectedIndex();
-			else if (source instanceof JLabel)
+			} else if (source instanceof JLabel) {
 				index = 0;
+			}
 			addDataComponent(sourceGroup, index);
 
 			buildParentheses();
@@ -1293,8 +1331,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private class NotButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			if (!(event.getSource() instanceof IconAsButton))
+			if (!(event.getSource() instanceof IconAsButton)) {
 				return;
+			}
 			IconAsButton button = (IconAsButton) event.getSource();
 			button.setActivated(!button.isActivated());
 			Logging.debug(this, "Negate button is activated: " + button.isActivated());
@@ -1304,8 +1343,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private class ParenthesisListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			if (!(event.getSource() instanceof IconAsButton))
+			if (!(event.getSource() instanceof IconAsButton)) {
 				return;
+			}
 			IconAsButton button = (IconAsButton) event.getSource();
 			button.setActivated(!button.isActivated());
 		}
@@ -1341,8 +1381,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		public long getValue() {
 			long value = (Long) spinner.getValue();
-			for (int i = 0; i < box.getSelectedIndex(); i++)
+			for (int i = 0; i < box.getSelectedIndex(); i++) {
 				value *= 1024l;
+			}
 			return value;
 		}
 
@@ -1365,21 +1406,14 @@ public class ClientSelectionDialog extends FGeneralDialog {
 						Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME
 								+ ")",
 						JOptionPane.OK_OPTION);
-
 				toFront();
 
 				return;
-			}
-
-			else if (!text.matches("[\\p{javaLowerCase}\\d_-]*")) {
-				JOptionPane.showMessageDialog(saveButton, "wrong name", "error",
-
-						JOptionPane.OK_OPTION);
-
+			} else if (!text.matches("[\\p{javaLowerCase}\\d_-]*")) {
+				JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
 				toFront();
 
 				return;
-
 			}
 
 			collectData();

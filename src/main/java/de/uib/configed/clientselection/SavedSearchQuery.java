@@ -52,16 +52,18 @@ public class SavedSearchQuery {
 		searchName = null;
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].equals("-h") || args[i].equals("-u") || args[i].equals("-p")) {
-				if (lastOption != null)
+				if (lastOption != null) {
 					return false;
+				}
 				lastOption = args[i];
 			} else {
 				if (lastOption != null) {
 					addInfo(lastOption.trim(), args[i]);
 					lastOption = null;
 				} else {
-					if (searchName != null)
+					if (searchName != null) {
 						return false;
+					}
 					searchName = args[i];
 				}
 			}
@@ -128,8 +130,9 @@ public class SavedSearchQuery {
 		manager.loadSearch(searchName);
 
 		List<String> result = manager.selectClients();
-		if (printing)
+		if (printing) {
 			printResult(result);
+		}
 		return result;
 	}
 
@@ -173,18 +176,20 @@ public class SavedSearchQuery {
 	}
 
 	private void addInfo(String option, String value) {
-		if (option.equals("-h"))
+		if (option.equals("-h")) {
 			host = value;
-		else if (option.equals("-u"))
+		} else if (option.equals("-u")) {
 			user = value;
-		else if (option.equals("-p"))
+		} else if (option.equals("-p")) {
 			password = value;
-		else
+		} else {
 			throw new IllegalArgumentException("Unknown option " + option);
+		}
 	}
 
 	private void printResult(List<String> result) {
-		for (String line : result)
+		for (String line : result) {
 			Logging.debug(line);
+		}
 	}
 }

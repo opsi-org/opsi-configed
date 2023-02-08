@@ -20,8 +20,9 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 	public OpsiDataSoftwareOperation(SelectOperation operation) {
 		super(operation);
 		controller = de.uib.opsidatamodel.PersistenceControllerFactory.getPersistenceController();
-		if (controller == null)
+		if (controller == null) {
 			Logging.warning(this, "Warning, controller is null!");
+		}
 		productDefaultStates = controller.getProductDefaultStates();
 		productsWithDefaultValues = new TreeSet<>(productDefaultStates.keySet());
 	}
@@ -42,8 +43,9 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 				oClient.setCurrentSoftwareValue(value);
 				Logging.debug(this,
 						" getChildOperations().get(0) instance of " + (getChildOperations().get(0)).getClass());
-				if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client))
+				if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
 					return true;
+				}
 			} else {
 				Logging.error(this, "Software map returned bad value (not a Map)");
 			}
@@ -53,8 +55,9 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 			oClient.setCurrentSoftwareValue(productDefaultStates.get(product));
 			Logging.debug(this, " getChildOperations().get(0) check default product values, instance of "
 					+ (getChildOperations().get(0)).getClass());
-			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client))
+			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
 				return true;
+			}
 		}
 
 		return false;

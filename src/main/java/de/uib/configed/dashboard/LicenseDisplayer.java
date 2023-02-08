@@ -182,8 +182,9 @@ public class LicenseDisplayer {
 		TableUpdateCollection updateCollection;
 
 		columnNames = new ArrayList<>();
-		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
+		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS) {
 			columnNames.add(key);
+		}
 
 		classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
@@ -263,10 +264,11 @@ public class LicenseDisplayer {
 		for (String swID : persist.getName2SWIdents().get(swName)) {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
-			if (licpool == null)
+			if (licpool == null) {
 				range.add(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL);
-			else
+			} else {
 				range.add(licpool);
+			}
 		}
 
 		return range;

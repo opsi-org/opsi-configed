@@ -230,8 +230,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				if (e.isPopupTrigger()) {
 					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 
-					if (selPath != null && isUserPath(selPath))
+					if (selPath != null && isUserPath(selPath)) {
 						super.maybeShowPopup(e);
+					}
 				}
 			}
 		};
@@ -243,8 +244,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				if (e.isPopupTrigger()) {
 					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 					Logging.info(this, " sel path " + selPath);
-					if (selPath != null && isUserRoot(selPath))
+					if (selPath != null && isUserRoot(selPath)) {
 						super.maybeShowPopup(e);
+					}
 				}
 			}
 		};
@@ -256,8 +258,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				if (e.isPopupTrigger()) {
 					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 					Logging.info(this, " sel path " + selPath);
-					if (selPath != null && isRolePath(selPath, false))
+					if (selPath != null && isRolePath(selPath, false)) {
 						super.maybeShowPopup(e);
+					}
 				}
 			}
 		};
@@ -269,8 +272,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 				if (e.isPopupTrigger()) {
 					TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 					Logging.info(this, " sel path " + selPath);
-					if (selPath != null && isRolePath(selPath, true))
+					if (selPath != null && isRolePath(selPath, true)) {
 						super.maybeShowPopup(e);
+					}
 				}
 			}
 		};
@@ -292,13 +296,13 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 			String role = roleFromRolerootKey(classkey);
 
-			if (role != null)
+			if (role != null) {
 				theRoles.add(role);
-
-			else {
+			} else {
 				String user = userFromUserrootkey(classkey);
-				if (user != null)
+				if (user != null) {
 					theUsers.add(user);
+				}
 			}
 
 		}
@@ -321,23 +325,21 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
 					String user = UserConfig.getUserFromKey(key);
-					if (user != null)
 					// we really are in a user branch
-					{
+					if (user != null) {
 
 						String rolekey = entry.getKey() + "." + UserConfig.HAS_ROLE_ATTRIBUT;
 
-						if (!(key.equals(rolekey)))
 						// rolekey may be edited
-						{
-
+						if (!(key.equals(rolekey))) {
 							String theRole = null;
 
 							List<Object> values = de.uib.opsidatamodel.PersistenceControllerFactory
 									.getPersistenceController().getConfigDefaultValues().get(rolekey);
 
-							if (values != null && !values.isEmpty())
+							if (values != null && !values.isEmpty()) {
 								theRole = "" + values.get(0);
+							}
 
 							boolean obeyToRole = (theRole != null && !(theRole.equals(UserConfig.NONE_PROTOTYPE)));
 
@@ -360,7 +362,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 			);
 		}
-
 	}
 
 	private String roleFromRolerootKey(String key) {
@@ -370,8 +371,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		if (splitted.length == 3 && splitted[0].equals(UserConfig.CONFIGKEY_STR_USER)
 				&& splitted[1].equals(UserConfig.ROLE)) {
 			result = splitted[2];
-			if (result.charAt(0) == '{' && result.charAt(result.length() - 1) == '}')
+			if (result.charAt(0) == '{' && result.charAt(result.length() - 1) == '}') {
 				result = result.substring(1, result.length() - 1);
+			}
 		}
 
 		return result;
@@ -384,8 +386,9 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		if (splitted.length == 2 && splitted[0].equals(UserConfig.CONFIGKEY_STR_USER)
 				&& !(splitted[1].equals(UserConfig.ROLE))) {
 			result = splitted[1];
-			if (result.charAt(0) == '{' && result.charAt(result.length() - 1) == '}')
+			if (result.charAt(0) == '{' && result.charAt(result.length() - 1) == '}') {
 				result = result.substring(1, result.length() - 1);
+			}
 		}
 
 		return result;
@@ -394,14 +397,13 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	private boolean isRolePath(TreePath path, boolean roleRoot) {
 		int requiredCount = 4;
 
-		if (roleRoot)
+		if (roleRoot) {
 			requiredCount = 3;
+		}
 
 		if (path.getPathCount() == requiredCount
 				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER)
-				&& path.getPathComponent(2).toString().equals(UserConfig.ROLE)
-
-		) {
+				&& path.getPathComponent(2).toString().equals(UserConfig.ROLE)) {
 			Logging.debug(this, "recognized role path " + path);
 			return true;
 		}
@@ -519,7 +521,6 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		} else {
 
 			if (!newData.isEmpty()) {
-
 				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
 						new Object[] { AbstractExecutioner.jsonArray(newData) });
 

@@ -40,8 +40,9 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 			}
 
 			oClient.setCurrentSwAuditValue(controller.getInstalledSoftwareInformation().get(swIdent));
-			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client))
+			if (((ExecutableOperation) getChildOperations().get(0)).doesMatch(client)) {
 				return true;
+			}
 		}
 		return false;
 	}

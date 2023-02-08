@@ -169,8 +169,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (!fSoftwarename2LicencePool.isVisible())
+				if (!fSoftwarename2LicencePool.isVisible()) {
 					fSoftwarename2LicencePool.setLocationRelativeTo(Globals.frame1);
+				}
 
 				Logging.info(this, "buttonSupplementSimilar actionPerformed, we have selected "
 						+ panelRadiobuttonsPreselectionForName2Pool.getValue());
@@ -356,8 +357,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		// take max width
 		int col0width = labelCountAssignedStatus.getPreferredSize().width;
-		if (labelCountAllWindowsSoftware.getPreferredSize().width > col0width)
+		if (labelCountAllWindowsSoftware.getPreferredSize().width > col0width) {
 			col0width = labelCountAllWindowsSoftware.getPreferredSize().width;
+		}
 
 		layoutPanelInfoConfig.setHorizontalGroup(layoutPanelInfoConfig.createSequentialGroup()
 				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
@@ -548,8 +550,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		Logging.info(this, " stateChanged modelSWnames swname  >>" + resetToSWname + "<<");
 		fSoftwarename2LicencePool.modelSWnames.requestReload();
 		fSoftwarename2LicencePool.modelSWnames.reset();
-		if (fSoftwarename2LicencePool.modelSWxLicencepool == null)
+		if (fSoftwarename2LicencePool.modelSWxLicencepool == null) {
 			return;
+		}
 
 		fSoftwarename2LicencePool.modelSWxLicencepool.requestReload();
 		fSoftwarename2LicencePool.modelSWnames.reset();

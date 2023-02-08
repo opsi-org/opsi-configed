@@ -601,8 +601,9 @@ public class MainFrame extends JFrame
 
 		private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
 				int maxRightWidth) {
-			if (splitpane == null || rightpane == null)
+			if (splitpane == null || rightpane == null) {
 				return;
+			}
 
 			int dividerLocation = splitpane.getDividerLocation();
 
@@ -610,7 +611,6 @@ public class MainFrame extends JFrame
 			int missingSpace = minRightWidth - sizeOfRightPanel;
 			if (missingSpace > 0 && dividerLocation > minLeftWidth) {
 				splitpane.setDividerLocation(dividerLocation - missingSpace);
-
 			}
 
 			if (sizeOfRightPanel > maxRightWidth) {
@@ -621,8 +621,9 @@ public class MainFrame extends JFrame
 		public void repairSizes() {
 			// repair sizes when the frame is resized
 
-			if (panelClientSelection == null)
+			if (panelClientSelection == null) {
 				return;
+			}
 
 			splitterPanelClientSelection = panelClientSelection.getSize().width - clientPaneW;
 
@@ -666,8 +667,9 @@ public class MainFrame extends JFrame
 
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			reloadAction();
-			if (iconButtonReloadLicenses.isEnabled())
+			if (iconButtonReloadLicenses.isEnabled()) {
 				reloadLicensesAction();
+			}
 		});
 
 		jMenuFileLanguage.setText(Configed.getResourceValue("MainFrame.jMenuFileChooseLanguage"));
@@ -976,9 +978,9 @@ public class MainFrame extends JFrame
 
 		jMenuClients.add(jMenuFreeLicences);
 		jMenuClients.add(jMenuChangeClientID);
-		if (multidepot)
+		if (multidepot) {
 			jMenuClients.add(jMenuChangeDepot);
-
+		}
 		jMenuClients.addSeparator();
 
 		// --
@@ -1044,8 +1046,9 @@ public class MainFrame extends JFrame
 		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
 
 		jMenuSSHConnection.setEnabled(false);
-		if (Configed.sshConnectOnStart)
+		if (Configed.sshConnectOnStart) {
 			factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
+		}
 
 		if (factory.checkSSHCommandMethod()) {
 			Logging.info(this, "setupMenuServer add commandcontrol");
@@ -1057,8 +1060,9 @@ public class MainFrame extends JFrame
 
 		jMenuServer.add(jMenuSSHConnection);
 		jMenuServer.add(jMenuSSHConfig);
-		if (factory.checkSSHCommandMethod())
+		if (factory.checkSSHCommandMethod()) {
 			jMenuServer.add(jMenuSSHCommandControl);
+		}
 
 		jMenuServer.addSeparator();
 
@@ -1089,8 +1093,9 @@ public class MainFrame extends JFrame
 					parentMenu.setIcon(Globals.createImageIcon("images/burger_menu_09.png", "..."));
 				}
 
-				if (!(parentMenuName.equals(SSHCommandFactory.PARENT_NULL)))
+				if (!(parentMenuName.equals(SSHCommandFactory.PARENT_NULL))) {
 					firstParentGroup = false;
+				}
 
 				for (final SSHCommandTemplate com : listCom) {
 					commandsExist = true;
@@ -1101,16 +1106,16 @@ public class MainFrame extends JFrame
 					jMenuItem.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED))
+							if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED)) {
 								Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message")
 										+ " " + factory.getConnectionState());
-							else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED))
+							} else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
 								Logging.error(this,
 										Configed.getResourceValue("SSHConnection.CONNECTION_NOT_ALLOWED.message"));
-							else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN))
+							} else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN)) {
 								Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message")
 										+ " " + factory.getConnectionState());
-							else {
+							} else {
 								// Create new instance of the same command, so that further
 								// modifications would not affect the original command.
 								final SSHCommandTemplate c = new SSHCommandTemplate(com);
@@ -1126,23 +1131,27 @@ public class MainFrame extends JFrame
 						if (parentMenuName.equals(SSHCommandFactory.PARENT_OPSI)) {
 							menuOpsi = parentMenu;
 							jMenuServer.add(menuOpsi);
-						} else
+						} else {
 							jMenuServer.add(parentMenu);
+						}
 					}
-					if (isReadOnly)
+					if (isReadOnly) {
 						jMenuItem.setEnabled(false);
-					if (commandsAreDeactivated)
+					}
+					if (commandsAreDeactivated) {
 						jMenuItem.setEnabled(false);
+					}
 				}
-				if (firstParentGroup && commandsExist)
+				if (firstParentGroup && commandsExist) {
 					jMenuServer.addSeparator();
+				}
 
 				firstParentGroup = false;
-
 			}
 			menuOpsi.addSeparator();
-		} else
+		} else {
 			jMenuServer.add(menuOpsi);
+		}
 		List<SSHCommand> commands = factory.getSSHCommandParameterList();
 		Logging.info(this, "setupMenuServer add parameterDialogs to opsi commands" + commands);
 		for (final SSHCommand command : commands) {
@@ -1368,8 +1377,9 @@ public class MainFrame extends JFrame
 			rbLoglevelItems[i] = new JRadioButtonMenuItem("[" + i + "] " + Logging.levelText(i).toLowerCase());
 
 			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
-			if (i == Logging.getLogLevelConsole())
+			if (i == Logging.getLogLevelConsole()) {
 				rbLoglevelItems[i].setSelected(true);
+			}
 
 			rbLoglevelItems[i].addActionListener(selectLoglevelListener);
 		}
@@ -1689,8 +1699,9 @@ public class MainFrame extends JFrame
 
 		popupClients.add(popupFreeLicences);
 		popupClients.add(popupChangeClientID);
-		if (multidepot)
+		if (multidepot) {
 			popupClients.add(popupChangeDepot);
+		}
 		popupClients.addSeparator();
 
 		popupClients.add(popupShowWANactiveColumn);
@@ -2113,10 +2124,11 @@ public class MainFrame extends JFrame
 				depotListPresenter.getScrollpaneDepotslist(), scrollpaneTreeClients);
 
 		Logging.info(this, "multidepot " + multidepot);
-		if (multidepot)
+		if (multidepot) {
 			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT);
-		else
+		} else {
 			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT);
+		}
 
 		panelTreeClientSelection = new JPanel();
 		GroupLayout layoutPanelTreeClientSelection = new GroupLayout(panelTreeClientSelection);
@@ -2203,12 +2215,14 @@ public class MainFrame extends JFrame
 					!FGeneralDialogLicensingInfo.extendedView);
 
 			if (licensingInfoMap.warningExists()) {
-				if (licensingInfoMap.getWarningLevel().equals(LicensingInfoMap.STATE_OVER_LIMIT))
+				if (licensingInfoMap.getWarningLevel().equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
 					jButtonOpsiLicenses = new JButton("",
 							Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
-				if (licensingInfoMap.getWarningLevel().equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT))
+				}
+				if (licensingInfoMap.getWarningLevel().equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
 					jButtonOpsiLicenses = new JButton("",
 							Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
+				}
 
 			} else {
 				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
@@ -2548,8 +2562,9 @@ public class MainFrame extends JFrame
 				String logtype = Globals.getLogType(showLogfiles.getSelectedIndex());
 
 				// logfile empty?
-				if (!configedMain.logfileExists(logtype))
+				if (!configedMain.logfileExists(logtype)) {
 					setUpdatedLogfilePanel(logtype);
+				}
 
 			}
 		});
@@ -2643,8 +2658,9 @@ public class MainFrame extends JFrame
 	// -- helper methods for interaction
 	public void saveConfigurationsSetEnabled(boolean b) {
 
-		if (Globals.isGlobalReadOnly() && b)
+		if (Globals.isGlobalReadOnly() && b) {
 			return;
+		}
 
 		Logging.debug(this, "saveConfigurationsSetEnabled " + b);
 
@@ -2758,10 +2774,11 @@ public class MainFrame extends JFrame
 		jMenuClientselectionToggleClientFilter.setState(configedMain.getFilterClientList());
 		popupSelectionToggleClientFilter.setState(configedMain.getFilterClientList());
 
-		if (!configedMain.getFilterClientList())
+		if (!configedMain.getFilterClientList()) {
 			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter_disabled-32.png", ""));
-		else
+		} else {
 			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter-32.png", ""));
+		}
 
 	}
 
@@ -2819,25 +2836,25 @@ public class MainFrame extends JFrame
 	private void groupByNotCurrentProductVersion() {
 		List<String> products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
 
-		if (!products.isEmpty())
+		if (!products.isEmpty()) {
 			configedMain.selectClientsNotCurrentProductInstalled(products, false);
-
+		}
 	}
 
 	private void groupByNotCurrentProductVersionOrBrokenInstallation() {
 		List<String> products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
 
-		if (!products.isEmpty())
+		if (!products.isEmpty()) {
 			configedMain.selectClientsNotCurrentProductInstalled(products, true);
-
+		}
 	}
 
 	private void groupByFailedProduct() {
 		List<String> products = getProduct(new ArrayList<>(new TreeSet<>(configedMain.getProductNames())));
 
-		if (!products.isEmpty())
+		if (!products.isEmpty()) {
 			configedMain.selectClientsWithFailedProduct(products);
-
+		}
 	}
 
 	public void saveGroupAction() {
@@ -2863,7 +2880,6 @@ public class MainFrame extends JFrame
 	public void reloadLicensesAction() {
 		configedMain.reloadLicensesData();
 		configedMain.licencesFrame.setVisible(true);
-
 	}
 
 	public void checkMenuItemsDisabling() {
@@ -2875,7 +2891,6 @@ public class MainFrame extends JFrame
 		List<String> disabledClientMenuEntries = configedMain.getPersistenceController().getDisabledClientMenuEntries();
 
 		if (disabledClientMenuEntries != null) {
-
 			for (String menuActionType : disabledClientMenuEntries) {
 				for (JMenuItem menuItem : menuItemsHost.get(menuActionType)) {
 					Logging.debug(this, "disable " + menuActionType + ", " + menuItem);
@@ -2890,7 +2905,6 @@ public class MainFrame extends JFrame
 				popupAddClient.setEnabled(false);
 				iconButtonNewClient.setVisible(false);
 			}
-
 		}
 	}
 
@@ -2905,7 +2919,6 @@ public class MainFrame extends JFrame
 
 		// sometimes
 		// before the menu is built completely
-
 	}
 
 	public void enableMenuItemsForClients(int countSelectedClients) {
@@ -2935,11 +2948,9 @@ public class MainFrame extends JFrame
 				jMenuChangeClientID.setEnabled(true);
 				popupChangeClientID.setEnabled(true);
 			}
-
 		}
 
 		checkMenuItemsDisabling();
-
 	}
 
 	// ------------------- set visual toggle items
@@ -2986,7 +2997,6 @@ public class MainFrame extends JFrame
 		}
 
 		info.setMessage(message.toString());
-
 		info.setVisible(true);
 	}
 
@@ -3050,13 +3060,9 @@ public class MainFrame extends JFrame
 
 			f.setMessage(message.toString());
 			f.setVisible(true);
-		}
-
-		else {
+		} else {
 			callOpsiLicensingInfo();
-
 		}
-
 	}
 
 	private void showInfoPage() {

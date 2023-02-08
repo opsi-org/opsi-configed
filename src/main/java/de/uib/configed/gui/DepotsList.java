@@ -86,18 +86,19 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	}
 
 	public void addToSelection(List<String> depots) {
-		if (depots == null || depots.isEmpty())
+		if (depots == null || depots.isEmpty()) {
 			return;
+		}
 
 		getSelectionModel().setValueIsAdjusting(true);
 
 		for (String depot : depots) {
 			int i = getIndexOf(depot);
-			if (i > -1)
+			if (i > -1) {
 				addSelectionInterval(i, i);
+			}
 		}
 		getSelectionModel().setValueIsAdjusting(false);
-
 	}
 
 	class MyListCellRenderer extends DefaultListCellRenderer {
@@ -126,8 +127,9 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 			Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-			if (!(c instanceof JComponent))
+			if (!(c instanceof JComponent)) {
 				return c;
+			}
 
 			JComponent jc = (JComponent) c;
 
@@ -136,15 +138,17 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 				String key = "";
 
-				if (value != null)
+				if (value != null) {
 					key = "" + value;
+				}
 
 				if (extendedInfo != null && extendedInfo.get(key) != null
 						&& extendedInfo.get(key).get("description") != null
-						&& !("" + extendedInfo.get(key).get("description")).equals(""))
+						&& !("" + extendedInfo.get(key).get("description")).equals("")) {
 					tooltipText = "" + extendedInfo.get(value).get("description");
-				else
+				} else {
 					tooltipText = key;
+				}
 
 				tooltipText = (Globals.fillStringToLength(tooltipText + " ", FILL_LENGTH));
 
@@ -153,9 +157,9 @@ public class DepotsList extends JList<String> implements ComponentListener {
 					((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
 					((JLabel) jc).setToolTipText(
 							"Depot " + depot + " " + Configed.getResourceValue("Permission.depot.not_accessible"));
-				} else
-
+				} else {
 					((JLabel) jc).setToolTipText(tooltipText);
+				}
 			}
 
 			return jc;

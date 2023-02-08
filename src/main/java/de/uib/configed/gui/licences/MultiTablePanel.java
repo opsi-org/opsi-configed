@@ -30,12 +30,14 @@ public class MultiTablePanel extends de.uib.utilities.swing.tabbedpane.TabClient
 	@Override
 	public boolean mayLeave() {
 
-		if (Globals.isGlobalReadOnly())
+		if (Globals.isGlobalReadOnly()) {
 			return true;
+		}
 
 		boolean result = super.mayLeave();
-		if (result)
+		if (result) {
 			result = controller.mayLeave();
+		}
 
 		return result;
 	}

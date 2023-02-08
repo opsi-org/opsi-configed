@@ -109,8 +109,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
-			if (poolIds.size() <= 1)
+			if (poolIds.size() <= 1) {
 				poolIds.add("");
+			}
 			// hack, since combo box shows nothing otherwise
 
 			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
@@ -180,8 +181,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
-			if (poolIds.size() <= 1)
+			if (poolIds.size() <= 1) {
 				poolIds.add("");
+			}
 			// hack, since combo box shows nothing otherwise
 
 			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
@@ -218,8 +220,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 			Iterator<TableEditItem> iter = updateCollection.iterator();
 			while (iter.hasNext() && !keyNew) {
 				TableEditItem update = iter.next();
-				if (update.getSource() == modelSoftwarelicences && update.keyChanged())
+				if (update.getSource() == modelSoftwarelicences && update.keyChanged()) {
 					keyNew = true;
+				}
 			}
 			if (keyNew) {
 				JOptionPane.showMessageDialog(mainController.licencesFrame,
@@ -323,8 +326,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 			Iterator<TableEditItem> iter = updateCollection.iterator();
 			while (iter.hasNext() && !keyNew) {
 				TableEditItem update = iter.next();
-				if (update.getSource() == modelLicencecontracts && update.keyChanged())
+				if (update.getSource() == modelLicencecontracts && update.keyChanged()) {
 					keyNew = true;
+				}
 			}
 			if (keyNew) {
 				JOptionPane.showMessageDialog(mainController.licencesFrame,
