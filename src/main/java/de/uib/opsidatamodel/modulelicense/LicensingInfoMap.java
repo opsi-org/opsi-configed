@@ -178,8 +178,9 @@ public class LicensingInfoMap {
 			jOResult = jsonObj.getJSONObject(RESULT);
 		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " constructor " + ex);
+			return;
 		}
-		datesKeys = new ArrayList<>();
+
 		configs = configVals;
 		produceConfigs();
 		checksum = produceChecksum();
@@ -198,7 +199,6 @@ public class LicensingInfoMap {
 		customerNames = produceCustomerNameSet();
 
 		instance = this;
-
 	}
 
 	private Map<String, Object> produceClientNumbersMap() {
