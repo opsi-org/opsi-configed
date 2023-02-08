@@ -2,11 +2,11 @@ package de.uib.opsidatamodel.datachanges;
 
 import java.util.Map;
 
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
-public class HostUpdate extends MapUpdate {
-	public HostUpdate(PersistenceController persis, Map newdata) {
+public class HostUpdate extends AbstractMapUpdate {
+	public HostUpdate(AbstractPersistenceController persis, Map newdata) {
 		super(persis, newdata);
 	}
 

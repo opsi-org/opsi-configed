@@ -48,7 +48,7 @@ import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.utilities.table.ListCellOptions;
 
-public abstract class DataStub {
+public abstract class AbstractDataStub {
 
 	public abstract boolean canCallMySQL();
 

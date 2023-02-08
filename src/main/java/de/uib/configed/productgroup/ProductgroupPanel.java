@@ -131,7 +131,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	private static final int MAX_COMBO_WIDTH = 200;
 	private static final int MIN_COMBO_WIDTH = 30;
 
-	abstract class MyDocumentListener implements DocumentListener {
+	abstract class AbstractDocumentListener implements DocumentListener {
 
 		protected boolean enabled = true;
 
@@ -160,8 +160,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		}
 	}
 
-	MyDocumentListener descriptionFieldListener;
-	MyDocumentListener groupsEditFieldListener;
+	AbstractDocumentListener descriptionFieldListener;
+	AbstractDocumentListener groupsEditFieldListener;
 
 	protected ConfigedMain mainController;
 
@@ -520,7 +520,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		groupsEditField.getCaret().setBlinkRate(0);
 		groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
 
-		groupsEditFieldListener = new MyDocumentListener() {
+		groupsEditFieldListener = new AbstractDocumentListener() {
 			@Override
 			public void doAction() {
 
@@ -554,7 +554,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		descriptionField.setBackground(Globals.BACKGROUND_COLOR_3);
 		descriptionField.getCaret().setBlinkRate(0);
 
-		descriptionFieldListener = new MyDocumentListener() {
+		descriptionFieldListener = new AbstractDocumentListener() {
 			@Override
 			public void doAction() {
 				Logging.debug(this, "description changed, setgroupediting");

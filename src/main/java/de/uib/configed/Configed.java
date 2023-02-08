@@ -21,7 +21,7 @@ import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.JSONthroughHTTP;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
@@ -794,9 +794,9 @@ public class Configed {
 		}
 	}
 
-	public static de.uib.opsidatamodel.PersistenceController connect() {
+	public static de.uib.opsidatamodel.AbstractPersistenceController connect() {
 		Messages.setLocale("en");
-		de.uib.opsidatamodel.PersistenceController controller = de.uib.opsidatamodel.PersistenceControllerFactory
+		de.uib.opsidatamodel.AbstractPersistenceController controller = de.uib.opsidatamodel.PersistenceControllerFactory
 				.getNewPersistenceController(host, user, password);
 		if (controller == null) {
 			Logging.error("Authentication error.");
@@ -869,7 +869,7 @@ public class Configed {
 
 			addMissingArgs();
 
-			PersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host, user,
+			AbstractPersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host, user,
 					password);
 
 			UserConfigProducing up = new UserConfigProducing(false, host,

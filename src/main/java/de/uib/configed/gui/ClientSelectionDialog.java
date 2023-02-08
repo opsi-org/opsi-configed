@@ -66,7 +66,7 @@ import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.SoftwareWithPropertiesOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
@@ -120,9 +120,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 						Configed.getResourceValue("ClientSelectionDialog.buttonSet") },
 				FRAME_WIDTH, FRAME_HEIGHT);
 
-		PersistenceController controller = PersistenceControllerFactory.getPersistenceController();
-		this.withMySQL = controller.isWithMySQL() && controller.getGlobalBooleanConfigValue(
-				PersistenceController.KEY_SEARCH_BY_SQL, PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
+		AbstractPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
+		this.withMySQL = controller.isWithMySQL()
+				&& controller.getGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SEARCH_BY_SQL,
+						AbstractPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		Logging.info(this, "use mysql " + withMySQL);
 

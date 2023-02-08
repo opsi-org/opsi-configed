@@ -6,7 +6,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public abstract class Executioner {
+public abstract class AbstractExecutioner {
 	public abstract ConnectionState getConnectionState();
 
 	public abstract void setConnectionState(ConnectionState state);
@@ -76,5 +76,5 @@ public abstract class Executioner {
 
 	public abstract String getStringValueFromItem(Object s);
 
-	public static final Executioner NONE = new NONEexecutioner();
+	public static final AbstractExecutioner NONE = new NONEexecutioner();
 }

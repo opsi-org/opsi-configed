@@ -29,9 +29,9 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
-import de.uib.opsicommand.Executioner;
+import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
@@ -424,7 +424,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		Logging.info(this, "rebuild tree, hopefully");
 		buildUserConfig();
 
-		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 		setEditableMap((Map) persist.getConfigDefaultValues(), persist.getConfigOptions());
 	}
@@ -432,7 +432,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	@Override
 	protected void reload() {
 		// partial reload
-		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		buildUserConfig();
 
 		persist.hostConfigsRequestRefresh();
@@ -497,7 +497,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	}
 
 	private void buildUserConfig() {
-		PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 		de.uib.opsidatamodel.permission.UserConfigProducing up = new de.uib.opsidatamodel.permission.UserConfigProducing(
 				false, // boolean notUsingDefaultUser, if true, we would supply the logged in user)
@@ -521,7 +521,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 			if (!newData.isEmpty()) {
 
 				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-						new Object[] { Executioner.jsonArray(newData) });
+						new Object[] { AbstractExecutioner.jsonArray(newData) });
 
 				persist.exec.doCall(omc);
 			}

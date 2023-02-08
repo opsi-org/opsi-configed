@@ -10,15 +10,15 @@ import javax.swing.JFrame;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsicommand.Executioner;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class FWakeClients extends FShowList {
 	boolean cancelled = false;
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 
-	public FWakeClients(JFrame master, String title, PersistenceController persist) {
+	public FWakeClients(JFrame master, String title, AbstractPersistenceController persist) {
 		super(master, title, false, new String[] { Configed.getResourceValue("FWakeClients.cancel") });
 		setFont(Globals.defaultFont);
 		setMessage("");
@@ -32,7 +32,7 @@ public class FWakeClients extends FShowList {
 		glassTransparency(true, 1000, 200, 0.04f);
 		Map<String, List<String>> hostSeparationByDepots = persist.getHostSeparationByDepots(selectedClients);
 		Map<String, Integer> counterByDepots = new HashMap<>();
-		Map<String, Executioner> executionerForDepots = new HashMap<>();
+		Map<String, AbstractExecutioner> executionerForDepots = new HashMap<>();
 
 		int maxSize = 0;
 
@@ -50,25 +50,25 @@ public class FWakeClients extends FShowList {
 
 				Logging.info(this,
 						"act on depot " + depotEntry.getKey() + ", executioner != NONE  "
-								+ (executionerForDepots.get(depotEntry.getKey()) != Executioner.NONE)
+								+ (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.NONE)
 								+ " counterByDepots.get(depot) " + counterByDepots.get(depotEntry.getKey()));
 
-				if (executionerForDepots.get(depotEntry.getKey()) != Executioner.NONE
+				if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.NONE
 						&& counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size())
 
 				{
 					if (executionerForDepots.get(depotEntry.getKey()) == null) {
-						Executioner exec1 = persist.retrieveWorkingExec(depotEntry.getKey());
+						AbstractExecutioner exec1 = persist.retrieveWorkingExec(depotEntry.getKey());
 						// we try to connect when the first client of a depot should be connected
 
 						executionerForDepots.put(depotEntry.getKey(), exec1); // may be Executioner.NONE
 
-						if (exec1 == Executioner.NONE)
+						if (exec1 == AbstractExecutioner.NONE)
 							appendLine("!! giving up connecting to  " + depotEntry.getKey());
 
 					}
 
-					if (executionerForDepots.get(depotEntry.getKey()) != Executioner.NONE) {
+					if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.NONE) {
 						String host = depotEntry.getValue().get(turn);
 
 						String line = String.format("trying to start up   %s    from depot    %s  ", host,

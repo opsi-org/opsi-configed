@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import de.uib.configed.Globals;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
-public abstract class RecordPane extends JPanel implements KeyListener {
+public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 	protected int lineHeight = Globals.LINE_HEIGHT;
 	protected int vGapSize = Globals.VGAP_SIZE;
 	protected int hGapSize = Globals.HGAP_SIZE;
@@ -40,10 +40,10 @@ public abstract class RecordPane extends JPanel implements KeyListener {
 	protected Map<String, String> hints;
 	protected Map<String, Boolean> editable;
 
-	protected RecordPane() {
+	protected AbstractRecordPane() {
 	}
 
-	protected RecordPane(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	protected AbstractRecordPane(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		init(data, labels, hints, editable);
 	}

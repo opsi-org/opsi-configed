@@ -30,7 +30,7 @@ import javax.swing.event.TableModelListener;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.PanelDashControl;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
@@ -38,7 +38,7 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class ControlDash {
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 
 	public static final String CONFIG_KEY = "configed.dash_config";
 
@@ -50,7 +50,7 @@ public class ControlDash {
 
 	private static ControlDash instance;
 
-	public static ControlDash getInstance(PersistenceController persis) {
+	public static ControlDash getInstance(AbstractPersistenceController persis) {
 		if (instance == null) {
 			instance = new ControlDash(persis);
 			instance.loadData();
@@ -59,7 +59,7 @@ public class ControlDash {
 		return instance;
 	}
 
-	private ControlDash(PersistenceController persis) {
+	private ControlDash(AbstractPersistenceController persis) {
 		Logging.info(this, "ControlDash constructed");
 		persist = persis;
 		loadData();
@@ -97,25 +97,26 @@ public class ControlDash {
 				@Override
 				protected void showDashOnStartupWasSetTo(boolean b) {
 					super.showDashOnStartupWasSetTo(b);
-					persist.setGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART, b,
+					persist.setGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART, b,
 							"(editable on dash window)");
 				}
 
 				@Override
 				protected void showDashOnLicencesActivationWasSetTo(boolean b) {
 					super.showDashOnLicencesActivationWasSetTo(b);
-					persist.setGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT, b,
+					persist.setGlobalBooleanConfigValue(
+							AbstractPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT, b,
 							"(editable on dash window)");
 				}
 			};
 
 			panelDash.setShowDashOnStartup(
-					persist.getGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART,
-							PersistenceController.DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART));
+					persist.getGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART,
+							AbstractPersistenceController.DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART));
 
-			panelDash.setShowDashOnLicencesActivation(
-					persist.getGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
-							PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT));
+			panelDash.setShowDashOnLicencesActivation(persist.getGlobalBooleanConfigValue(
+					AbstractPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
+					AbstractPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT));
 
 			String[] options = new String[] { Configed.getResourceValue("Dash.close"),
 					Configed.getResourceValue("Dash.reload") };
@@ -141,11 +142,11 @@ public class ControlDash {
 					loadData();
 					Logging.info(this, "update data ");
 					panelDash.setShowDashOnLicencesActivation(persist.getGlobalBooleanConfigValue(
-							PersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
-							PersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT));
-					panelDash.setShowDashOnStartup(
-							persist.getGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART,
-									PersistenceController.DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART));
+							AbstractPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
+							AbstractPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT));
+					panelDash.setShowDashOnStartup(persist.getGlobalBooleanConfigValue(
+							AbstractPersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART,
+							AbstractPersistenceController.DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART));
 				}
 
 				@Override

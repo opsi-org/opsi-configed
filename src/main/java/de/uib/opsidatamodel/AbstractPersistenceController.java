@@ -24,11 +24,11 @@ import org.json.JSONObject;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ControlDash;
+import de.uib.configed.type.AbstractMetaConfig;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.DatedRowList;
-import de.uib.configed.type.MetaConfig;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiProductInfo;
@@ -41,8 +41,8 @@ import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceStatisticsRow;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
+import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.Executioner;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataLoadingObservable;
@@ -50,7 +50,7 @@ import de.uib.utilities.observer.DataLoadingObserver;
 import de.uib.utilities.observer.DataRefreshedObservable;
 import de.uib.utilities.observer.DataRefreshedObserver;
 
-public abstract class PersistenceController implements DataRefreshedObservable, DataLoadingObservable {
+public abstract class AbstractPersistenceController implements DataRefreshedObservable, DataLoadingObservable {
 	public static final String CLIENT_GLOBAL_SEPARATOR = "/";
 
 	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = new HashSet<>();
@@ -155,7 +155,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		PROPERTY_CLASSES_SERVER.put(ControlDash.CONFIG_KEY, "dash configuration");
 		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
-		PROPERTY_CLASSES_SERVER.put(MetaConfig.CONFIG_KEY, "default configuration for other properties");
+		PROPERTY_CLASSES_SERVER.put(AbstractMetaConfig.CONFIG_KEY, "default configuration for other properties");
 		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
 				"<html><p>saved search configurations ,<br />do not edit here <br />- editing via the search form</p></html>");
 		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY,
@@ -202,9 +202,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	 * PersistenceController getPersistenceController () { return null; }
 	 */
 
-	public Executioner exec;
+	public AbstractExecutioner exec;
 
-	protected final Map<String, Executioner> execs = new HashMap<>();
+	protected final Map<String, AbstractExecutioner> execs = new HashMap<>();
 
 	public abstract void userConfigurationRequestReload();
 
@@ -219,7 +219,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	/* error handling convenience methods */
 
 	/* ============================ */
-	public abstract Executioner retrieveWorkingExec(String depot);
+	public abstract AbstractExecutioner retrieveWorkingExec(String depot);
 
 	protected abstract boolean makeConnection();
 
@@ -336,7 +336,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 
 	public abstract List<Map<java.lang.String, java.lang.Object>> hostRead();
 
-	public abstract HostInfoCollections getHostInfoCollections();
+	public abstract AbstractHostInfoCollections getHostInfoCollections();
 
 	public abstract List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations);
@@ -372,7 +372,7 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 	public abstract List<String> wakeOnLan(String[] hostIds);
 
 	public abstract List<String> wakeOnLan(java.util.Set<String> hostIds,
-			Map<String, List<String>> hostSeparationByDepot, Map<String, Executioner> execsByDepot);
+			Map<String, List<String>> hostSeparationByDepot, Map<String, AbstractExecutioner> execsByDepot);
 
 	public abstract List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds);
 
@@ -923,9 +923,9 @@ public abstract class PersistenceController implements DataRefreshedObservable, 
 		item.put("editable", editable);
 		item.put("multiValue", multiValue);
 
-		item.put("defaultValues", Executioner.jsonArray(defaultValues));
+		item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
 
-		item.put("possibleValues", Executioner.jsonArray(possibleValues));
+		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
 
 		return item;
 	}

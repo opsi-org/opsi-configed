@@ -13,7 +13,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -34,7 +34,7 @@ public abstract class SWExporter {
 	protected boolean askForOverwrite = false;
 	protected String filenamePrefix = "report_swaudit_";
 
-	protected PersistenceController persist;
+	protected AbstractPersistenceController persist;
 
 	protected GenTableModel modelSWInfo;
 	protected String scanInfo = "";
@@ -50,7 +50,7 @@ public abstract class SWExporter {
 	protected String title;
 
 	/* constructor for use in a initialized context */
-	protected SWExporter(PersistenceController controller) {
+	protected SWExporter(AbstractPersistenceController controller) {
 		this.persist = controller;
 	}
 

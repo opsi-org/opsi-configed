@@ -17,7 +17,7 @@ import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.SoftwareWithPropertiesOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.clientselection.serializers.OpsiDataSerializer;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.utilities.logging.Logging;
@@ -140,9 +140,10 @@ public class SelectionManager {
 	}
 
 	public List<String> selectClients() {
-		PersistenceController controller = PersistenceControllerFactory.getPersistenceController();
-		boolean withMySQL = controller.isWithMySQL() && controller.getGlobalBooleanConfigValue(
-				PersistenceController.KEY_SEARCH_BY_SQL, PersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
+		AbstractPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
+		boolean withMySQL = controller.isWithMySQL()
+				&& controller.getGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SEARCH_BY_SQL,
+						AbstractPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		SelectOperation operation = getTopOperation();
 		if (operation == null) {
@@ -166,7 +167,7 @@ public class SelectionManager {
 	}
 
 	// Filter the clients and get the matching clients back with MySQL backend
-	public List<String> selectClientsSQL(PersistenceController controller, SelectOperation operation) {
+	public List<String> selectClientsSQL(AbstractPersistenceController controller, SelectOperation operation) {
 
 		String json = serializer.getJson(operation);
 

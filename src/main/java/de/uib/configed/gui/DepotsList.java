@@ -14,7 +14,7 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class DepotsList extends JList<String> implements ComponentListener {
@@ -24,9 +24,9 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 	Map<String, Map<String, Object>> depotInfo;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 
-	public DepotsList(PersistenceController persist) {
+	public DepotsList(AbstractPersistenceController persist) {
 		this.persist = persist;
 		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
@@ -105,9 +105,9 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 		Map<String, Map<String, Object>> extendedInfo;
 
-		PersistenceController persist;
+		AbstractPersistenceController persist;
 
-		public MyListCellRenderer(PersistenceController persist) {
+		public MyListCellRenderer(AbstractPersistenceController persist) {
 			super();
 			this.persist = persist;
 		}

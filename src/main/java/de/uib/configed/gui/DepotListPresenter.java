@@ -19,7 +19,7 @@ import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
@@ -46,12 +46,12 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 	private boolean multidepot;
 
-	private PersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
-	public DepotListPresenter(DepotsList depotsList, boolean multidepot, PersistenceController persist) {
+	public DepotListPresenter(DepotsList depotsList, boolean multidepot, AbstractPersistenceController persist) {
 		this.depotslist = depotsList;
 		this.multidepot = multidepot;
 		this.persist = persist;

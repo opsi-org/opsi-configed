@@ -2,16 +2,17 @@ package de.uib.opsidatamodel.datachanges;
 
 import java.util.Map;
 
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 
 public class ProductpropertiesUpdate implements UpdateCommand {
 	String pcname;
 	String productname;
 	Map newdata;
 
-	PersistenceController persis;
+	AbstractPersistenceController persis;
 
-	public ProductpropertiesUpdate(PersistenceController persis, String pcname, String productname, Map newdata) {
+	public ProductpropertiesUpdate(AbstractPersistenceController persis, String pcname, String productname,
+			Map newdata) {
 		this.pcname = pcname;
 		this.productname = productname;
 		this.newdata = newdata;
@@ -20,7 +21,7 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 	@Override
 	public void setController(Object obj) {
-		this.persis = (PersistenceController) obj;
+		this.persis = (AbstractPersistenceController) obj;
 	}
 
 	@Override

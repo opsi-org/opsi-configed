@@ -21,7 +21,7 @@ import de.uib.configed.type.HostInfo;
  * 
  * @author Rupert Roeder
  */
-public abstract class HostInfoCollections {
+public abstract class AbstractHostInfoCollections {
 	public abstract int getCountClients();
 
 	public abstract String getConfigServer();

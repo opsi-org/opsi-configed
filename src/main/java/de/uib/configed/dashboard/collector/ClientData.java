@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -25,7 +25,7 @@ public class ClientData {
 
 	private static String selectedDepot;
 
-	private static PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private static AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 	private ClientData() {
 	}

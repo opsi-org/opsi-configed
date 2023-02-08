@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
-public abstract class NavigationPanel extends JPanel implements ActionListener {
+public abstract class AbstractNavigationPanel extends JPanel implements ActionListener {
 
 	protected JButton nextButton;
 	protected JButton previousButton;
@@ -24,7 +24,7 @@ public abstract class NavigationPanel extends JPanel implements ActionListener {
 	protected boolean hasNext;
 	protected boolean hasPrevious;
 
-	protected NavigationPanel() {
+	protected AbstractNavigationPanel() {
 		initComponents();
 
 		buttons = new ArrayList<>();

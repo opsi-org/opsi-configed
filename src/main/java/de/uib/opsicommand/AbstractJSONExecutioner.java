@@ -19,7 +19,7 @@ import de.uib.utilities.logging.Logging;
  * 
  * @author Rupert Roeder
  */
-public abstract class JSONExecutioner extends Executioner {
+public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	protected ConnectionState conStat;
 
 	@Override

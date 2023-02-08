@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
+import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
-import de.uib.configed.ControlMultiTablePanel;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
@@ -28,7 +28,7 @@ public class PanelEditLicences extends MultiTablePanel {
 	protected int minVSize = 100;
 
 	/** Creates new form PanelEditLicences */
-	public PanelEditLicences(ControlMultiTablePanel controller) {
+	public PanelEditLicences(AbstractControlMultiTablePanel controller) {
 		super(controller);
 		initComponents();
 	}

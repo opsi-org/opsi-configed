@@ -7,7 +7,7 @@ package de.uib.configed.gui.licences;
 
 import javax.swing.ListSelectionModel;
 
-import de.uib.configed.ControlMultiTablePanel;
+import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Globals;
 import de.uib.configed.Configed;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -24,7 +24,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 	protected int minVSize = 50;
 
 	/** Creates new form panelLicencesStatistics */
-	public PanelLicencesStatistics(ControlMultiTablePanel controller) {
+	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller) {
 		super(controller);
 		initComponents();
 	}

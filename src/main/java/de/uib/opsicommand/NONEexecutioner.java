@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
-public class NONEexecutioner extends Executioner {
+public class NONEexecutioner extends AbstractExecutioner {
 	@Override
 	public ConnectionState getConnectionState() {
 		return null;

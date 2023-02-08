@@ -33,7 +33,7 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 	TableCellRenderer tableCellRenderer;
 
-	protected class DefaultPropertyHandler extends PropertyHandler {
+	protected class DefaultPropertyHandler extends AbstractPropertyHandler {
 		@Override
 		public void removeValue(String key) {
 			Logging.debug(this, "removing value for key " + key);
@@ -48,9 +48,9 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 
 	}
 
-	protected PropertyHandler propertyHandler;
+	protected AbstractPropertyHandler propertyHandler;
 
-	protected final PropertyHandler defaultPropertyHandler;
+	protected final AbstractPropertyHandler defaultPropertyHandler;
 
 	public DefaultEditMapPanel(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable) {

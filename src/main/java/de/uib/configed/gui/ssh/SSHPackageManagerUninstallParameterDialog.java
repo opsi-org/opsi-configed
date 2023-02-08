@@ -24,7 +24,7 @@ import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxSimpleToolTip;
@@ -51,7 +51,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 	private JButton jButtonDepotSelection;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 
 	FDepotselectionList fDepotList;
 
@@ -131,7 +131,7 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		if (selectedDepots.isEmpty()) {
 			if (persist.isDepotsFullPermission()) {
-				depotParameter = PersistenceController.DEPOT_SELECTION_NODEPOTS;
+				depotParameter = AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
 			} else
@@ -140,11 +140,12 @@ public class SSHPackageManagerUninstallParameterDialog
 		} else {
 			jButtonExecute.setEnabled(true);
 
-			if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_NODEPOTS)) {
-				depotParameter = PersistenceController.DEPOT_SELECTION_NODEPOTS;
-			} else if (selectedDepots.contains(PersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
+			if (selectedDepots.contains(AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
+				depotParameter = AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS;
+			} else if (selectedDepots.contains(AbstractPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
 				StringBuilder sb = new StringBuilder();
-				int startIndex = possibleDepots.indexOf(PersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
+				int startIndex = possibleDepots
+						.indexOf(AbstractPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 
 				for (int i = startIndex + 1; i < possibleDepots.size() - 1; i++) {
 
@@ -176,8 +177,8 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		if (persist.isDepotsFullPermission()) {
 			textFieldSelectedDepots.setEditable(true);
-			result.add(PersistenceController.DEPOT_SELECTION_NODEPOTS);
-			result.add(PersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
+			result.add(AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS);
+			result.add(AbstractPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 		} else
 			textFieldSelectedDepots.setEditable(false);
 

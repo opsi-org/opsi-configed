@@ -32,7 +32,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -128,11 +128,11 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	ConfigedMain main;
-	protected PersistenceController persist;
+	protected AbstractPersistenceController persist;
 
 	private static final int KEY_COL = 0;
 
-	public ControllerHWinfoColumnConfiguration(ConfigedMain main, PersistenceController persist) {
+	public ControllerHWinfoColumnConfiguration(ConfigedMain main, AbstractPersistenceController persist) {
 		this.main = main;
 		this.persist = persist;
 

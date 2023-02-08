@@ -26,7 +26,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
@@ -71,7 +71,7 @@ public class PanelSWInfo extends JPanel {
 	protected int hLabel = Globals.BUTTON_HEIGHT;
 
 	protected ConfigedMain mainController;
-	protected PersistenceController persist;
+	protected AbstractPersistenceController persist;
 
 	public enum KindOfExport {
 		PDF, CSV

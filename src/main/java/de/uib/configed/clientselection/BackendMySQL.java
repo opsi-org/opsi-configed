@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class BackendMySQL {
@@ -33,9 +33,9 @@ public class BackendMySQL {
 	List<Map<String, Object>> hwConfig;
 
 	// For the queries to the opsi-server
-	PersistenceController controller;
+	AbstractPersistenceController controller;
 
-	public BackendMySQL(PersistenceController controller) {
+	public BackendMySQL(AbstractPersistenceController controller) {
 		this.controller = controller;
 		hwConfig = controller.getOpsiHWAuditConf("en_");
 

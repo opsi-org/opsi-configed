@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 import de.uib.configed.gui.licences.PanelEditLicences;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditPane;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -27,7 +27,7 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class ControlPanelEditLicences extends ControlMultiTablePanel
+public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 // tab edit licence
 {
 
@@ -37,10 +37,10 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 	GenTableModel modelSoftwarelicences;
 	GenTableModel modelLicencecontracts;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	ConfigedMain mainController;
 
-	public ControlPanelEditLicences(PersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelEditLicences(AbstractPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelEditLicences(this); // extending TabClientAdapter
 		this.persist = persist;
 		this.mainController = mainController;

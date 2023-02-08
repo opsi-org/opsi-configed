@@ -18,7 +18,7 @@ import de.uib.configed.Configed;
  */
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -34,7 +34,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 	protected int keyCol = 0;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 
 	ControlPanelAssignToLPools myController;
 

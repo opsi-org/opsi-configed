@@ -89,7 +89,7 @@ import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.Logging;
@@ -111,7 +111,7 @@ public class OpsiDataBackend extends Backend {
 	private Map<String, String> hwUiToOpsi;
 	private Map<String, List> hwClassToValues;
 
-	private PersistenceController controller;
+	private AbstractPersistenceController controller;
 
 	private static OpsiDataBackend instance;
 

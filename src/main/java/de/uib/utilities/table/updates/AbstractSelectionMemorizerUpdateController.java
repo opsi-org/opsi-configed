@@ -15,15 +15,16 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.thread.WaitCursor;
 
-public abstract class SelectionMemorizerUpdateController implements de.uib.utilities.table.updates.UpdateController {
+public abstract class AbstractSelectionMemorizerUpdateController
+		implements de.uib.utilities.table.updates.UpdateController {
 	PanelGenEditTable keysPanel;
 	int keyCol;
 	PanelGenEditTable panel;
 	GenTableModel tablemodel;
 	StrList2BooleanFunction updater;
 
-	protected SelectionMemorizerUpdateController(PanelGenEditTable keysPanel, int keyCol, PanelGenEditTable panel,
-			GenTableModel tablemodel, StrList2BooleanFunction updater) {
+	protected AbstractSelectionMemorizerUpdateController(PanelGenEditTable keysPanel, int keyCol,
+			PanelGenEditTable panel, GenTableModel tablemodel, StrList2BooleanFunction updater) {
 		this.keysPanel = keysPanel;
 		this.keyCol = keyCol;
 		this.panel = panel;

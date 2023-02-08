@@ -7,7 +7,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.MainFrame;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -16,11 +16,11 @@ public class FDriverUpload extends SecondaryFrame {
 
 	PanelDriverUpload panelDriverUpload;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	ConfigedMain main;
 	MainFrame mainframe;
 
-	public FDriverUpload(ConfigedMain main, PersistenceController persist, MainFrame mainframe) {
+	public FDriverUpload(ConfigedMain main, AbstractPersistenceController persist, MainFrame mainframe) {
 		super();
 
 		this.main = main;

@@ -11,13 +11,13 @@ import java.util.Map;
 import de.uib.configed.clientselection.SelectData;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializer {
-	private PersistenceController controller;
+	private AbstractPersistenceController controller;
 	private JsonParser parser;
 	private SelectData.DataType lastDataType;
 	private Map<String, String> searches;

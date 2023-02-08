@@ -7,7 +7,7 @@ import java.util.Map;
 import de.uib.configed.Globals;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
@@ -28,7 +28,7 @@ public class SavedSearchQuery {
 	private String password;
 	private String searchName;
 
-	private PersistenceController controller;
+	private AbstractPersistenceController controller;
 
 	public SavedSearchQuery() {
 		Logging.setLogLevelFile(Logging.LEVEL_NONE);

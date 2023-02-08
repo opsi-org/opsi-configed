@@ -21,7 +21,7 @@ import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.licences.PanelAssignToLPools;
 import de.uib.configed.type.licences.LicencepoolEntry;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
@@ -34,11 +34,11 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.SelectionMemorizerUpdateController;
+import de.uib.utilities.table.updates.AbstractSelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.StrList2BooleanFunction;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
+public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	private static final int MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE = 300;
 	public PanelAssignToLPools thePanel;
 
@@ -55,7 +55,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 	ConfigedMain mainController;
 
-	public PersistenceController persist;
+	public AbstractPersistenceController persist;
 
 	public enum SoftwareShowMode {
 		ALL, ASSIGNED
@@ -84,7 +84,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 	private Map<String, List<String>> removeKeysFromOtherLicencePool;
 
-	public ControlPanelAssignToLPools(PersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelAssignToLPools(AbstractPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelAssignToLPools(this);
 		this.persist = persist;
 		this.mainController = mainController;
@@ -687,7 +687,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		// updates
 		thePanel.panelRegisteredSoftware
-				.setUpdateController(new SelectionMemorizerUpdateController(thePanel.panelLicencepools, 0,
+				.setUpdateController(new AbstractSelectionMemorizerUpdateController(thePanel.panelLicencepools, 0,
 						thePanel.panelRegisteredSoftware, modelWindowsSoftwareIds, new StrList2BooleanFunction() {
 							@Override
 							public boolean sendUpdate(String poolId, List<String> softwareIds) {

@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -20,7 +20,7 @@ public class SSHPMInstallPanel extends JPanel {
 
 	protected List<String> additionalDefaultPaths = new ArrayList<>();
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	protected String workbench;
 
 	public SSHPMInstallPanel() {
@@ -29,7 +29,7 @@ public class SSHPMInstallPanel extends JPanel {
 		persist = PersistenceControllerFactory.getPersistenceController();
 		if (persist == null)
 			Logging.info(this, "init PersistenceController null");
-		workbench = PersistenceController.configedWorkbenchDefaultValue;
+		workbench = AbstractPersistenceController.configedWorkbenchDefaultValue;
 		if (workbench.charAt(workbench.length() - 1) != '/')
 			workbench = workbench + "/";
 	}

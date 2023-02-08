@@ -29,7 +29,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.configed.type.licences.LicencepoolEntry;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.DefaultTableModelFilterCondition;
@@ -64,7 +64,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	protected int keyCol = 0;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 
 	private ControlPanelAssignToLPools myController;
 

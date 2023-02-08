@@ -41,7 +41,7 @@ import de.uib.configed.productaction.PanelMountShare;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.FileX;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
@@ -186,12 +186,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	JLabel jLabelTopic;
 	int wLeftText;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	ConfigedMain main;
 	String server;
 	JFrame rootFrame;
 
-	public PanelDriverUpload(ConfigedMain main, PersistenceController persist, JFrame root) {
+	public PanelDriverUpload(ConfigedMain main, AbstractPersistenceController persist, JFrame root) {
 		this.main = main;
 		this.persist = persist;
 		this.rootFrame = root;

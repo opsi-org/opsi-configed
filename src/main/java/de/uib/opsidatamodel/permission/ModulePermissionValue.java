@@ -8,7 +8,7 @@ import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.logging.Logging;
 
 public class ModulePermissionValue {
-	de.uib.opsicommand.Executioner exec;
+	de.uib.opsicommand.AbstractExecutioner exec;
 
 	private ExtendedInteger maxClients;
 	private ExtendedDate expiresDate;
@@ -103,7 +103,7 @@ public class ModulePermissionValue {
 		return result;
 	}
 
-	public ModulePermissionValue(de.uib.opsicommand.Executioner exec, Object ob, ExtendedDate defaultExpires) {
+	public ModulePermissionValue(de.uib.opsicommand.AbstractExecutioner exec, Object ob, ExtendedDate defaultExpires) {
 		this.exec = exec;
 		Logging.info(this, "value object given: " + ob);
 		booleanValue = null;

@@ -36,7 +36,7 @@ import org.apache.commons.io.FileUtils;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitCursor;
@@ -77,11 +77,11 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	JButton buttonCallChooserServerpath;
 	JFileChooser chooserServerpath;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	ConfigedMain main;
 	JFrame rootFrame;
 
-	public PanelInstallOpsiPackage(ConfigedMain main, PersistenceController persist, JFrame root) {
+	public PanelInstallOpsiPackage(ConfigedMain main, AbstractPersistenceController persist, JFrame root) {
 		this.main = main;
 		this.persist = persist;
 		this.rootFrame = root;
@@ -165,7 +165,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private void produceServerPath() {
 		Logging.debug(this, "produceServerPath ");
 
-		opsiPackageServerPathS = PersistenceController.packageServerDirectoryS + opsiPackageNameS;
+		opsiPackageServerPathS = AbstractPersistenceController.packageServerDirectoryS + opsiPackageNameS;
 		Logging.debug(this, "produceServerPath " + opsiPackageServerPathS);
 	}
 

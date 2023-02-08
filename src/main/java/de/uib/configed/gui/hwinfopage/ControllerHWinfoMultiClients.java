@@ -25,7 +25,7 @@ import javax.swing.ListSelectionModel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FPanel;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -51,7 +51,7 @@ public class ControllerHWinfoMultiClients {
 
 	String[] hosts;
 	ConfigedMain main;
-	protected PersistenceController persist;
+	protected AbstractPersistenceController persist;
 
 	private static final int KEY_COL = 0;
 	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
@@ -90,7 +90,7 @@ public class ControllerHWinfoMultiClients {
 
 	};
 
-	public ControllerHWinfoMultiClients(ConfigedMain main, PersistenceController persist) {
+	public ControllerHWinfoMultiClients(ConfigedMain main, AbstractPersistenceController persist) {
 		this.main = main;
 		this.persist = persist;
 		start();

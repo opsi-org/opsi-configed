@@ -104,7 +104,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandNeedParameter;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
@@ -153,7 +153,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private static FLoadingWaiter fProgress;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 
 	// global table providers for licence management
 	TableProvider licencePoolTableProvider;
@@ -310,12 +310,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	ControlPanelEnterLicence controlPanelEnterLicence;
 	ControlPanelEditLicences controlPanelEditLicences;
-	ControlMultiTablePanel controlPanelAssignToLPools;
+	AbstractControlMultiTablePanel controlPanelAssignToLPools;
 	ControlPanelLicencesStatistics controlPanelLicencesStatistics;
 	ControlPanelLicencesUsage controlPanelLicencesUsage;
 	ControlPanelLicencesReconciliation controlPanelLicencesReconciliation;
 
-	List<ControlMultiTablePanel> allControlMultiTablePanels;
+	List<AbstractControlMultiTablePanel> allControlMultiTablePanels;
 
 	private Dashboard dashboard;
 
@@ -464,9 +464,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				fProgress.actAfterWaiting();
 			}
 
-			if (Boolean.TRUE
-					.equals(persist.getGlobalBooleanConfigValue(PersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART,
-							PersistenceController.DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART))) {
+			if (Boolean.TRUE.equals(
+					persist.getGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART,
+							AbstractPersistenceController.DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART))) {
 				initDashInfo();
 			}
 		});
@@ -1510,11 +1510,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	}
 
-	public PersistenceController getPersistenceController() {
+	public AbstractPersistenceController getPersistenceController() {
 		return persist;
 	}
 
-	public void setPersistenceController(PersistenceController persis) {
+	public void setPersistenceController(AbstractPersistenceController persis) {
 		persist = persis;
 	}
 
@@ -3017,7 +3017,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						Configed.getResourceValue("PanelHostProperties.SelectHost"),
 						new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
 						depotPropertiesForPermittedDepots, hostUpdateCollection,
-						PersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT
+						AbstractPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT
 
 				);
 
@@ -3083,7 +3083,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						additionalConfigs.get(0), persist.getConfigOptions(), additionalConfigs,
 						additionalconfigurationUpdateCollection, true,
 						// editableOptions
-						PersistenceController.PROPERTY_CLASSES_SERVER);
+						AbstractPersistenceController.PROPERTY_CLASSES_SERVER);
 			}
 
 			else {
@@ -3110,11 +3110,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				Map<String, de.uib.utilities.table.ListCellOptions> configOptions = persist.getConfigOptions();
 
-				removeKeysStartingWith(mergedVisualMap, PersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
+				removeKeysStartingWith(mergedVisualMap,
+						AbstractPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 
 				mainFrame.panelHostConfig.initEditing("  " + getSelectedClientsString(), mergedVisualMap, configOptions,
 						additionalConfigs, additionalconfigurationUpdateCollection, false, // editableOptions
-						PersistenceController.PROPERTYCLASSES_CLIENT);
+						AbstractPersistenceController.PROPERTYCLASSES_CLIENT);
 
 			}
 
@@ -3640,9 +3641,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.relationsAuditSoftwareToLicencePoolsRequestRefresh();
 			persist.reconciliationInfoRequestRefresh();
 
-			Iterator<ControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
+			Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
 			while (iter.hasNext()) {
-				ControlMultiTablePanel cmtp = iter.next();
+				AbstractControlMultiTablePanel cmtp = iter.next();
 				if (cmtp != null) {
 					for (int i = 0; i < cmtp.getTablePanes().size(); i++) {
 						PanelGenEditTable p = cmtp.getTablePanes().get(i);
@@ -4691,10 +4692,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private abstract class ErrorListProducer extends Thread {
+	private abstract class AbstractErrorListProducer extends Thread {
 		String title;
 
-		ErrorListProducer(String specificPartOfTitle) {
+		AbstractErrorListProducer(String specificPartOfTitle) {
 			String part = specificPartOfTitle;
 
 			title = Globals.APPNAME + ":  " +
@@ -4741,7 +4742,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (clients.length == 0)
 			return;
 
-		new ErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
+		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
 			@Override
 			protected List<String> getErrors() {
 				return persist.wakeOnLan(clients);
@@ -4782,7 +4783,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return;
 
-		new ErrorListProducer(Configed.getResourceValue("ConfigedMain.infoDeletePackageCaches")) {
+		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoDeletePackageCaches")) {
 			@Override
 			protected List<String> getErrors() {
 				return persist.deletePackageCaches(getSelectedClients());
@@ -4795,7 +4796,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return;
 
-		new ErrorListProducer(
+		new AbstractErrorListProducer(
 
 				"opsiclientd " + event) {
 			@Override
@@ -4810,7 +4811,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getSelectedClients() == null || getSelectedClients().length == 0)
 			return;
 
-		new ErrorListProducer(Configed.getResourceValue("ConfigedMain.infoPopup") + " " + message) {
+		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoPopup") + " " + message) {
 			@Override
 			protected List<String> getErrors() {
 				return persist.showPopupOnClients(message, getSelectedClients(), seconds);
@@ -5089,7 +5090,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (confirmActionForSelectedClients(
 				Configed.getResourceValue("ConfigedMain.ConfirmShutdownClients.question"))) {
-			new ErrorListProducer(Configed.getResourceValue("ConfigedMain.infoShutdownClients")) {
+			new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoShutdownClients")) {
 				@Override
 				protected List<String> getErrors() {
 					return persist.shutdownClients(getSelectedClients());
@@ -5104,7 +5105,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 
 		if (confirmActionForSelectedClients(Configed.getResourceValue("ConfigedMain.ConfirmRebootClients.question"))) {
-			new ErrorListProducer(Configed.getResourceValue("ConfigedMain.infoRebootClients")) {
+			new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoRebootClients")) {
 				@Override
 				protected List<String> getErrors() {
 					return persist.rebootClients(getSelectedClients());
@@ -5412,9 +5413,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		boolean change = false;
 		boolean result = false;
-		Iterator<ControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
+		Iterator<AbstractControlMultiTablePanel> iter = allControlMultiTablePanels.iterator();
 		while (!change && iter.hasNext()) {
-			ControlMultiTablePanel cmtp = iter.next();
+			AbstractControlMultiTablePanel cmtp = iter.next();
 			if (cmtp != null) {
 				Iterator<PanelGenEditTable> iterP = cmtp.tablePanes.iterator();
 				while (!change && iterP.hasNext()) {

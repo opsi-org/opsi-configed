@@ -15,7 +15,7 @@ import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public abstract class ControlMultiTablePanel {
+public abstract class AbstractControlMultiTablePanel {
 	protected List<GenTableModel> tableModels = new ArrayList<>();
 
 	protected List<PanelGenEditTable> tablePanes = new ArrayList<>();

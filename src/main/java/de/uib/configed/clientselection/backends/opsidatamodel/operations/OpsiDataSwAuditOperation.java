@@ -12,7 +12,7 @@ import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSwAuditOperation extends SwAuditOperation implements ExecutableOperation {
 
-	private de.uib.opsidatamodel.PersistenceController controller;
+	private de.uib.opsidatamodel.AbstractPersistenceController controller;
 
 	public OpsiDataSwAuditOperation(SelectOperation operation) {
 		super(operation);

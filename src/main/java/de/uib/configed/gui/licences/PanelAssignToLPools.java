@@ -11,8 +11,8 @@ import javax.swing.JSplitPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
-import de.uib.configed.ControlMultiTablePanel;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
@@ -58,7 +58,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	protected int tablesMaxHeight = Short.MAX_VALUE;
 
 	/** Creates new form panelAssignToLPools */
-	public PanelAssignToLPools(ControlMultiTablePanel controller) {
+	public PanelAssignToLPools(AbstractControlMultiTablePanel controller) {
 		super(controller);
 		initComponents();
 	}

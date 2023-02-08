@@ -29,7 +29,7 @@ import javax.swing.event.TableModelListener;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -66,7 +66,7 @@ public class LicenseDisplayer {
 	private ScrollPane scrollPane;
 
 	private String message = "";
-	private PersistenceController persist;
+	private AbstractPersistenceController persist;
 	private LicenseDisplayer controller;
 
 	private Stage stage;
