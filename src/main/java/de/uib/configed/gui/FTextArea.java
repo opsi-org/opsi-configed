@@ -93,7 +93,6 @@ public class FTextArea extends FGeneralDialog {
 		jTextArea1.addKeyListener(this);
 
 		pack();
-
 	}
 
 	// KeyListener
