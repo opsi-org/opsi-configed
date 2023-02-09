@@ -181,7 +181,7 @@ public class LicensingInfoMap {
 		try {
 			jOResult = jsonObj.getJSONObject(RESULT);
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " constructor " + ex);
+			Logging.error(CLASSNAME + " constructor, could not load jsonObject " + ex);
 			return;
 		}
 
