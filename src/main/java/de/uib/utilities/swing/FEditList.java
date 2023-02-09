@@ -59,7 +59,6 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	private SensitiveCellEditor celleditor;
 
-	boolean singleSelectionMode;
 	boolean nullable;
 
 	public FEditList() {
@@ -86,7 +85,6 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 		scrollpane.setViewportView(visibleList);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 		editable = false;
-		singleSelectionMode = true;
 
 		popup = new JPopupMenu();
 		visibleList.setComponentPopupMenu(popup);
@@ -121,9 +119,8 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	}
 
 	public void setSelectionMode(int selectionMode) {
-
 		visibleList.setSelectionMode(selectionMode);
-		singleSelectionMode = (selectionMode == ListSelectionModel.SINGLE_SELECTION);
+		buttonRemove.setVisible(selectionMode != ListSelectionModel.SINGLE_SELECTION);
 	}
 
 	/**
@@ -141,8 +138,6 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 		super.setEditable(b);
 		extraField.setVisible(b);
-		buttonRemove.setVisible(b && !singleSelectionMode);
-
 		buttonAdd.setVisible(b);
 	}
 

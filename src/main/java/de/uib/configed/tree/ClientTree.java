@@ -725,7 +725,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
 			if (topGroupNames.contains(group.getKey()))
 				continue;
-			Logging.devel(this, "adsfasdf");
 
 			DefaultMutableTreeNode node = groupNodes.get(group.getKey());
 

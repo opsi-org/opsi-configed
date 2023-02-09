@@ -1464,11 +1464,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 									&& !productVersion.equals(clientProductVersion))
 									|| (!JSONReMapper.equalsNull(clientPackageVersion)
 											&& !packageVersion.equals(clientPackageVersion))))
-			// and is not
-			// already configured for renewing
-			// &&
-			// !(clientActionRequest != null && ActionRequest.getLabel(
-			// ActionRequest.SETUP).equals( clientActionRequest ))
 			) {
 				Logging.debug("getClientsWithOtherProductVersion hit " + m);
 				result.add(client);
