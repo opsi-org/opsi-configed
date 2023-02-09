@@ -7846,12 +7846,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", Executioner.jsonArray(defaultValues));
-			item.put("possibleValues", Executioner.jsonArray(possibleValues));
+			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
 			item.put("editable", true);
 			item.put("multiValue", false);
 
-			readyObjects.add(Executioner.jsonMap(item));
+			readyObjects.add(AbstractExecutioner.jsonMap(item));
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7872,12 +7872,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", Executioner.jsonArray(defaultValues));
-			item.put("possibleValues", Executioner.jsonArray(possibleValues));
+			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
 			item.put("editable", true);
 			item.put("multiValue", false);
 
-			readyObjects.add(Executioner.jsonMap(item));
+			readyObjects.add(AbstractExecutioner.jsonMap(item));
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7898,12 +7898,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", Executioner.jsonArray(defaultValues));
-			item.put("possibleValues", Executioner.jsonArray(possibleValues));
+			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
 			item.put("editable", true);
 			item.put("multiValue", false);
 
-			readyObjects.add(Executioner.jsonMap(item));
+			readyObjects.add(AbstractExecutioner.jsonMap(item));
 
 			configDefaultValues.put(key, defaultValues);
 		}
@@ -7922,12 +7922,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			item.put("ident", key);
 			item.put("description", "saved domains for creating clients");
-			item.put("defaultValues", Executioner.jsonArray(defaultValues));
-			item.put("possibleValues", Executioner.jsonArray(possibleValues));
+			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
 			item.put("editable", true);
 			item.put("multiValue", true);
 
-			readyObjects.add(Executioner.jsonMap(item));
+			readyObjects.add(AbstractExecutioner.jsonMap(item));
 
 			configDefaultValues.put(key, defaultValues);
 		}
