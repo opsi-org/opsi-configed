@@ -115,6 +115,10 @@ public class LicensingInfoMap {
 
 	public static final String CONFIG_KEY = "licensing";
 
+	public static final int CLIENT_LIMIT_WARNING_PERCENT_DEFAULT = 95;
+	public static final int CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT = 5;
+	public static final int CLIENT_LIMIT_WARNING_DAYS_DEFAULT = 30;
+
 	private static LicensingInfoMap instance;
 	private static LicensingInfoMap instanceComplete;
 	private static LicensingInfoMap instanceReduced;
@@ -406,25 +410,30 @@ public class LicensingInfoMap {
 				disabledWarningModules = result;
 
 			} else {
-				String key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_ABSOLUTE;
-				if (configs.get(key) != null)
-					absolutClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
-				else
-					absolutClientLimitWarning = 5;
 
-				key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_PERCENT;
+				String key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_PERCENT;
 
-				if (configs.get(key) != null)
+				if (configs.get(key) != null) {
 					percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
-				else
-					percentClientLimitWarning = 95;
+				} else {
+					percentClientLimitWarning = CLIENT_LIMIT_WARNING_PERCENT_DEFAULT;
+				}
 
 				key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_ABSOLUTE;
 
-				if (configs.get(key) != null)
+				if (configs.get(key) != null) {
+					absolutClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
+				} else {
+					absolutClientLimitWarning = CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT;
+				}
+
+				key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_DAYS;
+
+				if (configs.get(key) != null) {
 					daysClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
-				else
-					daysClientLimitWarning = 30;
+				} else {
+					daysClientLimitWarning = CLIENT_LIMIT_WARNING_DAYS_DEFAULT;
+				}
 			}
 
 		} catch (NumberFormatException ex) {

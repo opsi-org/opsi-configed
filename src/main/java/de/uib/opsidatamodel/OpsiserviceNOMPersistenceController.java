@@ -7822,6 +7822,111 @@ public class OpsiserviceNOMPersistenceController extends PersistenceController {
 			readyObjects.add(Executioner.jsonMap(item));
 		}
 
+		// for warnings for opsi licences 
+
+		// percentage number of clients
+		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.info(this, "checkStandardConfigs: create domain list");
+
+			item = createNOMitem("UnicodeConfig");
+
+			defaultValues = new ArrayList<>();
+			defaultValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
+
+			possibleValues = new ArrayList<>();
+			possibleValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT_DEFAULT);
+
+			item.put("ident", key);
+			item.put("description", "saved domains for creating clients");
+			item.put("defaultValues", Executioner.jsonArray(defaultValues));
+			item.put("possibleValues", Executioner.jsonArray(possibleValues));
+			item.put("editable", true);
+			item.put("multiValue", false);
+
+			readyObjects.add(Executioner.jsonMap(item));
+
+			configDefaultValues.put(key, defaultValues);
+		}
+
+		// absolute number of clients
+		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.info(this, "checkStandardConfigs: create domain list");
+
+			item = createNOMitem("UnicodeConfig");
+
+			defaultValues = new ArrayList<>();
+			defaultValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT);
+
+			possibleValues = new ArrayList<>();
+			possibleValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT);
+
+			item.put("ident", key);
+			item.put("description", "saved domains for creating clients");
+			item.put("defaultValues", Executioner.jsonArray(defaultValues));
+			item.put("possibleValues", Executioner.jsonArray(possibleValues));
+			item.put("editable", true);
+			item.put("multiValue", false);
+
+			readyObjects.add(Executioner.jsonMap(item));
+
+			configDefaultValues.put(key, defaultValues);
+		}
+
+		// days limit warning
+		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.info(this, "checkStandardConfigs: create domain list");
+
+			item = createNOMitem("UnicodeConfig");
+
+			defaultValues = new ArrayList<>();
+			defaultValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
+
+			possibleValues = new ArrayList<>();
+			possibleValues.add(LicensingInfoMap.CLIENT_LIMIT_WARNING_DAYS_DEFAULT);
+
+			item.put("ident", key);
+			item.put("description", "saved domains for creating clients");
+			item.put("defaultValues", Executioner.jsonArray(defaultValues));
+			item.put("possibleValues", Executioner.jsonArray(possibleValues));
+			item.put("editable", true);
+			item.put("multiValue", false);
+
+			readyObjects.add(Executioner.jsonMap(item));
+
+			configDefaultValues.put(key, defaultValues);
+		}
+
+		// modules disabled for warnings
+		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.DISABLE_WARNING_FOR_MODULES;
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.info(this, "checkStandardConfigs: create domain list");
+
+			item = createNOMitem("UnicodeConfig");
+
+			defaultValues = new ArrayList<>();
+
+			possibleValues = new ArrayList<>();
+
+			item.put("ident", key);
+			item.put("description", "saved domains for creating clients");
+			item.put("defaultValues", Executioner.jsonArray(defaultValues));
+			item.put("possibleValues", Executioner.jsonArray(possibleValues));
+			item.put("editable", true);
+			item.put("multiValue", true);
+
+			readyObjects.add(Executioner.jsonMap(item));
+
+			configDefaultValues.put(key, defaultValues);
+		}
+		// End TESTING
+
 		// add metaconfigs
 
 		// do update
