@@ -32,7 +32,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -75,8 +75,9 @@ public class ControllerHWinfoColumnConfiguration {
 		String configIdent;
 
 		ColumnIdent(String tableValue) {
-			if (tableValue == null)
+			if (tableValue == null) {
 				return;
+			}
 
 			int indexCurly = tableValue.indexOf('{');
 
@@ -90,12 +91,13 @@ public class ControllerHWinfoColumnConfiguration {
 
 			String checkType = OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE + "}";
 
-			if (tableIdent.endsWith(checkType))
+			if (tableIdent.endsWith(checkType)) {
 				tableType = OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE;
-			else {
+			} else {
 				checkType = OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE + "}";
-				if (tableIdent.endsWith(checkType))
+				if (tableIdent.endsWith(checkType)) {
 					tableType = OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE;
+				}
 			}
 
 			int indexUnderline = tableIdent.lastIndexOf("_");
@@ -128,11 +130,11 @@ public class ControllerHWinfoColumnConfiguration {
 	}
 
 	ConfigedMain main;
-	protected PersistenceController persist;
+	protected AbstractPersistenceController persist;
 
 	private static final int KEY_COL = 0;
 
-	public ControllerHWinfoColumnConfiguration(ConfigedMain main, PersistenceController persist) {
+	public ControllerHWinfoColumnConfiguration(ConfigedMain main, AbstractPersistenceController persist) {
 		this.main = main;
 		this.persist = persist;
 
@@ -226,7 +228,6 @@ public class ControllerHWinfoColumnConfiguration {
 				boolean result = super.isCellEditable(row, col);
 
 				if (result) {
-
 					Object val = getValueAt(row, col);
 					if (val == null || (val instanceof String && ((String) val).trim().equals(""))) {
 						result = false;
@@ -235,9 +236,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 				return result;
 			}
-		}
-
-		;
+		};
 
 		updateItemFactory.setSource(model);
 
@@ -306,7 +305,6 @@ public class ControllerHWinfoColumnConfiguration {
 				return true;
 			}
 		}, updateCollection));
-
 	}
 
 	private void buildUpdateItem(ColumnIdent col, Boolean use) {
@@ -361,7 +359,6 @@ public class ControllerHWinfoColumnConfiguration {
 			id++;
 
 			for (OpsiHwAuditDevicePropertyType deviceProperty : deviceHostProperties) {
-
 				lineMap = new LinkedHashMap<>();
 				lineMap.put(COL_LINE_NO, formatLineNo(id));
 
@@ -371,10 +368,11 @@ public class ControllerHWinfoColumnConfiguration {
 				lineMap.put(COL_OPSI_COLUMN_NAME, columnIdent.produceColumnCellValue());
 				lineMap.put(COL_OPSI_DB_COLUMN_TYPE, deviceProperty.getOpsiDbColumnType());
 
-				if (deviceProperty.getDisplayed() == null)
+				if (deviceProperty.getDisplayed() == null) {
 					lineMap.put(COL_USE_IN_QUERY, "" + false);
-				else
+				} else {
 					lineMap.put(COL_USE_IN_QUERY, "" + deviceProperty.getDisplayed());
+				}
 
 				result.put(formatLineNo(id), lineMap);
 				id++;
@@ -399,19 +397,17 @@ public class ControllerHWinfoColumnConfiguration {
 
 				lineMap.put(COL_OPSI_DB_COLUMN_TYPE, deviceProperty.getOpsiDbColumnType());
 
-				if (deviceProperty.getDisplayed() == null)
+				if (deviceProperty.getDisplayed() == null) {
 					lineMap.put(COL_USE_IN_QUERY, "" + false);
-				else
+				} else {
 					lineMap.put(COL_USE_IN_QUERY, "" + deviceProperty.getDisplayed());
+				}
 
 				result.put(formatLineNo(id), lineMap);
 				id++;
 			}
-
 		}
 
 		return result;
-
 	}
-
 }

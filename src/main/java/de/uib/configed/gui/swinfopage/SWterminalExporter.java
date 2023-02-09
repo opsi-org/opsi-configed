@@ -1,6 +1,6 @@
 package de.uib.configed.gui.swinfopage;
 
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToTerminal;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -11,7 +11,7 @@ public class SWterminalExporter extends SWExporter {
 	ExporterToTerminal exportTable;
 	Boolean onlySelectedRows = false;
 
-	public SWterminalExporter(PersistenceController controller) {
+	public SWterminalExporter(AbstractPersistenceController controller) {
 		super(controller);
 		theTable = new javax.swing.JTable();
 		exportTable = new ExporterToTerminal(theTable);

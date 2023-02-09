@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.PropertiesStore;
 import de.uib.utilities.logging.Logging;
 
@@ -37,7 +37,7 @@ public class SavedStates extends PropertiesStore {
 		saveSWauditExportDir = new SaveString("swaudit_export_dir", this);
 		saveSWauditExportFilePrefix = new SaveString("swaudit_export_file_prefix", this);
 
-		saveRegisterUser = new SaveBoolean(PersistenceController.KEY_USER_REGISTER, false, this);
+		saveRegisterUser = new SaveBoolean(AbstractPersistenceController.KEY_USER_REGISTER, false, this);
 		// we memorize it locally in order to signal if the config has changed
 		saveLocalbootproductFilter = new SessionSaveSet<>();
 		saveNetbootproductFilter = new SessionSaveSet<>();

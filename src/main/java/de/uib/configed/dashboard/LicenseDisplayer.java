@@ -29,7 +29,7 @@ import javax.swing.event.TableModelListener;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -66,7 +66,7 @@ public class LicenseDisplayer {
 	private ScrollPane scrollPane;
 
 	private String message = "";
-	private PersistenceController persist;
+	private AbstractPersistenceController persist;
 	private LicenseDisplayer controller;
 
 	private Stage stage;
@@ -182,8 +182,9 @@ public class LicenseDisplayer {
 		TableUpdateCollection updateCollection;
 
 		columnNames = new ArrayList<>();
-		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
+		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS) {
 			columnNames.add(key);
+		}
 
 		classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
@@ -263,10 +264,11 @@ public class LicenseDisplayer {
 		for (String swID : persist.getName2SWIdents().get(swName)) {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
-			if (licpool == null)
+			if (licpool == null) {
 				range.add(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL);
-			else
+			} else {
 				range.add(licpool);
+			}
 		}
 
 		return range;

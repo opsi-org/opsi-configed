@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.uib.configed.gui.licences.PanelLicencesReconciliation;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -19,17 +19,17 @@ import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
+public class ControlPanelLicencesReconciliation extends AbstractControlMultiTablePanel {
 
 	PanelLicencesReconciliation thePanel;
 	GenTableModel modelLicencesReconciliation;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	ConfigedMain mainController;
 
 	boolean initialized = false;
 
-	public ControlPanelLicencesReconciliation(PersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelLicencesReconciliation(AbstractPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelLicencesReconciliation(this);
 		this.persist = persist;
 		this.mainController = mainController;
@@ -49,7 +49,7 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 		List<String> classNames;
 
 		List<String> extraHostFields = persist.getServerConfigStrings(
-				PersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
+				AbstractPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 
 		// --- panelLicencesReconciliation
 		columnNames = new ArrayList<>();
@@ -82,8 +82,9 @@ public class ControlPanelLicencesReconciliation extends ControlMultiTablePanel {
 					@Override
 					public Map retrieveMap() {
 						Logging.debug(this, "retrieveMap");
-						if (initialized)
+						if (initialized) {
 							persist.reconciliationInfoRequestRefresh();
+						}
 						initialized = true;
 						return persist.getLicencesReconciliation();
 					}

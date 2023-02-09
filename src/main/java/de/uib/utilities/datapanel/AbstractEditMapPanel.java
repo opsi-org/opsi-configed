@@ -50,7 +50,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		}
 	}
 
-	protected abstract class PropertyHandler {
+	protected abstract class AbstractPropertyHandler {
 		MapTableModel mapTableModel;
 
 		public void setMapTableModel(MapTableModel mapTableModel) {

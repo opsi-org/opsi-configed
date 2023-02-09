@@ -63,7 +63,7 @@ setting setup with dependencies, also for uninstall
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.Config;
@@ -132,7 +132,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 																						// (product state key -> product
 																						// state value)))
 
-	protected PersistenceController persist;
+	protected AbstractPersistenceController persist;
 	protected Map<String, Map<String, Map<String, String>>> collectChangedStates;
 	protected final String[] selectedClients;
 	protected Map<String, List<String>> possibleActions; // product-->possibleActions

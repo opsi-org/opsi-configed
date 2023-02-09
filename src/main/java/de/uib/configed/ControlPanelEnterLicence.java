@@ -7,7 +7,7 @@ import java.util.TreeMap;
 
 import de.uib.configed.gui.licences.PanelEnterLicence;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.swing.FEditPane;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
@@ -20,7 +20,7 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 import de.uib.utilities.thread.WaitCursor;
 
-public class ControlPanelEnterLicence extends ControlMultiTablePanel
+public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 // tab new licence
 {
 	PanelEnterLicence thePanel;
@@ -29,10 +29,10 @@ public class ControlPanelEnterLicence extends ControlMultiTablePanel
 	GenTableModel modelLicencepools;
 	GenTableModel modelLicencecontracts;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	public ConfigedMain mainController;
 
-	public ControlPanelEnterLicence(PersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelEnterLicence(AbstractPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelEnterLicence(this); // extending TabClientAdapter
 		this.persist = persist;
 		this.mainController = mainController;

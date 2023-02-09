@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
-public class ClientData {
+public final class ClientData {
 	private static Map<String, List<Client>> clients = new HashMap<>();
 	private static Map<String, List<String>> activeClients = new HashMap<>();
 	private static Map<String, List<String>> inactiveClients = new HashMap<>();
@@ -25,7 +25,7 @@ public class ClientData {
 
 	private static String selectedDepot;
 
-	private static PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private static AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 	private ClientData() {
 	}

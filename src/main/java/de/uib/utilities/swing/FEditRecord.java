@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 public class FEditRecord extends FEdit {
-	protected RecordPane recordPane;
+	protected AbstractRecordPane recordPane;
 
 	protected Map<String, JLabel> labels;
 	protected Map<String, JTextField> textfields;
@@ -26,7 +26,7 @@ public class FEditRecord extends FEdit {
 
 	public FEditRecord(String hint) {
 		super("", hint);
-		recordPane = new RecordPane() {
+		recordPane = new AbstractRecordPane() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 

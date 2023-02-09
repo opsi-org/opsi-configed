@@ -1,7 +1,7 @@
 package de.uib.opsidatamodel.dbtable;
 
 // TODO what to do with it? can can it be removed? Where store the values?
-public class ProductPropertyState extends Table {
+public final class ProductPropertyState extends Table {
 	public static final String TABLE_NAME = "PRODUCT_PROPERTY_STATE";
 
 	public static final String PRODUCT_ID = "productId";

@@ -37,7 +37,7 @@ import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
-public class Terminal {
+public final class Terminal {
 	private static Terminal instance;
 	private JediTermWidget widget;
 	private JFrame frame;

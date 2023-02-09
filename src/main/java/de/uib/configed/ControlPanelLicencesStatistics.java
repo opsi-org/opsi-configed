@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.gui.licences.PanelLicencesStatistics;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -15,15 +15,15 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class ControlPanelLicencesStatistics extends ControlMultiTablePanel {
+public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePanel {
 	PanelLicencesStatistics thePanel;
 	GenTableModel modelStatistics;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 
 	boolean initialized = false;
 
-	public ControlPanelLicencesStatistics(PersistenceController persist) {
+	public ControlPanelLicencesStatistics(AbstractPersistenceController persist) {
 		thePanel = new PanelLicencesStatistics(this);
 		this.persist = persist;
 		init();
@@ -63,10 +63,11 @@ public class ControlPanelLicencesStatistics extends ControlMultiTablePanel {
 					@Override
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap() for modelStatistics");
-						if (initialized)
+						if (initialized) {
 							persist.reconciliationInfoRequestRefresh();
-						else
+						} else {
 							initialized = true;
+						}
 						return persist.getLicenceStatistics();
 					}
 				})), 0, thePanel.panelStatistics, updateCollection);

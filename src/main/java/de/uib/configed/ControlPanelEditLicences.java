@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 import de.uib.configed.gui.licences.PanelEditLicences;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditPane;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -27,7 +27,7 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class ControlPanelEditLicences extends ControlMultiTablePanel
+public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 // tab edit licence
 {
 
@@ -37,10 +37,10 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 	GenTableModel modelSoftwarelicences;
 	GenTableModel modelLicencecontracts;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	ConfigedMain mainController;
 
-	public ControlPanelEditLicences(PersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelEditLicences(AbstractPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelEditLicences(this); // extending TabClientAdapter
 		this.persist = persist;
 		this.mainController = mainController;
@@ -109,8 +109,9 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
-			if (poolIds.size() <= 1)
+			if (poolIds.size() <= 1) {
 				poolIds.add("");
+			}
 			// hack, since combo box shows nothing otherwise
 
 			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
@@ -180,8 +181,9 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
-			if (poolIds.size() <= 1)
+			if (poolIds.size() <= 1) {
 				poolIds.add("");
+			}
 			// hack, since combo box shows nothing otherwise
 
 			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
@@ -218,8 +220,9 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 			Iterator<TableEditItem> iter = updateCollection.iterator();
 			while (iter.hasNext() && !keyNew) {
 				TableEditItem update = iter.next();
-				if (update.getSource() == modelSoftwarelicences && update.keyChanged())
+				if (update.getSource() == modelSoftwarelicences && update.keyChanged()) {
 					keyNew = true;
+				}
 			}
 			if (keyNew) {
 				JOptionPane.showMessageDialog(mainController.licencesFrame,
@@ -323,8 +326,9 @@ public class ControlPanelEditLicences extends ControlMultiTablePanel
 			Iterator<TableEditItem> iter = updateCollection.iterator();
 			while (iter.hasNext() && !keyNew) {
 				TableEditItem update = iter.next();
-				if (update.getSource() == modelLicencecontracts && update.keyChanged())
+				if (update.getSource() == modelLicencecontracts && update.keyChanged()) {
 					keyNew = true;
+				}
 			}
 			if (keyNew) {
 				JOptionPane.showMessageDialog(mainController.licencesFrame,

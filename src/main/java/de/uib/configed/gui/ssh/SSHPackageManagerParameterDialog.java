@@ -15,13 +15,13 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ FGeneralDialog {
 
-	protected PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	protected AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 	protected int frameWidth = 900;
 	protected int frameHeight = 600;
@@ -38,7 +38,7 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	protected String defaultProduct = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultProduct");
 	protected String defaultDepot = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultDepot");
 
-	protected String opsiProd = PersistenceController.configedWorkbenchDefaultValue;
+	protected String opsiProd = AbstractPersistenceController.configedWorkbenchDefaultValue;
 	protected String opsiRepo = "/var/lib/opsi/repository/";
 
 	private String configRepo = "repositoryLocalUrl";

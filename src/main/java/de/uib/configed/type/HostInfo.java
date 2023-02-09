@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 import de.uib.configed.Configed;
 import de.uib.configed.gui.MainFrame;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
@@ -519,7 +519,7 @@ public class HostInfo {
 	}
 
 	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, MainFrame mainFrame,
-			PersistenceController persist, String client, Map<String, String> sourceOfChanges) {
+			AbstractPersistenceController persist, String client, Map<String, String> sourceOfChanges) {
 		if (client == null || client.equals("")) {
 			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
 			return;

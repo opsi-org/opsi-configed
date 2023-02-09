@@ -8,15 +8,15 @@ import java.util.NavigableSet;
 import java.util.stream.Collectors;
 
 import de.uib.configed.type.licences.LicenceContractEntry;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
-public class LicenseData {
+public final class LicenseData {
 	private static List<String> licenses = new ArrayList<>();
 	private static List<String> activeLicenses = new ArrayList<>();
 	private static List<String> expiredLicenses = new ArrayList<>();
 
-	private static PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private static AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 	private LicenseData() {
 	}

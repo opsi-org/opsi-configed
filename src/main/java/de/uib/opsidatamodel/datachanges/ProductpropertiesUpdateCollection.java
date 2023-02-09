@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.ConfigedMain;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -16,7 +16,7 @@ import de.uib.utilities.logging.Logging;
 public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	List<String> clients;
 	String productname;
-	PersistenceController persis;
+	AbstractPersistenceController persis;
 	ConfigedMain mainController;
 
 	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, String[] clients,
@@ -39,7 +39,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 	@Override
 	public void setController(Object obj) {
-		this.persis = (PersistenceController) obj;
+		this.persis = (AbstractPersistenceController) obj;
 	}
 
 	@Override

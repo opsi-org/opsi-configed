@@ -31,7 +31,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -48,14 +48,14 @@ public class FGroupActions extends SecondaryFrame {
 
 	List<String> associatedClients;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	ConfigedMain main;
 
 	int hFirstGap = Globals.HFIRST_GAP;
 
 	int firstLabelWidth = Globals.BUTTON_WIDTH;
 
-	public FGroupActions(ConfigedMain main, PersistenceController persist) {
+	public FGroupActions(ConfigedMain main, AbstractPersistenceController persist) {
 		super();
 
 		this.main = main;
@@ -83,8 +83,8 @@ public class FGroupActions extends SecondaryFrame {
 		List<String> imagesCollection = new ArrayList<>();
 
 		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
-				PersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
-				PersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
+				AbstractPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
+				AbstractPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
 
 		comboSelectImage.setModel(new DefaultComboBoxModel<>(imagesCollection.toArray(new String[0])));
 	}
@@ -100,8 +100,9 @@ public class FGroupActions extends SecondaryFrame {
 	protected void replay() {
 		Logging.debug(this, "replay " + comboSelectImage.getSelectedItem());
 
-		if (comboSelectImage.getSelectedItem() == null)
+		if (comboSelectImage.getSelectedItem() == null) {
 			return;
+		}
 
 		String image = (String) comboSelectImage.getSelectedItem();
 
@@ -111,14 +112,14 @@ public class FGroupActions extends SecondaryFrame {
 		WaitCursor waitCursor = new WaitCursor(this);
 
 		persist.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
-				PersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
-				PersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
+				AbstractPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
+				AbstractPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_ACTION_REQUEST, "setup");
 
 		persist.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
-				PersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT, changedValues);
+				AbstractPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT, changedValues);
 
 		waitCursor.stop();
 	}

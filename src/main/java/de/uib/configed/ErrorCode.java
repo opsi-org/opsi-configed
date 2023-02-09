@@ -1,6 +1,6 @@
 package de.uib.configed;
 
-public class ErrorCode {
+public final class ErrorCode {
 	public static final int NO_ERROR = 0;
 	public static final int INITIALIZATION_ERROR = 1;
 	public static final int CONNECTION_ERROR = 2;
@@ -11,8 +11,10 @@ public class ErrorCode {
 
 	public static String tell(int n) {
 		String result = "";
-		if (n > 0)
+		if (n > 0) {
 			result = "problem type " + n + ": ";
+		}
+
 		switch (n) {
 		case NO_ERROR:
 			result = result + "no error occured";

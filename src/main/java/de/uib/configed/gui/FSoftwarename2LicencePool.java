@@ -29,7 +29,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
 import de.uib.configed.type.licences.LicencepoolEntry;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.DefaultTableModelFilterCondition;
@@ -64,7 +64,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	protected int keyCol = 0;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 
 	private ControlPanelAssignToLPools myController;
 
@@ -141,8 +141,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 				Object val = null;
 				int selRow = getSelectedRow();
-				if (selRow > -1)
+				if (selRow > -1) {
 					val = getValueAt(selRow, 1);
+				}
 
 				if (val != null && isSingleSelection() && getTableModel().getRowCount() > 1
 						&& !((String) val).equals(VALUE_NO_LICENCE_POOL)) {
@@ -287,8 +288,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	protected void initDataStructure() {
 		columnNames = new ArrayList<>();
-		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS)
+		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS) {
 			columnNames.add(key);
+		}
 
 		classNames = new ArrayList<>();
 		for (int i = 0; i < columnNames.size(); i++) {
@@ -338,8 +340,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		panelSWnames.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting())
+				if (e.getValueIsAdjusting()) {
 					return;
+				}
 
 				Logging.info(this, "selectedRow " + panelSWnames.getSelectedRow());
 
@@ -357,8 +360,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	private boolean setSWxColTo(String newVal) {
-		if (newVal == null)
+		if (newVal == null) {
 			return false;
+		}
 
 		for (int i = 0; i < modelSWxLicencepool.getRowCount(); i++) {
 			modelSWxLicencepool.setValueAt(newVal, i, 1);
@@ -448,10 +452,11 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		for (String swID : persist.getName2SWIdents().get(swName)) {
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
-			if (licpool == null)
+			if (licpool == null) {
 				range.add(VALUE_NO_LICENCE_POOL);
-			else
+			} else {
 				range.add(licpool);
+			}
 		}
 
 		return range;
@@ -464,8 +469,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	public boolean checkExistNamesWithVariantLicencepools() {
-		if (modelSWnames == null)
+		if (modelSWnames == null) {
 			return false;
+		}
 
 		boolean foundVariants = false;
 		int i = 0;
@@ -506,10 +512,11 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			rowMap.put(AuditSoftwareXLicencePool.SW_ID, swID);
 			String licpool = persist.getFSoftware2LicencePool(swID);
 
-			if (licpool == null)
+			if (licpool == null) {
 				rowMap.put(LicencepoolEntry.ID_SERVICE_KEY, VALUE_NO_LICENCE_POOL);
-			else
+			} else {
 				rowMap.put(LicencepoolEntry.ID_SERVICE_KEY, licpool);
+			}
 
 			result.put(swID, rowMap);
 		}
@@ -556,8 +563,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						String licensePoolIDOld = persist.getFSoftware2LicencePool(swID);
 						String licensePoolIDNew = (String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY);
 
-						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolIDNew))
+						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolIDNew)) {
 							setSWInfo(swID, licensePoolIDNew);
+						}
 
 						return persist.editPool2AuditSoftware(swID, licensePoolIDOld, licensePoolIDNew);
 

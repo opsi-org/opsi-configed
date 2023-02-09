@@ -23,7 +23,7 @@ import de.uib.configed.Configed;
 import de.uib.opsicommand.JSONObjectX;
 import de.uib.utilities.logging.Logging;
 
-public class LicensingInfoMap {
+public final class LicensingInfoMap {
 
 	private static final String CLASSNAME = LicensingInfoMap.class.getName();
 

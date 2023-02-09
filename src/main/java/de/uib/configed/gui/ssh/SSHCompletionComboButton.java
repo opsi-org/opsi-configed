@@ -18,7 +18,7 @@ import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CellAlternatingColorizer;
@@ -35,7 +35,7 @@ public class SSHCompletionComboButton {
 	private static final String HOME_DIRECTORY = "~";
 	private String opsiRepo = "/"; // will be overwritten with config
 
-	private PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 	public SSHCompletionComboButton() {
 		this(null, null, null);
@@ -82,7 +82,7 @@ public class SSHCompletionComboButton {
 		if (persist == null)
 			Logging.info(this, "init PersistenceController null");
 		else
-			opsiRepo = PersistenceController.configedWorkbenchDefaultValue;
+			opsiRepo = AbstractPersistenceController.configedWorkbenchDefaultValue;
 		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/')
 			opsiRepo = opsiRepo + "/";
 		if (comboboxDefaultPath != null) {

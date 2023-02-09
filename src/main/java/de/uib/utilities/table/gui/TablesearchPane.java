@@ -41,10 +41,10 @@ import de.uib.configed.Globals;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SaveInteger;
+import de.uib.utilities.swing.AbstractNavigationPanel;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.JMenuItemFormatted;
-import de.uib.utilities.swing.NavigationPanel;
 
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
 	javax.swing.JFrame masterFrame = ConfigedMain.getMainFrame();
@@ -70,7 +70,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	JLabel labelFilterMarkGap;
 
-	NavigationPanel navPane;
+	AbstractNavigationPanel navPane;
 	PanelGenEditTable associatedPanel;
 	boolean withNavPane = false;
 
@@ -336,7 +336,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	protected void initComponents() {
 		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-		navPane = new NavigationPanel() {
+		navPane = new AbstractNavigationPanel() {
 
 			@Override
 			public void next() {

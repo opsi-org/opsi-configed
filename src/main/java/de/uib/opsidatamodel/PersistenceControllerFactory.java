@@ -22,12 +22,12 @@ import de.uib.opsicommand.CertificateManager;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.logging.Logging;
 
-public class PersistenceControllerFactory {
+public final class PersistenceControllerFactory {
 	// private constructor to hide the implicit public one
 	private PersistenceControllerFactory() {
 	}
 
-	private static PersistenceController staticPersistControl;
+	private static AbstractPersistenceController staticPersistControl;
 
 	public static boolean sqlAndGetRows = false;
 	public static boolean avoidSqlRawData = false;
@@ -43,7 +43,8 @@ public class PersistenceControllerFactory {
 	 * choose if we take the already constructed one - returned from the static
 	 * method getPersistenceController - or construct a new one
 	 */
-	public static PersistenceController getNewPersistenceController(String server, String user, String password) {
+	public static AbstractPersistenceController getNewPersistenceController(String server, String user,
+			String password) {
 		Logging.info("getNewPersistenceController");
 		if (staticPersistControl != null
 				&& staticPersistControl.getConnectionState().getState() == ConnectionState.CONNECTED) {
@@ -51,7 +52,7 @@ public class PersistenceControllerFactory {
 			return staticPersistControl;
 		}
 
-		PersistenceController persistControl;
+		AbstractPersistenceController persistControl;
 
 		if (sqlAndGetRows) {
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
@@ -185,7 +186,7 @@ public class PersistenceControllerFactory {
 		return staticPersistControl;
 	}
 
-	public static PersistenceController getPersistenceController() {
+	public static AbstractPersistenceController getPersistenceController() {
 		return staticPersistControl;
 	}
 

@@ -3,13 +3,13 @@ package de.uib.configed.dashboard.collector;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
-public class DepotData {
+public final class DepotData {
 	private static Map<String, Map<String, Object>> depots = new HashMap<>();
 
-	private static PersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private static AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 	private DepotData() {
 	}

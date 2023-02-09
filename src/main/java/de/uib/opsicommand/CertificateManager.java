@@ -26,7 +26,7 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
-public class CertificateManager {
+public final class CertificateManager {
 	private CertificateManager() {
 	}
 

@@ -1,6 +1,6 @@
 package de.uib.configed.type;
 
-public class HWAuditClientEntry {
+public final class HWAuditClientEntry {
 	// private constructor to hide the implicit public one
 	private HWAuditClientEntry() {
 	}

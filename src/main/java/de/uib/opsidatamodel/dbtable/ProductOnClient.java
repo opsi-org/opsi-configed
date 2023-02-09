@@ -1,6 +1,6 @@
 package de.uib.opsidatamodel.dbtable;
 
-public class ProductOnClient {
+public final class ProductOnClient {
 
 	// private constructor to hide public one
 	private ProductOnClient() {

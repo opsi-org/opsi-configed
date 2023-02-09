@@ -75,7 +75,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 
 	ToolTipManager ttm;
 
-	protected class RemovingSpecificHandler extends PropertyHandler {
+	protected class RemovingSpecificHandler extends AbstractPropertyHandler {
 
 		@Override
 		public void removeValue(String key) {
@@ -96,7 +96,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		}
 	}
 
-	protected class SettingDefaultValuesHandler extends PropertyHandler {
+	protected class SettingDefaultValuesHandler extends AbstractPropertyHandler {
 
 		@Override
 		public void removeValue(String key) {
@@ -119,8 +119,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		}
 	}
 
-	protected final PropertyHandler removingSpecificValuesPropertyHandler;
-	protected final PropertyHandler settingDefaultValuesPropertyHandler;
+	protected final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
+	protected final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
 	protected boolean markDeviation = true;
 

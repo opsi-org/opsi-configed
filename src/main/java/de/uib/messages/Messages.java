@@ -16,7 +16,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import utils.ResourceBundleUtf8;
 
-public class Messages {
+public final class Messages {
 
 	// private constructor to hide the implicit public one
 	private Messages() {

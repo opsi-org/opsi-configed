@@ -57,7 +57,7 @@ public class SWAuditClientEntry
 	public static long summillis1stPartOfConstructor = 0;
 	public static long summillis2ndPartOfConstructor = 0;
 
-	de.uib.opsidatamodel.PersistenceController controller; // for retrieving softwarelist
+	de.uib.opsidatamodel.AbstractPersistenceController controller; // for retrieving softwarelist
 
 	public static final List<String> KEYS = new LinkedList<>();
 	static {
@@ -106,7 +106,7 @@ public class SWAuditClientEntry
 	}
 
 	public SWAuditClientEntry(final List<String> keys, final List<String> values,
-			de.uib.opsidatamodel.PersistenceController controller) {
+			de.uib.opsidatamodel.AbstractPersistenceController controller) {
 
 		startmillis1stPartOfConstructor = System.currentTimeMillis();
 
@@ -133,7 +133,8 @@ public class SWAuditClientEntry
 
 	}
 
-	public SWAuditClientEntry(final Map<String, Object> m, de.uib.opsidatamodel.PersistenceController controller) {
+	public SWAuditClientEntry(final Map<String, Object> m,
+			de.uib.opsidatamodel.AbstractPersistenceController controller) {
 
 		data = new HashMap<>();
 		data.put(SWAuditEntry.ID, Globals.produceNonNull(m.get(CLIENT_ID)));

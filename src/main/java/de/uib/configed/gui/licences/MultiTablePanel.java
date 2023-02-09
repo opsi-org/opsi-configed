@@ -4,7 +4,7 @@
 
 package de.uib.configed.gui.licences;
 
-import de.uib.configed.ControlMultiTablePanel;
+import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Globals;
 
 /**
@@ -13,9 +13,9 @@ import de.uib.configed.Globals;
  * @author roeder
  */
 public class MultiTablePanel extends de.uib.utilities.swing.tabbedpane.TabClientAdapter {
-	protected ControlMultiTablePanel controller;
+	protected AbstractControlMultiTablePanel controller;
 
-	public MultiTablePanel(ControlMultiTablePanel controller) {
+	public MultiTablePanel(AbstractControlMultiTablePanel controller) {
 		this.controller = controller;
 	}
 
@@ -30,12 +30,14 @@ public class MultiTablePanel extends de.uib.utilities.swing.tabbedpane.TabClient
 	@Override
 	public boolean mayLeave() {
 
-		if (Globals.isGlobalReadOnly())
+		if (Globals.isGlobalReadOnly()) {
 			return true;
+		}
 
 		boolean result = super.mayLeave();
-		if (result)
+		if (result) {
 			result = controller.mayLeave();
+		}
 
 		return result;
 	}

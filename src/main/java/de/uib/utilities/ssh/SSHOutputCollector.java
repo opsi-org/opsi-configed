@@ -3,7 +3,7 @@ package de.uib.utilities.ssh;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SSHOutputCollector {
+public final class SSHOutputCollector {
 	private static SSHOutputCollector instance;
 	private static final List<String> values = new ArrayList<>();
 

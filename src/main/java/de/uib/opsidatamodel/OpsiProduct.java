@@ -1,6 +1,6 @@
 package de.uib.opsidatamodel;
 
-public class OpsiProduct {
+public final class OpsiProduct {
 
 	// private constructor to hide the implicit public one
 	private OpsiProduct() {

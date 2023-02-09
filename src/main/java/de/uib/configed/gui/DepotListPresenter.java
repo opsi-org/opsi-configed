@@ -19,7 +19,7 @@ import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
@@ -46,12 +46,12 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 	private boolean multidepot;
 
-	private PersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
-	public DepotListPresenter(DepotsList depotsList, boolean multidepot, PersistenceController persist) {
+	public DepotListPresenter(DepotsList depotsList, boolean multidepot, AbstractPersistenceController persist) {
 		this.depotslist = depotsList;
 		this.multidepot = multidepot;
 		this.persist = persist;
@@ -62,10 +62,11 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 		for (Entry<String, Map<String, Object>> depotInfoEntry : depotInfo.entrySet()) {
 			values.add(depotInfoEntry.getKey());
-			if (depotInfoEntry.getValue() == null || depotInfoEntry.getValue().get("description") == null)
+			if (depotInfoEntry.getValue() == null || depotInfoEntry.getValue().get("description") == null) {
 				descriptions.add("");
-			else
+			} else {
 				descriptions.add((String) depotInfoEntry.getValue().get("description"));
+			}
 		}
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(depotsList, values, descriptions);
@@ -78,7 +79,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 		initComponents();
 		layouting();
-
 	}
 
 	/**
@@ -106,21 +106,21 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	 * @param boolean We are in progress
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
-		if (active)
+		if (active) {
 			depotslist.setBackground(Globals.BACKGROUND_COLOR_9);
-		else
+		} else {
 			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-
+		}
 		// colorize as hint that we have changed the depots selection
-
 	}
 
 	private void initComponents() {
 		labelDepotServer = new JLabel();
-		if (multidepot)
+		if (multidepot) {
 			labelDepotServer.setText(Configed.getResourceValue("DepotListPresenter.depots"));
-		else
+		} else {
 			labelDepotServer.setText(Configed.getResourceValue("DepotListPresenter.depot"));
+		}
 		labelDepotServer.setOpaque(false);
 
 		labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -141,8 +141,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 		searchPane.setFieldFont(Globals.defaultFont);
 		searchPane.setFieldBackground(getMyColor());
-		if (!multidepot)
+		if (!multidepot) {
 			searchPane.setEnabled(false);
+		}
 		searchPane.setBackground(getMyColor());
 		searchPane.setNarrow(true);
 
@@ -195,11 +196,11 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		if (!filtered) {
 			unfilteredV = depotslist.getListData();
 			depotslist.setListData(new ArrayList<>(depotslist.getSelectedValuesList()));
-		} else
+		} else {
 			depotslist.setListData(unfilteredV);
+		}
 
 		filtered = !filtered;
-
 	}
 
 	// ActionListener implementation
@@ -209,18 +210,14 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 			Logging.info(this, "action on buttonSelectDepotsAll");
 
 			depotslist.selectAll();
-		}
-
-		else if (e.getSource() == buttonSelectDepotsWithEqualProperties) {
+		} else if (e.getSource() == buttonSelectDepotsWithEqualProperties) {
 			Logging.info(this, "action on buttonSelectDepotsWithEqualProperties");
 
 			if (depotslist.getSelectedIndex() > -1) {
 				String depotSelected = depotslist.getSelectedValue();
 				List<String> depotsWithEqualStock = persist.getAllDepotsWithIdenticalProductStock(depotSelected);
 				depotslist.addToSelection(depotsWithEqualStock);
-
 			}
 		}
-
 	}
 }

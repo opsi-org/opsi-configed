@@ -14,8 +14,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
-import de.uib.opsicommand.Executioner;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class UserConfigProducing {
@@ -80,7 +80,7 @@ public class UserConfigProducing {
 			userparts.add(ConfigedMain.user);
 			String propertyclass = UserConfig.START_USER_KEY + ConfigedMain.user + '}';
 
-			PersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
+			AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
 				Logging.info(this, "createUserPropertySubclass for logged in user " + ConfigedMain.user);
 				return "";
 			});
@@ -116,7 +116,7 @@ public class UserConfigProducing {
 					String propertyclass = startRoleKey + rolename + '}';
 
 					final String role = rolename;
-					PersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
+					AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
 						Logging.info(this, "createRolePropertySubclass for role  " + role);
 						return "";
 					});
@@ -138,7 +138,7 @@ public class UserConfigProducing {
 						Logging.debug(this, "usernames, add " + username + " for key " + key);
 						String propertyclass = UserConfig.START_USER_KEY + username + '}';
 
-						PersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
+						AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
 							Logging.info(this, "createUserPropertySubclass for user  " + username);
 							return "";
 						});
@@ -168,9 +168,9 @@ public class UserConfigProducing {
 		if (serverconfigValuesMap.get(configKeyUseList) == null) {
 			Logging.info(this, "supplyPermissionList. serverconfigValuesMap has no value for key " + configKeyUseList);
 
-			item = PersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
+			item = AbstractPersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
 					"the primary value setting is " + initialValue);
-			readyObjects.add(Executioner.jsonMap(item));
+			readyObjects.add(AbstractExecutioner.jsonMap(item));
 		}
 
 		Logging.info(this, "supplyPermissionList  configKey " + configKeyList);
@@ -194,7 +194,7 @@ public class UserConfigProducing {
 
 			Logging.info(this, "supplyPermissionList products List " + listOptions);
 
-			item = PersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
+			item = AbstractPersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
 
 			item.put("ident", configKeyList);
 			item.put("editable", false);
@@ -202,10 +202,10 @@ public class UserConfigProducing {
 
 			item.put("description",
 					"the primary value setting is an empty selection list, but all existing items as option");
-			item.put("defaultValues", Executioner.jsonArray(selectedValues));
-			item.put("possibleValues", Executioner.jsonArray(listOptions));
+			item.put("defaultValues", AbstractExecutioner.jsonArray(selectedValues));
+			item.put("possibleValues", AbstractExecutioner.jsonArray(listOptions));
 
-			readyObjects.add(Executioner.jsonMap(item));
+			readyObjects.add(AbstractExecutioner.jsonMap(item));
 		}
 
 	}
@@ -307,8 +307,9 @@ public class UserConfigProducing {
 
 			List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
 
-			Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
-					roleKey, "which role should determine this users configuration", false, // editable
+			Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(
+					ConfigOption.TYPE.UnicodeConfig, roleKey, "which role should determine this users configuration",
+					false, // editable
 					false, // multivalue
 					selectedValuesRole, // defaultValues enry
 					possibleValuesRole);
@@ -316,7 +317,7 @@ public class UserConfigProducing {
 			Logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " " + possibleValuesRole
 					+ ", " + roleParts);
 
-			readyObjects.add(Executioner.jsonMap(itemRole));
+			readyObjects.add(AbstractExecutioner.jsonMap(itemRole));
 
 			UserConfig roleConfig = roleConfigs.get(roleToPlay);
 			// is defaultConfig if roleToPlay does not exist
@@ -375,10 +376,10 @@ public class UserConfigProducing {
 				value = prototypeConfig.getBooleanValue(partkey);
 
 				userConfig.setBooleanValue(partkey, value);
-				item = PersistenceController.createJSONBoolConfig(configKey, value,
+				item = AbstractPersistenceController.createJSONBoolConfig(configKey, value,
 						"the primary value setting is based on the user group");
 
-				readyObjects.add(Executioner.jsonMap(item));
+				readyObjects.add(AbstractExecutioner.jsonMap(item));
 			} else
 				value = (Boolean) values.get(0);
 
@@ -404,13 +405,14 @@ public class UserConfigProducing {
 				List<Object> selectedValuesRole = new ArrayList<>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
-				Map<String, Object> itemRole = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
-						configKey, "which role should determine this users configuration", false, // editable
+				Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(
+						ConfigOption.TYPE.UnicodeConfig, configKey,
+						"which role should determine this users configuration", false, // editable
 						false, // multivalue
 						selectedValuesRole, // defaultValues enry
 						selectedValuesRole);
 
-				readyObjects.add(Executioner.jsonMap(itemRole));
+				readyObjects.add(AbstractExecutioner.jsonMap(itemRole));
 			}
 		}
 
@@ -436,14 +438,15 @@ public class UserConfigProducing {
 
 				userConfig.setValues(partkey, values);
 
-				item = PersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig, configKey, configKey, // description
+				item = AbstractPersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig, configKey,
+						configKey, // description
 						false, // editable
 						false, // multivalue
 						values, values // possibleValues
 
 				);
 
-				readyObjects.add(Executioner.jsonMap(item));
+				readyObjects.add(AbstractExecutioner.jsonMap(item));
 
 			}
 
@@ -657,7 +660,7 @@ public class UserConfigProducing {
 					+ ": " + (readyObjects.size() - 1));
 			List<Object> timeVal = Globals.getNowTimeListValue("set by role prototype");
 
-			Map<String, Object> itemModifyTime = PersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
+			Map<String, Object> itemModifyTime = AbstractPersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
 
 			itemModifyTime.put("ident", startkey + UserConfig.MODIFICATION_INFO_KEY);
 			itemModifyTime.put("editable", false);
@@ -670,7 +673,7 @@ public class UserConfigProducing {
 
 			Logging.info(this, "modi time " + itemModifyTime);
 
-			readyObjects.add(Executioner.jsonMap(itemModifyTime));
+			readyObjects.add(AbstractExecutioner.jsonMap(itemModifyTime));
 		}
 
 	}

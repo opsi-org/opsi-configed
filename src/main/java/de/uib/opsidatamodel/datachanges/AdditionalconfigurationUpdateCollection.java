@@ -6,14 +6,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 /**
 */
 public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	String[] objectIds;
-	PersistenceController persis;
+	AbstractPersistenceController persis;
 	boolean determineConfigOptions = false;
 	boolean masterConfig = false;
 
@@ -25,7 +25,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 
 	@Override
 	public void setController(Object obj) {
-		this.persis = (PersistenceController) obj;
+		this.persis = (AbstractPersistenceController) obj;
 	}
 
 	@Override

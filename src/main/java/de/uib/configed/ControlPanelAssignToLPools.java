@@ -21,7 +21,7 @@ import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.licences.PanelAssignToLPools;
 import de.uib.configed.type.licences.LicencepoolEntry;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
@@ -31,14 +31,14 @@ import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
+import de.uib.utilities.table.updates.AbstractSelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.SelectionMemorizerUpdateController;
 import de.uib.utilities.table.updates.StrList2BooleanFunction;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
+public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	private static final int MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE = 300;
 	public PanelAssignToLPools thePanel;
 
@@ -55,7 +55,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 	ConfigedMain mainController;
 
-	public PersistenceController persist;
+	public AbstractPersistenceController persist;
 
 	public enum SoftwareShowMode {
 		ALL, ASSIGNED
@@ -84,7 +84,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 	private Map<String, List<String>> removeKeysFromOtherLicencePool;
 
-	public ControlPanelAssignToLPools(PersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelAssignToLPools(AbstractPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelAssignToLPools(this);
 		this.persist = persist;
 		this.mainController = mainController;
@@ -115,8 +115,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				"setSoftwareIdsFromLicencePool " + poolID + " should be thePanel.panelLicencepools.getSelectedRow() "
 						+ thePanel.panelLicencepools.getSelectedRow());
 		Logging.info(this, "setSoftwareIdsFromLicencePool, call thePanel.fSoftwarename2LicencePool.setGlobalPool ");
-		if (thePanel.fSoftwarename2LicencePool != null)
+		if (thePanel.fSoftwarename2LicencePool != null) {
 			thePanel.fSoftwarename2LicencePool.setGlobalPool(poolID);
+		}
 
 		thePanel.panelRegisteredSoftware.setAwareOfSelectionListener(false);
 
@@ -153,8 +154,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		thePanel.buttonShowAssignedNotExisting
 				.setEnabled(!persist.getUnknownSoftwareListForLicencePool(poolID).isEmpty());
-		if (thePanel.fMissingSoftwareInfo == null)
+		if (thePanel.fMissingSoftwareInfo == null) {
 			thePanel.fMissingSoftwareInfo = new FGlobalSoftwareInfo(Globals.frame1, this);
+		}
 
 		if (!persist.getUnknownSoftwareListForLicencePool(poolID).isEmpty()) {
 			Map<String, Object> missingSoftwareMap = new HashMap<>();
@@ -163,19 +165,19 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				String[] rowValues = ID.split(Globals.PSEUDO_KEY_SEPARATOR);
 
 				Map<String, String> rowMap = new HashMap<>();
-				for (String colName : thePanel.fMissingSoftwareInfo.columnNames)
+				for (String colName : thePanel.fMissingSoftwareInfo.columnNames) {
 					rowMap.put(colName, "");
+				}
 
 				rowMap.put("ID", ID);
 
 				List<String> identKeys = de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT;
-				if (rowValues.length != identKeys.size())
+				if (rowValues.length != identKeys.size()) {
 					Logging.warning(this, "illegal ID " + ID);
-				else {
+				} else {
 					int i = 0;
 					for (String key : identKeys) {
 						rowMap.put(key, rowValues[i]);
-
 						i++;
 					}
 				}
@@ -242,8 +244,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			Set<Object> existingKeys = modelWindowsSoftwareIds.getExistingKeys();
 			int count = 0;
 			for (String key : selectKeys) {
-				if (existingKeys.contains(key))
+				if (existingKeys.contains(key)) {
 					count++;
+				}
 			}
 
 			thePanel.fieldCountAssignedInEditing.setText(produceCount(count));
@@ -253,9 +256,10 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		Logging.debug(this, "setSoftwareIdsFromLicencePool  setSelectedValues " + selectKeys);
 		thePanel.panelRegisteredSoftware.setSelectedValues(selectKeys, WINDOWS_SOFTWARE_ID_KEY_COL);
 
-		if (!selectKeys.isEmpty())
+		if (!selectKeys.isEmpty()) {
 			thePanel.panelRegisteredSoftware.moveToValue(selectKeys.get(selectKeys.size() - 1),
 					WINDOWS_SOFTWARE_ID_KEY_COL, false);
+		}
 
 		Logging.debug(this,
 				"setSoftwareIdsFromLicencePool  selectedKeys " + thePanel.panelRegisteredSoftware.getSelectedKeys());
@@ -268,22 +272,25 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	}
 
 	private String produceCount(Integer count) {
-		if (count == null || count < 0)
+		if (count == null || count < 0) {
 			return "";
+		}
 		return "" + count;
 	}
 
 	private String produceCount(Integer count, boolean licencePoolNull) {
-		if (count == null || licencePoolNull || count < 0)
+		if (count == null || licencePoolNull || count < 0) {
 			return "";
+		}
 		return "" + count;
 	}
 
 	private void resetCounters(String licencePoolId) {
 		Logging.info(this, "resetCounters for pool " + licencePoolId);
 		String baseCount = "0";
-		if (licencePoolId == null)
+		if (licencePoolId == null) {
 			baseCount = "";
+		}
 
 		thePanel.fieldCountAssignedStatus.setText(baseCount);
 		thePanel.fieldCountAssignedInEditing.setText(baseCount);
@@ -291,26 +298,28 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		thePanel.buttonShowAssignedNotExisting.setEnabled(false);
 	}
 
-	public void validateWindowsSoftwareKeys()
 	// called by valueChanged method of ListSelectionListener
-	{
+	public void validateWindowsSoftwareKeys() {
 
 		String selectedLicencePool = getSelectedLicencePool();
 		Logging.debug(this, "validateWindowsSoftwareKeys for licencePoolID " + selectedLicencePool);
 
-		if (selectedLicencePool == null)
+		if (selectedLicencePool == null) {
 			return;
+		}
 
 		Logging.debug(this, "validateWindowsSoftwareKeys thePanel.panelRegisteredSoftware.isAwareOfSelectionListener "
 				+ thePanel.panelRegisteredSoftware.isAwareOfSelectionListener());
 
-		if (!thePanel.panelRegisteredSoftware.isAwareOfSelectionListener())
+		if (!thePanel.panelRegisteredSoftware.isAwareOfSelectionListener()) {
 			return;
+		}
 
 		List<String> selKeys = thePanel.panelRegisteredSoftware.getSelectedKeys();
 		String showSelKeys = null;
-		if (selKeys != null)
+		if (selKeys != null) {
 			showSelKeys = "" + selKeys.size();
+		}
 		Logging.info(this, "validateWindowsSoftwareKeys selectedKeys " + showSelKeys
 				+ " associated to selectedLicencePool " + selectedLicencePool);
 
@@ -333,7 +342,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				newAssociation = !(persist.getFSoftware2LicencePool(key).equals(selectedLicencePool));
 				Logging.debug(this,
 						"validateWindowsSoftwareKeys has association to " + persist.getFSoftware2LicencePool(key));
-
 			}
 
 			if (newAssociation != null && newAssociation) {
@@ -342,7 +350,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				if (otherPool.equals(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL)) {
 					Logging.info(this, "validateWindowsSoftwareKeys, assigned to valNoLicencepool");
 				} else {
-
 					String info = Configed.getResourceValue("PanelAssignToLPools.warningSoftwareAlreadyAssigned")
 							+ "\n\n" + otherPool;
 					String option = Configed
@@ -366,32 +373,27 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 						// we cancel the new selection
 						cancelSelectionKeys.add(key);
 					} else {
-
 						// or delete the assignment to the licence pool
-
 						List<String> removeKeys = removeKeysFromOtherLicencePool.get(otherPool);
 						if (removeKeys == null) {
 							removeKeys = new ArrayList<>();
 							removeKeysFromOtherLicencePool.put(otherPool, removeKeys);
 						}
 						removeKeys.add(key);
-
 					}
 				}
-
 			}
 		}
 
 		Logging.info(this, "cancelSelectionKeys " + cancelSelectionKeys);
-		if (!cancelSelectionKeys.isEmpty()) // without this condition we run into a loop
-		{
+		// without this condition we run into a loop
+		if (!cancelSelectionKeys.isEmpty()) {
 			selKeys.removeAll(cancelSelectionKeys);
 			Logging.info(this, "selKeys after removal " + selKeys);
 			thePanel.panelRegisteredSoftware.setSelectedValues(selKeys, WINDOWS_SOFTWARE_ID_KEY_COL);
 		}
 
 		thePanel.fieldCountAssignedInEditing.setText("" + selKeys.size());
-
 	}
 
 	@Override
@@ -432,9 +434,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			thePanel.panelLicencepools.moveToValue("" + a[0], 0);
 
 			// setting back the other tables is provided by ListSelectionListener
-			// setting back the other tables is provided by ListSelectionListener
-			// setting back the other tables is provided by ListSelectionListener
-
 		});
 
 		thePanel.panelLicencepools.addPopupItem(menuItemAddPool);
@@ -453,7 +452,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 								.size() < modelLicencepools.getRowCount());
 
 						if (existsNewRow && persist.getLicencepools().containsKey(rowmap.get("licensePoolId"))) {
-
 							// but we leave it until the service methods reflect the situation more
 							// accurately
 
@@ -468,8 +466,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 							return null;
 						}
 
-						if (existsNewRow)
+						if (existsNewRow) {
 							modelLicencepools.requestReload();
+						}
 
 						return persist.editLicencePool((String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY),
 								(String) rowmap.get(LicencepoolEntry.DESCRIPTION_KEY));
@@ -510,8 +509,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		menuItemAddRelationProductId2LPool.addActionListener(e -> {
 			Object[] a = new Object[2];
 			a[0] = "";
-			if (thePanel.panelLicencepools.getSelectedRow() > -1)
+			if (thePanel.panelLicencepools.getSelectedRow() > -1) {
 				a[0] = modelLicencepools.getValueAt(thePanel.panelLicencepools.getSelectedRowInModelTerms(), 0);
+			}
 
 			a[1] = "";
 
@@ -530,8 +530,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
-			if (poolIds.size() <= 1)
+			if (poolIds.size() <= 1) {
 				poolIds.add("");
+			}
 			// hack, since combo box shows nothing otherwise
 
 			return new DefaultComboBoxModel<>(poolIds.toArray(String[]::new));
@@ -546,7 +547,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		// updates
 		thePanel.panelProductId2LPool.setUpdateController(new MapItemsUpdateController(thePanel.panelProductId2LPool,
 				modelProductId2LPool, new MapBasedUpdater() {
-
 					@Override
 					public String sendUpdate(Map<String, Object> m) {
 						return persist.editRelationProductId2LPool((String) m.get("productId"),
@@ -671,7 +671,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			col.setCellRenderer(new de.uib.utilities.table.gui.BooleanIconTableCellRenderer(
 					Globals.createImageIcon("images/minibarpointerred.png", ""),
 					Globals.createImageIcon("images/minibarpointervoid.png", "")));
-
 		}
 
 		col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(WINDOWS_SOFTWARE_ID_KEY_COL);
@@ -687,7 +686,7 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 		// updates
 		thePanel.panelRegisteredSoftware
-				.setUpdateController(new SelectionMemorizerUpdateController(thePanel.panelLicencepools, 0,
+				.setUpdateController(new AbstractSelectionMemorizerUpdateController(thePanel.panelLicencepools, 0,
 						thePanel.panelRegisteredSoftware, modelWindowsSoftwareIds, new StrList2BooleanFunction() {
 							@Override
 							public boolean sendUpdate(String poolId, List<String> softwareIds) {
@@ -716,14 +715,16 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 										if (result && !otherStringPoolEntry.getValue().isEmpty()) {
 											result = persist.removeAssociations(otherStringPoolEntry.getKey(),
 													otherStringPoolEntry.getValue());
-											if (result)
+											if (result) {
 												removeKeysFromOtherLicencePool.remove(otherStringPoolEntry.getKey());
+											}
 										}
 									}
 								}
 
-								if (!result)
+								if (!result) {
 									return false;
+								}
 
 								// cleanup assignments to other pools since an update would not change them
 								// (redmine #3282)
@@ -799,8 +800,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// Ignore extra messages.
-				if (e.getValueIsAdjusting())
+				if (e.getValueIsAdjusting()) {
 					return;
+				}
 
 				String selectedLicencePool = null;
 				thePanel.panelProductId2LPool.setSelectedValues(null, 0);// clear selection
@@ -809,7 +811,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 				if (lsm.isSelectionEmpty()) {
 					Logging.debug(this, "no rows selected");
-
 				} else {
 					selectedLicencePool = getSelectedLicencePool();
 					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
@@ -860,7 +861,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				setSoftwareIdsFromLicencePool(selectedLicencePool);
 
 				if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
-
 					thePanel.panelRegisteredSoftware.setDataChanged(gotNewSWKeysForLicencePool(selectedLicencePool));
 				}
 
@@ -875,23 +875,27 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		Logging.debug(this, "setVisualSelection for panelRegisteredSoftware on keys " + keys);
 		thePanel.panelRegisteredSoftware.setSelectedValues(keys, WINDOWS_SOFTWARE_ID_KEY_COL);
 
-		if (keys != null && !keys.isEmpty())
+		if (keys != null && !keys.isEmpty()) {
 			thePanel.panelRegisteredSoftware.moveToValue(keys.get(keys.size() - 1), WINDOWS_SOFTWARE_ID_KEY_COL, false);
+		}
 	}
 
 	private void produceFilter1(List<String> assignedWindowsSoftwareIds) {
 		TreeSet<Object> filter1 = null;
 
-		if (softwareShowAllMeans != SoftwareShowAllMeans.ALL)
+		if (softwareShowAllMeans != SoftwareShowAllMeans.ALL) {
 			filter1 = new TreeSet<>(getUnAssignedSoftwareIds());
+		}
 
 		if (filter1 != null && softwareShowAllMeans == SoftwareShowAllMeans.ASSIGNED_OR_ASSIGNED_TO_NOTHING
-				&& assignedWindowsSoftwareIds != null)
+				&& assignedWindowsSoftwareIds != null) {
 			filter1.addAll(assignedWindowsSoftwareIds);
+		}
 
 		String filterInfo = "null";
-		if (filter1 != null)
+		if (filter1 != null) {
 			filterInfo = "" + filter1.size();
+		}
 
 		Logging.info(this, "produceFilterSets setFilter dontShowAssociatedToOtherPool " + filterInfo);
 
@@ -901,12 +905,14 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	private void produceFilterSets(List<String> assignedWindowsSoftwareIds) {
 		TreeSet<Object> filter0 = null;
 
-		if (softwareShow == SoftwareShowMode.ASSIGNED)
+		if (softwareShow == SoftwareShowMode.ASSIGNED) {
 			filter0 = new TreeSet<>(assignedWindowsSoftwareIds);
+		}
 
 		String filterInfo = "null";
-		if (filter0 != null)
+		if (filter0 != null) {
 			filterInfo = "" + filter0.size();
+		}
 		Logging.info(this, "produceFilterSets setFilter dontShowAssociatedToOtherPool " + filterInfo);
 		windowsSoftwareFilterConditonShowOnlySelected.setFilter(filter0);
 
@@ -925,10 +931,11 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 				+ " selected keys " + selectedKeys);
 
 		boolean usingShowSelectedFilter = (softwareShow == SoftwareShowMode.ASSIGNED);
-		if (usingShowSelectedFilter)
+		if (usingShowSelectedFilter) {
 			windowsSoftwareFilterConditonShowOnlySelected.setFilter(new TreeSet<>(selectedKeys));
-		else
+		} else {
 			windowsSoftwareFilterConditonShowOnlySelected.setFilter(null);
+		}
 
 		thePanel.panelRegisteredSoftware.setAwareOfTableChangedListener(
 				softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE);
@@ -966,7 +973,6 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 
 			thePanel.panelRegisteredSoftware.setAwareOfTableChangedListener(tableChangeAware);
 		}
-
 	}
 
 	public void setSoftwareDirectionOfAssignment(SoftwareDirectionOfAssignment direction) {
@@ -974,10 +980,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 		this.softwareDirectionOfAssignment = direction;
 
 		if (oldDirection != direction) {
-			if (direction == SoftwareDirectionOfAssignment.POOL2SOFTWARE)
+			if (direction == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
 				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(true);
-
-			else if (direction == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
+			} else if (direction == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
 				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(false);
 				resetCounters(null);
 				thePanel.fieldCountAssignedInEditing.setText("");
@@ -993,8 +998,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	}
 
 	private boolean gotNewSWKeysForLicencePool(String selectedLicencePool) {
-		if (selectedLicencePool == null)
+		if (selectedLicencePool == null) {
 			return false;
+		}
 
 		List<String> oldSWList = persist.getSoftwareListByLicencePool(selectedLicencePool);
 		List<String> newKeys = new ArrayList<>(thePanel.panelRegisteredSoftware.getSelectedKeys());
@@ -1014,8 +1020,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 			// entries
 
 			String selectedLicencePool = getSelectedLicencePool();
-			if (selectedLicencePool == null)
+			if (selectedLicencePool == null) {
 				return false;
+			}
 
 			validateWindowsSoftwareKeys();
 
@@ -1026,8 +1033,9 @@ public class ControlPanelAssignToLPools extends ControlMultiTablePanel {
 	public String getSelectedLicencePool() {
 		String result = null;
 
-		if (thePanel.panelLicencepools.getSelectedRow() >= 0)
+		if (thePanel.panelLicencepools.getSelectedRow() >= 0) {
 			result = thePanel.panelLicencepools.getValueAt(thePanel.panelLicencepools.getSelectedRow(), 0).toString();
+		}
 
 		return result;
 	}

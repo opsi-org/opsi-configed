@@ -2,7 +2,7 @@ package de.uib.utilities;
 
 import java.io.File;
 
-public class FileX {
+public final class FileX {
 
 	// private constructor to hide the implicit public one
 	private FileX() {

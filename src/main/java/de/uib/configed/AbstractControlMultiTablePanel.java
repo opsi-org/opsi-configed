@@ -15,7 +15,7 @@ import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public abstract class ControlMultiTablePanel {
+public abstract class AbstractControlMultiTablePanel {
 	protected List<GenTableModel> tableModels = new ArrayList<>();
 
 	protected List<PanelGenEditTable> tablePanes = new ArrayList<>();
@@ -76,12 +76,14 @@ public abstract class ControlMultiTablePanel {
 					Configed.getResourceValue("ControlMultiTablePanel.NotSavedChanges.title"),
 					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
 
-			if (returnedOption == JOptionPane.YES_OPTION)
+			if (returnedOption == JOptionPane.YES_OPTION) {
 				result = true;
+			}
 
 			Globals.frame1.setVisible(true);
-		} else
+		} else {
 			result = true;
+		}
 
 		return result;
 	}

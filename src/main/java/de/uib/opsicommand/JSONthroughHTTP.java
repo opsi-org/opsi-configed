@@ -50,7 +50,7 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
  * @author Rupert Roeder, Jan Schneider, Naglis Vidziunas
  */
 
-public class JSONthroughHTTP extends JSONExecutioner {
+public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	int[] serverVersion = { 0, 0, 0, 0 };
 	public static boolean compressTransmission = false;
 	public static boolean gzipTransmission = false;
@@ -303,7 +303,6 @@ public class JSONthroughHTTP extends JSONExecutioner {
 				return null;
 			}
 
-
 			final StringBuilder message = new StringBuilder();
 
 			if (!certificateExists) {
@@ -319,8 +318,7 @@ public class JSONthroughHTTP extends JSONExecutioner {
 			}
 
 			final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("JSONthroughHTTP.failedServerVerification"),
-					true,
+					Configed.getResourceValue("JSONthroughHTTP.failedServerVerification"), true,
 					new String[] { Configed.getResourceValue(Configed.getResourceValue("UIManager.cancelButtonText")),
 							Configed.getResourceValue("JSONthroughHTTP.alwaysTrust"),
 							Configed.getResourceValue("JSONthroughHTTP.trustOnlyOnce") },
@@ -341,7 +339,6 @@ public class JSONthroughHTTP extends JSONExecutioner {
 							fErrorMsg.repaint();
 						}
 					});
-
 
 					if (ConfigedMain.getMainFrame() == null && ConfigedMain.dpass != null) {
 						fErrorMsg.setLocationRelativeTo(ConfigedMain.dpass);

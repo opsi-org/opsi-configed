@@ -51,7 +51,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.JSONthroughHTTP;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
@@ -78,7 +78,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
 	private ConfigedMain main; // controller
-	private PersistenceController persis;
+	private AbstractPersistenceController persis;
 
 	private WaitCursor waitCursor;
 
@@ -123,8 +123,9 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	};
 
 	public void setHost(String host) {
-		if (host == null)
+		if (host == null) {
 			host = "";
+		}
 		fieldHost.setSelectedItem(host);
 		fieldUser.requestFocus();
 
@@ -137,15 +138,17 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	}
 
 	public void setUser(String user) {
-		if (user == null)
+		if (user == null) {
 			user = "";
+		}
 		fieldUser.setText(user);
 		passwordField.requestFocus();
 	}
 
 	public void setPassword(String password) {
-		if (password == null)
+		if (password == null) {
 			password = "";
+		}
 		passwordField.setText(password);
 	}
 
@@ -389,8 +392,9 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 				MessageFormat messageFormatDialogContent = new MessageFormat(
 						Configed.getResourceValue("DPassword.noConnectionMessageDialog.content"));
 
-				if (waitingWorker != null && waitingWorker.isTimeoutReached())
+				if (waitingWorker != null && waitingWorker.isTimeoutReached()) {
 					messageFormatDialogContent = new MessageFormat("Timeout in connecting");
+				}
 
 				JOptionPane.showMessageDialog(this,
 						messageFormatDialogContent.format(
@@ -460,8 +464,9 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 		// we make first a waitCursor and a waitInfo window
 
-		if (waitCursor != null)
+		if (waitCursor != null) {
 			waitCursor.stop(); // we want only one running instance
+		}
 
 		// correctly
 
@@ -493,7 +498,6 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		boolean localApp = ("" + Thread.currentThread()).indexOf("main]") > -1;
 		Logging.info(this, "is local app  " + localApp);
 		if (localApp) {
-
 			Logging.info(this, "start WaitingWorker");
 			waitingWorker = new WaitingWorker(this);
 			waitingWorker.execute();
@@ -514,7 +518,6 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 				}
 			}.start();
 		} else {
-
 			persis = PersistenceControllerFactory.getNewPersistenceController((String) fieldHost.getSelectedItem(),
 					fieldUser.getText(), String.valueOf(passwordField.getPassword()));
 
@@ -525,11 +528,11 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 					&& waited < TIMEOUT_MS) {
 				Globals.threadSleep(this, interval);
 				waited = waited + interval;
-
 			}
 
-			if (waited >= TIMEOUT_MS)
+			if (waited >= TIMEOUT_MS) {
 				Logging.error(" no connection");
+			}
 		}
 
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setUser(fieldUser.getText());
@@ -548,8 +551,9 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	}
 
 	private void jButtonCancelActionPerformed(ActionEvent e) {
-		if (waitCursor != null)
+		if (waitCursor != null) {
 			waitCursor.stop();
+		}
 		endProgram();
 	}
 
@@ -560,5 +564,4 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 			endProgram();
 		}
 	}
-
 }

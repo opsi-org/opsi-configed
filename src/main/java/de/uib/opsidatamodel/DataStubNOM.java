@@ -40,14 +40,14 @@ import de.uib.configed.type.licences.LicenceUsableForEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.configed.type.licences.TableLicenceContracts;
-import de.uib.opsicommand.Executioner;
+import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.JSONReMapper;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.table.ListCellOptions;
 
-public class DataStubNOM extends DataStub {
+public class DataStubNOM extends AbstractDataStub {
 
 	OpsiserviceNOMPersistenceController persist;
 
@@ -562,7 +562,7 @@ public class DataStubNOM extends DataStub {
 					Configed.getResourceValue("LoadingObserver.loadtable") + " product property state");
 			String[] callAttributes = new String[] {};
 			Map callFilter = new HashMap<>();
-			callFilter.put("objectId", Executioner.jsonArray(newClients));
+			callFilter.put("objectId", AbstractExecutioner.jsonArray(newClients));
 
 			result = persist.retrieveListOfMapsNOM(callAttributes, callFilter, "productPropertyState_getObjects");
 
@@ -896,7 +896,7 @@ public class DataStubNOM extends DataStub {
 				Map callFilter = new HashMap<>();
 				callFilter.put("state", 1);
 				if (newClients != null)
-					callFilter.put("clientId", Executioner.jsonArray(clientListForCall));
+					callFilter.put("clientId", AbstractExecutioner.jsonArray(clientListForCall));
 
 				List<Map<String, Object>> softwareAuditOnClients = persist.retrieveListOfMapsNOM(callAttributes,
 						callFilter, "auditSoftwareOnClient_getHashes");

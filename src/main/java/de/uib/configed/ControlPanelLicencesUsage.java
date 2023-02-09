@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 import de.uib.configed.gui.licences.PanelLicencesUsage;
 import de.uib.configed.type.licences.LicenceUsageEntry;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -21,7 +21,7 @@ import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
+public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 	PanelLicencesUsage thePanel;
 
 	GenTableModel modelLicencesUsage;
@@ -29,10 +29,10 @@ public class ControlPanelLicencesUsage extends ControlMultiTablePanel {
 	GenTableModel modelWindowsSoftwareIds;
 	GenTableModel modelLicencepools;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	ConfigedMain mainController;
 
-	public ControlPanelLicencesUsage(PersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelLicencesUsage(AbstractPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelLicencesUsage(this);
 		this.persist = persist;
 		this.mainController = mainController;

@@ -34,14 +34,14 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.productaction.PanelMountShare;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.PersistenceController;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.FileX;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
@@ -130,10 +130,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			if (buttonUploadDrivers != null) {
 				buttonUploadDrivers.setEnabled(result);
 
-				if (result)
+				if (result) {
 					buttonUploadDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.execute"));
-				else
+				} else {
 					buttonUploadDrivers.setToolTipText("Treiber- bzw. Zielpfad noch nicht gefunden");
+				}
 			}
 
 			return result;
@@ -186,12 +187,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	JLabel jLabelTopic;
 	int wLeftText;
 
-	PersistenceController persist;
+	AbstractPersistenceController persist;
 	ConfigedMain main;
 	String server;
 	JFrame rootFrame;
 
-	public PanelDriverUpload(ConfigedMain main, PersistenceController persist, JFrame root) {
+	public PanelDriverUpload(ConfigedMain main, AbstractPersistenceController persist, JFrame root) {
 		this.main = main;
 		this.persist = persist;
 		this.rootFrame = root;
@@ -296,8 +297,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	private void retrieveWinProducts() {
 		Logging.info(this, "retrieveWinProducts in " + depotProductDirectory);
 
-		if (depotProductDirectory == null)
+		if (depotProductDirectory == null) {
 			return;
+		}
 
 		// not yet a depot selected
 
@@ -703,16 +705,18 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 					serverPathChecked.setSelected(stateServerPath);
 					if (stateServerPath) {
 						try {
-							if (driverPath.isDirectory())
+							if (driverPath.isDirectory()) {
 								FileUtils.copyDirectoryToDirectory(driverPath, targetPath);
-							else
+							} else {
 								FileUtils.copyFileToDirectory(driverPath, targetPath);
+							}
 						} catch (IOException iox) {
 							waitCursor.stop();
 							Logging.error("copy error:\n" + iox, iox);
 						}
-					} else
+					} else {
 						Logging.info(this, "execute: targetPath does not exist");
+					}
 
 					if (stateServerPath) {
 						String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct
@@ -723,9 +727,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 					waitCursor.stop();
 
-					if (waiter != null)
+					if (waiter != null) {
 						waiter.setReady();
-
+					}
 				} catch (Exception ex) {
 					waitCursor.stop();
 					Logging.error("error in uploading :\n" + ex, ex);
@@ -751,13 +755,15 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	}
 
 	private void produceTarget() {
-		if (fieldServerPath == null)
+		if (fieldServerPath == null) {
 			return; // caution we are not yet initialized
+		}
 
 		String result = depotProductDirectory + File.separator + winProduct + File.separator + driverDirectory;
 
-		if (buttonByAudit.isSelected())
+		if (buttonByAudit.isSelected()) {
 			result = result + File.separator + byAuditPath;
+		}
 
 		fieldServerPath.setText(result);
 
@@ -785,12 +791,15 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	@Override
 	public String produceName() {
 
-		if (fieldServerPath != null)
+		if (fieldServerPath != null) {
 			Logging.info(this, "produceName ? fieldServerPath , depotProductDirectory " + fieldServerPath.getText()
 					+ " , " + depotProductDirectory);
+		}
+
 		if (fieldServerPath == null || fieldServerPath.getText().equals("")
-				|| fieldServerPath.getText().startsWith(depotProductDirectory))
+				|| fieldServerPath.getText().startsWith(depotProductDirectory)) {
 			return depotProductDirectory;
+		}
 
 		return fieldServerPath.getText();
 	}
@@ -798,7 +807,5 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	@Override
 	public String getDefaultName() {
 		return byAuditPath;
-
 	}
-
 }

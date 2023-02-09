@@ -8,7 +8,7 @@ import java.util.List;
  * server integration) www.opsi.org CopyrightInfos 2017
  */
 
-public class CopyrightInfos {
+public final class CopyrightInfos {
 
 	static final String COMPLETE_VERSION_INFO = System.getProperty("java.runtime.version");
 

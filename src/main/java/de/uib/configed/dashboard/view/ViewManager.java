@@ -3,7 +3,7 @@ package de.uib.configed.dashboard.view;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ViewManager {
+public final class ViewManager {
 	private static Map<String, View> views = new HashMap<>();
 
 	private ViewManager() {

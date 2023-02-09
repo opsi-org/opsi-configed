@@ -3,7 +3,7 @@ package de.uib.opsidatamodel.productstate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class InstallationInfo {
+public final class InstallationInfo {
 
 	// private constructor to hide the implicit public one
 	private InstallationInfo() {
