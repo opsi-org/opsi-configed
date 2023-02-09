@@ -76,6 +76,10 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 
 import de.uib.configed.Configed;
@@ -754,6 +758,23 @@ public class MainFrame extends JFrame
 
 	private void setupMenuClients() {
 		jMenuClients.setText(Configed.getResourceValue("MainFrame.jMenuClients"));
+
+		jMenuClients.addMenuListener(new MenuListener() {
+			@Override
+			public void menuCanceled(MenuEvent arg0) {
+				// Nothing to do. 
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent arg0) {
+				// Nothing to do. 
+			}
+
+			@Override
+			public void menuSelected(MenuEvent arg0) {
+				enableMenuItemsForClients(configedMain.getSelectedClients().length);
+			}
+		});
 
 		jCheckBoxMenuItemShowCreatedColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
 		combinedMenuItemCreatedColumn.show(configedMain.hostDisplayFields.get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
@@ -1648,6 +1669,23 @@ public class MainFrame extends JFrame
 		popupRebuildClientList.addActionListener((ActionEvent e) -> configedMain.reloadHosts());
 
 		// ----
+
+		popupClients.addPopupMenuListener(new PopupMenuListener() {
+			@Override
+			public void popupMenuCanceled(PopupMenuEvent arg0) {
+				// Nothing to do.
+			}
+
+			@Override
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
+				// Nothing to do.
+			}
+
+			@Override
+			public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
+				enableMenuItemsForClients(configedMain.getSelectedClients().length);
+			}
+		});
 
 		popupClients.add(popupWakeOnLan);
 
@@ -2926,20 +2964,36 @@ public class MainFrame extends JFrame
 				for (int i = 0; i < clientMenuItemsDependOnSelectionCount.length; i++) {
 					clientMenuItemsDependOnSelectionCount[i].setEnabled(true);
 				}
+
 				for (int i = 0; i < clientPopupsDependOnSelectionCount.length; i++) {
 					clientPopupsDependOnSelectionCount[i].setEnabled(true);
 				}
+
+				jMenuResetProducts.setEnabled(true);
+				popupResetProducts.setEnabled(true);
+			} else {
+				for (int i = 0; i < clientMenuItemsDependOnSelectionCount.length; i++) {
+					clientMenuItemsDependOnSelectionCount[i].setEnabled(false);
+				}
+
+				for (int i = 0; i < clientPopupsDependOnSelectionCount.length; i++) {
+					clientPopupsDependOnSelectionCount[i].setEnabled(false);
+				}
+
+				jMenuResetProducts.setEnabled(false);
+				popupResetProducts.setEnabled(false);
 			}
 
 			if (countSelectedClients == 1) {
 				jMenuChangeClientID.setEnabled(true);
 				popupChangeClientID.setEnabled(true);
+			} else {
+				jMenuChangeClientID.setEnabled(false);
+				popupChangeClientID.setEnabled(false);
 			}
-
 		}
 
 		checkMenuItemsDisabling();
-
 	}
 
 	// ------------------- set visual toggle items
