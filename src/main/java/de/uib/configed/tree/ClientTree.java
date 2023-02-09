@@ -725,6 +725,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		for (Entry<String, Map<String, String>> group : groups.entrySet()) {
 			if (topGroupNames.contains(group.getKey()))
 				continue;
+			Logging.devel(this, "adsfasdf");
 
 			DefaultMutableTreeNode node = groupNodes.get(group.getKey());
 
@@ -759,7 +760,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public DefaultTreeModel getModel() {
-		return model; // Can this be removed?
+		return model;
 	}
 
 	public Set<String> associateClientsToGroups(String[] x, Map<String, Set<String>> fObject2Groups,

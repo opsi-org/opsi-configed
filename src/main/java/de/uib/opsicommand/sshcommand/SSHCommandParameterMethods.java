@@ -48,7 +48,7 @@ import de.uib.utilities.ssh.SSHOutputCollector;
 /**
  * This Class handles SSHCommands.
  **/
-public class SSHCommandParameterMethods implements SSHCommandParameterInterface {
+public final class SSHCommandParameterMethods implements SSHCommandParameterInterface {
 
 	/** default parameter replace id beginns with <<< **/
 	public static final String REPLACEMENT_DEFAULT_1 = "<<<";
@@ -96,17 +96,19 @@ public class SSHCommandParameterMethods implements SSHCommandParameterInterface 
 	}
 
 	public static SSHCommandParameterMethods getInstance(ConfigedMain m) {
-		if (instance != null)
+		if (instance != null) {
 			return instance;
-		else
+		} else {
 			return new SSHCommandParameterMethods(m);
+		}
 	}
 
 	public static SSHCommandParameterMethods getInstance() {
-		if (instance != null)
+		if (instance != null) {
 			return instance;
-		else
+		} else {
 			return new SSHCommandParameterMethods(null);
+		}
 	}
 
 	public String[] getParameterMethodLocalNames() {
@@ -132,15 +134,17 @@ public class SSHCommandParameterMethods implements SSHCommandParameterInterface 
 
 	public String getMethodFromName(String name) {
 		for (Map.Entry<String, String> entry : methods.entrySet()) {
-			if (name.equals(entry.getKey()))
+			if (name.equals(entry.getKey())) {
 				return entry.getValue();
+			}
 		}
 		return name;
 	}
 
 	public String[] getParameterFormats() {
-		if (formats != null)
+		if (formats != null) {
 			return formats;
+		}
 		return new String[0];
 	}
 
@@ -184,8 +188,10 @@ public class SSHCommandParameterMethods implements SSHCommandParameterInterface 
 		String[] splittedParameter = splitParameter(param);
 		String result = callMethod(splittedParameter[0], splittedParameter[1]);
 		result = result.contains("ssh://") ? result.replace("ssh://", "") : result;
-		if (result == null)
+		if (result == null) {
 			return Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
+		}
+
 		return result;
 	}
 
@@ -228,8 +234,9 @@ public class SSHCommandParameterMethods implements SSHCommandParameterInterface 
 	public String getTranslatedMethod(String localeMethod) {
 		String method = "";
 		for (Map.Entry<String, String> entry : methods.entrySet()) {
-			if (entry.getKey().equals(localeMethod))
+			if (entry.getKey().equals(localeMethod)) {
 				method = entry.getValue();
+			}
 		}
 		return method;
 
@@ -396,19 +403,22 @@ public class SSHCommandParameterMethods implements SSHCommandParameterInterface 
 		jdialog.setSize(400, 150);
 		jdialog.setVisible(true);
 
-		if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION)
+		if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION) {
 			return field.getText().trim();
+		}
+
 		return null;
 	}
 
 	@Override
 	public String getConfigServerName() {
 		List<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
-		for (String depot : depots)
+		for (String depot : depots) {
 			if (depot.startsWith(ConfigedMain.host)) {
 				Logging.debug(this, "getConfig_serverName " + ConfigedMain.host);
 				return depot;
 			}
+		}
 
 		Logging.debug(this, "getConfig_serverName " + ConfigedMain.host);
 		//// peristancecontroller methods for depot :
@@ -435,9 +445,9 @@ public class SSHCommandParameterMethods implements SSHCommandParameterInterface 
 			if (hostInfo != null) {
 				clientIPs[counter] = hostInfo.getIpAddress();
 				counter++;
-			} else
+			} else {
 				Logging.debug(this, "getSelected_clientIPs host " + name + " HostInfo null");
-
+			}
 		}
 		return clientIPs;
 	}
@@ -586,8 +596,9 @@ public class SSHCommandParameterMethods implements SSHCommandParameterInterface 
 			final ValueSelectorList valueSelectorList = fillValueSelectorList(values);
 			final JOptionPane opPane = createValueSelectorDialog(valueSelectorList);
 
-			if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION)
+			if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION) {
 				return valueSelectorList.getSelectedValue();
+			}
 
 			return null;
 		}

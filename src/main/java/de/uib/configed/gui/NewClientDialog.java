@@ -47,7 +47,7 @@ import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.LabelChecked;
 import de.uib.utilities.swing.SeparatedDocument;
 
-public class NewClientDialog extends FGeneralDialog
+public final class NewClientDialog extends FGeneralDialog
 
 {
 	private ConfigedMain main;

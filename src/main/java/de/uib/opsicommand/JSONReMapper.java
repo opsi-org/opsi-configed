@@ -19,7 +19,7 @@ import de.uib.utilities.logging.Logging;
  * @author Rupert Roeder
  */
 
-public class JSONReMapper {
+public final class JSONReMapper {
 
 	// private constructor to hide the implicit public one
 	private JSONReMapper() {
@@ -178,21 +178,20 @@ public class JSONReMapper {
 
 			Iterator<String> iter0 = map0.keySet().iterator();
 			while (iter0.hasNext()) {
-				String key1 = iter0.next(); // e.g. client
-				HashMap<String, JSONObject> map1 = new HashMapX<>(map0.get(key1)); // e.g.
-																					// map
-																					// of
-																					// 1
-																					// client
-																					// values
+				// e.g. client
+				String key1 = iter0.next();
 
-				HashMap<String, Map<String, Object>> map1R = new HashMap<>(); // to produce
+				// e.g. map of 1 client values
+				HashMap<String, JSONObject> map1 = new HashMapX<>(map0.get(key1));
+
+				// to produce
+				HashMap<String, Map<String, Object>> map1R = new HashMap<>();
 
 				Iterator<String> iter1 = map1.keySet().iterator();
 				while (iter1.hasNext()) {
-					String key2 = iter1.next(); // e.g. product
-					HashMap<String, Object> map2 = new HashMapX<>(map1.get(key2), true); // e.g.
-																							// product
+					// e.g. product
+					String key2 = iter1.next();
+					HashMap<String, Object> map2 = new HashMapX<>(map1.get(key2), true);
 
 					map1R.put(key2, map2);
 

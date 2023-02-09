@@ -28,7 +28,7 @@ import javafx.stage.Stage;
  * (c) uib 2001-2022
  */
 
-public class Globals {
+public final class Globals {
 	private Globals() {
 	}
 
@@ -60,7 +60,7 @@ public class Globals {
 	public static final String CERTIFICATE_FILE_EXTENSION = "pem";
 	public static final String CERTIFICATE_FILE = CERTIFICATE_FILE_NAME + "." + CERTIFICATE_FILE_EXTENSION;
 
-	public static class ProductPackageVersionSeparator {
+	public static final class ProductPackageVersionSeparator {
 
 		public static final String FOR_DISPLAY = "-";
 		public static final String FOR_KEY = ";";
@@ -70,16 +70,19 @@ public class Globals {
 		}
 
 		public static String formatKeyForDisplay(String key) {
-			if (key == null)
+			if (key == null) {
 				return null;
+			}
 
 			int i = key.indexOf(FOR_KEY);
-			if (i == -1)
+			if (i == -1) {
 				return key;
+			}
 
 			String result = key.substring(0, i);
-			if (i < key.length())
+			if (i < key.length()) {
 				result = result + FOR_DISPLAY + key.substring(i + 1);
+			}
 
 			return result;
 		}
@@ -99,8 +102,9 @@ public class Globals {
 
 	public static boolean interpretAsBoolean(Object value) {
 
-		if (value == null)
+		if (value == null) {
 			return false;
+		}
 
 		if (value instanceof Boolean) {
 			return (Boolean) value;
@@ -108,33 +112,38 @@ public class Globals {
 
 		if (value instanceof Integer) {
 			int val = (Integer) value;
-			if (val == 1)
+			if (val == 1) {
 				return true;
-			else if (val == 0)
+			} else if (val == 0) {
 				return false;
-
-			else
+			} else {
 				throw new IllegalArgumentException("" + value + " cannot be interpreted as boolean");
+			}
 		}
 
 		if (value instanceof String) {
 
 			String val = ((String) value).toLowerCase();
 
-			if (val.equals(""))
+			if (val.equals("")) {
 				return false;
+			}
 
-			if (val.equals("true"))
+			if (val.equals("true")) {
 				return true;
+			}
 
-			if (val.equals("false"))
+			if (val.equals("false")) {
 				return false;
+			}
 
-			if (val.equals("1"))
+			if (val.equals("1")) {
 				return true;
+			}
 
-			if (val.equals("0"))
+			if (val.equals("0")) {
 				return false;
+			}
 
 			throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
 		}
@@ -142,7 +151,8 @@ public class Globals {
 		throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
 	}
 
-	public static final Color INVISIBLE = new Color(11, 13, 17); // some value which shall be interpreted as identical
+	// some value which shall be interpreted as identical
+	public static final Color INVISIBLE = new Color(11, 13, 17);
 
 	public static final Color PRIMARY_FOREGROUND_COLOR = Color.BLACK;
 

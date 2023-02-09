@@ -18,7 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.TextFlow;
 
-public class ComponentStyler {
+public final class ComponentStyler {
 	private ComponentStyler() {
 	}
 

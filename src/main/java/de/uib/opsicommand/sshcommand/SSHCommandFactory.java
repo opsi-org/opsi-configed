@@ -36,7 +36,7 @@ import de.uib.utilities.logging.Logging;
 /**
  * This Class handles SSHCommands.
  **/
-public class SSHCommandFactory {
+public final class SSHCommandFactory {
 	/** final string commands for linux terminal **/
 	public static final String STRING_REPLACEMENT_DIRECTORY = "*.dir.*";
 	// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
@@ -246,9 +246,9 @@ public class SSHCommandFactory {
 	public SSHCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
 			List<String> c) {
 
-		return new SSHCommandTemplate(id, c, // Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
-				// ArrayList! JsonArray muss nicht sortiert sein!"
-				mt, ns, pmt, ttt, p);
+		// Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
+		// ArrayList! JsonArray muss nicht sortiert sein!"
+		return new SSHCommandTemplate(id, c, mt, ns, pmt, ttt, p);
 	}
 
 	/**

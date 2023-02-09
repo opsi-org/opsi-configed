@@ -3,7 +3,7 @@ package de.uib.opsicommand.sshcommand;
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
-public class SSHConnectionInfo {
+public final class SSHConnectionInfo {
 	private boolean sshenabled = true;
 	private String sshConnectionUser = "";
 	private String sshConnectionPassword = "";
@@ -20,8 +20,10 @@ public class SSHConnectionInfo {
 
 	public static SSHConnectionInfo getInstance() {
 		Logging.info("SSHConnectionInfo getInstance, until now instance " + instance);
-		if (instance == null)
+		if (instance == null) {
 			instance = new SSHConnectionInfo();
+		}
+
 		return instance;
 	}
 
@@ -115,20 +117,25 @@ public class SSHConnectionInfo {
 	}
 
 	public void checkUserData() {
-		if (getHost() == null)
+		if (getHost() == null) {
 			setHost(ConfigedMain.host);
+		}
 
-		if (getPort() == null)
+		if (getPort() == null) {
 			setPort(SSHConnect.PORT_SSH);
+		}
 
-		if (getUser() == null)
+		if (getUser() == null) {
 			setUser(ConfigedMain.user);
+		}
 
-		if ((getPassw() == null) && (!usesKeyfile()))
+		if ((getPassw() == null) && (!usesKeyfile())) {
 			setPassw(ConfigedMain.password);
+		}
 
-		else if (getPassw() == null)
+		else if (getPassw() == null) {
 			setPassw("");
+		}
 
 		Logging.info(this, "checkUserData " + this.toString());
 	}
@@ -136,8 +143,10 @@ public class SSHConnectionInfo {
 	private static String getHostnameFromOpsihost(String host) {
 		String result = host;
 		Logging.info("SSHConnectionInfo  getHostnameFromOpsihost " + host);
-		if (host != null && host.indexOf(":") > -1)
+		if (host != null && host.indexOf(":") > -1) {
 			result = host.substring(0, host.indexOf(":"));
+		}
+
 		Logging.info("SSHConnectionInfo  getHostnameFromOpsihost result " + result);
 
 		return result;
