@@ -237,7 +237,8 @@ public final class Globals {
 
 	public static final Map<String, Color> SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS = new HashMap<>();
 	static {
-		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;info;0m", Globals.greyed); // user info not really ansi code !!
+		// user info not really ansi code !!
+		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;info;0m", Globals.greyed);
 		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;error;0m", Globals.ACTION_COLOR);
 		SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS.put("[0;30;40m", PRIMARY_FOREGROUND_COLOR);
 
@@ -445,8 +446,9 @@ public final class Globals {
 			return -1;
 		}
 
-		else
+		else {
 			return maxLogSizes[index];
+		}
 	}
 
 	// be given
@@ -481,8 +483,9 @@ public final class Globals {
 		return alphaCollator;
 	}
 
-	public static JFrame frame1; // can be changed
-	public static Container container1; // can be changed
+	// these two things can be changed
+	public static JFrame frame1;
+	public static Container container1;
 
 	public static final Dimension helperFormDimension = new Dimension(1100, 600);
 
@@ -504,13 +507,15 @@ public final class Globals {
 	}
 
 	public static String fillStringToLength(String s, int len) {
-		if (s.length() > len)
+		if (s.length() > len) {
 			return s;
+		}
 
 		StringBuilder result = new StringBuilder(s);
 
-		for (int i = s.length(); i < len; i++)
+		for (int i = s.length(); i < len; i++) {
 			result.append(' ');
+		}
 
 		return result.toString();
 	}
@@ -605,8 +610,9 @@ public final class Globals {
 		String sqlNow = new java.sql.Timestamp(System.currentTimeMillis()).toString();
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(' '));
 
-		if (justNumbers)
+		if (justNumbers) {
 			sqlNow = sqlNow.replace("-", "");
+		}
 
 		return sqlNow;
 	}
@@ -616,10 +622,11 @@ public final class Globals {
 	}
 
 	private static String formatlNumberUpTo99(long n) {
-		if (n < 10)
+		if (n < 10) {
 			return "0" + n;
-		else
+		} else {
 			return "" + n;
+		}
 	}
 
 	public static void threadSleep(Object caller, long millis) {
@@ -656,8 +663,9 @@ public final class Globals {
 	}
 
 	public static String getStringValue(Object s) {
-		if (s == null)
+		if (s == null) {
 			return "";
+		}
 
 		return s.toString();
 	}
@@ -665,8 +673,9 @@ public final class Globals {
 	public static List<String> takeAsStringList(List<Object> list) {
 		List<String> result = new ArrayList<>();
 
-		if (list == null)
+		if (list == null) {
 			return result;
+		}
 
 		for (Object val : list) {
 			result.add((String) val);
@@ -766,22 +775,27 @@ public final class Globals {
 
 	public static int max(int a, int b) {
 		int m = a;
-		if (b > a)
+		if (b > a) {
 			m = b;
+		}
+
 		return m;
 	}
 
 	public static int min(int a, int b) {
 		int m = a;
-		if (b < a)
+		if (b < a) {
 			m = b;
+		}
 		return m;
 	}
 
 	public static String produceNonNull(Object o) {
 		String result = "";
-		if (o != null)
+		if (o != null) {
 			result = o.toString();
+		}
+
 		return result;
 	}
 
@@ -792,32 +806,39 @@ public final class Globals {
 				Logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
 				result = false;
 			}
-		} else
+		} else {
 			Logging.debug(source.getClass().getName() + " " + cName + " is null");
+		}
 
 		return result;
 	}
 
 	private static Integer stringCompareAsInt(String s1, String s2) throws NumberFormatException {
 
-		if (s1 == null && s2 == null)
+		if (s1 == null && s2 == null) {
 			return 0;
-		if (s1 == null)
+		}
+		if (s1 == null) {
 			return -1;
-		if (s2 == null)
+		}
+		if (s2 == null) {
 			return +1;
+		}
 
 		String s1A = s1.trim();
 		String s2A = s2.trim();
 
-		if (s1A.equals(s2A))
+		if (s1A.equals(s2A)) {
 			return 0;
+		}
 
-		if (s1A.length() == 0)
+		if (s1A.length() == 0) {
 			return -1;
+		}
 
-		if (s2A.length() == 0)
+		if (s2A.length() == 0) {
 			return +1;
+		}
 
 		int val1 = Integer.parseInt(s1A);
 		int val2 = Integer.parseInt(s2A);
@@ -828,14 +849,21 @@ public final class Globals {
 	public static Integer compareDottedNumberStrings(final String ver1, final String ver2)
 			throws NumberFormatException {
 
-		if (ver1 == null && ver2 == null)
+		if (ver1 == null && ver2 == null) {
 			return 0;
-		if (ver1 == null)
+		}
+
+		if (ver1 == null) {
 			return -1;
-		if (ver2 == null)
+		}
+
+		if (ver2 == null) {
 			return +1;
-		if (ver1.equals(ver2))
+		}
+
+		if (ver1.equals(ver2)) {
 			return 0;
+		}
 
 		String ver1A = ver1.replace('_', '.');
 		String ver2A = ver2.replace('_', '.');
@@ -856,33 +884,45 @@ public final class Globals {
 	}
 
 	public static int compareOpsiVersions(final String number1, final String number2) {
-		if (number1 == null)
+		if (number1 == null) {
 			throw new IllegalArgumentException("Number1 can not be null");
-		if (!number1.matches("[0-9]+(\\.[0-9]+)*"))
+		}
+
+		// \\d stands for digit, so [0-9]
+		if (!number1.matches("\\d+(\\.\\d+)*")) {
 			throw new IllegalArgumentException("Invalid number1 format");
+		}
 
-		if (number2 == null)
+		if (number2 == null) {
 			throw new IllegalArgumentException("Number2 can not be null");
+		}
 
-		if (!number2.matches("[0-9]+(\\.[0-9]+)*"))
+		if (!number2.matches("\\d+(\\.\\d+)*")) {
 			throw new IllegalArgumentException("Invalid number2 format");
+		}
+
 		String[] n1Parts = number1.split("\\.");
 		String[] n2Parts = number2.split("\\.");
 		int length = Math.max(n1Parts.length, n2Parts.length);
 		for (int i = 0; i < length; i++) {
 			int n1Part = i < n1Parts.length ? Integer.parseInt(n1Parts[i]) : 0;
 			int n2Part = i < n2Parts.length ? Integer.parseInt(n2Parts[i]) : 0;
-			if (n1Part < n2Part)
+
+			if (n1Part < n2Part) {
 				return -1;
-			if (n1Part > n2Part)
+			}
+
+			if (n1Part > n2Part) {
 				return 1;
+			}
 		}
 		return 0;
 	}
 
 	public static String makeHTMLlines(String s) {
-		if (s == null || s.trim().startsWith("<"))
+		if (s == null || s.trim().startsWith("<")) {
 			return s;
+		}
 
 		final int maxLineLength = 80;
 
@@ -895,13 +935,15 @@ public final class Globals {
 			switch (s.charAt(c)) {
 			case ' ':
 				b.append("&nbsp;");
-				if (!indentDone)
+				if (!indentDone) {
 					lineIndent = lineIndent + 1;
+				}
 				break;
 			case '\t':
 				b.append("&nbsp;&nbsp;&nbsp;");
-				if (!indentDone)
+				if (!indentDone) {
 					lineIndent = lineIndent + 3;
+				}
 				break;
 			case '\n':
 				b.append("<br/>");
@@ -945,11 +987,15 @@ public final class Globals {
 
 	public static String getCLIparam(String question, boolean password) {
 		java.io.Console con = System.console();
-		if (con == null)
+		if (con == null) {
 			return "";
+		}
+
 		System.out.print(question);
-		if (password)
+		if (password) {
 			return String.valueOf(con.readPassword()).trim();
+		}
+
 		try (Scanner sc = new Scanner(con.reader())) {
 			return sc.nextLine();
 		}
@@ -964,8 +1010,9 @@ public final class Globals {
 	}
 
 	public static boolean isServerFullPermission() {
-		if (PersistenceControllerFactory.getPersistenceController() == null)
+		if (PersistenceControllerFactory.getPersistenceController() == null) {
 			return false;
+		}
 
 		return PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
 

@@ -2,7 +2,7 @@ package de.uib.utilities.savedstates;
 
 import de.uib.utilities.logging.Logging;
 
-public class SaveBoolean extends SaveState {
+public class SaveBoolean extends AbstractSaveState {
 	public SaveBoolean(String key, Object defaultValue, SavedStates states) {
 		super(key, defaultValue, states);
 		if (!(defaultValue instanceof Boolean))

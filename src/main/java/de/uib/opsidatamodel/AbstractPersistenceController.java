@@ -386,7 +386,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Map<String, Integer> getInstalledOsOverview();
 
-	public abstract Map<String, Object> getLicensingInfo();
+	public abstract Map<String, Object> getLicencingInfo();
 
 	public abstract List<Map<String, Object>> getModules();
 
@@ -848,11 +848,11 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Map<String, Object> getOpsiModulesInfos();
 
-	public abstract String getOpsiLicensingInfoVersion();
+	public abstract String getOpsiLicencingInfoVersion();
 
-	public abstract void opsiLicensingInfoRequestRefresh();
+	public abstract void opsiLicencingInfoRequestRefresh();
 
-	public abstract JSONObject getOpsiLicensingInfo();
+	public abstract JSONObject getOpsiLicencingInfo();
 
 	public abstract String getCustomer();
 

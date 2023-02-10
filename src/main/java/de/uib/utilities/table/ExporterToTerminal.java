@@ -3,7 +3,7 @@ package de.uib.utilities.table;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExporterToTerminal extends ExportTable {
+public class ExporterToTerminal extends AbstractExportTable {
 	public ExporterToTerminal(javax.swing.JTable table, List<String> classNames) {
 		super(table, classNames);
 	}

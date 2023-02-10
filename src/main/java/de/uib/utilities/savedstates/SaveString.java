@@ -1,6 +1,6 @@
 package de.uib.utilities.savedstates;
 
-public class SaveString extends SaveState {
+public class SaveString extends AbstractSaveState {
 	SaveString(String key, SavedStates states) {
 		super(key, "", states);
 	}

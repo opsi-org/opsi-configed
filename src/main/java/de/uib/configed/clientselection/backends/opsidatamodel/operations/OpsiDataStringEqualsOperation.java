@@ -2,9 +2,9 @@ package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
 import java.util.Map;
 
+import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
-import de.uib.configed.clientselection.SelectElement;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.StringEqualsOperation;
 import de.uib.utilities.logging.Logging;
@@ -17,7 +17,7 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 	protected boolean startsWith;
 	protected boolean endsWith;
 
-	public OpsiDataStringEqualsOperation(String map, String key, String data, SelectElement element) {
+	public OpsiDataStringEqualsOperation(String map, String key, String data, AbstractSelectElement element) {
 		super(element);
 		Logging.debug(this, "OpsiDataStringEqualsOperation maptype, key, data: " + map + ", " + key + ", " + data);
 		this.map = map;

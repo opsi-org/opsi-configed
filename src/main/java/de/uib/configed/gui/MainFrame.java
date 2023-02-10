@@ -134,7 +134,7 @@ import de.uib.utilities.swing.JTextHideField;
 import de.uib.utilities.swing.SeparatedDocument;
 import de.uib.utilities.swing.TitledPanel;
 import de.uib.utilities.swing.VerticalPositioner;
-import de.uib.utilities.table.ExportTable;
+import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.thread.WaitCursor;
@@ -159,7 +159,7 @@ public class MainFrame extends JFrame
 
 	private Map<String, Map<String, String>> changedClientInfos;
 
-	private ExportTable exportTable;
+	private AbstractExportTable exportTable;
 
 	private ConfigedMain configedMain;
 
@@ -2244,11 +2244,11 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setVisible(ConfigedMain.OPSI_4_3);
 		jButtonDashboard.addActionListener(this);
 
-		if (!configedMain.getPersistenceController().getOpsiLicensingInfoVersion()
+		if (!configedMain.getPersistenceController().getOpsiLicencingInfoVersion()
 				.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD) && licensingInfoMap == null) {
 
 			licensingInfoMap = LicensingInfoMap.getInstance(
-					configedMain.getPersistenceController().getOpsiLicensingInfo(),
+					configedMain.getPersistenceController().getOpsiLicencingInfo(),
 					configedMain.getPersistenceController().getConfigDefaultValues(),
 					!FGeneralDialogLicensingInfo.extendedView);
 
@@ -3099,7 +3099,7 @@ public class MainFrame extends JFrame
 	}
 
 	private void showOpsiModules() {
-		if (configedMain.getPersistenceController().getOpsiLicensingInfoVersion()
+		if (configedMain.getPersistenceController().getOpsiLicencingInfoVersion()
 				.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
 
 			FTextArea f = new FTextArea(this, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),

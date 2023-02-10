@@ -4,15 +4,15 @@ import java.util.List;
 
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
-import de.uib.configed.clientselection.SelectGroupOperation;
-import de.uib.configed.clientselection.SelectOperation;
+import de.uib.configed.clientselection.AbstractSelectGroupOperation;
+import de.uib.configed.clientselection.AbstractSelectOperation;
 
-public class NotOperation extends SelectGroupOperation implements ExecutableOperation {
-	public NotOperation(SelectOperation operation) {
+public class NotOperation extends AbstractSelectGroupOperation implements ExecutableOperation {
+	public NotOperation(AbstractSelectOperation operation) {
 		registerChildOperation(operation);
 	}
 
-	public NotOperation(List<SelectOperation> operations) {
+	public NotOperation(List<AbstractSelectOperation> operations) {
 		registerChildOperation(operations.get(0));
 	}
 

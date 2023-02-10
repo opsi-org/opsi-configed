@@ -5,7 +5,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToTerminal;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public class SWterminalExporter extends SWExporter {
+public class SWterminalExporter extends AbstractSWExporter {
 
 	javax.swing.JTable theTable;
 	ExporterToTerminal exportTable;

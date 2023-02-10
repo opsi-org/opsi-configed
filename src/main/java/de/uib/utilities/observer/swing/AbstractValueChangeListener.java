@@ -8,7 +8,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public abstract class ValueChangeListener implements ActionListener, ChangeListener, DocumentListener {
+public abstract class AbstractValueChangeListener implements ActionListener, ChangeListener, DocumentListener {
 	protected abstract void actOnChange();
 
 	@Override

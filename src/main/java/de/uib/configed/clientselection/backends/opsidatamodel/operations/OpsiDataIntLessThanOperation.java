@@ -4,7 +4,7 @@ import java.util.Map;
 
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
-import de.uib.configed.clientselection.SelectElement;
+import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.IntLessThanOperation;
 import de.uib.utilities.logging.Logging;
@@ -14,7 +14,7 @@ public class OpsiDataIntLessThanOperation extends IntLessThanOperation implement
 	private String key;
 	private int data;
 
-	public OpsiDataIntLessThanOperation(String map, String key, int data, SelectElement element) {
+	public OpsiDataIntLessThanOperation(String map, String key, int data, AbstractSelectElement element) {
 		super(element);
 		this.map = map;
 		this.key = key;

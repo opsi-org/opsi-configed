@@ -5,19 +5,19 @@ import java.util.List;
 
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
-import de.uib.configed.clientselection.SelectGroupOperation;
-import de.uib.configed.clientselection.SelectOperation;
+import de.uib.configed.clientselection.AbstractSelectGroupOperation;
+import de.uib.configed.clientselection.AbstractSelectOperation;
 
 /**
  * Connects two or more operations with a logical and, i.e. this Operation only
  * matches if all child operations match.
  */
-public class AndOperation extends SelectGroupOperation implements ExecutableOperation {
-	private List<SelectOperation> operations;
+public class AndOperation extends AbstractSelectGroupOperation implements ExecutableOperation {
+	private List<AbstractSelectOperation> operations;
 
-	public AndOperation(List<SelectOperation> operations) {
+	public AndOperation(List<AbstractSelectOperation> operations) {
 		this.operations = new LinkedList<>();
-		for (SelectOperation operation : operations) {
+		for (AbstractSelectOperation operation : operations) {
 			this.operations.add(operation);
 			registerChildOperation(operation);
 		}
@@ -25,7 +25,7 @@ public class AndOperation extends SelectGroupOperation implements ExecutableOper
 
 	@Override
 	public boolean doesMatch(Client client) {
-		for (SelectOperation operation : operations) {
+		for (AbstractSelectOperation operation : operations) {
 			if (!((ExecutableOperation) operation).doesMatch(client)) {
 				return false;
 			}

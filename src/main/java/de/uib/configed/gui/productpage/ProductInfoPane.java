@@ -50,7 +50,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	private PanelProductDependencies panelProductDependencies;
 	private boolean isPanelProductDependenciesVisible = false;
 
-	private DefaultPanelEditProperties panelEditProperties;
+	private AbstractPanelEditProperties panelEditProperties;
 	private JButton propertiesActivateButton;
 	private boolean isPanelEditPropertiesVisible = true;
 
@@ -63,7 +63,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	protected ConfigedMain mainController;
 
 	/** Creates new ProductInfoPane */
-	public ProductInfoPane(ConfigedMain mainController, DefaultPanelEditProperties panelEditProperties) {
+	public ProductInfoPane(ConfigedMain mainController, AbstractPanelEditProperties panelEditProperties) {
 		super(JSplitPane.VERTICAL_SPLIT);
 		this.mainController = mainController;
 		this.panelEditProperties = panelEditProperties;
@@ -71,7 +71,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	}
 
 	/** Creates new ProductInfoPane */
-	public ProductInfoPane(DefaultPanelEditProperties panelEditProperties) {
+	public ProductInfoPane(AbstractPanelEditProperties panelEditProperties) {
 		this(null, panelEditProperties);
 	}
 

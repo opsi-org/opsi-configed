@@ -2,7 +2,7 @@ package de.uib.utilities.savedstates;
 
 import java.util.Set;
 
-public class SessionSaveSet<T> extends SaveState {
+public class SessionSaveSet<T> extends AbstractSaveState {
 	Set<T> saveObject;
 
 	@Override

@@ -2,9 +2,9 @@ package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
 import de.uib.utilities.logging.Logging;
 
-public abstract class OpsiDataDateMatcher extends OpsiDataMatcher {
+public abstract class AbstractOpsiDataDateMatcher extends AbstractOpsiDataMatcher {
 
-	protected OpsiDataDateMatcher(String map, String key, String data) {
+	protected AbstractOpsiDataDateMatcher(String map, String key, String data) {
 		super(map, key, data);
 	}
 

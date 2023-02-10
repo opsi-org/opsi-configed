@@ -35,17 +35,15 @@ import de.uib.utilities.table.updates.TableUpdateCollection;
 public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	public LicensingInfoPanelGenEditTable thePanel;
-	GenTableModel theModel;
-	AbstractPersistenceController persist;
-	LicensingInfoMap licenseMap;
+	private GenTableModel theModel;
+	private AbstractPersistenceController persist;
+	private LicensingInfoMap licenseMap;
 
-	TableSource tableSource;
+	private TableSource tableSource;
 
-	List<String> columnNames = new ArrayList<>();
-	List<String> classNames = new ArrayList<>();
-	Map<String, Map> theSourceMap = new HashMap<>();
-	Map<String, Map<String, Map<String, Object>>> datesMap = new HashMap<>();
-	Map<String, Object> clientNumbers;
+	private List<String> columnNames = new ArrayList<>();
+	private List<String> classNames = new ArrayList<>();
+	private Map<String, Map> theSourceMap = new HashMap<>();
 
 	public static boolean extendedView = false;
 
@@ -61,11 +59,11 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		bottomPanel = this.initClientInfo();
 		centerPanel = this.initMainPanel();
 
-		this.setCenterPaneInScrollpane(centerPanel);
-		this.setAdditionalPane(bottomPanel);
+		super.setCenterPaneInScrollpane(centerPanel);
+		super.setAdditionalPane(bottomPanel);
 
-		this.setupLayout();
-		this.setVisible(true);
+		super.setupLayout();
+		super.setVisible(true);
 	}
 
 	@Override
@@ -146,7 +144,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		theSourceMap = licenseMap.getTableMap();
 	}
 
-	protected PanelGenEditTable initMainPanel() {
+	private PanelGenEditTable initMainPanel() {
 
 		retrieveData();
 
@@ -168,9 +166,9 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				Logging.info(this,
 						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
 				persist.configOptionsRequestRefresh();
-				persist.opsiLicensingInfoRequestRefresh();
+				persist.opsiLicencingInfoRequestRefresh();
 				LicensingInfoMap.requestRefresh();
-				licenseMap = LicensingInfoMap.getInstance(persist.getOpsiLicensingInfo(),
+				licenseMap = LicensingInfoMap.getInstance(persist.getOpsiLicencingInfo(),
 						persist.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
 				retrieveData();
 
@@ -202,7 +200,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		return thePanel;
 	}
 
-	protected JPanel initClientInfo() {
+	private JPanel initClientInfo() {
 
 		retrieveData();
 
@@ -402,7 +400,5 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		updateItemFactory.setClassNames(classNames);
 
 		thePanel.setTableModel(theModel);
-
 	}
-
 }

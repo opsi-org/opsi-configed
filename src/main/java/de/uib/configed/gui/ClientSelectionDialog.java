@@ -33,10 +33,10 @@ import javax.swing.event.ChangeListener;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.clientselection.AbstractSelectElement;
+import de.uib.configed.clientselection.AbstractSelectGroupOperation;
+import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.SelectData;
-import de.uib.configed.clientselection.SelectElement;
-import de.uib.configed.clientselection.SelectGroupOperation;
-import de.uib.configed.clientselection.SelectOperation;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.clientselection.elements.DescriptionElement;
 import de.uib.configed.clientselection.elements.GroupElement;
@@ -195,8 +195,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		collectData();
 
-		main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS); // because of potential memory problems we switch to
-															// client view
+		// because of potential memory problems we switch to
+		// client view
+		main.setVisualViewIndex(ConfigedMain.VIEW_CLIENTS);
 
 		if (manager != null) {
 			clients = manager.selectClients();
@@ -415,10 +416,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	/* This creates one line with element, operation, data, ... */
-	private SimpleGroup createSimpleGroup(SelectElement element) {
+	private SimpleGroup createSimpleGroup(AbstractSelectElement element) {
 		SimpleGroup result = new SimpleGroup();
 		result.element = element;
-		SelectOperation[] operations = element.supportedOperations().toArray(new SelectOperation[0]);
+		AbstractSelectOperation[] operations = element.supportedOperations().toArray(new AbstractSelectOperation[0]);
 		if (operations.length == 0) {
 			Logging.warning("Elements without any operations: " + result);
 			return result;
@@ -439,7 +440,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				result.connectionType.getPreferredSize().height));
 		if (operations.length > 1) {
 			JComboBox<String> box = new JComboBox<>();
-			for (SelectOperation op : operations) {
+			for (AbstractSelectOperation op : operations) {
 				box.addItem(op.getOperationString());
 			}
 			result.operationComponent = box;
@@ -625,8 +626,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				Configed.getResourceValue("ClientSelectionDialog.hardwareName")));
 		result.topLabel.setFont(Globals.defaultFontStandardBold);
 
-		List<SelectElement> elements = manager.getLocalizedHardwareList().get(hardware);
-		for (SelectElement element : elements) {
+		List<AbstractSelectElement> elements = manager.getLocalizedHardwareList().get(hardware);
+		for (AbstractSelectElement element : elements) {
 			result.groupList.add(createSimpleGroup(element));
 		}
 		result.groupList.getFirst().connectionType.setVisible(false);
@@ -720,7 +721,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	/* Gets the selected operation and adds the given data to it. */
-	private SelectOperation getOperation(SimpleGroup group) {
+	private AbstractSelectOperation getOperation(SimpleGroup group) {
 		int operationIndex;
 		if (group.operationComponent instanceof JComboBox) {
 			operationIndex = ((JComboBox) group.operationComponent).getSelectedIndex();
@@ -728,7 +729,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			operationIndex = 0;
 		}
 
-		SelectOperation operation = group.element.supportedOperations().get(operationIndex);
+		AbstractSelectOperation operation = group.element.supportedOperations().get(operationIndex);
 
 		Object data = null;
 		String text = null;
@@ -905,7 +906,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldText.setToolTipText(
 					/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-			fieldText.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+			fieldText.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
 				protected void actOnChange() {
 					buildParentheses();
@@ -919,7 +920,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDouble.setToolTipText(
 					/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-			fieldDouble.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+			fieldDouble.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
 				protected void actOnChange() {
 					buildParentheses();
@@ -932,7 +933,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 			box.setEditable(true);
 			box.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-			box.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+			box.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
 				protected void actOnChange() {
 					buildParentheses();
@@ -944,7 +945,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			TextInputField fieldDate = new TextInputField(null);
 			fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDate.setToolTipText("yyyy-mm-dd");
-			fieldDate.addValueChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+			fieldDate.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
 				protected void actOnChange() {
 					buildParentheses();
@@ -955,7 +956,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		case IntegerType:
 			JSpinner spinner = new JSpinner();
-			spinner.addChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+			spinner.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
 				protected void actOnChange() {
 					buildParentheses();
@@ -965,7 +966,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			break;
 		case BigIntegerType:
 			SpinnerWithExt swx = new SpinnerWithExt();
-			swx.addChangeListener(new de.uib.utilities.observer.swing.ValueChangeListener() {
+			swx.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
 				protected void actOnChange() {
 					buildParentheses();
@@ -1001,7 +1002,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			List<SelectionManager.OperationWithStatus> childList = new LinkedList<>();
 
 			for (SimpleGroup group : complex.groupList) {
-				SelectOperation op = getOperation(group);
+				AbstractSelectOperation op = getOperation(group);
 				if (op != null) {
 					SelectionManager.OperationWithStatus ows = getInformation(group);
 					ows.operation = op;
@@ -1088,7 +1089,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		Logging.debug(this, "load: size: " + topList.size());
 		for (int i = 0; i < topList.size(); i++) {
 			SelectionManager.OperationWithStatus ows = topList.get(i);
-			SelectOperation op = ows.operation;
+			AbstractSelectOperation op = ows.operation;
 			if (op == null) {
 				reset();
 				return;
@@ -1116,7 +1117,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			complexElements.add(element);
 			setConnectionTypes(element.connectionType, element.negateButton, ows.status);
 			List<SelectionManager.OperationWithStatus> subList;
-			subList = manager.operationsAsList(((SelectGroupOperation) op).getChildOperations().get(0));
+			subList = manager.operationsAsList(((AbstractSelectGroupOperation) op).getChildOperations().get(0));
 			Logging.debug(this, "subload: " + subList.size());
 			setGroupValues(element, subList);
 		}
@@ -1128,10 +1129,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		contentPane.repaint();
 	}
 
-	private SelectOperation getNonGroupOperation(SelectGroupOperation operation) {
-		SelectOperation child = operation.getChildOperations().get(0);
-		while (child instanceof SelectGroupOperation) {
-			child = ((SelectGroupOperation) child).getChildOperations().get(0);
+	private AbstractSelectOperation getNonGroupOperation(AbstractSelectGroupOperation operation) {
+		AbstractSelectOperation child = operation.getChildOperations().get(0);
+		while (child instanceof AbstractSelectGroupOperation) {
+			child = ((AbstractSelectGroupOperation) child).getChildOperations().get(0);
 		}
 		return child;
 	}
@@ -1140,7 +1141,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		for (int i = 0; i < owsList.size(); i++) {
 			for (SimpleGroup simple : group.groupList) {
 				SelectionManager.OperationWithStatus ows = owsList.get(i);
-				SelectOperation op = ows.operation;
+				AbstractSelectOperation op = ows.operation;
 				if (op.getElement().getPath().equals(simple.element.getPath())) {
 					if (op.getElement().supportedOperations().size() > 1) {
 						((JComboBox) simple.operationComponent).setSelectedItem(op.getOperationString());
@@ -1190,11 +1191,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	private class SimpleGroup {
-		private SelectElement element;
+		private AbstractSelectElement element;
 		private IconAsButton negateButton;
 		private AndOrSelectButtonByIcon connectionType;
 		private JLabel elementLabel;
-		private JComponent operationComponent; // may be JLabel or JComboBox
+
+		// may be JLabel or JComboBox
+		private JComponent operationComponent;
 		private JComponent dataComponent;
 		private GroupLayout.ParallelGroup vRow;
 		private IconAsButton openParenthesis;
@@ -1371,10 +1374,11 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			spinner.setMinimumSize(new Dimension(0, 0));
 			box = new JComboBox<>(new String[] { "", "k", "M", "G", "T" });
 			box.setMinimumSize(new Dimension(50, 0));
-			GroupLayout layout = new GroupLayout(this);
-			layout.setVerticalGroup(layout.createParallelGroup().addComponent(spinner).addComponent(box));
-			layout.setHorizontalGroup(layout.createSequentialGroup().addComponent(spinner).addComponent(box));
-			setLayout(layout);
+			GroupLayout spinnerLayout = new GroupLayout(this);
+			spinnerLayout.setVerticalGroup(spinnerLayout.createParallelGroup().addComponent(spinner).addComponent(box));
+			spinnerLayout
+					.setHorizontalGroup(spinnerLayout.createSequentialGroup().addComponent(spinner).addComponent(box));
+			setLayout(spinnerLayout);
 			add(spinner);
 			add(box);
 		}

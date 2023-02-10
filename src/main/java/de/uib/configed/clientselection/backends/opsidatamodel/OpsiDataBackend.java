@@ -10,11 +10,11 @@ import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Set;
 
-import de.uib.configed.clientselection.Backend;
+import de.uib.configed.clientselection.AbstractBackend;
+import de.uib.configed.clientselection.AbstractSelectElement;
+import de.uib.configed.clientselection.AbstractSelectGroupOperation;
+import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.Client;
-import de.uib.configed.clientselection.SelectElement;
-import de.uib.configed.clientselection.SelectGroupOperation;
-import de.uib.configed.clientselection.SelectOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntEqualsOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntGreaterOrEqualOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntGreaterThanOperation;
@@ -94,7 +94,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.Logging;
 
-public final class OpsiDataBackend extends Backend {
+public final class OpsiDataBackend extends AbstractBackend {
 	// data which will be cached
 	List<Client> clients;
 	Map<String, HostInfo> clientMaps;
@@ -138,12 +138,12 @@ public final class OpsiDataBackend extends Backend {
 	}
 
 	@Override
-	protected SelectOperation createOperation(SelectOperation operation) {
+	protected AbstractSelectOperation createOperation(AbstractSelectOperation operation) {
 		Logging.info(this, "createOperation operation, data, element: " + operation.getClassName() + ", "
 				+ operation.getData().toString() + ",  " + operation.getElement().getClassName());
 
 		// Host
-		SelectElement element = operation.getElement();
+		AbstractSelectElement element = operation.getElement();
 		String[] elementPath = element.getPathArray();
 		Object data = operation.getData();
 		String attributeTextHost = null;
@@ -315,8 +315,8 @@ public final class OpsiDataBackend extends Backend {
 	}
 
 	@Override
-	protected SelectGroupOperation createGroupOperation(SelectGroupOperation operation,
-			List<SelectOperation> operations) {
+	protected AbstractSelectGroupOperation createGroupOperation(AbstractSelectGroupOperation operation,
+			List<AbstractSelectOperation> operations) {
 		if (operation instanceof AndOperation && operations.size() >= 2) {
 			return new AndOperation(operations);
 		}
@@ -461,15 +461,15 @@ public final class OpsiDataBackend extends Backend {
 	}
 
 	@Override
-	public Map<String, List<SelectElement>> getHardwareList() {
-		Map<String, List<SelectElement>> result = new HashMap<>();
+	public Map<String, List<AbstractSelectElement>> getHardwareList() {
+		Map<String, List<AbstractSelectElement>> result = new HashMap<>();
 
 		for (int i = 0; i < hwConfig.size(); i++) {
 			Map hardwareMap = (Map) hwConfig.get(i);
 			Map hardwareMapLocalized = (Map) hwConfigLocalized.get(i);
 			String hardwareName = (String) ((Map) hardwareMap.get("Class")).get("UI");
 			String hardwareNameLocalized = (String) ((Map) hardwareMapLocalized.get("Class")).get("UI");
-			List<SelectElement> elementList = new LinkedList<>();
+			List<AbstractSelectElement> elementList = new LinkedList<>();
 			List values = (List) hardwareMap.get("Values");
 			List valuesLocalized = (List) hardwareMapLocalized.get("Values");
 			for (int j = 0; j < values.size(); j++) {
@@ -496,15 +496,15 @@ public final class OpsiDataBackend extends Backend {
 	}
 
 	@Override
-	public Map<String, List<SelectElement>> getLocalizedHardwareList() {
-		Map<String, List<SelectElement>> result = new HashMap<>();
+	public Map<String, List<AbstractSelectElement>> getLocalizedHardwareList() {
+		Map<String, List<AbstractSelectElement>> result = new HashMap<>();
 
 		for (int i = 0; i < hwConfig.size(); i++) {
 			Map hardwareMap = (Map) hwConfig.get(i);
 			Map hardwareMapLocalized = (Map) hwConfigLocalized.get(i);
 			String hardwareName = (String) ((Map) hardwareMap.get("Class")).get("UI");
 			String hardwareNameLocalized = (String) ((Map) hardwareMapLocalized.get("Class")).get("UI");
-			List<SelectElement> elementList = new LinkedList<>();
+			List<AbstractSelectElement> elementList = new LinkedList<>();
 			List values = (List) hardwareMap.get("Values");
 			List valuesLocalized = (List) hardwareMapLocalized.get("Values");
 			for (int j = 0; j < values.size(); j++) {

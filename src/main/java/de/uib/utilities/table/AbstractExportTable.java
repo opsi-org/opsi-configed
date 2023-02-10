@@ -21,7 +21,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public abstract class ExportTable {
+public abstract class AbstractExportTable {
 	protected javax.swing.JTable theTable;
 
 	protected List<String> classNames;
@@ -46,13 +46,13 @@ public abstract class ExportTable {
 
 	DecimalFormat f = new DecimalFormat("#0.00");
 
-	protected ExportTable(javax.swing.JTable table, List<String> classNames) {
+	protected AbstractExportTable(javax.swing.JTable table, List<String> classNames) {
 		this.theTable = table;
 		this.classNames = classNames;
 		askForOverwrite = true;
 	}
 
-	protected ExportTable(javax.swing.JTable table) {
+	protected AbstractExportTable(javax.swing.JTable table) {
 		this(table, null);
 	}
 
@@ -121,11 +121,13 @@ public abstract class ExportTable {
 
 	protected String checkExtension(String path) {
 
-		if (path == null)
+		if (path == null) {
 			return null;
+		}
 
-		if (!path.toLowerCase().endsWith(extension))
+		if (!path.toLowerCase().endsWith(extension)) {
 			path = path + extension;
+		}
 
 		return path;
 	}
@@ -157,10 +159,11 @@ public abstract class ExportTable {
 
 				result = null;
 				Logging.info(this, "checkSelection answered " + answer);
-				if (answer == 1)
+				if (answer == 1) {
 					result = true;
-				else if (answer == 2)
+				} else if (answer == 2) {
 					result = false;
+				}
 			}
 		}
 		Logging.info(this, "checkSelection gives: onlySelectedRows = " + result);
@@ -196,12 +199,14 @@ public abstract class ExportTable {
 
 					File file = new File(filename);
 
-					if (file.isDirectory())
+					if (file.isDirectory()) {
 						filename = filename + File.separator + defaultExportFilename;
+					}
 
 					else {
-						if (!filename.toLowerCase().endsWith(".csv"))
+						if (!filename.toLowerCase().endsWith(".csv")) {
 							filename = filename + ".csv";
+						}
 					}
 
 					Logging.debug(this, "filename " + filename);
@@ -214,8 +219,9 @@ public abstract class ExportTable {
 								Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
 								JOptionPane.OK_CANCEL_OPTION);
 
-						if (option == JOptionPane.CANCEL_OPTION)
+						if (option == JOptionPane.CANCEL_OPTION) {
 							filename = null;
+						}
 					}
 				} catch (Exception exception) {
 					Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
@@ -272,25 +278,28 @@ public abstract class ExportTable {
 		try {
 			Logging.info(this, "checkFileForExistence " + filename + " askForOverwrite " + askForOverwrite);
 
-			if (!askForOverwrite)
+			if (!askForOverwrite) {
 				return filename;
+			}
 
 			File file = new File(filename);
 
 			boolean fileExists = file.exists();
 
-			if (!fileExists)
+			if (!fileExists) {
 				return filename;
+			}
 
 			int option = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
 					Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
 					JOptionPane.OK_CANCEL_OPTION);
 
-			if (option == JOptionPane.CANCEL_OPTION)
+			if (option == JOptionPane.CANCEL_OPTION) {
 				result = null;
-			else
+			} else {
 				result = filename;
+			}
 		} catch (HeadlessException ex) {
 			Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
 
@@ -298,5 +307,4 @@ public abstract class ExportTable {
 
 		return result;
 	}
-
 }

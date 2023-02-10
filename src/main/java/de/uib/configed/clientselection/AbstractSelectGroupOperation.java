@@ -6,21 +6,21 @@ import java.util.List;
 /**
  * This is the base class for all operations operating on a group of operations.
  */
-public abstract class SelectGroupOperation extends SelectOperation {
-	private List<SelectOperation> childOperations;
+public abstract class AbstractSelectGroupOperation extends AbstractSelectOperation {
+	private List<AbstractSelectOperation> childOperations;
 
-	protected SelectGroupOperation() {
+	protected AbstractSelectGroupOperation() {
 		super(null);
 		childOperations = new LinkedList<>();
 	}
 
 	/** Register an operation as child of this operation. */
-	public final void registerChildOperation(SelectOperation operation) {
+	public final void registerChildOperation(AbstractSelectOperation operation) {
 		childOperations.add(operation);
 	}
 
 	/** Get the registered children. */
-	public List<SelectOperation> getChildOperations() {
+	public List<AbstractSelectOperation> getChildOperations() {
 		return childOperations;
 	}
 
@@ -37,7 +37,7 @@ public abstract class SelectGroupOperation extends SelectOperation {
 	@Override
 	public String printOperation(String indent) {
 		StringBuilder result = new StringBuilder(indent + getClassName() + " {\n");
-		for (SelectOperation op : childOperations)
+		for (AbstractSelectOperation op : childOperations)
 			result.append(op.printOperation(indent + "\t") + "\n");
 		return result + indent + "}";
 	}

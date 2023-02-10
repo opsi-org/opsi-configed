@@ -6,7 +6,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public class SwPdfExporter extends SWExporter {
+public class SwPdfExporter extends AbstractSWExporter {
 
 	javax.swing.JTable theTable;
 	ExporterToPDF exportTable;

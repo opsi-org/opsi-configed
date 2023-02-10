@@ -3,15 +3,15 @@ package de.uib.configed.clientselection;
 /**
  * An instance of this class represents the data needed for one operation.
  */
-public abstract class SelectOperation {
-	private SelectElement element;
+public abstract class AbstractSelectOperation {
+	private AbstractSelectElement element;
 	private SelectData data;
 
 	/**
 	 * Create a new SelectOperation, with this element as the property to
 	 * operate on.
 	 */
-	protected SelectOperation(SelectElement element) {
+	protected AbstractSelectOperation(AbstractSelectElement element) {
 		this.element = element;
 	}
 
@@ -20,7 +20,7 @@ public abstract class SelectOperation {
 		this.data = data;
 	}
 
-	public SelectElement getElement() {
+	public AbstractSelectElement getElement() {
 		return element;
 	}
 

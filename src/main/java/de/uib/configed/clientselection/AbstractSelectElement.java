@@ -8,7 +8,7 @@ import java.util.List;
  * which can sort out some of the clients based on the data given to the
  * operation.
  */
-public abstract class SelectElement {
+public abstract class AbstractSelectElement {
 	private String[] path;
 	private String[] localizedPath;
 
@@ -17,7 +17,7 @@ public abstract class SelectElement {
 	 * element is in any group (like a hardware group) and the name of the
 	 * Element.
 	 */
-	protected SelectElement(String[] path, String... localizedPath) {
+	protected AbstractSelectElement(String[] path, String... localizedPath) {
 		this.path = path;
 		this.localizedPath = localizedPath;
 	}
@@ -47,7 +47,7 @@ public abstract class SelectElement {
 	}
 
 	/** A list of Operations this element supports. */
-	public abstract List<SelectOperation> supportedOperations();
+	public abstract List<AbstractSelectOperation> supportedOperations();
 
 	/**
 	 * Returns the enumerated data, if there is any. This can be used to get a

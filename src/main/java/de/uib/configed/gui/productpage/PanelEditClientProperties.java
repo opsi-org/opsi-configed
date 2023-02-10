@@ -8,6 +8,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.Configed;
 /*
  * configed - configuration editor for client work stations in opsi
  * (open pc server integration) www.opsi.org
@@ -22,10 +23,9 @@ import javax.swing.JPanel;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.configed.gui.IconButton;
 
-public class PanelEditClientProperties extends DefaultPanelEditProperties {
+public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private javax.swing.JLabel jLabelProductProperties;
 	private IconButton buttonSetValuesFromServerDefaults;
 	private IconButton buttonRemoveSpecificValues;

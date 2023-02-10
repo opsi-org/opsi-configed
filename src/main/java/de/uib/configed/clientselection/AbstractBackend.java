@@ -12,7 +12,7 @@ import de.uib.utilities.logging.Logging;
  * clients should be selected. It also creates all operations, as the
  * implementation may differ between the data sources.
  */
-public abstract class Backend {
+public abstract class AbstractBackend {
 
 	/*
 	 * These variables tell you which data you have to fetch. E.g. if hasSoftware is
@@ -53,14 +53,14 @@ public abstract class Backend {
 	 * an executable operation tree by replacing the non-executable operations
 	 * with their backend-specific executable operations.
 	 */
-	public ExecutableOperation createExecutableOperation(SelectOperation operation) {
+	public ExecutableOperation createExecutableOperation(AbstractSelectOperation operation) {
 		Logging.debug(this, "createFromOperationData " + operation.getClassName());
 
-		if (operation instanceof SelectGroupOperation) {
-			SelectGroupOperation groupOperation = (SelectGroupOperation) operation;
-			List<SelectOperation> children = new LinkedList<>();
-			for (SelectOperation child : groupOperation.getChildOperations())
-				children.add((SelectOperation) createExecutableOperation(child));
+		if (operation instanceof AbstractSelectGroupOperation) {
+			AbstractSelectGroupOperation groupOperation = (AbstractSelectGroupOperation) operation;
+			List<AbstractSelectOperation> children = new LinkedList<>();
+			for (AbstractSelectOperation child : groupOperation.getChildOperations())
+				children.add((AbstractSelectOperation) createExecutableOperation(child));
 			return (ExecutableOperation) createGroupOperation(groupOperation, children);
 		} else {
 			return (ExecutableOperation) createOperation(operation);
@@ -77,14 +77,14 @@ public abstract class Backend {
 	/**
 	 * Create a backend specific executable operation based on this operation.
 	 */
-	protected abstract SelectOperation createOperation(SelectOperation operation);
+	protected abstract AbstractSelectOperation createOperation(AbstractSelectOperation operation);
 
 	/**
 	 * Creates a backend specific executable operation based on this group
 	 * operation and the list of backend specific children.
 	 */
-	protected abstract SelectGroupOperation createGroupOperation(SelectGroupOperation operation,
-			List<SelectOperation> operations);
+	protected abstract AbstractSelectGroupOperation createGroupOperation(AbstractSelectGroupOperation operation,
+			List<AbstractSelectOperation> operations);
 
 	/**
 	 * Get a list of all clients. These will be filtered later.
@@ -105,11 +105,11 @@ public abstract class Backend {
 	 * Get a map, with the hardware as key and a list of properties as value.
 	 * The key is in english.
 	 */
-	public abstract Map<String, List<SelectElement>> getHardwareList();
+	public abstract Map<String, List<AbstractSelectElement>> getHardwareList();
 
 	/**
 	 * Get a map, with the hardware as key and a list of properties as value.
 	 * The key is localized.
 	 */
-	public abstract Map<String, List<SelectElement>> getLocalizedHardwareList();
+	public abstract Map<String, List<AbstractSelectElement>> getLocalizedHardwareList();
 }

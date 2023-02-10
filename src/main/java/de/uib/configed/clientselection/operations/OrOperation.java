@@ -4,18 +4,18 @@ import java.util.List;
 
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
-import de.uib.configed.clientselection.SelectGroupOperation;
-import de.uib.configed.clientselection.SelectOperation;
+import de.uib.configed.clientselection.AbstractSelectGroupOperation;
+import de.uib.configed.clientselection.AbstractSelectOperation;
 
-public class OrOperation extends SelectGroupOperation implements ExecutableOperation {
-	public OrOperation(List<SelectOperation> operations) {
-		for (SelectOperation operation : operations)
+public class OrOperation extends AbstractSelectGroupOperation implements ExecutableOperation {
+	public OrOperation(List<AbstractSelectOperation> operations) {
+		for (AbstractSelectOperation operation : operations)
 			registerChildOperation(operation);
 	}
 
 	@Override
 	public boolean doesMatch(Client client) {
-		for (SelectOperation operation : getChildOperations()) {
+		for (AbstractSelectOperation operation : getChildOperations()) {
 			if (operation instanceof ExecutableOperation && ((ExecutableOperation) operation).doesMatch(client))
 				return true;
 		}

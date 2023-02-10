@@ -2,9 +2,9 @@ package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
 import java.util.List;
 
+import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
-import de.uib.configed.clientselection.SelectOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SWAuditClientEntry;
@@ -14,7 +14,7 @@ public class OpsiDataSwAuditOperation extends SwAuditOperation implements Execut
 
 	private de.uib.opsidatamodel.AbstractPersistenceController controller;
 
-	public OpsiDataSwAuditOperation(SelectOperation operation) {
+	public OpsiDataSwAuditOperation(AbstractSelectOperation operation) {
 		super(operation);
 
 		controller = de.uib.opsidatamodel.PersistenceControllerFactory.getPersistenceController();

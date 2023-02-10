@@ -2,15 +2,15 @@ package de.uib.configed.clientselection.operations;
 
 import java.util.List;
 
-import de.uib.configed.clientselection.SelectGroupOperation;
-import de.uib.configed.clientselection.SelectOperation;
+import de.uib.configed.clientselection.AbstractSelectGroupOperation;
+import de.uib.configed.clientselection.AbstractSelectOperation;
 
-public class SoftwareOperation extends SelectGroupOperation {
-	public SoftwareOperation(SelectOperation operation) {
+public class SoftwareOperation extends AbstractSelectGroupOperation {
+	public SoftwareOperation(AbstractSelectOperation operation) {
 		registerChildOperation(operation);
 	}
 
-	public SoftwareOperation(List<SelectOperation> operations) {
+	public SoftwareOperation(List<AbstractSelectOperation> operations) {
 		registerChildOperation(operations.get(0));
 	}
 }

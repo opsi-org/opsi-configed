@@ -1,14 +1,14 @@
 package de.uib.utilities.savedstates;
 
-public abstract class SaveState {
+public abstract class AbstractSaveState {
 	String key;
 	Object defaultValue;
 	SavedStates states;
 
-	SaveState() {
+	AbstractSaveState() {
 	}
 
-	protected SaveState(String key, Object defaultValue, SavedStates states) {
+	protected AbstractSaveState(String key, Object defaultValue, SavedStates states) {
 		this.key = key;
 		this.defaultValue = defaultValue;
 		this.states = states;

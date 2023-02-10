@@ -48,7 +48,7 @@ import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
-public class PanelEditDepotProperties extends DefaultPanelEditProperties
+public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		implements ListSelectionListener, ActionListener, MouseListener, KeyListener {
 
 	private javax.swing.JLabel jLabelEditDepotProductProperties;

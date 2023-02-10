@@ -2,9 +2,9 @@ package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
 import java.util.Map;
 
+import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
-import de.uib.configed.clientselection.SelectElement;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.BigIntLessOrEqualOperation;
 import de.uib.utilities.logging.Logging;
@@ -14,7 +14,7 @@ public class OpsiDataBigIntLessOrEqualOperation extends BigIntLessOrEqualOperati
 	private String key;
 	private long data;
 
-	public OpsiDataBigIntLessOrEqualOperation(String map, String key, long data, SelectElement element) {
+	public OpsiDataBigIntLessOrEqualOperation(String map, String key, long data, AbstractSelectElement element) {
 		super(element);
 		this.map = map;
 		this.key = key;

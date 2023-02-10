@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.uib.configed.clientselection.SelectElement;
-import de.uib.configed.clientselection.SelectOperation;
+import de.uib.configed.clientselection.AbstractSelectElement;
+import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
-public class GenericEnumElement extends SelectElement {
+public class GenericEnumElement extends AbstractSelectElement {
 	protected List<String> enumData;
 
 	public GenericEnumElement(String[] enumData, String[] name, String... localizedName) {
@@ -19,8 +19,8 @@ public class GenericEnumElement extends SelectElement {
 	}
 
 	@Override
-	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<>();
+	public List<AbstractSelectOperation> supportedOperations() {
+		List<AbstractSelectOperation> result = new LinkedList<>();
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}

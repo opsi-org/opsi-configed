@@ -220,11 +220,13 @@ public class SSHConnectExec extends SSHConnect {
 								SSHConnectSCP sftp = new SSHConnectSCP(commandInfoName);
 								sftp.exec(co, withGui, finalDialog, sequential, rememberPw, commandList.indexOf(co) + 1,
 										commandList.size());
-							} else
+							} else {
 								exec(co, withGui, finalDialog, sequential, rememberPw, commandList.indexOf(co) + 1,
 										commandList.size());
-						} else
+							}
+						} else {
 							foundError = true;
+						}
 					}
 				}
 				if (foundError) {

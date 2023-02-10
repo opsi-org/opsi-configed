@@ -9,10 +9,10 @@ import java.util.Map;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.type.licences.AuditSoftwareXLicencePool;
+import de.uib.utilities.datastructure.AbstractTableEntry;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.datastructure.TableEntry;
 
-public class SWAuditEntry extends TableEntry
+public class SWAuditEntry extends AbstractTableEntry
 /*
  * type of auditSoftware_getObjects resp
  * SOFTWARE in opsi data base

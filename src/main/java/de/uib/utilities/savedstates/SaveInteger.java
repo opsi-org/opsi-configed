@@ -2,7 +2,7 @@ package de.uib.utilities.savedstates;
 
 import de.uib.utilities.logging.Logging;
 
-public class SaveInteger extends SaveState {
+public class SaveInteger extends AbstractSaveState {
 	public SaveInteger(String key, Object defaultValue, SavedStates states) {
 		super(key, defaultValue, states);
 		if (!(defaultValue instanceof Integer))

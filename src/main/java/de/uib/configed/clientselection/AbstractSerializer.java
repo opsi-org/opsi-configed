@@ -23,7 +23,7 @@ import de.uib.utilities.logging.Logging;
 /**
  * A serializer is able to save and load searches.
  */
-public abstract class Serializer {
+public abstract class AbstractSerializer {
 	public static final String ELEMENT_NAME_GROUP = "GroupElement";
 	public static final String ELEMENT_NAME_GROUP_WITH_SUBGROUPS = "GroupWithSubgroupsElement";
 	public static final String ELEMENT_NAME_SOFTWARE_NAME_ELEMENT = "SoftwareNameElement";
@@ -37,7 +37,7 @@ public abstract class Serializer {
 
 	protected SelectionManager manager;
 
-	protected Serializer(SelectionManager manager) {
+	protected AbstractSerializer(SelectionManager manager) {
 		this.manager = manager;
 	}
 
@@ -45,7 +45,7 @@ public abstract class Serializer {
 	 * Save the given tree of operations under the given name. If the name
 	 * already exists, overwrite it.
 	 */
-	public void save(SelectOperation topOperation, String name, String description) {
+	public void save(AbstractSelectOperation topOperation, String name, String description) {
 		Map<String, Object> data = produceData(topOperation);
 		Logging.info(this, "save data " + data);
 		saveData(name, description, data);
@@ -61,7 +61,7 @@ public abstract class Serializer {
 	 */
 	public abstract SavedSearches getSavedSearches();
 
-	public String getJson(SelectOperation topOperation) {
+	public String getJson(AbstractSelectOperation topOperation) {
 		Map<String, Object> data = produceData(topOperation);
 
 		String jsonString;
@@ -80,7 +80,7 @@ public abstract class Serializer {
 	/**
 	 * reproduce a search
 	 */
-	public SelectOperation deserialize(Map<String, Object> data) {
+	public AbstractSelectOperation deserialize(Map<String, Object> data) {
 		if (data == null) {
 			Logging.warning(this, "data in Serializer.deserialize is null");
 			return null;
@@ -92,7 +92,7 @@ public abstract class Serializer {
 		}
 
 		try {
-			SelectOperation operation = getOperation(data, null);
+			AbstractSelectOperation operation = getOperation(data, null);
 			if (getSearchDataVersion() == 1) {
 				operation = checkForHostGroup(operation);
 			}
@@ -107,9 +107,9 @@ public abstract class Serializer {
 	 * reproduce a search from a serialization string
 	 */
 
-	public SelectOperation deserialize(String serialized) {
+	public AbstractSelectOperation deserialize(String serialized) {
 		Logging.info(this, "deserialize serialized " + serialized);
-		SelectOperation result = null;
+		AbstractSelectOperation result = null;
 
 		try {
 			Map<String, Object> data = decipher(serialized);
@@ -124,7 +124,7 @@ public abstract class Serializer {
 	/**
 	 * Get one search from searches map
 	 */
-	public SelectOperation load(String name) {
+	public AbstractSelectOperation load(String name) {
 		Logging.info(this, "load " + name);
 		try {
 			Map<String, Object> data = getData(name);
@@ -160,8 +160,8 @@ public abstract class Serializer {
 	 * Create a SelectOperation from the given data. This function works
 	 * recursively.
 	 */
-	private SelectOperation getOperation(Map<String, Object> data, Map<String, List<SelectElement>> hardware)
-			throws Exception {
+	private AbstractSelectOperation getOperation(Map<String, Object> data,
+			Map<String, List<AbstractSelectElement>> hardware) throws Exception {
 		Logging.info(this, "getOperation for map " + data + "; hardware " + hardware);
 
 		String elementPathS = null;
@@ -170,7 +170,7 @@ public abstract class Serializer {
 			Logging.info(this, "getOperation, elementPath in data " + elementPathS);
 		}
 		// Element
-		SelectElement element = null;
+		AbstractSelectElement element = null;
 		String elementName = (String) data.get(KEY_ELEMENT_NAME);
 		Logging.info(this, "Element name: " + elementName);
 
@@ -199,9 +199,9 @@ public abstract class Serializer {
 					hardware = manager.getBackend().getHardwareList();
 				}
 				Logging.info(this, "getOperation elementPath[0] " + elementPath[0]);
-				List<SelectElement> elements = hardware.get(elementPath[0]);
+				List<AbstractSelectElement> elements = hardware.get(elementPath[0]);
 
-				for (SelectElement possibleElement : elements) {
+				for (AbstractSelectElement possibleElement : elements) {
 					Logging.info(this,
 							"getOperation possibleElement.getClassName() " + possibleElement
 									+ " compare with elementName " + elementName + " or perhaps with elementPathS "
@@ -215,8 +215,9 @@ public abstract class Serializer {
 					}
 				}
 			} else {
-				element = (SelectElement) Class.forName("de.uib.configed.clientselection.elements." + elementName)
-						.getDeclaredConstructor().newInstance();
+				element = (AbstractSelectElement) Class
+						.forName("de.uib.configed.clientselection.elements." + elementName).getDeclaredConstructor()
+						.newInstance();
 			}
 		}
 
@@ -227,7 +228,7 @@ public abstract class Serializer {
 
 		// Children
 		List<Map<String, Object>> childrenData = (List<Map<String, Object>>) data.get("children");
-		LinkedList<SelectOperation> children = new LinkedList<>();
+		LinkedList<AbstractSelectOperation> children = new LinkedList<>();
 		if (childrenData != null)
 			for (Map<String, Object> child : childrenData)
 				children.add(getOperation(child, hardware));
@@ -235,7 +236,7 @@ public abstract class Serializer {
 		// Operation
 		String operationName = (String) data.get(KEY_OPERATION);
 		Logging.info(this, "getOperation Operation name: " + operationName);
-		SelectOperation operation;
+		AbstractSelectOperation operation;
 
 		if (getSearchDataVersion() == 1) {
 			operation = parseOperationVersion1(operationName, element, children);
@@ -244,12 +245,12 @@ public abstract class Serializer {
 			Logging.info(this, "getOperation operationClass  " + operationClass.toString());
 			if (element != null) {
 				Logging.info(this, "getOperation element != null, element  " + element);
-				operation = (SelectOperation) operationClass.getConstructors()[0].newInstance(element);
+				operation = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
 			} else // GroupOperation
 			{
 				Class<?> list = Class.forName("java.util.List");
 				Logging.info(this, "getOperation List name: " + list.toString());
-				operation = (SelectOperation) operationClass.getConstructor(list).newInstance(children);
+				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children);
 			}
 		}
 
@@ -271,9 +272,9 @@ public abstract class Serializer {
 	}
 
 	/* Create data from the operation recursively. */
-	private Map<String, Object> produceData(SelectOperation operation) {
+	private Map<String, Object> produceData(AbstractSelectOperation operation) {
 		Map<String, Object> map = new HashMap<>();
-		SelectElement element = operation.getElement();
+		AbstractSelectElement element = operation.getElement();
 		if (element == null) {
 			map.put(KEY_ELEMENT_NAME, null);
 			map.put(KEY_ELEMENT_PATH, null);
@@ -297,9 +298,9 @@ public abstract class Serializer {
 			map.put(KEY_DATA_TYPE, operation.getSelectData().getType());
 			map.put("data", operation.getSelectData().getData());
 		}
-		if (operation instanceof SelectGroupOperation) {
+		if (operation instanceof AbstractSelectGroupOperation) {
 			List<Map<String, Object>> childData = new LinkedList<>();
-			for (SelectOperation child : ((SelectGroupOperation) operation).getChildOperations())
+			for (AbstractSelectOperation child : ((AbstractSelectGroupOperation) operation).getChildOperations())
 				childData.add(produceData(child));
 			map.put("children", childData);
 		} else {
@@ -310,11 +311,12 @@ public abstract class Serializer {
 	}
 
 	/* Parse the operations with the old (version 1) operation names */
-	private SelectOperation parseOperationVersion1(String name, SelectElement element, List<SelectOperation> children) {
+	private AbstractSelectOperation parseOperationVersion1(String name, AbstractSelectElement element,
+			List<AbstractSelectOperation> children) {
 		Logging.info(this, "parseOperationVersion1");
 
 		if (element != null) {
-			for (SelectOperation operation : element.supportedOperations()) {
+			for (AbstractSelectOperation operation : element.supportedOperations()) {
 				if (operation.getOperationString().equals(name))
 					return operation;
 			}
@@ -339,8 +341,8 @@ public abstract class Serializer {
 	 * Needed for version 1 data. Adds HostOperations, as they didn't exist in
 	 * version 1
 	 */
-	private SelectOperation checkForHostGroup(SelectOperation operation) {
-		if (!(operation instanceof SelectGroupOperation)) {
+	private AbstractSelectOperation checkForHostGroup(AbstractSelectOperation operation) {
+		if (!(operation instanceof AbstractSelectGroupOperation)) {
 			Logging.debug("No group: " + operation.getClassName() + ", element path size: "
 					+ operation.getElement().getPathArray().length);
 			if (operation.getElement().getPathArray().length == 1)
@@ -354,17 +356,17 @@ public abstract class Serializer {
 		if (!(operation instanceof AndOperation))
 			return new HostOperation(operation);
 		AndOperation andOperation = (AndOperation) operation;
-		SelectOperation notGroup = operation;
-		while (notGroup instanceof SelectGroupOperation)
-			notGroup = ((SelectGroupOperation) notGroup).getChildOperations().get(0);
-		SelectOperation leftNotGroup = andOperation.getChildOperations().get(1);
-		while (leftNotGroup instanceof SelectGroupOperation)
-			leftNotGroup = ((SelectGroupOperation) leftNotGroup).getChildOperations().get(0);
+		AbstractSelectOperation notGroup = operation;
+		while (notGroup instanceof AbstractSelectGroupOperation)
+			notGroup = ((AbstractSelectGroupOperation) notGroup).getChildOperations().get(0);
+		AbstractSelectOperation leftNotGroup = andOperation.getChildOperations().get(1);
+		while (leftNotGroup instanceof AbstractSelectGroupOperation)
+			leftNotGroup = ((AbstractSelectGroupOperation) leftNotGroup).getChildOperations().get(0);
 		if (notGroup.getElement().getPathArray().length != 1)
 			return operation;
 		if (notGroup.getElement().getPathArray().length == 1 && leftNotGroup.getElement().getPathArray().length == 1)
 			return new HostOperation(andOperation);
-		List<SelectOperation> ops = andOperation.getChildOperations();
+		List<AbstractSelectOperation> ops = andOperation.getChildOperations();
 		HostOperation host = new HostOperation(ops.get(0));
 		ops.remove(0);
 		ops.add(0, host);

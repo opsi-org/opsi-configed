@@ -6,13 +6,9 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
 public class LicensingInfoPanelGenEditTable extends PanelGenEditTable {
 
-	public LicensingInfoPanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition, // if -1 dont use a standard popup
-			// if > 0 the popup is added later after installing another popup
+	public LicensingInfoPanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		super(title, maxTableWidth, editing, generalPopupPosition, switchLineColors, popupsWanted, withTablesearchPane);
-
-		// theTable.getTableHeader().setDefaultRenderer(new
-
 	}
 
 	@Override

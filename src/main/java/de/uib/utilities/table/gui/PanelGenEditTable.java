@@ -58,8 +58,8 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.PopupMenuTrait;
+import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.CursorrowObserver;
-import de.uib.utilities.table.ExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
@@ -134,7 +134,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected Map<Integer, SortOrder> sortDescriptor;
 	protected Map<Integer, SortOrder> specialSortDescriptor;
 
-	private ExportTable exportTable;
+	private AbstractExportTable exportTable;
 
 	public static final int POPUP_SEPARATOR = PopupMenuTrait.POPUP_SEPARATOR; // 0
 	public static final int POPUP_DELETE_ROW = 1;

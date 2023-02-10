@@ -1,14 +1,14 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
 import de.uib.configed.clientselection.Client;
-import de.uib.configed.clientselection.SelectElement;
+import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOperation {
 	private static boolean issuedTreeError = false;
 
-	public OpsiDataSuperGroupEqualsOperation(String data, SelectElement element) {
+	public OpsiDataSuperGroupEqualsOperation(String data, AbstractSelectElement element) {
 		super(OpsiDataClient.HOSTINFO_MAP, "", data, element);
 	}
 

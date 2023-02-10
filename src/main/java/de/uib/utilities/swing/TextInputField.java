@@ -162,7 +162,7 @@ public class TextInputField extends JPanel
 
 	}
 
-	public void addValueChangeListener(de.uib.utilities.observer.swing.ValueChangeListener listener) {
+	public void addValueChangeListener(de.uib.utilities.observer.swing.AbstractValueChangeListener listener) {
 		combo.addActionListener(listener);
 		textfield.getDocument().addDocumentListener(listener);
 	}

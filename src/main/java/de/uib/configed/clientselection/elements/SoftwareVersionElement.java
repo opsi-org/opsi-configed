@@ -4,11 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.uib.configed.Configed;
-import de.uib.configed.clientselection.SelectElement;
-import de.uib.configed.clientselection.SelectOperation;
+import de.uib.configed.clientselection.AbstractSelectElement;
+import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
-public class SoftwareVersionElement extends SelectElement {
+public class SoftwareVersionElement extends AbstractSelectElement {
 	public SoftwareVersionElement() {
 		super(new String[] { de.uib.opsidatamodel.OpsiProduct.NAME, "Version" },
 				Configed.getResourceValue("ClientSelectionDialog.softwareName"),
@@ -16,8 +16,8 @@ public class SoftwareVersionElement extends SelectElement {
 	}
 
 	@Override
-	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<>();
+	public List<AbstractSelectOperation> supportedOperations() {
+		List<AbstractSelectOperation> result = new LinkedList<>();
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}

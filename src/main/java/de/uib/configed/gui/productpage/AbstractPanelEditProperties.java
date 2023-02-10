@@ -23,7 +23,7 @@ import org.jdesktop.swingx.painter.AbstractPainter;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
-public abstract class DefaultPanelEditProperties extends JXPanel {
+public abstract class AbstractPanelEditProperties extends JXPanel {
 	protected de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel;
 
 	protected int minLabelVSize = 0;
@@ -40,15 +40,15 @@ public abstract class DefaultPanelEditProperties extends JXPanel {
 
 	protected String productEdited;
 
-	protected DefaultPanelEditProperties(ConfigedMain mainController,
+	protected AbstractPanelEditProperties(ConfigedMain mainController,
 			de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel) {
 		super();
 		this.mainController = mainController;
 		this.productPropertiesPanel = productPropertiesPanel;
 
-		setBackgroundPainter(new AbstractPainter<DefaultPanelEditProperties>() {
+		setBackgroundPainter(new AbstractPainter<AbstractPanelEditProperties>() {
 			@Override
-			public void doPaint(Graphics2D g, DefaultPanelEditProperties obj, int width, int height) {
+			public void doPaint(Graphics2D g, AbstractPanelEditProperties obj, int width, int height) {
 				g.setPaint(Globals.BACKGROUND_COLOR_7);
 				g.fillRect(0, 0, width, height);
 			}

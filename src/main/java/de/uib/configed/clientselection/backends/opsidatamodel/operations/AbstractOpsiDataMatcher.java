@@ -6,12 +6,12 @@ import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.utilities.logging.Logging;
 
-public abstract class OpsiDataMatcher {
+public abstract class AbstractOpsiDataMatcher {
 	protected String map;
 	protected String key;
 	protected String data;
 
-	protected OpsiDataMatcher(String map, String key, String data) {
+	protected AbstractOpsiDataMatcher(String map, String key, String data) {
 		Logging.debug(this, "created:  maptype, key, data: " + map + ", " + key + ", " + data);
 
 		this.map = map;

@@ -285,14 +285,19 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
 
 	protected Map<String, Object> opsiInformation = new HashMap<>();
-	protected JSONObject licensingInfo;
+	protected JSONObject licencingInfo;
 	private LicensingInfoMap licInfoMap;
 	private String opsiLicensingInfoVersion;
 	private static final String BACKEND_LICENSING_INFO_METHOD_NAME = "backend_getLicensingInfo";
 
-	protected Map<String, Object> opsiModulesInfo; // the may as read in
-	protected Map<String, Object> opsiModulesDisplayInfo; // the infos that are displayed in the gui
-	protected Map<String, Boolean> opsiModules; // the resulting info about permission
+	// the may as read in
+	protected Map<String, Object> opsiModulesInfo;
+
+	// the infos that are displayed in the gui
+	protected Map<String, Object> opsiModulesDisplayInfo;
+
+	// the resulting info about permission
+	protected Map<String, Boolean> opsiModules;
 
 	protected String opsiVersion;
 
@@ -306,7 +311,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected boolean withLinuxAgent = false;
 	protected boolean withUserRoles = false;
 
-	protected Map<String, ConfigOption> configOptions; // for internal use, for external cast to:
+	// for internal use, for external cast to:
+	protected Map<String, ConfigOption> configOptions;
 	protected Map<String, ListCellOptions> configListCellOptions;
 	protected Map<String, List<Object>> configDefaultValues;
 	protected Map<String, Map<String, Object>> hostConfigs;
@@ -2275,9 +2281,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public Map<String, Integer> getInstalledOsOverview() {
 		Logging.info(this, "getInstalledOsOverview");
 
-		Map<String, Object> licensingInfo = getLicensingInfo();
+		Map<String, Object> producedLicencingInfo = getLicencingInfo();
 		Map<String, Integer> map = new HashMap<>();
-		JSONObject jO = (JSONObject) licensingInfo.get("client_numbers");
+		JSONObject jO = (JSONObject) producedLicencingInfo.get("client_numbers");
 
 		try {
 			Iterator<String> iter = jO.keys();
@@ -2293,7 +2299,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public Map<String, Object> getLicensingInfo() {
+	public Map<String, Object> getLicencingInfo() {
 		Logging.info(this, "getLicensingInfo");
 
 		Object[] callParameters = { true, true, true };
@@ -2308,8 +2314,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public List<Map<String, Object>> getModules() {
 		Logging.info(this, "getModules");
 
-		Map<String, Object> licensingInfo = getLicensingInfo();
-		return JSONReMapper.getListOfMaps((JSONArray) licensingInfo.get("licenses"));
+		Map<String, Object> producedLicencingInfo = getLicencingInfo();
+		return JSONReMapper.getListOfMaps((JSONArray) producedLicencingInfo.get("licenses"));
 	}
 
 	@Override
@@ -4680,12 +4686,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		retrieveProductPropertyDefinitions();
 		Map<String, ListCellOptions> result;
 
-		if (productPropertyDefinitions == null)
+		if (productPropertyDefinitions == null) {
 			result = new HashMap<>();
-		else {
+		} else {
 			result = productPropertyDefinitions.get(productId);
-			if (result == null)
+			if (result == null) {
 				result = new HashMap<>();
+			}
 		}
 
 		return result;
@@ -4711,10 +4718,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.info(this, "getProductTitle for product " + result);
 
 		String resultS = null;
-		if (result == null)
+		if (result == null) {
 			resultS = EMPTYFIELD;
-		else
+		} else {
 			resultS = "" + result;
+		}
+
 		return resultS;
 	}
 
@@ -4759,10 +4768,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Map<String, String> result = new HashMap<>();
 
 		String depot = null;
-		if (depotId == null)
+		if (depotId == null) {
 			depot = theDepot;
-		else
+		} else {
 			depot = depotId;
+		}
 
 		Logging.debug(this,
 				"getProductRequirements productname, requirementType  " + productname + ", " + requirementType);
@@ -7990,7 +8000,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public String getOpsiLicensingInfoVersion() {
+	public String getOpsiLicencingInfoVersion() {
 		retrieveOpsiLicensingInfoVersion();
 		return opsiLicensingInfoVersion;
 	}
@@ -8014,34 +8024,34 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public final void opsiLicensingInfoRequestRefresh() {
-		licensingInfo = null;
+	public final void opsiLicencingInfoRequestRefresh() {
+		licencingInfo = null;
 		licInfoMap = null;
 		LicensingInfoMap.requestRefresh();
 		Logging.info(this, "request worked");
 	}
 
 	@Override
-	public final JSONObject getOpsiLicensingInfo()
+	public final JSONObject getOpsiLicencingInfo()
 	// is not allowed to be overriden in order to prevent changes
 	{
-		if (licensingInfo == null)
+		if (licencingInfo == null)
 			return retrieveJSONLicensingInfoReduced();
 
-		return licensingInfo;
+		return licencingInfo;
 	}
 
 	private JSONObject retrieveJSONLicensingInfoReduced() {
 		retrieveOpsiLicensingInfoVersion();
-		if (licensingInfo == null
+		if (licencingInfo == null
 				&& !opsiLicensingInfoVersion.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
 			OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME,
 					new Object[] { true, false, true, false });
 
-			licensingInfo = exec.retrieveJSONObject(omc);
+			licencingInfo = exec.retrieveJSONObject(omc);
 		}
 
-		return licensingInfo;
+		return licencingInfo;
 	}
 
 	@Override
@@ -8076,7 +8086,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private void produceOpsiModulesInfo() {
 		produceOpsiInformation();
 
-		opsiModules = new HashMap<>(); // has the actual signal if a module is activ
+		// has the actual signal if a module is activ
+		opsiModules = new HashMap<>(); 
 
 		// opsiinformation which delivers the service information on checked modules
 
@@ -8084,11 +8095,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		getHostInfoCollections().retrieveOpsiHosts(); // for checking number of clients and config states
 		Logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
-				.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
+				.getInstance(getOpsiLicencingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
 
 		licInfoWarnings = null;
 
-		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicensingInfo(), getConfigDefaultValues(),
+		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfo(), getConfigDefaultValues(),
 				!FGeneralDialogLicensingInfo.extendedView);
 
 		List<String> availableModules = licInfoMap.getAvailableModules();
@@ -8396,9 +8407,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public final void retrieveOpsiModules() {
 		Logging.info(this, "retrieveOpsiModules ");
 
-		licensingInfo = getOpsiLicensingInfo();
+		licencingInfo = getOpsiLicencingInfo();
 
-		if (licensingInfo == null)
+		if (licencingInfo == null)
 		// probably old opsi service version
 		{
 			produceOpsiModulesInfoClassic();

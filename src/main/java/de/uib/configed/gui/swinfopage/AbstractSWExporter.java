@@ -25,7 +25,7 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
  * Abstract class to manage batch export of SWAudit data, subclasses implement
  * the type of export
  */
-public abstract class SWExporter {
+public abstract class AbstractSWExporter {
 	File exportDirectory;
 	String exportDirectoryS;
 	String filepathStart;
@@ -50,12 +50,12 @@ public abstract class SWExporter {
 	protected String title;
 
 	/* constructor for use in a initialized context */
-	protected SWExporter(AbstractPersistenceController controller) {
+	protected AbstractSWExporter(AbstractPersistenceController controller) {
 		this.persist = controller;
 	}
 
 	/* constructor for standalone use */
-	protected SWExporter() {
+	protected AbstractSWExporter() {
 	}
 
 	public void setArgs(String server, String user, String password, String clientsFile, String outDir) {

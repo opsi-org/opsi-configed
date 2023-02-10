@@ -13,7 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
-public class ExporterToCSV extends ExportTable {
+public class ExporterToCSV extends AbstractExportTable {
 
 	protected static final String CSV_SEPARATOR = ";";
 	public static final Character STRING_DELIMITER = '"';

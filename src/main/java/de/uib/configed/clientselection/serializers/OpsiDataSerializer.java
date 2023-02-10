@@ -16,7 +16,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.utilities.logging.Logging;
 
-public class OpsiDataSerializer extends de.uib.configed.clientselection.Serializer {
+public class OpsiDataSerializer extends de.uib.configed.clientselection.AbstractSerializer {
 	private AbstractPersistenceController controller;
 	private JsonParser parser;
 	private SelectData.DataType lastDataType;

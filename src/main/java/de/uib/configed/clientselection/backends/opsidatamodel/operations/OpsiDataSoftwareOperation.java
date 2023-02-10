@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
-import de.uib.configed.clientselection.SelectOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.utilities.logging.Logging;
@@ -17,7 +17,7 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 	protected Set<String> productsWithDefaultValues;
 	protected de.uib.opsidatamodel.AbstractPersistenceController controller;
 
-	public OpsiDataSoftwareOperation(SelectOperation operation) {
+	public OpsiDataSoftwareOperation(AbstractSelectOperation operation) {
 		super(operation);
 		controller = de.uib.opsidatamodel.PersistenceControllerFactory.getPersistenceController();
 		if (controller == null) {

@@ -83,7 +83,7 @@ import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
-import de.uib.utilities.table.ExportTable;
+import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.gui.AdaptingCellEditorValuesByIndex;
@@ -100,11 +100,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	JScrollPane paneProducts;
 	public JTable tableProducts;
-	protected ExportTable exportTable;
+	protected AbstractExportTable exportTable;
 	JPanel topPane;
 
 	ProductInfoPane infoPane; // right pane
-	protected DefaultPanelEditProperties panelEditProperties;
+	protected AbstractPanelEditProperties panelEditProperties;
 	AbstractEditMapPanel propertiesPanel;
 
 	private static final int HEIGHT_MIN = 200;

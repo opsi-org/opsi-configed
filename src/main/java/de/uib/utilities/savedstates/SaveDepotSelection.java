@@ -2,7 +2,7 @@ package de.uib.utilities.savedstates;
 
 import java.util.Arrays;
 
-public class SaveDepotSelection extends SaveState {
+public class SaveDepotSelection extends AbstractSaveState {
 	public SaveDepotSelection(SavedStates states) {
 		super("selectedDepots", "", states);
 	}

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Set;
 
 import de.uib.configed.clientselection.SelectData;
-import de.uib.configed.clientselection.SelectElement;
-import de.uib.configed.clientselection.SelectOperation;
+import de.uib.configed.clientselection.AbstractSelectElement;
+import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
-public class GenericTextElement extends SelectElement {
+public class GenericTextElement extends AbstractSelectElement {
 
 	protected List<String> proposedData;
 
@@ -30,8 +30,8 @@ public class GenericTextElement extends SelectElement {
 	}
 
 	@Override
-	public List<SelectOperation> supportedOperations() {
-		List<SelectOperation> result = new LinkedList<>();
+	public List<AbstractSelectOperation> supportedOperations() {
+		List<AbstractSelectOperation> result = new LinkedList<>();
 		result.add(new StringEqualsOperation(this));
 		return result;
 	}

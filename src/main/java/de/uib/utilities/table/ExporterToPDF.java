@@ -40,7 +40,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-public class ExporterToPDF extends ExportTable {
+public class ExporterToPDF extends AbstractExportTable {
 
 	// TODO why static fields here everywhere?
 	protected static Document document;

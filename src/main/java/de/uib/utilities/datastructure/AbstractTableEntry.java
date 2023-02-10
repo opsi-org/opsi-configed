@@ -5,12 +5,12 @@ import java.util.Map;
 
 import de.uib.utilities.logging.Logging;
 
-public abstract class TableEntry extends LinkedHashMap<String, String> {
+public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 	// very similar to RelationElement
 	// static values and methods (resp. methods based on static values)
 	// must be defined in subclasses
 
-	protected TableEntry(Map entry) {
+	protected AbstractTableEntry(Map entry) {
 		pureEntry = entry;
 		entryRetrieved = entry;
 	}

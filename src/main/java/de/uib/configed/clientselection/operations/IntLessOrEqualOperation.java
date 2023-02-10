@@ -1,11 +1,11 @@
 package de.uib.configed.clientselection.operations;
 
+import de.uib.configed.clientselection.AbstractSelectElement;
+import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.SelectData;
-import de.uib.configed.clientselection.SelectElement;
-import de.uib.configed.clientselection.SelectOperation;
 
-public class IntLessOrEqualOperation extends SelectOperation {
-	public IntLessOrEqualOperation(SelectElement element) {
+public class IntLessOrEqualOperation extends AbstractSelectOperation {
+	public IntLessOrEqualOperation(AbstractSelectElement element) {
 		super(element);
 	}
 
