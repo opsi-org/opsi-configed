@@ -18,7 +18,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.utilities.logging.Logging;
 
-public class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
+public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 	protected JButton jButtonClear;
 	protected JButton jButtonKillProcess;
 	protected JButton jButtonReload;

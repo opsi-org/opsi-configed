@@ -197,8 +197,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected String clientInDepot;
 	protected HostInfo hostInfo = new HostInfo();
 
-	protected boolean groupLoading = false; // tells if a group of client is loaded via GroupManager (and not by direct
-											// selection)
+	// tells if a group of client is loaded via GroupManager (and not by direct
+	// selection)
+	protected boolean groupLoading = false;
+
 	protected boolean changeListByToggleShowSelection = false;
 	protected boolean hostgroupChanged = false;
 	protected String groupname = TEMPGROUPNAME;
@@ -211,8 +213,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private ClientSelectionDialog clientSelectionDialog;
 	private FShowList fShowReachableInfo;
 
-	protected String productEdited = null; // null serves als marker that we were not editing products
-	protected Collection<Map<String, Object>> productProperties; // the properties for one product and all selected clients
+	// null serves als marker that we were not editing products
+	protected String productEdited = null;
+
+	// the properties for one product and all selected clients
+	protected Collection<Map<String, Object>> productProperties;
 	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(
 			new ArrayList<>());
 	protected Map<String, ProductpropertiesUpdateCollection> clientProductpropertiesUpdateCollections;
@@ -2705,7 +2710,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Iterator<String> iter = displayFieldsLocalbootProducts.keySet().iterator();
 		while (iter.hasNext()) {
 			String key = iter.next();
-			if (displayFieldsLocalbootProducts.get(key)) {
+			if (Boolean.TRUE.equals(displayFieldsLocalbootProducts.get(key))) {
 				result.add(key);
 			}
 		}
@@ -2718,7 +2723,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Iterator<String> iter = displayFieldsNetbootProducts.keySet().iterator();
 		while (iter.hasNext()) {
 			String key = iter.next();
-			if (displayFieldsNetbootProducts.get(key)) {
+			if (Boolean.TRUE.equals(displayFieldsNetbootProducts.get(key))) {
 				result.add(key);
 			}
 		}

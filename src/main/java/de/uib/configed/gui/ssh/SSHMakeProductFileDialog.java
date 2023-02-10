@@ -51,19 +51,23 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		main = m;
 		initGUI();
 
-		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		this.setBackground(Globals.BACKGROUND_COLOR_7);
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		filename = "";
 
-		this.setSize(new java.awt.Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100,
-				// workbenchpanel.getHeight() + buttonPanel.getHeight()
-				Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100));
 		autocompletion.doButtonAction();
 		doSetActionGetVersions();
 		showAdvancedSettings();
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
-		this.setVisible(true);
+
+		initFrame();
+	}
+
+	private void initFrame() {
+		setLocationRelativeTo(ConfigedMain.getMainFrame());
+		setBackground(Globals.BACKGROUND_COLOR_7);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setSize(new java.awt.Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100,
+				Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100));
+		setVisible(true);
 	}
 
 	private void setComponentsEnabled(boolean value) {
@@ -411,7 +415,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		return "";
 	}
 
-	public void doSetActionGetVersions() {
+	public final void doSetActionGetVersions() {
 		String versions = doActionGetVersions();
 		if (versions.contains(";;;")) {
 			enableTfVersions(true);

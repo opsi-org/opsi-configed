@@ -28,8 +28,9 @@ public class RelationElement<S, O> extends HashMap<S, O> {
 		if (allowedAttributes != null && allowedAttributes.indexOf(key) < 0) {
 			Logging.error(this, "key " + key + " not allowed");
 			return null;
-		} else
+		} else {
 			return super.get(key);
+		}
 	}
 
 	public List<S> getAllowedAttributes() {

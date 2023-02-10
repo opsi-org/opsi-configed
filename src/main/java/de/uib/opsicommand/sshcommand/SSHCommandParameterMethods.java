@@ -187,12 +187,11 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	public String testParameter(String param) {
 		String[] splittedParameter = splitParameter(param);
 		String result = callMethod(splittedParameter[0], splittedParameter[1]);
-		result = result.contains("ssh://") ? result.replace("ssh://", "") : result;
 		if (result == null) {
 			return Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
 		}
 
-		return result;
+		return result.contains("ssh://") ? result.replace("ssh://", "") : result;
 	}
 
 	private void init() {

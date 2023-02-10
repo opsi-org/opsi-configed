@@ -14,7 +14,6 @@
 package de.uib.configed.gui;
 
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -67,17 +66,18 @@ import de.uib.utilities.thread.WaitingWorker;
  * 
  * @author D. Oertel; R. Roeder
  */
-public class DPassword extends JDialog implements WaitingSleeper// implements Runnable
-{
+public class DPassword extends JDialog implements WaitingSleeper {
 	private static final String TESTSERVER = "";
 	private static final String TESTUSER = "";
 	private static final String TESTPASSWORD = "";
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
-	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000l; // 5000 reproduceable error
+
+	// 5000 reproduceable error
+	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000l;
 
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
-	private ConfigedMain main; // controller
+	private ConfigedMain configedMain;
 	private AbstractPersistenceController persis;
 
 	private WaitCursor waitCursor;
@@ -106,8 +106,8 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	private JLabel waitLabel = new JLabel();
 	private long timeOutMillis = TIMEOUT_MS;
 
-	private JButton jButtonCommit = new JButton();
 	private JButton jButtonCancel = new JButton();
+	private JButton jButtonCommit = new JButton();
 
 	private KeyListener newKeyListener = new KeyAdapter() {
 
@@ -154,11 +154,9 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 	public DPassword(ConfigedMain main) {
 		super();
-		this.main = main;
+		this.configedMain = main;
 
 		guiInit();
-		pack();
-		setVisible(true);
 	}
 
 	private void setActivated(boolean active) {
@@ -236,21 +234,12 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
 		jProgressBar.putClientProperty("Nimbus.Overrides", defaults);
 
-		jPanelButtons.setLayout(flowLayoutButtons);
-
-		jButtonCommit.setText(Configed.getResourceValue("DPassword.jButtonCommit"));
-		jButtonCommit.setMaximumSize(new Dimension(100, 20));
-		jButtonCommit.setPreferredSize(new Dimension(100, 20));
-		jButtonCommit.setSelected(true);
-		jButtonCommit.addActionListener(this::jButtonCommitActionPerformed);
-
 		jButtonCancel.setText(Configed.getResourceValue("DPassword.jButtonCancel"));
-		jButtonCancel.setMaximumSize(new Dimension(100, 20));
-		jButtonCancel.setPreferredSize(new Dimension(100, 20));
 		jButtonCancel.addActionListener(this::jButtonCancelActionPerformed);
 
-		jPanelButtons.add(jButtonCommit);
-		jPanelButtons.add(jButtonCancel);
+		jButtonCommit.setText(Configed.getResourceValue("DPassword.jButtonCommit"));
+		jButtonCommit.setSelected(true);
+		jButtonCommit.addActionListener(this::jButtonCommitActionPerformed);
 
 		GroupLayout groupLayout = new GroupLayout(panel);
 		panel.setLayout(groupLayout);
@@ -287,8 +276,11 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 				.addGap(Globals.LINE_HEIGHT / 2)
 
-				.addComponent(jPanelButtons, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE));
+				.addGroup(groupLayout.createParallelGroup()
+						.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)));
 
 		groupLayout
 				.setHorizontalGroup(groupLayout.createParallelGroup()
@@ -333,9 +325,9 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
 								.addComponent(waitLabel).addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
 
-						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(
-								jPanelButtons, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)));
+						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
+								.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
+								.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.HGAP_SIZE)));
 
 		this.getContentPane().add(panel);
 
@@ -366,6 +358,9 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 
 		// Sets the window on the main screen
 		setLocationRelativeTo(null);
+
+		pack();
+		setVisible(true);
 	}
 
 	@Override
@@ -375,14 +370,16 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED) {
 			// we can finish
 			Logging.info(this, "connected with persis " + persis);
-			main.setPersistenceController(persis);
+			configedMain.setPersistenceController(persis);
 
 			MessageFormat messageFormatMainTitle = new MessageFormat(
 					Configed.getResourceValue("ConfigedMain.appTitle"));
-			main.setAppTitle(messageFormatMainTitle
+			configedMain.setAppTitle(messageFormatMainTitle
 					.format(new Object[] { Globals.APPNAME, fieldHost.getSelectedItem(), fieldUser.getText() }));
-			main.loadDataAndGo();
-		} else { // return to Passwordfield
+			configedMain.loadDataAndGo();
+		} else {
+			// return to Passwordfield
+
 			if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				// return to password dialog
 				Logging.info(this, "interrupted");
@@ -465,7 +462,8 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 		// we make first a waitCursor and a waitInfo window
 
 		if (waitCursor != null) {
-			waitCursor.stop(); // we want only one running instance
+			// we want only one running instance
+			waitCursor.stop();
 		}
 
 		// correctly
@@ -547,7 +545,7 @@ public class DPassword extends JDialog implements WaitingSleeper// implements Ru
 	}
 
 	private void endProgram() {
-		main.finishApp(false, 0);
+		configedMain.finishApp(false, 0);
 	}
 
 	private void jButtonCancelActionPerformed(ActionEvent e) {
