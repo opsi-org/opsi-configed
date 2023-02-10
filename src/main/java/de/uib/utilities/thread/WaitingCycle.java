@@ -1,7 +1,5 @@
 package de.uib.utilities.thread;
 
-import java.util.GregorianCalendar;
-
 import javax.swing.SwingWorker;
 
 import de.uib.configed.Globals;
@@ -23,7 +21,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 	public Void doInBackground() {
 		int waitSecs = 0;
 
-		long startActionMillis = new GregorianCalendar().getTimeInMillis();
+		long startActionMillis = System.currentTimeMillis();
 		Logging.info(this, " doInBackground start " + startActionMillis);
 
 		while (!ready && !timeoutReached && !stopped) {
@@ -40,7 +38,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 
 		}
 
-		Logging.info(this, " doInBackground finish time in millis " + new GregorianCalendar().getTimeInMillis());
+		Logging.info(this, " doInBackground finish time in millis " + System.currentTimeMillis());
 
 		Logging.info(this,
 				" doInBackground finished: ready, stopped, waitSecs " + ready + ", " + stopped + ", " + waitSecs);

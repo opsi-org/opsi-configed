@@ -84,35 +84,33 @@ public class MapSource implements TableSource
 			for (int i = 0; i < columnNames.size(); i++) {
 				Object obj = mRow.get(columnNames.get(i));
 
-				if (tableEntry.getKey().startsWith("A"))
+				if (tableEntry.getKey().startsWith("A")) {
 					Logging.debug(this, "fetchData for A-key " + tableEntry.getKey() + " col  " + columnNames.get(i)
 							+ " index " + i + " val " + obj);
+				}
 
 				if (obj != null) {
 					vRow.add(obj);
 
 					try {
-
 						Class<?> cl = Class.forName(classNames.get(i));
 						if (!dynInstanceOf(obj, cl)) {
-							// Class.forName( classNames.get(i) ) ).isAssignableFrom ( ob.getClass() ) )
 
 							Logging.warning(this, "MapSource fetchData(): data type does not fit");
 							Logging.info(this, " ob " + obj + " class " + obj.getClass().getName());
 							Logging.info(this, "class should be " + cl);
 						}
-					} catch (java.lang.NullPointerException ex) {
-						Logging.warning(this,
-								" " + ex + ", could not get dyninstance " + i + ", " + columnNames.get(i));
-					} catch (Exception ex) {
-						Logging.error("MapSource fetchData(): class " + classNames.get(i) + " not found, " + ex);
+					} catch (ClassNotFoundException e) {
+						Logging.error(this, "could not find class " + classNames.get(i));
 					}
 
 				} else {
 					if (mRow.containsKey(columnNames.get(i))) {
 						Logging.debug(this, "fetchData row " + mRow + " no value in column  " + columnNames.get(i)
 								+ " supplement by null");
-						vRow.add(obj); // we complete the row by null
+
+						// we complete the row by null
+						vRow.add(obj);
 					} else {
 						String className = classNames.get(i);
 
@@ -137,8 +135,9 @@ public class MapSource implements TableSource
 
 			}
 
-			if (tableEntry.getKey().startsWith("A"))
+			if (tableEntry.getKey().startsWith("A")) {
 				Logging.debug(this, "fetchData for A-key " + tableEntry.getKey() + " produced row " + vRow);
+			}
 
 			rows.add(vRow);
 

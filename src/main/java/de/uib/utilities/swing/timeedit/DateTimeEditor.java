@@ -238,14 +238,14 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	}
 
 	public java.sql.Timestamp getSelectedSqlTime() {
-		if (monthView.getFirstSelectionDate() == null)
+		if (monthView.getFirstSelectionDate() == null) {
 			return null;
+		}
 
 		calendar.setTime(monthView.getFirstSelectionDate());
 		calendar.add(Calendar.HOUR, timeSetter.getHour());
 		calendar.add(Calendar.MINUTE, timeSetter.getMin());
 		return new java.sql.Timestamp(calendar.getTimeInMillis());
-
 	}
 
 	public void addDateSelectionListener(org.jdesktop.swingx.event.DateSelectionListener listener) {

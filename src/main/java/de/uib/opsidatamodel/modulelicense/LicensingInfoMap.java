@@ -164,8 +164,9 @@ public final class LicensingInfoMap {
 	}
 
 	public static LicensingInfoMap getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			Logging.error(CLASSNAME + " instance  not initialized");
+		}
 
 		return instance;
 	}
@@ -247,10 +248,10 @@ public final class LicensingInfoMap {
 		Map<String, Map<String, Object>> result = new HashMap<>();
 
 		try {
-			JSONArray licenses = jOResult.getJSONArray(LICENSES);
-			for (int i = 0; i < licenses.length(); i++) {
+			JSONArray producedLicences = jOResult.getJSONArray(LICENSES);
+			for (int i = 0; i < producedLicences.length(); i++) {
 				Map<String, Object> tmp = new HashMap<>();
-				JSONObject obj = licenses.getJSONObject(i);
+				JSONObject obj = producedLicences.getJSONObject(i);
 
 				tmp.put(MODULE_ID, obj.get(MODULE_ID));
 				tmp.put(VALID_UNTIL, obj.get(VALID_UNTIL));
@@ -267,37 +268,38 @@ public final class LicensingInfoMap {
 	}
 
 	private Set<String> produceCustomerIDSet() {
-		Set<String> customerIDs = new LinkedHashSet<>();
+		Set<String> producedCustomerIDs = new LinkedHashSet<>();
 
 		try {
-			JSONArray licenses = jOResult.getJSONArray(LICENSES);
+			JSONArray producedLicences = jOResult.getJSONArray(LICENSES);
 
-			for (int i = 0; i < licenses.length(); i++) {
-				JSONObject l = licenses.getJSONObject(i);
-				customerIDs.add(l.get(CUSTOMER_ID).toString());
+			for (int i = 0; i < producedLicences.length(); i++) {
+				JSONObject l = producedLicences.getJSONObject(i);
+				producedCustomerIDs.add(l.get(CUSTOMER_ID).toString());
 			}
 
 		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex.toString());
 		}
 
-		return customerIDs;
+		return producedCustomerIDs;
 	}
 
 	private Set<String> produceCustomerNameSet() {
-		Set<String> customerNames = new LinkedHashSet<>();
+		Set<String> producedCustomerNames = new LinkedHashSet<>();
 
 		try {
 
-			JSONArray licenses = jOResult.getJSONArray(LICENSES);
+			JSONArray producedLicences = jOResult.getJSONArray(LICENSES);
 
-			for (int i = 0; i < licenses.length(); i++) {
-				JSONObject l = licenses.getJSONObject(i);
+			for (int i = 0; i < producedLicences.length(); i++) {
+				JSONObject l = producedLicences.getJSONObject(i);
 				String customerName = l.getString(CUSTOMER_NAME);
-				if (!l.get(CUSTOMER_UNIT).toString().equals("null"))
-					customerNames.add(customerName + " - " + l.get(CUSTOMER_UNIT).toString());
-				else
-					customerNames.add(customerName);
+				if (!l.get(CUSTOMER_UNIT).toString().equals("null")) {
+					producedCustomerNames.add(customerName + " - " + l.get(CUSTOMER_UNIT).toString());
+				} else {
+					producedCustomerNames.add(customerName);
+				}
 
 			}
 
@@ -305,7 +307,7 @@ public final class LicensingInfoMap {
 			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex.toString());
 		}
 
-		return customerNames;
+		return producedCustomerNames;
 	}
 
 	private List<String> produceAvailableModules() {
@@ -375,14 +377,16 @@ public final class LicensingInfoMap {
 	}
 
 	private List<String> produceShownModules() {
-		if (!jOResult.has(OBSOLETE_MODULES))
+		if (!jOResult.has(OBSOLETE_MODULES)) {
 			return produceKnownModules();
+		}
 
 		List<String> result = new ArrayList<>();
 
 		for (String mod : knownModulesList) {
-			if (!obsoleteModules.contains(mod))
+			if (!obsoleteModules.contains(mod)) {
 				result.add(mod);
+			}
 		}
 
 		//
@@ -490,22 +494,37 @@ public final class LicensingInfoMap {
 
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap() {
 
-		if (currentCloseToLimitModuleList == null)
+		if (currentCloseToLimitModuleList == null) {
 			currentCloseToLimitModuleList = new ArrayList<>();
-		if (currentOverLimitModuleList == null)
+		}
+
+		if (currentOverLimitModuleList == null) {
 			currentOverLimitModuleList = new ArrayList<>();
-		if (currentTimeWarningModuleList == null)
+		}
+
+		if (currentTimeWarningModuleList == null) {
 			currentTimeWarningModuleList = new ArrayList<>();
-		if (currentTimeOverModuleList == null)
+		}
+
+		if (currentTimeOverModuleList == null) {
 			currentTimeOverModuleList = new ArrayList<>();
-		if (futureCloseToLimitModuleList == null)
+		}
+
+		if (futureCloseToLimitModuleList == null) {
 			futureCloseToLimitModuleList = new ArrayList<>();
-		if (futureOverLimitModuleList == null)
+		}
+
+		if (futureOverLimitModuleList == null) {
 			futureOverLimitModuleList = new ArrayList<>();
-		if (allCloseToLimitModules == null)
+		}
+
+		if (allCloseToLimitModules == null) {
 			allCloseToLimitModules = new LinkedHashSet<>();
-		if (allOverLimitModules == null)
+		}
+
+		if (allOverLimitModules == null) {
 			allOverLimitModules = new LinkedHashSet<>();
+		}
 
 		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
 
@@ -546,16 +565,18 @@ public final class LicensingInfoMap {
 					if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
 						allCloseToLimitModules.add(currentModule);
 
-						if (key.equals(latestDateString))
+						if (key.equals(latestDateString)) {
 							currentCloseToLimitModuleList.add(currentModule);
+						}
 
 					} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT))
 
 					{
 						allOverLimitModules.add(currentModule);
 
-						if (key.equals(latestDateString))
+						if (key.equals(latestDateString)) {
 							currentOverLimitModuleList.add(currentModule);
+						}
 					}
 
 					else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_WARNING)) {
@@ -572,12 +593,14 @@ public final class LicensingInfoMap {
 					if (futureCheck != null && !moduleInfo.getString(STATE).equals(STATE_IGNORE_WARNING)) {
 						moduleInfo.put(FUTURE_STATE, futureCheck);
 
-						if (futureCheck.equals(STATE_OVER_LIMIT))
+						if (futureCheck.equals(STATE_OVER_LIMIT)) {
 							futureOverLimitModuleList.add(currentModule);
-						else if (futureCheck.equals(STATE_CLOSE_TO_LIMIT))
+						} else if (futureCheck.equals(STATE_CLOSE_TO_LIMIT)) {
 							futureCloseToLimitModuleList.add(currentModule);
-					} else
+						}
+					} else {
 						moduleInfo.put(FUTURE_STATE, "null");
+					}
 
 					JSONObjectX moduleInfoX = new JSONObjectX(moduleInfo);
 
@@ -656,11 +679,13 @@ public final class LicensingInfoMap {
 			for (String key : datesKeys) {
 
 				Date thisDate = sdf.parse(key);
-				if (dateNow.compareTo(thisDate) >= 0)
+				if (dateNow.compareTo(thisDate) >= 0) {
 					newest = key;
+				}
 
-				else
+				else {
 					break;
+				}
 
 			}
 		} catch (ParseException ex) {
@@ -680,12 +705,13 @@ public final class LicensingInfoMap {
 			for (String key : dates) {
 
 				Date thisDate = sdf.parse(key);
-				if (dateNow.compareTo(thisDate) >= 0)
+				if (dateNow.compareTo(thisDate) >= 0) {
 					newest = thisDate;
+				}
 
-				else
+				else {
 					break;
-
+				}
 			}
 		} catch (ParseException ex) {
 			Logging.error(CLASSNAME + " findLatestChangeDate" + ex);
@@ -699,8 +725,9 @@ public final class LicensingInfoMap {
 			Date latest = sdf.parse(latestDateString);
 			for (String key : datesKeys) {
 				Date thisDate = sdf.parse(key);
-				if (thisDate.compareTo(latest) > 0)
+				if (thisDate.compareTo(latest) > 0) {
 					return key;
+				}
 			}
 		} catch (ParseException ex) {
 			Logging.error(CLASSNAME + " findNextChangeDate " + ex);
@@ -740,13 +767,15 @@ public final class LicensingInfoMap {
 				for (int i = 0; i < lics.size(); i++) {
 					validUntil = licenses.get(lics.get(i)).get(VALID_UNTIL).toString();
 
-					if (dateNow.after(sdf.parse(validUntil)))
+					if (dateNow.after(sdf.parse(validUntil))) {
 						return STATE_DAYS_OVER;
+					}
 
 					Long timeLeft = getDaysLeftUntil(validUntil);
 
-					if (timeLeft <= daysClientLimitWarning)
+					if (timeLeft <= daysClientLimitWarning) {
 						return STATE_DAYS_WARNING;
+					}
 
 				}
 			} catch (ParseException ex) {
@@ -792,12 +821,14 @@ public final class LicensingInfoMap {
 
 				Integer diff = futureNum - clientNum;
 
-				if (diff < 0)
+				if (diff < 0) {
 					return STATE_OVER_LIMIT;
+				}
 
 				if (diff <= absolutClientLimitWarning
-						|| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning))
+						|| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning)) {
 					return STATE_CLOSE_TO_LIMIT;
+				}
 
 				return STATE_FUTURE_OKAY;
 			}
@@ -831,12 +862,14 @@ public final class LicensingInfoMap {
 
 	public void setWarningLevelViaConfig(Map<String, List<Object>> configs) {
 		String key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_ABSOLUTE;
-		if (configs.get(key) != null)
+		if (configs.get(key) != null) {
 			absolutClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
+		}
 
 		key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_PERCENT;
-		if (configs.get(key) != null)
+		if (configs.get(key) != null) {
 			percentClientLimitWarning = Integer.parseInt((String) configs.get(key).get(0));
+		}
 
 	}
 
@@ -899,13 +932,15 @@ public final class LicensingInfoMap {
 	}
 
 	public String getWarningLevel() {
-		if (!currentOverLimitModuleList.isEmpty() || !currentTimeOverModuleList.isEmpty())
+		if (!currentOverLimitModuleList.isEmpty() || !currentTimeOverModuleList.isEmpty()) {
 			return STATE_OVER_LIMIT;
-		if (!currentCloseToLimitModuleList.isEmpty() || !currentTimeWarningModuleList.isEmpty())
+		}
+
+		if (!currentCloseToLimitModuleList.isEmpty() || !currentTimeWarningModuleList.isEmpty()) {
 			return STATE_CLOSE_TO_LIMIT;
+		}
 
 		return STATE_OKAY;
-
 	}
 
 	public Set<String> getModulesListWithCloseToLimitWarnings() {
@@ -975,5 +1010,4 @@ public final class LicensingInfoMap {
 	public Integer getClientLimitWarningDays() {
 		return daysClientLimitWarning;
 	}
-
 }

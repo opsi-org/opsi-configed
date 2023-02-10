@@ -253,8 +253,10 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public JTextPane getOutputField() {
-		if (output == null)
+		if (output == null) {
 			return null;
+		}
+
 		return output;
 	}
 
@@ -276,7 +278,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		jComboBoxPrivat = new JCheckBox(Configed.getResourceValue("SSHConnection.passwordButtonText"));
 		jComboBoxPrivat.setPreferredSize(jButtonDimension);
-		if (!(Globals.isGlobalReadOnly()))
+		if (!(Globals.isGlobalReadOnly())) {
 			jComboBoxPrivat.addItemListener(itemEvent -> {
 				if (passwordMode) {
 					changeEchoChar('*');
@@ -284,23 +286,29 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 					passwordMode = false;
 				} else {
 					changeEchoChar((char) 0);
-					if (terminal.commandsCompgen != null)
+					if (terminal.commandsCompgen != null) {
 						setAutocompleteList(terminal.commandsCompgen);
+					}
 					passwordMode = true;
 				}
 				setCLfocus();
 			});
+		}
+
 		changeEchoChar((char) 0);
 		passwordMode = true;
 		final SSHConnectionTerminalDialog caller = this;
-		if (!(Globals.isGlobalReadOnly()))
+		if (!(Globals.isGlobalReadOnly())) {
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonTest().addActionListener(
 					actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel).doActionTestParam(caller));
+		}
 
-		if (!(Globals.isGlobalReadOnly()))
+		if (!(Globals.isGlobalReadOnly())) {
 			((SSHCommandControlParameterMethodsPanel) parameterPanel).getButtonAdd()
 					.addActionListener(actionEvent -> ((SSHCommandControlParameterMethodsPanel) parameterPanel)
 							.doActionParamAdd(jTextFieldCommand));
+		}
+
 		jButtonKillProcess = new de.uib.configed.gui.IconButton(
 				Configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
 				"images/edit-delete.png", "images/edit-delete.png", true);
@@ -311,7 +319,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				Configed.getResourceValue("SSHConnection.CommandControl.btnExecuteCommand"), "images/execute_blue.png",
 				"images/execute_blue.png", "images/execute_blue.png", true);
 		jButtonExecuteCommand.setPreferredSize(jButtonDimension);
-		if (!(Globals.isGlobalReadOnly()))
+		if (!(Globals.isGlobalReadOnly())) {
 			jButtonExecuteCommand.addActionListener(actionEvent -> {
 				String text = getInputField().getText() + "\n";
 				if (terminal != null) {
@@ -320,31 +328,25 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 					setCLfocus();
 				}
 			});
-
-		try {
-			createLayout();
-			setCLfocus();
-		} catch (java.lang.NullPointerException npe) {
-			Logging.error("NullPointerException in createLayout ");
-			Logging.error("looks like a thread problem");
-			Logging.error("" + npe);
-		} catch (Exception e) {
-			Logging.error("Exception in createLayout ");
-			Logging.error("looks like a thread problem");
-			Logging.error("" + e);
 		}
+
+		createLayout();
+		setCLfocus();
 
 		setCenterLayout();
 	}
 
 	public void setAutocompleteList(List<String> list) {
-		if (list.isEmpty())
+		if (list.isEmpty()) {
 			return;
+		}
+
 		final String COMMIT_ACTION = "commit";
 		// Without this, cursor always leaves text field
 		jTextFieldCommand.setFocusTraversalKeysEnabled(false);
-		if (autoComplete != null)
+		if (autoComplete != null) {
 			jTextFieldCommand.getDocument().removeDocumentListener(autoComplete);
+		}
 
 		autoComplete = new Autocomplete(jTextFieldCommand, list);
 		jTextFieldCommand.getDocument().addDocumentListener(autoComplete);
@@ -357,8 +359,9 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void removeAutocompleteListener() {
-		if (autoComplete != null)
+		if (autoComplete != null) {
 			jTextFieldCommand.getDocument().removeDocumentListener(autoComplete);
+		}
 	}
 
 	protected void createLayout() {

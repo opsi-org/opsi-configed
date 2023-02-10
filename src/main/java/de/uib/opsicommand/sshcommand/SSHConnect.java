@@ -97,13 +97,16 @@ public class SSHConnect {
 	protected boolean isConnected() {
 		boolean result = false;
 
-		if (session != null && session.isConnected())
+		if (session != null && session.isConnected()) {
 			result = true;
+		}
 
 		Logging.info(this, "isConnected session.isConnected " + result);
-		if (!result && successfulConnectObservedCount > 0)
+		if (!result && successfulConnectObservedCount > 0) {
 			Logging.info("No SSH connection after successful connections: " + successfulConnectObservedCount + "\n"
 					+ "check server authentication configuration");
+		}
+
 		return result;
 	}
 
@@ -123,8 +126,10 @@ public class SSHConnect {
 	 **/
 	protected String getSudoPass(Component dialog, boolean rememberPw) {
 		Logging.debug(this, "getSudoPass dialog " + dialog + " newConfirmDialog " + rememberPw);
-		if ((rememberPw) && (pwSudo != null))
+		if ((rememberPw) && (pwSudo != null)) {
 			return pwSudo;
+		}
+
 		return getSudoPass(dialog);
 	}
 
@@ -138,8 +143,10 @@ public class SSHConnect {
 			Logging.error(this, "connection forbidden.");
 			return "";
 		}
-		if (dialog == null)
+		if (dialog == null) {
 			dialog = ConfigedMain.getMainFrame();
+		}
+
 		Logging.debug(this, "getSudoPass dialog " + dialog);
 		final JPasswordField passwordField = new JPasswordField(10);
 		passwordField.setEchoChar('*');
@@ -202,10 +209,12 @@ public class SSHConnect {
 			Logging.warning(this, "connection forbidden.");
 			return false;
 		}
-		if (command != null)
+		if (command != null) {
 			Logging.info(this, "connect command " + command.getMenuText());
-		else
+		} else {
 			Logging.info(this, "connect command null");
+		}
+
 		try {
 			JSch jsch = new JSch();
 			connectionInfo.checkUserData();
@@ -215,8 +224,10 @@ public class SSHConnect {
 			Logging.info(this, "connect user " + connectionInfo.getUser());
 
 			if (connectionInfo.usesKeyfile()) {
-				if (!connectionInfo.getKeyfilePassphrase().equals(""))
+				if (!connectionInfo.getKeyfilePassphrase().equals("")) {
 					jsch.addIdentity(connectionInfo.getKeyfilePath(), connectionInfo.getKeyfilePassphrase());
+				}
+
 				jsch.addIdentity(connectionInfo.getKeyfilePath());
 				Logging.info(this, "connect this.keyfilepath " + connectionInfo.getKeyfilePath());
 				Logging.info(this, "connect useKeyfile " + connectionInfo.usesKeyfile() + " addIdentity "
@@ -258,23 +269,25 @@ public class SSHConnect {
 			retriedTimesAuth = retry(retriedTimesAuth, authfail);
 			if (retriedTimesAuth >= 2) {
 				Logging.warning(this, "connect Authentication failed. " + authfail);
-				if (successfulConnectObservedCount > 0)
-
+				if (successfulConnectObservedCount > 0) {
 					Logging.error("authentication failed after successful authentifications: "
 							+ successfulConnectObservedCount + "\n" + "\n" + "check server authentication configuration"
 							+ "\n" + "\n");
+				}
 
 				return false;
 
-			} else
+			} else {
 				connect(command);
+			}
 		} catch (Exception e) {
 			retriedTimesJschex = retry(retriedTimesJschex, e);
 			if (retriedTimesJschex >= 3) {
 				Logging.warning(this, "connect error: " + e);
 				return false;
-			} else
+			} else {
 				connect(command);
+			}
 		}
 		return false;
 	}
@@ -313,8 +326,10 @@ public class SSHConnect {
 		try {
 			Logging.info(this, "interruptChannel _channel " + channel);
 			channel.sendSignal("2");
-			if (kill)
+			if (kill) {
 				channel.sendSignal("9");
+			}
+
 			Logging.info(this, "interrupted");
 		} catch (Exception e) {
 			Logging.error("Failed interrupting channel", e);

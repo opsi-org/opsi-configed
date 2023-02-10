@@ -4,13 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-/**
- * FLoadingWaiter
- * Copyright:     Copyright (c) 2016
- * Organisation:  uib
- * @author Rupert Röder
- */
-import java.util.GregorianCalendar;
 
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -179,7 +172,7 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 
 	@Override
 	public long getStartActionMillis() {
-		return new GregorianCalendar().getTimeInMillis();
+		return System.currentTimeMillis();
 	}
 
 	@Override

@@ -340,8 +340,8 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 						}
 					});
 
-					if (ConfigedMain.getMainFrame() == null && ConfigedMain.dpass != null) {
-						fErrorMsg.setLocationRelativeTo(ConfigedMain.dpass);
+					if (ConfigedMain.getMainFrame() == null && ConfigedMain.dPassword != null) {
+						fErrorMsg.setLocationRelativeTo(ConfigedMain.dPassword);
 					}
 
 					fErrorMsg.setVisible(true);

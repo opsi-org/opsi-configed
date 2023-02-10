@@ -108,7 +108,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	}
 
-	protected void buildPanel() {
+	private void buildPanel() {
 
 		panelByAuditInfo = new PanelHWByAuditDriver(title, main);
 
@@ -202,7 +202,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
 						pdfExportTable.setMetaData(metaData);
 						pdfExportTable.setPageSizeA4Landscape();
-						pdfExportTable.execute(null, false); // create pdf // no filename, onlyselectedRows=false
+						// create pdf // no filename, onlyselectedRows=false
+						pdfExportTable.execute(null, false);
 
 						break;
 
@@ -273,8 +274,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	protected String addUnit(String value, String unit) {
-		if (value.equals(""))
+		if (value.equals("")) {
 			return value;
+		}
 
 		BigInteger v = null;
 
@@ -313,8 +315,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private List<String[]> getDataForNode(IconNode node, boolean reduceScanToByAuditClasses) {
 
-		if (node == null || !node.isLeaf())
+		if (node == null || !node.isLeaf()) {
 			return new ArrayList<>();
+		}
 
 		TreeNode[] path = node.getPath();
 		if (path.length < 3) {
@@ -336,14 +339,16 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		List values = null;
 
 		for (int j = 0; j < hwConfig.size(); j++) {
-			try {
-				Map whc = (Map) hwConfig.get(j);
-				if (((Map) whc.get("Class")).get("Opsi").equals(hwClass)) {
+
+			Map whc = (Map) hwConfig.get(j);
+			if (whc != null) {
+				Map whcClass = (Map) whc.get("Class");
+				if (whcClass.get("Opsi").equals(hwClass)) {
 					values = (List) whc.get("Values");
 					break;
 				}
-			} catch (NullPointerException ex) {
-				Logging.error("NullpointerException thrown on trying to get Values: ", ex);
+			} else {
+				Logging.error(this, "hwConfig.get(" + j + ") is null");
 			}
 		}
 		List<String[]> data = new ArrayList<>();
@@ -352,7 +357,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				Map v = (Map) values.get(j);
 				String opsi = (String) v.get("Opsi");
 				Logging.debug(this, "opsi " + opsi);
-				String ui = encodeString((String) v.get("UI")); // table row keys //no encoding needed
+
+				// table row keys //no encoding needed
+				String ui = encodeString((String) v.get("UI"));
 				String unit = null;
 				if (v.containsKey("Unit")) {
 					unit = (String) v.get("Unit");

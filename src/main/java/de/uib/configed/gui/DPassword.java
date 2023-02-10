@@ -23,7 +23,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.text.MessageFormat;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -425,7 +424,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 	@Override
 	public long getStartActionMillis() {
-		return new GregorianCalendar().getTimeInMillis();
+		return System.currentTimeMillis();
 	}
 
 	@Override

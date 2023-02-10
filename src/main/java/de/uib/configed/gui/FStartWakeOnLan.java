@@ -496,16 +496,18 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		disableSettingOfTimes();
 
 		scheduleTitle = fieldTaskname.getText();
-		if (scheduleTitle.startsWith(scheduleTitleStarter))
+		if (scheduleTitle.startsWith(scheduleTitleStarter)) {
 			scheduleTitle = scheduleTitle.substring(scheduleTitleStarter.length());
+		}
 
 		scheduleTitle = "  scheduler" + scheduleTitle;
-		startActionMillis = new GregorianCalendar().getTimeInMillis();
+		startActionMillis = System.currentTimeMillis();
 
 		waitingMillis = cal.getTimeInMillis() - startActionMillis;
 
-		if (waitingMillis < 0)
+		if (waitingMillis < 0) {
 			waitingMillis = 0;
+		}
 
 		if (waitingMillis < 100) {
 			startAction();

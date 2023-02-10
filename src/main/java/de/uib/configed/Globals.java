@@ -581,7 +581,7 @@ public final class Globals {
 	}
 
 	public static String getMinutes() {
-		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
+		String sqlNow = new java.sql.Timestamp(System.currentTimeMillis()).toString();
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(':'));
 		sqlNow = sqlNow.replace(' ', '-');
 
@@ -589,7 +589,7 @@ public final class Globals {
 	}
 
 	public static String getSeconds() {
-		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
+		String sqlNow = new java.sql.Timestamp(System.currentTimeMillis()).toString();
 
 		int i = sqlNow.lastIndexOf(' ');
 		String date = sqlNow.substring(0, i);
@@ -602,7 +602,7 @@ public final class Globals {
 	}
 
 	public static String getDate(boolean justNumbers) {
-		String sqlNow = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
+		String sqlNow = new java.sql.Timestamp(System.currentTimeMillis()).toString();
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(' '));
 
 		if (justNumbers)
@@ -612,7 +612,7 @@ public final class Globals {
 	}
 
 	public static Date getToday() {
-		return new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis());
+		return new java.sql.Timestamp(System.currentTimeMillis());
 	}
 
 	private static String formatlNumberUpTo99(long n) {
@@ -684,12 +684,13 @@ public final class Globals {
 	public static final List<Object> getNowTimeListValue(final String comment) {
 		List<Object> result = new ArrayList<>();
 
-		String now = new java.sql.Timestamp(new java.util.GregorianCalendar().getTimeInMillis()).toString();
+		String now = new java.sql.Timestamp(System.currentTimeMillis()).toString();
 		now = now.substring(0, now.indexOf("."));
-		if (comment != null)
+		if (comment != null) {
 			result.add(now + " " + comment);
-		else
+		} else {
 			result.add(now);
+		}
 
 		Logging.info("getNowTimeListValue" + result);
 

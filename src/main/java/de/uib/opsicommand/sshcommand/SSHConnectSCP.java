@@ -45,19 +45,16 @@ public class SSHConnectSCP extends SSHConnectExec {
 		start(command, outDia);
 	}
 
-	public String start(SSHSFTPCommand command) {
-		return start(command, null);
-	}
-
-	public String start(SSHSFTPCommand command, SSHConnectionExecDialog outDia) {
+	private String start(SSHSFTPCommand command, SSHConnectionExecDialog outDia) {
 		Logging.debug(this, "starting, create SSHConnectionExecDialog");
 		Logging.info(this, "execsftp command " + command.getDescription());
 		Logging.debug(this, "execsftp withGui " + command.getShowOutputDialog());
 		Logging.debug(this, "execsftp dialog " + outDia);
 		Logging.debug(this, "execsftp isConnected " + isConnected());
 
-		if (!(isConnected()))
+		if (!(isConnected())) {
 			connect();
+		}
 
 		if (command.getShowOutputDialog()) {
 			if (outDia != null)
@@ -119,8 +116,6 @@ public class SSHConnectSCP extends SSHConnectExec {
 				dialog.setVisible(withGui);
 
 			return task.get();
-		} catch (java.lang.NullPointerException npe) {
-			Logging.error(this, "exec NullPointerException", npe);
 		} catch (ExecutionException e) {
 			Logging.error(this, "exec Exception", e);
 		} catch (InterruptedException e) {

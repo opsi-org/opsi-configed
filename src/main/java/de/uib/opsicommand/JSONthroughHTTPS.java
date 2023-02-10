@@ -400,8 +400,8 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			fErrorMsg.setMessage(message);
 			fErrorMsg.setAlwaysOnTop(true);
 
-			if (ConfigedMain.getMainFrame() == null && ConfigedMain.dpass != null) {
-				fErrorMsg.setLocationRelativeTo(ConfigedMain.dpass);
+			if (ConfigedMain.getMainFrame() == null && ConfigedMain.dPassword != null) {
+				fErrorMsg.setLocationRelativeTo(ConfigedMain.dPassword);
 			}
 
 			fErrorMsg.setVisible(true);

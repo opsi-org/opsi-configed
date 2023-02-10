@@ -1,6 +1,5 @@
 package de.uib.utilities.thread;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -62,7 +61,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		while (!ready && !timeoutReached && !stopped) {
 			Globals.threadSleep(this, timeStepMillis);
 
-			long nowMillis = new GregorianCalendar().getTimeInMillis();
+			long nowMillis = System.currentTimeMillis();
 
 			elapsedMillis = nowMillis - startActionMillis;
 			elapsedMins = (elapsedMillis / 1000) / 60;

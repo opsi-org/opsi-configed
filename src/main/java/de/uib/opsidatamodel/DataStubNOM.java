@@ -1126,10 +1126,11 @@ public class DataStubNOM extends AbstractDataStub {
 	protected void retrieveLicenceContracts()
 	// LICENSE_CONTRACT
 	{
-		if (licenceContracts != null)
+		if (licenceContracts != null) {
 			return;
+		}
 
-		String today = new java.sql.Date(new java.util.Date().getTime()).toString();
+		String today = new java.sql.Date(System.currentTimeMillis()).toString();
 		licenceContracts = new HashMap<>();
 		contractsToNotify = new TreeMap<>();
 		contractsExpired = new TreeMap<>();
@@ -1193,8 +1194,9 @@ public class DataStubNOM extends AbstractDataStub {
 	protected void retrieveLicences()
 	// SOFTWARE_LICENSE
 	{
-		if (licences != null)
+		if (licences != null) {
 			return;
+		}
 
 		licences = new HashMap<>();
 
@@ -1228,8 +1230,9 @@ public class DataStubNOM extends AbstractDataStub {
 	protected void retrieveLicenceUsabilities()
 	// SOFTWARE_LICENSE_TO_LICENSE_POOL
 	{
-		if (licenceUsabilities != null)
+		if (licenceUsabilities != null) {
 			return;
+		}
 
 		licenceUsabilities = new ArrayList<>();
 
@@ -1266,8 +1269,9 @@ public class DataStubNOM extends AbstractDataStub {
 	// LICENSE_ON_CLIENT
 	{
 		Logging.info(this, "retrieveLicenceUsages");
-		if (licenceUsages != null)
+		if (licenceUsages != null) {
 			return;
+		}
 
 		licenceUsages = new ArrayList<>();
 
@@ -1303,8 +1307,9 @@ public class DataStubNOM extends AbstractDataStub {
 	protected void retrieveLicencePoolXOpsiProduct()
 	// LICENSE_POOL
 	{
-		if (licencePoolXOpsiProduct != null)
+		if (licencePoolXOpsiProduct != null) {
 			return;
+		}
 
 		Logging.info(this, "retrieveLicencePoolXOpsiProduct");
 

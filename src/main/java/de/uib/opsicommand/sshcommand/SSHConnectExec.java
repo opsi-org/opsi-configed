@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -63,13 +64,14 @@ public class SSHConnectExec extends SSHConnect {
 
 		Logging.info(this, "SSHConnectExec sshcommand " + sshcommand.getSecuredCommand());
 		this.responseButton = responseButton;
-		if (responseButton != null)
+		if (responseButton != null) {
 			responseButton.setEnabled(false);
+		}
 
 		starting(sshcommand);
 	}
 
-	public void starting(SSHCommand sshcommand) {
+	private void starting(SSHCommand sshcommand) {
 
 		if (!(isConnected())) {
 			final SSHCommandFactory factory = SSHCommandFactory.getInstance(main);
@@ -96,9 +98,10 @@ public class SSHConnectExec extends SSHConnect {
 				}
 			} else {
 				Logging.warning(this, Configed.getResourceValue("SSHConnection.Exec.cannotAsReadonly"));
-				if (outputDialog != null)
+				if (outputDialog != null) {
 					outputDialog.appendLater("[" + sshcommand.getId() + "] \t"
 							+ Configed.getResourceValue("SSHConnection.Exec.cannotAsReadonly"));
+				}
 			}
 		} catch (Exception e) {
 			Logging.error(this, "SSHConnectExec Exception", e);
@@ -111,9 +114,7 @@ public class SSHConnectExec extends SSHConnect {
 	}
 
 	public SSHConnectionExecDialog getDialog() {
-		if (outputDialog != null)
-			return outputDialog;
-		return null;
+		return outputDialog;
 	}
 
 	public void setDialog(SSHConnectionExecDialog dia) {
@@ -183,7 +184,7 @@ public class SSHConnectExec extends SSHConnect {
 			}
 			try {
 
-				finalDialog.appendLater("\n\n\n" + new Date());
+				finalDialog.appendLater("\n\n\n" + LocalDate.now() + " " + LocalTime.now());
 				finalDialog
 						.appendLater("\n[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist").trim()
 								+ "]\n" + defaultCommandsString + "\n\n");
@@ -211,8 +212,9 @@ public class SSHConnectExec extends SSHConnect {
 				for (SSHCommand co : commandToExec.getCommands()) {
 					if (!foundError) {
 
-						co = pmethodHandler.parseParameter(co, caller); // ???????? sollte hier eigentlich stehen?!
-																		// # nein! co wird vom phander verändert
+						// ???????? sollte hier eigentlich stehen?!
+						// # nein! co wird vom phander verändert
+						co = pmethodHandler.parseParameter(co, caller);
 						if (!pmethodHandler.canceled) {
 							if (co instanceof SSHSFTPCommand) {
 								SSHConnectSCP sftp = new SSHConnectSCP(commandInfoName);
@@ -271,8 +273,9 @@ public class SSHConnectExec extends SSHConnect {
 		Logging.info(this, "exec dialog " + dialog);
 		Logging.info(this, "exec isConnected " + isConnected());
 
-		if (!(isConnected()))
+		if (!(isConnected())) {
 			connect(command);
+		}
 
 		if (withGui) {
 			Logging.info(this, "exec given dialog " + dialog);
@@ -292,16 +295,18 @@ public class SSHConnectExec extends SSHConnect {
 				outputDialog = SSHConnectionExecDialog.getInstance();
 			}
 
-			if (SSHCommandFactory.sshAlwaysExecInBackground)
+			if (SSHCommandFactory.sshAlwaysExecInBackground) {
 				outputDialog.setVisible(false);
+			}
 
 			outputDialog.setTitle(Configed.getResourceValue("SSHConnection.Exec.title") + " "
 					+ Configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput") + "  ("
 					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost()
 					+ ")");
 
-		} else
+		} else {
 			outputDialog = null;
+		}
 
 		try {
 
@@ -312,18 +317,19 @@ public class SSHConnectExec extends SSHConnect {
 			task.execute();
 			Logging.info(this, "execute was called with task for command " + command.getSecuredCommand());
 
-			if (sequential)
+			if (sequential) {
 				return task.get();
+			}
 
-			if (SSHCommandFactory.sshAlwaysExecInBackground && withGui)
+			if (SSHCommandFactory.sshAlwaysExecInBackground && withGui && outputDialog != null) {
 				outputDialog.setVisible(false);
+			}
 
-			if (withGui)
+			if (withGui) {
 				return "finish";
-			else
+			} else {
 				return task.get();
-		} catch (java.lang.NullPointerException npe) {
-			Logging.error(this, "exec NullPointerException", npe);
+			}
 		} catch (InterruptedException e) {
 			Logging.error(this, "exec InterruptedException", e);
 			Thread.currentThread().interrupt();
@@ -368,13 +374,15 @@ public class SSHConnectExec extends SSHConnect {
 		SshCommandWorker(SSHConnectExec caller, SSHCommand command, SSHConnectionExecDialog outputDialog,
 				boolean withGui, boolean rememberPw, boolean interruptChannel) {
 			super();
-			if (caller != null)
+			if (caller != null) {
 				this.caller = caller;
+			}
 			this.command = command;
 			this.outputDialog = outputDialog;
 			this.withGui = withGui;
-			if (!withGui)
+			if (!withGui) {
 				this.outputDialog = null;
+			}
 
 			this.rememberPw = rememberPw;
 			this.interruptChannelWorker = interruptChannel;
@@ -395,10 +403,12 @@ public class SSHConnectExec extends SSHConnect {
 			Logging.debug(this, "publish " + s);
 			publishInfo(
 					"---------------------------------------------------------------------------------------------------------------------------------------------------");
-			if (this.commandNumber != -1 && this.maxCommandNumber != -1)
+			if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
 				publishInfo(Configed.getResourceValue("SSHConnection.Exec.commandcountertext")
 						.replace("xX0Xx", Integer.toString(this.commandNumber))
 						.replace("xX1Xx", Integer.toString(this.maxCommandNumber)));
+			}
+
 			publishInfo(s);
 			if (exitCode == 127) {
 				Logging.info(this, "exec exit code 127 (command does not exists).");
@@ -444,8 +454,9 @@ public class SSHConnectExec extends SSHConnect {
 			try {
 				Logging.info(this, "doInBackground getSession " + getSession());
 
-				if (!(isConnected()))
+				if (!(isConnected())) {
 					connect();
+				}
 				final Channel channel = getSession().openChannel("exec");
 
 				((ChannelExec) channel).setErrStream(System.err);
@@ -481,23 +492,27 @@ public class SSHConnectExec extends SSHConnect {
 						int timeStepMillis = 1000;
 						Globals.threadSleep(this, timeStepMillis);
 
-						if (i < 0)
+						if (i < 0) {
 							break;
+						}
+
 						String str = new String(tmp, 0, i, StandardCharsets.UTF_8);
 
 						if ((command.needSudo()) && (str.contains(SSHCommandFactory.SUDO_FAILED_TEXT))) {
 							String pw = "";
-							if (supwRetriedTimes >= 1)
+							if (supwRetriedTimes >= 1) {
 								pw = getSudoPass(outputDialog);
-							else
+							} else {
 								pw = getSudoPass(outputDialog, rememberPw);
+							}
 
 							if (pw == null) {
 								Logging.info(this, "exec ready (1)");
 								foundError = true;
 								publish(Configed.getResourceValue("SSHConnection.Exec.exitClosed"));
-								if (outputDialog != null)
+								if (outputDialog != null) {
 									outputDialog.setStatusFinish();
+								}
 								return null;
 							} else {
 								out.write((pw + "\n").getBytes());
@@ -515,21 +530,24 @@ public class SSHConnectExec extends SSHConnect {
 							}
 						} else {
 
-							for (String line : str.split("\n"))
+							for (String line : str.split("\n")) {
 								Logging.debug(this, "line: " + line);
+							}
 						}
 						buf.append(str);
 					}
 
 					if (channel.isClosed() || interruptChannel || interruptChannelWorker) {
-						if ((in.available() > 0) && (!interruptChannel))
+						if ((in.available() > 0) && (!interruptChannel)) {
 							continue;
+						}
 						checkExitCode(channel.getExitStatus(), withGui, channel);
 						if (channel.getExitStatus() != 0) {
 							Logging.info(this, "exec ready (2)");
 							foundError = true;
-							if (outputDialog != null)
+							if (outputDialog != null) {
 								outputDialog.setStatusFinish();
+							}
 							return null;
 						}
 						break;
@@ -537,8 +555,10 @@ public class SSHConnectExec extends SSHConnect {
 				}
 				Globals.threadSleep(this, 1000);
 
-				if (outputDialog != null)
+				if (outputDialog != null) {
 					setDialog(outputDialog);
+				}
+
 				Logging.info(this, "exec ready (0)");
 			}
 
@@ -557,14 +577,11 @@ public class SSHConnectExec extends SSHConnect {
 			} catch (IOException ex) {
 				Logging.warning(this, "SSH IOException", ex);
 				publishError(ex.toString());
-			} catch (Exception e) {
-				Logging.warning(this, "SSH Exception", e);
-				publishError(e.getMessage());
-				if (e instanceof InterruptedException)
-					Thread.currentThread().interrupt();
 			}
-			if (outputDialog != null && !multiCommand)
+
+			if (outputDialog != null && !multiCommand) {
 				outputDialog.setStatusFinish();
+			}
 
 			return buf.toString();
 		}
@@ -601,22 +618,24 @@ public class SSHConnectExec extends SSHConnect {
 		@Override
 		protected void done() {
 			Logging.info(this, "done");
-			if (outputDialog != null)
+			if (outputDialog != null) {
 				outputDialog.append(getCommandName(), "\n... READY  \n\n");
-			if (responseButton != null)
+			}
+			if (responseButton != null) {
 				responseButton.setEnabled(true);
-
+			}
 		}
 
 		private String getCommandName() {
 			String commandinfo = "[" + this.command.getMenuText() + "]";
 			if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
-				if ((commandInfoName != null) && (!commandInfoName.equals("")))
+				if ((commandInfoName != null) && (!commandInfoName.equals(""))) {
 					commandinfo = "[" + commandInfoName + "(" + Integer.toString(this.commandNumber) + "/"
 							+ Integer.toString(this.maxCommandNumber) + ")]";
-				else
+				} else {
 					commandinfo = "[" + this.command.getMenuText() + "(" + Integer.toString(this.commandNumber) + "/"
 							+ Integer.toString(this.maxCommandNumber) + ")]";
+				}
 			}
 
 			return commandinfo;

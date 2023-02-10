@@ -324,7 +324,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private Dashboard dashboard;
 
-	public static DPassword dpass;
+	public static DPassword dPassword;
 	MyDialogRemoteControl dialogRemoteControl;
 	Map<String, RemoteControl> remoteControls;
 
@@ -666,7 +666,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.syncTables();
 
-		fProgress = new FLoadingWaiter(dpass, Globals.APPNAME + " " + Configed.getResourceValue("FWaitProgress.title"));
+		fProgress = new FLoadingWaiter(dPassword,
+				Globals.APPNAME + " " + Configed.getResourceValue("FWaitProgress.title"));
 		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(fProgress);
 
 		fProgress.startWaiting();
@@ -1318,7 +1319,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void locateAndDisplay() {
-		Rectangle screenRectangle = fProgress.getGraphicsConfiguration().getBounds();
+		Rectangle screenRectangle = dPassword.getGraphicsConfiguration().getBounds();
 
 		Logging.info(this, "set size and location of mainFrame");
 
@@ -1338,7 +1339,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected void initLicencesFrame() {
 		long startmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicencesFrame start " + new Date(startmillis));
+		Logging.info(this, "initLicencesFrame start ");
 		WaitCursor waitCursor = new WaitCursor(mainFrame.getContentPane(), mainFrame.getCursor(), "initLicencesFrame");
 		// general
 
@@ -1469,7 +1470,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		waitCursor.stop();
 
 		long endmillis = System.currentTimeMillis();
-		Logging.info(this, "initLicencesFrame " + new Date(endmillis) + " diff " + (endmillis - startmillis));
+		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
 	}
 
 	protected void login(List<String> savedServers)
@@ -1477,31 +1478,31 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	{
 
 		Logging.debug(this, " create password dialog ");
-		dpass = new DPassword(this);
+		dPassword = new DPassword(this);
 
 		// set list of saved servers
 		if (savedServers != null && !savedServers.isEmpty()) {
-			dpass.setServers(savedServers);
+			dPassword.setServers(savedServers);
 		}
 
 		// check if we started with preferred values
 		if (host != null && !host.equals("")) {
-			dpass.setHost(host);
+			dPassword.setHost(host);
 		}
 
 		if (user != null) {
-			dpass.setUser(user);
+			dPassword.setUser(user);
 		}
 
 		if (password != null) {
-			dpass.setPassword(password);
+			dPassword.setPassword(password);
 		}
 
 		if (persist == null || persist.getConnectionState().getState() != ConnectionState.CONNECTED) {
 			Logging.info(this, "become interactive");
 
-			dpass.setAlwaysOnTop(true);
-			dpass.setVisible(true);
+			dPassword.setAlwaysOnTop(true);
+			dPassword.setVisible(true);
 			// dpass will give back control and call loadDataAndGo
 		}
 
@@ -1511,7 +1512,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// Auto login
 			Logging.info(this, "start with given credentials");
 
-			dpass.tryConnecting();
+			dPassword.tryConnecting();
 		}
 
 	}
@@ -5438,9 +5439,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mainFrame = null;
 		}
 
-		if (dpass != null) {
-			dpass.setVisible(false);
-			dpass.dispose();
+		if (dPassword != null) {
+			dPassword.setVisible(false);
+			dPassword.dispose();
 		}
 
 		if (!checkSavedLicencesFrame()) {
