@@ -158,6 +158,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	private void setActivated(boolean active) {
 		Logging.info(this, "------------ activate");
 
+		jProgressBar.setVisible(!active);
 		jProgressBar.setValue(0);
 
 		waitLabelConnecting.setText(active ? "" : Configed.getResourceValue("DPassword.WaitInfo.label"));
@@ -229,6 +230,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
 		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
 		jProgressBar.putClientProperty("Nimbus.Overrides", defaults);
+		jProgressBar.setVisible(false);
 
 		jButtonCancel.setText(Configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.addActionListener(this::jButtonCancelActionPerformed);
@@ -238,6 +240,10 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		jButtonCommit.addActionListener(this::jButtonCommitActionPerformed);
 
 		GroupLayout groupLayout = new GroupLayout(panel);
+
+		// With this, the jProgressBar will take up the vertical
+		// space even when it's invisible
+		groupLayout.setHonorsVisibility(false);
 		panel.setLayout(groupLayout);
 
 		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
