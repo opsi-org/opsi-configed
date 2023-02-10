@@ -1463,8 +1463,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 							&& ((!JSONReMapper.equalsNull(clientProductVersion)
 									&& !productVersion.equals(clientProductVersion))
 									|| (!JSONReMapper.equalsNull(clientPackageVersion)
-											&& !packageVersion.equals(clientPackageVersion))))
-			) {
+											&& !packageVersion.equals(clientPackageVersion))))) {
 				Logging.debug("getClientsWithOtherProductVersion hit " + m);
 				result.add(client);
 			}
@@ -6977,43 +6976,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return false;
 	}
 
-	private List<String> getPossibleValuesProductOnClientDisplayFieldsLocalboot() {
-		List<String> possibleValues = new ArrayList<>();
-		possibleValues.add("productId");
-		possibleValues.add(ProductState.KEY_PRODUCT_NAME);
-		possibleValues.add(ProductState.KEY_INSTALLATION_STATUS);
-		possibleValues.add(ProductState.KEY_INSTALLATION_INFO);
-		possibleValues.add(ProductState.KEY_ACTION_REQUEST);
-		possibleValues.add(ProductState.KEY_PRODUCT_PRIORITY);
-		possibleValues.add(ProductState.KEY_POSITION);
-		possibleValues.add(ProductState.KEY_LAST_STATE_CHANGE);
-		possibleValues.add(ProductState.KEY_TARGET_CONFIGURATION);
-		possibleValues.add(ProductState.KEY_VERSION_INFO);
-
-		return possibleValues;
-	}
-
-	private List<String> getDefaultValuesProductOnClientDisplayfieldsLocalboot() {
-		List<String> result = new ArrayList<>();
-
-		result.add("productId");
-
-		result.add(ProductState.KEY_INSTALLATION_STATUS);
-		result.add(ProductState.KEY_INSTALLATION_INFO);
-		result.add(ProductState.KEY_ACTION_REQUEST);
-		result.add(ProductState.KEY_VERSION_INFO);
-
-		return result;
-
-	}
-
 	private List<String> produceProductOnClientDisplayfieldsLocalboot() {
 		if (globalReadOnly)
 			return null;
 
-		List<String> result = getDefaultValuesProductOnClientDisplayfieldsLocalboot();
+		List<String> result = getDefaultValuesProductOnClientDisplayFields();
 
-		List<String> possibleValues = getPossibleValuesProductOnClientDisplayFieldsLocalboot();
+		List<String> possibleValues = getPossibleValuesProductOnClientDisplayFields();
 
 		// create config for service
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
@@ -7159,9 +7128,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			Logging.debug(this, "getProductOnClients_displayFieldsLocalbootProducts() possibleValuesAccordingToService "
 					+ possibleValuesAccordingToService);
 
-			if (configuredByService.isEmpty()
-					|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayFieldsLocalboot()))
-							.equals(new HashSet<>(possibleValuesAccordingToService)))) {
+			if (configuredByService.isEmpty() || !((new HashSet<>(getPossibleValuesProductOnClientDisplayFields()))
+					.equals(new HashSet<>(possibleValuesAccordingToService)))) {
 				// we did not initialize server property
 				configuredByService = produceProductOnClientDisplayfieldsLocalboot();
 			}
@@ -7245,32 +7213,23 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		exec.doCall(omc);
 	}
 
-	private List<String> getPossibleValuesProductOnClientDisplayfieldsNetboot() {
+	private List<String> getPossibleValuesProductOnClientDisplayFields() {
 		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add("productId");
 		possibleValues.add(ProductState.KEY_PRODUCT_NAME);
 		possibleValues.add(ProductState.KEY_INSTALLATION_STATUS);
 		possibleValues.add(ProductState.KEY_INSTALLATION_INFO);
-		// combines
-		// ProductState.KEY_actionProgress
-		// ProductState.KEY_actionResult
-		// ProductState.KEY_lastAction
 		possibleValues.add(ProductState.KEY_ACTION_REQUEST);
 		possibleValues.add(ProductState.KEY_PRODUCT_PRIORITY);
 		possibleValues.add(ProductState.KEY_POSITION);
 		possibleValues.add(ProductState.KEY_LAST_STATE_CHANGE);
-		// ProductState.KEY_actionSequence
-		// ProductState.KEY_actionSequence
 		possibleValues.add(ProductState.KEY_TARGET_CONFIGURATION);
 		possibleValues.add(ProductState.KEY_VERSION_INFO);
-		// combines
-		// ProductState.KEY_productVersion
-		// ProductState.KEY_packageVersion
 
 		return possibleValues;
 	}
 
-	private List<String> getDefaultValuesProductOnClientDisplayfieldsNetboot() {
+	private List<String> getDefaultValuesProductOnClientDisplayFields() {
 		List<String> result = new ArrayList<>();
 
 		result.add("productId");
@@ -7285,9 +7244,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	private List<String> produceProductOnClientDisplayfieldsNetboot() {
-		List<String> result = getDefaultValuesProductOnClientDisplayfieldsNetboot();
+		List<String> result = getDefaultValuesProductOnClientDisplayFields();
 
-		List<String> possibleValues = getPossibleValuesProductOnClientDisplayfieldsNetboot();
+		List<String> possibleValues = getPossibleValuesProductOnClientDisplayFields();
 
 		// create config for service
 		Map<String, Object> item = createNOMitem("UnicodeConfig");
@@ -7321,9 +7280,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				possibleValuesAccordingToService = (List<String>) configOptions
 						.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT).get("possibleValues");
 
-			if (configuredByService.isEmpty()
-					|| !((new HashSet<>(getPossibleValuesProductOnClientDisplayfieldsNetboot()))
-							.equals(new HashSet<>(possibleValuesAccordingToService)))
+			if (configuredByService.isEmpty() || !((new HashSet<>(getPossibleValuesProductOnClientDisplayFields()))
+					.equals(new HashSet<>(possibleValuesAccordingToService)))
 
 			) {
 				// we did not initialize server property
