@@ -65,7 +65,6 @@ public class FGroupActions extends SecondaryFrame {
 		reload();
 		setGlobals(Globals.getMap());
 		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FGroupAction.title"));
-
 	}
 
 	protected void setGroupLabelling(String label, String clientCount) {
@@ -124,7 +123,7 @@ public class FGroupActions extends SecondaryFrame {
 		waitCursor.stop();
 	}
 
-	protected void define() {
+	private void define() {
 		topPanel = new JPanel();
 
 		defineTopPanel(topPanel);

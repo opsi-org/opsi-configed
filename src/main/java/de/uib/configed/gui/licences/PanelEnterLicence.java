@@ -24,6 +24,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.ControlPanelEnterLicence;
 import de.uib.configed.Globals;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.utilities.logging.Logging;
@@ -67,14 +69,19 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	private FEditDate fEditDate;
 
-	protected de.uib.configed.ControlPanelEnterLicence enterLicenceController;
+	protected ControlPanelEnterLicence enterLicenceController;
+
+	private ConfigedMain configedMain;
 
 	private ComboBoxModel<String> emptyComboBoxModel = new DefaultComboBoxModel<>(new String[] { "" });
 
 	/** Creates new form PanelEnterLicence */
-	public PanelEnterLicence(de.uib.configed.ControlPanelEnterLicence enterLicenceController) {
+	public PanelEnterLicence(ControlPanelEnterLicence enterLicenceController, ConfigedMain configedMain) {
 		super(enterLicenceController);
+
 		this.enterLicenceController = enterLicenceController;
+		this.configedMain = configedMain;
+
 		initComponents();
 		defineListeners();
 	}
@@ -126,14 +133,14 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	private boolean checkAndStart() {
 		if (panelLicencepools.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(enterLicenceController.mainController.licencesFrame,
+			JOptionPane.showMessageDialog(configedMain.licencesFrame,
 					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencepool"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;
 		}
 
 		if (panelLicencecontracts.getSelectedRow() == -1) {
-			JOptionPane.showMessageDialog(enterLicenceController.mainController.licencesFrame,
+			JOptionPane.showMessageDialog(configedMain.licencesFrame,
 					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectLicencecontract"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 			return false;

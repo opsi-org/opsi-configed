@@ -26,6 +26,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 	public ControlPanelLicencesStatistics(AbstractPersistenceController persist) {
 		thePanel = new PanelLicencesStatistics(this);
 		this.persist = persist;
+
 		init();
 	}
 
@@ -35,7 +36,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 	}
 
 	@Override
-	public void init() {
+	public final void init() {
 		updateCollection = new TableUpdateCollection();
 
 		List<String> columnNames;

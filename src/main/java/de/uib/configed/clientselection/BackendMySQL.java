@@ -42,7 +42,7 @@ public class BackendMySQL {
 		allHosts = getListFromSQL("SELECT hostId FROM HOST;");
 	}
 
-	public List<String> getListFromSQL(String query) {
+	private List<String> getListFromSQL(String query) {
 
 		Logging.info(this, query);
 

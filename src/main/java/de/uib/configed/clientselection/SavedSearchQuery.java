@@ -47,7 +47,7 @@ public class SavedSearchQuery {
 		}
 	}
 
-	public boolean parseArgs() {
+	private boolean parseArgs() {
 		String lastOption = null;
 		searchName = null;
 		for (int i = 0; i < args.length; i++) {
@@ -71,7 +71,7 @@ public class SavedSearchQuery {
 		return true;
 	}
 
-	public void showUsage() {
+	private void showUsage() {
 		Logging.debug(USAGE);
 	}
 

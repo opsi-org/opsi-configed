@@ -15,7 +15,7 @@ public abstract class SelectGroupOperation extends SelectOperation {
 	}
 
 	/** Register an operation as child of this operation. */
-	protected void registerChildOperation(SelectOperation operation) {
+	public final void registerChildOperation(SelectOperation operation) {
 		childOperations.add(operation);
 	}
 

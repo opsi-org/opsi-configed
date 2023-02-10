@@ -1441,7 +1441,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// panelReconciliation
 		licencesPanelsTabNames.put(LicencesTabStatus.RECONCILIATION,
 				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation"));
-		controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation(persist, this);
+		controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation(persist);
 		addClient(LicencesTabStatus.RECONCILIATION, controlPanelLicencesReconciliation.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesReconciliation);
 
@@ -4081,7 +4081,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			setInterval(interval);
 		}
 
-		public void setInterval(Integer interval) {
+		public final void setInterval(Integer interval) {
 			int oldInterval = this.interval;
 
 			if (interval == null) {

@@ -30,27 +30,27 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 	GenTableModel modelLicencecontracts;
 
 	AbstractPersistenceController persist;
-	public ConfigedMain mainController;
+	private ConfigedMain configedMain;
 
-	public ControlPanelEnterLicence(AbstractPersistenceController persist, ConfigedMain mainController) {
-		thePanel = new PanelEnterLicence(this); // extending TabClientAdapter
+	public ControlPanelEnterLicence(AbstractPersistenceController persist, ConfigedMain configedMain) {
+
+		thePanel = new PanelEnterLicence(this, configedMain);
 		this.persist = persist;
-		this.mainController = mainController;
+		this.configedMain = configedMain;
 		init();
 	}
 
 	public List<String> getChoicesAllHosts() {
 		return new ArrayList<>(new TreeMap<>(persist.getHostInfoCollections()
-				.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients()))
-						.keySet());
+				.getClientListForDepots(configedMain.getSelectedDepots(), configedMain.getAllowedClients())).keySet());
 	}
 
 	public void saveNewLicence(Map<String, String> m) {
-		WaitCursor waitCursor = new WaitCursor(Globals.container1, mainController.licencesFrame.getCursor());
+		WaitCursor waitCursor = new WaitCursor(Globals.container1, configedMain.licencesFrame.getCursor());
 		persist.editSoftwareLicence(m.get(LicenceEntry.ID_KEY), m.get(LicenceEntry.LICENCE_CONTRACT_ID_KEY),
 				m.get(LicenceEntry.TYPE_KEY), m.get(LicenceEntry.MAX_INSTALLATIONS_KEY),
 				m.get(LicenceEntry.BOUND_TO_HOST_KEY), m.get(LicenceEntry.EXPIRATION_DATE_KEY));
-		mainController.softwarelicencesTableProvider.requestReloadRows();
+		configedMain.softwarelicencesTableProvider.requestReloadRows();
 		// ensure that the visual tables everywhere get the new data when refreshed
 
 		String keyValue = persist.editRelationSoftwareL2LPool(m.get(LicenceEntry.ID_KEY), m.get("licensePoolId"),
@@ -61,7 +61,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 		thePanel.panelKeys.setDataChanged(false);
 		thePanel.panelKeys.moveToKeyValue(keyValue);
 		waitCursor.stop();
-		mainController.checkErrorList();
+		configedMain.checkErrorList();
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 	}
 
 	@Override
-	public void init() {
+	public final void init() {
 		updateCollection = new TableUpdateCollection();
 
 		List<String> columnNames;
@@ -87,8 +87,8 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencekeys = new MapTableUpdateItemFactory(modelLicencekeys,
 				columnNames, classNames, 0);
-		modelLicencekeys = new GenTableModel(updateItemFactoryLicencekeys, mainController.licenceOptionsTableProvider,
-				-1, new int[] { 0, 1 }, thePanel.panelKeys, updateCollection);
+		modelLicencekeys = new GenTableModel(updateItemFactoryLicencekeys, configedMain.licenceOptionsTableProvider, -1,
+				new int[] { 0, 1 }, thePanel.panelKeys, updateCollection);
 		updateItemFactoryLicencekeys.setSource(modelLicencekeys);
 
 		tableModels.add(modelLicencekeys);
@@ -124,7 +124,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 		classNames.add("java.lang.String");
 		MapTableUpdateItemFactory updateItemFactoryLicencepools = new MapTableUpdateItemFactory(modelLicencepools,
 				columnNames, classNames, 0);
-		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, mainController.licencePoolTableProvider, 0,
+		modelLicencepools = new GenTableModel(updateItemFactoryLicencepools, configedMain.licencePoolTableProvider, 0,
 				thePanel.panelLicencepools, updateCollection);
 		updateItemFactoryLicencepools.setSource(modelLicencepools);
 
@@ -152,7 +152,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 		MapTableUpdateItemFactory updateItemFactoryLicencecontracts = new MapTableUpdateItemFactory(columnNames,
 				classNames, 0);
 		modelLicencecontracts = new GenTableModel(updateItemFactoryLicencecontracts,
-				mainController.licenceContractsTableProvider, 0, thePanel.panelLicencecontracts, updateCollection);
+				configedMain.licenceContractsTableProvider, 0, thePanel.panelLicencecontracts, updateCollection);
 		updateItemFactoryLicencecontracts.setSource(modelLicencecontracts);
 
 		tableModels.add(modelLicencecontracts);

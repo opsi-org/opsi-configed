@@ -25,14 +25,13 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	GenTableModel modelLicencesReconciliation;
 
 	AbstractPersistenceController persist;
-	ConfigedMain mainController;
 
 	boolean initialized = false;
 
-	public ControlPanelLicencesReconciliation(AbstractPersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelLicencesReconciliation(AbstractPersistenceController persist) {
 		thePanel = new PanelLicencesReconciliation(this);
 		this.persist = persist;
-		this.mainController = mainController;
+
 		init();
 	}
 
@@ -42,7 +41,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	}
 
 	@Override
-	public void init() {
+	public final void init() {
 		updateCollection = new TableUpdateCollection();
 
 		List<String> columnNames;

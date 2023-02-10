@@ -45,7 +45,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		this.persist = persist;
 		this.mainController = mainController;
 		init();
-
 	}
 
 	@Override
@@ -54,7 +53,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 	}
 
 	@Override
-	public void init() {
+	public final void init() {
 		updateCollection = new TableUpdateCollection();
 
 		List<String> columnNames;

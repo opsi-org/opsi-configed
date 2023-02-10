@@ -350,6 +350,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	private class HeaderOptionsPanel extends JPanel {
 		public HeaderOptionsPanel(ListModel<JCheckBox> model) {
+			init(model);
+		}
+
+		private void init(ListModel<JCheckBox> model) {
 			setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
