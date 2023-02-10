@@ -649,7 +649,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void loadDataAndGo() {
-		dpass.setVisible(false);
 
 		Logging.clearErrorList();
 
@@ -687,6 +686,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					fProgress.setReady();
 					fProgress.actAfterWaiting();
 				}
+
 				mainFrame.toFront();
 			}
 		}.start();

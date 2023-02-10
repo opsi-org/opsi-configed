@@ -24,16 +24,22 @@ import javax.swing.UIDefaults;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.DPassword;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.observer.DataLoadingObserver;
 import de.uib.utilities.thread.WaitInfoString;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.DataLoadingObserver, WaitingSleeper {
+public class FLoadingWaiter extends JFrame implements DataLoadingObserver, WaitingSleeper {
 
 	private static final long WAITING_MILLIS_FOR_LOADING = 50000;
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
+
+	DPassword dPass;
+
 	JProgressBar progressBar;
+	JProgressBar newProgressBar;
 	JLabel infoLabel;
 	protected String info;
 	protected static WaitInfoString waitInfoString;
@@ -59,31 +65,19 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 		}
 	}
 
-	public FLoadingWaiter(Component owner, String title) {
-		this(title);
+	public FLoadingWaiter(DPassword dPass, String title) {
+		super(title);
 
-		Logging.info(this, "set Loction of FLoadingWaiter in center of screen of owner");
+		this.dPass = dPass;
 
-		setLocationRelativeTo(owner);
-		setAlwaysOnTop(true);
-		setVisible(true);
-
-		Logging.info(this, "should be visible now");
+		createGUI(dPass);
 	}
 
 	public FLoadingWaiter(Component owner, String title, String startMessage) {
-		this(owner, title);
-		observingMesg = startMessage;
-	}
-
-	private FLoadingWaiter(String title) {
 		super(title);
 
-		createGUI();
-		if (waitInfoString == null)
-			waitInfoString = new WaitInfoString();
-
-		worker = new WaitingWorker(this);
+		createGUI(owner);
+		observingMesg = startMessage;
 	}
 
 	public void stopWaiting() {
@@ -96,7 +90,7 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 		observingMesg = mesg;
 	}
 
-	private void createGUI() {
+	private void createGUI(Component owner) {
 		setIconImage(Globals.mainIcon);
 
 		progressBar = new JProgressBar();
@@ -138,7 +132,18 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 
 		setSize(new Dimension(400, 250));
 
-		setLocationRelativeTo(null);
+		if (waitInfoString == null)
+			waitInfoString = new WaitInfoString();
+
+		worker = new WaitingWorker(this);
+		Logging.info(this, "set Loction of FLoadingWaiter in center of screen of owner");
+
+		setLocationRelativeTo(owner);
+		setAlwaysOnTop(true);
+		if (dPass == null)
+			setVisible(true);
+
+		Logging.info(this, "should be visible now");
 	}
 
 	public void startWaiting() {
@@ -153,17 +158,23 @@ public class FLoadingWaiter extends JFrame implements de.uib.utilities.observer.
 	@Override
 	public void actAfterWaiting() {
 		Logging.info(this, "actAfterWaiting");
-		SwingUtilities.invokeLater(() -> setVisible(false));
+		SwingUtilities.invokeLater(() -> {
+			if (dPass == null)
+				setVisible(false);
+
+			else
+				dPass.setVisible(false);
+		});
 	}
 
 	@Override
 	public JProgressBar getProgressBar() {
-		return progressBar;
+		return dPass == null ? progressBar : dPass.getProgressBar();
 	}
 
 	@Override
 	public JLabel getLabel() {
-		return infoLabel;
+		return dPass == null ? infoLabel : dPass.getLabel();
 	}
 
 	@Override
