@@ -73,7 +73,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 				command.setRepos(repos);
 			}
 		}
-		command.needSudo = true;
+		command.setNeedSudo(true);
 	}
 
 	private void init() {

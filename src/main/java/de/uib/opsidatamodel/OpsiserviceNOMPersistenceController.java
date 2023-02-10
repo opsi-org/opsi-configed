@@ -1086,7 +1086,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Logging.info(this, "no connection to server " + depot);
 
-		return AbstractExecutioner.NONE;
+		return AbstractExecutioner.getNoneExecutioner();
 	}
 
 	@Override
@@ -1702,7 +1702,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			Logging.info(this, "addWANConfigState values " + config.getValue());
 
-			item.put(ConfigStateEntry.VALUES, AbstractExecutioner.jsonArray(config.getValue()));
+			item.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(config.getValue()));
 
 			item.put(ConfigStateEntry.OBJECT_ID, clientId);
 
@@ -1831,7 +1831,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List<String> valuesDepot = new ArrayList<>();
 			valuesDepot.add(depotId);
 			itemDepot.put(ConfigStateEntry.OBJECT_ID, newClientId);
-			itemDepot.put(ConfigStateEntry.VALUES, AbstractExecutioner.jsonArray(valuesDepot));
+			itemDepot.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(valuesDepot));
 			itemDepot.put(ConfigStateEntry.CONFIG_ID, CONFIG_DEPOT_ID);
 
 			configStatesJsonObject.add(AbstractExecutioner.jsonMap(itemDepot));
@@ -1851,7 +1851,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				Map<String, Object> itemShI = createNOMitem(ConfigStateEntry.TYPE);
 				itemShI.put(ConfigStateEntry.OBJECT_ID, newClientId);
-				itemShI.put(ConfigStateEntry.VALUES, AbstractExecutioner.jsonArray(valuesShI));
+				itemShI.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(valuesShI));
 				itemShI.put(ConfigStateEntry.CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
 				Logging.info(this, "create client, config item for shutdownInstall " + itemShI);
@@ -1971,7 +1971,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List valuesDepot = new ArrayList<>();
 			valuesDepot.add(depotId);
 			itemDepot.put(ConfigStateEntry.OBJECT_ID, newClientId);
-			itemDepot.put(ConfigStateEntry.VALUES, AbstractExecutioner.jsonArray(valuesDepot));
+			itemDepot.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(valuesDepot));
 			itemDepot.put(ConfigStateEntry.CONFIG_ID, CONFIG_DEPOT_ID);
 
 			jsonObjects.add(AbstractExecutioner.jsonMap(itemDepot));
@@ -1991,7 +1991,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				Map<String, Object> itemShI = createNOMitem(ConfigStateEntry.TYPE);
 				itemShI.put(ConfigStateEntry.OBJECT_ID, newClientId);
-				itemShI.put(ConfigStateEntry.VALUES, AbstractExecutioner.jsonArray(valuesShI));
+				itemShI.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(valuesShI));
 				itemShI.put(ConfigStateEntry.CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
 				Logging.info(this, "create client, config item for shutdownInstall " + itemShI);
@@ -2175,7 +2175,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			}
 
-			if (exec1 != null && exec1 != AbstractExecutioner.NONE) {
+			if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
 				OpsiMethodCall omc = new OpsiMethodCall("hostControl_start",
 						new Object[] { hostSeparationEntry.getValue().toArray(new String[0]) });
 
@@ -2201,7 +2201,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				hostsToWake.retainAll(hostSeparationEntry.getValue());
 
 				if (execsByDepot.get(hostSeparationEntry.getKey()) != null
-						&& execsByDepot.get(hostSeparationEntry.getKey()) != AbstractExecutioner.NONE
+						&& execsByDepot.get(hostSeparationEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()
 						&& !hostsToWake.isEmpty()) {
 					Logging.debug(this, "wakeOnLan execute for " + hostsToWake);
 					OpsiMethodCall omc = new OpsiMethodCall("hostControl_start",
@@ -2274,7 +2274,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		// background call, do not show waiting info
-		return exec.getMapResult(new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND));
+		return exec.getMapResult(new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT));
 	}
 
 	@Override
@@ -2305,7 +2305,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Object[] callParameters = { true, true, true };
 		String methodName = "backend_getLicensingInfo";
 
-		OpsiMethodCall omc = new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND);
+		OpsiMethodCall omc = new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT);
 
 		return exec.getMapResult(omc);
 	}
@@ -2329,7 +2329,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		String methodname = "hostControl_getActiveSessions";
 
 		Map<String, Object> result0 = de.uib.opsicommand.JSONReMapper.getResponses(
-				exec.retrieveJSONObject(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND // background																																									
+				exec.retrieveJSONObject(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT // background																																									
 				))); // call, do not show waiting info
 
 		for (Entry<String, Object> resultEntry : result0.entrySet()) {
@@ -5147,7 +5147,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Map<String, Object> item = createNOMitem(ConfigStateEntry.TYPE);
 		item.put(ConfigStateEntry.OBJECT_ID, hostName);
-		item.put(ConfigStateEntry.VALUES, AbstractExecutioner.jsonArray(values));
+		item.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(values));
 		item.put(ConfigStateEntry.CONFIG_ID, configId);
 
 		List<Object> jsonObjects = new ArrayList<>();
@@ -8087,7 +8087,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		produceOpsiInformation();
 
 		// has the actual signal if a module is activ
-		opsiModules = new HashMap<>(); 
+		opsiModules = new HashMap<>();
 
 		// opsiinformation which delivers the service information on checked modules
 

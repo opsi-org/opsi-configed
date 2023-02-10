@@ -16,7 +16,7 @@ public class OpsiMethodCall {
 	private String methodname;
 
 	private Object[] parameters;
-	public static final boolean BACKGROUND = true;
+	public static final boolean BACKGROUND_DEFAULT = true;
 	private boolean background;
 
 	protected static final int DEFAULT_JSON_ID = 1;
@@ -100,7 +100,7 @@ public class OpsiMethodCall {
 		return Arrays.toString(parameters);
 	}
 
-	public boolean isBackground() {
+	public boolean isBackgroundDefault() {
 		return background;
 	}
 

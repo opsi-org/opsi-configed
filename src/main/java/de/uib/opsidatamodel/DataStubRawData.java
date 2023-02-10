@@ -358,7 +358,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		String columns = ConfigStateEntry.DB_TABLE_NAME + "." + ConfigStateEntry.OBJECT_ID + ", "
 				+ ConfigStateEntry.DB_TABLE_NAME + "." + ConfigStateEntry.CONFIG_ID + ", "
-				+ ConfigStateEntry.DB_TABLE_NAME + "." + ConfigStateEntry.VALUES;
+				+ ConfigStateEntry.DB_TABLE_NAME + "." + ConfigStateEntry.VALUES_ID;
 
 		String query = "select " + columns + " from " + ConfigStateEntry.DB_TABLE_NAME + " ";
 

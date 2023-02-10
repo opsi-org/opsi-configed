@@ -76,5 +76,13 @@ public abstract class AbstractExecutioner {
 
 	public abstract String getStringValueFromItem(Object s);
 
-	public static final AbstractExecutioner NONE = new NONEexecutioner();
+	private static AbstractExecutioner none;
+
+	public static AbstractExecutioner getNoneExecutioner() {
+		if (none == null) {
+			none = new NONEexecutioner();
+		}
+
+		return none;
+	}
 }

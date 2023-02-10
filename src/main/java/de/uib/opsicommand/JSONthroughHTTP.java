@@ -218,7 +218,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 		Logging.info(this, "retrieveJSONObjects started");
 		WaitCursor waitCursor = null;
 
-		if (omc != null && !omc.isBackground()) {
+		if (omc != null && !omc.isBackgroundDefault()) {
 			waitCursor = new WaitCursor(null, new Cursor(Cursor.DEFAULT_CURSOR), this.getClass().getName());
 		} else {
 			background = true;

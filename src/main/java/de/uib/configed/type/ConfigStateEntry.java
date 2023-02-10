@@ -10,5 +10,5 @@ public class ConfigStateEntry extends HashMap<String, Object> {
 	public static final String ID = "config_state_id";
 	public static final String OBJECT_ID = "objectId";
 	public static final String CONFIG_ID = "configId";
-	public static final String VALUES = "values";
+	public static final String VALUES_ID = "values";
 }

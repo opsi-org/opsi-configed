@@ -1,6 +1,6 @@
 package de.uib.utilities.logging;
 
-public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
+public class UncaughtConfigedExceptionHandler implements Thread.UncaughtExceptionHandler {
 
 	private static String lastException = "";
 

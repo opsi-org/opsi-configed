@@ -49,12 +49,11 @@ public class FWakeClients extends FShowList {
 
 			for (Entry<String, List<String>> depotEntry : hostSeparationByDepots.entrySet()) {
 
-				Logging.info(this,
-						"act on depot " + depotEntry.getKey() + ", executioner != NONE  "
-								+ (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.NONE)
-								+ " counterByDepots.get(depot) " + counterByDepots.get(depotEntry.getKey()));
+				Logging.info(this, "act on depot " + depotEntry.getKey() + ", executioner != NONE  "
+						+ (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner())
+						+ " counterByDepots.get(depot) " + counterByDepots.get(depotEntry.getKey()));
 
-				if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.NONE
+				if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()
 						&& counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size())
 
 				{
@@ -62,15 +61,16 @@ public class FWakeClients extends FShowList {
 						AbstractExecutioner exec1 = persist.retrieveWorkingExec(depotEntry.getKey());
 						// we try to connect when the first client of a depot should be connected
 
-						executionerForDepots.put(depotEntry.getKey(), exec1); // may be Executioner.NONE
+						// may be Executioner.NONE
+						executionerForDepots.put(depotEntry.getKey(), exec1);
 
-						if (exec1 == AbstractExecutioner.NONE) {
+						if (exec1 == AbstractExecutioner.getNoneExecutioner()) {
 							appendLine("!! giving up connecting to  " + depotEntry.getKey());
 						}
 
 					}
 
-					if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.NONE) {
+					if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()) {
 						String host = depotEntry.getValue().get(turn);
 
 						String line = String.format("trying to start up   %s    from depot    %s  ", host,

@@ -73,7 +73,7 @@ public final class LicensingInfoMap {
 	public static final String KNOWN_MODULES = "known_modules";
 	public static final String AVAILABLE_MODULES = "available_modules";
 	public static final String OBSOLETE_MODULES = "obsolete_modules";
-	public static final String LICENSES = "licenses";
+	public static final String LICENSES_ID = "licenses";
 	public static final String CUSTOMER_ID = "customer_id";
 	public static final String CUSTOMER_NAME = "customer_name";
 	public static final String CUSTOMER_UNIT = "customer_unit";
@@ -81,7 +81,7 @@ public final class LicensingInfoMap {
 	public static final String MODULE_ID = "module_id";
 	public static final String VALID_UNTIL = "valid_until";
 	public static final String REVOKED_IDS = "revoked_ids";
-	public static final String CHECKSUM = "licenses_checksum";
+	public static final String CHECKSUM_ID = "licenses_checksum";
 	public static final String DATES = "dates";
 	public static final String MODULES = "modules";
 	public static final String AVAILABLE = "available";
@@ -237,7 +237,7 @@ public final class LicensingInfoMap {
 			result.add(line);
 		}
 		List<String> line1 = new ArrayList<>();
-		line1.add(CHECKSUM);
+		line1.add(CHECKSUM_ID);
 		line1.add(checksum);
 		result.add(line1);
 
@@ -248,7 +248,7 @@ public final class LicensingInfoMap {
 		Map<String, Map<String, Object>> result = new HashMap<>();
 
 		try {
-			JSONArray producedLicences = jOResult.getJSONArray(LICENSES);
+			JSONArray producedLicences = jOResult.getJSONArray(LICENSES_ID);
 			for (int i = 0; i < producedLicences.length(); i++) {
 				Map<String, Object> tmp = new HashMap<>();
 				JSONObject obj = producedLicences.getJSONObject(i);
@@ -271,7 +271,7 @@ public final class LicensingInfoMap {
 		Set<String> producedCustomerIDs = new LinkedHashSet<>();
 
 		try {
-			JSONArray producedLicences = jOResult.getJSONArray(LICENSES);
+			JSONArray producedLicences = jOResult.getJSONArray(LICENSES_ID);
 
 			for (int i = 0; i < producedLicences.length(); i++) {
 				JSONObject l = producedLicences.getJSONObject(i);
@@ -290,7 +290,7 @@ public final class LicensingInfoMap {
 
 		try {
 
-			JSONArray producedLicences = jOResult.getJSONArray(LICENSES);
+			JSONArray producedLicences = jOResult.getJSONArray(LICENSES_ID);
 
 			for (int i = 0; i < producedLicences.length(); i++) {
 				JSONObject l = producedLicences.getJSONObject(i);
@@ -449,7 +449,7 @@ public final class LicensingInfoMap {
 		String newChecksum = "";
 
 		try {
-			newChecksum = jOResult.getString(CHECKSUM);
+			newChecksum = jOResult.getString(CHECKSUM_ID);
 		} catch (JSONException ex) {
 			Logging.error(CLASSNAME + " produceChecksum : " + ex);
 		}

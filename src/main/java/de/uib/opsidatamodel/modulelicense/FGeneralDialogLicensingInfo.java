@@ -35,7 +35,6 @@ import de.uib.utilities.table.updates.TableUpdateCollection;
 public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	public LicensingInfoPanelGenEditTable thePanel;
-	private GenTableModel theModel;
 	private AbstractPersistenceController persist;
 	private LicensingInfoMap licenseMap;
 
@@ -370,7 +369,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		TableUpdateCollection updateCollection = new TableUpdateCollection();
 
-		theModel = new GenTableModel(null, // updateItemFactory,
+		GenTableModel theModel = new GenTableModel(null, // updateItemFactory,
 
 				// tableProvider
 				new de.uib.utilities.table.provider.DefaultTableProvider(tableSource),

@@ -21,11 +21,11 @@ public class LicencePoolXOpsiProduct extends Relation {
 	public static final String ID_KEY = "id";
 	public static final String PRODUCTS_KEY = "productIds";
 
-	public static final List<String> ATTRIBUTES;
+	public static final List<String> LICENCE_ATTRIBUTES;
 	static {
-		ATTRIBUTES = new LinkedList<>();
-		ATTRIBUTES.add(LICENCE_POOL_KEY);
-		ATTRIBUTES.add(PRODUCT_ID_KEY);
+		LICENCE_ATTRIBUTES = new LinkedList<>();
+		LICENCE_ATTRIBUTES.add(LICENCE_POOL_KEY);
+		LICENCE_ATTRIBUTES.add(PRODUCT_ID_KEY);
 	}
 
 	public static final List<String> SERVICE_ATTRIBUTES;
@@ -41,7 +41,7 @@ public class LicencePoolXOpsiProduct extends Relation {
 	}
 
 	public LicencePoolXOpsiProduct() {
-		super(ATTRIBUTES);
+		super(LICENCE_ATTRIBUTES);
 	}
 
 	public void integrateRawFromService(Map<String, Object> m) {
@@ -53,7 +53,7 @@ public class LicencePoolXOpsiProduct extends Relation {
 			for (Object p : productList) {
 				String productId = (String) p;
 				StringValuedRelationElement rowmap = new StringValuedRelationElement();
-				rowmap.setAllowedAttributes(ATTRIBUTES);
+				rowmap.setAllowedAttributes(LICENCE_ATTRIBUTES);
 				rowmap.put(LicencepoolEntry.ID_SERVICE_KEY, licensePoolId);
 				rowmap.put(PRODUCT_ID_KEY, productId);
 				add(rowmap);

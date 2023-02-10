@@ -318,7 +318,7 @@ public class Configed {
 
 		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
 
-		UncaughtExceptionHandlerLocalized errorHandler = new UncaughtExceptionHandlerLocalized();
+		UncaughtConfigedExceptionHandlerLocalized errorHandler = new UncaughtConfigedExceptionHandlerLocalized();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
 		Logging.debug("starting " + getClass().getName());

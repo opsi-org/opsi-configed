@@ -13,13 +13,15 @@ import de.uib.configed.gui.ssh.SSHPackageUpdaterDialog;
 import de.uib.utilities.logging.Logging;
 
 public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParameter {
+
+	private static final int PRIORITY = 105;
+
 	private String command;
 	private String baseName = "opsi-package-updater";
 	protected FGeneralDialog dialog = null;
-	public boolean needSudo = false;
+	protected boolean needSudo = false;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
-	private int priority = 105;
 
 	private String action = " list --repos";
 	private String repo = "";
@@ -38,6 +40,10 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		actionhash.put(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.update"), "update");
 	}
 
+	public void setNeedSudo(boolean needSudo) {
+		this.needSudo = needSudo;
+	}
+
 	@Override
 	public String getSecureInfoInCommand() {
 		return "";
@@ -45,10 +51,11 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
-		else
+		} else {
 			return getCommand();
+		}
 	}
 
 	@Override
@@ -96,9 +103,12 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 			repo = " ";
 		}
 		setCommand(baseName + verbosity + repo + action);
-		if (needSudo() && !action.equals("list"))
+		if (needSudo() && !action.equals("list")) {
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
-		return command + " 2>&1"; // the output redirection semms not to produce a jsch input
+		}
+
+		// the output redirection semms not to produce a jsch input
+		return command + " 2>&1";
 	}
 
 	/**
@@ -123,7 +133,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public int getPriority() {
-		return priority;
+		return PRIORITY;
 	}
 
 	@Override
@@ -141,8 +151,9 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 		if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
 				|| main.getOpsiVersion().compareTo("4.1") < 0) {
 			Logging.error(this, Configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
-		} else
+		} else {
 			dialog = new SSHPackageUpdaterDialog();
+		}
 
 	}
 
@@ -162,12 +173,14 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	public void setVerbosity(int vSum) {
 		StringBuilder v = new StringBuilder();
-		for (int i = 0; i < vSum; i++)
+		for (int i = 0; i < vSum; i++) {
 			v.append("v");
+		}
 
 		verbosity = " -" + v + " ";
-		if (vSum == 0)
+		if (vSum == 0) {
 			verbosity = "";
+		}
 	}
 
 	public void setRepos(Map<String, String> r) {
@@ -175,10 +188,11 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	}
 
 	public void setRepo(String r) {
-		if (r == null)
+		if (r == null) {
 			repo = " ";
-		else
+		} else {
 			repo = " --repo " + r + " ";
+		}
 	}
 
 	public Map<String, String> getRepos() {
@@ -186,10 +200,11 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	}
 
 	public void setAction(String a) {
-		if (actionlist.contains(a))
+		if (actionlist.contains(a)) {
 			action = a;
-		else
+		} else {
 			action = "";
+		}
 	}
 
 	public String getAction(String text) {
