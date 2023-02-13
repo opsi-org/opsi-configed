@@ -18,6 +18,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,7 +39,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
-import utils.Base64OutputStream;
 
 /*  Copyright (c) 2006-2016, 2021 uib.de
  
@@ -196,9 +196,13 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	}
 
 	private void setGeneralRequestProperties(HttpURLConnection connection) {
-		String authorization = Base64OutputStream.encode(username + ":" + password);
+
+		String authorization = Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
+
 		connection.setRequestProperty("Authorization", "Basic " + authorization);
-		connection.setRequestProperty("X-opsi-session-lifetime", "900"); // has to be value between 1 and 43300 [sec]
+
+		// has to be value between 1 and 43300 [sec]
+		connection.setRequestProperty("X-opsi-session-lifetime", "900");
 
 		if (lz4Transmission) {
 			connection.setRequestProperty("Accept-Encoding", "lz4");
