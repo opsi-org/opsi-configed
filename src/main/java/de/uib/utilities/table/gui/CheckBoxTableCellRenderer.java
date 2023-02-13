@@ -16,10 +16,11 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 
 	public CheckBoxTableCellRenderer() {
 		super();
-		setOpaque(true);
-		setBorderPainted(true);
-		setHorizontalAlignment(SwingConstants.CENTER);
-		setVerticalAlignment(SwingConstants.CENTER);
+
+		super.setOpaque(true);
+		super.setBorderPainted(true);
+		super.setHorizontalAlignment(SwingConstants.CENTER);
+		super.setVerticalAlignment(SwingConstants.CENTER);
 	}
 
 	@Override

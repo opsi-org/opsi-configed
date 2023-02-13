@@ -26,7 +26,7 @@ public class XTree extends JTree {
 		init();
 	}
 
-	protected void init() {
+	private void init() {
 
 		MouseMotionListener ml = new MouseAdapter() {
 			Cursor infoCursor = new Cursor(Cursor.HAND_CURSOR);

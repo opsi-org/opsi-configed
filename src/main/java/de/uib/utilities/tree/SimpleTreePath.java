@@ -19,7 +19,7 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 	public SimpleTreePath(Object[] path) {
 		super();
 		for (int i = 0; i < path.length; i++) {
-			add(path[i].toString());
+			super.add(path[i].toString());
 		}
 	}
 
@@ -53,8 +53,9 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 	public static String dottedString(int startNodeNo, TreePath path) {
 		Object[] parts = path.getPath();
 
-		if (parts.length <= startNodeNo)
+		if (parts.length <= startNodeNo) {
 			return "";
+		}
 
 		StringBuilder res = new StringBuilder(parts[startNodeNo].toString());
 
@@ -76,11 +77,13 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 			i++;
 		}
 
-		if (result == 0 && (size() < o.size()))
+		if (result == 0 && (size() < o.size())) {
 			result = -1;
+		}
 
-		if (result == 0 && (size() > o.size()))
+		if (result == 0 && (size() > o.size())) {
 			result = +1;
+		}
 
 		return result;
 	}

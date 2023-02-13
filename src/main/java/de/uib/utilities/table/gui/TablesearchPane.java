@@ -333,7 +333,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkAllColumns.setToolTipText(s);
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		navPane = new AbstractNavigationPanel() {

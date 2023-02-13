@@ -20,18 +20,18 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	public SimpleIconNodeRenderer() {
 		super();
 
-		setOpaque(true);
+		super.setOpaque(true);
 
 		standard = Globals.defaultFontBig;
 
 		emphasized = Globals.defaultFontStandardBold;
 
-		setFont(standard);
-		setForeground(Globals.lightBlack);
-		setTextSelectionColor(Globals.lightBlack);
-		setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
-		setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
-		setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
+		super.setFont(standard);
+		super.setForeground(Globals.lightBlack);
+		super.setTextSelectionColor(Globals.lightBlack);
+		super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
+		super.setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
+		super.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
 	}
 
 	@Override
@@ -59,8 +59,8 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 				setFont(standard);
 			}
 
-			if (sel && row != 0) // assuming that row 0 contains sort of header
-			{
+			// assuming that row 0 contains sort of header
+			if (sel && row != 0) {
 				setBackground(Globals.BACKGROUND_COLOR_7);
 
 			} else {
@@ -81,8 +81,9 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 
 			}
 
-			if (!sel)
+			if (!sel) {
 				setIcon(node.getNonSelectedIcon());
+			}
 
 			setComponentOrientation(tree.getComponentOrientation());
 			return this;

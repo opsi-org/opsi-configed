@@ -51,6 +51,7 @@ public class MapSource implements TableSource
 		Logging.info(this, "constructed with classes " + classNames);
 		this.columnNames = columnNames;
 		this.classNames = classNames;
+
 		setRowCounting(rowCounting);
 		if (rowCounting) {
 			Logging.info(this, "completed to cols " + columnNames);
