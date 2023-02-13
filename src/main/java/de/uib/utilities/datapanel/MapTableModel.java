@@ -32,8 +32,11 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	protected Collection<Map<String, Object>> storeData;
 	protected boolean datachanged;
 
-	private List<Object> showOnlyValues; // values set cannot be set for any key
-	private java.util.Set<String> keysOfReadOnlyEntries; // keys which identify readonly entries
+	// values set cannot be set for any key
+	private List<Object> showOnlyValues;
+
+	// keys which identify readonly entries
+	private java.util.Set<String> keysOfReadOnlyEntries;
 
 	private Function<String, Boolean> editDenier;
 
@@ -44,9 +47,14 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 	protected Map<String, ListCellOptions> optionsMap;
 
-	private SortedMap<String, Object> data; // shall be sorted
-	private Map<String, Object> oridata; // we keep the original data for writing back changed values
-	private Map<String, Object> defaultData; // the shadow default values of all data
+	// shall be sorted
+	private SortedMap<String, Object> data;
+
+	// we keep the original data for writing back changed values
+	private Map<String, Object> oridata;
+
+	// the shadow default values of all data
+	private Map<String, Object> defaultData;
 	private List<String> keys;
 	private String modifiedKey;
 	private int rowModiTime;

@@ -79,7 +79,9 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public static final Boolean DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT = false;
 
 	public static final String KEY_SEARCH_BY_SQL = "configed.search_by_sql";
-	public static final Boolean DEFAULTVALUE_SEARCH_BY_SQL = true; // combines with question if mysql backend is working
+
+	// combines with question if mysql backend is working
+	public static final Boolean DEFAULTVALUE_SEARCH_BY_SQL = true;
 
 	public static final String KEY_DISABLED_CLIENT_ACTIONS = "configed.host_actions_disabled";
 

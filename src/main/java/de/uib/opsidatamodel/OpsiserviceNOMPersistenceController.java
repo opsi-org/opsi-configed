@@ -4572,8 +4572,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			Map<String, Object> retrievedConfig = ((RetrievedMap) properties).getRetrieved();
 			Object oldValue = null;
 
-			if (retrievedConfig != null)
+			if (retrievedConfig != null) {
 				oldValue = retrievedConfig.get(key);
+			}
 
 			if (newValue != oldValue) {
 				if (newValue == de.uib.utilities.datapanel.MapTableModel.nullLIST) {
@@ -4581,8 +4582,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					deleteCollection.add(AbstractExecutioner.jsonMap(state));
 
 					// we hope that the update works and directly update the retrievedConfig
-					if (retrievedConfig != null)
+					if (retrievedConfig != null) {
 						retrievedConfig.remove(key);
+					}
 				}
 
 				else {

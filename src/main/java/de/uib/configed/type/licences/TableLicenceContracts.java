@@ -35,7 +35,7 @@ public class TableLicenceContracts extends Relation {
 
 	public static final String TYPE_KEY = "type";
 
-	public static final List<String> DB_ATTRIBUTES;
+	private static final List<String> DB_ATTRIBUTES;
 
 	static {
 		DB_ATTRIBUTES = new LinkedList<>();
@@ -48,7 +48,7 @@ public class TableLicenceContracts extends Relation {
 		DB_ATTRIBUTES.add(DESCRIPTION_KEY);
 	}
 
-	public static final List<String> INTERFACED_ATTRIBUTES;
+	private static final List<String> INTERFACED_ATTRIBUTES;
 	static {
 		INTERFACED_ATTRIBUTES = new LinkedList<>();
 		INTERFACED_ATTRIBUTES.add(ID_DB_KEY);

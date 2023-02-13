@@ -52,14 +52,14 @@ public class UserConfig {
 	public static final String HAS_ROLE_ATTRIBUT = "has_role";
 	public static final String MODIFICATION_INFO_KEY = "modified";
 
-	public static final List<Object> EMPTY_LIST = new ArrayList<>();
-	public static final List<Object> BOOLEAN_POSSIBLE_VALUES = new ArrayList<>();
+	private static final List<Object> EMPTY_LIST = new ArrayList<>();
+	private static final List<Object> BOOLEAN_POSSIBLE_VALUES = new ArrayList<>();
 	static {
 		BOOLEAN_POSSIBLE_VALUES.add(true);
 		BOOLEAN_POSSIBLE_VALUES.add(false);
 	}
 
-	public static final List<Object> ZERO_TIME;
+	private static final List<Object> ZERO_TIME;
 	static {
 		ZERO_TIME = new ArrayList<>();
 		ZERO_TIME.add("0000-00-00 00:00:00");
@@ -218,18 +218,21 @@ public class UserConfig {
 	}
 
 	public List<Object> getValues(String key) {
-		if (valuesMap.get(key) == null)
+		if (valuesMap.get(key) == null) {
 			return new ArrayList<>();
+		}
 
 		return valuesMap.get(key);
 	}
 
 	public List<Object> getPossibleValues(String key) {
-		if (hasBooleanConfig(key))
+		if (hasBooleanConfig(key)) {
 			return BOOLEAN_POSSIBLE_VALUES;
+		}
 
-		if (possibleValuesMap.get(key) == null)
+		if (possibleValuesMap.get(key) == null) {
 			return new ArrayList<>();
+		}
 
 		return possibleValuesMap.get(key);
 	}
@@ -243,8 +246,10 @@ public class UserConfig {
 	}
 
 	public UserConfig getPrototype() {
-		if (prototypeConfig == null)
+		if (prototypeConfig == null) {
 			return archeoPrototypeConfig;
+		}
+
 		return prototypeConfig;
 	}
 
@@ -255,8 +260,9 @@ public class UserConfig {
 	private static UserConfig currentConfig;
 
 	public static UserConfig getCurrentUserConfig() {
-		if (currentConfig == null)
+		if (currentConfig == null) {
 			return archeoPrototypeConfig;
+		}
 
 		return currentConfig;
 	}

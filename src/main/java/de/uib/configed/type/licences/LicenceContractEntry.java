@@ -12,15 +12,16 @@ public class LicenceContractEntry extends StringValuedRelationElement {
 
 	public LicenceContractEntry(Map<String, Object> m) {
 		super();
-		setAllowedAttributes(TableLicenceContracts.ALLOWED_ATTRIBUTES);
+		super.setAllowedAttributes(TableLicenceContracts.ALLOWED_ATTRIBUTES);
 		produceFrom(m);
 	}
 
 	private String removeTime(String datetime) {
 		if (datetime != null && datetime.length() > 0) {
 			int idx = datetime.indexOf(" ");
-			if (idx > -1)
+			if (idx > -1) {
 				return datetime.substring(0, idx);
+			}
 		}
 
 		return datetime;

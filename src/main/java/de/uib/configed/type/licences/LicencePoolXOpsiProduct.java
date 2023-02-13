@@ -21,14 +21,14 @@ public class LicencePoolXOpsiProduct extends Relation {
 	public static final String ID_KEY = "id";
 	public static final String PRODUCTS_KEY = "productIds";
 
-	public static final List<String> LICENCE_ATTRIBUTES;
+	private static final List<String> LICENCE_ATTRIBUTES;
 	static {
 		LICENCE_ATTRIBUTES = new LinkedList<>();
 		LICENCE_ATTRIBUTES.add(LICENCE_POOL_KEY);
 		LICENCE_ATTRIBUTES.add(PRODUCT_ID_KEY);
 	}
 
-	public static final List<String> SERVICE_ATTRIBUTES;
+	private static final List<String> SERVICE_ATTRIBUTES;
 	static {
 		SERVICE_ATTRIBUTES = new LinkedList<>();
 		SERVICE_ATTRIBUTES.add(ID_KEY);

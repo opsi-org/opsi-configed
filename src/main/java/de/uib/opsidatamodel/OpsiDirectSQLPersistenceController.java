@@ -128,11 +128,11 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 				Map<String, String> rowMap = new HashMap<>();
 
 				for (String col : ProductState.DB_COLUMN_NAMES) {
-					if (rs.getString(col) == null)
+					if (rs.getString(col) == null) {
 						rowMap.put(col, "");
-
-					else
+					} else {
 						rowMap.put(col, rs.getString(col));
+					}
 				}
 
 				states1Client.add(new ProductState(rowMap, true));

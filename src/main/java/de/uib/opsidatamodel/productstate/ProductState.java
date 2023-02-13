@@ -14,8 +14,10 @@ public class ProductState extends HashMap<String, String> {
 	private static ProductState defaultProductState;
 
 	public static ProductState getDefaultProductState() {
-		if (defaultProductState == null)
+		if (defaultProductState == null) {
 			defaultProductState = new ProductState(null);
+		}
+
 		return defaultProductState;
 	}
 
@@ -148,8 +150,9 @@ public class ProductState extends HashMap<String, String> {
 			readRetrieved();
 		}
 
-		if (transform)
+		if (transform) {
 			setTransforms();
+		}
 	}
 
 	public ProductState(Map<String, String> retrievedState) {
@@ -180,10 +183,13 @@ public class ProductState extends HashMap<String, String> {
 				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
 				installationInfo.append(": ");
 			}
+
 			installationInfo.append(get(KEY_ACTION_PROGRESS));
 			installationInfo.append(" ( ");
-			if (lastAction.getVal() > 0)
+			if (lastAction.getVal() > 0) {
 				installationInfo.append(ActionRequest.getDisplayLabel(lastAction.getVal()));
+			}
+
 			installationInfo.append(" ) ");
 
 			if (result.getVal() == ActionResult.FAILED) {
@@ -210,9 +216,10 @@ public class ProductState extends HashMap<String, String> {
 
 		String versionInfo = "";
 
-		if (!get(KEY_PRODUCT_VERSION).equals(""))
+		if (!get(KEY_PRODUCT_VERSION).equals("")) {
 			versionInfo = get(KEY_PRODUCT_VERSION) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
 					+ get(KEY_PACKAGE_VERSION);
+		}
 
 		put(KEY_VERSION_INFO, versionInfo);
 
@@ -248,8 +255,9 @@ public class ProductState extends HashMap<String, String> {
 			return "";
 		}
 
-		if (retrieved.get(key) == null || (retrieved.get(key) instanceof String && retrieved.get(key).equals("null")))
+		if (retrieved.get(key) == null || (retrieved.get(key) instanceof String && retrieved.get(key).equals("null"))) {
 			return "";
+		}
 
 		return retrieved.get(key);
 

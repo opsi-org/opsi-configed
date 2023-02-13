@@ -198,7 +198,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PDF = new int[] { POPUP_RELOAD, POPUP_PDF, POPUP_SORT_AGAIN };
-	public static final int[] POPUPS_MINIMAL = new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN
+	protected static final int[] POPUPS_MINIMAL = new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN
 
 	};
 

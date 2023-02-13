@@ -79,7 +79,7 @@ public class UserOpsipermission extends UserConfigModule {
 	}
 
 	public static final Set<String> LIST_KEYS;
-	public static final Map<String, String> CORRESPONDENCE_TO_LIST_KEYS;
+	private static final Map<String, String> CORRESPONDENCE_TO_LIST_KEYS;
 	static {
 		CORRESPONDENCE_TO_LIST_KEYS = new HashMap<>();
 		LIST_KEYS = new HashSet<>();

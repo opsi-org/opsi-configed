@@ -55,10 +55,10 @@ public class PanelProductProperties extends JSplitPane
 		this.mainController = mainController;
 		init();
 
-		setResizeWeight(0.7);
+		super.setResizeWeight(0.7);
 	}
 
-	protected void init() {
+	private void init() {
 
 		depotsOfPackage = new ArrayList<>();
 
@@ -125,8 +125,9 @@ public class PanelProductProperties extends JSplitPane
 
 			Logging.debug(this, "valueChanged in paneProducts " + e);
 
-			if (e.getValueIsAdjusting())
+			if (e.getValueIsAdjusting()) {
 				return;
+			}
 
 			ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 			lsm.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -140,8 +141,9 @@ public class PanelProductProperties extends JSplitPane
 			if (lsm.isSelectionEmpty() || lsm.getMinSelectionIndex() != lsm.getMaxSelectionIndex()) {
 				infoPane.clearEditing();
 				infoPane.setGrey(true);
-			} else
+			} else {
 				infoPane.setGrey(false);
+			}
 
 			// otherweise selectedRowChanged() works
 		}
@@ -197,18 +199,19 @@ public class PanelProductProperties extends JSplitPane
 					} catch (Exception ex) {
 						retrieval = false;
 					}
-
-					if (retrieval // no exception
-							&& (depotsOfPackageAsRetrieved == null))
+					// no exception
+					if (retrieval && (depotsOfPackageAsRetrieved == null)) {
 						retrieval = false;
+					}
 
 					depotsOfPackage = new LinkedList<>();
 
 					if (retrieval) {
 						for (String depot : mainController.getPersistenceController().getHostInfoCollections()
 								.getDepots().keySet()) {
-							if (depotsOfPackageAsRetrieved.indexOf(depot) > -1)
+							if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {
 								depotsOfPackage.add(depot);
+							}
 						}
 					}
 
