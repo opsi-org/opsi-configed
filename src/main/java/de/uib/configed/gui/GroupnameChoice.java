@@ -36,13 +36,10 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		super(null, extraTitle + " (" + Globals.APPNAME + ")", true, new String[] {
 				Configed.getResourceValue("FGeneralDialog.cancel"), Configed.getResourceValue("FGeneralDialog.ok") },
 				300, 200);
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		try // in an applet context this is not possible without a security problem
-		{
-			setAlwaysOnTop(true);
-		} catch (Exception ex) {
-			toFront();
-		}
+
+		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+		setAlwaysOnTop(true);
 
 		dataList = v;
 
@@ -61,13 +58,15 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 
 		groupnameField.getDocument().addDocumentListener(this);
 
-		if (selIndex > -1 && selIndex < v.size())
+		if (selIndex > -1 && selIndex < v.size()) {
 			groups.setSelectedIndex(selIndex);
-		else
+		} else {
 			selIndex = -1;
+		}
 
-		if (selIndex == -1)
+		if (selIndex == -1) {
 			groupnameField.setText("");
+		}
 
 		JLabel labelExistingGroups = new JLabel(Configed.getResourceValue("GroupnameChoice.existingGroups") + ":");
 		labelExistingGroups.setFont(Globals.defaultFontBig);
@@ -81,8 +80,8 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 
 		scrollpane.getViewport().add(groups);
 
-		pack();
-		setVisible(true);
+		super.pack();
+		super.setVisible(true);
 	}
 
 	public String getResultString() {
@@ -135,8 +134,9 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 	public void valueChanged(ListSelectionEvent e) {
 		selIndex = groups.getSelectedIndex();
 
-		if (selIndex == -1)
+		if (selIndex == -1) {
 			return;
+		}
 
 		if (groupnameField.getText() == null || !groupnameField.getText().equals(groups.getSelectedValue())) {
 			groupnameField.setText((String) groups.getSelectedValue());

@@ -67,7 +67,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 			String disabled) {
 		super();
 
-		setOpaque(false);
+		super.setOpaque(false);
 
 		setDisplay(desc, inactive, over, active, attentionImage, disabled);
 		label = new JLabel(iconInactive, SwingConstants.CENTER);
@@ -78,9 +78,9 @@ public class IconAsButton extends JPanel implements MouseListener {
 		mouseOver = false;
 		actionListeners = new ArrayList<>();
 
-		setLayout(new BorderLayout());
+		super.setLayout(new BorderLayout());
 		label.addMouseListener(this);
-		add(label);
+		super.add(label);
 
 	}
 
@@ -96,15 +96,17 @@ public class IconAsButton extends JPanel implements MouseListener {
 		setDisplay(desc, inactive, over, active, null, disabled);
 	}
 
-	public void setDisplay(String desc, String inactive, String over, String active, String attentionImage,
+	private void setDisplay(String desc, String inactive, String over, String active, String attentionImage,
 			String disabled) {
 		description = desc;
 		tooltipActive = desc;
 		tooltipInactive = desc;
 		imageURLActive = active;
 		imageURLAttention = attentionImage;
-		if (imageURLAttention == null || imageURLAttention.equals(""))
+		if (imageURLAttention == null || imageURLAttention.equals("")) {
 			imageURLAttention = imageURLActive;
+		}
+
 		imageURLInactive = inactive;
 		imageURLOver = over;
 		imageURLDisabled = disabled;
@@ -122,8 +124,9 @@ public class IconAsButton extends JPanel implements MouseListener {
 			iconDisabled = Globals.createImageIcon(imageURLDisabled, description);
 		}
 
-		if (label != null)
+		if (label != null) {
 			label.setToolTipText(desc);
+		}
 
 	}
 
@@ -146,8 +149,9 @@ public class IconAsButton extends JPanel implements MouseListener {
 		enabled = b;
 		super.setEnabled(enabled);
 		setIcon();
-		if (enabled)
+		if (enabled) {
 			label.setEnabled(true);
+		}
 
 	}
 
@@ -195,10 +199,11 @@ public class IconAsButton extends JPanel implements MouseListener {
 		mouseOver = false;
 		setIcon();
 		if (tooltipActive != null && tooltipInactive != null) {
-			if (a)
+			if (a) {
 				label.setToolTipText(tooltipActive);
-			else
+			} else {
 				label.setToolTipText(tooltipInactive);
+			}
 		}
 	}
 

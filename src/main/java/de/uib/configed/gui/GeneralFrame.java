@@ -46,9 +46,10 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 	public GeneralFrame(Frame owner, String title, boolean modal) {
 		super(owner, modal);
-		setTitle(title);
-		setFont(Globals.defaultFont);
-		setIconImage(Globals.mainIcon);
+		super.setTitle(title);
+		super.setFont(Globals.defaultFont);
+		super.setIconImage(Globals.mainIcon);
+
 		initComponents();
 	}
 
@@ -127,10 +128,11 @@ public class GeneralFrame extends JDialog implements ActionListener {
 		public void setDirection(boolean vanishing) {
 			this.vanishing = vanishing;
 
-			if (vanishing)
+			if (vanishing) {
 				opacity = 1f;
-			else
+			} else {
 				opacity = 0f;
+			}
 		}
 
 		public void setStep(float f) {

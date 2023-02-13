@@ -18,7 +18,7 @@ public class XList extends JList // org.jdesktop.swingx.JXList
 		configure();
 	}
 
-	protected void configure() {
+	private void configure() {
 		setSelectionBackground(Globals.nimbusSelectionBackground);
 		setBackground(Globals.nimbusBackground);
 	}

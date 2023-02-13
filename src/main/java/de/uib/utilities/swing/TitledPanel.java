@@ -17,8 +17,7 @@ public class TitledPanel extends JPanel {
 	public TitledPanel(String title1, String title2) {
 		label1 = new JLabel();
 		label2 = new JLabel();
-		initGui();
-		setTitle(title1, title2);
+		initGui(title1, title2);
 	}
 
 	public void setTitle(String s1, String s2) {
@@ -27,7 +26,7 @@ public class TitledPanel extends JPanel {
 		label2.setVisible(s2 != null);
 	}
 
-	protected void initGui() {
+	private void initGui(String title1, String title2) {
 		setBackground(Globals.BACKGROUND_COLOR_7);
 
 		label1.setFont(Globals.defaultFontBig);
@@ -56,5 +55,6 @@ public class TitledPanel extends JPanel {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)));
 
+		setTitle(title1, title2);
 	}
 }

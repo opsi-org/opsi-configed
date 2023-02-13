@@ -35,11 +35,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -140,18 +137,18 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		public AdaptingSlider(int min, int max, int value) {
 			super(min, max, value);
-			addChangeListener(this);
+			super.addChangeListener(this);
 
 			this.min = min;
 			this.max = max;
 			this.value = value;
 
-			setFont(Globals.defaultFont);
+			super.setFont(Globals.defaultFont);
 
 			produceLabels(max);
 
-			setPaintLabels(true);
-			setSnapToTicks(true);
+			super.setPaintLabels(true);
+			super.setSnapToTicks(true);
 
 		}
 
@@ -162,7 +159,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			Logging.info(this, "min, max, value " + min + ", " + max + ", " + value + " -- ChangeEvent " + e);
 		}
 
-		public void produceLabels(int upTo) {
+		private void produceLabels(int upTo) {
 
 			Map<Integer, JLabel> levelMap = new LinkedHashMap<>();
 
@@ -170,8 +167,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				levelMap.put(i, new JLabel("" + i));
 			}
 
-			for (int i = upTo + 1; i <= max; i++)
+			for (int i = upTo + 1; i <= max; i++) {
 				levelMap.put(i, new JLabel(" . "));
+			}
 
 			try {
 				setLabelTable(new Hashtable<>(levelMap));
@@ -263,10 +261,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			Logging.warning(this, "savedMaxShownLogLevel could not be read, value "
 					+ Configed.savedStates.savedMaxShownLogLevel.deserialize());
 		}
-		if (savedMaxShownLogLevel > 0)
+		if (savedMaxShownLogLevel > 0) {
 			result = savedMaxShownLogLevel;
-		else
+		} else {
 			result = DEFAULT_MAX_SHOW_LEVEL;
+		}
 
 		Logging.info(this, "produceInitialMaxShowLevel " + result);
 
@@ -331,8 +330,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		highlighter = new UnderlineHighlighter(null);
 		jTextPane.setHighlighter(highlighter);
 
-		if (defaultText != null)
+		if (defaultText != null) {
 			jTextPane.setText(defaultText);
+		}
 
 		jTextPane.setOpaque(true);
 		jTextPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
@@ -345,7 +345,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpane.getVerticalScrollBar().setUnitIncrement(20);
 		scrollpane.getViewport().add(jTextPanel);
-		add(scrollpane, BorderLayout.CENTER);
+		super.add(scrollpane, BorderLayout.CENTER);
 
 		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
 		labelSearch.setFont(Globals.defaultFont);
@@ -383,25 +383,14 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		sliderLevel = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
 
-		JSpinner spinnerMinLevel = new JSpinner(new SpinnerNumberModel(valL, minL, maxL, 1));
-
-		spinnerMinLevel.setVisible(false); // to develop
-		JComponent editor = spinnerMinLevel.getEditor();
-		if (editor instanceof JSpinner.DefaultEditor) {
-			JTextField field = ((JSpinner.DefaultEditor) editor).getTextField();
-			field.setForeground(Globals.BACKGROUND_COLOR_7);
-			field.setBackground(Globals.BACKGROUND_COLOR_7);
-			Logging.info(this, "spinnerMinLevel set textfield cols 0");
-
-		}
-
 		sliderListener = new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 
 				Logging.debug(this, "change event from sliderLevel, " + sliderLevel.getValue());
-				if (sliderLevel.getValueIsAdjusting())
+				if (sliderLevel.getValueIsAdjusting()) {
 					return;
+				}
 
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -431,11 +420,13 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 				Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
 
-				if (newIndex > LEVELS.length - 1)
+				if (newIndex > LEVELS.length - 1) {
 					newIndex = LEVELS.length - 1;
+				}
 
-				else if (newIndex < 0)
+				else if (newIndex < 0) {
 					newIndex = 0;
+				}
 
 				Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
 
@@ -506,8 +497,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						.addComponent(labelLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
-						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
 						.addComponent(sliderLevel, SLIDER_W, SLIDER_W, SLIDER_W)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)));
 
@@ -528,8 +517,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 								Globals.LINE_HEIGHT)
 						.addComponent(comboType, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 						.addComponent(labelLevel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(spinnerMinLevel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
 						.addComponent(sliderLevel, SLIDER_H, SLIDER_H, SLIDER_H)
 
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));

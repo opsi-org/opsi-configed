@@ -102,6 +102,7 @@ import de.uib.configed.HostsStatusInfo;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
 import de.uib.configed.gui.hwinfopage.ControllerHWinfoMultiClients;
+import de.uib.configed.gui.hwinfopage.PanelHWInfo;
 import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
@@ -171,192 +172,181 @@ public class MainFrame extends JFrame
 
 	private Map<String, List<JMenuItem>> menuItemsHost;
 
-	JMenuBar jMenuBar1 = new JMenuBar();
+	private JMenuBar jMenuBar1 = new JMenuBar();
 
-	JMenu jMenuFile;
-	JMenuItem jMenuFileExit;
-	JMenuItem jMenuFileSaveConfigurations;
-	JMenuItem jMenuFileReload;
-	JMenuItem jMenuFileLanguage;
+	private JMenu jMenuFile;
+	private JMenuItem jMenuFileExit;
+	private JMenuItem jMenuFileSaveConfigurations;
+	private JMenuItem jMenuFileReload;
+	private JMenuItem jMenuFileLanguage;
 
-	JMenu jMenuClients = new JMenu();
+	private JMenu jMenuClients = new JMenu();
 
-	JMenu jMenuWakeOnLan;
-	JMenuItem jMenuDirectWOL = new JMenuItem();
-	JMenuItem jMenuNewScheduledWOL = new JMenuItem();
+	private JMenu jMenuWakeOnLan;
+	private JMenuItem jMenuDirectWOL = new JMenuItem();
+	private JMenuItem jMenuNewScheduledWOL = new JMenuItem();
 
-	JMenuItem jMenuShowScheduledWOL = new JMenuItem();
-	JMenuItem jMenuOpsiClientdEvent;
-	JMenuItem jMenuShowPopupMessage = new JMenuItem();
-	JMenuItem jMenuRequestSessionInfo = new JMenuItem();
-	JMenuItem jMenuShutdownClient = new JMenuItem();
-	JMenuItem jMenuRebootClient = new JMenuItem();
-	JMenuItem jMenuChangeDepot = new JMenuItem();
-	JMenuItem jMenuChangeClientID = new JMenuItem();
+	private JMenuItem jMenuShowScheduledWOL = new JMenuItem();
+	private JMenuItem jMenuOpsiClientdEvent;
+	private JMenuItem jMenuShowPopupMessage = new JMenuItem();
+	private JMenuItem jMenuRequestSessionInfo = new JMenuItem();
+	private JMenuItem jMenuShutdownClient = new JMenuItem();
+	private JMenuItem jMenuRebootClient = new JMenuItem();
+	private JMenuItem jMenuChangeDepot = new JMenuItem();
+	private JMenuItem jMenuChangeClientID = new JMenuItem();
 
-	JMenuItem jMenuAddClient = new JMenuItem();
-	JMenuItem jMenuDeleteClient = new JMenuItem();
+	private JMenuItem jMenuAddClient = new JMenuItem();
+	private JMenuItem jMenuDeleteClient = new JMenuItem();
 
-	JMenu jMenuResetProducts = new JMenu();
+	private JMenu jMenuResetProducts = new JMenu();
 
-	JMenuItem jMenuFreeLicences = new JMenuItem();
-	JMenuItem jMenuDeletePackageCaches = new JMenuItem();
+	private JMenuItem jMenuFreeLicences = new JMenuItem();
+	private JMenuItem jMenuDeletePackageCaches = new JMenuItem();
 
-	JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem();
-	JMenuItem jMenuResetProductOnClient = new JMenuItem();
-	JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem();
-	JMenuItem jMenuResetLocalbootProductOnClient = new JMenuItem();
-	JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem();
-	JMenuItem jMenuResetNetbootProductOnClient = new JMenuItem();
+	private JMenuItem jMenuResetProductOnClientWithStates = new JMenuItem();
+	private JMenuItem jMenuResetProductOnClient = new JMenuItem();
+	private JMenuItem jMenuResetLocalbootProductOnClientWithStates = new JMenuItem();
+	private JMenuItem jMenuResetLocalbootProductOnClient = new JMenuItem();
+	private JMenuItem jMenuResetNetbootProductOnClientWithStates = new JMenuItem();
+	private JMenuItem jMenuResetNetbootProductOnClient = new JMenuItem();
 
-	JMenu jMenuServer = new JMenu();
+	private JMenu jMenuServer = new JMenu();
 
-	JMenuItem jMenuSSHConfig = new JMenuItem();
-	JMenuItem jMenuSSHConnection = new JMenuItem();
-	JMenuItem jMenuSSHCommandControl = new JMenuItem();
+	private JMenuItem jMenuSSHConfig = new JMenuItem();
+	private JMenuItem jMenuSSHConnection = new JMenuItem();
+	private JMenuItem jMenuSSHCommandControl = new JMenuItem();
 
-	LinkedHashMap<String, Integer> labelledDelays;
+	private LinkedHashMap<String, Integer> labelledDelays;
 
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
 
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowCreatedColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItemShowWANactiveColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItemShowInventoryNumberColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItemShowHardwareAddressColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItemShowSessionInfoColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItemShowUefiBoot = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItemShowInstallByShutdown = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem();
-	JMenuItem jMenuRemoteControl = new JMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItemShowWANactiveColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItemShowInventoryNumberColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItemShowHardwareAddressColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItemShowSessionInfoColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItemShowUefiBoot = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItemShowInstallByShutdown = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItemShowDepotColumn = new JCheckBoxMenuItem();
+	private JMenuItem jMenuRemoteControl = new JMenuItem();
 
-	JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuAddClient,
+	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuAddClient,
 			jMenuDeleteClient, jMenuFreeLicences, jMenuChangeDepot, jMenuChangeClientID, };
 
-	JMenu jMenuClientselection = new JMenu();
-	JMenuItem jMenuClientselectionGetGroup = new JMenuItem();
-	JMenuItem jMenuClientselectionGetSavedSearch = new JMenuItem();
-	JMenuItem jMenuClientselectionProductNotUptodate = new JMenuItem();
-	JMenuItem jMenuClientselectionProductNotUptodateOrBroken = new JMenuItem();
-	JMenuItem jMenuClientselectionFailedProduct = new JMenuItem();
-	JMenu jMenuClientselectionFailedInPeriod = new JMenu();
+	private JMenu jMenuClientselection = new JMenu();
+	private JMenuItem jMenuClientselectionGetGroup = new JMenuItem();
+	private JMenuItem jMenuClientselectionGetSavedSearch = new JMenuItem();
+	private JMenuItem jMenuClientselectionProductNotUptodate = new JMenuItem();
+	private JMenuItem jMenuClientselectionProductNotUptodateOrBroken = new JMenuItem();
+	private JMenuItem jMenuClientselectionFailedProduct = new JMenuItem();
+	private JMenu jMenuClientselectionFailedInPeriod = new JMenu();
 
-	JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jMenuClientselectionToggleClientFilter = new JCheckBoxMenuItem();
 
-	JMenu jMenuFrames = new JMenu();
-	JMenuItem jMenuFrameWorkOnGroups = new JMenuItem();
-	JMenuItem jMenuFrameWorkOnProducts = new JMenuItem();
-	JMenuItem jMenuFrameDashboard = new JMenuItem();
-	JMenuItem jMenuFrameLicences = new JMenuItem();
-	JMenuItem jMenuFrameShowDialogs = new JMenuItem();
-	JMenuItem jMenuFrameTerminal = new JMenuItem();
+	private JMenu jMenuFrames = new JMenu();
+	private JMenuItem jMenuFrameWorkOnGroups = new JMenuItem();
+	private JMenuItem jMenuFrameWorkOnProducts = new JMenuItem();
+	private JMenuItem jMenuFrameDashboard = new JMenuItem();
+	private JMenuItem jMenuFrameLicences = new JMenuItem();
+	private JMenuItem jMenuFrameShowDialogs = new JMenuItem();
+	private JMenuItem jMenuFrameTerminal = new JMenuItem();
 
-	JMenu jMenuHelp = new JMenu();
-	JMenuItem jMenuHelpSupport = new JMenuItem();
-	JMenuItem jMenuHelpDoc = new JMenuItem();
-	JMenuItem jMenuHelpDocSpecial = new JMenuItem();
-	JMenuItem jMenuHelpForum = new JMenuItem();
-	JMenuItem jMenuHelpInternalConfiguration = new JMenuItem();
-	JMenuItem jMenuHelpAbout = new JMenuItem();
-	JMenuItem jMenuHelpOpsiVersion = new JMenuItem();
-	JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem();
-	JMenuItem jMenuHelpServerInfoPage = new JMenuItem();
-	JMenu jMenuHelpLoglevel = new JMenu();
-	JMenuItem jMenuHelpLogfileLocation = new JMenuItem();
+	private JMenu jMenuHelp = new JMenu();
+	private JMenuItem jMenuHelpSupport = new JMenuItem();
+	private JMenuItem jMenuHelpDoc = new JMenuItem();
+	private JMenuItem jMenuHelpForum = new JMenuItem();
+	private JMenuItem jMenuHelpInternalConfiguration = new JMenuItem();
+	private JMenuItem jMenuHelpAbout = new JMenuItem();
+	private JMenuItem jMenuHelpOpsiVersion = new JMenuItem();
+	private JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem();
+	private JMenuItem jMenuHelpServerInfoPage = new JMenuItem();
+	private JMenu jMenuHelpLoglevel = new JMenu();
+	private JMenuItem jMenuHelpLogfileLocation = new JMenuItem();
 
-	JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
+	private JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
 
-	JPopupMenu popupClients = new JPopupMenu();
+	private JPopupMenu popupClients = new JPopupMenu();
 
-	JMenu popupResetProducts = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
-	JMenuItemFormatted popupResetLocalbootProductOnClientWithStates = new JMenuItemFormatted();
-	JMenuItemFormatted popupResetLocalbootProductOnClient = new JMenuItemFormatted();
-	JMenuItemFormatted popupResetNetbootProductOnClientWithStates = new JMenuItemFormatted();
-	JMenuItemFormatted popupResetNetbootProductOnClient = new JMenuItemFormatted();
-	JMenuItemFormatted popupResetProductOnClientWithStates = new JMenuItemFormatted();
-	JMenuItemFormatted popupResetProductOnClient = new JMenuItemFormatted();
+	private JMenu popupResetProducts = new JMenu(Configed.getResourceValue("MainFrame.jMenuResetProducts"));
+	private JMenuItemFormatted popupResetLocalbootProductOnClientWithStates = new JMenuItemFormatted();
+	private JMenuItemFormatted popupResetLocalbootProductOnClient = new JMenuItemFormatted();
+	private JMenuItemFormatted popupResetNetbootProductOnClientWithStates = new JMenuItemFormatted();
+	private JMenuItemFormatted popupResetNetbootProductOnClient = new JMenuItemFormatted();
+	private JMenuItemFormatted popupResetProductOnClientWithStates = new JMenuItemFormatted();
+	private JMenuItemFormatted popupResetProductOnClient = new JMenuItemFormatted();
 
-	JMenuItemFormatted popupAddClient = new JMenuItemFormatted();
-	JMenuItemFormatted popupDeleteClient = new JMenuItemFormatted();
-	JMenuItemFormatted popupFreeLicences = new JMenuItemFormatted();
-	JMenuItemFormatted popupDeletePackageCaches = new JMenuItemFormatted();
-	JMenu popupWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
-	JMenuItemFormatted popupWakeOnLanDirect = new JMenuItemFormatted();
-	JMenuItemFormatted popupWakeOnLanScheduler = new JMenuItemFormatted();
+	private JMenuItemFormatted popupAddClient = new JMenuItemFormatted();
+	private JMenuItemFormatted popupDeleteClient = new JMenuItemFormatted();
+	private JMenuItemFormatted popupFreeLicences = new JMenuItemFormatted();
+	private JMenuItemFormatted popupDeletePackageCaches = new JMenuItemFormatted();
+	private JMenu popupWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
+	private JMenuItemFormatted popupWakeOnLanDirect = new JMenuItemFormatted();
+	private JMenuItemFormatted popupWakeOnLanScheduler = new JMenuItemFormatted();
 
-	JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
-	JMenuItemFormatted popupShowPopupMessage = new JMenuItemFormatted();
-	JMenuItemFormatted popupRequestSessionInfo = new JMenuItemFormatted();
-	JMenuItemFormatted popupShutdownClient = new JMenuItemFormatted();
-	JMenuItemFormatted popupRebootClient = new JMenuItemFormatted();
-	JMenuItemFormatted popupChangeDepot = new JMenuItemFormatted();
-	JMenuItemFormatted popupChangeClientID = new JMenuItemFormatted();
-	JMenuItemFormatted popupRemoteControl = new JMenuItemFormatted();
+	private JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
+	private JMenuItemFormatted popupShowPopupMessage = new JMenuItemFormatted();
+	private JMenuItemFormatted popupRequestSessionInfo = new JMenuItemFormatted();
+	private JMenuItemFormatted popupShutdownClient = new JMenuItemFormatted();
+	private JMenuItemFormatted popupRebootClient = new JMenuItemFormatted();
+	private JMenuItemFormatted popupChangeDepot = new JMenuItemFormatted();
+	private JMenuItemFormatted popupChangeClientID = new JMenuItemFormatted();
+	private JMenuItemFormatted popupRemoteControl = new JMenuItemFormatted();
 
-	JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupAddClient,
+	private JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupAddClient,
 			popupDeleteClient, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
 			popupDeletePackageCaches, popupRebootClient, popupShutdownClient, popupChangeDepot, popupChangeClientID,
 			popupRemoteControl };
 
-	JCheckBoxMenuItem popupShowCreatedColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem popupShowWANactiveColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem popupShowIPAddressColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem popupShowHardwareAddressColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem popupShowSessionInfoColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem popupShowInventoryNumberColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem popupShowUefiBoot = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem popupShowInstallByShutdownColumn = new JCheckBoxMenuItem();
-	JCheckBoxMenuItem popupShowDepotColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupShowCreatedColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupShowWANactiveColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupShowIPAddressColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupShowHardwareAddressColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupShowSessionInfoColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupShowInventoryNumberColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupShowUefiBoot = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupShowInstallByShutdownColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupShowDepotColumn = new JCheckBoxMenuItem();
 
-	JMenuItemFormatted popupSelectionGetGroup = new JMenuItemFormatted();
-	JMenuItemFormatted popupSelectionGetSavedSearch = new JMenuItemFormatted();
+	private JMenuItemFormatted popupSelectionGetGroup = new JMenuItemFormatted();
+	private JMenuItemFormatted popupSelectionGetSavedSearch = new JMenuItemFormatted();
 
-	JCheckBoxMenuItem popupSelectionToggleClientFilter = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupSelectionToggleClientFilter = new JCheckBoxMenuItem();
 
-	JMenuItemFormatted popupRebuildClientList = new JMenuItemFormatted(
+	private JMenuItemFormatted popupRebuildClientList = new JMenuItemFormatted(
 			Configed.getResourceValue("PopupMenuTrait.reload"), Globals.createImageIcon("images/reload16.png", ""));
-	JMenuItemFormatted popupCreatePdf = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
+	private JMenuItemFormatted popupCreatePdf = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
 			Globals.createImageIcon("images/acrobat_reader16.png", ""));
 
-	JPopupMenu popupLocalbootProducts = new JPopupMenu();
-	JPopupMenu popupNetbootProducts = new JPopupMenu();
-	JPopupMenu popupHardwareAudit = new JPopupMenu();
-	JPopupMenu popupSoftwareAudit = new JPopupMenu();
-	JPopupMenu popupNetworkConfig = new JPopupMenu();
-	JPopupMenu popupLogfiles = new JPopupMenu();
+	private JPanel iconBarPane;
 
-	JPopupMenu popupDepotList = new JPopupMenu();
-	JMenuItemFormatted popupCommitChangedDepotSelection = new JMenuItemFormatted();
-	JMenuItemFormatted popupCancelChangedDepotSelection = new JMenuItemFormatted();
+	private JPanel iconPane0;
 
-	JPanel iconBarPane;
+	private JPanel iconPaneTargets;
+	private JButton jButtonServerConfiguration;
+	private JButton jButtonDepotsConfiguration;
+	private JButton jButtonClientsConfiguration;
+	private JButton jButtonWorkOnGroups;
+	private JButton jButtonWorkOnProducts;
 
-	JPanel iconPane0;
+	private JPanel iconPaneExtraFrames;
 
-	JPanel iconPaneTargets;
-	JButton jButtonServerConfiguration;
-	JButton jButtonDepotsConfiguration;
-	JButton jButtonClientsConfiguration;
-	JButton jButtonWorkOnGroups;
-	JButton jButtonWorkOnProducts;
+	private JButton jButtonDashboard;
+	private JButton jButtonLicences;
+	private JButton jButtonOpsiLicenses;
 
-	JPanel iconPaneExtraFrames;
+	private JPanel iconPane1;
 
-	JButton jButtonDashboard;
-	JButton jButtonLicences;
-	public JButton jButtonOpsiLicenses;
+	private IconButton iconButtonReload;
+	private IconButton iconButtonReloadLicenses;
+	private IconButton iconButtonNewClient;
+	private IconButton iconButtonSaveGroup;/* gibts nicht **/
+	private IconButton iconButtonSetGroup;
+	private IconButton iconButtonSaveConfiguration;
+	private IconButton iconButtonCancelChanges;
+	private IconButton iconButtonToggleClientFilter;
 
-	JPanel iconPane1;
-
-	IconButton iconButtonReload;
-	IconButton iconButtonReloadLicenses;
-	IconButton iconButtonNewClient;
-	IconButton iconButtonSaveGroup;/* gibts nicht **/
-	IconButton iconButtonSetGroup;
-	IconButton iconButtonSaveConfiguration;
-	IconButton iconButtonCancelChanges;
-	IconButton iconButtonToggleClientFilter;
 	public IconButton iconButtonReachableInfo;
 	public IconButton iconButtonSessionInfo;
 
@@ -405,7 +395,7 @@ public class MainFrame extends JFrame
 	public PanelHostProperties panelHostProperties;
 	public PanelProductProperties panelProductProperties;
 
-	de.uib.configed.gui.hwinfopage.PanelHWInfo showHardwareLogVersion2;
+	PanelHWInfo showHardwareLogVersion2;
 	TitledPanel showHardwareLogNotFound;
 	public ControllerHWinfoMultiClients controllerHWinfoMultiClients;
 	JPanel showHardwareLogMultiClientReport;
@@ -482,11 +472,6 @@ public class MainFrame extends JFrame
 	JScrollPane scrollpaneTreeClients;
 
 	JPanel clientPane;
-	Containership csClientPane;
-
-	int splitterPanelClientSelection = 0;
-	int prefClientPaneW = 100;
-	int clientPaneW;
 
 	private LicenseDisplayer licenseDisplayer;
 
@@ -495,14 +480,14 @@ public class MainFrame extends JFrame
 			super();
 			Logging.debug(this, "glass pane initialized");
 			super.setVisible(true);
-			setOpaque(true);
-			addKeyListener(new KeyAdapter() {
+			super.setOpaque(true);
+			super.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyTyped(KeyEvent e) {
 					Logging.debug(this, "key typed on glass pane");
 				}
 			});
-			addMouseListener(new MouseAdapter() {
+			super.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					Logging.info(this, "mouse on glass pane");
@@ -525,7 +510,9 @@ public class MainFrame extends JFrame
 
 	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
 			ClientTree treeClients, boolean multidepot) {
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); // we handle it in the window listener method
+
+		// we handle it in the window listener method
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		this.multidepot = multidepot;
 
@@ -575,7 +562,7 @@ public class MainFrame extends JFrame
 
 	public class SizeListeningPanel extends JPanel implements ComponentListener {
 		SizeListeningPanel() {
-			addComponentListener(this);
+			super.addComponentListener(this);
 		}
 		// ComponentListener implementation
 
@@ -628,8 +615,6 @@ public class MainFrame extends JFrame
 			if (panelClientSelection == null) {
 				return;
 			}
-
-			splitterPanelClientSelection = panelClientSelection.getSize().width - clientPaneW;
 
 			moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
 					(int) (F_WIDTH_RIGHTHANDED * 1.5));
@@ -1857,8 +1842,6 @@ public class MainFrame extends JFrame
 
 		clientPane.setPreferredSize(new Dimension(F_WIDTH_RIGHTHANDED, F_HEIGHT + 40));
 		clientPane.setBorder(Globals.createPanelBorder());
-
-		csClientPane = new Containership(clientPane);
 
 		GroupLayout layoutClientPane = new GroupLayout(clientPane);
 		clientPane.setLayout(layoutClientPane);

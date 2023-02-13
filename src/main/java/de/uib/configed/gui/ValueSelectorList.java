@@ -55,10 +55,11 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		for (Entry<String, Map<String, Object>> depotEntry : depotInfo.entrySet()) {
 			values.add(depotEntry.getKey());
-			if (depotEntry.getValue() == null || depotEntry.getValue().get("description") == null)
+			if (depotEntry.getValue() == null || depotEntry.getValue().get("description") == null) {
 				descriptions.add("");
-			else
+			} else {
 				descriptions.add((String) depotEntry.getValue().get("description"));
+			}
 		}
 
 		SearchTargetModel searchTargetModel = new SearchTargetModelFromJList(valueList, values, descriptions);
@@ -110,10 +111,12 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 	private void initComponents() {
 		labelValue = new JLabel();
-		if (multidepot)
+		if (multidepot) {
 			labelValue.setText(Configed.getResourceValue("ValueSelectorList.values"));
-		else
+		} else {
 			labelValue.setText(Configed.getResourceValue("ValueSelectorList.value"));
+		}
+
 		labelValue.setOpaque(false);
 
 		labelValue.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -134,8 +137,10 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		searchPane.setFieldFont(Globals.defaultFont);
 		searchPane.setFieldBackground(getMyColor());
-		if (!multidepot)
+		if (!multidepot) {
 			searchPane.setEnabled(false);
+		}
+
 		searchPane.setBackground(getMyColor());
 		searchPane.setNarrow(true);
 
@@ -182,8 +187,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		if (!filtered) {
 			unfilteredV = valueList.getListData();
 			valueList.setListData(new ArrayList<>(valueList.getSelectedValuesList()));
-		} else
+		} else {
 			valueList.setListData(unfilteredV);
+		}
 
 		filtered = !filtered;
 
@@ -212,6 +218,5 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 			}
 		}
-
 	}
 }
