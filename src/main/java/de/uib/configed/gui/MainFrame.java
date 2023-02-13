@@ -146,7 +146,7 @@ public class MainFrame extends JFrame
 		implements WindowListener, KeyListener, MouseListener, ActionListener, RunningInstancesObserver<JDialog> {
 
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
-	protected int minHSizeTreePanel = 150;
+	private static final int MIN_WIDTH_TREE_PANEL = 150;
 
 	public static final int F_WIDTH = 800;
 	public static final int F_HEIGHT = 600;
@@ -2159,10 +2159,10 @@ public class MainFrame extends JFrame
 				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 				.addGroup(layoutPanelTreeClientSelection.createParallelGroup(GroupLayout.Alignment.LEADING)
 
-						.addComponent(depotListPresenter, minHSizeTreePanel, GroupLayout.PREFERRED_SIZE,
+						.addComponent(depotListPresenter, MIN_WIDTH_TREE_PANEL, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
 
-						.addComponent(splitpaneClientSelection, minHSizeTreePanel, GroupLayout.PREFERRED_SIZE,
+						.addComponent(splitpaneClientSelection, MIN_WIDTH_TREE_PANEL, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE))
 
 				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2));
@@ -3952,5 +3952,4 @@ public class MainFrame extends JFrame
 			WaitCursor.stopAll();
 		}
 	}
-
 }
