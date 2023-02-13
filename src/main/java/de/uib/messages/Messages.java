@@ -40,13 +40,15 @@ public final class Messages {
 		String characteristics = language + "_" + country;
 
 		myLocaleCharacteristics.add(characteristics);
-		if (existingLocalesNames.indexOf(characteristics) > -1)
+		if (existingLocalesNames.indexOf(characteristics) > -1) {
 			result = characteristics;
+		}
 
 		characteristics = language;
 		myLocaleCharacteristics.add(characteristics);
-		if (result == null && (existingLocalesNames.indexOf(characteristics) > -1))
+		if (result == null && (existingLocalesNames.indexOf(characteristics) > -1)) {
 			result = characteristics;
+		}
 
 		return result;
 	}
@@ -69,29 +71,6 @@ public final class Messages {
 		Logging.info("Messages, getSelectedLocale " + selectedLocaleString);
 
 		return selectedLocaleString;
-	}
-
-	private static int lastIntIndex(String s) {
-		if (s == null)
-			return -1;
-
-		StringBuilder allowed = new StringBuilder();
-
-		for (int j = 0; j < 10; j++)
-			allowed.append("" + j);
-		allowed.append(".");
-
-		int i = 0;
-		boolean goOn = true;
-
-		while (goOn && i < s.length()) {
-			if (allowed.indexOf("" + s.charAt(i)) >= 0) {
-				i++;
-			} else {
-				goOn = false;
-			}
-		}
-		return i;
 	}
 
 	public static ResourceBundle getResource() throws MissingResourceException {
@@ -177,8 +156,9 @@ public final class Messages {
 
 		}
 
-		if (loc == null)
+		if (loc == null) {
 			loc = produceLocale();
+		}
 
 		try {
 			messagesBundle = getResource();
@@ -191,15 +171,17 @@ public final class Messages {
 	}
 
 	public static List<String> getLocaleNames() {
-		if (existingLocalesNames == null)
+		if (existingLocalesNames == null) {
 			getLocaleRepresentations();
+		}
 
 		return existingLocalesNames;
 	}
 
 	public static Map<String, String> getLocaleInfo() {
-		if (localeInfo == null)
+		if (localeInfo == null) {
 			getLocaleRepresentations();
+		}
 
 		Logging.debug("Messages, getLocaleInfo " + localeInfo);
 
@@ -207,8 +189,9 @@ public final class Messages {
 	}
 
 	private static List<LocaleRepresentation> getLocaleRepresentations() {
-		if (existingLocales != null)
+		if (existingLocales != null) {
 			return existingLocales;
+		}
 
 		ArrayList<LocaleRepresentation> existingLocales = new ArrayList<>();
 		localeInfo = new TreeMap<>();
@@ -219,8 +202,9 @@ public final class Messages {
 			String line = reader.readLine();
 			while (line != null) {
 				line = line.trim();
-				if (line.length() > 0 && line.charAt(0) != '#')
+				if (line.length() > 0 && line.charAt(0) != '#') {
 					existingLocales.add(new LocaleRepresentation(line));
+				}
 				line = reader.readLine();
 			}
 		} catch (Exception ex) {
@@ -238,5 +222,4 @@ public final class Messages {
 		Logging.debug("Messages, localeInfo  " + localeInfo);
 		return existingLocales;
 	}
-
 }
