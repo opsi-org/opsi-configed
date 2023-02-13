@@ -179,8 +179,9 @@ public abstract class AbstractSerializer {
 
 			String[] elementPath = (String[]) data.get(KEY_ELEMENT_PATH);
 
-			if (elementName.equals(ELEMENT_NAME_SOFTWARE_NAME_ELEMENT))
+			if (elementName.equals(ELEMENT_NAME_SOFTWARE_NAME_ELEMENT)) {
 				element = manager.getNewSoftwareNameElement();
+			}
 
 			else if (elementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
 				element = new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]));
@@ -188,10 +189,11 @@ public abstract class AbstractSerializer {
 
 			else if (elementName.equals(ELEMENT_NAME_GROUP)) {
 				// constructing a compatibility with format without GroupWithSubgroupsElement
-				if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS))
+				if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
 					element = new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]));
-				else
+				} else {
 					element = new GroupElement(manager.getBackend().getGroups().toArray(new String[0]));
+				}
 			}
 
 			else if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
@@ -229,9 +231,11 @@ public abstract class AbstractSerializer {
 		// Children
 		List<Map<String, Object>> childrenData = (List<Map<String, Object>>) data.get("children");
 		LinkedList<AbstractSelectOperation> children = new LinkedList<>();
-		if (childrenData != null)
-			for (Map<String, Object> child : childrenData)
+		if (childrenData != null) {
+			for (Map<String, Object> child : childrenData) {
 				children.add(getOperation(child, hardware));
+			}
+		}
 
 		// Operation
 		String operationName = (String) data.get(KEY_OPERATION);
@@ -262,10 +266,12 @@ public abstract class AbstractSerializer {
 		Object realData = data.get("data");
 		Logging.info(this, "getOperation realData " + realData);
 		SelectData selectData;
-		if (dataType == null || data == null)
+		if (dataType == null || data == null) {
 			selectData = null;
-		else
+		} else {
 			selectData = new SelectData(realData, dataType);
+		}
+
 		operation.setSelectData(selectData);
 
 		return operation;
@@ -300,8 +306,10 @@ public abstract class AbstractSerializer {
 		}
 		if (operation instanceof AbstractSelectGroupOperation) {
 			List<Map<String, Object>> childData = new LinkedList<>();
-			for (AbstractSelectOperation child : ((AbstractSelectGroupOperation) operation).getChildOperations())
+			for (AbstractSelectOperation child : ((AbstractSelectGroupOperation) operation).getChildOperations()) {
 				childData.add(produceData(child));
+			}
+
 			map.put("children", childData);
 		} else {
 			map.put("children", null);
@@ -317,23 +325,36 @@ public abstract class AbstractSerializer {
 
 		if (element != null) {
 			for (AbstractSelectOperation operation : element.supportedOperations()) {
-				if (operation.getOperationString().equals(name))
+				if (operation.getOperationString().equals(name)) {
 					return operation;
+				}
 			}
 			throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
 		}
-		if (name.equals("Hardware"))
+		if (name.equals("Hardware")) {
 			return new HardwareOperation(children);
-		if (name.equals("Software"))
+		}
+
+		if (name.equals("Software")) {
 			return new SoftwareOperation(children);
-		if (name.equals("SwAudit"))
+		}
+
+		if (name.equals("SwAudit")) {
 			return new SwAuditOperation(children);
-		if (name.equals("and"))
+		}
+
+		if (name.equals("and")) {
 			return new AndOperation(children);
-		if (name.equals("or"))
+		}
+
+		if (name.equals("or")) {
 			return new OrOperation(children);
-		if (name.equals("not"))
+		}
+
+		if (name.equals("not")) {
 			return new NotOperation(children);
+		}
+
 		throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
 	}
 
@@ -345,27 +366,40 @@ public abstract class AbstractSerializer {
 		if (!(operation instanceof AbstractSelectGroupOperation)) {
 			Logging.debug("No group: " + operation.getClassName() + ", element path size: "
 					+ operation.getElement().getPathArray().length);
-			if (operation.getElement().getPathArray().length == 1)
+			if (operation.getElement().getPathArray().length == 1) {
 				return new HostOperation(operation);
-			else
+			} else {
 				return operation;
+			}
 		}
 		if (operation instanceof HardwareOperation || operation instanceof SoftwareOperation
-				|| operation instanceof SwAuditOperation)
+				|| operation instanceof SwAuditOperation) {
 			return operation;
-		if (!(operation instanceof AndOperation))
+		}
+
+		if (!(operation instanceof AndOperation)) {
 			return new HostOperation(operation);
+		}
+
 		AndOperation andOperation = (AndOperation) operation;
 		AbstractSelectOperation notGroup = operation;
-		while (notGroup instanceof AbstractSelectGroupOperation)
+		while (notGroup instanceof AbstractSelectGroupOperation) {
 			notGroup = ((AbstractSelectGroupOperation) notGroup).getChildOperations().get(0);
+		}
+
 		AbstractSelectOperation leftNotGroup = andOperation.getChildOperations().get(1);
-		while (leftNotGroup instanceof AbstractSelectGroupOperation)
+		while (leftNotGroup instanceof AbstractSelectGroupOperation) {
 			leftNotGroup = ((AbstractSelectGroupOperation) leftNotGroup).getChildOperations().get(0);
-		if (notGroup.getElement().getPathArray().length != 1)
+		}
+
+		if (notGroup.getElement().getPathArray().length != 1) {
 			return operation;
-		if (notGroup.getElement().getPathArray().length == 1 && leftNotGroup.getElement().getPathArray().length == 1)
+		}
+
+		if (notGroup.getElement().getPathArray().length == 1 && leftNotGroup.getElement().getPathArray().length == 1) {
 			return new HostOperation(andOperation);
+		}
+
 		List<AbstractSelectOperation> ops = andOperation.getChildOperations();
 		HostOperation host = new HostOperation(ops.get(0));
 		ops.remove(0);

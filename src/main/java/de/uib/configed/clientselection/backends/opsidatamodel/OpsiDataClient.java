@@ -20,17 +20,30 @@ public class OpsiDataClient implements Client {
 
 	private String hostId;
 	private Map<String, Object> infoMap;
-	private Set<String> groupsSet; // The opsi groups for the client
-	private Set<String> superGroupsSet; // The opsi groups in which the client is contained (directly or indirectly)
+
+	// The opsi groups for the client
+	private Set<String> groupsSet;
+
+	// The opsi groups in which the client is contained (directly or indirectly)
+	private Set<String> superGroupsSet;
 	private List<Map<String, Object>> hardwareInfo;
-	private List<Map<String, String>> productList; // The products (a list of maps)
-	private List<String> productNames; // Like above, but just the productIDs
+
+	// The products (a list of maps)
+	private List<Map<String, String>> productList;
+
+	// Like above, but just the productIDs
+	private List<String> productNames;
 	private List<SWAuditClientEntry> swauditList;
 
-	private Map<String, String> softwareValue; // current software to be checked
-	private Map<String, String> swauditValue; // current swaudit to be checked
+	// current software to be checked
+	private Map<String, String> softwareValue;
+
+	// current swaudit to be checked
+	private Map<String, String> swauditValue;
 	private Iterator<Map<String, Object>> hardwareIterator = null;
-	private Map<String, Object> hardwareValue = null; // current hardware to be checked
+
+	// current hardware to be checked
+	private Map<String, Object> hardwareValue = null;
 
 	public OpsiDataClient(String id) {
 		hostId = id;
@@ -75,14 +88,15 @@ public class OpsiDataClient implements Client {
 
 	/** Get a map by name */
 	public Map getMap(String map) {
-		if (map.equals(HOSTINFO_MAP))
+		if (map.equals(HOSTINFO_MAP)) {
 			return infoMap;
-		else if (map.equals(SOFTWARE_MAP))
+		} else if (map.equals(SOFTWARE_MAP)) {
 			return softwareValue;
-		else if (map.equals(SWAUDIT_MAP))
+		} else if (map.equals(SWAUDIT_MAP)) {
 			return swauditValue;
-		else
+		} else {
 			return getHardwareMap(map);
+		}
 	}
 
 	/** Get the ID of this client */
@@ -138,8 +152,9 @@ public class OpsiDataClient implements Client {
 
 	/** Go to the next hardware. Return false, if that is not possibe */
 	public boolean hardwareIteratorNext() {
-		if (hardwareIterator == null || !hardwareIterator.hasNext())
+		if (hardwareIterator == null || !hardwareIterator.hasNext()) {
 			return false;
+		}
 
 		hardwareValue = hardwareIterator.next();
 		Logging.debug(this, "hardwareIteratorNext: " + hardwareValue.toString());
@@ -157,9 +172,12 @@ public class OpsiDataClient implements Client {
 			Logging.debug(this, "getHardwareMap key " + key);
 			Logging.debug(this, "getHardwareMap hardwareInfo " + hardwareInfo);
 			HashSet<Map<String, Object>> values = new HashSet<>();
-			for (Map<String, Object> map : hardwareInfo)
-				if (key.equals(map.get("hardwareClass")))
+			for (Map<String, Object> map : hardwareInfo) {
+				if (key.equals(map.get("hardwareClass"))) {
 					values.add(map);
+				}
+			}
+
 			Logging.debug(this, values.toString());
 
 			hardwareValue = null;

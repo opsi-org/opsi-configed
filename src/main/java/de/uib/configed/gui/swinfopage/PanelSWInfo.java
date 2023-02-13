@@ -138,7 +138,7 @@ public class PanelSWInfo extends JPanel {
 		askingForKindOfAction = true;
 	}
 
-	protected void initTable() {
+	private void initTable() {
 
 		labelSuperTitle = new JLabel();
 
@@ -172,7 +172,7 @@ public class PanelSWInfo extends JPanel {
 			finalColumns[i] = i;
 		}
 
-		modelSWInfo = new GenTableModel(null, // no updates
+		modelSWInfo = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public Map<String, Map> retrieveMap() {
@@ -270,7 +270,7 @@ public class PanelSWInfo extends JPanel {
 
 	}
 
-	protected void buildPanel() {
+	private void buildPanel() {
 
 		labelSuperTitle.setOpaque(true);
 		labelSuperTitle.setBackground(Globals.BACKGROUND_COLOR_3);

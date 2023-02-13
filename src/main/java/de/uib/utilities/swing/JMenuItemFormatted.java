@@ -21,16 +21,16 @@ public class JMenuItemFormatted extends JMenuItem {
 
 	public JMenuItemFormatted() {
 		super();
-		setFont(specialFont);
+		super.setFont(specialFont);
 	}
 
 	public JMenuItemFormatted(String text) {
 		super(text);
-		setFont(specialFont);
+		super.setFont(specialFont);
 	}
 
 	public JMenuItemFormatted(String text, Icon icon) {
 		super(text, icon);
-		setFont(specialFont);
+		super.setFont(specialFont);
 	}
 }

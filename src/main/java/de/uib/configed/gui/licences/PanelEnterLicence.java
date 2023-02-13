@@ -42,15 +42,15 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	public PanelGenEditTable panelLicencecontracts;
 	private int splitPaneHMargin = 1;
 
-	public String selectedLicencePool = "";
+	private String selectedLicencePool = "";
 	private ListSelectionListener licencePoolSelectionListener;
 
-	protected int minVSize = 50;
-	protected int minPanelTableHeight = 60;
-	protected int maxHSize = 1000;
+	private static final int MIN_HEIGHT = 50;
+	private static final int MIN_PANEL_TABLE_HEIGHT = 60;
+	private static final int MAX_WIDTH = 1000;
 
-	protected int minFieldWidth = 40;
-	protected int minFieldHeight = 6;
+	private static final int MIN_FIELD_WIDTH = 40;
+	private static final int MIN_FIELD_HEIGHT = 6;
 
 	private javax.swing.JButton jButtonCreateStandard;
 	private javax.swing.JButton jButtonCreateVolume;
@@ -86,11 +86,12 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		defineListeners();
 	}
 
-	protected void defineListeners() {
+	private void defineListeners() {
 		panelLicencecontracts.getListSelectionModel().addListSelectionListener(listSelectionEvent -> {
 			// Ignore extra messages.
-			if (listSelectionEvent.getValueIsAdjusting())
+			if (listSelectionEvent.getValueIsAdjusting()) {
 				return;
+			}
 
 			ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
 
@@ -98,21 +99,24 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				int selectedRow = lsm.getMinSelectionIndex();
 				String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
 
-				if (jTextFieldLicenceContract.isEnabled())
+				if (jTextFieldLicenceContract.isEnabled()) {
 					jTextFieldLicenceContract.setText(keyValue);
+				}
 			}
 		});
 
 		panelLicencepools.addListSelectionListener(listSelectionEvent -> {
-			if (listSelectionEvent.getValueIsAdjusting())
+			if (listSelectionEvent.getValueIsAdjusting()) {
 				return;
+			}
 
 			int i = panelLicencepools.getSelectedRow();
 
 			selectedLicencePool = "";
 
-			if (i > -1)
+			if (i > -1) {
 				selectedLicencePool = panelLicencepools.getValueAt(i, 0).toString();
+			}
 
 			panelLicencepools.setTitle(Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool")
 					+ ": " + selectedLicencePool);
@@ -196,8 +200,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void startOEM() {
-		if (!checkAndStart())
+		if (!checkAndStart()) {
 			return;
+		}
 
 		jTextFieldLicenceType.setEnabled(true);
 		jTextFieldLicenceType.setText("OEM");
@@ -213,8 +218,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void startConcurrent() {
-		if (!checkAndStart())
+		if (!checkAndStart()) {
 			return;
+		}
 
 		jTextFieldLicenceID.setEnabled(true);
 		jTextFieldLicenceID.setText("l_" + Globals.getSeconds());
@@ -239,9 +245,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		panelKeys.setMasterFrame(Globals.frame1);
 
 		panelLicencepools = new PanelGenEditTable(
-				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), maxHSize, false, 0,
-				false, new int[] { PanelGenEditTable.POPUP_RELOAD }, true // with tablesearchpane
-		);
+				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool"), MAX_WIDTH, false, 0,
+				false, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 
 		panelLicencepools.setMasterFrame(Globals.frame1);
 
@@ -249,8 +254,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencecontract"), 0, true, 1, false,
 				new int[] { PanelGenEditTable.POPUP_DELETE_ROW, PanelGenEditTable.POPUP_SAVE,
 						PanelGenEditTable.POPUP_CANCEL, PanelGenEditTable.POPUP_RELOAD },
-				true // with tablesearchpane
-		);
+				true);
+
 		panelLicencecontracts.setMasterFrame(Globals.frame1);
 
 		JLabel jLabelLicencePool = new JLabel();
@@ -285,16 +290,18 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		jTextFieldEndOfLicence = new javax.swing.JTextField();
 
-		jTextFieldEndOfLicence.setEditable(false); // edit only via fEditDate
+		// edit only via fEditDate
+		jTextFieldEndOfLicence.setEditable(false);
 		jTextFieldEndOfLicence.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 
 				if (e.getClickCount() > 1 || e.getButton() != MouseEvent.BUTTON1) {
-					if (fEditDate == null)
+					if (fEditDate == null) {
 						fEditDate = new FEditDate(jTextFieldEndOfLicence.getText(), false);
-					else
+					} else {
 						fEditDate.setStartText(jTextFieldEndOfLicence.getText());
+					}
 
 					fEditDate.setCaller(jTextFieldEndOfLicence);
 					fEditDate.init();
@@ -320,8 +327,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				if (fEditDate != null)
+				if (fEditDate != null) {
 					fEditDate.deactivate();
+				}
 			}
 		});
 
@@ -384,39 +392,38 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 		javax.swing.GroupLayout panelLicenceModelLayout = new javax.swing.GroupLayout(panelLicenceModel);
 		panelLicenceModel.setLayout(panelLicenceModelLayout);
-		panelLicenceModelLayout.setHorizontalGroup(
-				panelLicenceModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(panelLicenceModelLayout.createSequentialGroup().addContainerGap().addGroup(
-								panelLicenceModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
-										false).addComponent(jLabelSLid4, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(jLabelSLid3, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(jLabelSLid2, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(jLabelSLid1, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+		panelLicenceModelLayout.setHorizontalGroup(panelLicenceModelLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(panelLicenceModelLayout.createSequentialGroup().addContainerGap()
+						.addGroup(panelLicenceModelLayout
+								.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+								.addComponent(jLabelSLid4, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(jLabelSLid3, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(jLabelSLid2, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(jLabelSLid1, javax.swing.GroupLayout.DEFAULT_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 
-								.addGroup(panelLicenceModelLayout.createParallelGroup(
-										javax.swing.GroupLayout.Alignment.LEADING, true)
+						.addGroup(panelLicenceModelLayout
+								.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
 
-										.addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelLicenceModelLayout
-												.createSequentialGroup().addGroup(panelLicenceModelLayout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
-																true)
-														.addComponent(comboClient, minFieldWidth, 208, Short.MAX_VALUE)
-														.addGroup(panelLicenceModelLayout.createSequentialGroup()
-																.addComponent(jTextFieldMaxInstallations, minFieldWidth,
-																		112, javax.swing.GroupLayout.PREFERRED_SIZE)
-																.addGap(5, 5, 5).addComponent(jLabelSLid3info,
-																		minFieldWidth, 112,
-																		javax.swing.GroupLayout.PREFERRED_SIZE))
-														.addComponent(jTextFieldLicenceID, minFieldWidth, 208,
-																Short.MAX_VALUE)
-														.addComponent(
-																jTextFieldLicenceType, minFieldWidth, 239,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addGroup(javax.swing.GroupLayout.Alignment.LEADING,
+										panelLicenceModelLayout.createSequentialGroup().addGroup(panelLicenceModelLayout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, true)
+												.addComponent(comboClient, MIN_FIELD_WIDTH, 208, Short.MAX_VALUE)
+												.addGroup(panelLicenceModelLayout.createSequentialGroup()
+														.addComponent(jTextFieldMaxInstallations, MIN_FIELD_WIDTH, 112,
+																javax.swing.GroupLayout.PREFERRED_SIZE)
+														.addGap(5, 5, 5).addComponent(jLabelSLid3info, MIN_FIELD_WIDTH,
+																112, javax.swing.GroupLayout.PREFERRED_SIZE))
+												.addComponent(jTextFieldLicenceID, MIN_FIELD_WIDTH, 208,
+														Short.MAX_VALUE)
+												.addComponent(
+														jTextFieldLicenceType, MIN_FIELD_WIDTH, 239,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34,
 														Short.MAX_VALUE)
 												.addGroup(panelLicenceModelLayout
@@ -429,8 +436,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 
-																.addComponent(jTextFieldLicenceContract, minFieldWidth,
-																		200, javax.swing.GroupLayout.PREFERRED_SIZE))
+																.addComponent(jTextFieldLicenceContract,
+																		MIN_FIELD_WIDTH, 200,
+																		javax.swing.GroupLayout.PREFERRED_SIZE))
 														.addGroup(panelLicenceModelLayout.createSequentialGroup()
 																.addComponent(jLabelSLid5,
 																		javax.swing.GroupLayout.PREFERRED_SIZE, 100,
@@ -438,50 +446,50 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 																.addPreferredGap(
 																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 
-																.addComponent(jTextFieldEndOfLicence, minFieldWidth,
+																.addComponent(jTextFieldEndOfLicence, MIN_FIELD_WIDTH,
 																		200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-								.addContainerGap(10, Short.MAX_VALUE)));
+						.addContainerGap(10, Short.MAX_VALUE)));
 		panelLicenceModelLayout
 				.setVerticalGroup(panelLicenceModelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
 								panelLicenceModelLayout.createSequentialGroup().addGap(0, 1, 3)
 										.addGroup(panelLicenceModelLayout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jLabelSLid1, minFieldHeight, Globals.LINE_HEIGHT,
+												.addComponent(jLabelSLid1, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jTextFieldLicenceID, minFieldHeight, Globals.LINE_HEIGHT,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabelSLid5, minFieldHeight, Globals.LINE_HEIGHT,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jTextFieldEndOfLicence, minFieldHeight,
-														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addGap(0, 1, 3)
-										.addGroup(panelLicenceModelLayout
-												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jLabelSLid2, minFieldHeight, Globals.LINE_HEIGHT,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jTextFieldLicenceType, minFieldHeight,
-														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addGap(0, 1, 3)
-										.addGroup(panelLicenceModelLayout
-												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jLabelSLid3, minFieldHeight, Globals.LINE_HEIGHT,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jTextFieldMaxInstallations, minFieldHeight,
+												.addComponent(jTextFieldLicenceID, MIN_FIELD_HEIGHT,
 														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabelSLid3info, minFieldHeight, Globals.LINE_HEIGHT,
+												.addComponent(jLabelSLid5, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabelSLid6, minFieldHeight, Globals.LINE_HEIGHT,
+												.addComponent(jTextFieldEndOfLicence, MIN_FIELD_HEIGHT,
+														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addGap(0, 1, 3)
+										.addGroup(panelLicenceModelLayout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(jLabelSLid2, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jTextFieldLicenceContract, minFieldHeight,
+												.addComponent(jTextFieldLicenceType, MIN_FIELD_HEIGHT,
+														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addGap(0, 1, 3)
+										.addGroup(panelLicenceModelLayout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(jLabelSLid3, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addComponent(jTextFieldMaxInstallations, MIN_FIELD_HEIGHT,
+														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addComponent(jLabelSLid3info, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addComponent(jLabelSLid6, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addComponent(jTextFieldLicenceContract, MIN_FIELD_HEIGHT,
 														Globals.LINE_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
 										.addGap(0, 1, 3)
 										.addGroup(panelLicenceModelLayout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jLabelSLid4, minFieldHeight, Globals.LINE_HEIGHT,
+												.addComponent(jLabelSLid4, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(comboClient, minFieldHeight, Globals.LINE_HEIGHT,
+												.addComponent(comboClient, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 
 						));
@@ -498,15 +506,15 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						.addComponent(jLabelLKey, javax.swing.GroupLayout.PREFERRED_SIZE, 133,
 								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(5, 5, 5)
-						.addComponent(jTextFieldLKey, minFieldWidth, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addComponent(jTextFieldLKey, MIN_FIELD_WIDTH, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addContainerGap(10, Short.MAX_VALUE)));
 		panelEnterKeyLayout.setVerticalGroup(panelEnterKeyLayout
 				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(panelEnterKeyLayout.createSequentialGroup().addGap(0, 1, 5)
 						.addGroup(panelEnterKeyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jLabelLKey, minFieldHeight, Globals.LINE_HEIGHT,
+								.addComponent(jLabelLKey, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
 										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(jTextFieldLKey, minFieldHeight, Globals.LINE_HEIGHT,
+								.addComponent(jTextFieldLKey, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
 										javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(0, 1, 5)));
 
@@ -525,7 +533,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 												.addGroup(layoutTask
 														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(panelLicencecontracts, 50, 300, maxHSize))))
+														.addComponent(panelLicencecontracts, 50, 300, MAX_WIDTH))))
 
 						)
 						.addGroup(layoutTask.createSequentialGroup()
@@ -554,14 +562,15 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 										.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, true)
 										.addComponent(panelEnterKey, javax.swing.GroupLayout.Alignment.LEADING,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize)
+												javax.swing.GroupLayout.DEFAULT_SIZE, MAX_WIDTH)
 										.addComponent(panelLicenceModel, javax.swing.GroupLayout.Alignment.LEADING,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize))
+												javax.swing.GroupLayout.DEFAULT_SIZE, MAX_WIDTH))
 								.addGap(10, 10, 10)))));
 		layoutTask.setVerticalGroup(layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layoutTask.createSequentialGroup().addGap(5, 5, 5).addComponent(jLabelTask).addGap(5, 5, 5)
-						.addComponent(panelLicencecontracts, minPanelTableHeight, minPanelTableHeight, Short.MAX_VALUE)
+						.addComponent(panelLicencecontracts, MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT,
+								Short.MAX_VALUE)
 						.addGap(5, 5, 5).addComponent(jLabelConfigure).addGap(2, 2, 2)
 						.addGroup(layoutTask.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
 								.addComponent(jButtonCreateStandard, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
@@ -573,7 +582,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 								.addComponent(jButtonCreateConcurrent, javax.swing.GroupLayout.PREFERRED_SIZE, 20,
 										javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(5, 5, 6)
-						.addComponent(panelLicenceModel, minVSize, javax.swing.GroupLayout.PREFERRED_SIZE,
+						.addComponent(panelLicenceModel, MIN_HEIGHT, javax.swing.GroupLayout.PREFERRED_SIZE,
 								javax.swing.GroupLayout.PREFERRED_SIZE)
 						.addGap(2, 2, 2)
 						.addComponent(panelEnterKey, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -594,12 +603,14 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		topPane.setLayout(layoutTopPane);
 		layoutTopPane.setHorizontalGroup(layoutTopPane
 				.createSequentialGroup().addGap(10, 10, 10).addComponent(panelLicencepools,
-						javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, maxHSize)
+						javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, MAX_WIDTH)
 				.addGap(10, 10, 10));
-		layoutTopPane.setVerticalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layoutTopPane.createSequentialGroup().addGap(5, 5, 5)
-						.addComponent(panelLicencepools, minPanelTableHeight, minPanelTableHeight, Short.MAX_VALUE)
-						.addGap(5, 5, 5)));
+		layoutTopPane
+				.setVerticalGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addGroup(layoutTopPane
+								.createSequentialGroup().addGap(5, 5, 5).addComponent(panelLicencepools,
+										MIN_PANEL_TABLE_HEIGHT, MIN_PANEL_TABLE_HEIGHT, Short.MAX_VALUE)
+								.addGap(5, 5, 5)));
 
 		javax.swing.GroupLayout layoutBottomPane = new javax.swing.GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
@@ -610,18 +621,18 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 										layoutBottomPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 												.addGroup(layoutBottomPane.createSequentialGroup().addGap(10, 10, 10)
 														.addComponent(panelTask, javax.swing.GroupLayout.DEFAULT_SIZE,
-																maxHSize, maxHSize)
+																MAX_WIDTH, MAX_WIDTH)
 														.addGap(10, 10, 10))
 												.addGroup(layoutBottomPane.createSequentialGroup().addGap(10, 10, 10)
 														.addComponent(panelKeys, javax.swing.GroupLayout.DEFAULT_SIZE,
-																maxHSize, maxHSize)
+																MAX_WIDTH, MAX_WIDTH)
 														.addGap(10, 10, 10)))
 								.addGap(10, 10, 10));
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addGap(5, 5, 5)
 				.addComponent(panelTask, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
-				.addGap(10, 10, 10).addComponent(panelKeys, minPanelTableHeight - 2 * Globals.LINE_HEIGHT,
-						minPanelTableHeight - 2 * Globals.LINE_HEIGHT, Short.MAX_VALUE)
+				.addGap(10, 10, 10).addComponent(panelKeys, MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT,
+						MIN_PANEL_TABLE_HEIGHT - 2 * Globals.LINE_HEIGHT, Short.MAX_VALUE)
 				.addGap(5, 5, 5));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -649,8 +660,10 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		m.put(LicenceEntry.EXPIRATION_DATE_KEY, jTextFieldEndOfLicence.getText());
 
 		String contractSendValue = jTextFieldLicenceContract.getText();
-		if (contractSendValue.equals("null"))
+		if (contractSendValue.equals("null")) {
 			contractSendValue = "";
+		}
+
 		m.put("licenseContractId", contractSendValue);
 
 		m.put("licensePoolId", panelLicencepools.getValueAt(panelLicencepools.getSelectedRow(), 0).toString());
@@ -686,5 +699,4 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		panelLicencepools.addListSelectionListener(licencePoolSelectionListener);
 		panelLicencepools.moveToValue(selectedLicencePool, 0);
 	}
-
 }

@@ -45,8 +45,9 @@ public class Autocomplete implements DocumentListener {
 	@Override
 	public void insertUpdate(DocumentEvent ev) {
 
-		if (ev.getLength() != 1)
+		if (ev.getLength() != 1) {
 			return;
+		}
 
 		int pos = ev.getOffset();
 		String content = null;
@@ -61,25 +62,30 @@ public class Autocomplete implements DocumentListener {
 		int w;
 		for (w = pos; w >= 0; w--) {
 
-			if (content.charAt(w) == ' ')
+			if (content.charAt(w) == ' ') {
 				break;
+			}
 		}
 
 		// Too few chars
-		if (pos - w < 1)
+		if (pos - w < 1) {
 			return;
+		}
 
 		String prefix = content.substring(w + 1).toLowerCase();
 		int n = Collections.binarySearch(this.keywords, prefix);
 		if (n < 0 && -n <= this.keywords.size()) {
 			String match = this.keywords.get(-n - 1);
-			if (match.startsWith(prefix)) { // A completion is found
+
+			// A completion is found
+			if (match.startsWith(prefix)) {
 				String completion = match.substring(pos - w);
 				// We cannot modify Document from within notification,
 				// so we submit a task that does the change later
 				SwingUtilities.invokeLater(new CompletionTask(completion, pos + 1));
 			}
-		} else { // Nothing found
+		} else {
+			// Nothing found
 			mode = Mode.INSERT;
 		}
 	}

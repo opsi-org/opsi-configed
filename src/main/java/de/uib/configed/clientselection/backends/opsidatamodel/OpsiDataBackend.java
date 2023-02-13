@@ -98,9 +98,12 @@ public final class OpsiDataBackend extends AbstractBackend {
 	// data which will be cached
 	List<Client> clients;
 	Map<String, HostInfo> clientMaps;
-	Map<String, Set<String>> groups; // client -> groups with it
-	Map<String, Set<String>> superGroups; // client -> all groups for which the client belongs to directly or by virtue
-											// of some path
+
+	// client -> groups with it
+	Map<String, Set<String>> groups;
+
+	// client -> all groups for which the client belongs to directly or by virtue of some path
+	Map<String, Set<String>> superGroups;
 	Map<String, List<Map<String, String>>> softwareMap;
 	Map<String, List<SWAuditClientEntry>> swauditMap;
 	List<Map<String, Object>> hardwareOnClient;
@@ -403,7 +406,9 @@ public final class OpsiDataBackend extends AbstractBackend {
 		if (hasHardware) {
 			getHardwareOnClient(clientNames);
 		} else {
-			hardwareOnClient = null; // dont use older data after a reload request
+
+			// dont use older data after a reload request
+			hardwareOnClient = null;
 		}
 
 		reloadRequested = false;

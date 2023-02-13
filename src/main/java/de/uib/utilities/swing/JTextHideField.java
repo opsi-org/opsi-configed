@@ -63,8 +63,9 @@ public class JTextHideField extends javax.swing.JPanel {
 
 		button = new JButton(Globals.createImageIcon("images/eye_blue_open.png", "show"));
 		button.addActionListener(actionEvent -> {
-			if (!multiValue)
+			if (!multiValue) {
 				toggleHidden();
+			}
 		});
 		button.setToolTipText(Configed.getResourceValue("JTextHideField.toggleHide"));
 
@@ -90,8 +91,9 @@ public class JTextHideField extends javax.swing.JPanel {
 	}
 
 	public void setHidden() {
-		if (!hiddenMode)
+		if (!hiddenMode) {
 			toggleHidden();
+		}
 	}
 
 	@Override
@@ -121,14 +123,16 @@ public class JTextHideField extends javax.swing.JPanel {
 
 	@Override
 	public void setBackground(java.awt.Color c) {
-		if (visibleField != null)
+		if (visibleField != null) {
 			visibleField.setBackground(c);
+		}
 	}
 
 	public void setText(String s) {
 		String s0 = s;
-		if (multiValue)
+		if (multiValue) {
 			s0 = "";
+		}
 
 		invisibleField.setText(s0);
 		((FixedDocument) (visibleField.getDocument())).setFixed(s0);

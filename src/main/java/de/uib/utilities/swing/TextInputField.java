@@ -52,8 +52,9 @@ public class TextInputField extends JPanel
 				initValue = "";
 			}
 
-			else
+			else {
 				inputType = InputType.TEXT;
+			}
 
 		}
 
@@ -67,8 +68,9 @@ public class TextInputField extends JPanel
 			TreeSet<Character> orderedValues = new TreeSet<>();
 
 			for (String val : proposedValues) {
-				if (val.length() > 0)
+				if (val.length() > 0) {
 					orderedValues.add(val.charAt(0));
+				}
 			}
 
 			orderedBeginChars = new Character[orderedValues.size()];
@@ -107,12 +109,14 @@ public class TextInputField extends JPanel
 									i--;
 								}
 								ch = orderedBeginChars[i];
-							} else
+							} else {
 								i++;
+							}
 						}
 
-						if (!stop && i > 0)
+						if (!stop && i > 0) {
 							ch = orderedBeginChars[i - 1];
+						}
 
 						combo.selectWithKeyChar(ch);
 						// advance to last entry with ch??
@@ -121,23 +125,26 @@ public class TextInputField extends JPanel
 							boolean located = false;
 							while (j < proposedValues.size() && !located) {
 								String val = proposedValues.get(j);
-								if (val.length() == 0)
+								if (val.length() == 0) {
 									j++;
-								else {
+								} else {
 									if (val.charAt(0) <= ch) {
 										j++;
 									} else
 									// first occurrence of next char
 									{
-										if (j > 0)
+										if (j > 0) {
 											j--;
+										}
+
 										located = true;
 									}
 								}
 							}
 
-							if (!located)
+							if (!located) {
 								j--;
+							}
 
 							combo.setSelectedItem(proposedValues.get(j));
 
@@ -155,10 +162,11 @@ public class TextInputField extends JPanel
 
 		textfield.getCaret().setBlinkRate(0);
 
-		if (inputType == InputType.VALUELIST)
-			add(combo);
-		else
-			add(textfield);
+		if (inputType == InputType.VALUELIST) {
+			super.add(combo);
+		} else {
+			super.add(textfield);
+		}
 
 	}
 
@@ -168,8 +176,9 @@ public class TextInputField extends JPanel
 	}
 
 	public boolean isEmpty() {
-		if (inputType == InputType.VALUELIST)
+		if (inputType == InputType.VALUELIST) {
 			return combo.getSelectedItem() == null || combo.getSelectedItem().toString().isEmpty();
+		}
 
 		return textfield.getText().isEmpty();
 	}
@@ -191,9 +200,10 @@ public class TextInputField extends JPanel
 	}
 
 	public String getText() {
-		if (inputType == InputType.VALUELIST)
+		if (inputType == InputType.VALUELIST) {
 			return combo.getSelectedItem().toString();
-		else
+		} else {
 			return textfield.getText();
+		}
 	}
 }

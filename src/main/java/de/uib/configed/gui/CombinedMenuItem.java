@@ -23,8 +23,9 @@ public class CombinedMenuItem {
 	}
 
 	private void startItemListeners(JMenuItem itemOwner, ItemListener[] listeners) {
-		if (listeners == null)
+		if (listeners == null) {
 			return;
+		}
 
 		for (ItemListener l : listeners) {
 			itemOwner.addItemListener(l);

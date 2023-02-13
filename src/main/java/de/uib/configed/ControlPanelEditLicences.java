@@ -41,7 +41,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 	ConfigedMain mainController;
 
 	public ControlPanelEditLicences(AbstractPersistenceController persist, ConfigedMain mainController) {
-		thePanel = new PanelEditLicences(this); // extending TabClientAdapter
+
+		// extending TabClientAdapter
+		thePanel = new PanelEditLicences(this);
 		this.persist = persist;
 		this.mainController = mainController;
 		init();

@@ -29,8 +29,9 @@ public class FDialogSubTable extends FGeneralDialog {
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
-		if (centerPanel == null)
+		if (centerPanel == null) {
 			centerPanel = new JPanel();
+		}
 
 		centerPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
 		centerPanel.setOpaque(true);

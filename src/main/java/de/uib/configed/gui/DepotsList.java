@@ -28,13 +28,13 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 	public DepotsList(AbstractPersistenceController persist) {
 		this.persist = persist;
-		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
-		setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
+		super.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		super.setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
+		super.setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
 
-		setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		myListCellRenderer = new MyListCellRenderer(persist);
-		setCellRenderer(myListCellRenderer);
+		super.setCellRenderer(myListCellRenderer);
 	}
 
 	public void setInfo(Map<String, Map<String, Object>> extendedInfo) {
@@ -119,11 +119,8 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, // value to display
-				int index, // cell index
-				boolean isSelected, // is the cell selected
-				boolean cellHasFocus // the list and the cell have the focus
-		) {
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
 
 			Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 

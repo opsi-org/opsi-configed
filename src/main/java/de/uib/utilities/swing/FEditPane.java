@@ -105,7 +105,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	protected void setSingleLine(boolean b) {
 		singleLine = b;
-
 	}
 
 	@Override
@@ -189,7 +188,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	@Override
 	public String getText() {
 
-		initialText = textpane.getText(); // set new initial text for use in processWindowEvent
+		// set new initial text for use in processWindowEvent
+		initialText = textpane.getText();
 		return initialText;
 	}
 
@@ -198,11 +198,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		if (e.getSource() == textpane) {
 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
-					&& e.getKeyCode() == KeyEvent.VK_TAB)
+					&& e.getKeyCode() == KeyEvent.VK_TAB) {
 				buttonCommit.requestFocusInWindow();
-
-			else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && singleLine)
+			} else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && singleLine) {
 				commit();
+			}
 		}
 		super.keyPressed(e);
 
@@ -278,10 +278,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	public void mouseMoved(MouseEvent e) {
 		Point p = e.getPoint();
 
-		if (getMarkedLine(textpane.viewToModel2D(p)) != null)
+		if (getMarkedLine(textpane.viewToModel2D(p)) != null) {
 			textpane.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		else
+		} else {
 			textpane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
 	}
 
 	// A simple class that searches for a word in
@@ -361,7 +362,8 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	// Painter for underlined highlights
 	public class UnderlineHighlightPainter extends LayeredHighlighter.LayerPainter {
-		protected Color color; // The color for the underline
+		// The color for the underline
+		protected Color color;
 
 		public UnderlineHighlightPainter(Color c) {
 			color = c;
@@ -428,5 +430,4 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			super.setDrawsLayeredHighlights(true);
 		}
 	}
-
 }

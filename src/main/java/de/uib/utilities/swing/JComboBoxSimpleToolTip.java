@@ -12,8 +12,8 @@ public class JComboBoxSimpleToolTip extends javax.swing.JComboBox<String> {
 	private static final int FILL_LENGTH = 40;
 
 	public JComboBoxSimpleToolTip() {
-		super(); // as it is
-		setRenderer(new MyComboBoxRenderer());
+		super();
+		super.setRenderer(new MyComboBoxRenderer());
 	}
 
 	protected class MyComboBoxRenderer extends BasicComboBoxRenderer {

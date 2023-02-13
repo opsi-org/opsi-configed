@@ -13,7 +13,8 @@ public class AndOrSelectButtonByIcon extends IconAsButton {
 	public AndOrSelectButtonByIcon() {
 		super("and/or", "images/boolean_and_or_disabled.png", "images/boolean_and_or_over.png",
 				"images/boolean_and_or.png", null);
-		addActionListener(new ButtonActionListener());
+
+		super.addActionListener(new ButtonActionListener());
 	}
 
 	public boolean isAndSelected() {

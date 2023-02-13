@@ -46,9 +46,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	GenTableModel modelProductId2LPool;
 	GenTableModel modelWindowsSoftwareIds;
 
-	TableModelFilterCondition windowsSoftwareFilterConditonShowOnlySelected; // we replace the filter from
-																				// GenTableModel
-																				// static String labelWindowsSoftwareFilterCondition_showOnlySelected =
+	// we replace the filter from GenTableModel
+	TableModelFilterCondition windowsSoftwareFilterConditonShowOnlySelected;
 
 	TableModelFilterCondition windowsSoftwareFilterConditionDontShowAssociatedToOtherPool;
 	private static final String LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_DONT_SHOW_ASSOCIATED_TO_OTHER_POOL = "restrictToNonAssociated";
@@ -563,7 +562,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		// --- panelRegisteredSoftware
 
 		columnNames = new ArrayList<>(de.uib.configed.type.SWAuditEntry.getDisplayKeys());
-		columnNames.add(colMarkCursorRow, "CURSOR"); // introducing a column for displaying the cursor row
+
+		// introducing a column for displaying the cursor row
+		columnNames.add(colMarkCursorRow, "CURSOR");
 
 		columnNames.remove("licenseKey");
 
@@ -571,8 +572,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		for (int i = 0; i <= columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
-		classNames.set(colMarkCursorRow, "java.lang.Boolean"); // introducing a column for displaying the
-																// cursor row
+
+		// introducing a column for displaying the cursor row
+		classNames.set(colMarkCursorRow, "java.lang.Boolean");
 
 		Logging.info(this, "panelRegisteredSoftware constructed with (size) cols " + "(" + columnNames.size() + ") "
 				+ columnNames);
@@ -663,7 +665,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		// special treatment of columns
 
 		if (colMarkCursorRow > -1) {
-			col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(colMarkCursorRow); // row cursor column
+
+			// row cursor column
+			col = thePanel.panelRegisteredSoftware.getColumnModel().getColumn(colMarkCursorRow);
 			col.setMaxWidth(12);
 			col.setHeaderValue("");
 
@@ -804,7 +808,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				}
 
 				String selectedLicencePool = null;
-				thePanel.panelProductId2LPool.setSelectedValues(null, 0);// clear selection
+
+				// clear selection
+				thePanel.panelProductId2LPool.setSelectedValues(null, 0);
 
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 

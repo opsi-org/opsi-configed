@@ -445,21 +445,13 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 	protected void addUser() {
 
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
-				"add user", // title
-				false, // modal
-
+		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add user", false,
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok"),
 						Configed.getResourceValue("FGeneralDialog.cancel") },
 
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
-				2, 600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
-				// layout
-				null // addPanel predefined
-		)
-
-		{
+				2, 600, 600, true, null) {
 
 			@Override
 			public void doAction1() {

@@ -76,7 +76,8 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected Window owner;
 
-	protected JProgressBar waitingProgressBar; // for use in derived classes
+	// for use in derived classes
+	protected JProgressBar waitingProgressBar;
 
 	public FGeneralDialog(JFrame owner, String title) {
 		super(owner, false);
@@ -84,11 +85,11 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		Logging.info(this, "created by constructor 1, owner " + owner);
 		registerWithRunningInstances();
-		setIconImage(Globals.mainIcon);
-		setTitle(title);
-		setFont(Globals.defaultFont);
+		super.setIconImage(Globals.mainIcon);
+		super.setTitle(title);
+		super.setFont(Globals.defaultFont);
 		checkAdditionalPane();
-		setLocationRelativeTo(owner);
+		super.setLocationRelativeTo(owner);
 	}
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal) {
@@ -97,9 +98,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		Logging.info(this, "created by constructor 2, owner " + owner);
 		registerWithRunningInstances();
-		setTitle(title);
-		setFont(Globals.defaultFont);
-		setIconImage(Globals.mainIcon);
+		super.setTitle(title);
+		super.setFont(Globals.defaultFont);
+		super.setIconImage(Globals.mainIcon);
 		checkAdditionalPane();
 		additionalPane.setVisible(false);
 		guiInit();
@@ -113,7 +114,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		defaultResult = d;
 	}
 
-	public void registerWithRunningInstances() {
+	private void registerWithRunningInstances() {
 		Logging.info(this, "registerWithRunningInstances " + wantToBeRegisteredWithRunningInstances());
 		if (wantToBeRegisteredWithRunningInstances()) {
 			FEditObject.runningInstances.add(this, "");

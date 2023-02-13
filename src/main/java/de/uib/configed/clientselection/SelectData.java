@@ -41,9 +41,9 @@ public class SelectData {
 
 		case DateType: {
 
-			if (!(data instanceof String))
-
+			if (!(data instanceof String)) {
 				throw new IllegalArgumentException("Data is not a (date) string");
+			}
 
 			break;
 		}

@@ -36,15 +36,15 @@ public class FPanel extends SecondaryFrame {
 	public FPanel(String title, JPanel panel, boolean checkLeave, int initialWidth, int initialHeight) {
 		super();
 		this.checkLeave = checkLeave;
-		setIconImage(Globals.mainIcon);
-		setTitle(Globals.APPNAME + " " + title);
+		super.setIconImage(Globals.mainIcon);
+		super.setTitle(Globals.APPNAME + " " + title);
 
-		setSize(new Dimension(initialWidth, initialHeight));
+		super.setSize(new Dimension(initialWidth, initialHeight));
 		innerPanel = panel;
-		getContentPane().add(innerPanel);
-		centerOnParent();
+		super.getContentPane().add(innerPanel);
+		super.centerOnParent();
 
-		setVisible(true);
+		super.setVisible(true);
 	}
 
 	protected boolean wantToBeRegisteredWithRunningInstances() {
@@ -53,24 +53,27 @@ public class FPanel extends SecondaryFrame {
 
 	protected void registerWithRunningInstances() {
 		Logging.info(this, "registerWithRunningInstances");
-		if (wantToBeRegisteredWithRunningInstances())
+		if (wantToBeRegisteredWithRunningInstances()) {
 			FPanel.runningInstances.add(this, "");
+		}
 	}
 
 	@Override
 	public void setVisible(boolean b) {
 
-		if (b)
+		if (b) {
 			runningInstances.add(this, "");
-		else
+		} else {
 			runningInstances.forget(this);
+		}
 
 		super.setVisible(b);
 	}
 
 	protected boolean leaveChecked() {
-		if (!checkLeave)
+		if (!checkLeave) {
 			return true;
+		}
 
 		boolean result = false;
 
@@ -100,10 +103,12 @@ public class FPanel extends SecondaryFrame {
 				}
 			}
 
-			else
+			else {
 				result = true;
-		} else
+			}
+		} else {
 			result = true;
+		}
 
 		Logging.info(this, "--------leaveChecked " + result);
 		return result;
@@ -137,8 +142,9 @@ public class FPanel extends SecondaryFrame {
 
 				leave();
 
-			} else
+			} else {
 				setVisible(true);
+			}
 		}
 
 	}

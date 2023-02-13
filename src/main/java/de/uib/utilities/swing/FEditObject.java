@@ -67,10 +67,11 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected JTextArea loggingArea;
 
 	public FEditObject(Object initialValue) {
-		setIconImage(Globals.mainIcon);
+		super.setIconImage(Globals.mainIcon);
 
-		if (initialValue != null)
+		if (initialValue != null) {
 			this.initialValue = initialValue;
+		}
 
 		createComponents();
 		// components initialized lazily in init()

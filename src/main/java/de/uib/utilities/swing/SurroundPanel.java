@@ -8,13 +8,13 @@ import javax.swing.JPanel;
 public class SurroundPanel extends JPanel {
 	public SurroundPanel() {
 		super();
-		setOpaque(false);
-		setLayout(new FlowLayout(FlowLayout.CENTER));
+		super.setOpaque(false);
+		super.setLayout(new FlowLayout(FlowLayout.CENTER));
 	}
 
 	public SurroundPanel(JComponent c) {
 		this();
-		add(c);
+		super.add(c);
 	}
 
 }

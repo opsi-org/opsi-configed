@@ -67,32 +67,38 @@ public class ImagePlusTextLabel extends JPanel {
 	 */
 	@Override
 	public void setFont(Font font) {
-		if (textlabel != null)
+		if (textlabel != null) {
 			textlabel.setFont(font);
+		}
 	}
 
 	@Override
 	public Font getFont() {
-		if (textlabel != null)
+		if (textlabel != null) {
 			return textlabel.getFont();
-		else
+		} else {
 			return super.getFont();
+		}
 	}
 
 	@Override
 	public void setBackground(Color bg) {
-		if (textlabel != null)
+		if (textlabel != null) {
 			textlabel.setBackground(bg);
-		if (imagefield != null)
+		}
+		if (imagefield != null) {
 			imagefield.setBackground(bg);
+		}
 	}
 
 	@Override
 	public void setForeground(Color fg) {
-		if (textlabel != null)
+		if (textlabel != null) {
 			textlabel.setForeground(fg);
-		if (imagefield != null)
+		}
+		if (imagefield != null) {
 			imagefield.setForeground(fg);
+		}
 	}
 
 }

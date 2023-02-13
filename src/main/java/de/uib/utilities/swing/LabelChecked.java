@@ -27,16 +27,17 @@ public class LabelChecked extends JLabel {
 		this.iconUnchecked = iconUnchecked;
 		this.iconEmpty = iconEmpty;
 
-		setIcon(iconEmpty);
+		super.setIcon(iconEmpty);
 	}
 
 	public void setValue(Boolean b) {
-		if (b == null)
+		if (b == null) {
 			setEmpty();
-		else if (b)
+		} else if (b) {
 			setChecked();
-		else
+		} else {
 			setUnchecked();
+		}
 	}
 
 	public void setChecked() {

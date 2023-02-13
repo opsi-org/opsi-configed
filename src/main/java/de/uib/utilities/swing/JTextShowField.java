@@ -12,7 +12,7 @@ public class JTextShowField extends javax.swing.JTextField {
 
 	public JTextShowField(String s, boolean editable) {
 		super(s);
-		setEditable(editable);
+		super.setEditable(editable);
 	}
 
 	public JTextShowField() {

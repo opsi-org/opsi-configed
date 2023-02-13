@@ -130,13 +130,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		this.main = main;
 		this.selectionPanel = selectionPanel;
 		this.savedSearchesDialog = savedSearchesDialog;
-		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+		super.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		manager = new SelectionManager("OpsiData");
 		complexElements = new LinkedList<>();
 		init();
-		pack();
+		super.pack();
 
-		addComponentListener(new ComponentAdapter() {
+		super.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				Logging.info(this, "ClientSelectionDialog resized");
@@ -449,7 +449,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 		result.operationComponent.setMaximumSize(new Dimension(result.operationComponent.getMaximumSize().width,
 				result.operationComponent.getPreferredSize().height));
-		result.dataComponent = new JLabel(); // to reserve the place
+
+		// to reserve the place
+		result.dataComponent = new JLabel();
 		result.dataComponent.setMaximumSize(new Dimension(result.dataComponent.getMaximumSize().width,
 				result.dataComponent.getPreferredSize().height));
 		result.openParenthesis = new IconAsButton(

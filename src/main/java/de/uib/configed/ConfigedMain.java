@@ -3081,7 +3081,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				List<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
 
 				if (hostConfigs == null) {
-					hostConfigs = new HashMap<>(); // serves as marker
+
+					// serves as marker
+					hostConfigs = new HashMap<>();
 
 					for (String client : getSelectedClients()) {
 						hostConfigs.put(client, persist.getConfigs().get(client));
@@ -3826,7 +3828,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		public void dataHaveChanged(Object source) {
 			super.dataHaveChanged(source);
 			Logging.info(this, "dataHaveChanged from " + source);
-			setDataChanged(super.isDataChanged()); // anyDataChanged in ConfigedMain
+
+			// anyDataChanged in ConfigedMain
+			setDataChanged(super.isDataChanged());
 		}
 
 		public boolean askSave() {
@@ -4047,8 +4051,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.debug(this, "----------------  checkSaveAll: anyDataChanged, ask  " + anyDataChanged + ", " + ask);
 
 		if (anyDataChanged) {
-			setDataChanged(false, false); // without showing, but must be on first place since we run in this method
-											// again
+			// without showing, but must be on first place since we run in this method again
+			setDataChanged(false, false);
 
 			if (ask) {
 				if (clientInfoDataChangedKeeper.askSave()) {
@@ -4067,6 +4071,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			if (!ask || hostConfigsDataChangedKeeper.askSave()) {
 				hostConfigsDataChangedKeeper.save();
+			} else {
+				hostConfigsDataChangedKeeper.cancel();
 			}
 
 			setDataChanged(false, true);

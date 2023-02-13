@@ -32,28 +32,33 @@ public class MySQL {
 	public String getMySQLInnerJoins() {
 		String joins = "";
 
-		if (group)
+		if (group) {
 			joins += " INNER JOIN OBJECT_TO_GROUP a ON (HOST.hostId=a.objectId AND a.groupType LIKE 'HostGroup' ) ";
+		}
 
-		if (product)
+		if (product) {
 			joins += " INNER JOIN PRODUCT_ON_CLIENT d ON (HOST.hostId=d.clientId) ";
+		}
 
-		if (property)
+		if (property) {
 			joins += " INNER JOIN PRODUCT_PROPERTY_STATE h ON (h.productId LIKE d.productId AND h.objectId LIKE HOST.hostId) ";
+		}
 
-		if (software)
+		if (software) {
 			joins += " INNER JOIN SOFTWARE_CONFIG f ON (HOST.hostId=f.clientId) INNER JOIN SOFTWARE g ON (f.name=g.name AND f.version=g.version AND f.subVersion=g.subVersion AND f.language=g.language AND f.architecture=g.architecture) ";
+		}
 
 		if (hardware) {
 			String hardwareJoinString;
 
-			if (hardwareWithDevice)
+			if (hardwareWithDevice) {
 				hardwareJoinString = " INNER JOIN HARDWARE_CONFIG_" + hardwareTableName
 						+ " i ON (i.hostId LIKE HOST.hostId) INNER JOIN HARDWARE_DEVICE_" + hardwareTableName
 						+ " g ON (g.hardware_id LIKE i.hardware_id) ";
-			else
+			} else {
 				hardwareJoinString = " INNER JOIN HARDWARE_CONFIG_" + hardwareTableName
 						+ " i ON (i.hostId LIKE HOST.hostId) ";
+			}
 
 			joins += hardwareJoinString;
 		}
@@ -134,10 +139,12 @@ public class MySQL {
 
 					// In der Datenbank sind die 'values' immer in Anführungszeichen,
 					// Außnahme: true, false
-					if (data.equals("false") || data.equals("true"))
+					if (data.equals("false") || data.equals("true")) {
 						return " (h.values LIKE '%" + data + "%' OR h.values LIKE '\"%" + data + "\"%') ";
+					}
 
-					return " h.values LIKE '%\"" + data + "\"%' "; // 'data' should be part of the array
+					// 'data' should be part of the array
+					return " h.values LIKE '%\"" + data + "\"%' ";
 
 				// Software-Inventur-Data
 				case "SwAuditNameElement":
@@ -214,17 +221,20 @@ public class MySQL {
 		String spaltenName = spalte.get("Opsi");
 		String scope = spalte.get("Scope");
 
-		if (scope.equals("g"))
+		if (scope.equals("g")) {
 			hardwareWithDevice = true;
+		}
 
-		return scope + "." + spaltenName + " NOT LIKE '' AND " + scope + "." + spaltenName; // LEERE FELDER NICHT
-																							// ERLAUBEN
+		// Do not allow empty fields
+		return scope + "." + spaltenName + " NOT LIKE '' AND " + scope + "." + spaltenName;
 	}
 
 	private Map<String, String> findColumnInTable(String column, List<Map<String, String>> values) {
-		for (int i = 0; i < values.size(); i++)
-			if (values.get(i).get("UI").equals(column))
+		for (int i = 0; i < values.size(); i++) {
+			if (values.get(i).get("UI").equals(column)) {
 				return values.get(i);
+			}
+		}
 
 		return new HashMap<>();
 	}
@@ -232,8 +242,9 @@ public class MySQL {
 	// Actually return type is Map<String, Map<String, String>>, but cannot cast
 	private Map<String, Object> findHardwareInConfig(String elementPath) {
 		for (int i = 0; i < hwConfig.size(); i++) {
-			if (((Map<String, String>) hwConfig.get(i).get("Class")).get("UI").equals(elementPath))
+			if (((Map<String, String>) hwConfig.get(i).get("Class")).get("UI").equals(elementPath)) {
 				return hwConfig.get(i);
+			}
 		}
 
 		return new HashMap<>();

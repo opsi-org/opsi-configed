@@ -59,10 +59,12 @@ public class PropertiesStore
 
 					String key = line.substring(0, posSeparator);
 					String value = null;
-					if (line.length() > posSeparator)
+					if (line.length() > posSeparator) {
 						value = line.substring(posSeparator + 1);
-					if (value != null)
+					}
+					if (value != null) {
 						setProperty(key, value);
+					}
 					Logging.debug(this, "key, value " + key + ", " + value);
 				}
 
@@ -86,8 +88,9 @@ public class PropertiesStore
 	// used by subsubclasses
 	protected final String getProp(String key, String defaultValue) {
 		String result = internalStore.get(key);
-		if (result == null)
+		if (result == null) {
 			return defaultValue;
+		}
 
 		return result;
 	}
@@ -106,8 +109,9 @@ public class PropertiesStore
 		TreeSet<String> orderedLines = new TreeSet<>();
 
 		for (String key : internalStore.keySet()) {
-			if (getProperty(key) != null)
+			if (getProperty(key) != null) {
 				orderedLines.add(key + KEY_SEPARATOR + getProperty(key));
+			}
 		}
 
 		return orderedLines;
@@ -116,8 +120,9 @@ public class PropertiesStore
 	public void store(String comments) throws IOException {
 		List<String> outLines = new ArrayList<>();
 
-		if (comments != null)
+		if (comments != null) {
 			outLines.add("# " + comments);
+		}
 		outLines.add("# " + java.text.DateFormat
 				.getDateTimeInstance(java.text.DateFormat.LONG, java.text.DateFormat.LONG).format(new Date()));
 		outLines.addAll(formOutputLines());

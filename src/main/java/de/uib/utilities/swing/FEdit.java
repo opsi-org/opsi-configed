@@ -56,10 +56,11 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		super((Dialog) null);
 
 		Logging.debug(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
-		setIconImage(Globals.mainIcon);
+		super.setIconImage(Globals.mainIcon);
 
-		if (initialText != null)
+		if (initialText != null) {
 			this.initialText = initialText;
+		}
 
 		this.hint = hint;
 
@@ -73,7 +74,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		labelHint.setText(hint);
 	}
 
-	protected void createComponents() {
+	private void createComponents() {
 		framingPanel = new JPanel();
 		editingArea = new JPanel(new BorderLayout());
 

@@ -47,8 +47,10 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		labelList.setToolTipText(defs.getListLabelToolTip());
 		theList = new JList<>();
 		theList.setListData(defs.getListData().toArray(new String[0]));
-		if (defs.getListData() != null && !defs.getListData().isEmpty())
+		if (defs.getListData() != null && !defs.getListData().isEmpty()) {
 			theList.setSelectedIndex(0);
+		}
+
 		theList.addListSelectionListener(this);
 	}
 
@@ -63,8 +65,9 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
-		if (centerPanel == null)
+		if (centerPanel == null) {
 			centerPanel = new JPanel();
+		}
 
 		centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 

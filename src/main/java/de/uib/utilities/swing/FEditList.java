@@ -153,8 +153,9 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	}
 
 	protected void addSelectedValues(List<Object> toSelect) {
-		if (toSelect == null)
+		if (toSelect == null) {
 			return;
+		}
 
 		ListModel<Object> model = visibleList.getModel();
 
@@ -172,8 +173,9 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	}
 
 	public void initSelection() {
-		if (visibleList.getModel().getSize() > 0)
+		if (visibleList.getModel().getSize() > 0) {
 			visibleList.setSelectedIndex(0);
+		}
 	}
 
 	public void setSelectedValues(List<Object> toSelect) {

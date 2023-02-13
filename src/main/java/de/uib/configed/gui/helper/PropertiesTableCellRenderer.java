@@ -22,15 +22,15 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
-			boolean isSelected, // is the cell selected
-			boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
 
 		Object sValue = formatList(value);
 		Component result = super.getTableCellRendererComponent(table, sValue, isSelected, hasFocus, row, column);
 
-		if (column == 1)
+		if (column == 1) {
 			mergeColorize(result, value);
+		}
 
 		return result;
 	}
@@ -55,7 +55,5 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 			comp.setBackground(Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR);
 			comp.setForeground(Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR);
 		}
-
 	}
-
 }

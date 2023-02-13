@@ -82,7 +82,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		return fieldFilenamePrefix.getText();
 	}
 
-	protected void setupPanel() {
+	private void setupPanel() {
 
 		setBackground(Globals.BACKGROUND_COLOR_7);
 		GroupLayout glGlobal = new GroupLayout(this);
@@ -101,11 +101,13 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		String filenamePrefix = Configed.savedStates.saveSWauditExportFilePrefix.deserialize();
 
-		if (filenamePrefix == null || filenamePrefix.length() == 0)
+		if (filenamePrefix == null || filenamePrefix.length() == 0) {
 			filenamePrefix = Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix");
+		}
 
-		if (filenamePrefix == null)
+		if (filenamePrefix == null) {
 			filenamePrefix = FILENAME_PREFIX_DEFAULT;
+		}
 
 		fieldFilenamePrefix = new JTextShowField(filenamePrefix);
 		fieldFilenamePrefix.setEditable(true);

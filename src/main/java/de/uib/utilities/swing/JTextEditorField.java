@@ -12,31 +12,35 @@ public class JTextEditorField extends javax.swing.JTextField implements KeyListe
 
 	public JTextEditorField(String s) {
 		super(s);
-		addKeyListener(this);
+		super.addKeyListener(this);
 	}
 
 	public JTextEditorField(Document doc, String text, int columns) {
 		super(doc, text, columns);
-		addKeyListener(this);
+		super.addKeyListener(this);
 	}
 
 	@Override
 	public void setText(String s) {
 		Logging.debug(this, "setText " + s);
-		if (s == null)
+		if (s == null) {
 			lastSetS = "";
-		else
+		} else {
 			lastSetS = s;
+		}
+
 		super.setText(s);
 	}
 
 	public boolean isChangedText() {
 
-		if (lastSetS == null && getText() == null)
+		if (lastSetS == null && getText() == null) {
 			return false;
+		}
 
-		if (lastSetS == null && getText() != null)
+		if (lastSetS == null && getText() != null) {
 			return true;
+		}
 
 		return !lastSetS.equals(getText());
 	}
