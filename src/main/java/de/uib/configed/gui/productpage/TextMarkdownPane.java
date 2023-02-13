@@ -26,8 +26,6 @@ import de.uib.utilities.logging.Logging;
 public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 
 	public TextMarkdownPane() {
-		super();
-
 		addHyperlinkListener(this);
 		setEditable(false);
 		setContentType("text/html");
