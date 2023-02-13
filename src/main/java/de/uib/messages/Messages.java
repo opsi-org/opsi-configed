@@ -12,9 +12,7 @@ import java.util.ResourceBundle;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
-import utils.ResourceBundleUtf8;
 
 public final class Messages {
 
@@ -25,7 +23,6 @@ public final class Messages {
 	public static final String APPNAME = "configed";
 	private static final String BUNDLE_NAME = "de/uib/messages/configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
-	private static Boolean utf8Hack = null;
 
 	static List<LocaleRepresentation> existingLocales;
 	static List<String> existingLocalesNames;
@@ -97,36 +94,11 @@ public final class Messages {
 		return i;
 	}
 
-	private static void checkUTF8() {
-		if (utf8Hack == null) {
-			String javaVersionOnlyNumbers0 = System.getProperty("java.version");
-			if (javaVersionOnlyNumbers0 == null) {
-				Logging.error("gotten Java version from System.getProperty is null");
-				return;
-			}
-
-			Logging.debug("java version " + javaVersionOnlyNumbers0);
-			String javaVersionOnlyNumbers = javaVersionOnlyNumbers0.substring(0, lastIntIndex(javaVersionOnlyNumbers0));
-
-			if (javaVersionOnlyNumbers.length() < javaVersionOnlyNumbers0.length())
-				Logging.debug("shortened to " + javaVersionOnlyNumbers);
-
-			Integer differenceToJava9 = Globals.compareDottedNumberStrings("9", javaVersionOnlyNumbers);
-			Logging.debug(" version difference to java 9 is: " + differenceToJava9);
-			utf8Hack = (differenceToJava9 > 0);
-			Logging.debug(" we will use the UTF8 hack " + utf8Hack);
-		}
-	}
-
 	public static ResourceBundle getResource() throws MissingResourceException {
-		checkUTF8();
-
 		try {
 			Logging.info("Messages, getResource from " + BUNDLE_NAME);
-			if (utf8Hack)
-				messagesBundle = ResourceBundleUtf8.getBundle(BUNDLE_NAME, myLocale);
-			else
-				messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
+
+			messagesBundle = ResourceBundle.getBundle(BUNDLE_NAME, myLocale);
 
 			Logging.debug("Messages messages " + messagesBundle);
 
@@ -137,14 +109,10 @@ public final class Messages {
 	}
 
 	public static ResourceBundle getResourceEN() throws MissingResourceException {
-		checkUTF8();
 
-		if (utf8Hack)
-			messagesEnBundle = ResourceBundleUtf8.getBundle(BUNDLE_NAME,
-					new Locale.Builder().setLanguage("en").setRegion("US").build());
-		else
-			messagesEnBundle = ResourceBundle.getBundle(BUNDLE_NAME,
-					new Locale.Builder().setLanguage("en").setRegion("US").build());
+		messagesEnBundle = ResourceBundle.getBundle(BUNDLE_NAME,
+				new Locale.Builder().setLanguage("en").setRegion("US").build());
+
 		myLocaleCharacteristicsEN = new ArrayList<>();
 		myLocaleCharacteristicsEN.add("en_US");
 		myLocaleCharacteristicsEN.add("en");
