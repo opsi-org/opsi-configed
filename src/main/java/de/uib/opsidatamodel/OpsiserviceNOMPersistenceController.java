@@ -162,7 +162,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected Set<String> productsHavingSpecificProperties;
 	protected Map<String, Boolean> productHavingClientSpecificProperties;
 
-	protected Map<String, Map<String, ListCellOptions>> productPropertyDefinitions; // for depot
+	// for depot
+	protected Map<String, Map<String, ListCellOptions>> productPropertyDefinitions;
 
 	protected AbstractHostInfoCollections hostInfoCollections;
 

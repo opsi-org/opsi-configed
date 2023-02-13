@@ -98,7 +98,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	private JComboBox<String> fieldHost = new JComboBox<>();
 
 	private JProgressBar jProgressBar = new JProgressBar();
-	private JLabel waitLabelConnecting = new JLabel();
+	private JLabel waitingLabel = new JLabel();
 
 	private long timeOutMillis = TIMEOUT_MS;
 
@@ -161,7 +161,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		jProgressBar.setVisible(!active);
 		jProgressBar.setValue(0);
 
-		waitLabelConnecting.setText(active ? "" : Configed.getResourceValue("DPassword.WaitInfo.label"));
+		waitingLabel.setText(active ? "" : Configed.getResourceValue("DPassword.WaitInfo.label"));
 		setEnabled(active);
 	}
 
@@ -271,8 +271,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 				.addComponent(jPanelParameters, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
 						(int) (1.2 * Globals.LINE_HEIGHT))
 
-				.addGap(2)
-				.addComponent(waitLabelConnecting, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(2).addComponent(waitingLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				.addComponent(jProgressBar, Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT,
 						Globals.PROGRESS_BAR_HEIGHT)
@@ -324,7 +323,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 								.addGap(Globals.VGAP_SIZE))
 
 						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
-								.addComponent(waitLabelConnecting).addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
+								.addComponent(waitingLabel).addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
 
 						.addComponent(jProgressBar)
 
@@ -425,7 +424,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 	@Override
 	public JLabel getLabel() {
-		return waitLabelConnecting;
+		return waitingLabel;
 	}
 
 	@Override
@@ -445,7 +444,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
-		return waitLabelConnecting.getText();
+		return waitingLabel.getText();
 	}
 
 	@Override

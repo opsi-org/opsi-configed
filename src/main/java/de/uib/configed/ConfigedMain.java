@@ -118,7 +118,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.FEditText;
-import de.uib.utilities.swing.FLoadingWaiter;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.tabbedpane.TabClient;
 import de.uib.utilities.swing.tabbedpane.TabController;
@@ -151,7 +150,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	static final String TEMPGROUPNAME = "";
 
-	private static FLoadingWaiter fProgress;
+	private static GuiStrategyForLoadingData strategyForLoadingData;
 
 	AbstractPersistenceController persist;
 
@@ -465,8 +464,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
-			if (fProgress != null) {
-				fProgress.actAfterWaiting();
+			if (strategyForLoadingData != null) {
+				strategyForLoadingData.actAfterWaiting();
 			}
 
 			if (Boolean.TRUE.equals(
@@ -666,11 +665,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.syncTables();
 
-		fProgress = new FLoadingWaiter(dPassword,
-				Globals.APPNAME + " " + Configed.getResourceValue("FWaitProgress.title"));
-		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(fProgress);
+		strategyForLoadingData = new GuiStrategyForLoadingData(dPassword);
 
-		fProgress.startWaiting();
+		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(strategyForLoadingData);
+
+		strategyForLoadingData.startWaiting();
 
 		new Thread() {
 			@Override
@@ -681,17 +680,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				waitCursorInitGui.stop();
 				checkErrorList();
-				if (fProgress == null) {
-					Logging.warning(this, "configed.fProgress == null although it should have been started");
-				} else {
-					fProgress.setReady();
-					fProgress.actAfterWaiting();
-				}
+
+				strategyForLoadingData.setReady();
+				strategyForLoadingData.actAfterWaiting();
 
 				mainFrame.toFront();
 			}
 		}.start();
-
 	}
 
 	public void init() {
@@ -3123,10 +3118,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public static void setProgressComponentStopWaiting() {
-		if (fProgress != null) {
+		if (strategyForLoadingData != null) {
 			try {
-				fProgress.stopWaiting();
-				fProgress = null;
+				strategyForLoadingData.stopWaiting();
+				strategyForLoadingData = null;
 			} catch (Exception ex) {
 				Logging.debug("Exception " + ex);
 			}

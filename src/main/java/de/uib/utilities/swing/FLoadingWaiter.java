@@ -17,10 +17,8 @@ import javax.swing.UIDefaults;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.DPassword;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataLoadingObserver;
-import de.uib.utilities.thread.WaitInfoString;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
@@ -29,17 +27,12 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 	private static final long WAITING_MILLIS_FOR_LOADING = 50000;
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
-	DPassword dPass;
+	private JProgressBar progressBar;
+	private JLabel infoLabel;
 
-	JProgressBar progressBar;
-	JProgressBar newProgressBar;
-	JLabel infoLabel;
-	protected String info;
-	protected static WaitInfoString waitInfoString;
+	private Object observingMesg = Configed.getResourceValue("LoadingObserver.start");
 
-	protected Object observingMesg = Configed.getResourceValue("LoadingObserver.start");
-
-	int max = 200;
+	private static final int JPROGRESSBAR_MAX_VALUE = 200;
 
 	private WaitingWorker worker;
 
@@ -56,14 +49,6 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 			gd.setColor(color);
 			gd.fillRect(0, 0, width, height);
 		}
-	}
-
-	public FLoadingWaiter(DPassword dPass, String title) {
-		super(title);
-
-		this.dPass = dPass;
-
-		createGUI(dPass);
 	}
 
 	public FLoadingWaiter(Component owner, String title, String startMessage) {
@@ -90,7 +75,7 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 
 		progressBar.setEnabled(true);
 		progressBar.setValue(0);
-		progressBar.setMaximum(max);
+		progressBar.setMaximum(JPROGRESSBAR_MAX_VALUE);
 
 		UIDefaults defaults = new UIDefaults();
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new MyPainter(Globals.opsiLogoBlue));
@@ -125,16 +110,12 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 
 		setSize(new Dimension(400, 250));
 
-		if (waitInfoString == null)
-			waitInfoString = new WaitInfoString();
-
 		worker = new WaitingWorker(this);
 		Logging.info(this, "set Loction of FLoadingWaiter in center of screen of owner");
 
 		setLocationRelativeTo(owner);
 		setAlwaysOnTop(true);
-		if (dPass == null)
-			setVisible(true);
+		setVisible(true);
 
 		Logging.info(this, "should be visible now");
 	}
@@ -151,23 +132,17 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 	@Override
 	public void actAfterWaiting() {
 		Logging.info(this, "actAfterWaiting");
-		SwingUtilities.invokeLater(() -> {
-			if (dPass == null)
-				setVisible(false);
-
-			else
-				dPass.setVisible(false);
-		});
+		SwingUtilities.invokeLater(() -> setVisible(false));
 	}
 
 	@Override
 	public JProgressBar getProgressBar() {
-		return dPass == null ? progressBar : dPass.getProgressBar();
+		return progressBar;
 	}
 
 	@Override
 	public JLabel getLabel() {
-		return dPass == null ? infoLabel : dPass.getLabel();
+		return infoLabel;
 	}
 
 	@Override
@@ -188,7 +163,9 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
 		Logging.debug(this, "setLabellingStrategy millis " + millisLevel);
-		return "" + observingMesg + " " + waitInfoString.next(); // ??produces strings with ascii null
+
+		// produces strings with ascii null
+		return observingMesg + " ... ";
 
 	}
 
