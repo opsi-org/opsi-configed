@@ -2139,7 +2139,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setSelectionPanelCols();
 
-		setSelectedClientsCollectionOnPanel(valuesToSelect); // did lose the selection since last setting
+		// did lose the selection since last setting
+		setSelectedClientsCollectionOnPanel(valuesToSelect);
 
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel "
 				+ Logging.getSize(selectionPanel.getSelectedValues()));
@@ -2152,7 +2153,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		filterClientList = b;
 		setRebuiltClientListTableModel();
-
 	}
 
 	protected String getSelectedClientsString() {
@@ -3377,8 +3377,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-		if (!problem && dataReady) // we have loaded the data
-		{
+		if (!problem && dataReady) {
+			// we have loaded the data
 			viewIndex = visualViewIndex;
 
 			if (viewIndex != VIEW_CLIENTS) {
@@ -3460,7 +3460,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 
-			persist.updateProductOnClients(); // send the collected items
+			// send the collected items
+			persist.updateProductOnClients();
 		}
 	}
 
@@ -3488,8 +3489,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 
-			persist.updateProductOnClients(); // send the collected items
-
+			// send the collected items
+			persist.updateProductOnClients();
 		}
 
 		if (istmForSelectedClientsNetboot != null) {
@@ -3685,7 +3686,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.info(this, " reloadData _______________________________  saveViewIndex " + saveViewIndex);
 
-		WaitCursor.stopAll(); // stop all old waiting threads if there should be any left
+		// stop all old waiting threads if there should be any left
+		WaitCursor.stopAll();
 
 		List<String> selValuesList = selectionPanel.getSelectedValues();
 
@@ -3694,8 +3696,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String[] savedSelectedValues = selValuesList.toArray(new String[selValuesList.size()]);
 
 		if (selectionPanel != null) {
-			selectionPanel.removeListSelectionListener(this); // deactivate temporarily listening to list selection
-																// events
+			// deactivate temporarily listening to list selection events
+			selectionPanel.removeListSelectionListener(this);
 		}
 
 		// dont do anything if we did not finish another thread for this
@@ -3762,10 +3764,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// configuratio
 			persist.getHostInfoCollections().getAllDepots();
-			persist.checkConfiguration(); // we do this again since we reloaded the configuration
+
+			// we do this again since we reloaded the configuration
+			persist.checkConfiguration();
 		}
 
-		setEditingTarget(editingTarget); // sets visual view index, therefore:
+		// sets visual view index, therefore:
+		setEditingTarget(editingTarget);
 
 		// if depot selection changed, we adapt the clients
 		NavigableSet<String> clientsLeft = new TreeSet<>();
@@ -4246,7 +4251,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		mainFrame.iconButtonSessionInfo.setWaitingState(true);
 
-		sessionInfo = new HashMap<>(); // no old values kept
+		// no old values kept
+		sessionInfo = new HashMap<>();
 
 		try {
 			// leave the Event dispatching thread
@@ -4570,7 +4576,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		persist.hostConfigsRequestRefresh();
 		persist.hostGroupsRequestRefresh();
 		persist.fObject2GroupsRequestRefresh();
-		persist.fGroup2MembersRequestRefresh(); // ??
+		persist.fGroup2MembersRequestRefresh();
 		refreshClientListKeepingGroup();
 	}
 
@@ -5117,8 +5123,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			TreePath newGroupPath = treeClients.getPathToGROUPS().pathByAddingChild(newGroupNode);
 
 			for (int j = 0; j < getSelectedClients().length; j++) {
-				treeClients.copyClientTo(getSelectedClients()[j], null, // from nowhere
-						newGroupName, newGroupNode, newGroupPath);
+				treeClients.copyClientTo(getSelectedClients()[j], null, newGroupName, newGroupNode, newGroupPath);
 			}
 
 			treeClients.makeVisible(newGroupPath);

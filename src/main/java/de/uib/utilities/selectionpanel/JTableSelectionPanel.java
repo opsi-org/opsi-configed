@@ -62,7 +62,9 @@ import de.uib.utilities.table.gui.TablesearchPane;
 public class JTableSelectionPanel extends JPanel
 		implements DocumentListener, KeyListener, MissingDataPanel, ActionListener {
 	JScrollPane scrollpane;
-	JTable table; // we put a JTable on a standard JScrollPane
+
+	// we put a JTable on a standard JScrollPane
+	JTable table;
 
 	DefaultListSelectionModel selectionmodel;
 	ConfigedMain main;
@@ -81,7 +83,7 @@ public class JTableSelectionPanel extends JPanel
 
 	TablesearchPane.SearchMode searchMode;
 
-	protected int hMin = 200;
+	private static final int MIN_HEIGHT = 200;
 
 	private int foundrow = -1;
 
@@ -294,8 +296,8 @@ public class JTableSelectionPanel extends JPanel
 		leftPane.setLayout(layoutLeftPane);
 
 		layoutLeftPane.setHorizontalGroup(layoutLeftPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addComponent(topPane, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-				.addComponent(scrollpane, hMin, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+				.addComponent(topPane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(scrollpane, MIN_HEIGHT, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		layoutLeftPane.setVerticalGroup(layoutLeftPane.createSequentialGroup()
 				.addComponent(topPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -560,8 +562,9 @@ public class JTableSelectionPanel extends JPanel
 
 	public Set<String> getColumnValues(int col) {
 		HashSet<String> result = new HashSet<>();
-		if (table.getModel() == null || table.getModel().getColumnCount() <= col)
+		if (table.getModel() == null || table.getModel().getColumnCount() <= col) {
 			return result;
+		}
 
 		for (int i = 0; i < table.getModel().getRowCount(); i++) {
 			result.add("" + table.getModel().getValueAt(i, col));

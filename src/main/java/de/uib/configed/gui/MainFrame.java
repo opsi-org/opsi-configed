@@ -512,7 +512,7 @@ public class MainFrame extends JFrame
 			ClientTree treeClients, boolean multidepot) {
 
 		// we handle it in the window listener method
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		this.multidepot = multidepot;
 
@@ -1168,25 +1168,32 @@ public class MainFrame extends JFrame
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED))
+					if (factory.getConnectionState().equals(SSHCommandFactory.NOT_CONNECTED)) {
 						Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
 								+ factory.getConnectionState());
-					else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED))
+					} else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
 						Logging.error(this, Configed.getResourceValue("SSHConnection.CONNECTION_NOT_ALLOWED.message"));
-					else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN))
+					} else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN)) {
 						Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
 								+ factory.getConnectionState());
-					else
+					} else {
 						remoteSSHExecAction(command);
+					}
 				}
 			});
-			if (!jMenuServer.isMenuComponent(menuOpsi))
+
+			if (!jMenuServer.isMenuComponent(menuOpsi)) {
 				jMenuServer.add(menuOpsi);
+			}
+
 			menuOpsi.add(jMenuOpsiCommand);
-			if (isReadOnly)
+			if (isReadOnly) {
 				jMenuOpsiCommand.setEnabled(false);
-			if (commandsAreDeactivated)
+			}
+
+			if (commandsAreDeactivated) {
 				jMenuOpsiCommand.setEnabled(false);
+			}
 		}
 
 		Logging.info(this, "setupMenuServer create/read command menu configs");
@@ -1371,8 +1378,9 @@ public class MainFrame extends JFrame
 					rbLoglevelItems[i].setSelected(true);
 					Logging.setLogLevel(i);
 				} else {
-					if (rbLoglevelItems[i] != null)
+					if (rbLoglevelItems[i] != null) {
 						rbLoglevelItems[i].setSelected(false);
+					}
 				}
 			}
 		};
@@ -3186,8 +3194,9 @@ public class MainFrame extends JFrame
 		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
 		// Can iconify, but not deiconify a modal JDialog
 
-		if (frames == null)
+		if (frames == null) {
 			return;
+		}
 
 		int transpose = 20;
 
@@ -3222,8 +3231,9 @@ public class MainFrame extends JFrame
 	@Override
 	public void executeCommandOnInstances(String command, Set<JDialog> instances) {
 		Logging.info(this, "executeCommandOnInstances " + command + " for count instances " + instances.size());
-		if (command.equals("arrange"))
+		if (command.equals("arrange")) {
 			arrangeWs(instances);
+		}
 	}
 
 	private void reactToHostDataChange(InputEvent e) {
@@ -3247,8 +3257,9 @@ public class MainFrame extends JFrame
 				if (jTextFieldInventoryNumber.isChangedText()) {
 					changedClientInfo.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, jTextFieldInventoryNumber.getText());
 					configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
-				} else
+				} else {
 					changedClientInfo.remove(HostInfo.CLIENT_INVENTORY_NUMBER_KEY);
+				}
 
 			}
 
@@ -3563,11 +3574,12 @@ public class MainFrame extends JFrame
 
 	public void setHardwareInfo(Object hardwareInfo) {
 
-		if (hardwareInfo == null)
+		if (hardwareInfo == null) {
 			showHardwareLogVersion2.setHardwareInfo(null,
 					Configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
-		else
+		} else {
 			showHardwareLogVersion2.setHardwareInfo((Map) hardwareInfo, null);
+		}
 
 		showHardwareLog = showHardwareLogVersion2;
 		showHardwareInfo();
@@ -3587,8 +3599,9 @@ public class MainFrame extends JFrame
 		boolean goOn = true;
 
 		String clientID = getClientID();
-		if ((clientID == null) || (clientID.length() == 0))
+		if ((clientID == null) || (clientID.length() == 0)) {
 			return goOn;
+		}
 
 		// for testing commented out
 
@@ -3659,8 +3672,9 @@ public class MainFrame extends JFrame
 
 			fObsolete.setVisible(true);
 
-			if (fObsolete.getResult() != 1)
+			if (fObsolete.getResult() != 1) {
 				goOn = false;
+			}
 		}
 
 		return goOn;
@@ -3704,8 +3718,9 @@ public class MainFrame extends JFrame
 
 			for (String client : configedMain.getSelectedClients()) {
 				Map<String, Map> tableData = configedMain.getPersistenceController().retrieveSoftwareAuditData(client);
-				if (tableData == null || tableData.isEmpty())
+				if (tableData == null || tableData.isEmpty()) {
 					clientsWithoutScan.add(client);
+				}
 
 			}
 
@@ -3719,10 +3734,11 @@ public class MainFrame extends JFrame
 				String scandate = configedMain.getPersistenceController().getLastSoftwareAuditModification(client);
 				if (scandate != null) {
 					int timePos = scandate.indexOf(' ');
-					if (timePos >= 0)
+					if (timePos >= 0) {
 						scandate = scandate.substring(0, timePos);
-					else
+					} else {
 						scandate = "__";
+					}
 				}
 
 				String filepath = filepathStart + client + "__scan_" + scandate + extension;
@@ -3792,8 +3808,9 @@ public class MainFrame extends JFrame
 
 	public void setLogview(String logtype) {
 		int i = Arrays.asList(Globals.getLogTypes()).indexOf(logtype);
-		if (i < 0)
+		if (i < 0) {
 			return;
+		}
 
 		showLogfiles.setSelectedIndex(i);
 	}
@@ -3873,9 +3890,11 @@ public class MainFrame extends JFrame
 
 		labelHost.setEnabled(singleClient);
 
-		boolean b1 = false; // resulting toggle for multi hosts editing
-		if (singleClient && gb)
+		// resulting toggle for multi hosts editing
+		boolean b1 = false;
+		if (singleClient && gb) {
 			b1 = true;
+		}
 
 		jTextFieldDescription.setEnabled(singleClient);
 		jTextFieldDescription.setEditable(b1);

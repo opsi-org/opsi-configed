@@ -103,7 +103,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	protected AbstractExportTable exportTable;
 	JPanel topPane;
 
-	ProductInfoPane infoPane; // right pane
+	// right pane
+	ProductInfoPane infoPane;
 	protected AbstractPanelEditProperties panelEditProperties;
 	AbstractEditMapPanel propertiesPanel;
 

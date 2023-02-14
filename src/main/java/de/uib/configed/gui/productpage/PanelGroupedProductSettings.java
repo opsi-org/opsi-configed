@@ -41,10 +41,11 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 	}
 
 	protected void activatePacketSelectionHandling(boolean b) {
-		if (b)
+		if (b) {
 			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
-		else
+		} else {
 			tableProducts.getSelectionModel().removeListSelectionListener(groupPanel);
+		}
 	}
 
 	public void setSearchFields(List<String> fieldList) {
