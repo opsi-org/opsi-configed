@@ -1380,9 +1380,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			spinnerLayout.setVerticalGroup(spinnerLayout.createParallelGroup().addComponent(spinner).addComponent(box));
 			spinnerLayout
 					.setHorizontalGroup(spinnerLayout.createSequentialGroup().addComponent(spinner).addComponent(box));
-			setLayout(spinnerLayout);
-			add(spinner);
-			add(box);
+
+			super.setLayout(spinnerLayout);
+			super.add(spinner);
+			super.add(box);
 		}
 
 		public long getValue() {

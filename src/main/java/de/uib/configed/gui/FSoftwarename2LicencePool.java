@@ -270,11 +270,11 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.HGAP_SIZE)));
 
-		setAdditionalPane(panelSWx);
+		super.setAdditionalPane(panelSWx);
 
 		additionalPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);// Color.YELLOW
 
-		setCenterPane(panelSWnames);
+		super.setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);
 
 		setupLayout();
@@ -286,7 +286,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		return true;
 	}
 
-	protected void initDataStructure() {
+	private void initDataStructure() {
 		columnNames = new ArrayList<>();
 		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS) {
 			columnNames.add(key);

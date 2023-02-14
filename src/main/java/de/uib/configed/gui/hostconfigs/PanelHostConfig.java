@@ -81,7 +81,7 @@ public class PanelHostConfig extends JPanel {
 		}
 	}
 
-	protected void buildPanel() {
+	private void buildPanel() {
 
 		label = new JLabel(Configed.getResourceValue("MainFrame.jLabel_Config"));
 

@@ -87,7 +87,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		this.main = main;
 
 		setCalToNow();
-		setLocationRelativeTo(Globals.frame1);
+		super.setLocationRelativeTo(Globals.frame1);
 	}
 
 	public void setPredefinedDelays(Map<String, Integer> labelledDelays) {
@@ -103,10 +103,11 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		hostSeparationByDepots = main.getPersistenceController().getHostSeparationByDepots(main.getSelectedClients());
 		usedDepots = hostSeparationByDepots.keySet();
 		currentlySelectedClients = main.getSelectedClients();
-		if (main.getSelectedClients() != null)
+		if (main.getSelectedClients() != null) {
 			clientCount = main.getSelectedClients().length;
-		else
+		} else {
 			clientCount = 0;
+		}
 		Logging.info(this, "clients count " + clientCount + ", used depots " + usedDepots.size());
 		fieldClientCount.setText("" + clientCount);
 		fieldInvolvedDepotsCount.setText("" + usedDepots.size());
@@ -123,10 +124,11 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	private String formatNaturalNumber(long n) {
-		if (n < 10)
+		if (n < 10) {
 			return "0" + n;
-		else
+		} else {
 			return "" + n;
+		}
 	}
 
 	private String readTime(Calendar cal) {
@@ -147,17 +149,20 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		cal.set(changedField, reqValue);
 
 		Calendar now = new GregorianCalendar();
-		if (cal.before(now))
+		if (cal.before(now)) {
 			cal = now;
+		}
 
 		int newMinute = cal.get(Calendar.MINUTE);
 		int newHour = cal.get(Calendar.HOUR_OF_DAY);
 
-		if (newMinute != Integer.valueOf(spinnerMinute.getValue().toString()))
+		if (newMinute != Integer.valueOf(spinnerMinute.getValue().toString())) {
 			spinnerMinute.setValue(cal.get(Calendar.MINUTE));
+		}
 
-		if (newHour != Integer.valueOf(spinnerHour.getValue().toString()))
+		if (newHour != Integer.valueOf(spinnerHour.getValue().toString())) {
 			spinnerHour.setValue(cal.get(Calendar.HOUR_OF_DAY));
+		}
 
 		labelStarttime.setText(readTime(cal));
 	}
@@ -165,8 +170,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	protected void setNowTimeAsTarget() {
 		setCalToNow();
 
-		if (scheduleTitleStarter == null)
+		if (scheduleTitleStarter == null) {
 			scheduleTitleStarter = Configed.getResourceValue("FStartWakeOnLan.creation");
+		}
+
 		fieldTaskname.setText(scheduleTitleStarter + " " + readTime(cal));
 
 		spinnerHour.setValue(cal.get(Calendar.HOUR_OF_DAY));
@@ -432,8 +439,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	private void startWaiting() {
-		if (waitingTask != null)
+		if (waitingTask != null) {
 			waitingTask.stop();
+		}
+
 		waitingMode = true;
 		Logging.info(this, "startWaiting " + runningInstances);
 		runningInstances.add(this, scheduleTitle);
@@ -529,11 +538,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 					Configed.getResourceValue("FStartWakeOnLan.allowClose.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-			if (returnedOption == JOptionPane.YES_OPTION)
-				reallyLeave = true;
-			else
-				reallyLeave = false;
-
+			reallyLeave = (returnedOption == JOptionPane.YES_OPTION);
 		}
 
 		Logging.info(this, "leave  reallyLeave  " + reallyLeave);

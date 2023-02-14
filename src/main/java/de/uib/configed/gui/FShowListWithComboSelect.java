@@ -26,8 +26,7 @@ public class FShowListWithComboSelect extends FShowList {
 		combo.setFont(Globals.defaultFontBold);
 		northPanel.add(combo);
 
-		pack();
-
+		super.pack();
 	}
 
 	public Object getChoice() {

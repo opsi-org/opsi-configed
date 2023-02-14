@@ -56,9 +56,10 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	public AbstractPersistenceController persist;
 
+	// activate filter for selection in software table
 	public enum SoftwareShowMode {
 		ALL, ASSIGNED
-	} // activate filter for selection in software table
+	}
 
 	public enum SoftwareShowAllMeans {
 		ALL, ASSIGNED_OR_ASSIGNED_TO_NOTHING, ASSIGNED_TO_NOTHING

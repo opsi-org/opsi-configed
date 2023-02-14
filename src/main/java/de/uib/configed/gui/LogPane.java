@@ -205,8 +205,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	protected void floatExternal() {
-		if (document == null)
+		if (document == null) {
 			return;
+		}
 		// set text did not run
 		// probably we already are in a floating instance
 
@@ -521,7 +522,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		add(commandpane, BorderLayout.SOUTH);
+		super.add(commandpane, BorderLayout.SOUTH);
 
 		if (withPopup) {
 			popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_SAVE,
@@ -652,8 +653,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 
 			int lineNo = 0;
-			if (docLinestartPosition2lineCount.get(oldStartPosition) != null)
+			if (docLinestartPosition2lineCount.get(oldStartPosition) != null) {
 				lineNo = docLinestartPosition2lineCount.get(oldStartPosition);
+			}
 
 			buildDocument();
 
@@ -664,11 +666,13 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				Iterator<Integer> linesIterator = lineCount2docLinestartPosition.keySet().iterator();
 				int nextLineNo = 0;
 
-				if (linesIterator.hasNext())
+				if (linesIterator.hasNext()) {
 					nextLineNo = linesIterator.next();
+				}
 
-				while (linesIterator.hasNext() && nextLineNo < lineNo)
+				while (linesIterator.hasNext() && nextLineNo < lineNo) {
 					nextLineNo = linesIterator.next();
+				}
 
 				startPosition = lineCount2docLinestartPosition.get(nextLineNo) + offset;
 
@@ -726,10 +730,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				if (c == startC) {
 					counterStartC++;
 				} else if (c == endC) {
-					if (counterStartC > 0)
+					if (counterStartC > 0) {
 						counterStartC--;
-					else
+					} else {
 						result = i;
+					}
 				}
 
 				i++;
@@ -760,10 +765,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			contentEnd = findContentEnd();
 
-			if (contentEnd > -1)
+			if (contentEnd > -1) {
 				found = true;
-			else
+			} else {
 				return;
+			}
 
 			iEnd = contentEnd;
 			iEnd++;
@@ -775,10 +781,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected Style getStyleByLevelNo(int lev) {
 		Style result = null;
 
-		if (lev < logLevelStyles.length)
+		if (lev < logLevelStyles.length) {
 			result = logLevelStyles[lev];
-		else
+		} else {
 			result = logLevelStyles[logLevelStyles.length - 1];
+		}
 
 		return result;
 	}
@@ -807,8 +814,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 			if (Character.isDigit(levC)) {
 				lev = Character.getNumericValue(levC);
-				if (lev > maxExistingLevel)
+				if (lev > maxExistingLevel) {
 					maxExistingLevel = lev;
+				}
 
 				lineLevels[i] = lev;
 
@@ -872,8 +880,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			comboType.setEnabled(true);
 
 			int maxRowCount = typesList.size() + 1;
-			if (maxRowCount > typesListMaxShowCount)
+			if (maxRowCount > typesListMaxShowCount) {
 				maxRowCount = typesListMaxShowCount;
+			}
 
 			comboType.setMaximumRowCount(maxRowCount);
 		}
@@ -895,8 +904,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		parse();
 		if (lines.length > 1) {
 			showLevel = produceInitialMaxShowLevel();
-			if (maxExistingLevel < showLevel)
+			if (maxExistingLevel < showLevel) {
 				showLevel = maxExistingLevel;
+			}
 			adaptSlider();
 		} else {
 			showLevel = 1;
@@ -936,7 +946,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// change 08/2015: set lastReturnedOffset to start search at last caretPosition
 		searcher.lastReturnedOffset = jTextPane.getCaretPosition();
 		int offset = searcher.search(jComboBoxSearch.getSelectedItem().toString());
-		if (jComboBoxSearch.getSelectedIndex() <= -1) { // does not exist
+
+		// does not exist
+		if (jComboBoxSearch.getSelectedIndex() <= -1) {
 			jComboBoxSearch.addItem(jComboBoxSearch.getSelectedItem().toString());
 			jComboBoxSearch.repaint();
 		}
@@ -1075,17 +1087,20 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			try {
 				Document d = comp.getDocument();
 
-				if (cS)
+				if (cS) {
 					content = d.getText(0, d.getLength());
-				else
+				} else {
 					content = d.getText(0, d.getLength()).toLowerCase();
+				}
 			} catch (BadLocationException e) {
 				// Cannot happen
 				return -1;
 			}
 
-			if (!cS)
+			if (!cS) {
 				word = word.toLowerCase();
+			}
+
 			int lastIndex = 0;
 			int wordSize = word.length();
 
@@ -1115,7 +1130,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	// Painter for underlined highlights
 	public class UnderlineHighlightPainter extends LayeredHighlighter.LayerPainter {
-		protected Color color; // The color for the underline
+
+		// The color for the underline
+		protected Color color;
 
 		public UnderlineHighlightPainter(Color c) {
 			color = c;

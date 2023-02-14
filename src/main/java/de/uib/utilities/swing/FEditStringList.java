@@ -1,3 +1,19 @@
+/*
+ * FEditStringList.java
+ * 
+ * configed - configuration editor for client work stations in opsi
+ * (open pc server integration) www.opsi.org
+ *
+ * Copyright (C) 2023 uib.de
+ *
+ * This class represents a Frame so select certain values from a List, that
+ * are all of the String type. We need to extend FEditList in another class
+ * to add the possibility to add elements to the List from a Text Element. 
+ * With other types than String this cannot be possible
+ *
+ * @author otto
+ */
+
 package de.uib.utilities.swing;
 
 import java.awt.event.KeyEvent;

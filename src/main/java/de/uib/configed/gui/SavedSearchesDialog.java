@@ -28,6 +28,10 @@ public class SavedSearchesDialog extends FEditStringList {
 	private DefaultListModel<String> model;
 
 	public SavedSearchesDialog() {
+		initDialog();
+	}
+
+	private void initDialog() {
 		setTitle(Configed.getResourceValue("SavedSearchesDialog.title") + " (" + Globals.APPNAME + ")");
 		setModal(false);
 		setLeaveOnCommit(false);
@@ -143,8 +147,9 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		super.valueChanged(e);
 
-		if (e.getValueIsAdjusting())
+		if (e.getValueIsAdjusting()) {
 			return;
+		}
 
 		buttonCommit.setEnabled(!getSelectedList().isEmpty());
 	}
@@ -192,12 +197,13 @@ public class SavedSearchesDialog extends FEditStringList {
 		int index = visibleList.getSelectedIndex();
 		Logging.debug(this, "remove selected Entry, list index " + index);
 
-		if (index == -1)
+		if (index == -1) {
 			return;
+		}
 
 		Logging.debug(this, "remove entry at " + index);
 
-		removeSavedSearch((String) model.get(index));
+		removeSavedSearch(model.get(index));
 		model.remove(index);
 	}
 

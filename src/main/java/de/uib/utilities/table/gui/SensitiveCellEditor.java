@@ -179,7 +179,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		}
 
 		if (listeditor.getValue() instanceof List) {
-			List list = (List) listeditor.getValue();
+			List<?> list = (List<?>) listeditor.getValue();
 
 			if (forbiddenValues != null) {
 				Iterator<Object> iter = forbiddenValues.iterator();

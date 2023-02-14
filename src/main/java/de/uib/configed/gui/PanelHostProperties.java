@@ -15,8 +15,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
@@ -38,7 +38,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		buildPanel();
 	}
 
-	protected void buildPanel() {
+	private void buildPanel() {
 		label = new JLabel(Configed.getResourceValue("MainFrame.jLabel_Config"));
 		combo = new JComboBox<>();
 		combo.setVisible(false);
@@ -106,8 +106,10 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	}
 
 	public void activateCombo(ComboBoxModel<String> model) {
-		if (model != null)
+		if (model != null) {
 			combo.setModel(model);
+		}
+
 		combo.setEnabled((model != null));
 		combo.setVisible((model != null));
 	}
@@ -119,11 +121,11 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 
 			ListCellOptions cellOptions = null;
 
-			if ((entry.getValue()) instanceof java.lang.Boolean)
+			if ((entry.getValue()) instanceof java.lang.Boolean) {
 				cellOptions = DefaultListCellOptions.getNewBooleanListCellOptions();
-
-			else
+			} else {
 				cellOptions = DefaultListCellOptions.getNewEmptyListCellOptions();
+			}
 
 			Logging.debug(this, "cellOptions: " + cellOptions);
 

@@ -55,7 +55,7 @@ public class FTextArea extends FGeneralDialog {
 			int preferredHeight, JPanel addPane) {
 		super(owner, title, modal, buttonList, icons, buttonList.length, preferredWidth, preferredHeight, false,
 				addPane);
-		checkAdditionalPane();
+		super.checkAdditionalPane();
 		initFTextArea(preferredWidth, preferredHeight);
 
 	}
@@ -104,11 +104,13 @@ public class FTextArea extends FGeneralDialog {
 
 		}
 
-		if (!shiftPressed && e.getSource() == jTextArea1 && e.getKeyCode() == KeyEvent.VK_TAB)
+		if (!shiftPressed && e.getSource() == jTextArea1 && e.getKeyCode() == KeyEvent.VK_TAB) {
 			jButton1.requestFocus();
+		}
 
-		if (shiftPressed && e.getSource() == jButton1 && e.getKeyCode() == KeyEvent.VK_TAB)
+		if (shiftPressed && e.getSource() == jButton1 && e.getKeyCode() == KeyEvent.VK_TAB) {
 			jTextArea1.requestFocus();
+		}
 	}
 
 }

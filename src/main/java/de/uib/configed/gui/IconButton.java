@@ -148,7 +148,7 @@ public class IconButton extends JButton {
 	 * (icon, description, preferred size, enabled status, selected icon and (if
 	 * given) a disabled icon)
 	 */
-	public void createIconButton()
+	private void createIconButton()
 
 	{
 		setIcon(Globals.createImageIcon(this.imageURLActive, ""));
@@ -156,9 +156,9 @@ public class IconButton extends JButton {
 		setPreferredSize(Globals.graphicButtonDimension);
 		setEnabled(this.enabled);
 		setSelectedIcon(Globals.createImageIcon(this.imageURLOver, ""));
-		if (imageURLDisabled.length() > 3)
+		if (imageURLDisabled.length() > 3) {
 			setDisabledIcon(Globals.createImageIcon(this.imageURLDisabled, ""));
-
+		}
 	}
 
 	/**
@@ -181,8 +181,9 @@ public class IconButton extends JButton {
 		setPreferredSize(Globals.graphicButtonDimension);
 		setEnabled(enabled);
 		setSelectedIcon(Globals.createImageIcon(imageURLOver, ""));
-		if (imageURLDisabled.length() > 3)
+		if (imageURLDisabled.length() > 3) {
 			setDisabledIcon(Globals.createImageIcon(imageURLDisabled, ""));
+		}
 	}
 
 	/**
@@ -218,10 +219,11 @@ public class IconButton extends JButton {
 	public void setActivated(boolean a) {
 		activated = a;
 		if (tooltipActive != null && tooltipInactive != null) {
-			if (a)
+			if (a) {
 				setToolTipText(tooltipActive);
-			else
+			} else {
 				setToolTipText(tooltipInactive);
+			}
 		}
 	}
 
@@ -279,8 +281,9 @@ public class IconButton extends JButton {
 	 */
 	public void setWaitingState(boolean b) {
 		Logging.info(this, "setWaitingState " + b + " (imagesForAnimation == null)  " + (imagesForAnimation == null));
-		if (imagesForAnimation == null)
+		if (imagesForAnimation == null) {
 			return;
+		}
 
 		if (b) {
 			setEnabled(false);
@@ -302,8 +305,9 @@ public class IconButton extends JButton {
 	}
 
 	private void workWithWaitingSignals(List<Integer> chunks) {
-		if (imagesForAnimation == null)
+		if (imagesForAnimation == null) {
 			return;
+		}
 
 		int iconIndex = chunks.get(chunks.size() - 1) % (imagesForAnimation.length);
 

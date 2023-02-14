@@ -54,7 +54,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	public static final String ANSI_CODE_END_1 = "\u001B[0;0;0m";
 	public static final String ANSI_CODE_END_2 = "[0;0;0m";
 
-	public static final String ANSI_CODE_INFO = "[0;info;0m"; // user info not really ansi code !!
+	// user info not really ansi code !!
+	public static final String ANSI_CODE_INFO = "[0;info;0m";
 	public static final String ANSI_CODE_ERROR = "[0;error;0m";
 
 	private static final Map<String, Color> ansiCodeColors = Globals.SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS;
@@ -75,9 +76,9 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		buildFrame = false;
 		closeListener = new DialogCloseListener();
 		initOutputGui();
-		this.setSize(700, 400);
-		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		super.setSize(700, 400);
+		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
 	public void setStartAnsi(Color c) {
@@ -106,9 +107,11 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			return;
 		}
 
-		if (SSHCommandFactory.sshColoredOutput && (!line.trim().replace("\\t", "").replace(" ", "").equals("")))
-			for (Entry<String, Color> entry : ansiCodeColors.entrySet())
+		if (SSHCommandFactory.sshColoredOutput && (!line.trim().replace("\\t", "").replace(" ", "").equals(""))) {
+			for (Entry<String, Color> entry : ansiCodeColors.entrySet()) {
 				line = findAnsiCodeColor(entry, entry.getKey(), line);
+			}
+		}
 
 		Logging.debug(this, "line " + line.replace("\n", "") + " color " + linecolor.toString());
 		StyleContext sc = StyleContext.getDefaultStyleContext();
@@ -155,9 +158,11 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 			Style readonlyStyle = doc.addStyle("readonlyStyle", defaultStyle);
 
-			StyleConstants.setBackground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);// Kein grün :(
+			// Kein grün :(
+			StyleConstants.setBackground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
 
-			StyleConstants.setForeground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR); // Was ist rot?
+			// Was ist rot?
+			StyleConstants.setForeground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR);
 
 			SimpleAttributeSet readOnlyAttributeSet = new SimpleAttributeSet(doc.getStyle("readonlyStyle"));
 			readOnlyAttributeSet.addAttribute("readonly", true);
@@ -207,15 +212,17 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 		@Override
 		public void remove(final FilterBypass fb, final int offset, final int length) throws BadLocationException {
-			if (!isReadOnly())
+			if (!isReadOnly()) {
 				super.remove(fb, offset, length);
+			}
 		}
 
 		@Override
 		public void replace(final FilterBypass fb, final int offset, final int length, final String text,
 				final AttributeSet attrs) throws BadLocationException {
-			if (!isReadOnly())
+			if (!isReadOnly()) {
 				super.replace(fb, offset, length, text, attrs);
+			}
 		}
 
 		private boolean isReadOnly() {

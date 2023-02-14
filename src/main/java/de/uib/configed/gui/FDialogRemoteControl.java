@@ -87,9 +87,9 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList
 
 		checkSelected();
 
-		if (e.getClickCount() > 1)
+		if (e.getClickCount() > 1) {
 			commit();
-
+		}
 	}
 
 	// interface ListSelectionListener
@@ -98,13 +98,15 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList
 		super.valueChanged(e);
 
 		// Ignore extra messages.
-		if (e.getValueIsAdjusting())
+		if (e.getValueIsAdjusting()) {
 			return;
+		}
 
 		checkSelected();
 
-		if (visibleList.getSelectedValue() != null)
+		if (visibleList.getSelectedValue() != null) {
 			selValue = visibleList.getSelectedValue();
+		}
 
 		selText = "" + selValue;
 
@@ -149,8 +151,8 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		super.actionPerformed(e);
 
-		if (e.getSource() == extraField)
+		if (e.getSource() == extraField) {
 			commit();
+		}
 	}
-
 }

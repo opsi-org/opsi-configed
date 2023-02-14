@@ -63,8 +63,9 @@ public class FGroupActions extends SecondaryFrame {
 
 		define();
 		reload();
-		setGlobals(Globals.getMap());
-		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FGroupAction.title"));
+
+		super.setGlobals(Globals.getMap());
+		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FGroupAction.title"));
 	}
 
 	protected void setGroupLabelling(String label, String clientCount) {

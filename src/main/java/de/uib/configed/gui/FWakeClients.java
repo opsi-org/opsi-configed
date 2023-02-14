@@ -20,11 +20,10 @@ public class FWakeClients extends FShowList {
 
 	public FWakeClients(JFrame master, String title, AbstractPersistenceController persist) {
 		super(master, title, false, new String[] { Configed.getResourceValue("FWakeClients.cancel") });
-		setFont(Globals.defaultFont);
-		setMessage("");
-		setButtonsEnabled(true);
+		super.setFont(Globals.defaultFont);
+		super.setMessage("");
+		super.setButtonsEnabled(true);
 		this.persist = persist;
-
 	}
 
 	public void act(String[] selectedClients, int delaySecs) {

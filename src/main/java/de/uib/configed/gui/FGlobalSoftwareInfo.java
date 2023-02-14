@@ -39,12 +39,10 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	ControlPanelAssignToLPools myController;
 
 	public FGlobalSoftwareInfo(JFrame owner, ControlPanelAssignToLPools myController) {
-		super(
-
-				owner, Configed.getResourceValue("FGlobalSoftwareInfo.title"), false,
+		super(owner, Configed.getResourceValue("FGlobalSoftwareInfo.title"), false,
 				new String[] { Configed.getResourceValue("FGlobalSoftwareInfo.buttonClose"),
 						Configed.getResourceValue("FGlobalSoftwareInfo.buttonRemove") },
-				10, 10); // initial size of super frame
+				10, 10);
 
 		this.myController = myController;
 
@@ -63,7 +61,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		additionalPane.setVisible(true);
 
-		setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));
+		super.setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));
 		owner.setVisible(true);
 
 		jButton1.setEnabled(false);
@@ -71,15 +69,9 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		jButton2.setIcon(Globals.createImageIcon("images/edit-delete.png", ""));
 
 		initDataStructure();
-
 	}
 
-	@Override
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return true;
-	}
-
-	protected void initDataStructure() {
+	private void initDataStructure() {
 		columnNames = new ArrayList<>();
 		columnNames.add("ID");
 		for (String key : de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT) {
@@ -100,6 +92,11 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 				jButton1.setEnabled(panelGlobalSoftware.getTheTable().getSelectedRowCount() > 0);
 			}
 		});
+	}
+
+	@Override
+	protected boolean wantToBeRegisteredWithRunningInstances() {
+		return true;
 	}
 
 	public void setTableModel(GenTableModel model) {

@@ -83,8 +83,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
-		if (centerPanel == null)
+		if (centerPanel == null) {
 			centerPanel = new JPanel();
+		}
 
 		centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		centerPanel.setOpaque(true);
@@ -253,14 +254,21 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			JCheckBox headerBox = new JCheckBox(header);
 			headerBox.setActionCommand(header);
 
-			if (header.equals("hostname"))
+			if (header.equals("hostname")) {
 				headerBox.setSelected(true);
-			if (header.equals("selectedDomain"))
+			}
+
+			if (header.equals("selectedDomain")) {
 				headerBox.setSelected(true);
-			if (header.equals("depotID"))
+			}
+
+			if (header.equals("depotID")) {
 				headerBox.setSelected(true);
-			if (header.equals("macaddress"))
+			}
+
+			if (header.equals("macaddress")) {
 				headerBox.setSelected(true);
+			}
 
 			model.addElement(headerBox);
 			headerButtons.add(headerBox);
@@ -372,9 +380,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			protected Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
 			public CheckBoxList() {
-				setCellRenderer(new CellRenderer());
+				super.setCellRenderer(new CellRenderer());
 
-				addMouseListener(new MouseAdapter() {
+				super.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mousePressed(MouseEvent e) {
 						int index = locationToIndex(e.getPoint());
@@ -390,7 +398,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 			public CheckBoxList(ListModel<JCheckBox> model) {
 				this();
-				setModel(model);
+				super.setModel(model);
 			}
 
 			protected class CellRenderer implements ListCellRenderer<JCheckBox> {
@@ -443,8 +451,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();
-			if (!csvFile.endsWith(".csv"))
+			if (!csvFile.endsWith(".csv")) {
 				csvFile = csvFile.concat(".csv");
+			}
+
 			write(csvFile);
 		}
 

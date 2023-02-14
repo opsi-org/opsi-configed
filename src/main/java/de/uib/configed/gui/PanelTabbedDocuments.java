@@ -31,9 +31,9 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		identsList = Arrays.asList(idents);
 
-		setProportionOfTotalWidth(0.5);
+		super.setProportionOfTotalWidth(0.5);
 
-		setForeground(Globals.blue);
+		super.setForeground(Globals.blue);
 
 		textPanes = new LogPane[idents.length];
 
@@ -54,8 +54,9 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					}
 					Logging.debug(this, "save with filename " + filename);
 					String pathname = openFile(filename + ".log");
-					if (pathname != null && !pathname.equals(""))
+					if (pathname != null && !pathname.equals("")) {
 						saveToFile(pathname, lines);
+					}
 
 				}
 
@@ -111,7 +112,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 			textPanes[i] = showPane;
 
-			addTab(ident, textPanes[i]);
+			super.addTab(ident, textPanes[i]);
 
 		}
 
@@ -125,8 +126,9 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 	private void setDocument(int i, final String document, final String info) {
 		Logging.info(this, "setDocument " + i + " document == null " + (document == null));
-		if (i < 0 || i >= idents.length)
+		if (i < 0 || i >= idents.length) {
 			return;
+		}
 
 		if (document == null) {
 			textPanes[i].setText("");
@@ -135,7 +137,9 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		}
 
 		textPanes[i].setTitle(idents[i] + "  " + info);
-		textPanes[i].setInfo(info); // should be name of client, delivered from info textfield
+
+		// should be name of client, delivered from info textfield
+		textPanes[i].setInfo(info);
 		textPanes[i].setText(document);
 
 	}
@@ -227,7 +231,8 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			for (int logNo = 0; logNo < idents.length; logNo++) {
 				// load all logfiles ???
 				//
-				if (textPanes[logNo].lines.length > 1) { // save only if not empty
+				// save only if not empty
+				if (textPanes[logNo].lines.length > 1) {
 					ZipEntry entry = new ZipEntry(textPanes[logNo].title.replace(" ", "_").replace(".", "_") + ".log");
 					out.putNextEntry(entry);
 					int i = 0;

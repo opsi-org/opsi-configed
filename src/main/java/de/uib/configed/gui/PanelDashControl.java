@@ -8,8 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class PanelDashControl extends JPanel {
@@ -20,11 +20,11 @@ public class PanelDashControl extends JPanel {
 
 	public PanelDashControl() {
 		super();
-		setBorder(BorderFactory.createLineBorder(Globals.BACKGROUND_COLOR_6, 1, true));
+		super.setBorder(BorderFactory.createLineBorder(Globals.BACKGROUND_COLOR_6, 1, true));
 		initComponents();
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 		setBackground(Globals.BACKGROUND_COLOR_7);
 
 		GroupLayout dashLayout = new GroupLayout(this);

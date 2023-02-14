@@ -59,7 +59,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	// for overwriting
-	protected void initComponents() {
+	private void initComponents() {
 		additionalPane = new JPanel();
 		additionalPane.setVisible(true);
 	}

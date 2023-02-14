@@ -202,17 +202,19 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	public void setCenterPane(JPanel p) {
-		if (p == null)
+		if (p == null) {
 			centerPanel = new JPanel();
-		else
+		} else {
 			centerPanel = p;
+		}
 	}
 
 	public void setCenterPaneInScrollpane(JPanel p) {
-		if (p == null)
+		if (p == null) {
 			centerPanel = new JPanel();
-		else
+		} else {
 			centerPanel = p;
+		}
 
 		scrollpane.getViewport().add(centerPanel);
 	}
@@ -277,10 +279,11 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		StringBuilder iconsLog = new StringBuilder();
 
 		for (Icon icon : icons) {
-			if (icon == null)
+			if (icon == null) {
 				iconsLog.append(icon + "  ");
-			else
+			} else {
 				iconsLog.append(((ImageIcon) icon).getDescription() + "    ");
+			}
 		}
 
 		Logging.info(this, "with icons " + iconsLog);
@@ -568,10 +571,11 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		public void setDirection(boolean vanishing) {
 			this.vanishing = vanishing;
 
-			if (vanishing)
+			if (vanishing) {
 				opacity = 1f;
-			else
+			} else {
 				opacity = 0f;
+			}
 		}
 
 		public void setStep(float f) {
