@@ -209,11 +209,7 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 			layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 					.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		}
-
-		else
-
-		{
+		} else {
 
 			javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 			getContentPane().setLayout(layout);
@@ -237,7 +233,6 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 		}
 
 		pack();
-
 	}
 
 	public void setEditable(boolean b) {
@@ -248,15 +243,17 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	public void setModal(boolean b) {
 		super.setModal(b);
 		Logging.debug(this, "setModal " + b);
-		if (b)
+		if (b) {
 			setAlwaysOnTop(true);
+		}
 	}
 
 	public void setDataChanged(boolean b) {
 		Logging.debug(this, "setDataChanged " + b);
 
-		if (Globals.forbidEditingTargetSpecific() && b)
+		if (Globals.forbidEditingTargetSpecific() && b) {
 			return;
+		}
 
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
@@ -332,10 +329,11 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 	@Override
 	public void setVisible(boolean b) {
-		if (b)
+		if (b) {
 			runningInstances.add(this, "");
-		else
+		} else {
 			runningInstances.forget(this);
+		}
 		super.setVisible(b);
 	}
 
@@ -357,12 +355,13 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected void commit() {
 		Logging.debug(this, "FEditObject.commit");
 
-		if (Globals.forbidEditingTargetSpecific())
+		if (Globals.forbidEditingTargetSpecific()) {
 			cancel();
-		else {
+		} else {
 			setStartValue(getValue());
-			if (leaveOnCommit)
+			if (leaveOnCommit) {
 				leave();
+			}
 		}
 	}
 

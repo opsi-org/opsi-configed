@@ -28,6 +28,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
@@ -42,11 +43,8 @@ import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.SensitiveCellEditor;
 
 public class FEditList<O> extends FEditObject implements ListSelectionListener, MouseListener {
-	private javax.swing.JScrollPane scrollpane;
+	private JScrollPane scrollpane;
 
-	// The generic is Object here, because it could come from all kinds of objects,
-	// not only Strings
-	// TODO: Maybe make the class generic?
 	protected JList<O> visibleList;
 
 	private JTextComponent tracker;

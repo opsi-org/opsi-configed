@@ -62,7 +62,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	JComboBox editorfield;
 	TableCellEditor defaultCellEditor;
 
-	ListModelProducer modelProducer;
+	ListModelProducer<String> modelProducer;
 
 	MouseListener popupListener;
 	MouseListener popupNoEditOptionsListener;
@@ -164,10 +164,11 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 		defaultCellEditor = new XCellEditor(editorfield);
 		theCellEditor = defaultCellEditor;
 
-		if (tableCellRenderer == null)
+		if (tableCellRenderer == null) {
 			editableColumn.setCellRenderer(new ColorTableCellRenderer());
-		else
+		} else {
 			editableColumn.setCellRenderer(tableCellRenderer);
+		}
 
 		popupEditOptions = definePopup();
 		popupNoEditOptions = definePopup();

@@ -92,8 +92,9 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 			while (iter.hasNext()) {
 				Object entry = iter.next();
-				if (!model.contains(entry))
+				if (!model.contains(entry)) {
 					model.addElement(entry);
+				}
 			}
 		}
 		listmodels.put(row, model);

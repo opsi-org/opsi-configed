@@ -16,7 +16,7 @@ public class XCellEditor extends DefaultCellEditor {
 		super(textfield);
 	}
 
-	public XCellEditor(JComboBox combo) {
+	public XCellEditor(JComboBox<?> combo) {
 		super(combo);
 	}
 

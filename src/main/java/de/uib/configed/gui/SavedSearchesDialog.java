@@ -43,7 +43,6 @@ public class SavedSearchesDialog extends FEditStringList {
 		buttonAdd.setVisible(true);
 		buttonRemove.setVisible(false);
 		extraField.setVisible(false);
-
 	}
 
 	public void start() {
@@ -119,7 +118,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		JMenuItem edit = new JMenuItemFormatted();
 		edit.setText(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
 		edit.setFont(Globals.defaultFont);
-		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue().toString()));
+		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
 		popup.add(edit);
 
 	}

@@ -32,13 +32,23 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	private int editingColumn = -1;
 	protected String myKey;
 
-	protected ListModelProducer modelProducer;
+	protected ListModelProducer<String> modelProducer;
 	protected List<Object> forbiddenValues;
 
 	private boolean usingListEditor;
 
 	public SensitiveCellEditor() {
-		this(null);
+		super();
+
+		field = new JTextField();
+
+		field.setEditable(false);
+		field.addMouseListener(this);
+		listeditor = new FEditStringList(field, this);
+
+		// true has undesired effects in the interaction of the CellEditor and the FEditList
+		listeditor.setModal(false);
+		listeditor.init();
 	}
 
 	private static final Map<Object, SensitiveCellEditor> instances = new HashMap<>();
@@ -58,22 +68,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		});
 	}
 
-	protected SensitiveCellEditor(ListModelProducer modelProducer) {
-		super();
-
-		field = new JTextField();
-
-		field.setEditable(false);
-		field.addMouseListener(this);
-		listeditor = new FEditStringList(field, this);
-
-		// true has undesired effects in the interaction of the CellEditor and the FEditList
-		listeditor.setModal(false);
-		listeditor.init();
-
-		setModelProducer(modelProducer);
-	}
-
 	public void reInit() {
 		listeditor.init();
 	}
@@ -82,13 +76,13 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		forbiddenValues = forbidden;
 	}
 
-	public void setModelProducer(ListModelProducer producer) {
+	public void setModelProducer(ListModelProducer<String> producer) {
 
 		this.modelProducer = producer;
 		if (producer == null)
 		// build default producer
 		{
-			modelProducer = new DefaultListModelProducer();
+			modelProducer = new DefaultListModelProducer<>();
 		}
 	}
 
@@ -126,10 +120,10 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		Logging.debug(this, "  celleditor working in " + row + ", " + column + " with value " + value + ", class "
 				+ value.getClass().getName());
 
-		List val = modelProducer.toList(value);
+		List<String> val = modelProducer.toList((String) value);
 
-		if (val instanceof List) // is now always
-		{
+		// is now always
+		if (val instanceof List) {
 
 			ListModel<String> model = modelProducer.getListModel(row, column);
 			Logging.debug(this,
@@ -180,8 +174,9 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	@Override
 	public Object getCellEditorValue() {
 
-		if (listeditor.getValue() == null)
+		if (listeditor.getValue() == null) {
 			return null;
+		}
 
 		if (listeditor.getValue() instanceof List) {
 			List list = (List) listeditor.getValue();
@@ -204,22 +199,25 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			if (java.lang.Integer.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
 
-				if (n == 0)
+				if (n == 0) {
 					return null;
+				}
 
 				return list.get(0);
 			}
 
 			if (java.lang.Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
 
-				if (n == 0)
+				if (n == 0) {
 					return null;
+				}
 
 				return list.get(0);
 			}
 
-			if (n == 0)
+			if (n == 0) {
 				return "";
+			}
 
 			StringBuilder buf = new StringBuilder("");
 
@@ -230,8 +228,9 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			String result = buf.toString();
 
-			if (result.equalsIgnoreCase("null"))
+			if (result.equalsIgnoreCase("null")) {
 				return org.json.JSONObject.NULL;
+			}
 
 			return result;
 		}

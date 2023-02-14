@@ -17,7 +17,7 @@ public interface ListModelProducer<O> {
 
 	public String getCaption(int row, int column);
 
-	public List<O> toList(Object value);
+	public List<O> toList(O value);
 
 	public Class<?> getClass(int row, int column);
 

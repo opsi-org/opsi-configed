@@ -90,7 +90,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		if (data != null) {
 			Collator myCollator = Collator.getInstance();
 			myCollator.setStrength(Collator.PRIMARY);
-			this.data = Collections.synchronizedSortedMap(new TreeMap(myCollator));
+			this.data = Collections.synchronizedSortedMap(new TreeMap<>(myCollator));
 			this.data.putAll(data);
 			keys = new ArrayList<>(this.data.keySet());
 
@@ -108,8 +108,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	private String getModifiedKey() {
-		if (modifiedKey != null)
+		if (modifiedKey != null) {
 			return modifiedKey;
+		}
 
 		for (String key : keys) {
 			if (key.startsWith(de.uib.opsidatamodel.permission.UserConfig.CONFIGKEY_STR_USER)
@@ -129,7 +130,8 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	private void setNew() {
-		datachanged = false; // starting with a new set of data
+		// starting with a new set of data
+		datachanged = false;
 	}
 
 	public List<String> getKeys() {
@@ -143,8 +145,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	 * @param Collection data
 	 */
 	public void setStoreData(Collection<Map<String, Object>> data) {
-		if (data == null)
+		if (data == null) {
 			Logging.debug(this, "setStoreData, data is null ");
+		}
 
 		setNew();
 		storeData = data;
@@ -191,8 +194,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		Logging.debug(this, " keys " + keys);
 		keys = new ArrayList<>(data.keySet());
 		Logging.debug(this, " new keys  " + keys);
-		if (toStore)
+		if (toStore) {
 			putEntryIntoStoredMaps(key, newval, toStore);
+		}
 		fireTableDataChanged();
 	}
 
@@ -235,8 +239,10 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	@Override
 	public int getRowCount() {
 		int result = 0;
-		if (data != null)
+		if (data != null) {
 			result = keys.size();
+		}
+
 		return result;
 	}
 
@@ -256,8 +262,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		if (data == null)
+		if (data == null) {
 			return "";
+		}
 
 		String key = null;
 		Object result = null;
@@ -267,8 +274,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			return "keys " + keys + " row " + row + " : " + ex.toString();
 		}
 
-		if (col == 0)
+		if (col == 0) {
 			result = key;
+		}
 
 		else if (col == 1) {
 			result = data.get(key);
@@ -331,8 +339,8 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	}
 
 	void weHaveChangedStoredMaps() {
-		if (!datachanged || updateCollection.isEmpty() // updateCollection has been emptied since last change
-		) {
+		// updateCollection has been emptied since last change
+		if (!datachanged || updateCollection.isEmpty()) {
 			datachanged = true;
 			// tell it to all registered DataChangedObservers
 			notifyChange();
@@ -340,10 +348,11 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			// we add the reference to the changed backend data only once to the
 			// updateCollection
 
-			if (updateCollection == null)
+			if (updateCollection == null) {
 				Logging.debug(this, "updateCollection null - should not be");
-			else
+			} else {
 				updateCollection.addAll(storeData);
+			}
 
 			Logging.debug(this,
 					" ---  updateCollection: " + updateCollection + "  has size " + updateCollection.size());
@@ -378,16 +387,17 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			while (it.hasNext()) {
 				Map<String, Object> aStoreMap = it.next();
 
-				if (aStoreMap != null)
+				if (aStoreMap != null) {
 					aStoreMap.put(myKey, value);
-
-				else
+				} else {
 					Logging.info(this, "EditMapPanel.setValueAt: we have some data null ");
+				}
 
 			}
 
-			if (toStore)
+			if (toStore) {
 				weHaveChangedStoredMaps();
+			}
 		}
 	}
 
