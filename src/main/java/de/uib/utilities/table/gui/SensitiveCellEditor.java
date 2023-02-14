@@ -120,7 +120,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		Logging.debug(this, "  celleditor working in " + row + ", " + column + " with value " + value + ", class "
 				+ value.getClass().getName());
 
-		List<String> val = modelProducer.toList((String) value);
+		List<String> val = modelProducer.toList(value);
 
 		// is now always
 		if (val instanceof List) {

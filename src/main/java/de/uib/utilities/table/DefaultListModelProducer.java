@@ -6,6 +6,8 @@ import java.util.List;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
+import de.uib.utilities.logging.Logging;
+
 public class DefaultListModelProducer<O> implements ListModelProducer<O> {
 	@Override
 	public ListModel<O> getListModel(int row, int column) {
@@ -43,19 +45,19 @@ public class DefaultListModelProducer<O> implements ListModelProducer<O> {
 	}
 
 	@Override
-	public List<O> toList(O value) {
+	public List<O> toList(Object value) {
 		if (value == null) {
+			Logging.warning(this, "value is null");
 			return new ArrayList<>();
 		}
 
 		if (value instanceof List) {
-			return (List) value;
+			return (List<O>) value;
 		}
 
-		List<O> list = new ArrayList<>();
-		list.add(value);
+		Logging.warning(this, "value is not instance of List<O>");
+		return new ArrayList<>();
 
-		return list;
 	}
 
 }
