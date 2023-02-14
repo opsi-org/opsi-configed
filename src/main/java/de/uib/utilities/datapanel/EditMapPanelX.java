@@ -612,8 +612,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 	}
 
 	public void stopEditing() {
-		if (table.isEditing()) // we prefer not to cancel cell editing
-		{
+		// we prefer not to cancel cell editing
+		if (table.isEditing()) {
 			table.getCellEditor().stopCellEditing();
 		}
 	}

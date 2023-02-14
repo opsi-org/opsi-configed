@@ -41,17 +41,17 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.SensitiveCellEditor;
 
-public class FEditList extends FEditObject implements ListSelectionListener, MouseListener {
+public class FEditList<O> extends FEditObject implements ListSelectionListener, MouseListener {
 	private javax.swing.JScrollPane scrollpane;
 
 	// The generic is Object here, because it could come from all kinds of objects,
 	// not only Strings
 	// TODO: Maybe make the class generic?
-	protected JList<Object> visibleList;
+	protected JList<O> visibleList;
 
 	private JTextComponent tracker;
 
-	private List<Object> initiallySelected;
+	private List<O> initiallySelected;
 
 	protected Object selValue = "";
 
@@ -110,11 +110,11 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	}
 
-	public void setCellRenderer(ListCellRenderer render) {
+	public void setCellRenderer(ListCellRenderer<Object> render) {
 		visibleList.setCellRenderer(render);
 	}
 
-	public void setListModel(ListModel<Object> model) {
+	public void setListModel(ListModel<O> model) {
 		visibleList.setModel(model);
 	}
 
@@ -152,12 +152,12 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 		extraFieldChanged(false);
 	}
 
-	protected void addSelectedValues(List<Object> toSelect) {
+	protected void addSelectedValues(List<O> toSelect) {
 		if (toSelect == null) {
 			return;
 		}
 
-		ListModel<Object> model = visibleList.getModel();
+		ListModel<O> model = visibleList.getModel();
 
 		for (int i = 0; i < model.getSize(); i++) {
 			Object element = model.getElementAt(i);
@@ -178,7 +178,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 		}
 	}
 
-	public void setSelectedValues(List<Object> toSelect) {
+	public void setSelectedValues(List<O> toSelect) {
 
 		initiallySelected = toSelect;
 
@@ -188,27 +188,18 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 
 	}
 
-	public void setSelectedValue(Object ob) {
+	public void setSelectedValue(O ob) {
 
 		visibleList.setSelectedValue(ob, true);
 	}
 
-	private void addElementFromExtraField(Object element) {
+	protected void addElement(O element) {
 
-		addElement(element);
-
-		// ever event
-
-		extraFieldChanged(false);
-	}
-
-	protected void addElement(Object element) {
-
-		ListModel<Object> limo = visibleList.getModel();
+		ListModel<O> limo = visibleList.getModel();
 		if (limo instanceof DefaultListModel) {
-			if (!((DefaultListModel<Object>) limo).contains(element)) {
-				((DefaultListModel<Object>) limo).addElement(element);
-				List<Object> list = new ArrayList<>();
+			if (!((DefaultListModel<O>) limo).contains(element)) {
+				((DefaultListModel<O>) limo).addElement(element);
+				List<O> list = new ArrayList<>();
 				list.add(element);
 				addSelectedValues(list);
 			}
@@ -270,9 +261,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		super.actionPerformed(e);
 
-		if (e.getSource() == buttonAdd) {
-			addElementFromExtraField(extraField.getText());
-		} else if (e.getSource() == buttonRemove) {
+		if (e.getSource() == buttonRemove) {
 			visibleList.clearSelection();
 		}
 	}
@@ -282,9 +271,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	public void keyPressed(KeyEvent e) {
 		super.keyPressed(e);
 
-		if (e.getSource() == buttonAdd) {
-			addElementFromExtraField(extraField.getText());
-		} else if (e.getSource() == buttonRemove) {
+		if (e.getSource() == buttonRemove) {
 			visibleList.clearSelection();
 		}
 	}
@@ -328,13 +315,13 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 		return super.init();
 	}
 
-	public List getSelectedList() {
-		List result = new ArrayList<>();
+	public List<O> getSelectedList() {
+		List<O> result = new ArrayList<>();
 
-		ListModel model = visibleList.getModel();
+		ListModel<O> model = visibleList.getModel();
 
 		for (int i = 0; i < model.getSize(); i++) {
-			Object element = model.getElementAt(i);
+			O element = model.getElementAt(i);
 			if (visibleList.isSelectedIndex(i)) {
 				result.add(element);
 			}
@@ -353,7 +340,7 @@ public class FEditList extends FEditObject implements ListSelectionListener, Mou
 	// interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		List selectedList = getSelectedList();
+		List<O> selectedList = getSelectedList();
 
 		if (!nullable && selectedList.isEmpty()) {
 			// reset to some value

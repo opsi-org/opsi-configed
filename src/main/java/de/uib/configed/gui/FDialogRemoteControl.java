@@ -9,7 +9,7 @@ import javax.swing.event.ListSelectionEvent;
 import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
-public class FDialogRemoteControl extends de.uib.utilities.swing.FEditList {
+public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList {
 	Map<String, String> meanings;
 	Map<String, Boolean> editable;
 	String selText;

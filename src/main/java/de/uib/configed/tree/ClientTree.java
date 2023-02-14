@@ -1271,8 +1271,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		if (groupSet.size() > 1) {
 
-			FEditList fList = new FEditList(null);
-			fList.setListModel(new DefaultComboBoxModel<>(groupSet.toArray()));
+			FEditList<GroupNode> fList = new FEditList<>(null);
+			fList.setListModel(new DefaultComboBoxModel<>(groupSet.toArray(new GroupNode[0])));
 			fList.setTitle(Globals.APPNAME + ":  " + Configed.getResourceValue("ClientTree.DIRECTORYname") + " "
 					+ Configed.getResourceValue("ClientTree.checkDIRECTORYAssignments"));
 			fList.setExtraLabel(Configed.getResourceValue("ClientTree.severalLocationsAssigned") + " >> " + clientID

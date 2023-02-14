@@ -4961,7 +4961,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dialogRemoteControl.setMeanings(rcCommands);
 			dialogRemoteControl.setEditable(commandsEditable);
 
-			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(remoteControls.keySet().toArray()));
+			dialogRemoteControl
+					.setListModel(new DefaultComboBoxModel<>(remoteControls.keySet().toArray(new String[0])));
 
 			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, false, ""));
 

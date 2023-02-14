@@ -126,8 +126,8 @@ import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.ActivityPanel;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.Containership;
-import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.swing.FEditObject;
+import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.FEditTextWithExtra;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.JTextEditorField;
@@ -2839,8 +2839,8 @@ public class MainFrame extends JFrame
 	}
 
 	private List<String> getProduct(List<String> completeList) {
-		FEditList fList = new FEditList();
-		fList.setListModel(new DefaultComboBoxModel<>(completeList.toArray()));
+		FEditStringList fList = new FEditStringList();
+		fList.setListModel(new DefaultComboBoxModel<>(completeList.toArray(new String[0])));
 		fList.setTitle(Globals.APPNAME + ": " + Configed.getResourceValue("MainFrame.productSelection"));
 		fList.init();
 

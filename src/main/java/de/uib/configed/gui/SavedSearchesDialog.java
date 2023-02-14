@@ -17,15 +17,15 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditList;
+import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.thread.WaitCursor;
 
-public class SavedSearchesDialog extends FEditList {
+public class SavedSearchesDialog extends FEditStringList {
 	private SelectionManager manager;
 	private List<String> result;
-	private DefaultListModel<Object> model;
+	private DefaultListModel<String> model;
 
 	public SavedSearchesDialog() {
 		setTitle(Configed.getResourceValue("SavedSearchesDialog.title") + " (" + Globals.APPNAME + ")");

@@ -20,14 +20,14 @@ import javax.swing.table.TableCellEditor;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.FEditList;
+import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.table.DefaultListModelProducer;
 import de.uib.utilities.table.ListModelProducer;
 
 public class SensitiveCellEditor extends AbstractCellEditor implements TableCellEditor, MouseListener {
 	protected JTextField field;
 
-	protected FEditList listeditor;
+	protected FEditStringList listeditor;
 	private int editingRow = -1;
 	private int editingColumn = -1;
 	protected String myKey;
@@ -65,9 +65,10 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 		field.setEditable(false);
 		field.addMouseListener(this);
-		listeditor = new FEditList(field, this);
-		listeditor.setModal(false);// true has undesired effects in the interaction of the CellEditor and the
-									// FEditList
+		listeditor = new FEditStringList(field, this);
+
+		// true has undesired effects in the interaction of the CellEditor and the FEditList
+		listeditor.setModal(false);
 		listeditor.init();
 
 		setModelProducer(modelProducer);
@@ -130,7 +131,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		if (val instanceof List) // is now always
 		{
 
-			ListModel<Object> model = modelProducer.getListModel(row, column);
+			ListModel<String> model = modelProducer.getListModel(row, column);
 			Logging.debug(this,
 					" try list editing, modelproducer tells nullable " + modelProducer.getNullable(row, column));
 			listeditor.setVisible(false);
