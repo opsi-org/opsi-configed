@@ -60,10 +60,11 @@ public class EmptyCommand implements SSHCommand {
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
-		else
+		} else {
 			return getCommand();
+		}
 	}
 
 	/**
@@ -81,7 +82,6 @@ public class EmptyCommand implements SSHCommand {
 	}
 
 	public EmptyCommand(String c) {
-
 		setCommand(c);
 		getParameterList();
 
@@ -98,7 +98,7 @@ public class EmptyCommand implements SSHCommand {
 	 * 
 	 * @param i (id): String
 	 **/
-	public void setId(String i) {
+	public final void setId(String i) {
 		id = i;
 	}
 
@@ -108,7 +108,7 @@ public class EmptyCommand implements SSHCommand {
 	 * @param c (command): String
 	 **/
 	@Override
-	public void setCommand(String c) {
+	public final void setCommand(String c) {
 		command = c;
 	}
 
@@ -117,7 +117,7 @@ public class EmptyCommand implements SSHCommand {
 	 * 
 	 * @param mt (menu text): String
 	 **/
-	public void setMenuText(String mt) {
+	public final void setMenuText(String mt) {
 		menuText = mt;
 	}
 
@@ -144,7 +144,7 @@ public class EmptyCommand implements SSHCommand {
 	 * 
 	 * @param ns (needSudo): boolean
 	 **/
-	public void setNeedSudo(boolean ns) {
+	public final void setNeedSudo(boolean ns) {
 		needSudo = ns;
 	}
 
@@ -220,7 +220,7 @@ public class EmptyCommand implements SSHCommand {
 	 * @return List with placeholdern for parameter
 	 */
 	@Override
-	public List<String> getParameterList() {
+	public final List<String> getParameterList() {
 		List<String> paramlist = new ArrayList<>();
 		String temp1 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1;
 		String temp2 = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
@@ -229,8 +229,9 @@ public class EmptyCommand implements SSHCommand {
 			Logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
 			for (int i = 0; i < counterString(getCommandRaw(), temp1); i++) {
 				String plHolder = searchPlaceholder();
-				if (!paramlist.contains(plHolder))
+				if (!paramlist.contains(plHolder)) {
 					paramlist.add(plHolder);
+				}
 			}
 		}
 		Logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
@@ -302,15 +303,17 @@ public class EmptyCommand implements SSHCommand {
 		String result = "";
 
 		if (needSudo()) {
-			if (command.contains("2>&1"))
+			if (command.contains("2>&1")) {
 				result = SSHCommandFactory.SUDO_TEXT + " " + command;
-			else
+			} else {
 				result = SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
+			}
 		} else {
-			if (command.contains("2>&1"))
+			if (command.contains("2>&1")) {
 				result = command;
-			else
+			} else {
 				result = command + "  2>&1";
+			}
 		}
 
 		return result;

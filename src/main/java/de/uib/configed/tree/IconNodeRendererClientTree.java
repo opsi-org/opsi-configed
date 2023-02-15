@@ -18,11 +18,11 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 	public IconNodeRendererClientTree(ConfigedMain main) {
 		this.main = main;
-		setOpaque(true);
-		setForeground(Globals.lightBlack);
-		setTextSelectionColor(Globals.lightBlack);
-		setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
-		setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
+		super.setOpaque(true);
+		super.setForeground(Globals.lightBlack);
+		super.setTextSelectionColor(Globals.lightBlack);
+		super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
+		super.setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
 	}
 
 	@Override

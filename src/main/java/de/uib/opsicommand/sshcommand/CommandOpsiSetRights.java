@@ -21,7 +21,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	private boolean isMultiCommand = true;
 	private LinkedList<SSHCommand> sshCommand = new LinkedList<>();
 	private LinkedList<SSHCommand> sshCommandOriginal = new LinkedList<>();
-	private int priority = 110;
+	private static final int PRIORITY = 110;
 	private String mainName = "";
 	private String dir = null;
 	private String myTmpCommand;
@@ -35,8 +35,9 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	public CommandOpsiSetRights(String d) {
 		setDir(d);
 		command = BASE_NAME + dir;
-		if (d.length() > 0 && d.charAt(d.length() - 1) != '/')
+		if (d.length() > 0 && d.charAt(d.length() - 1) != '/') {
 			d = d + "/";
+		}
 
 		Logging.info(this, "CommandOpsiSetRights dir " + dir);
 		sshCommand.add(this);
@@ -85,19 +86,23 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
-		else
+		} else {
 			return getCommand();
+		}
 	}
 
 	@Override
 	public String getCommand() {
-		if (dir != null)
+		if (dir != null) {
 			command = "opsi-set-rights " + dir;
+		}
 
-		if (needSudo())
+		if (needSudo()) {
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
+		}
+
 		return command + " 2>&1";
 	}
 
@@ -111,8 +116,9 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 		LinkedList<String> commandsStringList = new LinkedList<>();
 		for (SSHCommand c : sshCommand) {
 			String comstr = c.getCommandRaw();
-			if (!((comstr == null) || (comstr.trim().equals(""))))
+			if (!((comstr == null) || (comstr.trim().equals("")))) {
 				commandsStringList.add(c.getCommandRaw());
+			}
 		}
 		return commandsStringList;
 	}
@@ -134,7 +140,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 
 	@Override
 	public int getPriority() {
-		return priority;
+		return PRIORITY;
 	}
 
 	@Override
@@ -172,8 +178,9 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 			Logging.debug(this, "getParameterList myCommand_tmp " + myTmpCommand);
 			for (int i = 0; i < counterString(getCommandRaw(), temp1); i++) {
 				String plHolder = searchPlaceholder();
-				if (!paramlist.contains(plHolder))
+				if (!paramlist.contains(plHolder)) {
 					paramlist.add(plHolder);
+				}
 			}
 		}
 		Logging.debug(this, "getParameterList command " + command + " placeholders " + paramlist);
@@ -231,11 +238,12 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 		return dialog;
 	}
 
-	public void setDir(String d) {
-		if (!d.equals(""))
+	public final void setDir(String d) {
+		if (!d.equals("")) {
 			dir = " " + d;
-		else
+		} else {
 			dir = "";
+		}
 	}
 
 	public String getDir() {

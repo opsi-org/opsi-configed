@@ -218,7 +218,9 @@ public final class JSONReMapper {
 
 				Iterator<String> iter0 = map0.keySet().iterator();
 				while (iter0.hasNext()) {
-					String key1 = iter0.next(); // e.g. client
+
+					// e.g. client
+					String key1 = iter0.next();
 					HashMap<String, JSONObject> map1 = new HashMapX<>(map0.get(key1)); // e.g.
 																						// map
 																						// of
@@ -360,9 +362,10 @@ public final class JSONReMapper {
 				result.add(mapItem);
 
 			}
-			if (jsonList.size() != result.size())
+			if (jsonList.size() != result.size()) {
 				Logging.warning(" getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped "
 						+ result.size());
+			}
 		} catch (Exception ex) {
 			Logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
 		}
@@ -565,10 +568,11 @@ public final class JSONReMapper {
 						String key = iter.next();
 
 						if (!jO.isNull(key)) {
-							if (derive)
-								put(key, (V) (deriveStandard(jO.get(key))));
-							else
-								put(key, (V) (jO.get(key)));
+							if (derive) {
+								super.put(key, (V) (deriveStandard(jO.get(key))));
+							} else {
+								super.put(key, (V) (jO.get(key)));
+							}
 						}
 					}
 				}
@@ -579,11 +583,13 @@ public final class JSONReMapper {
 	}
 
 	public static Object deriveStandard(Object ob) {
-		if (ob == null)
+		if (ob == null) {
 			return null;
+		}
 
-		else if (ob instanceof String)
+		else if (ob instanceof String) {
 			return ob;
+		}
 
 		else if (ob instanceof JSONArray) {
 			return ((JSONArray) ob).toList();
@@ -602,10 +608,9 @@ public final class JSONReMapper {
 				try {
 					key = iter.next();
 
-					if (((JSONObject) ob).isNull(key))
+					if (((JSONObject) ob).isNull(key)) {
 						map.put(key, null);
-
-					else {
+					} else {
 						value = ((JSONObject) ob).get(key);
 						map.put(key, value);
 					}
@@ -615,8 +620,9 @@ public final class JSONReMapper {
 				}
 			}
 			return map;
-		} else
+		} else {
 			return ob;
+		}
 	}
 
 	public static boolean isNull(Object ob) {
@@ -630,16 +636,18 @@ public final class JSONReMapper {
 	}
 
 	public static String giveEmptyForNullString(String ob) {
-		if (ob == null || ob.equalsIgnoreCase("null"))
+		if (ob == null || ob.equalsIgnoreCase("null")) {
 			return "";
-		else
+		} else {
 			return ob;
+		}
 	}
 
 	public static Map<String, String> giveEmptyForNullString(Map<String, String> m) {
 		for (Entry<String, String> entry : m.entrySet()) {
-			if (isNull(entry.getValue()))
+			if (isNull(entry.getValue())) {
 				m.put(entry.getKey(), "");
+			}
 		}
 
 		return m;
@@ -649,10 +657,11 @@ public final class JSONReMapper {
 
 		HashMap<String, String> result = new HashMap<>();
 		for (Entry<String, Object> entry : m.entrySet()) {
-			if (isNull(entry.getValue()))
+			if (isNull(entry.getValue())) {
 				result.put(entry.getKey(), "");
-			else
+			} else {
 				result.put(entry.getKey(), "" + entry.getValue());
+			}
 		}
 
 		return result;

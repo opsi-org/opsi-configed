@@ -19,7 +19,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	private boolean needSudo = false;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = false;
-	private int priority = 110;
+	private static final int PRIORITY = 110;
 
 	private String dir = " ";
 	private String keepVersions = " ";
@@ -74,10 +74,11 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
-		else
+		} else {
 			return getCommand();
+		}
 	}
 
 	@Override
@@ -88,20 +89,22 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 		return "ERROR";
 	}
 
-	public void setDir(String d) {
-		if (d != null)
+	private void setDir(String d) {
+		if (d != null) {
 			dir = d;
+		}
 	}
 
 	public String getDir() {
 		return dir;
 	}
 
-	public void setKeepVersions(boolean o) {
-		if (o)
+	private void setKeepVersions(boolean o) {
+		if (o) {
 			keepVersions = " --keep-versions ";
-		else
+		} else {
 			keepVersions = " ";
+		}
 	}
 
 	@Override
@@ -137,12 +140,16 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	@Override
 	public String getCommand() {
 		setCommandName();
-		if (!packageVersion.equals("") || !productVersion.equals(""))
+		if (!packageVersion.equals("") || !productVersion.equals("")) {
 			keepVersions = "--keep-versions ";
+		}
+
 		command = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
 				+ " " + md5sum + " " + zsync + " ";
-		if (needSudo())
+		if (needSudo()) {
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
+		}
+
 		return command + " 2>&1";
 	}
 
@@ -168,7 +175,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 
 	@Override
 	public int getPriority() {
-		return priority;
+		return PRIORITY;
 	}
 
 	@Override
@@ -204,32 +211,36 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 		return dialog;
 	}
 
-	public void setMd5sum(boolean m) {
-		if (m)
+	private void setMd5sum(boolean m) {
+		if (m) {
 			md5sum = "-m";
-		else
+		} else {
 			md5sum = "";
+		}
 	}
 
-	public void setZsync(boolean z) {
-		if (z)
+	private void setZsync(boolean z) {
+		if (z) {
 			zsync = "-z";
-		else
+		} else {
 			zsync = "";
+		}
 	}
 
-	public void setPackageVersion(String pav) {
-		if (!pav.equals(""))
+	private void setPackageVersion(String pav) {
+		if (!pav.equals("")) {
 			packageVersion = "--package-version " + pav;
-		else
+		} else {
 			packageVersion = "";
+		}
 	}
 
-	public void setProductVersion(String prv) {
-		if (!prv.equals(""))
+	private void setProductVersion(String prv) {
+		if (!prv.equals("")) {
 			productVersion = "--product-version " + prv;
-		else
+		} else {
 			productVersion = "";
+		}
 	}
 
 	@Override

@@ -15,12 +15,12 @@ public class CommandModulesUpload extends CommandSFTPUpload
 	public static final String DEFAULT_FILENAME = "modules";
 
 	public CommandModulesUpload() {
-		setTitle("Modules Upload");
-		setBaseName("Modules Upload");
+		super.setTitle("Modules Upload");
+		super.setBaseName("Modules Upload");
 		command = "Modules Upload (via sftp)";
-		setDescription("# write modules file to opsi-server");
-		setTargetPath("/etc/opsi/");
-		setTargetFilename(DEFAULT_FILENAME);
+		super.setDescription("# write modules file to opsi-server");
+		super.setTargetPath("/etc/opsi/");
+		super.setTargetFilename(DEFAULT_FILENAME);
 	}
 
 	@Override

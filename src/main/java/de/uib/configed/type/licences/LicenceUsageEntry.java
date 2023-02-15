@@ -47,50 +47,57 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 	public LicenceUsageEntry(String hostId, String softwareLicenceId, String licencePoolId, String licenceKey,
 			String notes) {
 		super();
-		setAllowedAttributes(KEYS);
 
-		if (hostId == null)
-			put(CLIENT_ID_KEY, "");
-		else
-			put(CLIENT_ID_KEY, hostId);
+		super.setAllowedAttributes(KEYS);
 
-		if (softwareLicenceId == null)
-			put(LICENCE_ID_KEY, "");
-		else
-			put(LICENCE_ID_KEY, softwareLicenceId);
+		if (hostId == null) {
+			super.put(CLIENT_ID_KEY, "");
+		} else {
+			super.put(CLIENT_ID_KEY, hostId);
+		}
 
-		if (licencePoolId == null)
-			put(LICENCE_POOL_ID_KEY, "");
-		else
-			put(LICENCE_POOL_ID_KEY, licencePoolId);
+		if (softwareLicenceId == null) {
+			super.put(LICENCE_ID_KEY, "");
+		} else {
+			super.put(LICENCE_ID_KEY, softwareLicenceId);
+		}
 
-		if (licenceKey == null)
-			put(LICENCE_KEY_KEY, "");
-		else
-			put(LICENCE_KEY_KEY, licenceKey);
+		if (licencePoolId == null) {
+			super.put(LICENCE_POOL_ID_KEY, "");
+		} else {
+			super.put(LICENCE_POOL_ID_KEY, licencePoolId);
+		}
 
-		if (notes == null)
-			put(NOTES_KEY, "");
-		else
-			put(NOTES_KEY, notes);
+		if (licenceKey == null) {
+			super.put(LICENCE_KEY_KEY, "");
+		} else {
+			super.put(LICENCE_KEY_KEY, licenceKey);
+		}
+
+		if (notes == null) {
+			super.put(NOTES_KEY, "");
+		} else {
+			super.put(NOTES_KEY, notes);
+		}
 
 		lic4pool = Globals.pseudokey(new String[] { get(LICENCE_ID_KEY), get(LICENCE_POOL_ID_KEY) });
 	}
 
 	public LicenceUsageEntry(Map<String, Object> entry) {
 		super();
-		setAllowedAttributes(KEYS);
+		super.setAllowedAttributes(KEYS);
 
 		Set<String> reducedEntrySet = entry.keySet();
 		reducedEntrySet.remove(IDENT_KEY);
 		for (String key : reducedEntrySet) {
-			put(key, "" + entry.get(key));
+			super.put(key, "" + entry.get(key));
 		}
 
-		if (get(LICENCE_ID_KEY) == null || get(LICENCE_POOL_ID_KEY) == null)
+		if (super.get(LICENCE_ID_KEY) == null || super.get(LICENCE_POOL_ID_KEY) == null) {
 			Logging.warning(this, "missing values " + entry);
+		}
 
-		lic4pool = Globals.pseudokey(new String[] { get(LICENCE_ID_KEY), get(LICENCE_POOL_ID_KEY) });
+		lic4pool = Globals.pseudokey(new String[] { super.get(LICENCE_ID_KEY), super.get(LICENCE_POOL_ID_KEY) });
 	}
 
 	public String getId() {

@@ -21,12 +21,12 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 
 	public LicenceStatisticsRow(String licencePool) {
 		super();
-		put(USED_BY_OPSI_KEY, ZERO);
-		put(ID_KEY, licencePool);
-		put(LICENSE_OPTIONS_KEY, ZERO);
-		put(REMAINING_OPSI_KEY, ZERO);
-		put(SW_INVENTORY_USED_KEY, ZERO);
-		put(SW_INVENTORY_REMAINING_KEY, ZERO);
+		super.put(USED_BY_OPSI_KEY, ZERO);
+		super.put(ID_KEY, licencePool);
+		super.put(LICENSE_OPTIONS_KEY, ZERO);
+		super.put(REMAINING_OPSI_KEY, ZERO);
+		super.put(SW_INVENTORY_USED_KEY, ZERO);
+		super.put(SW_INVENTORY_REMAINING_KEY, ZERO);
 		allowedUsages = ExtendedInteger.ZERO;
 		opsiUsages = 0;
 		swInventoryUsages = 0;

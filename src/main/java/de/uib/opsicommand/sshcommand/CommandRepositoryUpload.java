@@ -11,12 +11,12 @@ public class CommandRepositoryUpload extends CommandSFTPUpload
 {
 
 	public CommandRepositoryUpload() {
-		setTitle("Repo-file Upload");
-		setBaseName("Repo-file Upload");
+		super.setTitle("Repo-file Upload");
+		super.setBaseName("Repo-file Upload");
 		command = "Repo-file Upload (via sftp)";
-		setDescription("# write Repo-file file to opsi-server");
-		setTargetPath("/etc/opsi/package-updater.repos.d/");
-		setTargetFilename("");
+		super.setDescription("# write Repo-file file to opsi-server");
+		super.setTargetPath("/etc/opsi/package-updater.repos.d/");
+		super.setTargetFilename("");
 	}
 
 	@Override
@@ -40,8 +40,9 @@ public class CommandRepositoryUpload extends CommandSFTPUpload
 		if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
 				|| main.getOpsiVersion().compareTo("4.1") < 0) {
 			Logging.error(this, Configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
-		} else
+		} else {
 			dialog = new SSHRepositoryUploadDialog();
+		}
 	}
 
 	@Override
