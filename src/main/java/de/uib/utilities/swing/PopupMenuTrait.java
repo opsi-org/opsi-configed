@@ -6,8 +6,8 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 
-import de.uib.configed.Globals;
 import de.uib.configed.Configed;
+import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class PopupMenuTrait extends JPopupMenu {
@@ -52,7 +52,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		}
 	}
 
-	protected void addPopup(final int p) {
+	private void addPopup(final int p) {
 		int i;
 		switch (p) {
 		case POPUP_RELOAD:

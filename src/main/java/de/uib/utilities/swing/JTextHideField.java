@@ -70,10 +70,9 @@ public class JTextHideField extends javax.swing.JPanel {
 		button.setToolTipText(Configed.getResourceValue("JTextHideField.toggleHide"));
 
 		setupPanel();
-		setEnabled(false);
 	}
 
-	protected void setupPanel() {
+	private void setupPanel() {
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
@@ -88,6 +87,9 @@ public class JTextHideField extends javax.swing.JPanel {
 						.addComponent(invisibleField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(visibleField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addComponent(button, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT));
+
+		setEnabled(false);
+
 	}
 
 	public void setHidden() {

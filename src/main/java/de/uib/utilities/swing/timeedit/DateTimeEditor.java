@@ -21,9 +21,7 @@ import org.jdesktop.swingx.calendar.DateSelectionModel;
 
 import de.uib.utilities.logging.Logging;
 
-public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.DateSelectionListener
-
-{
+public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.DateSelectionListener {
 	protected JXMonthView monthView;
 	protected TimeEditor timeSetter;
 	protected Calendar calendar;
@@ -64,22 +62,26 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		popup.add(menuItemNull);
 
-		addMouseListener(new utils.PopupMouseListener(popup));
+		super.addMouseListener(new utils.PopupMouseListener(popup));
 
 		calendar = Calendar.getInstance();
-		if (!withTime)
+		if (!withTime) {
 			setToMidnight();
+		}
+
 		hourDateFormat = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm");
 
 		monthView = new JXMonthView();
 
 		monthView.setSelectionMode(DateSelectionModel.SelectionMode.SINGLE_SELECTION);
 
-		addDateSelectionListener(this); // observe monthview
+		// observe monthview
+		addDateSelectionListener(this);
 
 		timeSetter = new TimeEditor(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
-		if (!withTime)
+		if (!withTime) {
 			timeSetter.setVisible(false);
+		}
 
 		setDate(false);
 
@@ -104,7 +106,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		buttonYearForward.addActionListener(actionEvent -> switchYear(+1));
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-		setLayout(layout);
+		super.setLayout(layout);
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addGap(1, 1, Short.MAX_VALUE)
@@ -135,7 +137,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 	}
 
-	protected void setToMidnight() {
+	private void setToMidnight() {
 
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
@@ -143,7 +145,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		calendar.set(Calendar.MILLISECOND, 0);
 	}
 
-	protected void switchMonth(int d) {
+	private void switchMonth(int d) {
 
 		calendar.add(Calendar.MONTH, d);
 
@@ -156,7 +158,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		}
 	}
 
-	protected void switchYear(int d) {
+	private void switchYear(int d) {
 
 		calendar.add(Calendar.YEAR, d);
 
@@ -193,9 +195,9 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		}
 
 		monthView.setFirstDisplayedDay(now);
-		if (select)
+		if (select) {
 			monthView.setSelectionDate(now);
-		else {
+		} else {
 			monthView.getSelectionModel().clearSelection();
 			monthView.commitSelection();
 		}
@@ -216,8 +218,10 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 	public void setSelectionDate(Date d) {
 		Logging.debug(this, " setSelectionDate " + d);
-		if (d != null)
+		if (d != null) {
 			monthView.ensureDateVisible(d);
+		}
+
 		calendar.setTime(d);
 		monthView.setSelectionDate(d);
 		timeSetter.setHour(calendar.get(Calendar.HOUR_OF_DAY));
@@ -273,8 +277,9 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 				// avoid recursion
 
 			} else {
-				if (monthView.getFirstSelectionDate() != null)
+				if (monthView.getFirstSelectionDate() != null) {
 					calendar.setTime(monthView.getFirstSelectionDate());
+				}
 			}
 		}
 	}
@@ -287,11 +292,13 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		String[] months = new java.text.DateFormatSymbols().getMonths();
 		int lastIndex = months.length - 1;
 
-		if (months[lastIndex] == null || months[lastIndex].length() <= 0) { // last item empty
+		if (months[lastIndex] == null || months[lastIndex].length() <= 0) {
+			// last item empty
 			String[] monthStrings = new String[lastIndex];
 			System.arraycopy(months, 0, monthStrings, 0, lastIndex);
 			return monthStrings;
-		} else { // last item not empty
+		} else {
+			// last item not empty
 			return months;
 		}
 	}

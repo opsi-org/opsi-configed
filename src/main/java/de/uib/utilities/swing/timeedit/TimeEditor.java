@@ -28,25 +28,31 @@ public class TimeEditor extends JPanel {
 	public TimeEditor(int hours, int minutes) {
 		super();
 		init();
+
+		setTime(hours, minutes);
+	}
+
+	private void setTime(int hours, int minutes) {
 		setHour(hours);
 		setMin(minutes);
-
 	}
 
 	private String fillTo2Chars(int i) {
 		String result = "00";
-		if (i < 0 || i > 99)
+		if (i < 0 || i > 99) {
 			return result;
+		}
 
 		result = "" + i;
 
-		if (result.length() == 1)
+		if (result.length() == 1) {
 			result = "0" + result;
+		}
 
 		return result;
 	}
 
-	protected void init() {
+	private void init() {
 		setOpaque(false);
 		setLayout(new GridLayout(1, 2));
 		setPreferredSize(new Dimension(250, 22));
@@ -75,7 +81,6 @@ public class TimeEditor extends JPanel {
 
 	public void setHour(int h) {
 		spinnerHour.getModel().setValue(hours.get(h));
-
 	}
 
 	public void setMin(int m) {

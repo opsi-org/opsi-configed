@@ -78,16 +78,18 @@ public class PanelStateSwitch extends JPanel {
 
 		changeListeners = new ArrayList<>();
 
-		if (labels != null && labels.length < values.length)
+		if (labels != null && labels.length < values.length) {
 			Logging.warning(this, "missing label");
+		}
 
 		this.labels = new LinkedHashMap<>();
 
 		for (int i = 0; i < values.length; i++) {
-			if (labels == null || i > labels.length - 1)
+			if (labels == null || i > labels.length - 1) {
 				this.labels.put(values[i], values[i].toString());
-			else
+			} else {
 				this.labels.put(values[i], labels[i]);
+			}
 		}
 
 		myenumClass = myenum;
@@ -101,8 +103,9 @@ public class PanelStateSwitch extends JPanel {
 
 			int i = 0;
 			for (Object constant : myenumClass.getEnumConstants()) {
-				if (i == 0)
+				if (i == 0) {
 					producedValue = (Enum) constant;
+				}
 				i++;
 				Logging.info(this, " enum constant  " + constant + " class " + constant.getClass());
 			}
@@ -135,7 +138,7 @@ public class PanelStateSwitch extends JPanel {
 		}
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 		primaryFont = Globals.defaultFont;
 		ButtonGroup buttonGroup = new ButtonGroup();
 		groupedButtons = new LinkedHashMap<>();
@@ -156,8 +159,10 @@ public class PanelStateSwitch extends JPanel {
 			groupedButtons.put(val, button);
 			button.addActionListener((ActionEvent ae) -> {
 				producedValue = val;
-				if (enumSetter != null)
+				if (enumSetter != null) {
 					enumSetter.setValue(val);
+				}
+
 				Logging.debug(this, "actionEvent with result " + val);
 				notifyChangeListeners(new ChangeEvent(this));
 			})
@@ -169,8 +174,9 @@ public class PanelStateSwitch extends JPanel {
 				@Override
 				public void mouseEntered(MouseEvent e) {
 
-					if (!button.isSelected())
+					if (!button.isSelected()) {
 						button.setSelectedIcon(deactivatedIcon);
+					}
 				}
 
 				@Override
@@ -190,12 +196,13 @@ public class PanelStateSwitch extends JPanel {
 		groupedButtons.get(startValue).setSelected(true);
 	}
 
-	protected void initLayout() {
+	private void initLayout() {
 		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		JLabel labelTitle = new JLabel("");
-		if (title != null)
+		if (title != null) {
 			labelTitle.setText(title);
+		}
 
 		labelTitle.setFont(primaryFont);
 
@@ -224,9 +231,10 @@ public class PanelStateSwitch extends JPanel {
 		GroupLayout.ParallelGroup hGroup = layout.createParallelGroup(GroupLayout.Alignment.LEADING);
 		layout.setHorizontalGroup(hGroup);
 
-		if (title != null)
+		if (title != null) {
 			hGroup.addGroup(layout.createSequentialGroup().addGap(hGap)
 					.addComponent(labelTitle, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addGap(hGap));
+		}
 
 		for (Enum val : values) {
 			hGroup.addGroup(layout.createSequentialGroup().addGap(hGap)
@@ -240,9 +248,8 @@ public class PanelStateSwitch extends JPanel {
 		return producedValue;
 	}
 
-	public void setValueByString(String valS)
-	// keeps old produced value if valS does not match
-	{
+	public void setValueByString(String valS) {
+		// keeps old produced value if valS does not match
 		for (Enum val : values) {
 			if (val.name().equals(valS)) {
 				producedValue = val;
@@ -254,7 +261,8 @@ public class PanelStateSwitch extends JPanel {
 
 		Logging.info(this, "setValueByString " + producedValue);
 
-		if (enumSetter != null)
+		if (enumSetter != null) {
 			enumSetter.setValue(producedValue);
+		}
 	}
 }

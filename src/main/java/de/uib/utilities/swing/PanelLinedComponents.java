@@ -32,7 +32,7 @@ public class PanelLinedComponents extends JPanel {
 		defineLayout();
 	}
 
-	public void setComponents(JComponent[] components) {
+	private void setComponents(JComponent[] components) {
 		setComponents(components, Globals.LINE_HEIGHT);
 	}
 
@@ -66,5 +66,4 @@ public class PanelLinedComponents extends JPanel {
 		vGroup.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2);
 		layout.setVerticalGroup(vGroup);
 	}
-
 }

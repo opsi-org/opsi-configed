@@ -80,11 +80,13 @@ public class LicenceEntry extends TreeMap<String, Object>
 
 	public LicenceEntry(Map<String, Object> importedEntry) {
 		super(importedEntry);
-		if (importedEntry.get(ID_SERVICE_KEY) != null)
-			put(ID_KEY, importedEntry.get(ID_SERVICE_KEY));
+		if (importedEntry.get(ID_SERVICE_KEY) != null) {
+			super.put(ID_KEY, importedEntry.get(ID_SERVICE_KEY));
+		}
 
-		if (get(ID_KEY) == null)
+		if (super.get(ID_KEY) == null) {
 			Logging.warning(this, "missing primary key in " + importedEntry);
+		}
 
 		if (importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY) == null) {
 			importedEntry.put(MAX_INSTALLATIONS_KEY, ExtendedInteger.ZERO);
@@ -96,14 +98,16 @@ public class LicenceEntry extends TreeMap<String, Object>
 						+ importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY));
 			} else {
 				int val = (Integer) importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY);
-				if (val == 0)
-					put(MAX_INSTALLATIONS_KEY, ExtendedInteger.INFINITE);
-				else
-					put(MAX_INSTALLATIONS_KEY, new ExtendedInteger(val));
+				if (val == 0) {
+					super.put(MAX_INSTALLATIONS_KEY, ExtendedInteger.INFINITE);
+				} else {
+					super.put(MAX_INSTALLATIONS_KEY, new ExtendedInteger(val));
+				}
 			}
 		}
-		if (importedEntry.get(TYPE_SERVICE_KEY) != null)
-			put(TYPE_KEY, translateTypeFromService((String) importedEntry.get(TYPE_SERVICE_KEY)));
+		if (importedEntry.get(TYPE_SERVICE_KEY) != null) {
+			super.put(TYPE_KEY, translateTypeFromService((String) importedEntry.get(TYPE_SERVICE_KEY)));
+		}
 	}
 
 	public String getId() {
@@ -115,16 +119,19 @@ public class LicenceEntry extends TreeMap<String, Object>
 	}
 
 	public static String produceNormalizedCount(String count) {
-		if (count == null)
+		if (count == null) {
 			return null;
+		}
 
-		if (count.trim().equals("0"))
+		if (count.trim().equals("0")) {
 			return "0";
+		}
 
 		ExtendedInteger ei = new ExtendedInteger(count);
 
-		if (ei.equals(ExtendedInteger.INFINITE))
+		if (ei.equals(ExtendedInteger.INFINITE)) {
 			return "0";
+		}
 
 		return count;
 	}

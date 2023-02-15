@@ -110,30 +110,32 @@ public class Mapping<K, V> {
 		mapOfStrings.put("" + k, v);
 
 		if (invertible) {
-			if (inverseMap.get(v) != null)
+			if (inverseMap.get(v) != null) {
 				// there is already an inverse assignment,
 				// the next one corrupts the function
 				invertible = false;
-			else
+			} else {
 				inverseMap.put(v, k);
+			}
 		}
 	}
 
-	public void defineBy(Map<K, V> m) {
+	private void defineBy(Map<K, V> m) {
 		clear();
-		if (m == null)
+		if (m == null) {
 			return;
+		}
 
 		map = m;
 		Iterator<K> iter = map.keySet().iterator();
 		while (iter.hasNext()) {
 			K k = iter.next();
 			V v = map.get(k);
-			if (v == null)
+			if (v == null) {
 				Logging.info(this, " " + k + " mapped to null in map " + m);
-			else
-
+			} else {
 				addPair(k, v);
+			}
 		}
 	}
 
