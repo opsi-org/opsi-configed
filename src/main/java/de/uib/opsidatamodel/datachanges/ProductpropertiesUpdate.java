@@ -34,7 +34,7 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
 
-			persis.setProductproperties(pcname, productname, newdata);
+			persis.setProductProperties(pcname, productname, newdata);
 		}
 	}
 

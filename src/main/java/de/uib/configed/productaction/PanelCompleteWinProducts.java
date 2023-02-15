@@ -356,7 +356,7 @@ public class PanelCompleteWinProducts extends JPanel
 			values.add(productKey);
 
 			// check if product key is new and should be changed
-			Map<String, Object> propsMap = persist.getProductproperties(server, winProduct);
+			Map<String, Object> propsMap = persist.getProductProperties(server, winProduct);
 			Logging.debug(this, " getProductproperties " + propsMap);
 
 			String oldProductKey = null;

@@ -634,7 +634,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract void productpropertiesRequestRefresh();
 
-	public abstract void retrieveProductproperties(List<String> clientNames);
+	public abstract void retrieveProductProperties(List<String> clientNames);
 
 	public abstract Boolean hasClientSpecificProperties(String productname);
 
@@ -646,13 +646,13 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract void retrieveDepotProductProperties();
 
-	public abstract Map<String, Object> getProductproperties(String pcname, String productname);
+	public abstract Map<String, Object> getProductProperties(String pcname, String productname);
 
 	// Map properties,
 
-	public abstract void setProductproperties(String pcname, String productname, Map properties);
+	public abstract void setProductProperties(String pcname, String productname, Map properties);
 
-	public abstract void setProductproperties();
+	public abstract void setProductProperties();
 
 	public abstract void setCommonProductPropertyValue(Set<String> clientNames, String productName, String propertyName,
 			List<String> values);

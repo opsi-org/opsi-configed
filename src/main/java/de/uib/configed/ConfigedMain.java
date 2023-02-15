@@ -40,16 +40,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.RowSorter;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -117,6 +122,7 @@ import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
+import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.tabbedpane.TabClient;
@@ -144,7 +150,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard and other features for opsi 4.3 disabled
-	public static final boolean OPSI_4_3 = false;
+	public static final boolean OPSI_4_3 = true;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -1283,6 +1289,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					mainFrame.showPopupClients();
 				}
 			}
+
 		};
 
 		selectionPanel.setModel(buildClientListTableModel(true));
@@ -2213,7 +2220,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if ((getSelectedClients().length > 0) && (possibleActions.get(productEdited) != null)) {
 
-			Map<String, Object> productPropertiesFor1Client = persist.getProductproperties(getSelectedClients()[0],
+			Map<String, Object> productPropertiesFor1Client = persist.getProductProperties(getSelectedClients()[0],
 					productEdited);
 
 			if (productPropertiesFor1Client != null) {
@@ -2233,7 +2240,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				// merge the other clients
 				for (int i = 1; i < getSelectedClients().length; i++) {
-					productPropertiesFor1Client = persist.getProductproperties(getSelectedClients()[i], productEdited);
+					productPropertiesFor1Client = persist.getProductProperties(getSelectedClients()[i], productEdited);
 
 					productProperties.add(productPropertiesFor1Client);
 
@@ -2784,7 +2791,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// listener is triggered
 			// which loads the productProperties for each client separately
 
-			persist.retrieveProductproperties(selectionPanel.getSelectedValues());
+			persist.retrieveProductProperties(selectionPanel.getSelectedValues());
 
 			Set<String> oldProductSelection = mainFrame.panelLocalbootProductSettings.getSelectedIDs();
 			List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panelLocalbootProductSettings
@@ -2876,7 +2883,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// we retrieve the properties for all clients and products
 
-			persist.retrieveProductproperties(selectionPanel.getSelectedValues());
+			persist.retrieveProductProperties(selectionPanel.getSelectedValues());
 
 			if (istmForSelectedClientsNetboot == null) {
 				// we rebuild only if we reloaded
@@ -4438,6 +4445,26 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				String newID = getText();
 
+				if (persist.getHostInfoCollections().getOpsiHostNames().contains(newID)) {
+					FTextArea fHostExistsInfo = new FTextArea(
+							getMainFrame(), Configed.getResourceValue("FGeneralDialog.title.information") + " ("
+									+ Globals.APPNAME + ") ",
+							true, new String[] { Configed.getResourceValue("FGeneralDialog.ok") });
+
+					StringBuilder message = new StringBuilder();
+					message.append(Configed.getResourceValue("ConfigedMain.hostExists"));
+					message.append(" \"");
+					message.append(newID);
+					message.append("\" \n");
+
+					fHostExistsInfo.setMessage(message.toString());
+					fHostExistsInfo.setLocationRelativeTo(getMainFrame());
+					fHostExistsInfo.setAlwaysOnTop(true);
+					fHostExistsInfo.setVisible(true);
+
+					return;
+				}
+
 				Logging.debug(this, "new name " + newID);
 
 				persist.renameClient(getSelectedClients()[0], newID);
@@ -5096,6 +5123,109 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		refreshClientListKeepingGroup();
 		selectionPanel.clearSelection();
+	}
+
+	public void copySelectedClient() {
+		if (getSelectedClients() == null || getSelectedClients().length == 0) {
+			return;
+		}
+
+		Optional<HostInfo> selectedClient = persist.getHostInfoCollections().getMapOfPCInfoMaps().values().stream()
+				.filter(hostValues -> hostValues.getName().equals(getSelectedClients()[0])).findFirst();
+
+		if (selectedClient.isPresent()) {
+			JPanel additionalPane = new JPanel();
+			additionalPane.setOpaque(false);
+			GroupLayout additionalPaneLayout = new GroupLayout(additionalPane);
+			additionalPane.setLayout(additionalPaneLayout);
+
+			JLabel jLabelHostname = new JLabel(Configed.getResourceValue("ConfigedMain.jLabelHostname"));
+			JTextField jTextHostname = new JTextField(new CheckedDocument(new char[] { '-', '0', '1', '2', '3', '4',
+					'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+					'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }, -1), "", 17);
+			jTextHostname.setToolTipText(Configed.getResourceValue("NewClientDialog.hostnameRules"));
+			CopySuffixAddition copySuffixAddition = new CopySuffixAddition(selectedClient.get().getName());
+			jTextHostname.setText(copySuffixAddition.add());
+
+			additionalPaneLayout.setHorizontalGroup(additionalPaneLayout
+					.createParallelGroup(GroupLayout.Alignment.LEADING)
+					.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jLabelHostname)
+					.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(jTextHostname));
+			additionalPaneLayout.setVerticalGroup(additionalPaneLayout.createSequentialGroup()
+					.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
+					.addComponent(jLabelHostname)
+					.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2)
+					.addComponent(jTextHostname));
+
+			additionalPane.add(jLabelHostname);
+			additionalPane.add(jTextHostname);
+			additionalPane.setVisible(true);
+
+			FTextArea fAskCopyClient = new FTextArea(getMainFrame(),
+					Configed.getResourceValue("MainFrame.jMenuCopyClient") + " (" + Globals.APPNAME + ") ", true,
+					new String[] { Configed.getResourceValue("FGeneralDialog.no"),
+							Configed.getResourceValue("FGeneralDialog.yes") },
+					null, Globals.DEFAULT_FTEXTAREA_WIDTH, 230, additionalPane);
+
+			StringBuilder message = new StringBuilder("");
+			message.append(Configed.getResourceValue("ConfigedMain.confirmCopyClient"));
+			message.append("\n\n");
+			message.append(selectedClient.get().getName());
+
+			fAskCopyClient.setMessage(message.toString());
+			fAskCopyClient.setLocationRelativeTo(getMainFrame());
+			fAskCopyClient.setAlwaysOnTop(true);
+			fAskCopyClient.setVisible(true);
+
+			if (fAskCopyClient.getResult() == 2) {
+				boolean overwriteExistingHost = false;
+				String newClientName = jTextHostname.getText();
+
+				if (newClientName.isEmpty()) {
+					return;
+				}
+
+				HostInfo clientToCopy = selectedClient.get();
+				String[] splittedClientName = clientToCopy.getName().split("\\.");
+				String newClientNameWithDomain = newClientName + "." + splittedClientName[1] + "."
+						+ splittedClientName[2];
+
+				if (persist.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
+					overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
+				}
+
+				if (!overwriteExistingHost) {
+					return;
+				}
+
+				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
+				copyClient.copy();
+
+				refreshClientList(newClientName);
+			}
+		}
+	}
+
+	private boolean ask2OverwriteExistingHost(String host) {
+		FTextArea fAskOverwriteExsitingHost = new FTextArea(getMainFrame(),
+				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
+						+ ") ",
+				true, new String[] { Configed.getResourceValue("FGeneralDialog.no"),
+						Configed.getResourceValue("FGeneralDialog.yes") });
+
+		StringBuilder message = new StringBuilder();
+		message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message0"));
+		message.append(" \"");
+		message.append(host);
+		message.append("\" \n");
+		message.append(Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Message1"));
+
+		fAskOverwriteExsitingHost.setMessage(message.toString());
+		fAskOverwriteExsitingHost.setLocationRelativeTo(getMainFrame());
+		fAskOverwriteExsitingHost.setAlwaysOnTop(true);
+		fAskOverwriteExsitingHost.setVisible(true);
+
+		return fAskOverwriteExsitingHost.getResult() == 2;
 	}
 
 	public void callSaveGroupDialog() {

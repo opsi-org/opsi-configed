@@ -197,6 +197,7 @@ public class MainFrame extends JFrame
 
 	private JMenuItem jMenuAddClient = new JMenuItem();
 	private JMenuItem jMenuDeleteClient = new JMenuItem();
+	private JMenuItem jMenuCopyClient = new JMenuItem();
 
 	private JMenu jMenuResetProducts = new JMenu();
 
@@ -233,7 +234,7 @@ public class MainFrame extends JFrame
 	private JMenuItem jMenuRemoteControl = new JMenuItem();
 
 	private JMenuItem[] clientMenuItemsDependOnSelectionCount = new JMenuItem[] { jMenuResetProducts, jMenuAddClient,
-			jMenuDeleteClient, jMenuFreeLicences, jMenuChangeDepot, jMenuChangeClientID, };
+			jMenuCopyClient, jMenuDeleteClient, jMenuFreeLicences, jMenuChangeDepot, jMenuChangeClientID, };
 
 	private JMenu jMenuClientselection = new JMenu();
 	private JMenuItem jMenuClientselectionGetGroup = new JMenuItem();
@@ -278,6 +279,7 @@ public class MainFrame extends JFrame
 	private JMenuItemFormatted popupResetProductOnClient = new JMenuItemFormatted();
 
 	private JMenuItemFormatted popupAddClient = new JMenuItemFormatted();
+	private JMenuItemFormatted popupCopyClient = new JMenuItemFormatted();
 	private JMenuItemFormatted popupDeleteClient = new JMenuItemFormatted();
 	private JMenuItemFormatted popupFreeLicences = new JMenuItemFormatted();
 	private JMenuItemFormatted popupDeletePackageCaches = new JMenuItemFormatted();
@@ -295,7 +297,7 @@ public class MainFrame extends JFrame
 	private JMenuItemFormatted popupRemoteControl = new JMenuItemFormatted();
 
 	private JMenuItem[] clientPopupsDependOnSelectionCount = new JMenuItem[] { popupResetProducts, popupAddClient,
-			popupDeleteClient, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
+			popupCopyClient, popupDeleteClient, popupFreeLicences, popupShowPopupMessage, popupRequestSessionInfo,
 			popupDeletePackageCaches, popupRebootClient, popupShutdownClient, popupChangeDepot, popupChangeClientID,
 			popupRemoteControl };
 
@@ -943,6 +945,9 @@ public class MainFrame extends JFrame
 		jMenuDeleteClient.setText(Configed.getResourceValue("MainFrame.jMenuDeleteClient"));
 		jMenuDeleteClient.addActionListener((ActionEvent e) -> deleteClientAction());
 
+		jMenuCopyClient.setText(Configed.getResourceValue("MainFrame.jMenuCopyClient"));
+		jMenuCopyClient.addActionListener((ActionEvent e) -> copyClientAction());
+
 		menuItemsHost.get(ITEM_DELETE_CLIENT).add(jMenuDeleteClient);
 
 		jMenuFreeLicences.setText(Configed.getResourceValue("MainFrame.jMenuFreeLicences"));
@@ -971,6 +976,9 @@ public class MainFrame extends JFrame
 		jMenuClients.addSeparator();
 
 		jMenuClients.add(jMenuAddClient);
+		if (ConfigedMain.OPSI_4_3) {
+			jMenuClients.add(jMenuCopyClient);
+		}
 		jMenuClients.add(jMenuDeleteClient);
 
 		jMenuResetProducts.add(jMenuResetLocalbootProductOnClientWithStates);
@@ -1641,6 +1649,11 @@ public class MainFrame extends JFrame
 
 		menuItemsHost.get(ITEM_DELETE_CLIENT).add(popupDeleteClient);
 
+		popupCopyClient.setText(Configed.getResourceValue("MainFrame.jMenuCopyClient"));
+		popupCopyClient.addActionListener((ActionEvent e) -> copyClientAction());
+
+		menuItemsHost.get(ITEM_DELETE_CLIENT).add(popupCopyClient);
+
 		popupFreeLicences.setText(Configed.getResourceValue("MainFrame.jMenuFreeLicences"));
 		popupFreeLicences.addActionListener((ActionEvent e) -> freeLicencesAction());
 
@@ -1718,6 +1731,9 @@ public class MainFrame extends JFrame
 
 		// --
 		popupClients.add(popupAddClient);
+		if (ConfigedMain.OPSI_4_3) {
+			popupClients.add(popupCopyClient);
+		}
 		popupClients.add(popupDeleteClient);
 
 		popupResetProducts.add(popupResetLocalbootProductOnClientWithStates);
@@ -2754,6 +2770,10 @@ public class MainFrame extends JFrame
 		configedMain.deleteSelectedClients();
 	}
 
+	public void copyClientAction() {
+		configedMain.copySelectedClient();
+	}
+
 	public void freeLicencesAction() {
 		Logging.info(this, "freeLicencesAction ");
 		configedMain.freeAllPossibleLicencesForSelectedClients();
@@ -2931,7 +2951,9 @@ public class MainFrame extends JFrame
 
 			if (!configedMain.getPersistenceController().isCreateClientPermission()) {
 				jMenuAddClient.setEnabled(false);
+				jMenuCopyClient.setEnabled(false);
 				popupAddClient.setEnabled(false);
+				popupCopyClient.setEnabled(false);
 				iconButtonNewClient.setVisible(false);
 			}
 		}
@@ -2990,10 +3012,14 @@ public class MainFrame extends JFrame
 
 			if (countSelectedClients == 1) {
 				jMenuChangeClientID.setEnabled(true);
+				jMenuCopyClient.setEnabled(true);
 				popupChangeClientID.setEnabled(true);
+				popupCopyClient.setEnabled(true);
 			} else {
 				jMenuChangeClientID.setEnabled(false);
+				jMenuCopyClient.setEnabled(false);
 				popupChangeClientID.setEnabled(false);
+				popupCopyClient.setEnabled(false);
 			}
 		}
 
@@ -3054,8 +3080,8 @@ public class MainFrame extends JFrame
 				new String[] { Configed.getResourceValue("MainFrame.showLogFileClose"),
 						Configed.getResourceValue("MainFrame.showLogFileCopyToClipboard"),
 						Configed.getResourceValue("MainFrame.showLogFileOpen") },
-				new Icon[] { null, Globals.createImageIcon("images/document-view16.png", ""),
-						Globals.createImageIcon("images/cancel16_small.png", "") },
+				new Icon[] { Globals.createImageIcon("images/cancel16_small.png", ""), null,
+						Globals.createImageIcon("images/document-view16.png", "") },
 				Globals.WIDTH_INFO_LOG_FILE, Globals.HEIGHT_INFO_LOG_FILE) {
 			@Override
 			public void doAction2() {
@@ -3065,7 +3091,7 @@ public class MainFrame extends JFrame
 			@Override
 			public void doAction3() {
 				try {
-					Desktop.getDesktop().open(new java.io.File(Logging.getCurrentLogfilePath()));
+					Desktop.getDesktop().open(new File(Logging.getCurrentLogfilePath()));
 				} catch (Exception e) {
 					Logging.error("cannot open: " + Logging.getCurrentLogfilePath() + " :\n " + e);
 				}
@@ -3608,7 +3634,7 @@ public class MainFrame extends JFrame
 		List<String> shutdownValueX = null;
 		try {
 			shutdownValueX = (List) configedMain.getPersistenceController()
-					.getProductproperties(clientID, "opsi-client-agent").get("on_shutdown_install");
+					.getProductProperties(clientID, "opsi-client-agent").get("on_shutdown_install");
 		} catch (Exception ex) {
 			Logging.error("cannot get product property  on_shutdown_install for client " + clientID, ex);
 		}

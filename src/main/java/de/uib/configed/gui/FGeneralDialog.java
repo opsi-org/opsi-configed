@@ -187,8 +187,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		setLocationRelativeTo(owner);
 	}
 
-	public FGeneralDialog(java.awt.Window owner, String title, String[] buttonList, int preferredWidth,
-			int preferredHeight) {
+	public FGeneralDialog(Window owner, String title, String[] buttonList, int preferredWidth, int preferredHeight) {
 		super(owner);
 		initFGeneralDialog(title, buttonList, null, -1, preferredWidth, preferredHeight, false, null);
 	}
@@ -309,7 +308,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		GroupLayout southLayout = new GroupLayout(southPanel);
 		southPanel.setLayout(southLayout);
 
-		southLayout.setHorizontalGroup(southLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		southLayout.setHorizontalGroup(southLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(southLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Short.MAX_VALUE)
 						.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE,
@@ -436,8 +435,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			result = defaultResult;
 			leave();
-		} else
+		} else {
 			super.processWindowEvent(e);
+		}
 	}
 
 	// KeyListener
