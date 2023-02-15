@@ -16,7 +16,9 @@ import de.uib.utilities.table.GenTableModel;
 
 public class SearchTargetModelFromTable implements SearchTargetModel {
 	protected JTable table;
-	protected PanelGenEditTable thePanel; // in case that we are working in our standard context
+
+	// in case that we are working in our standard context
+	protected PanelGenEditTable thePanel;
 
 	public static final String FILTER_BY_SELECTION = "filterBySelection";
 
@@ -35,10 +37,9 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		this.thePanel = thePanel;
 	}
 
-	public void setTable(JTable table) {
+	protected final void setTable(JTable table) {
 		this.table = table;
 		Logging.info(this, "setTable null? " + (table == null));
-
 	}
 
 	protected AbstractTableModel getTableModel() {
@@ -123,8 +124,9 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void setSelectedRow(int row) {
-		if (table.getRowCount() == 0)
+		if (table.getRowCount() == 0) {
 			return;
+		}
 
 		if (row == -1) {
 			table.clearSelection();
@@ -140,8 +142,9 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 	public void addSelectedRow(int row) {
 		Logging.debug(this, "addSelectedRow " + row);
 
-		if (table.getRowCount() == 0)
+		if (table.getRowCount() == 0) {
 			return;
+		}
 
 		table.addRowSelectionInterval(row, row);
 
@@ -182,13 +185,15 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 		boolean wasChanged = false;
 
-		if (thePanel != null)
+		if (thePanel != null) {
 			wasChanged = thePanel.isDataChanged();
+		}
 
 		GenTableModel model = (GenTableModel) (table.getModel());
 
-		if (!filtered)
+		if (!filtered) {
 			viewRowfilter = table.getSelectedRows();
+		}
 
 		if (b && viewRowfilter.length > 0) {
 			int[] modelRowFilter = new int[viewRowfilter.length];

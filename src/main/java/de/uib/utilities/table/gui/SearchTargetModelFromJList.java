@@ -52,7 +52,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		super.setTable(new JTable(tableModel));
 	}
 
-	protected AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
+	private AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
 
 		return new AbstractTableModel() {
 			@Override

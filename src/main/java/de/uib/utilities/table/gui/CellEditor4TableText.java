@@ -30,11 +30,11 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 
 	public CellEditor4TableText(de.uib.utilities.swing.FEdit fEdit, Dimension initSize) {
 		super(new JTextField());
-		editorContent = (JTextField) getComponent();
+		editorContent = (JTextField) super.getComponent();
 
-		if (fEdit == null)
+		if (fEdit == null) {
 			this.fEdit = new de.uib.utilities.swing.FEditText("");
-		else {
+		} else {
 			this.fEdit = fEdit;
 			globalFEdit = true;
 		}
@@ -95,8 +95,9 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 	// KeyListener
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getSource() == editorContent && e.getKeyCode() == 32)
+		if (e.getSource() == editorContent && e.getKeyCode() == 32) {
 			fEdit.setVisible(true);
+		}
 	}
 
 	@Override
@@ -140,11 +141,12 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 		fEdit.setStartText(oldValue);
 
 		if (!fEditInitialized) {
-			if (initSize != null)
+			if (initSize != null) {
 				fEditInitialized = fEdit.init(initSize);
-			else
+			} else {
 				fEditInitialized = fEdit.init(new Dimension(table.getCellRect(row, column, true).width + 60,
 						table.getCellRect(row, column, true).height + 30));
+			}
 		}
 
 		java.awt.Point loc = null;

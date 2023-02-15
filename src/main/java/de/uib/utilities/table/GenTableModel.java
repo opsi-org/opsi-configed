@@ -97,23 +97,27 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		this.finalCols = new ArrayList<>();
 		if (finalColumns == null) {
-			if (keyCol > -1)
+			if (keyCol > -1) {
 				this.finalCols.add(keyCol);
+			}
 		} else {
-			for (int i = 0; i < finalColumns.length; i++)
+			for (int i = 0; i < finalColumns.length; i++) {
 				this.finalCols.add(finalColumns[i]);
+			}
 		}
 
 		modelDataValid = false;
 		modelStructureValid = true;
 
-		if (rows == null)
+		if (rows == null) {
 			rowsLength = 0;
-		else
+		} else {
 			rowsLength = rows.size();
+		}
 
-		if (l != null)
-			addTableModelListener(l);
+		if (l != null) {
+			super.addTableModelListener(l);
+		}
 
 		chainedFilter = new ChainedTableModelFilter();
 		emptyFilter = new TableModelFilter();
@@ -131,27 +135,34 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		colsLength = 0;
 		rowsLength = 0;
 		colEditable = new boolean[0];
-		if (columnNames != null)
+		if (columnNames != null) {
 			columnNames.clear();
-		if (classNames != null)
+		}
+
+		if (classNames != null) {
 			classNames.clear();
-		if (rows != null)
+		}
+
+		if (rows != null) {
 			rows.clear();
+		}
+
 		clearUpdates();
 		fireTableStructureChanged();
 	}
 
-	protected void initColumns() {
+	private void initColumns() {
 		columnNames = tableProvider.getColumnNames();
 		Logging.info(this, "initColumns " + columnNames);
 
 		classNames = tableProvider.getClassNames();
 		Logging.info(this, "initColumns  classNames " + classNames);
 
-		if (columnNames == null)
+		if (columnNames == null) {
 			colsLength = 0;
-		else
+		} else {
 			colsLength = columnNames.size();
+		}
 
 		colEditable = new boolean[colsLength];
 	}
@@ -180,7 +191,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public void invalidate() {
-		tableProvider.requestReturnToOriginal(); // is needed
+		// is needed
+		tableProvider.requestReturnToOriginal();
 		modelDataValid = false;
 		requestRefreshDerivedMaps();
 	}
@@ -253,19 +265,23 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public GenTableModel chainFilter(String filterName, TableModelFilter filter) {
 		chainedFilter.set(filterName, filter);
 		Logging.info(this, "chainFilter, we have chainedFilter " + chainedFilter);
-		return this; // for chaining in notation
+
+		// for chaining in notation
+		return this;
 	}
 
 	public Set<Object> getExistingKeys() {
 		int keycol = getKeyCol();
 
-		if (keycol < 0)
+		if (keycol < 0) {
 			return new HashSet<>();
+		}
 
 		TreeSet<Object> result = new TreeSet<>();
 		for (int row = 0; row < getRowCount(); row++) {
-			if (getValueAt(row, keycol) != null)
+			if (getValueAt(row, keycol) != null) {
 				result.add(getValueAt(row, keycol));
+			}
 		}
 
 		return result;
@@ -279,7 +295,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		rowsLength = rows.size();
 
-		getColumnNames(); // update columns and class names from tableProvider
+		// update columns and class names from tableProvider
+		getColumnNames();
 
 		Logging.info(this, " ---  rows produced, columnNames: " + columnNames);
 		Logging.info(this,
@@ -290,8 +307,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			List<List<Object>> filteredRows = new ArrayList<>();
 
 			for (List<Object> row : rows) {
-				if (workingFilter.test(row))
+				if (workingFilter.test(row)) {
 					filteredRows.add(row);
+				}
 			}
 			setRows(filteredRows);
 			rowsLength = rows.size();
@@ -308,8 +326,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 			if (sortCol == null || sortCol < 0 || sortCol >= getRowCount()) {
 				this.sorting = false;
-			} else
+			} else {
 				this.sorting = sorting;
+			}
 
 			Logging.info(this, "setSorting: we reset");
 			invalidate();
@@ -322,12 +341,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		return rows;
 	}
 
-	protected void setRows(List<List<Object>> givenRows) {
+	private void setRows(List<List<Object>> givenRows) {
 		Logging.info(this, "setRows size " + givenRows.size());
-		if (!sorting)
+		if (!sorting) {
 			rows = givenRows;
-
-		else {
+		} else {
 			java.text.Collator myCollator = java.text.Collator.getInstance();
 
 			// as capitalization
@@ -336,7 +354,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			TreeMap<String, List<Object>> mapRows = new TreeMap<>(myCollator);
 
 			int col = sortCol;
-			int i = 0; // we use the index to get unique values in any col
+
+			// we use the index to get unique values in any col
+			int i = 0;
 			for (List<Object> row : givenRows) {
 				mapRows.put(row.get(col).toString() + ":" + i, row);
 				i++;
@@ -413,10 +433,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	private void clearUpdates() {
 		addedRows.clear();
 		updatedRows.clear();
-		if (updates == null)
+		if (updates == null) {
 			saveUpdatesSize = 0;
-		else
+		} else {
 			saveUpdatesSize = updates.size();
+		}
 	}
 
 	/**
@@ -436,8 +457,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			colEditable[i] = false;
 		}
 
-		if (editable == null)
+		if (editable == null) {
 			return;
+		}
 
 		for (int j = 0; j < editable.length; j++) {
 
@@ -465,9 +487,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public Object getValueAt(int row, int col) {
 		Object result = null;
 
-		if (markCursorRow && col == colMarkCursorRow && row == cursorrow)
+		if (markCursorRow && col == colMarkCursorRow && row == cursorrow) {
 			result = true;
-		else {
+		} else {
 
 			result = (rows.get(row)).get(col);
 		}
@@ -479,8 +501,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (col > -1 && col < getColumnCount()) {
 			colMarkCursorRow = col;
 			markCursorRow = true;
-		} else
+		} else {
 			markCursorRow = false;
+		}
 	}
 
 	public List<Object> getRow(int row) {
@@ -502,10 +525,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		for (int col = 0; col < getColumnNames().size(); col++) {
 			Object value = getValueAt(row, col);
-			if (value == null)
+			if (value == null) {
 				value = "";
-			else
+			} else {
 				value = "" + value;
+			}
 
 			result.put(getColumnName(col), value);
 		}
@@ -515,28 +539,30 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	public List<Object> getColumn(int col) {
 		List<Object> result = new ArrayList<>();
-		for (int row = 0; row < rowsLength; row++)
+		for (int row = 0; row < rowsLength; row++) {
 			result.add(getValueAt(row, col));
+		}
 
 		return result;
 	}
 
 	public List<String> getOrderedColumn(int col) {
 		TreeSet<String> set = new TreeSet<>();
-		for (int row = 0; row < rowsLength; row++)
+		for (int row = 0; row < rowsLength; row++) {
 			set.add((String) getValueAt(row, col));
+		}
 
 		return new ArrayList<>(set);
 	}
 
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		if (addedRows.indexOf(row) == -1 && finalCols.indexOf(col) > -1)
+		if (addedRows.indexOf(row) == -1 && finalCols.indexOf(col) > -1) {
 			// we cannot edit a key column but when it is not saved in the data backend
 			return false;
-
-		else
+		} else {
 			return colEditable[col];
+		}
 	}
 
 	public void addCursorrowObserver(CursorrowObserver o) {
@@ -555,8 +581,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public void setCursorRow(int modelrow) {
 		if (markCursorRow) {
 			Logging.info(this, "setCursorRow modelrow " + modelrow + " markCursorRow " + markCursorRow);
-			if (modelrow > 0 && colsLength > 2)
+			if (modelrow > 0 && colsLength > 2) {
 				Logging.info(this, "setCursorRow val at (modelrow,2) ) " + getValueAt(modelrow, 2));
+			}
 		}
 
 		if (markCursorRow) {
@@ -618,8 +645,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			valueChanged = true;
 		}
 
-		if (valueChanged && markCursorRow && col == colMarkCursorRow)
+		if (valueChanged && markCursorRow && col == colMarkCursorRow) {
 			valueChanged = false;
+		}
 
 		if (valueChanged) {
 			// we dont register updates for already registered rows, since there values are
@@ -629,11 +657,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 				rows.get(row).set(col, value);
 
-				if (itemFactory == null)
+				if (itemFactory == null) {
 					Logging.info("update item factory missing");
-				else if (updates == null)
+				} else if (updates == null) {
 					Logging.info("updates not initialized");
-				else {
+				} else {
 
 					updates.add(itemFactory.produceUpdateItem(oldValues, rows.get(row)));
 				}
@@ -656,8 +684,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				return;
 			}
 
-			rows.get(row).set(col, value); // in case of an updated row we did this already
-
+			// in case of an updated row we did this already
+			rows.get(row).set(col, value);
 			fireTableCellUpdated(row, col);
 
 			requestRefreshDerivedMaps();
@@ -672,15 +700,17 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 			Object val = values.get(getColumnName(col));
 
-			if (val != null)
+			if (val != null) {
 				setValueAt(val, row, col);
+			}
 		}
 	}
 
 	public void setRow(int row, Object[] a) {
 		int col = 0;
-		if (colsLength != a.length)
+		if (colsLength != a.length) {
 			Logging.info("update row values less than than row elements");
+		}
 
 		while (col < colsLength && col < a.length) {
 			setValueAt(a[col], row, col);
@@ -695,7 +725,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		addedRows.add(rowsLength);
 
 		updates.add(itemFactory.produceInsertItem(rowV));
-		requestReload(); // we shall have to reload the data if keys are newly generated
+
+		// we shall have to reload the data if keys are newly generated
+		requestReload();
 
 		rowsLength++;
 		try {
@@ -728,10 +760,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		for (String col : columnNames) {
 
-			if (entries.get(col) != null)
+			if (entries.get(col) != null) {
 				result.add(entries.get(col));
-			else
+			} else {
 				result.add(null);
+			}
 		}
 
 		return result;
@@ -757,8 +790,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public void deleteRows(int[] selection) {
 		Logging.debug(this, "deleteRows " + java.util.Arrays.toString(selection));
 
-		if (selection == null || selection.length == 0)
+		if (selection == null || selection.length == 0) {
 			return;
+		}
 
 		java.util.Arrays.sort(selection);
 		Logging.debug(this, "deleteRows, sorted " + java.util.Arrays.toString(selection));
@@ -769,8 +803,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		}
 
 		for (int i = 0; i < selection.length; i++) {
-			if (!checkDeletionOfAddedRow(selection[i]))
+			if (!checkDeletionOfAddedRow(selection[i])) {
 				return;
+			}
 		}
 
 		// do with original row nums
@@ -814,8 +849,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			return;
 		}
 
-		if (!checkDeletionOfAddedRow(rowNum))
+		if (!checkDeletionOfAddedRow(rowNum)) {
 			return;
+		}
 
 		List<Object> oldValues = new ArrayList<>(rows.get(rowNum));
 		Logging.debug(this, "deleteRow values " + oldValues);
@@ -844,8 +880,10 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (rowNums != null) {
 			int i = 0;
 			while (!result && i < rowNums.length) {
-				if (addedRows.indexOf(rowNums[i]) > -1)
+				if (addedRows.indexOf(rowNums[i]) > -1) {
 					result = true;
+				}
+
 				i++;
 			}
 		}
@@ -880,8 +918,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			List<Object> associatedValues = result.computeIfAbsent(val1, arg -> new ArrayList<>());
 
 			Object val2 = getValueAt(row, col2);
-			if (associatedValues.indexOf(val2) == -1)
+			if (associatedValues.indexOf(val2) == -1) {
 				associatedValues.add(val2);
+			}
 		}
 
 		setFilter(chainedFilter);
@@ -902,10 +941,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		while (!found && i < getRowCount()) {
 			String compValue = "" + getValueAt(i, col);
 
-			if (compValue.equals(value))
+			if (compValue.equals(value)) {
 				found = true;
-			else
+			} else {
 				i++;
+			}
 
 		}
 		return found;
@@ -917,11 +957,11 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		while (!found && i < getRowCount()) {
 			Object compValue = getValueAt(i, col);
 
-			if (compValue.equals(value))
+			if (compValue.equals(value)) {
 				found = true;
-			else
+			} else {
 				i++;
-
+			}
 		}
 		return found;
 	}
@@ -944,8 +984,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public Map<Object, List<Object>> getFunction(int col1, int col2, TableModelFilterCondition specialFilterCondition) {
 		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1, col2);
 
-		if (functions == null)
+		if (functions == null) {
 			functions = new HashMap<>();
+		}
 
 		java.util.Map<Object, List<Object>> function = functions.get(pair);
 
@@ -958,11 +999,13 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	@Override
 	public java.util.Map<Integer, RowStringMap> getPrimarykey2Rowmap() {
-		if (keyCol < 0)
+		if (keyCol < 0) {
 			return new HashMap<>();
+		}
 
-		if (primarykey2Rowmap != null)
+		if (primarykey2Rowmap != null) {
 			return primarykey2Rowmap;
+		}
 
 		primarykey2Rowmap = new HashMap<>();
 
@@ -978,13 +1021,15 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd, Mapping col2ndMapping) {
 		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1st, col2nd);
 
-		if (xFunctions == null)
+		if (xFunctions == null) {
 			xFunctions = new HashMap<>();
+		}
 
 		java.util.Map<Object, List<Object>> function = getFunction(col1st, col2nd);
 
-		if (function == null)
+		if (function == null) {
 			return new HashMap<>();
+		}
 
 		java.util.Map<Integer, Mapping<Integer, String>> xFunction = xFunctions.get(pair);
 		if (xFunction == null) {
@@ -1000,8 +1045,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	@Override
 	public String toString() {
 		String info = "";
-		if (columnNames != null)
+		if (columnNames != null) {
 			info = " columns: " + columnNames;
+		}
 
 		return super.toString() + info;
 	}

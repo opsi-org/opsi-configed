@@ -130,6 +130,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			String savedStatesObjectTag) {
 		comparator = Globals.getCollator();
 		mappedValues = new HashMap<>();
+		this.targetModel = targetModel;
 		this.withRegEx = withRegEx;
 		this.preferredColumnIndex = prefColNo;
 
@@ -137,12 +138,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		initSavedStates(savedStatesObjectTag);
 
+		init();
+	}
+
+	private void init() {
 		setSearchFieldsAll();
 		initComponents();
 		setNarrow(false);
-
-		this.targetModel = targetModel;
-
 	}
 
 	/**

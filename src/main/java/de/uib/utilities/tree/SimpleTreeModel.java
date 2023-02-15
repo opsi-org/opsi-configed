@@ -26,9 +26,9 @@ public class SimpleTreeModel extends DefaultTreeModel {
 		super(new SimpleIconNode(""));
 
 		Logging.debug(this, "SimpleTreeModel created for " + dottedKeys);
-		setAsksAllowsChildren(true);
+		super.setAsksAllowsChildren(true);
 
-		rootNode = (SimpleIconNode) getRoot();
+		rootNode = (SimpleIconNode) super.getRoot();
 
 		this.tooltips = tooltips;
 		generateFrom(dottedKeys);
@@ -37,17 +37,19 @@ public class SimpleTreeModel extends DefaultTreeModel {
 	public NavigableSet<String> getGeneratedKeys() {
 		TreeSet<String> result = new TreeSet<>();
 
-		for (SimpleTreePath path : allPathes)
+		for (SimpleTreePath path : allPathes) {
 			result.add(path.dottedString(0, path.size()));
+		}
 
 		return result;
+
 	}
 
 	public void setRootLabel(String s) {
 		((DefaultMutableTreeNode) getRoot()).setUserObject(s);
 	}
 
-	protected void generateFrom(java.util.Set<String> dottedKeys) {
+	private void generateFrom(java.util.Set<String> dottedKeys) {
 		allPathes = new TreeSet<>();
 		path2Node = new TreeMap<>();
 
@@ -82,15 +84,15 @@ public class SimpleTreeModel extends DefaultTreeModel {
 			SimpleIconNode parent = rootNode;
 
 			for (int i = 1; i <= path.size(); i++) {
-				if (i > 1)
+				if (i > 1) {
 					parent = path2Node.get(path.subList(0, i - 1));
+				}
 
 				SimpleTreePath partialPath = path.subList(0, i);
 				SimpleIconNode node = path2Node.get(partialPath);
 
-				if (node == null)
-				// node must be created
-				{
+				if (node == null) {
+					// node must be created
 					node = new SimpleIconNode(path.get(i - 1));
 					node.setIcon(Globals.createImageIcon("images/opentable_small.png", "open table"));
 					node.setNonSelectedIcon(Globals.createImageIcon("images/closedtable_small.png", "closed table"));
@@ -98,10 +100,11 @@ public class SimpleTreeModel extends DefaultTreeModel {
 					if (tooltips != null) {
 						String key = partialPath.dottedString(0, partialPath.size());
 						String description = tooltips.get(key);
-						if (description == null || description.trim().equals(""))
+						if (description == null || description.trim().equals("")) {
 							node.setToolTipText(key);
-						else
+						} else {
 							node.setToolTipText(description);
+						}
 					}
 
 					path2Node.put(path.subList(0, i), node);

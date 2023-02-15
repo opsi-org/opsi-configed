@@ -75,7 +75,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
 	javax.swing.JFrame masterFrame = ConfigedMain.getMainFrame();
 
-	// TODO are these used somewhere?
 	protected Comparator[] comparators;
 
 	protected JScrollPane scrollpane;
@@ -256,23 +255,23 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		Logging.info(this, "internalpopups supplemented " + giveMenuitemNames(internalpopups));
 
-		if (maxTableWidth > 0)
+		if (maxTableWidth > 0) {
 			this.maxTableWidth = maxTableWidth;
-		if (title != null)
+		}
+
+		if (title != null) {
 			this.title = title;
+		}
+
 		this.editing = editing;
 
-		if (!Globals.isServerFullPermission())
+		if (!Globals.isServerFullPermission()) {
 			this.editing = false;
+		}
 
 		this.switchLineColors = switchLineColors;
 
 		initComponents();
-		if (generalPopupPosition == 0)
-			addPopupmenuStandardpart();
-		// if -1 dont use a standard popup
-		// if > 0 the popup is added later after installing another popup
-
 	}
 
 	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
@@ -316,18 +315,21 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 */
 	public void setMasterFrame(javax.swing.JFrame masterFrame) {
 		this.masterFrame = masterFrame;
-		if (searchPane != null)
+		if (searchPane != null) {
 			searchPane.setMasterFrame(masterFrame);
+		}
 
 	}
 
 	@Override
 	public void requestFocus() {
-		if (theTable != null)
+		if (theTable != null) {
 			theTable.requestFocus();
+		}
 
-		if (withTablesearchPane)
+		if (withTablesearchPane) {
 			searchPane.requestFocus();
+		}
 	}
 
 	public void setAutoResizeMode(int mode) {
@@ -346,7 +348,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		getListSelectionModel().removeListSelectionListener(l);
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
 		addComponentListener(this);
@@ -356,16 +358,18 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				"images/apply_over.png", "images/apply_disabled.png");
 
 		buttonCommit.setPreferredSize(Globals.smallButtonDimension);
-		if (!editing)
+		if (!editing) {
 			buttonCommit.setVisible(false);
+		}
 
 		buttonCancel = new de.uib.configed.gui.IconButton(
 				Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
 				"images/cancel_over.png", "images/cancel_disabled.png");
 
 		buttonCancel.setPreferredSize(Globals.smallButtonDimension);
-		if (!editing)
+		if (!editing) {
 			buttonCancel.setVisible(false);
+		}
 
 		buttonCommit.addActionListener(this);
 		buttonCancel.addActionListener(this);
@@ -373,8 +377,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		label = new JLabel(title);
 		label.setFont(Globals.defaultFontStandardBold);
-		if (title == null || title.equals(""))
+		if (title == null || title.equals("")) {
 			label.setVisible(false);
+		}
 
 		labelRowCount = new JLabel(title);
 		labelRowCount.setFont(Globals.defaultFontStandardBold);
@@ -403,10 +408,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		// NOT WORK
 
-		if (switchLineColors)
+		if (switchLineColors) {
 			theTable.setDefaultRenderer(Object.class, new StandardTableCellRenderer());
-		else
+		} else {
 			theTable.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
+		}
 
 		theTable.addMouseListener(this);
 
@@ -495,6 +501,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
+		if (generalPopupPosition == 0) {
+			// if -1 dont use a standard popup
+			// if > 0 the popup is added later after installing another popup
+
+			addPopupmenuStandardpart();
+		}
 	}
 
 	public void setColumnSelectionAllowed(boolean b)
@@ -514,8 +526,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	public void sortAgainAsConfigured() {
 		Logging.debug(this, "sortAgainAsConfigured " + specialSortDescriptor);
 
-		if (specialSortDescriptor != null && !specialSortDescriptor.isEmpty())
+		if (specialSortDescriptor != null && !specialSortDescriptor.isEmpty()) {
 			sortDescriptor = specialSortDescriptor;
+		}
 
 		if (sortDescriptor != null && !sortDescriptor.isEmpty()) {
 			int selRow = getSelectedRow();
@@ -568,10 +581,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void setTitlePaneBackground(java.awt.Color c) {
-		if (c == null)
+		if (c == null) {
 			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		else
+		} else {
 			titlePane.setBackground(c);
+		}
 	}
 
 	public void setTitlePane(JComponent[] components, int height) {
@@ -579,7 +593,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		((PanelLinedComponents) titlePane).setComponents(components, height);
 	}
 
-	protected List<Integer> supplementBefore(int insertpoint, final int[] injectKeys, final List<Integer> listOfKeys) {
+	private List<Integer> supplementBefore(int insertpoint, final int[] injectKeys, final List<Integer> listOfKeys) {
 		ArrayList<Integer> augmentedList = new ArrayList<>();
 
 		boolean found = false;
@@ -616,9 +630,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected void addPopupmenuStandardpart() {
 		Logging.info(this, "addPopupmenuStandardpart, internalpopups " + giveMenuitemNames(internalpopups));
 
-		if (generalPopupPosition > 0)
+		if (generalPopupPosition > 0) {
 			// add separator if a real position is given
 			popupMenu.addSeparator();
+		}
 
 		internalpopups = supplementBefore(POPUP_RELOAD, POPUPS_EXPORT, internalpopups);
 
@@ -655,8 +670,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 				// does not work
 				menuItemReload.addActionListener(actionEvent -> reload());
-				if (popupIndex > 1)
+				if (popupIndex > 1) {
 					popupMenu.addSeparator();
+				}
 
 				addPopupItem(menuItemReload);
 
@@ -682,8 +698,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 								Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 
 						return;
-					} else if (deleteAllowed)
+					} else if (deleteAllowed) {
 						tableModel.deleteRow(getSelectedRowInModelTerms());
+					}
 				});
 				addPopupItem(menuItemDeleteRelation);
 
@@ -709,8 +726,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 						Configed.getResourceValue("PanelGenEditTable.floatingCopy"));
 				menuItemFloatingCopy.addActionListener(actionEvent -> floatExternal());
 
-				if (popupIndex > 1)
+				if (popupIndex > 1) {
 					popupMenu.addSeparator();
+				}
 
 				addPopupItem(menuItemFloatingCopy);
 				break;
@@ -771,16 +789,20 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		if (item == null) {
-			if (popupIndex > 1)
+			if (popupIndex > 1) {
 				popupMenu.addSeparator();
+			}
+
 			return;
 		}
 
 		popupMenu.add(item);
 
-		popupIndex++; // prevents circle
-		if (popupIndex == generalPopupPosition)
+		// prevents circle
+		popupIndex++;
+		if (popupIndex == generalPopupPosition) {
 			addPopupmenuStandardpart();
+		}
 
 	}
 
@@ -797,12 +819,13 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		Logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor " + sortDescriptor);
 		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
 
-		if (tableModel.getColumnCount() == 0)
+		if (tableModel.getColumnCount() == 0) {
 			return new ArrayList<>();
+		}
 
-		else if (sortDescriptor == null)
-		// default sorting
-		{
+		else if (sortDescriptor == null) {
+
+			// default sorting
 			sortDescriptor = new LinkedHashMap<>();
 
 			if (tableModel.getKeyCol() > -1) {
@@ -828,8 +851,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				}
 			}
 
-			else
+			else {
 				sortKeys = null;
+			}
 
 		}
 
@@ -848,10 +872,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private void setSorter() {
 		Logging.info(this, "setSorter");
 
-		if (tableModel == null)
+		if (tableModel == null) {
 			return;
+		}
 
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tableModel) {
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel) {
 			@Override
 			protected boolean useToString(int column) {
 				try {
@@ -895,8 +920,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		List<RowSorter.SortKey> sortKeys = buildSortkeysFromColumns();
 
-		if (sortKeys != null && !sortKeys.isEmpty())
+		if (sortKeys != null && !sortKeys.isEmpty()) {
 			sorter.setSortKeys(sortKeys);
+		}
 
 		theTable.setRowSorter(sorter);
 
@@ -932,11 +958,13 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			return;
 		}
 		DefaultRowSorter sorter = (DefaultRowSorter) theTable.getRowSorter();
-		if (sorter == null)
+		if (sorter == null) {
 			Logging.warning(this, "no sorter");
+		}
 
-		else
+		else {
 			sorter.setComparator(modelCol, comparator);
+		}
 	}
 
 	/**
@@ -1082,8 +1110,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * should mark the columns which are editable after being generated
 	 */
 	public void setEmphasizedColumns(int[] cols) {
-		if (cols == null)
+		if (cols == null) {
 			return;
+		}
 
 		if (theTable.getColumnModel().getColumns().hasMoreElements()) {
 
@@ -1098,20 +1127,23 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected void setTimestampRenderer(String classname, javax.swing.table.TableColumn col) {
 
-		if (classname.equals("java.sql.Timestamp"))
+		if (classname.equals("java.sql.Timestamp")) {
 			col.setCellRenderer(new TableCellRendererDate());
+		}
 
 	}
 
 	protected void setBigDecimalRenderer(String classname, javax.swing.table.TableColumn col) {
-		if (classname.equals("java.math.BigDecimal"))
+		if (classname.equals("java.math.BigDecimal")) {
 			col.setCellRenderer(new TableCellRendererCurrency());
+		}
 
 	}
 
 	protected void setBooleanRenderer(String classname, javax.swing.table.TableColumn col) {
-		if (classname.equals("java.lang.Boolean"))
+		if (classname.equals("java.lang.Boolean")) {
 			col.setCellRenderer(new TableCellRendererByBoolean());
+		}
 
 	}
 
@@ -1124,9 +1156,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			setTimestampRenderer(classname, col);
 			setBigDecimalRenderer(classname, col);
 			setBooleanRenderer(classname, col);
-			if (col.getCellRenderer() == null) // no special renderer set
-				col.setCellRenderer(new StandardTableCellRenderer());
 
+			if (col.getCellRenderer() == null) {
+				// no special renderer set
+				col.setCellRenderer(new StandardTableCellRenderer());
+			}
 		}
 	}
 
@@ -1134,11 +1168,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		Logging.info(this, "setDataChanged " + b);
 		dataChanged = b;
 		buttonCommit.setEnabled(b);
-		if (menuItemSave != null)
+		if (menuItemSave != null) {
 			menuItemSave.setEnabled(b);
+		}
+
 		buttonCancel.setEnabled(b);
-		if (menuItemCancel != null)
+		if (menuItemCancel != null) {
 			menuItemCancel.setEnabled(b);
+		}
 	}
 
 	public boolean isDataChanged() {
@@ -1147,20 +1184,21 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void stopCellEditing() {
-		if (theTable.getCellEditor() != null)
-		// we are editing
-		{
+		if (theTable.getCellEditor() != null) {
+			// we are editing
 			Logging.info(this, "we are editing a cell");
 			theTable.getCellEditor().stopCellEditing();
-		} else
+		} else {
 			Logging.info(this, "no cell editing");
+		}
 	}
 
 	public void commit() {
 		stopCellEditing();
 
-		if (myController == null)
+		if (myController == null) {
 			return;
+		}
 
 		if (myController.saveChanges()) {
 			setDataChanged(false);
@@ -1168,8 +1206,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void cancel() {
-		if (myController == null)
+		if (myController == null) {
 			return;
+		}
 
 		if (myController.cancelChanges()) {
 			setDataChanged(false);
@@ -1177,11 +1216,13 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	protected void deleteCurrentRow() {
-		if (!deleteAllowed)
+		if (!deleteAllowed) {
 			return;
+		}
 
-		if (getSelectedRowCount() > 0)
+		if (getSelectedRowCount() > 0) {
 			tableModel.deleteRow(getSelectedRowInModelTerms());
+		}
 	}
 
 	public void setTableColumnInvisible(int col) {
@@ -1258,8 +1299,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void showSelectedRow() {
 		int row = getSelectedRow();
-		if (row != -1)
+		if (row != -1) {
 			theTable.scrollRectToVisible(theTable.getCellRect(row, 0, false));
+		}
 	}
 
 	public int getSelectedRowInModelTerms() {
@@ -1313,8 +1355,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	public List<String> getSelectedKeys() {
 		List<String> result = new ArrayList<>();
 
-		if (tableModel.getKeyCol() < 0)
+		if (tableModel.getKeyCol() < 0) {
 			return result;
+		}
 
 		if (tableModel.isUsingFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION)) {
 			for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -1337,8 +1380,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		getListSelectionModel().clearSelection();
 
-		if (values == null || values.isEmpty())
+		if (values == null || values.isEmpty()) {
 			return;
+		}
 
 		setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -1356,8 +1400,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		Logging.debug(this,
 				"findViewRowFromValue startviewrow, value, col " + startviewrow + ", " + value + ", " + col);
 
-		if (value == null)
+		if (value == null) {
 			return -1;
+		}
 
 		String val = value.toString();
 
@@ -1365,8 +1410,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		int viewrow = 0;
 
-		if (startviewrow > 0)
+		if (startviewrow > 0) {
 			viewrow = startviewrow;
+		}
 
 		while (!found && viewrow < tableModel.getRowCount()) {
 			Object compareValue = tableModel.getValueAt(
@@ -1376,19 +1422,22 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			);
 
 			if (compareValue == null) {
-				if (val == null || val.equals(""))
+				if (val == null || val.equals("")) {
 					found = true;
+				}
 			}
 
 			else {
 				String compareVal = compareValue.toString();
 
-				if (val.equals(compareVal))
+				if (val.equals(compareVal)) {
 					found = true;
+				}
 			}
 
-			if (!found)
+			if (!found) {
 				viewrow++;
+			}
 
 		}
 
@@ -1410,15 +1459,19 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	public boolean moveToValue(String value, int col, boolean selecting) {
 		Logging.info(this, "moveToValue " + value + " col " + col + " selecting " + selecting);
 		int viewrow = findViewRowFromValue(value, col);
-		if (viewrow > -1)
+		if (viewrow > -1) {
 			tableModel.setCursorRow(theTable.convertRowIndexToModel(viewrow));
+		}
+
 		theTable.scrollRectToVisible(theTable.getCellRect(viewrow, col, false));
 
-		if (viewrow == -1)
+		if (viewrow == -1) {
 			return false;
+		}
 
-		if (selecting)
+		if (selecting) {
 			setSelectedRow(viewrow);
+		}
 
 		return true;
 	}
@@ -1427,16 +1480,16 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		boolean found = false;
 
-		if (keyValue == null)
+		if (keyValue == null) {
 			return false;
+		}
 
 		if (tableModel.getKeyCol() > -1) {
 			found = moveToValue(keyValue, tableModel.getKeyCol());
 		}
 
-		else
-		// try to use pseudokey
-		{
+		else {
+			// try to use pseudokey
 			int viewrow = 0;
 
 			while (!found && viewrow < tableModel.getRowCount()) {
@@ -1448,10 +1501,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 							.toString();
 				}
 
-				if (keyValue.equals(Globals.pseudokey(partialkeys)))
+				if (keyValue.equals(Globals.pseudokey(partialkeys))) {
 					found = true;
-				else
+				} else {
 					viewrow++;
+				}
 			}
 
 			if (found) {
@@ -1471,14 +1525,17 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void moveToRow(int n) {
 
-		if (tableModel.getRowCount() == 0)
+		if (tableModel.getRowCount() == 0) {
 			return;
+		}
 
-		if (getSelectedRowCount() != 1)
+		if (getSelectedRowCount() != 1) {
 			return;
+		}
 
-		if (n < 0 || n >= theTable.getRowCount())
+		if (n < 0 || n >= theTable.getRowCount()) {
 			return;
+		}
 
 		theTable.scrollRectToVisible(theTable.getCellRect(n, 0, true));
 		theTable.setRowSelectionInterval(n, n);
@@ -1487,14 +1544,17 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void moveToModelRow(int n) {
-		if (tableModel.getRowCount() == 0)
+		if (tableModel.getRowCount() == 0) {
 			return;
+		}
 
-		if (getSelectedRowCount() != 1)
+		if (getSelectedRowCount() != 1) {
 			return;
+		}
 
-		if (n < 0 || n >= theTable.getRowCount())
+		if (n < 0 || n >= theTable.getRowCount()) {
 			return;
+		}
 
 		theTable.scrollRectToVisible(theTable.getCellRect(theTable.convertRowIndexToView(n), 0, true));
 		theTable.setRowSelectionInterval(theTable.convertRowIndexToView(n), theTable.convertRowIndexToView(n));
@@ -1519,14 +1579,17 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public boolean advanceCursor(int d) {
 		int viewCursorRow = -1;
-		if (tableModel.getCursorRow() > -1)
+		if (tableModel.getCursorRow() > -1) {
 			viewCursorRow = theTable.convertRowIndexToView(tableModel.getCursorRow());
+		}
 
 		Logging.info(this, "advanceCursor from " + viewCursorRow);
 		int nextViewCursorRow = viewCursorRow + d;
 		Logging.info(this, "advanceCursor to " + nextViewCursorRow);
-		if (nextViewCursorRow < tableModel.getRowCount() && nextViewCursorRow >= 0)
+		if (nextViewCursorRow < tableModel.getRowCount() && nextViewCursorRow >= 0) {
 			tableModel.setCursorRow(theTable.convertRowIndexToModel(nextViewCursorRow));
+		}
+
 		theTable.scrollRectToVisible(theTable.getCellRect(nextViewCursorRow, 0, true));
 
 		return true;
@@ -1554,16 +1617,20 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public void moveRowBy(int i) {
 
-		if (getSelectedRowCount() != 1)
+		if (getSelectedRowCount() != 1) {
 			return;
+		}
 
 		int n = theTable.getSelectedRow();
 
 		if (i > 0) {
-			if (n + i < theTable.getRowCount())
+			if (n + i < theTable.getRowCount()) {
 				n = n + i;
-		} else if (i < 0 && n + i >= 0)
+			}
+
+		} else if (i < 0 && n + i >= 0) {
 			n = n + i;
+		}
 
 		moveToRow(n);
 	}
@@ -1572,14 +1639,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		return theTable.getRowSorter();
 	}
 
-	//
 	// TableModelListener
 	@Override
 	public void tableChanged(TableModelEvent e) {
 		Logging.debug(this, " tableChanged " + "source " + e.getSource() + " col " + e.getColumn());
-		if (tableModel != null)
+		if (tableModel != null) {
 			Logging.debug(this,
 					"tableChanged,  whereas tableModel.getColMarkCursorRow() is " + tableModel.getColMarkCursorRow());
+		}
 
 		if (awareOfTableChangedListener && tableModel != null
 				&& !((tableModel.getColMarkCursorRow() > -1) && (e.getColumn() == tableModel.getColMarkCursorRow()))) {
@@ -1608,8 +1675,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	// KeyListener interface
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getSource() == theTable && e.getKeyCode() == KeyEvent.VK_DELETE)
+		if (e.getSource() == theTable && e.getKeyCode() == KeyEvent.VK_DELETE) {
 			deleteCurrentRow();
+		}
 	}
 
 	@Override
@@ -1626,29 +1694,35 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	public void valueChanged(ListSelectionEvent e) {
 		Logging.debug(this, "ListSelectionEvent " + e);
 		// Ignore extra messages.
-		if (e.getValueIsAdjusting())
+		if (e.getValueIsAdjusting()) {
 			return;
+		}
 
 		Logging.debug(this, "ListSelectionEvent not more adjusting");
 
 		ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
-		if (awareOfSelectionListener)
+		if (awareOfSelectionListener) {
 			setDataChanged(true);
+		}
 
 		if (lsm.isSelectionEmpty()) {
 			Logging.info(this, "no rows selected");
 			selectionEmpty = true;
 			singleSelection = false;
-			if (menuItemDeleteRelation != null)
+			if (menuItemDeleteRelation != null) {
 				menuItemDeleteRelation.setEnabled(false);
+			}
 		} else {
 			selectionEmpty = false;
 			int selectedRow = lsm.getMinSelectionIndex();
-			if (followSelectionListener)
+			if (followSelectionListener) {
 				selectedRowChanged();
-			if (menuItemDeleteRelation != null)
+			}
+
+			if (menuItemDeleteRelation != null) {
 				menuItemDeleteRelation.setEnabled(true);
+			}
 
 			singleSelection = (selectedRow == lsm.getMaxSelectionIndex());
 		}

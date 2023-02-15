@@ -51,15 +51,18 @@ public class MapSource implements TableSource
 		Logging.info(this, "constructed with classes " + classNames);
 		this.columnNames = columnNames;
 		this.classNames = classNames;
+		this.table = table;
 
+		init();
+	}
+
+	private void init() {
 		setRowCounting(rowCounting);
 		if (rowCounting) {
 			Logging.info(this, "completed to cols " + columnNames);
 			Logging.info(this, "completed to classes " + classNames);
 		}
-		this.table = table;
 		rows = new ArrayList<>();
-
 	}
 
 	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map> table) {
