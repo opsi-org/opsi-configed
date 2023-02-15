@@ -12,6 +12,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -226,6 +227,7 @@ public class MainFrame extends JFrame
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowWANactiveColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowIPAddressColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowInventoryNumberColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem jCheckBoxMenuItemShowSystemUUIDColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowHardwareAddressColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowSessionInfoColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem jCheckBoxMenuItemShowUefiBoot = new JCheckBoxMenuItem();
@@ -304,6 +306,7 @@ public class MainFrame extends JFrame
 	private JCheckBoxMenuItem popupShowCreatedColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem popupShowWANactiveColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem popupShowIPAddressColumn = new JCheckBoxMenuItem();
+	private JCheckBoxMenuItem popupShowSystemUUIDColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem popupShowHardwareAddressColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem popupShowSessionInfoColumn = new JCheckBoxMenuItem();
 	private JCheckBoxMenuItem popupShowInventoryNumberColumn = new JCheckBoxMenuItem();
@@ -360,6 +363,9 @@ public class MainFrame extends JFrame
 
 	private CombinedMenuItem combinedMenuItemIPAddressColumn = new CombinedMenuItem(
 			jCheckBoxMenuItemShowIPAddressColumn, popupShowIPAddressColumn);
+
+	private CombinedMenuItem combinedMenuItemSystemUUIDColumn = new CombinedMenuItem(
+			jCheckBoxMenuItemShowSystemUUIDColumn, popupShowSystemUUIDColumn);
 
 	private CombinedMenuItem combinedMenuItemHardwareAddressColumn = new CombinedMenuItem(
 			jCheckBoxMenuItemShowHardwareAddressColumn, popupShowHardwareAddressColumn);
@@ -451,6 +457,7 @@ public class MainFrame extends JFrame
 	JTextEditorField jTextFieldDescription;
 	JTextEditorField jTextFieldInventoryNumber;
 	JTextArea jTextAreaNotes;
+	JTextEditorField systemUUIDField;
 	JTextEditorField macAddressField;
 	JTextEditorField ipAddressField;
 	JTextEditorField jTextFieldOneTimePassword;
@@ -505,7 +512,6 @@ public class MainFrame extends JFrame
 			g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
 			g.fillRect(0, 0, getWidth(), getHeight());
 		}
-
 	}
 
 	GlassPane glass;
@@ -514,7 +520,7 @@ public class MainFrame extends JFrame
 			ClientTree treeClients, boolean multidepot) {
 
 		// we handle it in the window listener method
-		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		this.multidepot = multidepot;
 
@@ -621,7 +627,6 @@ public class MainFrame extends JFrame
 			moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
 					(int) (F_WIDTH_RIGHTHANDED * 1.5));
 		}
-
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -630,12 +635,10 @@ public class MainFrame extends JFrame
 	// menus
 
 	private void setupMenuLists() {
-
 		menuItemsHost = new LinkedHashMap<>();
 		menuItemsHost.put(ITEM_ADD_CLIENT, new ArrayList<>());
 		menuItemsHost.put(ITEM_DELETE_CLIENT, new ArrayList<>());
 		menuItemsHost.put(ITEM_FREE_LICENCES, new ArrayList<>());
-
 	}
 
 	private void setupMenuFile() {
@@ -742,7 +745,6 @@ public class MainFrame extends JFrame
 		searchedTimeSpansText.put(LAST_7_DAYS, Configed.getResourceValue("MainFrame.LAST_7_DAYS"));
 		searchedTimeSpansText.put(LAST_MONTH, Configed.getResourceValue("MainFrame.LAST_MONTH"));
 		searchedTimeSpansText.put(ANY_TIME, Configed.getResourceValue("MainFrame.ANY_TIME"));
-
 	}
 
 	private void setupMenuClients() {
@@ -781,6 +783,12 @@ public class MainFrame extends JFrame
 				.show(configedMain.hostDisplayFields.get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
 
 		jCheckBoxMenuItemShowIPAddressColumn.addItemListener((ItemEvent e) -> configedMain.toggleColumnIPAddress());
+
+		jCheckBoxMenuItemShowSystemUUIDColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowSystemUUIDColumn"));
+		combinedMenuItemSystemUUIDColumn
+				.show(configedMain.hostDisplayFields.get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
+
+		jCheckBoxMenuItemShowSystemUUIDColumn.addItemListener((ItemEvent e) -> configedMain.toggleColumnSystemUUID());
 
 		jCheckBoxMenuItemShowHardwareAddressColumn
 				.setText(Configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
@@ -1001,6 +1009,9 @@ public class MainFrame extends JFrame
 
 		jMenuClients.add(jCheckBoxMenuItemShowWANactiveColumn);
 		jMenuClients.add(jCheckBoxMenuItemShowIPAddressColumn);
+		if (ConfigedMain.OPSI_4_3) {
+			jMenuClients.add(jCheckBoxMenuItemShowSystemUUIDColumn);
+		}
 		jMenuClients.add(jCheckBoxMenuItemShowHardwareAddressColumn);
 		jMenuClients.add(jCheckBoxMenuItemShowSessionInfoColumn);
 		jMenuClients.add(jCheckBoxMenuItemShowInventoryNumberColumn);
@@ -1189,16 +1200,13 @@ public class MainFrame extends JFrame
 					}
 				}
 			});
-
 			if (!jMenuServer.isMenuComponent(menuOpsi)) {
 				jMenuServer.add(menuOpsi);
 			}
-
 			menuOpsi.add(jMenuOpsiCommand);
 			if (isReadOnly) {
 				jMenuOpsiCommand.setEnabled(false);
 			}
-
 			if (commandsAreDeactivated) {
 				jMenuOpsiCommand.setEnabled(false);
 			}
@@ -1502,7 +1510,6 @@ public class MainFrame extends JFrame
 	// context menus
 
 	private void setupPopupMenuClientsTab() {
-
 		popupShowCreatedColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowCreatedColumn"));
 		combinedMenuItemCreatedColumn.show(configedMain.hostDisplayFields.get(HostInfo.CREATED_DISPLAY_FIELD_LABEL));
 
@@ -1519,6 +1526,12 @@ public class MainFrame extends JFrame
 				.show(configedMain.hostDisplayFields.get(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL));
 
 		popupShowIPAddressColumn.addItemListener((ItemEvent e) -> configedMain.toggleColumnIPAddress());
+
+		popupShowSystemUUIDColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowSystemUUIDColumn"));
+		combinedMenuItemSystemUUIDColumn
+				.show(configedMain.hostDisplayFields.get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL));
+
+		popupShowSystemUUIDColumn.addItemListener((ItemEvent e) -> configedMain.toggleColumnSystemUUID());
 
 		popupShowHardwareAddressColumn.setText(Configed.getResourceValue("MainFrame.jMenuShowHardwareAddressColumn"));
 		combinedMenuItemHardwareAddressColumn
@@ -1753,6 +1766,9 @@ public class MainFrame extends JFrame
 
 		popupClients.add(popupShowWANactiveColumn);
 		popupClients.add(popupShowIPAddressColumn);
+		if (ConfigedMain.OPSI_4_3) {
+			popupClients.add(popupShowSystemUUIDColumn);
+		}
 		popupClients.add(popupShowHardwareAddressColumn);
 		popupClients.add(popupShowSessionInfoColumn);
 		popupClients.add(popupShowInventoryNumberColumn);
@@ -1773,7 +1789,6 @@ public class MainFrame extends JFrame
 		popupClients.add(popupCreatePdf);
 
 		exportTable.addMenuItemsTo(popupClients);
-
 	}
 
 	public void createPdf() {
@@ -1802,7 +1817,6 @@ public class MainFrame extends JFrame
 			pdfExportTable.setMetaData(metaData);
 			pdfExportTable.setPageSizeA4Landscape();
 			pdfExportTable.execute(null, jTable.getSelectedRowCount() != 0);
-
 		} catch (Exception ex) {
 			Logging.error("pdf printing error " + ex);
 		}
@@ -1878,18 +1892,14 @@ public class MainFrame extends JFrame
 
 		JLabel labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
 		labelClientDescription.setPreferredSize(Globals.buttonDimension);
-
 		JLabel labelClientInventoryNumber = new JLabel(Configed.getResourceValue("MainFrame.jLabelInventoryNumber"));
 		labelClientInventoryNumber.setPreferredSize(Globals.buttonDimension);
-
 		JLabel labelClientNotes = new JLabel(Configed.getResourceValue("MainFrame.jLabelNotes"));
-
+		JLabel labelClientSystemUUID = new JLabel(Configed.getResourceValue("MainFrame.jLabelSystemUUID"));
+		labelClientSystemUUID.setVisible(ConfigedMain.OPSI_4_3);
 		JLabel labelClientMacAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelMacAddress"));
-
 		JLabel labelClientIPAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelIPAddress"));
-
 		JLabel labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
-
 		JLabel labelOpsiHostKey = new JLabel("opsiHostKey");
 
 		jFieldInDepot = new JTextArea();
@@ -1925,6 +1935,14 @@ public class MainFrame extends JFrame
 		scrollpaneNotes.setPreferredSize(Globals.textfieldDimension);
 		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+		systemUUIDField = new JTextEditorField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3',
+				'4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true),
+				"", 36);
+
+		systemUUIDField.addKeyListener(this);
+		systemUUIDField.addMouseListener(this);
+		systemUUIDField.setVisible(ConfigedMain.OPSI_4_3);
 
 		macAddressField = new JTextEditorField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3',
 				'4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
@@ -1997,6 +2015,16 @@ public class MainFrame extends JFrame
 				.addGroup(layoutClientPane.createSequentialGroup()
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
 						.addComponent(jTextFieldInventoryNumber, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
+				/////// SYSTEM UUID
+				.addGroup(layoutClientPane.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(labelClientSystemUUID, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
+				.addGroup(layoutClientPane.createSequentialGroup()
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE)
+						.addComponent(systemUUIDField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 				/////// MAC ADDRESS
 				.addGroup(layoutClientPane.createSequentialGroup()
@@ -2081,6 +2109,10 @@ public class MainFrame extends JFrame
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(labelClientInventoryNumber)
 				.addComponent(jTextFieldInventoryNumber, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				/////// SYSTEM UUID
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+				.addComponent(labelClientSystemUUID)
+				.addComponent(systemUUIDField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// MAC ADDRESS
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
 				.addComponent(labelClientMacAddress)
@@ -2675,7 +2707,6 @@ public class MainFrame extends JFrame
 	}
 
 	public void showPopupClients() {
-
 		Rectangle rect = panelClientlist.getCellRect(panelClientlist.getSelectedRow(), 0, false);
 		popupClients.show(panelClientlist, rect.x + (rect.width / 2), rect.y + (rect.height / 2));
 	}
@@ -2702,7 +2733,6 @@ public class MainFrame extends JFrame
 
 	// -- helper methods for interaction
 	public void saveConfigurationsSetEnabled(boolean b) {
-
 		if (Globals.isGlobalReadOnly() && b) {
 			return;
 		}
@@ -2828,7 +2858,6 @@ public class MainFrame extends JFrame
 		} else {
 			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter-32.png", ""));
 		}
-
 	}
 
 	public void invertClientselection() {
@@ -3049,7 +3078,6 @@ public class MainFrame extends JFrame
 	}
 
 	public void showBackendConfigurationAction() {
-
 		FEditorPane backendInfoDialog = new FEditorPane(this,
 				Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.InfoInternalConfiguration"), false,
 				new String[] { Configed.getResourceValue("MainFrame.InfoInternalConfiguration.close") }, 800, 600);
@@ -3112,7 +3140,6 @@ public class MainFrame extends JFrame
 				.setSelectionStart(message.toString().length() - Logging.getCurrentLogfilePath().length());
 
 		info.setVisible(true);
-
 	}
 
 	private void showOpsiModules() {
@@ -3141,29 +3168,15 @@ public class MainFrame extends JFrame
 	private void showInfoPage() {
 		FEditorPane fEditPane = new FEditorPane(this, "opsi server infoPage", false, new String[] { "ok" }, 500, 400);
 		fEditPane.setPage("https://" + configedMain.getConfigserver() + ":4447/info");
-
 		fEditPane.setVisible(true);
 	}
 
 	public void callOpsiLicensingInfo() {
-
 		if (fDialogOpsiLicensingInfo == null) {
-
-			fDialogOpsiLicensingInfo = new de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo(this, // owner frame
-					// title
+			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false, // modal
-
-					new String[] { Configed.getResourceValue("Dash.close"),
-
-					},
-
-					new Icon[] {
-
-							Globals.createImageIcon("images/cancel16_small.png", "") },
-					1, 900, 680, true, // lazylayout, i.e, we have a chance to define components and use them for the
-					// layout
-					null // addPanel predefined
-			);
+					new String[] { Configed.getResourceValue("Dash.close") },
+					new Icon[] { Globals.createImageIcon("images/cancel16_small.png", "") }, 1, 900, 680, true, null);
 		} else {
 			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
 			fDialogOpsiLicensingInfo.setVisible(true);
@@ -3226,7 +3239,7 @@ public class MainFrame extends JFrame
 
 		int transpose = 20;
 
-		for (java.awt.Window f : frames) {
+		for (Window f : frames) {
 			transpose = transpose + Globals.LINE_HEIGHT;
 
 			if (f != null) {
@@ -3243,7 +3256,6 @@ public class MainFrame extends JFrame
 	// RunningInstancesObserver
 	@Override
 	public void instancesChanged(Set<JDialog> instances) {
-
 		boolean existJDialogInstances = (instances != null && !instances.isEmpty());
 
 		if (jMenuShowScheduledWOL != null) {
@@ -3276,43 +3288,37 @@ public class MainFrame extends JFrame
 					changedClientInfo.remove(HostInfo.CLIENT_DESCRIPTION_KEY);
 				}
 
-			}
-
-			else if (e.getSource() == jTextFieldInventoryNumber) {
-
+			} else if (e.getSource() == jTextFieldInventoryNumber) {
 				if (jTextFieldInventoryNumber.isChangedText()) {
 					changedClientInfo.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, jTextFieldInventoryNumber.getText());
 					configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else {
 					changedClientInfo.remove(HostInfo.CLIENT_INVENTORY_NUMBER_KEY);
 				}
-
-			}
-
-			else if (e.getSource() == jTextFieldOneTimePassword) {
+			} else if (e.getSource() == jTextFieldOneTimePassword) {
 				if (jTextFieldOneTimePassword.isChangedText()) {
 					changedClientInfo.put(HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY, jTextFieldOneTimePassword.getText());
 					configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else {
 					changedClientInfo.remove(HostInfo.CLIENT_ONE_TIME_PASSWORD_KEY);
 				}
-
-			}
-
-			else if (e.getSource() == jTextAreaNotes) {
+			} else if (e.getSource() == jTextAreaNotes) {
 				if (!jTextAreaNotes.getText().equals(oldNotes)) {
 					changedClientInfo.put(HostInfo.CLIENT_NOTES_KEY, jTextAreaNotes.getText());
 					configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else {
 					changedClientInfo.remove(HostInfo.CLIENT_NOTES_KEY);
 				}
+			} else if (e.getSource() == systemUUIDField) {
+				Logging.debug(this, " keyPressed on systemUUIDField, text " + systemUUIDField.getText());
 
-			}
-
-			else if (e.getSource() == macAddressField) {
-
-				// oldMacAddress
-
+				if (systemUUIDField.isChangedText()) {
+					changedClientInfo.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, systemUUIDField.getText());
+					configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
+				} else {
+					changedClientInfo.remove(HostInfo.CLIENT_SYSTEM_UUID_KEY);
+				}
+			} else if (e.getSource() == macAddressField) {
 				Logging.debug(this, " keyPressed on macAddressField, text " + macAddressField.getText());
 
 				if (macAddressField.isChangedText()) {
@@ -3320,15 +3326,8 @@ public class MainFrame extends JFrame
 					configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else {
 					changedClientInfo.remove(HostInfo.CLIENT_MAC_ADRESS_KEY);
-
 				}
-
-			}
-
-			else if (e.getSource() == ipAddressField) {
-
-				// oldMacAddress
-
+			} else if (e.getSource() == ipAddressField) {
 				Logging.debug(this, " keyPressed on ipAddressField, text " + ipAddressField.getText());
 
 				if (ipAddressField.isChangedText()) {
@@ -3336,11 +3335,8 @@ public class MainFrame extends JFrame
 					configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 				} else {
 					changedClientInfo.remove(HostInfo.CLIENT_IP_ADDRESS_KEY);
-
 				}
-
 			}
-
 		}
 	}
 
@@ -3399,7 +3395,6 @@ public class MainFrame extends JFrame
 
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
-
 		} else if (e.getSource() == cbUefiBoot) {
 			Logging.info(this, "actionPerformed on cbUefiBoot");
 
@@ -3455,10 +3450,7 @@ public class MainFrame extends JFrame
 
 		} else if (e.getSource() == jButtonDashboard || e.getSource() == jMenuFrameDashboard) {
 			configedMain.initDashInfo();
-		}
-
-		else if (e.getSource() == jButtonOpsiLicenses) {
-
+		} else if (e.getSource() == jButtonOpsiLicenses) {
 			showOpsiModules();
 		}
 
@@ -3541,7 +3533,7 @@ public class MainFrame extends JFrame
 
 	public void initHardwareInfo(List config) {
 		if (showHardwareLogVersion2 == null) {
-			showHardwareLogVersion2 = new de.uib.configed.gui.hwinfopage.PanelHWInfo(configedMain) {
+			showHardwareLogVersion2 = new PanelHWInfo(configedMain) {
 				@Override
 				protected void reload() {
 					super.reload();
@@ -3556,13 +3548,11 @@ public class MainFrame extends JFrame
 	}
 
 	private void showHardwareInfo() {
-
 		jTabbedPaneConfigPanes.setComponentAt(
 				jTabbedPaneConfigPanes.indexOfTab(Configed.getResourceValue("MainFrame.jPanel_hardwareLog")),
 				showHardwareLog);
 
 		showHardwareLog.repaint();
-
 	}
 
 	public void setHardwareInfoNotPossible(String label1S, String label2S) {
@@ -3574,7 +3564,6 @@ public class MainFrame extends JFrame
 			showHardwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_7);
 			showHardwareLogParentOfNotFoundPanel.setLayout(new BorderLayout());
 			showHardwareLogParentOfNotFoundPanel.add(showHardwareLogNotFound);
-
 		}
 
 		showHardwareLogNotFound.setTitle(label1S, label2S);
@@ -3599,7 +3588,6 @@ public class MainFrame extends JFrame
 	}
 
 	public void setHardwareInfo(Object hardwareInfo) {
-
 		if (hardwareInfo == null) {
 			showHardwareLogVersion2.setHardwareInfo(null,
 					Configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
@@ -3609,7 +3597,6 @@ public class MainFrame extends JFrame
 
 		showHardwareLog = showHardwareLogVersion2;
 		showHardwareInfo();
-
 	}
 
 	private void showSoftwareAudit() {
@@ -3625,9 +3612,8 @@ public class MainFrame extends JFrame
 		boolean goOn = true;
 
 		String clientID = getClientID();
-		if ((clientID == null) || (clientID.length() == 0)) {
+		if ((clientID == null) || (clientID.length() == 0))
 			return goOn;
-		}
 
 		// for testing commented out
 
@@ -3704,7 +3690,6 @@ public class MainFrame extends JFrame
 		}
 
 		return goOn;
-
 	}
 
 	private class SwExporter implements ActionListener {
@@ -3747,7 +3732,6 @@ public class MainFrame extends JFrame
 				if (tableData == null || tableData.isEmpty()) {
 					clientsWithoutScan.add(client);
 				}
-
 			}
 
 			Logging.info(this, "clientsWithoutScan " + clientsWithoutScan);
@@ -3775,9 +3759,7 @@ public class MainFrame extends JFrame
 			}
 
 			Logging.info(this, "clientsWithoutScan " + clientsWithoutScan);
-
 		}
-
 	}
 
 	public void setSoftwareAudit() {
@@ -3787,14 +3769,12 @@ public class MainFrame extends JFrame
 			showSoftwareLog = showSoftwareLogMultiClientReport;
 			showSoftwareAudit();
 
-		} else
-		// handled by the following methos
-		{
+		} else {
+			// handled by the following methods
 			labelNoSoftware.setText(Configed.getResourceValue("MainFrame.TabRequiresClientSelected"));
 			showSoftwareLog = showSoftwareLogNotFound;
 			showSoftwareAudit();
 		}
-
 	}
 
 	public void setSoftwareAuditNullInfo(String hostId) {
@@ -3818,9 +3798,7 @@ public class MainFrame extends JFrame
 
 	public void setUpdatedLogfilePanel(String logtype) {
 		Logging.info(this, "setUpdatedLogfilePanel " + logtype);
-
 		setLogfilePanel(configedMain.getLogfilesUpdating(logtype));
-
 	}
 
 	public void setLogfilePanel(final Map<String, String> logs) {
@@ -3829,14 +3807,12 @@ public class MainFrame extends JFrame
 				showLogfiles);
 
 		showLogfiles.setDocuments(logs, statusPane.getSelectedClientNames());
-
 	}
 
 	public void setLogview(String logtype) {
 		int i = Arrays.asList(Globals.getLogTypes()).indexOf(logtype);
-		if (i < 0) {
+		if (i < 0)
 			return;
-		}
 
 		showLogfiles.setSelectedIndex(i);
 	}
@@ -3845,42 +3821,39 @@ public class MainFrame extends JFrame
 	public void setClientDescriptionText(String s) {
 		jTextFieldDescription.setText(s);
 		jTextFieldDescription.setCaretPosition(0);
-
 	}
 
 	public void setClientInventoryNumberText(String s) {
 		jTextFieldInventoryNumber.setText(s);
 		jTextFieldInventoryNumber.setCaretPosition(0);
-
 	}
 
 	public void setClientOneTimePasswordText(String s) {
 		jTextFieldOneTimePassword.setText(s);
 		jTextFieldOneTimePassword.setCaretPosition(0);
-
 	}
 
 	public void setClientNotesText(String s) {
 		jTextAreaNotes.setText(s);
 		jTextAreaNotes.setCaretPosition(0);
 		oldNotes = s;
-
 	}
 
 	public void setClientMacAddress(String s) {
 		macAddressField.setText(s);
+	}
 
+	public void setClientSystemUUID(String s) {
+		systemUUIDField.setText(s);
 	}
 
 	public void setClientIpAddress(String s) {
 		ipAddressField.setText(s);
-
 	}
 
 	public void setUefiBoot(Boolean b) {
 		Logging.info(this, "setUefiBoot " + b);
 		cbUefiBoot.setSelected(b);
-
 	}
 
 	public void setWANConfig(Boolean b) {
@@ -3896,7 +3869,6 @@ public class MainFrame extends JFrame
 	public void setShutdownInstall(Boolean b) {
 		Logging.info(this, "setShutdownInstall " + b);
 		cbInstallByShutdown.setSelected(b);
-
 	}
 
 	public void setClientID(String s) {
@@ -3930,6 +3902,8 @@ public class MainFrame extends JFrame
 		jTextFieldOneTimePassword.setEditable(b1);
 		jTextAreaNotes.setEnabled(singleClient);
 		jTextAreaNotes.setEditable(b1);
+		systemUUIDField.setEnabled(singleClient);
+		systemUUIDField.setEnabled(b1);
 		macAddressField.setEnabled(singleClient);
 		macAddressField.setEditable(b1);
 		ipAddressField.setEnabled(singleClient);
@@ -3952,6 +3926,7 @@ public class MainFrame extends JFrame
 			jTextFieldInventoryNumber.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			jTextFieldOneTimePassword.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			jTextAreaNotes.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			systemUUIDField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			macAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			ipAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
@@ -3959,7 +3934,6 @@ public class MainFrame extends JFrame
 			cbWANConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			jTextFieldHostKey.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			cbInstallByShutdown.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-
 		} else {
 			jTextFieldDescription
 					.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
@@ -3973,15 +3947,14 @@ public class MainFrame extends JFrame
 			jTextFieldOneTimePassword.setBackground(Globals.BACKGROUND_COLOR_3);
 			jTextAreaNotes.setBackground(Globals.BACKGROUND_COLOR_3);
 
+			systemUUIDField.setBackground(Globals.BACKGROUND_COLOR_3);
 			macAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
 			ipAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
 			cbUefiBoot.setBackground(Globals.BACKGROUND_COLOR_3);
 			cbWANConfig.setBackground(Globals.BACKGROUND_COLOR_3);
 			jTextFieldHostKey.setBackground(Globals.BACKGROUND_COLOR_3);
 			cbInstallByShutdown.setBackground(Globals.BACKGROUND_COLOR_3);
-
 		}
-
 	}
 
 	public void setChangedDepotSelectionActive(boolean active) {
@@ -3989,7 +3962,7 @@ public class MainFrame extends JFrame
 	}
 
 	@Override
-	public void paint(java.awt.Graphics g) {
+	public void paint(Graphics g) {
 		try {
 			super.paint(g);
 		} catch (java.lang.ClassCastException ex) {

@@ -138,7 +138,6 @@ import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.thread.WaitCursor;
 
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
-
 	public static final int VIEW_CLIENTS = 0;
 	public static final int VIEW_LOCALBOOT_PRODUCTS = 1;
 	public static final int VIEW_NETBOOT_PRODUCTS = 2;
@@ -150,7 +149,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard and other features for opsi 4.3 disabled
-	public static final boolean OPSI_4_3 = false;
+	public static final boolean OPSI_4_3 = true;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -827,6 +826,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
+	public void toggleColumnSystemUUID() {
+		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
+		persist.getHostDisplayFields().put(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL, !visible);
+
+		setRebuiltClientListTableModel(false);
+		selectionPanel.initSortKeys();
+		if (getSelectedClients().length > 0) {
+			selectionPanel.moveToValue(getSelectedClients()[0], 0);
+		}
+	}
+
 	public void toggleColumnHardwareAddress() {
 		boolean visible = persist.getHostDisplayFields().get(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
 		persist.getHostDisplayFields().put(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL, !visible);
@@ -836,7 +846,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getSelectedClients().length > 0) {
 			selectionPanel.moveToValue(getSelectedClients()[0], 0);
 		}
-
 	}
 
 	public void setColumnSessionInfo(boolean b) {
@@ -2146,8 +2155,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setSelectionPanelCols();
 
-		// did lose the selection since last setting
-		setSelectedClientsCollectionOnPanel(valuesToSelect);
+		setSelectedClientsCollectionOnPanel(valuesToSelect); // did lose the selection since last setting
 
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel "
 				+ Logging.getSize(selectionPanel.getSelectedValues()));
@@ -2160,6 +2168,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		filterClientList = b;
 		setRebuiltClientListTableModel();
+
 	}
 
 	protected String getSelectedClientsString() {
@@ -3384,8 +3393,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-		if (!problem && dataReady) {
-			// we have loaded the data
+		if (!problem && dataReady) // we have loaded the data
+		{
 			viewIndex = visualViewIndex;
 
 			if (viewIndex != VIEW_CLIENTS) {
@@ -3467,8 +3476,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 
-			// send the collected items
-			persist.updateProductOnClients();
+			persist.updateProductOnClients(); // send the collected items
 		}
 	}
 
@@ -3496,8 +3504,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 
-			// send the collected items
-			persist.updateProductOnClients();
+			persist.updateProductOnClients(); // send the collected items
+
 		}
 
 		if (istmForSelectedClientsNetboot != null) {
@@ -3693,8 +3701,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.info(this, " reloadData _______________________________  saveViewIndex " + saveViewIndex);
 
-		// stop all old waiting threads if there should be any left
-		WaitCursor.stopAll();
+		WaitCursor.stopAll(); // stop all old waiting threads if there should be any left
 
 		List<String> selValuesList = selectionPanel.getSelectedValues();
 
@@ -3703,8 +3710,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String[] savedSelectedValues = selValuesList.toArray(new String[selValuesList.size()]);
 
 		if (selectionPanel != null) {
-			// deactivate temporarily listening to list selection events
-			selectionPanel.removeListSelectionListener(this);
+			selectionPanel.removeListSelectionListener(this); // deactivate temporarily listening to list selection
+																// events
 		}
 
 		// dont do anything if we did not finish another thread for this
@@ -3771,13 +3778,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// configuratio
 			persist.getHostInfoCollections().getAllDepots();
-
-			// we do this again since we reloaded the configuration
-			persist.checkConfiguration();
+			persist.checkConfiguration(); // we do this again since we reloaded the configuration
 		}
 
-		// sets visual view index, therefore:
-		setEditingTarget(editingTarget);
+		setEditingTarget(editingTarget); // sets visual view index, therefore:
 
 		// if depot selection changed, we adapt the clients
 		NavigableSet<String> clientsLeft = new TreeSet<>();
@@ -4258,8 +4262,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		mainFrame.iconButtonSessionInfo.setWaitingState(true);
 
-		// no old values kept
-		sessionInfo = new HashMap<>();
+		sessionInfo = new HashMap<>(); // no old values kept
 
 		try {
 			// leave the Event dispatching thread
@@ -4603,7 +4606,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		persist.hostConfigsRequestRefresh();
 		persist.hostGroupsRequestRefresh();
 		persist.fObject2GroupsRequestRefresh();
-		persist.fGroup2MembersRequestRefresh();
+		persist.fGroup2MembersRequestRefresh(); // ??
 		refreshClientListKeepingGroup();
 	}
 
@@ -4664,8 +4667,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public void createClient(final String hostname, final String domainname, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
-			final String macaddress, final boolean shutdownInstall, final boolean uefiBoot, final boolean wanConfig,
-			final String group, final String productNetboot, final String productLocalboot) {
+			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiBoot,
+			final boolean wanConfig, final String group, final String productNetboot, final String productLocalboot) {
 
 		Logging.debug(this,
 				"createClient " + hostname + ", " + domainname + ", " + depotID + ", " + description + ", "
@@ -4673,7 +4676,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						+ group + ", " + productNetboot + ", " + productLocalboot);
 
 		if (persist.createClient(hostname, domainname, depotID, description, inventorynumber, notes, ipaddress,
-				macaddress, shutdownInstall, uefiBoot, wanConfig, group, productNetboot, productLocalboot)) {
+				systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, group, productNetboot,
+				productLocalboot)) {
 			String newClientID = hostname + "." + domainname;
 
 			checkErrorList();
@@ -5253,7 +5257,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			TreePath newGroupPath = treeClients.getPathToGROUPS().pathByAddingChild(newGroupNode);
 
 			for (int j = 0; j < getSelectedClients().length; j++) {
-				treeClients.copyClientTo(getSelectedClients()[j], null, newGroupName, newGroupNode, newGroupPath);
+				treeClients.copyClientTo(getSelectedClients()[j], null, // from nowhere
+						newGroupName, newGroupNode, newGroupPath);
 			}
 
 			treeClients.makeVisible(newGroupPath);

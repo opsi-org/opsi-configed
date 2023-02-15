@@ -217,9 +217,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			button.addItemListener((ItemEvent e) -> {
 				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
 
-				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty())
+				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
 					format.setFieldSeparator(button.getActionCommand().charAt(0));
-
+				}
 			});
 		}
 
@@ -257,15 +257,12 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			if (header.equals("hostname")) {
 				headerBox.setSelected(true);
 			}
-
 			if (header.equals("selectedDomain")) {
 				headerBox.setSelected(true);
 			}
-
 			if (header.equals("depotID")) {
 				headerBox.setSelected(true);
 			}
-
 			if (header.equals("macaddress")) {
 				headerBox.setSelected(true);
 			}
@@ -380,9 +377,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			protected Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
 			public CheckBoxList() {
-				super.setCellRenderer(new CellRenderer());
+				setCellRenderer(new CellRenderer());
 
-				super.addMouseListener(new MouseAdapter() {
+				addMouseListener(new MouseAdapter() {
 					@Override
 					public void mousePressed(MouseEvent e) {
 						int index = locationToIndex(e.getPoint());
@@ -398,7 +395,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 			public CheckBoxList(ListModel<JCheckBox> model) {
 				this();
-				super.setModel(model);
+				setModel(model);
 			}
 
 			protected class CellRenderer implements ListCellRenderer<JCheckBox> {
@@ -451,10 +448,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();
-			if (!csvFile.endsWith(".csv")) {
+			if (!csvFile.endsWith(".csv"))
 				csvFile = csvFile.concat(".csv");
-			}
-
 			write(csvFile);
 		}
 

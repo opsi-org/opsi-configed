@@ -63,6 +63,7 @@ public final class NewClientDialog extends FGeneralDialog
 	protected JComboBox<String> jComboPrimaryGroup;
 	protected JComboBox<String> jComboNetboot;
 	protected JComboBox<String> jComboLocalboot;
+	protected JTextField systemUUIDField;
 	protected JTextField macAddressField;
 	protected JTextField ipAddressField;
 	protected LabelChecked labelShutdownDefault;
@@ -97,7 +98,7 @@ public final class NewClientDialog extends FGeneralDialog
 				Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")", false,
 				new String[] { Configed.getResourceValue("NewClientDialog.buttonClose"),
 						Configed.getResourceValue("NewClientDialog.buttonCreate") },
-				700, 600);
+				700, 680);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		this.main = main;
 
@@ -121,14 +122,14 @@ public final class NewClientDialog extends FGeneralDialog
 		if (instance == null) {
 			instance = new NewClientDialog(main, depots);
 			instance.init();
-		} else
+		} else {
 			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		}
 
 		return instance;
 	}
 
 	public static NewClientDialog getInstance() {
-
 		return instance;
 	}
 
@@ -158,8 +159,9 @@ public final class NewClientDialog extends FGeneralDialog
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboPrimaryGroup.getModel();
 		model.removeAllElements();
 		model.addElement(null);
-		for (String group : groupList)
+		for (String group : groupList) {
 			model.addElement(group);
+		}
 		jComboPrimaryGroup.setModel(model);
 		jComboPrimaryGroup.setSelectedIndex(0);
 
@@ -169,8 +171,9 @@ public final class NewClientDialog extends FGeneralDialog
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboNetboot.getModel();
 		model.removeAllElements();
 		model.addElement(null);
-		for (String product : productList)
+		for (String product : productList) {
 			model.addElement(product);
+		}
 		jComboNetboot.setModel(model);
 		jComboNetboot.setSelectedIndex(0);
 	}
@@ -179,8 +182,9 @@ public final class NewClientDialog extends FGeneralDialog
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboLocalboot.getModel();
 		model.removeAllElements();
 		model.addElement(null);
-		for (String product : productList)
+		for (String product : productList) {
 			model.addElement(product);
+		}
 		jComboLocalboot.setModel(model);
 		jComboLocalboot.setSelectedIndex(0);
 	}
@@ -193,11 +197,9 @@ public final class NewClientDialog extends FGeneralDialog
 		jCheckUefi.setVisible(!uefiIsDefault);
 		jCheckWan.setVisible(!wanIsDefault);
 		jCheckShutdownInstall.setVisible(!shutdownINSTALLIsDefault);
-
 	}
 
 	protected void init() {
-
 		panel = new JPanel();
 		gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
@@ -279,18 +281,15 @@ public final class NewClientDialog extends FGeneralDialog
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				try {
-
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
 					Logging.debug(this, " --------->" + newPiece + "<");
 
 					if (newPiece.equals("\t")) {
-
-						macAddressField.requestFocus();
+						systemUUIDField.requestFocus();
 					}
 				} catch (BadLocationException ex) {
 					Logging.warning(this, "BadLocationException thrown: ", ex);
 				}
-
 			}
 
 			@Override
@@ -310,6 +309,17 @@ public final class NewClientDialog extends FGeneralDialog
 
 		JLabel labelInfoIP = new JLabel(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
 		labelInfoIP.setFont(Globals.defaultFontBig);
+
+		JLabel jLabelSystemUUID = new JLabel();
+		jLabelSystemUUID.setText(Configed.getResourceValue("NewClientDialog.SystemUUID"));
+		jLabelSystemUUID.setVisible(ConfigedMain.OPSI_4_3);
+		systemUUIDField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
+				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true), "",
+				36);
+
+		systemUUIDField.addKeyListener(this);
+		systemUUIDField.addMouseListener(this);
+		systemUUIDField.setVisible(ConfigedMain.OPSI_4_3);
 
 		JLabel jLabelMacAddress = new JLabel();
 		jLabelMacAddress.setText(Configed.getResourceValue("NewClientDialog.HardwareAddress"));
@@ -411,6 +421,16 @@ public final class NewClientDialog extends FGeneralDialog
 						.addGap(Globals.VGAP_SIZE - 2, Globals.VGAP_SIZE - 2, Globals.VGAP_SIZE - 2)
 						.addComponent(jTextNotes, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.VGAP_SIZE - 2, Globals.VGAP_SIZE - 2, Globals.VGAP_SIZE - 2))
+				/////// SYSTEM UUID
+				.addGroup(gpl.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+						.addComponent(jLabelSystemUUID, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
+				.addGroup(gpl.createSequentialGroup()
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
+						.addComponent(systemUUIDField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+								Globals.FIRST_LABEL_WIDTH)
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				/////// MAC-ADDRESS
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addComponent(jLabelMacAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -423,6 +443,7 @@ public final class NewClientDialog extends FGeneralDialog
 						.addComponent(macAddressField, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
 								Globals.FIRST_LABEL_WIDTH)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
+				/////// IP-ADDRESS
 				.addGroup(gpl.createSequentialGroup().addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addComponent(jLabelIpAddress, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
@@ -476,12 +497,7 @@ public final class NewClientDialog extends FGeneralDialog
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(jComboNetboot, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 								2 * Globals.BUTTON_WIDTH)
-						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
-		// localboot
-
-		// )
-
-		);
+						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)));
 		gpl.setVerticalGroup(gpl.createSequentialGroup()
 				/////// HOSTNAME
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
@@ -505,6 +521,10 @@ public final class NewClientDialog extends FGeneralDialog
 				.addGap(Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE / 2, Globals.MIN_VGAP_SIZE)
 				.addComponent(jLabelNotes).addComponent(jTextNotes)
 
+				/////// SYSTEM UUID
+				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				.addGroup(gpl.createParallelGroup().addComponent(jLabelSystemUUID))
+				.addComponent(systemUUIDField, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				/////// MAC-ADDRESS
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 				.addGroup(gpl.createParallelGroup().addComponent(jLabelMacAddress).addComponent(labelInfoMac))
@@ -555,10 +575,7 @@ public final class NewClientDialog extends FGeneralDialog
 								.addComponent(jLabelNetboot, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 										Globals.LINE_HEIGHT)
 								.addComponent(jComboNetboot, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
-										Globals.BUTTON_HEIGHT))
-		/////// localboot
-
-		);
+										Globals.BUTTON_HEIGHT)));
 
 		final GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
@@ -605,8 +622,8 @@ public final class NewClientDialog extends FGeneralDialog
 			String hostname = (String) client.get(0);
 			String selectedDomain = (String) client.get(1);
 
-			if (!isBoolean((String) client.get(11)) || !isBoolean((String) client.get(12))
-					|| !isBoolean((String) client.get(13))) {
+			if (!isBoolean((String) client.get(12)) || !isBoolean((String) client.get(13))
+					|| !isBoolean((String) client.get(14))) {
 				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
 						Configed.getResourceValue("NewClientDialog.nonBooleanValue.title") + " (" + Globals.APPNAME
 								+ ") ",
@@ -637,12 +654,13 @@ public final class NewClientDialog extends FGeneralDialog
 
 	private void createClient(final String hostname, final String selectedDomain, final String depotID,
 			final String description, final String inventorynumber, final String notes, final String ipaddress,
-			final String macaddress, final boolean shutdownInstall, final boolean uefiboot, final boolean wanConfig,
-			final String group, final String netbootProduct, final String localbootProduct) {
+			final String systemUUID, final String macaddress, final boolean shutdownInstall, final boolean uefiboot,
+			final boolean wanConfig, final String group, final String netbootProduct, final String localbootProduct) {
 
 		if (checkClientCorrectness(hostname, selectedDomain)) {
 			main.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
-					macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
+					systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct,
+					localbootProduct);
 
 			treatSelectedDomainForNewClient(selectedDomain);
 		}
@@ -715,9 +733,9 @@ public final class NewClientDialog extends FGeneralDialog
 			fQuestion.setAlwaysOnTop(true);
 			fQuestion.setVisible(true);
 
-			if (fQuestion.getResult() == 1)
+			if (fQuestion.getResult() == 1) {
 				goOn = false;
-
+			}
 		}
 
 		if (goOn && hostname.length() > 15) {
@@ -733,15 +751,17 @@ public final class NewClientDialog extends FGeneralDialog
 			fQuestion.setAlwaysOnTop(true);
 			fQuestion.setVisible(true);
 
-			if (fQuestion.getResult() == 1)
+			if (fQuestion.getResult() == 1) {
 				goOn = false;
+			}
 		}
 
 		boolean onlyNumbers = true;
 		int i = 0;
 		while (onlyNumbers && hostname != null && i < hostname.length()) {
-			if (!Character.isDigit(hostname.charAt(i)))
+			if (!Character.isDigit(hostname.charAt(i))) {
 				onlyNumbers = false;
+			}
 			i++;
 		}
 
@@ -759,8 +779,9 @@ public final class NewClientDialog extends FGeneralDialog
 			fQuestion.setAlwaysOnTop(true);
 			fQuestion.setVisible(true);
 
-			if (fQuestion.getResult() == 1)
+			if (fQuestion.getResult() == 1) {
 				goOn = false;
+			}
 		}
 
 		return goOn;
@@ -776,8 +797,9 @@ public final class NewClientDialog extends FGeneralDialog
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();
-			if (!csvFile.endsWith(".csv"))
+			if (!csvFile.endsWith(".csv")) {
 				csvFile = csvFile.concat(".csv");
+			}
 			CSVImportDataDialog csvImportDataDialog = createCSVImportDataDialog(csvFile);
 
 			if (csvImportDataDialog == null) {
@@ -814,6 +836,7 @@ public final class NewClientDialog extends FGeneralDialog
 		columnNames.add("description");
 		columnNames.add("inventorynumber");
 		columnNames.add("notes");
+		columnNames.add("systemUUID");
 		columnNames.add("macaddress");
 		columnNames.add("ipaddress");
 		columnNames.add("group");
@@ -863,6 +886,7 @@ public final class NewClientDialog extends FGeneralDialog
 		columnNames.add("description");
 		columnNames.add("inventorynumber");
 		columnNames.add("notes");
+		columnNames.add("systemUUID");
 		columnNames.add("macaddress");
 		columnNames.add("ipaddress");
 		columnNames.add("group");
@@ -913,6 +937,7 @@ public final class NewClientDialog extends FGeneralDialog
 		String description = jTextDescription.getText();
 		String inventorynumber = jTextInventoryNumber.getText();
 		String notes = jTextNotes.getText().trim();
+		String systemUUID = systemUUIDField.getText();
 		String macaddress = macAddressField.getText();
 		String ipaddress = ipAddressField.getText();
 		String group = (String) jComboPrimaryGroup.getSelectedItem();
@@ -935,8 +960,8 @@ public final class NewClientDialog extends FGeneralDialog
 
 		boolean shutdownInstall = jCheckShutdownInstall.getSelectedObjects() != null;
 
-		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, macaddress,
-				shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
+		createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress, systemUUID,
+				macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct, localbootProduct);
 	}
 
 	@Override
@@ -945,14 +970,9 @@ public final class NewClientDialog extends FGeneralDialog
 				&& (e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 				&& e.getKeyCode() == KeyEvent.VK_TAB) {
 			jTextDescription.requestFocusInWindow();
-
-		}
-
-		else {
+		} else {
 			Logging.info(this, "keyPressed source " + e.getSource());
-
 			super.keyPressed(e);
 		}
 	}
-
 }
