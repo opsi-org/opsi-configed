@@ -96,7 +96,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	public void doCall() {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion");
-		persis.setProductproperties();
+		persis.setProductProperties();
 
 	}
 

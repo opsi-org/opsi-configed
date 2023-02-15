@@ -5,7 +5,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class RetrievedMap extends HashMap<String, Object> {
-	protected Map<String, Object> retrieved; // pass the original map
+	// pass the original map
+	protected Map<String, Object> retrieved;
 	protected Map<String, String> classnames;
 
 	public RetrievedMap(Map<String, Object> retrieved) {
@@ -16,8 +17,9 @@ public class RetrievedMap extends HashMap<String, Object> {
 	}
 
 	protected void build() {
-		if (retrieved == null)
+		if (retrieved == null) {
 			return;
+		}
 
 		Iterator<String> iter = retrieved.keySet().iterator();
 		while (iter.hasNext()) {
