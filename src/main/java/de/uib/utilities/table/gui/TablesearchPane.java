@@ -130,15 +130,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			String savedStatesObjectTag) {
 		comparator = Globals.getCollator();
 		mappedValues = new HashMap<>();
-		this.targetModel = targetModel;
 		this.withRegEx = withRegEx;
 		this.preferredColumnIndex = prefColNo;
 
 		filtering = true;
 
 		initSavedStates(savedStatesObjectTag);
-
 		init();
+
+		this.targetModel = targetModel;
 	}
 
 	private void init() {
@@ -235,8 +235,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void setFiltering(boolean b, boolean withFilterPopup) {
 		searchMenuEntries.put(popupMarkHits, true);
-		if (withFilterPopup)
+		if (withFilterPopup) {
 			searchMenuEntries.put(popupMarkAndFilter, true);
+		}
+
 		buildMenuSearchfield();
 
 		filtering = b;
@@ -296,9 +298,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * serve graphical filtermark
 	 */
 	public void setFilterMark(boolean b) {
-		if (filtermark.isSelected() == null || filtermark.isSelected() != b)
-
+		if (filtermark.isSelected() == null || filtermark.isSelected() != b) {
 			filtermark.setSelected(b);
+		}
 	}
 
 	/**
@@ -365,7 +367,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		Icon iconReload = Globals.createImageIcon("images/reload_blue16.png", "");
 		markReload = new CheckedLabel(iconReload, true);
-		markReload.setVisible(false); // in the moment, it's a proof of concept
+
+		// in the moment, it's a proof of concept
+		markReload.setVisible(false);
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
@@ -389,13 +393,16 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		boolean active = true;
 
-		if (saveSearchpaneProgressiveSearch != null)
+		if (saveSearchpaneProgressiveSearch != null) {
 			active = (saveSearchpaneProgressiveSearch.deserializeAsInt() == 0);
+		}
+
 		checkmarkSearchProgressive = new CheckedLabel(selectedIconSearch, unselectedIconSearch, active);
-		if (active)
+		if (active) {
 			searchInputType = SearchInputType.PROGRESSIVE;
-		else
+		} else {
 			searchInputType = SearchInputType.LINE;
+		}
 
 		checkmarkSearchProgressive.addActionListener(this);
 		checkmarkSearchProgressive.setChangeStateAutonomously(true);
@@ -455,16 +462,19 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		popupNewSearch.addActionListener(actionEvent -> {
 
 			targetModel.setFiltered(false);
-			if (resetFilterModeOnNewSearch)
+			if (resetFilterModeOnNewSearch) {
 				setFilteredMode(false);
+			}
+
 			searchTheRow(0, selectMode);
 		});
 
 		popupMarkHits.setText(Configed.getResourceValue("SearchPane.popup.markall"));
 
 		popupMarkHits.addActionListener(actionEvent -> {
-			if (!fieldSearch.getText().equals(""))
+			if (!fieldSearch.getText().equals("")) {
 				markAll();
+			}
 		});
 
 		popupMarkAndFilter.setText(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
@@ -480,8 +490,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
 
 		fieldSearch.addActionListener(actionEvent -> {
-			if (searchInputType == SearchInputType.PROGRESSIVE)
+			if (searchInputType == SearchInputType.PROGRESSIVE) {
 				searchNextRow(selectMode);
+			}
 		});
 
 		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
@@ -499,9 +510,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				Configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
 		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.starttext"), // Index START_TEXT_SEARCH
 				Configed.getResourceValue("SearchPane.mode.starttext.tooltip"));
-		if (withRegEx)
+		if (withRegEx) {
 			tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.regex"),
 					Configed.getResourceValue("SearchPane.mode.regex.tooltip"));
+		}
 
 		try {
 
@@ -539,8 +551,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		selectedIcon = Globals.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
 
 		active = true;
-		if (saveSearchpaneAllColumnsSearch != null)
+		if (saveSearchpaneAllColumnsSearch != null) {
 			active = (saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0);
+		}
 
 		checkmarkAllColumns = new CheckedLabel(selectedIcon, unselectedIcon, active);
 
@@ -551,15 +564,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		selectedIcon = Globals.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
 
 		active = true;
-		if (saveSearchpaneFullTextSearch != null)
+		if (saveSearchpaneFullTextSearch != null) {
 			active = (saveSearchpaneFullTextSearch.deserializeAsInt() == 0);
+		}
 
 		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active);
 
-		if (active)
+		if (active) {
 			comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
-		else
+		} else {
 			comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
+		}
 
 		checkmarkFullText.setToolTipText(Configed.getResourceValue("SearchPane.checkmarkFullText.tooltip"));
 		checkmarkFullText.addActionListener(this);
@@ -634,8 +649,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		Logging.info(this, "buildMenuSearchfield");
 		searchMenu = new JPopupMenu();
 		for (Entry<JMenuItemFormatted, Boolean> searchMenuEntry : searchMenuEntries.entrySet()) {
-			if (Boolean.TRUE.equals(searchMenuEntry.getValue()))
+			if (Boolean.TRUE.equals(searchMenuEntry.getValue())) {
 				searchMenu.add(searchMenuEntry.getKey());
+			}
 		}
 		fieldSearch.setComponentPopupMenu(searchMenu);
 		Logging.info(this, "buildMenuSearchfield " + searchMenu);
@@ -659,18 +675,20 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			}
 
 			if ((saveSearchpaneAllColumnsSearch == null) || saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0
-					|| preferredColumnIndex >= targetModel.getColumnCount())
+					|| preferredColumnIndex >= targetModel.getColumnCount()) {
 				comboSearchFields.setSelectedIndex(0);
-			else
+			} else {
 				comboSearchFields.setSelectedIndex(preferredColumnIndex);
+			}
 		}
 
 	}
 
 	public void setSearchFields(List<String> fieldList) {
 		for (String fieldName : fieldList) {
-			if (((DefaultComboBoxModel) comboSearchFields.getModel()).getIndexOf(fieldName) == -1)
+			if (((DefaultComboBoxModel) comboSearchFields.getModel()).getIndexOf(fieldName) == -1) {
 				comboSearchFields.addItem(fieldName);
+			}
 		}
 	}
 
@@ -679,11 +697,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setSearchMode(int a) {
-		if (a <= START_TEXT_SEARCH)
+		if (a <= START_TEXT_SEARCH) {
 			comboSearchFieldsMode.setSelectedIndex(a);
-		else {
-			if (withRegEx)
+		} else {
+			if (withRegEx) {
 				comboSearchFieldsMode.setSelectedIndex(REGEX_SEARCH);
+			}
 		}
 	}
 
@@ -700,8 +719,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private Finding stringContainsParts(final String colname, final String s, String[] parts) {
 		String realS = s;
 
-		if (mappedValues.get(colname) != null)
+		if (mappedValues.get(colname) != null) {
 			realS = mappedValues.get(colname).getMapOfStrings().get(s);
+		}
 
 		return stringContainsParts(realS, parts);
 	}
@@ -711,11 +731,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		String remainder = s;
 
-		if (s == null)
+		if (s == null) {
 			return result;
+		}
 
-		if (parts == null)
+		if (parts == null) {
 			return result;
+		}
 
 		int len = parts.length;
 		if (len == 0) {
@@ -733,16 +755,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			if (partSearch.success) {
 				i++;
 				// look for the next part?
-				if (i >= len) // all parts found
-				{
+				if (i >= len) {
+					// all parts found
 					result.success = true;
 					result.endChar = partSearch.endChar;
 					searching = false;
 				} else {
-					if (remainder.length() > 0)
+					if (remainder.length() > 0) {
 						remainder = remainder.substring(partSearch.endChar);
-					else
+					} else {
 						result.success = false;
+					}
 				}
 			} else {
 				result.success = false;
@@ -760,19 +783,19 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private Finding stringContains(final String colname, final String s, final String part) {
 		Finding result = new Finding();
 
-		if (s == null)
+		if (s == null || part == null) {
 			return result;
-
-		if (part == null)
-			return result;
+		}
 
 		String realS = s;
 
-		if (colname != null && mappedValues.get(colname) != null)
+		if (colname != null && mappedValues.get(colname) != null) {
 			realS = mappedValues.get(colname).getMapOfStrings().get(s);
+		}
 
-		if (realS == null || part.length() > realS.length())
+		if (realS == null || part.length() > realS.length()) {
 			return result;
+		}
 
 		if (part.length() == 0) {
 			result.success = true;
@@ -796,21 +819,26 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private boolean stringStartsWith(final String colname, final String s, final String part) {
-		if (s == null)
+		if (s == null) {
 			return false;
+		}
 
-		if (part == null)
+		if (part == null) {
 			return false;
+		}
 
 		String realS = s;
-		if (mappedValues.get(colname) != null)
+		if (mappedValues.get(colname) != null) {
 			realS = mappedValues.get(colname).getMapOfStrings().get(s);
+		}
 
-		if (part.length() > realS.length())
+		if (part.length() > realS.length()) {
 			return false;
+		}
 
-		if (part.length() == 0)
+		if (part.length() == 0) {
 			return true;
+		}
 
 		return (comparator.compare(realS.substring(0, part.length()), part) == 0);
 	}
@@ -823,13 +851,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						+ startviewrow + ", " + value + ", " + colIndices + ", " + fulltext + ", " + regex + ", "
 						+ combineCols);
 
-		if (value == null)
+		if (value == null) {
 			return -1;
+		}
 
 		String val = value.toString().toLowerCase();
 
-		if (val.length() < 2)
+		if (val.length() < 2) {
 			return -1;
+		}
 		// dont start searching for single chars
 
 		String[] valParts = val.split(" ");
@@ -838,14 +868,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		int viewrow = 0;
 
-		if (startviewrow > 0)
+		if (startviewrow > 0) {
 			viewrow = startviewrow;
+		}
 
 		Pattern pattern = null;
 		if (regex) {
 			try {
-				if (fulltext)
+				if (fulltext) {
 					val = ".*" + val + ".*";
+				}
+
 				pattern = Pattern.compile(val);
 			} catch (java.util.regex.PatternSyntaxException ex) {
 				Logging.info(this, "pattern problem " + ex);
@@ -854,15 +887,16 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		while (!found && viewrow < targetModel.getRowCount()) {
-			if (combineCols) // only fulltext
-			{
+			if (combineCols) {
+				// only fulltext
 				StringBuilder buffRow = new StringBuilder();
 
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
 
-					if (colIndices != null // we dont compare all values (comparing all values is default)
-							&& !colIndices.contains(j))
+					// we dont compare all values (comparing all values is default)
+					if (colIndices != null && !colIndices.contains(j)) {
 						continue;
+					}
 
 					int colJ = targetModel.getColForVisualCol(j);
 
@@ -873,8 +907,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 						String colname = targetModel.getColumnName(colJ);
 
-						if (mappedValues.get(colname) != null)
+						if (mappedValues.get(colname) != null) {
 							valSJ = mappedValues.get(colname).getMapOfStrings().get(valSJ);
+						}
 
 						buffRow.append(valSJ);
 					}
@@ -883,8 +918,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				String compareVal = buffRow.toString();
 
 				if (compareVal.equals("")) {
-					if (val.equals(""))
+					if (val.equals("")) {
 						found = true;
+					}
 				} else {
 					found = stringContainsParts(compareVal, valParts).success;
 				}
@@ -894,10 +930,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			else {
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
 
-					if (colIndices != null // we dont compare all values (comparing all values is default)
-							&& !colIndices.contains(j))
-
+					// we dont compare all values (comparing all values is default)
+					if (colIndices != null && !colIndices.contains(j)) {
 						continue;
+					}
 
 					int colJ = targetModel.getColForVisualCol(j);
 
@@ -908,8 +944,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					);
 
 					if (compareValue == null) {
-						if (val.equals(""))
+						if (val.equals("")) {
 							found = true;
+						}
 					}
 
 					else {
@@ -917,17 +954,16 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 						if (regex) {
 
-							if (pattern.matcher(compareVal).matches())
+							if (pattern.matcher(compareVal).matches()) {
 								found = true;
-
+							}
 						}
 
 						else {
-							if (fulltext)
+							if (fulltext) {
 								found = stringContainsParts(targetModel.getColumnName(colJ), compareVal,
 										valParts).success;
-
-							else {
+							} else {
 
 								found = stringStartsWith(targetModel.getColumnName(colJ), compareVal, val);
 
@@ -937,16 +973,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					}
 
 					if (found) {
-
 						break;
 					}
 				}
 
 			}
 
-			if (!found)
+			if (!found) {
 				viewrow++;
-
+			}
 		}
 
 		if (found) {
@@ -977,8 +1012,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		foundrow = foundrow + 1;
 
+		// adding the next row to selection
 		while (foundrow > startFoundrow) {
-			getSelectedAndSearch(true, true); // adding the next row to selection
+			getSelectedAndSearch(true, true);
 
 		}
 		targetModel.setValueIsAdjusting(false);
@@ -991,11 +1027,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private void markAllAndFilter() {
 		Logging.info(this, " markAllAndFilter filtering, disabledSinceWeAreInFilteredModel " + filtering + ", "
 				+ disabledSinceWeAreInFilteredMode());
-		if (!filtering)
+		if (!filtering) {
 			return;
+		}
 
-		if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals(""))
+		if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals("")) {
 			markAll();
+		}
 	}
 
 	/**
@@ -1025,17 +1063,19 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private void getSelectedAndSearch(boolean addSelection, boolean select) {
 
 		int startrow = 0;
-		if (targetModel.getSelectedRow() >= 0)
+		if (targetModel.getSelectedRow() >= 0) {
 			startrow = targetModel.getSelectedRows()[targetModel.getSelectedRows().length - 1] + 1;
+		}
 
-		if (startrow >= targetModel.getRowCount())
+		if (startrow >= targetModel.getRowCount()) {
 			startrow = 0;
+		}
 
 		searchTheRow(startrow, addSelection, select);
 
-		if (foundrow == -1)
+		if (foundrow == -1) {
 			searchTheRow(0, addSelection, select);
-
+		}
 	}
 
 	private void searchTheRow(boolean select) {
@@ -1049,12 +1089,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private void setRow(int row, boolean addSelection, boolean select) {
 
 		if (select) {
-			if (addSelection)
+			if (addSelection) {
 				addSelectedRow(row);
-			else
+			} else {
 				setSelectedRow(row);
-		} else // make only visible
-		{
+			}
+		} else {
+			// make only visible
 			targetModel.ensureRowIsVisible(row);
 		}
 
@@ -1097,8 +1138,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				if (startrow > 0) {
 
 					searchTheRow(0, addSelection, select);
-				} else
+				} else {
 					setRow(0, false, select);
+				}
 			}
 		}
 
@@ -1181,8 +1223,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public void keyPressed(KeyEvent e) {
 
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
-			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals(""))
+			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals("")) {
 				markAll();
+			}
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_F8) {
@@ -1192,8 +1235,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_F3) {
-			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals(""))
+			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals("")) {
 				searchNextRow(selectMode);
+			}
 		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -1223,25 +1267,30 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			Logging.debug(this, "actionPerformed on checkmarkAllColumns");
 
 			if (Boolean.TRUE.equals(checkmarkAllColumns.isSelected())) {
-				comboSearchFields.setSelectedIndex(0); // all columns
-				if (saveSearchpaneAllColumnsSearch != null)
+				// all columns
+				comboSearchFields.setSelectedIndex(0);
+				if (saveSearchpaneAllColumnsSearch != null) {
 					saveSearchpaneAllColumnsSearch.serialize(0);
+				}
 			} else {
 				comboSearchFields.setSelectedIndex(preferredColumnIndex);
-				if (saveSearchpaneAllColumnsSearch != null)
+				if (saveSearchpaneAllColumnsSearch != null) {
 					saveSearchpaneAllColumnsSearch.serialize(1);
+				}
 			}
 		} else if (e.getSource() == checkmarkFullText) {
 			Logging.debug(this, "actionPerformed on checkmarkFullText");
 
 			if (Boolean.TRUE.equals(checkmarkFullText.isSelected())) {
 				comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
-				if (saveSearchpaneFullTextSearch != null)
+				if (saveSearchpaneFullTextSearch != null) {
 					saveSearchpaneFullTextSearch.serialize(0);
+				}
 			} else {
 				comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
-				if (saveSearchpaneFullTextSearch != null)
+				if (saveSearchpaneFullTextSearch != null) {
 					saveSearchpaneFullTextSearch.serialize(1);
+				}
 			}
 		} else if (e.getSource() == filtermark) {
 			Logging.info(this, "actionPerformed on filtermark, targetModel.isFiltered " + targetModel.isFiltered());
@@ -1269,12 +1318,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					"actionPerformed on checkmarkSearchProgressiv, set to  " + checkmarkSearchProgressive.isSelected());
 			if (Boolean.TRUE.equals(checkmarkSearchProgressive.isSelected())) {
 				searchInputType = SearchInputType.PROGRESSIVE;
-				if (saveSearchpaneProgressiveSearch != null)
+				if (saveSearchpaneProgressiveSearch != null) {
 					saveSearchpaneProgressiveSearch.serialize(0);
+				}
 			} else {
 				searchInputType = SearchInputType.LINE;
-				if (saveSearchpaneProgressiveSearch != null)
+				if (saveSearchpaneProgressiveSearch != null) {
 					saveSearchpaneProgressiveSearch.serialize(1);
+				}
 			}
 
 			Logging.debug(this,
