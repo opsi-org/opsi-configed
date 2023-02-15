@@ -1810,13 +1810,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			String description = (String) client.get(3);
 			String inventorynumber = (String) client.get(4);
 			String notes = (String) client.get(5);
-			String macaddress = (String) client.get(6);
-			String ipaddress = (String) client.get(7);
-			String group = (String) client.get(8);
-			String productNetboot = (String) client.get(9);
-			boolean wanConfig = Boolean.parseBoolean((String) client.get(11));
-			boolean uefiBoot = Boolean.parseBoolean((String) client.get(12));
-			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(13));
+			String systemUUID = (String) client.get(6);
+			String macaddress = (String) client.get(7);
+			String ipaddress = (String) client.get(8);
+			String group = (String) client.get(9);
+			String productNetboot = (String) client.get(10);
+			boolean wanConfig = Boolean.parseBoolean((String) client.get(12));
+			boolean uefiBoot = Boolean.parseBoolean((String) client.get(13));
+			boolean shutdownInstall = Boolean.parseBoolean((String) client.get(14));
 
 			String newClientId = hostname + "." + domainname;
 
@@ -1824,6 +1825,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
 			hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 			hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
+			hostItem.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, systemUUID);
 			hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
 			hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 			hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
@@ -1921,8 +1923,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public boolean createClient(String hostname, String domainname, String depotId, String description,
-			String inventorynumber, String notes, String ipaddress, String macaddress, boolean shutdownInstall,
-			boolean uefiBoot, boolean wanConfig, String group, String productNetboot, String productLocalboot) {
+			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
+			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String group, String productNetboot,
+			String productLocalboot) {
 		if (!getDepotPermission(depotId)) {
 			return false;
 		}
@@ -1956,6 +1959,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
 		hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 		hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
+		hostItem.put(HostInfo.CLIENT_SYSTEM_UUID_KEY, systemUUID);
 		hostItem.put(HostInfo.CLIENT_MAC_ADRESS_KEY, macaddress);
 		hostItem.put(HostInfo.CLIENT_IP_ADDRESS_KEY, ipaddress);
 		hostItem.put(HostInfo.CLIENT_INVENTORY_NUMBER_KEY, inventorynumber);
@@ -2061,7 +2065,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		return result;
-
 	}
 
 	@Override
@@ -2432,6 +2435,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public void setHostNotes(String hostId, String notes) {
 		updateHost(hostId, HostInfo.CLIENT_NOTES_KEY, notes);
+	}
+
+	@Override
+	public void setSystemUUID(String hostId, String uuid) {
+		updateHost(hostId, HostInfo.CLIENT_SYSTEM_UUID_KEY, uuid);
 	}
 
 	@Override
@@ -7306,6 +7314,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		possibleValues.add(HostInfo.LAST_SEEN_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_WAN_CONFIG_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_IP_ADDRESS_DISPLAY_FIELD_LABEL);
+		possibleValues.add(HostInfo.CLIENT_SYSTEM_UUID_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_MAC_ADDRESS_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_INVENTORY_NUMBER_DISPLAY_FIELD_LABEL);
 		possibleValues.add(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL);

@@ -280,21 +280,24 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	@Override
 	public void registerDataRefreshedObserver(DataRefreshedObserver ob) {
-		if (dataRefreshedObservers == null)
+		if (dataRefreshedObservers == null) {
 			dataRefreshedObservers = new ArrayList<>();
+		}
 		dataRefreshedObservers.add(ob);
 	}
 
 	@Override
 	public void unregisterDataRefreshedObserver(DataRefreshedObserver ob) {
-		if (dataRefreshedObservers != null)
+		if (dataRefreshedObservers != null) {
 			dataRefreshedObservers.remove(ob);
+		}
 	}
 
 	@Override
 	public void notifyDataRefreshedObservers(Object mesg) {
-		if (dataRefreshedObservers == null)
+		if (dataRefreshedObservers == null) {
 			return;
+		}
 
 		for (DataRefreshedObserver ob : dataRefreshedObservers) {
 			ob.gotNotification(mesg);
@@ -306,21 +309,24 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	@Override
 	public void registerDataLoadingObserver(DataLoadingObserver ob) {
-		if (dataLoadingObservers == null)
+		if (dataLoadingObservers == null) {
 			dataLoadingObservers = new ArrayList<>();
+		}
 		dataLoadingObservers.add(ob);
 	}
 
 	@Override
 	public void unregisterDataLoadingObserver(DataLoadingObserver ob) {
-		if (dataLoadingObservers != null)
+		if (dataLoadingObservers != null) {
 			dataLoadingObservers.remove(ob);
+		}
 	}
 
 	@Override
 	public void notifyDataLoadingObservers(Object mesg) {
-		if (dataLoadingObservers == null)
+		if (dataLoadingObservers == null) {
 			return;
+		}
 
 		for (DataLoadingObserver ob : dataLoadingObservers) {
 			ob.gotNotification(mesg);
@@ -354,8 +360,9 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract boolean createClients(List<List<Object>> clients);
 
 	public abstract boolean createClient(String hostname, String domainname, String depotId, String description,
-			String inventorynumber, String notes, String ipaddress, String macaddress, boolean shutdownInstall,
-			boolean uefiBoot, boolean wan, String group, String productNetboot, String productLocalboot);
+			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
+			boolean shutdownInstall, boolean uefiBoot, boolean wan, String group, String productNetboot,
+			String productLocalboot);
 
 	public abstract boolean configureInstallByShutdown(String clientId, boolean shutdownInstal);
 
@@ -406,6 +413,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract void setHostNotes(String hostId, String notes);
 
 	public abstract String getMacAddress(String hostId);
+
+	public abstract void setSystemUUID(String hostId, String uuid);
 
 	public abstract void setMacAddress(String hostId, String address);
 
