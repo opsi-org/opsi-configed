@@ -21,7 +21,6 @@ public class StringValuedRelationElement extends RelationElement<String, String>
 
 		this.allowedAttributes = allowedAttributes;
 		produceFrom(map);
-
 	}
 
 	protected void produceFrom(Map<String, ? extends Object> map) {

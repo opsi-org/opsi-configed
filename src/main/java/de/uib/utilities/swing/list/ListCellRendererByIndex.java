@@ -47,9 +47,8 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 		mapOfTooltips = mapOfDescriptions;
 		mapOfImages = new HashMap<>();
 
-		if (mapOfStrings != null)
-		// Load the item values
-		{
+		if (mapOfStrings != null) {
+			// Load the item values
 			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
 			while (iter.hasNext()) {
 				Map.Entry<String, String> entry = iter.next();
@@ -63,18 +62,17 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 
 					image = Globals.createImageIcon(imageFileString, stringval);
 
-					if (image == null)
-					// try with gif
-					{
+					if (image == null) {
+						// try with gif
 						imageFileString = imagesBase + "/" + stringval + ".gif";
 
 						image = Globals.createImageIcon(imageFileString, stringval);
 
 					}
 
-					if (image != null)
+					if (image != null) {
 						mapOfImages.put(key, image);
-
+					}
 				}
 			}
 		}
@@ -89,8 +87,9 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 	{
 		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-		if (!(c instanceof JComponent))
+		if (!(c instanceof JComponent)) {
 			return c;
+		}
 
 		if (value == null) {
 			return c;
@@ -98,10 +97,11 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 
 		String tooltip = mapOfTooltips.get(value);
 		if (tooltip == null || tooltip.equals("")) {
-			if (mapOfStrings == null)
+			if (mapOfStrings == null) {
 				tooltip = "" + value;
-			else
+			} else {
 				tooltip = mapOfStrings.get(value);
+			}
 		}
 
 		JComponent jc = (JComponent) c;

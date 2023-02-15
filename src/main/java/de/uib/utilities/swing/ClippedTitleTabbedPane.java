@@ -35,13 +35,14 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 
 	public ClippedTitleTabbedPane() {
 		super();
-		addComponentListener(new ComponentAdapter() {
+		super.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				initTabWidth();
 			}
 		});
-		addChangeListener(changeEvent -> initTabWidth());
+
+		super.addChangeListener(changeEvent -> initTabWidth());
 	}
 
 	private Insets getTabInsets() {

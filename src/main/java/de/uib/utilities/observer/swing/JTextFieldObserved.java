@@ -10,7 +10,7 @@ public class JTextFieldObserved extends JTextField implements KeyListener {
 
 	public JTextFieldObserved() {
 		super("");
-		addKeyListener(this);
+		super.addKeyListener(this);
 	}
 
 	@Override

@@ -62,7 +62,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		Logging.info(this, " FEdit constructed for >>" + initialText + "<< title " + hint);
 
 		initFEditText();
-		setSingleLine(false);
+		singleLine = false;
 	}
 
 	public FEditPane(String initialText) {
@@ -70,7 +70,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		initFEditText();
 	}
 
-	protected void initFEditText() {
+	private void initFEditText() {
 		JScrollPane scrollpane = new javax.swing.JScrollPane();
 		textpane = new javax.swing.JTextPane();
 		scrollpane.setViewportView(textpane);
@@ -94,17 +94,14 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		setDataChanged(false);
 
 		cmdLauncher = new de.uib.utilities.script.CmdLauncher();
-		if (Globals.isWindows())
+		if (Globals.isWindows()) {
 			cmdLauncher.setPrefix(WINDOWS_LINK_INTERPRETER);
-		else
+		} else {
 			cmdLauncher.setPrefix(LINUX_LINK_INTERPRETER);
+		}
 
 		// HyperlinkListener hyperlinkListener = new
 
-	}
-
-	protected void setSingleLine(boolean b) {
-		singleLine = b;
 	}
 
 	@Override
@@ -130,16 +127,19 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	public boolean isLink(String s0) {
 
-		if (s0 == null)
+		if (s0 == null) {
 			return false;
+		}
 
-		if (s0.length() > 2 && s0.startsWith("\\\\"))
+		if (s0.length() > 2 && s0.startsWith("\\\\")) {
 			return true;
+		}
 
 		// check URI very roughly
 		int linkpos = s0.indexOf(":");
-		if (linkpos < 0)
+		if (linkpos < 0) {
 			return false;
+		}
 
 		// s0 has : but ends there
 		return linkpos + 1 < s0.length();
@@ -150,19 +150,24 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	// return first pos in line of recognized string
 	// returns -1 if nothing is recognized
 	{
-		if (s == null)
+		if (s == null) {
 			return -1;
+		}
 
 		int pos = 0;
-		while (pos < s.length() && s.charAt(pos) == ' ')
+		while (pos < s.length() && s.charAt(pos) == ' ') {
 			pos++;
-		if (pos == s.length())
+		}
+		if (pos == s.length()) {
 			return -1;
+		}
 
 		String s0 = s.substring(pos).trim();
 
-		if (isLink(s0))
+		if (isLink(s0)) {
 			return pos;
+		}
+
 		return -1;
 	}
 
@@ -324,10 +329,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			try {
 				Document d = comp.getDocument();
 
-				if (cS)
+				if (cS) {
 					content = d.getText(0, d.getLength());
-				else
+				} else {
 					content = d.getText(0, d.getLength()).toLowerCase();
+				}
 			} catch (BadLocationException e) {
 				Logging.warning(this, "Exception thrown when getting Document: " + e);
 				return -1;

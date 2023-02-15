@@ -22,13 +22,11 @@ import de.uib.configed.Globals;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
 public abstract class AbstractRecordPane extends JPanel implements KeyListener {
-	protected int lineHeight = Globals.LINE_HEIGHT;
-	protected int vGapSize = Globals.VGAP_SIZE;
-	protected int hGapSize = Globals.HGAP_SIZE;
-	protected int minFieldWidth = 60;
-	protected int maxFieldWidth = Short.MAX_VALUE;
-	protected int minLabelWidth = 30;
-	protected int maxLabelWidth = 100;
+	private static final int LINE_HEIGHT = Globals.LINE_HEIGHT;
+	private static final int MIN_FIELD_WIDTH = 60;
+	private static final int MAX_FIELD_WIDTH = Short.MAX_VALUE;
+	private static final int MIN_LABEL_WIDTH = 30;
+	private static final int MAX_LABEL_WIDTH = 100;
 
 	// GUI
 	protected Map<String, JLabel> labelfields;
@@ -53,7 +51,7 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 		init(data, labels, hints, editable);
 	}
 
-	protected void init(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	private void init(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable) {
 		this.data = data;
 		this.labels = labels;
@@ -61,7 +59,6 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 		this.hints = hints;
 
 		initComponents();
-
 	}
 
 	protected void initComponents() {
@@ -74,31 +71,35 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 		javax.swing.GroupLayout baseLayout = new javax.swing.GroupLayout(this);
 		this.setLayout(baseLayout);
 
-		if (data == null)
+		if (data == null) {
 			return;
+		}
 
 		for (Entry<String, String> dataEntry : data.entrySet()) {
 			JLabel jLabel = new JLabel();
 
-			if (labels == null || labels.get(dataEntry.getKey()) == null)
+			if (labels == null || labels.get(dataEntry.getKey()) == null) {
 				jLabel.setText("");
-			else
+			} else {
 				jLabel.setText(labels.get(dataEntry.getKey()));
+			}
 
 			jLabel.setFont(Globals.defaultFontBig);
 			labelfields.put(dataEntry.getKey(), jLabel);
 
 			JTextFieldObserved jTextField = new JTextFieldObserved();
-			if (dataEntry.getValue() != null)
+			if (dataEntry.getValue() != null) {
 				jTextField.setText("" + dataEntry.getValue());
-			else
+			} else {
 				jTextField.setText("");
+			}
 
 			jTextField.setFont(Globals.defaultFontBig);
 			jTextField.getCaret().setBlinkRate(0);
 
-			if (hints != null)
+			if (hints != null) {
 				jTextField.setToolTipText(hints.get(dataEntry.getKey()));
+			}
 
 			if (editable != null && editable.get(dataEntry.getKey()) != null) {
 				jTextField.setEditable(editable.get(dataEntry.getKey()));
@@ -118,9 +119,9 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 		for (String key : data.keySet()) {
 			hGroup.addGroup(baseLayout.createSequentialGroup()
 					.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
-					.addComponent(labelfields.get(key), minLabelWidth, GroupLayout.PREFERRED_SIZE, maxLabelWidth)
+					.addComponent(labelfields.get(key), MIN_LABEL_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_LABEL_WIDTH)
 					.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
-					.addComponent(datafields.get(key), minFieldWidth, GroupLayout.PREFERRED_SIZE, maxFieldWidth)
+					.addComponent(datafields.get(key), MIN_FIELD_WIDTH, GroupLayout.PREFERRED_SIZE, MAX_FIELD_WIDTH)
 					.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2));
 		}
 
@@ -132,8 +133,8 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 		for (String key : data.keySet()) {
 			vGroup.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE);
 			vGroup.addGroup(baseLayout.createParallelGroup()
-					.addComponent(labelfields.get(key), lineHeight, lineHeight, lineHeight)
-					.addComponent(datafields.get(key), lineHeight, lineHeight, lineHeight));
+					.addComponent(labelfields.get(key), LINE_HEIGHT, LINE_HEIGHT, LINE_HEIGHT)
+					.addComponent(datafields.get(key), LINE_HEIGHT, LINE_HEIGHT, LINE_HEIGHT));
 		}
 		vGroup.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE);
 

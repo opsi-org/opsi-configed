@@ -65,16 +65,15 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 	public CellRendererByIndex(Set<String> keySet, String imagesBase, int imageWidth) {
 		super(imageWidth);
 
-		setOpaque(true);
+		super.setOpaque(true);
 
 		mapOfImages = new HashMap<>();
 		mapOfStrings = new HashMap<>();
 
 		// Load the item images
-		if (imagesBase == null)
+		if (imagesBase == null) {
 			super.setIconVisible(false);
-
-		else {
+		} else {
 			Iterator<String> iter = keySet.iterator();
 			while (iter.hasNext()) {
 				String key = iter.next();
@@ -86,9 +85,9 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 				String imageFileString = imagesBase + "/" + stringval + ".png";
 
 				image = Globals.createImageIcon(imageFileString, stringval);
-				if (image != null)
+				if (image != null) {
 					mapOfImages.put(key, image);
-
+				}
 			}
 		}
 		mapOfTooltips = mapOfStrings;
@@ -104,22 +103,19 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 	}
 
 	public CellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
-			String imagesBase, int imageWidth)
-
-	{
+			String imagesBase, int imageWidth) {
 		super(imageWidth);
 
-		setOpaque(true);
+		super.setOpaque(true);
 
 		mapOfStrings = mapOfStringValues;
 		mapOfTooltips = mapOfDescriptions;
 		mapOfImages = new HashMap<>();
 
 		// Load the item images
-		if (imagesBase == null)
+		if (imagesBase == null) {
 			super.setIconVisible(false);
-
-		else {
+		} else {
 			Iterator<Entry<String, String>> iter = mapOfStrings.entrySet().iterator();
 			while (iter.hasNext()) {
 				Entry<String, String> entry = iter.next();
@@ -132,8 +128,9 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 					String imageFileString = imagesBase + "/" + stringval + ".png";
 
 					image = Globals.createImageIcon(imageFileString, stringval);
-					if (image != null)
+					if (image != null) {
 						mapOfImages.put(key, image);
+					}
 				}
 			}
 		}
@@ -169,23 +166,29 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 		ImageIcon selectedIcon = null;
 		String selectedTooltip = "";
 
-		if (uhOhFont == null) { // lazily create this font
+		if (uhOhFont == null) {
+			// lazily create this font
 			uhOhFont = list.getFont().deriveFont((float) 10);
 		}
 		setFont(uhOhFont);
 
 		if (value != null) {
-			if (mapOfStrings != null)
+			if (mapOfStrings != null) {
 				selectedString = mapOfStrings.get(value);
-			if (mapOfImages != null)
-				selectedIcon = mapOfImages.get(value);
-			if (mapOfTooltips != null)
-				selectedTooltip = mapOfTooltips.get(value);
+			}
 
+			if (mapOfImages != null) {
+				selectedIcon = mapOfImages.get(value);
+			}
+
+			if (mapOfTooltips != null) {
+				selectedTooltip = mapOfTooltips.get(value);
+			}
 		}
 
-		if (selectedString == null)
+		if (selectedString == null) {
 			selectedString = "" + value;
+		}
 
 		setIcon(selectedIcon);
 		setText(selectedString);

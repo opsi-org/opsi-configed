@@ -15,10 +15,10 @@ public class FEditTextWithExtra extends FEditText {
 	public FEditTextWithExtra(String initialText, String hint, String extraName) {
 		super(initialText, hint);
 		initFEditTextWithExtra(extraName);
-		setSingleLine(false);
+		super.setSingleLine(false);
 	}
 
-	protected void initFEditTextWithExtra(String extraName) {
+	private void initFEditTextWithExtra(String extraName) {
 		JPanel extraPanel = new JPanel();
 		JLabel extraLabel = new JLabel(extraName);
 		extraField = new JTextField();

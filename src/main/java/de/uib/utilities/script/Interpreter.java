@@ -44,20 +44,19 @@ public class Interpreter {
 					partBuff = new StringBuilder();
 					lastCitMark = s;
 				} else {
-					if (s.equals(lastCitMark))
-					// end of citation
-					{
-
+					if (s.equals(lastCitMark)) {
+						// end of citation
 						result.add(partBuff.toString());
 						partBuff = null;
-					} else
+					} else {
 						partBuff.append(s);
-
+					}
 				}
 			} else if (blankDelims.indexOf(s) > -1) {
-				if (partBuff != null)
+				if (partBuff != null) {
 					// buff started
 					partBuff.append(s);
+				}
 			} else
 			// no delimiter
 			if (partBuff == null)
@@ -65,8 +64,9 @@ public class Interpreter {
 			{
 
 				result.add(s);
-			} else
+			} else {
 				partBuff.append(s);
+			}
 		}
 
 		if (partBuff != null) {
@@ -81,18 +81,20 @@ public class Interpreter {
 		return splitToList(cmd).toArray(new String[] {});
 	}
 
-	protected void initSpecialValues(String[] specials) {
+	private void initSpecialValues(String[] specials) {
 		specialValues = new LinkedHashMap<>();
-		for (int i = 0; i < specials.length; i++)
+		for (int i = 0; i < specials.length; i++) {
 			specialValues.put(specials[i], "");
+		}
 	}
 
 	public void setValues(Map<String, String> givenValues) {
 		for (Entry<String, String> givenEntry : givenValues.entrySet()) {
-			if (specialValues.get(givenEntry.getKey()) == null)
+			if (specialValues.get(givenEntry.getKey()) == null) {
 				Logging.warning(this, "value set for an unknown key");
-			else
+			} else {
 				specialValues.put(givenEntry.getKey(), givenEntry.getValue());
+			}
 		}
 	}
 

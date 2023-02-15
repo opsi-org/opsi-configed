@@ -28,7 +28,7 @@ public class LicenceContractEntry extends StringValuedRelationElement {
 	}
 
 	@Override
-	protected void produceFrom(Map<String, ? extends Object> map) {
+	protected final void produceFrom(Map<String, ? extends Object> map) {
 		super.produceFrom(map);
 
 		put(TableLicenceContracts.ID_DB_KEY, get(TableLicenceContracts.ID_KEY));

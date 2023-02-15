@@ -42,7 +42,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 		initFEditText();
 	}
 
-	protected void initFEditText() {
+	private void initFEditText() {
 		scrollpane = new javax.swing.JScrollPane();
 		textarea = new javax.swing.JTextArea();
 		scrollpane.setViewportView(textarea);
@@ -54,7 +54,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 		setStartText(this.initialText);
 	}
 
-	public void setSingleLine(boolean b) {
+	public final void setSingleLine(boolean b) {
 		singleLine = b;
 		textarea.setLineWrap(!singleLine);
 		textarea.setWrapStyleWord(!singleLine);
@@ -69,9 +69,12 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	@Override
 	public String getText() {
 		textarea.setText(textarea.getText().replace("\t", ""));
-		if (singleLine)
+		if (singleLine) {
 			textarea.setText(textarea.getText().replace("\n", ""));
-		initialText = textarea.getText(); // set new initial text for use in processWindowEvent
+		}
+
+		// set new initial text for use in processWindowEvent
+		initialText = textarea.getText();
 		return initialText;
 	}
 
@@ -84,11 +87,13 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 		if (e.getSource() == textarea) {
 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
-					&& e.getKeyCode() == KeyEvent.VK_TAB)
+					&& e.getKeyCode() == KeyEvent.VK_TAB) {
 				buttonCommit.requestFocusInWindow();
+			}
 
-			else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && singleLine)
+			else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && singleLine) {
 				commit();
+			}
 		}
 
 		super.keyPressed(e);
@@ -112,8 +117,9 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
-		if (standalone)
+		if (standalone) {
 			Logging.debug(getText());
+		}
 	}
 
 	@Override

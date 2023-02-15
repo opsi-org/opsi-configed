@@ -72,7 +72,8 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 		}
 		try {
-			paintImmediately(0, 0, WIDTH, HEIGHT); // class cast exceptions mit sleepingMS = 50 if not event dispatch thread
+			// class cast exceptions mit sleepingMS = 50 if not event dispatch thread
+			paintImmediately(0, 0, WIDTH, HEIGHT);
 		} catch (Exception strange) {
 			Logging.warning(this, "strange exception " + strange);
 			setState(INACTIVE);
@@ -127,13 +128,14 @@ public class ActivityPanel extends JPanel implements Runnable {
 		} catch (Exception anyException) {
 			Logging.warning(this, "on running, caught some exception", anyException);
 
-			if (anyException instanceof InterruptedException)
+			if (anyException instanceof InterruptedException) {
 				Thread.currentThread().interrupt();
+			}
 		}
 
 	}
 
-	protected void initGui() {
+	private void initGui() {
 		Logging.debug(this, "starting");
 		setOpaque(true);
 		setBorder(lineBorderInactive);
@@ -173,13 +175,17 @@ public class ActivityPanel extends JPanel implements Runnable {
 		setLayout(layout);
 
 		GroupLayout.SequentialGroup hGroup = layout.createSequentialGroup();
-		for (int j = 0; j < NO_OF_PARTS; j++)
+		for (int j = 0; j < NO_OF_PARTS; j++) {
 			hGroup.addComponent(partPanels.get(j), WIDTH / NO_OF_PARTS, WIDTH / NO_OF_PARTS, WIDTH / NO_OF_PARTS);
+		}
+
 		layout.setHorizontalGroup(hGroup);
 
 		GroupLayout.ParallelGroup vGroup = layout.createParallelGroup();
-		for (int j = 0; j < NO_OF_PARTS; j++)
+		for (int j = 0; j < NO_OF_PARTS; j++) {
 			vGroup.addComponent(partPanels.get(j), HEIGHT - 2, HEIGHT - 2, HEIGHT - 2);
+		}
+
 		layout.setVerticalGroup(vGroup);
 	}
 

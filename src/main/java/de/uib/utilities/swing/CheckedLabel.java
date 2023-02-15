@@ -92,12 +92,12 @@ public class CheckedLabel extends JPanel implements FocusListener
 	public CheckedLabel(String text, Icon selectedIcon, Icon unselectedIcon, Icon nullIcon, boolean selected) {
 		super();
 
-		setOpaque(false);
+		super.setOpaque(false);
 
-		setFocusable(true);
-		setRequestFocusEnabled(true);
+		super.setFocusable(true);
+		super.setRequestFocusEnabled(true);
 
-		addFocusListener(this);
+		super.addFocusListener(this);
 
 		myListeners = new ArrayList<>();
 
@@ -117,8 +117,6 @@ public class CheckedLabel extends JPanel implements FocusListener
 		nullLabel = new JLabel(nullIcon);
 
 		setLayout();
-
-		setSelected(selected);
 
 		addInternalListeners();
 
@@ -252,6 +250,8 @@ public class CheckedLabel extends JPanel implements FocusListener
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(nullLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE));
+
+		setSelected(selected);
 	}
 
 	public void setSelected(Boolean b) {

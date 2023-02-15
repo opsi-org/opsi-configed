@@ -36,15 +36,16 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 
 	@Override
 	public void setEnabled(boolean b) {
-		if (buttons == null)
+		if (buttons == null) {
 			return;
+		}
 
 		for (JButton button : buttons) {
 			button.setEnabled(b);
 		}
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 
 		Logging.info(this, "initComponents");
 
@@ -124,17 +125,15 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 	// ActionListener
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e) {
-		if (e.getSource() == nextButton)
+		if (e.getSource() == nextButton) {
 			next();
-
-		else if (e.getSource() == previousButton)
+		} else if (e.getSource() == previousButton) {
 			previous();
-
-		else if (e.getSource() == lastButton)
+		} else if (e.getSource() == lastButton) {
 			last();
-
-		else if (e.getSource() == firstButton)
+		} else if (e.getSource() == firstButton) {
 			first();
+		}
 	}
 
 }

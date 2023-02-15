@@ -8,8 +8,8 @@ import javax.swing.JPanel;
 public class CenterPositioner extends JPanel {
 
 	public CenterPositioner(JComponent comp) {
-		setLayout(new FlowLayout());
-		add(comp);
+		super.setLayout(new FlowLayout());
+		super.add(comp);
 	}
 
 }

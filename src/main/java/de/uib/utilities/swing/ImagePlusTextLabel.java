@@ -22,7 +22,7 @@ public class ImagePlusTextLabel extends JPanel {
 		initComponents();
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 
 		textlabel = new JLabel();
 		textlabel.setHorizontalAlignment(SwingConstants.LEFT);
