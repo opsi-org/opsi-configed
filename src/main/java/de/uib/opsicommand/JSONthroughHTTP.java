@@ -18,10 +18,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -33,7 +30,6 @@ import org.json.JSONObject;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
@@ -51,9 +47,8 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
  */
 
 public class JSONthroughHTTP extends AbstractJSONExecutioner {
-	int[] serverVersion = { 0, 0, 0, 0 };
-	public static boolean gzipTransmission = false;
-	public static boolean lz4Transmission = false;
+	protected boolean disableCertificateVerification = false;
+
 	protected static final int POST = 0;
 	protected static final int GET = 1;
 	protected static final String CODING_TABLE = "UTF8";
@@ -194,29 +189,12 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 		return (HttpURLConnection) serviceURL.openConnection();
 	}
 
-	private void setGeneralRequestProperties(HttpURLConnection connection) {
-
-		String authorization = Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
-
-		connection.setRequestProperty("Authorization", "Basic " + authorization);
-
-		// has to be value between 1 and 43300 [sec]
-		connection.setRequestProperty("X-opsi-session-lifetime", "900");
-
-		if (lz4Transmission) {
-			connection.setRequestProperty("Accept-Encoding", "lz4");
-		} else if (gzipTransmission) {
-			connection.setRequestProperty("Accept-Encoding", "gzip");
-		}
-
-		connection.setRequestProperty("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
-	}
-
 	/**
 	 * This method receives the JSONObject via HTTP.
 	 */
 	@Override
 	public JSONObject retrieveJSONObject(OpsiMethodCall omc) {
+
 		boolean background = false;
 		Logging.info(this, "retrieveJSONObjects started");
 		WaitCursor waitCursor = null;
@@ -241,8 +219,6 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			connection = produceConnection();
 			// the underlying network connection can be shared,
 			// only disconnect() may close the underlying socket
-
-			setGeneralRequestProperties(connection);
 
 			if (requestMethod == POST) {
 				connection.setRequestMethod("POST");
@@ -387,34 +363,6 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			try {
 				Logging.debug(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage());
 
-				if (serverVersion[0] == 0) {
-					String server = connection.getHeaderField("Server");
-					Pattern pattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
-					Matcher matcher = pattern.matcher(server);
-					if (matcher.find()) {
-						Logging.info(this, "opsi server version: " + matcher.group(1));
-						String[] versionParts = matcher.group(1).split("\\.");
-						for (int i = 0; i < versionParts.length && i < 4; i++) {
-							try {
-								serverVersion[i] = Integer.parseInt(versionParts[i]);
-							} catch (NumberFormatException nex) {
-								Logging.error(this, "value is unparsable to int");
-							}
-						}
-					} else {
-						serverVersion[0] = 4;
-						serverVersion[1] = 1;
-					}
-
-					if ((serverVersion[0] > 4) || (serverVersion[0] == 4 && serverVersion[1] >= 2)) {
-						gzipTransmission = false;
-						lz4Transmission = true;
-					} else {
-						gzipTransmission = true;
-						lz4Transmission = false;
-					}
-				}
-
 				StringBuilder errorInfo = new StringBuilder("");
 
 				if (connection.getErrorStream() != null) {
@@ -487,7 +435,9 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 							stream = new InflaterInputStream(str);
 						} else {
 							Logging.info(this, "initiating GZIPInputStream");
-							stream = new GZIPInputStream(connection.getInputStream()); // not working, if no GZIP
+
+							// not working, if no GZIP
+							stream = new GZIPInputStream(connection.getInputStream());
 						}
 					} else {
 						Logging.info(this, "initiating plain input stream");

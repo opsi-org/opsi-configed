@@ -23,7 +23,10 @@ import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.net.ssl.HandshakeCompletedEvent;
@@ -52,7 +55,10 @@ import de.uib.utilities.logging.Logging;
  */
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
-	private static final boolean DISABLE_CERTIFICATE_VERIFICATION = false;
+
+	private int[] serverVersion = { 0, 0, 0, 0 };
+	private boolean gzipTransmission = false;
+	private boolean lz4Transmission = false;
 
 	// By default we set hostnameVerified to true, because MyHostnameVerifier is
 	// only used to check hostname verification, when default determines that
@@ -66,6 +72,80 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		super(host, username, password);
 	}
 
+	// Checks if the Server version is already known, and loads it otherwise
+	private void checkServerVersion() {
+		if (serverVersion[0] != 0) {
+			return;
+		}
+
+		HttpsURLConnection connection;
+
+		try {
+			connection = (HttpsURLConnection) new URL("https://bonifax:4447").openConnection();
+			String authorization = Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
+			connection.setRequestProperty("Authorization", "Basic " + authorization);
+			connection.setSSLSocketFactory(createDullSSLSocketFactory());
+			connection.setRequestMethod("HEAD");
+
+		} catch (IOException e) {
+			Logging.warning(this, "error in testing connection to server for getting server opsi version");
+			return;
+		}
+
+		String server = connection.getHeaderField("Server");
+		Pattern pattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
+		Matcher matcher = pattern.matcher(server);
+		if (matcher.find()) {
+			Logging.info(this, "opsi server version: " + matcher.group(1));
+			String[] versionParts = matcher.group(1).split("\\.");
+			for (int i = 0; i < versionParts.length && i < 4; i++) {
+				try {
+					serverVersion[i] = Integer.parseInt(versionParts[i]);
+				} catch (NumberFormatException nex) {
+					Logging.error(this, "value is unparsable to int");
+				}
+			}
+		} else {
+			serverVersion[0] = 4;
+			serverVersion[1] = 1;
+		}
+
+		if ((serverVersion[0] > 4) || (serverVersion[0] == 4 && serverVersion[1] >= 2)) {
+			gzipTransmission = false;
+			lz4Transmission = true;
+		} else {
+			gzipTransmission = true;
+			lz4Transmission = false;
+		}
+
+		// The way we check the certificate does not work before opsi server version 4.2
+		if (serverVersion[0] < 4 || (serverVersion[0] == 4 && serverVersion[1] < 2)) {
+			disableCertificateVerification = true;
+		}
+
+		Logging.info(this, "we checked the server version: " + Arrays.toString(serverVersion));
+		Logging.info(this, "we use now gzip: " + gzipTransmission + " or lz4: " + lz4Transmission);
+		Logging.info(this, "is certificateVerification disabled? " + disableCertificateVerification);
+	}
+
+	private void setGeneralRequestProperties(HttpURLConnection connection) {
+
+		String authorization = Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
+
+		connection.setRequestProperty("Authorization", "Basic " + authorization);
+
+		// has to be value between 1 and 43300 [sec]
+		connection.setRequestProperty("X-opsi-session-lifetime", "900");
+
+		if (lz4Transmission) {
+			connection.setRequestProperty("Accept-Encoding", "lz4");
+		} else if (gzipTransmission) {
+			connection.setRequestProperty("Accept-Encoding", "gzip");
+		}
+
+		connection.setRequestProperty("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
+	}
+
 	@Override
 	protected String produceBaseURL(String rpcPath) {
 		return "https://" + host + ":" + portHTTPS + rpcPath;
@@ -76,16 +156,23 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	 */
 	@Override
 	protected HttpURLConnection produceConnection() throws IOException {
+
+		checkServerVersion();
+
 		Logging.info(this, "produceConnection, url; " + serviceURL);
 		HttpURLConnection connection = (HttpURLConnection) serviceURL.openConnection();
+
 		SSLSocketFactory sslFactory = null;
-		if (DISABLE_CERTIFICATE_VERIFICATION) {
+		if (disableCertificateVerification) {
 			sslFactory = createDullSSLSocketFactory();
 		} else {
 			sslFactory = createSSLSocketFactory();
 		}
 		((HttpsURLConnection) connection).setSSLSocketFactory(sslFactory);
 		HttpsURLConnection.setDefaultHostnameVerifier(new MyHostnameVerifier());
+
+		setGeneralRequestProperties(connection);
+
 		return connection;
 	}
 
