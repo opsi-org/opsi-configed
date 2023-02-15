@@ -47,7 +47,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.JSONthroughHTTP;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -197,18 +196,6 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
-		JCheckBox checkCompression = new JCheckBox(Configed.getResourceValue("DPassword.checkCompression"),
-				JSONthroughHTTP.compressTransmission);
-		checkCompression.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-
-				JSONthroughHTTP.compressTransmission = (e.getStateChange() == ItemEvent.SELECTED);
-
-				Logging.debug(this, "itemStateChanged " + de.uib.opsicommand.JSONthroughHTTP.gzipTransmission);
-			}
-		});
-
 		JCheckBox checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"),
 				Configed.sshConnectOnStart);
 		Logging.info(this, "checkTrySSH  " + Configed.sshConnectOnStart);
@@ -223,8 +210,8 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		});
 
 		JPanel jPanelParameters = new PanelLinedComponents(new JComponent[] {
-				// checkTrySSH, checkGzip
-				checkTrySSH, checkCompression });
+				// checkTrySSH, 
+				checkTrySSH });
 
 		UIDefaults defaults = new UIDefaults();
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));

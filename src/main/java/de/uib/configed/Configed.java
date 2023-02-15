@@ -19,7 +19,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import de.uib.configed.gui.FTextArea;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.JSONthroughHTTP;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -374,8 +373,6 @@ public class Configed {
 	protected static void processArgs(String[] args) {
 		Logging.debug("args " + Arrays.toString(args));
 
-		JSONthroughHTTP.compressTransmission = true;
-
 		if (args.length == 2 && args[0].equals("--args")) {
 			args = args[1].split(";;");
 		}
@@ -486,25 +483,6 @@ public class Configed {
 				} else if (args[i].equals("--ssh-passphrase")) {
 					sshKeyPass = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("--gzip")) {
-
-					JSONthroughHTTP.compressTransmission = true;
-					i = i + 1;
-
-					if (isValue(args, i)) {
-
-						if (args[i].equalsIgnoreCase("Y")) {
-
-							JSONthroughHTTP.compressTransmission = true;
-						} else if (args[i].equalsIgnoreCase("N")) {
-							JSONthroughHTTP.compressTransmission = false;
-
-						} else {
-							usage();
-							endApp(ERROR_INVALID_OPTION);
-						}
-					}
-					i = i + 1;
 				} else if (args[i].equals("-qs") || args[i].equals("--querysavedsearch")) {
 					optionCLIQuerySearch = true;
 					savedSearch = getArg(args, i);

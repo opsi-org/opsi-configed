@@ -52,7 +52,6 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
 
 public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	int[] serverVersion = { 0, 0, 0, 0 };
-	public static boolean compressTransmission = false;
 	public static boolean gzipTransmission = false;
 	public static boolean lz4Transmission = false;
 	protected static final int POST = 0;
@@ -407,14 +406,12 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 						serverVersion[1] = 1;
 					}
 
-					if (compressTransmission) {
-						if ((serverVersion[0] > 4) || (serverVersion[0] == 4 && serverVersion[1] >= 2)) {
-							gzipTransmission = false;
-							lz4Transmission = true;
-						} else {
-							gzipTransmission = true;
-							lz4Transmission = false;
-						}
+					if ((serverVersion[0] > 4) || (serverVersion[0] == 4 && serverVersion[1] >= 2)) {
+						gzipTransmission = false;
+						lz4Transmission = true;
+					} else {
+						gzipTransmission = true;
+						lz4Transmission = false;
 					}
 				}
 
