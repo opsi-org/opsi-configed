@@ -207,15 +207,17 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	public void doCall() {
 		Logging.debug(this, "doCall, element count: " + size());
 
-		if (size() == 0)
+		if (size() == 0) {
 			return;
+		}
 
 		Iterator<Object> it = implementor.iterator();
 		while (it.hasNext()) {
 			UpdateCommand theCommand = ((UpdateCommand) it.next());
 
-			if (theCommand != null)
+			if (theCommand != null) {
 				theCommand.doCall();
+			}
 		}
 
 	}

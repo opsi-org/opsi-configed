@@ -1021,11 +1021,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		boolean setUserRegisterVal = !keyUserRegisterValue && correctedUserRegisterVal;
 
-		if (setUserRegisterVal)
+		if (setUserRegisterVal) {
 			keyUserRegisterValue = true;
+		}
 
-		if (Boolean.TRUE.equals(keyUserRegisterValue))
+		if (Boolean.TRUE.equals(keyUserRegisterValue)) {
 			keyUserRegisterValue = checkUserRolesModule();
+		}
 
 		if (serverPropertyMap.get(KEY_USER_REGISTER) == null || setUserRegisterVal) {
 			List<Object> readyObjects = new ArrayList<>();
@@ -1222,10 +1224,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 
-		String configKey = null; // variable for simplifying the use of the map
+		// variable for simplifying the use of the map
+		String configKey = null;
 
-		if (!globalReadOnly) // already specified via systemuser group
-		{
+		// already specified via systemuser group
+		if (!globalReadOnly) {
 			// lookup if we have a config for it and set it though not set by group
 			configKey = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_GLOBAL_READONLY;
 			Logging.info(this, "checkPermissions  configKey " + configKey);
@@ -1420,8 +1423,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		String[] args = new String[] { path };
 
-		if (path == null)
+		if (path == null) {
 			args = new String[] {};
+		}
 
 		return exec.getBooleanResult(new OpsiMethodCall(method, args));
 	}
@@ -1689,13 +1693,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Map<String, List<Object>> specifiedConfiguration;
 
-		if (wan)
+		if (wan) {
 			specifiedConfiguration = wanConfiguration;
-		else
+		} else {
 			specifiedConfiguration = notWanConfiguration;
+		}
 
-		if (jsonObjects == null)
+		if (jsonObjects == null) {
 			jsonObjects = new ArrayList<>();
+		}
 
 		for (Entry<String, List<Object>> config : specifiedConfiguration.entrySet()) {
 			Logging.info(this, "addWANConfigState configId " + config.getKey());
@@ -6092,8 +6098,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		softwareWithoutAssociatedLicencePool = new TreeSet<>(getInstalledSoftwareInformationForLicensing().keySet());
 
-		if (!withLicenceManagement)
+		if (!withLicenceManagement) {
 			return;
+		}
 
 		for (StringValuedRelationElement retrieved : relationsAuditSoftwareToLicencePools) {
 
@@ -6118,8 +6125,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			fSoftware2LicencePool.put(swKEY, licencePoolKEY);
 
 			// build fLicencePool2SoftwareList
-			if (fLicencePool2SoftwareList.get(licencePoolKEY) == null)
+			if (fLicencePool2SoftwareList.get(licencePoolKEY) == null) {
 				fLicencePool2SoftwareList.put(licencePoolKEY, new ArrayList<>());
+			}
 
 			List<String> softwareIds = fLicencePool2SoftwareList.get(licencePoolKEY);
 			if (softwareIds.indexOf(swKEY) == -1) {
@@ -7432,8 +7440,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Logging.info(this, "checkStandardConfigs, already there " + result);
 
-		if (!result)
+		if (!result) {
 			return false;
+		}
 
 		List defaultValues;
 		List possibleValues;
@@ -7473,6 +7482,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		defaultValues = configDefaultValues.get(key);
 
 		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
 			item = createJSONBoolConfig(key, DEFAULTVALUE_SEARCH_BY_SQL,
 					"Use SQL calls for search if SQL backend is active");
 			readyObjects.add(AbstractExecutioner.jsonMap(item));
@@ -7485,152 +7496,181 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		defaultValues = configDefaultValues.get(key);
 
 		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
 			item = createJSONBoolConfig(key, DEFAULTVALUE_CLIENTCONFIG_INSTALL_BY_SHUTDOWN,
 					"Use install by shutdown if possible");
 			readyObjects.add(AbstractExecutioner.jsonMap(item));
 		}
 
 		// product_sort_algorithm
-		possibleValues = new ArrayList<>();
-		possibleValues.add("algorithm1");
-		possibleValues.add("algorithm2");
 
+		key = KEY_PRODUCT_SORT_ALGORITHM;
 		// defaultValues
-		defaultValues = configDefaultValues.get(KEY_PRODUCT_SORT_ALGORITHM);
+		defaultValues = configDefaultValues.get(key);
 		Logging.info(this, "checkStandardConfigs:  from server product_sort_algorithm " + defaultValues);
 
 		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
 			defaultValues = new ArrayList<>();
 			defaultValues.add("algorithm1");
+
+			possibleValues = new ArrayList<>();
+			possibleValues.add("algorithm1");
+			possibleValues.add("algorithm2");
+
+			// create config for service
+			item = createNOMitem("UnicodeConfig");
+			item.put("ident", key);
+			item.put("description", "algorithm1 = dependencies first; algorithm2 = priorities first");
+			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+
+			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("editable", false);
+			item.put("multiValue", false);
+
+			readyObjects.add(AbstractExecutioner.jsonMap(item));
 		}
 
-		// create config for service
-		item = createNOMitem("UnicodeConfig");
-		item.put("ident", KEY_PRODUCT_SORT_ALGORITHM);
-		item.put("description", "algorithm1 = dependencies first; algorithm2 = priorities first");
-		item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+		// extra display fields in licencing
 
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
-		item.put("editable", false);
-		item.put("multiValue", false);
-
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
-
-		// extra columns for licence management, page licences reconciliation
-		possibleValues = new ArrayList<>();
-		possibleValues.add("description");
-		possibleValues.add("inventoryNumber");
-		possibleValues.add("notes");
-		possibleValues.add("ipAddress");
-		possibleValues.add("lastSeen");
+		key = KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION;
 
 		// defaultValues
 
-		defaultValues = configDefaultValues.get(KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
+		defaultValues = configDefaultValues.get(key);
 		if (defaultValues == null) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  "
-					+ KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 			// key not yet configured
 			defaultValues = new ArrayList<>();
 			// example for standard configuration other than empty
+			// extra columns for licence management, page licences reconciliation
+			possibleValues = new ArrayList<>();
+			possibleValues.add("description");
+			possibleValues.add("inventoryNumber");
+			possibleValues.add("notes");
+			possibleValues.add("ipAddress");
+			possibleValues.add("lastSeen");
+
+			// create config for service
+			item = createNOMitem("UnicodeConfig");
+			item.put("ident", key);
+			item.put("description",
+					Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation.ExtraHostFields"));
+			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+
+			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("editable", false);
+			item.put("multiValue", true);
+
+			readyObjects.add(AbstractExecutioner.jsonMap(item));
 		}
-
-		// create config for service
-		item = createNOMitem("UnicodeConfig");
-		item.put("ident", KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
-		item.put("description",
-				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation.ExtraHostFields"));
-		item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
-		item.put("editable", false);
-		item.put("multiValue", true);
-
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
 
 		// remote controls
 		String command;
 		String description;
 
 		// ping_linux
-		key = "ping_linux";
-		command = "xterm +hold -e ping %host%";
-		description = "ping, started in a Linux environment";
+		key = RemoteControl.CONFIG_KEY + "." + "ping_linux";
 
-		readyObjects
-				.add(produceConfigEntry("UnicodeConfig", RemoteControl.CONFIG_KEY + "." + key, command, description));
-		readyObjects.add(produceConfigEntry("BoolConfig",
-				RemoteControl.CONFIG_KEY + "." + key + "." + RemoteControl.EDITABLE_KEY, true,
-				"(command may be edited)"));
-		// description entry
-		readyObjects.add(produceConfigEntry("UnicodeConfig",
-				RemoteControl.CONFIG_KEY + "." + key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			command = "xterm +hold -e ping %host%";
+			description = "ping, started in a Linux environment";
+
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY, true,
+					"(command may be edited)"));
+			// description entry
+			readyObjects.add(
+					produceConfigEntry("UnicodeConfig", key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		}
 
 		// ping_windows
-		key = "ping_windows";
-		command = "cmd.exe /c start ping %host%";
-		description = "ping, started in a Windows terminal";
+		key = RemoteControl.CONFIG_KEY + "." + "ping_windows";
 
-		readyObjects
-				.add(produceConfigEntry("UnicodeConfig", RemoteControl.CONFIG_KEY + "." + key, command, description));
-		readyObjects.add(produceConfigEntry("BoolConfig",
-				RemoteControl.CONFIG_KEY + "." + key + "." + RemoteControl.EDITABLE_KEY, true,
-				"(command may be edited)"));
-		// description entry
-		readyObjects.add(produceConfigEntry("UnicodeConfig",
-				RemoteControl.CONFIG_KEY + "." + key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			command = "cmd.exe /c start ping %host%";
+			description = "ping, started in a Windows terminal";
+
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY, true,
+					"(command may be edited)"));
+			// description entry
+			readyObjects.add(
+					produceConfigEntry("UnicodeConfig", key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		}
 
 		// connect to opsiclientd timeline, linux
-		key = "opsiclientd_timeline_linux";
-		command = "firefox https://%host%:4441/info.html";
-		description = "opsiclientd  timeline, called from a Linux environment, firefox recommended";
+		key = RemoteControl.CONFIG_KEY + "." + "opsiclientd_timeline_linux";
 
-		readyObjects
-				.add(produceConfigEntry("UnicodeConfig", RemoteControl.CONFIG_KEY + "." + key, command, description));
-		readyObjects.add(produceConfigEntry("BoolConfig",
-				RemoteControl.CONFIG_KEY + "." + key + "." + RemoteControl.EDITABLE_KEY, false,
-				"(command may not be edited)"));
-		// description entry
-		readyObjects.add(produceConfigEntry("UnicodeConfig",
-				RemoteControl.CONFIG_KEY + "." + key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			command = "firefox https://%host%:4441/info.html";
+			description = "opsiclientd  timeline, called from a Linux environment, firefox recommended";
+
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY, false,
+					"(command may not be edited)"));
+			// description entry
+			readyObjects.add(
+					produceConfigEntry("UnicodeConfig", key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		}
 
 		// connect to opsiclientd timeline, windows
-		key = "opsiclientd_timeline_windows";
-		command = "cmd.exe /c start https://%host%:4441/info.html";
-		description = "opsiclientd  timeline, called rfrom a Windows environment";
+		key = RemoteControl.CONFIG_KEY + "." + "opsiclientd_timeline_windows";
 
-		readyObjects
-				.add(produceConfigEntry("UnicodeConfig", RemoteControl.CONFIG_KEY + "." + key, command, description));
-		readyObjects.add(produceConfigEntry("BoolConfig",
-				RemoteControl.CONFIG_KEY + "." + key + "." + RemoteControl.EDITABLE_KEY, false,
-				"(command may not be edited)"));
-		// description entry
-		readyObjects.add(produceConfigEntry("UnicodeConfig",
-				RemoteControl.CONFIG_KEY + "." + key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		defaultValues = configDefaultValues.get(key);
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+
+			command = "cmd.exe /c start https://%host%:4441/info.html";
+			description = "opsiclientd  timeline, called rfrom a Windows environment";
+
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key, command, description));
+			readyObjects.add(produceConfigEntry("BoolConfig", key + "." + RemoteControl.EDITABLE_KEY, false,
+					"(command may not be edited)"));
+			// description entry
+			readyObjects.add(
+					produceConfigEntry("UnicodeConfig", key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+		}
 
 		// additional queries
 		String query;
 		StringBuilder qbuf;
-		key = "hosts_with_products";
-		qbuf = new StringBuilder("select");
-		qbuf.append(" hostId, productId, installationStatus from ");
-		qbuf.append(" HOST, PRODUCT_ON_CLIENT ");
-		qbuf.append(" WHERE HOST.hostId  = PRODUCT_ON_CLIENT.clientId ");
-		qbuf.append(" AND =  installationStatus='installed' ");
-		qbuf.append(" order by hostId, productId ");
+		key = AdditionalQuery.CONFIG_KEY + "." + "hosts_with_products";
 
-		query = qbuf.toString();
-		description = "all hosts and their installed products";
+		defaultValues = configDefaultValues.get(key);
 
-		readyObjects
-				.add(produceConfigEntry("UnicodeConfig", AdditionalQuery.CONFIG_KEY + "." + key, query, description));
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 
-		readyObjects.add(produceConfigEntry("BoolConfig",
-				AdditionalQuery.CONFIG_KEY + "." + key + "." + AdditionalQuery.EDITABLE_KEY, false,
-				"(command may be edited)"));
-		// description entry
-		readyObjects.add(produceConfigEntry("UnicodeConfig",
-				AdditionalQuery.CONFIG_KEY + "." + key + "." + AdditionalQuery.DESCRIPTION_KEY, description, ""));
+			qbuf = new StringBuilder("select");
+			qbuf.append(" hostId, productId, installationStatus from ");
+			qbuf.append(" HOST, PRODUCT_ON_CLIENT ");
+			qbuf.append(" WHERE HOST.hostId  = PRODUCT_ON_CLIENT.clientId ");
+			qbuf.append(" AND =  installationStatus='installed' ");
+			qbuf.append(" order by hostId, productId ");
+
+			query = qbuf.toString();
+			description = "all hosts and their installed products";
+
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key, query, description));
+
+			readyObjects.add(produceConfigEntry("BoolConfig", key + "." + AdditionalQuery.EDITABLE_KEY, false,
+					"(command may be edited)"));
+			// description entry
+			readyObjects.add(
+					produceConfigEntry("UnicodeConfig", key + "." + AdditionalQuery.DESCRIPTION_KEY, description, ""));
+		}
 
 		// WAN_CONFIGURATION
 		// does it exist?
@@ -7643,41 +7683,33 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		// saved searches
 
-		key = "product_failed";
+		key = SavedSearch.CONFIG_KEY + "." + "product_failed";
 
-		StringBuilder val = new StringBuilder();
-		val.append("{ \"version\" : \"2\", ");
-		val.append("\"data\" : {");
-		val.append(" \"element\" : null, ");
-		val.append(" \"elementPath\" : null,");
-		val.append(" \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, ");
-		val.append(
-				" \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] ");
-		val.append("} }");
+		defaultValues = configDefaultValues.get(key);
 
-		String value = val.toString();
+		if (defaultValues == null) {
+			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 
-		description = "any product failed";
+			StringBuilder val = new StringBuilder();
+			val.append("{ \"version\" : \"2\", ");
+			val.append("\"data\" : {");
+			val.append(" \"element\" : null, ");
+			val.append(" \"elementPath\" : null,");
+			val.append(" \"operation\" : \"SoftwareOperation\", \"dataType\" : null, \"data\" : null, ");
+			val.append(
+					" \"children\" : [ { \"element\" : \"SoftwareActionResultElement\", \"elementPath\" : [ \"Product\", \"Action Result\" ], \"operation\" : \"StringEqualsOperation\", \"dataType\" : TextType, \"data\" : \"failed\", \"children\" : null } ] ");
+			val.append("} }");
 
-		readyObjects.add(produceConfigEntry("UnicodeConfig", SavedSearch.CONFIG_KEY + "." + key, value, description));
+			String value = val.toString();
 
-		// description entry
-		readyObjects.add(produceConfigEntry("UnicodeConfig",
-				SavedSearch.CONFIG_KEY + "." + key + "." + SavedSearch.DESCRIPTION_KEY, description, ""));
+			description = "any product failed";
 
-		// ping_windows
-		key = "ping_windows";
-		command = "cmd.exe /c start ping %host%";
-		description = "ping, started in a Windows terminal";
+			readyObjects.add(produceConfigEntry("UnicodeConfig", key, value, description));
 
-		readyObjects
-				.add(produceConfigEntry("UnicodeConfig", RemoteControl.CONFIG_KEY + "." + key, command, description));
-		readyObjects.add(produceConfigEntry("BoolConfig",
-				RemoteControl.CONFIG_KEY + "." + key + "." + RemoteControl.EDITABLE_KEY, true,
-				"(command may be edited)"));
-		// description entry
-		readyObjects.add(produceConfigEntry("UnicodeConfig",
-				RemoteControl.CONFIG_KEY + "." + key + "." + RemoteControl.DESCRIPTION_KEY, description, ""));
+			// description entry
+			readyObjects
+					.add(produceConfigEntry("UnicodeConfig", key + "." + SavedSearch.DESCRIPTION_KEY, description, ""));
+		}
 
 		// configuration of host menus
 
@@ -7690,23 +7722,23 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			// key not yet configured
 			defaultValues = new ArrayList<>();
 			configDefaultValues.put(key, defaultValues);
+
+			possibleValues = new ArrayList<>();
+			possibleValues.add(MainFrame.ITEM_ADD_CLIENT);
+			possibleValues.add(MainFrame.ITEM_DELETE_CLIENT);
+			possibleValues.add(MainFrame.ITEM_FREE_LICENCES);
+
+			item = createNOMitem("UnicodeConfig");
+			item.put("id", key);
+			item.put("description", "");
+			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+
+			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("editable", false);
+			item.put("multiValue", true);
+
+			readyObjects.add(AbstractExecutioner.jsonMap(item));
 		}
-
-		possibleValues = new ArrayList<>();
-		possibleValues.add(MainFrame.ITEM_ADD_CLIENT);
-		possibleValues.add(MainFrame.ITEM_DELETE_CLIENT);
-		possibleValues.add(MainFrame.ITEM_FREE_LICENCES);
-
-		item = createNOMitem("UnicodeConfig");
-		item.put("id", key);
-		item.put("description", "");
-		item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
-
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
-		item.put("editable", false);
-		item.put("multiValue", true);
-
-		readyObjects.add(AbstractExecutioner.jsonMap(item));
 
 		key = KEY_SSH_DEFAULTWINUSER;
 		defaultValues = configDefaultValues.get(key);
@@ -7872,15 +7904,20 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			configDefaultValues.put(key, defaultValues);
 		}
-		// End TESTING
 
 		// add metaconfigs
 
-		// do update
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+		// Update configs if there are some to update
+		if (!readyObjects.isEmpty()) {
+			Logging.notice(this, "There are " + readyObjects.size() + "configurations to update, so we do this now:");
 
-		exec.doCall(omc);
+			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
+					new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
+
+			exec.doCall(omc);
+		} else {
+			Logging.notice(this, "there are no configurations to update");
+		}
 
 		List<org.json.JSONObject> defaultUserConfigsObsolete = new ArrayList<>();
 

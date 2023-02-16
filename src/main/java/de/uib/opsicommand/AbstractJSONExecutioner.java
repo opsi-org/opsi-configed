@@ -27,8 +27,9 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 
 	public JSONObject retrieveJSONResult(OpsiMethodCall omc) {
 		JSONObject jO = retrieveJSONObject(omc);
-		if (checkResponse(jO))
+		if (checkResponse(jO)) {
 			return jO.optJSONObject("result");
+		}
 
 		return null;
 	}
@@ -63,6 +64,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 
 	@Override
 	public boolean doCall(OpsiMethodCall omc) {
+
 		JSONObject jO = retrieveJSONObject(omc);
 
 		return checkResponse(jO);
