@@ -80,7 +80,7 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 			super.put(NOTES_KEY, notes);
 		}
 
-		lic4pool = Globals.pseudokey(new String[] { get(LICENCE_ID_KEY), get(LICENCE_POOL_ID_KEY) });
+		lic4pool = Globals.pseudokey(new String[] { super.get(LICENCE_ID_KEY), super.get(LICENCE_POOL_ID_KEY) });
 	}
 
 	public LicenceUsageEntry(Map<String, Object> entry) {

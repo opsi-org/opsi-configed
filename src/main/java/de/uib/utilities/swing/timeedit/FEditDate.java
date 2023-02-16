@@ -31,6 +31,11 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 
 	public FEditDate(String initialText, boolean withTime) {
 		super(initialText);
+
+		init(withTime);
+	}
+
+	private void init(boolean withTime) {
 		areaDimension = AREA_DIMENSION;
 
 		dateFormat = DateFormat.getDateInstance(Globals.DATE_FORMAT_STYLE_PATTERN);
@@ -46,7 +51,6 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 		dateEditor.addMonthViewMouseListener(this);
 
 		setStartText(this.initialText);
-
 	}
 
 	@Override
@@ -67,12 +71,13 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 				dateEditor.setSelectionDate(newDate);
 				setDataChanged(false);
 			} catch (ParseException pex) {
-				try // fallback for standard sql time format
-				{
-
+				try {
+					// fallback for standard sql time format
 					s1 = s;
-					if (s1.indexOf(' ') == -1)
+					if (s1.indexOf(' ') == -1) {
 						s1 = s1 + " 00:00:00";
+					}
+
 					newDate = java.sql.Timestamp.valueOf(s1);
 					Logging.info(this, "after supplement setStartText(): " + s1);
 					dateEditor.setSelectionDate(newDate);
@@ -80,7 +85,7 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 					setDataChanged(false);
 				} catch (IllegalArgumentException ex) {
 					Logging.warning("not valid date: " + s1);
-					dateEditor.setDate();
+					dateEditor.setDate(true);
 					setDataChanged(true);
 				}
 			}
@@ -90,20 +95,23 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 
 	@Override
 	public void setVisible(boolean b) {
-		if (b)
+		if (b) {
 			dateEditor.requestFocus();
+		}
 		// get focus in order to receive keyboard events
 		super.setVisible(b);
 		setSize(areaDimension);
-		if (b)
+		if (b) {
 			setStartText(initialText);
+		}
 	}
 
 	private String getSelectedDateTime() {
 		Logging.debug(this, " getSelectedDateTime() : " + dateEditor.getSelectedSqlTime());
 
-		if (dateEditor.getSelectedSqlTime() == null)
+		if (dateEditor.getSelectedSqlTime() == null) {
 			return "";
+		}
 
 		return dateEditor.getSelectedSqlTime().toString();
 	}
@@ -119,7 +127,9 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	public String getText() {
 		String oldText = initialText;
 		Logging.info(this, "getText initialText was " + oldText);
-		initialText = getSelectedDateString(); // set new initial text for use in processWindowEvent
+
+		// set new initial text for use in processWindowEvent
+		initialText = getSelectedDateString();
 		Logging.info(this, "getText initialText changed to  " + initialText);
 		return initialText;
 	}
@@ -150,9 +160,9 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
-		if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2)
+		if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
 			commit();
-
+		}
 	}
 
 	@Override

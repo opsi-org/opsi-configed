@@ -33,7 +33,9 @@ public class SSHCompletionComboButton {
 	private String comboboxDefaultPath;
 	private static final String ROOT_DIRECTORY = "/";
 	private static final String HOME_DIRECTORY = "~";
-	private String opsiRepo = "/"; // will be overwritten with config
+
+	// will be overwritten with config
+	private String opsiRepo = "/";
 
 	private AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
@@ -52,8 +54,10 @@ public class SSHCompletionComboButton {
 		init(values);
 		createInstances();
 		initTextfield();
-		if (comboboxDefaultPath != null)
+		if (comboboxDefaultPath != null) {
 			textfield.setText(comboboxDefaultPath);
+		}
+
 		initCombobox();
 		initButton();
 	}
@@ -73,18 +77,24 @@ public class SSHCompletionComboButton {
 
 	public String getBasicPath() {
 		String basicSearchPath = (String) combobox.getSelectedItem();
-		if (basicSearchPath != null)
+		if (basicSearchPath != null) {
 			return basicSearchPath.trim();
+		}
+
 		return "";
 	}
 
 	private void init(List<String> defvalues) {
-		if (persist == null)
+		if (persist == null) {
 			Logging.info(this, "init PersistenceController null");
-		else
+		} else {
 			opsiRepo = AbstractPersistenceController.configedWorkbenchDefaultValue;
-		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/')
+		}
+
+		if (opsiRepo.charAt(opsiRepo.length() - 1) != '/') {
 			opsiRepo = opsiRepo + "/";
+		}
+
 		if (comboboxDefaultPath != null) {
 			defaultvalues = new ArrayList<>();
 			defaultvalues.add(comboboxDefaultPath);
@@ -98,13 +108,18 @@ public class SSHCompletionComboButton {
 
 		}
 		// Is element in defaultValues?
-		if (defvalues != null)
-			for (String elem : defvalues)
-				if ((elem != null) && (!elem.trim().equals("")))
+		if (defvalues != null) {
+			for (String elem : defvalues) {
+				if ((elem != null) && (!elem.trim().equals(""))) {
 					defaultvalues.add(elem);
+				}
+			}
+		}
+
 		Logging.info(this, "init =======================================");
-		for (String elem : defaultvalues)
+		for (String elem : defaultvalues) {
 			Logging.debug(this, "init defaultvalues contains " + elem);
+		}
 	}
 
 	public List<String> getDefaultValues() {
@@ -128,18 +143,23 @@ public class SSHCompletionComboButton {
 				Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.cb_serverDir.tooltip"));
 		combobox.setEditable(true);
 
-		if (comboboxDefaultPath != null)
+		if (comboboxDefaultPath != null) {
 			combobox.setSelectedItem(comboboxDefaultPath);
+		}
 
-		if (searchSpecificFiles != null && (!searchSpecificFiles.equals("")))
+		if (searchSpecificFiles != null && (!searchSpecificFiles.equals(""))) {
 			combobox.addActionListener(actionEvent -> {
 				if (combobox.getSelectedItem() != null
-						&& ((String) combobox.getSelectedItem()).endsWith(searchSpecificFiles))
+						&& ((String) combobox.getSelectedItem()).endsWith(searchSpecificFiles)) {
 					textfield.setText((String) combobox.getSelectedItem());
-				else
+				} else {
 					textfield.setText("");
+				}
+
 				combobox.setSelectedItem(combobox.getSelectedItem());
 			});
+		}
+
 		combobox.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 	}
 
@@ -163,10 +183,11 @@ public class SSHCompletionComboButton {
 			combobox.setSelectedItem(strcbtext);
 		}
 
-		if (searchSpecificFiles != null && (!searchSpecificFiles.equals("")))
+		if (searchSpecificFiles != null && (!searchSpecificFiles.equals(""))) {
 			getDirectoriesAndFilesIn(strcbtext);
-		else
+		} else {
 			getDirectoriesIn(strcbtext);
+		}
 
 		setComboDefault(null);
 	}
@@ -196,10 +217,11 @@ public class SSHCompletionComboButton {
 	}
 
 	public String comboBoxGetStringItem() {
-		if (combobox.getEditor().getItem().toString().startsWith("/"))
+		if (combobox.getEditor().getItem().toString().startsWith("/")) {
 			return combobox.getEditor().getItem().toString();
-		else
+		} else {
 			return getBasicPath() + combobox.getEditor().getItem().toString();
+		}
 	}
 
 	private void getDirectoriesIn(final String curdir) {
@@ -215,10 +237,12 @@ public class SSHCompletionComboButton {
 							return ROOT_DIRECTORY;
 						}
 					};
+
 					SSHConnectExec ssh = new SSHConnectExec();
 					String result = ssh.exec(getDirectories, false);
-					if (result == null || result.equals(""))
+					if (result == null || result.equals("")) {
 						result = HOME_DIRECTORY;
+					}
 
 					setItems(result, curdir);
 					enableComponents(true);
@@ -238,23 +262,27 @@ public class SSHCompletionComboButton {
 							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
 					SSHConnectExec ssh = new SSHConnectExec();
 					String result = ssh.exec(getFiles, false);
-					if (result == null || result.equals(""))
+					if (result == null || result.equals("")) {
 						result = ROOT_DIRECTORY;
+					}
 
 					getFiles = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_OPSI_FILES
 							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
 						/** Sets the command specific error text **/
 						@Override
 						public String getErrorText() {
-							return ROOT_DIRECTORY; // no file found
+							// no file found
+							return ROOT_DIRECTORY;
 						}
 					};
 					try {
 						////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
 						// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
 						String tempResult = ssh.exec(getFiles, false);
-						if ((tempResult != null) && !tempResult.trim().equals("null"))
+						if ((tempResult != null) && !tempResult.trim().equals("null")) {
 							result += tempResult;
+						}
+
 					} catch (Exception ei) {
 						Logging.warning(this, "Could not find .opsi files in directory " + curdir
 								+ " (It may be the rights are setted wrong.)");
@@ -284,15 +312,18 @@ public class SSHCompletionComboButton {
 				Logging.debug(this, "setItems add " + element);
 			}
 			String curDirLocated = curdir;
-			if (!containsInDefaults(curDirLocated))
+			if (!containsInDefaults(curDirLocated)) {
 				combobox.addItem(curDirLocated);
+			}
+
 			Logging.debug(this, "setItems add " + curDirLocated);
 			for (String item : result.split("\n")) {
 				Logging.debug(this, "setItems add " + item);
-				if (item.contains("//"))
+				if (item.contains("//")) {
 					combobox.addItem(item.replace("//", "/"));
-				else
+				} else {
 					combobox.addItem(item);
+				}
 			}
 			combobox.setSelectedItem(curdir);
 		}
@@ -311,35 +342,38 @@ public class SSHCompletionComboButton {
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, // value to display
-				int index, // cell index
-				boolean isSelected, // is the cell selected
-				boolean cellHasFocus) // the list and the cell have the focus
-		{
+		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
 			Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 			Logging.debug(this, "getListCellRendererComponent called");
 
 			// is null or not JComponent
-			if (!(c instanceof JComponent))
+			if (!(c instanceof JComponent)) {
 				return c;
+			}
 
 			JComponent jc = (JComponent) c;
 
 			if (jc instanceof JLabel) {
 				JLabel lbl = (JLabel) jc;
 				String getText = ((JLabel) jc).getText();
-				if (autocompletion == null || getText == null || getText.equals(""))
+				if (autocompletion == null || getText == null || getText.equals("")) {
 					return c;
+				}
+
 				getText = getText.trim();
 				String basicPath = autocompletion.getBasicPath();
 				Logging.debug(this, "(1)  basicPath " + basicPath + " getText " + getText);
 
-				if ((!basicPath.equals("")) && (!getText.equals(""))) // könnte eigtl raus. funktiniert sonst aber nicht...
-				{
-					if (basicPath.contains("//"))
+				// könnte eigtl raus. funktiniert sonst aber nicht...
+				if ((!basicPath.equals("")) && (!getText.equals(""))) {
+					if (basicPath.contains("//")) {
 						basicPath = basicPath.replace("//", "/");
-					if (getText.contains("//"))
+					}
+
+					if (getText.contains("//")) {
 						getText = getText.replace("//", "/");
+					}
 
 					if (getText.equals(basicPath) || autocompletion.containsInDefaults(getText)) {
 						Logging.debug(this, "getListCellRendererComponent colorize(" + getText + ") = true");

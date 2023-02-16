@@ -139,20 +139,23 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
-			if (enabled)
+			if (enabled) {
 				doAction();
+			}
 		}
 
 		@Override
 		public void insertUpdate(DocumentEvent e) {
-			if (enabled)
+			if (enabled) {
 				doAction();
+			}
 		}
 
 		@Override
 		public void removeUpdate(DocumentEvent e) {
-			if (enabled)
+			if (enabled) {
 				doAction();
+			}
 		}
 
 		public void setEnabled(boolean b) {
@@ -244,15 +247,17 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	private boolean membersChanged() {
-		if (productGroupMembers == null || saveNameEditor == null)
+		if (productGroupMembers == null || saveNameEditor == null) {
 			return false;
+		}
 
 		selectedIDs = associate.getSelectedIDs();
 
 		String currentKey = saveNameEditor.getText();
 
-		if (currentKey == null || currentKey.equals(""))
+		if (currentKey == null || currentKey.equals("")) {
 			return false;
+		}
 
 		boolean result = false;
 
@@ -262,20 +267,22 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			if (productGroupMembers.get(currentKey) == null || productGroupMembers.get(currentKey).isEmpty())
 			// there were no products assigned
 			{
-				if (!selectedIDs.isEmpty())
+				if (!selectedIDs.isEmpty()) {
 					// but now there are some
 					result = true;
-			} else
-			// there were products assigned
-			{
-				if (!productGroupMembers.get(currentKey).equals(selectedIDs)) // but they are different
+				}
+			} else {
+				// there were products assigned
+				if (!productGroupMembers.get(currentKey).equals(selectedIDs)) {
+					// but they are different
 					result = true;
+				}
 			}
-		} else
-		// we have no old key
-		{
-			if (!selectedIDs.isEmpty())
+		} else {
+			// we have no old key
+			if (!selectedIDs.isEmpty()) {
 				result = true;
+			}
 		}
 
 		return result;
@@ -316,8 +323,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				}
 			}
 		}
-		if (!theSetFound)
+		if (!theSetFound) {
 			setItemWithoutListener(NO_GROUP_ID);
+		}
 	}
 
 	private void updateAssociations() {
@@ -326,8 +334,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			setDataChanged(true);
 		}
 
-		if (namesAndDescriptions == null)
+		if (namesAndDescriptions == null) {
 			return;
+		}
 
 		isSaveLegal();
 
@@ -341,13 +350,16 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		String currentKey = saveNameEditor.getText();
 
-		if (namesAndDescriptions.get(currentKey) == null) // current key did not exist
+		// current key did not exist
+		if (namesAndDescriptions.get(currentKey) == null) {
 			result = true;
+		}
 
 		else {
 			String oldDescription = namesAndDescriptions.get(currentKey);
-			if (!oldDescription.equals(descriptionField.getText()))
+			if (!oldDescription.equals(descriptionField.getText())) {
 				result = true;
+			}
 		}
 
 		return result;
@@ -359,11 +371,13 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		}
 	}
 
-	protected void initData() {
+	private void initData() {
 		searchPane = new TablesearchPane(new SearchTargetModelFromInstallationStateTable(tableProducts, associate),
 				true, null);
 		searchPane.setFiltering(true);
-		searchPane.showFilterIcon(true); // filter icon inside searchpane
+
+		// filter icon inside searchpane
+		searchPane.showFilterIcon(true);
 
 		groupsCombo = new JComboBoxToolTip();
 		groupsCombo.setEditable(false);
@@ -378,7 +392,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		setGroupEditing(false);
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 		buttonCommit = new de.uib.configed.gui.IconButton(Configed.getResourceValue("GroupPanel.SaveButtonTooltip"), // desc
 				"images/apply.png", // inactive
 				"images/apply_over.png", // over
@@ -448,7 +462,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		for (String key : values.keySet()) {
 			modelChooseAction.addElement(key);
 		}
-		JList<String> listChooseAction = new JList<>(modelChooseAction); // create list with tooltips
+
+		// create list with tooltips
+		JList<String> listChooseAction = new JList<>(modelChooseAction);
 		de.uib.utilities.swing.list.StandardListCellRenderer renderActionList = new de.uib.utilities.swing.list.ListCellRendererByIndex(
 				null, // index is identical with the value
 				values, "");
@@ -472,6 +488,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				}
 			}
 		});
+
 		listChooseAction.setSelectedIndex(0);
 
 		JLabel labelStrip = new JLabel("  " + Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
@@ -726,8 +743,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				fList.setLines(new ArrayList<>(outlines));
 				fList.setVisible(true);
 
-				if (fList.getResult() == 1)
+				if (fList.getResult() == 1) {
 					associate.setSelection(extendedSelection);
+				}
 			}
 
 			selectedProducts = associate.getSelectedIDs();
@@ -752,9 +770,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	protected void setMembers() {
 
-		if (productGroupMembers == null || groupsCombo == null)
-		// || productGroupMembers.get((String) groupsCombo.getSelectedItem()) == null)
-		{
+		if (productGroupMembers == null || groupsCombo == null) {
 			associate.clearSelection();
 			return;
 		}
@@ -793,10 +809,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		this.productGroupMembers = new MapOfProductGroups(productGroupMembers);
 
-		if (data != null)
+		if (data != null) {
 			theData = data;
-		else
+		} else {
 			theData = new HashMap<>();
+		}
 
 		setInternalGroupsData();
 
@@ -854,19 +871,17 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			insTableModel.initCollectiveChange();
 
 			int actionType;
-			if (selected.equals(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked")))
+			if (selected.equals(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"))) {
 				actionType = ActionRequest.SETUP;
-
-			else if (selected.equals(
-					de.uib.configed.Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked")))
+			} else if (selected.equals(
+					de.uib.configed.Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"))) {
 				actionType = ActionRequest.UNINSTALL;
-
-			else if (selected
-					.equals(de.uib.configed.Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked")))
+			} else if (selected.equals(
+					de.uib.configed.Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"))) {
 				actionType = ActionRequest.NONE;
-
-			else
+			} else {
 				actionType = ActionRequest.INVALID;
+			}
 
 			if (actionType != ActionRequest.INVALID) {
 
@@ -888,8 +903,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	public void valueChanged(ListSelectionEvent e) {
 
 		// Ignore extra messages.
-		if (e.getValueIsAdjusting())
+		if (e.getValueIsAdjusting()) {
 			return;
+		}
 
 		// assumed to be list selection model of product table
 		updateAssociations();
@@ -900,36 +916,38 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	public void itemStateChanged(ItemEvent e) {
 		Logging.info(this, "itemStateChanged ");
 		if (e.getStateChange() == ItemEvent.SELECTED) {
-			if (e.getSource() == groupsCombo)
+			if (e.getSource() == groupsCombo) {
 				enterExistingGroup();
+			}
 
-			else if (e.getSource() == saveNameEditor)
+			else if (e.getSource() == saveNameEditor) {
 				enterEditGroup();
-
+			}
 		}
 	}
 
 	private void saveNameEditorShallFollow() {
 		int comboIndex = groupsCombo.getSelectedIndex();
 
-		if (comboIndex == 0 || comboIndex == -1)
+		if (comboIndex == 0 || comboIndex == -1) {
 			saveNameEditor.setText(SAVE_GROUP_ID);
-		else
+		} else {
 			saveNameEditor.setText("" + groupsCombo.getSelectedItem());
+		}
 	}
 
 	// handling data changes
 	private void clearChanges() {
 		// reset internal components
 		if (saveNameEditor != null) {
-
 			saveNameEditorShallFollow();
 		}
 
 		setDataChanged(false);
 		setDeleted(false);
-		if (buttonDelete != null)
+		if (buttonDelete != null) {
 			buttonDelete.setEnabled(false);
+		}
 
 		setMembers();
 	}
@@ -937,10 +955,13 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	public void setDataChanged(boolean b) {
 
 		dataChanged = b;
-		if (buttonCommit != null)
+		if (buttonCommit != null) {
 			buttonCommit.setEnabled(b);
-		if (buttonCancel != null)
+		}
+
+		if (buttonCancel != null) {
 			buttonCancel.setEnabled(b);
+		}
 	}
 
 	protected boolean isSaveLegal() {
@@ -948,8 +969,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 		boolean result = true;
 
-		if (proposedName == null)
+		if (proposedName == null) {
 			result = false;
+		}
 
 		if (result) {
 			boolean forbidden = proposedName.equals(SAVE_GROUP_ID) || proposedName.equals("");
@@ -965,8 +987,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	protected boolean isDeleteLegal() {
 		boolean result = false;
 
-		if (groupsCombo != null)
+		if (groupsCombo != null) {
 			result = (groupsCombo.getSelectedIndex() > 0);
+		}
 
 		buttonDelete.setEnabled(result);
 
@@ -981,10 +1004,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			descriptionField.setEditable(!b);
 			buttonDelete.setEnabled(!b);
 
-			if (b)
+			if (b) {
 				labelSave.setText(TEXT_DELETE);
-			else
+			} else {
 				labelSave.setText(TEXT_SAVE);
+			}
 
 			deleted = b;
 		}

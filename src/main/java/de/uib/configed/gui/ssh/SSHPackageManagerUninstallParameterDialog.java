@@ -70,8 +70,9 @@ public class SSHPackageManagerUninstallParameterDialog
 		frameHeight = 350;
 
 		persist = PersistenceControllerFactory.getPersistenceController();
-		if (persist == null)
+		if (persist == null) {
 			Logging.info(this, "init PersistenceController null");
+		}
 
 		WaitCursor waitCursor = new WaitCursor(this.getContentPane());
 		main = m;
@@ -98,15 +99,16 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		init();
 
-		jButtonExecute.setEnabled(false); // requires valid depot selection
+		// requires valid depot selection
+		jButtonExecute.setEnabled(false);
 		textFieldSelectedDepots.setText("");
 
-		pack();
-		this.setSize(frameWidth, frameHeight);
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		super.pack();
+		super.setSize(frameWidth, frameHeight);
+		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 		waitCursor.stop();
-		this.setVisible(true);
+		super.setVisible(true);
 	}
 
 	@Override
@@ -134,8 +136,9 @@ public class SSHPackageManagerUninstallParameterDialog
 				depotParameter = AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
-			} else
+			} else {
 				jButtonExecute.setEnabled(false);
+			}
 
 		} else {
 			jButtonExecute.setEnabled(true);
@@ -179,8 +182,9 @@ public class SSHPackageManagerUninstallParameterDialog
 			textFieldSelectedDepots.setEditable(true);
 			result.add(AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS);
 			result.add(AbstractPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
-		} else
+		} else {
 			textFieldSelectedDepots.setEditable(false);
+		}
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
 			if (persist.getDepotPermission(depot) && ((persist.getDepot2LocalbootProducts().get(depot) != null
@@ -206,12 +210,13 @@ public class SSHPackageManagerUninstallParameterDialog
 		{
 			jButtonExecute.setVisible(false);
 			textFieldSelectedDepots.setText("");
-		} else
+		} else {
 			textFieldSelectedDepots.setText("" + possibleDepots.get(0));
+		}
 
 	}
 
-	protected void init() {
+	private void init() {
 		uninstallPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		getContentPane().add(uninstallPanel, BorderLayout.CENTER);
@@ -225,8 +230,10 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		jComboBoxVerbosity = new JComboBox<>();
 		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 5; i++) {
 			jComboBoxVerbosity.addItem(i);
+		}
+
 		jComboBoxVerbosity.setSelectedItem(1);
 		jComboBoxVerbosity.addItemListener(itemEvent -> changeVerbosity());
 
@@ -271,8 +278,10 @@ public class SSHPackageManagerUninstallParameterDialog
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
 		jButtonDepotSelection.addActionListener(actionEvent -> {
 			initDepots();
-			if (jButtonDepotSelection != null)
+			if (jButtonDepotSelection != null) {
 				fDepotList.setLocationRelativeTo(jButtonDepotSelection);
+			}
+
 			fDepotList.setVisible(true);
 		});
 
@@ -297,12 +306,13 @@ public class SSHPackageManagerUninstallParameterDialog
 	private void resetProducts() {
 		Logging.info(this, "resetProducts in cb_opsiproducts");
 		jComboBoxOpsiProducts.removeAllItems();
-		if (persist == null)
+		if (persist == null) {
 			Logging.error(this, "resetProducts PersistenceController null");
-		else {
+		} else {
 			NavigableSet<String> productnames = persist.getProductIds();
-			for (String item : productnames)
+			for (String item : productnames) {
 				jComboBoxOpsiProducts.addItem(item);
+			}
 		}
 	}
 
@@ -316,14 +326,15 @@ public class SSHPackageManagerUninstallParameterDialog
 	}
 
 	private void changeDepot() {
-		if (textFieldSelectedDepots.getText()
-				.equals(Configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")))
+		if (textFieldSelectedDepots.getText().equals(
+				Configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS"))) {
 			commandPMUninstall.setDepot(null);
-		else if (textFieldSelectedDepots.getText().equals(Configed
-				.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED")))
+		} else if (textFieldSelectedDepots.getText().equals(Configed
+				.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED"))) {
 			commandPMUninstall.setDepot("all");
-		else
+		} else {
 			commandPMUninstall.setDepot(textFieldSelectedDepots.getText());
+		}
 
 		updateCommand();
 	}

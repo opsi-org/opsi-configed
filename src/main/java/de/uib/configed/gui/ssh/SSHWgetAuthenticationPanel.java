@@ -75,12 +75,18 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 	}
 
 	public JComponent get(String comp) {
-		if (comp.equals(LBLNEEDAUTH))
+		if (comp.equals(LBLNEEDAUTH)) {
 			return jLabelNeedAuthentication;
-		if (comp.equals(CBNEEDAUTH))
+		}
+
+		if (comp.equals(CBNEEDAUTH)) {
 			return jCheckBoxNeedAuthentication;
-		if (comp.equals(LBLUSER))
+		}
+
+		if (comp.equals(LBLUSER)) {
 			return jLabeluser;
+		}
+
 		return null;
 	}
 

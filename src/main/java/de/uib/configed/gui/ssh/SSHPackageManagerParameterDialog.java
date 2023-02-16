@@ -48,22 +48,24 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 	public SSHPackageManagerParameterDialog(String title) {
 		super(null, title);
 
-		setTitle(title);
-		setFont(Globals.defaultFont);
-		setIconImage(Globals.mainIcon);
+		super.setTitle(title);
+		super.setFont(Globals.defaultFont);
+		super.setIconImage(Globals.mainIcon);
 
-		this.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
-		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		this.setBackground(Globals.BACKGROUND_COLOR_7);
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
+		super.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
+		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		super.setBackground(Globals.BACKGROUND_COLOR_7);
+		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 
 	protected void setComponentsEnabled(boolean value) {
-		if (jButtonHelp != null)
+		if (jButtonHelp != null) {
 			jButtonHelp.setEnabled(value);
-		if (jButtonExecute != null)
+		}
+
+		if (jButtonExecute != null) {
 			jButtonExecute.setEnabled(value);
+		}
 	}
 
 	protected void getRepositoriesFromConfigs(String depot) {
@@ -73,15 +75,18 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		Logging.info(this, "getRepositoriesFromConfigs depotProperties " + depotProperties);
 
 		Map<String, Object> firstDepot;
-		if (depot == null || depot.equals(defaultDepot) || depot.equals("all"))
+		if (depot == null || depot.equals(defaultDepot) || depot.equals("all")) {
 			firstDepot = depotProperties.get(depotProperties.firstKey());
-		else
+		} else {
 			firstDepot = depotProperties.get(depot);
+		}
+
 		Logging.info(this, "getRepositoriesFromConfigs firstDepot " + firstDepot);
 
 		String oRepo = ((String) firstDepot.get(configRepo)).replace("file://", "");
-		if (oRepo != null && !oRepo.equals("null") && !oRepo.trim().equals(""))
+		if (oRepo != null && !oRepo.equals("null") && !oRepo.trim().equals("")) {
 			opsiRepo = oRepo + "/";
+		}
 
 		Logging.info(this, "getRepositoriesFromConfigs o_repo " + oRepo);
 		Logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
@@ -108,23 +113,28 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		if (!(Globals.isGlobalReadOnly()))
+		if (!(Globals.isGlobalReadOnly())) {
 			jButtonExecute.addActionListener(actionEvent -> {
-				if (caller instanceof SSHPackageManagerUninstallParameterDialog)
+				if (caller instanceof SSHPackageManagerUninstallParameterDialog) {
 					((SSHPackageManagerUninstallParameterDialog) caller).doAction2();
-				else if (caller instanceof SSHPackageManagerInstallParameterDialog)
+				} else if (caller instanceof SSHPackageManagerInstallParameterDialog) {
 					((SSHPackageManagerInstallParameterDialog) caller).doAction2();
+				}
 			});
+		}
+
 		jButtonReload = new JButton();
 		jButtonReload.setText(Configed.getResourceValue("SSHConnection.buttonPackagesReload"));
 		jButtonReload.setIcon(Globals.createImageIcon("images/reloadcomplete16.png", ""));
 		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
-		if (!(Globals.isGlobalReadOnly()))
+
+		if (!(Globals.isGlobalReadOnly())) {
 			jButtonReload.addActionListener(actionEvent -> {
 				Logging.debug(this, "ActionEvent on btn_reload");
 				main.reload();
 				consolidate();
 			});
+		}
 
 		jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
@@ -150,8 +160,9 @@ public class SSHPackageManagerParameterDialog extends /* javax.swing.JDialog */ 
 			dia = new CommandOpsiPackageManagerInstall().startHelpDialog();
 		}
 
-		if (dia != null)
+		if (dia != null) {
 			dia.setVisible(true);
+		}
 	}
 
 	public void cancel() {

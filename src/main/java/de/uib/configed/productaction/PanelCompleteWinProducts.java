@@ -394,7 +394,7 @@ public class PanelCompleteWinProducts extends JPanel
 		}
 	}
 
-	public void defineLayout() {
+	private void defineLayout() {
 		setBorder(Globals.createPanelBorder());
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("CompleteWinProducts.topic"));
 

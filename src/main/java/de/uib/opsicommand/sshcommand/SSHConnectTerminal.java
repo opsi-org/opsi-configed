@@ -42,10 +42,12 @@ public class SSHConnectTerminal extends SSHConnect {
 	public SSHConnectTerminal(ConfigedMain main, SSHConnectionTerminalDialog dialog) {
 		super(main);
 		this.dialog = dialog;
-		if (dialog == null)
+		if (dialog == null) {
 			dialog = new SSHConnectionTerminalDialog(Configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
 					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost(),
 					this);
+		}
+
 		connect();
 	}
 

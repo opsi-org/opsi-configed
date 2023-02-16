@@ -46,10 +46,14 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		super();
 		this.withTime = withTime;
 
+		init();
+	}
+
+	private void init() {
 		JPopupMenu popup = new JPopupMenu();
 
 		JMenuItem menuItemNow = new JMenuItem("Jetzt");
-		menuItemNow.addActionListener(actionEvent -> setDate());
+		menuItemNow.addActionListener(actionEvent -> setDate(true));
 
 		popup.add(menuItemNow);
 
@@ -134,7 +138,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 										.addComponent(buttonYearForward, BUTTON_H, BUTTON_H, BUTTON_H))
 						.addComponent(timeSetter, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))));
-
 	}
 
 	private void setToMidnight() {
@@ -180,10 +183,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	public void requestFocus() {
 		Logging.debug(this, "requestFocus");
 		monthView.requestFocus();
-	}
-
-	public void setDate() {
-		setDate(true);
 	}
 
 	public void setDate(boolean select) {

@@ -24,14 +24,17 @@ public class SSHPMInstallPanel extends JPanel {
 	protected String workbench;
 
 	public SSHPMInstallPanel() {
-		this.setBackground(Globals.BACKGROUND_COLOR_7);
+		super.setBackground(Globals.BACKGROUND_COLOR_7);
+
 		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_REPOSITORY);
 		persist = PersistenceControllerFactory.getPersistenceController();
-		if (persist == null)
+		if (persist == null) {
 			Logging.info(this, "init PersistenceController null");
+		}
 		workbench = AbstractPersistenceController.configedWorkbenchDefaultValue;
-		if (workbench.charAt(workbench.length() - 1) != '/')
+		if (workbench.charAt(workbench.length() - 1) != '/') {
 			workbench = workbench + "/";
+		}
 	}
 
 	public void open() {

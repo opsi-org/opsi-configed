@@ -8,11 +8,13 @@ public class SSHRepositoryUploadDialog extends SSHFileUploadDialog {
 	private static String title = Configed.getResourceValue("SSHConnection.ParameterDialog.repoupload.title");
 
 	public SSHRepositoryUploadDialog() {
-		super(title, new CommandRepositoryUpload());
-		this.setVisible(true);
+		super(Configed.getResourceValue("SSHConnection.ParameterDialog.repoupload.title"),
+				new CommandRepositoryUpload());
+		super.setVisible(true);
+
 		Logging.info(this, "SSHRepositoryUploadDialog build");
 		height = 400;
-		showDialog();
+		super.showDialog();
 	}
 
 	@Override

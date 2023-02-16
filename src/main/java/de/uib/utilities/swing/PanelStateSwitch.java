@@ -117,8 +117,6 @@ public class PanelStateSwitch extends JPanel {
 
 		initComponents();
 
-		setValueByString(startValue.toString());
-
 		initLayout();
 
 	}
@@ -194,6 +192,8 @@ public class PanelStateSwitch extends JPanel {
 		producedValue = startValue;
 
 		groupedButtons.get(startValue).setSelected(true);
+
+		setValueByString(startValue.toString());
 	}
 
 	private void initLayout() {
@@ -215,9 +215,10 @@ public class PanelStateSwitch extends JPanel {
 
 		vGroup.addGap(vGap);
 
-		if (title != null)
+		if (title != null) {
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(labelTitle,
 					Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT));
+		}
 
 		for (Enum val : values) {
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(

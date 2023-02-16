@@ -55,14 +55,16 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		init();
 		initLayout();
-		pack();
-		setSize(Globals.dialogFrameDefaultSize);
-		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		this.setBackground(Globals.BACKGROUND_COLOR_7);
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		this.setVisible(true);
-		if (Globals.isGlobalReadOnly())
+		super.pack();
+		super.setSize(Globals.dialogFrameDefaultSize);
+		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		super.setBackground(Globals.BACKGROUND_COLOR_7);
+		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		super.setVisible(true);
+		if (Globals.isGlobalReadOnly()) {
 			setComponentsEnabledRO(false);
+		}
+
 		jComboBoxDir.setEnabled(true);
 	}
 
@@ -131,8 +133,10 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
 		jComboBoxVerbosity = new JComboBox<>();
 		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 5; i++) {
 			jComboBoxVerbosity.addItem(i);
+		}
+
 		jComboBoxVerbosity.setSelectedItem(1);
 		jComboBoxVerbosity.addItemListener(itemEvent -> {
 			commandWget.setVerbosity(((int) jComboBoxVerbosity.getSelectedItem()));
@@ -174,8 +178,9 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		jButtonExecute.addActionListener(actionEvent -> {
-			if (!(Globals.isGlobalReadOnly()))
+			if (!(Globals.isGlobalReadOnly())) {
 				doAction3();
+			}
 		});
 
 		JButton jButtonClose = new JButton();
@@ -199,18 +204,22 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	private void changeFreeInput() {
-		if (!jTextFieldFreeInput.getText().trim().equals(""))
+		if (!jTextFieldFreeInput.getText().trim().equals("")) {
 			commandWget.setFreeInput(jTextFieldFreeInput.getText().trim());
-		else
+		} else {
 			commandWget.setFreeInput("");
+		}
+
 		updateCommand();
 	}
 
 	private void changeUrl() {
-		if (!(jTextFieldURL.getText().equals("")))
+		if (!(jTextFieldURL.getText().equals(""))) {
 			commandWget.setUrl(jTextFieldURL.getText().trim());
-		else
+		} else {
 			commandWget.setUrl("");
+		}
+
 		updateCommand();
 	}
 
@@ -228,8 +237,10 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
 			commandWget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
 					+ wgetAuthPanel.getPw() + " ");
-		} else
+		} else {
 			commandWget.setAuthentication(" ");
+		}
+
 		updateCommand();
 
 		if (commandWget.checkCommand()) {
@@ -239,8 +250,6 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 					try {
 						Logging.info(this, "doAction3 wget ");
 						new SSHConnectExec(commandWget, jButtonExecute);
-						// btn_execute.setEnabled( true ) transferred to SwingWorker.done()
-
 					} catch (Exception e) {
 						Logging.warning(this, "doAction3, exception occurred", e);
 					}

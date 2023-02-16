@@ -11,7 +11,7 @@ public class MapOfProductGroups extends HashMap<String, TreeSetBuddy> {
 
 		for (Entry<String, Set<String>> product : fName2ProductGroup.entrySet()) {
 			TreeSetBuddy set = new TreeSetBuddy(product.getValue());
-			put(product.getKey(), set);
+			super.put(product.getKey(), set);
 		}
 	}
 }

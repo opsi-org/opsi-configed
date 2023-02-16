@@ -28,14 +28,11 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	}
 
 	public SearchTargetModelFromInstallationStateTable(JTable table, PanelGroupedProductSettings panelProductSettings) {
-		setTable(table);
-		this.panelProductSettings = panelProductSettings;
-	}
 
-	public void setTable(JTable table) {
 		this.table = table;
-		Logging.info(this, "setTable null? " + (table == null));
+		Logging.info(this, "table null? " + (table == null));
 
+		this.panelProductSettings = panelProductSettings;
 	}
 
 	protected AbstractTableModel getTableModel() {
@@ -107,8 +104,9 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void setSelectedRow(int row) {
-		if (table.getRowCount() == 0)
+		if (table.getRowCount() == 0) {
 			return;
+		}
 
 		if (row == -1) {
 			table.clearSelection();
@@ -124,8 +122,9 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	public void addSelectedRow(int row) {
 		Logging.debug(this, "addSelectedRow " + row);
 
-		if (table.getRowCount() == 0)
+		if (table.getRowCount() == 0) {
 			return;
+		}
 
 		table.addRowSelectionInterval(row, row);
 
@@ -156,8 +155,9 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 	@Override
 	public void setFiltered(boolean b) {
 
-		if (!filtered)
+		if (!filtered) {
 			viewRowfilter = table.getSelectedRows();
+		}
 
 		if (b && viewRowfilter.length > 0) {
 			int[] modelRowFilter = new int[viewRowfilter.length];

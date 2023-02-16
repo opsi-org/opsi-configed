@@ -50,7 +50,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 		initComponents();
 	}
 
-	public void initComponents() {
+	private void initComponents() {
 
 		JLabel labelInfoProductDependenciesTable = new JLabel(
 				Configed.getResourceValue("PanelProductDependencies.labelInfoProductDependenciesTable"));

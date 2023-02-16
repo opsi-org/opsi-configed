@@ -77,16 +77,20 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	public SSHFileUploadDialog(String title, CommandSFTPUpload com) {
 		super(null, title, false);
 		this.command = com;
-		if (this.command == null)
+		if (this.command == null) {
 			command = new CommandSFTPUpload();
+		}
+
 		wgetAuthPanel = new SSHWgetAuthenticationPanel();
 		wgetDefText = Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url");
 		init();
 		initGUI();
-		this.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
-		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		this.setBackground(Globals.BACKGROUND_COLOR_7);
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+		super.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
+		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		super.setBackground(Globals.BACKGROUND_COLOR_7);
+		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
 		wgetAuthPanel.isOpen = true;
 		wgetAuthPanel.close();
 		Logging.info(this, "SSHFileUploadDialog build");
@@ -98,7 +102,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		Logging.info(this, "SSHFileUploadDialog show");
 	}
 
-	protected void init() {
+	private void init() {
 		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 
@@ -228,7 +232,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		verticalParallelGroup = inputPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER);
 	}
 
-	protected void initGUI() {
+	private void initGUI() {
 		try {
 			inputPanelLayout = new GroupLayout(inputPanel);
 			getContentPane().add(inputPanel, BorderLayout.CENTER);
@@ -245,8 +249,10 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 									.addGroup(inputPanelLayout.createSequentialGroup().addComponent(
 											jRadioButtonFromServer, GroupLayout.PREFERRED_SIZE,
 											GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-									.addGroup(inputPanelLayout.createSequentialGroup().addGroup(horizontalParallelGroup) // parallelGroup can be overwritten by child
-																																																																																																																																																																																					// classes
+
+									// parallelGroup can be overwritten by child
+									.addGroup(inputPanelLayout.createSequentialGroup().addGroup(horizontalParallelGroup)
+									// classes
 									)).addGap(Globals.GAP_SIZE))
 					.addGroup(inputPanelLayout.createSequentialGroup().addGap(Globals.GAP_SIZE)
 							.addGroup(inputPanelLayout.createParallelGroup().addGap(Globals.GAP_SIZE * 2)
@@ -334,8 +340,8 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 													GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 									.addGap(Globals.GAP_SIZE)
 
-									.addGroup(verticalParallelGroup) // parallelGroup can be overwritten by child classes
-					);
+									// parallelGroup can be overwritten by child classes
+									.addGroup(verticalParallelGroup));
 		} catch (Exception e) {
 			Logging.error("Error", e);
 		}
@@ -374,16 +380,20 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 				if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
 					wget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
 							+ wgetAuthPanel.getPw() + " ");
-				} else
+				} else {
 					wget.setAuthentication(" ");
+				}
+
 				fullcommand.addCommand(wget);
 			} else {
 				command.setOverwriteMode(jCheckBoxOverwriteExisting.isSelected());
 				fullcommand.addCommand(command);
 			}
 
-			if (jComboBoxSetRights.isSelected())
+			if (jComboBoxSetRights.isSelected()) {
 				fullcommand.addCommand((new CommandOpsiSetRights("")));
+			}
+
 			new SSHConnectExec(fullcommand);
 		} catch (Exception e) {
 			Logging.warning(this, "doAction2, exception occurred", e);
@@ -403,8 +413,9 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	protected void addListener(Component comp) {
-		if (comp instanceof JRadioButton)
+		if (comp instanceof JRadioButton) {
 			((JRadioButton) comp)
 					.addActionListener(actionEvent -> enableComponents(jRadioButtonFromServer.isSelected()));
+		}
 	}
 }

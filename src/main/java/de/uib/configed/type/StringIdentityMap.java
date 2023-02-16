@@ -6,9 +6,10 @@ import java.util.List;
 public class StringIdentityMap extends HashMap<String, String> {
 	public StringIdentityMap(List<String> keys) {
 		super();
+
 		if (keys != null) {
 			for (String key : keys) {
-				put(key, key);
+				super.put(key, key);
 			}
 		}
 	}

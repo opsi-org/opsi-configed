@@ -47,7 +47,8 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 	public RequirementsTableModel(AbstractPersistenceController persis) {
 		Logging.info(this, "creating");
 		perCon = persis;
-		setActualProduct(""); // initializing
+
+		init();
 	}
 
 	private void retrieveRequirements(String depotId, String product) {
@@ -58,11 +59,10 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		requDeinstallMap = perCon.getProductDeinstallRequirements(depotId, product);
 	}
 
-	public void setActualProduct(String product)
-	// we assume that the productId determines the requirements since we are on a
-	// preselected depot
-	{
-		setActualProduct(null, product);
+	private void init() {
+		// we assume that the productId determines the requirements since we are on a
+		// preselected depot
+		setActualProduct(null, "");
 	}
 
 	public void setActualProduct(String depotId, String product) {

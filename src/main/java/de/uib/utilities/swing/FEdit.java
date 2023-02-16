@@ -66,7 +66,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 		createComponents();
 		// components initialized lazily in init()
-
 	}
 
 	public void setHint(String hint) {

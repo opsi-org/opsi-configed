@@ -12,22 +12,7 @@ public class LabelChecked extends JLabel {
 	Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
 
 	public LabelChecked() {
-		this(false);
-	}
-
-	public LabelChecked(Boolean b) {
-		super();
-		setValue(b);
-	}
-
-	public LabelChecked(Icon iconChecked, Icon iconUnchecked, Icon iconEmpty) {
-		super();
-
-		this.iconChecked = iconChecked;
-		this.iconUnchecked = iconUnchecked;
-		this.iconEmpty = iconEmpty;
-
-		super.setIcon(iconEmpty);
+		setUnchecked();
 	}
 
 	public void setValue(Boolean b) {
@@ -40,15 +25,15 @@ public class LabelChecked extends JLabel {
 		}
 	}
 
-	public void setChecked() {
+	private void setChecked() {
 		setIcon(iconChecked);
 	}
 
-	public void setUnchecked() {
+	private void setUnchecked() {
 		setIcon(iconUnchecked);
 	}
 
-	public void setEmpty() {
+	private void setEmpty() {
 		setIcon(iconEmpty);
 	}
 }

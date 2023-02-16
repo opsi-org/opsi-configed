@@ -59,10 +59,10 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		init();
 		initLayout();
 
-		pack();
-		this.setSize(new Dimension(frameWidth, frameHeight));
-		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		this.setVisible(true);
+		super.pack();
+		super.setSize(new Dimension(frameWidth, frameHeight));
+		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		super.setVisible(true);
 		waitCursor.stop();
 	}
 
@@ -81,20 +81,25 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 
 		if ((fromMakeProductfile != null) && (!fromMakeProductfile.equals(""))) {
 			jRadioButtonServer.setSelected(true);
-			installLocalPanel.isOpen = true; // if true, it can be closed
+
+			// if true, it can be closed
+			installLocalPanel.isOpen = true;
 			installLocalPanel.close();
 
-			installServerPanel.isOpen = false; // if false it can be opened
+			// if false it can be opened
+			installServerPanel.isOpen = false;
 			installServerPanel.open();
 
 			installServerPanel.setPackagePath(fromMakeProductfile);
 		} else {
-
 			jRadioButtonLocal.setSelected(true);
-			installLocalPanel.isOpen = false; // if false it can be opened
+
+			// if false it can be opened
+			installLocalPanel.isOpen = false;
 			installLocalPanel.open();
 
-			installServerPanel.isOpen = true; // if true, it can be closed
+			// if true, it can be closed
+			installServerPanel.isOpen = true;
 			installServerPanel.close();
 		}
 		installWgetPanel.isOpen = true;
@@ -176,7 +181,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 				.addComponent(installSettingsPanel).addGap(2 * Globals.GAP_SIZE));
 	}
 
-	protected void init() {
+	private void init() {
 		radioPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -211,8 +216,9 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 				Logging.warning(this, "No url given. 2");
 				Logging.warning(this, "ERROR 0 command = null");
 				return;
-			} else
+			} else {
 				commands.addCommand(pmInstallCom);
+			}
 		}
 
 		else if (jRadioButtonServer.isSelected()) {
@@ -220,8 +226,9 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 			if (pmInstallCom == null) {
 				Logging.warning(this, "No opsi-package selected. 3");
 				return;
-			} else
+			} else {
 				commands.addCommand(pmInstallCom);
+			}
 		} else {
 			sequential = true;
 
@@ -233,10 +240,11 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 
 			pmInstallCom = SSHPMInstallServerPanel.getCommand(installWgetPanel.getProduct());
 			Logging.info(this, "c " + pmInstallCom);
-			if (pmInstallCom != null)
+			if (pmInstallCom != null) {
 				commands.addCommand(pmInstallCom);
-			else
+			} else {
 				Logging.warning(this, "ERROR 3 command = null");
+			}
 		}
 
 		installSettingsPanel.updateCommand(pmInstallCom);

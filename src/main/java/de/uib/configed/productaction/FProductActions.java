@@ -34,11 +34,12 @@ public class FProductActions extends SecondaryFrame {
 		this.persist = persist;
 
 		define();
-		setGlobals(Globals.getMap());
-		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FProductAction.title"));
+
+		super.setGlobals(Globals.getMap());
+		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FProductAction.title"));
 	}
 
-	protected void define() {
+	private void define() {
 		PanelInstallOpsiPackage panelInstallOpsiPackage = new PanelInstallOpsiPackage(main, persist, this);
 
 		JPanel imageActionPanel = new JPanel();

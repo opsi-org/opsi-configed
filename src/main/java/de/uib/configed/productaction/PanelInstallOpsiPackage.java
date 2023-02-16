@@ -394,7 +394,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		});
 	}
 
-	public void defineLayout() {
+	private void defineLayout() {
 		setBorder(Globals.createPanelBorder());
 
 		JLabel topicLabel = new JLabel(Configed.getResourceValue("InstallOpsiPackage.topic"));

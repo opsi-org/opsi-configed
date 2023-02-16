@@ -70,7 +70,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		initTitlePanel();
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 
 		JPanel panelDepots = new JPanel();
 
@@ -212,15 +212,16 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	// Interface ListSelectionListener
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		if (e.getValueIsAdjusting())
+		if (e.getValueIsAdjusting()) {
 			return;
+		}
 
 		Map<String, Object> visualData = mergeProperties(
 				mainController.getPersistenceController().getDepot2product2properties(),
 				listDepots.getSelectedValuesList(), productEdited);
 
-		if (visualData == null) // no properties
-		{
+		// no properties
+		if (visualData == null) {
 			// produce empty map
 			visualData = emptyVisualData;
 		}
@@ -428,8 +429,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private void selectDepotsWithEqualProperties() {
 		String selectedDepot0 = listDepots.getSelectedValue();
 
-		if (selectedDepot0 == null || selectedDepot0.equals(""))
+		if (selectedDepot0 == null || selectedDepot0.equals("")) {
 			return;
+		}
 
 		ConfigName2ConfigValue properties0 = mainController.getPersistenceController()
 				.getDefaultProductProperties(selectedDepot0).get(productEdited);
@@ -440,16 +442,17 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		for (int i = 0; i < listDepots.getModel().getSize(); i++) {
 			String compareDepot = listDepots.getModel().getElementAt(i);
 
-			if (compareDepot.equals(selectedDepot0))
+			if (compareDepot.equals(selectedDepot0)) {
 				continue;
+			}
 
 			ConfigName2ConfigValue compareProperties = mainController.getPersistenceController()
 					.getDefaultProductProperties(compareDepot).get(productEdited);
 
 			// True if both objects are equal or both null
-			if (Objects.equals(properties0, compareProperties))
+			if (Objects.equals(properties0, compareProperties)) {
 				listDepots.addSelectionInterval(i, i);
-
+			}
 		}
 	}
 }

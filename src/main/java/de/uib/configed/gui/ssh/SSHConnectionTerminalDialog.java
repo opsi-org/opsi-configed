@@ -51,7 +51,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		TerminatingPanel(ActionListener closeListener) {
 			super();
 
-			setBackground(Globals.BACKGROUND_COLOR_7);
+			super.setBackground(Globals.BACKGROUND_COLOR_7);
 			jButtonClose = new de.uib.configed.gui.IconButton(Configed.getResourceValue("SSHConnection.buttonClose"),
 					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
 			jButtonClose.addActionListener(closeListener);
@@ -59,7 +59,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			jButtonClose.setPreferredSize(jButtonDimension);
 
 			GroupLayout layout = new GroupLayout(this);
-			setLayout(layout);
+			super.setLayout(layout);
 
 			layout.setVerticalGroup(layout
 					.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(jButtonClose,
@@ -109,20 +109,21 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		terminatingPanel = new TerminatingPanel(closeListener);
 
-		jButtonClose.setVisible(false); // in terminating panel, we place an extra button
+		// in terminating panel, we place an extra button
+		jButtonClose.setVisible(false);
 
 		initGUI();
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		this.setSize(this.thissize);
-		this.setMaximumSize(new Dimension(900, 700));
+		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		super.setSize(this.thissize);
+		super.setMaximumSize(new Dimension(900, 700));
 
 		setComponentsEnabledRO(!Globals.isGlobalReadOnly());
 		setCLfocus();
 		// ((JTextField) tf_command).setCaretPosition(((JTextField)
 
 		Logging.info(this, "SSHConnectionTerminalDialog build ");
-		this.addComponentListener(new ComponentAdapter() {
+		super.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				Logging.info(this, "SSHConnectionTerminalDialog  resized");
@@ -176,10 +177,14 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 		double w = this.getSize().getWidth() - (Globals.GAP_SIZE * 4);
 		double h = this.getSize().getHeight() - noOutputHeight;
-		if (w > 1500)
+		if (w > 1500) {
 			w = 810;
-		if (h > 1500)
+		}
+
+		if (h > 1500) {
 			h = 600;
+		}
+
 		Dimension outputSize = new Dimension();
 		outputSize.setSize(w, h);
 
@@ -205,15 +210,17 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	public void setPrivate(boolean pr) {
 		Logging.info(this, "setPrivate " + pr);
-		if (pr)
+		if (pr) {
 			changeEchoChar('*');
-		else
+		} else {
 			changeEchoChar((char) 0);
+		}
 	}
 
 	public void setLastHistoryIndex() {
-		if (!commandHistory.isEmpty())
+		if (!commandHistory.isEmpty()) {
 			historyGetIndex = commandHistory.size();
+		}
 	}
 
 	public void addToHistory(String co) {
@@ -228,14 +235,17 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	public String getPrevCommandUp() {
 		Logging.debug(this, "getPrevCommand_up historySize " + commandHistory.size() + " getIndex " + historyGetIndex);
-		if (commandHistory.isEmpty())
+		if (commandHistory.isEmpty()) {
 			return "";
+		}
+
 		if (historyGetIndex - 1 < 0) {
 			historyGetIndex = 0;
-			if (commandHistory.get(historyGetIndex) != null)
+			if (commandHistory.get(historyGetIndex) != null) {
 				return commandHistory.get(historyGetIndex);
-			else
+			} else {
 				return "";
+			}
 		}
 		historyGetIndex = historyGetIndex - 1;
 		return commandHistory.get(historyGetIndex);

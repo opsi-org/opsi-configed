@@ -127,30 +127,33 @@ public class SWAuditEntry extends AbstractTableEntry
 	public SWAuditEntry(Map<String, Object> entry) {
 		super(entry);
 
-		remap(NAME, key2serverKey.get(NAME));
-		remap(VERSION, key2serverKey.get(VERSION));
+		super.remap(NAME, key2serverKey.get(NAME));
+		super.remap(VERSION, key2serverKey.get(VERSION));
 
-		remap(ARCHITECTURE, key2serverKey.get(ARCHITECTURE));
-		remap(LANGUAGE, key2serverKey.get(LANGUAGE));
+		super.remap(ARCHITECTURE, key2serverKey.get(ARCHITECTURE));
+		super.remap(LANGUAGE, key2serverKey.get(LANGUAGE));
 
-		remap(WINDOWS_SOFTWARE_ID, "windowsSoftwareId");
+		super.remap(WINDOWS_SOFTWARE_ID, "windowsSoftwareId");
 
-		String subversion // not included in key-values
-				= entryRetrieved.get(key2serverKey.get(SUB_VERSION));
+		// not included in key-values
+		String subversion = entryRetrieved.get(key2serverKey.get(SUB_VERSION));
 
-		if (subversion == null)
+		if (subversion == null) {
 			subversion = "";
-		put(key2serverKey.get(SUB_VERSION), subversion);
+		}
 
-		ident = Globals.pseudokey(new String[] { get(NAME), // KEYS_FOR_IDENT.get(0) ...
-				get(VERSION), subversion, get(LANGUAGE), get(ARCHITECTURE) });
+		super.put(key2serverKey.get(SUB_VERSION), subversion);
 
-		identReduced = Globals.pseudokey(new String[] { get(VERSION), get(ARCHITECTURE) });
+		ident = Globals.pseudokey(new String[] { super.get(NAME), // KEYS_FOR_IDENT.get(0) ...
+				super.get(VERSION), subversion, super.get(LANGUAGE), super.get(ARCHITECTURE) });
 
-		if (entry.get("lastseen") != null)
+		identReduced = Globals.pseudokey(new String[] { super.get(VERSION), super.get(ARCHITECTURE) });
+
+		if (entry.get("lastseen") != null) {
 			lastseen = entry.get("lastseen").toString();
+		}
 
-		put(ID, ident);
+		super.put(ID, ident);
 
 	}
 
