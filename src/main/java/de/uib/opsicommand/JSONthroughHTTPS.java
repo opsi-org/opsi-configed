@@ -81,7 +81,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		HttpsURLConnection connection;
 
 		try {
-			connection = (HttpsURLConnection) new URL("https://bonifax:4447").openConnection();
+			connection = (HttpsURLConnection) new URL(produceBaseURL("/")).openConnection();
 			String authorization = Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
 			connection.setRequestProperty("Authorization", "Basic " + authorization);
 			connection.setSSLSocketFactory(createDullSSLSocketFactory());
