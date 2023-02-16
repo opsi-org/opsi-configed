@@ -17,6 +17,7 @@ import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
+import de.uib.configed.gui.FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelStateSwitch;
@@ -49,7 +50,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 	public FGlobalSoftwareInfo fMissingSoftwareInfo;
 	public FSoftwarename2LicencePool fSoftwarename2LicencePool;
 
-	private PanelStateSwitch panelRadiobuttonsPreselectionForName2Pool;
+	private PanelStateSwitch<Softwarename2LicencepoolRestriction> panelRadiobuttonsPreselectionForName2Pool;
 	private JLabel labelSimilarEntriesExist;
 
 	protected int minVSize = 80;
@@ -189,7 +190,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		labelSimilarEntriesExist.setVisible(true);
 		labelSimilarEntriesExist.setFont(Globals.defaultFont);
 
-		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch(
+		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch<>(
 
 				null, FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.SHOW_ALL_NAMES, // start value
 				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.values(),
@@ -246,7 +247,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.HGAP_SIZE / 2)));
 
-		PanelStateSwitch panelRadiobuttonsDirectionOfAssignment = new PanelStateSwitch(
+		PanelStateSwitch panelRadiobuttonsDirectionOfAssignment = new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.title"),
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE, // start value
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.values(),
@@ -336,7 +337,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		;
 
-		PanelStateSwitch panelRadiobuttonsSoftwareselectionX = new PanelStateSwitch(null, // title
+		PanelStateSwitch panelRadiobuttonsSoftwareselectionX = new PanelStateSwitch<>(null, // title
 				ControlPanelAssignToLPools.SoftwareShowAllMeans.ALL,
 				ControlPanelAssignToLPools.SoftwareShowAllMeans.values(),
 

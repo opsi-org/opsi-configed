@@ -12,21 +12,23 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
+import de.uib.configed.ConfigedMain.LicencesTabStatus;
+
 public class TabbedPaneX extends JPanel {
 	private javax.swing.JTabbedPane jTabbedPaneMain;
 
 	TabController controller;
 
-	List<Enum> tabOrder;
+	List<LicencesTabStatus> tabOrder;
 
-	Map globals;
+	Map<String, Object> globals;
 
 	public TabbedPaneX(TabController controller) {
 		this.controller = controller;
 		init();
 	}
 
-	public void setGlobals(Map globals) {
+	public void setGlobals(Map<String, Object> globals) {
 		this.globals = globals;
 		setFont((Font) globals.get("defaultFont"));
 	}
@@ -43,10 +45,10 @@ public class TabbedPaneX extends JPanel {
 		jTabbedPaneMain.addChangeListener(changeEvent -> {
 			int newVisualIndex = jTabbedPaneMain.getSelectedIndex();
 
-			Enum newS = tabOrder.get(newVisualIndex);
+			LicencesTabStatus newS = tabOrder.get(newVisualIndex);
 
 			// report state change request to controller and look, what it produces
-			Enum s = controller.reactToStateChangeRequest(newS);
+			LicencesTabStatus s = controller.reactToStateChangeRequest(newS);
 
 			// if the controller did not accept the new index set it back
 			// observe that we get a recursion since we initiate another state change
@@ -65,7 +67,7 @@ public class TabbedPaneX extends JPanel {
 	/**
 	 * adds a tab to the incorporated JTabbedMain, with an icon and a tooltip
 	 */
-	public void addTab(Enum s, Component c, Icon icon, String tip) {
+	public void addTab(LicencesTabStatus s, Component c, Icon icon, String tip) {
 		tabOrder.add(s);
 		jTabbedPaneMain.addTab(s.toString(), icon, c, tip);
 	}
@@ -73,15 +75,15 @@ public class TabbedPaneX extends JPanel {
 	/**
 	 * adds a tab to the incorporated JTabbedMain, with an icon
 	 */
-	public void addTab(Enum s, Component c, Icon icon) {
+	public void addTab(LicencesTabStatus s, Component c, Icon icon) {
 		tabOrder.add(s);
 		jTabbedPaneMain.addTab(s.toString(), icon, c);
 	}
 
 	/**
-	 * adds a tab to the incorporated JTabbedMain
+	 * adds a tab to the incorporated JTabbedMainprotected
 	 */
-	public void addTab(Enum s, Component c) {
+	public void addTab(LicencesTabStatus s, Component c) {
 		tabOrder.add(s);
 		jTabbedPaneMain.addTab(s.toString(), c);
 	}
@@ -89,7 +91,7 @@ public class TabbedPaneX extends JPanel {
 	/**
 	 * adds a tab to the incorporated JTabbedMain, using an extra title
 	 */
-	public void addTab(Enum s, String title, Component c) {
+	public void addTab(LicencesTabStatus s, String title, Component c) {
 		tabOrder.add(s);
 		jTabbedPaneMain.addTab(title, c);
 	}
@@ -97,7 +99,7 @@ public class TabbedPaneX extends JPanel {
 	/**
 	 * removes a tab
 	 */
-	public void removeTab(Enum s) {
+	public void removeTab(LicencesTabStatus s) {
 		int tabIndex = tabOrder.indexOf(s);
 		if (tabIndex > 0) {
 			jTabbedPaneMain.remove(tabIndex);

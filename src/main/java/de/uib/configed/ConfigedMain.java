@@ -371,21 +371,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	@Override
-	public TabClient getClient(Enum<LicencesTabStatus> state) {
+	public TabClient getClient(LicencesTabStatus state) {
 		return licencesPanels.get(state);
 	}
 
 	@Override
-	public void addClient(Enum status, TabClient panel) {
-		licencesPanels.put((LicencesTabStatus) status, panel);
+	public void addClient(LicencesTabStatus status, TabClient panel) {
+		licencesPanels.put(status, panel);
 		licencesFrame.addTab(status, licencesPanelsTabNames.get(status), (JComponent) panel);
 	}
 
 	@Override
-	public Enum reactToStateChangeRequest(Enum newState) {
+	public LicencesTabStatus reactToStateChangeRequest(LicencesTabStatus newState) {
 		Logging.debug(this, "reactToStateChangeRequest( newState: " + newState + "), current state " + licencesStatus);
 		if (newState != licencesStatus && getClient(licencesStatus).mayLeave()) {
-			licencesStatus = (LicencesTabStatus) newState;
+			licencesStatus = newState;
 
 			if (getClient(licencesStatus) != null) {
 				licencesPanels.get(licencesStatus).reset();

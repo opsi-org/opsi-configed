@@ -32,16 +32,16 @@ import javax.swing.event.ChangeListener;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
-public class PanelStateSwitch extends JPanel {
+public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
-	protected Enum producedValue;
-	protected Enum startValue;
+	protected Enum<E> producedValue;
+	protected Enum<E> startValue;
 	protected Class<?> myenumClass;
-	protected Enum[] values;
-	protected Map<Enum, String> labels;
+	protected Enum<E>[] values;
+	protected Map<Enum<E>, String> labels;
 	protected String title;
-	protected Map<Enum, JRadioButton> groupedButtons;
-	protected Enumsetter enumSetter;
+	protected Map<Enum<E>, JRadioButton> groupedButtons;
+	protected Enumsetter<E> enumSetter;
 	protected Font primaryFont;
 	protected int vGap;
 	protected int hGap;
@@ -49,25 +49,26 @@ public class PanelStateSwitch extends JPanel {
 	protected List<ChangeListener> changeListeners;
 
 	@FunctionalInterface
-	public interface Enumsetter {
-		public void setValue(Enum val);
+	public interface Enumsetter<E extends Enum<E>> {
+		public void setValue(Enum<E> val);
 	}
 
-	public PanelStateSwitch(Enum startValue, Enum[] values, Class<?> myenum, Enumsetter enumSetter) {
+	public PanelStateSwitch(Enum<E> startValue, Enum<E>[] values, Class<?> myenum, Enumsetter<E> enumSetter) {
 		this(null, startValue, values, null, myenum, enumSetter);
 	}
 
-	public PanelStateSwitch(String title, Enum startValue, Enum[] values, Class<?> myenum, Enumsetter enumSetter) {
+	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, Class<?> myenum,
+			Enumsetter<E> enumSetter) {
 		this(title, startValue, values, null, myenum, enumSetter);
 	}
 
-	public PanelStateSwitch(String title, Enum startValue, Enum[] values, String[] labels, Class<?> myenum,
-			Enumsetter enumSetter) {
+	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, String[] labels, Class<?> myenum,
+			Enumsetter<E> enumSetter) {
 		this(title, startValue, values, labels, myenum, enumSetter, 0, 0);
 	}
 
-	public PanelStateSwitch(String title, Enum startValue, Enum[] values, String[] labels, Class<?> myenum,
-			Enumsetter enumSetter, int hGap, int vGap) {
+	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, String[] labels, Class<?> myenum,
+			Enumsetter<E> enumSetter, int hGap, int vGap) {
 
 		Logging.info(this, " my enum " + myenum);
 
@@ -144,7 +145,7 @@ public class PanelStateSwitch extends JPanel {
 		ImageIcon activatedIcon = Globals.createImageIcon("images/checked_withoutbox.png", "");
 		ImageIcon deactivatedIcon = Globals.createImageIcon("images/checked_empty_withoutbox.png", "");
 
-		for (Enum val : values) {
+		for (Enum<E> val : values) {
 			JRadioButton button = new JRadioButton(labels.get(val));
 
 			button.setIcon(deactivatedIcon);
@@ -220,7 +221,7 @@ public class PanelStateSwitch extends JPanel {
 					Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT));
 		}
 
-		for (Enum val : values) {
+		for (Enum<E> val : values) {
 			vGroup.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING).addComponent(
 					groupedButtons.get(val), Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT)
 
@@ -237,7 +238,7 @@ public class PanelStateSwitch extends JPanel {
 					.addComponent(labelTitle, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE).addGap(hGap));
 		}
 
-		for (Enum val : values) {
+		for (Enum<E> val : values) {
 			hGroup.addGroup(layout.createSequentialGroup().addGap(hGap)
 					.addComponent(groupedButtons.get(val), 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(hGap));
@@ -245,13 +246,13 @@ public class PanelStateSwitch extends JPanel {
 
 	}
 
-	public Enum getValue() {
+	public Enum<E> getValue() {
 		return producedValue;
 	}
 
 	public void setValueByString(String valS) {
 		// keeps old produced value if valS does not match
-		for (Enum val : values) {
+		for (Enum<E> val : values) {
 			if (val.name().equals(valS)) {
 				producedValue = val;
 				break;

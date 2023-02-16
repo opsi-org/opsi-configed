@@ -24,6 +24,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandDeployClientAgent;
+import de.uib.opsicommand.sshcommand.CommandDeployClientAgent.FinalActionType;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.AbstractPersistenceController;
@@ -54,7 +55,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private JPasswordField jTextFieldPassword;
 
 	protected CommandDeployClientAgent.FinalActionType finalAction;
-	protected PanelStateSwitch panelFinalAction;
+	protected PanelStateSwitch<FinalActionType> panelFinalAction;
 
 	private JButton jButtonShowPassword;
 	private JCheckBox jCheckBoxApplySudo;
@@ -180,8 +181,10 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jLabelVerbosity.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.jLabelVerbosity"));
 		jCheckBoxVerbosity = new JComboBox<>();
 		jCheckBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 5; i++) {
 			jCheckBoxVerbosity.addItem(i);
+		}
+
 		jCheckBoxVerbosity.setSelectedItem(1);
 		jCheckBoxVerbosity.addItemListener(itemEvent -> changeVerbosity());
 
@@ -262,7 +265,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jLabelFinalize
 				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.lbl_finalize"));
 
-		panelFinalAction = new PanelStateSwitch(null, CommandDeployClientAgent.FinalActionType.START_OCD,
+		panelFinalAction = new PanelStateSwitch<>(null, CommandDeployClientAgent.FinalActionType.START_OCD,
 				CommandDeployClientAgent.FinalActionType.values(),
 				new String[] {
 						Configed.getResourceValue(
@@ -333,10 +336,12 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 
 	private void changeUser() {
-		if (!(jTextFieldUser.getText().equals(defaultWinUser)))
+		if (!(jTextFieldUser.getText().equals(defaultWinUser))) {
 			commandDeployClientAgent.setUser(jTextFieldUser.getText().trim());
-		else
+		} else {
 			commandDeployClientAgent.setUser("");
+		}
+
 		updateCommand();
 	}
 

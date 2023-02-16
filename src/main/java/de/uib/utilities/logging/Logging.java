@@ -89,10 +89,12 @@ public class Logging implements LogEventSubject
 	}
 
 	public static void setLogLevelConsole(int newLevel) {
-		if (newLevel < LEVEL_NONE)
+		if (newLevel < LEVEL_NONE) {
 			newLevel = LEVEL_NONE;
-		else if (newLevel > LEVEL_SECRET)
+		} else if (newLevel > LEVEL_SECRET) {
 			newLevel = LEVEL_SECRET;
+		}
+
 		logLevelConsole = newLevel;
 	}
 
@@ -101,10 +103,12 @@ public class Logging implements LogEventSubject
 	}
 
 	public static void setLogLevelFile(int newLevel) {
-		if (newLevel < LEVEL_NONE)
+		if (newLevel < LEVEL_NONE) {
 			newLevel = LEVEL_NONE;
-		else if (newLevel > LEVEL_SECRET)
+		} else if (newLevel > LEVEL_SECRET) {
 			newLevel = LEVEL_SECRET;
+		}
+
 		logLevelFile = newLevel;
 	}
 
@@ -119,27 +123,29 @@ public class Logging implements LogEventSubject
 			return;
 		}
 
-		if (marker == null || marker.length() == 0)
+		if (marker == null || marker.length() == 0) {
 			logfileMarker = "";
-		else
-
+		} else {
 			logfileMarker = "__" + marker.replace('.', '_').replace(":", "__");
+		}
 	}
 
 	private static final void initLogFile() {
-		logFileInitialized = true; // Try to initialize only once!
+		// Try to initialize only once!
+		logFileInitialized = true;
 		String logFilename = "";
 
 		try {
 			File logDirectory;
 			if (logDirectoryName == null || logDirectoryName.isEmpty()) {
-				if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null)
+				if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
 					// Windows
 					logDirectory = new File(System.getenv(WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator
 							+ RELATIVE_LOG_DIR_WINDOWS);
-				else
+				} else {
 					logDirectory = new File(System.getProperty(ENV_VARIABLE_FOR_USER_DIRECTORY) + File.separator
 							+ RELATIVE_LOG_DIR_UNIX);
+				}
 			} else {
 				logDirectory = new File(logDirectoryName);
 			}
@@ -166,21 +172,21 @@ public class Logging implements LogEventSubject
 				}
 
 				for (int i = numberOfKeptLogFiles - 1; i > 0; i--) {
-					if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i]))
+					if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i])) {
 						Logging.warning("renaming logfile failed for file: " + logFiles[i - 1]);
+					}
 
 				}
 
-				if (logFile.exists() && !logFile.renameTo(logFiles[0]))
+				if (logFile.exists() && !logFile.renameTo(logFiles[0])) {
 					Logging.warning("renaming logfile failed for file: " + logFiles[0]);
+				}
 			}
 
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename));
 			logFilenameInUse = logFilename;
-		} catch (
-
-		Exception ex) {
-			System.out.print(ex);
+		} catch (Exception ex) {
+			Logging.error(ex.toString());
 			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
 		}
 	}
@@ -213,8 +219,9 @@ public class Logging implements LogEventSubject
 	}
 
 	public static String getIntegers(int[] s) {
-		if (s == null)
+		if (s == null) {
 			return null;
+		}
 
 		StringBuilder result = new StringBuilder("{");
 
@@ -222,8 +229,9 @@ public class Logging implements LogEventSubject
 			result.append("\"");
 			result.append("" + s[j]);
 			result.append("\"");
-			if (j < s.length - 1)
+			if (j < s.length - 1) {
 				result.append(", ");
+			}
 		}
 
 		result.append("}");
@@ -232,8 +240,9 @@ public class Logging implements LogEventSubject
 	}
 
 	public static String getStrings(int[] s) {
-		if (s == null)
+		if (s == null) {
 			return null;
+		}
 
 		Integer[] t = Arrays.asList(s).toArray(new Integer[0]);
 
@@ -241,22 +250,25 @@ public class Logging implements LogEventSubject
 	}
 
 	public static String getSize(Object[] a) {
-		if (a == null)
+		if (a == null) {
 			return null;
+		}
 
 		return "" + a.length;
 	}
 
 	public static String getSize(Collection<String> c) {
-		if (c == null)
+		if (c == null) {
 			return null;
+		}
 
 		return "" + c.size();
 	}
 
 	public static String getStrings(Object[] s) {
-		if (s == null)
+		if (s == null) {
 			return null;
+		}
 
 		StringBuilder result = new StringBuilder("{");
 
@@ -264,8 +276,9 @@ public class Logging implements LogEventSubject
 			result.append("\"");
 			result.append("" + s[j]);
 			result.append("\"");
-			if (j < s.length - 1)
+			if (j < s.length - 1) {
 				result.append(", ");
+			}
 		}
 
 		result.append("}");
@@ -437,17 +450,19 @@ public class Logging implements LogEventSubject
 		// if errors Occurred show a window with the logged errors
 
 		final JFrame f;
-		if (parentFrame == null)
+		if (parentFrame == null) {
 			f = ConfigedMain.getMainFrame();
-		else
+		} else {
 			f = parentFrame;
+		}
 
 		int errorCount = errorList.size();
 
 		info("error list size " + errorCount);
 
-		if (errorCount == 0)
+		if (errorCount == 0) {
 			return;
+		}
 
 		if (fErrors == null) {
 			WaitCursor.stopAll();

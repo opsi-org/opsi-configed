@@ -17,6 +17,7 @@ import javax.swing.UIManager;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.swinfopage.PanelSWInfo.KindOfExport;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.swing.PanelStateSwitch;
@@ -31,7 +32,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	public static final String FILENAME_PREFIX_DEFAULT = "report_";
 
-	protected PanelStateSwitch panelSelectExportType;
+	protected PanelStateSwitch<KindOfExport> panelSelectExportType;
 	protected PanelSWInfo.KindOfExport kindOfExport;
 
 	java.io.File exportDirectory;
@@ -50,8 +51,10 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	public void setActionListenerForStart(ActionListener li) {
 		Logging.info(this, "setActionListenerForStart " + li);
-		if (actionListenerForStart != null)
+		if (actionListenerForStart != null) {
 			buttonStart.removeActionListener(actionListenerForStart);
+		}
+
 		if (li != null) {
 			actionListenerForStart = li;
 			buttonStart.addActionListener(actionListenerForStart);
@@ -131,21 +134,24 @@ public class PanelSWMultiClientReport extends JPanel {
 		exportDirectory = null;
 
 		exportDirectoryS = Configed.savedStates.saveSWauditExportDir.deserialize();
-		if (exportDirectoryS == null)
+		if (exportDirectoryS == null) {
 			exportDirectoryS = "";
+		}
 
 		boolean found = false;
 		try {
 			if (exportDirectoryS.length() > 0) {
 				File f = new File(exportDirectoryS);
-				if (f.exists() && f.isDirectory())
+				if (f.exists() && f.isDirectory()) {
 					found = true;
+				}
 			}
 
-			if (found)
+			if (found) {
 				exportDirectory = new File(exportDirectoryS);
-			else
+			} else {
 				exportDirectory = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
+			}
 		} catch (Exception ex) {
 			Logging.warning(this, "could not define exportDirectory)");
 		}
@@ -218,7 +224,7 @@ public class PanelSWMultiClientReport extends JPanel {
 			}
 		});
 
-		panelSelectExportType = new PanelStateSwitch(
+		panelSelectExportType = new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), PanelSWInfo.KindOfExport.PDF,
 				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, (val -> {
 					Logging.info(this, "change to " + val);

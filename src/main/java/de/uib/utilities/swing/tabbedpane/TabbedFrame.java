@@ -5,6 +5,7 @@ import java.awt.Frame;
 import java.awt.Image;
 import java.util.Map;
 
+import de.uib.configed.ConfigedMain.LicencesTabStatus;
 import de.uib.utilities.swing.SecondaryFrame;
 
 //adapting TabbedPaneX to a JFrame
@@ -43,14 +44,14 @@ public class TabbedFrame extends SecondaryFrame {
 	/**
 	 * adds a tab to the incorporated JTabbedMain, using an extra title
 	 */
-	public void addTab(Enum s, String title, Component c) {
+	public void addTab(LicencesTabStatus s, String title, Component c) {
 		panel.addTab(s, title, c);
 	}
 
 	/**
 	 * removes a tab
 	 */
-	public void removeTab(Enum s) {
+	public void removeTab(LicencesTabStatus s) {
 		panel.removeTab(s);
 	}
 
