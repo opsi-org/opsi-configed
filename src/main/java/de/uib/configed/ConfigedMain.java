@@ -1938,8 +1938,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		clearLogPage();
 		clearSoftwareInfoPage();
 
-		if (getViewIndex() != VIEW_CLIENTS) // change in selection not via clientpage (i.e. via tree)
-		{
+		if (getViewIndex() != VIEW_CLIENTS) {
+			// change in selection not via clientpage (i.e. via tree)
+
 			Logging.debug(this, "getSelectedClients  " + Logging.getStrings(getSelectedClients())
 					+ " ,  getViewIndex, viewClients: " + getViewIndex() + ", " + VIEW_CLIENTS);
 			int newViewIndex = getViewIndex();
@@ -2063,9 +2064,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// column.setCellRenderer(new
 
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
-						Globals.createImageIcon("images/checked_withoutbox.png", ""), null
-				// "")
-				));
+						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
 			}
 
 		}
@@ -2155,7 +2154,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setSelectionPanelCols();
 
-		setSelectedClientsCollectionOnPanel(valuesToSelect); // did lose the selection since last setting
+		// did lose the selection since last setting
+		setSelectedClientsCollectionOnPanel(valuesToSelect);
 
 		Logging.info(this, "setRebuiltClientListTableModel selected in selection panel "
 				+ Logging.getSize(selectionPanel.getSelectedValues()));
@@ -3204,7 +3204,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (firstSelectedClient == null || !checkOneClientSelected()) {
 				mainFrame.setSoftwareAudit();
 			} else {
-				persist.getSoftwareAudit(firstSelectedClient); // retrieve data and check with softwaretable
+				// retrieve data and check with softwaretable
+				persist.getSoftwareAudit(firstSelectedClient);
+
 				mainFrame.setSoftwareAudit(firstSelectedClient);
 			}
 
@@ -3393,8 +3395,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}
 
-		if (!problem && dataReady) // we have loaded the data
-		{
+		if (!problem && dataReady) {
+			// we have loaded the data
+
 			viewIndex = visualViewIndex;
 
 			if (viewIndex != VIEW_CLIENTS) {
@@ -3476,7 +3479,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 
-			persist.updateProductOnClients(); // send the collected items
+			// send the collected items
+			persist.updateProductOnClients();
 		}
 	}
 
@@ -3504,8 +3508,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 
-			persist.updateProductOnClients(); // send the collected items
-
+			// send the collected items
+			persist.updateProductOnClients();
 		}
 
 		if (istmForSelectedClientsNetboot != null) {
@@ -3701,7 +3705,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.info(this, " reloadData _______________________________  saveViewIndex " + saveViewIndex);
 
-		WaitCursor.stopAll(); // stop all old waiting threads if there should be any left
+		// stop all old waiting threads if there should be any left
+		WaitCursor.stopAll();
 
 		List<String> selValuesList = selectionPanel.getSelectedValues();
 
@@ -3710,8 +3715,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String[] savedSelectedValues = selValuesList.toArray(new String[selValuesList.size()]);
 
 		if (selectionPanel != null) {
-			selectionPanel.removeListSelectionListener(this); // deactivate temporarily listening to list selection
-																// events
+			// deactivate temporarily listening to list selection events
+			selectionPanel.removeListSelectionListener(this);
 		}
 
 		// dont do anything if we did not finish another thread for this
@@ -3764,7 +3769,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			clearSwInfo();
 			clearHwInfo();
 
-			preloadData(); // sets dataReady
+			// sets dataReady
+			preloadData();
 
 			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
 
@@ -3778,10 +3784,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// configuratio
 			persist.getHostInfoCollections().getAllDepots();
-			persist.checkConfiguration(); // we do this again since we reloaded the configuration
+
+			// we do this again since we reloaded the configuration
+			persist.checkConfiguration();
 		}
 
-		setEditingTarget(editingTarget); // sets visual view index, therefore:
+		// sets visual view index, therefore:
+		setEditingTarget(editingTarget);
 
 		// if depot selection changed, we adapt the clients
 		NavigableSet<String> clientsLeft = new TreeSet<>();

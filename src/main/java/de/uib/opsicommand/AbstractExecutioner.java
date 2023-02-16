@@ -24,10 +24,11 @@ public abstract class AbstractExecutioner {
 	public static Object jsonArray(List l) {
 		Object result = null;
 
-		if (l == null)
+		if (l == null) {
 			result = new JSONArray();
-		else
+		} else {
 			result = new JSONArray(l);
+		}
 
 		return result;
 	}
