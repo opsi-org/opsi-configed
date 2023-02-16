@@ -27,13 +27,12 @@ public class FDriverUpload extends SecondaryFrame {
 		this.mainframe = mainframe;
 		this.persist = persist;
 
-		define();
-		setGlobals(Globals.getMap());
-		setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FDriverUpload.title"));
-
+		init();
+		super.setGlobals(Globals.getMap());
+		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FDriverUpload.title"));
 	}
 
-	protected void define() {
+	private void init() {
 		panelDriverUpload = new PanelDriverUpload(main, persist, this);
 
 		GroupLayout layout = new GroupLayout(getContentPane());

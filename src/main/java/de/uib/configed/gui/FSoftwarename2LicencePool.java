@@ -277,8 +277,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		super.setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);
 
-		setupLayout();
-
+		super.setupLayout();
 	}
 
 	@Override

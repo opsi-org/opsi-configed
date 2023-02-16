@@ -46,7 +46,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		buildPanel();
 	}
 
-	protected void buildPanel() {
+	private void buildPanel() {
 		jLabelTitle = new JLabel(title);
 		jLabelTitle.setOpaque(true);
 

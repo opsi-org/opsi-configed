@@ -39,7 +39,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		initTitlePanel();
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
 		jLabelProductProperties.setFont(Globals.defaultFontBold);
 		jLabelProductProperties.setForeground(Globals.lightBlack);

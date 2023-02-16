@@ -51,7 +51,7 @@ import de.uib.configed.csv.CSVWriter;
 import de.uib.utilities.logging.Logging;
 
 public class CSVTemplateCreatorDialog extends FGeneralDialog {
-	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
+	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
 
 	private CSVFormat format;
 
@@ -276,7 +276,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		centerLayout.setHorizontalGroup(centerLayout.createParallelGroup()
 				.addGroup(centerLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(dataLabel, wLeftLabel, wLeftLabel, wLeftLabel)
+						.addComponent(dataLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
@@ -288,7 +288,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(csvFormatLabel, wLeftLabel, wLeftLabel, wLeftLabel)
+						.addComponent(csvFormatLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
@@ -297,7 +297,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(fieldSeparatorLabel, wLeftLabel, wLeftLabel, wLeftLabel)
+						.addComponent(fieldSeparatorLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
@@ -321,9 +321,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(centerLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(stringSeparatorLabel, wLeftLabel, wLeftLabel, wLeftLabel)
+						.addComponent(stringSeparatorLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(stringSeparatorOptions, wLeftLabel, wLeftLabel, wLeftLabel)));
+						.addComponent(stringSeparatorOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
 
 		centerLayout.setVerticalGroup(centerLayout.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE).addComponent(dataLabel)
@@ -377,9 +377,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			protected Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
 			public CheckBoxList() {
-				setCellRenderer(new CellRenderer());
+				super.setCellRenderer(new CellRenderer());
 
-				addMouseListener(new MouseAdapter() {
+				super.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mousePressed(MouseEvent e) {
 						int index = locationToIndex(e.getPoint());
@@ -395,7 +395,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 			public CheckBoxList(ListModel<JCheckBox> model) {
 				this();
-				setModel(model);
+				super.setModel(model);
 			}
 
 			protected class CellRenderer implements ListCellRenderer<JCheckBox> {

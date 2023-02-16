@@ -144,13 +144,14 @@ public class ControllerHWinfoColumnConfiguration {
 
 	}
 
-	protected void initPanel() {
+	private void initPanel() {
 		panel = new PanelGenEditTable("", 0, true, 0, false,
 				new int[] { PanelGenEditTable.POPUP_RELOAD, PanelGenEditTable.POPUP_PDF }, true) {
 
 			@Override
 			public void commit() {
-				super.commit(); // we collect for each changed line an update item
+				// we collect for each changed line an update item
+				super.commit();
 				Logging.info(this, "commit, we do the saving");
 
 				Logging.info(this, " we have got updateItems " + updateItems);
@@ -180,13 +181,14 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setMasterFrame(ConfigedMain.getMainFrame());
 		panel.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
+		// supply implementation of SearchTargetModelFromTable.setFiltered
+		panel.showFilterIcon(true);
 		panel.setFiltering(true);
 		panel.setDeleteAllowed(false);
 
 	}
 
-	protected void initModel() {
+	private void initModel() {
 
 		updateCollection = new TableUpdateCollection();
 		columnNames = new ArrayList<>();

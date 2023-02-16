@@ -312,7 +312,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
 
-	protected void buildPanel() {
+	private void buildPanel() {
 
 		fieldByAuditPath = new JTextShowField();
 

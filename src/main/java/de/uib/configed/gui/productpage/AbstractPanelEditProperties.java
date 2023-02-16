@@ -26,11 +26,9 @@ import de.uib.configed.Globals;
 public abstract class AbstractPanelEditProperties extends JXPanel {
 	protected de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel;
 
-	protected int minLabelVSize = 0;
+	// TODO use globals
 	protected int minTableVSize = 40;
 	protected int minGapVSize = 2;
-	protected int minVSize = 10;
-	protected int prefVSize = 20;
 	protected int vGapSize = 5;
 	protected int hGapSize = 2;
 	protected int minHSize = 50;
@@ -46,7 +44,7 @@ public abstract class AbstractPanelEditProperties extends JXPanel {
 		this.mainController = mainController;
 		this.productPropertiesPanel = productPropertiesPanel;
 
-		setBackgroundPainter(new AbstractPainter<AbstractPanelEditProperties>() {
+		super.setBackgroundPainter(new AbstractPainter<AbstractPanelEditProperties>() {
 			@Override
 			public void doPaint(Graphics2D g, AbstractPanelEditProperties obj, int width, int height) {
 				g.setPaint(Globals.BACKGROUND_COLOR_7);

@@ -520,7 +520,7 @@ public class MainFrame extends JFrame
 			ClientTree treeClients, boolean multidepot) {
 
 		// we handle it in the window listener method
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		this.multidepot = multidepot;
 
