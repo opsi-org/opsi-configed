@@ -42,7 +42,7 @@ public final class Globals {
 	public static final String REQUIRED_SERVICE_VERSION = "4.1.0";
 	public static final String MIN_SUPPORTED_OPSI_VERSION = "4.0";
 
-	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2022 (www.uib.de)";
+	public static final String COPYRIGHT1 = "Copyright (c) uib 2001 - 2023 (www.uib.de)";
 	public static final String COPYRIGHT2 = "Open Source license: AGPL v3";
 
 	public static final String APPNAME = "opsi config editor";
@@ -358,6 +358,7 @@ public final class Globals {
 
 	}
 
+	public static final int SMALL_GAP_SIZE = 2;
 	public static final int GAP_SIZE = 10;
 	public static final int MIN_GAP_SIZE = 5;
 	public static final int VGAP_SIZE = 10;
@@ -370,6 +371,8 @@ public final class Globals {
 
 	public static final int MIN_HSIZE = 50;
 	public static final int PREF_HSIZE = 80;
+
+	public static final int MIN_TABLE_V_SIZE = 40;
 
 	public static final int BUTTON_HEIGHT = 24;
 	public static final int LINE_HEIGHT = 28;
@@ -409,7 +412,8 @@ public final class Globals {
 	public static final int HEIGHT_INFO_LOG_FILE = 200;
 
 	public static final int REACHABLE_INFO_FRAME_WIDTH = 300;
-	public static final int REACHABLE_INFO_FRAME_HEIGHT = 220; // Just enough so that the button is not hidden
+	// Just enough so that the button is not hidden
+	public static final int REACHABLE_INFO_FRAME_HEIGHT = 220;
 
 	public static final int POPUP_ON_CLIENTS_FRAME_WIDTH = 380;
 	public static final int POPUP_ON_CLIENTS_FRAME_HEIGHT = 300;
@@ -430,11 +434,11 @@ public final class Globals {
 	}
 
 	public static String getLogType(int index) {
-		if (index < 0 || index >= logTypes.length)
+		if (index < 0 || index >= logTypes.length) {
 			return "";
-
-		else
+		} else {
 			return logTypes[index];
+		}
 	}
 
 	private static final int[] maxLogSizes = new int[] { 4 * 1024 * 1024, 8 * 1024 * 1024, 8 * 1024 * 1024, 0,
@@ -876,8 +880,9 @@ public final class Globals {
 
 		while (result == 0 && i < ver1parts.length && i < ver2parts.length) {
 			result = stringCompareAsInt(ver1parts[i], ver2parts[i]);
-			if (result == 0)
+			if (result == 0) {
 				i++;
+			}
 		}
 
 		return result;
@@ -1045,5 +1050,4 @@ public final class Globals {
 	}
 
 	public static final String STARRED_STRING = "*****";
-
 }

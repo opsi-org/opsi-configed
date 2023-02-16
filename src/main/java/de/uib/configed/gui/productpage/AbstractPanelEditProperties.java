@@ -26,11 +26,6 @@ import de.uib.configed.Globals;
 public abstract class AbstractPanelEditProperties extends JXPanel {
 	protected de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel;
 
-	// TODO use globals
-	protected int minTableVSize = 40;
-	protected int minGapVSize = 2;
-	protected int vGapSize = 5;
-	protected int hGapSize = 2;
 	protected int minHSize = 50;
 	protected int prefHSize = 80;
 

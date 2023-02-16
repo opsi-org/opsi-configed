@@ -65,27 +65,14 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		javax.swing.GroupLayout layoutEditProperties = new javax.swing.GroupLayout(this);
 		setLayout(layoutEditProperties);
 
-		layoutEditProperties
-				.setHorizontalGroup(layoutEditProperties.createSequentialGroup().addGap(hGapSize, hGapSize, hGapSize)
-						.addGroup(layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(layoutEditProperties.createSequentialGroup()
-										.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
+				.addGap(Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE)
+				.addComponent(productPropertiesPanel, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE));
 
-										// Short.MAX_VALUE)
-										.addGap(hGapSize, hGapSize, hGapSize)
-
-										.addGap(2, 2, 2)
-
-								).addComponent(productPropertiesPanel, minHSize, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE))
-						.addGap(0, hGapSize, hGapSize));
-
-		layoutEditProperties
-				.setVerticalGroup(layoutEditProperties.createSequentialGroup().addGap(minGapVSize, vGapSize, vGapSize)
-						.addGroup(layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-
-						).addGap(minGapVSize, minGapVSize, minGapVSize).addComponent(productPropertiesPanel,
-								minTableVSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+		layoutEditProperties.setVerticalGroup(layoutEditProperties.createSequentialGroup()
+				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE).addComponent(
+						productPropertiesPanel, Globals.MIN_TABLE_V_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
 	private void initTitlePanel() {
@@ -96,8 +83,10 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 		titleLayout.setHorizontalGroup(titleLayout.createSequentialGroup()
 				.addComponent(jLabelProductProperties, minHSize, prefHSize, Short.MAX_VALUE)
-				.addGap(hGapSize, hGapSize, hGapSize).addComponent(buttonSetValuesFromServerDefaults, 20, 20, 20)
-				.addGap(2, 2, 2).addComponent(buttonRemoveSpecificValues, 20, 20, 20));
+				.addGap(Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE)
+				.addComponent(buttonSetValuesFromServerDefaults, 20, 20, 20)
+				.addGap(Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE, Globals.SMALL_GAP_SIZE)
+				.addComponent(buttonRemoveSpecificValues, 20, 20, 20));
 
 		titleLayout.setVerticalGroup(titleLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
 				.addComponent(jLabelProductProperties, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -123,8 +112,9 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 		setPropertyResetActivated(false);
 		if (specificPropertiesExisting != null && productName != null
-				&& specificPropertiesExisting.get(productName) != null)
+				&& specificPropertiesExisting.get(productName) != null) {
 			setPropertyResetActivated(specificPropertiesExisting.get(productName));
+		}
 	}
 
 	protected void setPropertyResetActivated(boolean b) {

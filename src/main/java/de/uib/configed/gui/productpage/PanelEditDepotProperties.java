@@ -160,7 +160,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		layoutAll.setVerticalGroup(layoutAll.createSequentialGroup().addComponent(splitter, minHSize,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, minTableVSize,
+		layoutAll.setHorizontalGroup(layoutAll.createParallelGroup().addComponent(splitter, Globals.MIN_TABLE_V_SIZE,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 	}
 
