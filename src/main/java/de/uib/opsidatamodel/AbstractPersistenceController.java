@@ -493,7 +493,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract void hwAuditConfRequestRefresh();
 
-	public abstract Object getHardwareInfo(String clientId, boolean asHTMLtable);
+	public abstract Map<String, List<Map<String, Object>>> getHardwareInfo(String clientId, boolean asHTMLtable);
 
 	public abstract void auditHardwareOnHostRequestRefresh();
 

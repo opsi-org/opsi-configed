@@ -43,7 +43,7 @@ public abstract class AbstractExecutioner {
 
 	public abstract Map getMapOfLists(OpsiMethodCall omc);
 
-	public abstract Map getMapOfMaps(OpsiMethodCall omc);
+	public abstract Map<String, Map<String, Object>> getMapOfMaps(OpsiMethodCall omc);
 
 	public abstract List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc);
 
@@ -63,7 +63,7 @@ public abstract class AbstractExecutioner {
 
 	public abstract Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key);
 
-	public abstract Map getMapOfListsOfMaps(OpsiMethodCall omc);
+	public abstract Map<String, List<Map<String, Object>>> getMapOfListsOfMaps(OpsiMethodCall omc);
 
 	public abstract List getListOfMapsOfListsOfMaps(OpsiMethodCall omc);
 
@@ -73,7 +73,7 @@ public abstract class AbstractExecutioner {
 
 	public abstract Map<String, Object> getMapFromItem(Object s);
 
-	public abstract List getListFromItem(String s);
+	public abstract List<Object> getListFromItem(String s);
 
 	public abstract String getStringValueFromItem(Object s);
 

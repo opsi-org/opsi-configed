@@ -3100,12 +3100,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public Object getHardwareInfo(String clientId, boolean asHTMLtable) {
+	public Map<String, List<Map<String, Object>>> getHardwareInfo(String clientId, boolean asHTMLtable) {
 		if (clientId == null) {
 			return null;
 		}
 
-		Map info = exec
+		Map<String, List<Map<String, Object>>> info = exec
 				.getMapOfListsOfMaps(new OpsiMethodCall("getHardwareInformation_hash", new String[] { clientId }));
 
 		// the first element is a default scantime
@@ -4843,12 +4843,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				Iterator iter = methodsList.iterator();
 				while (iter.hasNext()) {
-					Map listEntry = exec.getMapFromItem(iter.next());
+					Map<String, Object> listEntry = exec.getMapFromItem(iter.next());
 
 					String name = (String) listEntry.get("name");
 					List<String> signature = new ArrayList<>();
-					List signature1 = exec.getListFromItem(listEntry.get("params").toString()); // should never result
-																								// to null
+
+					// should never result
+					List<Object> signature1 = exec.getListFromItem(listEntry.get("params").toString());
+
+					// to null
 					for (int i = 0; i < signature1.size(); i++) {
 						String element = (String) signature1.get(i);
 

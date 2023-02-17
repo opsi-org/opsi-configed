@@ -58,7 +58,7 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map getMapOfMaps(OpsiMethodCall omc) {
+	public Map<String, Map<String, Object>> getMapOfMaps(OpsiMethodCall omc) {
 		return new HashMap<>();
 	}
 
@@ -105,7 +105,7 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map getMapOfListsOfMaps(OpsiMethodCall omc) {
+	public Map<String, List<Map<String, Object>>> getMapOfListsOfMaps(OpsiMethodCall omc) {
 		return new HashMap<>();
 	}
 
@@ -130,7 +130,7 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public List getListFromItem(String s) {
+	public List<Object> getListFromItem(String s) {
 		return new ArrayList<>();
 	}
 
