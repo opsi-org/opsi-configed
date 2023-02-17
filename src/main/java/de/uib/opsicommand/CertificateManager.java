@@ -77,12 +77,18 @@ public final class CertificateManager {
 				dirname = dirname.replace(":", "_");
 			}
 
+			File dirFile = new File(Configed.savedStatesLocationName, dirname);
+
+			if (!dirFile.exists()) {
+				dirFile.mkdir();
+			}
+
 			Files.copy(certificateFile.toPath(),
 					new File(Configed.savedStatesLocationName, dirname + File.separator + Globals.CERTIFICATE_FILE)
 							.toPath(),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
-			Logging.error("unable to save certificate");
+			Logging.error("unable to save certificate", e);
 		}
 	}
 
