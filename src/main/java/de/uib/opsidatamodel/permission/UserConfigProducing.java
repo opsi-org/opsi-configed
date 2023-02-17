@@ -416,6 +416,7 @@ public class UserConfigProducing {
 				Logging.info(this,
 						"supplyPermissionEntriesForAUser. serverconfigValuesMap gives not valid value for key "
 								+ configKey);
+
 				values = prototypeConfig.getValues(partkey);
 
 				userConfig.setValues(partkey, values);
@@ -423,6 +424,7 @@ public class UserConfigProducing {
 				item = AbstractPersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig, configKey,
 						configKey, false, false, values, values);
 
+				// TODO
 				readyObjects.add(AbstractExecutioner.jsonMap(item));
 			}
 		}
@@ -645,6 +647,7 @@ public class UserConfigProducing {
 
 			Logging.info(this, "modi time " + itemModifyTime);
 
+			// TODO
 			readyObjects.add(AbstractExecutioner.jsonMap(itemModifyTime));
 		}
 	}
