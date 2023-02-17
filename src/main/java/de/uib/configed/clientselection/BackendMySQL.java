@@ -372,8 +372,10 @@ public class BackendMySQL {
 		for (int i = 0; i < length; i++) {
 			try {
 
-				if (i == 0 && type == Type.NOT) {
-					mysql.append(" " + type);
+				if (i == 0) {
+					if (type == Type.NOT) {
+						mysql.append(" " + type);
+					}
 				} else if (type == Type.AND || type == Type.OR) {
 					mysql.append(type);
 				}
@@ -385,6 +387,7 @@ public class BackendMySQL {
 		}
 
 		return mysql + " ) ";
+
 	}
 
 	private Type getType(JSONObject json) {
