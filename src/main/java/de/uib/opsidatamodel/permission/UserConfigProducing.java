@@ -263,9 +263,29 @@ public class UserConfigProducing {
 			boolean followConfiguredRole = false;
 			Logging.info(this, "supplyAllPermissionEntries has role " + values);
 
-			if (values == null || values.isEmpty() || (((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE))) {
-				Logging.info(this, "no role specified for user " + username);
-			} else {
+			if (values == null || values.isEmpty()) {
+				// update role selection because we don't have one
+				List<Object> selectedValuesRole = new ArrayList<>();
+				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
+
+				Set<String> possibleValuesSet = new HashSet<>(roleParts);
+				possibleValuesSet.add(configuredRole);
+
+				possibleValuesSet.add(UserConfig.NONE_PROTOTYPE);
+
+				List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
+
+				Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(
+						ConfigOption.TYPE.UnicodeConfig, roleKey,
+						"which role should determine this users configuration", false, false, selectedValuesRole,
+						possibleValuesRole);
+
+				Logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " "
+						+ possibleValuesRole + ", " + roleParts);
+
+				readyObjects.add(AbstractExecutioner.jsonMap(itemRole));
+			} else if (!((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
+
 				// we have got some value
 				configuredRole = "" + values.get(0);
 
@@ -276,37 +296,12 @@ public class UserConfigProducing {
 					roleToPlay = configuredRole;
 					followConfiguredRole = true;
 				}
+			} else {
+				Logging.info(this, "no role specified for user " + username);
 			}
 
 			Logging.info(this,
 					" for user " + username + " followConfiguredRole " + followConfiguredRole + ": " + roleToPlay);
-
-			// update role selection
-			List<Object> selectedValuesRole = new ArrayList<>();
-			if (configuredRole != null) {
-				selectedValuesRole.add(configuredRole);
-			} else {
-				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
-			}
-
-			Set<String> possibleValuesSet = new HashSet<>(roleParts);
-			if (configuredRole != null) {
-				possibleValuesSet.add(configuredRole);
-			}
-
-			possibleValuesSet.add(UserConfig.NONE_PROTOTYPE);
-
-			List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
-
-			Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(
-					ConfigOption.TYPE.UnicodeConfig, roleKey, "which role should determine this users configuration",
-					false, false, selectedValuesRole, possibleValuesRole);
-
-			Logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " " + possibleValuesRole
-					+ ", " + roleParts);
-
-			// TODO
-			readyObjects.add(AbstractExecutioner.jsonMap(itemRole));
 
 			UserConfig roleConfig = roleConfigs.get(roleToPlay);
 			// is defaultConfig if roleToPlay does not exist
@@ -652,7 +647,5 @@ public class UserConfigProducing {
 
 			readyObjects.add(AbstractExecutioner.jsonMap(itemModifyTime));
 		}
-
 	}
-
 }
