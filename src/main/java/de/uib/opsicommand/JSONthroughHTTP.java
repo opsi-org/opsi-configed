@@ -47,7 +47,6 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
  */
 
 public class JSONthroughHTTP extends AbstractJSONExecutioner {
-	// protected boolean disableCertificateVerification = false;
 
 	protected static final int POST = 0;
 	protected static final int GET = 1;
@@ -131,7 +130,9 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 		try {
 			serviceURL = new URL(urlS);
 		} catch (MalformedURLException ex) {
-			Logging.error(urlS + " no legal URL, " + ex.toString());
+			Logging.error(urlS
+					+ " nhttps://learn.microsoft.com/id-id/windows-hardware/manufacture/desktop/oscdimg-command-line-options?view=windows-11o legal URL, "
+					+ ex.toString());
 		}
 	}
 
