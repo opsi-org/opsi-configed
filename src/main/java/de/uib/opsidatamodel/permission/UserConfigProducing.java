@@ -162,7 +162,6 @@ public class UserConfigProducing {
 
 		if (serverconfigValuesMap.get(configKeyUseList) == null) {
 			Logging.info(this, "supplyPermissionList. serverconfigValuesMap has no value for key " + configKeyUseList);
-			Logging.devel("first");
 			item = AbstractPersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
 					"the primary value setting is " + initialValue);
 			readyObjects.add(AbstractExecutioner.jsonMap(item));
@@ -392,6 +391,10 @@ public class UserConfigProducing {
 
 			if (values == null || values.isEmpty() || values.get(0) == null
 					|| !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
+
+				Logging.info(this,
+						"supplyPermissionEntriesForAUser. serverconfigValuesMap has no value for key " + configKey);
+
 				List<Object> selectedValuesRole = new ArrayList<>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
