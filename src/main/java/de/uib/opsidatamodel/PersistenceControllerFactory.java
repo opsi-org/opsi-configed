@@ -179,7 +179,8 @@ public final class PersistenceControllerFactory {
 
 		staticPersistControl = persistControl;
 
-		if (persistControl.getConnectionState().getState() == ConnectionState.CONNECTED) {
+		if (persistControl.getConnectionState().getState() == ConnectionState.CONNECTED
+				&& !Globals.disableCertificateVerification) {
 			CertificateManager.updateCertificate();
 		}
 

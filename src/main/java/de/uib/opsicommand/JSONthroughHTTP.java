@@ -47,7 +47,7 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
  */
 
 public class JSONthroughHTTP extends AbstractJSONExecutioner {
-	protected boolean disableCertificateVerification = false;
+	// protected boolean disableCertificateVerification = false;
 
 	protected static final int POST = 0;
 	protected static final int GET = 1;

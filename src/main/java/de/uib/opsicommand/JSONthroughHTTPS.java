@@ -55,7 +55,6 @@ import de.uib.utilities.logging.Logging;
  */
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
-
 	private int[] serverVersion = { 0, 0, 0, 0 };
 	private boolean gzipTransmission = false;
 	private boolean lz4Transmission = false;
@@ -85,6 +84,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			String authorization = Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
 			connection.setRequestProperty("Authorization", "Basic " + authorization);
 			connection.setSSLSocketFactory(createDullSSLSocketFactory());
+			connection.setHostnameVerifier(new DullHostnameVerifier());
 			connection.setRequestMethod("HEAD");
 
 		} catch (IOException e) {
@@ -120,12 +120,12 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 		// The way we check the certificate does not work before opsi server version 4.2
 		if (serverVersion[0] < 4 || (serverVersion[0] == 4 && serverVersion[1] < 2)) {
-			disableCertificateVerification = true;
+			Globals.disableCertificateVerification = true;
 		}
 
 		Logging.info(this, "we checked the server version: " + Arrays.toString(serverVersion));
 		Logging.info(this, "we use now gzip: " + gzipTransmission + " or lz4: " + lz4Transmission);
-		Logging.info(this, "is certificateVerification disabled? " + disableCertificateVerification);
+		Logging.info(this, "is certificateVerification disabled? " + Globals.disableCertificateVerification);
 	}
 
 	private void setGeneralRequestProperties(HttpURLConnection connection) {
@@ -160,16 +160,19 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		checkServerVersion();
 
 		Logging.info(this, "produceConnection, url; " + serviceURL);
-		HttpURLConnection connection = (HttpURLConnection) serviceURL.openConnection();
+		HttpsURLConnection connection = (HttpsURLConnection) serviceURL.openConnection();
 
 		SSLSocketFactory sslFactory = null;
-		if (disableCertificateVerification) {
+		HostnameVerifier hostnameVerifier = null;
+		if (Globals.disableCertificateVerification) {
 			sslFactory = createDullSSLSocketFactory();
+			hostnameVerifier = new DullHostnameVerifier();
 		} else {
 			sslFactory = createSSLSocketFactory();
+			hostnameVerifier = new MyHostnameVerifier();
 		}
-		((HttpsURLConnection) connection).setSSLSocketFactory(sslFactory);
-		HttpsURLConnection.setDefaultHostnameVerifier(new MyHostnameVerifier());
+		connection.setSSLSocketFactory(sslFactory);
+		connection.setHostnameVerifier(hostnameVerifier);
 
 		setGeneralRequestProperties(connection);
 
@@ -574,6 +577,13 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 				conStat = new ConnectionState(ConnectionState.INTERRUPTED);
 				return false;
 			}
+		}
+	}
+
+	private class DullHostnameVerifier implements HostnameVerifier {
+		@Override
+		public boolean verify(String hostname, SSLSession session) {
+			return true;
 		}
 	}
 
