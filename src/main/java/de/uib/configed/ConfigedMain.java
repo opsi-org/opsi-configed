@@ -465,7 +465,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setRebuiltClientListTableModel();
 
-		Logging.debug(this, "initialTreeActivation\u0009"); // \u0009 is tab
+		// \u0009 is tab
+		Logging.debug(this, "initialTreeActivation\u0009");
 
 		SwingUtilities.invokeLater(() -> {
 			initialTreeActivation();
@@ -1167,7 +1168,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			mainFrame.setClientInfoediting(getSelectedClients().length == 1);
 
-			depotsOfSelectedClients = null; // initialize the following method
+			// initialize the following method
+			depotsOfSelectedClients = null;
 			Set<String> depots = getDepotsOfSelectedClients();
 			Iterator<String> iter = depots.iterator();
 			StringBuilder depotsAdded = new StringBuilder("");
@@ -1272,7 +1274,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (!savedSelectedDepots.isEmpty()) {
 				int[] depotsToSelect = new int[savedSelectedDepots.size()];
 				for (int j = 0; j < depotsToSelect.length; j++) {
-					depotsToSelect[j] = savedSelectedDepots.get(j); // conversion to int
+					// conversion to int
+					depotsToSelect[j] = savedSelectedDepots.get(j);
 				}
 
 				depotsList.setSelectedIndices(depotsToSelect);
@@ -3382,6 +3385,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (visualViewIndex != VIEW_CLIENTS && (!((visualViewIndex == VIEW_CLIENTS)
 				|| ((visualViewIndex == VIEW_NETWORK_CONFIGURATION) && (editingTarget == EditingTarget.SERVER))
 				|| ((visualViewIndex == VIEW_HOST_PROPERTIES) && (editingTarget == EditingTarget.DEPOTS))))) {
+
 			Logging.debug(this, " selected clients " + Logging.getStrings(getSelectedClients()));
 
 			// should not occur

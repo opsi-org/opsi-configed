@@ -1064,9 +1064,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		checkPermissions();
 
-		if (serverFullPermission)
+		if (serverFullPermission) {
 			checkStandardConfigs();
-
+		}
 	}
 
 	@Override

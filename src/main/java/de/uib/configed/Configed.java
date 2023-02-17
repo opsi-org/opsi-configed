@@ -400,9 +400,8 @@ public class Configed {
 					// only one of them can be used
 				}
 				i++;
-			} else // options
-
-			{
+			} else {
+				// options
 
 				if (args[i].equals("-l") || args[i].equals("--locale")) {
 					locale = getArg(args, i);

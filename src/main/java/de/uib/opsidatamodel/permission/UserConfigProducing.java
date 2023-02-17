@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
@@ -44,9 +43,7 @@ public class UserConfigProducing {
 
 			// data. on which changes are based
 			Map<String, List<Object>> serverconfigValuesMap,
-			Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
-
-	) {
+			Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap) {
 		this.notUsingDefaultUser = notUsingDefaultUser;
 		this.configserver = configserver;
 
@@ -68,14 +65,10 @@ public class UserConfigProducing {
 		java.util.Set<String> roleparts = new TreeSet<>();
 		produceRoleAndUserParts(userparts, roleparts);
 
-		if (ConfigedMain.user == null) {
-			ConfigedMain.user = Configed.user;
-		}
-
 		Logging.info(this, "we have got logged in user " + ConfigedMain.user + " and configure based on it "
 				+ notUsingDefaultUser);
 
-		if (notUsingDefaultUser && ConfigedMain.user != null && !userparts.contains(ConfigedMain.user)) {
+		if (notUsingDefaultUser && ConfigedMain.user != null && !serverconfigValuesMap.containsKey(ConfigedMain.user)) {
 			Logging.info(this, "supply logged in user");
 			userparts.add(ConfigedMain.user);
 			String propertyclass = UserConfig.START_USER_KEY + ConfigedMain.user + '}';
@@ -98,8 +91,9 @@ public class UserConfigProducing {
 		final String startRoleKey = roleBranchPart + ".{";
 
 		for (String key : serverconfigValuesMap.keySet()) {
-			if (!(key.startsWith(UserConfig.KEY_USER_ROOT)))
+			if (!(key.startsWith(UserConfig.KEY_USER_ROOT))) {
 				continue;
+			}
 
 			if (key.startsWith(roleBranchPart)) {
 				String rolenameBefore = key.substring(0, startRoleKey.length());
@@ -143,11 +137,10 @@ public class UserConfigProducing {
 							return "";
 						});
 
-					} else
+					} else {
 						Logging.warning(this, "username not specified in key " + key);
-
+					}
 				}
-
 			}
 		}
 
@@ -155,19 +148,21 @@ public class UserConfigProducing {
 		Logging.info(this, "all userNames " + userNames);
 	}
 
-	private void supplyConfigPermissionList(final String configKeyUseList, final boolean initialValue, // activate this feature by default?
+	private void supplyConfigPermissionList(final String configKeyUseList, final boolean initialValue,
 			final String configKeyList, final List<Object> selectedValues, final Set<Object> oldPossibleValues,
-			final Set<Object> currentPossibleValuesListed)
-	// produces readyObjects for this configKey(List)
-	{
+			final Set<Object> currentPossibleValuesListed) {
+		// produces readyObjects for this configKey(List)
+
 		Logging.info(this, "supplyConfigPermissionList, configKeyUseList: " + configKeyUseList);
-		Map<String, Object> item = null; // item variable for adding items to readyObjects
+
+		// item variable for adding items to readyObjects
+		Map<String, Object> item = null;
 
 		Logging.info(this, "supplyConfigPermissionList  configKey " + configKeyUseList);
 
 		if (serverconfigValuesMap.get(configKeyUseList) == null) {
 			Logging.info(this, "supplyPermissionList. serverconfigValuesMap has no value for key " + configKeyUseList);
-
+			Logging.devel("first");
 			item = AbstractPersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
 					"the primary value setting is " + initialValue);
 			readyObjects.add(AbstractExecutioner.jsonMap(item));
@@ -183,9 +178,9 @@ public class UserConfigProducing {
 
 		if ((serverconfigValuesMap.get(configKeyList) == null)
 				|| !serverconfigValuesMap.get(configKeyList).equals(selectedValues)
-				|| !currentPossibleValuesListed.equals(oldPossibleValues)) // includes the case that there was no value
-																																																		// for the configKey at all
-		{
+				|| !currentPossibleValuesListed.equals(oldPossibleValues)) {
+
+			// for the configKey at all
 			Logging.info(this, "supplyPermissionList initialization or change");
 
 			Logging.info(this,
@@ -207,14 +202,11 @@ public class UserConfigProducing {
 
 			readyObjects.add(AbstractExecutioner.jsonMap(item));
 		}
-
 	}
 
 	/** we call up the cascade of default role, other roles, and the users */
 	protected void supplyAllPermissionEntries(java.util.Set<String> userParts, java.util.Set<String> roleParts) {
 		Logging.info(this, "supplyAllPermissionEntries start");
-
-		// separateServerConfigsTreeSection( userPart().substring( 0,
 
 		Logging.info(this, "supplyAllPermissionEntries all roles " + roleParts);
 		Logging.info(this, "supplyAllPermissionEntries first for default role,  " + UserConfig.DEFAULT_ROLE_NAME);
@@ -253,9 +245,7 @@ public class UserConfigProducing {
 		Logging.info(this, "supplyAllPermissionEntries readyObjects for roleparts " + readyObjects.size());
 		Logging.info(this, "supplyAllPermissionEntries for userparts " + userParts);
 
-		for (String username : userParts)
-
-		{
+		for (String username : userParts) {
 			String roleToPlay = UserConfig.DEFAULT_ROLE_NAME;
 			String usernameStartkey = UserConfig.KEY_USER_ROOT + ".{" + username + "}.";
 			UserConfig userConfig = new UserConfig(username);
@@ -274,8 +264,7 @@ public class UserConfigProducing {
 			boolean followConfiguredRole = false;
 			Logging.info(this, "supplyAllPermissionEntries has role " + values);
 
-			if (values == null || values.isEmpty() // || !(values.get(0) instanceof String )
-					|| (((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE))) {
+			if (values == null || values.isEmpty() || (((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE))) {
 				Logging.info(this, "no role specified for user " + username);
 			} else {
 				// we have got some value
@@ -295,28 +284,29 @@ public class UserConfigProducing {
 
 			// update role selection
 			List<Object> selectedValuesRole = new ArrayList<>();
-			if (configuredRole != null)
+			if (configuredRole != null) {
 				selectedValuesRole.add(configuredRole);
-			else
+			} else {
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
+			}
 
 			Set<String> possibleValuesSet = new HashSet<>(roleParts);
-			if (configuredRole != null)
+			if (configuredRole != null) {
 				possibleValuesSet.add(configuredRole);
+			}
+
 			possibleValuesSet.add(UserConfig.NONE_PROTOTYPE);
 
 			List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
 
 			Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(
 					ConfigOption.TYPE.UnicodeConfig, roleKey, "which role should determine this users configuration",
-					false, // editable
-					false, // multivalue
-					selectedValuesRole, // defaultValues enry
-					possibleValuesRole);
+					false, false, selectedValuesRole, possibleValuesRole);
 
 			Logging.info(this, "supplyAllPermissionEntries possibleValuesRole, roleParts " + " " + possibleValuesRole
 					+ ", " + roleParts);
 
+			// TODO
 			readyObjects.add(AbstractExecutioner.jsonMap(itemRole));
 
 			UserConfig roleConfig = roleConfigs.get(roleToPlay);
@@ -327,11 +317,11 @@ public class UserConfigProducing {
 
 		Logging.info(this, "readyObjects for userparts " + readyObjects.size());
 
-		if (notUsingDefaultUser)
+		if (notUsingDefaultUser) {
 			UserConfig.setCurrentConfig(userConfigs.get(ConfigedMain.user));
-		else
+		} else {
 			UserConfig.setCurrentConfig(defaultUserConfig);
-
+		}
 	}
 
 	private void supplyPermissionEntriesForAUser(final String username, final String startkey,
@@ -350,11 +340,10 @@ public class UserConfigProducing {
 		Logging.info(this,
 				"supplyPermissionEntriesForAUser UserConfig.getUserBoolKeys( " + UserConfig.getUserBoolKeys());
 
-		for (String partkey : UserConfig.getUserBoolKeys())
-		// includes at the moment ssh permission keys and opsi permission keys
-		{
+		for (String partkey : UserConfig.getUserBoolKeys()) {
+			// includes at the moment ssh permission keys and opsi permission keys
+
 			configKey = startkey + partkey;
-			// String configKey = startkey +
 
 			Logging.info(this,
 					"supplyPermissionEntriesForAUser boolean configKey " + configKey + " -- partkey " + partkey);
@@ -366,11 +355,10 @@ public class UserConfigProducing {
 					"supplyPermissionEntriesForAUser bool configKey " + configKey + " -- partkey " + partkey);
 			Logging.info(this, "supplyPermissionEntriesForAUser bool configKey has values " + values);
 
-			if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)
 			// there is no formally correct value)
-					|| (prototypeObligatory && !values.get(0).equals(prototypeConfig.getBooleanValue(partkey))
-					// the specific values differs from prototype values and must be corrected
-					)) {
+			// the specific values differs from prototype values and must be corrected
+			if (values == null || values.isEmpty() || !(values.get(0) instanceof Boolean)
+					|| (prototypeObligatory && !values.get(0).equals(prototypeConfig.getBooleanValue(partkey)))) {
 				Logging.info(this,
 						"supplyPermissionEntriesForAUser. serverconfigValuesMap has no value for key " + configKey);
 				value = prototypeConfig.getBooleanValue(partkey);
@@ -380,8 +368,9 @@ public class UserConfigProducing {
 						"the primary value setting is based on the user group");
 
 				readyObjects.add(AbstractExecutioner.jsonMap(item));
-			} else
+			} else {
 				value = (Boolean) values.get(0);
+			}
 
 			userConfig.setBooleanValue(partkey, value);
 		}
@@ -401,15 +390,14 @@ public class UserConfigProducing {
 			Logging.info(this, "configkey " + configKey);
 			List<Object> values = serverconfigValuesMap.get(configKey);
 
-			if (values == null || values.isEmpty() || !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
+			if (values == null || values.isEmpty() || values.get(0) == null
+					|| !((String) values.get(0)).equals(UserConfig.NONE_PROTOTYPE)) {
 				List<Object> selectedValuesRole = new ArrayList<>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
 				Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(
 						ConfigOption.TYPE.UnicodeConfig, configKey,
-						"which role should determine this users configuration", false, // editable
-						false, // multivalue
-						selectedValuesRole, // defaultValues enry
+						"which role should determine this users configuration", false, false, selectedValuesRole,
 						selectedValuesRole);
 
 				readyObjects.add(AbstractExecutioner.jsonMap(itemRole));
@@ -426,11 +414,7 @@ public class UserConfigProducing {
 			Logging.info(this, "supplyPermissionEntriesForAUser configKey " + configKey + " -- partkey " + partkey);
 			Logging.info(this, "supplyPermissionEntriesForAUser configKey has size 1 values " + values);
 
-			if (values == null
-
-					|| (prototypeObligatory && !(values.equals(prototypeConfig.getValues(partkey))))
-
-			) {
+			if (values == null || (prototypeObligatory && !(values.equals(prototypeConfig.getValues(partkey))))) {
 				Logging.info(this,
 						"supplyPermissionEntriesForAUser. serverconfigValuesMap gives not valid value for key "
 								+ configKey);
@@ -439,17 +423,10 @@ public class UserConfigProducing {
 				userConfig.setValues(partkey, values);
 
 				item = AbstractPersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig, configKey,
-						configKey, // description
-						false, // editable
-						false, // multivalue
-						values, values // possibleValues
-
-				);
+						configKey, false, false, values, values);
 
 				readyObjects.add(AbstractExecutioner.jsonMap(item));
-
 			}
-
 		}
 
 		// Stringlist valued
@@ -496,7 +473,6 @@ public class UserConfigProducing {
 			oldPossibleValuesDepot = new TreeSet<>();
 		} else {
 			oldPossibleValuesDepot = new HashSet<>(configOptionsMap.get(configKeyList).getPossibleValues());
-
 		}
 
 		Logging.info(this, "oldPossibleValuesDepot " + oldPossibleValuesDepot);
@@ -514,7 +490,6 @@ public class UserConfigProducing {
 			posVals.addAll(oldPossibleValuesDepot);
 
 			currentPossibleValuesDepotListed = new LinkedHashSet<>(posVals);
-
 		}
 
 		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesDepotListed));
@@ -571,7 +546,6 @@ public class UserConfigProducing {
 			Set<Object> posVals = new TreeSet<>(existingHostgroups);
 			posVals.addAll(oldPossibleValuesHostgroup);
 			currentPossibleValuesHostgroupListed = new LinkedHashSet<>(posVals);
-
 		}
 
 		userConfig.setPossibleValues(partkey, new ArrayList<>(currentPossibleValuesHostgroupListed));
