@@ -39,7 +39,6 @@ public abstract class AbstractBackend {
 
 		List<String> matchingClients = new LinkedList<>();
 		for (Client client : clients) {
-
 			if (operation.doesMatch(client)) {
 
 				matchingClients.add(client.getId());
@@ -59,8 +58,10 @@ public abstract class AbstractBackend {
 		if (operation instanceof AbstractSelectGroupOperation) {
 			AbstractSelectGroupOperation groupOperation = (AbstractSelectGroupOperation) operation;
 			List<AbstractSelectOperation> children = new LinkedList<>();
-			for (AbstractSelectOperation child : groupOperation.getChildOperations())
+			for (AbstractSelectOperation child : groupOperation.getChildOperations()) {
 				children.add((AbstractSelectOperation) createExecutableOperation(child));
+			}
+
 			return (ExecutableOperation) createGroupOperation(groupOperation, children);
 		} else {
 			return (ExecutableOperation) createOperation(operation);

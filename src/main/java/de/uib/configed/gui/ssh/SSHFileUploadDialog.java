@@ -184,8 +184,9 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		if (!(Globals.isGlobalReadOnly()))
+		if (!(Globals.isGlobalReadOnly())) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
+		}
 
 		jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));

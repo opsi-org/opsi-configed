@@ -1,7 +1,7 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.AbstractSelectElement;
+import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.utilities.logging.Logging;
 
@@ -27,8 +27,9 @@ public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOpera
 		}
 
 		for (String group : oClient.getSuperGroups()) {
-			if (checkData(group))
+			if (checkData(group)) {
 				return true;
+			}
 		}
 		return false;
 	}

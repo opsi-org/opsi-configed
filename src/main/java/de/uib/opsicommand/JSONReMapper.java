@@ -233,7 +233,8 @@ public final class JSONReMapper {
 
 					Iterator<String> iter1 = map1.keySet().iterator();
 					while (iter1.hasNext()) {
-						String key2 = iter1.next(); // e.g. product
+						// e.g. product
+						String key2 = iter1.next();
 						HashMap<String, Object> map2 = new HashMapX<>(map1.get(key2), true); // e.g.
 																								// product
 

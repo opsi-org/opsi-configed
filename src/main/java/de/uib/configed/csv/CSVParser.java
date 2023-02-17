@@ -55,8 +55,9 @@ public class CSVParser {
 		}
 
 		for (char c : line.toCharArray()) {
-			if (c == format.getStringSeparator())
+			if (c == format.getStringSeparator()) {
 				inQuotes = !inQuotes;
+			}
 		}
 
 		return inQuotes;
@@ -156,11 +157,10 @@ public class CSVParser {
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream()
 				.max(Map.Entry.comparingByValue());
 
-		if (optional.isPresent())
+		if (optional.isPresent()) {
 			return pendingFieldCount != 0 || numberOfFieldsPerLine.stream()
 					.allMatch(lineFieldCount -> lineFieldCount.equals(optional.get().getKey()));
-
-		else {
+		} else {
 			Logging.error(this, "value not present in equalFields");
 			return false;
 		}

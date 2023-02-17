@@ -42,10 +42,11 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 				Configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication.tooltip"));
 		jCheckBoxNeedAuthentication = new JCheckBox();
 		jCheckBoxNeedAuthentication.addItemListener(itemEvent -> {
-			if (itemEvent.getStateChange() == ItemEvent.SELECTED)
+			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				instance.open();
-			else
+			} else {
 				instance.close();
+			}
 		});
 		jLabeluser.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.username"));
 		jLabelPassword.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.password"));

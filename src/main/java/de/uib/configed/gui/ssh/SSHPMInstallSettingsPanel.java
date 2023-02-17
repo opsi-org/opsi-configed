@@ -42,8 +42,10 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 	public SSHPMInstallSettingsPanel(JDialog dia) {
 
-		if (dia != null)
+		if (dia != null) {
 			setFDepotList(dia);
+		}
+
 		initComponents();
 		initLayout();
 		initDepots();
@@ -61,8 +63,10 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
 		jButtonDepotselection.addActionListener(actionEvent -> {
 			initDepots();
-			if (jButtonDepotselection != null)
+			if (jButtonDepotselection != null) {
 				fDepotList.setLocationRelativeTo(jButtonDepotselection);
+			}
+
 			fDepotList.setVisible(true);
 		});
 
@@ -71,8 +75,10 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		jComboBoxVerbosity = new JComboBox<>();
 		jComboBoxVerbosity.setToolTipText(Configed.getResourceValue("SSHConnection.ParameterDialog.tooltip.verbosity"));
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 5; i++) {
 			jComboBoxVerbosity.addItem(i);
+		}
+
 		jComboBoxVerbosity.setSelectedItem(1);
 
 		jCheckBoxProperties = new JCheckBox();
@@ -87,7 +93,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 	}
 
-	public void setFDepotList(JDialog dia) {
+	private void setFDepotList(JDialog dia) {
 		fDepotList = new FDepotselectionList(dia) {
 			@Override
 			public void setListData(List<String> v) {
@@ -184,12 +190,14 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 			jTextFieldSelecteddepots.setEditable(true);
 			result.add(AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS);
 			result.add(AbstractPersistenceController.DEPOT_SELECTION_ALL);
-		} else
+		} else {
 			jTextFieldSelecteddepots.setEditable(false);
+		}
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
-			if (persist.getDepotPermission(depot))
+			if (persist.getDepotPermission(depot)) {
 				result.add(depot);
+			}
 		}
 
 		Logging.info(this, "getAllowedInstallTargets " + result);
@@ -231,7 +239,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		return depotParameter;
 	}
 
-	protected void initDepots() {
+	private void initDepots() {
 		depots = getAllowedInstallTargets();
 		Logging.info(this, "depots: " + depots.toString());
 		fDepotList.setListData(depots);
@@ -251,10 +259,12 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		basicCommand.setUpdateInstalled(jCheckBoxUpdateInstalled.isSelected());
 		basicCommand.setSetupInstalled(jCheckBoxSetupInstalled.isSelected());
 		if (jTextFieldSelecteddepots.getText().contains(
-				Configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS")))
+				Configed.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_NODEPOTS"))) {
 			basicCommand.setDepotForPInstall("");
-		else
+		} else {
 			basicCommand.setDepotForPInstall(jTextFieldSelecteddepots.getText());
+		}
+
 		return basicCommand;
 	}
 }

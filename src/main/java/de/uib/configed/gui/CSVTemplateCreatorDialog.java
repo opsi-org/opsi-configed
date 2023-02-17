@@ -448,8 +448,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			String csvFile = jFileChooser.getSelectedFile().getAbsolutePath();
-			if (!csvFile.endsWith(".csv"))
+			if (!csvFile.endsWith(".csv")) {
 				csvFile = csvFile.concat(".csv");
+			}
+
 			write(csvFile);
 		}
 

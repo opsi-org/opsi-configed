@@ -33,12 +33,14 @@ public class OpsiDataBigIntLessOrEqualOperation extends BigIntLessOrEqualOperati
 		Object realData = realMap.get(key);
 		Logging.debug(this, realData.getClass().getCanonicalName());
 		if (realData instanceof Long) {
-			if ((Long) realData <= data)
+			if ((Long) realData <= data) {
 				return true;
+			}
 		} else {
 			if (realData instanceof Integer) {
-				if ((Integer) realData <= data)
+				if ((Integer) realData <= data) {
 					return true;
+				}
 			} else {
 				Logging.error(this, "data is no BigInteger!" + realData);
 			}

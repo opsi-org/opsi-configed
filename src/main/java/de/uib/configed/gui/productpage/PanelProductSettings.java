@@ -263,8 +263,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				String stateChange = ((IFInstallationStateTableModel) (table.getModel()))
 						.getLastStateChange(convertRowIndexToModel(row));
 
-				if (stateChange == null)
+				if (stateChange == null) {
 					stateChange = "";
+				}
 
 				stateChange = table.getValueAt(row, column).toString() + ", "
 						+ Configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange;
@@ -279,14 +280,18 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		String iconsDir = null;
 
-		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE)
+		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
 			iconsDir = "images/productstate/targetconfiguration";
+		}
+
 		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(
 				de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_TARGET_CONFIGURATION) + ": ");
 
-		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE)
+		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
 			iconsDir = "images/productstate/installationstatus";
+		}
+
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
 				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2TextColor(),
 				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir, false,
@@ -674,8 +679,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 				switch (jTable.getColumnName(i)) {
 				case "Stand":
-					if (!s.equals("not_installed"))
+					if (!s.equals("not_installed")) {
 						dontStrippIt = true;
+					}
 					break;
 				case "Report":
 					if (!s.equals("")) {

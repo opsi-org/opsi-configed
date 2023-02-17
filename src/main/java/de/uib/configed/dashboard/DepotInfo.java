@@ -34,19 +34,27 @@ public class DepotInfo implements DataChangeListener {
 		if (selectedDepot != null
 				&& !selectedDepot.equals(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
 			if (depots.get(selectedDepot).get("type") != null
-					|| !depots.get(selectedDepot).get("type").toString().isEmpty())
+					|| !depots.get(selectedDepot).get("type").toString().isEmpty()) {
 				depotType = depots.get(selectedDepot).get("type").toString();
+			}
+
 			if (depots.get(selectedDepot).get("description") != null
-					|| !depots.get(selectedDepot).get("description").toString().isEmpty())
+					|| !depots.get(selectedDepot).get("description").toString().isEmpty()) {
 				depotDescription = depots.get(selectedDepot).get("description").toString();
+			}
 		}
 
-		if (depotType.equals("OpsiClient"))
+		if (depotType.equals("OpsiClient")) {
 			depotType = "Client";
-		if (depotType.equals("OpsiDepotserver"))
+		}
+
+		if (depotType.equals("OpsiDepotserver")) {
 			depotType = "Depot Server";
-		if (depotType.equals("OpsiConfigserver"))
+		}
+
+		if (depotType.equals("OpsiConfigserver")) {
 			depotType = "Config Server";
+		}
 
 		controller.depotTypeText.setText(depotType);
 		controller.depotDescriptionText.setText(depotDescription);

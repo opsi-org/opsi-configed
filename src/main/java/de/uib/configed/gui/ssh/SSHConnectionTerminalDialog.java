@@ -165,7 +165,6 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				Logging.info(this, "repeated requestFocus " + counter + " times");
 			}
 		});
-
 	}
 
 	private void setOutSize() {
@@ -199,8 +198,10 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public JTextField getInputField() {
-		if (jTextFieldCommand == null)
+		if (jTextFieldCommand == null) {
 			return null;
+		}
+
 		return jTextFieldCommand;
 	}
 

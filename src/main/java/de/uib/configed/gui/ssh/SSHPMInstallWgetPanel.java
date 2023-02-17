@@ -111,16 +111,19 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 	public SSHCommandTemplate getCommand(SSHCommandTemplate commands) {
 		if ((jTextFieldURL.getText() == null) || (jTextFieldURL.getText().trim().equals(""))
-				|| (jTextFieldURL.getText().trim().equals(urlDefText)))
+				|| (jTextFieldURL.getText().trim().equals(urlDefText))) {
 			return null;
+		}
 
 		CommandWget wget = getWgetCommand();
 		if (wget != null) {
 			if (((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).isSelected()) {
 				wget.setAuthentication(" --no-check-certificate --user=" + wgetAuthPanel.getUser() + " --password="
 						+ wgetAuthPanel.getPw() + " ");
-			} else
+			} else {
 				wget.setAuthentication(" ");
+			}
+
 			commands.addCommand(wget);
 			Logging.info(this, "doAction1 wget " + wget);
 		}
@@ -149,19 +152,21 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 		String tempTextFieldDir = "<" + Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory")
 				+ ">";
-		if (!wgetDir.equals("") || !wgetDir.equals(tempTextFieldDir))
+		if (!wgetDir.equals("") || !wgetDir.equals(tempTextFieldDir)) {
 			d = wgetDir;
-		else
+		} else {
 			return null;
+		}
 
 		String tempTextFieldURL = "<"
 				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetUrl")
 						.replace(":", "")
 				+ ">";
-		if (!jTextFieldURL.getText().equals("") || !jTextFieldURL.getText().equals(tempTextFieldURL))
+		if (!jTextFieldURL.getText().equals("") || !jTextFieldURL.getText().equals(tempTextFieldURL)) {
 			u = jTextFieldURL.getText();
-		else
+		} else {
 			return null;
+		}
 
 		mainProduct = u;
 		mainDir = d;

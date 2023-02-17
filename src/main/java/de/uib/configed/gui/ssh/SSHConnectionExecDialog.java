@@ -110,20 +110,23 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		SequentialGroup verticalGroup = layout.createSequentialGroup();
 
 		verticalGroup.addGap(vgap).addComponent(comp);
-		if (addInputField)
+		if (addInputField) {
 			verticalGroup.addGroup(layout.createParallelGroup().addGap(vgap, vgap, vgap)
 					.addComponent(jButtonClose, pref, pref, pref).addComponent(jButtonClear, pref, pref, pref)
 					.addComponent(jButtonKillProcess, pref, pref, pref).addGap(vgap));
+		}
+
 		verticalGroup.addGap(vgap);
 
 		ParallelGroup horizontalGroup = layout.createParallelGroup();
 		horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap).addComponent(comp).addGap(hgap));
-		if (addInputField)
+		if (addInputField) {
 			horizontalGroup.addGroup(layout.createSequentialGroup().addGap(hgap, hgap, max)
 					.addComponent(jButtonClose, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 					.addComponent(jButtonClear, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 					.addComponent(jButtonKillProcess, Globals.ICON_WIDTH, Globals.ICON_WIDTH, Globals.ICON_WIDTH)
 					.addGap(hgap));
+		}
 
 		layout.setVerticalGroup(verticalGroup);
 		layout.setHorizontalGroup(horizontalGroup);
@@ -145,8 +148,9 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		int callerlength = caller.length();
 
 		StringBuilder callerBuilder = new StringBuilder(caller);
-		for (int i = callerlength; i <= infolength; i++)
+		for (int i = callerlength; i <= infolength; i++) {
 			callerBuilder.append(" ");
+		}
 
 		super.append(callerBuilder.toString(), line);
 	}

@@ -96,11 +96,12 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 
 	@Override
 	protected CommandWget doAction1AdditionalSetWget(CommandWget c, String path) {
-		if (jComboBoxCopyToModulesD.isVisible() && jComboBoxCopyToModulesD.isSelected())
+		if (jComboBoxCopyToModulesD.isVisible() && jComboBoxCopyToModulesD.isSelected()) {
 			c.setDir(path + command.getTargetFilename());
-		else
+		} else {
 			c.setFileName(path + command.getTargetFilename());
+		}
+
 		return c;
 	}
-
 }

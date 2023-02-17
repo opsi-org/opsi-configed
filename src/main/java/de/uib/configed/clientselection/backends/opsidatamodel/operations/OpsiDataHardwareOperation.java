@@ -23,8 +23,9 @@ public class OpsiDataHardwareOperation extends HardwareOperation implements Exec
 
 				return true;
 			}
-			if (!oClient.hardwareIteratorNext())
+			if (!oClient.hardwareIteratorNext()) {
 				break;
+			}
 		}
 		return false;
 	}

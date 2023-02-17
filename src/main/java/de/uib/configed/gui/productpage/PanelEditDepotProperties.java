@@ -244,9 +244,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 					Logging.info(this, " product2properties null for depot " + depot);
 				} else if (product2properties.get(productEdited) == null) {
 					Logging.info(this, " product2properties null for depot, product " + depot + ", " + productEdited);
-				} else
+				} else {
 					storableProperties.add(product2properties.get(productEdited));
-
+				}
 			}
 			productPropertiesPanel.setStoreData(storableProperties);
 
@@ -256,9 +256,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 					productEdited);
 			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
 			mainController.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
-
 		}
-
 	}
 
 	private Map<String, Object> mergeProperties(
@@ -267,8 +265,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		Map<String, Object> result = new HashMap<>();
 
-		if (depots == null || depots.isEmpty())
+		if (depots == null || depots.isEmpty()) {
 			return result;
+		}
 
 		Map<String, ConfigName2ConfigValue> propertiesDepot0 = depot2product2properties.get(depots.get(0));
 

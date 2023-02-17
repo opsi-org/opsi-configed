@@ -114,10 +114,9 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 			opsiPackageOnWorkbench = new File(opsiPackageOnWorkbenchS);
 
-			if (opsiPackageNameS == null || opsiPackageNameS.trim().equals(""))
+			if (opsiPackageNameS == null || opsiPackageNameS.trim().equals("")) {
 				return false;
-
-			else {
+			} else {
 
 				if (opsiPackageOnWorkbench.exists()) {
 
@@ -131,9 +130,9 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 					return returnedOption == JOptionPane.YES_OPTION;
 
-				} else
-				// it is not there and we have to copy it
-				{
+				} else {
+					// it is not there and we have to copy it
+
 					waitCursor = new WaitCursor(rootFrame);
 
 					try {
@@ -153,8 +152,10 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			}
 
 		} catch (Exception ex) {
-			if (waitCursor != null)
+			if (waitCursor != null) {
 				waitCursor.stop();
+			}
+
 			Logging.error("library missing or path problem " + ex, ex);
 		}
 
@@ -174,8 +175,9 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		Logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 
-		if (depot2depotMap.get(depotserver) == null)
+		if (depot2depotMap.get(depotserver) == null) {
 			return;
+		}
 
 		String depotRemoteUrl = (String) depot2depotMap.get(depotserver).get("depotRemoteUrl");
 
@@ -213,10 +215,10 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 			Logging.info(this, "installPackage wrongly reporesult " + result);
 
-			if (result)
+			if (result) {
 				JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
 						Configed.getResourceValue("InstallOpsiPackage.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
-
+			}
 		}
 	}
 
@@ -255,7 +257,9 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		Logging.debug(this, "defineChoosers, depots: " + persist.getHostInfoCollections().getDepots());
 
 		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
-		comboChooseDepot.setEnabled(false); // as long as we did not implement contacting a different depot
+
+		// as long as we did not implement contacting a different depot
+		comboChooseDepot.setEnabled(false);
 
 		chooserPackage = new JFileChooser();
 		chooserPackage.setPreferredSize(Globals.filechooserSize);
@@ -291,7 +295,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserServerpath.setDialogType(JFileChooser.OPEN_DIALOG);
 		chooserServerpath.setDialogTitle(
 				Globals.APPNAME + " " + Configed.getResourceValue("InstallOpsiPackage.chooserServerPath"));
-
 	}
 
 	// implements NameProducer
@@ -343,10 +346,11 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		fieldTmpDir = new JTextField(DEFAULT_TEMP_DIRECTORY) {
 			@Override
 			public String getText() {
-				if (super.getText().equals(DEFAULT_TEMP_DIRECTORY))
+				if (super.getText().equals(DEFAULT_TEMP_DIRECTORY)) {
 					return "";
-				else
+				} else {
 					return super.getText();
+				}
 			}
 		};
 
@@ -500,9 +504,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 										.addGap(0, Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 										.addComponent(buttonCallExecute, GroupLayout.PREFERRED_SIZE,
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE))
-
-		);
+										.addGap(hFirstGap, hFirstGap, Short.MAX_VALUE)));
 	}
-
 }

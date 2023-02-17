@@ -2,9 +2,9 @@ package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
 import java.util.Map;
 
+import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
-import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.IntLessOrEqualOperation;
 import de.uib.utilities.logging.Logging;
@@ -32,8 +32,9 @@ public class OpsiDataIntLessOrEqualOperation extends IntLessOrEqualOperation imp
 
 		Object realData = realMap.get(key);
 		if (realData instanceof Integer) {
-			if ((Integer) realData <= data)
+			if ((Integer) realData <= data) {
 				return true;
+			}
 		} else {
 			Logging.warning(this, "data is no Integer!");
 		}

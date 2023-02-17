@@ -67,21 +67,30 @@ public abstract class AbstractSWExporter {
 	}
 
 	public void addMissingArgs() {
-		if (server == null)
+		if (server == null) {
 			server = Globals.getCLIparam("Host (default: localhost): ", false);
-		if (server.equals(""))
+		}
+
+		if (server.equals("")) {
 			server = "localhost";
+		}
 
-		if (user == null)
+		if (user == null) {
 			user = Globals.getCLIparam("User (default: " + System.getProperty("user.name") + ") : ", false);
-		if (user.equals(""))
+		}
+
+		if (user.equals("")) {
 			user = System.getProperty("user.name");
+		}
 
-		if (password == null)
+		if (password == null) {
 			password = Globals.getCLIparam("Password: ", true);
+		}
 
-		if (clientsFile == null)
+		if (clientsFile == null) {
 			clientsFile = Globals.getCLIparam("File with client names: ", false);
+		}
+
 		if (clientsFile.equals("")) {
 			finish(de.uib.configed.ErrorCode.CLIENTNAMES_FILENAME_MISSING);
 		}
@@ -89,15 +98,19 @@ public abstract class AbstractSWExporter {
 		File userHome = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 		String userHomeS = userHome.toString();
 
-		if (outDir == null)
+		if (outDir == null) {
 			outDir = Globals.getCLIparam("Export directory (default: " + userHomeS + "): ", false);
-		if (outDir.equals(""))
-			outDir = userHomeS;
+		}
 
-		if (outDir.endsWith("/"))
+		if (outDir.equals("")) {
+			outDir = userHomeS;
+		}
+
+		if (outDir.endsWith("/")) {
 			filepathStart = outDir + filenamePrefix;
-		else
+		} else {
 			filepathStart = outDir + File.separator + filenamePrefix;
+		}
 	}
 
 	public void run() {
@@ -173,8 +186,9 @@ public abstract class AbstractSWExporter {
 			}
 		}
 
-		if (exportDirectory != null)
+		if (exportDirectory != null) {
 			exportDirectoryS = exportDirectory.toString();
+		}
 
 		List<String> columnNames;
 		List<String> classNames;
@@ -188,7 +202,8 @@ public abstract class AbstractSWExporter {
 			finalColumns[i] = i;
 		}
 
-		modelSWInfo = new GenTableModel(null, // no updates
+		// no updates
+		modelSWInfo = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
 					public Map<String, Map> retrieveMap() {

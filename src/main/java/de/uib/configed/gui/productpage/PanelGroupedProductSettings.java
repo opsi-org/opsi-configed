@@ -99,8 +99,9 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 			} else {
 				for (int row = 0; row < tableProducts.getRowCount(); row++) {
 					Object productId = tableProducts.getValueAt(row, 0);
-					if (selectedIDs.contains(productId))
+					if (selectedIDs.contains(productId)) {
 						tableProducts.addRowSelectionInterval(row, row);
+					}
 				}
 			}
 		}

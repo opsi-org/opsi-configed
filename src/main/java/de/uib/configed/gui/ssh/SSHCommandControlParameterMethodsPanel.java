@@ -86,8 +86,10 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		Logging.info(this, "cb_parameter_formats lightweight " + jComboBoxParameterFormats.isLightWeightPopupEnabled());
 
 		jComboBoxParameterFormats.setPreferredSize(jComboBoxDim);
-		jComboBoxParameterFormats.setMaximumRowCount(5); // we have to delimit it so that is constrained to the component (in
-		// Windows) 
+
+		// we have to delimit it so that is constrained to the component (in Windows)
+		jComboBoxParameterFormats.setMaximumRowCount(5);
+
 		jComboBoxParameterMethods = new JComboBox<>(factory.getParameterHandler().getParameterMethodLocalNames());
 		jComboBoxParameterMethods
 				.setSelectedItem(Configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"));
@@ -209,28 +211,33 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 			Logging.debug("CREATED PARAM TEXT: " + paramText);
-		} else
+		} else {
 			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ SSHCommandParameterMethods.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
 					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
+		}
+
 		Logging.debug("PARAM TEXT: " + paramText);
 		try {
 			Logging.info(this, "actionPerformed(testParamMethod) parameterText " + paramText);
 			String result = "echo \"{0}\"".replace("{0}", factory.getParameterHandler().testParameter(paramText));
 			Logging.info(this, "actionPerformed(testParamMethod) result " + result);
 			String showThisText = "echo \"{0}\"".replace("{0}", paramText) + ":\n" + result;
-			if (result.equals(Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed")))
+			if (result.equals(Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed"))) {
 				showThisText = Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
+			}
+
 			JOptionPane.showMessageDialog(main, showThisText,
 					Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.title"),
 					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception ble) {
 			Logging.warning(this, "Testing parameter-method failed.", ble);
 		}
-		if (caller != null)
+		if (caller != null) {
 			caller.setVisible(true);
+		}
 	}
 
 	public void doActionParamAdd(JTextComponent component) {
@@ -243,12 +250,14 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
-		} else
+		} else {
 			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
 					+ factory.getParameterHandler()
 							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ SSHCommandParameterMethods.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
 					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
+		}
+
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);
 		} catch (BadLocationException ble) {

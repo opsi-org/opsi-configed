@@ -183,8 +183,10 @@ public class ClientView implements View {
 		final ObjectProperty<Predicate<Client>> lastSeenFilter = new SimpleObjectProperty<>();
 
 		hostnameFilter.bind(Bindings.createObjectBinding(() -> client -> {
-			if (clientSearchbarTextField.getText() == null)
+			if (clientSearchbarTextField.getText() == null) {
 				return true;
+			}
+
 			return client.getHostname().toLowerCase(Locale.ROOT)
 					.contains(clientSearchbarTextField.getText().toLowerCase(Locale.ROOT));
 		}, clientSearchbarTextField.textProperty()));

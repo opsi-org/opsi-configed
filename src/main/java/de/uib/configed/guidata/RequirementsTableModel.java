@@ -218,8 +218,9 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 			colorizer.colorize(cell, row, column);
 
-			if (cell instanceof JComponent)
+			if (cell instanceof JComponent) {
 				((JComponent) cell).setToolTipText("" + value);
+			}
 
 			// warning
 			String cellValue = String.valueOf(value);

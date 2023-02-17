@@ -168,8 +168,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void startStandard() {
-		if (!checkAndStart())
+		if (!checkAndStart()) {
 			return;
+		}
 
 		jTextFieldLicenceType.setEnabled(true);
 		jTextFieldLicenceType.setText("RETAIL");
@@ -184,8 +185,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void startVolume() {
-		if (!checkAndStart())
+		if (!checkAndStart()) {
 			return;
+		}
 
 		jTextFieldLicenceType.setEnabled(true);
 		jTextFieldLicenceType.setText("VOLUME");

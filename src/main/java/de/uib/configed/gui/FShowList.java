@@ -56,14 +56,16 @@ public class FShowList extends FTextArea {
 	}
 
 	public void setLines(List<String> lines) {
-		for (String line : lines)
+		for (String line : lines) {
 			appendLine(line);
+		}
 	}
 
 	@Override
 	public void setFont(Font f) {
-		if (jTextArea1 != null)
+		if (jTextArea1 != null) {
 			jTextArea1.setFont(f);
+		}
 	}
 
 	public void setLineWrap(boolean b) {
@@ -96,19 +98,23 @@ public class FShowList extends FTextArea {
 	public void doAction1() {
 
 		Logging.clearErrorList();
-		if (owner != null)
+		if (owner != null) {
 			owner.toFront();
+		}
+
 		super.doAction1();
 	}
 
 	// KeyListener
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT)
+		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
+		}
 
-		else if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed && e.getSource() == jTextArea1)
+		else if (e.getKeyCode() == KeyEvent.VK_TAB && !shiftPressed && e.getSource() == jTextArea1) {
 			jButton1.requestFocus();
+		}
 
 		else if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed && e.getSource() == jButton1) {
 			jTextArea1.requestFocus();

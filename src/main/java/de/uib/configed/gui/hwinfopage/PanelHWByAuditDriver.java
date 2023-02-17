@@ -149,21 +149,24 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldVendor2.setText("");
 		fieldLabel2.setText("");
 
-		if (fDriverUpload != null)
+		if (fDriverUpload != null) {
 			fDriverUpload.setUploadParameters("");
+		}
 	}
 
 	private String eliminateIllegalPathChars(String path) {
 		final String toReplace = "<>?\":|\\/*";
 		final char replacement = '_';
 
-		if (path == null)
+		if (path == null) {
 			return null;
+		}
 
 		char[] chars = path.toCharArray();
 		for (int i = 0; i < chars.length; i++) {
-			if (toReplace.indexOf(chars[i]) > -1)
+			if (toReplace.indexOf(chars[i]) > -1) {
 				chars[i] = replacement;
+			}
 		}
 
 		// requires bootimage >= 4.0.6
@@ -182,9 +185,9 @@ public class PanelHWByAuditDriver extends JPanel {
 		fieldVendor2.setText(vendorStringBaseBoard);
 		fieldLabel2.setText(productString);
 
-		if (fDriverUpload != null)
+		if (fDriverUpload != null) {
 			fDriverUpload.setUploadParameters(byAuditPath);
-
+		}
 	}
 
 	private void startDriverUploadFrame() {

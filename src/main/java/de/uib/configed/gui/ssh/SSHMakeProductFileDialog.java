@@ -190,8 +190,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			jButtonAdvancedSettings.setText(
 					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_advancedSettings"));
 
-			if (!(Globals.isGlobalReadOnly()))
+			if (!(Globals.isGlobalReadOnly())) {
 				jButtonAdvancedSettings.addActionListener(actionEvent -> showAdvancedSettings());
+			}
 
 			jButtonAdvancedSettings.setPreferredSize(jButtonSearchDir.getPreferredSize());
 			jTextFieldProductVersion.setPreferredSize(jButtonSearchDir.getPreferredSize());
@@ -202,8 +203,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 					.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights"));
 			jButtonSetRights.setToolTipText(
 					Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.btn_setRights.tooltip"));
-			if (!(Globals.isGlobalReadOnly()))
+			if (!(Globals.isGlobalReadOnly())) {
 				jButtonSetRights.addActionListener(actionEvent -> doExecSetRights());
+			}
 
 			jButtonToPackageManager = new JButton();
 			jButtonToPackageManager.setEnabled(false);
@@ -212,18 +214,21 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			jButtonToPackageManager.setToolTipText(Configed
 					.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
 
-			if (!(Globals.isGlobalReadOnly()))
+			if (!(Globals.isGlobalReadOnly())) {
 				jButtonToPackageManager.addActionListener(actionEvent -> {
-					if (main != null)
+					if (main != null) {
 						new SSHPackageManagerInstallParameterDialog(main, filename);
+					}
 				});
+			}
 
 			jButtonExec = new JButton();
 			jButtonExec.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 			jButtonExec.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 			jButtonExec.setEnabled(false);
-			if (!(Globals.isGlobalReadOnly()))
+			if (!(Globals.isGlobalReadOnly())) {
 				jButtonExec.addActionListener(actionEvent -> doAction2());
+			}
 
 			JButton jButtonCancel = new JButton();
 			jButtonCancel.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
@@ -521,8 +526,10 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	}
 
 	private String checkVersion(String v, String compareWith, String overwriteWith) {
-		if (v.equals(compareWith))
+		if (v.equals(compareWith)) {
 			return overwriteWith;
+		}
+
 		return v;
 	}
 
@@ -533,8 +540,10 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		SSHConnectExec ssh = new SSHConnectExec();
 		String result = ssh.exec(getPackageId, false);
 		Logging.debug(this, "getPackageID result " + result);
-		if (result != null)
+		if (result != null) {
 			return result.replace("id:", "").trim();
+		}
+
 		return "";
 
 	}

@@ -420,8 +420,9 @@ public class PanelSWInfo extends JPanel {
 
 		exporter.setHost(hostId);
 
-		if (panelTable.getSelectedRowCount() > 0)
+		if (panelTable.getSelectedRowCount() > 0) {
 			exporter.setOnlySelectedRows();
+		}
 
 		exporter.setPanelTableForExportTable(panelTable);
 
@@ -435,8 +436,9 @@ public class PanelSWInfo extends JPanel {
 		if (kindOfExport == KindOfExport.CSV) {
 			Logging.info(this, "export to " + exportPath);
 			csvExportTable.execute(exportPath, false);
-		} else if (kindOfExport == KindOfExport.PDF)
+		} else if (kindOfExport == KindOfExport.PDF) {
 			sendToPDF();
+		}
 	}
 
 	public void sendToCSV() {
@@ -514,8 +516,9 @@ public class PanelSWInfo extends JPanel {
 
 		String timeS = "" + Globals.getToday();
 		String[] parts = timeS.split(":");
-		if (parts.length > 2)
+		if (parts.length > 2) {
 			timeS = parts[0] + ":" + parts[1];
+		}
 
 		scanInfo = " (no software audit data, checked at time:  " + timeS + ")";
 	}

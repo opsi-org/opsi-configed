@@ -100,10 +100,11 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	 * @param boolean We are in progress
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
-		if (active)
+		if (active) {
 			valueList.setBackground(Globals.BACKGROUND_COLOR_9);
-		else
+		} else {
 			valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		// colorize as hint that we have changed the depots selection
 

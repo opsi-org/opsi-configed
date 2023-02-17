@@ -64,11 +64,12 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		jButtonDoAction = new JButton();
 		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonDoAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		if (!(Globals.isGlobalReadOnly()))
+		if (!(Globals.isGlobalReadOnly())) {
 			jButtonDoAction.addActionListener(actionEvent -> {
 				Logging.info(this, "btn_doAction pressed");
 				doAction2();
 			});
+		}
 
 		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));

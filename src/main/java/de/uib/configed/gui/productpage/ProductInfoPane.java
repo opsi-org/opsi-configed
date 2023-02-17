@@ -270,8 +270,9 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 	}
 
 	protected String fillEmpty(String content) {
-		if (content == null || content.equals("") || content.equals("-"))
+		if (content == null || content.equals("") || content.equals("-")) {
 			return " ";
+		}
 
 		return content;
 	}
@@ -305,14 +306,17 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		float alpha = grey ? 0.1f : 1f;
 
-		if (productDescriptionsPanel != null)
+		if (productDescriptionsPanel != null) {
 			productDescriptionsPanel.setAlpha(alpha);
+		}
 
-		if (panelEditProperties != null)
+		if (panelEditProperties != null) {
 			panelEditProperties.setAlpha(alpha);
+		}
 
-		if (bottomComponent != null)
+		if (bottomComponent != null) {
 			bottomComponent.setAlpha(alpha);
+		}
 	}
 
 	public void setEditValues(String productId, String productVersion, String packageVersion, String depotId) {

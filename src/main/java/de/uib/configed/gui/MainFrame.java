@@ -3612,8 +3612,9 @@ public class MainFrame extends JFrame
 		boolean goOn = true;
 
 		String clientID = getClientID();
-		if ((clientID == null) || (clientID.length() == 0))
+		if ((clientID == null) || (clientID.length() == 0)) {
 			return goOn;
+		}
 
 		// for testing commented out
 
@@ -3811,8 +3812,9 @@ public class MainFrame extends JFrame
 
 	public void setLogview(String logtype) {
 		int i = Arrays.asList(Globals.getLogTypes()).indexOf(logtype);
-		if (i < 0)
+		if (i < 0) {
 			return;
+		}
 
 		showLogfiles.setSelectedIndex(i);
 	}

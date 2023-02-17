@@ -20,11 +20,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	int[] saveRowSelection;
 
 	public PanelRegisteredSoftware(ControlPanelAssignToLPools controller) {
-		super("",
-
-				0, true, 2, true, new int[] { PanelGenEditTable.POPUP_RELOAD }, true
-
-		);
+		super("", 0, true, 2, true, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);
 		this.controller = controller;
 		searchPane.setWithNavPane(true);
 	}
@@ -69,16 +65,18 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	}
 
 	public void callName2Pool(int modelrow) {
-		if (tableModel.getCursorRow() < 0)
+		if (tableModel.getCursorRow() < 0) {
 			return;
+		}
 
 		String nameVal = (String) tableModel.getValueAt(modelrow,
 				getTableModel().getColumnNames().indexOf(SWAuditEntry.NAME));
 
 		Logging.info(this, " got name " + nameVal);
 
-		if (controller.thePanel.fSoftwarename2LicencePool != null)
+		if (controller.thePanel.fSoftwarename2LicencePool != null) {
 			controller.thePanel.fSoftwarename2LicencePool.panelSWnames.moveToValue(nameVal, 0);
+		}
 	}
 
 	@Override
@@ -142,9 +140,9 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		if (mouseInColumnOfMarkCursor(e.getPoint())) {
 			Logging.info(this, "mouseReleased reset saveRowSelection ");
 
-			if (saveRowSelection != null)
+			if (saveRowSelection != null) {
 				super.setSelection(saveRowSelection);
-
+			}
 		}
 
 		else {
@@ -161,9 +159,9 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 			if (tableModel.gotMarkCursorRow() && col != tableModel.getColMarkCursorRow()) {
 				super.setDataChanged(true);
 			}
-		} else
+		} else {
 			super.setDataChanged(false);
-
+		}
 	}
 
 	// CursorrowObserer
@@ -173,5 +171,4 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 		Logging.info(this, " rowUpdated to modelrow " + modelrow);
 		callName2Pool(modelrow);
 	}
-
 }

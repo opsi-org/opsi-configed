@@ -348,21 +348,18 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		}
 
 		char separator = format.getStringSeparator();
-		if (separator == '\'')
+		if (separator == '\'') {
 			stringSeparatorOptions.setSelectedItem('\'');
-		else if (separator == '"')
+		} else if (separator == '"') {
 			stringSeparatorOptions.setSelectedItem('"');
+		}
 	}
 
 	protected JPanel initPanel() {
-		thePanel = new PanelGenEditTable("", // title
-				-1, // don't use a definite max table width
-				true, // editing
-				0, // generalPopupPosition
-				true, // switchLineColors
-				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_RELOAD }, // popupsWanted
-				true // withTableseearchPane
-		);
+
+		// don't use a definite max table width (-1), with popups
+		thePanel = new PanelGenEditTable("", -1, true, 0, true,
+				new int[] { PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_RELOAD }, true);
 
 		parser.setIgnoreErrors(false);
 		boolean updatedSuccessfull = modifier.updateTable(parser, startLine, thePanel);

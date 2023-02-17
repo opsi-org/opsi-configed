@@ -94,9 +94,9 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 		Logging.info(this, "setFilter " + Logging.getStrings(filter));
 		this.filter = filter;
 
-		if (filter == null)
+		if (filter == null) {
 			filterInverse = null;
-		else {
+		} else {
 			filterInverse = new int[super.getRowCount()];
 			for (int j = 0; j < super.getRowCount(); j++) {
 				filterInverse[j] = -1;
@@ -113,8 +113,9 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	}
 
 	private int originRow(int i) {
-		if (filter == null)
+		if (filter == null) {
 			return i;
+		}
 
 		if (i >= filter.length) {
 			Logging.info(this, "originRow, error cannot evaluate filter; i, filter.length " + i + ", " + filter.length);
@@ -127,8 +128,9 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	@Override
 	public int getRowFromProductID(String id) {
 		int superRow = super.getRowFromProductID(id);
-		if (filterInverse == null)
+		if (filterInverse == null) {
 			return superRow;
+		}
 
 		return filterInverse[superRow];
 	}
@@ -136,10 +138,11 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	// table model
 	@Override
 	public int getRowCount() {
-		if (filter == null)
+		if (filter == null) {
 			return super.getRowCount();
-		else
+		} else {
 			return filter.length;
+		}
 	}
 
 	@Override

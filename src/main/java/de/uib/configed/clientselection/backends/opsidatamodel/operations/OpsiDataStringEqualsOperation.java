@@ -53,18 +53,19 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 		String rData = realData.toLowerCase();
 
-		if (dataSplitted == null) // simple case: no '*'
-		{
+		// simple case: no '*'
+		if (dataSplitted == null) {
 			return rData.equals(data);
 		}
 
-		else if (dataSplitted.length == 0) // the only chars are '*'
-		{
+		// the only chars are '*'
+		else if (dataSplitted.length == 0) {
 			return realData.length() > 0;
 		} else {
 
-			if (!startsWith && !rData.startsWith(dataSplitted[0]))
+			if (!startsWith && !rData.startsWith(dataSplitted[0])) {
 				return false;
+			}
 
 			int index = 0;
 			int i = 0;
@@ -72,8 +73,9 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 
 				if (!dataSplitted[i].isEmpty()) {
 					index = rData.indexOf(dataSplitted[i], index);
-					if (index >= 0)
+					if (index >= 0) {
 						index += dataSplitted[i].length();
+					}
 				}
 
 				i++;

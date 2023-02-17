@@ -140,8 +140,9 @@ public class PanelCompleteWinProducts extends JPanel
 	}
 
 	private void retrieveWinProducts() {
-		if (depotProductDirectory == null)
+		if (depotProductDirectory == null) {
 			return;
+		}
 
 		// not yet a depot selected
 
@@ -190,8 +191,9 @@ public class PanelCompleteWinProducts extends JPanel
 	}
 
 	private void checkButtonCallExecute() {
-		if (buttonCallExecute == null)
+		if (buttonCallExecute == null) {
 			return;
+		}
 
 		buttonCallExecute.setEnabled(
 				// true
@@ -212,8 +214,9 @@ public class PanelCompleteWinProducts extends JPanel
 		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory " + fieldTargetPath + " , "
 				+ depotProductDirectory);
 		if (fieldTargetPath == null || fieldTargetPath.getText().equals("")
-				|| fieldTargetPath.getText().startsWith(depotProductDirectory))
+				|| fieldTargetPath.getText().startsWith(depotProductDirectory)) {
 			return depotProductDirectory;
+		}
 
 		return fieldTargetPath.getText();
 	}
@@ -363,11 +366,13 @@ public class PanelCompleteWinProducts extends JPanel
 
 			if (propsMap != null && propsMap.get("productkey") != null && propsMap.get("productkey") instanceof List
 					&& !((List) propsMap.get("productkey")).isEmpty()
-					&& !((List) propsMap.get("productkey")).get(0).equals(""))
+					&& !((List) propsMap.get("productkey")).get(0).equals("")) {
 				oldProductKey = (String) ((List) propsMap.get("productkey")).get(0);
+			}
 
-			if (oldProductKey == null)
+			if (oldProductKey == null) {
 				oldProductKey = "";
+			}
 
 			depots.clear();
 			depots.add((String) comboChooseDepot.getSelectedItem());
@@ -538,5 +543,4 @@ public class PanelCompleteWinProducts extends JPanel
 
 		);
 	}
-
 }

@@ -5,9 +5,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.HostsStatusInfo;
-import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 
@@ -103,15 +103,19 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		if (bracketIndex > -1) {
 			String keep = fieldActivatedClientsCount.getText().substring(0, bracketIndex);
 			newS = keep + "(" + n + ")";
-		} else
+		} else {
 			newS = "(" + n + ")";
+		}
+
 		fieldActivatedClientsCount.setText(newS);
 	}
 
 	private void setFieldClientsCount(Integer n) {
 		String newS = null;
-		if (n != null)
+		if (n != null) {
 			newS = "" + n + " ";
+		}
+
 		int bracketIndex = fieldActivatedClientsCount.getText().indexOf("(");
 		if (bracketIndex > -1) {
 			String keep = fieldActivatedClientsCount.getText().substring(bracketIndex);

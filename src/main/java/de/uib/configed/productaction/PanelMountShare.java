@@ -24,9 +24,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.Configed;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
@@ -75,9 +75,10 @@ public class PanelMountShare extends JPanel {
 		buttonMountShare = new JButton("", Globals.createImageIcon("images/windows16.png", ""));
 		buttonMountShare.setSelectedIcon(Globals.createImageIcon("images/windows16.png", ""));
 		buttonMountShare.setPreferredSize(Globals.graphicButtonDimension);
-		if (isWindows)
+		if (isWindows) {
 			buttonMountShare.setToolTipText(
 					Configed.getResourceValue("PanelMountShare.mountShareDescription") + " " + np.produceName());
+		}
 
 		buttonMountShare.setEnabled(isWindows);
 
@@ -144,8 +145,9 @@ public class PanelMountShare extends JPanel {
 	}
 
 	private void callMountShare() {
-		if (!isWindows)
+		if (!isWindows) {
 			return;
+		}
 
 		String call;
 		call = "explorer.exe " + " \"" + np.produceName() + "\"";
@@ -175,12 +177,12 @@ public class PanelMountShare extends JPanel {
 	}
 
 	private void setShareMountedInfo(boolean mounted) {
-		if (mounted)
+		if (mounted) {
 			mountShareDescriptionLabel
 					.setText(Configed.getResourceValue("PanelMountShare.mountShareResult2") + " " + np.produceName());
-		else
+		} else {
 			mountShareDescriptionLabel.setText(Configed.getResourceValue("PanelMountShare.mountShareResult0"));
-
+		}
 	}
 
 	protected boolean checkConnectionToShare() {
@@ -202,8 +204,9 @@ public class PanelMountShare extends JPanel {
 
 		setShareMountedInfo(found);
 
-		if (!smbMounted && found)
+		if (!smbMounted && found) {
 			initialMount();
+		}
 
 		smbMounted = found;
 

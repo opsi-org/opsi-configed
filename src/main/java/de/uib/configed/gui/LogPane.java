@@ -587,8 +587,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					show = true;
 				}
 
-				if (show && showTypeRestricted && lineTypes[i] != selTypeIndex)
+				if (show && showTypeRestricted && lineTypes[i] != selTypeIndex) {
 					show = false;
+				}
 
 				if (show) {
 

@@ -36,36 +36,44 @@ class JsonParser {
 			Logging.debug(this, (char) i + " " + currentPosition.toString());
 			managePosition();
 			char c = (char) i;
-			if (Character.isWhitespace(c))
+			if (Character.isWhitespace(c)) {
 				continue;
+			}
+
 			if (c == ':' && currentPosition == PositionType.JSON_NAME) {
 				currentPosition = PositionType.JSON_VALUE;
 				continue;
 			}
+
 			if (c == ',' && currentPosition == PositionType.JSON_VALUE) {
 				if (!inList)
 					currentPosition = PositionType.JSON_NAME;
 				continue;
 			}
+
 			if (c == '{' && currentPosition == PositionType.JSON_VALUE) {
 				currentPosition = PositionType.OBJECT_BEGIN;
 				inList = false;
 				return true;
 			}
+
 			if (c == '}' && currentPosition == PositionType.JSON_VALUE) {
 				currentPosition = PositionType.OBJECT_END;
 				return true;
 			}
+
 			if (c == '[' && currentPosition == PositionType.JSON_VALUE) {
 				currentPosition = PositionType.LIST_BEGIN;
 				inList = true;
 				return true;
 			}
+
 			if (c == ']' && currentPosition == PositionType.JSON_VALUE) {
 				currentPosition = PositionType.LIST_END;
 				inList = false;
 				return true;
 			}
+
 			if ((c == '"' || Character.isLetter(c))
 					&& (currentPosition == PositionType.JSON_VALUE || currentPosition == PositionType.JSON_NAME)) {
 				currentValue = getNextValue(c);
@@ -94,8 +102,10 @@ class JsonParser {
 				builder.append((char) i);
 				i = reader.read();
 			}
-			if (i == -1)
+			if (i == -1) {
 				throw new IllegalArgumentException("Unexpected EOF");
+			}
+
 			builder.append((char) i);
 			return builder.toString();
 		} else {

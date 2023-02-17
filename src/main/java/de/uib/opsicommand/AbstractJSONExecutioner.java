@@ -109,8 +109,8 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 		return result;
 	}
 
-	private Map getMapOfLists(OpsiMethodCall omc, boolean recursive) {
-		Map result = new HashMap<>();
+	private Map<String, List<Object>> getMapOfLists(OpsiMethodCall omc, boolean recursive) {
+		Map<String, List<Object>> result = new HashMap<>();
 		try {
 			JSONObject jO = retrieveJSONObject(omc);
 

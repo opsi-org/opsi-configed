@@ -25,16 +25,20 @@ public abstract class AbstractSelectElement {
 	/** Get the non-localized path joined with '/' */
 	public String getPath() {
 		StringBuilder s = new StringBuilder();
-		for (int i = 0; i < path.length; i++)
+		for (int i = 0; i < path.length; i++) {
 			s.append(path[i] + '/');
+		}
+
 		return s.substring(0, s.length() - 1);
 	}
 
 	/** Get the localized path joined with '/' */
 	public String getLocalizedPath() {
 		StringBuilder s = new StringBuilder();
-		for (int i = 0; i < localizedPath.length; i++)
+		for (int i = 0; i < localizedPath.length; i++) {
 			s.append(localizedPath[i] + '/');
+		}
+
 		return s.substring(0, s.length() - 1);
 	}
 

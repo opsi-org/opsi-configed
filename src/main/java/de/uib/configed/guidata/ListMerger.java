@@ -33,11 +33,13 @@ public class ListMerger extends ArrayList {
 
 	private boolean equals(List list1, List list2) {
 
-		if (list1 == null && list2 == null)
+		if (list1 == null && list2 == null) {
 			return true;
+		}
 
-		if (list1 == null || list2 == null)
+		if (list1 == null || list2 == null) {
 			return false;
+		}
 
 		return list1.containsAll(list2) && list2.containsAll(list1);
 	}
@@ -49,8 +51,9 @@ public class ListMerger extends ArrayList {
 			listValue = NO_COMMON_VALUE;
 		}
 
-		if (!havingCommonValue)
+		if (!havingCommonValue) {
 			return NO_COMMON_VALUE;
+		}
 
 		return this;
 	}
@@ -64,25 +67,27 @@ public class ListMerger extends ArrayList {
 	}
 
 	public static List getMergedList(List li) {
-		if (li instanceof ListMerger)
+		if (li instanceof ListMerger) {
 			return ((ListMerger) li).getValue();
-		else
+		} else {
 			// li is ArrayList
 			return li;
+		}
 	}
 
 	public Color getTextColor() {
 		if (!havingCommonValue) {
 			return Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR;
-		} else
+		} else {
 			return Globals.LIST_MERGER_NORMAL_VALUE_TEXT_COLOR;
+		}
 	}
 
 	public Color getBackgroundColor() {
 		if (!havingCommonValue) {
 			return Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR;
-		} else
+		} else {
 			return Globals.LIST_MERGER_NORMAL_VALUE_BACKGROUND_COLOR;
+		}
 	}
-
 }

@@ -327,8 +327,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		String hwClassUI = path[1].toString();
 		String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-		if (hwClass != null && reduceScanToByAuditClasses && !hwClassesForByAudit.contains(hwClass))
+		if (hwClass != null && reduceScanToByAuditClasses && !hwClassesForByAudit.contains(hwClass)) {
 			return new ArrayList<>();
+		}
 
 		List devices = (List) hwInfo.get(hwClass);
 		Map deviceInfo = node.getDeviceInfo();
@@ -430,8 +431,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	public void valueChanged(TreeSelectionEvent e) {
 		// Returns the last path element of the selection.
 		IconNode node = (IconNode) tree.getLastSelectedPathComponent();
-		if (node == null)
+		if (node == null) {
 			return;
+		}
 
 		TreePath selectedPath = tree.getSelectionPath();
 		Logging.debug(this, "selectedPath " + selectedPath);
@@ -504,11 +506,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return;
 		}
 
-		if (hwInfo == null) {
-			Logging.info("hwInfo null");
-			return;
-		}
-
 		hwClassMapping = new HashMap<>();
 		String[] hwClassesUI = new String[hwConfig.size()];
 		for (int i = 0; i < hwConfig.size(); i++) {
@@ -568,8 +565,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				for (int j = 0; j < devs.size(); j++) {
 					Map dev = (Map) devs.get(j);
 					String dn = displayName;
-					if (devs.size() > 1)
+					if (devs.size() > 1) {
 						dn += " (" + j + ")";
+					}
 
 					dev.put("displayName", dn);
 					names[num] = dn;
@@ -683,9 +681,13 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			boolean first = true;
 			while (alIterator.hasNext()) {
 				Map hm = alIterator.next();
-				if (first) { // second column, first element
+				if (first) {
+					// second column, first element
+
 					childValues = new ArrayList<>();
-					childValues.add(child.toString()); // first column
+
+					// first column
+					childValues.add(child.toString());
 					childValues.add(hm.get("displayName").toString());
 					Iterator hmIterator = hm.keySet().iterator();
 					boolean firstValue = true;
@@ -710,7 +712,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					first = false;
 				} else {
 					childValues = new ArrayList<>();
-					childValues.add(""); // first column empty
+
+					// first column empty
+					childValues.add("");
 					childValues.add(hm.get("displayName").toString());
 					Iterator hmIterator = hm.keySet().iterator();
 					boolean firstValue = true;
@@ -731,12 +735,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 							tableModelComplete.addRow(childValues.toArray());
 						}
 					}
-
 				}
 			}
 		}
 		return jTableComplete;
-
 	}
-
 }

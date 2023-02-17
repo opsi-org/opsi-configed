@@ -71,8 +71,9 @@ public class ControllerHWinfoMultiClients {
 
 		@Override
 		public boolean test(List<Object> row) {
-			if (filter == null || row == null || KEY_COL >= row.size())
+			if (filter == null || row == null || KEY_COL >= row.size()) {
 				return true;
+			}
 
 			return filter.contains(row.get(KEY_COL));
 
@@ -82,8 +83,9 @@ public class ControllerHWinfoMultiClients {
 		public String toString() {
 			String result = "TableModelFilterCondition: filterConditionHwForSelectedHosts, filter == null "
 					+ (filter == null);
-			if (filter != null)
+			if (filter != null) {
 				result = result + " size " + filter.size();
+			}
 
 			return result;
 		}
@@ -146,7 +148,8 @@ public class ControllerHWinfoMultiClients {
 		panel.setMasterFrame(ConfigedMain.getMainFrame());
 		panel.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		panel.showFilterIcon(true); // supply implementation of SearchTargetModelFromTable.setFiltered
+		// supply implementation of SearchTargetModelFromTable.setFiltered
+		panel.showFilterIcon(true);
 		panel.setFiltering(true);
 
 	}
@@ -200,7 +203,9 @@ public class ControllerHWinfoMultiClients {
 		persist.configOptionsRequestRefresh();
 		persist.client2HwRowsRequestRefresh();
 		initModel();
-		panel.reset(); // we apply filter
+
+		// we apply filter
+		panel.reset();
 	}
 
 	protected void buildSurrounding() {

@@ -114,8 +114,10 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 	}
 
 	public CommandSFTPUpload getCommand() {
-		if ((jTextFieldPath.getText() == null) || (jTextFieldPath.getText().equals("")))
+		if ((jTextFieldPath.getText() == null) || (jTextFieldPath.getText().equals(""))) {
 			return null;
+		}
+
 		CommandSFTPUpload com1 = new CommandSFTPUpload("PackegeUpload");
 		com1.setCommand("SFTP local file to server");
 		com1.setFullSourcePath(jTextFieldPath.getText());

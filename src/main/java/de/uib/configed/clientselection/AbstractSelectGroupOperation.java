@@ -37,8 +37,10 @@ public abstract class AbstractSelectGroupOperation extends AbstractSelectOperati
 	@Override
 	public String printOperation(String indent) {
 		StringBuilder result = new StringBuilder(indent + getClassName() + " {\n");
-		for (AbstractSelectOperation op : childOperations)
+		for (AbstractSelectOperation op : childOperations) {
 			result.append(op.printOperation(indent + "\t") + "\n");
+		}
+
 		return result + indent + "}";
 	}
 }

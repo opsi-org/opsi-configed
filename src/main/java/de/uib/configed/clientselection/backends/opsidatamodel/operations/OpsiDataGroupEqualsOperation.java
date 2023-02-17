@@ -1,7 +1,7 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
-import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.AbstractSelectElement;
+import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 
 public class OpsiDataGroupEqualsOperation extends OpsiDataStringEqualsOperation {
@@ -14,8 +14,9 @@ public class OpsiDataGroupEqualsOperation extends OpsiDataStringEqualsOperation 
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		for (String obj : oClient.getGroups()) {
 			String group = obj;
-			if (checkData(group))
+			if (checkData(group)) {
 				return true;
+			}
 		}
 		return false;
 	}

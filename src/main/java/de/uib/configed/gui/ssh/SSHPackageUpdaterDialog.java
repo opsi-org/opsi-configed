@@ -92,11 +92,12 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		jButtonDoAction = new JButton();
 		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonDoAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		if (!(Globals.isGlobalReadOnly()))
+		if (!(Globals.isGlobalReadOnly())) {
 			jButtonDoAction.addActionListener(actionEvent -> {
 				Logging.info(this, "btn_doAction pressed");
 				doAction2();
 			});
+		}
 
 		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
@@ -111,8 +112,9 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		jComboBoxActions = new JComboBox<>(command.getActionsText());
 		jComboBoxActions.addItemListener(itemEvent -> {
 			if (((String) itemEvent.getItem())
-					.equals(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list")))
+					.equals(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"))) {
 				jComboBoxRepos.setEnabled(itemEvent.getStateChange() != ItemEvent.SELECTED);
+			}
 		});
 
 		if (command.getRepos() != null) {
@@ -141,10 +143,12 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 			command.setAction(command.getAction((String) jComboBoxActions.getSelectedItem()));
 			String repo = (String) jComboBoxRepos.getSelectedItem();
 			if (repo.equals(
-					Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories")))
+					Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackageupdater.allrepositories"))) {
 				command.setRepo(null);
-			else
+			} else {
 				command.setRepo(repo);
+			}
+
 			Logging.info(this, "doAction2 opsi-package-updater: " + command.toString());
 			new SSHConnectExec(command);
 

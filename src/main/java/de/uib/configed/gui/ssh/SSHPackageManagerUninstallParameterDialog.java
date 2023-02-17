@@ -383,11 +383,9 @@ public class SSHPackageManagerUninstallParameterDialog
 
 		changeProduct(prod);
 
-		if (!commandPMUninstall.checkCommand())
+		if (!commandPMUninstall.checkCommand() || !confirmAction()) {
 			return;
-
-		if (!confirmAction())
-			return;
+		}
 
 		Thread execThread = new Thread() {
 			@Override

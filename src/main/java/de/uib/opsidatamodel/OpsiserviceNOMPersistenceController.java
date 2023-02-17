@@ -3611,8 +3611,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					.getMapOfLists(new OpsiMethodCall("getProductOrdering", new String[] { depotId }));
 
 			List<String> sortedProducts = (List<String>) productOrderingResult.get("sorted");
-			if (sortedProducts == null)
+			if (sortedProducts == null) {
 				sortedProducts = new ArrayList<>();
+			}
 
 			List<String> notSortedProducts = (List<String>) productOrderingResult.get("not_sorted");
 			if (notSortedProducts == null) {

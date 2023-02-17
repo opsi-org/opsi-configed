@@ -77,10 +77,11 @@ public final class SSHConfigDialog extends FGeneralDialog {
 	}
 
 	public static SSHConfigDialog getInstance(ConfigedMain cmain) {
-		if (instance == null)
+		if (instance == null) {
 			instance = new SSHConfigDialog(cmain);
-		else
+		} else {
 			instance.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		}
 
 		instance.setVisible(true);
 		checkComponents();
@@ -199,8 +200,9 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		if (str.equals(SSHCommandFactory.CONNECTED)) {
 			labeltext = "<html><font color='green'>" + str + "</font></html>";
 		} else {
-			if (str.equals(SSHCommandFactory.NOT_CONNECTED))
+			if (str.equals(SSHCommandFactory.NOT_CONNECTED)) {
 				labeltext = "<html><font color='red'>" + str + "</font></html>";
+			}
 		}
 		jLabelConnectionState.setText(labeltext);
 		Logging.debug(this, "setSSHState setText " + labeltext);
@@ -234,13 +236,17 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		jComboBoxHost = new JComboBox<>();
 		String host = connectionInfo.getHost();
-		if (host == null)
+		if (host == null) {
 			host = ConfigedMain.host;
+		}
+
 		jComboBoxHost.addItem(host);
 
 		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		Set<String> depots = persist.getDepotPropertiesForPermittedDepots().keySet();
-		depots.remove(host); // remove login host name if identical with depot fqdn
+
+		// remove login host name if identical with depot fqdn
+		depots.remove(host);
 		for (String depot : depots) {
 			jComboBoxHost.addItem(depot);
 		}
@@ -422,13 +428,16 @@ public final class SSHConfigDialog extends FGeneralDialog {
 				jTextFieldUser.setText(connectionInfo.getUser());
 				jTextFieldPassword.setText(connectionInfo.getPassw());
 				jTextFieldPort.setText(connectionInfo.getPort());
-			} else
+			} else {
 				setComponentsEditable(true);
+			}
+
 			checkComponentStates();
 		});
 
-		if (!connectionInfo.getKeyfilePath().equals(""))
+		if (!connectionInfo.getKeyfilePath().equals("")) {
 			jCheckBoxUseKeyFile.setSelected(true);
+		}
 
 		jCheckBoxUseOutputColor = new JCheckBox();
 		jCheckBoxUseOutputColor.setText(Configed.getResourceValue("SSHConnection.Config.coloredOutput"));
@@ -569,13 +578,14 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		jComboBoxHost.setEnabled(value);
 		jTextFieldPort.setEnabled(value);
 		jTextFieldUser.setEnabled(value);
-		if (jCheckBoxUseKeyFile.isSelected())
+		if (jCheckBoxUseKeyFile.isSelected()) {
 			jTextFieldPassword.setEnabled(false);
-		else {
+		} else {
 			jTextFieldPassword.setEnabled(value);
 		}
-		if (jCheckBoxDefault.isSelected())
+		if (jCheckBoxDefault.isSelected()) {
 			jTextFieldPassword.setEnabled(false);
+		}
 	}
 
 	/* This method gets called when button 1 is pressed */

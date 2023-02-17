@@ -763,10 +763,12 @@ public final class Globals {
 				if (separationString.charAt(i) == ' ' || separationString.charAt(i) == '\n'
 						|| separationString.charAt(i) == '\t') {
 					found = true;
-					if (separationString.charAt(i) == '\n')
+					if (separationString.charAt(i) == '\n') {
 						result.append("<br />");
-				} else
+					}
+				} else {
 					i++;
+				}
 			}
 
 			result.append(separationString.substring(0, i));

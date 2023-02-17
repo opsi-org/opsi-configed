@@ -31,13 +31,13 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
-			boolean isSelected, // is the cell selected
-			boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (value == null)
+		if (value == null) {
 			return c;
+		}
 
 		if (value.equals(InstallationStateTableModel.CONFLICT_STRING)) {
 			c.setBackground(Globals.BACKGROUND_COLOR_4);
@@ -46,10 +46,11 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 			if (mapOfTextColors != null && value instanceof String) {
 				Color textcolor = mapOfTextColors.get(value);
 				if (textcolor != null) {
-					if (textcolor.equals(Globals.INVISIBLE))
+					if (textcolor.equals(Globals.INVISIBLE)) {
 						c.setForeground(c.getBackground());
-					else
+					} else {
 						c.setForeground(textcolor);
+					}
 				}
 			}
 		}
