@@ -65,11 +65,13 @@ public class JSONObjectX extends JSONObject {
 			while (iter.hasNext()) {
 				String key = iter.next();
 
-				if (master.get(key) != null)
+				if (master.get(key) != null) {
 					beingList = false;
+				}
 
-				if (master.get(key) == null)
+				if (master.get(key) == null) {
 					beingMap = false;
+				}
 
 				if (!master.isNull(key)) {
 					Object masterValue = master.get(key);
@@ -80,7 +82,8 @@ public class JSONObjectX extends JSONObject {
 					} else if (masterValue instanceof org.json.JSONArray) {
 						map.put(key, ((JSONArray) masterValue).toList());
 					} else if (masterValue instanceof org.json.JSONObject) {
-						map.put(key, masterValue); // should only occur on the last level
+						// should only occur on the last level
+						map.put(key, masterValue);
 					}
 				}
 			}
@@ -90,8 +93,9 @@ public class JSONObjectX extends JSONObject {
 	}
 
 	private void produceList() {
-		if (master.names() != null)
+		if (master.names() != null) {
 			list = master.names().toList();
+		}
 	}
 
 	public void produceString() {

@@ -1751,7 +1751,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	private Object createUefiJSONEntry(String clientId, String val) {
 		Map<String, Object> item = createNOMitem("ConfigState");
-		List values = new ArrayList<>();
+		List<String> values = new ArrayList<>();
 		values.add(val);
 		item.put("objectId", clientId);
 		item.put("values", AbstractExecutioner.jsonArray(values));
@@ -1766,7 +1766,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Logging.info(this, "configureUefiBoot, clientId " + clientId + " " + uefiBoot);
 
-		List values = new ArrayList<>();
+		List<String> values = new ArrayList<>();
 
 		if (uefiBoot) {
 			values.add(EFI_DHCPD_FILENAME);
@@ -1791,8 +1791,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		// locally
 		if (result) {
-			if (getConfigs().get(clientId) == null)
+			if (getConfigs().get(clientId) == null) {
 				getConfigs().put(clientId, new HashMap<>());
+			}
 
 			Logging.info(this,
 					"configureUefiBoot, configs for clientId " + clientId + " " + getConfigs().get(clientId));
@@ -2344,15 +2345,18 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					int i = errorStr.indexOf("(");
 					if (i > -1) {
 						value.append("   " + errorStr.substring(i + 1, errorStr.length() - 1));
-					} else
+					} else {
 						value.append(" (opsi timeout)");
+					}
 				}
 
-				else if (errorStr.indexOf(methodname) > -1)
+				else if (errorStr.indexOf(methodname) > -1) {
 					value.append("  (" + methodname + " not valid)");
+				}
 
-				else if (errorStr.indexOf("Name or service not known") > -1)
+				else if (errorStr.indexOf("Name or service not known") > -1) {
 					value.append(" (name or service not known)");
+				}
 			}
 
 			else if (resultEntry.getValue() instanceof List) {
@@ -2365,8 +2369,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					String username = "" + session.get("UserName");
 					String logondomain = "" + session.get("LogonDomain");
 
-					if (!value.toString().equals(""))
+					if (!value.toString().equals("")) {
 						value.append("; ");
+					}
 
 					value.append(username + " (" + logondomain + "\\" + username + ")");
 				}
@@ -2381,13 +2386,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	// executes all updates collected by setHostDescription ...
 	@Override
 	public void updateHosts() {
-		if (globalReadOnly)
+		if (globalReadOnly) {
 			return;
+		}
 
 		// checkHostPermission is done in updateHost
 
-		if (hostUpdates == null)
+		if (hostUpdates == null) {
 			return;
+		}
 
 		List<Object> updates = new ArrayList<>();
 		for (Map<String, Object> hostUpdateValue : hostUpdates.values()) {
@@ -2396,9 +2403,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		OpsiMethodCall omc = new OpsiMethodCall("host_updateObjects", new Object[] { updates.toArray() });
 
-		if (exec.doCall(omc))
+		if (exec.doCall(omc)) {
 			hostUpdates.clear();
-
+		}
 	}
 
 	protected void updateHost(String hostId, String property, String value) {
@@ -3602,7 +3609,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.info(this, "getAllLocalbootProductNames, producing " + (localbootProductNames == null));
 		if (localbootProductNames == null) {
 			// opsi 4.0
-			// localbootProductNames = exec.getListResult( new
 
 			Map productOrderingResult = exec
 					.getMapOfLists(new OpsiMethodCall("getProductOrdering", new String[] { depotId }));
@@ -4661,6 +4667,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		setProductProperties(updateCollection, deleteCollection);
 	}
 
+	@Override
 	public Map<String, ListCellOptions> getProductPropertyOptionsMap(String depotId, String productId) {
 
 		Map<String, ListCellOptions> result = null;
@@ -4834,13 +4841,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public List<String> getMethodSignature(String methodname) {
 		if (mapOfMethodSignatures == null) {
-			List methodsList = exec
+			List<Object> methodsList = exec
 					.getListResult(new OpsiMethodCall("getPossibleMethods_listOfHashes", new Object[] {}));
 
 			if (!methodsList.isEmpty()) {
 				mapOfMethodSignatures = new HashMap<>();
 
-				Iterator iter = methodsList.iterator();
+				Iterator<Object> iter = methodsList.iterator();
 				while (iter.hasNext()) {
 					Map<String, Object> listEntry = exec.getMapFromItem(iter.next());
 
@@ -4888,14 +4895,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		OpsiMethodCall omc = new OpsiMethodCall("getBackendInfos_listOfHashes", new String[] {});
 
-		List list = exec.getListResult(omc);
+		List<Object> list = exec.getListResult(omc);
 
 		StringBuilder buf = new StringBuilder("");
 
-		Map backends = new HashMap<>();
+		Map<String, List<Object>> backends = new HashMap<>();
 
 		for (int i = 0; i < list.size(); i++) {
-			Map listEntry = exec.getMapFromItem(list.get(i));
+			Map<String, Object> listEntry = exec.getMapFromItem(list.get(i));
 
 			String backendName = "UNKNOWN";
 
@@ -4907,19 +4914,19 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				backends.put(backendName, new ArrayList<>());
 			}
 
-			((List) backends.get(backendName)).add(listEntry);
+			backends.get(backendName).add(listEntry);
 		}
 
 		buf.append("<table border='0' cellspacing='0' cellpadding='0'>\n");
 
-		Iterator backendIterator = backends.keySet().iterator();
+		Iterator<String> backendIterator = backends.keySet().iterator();
 		while (backendIterator.hasNext()) {
-			String backendName = (String) backendIterator.next();
+			String backendName = backendIterator.next();
 
 			buf.append("<tr><td bgcolor='#fbeca5' color='#000000'  width='100%'  colspan='3'  align='left'>");
 			buf.append("<font size='" + titleSize + "'><b>" + backendName + "</b></font></td></tr>");
 
-			List backendEntries = (List) backends.get(backendName);
+			List<Object> backendEntries = backends.get(backendName);
 
 			for (int i = 0; i < backendEntries.size(); i++) {
 				Map listEntry = (Map) backendEntries.get(i);
@@ -4951,13 +4958,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 								+ fontSizeBig + "'>&nbsp;</font></td>");
 						buf.append("</tr>");
 
-						Map configItems = exec.getMapFromItem(value);
+						Map<String, Object> configItems = exec.getMapFromItem(value);
 
 						if (!configItems.isEmpty()) {
-							Iterator configItemsIterator = configItems.keySet().iterator();
+							Iterator<String> configItemsIterator = configItems.keySet().iterator();
 
 							while (configItemsIterator.hasNext()) {
-								String configKey = (String) configItemsIterator.next();
+								String configKey = configItemsIterator.next();
 
 								Object jO = configItems.get(configKey);
 
@@ -5385,7 +5392,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				}
 			}
 
-			List existingConfigIds = exec.getListResult(new OpsiMethodCall("config_getIdents", new Object[] {}));
+			List<Object> existingConfigIds = exec
+					.getListResult(new OpsiMethodCall("config_getIdents", new Object[] {}));
 			Logging.debug(this, "setAdditionalConfiguration(), existingConfigIds: " + existingConfigIds.size());
 
 			Set<String> missingConfigIds = new HashSet<>(usedConfigIds);
@@ -5565,7 +5573,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			Logging.debug(this, "setConfig(), usedConfigIds: " + usedConfigIds);
 
-			List existingConfigIds = exec.getListResult(new OpsiMethodCall("config_getIdents", new Object[] {}));
+			List<Object> existingConfigIds = exec
+					.getListResult(new OpsiMethodCall("config_getIdents", new Object[] {}));
 
 			Logging.info(this, "setConfig(), existingConfigIds: " + existingConfigIds.size());
 
@@ -5944,31 +5953,36 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		HashMap<String, Map> rowsSoftwareL2LPool = new HashMap<>();
 
 		if (withLicenceManagement) {
-			List li0 = exec.getListResult(new OpsiMethodCall("getSoftwareLicenses_listOfHashes", new String[] {}));
+			List<Object> li0 = exec
+					.getListResult(new OpsiMethodCall("getSoftwareLicenses_listOfHashes", new String[] {}));
 
-			Iterator iter0 = li0.iterator();
+			Iterator<Object> iter0 = li0.iterator();
 
 			while (iter0.hasNext()) {
 				Object ob = iter0.next();
 
-				Map m0 = exec.getMapFromItem(ob);
+				Map<String, Object> m0 = exec.getMapFromItem(ob);
 				String softwareLicenseId = (String) m0.get("softwareLicenseId");
 
-				List li1 = exec.getListFromItem("" + m0.get("licensePoolIds"));
-				Map m1 = exec.getMapFromItem("" + m0.get("licenseKeys"));
+				List<Object> li1 = exec.getListFromItem("" + m0.get("licensePoolIds"));
+				Map<String, Object> m1 = exec.getMapFromItem("" + m0.get("licenseKeys"));
 
-				Iterator iter1 = li1.iterator();
+				Iterator<Object> iter1 = li1.iterator();
 
 				while (iter1.hasNext()) {
-					Map m = new HashMap<>();
+					Map<String, String> m = new HashMap<>();
 					String licensePoolId = (String) iter1.next();
 					m.put("licensePoolId", licensePoolId);
 
 					String licenseKey = null;
-					if (m1 != null)
+					if (m1 != null) {
 						licenseKey = (String) m1.get(licensePoolId);
-					if (licenseKey == null)
+					}
+
+					if (licenseKey == null) {
 						licenseKey = "";
+					}
+
 					m.put("licenseKey", licenseKey);
 
 					m.put("softwareLicenseId", softwareLicenseId);
@@ -5987,8 +6001,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	//
 	public String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId, String licenseKey) {
-		if (!serverFullPermission)
+		if (!serverFullPermission) {
 			return "";
+		}
 
 		if (withLicenceManagement) {
 
@@ -8181,8 +8196,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			opsiModulesDisplayInfo = new HashMap<>(opsiModulesInfo);
 
 			ExtendedDate validUntil = ExtendedDate.INFINITE;
-			if (opsiModulesInfo.get(expiresKey) != null)
+			if (opsiModulesInfo.get(expiresKey) != null) {
 				validUntil = new ExtendedDate(opsiModulesInfo.get(expiresKey));
+			}
 
 			// analyse the real module info
 			opsiCountModules = exec.getMapFromItem(opsiInformation.get("realmodules"));

@@ -62,7 +62,7 @@ public final class JSONReMapper {
 				HashMapX response = new HashMapX<>(jO, true);
 
 				if (response.get("error") == null) {
-					List list = (List) response.get("result");
+					List<?> list = (List<?>) response.get("result");
 
 					result.put(result0Entry.getKey(), list);
 				} else {
@@ -70,7 +70,6 @@ public final class JSONReMapper {
 					String str = "" + response.get("error");
 					result.put(result0Entry.getKey(), str);
 				}
-
 			}
 		}
 
@@ -255,7 +254,7 @@ public final class JSONReMapper {
 
 	public static List<Map<String, String>> getListOfStringMaps(Object retrieved) {
 		List<Map<String, String>> result = new ArrayList<>();
-		List jsonList = null;
+		List<Object> jsonList = null;
 		try {
 			JSONObject jO = (JSONObject) retrieved;
 			if (checkResponse(jO)) {
@@ -274,7 +273,7 @@ public final class JSONReMapper {
 
 		try {
 
-			Iterator iter = jsonList.iterator();
+			Iterator<Object> iter = jsonList.iterator();
 
 			while (iter.hasNext()) {
 				item = (JSONObject) iter.next();
@@ -282,9 +281,10 @@ public final class JSONReMapper {
 				result.add(mapItem);
 
 			}
-			if (jsonList.size() != result.size())
+			if (jsonList.size() != result.size()) {
 				Logging.warning(" getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped "
 						+ result.size());
+			}
 		} catch (Exception ex) {
 			Logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
 		}
@@ -294,7 +294,7 @@ public final class JSONReMapper {
 
 	public static List<Map<String, Object>> getListOfMaps(JSONArray retrieved) {
 		List<Map<String, Object>> result = new ArrayList<>();
-		List jsonList = null;
+		List<Object> jsonList = null;
 
 		try {
 			JSONArray jA = retrieved;
@@ -315,17 +315,18 @@ public final class JSONReMapper {
 
 		try {
 
-			Iterator iter = jsonList.iterator();
+			Iterator<Object> iter = jsonList.iterator();
 
 			while (iter.hasNext()) {
 				item = (JSONObject) iter.next();
-				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard(item);
+				Map<String, Object> mapItem = JSONReMapper.getMapObject(item);
 				result.add(mapItem);
 
 			}
-			if (jsonList.size() == result.size())
+			if (jsonList.size() == result.size()) {
 				Logging.warning(" getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped "
 						+ result.size());
+			}
 		} catch (Exception ex) {
 			Logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
 		}
@@ -335,7 +336,7 @@ public final class JSONReMapper {
 
 	public static List<Map<String, Object>> getListOfMaps(Object retrieved) {
 		List<Map<String, Object>> result = new ArrayList<>();
-		List jsonList = null;
+		List<Object> jsonList = null;
 
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -355,11 +356,11 @@ public final class JSONReMapper {
 
 		try {
 
-			Iterator iter = jsonList.iterator();
+			Iterator<Object> iter = jsonList.iterator();
 
 			while (iter.hasNext()) {
 				item = (JSONObject) iter.next();
-				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard(item);
+				Map<String, Object> mapItem = JSONReMapper.getMapObject(item);
 				result.add(mapItem);
 
 			}
@@ -414,7 +415,6 @@ public final class JSONReMapper {
 				if (jA != null) {
 					row = new ArrayList<>(jA.length());
 					for (int i = 0; i < jA.length(); i++) {
-
 						if (isNull(jA.get(i))) {
 							row.add("");
 						}
@@ -434,8 +434,8 @@ public final class JSONReMapper {
 		return result;
 	}
 
-	public static List getJsonList(JSONObject jO, String key) {
-		List result = new ArrayList<>();
+	public static List<Object> getJsonList(JSONObject jO, String key) {
+		List<Object> result = new ArrayList<>();
 		try {
 			JSONArray jA = jO.optJSONArray(key);
 
@@ -473,8 +473,8 @@ public final class JSONReMapper {
 		return result;
 	}
 
-	public static List getListResult(JSONObject jO) {
-		List result = new ArrayList<>();
+	public static List<Object> getListResult(JSONObject jO) {
+		List<Object> result = new ArrayList<>();
 		try {
 			if (checkResponse(jO)) {
 				result = JSONReMapper.getJsonList(jO, "result");
@@ -632,7 +632,6 @@ public final class JSONReMapper {
 	public static boolean isNull(Object ob) {
 		return ob == null || (ob instanceof String && ((String) ob).equalsIgnoreCase("null"))
 				|| ((ob instanceof JSONObject) && (JSONObject.NULL.equals(ob)));
-
 	}
 
 	public static boolean equalsNull(String ob) {

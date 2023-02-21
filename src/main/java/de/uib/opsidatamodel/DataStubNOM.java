@@ -429,16 +429,20 @@ public class DataStubNOM extends AbstractDataStub {
 
 				String action = "" + dependencyItem.get("productAction");
 				String requirementType = "";
-				if (dependencyItem.get("requirementType") != null)
+				if (dependencyItem.get("requirementType") != null) {
 					requirementType = "" + dependencyItem.get("requirementType");
+				}
 
 				String requiredProductId = "" + dependencyItem.get("requiredProductId");
 				String requiredAction = "";
-				if (dependencyItem.get("requiredAction") != null)
+				if (dependencyItem.get("requiredAction") != null) {
 					requiredAction = "" + dependencyItem.get("requiredAction");
+				}
 				String requiredInstallationStatus = "";
-				if (dependencyItem.get("requiredInstallationStatus") != null)
+
+				if (dependencyItem.get("requiredInstallationStatus") != null) {
 					requiredInstallationStatus = "" + dependencyItem.get("requiredInstallationStatus");
+				}
 
 				if ((product2VersionInfo2Depots == null) || (product2VersionInfo2Depots.get(productId) == null)
 						|| (product2VersionInfo2Depots.get(productId).get(versionInfo) == null)) {
@@ -480,8 +484,9 @@ public class DataStubNOM extends AbstractDataStub {
 	}
 
 	protected List<Map<String, Object>> productPropertyStates;
-	protected List<Map<String, Object>> productPropertyDepotStates; // will only be refreshed when all product
-																	// data are refreshed
+
+	// will only be refreshed when all product data are refreshed
+	protected List<Map<String, Object>> productPropertyDepotStates;
 
 	protected java.util.Set<String> hostsWithProductProperties;
 
@@ -539,10 +544,11 @@ public class DataStubNOM extends AbstractDataStub {
 			java.util.Set<String> hosts) {
 		Logging.info(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
 		List<String> newClients = null;
-		if (clients == null)
+		if (clients == null) {
 			newClients = new ArrayList<>();
-		else
+		} else {
 			newClients = new ArrayList<>(clients);
+		}
 
 		if (hosts == null) {
 			hosts = new HashSet<>();
@@ -578,11 +584,17 @@ public class DataStubNOM extends AbstractDataStub {
 
 	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformation;
 	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
-	protected NavigableMap<String, Set<String>> name2SWIdents; // giving the idents which have the name in their ident
+
+	// giving the idents which have the name in their ident
+	protected NavigableMap<String, Set<String>> name2SWIdents;
 	protected NavigableMap<String, Map<String, String>> installedSoftwareName2SWinfo;
 	protected NavigableMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool;
-	protected List<String> softwareList; // List of idents of software
-	protected NavigableMap<String, Integer> software2Number; // the same with a numbering index
+
+	// List of idents of software
+	protected List<String> softwareList;
+
+	// the same with a numbering index
+	protected NavigableMap<String, Integer> software2Number;
 
 	@Override
 	public void installedSoftwareInformationRequestRefresh() {
@@ -895,8 +907,9 @@ public class DataStubNOM extends AbstractDataStub {
 				String[] callAttributes = new String[] {};
 				Map callFilter = new HashMap<>();
 				callFilter.put("state", 1);
-				if (newClients != null)
+				if (newClients != null) {
 					callFilter.put("clientId", AbstractExecutioner.jsonArray(clientListForCall));
+				}
 
 				List<Map<String, Object>> softwareAuditOnClients = persist.retrieveListOfMapsNOM(callAttributes,
 						callFilter, "auditSoftwareOnClient_getHashes");

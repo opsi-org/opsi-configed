@@ -88,8 +88,9 @@ public class ModulePermissionValue {
 
 		}
 
-		if (result == null)
+		if (result == null) {
 			result = ExtendedDate.ZERO;
+		}
 
 		return result;
 	}
@@ -97,8 +98,9 @@ public class ModulePermissionValue {
 	private Map<String, Object> interpretAsJson(Object ob) {
 		Map<String, Object> result = exec.getMapFromItem(ob);
 
-		if (result.entrySet().isEmpty())
+		if (result.entrySet().isEmpty()) {
 			return new HashMap<>();
+		}
 
 		return result;
 	}

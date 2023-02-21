@@ -75,7 +75,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public List getListResult(OpsiMethodCall omc) {
+	public List<Object> getListResult(OpsiMethodCall omc) {
 		return JSONReMapper.getListResult(retrieveJSONObject(omc));
 	}
 
@@ -137,7 +137,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map getMapOfLists(OpsiMethodCall omc) {
+	public Map<String, List<Object>> getMapOfLists(OpsiMethodCall omc) {
 		return getMapOfLists(omc, true);
 	}
 
@@ -248,7 +248,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	{
 		Map<String, Map<String, String>> result = new TreeMap<>();
 
-		List<JSONObject> resultlist = null;
+		List<Object> resultlist = null;
 
 		try {
 			JSONObject jO = retrieveJSONObject(omc);
@@ -264,9 +264,11 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 		if (resultlist != null) {
 			try {
 
-				Iterator<JSONObject> iter = resultlist.iterator();
+				Iterator<Object> iter = resultlist.iterator();
+
+				// loop through list elements
 				while (iter.hasNext()) {
-					JSONObject jO = iter.next();
+					JSONObject jO = (JSONObject) iter.next();
 
 					String keyOfItem = null;
 
@@ -298,8 +300,9 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 								String value = sourceVars[i];
 								String val = jO.get(value).toString();
 
-								if (translateValues != null && translateValues.get(val) != null)
+								if (translateValues != null && translateValues.get(val) != null) {
 									val = translateValues.get(val);
+								}
 
 								detailMap.put(value, val);
 							}
@@ -326,7 +329,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 					}
 
 					result.put(keyOfItem, detailMap);
-				} // loop through list elements
+				}
 
 			} catch (Exception ex) {
 				Logging.error(this, "Exception on building string maps  " + ex.toString());
