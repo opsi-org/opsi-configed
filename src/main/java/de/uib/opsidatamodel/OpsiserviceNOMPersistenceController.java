@@ -2161,7 +2161,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	protected List<String> wakeOnLan(Map<String, List<String>> hostSeparationByDepot) {
-		Map responses = new HashMap<>();
+		Map<String, Object> responses = new HashMap<>();
 
 		Map<String, AbstractExecutioner> executionerForDepots = new HashMap<>();
 
@@ -2175,7 +2175,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			if (exec1 == null) {
 				exec1 = retrieveWorkingExec(hostSeparationEntry.getKey());
-
 			}
 
 			if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
@@ -2185,11 +2184,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				Map<String, Object> responses1 = exec1.getMapResult(omc);
 				responses.putAll(responses1);
 			}
-
 		}
 
 		return collectErrorsFromResponsesByHost(responses, "wakeOnLan");
-
 	}
 
 	@Override
@@ -4645,6 +4642,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 	}
 
+	@Override
 	public void setCommonProductPropertyValue(Set<String> clientNames, String productName, String propertyName,
 			List<String> values) {
 		List updateCollection = new ArrayList<>();
@@ -6826,8 +6824,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	public String editLicenceUsage(String hostId, String softwareLicenseId, String licensePoolId, String licenseKey,
 			String notes) {
-		if (!serverFullPermission)
+		if (!serverFullPermission) {
 			return null;
+		}
 
 		String result = null;
 		Map<String, Object> resultMap = null;
@@ -6838,9 +6837,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			resultMap = exec.getMapResult(omc);
 
-			if (!resultMap.isEmpty())
+			if (!resultMap.isEmpty()) {
 				result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
 						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
+			}
 		}
 
 		return result;
@@ -8080,14 +8080,16 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	private Map<String, Object> produceOpsiInformation() {
-		if (!opsiInformation.isEmpty()) // we are initialized
+		if (!opsiInformation.isEmpty()) {
+			// we are initialized
 			return opsiInformation;
+		}
 
 		OpsiMethodCall omc = new OpsiMethodCall("backend_info", new String[] {});
 		opsiInformation = new HashMap<>();
 
-		if (getMethodSignature("backend_info") != NONE_LIST) // method does not exist before opsi 3.4
-		{
+		// method does not exist before opsi 3.4
+		if (getMethodSignature("backend_info") != NONE_LIST) {
 			opsiInformation = exec.getMapResult(omc);
 		}
 

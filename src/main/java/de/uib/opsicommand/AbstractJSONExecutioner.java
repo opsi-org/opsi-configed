@@ -85,7 +85,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map getMapResult(OpsiMethodCall omc)
+	public Map<String, Object> getMapResult(OpsiMethodCall omc)
 	// yields possibly JSON objects and arrays as values
 	// compare getMap_Object
 	{

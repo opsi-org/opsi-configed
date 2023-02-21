@@ -504,11 +504,11 @@ public final class JSONReMapper {
 		return result;
 	}
 
-	public static Map getMapResult(JSONObject jO)
+	public static Map<String, Object> getMapResult(JSONObject jO)
 	// yields possibly JSON objects and arrays as values
 	// compare getMap_Object
 	{
-		Map result = new HashMap<>();
+		Map<String, Object> result = new HashMap<>();
 		try {
 			if (checkResponse(jO)) {
 				JSONObject jOResult = jO.optJSONObject("result");

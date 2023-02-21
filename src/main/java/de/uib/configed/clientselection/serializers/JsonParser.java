@@ -46,8 +46,10 @@ class JsonParser {
 			}
 
 			if (c == ',' && currentPosition == PositionType.JSON_VALUE) {
-				if (!inList)
+				if (!inList) {
 					currentPosition = PositionType.JSON_NAME;
+				}
+
 				continue;
 			}
 
