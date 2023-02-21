@@ -92,8 +92,8 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 		return JSONReMapper.getMapResult(retrieveJSONObject(omc));
 	}
 
-	public Map getMapOfLists(JSONObject jO) {
-		Map result = new HashMap<>();
+	public Map<String, List<Object>> getMapOfLists(JSONObject jO) {
+		Map<String, List<Object>> result = new HashMap<>();
 		try {
 			if (jO != null) {
 				Iterator<String> iter = jO.keys();
@@ -277,8 +277,9 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 
 					keyOfItem = jO.get(key).toString();
 
-					if (translateValues != null && translateValues.get(keyOfItem) != null)
+					if (translateValues != null && translateValues.get(keyOfItem) != null) {
 						keyOfItem = translateValues.get(keyOfItem);
+					}
 
 					HashMap<String, String> detailMap = new HashMap<>();
 
@@ -303,8 +304,9 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 								detailMap.put(value, val);
 							}
 						} else {
-							if (targetVars.length != sourceVars.length)
+							if (targetVars.length != sourceVars.length) {
 								Logging.warning(this, "getStringMappedObjectsByKey targetVars not assignable");
+							}
 
 							for (int i = 0; i < sourceVars.length; i++) {
 								String value = sourceVars[i];
@@ -312,8 +314,9 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 								if (i < targetVars.length) {
 									value = targetVars[i];
 
-									if (translateValues != null && translateValues.get(val) != null)
+									if (translateValues != null && translateValues.get(val) != null) {
 										val = translateValues.get(val);
+									}
 
 									detailMap.put(value, val);
 
@@ -429,8 +432,9 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 										Iterator<String> iter2 = jsonInner2.keys();
 										while (iter2.hasNext()) {
 											String key2 = iter2.next();
-											if (!jsonInner2.isNull(key2))
+											if (!jsonInner2.isNull(key2)) {
 												inner2.put(key2, jsonInner2.get(key2));
+											}
 										}
 									}
 									inner1.put(key, inner2);
@@ -484,8 +488,9 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 			}
 		}
 
-		if (result == null)
+		if (result == null) {
 			return false;
+		}
 
 		return result.booleanValue();
 	}

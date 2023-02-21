@@ -415,11 +415,13 @@ public final class JSONReMapper {
 					row = new ArrayList<>(jA.length());
 					for (int i = 0; i < jA.length(); i++) {
 
-						if (isNull(jA.get(i)))
+						if (isNull(jA.get(i))) {
 							row.add("");
+						}
 
-						else
+						else {
 							row.add("" + jA.get(i));
+						}
 					}
 
 					result.add(row);
@@ -494,8 +496,9 @@ public final class JSONReMapper {
 
 			if (!jOX.isMap()) {
 				Logging.error("JSONReMapper map expected " + jOX);
-			} else
+			} else {
 				result = jOX.getMap();
+			}
 
 		} catch (Exception ex) {
 			Logging.error("JSONReMapper  getMap_Object : " + ex.toString());
