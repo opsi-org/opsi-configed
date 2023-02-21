@@ -38,10 +38,25 @@ public class Messagebus {
 
 	private String createUrl() {
 		String uri = "wss";
-		String domain = ConfigedMain.host;
-		int port = 4447;
+		String host = ConfigedMain.host;
 
-		return String.format("%s://%s:%d/messagebus/v1?", uri, domain, port);
+		if (!hasPort(host)) {
+			host = host + ":4447";
+		}
+
+		return String.format("%s://%s/messagebus/v1", uri, host);
+	}
+
+	private boolean hasPort(String host) {
+		boolean result = false;
+
+		if (host.contains("[") && host.contains("]")) {
+			result = host.indexOf(":", host.indexOf("]")) != -1;
+		} else {
+			result = host.contains(":");
+		}
+
+		return result;
 	}
 
 	private String createEncBasicAuth() {

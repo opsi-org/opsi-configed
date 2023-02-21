@@ -34,6 +34,7 @@ import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
 import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -117,6 +118,7 @@ public final class Terminal {
 		frame.setContentPane(createTerminalWidget());
 		frame.setIconImage(Globals.mainIcon);
 		frame.pack();
+		frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		frame.setVisible(true);
 
 		frame.addWindowListener(new WindowAdapter() {
