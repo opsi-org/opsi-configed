@@ -49,6 +49,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 			});
 
 			String type = (String) data.get("type");
+			Logging.debug(this, "response data: " + data.toString());
 
 			if (type.startsWith("terminal_")) {
 				if (type.equals("terminal_data_read")) {
@@ -93,6 +94,6 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 
 	@Override
 	public void onError(Exception ex) {
-		ex.printStackTrace();
+		Logging.error(this, "error encountered in messagebus: " + ex);
 	}
 }

@@ -42,17 +42,25 @@ public class Messagebus {
 
 		if (!hasPort(host)) {
 			host = host + ":4447";
+			Logging.info(this, "host doesn't have specified port (using default): " + host);
+		} else {
+			Logging.info(this, "host does have specified port (using specified port): " + host);
 		}
 
-		return String.format("%s://%s/messagebus/v1", uri, host);
+		String url = String.format("%s://%s/messagebus/v1", uri, host);
+		Logging.info(this, "connecting to messagebus using the following URL: " + url);
+
+		return url;
 	}
 
 	private boolean hasPort(String host) {
 		boolean result = false;
 
 		if (host.contains("[") && host.contains("]")) {
+			Logging.info(this, "host is IPv6: " + host);
 			result = host.indexOf(":", host.indexOf("]")) != -1;
 		} else {
+			Logging.info(this, "host is either IPv4 or FQDN: " + host);
 			result = host.contains(":");
 		}
 
@@ -93,9 +101,9 @@ public class Messagebus {
 			sslContext.init(null, trustAllCerts, new SecureRandom());
 			sslFactory = sslContext.getSocketFactory();
 		} catch (NoSuchAlgorithmException e) {
-			Logging.error(this, "provider doesn't support algorithm");
+			Logging.warning(this, "provider doesn't support algorithm");
 		} catch (KeyManagementException e) {
-			Logging.error(this, "failed to initialize SSL context");
+			Logging.warning(this, "failed to initialize SSL context: " + e);
 		}
 
 		return sslFactory;
@@ -111,6 +119,7 @@ public class Messagebus {
 		messagebusWebSocket.setSocketFactory(factory);
 
 		connected = messagebusWebSocket.connectBlocking();
+		Logging.info(this, "connection to messagebus established: " + connected);
 
 		return connected;
 	}
@@ -129,12 +138,14 @@ public class Messagebus {
 		data.put("operation", "add");
 		data.put("channels", channels);
 
+		Logging.debug(this, "channel subscription request: " + data.toString());
+
 		try {
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
 			send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 		} catch (JsonProcessingException e) {
-			Logging.error(this, "error occurred while processing JSON");
+			Logging.warning(this, "error occurred while processing JSON: " + e);
 		}
 	}
 
@@ -159,12 +170,14 @@ public class Messagebus {
 		data.put("cols", terminal.getColumnCount());
 		data.put("rows", terminal.getRowCount());
 
+		Logging.debug(this, "terminal open request: " + data.toString());
+
 		try {
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
 			send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 		} catch (JsonProcessingException e) {
-			Logging.error(this, "error occurred while processing JSON");
+			Logging.warning(this, "error occurred while processing JSON: " + e);
 		}
 
 		terminal.lock();
@@ -175,7 +188,7 @@ public class Messagebus {
 		if (messagebusWebSocket.getConnection().isOpen()) {
 			messagebusWebSocket.send(message);
 		} else {
-			Logging.info(this, "Messagebus not connected");
+			Logging.info(this, "messagebus not connected");
 		}
 	}
 
@@ -186,8 +199,9 @@ public class Messagebus {
 	public void disconnect() throws InterruptedException {
 		if (messagebusWebSocket != null && messagebusWebSocket.getConnection().isOpen()) {
 			messagebusWebSocket.closeBlocking();
+			Logging.info(this, "connection to messagebus closed");
 		} else {
-			Logging.info(this, "Messagebus not connected");
+			Logging.info(this, "messagebus not connected");
 		}
 
 		connected = false;

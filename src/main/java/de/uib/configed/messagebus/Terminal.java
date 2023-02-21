@@ -2,6 +2,7 @@ package de.uib.configed.messagebus;
 
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
@@ -39,6 +40,10 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public final class Terminal {
+	private static final int DEFAULT_TERMINAL_COLUMNS = 80;
+	private static final int DEFAULT_TERMINAL_ROWS = 24;
+	private static final int DEFAULT_TIME_TO_BLOCK_IN_MS = 5000;
+
 	private static Terminal instance;
 	private JediTermWidget widget;
 	private JFrame frame;
@@ -91,13 +96,13 @@ public final class Terminal {
 	public void lock() {
 		try {
 			locker = new CountDownLatch(1);
-			if (locker.await(5000, TimeUnit.MILLISECONDS)) {
+			if (locker.await(DEFAULT_TIME_TO_BLOCK_IN_MS, TimeUnit.MILLISECONDS)) {
 				Logging.info(this, "thread was unblocked");
 			} else {
 				Logging.info(this, "time ellapsed");
 			}
 		} catch (InterruptedException ie) {
-			Logging.error(this, "thread was interrupted");
+			Logging.warning(this, "thread was interrupted");
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -107,7 +112,7 @@ public final class Terminal {
 	}
 
 	private JediTermWidget createTerminalWidget() {
-		widget = new JediTermWidget(80, 24, new DefaultSettingsProvider());
+		widget = new JediTermWidget(DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, new DefaultSettingsProvider());
 		widget.setDropTarget(new FileUpload());
 		return widget;
 	}
@@ -129,7 +134,7 @@ public final class Terminal {
 					widget.stop();
 					frame.dispose();
 				} catch (InterruptedException ex) {
-					Logging.error(this, "thread was interrupted");
+					Logging.warning(this, "thread was interrupted");
 					Thread.currentThread().interrupt();
 				}
 			}
@@ -147,6 +152,7 @@ public final class Terminal {
 		widget.start();
 	}
 
+	@SuppressWarnings("java:S2972")
 	private class WebSocketTtyConnector implements TtyConnector {
 		private final InputStreamReader reader;
 		private final OutputStream writer;
@@ -195,7 +201,7 @@ public final class Terminal {
 				writer.write(dataJsonBytes);
 				writer.flush();
 			} catch (IOException ex) {
-				Logging.error(this, "cannot resize terminal window");
+				Logging.error(this, "cannot resize terminal window: " + data.toString());
 			}
 		}
 
@@ -222,7 +228,7 @@ public final class Terminal {
 				writer.write(dataJsonBytes);
 				writer.flush();
 			} catch (IOException ex) {
-				Logging.error("cannot send message to server");
+				Logging.error("cannot send message to server: " + data.toString());
 			}
 		}
 
@@ -247,22 +253,27 @@ public final class Terminal {
 		}
 	}
 
+	@SuppressWarnings("java:S2972")
 	private class FileUpload extends DropTarget {
+		@SuppressWarnings("unchecked")
 		private String getFilename(DropTargetDropEvent e) {
 			String filename = null;
 
+			List<File> droppedFile;
+
 			try {
-				@SuppressWarnings("unchecked")
-				List<File> droppedFile = (List<File>) e.getTransferable()
-						.getTransferData(DataFlavor.javaFileListFlavor);
+				droppedFile = (List<File>) e.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 
 				if (droppedFile.size() > 1) {
 					return null;
 				}
 
 				filename = droppedFile.get(0).toString();
-			} catch (Exception ex) {
-				Logging.error(this, "cannot retrieve dropped file");
+				Logging.info(this, "dropped file: " + filename);
+			} catch (UnsupportedFlavorException ex) {
+				Logging.warning(this, "this should not happen, unless javaFileListFlavor is no longer supported");
+			} catch (IOException ex) {
+				Logging.warning(this, "cannot retrieve dropped file");
 			}
 
 			return filename;
@@ -291,6 +302,9 @@ public final class Terminal {
 				data.put("name", file.getName());
 				data.put("size", Files.size(file.toPath()));
 				data.put("terminal_id", terminalId);
+
+				Logging.debug(this, "file upload request: " + data.toString());
+
 				ObjectMapper mapper = new MessagePackMapper();
 				byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
 				messagebus.send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
@@ -314,11 +328,13 @@ public final class Terminal {
 					data.put("data", new String(buf).replace("\0", "").getBytes());
 					data.put("last", last);
 
+					Logging.debug(this, "uploading file chunk: " + data.toString());
+
 					dataJsonBytes = mapper.writeValueAsBytes(data);
 					messagebus.send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 				}
 			} catch (IOException ex) {
-				Logging.error("cannot upload file to server");
+				Logging.error("cannot upload file to server: " + file.getAbsolutePath());
 			}
 		}
 	}
