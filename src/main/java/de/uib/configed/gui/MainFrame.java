@@ -3531,7 +3531,7 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	public void initHardwareInfo(List config) {
+	public void initHardwareInfo(List<Map<String, Object>> config) {
 		if (showHardwareLogVersion2 == null) {
 			showHardwareLogVersion2 = new PanelHWInfo(configedMain) {
 				@Override
@@ -3587,12 +3587,12 @@ public class MainFrame extends JFrame
 
 	}
 
-	public void setHardwareInfo(Object hardwareInfo) {
+	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hardwareInfo) {
 		if (hardwareInfo == null) {
 			showHardwareLogVersion2.setHardwareInfo(null,
 					Configed.getResourceValue("MainFrame.NoHardwareConfiguration"));
 		} else {
-			showHardwareLogVersion2.setHardwareInfo((Map) hardwareInfo, null);
+			showHardwareLogVersion2.setHardwareInfo(hardwareInfo, null);
 		}
 
 		showHardwareLog = showHardwareLogVersion2;

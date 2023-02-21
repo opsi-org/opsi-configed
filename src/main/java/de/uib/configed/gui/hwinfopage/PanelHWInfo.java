@@ -52,9 +52,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String KEY_MODEL = "model";
 	private static final String KEY_PRODUCT = "product";
 
-	protected Map hwInfo;
+	protected Map<String, List<Map<String, Object>>> hwInfo;
 	protected String treeRootTitle;
-	protected List hwConfig;
+	protected List<Map<String, Object>> hwConfig;
 	protected String title = "HW Information";
 
 	// for creating pdf
@@ -69,7 +69,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	protected DefaultTreeModel treeModel;
 	protected JTable table;
 	protected HWInfoTableModel tableModel;
-	protected Map hwClassMapping;
+	protected Map<String, Object> hwClassMapping;
 
 	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
 	protected static final String SCANTIME = "scantime";
@@ -331,21 +331,21 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return new ArrayList<>();
 		}
 
-		List devices = (List) hwInfo.get(hwClass);
+		List<Map<String, Object>> devices = hwInfo.get(hwClass);
 		Map deviceInfo = node.getDeviceInfo();
 		if ((devices == null) || (deviceInfo == null)) {
 			return new ArrayList<>();
 		}
 
-		List values = null;
+		List<?> values = null;
 
 		for (int j = 0; j < hwConfig.size(); j++) {
 
-			Map whc = (Map) hwConfig.get(j);
+			Map<String, Object> whc = hwConfig.get(j);
 			if (whc != null) {
-				Map whcClass = (Map) whc.get("Class");
+				Map<?, ?> whcClass = (Map<?, ?>) whc.get("Class");
 				if (whcClass.get("Opsi").equals(hwClass)) {
-					values = (List) whc.get("Values");
+					values = (List<?>) whc.get("Values");
 					break;
 				}
 			} else {
@@ -355,7 +355,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		List<String[]> data = new ArrayList<>();
 		if (values != null) {
 			for (int j = 0; j < values.size(); j++) {
-				Map v = (Map) values.get(j);
+				Map<?, ?> v = (Map<?, ?>) values.get(j);
 				String opsi = (String) v.get("Opsi");
 				Logging.debug(this, "opsi " + opsi);
 
@@ -444,7 +444,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	}
 
-	public void setHardwareConfig(List hwConfig) {
+	public void setHardwareConfig(List<Map<String, Object>> hwConfig) {
 		this.hwConfig = hwConfig;
 	}
 
@@ -476,7 +476,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		productString = "";
 	}
 
-	public void setHardwareInfo(Map hwInfo, String treeRootTitle) {
+	public void setHardwareInfo(Map<String, List<Map<String, Object>>> hwInfo, String treeRootTitle) {
 		initByAuditStrings();
 		panelByAuditInfo.emptyByAuditStrings();
 
@@ -489,12 +489,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return;
 		}
 
-		List hwInfoSpecial = (List) hwInfo.get(SCANPROPERTYNAME);
+		List<Map<String, Object>> hwInfoSpecial = hwInfo.get(SCANPROPERTYNAME);
 		String rootname = "";
 
 		if (hwInfoSpecial != null && !hwInfoSpecial.isEmpty() && hwInfoSpecial.get(0) != null
-				&& ((Map) hwInfoSpecial.get(0)).get(SCANTIME) != null) {
-			rootname = "Scan " + (String) ((Map) hwInfoSpecial.get(0)).get(SCANTIME);
+				&& hwInfoSpecial.get(0).get(SCANTIME) != null) {
+			rootname = "Scan " + (String) hwInfoSpecial.get(0).get(SCANTIME);
 		}
 		title = rootname;
 
@@ -509,9 +509,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		hwClassMapping = new HashMap<>();
 		String[] hwClassesUI = new String[hwConfig.size()];
 		for (int i = 0; i < hwConfig.size(); i++) {
-			Map whc = (Map) hwConfig.get(i);
-			hwClassesUI[i] = (String) ((Map) whc.get("Class")).get("UI");
-			hwClassMapping.put(hwClassesUI[i], ((Map) whc.get("Class")).get("Opsi"));
+			Map<String, Object> whc = hwConfig.get(i);
+			hwClassesUI[i] = (String) ((Map<?, ?>) whc.get("Class")).get("UI");
+			hwClassMapping.put(hwClassesUI[i], ((Map<?, ?>) whc.get("Class")).get("Opsi"));
 
 		}
 
@@ -522,7 +522,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			String hwClassUI = hwClassesUI[i];
 			String hwClass = (String) hwClassMapping.get(hwClassUI);
 
-			List devices = (List) hwInfo.get(hwClass);
+			List<Map<String, Object>> devices = hwInfo.get(hwClass);
 			if (devices == null) {
 				Logging.debug(this, "No devices of hwclass " + hwClass + " found");
 				continue;
@@ -540,10 +540,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			classNode.setOpenIcon(classIcon);
 			root.add(classNode);
 
-			Map displayNames = new HashMap<>();
+			Map<String, List<Map<String, Object>>> displayNames = new HashMap<>();
 
 			for (int j = 0; j < devices.size(); j++) {
-				Map deviceInfo = (Map) devices.get(j);
+				Map<String, Object> deviceInfo = devices.get(j);
 				String displayName = (String) deviceInfo.get("name");
 				if ((displayName == null) || displayName.equals("")) {
 					displayName = hwClass + "_" + j;
@@ -552,18 +552,18 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				if (!displayNames.containsKey(displayName)) {
 					displayNames.put(displayName, new ArrayList<>());
 				}
-				((List) displayNames.get(displayName)).add(devices.get(j));
+				displayNames.get(displayName).add(devices.get(j));
 			}
 
 			int num = 0;
 			String[] names = new String[devices.size()];
-			Iterator iter = displayNames.keySet().iterator();
+			Iterator<String> iter = displayNames.keySet().iterator();
 			while (iter.hasNext()) {
-				String displayName = (String) iter.next();
-				List devs = (List) displayNames.get(displayName);
+				String displayName = iter.next();
+				List<Map<String, Object>> devs = displayNames.get(displayName);
 
 				for (int j = 0; j < devs.size(); j++) {
-					Map dev = (Map) devs.get(j);
+					Map<String, Object> dev = devs.get(j);
 					String dn = displayName;
 					if (devs.size() > 1) {
 						dn += " (" + j + ")";
@@ -579,13 +579,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			for (int j = 0; j < names.length; j++) {
 				for (int k = 0; k < devices.size(); k++) {
-					if (names[j].equals(((Map) devices.get(k)).get("displayName"))) {
-						IconNode iconNode = new IconNode(
-								encodeString((String) ((Map) devices.get(k)).get("displayName")));
+					if (names[j].equals(devices.get(k).get("displayName"))) {
+						IconNode iconNode = new IconNode(encodeString((String) devices.get(k).get("displayName")));
 						iconNode.setClosedIcon(classIcon);
 						iconNode.setLeafIcon(classIcon);
 						iconNode.setOpenIcon(classIcon);
-						iconNode.setDeviceInfo((Map) devices.get(k));
+						iconNode.setDeviceInfo(devices.get(k));
 						classNode.add(iconNode);
 						scanNodes(iconNode);
 						break;
@@ -639,20 +638,18 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		hwOpsiToUI = new HashMap<>();
 
-		for (Object obj : hwConfig) {
-			Map hardwareMap = (Map) obj;
-			List values = (List) hardwareMap.get("Values");
+		for (Map<String, Object> hardwareMap : hwConfig) {
+			List<?> values = (List<?>) hardwareMap.get("Values");
 			for (int j = 0; j < values.size(); j++) {
-				Map valuesMap = (Map) values.get(j);
+				Map<?, ?> valuesMap = (Map<?, ?>) values.get(j);
 				String type = (String) valuesMap.get("Opsi");
 				String name = (String) valuesMap.get("UI");
 				hwOpsiToUI.putIfAbsent(type, name);
 			}
 		}
-		for (Object obj : hwConfig) {
-			Map hardwareMap = (Map) obj;
-			String hardwareName = (String) ((Map) hardwareMap.get("Class")).get("UI");
-			String hardwareOpsi = (String) ((Map) hardwareMap.get("Class")).get("Opsi");
+		for (Map<String, Object> hardwareMap : hwConfig) {
+			String hardwareName = (String) ((Map<?, ?>) hardwareMap.get("Class")).get("UI");
+			String hardwareOpsi = (String) ((Map<?, ?>) hardwareMap.get("Class")).get("Opsi");
 
 			hwOpsiToUI.putIfAbsent(hardwareOpsi, hardwareName);
 		}
@@ -665,7 +662,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		DefaultTableModel tableModelComplete = new DefaultTableModel();
 		JTable jTableComplete = new JTable(tableModelComplete);
 
-		List childValues;
+		List<String> childValues;
 
 		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_hardware"));
 		tableModelComplete.addColumn(Configed.getResourceValue("PanelHWInfo.createPDF.column_device"));
@@ -675,12 +672,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		for (int i = 0; i < treeModel.getChildCount(treeModel.getRoot()); i++) {
 			Object child = treeModel.getChild(treeModel.getRoot(), i);
 			// get ArrayList
-			List al = (List) hwInfo.get(hwClassMapping.get(child.toString()));
-			Iterator<Map> alIterator = al.iterator();
+			List<Map<String, Object>> al = hwInfo.get(hwClassMapping.get(child.toString()));
+			Iterator<Map<String, Object>> alIterator = al.iterator();
 
 			boolean first = true;
 			while (alIterator.hasNext()) {
-				Map hm = alIterator.next();
+				Map<String, Object> hm = alIterator.next();
 				if (first) {
 					// second column, first element
 
@@ -689,21 +686,21 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					// first column
 					childValues.add(child.toString());
 					childValues.add(hm.get("displayName").toString());
-					Iterator hmIterator = hm.keySet().iterator();
+					Iterator<String> hmIterator = hm.keySet().iterator();
 					boolean firstValue = true;
 					while (hmIterator.hasNext()) {
-						String hmKey = (String) hmIterator.next();
-						if (!hmKey.equals("displayName") && !hmKey.equals("type")) { //
+						String hmKey = hmIterator.next();
+						if (!hmKey.equals("displayName") && !hmKey.equals("type")) {
 							if (firstValue) {
 								childValues.add(hwOpsiToUI.get(hmKey));
-								childValues.add(hm.get(hmKey));
+								childValues.add(hm.get(hmKey).toString());
 								firstValue = false;
 							} else {
 								childValues = new ArrayList<>();
 								childValues.add("");
 								childValues.add("");
 								childValues.add(hwOpsiToUI.get(hmKey));
-								childValues.add(hm.get(hmKey));
+								childValues.add(hm.get(hmKey).toString());
 							}
 							tableModelComplete.addRow(childValues.toArray());
 						}
@@ -716,21 +713,21 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					// first column empty
 					childValues.add("");
 					childValues.add(hm.get("displayName").toString());
-					Iterator hmIterator = hm.keySet().iterator();
+					Iterator<String> hmIterator = hm.keySet().iterator();
 					boolean firstValue = true;
 					while (hmIterator.hasNext()) {
-						String hmKey = (String) hmIterator.next();
+						String hmKey = hmIterator.next();
 						if (!hmKey.equals("displayName") && !hmKey.equals("type")) {
 							if (firstValue) {
 								firstValue = false;
 								childValues.add(hwOpsiToUI.get(hmKey));
-								childValues.add(hm.get(hmKey));
+								childValues.add(hm.get(hmKey).toString());
 							} else {
 								childValues = new ArrayList<>();
 								childValues.add("");
 								childValues.add("");
 								childValues.add(hwOpsiToUI.get(hmKey));
-								childValues.add(hm.get(hmKey));
+								childValues.add(hm.get(hmKey).toString());
 							}
 							tableModelComplete.addRow(childValues.toArray());
 						}

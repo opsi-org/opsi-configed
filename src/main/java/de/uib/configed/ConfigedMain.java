@@ -273,7 +273,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected List<String> localbootProductnames;
 	protected List<String> netbootProductnames;
-	protected List hwAuditConfig;
+	protected List<Map<String, Object>> hwAuditConfig;
 
 	// marker variables for requests for reload when clientlist changes
 	private Map<String, List<Map<String, String>>> localbootStatesAndActions = null;
@@ -283,7 +283,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// collection of retrieved software audit and hardware maps
 
-	private Map<String, Object> hwInfoClientmap;
+	private Map<String, Map<String, List<Map<String, Object>>>> hwInfoClientmap;
 
 	protected String myServer;
 	protected String opsiDefaultDomain;
@@ -3175,7 +3175,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			} else {
 				checkHwInfo();
-				Object hwInfo = hwInfoClientmap.get(firstSelectedClient);
+				Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.get(firstSelectedClient);
 				if (hwInfo == null) {
 					hwInfo = persist.getHardwareInfo(firstSelectedClient, true);
 					hwInfoClientmap.put(firstSelectedClient, hwInfo);

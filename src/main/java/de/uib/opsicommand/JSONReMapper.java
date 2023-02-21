@@ -319,7 +319,7 @@ public final class JSONReMapper {
 
 			while (iter.hasNext()) {
 				item = (JSONObject) iter.next();
-				Map<String, Object> mapItem = JSONReMapper.getMapObject(item);
+				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard(item);
 				result.add(mapItem);
 
 			}
@@ -360,7 +360,7 @@ public final class JSONReMapper {
 
 			while (iter.hasNext()) {
 				item = (JSONObject) iter.next();
-				Map<String, Object> mapItem = JSONReMapper.getMapObject(item);
+				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard(item);
 				result.add(mapItem);
 
 			}
