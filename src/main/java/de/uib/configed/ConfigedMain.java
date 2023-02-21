@@ -1670,12 +1670,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				Logging.info(this, "------------ buildPclistTableModel, allPCs (2) " + allPCs.length);
 
-				treeClients.associateClientsToGroups(allPCs, persist.getFObject2Groups(), null // we got already
-																								// allowedClients,
-																								// therefore don't need
-																								// the parameter
-																								// hostgroupsPermitted
-				);
+				// we got already allowedClients, therefore don't need the parameter hostgroupsPermitted
+				treeClients.associateClientsToGroups(allPCs, persist.getFObject2Groups(), null);
 
 				Logging.info(this, "tree produced");
 			}
@@ -1688,20 +1684,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (filterClientList) {
 
 			if (pclist0 != null) {
-				Object[] pcEntries = pclist0.entrySet().toArray();
 
 				Logging.info(this,
 						"buildPclistTableModel with filterCLientList " + "selected pcs " + getSelectedClients().length);
 
-				for (int i = 0; i < pcEntries.length; i++) {
-					Map.Entry ob = (Map.Entry) pcEntries[i];
+				for (Entry<String, Boolean> pcEntry : pclist0.entrySet()) {
 
-					String key = (String) ob.getKey();
 					for (int j = 0; j < getSelectedClients().length; j++) {
 
-						if (getSelectedClients()[j].equals(key)) {
+						if (getSelectedClients()[j].equals(pcEntry.getKey())) {
 
-							pclist.put(key, (Boolean) ob.getValue());
+							pclist.put(pcEntry.getKey(), pcEntry.getValue());
 							break;
 						}
 					}
@@ -2240,7 +2233,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					// get next key - value - pair
 					String key = iter.next();
 
-					List value = (List) productPropertiesFor1Client.get(key);
+					List<?> value = (List<?>) productPropertiesFor1Client.get(key);
 
 					// create a merger for it
 					ListMerger merger = new ListMerger(value);
@@ -2257,7 +2250,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 					while (iter.hasNext()) {
 						String key = iter.next();
-						List value = (List) productPropertiesFor1Client.get(key);
+						List<?> value = (List<?>) productPropertiesFor1Client.get(key);
 
 						if (mergedProductProperties.get(key) == null)
 						// we need a new property. it is not common
@@ -2962,7 +2955,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Map<String, Object> mergeIn = collection.get(0);
 
 		for (Entry<String, Object> entry : mergeIn.entrySet()) {
-			List value = (List) entry.getValue();
+			List<?> value = (List<?>) entry.getValue();
 			ListMerger merger = new ListMerger(value);
 			mergedMap.put(entry.getKey(), merger);
 		}
@@ -2972,7 +2965,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mergeIn = collection.get(i);
 
 			for (Entry<String, Object> mergeInEntry : mergeIn.entrySet()) {
-				List value = (List) mergeInEntry.getValue();
+				List<?> value = (List<?>) mergeInEntry.getValue();
 
 				if (mergedMap.get(mergeInEntry.getKey()) == null) {
 					ListMerger merger = new ListMerger(value);
