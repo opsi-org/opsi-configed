@@ -759,7 +759,7 @@ public final class LicensingInfoMap {
 		if (!moduleInfo.get(CLIENT_NUMBER).toString().equals(UNLIMITED_NUMBER)
 				&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
 
-			List lics = (List) moduleInfo.get(LICENSE_IDS);
+			List<?> lics = (List<?>) moduleInfo.get(LICENSE_IDS);
 			String validUntil;
 			LocalDate now = LocalDate.now();
 			Date dateNow = Date.from(now.atStartOfDay(ZoneId.systemDefault()).toInstant());

@@ -189,7 +189,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected AuditSoftwareXLicencePool relationsAuditSoftwareToLicencePools;
 
-	protected Map<String, Map> rowmapAuditSoftware;
+	// TODO Still needed?
+	protected Map<String, Map<String, String>> rowmapAuditSoftware;
 
 	// function softwareIdent --> pool
 	protected Map<String, String> fSoftware2LicencePool;
@@ -330,9 +331,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected Map<String, Boolean> productOnClientsDisplayFieldsLocalbootProducts;
 	protected Map<String, Boolean> hostDisplayFields;
 
-	protected List configStateCollection;
-	protected List deleteConfigStateItems;
-	protected List configCollection;
+	protected List<Map<String, Object>> configStateCollection;
+	protected List<JSONObject> deleteConfigStateItems;
+	protected List<Map<String, Object>> configCollection;
 
 	protected List productPropertyStateUpdateCollection;
 	protected List productPropertyStateDeleteCollection;
@@ -377,7 +378,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return ((String) ob).equals("1");
 
 		Logging.warning("could not find boolean in interpretAsBoolean, returning false");
-		return false; // not foreseen value
+
+		// not foreseen value
+		return false;
 	}
 
 	protected class CheckingEntryMapOfMaps extends LinkedHashMap<String, Map<String, Object>> {}
@@ -395,9 +398,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		protected Map<String, Boolean> mapOfPCs;
 
-		protected Map<String, HostInfo> mapPCInfomap; // for some depots
-		protected Map<String, HostInfo> host2hostInfo; // all hosts
-		protected Map<String, Set<String>> fNode2Treeparents; // essentially client --> all groups with it
+		// for some depots
+		protected Map<String, HostInfo> mapPCInfomap;
+
+		// all hosts
+		protected Map<String, HostInfo> host2hostInfo;
+
+		// essentially client --> all groups with it
+		protected Map<String, Set<String>> fNode2Treeparents;
 		protected Map<String, String> mapPcBelongsToDepot;
 
 		private de.uib.configed.tree.ClientTree connectedTree;
@@ -631,11 +639,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 						String depotId = null;
 
 						if (getConfigs().get(name) == null || getConfigs().get(name).get(CONFIG_DEPOT_ID) == null
-								|| ((List) (getConfigs().get(name).get(CONFIG_DEPOT_ID))).isEmpty()) {
+								|| ((List<?>) (getConfigs().get(name).get(CONFIG_DEPOT_ID))).isEmpty()) {
 							Logging.debug(this,
 									"retrieveOpsiHosts client  " + name + " has no config for " + CONFIG_DEPOT_ID);
 						} else {
-							depotId = (String) ((List) (getConfigs().get(name).get(CONFIG_DEPOT_ID))).get(0);
+							depotId = (String) ((List<?>) (getConfigs().get(name).get(CONFIG_DEPOT_ID))).get(0);
 						}
 
 						if (depotId != null && masterDepots.keySet().contains(depotId)) {
@@ -1986,7 +1994,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List<Object> jsonObjects = new ArrayList<>();
 
 			Map<String, Object> itemDepot = createNOMitem(ConfigStateEntry.TYPE);
-			List valuesDepot = new ArrayList<>();
+			List<String> valuesDepot = new ArrayList<>();
 			valuesDepot.add(depotId);
 			itemDepot.put(ConfigStateEntry.OBJECT_ID, newClientId);
 			itemDepot.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(valuesDepot));
@@ -2367,7 +2375,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			else if (resultEntry.getValue() instanceof List) {
 				// should then hold
 
-				List sessionlist = (List) resultEntry.getValue();
+				List<?> sessionlist = (List<?>) resultEntry.getValue();
 				for (Object element : sessionlist) {
 					Map<String, Object> session = JSONReMapper.getMapObject((org.json.JSONObject) element);
 
@@ -2814,7 +2822,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		boolean result = true;
 
-		Map map = new HashMap<>();
+		Map<String, String> map = new HashMap<>();
 
 		map.put("id", groupId);
 		map.put("type", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
@@ -2841,13 +2849,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.info(this, "setProductGroup: inOriSetnotInNewSet, inNewSetnotInOriSet. " + inOriSetnotInNewSet + ", "
 				+ inNewSetnotInOriSet);
 
-		final Map typingObject = new HashMap<>();
+		final Map<String, String> typingObject = new HashMap<>();
 		typingObject.put("groupType", Object2GroupEntry.GROUP_TYPE_PRODUCTGROUP);
 		typingObject.put("type", Object2GroupEntry.TYPE_NAME);
 
-		List object2Groups = new ArrayList<>();
+		List<JSONObject> object2Groups = new ArrayList<>();
 		for (String objectId : inOriSetnotInNewSet) {
-			Map m = new HashMap<>(typingObject);
+			Map<String, String> m = new HashMap<>(typingObject);
 			m.put("groupId", groupId);
 			m.put("objectId", objectId);
 			object2Groups.add(AbstractExecutioner.jsonMap(m));
@@ -2863,7 +2871,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		object2Groups.clear();
 		for (String objectId : inNewSetnotInOriSet) {
-			Map m = new HashMap<>(typingObject);
+			Map<String, String> m = new HashMap<>(typingObject);
 			m.put("groupId", groupId);
 			m.put("objectId", objectId);
 			object2Groups.add(AbstractExecutioner.jsonMap(m));
@@ -3207,13 +3215,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			Logging.info(this, "hw audit class " + hwClass);
 
-			for (Object m : (List) (hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY))) {
+			for (Object m : (List<?>) hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY)) {
 				if (!(m instanceof Map)) {
 					Logging.warning(this, "getAllHwClassNames illegal VALUES item, m " + m);
 					continue;
 				}
 
-				Map ma = (Map) m;
+				Map<?, ?> ma = (Map<?, ?>) m;
 
 				if (ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY).equals("i")) {
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
@@ -5372,11 +5380,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			List<Object> doneList = new ArrayList<>();
 
-			for (Object configState : configStateCollection) {
-				String ident = (String) (((Map) configState).get("configId"));
+			for (Map<String, Object> configState : configStateCollection) {
+				String ident = (String) configState.get("configId");
 				usedConfigIds.add(ident);
 
-				List<Object> valueList = (List) (((Map) configState).get("values"));
+				List<?> valueList = (List<?>) configState.get("values");
 
 				if (!valueList.isEmpty() && valueList.get(0) instanceof Boolean) {
 					typesOfUsedConfigIds.put(ident, "BoolConfig");
@@ -5386,8 +5394,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				if (valueList == MapTableModel.nullLIST) {
 					Map<String, Object> item = createNOMitem("ConfigState");
-					item.put("objectId", ((Map) configState).get("objectId"));
-					item.put("configId", ((Map) configState).get("configId"));
+					item.put("objectId", configState.get("objectId"));
+					item.put("configId", configState.get("configId"));
 
 					deleteConfigStateItems.add(AbstractExecutioner.jsonMap(item));
 
@@ -5439,8 +5447,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List<JSONObject> callsConfigName2ConfigValueCollection = new ArrayList<>();
 			List<JSONObject> callsConfigCollection = new ArrayList<>();
 
-			for (Object stateO : configStateCollection) {
-				Map state = (Map) stateO;
+			for (Map<String, Object> state : configStateCollection) {
 
 				if (determineConfigOptions) {
 					ConfigOption configOption = configOptions.get(state.get("configId"));
@@ -5451,8 +5458,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					configForUpdate.put("type", configOption.getRetrieved().get("type"));
 					configForUpdate.put("defaultValues", AbstractExecutioner.jsonArray((List) state.get("values")));
 
-					List<Object> possibleValues = (List) configOption.get("possibleValues");
-					for (Object item : (List) state.get("values")) {
+					List<Object> possibleValues = (List<Object>) configOption.get("possibleValues");
+					for (Object item : (List<?>) state.get("values")) {
 						if (possibleValues.indexOf(item) == -1) {
 							possibleValues.add(item);
 						}
@@ -5464,7 +5471,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					callsConfigCollection.add(AbstractExecutioner.jsonMap(configForUpdate));
 				}
 
-				state.put("values", AbstractExecutioner.jsonArray((List) state.get("values")));
+				state.put("values", AbstractExecutioner.jsonArray((List<?>) state.get("values")));
 				callsConfigName2ConfigValueCollection.add(AbstractExecutioner.jsonMap(state));
 			}
 
@@ -5583,10 +5590,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			// add configId where necessary
 			List<String> usedConfigIds = new ArrayList<>();
 			Map<String, String> typesOfUsedConfigIds = new HashMap<>();
-			for (Object config : configCollection) {
-				String ident = (String) (((Map) config).get("ident"));
+			for (Map<String, Object> config : configCollection) {
+				String ident = (String) config.get("ident");
 				usedConfigIds.add(ident);
-				typesOfUsedConfigIds.put(ident, (String) ((Map) config).get("type"));
+				typesOfUsedConfigIds.put(ident, (String) config.get("type"));
 			}
 
 			Logging.debug(this, "setConfig(), usedConfigIds: " + usedConfigIds);
@@ -5617,11 +5624,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List<JSONObject> callsConfigUpdateCollection = new ArrayList<>();
 			List<JSONObject> callsConfigDeleteCollection = new ArrayList<>();
 
-			for (Object config : configCollection) {
-				Map callConfig = (Map) config;
+			for (Map<String, Object> callConfig : configCollection) {
 
-				if (((Map) config).get("defaultValues") == MapTableModel.nullLIST) {
-					callsConfigDeleteCollection.add(AbstractExecutioner.jsonMap((Map) config));
+				if (callConfig.get("defaultValues") == MapTableModel.nullLIST) {
+					callsConfigDeleteCollection.add(AbstractExecutioner.jsonMap(callConfig));
 				}
 
 				else {
@@ -5631,10 +5637,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 					if (!restrictToMissing || isMissing) {
 						callConfig.put("defaultValues",
-								AbstractExecutioner.jsonArray((List) ((Map) config).get("defaultValues")));
+								AbstractExecutioner.jsonArray((List<?>) callConfig.get("defaultValues")));
 						callConfig.put("possibleValues",
-								AbstractExecutioner.jsonArray((List) ((Map) config).get("possibleValues")));
-						callsConfigUpdateCollection.add(AbstractExecutioner.jsonMap((Map) config));
+								AbstractExecutioner.jsonArray((List<?>) callConfig.get("possibleValues")));
+						callsConfigUpdateCollection.add(AbstractExecutioner.jsonMap(callConfig));
 					}
 				}
 			}
@@ -5645,7 +5651,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				exec.doCall(new OpsiMethodCall("config_deleteObjects",
 						new Object[] { AbstractExecutioner.jsonArray(callsConfigDeleteCollection) }));
 				configOptionsRequestRefresh();
-				hostConfigsRequestRefresh(); // because of referential integrity
+
+				// because of referential integrity
+				hostConfigsRequestRefresh();
 			}
 
 			Logging.debug(this, "setConfig() callsConfigUpdateCollection " + callsConfigUpdateCollection);
