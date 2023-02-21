@@ -20,7 +20,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 //data source table productOnDepot
-public class OpsiPackage implements Comparable {
+public class OpsiPackage implements Comparable<String> {
 	protected String productId;
 	protected int productType;
 	protected String versionInfo;
@@ -42,7 +42,8 @@ public class OpsiPackage implements Comparable {
 	public static final String LOCALBOOT_PRODUCT_SERVER_STRING = "LocalbootProduct";
 	public static final String NETBOOT_PRODUCT_SERVER_STRING = "NetbootProduct";
 
-	public static final List<String> SERVICE_KEYS; // those which form the primary keys
+	// those which form the primary keys
+	public static final List<String> SERVICE_KEYS;
 	static {
 		SERVICE_KEYS = new ArrayList<>();
 		SERVICE_KEYS.add(SERVICE_KEY_PRODUCT_ID0);
@@ -55,8 +56,8 @@ public class OpsiPackage implements Comparable {
 	public static final int TYPE_NETBOOT = 1;
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
-		this(productId, productVersion, packageVersion, productType, false); // compatibility to usages without locked
-																				// parameter
+		this(productId, productVersion, packageVersion, productType, false);
+		// compatibility to usages without locked parameter
 	}
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType,
@@ -66,17 +67,19 @@ public class OpsiPackage implements Comparable {
 		this.packageVersion = packageVersion;
 		this.versionInfo = productVersion + Globals.ProductPackageVersionSeparator.FOR_KEY + packageVersion;
 
-		if (productType.equals(LOCALBOOT_PRODUCT_SERVER_STRING))
+		if (productType.equals(LOCALBOOT_PRODUCT_SERVER_STRING)) {
 			this.productType = 0;
-		else if (productType.equals(NETBOOT_PRODUCT_SERVER_STRING))
+		} else if (productType.equals(NETBOOT_PRODUCT_SERVER_STRING)) {
 			this.productType = 1;
-		else
+		} else {
 			this.productType = -1;
+		}
 
-		if (locked)
+		if (locked) {
 			this.lockedText = IS_LOCKED_INFO;
-		else
+		} else {
 			this.lockedText = "";
+		}
 
 		Logging.debug(this, "created : " + productId + ", " + productType + ", " + versionInfo);
 
@@ -161,8 +164,8 @@ public class OpsiPackage implements Comparable {
 
 	// Interface Comparable
 	@Override
-	public int compareTo(Object o) {
-		return representation.compareTo(o.toString());
+	public int compareTo(String o) {
+		return representation.compareTo(o);
 	}
 
 	@Override

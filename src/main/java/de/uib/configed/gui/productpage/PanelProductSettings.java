@@ -1051,13 +1051,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	public void initEditing(String productID, String productTitle, String productInfo, String productHint,
 			String productVersion, Collection<Map<String, Object>> storableProductProperties,
 			Map editableProductProperties,
-
 			// editmappanelx
 			Map<String, de.uib.utilities.table.ListCellOptions> productpropertyOptionsMap,
-
-			ProductpropertiesUpdateCollection updateCollection)
-
-	{
+			ProductpropertiesUpdateCollection updateCollection) {
 		infoPane.setGrey(false);
 		infoPane.setProductId(productID);
 		infoPane.setProductName(productTitle);
@@ -1070,11 +1066,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		Globals.checkCollection(this, "productpropertyOptionsMap", productpropertyOptionsMap);
 
 		propertiesPanel.setEditableMap(
-
 				// visualMap (merged for different clients)
-				editableProductProperties, productpropertyOptionsMap
-
-		);
+				editableProductProperties, productpropertyOptionsMap);
 
 		propertiesPanel.setStoreData(storableProductProperties);
 		propertiesPanel.setUpdateCollection(updateCollection);

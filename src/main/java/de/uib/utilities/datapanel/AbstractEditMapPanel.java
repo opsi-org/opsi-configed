@@ -113,7 +113,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	 * 
 	 * @param Collection data
 	 */
-	public void setStoreData(Collection data) {
+	public void setStoreData(Collection<Map<String, Object>> data) {
 		mapTableModel.setStoreData(data);
 	}
 
@@ -162,9 +162,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
-	public void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap) {
-		Logging.debug(this, "setEditableMap optionsMap == null? " + (optionsMap == null));
-	}
+	public abstract void setEditableMap(Map<String, Object> visualdata, Map<String, ListCellOptions> optionsMap);
 
 	/**
 	 * setting a label <br />

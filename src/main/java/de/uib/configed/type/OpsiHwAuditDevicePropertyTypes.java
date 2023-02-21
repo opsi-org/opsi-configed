@@ -13,7 +13,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 		this.hwAuditDeviceClasses = hwAuditDeviceClasses;
 	}
 
-	public void checkIn(String key, List valuesSet) {
+	public void checkIn(String key, List<Object> valuesSet) {
 		if (!key.startsWith(OpsiHwAuditDeviceClass.CONFIG_KEY)) {
 			return;
 		}

@@ -979,7 +979,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 					case 2:
 						Logging.info(this, "setAgainUserRegistration remove warning locally ");
-						Configed.savedStates.saveRegisterUser.serialize(null); // remove from store
+						// remove from store
+						Configed.savedStates.saveRegisterUser.serialize(null);
 						Configed.savedStates.store();
 						break;
 
@@ -1000,13 +1001,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	private String userPart() {
-		if (userConfigPart != null)
+		if (userConfigPart != null) {
 			return userConfigPart;
+		}
 
-		if (applyUserSpecializedConfig())
+		if (applyUserSpecializedConfig()) {
 			userConfigPart = KEY_USER_ROOT + ".{" + user + "}.";
-		else
+		} else {
 			userConfigPart = UserConfig.KEY_USER_ROLE_ROOT + ".{" + UserConfig.DEFAULT_ROLE_NAME + "}.";
+		}
 
 		Logging.info(this, "userConfigPart initialized, " + userConfigPart);
 
@@ -3974,7 +3977,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected boolean updateProductOnClient(String pcname, String productname, int producttype, Map updateValues,
 			List updateItems) {
-		Map<Object, Object> values = new HashMap<>();
+		Map<String, Object> values = new HashMap<>();
 
 		values.put("productType", OpsiPackage.giveProductType(producttype));
 		values.put("type", "ProductOnClient");

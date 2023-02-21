@@ -41,21 +41,25 @@ public class OpsiProductInfo extends OpsiPackage {
 		possibleActions.add(ActionRequest.getState2Label().get(ActionRequest.NONE));
 		// keys are the possible script types
 		for (String scriptKey : ActionRequest.getScriptKeys()) {
-			if (m.get(scriptKey) != null && !("" + m.get(scriptKey)).equals(""))
+			if (m.get(scriptKey) != null && !("" + m.get(scriptKey)).equals("")) {
 				possibleActions.add(ActionRequest.getScriptKey2Label().get(scriptKey));
+			}
 		}
 
 		productName = "";
-		if (m.get(SERVICE_KEY_PRODUCT_NAME) != null)
+		if (m.get(SERVICE_KEY_PRODUCT_NAME) != null) {
 			productName = "" + m.get(SERVICE_KEY_PRODUCT_NAME);
+		}
 
 		description = "";
-		if (m.get(SERVICE_KEY_PRODUCT_DESCRIPTION) != null)
+		if (m.get(SERVICE_KEY_PRODUCT_DESCRIPTION) != null) {
 			description = "" + m.get(SERVICE_KEY_PRODUCT_DESCRIPTION);
+		}
 
 		advice = "";
-		if (m.get(SERVICE_KEY_PRODUCT_ADVICE) != null)
+		if (m.get(SERVICE_KEY_PRODUCT_ADVICE) != null) {
 			advice = "" + m.get(SERVICE_KEY_PRODUCT_ADVICE);
+		}
 
 		try {
 			priority = Integer.valueOf("" + m.get(SERVICE_KEY_PRIORITY));
@@ -71,7 +75,7 @@ public class OpsiProductInfo extends OpsiPackage {
 
 	}
 
-	public List getPossibleActions() {
+	public List<String> getPossibleActions() {
 		return possibleActions;
 	}
 

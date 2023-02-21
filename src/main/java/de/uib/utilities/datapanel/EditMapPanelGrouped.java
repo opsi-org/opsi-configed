@@ -372,7 +372,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	// apply method of superclass for all partial maps
 	@Override
-	public void setStoreData(Collection data) {
+	public void setStoreData(Collection<Map<String, Object>> data) {
 		super.setStoreData(data);
 
 		for (String key : keyclasses) {

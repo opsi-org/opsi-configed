@@ -15,6 +15,7 @@ import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.ControlPanelAssignToLPools.SoftwareDirectionOfAssignment;
+import de.uib.configed.ControlPanelAssignToLPools.SoftwareShowAllMeans;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
@@ -338,9 +339,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		;
 
-		PanelStateSwitch panelRadiobuttonsSoftwareselectionX = new PanelStateSwitch<>(null, // title
-				ControlPanelAssignToLPools.SoftwareShowAllMeans.ALL,
-				ControlPanelAssignToLPools.SoftwareShowAllMeans.values(),
+		PanelStateSwitch<SoftwareShowAllMeans> panelRadiobuttonsSoftwareselectionX = new PanelStateSwitch<>(null,
+				SoftwareShowAllMeans.ALL, SoftwareShowAllMeans.values(),
 
 				new String[] { Configed.getResourceValue("PanelAssignToLPools.radiobuttonALL"),
 						Configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_OR_ASSIGNED_TO_NOTHING"),
