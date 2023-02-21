@@ -2973,11 +2973,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public Map getSoftwareInfo(String clientId) {
-		return new HashMap<>();
-	}
-
-	@Override
 	public void softwareAuditOnClientsRequestRefresh() {
 		Logging.info(this, "softwareAuditOnClientsRequestRefresh");
 		dataStub.softwareAuditOnClientsRequestRefresh();
@@ -3083,8 +3078,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public Map<String, Map/* <String, String> */> retrieveSoftwareAuditData(String clientId) {
-		Map<String, Map/* <String, String> */> result = new TreeMap<>();
+	public Map<String, Map> retrieveSoftwareAuditData(String clientId) {
+		Map<String, Map> result = new TreeMap<>();
 
 		if (clientId == null || clientId.equals("")) {
 			return result;

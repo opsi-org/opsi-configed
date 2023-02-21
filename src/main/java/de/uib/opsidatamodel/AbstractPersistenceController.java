@@ -468,8 +468,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract NavigableMap<String, Integer> getSoftware2Number();
 
-	public abstract Map getSoftwareInfo(String clientId);
-
 	public abstract void fillClient2Software(List<String> clients);
 
 	public abstract void softwareAuditOnClientsRequestRefresh();
@@ -480,7 +478,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract String getLastSoftwareAuditModification(String clientId);
 
-	public abstract Map<String, Map/* <String, String> */> retrieveSoftwareAuditData(String clientId);
+	public abstract Map<String, Map> retrieveSoftwareAuditData(String clientId);
 
 	/* hardware info */
 	public abstract List<Map<String, Object>> getOpsiHWAuditConf();

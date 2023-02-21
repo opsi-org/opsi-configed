@@ -332,7 +332,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		List<Map<String, Object>> devices = hwInfo.get(hwClass);
-		Map deviceInfo = node.getDeviceInfo();
+		Map<String, Object> deviceInfo = node.getDeviceInfo();
 		if ((devices == null) || (deviceInfo == null)) {
 			return new ArrayList<>();
 		}
@@ -366,7 +366,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					unit = (String) v.get("Unit");
 					Logging.debug(this, "unit  " + unit);
 				}
-				Iterator iter = deviceInfo.keySet().iterator();
+				Iterator<String> iter = deviceInfo.keySet().iterator();
 				while (iter.hasNext()) {
 					String key = (String) iter.next();
 					if (key.equalsIgnoreCase(opsi)) {
@@ -410,9 +410,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				}
 			}
 		} else {
-			Iterator iter = deviceInfo.keySet().iterator();
+			Iterator<String> iter = deviceInfo.keySet().iterator();
 			while (iter.hasNext()) {
-				String key = (String) iter.next();
+				String key = iter.next();
 				String[] row = { key, (String) deviceInfo.get(key) };
 				data.add(row);
 				Logging.debug(this, "hwClass row  " + hwClass + ": " + Arrays.toString(row));

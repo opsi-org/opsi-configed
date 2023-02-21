@@ -119,8 +119,6 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected Map<String, Map<String, String>> combinedVisualValues; // state key (column name) --> product name -->
 																		// visual value
 
-	protected Map stateChanges;
-
 	protected Map<String, Set<String>> product2setOfClientsWithNewAction;
 	// for each product, we shall collect the clients that have a changed action
 	// request

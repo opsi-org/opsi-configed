@@ -292,7 +292,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				ConfigName2ConfigValue properties = depot2product2properties.get(depots.get(n)).get(productId);
 
 				for (Entry<String, Object> entry : properties.entrySet()) {
-					List value = (List) entry.getValue();
+					List<?> value = (List<?>) entry.getValue();
 					result.put(entry.getKey(), new ListMerger(value));
 				}
 

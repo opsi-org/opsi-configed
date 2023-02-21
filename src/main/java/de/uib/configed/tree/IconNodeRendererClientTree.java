@@ -42,8 +42,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 			node.setEnabled(enabled);
 
-			if (!node.getAllowsChildren()) // client
-			{
+			if (!node.getAllowsChildren()) {
+				// client
 
 				if (
 
@@ -64,7 +64,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 				setText(visualText);
 
-				setIcon(node.getClosedIcon()); // default,will be changed, if clients are childs
+				// default,will be changed, if clients are childs
+				setIcon(node.getClosedIcon());
 
 				if (main.getActiveParents().contains(stringValue)) {
 					setIcon(node.getEmphasizedIcon());
