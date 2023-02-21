@@ -16,7 +16,6 @@ import java.util.Map.Entry;
 
 import de.uib.utilities.logging.Logging;
 
-public class MapSource implements TableSource
 // based on a regular map (rows indexed by a String key)
 // of maps (representing the rows as pairs columnname - value)
 
@@ -24,7 +23,7 @@ public class MapSource implements TableSource
 // column 0 of the table is the key of the outer map (therefore the first
 // classname
 // has to be String)
-{
+public class MapSource implements TableSource {
 	protected static final String ROW_COUNTER_NAME = "rowcounter";
 
 	protected boolean rowCounting = false;

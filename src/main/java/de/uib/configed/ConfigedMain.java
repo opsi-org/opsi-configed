@@ -149,7 +149,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard and other features for opsi 4.3 disabled
-	public static final boolean OPSI_4_3 = false;
+	public static final boolean OPSI_4_3 = true;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -222,8 +222,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// the properties for one product and all selected clients
 	protected Collection<Map<String, Object>> productProperties;
-	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(
-			new ArrayList<>());
+	protected UpdateCollection updateCollection = new UpdateCollection(new ArrayList<>());
 	protected Map<String, ProductpropertiesUpdateCollection> clientProductpropertiesUpdateCollections;
 	/*
 	 * for each product:
@@ -753,9 +752,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}));
 	}
 
-	protected void preloadData()
 	// sets dataReady = true when finished
-	{
+	protected void preloadData() {
 		WaitCursor waitCursor = new WaitCursor(mainFrame.getContentPane(), "preloadData");
 
 		persist.retrieveOpsiModules();
@@ -809,7 +807,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		dataReady = true;
 		waitCursor.stop();
 		mainFrame.enableAfterLoading();
-
 	}
 
 	public void setGroupLoading(boolean b) {

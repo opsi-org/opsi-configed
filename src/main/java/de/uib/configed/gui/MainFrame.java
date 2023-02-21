@@ -27,7 +27,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -99,6 +101,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.CopyrightInfos;
 import de.uib.configed.Globals;
+import de.uib.configed.HealthInfo;
 import de.uib.configed.HostsStatusInfo;
 import de.uib.configed.dashboard.LicenseDisplayer;
 import de.uib.configed.gui.hostconfigs.PanelHostConfig;
@@ -267,6 +270,7 @@ public class MainFrame extends JFrame
 	private JMenuItem jMenuHelpServerInfoPage = new JMenuItem();
 	private JMenu jMenuHelpLoglevel = new JMenu();
 	private JMenuItem jMenuHelpLogfileLocation = new JMenuItem();
+	private JMenuItem jMenuHelpCheckHealth = new JMenuItem();
 
 	private JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET + 1];
 
@@ -1423,6 +1427,16 @@ public class MainFrame extends JFrame
 		jMenuHelpLogfileLocation.addActionListener((ActionEvent e) -> showLogfileLocationAction());
 
 		jMenuHelp.add(jMenuHelpLogfileLocation);
+
+		jMenuHelpCheckHealth.setText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
+		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> {
+			saveHealthDataToFile();
+			showHealthDataAction();
+		});
+
+		if (ConfigedMain.OPSI_4_3) {
+			jMenuHelp.add(jMenuHelpCheckHealth);
+		}
 
 		jMenuHelp.addSeparator();
 
@@ -3102,7 +3116,6 @@ public class MainFrame extends JFrame
 	}
 
 	private void showLogfileLocationAction() {
-
 		FTextArea info = new FTextArea(this,
 				Globals.APPNAME + " " + Configed.getResourceValue("MainFrame.showLogFileInfoTitle"), false,
 				new String[] { Configed.getResourceValue("MainFrame.showLogFileClose"),
@@ -3140,6 +3153,28 @@ public class MainFrame extends JFrame
 				.setSelectionStart(message.toString().length() - Logging.getCurrentLogfilePath().length());
 
 		info.setVisible(true);
+	}
+
+	private void showHealthDataAction() {
+		HealthCheckDialog dialog = new HealthCheckDialog();
+		dialog.setupLayout();
+		dialog.setMessage(HealthInfo.getHealthData(false));
+		dialog.setVisible(true);
+	}
+
+	private void saveHealthDataToFile() {
+		File healthDataFile = new File(Configed.savedStatesLocationName, Globals.HEALTH_CHECK_LOG_FILE_NAME);
+
+		if (healthDataFile.exists() && healthDataFile.length() != 0) {
+			return;
+		}
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(healthDataFile))) {
+			writer.write(HealthInfo.getHealthData(true));
+			writer.flush();
+		} catch (IOException e) {
+			Logging.error("unable to write to a file: " + healthDataFile.getAbsolutePath());
+		}
 	}
 
 	private void showOpsiModules() {

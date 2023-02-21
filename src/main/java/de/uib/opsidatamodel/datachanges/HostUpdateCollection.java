@@ -34,9 +34,7 @@ public class HostUpdateCollection extends UpdateCollection {
 
 			try {
 				map = (Map) obj;
-			}
-
-			catch (ClassCastException ccex) {
+			} catch (ClassCastException ccex) {
 				Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 			}
 
@@ -50,5 +48,4 @@ public class HostUpdateCollection extends UpdateCollection {
 		Logging.debug(this, "clearElements()");
 		clear();
 	}
-
 }

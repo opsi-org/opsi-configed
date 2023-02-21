@@ -899,6 +899,24 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract boolean checkSSHCommandMethod(String method);
 
+	public abstract List<Map<String, Object>> getOpsiconfdConfigHealth();
+
+	public abstract List<Map<String, Object>> getDiskUsageHealth();
+
+	public abstract List<Map<String, Object>> getDepotHealth();
+
+	public abstract List<Map<String, Object>> getSystemPackageHealth();
+
+	public abstract List<Map<String, Object>> getProductOnDepotsHealth();
+
+	public abstract List<Map<String, Object>> getProductOnClientsHealth();
+
+	public abstract List<Map<String, Object>> getLicenseHealth();
+
+	public abstract List<Map<String, Object>> getDeprecatedCalls();
+
+	public abstract List<Map<String, Object>> checkHealth();
+
 	// json generating
 
 	public static Map<String, Object> createNOMitem(String type) {
