@@ -201,7 +201,7 @@ public final class Terminal {
 				writer.write(dataJsonBytes);
 				writer.flush();
 			} catch (IOException ex) {
-				Logging.error(this, "cannot resize terminal window: " + data.toString());
+				Logging.warning(this, "cannot resize terminal window: " + data.toString());
 			}
 		}
 
@@ -228,7 +228,7 @@ public final class Terminal {
 				writer.write(dataJsonBytes);
 				writer.flush();
 			} catch (IOException ex) {
-				Logging.error("cannot send message to server: " + data.toString());
+				Logging.warning("cannot send message to server: " + data.toString());
 			}
 		}
 
