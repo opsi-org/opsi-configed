@@ -3078,8 +3078,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public Map<String, Map> retrieveSoftwareAuditData(String clientId) {
-		Map<String, Map> result = new TreeMap<>();
+	public Map<String, Map<String, Object>> retrieveSoftwareAuditData(String clientId) {
+		Map<String, Map<String, Object>> result = new TreeMap<>();
 
 		if (clientId == null || clientId.equals("")) {
 			return result;
@@ -5949,8 +5949,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// without internal caching; legacy license method
-	public Map<String, Map> getRelationsSoftwareL2LPool() {
-		HashMap<String, Map> rowsSoftwareL2LPool = new HashMap<>();
+	public Map<String, Map<String, Object>> getRelationsSoftwareL2LPool() {
+		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
 
 		if (withLicenceManagement) {
 			List<Object> li0 = exec
@@ -5970,7 +5970,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				Iterator<Object> iter1 = li1.iterator();
 
 				while (iter1.hasNext()) {
-					Map<String, String> m = new HashMap<>();
+					Map<String, Object> m = new HashMap<>();
 					String licensePoolId = (String) iter1.next();
 					m.put("licensePoolId", licensePoolId);
 

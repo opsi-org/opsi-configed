@@ -478,7 +478,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract String getLastSoftwareAuditModification(String clientId);
 
-	public abstract Map<String, Map> retrieveSoftwareAuditData(String clientId);
+	public abstract Map<String, Map<String, Object>> retrieveSoftwareAuditData(String clientId);
 
 	/* hardware info */
 	public abstract List<Map<String, Object>> getOpsiHWAuditConf();
@@ -765,7 +765,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract boolean deleteSoftwareLicence(String softwareLicenseId);
 
-	public abstract Map<String, Map> getRelationsSoftwareL2LPool();
+	public abstract Map<String, Map<String, Object>> getRelationsSoftwareL2LPool();
 
 	// returns the ID of the edited data record
 	public abstract String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId,

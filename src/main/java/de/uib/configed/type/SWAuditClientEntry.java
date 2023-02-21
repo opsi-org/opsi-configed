@@ -294,8 +294,8 @@ public class SWAuditClientEntry
 		return locale.get(KEYS.get(i));
 	}
 
-	public Map<String, String> getExpandedMap(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
-		Map<String, String> dataMap = new HashMap<>(data);
+	public Map<String, Object> getExpandedMap(Map<String, SWAuditEntry> installedSoftwareInformation, String swIdent) {
+		Map<String, Object> dataMap = new HashMap<>(data);
 		dataMap.putAll(installedSoftwareInformation.get(swIdent));
 
 		return dataMap;

@@ -3764,7 +3764,8 @@ public class MainFrame extends JFrame
 			List<String> clientsWithoutScan = new ArrayList<>();
 
 			for (String client : configedMain.getSelectedClients()) {
-				Map<String, Map> tableData = configedMain.getPersistenceController().retrieveSoftwareAuditData(client);
+				Map<String, Map<String, Object>> tableData = configedMain.getPersistenceController()
+						.retrieveSoftwareAuditData(client);
 				if (tableData == null || tableData.isEmpty()) {
 					clientsWithoutScan.add(client);
 				}

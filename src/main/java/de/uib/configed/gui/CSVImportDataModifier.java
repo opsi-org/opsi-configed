@@ -118,7 +118,7 @@ public class CSVImportDataModifier {
 		List<String> classNames = new ArrayList<>();
 		populateClassNames(classNames, columnNames);
 
-		Map<String, Map> theSourceMap = new HashMap<>();
+		Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 		populateSourceMap(theSourceMap, csvData);
 
 		TableUpdateCollection updateCollection = new TableUpdateCollection();
@@ -208,7 +208,7 @@ public class CSVImportDataModifier {
 		}
 	}
 
-	private void populateSourceMap(Map<String, Map> theSourceMap, List<Map<String, Object>> data) {
+	private void populateSourceMap(Map<String, Map<String, Object>> theSourceMap, List<Map<String, Object>> data) {
 		int id = 0;
 
 		for (Map<String, Object> line : data) {

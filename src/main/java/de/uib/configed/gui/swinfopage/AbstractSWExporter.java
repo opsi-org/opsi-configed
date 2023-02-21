@@ -206,9 +206,9 @@ public abstract class AbstractSWExporter {
 		modelSWInfo = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
-					public Map<String, Map> retrieveMap() {
+					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + theHost);
-						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(theHost);
+						Map<String, Map<String, Object>> tableData = persist.retrieveSoftwareAuditData(theHost);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
 							Logging.debug(this, "tableData is empty or null");
