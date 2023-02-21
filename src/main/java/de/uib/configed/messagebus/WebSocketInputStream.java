@@ -41,8 +41,7 @@ public final class WebSocketInputStream {
 			reader.connect(writer);
 			connected = true;
 		} catch (IOException e) {
-			e.printStackTrace();
-			Logging.error(WebSocketInputStream.class, "connecting reader with writer, when they're connected");
+			Logging.warning(WebSocketInputStream.class, "connecting reader with writer, when they're connected");
 		}
 	}
 
