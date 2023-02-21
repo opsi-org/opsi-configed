@@ -10,12 +10,14 @@ public class SaveInteger extends AbstractSaveState {
 	}
 
 	public void serialize(final Integer value, Integer minValue) {
-		if (minValue == null || value == null)
+		if (minValue == null || value == null) {
 			serialize(value);
-		else {
+		} else {
 			int val0 = value;
-			if (val0 < minValue)
+			if (val0 < minValue) {
 				val0 = minValue;
+			}
+
 			serialize(val0);
 		}
 	}

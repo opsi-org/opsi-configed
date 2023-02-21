@@ -79,8 +79,9 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 				" doInBackground finished: ready, stopped, elapsedMillis < waitingSleeper.getWaitingMillis() " + ready
 						+ ", " + stopped + ", " + (elapsedMillis >= waitingSleeper.getWaitingMillis()));
 
-		if (timeoutReached)
+		if (timeoutReached) {
 			Logging.warning(this, " doInBackground finished, timeoutReached");
+		}
 
 		return null;
 	}
@@ -119,8 +120,9 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	@Override
 	public void done() {
 		Logging.info(this, "done,  stopped is " + stopped);
-		if (!stopped)
+		if (!stopped) {
 			waitingSleeper.actAfterWaiting();
+		}
 	}
 
 	public boolean isTimeoutReached() {

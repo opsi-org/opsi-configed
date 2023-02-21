@@ -51,8 +51,9 @@ public class TableModelFilter {
 	}
 
 	public boolean test(List<Object> row) {
-		if (!inUse || condition == null)
+		if (!inUse || condition == null) {
 			return true;
+		}
 
 		boolean testresult = condition.test(row);
 

@@ -13,8 +13,9 @@ public class SaveString extends AbstractSaveState {
 
 	@Override
 	public String deserialize() {
-		if (states.getProperty(key, (String) defaultValue).equals(defaultValue))
+		if (states.getProperty(key, (String) defaultValue).equals(defaultValue)) {
 			return null;
+		}
 
 		return states.getProperty(key, (String) defaultValue);
 	}

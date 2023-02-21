@@ -28,9 +28,8 @@ public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
-			boolean isSelected, // is the cell selected
-			boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		String selectedString = "";
@@ -39,12 +38,14 @@ public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 		if (value != null) {
 			if (!value.toString().equals("")) {
 				if (value instanceof Boolean) {
-					if (Boolean.TRUE.equals(value))
+					if (Boolean.TRUE.equals(value)) {
 						selectedString = "ja";
-					else
+					} else {
 						selectedString = "nein";
-				} else
+					}
+				} else {
 					selectedString = value.toString();
+				}
 			}
 		} else {
 			selectedString = "";

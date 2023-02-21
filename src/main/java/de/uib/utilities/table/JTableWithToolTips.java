@@ -31,19 +31,22 @@ public class JTableWithToolTips extends JTable {
 			JComponent jc = (JComponent) c;
 			String valstr = "";
 
-			if (c instanceof JLabel)
+			if (c instanceof JLabel) {
 				valstr = ((JLabel) c).getText();
-			else {
+			} else {
 				Object val = getValueAt(rowIndex, colIndex);
 
-				if (val instanceof Integer)
+				if (val instanceof Integer) {
 					valstr = " " + val;
-				else if (val instanceof String)
+				} else if (val instanceof String) {
 					valstr = (String) val;
+				}
 			}
 
-			if (jc.getToolTipText() == null)
+			if (jc.getToolTipText() == null) {
 				jc.setToolTipText(valstr);
+			}
+
 			return jc;
 		}
 		return c;

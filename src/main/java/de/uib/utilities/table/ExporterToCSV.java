@@ -34,15 +34,17 @@ public class ExporterToCSV extends AbstractExportTable {
 	}
 
 	private String removeStringDelimiter(Object value) {
-		if (value == null)
+		if (value == null) {
 			return "";
+		}
 
 		return ((String) value).replace(STRING_DELIMITER, '\'');
 	}
 
 	private String removeSeparatorChar(Object value) {
-		if (value == null)
+		if (value == null) {
 			return "";
+		}
 
 		return ((String) value).replace(CSV_SEPARATOR, "\\" + CSV_SEPARATOR);
 	}
@@ -54,11 +56,13 @@ public class ExporterToCSV extends AbstractExportTable {
 				+ "\", " + "\"" + CSV_SEPARATOR + "\"");
 
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
-		if (selectedOnly == null)
+		if (selectedOnly == null) {
 			return;
+		}
 
-		if (theTable.getModel() instanceof GenTableModel)
+		if (theTable.getModel() instanceof GenTableModel) {
 			setClassNames(((GenTableModel) theTable.getModel()).getClassNames());
+		}
 
 		Date date1 = null;
 		fileName = checkFile(fileName, extensionFilter);
@@ -71,7 +75,7 @@ public class ExporterToCSV extends AbstractExportTable {
 
 				// write header
 				StringBuilder line = new StringBuilder();
-				for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
+				for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
 					line.append(STRING_DELIMITER);
 					line.append(theTable.getColumnName(colI));
 					line.append(STRING_DELIMITER);
@@ -155,10 +159,10 @@ public class ExporterToCSV extends AbstractExportTable {
 												line.append("" + date1);
 											}
 										}
-									}
-
-									else // append other values
+									} else {
+										// append other values
 										line.append(theTable.getValueAt(rowI, colI));
+									}
 								}
 							}
 

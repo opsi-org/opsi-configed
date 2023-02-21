@@ -7,5 +7,4 @@ public interface TableModelFilterCondition {
 	public void setFilter(Set<Object> filter);
 
 	public boolean test(List<Object> row);
-
 }

@@ -109,11 +109,13 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			public void action(int p) {
 				Logging.debug(this, "( EditMapPanelGrouped ) popup " + p);
 
-				if (p == PopupMenuTrait.POPUP_RELOAD)
+				if (p == PopupMenuTrait.POPUP_RELOAD) {
 					reload();
+				}
 
-				else if (p == PopupMenuTrait.POPUP_SAVE)
+				else if (p == PopupMenuTrait.POPUP_SAVE) {
 					actor.saveData();
+				}
 			}
 		};
 	}
@@ -188,9 +190,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	}
 
 	private void createPDF() {
-		String client = "";
+		String client = tree.getSelectionPath().getPathComponent(0).toString().trim();
 
-		client = tree.getSelectionPath().getPathComponent(0).toString().trim(); // client name
 		// TODO get Depotname
 		Logging.info(this, "------------- create report");
 		HashMap<String, String> metaData = new HashMap<>();
@@ -220,9 +221,10 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		for (String key : keys) {
 			String property = "";
 
-			List listelem = ListMerger.getMergedList((List) mapTableModel.getData().get(key));
-			if (!listelem.isEmpty())
+			List listelem = ListMerger.getMergedList((List<?>) mapTableModel.getData().get(key));
+			if (!listelem.isEmpty()) {
 				property = listelem.get(0).toString();
+			}
 
 			values = new ArrayList<>();
 
@@ -299,8 +301,9 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		virtualLines.put("", new TreeMap<>());
 
-		if (data == null)
+		if (data == null) {
 			return;
+		}
 
 		NavigableSet<String> classIdsDescending = classIds.descendingSet();
 
@@ -394,8 +397,9 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	@Override
 	public void setLabel(String s) {
-		if (treemodel == null)
+		if (treemodel == null) {
 			return;
+		}
 
 		treemodel.setRootLabel(s);
 	}
@@ -408,8 +412,9 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		boolean isRoot = (p.getPathCount() == 1);
 
-		if (isRoot)
+		if (isRoot) {
 			return null;
+		}
 
 		return SimpleTreePath.dottedString(1, p);
 	}
@@ -429,23 +434,19 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 		boolean isRoot = (p.getPathCount() == 1);
 
-		if (isRoot)
+		if (isRoot) {
 			splitPane.setRightComponent(rightPane);
+		} else {
+			// we start at 1 since we eliminate the root node
+			String key = SimpleTreePath.dottedString(1, p);
 
-		else {
-
-			String key = SimpleTreePath.dottedString(1, p); // we start at 1 since we eliminate the root node
-
-			if (partialPanels.get(key) == null)
+			if (partialPanels.get(key) == null) {
 				splitPane.setRightComponent(rightPane);
-
-			else {
+			} else {
 				splitPane.setRightComponent(partialPanels.get(key));
 			}
 		}
 
 		splitPane.setDividerLocation(divLoc);
-
 	}
-
 }

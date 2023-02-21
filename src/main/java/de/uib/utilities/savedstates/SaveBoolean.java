@@ -5,8 +5,9 @@ import de.uib.utilities.logging.Logging;
 public class SaveBoolean extends AbstractSaveState {
 	public SaveBoolean(String key, Object defaultValue, SavedStates states) {
 		super(key, defaultValue, states);
-		if (!(defaultValue instanceof Boolean))
+		if (!(defaultValue instanceof Boolean)) {
 			Logging.error("default value must be a Boolean");
+		}
 	}
 
 	@Override
@@ -34,8 +35,9 @@ public class SaveBoolean extends AbstractSaveState {
 		} catch (Exception ex) {
 			Logging.warning(this, "deserializeAsBoolean error " + ex);
 		}
-		if (result == null)
+		if (result == null) {
 			result = (Boolean) defaultValue;
+		}
 
 		return result;
 	}

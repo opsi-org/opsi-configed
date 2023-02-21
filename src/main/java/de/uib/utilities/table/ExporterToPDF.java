@@ -86,8 +86,9 @@ public class ExporterToPDF extends AbstractExportTable {
 	public void execute(String fileName, boolean onlySelectedRows) {
 		setPageSizeA4Landscape();
 
-		if (fileName != null)
+		if (fileName != null) {
 			saveAction = true;
+		}
 
 		String filePath = null;
 		File temp = null;
@@ -108,8 +109,9 @@ public class ExporterToPDF extends AbstractExportTable {
 		if (saveAction != null) {
 			if (Boolean.TRUE.equals(saveAction)) {
 
-				if (fileName == null)
+				if (fileName == null) {
 					fileName = getFileLocation();
+				}
 
 				// FileName is null if nothing chosen, then we do nothing
 				if (fileName == null)
@@ -121,8 +123,9 @@ public class ExporterToPDF extends AbstractExportTable {
 						File file = new File(fileName);
 						if (file.isDirectory())
 							Logging.error("no valid filename " + fileName);
-						else
+						else {
 							filePath = file.getAbsolutePath();
+						}
 					} catch (Exception e) {
 						Logging.error("no valid filename " + fileName);
 					}
@@ -152,10 +155,11 @@ public class ExporterToPDF extends AbstractExportTable {
 
 				try {
 					TableHeader event = new TableHeader();
-					if (metaData.containsKey("header"))
+					if (metaData.containsKey("header")) {
 						event.setHeader(metaData.get("header"));
-					else if (metaData.containsKey("title"))
+					} else if (metaData.containsKey("title")) {
 						event.setHeader(metaData.get("title"));
+					}
 					writer.setPageEvent(event);
 				} catch (Exception ex) {
 					Logging.error("Error PdfWriter --- " + ex);
@@ -164,7 +168,9 @@ public class ExporterToPDF extends AbstractExportTable {
 				document.open();
 				addMetaData(metaData);
 				document.add(addTitleLines(metaData));
-				document.add(createTableDataElement(theTable)); // table data
+
+				// table data
+				document.add(createTableDataElement(theTable));
 
 				document.close();
 
@@ -228,10 +234,14 @@ public class ExporterToPDF extends AbstractExportTable {
 		// Second parameter is the number of the chapter
 		Paragraph content = new Paragraph();
 
-		if (metaData.containsKey("title"))
+		if (metaData.containsKey("title")) {
 			content.add(new Paragraph(metaData.get("title"), catFont));
-		if (metaData.containsKey("subtitle"))
+		}
+
+		if (metaData.containsKey("subtitle")) {
 			content.add(new Paragraph(metaData.get("subtitle"), smallBold));
+		}
+
 		String userInitial = "";
 		if (System.getProperty("user.name") != null) {
 			userInitial = System.getProperty("user.name");
@@ -240,8 +250,9 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			if (nameLength >= cutpos) {
 				userInitial = userInitial.substring(0, cutpos);
-				if (System.getProperty("user.name").length() > cutpos)
+				if (System.getProperty("user.name").length() > cutpos) {
 					userInitial = userInitial + "..";
+				}
 			}
 		}
 
@@ -307,10 +318,12 @@ public class ExporterToPDF extends AbstractExportTable {
 					default:
 						value = new PdfPCell(new Phrase(s, small));
 					}
-					if (j % 2 == 0)
+					if (j % 2 == 0) {
 						value.setBackgroundColor(evenBackground);
-					else
+					} else {
 						value.setBackgroundColor(oddBackground);
+					}
+
 					if (leftAlignmentlist.contains(i)) {
 						value.setHorizontalAlignment(Element.ALIGN_LEFT);
 					} else {

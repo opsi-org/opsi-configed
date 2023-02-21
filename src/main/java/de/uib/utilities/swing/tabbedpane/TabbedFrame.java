@@ -25,7 +25,7 @@ public class TabbedFrame extends SecondaryFrame {
 		setTitle((String) globals.get("APPNAME"));
 	}
 
-	protected void init() {
+	private void init() {
 		panel.init();
 		add(panel);
 		pack();

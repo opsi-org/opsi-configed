@@ -13,7 +13,6 @@ import java.lang.reflect.Method;
 import de.uib.utilities.logging.Logging;
 
 public class Containership {
-	int debugLevel = 4;
 
 	java.awt.Container theContainer;
 

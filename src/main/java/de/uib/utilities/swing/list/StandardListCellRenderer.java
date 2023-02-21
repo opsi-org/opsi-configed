@@ -64,20 +64,21 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		c.setPreferredSize(prefDimension);
 
 		// condition true if c is null
-		if (!(c instanceof JComponent))
+		if (!(c instanceof JComponent)) {
 			return c;
+		}
 
 		JComponent jc = (JComponent) c;
 
-		if (uniformColor == null)
+		if (uniformColor == null) {
 			CellAlternatingColorizer.colorize(jc, isSelected, (index % 2 == 0), true, selectedEven, selectedUneven,
 					unselectedEven, unselectedUneven);
-
-		else {
-			if (isSelected)
+		} else {
+			if (isSelected) {
 				jc.setBackground(uniformSelectedColor);
-			else
+			} else {
 				jc.setBackground(uniformColor);
+			}
 		}
 
 		jc.setFont(Globals.defaultFont);

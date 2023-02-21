@@ -127,14 +127,16 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 	public void cancelOldCellEditing() {
 
 		if (theCellEditor != null) {
-			theCellEditor.cancelCellEditing(); // don't shift the old editing state to a new product
+			// don't shift the old editing state to a new product
+			theCellEditor.cancelCellEditing();
 		}
 	}
 
 	public void setValues(Map<String, Object> data) {
 
-		if (data == null)
+		if (data == null) {
 			return;
+		}
 
 		Iterator<String> iter = data.keySet().iterator();
 		while (iter.hasNext()) {
