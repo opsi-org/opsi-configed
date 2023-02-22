@@ -21,7 +21,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import de.uib.configed.Configed;
@@ -62,12 +61,6 @@ public final class CertificateManager {
 
 	private static void removeCertificateFromKeyStore(File certificateFile) {
 		try {
-			Enumeration<String> aliases = ks.aliases();
-
-			while (aliases.hasMoreElements()) {
-				System.out.println("alias: " + aliases.nextElement());
-			}
-
 			if (ks.isCertificateEntry(certificateFile.getParentFile().getName())) {
 				Logging.info("removing certificate from keystore, since it is invalid certificate: "
 						+ certificateFile.getAbsolutePath());
