@@ -566,9 +566,11 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 	}
 
+	@SuppressWarnings("java:S5527")
 	private class DullHostnameVerifier implements HostnameVerifier {
 		@Override
 		public boolean verify(String hostname, SSLSession session) {
+			/* We disable hostname veirifcation */
 			return true;
 		}
 	}
