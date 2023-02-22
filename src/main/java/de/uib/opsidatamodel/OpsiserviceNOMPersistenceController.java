@@ -2881,8 +2881,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				continue;
 			}
-			String hwClass = (String) (((Map) (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)))
-					.get(OpsiHwAuditDeviceClass.OPSI_KEY));
+			String hwClass = (String) ((Map<?, ?>) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY))
+					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
 
 			result.add(hwClass);
 		}
@@ -4900,14 +4900,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List<Map<String, Object>> backendEntries = backends.get(backendName);
 
 			for (int i = 0; i < backendEntries.size(); i++) {
-				Map listEntry = (Map) backendEntries.get(i);
+				Map<String, Object> listEntry = backendEntries.get(i);
 
-				Iterator eIt = listEntry.keySet().iterator();
+				Iterator<String> eIt = listEntry.keySet().iterator();
 
 				boolean entryIsEven = false;
 
 				while (eIt.hasNext()) {
-					String key = (String) eIt.next();
+					String key = eIt.next();
 					if (key.equals("name")) {
 						continue;
 					}

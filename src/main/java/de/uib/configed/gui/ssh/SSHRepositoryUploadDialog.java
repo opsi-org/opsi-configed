@@ -5,7 +5,6 @@ import de.uib.opsicommand.sshcommand.CommandRepositoryUpload;
 import de.uib.utilities.logging.Logging;
 
 public class SSHRepositoryUploadDialog extends SSHFileUploadDialog {
-	private static String title = Configed.getResourceValue("SSHConnection.ParameterDialog.repoupload.title");
 
 	public SSHRepositoryUploadDialog() {
 		super(Configed.getResourceValue("SSHConnection.ParameterDialog.repoupload.title"),

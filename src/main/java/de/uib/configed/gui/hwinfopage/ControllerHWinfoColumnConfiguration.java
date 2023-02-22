@@ -213,8 +213,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 				// tableProvider
 
-				new DefaultTableProvider(
-						new RetrieverMapSource(columnNames, classNames, () -> (Map) getHwColumnConfig())),
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, this::getHwColumnConfig)),
 
 				KEY_COL,
 
