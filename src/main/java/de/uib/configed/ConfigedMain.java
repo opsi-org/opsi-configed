@@ -4917,7 +4917,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							values.put("%host%", targetClient);
 							String hostName = targetClient;
 							Logging.info(this, " targetClient " + targetClient);
-							if (targetClient.indexOf(".") > 0) {
+							if (targetClient.contains(".")) {
 								String[] parts = targetClient.split("\\.");
 								Logging.info(this, " targetClient " + Arrays.toString(parts));
 								hostName = parts[0];
@@ -4974,7 +4974,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dialogRemoteControl = new MyDialogRemoteControl();
 		}
 
-		if (remoteControls != getRemoteControls()) {
+		if (!remoteControls.equals(getRemoteControls())) {
 			remoteControls = getRemoteControls();
 
 			Logging.debug(this, "remoteControls " + remoteControls);

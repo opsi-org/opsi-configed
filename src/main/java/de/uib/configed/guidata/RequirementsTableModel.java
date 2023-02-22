@@ -177,6 +177,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 					break;
 				}
 
+				break;
 			case 2:
 				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requBeforeMap != null) {
@@ -184,12 +185,15 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 					break;
 				}
 
+				break;
 			case 3:
 				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requAfterMap != null) {
 					result = requAfterMap.get(myKey);
 					break;
 				}
+
+				break;
 			default:
 				Logging.warning(this, "no case found for col in getValueAt");
 				break;
