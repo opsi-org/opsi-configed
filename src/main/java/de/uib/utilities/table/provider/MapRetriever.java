@@ -11,5 +11,5 @@ package de.uib.utilities.table.provider;
 import java.util.Map;
 
 public interface MapRetriever {
-	Map<String, Map> retrieveMap();
+	Map<String, Map<String, Object>> retrieveMap();
 }

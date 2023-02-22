@@ -72,8 +72,9 @@ public class ExtendedInteger implements Comparable<Integer> {
 
 	@Override
 	public boolean equals(Object x) {
-		if (!(x instanceof ExtendedInteger))
+		if (!(x instanceof ExtendedInteger)) {
 			return false;
+		}
 
 		ExtendedInteger ei = (ExtendedInteger) x;
 
@@ -110,12 +111,13 @@ public class ExtendedInteger implements Comparable<Integer> {
 	@Override
 	public int compareTo(Integer integer) {
 
-		if (this.equals(INFINITE))
+		if (this.equals(INFINITE)) {
 			return -1;
+		}
 
-		else
+		else {
 			return getNumber() - integer;
-
+		}
 	}
 
 	@Override

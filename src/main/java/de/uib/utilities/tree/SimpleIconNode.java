@@ -126,8 +126,9 @@ public class SimpleIconNode extends DefaultMutableTreeNode {
 	}
 
 	public Icon getNonSelectedIcon() {
-		if (nonSelectedIcon == null && defaultIcon != null)
+		if (nonSelectedIcon == null && defaultIcon != null) {
 			nonSelectedIcon = createDisabledIcon(leafIcon);
+		}
 
 		return nonSelectedIcon;
 	}
@@ -147,14 +148,15 @@ public class SimpleIconNode extends DefaultMutableTreeNode {
 	}
 
 	public void setDisabledLeafIcon() {
-		if (leafIcon != null)
+		if (leafIcon != null) {
 			disabledLeafIcon = createDisabledIcon(leafIcon);
+		}
 	}
 
 	public void setEmphasizedIcon(Icon anEmphasizedIcon) {
-		if (anEmphasizedIcon != null)
+		if (anEmphasizedIcon != null) {
 			emphasizedIcon = anEmphasizedIcon;
-
+		}
 	}
 
 	public Icon getEmphasizedIcon() {

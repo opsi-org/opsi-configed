@@ -741,7 +741,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	public void addRow(Object[] a) {
 
-		List rowV = new ArrayList<>();
+		List<Object> rowV = new ArrayList<>();
 		for (int i = 0; i < colsLength; i++) {
 			rowV.add(null);
 		}

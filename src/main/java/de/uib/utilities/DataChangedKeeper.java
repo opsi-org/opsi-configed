@@ -25,8 +25,9 @@ public class DataChangedKeeper implements DataChangedObserver {
 	}
 
 	public void setActingOnSource(ActUpon actUpon) {
-		if (actUpon != null)
+		if (actUpon != null) {
 			this.actUpon = actUpon;
+		}
 	}
 
 	@FunctionalInterface
@@ -39,9 +40,9 @@ public class DataChangedKeeper implements DataChangedObserver {
 		Logging.debug(this, "dataHaveChanged " + source);
 		dataChanged = true;
 
-		if (actUpon != null)
+		if (actUpon != null) {
 			actUpon.act(source);
-
+		}
 	}
 
 	public void actionOnChangeXXX(boolean condition, Object source) {
@@ -59,9 +60,9 @@ public class DataChangedKeeper implements DataChangedObserver {
 	}
 
 	public void checkAndSave() {
-		if (dataChanged)
+		if (dataChanged) {
 			dataChanged = false;
+		}
 		// overwrite e.g. with an dialog
 	}
-
 }

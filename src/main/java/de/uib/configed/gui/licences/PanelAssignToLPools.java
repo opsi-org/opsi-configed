@@ -14,6 +14,8 @@ import javax.swing.event.ChangeListener;
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
 import de.uib.configed.ControlPanelAssignToLPools;
+import de.uib.configed.ControlPanelAssignToLPools.SoftwareDirectionOfAssignment;
+import de.uib.configed.ControlPanelAssignToLPools.SoftwareShowAllMeans;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
@@ -192,7 +194,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch<>(
 
-				null, FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.SHOW_ALL_NAMES, // start value
+				null, FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.SHOW_ALL_NAMES,
 				FSoftwarename2LicencePool.Softwarename2LicencepoolRestriction.values(),
 				new String[] {
 						Configed.getResourceValue(
@@ -247,9 +249,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.HGAP_SIZE / 2)));
 
-		PanelStateSwitch panelRadiobuttonsDirectionOfAssignment = new PanelStateSwitch<>(
+		PanelStateSwitch<SoftwareDirectionOfAssignment> panelRadiobuttonsDirectionOfAssignment = new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.title"),
-				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE, // start value
+				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE,
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.values(),
 				new String[] {
 						Configed.getResourceValue("PanelAssignToLPools.SoftwareDirectionOfAssignment.POOL2SOFTWARE"),
@@ -337,9 +339,8 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		;
 
-		PanelStateSwitch panelRadiobuttonsSoftwareselectionX = new PanelStateSwitch<>(null, // title
-				ControlPanelAssignToLPools.SoftwareShowAllMeans.ALL,
-				ControlPanelAssignToLPools.SoftwareShowAllMeans.values(),
+		PanelStateSwitch<SoftwareShowAllMeans> panelRadiobuttonsSoftwareselectionX = new PanelStateSwitch<>(null,
+				SoftwareShowAllMeans.ALL, SoftwareShowAllMeans.values(),
 
 				new String[] { Configed.getResourceValue("PanelAssignToLPools.radiobuttonALL"),
 						Configed.getResourceValue("PanelAssignToLPools.radiobuttonASSIGNED_OR_ASSIGNED_TO_NOTHING"),
@@ -405,7 +406,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 				));
 		layoutPanelInfoConfig.setVerticalGroup(layoutPanelInfoConfig.createSequentialGroup().addContainerGap()
-				.addGap(Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT) // title height
+
+				// title height
+				.addGap(Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
 				.addGroup(layoutPanelInfoConfig.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
 						.addComponent(labelCountAllWindowsSoftware, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
@@ -419,7 +422,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 								Globals.BUTTON_HEIGHT)
 						.addComponent(fieldCountNotAssignedSoftware, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT))
-				.addGap(3) // to get the level of the components of the left side
+
+				// to get the level of the components of the left side
+				.addGap(3)
 				.addGroup(layoutPanelInfoConfig.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
 						.addComponent(labelCountAssignedStatus, Globals.SMALL_HEIGHT, Globals.SMALL_HEIGHT,
 								Globals.SMALL_HEIGHT)
@@ -467,9 +472,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
 						layoutTopPane.createSequentialGroup().addContainerGap()
 								.addGroup(layoutTopPane.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										// for testing purposes:
 
-										// Short.MAX_VALUE)
 										.addComponent(panelLicencepools, javax.swing.GroupLayout.Alignment.LEADING,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

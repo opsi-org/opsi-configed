@@ -21,7 +21,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 		build();
 	}
 
-	protected void buildX() {
+	private void buildX() {
 		// overwrite values by virtue of imported type informations
 
 		if (retrieved == null) {
@@ -43,7 +43,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 		}
 
 		for (Entry<String, Object> entry : retrieved.entrySet()) {
-			List list = null;
+			List<?> list = null;
 			// the retrieved object always are lists, we could correct this by observing the
 			// config options
 
@@ -53,7 +53,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 				continue;
 			} else {
-				list = (List) entry.getValue();
+				list = (List<?>) entry.getValue();
 			}
 
 			classnames.put(entry.getKey(), "List");

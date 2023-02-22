@@ -26,8 +26,9 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 
 	public void setFilter(int[] modelRowNoFilter, final List<List<Object>> rows) {
 		Logging.info(this, "setFilter int[]  " + modelRowNoFilter);
-		if (modelRowNoFilter != null)
+		if (modelRowNoFilter != null) {
 			Logging.info(this, "setFilter as string " + Arrays.toString(modelRowNoFilter));
+		}
 
 		if (rows == null || modelRowNoFilter == null || modelRowNoFilter.length == 0) {
 			selectionInfo = null;
@@ -37,25 +38,26 @@ public class RowNoTableModelFilterCondition implements TableModelFilterCondition
 		selectionInfo = new HashMap<>();
 
 		for (int i : modelRowNoFilter) {
-			if (i >= rows.size())
+			if (i >= rows.size()) {
 				Logging.warning(this, "setFilter: impossible selection index " + i);
-			else
-
+			} else {
 				selectionInfo.put(rows.get(i), true);
+			}
 		}
-
 	}
 
 	@Override
 	public boolean test(List<Object> row) {
 
-		if (selectionInfo == null)
+		if (selectionInfo == null) {
 			return true;
+		}
 
 		Boolean found = selectionInfo.get(row);
 
-		if (found == null)
+		if (found == null) {
 			return false;
+		}
 
 		return found;
 	}

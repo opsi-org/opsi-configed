@@ -468,8 +468,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract NavigableMap<String, Integer> getSoftware2Number();
 
-	public abstract Map getSoftwareInfo(String clientId);
-
 	public abstract void fillClient2Software(List<String> clients);
 
 	public abstract void softwareAuditOnClientsRequestRefresh();
@@ -480,7 +478,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract String getLastSoftwareAuditModification(String clientId);
 
-	public abstract Map<String, Map/* <String, String> */> retrieveSoftwareAuditData(String clientId);
+	public abstract Map<String, Map<String, Object>> retrieveSoftwareAuditData(String clientId);
 
 	/* hardware info */
 	public abstract List<Map<String, Object>> getOpsiHWAuditConf();
@@ -767,7 +765,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract boolean deleteSoftwareLicence(String softwareLicenseId);
 
-	public abstract Map<String, Map> getRelationsSoftwareL2LPool();
+	public abstract Map<String, Map<String, Object>> getRelationsSoftwareL2LPool();
 
 	// returns the ID of the edited data record
 	public abstract String editRelationSoftwareL2LPool(String softwareLicenseId, String licensePoolId,
@@ -898,6 +896,24 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract boolean deleteSSHCommand(List<String> jsonObjects);
 
 	public abstract boolean checkSSHCommandMethod(String method);
+
+	public abstract List<Map<String, Object>> getOpsiconfdConfigHealth();
+
+	public abstract List<Map<String, Object>> getDiskUsageHealth();
+
+	public abstract List<Map<String, Object>> getDepotHealth();
+
+	public abstract List<Map<String, Object>> getSystemPackageHealth();
+
+	public abstract List<Map<String, Object>> getProductOnDepotsHealth();
+
+	public abstract List<Map<String, Object>> getProductOnClientsHealth();
+
+	public abstract List<Map<String, Object>> getLicenseHealth();
+
+	public abstract List<Map<String, Object>> getDeprecatedCalls();
+
+	public abstract List<Map<String, Object>> checkHealth();
 
 	// json generating
 

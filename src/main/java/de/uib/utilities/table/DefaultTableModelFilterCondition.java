@@ -11,8 +11,9 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 
 	public DefaultTableModelFilterCondition(int keyCol, String label) {
 		this.keyCol = keyCol;
-		if (label != null)
+		if (label != null) {
 			this.filterLabel = label;
+		}
 	}
 
 	public DefaultTableModelFilterCondition() {
@@ -23,8 +24,9 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 	}
 
 	public DefaultTableModelFilterCondition(String label) {
-		if (label != null)
+		if (label != null) {
 			this.filterLabel = label;
+		}
 	}
 
 	@Override
@@ -35,11 +37,13 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 	@Override
 	public boolean test(List<Object> row) {
 
-		if (filterSet == null)
+		if (filterSet == null) {
 			return true;
+		}
 
-		if (keyCol == -1)
+		if (keyCol == -1) {
 			return true;
+		}
 
 		return filterSet.contains(row.get(keyCol));
 	}
@@ -48,5 +52,4 @@ public class DefaultTableModelFilterCondition implements TableModelFilterConditi
 	public String toString() {
 		return filterLabel;
 	}
-
 }

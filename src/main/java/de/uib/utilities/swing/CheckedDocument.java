@@ -21,17 +21,20 @@ public class CheckedDocument extends PlainDocument {
 	public boolean appendCharIfAllowed(StringBuilder s, char c) {
 		char cCorrected = c;
 
-		if (allowedChars == null)
+		if (allowedChars == null) {
 			return false;
+		}
 
 		boolean result = false;
 
 		for (int j = 0; j < allowedChars.length; j++) {
 			if (Character.toLowerCase(allowedChars[j]) == Character.toLowerCase(c)) {
-				if (Character.isLowerCase(allowedChars[j]))
+				if (Character.isLowerCase(allowedChars[j])) {
 					cCorrected = Character.toLowerCase(c);
-				else if (Character.isUpperCase(allowedChars[j]))
+				} else if (Character.isUpperCase(allowedChars[j])) {
 					cCorrected = Character.toUpperCase(c);
+				}
+
 				s.append(cCorrected);
 				result = true;
 				break;
@@ -43,8 +46,9 @@ public class CheckedDocument extends PlainDocument {
 
 	protected String giveAllowedCharacters(String s, int offset) {
 
-		if (s == null)
+		if (s == null) {
 			return "";
+		}
 
 		char[] startchars = s.toCharArray();
 		StringBuilder textBuf = new StringBuilder();
@@ -67,19 +71,23 @@ public class CheckedDocument extends PlainDocument {
 	@Override
 	public void insertString(int offs, String s, AttributeSet a) throws BadLocationException {
 
-		if (s == null)
+		if (s == null) {
 			return;
+		}
 
-		if (size > -1 && offs >= size)
+		if (size > -1 && offs >= size) {
 			return;
+		}
 
 		String corrected = giveAllowedCharacters(s, offs);
 
-		if (size > -1 && offs + corrected.length() > size)
+		if (size > -1 && offs + corrected.length() > size) {
 			corrected = corrected.substring(0, size - offs);
+		}
 
 		insertStringPlain(offs, corrected, a);
-		if (checkMask)
+		if (checkMask) {
 			applyMask(a);
+		}
 	}
 }

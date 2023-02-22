@@ -175,9 +175,9 @@ public class PanelSWInfo extends JPanel {
 		modelSWInfo = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
-					public Map<String, Map> retrieveMap() {
+					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + hostId);
-						Map<String, Map> tableData = persist.retrieveSoftwareAuditData(hostId);
+						Map<String, Map<String, Object>> tableData = persist.retrieveSoftwareAuditData(hostId);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");

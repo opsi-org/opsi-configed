@@ -52,8 +52,9 @@ public class ChainedTableModelFilter extends TableModelFilter {
 
 	@Override
 	public boolean test(List<Object> row) {
-		if (!inUse)
+		if (!inUse) {
 			return true;
+		}
 
 		boolean testresult = true;
 

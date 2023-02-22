@@ -94,8 +94,8 @@ public class BackendMySQL {
 		return result;
 	}
 
-	public <T> List<T> union(List<T> list1, List<T> list2) {
-		Set<T> set = new HashSet<>();
+	public List<String> union(List<String> list1, List<String> list2) {
+		Set<String> set = new HashSet<>();
 
 		set.addAll(list1);
 		set.addAll(list2);
@@ -266,8 +266,9 @@ public class BackendMySQL {
 				JSONArray jsonArray = jsonObject.getJSONArray(KEY_CHILDREN);
 				return getListFromJSONObject((JSONObject) jsonArray.get(0));
 			}
-		} else if (jsonObject.getJSONArray("elementPath").getString(0).equals("GroupWithSubgroups")) { // Group with
-																										// subgroups
+		} else if (jsonObject.getJSONArray("elementPath").getString(0).equals("GroupWithSubgroups")) {
+			// Group with subgroups
+
 			return getGroupWithSubgroup(jsonObject.getString("data").replace("*", "%"));
 		} else {
 			MySQL mySQL = new MySQL(hwConfig);

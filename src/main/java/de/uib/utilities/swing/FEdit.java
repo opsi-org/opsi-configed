@@ -257,7 +257,9 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		updateCaller(initialText);
 		buttonCommit.setEnabled(false);
 		setVisible(false);
-		deactivate(); // no effect probably because of reentering the field
+
+		// no effect probably because of reentering the field
+		deactivate();
 	}
 
 	@Override

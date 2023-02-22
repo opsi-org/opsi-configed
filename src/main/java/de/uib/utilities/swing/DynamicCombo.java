@@ -85,8 +85,9 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 	@Override
 	public void setFont(java.awt.Font font) {
-		if (combo != null)
+		if (combo != null) {
 			combo.setFont(font);
+		}
 	}
 
 	public void setModelSource(de.uib.utilities.ComboBoxModeller modelSource) {

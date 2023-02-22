@@ -7,10 +7,11 @@ public class SessionSaveSet<T> extends AbstractSaveState {
 
 	@Override
 	public void serialize(Object ob) {
-		if (ob == null)
+		if (ob == null) {
 			saveObject = null;
-		else
+		} else {
 			saveObject = (Set<T>) ob;
+		}
 	}
 
 	@Override

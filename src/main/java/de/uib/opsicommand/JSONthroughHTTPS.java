@@ -93,6 +93,11 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		String server = connection.getHeaderField("Server");
+
+		if (server == null) {
+			Logging.warning("error in getting server version, Headerfield is null");
+			return;
+		}
 		Pattern pattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
 		Matcher matcher = pattern.matcher(server);
 		if (matcher.find()) {

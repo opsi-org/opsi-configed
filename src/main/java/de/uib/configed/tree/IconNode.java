@@ -29,7 +29,7 @@ public class IconNode extends DefaultMutableTreeNode {
 
 	protected boolean emphasized = false;
 
-	private Map deviceInfo;
+	private Map<String, Object> deviceInfo;
 
 	public IconNode(Object userObject, boolean allowsChildren) {
 		super(userObject, allowsChildren);
@@ -49,11 +49,11 @@ public class IconNode extends DefaultMutableTreeNode {
 		return toolTipText;
 	}
 
-	public void setDeviceInfo(Map deviceInfo) {
+	public void setDeviceInfo(Map<String, Object> deviceInfo) {
 		this.deviceInfo = deviceInfo;
 	}
 
-	public Map getDeviceInfo() {
+	public Map<String, Object> getDeviceInfo() {
 		return deviceInfo;
 	}
 
@@ -124,8 +124,9 @@ public class IconNode extends DefaultMutableTreeNode {
 	}
 
 	public Icon getNonSelectedLeafIcon() {
-		if (nonSelectedLeafIcon == null && leafIcon != null)
+		if (nonSelectedLeafIcon == null && leafIcon != null) {
 			nonSelectedLeafIcon = createDisabledIcon(leafIcon);
+		}
 
 		return nonSelectedLeafIcon;
 	}
@@ -145,14 +146,15 @@ public class IconNode extends DefaultMutableTreeNode {
 	}
 
 	public void setDisabledLeafIcon() {
-		if (leafIcon != null)
+		if (leafIcon != null) {
 			disabledLeafIcon = createDisabledIcon(leafIcon);
+		}
 	}
 
 	public void setEmphasizedIcon(Icon anEmphasizedIcon) {
-		if (anEmphasizedIcon != null)
+		if (anEmphasizedIcon != null) {
 			emphasizedIcon = anEmphasizedIcon;
-
+		}
 	}
 
 	public Icon getEmphasizedIcon() {

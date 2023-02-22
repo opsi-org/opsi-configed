@@ -21,7 +21,7 @@ import de.uib.utilities.table.ListCellOptions;
 	for which data exist (to be placed in column 1 of the table)
 */
 
-public class ListModelProducerForVisualDatamap extends DefaultListModelProducer {
+public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProducer<O> {
 	Map<Integer, ListModel> listmodels = new HashMap<>();
 
 	Map<String, ListCellOptions> optionsMap;
@@ -78,12 +78,12 @@ public class ListModelProducerForVisualDatamap extends DefaultListModelProducer 
 
 		ListCellOptions options = getListCellOptions(key);
 
-		List values = options.getPossibleValues();
+		List<Object> values = options.getPossibleValues();
 		Logging.info(this, "getListModel key " + key + " the option values " + values);
 		Logging.info(this, "getListModel key " + key + " options  " + options);
 
-		DefaultListModel model = new DefaultListModel();
-		Iterator iter = values.iterator();
+		DefaultListModel<Object> model = new DefaultListModel<Object>();
+		Iterator<Object> iter = values.iterator();
 		while (iter.hasNext()) {
 			model.addElement(iter.next());
 		}

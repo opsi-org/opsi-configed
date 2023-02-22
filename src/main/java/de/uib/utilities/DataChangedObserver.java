@@ -8,5 +8,6 @@
 package de.uib.utilities;
 
 public interface DataChangedObserver {
-	void dataHaveChanged(Object source);// means (and will be implemented): DataChangedSubject source
+	// means (and will be implemented): DataChangedSubject source
+	void dataHaveChanged(Object source);
 }

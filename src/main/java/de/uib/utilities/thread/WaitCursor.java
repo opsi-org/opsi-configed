@@ -53,8 +53,9 @@ public class WaitCursor {
 				Logging.info(this, "retrieveBasePane " + ex);
 				c = null;
 			}
-		} else
+		} else {
 			c = componentCalling;
+		}
 
 		Logging.debug(this,
 				"adding instance " + objectNo + "-- call location at (" + callLocation + ") on component " + c);
@@ -88,8 +89,9 @@ public class WaitCursor {
 
 		javax.swing.SwingUtilities.invokeLater(() -> {
 
-			if (c != null)
+			if (c != null) {
 				c.setCursor(saveCursor);
+			}
 
 			if (isStopped()) {
 				objectCounting.decrementAndGet();

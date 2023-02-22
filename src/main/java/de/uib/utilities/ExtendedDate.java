@@ -28,8 +28,9 @@ public class ExtendedDate {
 		date = null;
 		sDate = null;
 
-		if (ob == null)
+		if (ob == null) {
 			return;
+		}
 
 		if (ob instanceof String) {
 			String value = ((String) ob).trim();
@@ -70,34 +71,42 @@ public class ExtendedDate {
 	}
 
 	public int compareTo(Date compareDate) {
-		if (equals(INFINITE))
+		if (equals(INFINITE)) {
 			return 1;
+		}
 
-		else if (getDate().equals(compareDate))
+		else if (getDate().equals(compareDate)) {
 			return 0;
+		}
 
-		else if (getDate().after(compareDate))
+		else if (getDate().after(compareDate)) {
 			return 1;
+		}
 
-		else
+		else {
 			return -1;
+		}
 	}
 
 	public int compareTo(ExtendedDate compareValue) {
-		if (equals(compareValue))
+		if (equals(compareValue)) {
 			return 0;
+		}
 
-		else if (equals(INFINITE))
+		else if (equals(INFINITE)) {
 			return 1;
+		}
 
-		else if (compareValue.equals(INFINITE))
+		else if (compareValue.equals(INFINITE)) {
 			return -1;
+		}
 
-		else if (getDate().after(compareValue.getDate()))
+		else if (getDate().after(compareValue.getDate())) {
 			return 1;
+		}
 
-		else
+		else {
 			return -1;
+		}
 	}
-
 }

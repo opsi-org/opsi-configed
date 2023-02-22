@@ -16,11 +16,13 @@ public class RowStringMap extends HashMap<String, Object> {
 	public String get(Object key) {
 		String result = (String) super.get(key);
 
-		if (result == null)
+		if (result == null) {
 			result = (String) super.get(((String) key).toUpperCase());
+		}
 
-		if (result == null)
+		if (result == null) {
 			result = (String) super.get(((String) key).toLowerCase());
+		}
 
 		return result;
 	}

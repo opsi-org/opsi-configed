@@ -60,6 +60,8 @@ public final class Globals {
 	public static final String CERTIFICATE_FILE_EXTENSION = "pem";
 	public static final String CERTIFICATE_FILE = CERTIFICATE_FILE_NAME + "." + CERTIFICATE_FILE_EXTENSION;
 
+	public static final String HEALTH_CHECK_LOG_FILE_NAME = "healthCheck.log";
+
 	public static boolean disableCertificateVerification = false;
 
 	public static final class ProductPackageVersionSeparator {

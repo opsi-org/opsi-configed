@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ListCellOptions
 // may represent an Opsi 4.0 config
-
+// TODO make this class generic?
 {
 	public List<Object> getPossibleValues();
 

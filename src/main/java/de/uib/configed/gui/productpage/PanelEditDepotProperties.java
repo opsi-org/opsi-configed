@@ -235,7 +235,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 							.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0), productEdited));
 
 			// list of all property maps
-			List<ConfigName2ConfigValue> storableProperties = new ArrayList<>();
+			List<Map<String, Object>> storableProperties = new ArrayList<>();
 			for (String depot : listDepots.getSelectedValuesList()) {
 				Map<String, ConfigName2ConfigValue> product2properties = mainController.getPersistenceController()
 						.getDepot2product2properties().get(depot);
@@ -292,7 +292,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				ConfigName2ConfigValue properties = depot2product2properties.get(depots.get(n)).get(productId);
 
 				for (Entry<String, Object> entry : properties.entrySet()) {
-					List value = (List) entry.getValue();
+					List<?> value = (List<?>) entry.getValue();
 					result.put(entry.getKey(), new ListMerger(value));
 				}
 
@@ -307,7 +307,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 					}
 
 					for (Entry<String, Object> entry : properties.entrySet()) {
-						List value = (List) entry.getValue();
+						List<?> value = (List<?>) entry.getValue();
 						if (result.get(entry.getKey()) == null)
 						// we need a new property. it is not common
 						{

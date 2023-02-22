@@ -13,9 +13,10 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 		this.hwAuditDeviceClasses = hwAuditDeviceClasses;
 	}
 
-	public void checkIn(String key, List valuesSet) {
-		if (!key.startsWith(OpsiHwAuditDeviceClass.CONFIG_KEY))
+	public void checkIn(String key, List<Object> valuesSet) {
+		if (!key.startsWith(OpsiHwAuditDeviceClass.CONFIG_KEY)) {
 			return;
+		}
 
 		Logging.info(this, "checkIn key " + key + " valuesSet " + valuesSet);
 
@@ -33,11 +34,13 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 
 		int i = hwdevicePartOfKey.lastIndexOf("_");
 
-		if (i > 0)
+		if (i > 0) {
 			hwClass = hwdevicePartOfKey.substring(0, i);
+		}
 
-		if (tableType == null || hwClass == null)
+		if (tableType == null || hwClass == null) {
 			return;
+		}
 
 		Logging.info(this, "checkIn key " + key + " hwClass " + hwClass + " tableType " + tableType);
 
@@ -49,8 +52,9 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 
 		if (tableType.equals(OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE)) {
 
-			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHostProperties())
+			for (OpsiHwAuditDevicePropertyType deviceProperty : auditDeviceClass.getDeviceHostProperties()) {
 				deviceProperty.setDisplayed(valuesSet.contains(deviceProperty.getOpsiDbColumnName()));
+			}
 
 		} else {
 

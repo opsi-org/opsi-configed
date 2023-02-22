@@ -9,13 +9,15 @@ public final class FileX {
 	}
 
 	public static String getPath(String[] parts, boolean absolute, String separator) {
-		if (parts == null || parts.length == 0)
+		if (parts == null || parts.length == 0) {
 			return "";
+		}
 
 		StringBuilder result = new StringBuilder(parts[0]);
 
-		if (absolute)
+		if (absolute) {
 			result.insert(0, separator);
+		}
 
 		for (int i = 1; i < parts.length; i++) {
 			result.append(separator + parts[i]);
@@ -30,8 +32,9 @@ public final class FileX {
 
 	// share, String[] parts)
 	public static String getRemotePath(String server, String share, String[] parts) {
-		if (parts == null || parts.length == 0)
+		if (parts == null || parts.length == 0) {
 			return "";
+		}
 
 		StringBuilder result = new StringBuilder(File.separator + File.separator + server + File.separator + share);
 

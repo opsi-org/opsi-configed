@@ -171,4 +171,5 @@ public abstract class AbstractDataStub {
 		linuxSubversionMarkers.add("lin:");
 	}
 
+	public abstract List<Map<String, Object>> checkHealth();
 }

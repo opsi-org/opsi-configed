@@ -16,8 +16,9 @@ public class SaveDepotSelection extends AbstractSaveState {
 	@Override
 	public String[] deserialize() {
 		String s = states.getProperty(key, (String) defaultValue);
-		if (s.equals(""))
+		if (s.equals("")) {
 			return new String[0];
+		}
 
 		s = s.substring(1);
 		s = s.substring(0, s.length() - 1);

@@ -149,7 +149,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard and other features for opsi 4.3 disabled
-	public static final boolean OPSI_4_3 = false;
+	public static final boolean OPSI_4_3 = true;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -222,8 +222,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// the properties for one product and all selected clients
 	protected Collection<Map<String, Object>> productProperties;
-	protected de.uib.opsidatamodel.datachanges.UpdateCollection updateCollection = new UpdateCollection(
-			new ArrayList<>());
+	protected UpdateCollection updateCollection = new UpdateCollection(new ArrayList<>());
 	protected Map<String, ProductpropertiesUpdateCollection> clientProductpropertiesUpdateCollections;
 	/*
 	 * for each product:
@@ -273,7 +272,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected List<String> localbootProductnames;
 	protected List<String> netbootProductnames;
-	protected List hwAuditConfig;
+	protected List<Map<String, Object>> hwAuditConfig;
 
 	// marker variables for requests for reload when clientlist changes
 	private Map<String, List<Map<String, String>>> localbootStatesAndActions = null;
@@ -283,7 +282,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// collection of retrieved software audit and hardware maps
 
-	private Map<String, Object> hwInfoClientmap;
+	private Map<String, Map<String, List<Map<String, Object>>>> hwInfoClientmap;
 
 	protected String myServer;
 	protected String opsiDefaultDomain;
@@ -753,9 +752,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}));
 	}
 
-	protected void preloadData()
 	// sets dataReady = true when finished
-	{
+	protected void preloadData() {
 		WaitCursor waitCursor = new WaitCursor(mainFrame.getContentPane(), "preloadData");
 
 		persist.retrieveOpsiModules();
@@ -809,7 +807,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		dataReady = true;
 		waitCursor.stop();
 		mainFrame.enableAfterLoading();
-
 	}
 
 	public void setGroupLoading(boolean b) {
@@ -1673,12 +1670,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				Logging.info(this, "------------ buildPclistTableModel, allPCs (2) " + allPCs.length);
 
-				treeClients.associateClientsToGroups(allPCs, persist.getFObject2Groups(), null // we got already
-																								// allowedClients,
-																								// therefore don't need
-																								// the parameter
-																								// hostgroupsPermitted
-				);
+				// we got already allowedClients, therefore don't need the parameter hostgroupsPermitted
+				treeClients.associateClientsToGroups(allPCs, persist.getFObject2Groups(), null);
 
 				Logging.info(this, "tree produced");
 			}
@@ -1691,20 +1684,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (filterClientList) {
 
 			if (pclist0 != null) {
-				Object[] pcEntries = pclist0.entrySet().toArray();
 
 				Logging.info(this,
 						"buildPclistTableModel with filterCLientList " + "selected pcs " + getSelectedClients().length);
 
-				for (int i = 0; i < pcEntries.length; i++) {
-					Map.Entry ob = (Map.Entry) pcEntries[i];
+				for (Entry<String, Boolean> pcEntry : pclist0.entrySet()) {
 
-					String key = (String) ob.getKey();
 					for (int j = 0; j < getSelectedClients().length; j++) {
 
-						if (getSelectedClients()[j].equals(key)) {
+						if (getSelectedClients()[j].equals(pcEntry.getKey())) {
 
-							pclist.put(key, (Boolean) ob.getValue());
+							pclist.put(pcEntry.getKey(), pcEntry.getValue());
 							break;
 						}
 					}
@@ -2243,7 +2233,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					// get next key - value - pair
 					String key = iter.next();
 
-					List value = (List) productPropertiesFor1Client.get(key);
+					List<?> value = (List<?>) productPropertiesFor1Client.get(key);
 
 					// create a merger for it
 					ListMerger merger = new ListMerger(value);
@@ -2260,7 +2250,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 					while (iter.hasNext()) {
 						String key = iter.next();
-						List value = (List) productPropertiesFor1Client.get(key);
+						List<?> value = (List<?>) productPropertiesFor1Client.get(key);
 
 						if (mergedProductProperties.get(key) == null)
 						// we need a new property. it is not common
@@ -2965,7 +2955,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Map<String, Object> mergeIn = collection.get(0);
 
 		for (Entry<String, Object> entry : mergeIn.entrySet()) {
-			List value = (List) entry.getValue();
+			List<?> value = (List<?>) entry.getValue();
 			ListMerger merger = new ListMerger(value);
 			mergedMap.put(entry.getKey(), merger);
 		}
@@ -2975,7 +2965,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mergeIn = collection.get(i);
 
 			for (Entry<String, Object> mergeInEntry : mergeIn.entrySet()) {
-				List value = (List) mergeInEntry.getValue();
+				List<?> value = (List<?>) mergeInEntry.getValue();
 
 				if (mergedMap.get(mergeInEntry.getKey()) == null) {
 					ListMerger merger = new ListMerger(value);
@@ -3175,7 +3165,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			} else {
 				checkHwInfo();
-				Object hwInfo = hwInfoClientmap.get(firstSelectedClient);
+				Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.get(firstSelectedClient);
 				if (hwInfo == null) {
 					hwInfo = persist.getHardwareInfo(firstSelectedClient, true);
 					hwInfoClientmap.put(firstSelectedClient, hwInfo);

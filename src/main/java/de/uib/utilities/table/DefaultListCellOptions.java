@@ -8,8 +8,8 @@ import javax.swing.ListSelectionModel;
 import de.uib.utilities.logging.Logging;
 
 public class DefaultListCellOptions implements ListCellOptions {
-	List possibleValues;
-	List defaultValues;
+	List<Object> possibleValues;
+	List<Object> defaultValues;
 	int selectionMode;
 	boolean editable;
 	boolean nullable;
@@ -26,8 +26,8 @@ public class DefaultListCellOptions implements ListCellOptions {
 				+ editable + ", " + nullable);
 	}
 
-	public DefaultListCellOptions(List possibleValues, List defaultValues, int selectionMode, boolean editable,
-			boolean nullable, String description)
+	public DefaultListCellOptions(List<Object> possibleValues, List<Object> defaultValues, int selectionMode,
+			boolean editable, boolean nullable, String description)
 
 	{
 		this.possibleValues = possibleValues;
@@ -45,10 +45,10 @@ public class DefaultListCellOptions implements ListCellOptions {
 
 	public static ListCellOptions getNewBooleanListCellOptions() {
 		Logging.info("getNewBooleanListCellOptions");
-		List possibleValues = new ArrayList<>();
+		List<Object> possibleValues = new ArrayList<>();
 		possibleValues.add(true);
 		possibleValues.add(false);
-		List defaultValues = new ArrayList<>();
+		List<Object> defaultValues = new ArrayList<>();
 		defaultValues.add(false);
 		boolean editable = false;
 		boolean nullable = false;
@@ -58,7 +58,7 @@ public class DefaultListCellOptions implements ListCellOptions {
 
 	public static ListCellOptions getNewEmptyListCellOptions() {
 		Logging.info("getNewEmptyListCellOptions");
-		List possibleValues = new ArrayList<>();
+		List<Object> possibleValues = new ArrayList<>();
 		boolean editable = true;
 		boolean nullable = true;
 		return new DefaultListCellOptions(possibleValues, null, ListSelectionModel.SINGLE_SELECTION, editable, nullable,
@@ -67,7 +67,7 @@ public class DefaultListCellOptions implements ListCellOptions {
 
 	public static ListCellOptions getNewEmptyListCellOptionsMultiSelection() {
 		Logging.info("getNewBooleanListCellOptionsMultiSelection");
-		List possibleValues = new ArrayList<>();
+		List<Object> possibleValues = new ArrayList<>();
 		boolean editable = true;
 		boolean nullable = true;
 		return new DefaultListCellOptions(possibleValues, null, ListSelectionModel.MULTIPLE_INTERVAL_SELECTION,
@@ -75,17 +75,17 @@ public class DefaultListCellOptions implements ListCellOptions {
 	}
 
 	@Override
-	public List getPossibleValues() {
+	public List<Object> getPossibleValues() {
 		return possibleValues;
 	}
 
 	@Override
-	public List getDefaultValues() {
+	public List<Object> getDefaultValues() {
 		return defaultValues;
 	}
 
 	@Override
-	public void setDefaultValues(List values) {
+	public void setDefaultValues(List<Object> values) {
 		defaultValues = values;
 	}
 

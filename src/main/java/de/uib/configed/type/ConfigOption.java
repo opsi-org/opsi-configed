@@ -105,17 +105,17 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions
 
 	// interface de.uib.utilities.table.ListCellOptions
 	@Override
-	public List getPossibleValues() {
-		return (List) get("possibleValues");
+	public List<Object> getPossibleValues() {
+		return (List<Object>) get("possibleValues");
 	}
 
 	@Override
-	public List getDefaultValues() {
-		return (List) get("defaultValues");
+	public List<Object> getDefaultValues() {
+		return (List<Object>) get("defaultValues");
 	}
 
 	@Override
-	public void setDefaultValues(List values) {
+	public void setDefaultValues(List<Object> values) {
 		put("defaultValues", values);
 	}
 
@@ -126,7 +126,8 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions
 
 	@Override
 	public boolean isNullable() {
-		return (!type.equals(TYPE.BoolConfig)); // until we extend the data structure
+		// until we extend the data structure
+		return (!type.equals(TYPE.BoolConfig));
 	}
 
 	@Override

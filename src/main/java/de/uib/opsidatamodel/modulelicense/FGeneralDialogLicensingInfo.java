@@ -42,7 +42,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	private List<String> columnNames = new ArrayList<>();
 	private List<String> classNames = new ArrayList<>();
-	private Map<String, Map> theSourceMap = new HashMap<>();
+	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 
 	public static boolean extendedView = false;
 
