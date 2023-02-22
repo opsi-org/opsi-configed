@@ -14,6 +14,9 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -27,6 +30,8 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public final class CertificateManager {
+	private static KeyStore ks;
+
 	private CertificateManager() {
 	}
 
@@ -37,14 +42,65 @@ public final class CertificateManager {
 			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
 			cert = (X509Certificate) certFactory.generateCertificate(is);
 		} catch (CertificateException e) {
-			Logging.error("unable to parse certificate (format is invalid)");
+			Logging.warning("unable to parse certificate (format is inavlid)");
+			removeCertificateFromKeyStore(certificateFile);
 		} catch (FileNotFoundException e) {
-			Logging.error("unable to find certificate");
+			Logging.warning("unable to find certificate: " + certificateFile.getAbsolutePath());
 		} catch (IOException e) {
-			Logging.error("unable to close certificate");
+			Logging.warning("unable to close certificate: " + certificateFile.getAbsolutePath());
 		}
 
 		return cert;
+	}
+
+	private static void removeCertificateFromKeyStore(File certificateFile) {
+		try {
+			if (ks.isCertificateEntry(certificateFile.getParent())) {
+				Logging.info("removing certificate from keystore, since it is invalid certificate: "
+						+ certificateFile.getAbsolutePath());
+				ks.deleteEntry(certificateFile.getParent());
+			}
+		} catch (KeyStoreException e) {
+			Logging.warning("unable to remove certificate " + certificateFile.getAbsolutePath() + " from the keystore: "
+					+ e.toString());
+		}
+	}
+
+	public static KeyStore initializeKeyStore() {
+		if (ks == null) {
+			try {
+				ks = KeyStore.getInstance(KeyStore.getDefaultType());
+				ks.load(null, null);
+			} catch (KeyStoreException e) {
+				Logging.warning("keystore wasn't initialized: " + e.toString());
+			} catch (NoSuchAlgorithmException e) {
+				Logging.warning("used unsupported algorithm, when initializing key store: " + e.toString());
+			} catch (CertificateException e) {
+				Logging.warning("faulty certificate (should not happen, since no certificate is provided)");
+			} catch (IOException e) {
+				Logging.warning("unable to initialize keystore: " + e.toString());
+			}
+		}
+
+		return ks;
+	}
+
+	public static void loadCertificatesToKeyStore() {
+		List<File> certificates = CertificateManager.getCertificates();
+
+		if (!certificates.isEmpty()) {
+			certificates.forEach(CertificateManager::loadCertificateToKeyStore);
+		}
+	}
+
+	public static void loadCertificateToKeyStore(File certificateFile) {
+		try {
+			X509Certificate certificate = CertificateManager.instantiateCertificate(certificateFile);
+			String alias = certificateFile.getParentFile().getName();
+			ks.setCertificateEntry(alias, certificate);
+		} catch (KeyStoreException e) {
+			Logging.error("unable to load certificate into a keystore");
+		}
 	}
 
 	public static List<File> getCertificates() {
@@ -118,6 +174,10 @@ public final class CertificateManager {
 			writeToCertificate(certificateFile, certificateContent);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+
+		if (certificateFile == null) {
+			return null;
 		}
 
 		return instantiateCertificate(certificateFile);

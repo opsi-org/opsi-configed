@@ -313,9 +313,8 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		SSLSocketFactory sslFactory = null;
 
 		try {
-			KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
-			ks.load(null, null);
-			loadCertificatesToKeyStore(ks);
+			KeyStore ks = CertificateManager.initializeKeyStore();
+			loadCertificatesToKeyStore();
 
 			KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			kmf.init(ks, new char[0]);
@@ -329,8 +328,6 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 					new SecureRandom());
 
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
-		} catch (CertificateException e) {
-			Logging.error(this, "something is wrong with the certificate: " + e.toString());
 		} catch (KeyStoreException e) {
 			Logging.error(this, "keystore wasn't initialized: " + e.toString());
 		} catch (NoSuchAlgorithmException e) {
@@ -339,8 +336,6 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			Logging.error(this, "unable to provide key");
 		} catch (KeyManagementException e) {
 			Logging.error(this, "failed to initialize SSL context: " + e.toString());
-		} catch (IOException e) {
-			Logging.error(this, "something is wrong with the keystore data: " + e.toString());
 		}
 
 		return sslFactory;
@@ -358,7 +353,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		throw new IllegalStateException("'" + trustManager + "' is not a X509TrustManager");
 	}
 
-	private void loadCertificatesToKeyStore(KeyStore ks) {
+	private void loadCertificatesToKeyStore() {
 		if (trustAlways || trustOnlyOnce) {
 			String url = produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE);
 			File certificateFile = downloadCertificateFile(url);
@@ -376,7 +371,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 				return;
 			}
 
-			loadCertificateToKeyStore(ks, certificateFile);
+			CertificateManager.loadCertificateToKeyStore(certificateFile);
 
 			if (trustAlways) {
 				trustAlways = false;
@@ -385,21 +380,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 			deleteFile(certificateFile);
 		} else {
-			List<File> certificates = CertificateManager.getCertificates();
-
-			if (!certificates.isEmpty()) {
-				certificates.forEach(certificate -> loadCertificateToKeyStore(ks, certificate));
-			}
-		}
-	}
-
-	private void loadCertificateToKeyStore(KeyStore ks, File certificateFile) {
-		try {
-			X509Certificate certificate = CertificateManager.instantiateCertificate(certificateFile);
-			String alias = certificateFile.getParentFile().getName();
-			ks.setCertificateEntry(alias, certificate);
-		} catch (KeyStoreException e) {
-			Logging.error(this, "unable to load certificate into a keystore");
+			CertificateManager.loadCertificatesToKeyStore();
 		}
 	}
 
