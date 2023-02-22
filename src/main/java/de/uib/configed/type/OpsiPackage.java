@@ -20,7 +20,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 //data source table productOnDepot
-public class OpsiPackage implements Comparable<String> {
+public class OpsiPackage implements Comparable<OpsiPackage> {
 	protected String productId;
 	protected int productType;
 	protected String versionInfo;
@@ -164,8 +164,8 @@ public class OpsiPackage implements Comparable<String> {
 
 	// Interface Comparable
 	@Override
-	public int compareTo(String o) {
-		return representation.compareTo(o);
+	public int compareTo(OpsiPackage o) {
+		return representation.compareTo(o.toString());
 	}
 
 	@Override
