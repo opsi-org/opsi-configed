@@ -412,7 +412,9 @@ public class UserConfigProducing {
 			Logging.info(this, "supplyPermissionEntriesForAUser configKey " + configKey + " -- partkey " + partkey);
 			Logging.info(this, "supplyPermissionEntriesForAUser configKey has size 1 values " + values);
 
-			if (values == null || (prototypeObligatory && !(values.equals(prototypeConfig.getValues(partkey))))) {
+			// We don't want to change the 'modified' value based on userroles (when prototypeObligatory is true)
+			if (values == null || (prototypeObligatory && !partkey.equals(UserConfig.MODIFICATION_INFO_KEY)
+					&& !(values.equals(prototypeConfig.getValues(partkey))))) {
 				Logging.info(this,
 						"supplyPermissionEntriesForAUser. serverconfigValuesMap gives not valid value for key "
 								+ configKey);
