@@ -570,7 +570,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	private class DullHostnameVerifier implements HostnameVerifier {
 		@Override
 		public boolean verify(String hostname, SSLSession session) {
-			/* We disable hostname veirifcation */
+			/* We disable hostname verification */
 			return true;
 		}
 	}
