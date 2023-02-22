@@ -21,6 +21,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import de.uib.configed.Configed;
@@ -31,6 +32,7 @@ import de.uib.utilities.logging.Logging;
 
 public final class CertificateManager {
 	private static KeyStore ks;
+	private static List<String> invalidCertificates = new ArrayList<>();
 
 	private CertificateManager() {
 	}
@@ -38,12 +40,17 @@ public final class CertificateManager {
 	public static X509Certificate instantiateCertificate(File certificateFile) {
 		X509Certificate cert = null;
 
+		if (invalidCertificates.contains(certificateFile.getAbsolutePath())) {
+			return null;
+		}
+
 		try (FileInputStream is = new FileInputStream(certificateFile)) {
 			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
 			cert = (X509Certificate) certFactory.generateCertificate(is);
 		} catch (CertificateException e) {
-			Logging.warning("unable to parse certificate (format is inavlid)");
+			Logging.warning("unable to parse certificate (format is inavlid): " + certificateFile.getAbsolutePath());
 			removeCertificateFromKeyStore(certificateFile);
+			invalidCertificates.add(certificateFile.getAbsolutePath());
 		} catch (FileNotFoundException e) {
 			Logging.warning("unable to find certificate: " + certificateFile.getAbsolutePath());
 		} catch (IOException e) {
@@ -55,10 +62,16 @@ public final class CertificateManager {
 
 	private static void removeCertificateFromKeyStore(File certificateFile) {
 		try {
-			if (ks.isCertificateEntry(certificateFile.getParent())) {
+			Enumeration<String> aliases = ks.aliases();
+
+			while (aliases.hasMoreElements()) {
+				System.out.println("alias: " + aliases.nextElement());
+			}
+
+			if (ks.isCertificateEntry(certificateFile.getParentFile().getName())) {
 				Logging.info("removing certificate from keystore, since it is invalid certificate: "
 						+ certificateFile.getAbsolutePath());
-				ks.deleteEntry(certificateFile.getParent());
+				ks.deleteEntry(certificateFile.getParentFile().getName());
 			}
 		} catch (KeyStoreException e) {
 			Logging.warning("unable to remove certificate " + certificateFile.getAbsolutePath() + " from the keystore: "
