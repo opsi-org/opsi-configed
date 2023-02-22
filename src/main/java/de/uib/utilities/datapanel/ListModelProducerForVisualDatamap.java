@@ -82,7 +82,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 		Logging.info(this, "getListModel key " + key + " the option values " + values);
 		Logging.info(this, "getListModel key " + key + " options  " + options);
 
-		DefaultListModel<Object> model = new DefaultListModel<Object>();
+		DefaultListModel<Object> model = new DefaultListModel<>();
 		Iterator<Object> iter = values.iterator();
 		while (iter.hasNext()) {
 			model.addElement(iter.next());

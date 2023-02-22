@@ -60,6 +60,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
+import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
@@ -74,24 +75,24 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 {
 	JComboBoxToolTip groupsCombo;
 
-	protected de.uib.utilities.table.gui.TablesearchPane searchPane;
+	protected TablesearchPane searchPane;
 	protected JTable tableProducts;
 	protected IFInstallationStateTableModel insTableModel;
 
 	JTextField saveNameEditor;
 
-	protected de.uib.configed.gui.IconButton buttonCommit;
-	protected de.uib.configed.gui.IconButton buttonCancel;
+	protected IconButton buttonCommit;
+	protected IconButton buttonCancel;
 
 	// use the filter icon of the tablesearchpane
-	protected de.uib.configed.gui.IconButton buttonEditDialog;
-	protected de.uib.configed.gui.IconButton buttonDelete;
+	protected IconButton buttonEditDialog;
+	protected IconButton buttonDelete;
 
-	protected de.uib.configed.gui.IconButton buttonReloadProductStates;
+	protected IconButton buttonReloadProductStates;
 
-	protected de.uib.configed.gui.IconButton buttonSaveAndExecute;
+	protected IconButton buttonSaveAndExecute;
 
-	protected de.uib.configed.gui.IconButton buttonCollectiveAction;
+	protected IconButton buttonCollectiveAction;
 
 	protected JLabel labelCollectiveAction;
 	protected JComboBoxToolTip comboAggregatedEditing;
@@ -885,10 +886,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 			if (actionType != ActionRequest.INVALID) {
 
-				associate.getSelectedRowsInModelTerms().stream()
-						.peek(x -> Logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0)))
-						.forEach(x -> insTableModel.collectiveChangeActionRequest(
-								(String) insTableModel.getValueAt(x, 0), new ActionRequest(actionType)));
+				associate.getSelectedRowsInModelTerms().stream().forEach(x -> {
+					Logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0));
+					insTableModel.collectiveChangeActionRequest((String) insTableModel.getValueAt(x, 0),
+							new ActionRequest(actionType));
+				});
 			}
 
 			insTableModel.finishCollectiveChange();
