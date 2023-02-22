@@ -197,8 +197,9 @@ public class ControllerHWinfoMultiClients {
 	}
 
 	public void rebuildModel() {
-		if (model == null)
+		if (model == null) {
 			return;
+		}
 		// the window exists
 		persist.configOptionsRequestRefresh();
 		persist.client2HwRowsRequestRefresh();

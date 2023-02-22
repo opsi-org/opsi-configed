@@ -49,8 +49,9 @@ public class ActionRequest {
 	private int state = INVALID;
 
 	private static void checkCollections() {
-		if (states != null)
+		if (states != null) {
 			return;
+		}
 
 		states = new ArrayList<>();
 		states.add(CONFLICT);
@@ -218,8 +219,9 @@ public class ActionRequest {
 	public static String getLabel(int state) {
 		checkCollections();
 
-		if (!existsState(state))
+		if (!existsState(state)) {
 			return null;
+		}
 
 		return state2label.get(state);
 	}
@@ -233,11 +235,13 @@ public class ActionRequest {
 	public static Integer getVal(String label) {
 		checkCollections();
 
-		if (label == null || label.equals(""))
+		if (label == null || label.equals("")) {
 			return NONE;
+		}
 
-		if (!existsLabel(label))
+		if (!existsLabel(label)) {
 			return null;
+		}
 
 		return label2state.get(label);
 	}
@@ -251,8 +255,9 @@ public class ActionRequest {
 	public static String getStaticString(String label) {
 		Integer state = label2state.get(label);
 
-		if (state == null)
+		if (state == null) {
 			return null;
+		}
 
 		return state2label.get(state);
 	}
@@ -286,11 +291,13 @@ public class ActionRequest {
 	public static ActionRequest produceFromLabel(String label) {
 		checkCollections();
 
-		if (label == null)
+		if (label == null) {
 			return new ActionRequest(NONE);
+		}
 
-		if (!labels.contains(label))
+		if (!labels.contains(label)) {
 			return new ActionRequest(INVALID);
+		}
 
 		return new ActionRequest(getVal(label));
 	}
@@ -300,10 +307,11 @@ public class ActionRequest {
 	}
 
 	public ActionRequest(int t) {
-		if (existsState(t))
+		if (existsState(t)) {
 			state = t;
-		else
+		} else {
 			state = NOT_AVAILABLE;
+		}
 	}
 
 }
