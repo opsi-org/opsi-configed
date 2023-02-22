@@ -9,10 +9,8 @@ import javax.swing.ListSelectionModel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
-public class ConfigOption extends RetrievedMap implements ListCellOptions
-
 // has a problem with type of defaultValues
-{
+public class ConfigOption extends RetrievedMap implements ListCellOptions {
 	public static final String REFERENCE_ID = "configId";
 
 	public enum TYPE {
@@ -35,75 +33,78 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions
 	@Override
 	protected void build() {
 		// overwrite values
-		if (retrieved == null || retrieved.get("possibleValues") == null)
+		if (retrieved == null || retrieved.get("possibleValues") == null) {
 			put("possibleValues", new ArrayList<>());
-		else
+		} else {
 			put("possibleValues", retrieved.get("possibleValues"));
+		}
 
-		if (retrieved == null || retrieved.get("defaultValues") == null)
+		if (retrieved == null || retrieved.get("defaultValues") == null) {
 			put("defaultValues", new ArrayList<>());
-		else {
+		} else {
 			if (retrieved.get("defaultValues") instanceof org.json.JSONArray) {
 
 				Logging.info(this, "gotdefaultvalues unexpectedly " + retrieved.get("defaultValues").getClass() + " "
 						+ retrieved.get("defaultValues"));
 				put("defaultValues", ((org.json.JSONArray) retrieved.get("defaultValues")).toList());
-			} else
+			} else {
 				put("defaultValues", retrieved.get("defaultValues"));
+			}
 
 		}
 
-		if (retrieved == null || retrieved.get("description") == null)
+		if (retrieved == null || retrieved.get("description") == null) {
 			put("description", "");
-		else
+		} else {
 			put("description", retrieved.get("description"));
+		}
 
 		if (retrieved == null || retrieved.get("type") == null) {
 			Logging.debug(this, "set default UnicodeConfig");
 			put("type", "UnicodeConfig");
 			type = TYPE.UnicodeConfig;
-		}
-
-		else {
-			if (retrieved.get("type") == null)
+		} else {
+			if (retrieved.get("type") == null) {
 				put("type", UNDEFINED_TYPE);
-
-			else
+			} else {
 				put("type", retrieved.get("type"));
+			}
 
-			if (get("type").equals(BOOL_TYPE) || get("type").equals("BoolProductProperty"))
+			if (get("type").equals(BOOL_TYPE) || get("type").equals("BoolProductProperty")) {
 				type = TYPE.BoolConfig;
-			else
+			} else {
 				type = TYPE.UnicodeConfig;
+			}
 		}
 
-		if (retrieved == null)
+		if (retrieved == null) {
 			put("selectionMode", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
-		else if (retrieved.get("multiValue") == null)
+		} else if (retrieved.get("multiValue") == null) {
 			put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
-
-		else {
-			if (Boolean.TRUE.equals(retrieved.get("multiValue")))
+		} else {
+			if (Boolean.TRUE.equals(retrieved.get("multiValue"))) {
 				put("selectionMode", ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-			else
+			} else {
 				put("selectionMode", ListSelectionModel.SINGLE_SELECTION);
+			}
 		}
 
 		put("classname", "List");
 
-		if (retrieved == null)
+		if (retrieved == null) {
 			put("editable", true);
-		else if (retrieved.get("editable") == null)
+		} else if (retrieved.get("editable") == null) {
 			put("editable", false);
-		else
+		} else {
 			put("editable", retrieved.get("editable"));
+		}
 
-		if (type != TYPE.BoolConfig)
+		if (type != TYPE.BoolConfig) {
 			put("nullable", false);
+		}
 	}
 
-	// interface de.uib.utilities.table.ListCellOptions
+	// interface ListCellOptions
 	@Override
 	public List<Object> getPossibleValues() {
 		return (List<Object>) get("possibleValues");
@@ -143,5 +144,4 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions
 	public TYPE getType() {
 		return type;
 	}
-
 }

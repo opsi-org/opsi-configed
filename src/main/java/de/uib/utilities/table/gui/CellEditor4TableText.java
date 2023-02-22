@@ -2,6 +2,8 @@ package de.uib.utilities.table.gui;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -16,24 +18,24 @@ import javax.swing.JTextField;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.swing.FEdit;
+import de.uib.utilities.swing.FEditText;
 
-public class CellEditor4TableText extends DefaultCellEditor implements MouseListener, KeyListener, FocusListener
-
-{
+public class CellEditor4TableText extends DefaultCellEditor implements MouseListener, KeyListener, FocusListener {
 	String oldValue;
 	String currentValue;
 	JTextField editorContent;
-	de.uib.utilities.swing.FEdit fEdit;
+	FEdit fEdit;
 	boolean globalFEdit = false;
 	boolean fEditInitialized = false;
 	Dimension initSize;
 
-	public CellEditor4TableText(de.uib.utilities.swing.FEdit fEdit, Dimension initSize) {
+	public CellEditor4TableText(FEdit fEdit, Dimension initSize) {
 		super(new JTextField());
 		editorContent = (JTextField) super.getComponent();
 
 		if (fEdit == null) {
-			this.fEdit = new de.uib.utilities.swing.FEditText("");
+			this.fEdit = new FEditText("");
 		} else {
 			this.fEdit = fEdit;
 			globalFEdit = true;
@@ -123,8 +125,9 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 	public Object getCellEditorValue() {
 		currentValue = fEdit.getText();
 		fEdit.setVisible(false);
-		if (!fEditInitialized)
+		if (!fEditInitialized) {
 			fEditInitialized = true;
+		}
 
 		return currentValue;
 	}
@@ -149,13 +152,13 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 			}
 		}
 
-		java.awt.Point loc = null;
-		java.awt.Rectangle rec = table.getCellRect(row, column, true);
+		Point loc = null;
+		Rectangle rec = table.getCellRect(row, column, true);
 		try {
 			loc = table.getLocationOnScreen();
 		} catch (Exception ex) {
 			Logging.warning(this, "get location error " + ex);
-			loc = new java.awt.Point(50, 50);
+			loc = new Point(50, 50);
 		}
 
 		fEdit.setVisible(true);

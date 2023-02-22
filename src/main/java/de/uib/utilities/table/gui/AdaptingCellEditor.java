@@ -35,10 +35,12 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 		if (cbm == null || cbm.getComboBoxModel(modelRow, modelColumn).getSize() <= 1) {
 			cc.setModel(nullModel);
 
-			if (cbm != null && cbm.getComboBoxModel(modelRow, modelColumn).getSize() == 1)
+			if (cbm != null && cbm.getComboBoxModel(modelRow, modelColumn).getSize() == 1) {
 				cc.setToolTipText((String) cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
-		} else
+			}
+		} else {
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
+		}
 
 		return super.getTableCellEditorComponent(table, value, isSelected, row, column);
 

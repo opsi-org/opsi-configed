@@ -281,8 +281,9 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		Logging.info(this, "commit");
 		setStartText(getText());
 
-		if (servedCellEditor != null)
+		if (servedCellEditor != null) {
 			servedCellEditor.stopCellEditing();
+		}
 
 		leave();
 	}
@@ -292,8 +293,9 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		setStartText(initialText); // sets cancelled = false
 		cancelled = true;
 
-		if (servedCellEditor != null)
+		if (servedCellEditor != null) {
 			servedCellEditor.stopCellEditing();
+		}
 
 		leave();
 	}

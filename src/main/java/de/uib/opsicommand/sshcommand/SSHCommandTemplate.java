@@ -122,8 +122,9 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 
 				SSHCommand sshc = new EmptyCommand(getId(), c, getMenuText(), needSudo());
 				sshCommand.add(sshc);
-				if (firstInitCommands)
+				if (firstInitCommands) {
 					sshCommandOriginal.add(sshc);
+				}
 			}
 			firstInitCommands = false;
 		}
@@ -157,8 +158,9 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	public String getSecuredCommand() {
 		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().equals(""))) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
-		} else
+		} else {
 			return getCommand();
+		}
 	}
 
 	/**
@@ -223,8 +225,9 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 **/
 	@Override
 	public String getMenuText() {
-		if (menuText != null && menuText.length() > 0)
+		if (menuText != null && menuText.length() > 0) {
 			return menuText.trim();
+		}
 
 		return menuText;
 	}
@@ -309,8 +312,9 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		List<String> commandsStringList = new LinkedList<>();
 		for (SSHCommand c : sshCommand) {
 			String comstr = c.getCommandRaw();
-			if (!((comstr == null) || (comstr.trim().equals(""))))
+			if (!((comstr == null) || (comstr.trim().equals("")))) {
 				commandsStringList.add(c.getCommandRaw());
+			}
 		}
 
 		return commandsStringList;
@@ -355,10 +359,11 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		com.append(SSHCommandFactory.COMMAND_MAP_COMMANDS).append(":").append("[");
 		for (int i = 0; i < getCommandsRaw().size(); i++) {
 			String c = getCommandsRaw().get(i);
-			if (i == getCommandsRaw().size() - 1)
+			if (i == getCommandsRaw().size() - 1) {
 				com.append(c);
-			else
+			} else {
 				com.append(c).append(",");
+			}
 		}
 		com.append("]");
 		com.append("}");
@@ -369,10 +374,11 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		StringBuilder commandString = new StringBuilder("[");
 		for (int i = 0; i < getCommands().size(); i++) {
 			String c = ((EmptyCommand) getCommands().get(i)).commandToString();
-			if (i == getCommands().size() - 1)
+			if (i == getCommands().size() - 1) {
 				commandString.append(c);
-			else
+			} else {
 				commandString.append(c).append(",");
+			}
 		}
 		commandString.append("]");
 		return commandString.toString();
@@ -387,10 +393,10 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	 */
 	@Override
 	public int compareTo(SSHCommandTemplate compareCom) {
-
 		int dif = this.position - compareCom.getPriority();
-		if (dif == 0)
+		if (dif == 0) {
 			return this.menuText.compareTo(compareCom.getMenuText());
+		}
 		return dif;
 	}
 
@@ -415,7 +421,6 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	}
 
 	public boolean equals(SSHCommandTemplate com) {
-
 		if (!this.getId().trim().equals(com.getId().trim())) {
 			Logging.debug(this, "equals different id's " + this.getId() + " != " + com.getId() + "");
 			return false;

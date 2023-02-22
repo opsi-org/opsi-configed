@@ -15,11 +15,13 @@ public class TreeSetBuddy extends TreeSet<String> {
 	}
 
 	public boolean equals(TreeSetBuddy other) {
-		if (other == null)
+		if (other == null) {
 			return false;
+		}
 
-		if (other.size() != size())
+		if (other.size() != size()) {
 			return false;
+		}
 
 		boolean equal = true;
 
@@ -30,13 +32,15 @@ public class TreeSetBuddy extends TreeSet<String> {
 			String str0 = iter.next();
 			String str1 = otherIter.next();
 
-			if (!str0.equals(str1))
+			if (!str0.equals(str1)) {
 				equal = false;
+			}
 
 		}
 
-		if (equal && otherIter.hasNext())
+		if (equal && otherIter.hasNext()) {
 			equal = false;
+		}
 
 		return equal;
 	}

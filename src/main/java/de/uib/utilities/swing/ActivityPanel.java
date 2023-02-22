@@ -112,10 +112,11 @@ public class ActivityPanel extends JPanel implements Runnable {
 					}
 
 					setState(i);
-					if (forward)
+					if (forward) {
 						i++;
-					else
+					} else {
 						i--;
+					}
 				} else if (finalizing) {
 					finalizing = false;
 					forward = true;

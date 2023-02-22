@@ -44,16 +44,19 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 			boolean hasFocus, int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (!(c instanceof JLabel))
+		if (!(c instanceof JLabel)) {
 			return c;
+		}
 
 		JLabel label = (JLabel) c;
 
-		if (value != null && !(value instanceof Boolean) && !(value instanceof String))
+		if (value != null && !(value instanceof Boolean) && !(value instanceof String)) {
 			return c;
+		}
 
-		if (value != null && !allowingString && !(value instanceof Boolean))
+		if (value != null && !allowingString && !(value instanceof Boolean)) {
 			return c;
+		}
 
 		label.setText("");
 		label.setIcon(null);

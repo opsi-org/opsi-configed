@@ -5,9 +5,7 @@ import java.util.List;
 
 import de.uib.configed.gui.FGeneralDialog;
 
-public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeedParameter
-
-{
+public class CommandHelp /* extends */ implements SSHCommand {
 
 	private boolean needSudo = false;
 
@@ -40,10 +38,11 @@ public class CommandHelp /* extends */ implements SSHCommand // , SSHCommandNeed
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
-		else
+		} else {
 			return getCommand();
+		}
 	}
 
 	@Override

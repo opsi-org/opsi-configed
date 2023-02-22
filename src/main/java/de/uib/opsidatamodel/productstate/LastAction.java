@@ -40,8 +40,9 @@ public class LastAction {
 	private int state = INVALID;
 
 	private static void checkCollections() {
-		if (states != null)
+		if (states != null) {
 			return;
+		}
 
 		states = new ArrayList<>();
 		states.add(CONFLICT);
@@ -137,8 +138,9 @@ public class LastAction {
 	public static String getLabel(int state) {
 		checkCollections();
 
-		if (!existsState(state))
+		if (!existsState(state)) {
 			return null;
+		}
 
 		return state2label.get(state);
 	}
@@ -152,11 +154,13 @@ public class LastAction {
 	public static Integer getVal(String label) {
 		checkCollections();
 
-		if (label == null || label.equals(""))
+		if (label == null || label.equals("")) {
 			return NONE;
+		}
 
-		if (!existsLabel(label))
+		if (!existsLabel(label)) {
 			return null;
+		}
 
 		return label2state.get(label);
 	}
@@ -190,11 +194,13 @@ public class LastAction {
 	public static LastAction produceFromLabel(String label) {
 		checkCollections();
 
-		if (label == null)
+		if (label == null) {
 			return new LastAction(NOT_AVAILABLE);
+		}
 
-		if (!labels.contains(label))
+		if (!labels.contains(label)) {
 			return new LastAction(INVALID);
+		}
 
 		return new LastAction(getVal(label));
 	}
@@ -204,9 +210,10 @@ public class LastAction {
 	}
 
 	public LastAction(int t) {
-		if (existsState(t))
+		if (existsState(t)) {
 			state = t;
-		else
+		} else {
 			state = NOT_AVAILABLE;
+		}
 	}
 }

@@ -27,6 +27,8 @@ package de.uib.opsidatamodel;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
+
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.dbtable.Host;
 import de.uib.utilities.logging.Logging;
@@ -40,8 +42,9 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 
 	@Override
 	protected void initMembers() {
-		if (dataStub == null)
+		if (dataStub == null) {
 			dataStub = new DataStubRawData(this);
+		}
 	}
 
 	@Override
@@ -51,7 +54,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		// but are underlicensed
 		{
 
-			javax.swing.SwingUtilities.invokeLater(() -> {
+			SwingUtilities.invokeLater(() -> {
 
 				String warning = "limit for mysql backend reached";
 
@@ -63,7 +66,7 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 	}
 
 	@Override
-	public List<Map<java.lang.String, java.lang.Object>> hostRead() {
+	public List<Map<String, Object>> hostRead() {
 
 		Logging.debug(this, "HOST_read ");
 		String query = "select *  from HOST";
@@ -75,11 +78,10 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
 		Logging.notice(this, "HOST_read, query " + query);
-		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
-				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
+		List<Map<String, Object>> opsiHosts = exec.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();
 
-		for (Map<java.lang.String, java.lang.Object> entry : opsiHosts) {
+		for (Map<String, Object> entry : opsiHosts) {
 
 			Host.db2ServiceRowMap(entry);
 

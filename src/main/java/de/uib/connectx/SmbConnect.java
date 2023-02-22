@@ -47,8 +47,9 @@ public final class SmbConnect {
 	}
 
 	public static SmbConnect getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new SmbConnect();
+		}
 
 		return instance;
 	}
@@ -60,8 +61,9 @@ public final class SmbConnect {
 				buf.append(parts[i]);
 				buf.append("/");
 			}
-			if (parts.length - 1 > 0)
+			if (parts.length - 1 > 0) {
 				buf.append(parts[parts.length - 1]);
+			}
 		}
 		return buf.toString();
 	}
@@ -72,8 +74,9 @@ public final class SmbConnect {
 
 		Logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 
-		if (depot2depotMap.get(depotserver) == null)
+		if (depot2depotMap.get(depotserver) == null) {
 			return result;
+		}
 
 		String depotRemoteUrl = (String) depot2depotMap.get(depotserver).get("depotRemoteUrl");
 

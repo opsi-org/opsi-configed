@@ -27,8 +27,9 @@ public class FOpsiLicenseMissingText extends FTextArea {
 	}
 
 	private static FOpsiLicenseMissingText getInstance() {
-		if (instance == null)
+		if (instance == null) {
 			instance = new FOpsiLicenseMissingText();
+		}
 		return instance;
 	}
 

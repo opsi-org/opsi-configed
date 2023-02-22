@@ -48,8 +48,9 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 		setDir(d);
 		setUrl(u);
 
-		if (d.charAt(d.length() - 1) != '/')
+		if (d.charAt(d.length() - 1) != '/') {
 			d = d + "/";
+		}
 		setProduct(d + getFilenameFromUrl(url));
 		Logging.debug(this, "CommandWget dir " + dir);
 		Logging.debug(this, "CommandWget url " + url);
@@ -58,8 +59,9 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setFileName(String newFilename) {
-		if ((newFilename != null) && (!newFilename.trim().equals("")))
+		if ((newFilename != null) && (!newFilename.trim().equals(""))) {
 			fileName = " --output-document=" + newFilename + " ";
+		}
 	}
 
 	@Override
@@ -68,8 +70,9 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setAuthentication(String a) {
-		if (a != null)
+		if (a != null) {
 			authentication = a;
+		}
 	}
 
 	@Override
@@ -104,12 +107,14 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getCommand() {
-		if (!freeInput.equals(""))
+		if (!freeInput.equals("")) {
 			command = "wget " + authentication + fileName + freeInput + verbosity + dir + url + " " + additionalURL;
-		else
+		} else {
 			command = "wget " + authentication + fileName + verbosity + dir + url + " " + additionalURL;
-		if (needSudo())
+		}
+		if (needSudo()) {
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
+		}
 		return command + " 2>&1";
 	}
 
@@ -120,10 +125,11 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
-		else
+		} else {
 			return getCommand();
+		}
 	}
 
 	@Override
@@ -169,27 +175,31 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setDir(String d) {
-		if (!d.equals(""))
+		if (!d.equals("")) {
 			dir = " -P " + d;
-		else
+		} else {
 			dir = "";
+		}
 	}
 
 	public void setUrl(String u) {
-		if (!u.equals(""))
+		if (!u.equals("")) {
 			url = " " + u;
-		else
+		} else {
 			url = "";
+		}
 	}
 
 	public void setVerbosity(int vSum) {
 		StringBuilder v = new StringBuilder();
-		for (int i = 0; i < vSum; i++)
+		for (int i = 0; i < vSum; i++) {
 			v.append("v");
+		}
 
 		verbosity = " -" + v + " ";
-		if (vSum == 0)
+		if (vSum == 0) {
 			verbosity = "";
+		}
 	}
 
 	public void setFreeInput(String fI) {

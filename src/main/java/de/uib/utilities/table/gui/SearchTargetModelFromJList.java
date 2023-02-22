@@ -67,10 +67,11 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 			@Override
 			public Object getValueAt(int row, int col) {
-				if (col == 0)
+				if (col == 0) {
 					return values.get(row);
-				else
+				} else {
 					return "" + descriptions.get(row);
+				}
 			}
 		};
 	}
@@ -93,8 +94,9 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 	@Override
 	public int getSelectedRow() {
-		if (getSelectedRows().length == 0)
+		if (getSelectedRows().length == 0) {
 			return -1;
+		}
 		return getSelectedRows()[0];
 	}
 
@@ -102,8 +104,9 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	public int[] getSelectedRows() {
 		TreeSet<Integer> selection = new TreeSet<>();
 		for (int j = 0; j < theValues.size(); j++) {
-			if (jList.isSelectedIndex(j))
+			if (jList.isSelectedIndex(j)) {
 				selection.add(j);
+			}
 		}
 
 		int[] result = new int[selection.size()];
@@ -160,14 +163,16 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		for (int i : selection) {
 			if (i > tableModel.getRowCount() - 1) {
 				Logging.warning(this, "tableModel has index (as should be set from selection) " + i);
-			} else
+			} else {
 				jList.addSelectionInterval(i, i);
+			}
 
 		}
 
 		setValueIsAdjusting(false);
-		if (selection.length > 0)
+		if (selection.length > 0) {
 			jList.ensureIndexIsVisible(selection[0]);
+		}
 	}
 
 	@Override
@@ -181,11 +186,11 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	public void setFiltered(boolean b) {
 		Logging.info(this, "setFiltered " + b + " it was filtered " + filtered);
 
-		if (b == filtered)
+		if (b == filtered) {
 			return;
+		}
 
-		if (b) // && filtering)
-		{
+		if (b) {
 			unfilteredSelection = jList.getSelectedIndices();
 			theValues = new ArrayList<>();
 			theDescriptions = new ArrayList<>();
@@ -213,8 +218,9 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 				setValueIsAdjusting(true);
 				jList.setSelectionInterval(0, jList.getModel().getSize() - 1);
 				setValueIsAdjusting(false);
-			} else
+			} else {
 				jList.setSelectionInterval(0, 0);
+			}
 		} catch (Exception ex) {
 			Logging.warning(this, "selection error " + ex);
 		}

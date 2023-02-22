@@ -36,8 +36,9 @@ public class ActionProgress {
 	private int state = INVALID;
 
 	private static void checkCollections() {
-		if (states != null)
+		if (states != null) {
 			return;
+		}
 
 		states = new ArrayList<>();
 		states.add(CONFLICT);
@@ -111,8 +112,9 @@ public class ActionProgress {
 	public static String getLabel(int state) {
 		checkCollections();
 
-		if (!existsState(state))
+		if (!existsState(state)) {
 			return null;
+		}
 
 		return state2label.get(state);
 	}
@@ -126,11 +128,13 @@ public class ActionProgress {
 	public static Integer getVal(String label) {
 		checkCollections();
 
-		if (label == null || label.equals(""))
+		if (label == null || label.equals("")) {
 			return NONE;
+		}
 
-		if (!existsLabel(label))
+		if (!existsLabel(label)) {
 			return null;
+		}
 
 		return label2state.get(label);
 	}
@@ -164,11 +168,13 @@ public class ActionProgress {
 	public static ActionProgress produceFromLabel(String label) {
 		checkCollections();
 
-		if (label == null)
+		if (label == null) {
 			return new ActionProgress(NOT_AVAILABLE);
+		}
 
-		if (!labels.contains(label))
+		if (!labels.contains(label)) {
 			return new ActionProgress(INVALID);
+		}
 
 		return new ActionProgress(getVal(label));
 	}
@@ -178,9 +184,10 @@ public class ActionProgress {
 	}
 
 	public ActionProgress(int t) {
-		if (existsState(t))
+		if (existsState(t)) {
 			state = t;
-		else
+		} else {
 			state = NOT_AVAILABLE;
+		}
 	}
 }

@@ -21,10 +21,11 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 		this.f = f;
 		this.color = c;
 		this.bg1 = bg1;
-		if (bg2 != null)
+		if (bg2 != null) {
 			this.bg2 = bg2;
-		else
+		} else {
 			this.bg2 = bg1;
+		}
 
 		this.selectionBackground = selectionBackground;
 		this.selectionEditingBackground = selectionEditingBackground;
@@ -36,23 +37,25 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 			boolean hasFocus, int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (f != null)
+		if (f != null) {
 			result.setFont(f);
+		}
 
 		if (bg1 != null) {
-			if (selectionEditingBackground != null && isSelected)
+			if (selectionEditingBackground != null && isSelected) {
 				result.setBackground(selectionEditingBackground);
-
-			else {
+			} else {
 				if (row % 2 == 0) {
 					result.setBackground(bg2);
-				} else
+				} else {
 					result.setBackground(bg1);
+				}
 			}
 		}
 
-		if (color != null)
+		if (color != null) {
 			result.setForeground(color);
+		}
 
 		return result;
 	}

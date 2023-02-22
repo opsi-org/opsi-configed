@@ -5,8 +5,9 @@ import de.uib.utilities.logging.Logging;
 public class SaveInteger extends AbstractSaveState {
 	public SaveInteger(String key, Object defaultValue, SavedStates states) {
 		super(key, defaultValue, states);
-		if (!(defaultValue instanceof Integer))
+		if (!(defaultValue instanceof Integer)) {
 			Logging.error("default value must be Integer");
+		}
 	}
 
 	public void serialize(final Integer value, Integer minValue) {
@@ -42,8 +43,9 @@ public class SaveInteger extends AbstractSaveState {
 		} catch (Exception ex) {
 			Logging.warning(this, "deserializeAsInt error " + ex);
 		}
-		if (result == null)
+		if (result == null) {
 			result = (Integer) defaultValue;
+		}
 
 		return result;
 	}

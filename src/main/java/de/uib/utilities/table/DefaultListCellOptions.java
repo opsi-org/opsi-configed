@@ -35,10 +35,11 @@ public class DefaultListCellOptions implements ListCellOptions {
 		this.selectionMode = selectionMode;
 		this.editable = editable;
 		this.nullable = nullable;
-		if (description == null)
+		if (description == null) {
 			this.description = "";
-		else
+		} else {
 			this.description = description;
+		}
 		Logging.info(this, "constructed with given " + possibleValues + ", " + defaultValues + ", " + selectionMode
 				+ ", " + editable + ", " + nullable);
 	}

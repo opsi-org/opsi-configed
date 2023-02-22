@@ -226,7 +226,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		connectionPanel.setBorder(
 				BorderFactory.createTitledBorder(Configed.getResourceValue("SSHConnection.Config.serverPanelTitle")));
-		connectionPanel.setPreferredSize(new java.awt.Dimension(400, 350));
+		connectionPanel.setPreferredSize(new Dimension(400, 350));
 
 		settingsPanel.setBorder(
 				BorderFactory.createTitledBorder(Configed.getResourceValue("SSHConnection.Config.settingsPanelTitle")));
@@ -349,8 +349,9 @@ public final class SSHConfigDialog extends FGeneralDialog {
 				Configed.getResourceValue("SSHConnection.Config.SelectKeyFile"), "images/folder_16.png", " ",
 				"images/folder_16.png", true);
 		iconButtonOpenChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
-		if (!(Globals.isGlobalReadOnly()))
+		if (!(Globals.isGlobalReadOnly())) {
 			iconButtonOpenChooser.addActionListener(actionEvent -> doActionOeffnen());
+		}
 
 		buttonPanel.add(jButtonKill);
 		buttonPanel.add(jButtonSave);
@@ -408,8 +409,9 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				value = true;
 			}
-			if (!jCheckBoxDefault.isSelected())
+			if (!jCheckBoxDefault.isSelected()) {
 				jTextFieldPassword.setEnabled(!value);
+			}
 			iconButtonOpenChooser.setEnabled(value);
 			jTextFieldKeyFile.setEnabled(value);
 			jTextFieldPassphrase.setEnabled(value);

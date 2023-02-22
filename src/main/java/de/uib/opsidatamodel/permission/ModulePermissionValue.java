@@ -35,8 +35,9 @@ public class ModulePermissionValue {
 		else if (ob instanceof String) {
 			String sValue = ((String) ob).trim();
 			boolean checked = sValue.equalsIgnoreCase("yes") || sValue.equalsIgnoreCase("true");
-			if (checked)
+			if (checked) {
 				result = sValue.equalsIgnoreCase("yes");
+			}
 		}
 
 		return result;
@@ -45,17 +46,16 @@ public class ModulePermissionValue {
 	private ExtendedInteger retrieveMaxClients(Object ob) {
 		ExtendedInteger result = null;
 
-		if (ob == null)
-
+		if (ob == null) {
 			result = ExtendedInteger.ZERO;
-
-		else {
+		} else {
 			Boolean b = checkBoolean(ob);
 			if (b != null) {
-				if (b)
+				if (b) {
 					result = ExtendedInteger.INFINITE;
-				else
+				} else {
 					result = ExtendedInteger.ZERO;
+				}
 			} else if (ob instanceof Integer) {
 				result = new ExtendedInteger((Integer) ob);
 			} else if (ob instanceof String) {
@@ -65,8 +65,9 @@ public class ModulePermissionValue {
 				} catch (NumberFormatException ex) {
 					Logging.debug(this, "not a number: " + ob);
 				}
-				if (number != null)
+				if (number != null) {
 					result = new ExtendedInteger(number);
+				}
 			}
 
 		}
@@ -133,8 +134,9 @@ public class ModulePermissionValue {
 			}
 		}
 
-		if (expiresDate == ExtendedDate.ZERO)
+		if (expiresDate == ExtendedDate.ZERO) {
 			expiresDate = defaultExpires;
+		}
 
 	}
 

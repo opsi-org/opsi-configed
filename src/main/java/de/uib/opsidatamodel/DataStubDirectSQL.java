@@ -67,8 +67,9 @@ public class DataStubDirectSQL extends DataStubRawData
 				clientSelection = " AND ( " + giveWhereOR("clientId", newClients) + ") ";
 			}
 
-			if (client2software == null)
+			if (client2software == null) {
 				client2software = new HashMap<>();
+			}
 
 			persist.notifyDataLoadingObservers(
 					Configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");

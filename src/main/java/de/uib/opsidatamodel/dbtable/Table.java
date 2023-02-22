@@ -32,8 +32,9 @@ public class Table {
 	}
 
 	public void compareToHighTimestamp(String s) {
-		if (s.compareTo(highTimestampS) > 0)
+		if (s.compareTo(highTimestampS) > 0) {
 			highTimestampS = s;
+		}
 	}
 
 	protected String valueAssertion(String key, String value) {
@@ -41,8 +42,9 @@ public class Table {
 		sb.append(key);
 		sb.append("=");
 		sb.append("'");
-		if (value == null)
+		if (value == null) {
 			value = "";
+		}
 		sb.append(value);
 		sb.append("'");
 
@@ -51,8 +53,9 @@ public class Table {
 
 	protected String conjunction(Map<String, String> rowMap, String[] keys) {
 		Logging.debug(this, "conjunction keys " + Arrays.toString(keys));
-		if (keys == null || keys.length == 0)
+		if (keys == null || keys.length == 0) {
 			return null;
+		}
 
 		StringBuilder sb = new StringBuilder("(");
 		sb.append(valueAssertion(keys[0], rowMap.get(keys[0])));

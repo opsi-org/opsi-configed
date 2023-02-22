@@ -32,16 +32,18 @@ public class DefaultTableProvider implements TableProvider {
 
 	@Override
 	public List<String> getColumnNames() {
-		if (columnNames == null)
+		if (columnNames == null) {
 			columnNames = source.retrieveColumnNames();
+		}
 
 		return columnNames;
 	}
 
 	@Override
 	public List<String> getClassNames() {
-		if (classNames == null)
+		if (classNames == null) {
 			classNames = source.retrieveClassNames();
+		}
 
 		return classNames;
 	}
@@ -51,8 +53,9 @@ public class DefaultTableProvider implements TableProvider {
 	public List<List<Object>> getRows() {
 		Logging.info(this, " -- getRows()");
 
-		if (rowsCopy == null)
+		if (rowsCopy == null) {
 			resetRows();
+		}
 
 		return rowsCopy;
 	}
@@ -60,10 +63,11 @@ public class DefaultTableProvider implements TableProvider {
 	// should set back the copy of the data to the original values
 	protected void resetRows() {
 		Logging.info(this, " -- resetRows()");
-		if (rowsCopy != null)
+		if (rowsCopy != null) {
 			rowsCopy.clear();
-		else
+		} else {
 			rowsCopy = new ArrayList<>();
+		}
 
 		if (rows == null) {
 			rows = source.retrieveRows();
@@ -86,13 +90,10 @@ public class DefaultTableProvider implements TableProvider {
 	// should set the working copy as new original values
 	@Override
 	public void setWorkingCopyAsNewOriginalRows() {
-
 		if (rows == null) {
-
+			// TODO: request reload?
 			// in the following reset, we request a reload
-		}
-
-		else {
+		} else {
 			if (rowsCopy != null) {
 				rows.clear();
 
@@ -100,7 +101,6 @@ public class DefaultTableProvider implements TableProvider {
 					rows.add(rowsCopy.get(i));
 				}
 			}
-
 		}
 
 		resetRows();
@@ -130,7 +130,6 @@ public class DefaultTableProvider implements TableProvider {
 	// yields a column as ordered List
 	@Override
 	public List<String> getOrderedColumn(int col, boolean emptyAllowed) {
-
 		TreeSet<String> set = new TreeSet<>();
 		for (int row = 0; row < rowsCopy.size(); row++) {
 			String val = (String) rowsCopy.get(row).get(col);

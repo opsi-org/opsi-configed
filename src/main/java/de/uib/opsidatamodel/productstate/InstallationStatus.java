@@ -41,8 +41,9 @@ public class InstallationStatus {
 	private int state = INVALID;
 
 	private static void checkCollections() {
-		if (states != null)
+		if (states != null) {
 			return;
+		}
 
 		states = new ArrayList<>();
 		states.add(CONFLICT);
@@ -137,8 +138,9 @@ public class InstallationStatus {
 	public static String getLabel(int state) {
 		checkCollections();
 
-		if (!existsState(state))
+		if (!existsState(state)) {
 			return null;
+		}
 
 		return state2label.get(state);
 	}
@@ -152,13 +154,14 @@ public class InstallationStatus {
 	public static Integer getVal(String label) {
 		checkCollections();
 
-		if (label == null || label.equals(""))
-
+		if (label == null || label.equals("")) {
 			// action requests
 			return UNKNOWN;
+		}
 
-		if (!existsLabel(label))
+		if (!existsLabel(label)) {
 			return null;
+		}
 
 		return label2state.get(label);
 	}
@@ -198,11 +201,13 @@ public class InstallationStatus {
 	public static InstallationStatus produceFromLabel(String label) {
 		checkCollections();
 
-		if (label == null)
+		if (label == null) {
 			return new InstallationStatus(INVALID);
+		}
 
-		if (!labels.contains(label))
+		if (!labels.contains(label)) {
 			return new InstallationStatus(INVALID);
+		}
 
 		return new InstallationStatus(getVal(label));
 	}
@@ -212,9 +217,10 @@ public class InstallationStatus {
 	}
 
 	public InstallationStatus(int t) {
-		if (existsState(t))
+		if (existsState(t)) {
 			state = t;
-		else
+		} else {
 			state = INVALID;
+		}
 	}
 }

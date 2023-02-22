@@ -153,12 +153,13 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 
 	public SSHCommand parseParameter(final SSHCommand command, SSHConnect caller) {
 		Logging.info(this, "parseParameter command " + command.getCommandRaw());
-		if (caller instanceof SSHConnectExec)
+		if (caller instanceof SSHConnectExec) {
 			outputDia = ((SSHConnectExec) caller).getDialog();
-		else if (caller instanceof SSHConnectTerminal)
+		} else if (caller instanceof SSHConnectTerminal) {
 			outputDia = ((SSHConnectTerminal) caller).getDialog();
+		}
 		List<String> params = command.getParameterList();
-		if (!params.isEmpty())
+		if (!params.isEmpty()) {
 			for (String param : params) {
 				if (command.getCommandRaw().contains(param)) {
 					String[] splittedParameter = splitParameter(param);
@@ -175,6 +176,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 				}
 
 			}
+		}
 		Logging.info(this, "parseParameter command " + command.getCommandRaw());
 		return command;
 	}
@@ -384,8 +386,9 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	}
 
 	protected String getUserText(String text, Component dialog) {
-		if (dialog == null)
+		if (dialog == null) {
 			dialog = ConfigedMain.getMainFrame();
+		}
 		Logging.debug(this, "getUserText text " + text);
 		final JTextField field = new JTextField();
 
@@ -548,8 +551,9 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 			final ValueSelectorList valueSelectorList = fillValueSelectorList(values);
 			final JOptionPane opPane = createValueSelectorDialog(valueSelectorList);
 
-			if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION)
+			if (((Integer) opPane.getValue()) == JOptionPane.OK_OPTION) {
 				return valueSelectorList.getSelectedValue();
+			}
 
 			return "";
 		}

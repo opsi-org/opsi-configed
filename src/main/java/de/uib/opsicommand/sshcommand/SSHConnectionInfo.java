@@ -42,8 +42,9 @@ public final class SSHConnectionInfo {
 
 	public String getShortPassw() {
 		String shortened = "x";
-		if (sshConnectionPassword.length() > 2)
+		if (sshConnectionPassword.length() > 2) {
 			shortened = sshConnectionPassword.charAt(0) + "...";
+		}
 		return shortened;
 	}
 

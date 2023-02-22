@@ -40,8 +40,9 @@ public class TargetConfiguration {
 	private int state = INVALID;
 
 	private static void checkCollections() {
-		if (states != null)
+		if (states != null) {
 			return;
+		}
 
 		states = new ArrayList<>();
 		states.add(CONFLICT);
@@ -116,8 +117,9 @@ public class TargetConfiguration {
 	public static String getLabel(int state) {
 		checkCollections();
 
-		if (!existsState(state))
+		if (!existsState(state)) {
 			return null;
+		}
 
 		return state2label.get(state);
 	}
@@ -131,11 +133,13 @@ public class TargetConfiguration {
 	public static Integer getVal(String label) {
 		checkCollections();
 
-		if (label == null || label.equals(""))
+		if (label == null || label.equals("")) {
 			return UNDEFINED;
+		}
 
-		if (!existsLabel(label))
+		if (!existsLabel(label)) {
 			return null;
+		}
 
 		return label2state.get(label);
 	}
@@ -175,11 +179,13 @@ public class TargetConfiguration {
 	public static TargetConfiguration produceFromLabel(String label) {
 		checkCollections();
 
-		if (label == null)
+		if (label == null) {
 			return new TargetConfiguration(INVALID);
+		}
 
-		if (!labels.contains(label))
+		if (!labels.contains(label)) {
 			return new TargetConfiguration(INVALID);
+		}
 
 		return new TargetConfiguration(getVal(label));
 	}
@@ -189,9 +195,10 @@ public class TargetConfiguration {
 	}
 
 	public TargetConfiguration(int t) {
-		if (existsState(t))
+		if (existsState(t)) {
 			state = t;
-		else
+		} else {
 			state = INVALID;
+		}
 	}
 }

@@ -35,16 +35,15 @@ public class LicenceUsableForEntry extends HashMap<String, String> {
 		for (Entry<String, Object> imported : importedEntry.entrySet()) {
 			entry.put(imported.getKey(), (String) imported.getValue());
 		}
-		if (importedEntry.get(LICENCE_ID_KEY) == null || importedEntry.get(LICENSE_POOL_ID_KEY) == null)
+		if (importedEntry.get(LICENCE_ID_KEY) == null || importedEntry.get(LICENSE_POOL_ID_KEY) == null) {
 			Logging.warning("LicenceUsableForEntry,  missing primary key in " + importedEntry);
+		}
 
 		String pseudokey = Globals
 				.pseudokey(new String[] { entry.get(LICENCE_ID_KEY), entry.get(LICENSE_POOL_ID_KEY) });
-
 		entry.put(ID_KEY, pseudokey);
 
 		return entry;
-
 	}
 
 	public String getId() {

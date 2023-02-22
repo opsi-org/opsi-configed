@@ -28,11 +28,13 @@ public class MapDeliveryItem extends MapBasedTableEditItem {
 
 	@Override
 	public boolean keyChanged() {
-		if (keyCol < 0)
+		if (keyCol < 0) {
 			return false;
+		}
 
-		if (oldValues == null)
+		if (oldValues == null) {
 			return true;
+		}
 
 		return oldValues.get(keyCol).toString().equals(rowV.get(keyCol).toString());
 	}

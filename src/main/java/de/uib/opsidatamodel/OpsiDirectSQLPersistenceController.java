@@ -58,23 +58,23 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 	}
 
 	@Override
-	public List<Map<java.lang.String, java.lang.Object>> hostRead() {
+	public List<Map<String, Object>> hostRead() {
 
 		Logging.info(this, "HOST_read ");
 		String query = "select *  from HOST";
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 
 		Logging.notice(this, "HOST_read");
-		List<Map<java.lang.String, java.lang.Object>> opsiHosts = exec
-				.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
+		List<Map<String, Object>> opsiHosts = exec.getListOfMaps(new OpsiMethodCall("getData", new Object[] { query }));
 		timer.stop();
 
 		return opsiHosts;
 	}
 
 	private String giveWhereOR(String colName, String[] values) {
-		if (values == null || values.length == 0)
+		if (values == null || values.length == 0) {
 			return "true";
+		}
 
 		StringBuilder result = new StringBuilder(colName + " = '" + values[0] + "'");
 
@@ -212,7 +212,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			Logging.error("cleanUpAuditSoftware sql Error " + e.toString());
 		}
 
-		java.util.Set<String> swIdentsOnClients = rowsSoftwareOnClients.keySet();
+		Set<String> swIdentsOnClients = rowsSoftwareOnClients.keySet();
 
 		TreeMap<String, Map<String, String>> rowsSOFTWARE = new TreeMap<>();
 
@@ -267,10 +267,11 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		int portionStart = 0;
 		int portionEnd;
-		if (portionStart + portionSize <= sizeOfAllRemoves)
+		if (portionStart + portionSize <= sizeOfAllRemoves) {
 			portionEnd = portionStart + portionSize;
-		else
+		} else {
 			portionEnd = sizeOfAllRemoves;
+		}
 
 		boolean goOn = (sizeOfAllRemoves > 0);
 
@@ -320,10 +321,11 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			goOn = (portionEnd < sizeOfAllRemoves);
 
 			portionStart = portionEnd;
-			if (portionStart + portionSize <= sizeOfAllRemoves)
+			if (portionStart + portionSize <= sizeOfAllRemoves) {
 				portionEnd = portionStart + portionSize;
-			else
+			} else {
 				portionEnd = sizeOfAllRemoves;
+			}
 
 			Logging.info(this, "cleanUpAuditSoftware removed entries up to (not including) " + portionStart);
 

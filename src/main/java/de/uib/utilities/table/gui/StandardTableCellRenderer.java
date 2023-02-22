@@ -38,18 +38,20 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			boolean hasFocus, int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (!(c instanceof JComponent))
+		if (!(c instanceof JComponent)) {
 			return c;
+		}
 
 		JComponent jc = (JComponent) c;
 		CellAlternatingColorizer.colorize(jc, isSelected, (row % 2 == 0), (column % 2 == 0), true);
 
 		if (jc instanceof JLabel) {
 			String tooltipText = null;
-			if (tooltipPrefix != null && !tooltipPrefix.equals(""))
+			if (tooltipPrefix != null && !tooltipPrefix.equals("")) {
 				tooltipText = Globals.fillStringToLength(tooltipPrefix + separator + value + " ", FILL_LENGTH);
-			else
+			} else {
 				tooltipText = Globals.fillStringToLength(value + " ", FILL_LENGTH);
+			}
 
 			((JLabel) jc).setToolTipText(tooltipText);
 		}

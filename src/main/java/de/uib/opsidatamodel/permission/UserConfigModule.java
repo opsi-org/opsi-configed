@@ -63,28 +63,30 @@ public class UserConfigModule {
 	}
 
 	public Boolean getBooleanValue(String key) {
-		if (booleanMap.get(key) != null)
+		if (booleanMap.get(key) != null) {
 			return booleanMap.get(key);
+		}
 
 		return UserConfig.getArcheoConfig().getBooleanValue(key);
 	}
 
 	public List<Object> getValues(String key) {
-		if (valuesMap.get(key) == null)
+		if (valuesMap.get(key) == null) {
 			return new ArrayList<>();
+		}
 
 		return valuesMap.get(key);
 	}
 
 	public List<Object> getPossibleValues(String key) {
-		if (possibleValuesMap.get(key) == null)
+		if (possibleValuesMap.get(key) == null) {
 			return new ArrayList<>();
+		}
 
 		return valuesMap.get(key);
 	}
 
 	public void setBooleanValue(String key, Boolean val) {
-
 		Logging.info(this, "for user " + username + " setBooleanValue " + key + " : " + val);
 		booleanMap.put(key, val);
 	}
@@ -104,8 +106,9 @@ public class UserConfigModule {
 		Logging.info(this, "we have list_keys " + listKeys);
 		Logging.info(this, "we have bool_keys " + boolKeys);
 
-		if (!listKeys.contains(key))
+		if (!listKeys.contains(key)) {
 			Logging.info("UserOpsiPermisson : still missing key " + key);
+		}
 
 		valuesMap.put(key, values);
 	}
@@ -119,8 +122,9 @@ public class UserConfigModule {
 		Logging.info(this, "we have list_keys " + listKeys);
 		Logging.info(this, "we have bool_keys " + boolKeys);
 
-		if (!listKeys.contains(key))
+		if (!listKeys.contains(key)) {
 			Logging.info("UserOpsiPermisson : still missing key " + key);
+		}
 
 		possibleValuesMap.put(key, possibleValues);
 	}

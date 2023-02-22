@@ -87,8 +87,9 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 
 			while (enumer.hasMoreElements()) {
 				DefaultMutableTreeNode element = (DefaultMutableTreeNode) enumer.nextElement();
-				if (!element.getAllowsChildren())
+				if (!element.getAllowsChildren()) {
 					clientNodesToRemove.add(element);
+				}
 			}
 
 			if (tree.removeClientNodes(clientNodesToRemove)) {
@@ -98,14 +99,15 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 	}
 
 	protected boolean checkAccepted(MouseEvent e) {
-		if (!tree.isEnabled())
+		if (!tree.isEnabled()) {
 			return false;
+		}
 
 		int mouseRow = tree.getRowForLocation(e.getX(), e.getY());
 		mousePath = tree.getPathForLocation(e.getX(), e.getY());
 
-		if (mouseRow == -1) // no node selection area
-		{
+		// no node selection area
+		if (mouseRow == -1) {
 			mousePath = null;
 			return false;
 		}
@@ -127,9 +129,10 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 
 		if (nodeName.equals(ClientTree.ALL_CLIENTS_NAME)
 				|| (((DefaultMutableTreeNode) clickNode.getParent()).getUserObject().toString()
-						.equals(ClientTree.ALL_CLIENTS_NAME) && !nodeName.equals(ClientTree.ALL_GROUPS_NAME)))
-
-			return false; // dont show here any menu
+						.equals(ClientTree.ALL_CLIENTS_NAME) && !nodeName.equals(ClientTree.ALL_GROUPS_NAME))) {
+			// dont show here any menu
+			return false;
+		}
 
 		menuItemCreateNode.setVisible(false); // creation of subgroup
 		menuItemEditNode.setVisible(false); // edit
@@ -166,7 +169,6 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 															// elements
 				numberVisibleItems++;
 			}
-
 		} else if (!(((GroupNode) parentNode).isFixed())) {
 			menuItemDeleteNode.setVisible(true);
 			numberVisibleItems++;
@@ -177,8 +179,8 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 
 	@Override
 	protected void maybeShowPopup(MouseEvent e) {
-		if (checkAccepted(e))
+		if (checkAccepted(e)) {
 			super.maybeShowPopup(e);
+		}
 	}
-
 }

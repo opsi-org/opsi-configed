@@ -15,6 +15,8 @@ import java.util.TreeSet;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.AbstractTableModel;
 
 /*
  * configed - configuration editor for client work stations in opsi
@@ -63,6 +65,7 @@ setting setup with dependencies, also for uninstall
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.FShowList;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
@@ -79,8 +82,7 @@ import de.uib.utilities.logging.Logging;
  * here have the required data the class implements the ComboBoxModeler for
  * getting cell editors.
  */
-public class InstallationStateTableModel extends javax.swing.table.AbstractTableModel
-		implements IFInstallationStateTableModel {
+public class InstallationStateTableModel extends AbstractTableModel implements IFInstallationStateTableModel {
 
 	public static final String EMPTYFIELD = "_";
 
@@ -140,7 +142,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 	protected ActionRequest actionInTreatment;
 
-	protected java.util.Set<String> missingProducts = new HashSet<>();
+	protected Set<String> missingProducts = new HashSet<>();
 
 	protected List<String> displayColumns;
 	protected int numberOfColumns;
@@ -610,10 +612,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					new Thread() {
 						@Override
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), infoOfChange,
+							JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), infoOfChange,
 									Configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
-									javax.swing.JOptionPane.WARNING_MESSAGE);
+									JOptionPane.WARNING_MESSAGE);
 						}
 					}.start();
 
@@ -640,10 +642,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 					new Thread() {
 						@Override
 						public void run() {
-							javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo,
+							JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo,
 									Configed.getResourceValue(
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
-									javax.swing.JOptionPane.WARNING_MESSAGE);
+									JOptionPane.WARNING_MESSAGE);
 						}
 					}.start();
 				}
@@ -689,10 +691,10 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	public boolean infoIfNoClientsSelected() {
 
 		if (selectedClients.length == 0) {
-			javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected"),
 					Configed.getResourceValue("InstallationStateTableModel.noClientsSelected.title"),
-					javax.swing.JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.INFORMATION_MESSAGE);
 			return true;
 		}
 
@@ -731,8 +733,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				lines.append(p);
 			}
 
-			final de.uib.configed.gui.FShowList fMissingProducts = new de.uib.configed.gui.FShowList(
-					ConfigedMain.getMainFrame(),
+			final FShowList fMissingProducts = new FShowList(ConfigedMain.getMainFrame(),
 					Globals.APPNAME + ": "
 							+ Configed.getResourceValue("InstallationStateTableModel.missingProducts.title"),
 					true, new String[] { "ok" }, 400, 300);
@@ -758,12 +759,12 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 				products.append("\n");
 			}
 
-			javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("InstallationStateTableModel.missingImplementationForActionRequest")
 							+ products,
 					Configed.getResourceValue(
 							"InstallationStateTableModel.missingImplementationForActionRequest.title"),
-					javax.swing.JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.INFORMATION_MESSAGE);
 		}
 
 	}
@@ -1088,58 +1089,52 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			}
 
 			return new DefaultComboBoxModel<>(actionsForProduct);
-		}
+		} else if (column == displayColumns.indexOf(InstallationStatus.KEY)) {
+			// selection of status
 
-		// selection of status
-		else if (column == displayColumns.indexOf(InstallationStatus.KEY)) {
-
-			if (possibleActions.get(actualProduct) == null)
 			// we dont have the product in our depot selection
-			{
+			if (possibleActions.get(actualProduct) == null) {
 				String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct);
-				if (state == null)
+				if (state == null) {
 					return new DefaultComboBoxModel<>(new String[] { "null" });
+				}
 
 				return new DefaultComboBoxModel<>(new String[] {});
 			}
 
 			return new DefaultComboBoxModel<>(InstallationStatus.getDisplayLabelsForChoice());
-		}
+		} else if (column == displayColumns.indexOf(TargetConfiguration.KEY)) {
+			// selection of status
 
-		else if (column == displayColumns.indexOf(TargetConfiguration.KEY)) // selection of status
-		{
-
-			if (possibleActions.get(actualProduct) == null)
 			// we dont have the product in our depot selection
-			{
+			if (possibleActions.get(actualProduct) == null) {
 				String state = combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).get(actualProduct);
-				if (state == null)
+				if (state == null) {
 					return new DefaultComboBoxModel<>(new String[] { "null" });
+				}
 
 				return new DefaultComboBoxModel<>(new String[] {});
 			}
 
 			return new DefaultComboBoxModel<>(TargetConfiguration.getDisplayLabelsForChoice());
-		}
-
-		else if (column == displayColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
+		} else if (column == displayColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
 			String delivered = (String) getValueAt(row, column);
-			if (delivered == null)
+			if (delivered == null) {
 				delivered = "";
+			}
 
 			LinkedHashSet<String> values = new LinkedHashSet<>();
 
-			if (!InstallationInfo.defaultDisplayValues.contains(delivered))
+			if (!InstallationInfo.defaultDisplayValues.contains(delivered)) {
 				values.add(delivered);
+			}
 
 			values.addAll(InstallationInfo.defaultDisplayValues);
 
 			return new DefaultComboBoxModel<>(values.toArray(new String[0]));
-
 		}
 
 		return null;
-
 	}
 
 	// table model
@@ -1179,11 +1174,11 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	}
 
 	private Object retrieveValueAt(int row, int displayCol) {
-
 		actualProduct = productsV.get(row);
 
-		if (displayCol >= indexPreparedColumns.length)
+		if (displayCol >= indexPreparedColumns.length) {
 			return "";
+		}
 
 		int col = indexPreparedColumns[displayCol];
 
@@ -1231,7 +1226,7 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 
 		case 12:
 			String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
-					.get(de.uib.opsidatamodel.productstate.ProductState.KEY_VERSION_INFO);
+					.get(ProductState.KEY_VERSION_INFO);
 			String result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
 			if (result != null && !(result.equals("")) && serverProductVersion != null
 					&& !(serverProductVersion.equals(result))) {
@@ -1285,7 +1280,6 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 		Logging.debug(this, " actualProduct " + actualProduct + ", set value at " + row + ", " + col);
 		changeValueAt(value, row, col);
 		fireTableCellUpdated(row, col);
-
 	}
 
 	protected void changeValueAt(Object value, int row, int col) {
@@ -1318,25 +1312,20 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 			if (indexPreparedColumns[col] == preparedColumns.indexOf(InstallationStatus.KEY)) {
 				combinedVisualValues.get(ProductState.KEY_INSTALLATION_STATUS).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, InstallationStatus.KEY, (String) value);
-			}
-
-			else if (indexPreparedColumns[col] == preparedColumns.indexOf(TargetConfiguration.KEY)) {
+			} else if (indexPreparedColumns[col] == preparedColumns.indexOf(TargetConfiguration.KEY)) {
 				combinedVisualValues.get(ProductState.KEY_TARGET_CONFIGURATION).put(actualProduct, (String) value);
 				registerStateChange(actualProduct, TargetConfiguration.KEY, (String) value);
-			}
-
-			else if (indexPreparedColumns[col] == preparedColumns.indexOf(ActionRequest.KEY)) {
+			} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ActionRequest.KEY)) {
 				// an action has changed
 				// change recursively visible action changes and collect the changes for saving
 
 				initCollectiveChange();
 				collectiveChangeActionRequest(actualProduct, ActionRequest.produceFromLabel((String) value));
 				finishCollectiveChange();
-			}
-
-			else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
-				if (value.equals(InstallationInfo.NONE_DISPLAY_STRING))
+			} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
+				if (value.equals(InstallationInfo.NONE_DISPLAY_STRING)) {
 					value = InstallationInfo.NONE_STRING;
+				}
 
 				setInstallationInfo(actualProduct, (String) value);
 			}
@@ -1349,5 +1338,4 @@ public class InstallationStateTableModel extends javax.swing.table.AbstractTable
 	protected void clearUpdates() {
 		main.getGeneralDataChangedKeeper().cancel();
 	}
-
 }

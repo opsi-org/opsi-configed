@@ -80,10 +80,11 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	public void doCall() {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion, element count: " + size());
-		if (masterConfig)
+		if (masterConfig) {
 			persis.setConfig();
-		else
+		} else {
 			persis.setAdditionalConfiguration(determineConfigOptions);
+		}
 		clear();
 	}
 

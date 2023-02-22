@@ -14,13 +14,14 @@ public class DateExtendedByVars extends java.sql.Date {
 	public static final char CHAR_DELIMITER = '%';
 
 	private static String stripTimeFromDay(String datetime) {
-
-		if (datetime == null)
+		if (datetime == null) {
 			return null;
+		}
 
 		int idx = datetime.indexOf(" ");
-		if (idx < 0)
+		if (idx < 0) {
 			return datetime;
+		}
 
 		return datetime.substring(0, idx);
 	}
@@ -30,8 +31,9 @@ public class DateExtendedByVars extends java.sql.Date {
 
 		int i = s.indexOf(CHAR_DELIMITER);
 
-		if (i == -1)
+		if (i == -1) {
 			return s;
+		}
 
 		i++;
 

@@ -13,8 +13,9 @@ public class TimeCheck {
 			if (s.length() >= MAX_SHOWN && loglevel < Logging.LEVEL_DEBUG) {
 				result = s.substring(0, MAX_SHOWN);
 				result = result + " ... ";
-			} else
+			} else {
 				result = s;
+			}
 		}
 
 		return result;
@@ -42,8 +43,9 @@ public class TimeCheck {
 
 	public void stop(String stopMessage) {
 		String info = stopMessage;
-		if (stopMessage == null)
+		if (stopMessage == null) {
 			info = mesg;
+		}
 		long endmillis = System.currentTimeMillis();
 		Logging.log(caller, loglevel, " ------  stopped: " + info + " ");
 		Logging.log(caller, loglevel, " ======  diff " + (endmillis - startmillis) + " ms  (" + info + ")");

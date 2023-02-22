@@ -3,6 +3,7 @@ package de.uib.opsicommand.sshcommand;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -57,10 +58,11 @@ public class SSHConnectSCP extends SSHConnectExec {
 		}
 
 		if (command.getShowOutputDialog()) {
-			if (outDia != null)
+			if (outDia != null) {
 				setDialog(outDia);
-			else
+			} else {
 				setDialog(SSHConnectionExecDialog.getInstance());
+			}
 			outputDialog = getDialog();
 
 			if (SSHCommandFactory.sshAlwaysExecInBackground) {
@@ -74,8 +76,9 @@ public class SSHConnectSCP extends SSHConnectExec {
 			task.execute();
 			Logging.info(this, "execute was called");
 
-			if (SSHCommandFactory.sshAlwaysExecInBackground)
+			if (SSHCommandFactory.sshAlwaysExecInBackground) {
 				outputDialog.setVisible(command.getShowOutputDialog());
+			}
 
 			return task.get();
 		} catch (ExecutionException e) {
@@ -109,11 +112,13 @@ public class SSHConnectSCP extends SSHConnectExec {
 			task.execute();
 			Logging.info(this, "execute was called");
 
-			if (sequential)
+			if (sequential) {
 				return task.get();
+			}
 
-			if (SSHCommandFactory.sshAlwaysExecInBackground)
+			if (SSHCommandFactory.sshAlwaysExecInBackground) {
 				dialog.setVisible(withGui);
+			}
 
 			return task.get();
 		} catch (ExecutionException e) {
@@ -165,10 +170,11 @@ public class SSHConnectSCP extends SSHConnectExec {
 			Logging.debug(this, "publish " + s);
 			publishInfo(
 					"---------------------------------------------------------------------------------------------------------------------------------------------------");
-			if (this.commandNumber != -1 && this.maxCommandNumber != -1)
+			if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
 				publishInfo(Configed.getResourceValue("SSHConnection.Exec.commandcountertext")
 						.replace("xX0Xx", Integer.toString(this.commandNumber))
 						.replace("xX1Xx", Integer.toString(this.maxCommandNumber)));
+			}
 			publishInfo(s.replace("-1", "0"));
 			if (exitCode == 127) {
 				Logging.info(this, "exec exit code 127 (command does not exists).");
@@ -214,14 +220,15 @@ public class SSHConnectSCP extends SSHConnectExec {
 		}
 
 		@Override
-		public String doInBackground() throws java.net.SocketException {
+		public String doInBackground() throws SocketException {
 			StringBuilder buf = new StringBuilder();
 			File sourcefile = new File(command.getFullSourcePath());
 			try (FileInputStream fis = new FileInputStream(sourcefile)) {
 				Logging.info(this, "doInBackground getSession " + getSession());
 
-				if (!(isConnected()))
+				if (!(isConnected())) {
 					connect();
+				}
 
 				final Channel channel = getSession().openChannel("sftp");
 				Logging.info(this, "doInBackground channel openchannel " + channel);
@@ -233,10 +240,11 @@ public class SSHConnectSCP extends SSHConnectExec {
 				channelsftp.cd(command.getTargetPath());
 				publish("Set target directory … " + command.getTargetPath());
 
-				if (command.getOverwriteMode())
+				if (command.getOverwriteMode()) {
 					channelsftp.put(fis, command.getTargetFilename(), ChannelSftp.OVERWRITE);
-				else
+				} else {
 					channelsftp.put(fis, command.getTargetFilename());
+				}
 				publish("Set target filename … " + command.getTargetFilename());
 				publish("Set overwrite mode … " + command.getOverwriteMode());
 				publish(" ");
@@ -250,8 +258,9 @@ public class SSHConnectSCP extends SSHConnectExec {
 				if ((channel.getExitStatus() != 0) && (channel.getExitStatus() != -1)) {
 					Logging.info(this, "exec ready (2)");
 					foundError = true;
-					if (outputDialog != null)
+					if (outputDialog != null) {
 						outputDialog.setStatusFinish();
+					}
 					return null;
 				}
 
@@ -303,13 +312,15 @@ public class SSHConnectSCP extends SSHConnectExec {
 		}
 
 		protected void publishInfo(String s) {
-			if (outputDialog != null)
+			if (outputDialog != null) {
 				publish(setAsInfoString(s));
+			}
 		}
 
 		protected void publishError(String s) {
-			if (outputDialog != null && s.length() > 0 && !s.equals("\n"))
+			if (outputDialog != null && s.length() > 0 && !s.equals("\n")) {
 				s = SSHConnectionOutputDialog.ANSI_CODE_ERROR + s;
+			}
 			publish(s);
 		}
 
@@ -321,13 +332,15 @@ public class SSHConnectSCP extends SSHConnectExec {
 		private String getCommandName() {
 
 			String counterInfo = "";
-			if (this.commandNumber != -1 && this.maxCommandNumber != -1)
+			if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
 				counterInfo = "(" + Integer.toString(this.commandNumber) + "/" + Integer.toString(this.maxCommandNumber)
 						+ ")";
+			}
 
 			String commandinfo = "[" + this.command.getId() + counterInfo + "]";
-			if ((commandInfoName != null) && (!commandInfoName.equals("")))
+			if ((commandInfoName != null) && (!commandInfoName.equals(""))) {
 				commandinfo = "[" + commandInfoName + counterInfo + "]";
+			}
 
 			return commandinfo;
 		}

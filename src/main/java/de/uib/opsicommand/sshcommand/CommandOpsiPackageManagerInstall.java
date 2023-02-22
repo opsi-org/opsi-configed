@@ -61,8 +61,9 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 		command = "opsi-package-manager  --force -q " + verbosity + updateInstalled + setupInstalled + property + depot
 				+ freeInput + opsiproduct;
 		Logging.info(this, "got command " + command);
-		if (needSudo())
+		if (needSudo()) {
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
+		}
 		return command + " 2>&1";
 	}
 
@@ -99,23 +100,26 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public void setOpsiproduct(String prod) {
-		if (prod != null && !prod.equals(""))
+		if (prod != null && !prod.equals("")) {
 			opsiproduct = " -i " + prod;
-		else
+		} else {
 			opsiproduct = "";
+		}
 	}
 
 	public void setDepotForPInstall(String dep) {
-		if (!dep.equals(""))
+		if (!dep.equals("")) {
 			depot = " -d " + dep;
-		else
+		} else {
 			depot = "";
+		}
 	}
 
 	public void setVerbosity(int vSum) {
 		StringBuilder v = new StringBuilder("v");
-		for (int i = 0; i < vSum; i++)
+		for (int i = 0; i < vSum; i++) {
 			v.append("v");
+		}
 		verbosity = " -" + v + " ";
 	}
 
@@ -128,10 +132,11 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public void setProperty(boolean keepDepotDefaults) {
-		if (keepDepotDefaults)
+		if (keepDepotDefaults) {
 			property = " -p keep ";
-		else
+		} else {
 			property = " -p package ";
+		}
 	}
 
 	public String getProperty() {
@@ -139,16 +144,18 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public void setUpdateInstalled(boolean u) {
-		if (u)
+		if (u) {
 			updateInstalled = " --update ";
-		else
+		} else {
 			updateInstalled = "";
+		}
 	}
 
 	public void setSetupInstalled(boolean s) {
-		if (s)
+		if (s) {
 			setupInstalled = " --setup ";
-		else
+		} else {
 			setupInstalled = "";
+		}
 	}
 }

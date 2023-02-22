@@ -61,8 +61,9 @@ public class SSHConnectTerminal extends SSHConnect {
 	}
 
 	public SSHConnectionOutputDialog getDialog() {
-		if (dialog != null)
+		if (dialog != null) {
 			return dialog;
+		}
 		return null;
 	}
 
@@ -85,7 +86,6 @@ public class SSHConnectTerminal extends SSHConnect {
 	public void connect() {
 		if (!isConnectionAllowed()) {
 			Logging.error(this, "connection forbidden.");
-
 		} else {
 
 			Logging.info(this, "connect ...");
@@ -98,9 +98,10 @@ public class SSHConnectTerminal extends SSHConnect {
 				Logging.info(this, "connect user@host " + SSHConnectionInfo.getInstance().getUser() + "@"
 						+ SSHConnectionInfo.getInstance().getHost());
 				if (SSHConnectionInfo.getInstance().usesKeyfile()) {
-					if (!SSHConnectionInfo.getInstance().getKeyfilePassphrase().equals(""))
+					if (!SSHConnectionInfo.getInstance().getKeyfilePassphrase().equals("")) {
 						jsch.addIdentity(SSHConnectionInfo.getInstance().getKeyfilePath(),
 								SSHConnectionInfo.getInstance().getKeyfilePassphrase());
+					}
 					jsch.addIdentity(SSHConnectionInfo.getInstance().getKeyfilePath());
 					Logging.info(this, "connect this.keyfilepath " + SSHConnectionInfo.getInstance().getKeyfilePath());
 					Logging.info(this, "connect useKeyfile " + SSHConnectionInfo.getInstance().usesKeyfile()
@@ -229,10 +230,11 @@ public class SSHConnectTerminal extends SSHConnect {
 		dialog.getOutputField().setText("");
 		dialog.getInputField().setText("");
 		try {
-			if (out != null)
+			if (out != null) {
 				out.write("\n".getBytes());
-			else
+			} else {
 				Logging.warning(this, "Pipe closed");
+			}
 		} catch (Exception e2) {
 			Logging.error("Error", e2);
 		}
@@ -271,18 +273,14 @@ public class SSHConnectTerminal extends SSHConnect {
 					if (textField.getText().trim().equalsIgnoreCase("clear")) {
 						clear();
 						((Component) textField).requestFocusInWindow();
-					}
-
-					else {
+					} else {
 
 						exec(textField.getText() + "\n");
 
 						((Component) textField).requestFocusInWindow();
 						dialog.getInputField().setText("");
 					}
-				}
-
-				else if ((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_KP_UP)) {
+				} else if ((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_KP_UP)) {
 					dialog.getInputField().setText(dialog.getPrevCommandUp());
 					((Component) textField).requestFocusInWindow();
 				} else if ((key == KeyEvent.VK_DOWN) || (key == KeyEvent.VK_KP_DOWN)) {
@@ -303,9 +301,9 @@ public class SSHConnectTerminal extends SSHConnect {
 			result = ssh.exec(new EmptyCommand(
 					// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
 					SSHCommandFactory.STRING_COMMAND_GET_LINUX_COMMANDS), false, null);
-			if (result == null)
+			if (result == null) {
 				Logging.warning(this, "no commands could be found for autocompletion");
-			else {
+			} else {
 				commandsCompgen = getList(result);
 				Logging.debug(this, "getCompletionList commands compgen -c " + result);
 			}
@@ -315,8 +313,9 @@ public class SSHConnectTerminal extends SSHConnect {
 	}
 
 	private List<String> getList(String str) {
-		if (str.equals(""))
+		if (str.equals("")) {
 			return new ArrayList<>();
+		}
 
 		String[] arr = str.split("\n");
 

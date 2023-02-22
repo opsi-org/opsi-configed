@@ -39,14 +39,17 @@ public class DynamicCellEditor extends DefaultCellEditor {
 			cc.setModel(nullModel);
 
 			if (cbm != null && cbm.getComboBoxModel(modelRow, modelColumn) != null
-					&& cbm.getComboBoxModel(modelRow, modelColumn).getSize() == 1)
+					&& cbm.getComboBoxModel(modelRow, modelColumn).getSize() == 1) {
 				cc.setToolTipText((String) cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
-		} else
+			}
+		} else {
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));
+		}
 
 		Component c = super.getTableCellEditorComponent(table, value, isSelected, row, column);
-		if (c instanceof JComponent)
+		if (c instanceof JComponent) {
 			((JComponent) c).setToolTipText("" + value);
+		}
 
 		return c;
 	}

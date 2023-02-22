@@ -52,8 +52,9 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 
 				}
 
-				if (image != null)
+				if (image != null) {
 					mapOfImages.put(key, image);
+				}
 
 			}
 		}
@@ -70,11 +71,13 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 
 		if (value != null) {
 
-			if (mapOfStrings != null)
+			if (mapOfStrings != null) {
 				selectedString = mapOfStrings.get("" + value);
+			}
 
-			if (mapOfImages != null)
+			if (mapOfImages != null) {
 				selectedIcon = mapOfImages.get("" + value);
+			}
 
 		}
 
@@ -83,8 +86,9 @@ public class TableCellRendererByIndex extends StandardTableCellRenderer {
 			if (showOnlyIcon) {
 				((JLabel) result).setText(null);
 				((JLabel) result).setHorizontalAlignment(SwingConstants.CENTER);
-			} else
+			} else {
 				((JLabel) result).setText(selectedString);
+			}
 
 			((JLabel) result).setIcon(selectedIcon);
 			((JLabel) result).setToolTipText(

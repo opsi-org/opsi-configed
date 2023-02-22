@@ -23,14 +23,16 @@ public final class CellAlternatingColorizer {
 	public static void colorize(Component cell, boolean isSelected, boolean isEven, boolean textColoring,
 			Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,
 			Color unselectedUnevenColor) {
-		if (textColoring)
+		if (textColoring) {
 			cell.setForeground(Globals.lightBlack);
+		}
 
 		if (isSelected) {
-			if (isEven)
+			if (isEven) {
 				cell.setBackground(selectedEvenColor);
-			else
+			} else {
 				cell.setBackground(selectedUnevenColor);
+			}
 		}
 
 		else {
@@ -43,36 +45,32 @@ public final class CellAlternatingColorizer {
 
 	}
 
-	public static void colorizeSecret(java.awt.Component cell) {
+	public static void colorizeSecret(Component cell) {
 		cell.setBackground(Globals.defaultTableSelectedRowBright);
 		cell.setForeground(Globals.defaultTableSelectedRowBright);
 	}
 
-	public static void colorize(java.awt.Component cell, boolean isSelected, boolean rowEven, boolean colEven,
+	public static void colorize(Component cell, boolean isSelected, boolean rowEven, boolean colEven,
 			boolean textColoring) {
 
-		if (textColoring)
+		if (textColoring) {
 			cell.setForeground(Globals.lightBlack);
-
-		if (isSelected) {
-			if (rowEven)
-				cell.setBackground(Globals.defaultTableSelectedRowDark);
-			else
-				cell.setBackground(Globals.defaultTableSelectedRowBright);
-
 		}
 
-		else {
-			if (rowEven && colEven) // 0,0
-			{
+		if (isSelected) {
+			if (rowEven) {
+				cell.setBackground(Globals.defaultTableSelectedRowDark);
+			} else {
+				cell.setBackground(Globals.defaultTableSelectedRowBright);
+			}
+		} else {
+			if (rowEven && colEven) {
 				cell.setBackground(Globals.defaultTableCellBgColor00);
-			} else if (rowEven) // 0,1
-			{
+			} else if (rowEven) {
 				cell.setBackground(Globals.defaultTableCellBgColor01);
-			} else if (colEven) // 1,0
-			{
+			} else if (colEven) {
 				cell.setBackground(Globals.defaultTableCellBgColor10);
-			} else { // 1,1
+			} else {
 				cell.setBackground(Globals.defaultTableCellBgColor11);
 			}
 		}

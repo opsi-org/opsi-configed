@@ -34,8 +34,9 @@ public class Relation extends ArrayList<StringValuedRelationElement> {
 	public Map<String, Relation> getFunctionBy(String attribute) {
 		Map<String, Relation> function = functionByAttribute.get(attribute);
 
-		if (function != null)
+		if (function != null) {
 			return function;
+		}
 
 		function = new HashMap<>();
 		functionByAttribute.put(attribute, function);

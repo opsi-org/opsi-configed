@@ -33,10 +33,11 @@ public class CommandOpsiPackageManager implements SSHCommand {
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
-		else
+		} else {
 			return getCommand();
+		}
 	}
 
 	@Override

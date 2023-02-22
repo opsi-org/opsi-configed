@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.json.JSONArray;
 
@@ -66,7 +67,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		String query = sb.toString();
 
-		List<List<java.lang.String>> rows = persist.exec
+		List<List<String>> rows = persist.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 		for (List<String> row : rows) {
 			Logging.info(this, "sql produced row " + row);
@@ -93,8 +94,9 @@ public class DataStubRawData extends DataStubNOM {
 	}
 
 	protected String giveWhereOR(String colName, List<String> values) {
-		if (values == null || values.isEmpty())
+		if (values == null || values.isEmpty()) {
 			return "true";
+		}
 
 		StringBuilder result = new StringBuilder(colName + " = '" + values.get(0) + "'");
 
@@ -133,16 +135,17 @@ public class DataStubRawData extends DataStubNOM {
 
 	@Override
 	protected List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
-			java.util.Set<String> hosts) {
+			Set<String> hosts) {
 		Logging.debug(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
 
 		List<Map<String, Object>> result = new ArrayList<>();
 
 		List<String> newClients = null;
-		if (clients == null)
+		if (clients == null) {
 			newClients = new ArrayList<>();
-		else
+		} else {
 			newClients = new ArrayList<>(clients);
+		}
 
 		if (hosts == null) {
 			hosts = new HashSet<>();
@@ -172,7 +175,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			Logging.info(this, "produceProductPropertyStates query " + query);
 
-			List<List<java.lang.String>> rows = persist.exec
+			List<List<String>> rows = persist.exec
 					.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 
 			Logging.info(this, "produceProductPropertyStates got rows " + rows.size());
@@ -187,9 +190,9 @@ public class DataStubRawData extends DataStubNOM {
 
 				// parse String and produce json list
 
-				org.json.JSONArray values = null;
+				JSONArray values = null;
 				try {
-					values = new org.json.JSONArray(row.get(3));
+					values = new JSONArray(row.get(3));
 				} catch (Exception ex) {
 					Logging.warning(this, "produceProductPropertyStates, error when json parsing database string \n"
 							+ row.get(3) + " for propertyId " + row.get(1));
@@ -242,11 +245,13 @@ public class DataStubRawData extends DataStubNOM {
 
 			}
 
-			if (client2software == null)
+			if (client2software == null) {
 				client2software = new HashMap<>();
+			}
 
-			if (softwareIdent2clients == null)
+			if (softwareIdent2clients == null) {
 				softwareIdent2clients = new HashMap<>();
+			}
 
 			persist.notifyDataLoadingObservers(
 					Configed.getResourceValue("LoadingObserver.loadtable") + " softwareConfig ");
@@ -262,7 +267,7 @@ public class DataStubRawData extends DataStubNOM {
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients, query " + query);
 
-			List<List<java.lang.String>> rows = persist.exec
+			List<List<String>> rows = persist.exec
 					.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients, finished a request");
@@ -273,8 +278,9 @@ public class DataStubRawData extends DataStubNOM {
 
 				Logging.info(this, "retrieveSoftwareAuditOnClients rows size " + rows.size());
 
-				if (fetchAll)
+				if (fetchAll) {
 					client2software.clear();
+				}
 
 				SWAuditClientEntry.summillis1stPartOfConstructor = 0;
 				SWAuditClientEntry.summillis2ndPartOfConstructor = 0;
@@ -295,7 +301,7 @@ public class DataStubRawData extends DataStubNOM {
 
 					swIdent = clientEntry.getSWident();
 
-					java.util.Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
+					Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
 					if (clientsWithThisSW == null) {
 						clientsWithThisSW = new HashSet<>();
 
@@ -343,8 +349,9 @@ public class DataStubRawData extends DataStubNOM {
 	@Override
 	protected void retrieveHostConfigs() {
 
-		if (hostConfigs != null)
+		if (hostConfigs != null) {
 			return;
+		}
 
 		Logging.info(this, "retrieveHostConfigs classCounter:" + classCounter);
 
@@ -364,7 +371,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		Logging.info(this, "retrieveHostConfigs, query " + query);
 
-		List<List<java.lang.String>> rows = persist.exec
+		List<List<String>> rows = persist.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query })
 
 				);
@@ -397,7 +404,6 @@ public class DataStubRawData extends DataStubNOM {
 				List values = new ArrayList<>();
 				try {
 					values = (new JSONArray(valueString)).toList();
-
 				} catch (Exception ex) {
 					Logging.warning(this, "retrieveHostConfigs, error when json parsing database string \n"
 							+ valueString + " for configId " + configId);
@@ -418,17 +424,21 @@ public class DataStubRawData extends DataStubNOM {
 	}
 
 	private String maxTime(String time0, String time1) {
-		if (time0 == null && time1 == null)
+		if (time0 == null && time1 == null) {
 			return null;
+		}
 
-		if (time0 == null || time0.equals(""))
+		if (time0 == null || time0.equals("")) {
 			return time1;
+		}
 
-		if (time1 == null || time1.equals(""))
+		if (time1 == null || time1.equals("")) {
 			return time0;
+		}
 
-		if (time0.compareTo(time1) < 0)
+		if (time0.compareTo(time1) < 0) {
 			return time1;
+		}
 
 		return time0;
 	}
@@ -436,8 +446,9 @@ public class DataStubRawData extends DataStubNOM {
 	private Map<String, Map<String, Object>> client2HwRowsForHwClass(String hwClass) {
 		Logging.info(this, "client2HwRowsForHwClass " + hwClass);
 
-		if (client2HwRows == null)
+		if (client2HwRows == null) {
 			return new HashMap<>();
+		}
 
 		// z.B. hwClass is DISK_PARTITION
 
@@ -460,8 +471,9 @@ public class DataStubRawData extends DataStubNOM {
 		// build and collect database columnnames
 		for (String hwInfoCol : persist.getClient2HwRowsColumnNames()) {
 			if (hwInfoCol.startsWith("HOST.")
-					|| hwInfoCol.equals(AbstractPersistenceController.LAST_SEEN_VISIBLE_COL_NAME))
+					|| hwInfoCol.equals(AbstractPersistenceController.LAST_SEEN_VISIBLE_COL_NAME)) {
 				continue; // these already are in the collection
+			}
 
 			Logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + AbstractPersistenceController.HW_INFO_DEVICE
 					+ " as well as " + AbstractPersistenceController.HW_INFO_CONFIG);
@@ -528,7 +540,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		Logging.info(this, "retrieveClient2HwRows, query " + query);
 
-		List<List<java.lang.String>> rows = persist.exec
+		List<List<String>> rows = persist.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query })
 
 				);
@@ -550,8 +562,9 @@ public class DataStubRawData extends DataStubNOM {
 			for (int i = 1; i < specificColumns.size(); i++) {
 				Object value = rowMap.get(specificColumns.get(i));
 				String valInRow = row.get(i);
-				if (valInRow == null || valInRow.equals("null"))
+				if (valInRow == null || valInRow.equals("null")) {
 					valInRow = "";
+				}
 
 				if (value == null) {
 					value = valInRow;
@@ -562,8 +575,9 @@ public class DataStubRawData extends DataStubNOM {
 				if (specificColumns.get(i).equals(lastseenCol)) {
 					String timeS = maxTime((String) value, row.get(i));
 					rowMap.put(AbstractPersistenceController.LAST_SEEN_VISIBLE_COL_NAME, timeS);
-				} else
+				} else {
 					rowMap.put(specificColumns.get(i), value);
+				}
 
 			}
 
@@ -639,9 +653,10 @@ public class DataStubRawData extends DataStubNOM {
 							.get(AbstractPersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
 					String lastseen2 = (String) client2ClassInfo.getValue()
 							.get(AbstractPersistenceController.LAST_SEEN_VISIBLE_COL_NAME);
-					if (lastseen1 != null && lastseen2 != null)
+					if (lastseen1 != null && lastseen2 != null) {
 						client2ClassInfo.getValue().put(AbstractPersistenceController.LAST_SEEN_VISIBLE_COL_NAME,
 								maxTime(lastseen1, lastseen2));
+					}
 
 					allInfosForAClient.putAll(client2ClassInfo.getValue());
 				}

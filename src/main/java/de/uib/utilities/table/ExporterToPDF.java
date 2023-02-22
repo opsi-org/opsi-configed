@@ -114,16 +114,15 @@ public class ExporterToPDF extends AbstractExportTable {
 				}
 
 				// FileName is null if nothing chosen, then we do nothing
-				if (fileName == null)
+				if (fileName == null) {
 					return;
-
-				else {
+				} else {
 					try {
 						Logging.info(this, "filename for saving PDF: " + fileName);
 						File file = new File(fileName);
-						if (file.isDirectory())
+						if (file.isDirectory()) {
 							Logging.error("no valid filename " + fileName);
-						else {
+						} else {
 							filePath = file.getAbsolutePath();
 						}
 					} catch (Exception e) {
@@ -135,7 +134,6 @@ public class ExporterToPDF extends AbstractExportTable {
 					Logging.notice(this, "after checkExtension(..), fileName is now: " + fileName);
 					fileName = checkFile(fileName, extensionFilter);
 				}
-
 			} else {
 				try {
 					temp = File.createTempFile(defaultFilename.substring(0, defaultFilename.indexOf(".")), ".pdf");
@@ -197,12 +195,15 @@ public class ExporterToPDF extends AbstractExportTable {
 			document.addSubject("Using iText");
 			document.addKeywords("Java, PDF, iText");
 		} else {
-			if (metaData.containsKey("title"))
+			if (metaData.containsKey("title")) {
 				document.addTitle(metaData.get("title"));
-			if (metaData.containsKey("subject"))
+			}
+			if (metaData.containsKey("subject")) {
 				document.addSubject(metaData.get("subject"));
-			if (metaData.containsKey("keywords"))
+			}
+			if (metaData.containsKey("keywords")) {
 				document.addKeywords(metaData.get("keywords"));
+			}
 		}
 		document.addAuthor(System.getProperty("user.name"));
 		document.addCreator(Globals.APPNAME);
@@ -294,8 +295,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		}
 		table.setHeaderRows(1);
 
-		for (int j = 0; j < theTable.getRowCount(); j++)
-
+		for (int j = 0; j < theTable.getRowCount(); j++) {
 			if (!onlySelectedRows || theTable.isRowSelected(j)) {
 
 				for (int i = 0; i < theTable.getColumnCount(); i++) {
@@ -333,6 +333,7 @@ public class ExporterToPDF extends AbstractExportTable {
 					table.addCell(value);
 				}
 			}
+		}
 
 		return table;
 	}

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class SWAuditClientEntry
@@ -57,7 +58,7 @@ public class SWAuditClientEntry
 	public static long summillis1stPartOfConstructor = 0;
 	public static long summillis2ndPartOfConstructor = 0;
 
-	de.uib.opsidatamodel.AbstractPersistenceController controller; // for retrieving softwarelist
+	AbstractPersistenceController controller; // for retrieving softwarelist
 
 	public static final List<String> KEYS = new LinkedList<>();
 	static {
@@ -106,7 +107,7 @@ public class SWAuditClientEntry
 	}
 
 	public SWAuditClientEntry(final List<String> keys, final List<String> values,
-			de.uib.opsidatamodel.AbstractPersistenceController controller) {
+			AbstractPersistenceController controller) {
 
 		startmillis1stPartOfConstructor = System.currentTimeMillis();
 
@@ -133,8 +134,7 @@ public class SWAuditClientEntry
 
 	}
 
-	public SWAuditClientEntry(final Map<String, Object> m,
-			de.uib.opsidatamodel.AbstractPersistenceController controller) {
+	public SWAuditClientEntry(final Map<String, Object> m, AbstractPersistenceController controller) {
 
 		data = new HashMap<>();
 		data.put(SWAuditEntry.ID, Globals.produceNonNull(m.get(CLIENT_ID)));
@@ -194,25 +194,27 @@ public class SWAuditClientEntry
 			software = controller.getSoftwareList();
 			lastUpdateTime = System.currentTimeMillis();
 			notFoundSoftwareIDs = new ArrayList<>();
-		} else
+		} else {
 			Logging.warning(this, "updateSoftware: doing nothing since we just updated");
+		}
 	}
 
 	private Integer getIndex(List<String> list, String element) {
-
 		int result = -1;
 
-		if (!swIdent.equals(element))
+		if (!swIdent.equals(element)) {
 			Logging.warning(this,
 					"getIndex gobal swIdent was assumed to be equal to element " + swIdent + ". " + element);
+		}
 
 		Integer j = software2Number.get(element);
 
 		if (j == null) {
 			Logging.info(this,
 					"getIndex, probably because of an upper-lower case or a null issue, not found for  " + element);
-		} else
+		} else {
 			result = j;
+		}
 
 		if (result == -1 && list != null) {
 
@@ -247,8 +249,9 @@ public class SWAuditClientEntry
 
 			if (swId == -1) {
 				Logging.warning(this, "swIdent not found in softwarelist: " + swIdent);
-				if (notFoundSoftwareIDs == null)
+				if (notFoundSoftwareIDs == null) {
 					notFoundSoftwareIDs = new ArrayList<>();
+				}
 				notFoundSoftwareIDs.add(swIdent);
 			}
 		}

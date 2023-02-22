@@ -43,8 +43,9 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 		Logging.info(this,
 				" doInBackground finished: ready, stopped, waitSecs " + ready + ", " + stopped + ", " + waitSecs);
 
-		if (timeoutReached)
+		if (timeoutReached) {
 			Logging.warning(this, " doInBackground finished, timeoutReached");
+		}
 
 		return null;
 

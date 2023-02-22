@@ -421,8 +421,9 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 											Iterator<String> iter2 = jsonInner2.keys();
 											while (iter2.hasNext()) {
 												String key2 = iter2.next();
-												if (!jsonInner2.isNull(key2))
+												if (!jsonInner2.isNull(key2)) {
 													inner2.put(key2, jsonInner2.get(key2));
+												}
 											}
 										}
 										al2.add(inner2);

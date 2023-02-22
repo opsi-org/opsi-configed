@@ -478,8 +478,9 @@ public final class LicensingInfoMap {
 			if (reducedView) {
 
 				for (String key : dates) {
-					if ((sdf.parse(key)).compareTo(latest) >= 0)
+					if ((sdf.parse(key)).compareTo(latest) >= 0) {
 						reducedDatesKeys.add(key);
+					}
 				}
 
 				dates = reducedDatesKeys;
@@ -551,8 +552,9 @@ public final class LicensingInfoMap {
 
 					if (moduleToDate.containsKey(currentModule)) {
 						moduleInfo = (JSONObject) moduleToDate.get(currentModule);
-						if (disabledWarningModules != null && disabledWarningModules.contains(currentModule))
+						if (disabledWarningModules != null && disabledWarningModules.contains(currentModule)) {
 							moduleInfo.put(STATE, STATE_IGNORE_WARNING);
+						}
 					} else {
 						moduleInfo = new JSONObject();
 						moduleInfo.put(CLIENT_NUMBER, "0");

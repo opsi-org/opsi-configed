@@ -37,10 +37,11 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals("")))
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
-		else
+		} else {
 			return getCommand();
+		}
 	}
 
 	@Override
@@ -121,8 +122,9 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	public String getCommand() {
 		command = baseName + " " + verbosity + user + passw + finishAction + keepClientOnFailure + getPingOption()
 				+ client;
-		if (needSudo())
+		if (needSudo()) {
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
+		}
 		return command + " 2>&1";
 	}
 
@@ -149,10 +151,11 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	private String getPingOption() {
-		if (pingIsRequired)
+		if (pingIsRequired) {
 			return " ";
-		else
+		} else {
 			return " --ignore-failed-ping ";
+		}
 	}
 
 	@Override
@@ -188,9 +191,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
 		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(command
-
-		);
+		SSHConnectExec exec = new SSHConnectExec(command);
 
 		return exec.getDialog();
 	}
@@ -201,41 +202,47 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public void setClient(String c) {
-		if (!c.equals(""))
+		if (!c.equals("")) {
 			client = " " + c;
-		else
+		} else {
 			client = "";
+		}
 	}
 
 	public void setUser(String u) {
-		if (!u.equals(""))
+		if (!u.equals("")) {
 			user = " -u " + u;
-		else
+		} else {
 			user = "";
+		}
 	}
 
 	public void setVerbosity(int vSum) {
 		StringBuilder v = new StringBuilder();
-		for (int i = 0; i < vSum; i++)
+		for (int i = 0; i < vSum; i++) {
 			v.append("v");
+		}
 
 		verbosity = " -" + v + " ";
-		if (vSum == 0)
+		if (vSum == 0) {
 			verbosity = "";
+		}
 	}
 
 	public void setPassw(String pw) {
-		if (!pw.equals(""))
+		if (!pw.equals("")) {
 			passw = " -p " + pw;
-		else
+		} else {
 			passw = "";
+		}
 	}
 
 	public void setKeepClient(boolean kc) {
-		if (kc)
+		if (kc) {
 			keepClientOnFailure = " --keep-client-on-failure ";
-		else
+		} else {
 			keepClientOnFailure = "";
+		}
 	}
 
 	public boolean checkCommand() {

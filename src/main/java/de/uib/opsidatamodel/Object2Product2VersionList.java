@@ -15,8 +15,9 @@ public class Object2Product2VersionList extends java.util.HashMap<String, Produc
 
 		List<String> versions = pVersions.computeIfAbsent(productName, arg -> new ArrayList<>());
 
-		if (!versions.contains(versionInfo))
+		if (!versions.contains(versionInfo)) {
 			versions.add(versionInfo);
+		}
 
 		if (versions.size() != 1) {
 			Logging.warning(this,

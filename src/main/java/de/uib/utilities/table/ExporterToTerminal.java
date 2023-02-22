@@ -17,8 +17,9 @@ public class ExporterToTerminal extends AbstractExportTable {
 	public void execute(String fileName, boolean onlySelectedRows) {
 
 		Boolean selectedOnly = checkSelection(onlySelectedRows);
-		if (selectedOnly == null)
+		if (selectedOnly == null) {
 			return;
+		}
 
 		for (int rowI = 0; rowI < theTable.getRowCount(); rowI++) {
 

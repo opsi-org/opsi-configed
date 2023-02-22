@@ -62,12 +62,10 @@ public class OpsiMethodCall {
 	}
 
 	private void collectCall() {
-		if ((maxCollectSize < 0)
-				// -1 means deactivated
-				|| (maxCollectSize != 0 && collectedCalls.size() >= maxCollectSize)
-		// 0 means infinite
-		)
+		// -1 means deactivated; 0 means infinite
+		if ((maxCollectSize < 0) || (maxCollectSize != 0 && collectedCalls.size() >= maxCollectSize)) {
 			return;
+		}
 
 		collectedCalls.add(this.getMethodname() + "\n\t" + this.getParameter());
 	}
@@ -121,9 +119,7 @@ public class OpsiMethodCall {
 
 				if (paramI instanceof Object[]) {
 					sb.append(Arrays.toString((Object[]) paramI));
-				}
-
-				else if (paramI instanceof Map) {
+				} else if (paramI instanceof Map) {
 					sb.append("{");
 
 					for (Object key : ((Map) paramI).keySet()) {
@@ -136,10 +132,9 @@ public class OpsiMethodCall {
 						sb.append(" ");
 					}
 					sb.append("}");
-				}
-
-				else
+				} else {
 					sb.append("" + paramI);
+				}
 
 			}
 
@@ -177,8 +172,9 @@ public class OpsiMethodCall {
 				if (parameters[i] instanceof Object[]) {
 					Object[] obs = (Object[]) parameters[i];
 					JSONArray arr = new JSONArray();
-					for (int j = 0; j < obs.length; j++)
+					for (int j = 0; j < obs.length; j++) {
 						arr.put(obs[j]);
+					}
 
 					joParams.put(arr);
 				}

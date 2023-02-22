@@ -23,8 +23,9 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		while (it.hasNext() && success) {
 			Object ob = it.next();
 			Logging.debug(this, "addAll, element of Collection: " + ob);
-			if (!add(ob))
+			if (!add(ob)) {
 				success = false;
+			}
 		}
 		return success;
 	}
@@ -155,8 +156,9 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 			return false;
 		}
 
-		if (obj == null)
+		if (obj == null) {
 			return true;
+		}
 
 		return implementor.add(obj);
 	}
@@ -168,8 +170,9 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 
 	@Override
 	public int accumulatedSize() {
-		if (size() == 0)
+		if (size() == 0) {
 			return 0;
+		}
 
 		int result = 0;
 
@@ -177,13 +180,13 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		while (it.hasNext()) {
 			Object obj = it.next();
 			if (obj != null) {
-				if (obj instanceof CountedCollection)
 				// a element of the collection is a collection, we retrieve the size recursively
-				{
+				if (obj instanceof CountedCollection) {
 					result = result + ((CountedCollection) obj).accumulatedSize();
-				} else
+				} else {
 					// we found an 'ordinary' element and add 1
 					result++;
+				}
 			}
 		}
 

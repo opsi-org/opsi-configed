@@ -81,8 +81,9 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	@Override
 	public String getCommand() {
 		command = "opsi-package-manager -q " + verbosity + keepFiles + depots + freeInput + opsiproduct;
-		if (needSudo())
+		if (needSudo()) {
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
+		}
 		return command + " 2>&1";
 	}
 
@@ -92,30 +93,34 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	}
 
 	public void setKeepFiles(boolean kF) {
-		if (kF)
+		if (kF) {
 			keepFiles = "  --keep-files ";
-		else
+		} else {
 			keepFiles = "";
+		}
 	}
 
 	public void setOpsiproduct(String prod) {
-		if (prod != null && !prod.equals(""))
+		if (prod != null && !prod.equals("")) {
 			opsiproduct = " -r " + prod;
-		else
+		} else {
 			opsiproduct = " ";
+		}
 	}
 
 	public void setDepot(String depotlist) {
-		if (depotlist != null && !depotlist.equals(""))
+		if (depotlist != null && !depotlist.equals("")) {
 			depots = " -d " + depotlist;
-		else
+		} else {
 			depots = " ";
+		}
 	}
 
 	public void setVerbosity(int vSum) {
 		StringBuilder v = new StringBuilder("v");
-		for (int i = 0; i < vSum; i++)
+		for (int i = 0; i < vSum; i++) {
 			v.append("v");
+		}
 
 		verbosity = " -" + v + " ";
 	}

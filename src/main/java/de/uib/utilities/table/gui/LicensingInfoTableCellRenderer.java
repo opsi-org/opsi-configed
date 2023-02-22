@@ -1,8 +1,10 @@
 package de.uib.utilities.table.gui;
 
+import java.awt.Component;
 import java.util.Map;
 
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.configed.Configed;
@@ -20,12 +22,13 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 	}
 
 	@Override
-	public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected,
-			boolean hasFocus, int row, int column) {
-		if (value.equals(LicensingInfoMap.UNLIMITED_NUMBER))
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
+		if (value.equals(LicensingInfoMap.UNLIMITED_NUMBER)) {
 			value = LicensingInfoMap.DISPLAY_INFINITE;
+		}
 
-		java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		JLabel jc = (JLabel) cell;
 
@@ -36,10 +39,9 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		String rowName = licensingInfoMap.getModules().get(row);
 
 		if (columnName != null && (columnName.equals(Configed.getResourceValue("LicensingInfo.modules")))
-				|| columnName.equals(Configed.getResourceValue("LicensingInfo.available"))
-
-		)
+				|| columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 			jc.setToolTipText(value.toString());
+		}
 
 		if (columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))) {
 			// TODO what shall I do here?
@@ -48,16 +50,14 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		if (columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 			jc.setText("");
 
-			if (value.equals(true))
+			if (value.equals(true)) {
 				jc.setIcon(Globals.createImageIcon("images/checked_withoutbox.png", ""));
-
-			else
+			} else {
 				jc.setIcon(Globals.createImageIcon("images/checked_void.png", ""));
+			}
 
 		} else if (columnName != null && !columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))
-				&& !columnName.equals(Configed.getResourceValue("LicensingInfo.available"))
-
-		) {
+				&& !columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 			Map<String, Map<String, Map<String, Object>>> datesMap = licensingInfoMap.getDatesMap();
 			Map<String, Object> moduleToDateData = datesMap.get(columnName).get(rowName);
 			String state = moduleToDateData.get(LicensingInfoMap.STATE).toString();
@@ -67,8 +67,9 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 				jc.setToolTipText(
 						"<html>" + "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
-			} else
+			} else {
 				jc.setToolTipText("<html>" + "clients: " + value.toString() + "</html>");
+			}
 
 			if (columnName.equals(latestChange)) {
 				jc.setBackground(Globals.CHECK_COLOR);
@@ -108,8 +109,9 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 							.toString();
 
 					if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules")) && clientNum != null
-							&& prevClientNum != null && !clientNum.equals(prevClientNum))
+							&& prevClientNum != null && !clientNum.equals(prevClientNum)) {
 						jc.setFont(Globals.defaultFontBold);
+					}
 				}
 
 			} catch (Exception ex) {

@@ -4,9 +4,12 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -29,13 +32,15 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	private GroupNode transferRepresentsGroup(String treeRepresentation) {
 		GroupNode result = null;
 
-		if (treeRepresentation == null)
+		if (treeRepresentation == null) {
 			return null;
+		}
 
 		String[] parts = treeRepresentation.split(",");
 
-		if (parts.length == 1)
+		if (parts.length == 1) {
 			return null;
+		}
 
 		String node = parts[parts.length - 1];
 		result = tree.getGroupNode(node);
@@ -50,8 +55,9 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		boolean result = true;
 		Logging.debug(this, "----------- can import ??");
 
-		if (Globals.isGlobalReadOnly())
+		if (Globals.isGlobalReadOnly()) {
 			return false;
+		}
 
 		if (!support.isDataFlavorSupported(DataFlavor.stringFlavor) || !support.isDrop()) {
 			return false;
@@ -59,17 +65,17 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		JTree.DropLocation dropLocation = (JTree.DropLocation) support.getDropLocation();
 		Logging.debug(this, "ClientTreeTransferHandler, dropLocation.getPath() " + dropLocation.getPath());
 
-		if (dropLocation.getPath() == null)
+		if (dropLocation.getPath() == null) {
 			return false;
+		}
 
 		String transferData = null;
 
 		try {
 			transferData = (String) support.getTransferable().getTransferData(DataFlavor.stringFlavor);
-
-		} catch (java.awt.datatransfer.UnsupportedFlavorException ex) {
+		} catch (UnsupportedFlavorException ex) {
 			Logging.warning(this, " unsupported data flavor " + ex);
-		} catch (java.io.IOException ex) {
+		} catch (IOException ex) {
 			Logging.warning(this, " transferable io exception " + ex);
 		} catch (Exception ex) {
 			Logging.warning(this, "canImport " + ex);
@@ -77,15 +83,17 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		GroupNode sourceGroupNode = transferRepresentsGroup(transferData);
 		Object[] sourceObjectPath = new Object[0];
-		if (sourceGroupNode != null)
+		if (sourceGroupNode != null) {
 			sourceObjectPath = sourceGroupNode.getUserObjectPath();
+		}
 
 		DefaultMutableTreeNode dropOnThis = (DefaultMutableTreeNode) dropLocation.getPath().getLastPathComponent();
 		String id = dropOnThis.getUserObject().toString();
 		GroupNode targetNode = tree.getGroupNode(id);
 		Object[] dropObjectPath = new Object[0];
-		if (targetNode != null)
+		if (targetNode != null) {
 			dropObjectPath = targetNode.getUserObjectPath();
+		}
 
 		// debugging the if clause
 
@@ -112,11 +120,9 @@ public class ClientTreeTransferHandler extends TransferHandler {
 						&& sourceObjectPath.length > 1 && dropObjectPath.length > 1
 						&& !(sourceObjectPath[1].equals(dropObjectPath[1]))
 				// different group branchess
-				)
-
-		)
-
+				)) {
 			result = false;
+		}
 
 		Logging.debug(this, "canImport, dropOnThis " + dropOnThis.getUserObject());
 
@@ -203,12 +209,14 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			int len = path.getPath().length;
 			for (int j = 0; j < len; j++) {
 				buff.append(path.getPath()[j]);
-				if (j < len - 1)
+				if (j < len - 1) {
 					buff.append(",");
+				}
 			}
 
-			if (iterPaths.hasNext())
+			if (iterPaths.hasNext()) {
 				buff.append("\n");
+			}
 		}
 
 		return new StringSelection(buff.toString());
@@ -250,9 +258,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	private void handleClientID(String importID, TransferHandler.TransferSupport support, TreePath sourcePath,
 			GroupNode sourceParentNode, String sourceParentID, TreePath dropPath, DefaultMutableTreeNode dropParentNode,
-			String dropParentID)
-
-	{
+			String dropParentID) {
 		Logging.debug(this,
 				"handleClientID importID, sourcePath, sourceParentID, sourceParentNode, dropParentID,  " + importID
 						+ ", " + sourcePath + " , " + sourceParentID + ", " + sourceParentNode + ", " + dropParentID);
@@ -262,11 +268,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		String adaptedSourceParentID = sourceParentID;
 		GroupNode adaptedSourceParentNode = sourceParentNode;
 
-		if (sourcePath == null)
 		// we are in table and did not get a real souce path
-		{
+		if (sourcePath == null) {
 			String firstDIRECTORYgroupname = null;
-			java.util.Set<GroupNode> locations = tree.getLocationsInDIRECTORY(importID);
+			Set<GroupNode> locations = tree.getLocationsInDIRECTORY(importID);
 			if (locations != null && !locations.isEmpty()) {
 				Logging.debug(this, "handleClientID tree.getLocationsInDIRECTORY 1");
 				Iterator<GroupNode> iter = tree.getLocationsInDIRECTORY(importID).iterator();
@@ -278,18 +283,12 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 				adaptedSourceParentNode = tree.getGroupNode(adaptedSourceParentID);
 			}
-		}
-
-		else {
+		} else {
 			moving = chooseMOVE(support, adaptedSourceParentID, dropPath, true);
 		}
 
-		tree.clientCopyOrMoveTo(importID, sourcePath, adaptedSourceParentID, adaptedSourceParentNode,
-
-				dropParentNode, dropPath, dropParentID,
-
-				moving);
-
+		tree.clientCopyOrMoveTo(importID, sourcePath, adaptedSourceParentID, adaptedSourceParentNode, dropParentNode,
+				dropPath, dropParentID, moving);
 	}
 
 	@Override
@@ -314,12 +313,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		String[] values = tree.getSelectedClientsInTable().toArray(new String[] {});
 
-		if (values.length == 0)
 		// possibly transfer of a group node
-		{
+		if (values.length == 0) {
 			List<TreePath> activePaths = tree.getActivePaths();
 			if (activePaths != null && activePaths.size() == 1) {
-
 				String importID = (String) (((DefaultMutableTreeNode) (activePaths.get(0)).getLastPathComponent())
 						.getUserObject());
 				values = new String[] { importID };
@@ -355,7 +352,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 					importID = parts[parts.length - 1];
 
 				}
-
 			} catch (Exception ex) {
 				Logging.info(this, " no tree parts got " + ex);
 			}
@@ -373,26 +369,21 @@ public class ClientTreeTransferHandler extends TransferHandler {
 						.getUserObject();
 				sourceParentNode = tree.getGroupNode(sourceParentID);
 				groupNode = tree.getGroupNode(importID);
-			}
-
-			else
+			} else {
 				// coming from table, replace!
-
 				Logging.debug(this, "importData, sourceParentID " + sourceParentID);
+			}
 			Logging.debug(this, "importData, sourceParentNode " + sourceParentNode);
 			Logging.debug(this, "importData, groupNode " + groupNode);
 
 			if (groupNode != null) {
 				// it is a group and it could be moved
-				if (chooseMOVE(support, sourceParentID, dropPath, false))
 				// it is a group, and it will be moved, but only inside one partial tree
-				{
+				if (chooseMOVE(support, sourceParentID, dropPath, false)) {
 					tree.moveGroupTo(importID, groupNode, sourceParentNode, dropParentNode, dropPath, dropParentID);
-
 				} else {
 					Logging.info(this, "importData: this group will not be moved");
 				}
-
 			} else {
 				// client node
 				Logging.debug(this, "importData handling client ID " + importID);
@@ -414,5 +405,4 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, " exportToClipboard " + comp + " , " + clip + ", " + action);
 		super.exportToClipboard(comp, clip, action);
 	}
-
 }

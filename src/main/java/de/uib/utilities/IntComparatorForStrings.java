@@ -28,10 +28,11 @@ public class IntComparatorForStrings implements Comparator<String> {
 			Logging.debug("o2 no number " + o2);
 		}
 
-		if (i1 < i2)
+		if (i1 < i2) {
 			result = -1;
-		else if (i1 > i2)
+		} else if (i1 > i2) {
 			result = +1;
+		}
 
 		return result;
 	}

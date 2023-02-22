@@ -28,10 +28,11 @@ public class SavedSearch {
 	}
 
 	public void setDescription(Object s) {
-		if (s != null)
+		if (s != null) {
 			description = "" + s;
-		else
+		} else {
 			description = name;
+		}
 	}
 
 	public String getName() {

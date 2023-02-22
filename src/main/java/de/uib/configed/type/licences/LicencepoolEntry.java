@@ -28,8 +28,9 @@ public class LicencepoolEntry extends AbstractTableEntry {
 		if (KEYS.indexOf(key) <= -1) {
 			Logging.error(this, "not valid key: " + key);
 			return null;
-		} else
+		} else {
 			return super.put(key, value);
+		}
 	}
 
 	public LicencepoolEntry(Map<String, Object> entry) {
@@ -39,8 +40,9 @@ public class LicencepoolEntry extends AbstractTableEntry {
 	}
 
 	public String getLicencepoolId() {
-		if (get(ID_SERVICE_KEY) != null)
+		if (get(ID_SERVICE_KEY) != null) {
 			return get(ID_SERVICE_KEY);
+		}
 
 		return get(ID_KEY);
 	}

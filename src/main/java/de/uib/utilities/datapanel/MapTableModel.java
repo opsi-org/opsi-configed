@@ -292,8 +292,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 			}
 		}
 
-		if (result == null)
+		if (result == null) {
 			return "";
+		}
 
 		return result;
 	}
@@ -327,8 +328,9 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		// The data/cell address is constant,
 		// no matter where the cell appears onscreen.
 
-		if (data == null)
+		if (data == null) {
 			return false;
+		}
 
 		if (col < 1) {
 			return false;

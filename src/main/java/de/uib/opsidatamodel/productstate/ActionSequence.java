@@ -13,8 +13,9 @@ public final class ActionSequence {
 	private static Map<String, String> displayLabel2label;
 
 	private static void checkCollections() {
-		if (displayLabel2label == null)
+		if (displayLabel2label == null) {
 			displayLabel2label = new HashMap<>();
+		}
 
 		for (int i = -100; i <= 100; i++) {
 			String st = "" + i;

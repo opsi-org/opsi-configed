@@ -71,14 +71,13 @@ public class ConnectionState {
 
 	@Override
 	public boolean equals(Object state) {
-		if (state instanceof Integer)
+		if (state instanceof Integer) {
 			return (myState == (Integer) state);
-
-		else if (state instanceof ConnectionState)
+		} else if (state instanceof ConnectionState) {
 			return (myState == ((ConnectionState) state).getState());
-
-		else
+		} else {
 			return false;
+		}
 	}
 
 	/**

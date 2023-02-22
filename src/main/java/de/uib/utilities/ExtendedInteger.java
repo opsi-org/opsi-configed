@@ -64,10 +64,11 @@ public class ExtendedInteger implements Comparable<Integer> {
 	}
 
 	public String getDisplay() {
-		if (value.equals(S_INFINITE))
+		if (value.equals(S_INFINITE)) {
 			return DISPLAY_INFINITE;
-		else
+		} else {
 			return value;
+		}
 	}
 
 	@Override
@@ -113,9 +114,7 @@ public class ExtendedInteger implements Comparable<Integer> {
 
 		if (this.equals(INFINITE)) {
 			return -1;
-		}
-
-		else {
+		} else {
 			return getNumber() - integer;
 		}
 	}

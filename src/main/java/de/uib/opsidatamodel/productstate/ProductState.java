@@ -164,8 +164,9 @@ public class ProductState extends HashMap<String, String> {
 		if (KEYS.indexOf(key) < 0) {
 			Logging.error(this, "key " + key + " not known, value was " + value + " , " + KEYS);
 			return null;
-		} else
+		} else {
 			return super.put(key, value);
+		}
 	}
 
 	private void setTransforms() {

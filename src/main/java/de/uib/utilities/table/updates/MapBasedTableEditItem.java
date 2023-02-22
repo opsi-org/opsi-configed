@@ -45,8 +45,9 @@ public class MapBasedTableEditItem extends TableEditItem {
 	}
 
 	public String getKeyColumnStringValue() {
-		if (keyCol < 0 || keyCol == columnNames.size())
+		if (keyCol < 0 || keyCol == columnNames.size()) {
 			return null;
+		}
 
 		return (rowV.get(keyCol).toString());
 	}
