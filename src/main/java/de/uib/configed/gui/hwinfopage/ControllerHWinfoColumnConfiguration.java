@@ -261,7 +261,8 @@ public class ControllerHWinfoColumnConfiguration {
 
 		panel.setComparator(COL_LINE_NO, new de.uib.utilities.IntComparatorForObjects());
 
-		panel.reload();// now sorted
+		// now sorted
+		panel.reload();
 
 		javax.swing.table.TableColumn col;
 		col = panel.getColumnModel().getColumn(columnNames.indexOf(COL_LINE_NO));
