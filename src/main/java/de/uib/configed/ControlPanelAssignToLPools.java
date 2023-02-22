@@ -191,9 +191,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					new MapTableUpdateItemFactory(thePanel.fMissingSoftwareInfo.columnNames,
 							thePanel.fMissingSoftwareInfo.classNames, 0), // dummy
 					new DefaultTableProvider(new RetrieverMapSource(thePanel.fMissingSoftwareInfo.columnNames,
-							thePanel.fMissingSoftwareInfo.classNames,
-							// () -> (Map) persist.getInstalledSoftwareInformation()
-							() -> (Map) missingSoftwareMap)),
+							thePanel.fMissingSoftwareInfo.classNames, () -> (Map) missingSoftwareMap)),
 					0, new int[] {}, thePanel.fMissingSoftwareInfo.panelGlobalSoftware, updateCollection));
 
 		}
@@ -588,8 +586,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					persist.installedSoftwareInformationRequestRefresh();
 					return (Map) persist.getInstalledSoftwareInformationForLicensing();
 
-				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, // key column
-				new int[] {}, thePanel.panelRegisteredSoftware, updateCollection);
+				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.panelRegisteredSoftware,
+				updateCollection);
 
 		Logging.info(this, "modelWindowsSoftwareIds row count " + modelWindowsSoftwareIds.getRowCount());
 		tableModels.add(modelWindowsSoftwareIds);

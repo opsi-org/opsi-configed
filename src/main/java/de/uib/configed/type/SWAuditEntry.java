@@ -144,8 +144,8 @@ public class SWAuditEntry extends AbstractTableEntry
 
 		super.put(key2serverKey.get(SUB_VERSION), subversion);
 
-		ident = Globals.pseudokey(new String[] { super.get(NAME), // KEYS_FOR_IDENT.get(0) ...
-				super.get(VERSION), subversion, super.get(LANGUAGE), super.get(ARCHITECTURE) });
+		ident = Globals.pseudokey(new String[] { super.get(NAME), super.get(VERSION), subversion, super.get(LANGUAGE),
+				super.get(ARCHITECTURE) });
 
 		identReduced = Globals.pseudokey(new String[] { super.get(VERSION), super.get(ARCHITECTURE) });
 

@@ -282,7 +282,9 @@ public class SelectionManager {
 			Logging.debug("currentInput: " + currentInput.operation + currentInput.status + currentInput.parenthesisOpen
 					+ currentInput.parenthesisClose);
 			if (currentInput.parenthesisOpen) {
-				currentInput.parenthesisOpen = false; // so we don't go one step deeper next time here, too
+
+				// so we don't go one step deeper next time here, too
+				currentInput.parenthesisOpen = false;
 				AbstractSelectOperation operation = build(input, currentPos);
 				Logging.debug("\n" + operation.printOperation(""));
 				currentPos[0]--;

@@ -216,8 +216,10 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			@Override
 			protected boolean checkConnectionToShare() {
 				boolean connected = super.checkConnectionToShare();
-				if (comboChooseWinProduct != null // we have an initialized gui
-						&& connected) {
+
+				if (comboChooseWinProduct != null && connected) {
+					// we have an initialized gui and are connected
+
 					evaluateWinProducts();
 				}
 
@@ -347,12 +349,14 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			public void run() {
 				new SSHConnectExec(main,
 						// Empty_Command(String id, String c, String mt, boolean ns)
-						(new EmptyCommand("show_drivers.py", // id not needed
+						// id not needed
+						(new EmptyCommand("show_drivers.py",
 								"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/show_drivers.py "
 										+ fieldClientname.getText(),
-								"show_drivers.py", // menuText - not needed
-								false // needSudo?
-				)));
+								// menuText - not needed
+								"show_drivers.py",
+								// need Sudo?
+								false)));
 			}
 		}.start());
 
@@ -361,11 +365,13 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(main,
 				// Empty_Command(String id, String c, String mt, boolean ns)
-				new EmptyCommand("create_driver_links.py", // id not needed
+				// id not needed
+				new EmptyCommand("create_driver_links.py",
 						"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
-						"create_driver_links.py", // menutext - not needed
-						true // need sudo ?
-				)));
+						// menutext - not needed
+						"create_driver_links.py",
+						// need sudo ?
+						true)));
 
 		JLabel labelTargetPath = new JLabel(Configed.getResourceValue("CompleteWinProducts.labelTargetPath"));
 		fieldServerPath = new JTextShowField(true);
@@ -756,7 +762,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	private void produceTarget() {
 		if (fieldServerPath == null) {
-			return; // caution we are not yet initialized
+
+			// caution we are not yet initialized
+			return;
 		}
 
 		String result = depotProductDirectory + File.separator + winProduct + File.separator + driverDirectory;

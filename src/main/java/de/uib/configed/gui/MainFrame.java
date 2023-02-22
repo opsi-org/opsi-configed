@@ -350,7 +350,9 @@ public class MainFrame extends JFrame
 	private IconButton iconButtonReload;
 	private IconButton iconButtonReloadLicenses;
 	private IconButton iconButtonNewClient;
-	private IconButton iconButtonSaveGroup;/* gibts nicht **/
+
+	/* gibts nicht **/ // TODO
+	private IconButton iconButtonSaveGroup;
 	private IconButton iconButtonSetGroup;
 	private IconButton iconButtonSaveConfiguration;
 	private IconButton iconButtonCancelChanges;

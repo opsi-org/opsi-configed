@@ -16,7 +16,7 @@ public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 	}
 
 	// object values and methods
-	protected Map pureEntry;
+	protected Map<String, Object> pureEntry;
 	protected Map<String, String> entryRetrieved;
 
 	protected void remap(String key)

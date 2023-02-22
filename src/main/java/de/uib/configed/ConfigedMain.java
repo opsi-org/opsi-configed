@@ -2329,8 +2329,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
 						+ persist.getProductPackageVersion(productEdited) + "   "
 						+ persist.getProductLockedInfo(productEdited),
-				productProperties, // List of the properties map of all selected clients
-				mergedProductProperties, // these properties merged to one map
+				// List of the properties map of all selected clients
+				productProperties,
+				// these properties merged to one map
+				mergedProductProperties,
 
 				// editmappanelx
 				persist.getProductPropertyOptionsMap(productEdited),
@@ -2342,8 +2344,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
 						+ persist.getProductPackageVersion(productEdited) + "   "
 						+ persist.getProductLockedInfo(productEdited),
-				productProperties, // array of the properties map of all selected clients
-				mergedProductProperties, // these properties merged to one map
+				// array of the properties map of all selected clients
+				productProperties,
+				// these properties merged to one map
+				mergedProductProperties,
 
 				// editmappanelx
 				persist.getProductPropertyOptionsMap(productEdited),
@@ -2527,8 +2531,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setGroupByTree(node, pathToNode);
 
-		if (preferringOldSelection // intended for reload, we cancel activating group
-				&& selectionPanel.getSelectedSet() != null && !selectionPanel.getSelectedSet().isEmpty()) {
+		// intended for reload, we cancel activating group
+		if (preferringOldSelection && selectionPanel.getSelectedSet() != null
+				&& !selectionPanel.getSelectedSet().isEmpty()) {
 			return;
 		}
 
@@ -4265,7 +4270,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		mainFrame.iconButtonSessionInfo.setWaitingState(true);
 
-		sessionInfo = new HashMap<>(); // no old values kept
+		// no old values kept
+		sessionInfo = new HashMap<>();
 
 		try {
 			// leave the Event dispatching thread
@@ -5260,8 +5266,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			TreePath newGroupPath = treeClients.getPathToGROUPS().pathByAddingChild(newGroupNode);
 
 			for (int j = 0; j < getSelectedClients().length; j++) {
-				treeClients.copyClientTo(getSelectedClients()[j], null, // from nowhere
-						newGroupName, newGroupNode, newGroupPath);
+				treeClients.copyClientTo(getSelectedClients()[j], null, newGroupName, newGroupNode, newGroupPath);
 			}
 
 			treeClients.makeVisible(newGroupPath);

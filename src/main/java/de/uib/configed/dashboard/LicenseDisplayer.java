@@ -195,11 +195,10 @@ public class LicenseDisplayer {
 
 		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 
-		modelSWnames = new GenTableModel(null, // no updates
+		modelSWnames = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
-				0, new int[] {}, (TableModelListener) null, // panelSWnames ,
-				updateCollection) {
+				0, new int[] {}, (TableModelListener) null, updateCollection) {
 
 			@Override
 			public void produceRows() {

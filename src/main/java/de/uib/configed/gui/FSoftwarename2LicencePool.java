@@ -382,7 +382,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		// test
 		{
 			Logging.info(this, "init modelSWnames");
-			this.modelSWnames = new GenTableModel(null, // no updates
+
+			this.modelSWnames = new GenTableModel(null,
 					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
 
 							() -> (Map) persist.getInstalledSoftwareName2SWinfo())
