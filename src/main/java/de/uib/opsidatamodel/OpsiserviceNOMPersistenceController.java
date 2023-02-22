@@ -3067,7 +3067,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public Map<String, List<Map<String, Object>>> getHardwareInfo(String clientId, boolean asHTMLtable) {
 		if (clientId == null) {
-			return null;
+			return new HashMap<>();
 		}
 
 		Map<String, List<Map<String, Object>>> info = exec
@@ -3078,7 +3078,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return info;
 		}
 
-		return null;
+		return new HashMap<>();
 	}
 
 	@Override
@@ -3863,6 +3863,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return result;
 	}
 
+	@SuppressWarnings("java:S1168")
 	@Override
 	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds) {
 		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Logging.getStrings(clientIds));
@@ -3905,6 +3906,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return result;
 	}
 
+	@SuppressWarnings("java:S1168")
 	@Override
 	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
 		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Logging.getStrings(clientIds));
@@ -6942,6 +6944,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return false;
 	}
 
+	@SuppressWarnings("java:S1168")
 	private List<String> produceProductOnClientDisplayfieldsLocalboot() {
 		if (globalReadOnly) {
 			return null;
