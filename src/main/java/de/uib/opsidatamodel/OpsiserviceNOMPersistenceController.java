@@ -7303,24 +7303,26 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		if (givenList == null || givenList.isEmpty()) {
 			result = defaultValues;
+
+			Logging.info(this, "givenList is null or empty: " + givenList);
+
+			// create config for service
+			Map<String, Object> item = createNOMitem("UnicodeConfig");
+			item.put("ident", KEY_HOST_DISPLAYFIELDS);
+			item.put("description", "");
+			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("editable", false);
+			item.put("multiValue", true);
+
+			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
+					new Object[] { AbstractExecutioner.jsonMap(item) });
+
+			exec.doCall(omc);
 		} else {
 			result = givenList;
 			// but not if we want to change the default values:
 		}
-
-		// create config for service
-		Map<String, Object> item = createNOMitem("UnicodeConfig");
-		item.put("ident", KEY_HOST_DISPLAYFIELDS);
-		item.put("description", "");
-		item.put("defaultValues", AbstractExecutioner.jsonArray(result));
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
-		item.put("editable", false);
-		item.put("multiValue", true);
-
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonMap(item) });
-
-		exec.doCall(omc);
 
 		return result;
 	}
