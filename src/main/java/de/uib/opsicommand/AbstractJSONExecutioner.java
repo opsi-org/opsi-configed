@@ -1,6 +1,7 @@
 package de.uib.opsicommand;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -64,7 +65,11 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 
 	@Override
 	public boolean doCall(OpsiMethodCall omc) {
+
 		JSONObject jO = retrieveJSONObject(omc);
+
+		Logging.devel(this, omc.toString());
+		Logging.devel(this, Arrays.toString(Thread.currentThread().getStackTrace()) + "\n");
 
 		return checkResponse(jO);
 	}

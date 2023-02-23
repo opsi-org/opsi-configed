@@ -368,7 +368,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				}
 				Iterator<String> iter = deviceInfo.keySet().iterator();
 				while (iter.hasNext()) {
-					String key = (String) iter.next();
+					String key = iter.next();
 					if (key.equalsIgnoreCase(opsi)) {
 						String cv = "";
 						if (deviceInfo.get(key) instanceof String) {

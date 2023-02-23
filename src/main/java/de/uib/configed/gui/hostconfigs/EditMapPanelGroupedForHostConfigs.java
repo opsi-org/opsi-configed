@@ -494,17 +494,26 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 		de.uib.opsidatamodel.permission.UserConfigProducing up = new de.uib.opsidatamodel.permission.UserConfigProducing(
-				false, // boolean notUsingDefaultUser, if true, we would supply the logged in user)
+				// boolean notUsingDefaultUser, if true, we would supply the logged in user)
+				false,
 
-				persist.getHostInfoCollections().getConfigServer(), // String configserver,
-				persist.getHostInfoCollections().getDepotNamesList(), // Collection<String> existingDepots,
-				persist.getHostGroupIds(), // Collection<String> existingHostgroups,
-				persist.getProductGroups().keySet(), // Collection<String> existingProductgroups,
+				// String configserver,
+				persist.getHostInfoCollections().getConfigServer(),
+
+				// Collection<String> existingDepots,
+				persist.getHostInfoCollections().getDepotNamesList(),
+
+				// Collection<String> existingHostgroups,
+				persist.getHostGroupIds(),
+				// Collection<String> existingProductgroups,
+				persist.getProductGroups().keySet(),
 
 				// data. on which changes are based
-				persist.getConfigDefaultValues(), // Map<String, List<Object>> serverconfigValuesMap,
-				persist.getConfigOptions()// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
-		);
+				// Map<String, List<Object>> serverconfigValuesMap,
+				persist.getConfigDefaultValues(),
+
+				// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
+				persist.getConfigOptions());
 
 		List<Object> newData = up.produce();
 
@@ -525,8 +534,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 	protected void addRole() {
 
-		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, // owner frame
-				"add role", // title
+		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add role", // title
 				false, // modal
 
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok"),
@@ -534,10 +542,11 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", ""),
 						Globals.createImageIcon("images/cancel16_small.png", "") },
-				2, 600, 600, true, // lazylayout, i.e, we have a chance to define components and use them for the
+				2, 600, 600,
+				// lazylayout, i.e, we have a chance to define components and use them for the
+				true,
 				// layout
-				null // addPanel predefined
-		) {
+				null) {
 
 			@Override
 			public void doAction1() {

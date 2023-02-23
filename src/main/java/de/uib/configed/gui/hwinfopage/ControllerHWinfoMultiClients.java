@@ -13,7 +13,6 @@
 package de.uib.configed.gui.hwinfopage;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -171,8 +170,7 @@ public class ControllerHWinfoMultiClients {
 
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 					Logging.info(this, "retrieveMap: getClient2HwRows");
-
-					return (Map) persist.getClient2HwRows(hosts);
+					return persist.getClient2HwRows(hosts);
 				})),
 
 				// keycol

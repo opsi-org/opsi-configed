@@ -2881,8 +2881,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				continue;
 			}
-			String hwClass = (String) (((Map) (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)))
-					.get(OpsiHwAuditDeviceClass.OPSI_KEY));
+			String hwClass = (String) ((Map<?, ?>) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY))
+					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
 
 			result.add(hwClass);
 		}
@@ -4902,14 +4902,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List<Map<String, Object>> backendEntries = backends.get(backendName);
 
 			for (int i = 0; i < backendEntries.size(); i++) {
-				Map listEntry = (Map) backendEntries.get(i);
+				Map<String, Object> listEntry = backendEntries.get(i);
 
-				Iterator eIt = listEntry.keySet().iterator();
+				Iterator<String> eIt = listEntry.keySet().iterator();
 
 				boolean entryIsEven = false;
 
 				while (eIt.hasNext()) {
-					String key = (String) eIt.next();
+					String key = eIt.next();
 					if (key.equals("name")) {
 						continue;
 					}
@@ -7303,24 +7303,26 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		if (givenList == null || givenList.isEmpty()) {
 			result = defaultValues;
+
+			Logging.info(this, "givenList is null or empty: " + givenList);
+
+			// create config for service
+			Map<String, Object> item = createNOMitem("UnicodeConfig");
+			item.put("ident", KEY_HOST_DISPLAYFIELDS);
+			item.put("description", "");
+			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+			item.put("editable", false);
+			item.put("multiValue", true);
+
+			OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
+					new Object[] { AbstractExecutioner.jsonMap(item) });
+
+			exec.doCall(omc);
 		} else {
 			result = givenList;
 			// but not if we want to change the default values:
 		}
-
-		// create config for service
-		Map<String, Object> item = createNOMitem("UnicodeConfig");
-		item.put("ident", KEY_HOST_DISPLAYFIELDS);
-		item.put("description", "");
-		item.put("defaultValues", AbstractExecutioner.jsonArray(result));
-		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
-		item.put("editable", false);
-		item.put("multiValue", true);
-
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonMap(item) });
-
-		exec.doCall(omc);
 
 		return result;
 	}

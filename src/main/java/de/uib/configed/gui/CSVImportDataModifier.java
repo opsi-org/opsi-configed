@@ -127,11 +127,13 @@ public class CSVImportDataModifier {
 
 		GenTableModel model = new GenTableModel(updateItemFactory, // updateItemFactory,
 				new de.uib.utilities.table.provider.DefaultTableProvider(source), // tableProvider
-				0, // keycol
-				new int[] {}, // final columns int array
-				thePanel, // table model listener
-				updateCollection // TableUpdateCollection updates
-		);
+				0,
+				// final columns int array
+				new int[] {},
+				// table model listener
+				thePanel,
+				// TableUpdateCollection updates
+				updateCollection);
 
 		updateItemFactory.setSource(model);
 
