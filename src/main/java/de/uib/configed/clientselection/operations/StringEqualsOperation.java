@@ -12,7 +12,7 @@ public class StringEqualsOperation extends AbstractSelectOperation {
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.TextType;
+		return SelectData.DataType.TEXT_TYPE;
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public class DateGreaterOrEqualOperation extends AbstractSelectOperation {
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.DateType;
+		return SelectData.DataType.DATE_TYPE;
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package de.uib.configed.clientselection.operations;
 
-import de.uib.configed.clientselection.SelectData;
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectOperation;
+import de.uib.configed.clientselection.SelectData;
 
 public class IntEqualsOperation extends AbstractSelectOperation {
 	public IntEqualsOperation(AbstractSelectElement element) {
@@ -11,7 +11,7 @@ public class IntEqualsOperation extends AbstractSelectOperation {
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.IntegerType;
+		return SelectData.DataType.INTEGER_TYPE;
 	}
 
 	@Override
