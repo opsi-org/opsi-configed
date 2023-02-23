@@ -9,13 +9,10 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +64,10 @@ public final class Terminal {
 
 	public void setMessagebus(Messagebus messagebus) {
 		this.messagebus = messagebus;
+	}
+
+	public Messagebus getMessagebus() {
+		return messagebus;
 	}
 
 	public void setTerminalChannel(String value) {
@@ -173,7 +174,7 @@ public final class Terminal {
 				writer.close();
 				WebSocketInputStream.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logging.warning(this, "failed to close output/input stream: " + e);
 			}
 		}
 
@@ -256,86 +257,35 @@ public final class Terminal {
 	@SuppressWarnings("java:S2972")
 	private class FileUpload extends DropTarget {
 		@SuppressWarnings("unchecked")
-		private String getFilename(DropTargetDropEvent e) {
-			String filename = null;
-
-			List<File> droppedFile;
+		private List<File> getDroppedFiles(DropTargetDropEvent e) {
+			List<File> droppedFiles = null;
 
 			try {
-				droppedFile = (List<File>) e.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+				droppedFiles = (List<File>) e.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 
-				if (droppedFile.size() > 1) {
-					return null;
-				}
-
-				filename = droppedFile.get(0).toString();
-				Logging.info(this, "dropped file: " + filename);
+				Logging.info(this, "dropped files: " + droppedFiles);
 			} catch (UnsupportedFlavorException ex) {
 				Logging.warning(this, "this should not happen, unless javaFileListFlavor is no longer supported");
 			} catch (IOException ex) {
 				Logging.warning(this, "cannot retrieve dropped file");
 			}
 
-			return filename;
+			return droppedFiles;
 		}
 
 		@Override
 		public synchronized void drop(DropTargetDropEvent e) {
 			e.acceptDrop(DnDConstants.ACTION_COPY);
-			File file = new File(getFilename(e));
 
-			try (FileInputStream reader = new FileInputStream(file)) {
-				int chunkSize = 100000;
-				String fileId = UUID.randomUUID().toString();
-				int chunk = 0;
-				int offset = 0;
+			List<File> files = getDroppedFiles(e);
 
-				Map<String, Object> data = new HashMap<>();
-				data.put("type", "file_upload_request");
-				data.put("id", UUID.randomUUID().toString());
-				data.put("sender", "@");
-				data.put("channel", terminalChannel);
-				data.put("created", System.currentTimeMillis());
-				data.put("expires", System.currentTimeMillis() + 10000);
-				data.put("file_id", fileId);
-				data.put("content_type", "application/octet-stream");
-				data.put("name", file.getName());
-				data.put("size", Files.size(file.toPath()));
-				data.put("terminal_id", terminalId);
-
-				Logging.debug(this, "file upload request: " + data.toString());
-
-				ObjectMapper mapper = new MessagePackMapper();
-				byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-				messagebus.send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
-
-				byte[] buf = new byte[chunkSize];
-
-				while (reader.read(buf) > 0) {
-					offset += chunkSize;
-					chunk += 1;
-					boolean last = offset >= Files.size(file.toPath());
-
-					data.clear();
-					data.put("type", "file_chunk");
-					data.put("id", UUID.randomUUID().toString());
-					data.put("sender", "@");
-					data.put("channel", terminalChannel);
-					data.put("created", System.currentTimeMillis());
-					data.put("expires", System.currentTimeMillis() + 10000);
-					data.put("file_id", fileId);
-					data.put("number", chunk);
-					data.put("data", new String(buf).replace("\0", "").getBytes());
-					data.put("last", last);
-
-					Logging.debug(this, "uploading file chunk: " + data.toString());
-
-					dataJsonBytes = mapper.writeValueAsBytes(data);
-					messagebus.send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
-				}
-			} catch (IOException ex) {
-				Logging.error("cannot upload file to server: " + file.getAbsolutePath());
+			if (files == null || files.isEmpty()) {
+				Logging.info(this, "files are null or empty: " + files);
+				return;
 			}
+
+			BackgroundFileUploader fileUploader = new BackgroundFileUploader(files);
+			fileUploader.execute();
 		}
 	}
 }

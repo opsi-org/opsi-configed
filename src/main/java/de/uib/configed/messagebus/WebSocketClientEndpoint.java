@@ -94,6 +94,6 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 
 	@Override
 	public void onError(Exception ex) {
-		Logging.error(this, "error encountered in messagebus: " + ex);
+		Logging.warning(this, "error encountered in messagebus: " + ex);
 	}
 }
