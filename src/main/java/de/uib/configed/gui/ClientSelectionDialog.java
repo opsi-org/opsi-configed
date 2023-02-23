@@ -738,30 +738,30 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		SelectData.DataType type = operation.getDataType();
 		switch (type) {
 		// Do the same for all three cases
-		case DOUBLE_TYPE:
-		case TEXT_TYPE:
-		case DATE_TYPE:
+		case DoubleType:
+		case TextType:
+		case DateType:
 			text = ((TextInputField) (group.dataComponent)).getText();
 			if (text.isEmpty()) {
 				return null;
 			}
 			data = text;
 			break;
-		case INTEGER_TYPE:
+		case IntegerType:
 			Integer value = (Integer) ((JSpinner) group.dataComponent).getValue();
 			if (value == 0) {
 				return null;
 			}
 			data = value;
 			break;
-		case BIG_INTEGER_TYPE:
+		case BigIntegerType:
 			Long value2 = ((SpinnerWithExt) group.dataComponent).getValue();
 			if (value2 == 0) {
 				return null;
 			}
 			data = value2;
 			break;
-		case ENUM_TYPE:
+		case EnumType:
 
 			String textEnum = ((TextInputField) group.dataComponent).getText();
 			if (textEnum.isEmpty()) {
@@ -769,7 +769,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			}
 			data = textEnum;
 			break;
-		case NONE_TYPE:
+		case NoneType:
 		default:
 		}
 
@@ -902,7 +902,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			return;
 		}
 		switch (sourceGroup.element.supportedOperations().get(operationIndex).getDataType()) {
-		case TEXT_TYPE:
+		case TextType:
 			TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
 			fieldText.setEditable(true);
 			fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
@@ -916,7 +916,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = fieldText;
 			break;
-		case DOUBLE_TYPE:
+		case DoubleType:
 
 			TextInputField fieldDouble = new TextInputField("");
 			fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
@@ -930,7 +930,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = fieldDouble;
 			break;
-		case ENUM_TYPE:
+		case EnumType:
 
 			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 			box.setEditable(true);
@@ -943,7 +943,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = box;
 			break;
-		case DATE_TYPE:
+		case DateType:
 			TextInputField fieldDate = new TextInputField(null);
 			fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDate.setToolTipText("yyyy-mm-dd");
@@ -956,7 +956,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			sourceGroup.dataComponent = fieldDate;
 			break;
 
-		case INTEGER_TYPE:
+		case IntegerType:
 			JSpinner spinner = new JSpinner();
 			spinner.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
@@ -966,7 +966,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = spinner;
 			break;
-		case BIG_INTEGER_TYPE:
+		case BigIntegerType:
 			SpinnerWithExt swx = new SpinnerWithExt();
 			swx.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
@@ -977,7 +977,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 			sourceGroup.dataComponent = swx;
 			break;
-		case NONE_TYPE:
+		case NoneType:
 			return;
 		}
 		sourceGroup.dataComponent.setMaximumSize(new Dimension(sourceGroup.dataComponent.getMaximumSize().width,
@@ -1166,9 +1166,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		if (component instanceof TextInputField) {
 			((TextInputField) component).setText(data.getData().toString());
-		} else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BIG_INTEGER_TYPE) {
+		} else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BigIntegerType) {
 			((SpinnerWithExt) component).setValue((Long) data.getData());
-		} else if (component instanceof JSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
+		} else if (component instanceof JSpinner && data.getType() == SelectData.DataType.IntegerType) {
 			((JSpinner) component).setValue(data.getData());
 		}
 	}

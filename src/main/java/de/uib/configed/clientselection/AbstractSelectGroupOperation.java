@@ -26,7 +26,7 @@ public abstract class AbstractSelectGroupOperation extends AbstractSelectOperati
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.NONE_TYPE;
+		return SelectData.DataType.NoneType;
 	}
 
 	@Override

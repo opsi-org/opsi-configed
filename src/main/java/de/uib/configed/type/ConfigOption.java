@@ -14,14 +14,14 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 	public static final String REFERENCE_ID = "configId";
 
 	public enum TYPE {
-		BOOL_CONFIG, UNICODE_CONFIG, UNDEFINED_CONFIG
+		BoolConfig, UnicodeConfig, UndefinedConfig
 	}
 
 	// UndefinedConfig should not occur
 
-	public static final String BOOL_TYPE = TYPE.BOOL_CONFIG.toString();
-	public static final String UNICODE_TYPE = TYPE.UNICODE_CONFIG.toString();
-	public static final String UNDEFINED_TYPE = TYPE.UNDEFINED_CONFIG.toString();
+	public static final String BOOL_TYPE = TYPE.BoolConfig.toString();
+	public static final String UNICODE_TYPE = TYPE.UnicodeConfig.toString();
+	public static final String UNDEFINED_TYPE = TYPE.UndefinedConfig.toString();
 
 	protected TYPE type;
 
@@ -62,7 +62,7 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 		if (retrieved == null || retrieved.get("type") == null) {
 			Logging.debug(this, "set default UnicodeConfig");
 			put("type", "UnicodeConfig");
-			type = TYPE.UNICODE_CONFIG;
+			type = TYPE.UnicodeConfig;
 		} else {
 			if (retrieved.get("type") == null) {
 				put("type", UNDEFINED_TYPE);
@@ -71,9 +71,9 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 			}
 
 			if (get("type").equals(BOOL_TYPE) || get("type").equals("BoolProductProperty")) {
-				type = TYPE.BOOL_CONFIG;
+				type = TYPE.BoolConfig;
 			} else {
-				type = TYPE.UNICODE_CONFIG;
+				type = TYPE.UnicodeConfig;
 			}
 		}
 
@@ -99,7 +99,7 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 			put("editable", retrieved.get("editable"));
 		}
 
-		if (type != TYPE.BOOL_CONFIG) {
+		if (type != TYPE.BoolConfig) {
 			put("nullable", false);
 		}
 	}
@@ -128,7 +128,7 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 	@Override
 	public boolean isNullable() {
 		// until we extend the data structure
-		return (!type.equals(TYPE.BOOL_CONFIG));
+		return (!type.equals(TYPE.BoolConfig));
 	}
 
 	@Override
