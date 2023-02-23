@@ -276,7 +276,7 @@ public class UserConfigProducing {
 				List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
 
 				Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(
-						ConfigOption.TYPE.UnicodeConfig, roleKey,
+						ConfigOption.TYPE.UNICODE_CONFIG, roleKey,
 						"which role should determine this users configuration", false, false, selectedValuesRole,
 						possibleValuesRole);
 
@@ -394,7 +394,7 @@ public class UserConfigProducing {
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
 				Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(
-						ConfigOption.TYPE.UnicodeConfig, configKey,
+						ConfigOption.TYPE.UNICODE_CONFIG, configKey,
 						"which role should determine this users configuration", false, false, selectedValuesRole,
 						selectedValuesRole);
 
@@ -421,7 +421,7 @@ public class UserConfigProducing {
 
 				userConfig.setValues(partkey, values);
 
-				item = AbstractPersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig, configKey,
+				item = AbstractPersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey,
 						configKey, false, false, values, values);
 
 				// TODO

@@ -1640,7 +1640,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		List<Object> values = null;
 
 		for (Entry<String, ConfigOption> notWanConfigOption : notWanConfigOptions.entrySet()) {
-			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BoolConfig) {
+			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BOOL_CONFIG) {
 				notWanConfiguration.put(notWanConfigOption.getKey(), null);
 				wanConfiguration.put(notWanConfigOption.getKey(), null);
 			} else {
@@ -3340,7 +3340,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			}
 		}
 
-		Map<String, Object> configItem = createJSONConfig(ConfigOption.TYPE.UnicodeConfig, configKey, // key
+		Map<String, Object> configItem = createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey, // key
 				"", false, // editable
 				true, // multivalue
 				newDefaultValues, possibleValues);
@@ -5165,7 +5165,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		} else {
 			ConfigOption option = (ConfigOption) ob;
 
-			if (option.getType() != ConfigOption.TYPE.BoolConfig) {
+			if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
 				Logging.warning(this, "entry for " + key + " should be boolean");
 			} else {
 				List li = option.getDefaultValues();
@@ -6996,7 +6996,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		List<Object> selectedValuesRole = new ArrayList<>();
 		selectedValuesRole.add(role);
 
-		Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
+		Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG,
 				configkey, "which role should determine this configuration", false, false, selectedValuesRole,
 				selectedValuesRole);
 
