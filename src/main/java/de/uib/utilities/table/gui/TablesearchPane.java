@@ -506,9 +506,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		Map<String, String> tooltipsMap = new LinkedHashMap<>();
 
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.searchmode.fulltext"), // Index FULL_TEXT_SEARCH
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.searchmode.fulltext"),
 				Configed.getResourceValue("SearchPane.mode.fulltext.tooltip"));
-		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.starttext"), // Index START_TEXT_SEARCH
+		tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.starttext"),
 				Configed.getResourceValue("SearchPane.mode.starttext.tooltip"));
 		if (withRegEx) {
 			tooltipsMap.put(Configed.getResourceValue("SearchPane.mode.regex"),

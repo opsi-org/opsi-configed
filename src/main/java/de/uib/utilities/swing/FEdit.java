@@ -210,8 +210,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	@Override
 	public void setVisible(boolean b) {
-		if (starting && b) // first visibility
-		{
+		if (starting && b) {
 			starting = false;
 			setDataChanged(false);
 		}
@@ -290,7 +289,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	protected void cancel() {
 		Logging.info(this, "cancel, go back to " + initialText);
-		setStartText(initialText); // sets cancelled = false
+		setStartText(initialText);
 		cancelled = true;
 
 		if (servedCellEditor != null) {

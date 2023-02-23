@@ -50,9 +50,8 @@ import de.uib.utilities.table.ListModelProducer;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.SensitiveCellEditor;
 
-public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 // works on a map of pairs of type String - List
-{
+public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener {
 	private static Integer objectCounter = 0;
 	JScrollPane jScrollPane;
 	JTable table;
@@ -84,9 +83,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			mapTableModel.removeEntry(key);
 
 			// set for this session to default, without storing the value separately)
-			mapTableModel.addEntry(key, defaultsMap.get(key),
-					// optionsMap.get(key).getDefaultValues(),
-					false);
+			mapTableModel.addEntry(key, defaultsMap.get(key), false);
 		}
 
 		@Override
@@ -105,17 +102,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener
 			mapTableModel.removeEntry(key);
 
 			// set for this session to default, without storing the value separately)
-			mapTableModel.addEntry(key, defaultsMap.get(key),
-					// optionsMap.get(key).getDefaultValues(),
-					true // we save the value specifically
-			);
+			mapTableModel.addEntry(key, defaultsMap.get(key), true);
 		}
 
 		@Override
 		public String getRemovalMenuText() {
 			super.getRemovalMenuText();
 			return Configed.getResourceValue("EditMapPanelX.PopupMenu.SetSpecificValueToDefault");
-
 		}
 	}
 

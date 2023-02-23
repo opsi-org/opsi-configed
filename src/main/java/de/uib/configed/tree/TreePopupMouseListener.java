@@ -93,7 +93,8 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 			}
 
 			if (tree.removeClientNodes(clientNodesToRemove)) {
-				configedMain.setGroup(node.toString()); // refresh internal view
+				// refresh internal view
+				configedMain.setGroup(node.toString());
 			}
 		}
 	}
@@ -134,39 +135,37 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 			return false;
 		}
 
-		menuItemCreateNode.setVisible(false); // creation of subgroup
-		menuItemEditNode.setVisible(false); // edit
-		menuItemDeleteNode.setVisible(false); // deletion
-		menuItemDeleteGroupNode.setVisible(false); // deletion
-		menuItemActivateElements.setVisible(false); // removal of non-groupnode
-													// elements
-		menuItemRemoveElements.setVisible(false); // edit
+		menuItemCreateNode.setVisible(false);
+		menuItemEditNode.setVisible(false);
+		menuItemDeleteNode.setVisible(false);
+		menuItemDeleteGroupNode.setVisible(false);
+		menuItemActivateElements.setVisible(false);
+		menuItemRemoveElements.setVisible(false);
 
 		int numberVisibleItems = 0;
 
 		if (clickNode.getAllowsChildren()) {
 
 			if (((GroupNode) clickNode).allowsSubGroups()) {
-				menuItemCreateNode.setVisible(true); // creation of subgroup
+				menuItemCreateNode.setVisible(true);
 				numberVisibleItems++;
 			}
 
 			if (((GroupNode) clickNode).allowsSubGroups() && !(((GroupNode) clickNode).isFixed())) {
-				menuItemEditNode.setVisible(true); // edit this node
+				menuItemEditNode.setVisible(true);
 				numberVisibleItems++;
 			}
 
 			if (!(((GroupNode) clickNode).isFixed())) {
-				menuItemDeleteGroupNode.setVisible(true); // deletion
+				menuItemDeleteGroupNode.setVisible(true);
 				numberVisibleItems++;
 			}
 
-			menuItemActivateElements.setVisible(true); // activate elements
+			menuItemActivateElements.setVisible(true);
 			numberVisibleItems++;
 
 			if (!(((GroupNode) clickNode).isFixed())) {
-				menuItemRemoveElements.setVisible(true); // delete non-groupnode
-															// elements
+				menuItemRemoveElements.setVisible(true);
 				numberVisibleItems++;
 			}
 		} else if (!(((GroupNode) parentNode).isFixed())) {

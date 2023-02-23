@@ -56,7 +56,7 @@ public class ExporterToPDF extends AbstractExportTable {
 
 	private static final float M_LEFT = 36;
 	private static final float M_RIGHT = 36;
-	private static final float M_TOP = 74; // with header
+	private static final float M_TOP = 74;
 	private static final float M_BOTTOM = 54;
 
 	private float xHeaderTop = 803;
@@ -378,7 +378,7 @@ public class ExporterToPDF extends AbstractExportTable {
 			PdfPTable table = new PdfPTable(3);
 			// TODO: logo, create String from Globals
 
-			java.net.URL opsiImageURL = Globals.getImageResourceURL("images/opsi_full.png");
+			URL opsiImageURL = Globals.getImageResourceURL("images/opsi_full.png");
 			try {
 				// add header table with page number
 				table.setWidths(new int[] { 24, 24, 2 });
@@ -421,7 +421,7 @@ public class ExporterToPDF extends AbstractExportTable {
 	public static Image createElement(URL imageSource, float posx, float posy)
 			// http://kievan.hubpages.com/hub/How-to-Create-a-Basic-iText-PDF-Document
 			throws DocumentException, IOException {
-		Image img = com.itextpdf.text.Image.getInstance(imageSource);
+		Image img = Image.getInstance(imageSource);
 		// no scaling
 		img.setAbsolutePosition(posx, posy);
 		return img;

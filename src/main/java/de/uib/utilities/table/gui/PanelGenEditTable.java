@@ -224,11 +224,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected List<JMenuItem> menuItemsRequesting1SelectedLine;
 	protected List<JMenuItem> menuItemsRequestingMultiSelectedLines;
 
-	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition, // if -1 dont
-			// use a
-			// standard
-			// popup
-			// if > 0 the popup is added later after installing another popup
+	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
 

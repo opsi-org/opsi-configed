@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
 import javax.swing.JCheckBox;
@@ -23,6 +24,7 @@ import javax.swing.table.TableRowSorter;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
@@ -34,6 +36,7 @@ import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
+import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
@@ -87,7 +90,7 @@ public class PanelSWInfo extends JPanel {
 	static final String FILTER_MS_UPDATES = "withMsUpdates";
 	int indexOfColWindowsSoftwareID;
 
-	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates = new de.uib.utilities.table.TableModelFilterCondition() {
+	TableModelFilterCondition filterConditionWithMsUpdates = new TableModelFilterCondition() {
 		@Override
 		public void setFilter(Set<Object> filter) {
 			/* Not needed */}
@@ -105,9 +108,9 @@ public class PanelSWInfo extends JPanel {
 	JCheckBox checkWithMsUpdates2;
 	static final String FILTER_MS_UPDATES2 = "withMsUpdates2";
 
-	final java.util.regex.Pattern patternWithKB = java.util.regex.Pattern.compile("\\{.*\\}\\p{Punct}kb.*");
+	final Pattern patternWithKB = Pattern.compile("\\{.*\\}\\p{Punct}kb.*");
 
-	de.uib.utilities.table.TableModelFilterCondition filterConditionWithMsUpdates2 = new de.uib.utilities.table.TableModelFilterCondition() {
+	TableModelFilterCondition filterConditionWithMsUpdates2 = new TableModelFilterCondition() {
 		@Override
 		public void setFilter(Set<Object> filter) {
 			/* Not needed */}
@@ -152,8 +155,7 @@ public class PanelSWInfo extends JPanel {
 
 		panelTable.setTitle("");
 
-		// therefore postponed
-		panelTable.setColumnSelectionAllowed(false); // up to now, true is destroying search function
+		panelTable.setColumnSelectionAllowed(false);
 
 		panelTable.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -299,25 +301,23 @@ public class PanelSWInfo extends JPanel {
 		GroupLayout layoutEmbed = new GroupLayout(this);
 		setLayout(layoutEmbed);
 
-		layoutEmbed
-				.setHorizontalGroup(layoutEmbed
-						.createSequentialGroup().addGap(hGap, hGap, hGap).addGroup(layoutEmbed.createParallelGroup()
+		layoutEmbed.setHorizontalGroup(layoutEmbed.createSequentialGroup().addGap(hGap, hGap, hGap)
+				.addGroup(layoutEmbed.createParallelGroup()
 
-								.addComponent(subPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
 
-								.addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addGap(hGap, hGap, hGap));
+						.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE))
+				.addGap(hGap, hGap, hGap));
 
 		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup()
 
 				.addGap(vGap, vGap, vGap)
-				.addComponent(subPanelTitle, javax.swing.GroupLayout.PREFERRED_SIZE,
-						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+				.addComponent(subPanelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 
-				.addComponent(panelTable, javax.swing.GroupLayout.PREFERRED_SIZE,
-						javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(panelTable, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(vGap, vGap, vGap));
 
 		if (withPopup) {
@@ -415,8 +415,7 @@ public class PanelSWInfo extends JPanel {
 
 	public void sendToTerminal() {
 
-		de.uib.configed.gui.swinfopage.SWterminalExporter exporter = new de.uib.configed.gui.swinfopage.SWterminalExporter(
-				PersistenceControllerFactory.getPersistenceController());
+		SWterminalExporter exporter = new SWterminalExporter(PersistenceControllerFactory.getPersistenceController());
 
 		exporter.setHost(hostId);
 
@@ -482,13 +481,13 @@ public class PanelSWInfo extends JPanel {
 	protected void floatExternalX() {
 
 		PanelSWInfo copyOfMe;
-		de.uib.configed.gui.GeneralFrame externalView;
+		GeneralFrame externalView;
 
 		copyOfMe = new PanelSWInfo(false, mainController);
 		copyOfMe.setHost(hostId);
 		copyOfMe.updateModel();
 
-		externalView = new de.uib.configed.gui.GeneralFrame(null, title, false);
+		externalView = new GeneralFrame(null, title, false);
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());

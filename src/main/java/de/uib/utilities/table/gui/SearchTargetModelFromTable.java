@@ -8,11 +8,14 @@
 
 package de.uib.utilities.table.gui;
 
+import java.util.Arrays;
+
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.RowNoTableModelFilterCondition;
 
 public class SearchTargetModelFromTable implements SearchTargetModel {
 	protected JTable table;
@@ -115,9 +118,8 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 		Logging.info(this, "setCursorRow row, produced modelrow " + modelrow);
 
-		if (table.getModel() instanceof de.uib.utilities.table.GenTableModel) {
-
-			((de.uib.utilities.table.GenTableModel) table.getModel()).setCursorRow(modelrow);
+		if (table.getModel() instanceof GenTableModel) {
+			((GenTableModel) table.getModel()).setCursorRow(modelrow);
 		}
 
 	}
@@ -163,7 +165,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void setSelection(int[] selection) {
-		Logging.info(this, "setSelection --- " + java.util.Arrays.toString(selection));
+		Logging.info(this, "setSelection --- " + Arrays.toString(selection));
 		table.getSelectionModel().clearSelection();
 		for (int i = 0; i < selection.length; i++) {
 			table.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
@@ -182,7 +184,6 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 
 	@Override
 	public void setFiltered(boolean b) {
-
 		boolean wasChanged = false;
 
 		if (thePanel != null) {
@@ -201,10 +202,10 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 				modelRowFilter[i] = table.convertRowIndexToModel(viewRowfilter[i]);
 			}
 
-			Logging.info(this, "setFiltered modelRowFilter " + java.util.Arrays.toString(modelRowFilter));
+			Logging.info(this, "setFiltered modelRowFilter " + Arrays.toString(modelRowFilter));
 
-			((de.uib.utilities.table.RowNoTableModelFilterCondition) (model.getFilter(FILTER_BY_SELECTION)
-					.getCondition())).setFilter(modelRowFilter, model.getRows());
+			((RowNoTableModelFilterCondition) (model.getFilter(FILTER_BY_SELECTION).getCondition()))
+					.setFilter(modelRowFilter, model.getRows());
 
 			model.setUsingFilter(FILTER_BY_SELECTION, true);
 			model.reset();
@@ -214,7 +215,8 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		} else {
 			model.setUsingFilter(FILTER_BY_SELECTION, false);
 
-			setSelection(viewRowfilter); // restore the original selection
+			// restore the original selection
+			setSelection(viewRowfilter);
 		}
 		filtered = b;
 

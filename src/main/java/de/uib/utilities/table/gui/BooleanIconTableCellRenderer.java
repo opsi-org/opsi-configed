@@ -39,9 +39,8 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
-			boolean isSelected, // is the cell selected
-			boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (!(c instanceof JLabel)) {

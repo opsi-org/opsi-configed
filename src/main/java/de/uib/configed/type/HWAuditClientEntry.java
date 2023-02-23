@@ -9,7 +9,7 @@ public final class HWAuditClientEntry {
 
 	public static final String HOST_KEY = "hostId";
 	public static final String NAME_KEY = "name";
-	public static final String STATE_KEY = "state"; // value is Integer
+	public static final String STATE_KEY = "state";
 	public static final String HARDWARE_CLASS_KEY = "hardwareClass";
 
 	public static final String LAST_SEEN_KEY = "lastseen";

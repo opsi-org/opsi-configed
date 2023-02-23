@@ -20,8 +20,7 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 	ComboBoxModel<String> nullModel;
 
 	public AdaptingCellEditorValuesByIndex(JComboBox cc, ComboBoxModeller cbm,
-			Map<String, String> universalMapOfStrings, // valid for every possible content of cbm
-			String imagesBase) {
+			Map<String, String> universalMapOfStrings, String imagesBase) {
 		super(cc);
 		this.cc = cc;
 		this.cbm = cbm;

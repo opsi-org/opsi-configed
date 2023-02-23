@@ -24,7 +24,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 	protected boolean addEmpty = false;
 
 	public JComboBoxToolTip() {
-		super(); // as it is
+		super();
 
 		listBackgroundColorSelected = Globals.SECONDARY_BACKGROUND_COLOR;
 		listBackgroundColorUnselected = Globals.BACKGROUND_COLOR_3;
@@ -42,8 +42,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 				setBackground(listBackgroundColorSelected);
 				setForeground(listForegroundColor);
 				Logging.debug(this, "index, tooltips " + index + ", " + tooltips);
-				if (-1 < index && index < tooltips.size() // we had an error only on linux with openjdk 8
-				) {
+				if (-1 < index && index < tooltips.size()) {
 					list.setToolTipText(tooltips.get(index));
 				}
 			} else {

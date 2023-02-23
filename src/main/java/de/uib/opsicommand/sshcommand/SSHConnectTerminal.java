@@ -120,8 +120,8 @@ public class SSHConnectTerminal extends SSHConnect {
 				// Do not use StrictHostKeyChecking=no. See JSch SFTP security with
 
 				// http://stackoverflow.com/questions/30178936/jsch-sftp-security-with-session-setconfigstricthostkeychecking-no
-				session.setConfig("StrictHostKeyChecking", "no"); // otherwise exception if not in knwon_hosts or
-																	// unknown fingerprint
+				// otherwise exception if not in knwon_hosts or unknown fingerprint
+				session.setConfig("StrictHostKeyChecking", "no");
 				session.connect();
 				channel = (ChannelShell) session.openChannel("shell");
 

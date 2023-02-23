@@ -452,7 +452,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		// z.B. hwClass is DISK_PARTITION
 
-		List<String> specificColumns = new ArrayList<>(); // columns specific for the class
+		List<String> specificColumns = new ArrayList<>();
 		specificColumns.add(Host.ID_COLUMN);
 
 		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
@@ -472,7 +472,7 @@ public class DataStubRawData extends DataStubNOM {
 		for (String hwInfoCol : persist.getClient2HwRowsColumnNames()) {
 			if (hwInfoCol.startsWith("HOST.")
 					|| hwInfoCol.equals(AbstractPersistenceController.LAST_SEEN_VISIBLE_COL_NAME)) {
-				continue; // these already are in the collection
+				continue;
 			}
 
 			Logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + AbstractPersistenceController.HW_INFO_DEVICE

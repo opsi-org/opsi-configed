@@ -875,8 +875,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				}
 			}
 
-			directlyAllowedGroups.removeAll(allowedClients); // they were the last element in pathElements
-
+			// they were the last element in pathElements
+			directlyAllowedGroups.removeAll(allowedClients);
 		}
 
 		Logging.info(this, "associateClientsToGroups allowed Groups " + directlyAllowedGroups);

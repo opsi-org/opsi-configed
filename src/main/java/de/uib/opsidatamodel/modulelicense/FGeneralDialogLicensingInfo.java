@@ -147,18 +147,11 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		retrieveData();
 
-		thePanel = new LicensingInfoPanelGenEditTable("", // title
-				-1, // don't use a definite max table width
-				false, // editing
-				0, // generalPopupPosition
-				true, // switchLineColors
-
+		thePanel = new LicensingInfoPanelGenEditTable("", -1, false, 0, true,
 				new int[] { PanelGenEditTable.POPUP_PRINT, PanelGenEditTable.POPUP_PDF,
 						PanelGenEditTable.POPUP_SORT_AGAIN, PanelGenEditTable.POPUP_EXPORT_CSV,
 						PanelGenEditTable.POPUP_EXPORT_SELECTED_CSV, PanelGenEditTable.POPUP_RELOAD },
-				false // with tableSearchPane
-		) {
-
+				false) {
 			@Override
 			public void reload() {
 

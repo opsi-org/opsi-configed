@@ -46,12 +46,10 @@ import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.observer.DataRefreshedObserver;
 import de.uib.utilities.thread.WaitCursor;
 
-public class PanelCompleteWinProducts extends JPanel
-		implements de.uib.utilities.observer.DataRefreshedObserver, NameProducer
-
-{
+public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObserver, NameProducer {
 
 	// file name conventions
 
@@ -96,8 +94,7 @@ public class PanelCompleteWinProducts extends JPanel
 		initComponentsForNameProducer();
 
 		selectedDepot = "" + comboChooseDepot.getSelectedItem();
-		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot,
-				de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW);
+		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
 
 		panelMountShare = new PanelMountShare(this, main, root)
 
@@ -105,8 +102,7 @@ public class PanelCompleteWinProducts extends JPanel
 			@Override
 			protected boolean checkConnectionToShare() {
 				boolean connected = super.checkConnectionToShare();
-				if (comboChooseWinProduct != null // we have an initialized gui
-						&& connected) {
+				if (comboChooseWinProduct != null && connected) {
 					evaluateWinProducts();
 				}
 
@@ -177,7 +173,7 @@ public class PanelCompleteWinProducts extends JPanel
 			Logging.info(this, "actionPerformed  depot selected " + selectedDepot);
 			depots.clear();
 			depots.add(selectedDepot);
-			SmbConnect.getInstance().buildSambaTarget(selectedDepot, de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW);
+			SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
 			evaluateWinProducts();
 		});
 
@@ -223,7 +219,7 @@ public class PanelCompleteWinProducts extends JPanel
 
 	@Override
 	public String getDefaultName() {
-		return de.uib.connectx.SmbConnect.PRODUCT_SHARE_RW;
+		return SmbConnect.PRODUCT_SHARE_RW;
 	}
 
 	private void initComponentsForNameProducer() {
@@ -346,8 +342,8 @@ public class PanelCompleteWinProducts extends JPanel
 
 			persist.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
 					+ SmbConnect.DIRECTORY_PE);
-			persist.setRights("/" + SmbConnect.unixPath(de.uib.connectx.SmbConnect.directoryProducts) + "/" + winProduct
-					+ "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
+			persist.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
+					+ SmbConnect.DIRECTORY_INSTALL_FILES);
 			waitCursor.stop();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,

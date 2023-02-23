@@ -943,21 +943,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					StringBuilder msg = new StringBuilder(
 
 							Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
-					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));// At the moment,
-																										// user control
-																										// is not more
-																										// active!
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
 					msg.append("\n");
-					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option1"));// Ignore warning
-																										// and
-																										// continue?
-					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));// No more
-																										// warning
-																										// (locally)?
-					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));// Re-activate
-																										// user check
-																										// (on the opsi
-																										// server)?
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option1"));
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));
 
 					dialog.setMessage("" + msg);
 					dialog.setVisible(true);
@@ -1675,9 +1665,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() " + notWanConfiguration.keySet() + "\n "
 				+ notWanConfiguration.keySet().size());
 
-		setConfig(notWanConfiguration); // set the collection
+		setConfig(notWanConfiguration);
 		Logging.info(this, "set notWanConfiguration members where no entry exists ----------------------------- ");
-		setConfig(true); // send to opsiserver only new configs
+		// send to opsiserver only new configs
+		setConfig(true);
 
 		Map<String, List<Object>> specifiedConfiguration;
 
@@ -2305,7 +2296,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Map<String, Object> result0 = JSONReMapper.getResponses(
 				exec.retrieveJSONObject(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT // background																																									
-				))); // call, do not show waiting info
+				)));
 
 		for (Entry<String, Object> resultEntry : result0.entrySet()) {
 			StringBuilder value = new StringBuilder();
@@ -3385,8 +3376,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				// now, we have got them in a view model
 
-				Logging.info(this, "saveHwColumnConfig, locally saving " // + configOption
-						+ " key " + hwAuditDeviceClass.getHwItemConfigKey());
+				Logging.info(this,
+						"saveHwColumnConfig, locally saving " + " key " + hwAuditDeviceClass.getHwItemConfigKey());
 
 				Logging.info(this,
 						"saveHwColumnConfig, old configOption for key" + " " + hwAuditDeviceClass.getHostConfigKey()
@@ -3428,8 +3419,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				Logging.info(this, "saveHwColumnConfig, produce a ConfigOption from configItem " + configItem);
 
-				Logging.info(this, "saveHwColumnConfig, locally saving " // + configOption
-						+ " key " + hwAuditDeviceClass.getHwItemConfigKey());
+				Logging.info(this,
+						"saveHwColumnConfig, locally saving " + " key " + hwAuditDeviceClass.getHwItemConfigKey());
 
 				Logging.info(this,
 						"saveHwColumnConfig, we had configOption for key" + " "
@@ -3669,13 +3660,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		boolean smbMounted = new File(depotProductDirectory).exists();
 
 		for (String product : new TreeSet<>(getAllNetbootProductNames(depotId))) {
-			if (!smbMounted // probably not on Windows, take every product to correct path manually
+			if (!smbMounted
 					|| new File(
 							depotProductDirectory + File.separator + product + File.separator + SmbConnect.DIRECTORY_PE)
-									.exists() // win 6.x
+									.exists()
 					|| new File(depotProductDirectory + File.separator + product + File.separator
-							+ SmbConnect.DIRECTORY_I368).exists() // XP
-			) {
+							+ SmbConnect.DIRECTORY_I368).exists()) {
 				winProducts.add(product);
 			}
 		}
@@ -8069,7 +8059,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		// displaying to the user
 
-		getHostInfoCollections().retrieveOpsiHosts(); // for checking number of clients and config states
+		getHostInfoCollections().retrieveOpsiHosts();
 		Logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
 				.getInstance(getOpsiLicencingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
 

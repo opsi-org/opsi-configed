@@ -22,9 +22,8 @@ public class TargetConfiguration {
 	public static final int ALWAYS = 2;
 	public static final int FORBIDDEN = 4;
 
-	// future
-	public static final int DISABLED = 5; // do not install or uninstall at the moment
-	public static final int INSTALL_NEWEST = 6; // look for the newest version and try to install it
+	public static final int DISABLED = 5;
+	public static final int INSTALL_NEWEST = 6;
 
 	// mappings
 	private static Map<Integer, String> state2label;

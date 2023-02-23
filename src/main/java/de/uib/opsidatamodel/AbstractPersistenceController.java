@@ -560,8 +560,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Object2Product2VersionList getDepot2NetbootProducts();
 
-	public abstract Map<String, Map<String, Object>> getProductGlobalInfos(String depotId); // (productId -> (infoKey ->
-																							// info))
+	// (productId -> (infoKey -> info))
+	public abstract Map<String, Map<String, Object>> getProductGlobalInfos(String depotId);
 
 	public abstract List<List<Object>> getProductRows();
 
