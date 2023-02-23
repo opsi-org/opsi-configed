@@ -11,7 +11,7 @@ public class IntLessOrEqualOperation extends AbstractSelectOperation {
 
 	@Override
 	public SelectData.DataType getDataType() {
-		return SelectData.DataType.IntegerType;
+		return SelectData.DataType.INTEGER_TYPE;
 	}
 
 	@Override

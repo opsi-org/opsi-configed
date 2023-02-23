@@ -10,7 +10,48 @@ public class SelectData {
 	private Object dataObject;
 
 	public enum DataType {
-		TextType, IntegerType, BigIntegerType, DoubleType, EnumType, DateType, NoneType
+		TEXT_TYPE {
+			@Override
+			public String toString() {
+				return "TextType";
+			}
+		},
+		INTEGER_TYPE {
+			@Override
+			public String toString() {
+				return "IntegerType";
+			}
+		},
+		BIG_INTEGER_TYPE {
+			@Override
+			public String toString() {
+				return "BigIntegerType";
+			}
+		},
+		DOUBLE_TYPE {
+			@Override
+			public String toString() {
+				return "DoubleType";
+			}
+		},
+		ENUM_TYPE {
+			@Override
+			public String toString() {
+				return "EnumType";
+			}
+		},
+		DATE_TYPE {
+			@Override
+			public String toString() {
+				return "DateType";
+			}
+		},
+		NONE_TYPE {
+			@Override
+			public String toString() {
+				return "NoneType";
+			}
+		}
 	}
 
 	public SelectData(Object data, DataType type) {
@@ -20,26 +61,26 @@ public class SelectData {
 		Logging.debug(this, "got data, type " + data + ", " + type);
 
 		switch (type) {
-		case TextType:
+		case TEXT_TYPE:
 			if (!(data instanceof String)) {
 				Logging.error(this, "Data is no String");
 				throw new IllegalArgumentException("Data is no String");
 			}
 			break;
-		case IntegerType:
+		case INTEGER_TYPE:
 			if (!(data instanceof Integer)) {
 				Logging.error(this, "Data is no Integer");
 				throw new IllegalArgumentException("Data is no Integer");
 			}
 			break;
-		case BigIntegerType:
+		case BIG_INTEGER_TYPE:
 			if (!(data instanceof Long)) {
 				Logging.error(this, "Data is no Long");
 				throw new IllegalArgumentException("Data is no Long");
 			}
 			break;
 
-		case DateType: {
+		case DATE_TYPE: {
 
 			if (!(data instanceof String)) {
 				throw new IllegalArgumentException("Data is not a (date) string");
@@ -48,19 +89,19 @@ public class SelectData {
 			break;
 		}
 
-		case DoubleType:
+		case DOUBLE_TYPE:
 			if (!(data instanceof Double)) {
 				Logging.error(this, "Data is no Double");
 				throw new IllegalArgumentException("Data is no Double");
 			}
 			break;
-		case EnumType:
+		case ENUM_TYPE:
 			if (!(data instanceof String)) {
 				Logging.error(this, "Data is no String");
 				throw new IllegalArgumentException("Data is no String");
 			}
 			break;
-		case NoneType:
+		case NONE_TYPE:
 			break;
 		}
 	}
