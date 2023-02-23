@@ -22,8 +22,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.utilities.logging.Logging;
 
 public class BackgroundFileUploader extends SwingWorker<Void, Void> {
-	private static final int DEFAULT_CHUNK_SIZE = 1000000;
-	private static final int DEFAULT_TIME_TO_WAIT_IN_MS = 5;
+	private static final int DEFAULT_CHUNK_SIZE = 25000;
+	private static final int DEFAULT_BUSY_WAIT_IN_MS = 50;
 
 	private List<File> files;
 	private Terminal terminal;
@@ -84,7 +84,9 @@ public class BackgroundFileUploader extends SwingWorker<Void, Void> {
 					buff.clear();
 
 					if (!last) {
-						wait(DEFAULT_TIME_TO_WAIT_IN_MS);
+						while (terminal.getMessagebus().isBusy()) {
+							wait(DEFAULT_BUSY_WAIT_IN_MS);
+						}
 					}
 				}
 			} catch (IOException ex) {

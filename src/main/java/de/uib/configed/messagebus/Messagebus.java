@@ -192,6 +192,10 @@ public class Messagebus {
 		}
 	}
 
+	public boolean isBusy() {
+		return messagebusWebSocket.hasBufferedData();
+	}
+
 	public boolean isConnected() {
 		return connected;
 	}
