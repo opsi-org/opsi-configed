@@ -5335,7 +5335,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					typesOfUsedConfigIds.put(ident, "UnicodeConfig");
 				}
 
-				if (valueList.equals(MapTableModel.nullLIST)) {
+				if (valueList == MapTableModel.nullLIST) {
 					Map<String, Object> item = createNOMitem("ConfigState");
 					item.put("objectId", configState.get("objectId"));
 					item.put("configId", configState.get("configId"));
@@ -7975,7 +7975,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			Logging.info(this, "retrieveOpsiLicensingInfoVersion getMethodSignature( backend_getLicensingInfo "
 					+ getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME));
 
-			if (getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME).equals(NONE_LIST)) {
+			if (getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME) == NONE_LIST) {
 				Logging.info(this,
 						"method " + BACKEND_LICENSING_INFO_METHOD_NAME + " not existing in this opsi service");
 				opsiLicensingInfoVersion = LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD;
@@ -8033,7 +8033,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		opsiInformation = new HashMap<>();
 
 		// method does not exist before opsi 3.4
-		if (!getMethodSignature("backend_info").equals(NONE_LIST)) {
+		if (getMethodSignature("backend_info") != NONE_LIST) {
 			opsiInformation = exec.getMapResult(omc);
 		}
 
@@ -8450,7 +8450,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public boolean checkSSHCommandMethod(String method) {
 		// method does not exist before opsi 3.4
-		if (!getMethodSignature(method).equals(NONE_LIST)) {
+		if (getMethodSignature(method) != NONE_LIST) {
 			Logging.info(this, "checkSSHCommandMethod " + method + " exists");
 			return true;
 		}

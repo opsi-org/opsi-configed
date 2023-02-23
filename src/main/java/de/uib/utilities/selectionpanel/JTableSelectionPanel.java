@@ -888,7 +888,7 @@ public class JTableSelectionPanel extends JPanel
 	private void searchTheRow(int startrow, boolean addSelection) {
 		String value = fieldSearch.getText();
 
-		if (value.length() > 10 && value.substring(0, 4).equalsIgnoreCase("http") && value.contains("host=")) {
+		if (value.length() > 10 && value.substring(0, 4).equalsIgnoreCase("http") && value.indexOf("host=") > 0) {
 			value = value.substring(value.indexOf("host=") + ("host=").length());
 		}
 
