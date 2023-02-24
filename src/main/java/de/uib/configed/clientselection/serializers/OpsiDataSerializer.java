@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.clientselection.SelectData;
+import de.uib.configed.clientselection.SelectData.DataType;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.AbstractPersistenceController;
@@ -303,8 +304,34 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 		}
 
 		if (name.equals("dataType")) {
-			lastDataType = SelectData.DataType.valueOf(value);
-			return lastDataType;
+			//TextType, IntegerType, BigIntegerType, DoubleType, EnumType, DateType, NoneType
+
+			switch (value) {
+			case "TextType":
+				return DataType.TEXT_TYPE;
+
+			case "IntegerType":
+				return DataType.INTEGER_TYPE;
+
+			case "BigIntegerType":
+				return DataType.BIG_INTEGER_TYPE;
+
+			case "DoubleType":
+				return DataType.DOUBLE_TYPE;
+
+			case "EnumType":
+				return DataType.ENUM_TYPE;
+
+			case "DateType":
+				return DataType.DATE_TYPE;
+
+			case "NoneType":
+				return DataType.NONE_TYPE;
+
+			default:
+				Logging.error(this, "dataType for " + value + " cannot be found...)");
+				break;
+			}
 		}
 
 		throw new IllegalArgumentException(value + " was not expected here");
