@@ -8,6 +8,8 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -156,12 +158,12 @@ public final class Terminal {
 
 	@SuppressWarnings("java:S2972")
 	private class WebSocketTtyConnector implements TtyConnector {
-		private final InputStreamReader reader;
-		private final OutputStream writer;
+		private final BufferedReader reader;
+		private final BufferedOutputStream writer;
 
 		public WebSocketTtyConnector(OutputStream outputStream, InputStream inputStream) {
-			this.writer = outputStream;
-			this.reader = new InputStreamReader(inputStream);
+			this.writer = new BufferedOutputStream(outputStream);
+			this.reader = new BufferedReader(new InputStreamReader(inputStream));
 		}
 
 		@Override
