@@ -440,8 +440,6 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 									Map<String, Object> inner2 = new HashMap<>();
 									JSONObject jsonInner2 = (JSONObject) jsonInner1.get(key);
 
-									Logging.devel(this, "is JSONObject");
-
 									if (jsonInner2 != null) {
 										Iterator<String> iter2 = jsonInner2.keys();
 										while (iter2.hasNext()) {

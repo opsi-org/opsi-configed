@@ -588,7 +588,7 @@ public final class OpsiDataBackend extends AbstractBackend {
 
 		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
 			String hardwareName = (String) hardwareMap.get("Class").get(0).get("UI");
-			String hardwareOpsi = (String) ((Map<?, ?>) hardwareMap.get("Class")).get("Opsi");
+			String hardwareOpsi = (String) hardwareMap.get("Class").get(0).get("Opsi");
 			List<Map<String, Object>> values = hardwareMap.get("Values");
 			hwUiToOpsi.put(hardwareName, hardwareOpsi);
 			hwClassToValues.put(hardwareOpsi, values);

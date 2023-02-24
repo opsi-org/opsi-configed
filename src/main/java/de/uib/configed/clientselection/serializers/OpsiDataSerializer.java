@@ -307,30 +307,41 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 
 			switch (value) {
 			case "TextType":
-				return DataType.TEXT_TYPE;
+				lastDataType = DataType.TEXT_TYPE;
+				break;
 
 			case "IntegerType":
-				return DataType.INTEGER_TYPE;
+				lastDataType = DataType.INTEGER_TYPE;
+				break;
 
 			case "BigIntegerType":
-				return DataType.BIG_INTEGER_TYPE;
+				lastDataType = DataType.BIG_INTEGER_TYPE;
+				break;
 
 			case "DoubleType":
-				return DataType.DOUBLE_TYPE;
+				lastDataType = DataType.DOUBLE_TYPE;
+				break;
 
 			case "EnumType":
-				return DataType.ENUM_TYPE;
+				lastDataType = DataType.ENUM_TYPE;
+				break;
 
 			case "DateType":
-				return DataType.DATE_TYPE;
+				lastDataType = DataType.DATE_TYPE;
+				break;
 
 			case "NoneType":
-				return DataType.NONE_TYPE;
+				lastDataType = DataType.NONE_TYPE;
+				break;
 
 			default:
 				Logging.error(this, "dataType for " + value + " cannot be found...)");
 				break;
 			}
+
+			Logging.info(this, "lastDataType is now " + lastDataType);
+
+			return lastDataType;
 		}
 
 		throw new IllegalArgumentException(value + " was not expected here");
