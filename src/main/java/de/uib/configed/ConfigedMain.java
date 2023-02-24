@@ -1047,65 +1047,63 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.visualizeEditingTarget(t);
 		// what else to do:
 		switch (t) {
-			case CLIENTS:
-				Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+		case CLIENTS:
+			Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
-				mainFrame.setConfigPanesEnabled(true);
-				mainFrame.setConfigPaneEnabled(
-						mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
-				mainFrame.setConfigPaneEnabled(
-						mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")),
-						false);
-				mainFrame.setVisualViewIndex(saveClientsViewIndex);
+			mainFrame.setConfigPanesEnabled(true);
+			mainFrame.setConfigPaneEnabled(
+					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
+			mainFrame.setConfigPaneEnabled(
+					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
+			mainFrame.setVisualViewIndex(saveClientsViewIndex);
 
-				Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+			Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
 
-				if (!reachableUpdater.isInterrupted()) {
-					reachableUpdater.interrupt();
-				}
+			if (!reachableUpdater.isInterrupted()) {
+				reachableUpdater.interrupt();
+			}
 
-				if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
-					setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
-				}
+			if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
+				setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
+			}
 
-				break;
-			case DEPOTS:
-				Logging.info(this, "setEditingTarget  DEPOTS");
+			break;
+		case DEPOTS:
+			Logging.info(this, "setEditingTarget  DEPOTS");
 
-				if (!reachableUpdater.isInterrupted()) {
-					reachableUpdater.interrupt();
-				}
+			if (!reachableUpdater.isInterrupted()) {
+				reachableUpdater.interrupt();
+			}
 
-				initServer();
-				mainFrame.setConfigPanesEnabled(false);
+			initServer();
+			mainFrame.setConfigPanesEnabled(false);
 
-				mainFrame.setConfigPaneEnabled(
-						mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
-				mainFrame.setConfigPaneEnabled(
-						mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")),
-						true);
+			mainFrame.setConfigPaneEnabled(
+					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
+			mainFrame.setConfigPaneEnabled(
+					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
 
-				Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
-						+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+			Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
+					+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
 
-				mainFrame.setVisualViewIndex(saveDepotsViewIndex);
+			mainFrame.setVisualViewIndex(saveDepotsViewIndex);
 
-				break;
-			case SERVER:
-				if (!reachableUpdater.isInterrupted()) {
-					reachableUpdater.interrupt();
-				}
+			break;
+		case SERVER:
+			if (!reachableUpdater.isInterrupted()) {
+				reachableUpdater.interrupt();
+			}
 
-				initServer();
-				mainFrame.setConfigPanesEnabled(false);
+			initServer();
+			mainFrame.setConfigPanesEnabled(false);
 
-				mainFrame.setConfigPaneEnabled(
-						mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+			mainFrame.setConfigPaneEnabled(
+					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
 
-				mainFrame.setVisualViewIndex(saveServerViewIndex);
-				break;
-			default:
-				break;
+			mainFrame.setVisualViewIndex(saveServerViewIndex);
+			break;
+		default:
+			break;
 		}
 
 		resetView(viewIndex);
@@ -3304,45 +3302,45 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		boolean result = true;
 
 		switch (viewIndex) {
-			case VIEW_CLIENTS:
-				break;
+		case VIEW_CLIENTS:
+			break;
 
-			case VIEW_LOCALBOOT_PRODUCTS:
-				result = setLocalbootProductsPage();
-				break;
+		case VIEW_LOCALBOOT_PRODUCTS:
+			result = setLocalbootProductsPage();
+			break;
 
-			case VIEW_NETBOOT_PRODUCTS:
-				result = setNetbootProductsPage();
-				break;
+		case VIEW_NETBOOT_PRODUCTS:
+			result = setNetbootProductsPage();
+			break;
 
-			case VIEW_NETWORK_CONFIGURATION:
-				result = setNetworkconfigurationPage();
-				break;
+		case VIEW_NETWORK_CONFIGURATION:
+			result = setNetworkconfigurationPage();
+			break;
 
-			case VIEW_HARDWARE_INFO:
-				result = setHardwareInfoPage();
-				break;
+		case VIEW_HARDWARE_INFO:
+			result = setHardwareInfoPage();
+			break;
 
-			case VIEW_SOFTWARE_INFO:
-				result = setSoftwareInfoPage();
-				break;
+		case VIEW_SOFTWARE_INFO:
+			result = setSoftwareInfoPage();
+			break;
 
-			case VIEW_LOG:
-				result = setLogPage();
-				break;
+		case VIEW_LOG:
+			result = setLogPage();
+			break;
 
-			case VIEW_PRODUCT_PROPERTIES:
-				result = setProductPropertiesPage();
+		case VIEW_PRODUCT_PROPERTIES:
+			result = setProductPropertiesPage();
 
-				break;
+			break;
 
-			case VIEW_HOST_PROPERTIES:
-				result = setHostPropertiesPage();
-				break;
+		case VIEW_HOST_PROPERTIES:
+			result = setHostPropertiesPage();
+			break;
 
-			default:
-				Logging.warning(this, "resetting View failed, no index for viewIndex: '" + viewIndex + "' found");
-				break;
+		default:
+			Logging.warning(this, "resetting View failed, no index for viewIndex: '" + viewIndex + "' found");
+			break;
 		}
 
 		return result;
@@ -3431,17 +3429,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			switch (editingTarget) {
-				case CLIENTS:
-					saveClientsViewIndex = viewIndex;
-					break;
+			case CLIENTS:
+				saveClientsViewIndex = viewIndex;
+				break;
 
-				case DEPOTS:
-					saveDepotsViewIndex = viewIndex;
-					break;
+			case DEPOTS:
+				saveDepotsViewIndex = viewIndex;
+				break;
 
-				case SERVER:
-					saveServerViewIndex = viewIndex;
-					break;
+			case SERVER:
+				saveServerViewIndex = viewIndex;
+				break;
 			}
 
 			if (result) {
@@ -5195,7 +5193,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			fAskCopyClient.setVisible(true);
 
 			if (fAskCopyClient.getResult() == 2) {
-				boolean overwriteExistingHost = false;
 				String newClientName = jTextHostname.getText();
 
 				if (newClientName.isEmpty()) {
@@ -5207,15 +5204,18 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				String newClientNameWithDomain = newClientName + "." + splittedClientName[1] + "."
 						+ splittedClientName[2];
 
+				// if client already exists ask if they want to override
 				if (persist.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
-					overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
-				}
+					boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
 
-				if (!overwriteExistingHost) {
-					return;
+					if (!overwriteExistingHost) {
+						return;
+					}
 				}
 
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
+
+				Logging.info(this, "copy client with new name " + newClientName);
 				copyClient.copy();
 
 				refreshClientList(newClientName);

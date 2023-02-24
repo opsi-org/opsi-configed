@@ -7,6 +7,7 @@ import de.uib.utilities.logging.Logging;
 
 /**
 */
+
 public class UpdateCollection implements UpdateCommand, CountedCollection {
 
 	protected Collection<Object> implementor;

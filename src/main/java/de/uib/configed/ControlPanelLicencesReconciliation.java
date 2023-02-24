@@ -79,7 +79,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		modelLicencesReconciliation = new GenTableModel(updateItemFactoryLicencesReconciliation,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, new MapRetriever() {
 					@Override
-					public Map retrieveMap() {
+					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.debug(this, "retrieveMap");
 						if (initialized) {
 							persist.reconciliationInfoRequestRefresh();

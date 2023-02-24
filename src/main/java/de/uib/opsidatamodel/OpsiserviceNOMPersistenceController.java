@@ -3905,8 +3905,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return result;
 	}
 
-	protected boolean updateProductOnClient(String pcname, String productname, int producttype, Map updateValues,
-			List updateItems) {
+	protected boolean updateProductOnClient(String pcname, String productname, int producttype,
+			Map<String, String> updateValues, List<JSONObject> updateItems) {
 		Map<String, Object> values = new HashMap<>();
 
 		values.put("productType", OpsiPackage.giveProductType(producttype));
@@ -3922,7 +3922,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public boolean updateProductOnClient(String pcname, String productname, int producttype, Map updateValues) {
+	public boolean updateProductOnClient(String pcname, String productname, int producttype,
+			Map<String, String> updateValues) {
 		if (updateProductOnClientItems == null) {
 			updateProductOnClientItems = new ArrayList<>();
 		}
@@ -3963,7 +3964,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public boolean updateProductOnClients(Set<String> clients, String productName, int productType,
 			Map<String, String> changedValues) {
-		List updateCollection = new ArrayList<>();
+		List<JSONObject> updateCollection = new ArrayList<>();
 
 		boolean result = true;
 
@@ -5208,15 +5209,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public void setHostValues(Map settings) {
+	public void setHostValues(Map<String, Object> settings) {
 		if (globalReadOnly) {
 			return;
 		}
 
 		List<JSONObject> hostMaps = new ArrayList<>();
 
-		Map<Object, Object> corrected = new HashMap<>();
-		for (Entry setting : (Set<Entry>) settings.entrySet()) {
+		Map<String, Object> corrected = new HashMap<>();
+		for (Entry<String, Object> setting : settings.entrySet()) {
 			if (setting.getValue() instanceof String
 					&& ((String) setting.getValue()).trim().equals(JSONReMapper.NULL_REPRESENTER)) {
 				corrected.put(setting.getKey(), JSONObject.NULL);

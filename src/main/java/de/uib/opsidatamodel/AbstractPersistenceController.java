@@ -614,7 +614,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds);
 
 	// collecting update items
-	public abstract boolean updateProductOnClient(String pcname, String productname, int producttype, Map updateValues);
+	public abstract boolean updateProductOnClient(String pcname, String productname, int producttype,
+			Map<String, String> updateValues);
 
 	// send the collected items
 	public abstract boolean updateProductOnClients();
@@ -692,7 +693,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Map<String, Object> getConfig(String objectId);
 
-	public abstract void setHostValues(Map settings);
+	public abstract void setHostValues(Map<String, Object> settings);
 
 	public abstract void setAdditionalConfiguration(String objectId, ConfigName2ConfigValue settings);
 
