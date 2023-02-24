@@ -263,7 +263,6 @@ public final class Terminal {
 
 			try {
 				droppedFiles = (List<File>) e.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-
 				Logging.info(this, "dropped files: " + droppedFiles);
 			} catch (UnsupportedFlavorException ex) {
 				Logging.warning(this, "this should not happen, unless javaFileListFlavor is no longer supported");

@@ -37,10 +37,6 @@ public class BackgroundFileUploader extends SwingWorker<Void, Void> {
 	@SuppressWarnings("java:S134")
 	@Override
 	protected Void doInBackground() {
-		if (files.isEmpty()) {
-			return null;
-		}
-
 		for (File file : files) {
 			String fileId = UUID.randomUUID().toString();
 			sendFileUploadRequest(file, fileId);
