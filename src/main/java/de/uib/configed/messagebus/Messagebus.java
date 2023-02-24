@@ -199,7 +199,7 @@ public class Messagebus {
 	}
 
 	public void disconnect() throws InterruptedException {
-		if (messagebusWebSocket != null && messagebusWebSocket.getConnection().isOpen()) {
+		if (messagebusWebSocket != null && isConnected()) {
 			messagebusWebSocket.closeBlocking();
 			Logging.info(this, "connection to messagebus closed");
 		} else {
