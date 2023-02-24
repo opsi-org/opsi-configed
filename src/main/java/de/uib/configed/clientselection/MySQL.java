@@ -23,9 +23,9 @@ public class MySQL {
 	private String hardwareTableName = "";
 
 	// Die Hardwarekonfiguration
-	List<Map<String, Object>> hwConfig;
+	List<Map<String, List<Map<String, Object>>>> hwConfig;
 
-	public MySQL(List<Map<String, Object>> hwConfig) {
+	public MySQL(List<Map<String, List<Map<String, Object>>>> hwConfig) {
 		this.hwConfig = hwConfig;
 	}
 
@@ -211,15 +211,15 @@ public class MySQL {
 		JSONArray elementPath = json.getJSONArray("elementPath");
 		String hardwareType = elementPath.getString(0);
 		String column = elementPath.getString(1);
-		Map<String, Object> element = findHardwareInConfig(hardwareType);
+		Map<String, List<Map<String, Object>>> element = findHardwareInConfig(hardwareType);
 
-		hardwareTableName = (String) ((Map<String, Object>) element.get("Class")).get("Opsi");
+		hardwareTableName = (String) element.get("Class").get(0).get("Opsi");
 
-		List<Map<String, String>> values = (List<Map<String, String>>) element.get("Values");
+		List<Map<String, Object>> values = element.get("Values");
 
-		Map<String, String> spalte = findColumnInTable(column, values);
-		String spaltenName = spalte.get("Opsi");
-		String scope = spalte.get("Scope");
+		Map<String, Object> spalte = findColumnInTable(column, values);
+		String spaltenName = (String) spalte.get("Opsi");
+		String scope = (String) spalte.get("Scope");
 
 		if (scope.equals("g")) {
 			hardwareWithDevice = true;
@@ -229,7 +229,7 @@ public class MySQL {
 		return scope + "." + spaltenName + " NOT LIKE '' AND " + scope + "." + spaltenName;
 	}
 
-	private Map<String, String> findColumnInTable(String column, List<Map<String, String>> values) {
+	private Map<String, Object> findColumnInTable(String column, List<Map<String, Object>> values) {
 		for (int i = 0; i < values.size(); i++) {
 			if (values.get(i).get("UI").equals(column)) {
 				return values.get(i);
@@ -240,9 +240,9 @@ public class MySQL {
 	}
 
 	// Actually return type is Map<String, Map<String, String>>, but cannot cast
-	private Map<String, Object> findHardwareInConfig(String elementPath) {
+	private Map<String, List<Map<String, Object>>> findHardwareInConfig(String elementPath) {
 		for (int i = 0; i < hwConfig.size(); i++) {
-			if (((Map<String, String>) hwConfig.get(i).get("Class")).get("UI").equals(elementPath)) {
+			if (hwConfig.get(i).get("Class").get(0).get("UI").equals(elementPath)) {
 				return hwConfig.get(i);
 			}
 		}

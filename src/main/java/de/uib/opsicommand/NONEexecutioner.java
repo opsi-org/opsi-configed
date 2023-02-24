@@ -110,7 +110,7 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public List getListOfMapsOfListsOfMaps(OpsiMethodCall omc) {
+	public List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc) {
 		return new ArrayList<>();
 	}
 

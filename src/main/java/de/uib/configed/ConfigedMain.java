@@ -272,7 +272,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected List<String> localbootProductnames;
 	protected List<String> netbootProductnames;
-	protected List<Map<String, Object>> hwAuditConfig;
+	protected List<Map<String, List<Map<String, Object>>>> hwAuditConfig;
 
 	// marker variables for requests for reload when clientlist changes
 	private Map<String, List<Map<String, String>>> localbootStatesAndActions = null;

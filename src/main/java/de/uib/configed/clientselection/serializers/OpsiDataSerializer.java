@@ -304,7 +304,6 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 		}
 
 		if (name.equals("dataType")) {
-			//TextType, IntegerType, BigIntegerType, DoubleType, EnumType, DateType, NoneType
 
 			switch (value) {
 			case "TextType":

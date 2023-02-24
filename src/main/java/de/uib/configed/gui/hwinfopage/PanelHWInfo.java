@@ -54,7 +54,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	protected Map<String, List<Map<String, Object>>> hwInfo;
 	protected String treeRootTitle;
-	protected List<Map<String, Object>> hwConfig;
+	protected List<Map<String, List<Map<String, Object>>>> hwConfig;
 	protected String title = "HW Information";
 
 	// for creating pdf
@@ -337,15 +337,15 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return new ArrayList<>();
 		}
 
-		List<?> values = null;
+		List<Map<String, Object>> values = null;
 
 		for (int j = 0; j < hwConfig.size(); j++) {
 
-			Map<String, Object> whc = hwConfig.get(j);
+			Map<String, List<Map<String, Object>>> whc = hwConfig.get(j);
 			if (whc != null) {
-				Map<?, ?> whcClass = (Map<?, ?>) whc.get("Class");
+				Map<String, Object> whcClass = whc.get("Class").get(0);
 				if (whcClass.get("Opsi").equals(hwClass)) {
-					values = (List<?>) whc.get("Values");
+					values = whc.get("Values");
 					break;
 				}
 			} else {
@@ -355,7 +355,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		List<String[]> data = new ArrayList<>();
 		if (values != null) {
 			for (int j = 0; j < values.size(); j++) {
-				Map<?, ?> v = (Map<?, ?>) values.get(j);
+				Map<String, Object> v = values.get(j);
 				String opsi = (String) v.get("Opsi");
 				Logging.debug(this, "opsi " + opsi);
 
@@ -444,7 +444,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	}
 
-	public void setHardwareConfig(List<Map<String, Object>> hwConfig) {
+	public void setHardwareConfig(List<Map<String, List<Map<String, Object>>>> hwConfig) {
 		this.hwConfig = hwConfig;
 	}
 
@@ -509,10 +509,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		hwClassMapping = new HashMap<>();
 		String[] hwClassesUI = new String[hwConfig.size()];
 		for (int i = 0; i < hwConfig.size(); i++) {
-			Map<String, Object> whc = hwConfig.get(i);
-			hwClassesUI[i] = (String) ((Map<?, ?>) whc.get("Class")).get("UI");
-			hwClassMapping.put(hwClassesUI[i], ((Map<?, ?>) whc.get("Class")).get("Opsi"));
-
+			Map<String, List<Map<String, Object>>> whc = hwConfig.get(i);
+			hwClassesUI[i] = (String) whc.get("Class").get(0).get("UI");
+			hwClassMapping.put(hwClassesUI[i], whc.get("Class").get(0).get("Opsi"));
 		}
 
 		java.util.Arrays.sort(hwClassesUI);
@@ -638,18 +637,18 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		hwOpsiToUI = new HashMap<>();
 
-		for (Map<String, Object> hardwareMap : hwConfig) {
-			List<?> values = (List<?>) hardwareMap.get("Values");
+		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
+			List<Map<String, Object>> values = hardwareMap.get("Values");
 			for (int j = 0; j < values.size(); j++) {
-				Map<?, ?> valuesMap = (Map<?, ?>) values.get(j);
+				Map<String, Object> valuesMap = values.get(j);
 				String type = (String) valuesMap.get("Opsi");
 				String name = (String) valuesMap.get("UI");
 				hwOpsiToUI.putIfAbsent(type, name);
 			}
 		}
-		for (Map<String, Object> hardwareMap : hwConfig) {
-			String hardwareName = (String) ((Map<?, ?>) hardwareMap.get("Class")).get("UI");
-			String hardwareOpsi = (String) ((Map<?, ?>) hardwareMap.get("Class")).get("Opsi");
+		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
+			String hardwareName = (String) hardwareMap.get("Class").get(0).get("UI");
+			String hardwareOpsi = (String) hardwareMap.get("Class").get(0).get("Opsi");
 
 			hwOpsiToUI.putIfAbsent(hardwareOpsi, hardwareName);
 		}

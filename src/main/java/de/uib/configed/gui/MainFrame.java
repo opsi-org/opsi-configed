@@ -3568,7 +3568,7 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	public void initHardwareInfo(List<Map<String, Object>> config) {
+	public void initHardwareInfo(List<Map<String, List<Map<String, Object>>>> config) {
 		if (showHardwareLogVersion2 == null) {
 			showHardwareLogVersion2 = new PanelHWInfo(configedMain) {
 				@Override

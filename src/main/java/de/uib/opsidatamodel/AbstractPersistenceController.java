@@ -481,9 +481,9 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract Map<String, Map<String, Object>> retrieveSoftwareAuditData(String clientId);
 
 	/* hardware info */
-	public abstract List<Map<String, Object>> getOpsiHWAuditConf();
+	public abstract List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf();
 
-	public abstract List<Map<String, Object>> getOpsiHWAuditConf(String locale);
+	public abstract List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf(String locale);
 
 	public abstract List<String> getAllHwClassNames();
 

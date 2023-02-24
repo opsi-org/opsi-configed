@@ -214,7 +214,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected NavigableMap<String, LicenceStatisticsRow> rowsLicenceStatistics;
 
-	protected Map<String, List<Map<String, Object>>> hwAuditConf;
+	protected Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf;
 
 	protected List<String> opsiHwClassNames;
 	protected Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
@@ -2857,22 +2857,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// partial version of produceHwAuditDeviceClasses()
-	private List<String> produceHwClasses(List<Map<String, Object>> hwAuditConf) {
+	private List<String> produceHwClasses(List<Map<String, List<Map<String, Object>>>> hwAuditConf) {
 		List<String> result = new ArrayList<>();
 
-		for (Map<String, Object> hwAuditClass : hwAuditConf) {
-			if (!(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)) {
-				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
-						+ hwAuditClass.get(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)));
-				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null) {
-					Logging.warning(this,
-							"getAllHwClassNames illegal hw config item,  hwAuditClass.get Class is of class "
-									+ hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).getClass());
-				}
+		for (Map<String, List<Map<String, Object>>> hwAuditClass : hwAuditConf) {
 
-				continue;
-			}
-			String hwClass = (String) ((Map<?, ?>) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY))
+			String hwClass = (String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
 					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
 
 			result.add(hwClass);
@@ -2882,7 +2872,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public List<Map<String, Object>> getOpsiHWAuditConf() {
+	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf() {
 		if (hwAuditConf == null) {
 			Logging.warning("hwAuditConf is null in getOpsiHWAuditConf");
 			return new ArrayList<>();
@@ -2897,7 +2887,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public List<Map<String, Object>> getOpsiHWAuditConf(String locale) {
+	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf(String locale) {
 		hwAuditConf.putIfAbsent(locale, exec
 				.getListOfMapsOfListsOfMaps(new OpsiMethodCall("auditHardware_getConfig", new String[] { locale })));
 
@@ -3117,11 +3107,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return;
 		}
 
-		for (Map<String, Object> hwAuditClass : getOpsiHWAuditConf()) {
+		for (Map<String, List<Map<String, Object>>> hwAuditClass : getOpsiHWAuditConf()) {
 			if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) == null
 					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null
-					|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)
-					|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) instanceof List)) {
+			//|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)
+			/*|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) instanceof List)*/) {
 				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
 						+ hwAuditClass.get("Class"));
 				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null) {
@@ -3137,8 +3127,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				continue;
 			}
-			String hwClass = (String) (((Map) (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)))
-					.get(OpsiHwAuditDeviceClass.OPSI_KEY));
+			String hwClass = (String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
+					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
 
 			OpsiHwAuditDevicePropertyType firstSeen = new OpsiHwAuditDevicePropertyType(hwClass);
 			firstSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.FIRST_SEEN_COL_NAME);
@@ -3152,10 +3142,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			OpsiHwAuditDeviceClass hwAuditDeviceClass = new OpsiHwAuditDeviceClass(hwClass);
 			hwAuditDeviceClasses.put(hwClass, hwAuditDeviceClass);
 
-			hwAuditDeviceClass.setLinuxQuery((String) (((Map) (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)))
-					.get(OpsiHwAuditDeviceClass.LINUX_KEY)));
-			hwAuditDeviceClass.setWmiQuery((String) (((Map) (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)))
-					.get(OpsiHwAuditDeviceClass.WMI_KEY)));
+			hwAuditDeviceClass.setLinuxQuery((String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
+					.get(OpsiHwAuditDeviceClass.LINUX_KEY));
+			hwAuditDeviceClass.setWmiQuery((String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
+					.get(OpsiHwAuditDeviceClass.WMI_KEY));
 
 			Logging.info(this, "hw audit class " + hwClass);
 
