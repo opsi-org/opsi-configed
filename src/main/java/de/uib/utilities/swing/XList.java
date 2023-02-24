@@ -6,15 +6,14 @@ import javax.swing.JList;
 
 import de.uib.configed.Globals;
 
-public class XList extends JList // org.jdesktop.swingx.JXList
-{
+public class XList extends JList<String> {
 	public XList() {
 		super();
 		configure();
 	}
 
-	public XList(List<?> listData) {
-		super(listData.toArray());
+	public XList(List<String> listData) {
+		super(listData.toArray(new String[0]));
 		configure();
 	}
 

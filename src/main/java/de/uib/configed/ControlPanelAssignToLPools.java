@@ -539,7 +539,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		JComboBox<String> comboLP1 = new JComboBox<>();
 		comboLP1.setFont(Globals.defaultFontBig);
 		col.setCellEditor(new de.uib.utilities.table.gui.AdaptingCellEditor(comboLP1,
-				(row, column) -> new DefaultComboBoxModel<>(persist.getProductIds().toArray())));
+				(row, column) -> new DefaultComboBoxModel<>(persist.getProductIds().toArray(new String[0]))));
 
 		// updates
 		thePanel.panelProductId2LPool.setUpdateController(new MapItemsUpdateController(thePanel.panelProductId2LPool,

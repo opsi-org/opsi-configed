@@ -13,11 +13,11 @@ import de.uib.utilities.swing.ColoredListCellRenderer;
 
 public class AdaptingCellEditor extends DefaultCellEditor {
 
-	JComboBox cc;
+	JComboBox<String> cc;
 	ComboBoxModeller cbm;
-	ComboBoxModel nullModel;
+	ComboBoxModel<String> nullModel;
 
-	public AdaptingCellEditor(JComboBox cc, ComboBoxModeller cbm) {
+	public AdaptingCellEditor(JComboBox<String> cc, ComboBoxModeller cbm) {
 		super(cc);
 		this.cc = cc;
 		this.cbm = cbm;
@@ -36,7 +36,7 @@ public class AdaptingCellEditor extends DefaultCellEditor {
 			cc.setModel(nullModel);
 
 			if (cbm != null && cbm.getComboBoxModel(modelRow, modelColumn).getSize() == 1) {
-				cc.setToolTipText((String) cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
+				cc.setToolTipText(cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
 			}
 		} else {
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));

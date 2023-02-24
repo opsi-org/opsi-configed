@@ -40,7 +40,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 	private Function<String, Boolean> editDenier;
 
-	public static final List nullLIST = new ArrayList<>();
+	public static final List<?> nullLIST = new ArrayList<>();
 	static {
 		nullLIST.add(null);
 	}
@@ -59,7 +59,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	private String modifiedKey;
 	private int rowModiTime;
 
-	private ListModelProducerForVisualDatamap modelProducer;
+	private ListModelProducerForVisualDatamap<String> modelProducer;
 
 	private boolean writeData = true;
 
@@ -68,7 +68,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 	}
 
-	public void setModelProducer(ListModelProducerForVisualDatamap modelProducer) {
+	public void setModelProducer(ListModelProducerForVisualDatamap<String> modelProducer) {
 
 		this.modelProducer = modelProducer;
 	}
@@ -283,7 +283,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 			// deliver the default value
 			if (result instanceof List) {
-				List li = (List) result;
+				List<?> li = (List<?>) result;
 				if (!li.isEmpty() && li.get(0) == null && optionsMap != null) {
 					result = defaultData.get(key);
 					Logging.info(this,
@@ -474,7 +474,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		}
 
 		if (optionsMap.get(key) != null && (optionsMap.get(key)) instanceof List) {
-			List valuelist = (List) optionsMap.get(key);
+			List<?> valuelist = (List<?>) optionsMap.get(key);
 
 			if (!valuelist.isEmpty() && valuelist.indexOf(value) == -1) {
 

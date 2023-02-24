@@ -653,7 +653,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			// we dont register updates for already registered rows, since there values are
 			// passed via the row List
 			if (addedRows.indexOf(row) == -1 && updatedRows.indexOf(row) == -1) {
-				List oldValues = new ArrayList<>(rows.get(row));
+				List<Object> oldValues = new ArrayList<>(rows.get(row));
 
 				rows.get(row).set(col, value);
 

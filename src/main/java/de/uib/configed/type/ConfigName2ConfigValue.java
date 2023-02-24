@@ -38,8 +38,6 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 
 				}
 			}
-		} else {
-			Logging.warning(this, "configOptions is null, cannot execute buildX()");
 		}
 
 		for (Entry<String, Object> entry : retrieved.entrySet()) {

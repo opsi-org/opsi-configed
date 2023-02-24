@@ -44,17 +44,17 @@ public class GenericTableUpdateItemFactory implements TableUpdateItemInterface {
 	}
 
 	@Override
-	public TableEditItem produceUpdateItem(List oldValues, List rowV) {
+	public TableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV) {
 		return new GenericTableUpdateItem(source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
 	@Override
-	public TableEditItem produceInsertItem(List rowV) {
+	public TableEditItem produceInsertItem(List<Object> rowV) {
 		return new GenericTableInsertItem(source, keyCol, columnNames, classNames, rowV);
 	}
 
 	@Override
-	public TableEditItem produceDeleteItem(List rowV) {
+	public TableEditItem produceDeleteItem(List<Object> rowV) {
 		return new GenericTableDeleteItem(source, keyCol, columnNames, classNames, rowV);
 	}
 

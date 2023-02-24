@@ -68,7 +68,7 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public List<Map<String, String>> getListOfStringMaps(OpsiMethodCall omc) {
+	public List<Map<String, Object>> getListOfStringMaps(OpsiMethodCall omc) {
 		return new ArrayList<>();
 	}
 

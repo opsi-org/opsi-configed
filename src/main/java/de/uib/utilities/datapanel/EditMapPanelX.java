@@ -58,7 +58,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	TableColumn editableColumn;
 	TableCellEditor theCellEditor;
-	JComboBox editorfield;
+	JComboBox<?> editorfield;
 	TableCellEditor defaultCellEditor;
 
 	ListModelProducer<String> modelProducer;
@@ -454,7 +454,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				Logging.debug(this, " key " + option.getKey() + " is nullable " + option.getValue().isNullable());
 			}
 
-			modelProducer = new ListModelProducerForVisualDatamap(table, optionsMap, visualdata);
+			modelProducer = new ListModelProducerForVisualDatamap<>(table, optionsMap, visualdata);
 		}
 
 		Logging.debug(this, "setEditableMap set modelProducer  == null " + (modelProducer == null));
@@ -463,7 +463,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			Logging.debug(this, "setEditableMap test modelProducer " + modelProducer.getClass(0, 0));
 		}
 
-		mapTableModel.setModelProducer((ListModelProducerForVisualDatamap) modelProducer);
+		mapTableModel.setModelProducer((ListModelProducerForVisualDatamap<String>) modelProducer);
 
 		if (theCellEditor instanceof SensitiveCellEditor) {
 
@@ -557,7 +557,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		addProperty(key, val);
 		optionsMap.put(key, DefaultListCellOptions.getNewEmptyListCellOptions());
 		mapTableModel.setMap(mapTableModel.getData());
-		((ListModelProducerForVisualDatamap) modelProducer).setData(optionsMap, mapTableModel.getData());
+		((ListModelProducerForVisualDatamap<String>) modelProducer).setData(optionsMap, mapTableModel.getData());
 	}
 
 	public void addEmptyPropertyMultiSelection(String key) {
@@ -566,7 +566,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		addProperty(key, val);
 		optionsMap.put(key, DefaultListCellOptions.getNewEmptyListCellOptionsMultiSelection());
 		mapTableModel.setMap(mapTableModel.getData());
-		((ListModelProducerForVisualDatamap) modelProducer).setData(optionsMap, mapTableModel.getData());
+		((ListModelProducerForVisualDatamap<String>) modelProducer).setData(optionsMap, mapTableModel.getData());
 	}
 
 	public void addBooleanProperty(String key) {
@@ -575,7 +575,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		addProperty(key, val);
 		optionsMap.put(key, DefaultListCellOptions.getNewBooleanListCellOptions());
 		mapTableModel.setMap(mapTableModel.getData());
-		((ListModelProducerForVisualDatamap) modelProducer).setData(optionsMap, mapTableModel.getData());
+		((ListModelProducerForVisualDatamap<String>) modelProducer).setData(optionsMap, mapTableModel.getData());
 	}
 
 	/**

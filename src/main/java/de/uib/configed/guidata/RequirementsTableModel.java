@@ -170,26 +170,26 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				if (rowTypeIndex == 1) {
 					if (requMap != null) {
 						result = requMap.get(myKey);
-						break;
 					}
 				} else if (rowTypeIndex == 2 && requDeinstallMap != null) {
 					result = requDeinstallMap.get(myKey);
-					break;
 				}
+				break;
 
 			case 2:
 				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requBeforeMap != null) {
 					result = requBeforeMap.get(myKey);
-					break;
 				}
+				break;
 
 			case 3:
 				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requAfterMap != null) {
 					result = requAfterMap.get(myKey);
-					break;
 				}
+				break;
+
 			default:
 				Logging.warning(this, "no case found for col in getValueAt");
 				break;

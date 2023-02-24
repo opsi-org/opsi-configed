@@ -23,7 +23,7 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 	protected JTable table;
 	protected DefaultTableModel tablemodel;
-	protected JComboBox combo;
+	protected JComboBox<String> combo;
 	protected de.uib.utilities.ComboBoxModeller modelsource;
 
 	protected TableColumn col;
