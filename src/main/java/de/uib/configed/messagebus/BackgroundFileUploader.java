@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.utilities.logging.Logging;
 
+@SuppressWarnings("java:S109")
 public class BackgroundFileUploader extends SwingWorker<Void, Void> {
 	private static final int DEFAULT_CHUNK_SIZE = 25000;
 	private static final int DEFAULT_BUSY_WAIT_IN_MS = 50;
@@ -33,6 +34,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Void> {
 		this.files = files;
 	}
 
+	@SuppressWarnings("java:S134")
 	@Override
 	protected Void doInBackground() {
 		if (files.isEmpty()) {

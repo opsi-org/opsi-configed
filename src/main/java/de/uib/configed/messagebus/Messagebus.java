@@ -28,9 +28,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
+@SuppressWarnings("java:S109")
 public class Messagebus {
 	private WebSocketClientEndpoint messagebusWebSocket;
-	private boolean connected;
 
 	public WebSocket getWebSocket() {
 		return messagebusWebSocket;
@@ -117,11 +117,9 @@ public class Messagebus {
 		messagebusWebSocket = new WebSocketClientEndpoint(new URI(url));
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
 		messagebusWebSocket.setSocketFactory(factory);
+		messagebusWebSocket.setReuseAddr(true);
 
-		connected = messagebusWebSocket.connectBlocking();
-		Logging.info(this, "connection to messagebus established: " + connected);
-
-		return connected;
+		return messagebusWebSocket.connectBlocking();
 	}
 
 	private void makeChannelSubscriptionRequest(String channel) {
@@ -197,7 +195,7 @@ public class Messagebus {
 	}
 
 	public boolean isConnected() {
-		return connected;
+		return messagebusWebSocket.getConnection().isOpen();
 	}
 
 	public void disconnect() throws InterruptedException {
@@ -207,7 +205,5 @@ public class Messagebus {
 		} else {
 			Logging.info(this, "messagebus not connected");
 		}
-
-		connected = false;
 	}
 }

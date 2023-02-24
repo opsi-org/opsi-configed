@@ -36,6 +36,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
+@SuppressWarnings("java:S109")
 public final class Terminal {
 	private static final int DEFAULT_TERMINAL_COLUMNS = 80;
 	private static final int DEFAULT_TERMINAL_ROWS = 24;

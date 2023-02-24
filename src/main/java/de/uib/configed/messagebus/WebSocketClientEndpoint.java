@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.utilities.logging.Logging;
 
+@SuppressWarnings("java:S109")
 public class WebSocketClientEndpoint extends WebSocketClient {
 	public WebSocketClientEndpoint(URI serverUri, Draft draft) {
 		super(serverUri, draft);
