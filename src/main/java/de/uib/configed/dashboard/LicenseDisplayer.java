@@ -13,11 +13,13 @@
 
 package de.uib.configed.dashboard;
 
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
@@ -27,6 +29,7 @@ import javax.swing.UIManager;
 import javax.swing.event.TableModelListener;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.opsidatamodel.AbstractPersistenceController;
@@ -104,8 +107,9 @@ public class LicenseDisplayer {
 		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Globals.mainIcon), null));
 		stage.setTitle(Configed.getResourceValue("Dashboard.license.title"));
 		stage.setScene(scene);
-		stage.show();
 
+		stage.setOnShown(event -> centerAndShowStage());
+		stage.show();
 		controller = fxmlLoader.getController();
 
 		Platform.runLater(() -> {
@@ -134,8 +138,18 @@ public class LicenseDisplayer {
 	}
 
 	public void display() {
+
 		stage.show();
 		loadData();
+	}
+
+	private void centerAndShowStage() {
+
+		// center stage on mainframe after show()-call to have sizes of the stage
+		Rectangle mainRectangle = ConfigedMain.getMainFrame().getBounds();
+
+		stage.setX(mainRectangle.getX() + mainRectangle.getWidth() / 2 - stage.getWidth() / 2);
+		stage.setY(mainRectangle.getY() + mainRectangle.getHeight() / 2 - stage.getHeight() / 2);
 	}
 
 	protected String showLicenceContractWarnings() {
@@ -150,7 +164,7 @@ public class LicenseDisplayer {
 		result.append(Configed.getResourceValue("Dashboard.expiredContracts"));
 		result.append(":  \n");
 
-		for (Map.Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
+		for (Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
 			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");
@@ -162,7 +176,7 @@ public class LicenseDisplayer {
 		result.append(Configed.getResourceValue("Dashboard.contractsToNotify"));
 		result.append(":  \n");
 
-		for (Map.Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
+		for (Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
 			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");

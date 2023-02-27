@@ -36,7 +36,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 
 	protected class NewComboBoxRenderer extends BasicComboBoxRenderer {
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			if (isSelected) {
 				setBackground(listBackgroundColorSelected);

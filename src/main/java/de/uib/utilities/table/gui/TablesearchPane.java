@@ -686,7 +686,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void setSearchFields(List<String> fieldList) {
 		for (String fieldName : fieldList) {
-			if (((DefaultComboBoxModel) comboSearchFields.getModel()).getIndexOf(fieldName) == -1) {
+			if (((DefaultComboBoxModel<String>) comboSearchFields.getModel()).getIndexOf(fieldName) == -1) {
 				comboSearchFields.addItem(fieldName);
 			}
 		}
