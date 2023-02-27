@@ -48,7 +48,7 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map getMapResult(OpsiMethodCall omc) {
+	public Map<String, Object> getMapResult(OpsiMethodCall omc) {
 		return new HashMap<>();
 	}
 

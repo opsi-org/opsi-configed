@@ -122,12 +122,12 @@ public class OpsiMethodCall {
 				} else if (paramI instanceof Map) {
 					sb.append("{");
 
-					for (Object key : ((Map) paramI).keySet()) {
+					for (Object key : ((Map<?, ?>) paramI).keySet()) {
 						sb.append("" + key + ": ");
-						if (((Map) paramI).get(key) instanceof Object[]) {
-							sb.append(Arrays.toString((Object[]) ((Map) paramI).get(key)));
+						if (((Map<?, ?>) paramI).get(key) instanceof Object[]) {
+							sb.append(Arrays.toString((Object[]) ((Map<?, ?>) paramI).get(key)));
 						} else {
-							sb.append("" + ((Map) paramI).get(key));
+							sb.append("" + ((Map<?, ?>) paramI).get(key));
 						}
 						sb.append(" ");
 					}
@@ -180,9 +180,8 @@ public class OpsiMethodCall {
 				}
 
 				else if (parameters[i] instanceof Map) {
-					JSONObject job = new JSONObject((Map) parameters[i]);
+					JSONObject job = new JSONObject((Map<?, ?>) parameters[i]);
 					joParams.put(job);
-
 				}
 
 				else {

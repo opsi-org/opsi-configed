@@ -1426,7 +1426,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public List<Map<String, Object>> hostRead() {
 		String[] callAttributes = new String[] {};
-		Map callFilter = new HashMap<>();
+		Map<?, ?> callFilter = new HashMap<>();
 
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 		Logging.notice(this, "host_getObjects");
@@ -1571,11 +1571,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.debug(this, "valueFromConfigStateAsExpected configKey " + configKey);
 		boolean result = false;
 
-		if (configs != null && configs.get(configKey) != null && !((List) (configs.get(configKey))).isEmpty()) {
+		if (configs != null && configs.get(configKey) != null && !((List<?>) (configs.get(configKey))).isEmpty()) {
 			Logging.debug(this, "valueFromConfigStateAsExpected configKey, values " + configKey + ", valueList "
 					+ configs.get(configKey) + " expected " + expectValue);
 
-			Object value = ((List) configs.get(configKey)).get(0);
+			Object value = ((List<?>) configs.get(configKey)).get(0);
 
 			if (value instanceof Boolean) {
 				if (((Boolean) value).equals(expectValue)) {
@@ -4512,7 +4512,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			state.put("productId", productname);
 			state.put("propertyId", key);
 
-			List newValue = (List) properties.get(key);
+			List<?> newValue = (List<?>) properties.get(key);
 
 			Map<String, Object> retrievedConfig = ((RetrievedMap) properties).getRetrieved();
 			Object oldValue = null;

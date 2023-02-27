@@ -401,7 +401,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				// parse String and produce list
 
-				List values = new ArrayList<>();
+				List<Object> values = new ArrayList<>();
 				try {
 					values = (new JSONArray(valueString)).toList();
 				} catch (Exception ex) {
@@ -411,8 +411,6 @@ public class DataStubRawData extends DataStubNOM {
 
 				// put into host configs
 				configs1Host.put(configId, values);
-
-				// configValues1Host.put( configId, (List) configs1Host.get( configId
 
 			}
 		}

@@ -158,12 +158,12 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		}
 
 		if (!persist.getUnknownSoftwareListForLicencePool(poolID).isEmpty()) {
-			Map<String, Object> missingSoftwareMap = new HashMap<>();
+			Map<String, Map<String, Object>> missingSoftwareMap = new HashMap<>();
 
 			for (String ID : persist.getUnknownSoftwareListForLicencePool(poolID)) {
 				String[] rowValues = ID.split(Globals.PSEUDO_KEY_SEPARATOR);
 
-				Map<String, String> rowMap = new HashMap<>();
+				Map<String, Object> rowMap = new HashMap<>();
 				for (String colName : thePanel.fMissingSoftwareInfo.columnNames) {
 					rowMap.put(colName, "");
 				}
@@ -191,7 +191,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					new MapTableUpdateItemFactory(thePanel.fMissingSoftwareInfo.columnNames,
 							thePanel.fMissingSoftwareInfo.classNames, 0), // dummy
 					new DefaultTableProvider(new RetrieverMapSource(thePanel.fMissingSoftwareInfo.columnNames,
-							thePanel.fMissingSoftwareInfo.classNames, () -> (Map) missingSoftwareMap)),
+							thePanel.fMissingSoftwareInfo.classNames, () -> missingSoftwareMap)),
 					0, new int[] {}, thePanel.fMissingSoftwareInfo.panelGlobalSoftware, updateCollection));
 
 		}

@@ -144,7 +144,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 		throw new IllegalArgumentException("Unknown type");
 	}
 
-	public static String createJsonRecursive(Map<String, Object> objects) {
+	public static String createJsonRecursive(Map<?, ?> objects) {
 		StringBuilder builder = new StringBuilder(255);
 		builder.append("{ ");
 		builder.append("\"element\" : ");
@@ -170,16 +170,21 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 		builder.append(", \"data\" : ");
 		builder.append(objectToString(objects.get("data")));
 		builder.append(", \"children\" : ");
-		List<Map<String, Object>> children = (List) objects.get("children");
+		List<?> children = (List<?>) objects.get("children");
 		if (children == null) {
 			builder.append("null");
 		} else {
 			builder.append("[ ");
-			Iterator<Map<String, Object>> childIterator = children.iterator();
+			Iterator<?> childIterator = children.iterator();
 			while (childIterator.hasNext()) {
-				builder.append(createJsonRecursive(childIterator.next()));
-				if (childIterator.hasNext()) {
-					builder.append(", ");
+				Object child = childIterator.next();
+				if (!(child instanceof Map)) {
+					Logging.warning("child is not a map, but " + child.getClass());
+					builder.append(createJsonRecursive((Map<?, ?>) child));
+
+					if (childIterator.hasNext()) {
+						builder.append(", ");
+					}
 				}
 			}
 			builder.append(" ]");

@@ -385,14 +385,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 			this.modelSWnames = new GenTableModel(null,
 					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-
-							() -> (Map) persist.getInstalledSoftwareName2SWinfo())
-
-					),
-
-					0, new int[] {}, panelSWnames, updateCollection)
-
-			{
+							() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
+					0, new int[] {}, panelSWnames, updateCollection) {
 
 				@Override
 				public void produceRows() {

@@ -588,7 +588,5 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 		}
 
 		return result;
-
 	}
-
 }
