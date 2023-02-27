@@ -7,6 +7,7 @@ import de.uib.configed.dashboard.collector.ClientData;
 import de.uib.configed.dashboard.collector.DepotData;
 import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.configed.dashboard.view.MainView;
+import de.uib.configed.type.HostInfo;
 
 public class DepotInfo implements DataChangeListener {
 	private MainView controller;
@@ -44,15 +45,15 @@ public class DepotInfo implements DataChangeListener {
 			}
 		}
 
-		if (depotType.equals("OpsiClient")) {
+		if (depotType.equals(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT)) {
 			depotType = "Client";
 		}
 
-		if (depotType.equals("OpsiDepotserver")) {
+		if (depotType.equals(HostInfo.HOST_TYPE_VALUE_OPSI_DEPOT_SERVER)) {
 			depotType = "Depot Server";
 		}
 
-		if (depotType.equals("OpsiConfigserver")) {
+		if (depotType.equals(HostInfo.HOST_TYPE_VALUE_OPSI_CONFIG_SERVER)) {
 			depotType = "Config Server";
 		}
 

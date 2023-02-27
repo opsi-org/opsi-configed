@@ -12,24 +12,14 @@ import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
 public class FEditRecord extends FEdit {
 	protected AbstractRecordPane recordPane;
-
-	protected Map<String, JLabel> labels;
-	protected Map<String, JTextField> textfields;
-	protected Map<String, String> data;
-	protected Map<String, String> hints;
-	protected Map<String, Boolean> editable;
 
 	public FEditRecord(String hint) {
 		super("", hint);
 		recordPane = new AbstractRecordPane() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					commit();
 				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {

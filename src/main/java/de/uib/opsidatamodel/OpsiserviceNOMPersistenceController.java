@@ -1546,8 +1546,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Boolean result = false;
 
 		if (getConfigs().get(hostname) != null && getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME) != null
-				&& !((List) (getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME))).isEmpty()) {
-			String configValue = (String) ((List) (getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME))).get(0);
+				&& !((List<?>) getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME)).isEmpty()) {
+			String configValue = (String) ((List<?>) getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME)).get(0);
 
 			if (configValue.indexOf(EFI_STRING) >= 0) {
 				// something similar should work, but not this:
@@ -1555,8 +1555,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				result = true;
 			}
 		} else if (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME) != null
-				&& !((List) (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME))).isEmpty()) {
-			String configValue = (String) ((List) (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME))).get(0);
+				&& !((List<?>) getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME)).isEmpty()) {
+			String configValue = (String) ((List<?>) getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME)).get(0);
 
 			if (configValue.indexOf(EFI_STRING) >= 0) {
 				// something similar should work, but not this:
@@ -1804,7 +1804,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			String newClientId = hostname + "." + domainname;
 
-			Map<String, Object> hostItem = createNOMitem("OpsiClient");
+			Map<String, Object> hostItem = createNOMitem(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
 			hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
 			hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 			hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
@@ -1938,7 +1938,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		String newClientId = hostname + "." + domainname;
 
-		Map<String, Object> hostItem = createNOMitem("OpsiClient");
+		Map<String, Object> hostItem = createNOMitem(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
 		hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
 		hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 		hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
@@ -2379,7 +2379,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		hostUpdateMap.put("ident", hostId);
-		hostUpdateMap.put(HostInfo.HOST_TYPE_KEY, "OpsiClient");
+		hostUpdateMap.put(HostInfo.HOST_TYPE_KEY, HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
 		hostUpdateMap.put(property, value);
 
 		hostUpdates.put(hostId, hostUpdateMap);
@@ -5110,9 +5110,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		boolean globalDefault = getGlobalBooleanConfigValue(key, null);
 
 		if (getConfigs().get(hostName) != null && getConfigs().get(hostName).get(key) != null
-				&& !((List) (getConfigs().get(hostName).get(key))).isEmpty()) {
+				&& !((List<?>) (getConfigs().get(hostName).get(key))).isEmpty()) {
 
-			result = interpretAsBoolean(((List) (getConfigs().get(hostName).get(key))).get(0), (Boolean) null);
+			result = interpretAsBoolean(((List<?>) getConfigs().get(hostName).get(key)).get(0), (Boolean) null);
 
 			Logging.debug(this,
 					"getHostBooleanConfigValue for key, host " + key + ", " + hostName + " giving " + result);
@@ -5149,7 +5149,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
 				Logging.warning(this, "entry for " + key + " should be boolean");
 			} else {
-				List li = option.getDefaultValues();
+				List<Object> li = option.getDefaultValues();
 				if (li != null && !li.isEmpty()) {
 					val = (Boolean) li.get(0);
 				}
@@ -5441,7 +5441,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 						+ setting.getValue() + " , " + setting.getValue().getClass().getName());
 
 				if (setting.getValue() instanceof List) {
-					List oldValue = null;
+					List<Object> oldValue = null;
 
 					if (configOptions.get(setting.getKey()) != null) {
 						oldValue = configOptions.get(setting.getKey()).getDefaultValues();
@@ -5472,7 +5472,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 						config.put("defaultValues", valueList);
 
-						List possibleValues = null;
+						List<Object> possibleValues = null;
 						if (configOptions.get(setting.getKey()) == null) {
 							possibleValues = new ArrayList<>();
 							if (type.equals(ConfigOption.BOOL_TYPE)) {
@@ -7003,7 +7003,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 		// dont do anything if we have not got the config
 		if (serverPropertyMap.get(KEY_USER_REGISTER) != null && !serverPropertyMap.get(KEY_USER_REGISTER).isEmpty()) {
-			result = (Boolean) ((List) (serverPropertyMap.get(KEY_USER_REGISTER))).get(0);
+			result = (Boolean) ((List<?>) serverPropertyMap.get(KEY_USER_REGISTER)).get(0);
 		}
 		return result;
 	}
