@@ -528,11 +528,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			} catch (Exception ex) {
 				Logging.warning(this, "saved states exception " + ex);
 				success = false;
+				Logging.error(this, "cannot not write saved states into " + Configed.savedStatesLocationName);
 			}
-		}
-
-		if (!success) {
-			Logging.error(this, "cannot not write saved states into " + Configed.savedStatesLocationName);
 		}
 
 		if (Configed.savedStatesLocationName == null || Configed.savedStates == null || !success) {
@@ -1331,11 +1328,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void locateAndDisplay() {
 		Rectangle screenRectangle = dPassword.getGraphicsConfiguration().getBounds();
+		int distance = (int) (Math.min(screenRectangle.width, screenRectangle.height) / 10);
 
 		Logging.info(this, "set size and location of mainFrame");
 
 		// weird formula for size
-		mainFrame.setSize(screenRectangle.width * 19 / 20 - 100, screenRectangle.height * 19 / 20 - 100);
+		mainFrame.setSize(screenRectangle.width - distance, screenRectangle.height - distance);
 
 		// Center mainFrame on screen of configed.fProgress
 		mainFrame.setLocation((int) (screenRectangle.getCenterX() - mainFrame.getSize().getWidth() / 2),
@@ -1344,8 +1342,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "setting mainframe visible");
 		mainFrame.setVisible(true);
 
-		mainFrame.panelLocalbootProductSettings.setDividerLocation(mainFrame.getSize().width - 600);
-		mainFrame.panelNetbootProductSettings.setDividerLocation(mainFrame.getSize().width - 600);
+		final int locationDividerProductSettings = 600;
+
+		mainFrame.panelLocalbootProductSettings
+				.setDividerLocation(mainFrame.getSize().width - locationDividerProductSettings);
+		mainFrame.panelNetbootProductSettings
+				.setDividerLocation(mainFrame.getSize().width - locationDividerProductSettings);
 	}
 
 	protected void initLicencesFrame() {
@@ -1484,9 +1486,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
 	}
 
-	protected void login(List<String> savedServers)
 	// returns true if we have a PersistenceController and are connected
-	{
+	protected void login(List<String> savedServers) {
 
 		Logging.debug(this, " create password dialog ");
 		dPassword = new DPassword(this);
@@ -1519,7 +1520,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// This must be called last, so that loading frame for connection is called last
 		// and on top of the login-frame
-		if ((host != null && user != null && password != null)) {
+		if (host != null && user != null && password != null) {
 			// Auto login
 			Logging.info(this, "start with given credentials");
 
@@ -2029,9 +2030,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// column.setCellRenderer(new
 
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
-						Globals.createImageIcon("images/checked_withoutbox.png", ""), null
-				// "")
-				));
+						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
 
 			}
 		}
@@ -2054,8 +2053,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
-
-				// column.setCellRenderer(new
 
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
 						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
