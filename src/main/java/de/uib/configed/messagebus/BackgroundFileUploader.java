@@ -80,14 +80,12 @@ public class BackgroundFileUploader extends SwingWorker<Void, Void> {
 
 					buff.clear();
 
-					if (!last) {
-						while (terminal.getMessagebus().isBusy()) {
-							wait(DEFAULT_BUSY_WAIT_IN_MS);
-						}
+					while (!last && terminal.getMessagebus().isBusy()) {
+						wait(DEFAULT_BUSY_WAIT_IN_MS);
 					}
 				}
 			} catch (IOException ex) {
-				Logging.error("cannot upload file to server: " + file.getAbsolutePath());
+				Logging.warning("cannot upload file to server: " + file.getAbsolutePath());
 			}
 		}
 
