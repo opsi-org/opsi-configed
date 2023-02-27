@@ -2270,8 +2270,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.info(this, "getLicensingInfo");
 
 		Object[] callParameters = { true, true, true };
-		String methodName = "backend_getLicensingInfo";
-		OpsiMethodCall omc = new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT);
+		OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME, callParameters,
+				OpsiMethodCall.BACKGROUND_DEFAULT);
 
 		return exec.getMapResult(omc);
 	}

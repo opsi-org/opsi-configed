@@ -147,7 +147,7 @@ public class LicenseDisplayer {
 		Logging.info(this, "contractsToNotify " + contractsToNotify);
 
 		result.append("  ");
-		result.append(Configed.getResourceValue("Dash.expiredContracts"));
+		result.append(Configed.getResourceValue("Dashboard.expiredContracts"));
 		result.append(":  \n");
 
 		for (Map.Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
@@ -159,7 +159,7 @@ public class LicenseDisplayer {
 		result.append("\n");
 
 		result.append("  ");
-		result.append(Configed.getResourceValue("Dash.contractsToNotify"));
+		result.append(Configed.getResourceValue("Dashboard.contractsToNotify"));
 		result.append(":  \n");
 
 		for (Map.Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
@@ -240,7 +240,7 @@ public class LicenseDisplayer {
 
 		result.append("\n");
 		result.append("  ");
-		result.append(Configed.getResourceValue("Dash.similarSWEntriesForLicencePoolExist"));
+		result.append(Configed.getResourceValue("Dashboard.similarSWEntriesForLicencePoolExist"));
 		result.append(":  \n");
 
 		for (String name : namesWithVariantPools) {

@@ -23,7 +23,6 @@ import java.util.TreeMap;
 import org.json.JSONObject;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ControlDash;
 import de.uib.configed.type.AbstractMetaConfig;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -72,10 +71,13 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public static final String KEY_HOST_DISPLAYFIELDS = "configed.host_displayfields";
 	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
-	public static final String KEY_SHOW_DASH_ON_PROGRAMSTART = ControlDash.CONFIG_KEY + ".show_dash_on_loaddata";
+	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
+
+	public static final String KEY_SHOW_DASH_ON_PROGRAMSTART = CONTROL_DASH_CONFIG_KEY + ".show_dash_on_loaddata";
 	public static final Boolean DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART = false;
-	public static final String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = ControlDash.CONFIG_KEY
+	public static final String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = CONTROL_DASH_CONFIG_KEY
 			+ ".show_dash_for_showlicenses";
+
 	public static final Boolean DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT = false;
 
 	public static final String KEY_SEARCH_BY_SQL = "configed.search_by_sql";
@@ -154,7 +156,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
 		PROPERTY_CLASSES_SERVER.put(de.uib.opsidatamodel.modulelicense.LicensingInfoMap.CONFIG_KEY,
 				"opsi module status display");
-		PROPERTY_CLASSES_SERVER.put(ControlDash.CONFIG_KEY, "dash configuration");
+		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "dash configuration");
 		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
 		PROPERTY_CLASSES_SERVER.put(AbstractMetaConfig.CONFIG_KEY, "default configuration for other properties");
