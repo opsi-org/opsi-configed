@@ -110,6 +110,11 @@ public class Messagebus {
 	}
 
 	public boolean connect() throws URISyntaxException, InterruptedException {
+		if (messagebusWebSocket != null && isConnected()) {
+			Logging.info(this, "messagebus is already connected");
+			return true;
+		}
+
 		String url = createUrl();
 		String basicAuthEnc = createEncBasicAuth();
 		SSLSocketFactory factory = createDullSSLSocketFactory();
@@ -154,7 +159,7 @@ public class Messagebus {
 
 		Terminal terminal = Terminal.getInstance();
 		terminal.setMessagebus(this);
-		terminal.createAndShowGUI();
+		terminal.display();
 
 		Map<String, Object> data = new HashMap<>();
 		data.put("type", "terminal_open_request");

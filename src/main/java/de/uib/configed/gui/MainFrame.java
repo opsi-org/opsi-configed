@@ -112,6 +112,7 @@ import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.messagebus.Messagebus;
+import de.uib.configed.messagebus.Terminal;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messages.Messages;
@@ -489,6 +490,8 @@ public class MainFrame extends JFrame
 	JPanel clientPane;
 
 	private LicenseDisplayer licenseDisplayer;
+
+	private Messagebus messagebus;
 
 	class GlassPane extends JComponent {
 		GlassPane() {
@@ -1326,13 +1329,21 @@ public class MainFrame extends JFrame
 		jMenuFrameTerminal.setEnabled(true);
 		jMenuFrameTerminal.addActionListener(e -> {
 			try {
-				Messagebus messagebus = new Messagebus();
-				boolean connected = messagebus.connect();
-				if (!connected) {
+				if (messagebus == null) {
+					messagebus = new Messagebus();
+				}
+
+				if (!messagebus.connect()) {
 					return;
 				}
 
-				messagebus.connectTerminal();
+				if (!Terminal.getInstance().isWebSocketConnected()) {
+					messagebus.connectTerminal();
+				} else {
+					Logging.info(this,
+							"terminal is already opened and connected to websocket (displaying current terminal window)");
+					Terminal.getInstance().display();
+				}
 			} catch (InterruptedException ex) {
 				Logging.error(this, "cannot open terminal, thread interrupted", ex);
 				Thread.currentThread().interrupt();

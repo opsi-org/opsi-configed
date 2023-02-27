@@ -53,6 +53,7 @@ public final class Terminal {
 	private String terminalId;
 
 	private CountDownLatch locker;
+	private boolean webSocketConnected;
 
 	private Terminal() {
 	}
@@ -97,6 +98,10 @@ public final class Terminal {
 		return widget.getTerminalDisplay().getRowCount();
 	}
 
+	public boolean isWebSocketConnected() {
+		return webSocketConnected;
+	}
+
 	public void lock() {
 		try {
 			locker = new CountDownLatch(1);
@@ -121,7 +126,7 @@ public final class Terminal {
 		return widget;
 	}
 
-	public void createAndShowGUI() {
+	private void createAndShowGUI() {
 		frame = new JFrame("Terminal");
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frame.setContentPane(createTerminalWidget());
@@ -145,6 +150,14 @@ public final class Terminal {
 		});
 	}
 
+	public void display() {
+		if (frame == null) {
+			createAndShowGUI();
+		} else {
+			frame.setVisible(true);
+		}
+	}
+
 	public void close() {
 		SwingUtilities.invokeLater(() -> frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)));
 	}
@@ -154,6 +167,8 @@ public final class Terminal {
 				WebSocketInputStream.getInstance().getReader());
 		widget.setTtyConnector(connector);
 		widget.start();
+
+		webSocketConnected = true;
 	}
 
 	@SuppressWarnings("java:S2972")
@@ -176,6 +191,7 @@ public final class Terminal {
 			try {
 				writer.close();
 				WebSocketInputStream.close();
+				webSocketConnected = false;
 			} catch (IOException e) {
 				Logging.warning(this, "failed to close output/input stream: " + e);
 			}
@@ -278,7 +294,6 @@ public final class Terminal {
 		@Override
 		public synchronized void drop(DropTargetDropEvent e) {
 			e.acceptDrop(DnDConstants.ACTION_COPY);
-
 			List<File> files = getDroppedFiles(e);
 
 			if (files == null || files.isEmpty()) {
