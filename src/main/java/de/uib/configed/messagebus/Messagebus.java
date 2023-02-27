@@ -123,6 +123,7 @@ public class Messagebus {
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
 		messagebusWebSocket.setSocketFactory(factory);
 		messagebusWebSocket.setReuseAddr(true);
+		messagebusWebSocket.setTcpNoDelay(true);
 
 		return messagebusWebSocket.connectBlocking();
 	}
