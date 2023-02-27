@@ -76,7 +76,6 @@ public class BackgroundFileUploader extends SwingWorker<Void, Void> {
 
 					ObjectMapper mapper = new MessagePackMapper();
 					byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-					System.out.println("sending: " + data.toString());
 					terminal.getMessagebus().send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 
 					buff.clear();
