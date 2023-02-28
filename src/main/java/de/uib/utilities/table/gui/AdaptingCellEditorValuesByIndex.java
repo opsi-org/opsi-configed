@@ -15,11 +15,11 @@ import de.uib.utilities.swing.CellRendererByIndex;
 
 public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 
-	JComboBox cc;
+	JComboBox<String> cc;
 	ComboBoxModeller cbm;
 	ComboBoxModel<String> nullModel;
 
-	public AdaptingCellEditorValuesByIndex(JComboBox cc, ComboBoxModeller cbm,
+	public AdaptingCellEditorValuesByIndex(JComboBox<String> cc, ComboBoxModeller cbm,
 			Map<String, String> universalMapOfStrings, String imagesBase) {
 		super(cc);
 		this.cc = cc;
@@ -40,7 +40,7 @@ public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 
 			if (cbm != null && cbm.getComboBoxModel(modelRow, modelColumn) != null
 					&& cbm.getComboBoxModel(modelRow, modelColumn).getSize() == 1) {
-				cc.setToolTipText((String) cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
+				cc.setToolTipText(cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
 			}
 		} else {
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));

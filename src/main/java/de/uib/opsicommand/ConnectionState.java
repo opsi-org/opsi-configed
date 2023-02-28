@@ -22,12 +22,10 @@ public class ConnectionState {
 	/**
 	 * constructor
 	 */
-	public ConnectionState(int state, String message) // throws UnknownStateException, to implement
-	{
+	public ConnectionState(int state, String message) {
 		myState = state;
 		this.message = message;
 		instancesCount++;
-
 	}
 
 	/**

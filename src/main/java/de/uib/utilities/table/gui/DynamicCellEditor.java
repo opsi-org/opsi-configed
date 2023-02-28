@@ -15,11 +15,11 @@ import de.uib.utilities.swing.CellRendererByIndex;
 
 public class DynamicCellEditor extends DefaultCellEditor {
 
-	JComboBox cc;
+	JComboBox<String> cc;
 	ComboBoxModeller cbm;
-	ComboBoxModel nullModel;
+	ComboBoxModel<String> nullModel;
 
-	public DynamicCellEditor(JComboBox cc, ComboBoxModeller cbm, Set<String> knownKeys) {
+	public DynamicCellEditor(JComboBox<String> cc, ComboBoxModeller cbm, Set<String> knownKeys) {
 		super(cc);
 		this.cc = cc;
 		this.cbm = cbm;
@@ -40,7 +40,7 @@ public class DynamicCellEditor extends DefaultCellEditor {
 
 			if (cbm != null && cbm.getComboBoxModel(modelRow, modelColumn) != null
 					&& cbm.getComboBoxModel(modelRow, modelColumn).getSize() == 1) {
-				cc.setToolTipText((String) cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
+				cc.setToolTipText(cbm.getComboBoxModel(modelRow, modelColumn).getElementAt(0));
 			}
 		} else {
 			cc.setModel(cbm.getComboBoxModel(modelRow, modelColumn));

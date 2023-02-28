@@ -1330,7 +1330,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void locateAndDisplay() {
 		Rectangle screenRectangle = dPassword.getGraphicsConfiguration().getBounds();
-		int distance = (int) (Math.min(screenRectangle.width, screenRectangle.height) / 10);
+		int distance = Math.min(screenRectangle.width, screenRectangle.height) / 10;
 
 		Logging.info(this, "set size and location of mainFrame");
 

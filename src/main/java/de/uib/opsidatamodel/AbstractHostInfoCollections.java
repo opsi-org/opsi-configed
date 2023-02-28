@@ -33,11 +33,13 @@ public abstract class AbstractHostInfoCollections {
 
 	public abstract List<String> getOpsiHostNames();
 
-	public abstract Map<String, Map<String, Object>> getDepots();// only master depots
+	// only master depots
+	public abstract Map<String, Map<String, Object>> getDepots();
 
 	public abstract Map<String, Map<String, Object>> getAllDepots();
 
-	public abstract List<String> getDepotNamesList(); // master depots in display order
+	// master depots in display order
+	public abstract List<String> getDepotNamesList();
 
 	public abstract Map<String, String> getMapPcBelongsToDepot();
 

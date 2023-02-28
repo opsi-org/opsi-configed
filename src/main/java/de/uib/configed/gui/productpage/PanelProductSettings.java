@@ -898,7 +898,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				iconsDir = "images/productstate/targetconfiguration";
 			}
 
-			JComboBox targetCombo = new JComboBox<>();
+			JComboBox<String> targetCombo = new JComboBox<>();
 			targetCombo.setRenderer(standardListCellRenderer);
 
 			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm,
@@ -915,7 +915,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				iconsDir = "images/productstate/installationstatus";
 			}
 
-			JComboBox statesCombo = new JComboBox<>();
+			JComboBox<String> statesCombo = new JComboBox<>();
 			statesCombo.setRenderer(standardListCellRenderer);
 
 			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm,
@@ -952,7 +952,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				iconsDir = "images/productstate/actionrequest";
 			}
 
-			JComboBox actionsCombo = new JComboBox<>();
+			JComboBox<String> actionsCombo = new JComboBox<>();
 			actionsCombo.setRenderer(standardListCellRenderer);
 			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm,
 					ActionRequest.getLabel2DisplayLabel(), iconsDir));
@@ -976,7 +976,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
 			if (sorter instanceof DefaultRowSorter) {
-				((DefaultRowSorter) sorter).setComparator(colIndex, new de.uib.utilities.IntComparatorForStrings());
+				((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex,
+						new de.uib.utilities.IntComparatorForStrings());
 			}
 
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
@@ -990,7 +991,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
-			((DefaultRowSorter) sorter).setComparator(colIndex, new de.uib.utilities.IntComparatorForStrings());
+			((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new de.uib.utilities.IntComparatorForStrings());
 
 		}
 
@@ -1023,7 +1024,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			versionInfoColumn.setPreferredWidth(WIDTH_COLUMN_VERSION_INFO);
 			versionInfoColumn.setCellRenderer(versionInfoTableCellRenderer);
 
-			((DefaultRowSorter) sorter).setComparator(colIndex, new StringComparator());
+			((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new StringComparator());
 
 		}
 
@@ -1032,7 +1033,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			installationInfoColumn.setPreferredWidth(WIDTH_COLUMN_INSTALLATION_INFO);
 			installationInfoColumn.setCellRenderer(installationInfoTableCellRenderer);
 
-			JComboBox installationInfoCombo = new JComboBox<>();
+			JComboBox<String> installationInfoCombo = new JComboBox<>();
 
 			installationInfoCombo.setRenderer(standardListCellRenderer);
 

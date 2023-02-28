@@ -214,7 +214,8 @@ public class CSVImportDataModifier {
 		int id = 0;
 
 		for (Map<String, Object> line : data) {
-			theSourceMap.put(String.valueOf(id++), line);
+			theSourceMap.put(String.valueOf(id), line);
+			id++;
 		}
 	}
 

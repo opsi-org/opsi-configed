@@ -274,7 +274,7 @@ public class Configed {
 		// Try with resources so that it will be closed in implicit finally statement
 		try (Formatter formatter = new Formatter()) {
 			Logging.info(
-					" we get max memory " + formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1000000));
+					" we get max memory " + formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1_000_000));
 		}
 
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
