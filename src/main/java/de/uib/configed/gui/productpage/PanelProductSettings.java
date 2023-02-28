@@ -75,7 +75,9 @@ import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.productstate.ActionProgress;
+import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
+import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.InstallationInfo;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
@@ -345,38 +347,33 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			iconsDir = "images/productstate/actionprogress";
 		}
 
-		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer(
-				de.uib.opsidatamodel.productstate.ActionProgress.getLabel2DisplayLabel(), iconsDir, false,
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_PROGRESS) + ": ");
+		actionProgressTableCellRenderer = new ActionProgressTableCellRenderer(ActionProgress.getLabel2DisplayLabel(),
+				iconsDir, false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_PROGRESS) + ": ");
 
 		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
 			iconsDir = "images/productstate/actionresult";
 		}
 
-		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.ActionResult.getLabel2DisplayLabel(), iconsDir, false,
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_RESULT) + ": ");
+		actionResultTableCellRenderer = new ColoredTableCellRendererByIndex(ActionResult.getLabel2DisplayLabel(),
+				iconsDir, false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_RESULT) + ": ");
 
 		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
 			iconsDir = "images/productstate/lastaction";
 		}
 
-		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir, false,
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_ACTION) + ": ");
+		lastActionTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2DisplayLabel(),
+				iconsDir, false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_LAST_ACTION) + ": ");
 
 		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
 			iconsDir = "images/productstate/actionrequest";
 		}
 
-		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.ActionRequest.getLabel2TextColor(),
-				de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir, false,
+		actionRequestTableCellRenderer = new ColoredTableCellRendererByIndex(ActionRequest.getLabel2TextColor(),
+				ActionRequest.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_REQUEST) + ": ");
 
-		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.ActionSequence.getLabel2DisplayLabel(), null, false,
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_SEQUENCE) + ": "
+		priorityclassTableCellRenderer = new ColoredTableCellRendererByIndex(ActionSequence.getLabel2DisplayLabel(),
+				null, false, InstallationStateTableModel.getColumnTitle(ProductState.KEY_ACTION_SEQUENCE) + ": "
 
 		);
 
@@ -425,7 +422,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 						} else {
 							serverProductVersion = serverProductVersion
 									+ ((istm.getGlobalProductInfos()).get(productId))
-											.get(de.uib.opsidatamodel.productstate.ProductState.KEY_VERSION_INFO);
+											.get(ProductState.KEY_VERSION_INFO);
 						}
 
 						if (!val.equals(serverProductVersion)) {

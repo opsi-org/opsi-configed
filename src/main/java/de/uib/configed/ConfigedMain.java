@@ -296,7 +296,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	JTableSelectionPanel selectionPanel;
 
-	de.uib.configed.tree.ClientTree treeClients;
+	ClientTree treeClients;
 
 	Map<String, Map<String, String>> productGroups;
 	Map<String, Set<String>> productGroupMembers;

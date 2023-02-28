@@ -32,6 +32,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
+import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -196,7 +197,7 @@ public class LicenseDisplayer {
 		TableUpdateCollection updateCollection;
 
 		columnNames = new ArrayList<>();
-		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS) {
+		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {
 			columnNames.add(key);
 		}
 

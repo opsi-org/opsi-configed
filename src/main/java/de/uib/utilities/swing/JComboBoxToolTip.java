@@ -1,5 +1,6 @@
 package de.uib.utilities.swing;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,9 @@ public class JComboBoxToolTip extends JComboBox<String> {
 
 	private Map<String, String> selectValues;
 
-	protected java.awt.Color listBackgroundColorSelected;
-	protected java.awt.Color listBackgroundColorUnselected;
-	protected java.awt.Color listForegroundColor;
+	protected Color listBackgroundColorSelected;
+	protected Color listBackgroundColorUnselected;
+	protected Color listForegroundColor;
 
 	protected boolean addEmpty = false;
 

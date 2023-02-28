@@ -27,7 +27,7 @@ import de.uib.configed.gui.IconButton;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
 
 public class PanelEditClientProperties extends AbstractPanelEditProperties {
-	private javax.swing.JLabel jLabelProductProperties;
+	private JLabel jLabelProductProperties;
 	private IconButton buttonSetValuesFromServerDefaults;
 	private IconButton buttonRemoveSpecificValues;
 
@@ -62,7 +62,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 		buttonRemoveSpecificValues.addActionListener((ActionEvent e) -> productPropertiesPanel.setVoid());
 
-		GroupLayout layoutEditProperties = new javax.swing.GroupLayout(this);
+		GroupLayout layoutEditProperties = new GroupLayout(this);
 		setLayout(layoutEditProperties);
 
 		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()

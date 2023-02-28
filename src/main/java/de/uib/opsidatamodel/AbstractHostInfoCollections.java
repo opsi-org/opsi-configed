@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 
 /**
@@ -61,6 +62,6 @@ public abstract class AbstractHostInfoCollections {
 
 	protected abstract void retrieveOpsiHosts();
 
-	public abstract void setTree(de.uib.configed.tree.ClientTree tree);
+	public abstract void setTree(ClientTree tree);
 
 }

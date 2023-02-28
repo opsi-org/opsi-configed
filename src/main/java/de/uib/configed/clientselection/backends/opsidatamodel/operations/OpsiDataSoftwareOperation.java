@@ -10,6 +10,7 @@ import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSoftwareOperation extends SoftwareOperation implements ExecutableOperation {
@@ -19,7 +20,7 @@ public class OpsiDataSoftwareOperation extends SoftwareOperation implements Exec
 
 	public OpsiDataSoftwareOperation(AbstractSelectOperation operation) {
 		super(operation);
-		controller = de.uib.opsidatamodel.PersistenceControllerFactory.getPersistenceController();
+		controller = PersistenceControllerFactory.getPersistenceController();
 		if (controller == null) {
 			Logging.warning(this, "Warning, controller is null!");
 		}

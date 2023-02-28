@@ -581,7 +581,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped
 
 	protected void deleteUser() {
 
-		javax.swing.tree.TreePath p = tree.getSelectionPath();
+		TreePath p = tree.getSelectionPath();
 
 		if (p != null) {
 			Logging.info(this, "deleteUser path " + p);

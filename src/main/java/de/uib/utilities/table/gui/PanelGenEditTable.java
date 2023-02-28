@@ -351,18 +351,16 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		addComponentListener(this);
 
-		buttonCommit = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
-				"images/apply_over.png", "images/apply_disabled.png");
+		buttonCommit = new IconButton(Configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"),
+				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png");
 
 		buttonCommit.setPreferredSize(Globals.smallButtonDimension);
 		if (!editing) {
 			buttonCommit.setVisible(false);
 		}
 
-		buttonCancel = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
-				"images/cancel_over.png", "images/cancel_disabled.png");
+		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
+				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png");
 
 		buttonCancel.setPreferredSize(Globals.smallButtonDimension);
 		if (!editing) {
@@ -456,7 +454,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		}
 
-		GroupLayout layout = new javax.swing.GroupLayout(this);
+		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
@@ -464,21 +462,19 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				.addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup()
 								.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
-								.addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(label, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
 
-								.addComponent(titlePane, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-						.addComponent(searchPane, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.PREFERRED_SIZE, maxTableWidth)// Short.MAX_VALUE)
-						.addComponent(scrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 100, maxTableWidth)
+								.addComponent(titlePane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE))
+						.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, maxTableWidth)// Short.MAX_VALUE)
+						.addComponent(scrollpane, GroupLayout.DEFAULT_SIZE, 100, maxTableWidth)
 						.addGroup(layout.createSequentialGroup()
-								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE)))
+								.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)));
 
 		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -492,11 +488,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 						.addComponent(scrollpane, 20, 100, Short.MAX_VALUE)
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		if (generalPopupPosition == 0) {
@@ -578,7 +574,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	public void setTitlePaneBackground(java.awt.Color c) {
+	public void setTitlePaneBackground(Color c) {
 		if (c == null) {
 			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		} else {

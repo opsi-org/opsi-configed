@@ -2,6 +2,7 @@ package de.uib.configed.gui;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -25,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.Timer;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -288,7 +290,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		Logging.info(this, "with icons " + iconsLog);
 	}
 
-	public void setContentBackground(java.awt.Color c) {
+	public void setContentBackground(Color c) {
 		allpane.setBackground(c);
 	}
 
@@ -563,7 +565,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	public static class FadingMirror extends JPanel implements ActionListener {
 		private float opacity = 1f;
 		private float step = 0.3f;
-		private javax.swing.Timer fadeTimer;
+		private Timer fadeTimer;
 		private int initialDelay = 100;
 		private int delay = 100;
 		private boolean vanishing = true;
@@ -588,7 +590,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		}
 
 		public void begin() {
-			fadeTimer = new javax.swing.Timer(initialDelay, this);
+			fadeTimer = new Timer(initialDelay, this);
 			fadeTimer.setDelay(delay);
 			fadeTimer.start();
 		}

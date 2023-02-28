@@ -86,7 +86,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	/** JComboBox menu text instance **/
 	private JComboBox<String> jComboBoxMenuText;
 	/** IconButton delete menu text instance **/
-	private de.uib.configed.gui.IconButton buttonDelete;
+	private IconButton buttonDelete;
 
 	/** JComboBox parent menu text instance **/
 	private JComboBox<String> jComboBoxParentMenuText;
@@ -209,13 +209,11 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		labelCommands = new JLabel();
 		jTextPaneommands = new JTextPane();
 
-		buttonTestCommand = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
+		buttonTestCommand = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.btnTestCommand"),
 				"images/executing_command_red_22.png", "images/executing_command_red_22.png",
 				"images/executing_command_red_22.png", true);
-		buttonDelete = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"), "images/list-remove.png",
-				"images/list-remove.png", "images/list-remove_disabled.png", true);
+		buttonDelete = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.rm_menuText.tooltip"),
+				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
 		buttonSave = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
 		JButton buttonClose = new IconButton(Configed.getResourceValue("MainFrame.iconButtonCancelChanges"),

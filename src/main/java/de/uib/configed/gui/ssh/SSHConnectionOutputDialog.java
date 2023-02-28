@@ -30,6 +30,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
+import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -174,8 +175,8 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			jScrollPane.setViewportView(output);
 			output.setText("");
 
-			jButtonClose = new de.uib.configed.gui.IconButton(Configed.getResourceValue("SSHConnection.buttonClose"),
-					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
+			jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
+					"images/cancel.png", "images/cancel.png", true);
 
 			jButtonClose.setPreferredSize(jButtonDimension);
 

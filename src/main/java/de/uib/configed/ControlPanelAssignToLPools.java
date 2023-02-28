@@ -20,6 +20,7 @@ import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.licences.PanelAssignToLPools;
+import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
@@ -170,7 +171,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 				rowMap.put("ID", ID);
 
-				List<String> identKeys = de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT;
+				List<String> identKeys = SWAuditEntry.KEYS_FOR_IDENT;
 				if (rowValues.length != identKeys.size()) {
 					Logging.warning(this, "illegal ID " + ID);
 				} else {
@@ -560,7 +561,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		// --- panelRegisteredSoftware
 
-		columnNames = new ArrayList<>(de.uib.configed.type.SWAuditEntry.getDisplayKeys());
+		columnNames = new ArrayList<>(SWAuditEntry.getDisplayKeys());
 
 		// introducing a column for displaying the cursor row
 		columnNames.add(colMarkCursorRow, "CURSOR");

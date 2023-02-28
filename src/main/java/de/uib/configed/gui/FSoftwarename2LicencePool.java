@@ -288,7 +288,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private void initDataStructure() {
 		columnNames = new ArrayList<>();
-		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS) {
+		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {
 			columnNames.add(key);
 		}
 

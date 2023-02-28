@@ -1,5 +1,7 @@
 package de.uib.utilities.swing;
 
+import java.awt.Color;
+
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -124,7 +126,7 @@ public class JTextHideField extends javax.swing.JPanel {
 	}
 
 	@Override
-	public void setBackground(java.awt.Color c) {
+	public void setBackground(Color c) {
 		if (visibleField != null) {
 			visibleField.setBackground(c);
 		}

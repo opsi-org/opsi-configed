@@ -53,7 +53,7 @@ import de.uib.utilities.swing.list.StandardListCellRenderer;
 public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		implements ListSelectionListener, ActionListener, MouseListener, KeyListener {
 
-	private javax.swing.JLabel jLabelEditDepotProductProperties;
+	private JLabel jLabelEditDepotProductProperties;
 
 	private JList<String> listDepots;
 	private List<String> listSelectedDepots;
@@ -137,7 +137,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
 
 		JPanel panelTop = new JPanel();
-		GroupLayout layoutEditProperties = new javax.swing.GroupLayout(panelTop);
+		GroupLayout layoutEditProperties = new GroupLayout(panelTop);
 		panelTop.setLayout(layoutEditProperties);
 
 		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()

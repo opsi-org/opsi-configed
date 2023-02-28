@@ -109,7 +109,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		buttonYearForward.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
 		buttonYearForward.addActionListener(actionEvent -> switchYear(+1));
 
-		GroupLayout layout = new javax.swing.GroupLayout(this);
+		GroupLayout layout = new GroupLayout(this);
 		super.setLayout(layout);
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)

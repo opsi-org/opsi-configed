@@ -45,7 +45,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	protected int buttonWidth = 140;
 	protected int lPoolHeight = 100;
 
-	protected de.uib.configed.ControlPanelLicencesUsage licencesUsageController;
+	protected ControlPanelLicencesUsage licencesUsageController;
 	private int initialSplit = 0;
 
 	/** Creates new form panelLicencesUsage */

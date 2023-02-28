@@ -34,10 +34,10 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
+import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.logging.Logging;
 
-public class ProductInfoPane extends javax.swing.JSplitPane
-		implements de.uib.utilities.DataChangedObserver, ActionListener {
+public class ProductInfoPane extends JSplitPane implements DataChangedObserver, ActionListener {
 
 	private JXPanel productDescriptionsPanel;
 	private JXPanel bottomComponent;
@@ -150,7 +150,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		productDescriptionsPanel = new JXPanel();
 
-		GroupLayout layoutDescriptionsPanel = new javax.swing.GroupLayout(productDescriptionsPanel);
+		GroupLayout layoutDescriptionsPanel = new GroupLayout(productDescriptionsPanel);
 		productDescriptionsPanel.setLayout(layoutDescriptionsPanel);
 
 		layoutDescriptionsPanel.setHorizontalGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
@@ -195,7 +195,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		// treat the bottom panel
 		bottomComponent = new JXPanel();
 
-		GroupLayout layoutBottomComponent = new javax.swing.GroupLayout(bottomComponent);
+		GroupLayout layoutBottomComponent = new GroupLayout(bottomComponent);
 		bottomComponent.setLayout(layoutBottomComponent);
 
 		layoutBottomComponent.setHorizontalGroup(layoutBottomComponent.createParallelGroup()

@@ -185,7 +185,7 @@ public final class Globals {
 	public static final Color OK_COLOR = new Color(20, 140, 20);
 	public static final Color UNKNOWN_COLOR = new Color(40, 17, 213);
 
-	public static final Color darkOrange = new java.awt.Color(218, 180, 4);
+	public static final Color darkOrange = new Color(218, 180, 4);
 	public static final Color lightBlack = new Color(30, 30, 30);
 	public static final Color blue = new Color(30, 30, 100);
 	public static final Color blueGrey = new Color(180, 190, 190);
