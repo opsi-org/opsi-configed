@@ -13,6 +13,7 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.JFileChooser;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
@@ -184,7 +185,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		File f = new File(chooserDirectory, typename);
 		chooser.setSelectedFile(f);
 
-		int returnVal = chooser.showSaveDialog(Globals.frame1);
+		int returnVal = chooser.showSaveDialog(ConfigedMain.getMainFrame());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 			chooserDirectory = chooser.getCurrentDirectory();

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -5006,8 +5007,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dialogRemoteControl.setMeanings(rcCommands);
 			dialogRemoteControl.setEditable(commandsEditable);
 
-			dialogRemoteControl
-					.setListModel(new DefaultComboBoxModel<>(remoteControls.keySet().toArray(new String[0])));
+			// we want to present a sorted list of the keys
+			List<String> sortedKeys = new ArrayList<>(remoteControls.keySet());
+			sortedKeys.sort(Comparator.comparing(String::toString));
+			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
 
 			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, false, ""));
 
