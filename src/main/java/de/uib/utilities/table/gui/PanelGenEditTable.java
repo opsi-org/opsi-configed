@@ -29,6 +29,8 @@ import java.util.Set;
 
 import javax.swing.DefaultRowSorter;
 import javax.swing.DropMode;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -400,7 +402,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.getTableHeader().addMouseListener(this);
 
 		// add the popup to the scrollpane for the case that the table is empty
-		scrollpane = new javax.swing.JScrollPane();
+		scrollpane = new JScrollPane();
 
 		// NOT WORK
 
@@ -441,25 +443,25 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.setAutoCreateRowSorter(false);
 
 		try {
-			scrollpane = new javax.swing.JScrollPane();
+			scrollpane = new JScrollPane();
 			scrollpane.setViewportView(theTable);
 			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		} catch (ClassCastException ex) {
 			// a strange Nimbus exception which occurs sometimes here
 			Logging.warning(this, "strange exception on creating scrollpane " + ex);
 
-			scrollpane = new javax.swing.JScrollPane();
+			scrollpane = new JScrollPane();
 			scrollpane.setViewportView(theTable);
 			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 
 		}
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+		GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup().addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
+				.addGroup(layout.createParallelGroup(Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup()
 								.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 								.addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -479,9 +481,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 										javax.swing.GroupLayout.PREFERRED_SIZE)))
 				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)));
 
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addContainerGap()
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+						.addGroup(layout.createParallelGroup(Alignment.CENTER)
 								.addComponent(label, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 								.addComponent(titlePane, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
@@ -489,7 +491,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addComponent(scrollpane, 20, 100, Short.MAX_VALUE)
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+						.addGroup(layout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)

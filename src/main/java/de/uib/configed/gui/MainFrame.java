@@ -426,7 +426,7 @@ public class MainFrame extends JFrame
 
 	JPanel jPanelSchalterstellung;
 
-	public de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
+	public FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
 	LicensingInfoMap licensingInfoMap;
 
 	JTextField jTextFieldConfigdir = new JTextField();
@@ -697,7 +697,7 @@ public class MainFrame extends JFrame
 
 			menuItem.addActionListener((ActionEvent e) -> {
 				configedMain.closeInstance(true);
-				de.uib.messages.Messages.setLocale(localeName);
+				Messages.setLocale(localeName);
 				new Thread() {
 					@Override
 					public void run() {

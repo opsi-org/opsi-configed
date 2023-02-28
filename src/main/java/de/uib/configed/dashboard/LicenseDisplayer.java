@@ -268,7 +268,7 @@ public class LicenseDisplayer {
 		return result.toString();
 	}
 
-	private java.util.Set<String> getRangeSWxLicencepool(String swName)
+	private Set<String> getRangeSWxLicencepool(String swName)
 	// nearly done in produceModelSWxLicencepool, but we collect the range of the
 	// model-map
 	{
@@ -288,7 +288,7 @@ public class LicenseDisplayer {
 	}
 
 	private boolean checkExistNamesWithVariantLicencepools(String name) {
-		java.util.Set<String> range = getRangeSWxLicencepool(name);
+		Set<String> range = getRangeSWxLicencepool(name);
 
 		if (range.size() > 1)
 		// && range.contains( FSoftwarename2LicencePool.valNoLicencepool ))

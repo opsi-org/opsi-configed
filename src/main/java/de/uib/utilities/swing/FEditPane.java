@@ -71,7 +71,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	}
 
 	private void initFEditText() {
-		JScrollPane scrollpane = new javax.swing.JScrollPane();
+		JScrollPane scrollpane = new JScrollPane();
 		textpane = new javax.swing.JTextPane();
 		scrollpane.setViewportView(textpane);
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);

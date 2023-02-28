@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -43,7 +44,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	}
 
 	private void initFEditText() {
-		scrollpane = new javax.swing.JScrollPane();
+		scrollpane = new JScrollPane();
 		textarea = new javax.swing.JTextArea();
 		scrollpane.setViewportView(textarea);
 		editingArea.add(scrollpane, BorderLayout.CENTER);

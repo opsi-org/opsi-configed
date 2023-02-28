@@ -16,6 +16,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -111,26 +113,24 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		buttonCommit.addKeyListener(this);
 		buttonCancel.addKeyListener(this);
 
-		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
+		GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
-		layout1.setHorizontalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout1.createSequentialGroup()
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(labelHint, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(editingArea, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGroup(layout1.createSequentialGroup()
-										.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
+		layout1.setHorizontalGroup(layout1.createParallelGroup(Alignment.LEADING).addGroup(layout1
+				.createSequentialGroup().addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGroup(layout1.createParallelGroup(Alignment.LEADING)
+						.addComponent(labelHint, javax.swing.GroupLayout.PREFERRED_SIZE,
+								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addComponent(editingArea, javax.swing.GroupLayout.PREFERRED_SIZE,
+								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGroup(layout1.createSequentialGroup()
+								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 
-										.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)))
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
-		layout1.setVerticalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.PREFERRED_SIZE)))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
+		layout1.setVerticalGroup(layout1.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout1.createSequentialGroup()
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
 						.addComponent(labelHint, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -138,21 +138,21 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addComponent(editingArea, 20, 80, Short.MAX_VALUE)
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+						.addGroup(layout1.createParallelGroup(Alignment.BASELINE)
 								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(framingPanel,
 						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addContainerGap()));
 		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				layout.createParallelGroup(Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup().addContainerGap()
 								.addComponent(framingPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
 										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)

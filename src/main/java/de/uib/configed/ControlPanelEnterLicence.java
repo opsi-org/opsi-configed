@@ -219,8 +219,8 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 
 		FEditPane fedNotes = new FEditPane("", "Notes");
 
-		CellEditor4TableText cellEditorLicenceContractNotes = new de.uib.utilities.table.gui.CellEditor4TableText(
-				fedNotes, FEditPane.AREA_DIMENSION);
+		CellEditor4TableText cellEditorLicenceContractNotes = new CellEditor4TableText(fedNotes,
+				FEditPane.AREA_DIMENSION);
 
 		fedNotes.setServedCellEditor(cellEditorLicenceContractNotes);
 		col.setCellEditor(cellEditorLicenceContractNotes);

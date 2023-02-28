@@ -1,6 +1,8 @@
 package de.uib.utilities.swing;
 
-public class JTextShowField extends javax.swing.JTextField {
+import javax.swing.JTextField;
+
+public class JTextShowField extends JTextField {
 
 	public JTextShowField(boolean editable) {
 		this("", editable);

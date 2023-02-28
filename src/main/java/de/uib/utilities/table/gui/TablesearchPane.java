@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -583,8 +584,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		this.setLayout(layoutTablesearchPane);
 
 		int checkedLabelWidth = 18;
-		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(layoutTablesearchPane.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(markReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -621,7 +621,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
 
-				.addGroup(layoutTablesearchPane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+				.addGroup(layoutTablesearchPane.createParallelGroup(Alignment.CENTER)
 						.addComponent(markReload, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)

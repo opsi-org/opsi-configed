@@ -16,7 +16,10 @@ import java.util.Map;
 import java.util.Scanner;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -92,14 +95,14 @@ public final class Globals {
 		}
 	}
 
-	public static final Font defaultFont = new java.awt.Font("SansSerif", 0, 11);
-	public static final Font defaultFontStandardBold = new java.awt.Font("SansSerif", Font.BOLD, 11);
-	public static final Font defaultFontSmall = new java.awt.Font("SansSerif", 0, 9);
-	public static final Font defaultFontSmallBold = new java.awt.Font("SansSerif", Font.BOLD, 9);
+	public static final Font defaultFont = new Font("SansSerif", 0, 11);
+	public static final Font defaultFontStandardBold = new Font("SansSerif", Font.BOLD, 11);
+	public static final Font defaultFontSmall = new Font("SansSerif", 0, 9);
+	public static final Font defaultFontSmallBold = new Font("SansSerif", Font.BOLD, 9);
 
-	public static final Font defaultFontBig = new java.awt.Font("SansSerif", 0, 12);
-	public static final Font defaultFontBold = new java.awt.Font("SansSerif", Font.BOLD, 12);
-	public static final Font defaultFontTitle = new java.awt.Font("SansSerif", 0, 16);
+	public static final Font defaultFontBig = new Font("SansSerif", 0, 12);
+	public static final Font defaultFontBold = new Font("SansSerif", Font.BOLD, 12);
+	public static final Font defaultFontTitle = new Font("SansSerif", 0, 16);
 
 	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;
 	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
@@ -347,11 +350,11 @@ public final class Globals {
 	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
 	public static final int TOOLTIP_RESHOW_DELAY_MS = 0;
 
-	public static javax.swing.border.Border createPanelBorder() {
-		return new javax.swing.border.LineBorder(Globals.BACKGROUND_COLOR_6, 2, true);
+	public static Border createPanelBorder() {
+		return new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true);
 	}
 
-	public static void formatButtonSmallText(javax.swing.JButton button) {
+	public static void formatButtonSmallText(JButton button) {
 		button.setFont(defaultFontSmall);
 		button.setPreferredSize(new Dimension(45, 20));
 		button.setForeground(lightBlack);

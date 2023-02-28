@@ -35,10 +35,11 @@ import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.datapanel.AbstractEditMapPanel;
+import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
-public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapanel.EditMapPanelGrouped
+public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped
 
 // works on a map of pairs of type String - List
 {
@@ -56,8 +57,7 @@ public class EditMapPanelGroupedForHostConfigs extends de.uib.utilities.datapane
 	protected LinkedList<String> theRoles;
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
-			boolean keylistEditable, boolean reloadable,
-			final de.uib.utilities.datapanel.AbstractEditMapPanel.Actor actor) {
+			boolean keylistEditable, boolean reloadable, final AbstractEditMapPanel.Actor actor) {
 		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, actor);
 
 		popupForUserpathes = new PopupMenuTrait(

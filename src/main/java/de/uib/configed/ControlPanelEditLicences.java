@@ -191,8 +191,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		}));
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(5);
-		col.setCellEditor(new de.uib.utilities.table.gui.CellEditor4TableText(new FEditDate("", false),
-				FEditDate.AREA_DIMENSION));
+		col.setCellEditor(new CellEditor4TableText(new FEditDate("", false), FEditDate.AREA_DIMENSION));
 
 		// expiration date
 
@@ -396,8 +395,8 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		col = thePanel.panelLicencecontracts.getColumnModel().getColumn(5);
 
 		FEditPane fedNotes = new FEditPane("", "Notes");
-		CellEditor4TableText cellEditorLicenceContractNotes = new de.uib.utilities.table.gui.CellEditor4TableText(
-				fedNotes, FEditPane.AREA_DIMENSION);
+		CellEditor4TableText cellEditorLicenceContractNotes = new CellEditor4TableText(fedNotes,
+				FEditPane.AREA_DIMENSION);
 
 		fedNotes.setServedCellEditor(cellEditorLicenceContractNotes);
 		col.setCellEditor(cellEditorLicenceContractNotes);

@@ -22,9 +22,10 @@ import org.jdesktop.swingx.painter.AbstractPainter;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.utilities.datapanel.AbstractEditMapPanel;
 
 public abstract class AbstractPanelEditProperties extends JXPanel {
-	protected de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel;
+	protected AbstractEditMapPanel productPropertiesPanel;
 
 	protected int minHSize = 50;
 	protected int prefHSize = 80;
@@ -33,8 +34,7 @@ public abstract class AbstractPanelEditProperties extends JXPanel {
 
 	protected String productEdited;
 
-	protected AbstractPanelEditProperties(ConfigedMain mainController,
-			de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel) {
+	protected AbstractPanelEditProperties(ConfigedMain mainController, AbstractEditMapPanel productPropertiesPanel) {
 		super();
 		this.mainController = mainController;
 		this.productPropertiesPanel = productPropertiesPanel;

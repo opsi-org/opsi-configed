@@ -66,6 +66,7 @@ import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
@@ -525,7 +526,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 
 				Logging.info(this, "writing saved states, set writable, success: " + success);
-				Configed.savedStates = new de.uib.utilities.savedstates.SavedStates(
+				Configed.savedStates = new SavedStates(
 						new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
 			} catch (Exception ex) {
 				Logging.warning(this, "saved states exception " + ex);
@@ -2825,9 +2826,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
 				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection); // (*)
 
-				mainFrame.panelLocalbootProductSettings
-						.setSearchFields(de.uib.configed.guidata.InstallationStateTableModel
-								.localizeColumns(getLocalbootProductDisplayFieldsList()));
+				mainFrame.panelLocalbootProductSettings.setSearchFields(
+						InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
 
 				setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
 			} catch (Exception ex) {
@@ -5369,8 +5369,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void selectClientsByFailedAtSomeTimeAgo(String arg) {
-		de.uib.configed.clientselection.SelectionManager manager = new de.uib.configed.clientselection.SelectionManager(
-				null);
+		SelectionManager manager = new SelectionManager(null);
 
 		if (arg == null || arg.equals("")) {
 			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
@@ -5422,8 +5421,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 		}
 
-		de.uib.configed.clientselection.SelectionManager manager = new de.uib.configed.clientselection.SelectionManager(
-				null);
+		SelectionManager manager = new SelectionManager(null);
 
 		String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
 

@@ -79,7 +79,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 
 		visibleList.addMouseListener(this);
 
-		scrollpane = new javax.swing.JScrollPane();
+		scrollpane = new JScrollPane();
 		scrollpane.setViewportView(visibleList);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 		editable = false;
