@@ -116,7 +116,7 @@ import de.uib.utilities.table.ListCellOptions;
 
 public class OpsiserviceNOMPersistenceController extends AbstractPersistenceController {
 	private static final String EMPTYFIELD = "-";
-	private static final List NONE_LIST = new ArrayList<>() {
+	private static final List<String> NONE_LIST = new ArrayList<>() {
 		@Override
 		public int size() {
 			return -1;
@@ -288,7 +288,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected Map<String, String> logfiles;
 
-	private List updateProductOnClientItems;
+	private List<JSONObject> updateProductOnClientItems;
 
 	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
 
@@ -336,8 +336,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected List<JSONObject> deleteConfigStateItems;
 	protected List<Map<String, Object>> configCollection;
 
-	protected List productPropertyStateUpdateCollection;
-	protected List productPropertyStateDeleteCollection;
+	protected List<JSONObject> productPropertyStateUpdateCollection;
+	protected List<JSONObject> productPropertyStateDeleteCollection;
 
 	protected Map<String, Map<String, Object>> hostUpdates;
 
@@ -3932,7 +3932,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// hopefully we get only updateItems for allowed clients
-	public boolean updateProductOnClients(List updateItems) {
+	public boolean updateProductOnClients(List<JSONObject> updateItems) {
 		Logging.info(this, "updateProductOnClients ");
 
 		if (globalReadOnly) {
@@ -4204,7 +4204,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return retrieveListOfMapsNOM(callAttributes, callFilter, methodName);
 	}
 
-	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map callFilter, String methodName) {
+	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map<?, ?> callFilter, String methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
 		Logging.debug(this, "retrieveListOfMapsNOM " + retrieved);
@@ -4244,7 +4244,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		for (Map<String, Object> map : properties) {
 			Object retrievedValues = ((JSONArray) map.get("values")).toList();
 
-			List<Object> valueList = (List<Object>) retrievedValues;
+			List<?> valueList = (List<?>) retrievedValues;
 
 			Set<String> values = new HashSet<>();
 
@@ -4493,14 +4493,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// collect productPropertyState updates and deletions
-	public void setProductProperties(String pcname, String productname, Map properties, List updateCollection,
-			List deleteCollection) {
+	public void setProductProperties(String pcname, String productname, Map<?, ?> properties,
+			List<JSONObject> updateCollection, List<JSONObject> deleteCollection) {
 		if (!(properties instanceof ConfigName2ConfigValue)) {
 			Logging.warning(this, "! properties instanceof ConfigName2ConfigValue ");
 			return;
 		}
 
-		Iterator propertiesKeyIterator = properties.keySet().iterator();
+		Iterator<?> propertiesKeyIterator = properties.keySet().iterator();
 
 		Map<String, Object> state = new HashMap<>();
 
@@ -4548,7 +4548,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	// collect productPropertyState updates and deletions in standard lists
 	@Override
-	public void setProductProperties(String pcname, String productname, Map properties) {
+	public void setProductProperties(String pcname, String productname, Map<?, ?> properties) {
 		// old version
 
 		if (productPropertyStateUpdateCollection == null) {
@@ -4571,7 +4571,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// send productPropertyState updates and clear the collections
-	public void setProductProperties(List updateCollection, List deleteCollection) {
+	public void setProductProperties(List<?> updateCollection, List<?> deleteCollection) {
 		Logging.debug(this, "setProductproperties() ");
 
 		if (globalReadOnly) {
@@ -4594,8 +4594,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public void setCommonProductPropertyValue(Set<String> clientNames, String productName, String propertyName,
 			List<String> values) {
-		List updateCollection = new ArrayList<>();
-		List deleteCollection = new ArrayList<>();
+		List<JSONObject> updateCollection = new ArrayList<>();
+		List<JSONObject> deleteCollection = new ArrayList<>();
 
 		// collect updates for all clients
 		for (String client : clientNames) {
@@ -7061,10 +7061,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List<String> configuredByService = Globals
 					.takeAsStringList(serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
 
-			List<String> possibleValuesAccordingToService = new ArrayList<>();
+			List<?> possibleValuesAccordingToService = new ArrayList<>();
 
 			if (configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT) != null) {
-				possibleValuesAccordingToService = (List<String>) configOptions
+				possibleValuesAccordingToService = (List<?>) configOptions
 						.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT).get("possibleValues");
 			}
 
@@ -7216,10 +7216,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List<String> configuredByService = Globals
 					.takeAsStringList(serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT));
 
-			List<String> possibleValuesAccordingToService = new ArrayList<>();
+			List<?> possibleValuesAccordingToService = new ArrayList<>();
 
 			if (configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT) != null) {
-				possibleValuesAccordingToService = (List<String>) configOptions
+				possibleValuesAccordingToService = (List<?>) configOptions
 						.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT).get("possibleValues");
 			}
 

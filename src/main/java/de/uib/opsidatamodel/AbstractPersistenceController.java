@@ -660,7 +660,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	// Map properties,
 
-	public abstract void setProductProperties(String pcname, String productname, Map properties);
+	public abstract void setProductProperties(String pcname, String productname, Map<?, ?> properties);
 
 	public abstract void setProductProperties();
 
