@@ -61,6 +61,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -1989,7 +1990,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
 
-			javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+			TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 
 			column.setMaxWidth(iconColumnMaxWidth);
 
@@ -2017,7 +2018,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "showAndSave found col " + col);
 
 			if (col > -1) {
-				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
 
@@ -2044,7 +2045,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
 			if (col > -1) {
-				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
 
@@ -2071,7 +2072,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
 			if (col > -1) {
-				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
 

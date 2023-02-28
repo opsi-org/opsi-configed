@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -36,7 +37,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	private List<Object> showOnlyValues;
 
 	// keys which identify readonly entries
-	private java.util.Set<String> keysOfReadOnlyEntries;
+	private Set<String> keysOfReadOnlyEntries;
 
 	private Function<String, Boolean> editDenier;
 
@@ -172,7 +173,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		return updateCollection;
 	}
 
-	public void setReadOnlyEntries(java.util.Set<String> keys) {
+	public void setReadOnlyEntries(Set<String> keys) {
 		keysOfReadOnlyEntries = keys;
 	}
 

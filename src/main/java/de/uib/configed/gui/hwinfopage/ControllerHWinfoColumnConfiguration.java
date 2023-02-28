@@ -26,6 +26,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
+import javax.swing.table.TableColumn;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -263,7 +264,7 @@ public class ControllerHWinfoColumnConfiguration {
 		// now sorted
 		panel.reload();
 
-		javax.swing.table.TableColumn col;
+		TableColumn col;
 		col = panel.getColumnModel().getColumn(columnNames.indexOf(COL_LINE_NO));
 		col.setMaxWidth(80);
 		col.setHeaderValue("");

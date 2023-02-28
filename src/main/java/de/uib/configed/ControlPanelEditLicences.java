@@ -9,6 +9,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelEditLicences;
 import de.uib.configed.type.licences.LicenceEntry;
@@ -100,7 +101,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		thePanel.panelKeys.addPopupItem(menuItemAddKey);
 
 		// special treatment of columns
-		javax.swing.table.TableColumn col;
+		TableColumn col;
 
 		col = thePanel.panelKeys.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP0 = new JComboBox<>();

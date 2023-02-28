@@ -385,7 +385,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jLabelConfigure.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ChooseType"));
 		jLabelConfigure.setFont(Globals.defaultFontStandardBold);
 
-		panelLicenceModel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+		panelLicenceModel.setBorder(BorderFactory.createEtchedBorder());
 
 		jLabelSLid1.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid1"));
 		jLabelSLid2.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid2"));

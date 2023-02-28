@@ -22,7 +22,7 @@ public class SimpleTreeModel extends DefaultTreeModel {
 
 	Map<String, String> tooltips;
 
-	public SimpleTreeModel(java.util.Set<String> dottedKeys, Map<String, String> tooltips) {
+	public SimpleTreeModel(Set<String> dottedKeys, Map<String, String> tooltips) {
 		super(new SimpleIconNode(""));
 
 		Logging.debug(this, "SimpleTreeModel created for " + dottedKeys);
@@ -49,7 +49,7 @@ public class SimpleTreeModel extends DefaultTreeModel {
 		((DefaultMutableTreeNode) getRoot()).setUserObject(s);
 	}
 
-	private void generateFrom(java.util.Set<String> dottedKeys) {
+	private void generateFrom(Set<String> dottedKeys) {
 		allPathes = new TreeSet<>();
 		path2Node = new TreeMap<>();
 

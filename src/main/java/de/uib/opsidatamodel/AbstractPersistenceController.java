@@ -382,8 +382,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract List<String> wakeOnLan(String[] hostIds);
 
-	public abstract List<String> wakeOnLan(java.util.Set<String> hostIds,
-			Map<String, List<String>> hostSeparationByDepot, Map<String, AbstractExecutioner> execsByDepot);
+	public abstract List<String> wakeOnLan(Set<String> hostIds, Map<String, List<String>> hostSeparationByDepot,
+			Map<String, AbstractExecutioner> execsByDepot);
 
 	public abstract List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds);
 

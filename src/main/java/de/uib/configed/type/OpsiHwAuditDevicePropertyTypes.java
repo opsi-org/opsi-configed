@@ -2,13 +2,14 @@ package de.uib.configed.type;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.uib.utilities.logging.Logging;
 
 public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditDeviceClass> {
-	java.util.Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
+	Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
 
-	public OpsiHwAuditDevicePropertyTypes(java.util.Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses) {
+	public OpsiHwAuditDevicePropertyTypes(Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses) {
 		super();
 		this.hwAuditDeviceClasses = hwAuditDeviceClasses;
 	}

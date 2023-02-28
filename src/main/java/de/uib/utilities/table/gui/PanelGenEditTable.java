@@ -1120,7 +1120,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	}
 
-	protected void setTimestampRenderer(String classname, javax.swing.table.TableColumn col) {
+	protected void setTimestampRenderer(String classname, TableColumn col) {
 
 		if (classname.equals("java.sql.Timestamp")) {
 			col.setCellRenderer(new TableCellRendererDate());
@@ -1128,14 +1128,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	protected void setBigDecimalRenderer(String classname, javax.swing.table.TableColumn col) {
+	protected void setBigDecimalRenderer(String classname, TableColumn col) {
 		if (classname.equals("java.math.BigDecimal")) {
 			col.setCellRenderer(new TableCellRendererCurrency());
 		}
 
 	}
 
-	protected void setBooleanRenderer(String classname, javax.swing.table.TableColumn col) {
+	protected void setBooleanRenderer(String classname, TableColumn col) {
 		if (classname.equals("java.lang.Boolean")) {
 			col.setCellRenderer(new TableCellRendererByBoolean());
 		}

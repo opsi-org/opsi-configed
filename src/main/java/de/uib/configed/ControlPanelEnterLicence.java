@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.swing.table.TableColumn;
+
 import de.uib.configed.gui.licences.PanelEnterLicence;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.opsidatamodel.AbstractPersistenceController;
@@ -182,7 +184,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 		thePanel.panelLicencecontracts.addPopupItem(menuItemAddContract);
 
 		// special treatment of columns
-		javax.swing.table.TableColumn col;
+		TableColumn col;
 
 		col = thePanel.panelLicencecontracts.getColumnModel().getColumn(2);
 

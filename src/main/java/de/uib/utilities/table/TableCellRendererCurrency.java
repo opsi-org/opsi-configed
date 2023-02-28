@@ -18,7 +18,7 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class TableCellRendererCurrency extends ColorTableCellRenderer {
 	JLabel label = new JLabel();
-	private java.text.NumberFormat decimalFormat;
+	private NumberFormat decimalFormat;
 
 	public TableCellRendererCurrency() {
 		label.setText("");

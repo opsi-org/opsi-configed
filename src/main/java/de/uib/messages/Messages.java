@@ -26,7 +26,7 @@ public final class Messages {
 
 	static List<LocaleRepresentation> existingLocales;
 	static List<String> existingLocalesNames;
-	static java.util.Map<String, String> localeInfo;
+	static Map<String, String> localeInfo;
 	static String selectedLocaleString;
 	static Locale myLocale = null;
 	public static ResourceBundle messagesBundle;

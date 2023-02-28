@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesUsage;
 import de.uib.configed.type.licences.LicenceUsageEntry;
@@ -122,7 +123,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		thePanel.panelUsage.setEmphasizedColumns(new int[] { 3, 4 });
 
 		// special treatment of columns
-		javax.swing.table.TableColumn col;
+		TableColumn col;
 		col = thePanel.panelUsage.getColumnModel().getColumn(4);
 		col.setCellEditor(new de.uib.utilities.table.gui.CellEditor4TableText());
 
