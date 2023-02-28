@@ -99,6 +99,8 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	private JProgressBar jProgressBar = new JProgressBar();
 	private JLabel waitingLabel = new JLabel();
 
+	private JCheckBox checkTrySSH;
+
 	private long timeOutMillis = TIMEOUT_MS;
 
 	private JButton jButtonCancel = new JButton();
@@ -161,7 +163,14 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		jProgressBar.setValue(0);
 
 		waitingLabel.setText(active ? "" : Configed.getResourceValue("DPassword.WaitInfo.label"));
-		setEnabled(active);
+
+		fieldHost.setEnabled(active);
+		fieldUser.setEnabled(active);
+		passwordField.setEnabled(active);
+		checkTrySSH.setEnabled(active);
+		jButtonCommit.setEnabled(active);
+
+		//setEnabled(active);
 	}
 
 	private void guiInit() {
@@ -196,8 +205,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
-		JCheckBox checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"),
-				Configed.sshConnectOnStart);
+		checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"), Configed.sshConnectOnStart);
 		Logging.info(this, "checkTrySSH  " + Configed.sshConnectOnStart);
 		checkTrySSH.addItemListener(new ItemListener() {
 			@Override
@@ -209,9 +217,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 			}
 		});
 
-		JPanel jPanelParameters = new PanelLinedComponents(new JComponent[] {
-				// checkTrySSH, 
-				checkTrySSH });
+		JPanel jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
 
 		UIDefaults defaults = new UIDefaults();
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
