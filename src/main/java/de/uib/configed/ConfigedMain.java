@@ -121,6 +121,7 @@ import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.logging.LogEvent;
 import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.observer.DataLoadingObservable;
 import de.uib.utilities.savedstates.SavedStates;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.CheckedDocument;
@@ -670,7 +671,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		strategyForLoadingData = new GuiStrategyForLoadingData(dPassword);
 
-		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(strategyForLoadingData);
+		((DataLoadingObservable) persist).registerDataLoadingObserver(strategyForLoadingData);
 
 		strategyForLoadingData.startWaiting();
 
@@ -678,8 +679,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			@Override
 			public void run() {
 				initGui();
-
-				mainFrame.initSplitPanes();
 
 				waitCursorInitGui.stop();
 				checkErrorList();
@@ -1313,18 +1312,18 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.enableMenuItemsForClients(0);
 
 		// rearranging visual components
-
 		mainFrame.validate();
 
-		// center the frame:
+		// set splitpanes before making the frame visible
+		mainFrame.initSplitPanes();
 
+		// center the frame:
 		locateAndDisplay();
 
 		// init visual states
 		Logging.debug(this, "mainframe nearly initialized");
 
 		mainFrame.saveGroupSetEnabled(false);
-
 	}
 
 	private void locateAndDisplay() {
@@ -1342,13 +1341,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.info(this, "setting mainframe visible");
 		mainFrame.setVisible(true);
-
-		final int locationDividerProductSettings = 600;
-
-		mainFrame.panelLocalbootProductSettings
-				.setDividerLocation(mainFrame.getSize().width - locationDividerProductSettings);
-		mainFrame.panelNetbootProductSettings
-				.setDividerLocation(mainFrame.getSize().width - locationDividerProductSettings);
 	}
 
 	protected void initLicencesFrame() {

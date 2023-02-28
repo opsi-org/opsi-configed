@@ -169,8 +169,6 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		passwordField.setEnabled(active);
 		checkTrySSH.setEnabled(active);
 		jButtonCommit.setEnabled(active);
-
-		//setEnabled(active);
 	}
 
 	private void guiInit() {
