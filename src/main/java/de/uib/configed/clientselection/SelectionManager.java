@@ -177,6 +177,7 @@ public class SelectionManager {
 	// Filter the clients and get the matching clients back with MySQL backend
 	public List<String> selectClientsSQL(AbstractPersistenceController controller, AbstractSelectOperation operation) {
 		String json = serializer.getJson(operation);
+		Logging.info(this, "in selectClientsSQL gotten json-string: " + json);
 		List<String> clientsSelected = new ArrayList<>();
 
 		try {

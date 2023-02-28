@@ -178,13 +178,14 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 			Iterator<?> childIterator = children.iterator();
 			while (childIterator.hasNext()) {
 				Object child = childIterator.next();
-				if (!(child instanceof Map)) {
-					Logging.warning("child is not a map, but " + child.getClass());
+				if (child instanceof Map) {
 					builder.append(createJsonRecursive((Map<?, ?>) child));
 
 					if (childIterator.hasNext()) {
 						builder.append(", ");
 					}
+				} else {
+					Logging.warning("child is not a map, but " + child.getClass());
 				}
 			}
 			builder.append(" ]");
