@@ -12,6 +12,7 @@
 
 package de.uib.configed.gui.hwinfopage;
 
+import java.awt.Dimension;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -234,7 +235,7 @@ public class ControllerHWinfoMultiClients {
 				fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel,
 						true);
 
-				fTable.setSize(new java.awt.Dimension(ConfigedMain.getMainFrame().getSize().width - 50,
+				fTable.setSize(new Dimension(ConfigedMain.getMainFrame().getSize().width - 50,
 						ConfigedMain.getMainFrame().getSize().height / 2));
 			}
 

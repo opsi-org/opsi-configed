@@ -68,7 +68,7 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 		labelfields = new HashMap<>();
 		datafields = new HashMap<>();
 
-		GroupLayout baseLayout = new javax.swing.GroupLayout(this);
+		GroupLayout baseLayout = new GroupLayout(this);
 		this.setLayout(baseLayout);
 
 		if (data == null) {

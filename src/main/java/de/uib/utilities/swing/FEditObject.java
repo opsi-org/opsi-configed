@@ -36,7 +36,7 @@ import de.uib.configed.gui.IconButton;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 
-public class FEditObject extends javax.swing.JDialog implements ActionListener, KeyListener, DocumentListener {
+public class FEditObject extends JDialog implements ActionListener, KeyListener, DocumentListener {
 	public static final RunningInstances<JDialog> runningInstances = new RunningInstances<>(JDialog.class,
 			"leaving dialog");
 

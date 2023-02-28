@@ -334,8 +334,8 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped
 						if (!(key.equals(rolekey))) {
 							String theRole = null;
 
-							List<Object> values = de.uib.opsidatamodel.PersistenceControllerFactory
-									.getPersistenceController().getConfigDefaultValues().get(rolekey);
+							List<Object> values = PersistenceControllerFactory.getPersistenceController()
+									.getConfigDefaultValues().get(rolekey);
 
 							if (values != null && !values.isEmpty()) {
 								theRole = "" + values.get(0);

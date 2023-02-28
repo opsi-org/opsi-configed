@@ -9,6 +9,7 @@
 package de.uib.utilities.table;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.swing.JOptionPane;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
@@ -778,8 +780,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 			Logging.info(this, "no deletion of added rows");
 
-			javax.swing.JOptionPane.showMessageDialog(null, "no deletion of added rows, please save or cancel editing",
-					"Information", javax.swing.JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(null, "no deletion of added rows, please save or cancel editing",
+					"Information", JOptionPane.OK_OPTION);
 			return false;
 
 		}
@@ -788,14 +790,14 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public void deleteRows(int[] selection) {
-		Logging.debug(this, "deleteRows " + java.util.Arrays.toString(selection));
+		Logging.debug(this, "deleteRows " + Arrays.toString(selection));
 
 		if (selection == null || selection.length == 0) {
 			return;
 		}
 
-		java.util.Arrays.sort(selection);
-		Logging.debug(this, "deleteRows, sorted " + java.util.Arrays.toString(selection));
+		Arrays.sort(selection);
+		Logging.debug(this, "deleteRows, sorted " + Arrays.toString(selection));
 
 		if (updates == null) {
 			Logging.info(this, "updates not initialized");

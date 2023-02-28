@@ -209,12 +209,11 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 	protected class MyTableCellRenderer extends DefaultTableCellRenderer {
 		@Override
-		public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-				boolean hasFocus, int row, int column) {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
 			MyColorizer colorizer = new MyColorizer(String.valueOf(value));
 
-			java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-					column);
+			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 			colorizer.colorize(cell, row, column);
 
@@ -251,7 +250,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 			cellValue = value;
 		}
 
-		public void colorize(java.awt.Component cell, int row, int col) {
+		public void colorize(Component cell, int row, int col) {
 			cell.setForeground(Globals.lightBlack);
 
 			int kindOfRow = row % 3;

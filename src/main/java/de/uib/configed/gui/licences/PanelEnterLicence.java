@@ -6,6 +6,7 @@
 
 package de.uib.configed.gui.licences;
 
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -13,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -291,7 +293,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		comboClient = new JComboBox<>();
 		comboClient.setFont(Globals.defaultFontBig);
 
-		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));
+		comboClient.setPreferredSize(new Dimension(200, 20));
 
 		JLabel jLabelSLid3info = new JLabel();
 
@@ -422,8 +424,8 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 																GroupLayout.PREFERRED_SIZE)
 														.addGap(5, 5, 5).addComponent(jLabelSLid3info, MIN_FIELD_WIDTH,
 																112, GroupLayout.PREFERRED_SIZE))
-												.addComponent(
-														jTextFieldLicenceID, MIN_FIELD_WIDTH, 208, Short.MAX_VALUE)
+												.addComponent(jTextFieldLicenceID, MIN_FIELD_WIDTH, 208,
+														Short.MAX_VALUE)
 												.addComponent(jTextFieldLicenceType, MIN_FIELD_WIDTH, 239,
 														GroupLayout.PREFERRED_SIZE))
 										.addPreferredGap(ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
@@ -431,8 +433,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 												.addGroup(panelLicenceModelLayout.createSequentialGroup()
 														.addComponent(jLabelSLid6, GroupLayout.PREFERRED_SIZE, 99,
 																GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(
-																javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+														.addPreferredGap(ComponentPlacement.UNRELATED)
 
 														.addComponent(jTextFieldLicenceContract, MIN_FIELD_WIDTH, 200,
 																GroupLayout.PREFERRED_SIZE))
@@ -473,7 +474,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 										GroupLayout.PREFERRED_SIZE)
 								.addComponent(jTextFieldLicenceContract, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
 										GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addGap(0, 1, 3)
+						.addPreferredGap(ComponentPlacement.UNRELATED).addGap(0, 1, 3)
 						.addGroup(panelLicenceModelLayout.createParallelGroup(Alignment.BASELINE)
 								.addComponent(jLabelSLid4, MIN_FIELD_HEIGHT, Globals.LINE_HEIGHT,
 										GroupLayout.PREFERRED_SIZE)
@@ -482,7 +483,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 				));
 
-		panelEnterKey.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+		panelEnterKey.setBorder(BorderFactory.createEtchedBorder());
 
 		jLabelLKey.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelLicenseKey"));
 

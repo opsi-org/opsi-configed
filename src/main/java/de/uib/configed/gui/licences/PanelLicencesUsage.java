@@ -5,6 +5,7 @@
 
 package de.uib.configed.gui.licences;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -81,7 +82,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 
 		comboClient = new de.uib.utilities.swing.DynamicCombo();
 		comboClient.setFont(Globals.defaultFontBig);
-		comboClient.setPreferredSize(new java.awt.Dimension(200, 20));
+		comboClient.setPreferredSize(new Dimension(200, 20));
 		buttonGet = new JButton(Configed.getResourceValue("ConfigedMain.Licences.Usage.AssignLicense"));
 		buttonGet.addActionListener(this);
 

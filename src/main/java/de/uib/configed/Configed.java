@@ -17,6 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.tree.ClientTreeUI;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -734,7 +735,7 @@ public class Configed {
 
 					UIManager.put("Tree.selectionBackground", UIManager.get("controlHighlight"));
 
-					UIManager.put("TreeUI", de.uib.configed.tree.ClientTreeUI.class.getName());
+					UIManager.put("TreeUI", ClientTreeUI.class.getName());
 
 					found = true;
 					break;

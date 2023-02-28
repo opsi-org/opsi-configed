@@ -17,6 +17,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1284,7 +1285,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void setSelection(int[] selection) {
-		Logging.info(this, "setSelection --- " + java.util.Arrays.toString(selection));
+		Logging.info(this, "setSelection --- " + Arrays.toString(selection));
 		theTable.getSelectionModel().clearSelection();
 		for (int i = 0; i < selection.length; i++) {
 			theTable.getSelectionModel().addSelectionInterval(selection[i], selection[i]);

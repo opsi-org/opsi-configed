@@ -16,7 +16,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
-public class JTextHideField extends javax.swing.JPanel {
+public class JTextHideField extends JPanel {
 	JPasswordField invisibleField;
 	JTextField visibleField;
 	JPanel panel;

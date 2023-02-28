@@ -955,7 +955,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			JComboBox actionsCombo = new JComboBox<>();
 			actionsCombo.setRenderer(standardListCellRenderer);
 			actionColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(actionsCombo, istm,
-					de.uib.opsidatamodel.productstate.ActionRequest.getLabel2DisplayLabel(), iconsDir));
+					ActionRequest.getLabel2DisplayLabel(), iconsDir));
 			actionColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			actionColumn.setCellRenderer(actionRequestTableCellRenderer);
 		}

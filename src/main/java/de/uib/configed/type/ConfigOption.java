@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.swing.ListSelectionModel;
 
+import org.json.JSONArray;
+
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
@@ -59,11 +61,11 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 		if (retrieved == null || retrieved.get("defaultValues") == null) {
 			put("defaultValues", new ArrayList<>());
 		} else {
-			if (retrieved.get("defaultValues") instanceof org.json.JSONArray) {
+			if (retrieved.get("defaultValues") instanceof JSONArray) {
 
 				Logging.info(this, "gotdefaultvalues unexpectedly " + retrieved.get("defaultValues").getClass() + " "
 						+ retrieved.get("defaultValues"));
-				put("defaultValues", ((org.json.JSONArray) retrieved.get("defaultValues")).toList());
+				put("defaultValues", ((JSONArray) retrieved.get("defaultValues")).toList());
 			} else {
 				put("defaultValues", retrieved.get("defaultValues"));
 			}

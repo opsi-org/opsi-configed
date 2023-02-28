@@ -1,6 +1,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -92,7 +93,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
-		inputPanel.setPreferredSize(new java.awt.Dimension(376, 220));
+		inputPanel.setPreferredSize(new Dimension(376, 220));
 
 		jLabelURL.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelUrl"));
 		jTextFieldURL = new JTextField();

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,8 +26,8 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	protected JXMonthView monthView;
 	protected TimeEditor timeSetter;
 	protected Calendar calendar;
-	protected java.text.DateFormat hourDateFormat;
-	protected javax.swing.JSpinner monthSpinner;
+	protected DateFormat hourDateFormat;
+	protected JSpinner monthSpinner;
 	protected SpinnerModel monthSpinnerModel;
 	protected JButton buttonBack;
 	protected JButton buttonForward;

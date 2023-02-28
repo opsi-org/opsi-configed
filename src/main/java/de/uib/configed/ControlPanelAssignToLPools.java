@@ -30,6 +30,7 @@ import de.uib.utilities.table.DefaultTableModelFilterCondition;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.TableModelFilterCondition;
+import de.uib.utilities.table.gui.AdaptingCellEditor;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.AbstractSelectionMemorizerUpdateController;
@@ -524,7 +525,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(0);
 		JComboBox<String> comboLP0 = new JComboBox<>();
 		comboLP0.setFont(Globals.defaultFontBig);
-		col.setCellEditor(new de.uib.utilities.table.gui.AdaptingCellEditor(comboLP0, (row, column) -> {
+		col.setCellEditor(new AdaptingCellEditor(comboLP0, (row, column) -> {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
@@ -539,7 +540,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP1 = new JComboBox<>();
 		comboLP1.setFont(Globals.defaultFontBig);
-		col.setCellEditor(new de.uib.utilities.table.gui.AdaptingCellEditor(comboLP1,
+		col.setCellEditor(new AdaptingCellEditor(comboLP1,
 				(row, column) -> new DefaultComboBoxModel<>(persist.getProductIds().toArray(new String[0]))));
 
 		// updates

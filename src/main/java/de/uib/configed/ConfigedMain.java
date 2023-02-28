@@ -2456,7 +2456,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		activeTreeNodes = new HashMap<>();
 		activePaths = new ArrayList<>();
 
-		treeClients = new de.uib.configed.tree.ClientTree(this);
+		treeClients = new ClientTree(this);
 		persist.getHostInfoCollections().setTree(treeClients);
 
 	}

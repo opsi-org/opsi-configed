@@ -16,6 +16,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
+import java.util.Arrays;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -250,7 +251,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	protected void setButtons() {
-		Logging.info(this, "setButtons and icons " + java.util.Arrays.asList(buttonNames));
+		Logging.info(this, "setButtons and icons " + Arrays.asList(buttonNames));
 
 		jButton1.setText(buttonNames[0]);
 		button1Text = buttonNames[0];

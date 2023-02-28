@@ -7,6 +7,8 @@ package de.uib.configed.guidata;
  * 
  */
 
+import java.util.Arrays;
+
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
@@ -143,7 +145,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	@Override
 	public void setSelection(int[] selection) {
-		Logging.info(this, "setSelection --- " + java.util.Arrays.toString(selection));
+		Logging.info(this, "setSelection --- " + Arrays.toString(selection));
 		table.getSelectionModel().clearSelection();
 		for (int i = 0; i < selection.length; i++) {
 			table.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
@@ -165,7 +167,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 				modelRowFilter[i] = table.convertRowIndexToModel(viewRowfilter[i]);
 			}
 
-			Logging.info(this, "setFiltered modelRowFilter " + java.util.Arrays.toString(modelRowFilter));
+			Logging.info(this, "setFiltered modelRowFilter " + Arrays.toString(modelRowFilter));
 
 			panelProductSettings.reduceToSelected();
 

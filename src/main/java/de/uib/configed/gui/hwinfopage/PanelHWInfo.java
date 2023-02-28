@@ -512,7 +512,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			hwClassMapping.put(hwClassesUI[i], whc.get("Class").get(0).get("Opsi"));
 		}
 
-		java.util.Arrays.sort(hwClassesUI);
+		Arrays.sort(hwClassesUI);
 
 		for (int i = 0; i < hwClassesUI.length; i++) {
 			// get next key - value - pair
@@ -572,7 +572,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				}
 			}
 
-			java.util.Arrays.sort(names);
+			Arrays.sort(names);
 
 			for (int j = 0; j < names.length; j++) {
 				for (int k = 0; k < devices.size(); k++) {
