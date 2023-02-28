@@ -32,8 +32,8 @@ public final class Globals {
 	private Globals() {
 	}
 
-	public static final String VERSION = "4.2.20.6";
-	public static final String VERDATE = "2023-02-24";
+	public static final String VERSION = "4.3.0.1";
+	public static final String VERDATE = "2023-02-28";
 
 	public static final String VERHASHTAG = "";
 
