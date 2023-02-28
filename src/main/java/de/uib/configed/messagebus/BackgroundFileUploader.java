@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,22 +23,52 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S109")
-public class BackgroundFileUploader extends SwingWorker<Void, Void> {
+public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private static final int DEFAULT_CHUNK_SIZE = 25000;
 	private static final int DEFAULT_BUSY_WAIT_IN_MS = 50;
 
 	private List<File> files;
 	private Terminal terminal;
 
+	private File currentFile;
+	private File previousFile;
+	private int totalFilesToUpload;
+	private int currentFileUploading;
+
 	public BackgroundFileUploader(List<File> files) {
 		this.terminal = Terminal.getInstance();
-		this.files = files;
+		this.files = new ArrayList<>(files);
+	}
+
+	@Override
+	protected void process(List<Integer> data) {
+		for (Integer d : data) {
+			if (currentFile == null) {
+				return;
+			}
+
+			if (previousFile == null || !previousFile.equals(currentFile)) {
+				previousFile = currentFile;
+				currentFileUploading += 1;
+				terminal.indicateFileUpload(currentFile, currentFileUploading, totalFilesToUpload);
+			}
+
+			try {
+				terminal.updateFileUploadProgressBar(d, (int) Files.size(currentFile.toPath()));
+			} catch (IOException e) {
+				Logging.warning(this, "unable to retrieve file size");
+			}
+		}
 	}
 
 	@SuppressWarnings("java:S134")
 	@Override
 	protected Void doInBackground() {
+		totalFilesToUpload = files.size();
+
 		for (File file : files) {
+			currentFile = file;
+
 			String fileId = UUID.randomUUID().toString();
 			sendFileUploadRequest(file, fileId);
 
@@ -57,6 +88,8 @@ public class BackgroundFileUploader extends SwingWorker<Void, Void> {
 					offset += chunkSize;
 					chunk += 1;
 					boolean last = offset >= Files.size(file.toPath());
+
+					publish(offset);
 
 					buff.flip();
 
@@ -126,5 +159,10 @@ public class BackgroundFileUploader extends SwingWorker<Void, Void> {
 			Logging.warning(this, "thread was interrupted");
 			Thread.currentThread().interrupt();
 		}
+	}
+
+	@Override
+	protected void done() {
+		terminal.showFileUploadProgress(false);
 	}
 }

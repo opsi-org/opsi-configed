@@ -1325,7 +1325,7 @@ public class MainFrame extends JFrame
 			}
 		});
 
-		jMenuFrameTerminal.setText("Terminal");
+		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
 		jMenuFrameTerminal.setEnabled(true);
 		jMenuFrameTerminal.addActionListener(e -> {
 			try {
