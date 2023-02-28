@@ -181,7 +181,38 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	protected PopupMenuTrait popupMenu;
 
-	protected DefaultStyledDocument document;
+	// We create this class because the JTextPane should be editable only to show the caret position,
+	// but then you should not be able to change anything in the Text...
+	protected class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
+		ImmutableDefaultStyledDocument() {
+			super();
+		}
+
+		ImmutableDefaultStyledDocument(StyleContext styles) {
+			super(styles);
+		}
+
+		public void insertStringTruely(int offs, String str, AttributeSet a) throws BadLocationException {
+			super.insertString(offs, str, a);
+		}
+
+		@Override
+		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+			/* Should be empty, because we don't want it to be able to be editable*/
+		}
+
+		@Override
+		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+			/* Should be empty, because we don't want it to be able to be editable*/
+		}
+
+		@Override
+		public void remove(int offs, int len) throws BadLocationException {
+			/* Should be empty, because we don't want it to be able to be editable*/
+		}
+	}
+
+	protected ImmutableDefaultStyledDocument document;
 
 	protected String[] lines;
 	protected int[] lineLevels;
@@ -568,7 +599,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		// Switch to an blank document temporarily to avoid repaints
 
-		document = new DefaultStyledDocument(styleContext);
+		document = new ImmutableDefaultStyledDocument(styleContext);
 
 		int selLevel = levelList.indexOf(sliderLevel.getValue()) + 1;
 
@@ -597,7 +628,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					lineCount2docLinestartPosition.put(i, document.getLength());
 
 					String no = "(" + i + ")";
-					document.insertString(document.getLength(), String.format("%-10s", no) + lines[i] + '\n',
+					document.insertStringTruely(document.getLength(), String.format("%-10s", no) + lines[i] + '\n',
 							lineStyles[i]);
 				}
 
@@ -942,6 +973,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	public void search() {
 		Logging.debug(this, "Searching string in log");
+
+		if (jComboBoxSearch.getSelectedItem() == null || jComboBoxSearch.getSelectedItem().toString().equals("")) {
+			Logging.info(this, "item to search for is null or empty, do nothing");
+			return;
+		}
+
 		jTextPane.requestFocus();
 		searcher.comp.setCaretPosition(jTextPane.getCaretPosition());
 		// change 08/2015: set lastReturnedOffset to start search at last caretPosition
@@ -975,9 +1012,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				search();
 			}
 		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
-			if ((e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER)
-					&& jComboBoxSearch.getSelectedItem() != null
-					&& !jComboBoxSearch.getSelectedItem().toString().equals("")) {
+			if ((e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER)) {
 				search();
 			}
 
