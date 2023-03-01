@@ -1,4 +1,4 @@
-package de.uib.configed.messagebus;
+package de.uib.configed.terminal;
 
 import java.util.Locale;
 
@@ -90,6 +90,6 @@ public class ByteUnitConverter {
 	}
 
 	public String asString(double bytes, ByteUnit byteUnitToUse) {
-		return String.format(Locale.getDefault(), "%.2f %s", bytes, byteUnitToUse.toString());	
+		return String.format(Locale.getDefault(), "%.2f %s", bytes, byteUnitToUse.toString());
 	}
 }

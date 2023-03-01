@@ -31,7 +31,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1347,8 +1346,6 @@ public class MainFrame extends JFrame
 			} catch (InterruptedException ex) {
 				Logging.error(this, "cannot open terminal, thread interrupted", ex);
 				Thread.currentThread().interrupt();
-			} catch (URISyntaxException ex) {
-				Logging.error(this, "cannot open terminal, Exception thrown", ex);
 			}
 		});
 

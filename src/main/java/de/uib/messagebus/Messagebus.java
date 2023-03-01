@@ -29,7 +29,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
 import de.uib.utilities.logging.Logging;
 
-@SuppressWarnings("java:S109")
+@SuppressWarnings("java:S1258")
 public class Messagebus {
 	private WebSocketClientEndpoint messagebusWebSocket;
 
@@ -37,8 +37,39 @@ public class Messagebus {
 		return messagebusWebSocket;
 	}
 
-	private String createUrl() {
-		String uri = "wss";
+	public boolean connect() throws InterruptedException {
+		if (messagebusWebSocket != null && isConnected()) {
+			Logging.info(this, "messagebus is already connected");
+			return true;
+		}
+
+		URI uri = createUri();
+		String basicAuthEnc = createEncBasicAuth();
+		SSLSocketFactory factory = createDullSSLSocketFactory();
+
+		messagebusWebSocket = new WebSocketClientEndpoint(uri);
+		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
+		messagebusWebSocket.setSocketFactory(factory);
+		messagebusWebSocket.setReuseAddr(true);
+		messagebusWebSocket.setTcpNoDelay(true);
+
+		return messagebusWebSocket.connectBlocking();
+	}
+
+	private URI createUri() {
+		URI uri = null;
+
+		try {
+			uri = new URI(produceURL());
+		} catch (URISyntaxException ex) {
+			Logging.warning(this, "inavlid URI: " + uri, ex);
+		}
+
+		return uri;
+	}
+
+	private String produceURL() {
+		String protocol = "wss";
 		String host = ConfigedMain.host;
 
 		if (!hasPort(host)) {
@@ -48,7 +79,7 @@ public class Messagebus {
 			Logging.info(this, "host does have specified port (using specified port): " + host);
 		}
 
-		String url = String.format("%s://%s/messagebus/v1", uri, host);
+		String url = String.format("%s://%s/messagebus/v1", protocol, host);
 		Logging.info(this, "connecting to messagebus using the following URL: " + url);
 
 		return url;
@@ -68,7 +99,7 @@ public class Messagebus {
 		return result;
 	}
 
-	private String createEncBasicAuth() {
+	private static String createEncBasicAuth() {
 		String username = ConfigedMain.user;
 		String password = ConfigedMain.password;
 		String basicAuth = String.format("%s:%s", username, password);
@@ -101,32 +132,13 @@ public class Messagebus {
 			SSLContext sslContext = SSLContext.getInstance("TLS");
 			sslContext.init(null, trustAllCerts, new SecureRandom());
 			sslFactory = sslContext.getSocketFactory();
-		} catch (NoSuchAlgorithmException e) {
-			Logging.warning(this, "provider doesn't support algorithm");
-		} catch (KeyManagementException e) {
-			Logging.warning(this, "failed to initialize SSL context: " + e);
+		} catch (NoSuchAlgorithmException ex) {
+			Logging.warning(this, "provider doesn't support algorithm: ", ex);
+		} catch (KeyManagementException ex) {
+			Logging.warning(this, "failed to initialize SSL context: ", ex);
 		}
 
 		return sslFactory;
-	}
-
-	public boolean connect() throws URISyntaxException, InterruptedException {
-		if (messagebusWebSocket != null && isConnected()) {
-			Logging.info(this, "messagebus is already connected");
-			return true;
-		}
-
-		String url = createUrl();
-		String basicAuthEnc = createEncBasicAuth();
-		SSLSocketFactory factory = createDullSSLSocketFactory();
-
-		messagebusWebSocket = new WebSocketClientEndpoint(new URI(url));
-		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
-		messagebusWebSocket.setSocketFactory(factory);
-		messagebusWebSocket.setReuseAddr(true);
-		messagebusWebSocket.setTcpNoDelay(true);
-
-		return messagebusWebSocket.connectBlocking();
 	}
 
 	private void makeChannelSubscriptionRequest(String channel) {
@@ -149,8 +161,8 @@ public class Messagebus {
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
 			send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
-		} catch (JsonProcessingException e) {
-			Logging.warning(this, "error occurred while processing JSON: " + e);
+		} catch (JsonProcessingException ex) {
+			Logging.warning(this, "error occurred while processing JSON: ", ex);
 		}
 	}
 
@@ -181,8 +193,8 @@ public class Messagebus {
 			ObjectMapper mapper = new MessagePackMapper();
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
 			send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
-		} catch (JsonProcessingException e) {
-			Logging.warning(this, "error occurred while processing JSON: " + e);
+		} catch (JsonProcessingException ex) {
+			Logging.warning(this, "error occurred while processing JSON: ", ex);
 		}
 
 		terminal.lock();
