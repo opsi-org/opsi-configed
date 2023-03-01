@@ -58,12 +58,12 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	}
 
 	private void setupSplit() {
-		splitPane.setResizeWeight(0.5f);
+		splitPane.setResizeWeight(0.5);
 	}
 
 	public void setDivider() {
 		if (initialSplit < 1) {
-			splitPane.setDividerLocation(0.7f);
+			splitPane.setDividerLocation(0.7);
 			initialSplit++;
 			revalidate();
 		}

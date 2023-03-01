@@ -1946,7 +1946,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return activePaths;
 	}
 
-	public boolean getFilterClientList() {
+	public boolean isFilterClientList() {
 		return filterClientList;
 	}
 
@@ -3540,7 +3540,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public List<String> getAccessedDepots() {
 		List<String> accessedDepots = new ArrayList<>();
 		for (String depot : selectedDepotsV) {
-			if (persist.getDepotPermission(depot)) {
+			if (persist.hasDepotPermission(depot)) {
 				accessedDepots.add(depot);
 			}
 		}
@@ -4718,7 +4718,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Cursor oldCursor = fListFeedback.getCursor();
 			fListFeedback.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			fListFeedback.setVisible(true);
-			fListFeedback.glassTransparency(true, 800, 200, 0.04f);
+			fListFeedback.glassTransparency(true, 800, 200, 0.04F);
 
 			List<String> errors = getErrors();
 
@@ -5125,7 +5125,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.deleteClients(getSelectedClients());
 
-		if (getFilterClientList()) {
+		if (isFilterClientList()) {
 			mainFrame.toggleClientFilterAction();
 		}
 
@@ -5356,7 +5356,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		boolean saveFilterClientList = false;
 
 		if (renewFilter) {
-			saveFilterClientList = getFilterClientList();
+			saveFilterClientList = isFilterClientList();
 			if (saveFilterClientList) {
 				setFilterClientList(false);
 			}

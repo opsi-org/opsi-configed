@@ -2180,7 +2180,7 @@ public class MainFrame extends JFrame
 		jButtonSaveList.addActionListener(this::jButtonSaveListActionPerformed);
 
 		jRadioRequiredAll.setMargin(new Insets(0, 0, 0, 0));
-		jRadioRequiredAll.setAlignmentY((float) 0.0);
+		jRadioRequiredAll.setAlignmentY(0.0F);
 		jRadioRequiredAll.setText(Configed.getResourceValue("MainFrame.jRadioRequiredAll"));
 		jRadioRequiredOff.setMargin(new Insets(0, 0, 0, 0));
 		jRadioRequiredOff.setSelected(true);
@@ -2798,7 +2798,7 @@ public class MainFrame extends JFrame
 			@Override
 			protected void commit() {
 				super.commit();
-				Float duration = 0.0f;
+				Float duration = 0F;
 				if (!getExtra().isEmpty()) {
 					duration = Float.parseFloat(getExtra());
 				}
@@ -2874,10 +2874,10 @@ public class MainFrame extends JFrame
 
 	public void toggleClientFilterAction() {
 		configedMain.toggleFilterClientList();
-		jMenuClientselectionToggleClientFilter.setState(configedMain.getFilterClientList());
-		popupSelectionToggleClientFilter.setState(configedMain.getFilterClientList());
+		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
+		popupSelectionToggleClientFilter.setState(configedMain.isFilterClientList());
 
-		if (!configedMain.getFilterClientList()) {
+		if (!configedMain.isFilterClientList()) {
 			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter_disabled-32.png", ""));
 		} else {
 			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter-32.png", ""));

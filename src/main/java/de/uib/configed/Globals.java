@@ -32,11 +32,9 @@ import javafx.stage.Stage;
  */
 
 public final class Globals {
-	private Globals() {
-	}
 
-	public static final String VERSION = "4.3.0.1";
-	public static final String VERDATE = "2023-02-28";
+	public static final String VERSION = "4.3.0.2";
+	public static final String VERDATE = "2023-03-01";
 
 	public static final String VERHASHTAG = "";
 
@@ -65,7 +63,11 @@ public final class Globals {
 
 	public static final String HEALTH_CHECK_LOG_FILE_NAME = "healthCheck.log";
 
-	public static boolean disableCertificateVerification = false;
+	public static boolean disableCertificateVerification;
+
+	// Hier to prevent initialization
+	private Globals() {
+	}
 
 	public static final class ProductPackageVersionSeparator {
 
@@ -536,7 +538,7 @@ public final class Globals {
 	public static java.net.URL getImageResourceURL(String relPath) {
 		String resourceS = IMAGE_BASE + relPath;
 
-		ClassLoader cl = Globals.class.getClassLoader();
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		java.net.URL imgURL = cl.getResource(resourceS);
 		if (imgURL != null) {
 			return imgURL;
@@ -548,7 +550,7 @@ public final class Globals {
 
 	public static Image createImage(String path) {
 		String xPath = IMAGE_BASE + path;
-		ClassLoader cl = Globals.class.getClassLoader();
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		// based on MainFrame
 
 		java.net.URL imgURL = cl.getResource(xPath);
@@ -573,7 +575,7 @@ public final class Globals {
 
 	public static ImageIcon createImageIcon(String path, String description) {
 		String xPath = IMAGE_BASE + path;
-		ClassLoader cl = Globals.class.getClassLoader();
+		ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		// based on MainFrame
 
 		java.net.URL imgURL = cl.getResource(xPath);

@@ -14,12 +14,12 @@ public final class Helper {
 	}
 
 	public static <T, V> List<T> combineListsFromMap(Map<V, List<T>> map) {
-		List<T> list = new ArrayList<>();
 
 		if (map.isEmpty()) {
 			return new ArrayList<>();
 		}
 
+		List<T> list = new ArrayList<>();
 		for (List<T> value : map.values()) {
 			list.addAll(value);
 		}
@@ -28,11 +28,12 @@ public final class Helper {
 	}
 
 	public static <T, V> Map<T, V> combineMapsFromMap(Map<T, Map<T, V>> map) {
-		Map<T, V> allMaps = new HashMap<>();
 
 		if (map.isEmpty()) {
 			return new HashMap<>();
 		}
+
+		Map<T, V> allMaps = new HashMap<>();
 
 		for (Map<T, V> value : map.values()) {
 			allMaps.putAll(value);
@@ -42,11 +43,12 @@ public final class Helper {
 	}
 
 	public static <T, V> Map<V, V> combineMapsFromMap2(Map<T, Map<V, V>> map) {
-		Map<V, V> allMaps = new HashMap<>();
 
 		if (map.isEmpty()) {
 			return new HashMap<>();
 		}
+
+		Map<V, V> allMaps = new HashMap<>();
 
 		for (Map<V, V> value : map.values()) {
 			allMaps.putAll(value);
@@ -101,10 +103,10 @@ public final class Helper {
 	public static Color adjustColorBrightness(Color color) {
 		float[] colorHSB = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
 
-		if (colorHSB[2] < 0.5f) {
-			colorHSB[2] += 0.10f;
+		if (colorHSB[2] < 0.5F) {
+			colorHSB[2] += 0.10F;
 		} else {
-			colorHSB[2] -= 0.10f;
+			colorHSB[2] -= 0.10F;
 		}
 
 		return new Color(Color.HSBtoRGB(colorHSB[0], colorHSB[1], colorHSB[2]));

@@ -223,7 +223,7 @@ public class DataStubNOM extends AbstractDataStub {
 			for (Map<String, Object> m : packages) {
 				String depot = "" + m.get("depotId");
 
-				if (!persist.getDepotPermission(depot)) {
+				if (!persist.hasDepotPermission(depot)) {
 					continue;
 				}
 

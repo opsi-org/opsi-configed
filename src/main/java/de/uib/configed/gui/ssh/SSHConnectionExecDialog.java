@@ -20,12 +20,13 @@ import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.utilities.logging.Logging;
 
 public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
-	protected JButton jButtonClear;
-	protected JButton jButtonKillProcess;
-	protected JButton jButtonReload;
+	JButton jButtonClear;
+	JButton jButtonKillProcess;
+	JButton jButtonReload;
 
-	protected boolean withReload;
-	protected String reloadInfo;
+	boolean withReload;
+	String reloadInfo;
+
 	private int infolength = 40;
 
 	private static SSHConnectionExecDialog instance;

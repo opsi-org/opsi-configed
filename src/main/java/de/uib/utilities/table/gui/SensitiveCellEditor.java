@@ -129,7 +129,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			ListModel<String> model = modelProducer.getListModel(row, column);
 			Logging.debug(this,
-					" try list editing, modelproducer tells nullable " + modelProducer.getNullable(row, column));
+					" try list editing, modelproducer tells nullable " + modelProducer.isNullable(row, column));
 			listeditor.setVisible(false);
 			listeditor.setTitle(modelProducer.getCaption(row, column));
 
@@ -140,8 +140,8 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				Logging.info(this, "startValue set: " + value);
 
 				listeditor.setSelectionMode(modelProducer.getSelectionMode(row, column));
-				listeditor.setEditable(modelProducer.getEditable(row, column));
-				listeditor.setNullable(modelProducer.getNullable(row, column));
+				listeditor.setEditable(modelProducer.isEditable(row, column));
+				listeditor.setNullable(modelProducer.isNullable(row, column));
 				listeditor.setSelectedValues(modelProducer.getSelectedValues(row, column));
 
 				listeditor.enter();

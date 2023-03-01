@@ -165,7 +165,7 @@ public final class SSHCommandFactory {
 		}
 	}
 
-	protected Set<String> allowedHosts = new HashSet<>();
+	Set<String> allowedHosts = new HashSet<>();
 
 	public void setAllowedHosts(Collection<String> allowed) {
 		allowedHosts.addAll(allowed);

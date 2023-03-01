@@ -35,7 +35,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 
 	protected int noOfButtons = 1;
 	protected int result = -1;
-	protected int defaultResult = 0;
+	protected int defaultResult;
 
 	protected JPanel jPanelButtonGrid = new JPanel();
 	protected GridLayout gridLayout1 = new GridLayout();
@@ -118,8 +118,8 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	}
 
 	static class FadingMirror extends JPanel implements ActionListener {
-		private float opacity = 1f;
-		private float step = 0.3f;
+		private float opacity = 1F;
+		private float step = 0.3F;
 		private Timer fadeTimer;
 		private int initialDelay = 100;
 		private int delay = 100;
@@ -129,9 +129,9 @@ public class GeneralFrame extends JDialog implements ActionListener {
 			this.vanishing = vanishing;
 
 			if (vanishing) {
-				opacity = 1f;
+				opacity = 1F;
 			} else {
-				opacity = 0f;
+				opacity = 0F;
 			}
 		}
 

@@ -14,9 +14,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitCursor;
 
 public class ActivityPanel extends JPanel implements Runnable {
-	Color[] colors;
-
-	Thread colorSwitching;
 
 	/** sets width = 30 pixel */
 	private static final int WIDTH = 30;
@@ -24,8 +21,6 @@ public class ActivityPanel extends JPanel implements Runnable {
 	private static final int HEIGHT = 10;
 
 	private static final int NO_OF_PARTS = 4;
-	/** an List for panels */
-	ArrayList<JPanel> partPanels = new ArrayList<>();
 
 	public static final int SLEEPING_IN_MS = 750;
 
@@ -37,15 +32,22 @@ public class ActivityPanel extends JPanel implements Runnable {
 	/** a blackLightBlue LineBorder */
 	private static final LineBorder lineBorderInactive = new LineBorder(Globals.BACKGROUND_COLOR_7, 1, true);
 
+	/** acting status default is false */
+	private static boolean acting;
+
+	/** an List for panels */
+	ArrayList<JPanel> partPanels = new ArrayList<>();
+
+	Color[] colors;
+
+	Thread colorSwitching;
+
 	/**
 	 * call the "initGui" method
 	 */
 	public ActivityPanel() {
 		initGui();
 	}
-
-	/** acting status default is false */
-	private static boolean acting = false;
 
 	/**
 	 * Sets the state of the panals with background and border color
@@ -123,7 +125,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 					i = INACTIVE;
 					setState(i);
 					i = 0;
-					Globals.threadSleep(this, 2l * SLEEPING_IN_MS);
+					Globals.threadSleep(this, 2L * SLEEPING_IN_MS);
 				}
 			}
 		} catch (Exception anyException) {

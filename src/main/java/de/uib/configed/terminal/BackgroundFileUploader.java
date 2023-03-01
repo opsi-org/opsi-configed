@@ -31,7 +31,6 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private Terminal terminal;
 
 	private File currentFile;
-	private File previousFile;
 	private int totalFilesToUpload;
 	private int currentFileUploading;
 

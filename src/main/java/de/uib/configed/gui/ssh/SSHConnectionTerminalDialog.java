@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -35,14 +36,14 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	private JCheckBox jComboBoxPrivat;
 	private JPanel parameterPanel;
 	private JPanel terminatingPanel;
-	public JButton jButtonKillProcess;
+	private JButton jButtonKillProcess;
 	private JButton jButtonExecuteCommand;
 	private final SSHConnectTerminal terminal;
 	private List<String> commandHistory = new ArrayList<>();
-	private int historyAddIndex = 0;
-	private int historyGetIndex = 0;
+	private int historyAddIndex;
+	private int historyGetIndex;
 	private Autocomplete autoComplete;
-	private boolean passwordMode = false;
+	private boolean passwordMode;
 	private Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH_X, Globals.BUTTON_HEIGHT);
 	private Dimension thissize = new Dimension(810, 600);
 
@@ -198,6 +199,11 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	}
 
+	public void renewJButtonKillActionListener(ActionListener connectionKeyListener) {
+		jButtonKillProcess.removeActionListener(connectionKeyListener);
+		jButtonKillProcess.addActionListener(connectionKeyListener);
+	}
+
 	public JTextField getInputField() {
 		if (jTextFieldCommand == null) {
 			return null;
@@ -206,7 +212,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		return jTextFieldCommand;
 	}
 
-	public boolean getPrivateStatus() {
+	public boolean hasPrivateStatus() {
 		return passwordMode;
 	}
 
@@ -291,7 +297,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		jComboBoxPrivat = new JCheckBox(Configed.getResourceValue("SSHConnection.passwordButtonText"));
 		jComboBoxPrivat.setPreferredSize(jButtonDimension);
 		if (!(Globals.isGlobalReadOnly())) {
-			jComboBoxPrivat.addItemListener(itemEvent -> {
+			jComboBoxPrivat.addItemListener((ItemEvent itemEvent) -> {
 				if (passwordMode) {
 					changeEchoChar('*');
 					removeAutocompleteListener();
@@ -331,7 +337,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 				"images/execute_blue.png", "images/execute_blue.png", true);
 		jButtonExecuteCommand.setPreferredSize(jButtonDimension);
 		if (!(Globals.isGlobalReadOnly())) {
-			jButtonExecuteCommand.addActionListener(actionEvent -> {
+			jButtonExecuteCommand.addActionListener((ActionEvent actionEvent) -> {
 				String text = getInputField().getText() + "\n";
 				if (terminal != null) {
 					terminal.exec(text);

@@ -150,7 +150,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 				tooltipText = (Globals.fillStringToLength(tooltipText + " ", FILL_LENGTH));
 
 				String depot = (String) value;
-				if (!persist.getDepotPermission(depot)) {
+				if (!persist.hasDepotPermission(depot)) {
 					((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
 					((JLabel) jc).setToolTipText(
 							"Depot " + depot + " " + Configed.getResourceValue("Permission.depot.not_accessible"));

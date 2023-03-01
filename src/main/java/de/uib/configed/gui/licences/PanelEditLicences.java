@@ -71,7 +71,7 @@ public class PanelEditLicences extends MultiTablePanel {
 		panelLicencecontracts.setAwareOfTableChangedListener(true);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setResizeWeight(0.5f);
+		splitPane.setResizeWeight(0.5);
 
 		JPanel topPane = new JPanel();
 		JPanel bottomPane = new JPanel();

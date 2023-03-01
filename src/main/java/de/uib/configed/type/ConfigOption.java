@@ -147,7 +147,7 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 	@Override
 	public boolean isNullable() {
 		// until we extend the data structure
-		return (!type.equals(TYPE.BOOL_CONFIG));
+		return (type != TYPE.BOOL_CONFIG);
 	}
 
 	@Override

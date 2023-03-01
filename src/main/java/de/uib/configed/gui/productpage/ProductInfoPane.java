@@ -304,7 +304,13 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 	public void setGrey(boolean grey) {
 
-		float alpha = grey ? 0.1f : 1f;
+		float alpha;
+
+		if (grey) {
+			alpha = 0.1F;
+		} else {
+			alpha = 1;
+		}
 
 		if (productDescriptionsPanel != null) {
 			productDescriptionsPanel.setAlpha(alpha);
