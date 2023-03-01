@@ -399,6 +399,14 @@ public final class Terminal {
 
 	@SuppressWarnings("java:S2972")
 	private static class FileUpload extends DropTarget {
+		private FileUploadQueue queue;
+		private BackgroundFileUploader fileUploader;
+
+		public FileUpload() {
+			this.queue = new FileUploadQueue();
+			this.fileUploader = new BackgroundFileUploader(queue);
+		}
+
 		@SuppressWarnings("unchecked")
 		private List<File> getDroppedFiles(DropTargetDropEvent e) {
 			List<File> droppedFiles = null;
@@ -426,7 +434,14 @@ public final class Terminal {
 				return;
 			}
 
-			BackgroundFileUploader fileUploader = new BackgroundFileUploader(files);
+			queue.addAll(files);
+
+			if (fileUploader.isDone()) {
+				fileUploader = new BackgroundFileUploader(queue);
+			} else {
+				fileUploader.updateTotalFilesToUpload();
+			}
+
 			fileUploader.execute();
 		}
 	}

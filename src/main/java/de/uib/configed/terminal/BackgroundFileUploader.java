@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import org.msgpack.jackson.dataformat.MessagePackMapper;
@@ -27,7 +27,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private static final int DEFAULT_CHUNK_SIZE = 25000;
 	private static final int DEFAULT_BUSY_WAIT_IN_MS = 50;
 
-	private List<File> files;
+	private FileUploadQueue queue;
 	private Terminal terminal;
 
 	private File currentFile;
@@ -35,9 +35,9 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	private int totalFilesToUpload;
 	private int currentFileUploading;
 
-	public BackgroundFileUploader(List<File> files) {
+	public BackgroundFileUploader(FileUploadQueue queue) {
 		this.terminal = Terminal.getInstance();
-		this.files = new ArrayList<>(files);
+		this.queue = queue;
 	}
 
 	@Override
@@ -45,12 +45,6 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 		for (Integer chunkSize : chunkSizes) {
 			if (currentFile == null) {
 				return;
-			}
-
-			if (previousFile == null || !previousFile.equals(currentFile)) {
-				previousFile = currentFile;
-				currentFileUploading += 1;
-				terminal.indicateFileUpload(currentFile, currentFileUploading, totalFilesToUpload);
 			}
 
 			try {
@@ -64,10 +58,13 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	@SuppressWarnings("java:S134")
 	@Override
 	protected Void doInBackground() {
-		totalFilesToUpload = files.size();
+		File file = null;
 
-		for (File file : files) {
+		while ((file = queue.get()) != null) {
 			currentFile = file;
+			currentFileUploading += 1;
+			totalFilesToUpload += queue.size();
+			updateTotalFilesToUpload();
 
 			String fileId = UUID.randomUUID().toString();
 			sendFileUploadRequest(file, fileId);
@@ -120,6 +117,8 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 			} catch (IOException ex) {
 				Logging.warning("cannot upload file to server: ", ex);
 			}
+
+			queue.remove(file);
 		}
 
 		return null;
@@ -164,5 +163,12 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	@Override
 	protected void done() {
 		terminal.showFileUploadProgress(false);
+		totalFilesToUpload = 0;
+		currentFileUploading = 0;
+	}
+
+	public void updateTotalFilesToUpload() {
+		SwingUtilities.invokeLater(() -> terminal.indicateFileUpload(currentFile, currentFileUploading,
+				totalFilesToUpload + queue.size() - 1));
 	}
 }
