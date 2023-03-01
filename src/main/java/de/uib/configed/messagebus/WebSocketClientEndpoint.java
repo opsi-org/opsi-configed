@@ -53,19 +53,25 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 			Logging.debug(this, "response data: " + data.toString());
 
 			if (type.startsWith("terminal_")) {
-				if (type.equals("terminal_data_read")) {
+				switch (type) {
+				case "terminal_data_read":
 					WebSocketInputStream.getInstance().write((byte[]) data.get("data"));
-				} else if (type.equals("terminal_open_event")) {
+					break;
+				case "terminal_open_event":
 					Terminal terminal = Terminal.getInstance();
 					terminal.setTerminalId((String) data.get("terminal_id"));
 					terminal.setTerminalChannel((String) data.get("back_channel"));
 					terminal.unlock();
-				} else if (type.equals("terminal_close_event")) {
+					break;
+				case "terminal_close_event":
 					Terminal.getInstance().close();
+					break;
+				default:
+					Logging.warning(this, "unhandeld terminal type response caught: " + type);
 				}
 			}
 
-			if (type.equals("file_upload_result")) {
+			if ("file_upload_result".equals(type)) {
 				String filePath = (String) data.get("path");
 
 				data.clear();
@@ -82,10 +88,11 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 				send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 			}
 		} catch (IOException e) {
-			Logging.error(this, "cannot read received message");
+			Logging.error(this, "cannot read received message: ", e);
 		}
 	}
 
+	@SuppressWarnings("java:S1774")
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame

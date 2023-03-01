@@ -1,5 +1,7 @@
 package de.uib.configed.messagebus;
 
+import java.util.Locale;
+
 import de.uib.utilities.logging.Logging;
 
 public class ByteUnitConverter {
@@ -69,21 +71,25 @@ public class ByteUnitConverter {
 
 		switch (byteUnitToUse) {
 		case KILO_BYTE:
-			size = (bytes / 1024);
+			size = bytes / 1024.0;
 			break;
 		case MEGA_BYTE:
-			size = (bytes / Math.pow(1024, 2));
+			size = bytes / Math.pow(1024, 2);
 			break;
 		case GIGA_BYTE:
-			size = (bytes / Math.pow(1024, 3));
+			size = bytes / Math.pow(1024, 3);
 			break;
 		case TERA_BYTE:
-			size = (bytes / Math.pow(1024, 4));
+			size = bytes / Math.pow(1024, 4);
 			break;
 		default:
 			Logging.warning(this, "unknown unit byte: " + byteUnitToUse);
 		}
 
 		return size;
+	}
+
+	public String asString(double bytes, ByteUnit byteUnitToUse) {
+		return String.format(Locale.getDefault(), "%.2f %s", bytes, byteUnitToUse.toString());	
 	}
 }

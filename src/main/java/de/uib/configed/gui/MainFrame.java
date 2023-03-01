@@ -1327,7 +1327,7 @@ public class MainFrame extends JFrame
 
 		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
 		jMenuFrameTerminal.setEnabled(true);
-		jMenuFrameTerminal.addActionListener(e -> {
+		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			try {
 				if (messagebus == null) {
 					messagebus = new Messagebus();

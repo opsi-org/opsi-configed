@@ -57,9 +57,8 @@ public final class Terminal {
 	private JediTermWidget widget;
 	private JFrame frame;
 	private JProgressBar fileUploadProgressBar;
-	private JLabel fileLabel;
-	private JLabel uploadingFileLabel;
-	private JPanel northPanel;
+	private JLabel uploadedFilesLabel;
+	private JLabel fileNameLabel;
 	private JPanel southPanel;
 
 	private Messagebus messagebus;
@@ -147,55 +146,12 @@ public final class Terminal {
 
 		JPanel allPane = new JPanel();
 		allPane.setBackground(Globals.BACKGROUND_COLOR_7);
+
 		GroupLayout allLayout = new GroupLayout(allPane);
 		allPane.setLayout(allLayout);
 
-		northPanel = new JPanel();
-		northPanel.setOpaque(false);
-		southPanel = new JPanel();
-		southPanel.setOpaque(false);
-		southPanel.setVisible(false);
-
-		JediTermWidget termWidget = createTerminalWidget();
-		JLabel label = new JLabel(Configed.getResourceValue("Terminal.uploadingFile"));
-
-		GroupLayout northLayout = new GroupLayout(northPanel);
-		northPanel.setLayout(northLayout);
-		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addComponent(termWidget));
-		northLayout.setHorizontalGroup(northLayout.createParallelGroup().addComponent(termWidget));
-
-		uploadingFileLabel = new JLabel();
-		fileLabel = new JLabel();
-		fileUploadProgressBar = new JProgressBar();
-		UIDefaults defaults = new UIDefaults();
-		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
-		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
-		fileUploadProgressBar.putClientProperty("Nimbus.Overrides", defaults);
-		fileUploadProgressBar.setStringPainted(true);
-
-		GroupLayout southLayout = new GroupLayout(southPanel);
-		southPanel.setLayout(southLayout);
-		southLayout.setHorizontalGroup(southLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
-				.addComponent(label, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(uploadingFileLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addComponent(fileLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.HGAP_SIZE)
-				.addComponent(fileUploadProgressBar, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-				.addGap(Globals.HGAP_SIZE));
-		southLayout.setVerticalGroup(
-				southLayout.createSequentialGroup().addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(southLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(label, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(uploadingFileLabel, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(fileLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(fileUploadProgressBar, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.HGAP_SIZE));
+		JPanel northPanel = createNorthPanel();
+		southPanel = createSouthPanel();
 
 		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
 				.addComponent(northPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addComponent(southPanel,
@@ -228,17 +184,74 @@ public final class Terminal {
 		});
 	}
 
+	public JPanel createNorthPanel() {
+		JPanel northPanel = new JPanel();
+		northPanel.setOpaque(false);
+
+		GroupLayout northLayout = new GroupLayout(northPanel);
+		northPanel.setLayout(northLayout);
+
+		JediTermWidget termWidget = createTerminalWidget();
+		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addComponent(termWidget));
+		northLayout.setHorizontalGroup(northLayout.createParallelGroup().addComponent(termWidget));
+
+		return northPanel;
+	}
+
+	public JPanel createSouthPanel() {
+		southPanel = new JPanel();
+		southPanel.setOpaque(false);
+		southPanel.setVisible(false);
+
+		JLabel uploadingFileLabel = new JLabel(Configed.getResourceValue("Terminal.uploadingFile"));
+		fileNameLabel = new JLabel();
+		uploadedFilesLabel = new JLabel();
+
+		fileUploadProgressBar = new JProgressBar();
+		UIDefaults defaults = new UIDefaults();
+		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
+		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
+		fileUploadProgressBar.putClientProperty("Nimbus.Overrides", defaults);
+		fileUploadProgressBar.setStringPainted(true);
+
+		GroupLayout southLayout = new GroupLayout(southPanel);
+		southPanel.setLayout(southLayout);
+		southLayout.setHorizontalGroup(southLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
+				.addComponent(uploadingFileLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(fileNameLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(uploadedFilesLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE)
+				.addComponent(fileUploadProgressBar, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE));
+		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
+				.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGroup(southLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(uploadingFileLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fileNameLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(uploadedFilesLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(fileUploadProgressBar, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.HGAP_SIZE));
+
+		return southPanel;
+	}
+
 	public void indicateFileUpload(File file, int currentFile, int totalFiles) {
 		showFileUploadProgress(true);
 
 		try {
 			fileUploadProgressBar.setMaximum((int) Files.size(file.toPath()));
 		} catch (IOException e) {
-			Logging.warning(this, "unable to retrieve file size");
+			Logging.warning(this, "unable to retrieve file size: ", e);
 		}
 
-		fileLabel.setText(currentFile + "/" + totalFiles);
-		uploadingFileLabel.setText(file.getAbsolutePath());
+		uploadedFilesLabel.setText(currentFile + "/" + totalFiles);
+		fileNameLabel.setText(file.getAbsolutePath());
 	}
 
 	public void updateFileUploadProgressBar(int progress, int fileSize) {
@@ -248,10 +261,11 @@ public final class Terminal {
 
 		ByteUnitConverter converter = new ByteUnitConverter();
 		ByteUnitConverter.ByteUnit byteUnit = converter.detectByteUnit(fileSize);
+		String uploadedFileSize = converter.asString(converter.convertByteUnit(progress, byteUnit), byteUnit);
+		String totalFileSize = converter.asString(converter.convertByteUnit(fileSize, byteUnit), byteUnit);
 
 		fileUploadProgressBar.setValue(progress);
-		fileUploadProgressBar.setString(String.format("%.2f %s/%.2f %s", converter.convertByteUnit(progress, byteUnit),
-				byteUnit.toString(), converter.convertByteUnit(fileSize, byteUnit), byteUnit.toString()));
+		fileUploadProgressBar.setString(uploadedFileSize + "/" + totalFileSize);
 		fileUploadProgressBar.repaint();
 	}
 
@@ -330,7 +344,7 @@ public final class Terminal {
 				writer.write(dataJsonBytes);
 				writer.flush();
 			} catch (IOException ex) {
-				Logging.warning(this, "cannot resize terminal window: " + data.toString());
+				Logging.warning(this, "cannot resize terminal window: ", ex);
 			}
 		}
 
@@ -357,7 +371,7 @@ public final class Terminal {
 				writer.write(dataJsonBytes);
 				writer.flush();
 			} catch (IOException ex) {
-				Logging.warning("cannot send message to server: " + data.toString());
+				Logging.warning("cannot send message to server: ", ex);
 			}
 		}
 
@@ -383,7 +397,7 @@ public final class Terminal {
 	}
 
 	@SuppressWarnings("java:S2972")
-	private class FileUpload extends DropTarget {
+	private static class FileUpload extends DropTarget {
 		@SuppressWarnings("unchecked")
 		private List<File> getDroppedFiles(DropTargetDropEvent e) {
 			List<File> droppedFiles = null;
@@ -392,9 +406,10 @@ public final class Terminal {
 				droppedFiles = (List<File>) e.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
 				Logging.info(this, "dropped files: " + droppedFiles);
 			} catch (UnsupportedFlavorException ex) {
-				Logging.warning(this, "this should not happen, unless javaFileListFlavor is no longer supported");
+				Logging.warning(this,
+						"this should not happen, unless javaFileListFlavor is no longer supported: " + ex);
 			} catch (IOException ex) {
-				Logging.warning(this, "cannot retrieve dropped file");
+				Logging.warning(this, "cannot retrieve dropped file: ", ex);
 			}
 
 			return droppedFiles;

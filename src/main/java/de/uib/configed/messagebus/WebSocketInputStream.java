@@ -41,16 +41,16 @@ public final class WebSocketInputStream {
 			reader.connect(writer);
 			connected = true;
 		} catch (IOException e) {
-			Logging.warning("connecting reader with writer, when they're connected");
+			Logging.warning("connecting reader with writer, when they're connected: ", e);
 		}
 	}
 
-	public void write(byte[] message) throws IOException {
+	public static void write(byte[] message) throws IOException {
 		writer.write(message);
 		writer.flush();
 	}
 
-	public PipedInputStream getReader() {
+	public static PipedInputStream getReader() {
 		return reader;
 	}
 

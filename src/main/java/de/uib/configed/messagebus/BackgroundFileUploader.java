@@ -41,8 +41,8 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	}
 
 	@Override
-	protected void process(List<Integer> data) {
-		for (Integer d : data) {
+	protected void process(List<Integer> chunkSizes) {
+		for (Integer chunkSize : chunkSizes) {
 			if (currentFile == null) {
 				return;
 			}
@@ -54,9 +54,9 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 			}
 
 			try {
-				terminal.updateFileUploadProgressBar(d, (int) Files.size(currentFile.toPath()));
+				terminal.updateFileUploadProgressBar(chunkSize, (int) Files.size(currentFile.toPath()));
 			} catch (IOException e) {
-				Logging.warning(this, "unable to retrieve file size");
+				Logging.warning(this, "unable to retrieve file size: ", e);
 			}
 		}
 	}
@@ -118,7 +118,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 					}
 				}
 			} catch (IOException ex) {
-				Logging.warning("cannot upload file to server: " + file.getAbsolutePath());
+				Logging.warning("cannot upload file to server: ", ex);
 			}
 		}
 
@@ -146,9 +146,9 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
 			terminal.getMessagebus().send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 		} catch (JsonProcessingException ex) {
-			Logging.warning(this, "error occurred while processing JSON: " + ex);
+			Logging.warning(this, "error occurred while processing JSON: ", ex);
 		} catch (IOException ex) {
-			Logging.warning(this, "unable to retrieve file size: " + ex);
+			Logging.warning(this, "unable to retrieve file size: ", ex);
 		}
 	}
 
