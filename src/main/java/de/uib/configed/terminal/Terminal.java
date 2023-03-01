@@ -1,11 +1,13 @@
 package de.uib.configed.terminal;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedOutputStream;
@@ -24,6 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.GroupLayout;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,7 +42,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jediterm.terminal.Questioner;
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.ui.JediTermWidget;
-import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -68,6 +70,8 @@ public final class Terminal {
 
 	private CountDownLatch locker;
 	private boolean webSocketConnected;
+
+	private TerminalSettingsProvider settingsProvider;
 
 	private Terminal() {
 	}
@@ -135,7 +139,11 @@ public final class Terminal {
 	}
 
 	private JediTermWidget createTerminalWidget() {
-		widget = new JediTermWidget(DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, new DefaultSettingsProvider());
+		if (settingsProvider == null) {
+			settingsProvider = new TerminalSettingsProvider();
+		}
+
+		widget = new JediTermWidget(DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, settingsProvider);
 		widget.setDropTarget(new FileUpload());
 		return widget;
 	}
@@ -154,13 +162,16 @@ public final class Terminal {
 		JPanel northPanel = createNorthPanel();
 		southPanel = createSouthPanel();
 
-		allLayout.setVerticalGroup(allLayout.createSequentialGroup()
-				.addComponent(northPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addComponent(southPanel,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		allLayout
+				.setVerticalGroup(allLayout.createSequentialGroup()
+						.addComponent(northPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								Short.MAX_VALUE)
+						.addComponent(southPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE));
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(allLayout.createSequentialGroup().addComponent(northPanel, 0, GroupLayout.PREFERRED_SIZE,
-						Short.MAX_VALUE))
+				.addGroup(allLayout.createSequentialGroup().addComponent(northPanel, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				.addGroup(allLayout.createSequentialGroup().addComponent(southPanel, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
 
@@ -192,11 +203,61 @@ public final class Terminal {
 		GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 
+		JPanel settingsPanel = createSettingsPanel();
 		JediTermWidget termWidget = createTerminalWidget();
-		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addComponent(termWidget));
-		northLayout.setHorizontalGroup(northLayout.createParallelGroup().addComponent(termWidget));
+
+		northLayout.setVerticalGroup(northLayout.createSequentialGroup()
+				.addComponent(settingsPanel, 0, GroupLayout.PREFERRED_SIZE, 50).addComponent(termWidget,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+
+		northLayout.setHorizontalGroup(northLayout.createParallelGroup()
+				.addGroup(northLayout.createSequentialGroup().addComponent(settingsPanel, 0, GroupLayout.PREFERRED_SIZE,
+						Short.MAX_VALUE))
+				.addGroup(northLayout.createSequentialGroup().addComponent(termWidget, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
 
 		return northPanel;
+	}
+
+	public JPanel createSettingsPanel() {
+		JPanel settingsPanel = new JPanel();
+		settingsPanel.setOpaque(false);
+
+		GroupLayout settingsLayout = new GroupLayout(settingsPanel);
+		settingsPanel.setLayout(settingsLayout);
+
+		JLabel themeLabel = new JLabel(Configed.getResourceValue("Terminal.settings.theme"));
+		JComboBox<String> themeComboBox = new JComboBox<>();
+		themeComboBox.addItem(Configed.getResourceValue("Terminal.settings.theme.dark"));
+		themeComboBox.addItem(Configed.getResourceValue("Terminal.settings.theme.light"));
+		themeComboBox.addActionListener((ActionEvent e) -> {
+			String selectedTheme = (String) themeComboBox.getSelectedItem();
+			if (selectedTheme.equals(Configed.getResourceValue("Terminal.settings.theme.light"))) {
+				TerminalSettingsProvider.setTerminalForegroundColor(Color.decode("#000000"));
+				TerminalSettingsProvider.setTerminalBackgroundColor(Color.decode("#ffffff"));
+			} else {
+				TerminalSettingsProvider.setTerminalForegroundColor(Color.decode("#ffffff"));
+				TerminalSettingsProvider.setTerminalBackgroundColor(Color.decode("#000000"));
+			}
+			widget.repaint();
+		});
+
+		settingsLayout.setHorizontalGroup(settingsLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
+				.addComponent(themeLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE)
+				.addComponent(themeComboBox, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.HGAP_SIZE));
+		settingsLayout.setVerticalGroup(settingsLayout.createSequentialGroup()
+				.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGroup(settingsLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+						.addComponent(themeLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(themeComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.HGAP_SIZE));
+
+		return settingsPanel;
 	}
 
 	public JPanel createSouthPanel() {
