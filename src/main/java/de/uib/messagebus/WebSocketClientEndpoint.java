@@ -1,4 +1,4 @@
-package de.uib.configed.messagebus;
+package de.uib.messagebus;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,8 +15,11 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.uib.configed.terminal.Terminal;
+import de.uib.configed.terminal.WebSocketInputStream;
 import de.uib.utilities.logging.Logging;
 
+@SuppressWarnings("java:S109")
 public class WebSocketClientEndpoint extends WebSocketClient {
 	public WebSocketClientEndpoint(URI serverUri, Draft draft) {
 		super(serverUri, draft);
@@ -52,28 +55,27 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 			Logging.debug(this, "response data: " + data.toString());
 
 			if (type.startsWith("terminal_")) {
-
 				switch (type) {
 				case "terminal_data_read":
-					WebSocketInputStream.getInstance().write((byte[]) data.get("data"));
+					WebSocketInputStream.write((byte[]) data.get("data"));
 					break;
-
 				case "terminal_open_event":
 					Terminal terminal = Terminal.getInstance();
 					terminal.setTerminalId((String) data.get("terminal_id"));
 					terminal.setTerminalChannel((String) data.get("back_channel"));
 					terminal.unlock();
+					break;
 				case "terminal_close_event":
 					Terminal.getInstance().close();
 					break;
-
-				default:
-					Logging.warning(this, "unexpected terminal-message from messagebus");
+				case "terminal_resize_event":
 					break;
+				default:
+					Logging.warning(this, "unhandeld terminal type response caught: " + type);
 				}
 			}
 
-			if (type.equals("file_upload_result")) {
+			if ("file_upload_result".equals(type)) {
 				String filePath = (String) data.get("path");
 
 				data.clear();
@@ -90,10 +92,11 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 				send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 			}
 		} catch (IOException e) {
-			Logging.error(this, "cannot read received message");
+			Logging.error(this, "cannot read received message: ", e);
 		}
 	}
 
+	@SuppressWarnings("java:S1774")
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame
@@ -103,6 +106,6 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 
 	@Override
 	public void onError(Exception ex) {
-		Logging.error(this, "error encountered in messagebus: " + ex);
+		Logging.warning(this, "error encountered in messagebus: " + ex);
 	}
 }
