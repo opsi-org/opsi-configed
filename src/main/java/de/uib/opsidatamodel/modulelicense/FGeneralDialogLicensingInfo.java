@@ -1,6 +1,7 @@
 package de.uib.opsidatamodel.modulelicense;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -244,7 +245,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 				, extendedView);
 
-		checkExtendedView.addActionListener(actionEvent -> {
+		checkExtendedView.addActionListener((ActionEvent actionEvent) -> {
 			extendedView = checkExtendedView.isSelected();
 			Logging.info(this, "extendedView " + extendedView + ", i.e. reduced " + !extendedView);
 			LicensingInfoMap.setReduced(!extendedView);
@@ -256,7 +257,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				"images/reload_blue16.png", "images/reload_blue16.png", "images/reload_blue16.png",
 				"images/reload_blue16.png");
 
-		buttonReload.addActionListener(actionEvent -> {
+		buttonReload.addActionListener((ActionEvent actionEvent) -> {
 			LicensingInfoMap.requestRefresh();
 			thePanel.reload();
 		});

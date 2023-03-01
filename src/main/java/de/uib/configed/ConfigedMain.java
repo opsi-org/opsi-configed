@@ -4281,7 +4281,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					}
 
 					// handling the main perspective
-					final int maxWaitSecs = 600;
+					final int MAX_WAIT_SECONDS = 600;
 
 					new Thread() {
 						@Override
@@ -4289,7 +4289,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							int waitSecs = 0;
 
 							Logging.info(this, "counting thread started");
-							while (!sessioninfoFinished && waitSecs <= maxWaitSecs) {
+							while (!sessioninfoFinished && waitSecs <= MAX_WAIT_SECONDS) {
 								Logging.debug(this, "wait secs for session infoi " + waitSecs);
 								try {
 									sleep(1000);
