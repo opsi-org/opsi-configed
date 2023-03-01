@@ -1,4 +1,4 @@
-package de.uib.configed.messagebus;
+package de.uib.messagebus;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,6 +26,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.terminal.Terminal;
 import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S109")

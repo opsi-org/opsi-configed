@@ -1,4 +1,4 @@
-package de.uib.configed.messagebus;
+package de.uib.configed.terminal;
 
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
@@ -44,6 +44,7 @@ import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.messagebus.Messagebus;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ProgressBarPainter;
 

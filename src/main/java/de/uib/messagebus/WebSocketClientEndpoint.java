@@ -1,4 +1,4 @@
-package de.uib.configed.messagebus;
+package de.uib.messagebus;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,6 +15,8 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.uib.configed.terminal.Terminal;
+import de.uib.configed.terminal.WebSocketInputStream;
 import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S109")
