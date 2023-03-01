@@ -118,8 +118,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	 * protected Map packageVersions; //combined values for selected clients
 	 */
 
-	protected Map<String, Map<String, String>> combinedVisualValues; // state key (column name) --> product name -->
-																		// visual value
+	// state key (column name) --> product name --> visual value
+	protected Map<String, Map<String, String>> combinedVisualValues;
 
 	protected Map<String, Set<String>> product2setOfClientsWithNewAction;
 	// for each product, we shall collect the clients that have a changed action
@@ -146,9 +146,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	protected List<String> displayColumns;
 	protected int numberOfColumns;
-	protected List<String> preparedColumns; // the columns for which code exists
+	// the columns for which code exists
+	protected List<String> preparedColumns;
 	protected List<String> columnTitles;
-	protected int[] indexPreparedColumns; // the indices of the displayColumns in the displayColumns
+	// the indices of the displayColumns in the displayColumns
+	protected int[] indexPreparedColumns;
 	protected boolean[] editablePreparedColumns;
 
 	// collects titles for the columns prepared in this class
@@ -551,14 +553,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		// reverse from putting together the values in ProductState
 
-		if (value.equals(InstallationInfo.NONE_STRING) // we set this in the calling method
-				|| value.equals(InstallationInfo.NONE_DISPLAY_STRING) // this is asked only for formal independence of the
-																		// method
-		) {
+		// `value.equals(InstallationInfo.NONE_DISPLAY_STRING)` is asked only for formal independence of the method
+		if (value.equals(InstallationInfo.NONE_STRING) || value.equals(InstallationInfo.NONE_DISPLAY_STRING)) {
 			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.NONE_STRING);
-
 		} else if (value.equals(InstallationInfo.FAILED_DISPLAY_STRING)) {
 			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.FAILED));
@@ -860,7 +859,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		}
 
-		fireTableDataChanged(); // removes the selection
+		// removes the selection
+		fireTableDataChanged();
 
 		// ordering command
 		tellAndClearMissingProducts(productId);

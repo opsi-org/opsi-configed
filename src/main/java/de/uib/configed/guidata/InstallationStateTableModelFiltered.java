@@ -163,7 +163,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 	// ComboBoxModeller
 	@Override
-	public ComboBoxModel getComboBoxModel(int row, int column) {
+	public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 		return super.getComboBoxModel(originRow(row), column);
 	}
 

@@ -7,12 +7,12 @@ import de.uib.opsidatamodel.AbstractPersistenceController;
 public class ProductpropertiesUpdate implements UpdateCommand {
 	String pcname;
 	String productname;
-	Map newdata;
+	Map<?, ?> newdata;
 
 	AbstractPersistenceController persis;
 
 	public ProductpropertiesUpdate(AbstractPersistenceController persis, String pcname, String productname,
-			Map newdata) {
+			Map<?, ?> newdata) {
 		this.pcname = pcname;
 		this.productname = productname;
 		this.newdata = newdata;

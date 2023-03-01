@@ -1,5 +1,6 @@
 package de.uib.utilities.swing;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,14 @@ public class JComboBoxToolTip extends JComboBox<String> {
 
 	private Map<String, String> selectValues;
 
-	protected java.awt.Color listBackgroundColorSelected;
-	protected java.awt.Color listBackgroundColorUnselected;
-	protected java.awt.Color listForegroundColor;
+	protected Color listBackgroundColorSelected;
+	protected Color listBackgroundColorUnselected;
+	protected Color listForegroundColor;
 
 	protected boolean addEmpty = false;
 
 	public JComboBoxToolTip() {
-		super(); // as it is
+		super();
 
 		listBackgroundColorSelected = Globals.SECONDARY_BACKGROUND_COLOR;
 		listBackgroundColorUnselected = Globals.BACKGROUND_COLOR_3;
@@ -36,14 +37,13 @@ public class JComboBoxToolTip extends JComboBox<String> {
 
 	protected class NewComboBoxRenderer extends BasicComboBoxRenderer {
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			if (isSelected) {
 				setBackground(listBackgroundColorSelected);
 				setForeground(listForegroundColor);
 				Logging.debug(this, "index, tooltips " + index + ", " + tooltips);
-				if (-1 < index && index < tooltips.size() // we had an error only on linux with openjdk 8
-				) {
+				if (-1 < index && index < tooltips.size()) {
 					list.setToolTipText(tooltips.get(index));
 				}
 			} else {

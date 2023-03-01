@@ -207,7 +207,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 		labelTitle.setFont(primaryFont);
 
-		GroupLayout layout = new javax.swing.GroupLayout(this);
+		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 		// this.setBorder(new
 

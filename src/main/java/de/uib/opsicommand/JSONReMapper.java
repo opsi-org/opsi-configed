@@ -59,7 +59,7 @@ public final class JSONReMapper {
 
 			for (Entry<String, Object> result0Entry : result0.entrySet()) {
 				JSONObject jO = (JSONObject) (result0Entry.getValue());
-				HashMapX response = new HashMapX<>(jO, true);
+				HashMapX<Object> response = new HashMapX<>(jO, true);
 
 				if (response.get("error") == null) {
 					List<?> list = (List<?>) response.get("result");
@@ -252,8 +252,8 @@ public final class JSONReMapper {
 
 	}
 
-	public static List<Map<String, String>> getListOfStringMaps(Object retrieved) {
-		List<Map<String, String>> result = new ArrayList<>();
+	public static List<Map<String, Object>> getListOfStringMaps(Object retrieved) {
+		List<Map<String, Object>> result = new ArrayList<>();
 		List<Object> jsonList = null;
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -277,7 +277,7 @@ public final class JSONReMapper {
 
 			while (iter.hasNext()) {
 				item = (JSONObject) iter.next();
-				Map<String, String> mapItem = (Map<String, String>) JSONReMapper.deriveStandard(item);
+				Map<String, Object> mapItem = JSONReMapper.deriveStandard(item);
 				result.add(mapItem);
 
 			}
@@ -296,10 +296,10 @@ public final class JSONReMapper {
 		List<Map<String, Object>> result = new ArrayList<>();
 		List<Object> jsonList = null;
 
-		try {
-			JSONArray jA = retrieved;
-			jsonList = new ArrayList<>();
+		JSONArray jA = retrieved;
+		jsonList = new ArrayList<>();
 
+		try {
 			if (jA != null) {
 				for (int i = 0; i < jA.length(); i++) {
 
@@ -314,20 +314,19 @@ public final class JSONReMapper {
 		JSONObject item = null;
 
 		try {
-
 			Iterator<Object> iter = jsonList.iterator();
 
 			while (iter.hasNext()) {
 				item = (JSONObject) iter.next();
-				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard(item);
+				Map<String, Object> mapItem = JSONReMapper.deriveStandard(item);
 				result.add(mapItem);
 
 			}
-			if (jsonList.size() == result.size()) {
+			if (jsonList.size() != result.size()) {
 				Logging.warning(" getListOfMaps did not work, jsonList.size " + jsonList.size() + ", remapped "
 						+ result.size());
 			}
-		} catch (Exception ex) {
+		} catch (JSONException ex) {
 			Logging.error("JSONReMapper: Exception on reproducing  " + item + ", " + ex);
 		}
 
@@ -361,7 +360,7 @@ public final class JSONReMapper {
 
 			while (iter.hasNext()) {
 				item = (JSONObject) iter.next();
-				Map<String, Object> mapItem = (Map<String, Object>) JSONReMapper.deriveStandard(item);
+				Map<String, Object> mapItem = JSONReMapper.deriveStandard(item);
 				result.add(mapItem);
 
 			}
@@ -602,32 +601,38 @@ public final class JSONReMapper {
 		}
 
 		else if (ob instanceof JSONObject) {
-			Map<String, Object> map = new HashMap<>();
+			return deriveStandard((JSONObject) ob);
 
-			Iterator<String> iter = ((JSONObject) ob).keys();
-
-			while (iter.hasNext()) {
-				String key = null;
-				Object value = null;
-
-				try {
-					key = iter.next();
-
-					if (((JSONObject) ob).isNull(key)) {
-						map.put(key, null);
-					} else {
-						value = ((JSONObject) ob).get(key);
-						map.put(key, value);
-					}
-					// make recursive
-				} catch (Exception ex) {
-					Logging.error("deriveStandard, key " + key + ", value " + value + ", " + ex);
-				}
-			}
-			return map;
 		} else {
+
 			return ob;
 		}
+	}
+
+	public static Map<String, Object> deriveStandard(JSONObject ob) {
+		Map<String, Object> map = new HashMap<>();
+
+		Iterator<String> iter = ob.keys();
+
+		while (iter.hasNext()) {
+			String key = null;
+			Object value = null;
+
+			try {
+				key = iter.next();
+
+				if (ob.isNull(key)) {
+					map.put(key, null);
+				} else {
+					value = ob.get(key);
+					map.put(key, value);
+				}
+				// make recursive
+			} catch (Exception ex) {
+				Logging.error("deriveStandard, key " + key + ", value " + value + ", " + ex);
+			}
+		}
+		return map;
 	}
 
 	public static boolean isNull(Object ob) {

@@ -1,11 +1,12 @@
 package de.uib.utilities.swing;
 
+import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-public class LowerCaseTextField extends javax.swing.JTextField {
+public class LowerCaseTextField extends JTextField {
 	// from apidoc
 
 	public LowerCaseTextField() {

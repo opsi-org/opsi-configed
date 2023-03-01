@@ -76,12 +76,12 @@ public class JSONObjectX extends JSONObject {
 				if (!master.isNull(key)) {
 					Object masterValue = master.get(key);
 
-					if (masterValue instanceof java.lang.Boolean || masterValue instanceof java.lang.String
-							|| masterValue instanceof java.lang.Integer) {
+					if (masterValue instanceof Boolean || masterValue instanceof String
+							|| masterValue instanceof Integer) {
 						map.put(key, masterValue);
-					} else if (masterValue instanceof org.json.JSONArray) {
+					} else if (masterValue instanceof JSONArray) {
 						map.put(key, ((JSONArray) masterValue).toList());
-					} else if (masterValue instanceof org.json.JSONObject) {
+					} else if (masterValue instanceof JSONObject) {
 						// should only occur on the last level
 						map.put(key, masterValue);
 					}

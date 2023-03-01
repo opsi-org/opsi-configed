@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.clientselection.SelectData;
+import de.uib.configed.clientselection.SelectData.DataType;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.AbstractPersistenceController;
@@ -143,7 +144,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 		throw new IllegalArgumentException("Unknown type");
 	}
 
-	public static String createJsonRecursive(Map<String, Object> objects) {
+	public static String createJsonRecursive(Map<?, ?> objects) {
 		StringBuilder builder = new StringBuilder(255);
 		builder.append("{ ");
 		builder.append("\"element\" : ");
@@ -169,16 +170,22 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 		builder.append(", \"data\" : ");
 		builder.append(objectToString(objects.get("data")));
 		builder.append(", \"children\" : ");
-		List<Map<String, Object>> children = (List) objects.get("children");
+		List<?> children = (List<?>) objects.get("children");
 		if (children == null) {
 			builder.append("null");
 		} else {
 			builder.append("[ ");
-			Iterator<Map<String, Object>> childIterator = children.iterator();
+			Iterator<?> childIterator = children.iterator();
 			while (childIterator.hasNext()) {
-				builder.append(createJsonRecursive(childIterator.next()));
-				if (childIterator.hasNext()) {
-					builder.append(", ");
+				Object child = childIterator.next();
+				if (child instanceof Map) {
+					builder.append(createJsonRecursive((Map<?, ?>) child));
+
+					if (childIterator.hasNext()) {
+						builder.append(", ");
+					}
+				} else {
+					Logging.warning("child is not a map, but " + child.getClass());
 				}
 			}
 			builder.append(" ]");
@@ -280,18 +287,18 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 		if (name.equals("data")) {
 			value = value.substring(1, value.length() - 1);
 			switch (lastDataType) {
-			case NoneType:
+			case NONE_TYPE:
 				return null;
-			case TextType:
-			case EnumType:
+			case TEXT_TYPE:
+			case ENUM_TYPE:
 				return value;
-			case DoubleType:
+			case DOUBLE_TYPE:
 				return Double.valueOf(value);
-			case IntegerType:
+			case INTEGER_TYPE:
 				return Integer.valueOf(value);
-			case BigIntegerType:
+			case BIG_INTEGER_TYPE:
 				return Long.valueOf(value);
-			case DateType:
+			case DATE_TYPE:
 				return value;
 			default:
 				throw new IllegalArgumentException("Type " + lastDataType + " not expected here");
@@ -303,7 +310,43 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 		}
 
 		if (name.equals("dataType")) {
-			lastDataType = SelectData.DataType.valueOf(value);
+
+			switch (value) {
+			case "TextType":
+				lastDataType = DataType.TEXT_TYPE;
+				break;
+
+			case "IntegerType":
+				lastDataType = DataType.INTEGER_TYPE;
+				break;
+
+			case "BigIntegerType":
+				lastDataType = DataType.BIG_INTEGER_TYPE;
+				break;
+
+			case "DoubleType":
+				lastDataType = DataType.DOUBLE_TYPE;
+				break;
+
+			case "EnumType":
+				lastDataType = DataType.ENUM_TYPE;
+				break;
+
+			case "DateType":
+				lastDataType = DataType.DATE_TYPE;
+				break;
+
+			case "NoneType":
+				lastDataType = DataType.NONE_TYPE;
+				break;
+
+			default:
+				Logging.error(this, "dataType for " + value + " cannot be found...)");
+				break;
+			}
+
+			Logging.info(this, "lastDataType is now " + lastDataType);
+
 			return lastDataType;
 		}
 

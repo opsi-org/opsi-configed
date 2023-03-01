@@ -2,6 +2,7 @@ package de.uib.utilities.thread;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.EventQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import de.uib.configed.ConfigedMain;
@@ -60,7 +61,7 @@ public class WaitCursor {
 		Logging.debug(this,
 				"adding instance " + objectNo + "-- call location at (" + callLocation + ") on component " + c);
 
-		if (java.awt.EventQueue.isDispatchThread()) {
+		if (EventQueue.isDispatchThread()) {
 			new Thread() {
 				@Override
 				public void run() {

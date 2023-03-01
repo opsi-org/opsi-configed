@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.uib.utilities.logging.Logging;
@@ -122,12 +123,12 @@ public class OpsiMethodCall {
 				} else if (paramI instanceof Map) {
 					sb.append("{");
 
-					for (Object key : ((Map) paramI).keySet()) {
+					for (Object key : ((Map<?, ?>) paramI).keySet()) {
 						sb.append("" + key + ": ");
-						if (((Map) paramI).get(key) instanceof Object[]) {
-							sb.append(Arrays.toString((Object[]) ((Map) paramI).get(key)));
+						if (((Map<?, ?>) paramI).get(key) instanceof Object[]) {
+							sb.append(Arrays.toString((Object[]) ((Map<?, ?>) paramI).get(key)));
 						} else {
-							sb.append("" + ((Map) paramI).get(key));
+							sb.append("" + ((Map<?, ?>) paramI).get(key));
 						}
 						sb.append(" ");
 					}
@@ -180,9 +181,8 @@ public class OpsiMethodCall {
 				}
 
 				else if (parameters[i] instanceof Map) {
-					JSONObject job = new JSONObject((Map) parameters[i]);
+					JSONObject job = new JSONObject((Map<?, ?>) parameters[i]);
 					joParams.put(job);
-
 				}
 
 				else {
@@ -196,7 +196,7 @@ public class OpsiMethodCall {
 			jO.put("params", joParams);
 			result = jO.toString();
 
-		} catch (org.json.JSONException jex) {
+		} catch (JSONException jex) {
 			Logging.error(this, "Exception while producing a JSONObject, " + jex.toString());
 		}
 

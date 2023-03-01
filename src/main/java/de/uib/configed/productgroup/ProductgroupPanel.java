@@ -1,5 +1,6 @@
 package de.uib.configed.productgroup;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -27,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -60,38 +62,38 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
+import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxToolTip;
+import de.uib.utilities.swing.list.ListCellRendererByIndex;
+import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 
-public class ProductgroupPanel extends JPanel implements ListSelectionListener // for associated table
-		, ActionListener // for internal buttons
-		, ItemListener // for combos
-{
+public class ProductgroupPanel extends JPanel implements ListSelectionListener, ActionListener, ItemListener {
 	JComboBoxToolTip groupsCombo;
 
-	protected de.uib.utilities.table.gui.TablesearchPane searchPane;
+	protected TablesearchPane searchPane;
 	protected JTable tableProducts;
 	protected IFInstallationStateTableModel insTableModel;
 
 	JTextField saveNameEditor;
 
-	protected de.uib.configed.gui.IconButton buttonCommit;
-	protected de.uib.configed.gui.IconButton buttonCancel;
+	protected IconButton buttonCommit;
+	protected IconButton buttonCancel;
 
 	// use the filter icon of the tablesearchpane
-	protected de.uib.configed.gui.IconButton buttonEditDialog;
-	protected de.uib.configed.gui.IconButton buttonDelete;
+	protected IconButton buttonEditDialog;
+	protected IconButton buttonDelete;
 
-	protected de.uib.configed.gui.IconButton buttonReloadProductStates;
+	protected IconButton buttonReloadProductStates;
 
-	protected de.uib.configed.gui.IconButton buttonSaveAndExecute;
+	protected IconButton buttonSaveAndExecute;
 
-	protected de.uib.configed.gui.IconButton buttonCollectiveAction;
+	protected IconButton buttonCollectiveAction;
 
 	protected JLabel labelCollectiveAction;
 	protected JComboBoxToolTip comboAggregatedEditing;
@@ -393,7 +395,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 	}
 
 	private void initComponents() {
-		buttonCommit = new de.uib.configed.gui.IconButton(Configed.getResourceValue("GroupPanel.SaveButtonTooltip"), // desc
+		buttonCommit = new IconButton(Configed.getResourceValue("GroupPanel.SaveButtonTooltip"), // desc
 				"images/apply.png", // inactive
 				"images/apply_over.png", // over
 				"images/apply_disabled.png", // active
@@ -401,19 +403,18 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		buttonCommit.addActionListener(this);
 		buttonCommit.setPreferredSize(Globals.newSmallButton);
 
-		buttonCancel = new de.uib.configed.gui.IconButton(Configed.getResourceValue("GroupPanel.CancelButtonTooltip"),
-				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png");
+		buttonCancel = new IconButton(Configed.getResourceValue("GroupPanel.CancelButtonTooltip"), "images/cancel.png",
+				"images/cancel_over.png", "images/cancel_disabled.png");
 		buttonCancel.addActionListener(this);
 		buttonCancel.setPreferredSize(Globals.newSmallButton);
 
-		buttonDelete = new de.uib.configed.gui.IconButton(Configed.getResourceValue("GroupPanel.DeleteButtonTooltip"),
+		buttonDelete = new IconButton(Configed.getResourceValue("GroupPanel.DeleteButtonTooltip"),
 				"images/edit-delete.png", "images/edit-delete_over.png", "images/edit-delete_disabled.png");
 		buttonDelete.addActionListener(this);
 		buttonDelete.setPreferredSize(Globals.newSmallButton);
 
-		buttonReloadProductStates = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("GroupPanel.ReloadButtonTooltip"), "images/reload_blue16.png",
-				"images/reload_blue16.png", " ", true);
+		buttonReloadProductStates = new IconButton(Configed.getResourceValue("GroupPanel.ReloadButtonTooltip"),
+				"images/reload_blue16.png", "images/reload_blue16.png", " ", true);
 
 		buttonReloadProductStates.setToolTipText(Configed.getResourceValue("GroupPanel.ReloadProductStatesTooltip"));
 
@@ -421,8 +422,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		buttonReloadProductStates.setPreferredSize(Globals.newSmallButton);
 		buttonReloadProductStates.setVisible(true);
 
-		buttonSaveAndExecute = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
+		buttonSaveAndExecute = new IconButton(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"),
 				"images/executing_command_blue-grey_16.png", "images/executing_command_blue-grey_16.png", " ", true);
 
 		buttonSaveAndExecute.setToolTipText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
@@ -434,8 +434,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		labelCollectiveAction = new JLabel(Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 		labelCollectiveAction.setFont(Globals.defaultFont);
 
-		buttonCollectiveAction = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
+		buttonCollectiveAction = new IconButton(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
 				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
 
 		buttonCollectiveAction.setToolTipText(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"));
@@ -457,17 +456,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		values.put(Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"),
 				Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked.tooltip"));
 
-		DefaultListModel<String> modelChooseAction = new DefaultListModel<>(); // put values from Map into
-																				// list
+		DefaultListModel<String> modelChooseAction = new DefaultListModel<>();
 		for (String key : values.keySet()) {
 			modelChooseAction.addElement(key);
 		}
 
 		// create list with tooltips
 		JList<String> listChooseAction = new JList<>(modelChooseAction);
-		de.uib.utilities.swing.list.StandardListCellRenderer renderActionList = new de.uib.utilities.swing.list.ListCellRendererByIndex(
-				null, // index is identical with the value
-				values, "");
+		StandardListCellRenderer renderActionList = new ListCellRendererByIndex(null, values, "");
 
 		renderActionList.setAlternatingColors(Globals.BACKGROUND_COLOR_7, Globals.BACKGROUND_COLOR_7,
 				Globals.BACKGROUND_COLOR_3, Globals.SECONDARY_BACKGROUND_COLOR);
@@ -520,7 +516,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		comboAggregatedEditing.setValues(values);
 		comboAggregatedEditing.setFont(Globals.defaultFont);
 
-		buttonEditDialog = new de.uib.configed.gui.IconButton(Configed.getResourceValue("GroupPanel.EditButtonTooltip"),
+		buttonEditDialog = new IconButton(Configed.getResourceValue("GroupPanel.EditButtonTooltip"),
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
 				"images/packagegroup_save_disabled.png");
 
@@ -605,8 +601,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		layoutPanelEdit.setHorizontalGroup(layoutPanelEdit
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layoutPanelEdit.setHorizontalGroup(layoutPanelEdit.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutPanelEdit.createSequentialGroup()
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE).addComponent(labelSave,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -638,7 +633,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 		separatingPlace.setForeground(Globals.BACKGROUND_COLOR_9);
 		separatingPlace.setBackground(Globals.FAILED_COLOR);
 		separatingPlace.setOpaque(true);
-		separatingPlace.setBorder(new javax.swing.border.LineBorder(Globals.BACKGROUND_COLOR_6));
+		separatingPlace.setBorder(new LineBorder(Globals.BACKGROUND_COLOR_6));
 
 		layoutMain.setVerticalGroup(layoutMain.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
@@ -666,7 +661,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2).addComponent(panelEdit,
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 
-		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layoutMain.setHorizontalGroup(layoutMain.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutMain.createSequentialGroup()
 
 						.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -832,7 +827,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 	// ActionListener interface
 	@Override
-	public void actionPerformed(java.awt.event.ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		String s = " ";
 		if (e.getSource() == buttonCommit) {
 			commit();
@@ -873,11 +868,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 			int actionType;
 			if (selected.equals(Configed.getResourceValue("GroupPanel.comboAggregateProducts.setupMarked"))) {
 				actionType = ActionRequest.SETUP;
-			} else if (selected.equals(
-					de.uib.configed.Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"))) {
+			} else if (selected
+					.equals(Configed.getResourceValue("GroupPanel.comboAggregateProducts.uninstallMarked"))) {
 				actionType = ActionRequest.UNINSTALL;
-			} else if (selected.equals(
-					de.uib.configed.Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"))) {
+			} else if (selected.equals(Configed.getResourceValue("GroupPanel.comboAggregateProducts.noneMarked"))) {
 				actionType = ActionRequest.NONE;
 			} else {
 				actionType = ActionRequest.INVALID;
@@ -885,10 +879,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener /
 
 			if (actionType != ActionRequest.INVALID) {
 
-				associate.getSelectedRowsInModelTerms().stream()
-						.peek(x -> Logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0)))
-						.forEach(x -> insTableModel.collectiveChangeActionRequest(
-								(String) insTableModel.getValueAt(x, 0), new ActionRequest(actionType)));
+				associate.getSelectedRowsInModelTerms().stream().forEach(x -> {
+					Logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0));
+					insTableModel.collectiveChangeActionRequest((String) insTableModel.getValueAt(x, 0),
+							new ActionRequest(actionType));
+				});
 			}
 
 			insTableModel.finishCollectiveChange();

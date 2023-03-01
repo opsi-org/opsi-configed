@@ -426,7 +426,7 @@ public class MainFrame extends JFrame
 
 	JPanel jPanelSchalterstellung;
 
-	public de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
+	public FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
 	LicensingInfoMap licensingInfoMap;
 
 	JTextField jTextFieldConfigdir = new JTextField();
@@ -699,7 +699,7 @@ public class MainFrame extends JFrame
 
 			menuItem.addActionListener((ActionEvent e) -> {
 				configedMain.closeInstance(true);
-				de.uib.messages.Messages.setLocale(localeName);
+				Messages.setLocale(localeName);
 				new Thread() {
 					@Override
 					public void run() {
@@ -3220,7 +3220,7 @@ public class MainFrame extends JFrame
 		if (fDialogOpsiLicensingInfo == null) {
 			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
 					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false, // modal
-					new String[] { Configed.getResourceValue("Dash.close") },
+					new String[] { Configed.getResourceValue("Dashboard.close") },
 					new Icon[] { Globals.createImageIcon("images/cancel16_small.png", "") }, 1, 900, 680, true, null);
 		} else {
 			fDialogOpsiLicensingInfo.setLocationRelativeTo(this);
@@ -3576,7 +3576,7 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	public void initHardwareInfo(List<Map<String, Object>> config) {
+	public void initHardwareInfo(List<Map<String, List<Map<String, Object>>>> config) {
 		if (showHardwareLogVersion2 == null) {
 			showHardwareLogVersion2 = new PanelHWInfo(configedMain) {
 				@Override
@@ -3650,92 +3650,6 @@ public class MainFrame extends JFrame
 				showSoftwareLog);
 
 		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().repaint());
-	}
-
-	protected boolean handleInstallByShutdownChange(final boolean wantActive) {
-
-		boolean goOn = true;
-
-		String clientID = getClientID();
-		if ((clientID == null) || (clientID.length() == 0)) {
-			return goOn;
-		}
-
-		// for testing commented out
-
-		List<String> shutdownValueX = null;
-		try {
-			shutdownValueX = (List) configedMain.getPersistenceController()
-					.getProductProperties(clientID, "opsi-client-agent").get("on_shutdown_install");
-		} catch (Exception ex) {
-			Logging.error("cannot get product property  on_shutdown_install for client " + clientID, ex);
-		}
-
-		final List<String> shutdownValue = shutdownValueX;
-
-		// for testing defined with fixed values
-
-		final Boolean activate = wantActive;
-
-		if (shutdownValue == null) {
-			Logging.info(this, "product property on_shutdown_install does not exist");
-			return goOn;
-		} else {
-
-			FTextArea fObsolete = new FTextArea(Globals.frame1,
-					Configed.getResourceValue("NewClientDialog.installByShutdown"), true,
-					new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
-							Configed.getResourceValue("FGeneralDialog.ok") },
-					300, 200) {
-				@Override
-				protected boolean wantToBeRegisteredWithRunningInstances() {
-					return false;
-				}
-
-				@Override
-				public void doAction1() {
-					Logging.info(this, "cancel");
-					result = 1;
-					leave();
-				}
-
-				@Override
-				public void doAction2() {
-					Logging.info(this, "set property and call setup for the opsi-clientagent");
-					handle(activate);
-					result = 2;
-					leave();
-				}
-
-				@Override
-				public void doAction3() {
-					Logging.info(this, "cancel");
-					result = 3;
-					leave();
-				}
-
-				private void handle(boolean switchOn) {
-					Logging.info(this, "handle " + switchOn + ", old value for one client " + shutdownValue);
-
-					configedMain.setInstallByShutdownProductPropertyValue(switchOn);
-					configedMain.requestReloadStatesAndActions();
-
-				}
-
-			};
-
-			fObsolete.setMessage("with opsi.client-agent up to 4.1 :\n\n" + "the property " + "on_shutdown_install"
-					+ " \n" + "has to be set,\n\n " + "any change requires a setup of the client agent\n"
-					+ "do it now?");
-
-			fObsolete.setVisible(true);
-
-			if (fObsolete.getResult() != 1) {
-				goOn = false;
-			}
-		}
-
-		return goOn;
 	}
 
 	private class SwExporter implements ActionListener {

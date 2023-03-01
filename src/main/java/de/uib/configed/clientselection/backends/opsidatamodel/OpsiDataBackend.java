@@ -109,10 +109,10 @@ public final class OpsiDataBackend extends AbstractBackend {
 	List<Map<String, Object>> hardwareOnClient;
 	Map<String, List<Map<String, Object>>> clientToHardware;
 
-	private List<Map<String, Object>> hwConfig;
-	private List<Map<String, Object>> hwConfigLocalized;
+	private List<Map<String, List<Map<String, Object>>>> hwConfig;
+	private List<Map<String, List<Map<String, Object>>>> hwConfigLocalized;
 	private Map<String, String> hwUiToOpsi;
-	private Map<String, List<?>> hwClassToValues;
+	private Map<String, List<Map<String, Object>>> hwClassToValues;
 
 	private AbstractPersistenceController controller;
 
@@ -470,18 +470,18 @@ public final class OpsiDataBackend extends AbstractBackend {
 		Map<String, List<AbstractSelectElement>> result = new HashMap<>();
 
 		for (int i = 0; i < hwConfig.size(); i++) {
-			Map<String, Object> hardwareMap = hwConfig.get(i);
-			Map<String, Object> hardwareMapLocalized = hwConfigLocalized.get(i);
-			String hardwareName = (String) ((Map<?, ?>) hardwareMap.get("Class")).get("UI");
-			String hardwareNameLocalized = (String) ((Map<?, ?>) hardwareMapLocalized.get("Class")).get("UI");
+			Map<String, List<Map<String, Object>>> hardwareMap = hwConfig.get(i);
+			Map<String, List<Map<String, Object>>> hardwareMapLocalized = hwConfigLocalized.get(i);
+			String hardwareName = (String) hardwareMap.get("Class").get(0).get("UI");
+			String hardwareNameLocalized = (String) hardwareMapLocalized.get("Class").get(0).get("UI");
 			List<AbstractSelectElement> elementList = new LinkedList<>();
-			List<?> values = (List<?>) hardwareMap.get("Values");
-			List<?> valuesLocalized = (List<?>) hardwareMapLocalized.get("Values");
+			List<Map<String, Object>> values = hardwareMap.get("Values");
+			List<Map<String, Object>> valuesLocalized = hardwareMapLocalized.get("Values");
 			for (int j = 0; j < values.size(); j++) {
-				Map<?, ?> valuesMap = (Map<?, ?>) values.get(j);
+				Map<String, Object> valuesMap = values.get(j);
 				String type = (String) valuesMap.get("Type");
 				String name = (String) valuesMap.get("UI");
-				String localizedName = (String) ((Map<?, ?>) valuesLocalized.get(j)).get("UI");
+				String localizedName = (String) valuesLocalized.get(j).get("UI");
 				if (type.equals("int") || type.equals("tinyint")) {
 					elementList.add(new GenericIntegerElement(new String[] { hardwareName, name },
 							hardwareNameLocalized, localizedName));
@@ -505,18 +505,18 @@ public final class OpsiDataBackend extends AbstractBackend {
 		Map<String, List<AbstractSelectElement>> result = new HashMap<>();
 
 		for (int i = 0; i < hwConfig.size(); i++) {
-			Map<String, Object> hardwareMap = hwConfig.get(i);
-			Map<String, Object> hardwareMapLocalized = hwConfigLocalized.get(i);
-			String hardwareName = (String) ((Map<?, ?>) hardwareMap.get("Class")).get("UI");
-			String hardwareNameLocalized = (String) ((Map<?, ?>) hardwareMapLocalized.get("Class")).get("UI");
+			Map<String, List<Map<String, Object>>> hardwareMap = hwConfig.get(i);
+			Map<String, List<Map<String, Object>>> hardwareMapLocalized = hwConfigLocalized.get(i);
+			String hardwareName = (String) hardwareMap.get("Class").get(0).get("UI");
+			String hardwareNameLocalized = (String) hardwareMapLocalized.get("Class").get(0).get("UI");
 			List<AbstractSelectElement> elementList = new LinkedList<>();
-			List<?> values = (List<?>) hardwareMap.get("Values");
-			List<?> valuesLocalized = (List<?>) hardwareMapLocalized.get("Values");
+			List<Map<String, Object>> values = hardwareMap.get("Values");
+			List<Map<String, Object>> valuesLocalized = hardwareMapLocalized.get("Values");
 			for (int j = 0; j < values.size(); j++) {
-				Map<?, ?> valuesMap = (Map<?, ?>) values.get(j);
+				Map<String, Object> valuesMap = values.get(j);
 				String type = (String) valuesMap.get("Type");
 				String name = (String) valuesMap.get("UI");
-				String localizedName = (String) ((Map<?, ?>) valuesLocalized.get(j)).get("UI");
+				String localizedName = (String) valuesLocalized.get(j).get("UI");
 				if (type.equals("int") || type.equals("tinyint")) {
 					elementList.add(new GenericIntegerElement(new String[] { hardwareName, name },
 							hardwareNameLocalized, localizedName));
@@ -537,10 +537,9 @@ public final class OpsiDataBackend extends AbstractBackend {
 
 	private String getKey(String[] elementPath) {
 		Logging.debug(this, elementPath[0]);
-		List<?> values = hwClassToValues.get(hwUiToOpsi.get(elementPath[0]));
+		List<Map<String, Object>> values = hwClassToValues.get(hwUiToOpsi.get(elementPath[0]));
 		if (values != null) {
-			for (Object value : values) {
-				Map<?, ?> valueMap = (Map<?, ?>) value;
+			for (Map<String, Object> valueMap : values) {
 				if (elementPath[1].equals(valueMap.get("UI"))) {
 					return (String) valueMap.get("Opsi");
 				}
@@ -587,10 +586,10 @@ public final class OpsiDataBackend extends AbstractBackend {
 		hwUiToOpsi = new HashMap<>();
 		hwClassToValues = new HashMap<>();
 
-		for (Map<String, Object> hardwareMap : hwConfig) {
-			String hardwareName = (String) ((Map<?, ?>) hardwareMap.get("Class")).get("UI");
-			String hardwareOpsi = (String) ((Map<?, ?>) hardwareMap.get("Class")).get("Opsi");
-			List<?> values = (List<?>) hardwareMap.get("Values");
+		for (Map<String, List<Map<String, Object>>> hardwareMap : hwConfig) {
+			String hardwareName = (String) hardwareMap.get("Class").get(0).get("UI");
+			String hardwareOpsi = (String) hardwareMap.get("Class").get(0).get("Opsi");
+			List<Map<String, Object>> values = hardwareMap.get("Values");
 			hwUiToOpsi.put(hardwareName, hardwareOpsi);
 			hwClassToValues.put(hardwareOpsi, values);
 		}

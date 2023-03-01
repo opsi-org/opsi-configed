@@ -35,7 +35,7 @@ public class PanelSWMultiClientReport extends JPanel {
 	protected PanelStateSwitch<KindOfExport> panelSelectExportType;
 	protected PanelSWInfo.KindOfExport kindOfExport;
 
-	java.io.File exportDirectory;
+	File exportDirectory;
 	String exportDirectoryS;
 	JFileChooser chooserDirectory;
 	JTextShowField fieldExportDirectory;

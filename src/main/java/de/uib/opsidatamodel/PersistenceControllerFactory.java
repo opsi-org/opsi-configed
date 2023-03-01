@@ -97,8 +97,8 @@ public final class PersistenceControllerFactory {
 							+ Configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion") + " "
 							+ persistControl.getOpsiVersion() + " ) ";
 
-					javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo, Globals.APPNAME,
-							javax.swing.JOptionPane.OK_OPTION);
+					JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo, Globals.APPNAME,
+							JOptionPane.OK_OPTION);
 
 					Configed.endApp(1);
 
@@ -120,7 +120,7 @@ public final class PersistenceControllerFactory {
 							proceed = true;
 
 							de.uib.configed.gui.FTextArea infodialog = new de.uib.configed.gui.FTextArea(
-									ConfigedMain.getMainFrame(), Globals.APPNAME, false, // we are not modal
+									ConfigedMain.getMainFrame(), Globals.APPNAME, false,
 									new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 300, 200) {
 								@Override
 								public void doAction1() {

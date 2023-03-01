@@ -14,9 +14,9 @@ import de.uib.utilities.logging.Logging;
 
 public class Containership {
 
-	java.awt.Container theContainer;
+	Container theContainer;
 
-	public Containership(java.awt.Container conti) {
+	public Containership(Container conti) {
 		theContainer = conti;
 		Logging.debug("Containership initialized");
 	}
@@ -44,7 +44,7 @@ public class Containership {
 	}
 
 	private void doForAllContained(String methodName, Object[] args, Class<?>[] theArgsTypes, Class<?> selClass,
-			java.awt.Container in) {
+			Container in) {
 		Component theComp;
 		Class<?> theCompClass;
 		Method theMethod;
@@ -76,7 +76,7 @@ public class Containership {
 			// theComp is an instance of Container
 			{
 				Logging.debug("+++ recursion ");
-				doForAllContained(methodName, args, theArgsTypes, selClass, (java.awt.Container) theComp);
+				doForAllContained(methodName, args, theArgsTypes, selClass, (Container) theComp);
 			}
 		}
 	}

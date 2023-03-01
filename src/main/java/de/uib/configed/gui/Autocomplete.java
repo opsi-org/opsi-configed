@@ -91,7 +91,6 @@ public class Autocomplete implements DocumentListener {
 	}
 
 	public class CommitAction extends AbstractAction {
-		private static final long serialVersionUID = 5794543109646743416L;
 
 		@Override
 		public void actionPerformed(ActionEvent ev) {

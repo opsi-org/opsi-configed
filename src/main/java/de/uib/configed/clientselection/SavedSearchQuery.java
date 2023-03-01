@@ -176,13 +176,21 @@ public class SavedSearchQuery {
 	}
 
 	private void addInfo(String option, String value) {
-		if (option.equals("-h")) {
+
+		switch (option) {
+		case "-h":
 			host = value;
-		} else if (option.equals("-u")) {
+			break;
+
+		case "-u":
 			user = value;
-		} else if (option.equals("-p")) {
+			break;
+
+		case "-p":
 			password = value;
-		} else {
+			break;
+
+		default:
 			throw new IllegalArgumentException("Unknown option " + option);
 		}
 	}

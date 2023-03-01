@@ -26,6 +26,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.Autocomplete;
+import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
 import de.uib.utilities.logging.Logging;
 
@@ -52,8 +53,8 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 			super();
 
 			super.setBackground(Globals.BACKGROUND_COLOR_7);
-			jButtonClose = new de.uib.configed.gui.IconButton(Configed.getResourceValue("SSHConnection.buttonClose"),
-					"images/cancel.png", "images/cancel.png", "images/cancel.png", true);
+			jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
+					"images/cancel.png", "images/cancel.png", true);
 			jButtonClose.addActionListener(closeListener);
 
 			jButtonClose.setPreferredSize(jButtonDimension);
@@ -320,13 +321,12 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 							.doActionParamAdd(jTextFieldCommand));
 		}
 
-		jButtonKillProcess = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
-				"images/edit-delete.png", "images/edit-delete.png", true);
+		jButtonKillProcess = new IconButton(Configed.getResourceValue("SSHConnection.buttonKillProcess"),
+				"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete.png", true);
 		jButtonKillProcess.setPreferredSize(jButtonDimension);
 		jButtonKillProcess.setToolTipText(Configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
-		jButtonExecuteCommand = new de.uib.configed.gui.IconButton(
+		jButtonExecuteCommand = new IconButton(
 				Configed.getResourceValue("SSHConnection.CommandControl.btnExecuteCommand"), "images/execute_blue.png",
 				"images/execute_blue.png", "images/execute_blue.png", true);
 		jButtonExecuteCommand.setPreferredSize(jButtonDimension);

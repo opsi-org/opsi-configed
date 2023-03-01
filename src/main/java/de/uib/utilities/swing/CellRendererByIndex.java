@@ -50,7 +50,7 @@ import javax.swing.ListCellRenderer;
 
 import de.uib.configed.Globals;
 
-public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellRenderer {
+public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellRenderer<String> {
 	private Font uhOhFont;
 
 	protected Map<String, String> mapOfStrings;
@@ -134,7 +134,6 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 				}
 			}
 		}
-
 	}
 
 	/*
@@ -143,8 +142,8 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 	 * to display the text and image.
 	 */
 	@Override
-	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
-			boolean cellHasFocus) {
+	public Component getListCellRendererComponent(JList<? extends String> list, String value, int index,
+			boolean isSelected, boolean cellHasFocus) {
 		// Get the selected index. (The index param isn't
 		// always valid, so just use the value.)
 

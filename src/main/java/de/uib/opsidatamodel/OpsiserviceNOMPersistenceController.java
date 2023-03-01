@@ -116,7 +116,7 @@ import de.uib.utilities.table.ListCellOptions;
 
 public class OpsiserviceNOMPersistenceController extends AbstractPersistenceController {
 	private static final String EMPTYFIELD = "-";
-	private static final List NONE_LIST = new ArrayList<>() {
+	private static final List<String> NONE_LIST = new ArrayList<>() {
 		@Override
 		public int size() {
 			return -1;
@@ -214,7 +214,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected NavigableMap<String, LicenceStatisticsRow> rowsLicenceStatistics;
 
-	protected Map<String, List<Map<String, Object>>> hwAuditConf;
+	protected Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf;
 
 	protected List<String> opsiHwClassNames;
 	protected Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
@@ -288,7 +288,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected Map<String, String> logfiles;
 
-	private List updateProductOnClientItems;
+	private List<JSONObject> updateProductOnClientItems;
 
 	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
 
@@ -336,8 +336,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected List<JSONObject> deleteConfigStateItems;
 	protected List<Map<String, Object>> configCollection;
 
-	protected List productPropertyStateUpdateCollection;
-	protected List productPropertyStateDeleteCollection;
+	protected List<JSONObject> productPropertyStateUpdateCollection;
+	protected List<JSONObject> productPropertyStateDeleteCollection;
 
 	protected Map<String, Map<String, Object>> hostUpdates;
 
@@ -943,21 +943,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					StringBuilder msg = new StringBuilder(
 
 							Configed.getResourceValue("RegisterUserWarning.dialog.info1"));
-					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));// At the moment,
-																										// user control
-																										// is not more
-																										// active!
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.info2"));
 					msg.append("\n");
-					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option1"));// Ignore warning
-																										// and
-																										// continue?
-					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));// No more
-																										// warning
-																										// (locally)?
-					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));// Re-activate
-																										// user check
-																										// (on the opsi
-																										// server)?
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option1"));
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option2"));
+					msg.append("\n" + Configed.getResourceValue("RegisterUserWarning.dialog.option3"));
 
 					dialog.setMessage("" + msg);
 					dialog.setVisible(true);
@@ -1436,7 +1426,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public List<Map<String, Object>> hostRead() {
 		String[] callAttributes = new String[] {};
-		Map callFilter = new HashMap<>();
+		Map<?, ?> callFilter = new HashMap<>();
 
 		TimeCheck timer = new TimeCheck(this, "HOST_read").start();
 		Logging.notice(this, "host_getObjects");
@@ -1556,8 +1546,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Boolean result = false;
 
 		if (getConfigs().get(hostname) != null && getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME) != null
-				&& !((List) (getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME))).isEmpty()) {
-			String configValue = (String) ((List) (getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME))).get(0);
+				&& !((List<?>) getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME)).isEmpty()) {
+			String configValue = (String) ((List<?>) getConfigs().get(hostname).get(CONFIG_DHCPD_FILENAME)).get(0);
 
 			if (configValue.indexOf(EFI_STRING) >= 0) {
 				// something similar should work, but not this:
@@ -1565,8 +1555,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				result = true;
 			}
 		} else if (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME) != null
-				&& !((List) (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME))).isEmpty()) {
-			String configValue = (String) ((List) (getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME))).get(0);
+				&& !((List<?>) getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME)).isEmpty()) {
+			String configValue = (String) ((List<?>) getConfigDefaultValues().get(CONFIG_DHCPD_FILENAME)).get(0);
 
 			if (configValue.indexOf(EFI_STRING) >= 0) {
 				// something similar should work, but not this:
@@ -1581,11 +1571,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.debug(this, "valueFromConfigStateAsExpected configKey " + configKey);
 		boolean result = false;
 
-		if (configs != null && configs.get(configKey) != null && !((List) (configs.get(configKey))).isEmpty()) {
+		if (configs != null && configs.get(configKey) != null && !((List<?>) (configs.get(configKey))).isEmpty()) {
 			Logging.debug(this, "valueFromConfigStateAsExpected configKey, values " + configKey + ", valueList "
 					+ configs.get(configKey) + " expected " + expectValue);
 
-			Object value = ((List) configs.get(configKey)).get(0);
+			Object value = ((List<?>) configs.get(configKey)).get(0);
 
 			if (value instanceof Boolean) {
 				if (((Boolean) value).equals(expectValue)) {
@@ -1640,7 +1630,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		List<Object> values = null;
 
 		for (Entry<String, ConfigOption> notWanConfigOption : notWanConfigOptions.entrySet()) {
-			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BoolConfig) {
+			if (notWanConfigOption.getValue().getType() != ConfigOption.TYPE.BOOL_CONFIG) {
 				notWanConfiguration.put(notWanConfigOption.getKey(), null);
 				wanConfiguration.put(notWanConfigOption.getKey(), null);
 			} else {
@@ -1675,9 +1665,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.debug(this, "addWANConfigState  notWanConfiguration.keySet() " + notWanConfiguration.keySet() + "\n "
 				+ notWanConfiguration.keySet().size());
 
-		setConfig(notWanConfiguration); // set the collection
+		setConfig(notWanConfiguration);
 		Logging.info(this, "set notWanConfiguration members where no entry exists ----------------------------- ");
-		setConfig(true); // send to opsiserver only new configs
+		// send to opsiserver only new configs
+		setConfig(true);
 
 		Map<String, List<Object>> specifiedConfiguration;
 
@@ -1813,7 +1804,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			String newClientId = hostname + "." + domainname;
 
-			Map<String, Object> hostItem = createNOMitem("OpsiClient");
+			Map<String, Object> hostItem = createNOMitem(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
 			hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
 			hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 			hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
@@ -1947,7 +1938,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		String newClientId = hostname + "." + domainname;
 
-		Map<String, Object> hostItem = createNOMitem("OpsiClient");
+		Map<String, Object> hostItem = createNOMitem(HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
 		hostItem.put(HostInfo.HOSTNAME_KEY, newClientId);
 		hostItem.put(HostInfo.CLIENT_DESCRIPTION_KEY, description);
 		hostItem.put(HostInfo.CLIENT_NOTES_KEY, notes);
@@ -2279,8 +2270,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.info(this, "getLicensingInfo");
 
 		Object[] callParameters = { true, true, true };
-		String methodName = "backend_getLicensingInfo";
-		OpsiMethodCall omc = new OpsiMethodCall(methodName, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT);
+		OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME, callParameters,
+				OpsiMethodCall.BACKGROUND_DEFAULT);
 
 		return exec.getMapResult(omc);
 	}
@@ -2305,7 +2296,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Map<String, Object> result0 = JSONReMapper.getResponses(
 				exec.retrieveJSONObject(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT // background																																									
-				))); // call, do not show waiting info
+				)));
 
 		for (Entry<String, Object> resultEntry : result0.entrySet()) {
 			StringBuilder value = new StringBuilder();
@@ -2388,7 +2379,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		hostUpdateMap.put("ident", hostId);
-		hostUpdateMap.put(HostInfo.HOST_TYPE_KEY, "OpsiClient");
+		hostUpdateMap.put(HostInfo.HOST_TYPE_KEY, HostInfo.HOST_TYPE_VALUE_OPSI_CLIENT);
 		hostUpdateMap.put(property, value);
 
 		hostUpdates.put(hostId, hostUpdateMap);
@@ -2866,22 +2857,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// partial version of produceHwAuditDeviceClasses()
-	private List<String> produceHwClasses(List<Map<String, Object>> hwAuditConf) {
+	private List<String> produceHwClasses(List<Map<String, List<Map<String, Object>>>> hwAuditConf) {
 		List<String> result = new ArrayList<>();
 
-		for (Map<String, Object> hwAuditClass : hwAuditConf) {
-			if (!(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)) {
-				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
-						+ hwAuditClass.get(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)));
-				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null) {
-					Logging.warning(this,
-							"getAllHwClassNames illegal hw config item,  hwAuditClass.get Class is of class "
-									+ hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).getClass());
-				}
+		for (Map<String, List<Map<String, Object>>> hwAuditClass : hwAuditConf) {
 
-				continue;
-			}
-			String hwClass = (String) ((Map<?, ?>) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY))
+			String hwClass = (String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
 					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
 
 			result.add(hwClass);
@@ -2891,7 +2872,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public List<Map<String, Object>> getOpsiHWAuditConf() {
+	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf() {
 		if (hwAuditConf == null) {
 			Logging.warning("hwAuditConf is null in getOpsiHWAuditConf");
 			return new ArrayList<>();
@@ -2906,7 +2887,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public List<Map<String, Object>> getOpsiHWAuditConf(String locale) {
+	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf(String locale) {
 		hwAuditConf.putIfAbsent(locale, exec
 				.getListOfMapsOfListsOfMaps(new OpsiMethodCall("auditHardware_getConfig", new String[] { locale })));
 
@@ -3126,11 +3107,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return;
 		}
 
-		for (Map<String, Object> hwAuditClass : getOpsiHWAuditConf()) {
+		for (Map<String, List<Map<String, Object>>> hwAuditClass : getOpsiHWAuditConf()) {
 			if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) == null
 					|| hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) == null
-					|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)
-					|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) instanceof List)) {
+			//|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) instanceof Map)
+			/*|| !(hwAuditClass.get(OpsiHwAuditDeviceClass.LIST_KEY) instanceof List)*/) {
 				Logging.warning(this, "getAllHwClassNames illegal hw config item, having hwAuditClass.get Class "
 						+ hwAuditClass.get("Class"));
 				if (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY) != null) {
@@ -3146,8 +3127,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				continue;
 			}
-			String hwClass = (String) (((Map) (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)))
-					.get(OpsiHwAuditDeviceClass.OPSI_KEY));
+			String hwClass = (String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
+					.get(OpsiHwAuditDeviceClass.OPSI_KEY);
 
 			OpsiHwAuditDevicePropertyType firstSeen = new OpsiHwAuditDevicePropertyType(hwClass);
 			firstSeen.setOpsiDbColumnName(OpsiHwAuditDeviceClass.FIRST_SEEN_COL_NAME);
@@ -3161,10 +3142,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			OpsiHwAuditDeviceClass hwAuditDeviceClass = new OpsiHwAuditDeviceClass(hwClass);
 			hwAuditDeviceClasses.put(hwClass, hwAuditDeviceClass);
 
-			hwAuditDeviceClass.setLinuxQuery((String) (((Map) (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)))
-					.get(OpsiHwAuditDeviceClass.LINUX_KEY)));
-			hwAuditDeviceClass.setWmiQuery((String) (((Map) (hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY)))
-					.get(OpsiHwAuditDeviceClass.WMI_KEY)));
+			hwAuditDeviceClass.setLinuxQuery((String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
+					.get(OpsiHwAuditDeviceClass.LINUX_KEY));
+			hwAuditDeviceClass.setWmiQuery((String) hwAuditClass.get(OpsiHwAuditDeviceClass.CLASS_KEY).get(0)
+					.get(OpsiHwAuditDeviceClass.WMI_KEY));
 
 			Logging.info(this, "hw audit class " + hwClass);
 
@@ -3340,7 +3321,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			}
 		}
 
-		Map<String, Object> configItem = createJSONConfig(ConfigOption.TYPE.UnicodeConfig, configKey, // key
+		Map<String, Object> configItem = createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey, // key
 				"", false, // editable
 				true, // multivalue
 				newDefaultValues, possibleValues);
@@ -3385,8 +3366,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				// now, we have got them in a view model
 
-				Logging.info(this, "saveHwColumnConfig, locally saving " // + configOption
-						+ " key " + hwAuditDeviceClass.getHwItemConfigKey());
+				Logging.info(this,
+						"saveHwColumnConfig, locally saving " + " key " + hwAuditDeviceClass.getHwItemConfigKey());
 
 				Logging.info(this,
 						"saveHwColumnConfig, old configOption for key" + " " + hwAuditDeviceClass.getHostConfigKey()
@@ -3428,8 +3409,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				Logging.info(this, "saveHwColumnConfig, produce a ConfigOption from configItem " + configItem);
 
-				Logging.info(this, "saveHwColumnConfig, locally saving " // + configOption
-						+ " key " + hwAuditDeviceClass.getHwItemConfigKey());
+				Logging.info(this,
+						"saveHwColumnConfig, locally saving " + " key " + hwAuditDeviceClass.getHwItemConfigKey());
 
 				Logging.info(this,
 						"saveHwColumnConfig, we had configOption for key" + " "
@@ -3669,13 +3650,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		boolean smbMounted = new File(depotProductDirectory).exists();
 
 		for (String product : new TreeSet<>(getAllNetbootProductNames(depotId))) {
-			if (!smbMounted // probably not on Windows, take every product to correct path manually
+			if (!smbMounted
 					|| new File(
 							depotProductDirectory + File.separator + product + File.separator + SmbConnect.DIRECTORY_PE)
-									.exists() // win 6.x
+									.exists()
 					|| new File(depotProductDirectory + File.separator + product + File.separator
-							+ SmbConnect.DIRECTORY_I368).exists() // XP
-			) {
+							+ SmbConnect.DIRECTORY_I368).exists()) {
 				winProducts.add(product);
 			}
 		}
@@ -3925,8 +3905,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return result;
 	}
 
-	protected boolean updateProductOnClient(String pcname, String productname, int producttype, Map updateValues,
-			List updateItems) {
+	protected boolean updateProductOnClient(String pcname, String productname, int producttype,
+			Map<String, String> updateValues, List<JSONObject> updateItems) {
 		Map<String, Object> values = new HashMap<>();
 
 		values.put("productType", OpsiPackage.giveProductType(producttype));
@@ -3942,7 +3922,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public boolean updateProductOnClient(String pcname, String productname, int producttype, Map updateValues) {
+	public boolean updateProductOnClient(String pcname, String productname, int producttype,
+			Map<String, String> updateValues) {
 		if (updateProductOnClientItems == null) {
 			updateProductOnClientItems = new ArrayList<>();
 		}
@@ -3951,7 +3932,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// hopefully we get only updateItems for allowed clients
-	public boolean updateProductOnClients(List updateItems) {
+	public boolean updateProductOnClients(List<JSONObject> updateItems) {
 		Logging.info(this, "updateProductOnClients ");
 
 		if (globalReadOnly) {
@@ -3983,7 +3964,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public boolean updateProductOnClients(Set<String> clients, String productName, int productType,
 			Map<String, String> changedValues) {
-		List updateCollection = new ArrayList<>();
+		List<JSONObject> updateCollection = new ArrayList<>();
 
 		boolean result = true;
 
@@ -4223,7 +4204,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return retrieveListOfMapsNOM(callAttributes, callFilter, methodName);
 	}
 
-	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map callFilter, String methodName) {
+	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map<?, ?> callFilter, String methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
 		Logging.debug(this, "retrieveListOfMapsNOM " + retrieved);
@@ -4263,7 +4244,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		for (Map<String, Object> map : properties) {
 			Object retrievedValues = ((JSONArray) map.get("values")).toList();
 
-			List<Object> valueList = (List<Object>) retrievedValues;
+			List<?> valueList = (List<?>) retrievedValues;
 
 			Set<String> values = new HashSet<>();
 
@@ -4512,14 +4493,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// collect productPropertyState updates and deletions
-	public void setProductProperties(String pcname, String productname, Map properties, List updateCollection,
-			List deleteCollection) {
+	public void setProductProperties(String pcname, String productname, Map<?, ?> properties,
+			List<JSONObject> updateCollection, List<JSONObject> deleteCollection) {
 		if (!(properties instanceof ConfigName2ConfigValue)) {
 			Logging.warning(this, "! properties instanceof ConfigName2ConfigValue ");
 			return;
 		}
 
-		Iterator propertiesKeyIterator = properties.keySet().iterator();
+		Iterator<?> propertiesKeyIterator = properties.keySet().iterator();
 
 		Map<String, Object> state = new HashMap<>();
 
@@ -4531,7 +4512,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			state.put("productId", productname);
 			state.put("propertyId", key);
 
-			List newValue = (List) properties.get(key);
+			List<?> newValue = (List<?>) properties.get(key);
 
 			Map<String, Object> retrievedConfig = ((RetrievedMap) properties).getRetrieved();
 			Object oldValue = null;
@@ -4567,7 +4548,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	// collect productPropertyState updates and deletions in standard lists
 	@Override
-	public void setProductProperties(String pcname, String productname, Map properties) {
+	public void setProductProperties(String pcname, String productname, Map<?, ?> properties) {
 		// old version
 
 		if (productPropertyStateUpdateCollection == null) {
@@ -4590,7 +4571,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// send productPropertyState updates and clear the collections
-	public void setProductProperties(List updateCollection, List deleteCollection) {
+	public void setProductProperties(List<?> updateCollection, List<?> deleteCollection) {
 		Logging.debug(this, "setProductproperties() ");
 
 		if (globalReadOnly) {
@@ -4613,8 +4594,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public void setCommonProductPropertyValue(Set<String> clientNames, String productName, String propertyName,
 			List<String> values) {
-		List updateCollection = new ArrayList<>();
-		List deleteCollection = new ArrayList<>();
+		List<JSONObject> updateCollection = new ArrayList<>();
+		List<JSONObject> deleteCollection = new ArrayList<>();
 
 		// collect updates for all clients
 		for (String client : clientNames) {
@@ -5129,9 +5110,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		boolean globalDefault = getGlobalBooleanConfigValue(key, null);
 
 		if (getConfigs().get(hostName) != null && getConfigs().get(hostName).get(key) != null
-				&& !((List) (getConfigs().get(hostName).get(key))).isEmpty()) {
+				&& !((List<?>) (getConfigs().get(hostName).get(key))).isEmpty()) {
 
-			result = interpretAsBoolean(((List) (getConfigs().get(hostName).get(key))).get(0), (Boolean) null);
+			result = interpretAsBoolean(((List<?>) getConfigs().get(hostName).get(key)).get(0), (Boolean) null);
 
 			Logging.debug(this,
 					"getHostBooleanConfigValue for key, host " + key + ", " + hostName + " giving " + result);
@@ -5165,10 +5146,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		} else {
 			ConfigOption option = (ConfigOption) ob;
 
-			if (option.getType() != ConfigOption.TYPE.BoolConfig) {
+			if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
 				Logging.warning(this, "entry for " + key + " should be boolean");
 			} else {
-				List li = option.getDefaultValues();
+				List<Object> li = option.getDefaultValues();
 				if (li != null && !li.isEmpty()) {
 					val = (Boolean) li.get(0);
 				}
@@ -5228,15 +5209,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public void setHostValues(Map settings) {
+	public void setHostValues(Map<String, Object> settings) {
 		if (globalReadOnly) {
 			return;
 		}
 
 		List<JSONObject> hostMaps = new ArrayList<>();
 
-		Map<Object, Object> corrected = new HashMap<>();
-		for (Entry setting : (Set<Entry>) settings.entrySet()) {
+		Map<String, Object> corrected = new HashMap<>();
+		for (Entry<String, Object> setting : settings.entrySet()) {
 			if (setting.getValue() instanceof String
 					&& ((String) setting.getValue()).trim().equals(JSONReMapper.NULL_REPRESENTER)) {
 				corrected.put(setting.getKey(), JSONObject.NULL);
@@ -5460,7 +5441,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 						+ setting.getValue() + " , " + setting.getValue().getClass().getName());
 
 				if (setting.getValue() instanceof List) {
-					List oldValue = null;
+					List<Object> oldValue = null;
 
 					if (configOptions.get(setting.getKey()) != null) {
 						oldValue = configOptions.get(setting.getKey()).getDefaultValues();
@@ -5491,7 +5472,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 						config.put("defaultValues", valueList);
 
-						List possibleValues = null;
+						List<Object> possibleValues = null;
 						if (configOptions.get(setting.getKey()) == null) {
 							possibleValues = new ArrayList<>();
 							if (type.equals(ConfigOption.BOOL_TYPE)) {
@@ -6996,7 +6977,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		List<Object> selectedValuesRole = new ArrayList<>();
 		selectedValuesRole.add(role);
 
-		Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(ConfigOption.TYPE.UnicodeConfig,
+		Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG,
 				configkey, "which role should determine this configuration", false, false, selectedValuesRole,
 				selectedValuesRole);
 
@@ -7022,7 +7003,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 		// dont do anything if we have not got the config
 		if (serverPropertyMap.get(KEY_USER_REGISTER) != null && !serverPropertyMap.get(KEY_USER_REGISTER).isEmpty()) {
-			result = (Boolean) ((List) (serverPropertyMap.get(KEY_USER_REGISTER))).get(0);
+			result = (Boolean) ((List<?>) serverPropertyMap.get(KEY_USER_REGISTER)).get(0);
 		}
 		return result;
 	}
@@ -7080,10 +7061,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List<String> configuredByService = Globals
 					.takeAsStringList(serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT));
 
-			List<String> possibleValuesAccordingToService = new ArrayList<>();
+			List<?> possibleValuesAccordingToService = new ArrayList<>();
 
 			if (configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT) != null) {
-				possibleValuesAccordingToService = (List<String>) configOptions
+				possibleValuesAccordingToService = (List<?>) configOptions
 						.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT).get("possibleValues");
 			}
 
@@ -7235,10 +7216,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			List<String> configuredByService = Globals
 					.takeAsStringList(serverPropertyMap.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT));
 
-			List<String> possibleValuesAccordingToService = new ArrayList<>();
+			List<?> possibleValuesAccordingToService = new ArrayList<>();
 
 			if (configOptions.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT) != null) {
-				possibleValuesAccordingToService = (List<String>) configOptions
+				possibleValuesAccordingToService = (List<?>) configOptions
 						.get(KEY_PRODUCTONCLIENT_DISPLAYFIELDS_NETBOOT).get("possibleValues");
 			}
 
@@ -8069,7 +8050,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		// displaying to the user
 
-		getHostInfoCollections().retrieveOpsiHosts(); // for checking number of clients and config states
+		getHostInfoCollections().retrieveOpsiHosts();
 		Logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
 				.getInstance(getOpsiLicencingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
 

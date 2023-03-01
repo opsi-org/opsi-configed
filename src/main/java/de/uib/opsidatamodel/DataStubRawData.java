@@ -329,7 +329,7 @@ public class DataStubRawData extends DataStubNOM {
 			}
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end "
-					+ Runtime.getRuntime().totalMemory() / 1000000 + " MB");
+					+ Runtime.getRuntime().totalMemory() / 1_000_000 + " MB");
 
 			persist.notifyDataRefreshedObservers("softwareConfig");
 		}
@@ -401,7 +401,7 @@ public class DataStubRawData extends DataStubNOM {
 
 				// parse String and produce list
 
-				List values = new ArrayList<>();
+				List<Object> values = new ArrayList<>();
 				try {
 					values = (new JSONArray(valueString)).toList();
 				} catch (Exception ex) {
@@ -411,8 +411,6 @@ public class DataStubRawData extends DataStubNOM {
 
 				// put into host configs
 				configs1Host.put(configId, values);
-
-				// configValues1Host.put( configId, (List) configs1Host.get( configId
 
 			}
 		}
@@ -452,7 +450,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		// z.B. hwClass is DISK_PARTITION
 
-		List<String> specificColumns = new ArrayList<>(); // columns specific for the class
+		List<String> specificColumns = new ArrayList<>();
 		specificColumns.add(Host.ID_COLUMN);
 
 		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
@@ -472,7 +470,7 @@ public class DataStubRawData extends DataStubNOM {
 		for (String hwInfoCol : persist.getClient2HwRowsColumnNames()) {
 			if (hwInfoCol.startsWith("HOST.")
 					|| hwInfoCol.equals(AbstractPersistenceController.LAST_SEEN_VISIBLE_COL_NAME)) {
-				continue; // these already are in the collection
+				continue;
 			}
 
 			Logging.info(this, "hwInfoCol " + hwInfoCol + " look for " + AbstractPersistenceController.HW_INFO_DEVICE

@@ -865,14 +865,14 @@ public class DataStubNOM extends AbstractDataStub {
 		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
 				+ "  new clients count  ====== " + newClients.size());
 
-		int stepSize = 100;
+		final int STEP_SIZE = 100;
 
 		if (client2software == null || softwareIdent2clients == null || !newClients.isEmpty()) {
 			int step = 1;
 			while (!newClients.isEmpty()) {
 				List<String> clientListForCall = new ArrayList<>();
 
-				for (int i = 0; i < stepSize && i < newClients.size(); i++) {
+				for (int i = 0; i < STEP_SIZE && i < newClients.size(); i++) {
 					clientListForCall.add(newClients.get(i));
 				}
 

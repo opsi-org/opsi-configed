@@ -19,10 +19,12 @@ import java.awt.event.ActionListener;
 import java.util.Map;
 
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import org.jdesktop.swingx.JXPanel;
@@ -32,17 +34,17 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
+import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.logging.Logging;
 
-public class ProductInfoPane extends javax.swing.JSplitPane
-		implements de.uib.utilities.DataChangedObserver, ActionListener {
+public class ProductInfoPane extends JSplitPane implements DataChangedObserver, ActionListener {
 
 	private JXPanel productDescriptionsPanel;
 	private JXPanel bottomComponent;
-	protected javax.swing.JTextField jLabelProductID;
-	protected javax.swing.JTextField jLabelProductVersion;
-	protected javax.swing.JLabel jLabelLabelProductVersion;
-	protected javax.swing.JLabel jLabelProductName;
+	protected JTextField jLabelProductID;
+	protected JTextField jLabelProductVersion;
+	protected JLabel jLabelLabelProductVersion;
+	protected JLabel jLabelProductName;
 
 	private JLabel dependenciesTextLabel;
 	private JButton dependenciesActivateButton;
@@ -77,14 +79,14 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 	private void initComponents() {
 		jLabelProductName = new JLabel();
-		jLabelProductID = new javax.swing.JTextField();
-		jLabelProductVersion = new javax.swing.JTextField();
+		jLabelProductID = new JTextField();
+		jLabelProductVersion = new JTextField();
 		jLabelLabelProductVersion = new JLabel();
 
-		JScrollPane jScrollPaneProductInfo = new javax.swing.JScrollPane();
+		JScrollPane jScrollPaneProductInfo = new JScrollPane();
 		jTextAreaProductInfo = new TextMarkdownPane();
 
-		JScrollPane jScrollPaneProductAdvice = new javax.swing.JScrollPane();
+		JScrollPane jScrollPaneProductAdvice = new JScrollPane();
 		jTextAreaProductAdvice = new TextMarkdownPane();
 
 		dependenciesActivateButton = new JButton();
@@ -148,30 +150,28 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 
 		productDescriptionsPanel = new JXPanel();
 
-		javax.swing.GroupLayout layoutDescriptionsPanel = new javax.swing.GroupLayout(productDescriptionsPanel);
+		GroupLayout layoutDescriptionsPanel = new GroupLayout(productDescriptionsPanel);
 		productDescriptionsPanel.setLayout(layoutDescriptionsPanel);
 
-		layoutDescriptionsPanel.setHorizontalGroup(
-				layoutDescriptionsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layoutDescriptionsPanel.setHorizontalGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
 
-						.addComponent(jLabelProductID, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
+				.addComponent(jLabelProductID, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
 
-						.addGroup(layoutDescriptionsPanel.createSequentialGroup()
-								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-								.addComponent(jLabelProductName, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
-								.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
+				.addGroup(layoutDescriptionsPanel.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jLabelProductName, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
-						.addGroup(layoutDescriptionsPanel.createSequentialGroup()
-								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-								.addComponent(jLabelLabelProductVersion, Globals.MIN_HSIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabelProductVersion, Globals.MIN_HSIZE, Globals.PREF_HSIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
+				.addGroup(layoutDescriptionsPanel.createSequentialGroup()
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+						.addComponent(jLabelLabelProductVersion, Globals.MIN_HSIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jLabelProductVersion, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
+						.addGap(Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE, Globals.MIN_HGAP_SIZE))
 
-						.addComponent(jScrollPaneProductInfo, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
+				.addComponent(jScrollPaneProductInfo, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
 
-						.addComponent(jScrollPaneProductAdvice, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
+				.addComponent(jScrollPaneProductAdvice, Globals.MIN_HSIZE, Globals.PREF_HSIZE, Short.MAX_VALUE)
 
 		);
 
@@ -182,7 +182,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 				.addComponent(jLabelProductName, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)
-				.addGroup(layoutDescriptionsPanel.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layoutDescriptionsPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(jLabelLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jLabelProductVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -195,7 +195,7 @@ public class ProductInfoPane extends javax.swing.JSplitPane
 		// treat the bottom panel
 		bottomComponent = new JXPanel();
 
-		GroupLayout layoutBottomComponent = new javax.swing.GroupLayout(bottomComponent);
+		GroupLayout layoutBottomComponent = new GroupLayout(bottomComponent);
 		bottomComponent.setLayout(layoutBottomComponent);
 
 		layoutBottomComponent.setHorizontalGroup(layoutBottomComponent.createParallelGroup()

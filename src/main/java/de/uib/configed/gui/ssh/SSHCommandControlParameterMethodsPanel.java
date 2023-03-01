@@ -28,6 +28,7 @@ import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandParameterMethods;
 import de.uib.utilities.logging.Logging;
@@ -108,14 +109,12 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 		});
 
-		jButtonTestParam = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),
+		jButtonTestParam = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.btnTestParamMethod"),
 				"images/executing_command.png", "images/executing_command.png", "images/executing_command.png", true);
 		jButtonTestParam.setPreferredSize(jButtonDim);
 
-		jButtonAddParam = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("SSHConnection.CommandControl.btnAddParamMethod"), "images/list-add.png",
-				"images/list-add.png", "images/list-add_disabled.png", true);
+		jButtonAddParam = new IconButton(Configed.getResourceValue("SSHConnection.CommandControl.btnAddParamMethod"),
+				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
 		jButtonAddParam.setSize(jButtonDim);
 		jButtonAddParam.setPreferredSize(jButtonDim);
 		setComponentsEnabledRO();

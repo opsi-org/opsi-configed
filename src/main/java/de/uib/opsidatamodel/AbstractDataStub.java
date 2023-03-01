@@ -84,7 +84,7 @@ public abstract class AbstractDataStub {
 
 	public abstract List<Map<String, Object>> getProductPropertyStates();
 
-	public abstract List<Map<String, Object>> getProductPropertyDepotStates(java.util.Set<String> depots);
+	public abstract List<Map<String, Object>> getProductPropertyDepotStates(Set<String> depots);
 
 	public abstract void installedSoftwareInformationRequestRefresh();
 
@@ -110,7 +110,7 @@ public abstract class AbstractDataStub {
 
 	public abstract Map<String, List<SWAuditClientEntry>> getClient2Software();
 
-	public abstract Map<String, java.util.Set<String>> getSoftwareIdent2clients();
+	public abstract Map<String, Set<String>> getSoftwareIdent2clients();
 
 	public abstract void auditSoftwareXLicencePoolRequestRefresh();
 
@@ -137,7 +137,7 @@ public abstract class AbstractDataStub {
 
 	public abstract void licencesRequestRefresh();
 
-	public abstract java.util.Map<String, LicenceEntry> getLicences();
+	public abstract Map<String, LicenceEntry> getLicences();
 
 	public abstract void licenceUsabilitiesRequestRefresh();
 

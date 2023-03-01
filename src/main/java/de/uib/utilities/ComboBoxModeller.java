@@ -10,5 +10,5 @@ public interface ComboBoxModeller {
 	/**
 	 * Producing a Combo
 	 */
-	ComboBoxModel getComboBoxModel(int row, int column);
+	ComboBoxModel<String> getComboBoxModel(int row, int column);
 }

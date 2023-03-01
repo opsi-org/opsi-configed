@@ -13,11 +13,13 @@
 
 package de.uib.configed.dashboard;
 
+import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
 import java.util.Set;
@@ -27,8 +29,10 @@ import javax.swing.UIManager;
 import javax.swing.event.TableModelListener;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
+import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -104,8 +108,9 @@ public class LicenseDisplayer {
 		stage.getIcons().add(SwingFXUtils.toFXImage(Helper.toBufferedImage(Globals.mainIcon), null));
 		stage.setTitle(Configed.getResourceValue("Dashboard.license.title"));
 		stage.setScene(scene);
-		stage.show();
 
+		stage.setOnShown(event -> centerAndShowStage());
+		stage.show();
 		controller = fxmlLoader.getController();
 
 		Platform.runLater(() -> {
@@ -134,8 +139,18 @@ public class LicenseDisplayer {
 	}
 
 	public void display() {
+
 		stage.show();
 		loadData();
+	}
+
+	private void centerAndShowStage() {
+
+		// center stage on mainframe after show()-call to have sizes of the stage
+		Rectangle mainRectangle = ConfigedMain.getMainFrame().getBounds();
+
+		stage.setX(mainRectangle.getX() + mainRectangle.getWidth() / 2 - stage.getWidth() / 2);
+		stage.setY(mainRectangle.getY() + mainRectangle.getHeight() / 2 - stage.getHeight() / 2);
 	}
 
 	protected String showLicenceContractWarnings() {
@@ -147,10 +162,10 @@ public class LicenseDisplayer {
 		Logging.info(this, "contractsToNotify " + contractsToNotify);
 
 		result.append("  ");
-		result.append(Configed.getResourceValue("Dash.expiredContracts"));
+		result.append(Configed.getResourceValue("Dashboard.expiredContracts"));
 		result.append(":  \n");
 
-		for (Map.Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
+		for (Entry<String, NavigableSet<String>> entry : contractsExpired.entrySet()) {
 			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");
@@ -159,10 +174,10 @@ public class LicenseDisplayer {
 		result.append("\n");
 
 		result.append("  ");
-		result.append(Configed.getResourceValue("Dash.contractsToNotify"));
+		result.append(Configed.getResourceValue("Dashboard.contractsToNotify"));
 		result.append(":  \n");
 
-		for (Map.Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
+		for (Entry<String, NavigableSet<String>> entry : contractsToNotify.entrySet()) {
 			for (String ID : entry.getValue()) {
 				result.append(entry.getValue() + ": " + ID);
 				result.append("\n");
@@ -182,7 +197,7 @@ public class LicenseDisplayer {
 		TableUpdateCollection updateCollection;
 
 		columnNames = new ArrayList<>();
-		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS) {
+		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {
 			columnNames.add(key);
 		}
 
@@ -240,7 +255,7 @@ public class LicenseDisplayer {
 
 		result.append("\n");
 		result.append("  ");
-		result.append(Configed.getResourceValue("Dash.similarSWEntriesForLicencePoolExist"));
+		result.append(Configed.getResourceValue("Dashboard.similarSWEntriesForLicencePoolExist"));
 		result.append(":  \n");
 
 		for (String name : namesWithVariantPools) {
@@ -254,7 +269,7 @@ public class LicenseDisplayer {
 		return result.toString();
 	}
 
-	private java.util.Set<String> getRangeSWxLicencepool(String swName)
+	private Set<String> getRangeSWxLicencepool(String swName)
 	// nearly done in produceModelSWxLicencepool, but we collect the range of the
 	// model-map
 	{
@@ -274,7 +289,7 @@ public class LicenseDisplayer {
 	}
 
 	private boolean checkExistNamesWithVariantLicencepools(String name) {
-		java.util.Set<String> range = getRangeSWxLicencepool(name);
+		Set<String> range = getRangeSWxLicencepool(name);
 
 		if (range.size() > 1)
 		// && range.contains( FSoftwarename2LicencePool.valNoLicencepool ))

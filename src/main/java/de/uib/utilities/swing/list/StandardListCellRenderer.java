@@ -52,11 +52,8 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 	}
 
 	@Override
-	public Component getListCellRendererComponent(JList<?> list, Object value, // value to display
-			int index, // cell index
-			boolean isSelected, // is the cell selected
-			boolean cellHasFocus) // the list and the cell have the focus
-	{
+	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+			boolean cellHasFocus) {
 		Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
 		Dimension prefDimension = c.getPreferredSize();

@@ -17,14 +17,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.utilities.logging.Logging;
 
 public class FEditText extends FEdit implements DocumentListener, MouseListener {
-	protected javax.swing.JScrollPane scrollpane;
-	protected javax.swing.JTextArea textarea;
+	protected JScrollPane scrollpane;
+	protected JTextArea textarea;
 
 	protected boolean singleLine;
 
@@ -43,8 +45,8 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	}
 
 	private void initFEditText() {
-		scrollpane = new javax.swing.JScrollPane();
-		textarea = new javax.swing.JTextArea();
+		scrollpane = new JScrollPane();
+		textarea = new JTextArea();
 		scrollpane.setViewportView(textarea);
 		editingArea.add(scrollpane, BorderLayout.CENTER);
 		textarea.setEditable(true);

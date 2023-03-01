@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -36,11 +37,11 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	private List<Object> showOnlyValues;
 
 	// keys which identify readonly entries
-	private java.util.Set<String> keysOfReadOnlyEntries;
+	private Set<String> keysOfReadOnlyEntries;
 
 	private Function<String, Boolean> editDenier;
 
-	public static final List nullLIST = new ArrayList<>();
+	public static final List<?> nullLIST = new ArrayList<>();
 	static {
 		nullLIST.add(null);
 	}
@@ -59,7 +60,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 	private String modifiedKey;
 	private int rowModiTime;
 
-	private ListModelProducerForVisualDatamap modelProducer;
+	private ListModelProducerForVisualDatamap<String> modelProducer;
 
 	private boolean writeData = true;
 
@@ -68,7 +69,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 	}
 
-	public void setModelProducer(ListModelProducerForVisualDatamap modelProducer) {
+	public void setModelProducer(ListModelProducerForVisualDatamap<String> modelProducer) {
 
 		this.modelProducer = modelProducer;
 	}
@@ -172,7 +173,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		return updateCollection;
 	}
 
-	public void setReadOnlyEntries(java.util.Set<String> keys) {
+	public void setReadOnlyEntries(Set<String> keys) {
 		keysOfReadOnlyEntries = keys;
 	}
 
@@ -283,7 +284,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 			// deliver the default value
 			if (result instanceof List) {
-				List li = (List) result;
+				List<?> li = (List<?>) result;
 				if (!li.isEmpty() && li.get(0) == null && optionsMap != null) {
 					result = defaultData.get(key);
 					Logging.info(this,
@@ -474,7 +475,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		}
 
 		if (optionsMap.get(key) != null && (optionsMap.get(key)) instanceof List) {
-			List valuelist = (List) optionsMap.get(key);
+			List<?> valuelist = (List<?>) optionsMap.get(key);
 
 			if (!valuelist.isEmpty() && valuelist.indexOf(value) == -1) {
 

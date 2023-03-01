@@ -145,7 +145,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 		}
 
 		public void begin() {
-			fadeTimer = new javax.swing.Timer(initialDelay, this);
+			fadeTimer = new Timer(initialDelay, this);
 			fadeTimer.setDelay(delay);
 			fadeTimer.start();
 		}

@@ -3,6 +3,7 @@ package de.uib.configed.tree;
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.font.TextAttribute;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JTree;
@@ -83,13 +84,11 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			}
 
 			if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
-					&& tree.hasFocus())
+					&& tree.hasFocus()) {
 
-			{
-
-				Map attributes = getFont().getAttributes();
-				attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-				setFont(getFont().deriveFont(attributes));
+				Map<TextAttribute, Integer> newAttributes = new HashMap<>();
+				newAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+				setFont(getFont().deriveFont(newAttributes));
 
 			}
 

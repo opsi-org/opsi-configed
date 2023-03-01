@@ -11,8 +11,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
@@ -162,8 +164,8 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			chooser = new JFileChooser(fn);
 			chooser.setPreferredSize(Globals.filechooserSize);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z",
-					"log", "zip", "gz", "7z"));
+			chooser.setFileFilter(
+					new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));
 
 			chooser.setApproveButtonText("O.K.");
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -184,7 +186,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		File f = new File(chooserDirectory, typename);
 		chooser.setSelectedFile(f);
 
-		int returnVal = chooser.showSaveDialog(Globals.frame1);
+		int returnVal = chooser.showSaveDialog(ConfigedMain.getMainFrame());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 			chooserDirectory = chooser.getCurrentDirectory();

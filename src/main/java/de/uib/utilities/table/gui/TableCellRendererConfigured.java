@@ -11,7 +11,7 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 	Font f;
 	Color color;
 	Color bg1;
-	Color bg2; // for even line numbers
+	Color bg2;
 	Color selectionBackground;
 	Color selectionEditingBackground;
 
@@ -32,9 +32,8 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, // value to display
-			boolean isSelected, // is the cell selected
-			boolean hasFocus, int row, int column) {
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (f != null) {

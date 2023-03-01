@@ -6,7 +6,7 @@ import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class HostUpdate extends AbstractMapUpdate {
-	public HostUpdate(AbstractPersistenceController persis, Map newdata) {
+	public HostUpdate(AbstractPersistenceController persis, Map<String, Object> newdata) {
 		super(persis, newdata);
 	}
 

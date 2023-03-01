@@ -33,12 +33,12 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 	@Override
 	public boolean saveChanges() {
-
 		Logging.debug(this, "saveChanges");
 
 		WaitCursor waitCursor = new WaitCursor();
 
-		boolean success = true; // true until failure
+		// true until failure
+		boolean success = true;
 
 		List<MapBasedTableEditItem> successfullInsertsWithNewKeys = new ArrayList<>();
 
@@ -110,7 +110,8 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 				// ... and look what we have in the database
 				tablemodel.requestReload();
 				tablemodel.reset();
-				success = true; // we have valid data again, even if not the expected ones
+				// we have valid data again, even if not the expected ones
+				success = true;
 			}
 
 			waitCursor.stop();

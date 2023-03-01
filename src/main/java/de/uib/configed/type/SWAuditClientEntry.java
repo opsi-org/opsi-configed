@@ -58,7 +58,7 @@ public class SWAuditClientEntry
 	public static long summillis1stPartOfConstructor = 0;
 	public static long summillis2ndPartOfConstructor = 0;
 
-	AbstractPersistenceController controller; // for retrieving softwarelist
+	AbstractPersistenceController controller;
 
 	public static final List<String> KEYS = new LinkedList<>();
 	static {

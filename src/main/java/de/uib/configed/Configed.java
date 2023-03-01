@@ -17,6 +17,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.tree.ClientTreeUI;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -273,7 +274,7 @@ public class Configed {
 		// Try with resources so that it will be closed in implicit finally statement
 		try (Formatter formatter = new Formatter()) {
 			Logging.info(
-					" we get max memory " + formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1000000));
+					" we get max memory " + formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1_000_000));
 		}
 
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
@@ -502,19 +503,19 @@ public class Configed {
 					optionPersistenceControllerMethodCall = true;
 					i = i + 1;
 				} else if (args[i].equals("--sqlgethashes")) {
-					de.uib.opsidatamodel.PersistenceControllerFactory.sqlAndGetHashes = true;
+					PersistenceControllerFactory.sqlAndGetHashes = true;
 					i = i + 1;
 				} else if (args[i].equals("--sqlgetrows")) {
-					de.uib.opsidatamodel.PersistenceControllerFactory.sqlAndGetRows = true;
+					PersistenceControllerFactory.sqlAndGetRows = true;
 					i = i + 1;
 				} else if (args[i].equals("--nosqlrawdata")) {
-					de.uib.opsidatamodel.PersistenceControllerFactory.avoidSqlRawData = true;
+					PersistenceControllerFactory.avoidSqlRawData = true;
 					i = i + 1;
 				}
 
 				else if (args[i].equals("--sqldirect-cleanup-auditsoftware")) {
-					de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect = true;
-					de.uib.opsidatamodel.PersistenceControllerFactory.directmethodcall = de.uib.opsidatamodel.PersistenceControllerFactory.DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE;
+					PersistenceControllerFactory.sqlDirect = true;
+					PersistenceControllerFactory.directmethodcall = PersistenceControllerFactory.DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE;
 					i = i + 1;
 				} else if (args[i].equals("--version")) {
 					System.out.println("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
@@ -525,7 +526,7 @@ public class Configed {
 				} else if (args[i].equals("--collect_queries_until_no")) {
 					String no = getArg(args, i);
 					try {
-						de.uib.opsicommand.OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
+						OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
 					} catch (NumberFormatException ex) {
 						Logging.debug("  \n\nArgument >" + no + "< has no integer format");
 						usage();
@@ -633,7 +634,7 @@ public class Configed {
 			}
 		}
 
-		de.uib.opsicommand.OpsiMethodCall.report();
+		OpsiMethodCall.report();
 		Logging.info("regularly exiting app with code " + exitcode);
 
 		if (exitcode == ERROR_OUT_OF_MEMORY) {
@@ -734,7 +735,7 @@ public class Configed {
 
 					UIManager.put("Tree.selectionBackground", UIManager.get("controlHighlight"));
 
-					UIManager.put("TreeUI", de.uib.configed.tree.ClientTreeUI.class.getName());
+					UIManager.put("TreeUI", ClientTreeUI.class.getName());
 
 					found = true;
 					break;
@@ -773,10 +774,10 @@ public class Configed {
 		}
 	}
 
-	public static de.uib.opsidatamodel.AbstractPersistenceController connect() {
+	public static AbstractPersistenceController connect() {
 		Messages.setLocale("en");
-		de.uib.opsidatamodel.AbstractPersistenceController controller = de.uib.opsidatamodel.PersistenceControllerFactory
-				.getNewPersistenceController(host, user, password);
+		AbstractPersistenceController controller = PersistenceControllerFactory.getNewPersistenceController(host, user,
+				password);
 		if (controller == null) {
 			Logging.error("Authentication error.");
 			System.exit(1);
@@ -874,8 +875,8 @@ public class Configed {
 
 		}
 
-		if (de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect) {
-			Logging.debug("de.uib.opsidatamodel.PersistenceControllerFactory.sqlDirect");
+		if (PersistenceControllerFactory.sqlDirect) {
+			Logging.debug("PersistenceControllerFactory.sqlDirect");
 
 			addMissingArgs();
 

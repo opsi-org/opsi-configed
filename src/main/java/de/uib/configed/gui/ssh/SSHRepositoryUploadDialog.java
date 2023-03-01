@@ -5,6 +5,7 @@ import de.uib.opsicommand.sshcommand.CommandRepositoryUpload;
 import de.uib.utilities.logging.Logging;
 
 public class SSHRepositoryUploadDialog extends SSHFileUploadDialog {
+	private static final int DEFAULT_HEIGHT = 400;
 
 	public SSHRepositoryUploadDialog() {
 		super(Configed.getResourceValue("SSHConnection.ParameterDialog.repoupload.title"),
@@ -12,7 +13,7 @@ public class SSHRepositoryUploadDialog extends SSHFileUploadDialog {
 		super.setVisible(true);
 
 		Logging.info(this, "SSHRepositoryUploadDialog build");
-		height = 400;
+		height = DEFAULT_HEIGHT;
 		super.showDialog();
 	}
 

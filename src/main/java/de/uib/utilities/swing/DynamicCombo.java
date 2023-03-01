@@ -6,7 +6,11 @@
 
 package de.uib.utilities.swing;
 
+import java.awt.BorderLayout;
+import java.awt.Font;
+
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -14,21 +18,22 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import de.uib.configed.Globals;
+import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.table.gui.AdaptingCellEditor;
 
 /**
  * @author roeder
  */
-public class DynamicCombo extends javax.swing.JPanel {
+public class DynamicCombo extends JPanel {
 
 	protected JTable table;
 	protected DefaultTableModel tablemodel;
-	protected JComboBox combo;
-	protected de.uib.utilities.ComboBoxModeller modelsource;
+	protected JComboBox<String> combo;
+	protected ComboBoxModeller modelsource;
 
 	protected TableColumn col;
 
-	public DynamicCombo(de.uib.utilities.ComboBoxModeller modelsource) {
+	public DynamicCombo(ComboBoxModeller modelsource) {
 		this.modelsource = modelsource;
 		initComponents();
 	}
@@ -77,26 +82,23 @@ public class DynamicCombo extends javax.swing.JPanel {
 
 		col.setCellEditor(new AdaptingCellEditor(combo, modelsource));
 
-		setLayout(new java.awt.BorderLayout());
+		setLayout(new BorderLayout());
 
 		add(table);
 
 	}
 
 	@Override
-	public void setFont(java.awt.Font font) {
+	public void setFont(Font font) {
 		if (combo != null) {
 			combo.setFont(font);
 		}
 	}
 
-	public void setModelSource(de.uib.utilities.ComboBoxModeller modelSource) {
+	public void setModelSource(ComboBoxModeller modelSource) {
 		this.modelsource = modelSource;
 
-		col.setCellEditor(
-
-				new de.uib.utilities.table.gui.AdaptingCellEditor(combo, modelsource));
-
+		col.setCellEditor(new AdaptingCellEditor(combo, modelsource));
 	}
 
 	public Object getSelectedItem() {

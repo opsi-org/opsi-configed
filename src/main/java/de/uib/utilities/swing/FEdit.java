@@ -16,6 +16,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -24,6 +26,7 @@ import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.IconButton;
 import de.uib.utilities.logging.Logging;
 
 public class FEdit extends JDialog implements ActionListener, KeyListener {
@@ -36,8 +39,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected JComponent editingArea;
 	protected JLabel labelHint;
 
-	protected de.uib.configed.gui.IconButton buttonCommit;
-	protected de.uib.configed.gui.IconButton buttonCancel;
+	protected IconButton buttonCommit;
+	protected IconButton buttonCancel;
 
 	protected boolean dataChanged = false;
 	protected boolean cancelled = false;
@@ -80,9 +83,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		labelHint = new JLabel();
 		labelHint.setFont(Globals.defaultFontStandardBold);
 
-		buttonCommit = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"), "images/apply.png",
-				"images/apply_over.png", "images/apply_disabled.png", true) {
+		buttonCommit = new IconButton(Configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"),
+				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png", true) {
 			@Override
 			public void setEnabled(boolean b) {
 				super.setEnabled(b);
@@ -92,9 +94,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 		buttonCommit.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
-		buttonCancel = new de.uib.configed.gui.IconButton(
-				Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"), "images/cancel.png",
-				"images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel = new IconButton(Configed.getResourceValue("PanelGenEditTable.CancelButtonTooltip"),
+				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
 		buttonCancel.setPreferredSize(new Dimension(40, Globals.BUTTON_HEIGHT));
 
 	}
@@ -111,52 +112,49 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		buttonCommit.addKeyListener(this);
 		buttonCancel.addKeyListener(this);
 
-		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
+		GroupLayout layout1 = new GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
-		layout1.setHorizontalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layout1.setHorizontalGroup(layout1.createParallelGroup(Alignment.LEADING)
 				.addGroup(layout1.createSequentialGroup()
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(labelHint, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addComponent(editingArea, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGroup(layout1.createParallelGroup(Alignment.LEADING)
+								.addComponent(labelHint, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE)
+								.addComponent(editingArea, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										Short.MAX_VALUE)
 								.addGroup(layout1.createSequentialGroup()
-										.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 
-										.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)))
+										.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE,
+												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
-		layout1.setVerticalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout1.createSequentialGroup()
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
-						.addComponent(labelHint, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addComponent(editingArea, 20, 80, Short.MAX_VALUE)
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
+		layout1.setVerticalGroup(layout1.createParallelGroup(Alignment.LEADING).addGroup(layout1.createSequentialGroup()
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE, Globals.VGAP_SIZE)
+				.addComponent(labelHint, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addComponent(editingArea, 20, 80, Short.MAX_VALUE)
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGroup(layout1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(framingPanel,
-						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout
+						.createSequentialGroup().addContainerGap().addComponent(framingPanel,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addContainerGap()));
-		layout.setVerticalGroup(
-				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup().addContainerGap()
-								.addComponent(framingPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addContainerGap(20, 20)));
+		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout
+						.createSequentialGroup().addContainerGap().addComponent(framingPanel,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addContainerGap(20, 20)));
 
 		pack();
 
@@ -210,8 +208,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	@Override
 	public void setVisible(boolean b) {
-		if (starting && b) // first visibility
-		{
+		if (starting && b) {
 			starting = false;
 			setDataChanged(false);
 		}
@@ -290,7 +287,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	protected void cancel() {
 		Logging.info(this, "cancel, go back to " + initialText);
-		setStartText(initialText); // sets cancelled = false
+		setStartText(initialText);
 		cancelled = true;
 
 		if (servedCellEditor != null) {

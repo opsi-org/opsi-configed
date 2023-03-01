@@ -1,8 +1,10 @@
 package de.uib.configed.gui;
 
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -141,9 +143,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			public void componentResized(ComponentEvent e) {
 				Logging.info(this, "ClientSelectionDialog resized");
 				// move it up and down for fixing the combobox popup vanishing
-				java.awt.Component c = e.getComponent();
-				java.awt.Point point = c.getLocation();
-				java.awt.Point savePoint = new java.awt.Point(point);
+				Component c = e.getComponent();
+				Point point = c.getLocation();
+				Point savePoint = new Point(point);
 				point.setLocation(point.getX(), point.getY() + 1.0);
 				c.setLocation(point);
 				c.revalidate();
@@ -738,30 +740,30 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		SelectData.DataType type = operation.getDataType();
 		switch (type) {
 		// Do the same for all three cases
-		case DoubleType:
-		case TextType:
-		case DateType:
+		case DOUBLE_TYPE:
+		case TEXT_TYPE:
+		case DATE_TYPE:
 			text = ((TextInputField) (group.dataComponent)).getText();
 			if (text.isEmpty()) {
 				return null;
 			}
 			data = text;
 			break;
-		case IntegerType:
+		case INTEGER_TYPE:
 			Integer value = (Integer) ((JSpinner) group.dataComponent).getValue();
 			if (value == 0) {
 				return null;
 			}
 			data = value;
 			break;
-		case BigIntegerType:
+		case BIG_INTEGER_TYPE:
 			Long value2 = ((SpinnerWithExt) group.dataComponent).getValue();
 			if (value2 == 0) {
 				return null;
 			}
 			data = value2;
 			break;
-		case EnumType:
+		case ENUM_TYPE:
 
 			String textEnum = ((TextInputField) group.dataComponent).getText();
 			if (textEnum.isEmpty()) {
@@ -769,7 +771,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			}
 			data = textEnum;
 			break;
-		case NoneType:
+		case NONE_TYPE:
 		default:
 		}
 
@@ -902,7 +904,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			return;
 		}
 		switch (sourceGroup.element.supportedOperations().get(operationIndex).getDataType()) {
-		case TextType:
+		case TEXT_TYPE:
 			TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
 			fieldText.setEditable(true);
 			fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
@@ -916,7 +918,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = fieldText;
 			break;
-		case DoubleType:
+		case DOUBLE_TYPE:
 
 			TextInputField fieldDouble = new TextInputField("");
 			fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
@@ -930,7 +932,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = fieldDouble;
 			break;
-		case EnumType:
+		case ENUM_TYPE:
 
 			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
 			box.setEditable(true);
@@ -943,7 +945,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = box;
 			break;
-		case DateType:
+		case DATE_TYPE:
 			TextInputField fieldDate = new TextInputField(null);
 			fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
 			fieldDate.setToolTipText("yyyy-mm-dd");
@@ -956,7 +958,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			sourceGroup.dataComponent = fieldDate;
 			break;
 
-		case IntegerType:
+		case INTEGER_TYPE:
 			JSpinner spinner = new JSpinner();
 			spinner.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
@@ -966,7 +968,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			});
 			sourceGroup.dataComponent = spinner;
 			break;
-		case BigIntegerType:
+		case BIG_INTEGER_TYPE:
 			SpinnerWithExt swx = new SpinnerWithExt();
 			swx.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
@@ -977,7 +979,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 			sourceGroup.dataComponent = swx;
 			break;
-		case NoneType:
+		case NONE_TYPE:
 			return;
 		}
 		sourceGroup.dataComponent.setMaximumSize(new Dimension(sourceGroup.dataComponent.getMaximumSize().width,
@@ -1166,9 +1168,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		if (component instanceof TextInputField) {
 			((TextInputField) component).setText(data.getData().toString());
-		} else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BigIntegerType) {
+		} else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BIG_INTEGER_TYPE) {
 			((SpinnerWithExt) component).setValue((Long) data.getData());
-		} else if (component instanceof JSpinner && data.getType() == SelectData.DataType.IntegerType) {
+		} else if (component instanceof JSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
 			((JSpinner) component).setValue(data.getData());
 		}
 	}

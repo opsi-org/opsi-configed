@@ -10,6 +10,8 @@ package de.uib.utilities.datapanel;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -127,7 +129,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		mapTableModel.setUpdateCollection(updateCollection);
 	}
 
-	public void setReadOnlyEntries(java.util.Set<String> keys) {
+	public void setReadOnlyEntries(Set<String> keys) {
 		mapTableModel.setReadOnlyEntries(keys);
 	}
 
@@ -135,7 +137,7 @@ public abstract class AbstractEditMapPanel extends JPanel {
 		mapTableModel.setShowOnlyValues(showOnly);
 	}
 
-	public void setEditDenier(java.util.function.Function<String, Boolean> disallow) {
+	public void setEditDenier(Function<String, Boolean> disallow) {
 		mapTableModel.setEditDenier(disallow);
 	}
 

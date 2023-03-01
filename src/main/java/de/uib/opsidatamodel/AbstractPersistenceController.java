@@ -23,7 +23,6 @@ import java.util.TreeMap;
 import org.json.JSONObject;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ControlDash;
 import de.uib.configed.type.AbstractMetaConfig;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -72,10 +71,13 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public static final String KEY_HOST_DISPLAYFIELDS = "configed.host_displayfields";
 	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
-	public static final String KEY_SHOW_DASH_ON_PROGRAMSTART = ControlDash.CONFIG_KEY + ".show_dash_on_loaddata";
+	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
+
+	public static final String KEY_SHOW_DASH_ON_PROGRAMSTART = CONTROL_DASH_CONFIG_KEY + ".show_dash_on_loaddata";
 	public static final Boolean DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART = false;
-	public static final String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = ControlDash.CONFIG_KEY
+	public static final String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = CONTROL_DASH_CONFIG_KEY
 			+ ".show_dash_for_showlicenses";
+
 	public static final Boolean DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT = false;
 
 	public static final String KEY_SEARCH_BY_SQL = "configed.search_by_sql";
@@ -154,7 +156,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
 		PROPERTY_CLASSES_SERVER.put(de.uib.opsidatamodel.modulelicense.LicensingInfoMap.CONFIG_KEY,
 				"opsi module status display");
-		PROPERTY_CLASSES_SERVER.put(ControlDash.CONFIG_KEY, "dash configuration");
+		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "dash configuration");
 		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
 		PROPERTY_CLASSES_SERVER.put(AbstractMetaConfig.CONFIG_KEY, "default configuration for other properties");
@@ -380,8 +382,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract List<String> wakeOnLan(String[] hostIds);
 
-	public abstract List<String> wakeOnLan(java.util.Set<String> hostIds,
-			Map<String, List<String>> hostSeparationByDepot, Map<String, AbstractExecutioner> execsByDepot);
+	public abstract List<String> wakeOnLan(Set<String> hostIds, Map<String, List<String>> hostSeparationByDepot,
+			Map<String, AbstractExecutioner> execsByDepot);
 
 	public abstract List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds);
 
@@ -481,9 +483,9 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract Map<String, Map<String, Object>> retrieveSoftwareAuditData(String clientId);
 
 	/* hardware info */
-	public abstract List<Map<String, Object>> getOpsiHWAuditConf();
+	public abstract List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf();
 
-	public abstract List<Map<String, Object>> getOpsiHWAuditConf(String locale);
+	public abstract List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf(String locale);
 
 	public abstract List<String> getAllHwClassNames();
 
@@ -560,8 +562,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Object2Product2VersionList getDepot2NetbootProducts();
 
-	public abstract Map<String, Map<String, Object>> getProductGlobalInfos(String depotId); // (productId -> (infoKey ->
-																							// info))
+	// (productId -> (infoKey -> info))
+	public abstract Map<String, Map<String, Object>> getProductGlobalInfos(String depotId);
 
 	public abstract List<List<Object>> getProductRows();
 
@@ -614,7 +616,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds);
 
 	// collecting update items
-	public abstract boolean updateProductOnClient(String pcname, String productname, int producttype, Map updateValues);
+	public abstract boolean updateProductOnClient(String pcname, String productname, int producttype,
+			Map<String, String> updateValues);
 
 	// send the collected items
 	public abstract boolean updateProductOnClients();
@@ -657,7 +660,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	// Map properties,
 
-	public abstract void setProductProperties(String pcname, String productname, Map properties);
+	public abstract void setProductProperties(String pcname, String productname, Map<?, ?> properties);
 
 	public abstract void setProductProperties();
 
@@ -692,7 +695,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Map<String, Object> getConfig(String objectId);
 
-	public abstract void setHostValues(Map settings);
+	public abstract void setHostValues(Map<String, Object> settings);
 
 	public abstract void setAdditionalConfiguration(String objectId, ConfigName2ConfigValue settings);
 
@@ -965,7 +968,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		possibleValues.add(true);
 		possibleValues.add(false);
 
-		return createConfig(ConfigOption.TYPE.BoolConfig, key, description, false, false, defaultValues,
+		return createConfig(ConfigOption.TYPE.BOOL_CONFIG, key, description, false, false, defaultValues,
 				possibleValues);
 	}
 
@@ -977,7 +980,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		possibleValues.add(true);
 		possibleValues.add(false);
 
-		return createJSONConfig(ConfigOption.TYPE.BoolConfig, key, description, false, false, defaultValues,
+		return createJSONConfig(ConfigOption.TYPE.BOOL_CONFIG, key, description, false, false, defaultValues,
 				possibleValues);
 	}
 

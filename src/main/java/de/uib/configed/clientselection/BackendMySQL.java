@@ -30,7 +30,7 @@ public class BackendMySQL {
 
 	private List<String> allHosts;
 
-	List<Map<String, Object>> hwConfig;
+	List<Map<String, List<Map<String, Object>>>> hwConfig;
 
 	// For the queries to the opsi-server
 	AbstractPersistenceController controller;

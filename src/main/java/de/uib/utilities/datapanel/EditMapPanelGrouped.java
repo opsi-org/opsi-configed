@@ -30,6 +30,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -138,7 +139,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
 				protected void reload() {
-					javax.swing.tree.TreePath p = tree.getSelectionPath();
+					TreePath p = tree.getSelectionPath();
 					int row = tree.getRowForPath(p);
 
 					actor.reloadData();
@@ -240,7 +241,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	protected void reload() {
 		Logging.info(this, "reload");
-		javax.swing.tree.TreePath p = tree.getSelectionPath();
+		TreePath p = tree.getSelectionPath();
 		int row = tree.getRowForPath(p);
 
 		actor.reloadData();
@@ -405,7 +406,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	}
 
 	protected String getCurrentKey() {
-		javax.swing.tree.TreePath p = tree.getSelectionPath();
+		TreePath p = tree.getSelectionPath();
 		if (p == null) {
 			return null;
 		}
@@ -422,7 +423,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	// TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		javax.swing.tree.TreePath p = tree.getSelectionPath();
+		TreePath p = tree.getSelectionPath();
 
 		int divLoc = splitPane.getDividerLocation();
 

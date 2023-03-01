@@ -26,7 +26,7 @@ public final class Messages {
 
 	static List<LocaleRepresentation> existingLocales;
 	static List<String> existingLocalesNames;
-	static java.util.Map<String, String> localeInfo;
+	static Map<String, String> localeInfo;
 	static String selectedLocaleString;
 	static Locale myLocale = null;
 	public static ResourceBundle messagesBundle;
@@ -196,7 +196,7 @@ public final class Messages {
 		ArrayList<LocaleRepresentation> existingLocales = new ArrayList<>();
 		localeInfo = new TreeMap<>();
 
-		InputStream stream = de.uib.messages.Messages.class.getResourceAsStream(LOCALISATIONS_CONF);
+		InputStream stream = Messages.class.getResourceAsStream(LOCALISATIONS_CONF);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 		try {
 			String line = reader.readLine();

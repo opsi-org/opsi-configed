@@ -15,13 +15,13 @@ public abstract class AbstractExecutioner {
 
 	public abstract JSONObject retrieveJSONObject(OpsiMethodCall omc);
 
-	public static JSONObject jsonMap(Map<?, ?> m) {
+	public static JSONObject jsonMap(Map<String, ? extends Object> m) {
 		return new JSONObject(m);
 	}
 
 	public abstract Object getValueFromJSONObject(Object o, String key);
 
-	public static JSONArray jsonArray(List l) {
+	public static JSONArray jsonArray(List<?> l) {
 		JSONArray result = null;
 
 		if (l == null) {
@@ -47,7 +47,7 @@ public abstract class AbstractExecutioner {
 
 	public abstract List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc);
 
-	public abstract List<Map<String, String>> getListOfStringMaps(OpsiMethodCall omc);
+	public abstract List<Map<String, Object>> getListOfStringMaps(OpsiMethodCall omc);
 
 	public abstract Map<String, Object> getMapObject(OpsiMethodCall omc);
 
@@ -65,7 +65,7 @@ public abstract class AbstractExecutioner {
 
 	public abstract Map<String, List<Map<String, Object>>> getMapOfListsOfMaps(OpsiMethodCall omc);
 
-	public abstract List getListOfMapsOfListsOfMaps(OpsiMethodCall omc);
+	public abstract List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc);
 
 	public abstract String getStringResult(OpsiMethodCall omc);
 

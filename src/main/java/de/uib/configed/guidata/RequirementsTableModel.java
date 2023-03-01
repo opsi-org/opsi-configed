@@ -170,26 +170,26 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				if (rowTypeIndex == 1) {
 					if (requMap != null) {
 						result = requMap.get(myKey);
-						break;
 					}
 				} else if (rowTypeIndex == 2 && requDeinstallMap != null) {
 					result = requDeinstallMap.get(myKey);
-					break;
 				}
+				break;
 
 			case 2:
 				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requBeforeMap != null) {
 					result = requBeforeMap.get(myKey);
-					break;
 				}
+				break;
 
 			case 3:
 				// otherwise, result will remain null
 				if (rowTypeIndex == 1 && requAfterMap != null) {
 					result = requAfterMap.get(myKey);
-					break;
 				}
+				break;
+
 			default:
 				Logging.warning(this, "no case found for col in getValueAt");
 				break;
@@ -209,12 +209,11 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 	protected class MyTableCellRenderer extends DefaultTableCellRenderer {
 		@Override
-		public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-				boolean hasFocus, int row, int column) {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
 			MyColorizer colorizer = new MyColorizer(String.valueOf(value));
 
-			java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-					column);
+			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 			colorizer.colorize(cell, row, column);
 
@@ -251,7 +250,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 			cellValue = value;
 		}
 
-		public void colorize(java.awt.Component cell, int row, int col) {
+		public void colorize(Component cell, int row, int col) {
 			cell.setForeground(Globals.lightBlack);
 
 			int kindOfRow = row % 3;

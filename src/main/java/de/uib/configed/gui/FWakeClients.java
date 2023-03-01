@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.JFrame;
 
@@ -44,7 +45,7 @@ public class FWakeClients extends FShowList {
 
 		int turn = 0;
 		while (turn < maxSize && !cancelled) {
-			java.util.Set<String> hostsToWakeOnThisTurn = new HashSet<>();
+			Set<String> hostsToWakeOnThisTurn = new HashSet<>();
 
 			for (Entry<String, List<String>> depotEntry : hostSeparationByDepots.entrySet()) {
 

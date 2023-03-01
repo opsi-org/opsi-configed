@@ -32,17 +32,17 @@ public class MapTableUpdateItemFactory implements TableUpdateItemInterface {
 	}
 
 	@Override
-	public TableEditItem produceUpdateItem(List oldValues, List rowV) {
+	public TableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV) {
 		return new MapDeliveryItem(source, keyCol, columnNames, classNames, oldValues, rowV);
 	}
 
 	@Override
-	public TableEditItem produceInsertItem(List rowV) {
+	public TableEditItem produceInsertItem(List<Object> rowV) {
 		return new MapDeliveryItem(source, keyCol, columnNames, classNames, rowV);
 	}
 
 	@Override
-	public TableEditItem produceDeleteItem(List rowV) {
+	public TableEditItem produceDeleteItem(List<Object> rowV) {
 		return new MapDeleteItem(source, keyCol, columnNames, classNames, rowV);
 	}
 

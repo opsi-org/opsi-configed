@@ -113,14 +113,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		Logging.debug(this, "canImport, dropOnThis  path " + Arrays.toString(dropObjectPath));
 		Logging.debug(this, "canImport source path " + Arrays.toString(sourceObjectPath));
 
-		if (targetNode == null || targetNode.isImmutable() || (sourceGroupNode != null // group
-				&& !targetNode.allowsSubGroups()) || (sourceGroupNode == null // no group
-						&& targetNode.allowsOnlyGroupChilds())
-				|| (sourceGroupNode != null // group
+		if (targetNode == null || targetNode.isImmutable() || (sourceGroupNode != null && !targetNode.allowsSubGroups())
+				|| (sourceGroupNode == null && targetNode.allowsOnlyGroupChilds()) || (sourceGroupNode != null // group
 						&& sourceObjectPath.length > 1 && dropObjectPath.length > 1
-						&& !(sourceObjectPath[1].equals(dropObjectPath[1]))
-				// different group branchess
-				)) {
+						&& !(sourceObjectPath[1].equals(dropObjectPath[1])))) {
 			result = false;
 		}
 

@@ -93,7 +93,7 @@ public class ExporterToCSV extends AbstractExportTable {
 
 					if (Boolean.TRUE.equals(!selectedOnly) || theTable.isRowSelected(rowI)) {
 						line = new StringBuilder();
-						for (int colI = 0; colI < theTable.getColumnCount(); colI++) { // i column
+						for (int colI = 0; colI < theTable.getColumnCount(); colI++) {
 							date1 = null; // reset
 
 							if (theTable.getValueAt(rowI, colI) != null) {

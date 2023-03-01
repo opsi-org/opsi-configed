@@ -160,7 +160,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		inputPanel.setBorder(BorderFactory.createTitledBorder(""));
 		winAuthPanel.setBorder(new LineBorder(Globals.blueGrey, 2, true));
-		inputPanel.setPreferredSize(new java.awt.Dimension(376, 220));
+		inputPanel.setPreferredSize(new Dimension(376, 220));
 
 		jCheckBoxApplySudo = new JCheckBox("", commandDeployClientAgent.needSudo());
 		jLabelApplySudo

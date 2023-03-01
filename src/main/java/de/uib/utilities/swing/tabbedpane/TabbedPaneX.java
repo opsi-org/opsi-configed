@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 import de.uib.configed.ConfigedMain.LicencesTabStatus;
 
 public class TabbedPaneX extends JPanel {
-	private javax.swing.JTabbedPane jTabbedPaneMain;
+	private JTabbedPane jTabbedPaneMain;
 
 	TabController controller;
 

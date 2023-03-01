@@ -9,6 +9,7 @@
 package de.uib.utilities.table;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.swing.JOptionPane;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
@@ -79,9 +81,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	CursorrowObserved cursorrowObservable;
 
-	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemInterface itemFactory,
-			de.uib.utilities.table.provider.TableProvider dataProvider, int keyCol, int[] finalColumns,
-			TableModelListener l, de.uib.utilities.table.updates.TableUpdateCollection updates) {
+	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
+			int[] finalColumns, TableModelListener l, TableUpdateCollection updates) {
 		this.keyCol = keyCol;
 		this.updates = updates;
 		this.tableProvider = dataProvider;
@@ -125,9 +126,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	}
 
-	public GenTableModel(de.uib.utilities.table.updates.TableUpdateItemInterface itemFactory,
-			de.uib.utilities.table.provider.TableProvider dataProvider, int keyCol, TableModelListener l,
-			de.uib.utilities.table.updates.TableUpdateCollection updates) {
+	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
+			TableModelListener l, TableUpdateCollection updates) {
 		this(itemFactory, dataProvider, keyCol, null, l, updates);
 	}
 
@@ -653,7 +653,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			// we dont register updates for already registered rows, since there values are
 			// passed via the row List
 			if (addedRows.indexOf(row) == -1 && updatedRows.indexOf(row) == -1) {
-				List oldValues = new ArrayList<>(rows.get(row));
+				List<Object> oldValues = new ArrayList<>(rows.get(row));
 
 				rows.get(row).set(col, value);
 
@@ -671,15 +671,14 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 				updatedRows.add(row);
 			}
 
-			if (addedRows.indexOf(row) == -1 && finalCols.indexOf(col) > -1)
 			// we cannot edit a key column after it is saved in the data backend
-			{
+			if (addedRows.indexOf(row) == -1 && finalCols.indexOf(col) > -1) {
 				// we should not get any more to this code, since for this condition the value
 				// is marked as not editable
 				Logging.warning("key column cannot be edited after saving the data");
 
-				javax.swing.JOptionPane.showMessageDialog(null, "values in this column are fixed after saving the data",
-						"Information", javax.swing.JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(null, "values in this column are fixed after saving the data",
+						"Information", JOptionPane.OK_OPTION);
 
 				return;
 			}
@@ -778,8 +777,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 			Logging.info(this, "no deletion of added rows");
 
-			javax.swing.JOptionPane.showMessageDialog(null, "no deletion of added rows, please save or cancel editing",
-					"Information", javax.swing.JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog(null, "no deletion of added rows, please save or cancel editing",
+					"Information", JOptionPane.OK_OPTION);
 			return false;
 
 		}
@@ -788,14 +787,14 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public void deleteRows(int[] selection) {
-		Logging.debug(this, "deleteRows " + java.util.Arrays.toString(selection));
+		Logging.debug(this, "deleteRows " + Arrays.toString(selection));
 
 		if (selection == null || selection.length == 0) {
 			return;
 		}
 
-		java.util.Arrays.sort(selection);
-		Logging.debug(this, "deleteRows, sorted " + java.util.Arrays.toString(selection));
+		Arrays.sort(selection);
+		Logging.debug(this, "deleteRows, sorted " + Arrays.toString(selection));
 
 		if (updates == null) {
 			Logging.info(this, "updates not initialized");
@@ -988,7 +987,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			functions = new HashMap<>();
 		}
 
-		java.util.Map<Object, List<Object>> function = functions.get(pair);
+		Map<Object, List<Object>> function = functions.get(pair);
 
 		if (function == null) {
 			function = buildFunction(pair.col1, pair.col2, specialFilterCondition);
@@ -998,7 +997,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	@Override
-	public java.util.Map<Integer, RowStringMap> getPrimarykey2Rowmap() {
+	public Map<Integer, RowStringMap> getPrimarykey2Rowmap() {
 		if (keyCol < 0) {
 			return new HashMap<>();
 		}
@@ -1025,13 +1024,13 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			xFunctions = new HashMap<>();
 		}
 
-		java.util.Map<Object, List<Object>> function = getFunction(col1st, col2nd);
+		Map<Object, List<Object>> function = getFunction(col1st, col2nd);
 
 		if (function == null) {
 			return new HashMap<>();
 		}
 
-		java.util.Map<Integer, Mapping<Integer, String>> xFunction = xFunctions.get(pair);
+		Map<Integer, Mapping<Integer, String>> xFunction = xFunctions.get(pair);
 		if (xFunction == null) {
 			xFunction = new HashMap<>();
 			for (Entry<Object, List<Object>> functionEntry : function.entrySet()) {

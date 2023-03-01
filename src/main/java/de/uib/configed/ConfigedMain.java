@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -60,11 +61,13 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
@@ -120,6 +123,7 @@ import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.logging.LogEvent;
 import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.observer.DataLoadingObservable;
 import de.uib.utilities.savedstates.SavedStates;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.CheckedDocument;
@@ -272,7 +276,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected List<String> localbootProductnames;
 	protected List<String> netbootProductnames;
-	protected List<Map<String, Object>> hwAuditConfig;
+	protected List<Map<String, List<Map<String, Object>>>> hwAuditConfig;
 
 	// marker variables for requests for reload when clientlist changes
 	private Map<String, List<Map<String, String>>> localbootStatesAndActions = null;
@@ -293,7 +297,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	JTableSelectionPanel selectionPanel;
 
-	de.uib.configed.tree.ClientTree treeClients;
+	ClientTree treeClients;
 
 	Map<String, Map<String, String>> productGroups;
 	Map<String, Set<String>> productGroupMembers;
@@ -523,16 +527,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 
 				Logging.info(this, "writing saved states, set writable, success: " + success);
-				Configed.savedStates = new de.uib.utilities.savedstates.SavedStates(
+				Configed.savedStates = new SavedStates(
 						new File(savedStatesDir.toString() + File.separator + Configed.SAVED_STATES_FILENAME));
 			} catch (Exception ex) {
 				Logging.warning(this, "saved states exception " + ex);
 				success = false;
+				Logging.error(this, "cannot not write saved states into " + Configed.savedStatesLocationName);
 			}
-		}
-
-		if (!success) {
-			Logging.error(this, "cannot not write saved states into " + Configed.savedStatesLocationName);
 		}
 
 		if (Configed.savedStatesLocationName == null || Configed.savedStates == null || !success) {
@@ -672,7 +673,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		strategyForLoadingData = new GuiStrategyForLoadingData(dPassword);
 
-		((de.uib.utilities.observer.DataLoadingObservable) persist).registerDataLoadingObserver(strategyForLoadingData);
+		((DataLoadingObservable) persist).registerDataLoadingObserver(strategyForLoadingData);
 
 		strategyForLoadingData.startWaiting();
 
@@ -680,8 +681,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			@Override
 			public void run() {
 				initGui();
-
-				mainFrame.initSplitPanes();
 
 				waitCursorInitGui.stop();
 				checkErrorList();
@@ -1315,27 +1314,28 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.enableMenuItemsForClients(0);
 
 		// rearranging visual components
-
 		mainFrame.validate();
 
-		// center the frame:
+		// set splitpanes before making the frame visible
+		mainFrame.initSplitPanes();
 
+		// center the frame:
 		locateAndDisplay();
 
 		// init visual states
 		Logging.debug(this, "mainframe nearly initialized");
 
 		mainFrame.saveGroupSetEnabled(false);
-
 	}
 
 	private void locateAndDisplay() {
 		Rectangle screenRectangle = dPassword.getGraphicsConfiguration().getBounds();
+		int distance = Math.min(screenRectangle.width, screenRectangle.height) / 10;
 
 		Logging.info(this, "set size and location of mainFrame");
 
 		// weird formula for size
-		mainFrame.setSize(screenRectangle.width * 19 / 20 - 100, screenRectangle.height * 19 / 20 - 100);
+		mainFrame.setSize(screenRectangle.width - distance, screenRectangle.height - distance);
 
 		// Center mainFrame on screen of configed.fProgress
 		mainFrame.setLocation((int) (screenRectangle.getCenterX() - mainFrame.getSize().getWidth() / 2),
@@ -1343,9 +1343,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.info(this, "setting mainframe visible");
 		mainFrame.setVisible(true);
-
-		mainFrame.panelLocalbootProductSettings.setDividerLocation(mainFrame.getSize().width - 600);
-		mainFrame.panelNetbootProductSettings.setDividerLocation(mainFrame.getSize().width - 600);
 	}
 
 	protected void initLicencesFrame() {
@@ -1484,9 +1481,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
 	}
 
-	protected void login(List<String> savedServers)
 	// returns true if we have a PersistenceController and are connected
-	{
+	protected void login(List<String> savedServers) {
 
 		Logging.debug(this, " create password dialog ");
 		dPassword = new DPassword(this);
@@ -1517,9 +1513,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// dpass will give back control and call loadDataAndGo
 		}
 
-		// This must be called last, so that  loading frame for connection is called last
+		// This must be called last, so that loading frame for connection is called last
 		// and on top of the login-frame
-		if ((host != null && user != null && password != null)) {
+		if (host != null && user != null && password != null) {
 			// Auto login
 			Logging.info(this, "start with given credentials");
 
@@ -1670,7 +1666,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				Logging.info(this, "------------ buildPclistTableModel, allPCs (2) " + allPCs.length);
 
-				// we got already allowedClients, therefore don't need the parameter hostgroupsPermitted
+				// we got already allowedClients, therefore don't need the parameter
+				// hostgroupsPermitted
 				treeClients.associateClientsToGroups(allPCs, persist.getFObject2Groups(), null);
 
 				Logging.info(this, "tree produced");
@@ -1993,7 +1990,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
 					"ConfigedMain.pclistTableModel." + HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL));
 
-			javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+			TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 
 			column.setMaxWidth(iconColumnMaxWidth);
 
@@ -2021,16 +2018,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "showAndSave found col " + col);
 
 			if (col > -1) {
-				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
 
 				// column.setCellRenderer(new
 
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
-						Globals.createImageIcon("images/checked_withoutbox.png", ""), null
-				// "")
-				));
+						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
 
 			}
 		}
@@ -2050,11 +2045,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
 			if (col > -1) {
-				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
-
-				// column.setCellRenderer(new
 
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
 						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
@@ -2079,7 +2072,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, "setSelectionPanelCols ,  found col " + col);
 
 			if (col > -1) {
-				javax.swing.table.TableColumn column = selectionPanel.getColumnModel().getColumn(col);
+				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
 				column.setMaxWidth(iconColumnMaxWidth);
 
@@ -2464,7 +2457,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		activeTreeNodes = new HashMap<>();
 		activePaths = new ArrayList<>();
 
-		treeClients = new de.uib.configed.tree.ClientTree(this);
+		treeClients = new ClientTree(this);
 		persist.getHostInfoCollections().setTree(treeClients);
 
 	}
@@ -2834,9 +2827,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
 				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection); // (*)
 
-				mainFrame.panelLocalbootProductSettings
-						.setSearchFields(de.uib.configed.guidata.InstallationStateTableModel
-								.localizeColumns(getLocalbootProductDisplayFieldsList()));
+				mainFrame.panelLocalbootProductSettings.setSearchFields(
+						InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
 
 				setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
 			} catch (Exception ex) {
@@ -4695,7 +4687,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			refreshClientList();
 
-			// Activate group of created Client (and the group of all clients if no group specified)
+			// Activate group of created Client (and the group of all clients if no group
+			// specified)
 			if (!activateGroup(group)) {
 				activateGroup(ClientTree.ALL_CLIENTS_NAME);
 			}
@@ -5007,8 +5000,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dialogRemoteControl.setMeanings(rcCommands);
 			dialogRemoteControl.setEditable(commandsEditable);
 
-			dialogRemoteControl
-					.setListModel(new DefaultComboBoxModel<>(remoteControls.keySet().toArray(new String[0])));
+			// we want to present a sorted list of the keys
+			List<String> sortedKeys = new ArrayList<>(remoteControls.keySet());
+			sortedKeys.sort(Comparator.comparing(String::toString));
+			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
 
 			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, false, ""));
 
@@ -5191,7 +5186,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			fAskCopyClient.setVisible(true);
 
 			if (fAskCopyClient.getResult() == 2) {
-				boolean overwriteExistingHost = false;
 				String newClientName = jTextHostname.getText();
 
 				if (newClientName.isEmpty()) {
@@ -5203,15 +5197,18 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				String newClientNameWithDomain = newClientName + "." + splittedClientName[1] + "."
 						+ splittedClientName[2];
 
+				// if client already exists ask if they want to override
 				if (persist.getHostInfoCollections().getOpsiHostNames().contains(newClientNameWithDomain)) {
-					overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
-				}
+					boolean overwriteExistingHost = ask2OverwriteExistingHost(newClientNameWithDomain);
 
-				if (!overwriteExistingHost) {
-					return;
+					if (!overwriteExistingHost) {
+						return;
+					}
 				}
 
 				CopyClient copyClient = new CopyClient(clientToCopy, newClientName);
+
+				Logging.info(this, "copy client with new name " + newClientName);
 				copyClient.copy();
 
 				refreshClientList(newClientName);
@@ -5373,8 +5370,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void selectClientsByFailedAtSomeTimeAgo(String arg) {
-		de.uib.configed.clientselection.SelectionManager manager = new de.uib.configed.clientselection.SelectionManager(
-				null);
+		SelectionManager manager = new SelectionManager(null);
 
 		if (arg == null || arg.equals("")) {
 			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
@@ -5426,8 +5422,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 		}
 
-		de.uib.configed.clientselection.SelectionManager manager = new de.uib.configed.clientselection.SelectionManager(
-				null);
+		SelectionManager manager = new SelectionManager(null);
 
 		String test = String.format(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_PRODUCT, selectedProducts.get(0));
 
