@@ -555,7 +555,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		try {
 			Configed.savedStates.load();
 		} catch (IOException iox) {
-			Logging.warning(this, "saved states file could not be loaded");
+			Logging.warning(this, "saved states file could not be loaded", iox);
 		}
 
 		Integer oldUsageCount = Integer.valueOf(Configed.savedStates.saveUsageCount.deserialize());
@@ -1795,7 +1795,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 *
 	 * @param groupname
 	 */
-	public boolean activateGroup(String groupname) {
+	public boolean activateGroup(boolean preferringOldSelection, String groupname) {
 		Logging.info(this, "activateGroup  " + groupname);
 		if (groupname == null) {
 			return false;
@@ -1809,7 +1809,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		GroupNode node = treeClients.getGroupNode(groupname);
 		TreePath path = treeClients.getPathToNode(node);
 
-		activateGroupByTree(false, node, path);
+		activateGroupByTree(preferringOldSelection, node, path);
 
 		Logging.info(this, "expand activated  path " + path);
 		treeClients.expandPath(path);
@@ -1824,7 +1824,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 */
 	public void setGroup(String groupname) {
 		Logging.info(this, "setGroup " + groupname);
-		if (!activateGroup(groupname)) {
+		if (!activateGroup(true, groupname)) {
 			return;
 		}
 
@@ -3661,7 +3661,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, " ==== refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
 			refreshClientList();
-			activateGroup(oldGroupSelection);
+			activateGroup(true, oldGroupSelection);
 		}
 	}
 
@@ -4548,10 +4548,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			oldGroupSelection = Configed.savedStates.saveGroupSelection.deserialize();
 		}
 
-		if (oldGroupSelection != null && activateGroup(oldGroupSelection)) {
+		if (oldGroupSelection != null && activateGroup(true, oldGroupSelection)) {
 			Logging.info(this, "old group reset " + oldGroupSelection);
 		} else {
-			activateGroup(ClientTree.ALL_CLIENTS_NAME);
+			activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 		}
 	}
 
@@ -4562,7 +4562,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected void refreshClientListActivateALL() {
 		Logging.info(this, "refreshClientListActivateALL");
 		refreshClientList();
-		activateGroup(ClientTree.ALL_CLIENTS_NAME);
+		activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 	}
 
 	protected void refreshClientList() {
@@ -4607,7 +4607,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		persist.hostConfigsRequestRefresh();
 		persist.hostGroupsRequestRefresh();
 		persist.fObject2GroupsRequestRefresh();
-		persist.fGroup2MembersRequestRefresh(); // ??
+		persist.fGroup2MembersRequestRefresh();
 		refreshClientListKeepingGroup();
 	}
 
@@ -4689,8 +4689,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// Activate group of created Client (and the group of all clients if no group
 			// specified)
-			if (!activateGroup(group)) {
-				activateGroup(ClientTree.ALL_CLIENTS_NAME);
+			if (!activateGroup(false, group)) {
+				activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 			}
 
 			// Sets the client on the table
