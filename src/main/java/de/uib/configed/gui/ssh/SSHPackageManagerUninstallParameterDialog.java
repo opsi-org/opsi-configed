@@ -1,6 +1,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NavigableSet;
@@ -30,8 +31,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxSimpleToolTip;
 import de.uib.utilities.thread.WaitCursor;
 
-public class SSHPackageManagerUninstallParameterDialog
-		extends /* javax.swing.JDialog */ SSHPackageManagerParameterDialog {
+public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManagerParameterDialog {
 
 	private JPanel uninstallPanel = new JPanel();
 
@@ -223,7 +223,7 @@ public class SSHPackageManagerUninstallParameterDialog
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		uninstallPanel.setBorder(BorderFactory.createTitledBorder(""));
-		uninstallPanel.setPreferredSize(new java.awt.Dimension(376, 220));
+		uninstallPanel.setPreferredSize(new Dimension(376, 220));
 
 		jLabelUninstall.setText(Configed
 				.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelUninstall"));

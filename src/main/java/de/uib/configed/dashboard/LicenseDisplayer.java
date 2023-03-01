@@ -32,6 +32,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
+import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -196,7 +197,7 @@ public class LicenseDisplayer {
 		TableUpdateCollection updateCollection;
 
 		columnNames = new ArrayList<>();
-		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS) {
+		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {
 			columnNames.add(key);
 		}
 
@@ -268,7 +269,7 @@ public class LicenseDisplayer {
 		return result.toString();
 	}
 
-	private java.util.Set<String> getRangeSWxLicencepool(String swName)
+	private Set<String> getRangeSWxLicencepool(String swName)
 	// nearly done in produceModelSWxLicencepool, but we collect the range of the
 	// model-map
 	{
@@ -288,7 +289,7 @@ public class LicenseDisplayer {
 	}
 
 	private boolean checkExistNamesWithVariantLicencepools(String name) {
-		java.util.Set<String> range = getRangeSWxLicencepool(name);
+		Set<String> range = getRangeSWxLicencepool(name);
 
 		if (range.size() > 1)
 		// && range.contains( FSoftwarename2LicencePool.valNoLicencepool ))

@@ -88,21 +88,37 @@ public class SelectionManager {
 		LinkedList<AbstractSelectOperation> tmpList = new LinkedList<>();
 		tmpList.add(build(operationsWithStatuses, new int[] { 0 }));
 		Logging.debug(this, "addGroupOperation: " + name + " " + tmpList.size() + " " + tmpList.get(0));
-		if (name.equals("Software")) {
+
+		switch (name) {
+		case "Software":
 			groupStatus.operation = new SoftwareOperation(tmpList);
-		} else if (name.equals("Properties")) {
+			break;
+
+		case "Properties":
 			groupStatus.operation = new PropertiesOperation(tmpList);
-		} else if (name.equals("SoftwareWithProperties")) {
+			break;
+
+		case "SoftwareWithProperties":
 			groupStatus.operation = new SoftwareWithPropertiesOperation(tmpList);
-		} else if (name.equals("Hardware")) {
+			break;
+
+		case "Hardware":
 			groupStatus.operation = new HardwareOperation(tmpList);
-		} else if (name.equals("SwAudit")) {
+			break;
+
+		case "SwAudit":
 			groupStatus.operation = new SwAuditOperation(tmpList);
-		} else if (name.equals("Host")) {
+			break;
+
+		case "Host":
 			groupStatus.operation = new HostOperation(tmpList);
-		} else {
+			break;
+
+		default:
 			throw new IllegalArgumentException(name + " is no valid group operation.");
+
 		}
+
 		groupWithStatusList.add(groupStatus);
 
 		if (name.equals("Software")) {
@@ -164,12 +180,12 @@ public class SelectionManager {
 		if (withMySQL) {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsSQL(controller, operation);
-			Logging.notice(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			Logging.notice(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1_000_000));
 			return l;
 		} else {
 			long startTime = System.nanoTime();
 			List<String> l = selectClientsLocal(operation);
-			Logging.notice(this, "select Clients without MySQL " + ((System.nanoTime() - startTime) / 1000000));
+			Logging.notice(this, "select Clients without MySQL " + ((System.nanoTime() - startTime) / 1_000_000));
 			return l;
 		}
 	}

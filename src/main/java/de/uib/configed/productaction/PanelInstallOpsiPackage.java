@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.FileUtils;
 
@@ -264,8 +265,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		chooserPackage = new JFileChooser();
 		chooserPackage.setPreferredSize(Globals.filechooserSize);
 
-		javax.swing.filechooser.FileNameExtensionFilter filter = new javax.swing.filechooser.FileNameExtensionFilter(
-				"opsi package", "opsi");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("opsi package", "opsi");
 		chooserPackage.addChoosableFileFilter(filter);
 		chooserPackage.setFileFilter(filter);
 		chooserPackage.setApproveButtonText(Configed.getResourceValue("FileChooser.approve"));

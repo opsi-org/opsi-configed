@@ -52,15 +52,24 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 			Logging.debug(this, "response data: " + data.toString());
 
 			if (type.startsWith("terminal_")) {
-				if (type.equals("terminal_data_read")) {
+
+				switch (type) {
+				case "terminal_data_read":
 					WebSocketInputStream.getInstance().write((byte[]) data.get("data"));
-				} else if (type.equals("terminal_open_event")) {
+					break;
+
+				case "terminal_open_event":
 					Terminal terminal = Terminal.getInstance();
 					terminal.setTerminalId((String) data.get("terminal_id"));
 					terminal.setTerminalChannel((String) data.get("back_channel"));
 					terminal.unlock();
-				} else if (type.equals("terminal_close_event")) {
+				case "terminal_close_event":
 					Terminal.getInstance().close();
+					break;
+
+				default:
+					Logging.warning(this, "unexpected terminal-message from messagebus");
+					break;
 				}
 			}
 

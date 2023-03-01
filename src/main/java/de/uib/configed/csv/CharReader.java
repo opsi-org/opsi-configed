@@ -32,7 +32,8 @@ public class CharReader {
 
 	private char get() {
 		lastRead = index - 1;
-		char item = buff[index++];
+		char item = buff[index];
+		index++;
 		index %= size;
 		return item;
 	}

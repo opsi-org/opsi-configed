@@ -1,5 +1,6 @@
 package de.uib.configed.gui;
 
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JEditorPane;
@@ -23,7 +24,7 @@ public class FEditorPane extends FGeneralDialog {
 		editPane.setBackground(Globals.BACKGROUND_COLOR_4);
 		editPane.setText("          ");
 		editPane.setEditable(false);
-		editPane.setFont(new java.awt.Font("Dialog", 0, 10));
+		editPane.setFont(new Font("Dialog", 0, 10));
 
 		scrollpane.getViewport().add(editPane, null);
 

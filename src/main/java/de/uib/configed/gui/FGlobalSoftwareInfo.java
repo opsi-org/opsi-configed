@@ -18,6 +18,7 @@ import de.uib.configed.Configed;
  */
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
+import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -74,7 +75,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	private void initDataStructure() {
 		columnNames = new ArrayList<>();
 		columnNames.add("ID");
-		for (String key : de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT) {
+		for (String key : SWAuditEntry.KEYS_FOR_IDENT) {
 			columnNames.add(key);
 		}
 

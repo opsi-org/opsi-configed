@@ -27,6 +27,7 @@ import java.util.TreeMap;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -498,8 +499,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		GroupLayout layoutCommandpane = new GroupLayout(commandpane);
 		commandpane.setLayout(layoutCommandpane);
 
-		layoutCommandpane.setHorizontalGroup(layoutCommandpane
-				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+		layoutCommandpane.setHorizontalGroup(layoutCommandpane.createParallelGroup(Alignment.LEADING)
 				.addGroup(layoutCommandpane.createSequentialGroup()
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -534,7 +534,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-				.addGroup(layoutCommandpane.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+				.addGroup(layoutCommandpane.createParallelGroup(Alignment.CENTER)
 						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jComboBoxSearch, FIELD_H, FIELD_H, FIELD_H)

@@ -3,6 +3,7 @@ package de.uib.utilities.tree;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.tree.TreePath;
 
@@ -23,7 +24,7 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 		}
 	}
 
-	public java.util.Set<String> collectNodeNames() {
+	public Set<String> collectNodeNames() {
 		HashSet<String> set = new HashSet<>();
 
 		for (String nodename : this) {

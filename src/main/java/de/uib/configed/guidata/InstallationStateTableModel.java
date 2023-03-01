@@ -103,21 +103,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	Map<Integer, Map<String, String>> changeEventCount2product2request;
 
-	/*
-	 * protected Map targets; //combined values for selected clients
-	 * protected Map states; //combined values for selected clients
-	 * protected Map installationInfos; //combined values for selected clients
-	 * protected Map results; //combined values for selected clients
-	 * protected Map progresses; //combined values for selected clients
-	 * protected Map lastActions; //combined values for selected clients
-	 * protected Map actions; //combined values for selected clients
-	 * protected Map priorities; //combined values for selected clients
-	 * protected Map positions; //combined values for selected clients
-	 * protected Map versionInfos; //combined values for selected clients
-	 * protected Map productVersions; //combined values for selected clients
-	 * protected Map packageVersions; //combined values for selected clients
-	 */
-
 	// state key (column name) --> product name --> visual value
 	protected Map<String, Map<String, String>> combinedVisualValues;
 
@@ -222,7 +207,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	public InstallationStateTableModel(String[] selectedClients, ConfigedMain main,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
-			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions, // product-->possibleActions
+			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
 			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
 		Logging.info(this, "creating an InstallationStateTableModel ");
 		if (statesAndActions == null) {
@@ -1222,7 +1207,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return combinedVisualValues.get(ProductState.KEY_ACTION_SEQUENCE).get(actualProduct);
 
 		case 11:
-			return productNamesInDeliveryOrder.indexOf(actualProduct); // ProductState.KEY_position
+			return productNamesInDeliveryOrder.indexOf(actualProduct);
 
 		case 12:
 			String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)

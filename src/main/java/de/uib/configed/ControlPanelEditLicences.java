@@ -9,6 +9,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelEditLicences;
 import de.uib.configed.type.licences.LicenceEntry;
@@ -100,7 +101,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		thePanel.panelKeys.addPopupItem(menuItemAddKey);
 
 		// special treatment of columns
-		javax.swing.table.TableColumn col;
+		TableColumn col;
 
 		col = thePanel.panelKeys.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP0 = new JComboBox<>();
@@ -191,8 +192,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		}));
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(5);
-		col.setCellEditor(new de.uib.utilities.table.gui.CellEditor4TableText(new FEditDate("", false),
-				FEditDate.AREA_DIMENSION));
+		col.setCellEditor(new CellEditor4TableText(new FEditDate("", false), FEditDate.AREA_DIMENSION));
 
 		// expiration date
 
@@ -396,8 +396,8 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		col = thePanel.panelLicencecontracts.getColumnModel().getColumn(5);
 
 		FEditPane fedNotes = new FEditPane("", "Notes");
-		CellEditor4TableText cellEditorLicenceContractNotes = new de.uib.utilities.table.gui.CellEditor4TableText(
-				fedNotes, FEditPane.AREA_DIMENSION);
+		CellEditor4TableText cellEditorLicenceContractNotes = new CellEditor4TableText(fedNotes,
+				FEditPane.AREA_DIMENSION);
 
 		fedNotes.setServedCellEditor(cellEditorLicenceContractNotes);
 		col.setCellEditor(cellEditorLicenceContractNotes);

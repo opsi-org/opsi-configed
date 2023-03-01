@@ -7,6 +7,7 @@
 package de.uib.utilities.swing;
 
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
@@ -53,7 +54,7 @@ public class PanelLinedComponents extends JPanel {
 		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
 		vGroup.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2);
 
-		GroupLayout.ParallelGroup vGroup1 = layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER);
+		GroupLayout.ParallelGroup vGroup1 = layout.createParallelGroup(Alignment.CENTER);
 
 		if (components != null) {
 			for (int j = 0; j < components.length; j++) {

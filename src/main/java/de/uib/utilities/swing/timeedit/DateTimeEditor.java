@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,8 +26,8 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	protected JXMonthView monthView;
 	protected TimeEditor timeSetter;
 	protected Calendar calendar;
-	protected java.text.DateFormat hourDateFormat;
-	protected javax.swing.JSpinner monthSpinner;
+	protected DateFormat hourDateFormat;
+	protected JSpinner monthSpinner;
 	protected SpinnerModel monthSpinnerModel;
 	protected JButton buttonBack;
 	protected JButton buttonForward;
@@ -109,7 +110,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		buttonYearForward.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
 		buttonYearForward.addActionListener(actionEvent -> switchYear(+1));
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+		GroupLayout layout = new GroupLayout(this);
 		super.setLayout(layout);
 
 		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)

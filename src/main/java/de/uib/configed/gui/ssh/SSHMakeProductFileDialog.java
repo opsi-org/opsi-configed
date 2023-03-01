@@ -1,6 +1,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
+import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -409,10 +410,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 							+ "Please also check the rights of the file/s.");
 		} else {
 			String[] versions = result.replace("version: ", "").split("\n");
-			Logging.info(this, "doActionGetVersions, getDirectories result " + java.util.Arrays.toString(versions));
+			Logging.info(this, "doActionGetVersions, getDirectories result " + Arrays.toString(versions));
 			if (versions.length < 1) {
-				Logging.info(this,
-						"doActionGetVersions, not expected versions array " + java.util.Arrays.toString(versions));
+				Logging.info(this, "doActionGetVersions, not expected versions array " + Arrays.toString(versions));
 				return "";
 			}
 			return versions[0] + ";;;" + versions[1];

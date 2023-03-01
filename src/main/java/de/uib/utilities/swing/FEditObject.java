@@ -17,6 +17,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,10 +32,11 @@ import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.IconButton;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 
-public class FEditObject extends javax.swing.JDialog implements ActionListener, KeyListener, DocumentListener {
+public class FEditObject extends JDialog implements ActionListener, KeyListener, DocumentListener {
 	public static final RunningInstances<JDialog> runningInstances = new RunningInstances<>(JDialog.class,
 			"leaving dialog");
 
@@ -51,10 +54,10 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 	protected JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
-	protected de.uib.configed.gui.IconButton buttonCommit;
-	protected de.uib.configed.gui.IconButton buttonCancel;
-	protected de.uib.configed.gui.IconButton buttonAdd;
-	protected de.uib.configed.gui.IconButton buttonRemove;
+	protected IconButton buttonCommit;
+	protected IconButton buttonCancel;
+	protected IconButton buttonAdd;
+	protected IconButton buttonRemove;
 
 	protected String tooltipCommit = Configed.getResourceValue("FEditObject.SaveButtonTooltip");
 
@@ -88,29 +91,29 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		loggingArea.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-		scrollpaneL = new javax.swing.JScrollPane();
+		scrollpaneL = new JScrollPane();
 		scrollpaneL.setViewportView(loggingArea);
 		scrollpaneL.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		loggingPanel.add(scrollpaneL, BorderLayout.CENTER);
 
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 
-		buttonCommit = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.SaveButtonTooltip"),
-				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png", true);
+		buttonCommit = new IconButton(Configed.getResourceValue("FEditObject.SaveButtonTooltip"), "images/apply.png",
+				"images/apply_over.png", "images/apply_disabled.png", true);
 		buttonCommit.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 
-		buttonCancel = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.CancelButtonTooltip"),
-				"images/cancel.png", "images/cancel_over.png", "images/cancel_disabled.png", true);
+		buttonCancel = new IconButton(Configed.getResourceValue("FEditObject.CancelButtonTooltip"), "images/cancel.png",
+				"images/cancel_over.png", "images/cancel_disabled.png", true);
 		buttonCancel.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonCancel.setEnabled(true);
 
-		buttonRemove = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
+		buttonRemove = new IconButton(Configed.getResourceValue("FEditObject.RemoveButtonTooltip"),
 				"images/list-remove.png", "images/list-remove.png", "images/list-remove_disabled.png", true);
 		buttonRemove.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonRemove.setVisible(false);
 
-		buttonAdd = new de.uib.configed.gui.IconButton(Configed.getResourceValue("FEditObject.AddButtonTooltip"),
-				"images/list-add.png", "images/list-add.png", "images/list-add_disabled.png", true);
+		buttonAdd = new IconButton(Configed.getResourceValue("FEditObject.AddButtonTooltip"), "images/list-add.png",
+				"images/list-add.png", "images/list-add_disabled.png", true);
 		buttonAdd.setPreferredSize(new Dimension(BUTTON_WIDTH, Globals.BUTTON_HEIGHT));
 		buttonAdd.setVisible(false);
 
@@ -149,48 +152,39 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 		extraField.getDocument().addDocumentListener(this);
 
-		javax.swing.GroupLayout layout1 = new javax.swing.GroupLayout(framingPanel);
+		GroupLayout layout1 = new GroupLayout(framingPanel);
 		framingPanel.setLayout(layout1);
-		layout1.setHorizontalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout1.createSequentialGroup()
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(editingArea, 60, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-								.addGroup(layout1.createSequentialGroup()
-										.addComponent(buttonCancel, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonCommit, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE)
-										.addComponent(buttonRemove, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(buttonAdd, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(extraField, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE)
-										.addComponent(extraLabel, 20, javax.swing.GroupLayout.PREFERRED_SIZE,
-												Short.MAX_VALUE)))
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
-		layout1.setVerticalGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout1.createSequentialGroup()
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addComponent(editingArea, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(layout1.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(buttonCancel, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonCommit, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonRemove, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(buttonAdd, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(extraField, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(extraLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
+		layout1.setHorizontalGroup(layout1.createParallelGroup(Alignment.LEADING).addGroup(layout1
+				.createSequentialGroup().addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGroup(layout1.createParallelGroup(Alignment.LEADING)
+						.addComponent(editingArea, 60, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+						.addGroup(layout1.createSequentialGroup()
+								.addComponent(buttonCancel, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonCommit, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGap(Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE, 2 * Globals.VGAP_SIZE)
+								.addComponent(buttonRemove, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(buttonAdd, 20, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(extraField, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+								.addComponent(extraLabel, 20, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
+		layout1.setVerticalGroup(layout1.createParallelGroup(Alignment.LEADING).addGroup(layout1.createSequentialGroup()
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addComponent(editingArea, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
+				.addGroup(layout1.createParallelGroup(Alignment.BASELINE)
+						.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonRemove, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonAdd, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(extraField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(extraLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE))
+				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		if (loggingPanel.isVisible()) {
 			splitPane.setTopComponent(framingPanel);
@@ -198,36 +192,33 @@ public class FEditObject extends javax.swing.JDialog implements ActionListener, 
 
 			add(splitPane);
 
-			javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+			GroupLayout layout = new GroupLayout(getContentPane());
 			this.setLayout(layout);
-			layout.setHorizontalGroup(layout.createSequentialGroup()
-					.addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
-					.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-							.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
-					.addContainerGap().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
+			layout.setHorizontalGroup(
+					layout.createSequentialGroup().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin)
+							.addGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
+									GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+							.addContainerGap().addGap(splitPaneHMargin, splitPaneHMargin, splitPaneHMargin));
 
-			layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-					.addComponent(splitPane, 0, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
+			layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING).addComponent(splitPane, 0,
+					GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		} else {
 
-			javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+			GroupLayout layout = new GroupLayout(getContentPane());
 			getContentPane().setLayout(layout);
-			layout.setHorizontalGroup(
-					layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-							.addGroup(layout.createSequentialGroup().addContainerGap()
-									.addComponent(framingPanel, 100, javax.swing.GroupLayout.DEFAULT_SIZE,
-											Short.MAX_VALUE)
-									.addContainerGap())
-							.addGroup(layout
-									.createSequentialGroup().addContainerGap().addComponent(loggingPanel, 100,
-											javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-									.addContainerGap()));
-			layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+			layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
+					.addGroup(layout.createSequentialGroup().addContainerGap()
+							.addComponent(framingPanel, 100, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addContainerGap())
+					.addGroup(layout.createSequentialGroup().addContainerGap()
+							.addComponent(loggingPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+							.addContainerGap()));
+			layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
 					.addGroup(layout.createSequentialGroup().addContainerGap(20, 20)
-							.addComponent(framingPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
-									javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-							.addComponent(loggingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, Short.MAX_VALUE)
+							.addComponent(framingPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+									Short.MAX_VALUE)
+							.addComponent(loggingPanel, GroupLayout.PREFERRED_SIZE, 30, Short.MAX_VALUE)
 							.addContainerGap(20, 20)));
 
 		}

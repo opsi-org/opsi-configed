@@ -12,6 +12,7 @@
 
 package de.uib.configed.gui.hwinfopage;
 
+import java.awt.Dimension;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableColumn;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -234,7 +236,7 @@ public class ControllerHWinfoMultiClients {
 				fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel,
 						true);
 
-				fTable.setSize(new java.awt.Dimension(ConfigedMain.getMainFrame().getSize().width - 50,
+				fTable.setSize(new Dimension(ConfigedMain.getMainFrame().getSize().width - 50,
 						ConfigedMain.getMainFrame().getSize().height / 2));
 			}
 
@@ -260,7 +262,7 @@ public class ControllerHWinfoMultiClients {
 		panel.addListSelectionListener(listSelectionEvent -> buttonCopySelection
 				.setEnabled(!((ListSelectionModel) listSelectionEvent.getSource()).isSelectionEmpty()));
 
-		javax.swing.table.TableColumn col;
+		TableColumn col;
 		col = panel.getColumnModel().getColumn(0);
 		col.setHeaderValue(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientName"));
 		col = panel.getColumnModel().getColumn(1);

@@ -31,7 +31,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 	// State reducedTo1stSelection
 	// List reductionList
 
-	de.uib.configed.productgroup.ProductgroupPanel groupPanel;
+	ProductgroupPanel groupPanel;
 
 	JMenuItemFormatted popupMarkHits;
 

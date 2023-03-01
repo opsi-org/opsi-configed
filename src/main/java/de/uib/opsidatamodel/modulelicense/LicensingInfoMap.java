@@ -571,22 +571,16 @@ public final class LicensingInfoMap {
 							currentCloseToLimitModuleList.add(currentModule);
 						}
 
-					} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT))
-
-					{
+					} else if (((String) moduleInfo.get(STATE)).equals(STATE_OVER_LIMIT)) {
 						allOverLimitModules.add(currentModule);
 
 						if (key.equals(latestDateString)) {
 							currentOverLimitModuleList.add(currentModule);
 						}
-					}
-
-					else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_WARNING)) {
+					} else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_WARNING)) {
 						moduleInfo.put(STATE, STATE_DAYS_WARNING);
 						currentTimeWarningModuleList.add(currentModule);
-					}
-
-					else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_OVER)) {
+					} else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_OVER)) {
 						moduleInfo.put(STATE, STATE_DAYS_OVER);
 						currentTimeOverModuleList.add(currentModule);
 					}
@@ -710,9 +704,7 @@ public final class LicensingInfoMap {
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0) {
 					newest = thisDate;
-				}
-
-				else {
+				} else {
 					break;
 				}
 			}

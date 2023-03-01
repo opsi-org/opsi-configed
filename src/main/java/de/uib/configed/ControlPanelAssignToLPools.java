@@ -15,11 +15,13 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.licences.PanelAssignToLPools;
+import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
@@ -29,6 +31,7 @@ import de.uib.utilities.table.DefaultTableModelFilterCondition;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.TableModelFilterCondition;
+import de.uib.utilities.table.gui.AdaptingCellEditor;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.AbstractSelectionMemorizerUpdateController;
@@ -170,7 +173,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 				rowMap.put("ID", ID);
 
-				List<String> identKeys = de.uib.configed.type.SWAuditEntry.KEYS_FOR_IDENT;
+				List<String> identKeys = SWAuditEntry.KEYS_FOR_IDENT;
 				if (rowValues.length != identKeys.size()) {
 					Logging.warning(this, "illegal ID " + ID);
 				} else {
@@ -436,7 +439,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.panelLicencepools.addPopupItem(menuItemAddPool);
 
 		// special treatment of columns
-		javax.swing.table.TableColumn col;
+		TableColumn col;
 		thePanel.panelLicencepools.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// updates
@@ -523,7 +526,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(0);
 		JComboBox<String> comboLP0 = new JComboBox<>();
 		comboLP0.setFont(Globals.defaultFontBig);
-		col.setCellEditor(new de.uib.utilities.table.gui.AdaptingCellEditor(comboLP0, (row, column) -> {
+		col.setCellEditor(new AdaptingCellEditor(comboLP0, (row, column) -> {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
@@ -538,7 +541,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP1 = new JComboBox<>();
 		comboLP1.setFont(Globals.defaultFontBig);
-		col.setCellEditor(new de.uib.utilities.table.gui.AdaptingCellEditor(comboLP1,
+		col.setCellEditor(new AdaptingCellEditor(comboLP1,
 				(row, column) -> new DefaultComboBoxModel<>(persist.getProductIds().toArray(new String[0]))));
 
 		// updates
@@ -560,7 +563,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		// --- panelRegisteredSoftware
 
-		columnNames = new ArrayList<>(de.uib.configed.type.SWAuditEntry.getDisplayKeys());
+		columnNames = new ArrayList<>(SWAuditEntry.getDisplayKeys());
 
 		// introducing a column for displaying the cursor row
 		columnNames.add(colMarkCursorRow, "CURSOR");

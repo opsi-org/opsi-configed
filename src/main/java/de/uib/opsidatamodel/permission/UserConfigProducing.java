@@ -61,8 +61,8 @@ public class UserConfigProducing {
 	public List<Object> produce() {
 		readyObjects = new ArrayList<>();
 
-		java.util.Set<String> userparts = new TreeSet<>();
-		java.util.Set<String> roleparts = new TreeSet<>();
+		Set<String> userparts = new TreeSet<>();
+		Set<String> roleparts = new TreeSet<>();
 		produceRoleAndUserParts(userparts, roleparts);
 
 		Logging.info(this, "we have got logged in user " + ConfigedMain.user + " and configure based on it "
@@ -84,7 +84,7 @@ public class UserConfigProducing {
 		return readyObjects;
 	}
 
-	private void produceRoleAndUserParts(java.util.Set<String> userNames, java.util.Set<String> roleNames) {
+	private void produceRoleAndUserParts(Set<String> userNames, Set<String> roleNames) {
 		Logging.info(this, "produceRoleAndUserParts for " + userNames + " resp. " + roleNames);
 
 		final String roleBranchPart = UserConfig.KEY_USER_ROLE_ROOT;
@@ -204,7 +204,7 @@ public class UserConfigProducing {
 	}
 
 	/** we call up the cascade of default role, other roles, and the users */
-	protected void supplyAllPermissionEntries(java.util.Set<String> userParts, java.util.Set<String> roleParts) {
+	protected void supplyAllPermissionEntries(Set<String> userParts, Set<String> roleParts) {
 		Logging.info(this, "supplyAllPermissionEntries start");
 
 		Logging.info(this, "supplyAllPermissionEntries all roles " + roleParts);

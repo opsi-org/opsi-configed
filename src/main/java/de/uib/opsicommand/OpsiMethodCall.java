@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.uib.utilities.logging.Logging;
@@ -195,7 +196,7 @@ public class OpsiMethodCall {
 			jO.put("params", joParams);
 			result = jO.toString();
 
-		} catch (org.json.JSONException jex) {
+		} catch (JSONException jex) {
 			Logging.error(this, "Exception while producing a JSONObject, " + jex.toString());
 		}
 

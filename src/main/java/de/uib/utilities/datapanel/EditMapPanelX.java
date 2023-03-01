@@ -33,6 +33,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -358,14 +359,14 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 						jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
 						jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
-						java.awt.Font gotFont = jc.getFont();
+						Font gotFont = jc.getFont();
 						gotFont = gotFont.deriveFont(Font.BOLD);
 						jc.setFont(gotFont);
 					} else {
 
 						Object gotValue = table.getValueAt(rowIndex, 1);
 						if (markDeviation && !defaultValue.equals(gotValue)) {
-							java.awt.Font gotFont = jc.getFont();
+							Font gotFont = jc.getFont();
 							gotFont = gotFont.deriveFont(Font.BOLD);
 							jc.setFont(gotFont);
 						}
@@ -374,8 +375,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					if (vColIndex == 1 && Globals.isKeyForSecretValue((String) mapTableModel.getValueAt(rowIndex, 0))) {
 						if (jc instanceof JLabel) {
 							((JLabel) jc).setText(Globals.STARRED_STRING);
-						} else if (jc instanceof javax.swing.text.JTextComponent) {
-							((javax.swing.text.JTextComponent) jc).setText(Globals.STARRED_STRING);
+						} else if (jc instanceof JTextComponent) {
+							((JTextComponent) jc).setText(Globals.STARRED_STRING);
 						} else {
 							CellAlternatingColorizer.colorizeSecret(jc);
 						}

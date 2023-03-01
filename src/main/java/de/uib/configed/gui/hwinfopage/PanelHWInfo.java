@@ -133,14 +133,12 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		GroupLayout layoutEmbed = new GroupLayout(embed);
 		embed.setLayout(layoutEmbed);
 
-		layoutEmbed.setHorizontalGroup(layoutEmbed
-				.createSequentialGroup().addGap(hGap, hGap, hGap).addComponent(table,
-						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		layoutEmbed.setHorizontalGroup(layoutEmbed.createSequentialGroup().addGap(hGap, hGap, hGap)
+				.addComponent(table, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(hGap, hGap, hGap));
 
-		layoutEmbed.setVerticalGroup(layoutEmbed
-				.createSequentialGroup().addGap(vGap, vGap, vGap).addComponent(table,
-						javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+		layoutEmbed.setVerticalGroup(layoutEmbed.createSequentialGroup().addGap(vGap, vGap, vGap)
+				.addComponent(table, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(vGap, vGap, vGap));
 
 		jScrollPaneInfo = new JScrollPane(embed);
@@ -157,14 +155,14 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 								.addComponent(panelByAuditInfo, 30, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 								.addGap(hGap - 2, hGap - 2, hGap - 2)
 
-						).addComponent(contentPane, 100, javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
+						).addComponent(contentPane, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 				.addGap(hGap, hGap, hGap));
 
 		layoutBase.setVerticalGroup(layoutBase.createSequentialGroup().addGap(vGap, vGap, vGap)
 				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-				.addGap(vGap / 2, vGap / 2, vGap / 2).addComponent(contentPane, javax.swing.GroupLayout.PREFERRED_SIZE,
-						javax.swing.GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addGap(vGap / 2, vGap / 2, vGap / 2)
+				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 
 		);
 
@@ -514,7 +512,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			hwClassMapping.put(hwClassesUI[i], whc.get("Class").get(0).get("Opsi"));
 		}
 
-		java.util.Arrays.sort(hwClassesUI);
+		Arrays.sort(hwClassesUI);
 
 		for (int i = 0; i < hwClassesUI.length; i++) {
 			// get next key - value - pair
@@ -574,7 +572,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				}
 			}
 
-			java.util.Arrays.sort(names);
+			Arrays.sort(names);
 
 			for (int j = 0; j < names.length; j++) {
 				for (int k = 0; k < devices.size(); k++) {

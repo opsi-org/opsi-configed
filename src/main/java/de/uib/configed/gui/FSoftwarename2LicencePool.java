@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -206,17 +207,17 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		GroupLayout panelActionLayout = new GroupLayout(panelAction);
 		panelAction.setLayout(panelActionLayout);
 		panelActionLayout.setVerticalGroup(panelActionLayout.createSequentialGroup()
-				.addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+				.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
 						.addComponent(buttonRemoveAllAssignments, 5, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelRemoveAllAssignments, 5, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+				.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
 						.addComponent(buttonSetAllAssignmentsToGloballySelectedPool, 5, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelSetAllAssignmentsToGloballySelectedPool, 5, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
-				.addGroup(panelActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+				.addGroup(panelActionLayout.createParallelGroup(Alignment.CENTER)
 						.addComponent(buttonSetAllAssignmentsToPoolFromSelectedRow, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelSetAllAssignmentsToPoolFromSelectedRow, GroupLayout.PREFERRED_SIZE,
@@ -287,7 +288,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private void initDataStructure() {
 		columnNames = new ArrayList<>();
-		for (String key : de.uib.configed.type.SWAuditEntry.ID_VARIANTS_COLS) {
+		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {
 			columnNames.add(key);
 		}
 

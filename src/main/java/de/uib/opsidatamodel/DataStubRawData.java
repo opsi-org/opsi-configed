@@ -329,7 +329,7 @@ public class DataStubRawData extends DataStubNOM {
 			}
 
 			Logging.info(this, "retrieveSoftwareAuditOnClients used memory on end "
-					+ Runtime.getRuntime().totalMemory() / 1000000 + " MB");
+					+ Runtime.getRuntime().totalMemory() / 1_000_000 + " MB");
 
 			persist.notifyDataRefreshedObservers("softwareConfig");
 		}

@@ -3,11 +3,12 @@ package de.uib.utilities.swing;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JTextField;
 import javax.swing.text.Document;
 
 import de.uib.utilities.logging.Logging;
 
-public class JTextEditorField extends javax.swing.JTextField implements KeyListener {
+public class JTextEditorField extends JTextField implements KeyListener {
 	String lastSetS = null;
 
 	public JTextEditorField(String s) {

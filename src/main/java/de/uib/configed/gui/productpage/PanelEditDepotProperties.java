@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -45,13 +46,14 @@ import de.uib.configed.gui.IconButton;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
+import de.uib.utilities.datapanel.AbstractEditMapPanel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
 public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		implements ListSelectionListener, ActionListener, MouseListener, KeyListener {
 
-	private javax.swing.JLabel jLabelEditDepotProductProperties;
+	private JLabel jLabelEditDepotProductProperties;
 
 	private JList<String> listDepots;
 	private List<String> listSelectedDepots;
@@ -63,8 +65,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 	protected final Map<String, Object> emptyVisualData = new HashMap<>();
 
-	public PanelEditDepotProperties(ConfigedMain mainController,
-			de.uib.utilities.datapanel.AbstractEditMapPanel productPropertiesPanel) {
+	public PanelEditDepotProperties(ConfigedMain mainController, AbstractEditMapPanel productPropertiesPanel) {
 		super(mainController, productPropertiesPanel);
 		initComponents();
 		initTitlePanel();
@@ -84,7 +85,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		listSelectedDepots = new ArrayList<>();
 
-		JScrollPane scrollpaneDepots = new javax.swing.JScrollPane();
+		JScrollPane scrollpaneDepots = new JScrollPane();
 		scrollpaneDepots.setViewportView(listDepots);
 
 		popupDepot = new JPopupMenu();
@@ -136,18 +137,17 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		buttonSetValuesFromPackage.addActionListener(actionEvent -> productPropertiesPanel.resetDefaults());
 
 		JPanel panelTop = new JPanel();
-		javax.swing.GroupLayout layoutEditProperties = new javax.swing.GroupLayout(panelTop);
+		GroupLayout layoutEditProperties = new GroupLayout(panelTop);
 		panelTop.setLayout(layoutEditProperties);
 
 		layoutEditProperties.setHorizontalGroup(layoutEditProperties.createSequentialGroup()
 				.addComponent(panelDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(buttonSetValuesFromPackage, 40, 40, 40));
 
-		layoutEditProperties
-				.setVerticalGroup(layoutEditProperties.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-						.addComponent(panelDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-						.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		layoutEditProperties.setVerticalGroup(layoutEditProperties.createParallelGroup(Alignment.TRAILING)
+				.addComponent(panelDepots, minHSize, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+				.addComponent(buttonSetValuesFromPackage, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitter.setResizeWeight(0.3);

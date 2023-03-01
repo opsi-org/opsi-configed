@@ -1,5 +1,7 @@
 package de.uib.utilities.table.gui;
 
+import java.awt.Component;
+
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -11,9 +13,9 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 	}
 
 	@Override
-	public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-			boolean hasFocus, int row, int column) {
-		java.awt.Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
+		Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		CellAlternatingColorizer.colorize(cell, isSelected, (row % 2 == 0), true);
 

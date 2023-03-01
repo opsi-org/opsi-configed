@@ -14,6 +14,7 @@ import javax.swing.WindowConstants;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.utilities.logging.Logging;
@@ -76,14 +77,13 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 
 	private void initGUI() {
 		try {
-			jButtonKillProcess = new de.uib.configed.gui.IconButton(
-					Configed.getResourceValue("SSHConnection.buttonKillProcess"), "images/edit-delete.png",
-					"images/edit-delete.png", "images/edit-delete.png", true);
+			jButtonKillProcess = new IconButton(Configed.getResourceValue("SSHConnection.buttonKillProcess"),
+					"images/edit-delete.png", "images/edit-delete.png", "images/edit-delete.png", true);
 			jButtonKillProcess
 					.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
 			jButtonKillProcess.setToolTipText(Configed.getResourceValue("SSHConnection.buttonKillProcess"));
 
-			jButtonClear = new de.uib.configed.gui.IconButton(Configed.getResourceValue("SSHConnection.buttonClear"),
+			jButtonClear = new IconButton(Configed.getResourceValue("SSHConnection.buttonClear"),
 					"images/user-trash.png", "images/user-trash.png", "images/user-trash.png", true);
 			jButtonClear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
 			jButtonClear.setToolTipText(Configed.getResourceValue("SSHConnection.btn_clear"));

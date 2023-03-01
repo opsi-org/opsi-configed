@@ -9,6 +9,8 @@
 
 package de.uib.utilities.observer;
 
+import java.util.Set;
+
 /**
  * Observing RunningInstaces
  * 
@@ -17,8 +19,8 @@ package de.uib.utilities.observer;
  */
 
 public interface RunningInstancesObserver<T> {
-	public void executeCommandOnInstances(String command, java.util.Set<T> instances);
+	public void executeCommandOnInstances(String command, Set<T> instances);
 
-	public void instancesChanged(java.util.Set<T> instances);
+	public void instancesChanged(Set<T> instances);
 
 }

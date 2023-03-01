@@ -85,7 +85,7 @@ public class FShowList extends FTextArea {
 		jTextArea1.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
-		jTextArea1.setFont(new java.awt.Font("Dialog", 0, 14));
+		jTextArea1.setFont(new Font("Dialog", 0, 14));
 
 		scrollpane.getViewport().add(jTextArea1, null);
 

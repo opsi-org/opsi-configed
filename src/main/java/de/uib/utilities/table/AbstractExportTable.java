@@ -27,7 +27,7 @@ public abstract class AbstractExportTable {
 	protected List<String> classNames;
 	protected Map<String, String> metaData;
 
-	protected javax.swing.filechooser.FileNameExtensionFilter extensionFilter;
+	protected FileNameExtensionFilter extensionFilter;
 	protected String defaultExportFilename;
 
 	protected File exportDirectory;
@@ -251,7 +251,7 @@ public abstract class AbstractExportTable {
 		JFileChooser chooser = new JFileChooser(exportDirectory);
 		chooser.setPreferredSize(Globals.filechooserSize);
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PDF", "pdf"));
+		chooser.setFileFilter(new FileNameExtensionFilter("PDF", "pdf"));
 
 		chooser.setSelectedFile(defaultFile);
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);

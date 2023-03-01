@@ -190,7 +190,7 @@ public final class Terminal {
 			data.put("sender", "@");
 			data.put("channel", terminalChannel);
 			data.put("created", System.currentTimeMillis());
-			data.put("expires", System.currentTimeMillis() + 10000);
+			data.put("expires", System.currentTimeMillis() + 10_000);
 			data.put("terminal_id", terminalId);
 			data.put("rows", widget.getTerminalDisplay().getRowCount());
 			data.put("cols", widget.getTerminalDisplay().getColumnCount());

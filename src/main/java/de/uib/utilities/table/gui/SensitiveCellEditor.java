@@ -18,6 +18,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
+import org.json.JSONObject;
+
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditStringList;
@@ -229,7 +231,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 			String result = buf.toString();
 
 			if (result.equalsIgnoreCase("null")) {
-				return org.json.JSONObject.NULL;
+				return JSONObject.NULL;
 			}
 
 			return result;

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 
 /**
@@ -32,11 +33,13 @@ public abstract class AbstractHostInfoCollections {
 
 	public abstract List<String> getOpsiHostNames();
 
-	public abstract Map<String, Map<String, Object>> getDepots();// only master depots
+	// only master depots
+	public abstract Map<String, Map<String, Object>> getDepots();
 
 	public abstract Map<String, Map<String, Object>> getAllDepots();
 
-	public abstract List<String> getDepotNamesList(); // master depots in display order
+	// master depots in display order
+	public abstract List<String> getDepotNamesList();
 
 	public abstract Map<String, String> getMapPcBelongsToDepot();
 
@@ -61,6 +64,6 @@ public abstract class AbstractHostInfoCollections {
 
 	protected abstract void retrieveOpsiHosts();
 
-	public abstract void setTree(de.uib.configed.tree.ClientTree tree);
+	public abstract void setTree(ClientTree tree);
 
 }
