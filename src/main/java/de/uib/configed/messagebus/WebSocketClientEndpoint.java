@@ -55,7 +55,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 			if (type.startsWith("terminal_")) {
 				switch (type) {
 				case "terminal_data_read":
-					WebSocketInputStream.getInstance().write((byte[]) data.get("data"));
+					WebSocketInputStream.write((byte[]) data.get("data"));
 					break;
 				case "terminal_open_event":
 					Terminal terminal = Terminal.getInstance();
@@ -65,6 +65,8 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 					break;
 				case "terminal_close_event":
 					Terminal.getInstance().close();
+					break;
+				case "terminal_resize_event":
 					break;
 				default:
 					Logging.warning(this, "unhandeld terminal type response caught: " + type);

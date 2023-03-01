@@ -7,42 +7,11 @@ import java.io.PipedOutputStream;
 import de.uib.utilities.logging.Logging;
 
 public final class WebSocketInputStream {
-	private static WebSocketInputStream instance;
-
 	private static PipedOutputStream writer;
 	private static PipedInputStream reader;
 	private static boolean connected;
 
 	private WebSocketInputStream() {
-	}
-
-	public static WebSocketInputStream getInstance() {
-		if (instance == null) {
-			instance = new WebSocketInputStream();
-		}
-
-		if (writer == null) {
-			writer = new PipedOutputStream();
-		}
-
-		if (reader == null) {
-			reader = new PipedInputStream();
-		}
-
-		if (!connected) {
-			connect();
-		}
-
-		return instance;
-	}
-
-	private static void connect() {
-		try {
-			reader.connect(writer);
-			connected = true;
-		} catch (IOException e) {
-			Logging.warning("connecting reader with writer, when they're connected: ", e);
-		}
 	}
 
 	public static void write(byte[] message) throws IOException {
@@ -51,14 +20,34 @@ public final class WebSocketInputStream {
 	}
 
 	public static PipedInputStream getReader() {
+		if (!connected) {
+			connect();
+		}
+
 		return reader;
+	}
+
+	private static void connect() {
+		if (writer == null) {
+			writer = new PipedOutputStream();
+		}
+
+		if (reader == null) {
+			reader = new PipedInputStream();
+		}
+
+		try {
+			reader.connect(writer);
+			connected = true;
+		} catch (IOException e) {
+			Logging.warning("connecting reader with writer, when they're connected: ", e);
+		}
 	}
 
 	public static void close() throws IOException {
 		writer.close();
 		reader.close();
 
-		instance = null;
 		writer = null;
 		reader = null;
 		connected = false;
