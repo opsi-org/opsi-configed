@@ -317,7 +317,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	MyDialogRemoteControl dialogRemoteControl;
 	Map<String, RemoteControl> remoteControls;
 
-	private int clientCount = 0;
+	private int clientCount;
 	private boolean firstDepotListChange = true;
 
 	private final Dimension licencesInitDimension = new Dimension(1200, 800);
@@ -411,8 +411,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		SSHConnectionInfo.getInstance().setHost(host);
 		SSHConnectionInfo.getInstance().setUser(user);
 		SSHConnectionInfo.getInstance().setPassw(password);
-		SSHConnectionInfo.getInstance().useKeyfile(sshKey != null, sshKey != null ? sshKey : "",
-				sshKey != null ? sshKeyPass : "");
+		if (sshKey == null) {
+			SSHConnectionInfo.getInstance().useKeyfile(false, "", "");
+		} else {
+			SSHConnectionInfo.getInstance().useKeyfile(true, sshKey, sshKeyPass);
+		}
+
 		Logging.registLogEventObserver(this);
 	}
 
@@ -1214,7 +1218,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (depotsListSelectionListener == null) {
 			Logging.info(this, "create depotsListSelectionListener");
 			depotsListSelectionListener = new ListSelectionListener() {
-				private int counter = 0;
+				private int counter;
 
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
@@ -1564,7 +1568,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return result;
 	}
 
-	private int buildPclistTableModelCounter = 0;
+	private int buildPclistTableModelCounter;
 
 	protected TableModel buildClientListTableModel(boolean rebuildTree) {
 		Logging.debug(this, " --------- buildPclistTableModel rebuildTree " + rebuildTree);
@@ -2076,7 +2080,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		setRebuiltClientListTableModel(restoreSortKeys, true, selectionPanel.getSelectedSet());
 	}
 
-	private int reloadCounter = 0;
+	private int reloadCounter;
 
 	protected void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
 			Set<String> selectValues) {
@@ -4167,6 +4171,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		final boolean onlySelectedClients = (selectedClients != null && selectedClients.length > 0);
 
 		final String[] selClients = selectedClients;
+
 		Logging.info(this, "we have sel clients " + selClients.length);
 
 		// we put this into a thread since it may never end in case of a name resolving

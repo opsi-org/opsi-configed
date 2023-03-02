@@ -34,7 +34,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public List<String> classNames;
 	TableUpdateCollection updateCollection;
 
-	protected int keyCol = 0;
+	protected int keyCol;
 
 	AbstractPersistenceController persist;
 

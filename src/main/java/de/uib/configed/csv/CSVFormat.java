@@ -159,7 +159,11 @@ public class CSVFormat {
 		}
 
 		public String getHeader() {
-			return hasHeader ? line : "";
+			if (hasHeader) {
+				return line;
+			} else {
+				return "";
+			}
 		}
 
 		public boolean detect() {

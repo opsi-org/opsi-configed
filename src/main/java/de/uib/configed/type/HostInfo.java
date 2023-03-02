@@ -18,7 +18,7 @@ import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 public class HostInfo {
 	static int callCounter = 0;
 	// an AtomicInteger would be threadsafe
-	private static int numberOfInstances = 0;
+	private static int numberOfInstances;
 	private final int instanceNumber;
 	private static Map<String, Integer> id2InstanceNumber;
 

@@ -55,8 +55,8 @@ public class SWAuditClientEntry
 	static long startmillis2ndPartOfConstructor;
 	static long endmillis1stPartOfConstructor;
 	static long endmillis2ndPartOfConstructor;
-	public static long summillis1stPartOfConstructor = 0;
-	public static long summillis2ndPartOfConstructor = 0;
+	public static long summillis1stPartOfConstructor;
+	public static long summillis2ndPartOfConstructor;
 
 	AbstractPersistenceController controller;
 

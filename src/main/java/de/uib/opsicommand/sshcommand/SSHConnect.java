@@ -52,7 +52,7 @@ public class SSHConnect {
 	protected ConfigedMain main;
 
 	SSHConnectionInfo connectionInfo;
-	private static int successfulConnectObservedCount = 0;
+	private static int successfulConnectObservedCount;
 
 	/**
 	 * Instanz for SSH connection {@link de.uib.configed.ConfigedMain}

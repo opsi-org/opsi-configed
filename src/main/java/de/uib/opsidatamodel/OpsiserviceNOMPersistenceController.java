@@ -169,7 +169,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	// for depot
 	protected Map<String, Map<String, ListCellOptions>> productPropertyDefinitions;
 
-	protected AbstractHostInfoCollections hostInfoCollections;
+	protected HostInfoCollections hostInfoCollections;
 
 	private String theDepot = "";
 
@@ -362,7 +362,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public AbstractHostInfoCollections getHostInfoCollections() {
+	public HostInfoCollections getHostInfoCollections() {
 		return hostInfoCollections;
 	}
 
@@ -391,11 +391,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected class CheckingEntryMapOfMaps extends LinkedHashMap<String, Map<String, Object>> {}
 
-	protected class DefaultHostInfoCollections extends AbstractHostInfoCollections {
+	protected class DefaultHostInfoCollections implements HostInfoCollections {
 		protected String configServer;
 		protected List<String> opsiHostNames;
 
-		protected int countClients = 0;
+		protected int countClients;
 
 		protected Map<String, Map<String, Object>> masterDepots;
 		protected Map<String, Map<String, Object>> allDepots;
@@ -508,7 +508,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		// build data
 		@Override
-		protected void retrieveOpsiHosts() {
+		public void retrieveOpsiHosts() {
 			Logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null " + (opsiHostNames == null));
 
 			int countHosts = 0;

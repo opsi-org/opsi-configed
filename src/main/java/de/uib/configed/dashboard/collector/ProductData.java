@@ -22,10 +22,10 @@ public final class ProductData {
 	private static Map<String, Map<Product, Product>> unusedProducts = new HashMap<>();
 	private static Map<String, Map<String, List<String>>> clientUnusedProductsList = new HashMap<>();
 
-	private static int totalOSInstallations = 0;
-	private static int totalLinuxInstallations = 0;
-	private static int totalWindowsInstallations = 0;
-	private static int totalMacOSInstallations = 0;
+	private static int totalOSInstallations;
+	private static int totalLinuxInstallations;
+	private static int totalWindowsInstallations;
+	private static int totalMacOSInstallations;
 
 	private static AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 

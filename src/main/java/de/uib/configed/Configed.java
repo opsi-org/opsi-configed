@@ -164,7 +164,7 @@ public class Configed {
 	public static String savedStatesLocationName;
 	public static final String SAVED_STATES_FILENAME = "configedStates.prop";
 
-	private static Integer refreshMinutes = 0;
+	private static Integer refreshMinutes;
 
 	private static String paramHost;
 	private static String paramUser;

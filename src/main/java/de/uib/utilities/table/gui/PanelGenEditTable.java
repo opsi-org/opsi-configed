@@ -128,9 +128,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected String title = "";
 
-	protected int generalPopupPosition = 0;
+	protected int generalPopupPosition;
 
-	protected int popupIndex = 0;
+	protected int popupIndex;
 
 	private int oldrowcount = -1;
 

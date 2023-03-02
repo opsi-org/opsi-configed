@@ -63,7 +63,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private TableUpdateCollection updateCollection;
 
-	protected int keyCol = 0;
+	protected int keyCol;
 
 	AbstractPersistenceController persist;
 

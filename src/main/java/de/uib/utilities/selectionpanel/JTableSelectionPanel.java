@@ -88,7 +88,7 @@ public class JTableSelectionPanel extends JPanel
 
 	private int foundrow = -1;
 
-	private int lastCountOfSearchWords = 0;
+	private int lastCountOfSearchWords;
 
 	private NavigableMap<String, Integer> rowIndexMap;
 

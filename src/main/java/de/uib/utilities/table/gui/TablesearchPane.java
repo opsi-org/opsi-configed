@@ -94,7 +94,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public static final int START_TEXT_SEARCH = 1;
 	public static final int REGEX_SEARCH = 2;
 
-	protected int preferredColumnIndex = 0;
+	protected int preferredColumnIndex;
 
 	protected boolean withRegEx = true;
 	protected boolean selectMode = true;

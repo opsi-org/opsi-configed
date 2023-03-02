@@ -25,7 +25,7 @@ public class CSVParser {
 
 	private boolean ignoreErrors;
 
-	private int pendingFieldCount = 0;
+	private int pendingFieldCount;
 	private List<Integer> numberOfFieldsPerLine = new ArrayList<>();
 
 	public CSVParser() {
