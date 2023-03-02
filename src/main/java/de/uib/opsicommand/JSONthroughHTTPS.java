@@ -594,7 +594,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
 			List<File> certificateFiles = CertificateManager.getCertificates();
 			for (X509Certificate certificate : certificates) {
-				certificateFiles.forEach(certificateFile -> {
+				certificateFiles.forEach((File certificateFile) -> {
 					if (certificate.equals(CertificateManager.instantiateCertificate(certificateFile))) {
 						certificateExists = true;
 						return;

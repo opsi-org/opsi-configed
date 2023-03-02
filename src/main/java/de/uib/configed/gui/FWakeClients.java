@@ -16,7 +16,7 @@ import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class FWakeClients extends FShowList {
-	boolean cancelled = false;
+	boolean cancelled;
 	AbstractPersistenceController persist;
 
 	public FWakeClients(JFrame master, String title, AbstractPersistenceController persist) {
@@ -29,7 +29,7 @@ public class FWakeClients extends FShowList {
 
 	public void act(String[] selectedClients, int delaySecs) {
 		setVisible(true);
-		glassTransparency(true, 1000, 200, 0.04f);
+		glassTransparency(true, 1000, 200, 0.04F);
 		Map<String, List<String>> hostSeparationByDepots = persist.getHostSeparationByDepots(selectedClients);
 		Map<String, Integer> counterByDepots = new HashMap<>();
 		Map<String, AbstractExecutioner> executionerForDepots = new HashMap<>();
@@ -54,9 +54,8 @@ public class FWakeClients extends FShowList {
 						+ " counterByDepots.get(depot) " + counterByDepots.get(depotEntry.getKey()));
 
 				if (executionerForDepots.get(depotEntry.getKey()) != AbstractExecutioner.getNoneExecutioner()
-						&& counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size())
+						&& counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size()) {
 
-				{
 					if (executionerForDepots.get(depotEntry.getKey()) == null) {
 						AbstractExecutioner exec1 = persist.retrieveWorkingExec(depotEntry.getKey());
 						// we try to connect when the first client of a depot should be connected
@@ -86,7 +85,7 @@ public class FWakeClients extends FShowList {
 
 			persist.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
 
-			Globals.threadSleep(this, 1000l * delaySecs);
+			Globals.threadSleep(this, 1000L * delaySecs);
 			turn++;
 		}
 

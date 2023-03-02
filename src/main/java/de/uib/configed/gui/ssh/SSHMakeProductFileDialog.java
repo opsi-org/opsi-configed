@@ -1,6 +1,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.util.Arrays;
 
 import javax.swing.BorderFactory;
@@ -135,7 +136,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 			JButton jButtonSearchDir = autocompletion.getButton();
 			jButtonSearchDir.removeActionListener(jButtonSearchDir.getActionListeners()[0]);
-			jButtonSearchDir.addActionListener(actionEvent -> {
+			jButtonSearchDir.addActionListener((ActionEvent actionEvent) -> {
 				autocompletion.doButtonAction();
 				doSetActionGetVersions();
 			});
@@ -216,7 +217,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 					.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.buttonToPackageManager.tooltip"));
 
 			if (!(Globals.isGlobalReadOnly())) {
-				jButtonToPackageManager.addActionListener(actionEvent -> {
+				jButtonToPackageManager.addActionListener((ActionEvent actionEvent) -> {
 					if (main != null) {
 						new SSHPackageManagerInstallParameterDialog(main, filename);
 					}

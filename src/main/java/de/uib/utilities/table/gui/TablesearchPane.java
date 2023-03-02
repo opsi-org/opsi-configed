@@ -461,7 +461,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		popupNewSearch.setText(Configed.getResourceValue("SearchPane.popup.searchnew"));
 
-		popupNewSearch.addActionListener(actionEvent -> {
+		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
 
 			targetModel.setFiltered(false);
 			if (resetFilterModeOnNewSearch) {
@@ -473,7 +473,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		popupMarkHits.setText(Configed.getResourceValue("SearchPane.popup.markall"));
 
-		popupMarkHits.addActionListener(actionEvent -> {
+		popupMarkHits.addActionListener((ActionEvent actionEvent) -> {
 			if (!fieldSearch.getText().equals("")) {
 				markAll();
 			}
@@ -481,7 +481,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		popupMarkAndFilter.setText(Configed.getResourceValue("SearchPane.popup.markAndFilter"));
 
-		popupMarkAndFilter.addActionListener(actionEvent -> {
+		popupMarkAndFilter.addActionListener((ActionEvent actionEvent) -> {
 			switchFilterOff();
 			markAllAndFilter();
 			switchFilterOn();
@@ -491,7 +491,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		popupEmptySearchfield.addActionListener(actionEvent -> fieldSearch.setText(""));
 
-		fieldSearch.addActionListener(actionEvent -> {
+		fieldSearch.addActionListener((ActionEvent actionEvent) -> {
 			if (searchInputType == SearchInputType.PROGRESSIVE) {
 				searchNextRow(selectMode);
 			}

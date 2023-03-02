@@ -10,44 +10,43 @@ package de.uib.utilities.table.gui;
 
 public interface SearchTargetModel {
 
-	public String getColumnName(int col);
+	String getColumnName(int col);
 
-	public int findColumn(String name);
+	int findColumn(String name);
 
-	public int getColumnCount();
+	int getColumnCount();
 
-	public int getRowCount();
+	int getRowCount();
 
-	public Object getValueAt(int row, int col);
+	Object getValueAt(int row, int col);
 
-	public int getColForVisualCol(int visualCol);
+	int getColForVisualCol(int visualCol);
 
-	public int getRowForVisualRow(int visualRow);
+	int getRowForVisualRow(int visualRow);
 
-	public void clearSelection();
+	void clearSelection();
 
-	public int getSelectedRow();
+	int getSelectedRow();
 
-	public int[] getSelectedRows();
+	int[] getSelectedRows();
 
-	public void ensureRowIsVisible(int row);
+	void ensureRowIsVisible(int row);
 
-	public void setCursorRow(int row);
+	void setCursorRow(int row);
 
-	public void setSelectedRow(int row);
+	void setSelectedRow(int row);
 
-	public void addSelectedRow(int row);
+	void addSelectedRow(int row);
 
-	public int[] getUnfilteredSelection();
+	int[] getUnfilteredSelection();
 
-	public void setSelection(int[] selection);
+	void setSelection(int[] selection);
 
-	public void setValueIsAdjusting(boolean b);
+	void setValueIsAdjusting(boolean b);
 
-	public void setFiltered(boolean b);
+	void setFiltered(boolean b);
 
-	public boolean isFiltered();
+	boolean isFiltered();
 
-	public int getListSelectionMode();
-
+	int getListSelectionMode();
 }

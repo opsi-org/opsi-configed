@@ -1,6 +1,7 @@
 package de.uib.opsicommand.sshcommand;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.InputStream;
@@ -466,7 +467,7 @@ public class SSHConnectExec extends SSHConnect {
 				final OutputStream out = channel.getOutputStream();
 				final InputStream in = channel.getInputStream();
 				channel.connect();
-				killProcessListener = actionEvent -> {
+				killProcessListener = (ActionEvent actionEvent) -> {
 					interruptChannel(channel);
 					disconnect();
 					interruptChannel = true;

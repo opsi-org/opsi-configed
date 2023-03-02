@@ -28,6 +28,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
@@ -94,25 +95,26 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void defineListeners() {
-		panelLicencecontracts.getListSelectionModel().addListSelectionListener(listSelectionEvent -> {
-			// Ignore extra messages.
-			if (listSelectionEvent.getValueIsAdjusting()) {
-				return;
-			}
+		panelLicencecontracts.getListSelectionModel()
+				.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
+					// Ignore extra messages.
+					if (listSelectionEvent.getValueIsAdjusting()) {
+						return;
+					}
 
-			ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
+					ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
 
-			if (!lsm.isSelectionEmpty()) {
-				int selectedRow = lsm.getMinSelectionIndex();
-				String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
+					if (!lsm.isSelectionEmpty()) {
+						int selectedRow = lsm.getMinSelectionIndex();
+						String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
 
-				if (jTextFieldLicenceContract.isEnabled()) {
-					jTextFieldLicenceContract.setText(keyValue);
-				}
-			}
-		});
+						if (jTextFieldLicenceContract.isEnabled()) {
+							jTextFieldLicenceContract.setText(keyValue);
+						}
+					}
+				});
 
-		panelLicencepools.addListSelectionListener(listSelectionEvent -> {
+		panelLicencepools.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
 			if (listSelectionEvent.getValueIsAdjusting()) {
 				return;
 			}
@@ -567,7 +569,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				.addGap(2, 2, 2).addComponent(jButtonSend, 20, 20, 20).addGap(5, 5, 5)));
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setResizeWeight(0.3f);
+		splitPane.setResizeWeight(0.3);
 
 		JPanel topPane = new JPanel();
 		JPanel bottomPane = new JPanel();

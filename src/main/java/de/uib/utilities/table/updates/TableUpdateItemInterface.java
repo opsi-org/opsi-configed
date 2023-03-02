@@ -11,10 +11,9 @@ package de.uib.utilities.table.updates;
 import java.util.List;
 
 public interface TableUpdateItemInterface {
-	public abstract TableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV);
+	TableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV);
 
-	public abstract TableEditItem produceInsertItem(List<Object> rowV);
+	TableEditItem produceInsertItem(List<Object> rowV);
 
-	public abstract TableEditItem produceDeleteItem(List<Object> rowV);
-
+	TableEditItem produceDeleteItem(List<Object> rowV);
 }

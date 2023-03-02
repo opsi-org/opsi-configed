@@ -3,9 +3,9 @@ package de.uib.opsicommand.sshcommand;
 import java.util.List;
 
 public interface SSHMultiCommand {
-	public List<SSHCommand> getCommands();
+	List<SSHCommand> getCommands();
 
-	public List<String> getCommandsRaw();
+	List<String> getCommandsRaw();
 
-	public String getMainName();
+	String getMainName();
 }

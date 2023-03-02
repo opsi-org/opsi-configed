@@ -2,6 +2,8 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NavigableSet;
@@ -187,7 +189,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		}
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
-			if (persist.getDepotPermission(depot) && ((persist.getDepot2LocalbootProducts().get(depot) != null
+			if (persist.hasDepotPermission(depot) && ((persist.getDepot2LocalbootProducts().get(depot) != null
 					&& persist.getDepot2LocalbootProducts().get(depot).keySet().contains(selectedProduct))
 					|| (persist.getDepot2NetbootProducts().get(depot) != null
 							&& persist.getDepot2NetbootProducts().get(depot).keySet().contains(selectedProduct)))) {
@@ -253,7 +255,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		jComboBoxOpsiProducts.setRenderer(new DefaultListCellRenderer());
 		jComboBoxOpsiProducts.setMaximumRowCount(Globals.COMBOBOX_ROW_COUNT);
 
-		jComboBoxOpsiProducts.addItemListener(itemEvent -> {
+		jComboBoxOpsiProducts.addItemListener((ItemEvent itemEvent) -> {
 			textFieldSelectedDepots.setText("");
 
 			jButtonExecute.setEnabled(false);
@@ -266,7 +268,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		iconButtonUpdateList.setToolTipText(Configed.getResourceValue(
 				"SSHConnection.ParameterDialog.opsipackagemanager_uninstall.JButtonUpdateList.tooltip"));
 
-		iconButtonUpdateList.addActionListener(actionEvent -> {
+		iconButtonUpdateList.addActionListener((ActionEvent actionEvent) -> {
 			Logging.info(this, "actionPerformed");
 			resetProducts();
 		});
@@ -276,7 +278,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 		jButtonDepotSelection = new JButton(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
-		jButtonDepotSelection.addActionListener(actionEvent -> {
+		jButtonDepotSelection.addActionListener((ActionEvent actionEvent) -> {
 			initDepots();
 			if (jButtonDepotSelection != null) {
 				fDepotList.setLocationRelativeTo(jButtonDepotSelection);

@@ -93,7 +93,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		jCheckBoxIncludeZSync.setSelected(true);
 		jCheckBoxIncludeZSync.setToolTipText(Configed.getResourceValue(
 				"SSHConnection.ParameterDialog.opsipackagemanager_install.jCheckBoxIncludeZsync.tooltip"));
-		jCheckBoxIncludeZSync.addItemListener(itemEvent -> {
+		jCheckBoxIncludeZSync.addItemListener((ItemEvent itemEvent) -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				jCheckBoxCompareMD5.setSelected(true);
 				jCheckBoxCompareMD5.setEnabled(true);

@@ -70,7 +70,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 
 	// 5000 reproduceable error
-	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000l;
+	private static final long TIMEOUT_MS = SECS_WAIT_FOR_CONNECTION * 1000L;
 
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 

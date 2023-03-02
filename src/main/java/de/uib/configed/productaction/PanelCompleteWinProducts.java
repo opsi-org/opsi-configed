@@ -168,7 +168,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 		comboChooseDepot.setEnabled(false);
 
-		comboChooseDepot.addActionListener(actionEvent -> {
+		comboChooseDepot.addActionListener((ActionEvent actionEvent) -> {
 			selectedDepot = "" + comboChooseDepot.getSelectedItem();
 			Logging.info(this, "actionPerformed  depot selected " + selectedDepot);
 			depots.clear();
@@ -179,7 +179,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.setSize(Globals.textfieldDimension);
-		comboChooseWinProduct.addActionListener(actionEvent -> {
+		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
 			winProduct = "" + comboChooseWinProduct.getSelectedItem();
 			produceTarget();
 		});
@@ -256,7 +256,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 		buttonCallSelectFolderWinPE.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectFolderWinPE.setToolTipText(Configed.getResourceValue("CompleteWinProducts.chooserFolderPE"));
 
-		buttonCallSelectFolderWinPE.addActionListener(actionEvent -> {
+		buttonCallSelectFolderWinPE.addActionListener((ActionEvent actionEvent) -> {
 
 			int returnVal = chooserFolder.showOpenDialog(panel);
 
@@ -277,7 +277,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 		fieldPathInstallFiles = new JTextField();
 
-		buttonCallSelectFolderInstallFiles.addActionListener(actionEvent -> {
+		buttonCallSelectFolderInstallFiles.addActionListener((ActionEvent actionEvent) -> {
 
 			int returnVal = chooserFolder.showOpenDialog(panel);
 

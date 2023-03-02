@@ -2,6 +2,7 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -168,7 +169,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jButtonFileChooser.setPreferredSize(Globals.smallButtonDimension);
 		jButtonFileChooser.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.tooltip"));
-		jButtonFileChooser.addActionListener(actionEvent -> {
+		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
 			int returnVal = jFileChooserLocal.showOpenDialog(inputPanel);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {

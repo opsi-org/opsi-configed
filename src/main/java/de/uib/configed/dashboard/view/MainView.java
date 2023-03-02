@@ -23,8 +23,10 @@ import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -184,7 +186,7 @@ public class MainView implements View {
 			@Override
 			protected Task<Void> createTask() {
 				InitialDataRetriever dataRetriever = new InitialDataRetriever();
-				dataRetriever.setOnSucceeded(e -> {
+				dataRetriever.setOnSucceeded((WorkerStateEvent e) -> {
 					ViewManager.displayView(Dashboard.MAIN_VIEW);
 
 					// When initial data is retrieved, we create and start another thread.
@@ -255,8 +257,9 @@ public class MainView implements View {
 		clientDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.CLIENT_VIEW));
 		productDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.PRODUCT_VIEW));
 		licenseDataDisplayAreaVBox.setOnMouseClicked(e -> displayLicenseInfo());
-		selectedDepotComboBox.getSelectionModel().selectedItemProperty().addListener(
-				(observableValue, oldValue, newValue) -> observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue));
+		selectedDepotComboBox.getSelectionModel().selectedItemProperty()
+				.addListener((ObservableValue<? extends String> observableValue, String oldValue,
+						String newValue) -> observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue));
 	}
 
 	@Override

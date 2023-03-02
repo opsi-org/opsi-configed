@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Window;
+import java.awt.event.HierarchyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -56,7 +57,6 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	public static final String REPLACEMENT_DEFAULT_2 = ">>>";
 	public static final String PARAM_SPLITTER_DEFAULT = "><";
 
-	private ConfigedMain main;
 	private static SSHCommandParameterMethods instance;
 
 	public static final String METHOD_INTERACTIVE_ELEMENT = Configed
@@ -76,7 +76,9 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	public static final String METHOD_OPTION_SELECTION = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.optionSelection");
 
-	protected static final Map<String, String> methods = new HashMap<>();
+	static final Map<String, String> methods = new HashMap<>();
+
+	private ConfigedMain main;
 
 	private String[] formats;
 
@@ -111,7 +113,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		}
 	}
 
-	public String[] getParameterMethodLocalNames() {
+	public static String[] getParameterMethodLocalNames() {
 		String[] mymethods = new String[methods.size()];
 		int counter = 0;
 		for (Map.Entry<String, String> entry : methods.entrySet()) {
@@ -122,7 +124,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return mymethods;
 	}
 
-	public String[] getParameterMethods() {
+	public static String[] getParameterMethods() {
 		String[] mymethods = new String[methods.size()];
 		int counter = 0;
 		for (Map.Entry<String, String> entry : methods.entrySet()) {
@@ -132,7 +134,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return mymethods;
 	}
 
-	public String getMethodFromName(String name) {
+	public static String getMethodFromName(String name) {
 		for (Map.Entry<String, String> entry : methods.entrySet()) {
 			if (name.equals(entry.getKey())) {
 				return entry.getValue();
@@ -149,7 +151,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	}
 
 	public boolean canceled;
-	SSHConnectionOutputDialog outputDia = null;
+	SSHConnectionOutputDialog outputDia;
 
 	public SSHCommand parseParameter(final SSHCommand command, SSHConnect caller) {
 		Logging.info(this, "parseParameter command " + command.getCommandRaw());
@@ -377,15 +379,15 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return result;
 	}
 
-	public String arrayToStringAsList(Object[] list) {
+	public static String arrayToStringAsList(Object[] list) {
 		return Arrays.toString(list).replace("[", "").replace("]", "");
 	}
 
-	public String arrayToString(Object[] list) {
+	public static String arrayToString(Object[] list) {
 		return Arrays.toString(list).replace("[", "").replace(",", " ").replace("]", "");
 	}
 
-	protected String getUserText(String text, Component dialog) {
+	String getUserText(String text, Component dialog) {
 		if (dialog == null) {
 			dialog = ConfigedMain.getMainFrame();
 		}
@@ -486,7 +488,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return depotIPs;
 	}
 
-	private ValueSelectorList fillValueSelectorList(final List<String> values) {
+	private static ValueSelectorList fillValueSelectorList(final List<String> values) {
 		final DepotsList valueList = new DepotsList(PersistenceControllerFactory.getPersistenceController());
 		valueList.setVisible(true);
 		final Map<String, Object> extendedInfo = new TreeMap<>();
@@ -509,7 +511,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return valueSelectorList;
 	}
 
-	private JOptionPane createValueSelectorDialog(final ValueSelectorList valueSelectorList) {
+	private static JOptionPane createValueSelectorDialog(final ValueSelectorList valueSelectorList) {
 		final JScrollPane valueScrollPane = valueSelectorList.getScrollpaneDepotslist();
 		final JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
@@ -525,7 +527,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 			}
 		};
 
-		opPane.addHierarchyListener(hierarchyEvent -> {
+		opPane.addHierarchyListener((HierarchyEvent hierarchyEvent) -> {
 			Window window = SwingUtilities.getWindowAncestor(opPane);
 			if (window instanceof Dialog) {
 				Dialog dialog = (Dialog) window;

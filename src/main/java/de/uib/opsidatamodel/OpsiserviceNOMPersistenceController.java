@@ -770,7 +770,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			List<String> depotList = new ArrayList<>();
 			for (String depot : depots) {
-				if (getDepotPermission(depot)) {
+				if (hasDepotPermission(depot)) {
 					depotList.add(depot);
 				}
 			}
@@ -824,7 +824,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		@Override
 		public void setDepotForClients(String[] clients, String depotId) {
-			if (!getDepotPermission(depotId)) {
+			if (!hasDepotPermission(depotId)) {
 				return;
 			}
 
@@ -1158,12 +1158,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		LinkedHashMap<String, Map<String, Object>> depotPropertiesForPermittedDepots = new LinkedHashMap<>();
 
 		String configServer = getHostInfoCollections().getConfigServer();
-		if (getDepotPermission(configServer)) {
+		if (hasDepotPermission(configServer)) {
 			depotPropertiesForPermittedDepots.put(configServer, depotProperties.get(configServer));
 		}
 
 		for (Entry<String, Map<String, Object>> depotProperty : depotProperties.entrySet()) {
-			if (!depotProperty.getKey().equals(configServer) && getDepotPermission(depotProperty.getKey())) {
+			if (!depotProperty.getKey().equals(configServer) && hasDepotPermission(depotProperty.getKey())) {
 				depotPropertiesForPermittedDepots.put(depotProperty.getKey(), depotProperty.getValue());
 			}
 		}
@@ -1322,7 +1322,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public boolean getDepotPermission(String depotId) {
+	public boolean hasDepotPermission(String depotId) {
 		if (depotsFullPermission) {
 			return true;
 		}
@@ -1354,7 +1354,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public boolean getHostgroupPermission(String hostgroupId) {
+	public boolean hasHostgroupPermission(String hostgroupId) {
 		if (hostgroupsOnlyIfExplicitlyStated) {
 			return true;
 		}
@@ -1380,7 +1380,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public boolean getProductgroupPermission(String productgroupId) {
+	public boolean hasProductgroupPermission(String productgroupId) {
 		if (productgroupsFullPermission) {
 			return true;
 		}
@@ -1909,7 +1909,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			String inventorynumber, String notes, String ipaddress, String systemUUID, String macaddress,
 			boolean shutdownInstall, boolean uefiBoot, boolean wanConfig, String group, String productNetboot,
 			String productLocalboot) {
-		if (!getDepotPermission(depotId)) {
+		if (!hasDepotPermission(depotId)) {
 			return false;
 		}
 
@@ -2202,7 +2202,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public List<String> showPopupOnClients(String message, String[] clientIds, Float seconds) {
 		OpsiMethodCall omc;
 
-		if (seconds == 0.0) {
+		if (seconds == 0) {
 			omc = new OpsiMethodCall("hostControl_showPopup", new Object[] { message, clientIds });
 		} else {
 			omc = new OpsiMethodCall("hostControl_showPopup",

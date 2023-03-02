@@ -1,5 +1,6 @@
 package de.uib.configed.gui.ssh;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		jButtonDepotselection = new JButton(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager.depotselection"));
-		jButtonDepotselection.addActionListener(actionEvent -> {
+		jButtonDepotselection.addActionListener((ActionEvent actionEvent) -> {
 			initDepots();
 			if (jButtonDepotselection != null) {
 				fDepotList.setLocationRelativeTo(jButtonDepotselection);
@@ -195,7 +196,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		}
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
-			if (persist.getDepotPermission(depot)) {
+			if (persist.hasDepotPermission(depot)) {
 				result.add(depot);
 			}
 		}

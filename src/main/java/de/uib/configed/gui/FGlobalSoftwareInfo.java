@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
 /**
@@ -88,7 +89,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 		panelGlobalSoftware.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-		panelGlobalSoftware.addListSelectionListener(listSelectionEvent -> {
+		panelGlobalSoftware.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
 			if (!listSelectionEvent.getValueIsAdjusting()) {
 				jButton1.setEnabled(panelGlobalSoftware.getTheTable().getSelectedRowCount() > 0);
 			}

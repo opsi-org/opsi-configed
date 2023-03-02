@@ -39,7 +39,7 @@ public class Client {
 		return lastSeen;
 	}
 
-	public final boolean getReachable() {
+	public final boolean isReachable() {
 		return reachable.get();
 	}
 

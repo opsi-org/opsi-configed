@@ -226,7 +226,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		panelSelectExportType = new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), PanelSWInfo.KindOfExport.PDF,
-				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, (val -> {
+				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, ((Enum<KindOfExport> val) -> {
 					Logging.info(this, "change to " + val);
 					kindOfExport = (PanelSWInfo.KindOfExport) val;
 					Configed.savedStates.saveSWauditKindOfExport.serialize("" + val);

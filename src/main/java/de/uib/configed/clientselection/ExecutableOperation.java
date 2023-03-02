@@ -10,5 +10,5 @@ public interface ExecutableOperation {
 	 * Checks whether the client does match the given criteria. You may need to
 	 * set the data first.
 	 */
-	public boolean doesMatch(Client client);
+	boolean doesMatch(Client client);
 }

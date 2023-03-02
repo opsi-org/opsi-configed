@@ -74,6 +74,18 @@ import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 
 public class ProductgroupPanel extends JPanel implements ListSelectionListener, ActionListener, ItemListener {
+
+	static final String NO_GROUP_ID = Configed.getResourceValue("GroupPanel.NO_GROUP_ID");
+	static final String SAVE_GROUP_ID = Configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
+	static final String NO_GROUP_DESCRIPTION = Configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
+	static final String EMPTIED_GROUPID = "";
+	static final String TEXT_SAVE = Configed.getResourceValue("GroupPanel.TEXT_SAVE");
+	static final String TEXT_DELETE = Configed.getResourceValue("GroupPanel.TEXT_DELETE");
+
+	private static final int MIN_FIELD_WIDTH = 30;
+	private static final int MAX_COMBO_WIDTH = 200;
+	private static final int MIN_COMBO_WIDTH = 30;
+
 	JComboBoxToolTip groupsCombo;
 
 	protected TablesearchPane searchPane;
@@ -100,13 +112,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	protected JLabel labelSave;
 
-	static final String NO_GROUP_ID = Configed.getResourceValue("GroupPanel.NO_GROUP_ID");
-	static final String SAVE_GROUP_ID = Configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
-	static final String NO_GROUP_DESCRIPTION = Configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
-	static final String EMPTIED_GROUPID = "";
-	static final String TEXT_SAVE = Configed.getResourceValue("GroupPanel.TEXT_SAVE");
-	static final String TEXT_DELETE = Configed.getResourceValue("GroupPanel.TEXT_DELETE");
-
 	protected Map<String, Map<String, String>> theData;
 
 	PanelGroupedProductSettings associate;
@@ -129,11 +134,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	protected boolean groupEditing = false;
 	protected boolean deleted = false;
 
-	private static final int MIN_FIELD_WIDTH = 30;
-	private static final int MAX_COMBO_WIDTH = 200;
-	private static final int MIN_COMBO_WIDTH = 30;
-
-	abstract class AbstractDocumentListener implements DocumentListener {
+	abstract static class AbstractDocumentListener implements DocumentListener {
 
 		protected boolean enabled = true;
 
@@ -194,10 +195,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	}
 
-	public boolean getGuiIsFiltered() {
-
+	public boolean isGuiFiltered() {
 		return searchPane.isFilteredMode();
-
 	}
 
 	public void setReloadActionHandler(ActionListener al) {
@@ -215,7 +214,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		saveNameEditorShallFollow();
 
-		if (getGuiIsFiltered()) {
+		if (isGuiFiltered()) {
 			Logging.info(this, "enterExistingGroup, was filtered");
 			setGuiIsFiltered(false);
 			associate.noSelection();
@@ -263,12 +262,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		boolean result = false;
 
-		if (namesAndDescriptions.get(currentKey) != null)
-		// case we have an old key
-		{
-			if (productGroupMembers.get(currentKey) == null || productGroupMembers.get(currentKey).isEmpty())
-			// there were no products assigned
-			{
+		if (namesAndDescriptions.get(currentKey) != null) {
+			// case we have an old key
+
+			if (productGroupMembers.get(currentKey) == null || productGroupMembers.get(currentKey).isEmpty()) {
+				// there were no products assigned
+
 				if (!selectedIDs.isEmpty()) {
 					// but now there are some
 					result = true;
@@ -299,18 +298,16 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	public void findGroup(Set<String> set) {
-		Iterator<String> iterNames;
-
-		boolean theSetFound = false;
 
 		if (namesAndDescriptions == null) {
 			Logging.info(this, " namesAndDescriptions null ");
 			return;
 		}
 
-		iterNames = namesAndDescriptions.keySet().iterator();
+		Iterator<String> iterNames = namesAndDescriptions.keySet().iterator();
 		Logging.info(this, " namesAndDescriptions " + namesAndDescriptions);
 
+		boolean theSetFound = false;
 		if (set != null) {
 			TreeSetBuddy checkSet = new TreeSetBuddy(set);
 
@@ -355,9 +352,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		// current key did not exist
 		if (namesAndDescriptions.get(currentKey) == null) {
 			result = true;
-		}
-
-		else {
+		} else {
 			String oldDescription = namesAndDescriptions.get(currentKey);
 			if (!oldDescription.equals(descriptionField.getText())) {
 				result = true;
@@ -831,26 +826,20 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		String s = " ";
 		if (e.getSource() == buttonCommit) {
 			commit();
-		}
-
-		else if (e.getSource() == buttonCancel) {
+		} else if (e.getSource() == buttonCancel) {
 
 			cancel();
-		}
+		} else if (e.getSource() == buttonDelete) {
 
-		else if (e.getSource() == buttonDelete) {
 			setDeleted(true);
 			setDataChanged(true);
-		}
+		} else if (e.getSource() == buttonEditDialog) {
 
-		else if (e.getSource() == buttonEditDialog) {
 			setGroupEditing(!panelEdit.isVisible());
-		}
+		} else if (e.getSource() == buttonCollectiveAction) {
 
-		else if (e.getSource() == buttonCollectiveAction) {
 			handleCollectiveAction(s, (IFInstallationStateTableModel) tableProducts.getModel());
 		}
-
 	}
 
 	protected void handleCollectiveAction(String selected, IFInstallationStateTableModel insTableModel) {
@@ -879,7 +868,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 			if (actionType != ActionRequest.INVALID) {
 
-				associate.getSelectedRowsInModelTerms().stream().forEach(x -> {
+				associate.getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
 					Logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0));
 					insTableModel.collectiveChangeActionRequest((String) insTableModel.getValueAt(x, 0),
 							new ActionRequest(actionType));

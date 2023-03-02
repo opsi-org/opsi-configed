@@ -4,12 +4,11 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 
 public interface SSHCommandNeedParameter {
-	public void startParameterGui();
+	void startParameterGui();
 
-	public void startParameterGui(ConfigedMain main);
+	void startParameterGui(ConfigedMain main);
 
-	public SSHConnectionExecDialog startHelpDialog();
+	SSHConnectionExecDialog startHelpDialog();
 
-	public String getBasicName();
-
+	String getBasicName();
 }

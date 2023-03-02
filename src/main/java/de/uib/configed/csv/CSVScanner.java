@@ -21,7 +21,11 @@ public class CSVScanner {
 	}
 
 	public CSVScanner(Reader reader, CSVFormat format) {
-		this.reader = (reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader));
+		if (reader instanceof BufferedReader) {
+			this.reader = (BufferedReader) reader;
+		} else {
+			this.reader = new BufferedReader(reader);
+		}
 		this.format = format;
 	}
 
@@ -62,7 +66,7 @@ public class CSVScanner {
 						continue;
 					}
 
-					if ((cReader.lastRead() == format.getStringSeparator() && i == 0
+					if (((cReader.lastRead() == format.getStringSeparator() && i == 0)
 							|| cReader.lastRead() == format.getFieldSeparator())
 							&& cReader.peek() == format.getStringSeparator()) {
 						fieldBeginsWithEmbeddedQuote = true;

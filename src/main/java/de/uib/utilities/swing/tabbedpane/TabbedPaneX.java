@@ -11,6 +11,7 @@ import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
 
 import de.uib.configed.ConfigedMain.LicencesTabStatus;
 
@@ -42,7 +43,7 @@ public class TabbedPaneX extends JPanel {
 
 		tabOrder = new ArrayList<>();
 
-		jTabbedPaneMain.addChangeListener(changeEvent -> {
+		jTabbedPaneMain.addChangeListener((ChangeEvent changeEvent) -> {
 			int newVisualIndex = jTabbedPaneMain.getSelectedIndex();
 
 			LicencesTabStatus newS = tabOrder.get(newVisualIndex);

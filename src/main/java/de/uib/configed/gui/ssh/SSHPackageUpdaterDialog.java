@@ -1,6 +1,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.util.HashMap;
 
@@ -93,7 +94,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonDoAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly())) {
-			jButtonDoAction.addActionListener(actionEvent -> {
+			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
 				Logging.info(this, "btn_doAction pressed");
 				doAction2();
 			});
@@ -110,7 +111,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
 
 		jComboBoxActions = new JComboBox<>(command.getActionsText());
-		jComboBoxActions.addItemListener(itemEvent -> {
+		jComboBoxActions.addItemListener((ItemEvent itemEvent) -> {
 			if (((String) itemEvent.getItem())
 					.equals(Configed.getResourceValue("SSHConnection.command.opsipackageupdater.action.list"))) {
 				jComboBoxRepos.setEnabled(itemEvent.getStateChange() != ItemEvent.SELECTED);

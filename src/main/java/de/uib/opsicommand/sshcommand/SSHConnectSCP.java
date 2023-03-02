@@ -49,7 +49,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 	private String start(SSHSFTPCommand command, SSHConnectionExecDialog outDia) {
 		Logging.debug(this, "starting, create SSHConnectionExecDialog");
 		Logging.info(this, "execsftp command " + command.getDescription());
-		Logging.debug(this, "execsftp withGui " + command.getShowOutputDialog());
+		Logging.debug(this, "execsftp withGui " + command.isShowOutputDialog());
 		Logging.debug(this, "execsftp dialog " + outDia);
 		Logging.debug(this, "execsftp isConnected " + isConnected());
 
@@ -57,7 +57,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 			connect();
 		}
 
-		if (command.getShowOutputDialog()) {
+		if (command.isShowOutputDialog()) {
 			if (outDia != null) {
 				setDialog(outDia);
 			} else {
@@ -72,12 +72,12 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 		try {
 			Logging.info(this, "exec isConnected " + isConnected());
-			SshSFTPCommandWorker task = new SshSFTPCommandWorker(command, outputDialog, command.getShowOutputDialog());
+			SshSFTPCommandWorker task = new SshSFTPCommandWorker(command, outputDialog, command.isShowOutputDialog());
 			task.execute();
 			Logging.info(this, "execute was called");
 
 			if (SSHCommandFactory.sshAlwaysExecInBackground) {
-				outputDialog.setVisible(command.getShowOutputDialog());
+				outputDialog.setVisible(command.isShowOutputDialog());
 			}
 
 			return task.get();
@@ -240,13 +240,13 @@ public class SSHConnectSCP extends SSHConnectExec {
 				channelsftp.cd(command.getTargetPath());
 				publish("Set target directory … " + command.getTargetPath());
 
-				if (command.getOverwriteMode()) {
+				if (command.isOverwriteMode()) {
 					channelsftp.put(fis, command.getTargetFilename(), ChannelSftp.OVERWRITE);
 				} else {
 					channelsftp.put(fis, command.getTargetFilename());
 				}
 				publish("Set target filename … " + command.getTargetFilename());
-				publish("Set overwrite mode … " + command.getOverwriteMode());
+				publish("Set overwrite mode … " + command.isOverwriteMode());
 				publish(" ");
 				Globals.threadSleep(this, 2000);
 

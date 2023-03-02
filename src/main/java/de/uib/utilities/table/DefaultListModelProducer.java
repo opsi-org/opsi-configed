@@ -20,12 +20,12 @@ public class DefaultListModelProducer<O> implements ListModelProducer<O> {
 	}
 
 	@Override
-	public boolean getNullable(int row, int column) {
+	public boolean isNullable(int row, int column) {
 		return true;
 	}
 
 	@Override
-	public boolean getEditable(int row, int column) {
+	public boolean isEditable(int row, int column) {
 		return false;
 	}
 

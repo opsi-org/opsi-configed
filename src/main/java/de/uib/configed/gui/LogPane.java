@@ -478,7 +478,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboType.setEnabled(false);
 		comboType.setEditable(false);
 
-		comboType.addActionListener(actionEvent -> {
+		comboType.addActionListener((ActionEvent actionEvent) -> {
 			int oldSelTypeIndex = selTypeIndex;
 			Object selType = comboType.getSelectedItem();
 			if (selType == null || selType.equals(DEFAULT_TYPE)) {

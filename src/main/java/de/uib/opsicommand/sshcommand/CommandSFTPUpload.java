@@ -38,7 +38,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	}
 
 	@Override
-	public boolean getShowOutputDialog() {
+	public boolean isShowOutputDialog() {
 		return showOutputDialog;
 	}
 
@@ -87,7 +87,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	}
 
 	@Override
-	public boolean getOverwriteMode() {
+	public boolean isOverwriteMode() {
 		return overwriteMode;
 	}
 

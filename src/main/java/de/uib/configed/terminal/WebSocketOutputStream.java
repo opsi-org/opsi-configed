@@ -1,4 +1,4 @@
-package de.uib.configed.messagebus;
+package de.uib.configed.terminal;
 
 import java.io.OutputStream;
 import java.nio.ByteBuffer;

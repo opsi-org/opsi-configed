@@ -4,6 +4,9 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
 public final class SSHConnectionInfo {
+
+	private static SSHConnectionInfo instance;
+
 	private boolean sshenabled = true;
 	private String sshConnectionUser = "";
 	private String sshConnectionPassword = "";
@@ -13,7 +16,6 @@ public final class SSHConnectionInfo {
 	private boolean useKeyfile;
 	private String keyfilepath = "";
 	private String keyfilepassphrase = "";
-	private static SSHConnectionInfo instance = null;
 
 	private SSHConnectionInfo() {
 	}
@@ -64,11 +66,11 @@ public final class SSHConnectionInfo {
 		return keyfilepassphrase;
 	}
 
-	public boolean getSSHActivateStatus() {
+	public boolean isSSHActivate() {
 		return sshenabled;
 	}
 
-	public void setSSHActivateStatus(boolean val) {
+	public void setSSHActivate(boolean val) {
 		sshenabled = val;
 	}
 
@@ -132,9 +134,7 @@ public final class SSHConnectionInfo {
 
 		if ((getPassw() == null) && (!usesKeyfile())) {
 			setPassw(ConfigedMain.password);
-		}
-
-		else if (getPassw() == null) {
+		} else if (getPassw() == null) {
 			setPassw("");
 		}
 

@@ -50,7 +50,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
 	@FunctionalInterface
 	public interface Enumsetter<E extends Enum<E>> {
-		public void setValue(Enum<E> val);
+		void setValue(Enum<E> val);
 	}
 
 	public PanelStateSwitch(Enum<E> startValue, Enum<E>[] values, Class<?> myenum, Enumsetter<E> enumSetter) {

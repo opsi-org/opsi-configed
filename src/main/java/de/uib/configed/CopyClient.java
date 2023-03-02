@@ -82,7 +82,7 @@ public class CopyClient {
 				continue;
 			}
 
-			productStatesAndActions.forEach(productInfo -> {
+			productStatesAndActions.forEach((Map<String, String> productInfo) -> {
 				productInfo.values().removeIf(String::isEmpty);
 				persist.updateProductOnClient(newClientNameWithDomain, productInfo.get("productId"),
 						getProductType(productInfo.get("productId")), productInfo);
@@ -111,7 +111,7 @@ public class CopyClient {
 				continue;
 			}
 
-			productStatesAndActions.forEach(productInfo -> {
+			productStatesAndActions.forEach((Map<String, String> productInfo) -> {
 				Map<String, Object> clientProductProperties = persist.getProductProperties(newClientNameWithDomain,
 						productInfo.get("productId"));
 				clientProductProperties.clear();

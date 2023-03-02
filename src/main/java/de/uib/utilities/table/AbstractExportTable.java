@@ -1,6 +1,7 @@
 package de.uib.utilities.table;
 
 import java.awt.HeadlessException;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -97,7 +98,7 @@ public abstract class AbstractExportTable {
 				Configed.getResourceValue("PanelGenEditTable.exportSelectedRowsAsCSV")
 
 		);
-		menuItem.addActionListener(actionEvent -> {
+		menuItem.addActionListener((ActionEvent actionEvent) -> {
 			boolean onlySelected = true;
 			Logging.debug(this, "menuItemExportSelectedCSV " + onlySelected);
 			execute(null, onlySelected);

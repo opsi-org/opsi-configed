@@ -1,4 +1,4 @@
-package de.uib.configed.messagebus;
+package de.uib.configed.terminal;
 
 import java.io.IOException;
 import java.io.PipedInputStream;
@@ -7,8 +7,6 @@ import java.io.PipedOutputStream;
 import de.uib.utilities.logging.Logging;
 
 public final class WebSocketInputStream {
-	private static WebSocketInputStream instance;
-
 	private static PipedOutputStream writer;
 	private static PipedInputStream reader;
 	private static boolean connected;
@@ -16,11 +14,24 @@ public final class WebSocketInputStream {
 	private WebSocketInputStream() {
 	}
 
-	public static WebSocketInputStream getInstance() {
-		if (instance == null) {
-			instance = new WebSocketInputStream();
+	public static void write(byte[] message) throws IOException {
+		if (!connected) {
+			connect();
 		}
 
+		writer.write(message);
+		writer.flush();
+	}
+
+	public static PipedInputStream getReader() {
+		if (!connected) {
+			connect();
+		}
+
+		return reader;
+	}
+
+	private static void connect() {
 		if (writer == null) {
 			writer = new PipedOutputStream();
 		}
@@ -29,36 +40,18 @@ public final class WebSocketInputStream {
 			reader = new PipedInputStream();
 		}
 
-		if (!connected) {
-			connect();
-		}
-
-		return instance;
-	}
-
-	private static void connect() {
 		try {
 			reader.connect(writer);
 			connected = true;
 		} catch (IOException e) {
-			Logging.warning(WebSocketInputStream.class, "connecting reader with writer, when they're connected");
+			Logging.warning("connecting reader with writer, when they're connected: ", e);
 		}
-	}
-
-	public void write(byte[] message) throws IOException {
-		writer.write(message);
-		writer.flush();
-	}
-
-	public PipedInputStream getReader() {
-		return reader;
 	}
 
 	public static void close() throws IOException {
 		writer.close();
 		reader.close();
 
-		instance = null;
 		writer = null;
 		reader = null;
 		connected = false;

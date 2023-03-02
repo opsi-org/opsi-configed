@@ -2,6 +2,7 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -105,17 +106,17 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		installWgetPanel.isOpen = true;
 		installWgetPanel.close();
 
-		jRadioButtonLocal.addActionListener(actionEvent -> {
+		jRadioButtonLocal.addActionListener((ActionEvent actionEvent) -> {
 			installLocalPanel.open();
 			installServerPanel.close();
 			installWgetPanel.close();
 		});
-		jRadioButtonServer.addActionListener(actionEvent -> {
+		jRadioButtonServer.addActionListener((ActionEvent actionEvent) -> {
 			installLocalPanel.close();
 			installServerPanel.open();
 			installWgetPanel.close();
 		});
-		jRadioButtonWGet.addActionListener(actionEvent -> {
+		jRadioButtonWGet.addActionListener((ActionEvent actionEvent) -> {
 			installLocalPanel.close();
 			installServerPanel.close();
 			installWgetPanel.open();

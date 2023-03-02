@@ -1,6 +1,7 @@
 package de.uib.utilities.swing.timeedit;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -59,7 +60,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		popup.add(menuItemNow);
 
 		JMenuItem menuItemNull = new JMenuItem("Kein Datum");
-		menuItemNull.addActionListener(actionEvent -> {
+		menuItemNull.addActionListener((ActionEvent actionEvent) -> {
 
 			monthView.getSelectionModel().clearSelection();
 			monthView.commitSelection();

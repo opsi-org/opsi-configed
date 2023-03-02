@@ -10,5 +10,5 @@
 package de.uib.utilities.table;
 
 public interface CursorrowObserver {
-	public void rowUpdated(int modelrow);
+	void rowUpdated(int modelrow);
 }

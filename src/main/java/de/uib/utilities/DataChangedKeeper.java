@@ -17,7 +17,7 @@ public class DataChangedKeeper implements DataChangedObserver {
 
 	protected ActUpon actUpon;
 
-	public class TellWhat implements ActUpon {
+	public static class TellWhat implements ActUpon {
 		@Override
 		public void act(Object source) {
 			JOptionPane.showMessageDialog(null, "" + source, "alert", JOptionPane.INFORMATION_MESSAGE);
@@ -32,7 +32,7 @@ public class DataChangedKeeper implements DataChangedObserver {
 
 	@FunctionalInterface
 	public interface ActUpon {
-		public void act(Object source);
+		void act(Object source);
 	}
 
 	@Override

@@ -40,7 +40,7 @@ public final class SmbConnect {
 
 	private static SmbConnect instance;
 
-	protected AbstractPersistenceController persist;
+	AbstractPersistenceController persist;
 
 	private SmbConnect() {
 		persist = PersistenceControllerFactory.getPersistenceController();

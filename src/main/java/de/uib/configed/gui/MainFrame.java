@@ -31,7 +31,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -111,9 +110,10 @@ import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.gui.productpage.PanelProductProperties;
 import de.uib.configed.gui.swinfopage.PanelSWInfo;
 import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
-import de.uib.configed.messagebus.Messagebus;
+import de.uib.configed.terminal.Terminal;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
+import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -489,6 +489,8 @@ public class MainFrame extends JFrame
 	JPanel clientPane;
 
 	private LicenseDisplayer licenseDisplayer;
+
+	private Messagebus messagebus;
 
 	class GlassPane extends JComponent {
 		GlassPane() {
@@ -1322,22 +1324,28 @@ public class MainFrame extends JFrame
 			}
 		});
 
-		jMenuFrameTerminal.setText("Terminal");
+		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
 		jMenuFrameTerminal.setEnabled(true);
-		jMenuFrameTerminal.addActionListener(e -> {
+		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
 			try {
-				Messagebus messagebus = new Messagebus();
-				boolean connected = messagebus.connect();
-				if (!connected) {
+				if (messagebus == null) {
+					messagebus = new Messagebus();
+				}
+
+				if (!messagebus.connect()) {
 					return;
 				}
 
-				messagebus.connectTerminal();
+				if (!Terminal.getInstance().isWebSocketConnected()) {
+					messagebus.connectTerminal();
+				} else {
+					Logging.info(this,
+							"terminal is already opened and connected to websocket (displaying current terminal window)");
+					Terminal.getInstance().display();
+				}
 			} catch (InterruptedException ex) {
 				Logging.error(this, "cannot open terminal, thread interrupted", ex);
 				Thread.currentThread().interrupt();
-			} catch (URISyntaxException ex) {
-				Logging.error(this, "cannot open terminal, Exception thrown", ex);
 			}
 		});
 
@@ -2172,7 +2180,7 @@ public class MainFrame extends JFrame
 		jButtonSaveList.addActionListener(this::jButtonSaveListActionPerformed);
 
 		jRadioRequiredAll.setMargin(new Insets(0, 0, 0, 0));
-		jRadioRequiredAll.setAlignmentY((float) 0.0);
+		jRadioRequiredAll.setAlignmentY(0.0F);
 		jRadioRequiredAll.setText(Configed.getResourceValue("MainFrame.jRadioRequiredAll"));
 		jRadioRequiredOff.setMargin(new Insets(0, 0, 0, 0));
 		jRadioRequiredOff.setSelected(true);
@@ -2790,7 +2798,7 @@ public class MainFrame extends JFrame
 			@Override
 			protected void commit() {
 				super.commit();
-				Float duration = 0.0f;
+				Float duration = 0F;
 				if (!getExtra().isEmpty()) {
 					duration = Float.parseFloat(getExtra());
 				}
@@ -2866,10 +2874,10 @@ public class MainFrame extends JFrame
 
 	public void toggleClientFilterAction() {
 		configedMain.toggleFilterClientList();
-		jMenuClientselectionToggleClientFilter.setState(configedMain.getFilterClientList());
-		popupSelectionToggleClientFilter.setState(configedMain.getFilterClientList());
+		jMenuClientselectionToggleClientFilter.setState(configedMain.isFilterClientList());
+		popupSelectionToggleClientFilter.setState(configedMain.isFilterClientList());
 
-		if (!configedMain.getFilterClientList()) {
+		if (!configedMain.isFilterClientList()) {
 			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter_disabled-32.png", ""));
 		} else {
 			iconButtonToggleClientFilter.setIcon(Globals.createImageIcon("images/view-filter-32.png", ""));

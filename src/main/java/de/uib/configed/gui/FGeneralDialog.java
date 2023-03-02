@@ -35,6 +35,13 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
 
 public class FGeneralDialog extends JDialog implements ActionListener, KeyListener, MouseListener {
+
+	static final int OK = 1;
+	static final int NO = 2;
+
+	private static final int DEFAULT_PREFERRED_WIDTH = 250;
+	private static final int DEFAULT_PREFERRED_HEIGHT = 300;
+
 	boolean shiftPressed = true;
 
 	protected FadingMirror glass;
@@ -48,20 +55,15 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected IconButton jButton2 = new IconButton();
 	protected IconButton jButton3 = new IconButton();
 	private int defaultResult = 1;
-	static final int OK = 1;
-	static final int NO = 2;
-
-	private static int defaultPreferredWidth = 250;
-	private static int defaultPreferredHeight = 300;
 
 	protected int preferredWidth;
 	protected int preferredHeight;
 
 	protected int additionalPaneMaxWidth = GroupLayout.PREFERRED_SIZE;
 
-	protected String button1Text = null;
-	protected String button2Text = null;
-	protected String button3Text = null;
+	protected String button1Text;
+	protected String button2Text;
+	protected String button3Text;
 
 	protected String[] buttonNames;
 	protected Icon[] icons;
@@ -109,24 +111,8 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		guiInit();
 	}
 
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return true;
-	}
-
-	public void setDefaultResult(int d) {
-		defaultResult = d;
-	}
-
-	private void registerWithRunningInstances() {
-		Logging.info(this, "registerWithRunningInstances " + wantToBeRegisteredWithRunningInstances());
-		if (wantToBeRegisteredWithRunningInstances()) {
-			FEditObject.runningInstances.add(this, "");
-		}
-		Logging.info(this, "running instances " + FEditObject.runningInstances.size());
-	}
-
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList) {
-		this(owner, title, modal, buttonList, defaultPreferredWidth, defaultPreferredHeight);
+		this(owner, title, modal, buttonList, DEFAULT_PREFERRED_WIDTH, DEFAULT_PREFERRED_HEIGHT);
 	}
 
 	public FGeneralDialog(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
@@ -152,6 +138,27 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		initFGeneralDialog(title, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
 				addPane);
+	}
+
+	public FGeneralDialog(Window owner, String title, String[] buttonList, int preferredWidth, int preferredHeight) {
+		super(owner);
+		initFGeneralDialog(title, buttonList, null, -1, preferredWidth, preferredHeight, false, null);
+	}
+
+	protected boolean wantToBeRegisteredWithRunningInstances() {
+		return true;
+	}
+
+	public void setDefaultResult(int d) {
+		defaultResult = d;
+	}
+
+	private void registerWithRunningInstances() {
+		Logging.info(this, "registerWithRunningInstances " + wantToBeRegisteredWithRunningInstances());
+		if (wantToBeRegisteredWithRunningInstances()) {
+			FEditObject.runningInstances.add(this, "");
+		}
+		Logging.info(this, "running instances " + FEditObject.runningInstances.size());
 	}
 
 	private void initFGeneralDialog(String title, String[] buttonList, Icon[] icons, int lastButtonNo,
@@ -188,11 +195,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			guiInit();
 		}
 		setLocationRelativeTo(owner);
-	}
-
-	public FGeneralDialog(Window owner, String title, String[] buttonList, int preferredWidth, int preferredHeight) {
-		super(owner);
-		initFGeneralDialog(title, buttonList, null, -1, preferredWidth, preferredHeight, false, null);
 	}
 
 	public int getResult() {
@@ -564,8 +566,8 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	public static class FadingMirror extends JPanel implements ActionListener {
-		private float opacity = 1f;
-		private float step = 0.3f;
+		private float opacity = 1F;
+		private float step = 0.3F;
 		private Timer fadeTimer;
 		private int initialDelay = 100;
 		private int delay = 100;
@@ -575,9 +577,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			this.vanishing = vanishing;
 
 			if (vanishing) {
-				opacity = 1f;
+				opacity = 1F;
 			} else {
-				opacity = 0f;
+				opacity = 0F;
 			}
 		}
 
