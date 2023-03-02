@@ -4,70 +4,41 @@ package de.uib.opsicommand.sshcommand;
  * Represent a sshcommand object
  **/
 public abstract interface SSHSFTPCommand {
-	public abstract String getId();
+	String getId();
 
-	public abstract String getDescription();
+	String getDescription();
 
-	public abstract String getTitle();
+	String getTitle();
 
-	public abstract String getSourcePath();
+	String getSourcePath();
 
-	public abstract String getFullSourcePath();
+	String getFullSourcePath();
 
-	public abstract String getSourceFilename();
+	String getSourceFilename();
 
-	public abstract String getFullTargetPath();
+	String getFullTargetPath();
 
-	public abstract String getTargetPath();
+	String getTargetPath();
 
-	public abstract String getTargetFilename();
+	String getTargetFilename();
 
-	public abstract boolean getOverwriteMode();
+	boolean isOverwriteMode();
 
-	public abstract boolean getShowOutputDialog();
+	boolean isShowOutputDialog();
 
-	public void setTitle(String t);
+	void setTitle(String t);
 
-	public void setDescription(String d);
+	void setDescription(String d);
 
-	public void setSourcePath(String p);
+	void setSourcePath(String p);
 
-	public void setFullSourcePath(String p);
+	void setFullSourcePath(String p);
 
-	public void setSourceFilename(String f);
+	void setSourceFilename(String f);
 
-	public void setTargetPath(String p);
+	void setTargetPath(String p);
 
-	public void setTargetFilename(String f);
+	void setTargetFilename(String f);
 
-	public void setOverwriteMode(boolean o);
-
-	// /** @return command String to execute **/
-
-	// 
-
-	// /** @return raw command String **/
-
-	// /** @returnlist of parameter-Ersatz **/
-
-	// /** @return True if command need sudo **/
-
-	// /** @return command id String **/
-
-	// 
-	// /** @return command menu text String **/
-
-	// /** @return command parent menu text String **/
-
-	// /** @return command tooltip text String **/
-
-	// /** @return command priority int **/
-
-	// /** @return True if command needs an parameter gui **/
-
-	// /** @return True if command is a multicommand **/
-
-	// 
-	// /** @return the command dialog(parameter)**/
-
+	void setOverwriteMode(boolean o);
 }

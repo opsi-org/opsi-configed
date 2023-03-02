@@ -23,6 +23,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -155,25 +156,25 @@ public class ProductView implements View {
 		final ObjectProperty<Predicate<Product>> productIdFilter = new SimpleObjectProperty<>();
 		final ObjectProperty<Predicate<Product>> productStatusFilter = new SimpleObjectProperty<>();
 
-		productIdFilter.bind(Bindings.createObjectBinding(() -> product -> {
+		productIdFilter.bind(Bindings.createObjectBinding(() -> (Product product) -> {
 			if (productSearchbarTextField.getText() == null) {
 				return true;
 			}
 
 			return product.getId().contains(productSearchbarTextField.getText());
 		}, productSearchbarTextField.textProperty()));
-		productStatusFilter.bind(Bindings.createObjectBinding(() -> product -> {
+		productStatusFilter.bind(Bindings.createObjectBinding(() -> (Product product) -> {
 			if (productStatusComboBox.getValue() == null || productStatusComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
 			}
 
-			return productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.installed"))
-					&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.installed"))
-					|| productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.failed"))
-							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.failed"))
-					|| productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.unused"))
-							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.unused"));
+			return (productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.installed"))
+					&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.installed")))
+					|| (productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.failed"))
+							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.failed")))
+					|| (productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.unused"))
+							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.unused")));
 		}, productStatusComboBox.valueProperty()));
 
 		filteredData.predicateProperty().bind(Bindings.createObjectBinding(
@@ -183,8 +184,8 @@ public class ProductView implements View {
 		sortedData.comparatorProperty().bind(productTableView.comparatorProperty());
 		productTableView.setItems(sortedData);
 
-		productTableView.getSelectionModel().selectedItemProperty()
-				.addListener((observableValue, oldValue, newValue) -> {
+		productTableView.getSelectionModel().selectedItemProperty().addListener(
+				(ObservableValue<? extends Product> observableValue, Product oldValue, Product newValue) -> {
 					if (newValue == null) {
 						return;
 					}

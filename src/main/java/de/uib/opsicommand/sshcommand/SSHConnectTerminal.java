@@ -173,10 +173,10 @@ public class SSHConnectTerminal extends SSHConnect {
 					String ntext = SSHCommandFactory.getInstance(main).getParameterHandler()
 							.parseParameterToString(command, this);
 					out.write(ntext.getBytes());
-					Logging.debug(this, " exec getPrivateStatus " + dialog.getPrivateStatus());
+					Logging.debug(this, " exec getPrivateStatus " + dialog.hasPrivateStatus());
 					Logging.info(this, " exec text " + text);
 					Logging.info(this, " exec ntext " + ntext);
-					if (!(dialog.getPrivateStatus())) {
+					if (!(dialog.hasPrivateStatus())) {
 						dialog.setPrivate(false);
 					} else {
 						Logging.debug(this, " exec addToHistory " + text);
@@ -214,8 +214,8 @@ public class SSHConnectTerminal extends SSHConnect {
 	private void initKillProcessButtonFromDialog() {
 		Logging.info(this, "initKillProcessButtonFromDialog ");
 		initListeners();
-		this.dialog.jButtonKillProcess.removeActionListener(connectionKeyListener);
-		this.dialog.jButtonKillProcess.addActionListener(connectionKeyListener);
+
+		dialog.renewJButtonKillActionListener(connectionKeyListener);
 	}
 
 	public void initInputFieldFromDialog() {

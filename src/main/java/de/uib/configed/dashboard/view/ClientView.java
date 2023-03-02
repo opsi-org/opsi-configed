@@ -203,28 +203,27 @@ public class ClientView implements View {
 							: LocalDate.parse(client.getLastSeen().substring(0, 10), dtf);
 			final long days = ChronoUnit.DAYS.between(lastSeenDate, current);
 
-			return clientLastSeenComboBox.getValue()
+			return (clientLastSeenComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")) && days <= 14
-					&& days >= 0
-					|| clientLastSeenComboBox.getValue()
+					&& days >= 0)
+					|| (clientLastSeenComboBox.getValue()
 							.equals(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"))
-							&& days > 14 && days <= 30
-					|| clientLastSeenComboBox.getValue()
-							.equals(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")) && days > 30
-					|| clientLastSeenComboBox.getValue().equals(Configed.getResourceValue("Dashboard.lastSeen.never"))
-							&& client.getLastSeen().equals(Configed.getResourceValue("Dashboard.lastSeen.never"));
+							&& days > 14 && days <= 30)
+					|| (clientLastSeenComboBox.getValue()
+							.equals(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")) && days > 30)
+					|| (clientLastSeenComboBox.getValue().equals(Configed.getResourceValue("Dashboard.lastSeen.never"))
+							&& client.getLastSeen().equals(Configed.getResourceValue("Dashboard.lastSeen.never")));
 		}, clientLastSeenComboBox.valueProperty()));
-		activeFilter.bind(Bindings.createObjectBinding(() -> client -> {
+		activeFilter.bind(Bindings.createObjectBinding(() -> (Client client) -> {
 			if (clientActivityStatusComboBox.getValue() == null || clientActivityStatusComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;
 			}
 
-			return client.getReachable()
-					&& clientActivityStatusComboBox.getValue()
-							.equals(Configed.getResourceValue("Dashboard.client.active"))
-					|| !client.getReachable() && clientActivityStatusComboBox.getValue()
-							.equals(Configed.getResourceValue("Dashboard.client.inactive"));
+			return (client.isReachable() && clientActivityStatusComboBox.getValue()
+					.equals(Configed.getResourceValue("Dashboard.client.active")))
+					|| (!client.isReachable() && clientActivityStatusComboBox.getValue()
+							.equals(Configed.getResourceValue("Dashboard.client.inactive")));
 		}, clientActivityStatusComboBox.valueProperty()));
 
 		filteredData.predicateProperty()

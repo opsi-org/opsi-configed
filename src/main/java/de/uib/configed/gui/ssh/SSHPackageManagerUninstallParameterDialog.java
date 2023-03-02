@@ -187,7 +187,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		}
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
-			if (persist.getDepotPermission(depot) && ((persist.getDepot2LocalbootProducts().get(depot) != null
+			if (persist.hasDepotPermission(depot) && ((persist.getDepot2LocalbootProducts().get(depot) != null
 					&& persist.getDepot2LocalbootProducts().get(depot).keySet().contains(selectedProduct))
 					|| (persist.getDepot2NetbootProducts().get(depot) != null
 							&& persist.getDepot2NetbootProducts().get(depot).keySet().contains(selectedProduct)))) {

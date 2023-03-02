@@ -253,17 +253,17 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract boolean isDepotsFullPermission();
 
-	public abstract boolean getDepotPermission(String depotId);
+	public abstract boolean hasDepotPermission(String depotId);
 
 	public abstract boolean accessToHostgroupsOnlyIfExplicitlyStated();
 
 	public abstract Set<String> getHostgroupsPermitted();
 
-	public abstract boolean getHostgroupPermission(String hostgroupId);
+	public abstract boolean hasHostgroupPermission(String hostgroupId);
 
 	public abstract boolean isProductgroupsFullPermission();
 
-	public abstract boolean getProductgroupPermission(String productgroupId);
+	public abstract boolean hasProductgroupPermission(String productgroupId);
 
 	/* ============================ */
 	/* data retrieving and setting */

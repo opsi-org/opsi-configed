@@ -195,7 +195,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		}
 
 		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
-			if (persist.getDepotPermission(depot)) {
+			if (persist.hasDepotPermission(depot)) {
 				result.add(depot);
 			}
 		}

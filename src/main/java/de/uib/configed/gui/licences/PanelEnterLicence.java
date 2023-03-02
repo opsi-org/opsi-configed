@@ -567,7 +567,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 				.addGap(2, 2, 2).addComponent(jButtonSend, 20, 20, 20).addGap(5, 5, 5)));
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setResizeWeight(0.3f);
+		splitPane.setResizeWeight(0.3);
 
 		JPanel topPane = new JPanel();
 		JPanel bottomPane = new JPanel();

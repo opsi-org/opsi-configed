@@ -555,7 +555,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		try {
 			Configed.savedStates.load();
 		} catch (IOException iox) {
-			Logging.warning(this, "saved states file could not be loaded");
+			Logging.warning(this, "saved states file could not be loaded", iox);
 		}
 
 		Integer oldUsageCount = Integer.valueOf(Configed.savedStates.saveUsageCount.deserialize());
@@ -1795,7 +1795,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 *
 	 * @param groupname
 	 */
-	public boolean activateGroup(String groupname) {
+	public boolean activateGroup(boolean preferringOldSelection, String groupname) {
 		Logging.info(this, "activateGroup  " + groupname);
 		if (groupname == null) {
 			return false;
@@ -1809,7 +1809,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		GroupNode node = treeClients.getGroupNode(groupname);
 		TreePath path = treeClients.getPathToNode(node);
 
-		activateGroupByTree(false, node, path);
+		activateGroupByTree(preferringOldSelection, node, path);
 
 		Logging.info(this, "expand activated  path " + path);
 		treeClients.expandPath(path);
@@ -1824,7 +1824,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 */
 	public void setGroup(String groupname) {
 		Logging.info(this, "setGroup " + groupname);
-		if (!activateGroup(groupname)) {
+		if (!activateGroup(true, groupname)) {
 			return;
 		}
 
@@ -1946,7 +1946,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return activePaths;
 	}
 
-	public boolean getFilterClientList() {
+	public boolean isFilterClientList() {
 		return filterClientList;
 	}
 
@@ -3540,7 +3540,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public List<String> getAccessedDepots() {
 		List<String> accessedDepots = new ArrayList<>();
 		for (String depot : selectedDepotsV) {
-			if (persist.getDepotPermission(depot)) {
+			if (persist.hasDepotPermission(depot)) {
 				accessedDepots.add(depot);
 			}
 		}
@@ -3661,7 +3661,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.info(this, " ==== refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
 			refreshClientList();
-			activateGroup(oldGroupSelection);
+			activateGroup(true, oldGroupSelection);
 		}
 	}
 
@@ -4281,7 +4281,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					}
 
 					// handling the main perspective
-					final int maxWaitSecs = 600;
+					final int MAX_WAIT_SECONDS = 600;
 
 					new Thread() {
 						@Override
@@ -4289,7 +4289,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							int waitSecs = 0;
 
 							Logging.info(this, "counting thread started");
-							while (!sessioninfoFinished && waitSecs <= maxWaitSecs) {
+							while (!sessioninfoFinished && waitSecs <= MAX_WAIT_SECONDS) {
 								Logging.debug(this, "wait secs for session infoi " + waitSecs);
 								try {
 									sleep(1000);
@@ -4548,10 +4548,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			oldGroupSelection = Configed.savedStates.saveGroupSelection.deserialize();
 		}
 
-		if (oldGroupSelection != null && activateGroup(oldGroupSelection)) {
+		if (oldGroupSelection != null && activateGroup(true, oldGroupSelection)) {
 			Logging.info(this, "old group reset " + oldGroupSelection);
 		} else {
-			activateGroup(ClientTree.ALL_CLIENTS_NAME);
+			activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 		}
 	}
 
@@ -4562,7 +4562,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected void refreshClientListActivateALL() {
 		Logging.info(this, "refreshClientListActivateALL");
 		refreshClientList();
-		activateGroup(ClientTree.ALL_CLIENTS_NAME);
+		activateGroup(true, ClientTree.ALL_CLIENTS_NAME);
 	}
 
 	protected void refreshClientList() {
@@ -4607,7 +4607,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		persist.hostConfigsRequestRefresh();
 		persist.hostGroupsRequestRefresh();
 		persist.fObject2GroupsRequestRefresh();
-		persist.fGroup2MembersRequestRefresh(); // ??
+		persist.fGroup2MembersRequestRefresh();
 		refreshClientListKeepingGroup();
 	}
 
@@ -4689,8 +4689,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// Activate group of created Client (and the group of all clients if no group
 			// specified)
-			if (!activateGroup(group)) {
-				activateGroup(ClientTree.ALL_CLIENTS_NAME);
+			if (!activateGroup(false, group)) {
+				activateGroup(false, ClientTree.ALL_CLIENTS_NAME);
 			}
 
 			// Sets the client on the table
@@ -4718,7 +4718,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Cursor oldCursor = fListFeedback.getCursor();
 			fListFeedback.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			fListFeedback.setVisible(true);
-			fListFeedback.glassTransparency(true, 800, 200, 0.04f);
+			fListFeedback.glassTransparency(true, 800, 200, 0.04F);
 
 			List<String> errors = getErrors();
 
@@ -5125,7 +5125,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		persist.deleteClients(getSelectedClients());
 
-		if (getFilterClientList()) {
+		if (isFilterClientList()) {
 			mainFrame.toggleClientFilterAction();
 		}
 
@@ -5356,7 +5356,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		boolean saveFilterClientList = false;
 
 		if (renewFilter) {
-			saveFilterClientList = getFilterClientList();
+			saveFilterClientList = isFilterClientList();
 			if (saveFilterClientList) {
 				setFilterClientList(false);
 			}

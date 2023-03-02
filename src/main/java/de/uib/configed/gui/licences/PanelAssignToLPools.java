@@ -72,7 +72,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		// splitpane
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setResizeWeight(0.7f);
+		splitPane.setResizeWeight(0.7);
 
 		JPanel topPane = new JPanel();
 		JPanel bottomPane = new JPanel();

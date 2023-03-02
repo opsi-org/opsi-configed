@@ -497,8 +497,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		contentPane.add(result.closeParenthesis);
 
 		if (operations.length > 1) {
-			((JComboBox) result.operationComponent).addActionListener(new SelectOperationListener());
-			addDataComponent(result, ((JComboBox) result.operationComponent).getSelectedIndex());
+			((JComboBox<?>) result.operationComponent).addActionListener(new SelectOperationListener());
+			addDataComponent(result, ((JComboBox<?>) result.operationComponent).getSelectedIndex());
 		} else if (operations.length == 1) {
 			addDataComponent(result, 0);
 		}
@@ -728,7 +728,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private AbstractSelectOperation getOperation(SimpleGroup group) {
 		int operationIndex;
 		if (group.operationComponent instanceof JComboBox) {
-			operationIndex = ((JComboBox) group.operationComponent).getSelectedIndex();
+			operationIndex = ((JComboBox<?>) group.operationComponent).getSelectedIndex();
 		} else {
 			operationIndex = 0;
 		}
@@ -1133,7 +1133,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		contentPane.repaint();
 	}
 
-	private AbstractSelectOperation getNonGroupOperation(AbstractSelectGroupOperation operation) {
+	private static AbstractSelectOperation getNonGroupOperation(AbstractSelectGroupOperation operation) {
 		AbstractSelectOperation child = operation.getChildOperations().get(0);
 		while (child instanceof AbstractSelectGroupOperation) {
 			child = ((AbstractSelectGroupOperation) child).getChildOperations().get(0);
@@ -1148,7 +1148,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				AbstractSelectOperation op = ows.operation;
 				if (op.getElement().getPath().equals(simple.element.getPath())) {
 					if (op.getElement().supportedOperations().size() > 1) {
-						((JComboBox) simple.operationComponent).setSelectedItem(op.getOperationString());
+						((JComboBox<?>) simple.operationComponent).setSelectedItem(op.getOperationString());
 					}
 					setComponentData(simple.dataComponent, op.getSelectData());
 					setConnectionTypes(simple.connectionType, simple.negateButton, ows.status);
@@ -1161,7 +1161,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 	}
 
-	private void setComponentData(JComponent component, SelectData data) {
+	private static void setComponentData(JComponent component, SelectData data) {
 		if (data == null || data.getData() == null) {
 			return;
 		}
@@ -1175,7 +1175,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 	}
 
-	private void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not,
+	private static void setConnectionTypes(AndOrSelectButtonByIcon andOr, IconAsButton not,
 			SelectionManager.ConnectionStatus status) {
 		switch (status) {
 		case AND:
@@ -1194,7 +1194,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 	}
 
-	private class SimpleGroup {
+	private static class SimpleGroup {
 		private AbstractSelectElement element;
 		private IconAsButton negateButton;
 		private AndOrSelectButtonByIcon connectionType;
@@ -1216,7 +1216,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		private GroupType type;
 		private IconAsButton removeButton;
 		private IconAsButton negateButton;
-		private JLabel topLabel = null;
+		private JLabel topLabel;
 		private AndOrSelectButtonByIcon connectionType;
 		private Deque<SimpleGroup> groupList;
 		private IconAsButton openParenthesis;
@@ -1322,7 +1322,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 			int index = 0;
 			if (source instanceof JComboBox) {
-				index = ((JComboBox) source).getSelectedIndex();
+				index = ((JComboBox<?>) source).getSelectedIndex();
 			} else if (source instanceof JLabel) {
 				index = 0;
 			}
@@ -1335,7 +1335,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 	}
 
-	private class NotButtonListener implements ActionListener {
+	private static class NotButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if (!(event.getSource() instanceof IconAsButton)) {
@@ -1347,7 +1347,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 	}
 
-	private class ParenthesisListener implements ActionListener {
+	private static class ParenthesisListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent event) {
 			if (!(event.getSource() instanceof IconAsButton)) {
@@ -1368,7 +1368,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	/*
 	 * A spinner for big numbers, with a metric prefix (kilo, mega, ...) selection.
 	 */
-	private class SpinnerWithExt extends JPanel {
+	private static class SpinnerWithExt extends JPanel {
 		private JSpinner spinner;
 		private JComboBox<String> box;
 
@@ -1391,7 +1391,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		public long getValue() {
 			long value = (Long) spinner.getValue();
 			for (int i = 0; i < box.getSelectedIndex(); i++) {
-				value *= 1024l;
+				value *= 1024L;
 			}
 			return value;
 		}

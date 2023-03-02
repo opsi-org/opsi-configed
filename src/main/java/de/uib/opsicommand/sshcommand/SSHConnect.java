@@ -66,7 +66,7 @@ public class SSHConnect {
 	}
 
 	public static boolean isConnectionAllowed() {
-		return SSHConnectionInfo.getInstance().getSSHActivateStatus();
+		return SSHConnectionInfo.getInstance().isSSHActivate();
 	}
 
 	/**
