@@ -342,7 +342,7 @@ public final class Terminal {
 		return southPanel;
 	}
 
-	public void indicateFileUpload(File file, int currentFile, int totalFiles) {
+	public void indicateFileUpload(File file, int uploadedFiles, int totalFiles) {
 		showFileUploadProgress(true);
 
 		try {
@@ -351,7 +351,7 @@ public final class Terminal {
 			Logging.warning(this, "unable to retrieve file size: ", e);
 		}
 
-		uploadedFilesLabel.setText(currentFile + "/" + totalFiles);
+		uploadedFilesLabel.setText(uploadedFiles + "/" + totalFiles);
 		fileNameLabel.setText(file.getAbsolutePath());
 	}
 
@@ -538,7 +538,9 @@ public final class Terminal {
 
 			if (fileUploader.isDone()) {
 				fileUploader = new BackgroundFileUploader(queue);
+				fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + files.size());
 			} else {
+				fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + files.size());
 				fileUploader.updateTotalFilesToUpload();
 			}
 
