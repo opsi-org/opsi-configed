@@ -11,5 +11,5 @@ package de.uib.utilities.table.updates;
 import java.util.List;
 
 public interface StrList2BooleanFunction {
-	public abstract boolean sendUpdate(String id, List<String> list);
+	boolean sendUpdate(String id, List<String> list);
 }

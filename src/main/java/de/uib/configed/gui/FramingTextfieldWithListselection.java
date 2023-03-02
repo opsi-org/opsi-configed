@@ -4,15 +4,15 @@ import java.util.List;
 
 public interface FramingTextfieldWithListselection {
 
-	public String getTitle();
+	String getTitle();
 
-	public String getTextfieldLabel();
+	String getTextfieldLabel();
 
-	public String getListLabel();
+	String getListLabel();
 
-	public String getListLabelToolTip();
+	String getListLabelToolTip();
 
-	public List<String> getListData();
+	List<String> getListData();
 
-	public void setListData(List<String> v);
+	void setListData(List<String> v);
 }

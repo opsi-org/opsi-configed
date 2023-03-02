@@ -3,7 +3,7 @@ package de.uib.opsicommand.sshcommand;
 /**
  * Represent a sshcommand object
  **/
-public abstract interface SSHSFTPCommand {
+public interface SSHSFTPCommand {
 	String getId();
 
 	String getDescription();

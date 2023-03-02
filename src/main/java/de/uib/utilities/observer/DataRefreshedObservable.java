@@ -10,10 +10,9 @@
 package de.uib.utilities.observer;
 
 public interface DataRefreshedObservable {
-	public void registerDataRefreshedObserver(DataRefreshedObserver ob);
+	void registerDataRefreshedObserver(DataRefreshedObserver ob);
 
-	public void unregisterDataRefreshedObserver(DataRefreshedObserver ob);
+	void unregisterDataRefreshedObserver(DataRefreshedObserver ob);
 
-	public void notifyDataRefreshedObservers(Object mesg);
-
+	void notifyDataRefreshedObservers(Object mesg);
 }

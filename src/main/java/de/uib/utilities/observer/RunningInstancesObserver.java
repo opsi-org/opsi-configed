@@ -19,8 +19,7 @@ import java.util.Set;
  */
 
 public interface RunningInstancesObserver<T> {
-	public void executeCommandOnInstances(String command, Set<T> instances);
+	void executeCommandOnInstances(String command, Set<T> instances);
 
-	public void instancesChanged(Set<T> instances);
-
+	void instancesChanged(Set<T> instances);
 }

@@ -13,8 +13,8 @@
 package de.uib.utilities;
 
 public interface NameProducer {
-	public String produceName();
+	String produceName();
 
-	public String getDefaultName();
+	String getDefaultName();
 
 }

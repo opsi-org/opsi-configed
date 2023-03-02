@@ -20,12 +20,11 @@ package de.uib.opsicommand.sshcommand;
  **/
 public interface SSHCommandParameterInterface {
 
-	public abstract String[] getSelectedClientNames();
+	String[] getSelectedClientNames();
 
-	public abstract String[] getSelectedDepotNames();
+	String[] getSelectedDepotNames();
 
-	public abstract String getConfigServerName();
+	String getConfigServerName();
 
-	public abstract String getConfigSSHServerName();
-
+	String getConfigSSHServerName();
 }

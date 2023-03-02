@@ -83,8 +83,8 @@ public class DependenciesModel {
 	}
 
 	public interface DependenciesModelListener {
-		public void updateProduct(String productId);
+		void updateProduct(String productId);
 
-		public void updateDepot(String depotId);
+		void updateDepot(String depotId);
 	}
 }

@@ -11,7 +11,7 @@ package de.uib.utilities.table.provider;
 import java.util.List;
 
 public interface TableSource {
-	public static int ROW_COUNT_START = 1;
+	int ROW_COUNT_START = 1;
 
 	List<String> retrieveColumnNames();
 

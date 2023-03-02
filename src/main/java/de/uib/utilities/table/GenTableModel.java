@@ -66,12 +66,13 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
 
-	// maps for TableModelFunctions
+	// maps for TableModelFunctions TODO: Remove these things, they don't do anything
 	protected Map<TableModelFunctions.PairOfInt, Map<Object, List<Object>>> functions;
+	protected Map<TableModelFunctions.PairOfInt, Map<Integer, Mapping<Integer, String>>> xFunctions;
+
 	protected Map<Integer, RowStringMap> primarykey2Rowmap;
 	protected Map<Integer, String> primarykeyTranslation;
 	protected Mapping<Integer, String> primarykeyRepresentation;
-	protected Map<TableModelFunctions.PairOfInt, Map<Integer, Mapping<Integer, String>>> xFunctions;
 
 	protected Integer sortCol;
 	protected boolean sorting = false;
@@ -901,11 +902,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			Logging.info(this, "buildFunction with filter " + filter);
 			setFilter(filter);
 			produceRows();
-		}
+		} else if (saveUsingFilter) {
+			// we filtered but do not want to do it now
 
-		else if (saveUsingFilter)
-		// we filtered but do not want to do it now
-		{
 			// turn off filter and reproduce rows
 			setFilter(emptyFilter);
 			produceRows();
@@ -924,9 +923,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		setFilter(chainedFilter);
 
-		if (specialFilterCondition != null || saveUsingFilter)
-
-		{
+		if (specialFilterCondition != null || saveUsingFilter) {
 			// we changed filtering and have to reproduce the rows
 			produceRows();
 		}

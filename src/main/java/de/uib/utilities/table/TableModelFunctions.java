@@ -14,7 +14,7 @@ import java.util.Map;
 import de.uib.utilities.Mapping;
 
 public interface TableModelFunctions {
-	public class PairOfInt {
+	class PairOfInt {
 		public final int col1;
 		public final int col2;
 
@@ -28,7 +28,7 @@ public interface TableModelFunctions {
 
 	Map<Integer, RowStringMap> getPrimarykey2Rowmap();
 
-	abstract Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd,
+	Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd,
 			Mapping<Integer, String> col2ndMapping);
 
 }
