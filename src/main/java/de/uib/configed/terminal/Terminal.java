@@ -1,6 +1,5 @@
 package de.uib.configed.terminal;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -26,11 +25,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
@@ -40,7 +41,9 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jediterm.terminal.Questioner;
+import com.jediterm.terminal.RequestOrigin;
 import com.jediterm.terminal.TtyConnector;
+import com.jediterm.terminal.model.JediTerminal;
 import com.jediterm.terminal.ui.JediTermWidget;
 
 import de.uib.configed.Configed;
@@ -63,6 +66,7 @@ public final class Terminal {
 	private JLabel uploadedFilesLabel;
 	private JLabel fileNameLabel;
 	private JPanel southPanel;
+	private JScrollBar scrollBar;
 
 	private Messagebus messagebus;
 	private String terminalChannel;
@@ -145,6 +149,10 @@ public final class Terminal {
 
 		widget = new JediTermWidget(DEFAULT_TERMINAL_COLUMNS, DEFAULT_TERMINAL_ROWS, settingsProvider);
 		widget.setDropTarget(new FileUpload());
+
+		scrollBar = new JScrollBar();
+		widget.getTerminalPanel().init(scrollBar);
+
 		return widget;
 	}
 
@@ -177,7 +185,7 @@ public final class Terminal {
 
 		frame.add(allPane);
 
-		frame.pack();
+		frame.setSize(600, 400);
 		frame.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		frame.setVisible(true);
 
@@ -206,15 +214,14 @@ public final class Terminal {
 		JPanel settingsPanel = createSettingsPanel();
 		JediTermWidget termWidget = createTerminalWidget();
 
-		northLayout.setVerticalGroup(northLayout.createSequentialGroup()
-				.addComponent(settingsPanel, 0, GroupLayout.PREFERRED_SIZE, 50).addComponent(termWidget,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
+		northLayout.setVerticalGroup(
+				northLayout.createSequentialGroup().addComponent(settingsPanel, 40, GroupLayout.PREFERRED_SIZE, 40)
+						.addComponent(termWidget, 0, 0, Short.MAX_VALUE));
 
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup()
 				.addGroup(northLayout.createSequentialGroup().addComponent(settingsPanel, 0, GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE))
-				.addGroup(northLayout.createSequentialGroup().addComponent(termWidget, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)));
+				.addGroup(northLayout.createSequentialGroup().addComponent(termWidget, 0, 0, Short.MAX_VALUE)));
 
 		return northPanel;
 	}
@@ -233,13 +240,31 @@ public final class Terminal {
 		themeComboBox.addActionListener((ActionEvent e) -> {
 			String selectedTheme = (String) themeComboBox.getSelectedItem();
 			if (selectedTheme.equals(Configed.getResourceValue("Terminal.settings.theme.light"))) {
-				TerminalSettingsProvider.setTerminalForegroundColor(Color.decode("#000000"));
-				TerminalSettingsProvider.setTerminalBackgroundColor(Color.decode("#ffffff"));
+				TerminalSettingsProvider.setTerminalLightTheme();
 			} else {
-				TerminalSettingsProvider.setTerminalForegroundColor(Color.decode("#ffffff"));
-				TerminalSettingsProvider.setTerminalBackgroundColor(Color.decode("#000000"));
+				TerminalSettingsProvider.setTerminalDarkTheme();
 			}
 			widget.repaint();
+		});
+
+		JButton buttonFontPlus = new JButton(Globals.createImageIcon("images/font-plus.png", ""));
+		buttonFontPlus.setToolTipText(Configed.getResourceValue("TextPane.fontPlus"));
+		buttonFontPlus.addActionListener((ActionEvent e) -> {
+			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() + 1);
+			widget.getTerminalPanel().init(scrollBar);
+			widget.repaint();
+
+			resizeTerminal();
+		});
+
+		JButton buttonFontMinus = new JButton(Globals.createImageIcon("images/font-minus.png", ""));
+		buttonFontMinus.setToolTipText(Configed.getResourceValue("TextPane.fontMinus"));
+		buttonFontMinus.addActionListener((ActionEvent e) -> {
+			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() - 1);
+			widget.getTerminalPanel().init(scrollBar);
+			widget.repaint();
+
+			resizeTerminal();
 		});
 
 		settingsLayout.setHorizontalGroup(settingsLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
@@ -247,6 +272,9 @@ public final class Terminal {
 				.addGap(Globals.HGAP_SIZE)
 				.addComponent(themeComboBox, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(buttonFontPlus, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE)
+				.addComponent(buttonFontMinus, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.HGAP_SIZE));
 		settingsLayout.setVerticalGroup(settingsLayout.createSequentialGroup()
 				.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
@@ -254,10 +282,21 @@ public final class Terminal {
 						.addComponent(themeLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(themeComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonFontPlus, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(buttonFontMinus, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.HGAP_SIZE));
 
 		return settingsPanel;
+	}
+
+	private void resizeTerminal() {
+		JediTerminal.ensureTermMinimumSize(widget.getTerminalPanel().getTerminalSizeFromComponent());
+		widget.getTypeAheadManager().onResize();
+		widget.getTerminalStarter().postResize(widget.getTerminalPanel().getTerminalSizeFromComponent(),
+				RequestOrigin.User);
 	}
 
 	public JPanel createSouthPanel() {
