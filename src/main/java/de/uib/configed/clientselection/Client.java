@@ -8,5 +8,5 @@ public interface Client {
 	/**
 	 * Get a representing string for a client.
 	 */
-	public String getId();
+	String getId();
 }

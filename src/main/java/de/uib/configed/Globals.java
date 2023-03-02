@@ -699,11 +699,11 @@ public final class Globals {
 
 	public static final String PSEUDO_KEY_SEPARATOR = ";";
 
-	public static final List<Object> getNowTimeListValue() {
+	public static List<Object> getNowTimeListValue() {
 		return getNowTimeListValue(null);
 	}
 
-	public static final List<Object> getNowTimeListValue(final String comment) {
+	public static List<Object> getNowTimeListValue(final String comment) {
 		List<Object> result = new ArrayList<>();
 
 		String now = new java.sql.Timestamp(System.currentTimeMillis()).toString();

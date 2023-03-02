@@ -14,7 +14,7 @@ import java.util.List;
  * delivers rows which are externally stored
  */
 public interface RowsProvider {
-	public void requestReload();
+	void requestReload();
 
-	public List<List<Object>> getRows();
+	List<List<Object>> getRows();
 }

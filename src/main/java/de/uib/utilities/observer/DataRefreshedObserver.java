@@ -10,5 +10,5 @@
 package de.uib.utilities.observer;
 
 public interface DataRefreshedObserver {
-	public void gotNotification(Object mesg);
+	void gotNotification(Object mesg);
 }

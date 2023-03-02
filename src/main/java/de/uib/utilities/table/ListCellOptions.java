@@ -2,21 +2,21 @@ package de.uib.utilities.table;
 
 import java.util.List;
 
-public interface ListCellOptions
 // may represent an Opsi 4.0 config
 // TODO make this class generic?
-{
-	public List<Object> getPossibleValues();
+public interface ListCellOptions {
 
-	public List<Object> getDefaultValues();
+	List<Object> getPossibleValues();
 
-	public void setDefaultValues(List<Object> values);
+	List<Object> getDefaultValues();
 
-	public int getSelectionMode();
+	void setDefaultValues(List<Object> values);
 
-	public boolean isEditable();
+	int getSelectionMode();
 
-	public boolean isNullable();
+	boolean isEditable();
 
-	public String getDescription();
+	boolean isNullable();
+
+	String getDescription();
 }

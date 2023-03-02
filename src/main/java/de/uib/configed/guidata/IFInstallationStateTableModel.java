@@ -8,22 +8,20 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.ComboBoxModeller;
 
 public interface IFInstallationStateTableModel extends TableModel, ComboBoxModeller {
-	public int getColumnIndex(String columnName);
+	int getColumnIndex(String columnName);
 
-	public void clearCollectChangedStates();
+	void clearCollectChangedStates();
 
-	public String getLastStateChange(int row);
+	String getLastStateChange(int row);
 
-	public Map<String, Map<String, Object>> getGlobalProductInfos();
+	Map<String, Map<String, Object>> getGlobalProductInfos();
 
-	// not used public void setActionRequestWithCondition(ActionRequest ar,
+	boolean infoIfNoClientsSelected();
 
-	public boolean infoIfNoClientsSelected();
+	void initCollectiveChange();
 
-	public void initCollectiveChange();
+	void collectiveChangeActionRequest(String productId, ActionRequest ar);
 
-	public void collectiveChangeActionRequest(String productId, ActionRequest ar);
-
-	public void finishCollectiveChange();
+	void finishCollectiveChange();
 
 }

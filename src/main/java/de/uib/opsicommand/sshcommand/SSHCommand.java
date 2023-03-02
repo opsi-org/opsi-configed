@@ -7,49 +7,49 @@ import de.uib.configed.gui.FGeneralDialog;
 /**
  * Represent a sshcommand object
  **/
-public abstract interface SSHCommand {
+public interface SSHCommand {
 
 	/** @return command String to execute **/
-	public abstract String getCommand();
+	String getCommand();
 
-	public abstract String getSecuredCommand();
+	String getSecuredCommand();
 
-	public abstract String getSecureInfoInCommand();
+	String getSecureInfoInCommand();
 
 	/** @return raw command String **/
-	public abstract String getCommandRaw();
+	String getCommandRaw();
 
 	/** @returnlist of parameter-Ersatz **/
-	public abstract List<String> getParameterList();
+	List<String> getParameterList();
 
 	/** @return True if command need sudo **/
-	public abstract boolean needSudo();
+	boolean needSudo();
 
 	/** @return command id String **/
-	public abstract String getId();
+	String getId();
 
 	/** @return command menu text String **/
-	public abstract String getMenuText();
+	String getMenuText();
 
 	/** @return command parent menu text String **/
-	public abstract String getParentMenuText();
+	String getParentMenuText();
 
 	/** @return command tooltip text String **/
-	public abstract String getToolTipText();
+	String getToolTipText();
 
 	/** @return command priority int **/
-	public abstract int getPriority();
+	int getPriority();
 
 	public void setCommand(String c);
 
 	/** @return True if command needs an parameter gui **/
-	public abstract boolean needParameter();
+	boolean needParameter();
 
 	/** @return True if command is a multicommand **/
-	public abstract boolean isMultiCommand();
+	boolean isMultiCommand();
 
 	/** @return the command dialog(parameter) **/
-	public abstract FGeneralDialog getDialog();
+	FGeneralDialog getDialog();
 
-	public abstract String getErrorText();
+	String getErrorText();
 }

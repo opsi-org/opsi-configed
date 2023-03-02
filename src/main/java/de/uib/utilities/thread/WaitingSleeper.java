@@ -4,17 +4,17 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 
 public interface WaitingSleeper {
-	public abstract void actAfterWaiting();
+	void actAfterWaiting();
 
-	public abstract JProgressBar getProgressBar();
+	JProgressBar getProgressBar();
 
-	public abstract JLabel getLabel();
+	JLabel getLabel();
 
-	public abstract long getStartActionMillis();
+	long getStartActionMillis();
 
-	public abstract long getWaitingMillis();
+	long getWaitingMillis();
 
-	public abstract long getOneProgressBarLengthWaitingMillis();
+	long getOneProgressBarLengthWaitingMillis();
 
-	public abstract String setLabellingStrategy(long millisLevel);
+	String setLabellingStrategy(long millisLevel);
 }
