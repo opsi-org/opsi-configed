@@ -40,7 +40,7 @@ public interface SSHCommand {
 	/** @return command priority int **/
 	int getPriority();
 
-	public void setCommand(String c);
+	void setCommand(String c);
 
 	/** @return True if command needs an parameter gui **/
 	boolean needParameter();

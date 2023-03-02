@@ -252,7 +252,7 @@ public class Configed {
 	}
 
 	protected static boolean isValue(String[] args, int i) {
-		return i >= args.length || args[i].indexOf('-') == 0;
+		return i < args.length && args[i].indexOf('-') != 0;
 	}
 
 	protected static String getArg(String[] args, int i) {
@@ -461,10 +461,11 @@ public class Configed {
 
 					i = i + 2;
 				} else if (args[i].equals("--ssh-immediate-connect")) {
-
+					Logging.devel(args[i + 1]);
 					i = i + 1;
 
 					if (isValue(args, i)) {
+						Logging.devel("is Value");
 						if (args[i].equalsIgnoreCase("Y")) {
 							sshConnectOnStart = true;
 

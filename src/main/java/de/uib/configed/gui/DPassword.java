@@ -203,6 +203,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
+		Logging.devel(this, Configed.sshConnectOnStart + "");
 		checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"), Configed.sshConnectOnStart);
 		Logging.info(this, "checkTrySSH  " + Configed.sshConnectOnStart);
 		checkTrySSH.addItemListener(new ItemListener() {
