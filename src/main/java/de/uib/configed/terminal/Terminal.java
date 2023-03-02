@@ -260,6 +260,10 @@ public final class Terminal {
 		JButton buttonFontMinus = new JButton(Globals.createImageIcon("images/font-minus.png", ""));
 		buttonFontMinus.setToolTipText(Configed.getResourceValue("TextPane.fontMinus"));
 		buttonFontMinus.addActionListener((ActionEvent e) -> {
+			if ((int) settingsProvider.getTerminalFontSize() == 1) {
+				return;
+			}
+
 			TerminalSettingsProvider.setTerminalFontSize((int) settingsProvider.getTerminalFontSize() - 1);
 			widget.getTerminalPanel().init(scrollBar);
 			widget.repaint();
