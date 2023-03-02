@@ -33,6 +33,7 @@ import de.uib.utilities.swing.FPanel;
 import de.uib.utilities.swing.SecondaryFrame;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.TableModelFilter;
+import de.uib.utilities.table.TableModelFilterCondition;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
@@ -63,7 +64,7 @@ public class ControllerHWinfoMultiClients {
 
 	SecondaryFrame fTable;
 
-	de.uib.utilities.table.TableModelFilterCondition filterConditionHwForSelectedHosts = new de.uib.utilities.table.TableModelFilterCondition() {
+	TableModelFilterCondition filterConditionHwForSelectedHosts = new TableModelFilterCondition() {
 		private Set<Object> filter;
 
 		@Override

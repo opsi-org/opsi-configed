@@ -99,7 +99,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected Integer maxExistingLevel = minLevel;
 	protected Integer showLevel = minLevel;
 
-	protected boolean showTypeRestricted = false;
+	protected boolean showTypeRestricted;
 	protected List<String> typesList;
 	protected int typesListMaxShowCount = 25;
 
@@ -1083,7 +1083,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		protected JTextComponent comp;
 		protected Highlighter.HighlightPainter painter;
 		protected int lastReturnedOffset;
-		protected boolean cS = false;
+		protected boolean cS;
 
 		public WordSearcher(JTextComponent comp) {
 			this.comp = comp;

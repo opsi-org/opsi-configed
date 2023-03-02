@@ -17,10 +17,10 @@ public class JSONObjectX extends JSONObject {
 	private List<Object> list;
 	private String value = "";
 
-	private boolean beingMap = false;
-	private boolean beingList = false;
-	private boolean beingString = false;
-	private boolean hasElements = false;
+	private boolean beingMap;
+	private boolean beingList;
+	private boolean beingString;
+	private boolean hasElements;
 
 	public JSONObjectX(JSONObject jO) {
 		master = jO;

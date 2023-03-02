@@ -75,9 +75,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	protected Mapping<Integer, String> primarykeyRepresentation;
 
 	protected Integer sortCol;
-	protected boolean sorting = false;
+	protected boolean sorting;
 	protected int cursorrow = -1;
-	protected boolean markCursorRow = false;
+	protected boolean markCursorRow;
 	protected int colMarkCursorRow = -1;
 
 	CursorrowObserved cursorrowObservable;

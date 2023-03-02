@@ -31,11 +31,11 @@ public class SelectionManager {
 	}
 
 	private List<OperationWithStatus> groupWithStatusList;
-	private boolean hasSoftware = false;
-	private boolean hasHardware = false;
-	private boolean hasSwAudit = false;
-	private boolean isSerializedLoaded = false;
-	private AbstractSelectOperation loadedSearch = null;
+	private boolean hasSoftware;
+	private boolean hasHardware;
+	private boolean hasSwAudit;
+	private boolean isSerializedLoaded;
+	private AbstractSelectOperation loadedSearch;
 
 	private AbstractBackend backend;
 	private de.uib.configed.clientselection.AbstractSerializer serializer;

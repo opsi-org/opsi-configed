@@ -153,7 +153,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private String userConfigPart;
 	private Boolean applyUserSpecializedConfig;
 
-	private static Boolean keyUserRegisterValue = null;
+	private static Boolean keyUserRegisterValue;
 
 	protected Map<String, List<String>> mapOfMethodSignatures;
 
@@ -309,15 +309,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected String opsiVersion;
 
-	protected boolean withLicenceManagement = false;
-	protected boolean withLocalImaging = false;
+	protected boolean withLicenceManagement;
+	protected boolean withLocalImaging;
 
-	protected boolean withMySQL = false;
-	protected boolean withUEFI = false;
-	protected boolean withWAN = false;
+	protected boolean withMySQL;
+	protected boolean withUEFI;
+	protected boolean withWAN;
 
-	protected boolean withLinuxAgent = false;
-	protected boolean withUserRoles = false;
+	protected boolean withLinuxAgent;
+	protected boolean withUserRoles;
 
 	// for internal use, for external cast to:
 	protected Map<String, ConfigOption> configOptions;
@@ -350,7 +350,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	AbstractDataStub dataStub;
 
-	protected Boolean acceptMySQL = null;
+	protected Boolean acceptMySQL;
 
 	@Override
 	public boolean canCallMySQL() {

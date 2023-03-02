@@ -28,7 +28,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	private String verbosity = " ";
 	private String freeInput = " ";
 
-	protected FGeneralDialog dialog = null;
+	protected FGeneralDialog dialog;
 
 	public CommandWget() {
 	}

@@ -13,13 +13,13 @@ public class MySQL {
 
 	public static final String KEY_OPERATION = "operation";
 
-	private boolean group = false;
-	private boolean product = false;
-	private boolean property = false;
-	private boolean software = false;
-	private boolean hardware = false;
+	private boolean group;
+	private boolean product;
+	private boolean property;
+	private boolean software;
+	private boolean hardware;
 
-	private boolean hardwareWithDevice = false;
+	private boolean hardwareWithDevice;
 	private String hardwareTableName = "";
 
 	// Die Hardwarekonfiguration

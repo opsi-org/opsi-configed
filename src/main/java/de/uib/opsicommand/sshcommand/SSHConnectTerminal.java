@@ -29,12 +29,12 @@ import de.uib.configed.gui.ssh.SSHConnectionTerminalDialog;
 import de.uib.utilities.logging.Logging;
 
 public class SSHConnectTerminal extends SSHConnect {
-	Session session = null;
-	ChannelShell channel = null;
+	Session session;
+	ChannelShell channel;
 	private SSHConnectionTerminalDialog dialog;
-	private KeyListener inputKeyListener = null;
-	private ActionListener connectionKeyListener = null;
-	private OutputStream out = null;
+	private KeyListener inputKeyListener;
+	private ActionListener connectionKeyListener;
+	private OutputStream out;
 	public static final String SOME_COMMAND = "/bin/bash";
 	String currentDirectory = "";
 	boolean getCurrentDirectorySilent = false;

@@ -180,7 +180,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		}
 	}
 
-	protected boolean filtered = false;
+	protected boolean filtered;
 
 	@Override
 	public void setFiltered(boolean b) {

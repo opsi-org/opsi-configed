@@ -57,16 +57,16 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	protected int portHTTP = 4444;
 	public static final int DEFAULT_PORT = 4447;
 	protected int portHTTPS = DEFAULT_PORT;
-	protected boolean startConnecting = false;
-	protected boolean endConnecting = false;
+	protected boolean startConnecting;
+	protected boolean endConnecting;
 	protected URL serviceURL;
 	protected String sessionId;
 	protected String lastSessionId;
 	protected int requestMethod = POST;
 	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
-	protected boolean certificateExists = false;
-	protected boolean trustOnlyOnce = false;
-	protected boolean trustAlways = false;
+	protected boolean certificateExists;
+	protected boolean trustOnlyOnce;
+	protected boolean trustAlways;
 
 	class JSONCommunicationException extends Exception {
 		JSONCommunicationException(String message) {

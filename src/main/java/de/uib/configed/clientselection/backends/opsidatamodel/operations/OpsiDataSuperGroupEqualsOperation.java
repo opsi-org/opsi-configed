@@ -6,7 +6,7 @@ import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSuperGroupEqualsOperation extends OpsiDataStringEqualsOperation {
-	private static boolean issuedTreeError = false;
+	private static boolean issuedTreeError;
 
 	public OpsiDataSuperGroupEqualsOperation(String data, AbstractSelectElement element) {
 		super(OpsiDataClient.HOSTINFO_MAP, "", data, element);

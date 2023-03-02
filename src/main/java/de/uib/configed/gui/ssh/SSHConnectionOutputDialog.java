@@ -39,7 +39,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	protected JScrollPane jScrollPane;
 
 	protected JButton jButtonClose;
-	protected boolean buildFrame = false;
+	protected boolean buildFrame;
 
 	protected JPanel mainPanel = new JPanel();
 	protected JPanel inputPanel = new JPanel();

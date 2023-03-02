@@ -13,7 +13,7 @@ import de.uib.utilities.swing.ActivityPanel;
 public class WaitCursor {
 
 	private static AtomicInteger objectCounting = new AtomicInteger();
-	private static boolean allStopped = false;
+	private static boolean allStopped ;
 
 	int objectNo;
 

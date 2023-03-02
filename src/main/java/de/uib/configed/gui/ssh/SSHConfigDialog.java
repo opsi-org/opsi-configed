@@ -57,7 +57,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 	private static boolean jComboBoxUseDefaultState;
 	private ConfigedMain configedMain;
 	private static SSHConfigDialog instance;
-	private static SSHConnectionInfo connectionInfo = null;
+	private static SSHConnectionInfo connectionInfo;
 
 	private SSHConfigDialog(ConfigedMain cmain) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHConfig"), false);

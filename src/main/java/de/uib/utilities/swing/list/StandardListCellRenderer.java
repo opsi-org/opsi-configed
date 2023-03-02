@@ -34,8 +34,8 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 
 	protected static final int FILL_LENGTH = 20;
 
-	protected Color uniformColor = null;
-	protected Color uniformSelectedColor = null;
+	protected Color uniformColor;
+	protected Color uniformSelectedColor;
 
 	protected Color selectedEven = Globals.defaultTableSelectedRowDark;
 	protected Color selectedUneven = Globals.defaultTableSelectedRowBright;

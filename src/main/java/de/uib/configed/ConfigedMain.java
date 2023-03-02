@@ -179,10 +179,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected IFInstallationStateTableModel istmForSelectedClientsLocalboot;
 	protected IFInstallationStateTableModel istmForSelectedClientsNetboot;
-	protected String firstSelectedClient = null;
+	protected String firstSelectedClient;
 	private String[] selectedClients = new String[] {};
-	List<String> saveSelectedClients = null;
-	List<String> preSaveSelectedClients = null;
+	List<String> saveSelectedClients;
+	List<String> preSaveSelectedClients;
 
 	// we do not work with selection
 
@@ -200,17 +200,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected String[] oldSelectedDepots;
 	protected List<String> selectedDepotsV = new ArrayList<>();
 
-	protected boolean anyDataChanged = false;
+	protected boolean anyDataChanged;
 
 	protected String clientInDepot;
 	protected HostInfo hostInfo = new HostInfo();
 
 	// tells if a group of client is loaded via GroupManager (and not by direct
 	// selection)
-	protected boolean groupLoading = false;
+	protected boolean groupLoading;
 
-	protected boolean changeListByToggleShowSelection = false;
-	protected boolean hostgroupChanged = false;
+	protected boolean changeListByToggleShowSelection;
+	protected boolean hostgroupChanged;
 	protected String groupname = TEMPGROUPNAME;
 	private String appTitle = Globals.APPNAME;
 
@@ -222,7 +222,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private FShowList fShowReachableInfo;
 
 	// null serves als marker that we were not editing products
-	protected String productEdited = null;
+	protected String productEdited;
 
 	// the properties for one product and all selected clients
 	protected Collection<Map<String, Object>> productProperties;
@@ -245,44 +245,26 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected Map<String /* client */, Map<String /* product */, Map<String /* propertykey */, String/* propertyvalue */>>> collectChangedNetbootStates = new HashMap<>();
 
-	protected Map<String, List<String>> possibleActions = new HashMap<>(); // a
-																			// map
-																			// of
-																			// products,
-																			// product
-																			// -->
-																			// list
-																			// of
+	// a map of products, product --> list of used as an indicator that a product is in the depot
+	protected Map<String, List<String>> possibleActions = new HashMap<>();
 
-	// used
-	// as
-	// an
-	// indicator
-	// that
-	// a
-	// product
-	// is
-	// in
-	// the
-	// depot
-
-	protected Map<String, ListMerger> mergedProductProperties = null;
+	protected Map<String, ListMerger> mergedProductProperties;
 
 	private Map<String, Boolean> displayFieldsLocalbootProducts;
 	private Map<String, Boolean> displayFieldsNetbootProducts;
 
-	protected Set<String> depotsOfSelectedClients = null;
-	protected Set<String> allowedClients = null;
+	protected Set<String> depotsOfSelectedClients;
+	protected Set<String> allowedClients;
 
 	protected List<String> localbootProductnames;
 	protected List<String> netbootProductnames;
 	protected List<Map<String, List<Map<String, Object>>>> hwAuditConfig;
 
 	// marker variables for requests for reload when clientlist changes
-	private Map<String, List<Map<String, String>>> localbootStatesAndActions = null;
-	private boolean localbootStatesAndActionsUPDATE = false;
-	private Map<String, List<Map<String, String>>> netbootStatesAndActions = null;
-	private Map<String, Map<String, Object>> hostConfigs = null;
+	private Map<String, List<Map<String, String>>> localbootStatesAndActions;
+	private boolean localbootStatesAndActionsUPDATE;
+	private Map<String, List<Map<String, String>>> netbootStatesAndActions;
+	private Map<String, Map<String, Object>> hostConfigs;
 
 	// collection of retrieved software audit and hardware maps
 
@@ -291,7 +273,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected String myServer;
 	protected String opsiDefaultDomain;
 	protected List<String> editableDomains;
-	protected boolean multiDepot = false;
+	protected boolean multiDepot;
 
 	private WaitCursor waitCursorInitGui;
 
@@ -400,13 +382,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return licencesStatus;
 	}
 
-	private boolean dataReady = false;
+	private boolean dataReady;
 
-	private boolean filterClientList = false;
+	private boolean filterClientList;
 
-	public static String host = null;
-	public static String user = null;
-	public static String password = null;
+	public static String host;
+	public static String user;
+	public static String password;
 
 	public enum EditingTarget {
 		CLIENTS, DEPOTS, SERVER
@@ -4096,8 +4078,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private class ReachableUpdater extends Thread {
-		private boolean suspended = false;
-		private int interval = 0;
+		private boolean suspended;
+		private int interval;
 
 		ReachableUpdater(Integer interval) {
 			super();

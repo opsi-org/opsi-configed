@@ -50,7 +50,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	private JButton dependenciesActivateButton;
 	private JLabel depotForDependenciesLabel;
 	private PanelProductDependencies panelProductDependencies;
-	private boolean isPanelProductDependenciesVisible = false;
+	private boolean isPanelProductDependenciesVisible;
 
 	private AbstractPanelEditProperties panelEditProperties;
 	private JButton propertiesActivateButton;

@@ -100,7 +100,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected JPopupMenu popupMenu;
 
-	protected boolean dataChanged = false;
+	protected boolean dataChanged;
 
 	protected UpdateController myController;
 
@@ -112,19 +112,19 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected boolean switchLineColors = true;
 
-	protected boolean awareOfSelectionListener = false;
+	protected boolean awareOfSelectionListener;
 	protected boolean followSelectionListener = true;
 	protected boolean awareOfTableChangedListener = true;
 
-	protected boolean withTablesearchPane = false;
+	protected boolean withTablesearchPane;
 
 	protected TablesearchPane searchPane;
 
 	protected RowNoTableModelFilterCondition filterBySelectionCondition;
 	protected TableModelFilter filterBySelection;
-	protected boolean filteringActive = false;
+	protected boolean filteringActive;
 	protected boolean selectionEmpty = true;
-	protected boolean singleSelection = false;
+	protected boolean singleSelection;
 
 	protected String title = "";
 

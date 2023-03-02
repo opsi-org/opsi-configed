@@ -296,7 +296,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		protected JTextComponent comp;
 		protected Highlighter.HighlightPainter painter;
 		protected int lastReturnedOffset;
-		protected boolean cS = false;
+		protected boolean cS;
 
 		public LinkSearcher(JTextComponent comp) {
 			this.comp = comp;

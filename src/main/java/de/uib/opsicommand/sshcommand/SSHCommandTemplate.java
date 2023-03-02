@@ -12,7 +12,7 @@ import de.uib.utilities.logging.Logging;
  **/
 public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemplate>, SSHMultiCommand {
 	/** boolean needParameter = false **/
-	private boolean needParameter = false;
+	private boolean needParameter;
 	/** boolean isMultiCommand = true **/
 	private boolean isMultiCommand = true;
 	/** String unique command id **/
@@ -23,9 +23,9 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 	private LinkedList<SSHCommand> sshCommand = new LinkedList<>();
 	private LinkedList<SSHCommand> sshCommandOriginal = new LinkedList<>();
 	/** boolean needSudo state **/
-	private boolean needSudo = false;
+	private boolean needSudo;
 	/** String parent menu text **/
-	private String parentMenuText = null;
+	private String parentMenuText;
 	/** String tooltip text **/
 	private String tooltipText = "";
 	/** integer position **/

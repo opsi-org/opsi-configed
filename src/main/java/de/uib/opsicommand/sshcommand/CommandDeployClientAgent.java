@@ -12,11 +12,11 @@ import de.uib.configed.gui.ssh.SSHDeployClientAgentParameterDialog;
 public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParameter {
 	private String command;
 	private String baseName = "/var/lib/opsi/depot/opsi-client-agent/opsi-deploy-client-agent";
-	protected FGeneralDialog dialog = null;
+	protected FGeneralDialog dialog;
 	private boolean needingSudo = true;
 	private boolean pingIsRequired = true;
 	private boolean needParameter = true;
-	private boolean isMultiCommand = false;
+	private boolean isMultiCommand;
 	private int priority = 105;
 
 	private String client = "";

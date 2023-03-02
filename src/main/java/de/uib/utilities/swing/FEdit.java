@@ -33,7 +33,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected Dimension areaDimension = new Dimension(100, 40);
 
 	protected String initialText = "";
-	protected String hint = null;
+	protected String hint;
 
 	protected JPanel framingPanel;
 	protected JComponent editingArea;
@@ -42,8 +42,8 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected IconButton buttonCommit;
 	protected IconButton buttonCancel;
 
-	protected boolean dataChanged = false;
-	protected boolean cancelled = false;
+	protected boolean dataChanged;
+	protected boolean cancelled;
 	protected boolean starting = true;
 
 	protected AbstractCellEditor servedCellEditor;

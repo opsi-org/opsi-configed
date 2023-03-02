@@ -33,7 +33,7 @@ public class Configed {
 
 	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
 
-	public static boolean sshConnectOnStart = false;
+	public static boolean sshConnectOnStart;
 
 	public static final String USAGE_INFO = "\n" + "\tconfiged [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
 	/*
@@ -131,34 +131,34 @@ public class Configed {
 	public static final String SYSTEM_SSL_VERSION = System.getProperty("https.protocols");
 
 	private static PropertiesStore extraLocalization;
-	private static boolean showLocalizationStrings = false;
+	private static boolean showLocalizationStrings;
 
 	private static ConfigedMain configedMain;
 
-	private static String locale = null;
-	private static String host = null;
-	public static String user = null;
-	private static String password = null;
+	private static String locale;
+	private static String host;
+	public static String user;
+	private static String password;
 	private static int loglevelConsole = Logging.getLogLevelConsole();
 	private static int loglevelFile = Logging.getLogLevelFile();
 
-	private static String sshKey = null;
-	private static String sshKeyPass = null;
-	private static String client = null;
-	private static String clientgroup = null;
-	private static Integer tab = null;
-	private static boolean optionCLIQuerySearch = false;
-	private static String savedSearch = null;
-	private static boolean optionCLIDefineGroupBySearch = false;
-	private static String group = null;
-	private static boolean optionCLISwAuditPDF = false;
-	private static boolean optionCLISwAuditCSV = false;
-	private static String clientsFile = null;
-	private static String outDir = null;
+	private static String sshKey;
+	private static String sshKeyPass;
+	private static String client;
+	private static String clientgroup;
+	private static Integer tab;
+	private static boolean optionCLIQuerySearch;
+	private static String savedSearch;
+	private static boolean optionCLIDefineGroupBySearch;
+	private static String group;
+	private static boolean optionCLISwAuditPDF;
+	private static boolean optionCLISwAuditCSV;
+	private static String clientsFile;
+	private static String outDir;
 
-	private static boolean optionPersistenceControllerMethodCall = false;
+	private static boolean optionPersistenceControllerMethodCall;
 
-	private static boolean optionCLIuserConfigProducing = false;
+	private static boolean optionCLIuserConfigProducing;
 
 	public static SavedStates savedStates;
 	public static String savedStatesLocationName;

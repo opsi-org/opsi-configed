@@ -15,10 +15,10 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	private String baseName = "opsi-makeproductfile ";
 	private String command = "opsi-makeproductfile ";
 
-	protected FGeneralDialog dialog = null;
-	private boolean needSudo = false;
+	protected FGeneralDialog dialog;
+	private boolean needSudo;
 	private boolean needParameter = true;
-	private boolean isMultiCommand = false;
+	private boolean isMultiCommand;
 	private static final int PRIORITY = 110;
 
 	private String dir = " ";

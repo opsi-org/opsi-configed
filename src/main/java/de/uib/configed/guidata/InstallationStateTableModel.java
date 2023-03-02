@@ -97,7 +97,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	protected ConfigedMain main;
 
-	protected List<String> productsV = null;
+	protected List<String> productsV;
 
 	protected int onGoingCollectiveChangeEventCount = -1;
 

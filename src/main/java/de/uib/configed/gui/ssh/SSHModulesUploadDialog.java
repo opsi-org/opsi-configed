@@ -41,8 +41,8 @@ public class SSHModulesUploadDialog extends SSHFileUploadDialog {
 
 		SSHConnectExec testFile = new SSHConnectExec();
 		testFile.exec(new EmptyCommand(SSHCommandFactory.STRING_COMMAND_FILE_EXISTS_NOT_REMOVE.replace(
-				SSHCommandFactory.STRING_REPLACEMENT_FILENAME, CommandModulesUpload.UNOFFICIAL_MODULES_DIRECTORY) // /etc/opsi/modules.d
-		), false);
+				SSHCommandFactory.STRING_REPLACEMENT_FILENAME, CommandModulesUpload.UNOFFICIAL_MODULES_DIRECTORY)),
+				false);
 
 		jLabelCopyToModulesD.setVisible(false);
 		jComboBoxCopyToModulesD.setVisible(false);

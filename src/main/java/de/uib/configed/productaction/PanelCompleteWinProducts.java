@@ -55,7 +55,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 	private String winProduct = "";
 	private String server = "";
-	private String selectedDepot = null;
+	private String selectedDepot;
 	private Set<String> depots = new HashSet<>();
 
 	private String depotProductDirectory;

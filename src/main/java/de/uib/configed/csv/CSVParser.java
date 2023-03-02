@@ -20,10 +20,10 @@ public class CSVParser {
 	private String pendingField = "";
 	private CSVFormat format;
 
-	private boolean inQuotes = false;
-	private boolean isMultiLine = false;
+	private boolean inQuotes;
+	private boolean isMultiLine;
 
-	private boolean ignoreErrors = false;
+	private boolean ignoreErrors;
 
 	private int pendingFieldCount = 0;
 	private List<Integer> numberOfFieldsPerLine = new ArrayList<>();

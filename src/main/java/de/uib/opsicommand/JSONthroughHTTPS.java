@@ -56,8 +56,8 @@ import de.uib.utilities.logging.Logging;
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
 	private int[] serverVersion = { 0, 0, 0, 0 };
-	private boolean gzipTransmission = false;
-	private boolean lz4Transmission = false;
+	private boolean gzipTransmission;
+	private boolean lz4Transmission;
 
 	// By default we set hostnameVerified to true, because MyHostnameVerifier is
 	// only used to check hostname verification, when default determines that

@@ -24,10 +24,10 @@ import de.uib.utilities.table.ListCellOptions;
 public abstract class AbstractEditMapPanel extends JPanel {
 	protected MapTableModel mapTableModel;
 
-	protected boolean reloadable = false;
+	protected boolean reloadable;
 	protected boolean showToolTip = true;
 
-	protected boolean keylistExtendible = false;
+	protected boolean keylistExtendible;
 	protected boolean keylistEditable = true;
 
 	protected boolean optionsEditable = true;

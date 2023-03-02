@@ -84,7 +84,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	// introducing a column for displaying the cursor row
 	public static final int WINDOWS_SOFTWARE_ID_KEY_COL = 1;
-	int colMarkCursorRow = 0;
+	int colMarkCursorRow;
 
 	private Map<String, List<String>> removeKeysFromOtherLicencePool;
 

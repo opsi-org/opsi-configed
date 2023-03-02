@@ -7,11 +7,11 @@ import de.uib.configed.gui.FGeneralDialog;
 
 public class CommandHelp /* extends */ implements SSHCommand {
 
-	private boolean needSudo = false;
+	private boolean needSudo;
 
-	private boolean needParameter = false;
+	private boolean needParameter;
 	private SSHCommand basicCommand;
-	protected FGeneralDialog dialog = null;
+	protected FGeneralDialog dialog;
 
 	public CommandHelp(SSHCommand basicCommand) {
 		this.basicCommand = basicCommand;
@@ -19,7 +19,7 @@ public class CommandHelp /* extends */ implements SSHCommand {
 		this.dialog = this.basicCommand.getDialog();
 	}
 
-	private boolean isMultiCommand = false;
+	private boolean isMultiCommand;
 
 	@Override
 	public boolean isMultiCommand() {

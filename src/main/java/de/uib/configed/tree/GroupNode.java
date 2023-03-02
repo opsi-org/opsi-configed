@@ -3,10 +3,10 @@ package de.uib.configed.tree;
 public class GroupNode extends IconNode {
 	protected String description;
 	protected boolean childsArePersistent = true;
-	protected boolean allowingOnlyGroupChilds = false;
+	protected boolean allowingOnlyGroupChilds;
 	protected boolean allowingSubGroups = true;
-	protected boolean immutable = false;
-	protected boolean fixed = false;
+	protected boolean immutable;
+	protected boolean fixed;
 
 	public GroupNode(Object userObject, String description) {
 		super(userObject, true);

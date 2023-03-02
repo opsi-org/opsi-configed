@@ -10,8 +10,8 @@ import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand {
 	protected FGeneralDialog dialog;
 	private boolean needParameter = true;
-	private boolean isMultiCommand = false;
-	private boolean needSudo = false;
+	private boolean isMultiCommand;
+	private boolean needSudo;
 	String command = "";
 	int priority = 0;
 

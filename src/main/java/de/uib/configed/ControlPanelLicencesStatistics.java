@@ -21,7 +21,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 
 	AbstractPersistenceController persist;
 
-	boolean initialized = false;
+	boolean initialized;
 
 	public ControlPanelLicencesStatistics(AbstractPersistenceController persist) {
 		thePanel = new PanelLicencesStatistics(this);

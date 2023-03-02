@@ -30,7 +30,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 	protected Map<String, String> mapOfStrings;
 	protected Map<String, String> mapOfTooltips;
 	protected Map<String, ImageIcon> mapOfImages;
-	protected boolean showOnlyIcon = false;
+	protected boolean showOnlyIcon;
 
 	public ListCellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
 			String tooltipPrefix) {

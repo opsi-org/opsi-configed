@@ -13,7 +13,7 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 	protected String map;
 	protected String key;
 	protected String data;
-	protected String[] dataSplitted = null;
+	protected String[] dataSplitted;
 	protected boolean startsWith;
 	protected boolean endsWith;
 

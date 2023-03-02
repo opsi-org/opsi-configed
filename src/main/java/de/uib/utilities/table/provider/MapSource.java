@@ -26,7 +26,7 @@ import de.uib.utilities.logging.Logging;
 public class MapSource implements TableSource {
 	protected static final String ROW_COUNTER_NAME = "rowcounter";
 
-	protected boolean rowCounting = false;
+	protected boolean rowCounting;
 
 	protected List<String> columnNames;
 

@@ -15,8 +15,8 @@ import de.uib.utilities.logging.Logging;
 class JsonParser {
 	private StringReader reader;
 	private PositionType currentPosition = PositionType.JSON_VALUE;
-	private String currentValue = null;
-	private boolean inList = false;
+	private String currentValue;
+	private boolean inList;
 	Deque<PositionType> stack;
 
 	public enum PositionType {

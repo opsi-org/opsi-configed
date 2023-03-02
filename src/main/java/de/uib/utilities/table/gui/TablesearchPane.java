@@ -53,8 +53,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	JTextField fieldSearch;
 
-	private boolean searchActive = false;
-	protected boolean filtering = false;
+	private boolean searchActive;
+	protected boolean filtering;
 
 	int blinkrate = 0;
 	JComboBox<String> comboSearchFields;
@@ -282,7 +282,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.setEnabled(b);
 	}
 
-	private boolean filteredMode = false;
+	private boolean filteredMode;
 
 	private boolean disabledSinceWeAreInFilteredMode() {
 		if (filteredMode) {

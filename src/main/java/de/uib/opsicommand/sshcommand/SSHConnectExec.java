@@ -32,8 +32,8 @@ import de.uib.utilities.ssh.SSHOutputCollector;
  * @inheritDoc Class for executing commands.
  */
 public class SSHConnectExec extends SSHConnect {
-	protected SSHConnectionExecDialog outputDialog = null;
-	protected boolean multiCommand = false;
+	protected SSHConnectionExecDialog outputDialog;
+	protected boolean multiCommand;
 	protected ActionListener killProcessListener;
 	protected JButton responseButton;
 
@@ -134,7 +134,7 @@ public class SSHConnectExec extends SSHConnect {
 		execList(command, true, null, sequential, true);
 	}
 
-	protected boolean interruptChannel = false;
+	protected boolean interruptChannel;
 
 	public void execList(SSHMultiCommand commands) {
 		execList(commands, true, null, false, true);
@@ -244,7 +244,7 @@ public class SSHConnectExec extends SSHConnect {
 		}
 	}
 
-	protected boolean foundError = false;
+	protected boolean foundError;
 
 	public String exec(SSHCommand command) {
 		return exec(command, true, null, false, false, 1, 1);

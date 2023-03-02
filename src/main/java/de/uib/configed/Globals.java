@@ -466,7 +466,7 @@ public final class Globals {
 
 	// be given
 
-	public static Image mainIcon = null;
+	public static Image mainIcon;
 
 	public static final String CONFLICT_STATE_STRING = "mixed";
 	public static final String NO_VALID_STATE_STRING = "";
@@ -485,7 +485,7 @@ public final class Globals {
 		return objects;
 	}
 
-	private static Collator alphaCollator = null;
+	private static Collator alphaCollator;
 
 	public static Collator getCollator() {
 		if (alphaCollator == null) {

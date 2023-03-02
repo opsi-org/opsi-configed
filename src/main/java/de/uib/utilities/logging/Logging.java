@@ -23,11 +23,11 @@ import de.uib.utilities.thread.WaitCursor;
 public class Logging implements LogEventSubject
 
 {
-	public static String logDirectoryName = null;
-	private static String logFilenameInUse = null;
+	public static String logDirectoryName;
+	private static String logFilenameInUse;
 
 	private static String logfileDelimiter = "configed";
-	private static String logfileMarker = null;
+	private static String logfileMarker;
 	public static final String WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY = "APPDATA";
 	public static final String ENV_VARIABLE_FOR_USER_DIRECTORY = "user.home";
 	public static final String RELATIVE_LOG_DIR_WINDOWS = "opsi.org" + File.separator + "log";
@@ -70,8 +70,8 @@ public class Logging implements LogEventSubject
 	private static final int MIN_LEVEL_FOR_SHOWING_MESSAGES = LEVEL_ERROR;
 
 	private static int numberOfKeptLogFiles = 3;
-	private static PrintWriter logFileWriter = null;
-	private static boolean logFileInitialized = false;
+	private static PrintWriter logFileWriter;
+	private static boolean logFileInitialized;
 
 	private static final int MAX_LISTED_ERRORS = 20;
 	private static List<String> errorList = new ArrayList<>(MAX_LISTED_ERRORS);

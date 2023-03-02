@@ -130,9 +130,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	protected String editedKey;
 	protected JTextField groupsEditField;
 	protected JTextField descriptionField;
-	protected boolean dataChanged = false;
-	protected boolean groupEditing = false;
-	protected boolean deleted = false;
+	protected boolean dataChanged;
+	protected boolean groupEditing;
+	protected boolean deleted;
 
 	abstract static class AbstractDocumentListener implements DocumentListener {
 
