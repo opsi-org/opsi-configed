@@ -404,7 +404,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		jCheckBoxUseKeyFile.setSelected(false);
 		jTextFieldPassword.setEnabled(false);
 		jTextFieldKeyFile.setEnabled(false);
-		jCheckBoxUseKeyFile.addItemListener(itemEvent -> {
+		jCheckBoxUseKeyFile.addItemListener((ItemEvent itemEvent) -> {
 			Boolean value = false;
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				value = true;
@@ -423,7 +423,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		jCheckBoxDefault.setSelected(true);
 
 		setComponentsEditable(false);
-		jCheckBoxDefault.addItemListener(itemEvent -> {
+		jCheckBoxDefault.addItemListener((ItemEvent itemEvent) -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				setComponentsEditable(false);
 				jComboBoxHost.setSelectedItem(connectionInfo.getHost());

@@ -1,5 +1,6 @@
 package de.uib.configed.gui.ssh;
 
+import java.awt.event.ActionEvent;
 import java.nio.file.Paths;
 
 import javax.swing.GroupLayout;
@@ -59,7 +60,7 @@ public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
 		jButtonFileChooser.setPreferredSize(Globals.smallButtonDimension);
 		jButtonFileChooser.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.filechooser.tooltip"));
-		jButtonFileChooser.addActionListener(actionEvent -> {
+		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
 			int returnVal = jFileChooser.showOpenDialog(instance);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				String pathModules = jFileChooser.getSelectedFile().getPath();

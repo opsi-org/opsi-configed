@@ -182,7 +182,7 @@ public class ClientView implements View {
 		final ObjectProperty<Predicate<Client>> activeFilter = new SimpleObjectProperty<>();
 		final ObjectProperty<Predicate<Client>> lastSeenFilter = new SimpleObjectProperty<>();
 
-		hostnameFilter.bind(Bindings.createObjectBinding(() -> client -> {
+		hostnameFilter.bind(Bindings.createObjectBinding(() -> (Client client) -> {
 			if (clientSearchbarTextField.getText() == null) {
 				return true;
 			}
@@ -190,7 +190,7 @@ public class ClientView implements View {
 			return client.getHostname().toLowerCase(Locale.ROOT)
 					.contains(clientSearchbarTextField.getText().toLowerCase(Locale.ROOT));
 		}, clientSearchbarTextField.textProperty()));
-		lastSeenFilter.bind(Bindings.createObjectBinding(() -> client -> {
+		lastSeenFilter.bind(Bindings.createObjectBinding(() -> (Client client) -> {
 			if (clientLastSeenComboBox.getValue() == null || clientLastSeenComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
 				return true;

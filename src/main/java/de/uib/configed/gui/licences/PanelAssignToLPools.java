@@ -151,7 +151,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		buttonShowAssignedNotExisting
 				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
 		buttonShowAssignedNotExisting.setFont(Globals.defaultFont);
-		buttonShowAssignedNotExisting.addActionListener(actionEvent -> {
+		buttonShowAssignedNotExisting.addActionListener((ActionEvent actionEvent) -> {
 			fMissingSoftwareInfo.setLocationRelativeTo(Globals.frame1);
 			fMissingSoftwareInfo.setVisible(true);
 		});
@@ -261,7 +261,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 				ControlPanelAssignToLPools.SoftwareDirectionOfAssignment.class,
 
-				val -> {
+				(Enum<SoftwareDirectionOfAssignment> val) -> {
 					Logging.info(this, " produced " + val);
 					((ControlPanelAssignToLPools) controller).setSoftwareDirectionOfAssignment(
 							(ControlPanelAssignToLPools.SoftwareDirectionOfAssignment) val);
@@ -350,7 +350,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 				ControlPanelAssignToLPools.SoftwareShowAllMeans.class,
 
-				val -> {
+				(Enum<SoftwareShowAllMeans> val) -> {
 					Logging.info(this, " produced " + val);
 					((ControlPanelAssignToLPools) controller)
 							.setSoftwareShowAllMeans((ControlPanelAssignToLPools.SoftwareShowAllMeans) val);

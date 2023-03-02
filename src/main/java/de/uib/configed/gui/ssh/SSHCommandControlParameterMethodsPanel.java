@@ -15,6 +15,7 @@ package de.uib.configed.gui.ssh;
  */
 
 import java.awt.Dimension;
+import java.awt.event.ItemEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -91,7 +92,8 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		// we have to delimit it so that is constrained to the component (in Windows)
 		jComboBoxParameterFormats.setMaximumRowCount(5);
 
-		jComboBoxParameterMethods = new JComboBox<>(factory.getParameterHandler().getParameterMethodLocalNames());
+		factory.getParameterHandler();
+		jComboBoxParameterMethods = new JComboBox<>(SSHCommandParameterMethods.getParameterMethodLocalNames());
 		jComboBoxParameterMethods
 				.setSelectedItem(Configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"));
 		jComboBoxParameterMethods.setPreferredSize(jComboBoxDim);
@@ -99,7 +101,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 		jComboBoxParameterFormats.setEnabled(false);
 
-		jComboBoxParameterMethods.addItemListener(itemEvent -> {
+		jComboBoxParameterMethods.addItemListener((ItemEvent itemEvent) -> {
 			boolean enabled = ((String) jComboBoxParameterMethods.getSelectedItem())
 					.equals(Configed.getResourceValue("SSHConnection.CommandControl.cbElementInteractiv"))
 					|| ((String) jComboBoxParameterMethods.getSelectedItem())
@@ -205,15 +207,15 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 				|| ((String) jComboBoxParameterMethods.getSelectedItem())
 						.equals(SSHCommandParameterMethods.METHOD_OPTION_SELECTION)) {
 			Logging.debug("CREATING PARAM TEXT... ");
+			factory.getParameterHandler();
 			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
-					+ factory.getParameterHandler()
-							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
+					+ SSHCommandParameterMethods.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 			Logging.debug("CREATED PARAM TEXT: " + paramText);
 		} else {
+			factory.getParameterHandler();
 			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
-					+ factory.getParameterHandler()
-							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
+					+ SSHCommandParameterMethods.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ SSHCommandParameterMethods.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
 					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 		}
@@ -245,14 +247,14 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 				.equals(SSHCommandParameterMethods.METHOD_INTERACTIVE_ELEMENT)
 				|| ((String) jComboBoxParameterMethods.getSelectedItem())
 						.equals(SSHCommandParameterMethods.METHOD_OPTION_SELECTION)) {
+			factory.getParameterHandler();
 			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
-					+ factory.getParameterHandler()
-							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
+					+ SSHCommandParameterMethods.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 		} else {
+			factory.getParameterHandler();
 			paramText = SSHCommandParameterMethods.REPLACEMENT_DEFAULT_1
-					+ factory.getParameterHandler()
-							.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
+					+ SSHCommandParameterMethods.getMethodFromName((String) jComboBoxParameterMethods.getSelectedItem())
 					+ SSHCommandParameterMethods.PARAM_SPLITTER_DEFAULT + jComboBoxParameterFormats.getSelectedItem()
 					+ SSHCommandParameterMethods.REPLACEMENT_DEFAULT_2;
 		}

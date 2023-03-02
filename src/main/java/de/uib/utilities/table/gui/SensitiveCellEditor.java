@@ -58,7 +58,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	public static synchronized SensitiveCellEditor getInstance(Object key) {
 
 		// Zu key gehörige Instanz aus Map holen
-		return instances.computeIfAbsent(key, arg -> {
+		return instances.computeIfAbsent(key, (Object arg) -> {
 
 			SensitiveCellEditor newInstance = new SensitiveCellEditor();
 

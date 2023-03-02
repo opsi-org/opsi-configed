@@ -1,6 +1,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.util.Map;
 import java.util.NavigableMap;
 
@@ -114,7 +115,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly())) {
-			jButtonExecute.addActionListener(actionEvent -> {
+			jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
 				if (caller instanceof SSHPackageManagerUninstallParameterDialog) {
 					((SSHPackageManagerUninstallParameterDialog) caller).doAction2();
 				} else if (caller instanceof SSHPackageManagerInstallParameterDialog) {
@@ -129,7 +130,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
 
 		if (!(Globals.isGlobalReadOnly())) {
-			jButtonReload.addActionListener(actionEvent -> {
+			jButtonReload.addActionListener((ActionEvent actionEvent) -> {
 				Logging.debug(this, "ActionEvent on btn_reload");
 				main.reload();
 				consolidate();

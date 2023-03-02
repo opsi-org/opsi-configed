@@ -16,6 +16,8 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -261,7 +263,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		jTextFieldPriority.setColumns(4);
 
 		final JTextComponent editor = (JTextComponent) jComboBoxMenuText.getEditor().getEditorComponent();
-		jComboBoxMenuText.addItemListener(itemEvent -> {
+		jComboBoxMenuText.addItemListener((ItemEvent itemEvent) -> {
 			if (editor.getText().trim().equals(SSHCommandFactory.MENU_NEW)) {
 				editor.setSelectionStart(0);
 				editor.setSelectionEnd(editor.getText().length());
@@ -346,7 +348,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		updateSelectedCommand();
 
 		if (!(Globals.isGlobalReadOnly())) {
-			buttonDelete.addActionListener(actionEvent -> {
+			buttonDelete.addActionListener((ActionEvent actionEvent) -> {
 				String menu = (String) jComboBoxMenuText.getSelectedItem();
 				factory.deleteSSHCommandByMenu(menu);
 

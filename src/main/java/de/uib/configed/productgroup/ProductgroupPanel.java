@@ -868,7 +868,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 			if (actionType != ActionRequest.INVALID) {
 
-				associate.getSelectedRowsInModelTerms().stream().forEach(x -> {
+				associate.getSelectedRowsInModelTerms().stream().forEach((Integer x) -> {
 					Logging.info(" row id " + x + " product " + insTableModel.getValueAt(x, 0));
 					insTableModel.collectiveChangeActionRequest((String) insTableModel.getValueAt(x, 0),
 							new ActionRequest(actionType));

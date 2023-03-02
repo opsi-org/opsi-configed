@@ -1,6 +1,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		jButtonDoAction.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonDoAction.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly())) {
-			jButtonDoAction.addActionListener(actionEvent -> {
+			jButtonDoAction.addActionListener((ActionEvent actionEvent) -> {
 				Logging.info(this, "btn_doAction pressed");
 				doAction2();
 			});

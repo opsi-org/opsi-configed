@@ -11,10 +11,12 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -212,7 +214,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				// which get associated to different menu items (and they are handled each
 				// therefore in a specific manner)
 
-				ActionListener listenerForRemoval = actionEvent -> {
+				ActionListener listenerForRemoval = (ActionEvent actionEvent) -> {
 					Logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 
@@ -230,7 +232,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					}
 				};
 
-				ActionListener listenerForRemovalRemoveSpecific = actionEvent -> {
+				ActionListener listenerForRemovalRemoveSpecific = (ActionEvent actionEvent) -> {
 					Logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 
@@ -248,7 +250,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					}
 				};
 
-				ActionListener listenerForRemovalSetDefaultAsSpecific = actionEvent -> {
+				ActionListener listenerForRemovalSetDefaultAsSpecific = (ActionEvent actionEvent) -> {
 					Logging.info(this, "popupItemDeleteEntry action");
 					if (table.getSelectedRowCount() == 0) {
 
@@ -393,7 +395,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		table.setShowGrid(true);
 		table.setGridColor(Globals.EDIT_MAP_PANEL_X_GRID_COLOR);
 
-		table.addMouseWheelListener(mouseWheelEvent -> {
+		table.addMouseWheelListener((MouseWheelEvent mouseWheelEvent) -> {
 
 			int selRow = -1;
 

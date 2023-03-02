@@ -250,7 +250,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		DefaultListModel<JCheckBox> model = new DefaultListModel<>();
 		headerButtons = new ArrayList<>();
-		columnNames.forEach(header -> {
+		columnNames.forEach((String header) -> {
 			JCheckBox headerBox = new JCheckBox(header);
 			headerBox.setActionCommand(header);
 
@@ -463,7 +463,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			CSVWriter writer = new CSVWriter(new FileWriter(csvFile), format);
 			List<String> headers = new ArrayList<>();
 
-			headerButtons.forEach(header -> {
+			headerButtons.forEach((JCheckBox header) -> {
 				if (header.isSelected()) {
 					headers.add(header.getActionCommand());
 				}

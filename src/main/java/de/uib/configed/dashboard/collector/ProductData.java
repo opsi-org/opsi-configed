@@ -214,7 +214,7 @@ public final class ProductData {
 
 				clientUnusedProductsList.put(depot, clientUnusedProducts);
 			} else {
-				allUnusedProducts.forEach(productId -> {
+				allUnusedProducts.forEach((String productId) -> {
 					if (installedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))
 							&& failedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))
 							&& unusedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))) {
@@ -244,7 +244,7 @@ public final class ProductData {
 	}
 
 	public static void retrieveUnusedProducts() {
-		depots.forEach(depot -> {
+		depots.forEach((String depot) -> {
 			Map<Product, Product> unusedProductsList = new HashMap<>();
 
 			if (clientUnusedProductsList.get(depot) == null) {
@@ -254,7 +254,7 @@ public final class ProductData {
 			for (Map.Entry<String, List<String>> entry : clientUnusedProductsList.get(depot).entrySet()) {
 				String hostname = entry.getKey();
 
-				entry.getValue().forEach(productId -> {
+				entry.getValue().forEach((String productId) -> {
 					Product product = new Product();
 					product.setDepot(depot);
 					product.setId(productId);

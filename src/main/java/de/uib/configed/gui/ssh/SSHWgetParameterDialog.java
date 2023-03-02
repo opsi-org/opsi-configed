@@ -2,8 +2,10 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
@@ -139,7 +141,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		}
 
 		jComboBoxVerbosity.setSelectedItem(1);
-		jComboBoxVerbosity.addItemListener(itemEvent -> {
+		jComboBoxVerbosity.addItemListener((ItemEvent itemEvent) -> {
 			commandWget.setVerbosity(((int) jComboBoxVerbosity.getSelectedItem()));
 			updateCommand();
 		});
@@ -178,7 +180,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
-		jButtonExecute.addActionListener(actionEvent -> {
+		jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
 			if (!(Globals.isGlobalReadOnly())) {
 				doAction3();
 			}

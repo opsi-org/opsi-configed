@@ -1,6 +1,7 @@
 package de.uib.utilities.swing;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -64,7 +65,7 @@ public class JTextHideField extends JPanel {
 		invisibleField.setEnabled(false);
 
 		button = new JButton(Globals.createImageIcon("images/eye_blue_open.png", "show"));
-		button.addActionListener(actionEvent -> {
+		button.addActionListener((ActionEvent actionEvent) -> {
 			if (!multiValue) {
 				toggleHidden();
 			}

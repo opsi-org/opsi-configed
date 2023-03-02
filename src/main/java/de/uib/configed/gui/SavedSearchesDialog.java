@@ -113,7 +113,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		remove.setText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 
 		remove.setFont(Globals.defaultFont);
-		remove.addActionListener(actionEvent -> {
+		remove.addActionListener((ActionEvent actionEvent) -> {
 			Logging.debug(this, "------------- remove action");
 			removeSelectedEntry();
 		});

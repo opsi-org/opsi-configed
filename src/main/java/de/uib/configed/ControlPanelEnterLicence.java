@@ -1,5 +1,6 @@
 package de.uib.configed;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -168,7 +169,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 		// --- PopupMenu
 		JMenuItemFormatted menuItemAddContract = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
-		menuItemAddContract.addActionListener(e -> {
+		menuItemAddContract.addActionListener((ActionEvent e) -> {
 			Object[] a = new Object[6];
 			a[0] = "c_" + Globals.getSeconds();
 			a[1] = "";

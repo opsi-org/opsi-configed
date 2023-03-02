@@ -13,6 +13,7 @@
 package de.uib.configed.gui.hwinfopage;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -222,12 +223,12 @@ public class ControllerHWinfoMultiClients {
 
 		buttonReload.setPreferredSize(Globals.smallButtonDimension);
 
-		buttonReload.addActionListener(actionEvent -> {
+		buttonReload.addActionListener((ActionEvent actionEvent) -> {
 			Logging.info(this, "action performed " + actionEvent);
 			rebuildModel();
 		});
 
-		buttonConfigureColumns.addActionListener(actionEvent -> {
+		buttonConfigureColumns.addActionListener((ActionEvent actionEvent) -> {
 			Logging.info(this, "action performed " + actionEvent);
 
 			ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration(

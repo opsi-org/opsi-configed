@@ -461,11 +461,9 @@ public class Configed {
 
 					i = i + 2;
 				} else if (args[i].equals("--ssh-immediate-connect")) {
-					Logging.devel(args[i + 1]);
 					i = i + 1;
 
 					if (isValue(args, i)) {
-						Logging.devel("is Value");
 						if (args[i].equalsIgnoreCase("Y")) {
 							sshConnectOnStart = true;
 

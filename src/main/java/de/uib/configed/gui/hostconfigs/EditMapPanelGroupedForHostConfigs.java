@@ -311,7 +311,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped
 		Logging.info(this, "theUsers found " + theUsers);
 
 		for (Entry<String, AbstractEditMapPanel> entry : partialPanels.entrySet()) {
-			entry.getValue().setEditDenier(key -> {
+			entry.getValue().setEditDenier((String key) -> {
 
 				Logging.info(this, "entry " + entry + " key " + key);
 

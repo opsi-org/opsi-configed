@@ -1,5 +1,6 @@
 package de.uib.configed;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -87,7 +88,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 
 		JMenuItemFormatted menuItemAddKey = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencekey"));
-		menuItemAddKey.addActionListener(e -> {
+		menuItemAddKey.addActionListener((ActionEvent e) -> {
 			Object[] a = new Object[3];
 			a[0] = "";
 			a[1] = "";
@@ -107,7 +108,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		JComboBox<String> comboLP0 = new JComboBox<>();
 		comboLP0.setFont(Globals.defaultFontBig);
 
-		col.setCellEditor(new AdaptingCellEditor(comboLP0, (row, column) -> {
+		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
@@ -179,7 +180,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		JComboBox<String> combo = new JComboBox<>();
 		combo.setFont(Globals.defaultFontBig);
 
-		col.setCellEditor(new AdaptingCellEditor(comboLP0, (row, column) -> {
+		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
@@ -199,7 +200,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		// --- PopupMenu
 		JMenuItemFormatted menuItemAddLicence = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewSoftwarelicence"));
-		menuItemAddLicence.addActionListener(e -> {
+		menuItemAddLicence.addActionListener((ActionEvent e) -> {
 			Object[] a = new Object[6];
 			a[0] = "l_" + Globals.getSeconds();
 			a[1] = "";
@@ -216,7 +217,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 
 		JMenuItemFormatted menuItemPickSoftwarelicence = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.MenuItemTransferIDFromSoftwarelicenceToLicencekey"));
-		menuItemPickSoftwarelicence.addActionListener(e -> {
+		menuItemPickSoftwarelicence.addActionListener((ActionEvent e) -> {
 			boolean keyNew = false;
 			Iterator<TableEditItem> iter = updateCollection.iterator();
 			while (iter.hasNext() && !keyNew) {
@@ -305,7 +306,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 		// --- PopupMenu
 		JMenuItemFormatted menuItemAddContract = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
-		menuItemAddContract.addActionListener(e -> {
+		menuItemAddContract.addActionListener((ActionEvent e) -> {
 			Object[] a = new Object[6];
 			a[0] = "c_" + Globals.getSeconds();
 			a[1] = "";
@@ -322,7 +323,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 
 		JMenuItemFormatted menuItemPickLicencecontract = new JMenuItemFormatted(Configed
 				.getResourceValue("ConfigedMain.Licences.MenuItemTransferIDFromLicencecontractToSoftwarelicence"));
-		menuItemPickLicencecontract.addActionListener(e -> {
+		menuItemPickLicencecontract.addActionListener((ActionEvent e) -> {
 			boolean keyNew = false;
 			Iterator<TableEditItem> iter = updateCollection.iterator();
 			while (iter.hasNext() && !keyNew) {

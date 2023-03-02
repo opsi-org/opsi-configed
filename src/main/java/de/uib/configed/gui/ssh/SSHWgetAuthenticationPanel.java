@@ -41,7 +41,7 @@ public class SSHWgetAuthenticationPanel extends SSHPMInstallPanel {
 		jLabelNeedAuthentication.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.wget.needAuthentication.tooltip"));
 		jCheckBoxNeedAuthentication = new JCheckBox();
-		jCheckBoxNeedAuthentication.addItemListener(itemEvent -> {
+		jCheckBoxNeedAuthentication.addItemListener((ItemEvent itemEvent) -> {
 			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
 				instance.open();
 			} else {

@@ -9,6 +9,7 @@
 package de.uib.utilities.table.gui;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -686,7 +687,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemDeleteRelation = new JMenuItemFormatted(
 						Configed.getResourceValue("PanelGenEditTable.deleteRow"));
 				menuItemDeleteRelation.setEnabled(false);
-				menuItemDeleteRelation.addActionListener(actionEvent -> {
+				menuItemDeleteRelation.addActionListener((ActionEvent actionEvent) -> {
 					if (getSelectedRowCount() == 0) {
 						JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 								Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
@@ -703,7 +704,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case POPUP_PRINT:
 				menuItemPrint = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.print"));
-				menuItemPrint.addActionListener(actionEvent -> {
+				menuItemPrint.addActionListener((ActionEvent actionEvent) -> {
 					try {
 						theTable.print();
 					} catch (Exception ex) {
@@ -743,7 +744,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			case POPUP_PDF:
 				menuItemPDF = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
 						Globals.createImageIcon("images/acrobat_reader16.png", ""));
-				menuItemPDF.addActionListener(actionEvent -> {
+				menuItemPDF.addActionListener((ActionEvent actionEvent) -> {
 					try {
 						HashMap<String, String> metaData = new HashMap<>();
 						metaData.put("header", title);

@@ -1,5 +1,6 @@
 package de.uib.configed;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -426,7 +427,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		JMenuItemFormatted menuItemAddPool = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencepool"));
-		menuItemAddPool.addActionListener(e -> {
+		menuItemAddPool.addActionListener((ActionEvent e) -> {
 			Object[] a = new Object[2];
 			a[0] = "";
 			a[1] = "";
@@ -506,7 +507,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		JMenuItemFormatted menuItemAddRelationProductId2LPool = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewRelationProductId2LPool"));
-		menuItemAddRelationProductId2LPool.addActionListener(e -> {
+		menuItemAddRelationProductId2LPool.addActionListener((ActionEvent e) -> {
 			Object[] a = new Object[2];
 			a[0] = "";
 			if (thePanel.panelLicencepools.getSelectedRow() > -1) {
@@ -526,7 +527,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(0);
 		JComboBox<String> comboLP0 = new JComboBox<>();
 		comboLP0.setFont(Globals.defaultFontBig);
-		col.setCellEditor(new AdaptingCellEditor(comboLP0, (row, column) -> {
+		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
 
@@ -637,13 +638,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		JMenuItemFormatted menuItemSoftwareShowAssigned = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.PopupWindowsSoftwareShowAssigned"));
-		menuItemSoftwareShowAssigned.addActionListener(e -> {
+		menuItemSoftwareShowAssigned.addActionListener((ActionEvent e) -> {
 			// save values
 			softwareShow = SoftwareShowMode.ASSIGNED;
 			setSWAssignments();
 		});
 
-		thePanel.panelRegisteredSoftware.setFiltermarkActionListener(e -> {
+		thePanel.panelRegisteredSoftware.setFiltermarkActionListener((ActionEvent e) -> {
 			if (softwareShow == SoftwareShowMode.ALL) {
 				softwareShow = SoftwareShowMode.ASSIGNED;
 				setSWAssignments();
@@ -656,7 +657,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		JMenuItemFormatted menuItemSoftwareShowAll = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.PopupWindowsSoftwareShowAll"));
-		menuItemSoftwareShowAll.addActionListener(e -> {
+		menuItemSoftwareShowAll.addActionListener((ActionEvent e) -> {
 			softwareShow = SoftwareShowMode.ALL;
 			setSWAssignments();
 		});

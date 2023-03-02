@@ -247,14 +247,14 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		comboChooseDepot.setEnabled(false);
 
-		comboChooseDepot.addActionListener(actionEvent -> {
+		comboChooseDepot.addActionListener((ActionEvent actionEvent) -> {
 			selectedDepot = (String) comboChooseDepot.getSelectedItem();
 			Logging.info(this, "actionPerformed  depot selected " + selectedDepot);
 		});
 
 		comboChooseWinProduct = new JComboBox<>();
 		comboChooseWinProduct.setSize(Globals.textfieldDimension);
-		comboChooseWinProduct.addActionListener(actionEvent -> {
+		comboChooseWinProduct.addActionListener((ActionEvent actionEvent) -> {
 			winProduct = "" + comboChooseWinProduct.getSelectedItem();
 			Logging.info(this, "winProduct  " + winProduct);
 			produceTarget();
@@ -363,7 +363,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(main,
-				// Empty_Command(String id, String c, String mt, boolean ns)
 				// id not needed
 				new EmptyCommand("create_driver_links.py",
 						"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/create_driver_links.py ",
@@ -381,7 +380,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		final JPanel thisPanel = this;
 
-		buttonCallSelectDriverFiles.addActionListener(actionEvent -> {
+		buttonCallSelectDriverFiles.addActionListener((ActionEvent actionEvent) -> {
 			int returnVal = chooserDriverPath.showOpenDialog(thisPanel);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {

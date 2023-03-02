@@ -73,7 +73,7 @@ public class UserConfigProducing {
 			userparts.add(ConfigedMain.user);
 			String propertyclass = UserConfig.START_USER_KEY + ConfigedMain.user + '}';
 
-			AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
+			AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, (String arg) -> {
 				Logging.info(this, "createUserPropertySubclass for logged in user " + ConfigedMain.user);
 				return "";
 			});
@@ -110,10 +110,11 @@ public class UserConfigProducing {
 					String propertyclass = startRoleKey + rolename + '}';
 
 					final String role = rolename;
-					AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
-						Logging.info(this, "createRolePropertySubclass for role  " + role);
-						return "";
-					});
+					AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass,
+							(String arg) -> {
+								Logging.info(this, "createRolePropertySubclass for role  " + role);
+								return "";
+							});
 				} else {
 					Logging.warning(this, "rolePart without proper rolename found " + key);
 				}
@@ -132,10 +133,11 @@ public class UserConfigProducing {
 						Logging.debug(this, "usernames, add " + username + " for key " + key);
 						String propertyclass = UserConfig.START_USER_KEY + username + '}';
 
-						AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, arg -> {
-							Logging.info(this, "createUserPropertySubclass for user  " + username);
-							return "";
-						});
+						AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass,
+								(String arg) -> {
+									Logging.info(this, "createUserPropertySubclass for user  " + username);
+									return "";
+								});
 
 					} else {
 						Logging.warning(this, "username not specified in key " + key);

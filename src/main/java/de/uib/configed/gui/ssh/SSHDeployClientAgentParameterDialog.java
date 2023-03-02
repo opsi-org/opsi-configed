@@ -2,6 +2,7 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ItemEvent;
 import java.util.List;
 import java.util.Map;
 
@@ -165,7 +166,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jCheckBoxApplySudo = new JCheckBox("", commandDeployClientAgent.needSudo());
 		jLabelApplySudo
 				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.applySudo"));
-		jCheckBoxApplySudo.addItemListener(itemEvent -> {
+		jCheckBoxApplySudo.addItemListener((ItemEvent itemEvent) -> {
 			commandDeployClientAgent.setNeedingSudo(!commandDeployClientAgent.needSudo());
 			updateCommand();
 		});
@@ -173,7 +174,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		jCheckBoxIgnorePing = new JCheckBox("", !commandDeployClientAgent.isPingRequired());
 		jLabelIgnorePing
 				.setText(Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.ignorePing"));
-		jCheckBoxIgnorePing.addItemListener(itemEvent -> {
+		jCheckBoxIgnorePing.addItemListener((ItemEvent itemEvent) -> {
 			commandDeployClientAgent.togglePingIsRequired();
 			updateCommand();
 		});
@@ -274,10 +275,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 								"SSHConnection.ParameterDialog.deploy-clientagent.lbl_finalize.REBOOT"),
 						Configed.getResourceValue(
 								"SSHConnection.ParameterDialog.deploy-clientagent.lbl_finalize.SHUTDOWN") },
-				CommandDeployClientAgent.FinalActionType.class, (val -> {
+				CommandDeployClientAgent.FinalActionType.class, ((Enum<FinalActionType> val) -> {
 					Logging.info(this, "change to " + val);
 					finalAction = (CommandDeployClientAgent.FinalActionType) val;
-					//
 				}), 2, 2);
 
 		panelFinalAction.setOpaque(false);
