@@ -237,6 +237,7 @@ public class MainView implements View {
 		}
 	}
 
+	@SuppressWarnings("squid:S4968")
 	private void loadData() {
 		depotsNumberLabel.setText(String.valueOf(DepotData.getDepots().size()));
 		clientsNumberLabel.setText(String.valueOf(ClientData.getClients().size()));
@@ -257,6 +258,7 @@ public class MainView implements View {
 		clientDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.CLIENT_VIEW));
 		productDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.PRODUCT_VIEW));
 		licenseDataDisplayAreaVBox.setOnMouseClicked(e -> displayLicenseInfo());
+
 		selectedDepotComboBox.getSelectionModel().selectedItemProperty()
 				.addListener((ObservableValue<? extends String> observableValue, String oldValue,
 						String newValue) -> observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue));

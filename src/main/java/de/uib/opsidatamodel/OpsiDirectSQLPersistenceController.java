@@ -263,12 +263,12 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 
 		List<String> removes = new ArrayList<>(swIdentsOnlyInSoftware);
 
-		final int portionSize = 10;
+		final int PORTION_SIZE = 10;
 
 		int portionStart = 0;
 		int portionEnd;
-		if (portionStart + portionSize <= sizeOfAllRemoves) {
-			portionEnd = portionStart + portionSize;
+		if (portionStart + PORTION_SIZE <= sizeOfAllRemoves) {
+			portionEnd = portionStart + PORTION_SIZE;
 		} else {
 			portionEnd = sizeOfAllRemoves;
 		}
@@ -321,8 +321,8 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			goOn = (portionEnd < sizeOfAllRemoves);
 
 			portionStart = portionEnd;
-			if (portionStart + portionSize <= sizeOfAllRemoves) {
-				portionEnd = portionStart + portionSize;
+			if (portionStart + PORTION_SIZE <= sizeOfAllRemoves) {
+				portionEnd = portionStart + PORTION_SIZE;
 			} else {
 				portionEnd = sizeOfAllRemoves;
 			}

@@ -619,13 +619,9 @@ public final class Globals {
 
 	}
 
-	public static String getDate(boolean justNumbers) {
+	public static String getDate() {
 		String sqlNow = new java.sql.Timestamp(System.currentTimeMillis()).toString();
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(' '));
-
-		if (justNumbers) {
-			sqlNow = sqlNow.replace("-", "");
-		}
 
 		return sqlNow;
 	}
@@ -940,7 +936,7 @@ public final class Globals {
 			return s;
 		}
 
-		final int maxLineLength = 80;
+		final int MAX_LINE_LENGTH = 80;
 
 		StringBuilder b = new StringBuilder("<html>");
 		int charsInLine = 0;
@@ -971,7 +967,7 @@ public final class Globals {
 				indentDone = true;
 				b.append(s.charAt(c));
 			}
-			if ((charsInLine >= maxLineLength && c + 1 < s.length())
+			if ((charsInLine >= MAX_LINE_LENGTH && c + 1 < s.length())
 					&& ((s.charAt(c + 1) == ' ') || (s.charAt(c + 1) == '\t') || (s.charAt(c + 1) == '\n'))) {
 				c++;
 				b.append("<br/>");

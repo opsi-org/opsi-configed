@@ -47,51 +47,50 @@ import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.LabelChecked;
 import de.uib.utilities.swing.SeparatedDocument;
 
-public final class NewClientDialog extends FGeneralDialog
+public final class NewClientDialog extends FGeneralDialog {
 
-{
 	private ConfigedMain main;
-	protected JPanel panel;
-	protected GroupLayout gpl;
-	protected JTextField jTextHostname;
+	private JPanel panel;
+	private GroupLayout gpl;
+	private JTextField jTextHostname;
 
-	protected JComboBox<String> jComboDomain;
-	protected JComboBox<String> jComboDepots;
-	protected JTextField jTextDescription;
-	protected JTextField jTextInventoryNumber;
-	protected JTextArea jTextNotes;
-	protected JComboBox<String> jComboPrimaryGroup;
-	protected JComboBox<String> jComboNetboot;
-	protected JComboBox<String> jComboLocalboot;
-	protected JTextField systemUUIDField;
-	protected JTextField macAddressField;
-	protected JTextField ipAddressField;
-	protected LabelChecked labelShutdownDefault;
-	protected LabelChecked labelUefiDefault;
-	protected LabelChecked labelWanDefault;
-	protected JCheckBox jCheckUefi;
-	protected JCheckBox jCheckWan;
-	protected JCheckBox jCheckShutdownInstall;
-	protected List<String> depots;
+	private JComboBox<String> jComboDomain;
+	private JComboBox<String> jComboDepots;
+	private JTextField jTextDescription;
+	private JTextField jTextInventoryNumber;
+	private JTextArea jTextNotes;
+	private JComboBox<String> jComboPrimaryGroup;
+	private JComboBox<String> jComboNetboot;
+	private JComboBox<String> jComboLocalboot;
+	private JTextField systemUUIDField;
+	private JTextField macAddressField;
+	private JTextField ipAddressField;
+	private LabelChecked labelShutdownDefault;
+	private LabelChecked labelUefiDefault;
+	private LabelChecked labelWanDefault;
+	private JCheckBox jCheckUefi;
+	private JCheckBox jCheckWan;
+	private JCheckBox jCheckShutdownInstall;
+	private List<String> depots;
 
-	protected JLabel jCSVTemplateLabel;
-	protected JButton jCSVTemplateButton;
-	protected JLabel jImportLabel;
-	protected JButton jImportButton;
+	private JLabel jCSVTemplateLabel;
+	private JButton jCSVTemplateButton;
+	private JLabel jImportLabel;
+	private JButton jImportButton;
 
-	protected List<String> groupList;
-	protected List<String> localbootProducts;
-	protected List<String> netbootProducts;
+	private List<String> groupList;
+	private List<String> localbootProducts;
+	private List<String> netbootProducts;
 
 	private static NewClientDialog instance;
 	private List<String> domains;
 	private boolean uefiboot;
 	private boolean wanConfig;
-	protected boolean multidepot;
+	private boolean multidepot;
 
 	private List<String> existingHostNames;
 
-	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
+	private int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
 	private NewClientDialog(ConfigedMain main, List<String> depots) {
 		super(ConfigedMain.getMainFrame(),
@@ -199,7 +198,7 @@ public final class NewClientDialog extends FGeneralDialog
 		jCheckShutdownInstall.setVisible(!shutdownINSTALLIsDefault);
 	}
 
-	protected void init() {
+	private void init() {
 		panel = new JPanel();
 		gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);

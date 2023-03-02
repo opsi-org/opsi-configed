@@ -1,6 +1,7 @@
 package de.uib.configed.gui.ssh;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,7 +149,7 @@ public class SSHCompletionComboButton {
 		}
 
 		if (searchSpecificFiles != null && (!searchSpecificFiles.equals(""))) {
-			combobox.addActionListener(actionEvent -> {
+			combobox.addActionListener((ActionEvent actionEvent) -> {
 				if (combobox.getSelectedItem() != null
 						&& ((String) combobox.getSelectedItem()).endsWith(searchSpecificFiles)) {
 					textfield.setText((String) combobox.getSelectedItem());

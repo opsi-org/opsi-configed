@@ -21,7 +21,7 @@ public class GroupNode extends IconNode {
 		childsArePersistent = b;
 	}
 
-	public boolean getChildsArePersistent() {
+	public boolean isChildsArePersistent() {
 		return childsArePersistent;
 	}
 

@@ -38,13 +38,9 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		String columnName = licensingInfoMap.getColumnNames().get(column);
 		String rowName = licensingInfoMap.getModules().get(row);
 
-		if (columnName != null && (columnName.equals(Configed.getResourceValue("LicensingInfo.modules")))
+		if ((columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.modules")))
 				|| columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 			jc.setToolTipText(value.toString());
-		}
-
-		if (columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))) {
-			// TODO what shall I do here?
 		}
 
 		if (columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {

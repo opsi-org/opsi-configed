@@ -581,16 +581,16 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				Logging.info(this, "retrieveOpsiHost found masterDepots " + masterDepots.size());
 				if (configServer == null) {
 					StringBuilder messbuff = new StringBuilder();
-					final String baselabel = "PersistenceController.noData";
+					final String BASE_LABEL = "PersistenceController.noData";
 
-					messbuff.append(Configed.getResourceValue(baselabel + "0"));
+					messbuff.append(Configed.getResourceValue(BASE_LABEL + "0"));
 					messbuff.append("\n");
-					messbuff.append(Configed.getResourceValue(baselabel + "1") + " " + countHosts);
+					messbuff.append(Configed.getResourceValue(BASE_LABEL + "1") + " " + countHosts);
 					messbuff.append("\n");
 					messbuff.append("\n");
 
 					for (int i = 2; i <= 4; i++) {
-						messbuff.append(Configed.getResourceValue(baselabel + i));
+						messbuff.append(Configed.getResourceValue(BASE_LABEL + i));
 						messbuff.append("\n");
 						messbuff.append("\n");
 					}
@@ -4969,7 +4969,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			boolean tryIt = true;
 
 			int tryOnceMoreCounter = 0;
-			final int stopRepeatingAtThis = 1;
+			final int STOP_REPEATING_AT_THIS = 1;
 
 			while (tryIt) {
 				tryIt = false;
@@ -5030,7 +5030,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					if (configOption.getDefaultValues() == null) {
 						Logging.warning(this, "default values missing for config  " + key);
 
-						if (tryOnceMoreCounter <= stopRepeatingAtThis) {
+						if (tryOnceMoreCounter <= STOP_REPEATING_AT_THIS) {
 							tryIt = true;
 							Logging.warning(this,
 									"repeat loading the values , we repeated  " + tryOnceMoreCounter + " times");

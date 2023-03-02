@@ -1127,7 +1127,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			insertNodeInOrder(clientNode, dropParentNode);
 			getModel().nodeStructureChanged(sourceParentNode);
 
-			if (getGroupNode(dropParentID).getChildsArePersistent()) {
+			if (getGroupNode(dropParentID).isChildsArePersistent()) {
 				addObject2PersistentGroup(importID, dropParentID);
 			}
 
@@ -1189,10 +1189,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 
 		Logging.debug(this, " -- copyClientTo childs are persistent, newParentNode " + newParentNode + " "
-				+ ((GroupNode) newParentNode).getChildsArePersistent());
+				+ ((GroupNode) newParentNode).isChildsArePersistent());
 
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
-		if (success && ((GroupNode) newParentNode).getChildsArePersistent()) {
+		if (success && ((GroupNode) newParentNode).isChildsArePersistent()) {
 			addObject2PersistentGroup(objectID, newParentID);
 		}
 

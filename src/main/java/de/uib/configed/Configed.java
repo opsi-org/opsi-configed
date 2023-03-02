@@ -209,7 +209,7 @@ public class Configed {
 		System.out.println("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		System.out.println(USAGE_INFO);
 
-		final int tabWidth = 8;
+		final int TAB_WIDTH = 8;
 		int length0 = 0;
 		int length1 = 0;
 
@@ -229,22 +229,22 @@ public class Configed {
 		}
 
 		int allTabs0 = 0;
-		if (length0 % tabWidth == 0) {
-			allTabs0 = length0 / tabWidth + 1;
+		if (length0 % TAB_WIDTH == 0) {
+			allTabs0 = length0 / TAB_WIDTH + 1;
 		} else {
-			allTabs0 = (length0 / tabWidth) + 1;
+			allTabs0 = (length0 / TAB_WIDTH) + 1;
 		}
 
 		int allTabs1 = 0;
-		if (length1 % tabWidth == 0) {
-			allTabs1 = length1 / tabWidth + 1;
+		if (length1 % TAB_WIDTH == 0) {
+			allTabs1 = length1 / TAB_WIDTH + 1;
 		} else {
-			allTabs1 = (length1 / tabWidth) + 1;
+			allTabs1 = (length1 / TAB_WIDTH) + 1;
 		}
 
 		for (int i = 0; i < usageLines.length; i++) {
-			int startedTabs0 = (usageLines[i][0].length() / tabWidth);
-			int startedTabs1 = (usageLines[i][1].length() / tabWidth);
+			int startedTabs0 = (usageLines[i][0].length() / TAB_WIDTH);
+			int startedTabs1 = (usageLines[i][1].length() / TAB_WIDTH);
 
 			System.out.println("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
 					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);

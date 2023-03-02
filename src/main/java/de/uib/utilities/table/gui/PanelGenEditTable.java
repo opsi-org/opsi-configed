@@ -1658,7 +1658,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	//
 	// ActionListener interface
 	@Override
-	public void actionPerformed(java.awt.event.ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == buttonCommit) {
 			commit();

@@ -1984,7 +1984,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private void setSelectionPanelCols() {
 		Logging.info(this, "setSelectionPanelCols ");
 
-		final int iconColumnMaxWidth = 100;
+		final int ICON_COLUMN_MAX_WIDTH = 100;
 
 		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL))) {
 			int col = selectionPanel.getTableModel().findColumn(Configed.getResourceValue(
@@ -1992,7 +1992,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 
-			column.setMaxWidth(iconColumnMaxWidth);
+			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
 			column.setCellRenderer(new BooleanIconTableCellRenderer(
 
@@ -2020,7 +2020,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (col > -1) {
 				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
-				column.setMaxWidth(iconColumnMaxWidth);
+				column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
 				// column.setCellRenderer(new
 
@@ -2047,7 +2047,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (col > -1) {
 				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
-				column.setMaxWidth(iconColumnMaxWidth);
+				column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
 						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
@@ -2074,7 +2074,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (col > -1) {
 				TableColumn column = selectionPanel.getColumnModel().getColumn(col);
 				Logging.info(this, "setSelectionPanelCols  column " + column.getHeaderValue());
-				column.setMaxWidth(iconColumnMaxWidth);
+				column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
 				column.setCellRenderer(new BooleanIconTableCellRenderer(
 						Globals.createImageIcon("images/checked_withoutbox.png", ""), null));
@@ -4182,10 +4182,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void getReachableInfo() {
-		getReachableInfo((selectedClients != null) && (selectedClients.length > 0));
-	}
+		final boolean onlySelectedClients = (selectedClients != null && selectedClients.length > 0);
 
-	public void getReachableInfo(final boolean onlySelectedClients) {
 		final String[] selClients = selectedClients;
 		Logging.info(this, "we have sel clients " + selClients.length);
 
@@ -4248,13 +4246,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}.start();
 	}
 
-	public void getSessionInfo() {
-		getSessionInfo((selectedClients != null) && (selectedClients.length > 0));
-	}
-
 	boolean sessioninfoFinished;
 
-	public void getSessionInfo(final boolean onlySelectedClients) {
+	public void getSessionInfo() {
+		final boolean onlySelectedClients = (selectedClients != null) && (selectedClients.length > 0);
+
 		final String[] selClients = selectedClients;
 		sessioninfoFinished = false;
 
@@ -4609,45 +4605,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		persist.fObject2GroupsRequestRefresh();
 		persist.fGroup2MembersRequestRefresh();
 		refreshClientListKeepingGroup();
-	}
-
-	public void setInstallByShutdownProductPropertyValue(boolean newStatus) {
-		String product = "opsi-client-agent";
-		String activate = "off";
-		String setup = "setup";
-		if (newStatus) {
-			activate = "on";
-		}
-
-		persist.setCommonProductPropertyValue(new HashSet<>(Arrays.asList(getSelectedClients())), product,
-				"on_shutdown_install", Arrays.asList(activate));
-
-		Map<String, String> productValues = new HashMap<>();
-		productValues.put("actionRequest", setup);
-
-		for (String clientNames : getSelectedClients()) {
-			persist.updateProductOnClient(clientNames, product, OpsiPackage.TYPE_LOCALBOOT, productValues);
-		}
-		persist.updateProductOnClients();
-	}
-
-	public void setInstallByShutdownProductPropertyValue(String clientNames, boolean status) {
-		String product = "opsi-client-agent";
-		String activate = "off";
-		String setup = "setup";
-		if (status) {
-			activate = "on";
-		}
-
-		persist.setCommonProductPropertyValue(new HashSet<>(Arrays.asList(clientNames)), product, "on_shutdown_install",
-				Arrays.asList(activate));
-
-		Map<String, String> productValues = new HashMap<>();
-		productValues.put("actionRequest", setup);
-
-		persist.updateProductOnClient(clientNames, product, OpsiPackage.TYPE_LOCALBOOT, productValues);
-		persist.updateProductOnClients();
-
 	}
 
 	public void createClients(List<List<Object>> clients) {

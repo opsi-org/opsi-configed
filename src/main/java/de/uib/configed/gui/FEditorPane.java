@@ -82,14 +82,14 @@ public class FEditorPane extends FGeneralDialog {
 	}
 
 	public void insertHTMLTable(String s, String title) {
-		final String baseRG = "f8f0f0";
-		final String header = "<HTML>\n <head>\n  <title>" + title + "</title>\n  </head>\n"
-				+ "<body style=\"background-color: " + baseRG + hexNoForColorizing(1) + "\">\n";
+		final String BASE_R_G = "f8f0f0";
+		final String HEADER = "<HTML>\n <head>\n  <title>" + title + "</title>\n  </head>\n"
+				+ "<body style=\"background-color: " + BASE_R_G + hexNoForColorizing(1) + "\">\n";
 
 		final String footer = "\n</body>\n</html>";
 
 		editPane.setContentType("text/html");
-		editPane.setText(header + s + footer);
+		editPane.setText(HEADER + s + footer);
 		editPane.setCaretPosition(0);
 	}
 
