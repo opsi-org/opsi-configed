@@ -15,6 +15,10 @@ public final class WebSocketInputStream {
 	}
 
 	public static void write(byte[] message) throws IOException {
+		if (!connected) {
+			connect();
+		}
+
 		writer.write(message);
 		writer.flush();
 	}

@@ -32,7 +32,7 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 
 	private File currentFile;
 	private int totalFilesToUpload;
-	private int currentFileUploading;
+	private int uploadedFiles;
 
 	public BackgroundFileUploader(FileUploadQueue queue) {
 		this.terminal = Terminal.getInstance();
@@ -61,8 +61,8 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 
 		while ((file = queue.get()) != null) {
 			currentFile = file;
-			currentFileUploading += 1;
-			totalFilesToUpload += queue.size();
+
+			uploadedFiles += 1;
 			updateTotalFilesToUpload();
 
 			String fileId = UUID.randomUUID().toString();
@@ -163,11 +163,18 @@ public class BackgroundFileUploader extends SwingWorker<Void, Integer> {
 	protected void done() {
 		terminal.showFileUploadProgress(false);
 		totalFilesToUpload = 0;
-		currentFileUploading = 0;
+		uploadedFiles = 0;
+	}
+
+	public int getTotalFilesToUpload() {
+		return totalFilesToUpload;
+	}
+
+	public void setTotalFilesToUpload(int totalFiles) {
+		this.totalFilesToUpload = totalFiles;
 	}
 
 	public void updateTotalFilesToUpload() {
-		SwingUtilities.invokeLater(() -> terminal.indicateFileUpload(currentFile, currentFileUploading,
-				totalFilesToUpload + queue.size() - 1));
+		SwingUtilities.invokeLater(() -> terminal.indicateFileUpload(currentFile, uploadedFiles, totalFilesToUpload));
 	}
 }
