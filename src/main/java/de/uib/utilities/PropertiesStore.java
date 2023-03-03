@@ -16,12 +16,12 @@ import java.util.TreeSet;
 
 import de.uib.utilities.logging.Logging;
 
-public class PropertiesStore
 // is a decorator of a HashMap
-{
-	File myStore;
+public class PropertiesStore {
 
 	protected static final String KEY_SEPARATOR = "=";
+
+	File myStore;
 
 	private Map<String, String> internalStore;
 

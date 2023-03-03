@@ -139,9 +139,7 @@ public final class Messages {
 				} catch (Exception e) {
 					Logging.info("Failed to set locale '" + characteristics + "': " + e);
 				}
-			}
-
-			else if (characteristics.length() == 2) {
+			} else if (characteristics.length() == 2) {
 				try {
 					loc = produceLocale(characteristics);
 					Logging.info("Locale " + loc + " set by param");

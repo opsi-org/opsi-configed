@@ -143,9 +143,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 			if (saveRowSelection != null) {
 				super.setSelection(saveRowSelection);
 			}
-		}
-
-		else {
+		} else {
 			saveRowSelection = theTable.getSelectedRows();
 			Logging.info(this, "mouseReleased set new saveRowSelection ");
 		}

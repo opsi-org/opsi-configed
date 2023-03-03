@@ -102,14 +102,10 @@ public class JSONObjectX extends JSONObject {
 		if (list.isEmpty()) {
 			value = "";
 			beingString = true;
-		}
-
-		else if (list.size() == 1 && !beingMap) {
+		} else if (list.size() == 1 && !beingMap) {
 			value = list.get(1).toString();
 			beingString = true;
-		}
-
-		else {
+		} else {
 			value = master.toString();
 			beingString = false;
 		}

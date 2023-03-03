@@ -71,9 +71,7 @@ public final class JSONReMapper {
 					result.put(result0Entry.getKey(), str);
 				}
 			}
-		}
-
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			Logging.error("JSONReMapper getResponses " + ex);
 		}
 
@@ -417,9 +415,7 @@ public final class JSONReMapper {
 					for (int i = 0; i < jA.length(); i++) {
 						if (isNull(jA.get(i))) {
 							row.add("");
-						}
-
-						else {
+						} else {
 							row.add("" + jA.get(i));
 						}
 					}
@@ -589,18 +585,12 @@ public final class JSONReMapper {
 	public static Object deriveStandard(Object ob) {
 		if (ob == null) {
 			return null;
-		}
-
-		else if (ob instanceof String) {
+		} else if (ob instanceof String) {
 			return ob;
-		}
-
-		else if (ob instanceof JSONArray) {
+		} else if (ob instanceof JSONArray) {
 			return ((JSONArray) ob).toList();
 			// to do: make recursive
-		}
-
-		else if (ob instanceof JSONObject) {
+		} else if (ob instanceof JSONObject) {
 			return deriveStandard((JSONObject) ob);
 
 		} else {

@@ -277,9 +277,7 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 
 		if (col == 0) {
 			result = key;
-		}
-
-		else if (col == 1) {
+		} else if (col == 1) {
 			result = data.get(key);
 
 			// deliver the default value

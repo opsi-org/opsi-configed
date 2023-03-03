@@ -817,9 +817,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		if (tableModel.getColumnCount() == 0) {
 			return new ArrayList<>();
-		}
-
-		else if (sortDescriptor == null) {
+		} else if (sortDescriptor == null) {
 
 			// default sorting
 			sortDescriptor = new LinkedHashMap<>();
@@ -834,9 +832,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					Logging.debug(this, "sortkey problem " + ex);
 				}
 
-			}
-
-			else if (tableModel.getFinalCols() != null && !tableModel.getFinalCols().isEmpty()) {
+			} else if (tableModel.getFinalCols() != null && !tableModel.getFinalCols().isEmpty()) {
 				Iterator<Integer> iter = tableModel.getFinalCols().iterator();
 
 				while (iter.hasNext()) {
@@ -845,15 +841,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 					sortDescriptor.put(col, SortOrder.ASCENDING);
 				}
-			}
-
-			else {
+			} else {
 				sortKeys = null;
 			}
 
-		}
-
-		else {
+		} else {
 
 			for (Entry<Integer, SortOrder> entry : sortDescriptor.entrySet()) {
 				sortKeys.add(new RowSorter.SortKey(entry.getKey(), entry.getValue()));
@@ -896,18 +888,16 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 		};
 
-		if (sorter instanceof DefaultRowSorter)
-		// is always the case since TableRowSorter extends DefaultRowSorter
-		{
+		if (sorter instanceof DefaultRowSorter) {
+			// is always the case since TableRowSorter extends DefaultRowSorter
+
 			for (int j = 0; j < tableModel.getColumnCount(); j++) {
 
 				if (comparators[j] != null) {
 					Logging.info(this, " set sorter for column " + j + " " + comparators[j]);
 					// restore previously explicitly assigned comparator
 					((DefaultRowSorter) sorter).setComparator(j, comparators[j]);
-				}
-
-				else if (tableModel.getClassNames().get(j).equals("java.lang.Integer")) {
+				} else if (tableModel.getClassNames().get(j).equals("java.lang.Integer")) {
 
 					((DefaultRowSorter) sorter).setComparator(j, new de.uib.utilities.IntComparatorForStrings());
 				}
@@ -956,9 +946,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		DefaultRowSorter sorter = (DefaultRowSorter) theTable.getRowSorter();
 		if (sorter == null) {
 			Logging.warning(this, "no sorter");
-		}
-
-		else {
+		} else {
 			sorter.setComparator(modelCol, comparator);
 		}
 	}
@@ -1421,9 +1409,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				if (val == null || val.equals("")) {
 					found = true;
 				}
-			}
-
-			else {
+			} else {
 				String compareVal = compareValue.toString();
 
 				if (val.equals(compareVal)) {
@@ -1482,9 +1468,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		if (tableModel.getKeyCol() > -1) {
 			found = moveToValue(keyValue, tableModel.getKeyCol());
-		}
-
-		else {
+		} else {
 			// try to use pseudokey
 			int viewrow = 0;
 
@@ -1506,9 +1490,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			if (found) {
 				setSelectedRow(viewrow);
-			}
-
-			else {
+			} else {
 				// try value for col 0 as target for search
 				found = moveToValue(keyValue, 0);
 			}

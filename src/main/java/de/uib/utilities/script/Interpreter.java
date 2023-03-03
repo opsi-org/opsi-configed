@@ -43,14 +43,12 @@ public class Interpreter {
 					// start of citation
 					partBuff = new StringBuilder();
 					lastCitMark = s;
+				} else if (s.equals(lastCitMark)) {
+					// end of citation
+					result.add(partBuff.toString());
+					partBuff = null;
 				} else {
-					if (s.equals(lastCitMark)) {
-						// end of citation
-						result.add(partBuff.toString());
-						partBuff = null;
-					} else {
-						partBuff.append(s);
-					}
+					partBuff.append(s);
 				}
 			} else if (blankDelims.indexOf(s) > -1) {
 				if (partBuff != null) {
@@ -59,9 +57,8 @@ public class Interpreter {
 				}
 			} else
 			// no delimiter
-			if (partBuff == null)
-			// no buff started
-			{
+			if (partBuff == null) {
+				// no buff started
 
 				result.add(s);
 			} else {

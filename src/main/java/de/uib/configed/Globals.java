@@ -33,7 +33,8 @@ import javafx.stage.Stage;
 
 public final class Globals {
 
-	public static final String VERSION = "4.3.0.2";
+	// get version from pom.xml
+	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
 	public static final String VERDATE = "2023-03-01";
 
 	public static final String VERHASHTAG = "";
@@ -457,9 +458,7 @@ public final class Globals {
 		if (index < 0 || index >= maxLogSizes.length) {
 			Logging.warning("error with index for maxLogSizes");
 			return -1;
-		}
-
-		else {
+		} else {
 			return maxLogSizes[index];
 		}
 	}
@@ -1039,9 +1038,7 @@ public final class Globals {
 			forbidEditing
 
 					= !PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
-		}
-
-		else {
+		} else {
 			forbidEditing = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
 		}
 

@@ -162,9 +162,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				Logging.warning(this, "no case found for rowTypeIndex in getValueAt");
 				break;
 			}
-		}
-
-		else {
+		} else {
 			switch (col) {
 			case 1:
 				if (rowTypeIndex == 1) {

@@ -62,6 +62,9 @@ import de.uib.utilities.table.gui.TablesearchPane;
 
 public class JTableSelectionPanel extends JPanel
 		implements DocumentListener, KeyListener, MissingDataPanel, ActionListener {
+
+	private static final int MIN_HEIGHT = 200;
+
 	JScrollPane scrollpane;
 
 	// we put a JTable on a standard JScrollPane
@@ -83,8 +86,6 @@ public class JTableSelectionPanel extends JPanel
 	JComboBoxToolTip comboSearchMode;
 
 	TablesearchPane.SearchMode searchMode;
-
-	private static final int MIN_HEIGHT = 200;
 
 	private int foundrow = -1;
 
@@ -697,8 +698,6 @@ public class JTableSelectionPanel extends JPanel
 			return -1;
 		}
 
-		boolean found = false;
-
 		int viewrow = 0;
 
 		if (startviewrow > 0) {
@@ -732,6 +731,7 @@ public class JTableSelectionPanel extends JPanel
 		List<String> alternativeWords = getWords(valLower);
 		lastCountOfSearchWords = alternativeWords.size();
 
+		boolean found = false;
 		while (!found && viewrow < getTableModel().getRowCount()) {
 
 			for (int j = 0; j < getTableModel().getColumnCount(); j++) {
@@ -996,12 +996,9 @@ public class JTableSelectionPanel extends JPanel
 			if (!fieldSearch.getText().equals("")) {
 				searchTheNextRow();
 			}
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
+		} else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
 			main.invertClientselection();
 		}
-
 	}
 
 	@Override
@@ -1021,5 +1018,4 @@ public class JTableSelectionPanel extends JPanel
 			fieldSearch.setText("");
 		}
 	}
-
 }

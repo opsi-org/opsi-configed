@@ -233,9 +233,7 @@ public class DataStubNOM extends AbstractDataStub {
 
 				if (p.isNetbootProduct()) {
 					depot2NetbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
-				}
-
-				else if (p.isLocalbootProduct()) {
+				} else if (p.isLocalbootProduct()) {
 					depot2LocalbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
 				}
 

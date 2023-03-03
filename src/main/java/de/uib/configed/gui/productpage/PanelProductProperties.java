@@ -161,9 +161,7 @@ public class PanelProductProperties extends JSplitPane
 				infoPane.clearEditing();
 				((EditMapPanelX) propertiesPanel).init();
 				panelEditProperties.clearDepotListData();
-			}
-
-			else {
+			} else {
 
 				infoPane.setGrey(false);
 				int row = lsm.getMinSelectionIndex();

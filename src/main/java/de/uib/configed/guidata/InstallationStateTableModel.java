@@ -579,9 +579,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Logging.debug(this, "checkForContradictingAssignments client " + clientId + ", actualproduct "
 					+ actualProduct + ", product " + product + ", stateType " + stateType + ", state " + state);
 
-		}
-
-		else {
+		} else {
 			boolean contradicting = !existingRequest.equals(state);
 			info = info + " for onGoingCollectiveChangeEventCount " + onGoingCollectiveChangeEventCount
 					+ " contradicting " + contradicting;
@@ -1000,9 +998,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 							ActionRequest.getVal(actionRequestForRequiredProduct) == requiredAR) {
 								Logging.info(this, "followRequirements:   no change of action request necessary for "
 										+ requirement.getKey());
-							}
-
-							else {
+							} else {
 								String alreadyExistingNewActionRequest = getChangedState(clientId, requirement.getKey(),
 										ActionRequest.KEY);
 

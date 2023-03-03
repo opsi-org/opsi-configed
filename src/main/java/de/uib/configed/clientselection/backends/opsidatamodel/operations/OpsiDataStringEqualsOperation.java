@@ -56,10 +56,9 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 		// simple case: no '*'
 		if (dataSplitted == null) {
 			return rData.equals(data);
-		}
+		} else if (dataSplitted.length == 0) {
+			// the only chars are '*'
 
-		// the only chars are '*'
-		else if (dataSplitted.length == 0) {
 			return realData.length() > 0;
 		} else {
 

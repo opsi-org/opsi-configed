@@ -327,9 +327,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 					((JLabel) result).setToolTipText(Globals.fillStringToLength(
 							tooltipPrefix + " " + Globals.CONFLICT_STATE_STRING + " ", FILL_LENGTH));
-				}
-
-				else {
+				} else {
 					result = super.getTableCellRendererComponent(table, "none", isSelected, hasFocus, row, column);
 
 					((JLabel) result).setToolTipText(Globals.fillStringToLength(

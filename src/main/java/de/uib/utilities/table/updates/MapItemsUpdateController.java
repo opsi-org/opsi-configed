@@ -63,13 +63,9 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 
 						lastKeyValue = result;
 					}
-				}
-
-				else if (updateItem instanceof MapDeleteItem) {
+				} else if (updateItem instanceof MapDeleteItem) {
 					success = updater.sendDelete(updateItem.getRowAsMap());
-				}
-
-				else {
+				} else {
 					Logging.error("update item type not supported");
 					success = false;
 				}

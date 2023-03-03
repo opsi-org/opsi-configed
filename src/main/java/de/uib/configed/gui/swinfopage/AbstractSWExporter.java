@@ -162,9 +162,7 @@ public abstract class AbstractSWExporter {
 	public void setHost(String hostId) {
 		if (modelSWInfo == null) {
 			initModel(hostId);
-		}
-
-		else {
+		} else {
 			theHost = hostId;
 			updateModel();
 

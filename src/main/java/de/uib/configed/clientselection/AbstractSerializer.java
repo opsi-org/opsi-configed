@@ -129,9 +129,7 @@ public abstract class AbstractSerializer {
 		try {
 			Map<String, Object> data = getData(name);
 			return deserialize(data);
-		}
-
-		catch (Exception e) {
+		} catch (Exception e) {
 			Logging.error(e.getMessage(), e);
 			return null;
 		}
@@ -181,22 +179,16 @@ public abstract class AbstractSerializer {
 
 			if (elementName.equals(ELEMENT_NAME_SOFTWARE_NAME_ELEMENT)) {
 				element = manager.getNewSoftwareNameElement();
-			}
-
-			else if (elementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
+			} else if (elementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
 				element = new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]));
-			}
-
-			else if (elementName.equals(ELEMENT_NAME_GROUP)) {
+			} else if (elementName.equals(ELEMENT_NAME_GROUP)) {
 				// constructing a compatibility with format without GroupWithSubgroupsElement
 				if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
 					element = new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]));
 				} else {
 					element = new GroupElement(manager.getBackend().getGroups().toArray(new String[0]));
 				}
-			}
-
-			else if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
+			} else if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
 				if (hardware == null) {
 					hardware = manager.getBackend().getHardwareList();
 				}

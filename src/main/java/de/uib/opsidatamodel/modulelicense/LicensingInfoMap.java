@@ -678,9 +678,7 @@ public final class LicensingInfoMap {
 				Date thisDate = sdf.parse(key);
 				if (dateNow.compareTo(thisDate) >= 0) {
 					newest = key;
-				}
-
-				else {
+				} else {
 					break;
 				}
 

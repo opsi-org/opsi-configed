@@ -140,7 +140,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			}
 		} catch (SQLException e) {
 			Logging.info(this, "getLocalBootProductStatesNOM sql Error  in:\n" + query);
-			Logging.error("getLocalBootProductStatesNOM sql Error " + e.toString());
+			Logging.error("getLocalBootProductStatesNOM sql Error ", e);
 		}
 
 		return result;
@@ -206,10 +206,8 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			Logging.info(this, "retrieveSoftwareAuditOnClients, entries read " + counter);
 			Logging.info(this, "retrieveSoftwareAuditOnClients, idents  " + rowsSoftwareOnClients.size());
 
-		}
-
-		catch (SQLException e) {
-			Logging.error("cleanUpAuditSoftware sql Error " + e.toString());
+		} catch (SQLException e) {
+			Logging.error("cleanUpAuditSoftware sql Error ", e);
 		}
 
 		Set<String> swIdentsOnClients = rowsSoftwareOnClients.keySet();
@@ -247,10 +245,8 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 			}
 			Logging.info(this, "retrieveSoftware, entries read " + counter);
 			Logging.info(this, "retrieveSoftware, idents size " + rowsSOFTWARE.size());
-		}
-
-		catch (SQLException e) {
-			Logging.error("cleanUpAuditSoftware sql Error " + e.toString());
+		} catch (SQLException e) {
+			Logging.error("cleanUpAuditSoftware sql Error ", e);
 		}
 
 		Set<String> swIdentsOnlyInSoftware = rowsSOFTWARE.keySet();

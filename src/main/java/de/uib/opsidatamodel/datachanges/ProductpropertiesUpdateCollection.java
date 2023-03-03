@@ -72,9 +72,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 				try {
 					map = (Map) obj;
-				}
-
-				catch (ClassCastException ccex) {
+				} catch (ClassCastException ccex) {
 					Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 				}
 

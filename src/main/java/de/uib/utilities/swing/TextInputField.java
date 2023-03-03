@@ -50,15 +50,11 @@ public class TextInputField extends JPanel
 			if (initialValue == null) {
 				inputType = InputType.DATE;
 				initValue = "";
-			}
-
-			else {
+			} else {
 				inputType = InputType.TEXT;
 			}
 
-		}
-
-		else {
+		} else {
 			this.proposedValues = proposedValues;
 			proposedValues.add(0, "");
 		}

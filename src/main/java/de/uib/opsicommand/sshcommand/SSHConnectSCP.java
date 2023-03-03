@@ -265,9 +265,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 				setDialog(outputDialog);
 				Logging.info(this, "exec ready (0)");
-			}
-
-			catch (JSchException jschex) {
+			} catch (JSchException jschex) {
 				if (retriedTimes >= 3) {
 					retriedTimes = 1;
 					Logging.warning(this, "jsch exception ", jschex);

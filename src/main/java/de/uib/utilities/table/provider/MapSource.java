@@ -125,9 +125,7 @@ public class MapSource implements TableSource {
 							if (class2defaultValue.get(className) != null) {
 								vRow.add(class2defaultValue.get(className));
 
-							}
-
-							else {
+							} else {
 								Logging.warning(this,
 										"fetchData row " + mRow
 												+ " ob == null, possibly the column name is not correct, column " + i

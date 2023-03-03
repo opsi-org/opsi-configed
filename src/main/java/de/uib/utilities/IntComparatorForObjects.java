@@ -9,7 +9,6 @@ public class IntComparatorForObjects implements Comparator<Object> {
 	@Override
 	public int compare(Object o1, Object o2) {
 
-		int result = 0;
 		int i1 = Integer.MAX_VALUE;
 		int i2 = Integer.MIN_VALUE;
 
@@ -22,9 +21,7 @@ public class IntComparatorForObjects implements Comparator<Object> {
 			}
 
 			i1 = Integer.parseInt(s1);
-		}
-
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			Logging.info("o1 no number " + o1 + " s1: " + s1);
 		}
 
@@ -34,20 +31,18 @@ public class IntComparatorForObjects implements Comparator<Object> {
 			}
 
 			i2 = Integer.parseInt(s2);
-		}
-
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			Logging.info(this, "exception " + ex);
 			Logging.info("o2 no number " + o2 + " s2: " + s2);
 		}
 
 		if (i1 < i2) {
-			result = -1;
+			return -1;
 		} else if (i1 > i2) {
-			result = +1;
+			return +1;
+		} else {
+			return 0;
 		}
-
-		return result;
 	}
 
 	@Override

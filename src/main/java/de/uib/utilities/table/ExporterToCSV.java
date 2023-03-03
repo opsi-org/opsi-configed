@@ -123,9 +123,7 @@ public class ExporterToCSV extends AbstractExportTable {
 										line.append(inString);
 										line.append(STRING_DELIMITER);
 
-									}
-
-									else if (classNames.get(colI).equals("java.lang.Integer")) {
+									} else if (classNames.get(colI).equals("java.lang.Integer")) {
 										line.append(theTable.getValueAt(rowI, colI));
 									} else if (classNames.get(colI).equals("java.lang.Double")) {
 										Logging.debug(this,

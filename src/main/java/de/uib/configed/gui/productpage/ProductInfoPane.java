@@ -257,9 +257,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
 
 			panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
-		}
-
-		else if (event.getSource() == propertiesActivateButton) {
+		} else if (event.getSource() == propertiesActivateButton) {
 			isPanelEditPropertiesVisible = !isPanelEditPropertiesVisible;
 
 			propertiesActivateButton.setText(isPanelEditPropertiesVisible ? "▼" : "▶");

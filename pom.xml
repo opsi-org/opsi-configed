@@ -6,12 +6,19 @@
 	<artifactId>configed</artifactId>
     <packaging>jar</packaging>
     <version>4.3.0.2</version>
+    
+    
+   
+
 
     <properties>
         <!-- use java 11 for backwards compatibility-->
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
     </properties>
 
     <repositories>
@@ -31,6 +38,9 @@
                     <archive>
                         <manifest>
                             <mainClass>de.uib.configed.Configed</mainClass>
+                            <addDefaultImplementationEntries>
+                                true
+                            </addDefaultImplementationEntries>
                         </manifest>
                     </archive>
                 </configuration>

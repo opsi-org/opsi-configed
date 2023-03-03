@@ -926,9 +926,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					found = stringContainsParts(compareVal, valParts).success;
 				}
 
-			}
-
-			else {
+			} else {
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
 
 					// we dont compare all values (comparing all values is default)
@@ -948,9 +946,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						if (val.equals("")) {
 							found = true;
 						}
-					}
-
-					else {
+					} else {
 						String compareVal = ("" + compareValue).toLowerCase();
 
 						if (regex) {
@@ -958,9 +954,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 							if (pattern.matcher(compareVal).matches()) {
 								found = true;
 							}
-						}
-
-						else {
+						} else {
 							if (fulltext) {
 								found = stringContainsParts(targetModel.getColumnName(colJ), compareVal,
 										valParts).success;
@@ -1127,9 +1121,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		if (value.length() < 2) {
 			setRow(0, false, select);
-		}
-
-		else {
+		} else {
 			foundrow = findViewRowFromValue(startrow, value, selectedCols, fulltextSearch, regexSearch, combineCols);
 
 			if (foundrow > -1) {
@@ -1227,21 +1219,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals("")) {
 				markAll();
 			}
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_F8) {
+		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
 			switchFilterOff();
 			markAllAndFilter();
 			switchFilterOn();
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_F3) {
+		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals("")) {
 				searchNextRow(selectMode);
 			}
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			Logging.debug(this, "key pressed ENTER on fieldSearch, with content " + fieldSearch.getText()
 					+ " searchInputType " + searchInputType);
 

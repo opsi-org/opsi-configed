@@ -552,9 +552,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				if (s == JSONObject.NULL) {
 					Logging.warning("JSONExecutioner.getMapFromItem \"" + s
 							+ "\" is  JSONObject.NULL and cannot be cast to a JSON Object");
-				}
-
-				else {
+				} else {
 
 					Logging.warning("JSONExecutioner.getMapFromItem \"" + s + "\" has class " + s.getClass().getName()
 							+ " cannot be cast to a JSON Object");

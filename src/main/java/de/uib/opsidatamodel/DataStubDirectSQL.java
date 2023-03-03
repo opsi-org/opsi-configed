@@ -132,9 +132,7 @@ public class DataStubDirectSQL extends DataStubRawData
 				for (String clientId : newClients) {
 					client2software.put(clientId, new LinkedList<>());
 				}
-			}
-
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				Logging.info(this, "retrieveSoftwareAuditOnClients sql Error  in:\n" + query);
 				Logging.error("retrieveSoftwareAuditOnClients sql Error " + e.toString());
 			}

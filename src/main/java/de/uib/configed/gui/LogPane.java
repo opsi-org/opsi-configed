@@ -455,9 +455,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 				if (newIndex > LEVELS.length - 1) {
 					newIndex = LEVELS.length - 1;
-				}
-
-				else if (newIndex < 0) {
+				} else if (newIndex < 0) {
 					newIndex = 0;
 				}
 
@@ -1014,22 +1012,16 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
 			if ((e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER)) {
 				search();
-			}
-
-			else if (e.getSource() == jTextPane && (e.getKeyChar() == '+')
+			} else if (e.getSource() == jTextPane && (e.getKeyChar() == '+')
 					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
 				Logging.info(this, "Ctrl-Plus");
 				setFontSize("+");
-			}
-
-			else if (e.getSource() == jTextPane && (e.getKeyChar() == '-')
+			} else if (e.getSource() == jTextPane && (e.getKeyChar() == '-')
 					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
 				Logging.info(this, "Ctrl-Minus");
 				setFontSize("-");
 			}
-
 		}
-
 	}
 
 	@Override
@@ -1066,13 +1058,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			jTextPane.requestFocusInWindow();
 		} else if (e.getSource() == jCheckBoxCaseSensitive) {
 			searcher.setCaseSensitivity(jCheckBoxCaseSensitive.isSelected());
-		}
-
-		else if (e.getSource() == buttonFontPlus) {
+		} else if (e.getSource() == buttonFontPlus) {
 			setFontSize("+");
-		}
-
-		else if (e.getSource() == buttonFontMinus) {
+		} else if (e.getSource() == buttonFontMinus) {
 			setFontSize("-");
 		}
 	}

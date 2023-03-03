@@ -944,9 +944,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		if (path == null) {
 			node = groupNodeGroups;
-		}
-
-		else {
+		} else {
 			node = (DefaultMutableTreeNode) path.getLastPathComponent();
 		}
 
