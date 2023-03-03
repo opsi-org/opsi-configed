@@ -25,45 +25,6 @@ import de.uib.utilities.logging.Logging;
 
 public final class LicensingInfoMap {
 
-	private static final String CLASSNAME = LicensingInfoMap.class.getName();
-
-	public static final String OPSI_LICENSING_INFO_VERSION_OLD = "";
-	public static final String OPSI_LICENSING_INFO_VERSION = "2";
-	public static final String DISPLAY_INFINITE = "\u221E";
-	final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-	private static boolean reducedView = !FGeneralDialogLicensingInfo.extendedView;
-	private JSONObject jOResult;
-	Map<String, List<Object>> configs;
-	private Map<String, Object> clientNumbersMap;
-	private List<List<String>> clientNumbersList;
-	private Set<String> customerIDs;
-	private Set<String> customerNames;
-	private Map<String, Map<String, Object>> licenses;
-	private List<String> availableModules;
-	private List<String> knownModulesList;
-	private List<String> obsoleteModules;
-	private List<String> shownModules;
-	private List<String> datesKeys;
-	private Map<String, Map<String, Map<String, Object>>> datesMap;
-	private List<String> columnNames;
-	private List<String> classNames;
-	private Map<String, Map<String, Object>> tableMap;
-	private String latestDateString;
-	private String checksum;
-	private List<String> currentCloseToLimitModuleList;
-	private List<String> currentOverLimitModuleList;
-	private List<String> currentTimeWarningModuleList;
-	private List<String> currentTimeOverModuleList;
-	private List<String> futureOverLimitModuleList;
-	private List<String> futureCloseToLimitModuleList;
-	private Set<String> allCloseToLimitModules;
-	private Set<String> allOverLimitModules;
-	private Integer daysClientLimitWarning;
-	private Integer absolutClientLimitWarning;
-	private Integer percentClientLimitWarning;
-	private List<String> disabledWarningModules;
-
 	public static final String RESULT = "result";
 	public static final String CLIENT_NUMBERS_INFO = "client_numbers";
 	public static final String ALL = "all";
@@ -119,9 +80,81 @@ public final class LicensingInfoMap {
 	public static final int CLIENT_LIMIT_WARNING_ABSOLUTE_DEFAULT = 5;
 	public static final int CLIENT_LIMIT_WARNING_DAYS_DEFAULT = 30;
 
+	private static final String CLASSNAME = LicensingInfoMap.class.getName();
+
+	public static final String OPSI_LICENSING_INFO_VERSION_OLD = "";
+	public static final String OPSI_LICENSING_INFO_VERSION = "2";
+	public static final String DISPLAY_INFINITE = "\u221E";
+
 	private static LicensingInfoMap instance;
 	private static LicensingInfoMap instanceComplete;
 	private static LicensingInfoMap instanceReduced;
+
+	private static boolean reducedView = !FGeneralDialogLicensingInfo.extendedView;
+
+	final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+	private JSONObject jOResult;
+	Map<String, List<Object>> configs;
+	private Map<String, Object> clientNumbersMap;
+	private List<List<String>> clientNumbersList;
+	private Set<String> customerIDs;
+	private Set<String> customerNames;
+	private Map<String, Map<String, Object>> licenses;
+	private List<String> availableModules;
+	private List<String> knownModulesList;
+	private List<String> obsoleteModules;
+	private List<String> shownModules;
+	private List<String> datesKeys;
+	private Map<String, Map<String, Map<String, Object>>> datesMap;
+	private List<String> columnNames;
+	private List<String> classNames;
+	private Map<String, Map<String, Object>> tableMap;
+	private String latestDateString;
+	private String checksum;
+	private List<String> currentCloseToLimitModuleList;
+	private List<String> currentOverLimitModuleList;
+	private List<String> currentTimeWarningModuleList;
+	private List<String> currentTimeOverModuleList;
+	private List<String> futureOverLimitModuleList;
+	private List<String> futureCloseToLimitModuleList;
+	private Set<String> allCloseToLimitModules;
+	private Set<String> allOverLimitModules;
+	private Integer daysClientLimitWarning;
+	private Integer absolutClientLimitWarning;
+	private Integer percentClientLimitWarning;
+	private List<String> disabledWarningModules;
+
+	private LicensingInfoMap(JSONObject jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
+		Logging.info(CLASSNAME + "generate with reducedView " + reduced + " at the moment ignored, we set false");
+		reducedView = reduced;
+
+		try {
+			jOResult = jsonObj.getJSONObject(RESULT);
+		} catch (JSONException ex) {
+			Logging.error(CLASSNAME + " constructor, could not load jsonObject " + ex);
+			return;
+		}
+
+		configs = configVals;
+		produceConfigs();
+		checksum = produceChecksum();
+		clientNumbersMap = produceClientNumbersMap();
+		clientNumbersList = produceListFromClientNumbersMap();
+		licenses = produceLicenses();
+		obsoleteModules = produceObsoleteModules();
+		availableModules = produceAvailableModules();
+		knownModulesList = produceKnownModules();
+		shownModules = produceShownModules();
+		datesKeys = produceDatesKeys();
+		latestDateString = findLatestChangeDateString();
+		datesMap = produceDatesMap();
+		tableMap = produceTableMapFromDatesMap(datesMap);
+		customerIDs = produceCustomerIDSet();
+		customerNames = produceCustomerNameSet();
+
+		instance = this;
+	}
 
 	public static LicensingInfoMap getInstance(JSONObject jsonObj, Map<String, List<Object>> configVals,
 			boolean reduced) {
@@ -154,15 +187,6 @@ public final class LicensingInfoMap {
 		}
 	}
 
-	public static LicensingInfoMap getInstance(JSONObject jsonObj, Map<String, List<Object>> configVals) {
-		Logging.info("instance here reducedView " + reducedView + ", instance " + instance);
-		if (instance == null) {
-			instance = getInstance(jsonObj, configVals, reducedView);
-		}
-
-		return instance;
-	}
-
 	public static LicensingInfoMap getInstance() {
 		if (instance == null) {
 			Logging.error(CLASSNAME + " instance  not initialized");
@@ -173,37 +197,6 @@ public final class LicensingInfoMap {
 
 	public static void requestRefresh() {
 		instance = null;
-	}
-
-	private LicensingInfoMap(JSONObject jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
-		Logging.info(this, "generate with reducedView " + reduced + " at the moment ignored, we set false");
-		reducedView = reduced;
-
-		try {
-			jOResult = jsonObj.getJSONObject(RESULT);
-		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " constructor, could not load jsonObject " + ex);
-			return;
-		}
-
-		configs = configVals;
-		produceConfigs();
-		checksum = produceChecksum();
-		clientNumbersMap = produceClientNumbersMap();
-		clientNumbersList = produceListFromClientNumbersMap();
-		licenses = produceLicenses();
-		obsoleteModules = produceObsoleteModules();
-		availableModules = produceAvailableModules();
-		knownModulesList = produceKnownModules();
-		shownModules = produceShownModules();
-		datesKeys = produceDatesKeys();
-		latestDateString = findLatestChangeDateString();
-		datesMap = produceDatesMap();
-		tableMap = produceTableMapFromDatesMap(datesMap);
-		customerIDs = produceCustomerIDSet();
-		customerNames = produceCustomerNameSet();
-
-		instance = this;
 	}
 
 	private Map<String, Object> produceClientNumbersMap() {
