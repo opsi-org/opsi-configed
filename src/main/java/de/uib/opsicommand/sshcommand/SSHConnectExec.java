@@ -359,7 +359,7 @@ public class SSHConnectExec extends SSHConnect {
 
 		boolean withGui;
 		boolean rememberPw;
-		boolean interruptChannelWorker = false;
+		boolean interruptChannelWorker;
 		int retriedTimes = 1;
 		int commandNumber = -1;
 		int maxCommandNumber = -1;

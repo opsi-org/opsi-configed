@@ -351,7 +351,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		updateCommand();
 	}
 
-	boolean aktive = false;
+	boolean aktive;
 
 	public void changeEchoChar() {
 		if (aktive) {

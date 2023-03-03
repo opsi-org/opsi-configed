@@ -609,9 +609,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		try {
 			int i = 0;
 
-			while (i < lines.length)
-			// we check if we got a new call
-			{
+			while (i < lines.length) {
+				// we check if we got a new call
+
 				boolean show = false;
 
 				if (lineLevels[i] <= selLevel) {

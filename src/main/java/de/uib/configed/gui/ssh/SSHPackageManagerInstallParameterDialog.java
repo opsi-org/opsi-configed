@@ -199,7 +199,6 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	public void doAction3() {
 		Logging.info(this, " doAction3 install ");
 		boolean sequential = false;
-		final SSHConnectExec ssh = new SSHConnectExec();
 		SSHCommandTemplate commands = new SSHCommandTemplate();
 		commands.setMainName("PackageInstallation");
 		CommandOpsiPackageManagerInstall pmInstallCom;
@@ -220,9 +219,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 			} else {
 				commands.addCommand(pmInstallCom);
 			}
-		}
-
-		else if (jRadioButtonServer.isSelected()) {
+		} else if (jRadioButtonServer.isSelected()) {
 			pmInstallCom = installServerPanel.getCommand();
 			if (pmInstallCom == null) {
 				Logging.warning(this, "No opsi-package selected. 3");
@@ -250,6 +247,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 
 		installSettingsPanel.updateCommand(pmInstallCom);
 
+		final SSHConnectExec ssh = new SSHConnectExec();
 		try {
 			ssh.execTemplate(commands, sequential);
 			ssh.getDialog().setVisible(true);

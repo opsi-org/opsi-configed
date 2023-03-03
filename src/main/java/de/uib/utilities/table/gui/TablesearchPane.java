@@ -74,7 +74,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	AbstractNavigationPanel navPane;
 	PanelGenEditTable associatedPanel;
-	boolean withNavPane = false;
+	boolean withNavPane;
 
 	JPopupMenu searchMenu;
 	LinkedHashMap<JMenuItemFormatted, Boolean> searchMenuEntries;
@@ -713,7 +713,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private class Finding {
-		boolean success = false;
+		boolean success;
 		int endChar = -1;
 	}
 

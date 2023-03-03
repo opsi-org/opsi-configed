@@ -29,10 +29,10 @@ public final class PersistenceControllerFactory {
 
 	private static AbstractPersistenceController staticPersistControl;
 
-	public static boolean sqlAndGetRows = false;
-	public static boolean avoidSqlRawData = false;
-	public static boolean sqlAndGetHashes = false;
-	public static boolean sqlDirect = false;
+	public static boolean sqlAndGetRows;
+	public static boolean avoidSqlRawData;
+	public static boolean sqlAndGetHashes;
+	public static boolean sqlDirect;
 	public static String directmethodcall = "";
 
 	public static final String DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE = "cleanupAuditsoftware";

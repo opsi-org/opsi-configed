@@ -86,7 +86,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	protected String globalLicencePool;
 
-	boolean foundVariantLicencepools = false;
+	boolean foundVariantLicencepools;
 
 	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(

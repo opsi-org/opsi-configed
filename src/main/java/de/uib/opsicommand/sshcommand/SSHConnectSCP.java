@@ -130,16 +130,15 @@ public class SSHConnectSCP extends SSHConnectExec {
 		return "end of method";
 	}
 
-	private class SshSFTPCommandWorker extends SwingWorker<String, String>
 	// first parameter class is return type of doInBackground
 	// second is element type of the list which is used by process
-	{
+	private class SshSFTPCommandWorker extends SwingWorker<String, String> {
 		SSHSFTPCommand command;
 		SSHConnectionExecDialog outputDialog;
 		SSHConnectExec caller;
 
 		boolean withGui;
-		boolean interruptChannel = false;
+		boolean interruptChannel;
 		int retriedTimes = 1;
 		int commandNumber = -1;
 		int maxCommandNumber = -1;

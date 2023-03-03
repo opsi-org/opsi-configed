@@ -180,7 +180,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		jList.getSelectionModel().setValueIsAdjusting(b);
 	}
 
-	boolean filtered = false;
+	boolean filtered;
 
 	@Override
 	public void setFiltered(boolean b) {

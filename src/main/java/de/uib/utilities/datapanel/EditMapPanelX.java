@@ -223,12 +223,12 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 								new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
 
 						fAsk.setVisible(true);
-					} else {
-						if (names != null) {
-							propertyHandler = defaultPropertyHandler;
+					} else if (names != null) {
 
-							removeProperty(names.get(table.getSelectedRow()));
-						}
+						propertyHandler = defaultPropertyHandler;
+
+						removeProperty(names.get(table.getSelectedRow()));
+
 					}
 				};
 
@@ -241,12 +241,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 								new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
 
 						fAsk.setVisible(true);
-					} else {
-						if (names != null) {
-							propertyHandler = removingSpecificValuesPropertyHandler;
+					} else if (names != null) {
+						propertyHandler = removingSpecificValuesPropertyHandler;
 
-							removeProperty(names.get(table.getSelectedRow()));
-						}
+						removeProperty(names.get(table.getSelectedRow()));
 					}
 				};
 
@@ -259,12 +257,11 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 								new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
 
 						fAsk.setVisible(true);
-					} else {
-						if (names != null) {
-							propertyHandler = settingDefaultValuesPropertyHandler;
+					} else if (names != null) {
 
-							removeProperty(names.get(table.getSelectedRow()));
-						}
+						propertyHandler = settingDefaultValuesPropertyHandler;
+
+						removeProperty(names.get(table.getSelectedRow()));
 					}
 				};
 
@@ -401,9 +398,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			if (table.getSelectedRows() == null || table.getSelectedRows().length == 0) {
 				selRow = -1;
-			}
-
-			else {
+			} else {
 				selRow = table.getSelectedRows()[0];
 			}
 

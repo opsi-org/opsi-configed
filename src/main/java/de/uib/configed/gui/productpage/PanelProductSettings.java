@@ -228,9 +228,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					if (selectedRow != lsm.getMaxSelectionIndex()) {
 						// multiselection
 
-					}
-
-					else {
+					} else {
 						Logging.debug(this, "selected " + selectedRow);
 						Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
 						Logging.debug(this, "selected  value at "
@@ -451,9 +449,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					if (val.startsWith(
 							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.FAILED)))) {
 						c.setForeground(Globals.PANEL_PRODUCT_SETTINGS_FAILED_COLOR);
-					}
-
-					else if (val.startsWith(
+					} else if (val.startsWith(
 							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.SUCCESSFUL)))) {
 						c.setForeground(Globals.OK_COLOR);
 					}
@@ -811,7 +807,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		return selectionInModelTerms;
 	}
 
-	private class StringComparator implements Comparator<String> {
+	private static class StringComparator implements Comparator<String> {
 		@Override
 		public int compare(String o1, String o2) {
 
@@ -830,7 +826,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		final StringComparator myComparator = new StringComparator();
 
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(tableProducts.getModel()) {
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableProducts.getModel()) {
 
 			@Override
 			protected boolean useToString(int column) {
@@ -1093,9 +1089,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	}
 
-	public List<String> getSelectedProducts()
-	// in model terms
-	{
+	public List<String> getSelectedProducts() {
+		// in model terms
+
 		List<Integer> selectedRows = getSelectedRowsInModelTerms();
 
 		List<String> selectedProducts = new ArrayList<>();

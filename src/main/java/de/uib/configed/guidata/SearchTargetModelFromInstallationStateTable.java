@@ -152,7 +152,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		}
 	}
 
-	boolean filtered = false;
+	boolean filtered;
 
 	@Override
 	public void setFiltered(boolean b) {

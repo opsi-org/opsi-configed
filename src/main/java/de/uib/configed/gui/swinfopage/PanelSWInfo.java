@@ -82,9 +82,9 @@ public class PanelSWInfo extends JPanel {
 
 	protected KindOfExport kindOfExport;
 
-	boolean withMsUpdates = false;
+	boolean withMsUpdates;
 	boolean withMsUpdates2 = true;
-	String exportFilename = null;
+	String exportFilename;
 
 	JCheckBox checkWithMsUpdates;
 	static final String FILTER_MS_UPDATES = "withMsUpdates";

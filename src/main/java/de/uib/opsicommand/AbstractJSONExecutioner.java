@@ -242,9 +242,8 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 
 	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
-			String[] sourceVars, String[] targetVars, Map<String, String> translateValues)
+			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
 
-	{
 		Map<String, Map<String, String>> result = new TreeMap<>();
 
 		List<Object> resultlist = null;

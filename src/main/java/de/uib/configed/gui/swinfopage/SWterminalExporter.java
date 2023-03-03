@@ -9,7 +9,7 @@ public class SWterminalExporter extends AbstractSWExporter {
 
 	javax.swing.JTable theTable;
 	ExporterToTerminal exportTable;
-	Boolean onlySelectedRows = false;
+	boolean onlySelectedRows;
 
 	public SWterminalExporter(AbstractPersistenceController controller) {
 		super(controller);

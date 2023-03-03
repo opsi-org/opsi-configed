@@ -14,8 +14,8 @@ import de.uib.utilities.logging.Logging;
 
 public class TableModelFilter {
 	TableModelFilterCondition condition;
-	boolean inverted = false;
-	boolean inUse = true;
+	boolean inverted;
+	boolean inUse;
 
 	public TableModelFilter(TableModelFilterCondition condition) {
 		this(condition, false, true);

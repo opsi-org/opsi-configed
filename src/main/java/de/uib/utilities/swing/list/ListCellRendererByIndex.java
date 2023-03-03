@@ -38,9 +38,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 	}
 
 	public ListCellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
-			String imagesBase, boolean showOnlyIcon, String tooltipPrefix)
-
-	{
+			String imagesBase, boolean showOnlyIcon, String tooltipPrefix) {
 		super(tooltipPrefix);
 		this.showOnlyIcon = showOnlyIcon;
 		mapOfStrings = mapOfStringValues;

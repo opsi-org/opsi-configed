@@ -37,7 +37,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	private OutputStream out;
 	public static final String SOME_COMMAND = "/bin/bash";
 	String currentDirectory = "";
-	boolean getCurrentDirectorySilent = false;
+	boolean getCurrentDirectorySilent;
 
 	public SSHConnectTerminal(ConfigedMain main, SSHConnectionTerminalDialog dialog) {
 		super(main);
