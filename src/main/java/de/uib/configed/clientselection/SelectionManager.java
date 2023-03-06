@@ -349,7 +349,7 @@ public class SelectionManager {
 	 * isTopOperation == true,
 	 * there are no parentheses around the whole list
 	 */
-	private List<OperationWithStatus> reverseBuild(AbstractSelectOperation operation, boolean isTopOperation) {
+	private static List<OperationWithStatus> reverseBuild(AbstractSelectOperation operation, boolean isTopOperation) {
 		LinkedList<OperationWithStatus> result = new LinkedList<>();
 		if (operation instanceof AndOperation) {
 			for (AbstractSelectOperation op : ((AndOperation) operation).getChildOperations()) {

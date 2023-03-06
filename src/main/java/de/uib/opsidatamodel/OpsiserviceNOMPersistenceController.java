@@ -7354,7 +7354,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return result;
 	}
 
-	private Object produceConfigEntry(String nomType, String key, Object value, String description) {
+	private static Object produceConfigEntry(String nomType, String key, Object value, String description) {
 		return produceConfigEntry(nomType, key, value, description, true);
 	}
 

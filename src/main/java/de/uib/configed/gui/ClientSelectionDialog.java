@@ -839,7 +839,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		contentPane.repaint();
 	}
 
-	private void showParenthesesForGroup(Deque<SimpleGroup> groups) {
+	private static void showParenthesesForGroup(Deque<SimpleGroup> groups) {
 		boolean inOr = false;
 		for (SimpleGroup group : groups) {
 			group.openParenthesis.setVisible(false);
