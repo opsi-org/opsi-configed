@@ -333,16 +333,16 @@ public final class Globals {
 	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235);
 	public static final Color defaultTableCellSelectedBgColorNotEditable = new Color(189, 207, 231);
 
-	public static final Color logColorEssential = new Color(0, 0, 0);
+	public static final Color logColorEssential = new Color(52, 204, 204);
 	public static final Color logColorCritical = new Color(255, 0, 0);
-	public static final Color logColorError = new Color(200, 100, 0);
-	public static final Color logColorWarning = new Color(20, 20, 200);
+	public static final Color logColorError = new Color(201, 0, 0);
+	public static final Color logColorWarning = new Color(246, 185, 37);
 
-	public static final Color logColorNotice = new Color(10, 150, 10);
-	public static final Color logColorInfo = new Color(50, 50, 50);
-	public static final Color logColorDebug = new Color(150, 150, 150);
-	public static final Color logColorDebug2 = new Color(150, 150, 150);
-	public static final Color logColorConfidential = new Color(150, 150, 0);
+	public static final Color logColorNotice = new Color(138, 226, 52);
+	public static final Color logColorInfo = new Color(238, 238, 236);
+	public static final Color logColorDebug = new Color(208, 215, 207);
+	public static final Color logColorTrace = new Color(139, 143, 138);
+	public static final Color logColorSecret = new Color(110, 90, 0);
 
 	public static final Color opsiLogoBlue = new Color(106, 128, 174);
 	public static final Color opsiLogoLightBlue = new Color(195, 200, 222);

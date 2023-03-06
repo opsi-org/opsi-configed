@@ -332,7 +332,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		logLevelStyles = new Style[10];
 
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
-		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential);
+		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential.darker().darker());
 
 		logLevelStyles[2] = styleContext.addStyle("loglevel critical", null);
 		StyleConstants.setForeground(logLevelStyles[2], Globals.logColorCritical);
@@ -341,22 +341,22 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		StyleConstants.setForeground(logLevelStyles[3], Globals.logColorError);
 
 		logLevelStyles[4] = styleContext.addStyle("loglevel warning", null);
-		StyleConstants.setForeground(logLevelStyles[4], Globals.logColorWarning);
+		StyleConstants.setForeground(logLevelStyles[4], Globals.logColorWarning.darker());
 
 		logLevelStyles[5] = styleContext.addStyle("loglevel notice", null);
-		StyleConstants.setForeground(logLevelStyles[5], Globals.logColorNotice);
+		StyleConstants.setForeground(logLevelStyles[5], Globals.logColorNotice.darker().darker());
 
 		logLevelStyles[6] = styleContext.addStyle("loglevel info", null);
-		StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfo);
+		StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfo.darker().darker());
 
 		logLevelStyles[7] = styleContext.addStyle("loglevel debug", null);
-		StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebug);
+		StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebug.darker().darker());
 
 		logLevelStyles[8] = styleContext.addStyle("loglevel debug2", null);
-		StyleConstants.setForeground(logLevelStyles[8], Globals.logColorDebug2);
+		StyleConstants.setForeground(logLevelStyles[8], Globals.logColorTrace.darker().darker());
 
 		logLevelStyles[9] = styleContext.addStyle("loglevel confidential", null);
-		StyleConstants.setForeground(logLevelStyles[9], Globals.logColorConfidential);
+		StyleConstants.setForeground(logLevelStyles[9], Globals.logColorSecret.darker());
 
 		searcher = new WordSearcher(jTextPane);
 		searcher.setCaseSensitivity(false);
