@@ -30,9 +30,6 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 
 	protected boolean singleLine;
 
-	protected boolean standalone = true;
-	static int count = 0;
-
 	public FEditText(String initialText, String hint) {
 		super(initialText, hint);
 		initFEditText();
@@ -116,10 +113,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
-		if (standalone) {
-			Logging.debug(getText());
-		}
+		Logging.debug(getText());
 	}
 
 	@Override

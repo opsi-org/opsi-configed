@@ -78,11 +78,13 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
+import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 /**
@@ -2527,7 +2529,7 @@ public class MainFrame extends JFrame
 
 		// tab panes
 
-		jTabbedPaneConfigPanes.addChangeListener(new javax.swing.event.ChangeListener() {
+		jTabbedPaneConfigPanes.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				// report state change request to
@@ -2654,7 +2656,7 @@ public class MainFrame extends JFrame
 				Globals.createImageIcon("images/logfile.png", ""), showLogfiles,
 				Configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
-		showLogfiles.addChangeListener(new javax.swing.event.ChangeListener() {
+		showLogfiles.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 
@@ -2700,7 +2702,7 @@ public class MainFrame extends JFrame
 		Containership csJPanelAllContent = new Containership(allPane);
 
 		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
-				new Class[] { boolean.class }, javax.swing.text.JTextComponent.class);
+				new Class[] { boolean.class }, JTextComponent.class);
 
 		// set colors of panels
 		csJPanelAllContent.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
@@ -3219,7 +3221,7 @@ public class MainFrame extends JFrame
 	public void callOpsiLicensingInfo() {
 		if (fDialogOpsiLicensingInfo == null) {
 			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
-					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false, // modal
+					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
 					new String[] { Configed.getResourceValue("Dashboard.close") },
 					new Icon[] { Globals.createImageIcon("images/cancel16_small.png", "") }, 1, 900, 680, true, null);
 		} else {

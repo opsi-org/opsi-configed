@@ -141,9 +141,7 @@ public class ExporterToCSV extends AbstractExportTable {
 									} else if (classNames.get(colI).equals("java.lang.Boolean")) {
 										boolean booleanValue = (Boolean) theTable.getValueAt(rowI, colI);
 										line.append(booleanValue);
-									}
-
-									else if (classNames.get(colI).equals("java.sql.Timestamp")) {
+									} else if (classNames.get(colI).equals("java.sql.Timestamp")) {
 										if ((theTable.getValueAt(rowI, colI) != null)
 												&& (!theTable.getValueAt(rowI, colI).equals(""))) {
 											try {

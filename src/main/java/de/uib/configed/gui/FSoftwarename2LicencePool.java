@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
 /**
@@ -337,7 +338,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		panelSWnames.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		panelSWnames.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+		panelSWnames.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting()) {

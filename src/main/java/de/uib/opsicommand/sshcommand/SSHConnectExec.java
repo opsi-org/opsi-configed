@@ -37,6 +37,8 @@ public class SSHConnectExec extends SSHConnect {
 	protected ActionListener killProcessListener;
 	protected JButton responseButton;
 
+	private int supwRetriedTimes;
+
 	public SSHConnectExec(SSHCommand sshcommand) {
 		this(null, sshcommand);
 	}
@@ -448,8 +450,6 @@ public class SSHConnectExec extends SSHConnect {
 			}
 
 		}
-
-		int supwRetriedTimes = 0;
 
 		@Override
 		public String doInBackground() throws java.net.SocketException {

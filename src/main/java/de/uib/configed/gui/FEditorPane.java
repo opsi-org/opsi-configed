@@ -86,10 +86,10 @@ public class FEditorPane extends FGeneralDialog {
 		final String HEADER = "<HTML>\n <head>\n  <title>" + title + "</title>\n  </head>\n"
 				+ "<body style=\"background-color: " + BASE_R_G + hexNoForColorizing(1) + "\">\n";
 
-		final String footer = "\n</body>\n</html>";
+		final String FOOTER = "\n</body>\n</html>";
 
 		editPane.setContentType("text/html");
-		editPane.setText(HEADER + s + footer);
+		editPane.setText(HEADER + s + FOOTER);
 		editPane.setCaretPosition(0);
 	}
 

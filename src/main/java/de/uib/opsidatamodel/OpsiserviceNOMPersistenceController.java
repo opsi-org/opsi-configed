@@ -146,8 +146,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public static final String NAME_REQUIREMENT_TYPE_NEUTRAL = "";
 	public static final String NAME_REQUIREMENT_TYPE_ON_DEINSTALL = "on_deinstall";
 
-	protected FTextArea licInfoWarnings;
-
 	protected String connectionServer;
 	private String user;
 	private String userConfigPart;
@@ -8055,8 +8053,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		getHostInfoCollections().retrieveOpsiHosts();
 		Logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
 				.getInstance(getOpsiLicencingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
-
-		licInfoWarnings = null;
 
 		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfo(), getConfigDefaultValues(),
 				!FGeneralDialogLicensingInfo.extendedView);

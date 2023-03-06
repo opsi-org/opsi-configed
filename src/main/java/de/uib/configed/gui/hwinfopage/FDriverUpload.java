@@ -2,6 +2,7 @@ package de.uib.configed.gui.hwinfopage;
 
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
+import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -51,7 +52,7 @@ public class FDriverUpload extends SecondaryFrame {
 				JPanel.class);
 
 		containerShipAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
-				javax.swing.text.JTextComponent.class);
+				JTextComponent.class);
 
 	}
 

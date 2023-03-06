@@ -510,9 +510,7 @@ public class Configed {
 				} else if (args[i].equals("--nosqlrawdata")) {
 					PersistenceControllerFactory.avoidSqlRawData = true;
 					i = i + 1;
-				}
-
-				else if (args[i].equals("--sqldirect-cleanup-auditsoftware")) {
+				} else if (args[i].equals("--sqldirect-cleanup-auditsoftware")) {
 					PersistenceControllerFactory.sqlDirect = true;
 					PersistenceControllerFactory.directmethodcall = PersistenceControllerFactory.DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE;
 					i = i + 1;

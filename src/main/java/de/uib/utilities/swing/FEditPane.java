@@ -42,6 +42,7 @@ import javax.swing.text.View;
 
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.script.CmdLauncher;
 
 public class FEditPane extends FEdit implements DocumentListener, MouseListener, MouseMotionListener {
 	public static final Dimension AREA_DIMENSION = new Dimension(600, 300);
@@ -50,12 +51,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	private JTextPane textpane;
 
 	protected LinkSearcher searcher;
-	protected de.uib.utilities.script.CmdLauncher cmdLauncher;
+	protected CmdLauncher cmdLauncher;
 
 	protected String[] linesplits;
 
 	private boolean singleLine;
-	static int count = 0;
 
 	public FEditPane(String initialText, String hint) {
 		super(initialText, hint);
@@ -146,10 +146,10 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 	}
 
-	private int startOfMarkedString(String s)
 	// return first pos in line of recognized string
 	// returns -1 if nothing is recognized
-	{
+	private int startOfMarkedString(String s) {
+
 		if (s == null) {
 			return -1;
 		}

@@ -60,6 +60,7 @@ import javax.swing.RowSorter;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -1093,8 +1094,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		resetView(viewIndex);
 	}
-
-	int shutdowncount = 0;
 
 	protected void actOnListSelection() {
 		Logging.info(this, "actOnListSelection");
@@ -4126,7 +4125,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 							reachableInfo = persist.reachableInfo(null);
 
-							javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
+							AbstractTableModel model = selectionPanel.getTableModel();
 
 							int col = model.findColumn(
 									Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
@@ -4214,7 +4213,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				// update column
 				if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientConnected"))) {
-					javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
+					AbstractTableModel model = selectionPanel.getTableModel();
 
 					int col = model
 							.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
@@ -4292,7 +4291,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 								// update column
 								if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientSessionInfo"))) {
-									javax.swing.table.AbstractTableModel model = selectionPanel.getTableModel();
+									AbstractTableModel model = selectionPanel.getTableModel();
 
 									int col = model.findColumn(Configed
 											.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));

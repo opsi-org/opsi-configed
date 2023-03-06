@@ -14,6 +14,7 @@ import java.util.TreeSet;
 
 import javax.swing.JList;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.utilities.logging.Logging;
@@ -206,7 +207,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		}
 
 		tableModel = setupTableModel(theValues, theDescriptions);
-		tableModel.fireTableChanged(new javax.swing.event.TableModelEvent(tableModel));
+		tableModel.fireTableChanged(new TableModelEvent(tableModel));
 		tableModel.fireTableStructureChanged();
 
 		jList.setListData(theValues.toArray(new String[0]));

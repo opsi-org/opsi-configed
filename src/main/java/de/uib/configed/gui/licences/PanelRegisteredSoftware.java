@@ -1,8 +1,11 @@
 
 package de.uib.configed.gui.licences;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.List;
+
+import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
@@ -93,7 +96,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 	// ListSelectionListener
 	@Override
-	public void valueChanged(javax.swing.event.ListSelectionEvent e) {
+	public void valueChanged(ListSelectionEvent e) {
 
 		if (isAwareOfSelectionListener()) {
 			Logging.debug(this, "selectionListener valueChanged, aware of selectionlistener");
@@ -102,7 +105,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 
 	}
 
-	private boolean mouseInColumnOfMarkCursor(java.awt.Point p) {
+	private boolean mouseInColumnOfMarkCursor(Point p) {
 		int mouseCol = theTable.columnAtPoint(p);
 
 		return mouseCol >= 0 && mouseCol == tableModel.getColMarkCursorRow();
@@ -111,7 +114,7 @@ public class PanelRegisteredSoftware extends PanelGenEditTable {
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		java.awt.Point mousePoint = e.getPoint();
+		Point mousePoint = e.getPoint();
 		int mouseRow = theTable.rowAtPoint(mousePoint);
 
 		if (mouseInColumnOfMarkCursor(mousePoint)) {

@@ -156,7 +156,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * 
 	 * @param javax.swing.JFrame
 	 */
-	public void setMasterFrame(javax.swing.JFrame masterFrame) {
+	public void setMasterFrame(JFrame masterFrame) {
 		this.masterFrame = masterFrame;
 	}
 

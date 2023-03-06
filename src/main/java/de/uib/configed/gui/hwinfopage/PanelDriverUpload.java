@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -439,7 +440,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		JPanel panelButtonGroup = new JPanel();
 		GroupLayout layoutButtonGroup = new GroupLayout(panelButtonGroup);
 		panelButtonGroup.setLayout(layoutButtonGroup);
-		panelButtonGroup.setBorder(new javax.swing.border.LineBorder(Globals.blueGrey, 1, true));
+		panelButtonGroup.setBorder(new LineBorder(Globals.blueGrey, 1, true));
 
 		layoutButtonGroup.setVerticalGroup(layoutButtonGroup.createSequentialGroup().addGap(vGap, vGap, vGap)
 				.addComponent(labelDriverLocationType, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)

@@ -5,6 +5,8 @@ import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.swing.SwingUtilities;
+
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
@@ -73,7 +75,7 @@ public class WaitCursor {
 				}
 			}.start();
 		} else {
-			javax.swing.SwingUtilities.invokeLater(() -> {
+			SwingUtilities.invokeLater(() -> {
 				ActivityPanel.setActing(true);
 
 				while (!ready && !allStopped) {
@@ -88,7 +90,7 @@ public class WaitCursor {
 		Logging.info(this, " stop wait cursor " + objectNo + ", was located at (" + callLocation + ")");
 		ready = true;
 
-		javax.swing.SwingUtilities.invokeLater(() -> {
+		SwingUtilities.invokeLater(() -> {
 
 			if (c != null) {
 				c.setCursor(saveCursor);

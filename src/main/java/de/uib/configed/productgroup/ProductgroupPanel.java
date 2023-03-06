@@ -902,9 +902,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		if (e.getStateChange() == ItemEvent.SELECTED) {
 			if (e.getSource() == groupsCombo) {
 				enterExistingGroup();
-			}
-
-			else if (e.getSource() == saveNameEditor) {
+			} else if (e.getSource() == saveNameEditor) {
 				enterEditGroup();
 			}
 		}

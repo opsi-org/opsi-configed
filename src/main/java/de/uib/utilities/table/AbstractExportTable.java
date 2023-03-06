@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -23,7 +24,7 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public abstract class AbstractExportTable {
-	protected javax.swing.JTable theTable;
+	protected JTable theTable;
 
 	protected List<String> classNames;
 	protected Map<String, String> metaData;
@@ -47,17 +48,17 @@ public abstract class AbstractExportTable {
 
 	DecimalFormat f = new DecimalFormat("#0.00");
 
-	protected AbstractExportTable(javax.swing.JTable table, List<String> classNames) {
+	protected AbstractExportTable(JTable table, List<String> classNames) {
 		this.theTable = table;
 		this.classNames = classNames;
 		askForOverwrite = true;
 	}
 
-	protected AbstractExportTable(javax.swing.JTable table) {
+	protected AbstractExportTable(JTable table) {
 		this(table, null);
 	}
 
-	public void setTableAndClassNames(javax.swing.JTable table, List<String> classNames) {
+	public void setTableAndClassNames(JTable table, List<String> classNames) {
 		this.theTable = table;
 		this.classNames = classNames;
 	}
@@ -70,9 +71,9 @@ public abstract class AbstractExportTable {
 		askForOverwrite = b;
 	}
 
-	public void setExcludeCols(List<Integer> excludeCols)
-	// only take into account for excel export at the moment
-	{
+	public void setExcludeCols(List<Integer> excludeCols) {
+		// only take into account for excel export at the moment
+
 		this.excludeCols = excludeCols;
 	}
 
@@ -202,9 +203,7 @@ public abstract class AbstractExportTable {
 
 					if (file.isDirectory()) {
 						filename = filename + File.separator + defaultExportFilename;
-					}
-
-					else {
+					} else {
 						if (!filename.toLowerCase().endsWith(".csv")) {
 							filename = filename + ".csv";
 						}

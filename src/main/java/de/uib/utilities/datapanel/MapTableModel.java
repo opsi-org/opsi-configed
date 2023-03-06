@@ -18,6 +18,8 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Function;
 
+import javax.swing.table.AbstractTableModel;
+
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.DataChangedObserver;
@@ -25,7 +27,7 @@ import de.uib.utilities.DataChangedSubject;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
-public class MapTableModel extends javax.swing.table.AbstractTableModel implements DataChangedSubject {
+public class MapTableModel extends AbstractTableModel implements DataChangedSubject {
 
 	protected List<DataChangedObserver> observers;
 
@@ -268,12 +270,13 @@ public class MapTableModel extends javax.swing.table.AbstractTableModel implemen
 		}
 
 		String key = null;
-		Object result = null;
 		try {
 			key = keys.get(row);
 		} catch (Exception ex) {
 			return "keys " + keys + " row " + row + " : " + ex.toString();
 		}
+
+		Object result = null;
 
 		if (col == 0) {
 			result = key;

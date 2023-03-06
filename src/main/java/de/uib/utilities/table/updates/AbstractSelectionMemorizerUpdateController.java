@@ -8,6 +8,8 @@
 
 package de.uib.utilities.table.updates;
 
+import javax.swing.JOptionPane;
+
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
@@ -34,7 +36,6 @@ public abstract class AbstractSelectionMemorizerUpdateController
 
 	@Override
 	public boolean saveChanges() {
-		boolean success = true;
 
 		WaitCursor waitCursor = new WaitCursor();
 
@@ -43,20 +44,20 @@ public abstract class AbstractSelectionMemorizerUpdateController
 			waitCursor.stop();
 			Logging.info(this, "no row selected");
 
-			javax.swing.JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
 					de.uib.configed.Configed
 							.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.text"),
 					Globals.APPNAME + "  "
 							+ de.uib.configed.Configed
 									.getResourceValue("SelectionMemorizerUpdateController.no_row_selection.title"),
-					javax.swing.JOptionPane.OK_OPTION);
+					JOptionPane.OK_OPTION);
 
 			return false;
 		}
 
 		String keyValue = keysPanel.getValueAt(keysPanel.getSelectedRow(), keyCol).toString();
 
-		success = updater.sendUpdate(keyValue, panel.getSelectedKeys());
+		boolean success = updater.sendUpdate(keyValue, panel.getSelectedKeys());
 
 		waitCursor.stop();
 

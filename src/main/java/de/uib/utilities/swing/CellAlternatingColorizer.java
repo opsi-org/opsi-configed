@@ -6,14 +6,15 @@ import java.awt.Component;
 import de.uib.configed.Globals;
 
 public final class CellAlternatingColorizer {
+
+	private static final Color selectedEven = Globals.defaultTableSelectedRowDark;
+	private static final Color selectedUneven = Globals.defaultTableSelectedRowBright;
+	private static final Color unselectedEven = Globals.defaultTableCellBgColor2;
+	private static final Color unselectedUneven = Globals.defaultTableCellBgColor1;
+
 	// private constructor to hide the implicit public one
 	private CellAlternatingColorizer() {
 	}
-
-	static Color selectedEven = Globals.defaultTableSelectedRowDark;
-	static Color selectedUneven = Globals.defaultTableSelectedRowBright;
-	static Color unselectedEven = Globals.defaultTableCellBgColor2;
-	static Color unselectedUneven = Globals.defaultTableCellBgColor1;
 
 	public static void colorize(Component cell, boolean isSelected, boolean isEven, boolean textColoring) {
 		colorize(cell, isSelected, isEven, textColoring, selectedEven, selectedUneven, unselectedEven,
@@ -33,9 +34,7 @@ public final class CellAlternatingColorizer {
 			} else {
 				cell.setBackground(selectedUnevenColor);
 			}
-		}
-
-		else {
+		} else {
 			if (isEven) {
 				cell.setBackground(unselectedEvenColor);
 			} else {
