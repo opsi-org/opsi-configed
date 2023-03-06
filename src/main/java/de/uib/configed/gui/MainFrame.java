@@ -3165,14 +3165,14 @@ public class MainFrame extends JFrame
 		info.setVisible(true);
 	}
 
-	private void showHealthDataAction() {
+	private static void showHealthDataAction() {
 		HealthCheckDialog dialog = new HealthCheckDialog();
 		dialog.setupLayout();
 		dialog.setMessage(HealthInfo.getHealthData(false));
 		dialog.setVisible(true);
 	}
 
-	private void saveHealthDataToFile() {
+	private static void saveHealthDataToFile() {
 		File healthDataFile = new File(Configed.savedStatesLocationName, Globals.HEALTH_CHECK_LOG_FILE_NAME);
 
 		if (healthDataFile.exists() && healthDataFile.length() != 0) {

@@ -59,7 +59,7 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 
 	}
 
-	private int nextPartAt(String remainder) {
+	private static int nextPartAt(String remainder) {
 		int posDot = remainder.indexOf(".");
 		if (posDot == -1 || remainder.length() == posDot + 1) {
 			return -1;

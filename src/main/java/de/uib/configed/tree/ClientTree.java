@@ -460,7 +460,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return n;
 	}
 
-	private GroupNode produceGroupNode(Object x, String description) {
+	private static GroupNode produceGroupNode(Object x, String description) {
 		GroupNode n = new GroupNode(x, description);
 		n.setToolTipText(description);
 		n.setEnabled(true);
@@ -1441,7 +1441,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		repaint();
 	}
 
-	private List<String> enumerateLeafNodes(DefaultMutableTreeNode node) {
+	private static List<String> enumerateLeafNodes(DefaultMutableTreeNode node) {
 		List<String> result = new ArrayList<>();
 
 		Enumeration<TreeNode> e = node.breadthFirstEnumeration();

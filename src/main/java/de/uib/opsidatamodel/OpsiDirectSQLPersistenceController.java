@@ -71,7 +71,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		return opsiHosts;
 	}
 
-	private String giveWhereOR(String colName, String[] values) {
+	private static String giveWhereOR(String colName, String[] values) {
 		if (values == null || values.length == 0) {
 			return "true";
 		}
@@ -146,7 +146,7 @@ public class OpsiDirectSQLPersistenceController extends OpsiserviceRawDataPersis
 		return result;
 	}
 
-	private String sqlQuote(String r) {
+	private static String sqlQuote(String r) {
 		String s = r.replace("'", "''");
 		return s.replace("\\", "\\\\");
 	}

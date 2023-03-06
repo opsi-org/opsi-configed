@@ -45,12 +45,7 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class ControllerHWinfoColumnConfiguration {
-	public PanelGenEditTable panel;
-	private GenTableModel model;
-	TableUpdateCollection updateCollection;
 
-	List<String> columnNames;
-	List<String> classNames;
 	public static final String COL_LINE_NO = Configed.getResourceValue("HWinfoColumnConfiguration.colLineNo");
 	public static final String COL_HOST_VS_ITEM_ASSIGNED = Configed
 			.getResourceValue("HWinfoColumnConfiguration.colHostVsItemAssigned");
@@ -66,6 +61,15 @@ public class ControllerHWinfoColumnConfiguration {
 	public static final String COL_HW_CLASS = Configed.getResourceValue("HWinfoColumnConfiguration.colHwClass");
 	public static final String COL_LINUX_QUERY = Configed.getResourceValue("HWinfoColumnConfiguration.colLinuxQuery");
 	public static final String COL_WMI_QUERY = Configed.getResourceValue("HWinfoColumnConfiguration.colWMIQuery");
+
+	private static final int KEY_COL = 0;
+
+	public PanelGenEditTable panel;
+	private GenTableModel model;
+	TableUpdateCollection updateCollection;
+
+	List<String> columnNames;
+	List<String> classNames;
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
@@ -132,8 +136,6 @@ public class ControllerHWinfoColumnConfiguration {
 
 	ConfigedMain main;
 	protected AbstractPersistenceController persist;
-
-	private static final int KEY_COL = 0;
 
 	public ControllerHWinfoColumnConfiguration(ConfigedMain main, AbstractPersistenceController persist) {
 		this.main = main;
@@ -215,10 +217,7 @@ public class ControllerHWinfoColumnConfiguration {
 				// tableProvider
 
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, this::getHwColumnConfig)),
-
-				KEY_COL,
-
-				new int[] { KEY_COL },
+				KEY_COL, new int[] { KEY_COL },
 
 				// table model listener
 				panel,
@@ -326,7 +325,7 @@ public class ControllerHWinfoColumnConfiguration {
 		tableConfigUpdates.put(col.dbColumnName, use);
 	}
 
-	private String formatLineNo(int no) {
+	private static String formatLineNo(int no) {
 		return "(" + no + ")";
 	}
 

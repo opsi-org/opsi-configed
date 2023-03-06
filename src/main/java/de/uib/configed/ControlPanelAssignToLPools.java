@@ -272,14 +272,14 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	}
 
-	private String produceCount(Integer count) {
+	private static String produceCount(Integer count) {
 		if (count == null || count < 0) {
 			return "";
 		}
 		return "" + count;
 	}
 
-	private String produceCount(Integer count, boolean licencePoolNull) {
+	private static String produceCount(Integer count, boolean licencePoolNull) {
 		if (count == null || licencePoolNull || count < 0) {
 			return "";
 		}

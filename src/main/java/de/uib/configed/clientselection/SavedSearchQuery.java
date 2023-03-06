@@ -71,7 +71,7 @@ public class SavedSearchQuery {
 		return true;
 	}
 
-	private void showUsage() {
+	private static void showUsage() {
 		Logging.debug(USAGE);
 	}
 
@@ -195,7 +195,7 @@ public class SavedSearchQuery {
 		}
 	}
 
-	private void printResult(List<String> result) {
+	private static void printResult(List<String> result) {
 		for (String line : result) {
 			Logging.debug(line);
 		}

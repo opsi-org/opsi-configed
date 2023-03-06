@@ -49,9 +49,9 @@ import de.uib.utilities.swing.SeparatedDocument;
 
 public final class NewClientDialog extends FGeneralDialog {
 
+	private static NewClientDialog instance;
+
 	private ConfigedMain main;
-	private JPanel panel;
-	private GroupLayout gpl;
 	private JTextField jTextHostname;
 
 	private JComboBox<String> jComboDomain;
@@ -73,20 +73,9 @@ public final class NewClientDialog extends FGeneralDialog {
 	private JCheckBox jCheckShutdownInstall;
 	private List<String> depots;
 
-	private JLabel jCSVTemplateLabel;
-	private JButton jCSVTemplateButton;
-	private JLabel jImportLabel;
-	private JButton jImportButton;
-
-	private List<String> groupList;
-	private List<String> localbootProducts;
-	private List<String> netbootProducts;
-
-	private static NewClientDialog instance;
 	private List<String> domains;
 	private boolean uefiboot;
 	private boolean wanConfig;
-	private boolean multidepot;
 
 	private List<String> existingHostNames;
 
@@ -108,9 +97,6 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		jButton2.setRunningActionIcon("images/waitingcircle_16.png");
 
-		if (depots != null && depots.size() > 1) {
-			multidepot = true;
-		}
 		this.depots = depots;
 
 		init();
@@ -132,7 +118,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		return instance;
 	}
 
-	public void closeNewClientDialog() {
+	public static void closeNewClientDialog() {
 		if (instance != null) {
 			instance.setVisible(false);
 		}
@@ -154,7 +140,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		this.existingHostNames = existingHostNames;
 	}
 
-	public void setGroupList(List<String> groupList) {
+	public void setGroupList(Iterable<String> groupList) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboPrimaryGroup.getModel();
 		model.removeAllElements();
 		model.addElement(null);
@@ -166,7 +152,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	}
 
-	public void setProductNetbootList(List<String> productList) {
+	public void setProductNetbootList(Iterable<String> productList) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboNetboot.getModel();
 		model.removeAllElements();
 		model.addElement(null);
@@ -177,7 +163,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		jComboNetboot.setSelectedIndex(0);
 	}
 
-	public void setProductLocalbootList(List<String> productList) {
+	public void setProductLocalbootList(Iterable<String> productList) {
 		DefaultComboBoxModel<String> model = (DefaultComboBoxModel<String>) jComboLocalboot.getModel();
 		model.removeAllElements();
 		model.addElement(null);
@@ -199,17 +185,17 @@ public final class NewClientDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		panel = new JPanel();
-		gpl = new GroupLayout(panel);
+		JPanel panel = new JPanel();
+		GroupLayout gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
 		panel.setBackground(Globals.BACKGROUND_COLOR_7);
 
-		jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
-		jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
+		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
+		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
 		jCSVTemplateButton.addActionListener((ActionEvent e) -> createCSVTemplate());
 
-		jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
-		jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
+		JLabel jImportLabel = new JLabel(Configed.getResourceValue("NewClientDialog.importLabel"));
+		JButton jImportButton = new JButton(Configed.getResourceValue("NewClientDialog.importButton"));
 		jImportButton.addActionListener((ActionEvent e) -> importCSV());
 
 		JLabel jLabelHostname = new JLabel();
@@ -618,9 +604,6 @@ public final class NewClientDialog extends FGeneralDialog {
 		while (iter.hasNext()) {
 			List<Object> client = iter.next();
 
-			String hostname = (String) client.get(0);
-			String selectedDomain = (String) client.get(1);
-
 			if (!isBoolean((String) client.get(12)) || !isBoolean((String) client.get(13))
 					|| !isBoolean((String) client.get(14))) {
 				FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(),
@@ -637,6 +620,9 @@ public final class NewClientDialog extends FGeneralDialog {
 				return;
 			}
 
+			String hostname = (String) client.get(0);
+			String selectedDomain = (String) client.get(1);
+
 			if (checkClientCorrectness(hostname, selectedDomain)) {
 				treatSelectedDomainForNewClient(selectedDomain);
 				modifiedClients.add(client);
@@ -646,7 +632,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		main.createClients(modifiedClients);
 	}
 
-	private boolean isBoolean(String bool) {
+	private static boolean isBoolean(String bool) {
 		return bool.isEmpty() || bool.equalsIgnoreCase(Boolean.TRUE.toString())
 				|| bool.equalsIgnoreCase(Boolean.FALSE.toString());
 	}
@@ -876,7 +862,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		return csvImportDataDialog;
 	}
 
-	public void createCSVTemplate() {
+	public static void createCSVTemplate() {
 		List<String> columnNames = new ArrayList<>();
 
 		columnNames.add("hostname");

@@ -31,7 +31,7 @@ public class ListMerger extends ArrayList {
 		havingCommonValue = false;
 	}
 
-	private boolean equals(List list1, List list2) {
+	private static boolean equals(List list1, List list2) {
 
 		if (list1 == null && list2 == null) {
 			return true;

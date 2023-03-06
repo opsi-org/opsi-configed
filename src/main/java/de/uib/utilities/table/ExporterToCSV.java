@@ -33,7 +33,7 @@ public class ExporterToCSV extends AbstractExportTable {
 
 	}
 
-	private String removeStringDelimiter(Object value) {
+	private static String removeStringDelimiter(Object value) {
 		if (value == null) {
 			return "";
 		}
@@ -41,7 +41,7 @@ public class ExporterToCSV extends AbstractExportTable {
 		return ((String) value).replace(STRING_DELIMITER, '\'');
 	}
 
-	private String removeSeparatorChar(Object value) {
+	private static String removeSeparatorChar(Object value) {
 		if (value == null) {
 			return "";
 		}

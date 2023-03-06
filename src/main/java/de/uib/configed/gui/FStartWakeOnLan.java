@@ -123,7 +123,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		spinnerMinute.setEnabled(false);
 	}
 
-	private String formatNaturalNumber(long n) {
+	private static String formatNaturalNumber(long n) {
 		if (n < 10) {
 			return "0" + n;
 		} else {

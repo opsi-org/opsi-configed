@@ -526,7 +526,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		}.start();
 	}
 
-	private String checkVersion(String v, String compareWith, String overwriteWith) {
+	private static String checkVersion(String v, String compareWith, String overwriteWith) {
 		if (v.equals(compareWith)) {
 			return overwriteWith;
 		}

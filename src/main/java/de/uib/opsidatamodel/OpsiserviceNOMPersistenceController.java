@@ -1726,7 +1726,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return result;
 	}
 
-	private Object createUefiJSONEntry(String clientId, String val) {
+	private static Object createUefiJSONEntry(String clientId, String val) {
 		Map<String, Object> item = createNOMitem("ConfigState");
 		List<String> values = new ArrayList<>();
 		values.add(val);
@@ -2086,7 +2086,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// hostControl methods
-	private List<String> collectErrorsFromResponsesByHost(Map<String, Object> responses, String callingMethodName) {
+	private static List<String> collectErrorsFromResponsesByHost(Map<String, Object> responses,
+			String callingMethodName) {
 		List<String> errors = new ArrayList<>();
 
 		for (Entry<String, Object> response : responses.entrySet()) {
@@ -2492,7 +2493,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		fProductGroup2Members = null;
 	}
 
-	private Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
+	private static Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
 			String originVar, String imageVar) {
 		Map<String, Set<String>> result = new TreeMap<>();
 
@@ -2857,7 +2858,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// partial version of produceHwAuditDeviceClasses()
-	private List<String> produceHwClasses(List<Map<String, List<Map<String, Object>>>> hwAuditConf) {
+	private static List<String> produceHwClasses(List<Map<String, List<Map<String, Object>>>> hwAuditConf) {
 		List<String> result = new ArrayList<>();
 
 		for (Map<String, List<Map<String, Object>>> hwAuditClass : hwAuditConf) {
@@ -7156,7 +7157,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		exec.doCall(omc);
 	}
 
-	private List<String> getPossibleValuesProductOnClientDisplayFields() {
+	private static List<String> getPossibleValuesProductOnClientDisplayFields() {
 		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add("productId");
 		possibleValues.add(ProductState.KEY_PRODUCT_NAME);
@@ -7172,7 +7173,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return possibleValues;
 	}
 
-	private List<String> getDefaultValuesProductOnClientDisplayFields() {
+	private static List<String> getDefaultValuesProductOnClientDisplayFields() {
 		List<String> result = new ArrayList<>();
 
 		result.add("productId");
@@ -7357,7 +7358,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return produceConfigEntry(nomType, key, value, description, true);
 	}
 
-	private Object produceConfigEntry(String nomType, String key, Object value, String description, boolean editable) {
+	private static Object produceConfigEntry(String nomType, String key, Object value, String description,
+			boolean editable) {
 		List<Object> possibleValues = new ArrayList<>();
 		possibleValues.add(value);
 

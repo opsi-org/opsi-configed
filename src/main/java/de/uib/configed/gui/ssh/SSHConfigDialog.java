@@ -35,18 +35,9 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 
 public final class SSHConfigDialog extends FGeneralDialog {
-	private JPanel connectionPanel = new JPanel();
-	private JPanel settingsPanel = new JPanel();
-	private JPanel buttonPanel = new JPanel();
 
 	private static JCheckBox jCheckBoxDefault;
 	private static JCheckBox jCheckBoxUseKeyFile;
-	private JCheckBox jCheckBoxUseOutputColor;
-	private JCheckBox jCheckBoxExecInBackground;
-	private JButton jButtonSave;
-	private JButton jButtonKill;
-
-	private JLabel jLabelConnectionState = new JLabel();
 
 	private static JComboBox<String> jComboBoxHost;
 	private static JTextField jTextFieldKeyFile;
@@ -55,9 +46,21 @@ public final class SSHConfigDialog extends FGeneralDialog {
 	private static JTextField jTextFieldPort;
 	private static JPasswordField jTextFieldPassword;
 	private static boolean jComboBoxUseDefaultState;
-	private ConfigedMain configedMain;
 	private static SSHConfigDialog instance;
 	private static SSHConnectionInfo connectionInfo;
+
+	private ConfigedMain configedMain;
+
+	private JPanel connectionPanel = new JPanel();
+	private JPanel settingsPanel = new JPanel();
+	private JPanel buttonPanel = new JPanel();
+
+	private JCheckBox jCheckBoxUseOutputColor;
+	private JCheckBox jCheckBoxExecInBackground;
+	private JButton jButtonSave;
+	private JButton jButtonKill;
+
+	private JLabel jLabelConnectionState = new JLabel();
 
 	private SSHConfigDialog(ConfigedMain cmain) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHConfig"), false);
@@ -576,7 +579,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		setComponentsEditable(value);
 	}
 
-	public void setComponentsEditable(boolean value) {
+	public static void setComponentsEditable(boolean value) {
 		jComboBoxHost.setEnabled(value);
 		jTextFieldPort.setEnabled(value);
 		jTextFieldUser.setEnabled(value);
@@ -619,9 +622,9 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		if (jCheckBoxDefault.isSelected()) {
 			Logging.info(this, "doAction3  cb_useDefault.isSelected true");
-			if (!jComboBoxUseDefaultState)
-			// state has changed
-			{
+			if (!jComboBoxUseDefaultState) {
+				// state has changed
+
 				connectionInfo.setUserData(ConfigedMain.host, ConfigedMain.user, ConfigedMain.password,
 						SSHConnect.PORT_SSH);
 			}

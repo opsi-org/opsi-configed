@@ -391,7 +391,7 @@ public class BackendMySQL {
 
 	}
 
-	private Type getType(JSONObject json) {
+	private static Type getType(JSONObject json) {
 		try {
 			switch (json.getString(MySQL.KEY_OPERATION)) {
 			case "OrOperation":
@@ -404,7 +404,7 @@ public class BackendMySQL {
 				return Type.NEW;
 			}
 		} catch (JSONException e) {
-			Logging.warning("we did get type of operation from " + json);
+			Logging.warning("we did get type of operation from " + json, e);
 			return Type.NEW;
 		}
 	}

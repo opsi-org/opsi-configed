@@ -94,8 +94,9 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 						if (loadMissingDocs) {
 							for (int logNo = 0; logNo < idents.length; logNo++) {
-								if (textPanes[logNo].lines.length <= 1)// empty
-								{
+								if (textPanes[logNo].lines.length <= 1) {
+									// empty
+
 									loadDocument(idents[logNo]);
 								}
 
@@ -120,9 +121,9 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 	}
 
-	public void loadDocument(String ident)
 	// override in subclasses
-	{
+	public void loadDocument(String ident) {
+
 		Logging.debug(this, "loadDocument ident " + ident);
 	}
 
@@ -195,7 +196,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		return fileName;
 	}
 
-	private void saveToFile(String fn, String[] lines) {
+	private static void saveToFile(String fn, String[] lines) {
 		FileWriter fWriter = null;
 		try {
 			fWriter = new FileWriter(fn);
@@ -256,7 +257,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 		}
 	}
 
-	private void saveToZipFile(String pn, String fn, String[] lines) {
+	private static void saveToZipFile(String pn, String fn, String[] lines) {
 
 		byte[] crlf = new byte[2];
 		crlf[0] = '\r';

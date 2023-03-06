@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.print.PrinterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -34,6 +35,7 @@ import javax.swing.DropMode;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -77,7 +79,70 @@ import de.uib.utilities.thread.WaitCursor;
 
 public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
 		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
-	javax.swing.JFrame masterFrame = ConfigedMain.getMainFrame();
+
+	public static final int POPUP_SEPARATOR = PopupMenuTrait.POPUP_SEPARATOR; // 0
+	public static final int POPUP_DELETE_ROW = 1;
+
+	public static final int POPUP_CANCEL = 3;
+
+	public static final int POPUP_RELOAD = PopupMenuTrait.POPUP_RELOAD; // 4
+
+	public static final int POPUP_SORT_AGAIN = 5;
+
+	public static final int POPUP_SAVE = PopupMenuTrait.POPUP_SAVE; // 8
+
+	public static final int POPUP_NEW_ROW = 11;
+	public static final int POPUP_COPY_ROW = 12;
+	public static final int POPUP_FLOATINGCOPY = PopupMenuTrait.POPUP_FLOATINGCOPY; // 14
+
+	public static final int POPUP_PDF = PopupMenuTrait.POPUP_PDF; // 21
+
+	public static final int POPUP_EXPORT_CSV = PopupMenuTrait.POPUP_EXPORT_CSV; // 23
+	public static final int POPUP_EXPORT_SELECTED_CSV = PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV; // 24
+
+	public static final int POPUP_PRINT = PopupMenuTrait.POPUP_PRINT; // 30
+
+	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PDF = new int[] { POPUP_RELOAD, POPUP_PDF, POPUP_SORT_AGAIN };
+	protected static final int[] POPUPS_MINIMAL = new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN
+
+	};
+
+	private static final int[] POPUPS_EXPORT = new int[] { POPUP_SEPARATOR, POPUP_EXPORT_CSV,
+			POPUP_EXPORT_SELECTED_CSV, };
+
+	private static final Map<Integer, String> keyNames = new HashMap<Integer, String>() {
+		@Override
+		public String put(Integer key, String value) {
+			// checking that not the same int key is used twice
+
+			if (get(key) != null) {
+				Logging.error("duplicate key setting " + key + ", until now " + get(key) + " now " + value);
+			}
+			return super.put(key, value);
+		}
+	};
+
+	protected List<Integer> internalpopups;
+
+	protected List<JMenuItem> menuItemsRequesting1SelectedLine;
+	protected List<JMenuItem> menuItemsRequestingMultiSelectedLines;
+
+	JMenuItemFormatted menuItemDeleteRelation;
+	JMenuItemFormatted menuItemSave;
+	JMenuItemFormatted menuItemCancel;
+	JMenuItemFormatted menuItemReload;
+	JMenuItemFormatted menuItemSortAgain;
+	JMenuItemFormatted menuItemPrint;
+	JMenuItemFormatted menuItemExportExcel;
+	JMenuItemFormatted menuItemExportSelectedExcel;
+	JMenuItemFormatted menuItemExportCSV;
+	JMenuItemFormatted menuItemExportSelectedCSV;
+	JMenuItemFormatted menuItemNewRow;
+	JMenuItemFormatted menuItemCopyRelation;
+	JMenuItemFormatted menuItemFloatingCopy;
+	JMenuItemFormatted menuItemPDF;
+
+	JFrame masterFrame = ConfigedMain.getMainFrame();
 
 	protected Comparator[] comparators;
 
@@ -138,95 +203,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected Map<Integer, SortOrder> specialSortDescriptor;
 
 	private AbstractExportTable exportTable;
-
-	public static final int POPUP_SEPARATOR = PopupMenuTrait.POPUP_SEPARATOR; // 0
-	public static final int POPUP_DELETE_ROW = 1;
-
-	public static final int POPUP_CANCEL = 3;
-
-	public static final int POPUP_RELOAD = PopupMenuTrait.POPUP_RELOAD; // 4
-
-	public static final int POPUP_SORT_AGAIN = 5;
-
-	public static final int POPUP_SAVE = PopupMenuTrait.POPUP_SAVE; // 8
-
-	public static final int POPUP_NEW_ROW = 11;
-	public static final int POPUP_COPY_ROW = 12;
-	public static final int POPUP_FLOATINGCOPY = PopupMenuTrait.POPUP_FLOATINGCOPY; // 14
-
-	public static final int POPUP_PDF = PopupMenuTrait.POPUP_PDF; // 21
-
-	public static final int POPUP_EXPORT_CSV = PopupMenuTrait.POPUP_EXPORT_CSV; // 23
-	public static final int POPUP_EXPORT_SELECTED_CSV = PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV; // 24
-
-	public static final int POPUP_PRINT = PopupMenuTrait.POPUP_PRINT; // 30
-
-	private static final Map<Integer, String> keyNames = new HashMap<Integer, String>() {
-		@Override
-		public String put(Integer key, String value)
-		// checking that not the same int key is used twice
-		{
-			if (get(key) != null) {
-				Logging.error("duplicate key setting " + key + ", until now " + get(key) + " now " + value);
-			}
-			return super.put(key, value);
-		}
-	};
-
-	static {
-		keyNames.put(POPUP_DELETE_ROW, "POPUP_DELETE_ROW");
-		keyNames.put(POPUP_SAVE, "POPUP_SAVE");
-		keyNames.put(POPUP_CANCEL, "POPUP_CANCEL");
-		keyNames.put(POPUP_RELOAD, "POPUP_RELOAD");
-		keyNames.put(POPUP_SORT_AGAIN, "POPUP_SORT_AGAIN");
-		keyNames.put(POPUP_PRINT, "POPUP_PRINT");
-
-		keyNames.put(POPUP_EXPORT_CSV, "POPUP_EXPORT_CSV");
-		keyNames.put(POPUP_EXPORT_SELECTED_CSV, "POPUP_EXPORT_SELECTED_CSV");
-		keyNames.put(POPUP_NEW_ROW, "POPUP_NEW_ROW");
-		keyNames.put(POPUP_COPY_ROW, "POPUP_COPY_ROW");
-		keyNames.put(POPUP_FLOATINGCOPY, "POPUP_FLOATINGCOPY");
-		keyNames.put(POPUP_PDF, "POPUP_PDF");
-
-	}
-
-	private static final List<String> giveMenuitemNames(List<Integer> popups) {
-		List<String> result = new ArrayList<>();
-
-		for (int el : popups) {
-			result.add(keyNames.get(el));
-		}
-
-		return result;
-	}
-
-	public static final int[] POPUPS_NOT_EDITABLE_TABLE_PDF = new int[] { POPUP_RELOAD, POPUP_PDF, POPUP_SORT_AGAIN };
-	protected static final int[] POPUPS_MINIMAL = new int[] { POPUP_RELOAD, POPUP_SORT_AGAIN
-
-	};
-
-	private static final int[] POPUPS_EXPORT = new int[] { POPUP_SEPARATOR, POPUP_EXPORT_CSV,
-			POPUP_EXPORT_SELECTED_CSV, };
-
-	protected List<Integer> internalpopups;
-
-	JMenuItemFormatted menuItemDeleteRelation;
-	JMenuItemFormatted menuItemSave;
-	JMenuItemFormatted menuItemCancel;
-	JMenuItemFormatted menuItemReload;
-	JMenuItemFormatted menuItemSortAgain;
-	JMenuItemFormatted menuItemPrint;
-	JMenuItemFormatted menuItemExportExcel;
-	JMenuItemFormatted menuItemExportSelectedExcel;
-	JMenuItemFormatted menuItemExportCSV;
-	JMenuItemFormatted menuItemExportSelectedCSV;
-	JMenuItemFormatted menuItemNewRow;
-	JMenuItemFormatted menuItemCopyRelation;
-	JMenuItemFormatted menuItemFloatingCopy;
-	JMenuItemFormatted menuItemPDF;
-
-	protected List<JMenuItem> menuItemsRequesting1SelectedLine;
-	protected List<JMenuItem> menuItemsRequestingMultiSelectedLines;
 
 	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
@@ -304,6 +280,16 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		this(0);
 	}
 
+	private static final List<String> giveMenuitemNames(List<Integer> popups) {
+		List<String> result = new ArrayList<>();
+
+		for (int el : popups) {
+			result.add(keyNames.get(el));
+		}
+
+		return result;
+	}
+
 	protected Object modifyHeaderValue(Object value) {
 		return value;
 	}
@@ -313,7 +299,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * 
 	 * @param javax.swing.JFrame
 	 */
-	public void setMasterFrame(javax.swing.JFrame masterFrame) {
+	public void setMasterFrame(JFrame masterFrame) {
 		this.masterFrame = masterFrame;
 		if (searchPane != null) {
 			searchPane.setMasterFrame(masterFrame);
@@ -469,7 +455,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 								.addComponent(titlePane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										Short.MAX_VALUE))
-						.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, maxTableWidth)// Short.MAX_VALUE)
+						.addComponent(searchPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, maxTableWidth)
 						.addComponent(scrollpane, GroupLayout.DEFAULT_SIZE, 100, maxTableWidth)
 						.addGroup(layout.createSequentialGroup()
 								.addComponent(buttonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -589,7 +575,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		((PanelLinedComponents) titlePane).setComponents(components, height);
 	}
 
-	private List<Integer> supplementBefore(int insertpoint, final int[] injectKeys, final List<Integer> listOfKeys) {
+	private static List<Integer> supplementBefore(int insertpoint, final int[] injectKeys,
+			final List<Integer> listOfKeys) {
 		ArrayList<Integer> augmentedList = new ArrayList<>();
 
 		boolean found = false;
@@ -707,8 +694,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemPrint.addActionListener((ActionEvent actionEvent) -> {
 					try {
 						theTable.print();
-					} catch (Exception ex) {
-						Logging.error("Printing error " + ex);
+					} catch (PrinterException ex) {
+						Logging.error("Printing error ", ex);
 					}
 				});
 

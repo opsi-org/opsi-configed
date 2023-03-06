@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import de.uib.utilities.logging.Logging;
@@ -199,8 +200,8 @@ public class MySQL {
 					break;
 				}
 			}
-		} catch (Exception e) {
-			Logging.warning(this, "we did not interpret element selection " + e);
+		} catch (JSONException e) {
+			Logging.warning(this, "we did not interpret element selection ", e);
 		}
 
 		return "";
@@ -229,7 +230,7 @@ public class MySQL {
 		return scope + "." + spaltenName + " NOT LIKE '' AND " + scope + "." + spaltenName;
 	}
 
-	private Map<String, Object> findColumnInTable(String column, List<Map<String, Object>> values) {
+	private static Map<String, Object> findColumnInTable(String column, List<Map<String, Object>> values) {
 		for (int i = 0; i < values.size(); i++) {
 			if (values.get(i).get("UI").equals(column)) {
 				return values.get(i);
@@ -250,7 +251,7 @@ public class MySQL {
 		return new HashMap<>();
 	}
 
-	private String getOperationFromElement(String operation) {
+	private static String getOperationFromElement(String operation) {
 
 		switch (operation) {
 		case "BigIntLessThanOperation":

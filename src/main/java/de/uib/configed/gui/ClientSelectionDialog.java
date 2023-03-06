@@ -725,7 +725,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	}
 
 	/* Gets the selected operation and adds the given data to it. */
-	private AbstractSelectOperation getOperation(SimpleGroup group) {
+	private static AbstractSelectOperation getOperation(SimpleGroup group) {
 		int operationIndex;
 		if (group.operationComponent instanceof JComboBox) {
 			operationIndex = ((JComboBox<?>) group.operationComponent).getSelectedIndex();
@@ -806,7 +806,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		return info;
 	}
 
-	private SelectionManager.ConnectionStatus getStatus(boolean andSelected, boolean notSelected) {
+	private static SelectionManager.ConnectionStatus getStatus(boolean andSelected, boolean notSelected) {
 		SelectionManager.ConnectionStatus conStatus;
 		if (andSelected) {
 			if (notSelected) {

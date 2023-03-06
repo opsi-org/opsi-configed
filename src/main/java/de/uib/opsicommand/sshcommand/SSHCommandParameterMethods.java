@@ -76,6 +76,9 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	public static final String METHOD_OPTION_SELECTION = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.optionSelection");
 
+	private static final String BRACKETS_NONE = " x ";
+	private static final String BRACKETS_SQUARE = "[x]";
+
 	static final Map<String, String> methods = new HashMap<>();
 
 	private ConfigedMain main;
@@ -234,7 +237,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 
 	}
 
-	public String getTranslatedMethod(String localeMethod) {
+	public static String getTranslatedMethod(String localeMethod) {
 		String method = "";
 		for (Map.Entry<String, String> entry : methods.entrySet()) {
 			if (entry.getKey().equals(localeMethod)) {
@@ -336,9 +339,6 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		}
 		return formatedResult;
 	}
-
-	private static final String BRACKETS_NONE = " x ";
-	private static final String BRACKETS_SQUARE = "[x]";
 
 	private String createFormattedDataSourceString(String[] strArr, String beginEndElement, String beginEndString,
 			String separator) {

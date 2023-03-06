@@ -154,13 +154,14 @@ public class PanelHWByAuditDriver extends JPanel {
 		}
 	}
 
-	private String eliminateIllegalPathChars(String path) {
-		final String TO_REPLACE = "<>?\":|\\/*";
-		final char REPLACEMENT = '_';
+	private static String eliminateIllegalPathChars(String path) {
 
 		if (path == null) {
 			return null;
 		}
+
+		final String TO_REPLACE = "<>?\":|\\/*";
+		final char REPLACEMENT = '_';
 
 		char[] chars = path.toCharArray();
 		for (int i = 0; i < chars.length; i++) {

@@ -28,6 +28,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -49,14 +50,15 @@ import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.JMenuItemFormatted;
 
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
-	javax.swing.JFrame masterFrame = ConfigedMain.getMainFrame();
+	private static final int BLINK_RATE = 0;
+
+	JFrame masterFrame = ConfigedMain.getMainFrame();
 
 	JTextField fieldSearch;
 
 	private boolean searchActive;
 	protected boolean filtering;
 
-	int blinkrate = 0;
 	JComboBox<String> comboSearchFields;
 	JComboBoxToolTip comboSearchFieldsMode;
 
@@ -417,7 +419,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.setFont(Globals.defaultFontBig);
 		fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 
-		fieldSearch.getCaret().setBlinkRate(blinkrate);
+		fieldSearch.getCaret().setBlinkRate(BLINK_RATE);
 		fieldSearch.setToolTipText(Configed.getResourceValue("SearchPane.searchField.toolTip"));
 
 		fieldSearch.getDocument().addDocumentListener(this);

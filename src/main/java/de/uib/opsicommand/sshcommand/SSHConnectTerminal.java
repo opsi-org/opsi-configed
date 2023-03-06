@@ -29,13 +29,15 @@ import de.uib.configed.gui.ssh.SSHConnectionTerminalDialog;
 import de.uib.utilities.logging.Logging;
 
 public class SSHConnectTerminal extends SSHConnect {
+
+	public static final String SOME_COMMAND = "/bin/bash";
+
 	Session session;
 	ChannelShell channel;
 	private SSHConnectionTerminalDialog dialog;
 	private KeyListener inputKeyListener;
 	private ActionListener connectionKeyListener;
 	private OutputStream out;
-	public static final String SOME_COMMAND = "/bin/bash";
 	String currentDirectory = "";
 	boolean getCurrentDirectorySilent;
 
@@ -312,7 +314,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		return result;
 	}
 
-	private List<String> getList(String str) {
+	private static List<String> getList(String str) {
 		if (str.equals("")) {
 			return new ArrayList<>();
 		}

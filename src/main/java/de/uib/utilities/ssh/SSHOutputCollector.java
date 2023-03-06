@@ -17,19 +17,19 @@ public final class SSHOutputCollector {
 		return instance;
 	}
 
-	public void appendValue(final String value) {
+	public static void appendValue(final String value) {
 		values.add(value);
 	}
 
-	public void removeValue(final String value) {
+	public static void removeValue(final String value) {
 		values.remove(value);
 	}
 
-	public void removeAllValues() {
+	public static void removeAllValues() {
 		values.clear();
 	}
 
-	public List<String> getValues() {
+	public static List<String> getValues() {
 		return values;
 	}
 

@@ -199,7 +199,7 @@ public class ProductView implements View {
 		productStatusComparison.display();
 	}
 
-	private void bindDataToListView(List<String> data, ListView<String> view, TextField searchbar) {
+	private static void bindDataToListView(List<String> data, ListView<String> view, TextField searchbar) {
 		if (data == null || data.isEmpty()) {
 			return;
 		}

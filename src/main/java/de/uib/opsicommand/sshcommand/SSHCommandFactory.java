@@ -253,7 +253,7 @@ public final class SSHCommandFactory {
 	 * @param c   (commands): LinkedList<String>
 	 * @return new SSHCommand_Template
 	 **/
-	public SSHCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
+	public static SSHCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
 			List<String> c) {
 
 		// Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
@@ -417,7 +417,7 @@ public final class SSHCommandFactory {
 	 * @param SSHCommandTemplate
 	 * @return Map<String,Object> command
 	 **/
-	private Map<String, Object> buildCommandMap(SSHCommandTemplate c) {
+	private static Map<String, Object> buildCommandMap(SSHCommandTemplate c) {
 		Map<String, Object> com = new HashMap<>();
 
 		com.put(COMMAND_MAP_MENU_TEXT, c.getMenuText());

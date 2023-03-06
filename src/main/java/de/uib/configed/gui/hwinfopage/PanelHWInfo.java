@@ -103,7 +103,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		buildPanel();
 	}
 
-	private String encodeString(String s) {
+	private static String encodeString(String s) {
 		return s;
 
 	}
@@ -169,9 +169,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		if (withPopup) {
 
 			popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
-					PopupMenuTrait.POPUP_FLOATINGCOPY })
+					PopupMenuTrait.POPUP_FLOATINGCOPY }) {
 
-			{
 				@Override
 				public void action(int p) {
 					switch (p) {
@@ -249,7 +248,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
-	private ImageIcon createImageIcon(String path) {
+	private static ImageIcon createImageIcon(String path) {
 		return Globals.createImageIcon(path, "");
 
 	}

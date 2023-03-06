@@ -29,6 +29,8 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	private List<String> unfilteredD;
 	protected int[] unfilteredSelection;
 
+	boolean filtered;
+
 	public SearchTargetModelFromJList(JList<String> jList, final List<String> values, final List<String> descriptions) {
 
 		this.jList = jList;
@@ -52,7 +54,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		super.setTable(new JTable(tableModel));
 	}
 
-	private AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
+	private static AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
 
 		return new AbstractTableModel() {
 			@Override
@@ -179,8 +181,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	public void setValueIsAdjusting(boolean b) {
 		jList.getSelectionModel().setValueIsAdjusting(b);
 	}
-
-	boolean filtered;
 
 	@Override
 	public void setFiltered(boolean b) {

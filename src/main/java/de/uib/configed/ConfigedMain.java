@@ -473,7 +473,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 	}
 
-	private String getSavedStatesDefaultLocation() {
+	private static String getSavedStatesDefaultLocation() {
 		String result = "";
 
 		if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
@@ -487,7 +487,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return result;
 	}
 
-	private String getSavedStatesDirectoryName(String locationName) {
+	private static String getSavedStatesDirectoryName(String locationName) {
 		return locationName + File.separator + host.replace(":", "_");
 	}
 
@@ -2906,7 +2906,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	}
 
-	private int[] getTableColumnWidths(JTable table) {
+	private static int[] getTableColumnWidths(JTable table) {
 		TableColumnModel columnModel = table.getColumnModel();
 		int[] columnWidths = new int[columnModel.getColumnCount()];
 
@@ -2918,7 +2918,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	// only has an effect if number of table columns not changed
-	private void setTableColumnWidths(JTable table, int[] columnWidths) {
+	private static void setTableColumnWidths(JTable table, int[] columnWidths) {
 
 		// Only do it if number of columns didn't change
 		if (columnWidths.length == table.getColumnModel().getColumnCount()) {
@@ -2929,7 +2929,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
+	private static Map<String, Object> mergeMaps(List<Map<String, Object>> collection) {
 		HashMap<String, Object> mergedMap = new HashMap<>();
 		if (collection == null || collection.isEmpty()) {
 			return mergedMap;
@@ -3016,7 +3016,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private void removeKeysStartingWith(Map<String, ? extends Object> m, Set<String> keystartersStrNotWanted) {
+	private static void removeKeysStartingWith(Map<String, ? extends Object> m, Set<String> keystartersStrNotWanted) {
 		Set<String> keysForDeleting = new HashSet<>();
 
 		for (String start : keystartersStrNotWanted) {
@@ -5160,7 +5160,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private boolean ask2OverwriteExistingHost(String host) {
+	private static boolean ask2OverwriteExistingHost(String host) {
 		FTextArea fAskOverwriteExsitingHost = new FTextArea(getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.OverwriteExistingHost.Question") + " (" + Globals.APPNAME
 						+ ") ",

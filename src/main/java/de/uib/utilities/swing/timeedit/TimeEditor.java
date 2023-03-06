@@ -37,7 +37,7 @@ public class TimeEditor extends JPanel {
 		setMin(minutes);
 	}
 
-	private String fillTo2Chars(int i) {
+	private static String fillTo2Chars(int i) {
 		String result = "00";
 		if (i < 0 || i > 99) {
 			return result;
@@ -92,7 +92,7 @@ public class TimeEditor extends JPanel {
 
 		try {
 			result = Integer.parseInt((String) spinnerHour.getValue());
-		} catch (Exception ex) {
+		} catch (NumberFormatException ex) {
 			Logging.debug("Time Editor exception " + spinnerHour.getValue() + ", " + ex);
 		}
 
@@ -104,7 +104,7 @@ public class TimeEditor extends JPanel {
 
 		try {
 			result = Integer.parseInt((String) spinnerMin.getValue());
-		} catch (Exception ex) {
+		} catch (NumberFormatException ex) {
 			Logging.debug("Time Editor exception  " + spinnerMin.getValue() + ", " + ex);
 		}
 

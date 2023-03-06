@@ -389,7 +389,7 @@ public class SelectionManager {
 	}
 
 	/* Add a NotOperation if necessary */
-	private AbstractSelectOperation parseNot(OperationWithStatus operation) {
+	private static AbstractSelectOperation parseNot(OperationWithStatus operation) {
 		if (operation.status == ConnectionStatus.AND || operation.status == ConnectionStatus.OR) {
 			return operation.operation;
 		}
@@ -401,7 +401,7 @@ public class SelectionManager {
 	}
 
 	/* See if there's a NotOperation and replace the status accordingly. */
-	private OperationWithStatus reverseParseNot(AbstractSelectOperation operation, ConnectionStatus status) {
+	private static OperationWithStatus reverseParseNot(AbstractSelectOperation operation, ConnectionStatus status) {
 		OperationWithStatus ows = new OperationWithStatus();
 		if (operation instanceof NotOperation) {
 			ows.operation = ((NotOperation) operation).getChildOperations().get(0);

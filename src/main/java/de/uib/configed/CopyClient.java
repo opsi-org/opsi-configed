@@ -93,7 +93,7 @@ public class CopyClient {
 		persist.updateProductOnClients();
 	}
 
-	private int getProductType(String productId) {
+	private static int getProductType(String productId) {
 		return persist.getAllLocalbootProductNames().contains(productId) ? OpsiPackage.TYPE_LOCALBOOT
 				: OpsiPackage.TYPE_NETBOOT;
 	}

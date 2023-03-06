@@ -210,7 +210,8 @@ public class CSVImportDataModifier {
 		}
 	}
 
-	private void populateSourceMap(Map<String, Map<String, Object>> theSourceMap, List<Map<String, Object>> data) {
+	private static void populateSourceMap(Map<String, Map<String, Object>> theSourceMap,
+			List<Map<String, Object>> data) {
 		int id = 0;
 
 		for (Map<String, Object> line : data) {
@@ -219,7 +220,7 @@ public class CSVImportDataModifier {
 		}
 	}
 
-	private void populateClassNames(List<String> classNames, List<String> columnNames) {
+	private static void populateClassNames(List<String> classNames, List<String> columnNames) {
 		if (!classNames.isEmpty()) {
 			classNames.clear();
 		}
@@ -258,7 +259,7 @@ public class CSVImportDataModifier {
 		return emptyRows == rows.size();
 	}
 
-	private void disableRowSorting(PanelGenEditTable thePanel) {
+	private static void disableRowSorting(PanelGenEditTable thePanel) {
 		TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(thePanel.getTheTable().getModel());
 
 		int columnCount = thePanel.getTheTable().getColumnCount();
@@ -270,7 +271,7 @@ public class CSVImportDataModifier {
 		thePanel.getTheTable().setRowSorter(rowSorter);
 	}
 
-	private void makeColumnsEditable(GenTableModel model, List<String> columnNames) {
+	private static void makeColumnsEditable(GenTableModel model, List<String> columnNames) {
 		int[] editableColumns = new int[columnNames.size()];
 
 		for (int i = 0; i < columnNames.size(); i++) {

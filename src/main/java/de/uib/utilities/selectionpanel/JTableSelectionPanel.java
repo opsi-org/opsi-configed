@@ -677,7 +677,7 @@ public class JTableSelectionPanel extends JPanel
 		return findViewRowFromValue(startviewrow, value, colIndices, searchMode);
 	}
 
-	private List<String> getWords(String line) {
+	private static List<String> getWords(String line) {
 		List<String> result = new ArrayList<>();
 		String[] splitted = line.split("\\s+");
 		for (String s : splitted) {
