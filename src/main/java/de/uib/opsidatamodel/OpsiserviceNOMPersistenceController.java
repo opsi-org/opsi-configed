@@ -3777,7 +3777,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfProductStatesAndActions for : " + Logging.getStrings(clientIds));
+		Logging.debug(this, "getMapOfProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
@@ -3845,7 +3845,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@SuppressWarnings("java:S1168")
 	@Override
 	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Logging.getStrings(clientIds));
+		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		if (clientIds == null || clientIds.length == 0) {
 			return null;
@@ -3888,7 +3888,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@SuppressWarnings("java:S1168")
 	@Override
 	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Logging.getStrings(clientIds));
+		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		if (clientIds == null || clientIds.length == 0) {
 			return null;

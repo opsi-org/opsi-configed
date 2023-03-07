@@ -36,6 +36,8 @@ import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
+	public static boolean extendedView;
+
 	public LicensingInfoPanelGenEditTable thePanel;
 	private AbstractPersistenceController persist;
 	private LicensingInfoMap licenseMap;
@@ -45,8 +47,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	private List<String> columnNames = new ArrayList<>();
 	private List<String> classNames = new ArrayList<>();
 	private Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
-
-	public static boolean extendedView;
 
 	public FGeneralDialogLicensingInfo(JFrame owner, String title, boolean modal, String[] buttonList, Icon[] icons,
 			int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout, JPanel addPane) {

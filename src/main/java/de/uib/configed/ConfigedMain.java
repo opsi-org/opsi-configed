@@ -1530,7 +1530,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected Map<String, Boolean> produceClientListForDepots(String[] depots, Set<String> allowedClients) {
-		Logging.info(this, " producePcListForDepots " + Logging.getStrings(depots) + " running with allowedClients "
+		Logging.info(this, " producePcListForDepots " + Arrays.toString(depots) + " running with allowedClients "
 				+ allowedClients);
 		Map<String, Boolean> m = persist.getHostInfoCollections().getClientListForDepots(depots, allowedClients);
 
@@ -1604,7 +1604,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
 			String[] allPCs = new TreeMap<>(unfilteredList).keySet().toArray(new String[] {});
 
-			Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Logging.getStrings(allPCs));
+			Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
 
 			treeClients.clear();
 			treeClients.setClientInfo(persist.getHostInfoCollections().getMapOfAllPCInfoMaps());
@@ -1638,7 +1638,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Logging.info(this, "------------ buildPclistTableModel, rebuildTree " + rebuildTree);
 				String[] allPCs = new TreeMap<>(unfilteredList).keySet().toArray(new String[] {});
 
-				Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Logging.getStrings(allPCs));
+				Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
 
 				treeClients.clear();
 				treeClients.setClientInfo(persist.getHostInfoCollections().getMapOfAllPCInfoMaps());
@@ -1916,7 +1916,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (getViewIndex() != VIEW_CLIENTS) {
 			// change in selection not via clientpage (i.e. via tree)
 
-			Logging.debug(this, "getSelectedClients  " + Logging.getStrings(getSelectedClients())
+			Logging.debug(this, "getSelectedClients  " + Arrays.toString(getSelectedClients())
 					+ " ,  getViewIndex, viewClients: " + getViewIndex() + ", " + VIEW_CLIENTS);
 			int newViewIndex = getViewIndex();
 			resetView(newViewIndex);
@@ -2729,7 +2729,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// enables and disables tabs depending if they make sense in other cases
 	private boolean checkOneClientSelected() {
-		Logging.debug(this, "checkOneClientSelected() selectedClients " + Logging.getStrings(getSelectedClients()));
+		Logging.debug(this, "checkOneClientSelected() selectedClients " + Arrays.toString(getSelectedClients()));
 		boolean result = true;
 
 		if (getSelectedClients().length != 1) {
@@ -3247,7 +3247,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected boolean setLogPage() {
 
-		Logging.debug(this, "setLogPage(), selected clients: " + Logging.getStrings(getSelectedClients()));
+		Logging.debug(this, "setLogPage(), selected clients: " + Arrays.toString(getSelectedClients()));
 
 		try {
 			logfiles = persist.getEmptyLogfiles();
@@ -3358,7 +3358,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				|| ((visualViewIndex == VIEW_NETWORK_CONFIGURATION) && (editingTarget == EditingTarget.SERVER))
 				|| ((visualViewIndex == VIEW_HOST_PROPERTIES) && (editingTarget == EditingTarget.DEPOTS))))) {
 
-			Logging.debug(this, " selected clients " + Logging.getStrings(getSelectedClients()));
+			Logging.debug(this, " selected clients " + Arrays.toString(getSelectedClients()));
 
 			// should not occur
 			if (getSelectedClients() == null) {

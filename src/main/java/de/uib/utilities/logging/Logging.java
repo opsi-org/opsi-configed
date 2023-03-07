@@ -7,7 +7,6 @@ import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +19,8 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.utilities.thread.WaitCursor;
 
-public class Logging implements LogEventSubject
+public class Logging implements LogEventSubject {
 
-{
 	public static String logDirectoryName;
 	private static String logFilenameInUse;
 
@@ -63,10 +61,6 @@ public class Logging implements LogEventSubject
 
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
-	public static final String levelText(int level) {
-		return LEVEL_TO_NAME.get(level);
-	}
-
 	private static final int MIN_LEVEL_FOR_SHOWING_MESSAGES = LEVEL_ERROR;
 
 	private static int numberOfKeptLogFiles = 3;
@@ -80,36 +74,40 @@ public class Logging implements LogEventSubject
 
 	protected static List<LogEventObserver> logEventObservers = new ArrayList<>();
 
+	public static final String levelText(int level) {
+		return LEVEL_TO_NAME.get(level);
+	}
+
 	public static void setSuppressConsole() {
 		setLogLevelConsole(LEVEL_NONE);
 	}
 
-	public static Integer getLogLevelConsole() {
+	public static synchronized Integer getLogLevelConsole() {
 		return logLevelConsole;
 	}
 
-	public static void setLogLevelConsole(int newLevel) {
+	public static synchronized void setLogLevelConsole(int newLevel) {
 		if (newLevel < LEVEL_NONE) {
-			newLevel = LEVEL_NONE;
+			logLevelConsole = LEVEL_NONE;
 		} else if (newLevel > LEVEL_SECRET) {
-			newLevel = LEVEL_SECRET;
+			logLevelConsole = LEVEL_SECRET;
+		} else {
+			logLevelConsole = newLevel;
 		}
-
-		logLevelConsole = newLevel;
 	}
 
-	public static Integer getLogLevelFile() {
+	public static synchronized Integer getLogLevelFile() {
 		return logLevelFile;
 	}
 
-	public static void setLogLevelFile(int newLevel) {
+	public static synchronized void setLogLevelFile(int newLevel) {
 		if (newLevel < LEVEL_NONE) {
-			newLevel = LEVEL_NONE;
+			logLevelFile = LEVEL_NONE;
 		} else if (newLevel > LEVEL_SECRET) {
-			newLevel = LEVEL_SECRET;
+			logLevelFile = LEVEL_SECRET;
+		} else {
+			logLevelFile = newLevel;
 		}
-
-		logLevelFile = newLevel;
 	}
 
 	public static void setLogLevel(int newLevel) {
@@ -117,7 +115,7 @@ public class Logging implements LogEventSubject
 		setLogLevelFile(newLevel);
 	}
 
-	public static void setLogfileMarker(String marker) {
+	public static synchronized void setLogfileMarker(String marker) {
 		if (logfileMarker != null) {
 			debug("logfileMarker already set");
 			return;
@@ -130,7 +128,7 @@ public class Logging implements LogEventSubject
 		}
 	}
 
-	private static final void initLogFile() {
+	private static synchronized final void initLogFile() {
 		// Try to initialize only once!
 		logFileInitialized = true;
 		String logFilename = "";
@@ -150,6 +148,7 @@ public class Logging implements LogEventSubject
 				logDirectory = new File(logDirectoryName);
 			}
 			logDirectory = logDirectory.getCanonicalFile();
+
 			logDirectoryName = logDirectory.getAbsolutePath();
 
 			info("Logging directory is: " + logDirectoryName);
@@ -218,37 +217,6 @@ public class Logging implements LogEventSubject
 		}
 	}
 
-	public static String getIntegers(int[] s) {
-		if (s == null) {
-			return null;
-		}
-
-		StringBuilder result = new StringBuilder("{");
-
-		for (int j = 0; j < s.length; j++) {
-			result.append("\"");
-			result.append("" + s[j]);
-			result.append("\"");
-			if (j < s.length - 1) {
-				result.append(", ");
-			}
-		}
-
-		result.append("}");
-
-		return result.toString();
-	}
-
-	public static String getStrings(int[] s) {
-		if (s == null) {
-			return null;
-		}
-
-		Integer[] t = Arrays.asList(s).toArray(new Integer[0]);
-
-		return getStrings(t);
-	}
-
 	public static String getSize(Object[] a) {
 		if (a == null) {
 			return null;
@@ -263,27 +231,6 @@ public class Logging implements LogEventSubject
 		}
 
 		return "" + c.size();
-	}
-
-	public static String getStrings(Object[] s) {
-		if (s == null) {
-			return null;
-		}
-
-		StringBuilder result = new StringBuilder("{");
-
-		for (int j = 0; j < s.length; j++) {
-			result.append("\"");
-			result.append("" + s[j]);
-			result.append("\"");
-			if (j < s.length - 1) {
-				result.append(", ");
-			}
-		}
-
-		result.append("}");
-
-		return result.toString();
 	}
 
 	public static synchronized void log(int level, String mesg, Object caller, Throwable ex) {

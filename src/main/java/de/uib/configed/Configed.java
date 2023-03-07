@@ -187,6 +187,46 @@ public class Configed {
 
 	private static FTextArea fErrorOutOfMemory;
 
+	/** construct the application */
+	public Configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
+			final String paramClient, final String paramClientgroup, final Integer paramTab) {
+
+		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
+
+		UncaughtConfigedExceptionHandlerLocalized errorHandler = new UncaughtConfigedExceptionHandlerLocalized();
+		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
+
+		Logging.debug("starting " + getClass().getName());
+		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
+		Logging.debug("server charset is configured as " + serverCharset);
+
+		if (serverCharset.equals(Charset.defaultCharset())) {
+			Logging.debug("they are equal");
+		}
+
+		configureUI();
+
+		try {
+			String resourceS = "opsi.gif";
+			URL resource = Globals.class.getResource(resourceS);
+			if (resource == null) {
+				Logging.debug("image resource " + resourceS + "  not found");
+			} else {
+				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
+			}
+		} catch (Exception ex) {
+			Logging.debug("imageHandled failed: " + ex.toString());
+		}
+
+		// Set locale
+		List<String> existingLocales = Messages.getLocaleNames();
+		Messages.setLocale(paramLocale);
+		Logging.info("getLocales: " + existingLocales);
+		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
+
+		startWithLocale();
+	}
+
 	// --------------------------------------------------------------------------------------------------------
 
 	private static String getYNforBoolean(boolean b) {
@@ -310,46 +350,6 @@ public class Configed {
 			Logging.info(" run " + ie);
 			Thread.currentThread().interrupt();
 		}
-	}
-
-	/** construct the application */
-	public Configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
-			final String paramClient, final String paramClientgroup, final Integer paramTab) {
-
-		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
-
-		UncaughtConfigedExceptionHandlerLocalized errorHandler = new UncaughtConfigedExceptionHandlerLocalized();
-		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
-
-		Logging.debug("starting " + getClass().getName());
-		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
-		Logging.debug("server charset is configured as " + serverCharset);
-
-		if (serverCharset.equals(Charset.defaultCharset())) {
-			Logging.debug("they are equal");
-		}
-
-		configureUI();
-
-		try {
-			String resourceS = "opsi.gif";
-			URL resource = Globals.class.getResource(resourceS);
-			if (resource == null) {
-				Logging.debug("image resource " + resourceS + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.debug("imageHandled failed: " + ex.toString());
-		}
-
-		// Set locale
-		List<String> existingLocales = Messages.getLocaleNames();
-		Messages.setLocale(paramLocale);
-		Logging.info("getLocales: " + existingLocales);
-		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
-
-		startWithLocale();
 	}
 
 	private static void setParamValues(String paramHost, String paramUser, String paramPassword, Integer paramTab,

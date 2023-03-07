@@ -319,7 +319,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			}
 		}
 
-		Logging.debug(this, "importData, ------------- values " + Logging.getStrings(values));
+		Logging.debug(this, "importData, ------------- values " + Arrays.toString(values));
 
 		TreePath groupPathActivatedByTree = tree.getGroupPathActivatedByTree();
 		Logging.debug(this, "importData,  ++++++++++++++++ groupPathActivatedByTree " + groupPathActivatedByTree);

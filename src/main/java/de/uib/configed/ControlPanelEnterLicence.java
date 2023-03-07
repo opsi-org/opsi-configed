@@ -23,9 +23,8 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 import de.uib.utilities.thread.WaitCursor;
 
-public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 // tab new licence
-{
+public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	PanelEnterLicence thePanel;
 
 	GenTableModel modelLicencekeys;
