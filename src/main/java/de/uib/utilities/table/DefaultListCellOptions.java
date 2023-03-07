@@ -27,9 +27,8 @@ public class DefaultListCellOptions implements ListCellOptions {
 	}
 
 	public DefaultListCellOptions(List<Object> possibleValues, List<Object> defaultValues, int selectionMode,
-			boolean editable, boolean nullable, String description)
+			boolean editable, boolean nullable, String description) {
 
-	{
 		this.possibleValues = possibleValues;
 		this.defaultValues = defaultValues;
 		this.selectionMode = selectionMode;

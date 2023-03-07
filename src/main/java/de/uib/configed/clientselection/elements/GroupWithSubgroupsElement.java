@@ -2,11 +2,7 @@ package de.uib.configed.clientselection.elements;
 
 import de.uib.configed.Configed;
 
-public class GroupWithSubgroupsElement
-		// extends GroupElement
-		extends GenericEnumElement
-
-{
+public class GroupWithSubgroupsElement extends GenericEnumElement {
 
 	public GroupWithSubgroupsElement(String[] enumData) {
 		super(enumData, new String[] { "GroupWithSubgroups" },

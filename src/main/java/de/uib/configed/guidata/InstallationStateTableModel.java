@@ -850,10 +850,10 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	}
 
-	protected void recursivelyChangeActionRequest(String clientId, String product, ActionRequest ar)
-	// adds the new value to the collection of changed states
-	// calls the dependencies for the next turn
-	{
+	protected void recursivelyChangeActionRequest(String clientId, String product, ActionRequest ar) {
+		// adds the new value to the collection of changed states
+		// calls the dependencies for the next turn
+
 		Logging.debug(this, "recursivelyChangeActionRequest " + clientId + ", " + product + ", " + ar);
 
 		setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
@@ -972,9 +972,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 						if ((requiredIS == InstallationStatus.INSTALLED
 								|| requiredIS == InstallationStatus.NOT_INSTALLED)
 								// the only relevant states for which we should eventually do something
-								&& InstallationStatus.getVal(installationStatusOfRequiredProduct) != requiredIS)
-						// we overwrite the required action request
-						{
+								&& InstallationStatus.getVal(installationStatusOfRequiredProduct) != requiredIS) {
+
+							// we overwrite the required action request
 
 							String requiredStatusS = InstallationStatus.getLabel(requiredIS);
 							Logging.debug(this, " requiredStatusS " + requiredStatusS);
@@ -986,9 +986,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 						}
 
 						// handle resulting action requests
-						if (requiredAR > ActionRequest.NONE)
-
-						{
+						if (requiredAR > ActionRequest.NONE) {
 
 							checkForContradictingAssignments(clientId, requirement.getKey(), ActionRequest.KEY,
 									ActionRequest.getLabel(requiredAR));

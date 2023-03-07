@@ -309,9 +309,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 					for (Entry<String, Object> entry : properties.entrySet()) {
 						List<?> value = (List<?>) entry.getValue();
-						if (result.get(entry.getKey()) == null)
-						// we need a new property. it is not common
-						{
+						if (result.get(entry.getKey()) == null) {
+							// we need a new property. it is not common
+
 							ListMerger merger = new ListMerger(value);
 
 							merger.setHavingNoCommonValue();

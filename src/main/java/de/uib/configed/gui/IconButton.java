@@ -148,9 +148,7 @@ public class IconButton extends JButton {
 	 * (icon, description, preferred size, enabled status, selected icon and (if
 	 * given) a disabled icon)
 	 */
-	private void createIconButton()
-
-	{
+	private void createIconButton() {
 		setIcon(Globals.createImageIcon(this.imageURLActive, ""));
 		setToolTipText(description);
 		setPreferredSize(Globals.graphicButtonDimension);
@@ -173,9 +171,7 @@ public class IconButton extends JButton {
 	 *                         false
 	 */
 	public void createIconButton(String desc, String imageURLActive, String imageURLOver, String imageURLDisabled,
-			boolean enabled)
-
-	{
+			boolean enabled) {
 		setIcon(Globals.createImageIcon(imageURLActive, ""));
 		setToolTipText(desc);
 		setPreferredSize(Globals.graphicButtonDimension);

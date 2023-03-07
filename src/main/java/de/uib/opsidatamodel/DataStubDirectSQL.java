@@ -29,11 +29,10 @@ import de.uib.opsicommand.DbConnect;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 
-public class DataStubDirectSQL extends DataStubRawData
 // only for testing purposes
 // called by OpsiDirectSQLPersistenceController which may have more methods with
 // direct sql access
-{
+public class DataStubDirectSQL extends DataStubRawData {
 	public DataStubDirectSQL(OpsiserviceNOMPersistenceController controller) {
 		super(controller);
 	}

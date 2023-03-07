@@ -12,9 +12,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SessionSaveSet;
 
-public class InstallationStateTableModelFiltered extends InstallationStateTableModel
+public class InstallationStateTableModelFiltered extends InstallationStateTableModel {
 
-{
 	private int[] filter;
 	// filter is a function
 	// row --> somerow (from super.table)

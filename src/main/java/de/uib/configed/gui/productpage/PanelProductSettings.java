@@ -101,16 +101,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		sortkeysDefault.add(new RowSorter.SortKey(0, SortOrder.ASCENDING));
 	}
 
-	JScrollPane paneProducts;
-	public JTable tableProducts;
-	protected AbstractExportTable exportTable;
-	JPanel topPane;
-
-	// right pane
-	ProductInfoPane infoPane;
-	protected AbstractPanelEditProperties panelEditProperties;
-	AbstractEditMapPanel propertiesPanel;
-
 	private static final int HEIGHT_MIN = 200;
 
 	private static final int FRAME_WIDTH_LEFTHANDED = 1100;
@@ -125,6 +115,16 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private static final int WIDTH_COLUMN_PRODUCT_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
 	private static final int WIDTH_COLUMN_PACKAGE_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
 	private static final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
+
+	JScrollPane paneProducts;
+	public JTable tableProducts;
+	protected AbstractExportTable exportTable;
+	JPanel topPane;
+
+	// right pane
+	ProductInfoPane infoPane;
+	protected AbstractPanelEditProperties panelEditProperties;
+	AbstractEditMapPanel propertiesPanel;
 
 	ListCellRenderer standardListCellRenderer;
 
@@ -433,9 +433,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		};
 
 		installationInfoTableCellRenderer = new ColoredTableCellRenderer(
-				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_INFO))
+				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_INFO)) {
 
-		{
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 					boolean hasFocus, int row, int column) {

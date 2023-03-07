@@ -2187,13 +2187,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return depotsOfSelectedClients;
 	}
 
-	private void collectTheProductProperties(String productEdited)
-	// we build
-	// --
-	// -- the map of the merged product properties from combining the properties of
-	// all selected clients
+	private void collectTheProductProperties(String productEdited) {
+		// we build
+		// --
+		// -- the map of the merged product properties from combining the properties of
+		// all selected clients
 
-	{
 		Logging.info(this, "collectTheProductProperties for " + productEdited);
 		mergedProductProperties = new HashMap<>();
 		productProperties = new ArrayList<>(getSelectedClients().length);
@@ -2230,9 +2229,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						String key = iter.next();
 						List<?> value = (List<?>) productPropertiesFor1Client.get(key);
 
-						if (mergedProductProperties.get(key) == null)
-						// we need a new property. it is not common
-						{
+						if (mergedProductProperties.get(key) == null) {
+							// we need a new property. it is not common
+
 							ListMerger merger = new ListMerger(value);
 
 							merger.setHavingNoCommonValue();
@@ -2262,9 +2261,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.panelNetbootProductSettings.clearListEditors();
 	}
 
-	public void setProductEdited(String productname)
-	// called from ProductSettings
-	{
+	public void setProductEdited(String productname) {
+		// called from ProductSettings
+
 		Logging.debug(this, "setProductEdited " + productname);
 
 		productEdited = productname;
@@ -2278,11 +2277,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 		clientProductpropertiesUpdateCollection = null;
 
-		if (clientProductpropertiesUpdateCollections.get(productEdited) == null)
-		// have we got already a clientProductpropertiesUpdateCollection for this
-		// product?
-		// if not, we produce one
-		{
+		if (clientProductpropertiesUpdateCollections.get(productEdited) == null) {
+			// have we got already a clientProductpropertiesUpdateCollection for this
+			// product?
+			// if not, we produce one
+
 			clientProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(this, persist,
 					getSelectedClients(), productEdited);
 

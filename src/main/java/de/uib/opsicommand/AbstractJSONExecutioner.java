@@ -84,10 +84,10 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, Object> getMapResult(OpsiMethodCall omc)
-	// yields possibly JSON objects and arrays as values
-	// compare getMap_Object
-	{
+	public Map<String, Object> getMapResult(OpsiMethodCall omc) {
+		// yields possibly JSON objects and arrays as values
+		// compare getMap_Object
+
 		return JSONReMapper.getMapResult(retrieveJSONObject(omc));
 	}
 
@@ -174,17 +174,16 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, Object> getMapObject(OpsiMethodCall omc)
-	// this method tries to return Java lists in comparison with getMapResult
-	{
+	public Map<String, Object> getMapObject(OpsiMethodCall omc) {
+		// this method tries to return Java lists in comparison with getMapResult
+
 		return JSONReMapper.getMapObject(retrieveJSONObject(omc));
 	}
 
 	@Override
-	public Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc)
-	// including a conversion of json objects to a standard java object
+	public Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc) {
+		// including a conversion of json objects to a standard java object
 
-	{
 		HashMap<String, Map<String, Object>> result = new HashMap<>();
 		HashMap<String, Map<String, Object>> resultNull = new HashMap<>();
 

@@ -128,7 +128,7 @@ public class Logging implements LogEventSubject {
 		}
 	}
 
-	private static synchronized final void initLogFile() {
+	private static final synchronized void initLogFile() {
 		// Try to initialize only once!
 		logFileInitialized = true;
 		String logFilename = "";
@@ -393,7 +393,7 @@ public class Logging implements LogEventSubject {
 		errorList.clear();
 	}
 
-	public static void checkErrorList(JFrame parentFrame) {
+	public static synchronized void checkErrorList(JFrame parentFrame) {
 		// if errors Occurred show a window with the logged errors
 
 		final JFrame f;

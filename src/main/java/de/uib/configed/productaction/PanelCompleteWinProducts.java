@@ -96,9 +96,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 		selectedDepot = "" + comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
 
-		panelMountShare = new PanelMountShare(this, main, root)
-
-		{
+		panelMountShare = new PanelMountShare(this, main, root) {
 			@Override
 			protected boolean checkConnectionToShare() {
 				boolean connected = super.checkConnectionToShare();

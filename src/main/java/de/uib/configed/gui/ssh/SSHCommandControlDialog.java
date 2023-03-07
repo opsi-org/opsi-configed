@@ -691,7 +691,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 			}
 		}
 
-		SSHCommandTemplate tempCommand = factory.buildSSHCommand(
+		SSHCommandTemplate tempCommand = SSHCommandFactory.buildSSHCommand(
 				generateId((String) jComboBoxMenuText.getSelectedItem()), parent, menuText,
 				(jTextFieldTooltipText.getText()), prio, jComboBoxNeedSudo.isSelected(), coms);
 		Logging.debug(this, "getCommandNow command: " + tempCommand);

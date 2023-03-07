@@ -39,6 +39,8 @@ public class SSHConnectExec extends SSHConnect {
 
 	private int supwRetriedTimes;
 
+	protected boolean foundError;
+
 	public SSHConnectExec(SSHCommand sshcommand) {
 		this(null, sshcommand);
 	}
@@ -181,8 +183,6 @@ public class SSHConnectExec extends SSHConnect {
 				String com = ((SSHCommandTemplate) commands).getOriginalCommands().get(i).getCommandRaw();
 				com = "(" + (i + 1) + ")  " + com;
 
-				// else
-
 				defaultCommandsString.append(com + "   \n");
 			}
 			try {
@@ -246,8 +246,6 @@ public class SSHConnectExec extends SSHConnect {
 		}
 	}
 
-	protected boolean foundError;
-
 	public String exec(SSHCommand command) {
 		return exec(command, true, null, false, false, 1, 1);
 	}
@@ -287,9 +285,9 @@ public class SSHConnectExec extends SSHConnect {
 
 			if (dialog != null) {
 				outputDialog = dialog;
-				if (!EventQueue.isDispatchThread())
-				// does this really occur anywhere?
-				{
+				if (!EventQueue.isDispatchThread()) {
+					// does this really occur anywhere?
+
 					SwingUtilities.invokeLater(() -> dialog.setVisible(true));
 				} else {
 					dialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
@@ -351,10 +349,9 @@ public class SSHConnectExec extends SSHConnect {
 		return s;
 	}
 
-	private class SshCommandWorker extends SwingWorker<String, String>
 	// first parameter class is return type of doInBackground
 	// second is element type of the list which is used by process
-	{
+	private class SshCommandWorker extends SwingWorker<String, String> {
 		SSHCommand command;
 		SSHConnectionExecDialog outputDialog;
 		SSHConnectExec caller;
@@ -590,14 +587,13 @@ public class SSHConnectExec extends SSHConnect {
 		@Override
 		protected void process(List<String> chunks) {
 			Logging.info(this, "chunks " + chunks.size());
-			final SSHOutputCollector sshOutputCollector = SSHOutputCollector.getInstance();
 
 			if (outputDialog != null) {
 				outputDialog.setStartAnsi(Globals.SSH_CONNECTION_SET_START_ANSI);
 
 				for (String line : chunks) {
 					Logging.debug(this, "process " + line);
-					sshOutputCollector.appendValue(line);
+					SSHOutputCollector.appendValue(line);
 					outputDialog.append(getCommandName(), line + "\n");
 
 				}

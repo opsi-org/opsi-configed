@@ -207,9 +207,9 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	protected void initDepots() {
 		possibleDepots = getPossibleDepots();
 		fDepotList.setListData(possibleDepots);
-		if (possibleDepots.isEmpty())
-		// probably no permission
-		{
+		if (possibleDepots.isEmpty()) {
+			// probably no permission
+
 			jButtonExecute.setVisible(false);
 			textFieldSelectedDepots.setText("");
 		} else {

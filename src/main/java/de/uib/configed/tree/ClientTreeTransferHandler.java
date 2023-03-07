@@ -30,7 +30,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 	}
 
 	private GroupNode transferRepresentsGroup(String treeRepresentation) {
-		GroupNode result = null;
 
 		if (treeRepresentation == null) {
 			return null;
@@ -43,7 +42,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		}
 
 		String node = parts[parts.length - 1];
-		result = tree.getGroupNode(node);
+		GroupNode result = tree.getGroupNode(node);
 
 		Logging.debug(this, "transferRepresentsGroup : " + treeRepresentation + ", result " + result);
 
@@ -337,9 +336,9 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			try {
 				// if values not got from transferable, the following reduces
 
-				if ((value.split("\t").length > 1))
-				// probably an import from the JTable
-				{
+				if ((value.split("\t").length > 1)) {
+					// probably an import from the JTable
+
 					// we assume a table source with first fieldvalue being a clientID
 					importID = value.split("\t")[0];
 				} else {

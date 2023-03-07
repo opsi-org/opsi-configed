@@ -39,10 +39,8 @@ import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
-public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped
-
 // works on a map of pairs of type String - List
-{
+public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	private static final int USER_START_INDEX = 1;
 

@@ -10,9 +10,9 @@ package de.uib.utilities.table.provider;
 
 import java.util.List;
 
-public class ExternalSource implements TableSource
-// adapter for external source for table data
-{
+public class ExternalSource implements TableSource {
+	// adapter for external source for table data
+
 	protected List<String> columnNames;
 
 	protected List<String> classNames;

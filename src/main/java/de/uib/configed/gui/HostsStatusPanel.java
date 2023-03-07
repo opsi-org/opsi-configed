@@ -79,9 +79,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		if (selectedClientNames == null) {
 			fieldSelectedClientsNames.setText("");
 			fieldSelectedClientsNames.setToolTipText(null);
-		} else
-
-		{
+		} else {
 
 			fieldSelectedClientsNames.setText(selectedClientNames);
 

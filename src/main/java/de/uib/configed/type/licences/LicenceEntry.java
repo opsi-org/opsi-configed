@@ -8,9 +8,9 @@ import java.util.TreeMap;
 import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.logging.Logging;
 
-public class LicenceEntry extends TreeMap<String, Object>
 // software license in opsi data base
-{
+public class LicenceEntry extends TreeMap<String, Object> {
+
 	/*
 	 * desc SOFTWARE_LICENSE :
 	 * | Field | Type | Null | Key | Default | Extra

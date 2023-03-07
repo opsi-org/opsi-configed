@@ -64,35 +64,37 @@ import de.uib.utilities.swing.PopupMenuTrait;
 public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
 
+	protected static final int FIELD_H = Globals.LINE_HEIGHT;
+	protected static final int SLIDER_H = 35;
+	protected static final int SLIDER_W = 180;
+	protected static final String DEFAULT_TYPE = "(all)";
+
+	private static final Integer[] LEVELS = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	private static final List<Integer> levelList = Arrays.asList(LEVELS);
+
 	protected JTextPane jTextPane;
 	protected JScrollPane scrollpane;
 	protected JPanel commandpane;
 	protected JLabel labelSearch;
 
 	protected JComboBox<String> jComboBoxSearch;
-	protected static final int FIELD_H = Globals.LINE_HEIGHT;
+
 	protected JButton buttonSearch;
 	protected JCheckBox jCheckBoxCaseSensitive;
 	protected JButton buttonFontPlus;
 	protected JButton buttonFontMinus;
 	protected JLabel labelLevel;
 	protected AdaptingSlider sliderLevel;
-	protected static final int SLIDER_H = 35;
-	protected static final int SLIDER_W = 180;
 	protected ChangeListener sliderListener;
 	protected JLabel labelDisplayRestriction;
 	protected JComboBox<String> comboType;
 	protected DefaultComboBoxModel<String> comboModelTypes;
-	protected static final String DEFAULT_TYPE = "(all)";
 
 	protected JPanel jTextPanel;
 	protected WordSearcher searcher;
 	protected Highlighter highlighter;
 	protected final StyleContext styleContext;
 	protected final Style[] logLevelStyles;
-
-	private static final Integer[] LEVELS = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	private static final List<Integer> levelList = Arrays.asList(LEVELS);
 
 	protected Integer maxLevel = LEVELS[LEVELS.length - 1];
 	protected Integer minLevel = LEVELS[0];
@@ -115,6 +117,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	protected Integer displayFontSize = 11;
 	protected Font monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+
+	protected ImmutableDefaultStyledDocument document;
+
+	protected String[] lines;
+	protected int[] lineLevels;
+	protected Style[] lineStyles;
 
 	public void setFontSize(String s) {
 		if (s.equals("+")) {
@@ -212,12 +220,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			/* Should be empty, because we don't want it to be able to be editable*/
 		}
 	}
-
-	protected ImmutableDefaultStyledDocument document;
-
-	protected String[] lines;
-	protected int[] lineLevels;
-	protected Style[] lineStyles;
 
 	protected void reload() {
 		Logging.info(this, "reload action");
@@ -1031,8 +1033,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		if (e.getSource() == jTextPane) {
-			if (e.getKeyChar() == '/' || e.getKeyChar() == '\u0006') // ctrl-f
-			{
+			if (e.getKeyChar() == '/' || e.getKeyChar() == '\u0006' /* ctrl-f */ ) {
 				editSearchString();
 			}
 
@@ -1089,8 +1090,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// occurrences found.
 		public int search(String word) {
 
-			int firstOffset = -1;
-			int returnOffset = lastReturnedOffset;
 			Highlighter highlighter = comp.getHighlighter();
 
 			// Remove any existing highlights for last word
@@ -1127,6 +1126,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			int lastIndex = 0;
 			int wordSize = word.length();
+			int firstOffset = -1;
+			int returnOffset = lastReturnedOffset;
 
 			while ((lastIndex = content.indexOf(word, lastIndex)) != -1) {
 				int endIndex = lastIndex + wordSize;

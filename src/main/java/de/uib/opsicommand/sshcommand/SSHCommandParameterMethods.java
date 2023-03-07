@@ -560,7 +560,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 			return "";
 		}
 
-		SSHOutputCollector.getInstance().removeAllValues();
+		SSHOutputCollector.removeAllValues();
 		final SSHConnect caller = new SSHConnect(main);
 
 		final String scriptFile = method.replace("ssh://", "");
@@ -593,7 +593,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		public void execute() {
 			new SSHConnectExec(main, cmd);
 
-			final List<String> values = sshOutputCollector.getValues();
+			final List<String> values = SSHOutputCollector.getValues();
 			value = retrieveSelectedValue(values);
 		}
 

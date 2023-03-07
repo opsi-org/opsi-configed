@@ -21,13 +21,13 @@ import de.uib.utilities.logging.Logging;
 
 public final class JSONReMapper {
 
-	// private constructor to hide the implicit public one
-	private JSONReMapper() {
-	}
-
 	private static final String CLASSNAME = JSONReMapper.class.getName();
 
 	public static final String NULL_REPRESENTER = "null";
+
+	// private constructor to hide the implicit public one
+	private JSONReMapper() {
+	}
 
 	public static String getErrorFromResponse(JSONObject retrieved) {
 		String errorMessage = null;
@@ -251,7 +251,6 @@ public final class JSONReMapper {
 	}
 
 	public static List<Map<String, Object>> getListOfStringMaps(Object retrieved) {
-		List<Map<String, Object>> result = new ArrayList<>();
 		List<Object> jsonList = null;
 		try {
 			JSONObject jO = (JSONObject) retrieved;
@@ -269,8 +268,8 @@ public final class JSONReMapper {
 
 		JSONObject item = null;
 
+		List<Map<String, Object>> result = new ArrayList<>();
 		try {
-
 			Iterator<Object> iter = jsonList.iterator();
 
 			while (iter.hasNext()) {
@@ -482,9 +481,8 @@ public final class JSONReMapper {
 		return result;
 	}
 
-	public static Map<String, Object> getMapObject(JSONObject jo)
 	// this method tries to return Java lists in comparison with getMapResult
-	{
+	public static Map<String, Object> getMapObject(JSONObject jo) {
 		Map<String, Object> result = new HashMap<>();
 
 		try {
@@ -503,10 +501,10 @@ public final class JSONReMapper {
 		return result;
 	}
 
-	public static Map<String, Object> getMapResult(JSONObject jO)
-	// yields possibly JSON objects and arrays as values
-	// compare getMap_Object
-	{
+	public static Map<String, Object> getMapResult(JSONObject jO) {
+		// yields possibly JSON objects and arrays as values
+		// compare getMap_Object
+
 		Map<String, Object> result = new HashMap<>();
 		try {
 			if (checkResponse(jO)) {

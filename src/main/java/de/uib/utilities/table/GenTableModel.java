@@ -31,6 +31,10 @@ import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
 public class GenTableModel extends AbstractTableModel implements TableModelFunctions {
 
+	public static final String DEFAULT_FILTER_NAME = "default";
+
+	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
+
 	protected int rowsLength;
 	protected int colsLength;
 	protected List<String> columnNames;
@@ -62,9 +66,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	protected final ChainedTableModelFilter chainedFilter;
 	protected final TableModelFilter emptyFilter;
 	private TableModelFilter workingFilter;
-	public static final String DEFAULT_FILTER_NAME = "default";
-
-	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
 
 	// maps for TableModelFunctions TODO: Remove these things, they don't do anything
 	protected Map<TableModelFunctions.PairOfInt, Map<Object, List<Object>>> functions;
@@ -371,11 +372,10 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	protected void refresh() {
-		if (!modelDataValid)
-		// perhaps the action should not depend on this condition,
-		// since the necessary requests are already sent to the
-		// table provider
-		{
+		if (!modelDataValid) {
+			// perhaps the action should not depend on this condition,
+			// since the necessary requests are already sent to the
+			// table provider
 
 			produceRows();
 
@@ -1015,7 +1015,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	@Override
 	public Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd, Mapping col2ndMapping) {
-		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1st, col2nd);
 
 		if (xFunctions == null) {
 			xFunctions = new HashMap<>();
@@ -1026,7 +1025,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		if (function == null) {
 			return new HashMap<>();
 		}
-
+		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1st, col2nd);
 		Map<Integer, Mapping<Integer, String>> xFunction = xFunctions.get(pair);
 		if (xFunction == null) {
 			xFunction = new HashMap<>();

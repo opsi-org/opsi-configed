@@ -552,9 +552,7 @@ public class Configed {
 							Logging.debug("File not found: " + extraLocalizationFileName);
 						} else if (!extraLocalizationFile.canRead()) {
 							Logging.debug("File not readable " + extraLocalizationFileName);
-						} else
-
-						{
+						} else {
 							Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
 									+ extraLocalizationFileName.matches("configed_...*\\.properties") + " --  "
 									+ extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX));

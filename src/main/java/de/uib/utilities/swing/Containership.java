@@ -74,9 +74,8 @@ public class Containership {
 
 			}
 
-			if (theComp instanceof Container)
-			// theComp is an instance of Container
-			{
+			if (theComp instanceof Container) {
+
 				Logging.debug("+++ recursion ");
 				doForAllContained(methodName, args, theArgsTypes, selClass, (Container) theComp);
 			}

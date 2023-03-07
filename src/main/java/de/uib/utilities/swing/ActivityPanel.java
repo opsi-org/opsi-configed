@@ -54,9 +54,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 	 * 
 	 * @param i number of selected panel of arraylist
 	 */
-	private void setState(int i)
-
-	{
+	private void setState(int i) {
 		for (int j = 0; j < partPanels.size(); j++) {
 			setBorder(lineBorderActive);
 			partPanels.get(j).setBackground(colors[0]);
@@ -191,5 +189,4 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 		layout.setVerticalGroup(vGroup);
 	}
-
 }

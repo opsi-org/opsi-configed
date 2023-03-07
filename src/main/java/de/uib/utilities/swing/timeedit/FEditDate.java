@@ -16,14 +16,14 @@ import java.awt.event.MouseListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 
+import org.jdesktop.swingx.event.DateSelectionListener;
+
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEdit;
 
-public class FEditDate extends FEdit implements /* DateEventObserver, */
-		org.jdesktop.swingx.event.DateSelectionListener, MouseListener
+public class FEditDate extends FEdit implements DateSelectionListener, MouseListener {
 
-{
 	public static final Dimension AREA_DIMENSION = new Dimension(380, 300);
 	private DateTimeEditor dateEditor;
 
@@ -116,11 +116,10 @@ public class FEditDate extends FEdit implements /* DateEventObserver, */
 		return dateEditor.getSelectedSqlTime().toString();
 	}
 
-	protected String getSelectedDateString()
-	// at the moment, the implementation decides about the date formatting
-	{
-		return getSelectedDateTime();
+	protected String getSelectedDateString() {
+		// at the moment, the implementation decides about the date formatting
 
+		return getSelectedDateTime();
 	}
 
 	@Override

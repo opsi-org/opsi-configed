@@ -212,9 +212,9 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
 		jList.setListData(theValues.toArray(new String[0]));
 		try {
-			if (filtered)
-			// we mark all since we just filtered the marked ones
-			{
+			if (filtered) {
+				// we mark all since we just filtered the marked ones
+
 				// selectAll : (since it is assumed that we filter the selected)
 				setValueIsAdjusting(true);
 				jList.setSelectionInterval(0, jList.getModel().getSize() - 1);

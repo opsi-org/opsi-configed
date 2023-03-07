@@ -99,9 +99,8 @@ public class WaitCursor {
 			if (isStopped()) {
 				objectCounting.decrementAndGet();
 				Logging.debug(this, "removing instance " + objectNo);
-				if (objectCounting.get() <= 0)
+				if (objectCounting.get() <= 0) {
 
-				{
 					Logging.info(this, "seemed to be last living instance");
 					ActivityPanel.setActing(false);
 				} else {

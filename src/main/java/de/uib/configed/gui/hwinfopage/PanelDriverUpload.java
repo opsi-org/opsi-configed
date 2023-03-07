@@ -210,9 +210,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		labelDriverToIntegrate = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
-		panelMountShare = new PanelMountShare(this, main, root, labelDriverToIntegrate.getPreferredSize().width + hGap)
-
-		{
+		panelMountShare = new PanelMountShare(this, main, root,
+				labelDriverToIntegrate.getPreferredSize().width + hGap) {
 			@Override
 			protected boolean checkConnectionToShare() {
 				boolean connected = super.checkConnectionToShare();

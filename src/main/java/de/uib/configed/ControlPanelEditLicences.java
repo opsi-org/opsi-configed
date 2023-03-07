@@ -29,9 +29,8 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
-// tab edit licence
-{
+public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
+	// tab edit licence
 
 	PanelEditLicences thePanel;
 

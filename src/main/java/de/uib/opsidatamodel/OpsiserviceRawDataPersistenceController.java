@@ -49,10 +49,9 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 
 	@Override
 	public boolean isWithMySQL() {
-		if (!withMySQL)
-		// we use mysql since we are in this class
-		// but are underlicensed
-		{
+		if (!withMySQL) {
+			// we use mysql since we are in this class
+			// but are underlicensed
 
 			SwingUtilities.invokeLater(() -> {
 
