@@ -153,7 +153,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_PRODUCT_PROPERTIES = 7;
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
-	// Dashboard and other features for opsi 4.3 disabled
+	// Dashboard and other features for opsi 4.3 enabled?
 	public static final boolean OPSI_4_3 = true;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
@@ -161,6 +161,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	static final String TEMPGROUPNAME = "";
 
 	private static GuiStrategyForLoadingData strategyForLoadingData;
+
+	private static MainFrame mainFrame;
+	public static DPassword dPassword;
+
+	public static String host;
+	public static String user;
+	public static String password;
+
+	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
 	AbstractPersistenceController persist;
 
@@ -292,8 +301,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private String depotRepresentative;
 	ListSelectionListener depotsListSelectionListener;
 
-	private static MainFrame mainFrame;
-
 	private ReachableUpdater reachableUpdater = new ReachableUpdater(0);
 
 	private List<JFrame> allFrames;
@@ -314,7 +321,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private Dashboard dashboard;
 
-	public static DPassword dPassword;
 	MyDialogRemoteControl dialogRemoteControl;
 	Map<String, RemoteControl> remoteControls;
 
@@ -345,6 +351,38 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected LicencesTabStatus licencesStatus;
 
 	protected Map<LicencesTabStatus, String> licencesPanelsTabNames = new EnumMap<>(LicencesTabStatus.class);
+
+	private boolean dataReady;
+
+	private boolean filterClientList;
+
+	public enum EditingTarget {
+		CLIENTS, DEPOTS, SERVER
+	}
+	// with this enum type we build a state model, which target shall be edited
+
+	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
+		if (ConfigedMain.host == null) {
+			ConfigedMain.host = host;
+		}
+		if (ConfigedMain.user == null) {
+			ConfigedMain.user = user;
+		}
+		if (ConfigedMain.password == null) {
+			ConfigedMain.password = password;
+		}
+
+		SSHConnectionInfo.getInstance().setHost(host);
+		SSHConnectionInfo.getInstance().setUser(user);
+		SSHConnectionInfo.getInstance().setPassw(password);
+		if (sshKey == null) {
+			SSHConnectionInfo.getInstance().useKeyfile(false, "", "");
+		} else {
+			SSHConnectionInfo.getInstance().useKeyfile(true, sshKey, sshKeyPass);
+		}
+
+		Logging.registLogEventObserver(this);
+	}
 
 	public static MainFrame getMainFrame() {
 		return mainFrame;
@@ -381,44 +419,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		return licencesStatus;
-	}
-
-	private boolean dataReady;
-
-	private boolean filterClientList;
-
-	public static String host;
-	public static String user;
-	public static String password;
-
-	public enum EditingTarget {
-		CLIENTS, DEPOTS, SERVER
-	}
-	// with this enum type we build a state model, which target shall be edited
-
-	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
-
-	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
-		if (ConfigedMain.host == null) {
-			ConfigedMain.host = host;
-		}
-		if (ConfigedMain.user == null) {
-			ConfigedMain.user = user;
-		}
-		if (ConfigedMain.password == null) {
-			ConfigedMain.password = password;
-		}
-
-		SSHConnectionInfo.getInstance().setHost(host);
-		SSHConnectionInfo.getInstance().setUser(user);
-		SSHConnectionInfo.getInstance().setPassw(password);
-		if (sshKey == null) {
-			SSHConnectionInfo.getInstance().useKeyfile(false, "", "");
-		} else {
-			SSHConnectionInfo.getInstance().useKeyfile(true, sshKey, sshKeyPass);
-		}
-
-		Logging.registLogEventObserver(this);
 	}
 
 	public static ConfigedMain.EditingTarget getEditingTarget() {
@@ -5411,11 +5411,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// interface LogEventObserver
 	@Override
 	public void logEventOccurred(LogEvent event) {
-		boolean found = false;
 
 		if (allFrames == null) {
 			return;
 		}
+
+		boolean found = false;
 
 		for (JFrame f : allFrames) {
 			if (f != null) {

@@ -119,6 +119,13 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 	};
 
+	public DPassword(ConfigedMain main) {
+		super();
+		this.configedMain = main;
+
+		guiInit();
+	}
+
 	public void setHost(String host) {
 		if (host == null) {
 			host = "";
@@ -147,13 +154,6 @@ public class DPassword extends JDialog implements WaitingSleeper {
 			password = "";
 		}
 		passwordField.setText(password);
-	}
-
-	public DPassword(ConfigedMain main) {
-		super();
-		this.configedMain = main;
-
-		guiInit();
 	}
 
 	private void setActivated(boolean active) {

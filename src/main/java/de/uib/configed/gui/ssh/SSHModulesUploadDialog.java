@@ -14,15 +14,17 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.Logging;
 
 public class SSHModulesUploadDialog extends SSHFileUploadDialog {
+
+	private static final String TITLE = Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
+
 	private JLabel jLabelCopyToModulesD;
 	private JCheckBox jComboBoxCopyToModulesD;
-	private static final String TITLE = Configed.getResourceValue("SSHConnection.ParameterDialog.modulesupload.title");
 
 	public SSHModulesUploadDialog() {
 		super(TITLE, new CommandModulesUpload());
 		super.setVisible(true);
 		Logging.info(this, "SSHModulesUploadDialog build");
-		height = 430;
+		frameHeight = 430;
 		showDialog();
 	}
 

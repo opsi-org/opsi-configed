@@ -124,187 +124,10 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected int[] lineLevels;
 	protected Style[] lineStyles;
 
-	public void setFontSize(String s) {
-		if (s.equals("+")) {
-			displayFontSize = displayFontSize + 2;
-			monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
-			buildDocument();
-		} else if (s.equals("-")) {
-			if (displayFontSize > 10) {
-				displayFontSize = displayFontSize - 2;
-				monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
-			}
-			buildDocument();
-		}
-	}
-
-	protected class AdaptingSlider extends JSlider implements ChangeListener {
-
-		int min;
-		int max;
-		int value;
-
-		public AdaptingSlider(int min, int max, int value) {
-			super(min, max, value);
-			super.addChangeListener(this);
-
-			this.min = min;
-			this.max = max;
-			this.value = value;
-
-			super.setFont(Globals.defaultFont);
-
-			produceLabels(max);
-
-			super.setPaintLabels(true);
-			super.setSnapToTicks(true);
-
-		}
-
-		// ChangeListener
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			// for debugging
-			Logging.info(this, "min, max, value " + min + ", " + max + ", " + value + " -- ChangeEvent " + e);
-		}
-
-		private void produceLabels(int upTo) {
-
-			Map<Integer, JLabel> levelMap = new LinkedHashMap<>();
-
-			for (int i = min; i <= upTo; i++) {
-				levelMap.put(i, new JLabel("" + i));
-			}
-
-			for (int i = upTo + 1; i <= max; i++) {
-				levelMap.put(i, new JLabel(" . "));
-			}
-
-			try {
-				setLabelTable(new Hashtable<>(levelMap));
-			} catch (Exception ex) {
-				Logging.info(this, "setLabelTable levelDict " + levelMap + " ex " + ex);
-			}
-		}
-	}
-
 	protected PopupMenuTrait popupMenu;
-
-	// We create this class because the JTextPane should be editable only to show the caret position,
-	// but then you should not be able to change anything in the Text...
-	protected class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
-		ImmutableDefaultStyledDocument() {
-			super();
-		}
-
-		ImmutableDefaultStyledDocument(StyleContext styles) {
-			super(styles);
-		}
-
-		public void insertStringTruely(int offs, String str, AttributeSet a) throws BadLocationException {
-			super.insertString(offs, str, a);
-		}
-
-		@Override
-		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-			/* Should be empty, because we don't want it to be able to be editable*/
-		}
-
-		@Override
-		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-			/* Should be empty, because we don't want it to be able to be editable*/
-		}
-
-		@Override
-		public void remove(int offs, int len) throws BadLocationException {
-			/* Should be empty, because we don't want it to be able to be editable*/
-		}
-	}
-
-	protected void reload() {
-		Logging.info(this, "reload action");
-		setLevelWithoutAction(produceInitialMaxShowLevel());
-	}
-
-	protected void save() {
-		Logging.debug(this, "save action");
-	}
-
-	protected void saveAsZip() {
-		Logging.debug(this, "save as zip action");
-	}
-
-	protected void saveAllAsZip(boolean loadMissingDocs) {
-		Logging.debug(this, "save all as zip action");
-	}
-
-	protected void floatExternal() {
-		if (document == null) {
-			return;
-		}
-		// set text did not run
-		// probably we already are in a floating instance
-
-		LogPane copyOfMe;
-		de.uib.configed.gui.GeneralFrame externalView;
-
-		copyOfMe = new LogPane("", false);
-
-		externalView = new de.uib.configed.gui.GeneralFrame(null, title, false);
-		externalView.addPanel(copyOfMe);
-		externalView.setup();
-		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		copyOfMe.setLevelWithoutAction(showLevel);
-		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,
-				maxExistingLevel);
-		copyOfMe.getTextComponent().setCaretPosition(jTextPane.getCaretPosition());
-		copyOfMe.adaptSlider();
-
-		externalView.setVisible(true);
-	}
-
-	JTextComponent getTextComponent() {
-		return jTextPane;
-	}
-
-	public void setTitle(String s) {
-		title = s;
-	}
-
-	public void setInfo(String s) {
-		info = s;
-	}
-
-	public String getInfo() {
-		return info;
-	}
 
 	public LogPane(String defaultText) {
 		this(defaultText, true);
-	}
-
-	private Integer produceInitialMaxShowLevel() {
-		int result = 1;
-
-		int savedMaxShownLogLevel = 0;
-		try {
-			savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.savedMaxShownLogLevel.deserialize());
-
-		} catch (NumberFormatException ex) {
-			Logging.warning(this, "savedMaxShownLogLevel could not be read, value "
-					+ Configed.savedStates.savedMaxShownLogLevel.deserialize());
-		}
-		if (savedMaxShownLogLevel > 0) {
-			result = savedMaxShownLogLevel;
-		} else {
-			result = DEFAULT_MAX_SHOW_LEVEL;
-		}
-
-		Logging.info(this, "produceInitialMaxShowLevel " + result);
-
-		return result;
 	}
 
 	public LogPane(String defaultText, boolean withPopup) {
@@ -592,6 +415,183 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			popupMenu.addPopupListenersTo(new JComponent[] { jTextPane });
 		}
+	}
+
+	public void setFontSize(String s) {
+		if (s.equals("+")) {
+			displayFontSize = displayFontSize + 2;
+			monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+			buildDocument();
+		} else if (s.equals("-")) {
+			if (displayFontSize > 10) {
+				displayFontSize = displayFontSize - 2;
+				monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+			}
+			buildDocument();
+		}
+	}
+
+	protected class AdaptingSlider extends JSlider implements ChangeListener {
+
+		int min;
+		int max;
+		int value;
+
+		public AdaptingSlider(int min, int max, int value) {
+			super(min, max, value);
+			super.addChangeListener(this);
+
+			this.min = min;
+			this.max = max;
+			this.value = value;
+
+			super.setFont(Globals.defaultFont);
+
+			produceLabels(max);
+
+			super.setPaintLabels(true);
+			super.setSnapToTicks(true);
+
+		}
+
+		// ChangeListener
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			// for debugging
+			Logging.info(this, "min, max, value " + min + ", " + max + ", " + value + " -- ChangeEvent " + e);
+		}
+
+		private void produceLabels(int upTo) {
+
+			Map<Integer, JLabel> levelMap = new LinkedHashMap<>();
+
+			for (int i = min; i <= upTo; i++) {
+				levelMap.put(i, new JLabel("" + i));
+			}
+
+			for (int i = upTo + 1; i <= max; i++) {
+				levelMap.put(i, new JLabel(" . "));
+			}
+
+			try {
+				setLabelTable(new Hashtable<>(levelMap));
+			} catch (Exception ex) {
+				Logging.info(this, "setLabelTable levelDict " + levelMap + " ex " + ex);
+			}
+		}
+	}
+
+	// We create this class because the JTextPane should be editable only to show the caret position,
+	// but then you should not be able to change anything in the Text...
+	protected class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
+		ImmutableDefaultStyledDocument() {
+			super();
+		}
+
+		ImmutableDefaultStyledDocument(StyleContext styles) {
+			super(styles);
+		}
+
+		public void insertStringTruely(int offs, String str, AttributeSet a) throws BadLocationException {
+			super.insertString(offs, str, a);
+		}
+
+		@Override
+		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+			/* Should be empty, because we don't want it to be able to be editable*/
+		}
+
+		@Override
+		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+			/* Should be empty, because we don't want it to be able to be editable*/
+		}
+
+		@Override
+		public void remove(int offs, int len) throws BadLocationException {
+			/* Should be empty, because we don't want it to be able to be editable*/
+		}
+	}
+
+	protected void reload() {
+		Logging.info(this, "reload action");
+		setLevelWithoutAction(produceInitialMaxShowLevel());
+	}
+
+	protected void save() {
+		Logging.debug(this, "save action");
+	}
+
+	protected void saveAsZip() {
+		Logging.debug(this, "save as zip action");
+	}
+
+	protected void saveAllAsZip(boolean loadMissingDocs) {
+		Logging.debug(this, "save all as zip action");
+	}
+
+	protected void floatExternal() {
+		if (document == null) {
+			return;
+		}
+		// set text did not run
+		// probably we already are in a floating instance
+
+		LogPane copyOfMe;
+		de.uib.configed.gui.GeneralFrame externalView;
+
+		copyOfMe = new LogPane("", false);
+
+		externalView = new de.uib.configed.gui.GeneralFrame(null, title, false);
+		externalView.addPanel(copyOfMe);
+		externalView.setup();
+		externalView.setSize(this.getSize());
+		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
+
+		copyOfMe.setLevelWithoutAction(showLevel);
+		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,
+				maxExistingLevel);
+		copyOfMe.getTextComponent().setCaretPosition(jTextPane.getCaretPosition());
+		copyOfMe.adaptSlider();
+
+		externalView.setVisible(true);
+	}
+
+	JTextComponent getTextComponent() {
+		return jTextPane;
+	}
+
+	public void setTitle(String s) {
+		title = s;
+	}
+
+	public void setInfo(String s) {
+		info = s;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	private Integer produceInitialMaxShowLevel() {
+		int result = 1;
+
+		int savedMaxShownLogLevel = 0;
+		try {
+			savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.savedMaxShownLogLevel.deserialize());
+
+		} catch (NumberFormatException ex) {
+			Logging.warning(this, "savedMaxShownLogLevel could not be read, value "
+					+ Configed.savedStates.savedMaxShownLogLevel.deserialize());
+		}
+		if (savedMaxShownLogLevel > 0) {
+			result = savedMaxShownLogLevel;
+		} else {
+			result = DEFAULT_MAX_SHOW_LEVEL;
+		}
+
+		Logging.info(this, "produceInitialMaxShowLevel " + result);
+
+		return result;
 	}
 
 	public void buildDocument() {

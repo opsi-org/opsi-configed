@@ -52,6 +52,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String KEY_MODEL = "model";
 	private static final String KEY_PRODUCT = "product";
 
+	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
+	protected static final String SCANTIME = "scantime";
+
 	protected Map<String, List<Map<String, Object>>> hwInfo;
 	protected String treeRootTitle;
 	protected List<Map<String, List<Map<String, Object>>>> hwConfig;
@@ -70,9 +73,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	protected JTable table;
 	protected HWInfoTableModel tableModel;
 	protected Map<String, Object> hwClassMapping;
-
-	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
-	protected static final String SCANTIME = "scantime";
 
 	protected String vendorStringComputerSystem;
 	protected String vendorStringBaseBoard;

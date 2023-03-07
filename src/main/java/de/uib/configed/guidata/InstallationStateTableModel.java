@@ -192,7 +192,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return columnDict.get(column);
 	}
 
-	public static List<String> localizeColumns(List<String> cols) {
+	public static List<String> localizeColumns(Iterable<String> cols) {
 		List<String> result = new ArrayList<>();
 
 		if (columnDict != null) {

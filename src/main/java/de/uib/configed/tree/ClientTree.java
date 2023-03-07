@@ -149,6 +149,13 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
+	public ClientTree(ConfigedMain configedMain) {
+		super();
+		this.configedMain = configedMain;
+
+		init();
+	}
+
 	public static Map<String, String> getTranslationsFromPersistentNames() {
 		return translationsFromPersistentNames;
 	}
@@ -241,13 +248,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				invertedSimpleClientPaths.get(leafname).remove(new SimpleTreePath(clientPath.getPath()));
 			}
 		}
-	}
-
-	public ClientTree(ConfigedMain configedMain) {
-		super();
-		this.configedMain = configedMain;
-
-		init();
 	}
 
 	private void init() {

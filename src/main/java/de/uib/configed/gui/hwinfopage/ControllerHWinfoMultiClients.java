@@ -39,6 +39,11 @@ import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 
 public class ControllerHWinfoMultiClients {
+
+	private static final int KEY_COL = 0;
+	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
+	private static final String DELETE_PREFIX = "HARDWARE_";
+
 	public PanelGenEditTable panel;
 	private GenTableModel model;
 
@@ -55,11 +60,6 @@ public class ControllerHWinfoMultiClients {
 	String[] hosts;
 	ConfigedMain main;
 	protected AbstractPersistenceController persist;
-
-	private static final int KEY_COL = 0;
-	private static final String FILTER_SELECTED_CLIENTS = "visibleClients";
-	private static final String DELETE_PREFIX = "HARDWARE_";
-
 	TableModelFilter tableModelFilter;
 
 	SecondaryFrame fTable;

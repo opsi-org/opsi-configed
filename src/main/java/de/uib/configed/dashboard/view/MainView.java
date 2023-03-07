@@ -42,6 +42,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class MainView implements View {
+
+	protected static final String DATA_CHANGED_SERVICE = "changed";
+	protected static final String NEW_DEPOT_SELECTED_SERVICE = "selectedDepot";
+
 	@FXML
 	private ClientLastSeenComparison clientLastSeenComparison;
 	@FXML
@@ -146,9 +150,6 @@ public class MainView implements View {
 	private AnchorPane anchorPane;
 	@FXML
 	private ProgressBar statusProgressBar;
-
-	protected static final String DATA_CHANGED_SERVICE = "changed";
-	protected static final String NEW_DEPOT_SELECTED_SERVICE = "selectedDepot";
 
 	private JFXPanel fxPanel;
 	private Scene scene;

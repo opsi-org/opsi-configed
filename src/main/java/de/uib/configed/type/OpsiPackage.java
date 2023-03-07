@@ -21,14 +21,7 @@ import de.uib.utilities.logging.Logging;
 
 //data source table productOnDepot
 public class OpsiPackage implements Comparable<OpsiPackage> {
-	protected String productId;
-	protected int productType;
-	protected String versionInfo;
-	protected String productVersion;
-	protected String packageVersion;
 
-	protected String representation;
-	protected String lockedText;
 	public static final String IS_LOCKED_INFO = "LOCKED";
 
 	public static final String DB_KEY_PRODUCT_ID = "productId";
@@ -54,6 +47,15 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 
 	public static final int TYPE_LOCALBOOT = 0;
 	public static final int TYPE_NETBOOT = 1;
+
+	protected String productId;
+	protected int productType;
+	protected String versionInfo;
+	protected String productVersion;
+	protected String packageVersion;
+
+	protected String representation;
+	protected String lockedText;
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
 		this(productId, productVersion, packageVersion, productType, false);

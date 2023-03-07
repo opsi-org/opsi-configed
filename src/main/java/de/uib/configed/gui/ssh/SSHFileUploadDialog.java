@@ -32,6 +32,9 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.Logging;
 
 public class SSHFileUploadDialog extends FGeneralDialog {
+
+	protected static String wgetDefText;
+
 	protected GroupLayout layout;
 	protected JPanel inputPanel = new JPanel();
 	protected JPanel buttonPanel = new JPanel();
@@ -66,10 +69,9 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	protected SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
 	protected SSHConnectionExecDialog dia;
 	protected ConfigedMain main;
-	protected static String wgetDefText;
 
-	protected int height = 410;
-	protected int width = 700;
+	protected int frameHeight = 410;
+	protected int frameWidth = 700;
 
 	public SSHFileUploadDialog() {
 		this(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.title"), null);
@@ -98,7 +100,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	protected void showDialog() {
-		this.setSize(width, height);
+		this.setSize(frameWidth, frameHeight);
 		this.setVisible(true);
 		Logging.info(this, "SSHFileUploadDialog show");
 	}

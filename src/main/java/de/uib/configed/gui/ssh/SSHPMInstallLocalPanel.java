@@ -16,14 +16,17 @@ import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.CommandSFTPUpload;
 
 public class SSHPMInstallLocalPanel extends SSHPMInstallPanel {
+
+	private static SSHPMInstallLocalPanel instance;
+
 	private JLabel jLabelUploadFrom;
 	private JLabel jLabelUploadTo;
 	private JTextField jTextFieldPath;
 	private JButton jButtonFileChooser;
-	private static SSHPMInstallLocalPanel instance;
+
 	private JComboBox<String> jComboBoxAutoCompletion;
 	private JButton jButtonAutoCompletion;
-	SSHCompletionComboButton autocompletion;
+	private SSHCompletionComboButton autocompletion;
 
 	public SSHPMInstallLocalPanel() {
 		super();

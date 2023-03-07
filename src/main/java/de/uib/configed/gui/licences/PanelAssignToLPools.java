@@ -34,6 +34,11 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  */
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 
+	private static final int SPLIT_PANE_H_MARGIN = 1;
+	public static final int TABLES_MAX_WIDTH = 1000;
+
+	private static final int MIN_V_SIZE = 80;
+
 	public JLabel fieldSelectedLicencePoolId;
 
 	public JLabel fieldCountAssignedStatus;
@@ -45,8 +50,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	public JButton buttonShowAssignedNotExisting;
 
-	private static final int SPLIT_PANE_H_MARGIN = 1;
-
 	public PanelRegisteredSoftware panelRegisteredSoftware;
 	public PanelGenEditTable panelLicencepools;
 	public PanelGenEditTable panelProductId2LPool;
@@ -56,11 +59,6 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 	private PanelStateSwitch<Softwarename2LicencepoolRestriction> panelRadiobuttonsPreselectionForName2Pool;
 	private JLabel labelSimilarEntriesExist;
-
-	protected int minVSize = 80;
-
-	public static final int TABLES_MAX_WIDTH = 1000;
-	protected int tablesMaxHeight = Short.MAX_VALUE;
 
 	/** Creates new form panelAssignToLPools */
 	public PanelAssignToLPools(AbstractControlMultiTablePanel controller) {
@@ -480,9 +478,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		layoutTopPane.setVerticalGroup(layoutTopPane.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutTopPane.createSequentialGroup().addContainerGap()
 
-						.addComponent(panelLicencepools, minVSize, GroupLayout.DEFAULT_SIZE, tablesMaxHeight)
+						.addComponent(panelLicencepools, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 
-						.addComponent(panelProductId2LPool, minVSize, GroupLayout.DEFAULT_SIZE, tablesMaxHeight)
+						.addComponent(panelProductId2LPool, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 
 						.addContainerGap())
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));
@@ -503,7 +501,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 		layoutBottomPane.setVerticalGroup(layoutBottomPane.createSequentialGroup().addContainerGap()
 				.addGroup(layoutBottomPane.createParallelGroup(GroupLayout.Alignment.LEADING)
 						.addComponent(panelInfoWindowsSoftware).addComponent(panelInfoConfigWindowsSoftware))
-				.addComponent(panelRegisteredSoftware, minVSize, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addComponent(panelRegisteredSoftware, MIN_V_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 				.addContainerGap());
 
 		splitPane.setTopComponent(topPane);

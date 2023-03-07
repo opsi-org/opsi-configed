@@ -85,6 +85,9 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 
 	private String[] formats;
 
+	public boolean canceled;
+	SSHConnectionOutputDialog outputDia;
+
 	private SSHCommandParameterMethods(ConfigedMain main) {
 		methods.put(METHOD_INTERACTIVE_ELEMENT, METHOD_INTERACTIVE_ELEMENT);
 		methods.put(METHOD_GET_SELECTED_CLIENT_NAMES, "getSelectedClientNames");
@@ -152,9 +155,6 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		}
 		return new String[0];
 	}
-
-	public boolean canceled;
-	SSHConnectionOutputDialog outputDia;
 
 	public SSHCommand parseParameter(final SSHCommand command, SSHConnect caller) {
 		Logging.info(this, "parseParameter command " + command.getCommandRaw());
@@ -578,12 +578,9 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	private class ScriptExecutioner {
 		private String value;
 		private SSHCommand cmd;
-		private SSHOutputCollector sshOutputCollector;
 
 		public ScriptExecutioner(SSHCommand cmd) {
 			this.cmd = cmd;
-
-			this.sshOutputCollector = SSHOutputCollector.getInstance();
 		}
 
 		public String getValue() {

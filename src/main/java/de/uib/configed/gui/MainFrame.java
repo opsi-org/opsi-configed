@@ -162,6 +162,10 @@ public class MainFrame extends JFrame
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT = 50;
 
+	public static final String ITEM_ADD_CLIENT = "add client";
+	public static final String ITEM_DELETE_CLIENT = "remove client";
+	public static final String ITEM_FREE_LICENCES = "free licences for client";
+
 	protected String oldNotes;
 
 	private Map<String, Map<String, String>> changedClientInfos;
@@ -171,11 +175,6 @@ public class MainFrame extends JFrame
 	private ConfigedMain configedMain;
 
 	// menu system
-
-	public static final String ITEM_ADD_CLIENT = "add client";
-	public static final String ITEM_DELETE_CLIENT = "remove client";
-	public static final String ITEM_FREE_LICENCES = "free licences for client";
-
 	private Map<String, List<JMenuItem>> menuItemsHost;
 
 	private JMenuBar jMenuBar1 = new JMenuBar();

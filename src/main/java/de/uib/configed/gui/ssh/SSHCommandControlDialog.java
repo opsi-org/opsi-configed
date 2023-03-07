@@ -53,6 +53,13 @@ import de.uib.utilities.swing.CheckedDocument;
  * @inheritDoc Graphical user interface for editing sshcommands.
  **/
 public final class SSHCommandControlDialog extends FGeneralDialog {
+
+	private static final int FRAME_WIDTH = 850;
+	private static final int FRAME_HEIGHT = 600;
+
+	/** This instance / Design Patter: singelton **/
+	private static SSHCommandControlDialog instance;
+
 	/** button panel instance **/
 	private JPanel buttonPanel = new JPanel();
 	/** command control panel instance **/
@@ -106,17 +113,14 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	private ConfigedMain cmain;
 	/** SSHCommandFactory instance **/
 	private final SSHCommandFactory factory = SSHCommandFactory.getInstance();
-	/** This instance / Design Patter: singelton **/
-	private static SSHCommandControlDialog instance;
 
 	private JButton buttonTestCommand;
+
 	/**
 	 * Graphical user interface for editing sshcommands.
 	 * 
 	 * @param owner Usually the MainFrame
 	 **/
-	private static final int FRAME_WIDTH = 850;
-	private static final int FRAME_HEIGHT = 600;
 
 	private SSHCommandControlDialog(ConfigedMain cm, JFrame owner) {
 		super(null, Configed.getResourceValue("MainFrame.jMenuSSHCommandControl"));

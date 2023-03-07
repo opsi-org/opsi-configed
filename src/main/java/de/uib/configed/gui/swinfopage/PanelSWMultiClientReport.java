@@ -23,14 +23,15 @@ import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.swing.PanelStateSwitch;
 
 public class PanelSWMultiClientReport extends JPanel {
+
+	public static final String FILENAME_PREFIX_DEFAULT = "report_";
+
 	JButton buttonStart;
 	ActionListener actionListenerForStart;
 
 	boolean withMsUpdates;
 	boolean withMsUpdates2;
 	boolean askForOverwrite;
-
-	public static final String FILENAME_PREFIX_DEFAULT = "report_";
 
 	protected PanelStateSwitch<KindOfExport> panelSelectExportType;
 	protected PanelSWInfo.KindOfExport kindOfExport;

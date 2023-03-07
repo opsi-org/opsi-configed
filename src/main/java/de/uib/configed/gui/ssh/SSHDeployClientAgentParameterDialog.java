@@ -33,6 +33,10 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelStateSwitch;
 
 public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
+
+	private static final int FRAME_WIDTH = 800;
+	private static final int FRAME_HEIGHT = 500;
+
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
 	private JPanel winAuthPanel = new JPanel();
@@ -65,11 +69,10 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 	private String defaultWinUser = "";
 
-	private static final int FRAME_WIDTH = 800;
-	private static final int FRAME_HEIGHT = 500;
-
 	private CommandDeployClientAgent commandDeployClientAgent = new CommandDeployClientAgent();
 	private ConfigedMain main;
+
+	boolean aktive;
 
 	public SSHDeployClientAgentParameterDialog() {
 		this(null);
@@ -350,8 +353,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		commandDeployClientAgent.setPassw(new String(jTextFieldPassword.getPassword()).trim());
 		updateCommand();
 	}
-
-	boolean aktive;
 
 	public void changeEchoChar() {
 		if (aktive) {

@@ -26,14 +26,15 @@ import de.uib.utilities.swing.CellAlternatingColorizer;
 
 // Verwendung in Beisspielsweise SSHOpsiSetRightsDialog.java
 public class SSHCompletionComboButton {
+	private static final String ROOT_DIRECTORY = "/";
+	private static final String HOME_DIRECTORY = "~";
+
 	private JComboBox<String> combobox;
 	private JButton button;
 	private JTextField textfield;
 	private List<String> defaultvalues;
 	private String searchSpecificFiles;
 	private String comboboxDefaultPath;
-	private static final String ROOT_DIRECTORY = "/";
-	private static final String HOME_DIRECTORY = "~";
 
 	// will be overwritten with config
 	private String opsiRepo = "/";
@@ -356,7 +357,6 @@ public class SSHCompletionComboButton {
 			JComponent jc = (JComponent) c;
 
 			if (jc instanceof JLabel) {
-				JLabel lbl = (JLabel) jc;
 				String getText = ((JLabel) jc).getText();
 				if (autocompletion == null || getText == null || getText.equals("")) {
 					return c;
@@ -383,7 +383,7 @@ public class SSHCompletionComboButton {
 
 					if ((getText.startsWith(basicPath)) && (!getText.equals(basicPath))
 							&& (!basicPath.equals(ROOT_DIRECTORY))) {
-						lbl.setText(getText.replace(basicPath, ""));
+						((JLabel) jc).setText(getText.replace(basicPath, ""));
 					}
 					Logging.debug(this, "(2) basicPath " + basicPath + " getText " + getText);
 				}

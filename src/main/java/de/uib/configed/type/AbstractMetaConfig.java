@@ -6,6 +6,14 @@ public abstract class AbstractMetaConfig {
 	// we have eight class members to define a property (a config) by a meta-config:
 	// giving four meta configs
 
+	public static final String CONFIG_KEY = "configed.meta_config";
+	public static final String PROPERTY_KEY_PART = "propertyname";
+	public static final String VALUE_KEY_PART = "defaultvalue";
+	public static final String POSSIBLE_VALUES_KEY_PART = "possiblevalues";
+	public static final String EDITABLE_KEY_PART = "editable";
+	public static final String MULTIVALUE_KEY_PART = "multivalue";
+	public static final String TYPE_KEY_PART = "type";
+
 	protected String metakeynameForPropertyName;
 	protected String metakeynameForPropertyValue;
 	protected String metakeynameForPropertyDefaultValues;
@@ -20,15 +28,7 @@ public abstract class AbstractMetaConfig {
 
 	protected ConfigOption.TYPE propertyType;
 
-	public class InvalidTypeException extends Exception {}
-
-	public static final String CONFIG_KEY = "configed.meta_config";
-	public static final String PROPERTY_KEY_PART = "propertyname";
-	public static final String VALUE_KEY_PART = "defaultvalue";
-	public static final String POSSIBLE_VALUES_KEY_PART = "possiblevalues";
-	public static final String EDITABLE_KEY_PART = "editable";
-	public static final String MULTIVALUE_KEY_PART = "multivalue";
-	public static final String TYPE_KEY_PART = "type";
+	public static class InvalidTypeException extends Exception {}
 
 	protected String baseEntryKeyName;
 

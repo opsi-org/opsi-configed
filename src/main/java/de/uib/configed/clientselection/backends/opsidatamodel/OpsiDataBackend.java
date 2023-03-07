@@ -95,6 +95,9 @@ import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.Logging;
 
 public final class OpsiDataBackend extends AbstractBackend {
+
+	private static OpsiDataBackend instance;
+
 	// data which will be cached
 	List<Client> clients;
 	Map<String, HostInfo> clientMaps;
@@ -116,7 +119,14 @@ public final class OpsiDataBackend extends AbstractBackend {
 
 	private AbstractPersistenceController controller;
 
-	private static OpsiDataBackend instance;
+	private OpsiDataBackend() {
+		controller = PersistenceControllerFactory.getPersistenceController();
+		if (controller == null) {
+			Logging.warning(this, "Warning, controller is null!");
+		}
+		getHardwareConfig();
+
+	}
 
 	// we make a singleton in order to avoid data reloading
 	public static OpsiDataBackend getInstance() {
@@ -131,15 +141,6 @@ public final class OpsiDataBackend extends AbstractBackend {
 		instance = null;
 	}
 
-	private OpsiDataBackend() {
-		controller = PersistenceControllerFactory.getPersistenceController();
-		if (controller == null) {
-			Logging.warning(this, "Warning, controller is null!");
-		}
-		getHardwareConfig();
-
-	}
-
 	@Override
 	protected AbstractSelectOperation createOperation(AbstractSelectOperation operation) {
 		Logging.info(this, "createOperation operation, data, element: " + operation.getClassName() + ", "
@@ -147,8 +148,6 @@ public final class OpsiDataBackend extends AbstractBackend {
 
 		// Host
 		AbstractSelectElement element = operation.getElement();
-		String[] elementPath = element.getPathArray();
-		Object data = operation.getData();
 		String attributeTextHost = null;
 
 		if (element instanceof NameElement) {
@@ -262,6 +261,9 @@ public final class OpsiDataBackend extends AbstractBackend {
 			return new OpsiDataStringEqualsOperation(OpsiDataClient.SWAUDIT_MAP, swauditAttributeText,
 					(String) operation.getData(), element);
 		}
+
+		String[] elementPath = element.getPathArray();
+		Object data = operation.getData();
 
 		// hardware
 		if (element instanceof GenericTextElement || element instanceof GenericIntegerElement

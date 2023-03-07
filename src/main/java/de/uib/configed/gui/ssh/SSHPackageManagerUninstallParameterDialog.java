@@ -61,6 +61,8 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private CommandOpsiPackageManagerUninstall commandPMUninstall = new CommandOpsiPackageManagerUninstall();
 
+	boolean execFinished;
+
 	public SSHPackageManagerUninstallParameterDialog() {
 		this(null);
 	}
@@ -352,9 +354,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		updateCommand();
 	}
 
-	boolean execFinished;
 	/* This method is called when button 1 is pressed */
-
 	private boolean confirmAction() {
 		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
 				Globals.APPNAME + " "

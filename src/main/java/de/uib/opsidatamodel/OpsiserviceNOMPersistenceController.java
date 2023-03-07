@@ -4787,6 +4787,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// lazy initializing
+	// TODO why do I need this?
 	@Override
 	public List<String> getMethodSignature(String methodname) {
 		if (mapOfMethodSignatures == null) {

@@ -35,6 +35,20 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHConnectionOutputDialog extends FGeneralDialog {
+
+	private static final String ANSI_ESCAPE_1 = "";
+	private static final String ANSI_ESCAPE_2 = "\u001B";
+
+	public static final String ANSI_CODE_END = "[0;0;0m";
+	public static final String ANSI_CODE_END_1 = "\u001B[0;0;0m";
+	public static final String ANSI_CODE_END_2 = "[0;0;0m";
+
+	// user info not really ansi code !!
+	public static final String ANSI_CODE_INFO = "[0;info;0m";
+	public static final String ANSI_CODE_ERROR = "[0;error;0m";
+
+	private static final Map<String, Color> ansiCodeColors = Globals.SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS;
+
 	protected JTextPane output;
 	protected JScrollPane jScrollPane;
 
@@ -48,18 +62,6 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	protected GroupLayout mainPanelLayout;
 
 	private Color linecolor = Globals.SSH_CONNECTION_OUTPUT_DIALOG_START_LINE_COLOR;
-	private static final String ANSI_ESCAPE_1 = "";
-	private static final String ANSI_ESCAPE_2 = "\u001B";
-
-	public static final String ANSI_CODE_END = "[0;0;0m";
-	public static final String ANSI_CODE_END_1 = "\u001B[0;0;0m";
-	public static final String ANSI_CODE_END_2 = "[0;0;0m";
-
-	// user info not really ansi code !!
-	public static final String ANSI_CODE_INFO = "[0;info;0m";
-	public static final String ANSI_CODE_ERROR = "[0;error;0m";
-
-	private static final Map<String, Color> ansiCodeColors = Globals.SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS;
 
 	protected class DialogCloseListener implements ActionListener {
 		@Override
@@ -204,7 +206,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		super.doAction2();
 	}
 
-	class InputFilter extends DocumentFilter {
+	private static class InputFilter extends DocumentFilter {
 		JTextPane editor;
 
 		public InputFilter(JTextPane editor) {
