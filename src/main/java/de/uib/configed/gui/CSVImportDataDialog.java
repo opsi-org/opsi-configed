@@ -51,6 +51,8 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	private CSVImportDataModifier modifier;
 
+	int startLine = 1;
+
 	public CSVImportDataDialog(CSVImportDataModifier modifier, CSVFormat format) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true,
 				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
@@ -63,8 +65,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		this.parser = new CSVParser(format);
 		this.modifier = modifier;
 	}
-
-	int startLine = 1;
 
 	@Override
 	protected void allLayout() {
@@ -367,7 +367,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		return updatedSuccessfull ? thePanel : null;
 	}
 
-	private class InputListener implements DocumentListener {
+	private static class InputListener implements DocumentListener {
 		public void performAction() {
 			/* Should be overridden in actual implementation */}
 

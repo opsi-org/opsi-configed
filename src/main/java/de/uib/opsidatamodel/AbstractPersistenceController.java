@@ -346,7 +346,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract List<Map<java.lang.String, java.lang.Object>> hostRead();
 
-	public abstract AbstractHostInfoCollections getHostInfoCollections();
+	public abstract HostInfoCollections getHostInfoCollections();
 
 	public abstract List<String> getClientsWithOtherProductVersion(String productId, String productVersion,
 			String packageVersion, boolean includeFailedInstallations);

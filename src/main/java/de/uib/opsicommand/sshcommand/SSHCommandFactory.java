@@ -52,22 +52,6 @@ public final class SSHCommandFactory {
 	public static final String OPSI_PATH_VAR_REPOSITORY = "/var/lib/opsi/repository/";
 	public static final String OPSI_PATH_VAR_DEPOT = "/var/lib/opsi/depot/";
 
-	/** ConfigedMain instance **/
-	private ConfigedMain main;
-	private MainFrame mainFrame;
-	/** SSHCommandFactory instance **/
-	private static SSHCommandFactory instance;
-	/**
-	 * List<Map<String,Object>> list elements are commands with key value pairs
-	 **/
-	private List<Map<String, Object>> commandlist;
-	/** List<SSHCommand_Template> list elements are sshcommands **/
-	private List<SSHCommandTemplate> sshCommandList;
-	/** list of known menus **/
-	private List<String> listKnownMenus;
-	/** list of known parent menus **/
-	private List<String> listKnownParents;
-
 	/** static String for parent null ("Server-Konsole") **/
 	public static final String PARENT_NULL = Configed.getResourceValue("MainFrame.jMenuServer");
 	/**
@@ -84,7 +68,7 @@ public final class SSHCommandFactory {
 	/** setting ssh_colored_output per default true **/
 	public static boolean sshColoredOutput = true;
 	/** setting ssh_always_exec_in_background per default false **/
-	public static boolean sshAlwaysExecInBackground = false;
+	public static boolean sshAlwaysExecInBackground;
 	/** all static commands which need run-time parameter **/
 	private static List<SSHCommand> sshCommandsParam = new ArrayList<>();
 
@@ -103,7 +87,6 @@ public final class SSHCommandFactory {
 	/** static final name of field "commands" */
 	public static final String COMMAND_MAP_COMMANDS = "commands";
 
-	SSHConnectExec connection = null;
 	public static final String CONNECTED = Configed.getResourceValue("SSHConnection.connected");
 	public static final String CONNECTION_NOT_ALLOWED = Configed
 			.getResourceValue("SSHConnection.CONNECTION_NOT_ALLOWED");
@@ -118,10 +101,31 @@ public final class SSHCommandFactory {
 	public static final String SSH_HOST = "<<!sshhost!>>";
 
 	public static final String CONFIDENTIAL = "***confidential***";
+
+	/** SSHCommandFactory instance **/
+	private static SSHCommandFactory instance;
+
+	SSHConnectExec connection;
+
+	/**
+	 * List<Map<String,Object>> list elements are commands with key value pairs
+	 **/
+	private List<Map<String, Object>> commandlist;
+	/** List<SSHCommand_Template> list elements are sshcommands **/
+	private List<SSHCommandTemplate> sshCommandList;
+	/** list of known menus **/
+	private List<String> listKnownMenus;
+	/** list of known parent menus **/
+	private List<String> listKnownParents;
+
+	/** ConfigedMain instance **/
+	private ConfigedMain main;
+	private MainFrame mainFrame;
+
 	List<String> createdProducts = new ArrayList<>();
 
-	SSHCommandParameterMethods pmethodHandler = null;
-	SSHConnectionInfo connectionInfo = null;
+	SSHCommandParameterMethods pmethodHandler;
+	SSHConnectionInfo connectionInfo;
 
 	/**
 	 * Factory Instance for SSH Command
@@ -249,7 +253,7 @@ public final class SSHCommandFactory {
 	 * @param c   (commands): LinkedList<String>
 	 * @return new SSHCommand_Template
 	 **/
-	public SSHCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
+	public static SSHCommandTemplate buildSSHCommand(String id, String pmt, String mt, String ttt, int p, boolean ns,
 			List<String> c) {
 
 		// Achtung Reihenfolge der Elemente in Arrays c könnte sich ändern !" toList =
@@ -413,7 +417,7 @@ public final class SSHCommandFactory {
 	 * @param SSHCommandTemplate
 	 * @return Map<String,Object> command
 	 **/
-	private Map<String, Object> buildCommandMap(SSHCommandTemplate c) {
+	private static Map<String, Object> buildCommandMap(SSHCommandTemplate c) {
 		Map<String, Object> com = new HashMap<>();
 
 		com.put(COMMAND_MAP_MENU_TEXT, c.getMenuText());

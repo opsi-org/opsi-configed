@@ -26,9 +26,9 @@ import de.uib.utilities.logging.Logging;
 public class EmptyCommand implements SSHCommand {
 	public static final String TESTCOMMAND = "pwd";
 	/** boolean needParameter = false **/
-	private boolean needParameter = false;
-	/** boolean isMultiCommand = true **/
-	private boolean isMultiCommand = false;
+	private boolean needParameter;
+	/** boolean isMultiCommand = false **/
+	private boolean isMultiCommand;
 	/** String unique command id **/
 	private String id;
 	/** String unique menu text **/
@@ -36,14 +36,14 @@ public class EmptyCommand implements SSHCommand {
 	/** String command **/
 	private String command;
 	/** boolean needSudo state **/
-	private boolean needSudo = false;
+	private boolean needSudo;
 	/** String parent menu text **/
-	private String parentMenuText = null;
+	private String parentMenuText;
 	/** String tooltip text **/
 	private String tooltipText = "";
 	/** integer position **/
 	private int position;
-	private String confidentialInformation = null;
+	private String confidentialInformation;
 
 	@Override
 	/**

@@ -29,7 +29,7 @@ public class ActivatedGroupModel {
 
 	protected Set<String> associatedClients;
 
-	protected boolean active = false;
+	protected boolean active;
 
 	private HostsStatusInfo hostsInfo;
 

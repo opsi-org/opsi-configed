@@ -28,7 +28,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	private String verbosity = " ";
 	private String freeInput = " ";
 
-	protected FGeneralDialog dialog = null;
+	protected FGeneralDialog dialog;
 
 	public CommandWget() {
 	}
@@ -223,7 +223,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 		return dir.equals("") && url.equals("");
 	}
 
-	private String getFilenameFromUrl(String url) {
+	private static String getFilenameFromUrl(String url) {
 		int p = url.lastIndexOf("/");
 		return url.substring(p + 1);
 	}

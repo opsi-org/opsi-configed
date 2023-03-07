@@ -18,9 +18,8 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class TextInputField extends JPanel
-// common wrapper class for JTextField and JCombBox
-{
+public class TextInputField extends JPanel {
+	// common wrapper class for JTextField and JCombBox
 
 	protected JTextField textfield;
 	protected JComboBox<String> combo;
@@ -50,15 +49,11 @@ public class TextInputField extends JPanel
 			if (initialValue == null) {
 				inputType = InputType.DATE;
 				initValue = "";
-			}
-
-			else {
+			} else {
 				inputType = InputType.TEXT;
 			}
 
-		}
-
-		else {
+		} else {
 			this.proposedValues = proposedValues;
 			proposedValues.add(0, "");
 		}
@@ -130,9 +125,9 @@ public class TextInputField extends JPanel
 								} else {
 									if (val.charAt(0) <= ch) {
 										j++;
-									} else
-									// first occurrence of next char
-									{
+									} else {
+										// first occurrence of next char
+
 										if (j > 0) {
 											j--;
 										}

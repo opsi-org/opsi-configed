@@ -1,6 +1,7 @@
 package de.uib.configed.clientselection;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,7 @@ public class BackendMySQL {
 		return new ArrayList<>(set);
 	}
 
-	public <T> List<T> intersection(List<T> list1, List<T> list2) {
+	public <T> List<T> intersection(Iterable<T> list1, Collection<T> list2) {
 		List<T> list = new ArrayList<>();
 
 		for (T t : list1) {
@@ -391,7 +392,7 @@ public class BackendMySQL {
 
 	}
 
-	private Type getType(JSONObject json) {
+	private static Type getType(JSONObject json) {
 		try {
 			switch (json.getString(MySQL.KEY_OPERATION)) {
 			case "OrOperation":
@@ -404,7 +405,7 @@ public class BackendMySQL {
 				return Type.NEW;
 			}
 		} catch (JSONException e) {
-			Logging.warning("we did get type of operation from " + json);
+			Logging.warning("we did get type of operation from " + json, e);
 			return Type.NEW;
 		}
 	}

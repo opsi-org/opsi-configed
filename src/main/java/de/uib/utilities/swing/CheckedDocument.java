@@ -7,7 +7,7 @@ import javax.swing.text.PlainDocument;
 public class CheckedDocument extends PlainDocument {
 	char[] allowedChars;
 	int size;
-	boolean checkMask = false;
+	boolean checkMask;
 
 	public CheckedDocument() {
 
@@ -19,13 +19,13 @@ public class CheckedDocument extends PlainDocument {
 	}
 
 	public boolean appendCharIfAllowed(StringBuilder s, char c) {
-		char cCorrected = c;
 
 		if (allowedChars == null) {
 			return false;
 		}
 
 		boolean result = false;
+		char cCorrected = c;
 
 		for (int j = 0; j < allowedChars.length; j++) {
 			if (Character.toLowerCase(allowedChars[j]) == Character.toLowerCase(c)) {

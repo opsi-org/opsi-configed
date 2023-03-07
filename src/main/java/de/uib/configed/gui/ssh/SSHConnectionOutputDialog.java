@@ -35,19 +35,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHConnectionOutputDialog extends FGeneralDialog {
-	protected JTextPane output;
-	protected JScrollPane jScrollPane;
 
-	protected JButton jButtonClose;
-	protected boolean buildFrame = false;
-
-	protected JPanel mainPanel = new JPanel();
-	protected JPanel inputPanel = new JPanel();
-
-	protected GroupLayout konsolePanelLayout;
-	protected GroupLayout mainPanelLayout;
-
-	private Color linecolor = Globals.SSH_CONNECTION_OUTPUT_DIALOG_START_LINE_COLOR;
 	private static final String ANSI_ESCAPE_1 = "";
 	private static final String ANSI_ESCAPE_2 = "\u001B";
 
@@ -60,6 +48,20 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	public static final String ANSI_CODE_ERROR = "[0;error;0m";
 
 	private static final Map<String, Color> ansiCodeColors = Globals.SSH_CONNECTION_OUTPUT_DIALOG_ANSI_CODE_COLORS;
+
+	protected JTextPane output;
+	protected JScrollPane jScrollPane;
+
+	protected JButton jButtonClose;
+	protected boolean buildFrame;
+
+	protected JPanel mainPanel = new JPanel();
+	protected JPanel inputPanel = new JPanel();
+
+	protected GroupLayout konsolePanelLayout;
+	protected GroupLayout mainPanelLayout;
+
+	private Color linecolor = Globals.SSH_CONNECTION_OUTPUT_DIALOG_START_LINE_COLOR;
 
 	protected class DialogCloseListener implements ActionListener {
 		@Override
@@ -204,7 +206,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		super.doAction2();
 	}
 
-	class InputFilter extends DocumentFilter {
+	private static class InputFilter extends DocumentFilter {
 		JTextPane editor;
 
 		public InputFilter(JTextPane editor) {

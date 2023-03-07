@@ -16,7 +16,7 @@ public class LicenceContractEntry extends StringValuedRelationElement {
 		produceFrom(m);
 	}
 
-	private String removeTime(String datetime) {
+	private static String removeTime(String datetime) {
 		if (datetime != null && datetime.length() > 0) {
 			int idx = datetime.indexOf(" ");
 			if (idx > -1) {

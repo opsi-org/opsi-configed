@@ -178,14 +178,10 @@ public class OpsiMethodCall {
 					}
 
 					joParams.put(arr);
-				}
-
-				else if (parameters[i] instanceof Map) {
+				} else if (parameters[i] instanceof Map) {
 					JSONObject job = new JSONObject((Map<?, ?>) parameters[i]);
 					joParams.put(job);
-				}
-
-				else {
+				} else {
 					joParams.put(parameters[i]);
 				}
 

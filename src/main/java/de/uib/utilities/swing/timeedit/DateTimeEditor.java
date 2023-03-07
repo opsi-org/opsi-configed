@@ -17,6 +17,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerModel;
+import javax.swing.border.EmptyBorder;
 
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.calendar.DateSelectionModel;
@@ -98,17 +99,17 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 		monthSpinner.setPreferredSize(new Dimension(17, 27));
 
 		buttonBack = new JButton("<");
-		buttonBack.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
+		buttonBack.setBorder(new EmptyBorder(1, 1, 1, 1));
 		buttonBack.addActionListener(actionEvent -> switchMonth(-1));
 		buttonForward = new JButton(">");
-		buttonForward.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
+		buttonForward.setBorder(new EmptyBorder(1, 1, 1, 1));
 		buttonForward.addActionListener(actionEvent -> switchMonth(+1));
 
 		buttonYearBack = new JButton("<<");
-		buttonYearBack.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
+		buttonYearBack.setBorder(new EmptyBorder(1, 1, 1, 1));
 		buttonYearBack.addActionListener(actionEvent -> switchYear(-1));
 		buttonYearForward = new JButton(">>");
-		buttonYearForward.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
+		buttonYearForward.setBorder(new EmptyBorder(1, 1, 1, 1));
 		buttonYearForward.addActionListener(actionEvent -> switchYear(+1));
 
 		GroupLayout layout = new GroupLayout(this);

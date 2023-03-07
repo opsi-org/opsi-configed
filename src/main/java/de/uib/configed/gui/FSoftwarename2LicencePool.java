@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
 /**
@@ -63,7 +64,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private TableUpdateCollection updateCollection;
 
-	protected int keyCol = 0;
+	protected int keyCol;
 
 	AbstractPersistenceController persist;
 
@@ -86,7 +87,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	protected String globalLicencePool;
 
-	boolean foundVariantLicencepools = false;
+	boolean foundVariantLicencepools;
 
 	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(
@@ -337,7 +338,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		panelSWnames.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		panelSWnames.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+		panelSWnames.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if (e.getValueIsAdjusting()) {
@@ -356,7 +357,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 				}
 			}
 		});
-
 	}
 
 	private boolean setSWxColTo(String newVal) {
@@ -379,9 +379,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	public void setTableModel(GenTableModel model) {
-		if (model == null)
-		// test
-		{
+		if (model == null) {
+			// TODO can this be removed inside if? There was a comment "test" here
+
 			Logging.info(this, "init modelSWnames");
 
 			this.modelSWnames = new GenTableModel(null,
@@ -407,9 +407,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					Logging.info(this, "reset");
 					super.reset();
 				}
-			}
+			};
 
-			;
 		} else {
 			Logging.info(this, "set modelSWnames");
 			this.modelSWnames = model;
@@ -438,10 +437,10 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		Logging.info(this, "setPreselectionForName2Pool, we did a reset for modelSWnames with " + val);
 	}
 
-	private Set<String> getRangeSWxLicencepool(String swName)
-	// nearly done in produceModelSWxLicencepool, but we collect the range of the
-	// model-map
-	{
+	private Set<String> getRangeSWxLicencepool(String swName) {
+		// nearly done in produceModelSWxLicencepool, but we collect the range of the
+		// model-map
+
 		Set<String> range = new HashSet<>();
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {

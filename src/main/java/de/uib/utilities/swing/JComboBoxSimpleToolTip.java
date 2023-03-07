@@ -2,12 +2,13 @@ package de.uib.utilities.swing;
 
 import java.awt.Component;
 
+import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import de.uib.configed.Globals;
 
-public class JComboBoxSimpleToolTip extends javax.swing.JComboBox<String> {
+public class JComboBoxSimpleToolTip extends JComboBox<String> {
 
 	private static final int FILL_LENGTH = 40;
 
@@ -16,7 +17,7 @@ public class JComboBoxSimpleToolTip extends javax.swing.JComboBox<String> {
 		super.setRenderer(new MyComboBoxRenderer());
 	}
 
-	protected class MyComboBoxRenderer extends BasicComboBoxRenderer {
+	protected static class MyComboBoxRenderer extends BasicComboBoxRenderer {
 		@Override
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {

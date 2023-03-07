@@ -421,7 +421,7 @@ public class DataStubRawData extends DataStubNOM {
 
 	}
 
-	private String maxTime(String time0, String time1) {
+	private static String maxTime(String time0, String time1) {
 		if (time0 == null && time1 == null) {
 			return null;
 		}

@@ -81,9 +81,9 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 	public void setModelProducer(ListModelProducer<String> producer) {
 
 		this.modelProducer = producer;
-		if (producer == null)
-		// build default producer
-		{
+		if (producer == null) {
+			// build default producer
+
 			modelProducer = new DefaultListModelProducer<>();
 		}
 	}

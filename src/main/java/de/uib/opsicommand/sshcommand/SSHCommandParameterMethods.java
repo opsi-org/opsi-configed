@@ -76,11 +76,17 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	public static final String METHOD_OPTION_SELECTION = Configed
 			.getResourceValue("SSHConnection.CommandControl.method.optionSelection");
 
+	private static final String BRACKETS_NONE = " x ";
+	private static final String BRACKETS_SQUARE = "[x]";
+
 	static final Map<String, String> methods = new HashMap<>();
 
 	private ConfigedMain main;
 
 	private String[] formats;
+
+	public boolean canceled;
+	SSHConnectionOutputDialog outputDia;
 
 	private SSHCommandParameterMethods(ConfigedMain main) {
 		methods.put(METHOD_INTERACTIVE_ELEMENT, METHOD_INTERACTIVE_ELEMENT);
@@ -149,9 +155,6 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		}
 		return new String[0];
 	}
-
-	public boolean canceled;
-	SSHConnectionOutputDialog outputDia;
 
 	public SSHCommand parseParameter(final SSHCommand command, SSHConnect caller) {
 		Logging.info(this, "parseParameter command " + command.getCommandRaw());
@@ -234,7 +237,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 
 	}
 
-	public String getTranslatedMethod(String localeMethod) {
+	public static String getTranslatedMethod(String localeMethod) {
 		String method = "";
 		for (Map.Entry<String, String> entry : methods.entrySet()) {
 			if (entry.getKey().equals(localeMethod)) {
@@ -336,9 +339,6 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		}
 		return formatedResult;
 	}
-
-	private static final String BRACKETS_NONE = " x ";
-	private static final String BRACKETS_SQUARE = "[x]";
 
 	private String createFormattedDataSourceString(String[] strArr, String beginEndElement, String beginEndString,
 			String separator) {
@@ -560,7 +560,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 			return "";
 		}
 
-		SSHOutputCollector.getInstance().removeAllValues();
+		SSHOutputCollector.removeAllValues();
 		final SSHConnect caller = new SSHConnect(main);
 
 		final String scriptFile = method.replace("ssh://", "");
@@ -578,12 +578,9 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	private class ScriptExecutioner {
 		private String value;
 		private SSHCommand cmd;
-		private SSHOutputCollector sshOutputCollector;
 
 		public ScriptExecutioner(SSHCommand cmd) {
 			this.cmd = cmd;
-
-			this.sshOutputCollector = SSHOutputCollector.getInstance();
 		}
 
 		public String getValue() {
@@ -593,7 +590,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		public void execute() {
 			new SSHConnectExec(main, cmd);
 
-			final List<String> values = sshOutputCollector.getValues();
+			final List<String> values = SSHOutputCollector.getValues();
 			value = retrieveSelectedValue(values);
 		}
 

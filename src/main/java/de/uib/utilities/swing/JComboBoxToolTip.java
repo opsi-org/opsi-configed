@@ -22,7 +22,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 	protected Color listBackgroundColorUnselected;
 	protected Color listForegroundColor;
 
-	protected boolean addEmpty = false;
+	protected boolean addEmpty;
 
 	public JComboBoxToolTip() {
 		super();

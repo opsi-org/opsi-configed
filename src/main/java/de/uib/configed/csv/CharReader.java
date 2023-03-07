@@ -2,9 +2,9 @@ package de.uib.configed.csv;
 
 public class CharReader {
 	private char[] buff;
-	private int size = 0;
-	private int index = 0;
-	private int lastRead = 0;
+	private int size;
+	private int index;
+	private int lastRead;
 
 	private boolean peeked;
 	private char peekedItem;

@@ -2,20 +2,22 @@ package de.uib.configed.gui.swinfopage;
 
 import java.util.HashMap;
 
+import javax.swing.JTable;
+
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class SwPdfExporter extends AbstractSWExporter {
 
-	javax.swing.JTable theTable;
+	JTable theTable;
 	ExporterToPDF exportTable;
-	Boolean onlySelectedRows = false;
+	boolean onlySelectedRows;
 	String fileName;
 
 	public SwPdfExporter() {
 
-		theTable = new javax.swing.JTable();
+		theTable = new JTable();
 		exportTable = new ExporterToPDF(theTable);
 	}
 

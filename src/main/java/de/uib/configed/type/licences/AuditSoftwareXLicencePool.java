@@ -53,7 +53,7 @@ public class AuditSoftwareXLicencePool extends Relation {
 		super(SOFTWARE_ATTRIBUTES);
 	}
 
-	private String produceSWident(Map<String, Object> m) {
+	private static String produceSWident(Map<String, Object> m) {
 		return Globals.pseudokey(new String[] { Globals.getStringValue(m.get(SWAuditEntry.NAME)),
 				Globals.getStringValue(m.get(SWAuditEntry.VERSION)),
 				Globals.getStringValue(m.get(SWAuditEntry.SUB_VERSION)),
@@ -62,7 +62,6 @@ public class AuditSoftwareXLicencePool extends Relation {
 	}
 
 	public static Map<String, String> produceMapFromSWident(String ident) {
-		Map<String, String> m = new HashMap<>();
 		if (ident == null) {
 			Logging.warning("produceMapFromSWident, ident null ");
 			return new HashMap<>();
@@ -73,6 +72,8 @@ public class AuditSoftwareXLicencePool extends Relation {
 		if (parts.length < 5) {
 			Logging.warning("produceMapFromSWident, ident can not be splitted. " + ident);
 		}
+
+		Map<String, String> m = new HashMap<>();
 
 		m.put(SWAuditEntry.NAME, parts[0]);
 		m.put(SWAuditEntry.VERSION, parts[1]);

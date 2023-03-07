@@ -12,7 +12,7 @@ import de.uib.utilities.swing.CellAlternatingColorizer;
 
 public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 
-	protected String tooltipPrefix = null;
+	protected String tooltipPrefix;
 	protected String separator = ": ";
 
 	protected static final int FILL_LENGTH = 20;

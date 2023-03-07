@@ -36,9 +36,7 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class PanelProductProperties extends JSplitPane
-// implements RowSorterListener
-{
+public class PanelProductProperties extends JSplitPane {
 
 	public PanelGenEditTable paneProducts;
 	private List<String> depotsOfPackage;
@@ -149,9 +147,9 @@ public class PanelProductProperties extends JSplitPane
 		}
 
 		@Override
-		public void selectedRowChanged()
-		// if we got a new selection
-		{
+		public void selectedRowChanged() {
+			// if we got a new selection
+
 			Logging.debug(this, "selectedRowChanged in paneProducts ");
 
 			ListSelectionModel lsm = getListSelectionModel();
@@ -161,9 +159,7 @@ public class PanelProductProperties extends JSplitPane
 				infoPane.clearEditing();
 				((EditMapPanelX) propertiesPanel).init();
 				panelEditProperties.clearDepotListData();
-			}
-
-			else {
+			} else {
 
 				infoPane.setGrey(false);
 				int row = lsm.getMinSelectionIndex();

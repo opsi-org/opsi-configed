@@ -20,6 +20,10 @@ import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
 
 public class PanelHostConfig extends JPanel {
+
+	public static final String PROPERTY_CLASS_USER = UserConfig.KEY_USER_ROOT;
+	public static final String PROPERTY_CLASS_ROLE = UserConfig.KEY_USER_ROLE_ROOT;
+
 	// delegate
 	protected EditMapPanelGrouped editMapPanel;
 	protected JLabel label;
@@ -27,9 +31,6 @@ public class PanelHostConfig extends JPanel {
 	protected boolean keylistExtendible = true;
 	protected boolean entryRemovable = true;
 	protected boolean reloadable = true;
-
-	public static final String PROPERTY_CLASS_USER = UserConfig.KEY_USER_ROOT;
-	public static final String PROPERTY_CLASS_ROLE = UserConfig.KEY_USER_ROLE_ROOT;
 
 	public PanelHostConfig() {
 

@@ -64,26 +64,31 @@ import de.uib.utilities.swing.PopupMenuTrait;
 public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
 
+	protected static final int FIELD_H = Globals.LINE_HEIGHT;
+	protected static final int SLIDER_H = 35;
+	protected static final int SLIDER_W = 180;
+	protected static final String DEFAULT_TYPE = "(all)";
+
+	private static final Integer[] LEVELS = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	private static final List<Integer> levelList = Arrays.asList(LEVELS);
+
 	protected JTextPane jTextPane;
 	protected JScrollPane scrollpane;
 	protected JPanel commandpane;
 	protected JLabel labelSearch;
 
 	protected JComboBox<String> jComboBoxSearch;
-	protected static final int FIELD_H = Globals.LINE_HEIGHT;
+
 	protected JButton buttonSearch;
 	protected JCheckBox jCheckBoxCaseSensitive;
 	protected JButton buttonFontPlus;
 	protected JButton buttonFontMinus;
 	protected JLabel labelLevel;
 	protected AdaptingSlider sliderLevel;
-	protected static final int SLIDER_H = 35;
-	protected static final int SLIDER_W = 180;
 	protected ChangeListener sliderListener;
 	protected JLabel labelDisplayRestriction;
 	protected JComboBox<String> comboType;
 	protected DefaultComboBoxModel<String> comboModelTypes;
-	protected static final String DEFAULT_TYPE = "(all)";
 
 	protected JPanel jTextPanel;
 	protected WordSearcher searcher;
@@ -91,15 +96,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected final StyleContext styleContext;
 	protected final Style[] logLevelStyles;
 
-	private static final Integer[] LEVELS = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	private static final List<Integer> levelList = Arrays.asList(LEVELS);
-
 	protected Integer maxLevel = LEVELS[LEVELS.length - 1];
 	protected Integer minLevel = LEVELS[0];
 	protected Integer maxExistingLevel = minLevel;
 	protected Integer showLevel = minLevel;
 
-	protected boolean showTypeRestricted = false;
+	protected boolean showTypeRestricted;
 	protected List<String> typesList;
 	protected int typesListMaxShowCount = 25;
 
@@ -116,193 +118,16 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	protected Integer displayFontSize = 11;
 	protected Font monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 
-	public void setFontSize(String s) {
-		if (s.equals("+")) {
-			displayFontSize = displayFontSize + 2;
-			monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
-			buildDocument();
-		} else if (s.equals("-")) {
-			if (displayFontSize > 10) {
-				displayFontSize = displayFontSize - 2;
-				monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
-			}
-			buildDocument();
-		}
-	}
-
-	protected class AdaptingSlider extends JSlider implements ChangeListener {
-
-		int min;
-		int max;
-		int value;
-
-		public AdaptingSlider(int min, int max, int value) {
-			super(min, max, value);
-			super.addChangeListener(this);
-
-			this.min = min;
-			this.max = max;
-			this.value = value;
-
-			super.setFont(Globals.defaultFont);
-
-			produceLabels(max);
-
-			super.setPaintLabels(true);
-			super.setSnapToTicks(true);
-
-		}
-
-		// ChangeListener
-		@Override
-		public void stateChanged(ChangeEvent e) {
-			// for debugging
-			Logging.info(this, "min, max, value " + min + ", " + max + ", " + value + " -- ChangeEvent " + e);
-		}
-
-		private void produceLabels(int upTo) {
-
-			Map<Integer, JLabel> levelMap = new LinkedHashMap<>();
-
-			for (int i = min; i <= upTo; i++) {
-				levelMap.put(i, new JLabel("" + i));
-			}
-
-			for (int i = upTo + 1; i <= max; i++) {
-				levelMap.put(i, new JLabel(" . "));
-			}
-
-			try {
-				setLabelTable(new Hashtable<>(levelMap));
-			} catch (Exception ex) {
-				Logging.info(this, "setLabelTable levelDict " + levelMap + " ex " + ex);
-			}
-		}
-	}
-
-	protected PopupMenuTrait popupMenu;
-
-	// We create this class because the JTextPane should be editable only to show the caret position,
-	// but then you should not be able to change anything in the Text...
-	protected class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
-		ImmutableDefaultStyledDocument() {
-			super();
-		}
-
-		ImmutableDefaultStyledDocument(StyleContext styles) {
-			super(styles);
-		}
-
-		public void insertStringTruely(int offs, String str, AttributeSet a) throws BadLocationException {
-			super.insertString(offs, str, a);
-		}
-
-		@Override
-		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-			/* Should be empty, because we don't want it to be able to be editable*/
-		}
-
-		@Override
-		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-			/* Should be empty, because we don't want it to be able to be editable*/
-		}
-
-		@Override
-		public void remove(int offs, int len) throws BadLocationException {
-			/* Should be empty, because we don't want it to be able to be editable*/
-		}
-	}
-
 	protected ImmutableDefaultStyledDocument document;
 
 	protected String[] lines;
 	protected int[] lineLevels;
 	protected Style[] lineStyles;
 
-	protected void reload() {
-		Logging.info(this, "reload action");
-		setLevelWithoutAction(produceInitialMaxShowLevel());
-	}
-
-	protected void save() {
-		Logging.debug(this, "save action");
-	}
-
-	protected void saveAsZip() {
-		Logging.debug(this, "save as zip action");
-	}
-
-	protected void saveAllAsZip(boolean loadMissingDocs) {
-		Logging.debug(this, "save all as zip action");
-	}
-
-	protected void floatExternal() {
-		if (document == null) {
-			return;
-		}
-		// set text did not run
-		// probably we already are in a floating instance
-
-		LogPane copyOfMe;
-		de.uib.configed.gui.GeneralFrame externalView;
-
-		copyOfMe = new LogPane("", false);
-
-		externalView = new de.uib.configed.gui.GeneralFrame(null, title, false);
-		externalView.addPanel(copyOfMe);
-		externalView.setup();
-		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
-
-		copyOfMe.setLevelWithoutAction(showLevel);
-		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,
-				maxExistingLevel);
-		copyOfMe.getTextComponent().setCaretPosition(jTextPane.getCaretPosition());
-		copyOfMe.adaptSlider();
-
-		externalView.setVisible(true);
-	}
-
-	JTextComponent getTextComponent() {
-		return jTextPane;
-	}
-
-	public void setTitle(String s) {
-		title = s;
-	}
-
-	public void setInfo(String s) {
-		info = s;
-	}
-
-	public String getInfo() {
-		return info;
-	}
+	protected PopupMenuTrait popupMenu;
 
 	public LogPane(String defaultText) {
 		this(defaultText, true);
-	}
-
-	private Integer produceInitialMaxShowLevel() {
-		int result = 1;
-
-		int savedMaxShownLogLevel = 0;
-		try {
-			savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.savedMaxShownLogLevel.deserialize());
-
-		} catch (NumberFormatException ex) {
-			Logging.warning(this, "savedMaxShownLogLevel could not be read, value "
-					+ Configed.savedStates.savedMaxShownLogLevel.deserialize());
-		}
-		if (savedMaxShownLogLevel > 0) {
-			result = savedMaxShownLogLevel;
-		} else {
-			result = DEFAULT_MAX_SHOW_LEVEL;
-		}
-
-		Logging.info(this, "produceInitialMaxShowLevel " + result);
-
-		return result;
 	}
 
 	public LogPane(String defaultText, boolean withPopup) {
@@ -332,7 +157,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		logLevelStyles = new Style[10];
 
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
-		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential);
+		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential.darker().darker());
 
 		logLevelStyles[2] = styleContext.addStyle("loglevel critical", null);
 		StyleConstants.setForeground(logLevelStyles[2], Globals.logColorCritical);
@@ -341,22 +166,22 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		StyleConstants.setForeground(logLevelStyles[3], Globals.logColorError);
 
 		logLevelStyles[4] = styleContext.addStyle("loglevel warning", null);
-		StyleConstants.setForeground(logLevelStyles[4], Globals.logColorWarning);
+		StyleConstants.setForeground(logLevelStyles[4], Globals.logColorWarning.darker());
 
 		logLevelStyles[5] = styleContext.addStyle("loglevel notice", null);
-		StyleConstants.setForeground(logLevelStyles[5], Globals.logColorNotice);
+		StyleConstants.setForeground(logLevelStyles[5], Globals.logColorNotice.darker().darker());
 
 		logLevelStyles[6] = styleContext.addStyle("loglevel info", null);
-		StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfo);
+		StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfo.darker().darker());
 
 		logLevelStyles[7] = styleContext.addStyle("loglevel debug", null);
-		StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebug);
+		StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebug.darker().darker());
 
 		logLevelStyles[8] = styleContext.addStyle("loglevel debug2", null);
-		StyleConstants.setForeground(logLevelStyles[8], Globals.logColorDebug2);
+		StyleConstants.setForeground(logLevelStyles[8], Globals.logColorTrace.darker().darker());
 
 		logLevelStyles[9] = styleContext.addStyle("loglevel confidential", null);
-		StyleConstants.setForeground(logLevelStyles[9], Globals.logColorConfidential);
+		StyleConstants.setForeground(logLevelStyles[9], Globals.logColorSecret.darker());
 
 		searcher = new WordSearcher(jTextPane);
 		searcher.setCaseSensitivity(false);
@@ -455,9 +280,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 				if (newIndex > LEVELS.length - 1) {
 					newIndex = LEVELS.length - 1;
-				}
-
-				else if (newIndex < 0) {
+				} else if (newIndex < 0) {
 					newIndex = 0;
 				}
 
@@ -594,6 +417,183 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
+	public void setFontSize(String s) {
+		if (s.equals("+")) {
+			displayFontSize = displayFontSize + 2;
+			monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+			buildDocument();
+		} else if (s.equals("-")) {
+			if (displayFontSize > 10) {
+				displayFontSize = displayFontSize - 2;
+				monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+			}
+			buildDocument();
+		}
+	}
+
+	protected class AdaptingSlider extends JSlider implements ChangeListener {
+
+		int min;
+		int max;
+		int value;
+
+		public AdaptingSlider(int min, int max, int value) {
+			super(min, max, value);
+			super.addChangeListener(this);
+
+			this.min = min;
+			this.max = max;
+			this.value = value;
+
+			super.setFont(Globals.defaultFont);
+
+			produceLabels(max);
+
+			super.setPaintLabels(true);
+			super.setSnapToTicks(true);
+
+		}
+
+		// ChangeListener
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			// for debugging
+			Logging.info(this, "min, max, value " + min + ", " + max + ", " + value + " -- ChangeEvent " + e);
+		}
+
+		private void produceLabels(int upTo) {
+
+			Map<Integer, JLabel> levelMap = new LinkedHashMap<>();
+
+			for (int i = min; i <= upTo; i++) {
+				levelMap.put(i, new JLabel("" + i));
+			}
+
+			for (int i = upTo + 1; i <= max; i++) {
+				levelMap.put(i, new JLabel(" . "));
+			}
+
+			try {
+				setLabelTable(new Hashtable<>(levelMap));
+			} catch (Exception ex) {
+				Logging.info(this, "setLabelTable levelDict " + levelMap + " ex " + ex);
+			}
+		}
+	}
+
+	// We create this class because the JTextPane should be editable only to show the caret position,
+	// but then you should not be able to change anything in the Text...
+	protected class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
+		ImmutableDefaultStyledDocument() {
+			super();
+		}
+
+		ImmutableDefaultStyledDocument(StyleContext styles) {
+			super(styles);
+		}
+
+		public void insertStringTruely(int offs, String str, AttributeSet a) throws BadLocationException {
+			super.insertString(offs, str, a);
+		}
+
+		@Override
+		public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+			/* Should be empty, because we don't want it to be able to be editable*/
+		}
+
+		@Override
+		public void replace(int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+			/* Should be empty, because we don't want it to be able to be editable*/
+		}
+
+		@Override
+		public void remove(int offs, int len) throws BadLocationException {
+			/* Should be empty, because we don't want it to be able to be editable*/
+		}
+	}
+
+	protected void reload() {
+		Logging.info(this, "reload action");
+		setLevelWithoutAction(produceInitialMaxShowLevel());
+	}
+
+	protected void save() {
+		Logging.debug(this, "save action");
+	}
+
+	protected void saveAsZip() {
+		Logging.debug(this, "save as zip action");
+	}
+
+	protected void saveAllAsZip(boolean loadMissingDocs) {
+		Logging.debug(this, "save all as zip action");
+	}
+
+	protected void floatExternal() {
+		if (document == null) {
+			return;
+		}
+		// set text did not run
+		// probably we already are in a floating instance
+
+		LogPane copyOfMe;
+		de.uib.configed.gui.GeneralFrame externalView;
+
+		copyOfMe = new LogPane("", false);
+
+		externalView = new de.uib.configed.gui.GeneralFrame(null, title, false);
+		externalView.addPanel(copyOfMe);
+		externalView.setup();
+		externalView.setSize(this.getSize());
+		externalView.setLocationRelativeTo(ConfigedMain.getMainFrame());
+
+		copyOfMe.setLevelWithoutAction(showLevel);
+		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,
+				maxExistingLevel);
+		copyOfMe.getTextComponent().setCaretPosition(jTextPane.getCaretPosition());
+		copyOfMe.adaptSlider();
+
+		externalView.setVisible(true);
+	}
+
+	JTextComponent getTextComponent() {
+		return jTextPane;
+	}
+
+	public void setTitle(String s) {
+		title = s;
+	}
+
+	public void setInfo(String s) {
+		info = s;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	private Integer produceInitialMaxShowLevel() {
+		int result = 1;
+
+		int savedMaxShownLogLevel = 0;
+		try {
+			savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.savedMaxShownLogLevel.deserialize());
+
+		} catch (NumberFormatException ex) {
+			Logging.warning(this, "savedMaxShownLogLevel could not be read, value "
+					+ Configed.savedStates.savedMaxShownLogLevel.deserialize());
+		}
+		if (savedMaxShownLogLevel > 0) {
+			result = savedMaxShownLogLevel;
+		} else {
+			result = DEFAULT_MAX_SHOW_LEVEL;
+		}
+
+		Logging.info(this, "produceInitialMaxShowLevel " + result);
+
+		return result;
+	}
+
 	public void buildDocument() {
 		Logging.debug(this, "building document");
 		jTextPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
@@ -609,9 +609,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		try {
 			int i = 0;
 
-			while (i < lines.length)
-			// we check if we got a new call
-			{
+			while (i < lines.length) {
+				// we check if we got a new call
+
 				boolean show = false;
 
 				if (lineLevels[i] <= selLevel) {
@@ -1014,22 +1014,16 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
 			if ((e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER)) {
 				search();
-			}
-
-			else if (e.getSource() == jTextPane && (e.getKeyChar() == '+')
+			} else if (e.getSource() == jTextPane && (e.getKeyChar() == '+')
 					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
 				Logging.info(this, "Ctrl-Plus");
 				setFontSize("+");
-			}
-
-			else if (e.getSource() == jTextPane && (e.getKeyChar() == '-')
+			} else if (e.getSource() == jTextPane && (e.getKeyChar() == '-')
 					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
 				Logging.info(this, "Ctrl-Minus");
 				setFontSize("-");
 			}
-
 		}
-
 	}
 
 	@Override
@@ -1039,8 +1033,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 		if (e.getSource() == jTextPane) {
-			if (e.getKeyChar() == '/' || e.getKeyChar() == '\u0006') // ctrl-f
-			{
+			if (e.getKeyChar() == '/' || e.getKeyChar() == '\u0006' /* ctrl-f */ ) {
 				editSearchString();
 			}
 
@@ -1066,13 +1059,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			jTextPane.requestFocusInWindow();
 		} else if (e.getSource() == jCheckBoxCaseSensitive) {
 			searcher.setCaseSensitivity(jCheckBoxCaseSensitive.isSelected());
-		}
-
-		else if (e.getSource() == buttonFontPlus) {
+		} else if (e.getSource() == buttonFontPlus) {
 			setFontSize("+");
-		}
-
-		else if (e.getSource() == buttonFontMinus) {
+		} else if (e.getSource() == buttonFontMinus) {
 			setFontSize("-");
 		}
 	}
@@ -1083,7 +1072,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		protected JTextComponent comp;
 		protected Highlighter.HighlightPainter painter;
 		protected int lastReturnedOffset;
-		protected boolean cS = false;
+		protected boolean cS;
 
 		public WordSearcher(JTextComponent comp) {
 			this.comp = comp;
@@ -1101,8 +1090,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// occurrences found.
 		public int search(String word) {
 
-			int firstOffset = -1;
-			int returnOffset = lastReturnedOffset;
 			Highlighter highlighter = comp.getHighlighter();
 
 			// Remove any existing highlights for last word
@@ -1139,6 +1126,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			int lastIndex = 0;
 			int wordSize = word.length();
+			int firstOffset = -1;
+			int returnOffset = lastReturnedOffset;
 
 			while ((lastIndex = content.indexOf(word, lastIndex)) != -1) {
 				int endIndex = lastIndex + wordSize;

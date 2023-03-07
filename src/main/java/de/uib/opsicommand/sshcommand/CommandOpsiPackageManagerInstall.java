@@ -11,7 +11,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	private String command;
 	private int priority = 8;
 	protected FGeneralDialog dialog;
-	private boolean isMultiCommand = false;
+	private boolean isMultiCommand;
 
 	String opsiproduct = "";
 	String depot = "";

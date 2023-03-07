@@ -42,6 +42,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class MainView implements View {
+
+	protected static final String DATA_CHANGED_SERVICE = "changed";
+	protected static final String NEW_DEPOT_SELECTED_SERVICE = "selectedDepot";
+
 	@FXML
 	private ClientLastSeenComparison clientLastSeenComparison;
 	@FXML
@@ -147,9 +151,6 @@ public class MainView implements View {
 	@FXML
 	private ProgressBar statusProgressBar;
 
-	protected static final String DATA_CHANGED_SERVICE = "changed";
-	protected static final String NEW_DEPOT_SELECTED_SERVICE = "selectedDepot";
-
 	private JFXPanel fxPanel;
 	private Scene scene;
 	private DataObserver observer;
@@ -237,6 +238,7 @@ public class MainView implements View {
 		}
 	}
 
+	@SuppressWarnings("squid:S4968")
 	private void loadData() {
 		depotsNumberLabel.setText(String.valueOf(DepotData.getDepots().size()));
 		clientsNumberLabel.setText(String.valueOf(ClientData.getClients().size()));
@@ -257,6 +259,7 @@ public class MainView implements View {
 		clientDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.CLIENT_VIEW));
 		productDataDisplayAreaVBox.setOnMouseClicked(e -> ViewManager.displayView(Dashboard.PRODUCT_VIEW));
 		licenseDataDisplayAreaVBox.setOnMouseClicked(e -> displayLicenseInfo());
+
 		selectedDepotComboBox.getSelectionModel().selectedItemProperty()
 				.addListener((ObservableValue<? extends String> observableValue, String oldValue,
 						String newValue) -> observer.notify(NEW_DEPOT_SELECTED_SERVICE, newValue));

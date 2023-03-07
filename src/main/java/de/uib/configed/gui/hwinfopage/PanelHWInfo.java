@@ -52,6 +52,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String KEY_MODEL = "model";
 	private static final String KEY_PRODUCT = "product";
 
+	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
+	protected static final String SCANTIME = "scantime";
+
 	protected Map<String, List<Map<String, Object>>> hwInfo;
 	protected String treeRootTitle;
 	protected List<Map<String, List<Map<String, Object>>>> hwConfig;
@@ -70,9 +73,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	protected JTable table;
 	protected HWInfoTableModel tableModel;
 	protected Map<String, Object> hwClassMapping;
-
-	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
-	protected static final String SCANTIME = "scantime";
 
 	protected String vendorStringComputerSystem;
 	protected String vendorStringBaseBoard;
@@ -103,7 +103,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		buildPanel();
 	}
 
-	private String encodeString(String s) {
+	private static String encodeString(String s) {
 		return s;
 
 	}
@@ -169,9 +169,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		if (withPopup) {
 
 			popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
-					PopupMenuTrait.POPUP_FLOATINGCOPY })
+					PopupMenuTrait.POPUP_FLOATINGCOPY }) {
 
-			{
 				@Override
 				public void action(int p) {
 					switch (p) {
@@ -249,7 +248,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
-	private ImageIcon createImageIcon(String path) {
+	private static ImageIcon createImageIcon(String path) {
 		return Globals.createImageIcon(path, "");
 
 	}

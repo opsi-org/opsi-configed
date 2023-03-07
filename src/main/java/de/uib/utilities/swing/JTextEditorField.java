@@ -9,7 +9,7 @@ import javax.swing.text.Document;
 import de.uib.utilities.logging.Logging;
 
 public class JTextEditorField extends JTextField implements KeyListener {
-	String lastSetS = null;
+	private String lastSetS;
 
 	public JTextEditorField(String s) {
 		super(s);

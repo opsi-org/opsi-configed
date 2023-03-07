@@ -62,9 +62,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList
 	private void checkSelected() {
 		if (visibleList.getSelectedValue() != null && selValue != null && !selValue.equals("")) {
 			setDataChanged(true);
-		}
-
-		else {
+		} else {
 			setDataChanged(false);
 			noText();
 		}

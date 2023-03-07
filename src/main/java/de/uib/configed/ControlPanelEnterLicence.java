@@ -23,9 +23,8 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 import de.uib.utilities.thread.WaitCursor;
 
-public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 // tab new licence
-{
+public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	PanelEnterLicence thePanel;
 
 	GenTableModel modelLicencekeys;
@@ -173,7 +172,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel
 			Object[] a = new Object[6];
 			a[0] = "c_" + Globals.getSeconds();
 			a[1] = "";
-			a[2] = Globals.getDate(false);
+			a[2] = Globals.getDate();
 			a[3] = Globals.ZERODATE;
 			a[4] = Globals.ZERODATE;
 			a[5] = "";

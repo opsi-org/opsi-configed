@@ -78,11 +78,13 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
+import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 /**
@@ -160,6 +162,10 @@ public class MainFrame extends JFrame
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_MULTI_DEPOT = 200;
 	private static final int DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT = 50;
 
+	public static final String ITEM_ADD_CLIENT = "add client";
+	public static final String ITEM_DELETE_CLIENT = "remove client";
+	public static final String ITEM_FREE_LICENCES = "free licences for client";
+
 	protected String oldNotes;
 
 	private Map<String, Map<String, String>> changedClientInfos;
@@ -169,11 +175,6 @@ public class MainFrame extends JFrame
 	private ConfigedMain configedMain;
 
 	// menu system
-
-	public static final String ITEM_ADD_CLIENT = "add client";
-	public static final String ITEM_DELETE_CLIENT = "remove client";
-	public static final String ITEM_FREE_LICENCES = "free licences for client";
-
 	private Map<String, List<JMenuItem>> menuItemsHost;
 
 	private JMenuBar jMenuBar1 = new JMenuBar();
@@ -447,7 +448,7 @@ public class MainFrame extends JFrame
 	JButton jBtnAllOff = new JButton();
 
 	JTableSelectionPanel panelClientlist;
-	boolean shiftpressed = false;
+	boolean shiftpressed;
 
 	JLabel jLabelHostinfos = new JLabel();
 
@@ -479,7 +480,7 @@ public class MainFrame extends JFrame
 	JPanel panelTreeClientSelection;
 	JPanel jPanelProductsConfig;
 
-	boolean multidepot = false;
+	boolean multidepot;
 
 	DepotListPresenter depotListPresenter;
 
@@ -2527,7 +2528,7 @@ public class MainFrame extends JFrame
 
 		// tab panes
 
-		jTabbedPaneConfigPanes.addChangeListener(new javax.swing.event.ChangeListener() {
+		jTabbedPaneConfigPanes.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				// report state change request to
@@ -2654,7 +2655,7 @@ public class MainFrame extends JFrame
 				Globals.createImageIcon("images/logfile.png", ""), showLogfiles,
 				Configed.getResourceValue("MainFrame.jPanel_logfiles"), ConfigedMain.VIEW_LOG);
 
-		showLogfiles.addChangeListener(new javax.swing.event.ChangeListener() {
+		showLogfiles.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 
@@ -2700,7 +2701,7 @@ public class MainFrame extends JFrame
 		Containership csJPanelAllContent = new Containership(allPane);
 
 		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
-				new Class[] { boolean.class }, javax.swing.text.JTextComponent.class);
+				new Class[] { boolean.class }, JTextComponent.class);
 
 		// set colors of panels
 		csJPanelAllContent.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
@@ -3165,14 +3166,14 @@ public class MainFrame extends JFrame
 		info.setVisible(true);
 	}
 
-	private void showHealthDataAction() {
+	private static void showHealthDataAction() {
 		HealthCheckDialog dialog = new HealthCheckDialog();
 		dialog.setupLayout();
 		dialog.setMessage(HealthInfo.getHealthData(false));
 		dialog.setVisible(true);
 	}
 
-	private void saveHealthDataToFile() {
+	private static void saveHealthDataToFile() {
 		File healthDataFile = new File(Configed.savedStatesLocationName, Globals.HEALTH_CHECK_LOG_FILE_NAME);
 
 		if (healthDataFile.exists() && healthDataFile.length() != 0) {
@@ -3219,7 +3220,7 @@ public class MainFrame extends JFrame
 	public void callOpsiLicensingInfo() {
 		if (fDialogOpsiLicensingInfo == null) {
 			fDialogOpsiLicensingInfo = new FGeneralDialogLicensingInfo(this,
-					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false, // modal
+					Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"), false,
 					new String[] { Configed.getResourceValue("Dashboard.close") },
 					new Icon[] { Globals.createImageIcon("images/cancel16_small.png", "") }, 1, 900, 680, true, null);
 		} else {

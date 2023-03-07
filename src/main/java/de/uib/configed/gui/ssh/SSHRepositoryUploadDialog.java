@@ -13,7 +13,7 @@ public class SSHRepositoryUploadDialog extends SSHFileUploadDialog {
 		super.setVisible(true);
 
 		Logging.info(this, "SSHRepositoryUploadDialog build");
-		height = DEFAULT_HEIGHT;
+		frameHeight = DEFAULT_HEIGHT;
 		super.showDialog();
 	}
 

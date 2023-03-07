@@ -16,33 +16,8 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
 public class HostInfo {
-	static int callCounter = 0;
-	// an AtomicInteger would be threadsafe
-	private static int numberOfInstances = 0;
-	private final int instanceNumber;
+	static int callCounter;
 	private static Map<String, Integer> id2InstanceNumber;
-
-	protected String depotOfClient;
-	protected String clientDescription;
-	protected String clientInventoryNumber;
-	protected String clientOneTimePassword;
-	protected String clientNotes;
-
-	protected String clientSystemUUID;
-	protected String clientMacAddress;
-	protected String lastSeen;
-	protected String created;
-	protected String clientName;
-	protected String hostKey;
-
-	protected String hostType;
-	protected String clientIpAddress;
-	protected Boolean clientUefiBoot;
-	protected Boolean clientWanConfig;
-	protected String clientSessionInfo;
-
-	protected Boolean clientConnected;
-	protected Boolean clientShutdownInstall;
 
 	// ---
 	public static final String DEPOT_OF_CLIENT_KEY = "depotId";
@@ -128,6 +103,42 @@ public class HostInfo {
 		}
 	}
 
+	// an AtomicInteger would be threadsafe
+	private static int numberOfInstances;
+	private final int instanceNumber;
+
+	protected String depotOfClient;
+	protected String clientDescription;
+	protected String clientInventoryNumber;
+	protected String clientOneTimePassword;
+	protected String clientNotes;
+
+	protected String clientSystemUUID;
+	protected String clientMacAddress;
+	protected String lastSeen;
+	protected String created;
+	protected String clientName;
+	protected String hostKey;
+
+	protected String hostType;
+	protected String clientIpAddress;
+	protected Boolean clientUefiBoot;
+	protected Boolean clientWanConfig;
+	protected String clientSessionInfo;
+
+	protected Boolean clientConnected;
+	protected Boolean clientShutdownInstall;
+
+	public HostInfo() {
+		initialize();
+		instanceNumber = incAndGetInstancesCount();
+	}
+
+	public HostInfo(Map<String, Object> pcInfo) {
+		instanceNumber = incAndGetInstancesCount();
+		setBy(pcInfo);
+	}
+
 	// https://support.microsoft.com/en-us/kb/909264
 	public static String checkADNamingConvention(String proposal) {
 		boolean result = true;
@@ -182,16 +193,6 @@ public class HostInfo {
 
 	public Integer getInstanceNumber(String key) {
 		return id2InstanceNumber.get(key);
-	}
-
-	public HostInfo() {
-		initialize();
-		instanceNumber = incAndGetInstancesCount();
-	}
-
-	public HostInfo(Map<String, Object> pcInfo) {
-		instanceNumber = incAndGetInstancesCount();
-		setBy(pcInfo);
 	}
 
 	public boolean isInstanceNumber(int compareNumber) {
@@ -404,7 +405,7 @@ public class HostInfo {
 		clientWanConfig = b;
 	}
 
-	private String showValue(String value) {
+	private static String showValue(String value) {
 		if (value == null || value.equals("null")) {
 			return "";
 		} else {
@@ -412,7 +413,7 @@ public class HostInfo {
 		}
 	}
 
-	private boolean showValue(Boolean value) {
+	private static boolean showValue(Boolean value) {
 		if (value == null) {
 			return false;
 		} else {
@@ -512,11 +513,11 @@ public class HostInfo {
 		lastSeen = showValue("" + infoMap.get(LAST_SEEN_KEY));
 	}
 
-	private int findCol(JTableSelectionPanel selectionPanel, String colName) {
+	private static int findCol(JTableSelectionPanel selectionPanel, String colName) {
 		return selectionPanel.getTableModel().findColumn(colName);
 	}
 
-	private int findRow(JTableSelectionPanel selectionPanel, String client) {
+	private static int findRow(JTableSelectionPanel selectionPanel, String client) {
 		return selectionPanel.findModelRowFromValue(client, 0);
 	}
 

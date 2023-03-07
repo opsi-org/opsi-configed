@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import de.uib.utilities.logging.Logging;
 
 public class DataChangedKeeper implements DataChangedObserver {
-	protected boolean dataChanged = false;
+	protected boolean dataChanged;
 
 	protected ActUpon actUpon;
 

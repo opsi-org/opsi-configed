@@ -1,17 +1,17 @@
 package de.uib.configed.type;
 
+import java.sql.Date;
 import java.util.Calendar;
 
 import de.uib.utilities.logging.Logging;
 
-public class DateExtendedByVars extends java.sql.Date {
+public class DateExtendedByVars extends Date {
+	public static final String MINUS = "minus";
+	public static final char CHAR_DELIMITER = '%';
 
 	public DateExtendedByVars(long date) {
 		super(date);
 	}
-
-	public static final String MINUS = "minus";
-	public static final char CHAR_DELIMITER = '%';
 
 	private static String stripTimeFromDay(String datetime) {
 		if (datetime == null) {

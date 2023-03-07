@@ -20,16 +20,14 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
-public class FDialogTextfieldWithListSelection extends FGeneralDialog implements ListSelectionListener
-
-{
+public class FDialogTextfieldWithListSelection extends FGeneralDialog implements ListSelectionListener {
 	JList<String> theList;
 	JScrollPane scrollpaneForList;
 	JTextField theField;
 	JLabel labelField;
 	JLabel labelList;
-	String selectedListElement = null;
-	String resultingText = null;
+	String selectedListElement;
+	String resultingText;
 
 	public FDialogTextfieldWithListSelection(JFrame owner, String title, boolean modal, String[] buttonList,
 			Icon[] icons, int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout,

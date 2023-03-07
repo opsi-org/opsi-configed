@@ -101,9 +101,7 @@ public class FPanel extends SecondaryFrame {
 					Logging.warning(this, "no case found for returnedOption in leaveChecked");
 					break;
 				}
-			}
-
-			else {
+			} else {
 				result = true;
 			}
 		} else {

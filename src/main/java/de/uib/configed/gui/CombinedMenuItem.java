@@ -14,7 +14,7 @@ public class CombinedMenuItem {
 		this.popupItem = popupItem;
 	}
 
-	private ItemListener[] stopItemListeners(JMenuItem itemOwner) {
+	private static ItemListener[] stopItemListeners(JMenuItem itemOwner) {
 		ItemListener[] myItemListeners = itemOwner.getItemListeners();
 		for (ItemListener l : myItemListeners) {
 			itemOwner.removeItemListener(l);
@@ -22,7 +22,7 @@ public class CombinedMenuItem {
 		return myItemListeners;
 	}
 
-	private void startItemListeners(JMenuItem itemOwner, ItemListener[] listeners) {
+	private static void startItemListeners(JMenuItem itemOwner, ItemListener[] listeners) {
 		if (listeners == null) {
 			return;
 		}

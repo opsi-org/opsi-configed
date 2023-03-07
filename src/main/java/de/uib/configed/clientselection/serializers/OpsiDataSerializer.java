@@ -18,11 +18,13 @@ import de.uib.opsidatamodel.SavedSearches;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSerializer extends de.uib.configed.clientselection.AbstractSerializer {
+
+	public static final int DATA_VERSION = 2;
+
 	private AbstractPersistenceController controller;
 	private JsonParser parser;
 	private SelectData.DataType lastDataType;
 	private Map<String, String> searches;
-	public static final int DATA_VERSION = 2;
 	private int searchDataVersion;
 
 	public OpsiDataSerializer(SelectionManager manager) {

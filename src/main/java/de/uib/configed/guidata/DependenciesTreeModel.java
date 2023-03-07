@@ -113,14 +113,10 @@ public class DependenciesTreeModel {
 			// Return only if taller than null
 			if (mainNode.getChildCount() > 0) {
 				return mainNode;
-			}
-
-			else {
+			} else {
 				return null;
 			}
-		}
-
-		else {
+		} else {
 			return null;
 		}
 	}

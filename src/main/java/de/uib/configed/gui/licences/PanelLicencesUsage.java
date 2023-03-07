@@ -47,7 +47,7 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	protected int lPoolHeight = 100;
 
 	protected ControlPanelLicencesUsage licencesUsageController;
-	private int initialSplit = 0;
+	private int initialSplit;
 
 	/** Creates new form panelLicencesUsage */
 	public PanelLicencesUsage(ControlPanelLicencesUsage licencesUsageController) {

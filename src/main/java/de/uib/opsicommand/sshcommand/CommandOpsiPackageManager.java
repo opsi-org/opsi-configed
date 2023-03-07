@@ -10,11 +10,11 @@ import de.uib.configed.gui.FGeneralDialog;
 public class CommandOpsiPackageManager implements SSHCommand {
 
 	protected LinkedList<Object> helpLinesSplitted;
-	protected FGeneralDialog dialog = null;
-	protected boolean needSudo = false;
-	protected boolean needRoot = false;
+	protected FGeneralDialog dialog;
+	protected boolean needSudo;
+	protected boolean needRoot;
 	protected boolean needParameter = true;
-	private boolean isMultiCommand = false;
+	private boolean isMultiCommand;
 	protected int helpColumns = 3;
 	protected int priority = 100;
 

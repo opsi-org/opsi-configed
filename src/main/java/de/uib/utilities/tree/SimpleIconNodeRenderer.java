@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Insets;
 
 import javax.swing.JTree;
+import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import de.uib.configed.Globals;
@@ -30,7 +31,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		super.setForeground(Globals.lightBlack);
 		super.setTextSelectionColor(Globals.lightBlack);
 		super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
-		super.setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
+		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
 		super.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
 	}
 

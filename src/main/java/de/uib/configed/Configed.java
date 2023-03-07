@@ -33,7 +33,7 @@ public class Configed {
 
 	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
 
-	public static boolean sshConnectOnStart = false;
+	public static boolean sshConnectOnStart;
 
 	public static final String USAGE_INFO = "\n" + "\tconfiged [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
 	/*
@@ -131,40 +131,40 @@ public class Configed {
 	public static final String SYSTEM_SSL_VERSION = System.getProperty("https.protocols");
 
 	private static PropertiesStore extraLocalization;
-	private static boolean showLocalizationStrings = false;
+	private static boolean showLocalizationStrings;
 
 	private static ConfigedMain configedMain;
 
-	private static String locale = null;
-	private static String host = null;
-	public static String user = null;
-	private static String password = null;
+	private static String locale;
+	private static String host;
+	public static String user;
+	private static String password;
 	private static int loglevelConsole = Logging.getLogLevelConsole();
 	private static int loglevelFile = Logging.getLogLevelFile();
 
-	private static String sshKey = null;
-	private static String sshKeyPass = null;
-	private static String client = null;
-	private static String clientgroup = null;
-	private static Integer tab = null;
-	private static boolean optionCLIQuerySearch = false;
-	private static String savedSearch = null;
-	private static boolean optionCLIDefineGroupBySearch = false;
-	private static String group = null;
-	private static boolean optionCLISwAuditPDF = false;
-	private static boolean optionCLISwAuditCSV = false;
-	private static String clientsFile = null;
-	private static String outDir = null;
+	private static String sshKey;
+	private static String sshKeyPass;
+	private static String client;
+	private static String clientgroup;
+	private static Integer tab;
+	private static boolean optionCLIQuerySearch;
+	private static String savedSearch;
+	private static boolean optionCLIDefineGroupBySearch;
+	private static String group;
+	private static boolean optionCLISwAuditPDF;
+	private static boolean optionCLISwAuditCSV;
+	private static String clientsFile;
+	private static String outDir;
 
-	private static boolean optionPersistenceControllerMethodCall = false;
+	private static boolean optionPersistenceControllerMethodCall;
 
-	private static boolean optionCLIuserConfigProducing = false;
+	private static boolean optionCLIuserConfigProducing;
 
 	public static SavedStates savedStates;
 	public static String savedStatesLocationName;
 	public static final String SAVED_STATES_FILENAME = "configedStates.prop";
 
-	private static Integer refreshMinutes = 0;
+	private static Integer refreshMinutes;
 
 	private static String paramHost;
 	private static String paramUser;
@@ -186,6 +186,46 @@ public class Configed {
 	public static final int ERROR_OUT_OF_MEMORY = 21;
 
 	private static FTextArea fErrorOutOfMemory;
+
+	/** construct the application */
+	public Configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
+			final String paramClient, final String paramClientgroup, final Integer paramTab) {
+
+		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
+
+		UncaughtConfigedExceptionHandlerLocalized errorHandler = new UncaughtConfigedExceptionHandlerLocalized();
+		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
+
+		Logging.debug("starting " + getClass().getName());
+		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
+		Logging.debug("server charset is configured as " + serverCharset);
+
+		if (serverCharset.equals(Charset.defaultCharset())) {
+			Logging.debug("they are equal");
+		}
+
+		configureUI();
+
+		try {
+			String resourceS = "opsi.gif";
+			URL resource = Globals.class.getResource(resourceS);
+			if (resource == null) {
+				Logging.debug("image resource " + resourceS + "  not found");
+			} else {
+				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
+			}
+		} catch (Exception ex) {
+			Logging.debug("imageHandled failed: " + ex.toString());
+		}
+
+		// Set locale
+		List<String> existingLocales = Messages.getLocaleNames();
+		Messages.setLocale(paramLocale);
+		Logging.info("getLocales: " + existingLocales);
+		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
+
+		startWithLocale();
+	}
 
 	// --------------------------------------------------------------------------------------------------------
 
@@ -209,7 +249,7 @@ public class Configed {
 		System.out.println("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		System.out.println(USAGE_INFO);
 
-		final int tabWidth = 8;
+		final int TAB_WIDTH = 8;
 		int length0 = 0;
 		int length1 = 0;
 
@@ -229,22 +269,22 @@ public class Configed {
 		}
 
 		int allTabs0 = 0;
-		if (length0 % tabWidth == 0) {
-			allTabs0 = length0 / tabWidth + 1;
+		if (length0 % TAB_WIDTH == 0) {
+			allTabs0 = length0 / TAB_WIDTH + 1;
 		} else {
-			allTabs0 = (length0 / tabWidth) + 1;
+			allTabs0 = (length0 / TAB_WIDTH) + 1;
 		}
 
 		int allTabs1 = 0;
-		if (length1 % tabWidth == 0) {
-			allTabs1 = length1 / tabWidth + 1;
+		if (length1 % TAB_WIDTH == 0) {
+			allTabs1 = length1 / TAB_WIDTH + 1;
 		} else {
-			allTabs1 = (length1 / tabWidth) + 1;
+			allTabs1 = (length1 / TAB_WIDTH) + 1;
 		}
 
 		for (int i = 0; i < usageLines.length; i++) {
-			int startedTabs0 = (usageLines[i][0].length() / tabWidth);
-			int startedTabs1 = (usageLines[i][1].length() / tabWidth);
+			int startedTabs0 = (usageLines[i][0].length() / TAB_WIDTH);
+			int startedTabs1 = (usageLines[i][1].length() / TAB_WIDTH);
 
 			System.out.println("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
 					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
@@ -310,46 +350,6 @@ public class Configed {
 			Logging.info(" run " + ie);
 			Thread.currentThread().interrupt();
 		}
-	}
-
-	/** construct the application */
-	public Configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
-			final String paramClient, final String paramClientgroup, final Integer paramTab) {
-
-		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
-
-		UncaughtConfigedExceptionHandlerLocalized errorHandler = new UncaughtConfigedExceptionHandlerLocalized();
-		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
-
-		Logging.debug("starting " + getClass().getName());
-		Logging.debug("default charset is " + Charset.defaultCharset().displayName());
-		Logging.debug("server charset is configured as " + serverCharset);
-
-		if (serverCharset.equals(Charset.defaultCharset())) {
-			Logging.debug("they are equal");
-		}
-
-		configureUI();
-
-		try {
-			String resourceS = "opsi.gif";
-			URL resource = Globals.class.getResource(resourceS);
-			if (resource == null) {
-				Logging.debug("image resource " + resourceS + "  not found");
-			} else {
-				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
-			}
-		} catch (Exception ex) {
-			Logging.debug("imageHandled failed: " + ex.toString());
-		}
-
-		// Set locale
-		List<String> existingLocales = Messages.getLocaleNames();
-		Messages.setLocale(paramLocale);
-		Logging.info("getLocales: " + existingLocales);
-		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
-
-		startWithLocale();
 	}
 
 	private static void setParamValues(String paramHost, String paramUser, String paramPassword, Integer paramTab,
@@ -510,9 +510,7 @@ public class Configed {
 				} else if (args[i].equals("--nosqlrawdata")) {
 					PersistenceControllerFactory.avoidSqlRawData = true;
 					i = i + 1;
-				}
-
-				else if (args[i].equals("--sqldirect-cleanup-auditsoftware")) {
+				} else if (args[i].equals("--sqldirect-cleanup-auditsoftware")) {
 					PersistenceControllerFactory.sqlDirect = true;
 					PersistenceControllerFactory.directmethodcall = PersistenceControllerFactory.DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE;
 					i = i + 1;
@@ -554,9 +552,7 @@ public class Configed {
 							Logging.debug("File not found: " + extraLocalizationFileName);
 						} else if (!extraLocalizationFile.canRead()) {
 							Logging.debug("File not readable " + extraLocalizationFileName);
-						} else
-
-						{
+						} else {
 							Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
 									+ extraLocalizationFileName.matches("configed_...*\\.properties") + " --  "
 									+ extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX));

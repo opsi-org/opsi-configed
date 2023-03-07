@@ -14,17 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
-public class DefaultEditMapPanel extends AbstractEditMapPanel
 // works on a map of pairs of type String - List
-{
-	TableCellEditor theCellEditor;
+public class DefaultEditMapPanel extends AbstractEditMapPanel {
 
 	List<String> names;
 	Map<String, ListCellOptions> optionsMap;
@@ -116,21 +113,11 @@ public class DefaultEditMapPanel extends AbstractEditMapPanel
 		mapTableModel.setOptions(optionsMap,
 				// for convenience we deliver defaultsMap
 				defaultsMap);
-
-		cancelOldCellEditing();
 	}
 
 	@Override
 	public void setLabel(String s) {
 		/* Not needed */}
-
-	public void cancelOldCellEditing() {
-
-		if (theCellEditor != null) {
-			// don't shift the old editing state to a new product
-			theCellEditor.cancelCellEditing();
-		}
-	}
 
 	public void setValues(Map<String, Object> data) {
 

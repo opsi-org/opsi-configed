@@ -47,6 +47,11 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	private JButton jButtonAddParam;
 	private JButton jButtonTestParam;
 
+	int lGap = Globals.GAP_SIZE;
+	int rGap = Globals.GAP_SIZE;
+	int uGap = Globals.GAP_SIZE;
+	int oGap = Globals.GAP_SIZE;
+
 	public SSHCommandControlParameterMethodsPanel(JDialog owner, int lg, int rg, int ug, int og) {
 		super();
 		Logging.info(this, "SSHCommandControlParameterMethodsPane  main " + main);
@@ -134,11 +139,6 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	public JButton getButtonTest() {
 		return jButtonTestParam;
 	}
-
-	int lGap = Globals.GAP_SIZE;
-	int rGap = Globals.GAP_SIZE;
-	int uGap = Globals.GAP_SIZE;
-	int oGap = Globals.GAP_SIZE;
 
 	public void setGapSize(int lgap, int rgap, int ugap, int ogap) {
 		Logging.info(this, "setGapSize lgap  " + lgap + " rgap " + rgap + " ugap " + ugap + " ogap " + ogap);

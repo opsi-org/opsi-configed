@@ -30,8 +30,8 @@ public abstract class AbstractSWExporter {
 	String exportDirectoryS;
 	String filepathStart;
 
-	protected Boolean askingForKindOfAction = false;
-	protected boolean askForOverwrite = false;
+	protected Boolean askingForKindOfAction;
+	protected boolean askForOverwrite;
 	protected String filenamePrefix = "report_swaudit_";
 
 	protected AbstractPersistenceController persist;
@@ -162,9 +162,7 @@ public abstract class AbstractSWExporter {
 	public void setHost(String hostId) {
 		if (modelSWInfo == null) {
 			initModel(hostId);
-		}
-
-		else {
+		} else {
 			theHost = hostId;
 			updateModel();
 

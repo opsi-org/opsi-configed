@@ -63,6 +63,8 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	private List<String> columnNames;
 	private List<JCheckBox> headerButtons;
 
+	int startLine = 1;
+
 	public CSVTemplateCreatorDialog(List<String> columnNames) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVTemplateCreatorDialog.title"), false,
 				new String[] { Configed.getResourceValue("FGeneralDialog.cancel"),
@@ -73,8 +75,6 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		this.columnNames = columnNames;
 	}
-
-	int startLine = 1;
 
 	@Override
 	protected void allLayout() {

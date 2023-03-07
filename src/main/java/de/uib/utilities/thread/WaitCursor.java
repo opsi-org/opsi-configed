@@ -5,6 +5,8 @@ import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.swing.SwingUtilities;
+
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
@@ -13,11 +15,11 @@ import de.uib.utilities.swing.ActivityPanel;
 public class WaitCursor {
 
 	private static AtomicInteger objectCounting = new AtomicInteger();
-	private static boolean allStopped = false;
+	private static boolean allStopped;
 
 	int objectNo;
 
-	boolean ready = false;
+	boolean ready;
 
 	Cursor saveCursor;
 	Component c;
@@ -73,7 +75,7 @@ public class WaitCursor {
 				}
 			}.start();
 		} else {
-			javax.swing.SwingUtilities.invokeLater(() -> {
+			SwingUtilities.invokeLater(() -> {
 				ActivityPanel.setActing(true);
 
 				while (!ready && !allStopped) {
@@ -88,7 +90,7 @@ public class WaitCursor {
 		Logging.info(this, " stop wait cursor " + objectNo + ", was located at (" + callLocation + ")");
 		ready = true;
 
-		javax.swing.SwingUtilities.invokeLater(() -> {
+		SwingUtilities.invokeLater(() -> {
 
 			if (c != null) {
 				c.setCursor(saveCursor);
@@ -97,9 +99,8 @@ public class WaitCursor {
 			if (isStopped()) {
 				objectCounting.decrementAndGet();
 				Logging.debug(this, "removing instance " + objectNo);
-				if (objectCounting.get() <= 0)
+				if (objectCounting.get() <= 0) {
 
-				{
 					Logging.info(this, "seemed to be last living instance");
 					ActivityPanel.setActing(false);
 				} else {

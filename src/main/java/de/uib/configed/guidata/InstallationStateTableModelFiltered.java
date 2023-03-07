@@ -1,5 +1,6 @@
 package de.uib.configed.guidata;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +12,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SessionSaveSet;
 
-public class InstallationStateTableModelFiltered extends InstallationStateTableModel
+public class InstallationStateTableModelFiltered extends InstallationStateTableModel {
 
-{
 	private int[] filter;
 	// filter is a function
 	// row --> somerow (from super.table)
@@ -91,7 +91,7 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	}
 
 	private void setFilter(int[] filter) {
-		Logging.info(this, "setFilter " + Logging.getStrings(filter));
+		Logging.info(this, "setFilter " + Arrays.toString(filter));
 		this.filter = filter;
 
 		if (filter == null) {
@@ -105,8 +105,8 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 				filterInverse[filter[i]] = i;
 			}
 
-			Logging.info(this, "setFilter: filter, filterInverse " + Logging.getStrings(filter) + ", "
-					+ Logging.getStrings(filterInverse));
+			Logging.info(this, "setFilter: filter, filterInverse " + Arrays.toString(filter) + ", "
+					+ Arrays.toString(filterInverse));
 		}
 
 		fireTableDataChanged();

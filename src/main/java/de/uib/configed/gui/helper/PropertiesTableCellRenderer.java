@@ -35,7 +35,7 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 		return result;
 	}
 
-	private Object formatList(Object value) {
+	private static Object formatList(Object value) {
 
 		Object result = value;
 		if (value != null) {

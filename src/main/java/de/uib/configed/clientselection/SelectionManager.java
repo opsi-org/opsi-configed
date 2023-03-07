@@ -31,11 +31,11 @@ public class SelectionManager {
 	}
 
 	private List<OperationWithStatus> groupWithStatusList;
-	private boolean hasSoftware = false;
-	private boolean hasHardware = false;
-	private boolean hasSwAudit = false;
-	private boolean isSerializedLoaded = false;
-	private AbstractSelectOperation loadedSearch = null;
+	private boolean hasSoftware;
+	private boolean hasHardware;
+	private boolean hasSwAudit;
+	private boolean isSerializedLoaded;
+	private AbstractSelectOperation loadedSearch;
 
 	private AbstractBackend backend;
 	private de.uib.configed.clientselection.AbstractSerializer serializer;
@@ -349,7 +349,7 @@ public class SelectionManager {
 	 * isTopOperation == true,
 	 * there are no parentheses around the whole list
 	 */
-	private List<OperationWithStatus> reverseBuild(AbstractSelectOperation operation, boolean isTopOperation) {
+	private static List<OperationWithStatus> reverseBuild(AbstractSelectOperation operation, boolean isTopOperation) {
 		LinkedList<OperationWithStatus> result = new LinkedList<>();
 		if (operation instanceof AndOperation) {
 			for (AbstractSelectOperation op : ((AndOperation) operation).getChildOperations()) {
@@ -389,7 +389,7 @@ public class SelectionManager {
 	}
 
 	/* Add a NotOperation if necessary */
-	private AbstractSelectOperation parseNot(OperationWithStatus operation) {
+	private static AbstractSelectOperation parseNot(OperationWithStatus operation) {
 		if (operation.status == ConnectionStatus.AND || operation.status == ConnectionStatus.OR) {
 			return operation.operation;
 		}
@@ -401,7 +401,7 @@ public class SelectionManager {
 	}
 
 	/* See if there's a NotOperation and replace the status accordingly. */
-	private OperationWithStatus reverseParseNot(AbstractSelectOperation operation, ConnectionStatus status) {
+	private static OperationWithStatus reverseParseNot(AbstractSelectOperation operation, ConnectionStatus status) {
 		OperationWithStatus ows = new OperationWithStatus();
 		if (operation instanceof NotOperation) {
 			ows.operation = ((NotOperation) operation).getChildOperations().get(0);

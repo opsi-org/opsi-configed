@@ -56,8 +56,8 @@ import de.uib.utilities.logging.Logging;
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
 	private int[] serverVersion = { 0, 0, 0, 0 };
-	private boolean gzipTransmission = false;
-	private boolean lz4Transmission = false;
+	private boolean gzipTransmission;
+	private boolean lz4Transmission;
 
 	// By default we set hostnameVerified to true, because MyHostnameVerifier is
 	// only used to check hostname verification, when default determines that
@@ -390,7 +390,6 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		HttpsURLConnection.setDefaultHostnameVerifier(new MyHostnameVerifier());
 
 		URL url = null;
-		File tmpCertFile = null;
 
 		try {
 			url = new URL(urlPath);
@@ -401,6 +400,8 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		if (url == null) {
 			return null;
 		}
+
+		File tmpCertFile = null;
 
 		try {
 			tmpCertFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION);
@@ -466,7 +467,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		return sslFactory;
 	}
 
-	private void displayErrorDialog(String message) {
+	private static void displayErrorDialog(String message) {
 		SwingUtilities.invokeLater(() -> {
 			FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("JSONthroughHTTP.failedServerVerification"), true,

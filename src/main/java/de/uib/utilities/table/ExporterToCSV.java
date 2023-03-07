@@ -33,7 +33,7 @@ public class ExporterToCSV extends AbstractExportTable {
 
 	}
 
-	private String removeStringDelimiter(Object value) {
+	private static String removeStringDelimiter(Object value) {
 		if (value == null) {
 			return "";
 		}
@@ -41,7 +41,7 @@ public class ExporterToCSV extends AbstractExportTable {
 		return ((String) value).replace(STRING_DELIMITER, '\'');
 	}
 
-	private String removeSeparatorChar(Object value) {
+	private static String removeSeparatorChar(Object value) {
 		if (value == null) {
 			return "";
 		}
@@ -123,9 +123,7 @@ public class ExporterToCSV extends AbstractExportTable {
 										line.append(inString);
 										line.append(STRING_DELIMITER);
 
-									}
-
-									else if (classNames.get(colI).equals("java.lang.Integer")) {
+									} else if (classNames.get(colI).equals("java.lang.Integer")) {
 										line.append(theTable.getValueAt(rowI, colI));
 									} else if (classNames.get(colI).equals("java.lang.Double")) {
 										Logging.debug(this,
@@ -143,9 +141,7 @@ public class ExporterToCSV extends AbstractExportTable {
 									} else if (classNames.get(colI).equals("java.lang.Boolean")) {
 										boolean booleanValue = (Boolean) theTable.getValueAt(rowI, colI);
 										line.append(booleanValue);
-									}
-
-									else if (classNames.get(colI).equals("java.sql.Timestamp")) {
+									} else if (classNames.get(colI).equals("java.sql.Timestamp")) {
 										if ((theTable.getValueAt(rowI, colI) != null)
 												&& (!theTable.getValueAt(rowI, colI).equals(""))) {
 											try {

@@ -3,19 +3,21 @@ package de.uib.opsidatamodel.permission;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.utilities.ExtendedDate;
 import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.logging.Logging;
 
 public class ModulePermissionValue {
-	de.uib.opsicommand.AbstractExecutioner exec;
+
+	public static final String KEY_EXPIRES = "expires";
+	public static final String KEY_MAX_CLIENTS = "maxclients";
+
+	AbstractExecutioner exec;
 
 	private ExtendedInteger maxClients;
 	private ExtendedDate expiresDate;
 	private Boolean booleanValue;
-
-	public static final String KEY_EXPIRES = "expires";
-	public static final String KEY_MAX_CLIENTS = "maxclients";
 
 	public static final Map<String, Boolean> MODULE_CHECKED = Map.ofEntries(Map.entry("license_management", true),
 			Map.entry("local_imaging", true), Map.entry("monitoring", true), Map.entry("wim-capture", true),
@@ -24,15 +26,13 @@ public class ModulePermissionValue {
 			Map.entry("directory-connector", true), Map.entry("macos_agent", true), Map.entry("secureboot", true),
 			Map.entry("win-vhd", true), Map.entry("os_install_by_wlan", true));
 
-	private Boolean checkBoolean(Object ob) {
+	private static Boolean checkBoolean(Object ob) {
 
 		Boolean result = null;
 
 		if (ob instanceof Boolean) {
 			result = (Boolean) ob;
-		}
-
-		else if (ob instanceof String) {
+		} else if (ob instanceof String) {
 			String sValue = ((String) ob).trim();
 			boolean checked = sValue.equalsIgnoreCase("yes") || sValue.equalsIgnoreCase("true");
 			if (checked) {
@@ -82,7 +82,7 @@ public class ModulePermissionValue {
 			try {
 				result = new ExtendedDate(ob);
 			} catch (ClassCastException ex) {
-				Logging.warning(this, "no String: " + ob);
+				Logging.warning(this, "not a String: " + ob, ex);
 			} catch (Exception ex) {
 				Logging.debug(this, "DateParseException for " + ob);
 			}
@@ -106,7 +106,7 @@ public class ModulePermissionValue {
 		return result;
 	}
 
-	public ModulePermissionValue(de.uib.opsicommand.AbstractExecutioner exec, Object ob, ExtendedDate defaultExpires) {
+	public ModulePermissionValue(AbstractExecutioner exec, Object ob, ExtendedDate defaultExpires) {
 		this.exec = exec;
 		Logging.info(this, "value object given: " + ob);
 		booleanValue = null;

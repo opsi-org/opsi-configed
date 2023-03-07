@@ -35,7 +35,7 @@ import de.uib.utilities.logging.Logging;
  **/
 public class SSHConnect {
 	/** Hostname for server to connected with **/
-	protected String commandInfoName = null;
+	protected String commandInfoName;
 	protected String host;
 	/** Username for server to connected as **/
 	protected String user;
@@ -48,11 +48,11 @@ public class SSHConnect {
 	protected String pwSudo;
 	/** If needed the root password **/
 	protected String pwRoot;
-	protected static Session session = null;
+	protected static Session session;
 	protected ConfigedMain main;
 
-	SSHConnectionInfo connectionInfo = null;
-	private static int successfulConnectObservedCount = 0;
+	SSHConnectionInfo connectionInfo;
+	private static int successfulConnectObservedCount;
 
 	/**
 	 * Instanz for SSH connection {@link de.uib.configed.ConfigedMain}

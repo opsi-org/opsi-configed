@@ -14,8 +14,8 @@ import de.uib.utilities.logging.Logging;
 public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	String[] objectIds;
 	AbstractPersistenceController persis;
-	boolean determineConfigOptions = false;
-	boolean masterConfig = false;
+	boolean determineConfigOptions;
+	boolean masterConfig;
 
 	public AdditionalconfigurationUpdateCollection(Object persis, String[] objectIds) {
 		super(new ArrayList<>(0));
@@ -48,9 +48,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 
 				try {
 					map = (Map) obj;
-				}
-
-				catch (ClassCastException ccex) {
+				} catch (ClassCastException ccex) {
 					Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 				}
 

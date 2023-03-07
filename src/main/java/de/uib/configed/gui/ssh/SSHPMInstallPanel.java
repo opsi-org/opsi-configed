@@ -13,7 +13,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHPMInstallPanel extends JPanel {
-	public boolean isOpen = false;
+	public boolean isOpen;
 
 	protected GroupLayout.Alignment center = GroupLayout.Alignment.CENTER;
 	protected GroupLayout.Alignment baseline = GroupLayout.Alignment.BASELINE;

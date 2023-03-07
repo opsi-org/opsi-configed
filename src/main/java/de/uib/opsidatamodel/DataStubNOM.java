@@ -23,6 +23,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.swing.JOptionPane;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -233,9 +235,7 @@ public class DataStubNOM extends AbstractDataStub {
 
 				if (p.isNetbootProduct()) {
 					depot2NetbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
-				}
-
-				else if (p.isLocalbootProduct()) {
+				} else if (p.isLocalbootProduct()) {
 					depot2LocalbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
 				}
 
@@ -616,12 +616,12 @@ public class DataStubNOM extends AbstractDataStub {
 			boolean infoFound = false;
 
 			// try reloading?
-			int returnedOption = javax.swing.JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
+			int returnedOption = JOptionPane.showOptionDialog(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("DataStub.reloadSoftwareInformation.text"),
-					Configed.getResourceValue("DataStub.reloadSoftwareInformation.title"),
-					javax.swing.JOptionPane.YES_NO_OPTION, javax.swing.JOptionPane.QUESTION_MESSAGE, null, null, null);
+					Configed.getResourceValue("DataStub.reloadSoftwareInformation.title"), JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-			if (returnedOption == javax.swing.JOptionPane.YES_OPTION) {
+			if (returnedOption == JOptionPane.YES_OPTION) {
 				installedSoftwareInformationRequestRefresh();
 				retrieveInstalledSoftwareInformation();
 				if (i > -1 && softwareList.size() >= i + 1) {

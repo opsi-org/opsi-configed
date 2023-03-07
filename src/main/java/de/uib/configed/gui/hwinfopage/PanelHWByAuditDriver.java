@@ -154,24 +154,25 @@ public class PanelHWByAuditDriver extends JPanel {
 		}
 	}
 
-	private String eliminateIllegalPathChars(String path) {
-		final String toReplace = "<>?\":|\\/*";
-		final char replacement = '_';
+	private static String eliminateIllegalPathChars(String path) {
 
 		if (path == null) {
 			return null;
 		}
 
+		final String TO_REPLACE = "<>?\":|\\/*";
+		final char REPLACEMENT = '_';
+
 		char[] chars = path.toCharArray();
 		for (int i = 0; i < chars.length; i++) {
-			if (toReplace.indexOf(chars[i]) > -1) {
-				chars[i] = replacement;
+			if (TO_REPLACE.indexOf(chars[i]) > -1) {
+				chars[i] = REPLACEMENT;
 			}
 		}
 
 		// requires bootimage >= 4.0.6
 		if (chars.length > 0 && (chars[chars.length - 1] == '.' || chars[chars.length - 1] == ' ')) {
-			chars[chars.length - 1] = replacement;
+			chars[chars.length - 1] = REPLACEMENT;
 		}
 
 		return new String(chars);

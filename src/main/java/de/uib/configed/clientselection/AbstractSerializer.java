@@ -129,9 +129,7 @@ public abstract class AbstractSerializer {
 		try {
 			Map<String, Object> data = getData(name);
 			return deserialize(data);
-		}
-
-		catch (Exception e) {
+		} catch (Exception e) {
 			Logging.error(e.getMessage(), e);
 			return null;
 		}
@@ -181,22 +179,16 @@ public abstract class AbstractSerializer {
 
 			if (elementName.equals(ELEMENT_NAME_SOFTWARE_NAME_ELEMENT)) {
 				element = manager.getNewSoftwareNameElement();
-			}
-
-			else if (elementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
+			} else if (elementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
 				element = new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]));
-			}
-
-			else if (elementName.equals(ELEMENT_NAME_GROUP)) {
+			} else if (elementName.equals(ELEMENT_NAME_GROUP)) {
 				// constructing a compatibility with format without GroupWithSubgroupsElement
 				if (subelementName != null && subelementName.equals(ELEMENT_NAME_GROUP_WITH_SUBGROUPS)) {
 					element = new GroupWithSubgroupsElement(manager.getBackend().getGroups().toArray(new String[0]));
 				} else {
 					element = new GroupElement(manager.getBackend().getGroups().toArray(new String[0]));
 				}
-			}
-
-			else if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
+			} else if (elementName.startsWith(ELEMENT_NAME_GENERIC)) {
 				if (hardware == null) {
 					hardware = manager.getBackend().getHardwareList();
 				}
@@ -250,8 +242,9 @@ public abstract class AbstractSerializer {
 			if (element != null) {
 				Logging.info(this, "getOperation element != null, element  " + element);
 				operation = (AbstractSelectOperation) operationClass.getConstructors()[0].newInstance(element);
-			} else // GroupOperation
-			{
+			} else {
+				// GroupOperation
+
 				Class<?> list = Class.forName("java.util.List");
 				Logging.info(this, "getOperation List name: " + list.toString());
 				operation = (AbstractSelectOperation) operationClass.getConstructor(list).newInstance(children);
@@ -284,9 +277,9 @@ public abstract class AbstractSerializer {
 		if (element == null) {
 			map.put(KEY_ELEMENT_NAME, null);
 			map.put(KEY_ELEMENT_PATH, null);
-		} else if (element instanceof GroupWithSubgroupsElement)
-		// producing compatibility for version without GroupWithSubgroupsElement
-		{
+		} else if (element instanceof GroupWithSubgroupsElement) {
+			// producing compatibility for version without GroupWithSubgroupsElement
+
 			map.put(KEY_ELEMENT_NAME, GroupElement.class.getSimpleName());
 			map.put(KEY_SUBELEMENT_NAME, GroupWithSubgroupsElement.class.getSimpleName());
 			map.put(KEY_ELEMENT_PATH, element.getPathArray());
@@ -362,7 +355,7 @@ public abstract class AbstractSerializer {
 	 * Needed for version 1 data. Adds HostOperations, as they didn't exist in
 	 * version 1
 	 */
-	private AbstractSelectOperation checkForHostGroup(AbstractSelectOperation operation) {
+	private static AbstractSelectOperation checkForHostGroup(AbstractSelectOperation operation) {
 		if (!(operation instanceof AbstractSelectGroupOperation)) {
 			Logging.debug("No group: " + operation.getClassName() + ", element path size: "
 					+ operation.getElement().getPathArray().length);

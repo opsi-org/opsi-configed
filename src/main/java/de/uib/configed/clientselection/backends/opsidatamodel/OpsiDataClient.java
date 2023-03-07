@@ -40,10 +40,10 @@ public class OpsiDataClient implements Client {
 
 	// current swaudit to be checked
 	private Map<String, String> swauditValue;
-	private Iterator<Map<String, Object>> hardwareIterator = null;
+	private Iterator<Map<String, Object>> hardwareIterator;
 
 	// current hardware to be checked
-	private Map<String, Object> hardwareValue = null;
+	private Map<String, Object> hardwareValue;
 
 	public OpsiDataClient(String id) {
 		hostId = id;

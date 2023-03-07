@@ -10,18 +10,18 @@ public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 	// static values and methods (resp. methods based on static values)
 	// must be defined in subclasses
 
+	// object values and methods
+	protected Map<String, Object> pureEntry;
+	protected Map<String, String> entryRetrieved;
+
 	protected AbstractTableEntry(Map entry) {
 		pureEntry = entry;
 		entryRetrieved = entry;
 	}
 
-	// object values and methods
-	protected Map<String, Object> pureEntry;
-	protected Map<String, String> entryRetrieved;
+	protected void remap(String key) {
+		// if key are identically named
 
-	protected void remap(String key)
-	// if key are identically named
-	{
 		remap(key, key);
 	}
 

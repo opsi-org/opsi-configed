@@ -8,9 +8,9 @@ import java.util.TreeMap;
 import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.logging.Logging;
 
-public class LicenceEntry extends TreeMap<String, Object>
 // software license in opsi data base
-{
+public class LicenceEntry extends TreeMap<String, Object> {
+
 	/*
 	 * desc SOFTWARE_LICENSE :
 	 * | Field | Type | Null | Key | Default | Extra
@@ -90,9 +90,7 @@ public class LicenceEntry extends TreeMap<String, Object>
 
 		if (importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY) == null) {
 			importedEntry.put(MAX_INSTALLATIONS_KEY, ExtendedInteger.ZERO);
-		}
-
-		else {
+		} else {
 			if (!(importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY) instanceof Integer)) {
 				Logging.warning(this, " " + importedEntry.get(ID_KEY) + " has not an integer for "
 						+ importedEntry.get(MAX_INSTALLATIONS_SERVICE_KEY));

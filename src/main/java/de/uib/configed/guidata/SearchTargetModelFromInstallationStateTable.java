@@ -17,13 +17,16 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 
 public class SearchTargetModelFromInstallationStateTable implements SearchTargetModel {
-	protected JTable table;
 
 	public static final String FILTER_BY_SELECTION = "filterBySelection";
+
+	protected JTable table;
 
 	protected int[] viewRowfilter = new int[0];
 
 	private PanelGroupedProductSettings panelProductSettings;
+
+	boolean filtered;
 
 	public SearchTargetModelFromInstallationStateTable() {
 		this(null, null);
@@ -151,8 +154,6 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 			table.getSelectionModel().addSelectionInterval(selection[i], selection[i]);
 		}
 	}
-
-	boolean filtered = false;
 
 	@Override
 	public void setFiltered(boolean b) {

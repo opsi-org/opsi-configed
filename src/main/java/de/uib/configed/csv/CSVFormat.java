@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -159,7 +160,11 @@ public class CSVFormat {
 		}
 
 		public String getHeader() {
-			return hasHeader ? line : "";
+			if (hasHeader) {
+				return line;
+			} else {
+				return "";
+			}
 		}
 
 		public boolean detect() {
@@ -174,7 +179,7 @@ public class CSVFormat {
 		}
 	}
 
-	public boolean hasExpectedHeaderNames(List<String> expectedHeaderNames) {
+	public boolean hasExpectedHeaderNames(Collection<String> expectedHeaderNames) {
 		return headers.stream().allMatch(header -> expectedHeaderNames.contains(header.trim()));
 	}
 }

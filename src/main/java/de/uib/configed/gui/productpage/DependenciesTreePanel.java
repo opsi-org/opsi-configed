@@ -57,7 +57,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 	private JTree dependenciesTree;
 	private JLabel dependenciesTreePathLabel;
 
-	private boolean isActive = false;
+	private boolean isActive;
 
 	public DependenciesTreePanel() {
 		dependenciesTreeModel = null;
@@ -116,9 +116,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 			public void setSelectionPath(TreePath path) {
 				if (dependenciesTree.isPathSelected(path)) {
 					clearSelection();
-				}
-
-				else {
+				} else {
 					clearSelection();
 					selectAllWithSameProductId(path);
 				}

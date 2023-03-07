@@ -44,7 +44,9 @@ import de.uib.utilities.thread.WaitCursor;
 
 public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
-	int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
+	private static final String DEFAULT_TEMP_DIRECTORY = "(Default)";
+
+	private static final String PAGE_SHARE_S = "opsi_workbench";
 
 	JButton buttonCallChooserPackage;
 	JButton buttonSelectTmpDir;
@@ -53,17 +55,14 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	JComboBox<String> comboChooseDepot;
 	JButton buttonCallExecute;
 
-	String opsiPackagePathToHandleS = null;
-	String opsiPackageOnWorkbenchS = null;
+	String opsiPackagePathToHandleS;
+	String opsiPackageOnWorkbenchS;
 	File opsiPackageOnWorkbench;
-	String opsiPackageNameS = null;
+	String opsiPackageNameS;
 
 	JTextField fieldOpsiPackageName;
 	JTextField fieldTmpDir;
 
-	private static final String DEFAULT_TEMP_DIRECTORY = "(Default)";
-
-	private static final String PAGE_SHARE_S = "opsi_workbench";
 	String opsiWorkBenchDirectoryS;
 	File opsiWorkBenchDirectory;
 	String opsiPackageServerPathS;
@@ -313,8 +312,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		buildSambaTarget("" + comboChooseDepot.getSelectedItem());
 
-		final JPanel panel = this;
-
 		fieldOpsiPackageName = new JTextField();
 		fieldOpsiPackageName.setEditable(true);
 		fieldOpsiPackageName.setPreferredSize(Globals.textfieldDimension);
@@ -360,7 +357,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				int returnVal = chooserTmpDir.showOpenDialog(panel);
+				int returnVal = chooserTmpDir.showOpenDialog(PanelInstallOpsiPackage.this);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					String tmpDir = chooserTmpDir.getSelectedFile().getPath();
@@ -463,7 +460,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 										GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 2, Short.MAX_VALUE))
 						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-								.addComponent(infoLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addComponent(infoLabel, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+										Globals.FIRST_LABEL_WIDTH)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(buttonCallChooserPackage, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -472,7 +470,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 										Short.MAX_VALUE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE))
 						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-								.addComponent(serverLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addComponent(serverLabel, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+										Globals.FIRST_LABEL_WIDTH)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addGap(Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH,
 										Globals.GRAPHIC_BUTTON_WIDTH)
@@ -486,7 +485,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE))
 
 						.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-								.addComponent(serverPathLabel, firstLabelWidth, firstLabelWidth, firstLabelWidth)
+								.addComponent(serverPathLabel, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH,
+										Globals.FIRST_LABEL_WIDTH)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(buttonCallChooserServerpath, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -497,7 +497,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 						.addGroup(
 								layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-										.addGap(0, firstLabelWidth, firstLabelWidth)
+										.addGap(0, Globals.FIRST_LABEL_WIDTH, Globals.FIRST_LABEL_WIDTH)
 										.addGap(0, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 										.addGap(0, Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 										.addGap(0, hFirstGap, hFirstGap)

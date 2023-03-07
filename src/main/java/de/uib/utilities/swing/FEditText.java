@@ -30,9 +30,6 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 
 	protected boolean singleLine;
 
-	protected boolean standalone = true;
-	static int count = 0;
-
 	public FEditText(String initialText, String hint) {
 		super(initialText, hint);
 		initFEditText();
@@ -91,9 +88,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB) {
 				buttonCommit.requestFocusInWindow();
-			}
-
-			else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && singleLine) {
+			} else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && singleLine) {
 				commit();
 			}
 		}
@@ -118,10 +113,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	// MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
-		if (standalone) {
-			Logging.debug(getText());
-		}
+		Logging.debug(getText());
 	}
 
 	@Override

@@ -146,14 +146,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public static final String NAME_REQUIREMENT_TYPE_NEUTRAL = "";
 	public static final String NAME_REQUIREMENT_TYPE_ON_DEINSTALL = "on_deinstall";
 
-	protected FTextArea licInfoWarnings;
-
 	protected String connectionServer;
 	private String user;
 	private String userConfigPart;
 	private Boolean applyUserSpecializedConfig;
 
-	private static Boolean keyUserRegisterValue = null;
+	private static Boolean keyUserRegisterValue;
 
 	protected Map<String, List<String>> mapOfMethodSignatures;
 
@@ -169,7 +167,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	// for depot
 	protected Map<String, Map<String, ListCellOptions>> productPropertyDefinitions;
 
-	protected AbstractHostInfoCollections hostInfoCollections;
+	protected HostInfoCollections hostInfoCollections;
 
 	private String theDepot = "";
 
@@ -309,15 +307,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected String opsiVersion;
 
-	protected boolean withLicenceManagement = false;
-	protected boolean withLocalImaging = false;
+	protected boolean withLicenceManagement;
+	protected boolean withLocalImaging;
 
-	protected boolean withMySQL = false;
-	protected boolean withUEFI = false;
-	protected boolean withWAN = false;
+	protected boolean withMySQL;
+	protected boolean withUEFI;
+	protected boolean withWAN;
 
-	protected boolean withLinuxAgent = false;
-	protected boolean withUserRoles = false;
+	protected boolean withLinuxAgent;
+	protected boolean withUserRoles;
 
 	// for internal use, for external cast to:
 	protected Map<String, ConfigOption> configOptions;
@@ -350,7 +348,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	AbstractDataStub dataStub;
 
-	protected Boolean acceptMySQL = null;
+	protected Boolean acceptMySQL;
 
 	@Override
 	public boolean canCallMySQL() {
@@ -362,7 +360,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public AbstractHostInfoCollections getHostInfoCollections() {
+	public HostInfoCollections getHostInfoCollections() {
 		return hostInfoCollections;
 	}
 
@@ -391,11 +389,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected class CheckingEntryMapOfMaps extends LinkedHashMap<String, Map<String, Object>> {}
 
-	protected class DefaultHostInfoCollections extends AbstractHostInfoCollections {
+	protected class DefaultHostInfoCollections implements HostInfoCollections {
 		protected String configServer;
 		protected List<String> opsiHostNames;
 
-		protected int countClients = 0;
+		protected int countClients;
 
 		protected Map<String, Map<String, Object>> masterDepots;
 		protected Map<String, Map<String, Object>> allDepots;
@@ -508,7 +506,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		// build data
 		@Override
-		protected void retrieveOpsiHosts() {
+		public void retrieveOpsiHosts() {
 			Logging.debug(this, "retrieveOpsiHosts , opsiHostNames == null " + (opsiHostNames == null));
 
 			int countHosts = 0;
@@ -581,16 +579,16 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				Logging.info(this, "retrieveOpsiHost found masterDepots " + masterDepots.size());
 				if (configServer == null) {
 					StringBuilder messbuff = new StringBuilder();
-					final String baselabel = "PersistenceController.noData";
+					final String BASE_LABEL = "PersistenceController.noData";
 
-					messbuff.append(Configed.getResourceValue(baselabel + "0"));
+					messbuff.append(Configed.getResourceValue(BASE_LABEL + "0"));
 					messbuff.append("\n");
-					messbuff.append(Configed.getResourceValue(baselabel + "1") + " " + countHosts);
+					messbuff.append(Configed.getResourceValue(BASE_LABEL + "1") + " " + countHosts);
 					messbuff.append("\n");
 					messbuff.append("\n");
 
 					for (int i = 2; i <= 4; i++) {
-						messbuff.append(Configed.getResourceValue(baselabel + i));
+						messbuff.append(Configed.getResourceValue(BASE_LABEL + i));
 						messbuff.append("\n");
 						messbuff.append("\n");
 					}
@@ -1726,7 +1724,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return result;
 	}
 
-	private Object createUefiJSONEntry(String clientId, String val) {
+	private static Object createUefiJSONEntry(String clientId, String val) {
 		Map<String, Object> item = createNOMitem("ConfigState");
 		List<String> values = new ArrayList<>();
 		values.add(val);
@@ -2086,7 +2084,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// hostControl methods
-	private List<String> collectErrorsFromResponsesByHost(Map<String, Object> responses, String callingMethodName) {
+	private static List<String> collectErrorsFromResponsesByHost(Map<String, Object> responses,
+			String callingMethodName) {
 		List<String> errors = new ArrayList<>();
 
 		for (Entry<String, Object> response : responses.entrySet()) {
@@ -2492,7 +2491,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		fProductGroup2Members = null;
 	}
 
-	private Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
+	private static Map<String, Set<String>> projectToFunction(Map<String, Map<String, String>> mappedRelation,
 			String originVar, String imageVar) {
 		Map<String, Set<String>> result = new TreeMap<>();
 
@@ -2857,7 +2856,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// partial version of produceHwAuditDeviceClasses()
-	private List<String> produceHwClasses(List<Map<String, List<Map<String, Object>>>> hwAuditConf) {
+	private static List<String> produceHwClasses(List<Map<String, List<Map<String, Object>>>> hwAuditConf) {
 		List<String> result = new ArrayList<>();
 
 		for (Map<String, List<Map<String, Object>>> hwAuditClass : hwAuditConf) {
@@ -3778,7 +3777,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfProductStatesAndActions for : " + Logging.getStrings(clientIds));
+		Logging.debug(this, "getMapOfProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
@@ -3846,7 +3845,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@SuppressWarnings("java:S1168")
 	@Override
 	public Map<String, List<Map<String, String>>> getMapOfLocalbootProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Logging.getStrings(clientIds));
+		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		if (clientIds == null || clientIds.length == 0) {
 			return null;
@@ -3863,7 +3862,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		return result;
 	}
-	// test ende*/
 
 	protected Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds) {
 		String[] callAttributes = new String[] {};
@@ -3889,20 +3887,18 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@SuppressWarnings("java:S1168")
 	@Override
 	public Map<String, List<Map<String, String>>> getMapOfNetbootProductStatesAndActions(String[] clientIds) {
-		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Logging.getStrings(clientIds));
+		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		if (clientIds == null || clientIds.length == 0) {
 			return null;
 		}
-
-		Map<String, List<Map<String, String>>> result = new HashMap<>();
 
 		Map<String, List<Map<String, String>>> states = getNetBootProductStatesNOM(clientIds);
 
 		if (states != null) {
 			return states;
 		}
-		return result;
+		return new HashMap<>();
 	}
 
 	protected boolean updateProductOnClient(String pcname, String productname, int producttype,
@@ -4791,11 +4787,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// lazy initializing
+	// TODO why do I need this?
 	@Override
 	public List<String> getMethodSignature(String methodname) {
 		if (mapOfMethodSignatures == null) {
-			List<Object> methodsList = exec
-					.getListResult(new OpsiMethodCall("getPossibleMethods_listOfHashes", new Object[] {}));
+			List<Object> methodsList = exec.getListResult(new OpsiMethodCall("backend_getInterface", new Object[] {}));
 
 			if (!methodsList.isEmpty()) {
 				mapOfMethodSignatures = new HashMap<>();
@@ -4969,7 +4965,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			boolean tryIt = true;
 
 			int tryOnceMoreCounter = 0;
-			final int stopRepeatingAtThis = 1;
+			final int STOP_REPEATING_AT_THIS = 1;
 
 			while (tryIt) {
 				tryIt = false;
@@ -5030,7 +5026,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					if (configOption.getDefaultValues() == null) {
 						Logging.warning(this, "default values missing for config  " + key);
 
-						if (tryOnceMoreCounter <= stopRepeatingAtThis) {
+						if (tryOnceMoreCounter <= STOP_REPEATING_AT_THIS) {
 							tryIt = true;
 							Logging.warning(this,
 									"repeat loading the values , we repeated  " + tryOnceMoreCounter + " times");
@@ -7156,7 +7152,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		exec.doCall(omc);
 	}
 
-	private List<String> getPossibleValuesProductOnClientDisplayFields() {
+	private static List<String> getPossibleValuesProductOnClientDisplayFields() {
 		List<String> possibleValues = new ArrayList<>();
 		possibleValues.add("productId");
 		possibleValues.add(ProductState.KEY_PRODUCT_NAME);
@@ -7172,7 +7168,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return possibleValues;
 	}
 
-	private List<String> getDefaultValuesProductOnClientDisplayFields() {
+	private static List<String> getDefaultValuesProductOnClientDisplayFields() {
 		List<String> result = new ArrayList<>();
 
 		result.add("productId");
@@ -7353,11 +7349,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return result;
 	}
 
-	private Object produceConfigEntry(String nomType, String key, Object value, String description) {
+	private static Object produceConfigEntry(String nomType, String key, Object value, String description) {
 		return produceConfigEntry(nomType, key, value, description, true);
 	}
 
-	private Object produceConfigEntry(String nomType, String key, Object value, String description, boolean editable) {
+	private static Object produceConfigEntry(String nomType, String key, Object value, String description,
+			boolean editable) {
 		List<Object> possibleValues = new ArrayList<>();
 		possibleValues.add(value);
 
@@ -8053,8 +8050,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		getHostInfoCollections().retrieveOpsiHosts();
 		Logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
 				.getInstance(getOpsiLicencingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
-
-		licInfoWarnings = null;
 
 		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfo(), getConfigDefaultValues(),
 				!FGeneralDialogLicensingInfo.extendedView);

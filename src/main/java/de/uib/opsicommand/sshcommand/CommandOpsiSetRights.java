@@ -15,7 +15,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	private static final String BASE_NAME = "opsi-set-rights ";
 	private String command = BASE_NAME;
 
-	protected FGeneralDialog dialog = null;
+	protected FGeneralDialog dialog;
 	private boolean needSudo = true;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = true;
@@ -23,7 +23,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	private LinkedList<SSHCommand> sshCommandOriginal = new LinkedList<>();
 	private static final int PRIORITY = 110;
 	private String mainName = "";
-	private String dir = null;
+	private String dir;
 	private String myTmpCommand;
 
 	public CommandOpsiSetRights() {

@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -73,12 +74,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	PanelMountShare panelMountShare;
 
 	String depotProductDirectory = "";
-	boolean smbMounted = false;
+	boolean smbMounted;
 	String driverDirectory = "";
 
-	boolean stateDriverPath = false;
+	boolean stateDriverPath;
 	CheckedLabel driverPathChecked;
-	boolean stateServerPath = false;
+	boolean stateServerPath;
 	CheckedLabel serverPathChecked;
 
 	JLabel jLabelUploading;
@@ -181,7 +182,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	JButton buttonUploadDrivers;
 
-	String selectedDepot = null;
+	String selectedDepot;
 	String winProduct = "";
 
 	JLabel jLabelTopic;
@@ -209,9 +210,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		labelDriverToIntegrate = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelDriverToIntegrate"));
 
-		panelMountShare = new PanelMountShare(this, main, root, labelDriverToIntegrate.getPreferredSize().width + hGap)
-
-		{
+		panelMountShare = new PanelMountShare(this, main, root,
+				labelDriverToIntegrate.getPreferredSize().width + hGap) {
 			@Override
 			protected boolean checkConnectionToShare() {
 				boolean connected = super.checkConnectionToShare();
@@ -439,7 +439,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		JPanel panelButtonGroup = new JPanel();
 		GroupLayout layoutButtonGroup = new GroupLayout(panelButtonGroup);
 		panelButtonGroup.setLayout(layoutButtonGroup);
-		panelButtonGroup.setBorder(new javax.swing.border.LineBorder(Globals.blueGrey, 1, true));
+		panelButtonGroup.setBorder(new LineBorder(Globals.blueGrey, 1, true));
 
 		layoutButtonGroup.setVerticalGroup(layoutButtonGroup.createSequentialGroup().addGap(vGap, vGap, vGap)
 				.addComponent(labelDriverLocationType, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)

@@ -37,23 +37,24 @@ public final class CertificateManager {
 	}
 
 	public static X509Certificate instantiateCertificate(File certificateFile) {
-		X509Certificate cert = null;
 
 		if (invalidCertificates.contains(certificateFile.getAbsolutePath())) {
 			return null;
 		}
 
+		X509Certificate cert = null;
+
 		try (FileInputStream is = new FileInputStream(certificateFile)) {
 			CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
 			cert = (X509Certificate) certFactory.generateCertificate(is);
 		} catch (CertificateException e) {
-			Logging.warning("unable to parse certificate (format is inavlid): " + certificateFile.getAbsolutePath());
+			Logging.warning("unable to parse certificate (format is inavlid): " + certificateFile.getAbsolutePath(), e);
 			removeCertificateFromKeyStore(certificateFile);
 			invalidCertificates.add(certificateFile.getAbsolutePath());
 		} catch (FileNotFoundException e) {
-			Logging.warning("unable to find certificate: " + certificateFile.getAbsolutePath());
+			Logging.warning("unable to find certificate: " + certificateFile.getAbsolutePath(), e);
 		} catch (IOException e) {
-			Logging.warning("unable to close certificate: " + certificateFile.getAbsolutePath());
+			Logging.warning("unable to close certificate: " + certificateFile.getAbsolutePath(), e);
 		}
 
 		return cert;
@@ -67,8 +68,8 @@ public final class CertificateManager {
 				ks.deleteEntry(certificateFile.getParentFile().getName());
 			}
 		} catch (KeyStoreException e) {
-			Logging.warning("unable to remove certificate " + certificateFile.getAbsolutePath() + " from the keystore: "
-					+ e.toString());
+			Logging.warning(
+					"unable to remove certificate " + certificateFile.getAbsolutePath() + " from the keystore: ", e);
 		}
 	}
 
@@ -78,13 +79,13 @@ public final class CertificateManager {
 				ks = KeyStore.getInstance(KeyStore.getDefaultType());
 				ks.load(null, null);
 			} catch (KeyStoreException e) {
-				Logging.warning("keystore wasn't initialized: " + e.toString());
+				Logging.warning("keystore wasn't initialized: ", e);
 			} catch (NoSuchAlgorithmException e) {
-				Logging.warning("used unsupported algorithm, when initializing key store: " + e.toString());
+				Logging.warning("used unsupported algorithm, when initializing key store: ", e);
 			} catch (CertificateException e) {
-				Logging.warning("faulty certificate (should not happen, since no certificate is provided)");
+				Logging.warning("faulty certificate (should not happen, since no certificate is provided)", e);
 			} catch (IOException e) {
-				Logging.warning("unable to initialize keystore: " + e.toString());
+				Logging.warning("unable to initialize keystore: ", e);
 			}
 		}
 
@@ -105,7 +106,7 @@ public final class CertificateManager {
 			String alias = certificateFile.getParentFile().getName();
 			ks.setCertificateEntry(alias, certificate);
 		} catch (KeyStoreException e) {
-			Logging.error("unable to load certificate into a keystore");
+			Logging.error("unable to load certificate into a keystore", e);
 		}
 	}
 
@@ -125,7 +126,7 @@ public final class CertificateManager {
 				}
 			});
 		} catch (IOException ex) {
-			ex.printStackTrace();
+			Logging.warning("error on getting certificate", ex);
 		}
 
 		return certificateFiles;
@@ -179,7 +180,7 @@ public final class CertificateManager {
 					"." + Globals.CERTIFICATE_FILE_EXTENSION);
 			writeToCertificate(certificateFile, certificateContent);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logging.warning("error on getting certificateFile", e);
 		}
 
 		if (certificateFile == null) {
@@ -194,7 +195,7 @@ public final class CertificateManager {
 			writer.write(certificateContent);
 			writer.flush();
 		} catch (IOException e) {
-			Logging.error("unable to write to certificate: " + certificateFile.getAbsolutePath());
+			Logging.error("unable to write to certificate: " + certificateFile.getAbsolutePath(), e);
 		}
 	}
 }

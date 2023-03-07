@@ -45,6 +45,13 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  */
 public class PanelEnterLicence extends MultiTablePanel implements ActionListener {
 
+	private static final int MIN_HEIGHT = 50;
+	private static final int MIN_PANEL_TABLE_HEIGHT = 60;
+	private static final int MAX_WIDTH = 1000;
+
+	private static final int MIN_FIELD_WIDTH = 40;
+	private static final int MIN_FIELD_HEIGHT = 6;
+
 	public PanelGenEditTable panelKeys;
 	public PanelGenEditTable panelLicencepools;
 	public PanelGenEditTable panelLicencecontracts;
@@ -52,13 +59,6 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	private String selectedLicencePool = "";
 	private ListSelectionListener licencePoolSelectionListener;
-
-	private static final int MIN_HEIGHT = 50;
-	private static final int MIN_PANEL_TABLE_HEIGHT = 60;
-	private static final int MAX_WIDTH = 1000;
-
-	private static final int MIN_FIELD_WIDTH = 40;
-	private static final int MIN_FIELD_HEIGHT = 6;
 
 	private JButton jButtonCreateStandard;
 	private JButton jButtonCreateVolume;

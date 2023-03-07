@@ -29,9 +29,8 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.table.updates.TableUpdateCollection;
 
-public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
-// tab edit licence
-{
+public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
+	// tab edit licence
 
 	PanelEditLicences thePanel;
 
@@ -310,7 +309,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel
 			Object[] a = new Object[6];
 			a[0] = "c_" + Globals.getSeconds();
 			a[1] = "";
-			a[2] = Globals.getDate(false);
+			a[2] = Globals.getDate();
 			a[3] = Globals.ZERODATE;
 			a[4] = Globals.ZERODATE;
 			a[5] = "";

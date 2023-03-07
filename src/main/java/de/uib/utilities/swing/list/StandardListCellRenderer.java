@@ -26,16 +26,15 @@ import de.uib.utilities.swing.CellAlternatingColorizer;
 
 public class StandardListCellRenderer extends DefaultListCellRenderer {
 
-	protected String tooltipPrefix = "";
-
 	// this is the normal preferred height for components with content.
 	// We want this height also for empty components
 	private static final int CELL_HEIGHT = 20;
-
 	protected static final int FILL_LENGTH = 20;
 
-	protected Color uniformColor = null;
-	protected Color uniformSelectedColor = null;
+	protected String tooltipPrefix = "";
+
+	protected Color uniformColor;
+	protected Color uniformSelectedColor;
 
 	protected Color selectedEven = Globals.defaultTableSelectedRowDark;
 	protected Color selectedUneven = Globals.defaultTableSelectedRowBright;
@@ -87,9 +86,9 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 		return jc;
 	}
 
-	public void setUniformColors(Color c, Color cSelected)
-	// ignore the inherited alterna
-	{
+	public void setUniformColors(Color c, Color cSelected) {
+		// ignore the inherited alterna
+
 		uniformColor = c;
 		uniformSelectedColor = cSelected;
 	}

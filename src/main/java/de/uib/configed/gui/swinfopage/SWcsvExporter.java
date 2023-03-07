@@ -1,5 +1,7 @@
 package de.uib.configed.gui.swinfopage;
 
+import javax.swing.JTable;
+
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToCSV;
 
@@ -7,11 +9,11 @@ import de.uib.utilities.table.ExporterToCSV;
  * A class to implement pdf export of SWAudit data
  */
 public class SWcsvExporter extends AbstractSWExporter {
-	javax.swing.JTable theTable;
+	JTable theTable;
 	ExporterToCSV exportTable;
 
 	public SWcsvExporter() {
-		theTable = new javax.swing.JTable();
+		theTable = new JTable();
 
 		exportTable = new ExporterToCSV(theTable);
 	}

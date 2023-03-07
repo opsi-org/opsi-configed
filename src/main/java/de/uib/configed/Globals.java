@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -33,8 +33,9 @@ import javafx.stage.Stage;
 
 public final class Globals {
 
-	public static final String VERSION = "4.2.20.9";
-	public static final String VERDATE = "2023-03-02";
+	// get version from pom.xml
+	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
+	public static final String VERDATE = "2023-03-07";
 
 	public static final String VERHASHTAG = "";
 
@@ -66,36 +67,6 @@ public final class Globals {
 	public static boolean disableCertificateVerification;
 
 	// Hier to prevent initialization
-	private Globals() {
-	}
-
-	public static final class ProductPackageVersionSeparator {
-
-		public static final String FOR_DISPLAY = "-";
-		public static final String FOR_KEY = ";";
-
-		// private constructor to hide the implicit public one
-		private ProductPackageVersionSeparator() {
-		}
-
-		public static String formatKeyForDisplay(String key) {
-			if (key == null) {
-				return null;
-			}
-
-			int i = key.indexOf(FOR_KEY);
-			if (i == -1) {
-				return key;
-			}
-
-			String result = key.substring(0, i);
-			if (i < key.length()) {
-				result = result + FOR_DISPLAY + key.substring(i + 1);
-			}
-
-			return result;
-		}
-	}
 
 	public static final Font defaultFont = new Font("SansSerif", 0, 11);
 	public static final Font defaultFontStandardBold = new Font("SansSerif", Font.BOLD, 11);
@@ -108,57 +79,6 @@ public final class Globals {
 
 	public static final int DEFAULT_FTEXTAREA_HEIGHT = 200;
 	public static final int DEFAULT_FTEXTAREA_WIDTH = 350;
-
-	public static boolean interpretAsBoolean(Object value) {
-
-		if (value == null) {
-			return false;
-		}
-
-		if (value instanceof Boolean) {
-			return (Boolean) value;
-		}
-
-		if (value instanceof Integer) {
-			int val = (Integer) value;
-			if (val == 1) {
-				return true;
-			} else if (val == 0) {
-				return false;
-			} else {
-				throw new IllegalArgumentException("" + value + " cannot be interpreted as boolean");
-			}
-		}
-
-		if (value instanceof String) {
-
-			String val = ((String) value).toLowerCase();
-
-			if (val.equals("")) {
-				return false;
-			}
-
-			if (val.equals("true")) {
-				return true;
-			}
-
-			if (val.equals("false")) {
-				return false;
-			}
-
-			if (val.equals("1")) {
-				return true;
-			}
-
-			if (val.equals("0")) {
-				return false;
-			}
-
-			throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
-		}
-
-		throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
-	}
 
 	// some value which shall be interpreted as identical
 	public static final Color INVISIBLE = new Color(11, 13, 17);
@@ -332,16 +252,16 @@ public final class Globals {
 	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235);
 	public static final Color defaultTableCellSelectedBgColorNotEditable = new Color(189, 207, 231);
 
-	public static final Color logColorEssential = new Color(0, 0, 0);
+	public static final Color logColorEssential = new Color(52, 204, 204);
 	public static final Color logColorCritical = new Color(255, 0, 0);
-	public static final Color logColorError = new Color(200, 100, 0);
-	public static final Color logColorWarning = new Color(20, 20, 200);
+	public static final Color logColorError = new Color(201, 0, 0);
+	public static final Color logColorWarning = new Color(246, 185, 37);
 
-	public static final Color logColorNotice = new Color(10, 150, 10);
-	public static final Color logColorInfo = new Color(50, 50, 50);
-	public static final Color logColorDebug = new Color(150, 150, 150);
-	public static final Color logColorDebug2 = new Color(150, 150, 150);
-	public static final Color logColorConfidential = new Color(150, 150, 0);
+	public static final Color logColorNotice = new Color(138, 226, 52);
+	public static final Color logColorInfo = new Color(238, 238, 236);
+	public static final Color logColorDebug = new Color(208, 215, 207);
+	public static final Color logColorTrace = new Color(139, 143, 138);
+	public static final Color logColorSecret = new Color(110, 90, 0);
 
 	public static final Color opsiLogoBlue = new Color(106, 128, 174);
 	public static final Color opsiLogoLightBlue = new Color(195, 200, 222);
@@ -351,21 +271,6 @@ public final class Globals {
 	public static final int TOOLTIP_INITIAL_DELAY_MS = 1000;
 	public static final int TOOLTIP_DISMISS_DELAY_MS = 20000;
 	public static final int TOOLTIP_RESHOW_DELAY_MS = 0;
-
-	public static Border createPanelBorder() {
-		return new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true);
-	}
-
-	public static void formatButtonSmallText(JButton button) {
-		button.setFont(defaultFontSmall);
-		button.setPreferredSize(new Dimension(45, 20));
-		button.setForeground(lightBlack);
-		button.setBackground(BACKGROUND_COLOR_6);
-		button.setOpaque(false);
-
-		button.setBorderPainted(false);
-
-	}
 
 	public static final int SMALL_GAP_SIZE = 2;
 	public static final int GAP_SIZE = 10;
@@ -435,66 +340,27 @@ public final class Globals {
 	public static final int HFIRST_GAP = HGAP_SIZE * 3;
 	public static final int FIRST_LABEL_WIDTH = 250;
 
+	public static final String STARRED_STRING = "*****";
+
 	private static final String[] logTypes = new String[] { "clientconnect", "instlog", "userlogin", "bootimage",
 			"opsiconfd" };
-
-	public static String[] getLogTypes() {
-		return logTypes;
-	}
-
-	public static String getLogType(int index) {
-		if (index < 0 || index >= logTypes.length) {
-			return "";
-		} else {
-			return logTypes[index];
-		}
-	}
 
 	private static final int[] maxLogSizes = new int[] { 4 * 1024 * 1024, 8 * 1024 * 1024, 8 * 1024 * 1024, 0,
 			1 * 1024 * 1024 };
 
-	public static int getMaxLogSize(int index) {
-		if (index < 0 || index >= maxLogSizes.length) {
-			Logging.warning("error with index for maxLogSizes");
-			return -1;
-		}
-
-		else {
-			return maxLogSizes[index];
-		}
-	}
-
-	// be given
-
-	public static Image mainIcon = null;
+	public static Image mainIcon;
 
 	public static final String CONFLICT_STATE_STRING = "mixed";
 	public static final String NO_VALID_STATE_STRING = "";
 
 	private static Map<String, Object> objects;
 
-	public static Map<String, Object> getMap() {
-		if (objects == null) {
-			objects = new HashMap<>();
+	private static Collator alphaCollator;
 
-			objects.put("mainIcon", mainIcon);
-			objects.put("defaultFont", defaultFont);
-			objects.put("APPNAME", APPNAME);
-		}
+	public static final String PSEUDO_KEY_SEPARATOR = ";";
 
-		return objects;
-	}
-
-	private static Collator alphaCollator = null;
-
-	public static Collator getCollator() {
-		if (alphaCollator == null) {
-			alphaCollator = Collator.getInstance();
-
-			alphaCollator.setStrength(Collator.IDENTICAL);
-		}
-		return alphaCollator;
-	}
+	private static final int TOOLTIP_LINE_LENGTH = 50;
+	private static final int UNCERTAINTY = 20;
 
 	// these two things can be changed
 	public static JFrame frame1;
@@ -509,6 +375,147 @@ public final class Globals {
 	public static final int DIALOG_FRAME_DEFAULT_WIDTH = 800;
 	public static final Dimension dialogFrameDefaultSize = new Dimension(DIALOG_FRAME_DEFAULT_WIDTH,
 			DIALOG_FRAME_DEFAULT_HEIGHT);
+
+	private static final String IMAGE_BASE = "de/uib/configed/gui/";
+
+	private Globals() {
+	}
+
+	public static final class ProductPackageVersionSeparator {
+
+		public static final String FOR_DISPLAY = "-";
+		public static final String FOR_KEY = ";";
+
+		// private constructor to hide the implicit public one
+		private ProductPackageVersionSeparator() {
+		}
+
+		public static String formatKeyForDisplay(String key) {
+			if (key == null) {
+				return null;
+			}
+
+			int i = key.indexOf(FOR_KEY);
+			if (i == -1) {
+				return key;
+			}
+
+			String result = key.substring(0, i);
+			if (i < key.length()) {
+				result = result + FOR_DISPLAY + key.substring(i + 1);
+			}
+
+			return result;
+		}
+	}
+
+	public static String[] getLogTypes() {
+		return logTypes;
+	}
+
+	public static String getLogType(int index) {
+		if (index < 0 || index >= logTypes.length) {
+			return "";
+		} else {
+			return logTypes[index];
+		}
+	}
+
+	public static Border createPanelBorder() {
+		return new LineBorder(Globals.BACKGROUND_COLOR_6, 2, true);
+	}
+
+	public static void formatButtonSmallText(AbstractButton button) {
+		button.setFont(defaultFontSmall);
+		button.setPreferredSize(new Dimension(45, 20));
+		button.setForeground(lightBlack);
+		button.setBackground(BACKGROUND_COLOR_6);
+		button.setOpaque(false);
+
+		button.setBorderPainted(false);
+
+	}
+
+	public static boolean interpretAsBoolean(Object value) {
+
+		if (value == null) {
+			return false;
+		}
+
+		if (value instanceof Boolean) {
+			return (Boolean) value;
+		}
+
+		if (value instanceof Integer) {
+			int val = (Integer) value;
+			if (val == 1) {
+				return true;
+			} else if (val == 0) {
+				return false;
+			} else {
+				throw new IllegalArgumentException("" + value + " cannot be interpreted as boolean");
+			}
+		}
+
+		if (value instanceof String) {
+
+			String val = ((String) value).toLowerCase();
+
+			if (val.equals("")) {
+				return false;
+			}
+
+			if (val.equals("true")) {
+				return true;
+			}
+
+			if (val.equals("false")) {
+				return false;
+			}
+
+			if (val.equals("1")) {
+				return true;
+			}
+
+			if (val.equals("0")) {
+				return false;
+			}
+
+			throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
+		}
+
+		throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
+	}
+
+	public static int getMaxLogSize(int index) {
+		if (index < 0 || index >= maxLogSizes.length) {
+			Logging.warning("error with index for maxLogSizes");
+			return -1;
+		} else {
+			return maxLogSizes[index];
+		}
+	}
+
+	public static Map<String, Object> getMap() {
+		if (objects == null) {
+			objects = new HashMap<>();
+
+			objects.put("mainIcon", mainIcon);
+			objects.put("defaultFont", defaultFont);
+			objects.put("APPNAME", APPNAME);
+		}
+
+		return objects;
+	}
+
+	public static Collator getCollator() {
+		if (alphaCollator == null) {
+			alphaCollator = Collator.getInstance();
+
+			alphaCollator.setStrength(Collator.IDENTICAL);
+		}
+		return alphaCollator;
+	}
 
 	public static String getResourceValue(String key) {
 		return Configed.getResourceValue(key);
@@ -532,8 +539,6 @@ public final class Globals {
 
 		return result.toString();
 	}
-
-	private static final String IMAGE_BASE = "de/uib/configed/gui/";
 
 	public static java.net.URL getImageResourceURL(String relPath) {
 		String resourceS = IMAGE_BASE + relPath;
@@ -619,13 +624,9 @@ public final class Globals {
 
 	}
 
-	public static String getDate(boolean justNumbers) {
+	public static String getDate() {
 		String sqlNow = new java.sql.Timestamp(System.currentTimeMillis()).toString();
 		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(' '));
-
-		if (justNumbers) {
-			sqlNow = sqlNow.replace("-", "");
-		}
 
 		return sqlNow;
 	}
@@ -697,8 +698,6 @@ public final class Globals {
 		return result;
 	}
 
-	public static final String PSEUDO_KEY_SEPARATOR = ";";
-
 	public static List<Object> getNowTimeListValue() {
 		return getNowTimeListValue(null);
 	}
@@ -743,9 +742,6 @@ public final class Globals {
 
 		return resultBuilder.toString();
 	}
-
-	private static final int TOOLTIP_LINE_LENGTH = 50;
-	private static final int UNCERTAINTY = 20;
 
 	public static String wrapToHTML(String s) {
 		StringBuilder result = new StringBuilder("<html>");
@@ -940,7 +936,7 @@ public final class Globals {
 			return s;
 		}
 
-		final int maxLineLength = 80;
+		final int MAX_LINE_LENGTH = 80;
 
 		StringBuilder b = new StringBuilder("<html>");
 		int charsInLine = 0;
@@ -971,7 +967,7 @@ public final class Globals {
 				indentDone = true;
 				b.append(s.charAt(c));
 			}
-			if ((charsInLine >= maxLineLength && c + 1 < s.length())
+			if ((charsInLine >= MAX_LINE_LENGTH && c + 1 < s.length())
 					&& ((s.charAt(c + 1) == ' ') || (s.charAt(c + 1) == '\t') || (s.charAt(c + 1) == '\n'))) {
 				c++;
 				b.append("<br/>");
@@ -1043,9 +1039,7 @@ public final class Globals {
 			forbidEditing
 
 					= !PersistenceControllerFactory.getPersistenceController().isServerFullPermission();
-		}
-
-		else {
+		} else {
 			forbidEditing = PersistenceControllerFactory.getPersistenceController().isGlobalReadOnly();
 		}
 
@@ -1059,6 +1053,4 @@ public final class Globals {
 
 		return t.indexOf("password") > -1 || t.startsWith("secret");
 	}
-
-	public static final String STARRED_STRING = "*****";
 }

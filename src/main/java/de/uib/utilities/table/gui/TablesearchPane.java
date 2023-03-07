@@ -28,6 +28,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -49,14 +50,15 @@ import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.JMenuItemFormatted;
 
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
-	javax.swing.JFrame masterFrame = ConfigedMain.getMainFrame();
+	private static final int BLINK_RATE = 0;
+
+	JFrame masterFrame = ConfigedMain.getMainFrame();
 
 	JTextField fieldSearch;
 
-	private boolean searchActive = false;
-	protected boolean filtering = false;
+	private boolean searchActive;
+	protected boolean filtering;
 
-	int blinkrate = 0;
 	JComboBox<String> comboSearchFields;
 	JComboBoxToolTip comboSearchFieldsMode;
 
@@ -74,7 +76,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	AbstractNavigationPanel navPane;
 	PanelGenEditTable associatedPanel;
-	boolean withNavPane = false;
+	boolean withNavPane;
 
 	JPopupMenu searchMenu;
 	LinkedHashMap<JMenuItemFormatted, Boolean> searchMenuEntries;
@@ -94,7 +96,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public static final int START_TEXT_SEARCH = 1;
 	public static final int REGEX_SEARCH = 2;
 
-	protected int preferredColumnIndex = 0;
+	protected int preferredColumnIndex;
 
 	protected boolean withRegEx = true;
 	protected boolean selectMode = true;
@@ -154,7 +156,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	 * 
 	 * @param javax.swing.JFrame
 	 */
-	public void setMasterFrame(javax.swing.JFrame masterFrame) {
+	public void setMasterFrame(JFrame masterFrame) {
 		this.masterFrame = masterFrame;
 	}
 
@@ -282,7 +284,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.setEnabled(b);
 	}
 
-	private boolean filteredMode = false;
+	private boolean filteredMode;
 
 	private boolean disabledSinceWeAreInFilteredMode() {
 		if (filteredMode) {
@@ -417,7 +419,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.setFont(Globals.defaultFontBig);
 		fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 
-		fieldSearch.getCaret().setBlinkRate(blinkrate);
+		fieldSearch.getCaret().setBlinkRate(BLINK_RATE);
 		fieldSearch.setToolTipText(Configed.getResourceValue("SearchPane.searchField.toolTip"));
 
 		fieldSearch.getDocument().addDocumentListener(this);
@@ -713,7 +715,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private class Finding {
-		boolean success = false;
+		boolean success;
 		int endChar = -1;
 	}
 
@@ -926,9 +928,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					found = stringContainsParts(compareVal, valParts).success;
 				}
 
-			}
-
-			else {
+			} else {
 				for (int j = 0; j < targetModel.getColumnCount(); j++) {
 
 					// we dont compare all values (comparing all values is default)
@@ -948,9 +948,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 						if (val.equals("")) {
 							found = true;
 						}
-					}
-
-					else {
+					} else {
 						String compareVal = ("" + compareValue).toLowerCase();
 
 						if (regex) {
@@ -958,9 +956,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 							if (pattern.matcher(compareVal).matches()) {
 								found = true;
 							}
-						}
-
-						else {
+						} else {
 							if (fulltext) {
 								found = stringContainsParts(targetModel.getColumnName(colJ), compareVal,
 										valParts).success;
@@ -1127,9 +1123,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		if (value.length() < 2) {
 			setRow(0, false, select);
-		}
-
-		else {
+		} else {
 			foundrow = findViewRowFromValue(startrow, value, selectedCols, fulltextSearch, regexSearch, combineCols);
 
 			if (foundrow > -1) {
@@ -1227,21 +1221,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals("")) {
 				markAll();
 			}
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_F8) {
+		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
 			switchFilterOff();
 			markAllAndFilter();
 			switchFilterOn();
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_F3) {
+		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals("")) {
 				searchNextRow(selectMode);
 			}
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			Logging.debug(this, "key pressed ENTER on fieldSearch, with content " + fieldSearch.getText()
 					+ " searchInputType " + searchInputType);
 

@@ -7,13 +7,14 @@ import java.util.List;
 import de.uib.configed.Globals;
 
 public class ListMerger extends ArrayList {
-	boolean onlyPartiallyExisting;
-	boolean havingCommonValue;
 
 	public static final ListMerger NO_COMMON_VALUE = new ListMerger(new ArrayList<>());
 	static {
 		NO_COMMON_VALUE.setHavingNoCommonValue();
 	}
+
+	boolean onlyPartiallyExisting;
+	boolean havingCommonValue;
 
 	// prevents correct recognition
 
@@ -31,7 +32,7 @@ public class ListMerger extends ArrayList {
 		havingCommonValue = false;
 	}
 
-	private boolean equals(List list1, List list2) {
+	private static boolean equals(List list1, List list2) {
 
 		if (list1 == null && list2 == null) {
 			return true;

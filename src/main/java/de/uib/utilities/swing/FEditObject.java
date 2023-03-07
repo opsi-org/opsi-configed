@@ -61,9 +61,9 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	protected String tooltipCommit = Configed.getResourceValue("FEditObject.SaveButtonTooltip");
 
-	protected boolean dataChanged = false;
+	protected boolean dataChanged;
 	protected boolean editable = true;
-	protected boolean finished = false;
+	protected boolean finished;
 
 	protected JTextField extraField;
 	protected JLabel extraLabel;

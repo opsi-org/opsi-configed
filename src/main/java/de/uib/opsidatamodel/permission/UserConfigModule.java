@@ -95,7 +95,7 @@ public class UserConfigModule {
 		return booleanMap;
 	}
 
-	private void extractKeys(final Map<String, ? extends Object> map, Set<String> result) {
+	private static void extractKeys(final Map<String, ? extends Object> map, Set<String> result) {
 		for (String key : map.keySet()) {
 			result.add(key);
 		}

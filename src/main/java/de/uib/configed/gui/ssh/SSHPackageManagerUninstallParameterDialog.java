@@ -61,6 +61,8 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private CommandOpsiPackageManagerUninstall commandPMUninstall = new CommandOpsiPackageManagerUninstall();
 
+	boolean execFinished;
+
 	public SSHPackageManagerUninstallParameterDialog() {
 		this(null);
 	}
@@ -207,9 +209,9 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	protected void initDepots() {
 		possibleDepots = getPossibleDepots();
 		fDepotList.setListData(possibleDepots);
-		if (possibleDepots.isEmpty())
-		// probably no permission
-		{
+		if (possibleDepots.isEmpty()) {
+			// probably no permission
+
 			jButtonExecute.setVisible(false);
 			textFieldSelectedDepots.setText("");
 		} else {
@@ -352,9 +354,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		updateCommand();
 	}
 
-	boolean execFinished;
 	/* This method is called when button 1 is pressed */
-
 	private boolean confirmAction() {
 		FShowList fConfirmAction = new FShowList(ConfigedMain.getMainFrame(),
 				Globals.APPNAME + " "

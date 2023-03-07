@@ -16,10 +16,6 @@ import de.uib.utilities.logging.Logging;
 
 public final class Messages {
 
-	// private constructor to hide the implicit public one
-	private Messages() {
-	}
-
 	public static final String APPNAME = "configed";
 	private static final String BUNDLE_NAME = "de/uib/messages/configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
@@ -28,11 +24,15 @@ public final class Messages {
 	static List<String> existingLocalesNames;
 	static Map<String, String> localeInfo;
 	static String selectedLocaleString;
-	static Locale myLocale = null;
+	static Locale myLocale;
 	public static ResourceBundle messagesBundle;
 	public static ResourceBundle messagesEnBundle;
 	static List<String> myLocaleCharacteristics;
 	static List<String> myLocaleCharacteristicsEN;
+
+	// private constructor to hide the implicit public one
+	private Messages() {
+	}
 
 	private static String findSelectedLocale(String language, String country) {
 		String result = null;
@@ -139,9 +139,7 @@ public final class Messages {
 				} catch (Exception e) {
 					Logging.info("Failed to set locale '" + characteristics + "': " + e);
 				}
-			}
-
-			else if (characteristics.length() == 2) {
+			} else if (characteristics.length() == 2) {
 				try {
 					loc = produceLocale(characteristics);
 					Logging.info("Locale " + loc + " set by param");

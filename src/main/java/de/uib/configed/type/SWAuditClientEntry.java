@@ -12,53 +12,38 @@ import de.uib.configed.Globals;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
-public class SWAuditClientEntry
-/*
- * type of auditSoftwareOnClient_getObjects resp
- * SOFTWARE_CONFIG in opsi data base
- * 
- * | Field | Type | Null | Key | Default
- * | config_id | int(11) | NO | PRI | NULL
- * | clientId | varchar(255) | NO | MUL | NULL
- * | firstseen | timestamp | NO | | 0000-00-00 00:00:00
- * | lastseen | timestamp | NO | | 0000-00-00 00:00:00
- * | state | tinyint(4) | NO | | NULL
- * | usageFrequency | int(11) | NO | | -1
- * | lastUsed | timestamp | NO | | 0000-00-00 00:00:00
- * | name | varchar(100) | NO | MUL | NULL
- * | version | varchar(100) | NO | | NULL
- * | subVersion | varchar(100) | NO | | NULL
- * | language | varchar(10) | NO | | NULL
- * | architecture | varchar(3) | NO | | NULL
- * | uninstallString | varchar(200) | YES | | NULL
- * | binaryName | varchar(100) | YES | | NULL
- * | licenseKey | varchar(100) | YES | | NULL
- * 
- */
+public class SWAuditClientEntry {
 
-{
+	/*
+	 * type of auditSoftwareOnClient_getObjects resp
+	 * SOFTWARE_CONFIG in opsi data base
+	 * 
+	 * | Field | Type | Null | Key | Default
+	 * | config_id | int(11) | NO | PRI | NULL
+	 * | clientId | varchar(255) | NO | MUL | NULL
+	 * | firstseen | timestamp | NO | | 0000-00-00 00:00:00
+	 * | lastseen | timestamp | NO | | 0000-00-00 00:00:00
+	 * | state | tinyint(4) | NO | | NULL
+	 * | usageFrequency | int(11) | NO | | -1
+	 * | lastUsed | timestamp | NO | | 0000-00-00 00:00:00
+	 * | name | varchar(100) | NO | MUL | NULL
+	 * | version | varchar(100) | NO | | NULL
+	 * | subVersion | varchar(100) | NO | | NULL
+	 * | language | varchar(10) | NO | | NULL
+	 * | architecture | varchar(3) | NO | | NULL
+	 * | uninstallString | varchar(200) | YES | | NULL
+	 * | binaryName | varchar(100) | YES | | NULL
+	 * | licenseKey | varchar(100) | YES | | NULL
+	 * 
+	 */
+
 	public static final String CLIENT_ID = "clientId";
 	public static final String LICENCE_KEY = "licenseKey";
 	public static final String LAST_MODIFICATION = "lastseen";
 
-	protected final Map<String, String> data;
-	protected List<String> software;
-	protected NavigableMap<String, Integer> software2Number;
 	private static List<String> notFoundSoftwareIDs;
 	private static Long lastUpdateTime;
 	private static final long MS_AFTER_THIS_ALLOW_NEXT_UPDATE = 60000;
-	protected Integer swId;
-	protected String swIdent;
-	protected String lastModificationS;
-
-	static long startmillis1stPartOfConstructor;
-	static long startmillis2ndPartOfConstructor;
-	static long endmillis1stPartOfConstructor;
-	static long endmillis2ndPartOfConstructor;
-	public static long summillis1stPartOfConstructor = 0;
-	public static long summillis2ndPartOfConstructor = 0;
-
-	AbstractPersistenceController controller;
 
 	public static final List<String> KEYS = new LinkedList<>();
 	static {
@@ -105,6 +90,23 @@ public class SWAuditClientEntry
 			DB_COLUMN_NAMES.add(value);
 		}
 	}
+
+	static long startmillis1stPartOfConstructor;
+	static long startmillis2ndPartOfConstructor;
+	static long endmillis1stPartOfConstructor;
+	static long endmillis2ndPartOfConstructor;
+	public static long summillis1stPartOfConstructor;
+	public static long summillis2ndPartOfConstructor;
+
+	protected Integer swId;
+	protected String swIdent;
+	protected String lastModificationS;
+
+	protected final Map<String, String> data;
+	protected List<String> software;
+	protected NavigableMap<String, Integer> software2Number;
+
+	AbstractPersistenceController controller;
 
 	public SWAuditClientEntry(final List<String> keys, final List<String> values,
 			AbstractPersistenceController controller) {

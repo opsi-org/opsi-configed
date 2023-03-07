@@ -4,6 +4,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -78,9 +79,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		if (selectedClientNames == null) {
 			fieldSelectedClientsNames.setText("");
 			fieldSelectedClientsNames.setToolTipText(null);
-		} else
-
-		{
+		} else {
 
 			fieldSelectedClientsNames.setText(selectedClientNames);
 
@@ -224,6 +223,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		csStatusPane.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
-				javax.swing.text.JTextComponent.class);
+				JTextComponent.class);
 	}
 }

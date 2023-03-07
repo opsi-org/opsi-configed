@@ -62,6 +62,9 @@ import de.uib.utilities.table.gui.TablesearchPane;
 
 public class JTableSelectionPanel extends JPanel
 		implements DocumentListener, KeyListener, MissingDataPanel, ActionListener {
+
+	private static final int MIN_HEIGHT = 200;
+
 	JScrollPane scrollpane;
 
 	// we put a JTable on a standard JScrollPane
@@ -84,11 +87,9 @@ public class JTableSelectionPanel extends JPanel
 
 	TablesearchPane.SearchMode searchMode;
 
-	private static final int MIN_HEIGHT = 200;
-
 	private int foundrow = -1;
 
-	private int lastCountOfSearchWords = 0;
+	private int lastCountOfSearchWords;
 
 	private NavigableMap<String, Integer> rowIndexMap;
 
@@ -676,7 +677,7 @@ public class JTableSelectionPanel extends JPanel
 		return findViewRowFromValue(startviewrow, value, colIndices, searchMode);
 	}
 
-	private List<String> getWords(String line) {
+	private static List<String> getWords(String line) {
 		List<String> result = new ArrayList<>();
 		String[] splitted = line.split("\\s+");
 		for (String s : splitted) {
@@ -697,12 +698,6 @@ public class JTableSelectionPanel extends JPanel
 			return -1;
 		}
 
-		String val = value.toString();
-
-		String valLower = val.toLowerCase();
-
-		boolean found = false;
-
 		int viewrow = 0;
 
 		if (startviewrow > 0) {
@@ -714,6 +709,9 @@ public class JTableSelectionPanel extends JPanel
 		boolean fulltext = (searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES
 				|| searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING);
 		// with another data configuration, it could be combined with regex
+
+		String val = value.toString();
+		String valLower = val.toLowerCase();
 
 		// get pattern for regex search mode if needed
 		Pattern pattern = null;
@@ -733,6 +731,7 @@ public class JTableSelectionPanel extends JPanel
 		List<String> alternativeWords = getWords(valLower);
 		lastCountOfSearchWords = alternativeWords.size();
 
+		boolean found = false;
 		while (!found && viewrow < getTableModel().getRowCount()) {
 
 			for (int j = 0; j < getTableModel().getColumnCount(); j++) {
@@ -750,9 +749,7 @@ public class JTableSelectionPanel extends JPanel
 
 				if (compareValue == null) {
 					found = (val == null || val.equals(""));
-				}
-
-				else {
+				} else {
 					String compareVal = ("" + compareValue).toLowerCase();
 
 					switch (searchMode) {
@@ -994,19 +991,14 @@ public class JTableSelectionPanel extends JPanel
 			if (!fieldSearch.getText().equals("")) {
 				markAll();
 			}
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_F3) {
+		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 
 			if (!fieldSearch.getText().equals("")) {
 				searchTheNextRow();
 			}
-		}
-
-		else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
+		} else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
 			main.invertClientselection();
 		}
-
 	}
 
 	@Override
@@ -1026,5 +1018,4 @@ public class JTableSelectionPanel extends JPanel
 			fieldSearch.setText("");
 		}
 	}
-
 }

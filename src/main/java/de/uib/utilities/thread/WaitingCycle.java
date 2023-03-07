@@ -8,8 +8,8 @@ import de.uib.utilities.logging.Logging;
 public class WaitingCycle extends SwingWorker<Void, Integer> {
 	private int maxWaitSecs;
 
-	private boolean ready = false;
-	private boolean stopped = false;
+	private boolean ready;
+	private boolean stopped;
 	private boolean timeoutReached;
 
 	public WaitingCycle(int maxWaitSecs) {

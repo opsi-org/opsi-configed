@@ -39,10 +39,8 @@ import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
-public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped
-
 // works on a map of pairs of type String - List
-{
+public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	private static final int USER_START_INDEX = 1;
 
@@ -364,7 +362,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped
 		}
 	}
 
-	private String roleFromRolerootKey(String key) {
+	private static String roleFromRolerootKey(String key) {
 		String result = null;
 		String[] splitted = key.split("\\.");
 
@@ -379,7 +377,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped
 		return result;
 	}
 
-	private String userFromUserrootkey(String key) {
+	private static String userFromUserrootkey(String key) {
 		String result = null;
 		String[] splitted = key.split("\\.");
 
@@ -411,12 +409,12 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped
 		return false;
 	}
 
-	private boolean isUserRoot(TreePath path) {
+	private static boolean isUserRoot(TreePath path) {
 		return path != null && path.getPathCount() == 2
 				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER);
 	}
 
-	private boolean isUserPath(TreePath path) {
+	private static boolean isUserPath(TreePath path) {
 		return path != null && path.getPathCount() == 3
 				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER)
 				&& !path.getPathComponent(2).toString().equals(UserConfig.ROLE);

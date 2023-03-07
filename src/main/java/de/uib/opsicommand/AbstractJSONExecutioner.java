@@ -84,10 +84,10 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, Object> getMapResult(OpsiMethodCall omc)
-	// yields possibly JSON objects and arrays as values
-	// compare getMap_Object
-	{
+	public Map<String, Object> getMapResult(OpsiMethodCall omc) {
+		// yields possibly JSON objects and arrays as values
+		// compare getMap_Object
+
 		return JSONReMapper.getMapResult(retrieveJSONObject(omc));
 	}
 
@@ -174,17 +174,16 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, Object> getMapObject(OpsiMethodCall omc)
-	// this method tries to return Java lists in comparison with getMapResult
-	{
+	public Map<String, Object> getMapObject(OpsiMethodCall omc) {
+		// this method tries to return Java lists in comparison with getMapResult
+
 		return JSONReMapper.getMapObject(retrieveJSONObject(omc));
 	}
 
 	@Override
-	public Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc)
-	// including a conversion of json objects to a standard java object
+	public Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc) {
+		// including a conversion of json objects to a standard java object
 
-	{
 		HashMap<String, Map<String, Object>> result = new HashMap<>();
 		HashMap<String, Map<String, Object>> resultNull = new HashMap<>();
 
@@ -242,9 +241,8 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 
 	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
-			String[] sourceVars, String[] targetVars, Map<String, String> translateValues)
+			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
 
-	{
 		Map<String, Map<String, String>> result = new TreeMap<>();
 
 		List<Object> resultlist = null;
@@ -553,9 +551,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				if (s == JSONObject.NULL) {
 					Logging.warning("JSONExecutioner.getMapFromItem \"" + s
 							+ "\" is  JSONObject.NULL and cannot be cast to a JSON Object");
-				}
-
-				else {
+				} else {
 
 					Logging.warning("JSONExecutioner.getMapFromItem \"" + s + "\" has class " + s.getClass().getName()
 							+ " cannot be cast to a JSON Object");

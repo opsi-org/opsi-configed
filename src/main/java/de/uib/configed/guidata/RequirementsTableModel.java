@@ -11,6 +11,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.configed.Configed;
@@ -20,7 +21,10 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utilities.logging.Logging;
 
-public class RequirementsTableModel extends javax.swing.table.AbstractTableModel {
+public class RequirementsTableModel extends AbstractTableModel {
+
+	protected static List<String> rowType;
+	protected static int noOfRowTypes;
 
 	Set<String> keySet;
 	Object[] keyArray;
@@ -33,8 +37,6 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 
 	AbstractPersistenceController perCon;
 
-	protected static List<String> rowType;
-	protected static int noOfRowTypes;
 	static {
 		rowType = new ArrayList<>();
 		rowType.add("KEYROW");
@@ -162,9 +164,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 				Logging.warning(this, "no case found for rowTypeIndex in getValueAt");
 				break;
 			}
-		}
-
-		else {
+		} else {
 			switch (col) {
 			case 1:
 				if (rowTypeIndex == 1) {
@@ -243,7 +243,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		}
 	}
 
-	protected class MyColorizer {
+	protected static class MyColorizer {
 		String cellValue;
 
 		protected MyColorizer(String value) {
@@ -277,7 +277,7 @@ public class RequirementsTableModel extends javax.swing.table.AbstractTableModel
 		}
 	}
 
-	protected class MyWarningColorizer {
+	protected static class MyWarningColorizer {
 		public void colorize(Component cell) {
 			cell.setBackground(Globals.ACTION_COLOR);
 		}

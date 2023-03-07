@@ -20,16 +20,13 @@ import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.utilities.logging.Logging;
 
 public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
-	JButton jButtonClear;
-	JButton jButtonKillProcess;
-	JButton jButtonReload;
-
-	boolean withReload;
-	String reloadInfo;
-
-	private int infolength = 40;
 
 	private static SSHConnectionExecDialog instance;
+
+	private static final int INFO_LENGTH = 40;
+
+	private JButton jButtonClear;
+	private JButton jButtonKillProcess;
 
 	private SSHConnectionExecDialog() {
 		super(Configed.getResourceValue("SSHConnection.Exec.dialog.commandoutput"));
@@ -149,7 +146,7 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 		int callerlength = caller.length();
 
 		StringBuilder callerBuilder = new StringBuilder(caller);
-		for (int i = callerlength; i <= infolength; i++) {
+		for (int i = callerlength; i <= INFO_LENGTH; i++) {
 			callerBuilder.append(" ");
 		}
 

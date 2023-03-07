@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JTree;
+import javax.swing.border.EmptyBorder;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -23,7 +24,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 		super.setForeground(Globals.lightBlack);
 		super.setTextSelectionColor(Globals.lightBlack);
 		super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
-		super.setBorder(new javax.swing.border.EmptyBorder(new Insets(0, 0, 0, 0)));
+		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
 	}
 
 	@Override
@@ -59,8 +60,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					setIcon(node.getNonSelectedLeafIcon());
 
 				}
-			} else // group
-			{
+			} else {
+				// group
+
 				String visualText = modifier.modify(stringValue);
 
 				setText(visualText);

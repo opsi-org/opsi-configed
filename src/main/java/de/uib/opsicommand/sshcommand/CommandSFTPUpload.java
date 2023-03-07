@@ -8,12 +8,14 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 
 public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand {
+
+	private static final int PRIORITY = 0;
+
 	protected FGeneralDialog dialog;
 	private boolean needParameter = true;
-	private boolean isMultiCommand = false;
-	private boolean needSudo = false;
+	private boolean isMultiCommand;
+	private boolean needSudo;
 	String command = "";
-	int priority = 0;
 
 	private String title = "File Upload";
 	private String baseName = "File Upload";
@@ -213,7 +215,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	@Override
 	public int getPriority() {
-		return priority;
+		return PRIORITY;
 	}
 
 	@Override

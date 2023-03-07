@@ -17,10 +17,10 @@ public class JSONObjectX extends JSONObject {
 	private List<Object> list;
 	private String value = "";
 
-	private boolean beingMap = false;
-	private boolean beingList = false;
-	private boolean beingString = false;
-	private boolean hasElements = false;
+	private boolean beingMap;
+	private boolean beingList;
+	private boolean beingString;
+	private boolean hasElements;
 
 	public JSONObjectX(JSONObject jO) {
 		master = jO;
@@ -102,14 +102,10 @@ public class JSONObjectX extends JSONObject {
 		if (list.isEmpty()) {
 			value = "";
 			beingString = true;
-		}
-
-		else if (list.size() == 1 && !beingMap) {
+		} else if (list.size() == 1 && !beingMap) {
 			value = list.get(1).toString();
 			beingString = true;
-		}
-
-		else {
+		} else {
 			value = master.toString();
 			beingString = false;
 		}

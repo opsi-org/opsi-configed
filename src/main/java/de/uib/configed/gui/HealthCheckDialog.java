@@ -35,7 +35,6 @@ public class HealthCheckDialog extends FGeneralDialog {
 	private final AttributeSet blackAttributeSet = styleContext.addAttribute(styleContext.getEmptySet(),
 			StyleConstants.Foreground, Color.BLACK);
 
-	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 	private JTextPane textPane = new JTextPane();
 	private DefaultStyledDocument styledDocument = new DefaultStyledDocument();
 
@@ -46,11 +45,9 @@ public class HealthCheckDialog extends FGeneralDialog {
 				null);
 	}
 
-	int startLine = 1;
-
 	@Override
 	protected void allLayout() {
-		Logging.info(this, "allLayout");
+		Logging.info(this, "start allLayout");
 
 		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
@@ -174,7 +171,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 			styledDocument.remove(0, styledDocument.getLength());
 			styledDocument.insertString(styledDocument.getLength(), message, blackAttributeSet);
 		} catch (BadLocationException e) {
-			e.printStackTrace();
+			Logging.warning("could not insert message into health check dialog, ", e);
 		}
 		textPane.setCaretPosition(0);
 	}

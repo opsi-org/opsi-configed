@@ -97,7 +97,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	protected ConfigedMain main;
 
-	protected List<String> productsV = null;
+	protected List<String> productsV;
 
 	protected int onGoingCollectiveChangeEventCount = -1;
 
@@ -192,7 +192,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return columnDict.get(column);
 	}
 
-	public static List<String> localizeColumns(List<String> cols) {
+	public static List<String> localizeColumns(Iterable<String> cols) {
 		List<String> result = new ArrayList<>();
 
 		if (columnDict != null) {
@@ -579,9 +579,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Logging.debug(this, "checkForContradictingAssignments client " + clientId + ", actualproduct "
 					+ actualProduct + ", product " + product + ", stateType " + stateType + ", state " + state);
 
-		}
-
-		else {
+		} else {
 			boolean contradicting = !existingRequest.equals(state);
 			info = info + " for onGoingCollectiveChangeEventCount " + onGoingCollectiveChangeEventCount
 					+ " contradicting " + contradicting;
@@ -852,10 +850,10 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	}
 
-	protected void recursivelyChangeActionRequest(String clientId, String product, ActionRequest ar)
-	// adds the new value to the collection of changed states
-	// calls the dependencies for the next turn
-	{
+	protected void recursivelyChangeActionRequest(String clientId, String product, ActionRequest ar) {
+		// adds the new value to the collection of changed states
+		// calls the dependencies for the next turn
+
 		Logging.debug(this, "recursivelyChangeActionRequest " + clientId + ", " + product + ", " + ar);
 
 		setChangedState(clientId, product, ActionRequest.KEY, ar.toString());
@@ -974,9 +972,9 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 						if ((requiredIS == InstallationStatus.INSTALLED
 								|| requiredIS == InstallationStatus.NOT_INSTALLED)
 								// the only relevant states for which we should eventually do something
-								&& InstallationStatus.getVal(installationStatusOfRequiredProduct) != requiredIS)
-						// we overwrite the required action request
-						{
+								&& InstallationStatus.getVal(installationStatusOfRequiredProduct) != requiredIS) {
+
+							// we overwrite the required action request
 
 							String requiredStatusS = InstallationStatus.getLabel(requiredIS);
 							Logging.debug(this, " requiredStatusS " + requiredStatusS);
@@ -988,9 +986,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 						}
 
 						// handle resulting action requests
-						if (requiredAR > ActionRequest.NONE)
-
-						{
+						if (requiredAR > ActionRequest.NONE) {
 
 							checkForContradictingAssignments(clientId, requirement.getKey(), ActionRequest.KEY,
 									ActionRequest.getLabel(requiredAR));
@@ -1000,9 +996,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 							ActionRequest.getVal(actionRequestForRequiredProduct) == requiredAR) {
 								Logging.info(this, "followRequirements:   no change of action request necessary for "
 										+ requirement.getKey());
-							}
-
-							else {
+							} else {
 								String alreadyExistingNewActionRequest = getChangedState(clientId, requirement.getKey(),
 										ActionRequest.KEY);
 

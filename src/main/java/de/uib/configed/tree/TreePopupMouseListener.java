@@ -19,7 +19,7 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 
 	private ClientTree tree;
 
-	private TreePath mousePath = null;
+	private TreePath mousePath;
 
 	private JMenuItem menuItemCreateNode;
 	private JMenuItem menuItemEditNode;

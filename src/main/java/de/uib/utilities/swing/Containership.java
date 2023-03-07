@@ -8,6 +8,7 @@ package de.uib.utilities.swing;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import de.uib.utilities.logging.Logging;
@@ -43,7 +44,7 @@ public class Containership {
 		doForAllContained(methodName, args, theArgsTypes, selClass, theContainer);
 	}
 
-	private void doForAllContained(String methodName, Object[] args, Class<?>[] theArgsTypes, Class<?> selClass,
+	private static void doForAllContained(String methodName, Object[] args, Class<?>[] theArgsTypes, Class<?> selClass,
 			Container in) {
 		Component theComp;
 		Class<?> theCompClass;
@@ -65,16 +66,16 @@ public class Containership {
 				try {
 					theMethod = theCompClass.getMethod(methodName, theArgsTypes);
 					theMethod.invoke(theComp, args);
-				} catch (Exception ex) {
+				} catch (NoSuchMethodException | SecurityException | IllegalAccessException
+						| InvocationTargetException ex) {
 					Logging.debug(methodName + ": not found >>>>> " + ex.toString() + "\n");
 
 				}
 
 			}
 
-			if (theComp instanceof Container)
-			// theComp is an instance of Container
-			{
+			if (theComp instanceof Container) {
+
 				Logging.debug("+++ recursion ");
 				doForAllContained(methodName, args, theArgsTypes, selClass, (Container) theComp);
 			}

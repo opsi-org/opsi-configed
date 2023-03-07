@@ -244,9 +244,9 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		depots = getAllowedInstallTargets();
 		Logging.info(this, "depots: " + depots.toString());
 		fDepotList.setListData(depots);
-		if (depots.isEmpty())
-		// probably no permission
-		{
+		if (depots.isEmpty()) {
+			// probably no permission
+
 			// To DO:
 			jButtonDepotselection.setVisible(false);
 		}

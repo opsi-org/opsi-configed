@@ -29,11 +29,10 @@ import de.uib.opsicommand.DbConnect;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 
-public class DataStubDirectSQL extends DataStubRawData
 // only for testing purposes
 // called by OpsiDirectSQLPersistenceController which may have more methods with
 // direct sql access
-{
+public class DataStubDirectSQL extends DataStubRawData {
 	public DataStubDirectSQL(OpsiserviceNOMPersistenceController controller) {
 		super(controller);
 	}
@@ -132,9 +131,7 @@ public class DataStubDirectSQL extends DataStubRawData
 				for (String clientId : newClients) {
 					client2software.put(clientId, new LinkedList<>());
 				}
-			}
-
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				Logging.info(this, "retrieveSoftwareAuditOnClients sql Error  in:\n" + query);
 				Logging.error("retrieveSoftwareAuditOnClients sql Error " + e.toString());
 			}

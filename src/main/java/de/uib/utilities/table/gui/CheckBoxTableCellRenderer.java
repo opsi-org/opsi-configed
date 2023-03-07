@@ -6,15 +6,16 @@ import javax.swing.JCheckBox;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
 import de.uib.configed.Globals;
 
-public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRenderer
+public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRenderer {
 
-{
-	javax.swing.border.Border noFocusBorder;
-	javax.swing.border.Border focusBorder;
+	private Border noFocusBorder;
+	private Border focusBorder;
 
 	public CheckBoxTableCellRenderer() {
 		super();
@@ -46,7 +47,7 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 			setBorder(focusBorder);
 		} else {
 			if (noFocusBorder == null) {
-				noFocusBorder = new javax.swing.border.EmptyBorder(1, 1, 1, 1);
+				noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 			}
 			setBorder(noFocusBorder);
 		}

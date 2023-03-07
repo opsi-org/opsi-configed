@@ -46,6 +46,10 @@ import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 
 public class PanelSWInfo extends JPanel {
+
+	private static final String FILTER_MS_UPDATES = "withMsUpdates";
+	private static final String FILTER_MS_UPDATES2 = "withMsUpdates2";
+
 	private PanelGenEditTable panelTable;
 	private ExporterToCSV csvExportTable;
 
@@ -82,12 +86,12 @@ public class PanelSWInfo extends JPanel {
 
 	protected KindOfExport kindOfExport;
 
-	boolean withMsUpdates = false;
+	boolean withMsUpdates;
 	boolean withMsUpdates2 = true;
-	String exportFilename = null;
+	String exportFilename;
 
 	JCheckBox checkWithMsUpdates;
-	static final String FILTER_MS_UPDATES = "withMsUpdates";
+
 	int indexOfColWindowsSoftwareID;
 
 	TableModelFilterCondition filterConditionWithMsUpdates = new TableModelFilterCondition() {
@@ -106,7 +110,6 @@ public class PanelSWInfo extends JPanel {
 	};
 
 	JCheckBox checkWithMsUpdates2;
-	static final String FILTER_MS_UPDATES2 = "withMsUpdates2";
 
 	final Pattern patternWithKB = Pattern.compile("\\{.*\\}\\p{Punct}kb.*");
 

@@ -13,8 +13,8 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	//
 	// Main task. Executed in background thread.
 	//
-	private boolean ready = false;
-	private boolean stopped = false;
+	private boolean ready;
+	private boolean stopped;
 	protected final JLabel statusLabel;
 	protected final JProgressBar progressBar;
 	private final long startActionMillis;

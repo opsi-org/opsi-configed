@@ -6,9 +6,7 @@ import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHRepositoryUploadDialog;
 import de.uib.utilities.logging.Logging;
 
-public class CommandRepositoryUpload extends CommandSFTPUpload
-// implements SSHCommandNeedParameter, SSHSFTPCommand, SSHCommand
-{
+public class CommandRepositoryUpload extends CommandSFTPUpload {
 
 	public CommandRepositoryUpload() {
 		super.setTitle("Repo-file Upload");

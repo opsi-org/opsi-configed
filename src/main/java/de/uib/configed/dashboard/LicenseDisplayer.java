@@ -269,10 +269,10 @@ public class LicenseDisplayer {
 		return result.toString();
 	}
 
-	private Set<String> getRangeSWxLicencepool(String swName)
-	// nearly done in produceModelSWxLicencepool, but we collect the range of the
-	// model-map
-	{
+	private Set<String> getRangeSWxLicencepool(String swName) {
+		// nearly done in produceModelSWxLicencepool, but we collect the range of the
+		// model-map
+
 		Set<String> range = new HashSet<>();
 
 		for (String swID : persist.getName2SWIdents().get(swName)) {
@@ -291,9 +291,7 @@ public class LicenseDisplayer {
 	private boolean checkExistNamesWithVariantLicencepools(String name) {
 		Set<String> range = getRangeSWxLicencepool(name);
 
-		if (range.size() > 1)
-		// && range.contains( FSoftwarename2LicencePool.valNoLicencepool ))
-		{
+		if (range.size() > 1) {
 			Logging.info(this, "checkExistNamesWithVariantLicencepools, found  for " + name + " :  " + range);
 			return true;
 		}

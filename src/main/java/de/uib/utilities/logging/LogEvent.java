@@ -9,8 +9,8 @@ package de.uib.utilities.logging;
 public class LogEvent {
 	String info = "";
 	int level = -1;
-	boolean showOnGui = false;
-	Object source = null;
+	boolean showOnGui;
+	Object source;
 
 	public LogEvent() {
 	}
@@ -37,5 +37,4 @@ public class LogEvent {
 	public boolean showOnGui() {
 		return showOnGui;
 	}
-
 }

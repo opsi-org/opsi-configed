@@ -19,46 +19,30 @@ public class UncaughtConfigedExceptionHandlerLocalized extends UncaughtConfigedE
 
 			if (e instanceof java.awt.IllegalComponentStateException) {
 				Logging.warning("exception " + e);
-			}
+			} else if (e.getMessage() == null) {
+				// according to some internet info it could occure on ground of some
+				// optimization in the JIT compiler
 
-			else if (e.getMessage() == null)
-			// according to some internet info it could occure on ground of some
-			// optimization in the JIT compiler
-			{
 				Logging.warning("exception with null message " + e);
-			}
-
-			else if (e.getMessage().indexOf("javax.swing.plaf.FontUIResource cannot be cast") > -1) {
+			} else if (e.getMessage().indexOf("javax.swing.plaf.FontUIResource cannot be cast") > -1) {
 				// https://netbeans.org/bugzilla/show_bug.cgi?id=271611
 				Logging.warning(errorText);
-			}
-
-			else if (e.getMessage().indexOf("javax.swing.Painter") > -1) {
+			} else if (e.getMessage().indexOf("javax.swing.Painter") > -1) {
 				// https://netbeans.org/bugzilla/show_bug.cgi?id=230528
 				Logging.warning(errorText);
-			}
-
-			else if (e.getMessage().indexOf("'bootstrap'") > -1) {
+			} else if (e.getMessage().indexOf("'bootstrap'") > -1) {
 				// https://netbeans.org/bugzilla/show_bug.cgi?id=230528
 				Logging.warning(errorText);
-			}
-
-			else if (e.getMessage().contains("cannot be cast to java.awt.Font")) {
+			} else if (e.getMessage().contains("cannot be cast to java.awt.Font")) {
 				// https://netbeans.org/bugzilla/show_bug.cgi?id=230528
 				Logging.warning(errorText);
-			}
-
-			else if (e.getMessage().contains("cannot be cast to class java.awt.Font")) {
+			} else if (e.getMessage().contains("cannot be cast to class java.awt.Font")) {
 				// https://netbeans.org/bugzilla/show_bug.cgi?id=230528
 				Logging.warning(errorText);
-			}
-
-			else if (e.getMessage().contains("javax.swing.plaf.")) {
+			} else if (e.getMessage().contains("javax.swing.plaf.")) {
 				// https://netbeans.org/bugzilla/show_bug.cgi?id=230528
 				Logging.warning(errorText);
-			}
-
-			else {
+			} else {
 				Logging.error(
 						errorText + "\n" + Configed.getResourceValue("UncaughtExceptionHandler.pleaseCheckLogfile"), e);
 			}

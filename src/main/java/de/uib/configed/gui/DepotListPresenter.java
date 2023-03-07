@@ -48,6 +48,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 	private AbstractPersistenceController persist;
 
+	boolean filtered;
+
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
@@ -187,8 +189,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));
 	}
-
-	boolean filtered = false;
 
 	protected void filterOnSelect() {
 		Logging.info(this, "filterOnSelect, we have " + depotslist.getListData());

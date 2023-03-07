@@ -26,7 +26,7 @@ import de.uib.utilities.logging.Logging;
 public class MapSource implements TableSource {
 	protected static final String ROW_COUNTER_NAME = "rowcounter";
 
-	protected boolean rowCounting = false;
+	protected boolean rowCounting;
 
 	protected List<String> columnNames;
 
@@ -125,9 +125,7 @@ public class MapSource implements TableSource {
 							if (class2defaultValue.get(className) != null) {
 								vRow.add(class2defaultValue.get(className));
 
-							}
-
-							else {
+							} else {
 								Logging.warning(this,
 										"fetchData row " + mRow
 												+ " ob == null, possibly the column name is not correct, column " + i

@@ -7,6 +7,7 @@
 
 package de.uib.utilities.swing;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -30,10 +31,8 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 //a class similar to JCheckBox
-public class CheckedLabel extends JPanel implements FocusListener
-// is an ObservedSubject for key and mouse actions
+public class CheckedLabel extends JPanel implements FocusListener {
 
-{
 	private static final int SET_CHECKED_ON = 1;
 	private static final int SET_CHECKED_OFF = 0;
 	private static final String CMD_SET_CHECKED_ON = "cmdSetOn";
@@ -45,12 +44,8 @@ public class CheckedLabel extends JPanel implements FocusListener
 	protected JLabel nullLabel;
 	protected JLabel textLabel;
 
-	protected java.awt.Font textFont;
-
-	// I didn't get work this, couldn't fix the Generics issues
-
-	protected Map<TextAttribute, ?> defaultTextAttributes;
-	protected Map focusedTextAttributes;
+	protected Font textFont;
+	protected Font focusedTextFont;
 
 	protected Boolean selected;
 
@@ -104,14 +99,17 @@ public class CheckedLabel extends JPanel implements FocusListener
 		textLabel = null;
 		try {
 			textLabel = new JLabel(text);
-		} catch (java.lang.ClassCastException ignore) {
+		} catch (ClassCastException ignore) {
 			textLabel = new JLabel(text);
 		}
 
 		textFont = textLabel.getFont();
-		defaultTextAttributes = textFont.getAttributes();
-		focusedTextAttributes = new HashMap<>(defaultTextAttributes);
-		focusedTextAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+
+		Map<TextAttribute, Integer> focusAttributes = new HashMap<>();
+		focusAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+
+		focusedTextFont = textFont.deriveFont(focusAttributes);
+
 		selectedLabel = new JLabel(selectedIcon);
 		unselectedLabel = new JLabel(unselectedIcon);
 		nullLabel = new JLabel(nullIcon);
@@ -119,7 +117,6 @@ public class CheckedLabel extends JPanel implements FocusListener
 		setLayout();
 
 		addInternalListeners();
-
 	}
 
 	public void setChangeStateAutonomously(boolean b) {
@@ -222,7 +219,7 @@ public class CheckedLabel extends JPanel implements FocusListener
 	// FocusListener
 	@Override
 	public void focusGained(FocusEvent e) {
-		textLabel.setFont(textFont.deriveFont(focusedTextAttributes));
+		textLabel.setFont(focusedTextFont);
 	}
 
 	@Override

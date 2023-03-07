@@ -64,18 +64,6 @@ import de.uib.utilities.tree.SimpleTreePath;
 
 public class ClientTree extends JTree implements TreeSelectionListener, MouseListener, KeyListener {
 
-	ConfigedMain configedMain;
-
-	protected DefaultTreeModel model;
-
-	private GroupNode groupNodeAllClients;
-	protected GroupNode groupNodeGroups;
-
-	protected GroupNode groupNodeDirectory;
-	protected GroupNode groupNodeDirectoryNotAssigned;
-
-	public static final String ALL_CLIENTS_NAME;
-
 	public static final String ALL_GROUPS_NAME;
 	public static final String DIRECTORY_NAME;
 	public static final String DIRECTORY_PERSISTENT_NAME;
@@ -85,64 +73,15 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	private static final Map<String, String> translationsFromPersistentNames;
 
-	private boolean mouseClicked;
+	public static final String ALL_CLIENTS_NAME;
 
-	static {
-		ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");
+	protected DefaultTreeModel model;
 
-		ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
-		DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
-		DIRECTORY_PERSISTENT_NAME = "clientdirectory";
-		DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("ClientTree.NOTASSIGNEDname");
-		translationsToPersistentNames = new HashMap<>();
-		translationsFromPersistentNames = new HashMap<>();
-		translationsToPersistentNames.put(DIRECTORY_NAME, DIRECTORY_PERSISTENT_NAME);
-		translationsFromPersistentNames.put(DIRECTORY_PERSISTENT_NAME, DIRECTORY_NAME);
-		topGroupNames = new HashSet<>();
+	private GroupNode groupNodeAllClients;
+	protected GroupNode groupNodeGroups;
 
-		topGroupNames.add(ALL_CLIENTS_NAME);
-		topGroupNames.add(ALL_GROUPS_NAME);
-		topGroupNames.add(DIRECTORY_NAME);
-		topGroupNames.add(DIRECTORY_NOT_ASSIGNED_NAME);
-
-	}
-
-	public static Map<String, String> getTranslationsFromPersistentNames() {
-		return translationsFromPersistentNames;
-	}
-
-	public static String translateToPersistentName(String name) {
-		if (translationsToPersistentNames.get(name) != null) {
-			return translationsToPersistentNames.get(name);
-		}
-		return name;
-	}
-
-	public static String translateFromPersistentName(String name) {
-		if (translationsFromPersistentNames.get(name) != null) {
-			return translationsFromPersistentNames.get(name);
-		}
-		return name;
-	}
-
-	class NodeComparator implements Comparator<DefaultMutableTreeNode> {
-		final Collator myCollator = Collator.getInstance();
-
-		NodeComparator() {
-			myCollator.setStrength(Collator.IDENTICAL);
-		}
-
-		@Override
-		public int compare(DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) {
-			return myCollator.compare("" + o1.getUserObject(), "" + o2.getUserObject());
-		}
-	}
-
-	class TreeException extends Exception {
-		TreeException(String s) {
-			super(s);
-		}
-	}
+	protected GroupNode groupNodeDirectory;
+	protected GroupNode groupNodeDirectoryNotAssigned;
 
 	protected TreePath pathToROOT;
 	protected TreePath pathToALL;
@@ -186,7 +125,69 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	protected Set<String> directlyAllowedGroups;
 
-	class Leafname2AllItsPaths {
+	private boolean mouseClicked;
+
+	ConfigedMain configedMain;
+
+	static {
+		ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");
+
+		ALL_GROUPS_NAME = Configed.getResourceValue("ClientTree.GROUPSname");
+		DIRECTORY_NAME = Configed.getResourceValue("ClientTree.DIRECTORYname");
+		DIRECTORY_PERSISTENT_NAME = "clientdirectory";
+		DIRECTORY_NOT_ASSIGNED_NAME = Configed.getResourceValue("ClientTree.NOTASSIGNEDname");
+		translationsToPersistentNames = new HashMap<>();
+		translationsFromPersistentNames = new HashMap<>();
+		translationsToPersistentNames.put(DIRECTORY_NAME, DIRECTORY_PERSISTENT_NAME);
+		translationsFromPersistentNames.put(DIRECTORY_PERSISTENT_NAME, DIRECTORY_NAME);
+		topGroupNames = new HashSet<>();
+
+		topGroupNames.add(ALL_CLIENTS_NAME);
+		topGroupNames.add(ALL_GROUPS_NAME);
+		topGroupNames.add(DIRECTORY_NAME);
+		topGroupNames.add(DIRECTORY_NOT_ASSIGNED_NAME);
+
+	}
+
+	public ClientTree(ConfigedMain configedMain) {
+		super();
+		this.configedMain = configedMain;
+
+		init();
+	}
+
+	public static Map<String, String> getTranslationsFromPersistentNames() {
+		return translationsFromPersistentNames;
+	}
+
+	public static String translateToPersistentName(String name) {
+		if (translationsToPersistentNames.get(name) != null) {
+			return translationsToPersistentNames.get(name);
+		}
+		return name;
+	}
+
+	public static String translateFromPersistentName(String name) {
+		if (translationsFromPersistentNames.get(name) != null) {
+			return translationsFromPersistentNames.get(name);
+		}
+		return name;
+	}
+
+	private static class NodeComparator implements Comparator<DefaultMutableTreeNode> {
+		final Collator myCollator = Collator.getInstance();
+
+		NodeComparator() {
+			myCollator.setStrength(Collator.IDENTICAL);
+		}
+
+		@Override
+		public int compare(DefaultMutableTreeNode o1, DefaultMutableTreeNode o2) {
+			return myCollator.compare("" + o1.getUserObject(), "" + o2.getUserObject());
+		}
+	}
+
+	private static class Leafname2AllItsPaths {
 		Map<String, ArrayList<SimpleTreePath>> invertedSimpleClientPaths = new HashMap<>();
 
 		Leafname2AllItsPaths() {
@@ -247,13 +248,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				invertedSimpleClientPaths.get(leafname).remove(new SimpleTreePath(clientPath.getPath()));
 			}
 		}
-	}
-
-	public ClientTree(ConfigedMain configedMain) {
-		super();
-		this.configedMain = configedMain;
-
-		init();
 	}
 
 	private void init() {
@@ -332,16 +326,13 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	public TreePath pathByAddingChild(TreePath treePath, Object child) {
-		TreePath result;
 
 		if (child == null) {
 			Logging.debug(this, "pathByAddingChild: child null cannot be added");
 			return null;
 		}
 
-		result = treePath.pathByAddingChild(child);
-
-		return result;
+		return treePath.pathByAddingChild(child);
 	}
 
 	public TreePath getPathToNode(DefaultMutableTreeNode node) {
@@ -460,7 +451,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return n;
 	}
 
-	private GroupNode produceGroupNode(Object x, String description) {
+	private static GroupNode produceGroupNode(Object x, String description) {
 		GroupNode n = new GroupNode(x, description);
 		n.setToolTipText(description);
 		n.setEnabled(true);
@@ -473,7 +464,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
-	private GroupNode produceGroupNode(Map<String, String> group) {
+	private static GroupNode produceGroupNode(Map<String, String> group) {
 		String description = group.get("description");
 		if (description == null || description.trim().equals("")) {
 			description = group.get("groupId");
@@ -944,9 +935,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		if (path == null) {
 			node = groupNodeGroups;
-		}
-
-		else {
+		} else {
 			node = (DefaultMutableTreeNode) path.getLastPathComponent();
 		}
 
@@ -1127,7 +1116,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			insertNodeInOrder(clientNode, dropParentNode);
 			getModel().nodeStructureChanged(sourceParentNode);
 
-			if (getGroupNode(dropParentID).getChildsArePersistent()) {
+			if (getGroupNode(dropParentID).isChildsArePersistent()) {
 				addObject2PersistentGroup(importID, dropParentID);
 			}
 
@@ -1189,10 +1178,10 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 
 		Logging.debug(this, " -- copyClientTo childs are persistent, newParentNode " + newParentNode + " "
-				+ ((GroupNode) newParentNode).getChildsArePersistent());
+				+ ((GroupNode) newParentNode).isChildsArePersistent());
 
 		boolean success = addObject2InternalGroup(objectID, newParentNode, newParentPath);
-		if (success && ((GroupNode) newParentNode).getChildsArePersistent()) {
+		if (success && ((GroupNode) newParentNode).isChildsArePersistent()) {
 			addObject2PersistentGroup(objectID, newParentID);
 		}
 
@@ -1249,7 +1238,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 	}
 
-	private List<GroupNode> selectOneNode(Set<GroupNode> groupSet, String clientID, GroupNode preSelected) {
+	private static List<GroupNode> selectOneNode(Set<GroupNode> groupSet, String clientID, GroupNode preSelected) {
 		List<GroupNode> result = null;
 
 		if (groupSet.size() > 1) {
@@ -1443,7 +1432,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		repaint();
 	}
 
-	private List<String> enumerateLeafNodes(DefaultMutableTreeNode node) {
+	private static List<String> enumerateLeafNodes(DefaultMutableTreeNode node) {
 		List<String> result = new ArrayList<>();
 
 		Enumeration<TreeNode> e = node.breadthFirstEnumeration();

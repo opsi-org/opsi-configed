@@ -17,7 +17,7 @@ public class ConnectionState {
 
 	protected String message = "";
 
-	private static int instancesCount = 0;
+	private static int instancesCount;
 
 	/**
 	 * constructor

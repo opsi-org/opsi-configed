@@ -201,9 +201,8 @@ public class PopupMenuTrait extends JPopupMenu {
 		}
 	}
 
-	public void action(int p)
 	// should be overwritten for specific actions in subclasses
-	{
+	public void action(int p) {
 		Logging.debug(this, "action called for type " + p);
 	}
 }

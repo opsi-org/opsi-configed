@@ -14,6 +14,7 @@ import java.util.TreeSet;
 
 import javax.swing.JList;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
 import de.uib.utilities.logging.Logging;
@@ -28,6 +29,8 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	private List<String> unfilteredV;
 	private List<String> unfilteredD;
 	protected int[] unfilteredSelection;
+
+	boolean filtered;
 
 	public SearchTargetModelFromJList(JList<String> jList, final List<String> values, final List<String> descriptions) {
 
@@ -52,7 +55,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		super.setTable(new JTable(tableModel));
 	}
 
-	private AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
+	private static AbstractTableModel setupTableModel(List<String> values, List<String> descriptions) {
 
 		return new AbstractTableModel() {
 			@Override
@@ -180,8 +183,6 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		jList.getSelectionModel().setValueIsAdjusting(b);
 	}
 
-	boolean filtered = false;
-
 	@Override
 	public void setFiltered(boolean b) {
 		Logging.info(this, "setFiltered " + b + " it was filtered " + filtered);
@@ -206,14 +207,14 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 		}
 
 		tableModel = setupTableModel(theValues, theDescriptions);
-		tableModel.fireTableChanged(new javax.swing.event.TableModelEvent(tableModel));
+		tableModel.fireTableChanged(new TableModelEvent(tableModel));
 		tableModel.fireTableStructureChanged();
 
 		jList.setListData(theValues.toArray(new String[0]));
 		try {
-			if (filtered)
-			// we mark all since we just filtered the marked ones
-			{
+			if (filtered) {
+				// we mark all since we just filtered the marked ones
+
 				// selectAll : (since it is assumed that we filter the selected)
 				setValueIsAdjusting(true);
 				jList.setSelectionInterval(0, jList.getModel().getSize() - 1);
