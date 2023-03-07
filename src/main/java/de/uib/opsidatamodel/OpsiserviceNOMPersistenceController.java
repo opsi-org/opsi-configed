@@ -3862,7 +3862,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		return result;
 	}
-	// test ende*/
 
 	protected Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds) {
 		String[] callAttributes = new String[] {};
@@ -3894,14 +3893,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return null;
 		}
 
-		Map<String, List<Map<String, String>>> result = new HashMap<>();
-
 		Map<String, List<Map<String, String>>> states = getNetBootProductStatesNOM(clientIds);
 
 		if (states != null) {
 			return states;
 		}
-		return result;
+		return new HashMap<>();
 	}
 
 	protected boolean updateProductOnClient(String pcname, String productname, int producttype,
@@ -4793,8 +4790,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public List<String> getMethodSignature(String methodname) {
 		if (mapOfMethodSignatures == null) {
-			List<Object> methodsList = exec
-					.getListResult(new OpsiMethodCall("getPossibleMethods_listOfHashes", new Object[] {}));
+			List<Object> methodsList = exec.getListResult(new OpsiMethodCall("backend_getInterface", new Object[] {}));
 
 			if (!methodsList.isEmpty()) {
 				mapOfMethodSignatures = new HashMap<>();

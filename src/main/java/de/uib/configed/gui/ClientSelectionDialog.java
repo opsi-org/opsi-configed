@@ -1290,7 +1290,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			contentPane.repaint();
 			newElementBox.setSelectedIndex(0);
 			complexElements.getLast().connectionType.setVisible(false);
-
 		}
 	}
 
