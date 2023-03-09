@@ -91,65 +91,6 @@ public final class PersistenceControllerFactory {
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 				}
 
-				if (persistControl.getOpsiVersion().compareTo(Globals.REQUIRED_SERVICE_VERSION) < 0) {
-					String errorInfo = Configed.getResourceValue("PersistenceControllerFactory.requiredServiceVersion")
-							+ " " + Globals.REQUIRED_SERVICE_VERSION + ", " + "\n( "
-							+ Configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion") + " "
-							+ persistControl.getOpsiVersion() + " ) ";
-
-					JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo, Globals.APPNAME,
-							JOptionPane.OK_OPTION);
-
-					Configed.endApp(1);
-
-					return null;
-				}
-
-				if (persistControl.getOpsiVersion().compareTo(Globals.MIN_SUPPORTED_OPSI_VERSION) < 0) {
-					String errorInfo = Configed
-							.getResourceValue("PersistenceControllerFactory.supportEndedForThisVersion")
-
-							+ "\n( " + Configed.getResourceValue("PersistenceControllerFactory.foundServiceVersion")
-							+ " " + persistControl.getOpsiVersion() + " ) ";
-
-					new Thread() {
-						private boolean proceed;
-
-						@Override
-						public void run() {
-							proceed = true;
-
-							de.uib.configed.gui.FTextArea infodialog = new de.uib.configed.gui.FTextArea(
-									ConfigedMain.getMainFrame(), Globals.APPNAME, false,
-									new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 300, 200) {
-								@Override
-								public void doAction1() {
-									super.doAction1();
-									Logging.info("== leaving not supported info ");
-									proceed = false;
-									setVisible(false);
-								}
-							};
-
-							infodialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-							infodialog.setMessage(errorInfo);
-							infodialog.setVisible(true);
-
-							int count = 0;
-
-							while (proceed) {
-								count++;
-
-								infodialog.setVisible(true);
-								Globals.threadSleep(this, 3000);
-								Logging.info("== repeating info " + count);
-
-								infodialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-							}
-						}
-					}.start();
-				}
-
 				persistControl.makeConnection();
 				persistControl.checkConfiguration();
 				persistControl.retrieveOpsiModules();

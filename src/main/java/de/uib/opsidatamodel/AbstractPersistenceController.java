@@ -884,10 +884,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract boolean applyUserSpecializedConfig();
 
-	public abstract String getOpsiVersion();
-
-	public abstract boolean handleVersionOlderThan(String minRequiredVersion);
-
 	public abstract List<Map<java.lang.String, java.lang.Object>> retrieveCommandList();
 
 	public abstract boolean doActionSSHCommand(String method, List<Object> jsonObjects);

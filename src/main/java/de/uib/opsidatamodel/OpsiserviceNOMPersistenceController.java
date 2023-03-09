@@ -123,6 +123,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 	};
 
+	private static final String BACKEND_LICENSING_INFO_METHOD_NAME = "backend_getLicensingInfo";
+
+	public static final String NAME_REQUIREMENT_TYPE_BEFORE = "before";
+	public static final String NAME_REQUIREMENT_TYPE_AFTER = "after";
+	public static final String NAME_REQUIREMENT_TYPE_NEUTRAL = "";
+	public static final String NAME_REQUIREMENT_TYPE_ON_DEINSTALL = "on_deinstall";
+
+	private static Boolean keyUserRegisterValue;
+
 	/* data for checking permissions */
 	protected boolean globalReadOnly;
 
@@ -141,17 +150,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/* ------------------------------------------ */
 
-	public static final String NAME_REQUIREMENT_TYPE_BEFORE = "before";
-	public static final String NAME_REQUIREMENT_TYPE_AFTER = "after";
-	public static final String NAME_REQUIREMENT_TYPE_NEUTRAL = "";
-	public static final String NAME_REQUIREMENT_TYPE_ON_DEINSTALL = "on_deinstall";
-
 	protected String connectionServer;
 	private String user;
 	private String userConfigPart;
 	private Boolean applyUserSpecializedConfig;
-
-	private static Boolean keyUserRegisterValue;
 
 	protected Map<String, List<String>> mapOfMethodSignatures;
 
@@ -294,7 +296,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected JSONObject licencingInfo;
 	private LicensingInfoMap licInfoMap;
 	private String opsiLicensingInfoVersion;
-	private static final String BACKEND_LICENSING_INFO_METHOD_NAME = "backend_getLicensingInfo";
 
 	// the may as read in
 	protected Map<String, Object> opsiModulesInfo;
@@ -387,7 +388,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return false;
 	}
 
-	protected class CheckingEntryMapOfMaps extends LinkedHashMap<String, Map<String, Object>> {}
+	protected static class CheckingEntryMapOfMaps extends LinkedHashMap<String, Map<String, Object>> {}
 
 	protected class DefaultHostInfoCollections implements HostInfoCollections {
 		protected String configServer;
@@ -8025,15 +8026,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			opsiInformation = exec.getMapResult(omc);
 		}
 
-		opsiVersion = "4";
-
-		if (!opsiInformation.isEmpty()) {
-			String value = (String) opsiInformation.get("opsiVersion");
-			if (value != null) {
-				opsiVersion = value;
-			}
-		}
-
 		return opsiInformation;
 	}
 
@@ -8090,7 +8082,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		opsiModulesInfo = new HashMap<>();
 		// keeps the info for displaying to the user
 		opsiModulesDisplayInfo = new HashMap<>();
-		opsiVersion = "4";
+
 		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
 		// has the actual signal if a module is active
 		opsiModules = new HashMap<>();
@@ -8099,9 +8091,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		String expiresKey = ModulePermissionValue.KEY_EXPIRES;
 
 		try {
-			opsiVersion = (String) opsiInformation.get("opsiVersion");
-			Logging.info(this, "opsi version information " + opsiVersion);
-
 			final List<String> missingModulesPermissionInfo = new ArrayList<>();
 
 			// prepare the user info
@@ -8414,17 +8403,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.info(this, "applyUserSpecializedConfig initialized, " + applyUserSpecializedConfig);
 
 		return applyUserSpecializedConfig;
-	}
-
-	@Override
-	public String getOpsiVersion() {
-		retrieveOpsiModules();
-		return opsiVersion;
-	}
-
-	@Override
-	public boolean handleVersionOlderThan(String minRequiredVersion) {
-		return Globals.compareOpsiVersions(opsiVersion, minRequiredVersion) < 0;
 	}
 
 	/**

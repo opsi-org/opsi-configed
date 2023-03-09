@@ -4334,10 +4334,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return persist.getBackendInfos();
 	}
 
-	public String getOpsiVersion() {
-		return persist.getOpsiVersion();
-	}
-
 	public Map<String, RemoteControl> getRemoteControls() {
 		return persist.getRemoteControls();
 	}

@@ -4,7 +4,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHRepositoryUploadDialog;
-import de.uib.utilities.logging.Logging;
 
 public class CommandRepositoryUpload extends CommandSFTPUpload {
 
@@ -35,12 +34,7 @@ public class CommandRepositoryUpload extends CommandSFTPUpload {
 	@Override
 	public void startParameterGui(ConfigedMain main) {
 
-		if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
-				|| main.getOpsiVersion().compareTo("4.1") < 0) {
-			Logging.error(this, Configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
-		} else {
-			dialog = new SSHRepositoryUploadDialog();
-		}
+		dialog = new SSHRepositoryUploadDialog();
 	}
 
 	@Override

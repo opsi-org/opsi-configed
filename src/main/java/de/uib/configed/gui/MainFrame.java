@@ -117,6 +117,7 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
+import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
@@ -1382,20 +1383,15 @@ public class MainFrame extends JFrame
 
 		jMenuHelp.addSeparator();
 
-		jMenuHelpOpsiVersion.setText(
-				Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": " + configedMain.getOpsiVersion());
+		jMenuHelpOpsiVersion.setText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": "
+				+ JSONthroughHTTPS.getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
 		jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
 
 		jMenuHelp.add(jMenuHelpOpsiVersion);
 
 		jMenuHelpOpsiModuleInformation.setText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-		if (configedMain.getOpsiVersion().length() == 0 || configedMain.getOpsiVersion().charAt(0) == '<'
-				|| configedMain.getOpsiVersion().compareTo("3.4") < 0) {
-			jMenuHelpOpsiModuleInformation.setEnabled(false);
-		} else {
-			jMenuHelpOpsiModuleInformation.addActionListener((ActionEvent e) -> showOpsiModules());
-		}
+		jMenuHelpOpsiModuleInformation.addActionListener((ActionEvent e) -> showOpsiModules());
 
 		jMenuHelp.add(jMenuHelpOpsiModuleInformation);
 

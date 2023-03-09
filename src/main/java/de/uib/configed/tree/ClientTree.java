@@ -940,17 +940,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 
 		if (node.getAllowsChildren()) {
-			if (!node.toString().equals(ALL_GROUPS_NAME) && configedMain.getOpsiVersion().compareTo("3.4.9") < 0) {
-				JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-						"group in group not supported for opsiVersion < 3.4.9, \nopsiVersion is "
-								+ configedMain.getOpsiVersion(),
-						"opsi info ",
-
-						// synchronous",
-
-						JOptionPane.WARNING_MESSAGE);
-				return result;
-			}
 
 			LinkedHashMap<String, String> groupData = new LinkedHashMap<>();
 			groupData.put("groupname", "");

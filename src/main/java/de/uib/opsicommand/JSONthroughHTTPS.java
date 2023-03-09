@@ -55,9 +55,13 @@ import de.uib.utilities.logging.Logging;
  */
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
-	private int[] serverVersion = { 0, 0, 0, 0 };
-	private boolean gzipTransmission;
-	private boolean lz4Transmission;
+	private static final Pattern versionPattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
+
+	private static int[] serverVersion = { 0, 0, 0, 0 };
+	private static String serverVersionString = "4.2";
+
+	private static boolean gzipTransmission;
+	private static boolean lz4Transmission;
 
 	// By default we set hostnameVerified to true, because MyHostnameVerifier is
 	// only used to check hostname verification, when default determines that
@@ -69,6 +73,46 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 	public JSONthroughHTTPS(String host, String username, String password) {
 		super(host, username, password);
+	}
+
+	private static void setServerVersion(int[] newServerVersion) {
+
+		if (newServerVersion == null || newServerVersion.length == 0) {
+			return;
+		}
+
+		serverVersion = Arrays.copyOf(newServerVersion, newServerVersion.length);
+
+		// Produce String of server version 
+		StringBuilder serverVersionBuilder = new StringBuilder(String.valueOf(serverVersion[0]));
+
+		for (int i = 1; i < serverVersion.length; i++) {
+			serverVersionBuilder.append(".");
+			serverVersionBuilder.append(String.valueOf(serverVersion[i]));
+		}
+
+		serverVersionString = serverVersionBuilder.toString();
+
+		if ((newServerVersion[0] > 4) || (newServerVersion[0] == 4 && newServerVersion[1] >= 2)) {
+			gzipTransmission = false;
+			lz4Transmission = true;
+		} else {
+			gzipTransmission = true;
+			lz4Transmission = false;
+		}
+
+		// The way we check the certificate does not work before opsi server version 4.2
+		if (newServerVersion[0] < 4 || (newServerVersion[0] == 4 && newServerVersion[1] < 2)) {
+			Globals.disableCertificateVerification = true;
+		}
+
+		Logging.info("we set the server version: " + Arrays.toString(newServerVersion));
+		Logging.info("we use now gzip: " + gzipTransmission + " or lz4: " + lz4Transmission);
+		Logging.info("is certificateVerification disabled? " + Globals.disableCertificateVerification);
+	}
+
+	public static String getServerVersion() {
+		return serverVersionString;
 	}
 
 	// Checks if the Server version is already known, and loads it otherwise
@@ -88,7 +132,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			connection.setRequestMethod("HEAD");
 
 		} catch (IOException e) {
-			Logging.warning(this, "error in testing connection to server for getting server opsi version");
+			Logging.warning(this, "error in testing connection to server for getting server opsi version", e);
 			return;
 		}
 
@@ -98,39 +142,31 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			Logging.warning("error in getting server version, Headerfield is null");
 			return;
 		}
-		Pattern pattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
-		Matcher matcher = pattern.matcher(server);
+
+		final int EXPECTED_SERVER_VERSION_LENGTH = 4;
+
+		int[] newServerVersion = new int[EXPECTED_SERVER_VERSION_LENGTH];
+
+		Matcher matcher = versionPattern.matcher(server);
 		if (matcher.find()) {
 			Logging.info(this, "opsi server version: " + matcher.group(1));
 			String[] versionParts = matcher.group(1).split("\\.");
-			for (int i = 0; i < versionParts.length && i < 4; i++) {
+			for (int i = 0; i < versionParts.length && i < EXPECTED_SERVER_VERSION_LENGTH; i++) {
 				try {
-					serverVersion[i] = Integer.parseInt(versionParts[i]);
+					newServerVersion[i] = Integer.parseInt(versionParts[i]);
 				} catch (NumberFormatException nex) {
 					Logging.error(this, "value is unparsable to int");
 				}
 			}
 		} else {
-			serverVersion[0] = 4;
-			serverVersion[1] = 1;
+			// Default is 4.1, if this query does not work
+
+			Logging.info("we set opsi version 4.1 because we did not find opsiconfd version in header");
+			newServerVersion[0] = 4;
+			newServerVersion[1] = 1;
 		}
 
-		if ((serverVersion[0] > 4) || (serverVersion[0] == 4 && serverVersion[1] >= 2)) {
-			gzipTransmission = false;
-			lz4Transmission = true;
-		} else {
-			gzipTransmission = true;
-			lz4Transmission = false;
-		}
-
-		// The way we check the certificate does not work before opsi server version 4.2
-		if (serverVersion[0] < 4 || (serverVersion[0] == 4 && serverVersion[1] < 2)) {
-			Globals.disableCertificateVerification = true;
-		}
-
-		Logging.info(this, "we checked the server version: " + Arrays.toString(serverVersion));
-		Logging.info(this, "we use now gzip: " + gzipTransmission + " or lz4: " + lz4Transmission);
-		Logging.info(this, "is certificateVerification disabled? " + Globals.disableCertificateVerification);
+		setServerVersion(newServerVersion);
 	}
 
 	private void setGeneralRequestProperties(HttpURLConnection connection) {

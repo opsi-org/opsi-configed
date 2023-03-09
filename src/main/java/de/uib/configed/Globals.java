@@ -895,42 +895,6 @@ public final class Globals {
 		return result;
 	}
 
-	public static int compareOpsiVersions(final String number1, final String number2) {
-		if (number1 == null) {
-			throw new IllegalArgumentException("Number1 can not be null");
-		}
-
-		// \\d stands for digit, so [0-9]
-		if (!number1.matches("\\d+(\\.\\d+)*")) {
-			throw new IllegalArgumentException("Invalid number1 format");
-		}
-
-		if (number2 == null) {
-			throw new IllegalArgumentException("Number2 can not be null");
-		}
-
-		if (!number2.matches("\\d+(\\.\\d+)*")) {
-			throw new IllegalArgumentException("Invalid number2 format");
-		}
-
-		String[] n1Parts = number1.split("\\.");
-		String[] n2Parts = number2.split("\\.");
-		int length = Math.max(n1Parts.length, n2Parts.length);
-		for (int i = 0; i < length; i++) {
-			int n1Part = i < n1Parts.length ? Integer.parseInt(n1Parts[i]) : 0;
-			int n2Part = i < n2Parts.length ? Integer.parseInt(n2Parts[i]) : 0;
-
-			if (n1Part < n2Part) {
-				return -1;
-			}
-
-			if (n1Part > n2Part) {
-				return 1;
-			}
-		}
-		return 0;
-	}
-
 	public static String makeHTMLlines(String s) {
 		if (s == null || s.trim().startsWith("<")) {
 			return s;

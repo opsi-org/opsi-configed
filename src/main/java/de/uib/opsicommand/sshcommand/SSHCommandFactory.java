@@ -180,23 +180,13 @@ public final class SSHCommandFactory {
 	}
 
 	private void addAditionalParamCommands() {
-		if (!(main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
-				|| main.getOpsiVersion().compareTo("4.1") < 0)) {
-			sshCommandsParam.add(new CommandPackageUpdater());
-		}
 
 		sshCommandsParam.add(new CommandOpsiPackageManagerInstall());
 		sshCommandsParam.add(new CommandOpsiPackageManagerUninstall());
 		sshCommandsParam.add(new CommandOpsimakeproductfile());
 		sshCommandsParam.add(new CommandWget());
 		sshCommandsParam.add(new CommandModulesUpload());
-		if (!(main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
-				|| main.getOpsiVersion().compareTo("4.1") < 0)) {
-			sshCommandsParam.add(new CommandRepositoryUpload());
-		}
-
 		sshCommandsParam.add(new CommandOpsiSetRights());
-
 		sshCommandsParam.add(new CommandDeployClientAgent());
 
 	}
