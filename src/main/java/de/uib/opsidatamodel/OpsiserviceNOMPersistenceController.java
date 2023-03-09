@@ -306,8 +306,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	// the resulting info about permission
 	protected Map<String, Boolean> opsiModules;
 
-	protected String opsiVersion;
-
 	protected boolean withLicenceManagement;
 	protected boolean withLocalImaging;
 

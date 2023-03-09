@@ -44,6 +44,8 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 import javax.swing.SwingUtilities;
 
+import org.apache.maven.artifact.versioning.ComparableVersion;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -56,9 +58,11 @@ import de.uib.utilities.logging.Logging;
 
 public class JSONthroughHTTPS extends JSONthroughHTTP {
 	private static final Pattern versionPattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
+	private static final int EXPECTED_SERVER_VERSION_LENGTH = 4;
 
 	private static int[] serverVersion = { 0, 0, 0, 0 };
 	private static String serverVersionString = "4.2";
+	private static ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
 
 	private static boolean gzipTransmission;
 	private static boolean lz4Transmission;
@@ -91,24 +95,39 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			serverVersionBuilder.append(String.valueOf(serverVersion[i]));
 		}
 
-		serverVersionString = serverVersionBuilder.toString();
+		setServerVersion(serverVersionBuilder.toString());
+	}
 
-		if ((newServerVersion[0] > 4) || (newServerVersion[0] == 4 && newServerVersion[1] >= 2)) {
+	public static void setServerVersion(String newServerVersion) {
+
+		serverVersionString = newServerVersion;
+		serverComparableVersion = new ComparableVersion(serverVersionString);
+
+		if (isServerVersionAtLeast("4.2")) {
 			gzipTransmission = false;
 			lz4Transmission = true;
 		} else {
 			gzipTransmission = true;
 			lz4Transmission = false;
-		}
 
-		// The way we check the certificate does not work before opsi server version 4.2
-		if (newServerVersion[0] < 4 || (newServerVersion[0] == 4 && newServerVersion[1] < 2)) {
+			// The way we check the certificate does not work before opsi server version 4.2
 			Globals.disableCertificateVerification = true;
 		}
 
-		Logging.info("we set the server version: " + Arrays.toString(newServerVersion));
+		Logging.info("we set the server version: " + serverVersionString);
 		Logging.info("we use now gzip: " + gzipTransmission + " or lz4: " + lz4Transmission);
 		Logging.info("is certificateVerification disabled? " + Globals.disableCertificateVerification);
+	}
+
+	/*
+	 * returns true, if the server has a newer version (or same version)
+	 * compared to the version in the argument
+	 * 
+	 * @arg compareVersion version to compare to of format x.y.z...
+	 */
+	public static boolean isServerVersionAtLeast(String compareVersion) {
+
+		return serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
 	}
 
 	public static String getServerVersion() {
@@ -142,8 +161,6 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			Logging.warning("error in getting server version, Headerfield is null");
 			return;
 		}
-
-		final int EXPECTED_SERVER_VERSION_LENGTH = 4;
 
 		int[] newServerVersion = new int[EXPECTED_SERVER_VERSION_LENGTH];
 

@@ -29,6 +29,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigStateEntry;
 import de.uib.configed.type.SWAuditClientEntry;
+import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.dbtable.Host;
 import de.uib.opsidatamodel.dbtable.ProductPropertyState;
@@ -79,6 +80,12 @@ public class DataStubRawData extends DataStubNOM {
 
 	@Override
 	public boolean canCallMySQL() {
+
+		// we cannot call MySQL if version before 4.3
+		if (JSONthroughHTTPS.isServerVersionAtLeast("4.3")) {
+			return false;
+		}
+
 		boolean result = false;
 
 		// test if we can access any table
