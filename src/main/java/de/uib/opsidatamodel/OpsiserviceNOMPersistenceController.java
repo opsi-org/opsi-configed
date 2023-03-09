@@ -314,7 +314,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected Map<String, Object> opsiInformation = new HashMap<>();
 	protected JSONObject licencingInfo;
 	private LicensingInfoMap licInfoMap;
-	private String opsiLicensingInfoVersion;
+
+	private boolean hasOpsiLicencingBeenChecked;
+	private boolean isOpsiLicencingAvailable;
+
+	private boolean hasIsOpisUserAdminBeenChecked;
+	private boolean isOpsiUserAdmin;
 
 	// the may as read in
 	protected Map<String, Object> opsiModulesInfo;
@@ -7952,25 +7957,52 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public String getOpsiLicencingInfoVersion() {
+	public boolean isOpsiLicencingAvailable() {
 		retrieveOpsiLicensingInfoVersion();
-		return opsiLicensingInfoVersion;
+		return isOpsiLicencingAvailable;
 	}
 
 	protected void retrieveOpsiLicensingInfoVersion() {
-		if (opsiLicensingInfoVersion == null) {
+		if (!hasOpsiLicencingBeenChecked) {
 			Logging.info(this, "retrieveOpsiLicensingInfoVersion getMethodSignature( backend_getLicensingInfo "
 					+ getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME));
 
-			if (getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME) == NONE_LIST) {
+			if (getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME) == NONE_LIST || !isOpsiUserAdmin()) {
 				Logging.info(this,
 						"method " + BACKEND_LICENSING_INFO_METHOD_NAME + " not existing in this opsi service");
-				opsiLicensingInfoVersion = LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD;
+				isOpsiLicencingAvailable = false;
 			} else {
-				opsiLicensingInfoVersion = LicensingInfoMap.OPSI_LICENSING_INFO_VERSION;
+				isOpsiLicencingAvailable = true;
 			}
+
+			hasOpsiLicencingBeenChecked = true;
+		}
+	}
+
+	@Override
+	public boolean isOpsiUserAdmin() {
+
+		if (!hasIsOpisUserAdminBeenChecked) {
+			retrieveIsOpsiUserAdmin();
 		}
 
+		return isOpsiUserAdmin;
+	}
+
+	protected void retrieveIsOpsiUserAdmin() {
+		OpsiMethodCall omc = new OpsiMethodCall("accessControl_userIsAdmin", new Object[] {});
+
+		JSONObject json = exec.retrieveJSONObject(omc);
+
+		if (json.has("result") && !json.isNull("result")) {
+			isOpsiUserAdmin = json.getBoolean("result");
+		} else {
+			Logging.warning(this, "cannot check if user is admin, fallback to false...");
+
+			isOpsiUserAdmin = false;
+		}
+
+		hasIsOpisUserAdminBeenChecked = true;
 	}
 
 	@Override
@@ -7993,8 +8025,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	private JSONObject retrieveJSONLicensingInfoReduced() {
 		retrieveOpsiLicensingInfoVersion();
-		if (licencingInfo == null
-				&& !opsiLicensingInfoVersion.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
+		if (licencingInfo == null && isOpsiLicencingAvailable) {
 			OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME,
 					new Object[] { true, false, true, false });
 

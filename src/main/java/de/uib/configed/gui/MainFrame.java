@@ -2300,8 +2300,7 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setVisible(ConfigedMain.OPSI_4_3);
 		jButtonDashboard.addActionListener(this);
 
-		if (!configedMain.getPersistenceController().getOpsiLicencingInfoVersion()
-				.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD) && licensingInfoMap == null) {
+		if (configedMain.getPersistenceController().isOpsiLicencingAvailable() && licensingInfoMap == null) {
 
 			licensingInfoMap = LicensingInfoMap.getInstance(
 					configedMain.getPersistenceController().getOpsiLicencingInfo(),
@@ -3181,8 +3180,7 @@ public class MainFrame extends JFrame
 	}
 
 	private void showOpsiModules() {
-		if (configedMain.getPersistenceController().getOpsiLicencingInfoVersion()
-				.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
+		if (!configedMain.getPersistenceController().isOpsiLicencingAvailable()) {
 
 			FTextArea f = new FTextArea(this, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
 					true);

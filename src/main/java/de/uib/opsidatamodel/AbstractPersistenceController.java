@@ -861,7 +861,9 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Map<String, Object> getOpsiModulesInfos();
 
-	public abstract String getOpsiLicencingInfoVersion();
+	public abstract boolean isOpsiLicencingAvailable();
+
+	public abstract boolean isOpsiUserAdmin();
 
 	public abstract void opsiLicencingInfoRequestRefresh();
 

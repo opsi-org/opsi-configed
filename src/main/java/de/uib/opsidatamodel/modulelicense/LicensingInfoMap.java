@@ -82,8 +82,6 @@ public final class LicensingInfoMap {
 
 	private static final String CLASSNAME = LicensingInfoMap.class.getName();
 
-	public static final String OPSI_LICENSING_INFO_VERSION_OLD = "";
-	public static final String OPSI_LICENSING_INFO_VERSION = "2";
 	public static final String DISPLAY_INFINITE = "\u221E";
 
 	private static LicensingInfoMap instance;
