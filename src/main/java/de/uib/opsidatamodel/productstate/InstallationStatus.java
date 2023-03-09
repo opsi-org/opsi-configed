@@ -40,6 +40,18 @@ public class InstallationStatus {
 	// instance variable
 	private int state = INVALID;
 
+	// constructor
+	public InstallationStatus() {
+	}
+
+	public InstallationStatus(int t) {
+		if (existsState(t)) {
+			state = t;
+		} else {
+			state = INVALID;
+		}
+	}
+
 	private static void checkCollections() {
 		if (states != null) {
 			return;
@@ -210,17 +222,5 @@ public class InstallationStatus {
 		}
 
 		return new InstallationStatus(getVal(label));
-	}
-
-	// constructor
-	public InstallationStatus() {
-	}
-
-	public InstallationStatus(int t) {
-		if (existsState(t)) {
-			state = t;
-		} else {
-			state = INVALID;
-		}
 	}
 }

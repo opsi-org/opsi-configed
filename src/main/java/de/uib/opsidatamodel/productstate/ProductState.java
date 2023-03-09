@@ -111,6 +111,20 @@ public class ProductState extends HashMap<String, String> {
 		key2servicekey.put(KEY_LAST_STATE_CHANGE, "modificationTime");
 	}
 
+	public ProductState(Map<String, String> retrievedState, boolean transform) {
+		super();
+		this.retrieved = retrievedState;
+		if (retrieved == null) {
+			setDefaultValues();
+		} else {
+			readRetrieved();
+		}
+
+		if (transform) {
+			setTransforms();
+		}
+	}
+
 	public ProductState(Map<String, String> retrievedState) {
 		this(retrievedState, true);
 	}
@@ -143,20 +157,6 @@ public class ProductState extends HashMap<String, String> {
 		put(KEY_PACKAGE_VERSION, getRetrievedValue(key2servicekey.get(KEY_PACKAGE_VERSION)));
 
 		put(KEY_LAST_STATE_CHANGE, getRetrievedValue(key2servicekey.get(KEY_LAST_STATE_CHANGE)));
-	}
-
-	public ProductState(Map<String, String> retrievedState, boolean transform) {
-		super();
-		this.retrieved = retrievedState;
-		if (retrieved == null) {
-			setDefaultValues();
-		} else {
-			readRetrieved();
-		}
-
-		if (transform) {
-			setTransforms();
-		}
 	}
 
 	@Override
@@ -261,7 +261,5 @@ public class ProductState extends HashMap<String, String> {
 		}
 
 		return retrieved.get(key);
-
 	}
-
 }

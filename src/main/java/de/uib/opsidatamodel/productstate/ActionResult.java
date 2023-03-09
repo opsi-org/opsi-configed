@@ -35,6 +35,18 @@ public class ActionResult {
 	// instance variable
 	private int state = INVALID;
 
+	// constructor
+	public ActionResult() {
+	}
+
+	public ActionResult(int t) {
+		if (existsState(t)) {
+			state = t;
+		} else {
+			state = NOT_AVAILABLE;
+		}
+	}
+
 	private static void checkCollections() {
 		if (states != null) {
 			return;
@@ -176,17 +188,5 @@ public class ActionResult {
 		}
 
 		return new ActionResult(getVal(label));
-	}
-
-	// constructor
-	public ActionResult() {
-	}
-
-	public ActionResult(int t) {
-		if (existsState(t)) {
-			state = t;
-		} else {
-			state = NOT_AVAILABLE;
-		}
 	}
 }

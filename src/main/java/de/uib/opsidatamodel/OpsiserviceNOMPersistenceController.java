@@ -226,75 +226,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected List<String> hwInfoClassNames;
 	protected List<String> hwTableNames;
 
-	// package visibility, the constructor is called by PersistenceControllerFactory
-	OpsiserviceNOMPersistenceController(String server, String user, String password) {
-		Logging.info(this, "start construction, \nconnect to " + server + " as " + user);
-		this.connectionServer = server;
-		this.user = user;
-
-		Logging.debug(this, "create");
-
-		hostInfoCollections = new DefaultHostInfoCollections();
-
-		exec = new JSONthroughHTTPS(server, user, password);
-
-		execs.put(server, exec);
-
-		hwAuditConf = new HashMap<>();
-
-		initMembers();
-	}
-
-	class HostGroups extends TreeMap<String, Map<String, String>> {
-		public HostGroups(Map<String, Map<String, String>> source) {
-			super(source);
-		}
-
-		HostGroups addSpecialGroups() {
-			Logging.debug(this, "addSpecialGroups check");
-			List<StringValuedRelationElement> groups = new ArrayList<>();
-
-			// create
-			if (get(ClientTree.DIRECTORY_PERSISTENT_NAME) == null) {
-				Logging.debug(this, "addSpecialGroups");
-				StringValuedRelationElement directoryGroup = new StringValuedRelationElement();
-
-				directoryGroup.put("groupId", ClientTree.DIRECTORY_PERSISTENT_NAME);
-				directoryGroup.put("parentGroupId", null);
-				directoryGroup.put("description", "root of directory");
-
-				addGroup(directoryGroup, false);
-
-				groups.add(directoryGroup);
-
-				put(ClientTree.DIRECTORY_PERSISTENT_NAME, directoryGroup);
-
-				Logging.debug(this, "addSpecialGroups we have " + this);
-
-			}
-
-			return this;
-		}
-
-		void alterToWorkingVersion() {
-			Logging.debug(this, "alterToWorkingVersion we have " + this);
-
-			for (Map<String, String> groupInfo : values()) {
-				if (ClientTree.DIRECTORY_PERSISTENT_NAME.equals(groupInfo.get("parentGroupId"))) {
-					groupInfo.put("parentGroupId", ClientTree.DIRECTORY_NAME);
-				}
-			}
-
-			Map<String, String> directoryGroup = get(ClientTree.DIRECTORY_PERSISTENT_NAME);
-			if (directoryGroup != null) {
-				directoryGroup.put("groupId", ClientTree.DIRECTORY_NAME);
-			}
-
-			put(ClientTree.DIRECTORY_NAME, directoryGroup);
-			remove(ClientTree.DIRECTORY_PERSISTENT_NAME);
-		}
-	}
-
 	protected Map<String, Map<String, String>> productGroups;
 
 	protected HostGroups hostGroups;
@@ -372,6 +303,75 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	AbstractDataStub dataStub;
 
 	protected Boolean acceptMySQL;
+
+	// package visibility, the constructor is called by PersistenceControllerFactory
+	OpsiserviceNOMPersistenceController(String server, String user, String password) {
+		Logging.info(this, "start construction, \nconnect to " + server + " as " + user);
+		this.connectionServer = server;
+		this.user = user;
+
+		Logging.debug(this, "create");
+
+		hostInfoCollections = new DefaultHostInfoCollections();
+
+		exec = new JSONthroughHTTPS(server, user, password);
+
+		execs.put(server, exec);
+
+		hwAuditConf = new HashMap<>();
+
+		initMembers();
+	}
+
+	class HostGroups extends TreeMap<String, Map<String, String>> {
+		public HostGroups(Map<String, Map<String, String>> source) {
+			super(source);
+		}
+
+		HostGroups addSpecialGroups() {
+			Logging.debug(this, "addSpecialGroups check");
+			List<StringValuedRelationElement> groups = new ArrayList<>();
+
+			// create
+			if (get(ClientTree.DIRECTORY_PERSISTENT_NAME) == null) {
+				Logging.debug(this, "addSpecialGroups");
+				StringValuedRelationElement directoryGroup = new StringValuedRelationElement();
+
+				directoryGroup.put("groupId", ClientTree.DIRECTORY_PERSISTENT_NAME);
+				directoryGroup.put("parentGroupId", null);
+				directoryGroup.put("description", "root of directory");
+
+				addGroup(directoryGroup, false);
+
+				groups.add(directoryGroup);
+
+				put(ClientTree.DIRECTORY_PERSISTENT_NAME, directoryGroup);
+
+				Logging.debug(this, "addSpecialGroups we have " + this);
+
+			}
+
+			return this;
+		}
+
+		void alterToWorkingVersion() {
+			Logging.debug(this, "alterToWorkingVersion we have " + this);
+
+			for (Map<String, String> groupInfo : values()) {
+				if (ClientTree.DIRECTORY_PERSISTENT_NAME.equals(groupInfo.get("parentGroupId"))) {
+					groupInfo.put("parentGroupId", ClientTree.DIRECTORY_NAME);
+				}
+			}
+
+			Map<String, String> directoryGroup = get(ClientTree.DIRECTORY_PERSISTENT_NAME);
+			if (directoryGroup != null) {
+				directoryGroup.put("groupId", ClientTree.DIRECTORY_NAME);
+			}
+
+			put(ClientTree.DIRECTORY_NAME, directoryGroup);
+			remove(ClientTree.DIRECTORY_PERSISTENT_NAME);
+		}
+	}
 
 	@Override
 	public boolean canCallMySQL() {

@@ -86,6 +86,14 @@ public class UserConfig {
 	protected Map<String, List<Object>> valuesMap;
 	protected Map<String, List<Object>> possibleValuesMap;
 
+	public UserConfig(String userName) {
+		Logging.info(this, "create for " + userName);
+		this.username = userName;
+		booleanMap = new LinkedHashMap<>();
+		valuesMap = new LinkedHashMap<>();
+		possibleValuesMap = new LinkedHashMap<>();
+	}
+
 	public static Set<String> getUserBoolKeys() {
 		if (userBoolKeys == null) {
 			userBoolKeys = new LinkedHashSet<>();
@@ -150,14 +158,6 @@ public class UserConfig {
 		archeoPrototypeConfig.setValues(MODIFICATION_INFO_KEY, ZERO_TIME);
 
 		return archeoPrototypeConfig;
-	}
-
-	public UserConfig(String userName) {
-		Logging.info(this, "create for " + userName);
-		this.username = userName;
-		booleanMap = new LinkedHashMap<>();
-		valuesMap = new LinkedHashMap<>();
-		possibleValuesMap = new LinkedHashMap<>();
 	}
 
 	public String getUserName() {
