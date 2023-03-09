@@ -3469,6 +3469,9 @@ public class MainFrame extends JFrame
 					AbstractPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
 				// Starting JavaFX-Thread by creating a new JFXPanel, but not
 				// using it since it is not needed.
+
+				// TODO can this be removed?
+				// when do we need it?
 				new JFXPanel();
 
 				Platform.runLater(() -> {

@@ -73,8 +73,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
 
-	public static final String KEY_SHOW_DASH_ON_PROGRAMSTART = CONTROL_DASH_CONFIG_KEY + ".show_dash_on_loaddata";
-	public static final Boolean DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART = false;
 	public static final String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = CONTROL_DASH_CONFIG_KEY
 			+ ".show_dash_for_showlicenses";
 

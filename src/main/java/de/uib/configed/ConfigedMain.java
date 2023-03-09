@@ -463,12 +463,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (strategyForLoadingData != null) {
 				strategyForLoadingData.actAfterWaiting();
 			}
-
-			if (Boolean.TRUE.equals(
-					persist.getGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART,
-							AbstractPersistenceController.DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART))) {
-				initDashInfo();
-			}
 		});
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
