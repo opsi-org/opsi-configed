@@ -353,7 +353,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		return centerPanel;
 	}
 
-	private class HeaderOptionsPanel extends JPanel {
+	private static class HeaderOptionsPanel extends JPanel {
 		public HeaderOptionsPanel(ListModel<JCheckBox> model) {
 			init(model);
 		}
@@ -416,7 +416,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		}
 	}
 
-	private class InputListener implements DocumentListener {
+	private static class InputListener implements DocumentListener {
 		public void performAction() {
 			/* Should be overridden in actual implementation */}
 

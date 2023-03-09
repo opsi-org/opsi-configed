@@ -15,7 +15,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.DataChangedObserver;
-import de.uib.utilities.datapanel.AbstractEditMapPanel;
+import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
 
@@ -91,7 +91,7 @@ public class PanelHostConfig extends JPanel {
 
 		editMapPanel = new EditMapPanelGroupedForHostConfigs(
 				new de.uib.configed.gui.helper.PropertiesTableCellRenderer(), keylistExtendible, entryRemovable,
-				reloadable, new AbstractEditMapPanel.Actor() {
+				reloadable, new DefaultEditMapPanel.Actor() {
 					@Override
 					protected void reloadData() {
 						reloadHostConfig();

@@ -714,7 +714,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.requestFocus();
 	}
 
-	private class Finding {
+	private static class Finding {
 		boolean success;
 		int endChar = -1;
 	}

@@ -19,7 +19,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utilities.DataChangedObserver;
-import de.uib.utilities.datapanel.AbstractEditMapPanel;
+import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
@@ -28,7 +28,7 @@ import de.uib.utilities.table.ListCellOptions;
 
 public class PanelHostProperties extends JPanel implements ItemListener {
 	// delegate
-	protected AbstractEditMapPanel editMapPanel;
+	protected DefaultEditMapPanel editMapPanel;
 	protected JLabel label;
 	protected JComboBox<String> combo;
 	protected Map<String, Map<String, Object>> multipleMaps;

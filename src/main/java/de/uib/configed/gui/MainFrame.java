@@ -330,10 +330,6 @@ public class MainFrame extends JFrame
 	private JMenuItemFormatted popupCreatePdf = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
 			Globals.createImageIcon("images/acrobat_reader16.png", ""));
 
-	private JPanel iconBarPane;
-
-	private JPanel iconPane0;
-
 	private JPanel iconPaneTargets;
 	private JButton jButtonServerConfiguration;
 	private JButton jButtonDepotsConfiguration;
@@ -494,7 +490,7 @@ public class MainFrame extends JFrame
 
 	private Messagebus messagebus;
 
-	class GlassPane extends JComponent {
+	static class GlassPane extends JComponent {
 		GlassPane() {
 			super();
 			Logging.debug(this, "glass pane initialized");
@@ -2410,7 +2406,7 @@ public class MainFrame extends JFrame
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		iconPane0 = new JPanel();
+		JPanel iconPane0 = new JPanel();
 
 		GroupLayout layoutIconPane0 = new GroupLayout(iconPane0);
 		iconPane0.setLayout(layoutIconPane0);
@@ -2494,7 +2490,7 @@ public class MainFrame extends JFrame
 										GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		iconBarPane = new JPanel();
+		JPanel iconBarPane = new JPanel();
 		iconBarPane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 

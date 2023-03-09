@@ -19,12 +19,6 @@ public class ExtendedInteger implements Comparable<Integer> {
 		this.value = value;
 	}
 
-	public class NotComparableException extends Exception {
-		public NotComparableException() {
-			super("INFINITE not comparable to INFINITE");
-		}
-	}
-
 	public ExtendedInteger(int intVal) {
 		number = Integer.valueOf(intVal);
 		value = "" + intVal;

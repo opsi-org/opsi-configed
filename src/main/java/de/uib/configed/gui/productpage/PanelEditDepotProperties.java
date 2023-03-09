@@ -47,7 +47,7 @@ import de.uib.configed.gui.IconButton;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
-import de.uib.utilities.datapanel.AbstractEditMapPanel;
+import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
@@ -66,7 +66,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 	protected final Map<String, Object> emptyVisualData = new HashMap<>();
 
-	public PanelEditDepotProperties(ConfigedMain mainController, AbstractEditMapPanel productPropertiesPanel) {
+	public PanelEditDepotProperties(ConfigedMain mainController, DefaultEditMapPanel productPropertiesPanel) {
 		super(mainController, productPropertiesPanel);
 		initComponents();
 		initTitlePanel();

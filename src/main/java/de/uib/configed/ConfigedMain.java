@@ -4630,7 +4630,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private abstract class AbstractErrorListProducer extends Thread {
+	private static abstract class AbstractErrorListProducer extends Thread {
 		String title;
 
 		AbstractErrorListProducer(String specificPartOfTitle) {

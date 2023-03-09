@@ -8,6 +8,8 @@
 
 package de.uib.utilities;
 
+import java.util.function.Consumer;
+
 import javax.swing.JOptionPane;
 
 import de.uib.utilities.logging.Logging;
@@ -15,24 +17,19 @@ import de.uib.utilities.logging.Logging;
 public class DataChangedKeeper implements DataChangedObserver {
 	protected boolean dataChanged;
 
-	protected ActUpon actUpon;
+	protected Consumer<Object> actUpon;
 
-	public static class TellWhat implements ActUpon {
+	public static class TellWhat implements Consumer<Object> {
 		@Override
-		public void act(Object source) {
+		public void accept(Object source) {
 			JOptionPane.showMessageDialog(null, "" + source, "alert", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 
-	public void setActingOnSource(ActUpon actUpon) {
+	public void setActingOnSource(Consumer<Object> actUpon) {
 		if (actUpon != null) {
 			this.actUpon = actUpon;
 		}
-	}
-
-	@FunctionalInterface
-	public interface ActUpon {
-		void act(Object source);
 	}
 
 	@Override
@@ -41,13 +38,7 @@ public class DataChangedKeeper implements DataChangedObserver {
 		dataChanged = true;
 
 		if (actUpon != null) {
-			actUpon.act(source);
-		}
-	}
-
-	public void actionOnChangeXXX(boolean condition, Object source) {
-		if (condition) {
-			JOptionPane.showMessageDialog(null, "" + source, "alert", JOptionPane.INFORMATION_MESSAGE);
+			actUpon.accept(source);
 		}
 	}
 

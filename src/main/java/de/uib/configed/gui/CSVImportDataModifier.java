@@ -145,7 +145,7 @@ public class CSVImportDataModifier {
 		return model;
 	}
 
-	private class CSVFileDataUpdater implements MapBasedUpdater {
+	private static class CSVFileDataUpdater implements MapBasedUpdater {
 		private String csvFile;
 		private GenTableModel model;
 		private CSVFormat format;

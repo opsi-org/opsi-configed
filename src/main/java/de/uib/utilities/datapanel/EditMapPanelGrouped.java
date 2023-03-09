@@ -58,7 +58,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected NavigableMap<String, String> givenClasses;
 	protected NavigableSet<String> keyclasses;
 	protected Map<String, String> tooltips4Keys;
-	protected Map<String, AbstractEditMapPanel> partialPanels;
+	protected Map<String, DefaultEditMapPanel> partialPanels;
 	protected NavigableMap<String, Map<String, Object>> virtualLines;
 
 	protected int hGap = Globals.HGAP_SIZE / 2;
@@ -89,16 +89,16 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
 			boolean reloadable, NavigableMap<String, String> classesMap) {
 		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, classesMap,
-				(AbstractEditMapPanel.Actor) null);
+				(DefaultEditMapPanel.Actor) null);
 	}
 
 	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable, final AbstractEditMapPanel.Actor actor) {
+			boolean reloadable, final DefaultEditMapPanel.Actor actor) {
 		this(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, null, actor);
 	}
 
 	public EditMapPanelGrouped(TableCellRenderer tableCellRenderer, boolean keylistExtendible, boolean keylistEditable,
-			boolean reloadable, NavigableMap<String, String> classesMap, final AbstractEditMapPanel.Actor actor) {
+			boolean reloadable, NavigableMap<String, String> classesMap, final DefaultEditMapPanel.Actor actor) {
 		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable);
 		buildPanel();
 		this.actor = actor;

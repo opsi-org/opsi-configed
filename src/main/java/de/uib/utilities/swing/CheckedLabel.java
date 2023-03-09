@@ -51,7 +51,7 @@ public class CheckedLabel extends JPanel implements FocusListener {
 
 	protected List<ActionListener> myListeners;
 
-	protected class GeneralMouseListener extends MouseAdapter {
+	protected static class GeneralMouseListener extends MouseAdapter {
 		protected String source;
 
 		public GeneralMouseListener(String source) {

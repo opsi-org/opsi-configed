@@ -164,7 +164,6 @@ public class SelectionManager {
 	}
 
 	public List<String> selectClients() {
-		AbstractPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 
 		AbstractSelectOperation operation = getTopOperation();
 		if (operation == null) {
@@ -173,6 +172,8 @@ public class SelectionManager {
 		} else {
 			Logging.info("\n" + operation.printOperation(""));
 		}
+
+		AbstractPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 
 		boolean withMySQL = controller.isWithMySQL()
 				&& controller.getGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SEARCH_BY_SQL,

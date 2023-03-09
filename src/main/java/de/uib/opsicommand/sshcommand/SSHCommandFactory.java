@@ -105,7 +105,11 @@ public final class SSHCommandFactory {
 	/** SSHCommandFactory instance **/
 	private static SSHCommandFactory instance;
 
+	Set<String> allowedHosts = new HashSet<>();
+
 	SSHConnectExec connection;
+
+	String connectionState = NOT_CONNECTED;
 
 	/**
 	 * List<Map<String,Object>> list elements are commands with key value pairs
@@ -169,8 +173,6 @@ public final class SSHCommandFactory {
 		}
 	}
 
-	Set<String> allowedHosts = new HashSet<>();
-
 	public void setAllowedHosts(Collection<String> allowed) {
 		allowedHosts.addAll(allowed);
 	}
@@ -179,7 +181,7 @@ public final class SSHCommandFactory {
 		return allowedHosts;
 	}
 
-	private void addAditionalParamCommands() {
+	private static void addAditionalParamCommands() {
 
 		sshCommandsParam.add(new CommandOpsiPackageManagerInstall());
 		sshCommandsParam.add(new CommandOpsiPackageManagerUninstall());
@@ -511,8 +513,6 @@ public final class SSHCommandFactory {
 			}
 		}.start();
 	}
-
-	String connectionState = NOT_CONNECTED;
 
 	public SSHConnect getConnection() {
 		return connection;

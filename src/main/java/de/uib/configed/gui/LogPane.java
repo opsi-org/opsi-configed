@@ -431,7 +431,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
-	protected class AdaptingSlider extends JSlider implements ChangeListener {
+	protected static class AdaptingSlider extends JSlider implements ChangeListener {
 
 		int min;
 		int max;
@@ -483,7 +483,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	// We create this class because the JTextPane should be editable only to show the caret position,
 	// but then you should not be able to change anything in the Text...
-	protected class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
+	protected static class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
 		ImmutableDefaultStyledDocument() {
 			super();
 		}
@@ -725,7 +725,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	}
 
-	private class StringBlock {
+	private static class StringBlock {
 		String s;
 		int iEnd;
 		private int contentStart;

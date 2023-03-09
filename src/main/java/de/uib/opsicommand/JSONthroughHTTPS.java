@@ -238,7 +238,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	}
 
 	// http://stackoverflow.com/questions/27075678/get-ssl-version-used-in-httpsurlconnection-java
-	private class SecureSSLSocketFactory extends SSLSocketFactory {
+	private static class SecureSSLSocketFactory extends SSLSocketFactory {
 		private final SSLSocketFactory delegate;
 		private HandshakeCompletedListener handshakeListener;
 
@@ -343,7 +343,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 	}
 
-	public class MyHandshakeCompletedListener implements HandshakeCompletedListener {
+	public static class MyHandshakeCompletedListener implements HandshakeCompletedListener {
 		@Override
 		public void handshakeCompleted(HandshakeCompletedEvent event) {
 			SSLSession session = event.getSession();
@@ -621,7 +621,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	}
 
 	@SuppressWarnings("java:S5527")
-	private class DullHostnameVerifier implements HostnameVerifier {
+	private static class DullHostnameVerifier implements HostnameVerifier {
 		@Override
 		public boolean verify(String hostname, SSLSession session) {
 			/* We disable hostname verification */

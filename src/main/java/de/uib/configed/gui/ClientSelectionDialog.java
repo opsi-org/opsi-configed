@@ -1212,7 +1212,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		HOST_GROUP, SOFTWARE_GROUP, PROPERTIES_GROUP, SOFTWARE_WITH_PROPERTIES_GROUP, SW_AUDIT_GROUP, HARDWARE_GROUP
 	}
 
-	private class ComplexGroup {
+	private static class ComplexGroup {
 		private GroupType type;
 		private IconAsButton removeButton;
 		private IconAsButton negateButton;

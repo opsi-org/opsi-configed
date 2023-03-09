@@ -69,7 +69,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	protected boolean trustOnlyOnce;
 	protected boolean trustAlways;
 
-	class JSONCommunicationException extends Exception {
+	static class JSONCommunicationException extends Exception {
 		JSONCommunicationException(String message) {
 			super(message);
 		}

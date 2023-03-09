@@ -101,7 +101,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		getSelectionModel().setValueIsAdjusting(false);
 	}
 
-	class MyListCellRenderer extends DefaultListCellRenderer {
+	static class MyListCellRenderer extends DefaultListCellRenderer {
 		private static final int FILL_LENGTH = 30;
 
 		Map<String, Map<String, Object>> extendedInfo;

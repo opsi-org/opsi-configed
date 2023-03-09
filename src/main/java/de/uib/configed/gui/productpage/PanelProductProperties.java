@@ -28,7 +28,7 @@ import javax.swing.event.ListSelectionEvent;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.utilities.datapanel.AbstractEditMapPanel;
+import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
@@ -44,7 +44,7 @@ public class PanelProductProperties extends JSplitPane {
 	// right pane
 	private ProductInfoPane infoPane;
 	protected PanelEditDepotProperties panelEditProperties;
-	public AbstractEditMapPanel propertiesPanel;
+	public DefaultEditMapPanel propertiesPanel;
 
 	protected ConfigedMain mainController;
 

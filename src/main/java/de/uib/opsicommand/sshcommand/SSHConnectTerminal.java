@@ -69,7 +69,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		return null;
 	}
 
-	class MyOutputPrinter extends PrintStream {
+	private static class MyOutputPrinter extends PrintStream {
 		SSHConnectionTerminalDialog theDialog;
 
 		MyOutputPrinter(SSHConnectionTerminalDialog dialog, OutputStream out) {

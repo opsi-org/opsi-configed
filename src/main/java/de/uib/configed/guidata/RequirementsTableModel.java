@@ -207,7 +207,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		return new MyTableCellRenderer();
 	}
 
-	protected class MyTableCellRenderer extends DefaultTableCellRenderer {
+	protected static class MyTableCellRenderer extends DefaultTableCellRenderer {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
@@ -283,7 +283,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 	}
 
-	protected class MyTableCellRendererWarning extends DefaultTableCellRenderer {
+	protected static class MyTableCellRendererWarning extends DefaultTableCellRenderer {
 		MyWarningColorizer colorizer = new MyWarningColorizer();
 
 		@Override
