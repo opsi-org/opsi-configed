@@ -361,6 +361,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 	// with this enum type we build a state model, which target shall be edited
 
+	private int buildPclistTableModelCounter;
+
+	private int reloadCounter;
+
+	boolean sessioninfoFinished;
+
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
 			ConfigedMain.host = host;
@@ -1561,8 +1567,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return result;
 	}
 
-	private int buildPclistTableModelCounter;
-
 	protected TableModel buildClientListTableModel(boolean rebuildTree) {
 		Logging.debug(this, " --------- buildPclistTableModel rebuildTree " + rebuildTree);
 		DefaultTableModel model = new DefaultTableModel() {
@@ -2072,8 +2076,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setRebuiltClientListTableModel(restoreSortKeys, true, selectionPanel.getSelectedSet());
 	}
-
-	private int reloadCounter;
 
 	protected void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
 			Set<String> selectValues) {
@@ -4225,8 +4227,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}.start();
 	}
 
-	boolean sessioninfoFinished;
-
 	public void getSessionInfo() {
 		final boolean onlySelectedClients = (selectedClients != null) && (selectedClients.length > 0);
 
@@ -4630,7 +4630,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private static abstract class AbstractErrorListProducer extends Thread {
+	private abstract static class AbstractErrorListProducer extends Thread {
 		String title;
 
 		AbstractErrorListProducer(String specificPartOfTitle) {

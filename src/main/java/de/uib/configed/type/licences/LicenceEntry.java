@@ -59,25 +59,6 @@ public class LicenceEntry extends TreeMap<String, Object> {
 		return KEYS;
 	}
 
-	private String translateTypeFromService(String servicetype) {
-		switch (servicetype) {
-		case VOLUME_SERVICE:
-			return VOLUME;
-		case OEM_SERVICE:
-			return OEM;
-		case RETAIL_SERVICE:
-			return RETAIL;
-		case CONCURRENT_SERVICE:
-			return CONCURRENT;
-		default:
-			Logging.warning(this, "no case found for servicetype in translateTypeFromService");
-			break;
-		}
-
-		Logging.warning(this, "illlegal servicetype " + servicetype);
-		return "";
-	}
-
 	public LicenceEntry(Map<String, Object> importedEntry) {
 		super(importedEntry);
 		if (importedEntry.get(ID_SERVICE_KEY) != null) {
@@ -106,6 +87,25 @@ public class LicenceEntry extends TreeMap<String, Object> {
 		if (importedEntry.get(TYPE_SERVICE_KEY) != null) {
 			super.put(TYPE_KEY, translateTypeFromService((String) importedEntry.get(TYPE_SERVICE_KEY)));
 		}
+	}
+
+	private String translateTypeFromService(String servicetype) {
+		switch (servicetype) {
+		case VOLUME_SERVICE:
+			return VOLUME;
+		case OEM_SERVICE:
+			return OEM;
+		case RETAIL_SERVICE:
+			return RETAIL;
+		case CONCURRENT_SERVICE:
+			return CONCURRENT;
+		default:
+			Logging.warning(this, "no case found for servicetype in translateTypeFromService");
+			break;
+		}
+
+		Logging.warning(this, "illlegal servicetype " + servicetype);
+		return "";
 	}
 
 	public String getId() {

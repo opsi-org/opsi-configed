@@ -13,14 +13,6 @@ public class ProductState extends HashMap<String, String> {
 
 	private static ProductState defaultProductState;
 
-	public static ProductState getDefaultProductState() {
-		if (defaultProductState == null) {
-			defaultProductState = new ProductState(null);
-		}
-
-		return defaultProductState;
-	}
-
 	public static final List<String> SERVICE_KEYS = List.of("modificationTime", "productId", "productVersion",
 			"packageVersion", "targetConfiguration", "lastAction", "installationStatus", "actionRequest",
 			"actionProgress", "actionResult", "priority", "actionSequence");
@@ -119,6 +111,18 @@ public class ProductState extends HashMap<String, String> {
 		key2servicekey.put(KEY_LAST_STATE_CHANGE, "modificationTime");
 	}
 
+	public ProductState(Map<String, String> retrievedState) {
+		this(retrievedState, true);
+	}
+
+	public static ProductState getDefaultProductState() {
+		if (defaultProductState == null) {
+			defaultProductState = new ProductState(null);
+		}
+
+		return defaultProductState;
+	}
+
 	private void readRetrieved() {
 
 		put(KEY_PRODUCT_ID, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_ID)));
@@ -153,10 +157,6 @@ public class ProductState extends HashMap<String, String> {
 		if (transform) {
 			setTransforms();
 		}
-	}
-
-	public ProductState(Map<String, String> retrievedState) {
-		this(retrievedState, true);
 	}
 
 	@Override

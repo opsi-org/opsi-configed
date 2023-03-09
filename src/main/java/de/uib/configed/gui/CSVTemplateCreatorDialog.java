@@ -373,7 +373,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			add(scroll);
 		}
 
-		private class CheckBoxList extends JList<JCheckBox> {
+		private static class CheckBoxList extends JList<JCheckBox> {
 			protected Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
 			public CheckBoxList() {

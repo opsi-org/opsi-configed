@@ -23,9 +23,6 @@ import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.logging.Logging;
 
 public final class PersistenceControllerFactory {
-	// private constructor to hide the implicit public one
-	private PersistenceControllerFactory() {
-	}
 
 	private static AbstractPersistenceController staticPersistControl;
 
@@ -36,6 +33,10 @@ public final class PersistenceControllerFactory {
 	public static String directmethodcall = "";
 
 	public static final String DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE = "cleanupAuditsoftware";
+
+	// private constructor to hide the implicit public one
+	private PersistenceControllerFactory() {
+	}
 
 	/**
 	 * This creation method constructs a new Controller instance and lets a

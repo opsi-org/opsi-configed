@@ -7,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public abstract class AbstractExecutioner {
+
+	private static AbstractExecutioner nonExecutioner;
+
 	public abstract ConnectionState getConnectionState();
 
 	public abstract void setConnectionState(ConnectionState state);
@@ -77,13 +80,11 @@ public abstract class AbstractExecutioner {
 
 	public abstract String getStringValueFromItem(Object s);
 
-	private static AbstractExecutioner none;
-
 	public static AbstractExecutioner getNoneExecutioner() {
-		if (none == null) {
-			none = new NONEexecutioner();
+		if (nonExecutioner == null) {
+			nonExecutioner = new NONEexecutioner();
 		}
 
-		return none;
+		return nonExecutioner;
 	}
 }

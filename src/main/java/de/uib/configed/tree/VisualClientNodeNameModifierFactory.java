@@ -3,7 +3,7 @@ package de.uib.configed.tree;
 public class VisualClientNodeNameModifierFactory {
 	VisualClientNodeNameModifier mod;
 
-	class SuppressTerminatingUnderscores implements VisualClientNodeNameModifier {
+	static class SuppressTerminatingUnderscores implements VisualClientNodeNameModifier {
 		@Override
 		public String modify(final String in) {
 			if (in == null) {

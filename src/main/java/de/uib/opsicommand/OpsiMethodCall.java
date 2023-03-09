@@ -13,20 +13,21 @@ import org.json.JSONObject;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiMethodCall {
+
+	public static final boolean BACKGROUND_DEFAULT = true;
+	protected static final int DEFAULT_JSON_ID = 1;
+	private static String extendRpcPath = "extend/configed";
+	private static final List<String> collectedCalls = new ArrayList<>();
+	public static int maxCollectSize = -1;
+
 	private Map<String, Object> theCall;
 	private String methodname;
 
 	private Object[] parameters;
-	public static final boolean BACKGROUND_DEFAULT = true;
+
 	private boolean background;
 
-	protected static final int DEFAULT_JSON_ID = 1;
-
-	private static String extendRpcPath = "extend/configed";
 	private String rpcPath = "";
-
-	private static final List<String> collectedCalls = new ArrayList<>();
-	public static int maxCollectSize = -1;
 
 	/**
 	 * @param rpcPath    subpath for the rpc call (not including "/rpc/")
@@ -51,15 +52,8 @@ public class OpsiMethodCall {
 	 * @param parameters the parameters for the method
 	 */
 	public OpsiMethodCall(String methodname, Object[] parameters) {
-		this.methodname = methodname;
-		this.parameters = parameters;
-		theCall = new HashMap<>();
-		theCall.put("method", methodname);
-		theCall.put("params", parameters);
-		theCall.put("rpcpath", rpcPath);
-		this.background = false;
-		collectCall();
 
+		this(methodname, parameters, false);
 	}
 
 	private void collectCall() {

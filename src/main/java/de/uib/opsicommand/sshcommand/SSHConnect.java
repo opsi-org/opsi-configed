@@ -34,25 +34,31 @@ import de.uib.utilities.logging.Logging;
  * This Class creates a SSH connection to a server.
  **/
 public class SSHConnect {
+	/** Port for server to connected as **/
+	public static final String DEFAULT_PORT = "22";
+	public static final String PORT_SSH = DEFAULT_PORT;
+
+	private static int successfulConnectObservedCount;
+	protected static Session session;
+
 	/** Hostname for server to connected with **/
 	protected String commandInfoName;
 	protected String host;
 	/** Username for server to connected as **/
 	protected String user;
-	/** Port for server to connected as **/
-	public static final String DEFAULT_PORT = "22";
-	public static final String PORT_SSH = DEFAULT_PORT;
+
 	/** Password for server and username **/
 	protected String password;
 	/** If needed the sudo password **/
 	protected String pwSudo;
 	/** If needed the root password **/
 	protected String pwRoot;
-	protected static Session session;
 	protected ConfigedMain main;
 
 	SSHConnectionInfo connectionInfo;
-	private static int successfulConnectObservedCount;
+
+	private int retriedTimesJschex = 1;
+	private int retriedTimesAuth = 1;
 
 	/**
 	 * Instanz for SSH connection {@link de.uib.configed.ConfigedMain}
@@ -303,9 +309,6 @@ public class SSHConnect {
 		}
 		return retriedTimes;
 	}
-
-	private int retriedTimesJschex = 1;
-	private int retriedTimesAuth = 1;
 
 	/**
 	 * Get current session

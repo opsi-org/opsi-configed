@@ -795,7 +795,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		return info;
 	}
 
-	private SelectionManager.OperationWithStatus getInformation(ComplexGroup group) {
+	private static SelectionManager.OperationWithStatus getInformation(ComplexGroup group) {
 		SelectionManager.OperationWithStatus info = new SelectionManager.OperationWithStatus();
 		info.operation = null;
 		info.parenthesisOpen = group.openParenthesis.isActivated();

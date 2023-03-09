@@ -226,6 +226,25 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected List<String> hwInfoClassNames;
 	protected List<String> hwTableNames;
 
+	// package visibility, the constructor is called by PersistenceControllerFactory
+	OpsiserviceNOMPersistenceController(String server, String user, String password) {
+		Logging.info(this, "start construction, \nconnect to " + server + " as " + user);
+		this.connectionServer = server;
+		this.user = user;
+
+		Logging.debug(this, "create");
+
+		hostInfoCollections = new DefaultHostInfoCollections();
+
+		exec = new JSONthroughHTTPS(server, user, password);
+
+		execs.put(server, exec);
+
+		hwAuditConf = new HashMap<>();
+
+		initMembers();
+	}
+
 	class HostGroups extends TreeMap<String, Map<String, String>> {
 		public HostGroups(Map<String, Map<String, String>> source) {
 			super(source);
@@ -872,25 +891,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			mapPCInfomap.put(hostId, hostInfo);
 			depot2Host2HostInfo.get(depotId).put(hostId, hostInfo);
 		}
-	}
-
-	// package visibility, the constructor is called by PersistenceControllerFactory
-	OpsiserviceNOMPersistenceController(String server, String user, String password) {
-		Logging.info(this, "start construction, \nconnect to " + server + " as " + user);
-		this.connectionServer = server;
-		this.user = user;
-
-		Logging.debug(this, "create");
-
-		hostInfoCollections = new DefaultHostInfoCollections();
-
-		exec = new JSONthroughHTTPS(server, user, password);
-
-		execs.put(server, exec);
-
-		hwAuditConf = new HashMap<>();
-
-		initMembers();
 	}
 
 	protected void initMembers() {
