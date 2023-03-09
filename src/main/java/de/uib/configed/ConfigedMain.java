@@ -2742,8 +2742,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.debug(this, "setLocalbootProductsPage() with filter "
 				+ Configed.savedStates.saveLocalbootproductFilter.deserialize());
 
-		Set<String> savedFilter = Configed.savedStates.saveLocalbootproductFilter.deserialize();
-
 		if (!setDepotRepresentative()) {
 			return false;
 		}
@@ -2806,6 +2804,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
 
+				Set<String> savedFilter = Configed.savedStates.saveLocalbootproductFilter.deserialize();
+
 				(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
 
 				Logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
@@ -2828,8 +2828,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected boolean setNetbootProductsPage() {
-
-		Set<String> savedFilter = Configed.savedStates.saveNetbootproductFilter.deserialize();
 
 		if (!setDepotRepresentative()) {
 			return false;
@@ -2886,6 +2884,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 
 				Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
+
+				Set<String> savedFilter = Configed.savedStates.saveNetbootproductFilter.deserialize();
 
 				mainFrame.panelNetbootProductSettings.reduceToSet(savedFilter);
 
@@ -5196,11 +5196,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				groupSelectionIds, i);
 
 		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().equals("")) {
-			String newGroupName = choiceDialog.getResultString();
+
 			IconNode newGroupNode = treeClients.makeSubgroupAt(null);
 			if (newGroupNode == null) {
 				return;
 			}
+
+			String newGroupName = choiceDialog.getResultString();
 
 			TreePath newGroupPath = treeClients.getPathToGROUPS().pathByAddingChild(newGroupNode);
 

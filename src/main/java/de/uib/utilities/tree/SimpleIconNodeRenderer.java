@@ -71,15 +71,12 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 
 			if (leaf) {
 				setIcon(node.getLeafIcon());
-			} else
-
-			{
+			} else {
 				if (expanded) {
 					setIcon(node.getOpenIcon());
 				} else {
 					setIcon(node.getClosedIcon());
 				}
-
 			}
 
 			if (!sel) {
@@ -91,6 +88,5 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		}
 
 		return this;
-
 	}
 }

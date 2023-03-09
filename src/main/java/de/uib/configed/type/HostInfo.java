@@ -546,11 +546,12 @@ public class HostInfo {
 		}
 
 		Logging.info(this, "showAndSave client, source " + client + ", " + sourceOfChanges);
-		int row = findRow(selectionPanel, client);
 
 		if (sourceOfChanges == null) {
 			return;
 		}
+
+		int row = findRow(selectionPanel, client);
 
 		if (sourceOfChanges.get(CLIENT_DESCRIPTION_KEY) != null) {
 			clientDescription = sourceOfChanges.get(CLIENT_DESCRIPTION_KEY);

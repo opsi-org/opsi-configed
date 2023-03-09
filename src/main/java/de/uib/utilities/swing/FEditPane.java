@@ -93,7 +93,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		textpane.setHighlighter(highlighter);
 		setDataChanged(false);
 
-		cmdLauncher = new de.uib.utilities.script.CmdLauncher();
+		cmdLauncher = new CmdLauncher();
 		if (Globals.isWindows()) {
 			cmdLauncher.setPrefix(WINDOWS_LINK_INTERPRETER);
 		} else {

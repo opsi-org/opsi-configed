@@ -51,7 +51,6 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
-		boolean result = true;
 		Logging.debug(this, "----------- can import ??");
 
 		if (Globals.isGlobalReadOnly()) {
@@ -111,6 +110,8 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		Logging.debug(this, "canImport, dropOnThis  path " + Arrays.toString(dropObjectPath));
 		Logging.debug(this, "canImport source path " + Arrays.toString(sourceObjectPath));
+
+		boolean result = true;
 
 		if (targetNode == null || targetNode.isImmutable() || (sourceGroupNode != null && !targetNode.allowsSubGroups())
 				|| (sourceGroupNode == null && targetNode.allowsOnlyGroupChilds()) || (sourceGroupNode != null // group

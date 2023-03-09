@@ -1,5 +1,7 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
+import java.sql.Date;
+
 import de.uib.utilities.logging.Logging;
 
 public abstract class AbstractOpsiDataDateMatcher extends AbstractOpsiDataMatcher {
@@ -11,11 +13,10 @@ public abstract class AbstractOpsiDataDateMatcher extends AbstractOpsiDataMatche
 	@Override
 	protected boolean checkData(final String realdata) {
 
-		java.sql.Date date = null;
-		java.sql.Date realdate = null;
+		Date date = null;
 
 		try {
-			date = java.sql.Date.valueOf(data);
+			date = Date.valueOf(data);
 		} catch (Exception ex) {
 			Logging.debug(this, "OpsiDataDateMatcher data is not a date! " + date + " " + ex);
 			return false;
@@ -43,9 +44,10 @@ public abstract class AbstractOpsiDataDateMatcher extends AbstractOpsiDataMatche
 		}
 
 		// check if we have to interpret variables
+		Date realdate = null;
 
 		try {
-			realdate = java.sql.Date.valueOf(realD);
+			realdate = Date.valueOf(realD);
 			return compare(date, realdate);
 		} catch (Exception ex) {
 			Logging.debug(this, "data is not a date! " + realdata + " " + ex);
@@ -54,5 +56,5 @@ public abstract class AbstractOpsiDataDateMatcher extends AbstractOpsiDataMatche
 
 	}
 
-	protected abstract boolean compare(java.sql.Date date, java.sql.Date realdate);
+	protected abstract boolean compare(Date date, Date realdate);
 }

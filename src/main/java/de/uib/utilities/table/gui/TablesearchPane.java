@@ -52,6 +52,10 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
 	private static final int BLINK_RATE = 0;
 
+	public static final int FULL_TEXT_SEARCH = 0;
+	public static final int START_TEXT_SEARCH = 1;
+	public static final int REGEX_SEARCH = 2;
+
 	JFrame masterFrame = ConfigedMain.getMainFrame();
 
 	JTextField fieldSearch;
@@ -92,10 +96,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
 	}
 
-	public static final int FULL_TEXT_SEARCH = 0;
-	public static final int START_TEXT_SEARCH = 1;
-	public static final int REGEX_SEARCH = 2;
-
 	protected int preferredColumnIndex;
 
 	protected boolean withRegEx = true;
@@ -120,6 +120,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	protected SaveInteger saveSearchpaneAllColumnsSearch;
 	protected SaveInteger saveSearchpaneFullTextSearch;
 
+	private boolean filteredMode;
+
 	/**
 	 * main constructor
 	 * 
@@ -143,32 +145,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		init();
 
 		this.targetModel = targetModel;
-	}
-
-	private void init() {
-		setSearchFieldsAll();
-		initComponents();
-		setNarrow(false);
-	}
-
-	/**
-	 * sets frame to return to e.g. from option dialogs
-	 * 
-	 * @param javax.swing.JFrame
-	 */
-	public void setMasterFrame(JFrame masterFrame) {
-		this.masterFrame = masterFrame;
-	}
-
-	private void initSavedStates(String savedStatesObject) {
-		if (savedStatesObject != null) {
-			saveSearchpaneProgressiveSearch = new SaveInteger(savedStatesObject + ".progressiveSearch", 0,
-					Configed.savedStates);
-			saveSearchpaneAllColumnsSearch = new SaveInteger(savedStatesObject + ".allColumnsSearch", 0,
-					Configed.savedStates);
-			saveSearchpaneFullTextSearch = new SaveInteger(savedStatesObject + ".fullTextSearch", 0,
-					Configed.savedStates);
-		}
 	}
 
 	/**
@@ -228,6 +204,32 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		this(null, null);
 	}
 
+	private void init() {
+		setSearchFieldsAll();
+		initComponents();
+		setNarrow(false);
+	}
+
+	/**
+	 * sets frame to return to e.g. from option dialogs
+	 * 
+	 * @param javax.swing.JFrame
+	 */
+	public void setMasterFrame(JFrame masterFrame) {
+		this.masterFrame = masterFrame;
+	}
+
+	private void initSavedStates(String savedStatesObject) {
+		if (savedStatesObject != null) {
+			saveSearchpaneProgressiveSearch = new SaveInteger(savedStatesObject + ".progressiveSearch", 0,
+					Configed.savedStates);
+			saveSearchpaneAllColumnsSearch = new SaveInteger(savedStatesObject + ".allColumnsSearch", 0,
+					Configed.savedStates);
+			saveSearchpaneFullTextSearch = new SaveInteger(savedStatesObject + ".fullTextSearch", 0,
+					Configed.savedStates);
+		}
+	}
+
 	public void setWithNavPane(boolean b) {
 		navPane.setVisible(b);
 		withNavPane = b;
@@ -283,8 +285,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		checkmarkFullText.setEnabled(b);
 		fieldSearch.setEnabled(b);
 	}
-
-	private boolean filteredMode;
 
 	private boolean disabledSinceWeAreInFilteredMode() {
 		if (filteredMode) {
@@ -732,8 +732,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private Finding stringContainsParts(final String s, String[] parts) {
 		Finding result = new Finding();
 
-		String remainder = s;
-
 		if (s == null) {
 			return result;
 		}
@@ -751,6 +749,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		int i = 0;
 		boolean searching = true;
 		Finding partSearch;
+
+		String remainder = s;
 
 		while (searching) {
 
@@ -865,10 +865,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 		// dont start searching for single chars
 
-		String[] valParts = val.split(" ");
-
-		boolean found = false;
-
 		int viewrow = 0;
 
 		if (startviewrow > 0) {
@@ -888,6 +884,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				return -1;
 			}
 		}
+
+		String[] valParts = val.split(" ");
+
+		boolean found = false;
 
 		while (!found && viewrow < targetModel.getRowCount()) {
 			if (combineCols) {

@@ -151,10 +151,7 @@ public class ProductView implements View {
 		products.addAll(ProductData.getFailedProducts().keySet());
 		products.addAll(ProductData.getUnusedProducts().keySet());
 
-		final FilteredList<Product> filteredData = new FilteredList<>(FXCollections.observableArrayList(products));
-
 		final ObjectProperty<Predicate<Product>> productIdFilter = new SimpleObjectProperty<>();
-		final ObjectProperty<Predicate<Product>> productStatusFilter = new SimpleObjectProperty<>();
 
 		productIdFilter.bind(Bindings.createObjectBinding(() -> (Product product) -> {
 			if (productSearchbarTextField.getText() == null) {
@@ -163,6 +160,9 @@ public class ProductView implements View {
 
 			return product.getId().contains(productSearchbarTextField.getText());
 		}, productSearchbarTextField.textProperty()));
+
+		final ObjectProperty<Predicate<Product>> productStatusFilter = new SimpleObjectProperty<>();
+
 		productStatusFilter.bind(Bindings.createObjectBinding(() -> (Product product) -> {
 			if (productStatusComboBox.getValue() == null || productStatusComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
@@ -176,6 +176,8 @@ public class ProductView implements View {
 					|| (productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.unused"))
 							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.unused")));
 		}, productStatusComboBox.valueProperty()));
+
+		final FilteredList<Product> filteredData = new FilteredList<>(FXCollections.observableArrayList(products));
 
 		filteredData.predicateProperty().bind(Bindings.createObjectBinding(
 				() -> productIdFilter.get().and(productStatusFilter.get()), productIdFilter, productStatusFilter));

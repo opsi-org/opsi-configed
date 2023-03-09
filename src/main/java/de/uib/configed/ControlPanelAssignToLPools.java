@@ -442,8 +442,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		thePanel.panelLicencepools.addPopupItem(menuItemAddPool);
 
-		// special treatment of columns
-		TableColumn col;
 		thePanel.panelLicencepools.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// updates
@@ -527,7 +525,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.panelProductId2LPool.addPopupItem(menuItemAddRelationProductId2LPool);
 
 		// special treatment of columns
-		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(0);
+		TableColumn col = thePanel.panelProductId2LPool.getColumnModel().getColumn(0);
 		JComboBox<String> comboLP0 = new JComboBox<>();
 		comboLP0.setFont(Globals.defaultFontBig);
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
@@ -713,8 +711,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 								Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicencePool "
 										+ removeKeysFromOtherLicencePool);
 
-								List<String> oldSWListForPool = persist.getSoftwareListByLicencePool(poolId);
-
 								boolean result = true;
 
 								if (removeKeysFromOtherLicencePool != null) {
@@ -762,6 +758,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 										"sendUpdate, we have software ids "
 												+ persist.getSoftwareListByLicencePool(poolId).size() + " they are "
 												+ persist.getSoftwareListByLicencePool(poolId));
+
+								List<String> oldSWListForPool = persist.getSoftwareListByLicencePool(poolId);
+
 								// remove all old assignements
 								for (String swId : oldSWListForPool) {
 									Logging.info(this, "sendUpdate remove " + swId + " from Software2LicencePool ");

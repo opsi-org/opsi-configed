@@ -711,7 +711,6 @@ public class JTableSelectionPanel extends JPanel
 		// with another data configuration, it could be combined with regex
 
 		String val = value.toString();
-		String valLower = val.toLowerCase();
 
 		// get pattern for regex search mode if needed
 		Pattern pattern = null;
@@ -727,6 +726,8 @@ public class JTableSelectionPanel extends JPanel
 				return -1;
 			}
 		}
+
+		String valLower = val.toLowerCase();
 
 		List<String> alternativeWords = getWords(valLower);
 		lastCountOfSearchWords = alternativeWords.size();

@@ -94,22 +94,6 @@ public class SWAuditEntry extends AbstractTableEntry {
 
 	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
 
-	public static void setLocale() {
-
-		locale.put(ID, "ID");
-		locale.put(NAME, Configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
-		locale.put(VERSION, Configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
-
-		locale.put(ARCHITECTURE, Configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
-		locale.put(LANGUAGE, Configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
-
-		locale.put(WINDOWS_SOFTWARE_ID, Configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
-	}
-
-	public static List<String> getDisplayKeys() {
-		return KEYS_FOR_GUI_TABLES;
-	}
-
 	private String lastseen = "";
 	private String ident;
 	private String identReduced;
@@ -153,7 +137,22 @@ public class SWAuditEntry extends AbstractTableEntry {
 		}
 
 		super.put(ID, ident);
+	}
 
+	public static void setLocale() {
+
+		locale.put(ID, "ID");
+		locale.put(NAME, Configed.getResourceValue("PanelSWInfo.tableheader_displayName"));
+		locale.put(VERSION, Configed.getResourceValue("PanelSWInfo.tableheader_displayVersion"));
+
+		locale.put(ARCHITECTURE, Configed.getResourceValue("PanelSWInfo.tableheader_architecture"));
+		locale.put(LANGUAGE, Configed.getResourceValue("PanelSWInfo.tableheader_displayLanguage"));
+
+		locale.put(WINDOWS_SOFTWARE_ID, Configed.getResourceValue("PanelSWInfo.tableheader_softwareId"));
+	}
+
+	public static List<String> getDisplayKeys() {
+		return KEYS_FOR_GUI_TABLES;
 	}
 
 	public static String getDisplayKey(int i) {

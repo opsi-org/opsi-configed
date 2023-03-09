@@ -146,8 +146,6 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 	private CommandWget getWgetCommand() {
 		String d;
-		String u = "";
-		String additionalProds = "";
 		String wgetDir = ((String) jComboBoxAutoCompletion.getSelectedItem());
 
 		String tempTextFieldDir = "<" + Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory")
@@ -162,6 +160,9 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.jLabelWgetUrl")
 						.replace(":", "")
 				+ ">";
+
+		String u = "";
+
 		if (!jTextFieldURL.getText().equals("") || !jTextFieldURL.getText().equals(tempTextFieldURL)) {
 			u = jTextFieldURL.getText();
 		} else {
@@ -170,6 +171,8 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 		mainProduct = u;
 		mainDir = d;
+
+		String additionalProds = "";
 
 		if (jCheckBoxIncludeZSync.isSelected() && additionalProds.contains(".opsi")) {
 			additionalProds = " " + u.replace(".opsi", ".opsi.zsync");

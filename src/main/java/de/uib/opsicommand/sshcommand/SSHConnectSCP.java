@@ -220,8 +220,8 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 		@Override
 		public String doInBackground() throws SocketException {
-			StringBuilder buf = new StringBuilder();
 			File sourcefile = new File(command.getFullSourcePath());
+
 			try (FileInputStream fis = new FileInputStream(sourcefile)) {
 				Logging.info(this, "doInBackground getSession " + getSession());
 
@@ -260,7 +260,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 					if (outputDialog != null) {
 						outputDialog.setStatusFinish();
 					}
-					return null;
+					return "";
 				}
 
 				setDialog(outputDialog);
@@ -293,7 +293,8 @@ public class SSHConnectSCP extends SSHConnectExec {
 				outputDialog.setStatusFinish();
 				disconnect();
 			}
-			return buf.toString();
+
+			return "";
 		}
 
 		@Override

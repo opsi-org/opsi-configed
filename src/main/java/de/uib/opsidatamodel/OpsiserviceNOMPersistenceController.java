@@ -3446,7 +3446,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public Map<String, String> getLogfiles(String clientId, String logtype) {
-		String[] logtypes = Globals.getLogTypes();
 
 		if (logfiles == null) {
 			getEmptyLogfiles();
@@ -3459,6 +3458,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		Logging.debug(this, "------------- getLogfile logtye " + logtype);
+
+		String[] logtypes = Globals.getLogTypes();
 
 		String s = "";
 		try {
@@ -3851,7 +3852,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return null;
 		}
 
-		Map<String, List<Map<String, String>>> result = new HashMap<>();
 		Map<String, List<Map<String, String>>> states = null;
 
 		states = getLocalBootProductStates(clientIds);
@@ -3860,7 +3860,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return states;
 		}
 
-		return result;
+		return new HashMap<>();
 	}
 
 	protected Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds) {

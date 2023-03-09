@@ -245,11 +245,12 @@ public final class ProductData {
 
 	public static void retrieveUnusedProducts() {
 		depots.forEach((String depot) -> {
-			Map<Product, Product> unusedProductsList = new HashMap<>();
 
 			if (clientUnusedProductsList.get(depot) == null) {
 				return;
 			}
+
+			Map<Product, Product> unusedProductsList = new HashMap<>();
 
 			for (Map.Entry<String, List<String>> entry : clientUnusedProductsList.get(depot).entrySet()) {
 				String hostname = entry.getKey();

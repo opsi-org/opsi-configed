@@ -165,9 +165,6 @@ public class SelectionManager {
 
 	public List<String> selectClients() {
 		AbstractPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
-		boolean withMySQL = controller.isWithMySQL()
-				&& controller.getGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SEARCH_BY_SQL,
-						AbstractPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		AbstractSelectOperation operation = getTopOperation();
 		if (operation == null) {
@@ -176,6 +173,10 @@ public class SelectionManager {
 		} else {
 			Logging.info("\n" + operation.printOperation(""));
 		}
+
+		boolean withMySQL = controller.isWithMySQL()
+				&& controller.getGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SEARCH_BY_SQL,
+						AbstractPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		if (withMySQL) {
 			long startTime = System.nanoTime();

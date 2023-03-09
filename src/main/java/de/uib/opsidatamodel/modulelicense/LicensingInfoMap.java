@@ -879,13 +879,14 @@ public final class LicensingInfoMap {
 	 * @return list of modules for every possible warning state (4)
 	 */
 	public Map<String, List<String>> getWarnings() {
-		Map<String, List<String>> result = new HashMap<>();
 
 		if (currentCloseToLimitModuleList.isEmpty() && currentOverLimitModuleList.isEmpty()
 				&& currentTimeWarningModuleList.isEmpty() && currentTimeOverModuleList.isEmpty()
 				&& futureCloseToLimitModuleList.isEmpty() && futureOverLimitModuleList.isEmpty()) {
 			return new HashMap<>();
 		}
+
+		Map<String, List<String>> result = new HashMap<>();
 
 		result.put(CURRENT_OVER_LIMIT, currentOverLimitModuleList);
 		result.put(CURRENT_CLOSE_TO_LIMIT, currentCloseToLimitModuleList);

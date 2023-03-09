@@ -126,8 +126,6 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 
 		Logging.debug(this, "checkAccepted clickNode.getParent() " + clickNode.getParent());
 
-		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) clickNode.getParent();
-
 		if (nodeName.equals(ClientTree.ALL_CLIENTS_NAME)
 				|| (((DefaultMutableTreeNode) clickNode.getParent()).getUserObject().toString()
 						.equals(ClientTree.ALL_CLIENTS_NAME) && !nodeName.equals(ClientTree.ALL_GROUPS_NAME))) {
@@ -143,6 +141,8 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		menuItemRemoveElements.setVisible(false);
 
 		int numberVisibleItems = 0;
+
+		DefaultMutableTreeNode parentNode = (DefaultMutableTreeNode) clickNode.getParent();
 
 		if (clickNode.getAllowsChildren()) {
 

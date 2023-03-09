@@ -456,7 +456,6 @@ public class DataStubRawData extends DataStubNOM {
 		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
 		StringBuilder cols = new StringBuilder("");
 
-		String deviceTable = AbstractPersistenceController.HW_INFO_DEVICE + hwClass;
 		String configTable = AbstractPersistenceController.HW_INFO_CONFIG + hwClass;
 
 		String lastseenCol = configTable + "." + AbstractPersistenceController.LAST_SEEN_COL_NAME;
@@ -505,6 +504,8 @@ public class DataStubRawData extends DataStubNOM {
 			Logging.info(this, "no columns found for hwClass " + hwClass);
 			return new HashMap<>();
 		}
+
+		String deviceTable = AbstractPersistenceController.HW_INFO_DEVICE + hwClass;
 
 		String colsS = cols.toString();
 		buf.append(colsS.substring(0, colsS.length() - 1));

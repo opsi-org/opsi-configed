@@ -491,9 +491,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	}
 
-	public void setColumnSelectionAllowed(boolean b)
-	// destroys search function
-	{
+	public void setColumnSelectionAllowed(boolean b) {
+		// destroys search function
+
 		theTable.setColumnSelectionAllowed(b);
 	}
 
@@ -1447,11 +1447,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	public boolean moveToKeyValue(String keyValue) {
 
-		boolean found = false;
-
 		if (keyValue == null) {
 			return false;
 		}
+
+		boolean found = false;
 
 		if (tableModel.getKeyCol() > -1) {
 			found = moveToValue(keyValue, tableModel.getKeyCol());
