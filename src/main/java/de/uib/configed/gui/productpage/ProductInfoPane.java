@@ -100,7 +100,9 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jLabelProductID.setFont(Globals.defaultFontStandardBold);
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
-		jLabelProductID.setBackground(null);
+		if (!ConfigedMain.OPSI_4_3) {
+			jLabelProductID.setBackground(null);
+		}
 
 		jLabelProductName.setFont(Globals.defaultFontBold);
 
@@ -111,17 +113,23 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jLabelProductVersion.setFont(Globals.defaultFontBold);
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
-		jLabelProductVersion.setBackground(null);
+		if (!ConfigedMain.OPSI_4_3) {
+			jLabelProductVersion.setBackground(null);
+		}
 
 		jTextAreaProductInfo.setFont(Globals.defaultFont);
-		jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.OPSI_4_3) {
+			jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		jScrollPaneProductInfo.setViewportView(jTextAreaProductInfo);
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		jTextAreaProductAdvice.setFont(Globals.defaultFont);
-		jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.OPSI_4_3) {
+			jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		jScrollPaneProductAdvice.setViewportView(jTextAreaProductAdvice);
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);

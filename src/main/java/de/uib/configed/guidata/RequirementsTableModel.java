@@ -15,6 +15,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -255,31 +256,34 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 			int kindOfRow = row % 3;
 
-			switch (kindOfRow) {
-			case 0:
-				cell.setBackground(Globals.BACKGROUND_COLOR_7);
-				break;
-			case 1:
-				cell.setBackground(Globals.BACKGROUND_COLOR_8);
-				break;
-			case 2:
-				cell.setBackground(Globals.BACKGROUND_COLOR_8);
-				break;
-			default:
-				Logging.warning(this, "no case found for kindOfRow in colorize");
-				break;
-			}
+			if (!ConfigedMain.OPSI_4_3) {
+				switch (kindOfRow) {
+				case 0:
+					cell.setBackground(Globals.BACKGROUND_COLOR_7);
+					break;
+				case 1:
+					cell.setBackground(Globals.BACKGROUND_COLOR_8);
+					break;
+				case 2:
+					cell.setBackground(Globals.BACKGROUND_COLOR_8);
+					break;
+				default:
+					Logging.warning(this, "no case found for kindOfRow in colorize");
+					break;
+				}
 
-			if (kindOfRow == 2 && col > 1) {
-				cell.setBackground(Globals.BACKGROUND_COLOR_4);
+				if (kindOfRow == 2 && col > 1) {
+					cell.setBackground(Globals.BACKGROUND_COLOR_4);
+				}
 			}
-
 		}
 	}
 
 	protected static class MyWarningColorizer {
 		public void colorize(Component cell) {
-			cell.setBackground(Globals.ACTION_COLOR);
+			if (!ConfigedMain.OPSI_4_3) {
+				cell.setBackground(Globals.ACTION_COLOR);
+			}
 		}
 	}
 

@@ -55,7 +55,9 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 		super.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		super.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			super.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 

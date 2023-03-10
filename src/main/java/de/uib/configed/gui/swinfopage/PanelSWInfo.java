@@ -226,7 +226,9 @@ public class PanelSWInfo extends JPanel {
 		JLabel labelWithMSUpdates = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates"));
 		JLabel labelWithMSUpdates2 = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates2"));
 
-		subPanelTitle.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			subPanelTitle.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		GroupLayout layoutSubPanelTitle = new GroupLayout(subPanelTitle);
 		subPanelTitle.setLayout(layoutSubPanelTitle);
@@ -278,7 +280,9 @@ public class PanelSWInfo extends JPanel {
 	private void buildPanel() {
 
 		labelSuperTitle.setOpaque(true);
-		labelSuperTitle.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.OPSI_4_3) {
+			labelSuperTitle.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		jTable = new JTable(voidTableModel, null);
 
@@ -299,7 +303,9 @@ public class PanelSWInfo extends JPanel {
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);
 		scrollPaneSWInfo = new JScrollPane(jTable);
-		scrollPaneSWInfo.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			scrollPaneSWInfo.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		GroupLayout layoutEmbed = new GroupLayout(this);
 		setLayout(layoutEmbed);

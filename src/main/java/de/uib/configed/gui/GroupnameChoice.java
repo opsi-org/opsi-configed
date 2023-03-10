@@ -16,6 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.SurroundPanel;
 import de.uib.utilities.swing.VerticalPositioner;
@@ -46,7 +47,10 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		groups = new XList(v);
 		groups.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		groups.setFont(Globals.defaultFontBig);
-		groups.setBackground(Globals.BACKGROUND_COLOR_3);
+
+		if (!ConfigedMain.OPSI_4_3) {
+			groups.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		groups.addListSelectionListener(this);
 

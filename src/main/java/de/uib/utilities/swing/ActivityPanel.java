@@ -57,17 +57,25 @@ public class ActivityPanel extends JPanel implements Runnable {
 	private void setState(int i) {
 		for (int j = 0; j < partPanels.size(); j++) {
 			setBorder(lineBorderActive);
-			partPanels.get(j).setBackground(colors[0]);
+			if (!ConfigedMain.OPSI_4_3) {
+				partPanels.get(j).setBackground(colors[0]);
+			}
 			if (i == INACTIVE) {
 				setBorder(lineBorderInactive);
-				partPanels.get(j).setBackground(Globals.BACKGROUND_COLOR_7);
+				if (!ConfigedMain.OPSI_4_3) {
+					partPanels.get(j).setBackground(Globals.BACKGROUND_COLOR_7);
+				}
 			} else {
 				setBorder(lineBorderActive);
-				partPanels.get(j).setBackground(Globals.backNimbus);
+				if (!ConfigedMain.OPSI_4_3) {
+					partPanels.get(j).setBackground(Globals.backNimbus);
+				}
 			}
 
 			if (j == i) {
-				partPanels.get(j).setBackground(colors[1]);
+				if (!ConfigedMain.OPSI_4_3) {
+					partPanels.get(j).setBackground(colors[1]);
+				}
 			}
 
 		}

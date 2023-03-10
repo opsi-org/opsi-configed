@@ -9,6 +9,7 @@ import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
@@ -30,7 +31,9 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		super.setFont(standard);
 		super.setForeground(Globals.lightBlack);
 		super.setTextSelectionColor(Globals.lightBlack);
-		super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
+		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
 		super.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
 	}
@@ -60,13 +63,14 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 				setFont(standard);
 			}
 
-			// assuming that row 0 contains sort of header
-			if (sel && row != 0) {
-				setBackground(Globals.BACKGROUND_COLOR_7);
+			if (!ConfigedMain.OPSI_4_3) {
+				// assuming that row 0 contains sort of header
+				if (sel && row != 0) {
+					setBackground(Globals.BACKGROUND_COLOR_7);
 
-			} else {
-				setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
-
+				} else {
+					setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
+				}
 			}
 
 			if (leaf) {

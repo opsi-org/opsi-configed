@@ -62,13 +62,13 @@ public class FProductActions extends SecondaryFrame {
 				.addComponent(panelCompleteWinProducts, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		Containership containerShipAll = new Containership(getContentPane());
-		containerShipAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
-				JPanel.class);
+		if (!ConfigedMain.OPSI_4_3) {
+			Containership containerShipAll = new Containership(getContentPane());
+			containerShipAll.doForAllContainedCompisOfClass("setBackground",
+					new Object[] { Globals.BACKGROUND_COLOR_7 }, JPanel.class);
 
-		containerShipAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
-				JTextComponent.class);
-
+			containerShipAll.doForAllContainedCompisOfClass("setBackground",
+					new Object[] { Globals.BACKGROUND_COLOR_3 }, JTextComponent.class);
+		}
 	}
-
 }

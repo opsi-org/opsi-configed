@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconAsButton;
@@ -72,7 +73,9 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		// we could design an adapted layout and infuse it in guiInit
 
-		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
@@ -81,7 +84,10 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		centerPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			centerPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
+		}
+
 		centerPanel.setOpaque(true);
 
 		southPanel = new JPanel();
@@ -108,7 +114,9 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			southPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
+		}
 		southPanel.setOpaque(true);
 
 		GroupLayout allLayout = new GroupLayout(allpane);
@@ -268,7 +276,9 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		};
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
-		extraInfoPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			extraInfoPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 		extraInfoPanel.setOpaque(true);
 
 		JPanel panel = new JPanel();
@@ -346,7 +356,9 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JPanel xPanel = new JPanel();
 		GroupLayout xLayout = new GroupLayout(xPanel);
 		xPanel.setLayout(xLayout);
-		xPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			xPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 		xPanel.setOpaque(true);
 
 		xLayout.setHorizontalGroup(xLayout.createParallelGroup(GroupLayout.Alignment.LEADING)

@@ -25,6 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.utilities.logging.Logging;
@@ -101,7 +102,9 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	protected void initComponents() {
-		framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		setHint(hint);

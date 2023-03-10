@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.swinfopage.PanelSWInfo.KindOfExport;
 import de.uib.utilities.logging.Logging;
@@ -88,7 +89,10 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	private void setupPanel() {
 
-		setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			setBackground(Globals.BACKGROUND_COLOR_7);
+		}
+
 		GroupLayout glGlobal = new GroupLayout(this);
 		this.setLayout(glGlobal);
 
@@ -242,7 +246,9 @@ public class PanelSWMultiClientReport extends JPanel {
 		Logging.info(this, "kindOfExport   " + kindOfExport);
 
 		JPanel subpanelPreConfig = new JPanel();
-		subpanelPreConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			subpanelPreConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		GroupLayout glPreConfig = new GroupLayout(subpanelPreConfig);
 		subpanelPreConfig.setLayout(glPreConfig);

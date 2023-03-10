@@ -203,7 +203,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.setPreferredSize(new Dimension(FRAME_WIDTH_LEFTHANDED, FRAME_HEIGHT));
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		tableProducts.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			tableProducts.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 		tableProducts.setShowHorizontalLines(true);
 		tableProducts.setGridColor(Globals.PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR);
 		tableProducts.setRowHeight(Globals.TABLE_ROW_HEIGHT);
@@ -362,8 +364,10 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					if (val.equals(InstallationStateTableModel.CONFLICT_STRING)
 							|| val.equals(InstallationStateTableModel.UNEQUAL_ADD_STRING
 									+ InstallationStateTableModel.CONFLICT_STRING)) {
-						c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR);
-						c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
+						if (!ConfigedMain.OPSI_4_3) {
+							c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR);
+							c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
+						}
 					} else {
 
 						String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);

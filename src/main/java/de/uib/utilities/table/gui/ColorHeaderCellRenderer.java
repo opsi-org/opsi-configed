@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
@@ -26,7 +27,9 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 			int row, int column) {
 		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
 				column);
-		cell.setBackground(Globals.defaultTableHeaderBgColor);
+		if (!ConfigedMain.OPSI_4_3) {
+			cell.setBackground(Globals.defaultTableHeaderBgColor);
+		}
 
 		if (cell instanceof JComponent) {
 			JComponent jc = (JComponent) cell;

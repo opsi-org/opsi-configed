@@ -505,9 +505,13 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 						+ fieldServerPath.getText());
 				final Color saveColor = buttonUploadDrivers.getBackground();
 
-				buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
+				if (!ConfigedMain.OPSI_4_3) {
+					buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
+				}
 				execute();
-				buttonUploadDrivers.setBackground(saveColor);
+				if (!ConfigedMain.OPSI_4_3) {
+					buttonUploadDrivers.setBackground(saveColor);
+				}
 			}
 		});
 
@@ -666,7 +670,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
 
-		setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.OPSI_4_3) {
+			setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 	}
 

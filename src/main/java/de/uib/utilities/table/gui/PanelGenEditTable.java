@@ -335,7 +335,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	private void initComponents() {
-		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		addComponentListener(this);
 
@@ -373,7 +375,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
-		titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		theTable = new de.uib.utilities.table.JTableWithToolTips();
 
@@ -431,15 +435,18 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		try {
 			scrollpane = new JScrollPane();
 			scrollpane.setViewportView(theTable);
-			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+			if (!ConfigedMain.OPSI_4_3) {
+				scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+			}
 		} catch (ClassCastException ex) {
 			// a strange Nimbus exception which occurs sometimes here
 			Logging.warning(this, "strange exception on creating scrollpane " + ex);
 
 			scrollpane = new JScrollPane();
 			scrollpane.setViewportView(theTable);
-			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
-
+			if (!ConfigedMain.OPSI_4_3) {
+				scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+			}
 		}
 
 		GroupLayout layout = new GroupLayout(this);
@@ -563,10 +570,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void setTitlePaneBackground(Color c) {
-		if (c == null) {
-			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		} else {
-			titlePane.setBackground(c);
+		if (!ConfigedMain.OPSI_4_3) {
+			if (c == null) {
+				titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			} else {
+				titlePane.setBackground(c);
+			}
 		}
 	}
 

@@ -23,14 +23,18 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 		super.setOpaque(true);
 		super.setForeground(Globals.lightBlack);
 		super.setTextSelectionColor(Globals.lightBlack);
-		super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
+		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
 	}
 
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
-		setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
+		}
 		if (value instanceof IconNode) {
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 

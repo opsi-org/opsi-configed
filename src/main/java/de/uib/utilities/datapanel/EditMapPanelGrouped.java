@@ -33,6 +33,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.utilities.logging.Logging;
@@ -254,8 +255,10 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected void buildPanel() {
 		splitPane = new JSplitPane();
 
-		splitPane.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR);
-		setBackground(Globals.backNimbus);
+		if (!ConfigedMain.OPSI_4_3) {
+			splitPane.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR);
+			setBackground(Globals.backNimbus);
+		}
 
 		tree = new XTree();
 

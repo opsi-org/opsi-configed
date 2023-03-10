@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataLoadingObserver;
@@ -85,8 +86,9 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 		infoLabel = new JLabel();
 
 		JPanel panel = new JPanel();
-		panel.setBackground(Globals.BACKGROUND_COLOR_7);
-
+		if (!ConfigedMain.OPSI_4_3) {
+			panel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		GroupLayout layout = new GroupLayout(panel);
 		panel.setLayout(layout);
 

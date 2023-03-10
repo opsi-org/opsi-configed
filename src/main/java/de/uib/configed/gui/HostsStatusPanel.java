@@ -7,6 +7,7 @@ import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.HostsStatusInfo;
 import de.uib.utilities.logging.Logging;
@@ -125,7 +126,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 	}
 
 	private void createGui() {
-		Containership csStatusPane = new Containership(this);
 
 		GroupLayout layoutStatusPane = new GroupLayout(this);
 		this.setLayout(layoutStatusPane);
@@ -222,7 +222,11 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 										Globals.LINE_HEIGHT))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		csStatusPane.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
-				JTextComponent.class);
+		if (!ConfigedMain.OPSI_4_3) {
+
+			Containership csStatusPane = new Containership(this);
+			csStatusPane.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
+					JTextComponent.class);
+		}
 	}
 }

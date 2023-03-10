@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -40,15 +41,19 @@ public class JComboBoxToolTip extends JComboBox<String> {
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			if (isSelected) {
-				setBackground(listBackgroundColorSelected);
-				setForeground(listForegroundColor);
+				if (!ConfigedMain.OPSI_4_3) {
+					setBackground(listBackgroundColorSelected);
+					setForeground(listForegroundColor);
+				}
 				Logging.debug(this, "index, tooltips " + index + ", " + tooltips);
 				if (-1 < index && index < tooltips.size()) {
 					list.setToolTipText(tooltips.get(index));
 				}
 			} else {
-				setBackground(listBackgroundColorSelected);
-				setForeground(listForegroundColor);
+				if (!ConfigedMain.OPSI_4_3) {
+					setBackground(listBackgroundColorSelected);
+					setForeground(listForegroundColor);
+				}
 			}
 			setFont(list.getFont());
 			setText((value == null) ? "" : value.toString());

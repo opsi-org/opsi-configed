@@ -1922,7 +1922,9 @@ public class MainFrame extends JFrame
 		jFieldInDepot = new JTextArea();
 		jFieldInDepot.setEditable(false);
 		jFieldInDepot.setFont(Globals.defaultFontBig);
-		jFieldInDepot.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.OPSI_4_3) {
+			jFieldInDepot.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		jTextFieldDescription = new JTextEditorField("");
 		jTextFieldDescription.setEditable(true);
@@ -2169,7 +2171,9 @@ public class MainFrame extends JFrame
 		jCheckBoxSorted.setText(Configed.getResourceValue("MainFrame.jCheckBoxSorted"));
 
 		jButtonSaveList.setText(Configed.getResourceValue("MainFrame.jButtonSaveList"));
-		jButtonSaveList.setBackground(Globals.BACKGROUND_COLOR_6);
+		if (!ConfigedMain.OPSI_4_3) {
+			jButtonSaveList.setBackground(Globals.BACKGROUND_COLOR_6);
+		}
 		jButtonSaveList.addActionListener(this::jButtonSaveListActionPerformed);
 
 		jRadioRequiredAll.setMargin(new Insets(0, 0, 0, 0));
@@ -2186,7 +2190,9 @@ public class MainFrame extends JFrame
 		buttonGroupRequired.add(jRadioRequiredAll);
 		buttonGroupRequired.add(jRadioRequiredOff);
 
-		jComboBoxProductValues.setBackground(Globals.BACKGROUND_COLOR_6);
+		if (!ConfigedMain.OPSI_4_3) {
+			jComboBoxProductValues.setBackground(Globals.BACKGROUND_COLOR_6);
+		}
 
 		treeClients.setFont(Globals.defaultFont);
 
@@ -2620,7 +2626,9 @@ public class MainFrame extends JFrame
 
 		showSoftwareLogNotFound = new JPanel(new FlowLayout());
 		showSoftwareLogNotFound.add(labelNoSoftware);
-		showSoftwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.OPSI_4_3) {
+			showSoftwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		showSoftwareLog = showSoftwareLogNotFound;
 
@@ -2689,32 +2697,34 @@ public class MainFrame extends JFrame
 
 		setTitle(configedMain.getAppTitle());
 
-		Containership csJPanelAllContent = new Containership(allPane);
+		if (!ConfigedMain.OPSI_4_3) {
+			Containership csJPanelAllContent = new Containership(allPane);
 
-		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
-				new Class[] { boolean.class }, JTextComponent.class);
+			csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
+					new Class[] { boolean.class }, JTextComponent.class);
 
-		// set colors of panels
-		csJPanelAllContent.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
-				JPanel.class);
+			// set colors of panels
+			csJPanelAllContent.doForAllContainedCompisOfClass("setBackground",
+					new Object[] { Globals.BACKGROUND_COLOR_7 }, JPanel.class);
 
-		depotListPresenter.setBackground(depotListPresenter.getMyColor());
+			depotListPresenter.setBackground(depotListPresenter.getMyColor());
 
-		Containership containershipPanelLocalbootProductsettings = new Containership(panelLocalbootProductSettings);
-		containershipPanelLocalbootProductsettings.doForAllContainedCompisOfClass("setBackground",
-				new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
-		panelLocalbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
+			Containership containershipPanelLocalbootProductsettings = new Containership(panelLocalbootProductSettings);
+			containershipPanelLocalbootProductsettings.doForAllContainedCompisOfClass("setBackground",
+					new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
+			panelLocalbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
-		Containership containershipPanelNetbootProductsettings = new Containership(panelNetbootProductSettings);
-		containershipPanelNetbootProductsettings.doForAllContainedCompisOfClass("setBackground",
-				new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
-		panelNetbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
+			Containership containershipPanelNetbootProductsettings = new Containership(panelNetbootProductSettings);
+			containershipPanelNetbootProductsettings.doForAllContainedCompisOfClass("setBackground",
+					new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
+			panelNetbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
-		iconPane0.setBackground(Globals.BACKGROUND_COLOR_7);
-		iconBarPane.setBackground(Globals.BACKGROUND_COLOR_7);
-		iconPane1.setBackground(Globals.BACKGROUND_COLOR_7);
-		panelTreeClientSelection.setBackground(Globals.BACKGROUND_COLOR_7);
-		statusPane.setBackground(Globals.BACKGROUND_COLOR_7);
+			iconPane0.setBackground(Globals.BACKGROUND_COLOR_7);
+			iconBarPane.setBackground(Globals.BACKGROUND_COLOR_7);
+			iconPane1.setBackground(Globals.BACKGROUND_COLOR_7);
+			panelTreeClientSelection.setBackground(Globals.BACKGROUND_COLOR_7);
+			statusPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		glass.setVisible(true);
 		glass.setOpaque(true);
@@ -3600,7 +3610,9 @@ public class MainFrame extends JFrame
 		if (showHardwareLogNotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
 			showHardwareLogNotFound = new TitledPanel();
 			showHardwareLogParentOfNotFoundPanel = new JPanel();
-			showHardwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_7);
+			if (!ConfigedMain.OPSI_4_3) {
+				showHardwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_7);
+			}
 			showHardwareLogParentOfNotFoundPanel.setLayout(new BorderLayout());
 			showHardwareLogParentOfNotFoundPanel.add(showHardwareLogNotFound);
 		}
@@ -3878,18 +3890,21 @@ public class MainFrame extends JFrame
 			jTextFieldInventoryNumber.setToolTipText(null);
 			jTextFieldOneTimePassword.setToolTipText(null);
 			jTextAreaNotes.setToolTipText(null);
-			jTextFieldDescription.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			jTextFieldInventoryNumber.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			jTextFieldOneTimePassword.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			jTextAreaNotes.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			systemUUIDField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			macAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			ipAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-			cbUefiBoot.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			cbWANConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			jTextFieldHostKey.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			cbInstallByShutdown.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			if (!ConfigedMain.OPSI_4_3) {
+				jTextFieldDescription.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				jTextFieldInventoryNumber.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				jTextFieldOneTimePassword.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				jTextAreaNotes.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				systemUUIDField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				macAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				ipAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+
+				cbUefiBoot.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				cbWANConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				jTextFieldHostKey.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				cbInstallByShutdown.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			}
 		} else {
 			jTextFieldDescription
 					.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
@@ -3898,18 +3913,20 @@ public class MainFrame extends JFrame
 			jTextFieldOneTimePassword
 					.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
 			jTextAreaNotes.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
-			jTextFieldDescription.setBackground(Globals.BACKGROUND_COLOR_3);
-			jTextFieldInventoryNumber.setBackground(Globals.BACKGROUND_COLOR_3);
-			jTextFieldOneTimePassword.setBackground(Globals.BACKGROUND_COLOR_3);
-			jTextAreaNotes.setBackground(Globals.BACKGROUND_COLOR_3);
+			if (!ConfigedMain.OPSI_4_3) {
+				jTextFieldDescription.setBackground(Globals.BACKGROUND_COLOR_3);
+				jTextFieldInventoryNumber.setBackground(Globals.BACKGROUND_COLOR_3);
+				jTextFieldOneTimePassword.setBackground(Globals.BACKGROUND_COLOR_3);
+				jTextAreaNotes.setBackground(Globals.BACKGROUND_COLOR_3);
 
-			systemUUIDField.setBackground(Globals.BACKGROUND_COLOR_3);
-			macAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
-			ipAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
-			cbUefiBoot.setBackground(Globals.BACKGROUND_COLOR_3);
-			cbWANConfig.setBackground(Globals.BACKGROUND_COLOR_3);
-			jTextFieldHostKey.setBackground(Globals.BACKGROUND_COLOR_3);
-			cbInstallByShutdown.setBackground(Globals.BACKGROUND_COLOR_3);
+				systemUUIDField.setBackground(Globals.BACKGROUND_COLOR_3);
+				macAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
+				ipAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
+				cbUefiBoot.setBackground(Globals.BACKGROUND_COLOR_3);
+				cbWANConfig.setBackground(Globals.BACKGROUND_COLOR_3);
+				jTextFieldHostKey.setBackground(Globals.BACKGROUND_COLOR_3);
+				cbInstallByShutdown.setBackground(Globals.BACKGROUND_COLOR_3);
+			}
 		}
 	}
 

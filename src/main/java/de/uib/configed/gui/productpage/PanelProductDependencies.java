@@ -61,9 +61,13 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 		dependenciesTreePanel = new DependenciesTreePanel();
 
-		dependenciesTable.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			dependenciesTable.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		dependenciesPanel.setViewportView(dependenciesTable);
-		dependenciesPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			dependenciesPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

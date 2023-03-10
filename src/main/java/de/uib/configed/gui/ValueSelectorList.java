@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
@@ -102,14 +103,16 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	 * @param boolean We are in progress
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
-		if (active) {
-			valueList.setBackground(Globals.BACKGROUND_COLOR_9);
-		} else {
-			valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+
+			if (active) {
+				valueList.setBackground(Globals.BACKGROUND_COLOR_9);
+			} else {
+				valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			}
+
+			// colorize as hint that we have changed the depots selection
 		}
-
-		// colorize as hint that we have changed the depots selection
-
 	}
 
 	private void initComponents() {
@@ -122,7 +125,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		labelValue.setOpaque(false);
 
-		labelValue.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			labelValue.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		labelValue.setFont(Globals.defaultFontStandardBold);
 
 		buttonSelectValuesWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
@@ -144,7 +149,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 			searchPane.setEnabled(false);
 		}
 
-		searchPane.setBackground(getMyColor());
+		if (!ConfigedMain.OPSI_4_3) {
+			searchPane.setBackground(getMyColor());
+		}
 		searchPane.setNarrow(true);
 
 		// not visible in this panel
@@ -157,8 +164,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		scrollPaneValueList.setPreferredSize(valueList.getMaximumSize());
 
 		valueList.setFont(Globals.defaultFont);
-		valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-
+		if (!ConfigedMain.OPSI_4_3) {
+			valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 	}
 
 	private void layouting() {

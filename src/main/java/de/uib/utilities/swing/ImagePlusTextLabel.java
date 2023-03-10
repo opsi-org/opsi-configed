@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class ImagePlusTextLabel extends JPanel {
@@ -83,11 +84,13 @@ public class ImagePlusTextLabel extends JPanel {
 
 	@Override
 	public void setBackground(Color bg) {
-		if (textlabel != null) {
-			textlabel.setBackground(bg);
-		}
-		if (imagefield != null) {
-			imagefield.setBackground(bg);
+		if (!ConfigedMain.OPSI_4_3) {
+			if (textlabel != null) {
+				textlabel.setBackground(bg);
+			}
+			if (imagefield != null) {
+				imagefield.setBackground(bg);
+			}
 		}
 	}
 

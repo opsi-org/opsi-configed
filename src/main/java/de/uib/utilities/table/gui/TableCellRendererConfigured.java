@@ -7,6 +7,8 @@ import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import de.uib.configed.ConfigedMain;
+
 public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 	Font f;
 	Color color;
@@ -41,13 +43,15 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 		}
 
 		if (bg1 != null) {
-			if (selectionEditingBackground != null && isSelected) {
-				result.setBackground(selectionEditingBackground);
-			} else {
-				if (row % 2 == 0) {
-					result.setBackground(bg2);
+			if (!ConfigedMain.OPSI_4_3) {
+				if (selectionEditingBackground != null && isSelected) {
+					result.setBackground(selectionEditingBackground);
 				} else {
-					result.setBackground(bg1);
+					if (row % 2 == 0) {
+						result.setBackground(bg2);
+					} else {
+						result.setBackground(bg1);
+					}
 				}
 			}
 		}

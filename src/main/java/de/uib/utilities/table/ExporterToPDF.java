@@ -35,6 +35,7 @@ import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
@@ -285,12 +286,16 @@ public class ExporterToPDF extends AbstractExportTable {
 			symbolFont = small;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();
-		defaultCell.setBackgroundColor(new BaseColor(100, 100, 100));
+		if (!ConfigedMain.OPSI_4_3) {
+			defaultCell.setBackgroundColor(new BaseColor(100, 100, 100));
+		}
 
 		for (int i = 0; i < theTable.getColumnCount(); i++) {
 			h = new PdfPCell(new Phrase(theTable.getColumnName(i)));
 			h.setHorizontalAlignment(Element.ALIGN_CENTER);
-			h.setBackgroundColor(headerBackground);
+			if (!ConfigedMain.OPSI_4_3) {
+				h.setBackgroundColor(headerBackground);
+			}
 			table.addCell(h);
 		}
 		table.setHeaderRows(1);
@@ -318,10 +323,12 @@ public class ExporterToPDF extends AbstractExportTable {
 					default:
 						value = new PdfPCell(new Phrase(s, small));
 					}
-					if (j % 2 == 0) {
-						value.setBackgroundColor(evenBackground);
-					} else {
-						value.setBackgroundColor(oddBackground);
+					if (!ConfigedMain.OPSI_4_3) {
+						if (j % 2 == 0) {
+							value.setBackgroundColor(evenBackground);
+						} else {
+							value.setBackgroundColor(oddBackground);
+						}
 					}
 
 					if (leftAlignmentlist.contains(i)) {
