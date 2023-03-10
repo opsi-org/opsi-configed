@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -41,34 +42,29 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	protected Map<Enum<E>, String> labels;
 	protected String title;
 	protected Map<Enum<E>, JRadioButton> groupedButtons;
-	protected Enumsetter<E> enumSetter;
+	protected Consumer<Enum<E>> enumSetter;
 	protected Font primaryFont;
 	protected int vGap;
 	protected int hGap;
 
 	protected List<ChangeListener> changeListeners;
 
-	@FunctionalInterface
-	public interface Enumsetter<E extends Enum<E>> {
-		void setValue(Enum<E> val);
-	}
-
-	public PanelStateSwitch(Enum<E> startValue, Enum<E>[] values, Class<?> myenum, Enumsetter<E> enumSetter) {
+	public PanelStateSwitch(Enum<E> startValue, Enum<E>[] values, Class<?> myenum, Consumer<Enum<E>> enumSetter) {
 		this(null, startValue, values, null, myenum, enumSetter);
 	}
 
 	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, Class<?> myenum,
-			Enumsetter<E> enumSetter) {
+			Consumer<Enum<E>> enumSetter) {
 		this(title, startValue, values, null, myenum, enumSetter);
 	}
 
 	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, String[] labels, Class<?> myenum,
-			Enumsetter<E> enumSetter) {
+			Consumer<Enum<E>> enumSetter) {
 		this(title, startValue, values, labels, myenum, enumSetter, 0, 0);
 	}
 
 	public PanelStateSwitch(String title, Enum<E> startValue, Enum<E>[] values, String[] labels, Class<?> myenum,
-			Enumsetter<E> enumSetter, int hGap, int vGap) {
+			Consumer<Enum<E>> enumSetter, int hGap, int vGap) {
 
 		Logging.info(this, " my enum " + myenum);
 
@@ -159,7 +155,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 			button.addActionListener((ActionEvent ae) -> {
 				producedValue = val;
 				if (enumSetter != null) {
-					enumSetter.setValue(val);
+					enumSetter.accept(val);
 				}
 
 				Logging.debug(this, "actionEvent with result " + val);
@@ -264,7 +260,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 		Logging.info(this, "setValueByString " + producedValue);
 
 		if (enumSetter != null) {
-			enumSetter.setValue(producedValue);
+			enumSetter.accept(producedValue);
 		}
 	}
 }

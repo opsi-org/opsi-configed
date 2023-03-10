@@ -50,6 +50,20 @@ import de.uib.utilities.table.ListCellOptions;
 
 public abstract class AbstractDataStub {
 
+	protected static final Set<String> linuxSWnameMarkers = new HashSet<>();
+	static {
+		linuxSWnameMarkers.add("linux");
+		linuxSWnameMarkers.add("Linux");
+		linuxSWnameMarkers.add("lib");
+		linuxSWnameMarkers.add("ubuntu");
+		linuxSWnameMarkers.add("ubuntu");
+	}
+
+	protected static final Set<String> linuxSubversionMarkers = new HashSet<>();
+	static {
+		linuxSubversionMarkers.add("lin:");
+	}
+
 	public abstract boolean canCallMySQL();
 
 	public abstract void productDataRequestRefresh();
@@ -156,20 +170,6 @@ public abstract class AbstractDataStub {
 	protected abstract void retrieveClient2HwRows(String[] hosts);
 
 	public abstract Map<String, Map<String, Object>> getClient2HwRows(String[] hosts);
-
-	protected static final Set<String> linuxSWnameMarkers = new HashSet<>();
-	static {
-		linuxSWnameMarkers.add("linux");
-		linuxSWnameMarkers.add("Linux");
-		linuxSWnameMarkers.add("lib");
-		linuxSWnameMarkers.add("ubuntu");
-		linuxSWnameMarkers.add("ubuntu");
-	}
-
-	protected static final Set<String> linuxSubversionMarkers = new HashSet<>();
-	static {
-		linuxSubversionMarkers.add("lin:");
-	}
 
 	public abstract List<Map<String, Object>> checkHealth();
 }

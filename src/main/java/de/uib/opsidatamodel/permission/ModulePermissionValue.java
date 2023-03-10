@@ -1,6 +1,5 @@
 package de.uib.opsidatamodel.permission;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.opsicommand.AbstractExecutioner;
@@ -13,18 +12,41 @@ public class ModulePermissionValue {
 	public static final String KEY_EXPIRES = "expires";
 	public static final String KEY_MAX_CLIENTS = "maxclients";
 
-	AbstractExecutioner exec;
-
-	private ExtendedInteger maxClients;
-	private ExtendedDate expiresDate;
-	private Boolean booleanValue;
-
 	public static final Map<String, Boolean> MODULE_CHECKED = Map.ofEntries(Map.entry("license_management", true),
 			Map.entry("local_imaging", true), Map.entry("monitoring", true), Map.entry("wim-capture", true),
 			Map.entry("scalability1", true), Map.entry("linux_agent", true), Map.entry("vpn", true),
 			Map.entry("mysql_backend", true), Map.entry("uefi", true), Map.entry("userroles", true),
 			Map.entry("directory-connector", true), Map.entry("macos_agent", true), Map.entry("secureboot", true),
 			Map.entry("win-vhd", true), Map.entry("os_install_by_wlan", true));
+
+	AbstractExecutioner exec;
+
+	private ExtendedInteger maxClients;
+	private ExtendedDate expiresDate;
+	private Boolean booleanValue;
+
+	public ModulePermissionValue(AbstractExecutioner exec, Object ob, ExtendedDate defaultExpires) {
+		this.exec = exec;
+		Logging.info(this, "value object given: " + ob);
+		booleanValue = null;
+		expiresDate = ExtendedDate.ZERO;
+		maxClients = ExtendedInteger.ZERO;
+		if (ob != null) {
+			booleanValue = checkBoolean(ob);
+
+			if (booleanValue == null) {
+				expiresDate = retrieveExpiresDate(ob);
+				maxClients = retrieveMaxClients(ob);
+				Logging.debug(this, "maxClients directly given " + maxClients);
+			} else if (Boolean.TRUE.equals(booleanValue)) {
+				maxClients = ExtendedInteger.INFINITE;
+			}
+		}
+
+		if (expiresDate == ExtendedDate.ZERO) {
+			expiresDate = defaultExpires;
+		}
+	}
 
 	private static Boolean checkBoolean(Object ob) {
 
@@ -94,50 +116,6 @@ public class ModulePermissionValue {
 		}
 
 		return result;
-	}
-
-	private Map<String, Object> interpretAsJson(Object ob) {
-		Map<String, Object> result = exec.getMapFromItem(ob);
-
-		if (result.entrySet().isEmpty()) {
-			return new HashMap<>();
-		}
-
-		return result;
-	}
-
-	public ModulePermissionValue(AbstractExecutioner exec, Object ob, ExtendedDate defaultExpires) {
-		this.exec = exec;
-		Logging.info(this, "value object given: " + ob);
-		booleanValue = null;
-		expiresDate = ExtendedDate.ZERO;
-		maxClients = ExtendedInteger.ZERO;
-		if (ob != null) {
-			Map<String, Object> detailled = interpretAsJson(ob);
-			Logging.debug(this, "detailled " + detailled);
-			if (!detailled.isEmpty()) {
-				maxClients = retrieveMaxClients(detailled.get(KEY_MAX_CLIENTS));
-				Logging.debug(this, "detailled  maxClients " + maxClients);
-				expiresDate = retrieveExpiresDate(detailled.get(KEY_EXPIRES));
-			} else {
-				booleanValue = checkBoolean(ob);
-
-				if (booleanValue == null) {
-					expiresDate = retrieveExpiresDate(ob);
-					maxClients = retrieveMaxClients(ob);
-					Logging.debug(this, "maxClients directly given " + maxClients);
-				} else if (Boolean.TRUE.equals(booleanValue)) {
-					maxClients = ExtendedInteger.INFINITE;
-				} else {
-					maxClients = ExtendedInteger.ZERO;
-				}
-			}
-		}
-
-		if (expiresDate == ExtendedDate.ZERO) {
-			expiresDate = defaultExpires;
-		}
-
 	}
 
 	public ExtendedInteger getMaxClients() {

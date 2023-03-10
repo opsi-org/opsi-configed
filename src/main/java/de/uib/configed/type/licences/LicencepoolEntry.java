@@ -19,6 +19,12 @@ public class LicencepoolEntry extends AbstractTableEntry {
 		KEYS.add(DESCRIPTION_KEY);
 	}
 
+	public LicencepoolEntry(Map<String, Object> entry) {
+		super(entry);
+		remap(ID_SERVICE_KEY, ID_KEY);
+		remap(DESCRIPTION_KEY, DESCRIPTION_KEY);
+	}
+
 	public static List<String> getKeys() {
 		return KEYS;
 	}
@@ -31,12 +37,6 @@ public class LicencepoolEntry extends AbstractTableEntry {
 		} else {
 			return super.put(key, value);
 		}
-	}
-
-	public LicencepoolEntry(Map<String, Object> entry) {
-		super(entry);
-		remap(ID_SERVICE_KEY, ID_KEY);
-		remap(DESCRIPTION_KEY, DESCRIPTION_KEY);
 	}
 
 	public String getLicencepoolId() {

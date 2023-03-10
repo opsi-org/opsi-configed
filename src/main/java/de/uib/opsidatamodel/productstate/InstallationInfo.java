@@ -5,10 +5,6 @@ import java.util.Set;
 
 public final class InstallationInfo {
 
-	// private constructor to hide the implicit public one
-	private InstallationInfo() {
-	}
-
 	// TODO WHICH values are still needed? some nowhere used
 	public static final String KEY = "installationInfo";
 
@@ -33,4 +29,7 @@ public final class InstallationInfo {
 		defaultDisplayValues.add(FAILED_DISPLAY_STRING);
 	}
 
+	// private constructor to hide the implicit public one
+	private InstallationInfo() {
+	}
 }

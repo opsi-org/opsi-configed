@@ -41,6 +41,8 @@ public class SSHConnectTerminal extends SSHConnect {
 	String currentDirectory = "";
 	boolean getCurrentDirectorySilent;
 
+	public List<String> commandsCompgen;
+
 	public SSHConnectTerminal(ConfigedMain main, SSHConnectionTerminalDialog dialog) {
 		super(main);
 		this.dialog = dialog;
@@ -69,7 +71,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		return null;
 	}
 
-	class MyOutputPrinter extends PrintStream {
+	private static class MyOutputPrinter extends PrintStream {
 		SSHConnectionTerminalDialog theDialog;
 
 		MyOutputPrinter(SSHConnectionTerminalDialog dialog, OutputStream out) {
@@ -292,8 +294,6 @@ public class SSHConnectTerminal extends SSHConnect {
 			}
 		};
 	}
-
-	public List<String> commandsCompgen;
 
 	private String getCompletionList(boolean newCommands) {
 		SSHConnectExec ssh = new SSHConnectExec();

@@ -35,6 +35,18 @@ public class ActionProgress {
 	// instance variable
 	private int state = INVALID;
 
+	// constructor
+	public ActionProgress() {
+	}
+
+	public ActionProgress(int t) {
+		if (existsState(t)) {
+			state = t;
+		} else {
+			state = NOT_AVAILABLE;
+		}
+	}
+
 	private static void checkCollections() {
 		if (states != null) {
 			return;
@@ -177,17 +189,5 @@ public class ActionProgress {
 		}
 
 		return new ActionProgress(getVal(label));
-	}
-
-	// constructor
-	public ActionProgress() {
-	}
-
-	public ActionProgress(int t) {
-		if (existsState(t)) {
-			state = t;
-		} else {
-			state = NOT_AVAILABLE;
-		}
 	}
 }

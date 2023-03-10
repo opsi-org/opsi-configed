@@ -361,6 +361,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 	// with this enum type we build a state model, which target shall be edited
 
+	private int buildPclistTableModelCounter;
+
+	private int reloadCounter;
+
+	boolean sessioninfoFinished;
+
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {
 			ConfigedMain.host = host;
@@ -462,12 +468,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			initialTreeActivation();
 			if (strategyForLoadingData != null) {
 				strategyForLoadingData.actAfterWaiting();
-			}
-
-			if (Boolean.TRUE.equals(
-					persist.getGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SHOW_DASH_ON_PROGRAMSTART,
-							AbstractPersistenceController.DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART))) {
-				initDashInfo();
 			}
 		});
 
@@ -1151,19 +1151,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// initialize the following method
 			depotsOfSelectedClients = null;
-			Set<String> depots = getDepotsOfSelectedClients();
-			Iterator<String> iter = depots.iterator();
+			depotsOfSelectedClients = getDepotsOfSelectedClients();
+			Iterator<String> selectedDepotsIterator = depotsOfSelectedClients.iterator();
 			StringBuilder depotsAdded = new StringBuilder("");
 
 			String singleDepot = "";
 
-			if (iter.hasNext()) {
-				singleDepot = iter.next();
+			if (selectedDepotsIterator.hasNext()) {
+				singleDepot = selectedDepotsIterator.next();
 				depotsAdded.append(singleDepot);
 			}
 
-			while (iter.hasNext()) {
-				String appS = iter.next();
+			while (selectedDepotsIterator.hasNext()) {
+				String appS = selectedDepotsIterator.next();
 				depotsAdded.append(";\n");
 				depotsAdded.append(appS);
 			}
@@ -1566,8 +1566,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		return result;
 	}
-
-	private int buildPclistTableModelCounter;
 
 	protected TableModel buildClientListTableModel(boolean rebuildTree) {
 		Logging.debug(this, " --------- buildPclistTableModel rebuildTree " + rebuildTree);
@@ -2078,8 +2076,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		setRebuiltClientListTableModel(restoreSortKeys, true, selectionPanel.getSelectedSet());
 	}
-
-	private int reloadCounter;
 
 	protected void setRebuiltClientListTableModel(boolean restoreSortKeys, boolean rebuildTree,
 			Set<String> selectValues) {
@@ -2616,8 +2612,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private boolean checkSynchronous(Set<String> depots) {
 
 		if (depots.size() > 1 && !persist.areDepotsSynchronous(depots)) {
-			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"), // "not
-					// synchronous",
+			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"),
 					Configed.getResourceValue("ConfigedMain.notSynchronous.title"), JOptionPane.OK_OPTION);
 
 			return false;
@@ -2636,14 +2631,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				depotRepresentative = myServer;
 			}
 		} else {
-			Set<String> depots = getDepotsOfSelectedClients();
-			Logging.info(this, "depots of selected clients:" + depots);
+
+			depotsOfSelectedClients = getDepotsOfSelectedClients();
+
+			Logging.info(this, "depots of selected clients:" + depotsOfSelectedClients);
 
 			String oldRepresentative = depotRepresentative;
 
 			Logging.debug(this, "setDepotRepresentative(), old representative: " + depotRepresentative + " should be ");
 
-			if (!checkSynchronous(depots)) {
+			if (!checkSynchronous(depotsOfSelectedClients)) {
 				result = false;
 			} else {
 				Logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
@@ -2651,9 +2648,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				depotRepresentative = null;
 
-				Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + getDepotsOfSelectedClients());
+				Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + depotsOfSelectedClients);
 
-				Iterator<String> depotsIterator = getDepotsOfSelectedClients().iterator();
+				Iterator<String> depotsIterator = depotsOfSelectedClients.iterator();
 
 				if (!depotsIterator.hasNext()) {
 					depotRepresentative = myServer;
@@ -2742,8 +2739,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.debug(this, "setLocalbootProductsPage() with filter "
 				+ Configed.savedStates.saveLocalbootproductFilter.deserialize());
 
-		Set<String> savedFilter = Configed.savedStates.saveLocalbootproductFilter.deserialize();
-
 		if (!setDepotRepresentative()) {
 			return false;
 		}
@@ -2806,6 +2801,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
 
+				Set<String> savedFilter = Configed.savedStates.saveLocalbootproductFilter.deserialize();
+
 				(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
 
 				Logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
@@ -2828,8 +2825,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected boolean setNetbootProductsPage() {
-
-		Set<String> savedFilter = Configed.savedStates.saveNetbootproductFilter.deserialize();
 
 		if (!setDepotRepresentative()) {
 			return false;
@@ -2886,6 +2881,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 
 				Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
+
+				Set<String> savedFilter = Configed.savedStates.saveNetbootproductFilter.deserialize();
 
 				mainFrame.panelNetbootProductSettings.reduceToSet(savedFilter);
 
@@ -4231,8 +4228,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}.start();
 	}
 
-	boolean sessioninfoFinished;
-
 	public void getSessionInfo() {
 		final boolean onlySelectedClients = (selectedClients != null) && (selectedClients.length > 0);
 
@@ -4332,10 +4327,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public String getBackendInfos() {
 		return persist.getBackendInfos();
-	}
-
-	public String getOpsiVersion() {
-		return persist.getOpsiVersion();
 	}
 
 	public Map<String, RemoteControl> getRemoteControls() {
@@ -4640,7 +4631,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private abstract class AbstractErrorListProducer extends Thread {
+	private abstract static class AbstractErrorListProducer extends Thread {
 		String title;
 
 		AbstractErrorListProducer(String specificPartOfTitle) {
@@ -5196,11 +5187,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				groupSelectionIds, i);
 
 		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().equals("")) {
-			String newGroupName = choiceDialog.getResultString();
+
 			IconNode newGroupNode = treeClients.makeSubgroupAt(null);
 			if (newGroupNode == null) {
 				return;
 			}
+
+			String newGroupName = choiceDialog.getResultString();
 
 			TreePath newGroupPath = treeClients.getPathToGROUPS().pathByAddingChild(newGroupNode);
 

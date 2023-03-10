@@ -46,12 +46,6 @@ public class ExporterToPDF extends AbstractExportTable {
 	protected static Document document;
 	protected static PdfWriter writer;
 
-	protected OpenSaveDialog dialog;
-	private Boolean saveAction;
-
-	protected String defaultFilename = "report.pdf";
-	protected boolean askForOverwrite = true;
-
 	protected static final String FILE_EXTENSION = ".pdf";
 
 	private static final float M_LEFT = 36;
@@ -59,13 +53,19 @@ public class ExporterToPDF extends AbstractExportTable {
 	private static final float M_TOP = 74;
 	private static final float M_BOTTOM = 54;
 
-	private float xHeaderTop = 803;
-	private float headerWidth = 527;
-
 	private static Font catFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
 	private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	private static List<Integer> leftAlignmentlist = new ArrayList<>();
+
+	protected OpenSaveDialog dialog;
+	private Boolean saveAction;
+
+	protected String defaultFilename = "report.pdf";
+	protected boolean askForOverwrite = true;
+
+	private float xHeaderTop = 803;
+	private float headerWidth = 527;
 
 	public ExporterToPDF(JTable table, List<String> classNames) {
 		super(table, classNames);

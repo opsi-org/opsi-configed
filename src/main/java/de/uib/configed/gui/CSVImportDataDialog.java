@@ -130,7 +130,6 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		formatter.setAllowsInvalid(false);
 		formatter.setCommitsOnValidEdit(true);
 
-		JLabel startLineLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
 		startLineInput = new JFormattedTextField(formatter);
 
 		tabsOption = new JRadioButton(Configed.getResourceValue("CSVImportDataDialog.tabsOption"));
@@ -215,6 +214,8 @@ public class CSVImportDataDialog extends FGeneralDialog {
 				}
 			}
 		});
+
+		JLabel startLineLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.startLineLabel"));
 
 		GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);

@@ -50,9 +50,76 @@ import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.table.ListCellOptions;
 
 public class DataStubNOM extends AbstractDataStub {
-	OpsiserviceNOMPersistenceController persist;
 
 	protected static Integer classCounter = 0;
+
+	OpsiserviceNOMPersistenceController persist;
+
+	protected Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
+
+	protected Object2Product2VersionList depot2LocalbootProducts;
+	protected Object2Product2VersionList depot2NetbootProducts;
+	protected List<List<Object>> productRows;
+	protected Map<String, TreeSet<OpsiPackage>> depot2Packages;
+	protected Map<String, Map<String, List<String>>> product2VersionInfo2Depots;
+
+	// depotId-->productId --> (propertyId --> value)
+	protected Map<String, Map<String, Map<String, ListCellOptions>>> depot2Product2PropertyDefinitions;
+
+	// depotId-->productId --> (dependencyKey--> value)
+	protected Map<String, Map<String, List<Map<String, String>>>> depot2product2dependencyInfos;
+
+	protected List<Map<String, Object>> productPropertyStates;
+
+	// will only be refreshed when all product data are refreshed
+	protected List<Map<String, Object>> productPropertyDepotStates;
+
+	protected Set<String> hostsWithProductProperties;
+
+	protected NavigableMap<String, List<HWAuditClientEntry>> client2hwAuditHostEntries;
+	protected NavigableMap<String, Map<String, List<HWAuditClientEntry>>> client2hwType2hwAuditHostEntries;
+
+	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformation;
+	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
+
+	// giving the idents which have the name in their ident
+	protected NavigableMap<String, Set<String>> name2SWIdents;
+	protected NavigableMap<String, Map<String, String>> installedSoftwareName2SWinfo;
+	protected NavigableMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool;
+
+	// List of idents of software
+	protected List<String> softwareList;
+
+	// the same with a numbering index
+	protected NavigableMap<String, Integer> software2Number;
+
+	protected Map<String, List<SWAuditClientEntry>> client2software;
+	protected Map<String, Set<String>> softwareIdent2clients;
+
+	protected AuditSoftwareXLicencePool auditSoftwareXLicencePool;
+
+	protected Map<String, Map<String, Object>> hostConfigs;
+
+	protected NavigableMap<String, LicencepoolEntry> licencepools;
+
+	protected Map<String, LicenceContractEntry> licenceContracts;
+
+	protected NavigableMap<String, NavigableSet<String>> contractsExpired;
+	// date in sql time format, contrad ID
+	protected NavigableMap<String, NavigableSet<String>> contractsToNotify;
+	// date in sql time format, contrad ID
+
+	protected List<LicenceUsableForEntry> licenceUsabilities;
+
+	protected List<LicenceUsageEntry> licenceUsages;
+
+	protected LicencePoolXOpsiProduct licencePoolXOpsiProduct;
+
+	protected Map<String, Map<String, Object>> client2HwRows;
+
+	protected List<Map<String, Object>> healthData;
+
+	protected Map<String, LicenceEntry> licences;
 
 	public DataStubNOM(OpsiserviceNOMPersistenceController controller) {
 		this.persist = controller;
@@ -77,8 +144,6 @@ public class DataStubNOM extends AbstractDataStub {
 	public boolean canCallMySQL() {
 		return false;
 	}
-
-	protected Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
 
 	@Override
 	public void product2versionInfoRequestRefresh() {
@@ -144,12 +209,6 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 
 	}
-
-	protected Object2Product2VersionList depot2LocalbootProducts;
-	protected Object2Product2VersionList depot2NetbootProducts;
-	protected List<List<Object>> productRows;
-	protected Map<String, TreeSet<OpsiPackage>> depot2Packages;
-	protected Map<String, Map<String, List<String>>> product2VersionInfo2Depots;
 
 	@Override
 	public void productsAllDepotsRequestRefresh() {
@@ -297,9 +356,6 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	// depotId-->productId --> (propertyId --> value)
-	protected Map<String, Map<String, Map<String, ListCellOptions>>> depot2Product2PropertyDefinitions;
-
 	@Override
 	public void productPropertyDefinitionsRequestRefresh() {
 		depot2Product2PropertyDefinitions = null;
@@ -381,11 +437,6 @@ public class DataStubNOM extends AbstractDataStub {
 			persist.notifyDataRefreshedObservers("productProperty");
 		}
 	}
-
-	// depotId-->productId --> (dependencyKey--> value)
-	protected Map<String, Map<String, List<Map<String, String>>>>
-
-	depot2product2dependencyInfos;
 
 	@Override
 	public void productDependenciesRequestRefresh() {
@@ -472,13 +523,6 @@ public class DataStubNOM extends AbstractDataStub {
 			persist.notifyDataRefreshedObservers("productDependency");
 		}
 	}
-
-	protected List<Map<String, Object>> productPropertyStates;
-
-	// will only be refreshed when all product data are refreshed
-	protected List<Map<String, Object>> productPropertyDepotStates;
-
-	protected Set<String> hostsWithProductProperties;
 
 	@Override
 	public void productPropertyStatesRequestRefresh() {
@@ -567,23 +611,6 @@ public class DataStubNOM extends AbstractDataStub {
 
 		return result;
 	}
-
-	protected NavigableMap<String, List<HWAuditClientEntry>> client2hwAuditHostEntries;
-	protected NavigableMap<String, Map<String, List<HWAuditClientEntry>>> client2hwType2hwAuditHostEntries;
-
-	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformation;
-	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
-
-	// giving the idents which have the name in their ident
-	protected NavigableMap<String, Set<String>> name2SWIdents;
-	protected NavigableMap<String, Map<String, String>> installedSoftwareName2SWinfo;
-	protected NavigableMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool;
-
-	// List of idents of software
-	protected List<String> softwareList;
-
-	// the same with a numbering index
-	protected NavigableMap<String, Integer> software2Number;
 
 	@Override
 	public void installedSoftwareInformationRequestRefresh() {
@@ -790,9 +817,6 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	protected Map<String, List<SWAuditClientEntry>> client2software;
-	protected Map<String, Set<String>> softwareIdent2clients;
-
 	@Override
 	public void softwareAuditOnClientsRequestRefresh() {
 		Logging.info(this, "softwareAuditOnClientsRequestRefresh");
@@ -943,8 +967,6 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	protected AuditSoftwareXLicencePool auditSoftwareXLicencePool;
-
 	@Override
 	public void auditSoftwareXLicencePoolRequestRefresh() {
 		Logging.info(this, "auditSoftwareXLicencePoolRequestRefresh");
@@ -980,8 +1002,6 @@ public class DataStubNOM extends AbstractDataStub {
 
 		Logging.info(this, "retrieveAuditSoftwareXLicencePool retrieved ");
 	}
-
-	protected Map<String, Map<String, Object>> hostConfigs;
 
 	@Override
 	public void hostConfigsRequestRefresh() {
@@ -1040,8 +1060,6 @@ public class DataStubNOM extends AbstractDataStub {
 		persist.notifyDataRefreshedObservers("configState");
 	}
 
-	protected NavigableMap<String, LicencepoolEntry> licencepools;
-
 	@Override
 	public void licencepoolsRequestRefresh() {
 		Logging.info(this, "licencepoolsRequestRefresh");
@@ -1076,13 +1094,6 @@ public class DataStubNOM extends AbstractDataStub {
 			}
 		}
 	}
-
-	protected Map<String, LicenceContractEntry> licenceContracts;
-
-	protected NavigableMap<String, NavigableSet<String>> contractsExpired;
-	// date in sql time format, contrad ID
-	protected NavigableMap<String, NavigableSet<String>> contractsToNotify;
-	// date in sql time format, contrad ID
 
 	@Override
 	public void licenceContractsRequestRefresh() {
@@ -1164,8 +1175,6 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	protected Map<String, LicenceEntry> licences;
-
 	@Override
 	public void licencesRequestRefresh() {
 		Logging.info(this, "licencesRequestRefresh");
@@ -1198,8 +1207,6 @@ public class DataStubNOM extends AbstractDataStub {
 			}
 		}
 	}
-
-	protected List<LicenceUsableForEntry> licenceUsabilities;
 
 	@Override
 	public void licenceUsabilitiesRequestRefresh() {
@@ -1234,8 +1241,6 @@ public class DataStubNOM extends AbstractDataStub {
 			}
 		}
 	}
-
-	protected List<LicenceUsageEntry> licenceUsages;
 
 	@Override
 	public void licenceUsagesRequestRefresh() {
@@ -1272,8 +1277,6 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	protected LicencePoolXOpsiProduct licencePoolXOpsiProduct;
-
 	@Override
 	public void licencePoolXOpsiProductRequestRefresh() {
 		Logging.info(this, "licencePoolXOpsiProductRequestRefresh");
@@ -1309,8 +1312,6 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	protected Map<String, Map<String, Object>> client2HwRows;
-
 	@Override
 	public void client2HwRowsRequestRefresh() {
 		Logging.info(this, "client2HwRowsRequestRefresh");
@@ -1329,8 +1330,6 @@ public class DataStubNOM extends AbstractDataStub {
 		retrieveClient2HwRows(hosts);
 		return client2HwRows;
 	}
-
-	protected List<Map<String, Object>> healthData;
 
 	@Override
 	public List<Map<String, Object>> checkHealth() {

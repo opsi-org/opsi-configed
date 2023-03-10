@@ -19,13 +19,6 @@ import de.uib.utilities.logging.Logging;
 
 //data source product table
 public class OpsiProductInfo extends OpsiPackage {
-	protected List<String> possibleActions;
-	protected String productName;
-	protected String description;
-	protected String advice;
-	protected boolean hasUserLoginScript;
-	protected Integer priority;
-
 	public static final int NO_PRIORITY = -101;
 
 	public static final String SERVICE_KEY_PRIORITY = "priority";
@@ -33,6 +26,13 @@ public class OpsiProductInfo extends OpsiPackage {
 	public static final String SERVICE_KEY_PRODUCT_ADVICE = "advice";
 	public static final String SERVICE_KEY_PRODUCT_DESCRIPTION = "description";
 	public static final String SERVICE_KEY_PRODUCT_NAME = "name";
+
+	protected List<String> possibleActions;
+	protected String productName;
+	protected String description;
+	protected String advice;
+	protected boolean hasUserLoginScript;
+	protected Integer priority;
 
 	public OpsiProductInfo(Map<String, Object> m) {
 		super(m);

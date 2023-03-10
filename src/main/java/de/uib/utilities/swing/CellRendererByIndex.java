@@ -51,12 +51,13 @@ import javax.swing.ListCellRenderer;
 import de.uib.configed.Globals;
 
 public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellRenderer<String> {
+	private static final int IMAGE_DEFAULT_WIDTH = 30;
+
 	private Font uhOhFont;
 
 	protected Map<String, String> mapOfStrings;
 	protected Map<String, String> mapOfTooltips;
 	protected Map<String, ImageIcon> mapOfImages;
-	private static final int IMAGE_DEFAULT_WIDTH = 30;
 
 	public CellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase) {
 		this(mapOfStringValues, imagesBase, IMAGE_DEFAULT_WIDTH);

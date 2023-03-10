@@ -317,8 +317,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	protected void buildPanel() {
 		setLayout(new BorderLayout());
 
-		TableCellRenderer colorized = new ColorTableCellRenderer();
-
 		table = new JTable(mapTableModel) {
 			@Override
 			public Component prepareRenderer(TableCellRenderer renderer, int rowIndex, int vColIndex) {
@@ -386,6 +384,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			}
 
 		};
+
+		TableCellRenderer colorized = new ColorTableCellRenderer();
 
 		table.setDefaultRenderer(Object.class, colorized);
 		table.setRowHeight(Globals.LINE_HEIGHT);

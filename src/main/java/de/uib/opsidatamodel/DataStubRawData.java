@@ -29,6 +29,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigStateEntry;
 import de.uib.configed.type.SWAuditClientEntry;
+import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.dbtable.Host;
 import de.uib.opsidatamodel.dbtable.ProductPropertyState;
@@ -79,6 +80,12 @@ public class DataStubRawData extends DataStubNOM {
 
 	@Override
 	public boolean canCallMySQL() {
+
+		// we cannot call MySQL if version before 4.3
+		if (JSONthroughHTTPS.isServerVersionAtLeast("4.3")) {
+			return false;
+		}
+
 		boolean result = false;
 
 		// test if we can access any table
@@ -456,7 +463,6 @@ public class DataStubRawData extends DataStubNOM {
 		StringBuilder buf = new StringBuilder("select HOST.hostId, ");
 		StringBuilder cols = new StringBuilder("");
 
-		String deviceTable = AbstractPersistenceController.HW_INFO_DEVICE + hwClass;
 		String configTable = AbstractPersistenceController.HW_INFO_CONFIG + hwClass;
 
 		String lastseenCol = configTable + "." + AbstractPersistenceController.LAST_SEEN_COL_NAME;
@@ -505,6 +511,8 @@ public class DataStubRawData extends DataStubNOM {
 			Logging.info(this, "no columns found for hwClass " + hwClass);
 			return new HashMap<>();
 		}
+
+		String deviceTable = AbstractPersistenceController.HW_INFO_DEVICE + hwClass;
 
 		String colsS = cols.toString();
 		buf.append(colsS.substring(0, colsS.length() - 1));

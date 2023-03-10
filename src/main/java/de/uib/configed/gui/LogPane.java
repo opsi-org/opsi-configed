@@ -157,7 +157,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		logLevelStyles = new Style[10];
 
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
-		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential.darker().darker());
+		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential);
 
 		logLevelStyles[2] = styleContext.addStyle("loglevel critical", null);
 		StyleConstants.setForeground(logLevelStyles[2], Globals.logColorCritical);
@@ -166,22 +166,22 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		StyleConstants.setForeground(logLevelStyles[3], Globals.logColorError);
 
 		logLevelStyles[4] = styleContext.addStyle("loglevel warning", null);
-		StyleConstants.setForeground(logLevelStyles[4], Globals.logColorWarning.darker());
+		StyleConstants.setForeground(logLevelStyles[4], Globals.logColorWarning);
 
 		logLevelStyles[5] = styleContext.addStyle("loglevel notice", null);
-		StyleConstants.setForeground(logLevelStyles[5], Globals.logColorNotice.darker().darker());
+		StyleConstants.setForeground(logLevelStyles[5], Globals.logColorNotice);
 
 		logLevelStyles[6] = styleContext.addStyle("loglevel info", null);
-		StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfo.darker().darker());
+		StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfo);
 
 		logLevelStyles[7] = styleContext.addStyle("loglevel debug", null);
-		StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebug.darker().darker());
+		StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebug);
 
 		logLevelStyles[8] = styleContext.addStyle("loglevel debug2", null);
-		StyleConstants.setForeground(logLevelStyles[8], Globals.logColorTrace.darker().darker());
+		StyleConstants.setForeground(logLevelStyles[8], Globals.logColorTrace);
 
 		logLevelStyles[9] = styleContext.addStyle("loglevel confidential", null);
-		StyleConstants.setForeground(logLevelStyles[9], Globals.logColorSecret.darker());
+		StyleConstants.setForeground(logLevelStyles[9], Globals.logColorSecret);
 
 		searcher = new WordSearcher(jTextPane);
 		searcher.setCaseSensitivity(false);
@@ -431,7 +431,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
-	protected class AdaptingSlider extends JSlider implements ChangeListener {
+	protected static class AdaptingSlider extends JSlider implements ChangeListener {
 
 		int min;
 		int max;
@@ -483,7 +483,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	// We create this class because the JTextPane should be editable only to show the caret position,
 	// but then you should not be able to change anything in the Text...
-	protected class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
+	protected static class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
 		ImmutableDefaultStyledDocument() {
 			super();
 		}
@@ -725,7 +725,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	}
 
-	private class StringBlock {
+	private static class StringBlock {
 		String s;
 		int iEnd;
 		private int contentStart;
@@ -805,9 +805,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 			iEnd = contentEnd;
 			iEnd++;
-
 		}
-
 	}
 
 	protected Style getStyleByLevelNo(int lev) {
@@ -893,11 +891,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 
 			lineTypes[i] = typeIndex;
-
 		}
 
 		adaptComboType();
-
 	}
 
 	private void adaptComboType() {

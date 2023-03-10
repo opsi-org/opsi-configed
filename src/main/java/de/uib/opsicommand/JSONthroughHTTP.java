@@ -48,6 +48,9 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
 
 public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
+	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
+	public static final int DEFAULT_PORT = 4447;
+
 	protected static final int POST = 0;
 	protected static final int GET = 1;
 	protected static final String CODING_TABLE = "UTF8";
@@ -55,7 +58,6 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	protected String username;
 	protected String password;
 	protected int portHTTP = 4444;
-	public static final int DEFAULT_PORT = 4447;
 	protected int portHTTPS = DEFAULT_PORT;
 	protected boolean startConnecting;
 	protected boolean endConnecting;
@@ -63,12 +65,11 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	protected String sessionId;
 	protected String lastSessionId;
 	protected int requestMethod = POST;
-	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
 	protected boolean certificateExists;
 	protected boolean trustOnlyOnce;
 	protected boolean trustAlways;
 
-	class JSONCommunicationException extends Exception {
+	static class JSONCommunicationException extends Exception {
 		JSONCommunicationException(String message) {
 			super(message);
 		}
@@ -205,8 +206,6 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 		} else {
 			background = true;
 		}
-
-		JSONObject result = null;
 
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 
@@ -359,6 +358,8 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
 			return null;
 		}
+
+		JSONObject result = null;
 
 		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) {
 			try {

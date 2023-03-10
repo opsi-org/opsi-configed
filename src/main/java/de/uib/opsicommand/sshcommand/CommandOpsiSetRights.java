@@ -12,7 +12,10 @@ import de.uib.configed.gui.ssh.SSHOpsiSetRightsParameterDialog;
 import de.uib.utilities.logging.Logging;
 
 public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHCommandNeedParameter {
+	private static final int PRIORITY = 110;
+
 	private static final String BASE_NAME = "opsi-set-rights ";
+
 	private String command = BASE_NAME;
 
 	protected FGeneralDialog dialog;
@@ -21,7 +24,6 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	private boolean isMultiCommand = true;
 	private LinkedList<SSHCommand> sshCommand = new LinkedList<>();
 	private LinkedList<SSHCommand> sshCommandOriginal = new LinkedList<>();
-	private static final int PRIORITY = 110;
 	private String mainName = "";
 	private String dir;
 	private String myTmpCommand;

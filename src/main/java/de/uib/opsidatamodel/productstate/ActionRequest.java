@@ -48,6 +48,18 @@ public class ActionRequest {
 	// instance variable
 	private int state = INVALID;
 
+	// constructor
+	public ActionRequest() {
+	}
+
+	public ActionRequest(int t) {
+		if (existsState(t)) {
+			state = t;
+		} else {
+			state = NOT_AVAILABLE;
+		}
+	}
+
 	private static void checkCollections() {
 		if (states != null) {
 			return;
@@ -301,17 +313,4 @@ public class ActionRequest {
 
 		return new ActionRequest(getVal(label));
 	}
-
-	// constructor
-	public ActionRequest() {
-	}
-
-	public ActionRequest(int t) {
-		if (existsState(t)) {
-			state = t;
-		} else {
-			state = NOT_AVAILABLE;
-		}
-	}
-
 }

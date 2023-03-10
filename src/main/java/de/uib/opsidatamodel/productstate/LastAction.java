@@ -39,6 +39,18 @@ public class LastAction {
 	// instance variable
 	private int state = INVALID;
 
+	// constructor
+	public LastAction() {
+	}
+
+	public LastAction(int t) {
+		if (existsState(t)) {
+			state = t;
+		} else {
+			state = NOT_AVAILABLE;
+		}
+	}
+
 	private static void checkCollections() {
 		if (states != null) {
 			return;
@@ -203,17 +215,5 @@ public class LastAction {
 		}
 
 		return new LastAction(getVal(label));
-	}
-
-	// constructor
-	public LastAction() {
-	}
-
-	public LastAction(int t) {
-		if (existsState(t)) {
-			state = t;
-		} else {
-			state = NOT_AVAILABLE;
-		}
 	}
 }

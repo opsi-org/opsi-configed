@@ -233,7 +233,6 @@ public final class Terminal {
 		GroupLayout settingsLayout = new GroupLayout(settingsPanel);
 		settingsPanel.setLayout(settingsLayout);
 
-		JLabel themeLabel = new JLabel(Configed.getResourceValue("Terminal.settings.theme"));
 		JComboBox<String> themeComboBox = new JComboBox<>();
 		themeComboBox.addItem(Configed.getResourceValue("Terminal.settings.theme.dark"));
 		themeComboBox.addItem(Configed.getResourceValue("Terminal.settings.theme.light"));
@@ -270,6 +269,8 @@ public final class Terminal {
 
 			resizeTerminal();
 		});
+
+		JLabel themeLabel = new JLabel(Configed.getResourceValue("Terminal.settings.theme"));
 
 		settingsLayout.setHorizontalGroup(settingsLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 				.addComponent(themeLabel, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)

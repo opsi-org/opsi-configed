@@ -73,7 +73,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
-	private class ColumnIdent {
+	private static class ColumnIdent {
 		String dbColumnName;
 		String hwClass;
 		String tableType;

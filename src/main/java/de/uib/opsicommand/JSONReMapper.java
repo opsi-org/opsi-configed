@@ -332,7 +332,6 @@ public final class JSONReMapper {
 
 	@SuppressWarnings("java:S1168")
 	public static List<Map<String, Object>> getListOfMaps(Object retrieved) {
-		List<Map<String, Object>> result = new ArrayList<>();
 		List<Object> jsonList = null;
 
 		try {
@@ -350,6 +349,8 @@ public final class JSONReMapper {
 		}
 
 		JSONObject item = null;
+
+		List<Map<String, Object>> result = new ArrayList<>();
 
 		try {
 

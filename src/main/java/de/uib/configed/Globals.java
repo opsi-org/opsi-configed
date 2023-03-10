@@ -35,7 +35,7 @@ public final class Globals {
 
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-03-07";
+	public static final String VERDATE = "2023-03-10";
 
 	public static final String VERHASHTAG = "";
 
@@ -252,16 +252,16 @@ public final class Globals {
 	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235);
 	public static final Color defaultTableCellSelectedBgColorNotEditable = new Color(189, 207, 231);
 
-	public static final Color logColorEssential = new Color(52, 204, 204);
+	public static final Color logColorEssential = new Color(0, 0, 0);
 	public static final Color logColorCritical = new Color(255, 0, 0);
 	public static final Color logColorError = new Color(201, 0, 0);
-	public static final Color logColorWarning = new Color(246, 185, 37);
+	public static final Color logColorWarning = new Color(206, 145, 30);
 
-	public static final Color logColorNotice = new Color(138, 226, 52);
-	public static final Color logColorInfo = new Color(238, 238, 236);
-	public static final Color logColorDebug = new Color(208, 215, 207);
-	public static final Color logColorTrace = new Color(139, 143, 138);
-	public static final Color logColorSecret = new Color(110, 90, 0);
+	public static final Color logColorNotice = new Color(10, 150, 10);
+	public static final Color logColorInfo = new Color(50, 50, 50);
+	public static final Color logColorDebug = new Color(150, 150, 150);
+	public static final Color logColorTrace = new Color(150, 150, 150);
+	public static final Color logColorSecret = new Color(150, 150, 0);
 
 	public static final Color opsiLogoBlue = new Color(106, 128, 174);
 	public static final Color opsiLogoLightBlue = new Color(195, 200, 222);
@@ -893,42 +893,6 @@ public final class Globals {
 		}
 
 		return result;
-	}
-
-	public static int compareOpsiVersions(final String number1, final String number2) {
-		if (number1 == null) {
-			throw new IllegalArgumentException("Number1 can not be null");
-		}
-
-		// \\d stands for digit, so [0-9]
-		if (!number1.matches("\\d+(\\.\\d+)*")) {
-			throw new IllegalArgumentException("Invalid number1 format");
-		}
-
-		if (number2 == null) {
-			throw new IllegalArgumentException("Number2 can not be null");
-		}
-
-		if (!number2.matches("\\d+(\\.\\d+)*")) {
-			throw new IllegalArgumentException("Invalid number2 format");
-		}
-
-		String[] n1Parts = number1.split("\\.");
-		String[] n2Parts = number2.split("\\.");
-		int length = Math.max(n1Parts.length, n2Parts.length);
-		for (int i = 0; i < length; i++) {
-			int n1Part = i < n1Parts.length ? Integer.parseInt(n1Parts[i]) : 0;
-			int n2Part = i < n2Parts.length ? Integer.parseInt(n2Parts[i]) : 0;
-
-			if (n1Part < n2Part) {
-				return -1;
-			}
-
-			if (n1Part > n2Part) {
-				return 1;
-			}
-		}
-		return 0;
 	}
 
 	public static String makeHTMLlines(String s) {

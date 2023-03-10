@@ -38,6 +38,18 @@ public class TargetConfiguration {
 	// instance variable
 	private int state = INVALID;
 
+	// constructor
+	public TargetConfiguration() {
+	}
+
+	public TargetConfiguration(int t) {
+		if (existsState(t)) {
+			state = t;
+		} else {
+			state = INVALID;
+		}
+	}
+
 	private static void checkCollections() {
 		if (states != null) {
 			return;
@@ -187,17 +199,5 @@ public class TargetConfiguration {
 		}
 
 		return new TargetConfiguration(getVal(label));
-	}
-
-	// constructor
-	public TargetConfiguration() {
-	}
-
-	public TargetConfiguration(int t) {
-		if (existsState(t)) {
-			state = t;
-		} else {
-			state = INVALID;
-		}
 	}
 }

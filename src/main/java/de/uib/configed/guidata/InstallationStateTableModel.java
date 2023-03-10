@@ -138,8 +138,54 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	protected int[] indexPreparedColumns;
 	protected boolean[] editablePreparedColumns;
 
-	// collects titles for the columns prepared in this class
+	public InstallationStateTableModel(String[] selectedClients, ConfigedMain main,
+			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
+			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
+		Logging.info(this, "creating an InstallationStateTableModel ");
+		if (statesAndActions == null) {
+			Logging.info(this, " statesAndActions null ");
+		} else {
+			Logging.info(this, " statesAndActions " + statesAndActions.size());
+		}
 
+		this.main = main;
+
+		this.collectChangedStates = collectChangedStates;
+		this.selectedClients = selectedClients;
+
+		this.possibleActions = possibleActions;
+		this.globalProductInfos = productGlobalInfos;
+
+		initColumnNames(displayColumns);
+		initChangedStates();
+
+		missingImplementationForAR = new TreeSet<>();
+		product2setOfClientsWithNewAction = new HashMap<>();
+
+		persist = main.getPersistenceController();
+		Collator myCollator = Collator.getInstance();
+
+		myCollator.setStrength(Collator.SECONDARY);
+
+		productNamesInDeliveryOrder = new ArrayList<>();
+		if (listOfInstallableProducts != null) {
+			for (int i = 0; i < listOfInstallableProducts.size(); i++) {
+				String product = listOfInstallableProducts.get(i);
+				productNamesInDeliveryOrder.add(product);
+			}
+		}
+
+		tsProductNames = new TreeSet<>(myCollator);
+		tsProductNames.addAll(productNamesInDeliveryOrder);
+		productsV = new ArrayList<>(tsProductNames);
+
+		Logging.debug(this, "tsProductNames " + tsProductNames);
+
+		initalizeProductStates(statesAndActions);
+	}
+
+	// collects titles for the columns prepared in this class
 	public static void restartColumnDict() {
 		columnDict = null;
 	}
@@ -203,53 +249,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			}
 		}
 		return result;
-	}
-
-	public InstallationStateTableModel(String[] selectedClients, ConfigedMain main,
-			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
-			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
-			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
-		Logging.info(this, "creating an InstallationStateTableModel ");
-		if (statesAndActions == null) {
-			Logging.info(this, " statesAndActions null ");
-		} else {
-			Logging.info(this, " statesAndActions " + statesAndActions.size());
-		}
-
-		this.main = main;
-
-		this.collectChangedStates = collectChangedStates;
-		this.selectedClients = selectedClients;
-
-		this.possibleActions = possibleActions;
-		this.globalProductInfos = productGlobalInfos;
-
-		initColumnNames(displayColumns);
-		initChangedStates();
-
-		missingImplementationForAR = new TreeSet<>();
-		product2setOfClientsWithNewAction = new HashMap<>();
-
-		persist = main.getPersistenceController();
-		Collator myCollator = Collator.getInstance();
-
-		myCollator.setStrength(Collator.SECONDARY);
-
-		productNamesInDeliveryOrder = new ArrayList<>();
-		if (listOfInstallableProducts != null) {
-			for (int i = 0; i < listOfInstallableProducts.size(); i++) {
-				String product = listOfInstallableProducts.get(i);
-				productNamesInDeliveryOrder.add(product);
-			}
-		}
-
-		tsProductNames = new TreeSet<>(myCollator);
-		tsProductNames.addAll(productNamesInDeliveryOrder);
-		productsV = new ArrayList<>(tsProductNames);
-
-		Logging.debug(this, "tsProductNames " + tsProductNames);
-
-		initalizeProductStates(statesAndActions);
 	}
 
 	private void initalizeProductStates(Map<String, List<Map<String, String>>> client2listProductState) {

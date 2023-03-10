@@ -82,8 +82,6 @@ public final class LicensingInfoMap {
 
 	private static final String CLASSNAME = LicensingInfoMap.class.getName();
 
-	public static final String OPSI_LICENSING_INFO_VERSION_OLD = "";
-	public static final String OPSI_LICENSING_INFO_VERSION = "2";
 	public static final String DISPLAY_INFINITE = "\u221E";
 
 	private static LicensingInfoMap instance;
@@ -146,6 +144,7 @@ public final class LicensingInfoMap {
 		availableModules = produceAvailableModules();
 		knownModulesList = produceKnownModules();
 		shownModules = produceShownModules();
+
 		datesKeys = produceDatesKeys();
 		latestDateString = findLatestChangeDateString();
 		datesMap = produceDatesMap();
@@ -879,13 +878,14 @@ public final class LicensingInfoMap {
 	 * @return list of modules for every possible warning state (4)
 	 */
 	public Map<String, List<String>> getWarnings() {
-		Map<String, List<String>> result = new HashMap<>();
 
 		if (currentCloseToLimitModuleList.isEmpty() && currentOverLimitModuleList.isEmpty()
 				&& currentTimeWarningModuleList.isEmpty() && currentTimeOverModuleList.isEmpty()
 				&& futureCloseToLimitModuleList.isEmpty() && futureOverLimitModuleList.isEmpty()) {
 			return new HashMap<>();
 		}
+
+		Map<String, List<String>> result = new HashMap<>();
 
 		result.put(CURRENT_OVER_LIMIT, currentOverLimitModuleList);
 		result.put(CURRENT_CLOSE_TO_LIMIT, currentCloseToLimitModuleList);

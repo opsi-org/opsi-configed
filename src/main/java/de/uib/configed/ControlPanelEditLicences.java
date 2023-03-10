@@ -239,9 +239,6 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 				return;
 			}
 
-			String val = (String) modelSoftwarelicences
-					.getValueAt(thePanel.panelSoftwarelicences.getSelectedRowInModelTerms(), 0);
-
 			if (thePanel.panelKeys.getSelectedRow() == -1) {
 				JOptionPane.showMessageDialog(mainController.licencesFrame,
 						Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
@@ -249,6 +246,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 				return;
 			}
+
+			String val = (String) modelSoftwarelicences
+					.getValueAt(thePanel.panelSoftwarelicences.getSelectedRowInModelTerms(), 0);
 
 			thePanel.panelKeys.setValueAt(val, thePanel.panelKeys.getSelectedRow(), 0);
 		});
@@ -345,14 +345,15 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 				return;
 			}
 
-			String val = (String) modelLicencecontracts
-					.getValueAt(thePanel.panelLicencecontracts.getSelectedRowInModelTerms(), 0);
 			if (thePanel.panelSoftwarelicences.getSelectedRow() == -1) {
 				JOptionPane.showMessageDialog(mainController.licencesFrame,
 						Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
 						Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
 				return;
 			}
+
+			String val = (String) modelLicencecontracts
+					.getValueAt(thePanel.panelLicencecontracts.getSelectedRowInModelTerms(), 0);
 
 			thePanel.panelSoftwarelicences.setValueAt(val, thePanel.panelSoftwarelicences.getSelectedRow(), 1);
 		});

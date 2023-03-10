@@ -80,7 +80,7 @@ import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.InstallationInfo;
 import de.uib.opsidatamodel.productstate.ProductState;
-import de.uib.utilities.datapanel.AbstractEditMapPanel;
+import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
@@ -124,7 +124,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	// right pane
 	ProductInfoPane infoPane;
 	protected AbstractPanelEditProperties panelEditProperties;
-	AbstractEditMapPanel propertiesPanel;
+	DefaultEditMapPanel propertiesPanel;
 
 	ListCellRenderer standardListCellRenderer;
 
@@ -298,47 +298,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_STATUS) + ": ");
 
-		class ActionProgressTableCellRenderer extends ColoredTableCellRendererByIndex {
-			ActionProgressTableCellRenderer(Map<String, String> mapOfStringValues, String imagesBase,
-					boolean showOnlyIcon, String tooltipPrefix) {
-				super(mapOfStringValues, imagesBase, showOnlyIcon, tooltipPrefix);
-			}
-
-			// overwrite the renderer in order to get the behaviour:
-			// - if the cell value is not empty or null, display the installing gif
-			// - write the cell value text as tooltip
-			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-					boolean hasFocus, int row, int column) {
-
-				Component result = null;
-				if (value != null && !value.equals("") && !value.toString().equals("null")
-						&& !value.toString().equalsIgnoreCase("none")
-						&& !value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
-					result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row,
-							column);
-
-					((JLabel) result)
-							.setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
-
-				} else if (value != null && value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
-					result = super.getTableCellRendererComponent(table, Globals.CONFLICT_STATE_STRING, isSelected,
-							hasFocus, row, column);
-
-					((JLabel) result).setToolTipText(Globals.fillStringToLength(
-							tooltipPrefix + " " + Globals.CONFLICT_STATE_STRING + " ", FILL_LENGTH));
-				} else {
-					result = super.getTableCellRendererComponent(table, "none", isSelected, hasFocus, row, column);
-
-					((JLabel) result).setToolTipText(Globals.fillStringToLength(
-							tooltipPrefix + " " + ActionProgress.getDisplayLabel(ActionProgress.NONE) + " ",
-							FILL_LENGTH));
-				}
-
-				return result;
-			}
-		}
-
 		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
 			iconsDir = "images/productstate/actionprogress";
 		}
@@ -476,7 +435,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
 		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
-		propertiesPanel.setActor(new AbstractEditMapPanel.Actor() {
+		propertiesPanel.setActor(new DefaultEditMapPanel.Actor() {
 			@Override
 			protected void reloadData() {
 				super.reloadData();
@@ -510,6 +469,45 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.addMouseListener(new utils.PopupMouseListener(popup));
 		tableProducts.addMouseListener(new utils.PopupMouseListener(popup));
 
+	}
+
+	private static class ActionProgressTableCellRenderer extends ColoredTableCellRendererByIndex {
+		ActionProgressTableCellRenderer(Map<String, String> mapOfStringValues, String imagesBase, boolean showOnlyIcon,
+				String tooltipPrefix) {
+			super(mapOfStringValues, imagesBase, showOnlyIcon, tooltipPrefix);
+		}
+
+		// overwrite the renderer in order to get the behaviour:
+		// - if the cell value is not empty or null, display the installing gif
+		// - write the cell value text as tooltip
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+
+			Component result = null;
+			if (value != null && !value.equals("") && !value.toString().equals("null")
+					&& !value.toString().equalsIgnoreCase("none")
+					&& !value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
+				result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row, column);
+
+				((JLabel) result)
+						.setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
+
+			} else if (value != null && value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
+				result = super.getTableCellRendererComponent(table, Globals.CONFLICT_STATE_STRING, isSelected, hasFocus,
+						row, column);
+
+				((JLabel) result).setToolTipText(Globals
+						.fillStringToLength(tooltipPrefix + " " + Globals.CONFLICT_STATE_STRING + " ", FILL_LENGTH));
+			} else {
+				result = super.getTableCellRendererComponent(table, "none", isSelected, hasFocus, row, column);
+
+				((JLabel) result).setToolTipText(Globals.fillStringToLength(
+						tooltipPrefix + " " + ActionProgress.getDisplayLabel(ActionProgress.NONE) + " ", FILL_LENGTH));
+			}
+
+			return result;
+		}
 	}
 
 	public void initAllProperties() {

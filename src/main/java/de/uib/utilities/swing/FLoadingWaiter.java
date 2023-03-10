@@ -27,16 +27,16 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 	private static final long WAITING_MILLIS_FOR_LOADING = 50000;
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
+	private static final int JPROGRESSBAR_MAX_VALUE = 200;
+
 	private JProgressBar progressBar;
 	private JLabel infoLabel;
 
 	private Object observingMesg = Configed.getResourceValue("LoadingObserver.start");
 
-	private static final int JPROGRESSBAR_MAX_VALUE = 200;
-
 	private WaitingWorker worker;
 
-	class MyPainter implements Painter<JProgressBar> {
+	static class MyPainter implements Painter<JProgressBar> {
 
 		private final Color color;
 

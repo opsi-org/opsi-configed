@@ -117,6 +117,7 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
+import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
@@ -329,10 +330,6 @@ public class MainFrame extends JFrame
 	private JMenuItemFormatted popupCreatePdf = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
 			Globals.createImageIcon("images/acrobat_reader16.png", ""));
 
-	private JPanel iconBarPane;
-
-	private JPanel iconPane0;
-
 	private JPanel iconPaneTargets;
 	private JButton jButtonServerConfiguration;
 	private JButton jButtonDepotsConfiguration;
@@ -493,7 +490,7 @@ public class MainFrame extends JFrame
 
 	private Messagebus messagebus;
 
-	class GlassPane extends JComponent {
+	static class GlassPane extends JComponent {
 		GlassPane() {
 			super();
 			Logging.debug(this, "glass pane initialized");
@@ -1382,20 +1379,15 @@ public class MainFrame extends JFrame
 
 		jMenuHelp.addSeparator();
 
-		jMenuHelpOpsiVersion.setText(
-				Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": " + configedMain.getOpsiVersion());
+		jMenuHelpOpsiVersion.setText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": "
+				+ JSONthroughHTTPS.getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
 		jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
 
 		jMenuHelp.add(jMenuHelpOpsiVersion);
 
 		jMenuHelpOpsiModuleInformation.setText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"));
-		if (configedMain.getOpsiVersion().length() == 0 || configedMain.getOpsiVersion().charAt(0) == '<'
-				|| configedMain.getOpsiVersion().compareTo("3.4") < 0) {
-			jMenuHelpOpsiModuleInformation.setEnabled(false);
-		} else {
-			jMenuHelpOpsiModuleInformation.addActionListener((ActionEvent e) -> showOpsiModules());
-		}
+		jMenuHelpOpsiModuleInformation.addActionListener((ActionEvent e) -> showOpsiModules());
 
 		jMenuHelp.add(jMenuHelpOpsiModuleInformation);
 
@@ -2308,32 +2300,35 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setVisible(ConfigedMain.OPSI_4_3);
 		jButtonDashboard.addActionListener(this);
 
-		if (!configedMain.getPersistenceController().getOpsiLicencingInfoVersion()
-				.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD) && licensingInfoMap == null) {
+		if (configedMain.getPersistenceController().isOpsiLicencingAvailable()
+				&& configedMain.getPersistenceController().isOpsiUserAdmin() && licensingInfoMap == null) {
 
 			licensingInfoMap = LicensingInfoMap.getInstance(
 					configedMain.getPersistenceController().getOpsiLicencingInfo(),
 					configedMain.getPersistenceController().getConfigDefaultValues(),
 					!FGeneralDialogLicensingInfo.extendedView);
 
-			if (licensingInfoMap.warningExists()) {
-				if (licensingInfoMap.getWarningLevel().equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
-					jButtonOpsiLicenses = new JButton("",
-							Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
-				}
-				if (licensingInfoMap.getWarningLevel().equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
-					jButtonOpsiLicenses = new JButton("",
-							Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
-				}
+			switch (licensingInfoMap.getWarningLevel()) {
+			case LicensingInfoMap.STATE_OVER_LIMIT:
+				jButtonOpsiLicenses = new JButton("",
+						Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
+				break;
+			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
+				jButtonOpsiLicenses = new JButton("",
+						Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
+				break;
 
-			} else {
+			case LicensingInfoMap.STATE_OKAY:
 				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
+				break;
+
+			default:
+				Logging.warning(this, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
+				break;
 			}
 
 		} else {
-
 			jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
-
 		}
 
 		jButtonOpsiLicenses.setPreferredSize(Globals.modeSwitchDimension);
@@ -2414,7 +2409,7 @@ public class MainFrame extends JFrame
 												GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 								.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		iconPane0 = new JPanel();
+		JPanel iconPane0 = new JPanel();
 
 		GroupLayout layoutIconPane0 = new GroupLayout(iconPane0);
 		iconPane0.setLayout(layoutIconPane0);
@@ -2498,7 +2493,7 @@ public class MainFrame extends JFrame
 										GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		iconBarPane = new JPanel();
+		JPanel iconBarPane = new JPanel();
 		iconBarPane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
@@ -3189,11 +3184,9 @@ public class MainFrame extends JFrame
 	}
 
 	private void showOpsiModules() {
-		if (configedMain.getPersistenceController().getOpsiLicencingInfoVersion()
-				.equals(LicensingInfoMap.OPSI_LICENSING_INFO_VERSION_OLD)) {
+		if (!configedMain.getPersistenceController().isOpsiLicencingAvailable()
+				|| !configedMain.getPersistenceController().isOpsiUserAdmin()) {
 
-			FTextArea f = new FTextArea(this, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
-					true);
 			StringBuilder message = new StringBuilder();
 			Map<String, Object> modulesInfo = configedMain.getPersistenceController().getOpsiModulesInfos();
 
@@ -3202,9 +3195,11 @@ public class MainFrame extends JFrame
 				count++;
 				message.append("\n " + modulesInfoEntry.getKey() + ": " + modulesInfoEntry.getValue());
 			}
-			f.setSize(new Dimension(300, 50 + count * 25));
 
-			f.setMessage(message.toString());
+			FTextArea f = new FTextArea(this, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
+					message.toString(), true, new String[] { Configed.getResourceValue("buttonOK") }, 300,
+					50 + count * 25);
+
 			f.setVisible(true);
 		} else {
 			callOpsiLicensingInfo();
@@ -3473,6 +3468,9 @@ public class MainFrame extends JFrame
 					AbstractPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
 				// Starting JavaFX-Thread by creating a new JFXPanel, but not
 				// using it since it is not needed.
+
+				// TODO can this be removed?
+				// when do we need it?
 				new JFXPanel();
 
 				Platform.runLater(() -> {

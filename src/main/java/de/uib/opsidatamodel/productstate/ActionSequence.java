@@ -4,13 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class ActionSequence {
-	// private constructor to hide the implicit public one
-	private ActionSequence() {
-	}
 
 	public static final String KEY = "actionSequence";
 
 	private static Map<String, String> displayLabel2label;
+
+	// private constructor to hide the implicit public one
+	private ActionSequence() {
+	}
 
 	private static void checkCollections() {
 		if (displayLabel2label == null) {

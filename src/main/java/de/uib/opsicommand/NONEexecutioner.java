@@ -53,7 +53,7 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, List<Object>> getMapOfLists(OpsiMethodCall omc) {
+	public Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc) {
 		return new HashMap<>();
 	}
 

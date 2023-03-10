@@ -29,6 +29,11 @@ import de.uib.utilities.table.ListCellOptions;
 
 public class MapTableModel extends AbstractTableModel implements DataChangedSubject {
 
+	public static final List<?> nullLIST = new ArrayList<>();
+	static {
+		nullLIST.add(null);
+	}
+
 	protected List<DataChangedObserver> observers;
 
 	protected Collection updateCollection;
@@ -42,11 +47,6 @@ public class MapTableModel extends AbstractTableModel implements DataChangedSubj
 	private Set<String> keysOfReadOnlyEntries;
 
 	private Function<String, Boolean> editDenier;
-
-	public static final List<?> nullLIST = new ArrayList<>();
-	static {
-		nullLIST.add(null);
-	}
 
 	protected Map<String, ListCellOptions> optionsMap;
 

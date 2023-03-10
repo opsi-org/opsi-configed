@@ -531,7 +531,7 @@ public class PanelSWInfo extends JPanel {
 		this.hostId = "" + hostId;
 	}
 
-	protected class SWInfoTableModel extends AbstractTableModel {
+	protected static class SWInfoTableModel extends AbstractTableModel {
 		private List<String[]> data;
 
 		public SWInfoTableModel() {

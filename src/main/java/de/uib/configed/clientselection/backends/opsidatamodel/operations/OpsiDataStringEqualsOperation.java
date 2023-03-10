@@ -37,7 +37,7 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		Logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch client " + oClient);
 
-		Map realMap = oClient.getMap(map);
+		Map<String, Object> realMap = oClient.getMap(map);
 		Logging.debug(this, "doesMatch,  we look into map for key " + key);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
 

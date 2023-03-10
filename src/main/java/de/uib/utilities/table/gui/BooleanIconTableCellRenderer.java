@@ -47,8 +47,6 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 			return c;
 		}
 
-		JLabel label = (JLabel) c;
-
 		if (value != null && !(value instanceof Boolean) && !(value instanceof String)) {
 			return c;
 		}
@@ -56,6 +54,8 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 		if (value != null && !allowingString && !(value instanceof Boolean)) {
 			return c;
 		}
+
+		JLabel label = (JLabel) c;
 
 		label.setText("");
 		label.setIcon(null);

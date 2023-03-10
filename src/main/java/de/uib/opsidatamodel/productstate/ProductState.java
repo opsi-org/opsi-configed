@@ -13,14 +13,6 @@ public class ProductState extends HashMap<String, String> {
 
 	private static ProductState defaultProductState;
 
-	public static ProductState getDefaultProductState() {
-		if (defaultProductState == null) {
-			defaultProductState = new ProductState(null);
-		}
-
-		return defaultProductState;
-	}
-
 	public static final List<String> SERVICE_KEYS = List.of("modificationTime", "productId", "productVersion",
 			"packageVersion", "targetConfiguration", "lastAction", "installationStatus", "actionRequest",
 			"actionProgress", "actionResult", "priority", "actionSequence");
@@ -67,8 +59,6 @@ public class ProductState extends HashMap<String, String> {
 	// additional values
 	public static final String KEY_POSITION = "position";
 	public static final String KEY_PRODUCT_NAME = "productName";
-
-	protected final Map<String, String> retrieved;
 
 	public static final List<String> KEYS = new ArrayList<>();
 	static {
@@ -119,6 +109,34 @@ public class ProductState extends HashMap<String, String> {
 		key2servicekey.put(KEY_LAST_STATE_CHANGE, "modificationTime");
 	}
 
+	protected final Map<String, String> retrieved;
+
+	public ProductState(Map<String, String> retrievedState, boolean transform) {
+		super();
+		this.retrieved = retrievedState;
+		if (retrieved == null) {
+			setDefaultValues();
+		} else {
+			readRetrieved();
+		}
+
+		if (transform) {
+			setTransforms();
+		}
+	}
+
+	public ProductState(Map<String, String> retrievedState) {
+		this(retrievedState, true);
+	}
+
+	public static ProductState getDefaultProductState() {
+		if (defaultProductState == null) {
+			defaultProductState = new ProductState(null);
+		}
+
+		return defaultProductState;
+	}
+
 	private void readRetrieved() {
 
 		put(KEY_PRODUCT_ID, getRetrievedValue(key2servicekey.get(KEY_PRODUCT_ID)));
@@ -139,24 +157,6 @@ public class ProductState extends HashMap<String, String> {
 		put(KEY_PACKAGE_VERSION, getRetrievedValue(key2servicekey.get(KEY_PACKAGE_VERSION)));
 
 		put(KEY_LAST_STATE_CHANGE, getRetrievedValue(key2servicekey.get(KEY_LAST_STATE_CHANGE)));
-	}
-
-	public ProductState(Map<String, String> retrievedState, boolean transform) {
-		super();
-		this.retrieved = retrievedState;
-		if (retrieved == null) {
-			setDefaultValues();
-		} else {
-			readRetrieved();
-		}
-
-		if (transform) {
-			setTransforms();
-		}
-	}
-
-	public ProductState(Map<String, String> retrievedState) {
-		this(retrievedState, true);
 	}
 
 	@Override
@@ -261,7 +261,5 @@ public class ProductState extends HashMap<String, String> {
 		}
 
 		return retrieved.get(key);
-
 	}
-
 }

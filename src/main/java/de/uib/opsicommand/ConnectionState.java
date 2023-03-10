@@ -11,13 +11,13 @@ public class ConnectionState {
 	public static final int CLOSING = 5;
 	public static final int INTERRUPTED = 6;
 	public static final int ERROR = 10;
-	protected int myState = NOT_CONNECTED;
 
 	public static final ConnectionState ConnectionUndefined = new ConnectionState(UNDEFINED, "not initialized");
+	private static int instancesCount;
+
+	protected int myState = NOT_CONNECTED;
 
 	protected String message = "";
-
-	private static int instancesCount;
 
 	/**
 	 * constructor

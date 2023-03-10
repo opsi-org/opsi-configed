@@ -25,7 +25,7 @@ public class OpsiDataBigIntGreaterOrEqualOperation extends BigIntGreaterOrEqualO
 	@Override
 	public boolean doesMatch(Client client) {
 		OpsiDataClient oClient = (OpsiDataClient) client;
-		Map realMap = oClient.getMap(map);
+		Map<String, Object> realMap = oClient.getMap(map);
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
 			Logging.debug(this, "key " + key + " not found!");
 			return false;

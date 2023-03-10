@@ -150,9 +150,8 @@ public class SWAuditClientEntry {
 
 	}
 
-	public static String produceSWident(List<String> keys, List<String> values)
-	// from db columns
-	{
+	public static String produceSWident(List<String> keys, List<String> values) {
+		// from db columns
 
 		String result = "";
 		try {

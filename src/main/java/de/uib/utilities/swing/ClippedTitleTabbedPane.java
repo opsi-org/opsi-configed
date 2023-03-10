@@ -25,14 +25,6 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 
 	private double proportionOfTotalWidth = 1;
 
-	private int calcWidth() {
-		return (int) (getWidth() * proportionOfTotalWidth);
-	}
-
-	public void setProportionOfTotalWidth(double prop) {
-		proportionOfTotalWidth = prop;
-	}
-
 	public ClippedTitleTabbedPane() {
 		super();
 		super.addComponentListener(new ComponentAdapter() {
@@ -43,6 +35,14 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 		});
 
 		super.addChangeListener(changeEvent -> initTabWidth());
+	}
+
+	private int calcWidth() {
+		return (int) (getWidth() * proportionOfTotalWidth);
+	}
+
+	public void setProportionOfTotalWidth(double prop) {
+		proportionOfTotalWidth = prop;
 	}
 
 	private Insets getTabInsets() {

@@ -176,11 +176,7 @@ public class ClientView implements View {
 		clientLastSeenComboBox.setItems(lastSeen);
 		clientLastSeenComboBox.getSelectionModel().selectFirst();
 
-		final FilteredList<Client> filteredData = new FilteredList<>(FXCollections.observableArrayList(clients));
-
 		final ObjectProperty<Predicate<Client>> hostnameFilter = new SimpleObjectProperty<>();
-		final ObjectProperty<Predicate<Client>> activeFilter = new SimpleObjectProperty<>();
-		final ObjectProperty<Predicate<Client>> lastSeenFilter = new SimpleObjectProperty<>();
 
 		hostnameFilter.bind(Bindings.createObjectBinding(() -> (Client client) -> {
 			if (clientSearchbarTextField.getText() == null) {
@@ -190,6 +186,9 @@ public class ClientView implements View {
 			return client.getHostname().toLowerCase(Locale.ROOT)
 					.contains(clientSearchbarTextField.getText().toLowerCase(Locale.ROOT));
 		}, clientSearchbarTextField.textProperty()));
+
+		final ObjectProperty<Predicate<Client>> lastSeenFilter = new SimpleObjectProperty<>();
+
 		lastSeenFilter.bind(Bindings.createObjectBinding(() -> (Client client) -> {
 			if (clientLastSeenComboBox.getValue() == null || clientLastSeenComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
@@ -214,6 +213,9 @@ public class ClientView implements View {
 					|| (clientLastSeenComboBox.getValue().equals(Configed.getResourceValue("Dashboard.lastSeen.never"))
 							&& client.getLastSeen().equals(Configed.getResourceValue("Dashboard.lastSeen.never")));
 		}, clientLastSeenComboBox.valueProperty()));
+
+		final ObjectProperty<Predicate<Client>> activeFilter = new SimpleObjectProperty<>();
+
 		activeFilter.bind(Bindings.createObjectBinding(() -> (Client client) -> {
 			if (clientActivityStatusComboBox.getValue() == null || clientActivityStatusComboBox.getValue()
 					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
@@ -225,6 +227,8 @@ public class ClientView implements View {
 					|| (!client.isReachable() && clientActivityStatusComboBox.getValue()
 							.equals(Configed.getResourceValue("Dashboard.client.inactive")));
 		}, clientActivityStatusComboBox.valueProperty()));
+
+		final FilteredList<Client> filteredData = new FilteredList<>(FXCollections.observableArrayList(clients));
 
 		filteredData.predicateProperty()
 				.bind(Bindings.createObjectBinding(

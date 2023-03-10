@@ -595,7 +595,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	}
 
-	private class HWInfoTableModel extends AbstractTableModel {
+	private static class HWInfoTableModel extends AbstractTableModel {
 		private List<String[]> data;
 		private final String[] header = { "Name", "Wert" };
 

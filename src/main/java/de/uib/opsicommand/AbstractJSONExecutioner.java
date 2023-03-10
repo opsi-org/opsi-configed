@@ -91,30 +91,13 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 		return JSONReMapper.getMapResult(retrieveJSONObject(omc));
 	}
 
-	public Map<String, List<Object>> getMapOfLists(JSONObject jO) {
-		Map<String, List<Object>> result = new HashMap<>();
-		try {
-			if (jO != null) {
-				Iterator<String> iter = jO.keys();
-				while (iter.hasNext()) {
-					String key = iter.next();
-
-					result.put(key, JSONReMapper.getJsonList(jO, key));
-				}
-			}
-		} catch (Exception ex) {
-			Logging.error("Exception on getting Map " + ex.toString());
-		}
-		return result;
-	}
-
-	private Map<String, List<Object>> getMapOfLists(OpsiMethodCall omc, boolean recursive) {
-		Map<String, List<Object>> result = new HashMap<>();
+	private Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc, boolean recursive) {
+		Map<String, List<String>> result = new HashMap<>();
 		try {
 			JSONObject jO = retrieveJSONObject(omc);
 
 			if (recursive && !JSONReMapper.checkForNotValidOpsiMethod(jO)) {
-				result = getMapOfLists(omc.activateExtendedRpcPath(), false);
+				result = getMapOfStringLists(omc.activateExtendedRpcPath(), false);
 			} else {
 				if (checkResponse(jO)) {
 					JSONObject jOResult = jO.optJSONObject("result");
@@ -124,7 +107,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 						while (iter.hasNext()) {
 							String key = iter.next();
 
-							result.put(key, JSONReMapper.getJsonList(jOResult, key));
+							result.put(key, JSONReMapper.getJsonStringList(jOResult, key));
 						}
 					}
 				}
@@ -136,8 +119,8 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, List<Object>> getMapOfLists(OpsiMethodCall omc) {
-		return getMapOfLists(omc, true);
+	public Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc) {
+		return getMapOfStringLists(omc, true);
 	}
 
 	@Override

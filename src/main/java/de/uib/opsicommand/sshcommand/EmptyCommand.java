@@ -45,27 +45,7 @@ public class EmptyCommand implements SSHCommand {
 	private int position;
 	private String confidentialInformation;
 
-	@Override
-	/**
-	 * Sets the command specific error text
-	 **/
-	public String getErrorText() {
-		return "ERROR";
-	}
-
-	@Override
-	public String getSecureInfoInCommand() {
-		return confidentialInformation;
-	}
-
-	@Override
-	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
-			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
-		} else {
-			return getCommand();
-		}
-	}
+	private String myTmpCommand;
 
 	/**
 	 * Creates an empty SSHCommand_Template instance
@@ -91,6 +71,28 @@ public class EmptyCommand implements SSHCommand {
 	 * Empty constuctor for creatiing empty instances
 	 */
 	public EmptyCommand() {
+	}
+
+	@Override
+	/**
+	 * Sets the command specific error text
+	 **/
+	public String getErrorText() {
+		return "ERROR";
+	}
+
+	@Override
+	public String getSecureInfoInCommand() {
+		return confidentialInformation;
+	}
+
+	@Override
+	public String getSecuredCommand() {
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
+			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
+		} else {
+			return getCommand();
+		}
 	}
 
 	/**
@@ -211,8 +213,6 @@ public class EmptyCommand implements SSHCommand {
 	public String getCommandRaw() {
 		return command;
 	}
-
-	private String myTmpCommand;
 
 	/**
 	 * Searches placeholders like <<<sth>>>

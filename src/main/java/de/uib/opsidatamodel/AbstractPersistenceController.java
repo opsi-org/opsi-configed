@@ -73,8 +73,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
 
-	public static final String KEY_SHOW_DASH_ON_PROGRAMSTART = CONTROL_DASH_CONFIG_KEY + ".show_dash_on_loaddata";
-	public static final Boolean DEFAULTVALUE_SHOW_DASH_ON_PROGRAMSTART = false;
 	public static final String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = CONTROL_DASH_CONFIG_KEY
 			+ ".show_dash_for_showlicenses";
 
@@ -114,12 +112,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public static final String CONFIGED_GIVEN_DOMAINS_KEY = "configed.domains_given";
 
-	// wan meta configuration
-	public static final String WAN_PARTKEY = "wan_";
-	public static final String WAN_CONFIGURED_PARTKEY = "wan_mode_on";
-	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
-	protected Map<String, List<Object>> wanConfiguration;
-	protected Map<String, List<Object>> notWanConfiguration;
 	// keys for default wan configuration
 	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP = "opsiclientd.event_gui_startup.active";
 	public static final String CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN = "opsiclientd.event_gui_startup{user_logged_in}.active";
@@ -196,6 +188,18 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.add("configed");
 	}
 
+	// opsi module information
+	public static final int CLIENT_COUNT_WARNING_LIMIT = 10;
+	public static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
+
+	// wan meta configuration
+	public static final String WAN_PARTKEY = "wan_";
+	public static final String WAN_CONFIGURED_PARTKEY = "wan_mode_on";
+	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
+
+	protected Map<String, List<Object>> wanConfiguration;
+	protected Map<String, List<Object>> notWanConfiguration;
+
 	/**
 	 * This creation method constructs a new Controller instance and lets a
 	 * static variable point to it When next time we need a Controller we can
@@ -206,9 +210,14 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	 * PersistenceController getPersistenceController () { return null; }
 	 */
 
+	protected List<DataRefreshedObserver> dataRefreshedObservers;
+
 	public AbstractExecutioner exec;
 
 	protected final Map<String, AbstractExecutioner> execs = new HashMap<>();
+
+	// offer observing of data loading
+	protected List<DataLoadingObserver> dataLoadingObservers;
 
 	public abstract void userConfigurationRequestReload();
 
@@ -278,7 +287,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	// ---------------------------------------------------------------
 	// implementation of observer patterns
 	// offer observing of data refreshed announcements
-	protected List<DataRefreshedObserver> dataRefreshedObservers;
 
 	@Override
 	public void registerDataRefreshedObserver(DataRefreshedObserver ob) {
@@ -305,9 +313,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 			ob.gotNotification(mesg);
 		}
 	}
-
-	// offer observing of data loading
-	protected List<DataLoadingObserver> dataLoadingObservers;
 
 	@Override
 	public void registerDataLoadingObserver(DataLoadingObserver ob) {
@@ -850,17 +855,15 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	// table sources
 
-	// opsi module information
-	public static final int CLIENT_COUNT_WARNING_LIMIT = 10;
-	public static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
-
 	public abstract void opsiInformationRequestRefresh();
 
 	public abstract void retrieveOpsiModules();
 
 	public abstract Map<String, Object> getOpsiModulesInfos();
 
-	public abstract String getOpsiLicencingInfoVersion();
+	public abstract boolean isOpsiLicencingAvailable();
+
+	public abstract boolean isOpsiUserAdmin();
 
 	public abstract void opsiLicencingInfoRequestRefresh();
 
@@ -883,10 +886,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract boolean isWithUserRoles();
 
 	public abstract boolean applyUserSpecializedConfig();
-
-	public abstract String getOpsiVersion();
-
-	public abstract boolean handleVersionOlderThan(String minRequiredVersion);
 
 	public abstract List<Map<java.lang.String, java.lang.Object>> retrieveCommandList();
 

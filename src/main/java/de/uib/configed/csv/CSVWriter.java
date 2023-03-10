@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Iterator;
-import java.util.List;
 
 public class CSVWriter {
 	private static final CSVFormat DEFAULT_FORMAT = new CSVFormat();
@@ -17,7 +16,13 @@ public class CSVWriter {
 	}
 
 	public CSVWriter(Writer writer, CSVFormat format) {
-		this.writer = (writer instanceof BufferedWriter ? (BufferedWriter) writer : new BufferedWriter(writer));
+
+		if (writer instanceof BufferedWriter) {
+			this.writer = (BufferedWriter) writer;
+		} else {
+			this.writer = new BufferedWriter(writer);
+		}
+
 		this.format = format;
 	}
 
@@ -26,7 +31,7 @@ public class CSVWriter {
 		writer.newLine();
 	}
 
-	public <T> void write(List<T> line) throws IOException {
+	public <T> void write(Iterable<T> line) throws IOException {
 		char fieldSeparator = format.getFieldSeparator();
 		char stringSeparator = format.getStringSeparator();
 		Iterator<T> iter = line.iterator();

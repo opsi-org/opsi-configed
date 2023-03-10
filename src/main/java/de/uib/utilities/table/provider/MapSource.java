@@ -26,6 +26,13 @@ import de.uib.utilities.logging.Logging;
 public class MapSource implements TableSource {
 	protected static final String ROW_COUNTER_NAME = "rowcounter";
 
+	static final Map<String, Object> class2defaultValue;
+	static {
+		class2defaultValue = new HashMap<>();
+		class2defaultValue.put("java.lang.Boolean", false);
+		class2defaultValue.put("java.lang.String", "");
+	}
+
 	protected boolean rowCounting;
 
 	protected List<String> columnNames;
@@ -37,13 +44,6 @@ public class MapSource implements TableSource {
 	protected List<List<Object>> rows;
 
 	protected boolean reloadRequested = true;
-
-	static final Map<String, Object> class2defaultValue;
-	static {
-		class2defaultValue = new HashMap<>();
-		class2defaultValue.put("java.lang.Boolean", false);
-		class2defaultValue.put("java.lang.String", "");
-	}
 
 	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map<String, Object>> table,
 			boolean rowCounting) {
@@ -63,10 +63,6 @@ public class MapSource implements TableSource {
 			Logging.info(this, "completed to classes " + classNames);
 		}
 		rows = new ArrayList<>();
-	}
-
-	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map<String, Object>> table) {
-		this(columnNames, classNames, table, false);
 	}
 
 	private static boolean dynInstanceOf(Object ob, Class<?> cl) {

@@ -34,7 +34,7 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
-import de.uib.utilities.datapanel.AbstractEditMapPanel;
+import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
@@ -55,7 +55,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 	protected LinkedList<String> theRoles;
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
-			boolean keylistEditable, boolean reloadable, final AbstractEditMapPanel.Actor actor) {
+			boolean keylistEditable, boolean reloadable, final DefaultEditMapPanel.Actor actor) {
 		super(tableCellRenderer, keylistExtendible, keylistEditable, reloadable, actor);
 
 		popupForUserpathes = new PopupMenuTrait(
@@ -308,7 +308,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		Logging.info(this, "theRoles found " + theRoles);
 		Logging.info(this, "theUsers found " + theUsers);
 
-		for (Entry<String, AbstractEditMapPanel> entry : partialPanels.entrySet()) {
+		for (Entry<String, DefaultEditMapPanel> entry : partialPanels.entrySet()) {
 			entry.getValue().setEditDenier((String key) -> {
 
 				Logging.info(this, "entry " + entry + " key " + key);

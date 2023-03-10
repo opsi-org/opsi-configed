@@ -10,7 +10,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHPackageUpdaterDialog;
-import de.uib.utilities.logging.Logging;
 
 public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParameter {
 
@@ -148,13 +147,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	@Override
 	public void startParameterGui(ConfigedMain main) {
 
-		if (main.getOpsiVersion().length() == 0 || main.getOpsiVersion().charAt(0) == '<'
-				|| main.getOpsiVersion().compareTo("4.1") < 0) {
-			Logging.error(this, Configed.getResourceValue("OpsiConfdVersionError").replace("{0}", "4.1.0"));
-		} else {
-			dialog = new SSHPackageUpdaterDialog();
-		}
-
+		dialog = new SSHPackageUpdaterDialog();
 	}
 
 	@Override

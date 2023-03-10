@@ -8,18 +8,18 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.ssh.SSHConnectionExecDialog;
 import de.uib.configed.gui.ssh.SSHMakeProductFileDialog;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedParameter {
-	private String baseName = "opsi-makeproductfile ";
-	private String command = "opsi-makeproductfile ";
+	private static final int PRIORITY = 110;
+
+	private String baseName = "opsi-makepackage ";
+	private String commandName = "opsi-makepackage ";
 
 	protected FGeneralDialog dialog;
 	private boolean needSudo;
 	private boolean needParameter = true;
 	private boolean isMultiCommand;
-	private static final int PRIORITY = 110;
 
 	private String dir = " ";
 	private String keepVersions = " ";
@@ -51,20 +51,6 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	}
 
 	public CommandOpsimakeproductfile() {
-	}
-
-	/**
-	 * check persistenceController opsi version and set Command name dependend
-	 * on this version to 'opsi-makeproductfile' or 'opsi-makepackage'
-	 */
-	private void setCommandName() {
-		if (!PersistenceControllerFactory.getPersistenceController().handleVersionOlderThan("4.1")) {
-			Logging.info(this, "set CommandOpsimakeproductfile name to 'opsi-makepackage'");
-			baseName = "opsi-makepackage";
-			command = "opsi-makepackage";
-		} else {
-			Logging.info(this, "let CommandOpsimakeproductfile named as 'opsi-makeproductfile'");
-		}
 	}
 
 	@Override
@@ -139,18 +125,18 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 
 	@Override
 	public String getCommand() {
-		setCommandName();
+
 		if (!packageVersion.equals("") || !productVersion.equals("")) {
 			keepVersions = "--keep-versions ";
 		}
 
-		command = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
+		commandName = "cd " + dir + " && " + baseName + " " + keepVersions + " " + packageVersion + " " + productVersion
 				+ " " + md5sum + " " + zsync + " ";
 		if (needSudo()) {
-			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
+			return SSHCommandFactory.SUDO_TEXT + " " + commandName + " 2>&1";
 		}
 
-		return command + " 2>&1";
+		return commandName + " 2>&1";
 	}
 
 	/**
@@ -160,12 +146,12 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	 **/
 	@Override
 	public void setCommand(String c) {
-		command = c;
+		commandName = c;
 	}
 
 	@Override
 	public String getCommandRaw() {
-		return command;
+		return commandName;
 	}
 
 	@Override

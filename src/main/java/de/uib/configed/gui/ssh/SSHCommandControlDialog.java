@@ -602,12 +602,14 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	@Override
 	public void doAction2() {
 		Logging.info(this, "doAction2 savecommand ");
-		String menuText = (String) jComboBoxMenuText.getSelectedItem();
 		SSHCommandTemplate command = getCommandNow();
 		if (command == null) {
 			return;
 		}
 		Logging.debug(this, "doAction2 savecommand " + command.toString());
+
+		String menuText = (String) jComboBoxMenuText.getSelectedItem();
+
 		if (factory.saveSSHCommand(command)) {
 			updateLists(true, menuText);
 			updateSelectedCommand(menuText);

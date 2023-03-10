@@ -20,12 +20,11 @@ import de.uib.utilities.logging.Logging;
 public class JTextHideField extends JPanel {
 	JPasswordField invisibleField;
 	JTextField visibleField;
-	JPanel panel;
 	JButton button;
 	boolean hiddenMode;
 	boolean multiValue;
 
-	class FixedDocument extends PlainDocument {
+	static class FixedDocument extends PlainDocument {
 
 		private String fixed = "xxx";
 

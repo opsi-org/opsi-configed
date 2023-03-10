@@ -85,7 +85,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	JLabel jLabelUploading;
 	ImagePanel waitingImage;
 
-	class RadioButtonIntegrationType extends JRadioButton {
+	private static class RadioButtonIntegrationType extends JRadioButton {
 		private String subdir;
 
 		public RadioButtonIntegrationType(String text, String subdir) {
@@ -98,7 +98,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		}
 	}
 
-	class FileNameDocumentListener implements DocumentListener {
+	private class FileNameDocumentListener implements DocumentListener {
 		private boolean checkFiles() {
 			boolean result = false;
 

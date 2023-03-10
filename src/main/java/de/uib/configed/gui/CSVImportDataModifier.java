@@ -125,7 +125,7 @@ public class CSVImportDataModifier {
 		TableSource source = new MapSource(columnNames, classNames, theSourceMap, false);
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, 0);
 
-		GenTableModel model = new GenTableModel(updateItemFactory, // updateItemFactory,
+		GenTableModel createdModel = new GenTableModel(updateItemFactory, // updateItemFactory,
 				new de.uib.utilities.table.provider.DefaultTableProvider(source), // tableProvider
 				0,
 				// final columns int array
@@ -135,17 +135,17 @@ public class CSVImportDataModifier {
 				// TableUpdateCollection updates
 				updateCollection);
 
-		updateItemFactory.setSource(model);
+		updateItemFactory.setSource(createdModel);
 
-		CSVFileDataUpdater updater = new CSVFileDataUpdater(model, csvFile, parser.getFormat(), hiddenColumns);
-		MapItemsUpdateController updateController = new MapItemsUpdateController(thePanel, model, updater,
+		CSVFileDataUpdater updater = new CSVFileDataUpdater(createdModel, csvFile, parser.getFormat(), hiddenColumns);
+		MapItemsUpdateController updateController = new MapItemsUpdateController(thePanel, createdModel, updater,
 				updateCollection);
 		thePanel.setUpdateController(updateController);
 
-		return model;
+		return createdModel;
 	}
 
-	private class CSVFileDataUpdater implements MapBasedUpdater {
+	private static class CSVFileDataUpdater implements MapBasedUpdater {
 		private String csvFile;
 		private GenTableModel model;
 		private CSVFormat format;

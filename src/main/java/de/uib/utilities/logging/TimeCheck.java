@@ -1,11 +1,23 @@
 package de.uib.utilities.logging;
 
 public class TimeCheck {
+
+	static int loglevel = Logging.LEVEL_NOTICE;
+	static final int MAX_SHOWN = 500;
+
 	Object caller;
 	String mesg;
 	long startmillis;
-	static int loglevel = Logging.LEVEL_NOTICE;
-	static final int MAX_SHOWN = 500;
+
+	private TimeCheck(Object caller, int loglevel, String mesg) {
+		this.caller = caller;
+		this.mesg = shorten(mesg);
+		TimeCheck.loglevel = loglevel;
+	}
+
+	public TimeCheck(Object caller, String mesg) {
+		this(caller, Logging.LEVEL_NOTICE, mesg);
+	}
 
 	private static String shorten(String s) {
 		String result = "";
@@ -19,16 +31,6 @@ public class TimeCheck {
 		}
 
 		return result;
-	}
-
-	private TimeCheck(Object caller, int loglevel, String mesg) {
-		this.caller = caller;
-		this.mesg = shorten(mesg);
-		TimeCheck.loglevel = loglevel;
-	}
-
-	public TimeCheck(Object caller, String mesg) {
-		this(caller, Logging.LEVEL_NOTICE, mesg);
 	}
 
 	public TimeCheck start() {

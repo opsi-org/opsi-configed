@@ -40,9 +40,9 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	public static final RunningInstances<JDialog> runningInstances = new RunningInstances<>(JDialog.class,
 			"leaving dialog");
 
-	private Dimension areaDimension = new Dimension(300, 240);
-
 	protected static final int BUTTON_WIDTH = 30;
+
+	private Dimension areaDimension = new Dimension(300, 240);
 
 	protected Object initialValue = "";
 	protected boolean leaveOnCommit = true;

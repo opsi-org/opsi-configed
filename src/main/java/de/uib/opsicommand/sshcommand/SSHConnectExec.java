@@ -41,6 +41,13 @@ public class SSHConnectExec extends SSHConnect {
 
 	protected boolean foundError;
 
+	protected boolean interruptChannel;
+
+	public SSHConnectExec() {
+		super(null);
+		connect();
+	}
+
 	public SSHConnectExec(SSHCommand sshcommand) {
 		this(null, sshcommand);
 	}
@@ -113,11 +120,6 @@ public class SSHConnectExec extends SSHConnect {
 		}
 	}
 
-	public SSHConnectExec() {
-		super(null);
-		connect();
-	}
-
 	public SSHConnectionExecDialog getDialog() {
 		return outputDialog;
 	}
@@ -137,8 +139,6 @@ public class SSHConnectExec extends SSHConnect {
 	public void execTemplate(SSHCommandTemplate command, boolean sequential) {
 		execList(command, true, null, sequential, true);
 	}
-
-	protected boolean interruptChannel;
 
 	public void execList(SSHMultiCommand commands) {
 		execList(commands, true, null, false, true);

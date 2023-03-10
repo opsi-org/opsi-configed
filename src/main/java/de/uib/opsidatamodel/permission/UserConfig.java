@@ -65,6 +65,19 @@ public class UserConfig {
 		ZERO_TIME.add("0000-00-00 00:00:00");
 	}
 
+	private static Set<String> userBoolKeys;
+
+	private static Set<String> userListKeys;
+
+	private static Set<String> userStringValueKeys;
+
+	private static Set<String> userStringValueKeysWithoutRole;
+
+	// default UserConfig Objects
+	private static UserConfig archeoPrototypeConfig;
+
+	private static UserConfig currentConfig;
+
 	protected String username;
 
 	protected UserConfig prototypeConfig;
@@ -73,7 +86,13 @@ public class UserConfig {
 	protected Map<String, List<Object>> valuesMap;
 	protected Map<String, List<Object>> possibleValuesMap;
 
-	private static Set<String> userBoolKeys;
+	public UserConfig(String userName) {
+		Logging.info(this, "create for " + userName);
+		this.username = userName;
+		booleanMap = new LinkedHashMap<>();
+		valuesMap = new LinkedHashMap<>();
+		possibleValuesMap = new LinkedHashMap<>();
+	}
 
 	public static Set<String> getUserBoolKeys() {
 		if (userBoolKeys == null) {
@@ -88,12 +107,6 @@ public class UserConfig {
 		return userBoolKeys;
 
 	}
-
-	private static Set<String> userListKeys;
-
-	private static Set<String> userStringValueKeys;
-
-	private static Set<String> userStringValueKeysWithoutRole;
 
 	public static Set<String> getUserStringValueKeys() {
 		if (userStringValueKeys == null) {
@@ -126,9 +139,6 @@ public class UserConfig {
 		return userListKeys;
 	}
 
-	// default UserConfig Objects
-	private static UserConfig archeoPrototypeConfig;
-
 	public static final UserConfig getArcheoConfig() {
 		Logging.info("getArcheoConfig");
 		if (archeoPrototypeConfig == null) {
@@ -148,14 +158,6 @@ public class UserConfig {
 		archeoPrototypeConfig.setValues(MODIFICATION_INFO_KEY, ZERO_TIME);
 
 		return archeoPrototypeConfig;
-	}
-
-	public UserConfig(String userName) {
-		Logging.info(this, "create for " + userName);
-		this.username = userName;
-		booleanMap = new LinkedHashMap<>();
-		valuesMap = new LinkedHashMap<>();
-		possibleValuesMap = new LinkedHashMap<>();
 	}
 
 	public String getUserName() {
@@ -256,8 +258,6 @@ public class UserConfig {
 	public void setPrototype(UserConfig prototype) {
 		this.prototypeConfig = prototype;
 	}
-
-	private static UserConfig currentConfig;
 
 	public static UserConfig getCurrentUserConfig() {
 		if (currentConfig == null) {
