@@ -1151,19 +1151,19 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// initialize the following method
 			depotsOfSelectedClients = null;
-			Set<String> depots = getDepotsOfSelectedClients();
-			Iterator<String> iter = depots.iterator();
+			depotsOfSelectedClients = getDepotsOfSelectedClients();
+			Iterator<String> selectedDepotsIterator = depotsOfSelectedClients.iterator();
 			StringBuilder depotsAdded = new StringBuilder("");
 
 			String singleDepot = "";
 
-			if (iter.hasNext()) {
-				singleDepot = iter.next();
+			if (selectedDepotsIterator.hasNext()) {
+				singleDepot = selectedDepotsIterator.next();
 				depotsAdded.append(singleDepot);
 			}
 
-			while (iter.hasNext()) {
-				String appS = iter.next();
+			while (selectedDepotsIterator.hasNext()) {
+				String appS = selectedDepotsIterator.next();
 				depotsAdded.append(";\n");
 				depotsAdded.append(appS);
 			}
@@ -2612,8 +2612,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private boolean checkSynchronous(Set<String> depots) {
 
 		if (depots.size() > 1 && !persist.areDepotsSynchronous(depots)) {
-			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"), // "not
-					// synchronous",
+			JOptionPane.showMessageDialog(mainFrame, Configed.getResourceValue("ConfigedMain.notSynchronous.text"),
 					Configed.getResourceValue("ConfigedMain.notSynchronous.title"), JOptionPane.OK_OPTION);
 
 			return false;
@@ -2632,14 +2631,16 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				depotRepresentative = myServer;
 			}
 		} else {
-			Set<String> depots = getDepotsOfSelectedClients();
-			Logging.info(this, "depots of selected clients:" + depots);
+
+			depotsOfSelectedClients = getDepotsOfSelectedClients();
+
+			Logging.info(this, "depots of selected clients:" + depotsOfSelectedClients);
 
 			String oldRepresentative = depotRepresentative;
 
 			Logging.debug(this, "setDepotRepresentative(), old representative: " + depotRepresentative + " should be ");
 
-			if (!checkSynchronous(depots)) {
+			if (!checkSynchronous(depotsOfSelectedClients)) {
 				result = false;
 			} else {
 				Logging.debug(this, "setDepotRepresentative  start  " + " up to now " + oldRepresentative + " old"
@@ -2647,9 +2648,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				depotRepresentative = null;
 
-				Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + getDepotsOfSelectedClients());
+				Logging.info(this, "setDepotRepresentative depotsOfSelectedClients " + depotsOfSelectedClients);
 
-				Iterator<String> depotsIterator = getDepotsOfSelectedClients().iterator();
+				Iterator<String> depotsIterator = depotsOfSelectedClients.iterator();
 
 				if (!depotsIterator.hasNext()) {
 					depotRepresentative = myServer;

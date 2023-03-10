@@ -40,15 +40,12 @@ public class ModulePermissionValue {
 				Logging.debug(this, "maxClients directly given " + maxClients);
 			} else if (Boolean.TRUE.equals(booleanValue)) {
 				maxClients = ExtendedInteger.INFINITE;
-			} else {
-				maxClients = ExtendedInteger.ZERO;
 			}
 		}
 
 		if (expiresDate == ExtendedDate.ZERO) {
 			expiresDate = defaultExpires;
 		}
-
 	}
 
 	private static Boolean checkBoolean(Object ob) {

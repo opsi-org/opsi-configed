@@ -99,7 +99,6 @@ public final class OpsiDataBackend extends AbstractBackend {
 	private static OpsiDataBackend instance;
 
 	// data which will be cached
-	List<Client> clients;
 	Map<String, HostInfo> clientMaps;
 
 	// client -> groups with it
