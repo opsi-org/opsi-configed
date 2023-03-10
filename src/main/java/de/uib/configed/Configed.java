@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -766,10 +767,21 @@ public class Configed {
 
 	public static void setOpsiLaf() {
 		try {
+			Logging.info("set look and feel " + Messages.getSelectedTheme());
 
-			FlatLightLaf lightTheme = new FlatLightLaf();
+			switch (Messages.getSelectedTheme()) {
+			case "Light":
+				UIManager.setLookAndFeel(new FlatLightLaf());
+				break;
 
-			UIManager.setLookAndFeel(lightTheme);
+			case "Dark":
+				UIManager.setLookAndFeel(new FlatDarkLaf());
+				break;
+
+			default:
+				Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + Messages.getSelectedTheme());
+				break;
+			}
 
 			FlatLaf.setSystemColorGetter((String name) -> {
 				if ("accent".equals(name)) {
@@ -780,7 +792,9 @@ public class Configed {
 			});
 
 			FlatLightLaf.setup();
-		} catch (UnsupportedLookAndFeelException e) {
+		} catch (
+
+		UnsupportedLookAndFeelException e) {
 			Logging.warning("error setting up FlatLightLaf", e);
 
 			configureUI();

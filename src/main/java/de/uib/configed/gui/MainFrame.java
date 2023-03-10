@@ -184,6 +184,7 @@ public class MainFrame extends JFrame
 	private JMenuItem jMenuFileExit;
 	private JMenuItem jMenuFileSaveConfigurations;
 	private JMenuItem jMenuFileReload;
+	private JMenuItem jMenuTheme;
 	private JMenuItem jMenuFileLanguage;
 
 	private JMenu jMenuClients = new JMenu();
@@ -654,6 +655,7 @@ public class MainFrame extends JFrame
 		jMenuFileExit = new JMenuItem();
 		jMenuFileSaveConfigurations = new JMenuItem();
 		jMenuFileReload = new JMenuItem();
+		jMenuTheme = new JMenu(); // submenu
 		jMenuFileLanguage = new JMenu(); // submenu
 
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
@@ -711,9 +713,38 @@ public class MainFrame extends JFrame
 			});
 		}
 
+		jMenuTheme.setText("Theme");
+		ButtonGroup groupThemes = new ButtonGroup();
+		String selectedTheme = Messages.getSelectedTheme();
+		Logging.debug(this, "selectedLocale " + selectedTheme);
+
+		for (final String themeName : Messages.getAvailableThemes()) {
+			JMenuItem themeItem = new JRadioButtonMenuItem(themeName);
+			Logging.debug(this, "selectedTheme " + themeName);
+			themeItem.setSelected(selectedTheme.equals(themeName));
+			jMenuTheme.add(themeItem);
+			groupThemes.add(themeItem);
+
+			themeItem.addActionListener((ActionEvent e) -> {
+				configedMain.closeInstance(true);
+				Messages.setTheme(themeName);
+				new Thread() {
+					@Override
+					public void run() {
+						Configed.setOpsiLaf();
+						Configed.startWithLocale();
+					}
+				}.start();
+			});
+		}
+
 		jMenuFile.add(jMenuFileSaveConfigurations);
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileLanguage);
+
+		if (ConfigedMain.OPSI_4_3) {
+			jMenuFile.add(jMenuTheme);
+		}
 
 		jMenuFile.add(jMenuFileExit);
 	}
