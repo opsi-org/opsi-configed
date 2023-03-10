@@ -252,7 +252,9 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 
 		public void colorize(Component cell, int row, int col) {
-			cell.setForeground(Globals.lightBlack);
+			if (!ConfigedMain.OPSI_4_3) {
+				cell.setForeground(Globals.lightBlack);
+			}
 
 			int kindOfRow = row % 3;
 

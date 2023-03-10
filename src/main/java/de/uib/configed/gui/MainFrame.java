@@ -1033,17 +1033,25 @@ public class MainFrame extends JFrame
 				+ SSHConnectionInfo.getInstance().getHost();
 
 		jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.UNKNOWN);
-		jMenuSSHConnection.setForeground(Globals.UNKNOWN_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			jMenuSSHConnection.setForeground(Globals.UNKNOWN_COLOR);
+		}
 		if (status.equals(SSHCommandFactory.NOT_CONNECTED)) {
 
-			jMenuSSHConnection.setForeground(Globals.lightBlack);
+			if (!ConfigedMain.OPSI_4_3) {
+				jMenuSSHConnection.setForeground(Globals.lightBlack);
+			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.NOT_CONNECTED);
 		} else if (status.equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-			jMenuSSHConnection.setForeground(Globals.ACTION_COLOR);
+			if (!ConfigedMain.OPSI_4_3) {
+				jMenuSSHConnection.setForeground(Globals.ACTION_COLOR);
+			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTION_NOT_ALLOWED);
 
 		} else if (status.equals(SSHCommandFactory.CONNECTED)) {
-			jMenuSSHConnection.setForeground(Globals.OK_COLOR);
+			if (!ConfigedMain.OPSI_4_3) {
+				jMenuSSHConnection.setForeground(Globals.OK_COLOR);
+			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTED);
 		}
 	}
@@ -1382,7 +1390,9 @@ public class MainFrame extends JFrame
 		jMenuHelpOpsiVersion.setText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": "
 				+ JSONthroughHTTPS.getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
-		jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
+		if (!ConfigedMain.OPSI_4_3) {
+			jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
+		}
 
 		jMenuHelp.add(jMenuHelpOpsiVersion);
 

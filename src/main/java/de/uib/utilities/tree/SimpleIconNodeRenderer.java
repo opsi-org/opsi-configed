@@ -29,9 +29,9 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		emphasized = Globals.defaultFontStandardBold;
 
 		super.setFont(standard);
-		super.setForeground(Globals.lightBlack);
-		super.setTextSelectionColor(Globals.lightBlack);
 		if (!ConfigedMain.OPSI_4_3) {
+			super.setForeground(Globals.lightBlack);
+			super.setTextSelectionColor(Globals.lightBlack);
 			super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
 		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));

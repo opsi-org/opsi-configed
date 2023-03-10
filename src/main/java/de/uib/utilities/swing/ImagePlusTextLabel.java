@@ -96,12 +96,13 @@ public class ImagePlusTextLabel extends JPanel {
 
 	@Override
 	public void setForeground(Color fg) {
-		if (textlabel != null) {
-			textlabel.setForeground(fg);
-		}
-		if (imagefield != null) {
-			imagefield.setForeground(fg);
+		if (!ConfigedMain.OPSI_4_3) {
+			if (textlabel != null) {
+				textlabel.setForeground(fg);
+			}
+			if (imagefield != null) {
+				imagefield.setForeground(fg);
+			}
 		}
 	}
-
 }

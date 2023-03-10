@@ -137,21 +137,29 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		dependenciesTextLabel.setText(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
 		dependenciesTextLabel.setFont(Globals.defaultFontBold);
-		dependenciesTextLabel.setForeground(Globals.greyed);
+		if (!ConfigedMain.OPSI_4_3) {
+			dependenciesTextLabel.setForeground(Globals.greyed);
+		}
 
 		depotForDependenciesLabel.setFont(Globals.defaultFontBold);
-		depotForDependenciesLabel.setForeground(Globals.greyed);
+		if (!ConfigedMain.OPSI_4_3) {
+			depotForDependenciesLabel.setForeground(Globals.greyed);
+		}
 
 		dependenciesActivateButton.setText("▶");
 		dependenciesActivateButton.setFont(Globals.defaultFont);
-		dependenciesActivateButton.setForeground(Globals.lightBlack);
+		if (!ConfigedMain.OPSI_4_3) {
+			dependenciesActivateButton.setForeground(Globals.lightBlack);
+		}
 		dependenciesActivateButton.addActionListener(this);
 
 		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 
 		propertiesActivateButton.setText("▼");
 		propertiesActivateButton.setFont(Globals.defaultFont);
-		propertiesActivateButton.setForeground(Globals.lightBlack);
+		if (!ConfigedMain.OPSI_4_3) {
+			propertiesActivateButton.setForeground(Globals.lightBlack);
+		}
 		propertiesActivateButton.addActionListener(this);
 
 		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
@@ -255,14 +263,18 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 			isPanelProductDependenciesVisible = !isPanelProductDependenciesVisible;
 
 			dependenciesActivateButton.setText(isPanelProductDependenciesVisible ? "▼" : "▶");
-			dependenciesTextLabel
-					.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
-							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
+			if (!ConfigedMain.OPSI_4_3) {
+				dependenciesTextLabel
+						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
+								: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
+			}
 
 			depotForDependenciesLabel.setEnabled(isPanelProductDependenciesVisible);
-			depotForDependenciesLabel
-					.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
-							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
+			if (!ConfigedMain.OPSI_4_3) {
+				depotForDependenciesLabel
+						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
+								: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
+			}
 
 			panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 		} else if (event.getSource() == propertiesActivateButton) {

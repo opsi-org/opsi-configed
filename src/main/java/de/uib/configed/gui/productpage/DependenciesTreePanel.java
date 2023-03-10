@@ -144,7 +144,9 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 		copyListButton = new JButton(Configed.getResourceValue("DependenciesTree.copyListButton"));
 		copyListButton.setFont(Globals.defaultFont);
-		copyListButton.setForeground(Globals.lightBlack);
+		if (!ConfigedMain.OPSI_4_3) {
+			copyListButton.setForeground(Globals.lightBlack);
+		}
 
 		dependenciesTreePathLabel = new JLabel();
 		dependenciesTreePathLabel.setBorder(BorderFactory.createLineBorder(Globals.greyed, 1));

@@ -329,7 +329,9 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonSelectTmpDir.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserTmpDir"));
 
 		fieldServerPath = new JTextField(opsiWorkBenchDirectoryS);
-		fieldServerPath.setForeground(Globals.greyed);
+		if (!ConfigedMain.OPSI_4_3) {
+			fieldServerPath.setForeground(Globals.greyed);
+		}
 
 		fieldServerPath.setPreferredSize(Globals.textfieldDimension);
 
@@ -411,7 +413,6 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		if (isWindows) {
 			serverPathLabel.setForeground(Globals.greyed);
 			buttonCallChooserServerpath.setEnabled(false);
-
 		}
 
 		JPanel panel = this;

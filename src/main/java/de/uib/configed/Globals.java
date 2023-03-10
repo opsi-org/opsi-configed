@@ -434,8 +434,8 @@ public final class Globals {
 	public static void formatButtonSmallText(AbstractButton button) {
 		button.setFont(defaultFontSmall);
 		button.setPreferredSize(new Dimension(45, 20));
-		button.setForeground(lightBlack);
 		if (!ConfigedMain.OPSI_4_3) {
+			button.setForeground(lightBlack);
 			button.setBackground(BACKGROUND_COLOR_6);
 		}
 		button.setOpaque(false);

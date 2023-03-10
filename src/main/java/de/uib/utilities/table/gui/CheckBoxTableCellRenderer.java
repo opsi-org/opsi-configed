@@ -31,7 +31,9 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 
-		setForeground(Globals.lightBlack);
+		if (!ConfigedMain.OPSI_4_3) {
+			setForeground(Globals.lightBlack);
+		}
 
 		if (!ConfigedMain.OPSI_4_3) {
 			if (isSelected) {

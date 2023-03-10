@@ -26,7 +26,9 @@ public final class CellAlternatingColorizer {
 			Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,
 			Color unselectedUnevenColor) {
 		if (textColoring) {
-			cell.setForeground(Globals.lightBlack);
+			if (!ConfigedMain.OPSI_4_3) {
+				cell.setForeground(Globals.lightBlack);
+			}
 		}
 
 		if (!ConfigedMain.OPSI_4_3) {

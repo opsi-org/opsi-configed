@@ -576,13 +576,17 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyIdGroup = createSimpleGroup(new PropertyIdElement());
-		propertyIdGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+		if (!ConfigedMain.OPSI_4_3) {
+			propertyIdGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+		}
 		propertyIdGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyIdGroup);
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyValueGroup = createSimpleGroup(new PropertyValueElement());
-		propertyValueGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+		if (!ConfigedMain.OPSI_4_3) {
+			propertyValueGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+		}
 		propertyValueGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyValueGroup);
 		result.groupList.getLast().connectionType.setVisible(false);
@@ -617,13 +621,17 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyIdGroup = createSimpleGroup(new PropertyIdElement());
-		propertyIdGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+		if (!ConfigedMain.OPSI_4_3) {
+			propertyIdGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+		}
 		propertyIdGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyIdGroup);
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyValueGroup = createSimpleGroup(new PropertyValueElement());
-		propertyValueGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+		if (!ConfigedMain.OPSI_4_3) {
+			propertyValueGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
+		}
 		propertyValueGroup.negateButton.setVisible(false);
 		result.groupList.add(propertyValueGroup);
 		result.groupList.getLast().connectionType.setVisible(false);

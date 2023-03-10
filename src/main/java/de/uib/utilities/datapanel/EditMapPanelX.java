@@ -353,7 +353,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
 						Logging.warning(this, "no default Value found");
 
-						jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
+						if (!ConfigedMain.OPSI_4_3) {
+							jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
+						}
 						jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 						Font gotFont = jc.getFont();

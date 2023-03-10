@@ -492,7 +492,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 		labelStrip.setOpaque(true);
 		labelStrip.setFont(Globals.defaultFont);
-		labelStrip.setForeground(Globals.lightBlack);
+		if (!ConfigedMain.OPSI_4_3) {
+			labelStrip.setForeground(Globals.lightBlack);
+		}
 
 		JPanel surroundScrollChooseAction = new JPanel();
 		GroupLayout surroundActionLayout = new GroupLayout(surroundScrollChooseAction);
@@ -640,8 +642,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		this.setLayout(layoutMain);
 
 		JPanel separatingPlace = new JPanel();
-		separatingPlace.setForeground(Globals.BACKGROUND_COLOR_9);
 		if (!ConfigedMain.OPSI_4_3) {
+			separatingPlace.setForeground(Globals.BACKGROUND_COLOR_9);
 			separatingPlace.setBackground(Globals.FAILED_COLOR);
 		}
 		separatingPlace.setOpaque(true);

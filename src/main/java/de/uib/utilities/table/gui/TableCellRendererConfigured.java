@@ -56,8 +56,10 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 			}
 		}
 
-		if (color != null) {
-			result.setForeground(color);
+		if (!ConfigedMain.OPSI_4_3) {
+			if (color != null) {
+				result.setForeground(color);
+			}
 		}
 
 		return result;

@@ -208,7 +208,9 @@ public class PanelSWInfo extends JPanel {
 
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
-		checkWithMsUpdates.setForeground(Globals.blue);
+		if (!ConfigedMain.OPSI_4_3) {
+			checkWithMsUpdates.setForeground(Globals.blue);
+		}
 		checkWithMsUpdates.addItemListener(itemEvent -> setWithMsUpdatesValue(checkWithMsUpdates.isSelected()));
 		setWithMsUpdatesValue(withMsUpdates);
 
@@ -217,7 +219,9 @@ public class PanelSWInfo extends JPanel {
 
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
-		checkWithMsUpdates2.setForeground(Globals.blue);
+		if (!ConfigedMain.OPSI_4_3) {
+			checkWithMsUpdates2.setForeground(Globals.blue);
+		}
 		checkWithMsUpdates2.addItemListener(itemEvent -> setWithMsUpdatesValue2(checkWithMsUpdates2.isSelected()));
 		setWithMsUpdatesValue2(withMsUpdates2);
 
