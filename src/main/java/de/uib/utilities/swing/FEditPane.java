@@ -40,6 +40,7 @@ import javax.swing.text.LayeredHighlighter;
 import javax.swing.text.Position;
 import javax.swing.text.View;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.script.CmdLauncher;
@@ -382,7 +383,9 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 		@Override
 		public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
-			g.setColor(color == null ? c.getSelectionColor() : color);
+			if (!ConfigedMain.OPSI_4_3) {
+				g.setColor(color == null ? c.getSelectionColor() : color);
+			}
 
 			Rectangle alloc = null;
 			if (offs0 == view.getStartOffset() && offs1 == view.getEndOffset()) {

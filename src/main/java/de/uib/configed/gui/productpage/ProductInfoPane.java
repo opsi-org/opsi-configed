@@ -269,8 +269,8 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 								: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
 			}
 
-			depotForDependenciesLabel.setEnabled(isPanelProductDependenciesVisible);
 			if (!ConfigedMain.OPSI_4_3) {
+				depotForDependenciesLabel.setEnabled(isPanelProductDependenciesVisible);
 				depotForDependenciesLabel
 						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
 								: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);

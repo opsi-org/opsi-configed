@@ -638,8 +638,10 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-			g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
-			g.fillRect(0, 0, getWidth(), getHeight());
+			if (!ConfigedMain.OPSI_4_3) {
+				g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
+				g.fillRect(0, 0, getWidth(), getHeight());
+			}
 		}
 	}
 }

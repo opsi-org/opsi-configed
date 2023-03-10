@@ -929,7 +929,9 @@ public class Configed {
 
 		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
 
-		fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
+		if (!ConfigedMain.OPSI_4_3) {
+			fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
+		}
 		// we activate it in case of an appropriate error
 
 		fErrorOutOfMemory.setFont(Globals.defaultFontBig);

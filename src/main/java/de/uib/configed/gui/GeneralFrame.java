@@ -16,6 +16,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -177,8 +178,10 @@ public class GeneralFrame extends JDialog implements ActionListener {
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-			g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
-			g.fillRect(0, 0, getWidth(), getHeight());
+			if (!ConfigedMain.OPSI_4_3) {
+				g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
+				g.fillRect(0, 0, getWidth(), getHeight());
+			}
 		}
 	}
 

@@ -47,8 +47,10 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 
 		@Override
 		public void paint(Graphics2D gd, JProgressBar t, int width, int height) {
-			gd.setColor(color);
-			gd.fillRect(0, 0, width, height);
+			if (!ConfigedMain.OPSI_4_3) {
+				gd.setColor(color);
+				gd.fillRect(0, 0, width, height);
+			}
 		}
 	}
 
