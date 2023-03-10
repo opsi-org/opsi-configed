@@ -2300,31 +2300,35 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setVisible(ConfigedMain.OPSI_4_3);
 		jButtonDashboard.addActionListener(this);
 
-		if (configedMain.getPersistenceController().isOpsiLicencingAvailable() && licensingInfoMap == null) {
+		if (configedMain.getPersistenceController().isOpsiLicencingAvailable()
+				&& configedMain.getPersistenceController().isOpsiUserAdmin() && licensingInfoMap == null) {
 
 			licensingInfoMap = LicensingInfoMap.getInstance(
 					configedMain.getPersistenceController().getOpsiLicencingInfo(),
 					configedMain.getPersistenceController().getConfigDefaultValues(),
 					!FGeneralDialogLicensingInfo.extendedView);
 
-			if (licensingInfoMap.warningExists()) {
-				if (licensingInfoMap.getWarningLevel().equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
-					jButtonOpsiLicenses = new JButton("",
-							Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
-				}
-				if (licensingInfoMap.getWarningLevel().equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
-					jButtonOpsiLicenses = new JButton("",
-							Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
-				}
+			switch (licensingInfoMap.getWarningLevel()) {
+			case LicensingInfoMap.STATE_OVER_LIMIT:
+				jButtonOpsiLicenses = new JButton("",
+						Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
+				break;
+			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
+				jButtonOpsiLicenses = new JButton("",
+						Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
+				break;
 
-			} else {
+			case LicensingInfoMap.STATE_OKAY:
 				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
+				break;
+
+			default:
+				Logging.warning(this, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
+				break;
 			}
 
 		} else {
-
 			jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
-
 		}
 
 		jButtonOpsiLicenses.setPreferredSize(Globals.modeSwitchDimension);
@@ -3180,7 +3184,8 @@ public class MainFrame extends JFrame
 	}
 
 	private void showOpsiModules() {
-		if (!configedMain.getPersistenceController().isOpsiLicencingAvailable()) {
+		if (!configedMain.getPersistenceController().isOpsiLicencingAvailable()
+				|| !configedMain.getPersistenceController().isOpsiUserAdmin()) {
 
 			StringBuilder message = new StringBuilder();
 			Map<String, Object> modulesInfo = configedMain.getPersistenceController().getOpsiModulesInfos();

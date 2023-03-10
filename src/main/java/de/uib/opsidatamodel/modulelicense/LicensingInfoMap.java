@@ -144,6 +144,7 @@ public final class LicensingInfoMap {
 		availableModules = produceAvailableModules();
 		knownModulesList = produceKnownModules();
 		shownModules = produceShownModules();
+
 		datesKeys = produceDatesKeys();
 		latestDateString = findLatestChangeDateString();
 		datesMap = produceDatesMap();
