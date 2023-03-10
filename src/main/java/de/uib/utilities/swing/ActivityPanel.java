@@ -9,6 +9,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitCursor;
