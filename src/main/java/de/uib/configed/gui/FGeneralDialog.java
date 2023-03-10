@@ -30,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.Timer;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
@@ -294,11 +295,16 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	public void setContentBackground(Color c) {
-		allpane.setBackground(c);
+		if (!ConfigedMain.OPSI_4_3) {
+			allpane.setBackground(c);
+		}
 	}
 
 	protected void allLayout() {
-		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
+
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 
 		northPanel = new JPanel();
@@ -307,7 +313,10 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		southPanel = new JPanel();
 		southPanel.setOpaque(false);
 
-		scrollpane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			scrollpane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
+		}
+
 		scrollpane.setOpaque(false);
 
 		GroupLayout southLayout = new GroupLayout(southPanel);

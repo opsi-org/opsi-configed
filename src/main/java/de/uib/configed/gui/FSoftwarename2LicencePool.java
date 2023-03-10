@@ -20,6 +20,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 /**
  * FSoftwarename2LicencePool
  * Copyright:     Copyright (c) 2020
@@ -203,7 +204,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 						setSWxColTo((String) panelSWxLicencepool.getValueAt(panelSWxLicencepool.getSelectedRow(), 1))));
 
 		JPanel panelAction = new JPanel();
-		panelAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			panelAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		GroupLayout panelActionLayout = new GroupLayout(panelAction);
 		panelAction.setLayout(panelActionLayout);
@@ -274,7 +277,9 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		super.setAdditionalPane(panelSWx);
 
-		additionalPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);// Color.YELLOW
+		if (!ConfigedMain.OPSI_4_3) {
+			additionalPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		super.setCenterPane(panelSWnames);
 		additionalPane.setVisible(true);

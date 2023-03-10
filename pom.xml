@@ -217,7 +217,6 @@
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
             <version>3.0</version>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>

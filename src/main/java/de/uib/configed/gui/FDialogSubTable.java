@@ -9,6 +9,7 @@ import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -25,7 +26,9 @@ public class FDialogSubTable extends FGeneralDialog {
 	protected void allLayout() {
 
 		Logging.info(this, "allLayout");
-		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
@@ -34,7 +37,10 @@ public class FDialogSubTable extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		centerPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			centerPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
+		}
+
 		centerPanel.setOpaque(true);
 
 		southPanel = new JPanel();
@@ -59,7 +65,9 @@ public class FDialogSubTable extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			southPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
+		}
 		southPanel.setOpaque(true);
 
 		GroupLayout allLayout = new GroupLayout(allpane);

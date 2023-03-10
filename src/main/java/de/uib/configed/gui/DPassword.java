@@ -324,10 +324,12 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 		this.getContentPane().add(panel);
 
-		Containership csPanel = new Containership(getContentPane());
+		if (!ConfigedMain.OPSI_4_3) {
+			Containership csPanel = new Containership(getContentPane());
 
-		csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
-				JPanel.class);
+			csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+					JPanel.class);
+		}
 
 		MessageFormat messageFormatVersion = new MessageFormat(Configed.getResourceValue("DPassword.jLabelVersion"));
 		jLabelVersion.setText(messageFormatVersion

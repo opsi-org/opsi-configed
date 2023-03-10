@@ -11,6 +11,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 /**
  * FGlobalSoftwareInfo
  * Copyright:     Copyright (c) 2017
@@ -60,7 +61,9 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		allpane.add(panelGlobalSoftware, BorderLayout.CENTER);
 		JLabel infoLabel = new JLabel(Configed.getResourceValue("FGlobalSoftwareInfo.info"));
 		additionalPane.add(infoLabel);
-		additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		additionalPane.setVisible(true);
 
 		super.setSize(new Dimension(infoLabel.getPreferredSize().width + 100, 300));

@@ -16,6 +16,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import com.formdev.flatlaf.FlatLightLaf;
+
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.tree.ClientTreeUI;
 import de.uib.messages.Messages;
@@ -204,7 +206,11 @@ public class Configed {
 			Logging.debug("they are equal");
 		}
 
-		configureUI();
+		if (ConfigedMain.OPSI_4_3) {
+			setOpsiLaf();
+		} else {
+			configureUI();
+		}
 
 		try {
 			String resourceS = "opsi.gif";
@@ -755,6 +761,16 @@ public class Configed {
 		}
 
 		// destroys some popups, saves others
+	}
+
+	public static void setOpsiLaf() {
+		try {
+			UIManager.setLookAndFeel(new FlatLightLaf());
+		} catch (UnsupportedLookAndFeelException e) {
+			Logging.warning("error setting up FlatLightLaf", e);
+
+			configureUI();
+		}
 	}
 
 	private static void addMissingArgs() {

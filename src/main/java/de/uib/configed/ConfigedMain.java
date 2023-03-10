@@ -1268,7 +1268,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// we correct the result of the first selection
 		depotsListSelectionChanged = false;
-		depotsList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+
+		if (!OPSI_4_3) {
+			depotsList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		// create client selection panel
 		selectionPanel = new JTableSelectionPanel(this) {

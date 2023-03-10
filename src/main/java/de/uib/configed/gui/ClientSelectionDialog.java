@@ -224,7 +224,10 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		GroupLayout additionalLayout = new GroupLayout(additionalPane);
 		additionalPane.setLayout(additionalLayout);
-		additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
+
+		if (!ConfigedMain.OPSI_4_3) {
+			additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		saveNameField = new LowerCaseTextField();
 		saveNameField.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.searchnameFormat"));
@@ -244,7 +247,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
-		buttonReload.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.OPSI_4_3) {
+			buttonReload.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		final ClientSelectionDialog dialog = this;
 		buttonReload.addActionListener(new ActionListener() {
@@ -270,7 +275,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
-		buttonRestart.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.OPSI_4_3) {
+			buttonRestart.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		buttonRestart.addActionListener(new ActionListener() {
 			@Override
@@ -326,7 +333,11 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 	private void init() {
 		contentPane = new JPanel();
-		contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
+
+		if (!ConfigedMain.OPSI_4_3) {
+			contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
+
 		layout = new GroupLayout(contentPane);
 		contentPane.setLayout(layout);
 
