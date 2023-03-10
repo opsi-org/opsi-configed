@@ -769,6 +769,14 @@ public class Configed {
 		try {
 			Logging.info("set look and feel " + Messages.getSelectedTheme());
 
+			FlatLaf.setSystemColorGetter((String name) -> {
+				if ("accent".equals(name)) {
+					return Globals.opsiBlue;
+				} else {
+					return null;
+				}
+			});
+
 			switch (Messages.getSelectedTheme()) {
 			case "Light":
 				UIManager.setLookAndFeel(new FlatLightLaf());
@@ -783,19 +791,10 @@ public class Configed {
 				break;
 			}
 
-			FlatLaf.setSystemColorGetter((String name) -> {
-				if ("accent".equals(name)) {
-					return Globals.opsiBlue;
-				} else {
-					return null;
-				}
-			});
-
-			FlatLightLaf.setup();
 		} catch (
 
 		UnsupportedLookAndFeelException e) {
-			Logging.warning("error setting up FlatLightLaf", e);
+			Logging.warning("error setting up FlatLaf", e);
 
 			configureUI();
 		}

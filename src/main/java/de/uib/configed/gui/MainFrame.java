@@ -728,10 +728,11 @@ public class MainFrame extends JFrame
 			themeItem.addActionListener((ActionEvent e) -> {
 				configedMain.closeInstance(true);
 				Messages.setTheme(themeName);
+				Configed.setOpsiLaf();
+
 				new Thread() {
 					@Override
 					public void run() {
-						Configed.setOpsiLaf();
 						Configed.startWithLocale();
 					}
 				}.start();
