@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import de.uib.configed.gui.FTextArea;
@@ -765,7 +766,20 @@ public class Configed {
 
 	public static void setOpsiLaf() {
 		try {
-			UIManager.setLookAndFeel(new FlatLightLaf());
+
+			FlatLightLaf lightTheme = new FlatLightLaf();
+
+			UIManager.setLookAndFeel(lightTheme);
+
+			FlatLaf.setSystemColorGetter((String name) -> {
+				if ("accent".equals(name)) {
+					return Globals.opsiBlue;
+				} else {
+					return null;
+				}
+			});
+
+			FlatLightLaf.setup();
 		} catch (UnsupportedLookAndFeelException e) {
 			Logging.warning("error setting up FlatLightLaf", e);
 

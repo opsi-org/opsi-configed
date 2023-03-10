@@ -68,6 +68,12 @@ public final class Globals {
 
 	// Hier to prevent initialization
 
+	public static final Color opsiDarkGrey = new Color(63, 63, 62);
+	public static final Color opsiGrey = new Color(178, 178, 178);
+	public static final Color opsiLightGrey = new Color(228, 228, 227);
+	public static final Color opsiMagenta = new Color(203, 30, 88);
+	public static final Color opsiBlue = new Color(63, 90, 166);
+
 	public static final Font defaultFont = new Font("SansSerif", 0, 11);
 	public static final Font defaultFontStandardBold = new Font("SansSerif", Font.BOLD, 11);
 	public static final Font defaultFontSmall = new Font("SansSerif", 0, 9);
