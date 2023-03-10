@@ -3182,8 +3182,6 @@ public class MainFrame extends JFrame
 	private void showOpsiModules() {
 		if (!configedMain.getPersistenceController().isOpsiLicencingAvailable()) {
 
-			FTextArea f = new FTextArea(this, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
-					true);
 			StringBuilder message = new StringBuilder();
 			Map<String, Object> modulesInfo = configedMain.getPersistenceController().getOpsiModulesInfos();
 
@@ -3192,9 +3190,11 @@ public class MainFrame extends JFrame
 				count++;
 				message.append("\n " + modulesInfoEntry.getKey() + ": " + modulesInfoEntry.getValue());
 			}
-			f.setSize(new Dimension(300, 50 + count * 25));
 
-			f.setMessage(message.toString());
+			FTextArea f = new FTextArea(this, Configed.getResourceValue("MainFrame.jMenuHelpOpsiModuleInformation"),
+					message.toString(), true, new String[] { Configed.getResourceValue("buttonOK") }, 300,
+					50 + count * 25);
+
 			f.setVisible(true);
 		} else {
 			callOpsiLicensingInfo();

@@ -1,6 +1,5 @@
 package de.uib.opsidatamodel.permission;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import de.uib.opsicommand.AbstractExecutioner;
@@ -33,24 +32,16 @@ public class ModulePermissionValue {
 		expiresDate = ExtendedDate.ZERO;
 		maxClients = ExtendedInteger.ZERO;
 		if (ob != null) {
-			Map<String, Object> detailled = interpretAsJson(ob);
-			Logging.debug(this, "detailled " + detailled);
-			if (!detailled.isEmpty()) {
-				maxClients = retrieveMaxClients(detailled.get(KEY_MAX_CLIENTS));
-				Logging.debug(this, "detailled  maxClients " + maxClients);
-				expiresDate = retrieveExpiresDate(detailled.get(KEY_EXPIRES));
-			} else {
-				booleanValue = checkBoolean(ob);
+			booleanValue = checkBoolean(ob);
 
-				if (booleanValue == null) {
-					expiresDate = retrieveExpiresDate(ob);
-					maxClients = retrieveMaxClients(ob);
-					Logging.debug(this, "maxClients directly given " + maxClients);
-				} else if (Boolean.TRUE.equals(booleanValue)) {
-					maxClients = ExtendedInteger.INFINITE;
-				} else {
-					maxClients = ExtendedInteger.ZERO;
-				}
+			if (booleanValue == null) {
+				expiresDate = retrieveExpiresDate(ob);
+				maxClients = retrieveMaxClients(ob);
+				Logging.debug(this, "maxClients directly given " + maxClients);
+			} else if (Boolean.TRUE.equals(booleanValue)) {
+				maxClients = ExtendedInteger.INFINITE;
+			} else {
+				maxClients = ExtendedInteger.ZERO;
 			}
 		}
 
@@ -125,16 +116,6 @@ public class ModulePermissionValue {
 
 		if (result == null) {
 			result = ExtendedDate.ZERO;
-		}
-
-		return result;
-	}
-
-	private Map<String, Object> interpretAsJson(Object ob) {
-		Map<String, Object> result = exec.getMapFromItem(ob);
-
-		if (result.entrySet().isEmpty()) {
-			return new HashMap<>();
 		}
 
 		return result;

@@ -8059,8 +8059,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	private void produceOpsiModulesInfo() {
-		produceOpsiInformation();
-
 		// has the actual signal if a module is activ
 		opsiModules = new HashMap<>();
 
