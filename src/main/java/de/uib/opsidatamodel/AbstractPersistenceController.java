@@ -188,6 +188,10 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS.add("configed");
 	}
 
+	// opsi module information
+	public static final int CLIENT_COUNT_WARNING_LIMIT = 10;
+	public static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
+
 	// wan meta configuration
 	public static final String WAN_PARTKEY = "wan_";
 	public static final String WAN_CONFIGURED_PARTKEY = "wan_mode_on";
@@ -214,10 +218,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	// offer observing of data loading
 	protected List<DataLoadingObserver> dataLoadingObservers;
-
-	// opsi module information
-	public static final int CLIENT_COUNT_WARNING_LIMIT = 10;
-	public static final int CLIENT_COUNT_TOLERANCE_LIMIT = 50;
 
 	public abstract void userConfigurationRequestReload();
 

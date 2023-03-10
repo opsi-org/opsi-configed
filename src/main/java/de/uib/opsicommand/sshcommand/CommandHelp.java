@@ -13,13 +13,13 @@ public class CommandHelp /* extends */ implements SSHCommand {
 	private SSHCommand basicCommand;
 	protected FGeneralDialog dialog;
 
+	private boolean isMultiCommand;
+
 	public CommandHelp(SSHCommand basicCommand) {
 		this.basicCommand = basicCommand;
 
 		this.dialog = this.basicCommand.getDialog();
 	}
-
-	private boolean isMultiCommand;
 
 	@Override
 	public boolean isMultiCommand() {

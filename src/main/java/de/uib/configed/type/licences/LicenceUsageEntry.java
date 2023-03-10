@@ -32,8 +32,6 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 
 	public static final String OPSI_NOM_TYPE = "LicenseOnClient";
 
-	private String lic4pool;
-
 	private static final List<String> KEYS = new ArrayList<>();
 	static {
 		KEYS.add(ID_KEY);
@@ -43,6 +41,8 @@ public class LicenceUsageEntry extends StringValuedRelationElement {
 		KEYS.add(LICENCE_KEY_KEY);
 		KEYS.add(NOTES_KEY);
 	}
+
+	private String lic4pool;
 
 	public LicenceUsageEntry(String hostId, String softwareLicenceId, String licencePoolId, String licenceKey,
 			String notes) {

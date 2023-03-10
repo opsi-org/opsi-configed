@@ -60,8 +60,6 @@ public class ProductState extends HashMap<String, String> {
 	public static final String KEY_POSITION = "position";
 	public static final String KEY_PRODUCT_NAME = "productName";
 
-	protected final Map<String, String> retrieved;
-
 	public static final List<String> KEYS = new ArrayList<>();
 	static {
 		KEYS.add(KEY_PRODUCT_ID);
@@ -110,6 +108,8 @@ public class ProductState extends HashMap<String, String> {
 
 		key2servicekey.put(KEY_LAST_STATE_CHANGE, "modificationTime");
 	}
+
+	protected final Map<String, String> retrieved;
 
 	public ProductState(Map<String, String> retrievedState, boolean transform) {
 		super();

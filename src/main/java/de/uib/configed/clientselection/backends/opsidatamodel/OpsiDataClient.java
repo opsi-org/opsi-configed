@@ -87,13 +87,13 @@ public class OpsiDataClient implements Client {
 	}
 
 	/** Get a map by name */
-	public Map getMap(String map) {
+	public Map<String, Object> getMap(String map) {
 		if (map.equals(HOSTINFO_MAP)) {
-			return infoMap;
+			return new HashMap<>(infoMap);
 		} else if (map.equals(SOFTWARE_MAP)) {
-			return softwareValue;
+			return new HashMap<>(softwareValue);
 		} else if (map.equals(SWAUDIT_MAP)) {
-			return swauditValue;
+			return new HashMap<>(swauditValue);
 		} else {
 			return getHardwareMap(map);
 		}

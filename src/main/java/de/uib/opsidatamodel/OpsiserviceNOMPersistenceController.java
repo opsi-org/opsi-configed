@@ -3553,15 +3553,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		if (localbootProductNames == null) {
 			// opsi 4.0
 
-			Map productOrderingResult = exec
-					.getMapOfLists(new OpsiMethodCall("getProductOrdering", new String[] { depotId }));
+			Map<String, List<String>> productOrderingResult = exec
+					.getMapOfStringLists(new OpsiMethodCall("getProductOrdering", new String[] { depotId }));
 
-			List<String> sortedProducts = (List<String>) productOrderingResult.get("sorted");
+			List<String> sortedProducts = productOrderingResult.get("sorted");
 			if (sortedProducts == null) {
 				sortedProducts = new ArrayList<>();
 			}
 
-			List<String> notSortedProducts = (List<String>) productOrderingResult.get("not_sorted");
+			List<String> notSortedProducts = productOrderingResult.get("not_sorted");
 			if (notSortedProducts == null) {
 				notSortedProducts = new ArrayList<>();
 			}

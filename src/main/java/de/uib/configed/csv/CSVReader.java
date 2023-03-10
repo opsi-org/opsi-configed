@@ -41,7 +41,13 @@ public class CSVReader {
 	}
 
 	public CSVReader(Reader reader, CSVParser parser, int startLine, List<String> headerNames) {
-		this.reader = reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
+
+		if (reader instanceof BufferedReader) {
+			this.reader = (BufferedReader) reader;
+		} else {
+			this.reader = new BufferedReader(reader);
+		}
+
 		this.parser = parser;
 		this.format = parser.getFormat();
 		this.scanner = new CSVScanner(this.reader, format);
@@ -86,7 +92,13 @@ public class CSVReader {
 	}
 
 	private Map<String, Object> createLineAsMap(String[] csvLine) {
-		List<String> headers = headerNames != null ? headerNames : format.getHeaders();
+
+		List<String> headers = headerNames;
+
+		if (headers == null) {
+			headers = format.getHeaders();
+		}
+
 		Map<String, Object> lineAsMap = new TreeMap<>();
 
 		for (int i = 0; i < csvLine.length; i++) {

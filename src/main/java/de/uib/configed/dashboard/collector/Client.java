@@ -24,7 +24,11 @@ public class Client {
 	}
 
 	public final String getLastSeen() {
-		return lastSeen.get().isEmpty() ? Configed.getResourceValue("Dashboard.lastSeen.never") : lastSeen.get();
+		if (lastSeen.get().isEmpty()) {
+			return Configed.getResourceValue("Dashboard.lastSeen.never");
+		} else {
+			return lastSeen.get();
+		}
 	}
 
 	public final void setLastSeen(String value) {

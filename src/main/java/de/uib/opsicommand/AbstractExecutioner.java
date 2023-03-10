@@ -44,7 +44,7 @@ public abstract class AbstractExecutioner {
 
 	public abstract Map<String, Object> getMapResult(OpsiMethodCall omc);
 
-	public abstract Map<String, List<Object>> getMapOfLists(OpsiMethodCall omc);
+	public abstract Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc);
 
 	public abstract Map<String, Map<String, Object>> getMapOfMaps(OpsiMethodCall omc);
 

@@ -23,7 +23,7 @@ public abstract class AbstractOpsiDataMatcher {
 		OpsiDataClient oClient = (OpsiDataClient) client;
 		Logging.debug(this, "doesMatch client " + oClient);
 
-		Map realMap = oClient.getMap(map);
+		Map<String, Object> realMap = oClient.getMap(map);
 
 		if (!realMap.containsKey(key) || realMap.get(key) == null) {
 

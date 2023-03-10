@@ -119,6 +119,8 @@ public class DataStubNOM extends AbstractDataStub {
 
 	protected List<Map<String, Object>> healthData;
 
+	protected Map<String, LicenceEntry> licences;
+
 	public DataStubNOM(OpsiserviceNOMPersistenceController controller) {
 		this.persist = controller;
 		classCounter++;
@@ -1172,8 +1174,6 @@ public class DataStubNOM extends AbstractDataStub {
 			Logging.info(this, "contractsExpired " + contractsExpired);
 		}
 	}
-
-	protected Map<String, LicenceEntry> licences;
 
 	@Override
 	public void licencesRequestRefresh() {

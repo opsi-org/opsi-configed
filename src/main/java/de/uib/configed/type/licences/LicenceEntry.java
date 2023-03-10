@@ -55,10 +55,6 @@ public class LicenceEntry extends TreeMap<String, Object> {
 
 	public static final String[] LICENCE_TYPES = new String[] { VOLUME, OEM, RETAIL, CONCURRENT };
 
-	public static List<String> getKeys() {
-		return KEYS;
-	}
-
 	public LicenceEntry(Map<String, Object> importedEntry) {
 		super(importedEntry);
 		if (importedEntry.get(ID_SERVICE_KEY) != null) {
@@ -87,6 +83,10 @@ public class LicenceEntry extends TreeMap<String, Object> {
 		if (importedEntry.get(TYPE_SERVICE_KEY) != null) {
 			super.put(TYPE_KEY, translateTypeFromService((String) importedEntry.get(TYPE_SERVICE_KEY)));
 		}
+	}
+
+	public static List<String> getKeys() {
+		return KEYS;
 	}
 
 	private String translateTypeFromService(String servicetype) {

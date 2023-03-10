@@ -25,6 +25,9 @@ import org.jdesktop.swingx.calendar.DateSelectionModel;
 import de.uib.utilities.logging.Logging;
 
 public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.DateSelectionListener {
+	protected static final int BUTTON_H = 25;
+	protected static final int BUTTON_W = 30;
+
 	protected JXMonthView monthView;
 	protected TimeEditor timeSetter;
 	protected Calendar calendar;
@@ -35,8 +38,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	protected JButton buttonForward;
 	protected JButton buttonYearBack;
 	protected JButton buttonYearForward;
-	protected static final int BUTTON_H = 25;
-	protected static final int BUTTON_W = 30;
 	protected boolean editable = true;
 	protected boolean withMovingSelectionDate = true;
 	protected boolean withTime = true;

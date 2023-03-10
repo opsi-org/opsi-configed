@@ -27,6 +27,8 @@ import de.uib.utilities.table.DefaultListModelProducer;
 import de.uib.utilities.table.ListModelProducer;
 
 public class SensitiveCellEditor extends AbstractCellEditor implements TableCellEditor, MouseListener {
+	private static final Map<Object, SensitiveCellEditor> instances = new HashMap<>();
+
 	protected JTextField field;
 
 	protected FEditStringList listeditor;
@@ -52,8 +54,6 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 		listeditor.setModal(false);
 		listeditor.init();
 	}
-
-	private static final Map<Object, SensitiveCellEditor> instances = new HashMap<>();
 
 	public static synchronized SensitiveCellEditor getInstance(Object key) {
 
