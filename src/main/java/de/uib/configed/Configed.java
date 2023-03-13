@@ -766,37 +766,23 @@ public class Configed {
 	}
 
 	public static void setOpsiLaf() {
-		try {
-			Logging.info("set look and feel " + Messages.getSelectedTheme());
+		Logging.info("set look and feel " + Messages.getSelectedTheme());
 
-			FlatLaf.setSystemColorGetter((String name) -> {
-				if ("accent".equals(name)) {
-					return Globals.opsiBlue;
-				} else {
-					return null;
-				}
-			});
+		// Location of the theme property files - register them
+		FlatLaf.registerCustomDefaultsSource("de.uib.configed.themes");
 
-			switch (Messages.getSelectedTheme()) {
-			case "Light":
-				UIManager.setLookAndFeel(new FlatLightLaf());
-				break;
+		switch (Messages.getSelectedTheme()) {
+		case "Light":
+			FlatLightLaf.setup();
+			break;
 
-			case "Dark":
-				UIManager.setLookAndFeel(new FlatDarkLaf());
-				break;
+		case "Dark":
+			FlatDarkLaf.setup();
+			break;
 
-			default:
-				Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + Messages.getSelectedTheme());
-				break;
-			}
-
-		} catch (
-
-		UnsupportedLookAndFeelException e) {
-			Logging.warning("error setting up FlatLaf", e);
-
-			configureUI();
+		default:
+			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + Messages.getSelectedTheme());
+			break;
 		}
 	}
 

@@ -79,6 +79,7 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.InstallationInfo;
+import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
@@ -677,7 +678,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 				switch (jTable.getColumnName(i)) {
 				case "Stand":
-					if (!s.equals("not_installed")) {
+					if (!s.equals(InstallationStatus.KEY_NOT_INSTALLED)) {
 						dontStrippIt = true;
 					}
 					break;
