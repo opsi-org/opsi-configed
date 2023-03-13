@@ -525,10 +525,6 @@ public final class Globals {
 		return alphaCollator;
 	}
 
-	public static String getResourceValue(String key) {
-		return Configed.getResourceValue(key);
-	}
-
 	public static boolean isWindows() {
 		String osName = System.getProperty("os.name");
 		return osName.toLowerCase().startsWith("windows");
@@ -561,31 +557,6 @@ public final class Globals {
 		}
 	}
 
-	public static Image createImage(String path) {
-		String xPath = IMAGE_BASE + path;
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		// based on MainFrame
-
-		java.net.URL imgURL = cl.getResource(xPath);
-
-		// should have the same result (but seems not to have)
-
-		try {
-
-			if (imgURL != null) {
-				return java.awt.Toolkit.getDefaultToolkit().createImage(imgURL);
-			} else {
-				Logging.info("Couldn't find file: " + path);
-				return null;
-			}
-		} catch (Exception ex) {
-			Logging.info("createImageIcon " + path + " : " + ex);
-
-		}
-
-		return null;
-	}
-
 	public static ImageIcon createImageIcon(String path, String description) {
 		String xPath = IMAGE_BASE + path;
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
@@ -609,14 +580,6 @@ public final class Globals {
 		}
 
 		return null;
-	}
-
-	public static String getMinutes() {
-		String sqlNow = new java.sql.Timestamp(System.currentTimeMillis()).toString();
-		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(':'));
-		sqlNow = sqlNow.replace(' ', '-');
-
-		return sqlNow;
 	}
 
 	public static String getSeconds() {
@@ -762,7 +725,7 @@ public final class Globals {
 			}
 			result.append(remainder.substring(0, TOOLTIP_LINE_LENGTH).replace("\\n", "<br />"));
 
-			int testspan = min(remainder.length() - TOOLTIP_LINE_LENGTH, UNCERTAINTY);
+			int testspan = Math.min(remainder.length() - TOOLTIP_LINE_LENGTH, UNCERTAINTY);
 
 			String separationString = remainder.substring(TOOLTIP_LINE_LENGTH, TOOLTIP_LINE_LENGTH + testspan);
 
@@ -784,29 +747,12 @@ public final class Globals {
 
 			result.append(separationString.substring(0, i));
 			result.append("<br />");
-			int end = max(remainder.length(), TOOLTIP_LINE_LENGTH);
+			int end = Math.max(remainder.length(), TOOLTIP_LINE_LENGTH);
 			remainder = remainder.substring(TOOLTIP_LINE_LENGTH + i, end);
 		}
 
 		result.append("</html>");
 		return result.toString();
-	}
-
-	public static int max(int a, int b) {
-		int m = a;
-		if (b > a) {
-			m = b;
-		}
-
-		return m;
-	}
-
-	public static int min(int a, int b) {
-		int m = a;
-		if (b < a) {
-			m = b;
-		}
-		return m;
 	}
 
 	public static String produceNonNull(Object o) {
@@ -827,77 +773,6 @@ public final class Globals {
 			}
 		} else {
 			Logging.debug(source.getClass().getName() + " " + cName + " is null");
-		}
-
-		return result;
-	}
-
-	private static Integer stringCompareAsInt(String s1, String s2) throws NumberFormatException {
-
-		if (s1 == null && s2 == null) {
-			return 0;
-		}
-		if (s1 == null) {
-			return -1;
-		}
-		if (s2 == null) {
-			return +1;
-		}
-
-		String s1A = s1.trim();
-		String s2A = s2.trim();
-
-		if (s1A.equals(s2A)) {
-			return 0;
-		}
-
-		if (s1A.length() == 0) {
-			return -1;
-		}
-
-		if (s2A.length() == 0) {
-			return +1;
-		}
-
-		int val1 = Integer.parseInt(s1A);
-		int val2 = Integer.parseInt(s2A);
-
-		return val1 - val2;
-	}
-
-	public static Integer compareDottedNumberStrings(final String ver1, final String ver2)
-			throws NumberFormatException {
-
-		if (ver1 == null && ver2 == null) {
-			return 0;
-		}
-
-		if (ver1 == null) {
-			return -1;
-		}
-
-		if (ver2 == null) {
-			return +1;
-		}
-
-		if (ver1.equals(ver2)) {
-			return 0;
-		}
-
-		String ver1A = ver1.replace('_', '.');
-		String ver2A = ver2.replace('_', '.');
-
-		String[] ver1parts = ver1A.split("\\.");
-		String[] ver2parts = ver2A.split("\\.");
-
-		int i = 0;
-		int result = 0;
-
-		while (result == 0 && i < ver1parts.length && i < ver2parts.length) {
-			result = stringCompareAsInt(ver1parts[i], ver2parts[i]);
-			if (result == 0) {
-				i++;
-			}
 		}
 
 		return result;
