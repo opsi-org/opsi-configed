@@ -20,8 +20,9 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 	public IconNodeRendererClientTree(ConfigedMain main) {
 		this.main = main;
-		super.setOpaque(true);
+
 		if (!ConfigedMain.OPSI_4_3) {
+			super.setOpaque(true);
 			super.setForeground(Globals.lightBlack);
 			super.setTextSelectionColor(Globals.lightBlack);
 			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
@@ -32,74 +33,75 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
+
 		if (!ConfigedMain.OPSI_4_3) {
 			setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
-		}
-		if (value instanceof IconNode) {
-			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
-			setText(stringValue);
-			setToolTipText(((IconNode) value).getToolTipText());
+			if (value instanceof IconNode) {
+				String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
-			// Attention: must be a IconNode
-			IconNode node = (IconNode) value;
-			boolean enabled = tree.isEnabled();
-			setEnabled(enabled);
+				setText(stringValue);
+				setToolTipText(((IconNode) value).getToolTipText());
 
-			node.setEnabled(enabled);
+				// Attention: must be a IconNode
+				IconNode node = (IconNode) value;
+				boolean enabled = tree.isEnabled();
+				setEnabled(enabled);
 
-			if (!node.getAllowsChildren()) {
-				// client
+				node.setEnabled(enabled);
 
-				if (
+				if (!node.getAllowsChildren()) {
+					// client
 
-				main.getActiveTreeNodes().containsKey(stringValue)) {
-					setFont(Globals.defaultFontStandardBold);
+					if (main.getActiveTreeNodes().containsKey(stringValue)) {
 
-					setIcon(node.getLeafIcon());
+						setFont(Globals.defaultFontStandardBold);
 
+						setIcon(node.getLeafIcon());
+
+					} else {
+
+						setFont(Globals.defaultFont);
+						setIcon(node.getNonSelectedLeafIcon());
+
+					}
 				} else {
+					// group
 
-					setFont(Globals.defaultFont);
-					setIcon(node.getNonSelectedLeafIcon());
+					String visualText = modifier.modify(stringValue);
+
+					setText(visualText);
+
+					// default,will be changed, if clients are childs
+					setIcon(node.getClosedIcon());
+
+					if (main.getActiveParents().contains(stringValue)) {
+						setIcon(node.getEmphasizedIcon());
+					}
+
+					if (
+
+					main.getActiveTreeNodes().containsKey(stringValue)) {
+						setFont(Globals.defaultFontStandardBold);
+
+					} else {
+						setFont(Globals.defaultFont);
+
+					}
+				}
+
+				if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
+						&& tree.hasFocus()) {
+
+					Map<TextAttribute, Integer> newAttributes = new HashMap<>();
+					newAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+					setFont(getFont().deriveFont(newAttributes));
 
 				}
-			} else {
-				// group
 
-				String visualText = modifier.modify(stringValue);
-
-				setText(visualText);
-
-				// default,will be changed, if clients are childs
-				setIcon(node.getClosedIcon());
-
-				if (main.getActiveParents().contains(stringValue)) {
-					setIcon(node.getEmphasizedIcon());
-				}
-
-				if (
-
-				main.getActiveTreeNodes().containsKey(stringValue)) {
-					setFont(Globals.defaultFontStandardBold);
-
-				} else {
-					setFont(Globals.defaultFont);
-
-				}
+				setComponentOrientation(tree.getComponentOrientation());
+				return this;
 			}
-
-			if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
-					&& tree.hasFocus()) {
-
-				Map<TextAttribute, Integer> newAttributes = new HashMap<>();
-				newAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-				setFont(getFont().deriveFont(newAttributes));
-
-			}
-
-			setComponentOrientation(tree.getComponentOrientation());
-			return this;
 		}
 
 		return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
