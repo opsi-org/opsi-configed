@@ -4,9 +4,9 @@
  * This program is free software; you may redistribute it and/or
  * modify it under the terms of the GNU General Public
  * License, version AGPLv3, as published by the Free Software Foundation
- * 
+ *
  * Copyright (c) 2000-2022 uib.de
- * 
+ *
  * @author D. Oertel, R. Roeder, J. Schneider, A. Sucher, N. Otto
  * configed - configuration editor for client work stations in opsi
  * (open pc server integration) www.opsi.org
@@ -4195,13 +4195,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				} else {
 					reachableInfo = persist.reachableInfo(null);
 				}
-				// it occurs that the rpc does not return
-
-				try {
-					sleep(2000);
-				} catch (InterruptedException ex) {
-					Thread.currentThread().interrupt();
-				}
 
 				fShowReachableInfo.setVisible(false);
 
@@ -4961,7 +4954,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	/**
 	 * Starts the execution of command
-	 * 
+	 *
 	 * @param command
 	 */
 	public void startSSHOpsiServerExec(final SSHCommand command) {
