@@ -126,7 +126,6 @@ public class Configed {
 					"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)" }
 
 			// undocumented
-
 	};
 
 	public static final Charset serverCharset = StandardCharsets.UTF_8;
