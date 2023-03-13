@@ -48,15 +48,17 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 		} else {
 			if (mapOfTextColors != null && value instanceof String) {
 				Color textcolor = mapOfTextColors.get(value);
-				if (!ConfigedMain.OPSI_4_3) {
-					if (textcolor != null) {
-						if (textcolor.equals(Globals.INVISIBLE)) {
-							c.setForeground(c.getBackground());
-						} else {
+				//if (!ConfigedMain.OPSI_4_3) { // Keep it invisible also with themes
+				if (textcolor != null) {
+					if (textcolor.equals(Globals.INVISIBLE)) {
+						c.setForeground(c.getBackground());
+					} else {
+						if (!ConfigedMain.OPSI_4_3 || !isSelected) {
 							c.setForeground(textcolor);
 						}
 					}
 				}
+				//}
 			}
 		}
 

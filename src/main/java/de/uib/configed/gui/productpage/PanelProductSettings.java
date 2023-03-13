@@ -297,8 +297,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2TextColor(),
-				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir, false,
+				InstallationStatus.getLabel2TextColor(), InstallationStatus.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_STATUS) + ": ");
 
 		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
