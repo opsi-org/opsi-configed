@@ -7967,7 +7967,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			Logging.info(this, "retrieveOpsiLicensingInfoVersion getMethodSignature( backend_getLicensingInfo "
 					+ getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME));
 
-			if (getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME) == NONE_LIST || !isOpsiUserAdmin()) {
+			if (getMethodSignature(BACKEND_LICENSING_INFO_METHOD_NAME) == NONE_LIST) {
 				Logging.info(this,
 						"method " + BACKEND_LICENSING_INFO_METHOD_NAME + " not existing in this opsi service");
 				isOpsiLicencingAvailable = false;
@@ -8016,16 +8016,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	// is not allowed to be overriden in order to prevent changes
 	@Override
 	public final JSONObject getOpsiLicencingInfo() {
-		if (licencingInfo == null) {
-			return retrieveJSONLicensingInfoReduced();
-		}
-
-		return licencingInfo;
-	}
-
-	private JSONObject retrieveJSONLicensingInfoReduced() {
-		retrieveOpsiLicensingInfoVersion();
-		if (licencingInfo == null && isOpsiLicencingAvailable) {
+		if (licencingInfo == null && isOpsiLicencingAvailable() && isOpsiUserAdmin()) {
 			OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME,
 					new Object[] { true, false, true, false });
 
@@ -8046,6 +8037,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			// we are initialized
 			return opsiInformation;
 		}
+
+		Logging.devel(this, "backend_info");
 
 		OpsiMethodCall omc = new OpsiMethodCall("backend_info", new String[] {});
 		opsiInformation = new HashMap<>();
@@ -8376,7 +8369,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			produceOpsiModulesInfoClassic();
 		} else {
 			produceOpsiModulesInfo();
-
 		}
 
 		Logging.info(this, " withMySQL " + withMySQL);
