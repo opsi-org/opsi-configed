@@ -22,7 +22,9 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	public SimpleIconNodeRenderer() {
 		super();
 
-		super.setOpaque(true);
+		if (!ConfigedMain.OPSI_4_3) {
+			super.setOpaque(true);
+		}
 
 		standard = Globals.defaultFontBig;
 
@@ -41,6 +43,8 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
+
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
 		if (value instanceof SimpleIconNode) {
 
