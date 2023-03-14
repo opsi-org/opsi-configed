@@ -17,8 +17,9 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 
 	public IconNodeRenderer() {
 		super();
-		super.setOpaque(true);
+
 		if (!ConfigedMain.OPSI_4_3) {
+			super.setOpaque(true);
 			super.setForeground(Globals.lightBlack);
 			super.setTextSelectionColor(Globals.lightBlack);
 			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
@@ -30,6 +31,9 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
+
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
 		if (value instanceof IconNode) {
 
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
@@ -62,10 +66,8 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			}
 
 			setComponentOrientation(tree.getComponentOrientation());
-			return this;
 		}
 
 		return this;
-
 	}
 }

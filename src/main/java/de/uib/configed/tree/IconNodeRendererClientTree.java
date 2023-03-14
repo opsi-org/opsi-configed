@@ -33,6 +33,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
 
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
 		if (!ConfigedMain.OPSI_4_3) {
 			setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
 		}
@@ -95,9 +97,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			}
 
 			setComponentOrientation(tree.getComponentOrientation());
-			return this;
 		}
 
-		return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+		return this;
 	}
 }
