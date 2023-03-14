@@ -8038,8 +8038,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return opsiInformation;
 		}
 
-		Logging.devel(this, "backend_info");
-
 		OpsiMethodCall omc = new OpsiMethodCall("backend_info", new String[] {});
 		opsiInformation = new HashMap<>();
 
