@@ -3,8 +3,7 @@ package de.uib.configed.tree;
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.font.TextAttribute;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
@@ -36,75 +35,69 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 		if (!ConfigedMain.OPSI_4_3) {
 			setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
+		}
 
-			if (value instanceof IconNode) {
-				String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
+		if (value instanceof IconNode) {
+			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
-				setText(stringValue);
-				setToolTipText(((IconNode) value).getToolTipText());
+			setText(stringValue);
+			setToolTipText(((IconNode) value).getToolTipText());
 
-				// Attention: must be a IconNode
-				IconNode node = (IconNode) value;
-				boolean enabled = tree.isEnabled();
-				setEnabled(enabled);
+			// Attention: must be a IconNode
+			IconNode node = (IconNode) value;
+			boolean enabled = tree.isEnabled();
+			setEnabled(enabled);
 
-				node.setEnabled(enabled);
+			node.setEnabled(enabled);
 
-				if (!node.getAllowsChildren()) {
-					// client
+			if (!node.getAllowsChildren()) {
+				// client
 
-					if (main.getActiveTreeNodes().containsKey(stringValue)) {
+				if (main.getActiveTreeNodes().containsKey(stringValue)) {
 
-						setFont(Globals.defaultFontStandardBold);
+					setFont(Globals.defaultFontStandardBold);
 
-						setIcon(node.getLeafIcon());
+					setIcon(node.getLeafIcon());
 
-					} else {
-
-						setFont(Globals.defaultFont);
-						setIcon(node.getNonSelectedLeafIcon());
-
-					}
 				} else {
-					// group
 
-					String visualText = modifier.modify(stringValue);
+					setFont(Globals.defaultFont);
+					setIcon(node.getNonSelectedLeafIcon());
+				}
+			} else {
+				// group
 
-					setText(visualText);
+				String visualText = modifier.modify(stringValue);
 
-					// default,will be changed, if clients are childs
-					setIcon(node.getClosedIcon());
+				setText(visualText);
 
-					if (main.getActiveParents().contains(stringValue)) {
-						setIcon(node.getEmphasizedIcon());
-					}
+				// default,will be changed, if clients are childs
+				setIcon(node.getClosedIcon());
 
-					if (
-
-					main.getActiveTreeNodes().containsKey(stringValue)) {
-						setFont(Globals.defaultFontStandardBold);
-
-					} else {
-						setFont(Globals.defaultFont);
-
-					}
+				if (main.getActiveParents().contains(stringValue)) {
+					setIcon(node.getEmphasizedIcon());
 				}
 
-				if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
-						&& tree.hasFocus()) {
+				if (main.getActiveTreeNodes().containsKey(stringValue)) {
+					setFont(Globals.defaultFontStandardBold);
 
-					Map<TextAttribute, Integer> newAttributes = new HashMap<>();
-					newAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-					setFont(getFont().deriveFont(newAttributes));
+				} else {
+					setFont(Globals.defaultFont);
 
 				}
-
-				setComponentOrientation(tree.getComponentOrientation());
-				return this;
 			}
+
+			if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
+					&& tree.hasFocus()) {
+
+				setFont(getFont()
+						.deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
+			}
+
+			setComponentOrientation(tree.getComponentOrientation());
+			return this;
 		}
 
 		return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
 	}
 }

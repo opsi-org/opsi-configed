@@ -270,9 +270,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		nodeRenderer = new IconNodeRendererClientTree(configedMain);
 
-		if (!ConfigedMain.OPSI_4_3) {
-			setCellRenderer(nodeRenderer);
-		}
+		setCellRenderer(nodeRenderer);
 
 		model = new DefaultTreeModel(rootNode);
 		setModel(model);

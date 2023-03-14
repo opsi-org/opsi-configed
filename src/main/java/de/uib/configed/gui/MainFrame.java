@@ -86,6 +86,8 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.configed.Configed;
 /**
  * configed - configuration editor for client work stations in opsi
@@ -731,10 +733,12 @@ public class MainFrame extends JFrame
 				Configed.setOpsiLaf();
 
 				new Thread() {
+
 					@Override
 					public void run() {
 						Configed.startWithLocale();
 					}
+
 				}.start();
 			});
 		}
@@ -2464,24 +2468,20 @@ public class MainFrame extends JFrame
 		GroupLayout layoutIconPane0 = new GroupLayout(iconPane0);
 		iconPane0.setLayout(layoutIconPane0);
 
-		layoutIconPane0.setHorizontalGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layoutIconPane0.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+		layoutIconPane0.setHorizontalGroup(
+				layoutIconPane0.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)
 						.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE));
+
 		layoutIconPane0.setVerticalGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addGroup(layoutIconPane0.createSequentialGroup()
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
+				.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		setupIcons1();
 		iconPane1 = new JPanel();
@@ -2547,17 +2547,46 @@ public class MainFrame extends JFrame
 		iconBarPane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1.0;
-		c.gridx = 0;
-		c.gridy = 0;
-		iconBarPane.add(iconPane1, c);
+		if (!ConfigedMain.OPSI_4_3) {
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 1.0;
+			c.gridx = 0;
+			c.gridy = 0;
+			iconBarPane.add(iconPane1, c);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.0;
-		c.gridx = 1;
-		c.gridy = 0;
-		iconBarPane.add(iconPane0, c);
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.0;
+			c.gridx = 2;
+			c.gridy = 0;
+			iconBarPane.add(iconPane0, c);
+		} else {
+			String pathToLogo;
+			if (FlatLaf.isLafDark()) {
+				pathToLogo = "opsi/OPSI_Logo_quer_half_neg.png";
+			} else {
+				pathToLogo = "opsi/OPSI_Logo_quer_half.png";
+			}
+
+			JLabel picLabel = new JLabel(Globals.createImageIcon(pathToLogo, ""));
+
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.0;
+			c.gridx = 0;
+			c.gridy = 0;
+			iconBarPane.add(iconPane1, c);
+
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 1.0;
+			c.gridx = 1;
+			c.gridy = 0;
+			iconBarPane.add(picLabel, c);
+
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.weightx = 0.0;
+			c.gridx = 2;
+			c.gridy = 0;
+			iconBarPane.add(iconPane0, c);
+		}
 
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
 				jTabbedPaneConfigPanes);
