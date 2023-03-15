@@ -797,12 +797,12 @@ public class MainFrame extends JFrame
 		jMenuClients.addMenuListener(new MenuListener() {
 			@Override
 			public void menuCanceled(MenuEvent arg0) {
-				// Nothing to do. 
+				// Nothing to do.
 			}
 
 			@Override
 			public void menuDeselected(MenuEvent arg0) {
-				// Nothing to do. 
+				// Nothing to do.
 			}
 
 			@Override
@@ -2363,22 +2363,22 @@ public class MainFrame extends JFrame
 					!FGeneralDialogLicensingInfo.extendedView);
 
 			switch (licensingInfoMap.getWarningLevel()) {
-			case LicensingInfoMap.STATE_OVER_LIMIT:
-				jButtonOpsiLicenses = new JButton("",
-						Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
-				break;
-			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-				jButtonOpsiLicenses = new JButton("",
-						Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
-				break;
+				case LicensingInfoMap.STATE_OVER_LIMIT:
+					jButtonOpsiLicenses = new JButton("",
+							Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
+					break;
+				case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
+					jButtonOpsiLicenses = new JButton("",
+							Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
+					break;
 
-			case LicensingInfoMap.STATE_OKAY:
-				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
-				break;
+				case LicensingInfoMap.STATE_OKAY:
+					jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
+					break;
 
-			default:
-				Logging.warning(this, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
-				break;
+				default:
+					Logging.warning(this, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
+					break;
 			}
 
 		} else {
@@ -2547,46 +2547,17 @@ public class MainFrame extends JFrame
 		iconBarPane.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		if (!ConfigedMain.OPSI_4_3) {
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.0;
-			c.gridx = 0;
-			c.gridy = 0;
-			iconBarPane.add(iconPane1, c);
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1.0;
+		c.gridx = 0;
+		c.gridy = 0;
+		iconBarPane.add(iconPane1, c);
 
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 0.0;
-			c.gridx = 2;
-			c.gridy = 0;
-			iconBarPane.add(iconPane0, c);
-		} else {
-			String pathToLogo;
-			if (FlatLaf.isLafDark()) {
-				pathToLogo = "opsi/OPSI_Logo_quer_half_neg.png";
-			} else {
-				pathToLogo = "opsi/OPSI_Logo_quer_half.png";
-			}
-
-			JLabel picLabel = new JLabel(Globals.createImageIcon(pathToLogo, ""));
-
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 0.0;
-			c.gridx = 0;
-			c.gridy = 0;
-			iconBarPane.add(iconPane1, c);
-
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.0;
-			c.gridx = 1;
-			c.gridy = 0;
-			iconBarPane.add(picLabel, c);
-
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 0.0;
-			c.gridx = 2;
-			c.gridy = 0;
-			iconBarPane.add(iconPane0, c);
-		}
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.0;
+		c.gridx = 2;
+		c.gridy = 0;
+		iconBarPane.add(iconPane0, c);
 
 		JSplitPane centralPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, panelTreeClientSelection,
 				jTabbedPaneConfigPanes);
@@ -3632,29 +3603,29 @@ public class MainFrame extends JFrame
 
 	public void visualizeEditingTarget(ConfigedMain.EditingTarget t) {
 		switch (t) {
-		case CLIENTS:
-			jButtonClientsConfiguration.setSelected(true);
-			jButtonDepotsConfiguration.setSelected(false);
-			jButtonServerConfiguration.setSelected(false);
+			case CLIENTS:
+				jButtonClientsConfiguration.setSelected(true);
+				jButtonDepotsConfiguration.setSelected(false);
+				jButtonServerConfiguration.setSelected(false);
 
-			break;
+				break;
 
-		case DEPOTS:
-			jButtonDepotsConfiguration.setSelected(true);
-			jButtonServerConfiguration.setSelected(false);
-			jButtonClientsConfiguration.setSelected(false);
+			case DEPOTS:
+				jButtonDepotsConfiguration.setSelected(true);
+				jButtonServerConfiguration.setSelected(false);
+				jButtonClientsConfiguration.setSelected(false);
 
-			break;
+				break;
 
-		case SERVER:
-			jButtonServerConfiguration.setSelected(true);
-			jButtonDepotsConfiguration.setSelected(false);
-			jButtonClientsConfiguration.setSelected(false);
+			case SERVER:
+				jButtonServerConfiguration.setSelected(true);
+				jButtonDepotsConfiguration.setSelected(false);
+				jButtonClientsConfiguration.setSelected(false);
 
-			break;
+				break;
 
-		default:
-			break;
+			default:
+				break;
 		}
 	}
 
