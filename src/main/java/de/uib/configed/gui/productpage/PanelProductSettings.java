@@ -366,8 +366,10 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 									+ InstallationStateTableModel.CONFLICT_STRING)) {
 						if (!ConfigedMain.OPSI_4_3) {
 							c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR);
-							c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
 						}
+
+						c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
+
 					} else {
 
 						String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);
@@ -385,9 +387,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 						}
 
 						if (!val.equals(serverProductVersion)) {
-							if (!ConfigedMain.OPSI_4_3) {
-								c.setForeground(Globals.FAILED_COLOR);
-							}
+							c.setForeground(Globals.FAILED_COLOR);
 						}
 					}
 				}
@@ -412,11 +412,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 						c.setForeground(Globals.PANEL_PRODUCT_SETTINGS_FAILED_COLOR);
 					} else if (val.startsWith(
 							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.SUCCESSFUL)))) {
-						if (!ConfigedMain.OPSI_4_3) {
-							if (!ConfigedMain.OPSI_4_3) {
-								c.setForeground(Globals.OK_COLOR);
-							}
-						}
+						c.setForeground(Globals.OK_COLOR);
 					}
 				}
 
