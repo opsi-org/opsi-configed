@@ -53,7 +53,7 @@ public class ProductState extends HashMap<String, String> {
 	public static final String KEY_ACTION_SEQUENCE = ActionSequence.KEY;
 
 	// transformed values
-	public static final String KEY_INSTALLATION_INFO = InstallationInfo.KEY;
+	public static final String KEY_INSTALLATION_INFO = "installationInfo";
 	public static final String KEY_VERSION_INFO = "versionInfo";
 
 	// additional values
