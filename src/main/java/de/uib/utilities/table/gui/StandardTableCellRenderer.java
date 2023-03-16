@@ -7,6 +7,9 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import com.formdev.flatlaf.FlatLaf;
+
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.CellAlternatingColorizer;
 
@@ -52,6 +55,30 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			}
 
 			((JLabel) jc).setToolTipText(tooltipText);
+		}
+
+		if (ConfigedMain.OPSI_4_3) {
+			if (isSelected) {
+				jc.setBackground(Globals.opsiBlue);
+			} else if (FlatLaf.isLafDark()) {
+				jc.setBackground(Globals.opsiDarkGrey);
+			} else {
+				jc.setBackground(Globals.opsiLightGrey);
+			}
+
+			if (row % 2 == 1) {
+				if (FlatLaf.isLafDark() || isSelected) {
+					jc.setBackground(jc.getBackground().darker());
+				} else {
+					jc.setBackground(jc.getBackground().brighter());
+				}
+			}
+
+			if (FlatLaf.isLafDark() || isSelected) {
+				jc.setForeground(Globals.opsiLightGrey);
+			} else {
+				jc.setForeground(Globals.opsiDarkGrey);
+			}
 		}
 
 		return jc;
