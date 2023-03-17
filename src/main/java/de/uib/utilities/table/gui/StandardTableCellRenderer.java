@@ -60,28 +60,28 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 		if (ConfigedMain.OPSI_4_3) {
 			if (isSelected) {
 				jc.setBackground(Globals.opsiBlue);
+				if (FlatLaf.isLafDark()) {
+					jc.setForeground(Globals.opsiForegroundDark);
+				} else {
+					jc.setForeground(Globals.opsiBackgroundLight);
+				}
 			} else if (FlatLaf.isLafDark()) {
-				jc.setBackground(Globals.opsiDarkGrey);
+				jc.setBackground(Globals.opsiBackgroundDark);
+				jc.setForeground(Globals.opsiForegroundDark);
 			} else {
-				jc.setBackground(Globals.opsiLightGrey);
+				jc.setBackground(Globals.opsiBackgroundLight);
+				jc.setForeground(Globals.opsiForegroundLight);
 			}
 
 			if (row % 2 == 1) {
-				if (FlatLaf.isLafDark() || isSelected) {
+				if (!FlatLaf.isLafDark() || isSelected) {
 					jc.setBackground(jc.getBackground().darker());
 				} else {
 					jc.setBackground(jc.getBackground().brighter());
 				}
 			}
-
-			if (FlatLaf.isLafDark() || isSelected) {
-				jc.setForeground(Globals.opsiLightGrey);
-			} else {
-				jc.setForeground(Globals.opsiDarkGrey);
-			}
 		}
 
 		return jc;
 	}
-
 }

@@ -74,6 +74,12 @@ public final class Globals {
 	public static final Color opsiMagenta = new Color(203, 30, 88);
 	public static final Color opsiBlue = new Color(63, 90, 166);
 
+	public static final Color opsiBackgroundLight = new Color(255, 255, 255);
+	public static final Color opsiBackgroundDark = new Color(31, 31, 31);
+
+	public static final Color opsiForegroundLight = new Color(0, 0, 0);
+	public static final Color opsiForegroundDark = new Color(225, 225, 225);
+
 	public static final Font defaultFont = new Font("SansSerif", 0, 11);
 	public static final Font defaultFontStandardBold = new Font("SansSerif", Font.BOLD, 11);
 	public static final Font defaultFontSmall = new Font("SansSerif", 0, 9);
@@ -258,16 +264,18 @@ public final class Globals {
 	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235);
 	public static final Color defaultTableCellSelectedBgColorNotEditable = new Color(189, 207, 231);
 
-	public static final Color logColorEssential = new Color(0, 0, 0);
-	public static final Color logColorCritical = new Color(255, 0, 0);
-	public static final Color logColorError = new Color(201, 0, 0);
-	public static final Color logColorWarning = new Color(206, 145, 30);
+	public static final Color logColorEssential = new Color(0, 80, 255);
+	public static final Color logColorCritical = new Color(226, 0, 102);
+	public static final Color logColorError = new Color(229, 29, 59);
+	public static final Color logColorWarning = new Color(255, 145, 0);
 
-	public static final Color logColorNotice = new Color(10, 150, 10);
-	public static final Color logColorInfo = new Color(50, 50, 50);
-	public static final Color logColorDebug = new Color(150, 150, 150);
-	public static final Color logColorTrace = new Color(150, 150, 150);
-	public static final Color logColorSecret = new Color(150, 150, 0);
+	public static final Color logColorNotice = new Color(0, 150, 5);
+	public static final Color logColorInfoLight = new Color(33, 33, 33);
+	public static final Color logColorInfoDark = new Color(245, 245, 245);
+	public static final Color logColorDebugLight = new Color(86, 86, 86);
+	public static final Color logColorDebugDark = new Color(192, 192, 192);
+	public static final Color logColorTrace = new Color(139, 139, 139);
+	public static final Color logColorSecret = new Color(213, 0, 249);
 
 	public static final Color opsiLogoBlue = new Color(106, 128, 174);
 	public static final Color opsiLogoLightBlue = new Color(195, 200, 222);
