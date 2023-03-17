@@ -44,11 +44,13 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 			if (!ConfigedMain.OPSI_4_3) {
 				c.setBackground(Globals.BACKGROUND_COLOR_4);
 				c.setForeground(Globals.BACKGROUND_COLOR_4);
+			} else {
+				c.setBackground(Color.PINK);
+				c.setForeground(Color.PINK);
 			}
 		} else {
 			if (mapOfTextColors != null && value instanceof String) {
 				Color textcolor = mapOfTextColors.get(value);
-				//if (!ConfigedMain.OPSI_4_3) { // Keep it invisible also with themes
 				if (textcolor != null) {
 					if (textcolor.equals(Globals.INVISIBLE)) {
 						c.setForeground(c.getBackground());
@@ -58,7 +60,6 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 						}
 					}
 				}
-				//}
 			}
 		}
 

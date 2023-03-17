@@ -7,6 +7,7 @@
 
 package de.uib.configed.guidata;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
@@ -29,6 +30,9 @@ public class ColoredTableCellRenderer extends de.uib.utilities.table.gui.Standar
 			if (!ConfigedMain.OPSI_4_3) {
 				c.setBackground(Globals.BACKGROUND_COLOR_4);
 				c.setForeground(Globals.BACKGROUND_COLOR_4);
+			} else {
+				c.setBackground(Color.PINK);
+				c.setForeground(Color.PINK);
 			}
 		}
 

@@ -1,5 +1,6 @@
 package de.uib.configed.gui.productpage;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -366,9 +367,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 									+ InstallationStateTableModel.CONFLICT_STRING)) {
 						if (!ConfigedMain.OPSI_4_3) {
 							c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR);
+							c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
+						} else {
+							c.setBackground(Color.PINK);
+							c.setForeground(Color.PINK);
 						}
-
-						c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
 
 					} else {
 

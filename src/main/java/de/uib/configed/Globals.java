@@ -35,7 +35,7 @@ public final class Globals {
 
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-03-15";
+	public static final String VERDATE = "2023-03-17";
 
 	public static final String VERHASHTAG = "";
 
@@ -264,7 +264,7 @@ public final class Globals {
 	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235);
 	public static final Color defaultTableCellSelectedBgColorNotEditable = new Color(189, 207, 231);
 
-	public static final Color logColorEssential = new Color(0, 80, 255);
+	public static final Color logColorEssential = new Color(41, 121, 255);
 	public static final Color logColorCritical = new Color(226, 0, 102);
 	public static final Color logColorError = new Color(229, 29, 59);
 	public static final Color logColorWarning = new Color(255, 145, 0);

@@ -1,6 +1,5 @@
 package de.uib.configed.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
@@ -32,8 +31,6 @@ import de.uib.utilities.logging.Logging;
 
 public class HealthCheckDialog extends FGeneralDialog {
 	private final StyleContext styleContext = StyleContext.getDefaultStyleContext();
-	private final AttributeSet blackAttributeSet = styleContext.addAttribute(styleContext.getEmptySet(),
-			StyleConstants.Foreground, Color.BLACK);
 
 	private JTextPane textPane = new JTextPane();
 	private DefaultStyledDocument styledDocument = new DefaultStyledDocument();
@@ -174,7 +171,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 	public void setMessage(String message) {
 		try {
 			styledDocument.remove(0, styledDocument.getLength());
-			styledDocument.insertString(styledDocument.getLength(), message, blackAttributeSet);
+			styledDocument.insertString(styledDocument.getLength(), message, null);
 		} catch (BadLocationException e) {
 			Logging.warning("could not insert message into health check dialog, ", e);
 		}
@@ -224,7 +221,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 			switch (token) {
 			case "OK":
 				style = styleContext.addStyle("ok", null);
-				StyleConstants.setForeground(style, Color.GREEN);
+				StyleConstants.setForeground(style, Globals.logColorNotice);
 				break;
 			case "WARNING":
 				style = styleContext.addStyle("warning", null);
