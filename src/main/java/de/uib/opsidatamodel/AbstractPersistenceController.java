@@ -584,6 +584,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Set<String> extendToDependentProducts(final Set<String> startProductSet, final String depot);
 
+	public abstract Set<String> getMessagebusConnectedClients();
+
 	// intersection of the values of the clients
 	public abstract List<String> getCommonProductPropertyValues(List<String> clients, String product, String property);
 

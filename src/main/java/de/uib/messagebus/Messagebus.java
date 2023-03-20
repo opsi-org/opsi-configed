@@ -7,6 +7,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
@@ -139,6 +140,17 @@ public class Messagebus {
 		}
 
 		return sslFactory;
+	}
+
+	public void makeStandardChannelSubscriptions(ConfigedMain configedMain) {
+		messagebusWebSocket.setConfigedMain(configedMain);
+
+		List<String> channels = new ArrayList<>();
+
+		channels.add("event:host_connected");
+		channels.add("event:host_disconnected");
+
+		makeChannelSubscriptionRequest(channels);
 	}
 
 	private void makeChannelSubscriptionRequest(List<String> channels) {

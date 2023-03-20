@@ -49,6 +49,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -105,6 +106,7 @@ import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
+import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.sshcommand.SSHCommand;
@@ -365,6 +367,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private int reloadCounter;
 
+	private Messagebus messagebus;
+
+	private Icon connectedIcon = Globals.createImageIcon("images/ok22.png", "");
+
+	private Set<String> connectedHostsByMessagebus;
+
 	boolean sessioninfoFinished;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
@@ -472,6 +480,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		});
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
+
+		setReachableInfo();
 	}
 
 	private static String getSavedStatesDefaultLocation() {
@@ -640,6 +650,46 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
+	private void initMessagebus() {
+		if (connectMessagebus()) {
+			messagebus.makeStandardChannelSubscriptions(this);
+		} else {
+			Logging.error(this, "could not connect to messagebus...");
+		}
+
+	}
+
+	public void addClientToConnectedList(String clientId) {
+		connectedHostsByMessagebus.add(clientId);
+		setReachableInfo();
+	}
+
+	public void removeClientToConnectedList(String clientId) {
+		connectedHostsByMessagebus.remove(clientId);
+		setReachableInfo();
+	}
+
+	public boolean connectMessagebus() {
+		if (messagebus == null) {
+			messagebus = new Messagebus();
+		}
+
+		try {
+
+			Logging.info(this, "connect to messagebus");
+			return messagebus.connect();
+		} catch (InterruptedException e) {
+			Logging.error(this, "could not connect to messagebus", e);
+			Thread.currentThread().interrupt();
+		}
+
+		return false;
+	}
+
+	public void connectTerminal() {
+		messagebus.connectTerminal();
+	}
+
 	public void loadDataAndGo() {
 
 		Logging.clearErrorList();
@@ -705,6 +755,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		hostConfigsDataChangedKeeper = new HostConfigsDataChangedKeeper();
 		allControlMultiTablePanels = new ArrayList<>();
 
+		connectedHostsByMessagebus = persist.getMessagebusConnectedClients();
+		initMessagebus();
 	}
 
 	protected void initSpecialTableProviders() {
@@ -1984,7 +2036,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 					Globals.createImageIcon("images/new_network-connect2.png", ""),
 					Globals.createImageIcon("images/new_network-disconnect.png", ""), false));
-
 		}
 
 		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL))) {
@@ -4203,25 +4254,35 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				mainFrame.iconButtonReachableInfo.setEnabled(true);
 
-				// update column
-				if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientConnected"))) {
-					AbstractTableModel model = selectionPanel.getTableModel();
+				setReachableInfo();
 
-					int col = model
-							.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
-
-					for (int row = 0; row < model.getRowCount(); row++) {
-						String clientId = (String) model.getValueAt(row, 0);
-
-						model.setValueAt(reachableInfo.get(clientId), row, col);
-					}
-
-					model.fireTableDataChanged();
-
-					setSelectedClientsOnPanel(selClients);
-				}
+				setSelectedClientsOnPanel(selClients);
 			}
 		}.start();
+	}
+
+	private void setReachableInfo() {
+		// update column
+		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientConnected"))) {
+			AbstractTableModel model = selectionPanel.getTableModel();
+
+			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+
+			for (int row = 0; row < model.getRowCount(); row++) {
+
+				String clientId = (String) model.getValueAt(row, 0);
+
+				if (connectedHostsByMessagebus.contains(clientId)) {
+					model.setValueAt("MBUS", row, col);
+				} else {
+					// Only set reachable info, if not connected by messagebus
+					model.setValueAt(reachableInfo.get(clientId), row, col);
+				}
+
+			}
+
+			model.fireTableDataChanged();
+		}
 	}
 
 	public void getSessionInfo() {
@@ -4280,7 +4341,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 								mainFrame.iconButtonSessionInfo.setEnabled(true);
 
 								// update column
-								if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientSessionInfo"))) {
+								if (Boolean.TRUE.equals(persist.getHostDisplayFields()
+										.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
 									AbstractTableModel model = selectionPanel.getTableModel();
 
 									int col = model.findColumn(Configed

@@ -4180,6 +4180,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return new TreeSet<>(endResultSet);
 	}
 
+	@Override
+	public Set<String> getMessagebusConnectedClients() {
+
+		Logging.info(this, "get clients connected with messagebus");
+		OpsiMethodCall omc = new OpsiMethodCall("host_getMessagebusConnectedIds", new Object[] {});
+
+		return new HashSet<>(exec.getStringListResult(omc));
+	}
+
 	/**
 	 * returns a set which depends on the momentarily selected hosts as
 	 * specified by a call to retrieveProductProperties

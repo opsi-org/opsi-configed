@@ -86,8 +86,6 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
-import com.formdev.flatlaf.FlatLaf;
-
 import de.uib.configed.Configed;
 /**
  * configed - configuration editor for client work stations in opsi
@@ -117,7 +115,6 @@ import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
-import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.sshcommand.SSHCommand;
@@ -490,8 +487,6 @@ public class MainFrame extends JFrame
 	JPanel clientPane;
 
 	private LicenseDisplayer licenseDisplayer;
-
-	private Messagebus messagebus;
 
 	static class GlassPane extends JComponent {
 		GlassPane() {
@@ -1371,25 +1366,14 @@ public class MainFrame extends JFrame
 		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
 		jMenuFrameTerminal.setEnabled(true);
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
-			try {
-				if (messagebus == null) {
-					messagebus = new Messagebus();
-				}
+			configedMain.connectMessagebus();
 
-				if (!messagebus.connect()) {
-					return;
-				}
-
-				if (!Terminal.getInstance().isWebSocketConnected()) {
-					messagebus.connectTerminal();
-				} else {
-					Logging.info(this,
-							"terminal is already opened and connected to websocket (displaying current terminal window)");
-					Terminal.getInstance().display();
-				}
-			} catch (InterruptedException ex) {
-				Logging.error(this, "cannot open terminal, thread interrupted", ex);
-				Thread.currentThread().interrupt();
+			if (!Terminal.getInstance().isWebSocketConnected()) {
+				configedMain.connectTerminal();
+			} else {
+				Logging.info(this,
+						"terminal is already opened and connected to websocket (displaying current terminal window)");
+				Terminal.getInstance().display();
 			}
 		});
 
@@ -1530,7 +1514,7 @@ public class MainFrame extends JFrame
 				"images/system-users-query.png", "images/system-users-query_over.png",
 				"images/system-users-query_over.png", waitingCircle,
 
-				500, configedMain.hostDisplayFields.get("clientSessionInfo"));
+				500, configedMain.hostDisplayFields.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 		iconButtonSessionInfo.setEnabled(true);
 
 		iconButtonToggleClientFilter = new IconButton(
@@ -2363,22 +2347,22 @@ public class MainFrame extends JFrame
 					!FGeneralDialogLicensingInfo.extendedView);
 
 			switch (licensingInfoMap.getWarningLevel()) {
-				case LicensingInfoMap.STATE_OVER_LIMIT:
-					jButtonOpsiLicenses = new JButton("",
-							Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
-					break;
-				case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
-					jButtonOpsiLicenses = new JButton("",
-							Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
-					break;
+			case LicensingInfoMap.STATE_OVER_LIMIT:
+				jButtonOpsiLicenses = new JButton("",
+						Globals.createImageIcon("images/opsi-licenses-error-small.png", ""));
+				break;
+			case LicensingInfoMap.STATE_CLOSE_TO_LIMIT:
+				jButtonOpsiLicenses = new JButton("",
+						Globals.createImageIcon("images/opsi-licenses-warning-small.png", ""));
+				break;
 
-				case LicensingInfoMap.STATE_OKAY:
-					jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
-					break;
+			case LicensingInfoMap.STATE_OKAY:
+				jButtonOpsiLicenses = new JButton("", Globals.createImageIcon("images/opsi-licenses.png", ""));
+				break;
 
-				default:
-					Logging.warning(this, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
-					break;
+			default:
+				Logging.warning(this, "unexpected warninglevel: " + licensingInfoMap.getWarningLevel());
+				break;
 			}
 
 		} else {
@@ -3603,29 +3587,29 @@ public class MainFrame extends JFrame
 
 	public void visualizeEditingTarget(ConfigedMain.EditingTarget t) {
 		switch (t) {
-			case CLIENTS:
-				jButtonClientsConfiguration.setSelected(true);
-				jButtonDepotsConfiguration.setSelected(false);
-				jButtonServerConfiguration.setSelected(false);
+		case CLIENTS:
+			jButtonClientsConfiguration.setSelected(true);
+			jButtonDepotsConfiguration.setSelected(false);
+			jButtonServerConfiguration.setSelected(false);
 
-				break;
+			break;
 
-			case DEPOTS:
-				jButtonDepotsConfiguration.setSelected(true);
-				jButtonServerConfiguration.setSelected(false);
-				jButtonClientsConfiguration.setSelected(false);
+		case DEPOTS:
+			jButtonDepotsConfiguration.setSelected(true);
+			jButtonServerConfiguration.setSelected(false);
+			jButtonClientsConfiguration.setSelected(false);
 
-				break;
+			break;
 
-			case SERVER:
-				jButtonServerConfiguration.setSelected(true);
-				jButtonDepotsConfiguration.setSelected(false);
-				jButtonClientsConfiguration.setSelected(false);
+		case SERVER:
+			jButtonServerConfiguration.setSelected(true);
+			jButtonDepotsConfiguration.setSelected(false);
+			jButtonClientsConfiguration.setSelected(false);
 
-				break;
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	}
 

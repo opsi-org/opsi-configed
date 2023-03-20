@@ -23,10 +23,6 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 	Icon nullIcon;
 	boolean allowingString;
 
-	public BooleanIconTableCellRenderer(Icon trueIcon) {
-		this(trueIcon, null);
-	}
-
 	public BooleanIconTableCellRenderer(Icon trueIcon, Icon falseIcon) {
 		this(trueIcon, falseIcon, false);
 	}

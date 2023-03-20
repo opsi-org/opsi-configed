@@ -15,12 +15,16 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.terminal.WebSocketInputStream;
 import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S109")
 public class WebSocketClientEndpoint extends WebSocketClient {
+
+	private ConfigedMain configedMain;
+
 	public WebSocketClientEndpoint(URI serverUri, Draft draft) {
 		super(serverUri, draft);
 	}
@@ -31,6 +35,10 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 
 	public WebSocketClientEndpoint(URI serverUri, Map<String, String> httpHeaders) {
 		super(serverUri, httpHeaders);
+	}
+
+	public void setConfigedMain(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 	}
 
 	@Override
