@@ -659,12 +659,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public void addClientToConnectedList(String clientId) {
 		connectedHostsByMessagebus.add(clientId);
-		setReachableInfo(selectedClients);
+		updateConnectionStatusInTable(clientId);
 	}
 
 	public void removeClientFromConnectedList(String clientId) {
 		connectedHostsByMessagebus.remove(clientId);
-		setReachableInfo(selectedClients);
+		updateConnectionStatusInTable(clientId);
 	}
 
 	public boolean connectMessagebus() {
@@ -4274,6 +4274,26 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		} else {
 			return ConnectionStatusTableCellRenderer.NOT_REACHABLE;
 		}
+	}
+
+	private void updateConnectionStatusInTable(String clientName) {
+
+		AbstractTableModel model = selectionPanel.getTableModel();
+
+		int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+
+		for (int row = 0; row < model.getRowCount(); row++) {
+
+			if (model.getValueAt(row, 0).equals(clientName)) {
+				model.setValueAt(getConnectionInfoForClient(clientName), row, col);
+
+				model.fireTableCellUpdated(row, col);
+
+				setSelectedClientsOnPanel(selectedClients);
+				return;
+			}
+		}
+		Logging.warning(this, "could not update connectionStatus for client " + clientName + ": Not found");
 	}
 
 	private void setReachableInfo(String[] selClients) {
