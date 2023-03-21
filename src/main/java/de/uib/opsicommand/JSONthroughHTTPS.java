@@ -130,7 +130,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	 * 
 	 * @arg compareVersion version to compare to of format x.y.z...
 	 */
-	public static boolean isServerVersionAtLeast(String compareVersion) {
+	private static boolean isServerVersionAtLeast(String compareVersion) {
 
 		return serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
 	}

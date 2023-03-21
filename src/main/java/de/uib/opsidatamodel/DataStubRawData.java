@@ -82,7 +82,7 @@ public class DataStubRawData extends DataStubNOM {
 	public boolean canCallMySQL() {
 
 		// we cannot call MySQL if version before 4.3
-		if (JSONthroughHTTPS.isServerVersionAtLeast("4.3")) {
+		if (JSONthroughHTTPS.isOpsi43()) {
 			return false;
 		}
 

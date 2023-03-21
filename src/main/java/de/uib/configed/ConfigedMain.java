@@ -756,7 +756,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		connectedHostsByMessagebus = persist.getMessagebusConnectedClients();
 
-		if (JSONthroughHTTPS.isServerVersionAtLeast("4.3")) {
+		if (JSONthroughHTTPS.isOpsi43()) {
 			initMessagebus();
 		}
 	}
