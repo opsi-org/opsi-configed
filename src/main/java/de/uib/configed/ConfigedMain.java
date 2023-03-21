@@ -49,7 +49,6 @@ import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
-import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -136,6 +135,7 @@ import de.uib.utilities.swing.tabbedpane.TabClient;
 import de.uib.utilities.swing.tabbedpane.TabController;
 import de.uib.utilities.swing.tabbedpane.TabbedFrame;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
+import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.ExternalSource;
@@ -368,8 +368,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private int reloadCounter;
 
 	private Messagebus messagebus;
-
-	private Icon connectedIcon = Globals.createImageIcon("images/ok22.png", "");
 
 	private Set<String> connectedHostsByMessagebus;
 
@@ -1756,9 +1754,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Logging.info(this, "buildPclistTableModel host_displayFields " + hostDisplayFields);
 
-			for (String key : pclist.keySet()) {
+			for (String clientName : pclist.keySet()) {
 
-				HostInfo pcinfo = pcinfos.get(key);
+				HostInfo pcinfo = pcinfos.get(clientName);
 				if (pcinfo == null) {
 					pcinfo = new HostInfo();
 				}
@@ -1766,12 +1764,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Map<String, Object> rowmap = pcinfo.getDisplayRowMap0();
 
 				String sessionValue = "";
-				if (sessionInfo.get(key) != null) {
-					sessionValue = "" + sessionInfo.get(key);
+				if (sessionInfo.get(clientName) != null) {
+					sessionValue = "" + sessionInfo.get(clientName);
 				}
 
 				rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
-				rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, reachableInfo.get(key));
+				rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, getConnectionInfoForClient(clientName));
 
 				List<Object> rowItems = new ArrayList<>();
 
@@ -1781,7 +1779,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					}
 				}
 
-				if (key.equals("fscnoteb1.uib.local")) {
+				if (clientName.equals("fscnoteb1.uib.local")) {
 					Logging.info(this, "*** host_displayFields size, content " + hostDisplayFields.size() + ": "
 							+ hostDisplayFields);
 					Logging.info(this, "*** rowmap size, content " + rowmap.size() + ": " + rowmap);
@@ -2032,10 +2030,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
-			column.setCellRenderer(new BooleanIconTableCellRenderer(
-
-					Globals.createImageIcon("images/new_network-connect2.png", ""),
-					Globals.createImageIcon("images/new_network-disconnect.png", ""), false));
+			column.setCellRenderer(new ConnectionStatusTableCellRenderer());
 		}
 
 		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL))) {
@@ -4261,6 +4256,18 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}.start();
 	}
 
+	/*
+	 * gets the connection String for the client, depending on whether connected
+	 * to the messagebus, or reachable or not
+	 */
+	private Object getConnectionInfoForClient(String clientName) {
+		if (connectedHostsByMessagebus.contains(clientName)) {
+			return ConnectionStatusTableCellRenderer.CONNECTED_BY_MESSAGEBUS;
+		} else {
+			return reachableInfo.get(clientName);
+		}
+	}
+
 	private void setReachableInfo() {
 		// update column
 		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientConnected"))) {
@@ -4272,13 +4279,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				String clientId = (String) model.getValueAt(row, 0);
 
-				if (connectedHostsByMessagebus.contains(clientId)) {
-					model.setValueAt("MBUS", row, col);
-				} else {
-					// Only set reachable info, if not connected by messagebus
-					model.setValueAt(reachableInfo.get(clientId), row, col);
-				}
-
+				model.setValueAt(getConnectionInfoForClient(clientId), row, col);
 			}
 
 			model.fireTableDataChanged();
