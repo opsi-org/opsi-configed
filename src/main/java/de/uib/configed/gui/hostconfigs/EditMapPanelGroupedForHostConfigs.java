@@ -471,9 +471,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		JPanel centerPanel = f.initPanel();
 		f.setCenterPaneInScrollpane(centerPanel);
 
-		JPanel addPanel = new JPanel();
-		addPanel.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_FOR_HOST_CONFIGS_BACKGROUND_COLOR);
-
 		f.setCenterPane(centerPanel);
 
 		f.setupLayout();
@@ -565,9 +562,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		JPanel centerPanel = f.initPanel();
 		f.setCenterPaneInScrollpane(centerPanel);
 		f.setListVisible(false);
-
-		JPanel addPanel = new JPanel();
-		addPanel.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_FOR_HOST_CONFIGS_BACKGROUND_COLOR);
 
 		f.setCenterPane(centerPanel);
 

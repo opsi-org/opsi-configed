@@ -20,12 +20,7 @@ import javax.swing.SwingConstants;
 public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 	Icon trueIcon;
 	Icon falseIcon;
-	Icon nullIcon;
 	boolean allowingString;
-
-	public BooleanIconTableCellRenderer(Icon trueIcon) {
-		this(trueIcon, null);
-	}
 
 	public BooleanIconTableCellRenderer(Icon trueIcon, Icon falseIcon) {
 		this(trueIcon, falseIcon, false);
@@ -58,13 +53,10 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 		JLabel label = (JLabel) c;
 
 		label.setText("");
-		label.setIcon(null);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 
 		if (value == null) {
-			if (nullIcon != null) {
-				label.setIcon(nullIcon);
-			}
+			label.setIcon(null);
 		} else {
 			if (Boolean.TRUE.equals(value)) {
 				if (trueIcon != null) {

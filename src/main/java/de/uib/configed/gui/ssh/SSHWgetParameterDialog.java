@@ -61,7 +61,9 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 		super.pack();
 		super.setSize(Globals.dialogFrameDefaultSize);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		super.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			super.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
 		if (Globals.isGlobalReadOnly()) {
@@ -88,8 +90,10 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 

@@ -8,6 +8,7 @@ import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class IconNodeRenderer extends DefaultTreeCellRenderer {
@@ -16,10 +17,13 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 
 	public IconNodeRenderer() {
 		super();
-		super.setOpaque(true);
-		super.setForeground(Globals.lightBlack);
-		super.setTextSelectionColor(Globals.lightBlack);
-		super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
+
+		if (!ConfigedMain.OPSI_4_3) {
+			super.setOpaque(true);
+			super.setForeground(Globals.lightBlack);
+			super.setTextSelectionColor(Globals.lightBlack);
+			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
+		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
 		super.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
 	}
@@ -27,6 +31,9 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
+
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
 		if (value instanceof IconNode) {
 
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
@@ -41,12 +48,13 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			setEnabled(enabled);
 			node.setEnabled(enabled);
 
-			if (sel) {
-				setBackground(Globals.BACKGROUND_COLOR_7);
+			if (!ConfigedMain.OPSI_4_3) {
+				if (sel) {
+					setBackground(Globals.BACKGROUND_COLOR_7);
 
-			} else {
-				setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
-
+				} else {
+					setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
+				}
 			}
 
 			if (leaf) {
@@ -58,10 +66,8 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			}
 
 			setComponentOrientation(tree.getComponentOrientation());
-			return this;
 		}
 
 		return this;
-
 	}
 }

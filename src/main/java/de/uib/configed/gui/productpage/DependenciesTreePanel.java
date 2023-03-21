@@ -43,6 +43,7 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.DependenciesTreeModel;
 
@@ -72,7 +73,9 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		// Den Tree bauen
 		dependenciesTree = new JTree();
 		dependenciesTree.setToggleClickCount(0);
-		dependenciesTree.setBackground(Globals.BACKGROUND_COLOR_8);
+		if (!ConfigedMain.OPSI_4_3) {
+			dependenciesTree.setBackground(Globals.BACKGROUND_COLOR_8);
+		}
 
 		dependenciesTree.addMouseListener(this);
 		dependenciesTree.addMouseMotionListener(this);
@@ -130,7 +133,9 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		JScrollPane dependenciesTreeScrollPanel = new JScrollPane();
 
 		dependenciesTreeScrollPanel.setViewportView(dependenciesTree);
-		dependenciesTreeScrollPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			dependenciesTreeScrollPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		dependenciesNeedsButton = new JRadioButton(
 				Configed.getResourceValue("DependenciesTree.dependenciesNeedsButton"));
@@ -139,12 +144,16 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 
 		copyListButton = new JButton(Configed.getResourceValue("DependenciesTree.copyListButton"));
 		copyListButton.setFont(Globals.defaultFont);
-		copyListButton.setForeground(Globals.lightBlack);
+		if (!ConfigedMain.OPSI_4_3) {
+			copyListButton.setForeground(Globals.lightBlack);
+		}
 
 		dependenciesTreePathLabel = new JLabel();
 		dependenciesTreePathLabel.setBorder(BorderFactory.createLineBorder(Globals.greyed, 1));
 		dependenciesTreePathLabel.setOpaque(true);
-		dependenciesTreePathLabel.setBackground(Globals.BACKGROUND_COLOR_8);
+		if (!ConfigedMain.OPSI_4_3) {
+			dependenciesTreePathLabel.setBackground(Globals.BACKGROUND_COLOR_8);
+		}
 
 		dependenciesNeedsButton.addActionListener(this);
 		dependenciesNeededByButton.addActionListener(this);

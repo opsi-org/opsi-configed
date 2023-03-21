@@ -53,8 +53,10 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_DEPOT);
 		completion = new SSHCompletionComboButton(additionalDefaultPaths);
 
-		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
@@ -150,7 +152,9 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 
 		this.setSize(600, 200);
 		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		this.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			this.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}

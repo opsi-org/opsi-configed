@@ -16,6 +16,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
@@ -59,8 +60,9 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		// we could design an adapted layout and infuse it in guiInit
 		Logging.info(this, "allLayout");
 
-		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
-		// 
+		if (!ConfigedMain.OPSI_4_3) {
+			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -68,7 +70,9 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 			centerPanel = new JPanel();
 		}
 
-		centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		southPanel = new JPanel();
 
@@ -92,7 +96,9 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		southPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			southPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		GroupLayout allLayout = new GroupLayout(allpane);
 		allpane.setLayout(allLayout);
@@ -124,7 +130,9 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 	public JPanel initPanel() {
 		JPanel thePanel = new JPanel();
-		thePanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			thePanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		theList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		theList.addListSelectionListener(this);

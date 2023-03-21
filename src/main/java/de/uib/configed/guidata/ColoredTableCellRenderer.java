@@ -7,10 +7,12 @@
 
 package de.uib.configed.guidata;
 
+import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class ColoredTableCellRenderer extends de.uib.utilities.table.gui.StandardTableCellRenderer {
@@ -25,8 +27,13 @@ public class ColoredTableCellRenderer extends de.uib.utilities.table.gui.Standar
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (value != null && (value.equals(InstallationStateTableModel.CONFLICT_STRING))) {
-			c.setBackground(Globals.BACKGROUND_COLOR_4);
-			c.setForeground(Globals.BACKGROUND_COLOR_4);
+			if (!ConfigedMain.OPSI_4_3) {
+				c.setBackground(Globals.BACKGROUND_COLOR_4);
+				c.setForeground(Globals.BACKGROUND_COLOR_4);
+			} else {
+				c.setBackground(Color.PINK);
+				c.setForeground(Color.PINK);
+			}
 		}
 
 		return c;

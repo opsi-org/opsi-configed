@@ -162,7 +162,9 @@ public final class Terminal {
 		frame.setIconImage(Globals.mainIcon);
 
 		JPanel allPane = new JPanel();
-		allPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			allPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		GroupLayout allLayout = new GroupLayout(allPane);
 		allPane.setLayout(allLayout);

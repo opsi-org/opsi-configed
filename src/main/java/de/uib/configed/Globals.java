@@ -35,7 +35,7 @@ public final class Globals {
 
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-03-10";
+	public static final String VERDATE = "2023-03-17";
 
 	public static final String VERHASHTAG = "";
 
@@ -67,6 +67,18 @@ public final class Globals {
 	public static boolean disableCertificateVerification;
 
 	// Hier to prevent initialization
+
+	public static final Color opsiDarkGrey = new Color(63, 63, 62);
+	public static final Color opsiGrey = new Color(178, 178, 178);
+	public static final Color opsiLightGrey = new Color(228, 228, 227);
+	public static final Color opsiMagenta = new Color(203, 30, 88);
+	public static final Color opsiBlue = new Color(63, 90, 166);
+
+	public static final Color opsiBackgroundLight = new Color(255, 255, 255);
+	public static final Color opsiBackgroundDark = new Color(31, 31, 31);
+
+	public static final Color opsiForegroundLight = new Color(0, 0, 0);
+	public static final Color opsiForegroundDark = new Color(225, 225, 225);
 
 	public static final Font defaultFont = new Font("SansSerif", 0, 11);
 	public static final Font defaultFontStandardBold = new Font("SansSerif", Font.BOLD, 11);
@@ -252,16 +264,18 @@ public final class Globals {
 	public static final Color defaultTableCellSelectedBgColor = new Color(206, 224, 235);
 	public static final Color defaultTableCellSelectedBgColorNotEditable = new Color(189, 207, 231);
 
-	public static final Color logColorEssential = new Color(0, 0, 0);
-	public static final Color logColorCritical = new Color(255, 0, 0);
-	public static final Color logColorError = new Color(201, 0, 0);
-	public static final Color logColorWarning = new Color(206, 145, 30);
+	public static final Color logColorEssential = new Color(41, 121, 255);
+	public static final Color logColorCritical = new Color(226, 0, 102);
+	public static final Color logColorError = new Color(229, 29, 59);
+	public static final Color logColorWarning = new Color(255, 145, 0);
 
-	public static final Color logColorNotice = new Color(10, 150, 10);
-	public static final Color logColorInfo = new Color(50, 50, 50);
-	public static final Color logColorDebug = new Color(150, 150, 150);
-	public static final Color logColorTrace = new Color(150, 150, 150);
-	public static final Color logColorSecret = new Color(150, 150, 0);
+	public static final Color logColorNotice = new Color(0, 150, 5);
+	public static final Color logColorInfoLight = new Color(33, 33, 33);
+	public static final Color logColorInfoDark = new Color(245, 245, 245);
+	public static final Color logColorDebugLight = new Color(86, 86, 86);
+	public static final Color logColorDebugDark = new Color(192, 192, 192);
+	public static final Color logColorTrace = new Color(139, 139, 139);
+	public static final Color logColorSecret = new Color(213, 0, 249);
 
 	public static final Color opsiLogoBlue = new Color(106, 128, 174);
 	public static final Color opsiLogoLightBlue = new Color(195, 200, 222);
@@ -428,8 +442,10 @@ public final class Globals {
 	public static void formatButtonSmallText(AbstractButton button) {
 		button.setFont(defaultFontSmall);
 		button.setPreferredSize(new Dimension(45, 20));
-		button.setForeground(lightBlack);
-		button.setBackground(BACKGROUND_COLOR_6);
+		if (!ConfigedMain.OPSI_4_3) {
+			button.setForeground(lightBlack);
+			button.setBackground(BACKGROUND_COLOR_6);
+		}
 		button.setOpaque(false);
 
 		button.setBorderPainted(false);
@@ -517,10 +533,6 @@ public final class Globals {
 		return alphaCollator;
 	}
 
-	public static String getResourceValue(String key) {
-		return Configed.getResourceValue(key);
-	}
-
 	public static boolean isWindows() {
 		String osName = System.getProperty("os.name");
 		return osName.toLowerCase().startsWith("windows");
@@ -553,31 +565,6 @@ public final class Globals {
 		}
 	}
 
-	public static Image createImage(String path) {
-		String xPath = IMAGE_BASE + path;
-		ClassLoader cl = Thread.currentThread().getContextClassLoader();
-		// based on MainFrame
-
-		java.net.URL imgURL = cl.getResource(xPath);
-
-		// should have the same result (but seems not to have)
-
-		try {
-
-			if (imgURL != null) {
-				return java.awt.Toolkit.getDefaultToolkit().createImage(imgURL);
-			} else {
-				Logging.info("Couldn't find file: " + path);
-				return null;
-			}
-		} catch (Exception ex) {
-			Logging.info("createImageIcon " + path + " : " + ex);
-
-		}
-
-		return null;
-	}
-
 	public static ImageIcon createImageIcon(String path, String description) {
 		String xPath = IMAGE_BASE + path;
 		ClassLoader cl = Thread.currentThread().getContextClassLoader();
@@ -601,14 +588,6 @@ public final class Globals {
 		}
 
 		return null;
-	}
-
-	public static String getMinutes() {
-		String sqlNow = new java.sql.Timestamp(System.currentTimeMillis()).toString();
-		sqlNow = sqlNow.substring(0, sqlNow.lastIndexOf(':'));
-		sqlNow = sqlNow.replace(' ', '-');
-
-		return sqlNow;
 	}
 
 	public static String getSeconds() {
@@ -754,7 +733,7 @@ public final class Globals {
 			}
 			result.append(remainder.substring(0, TOOLTIP_LINE_LENGTH).replace("\\n", "<br />"));
 
-			int testspan = min(remainder.length() - TOOLTIP_LINE_LENGTH, UNCERTAINTY);
+			int testspan = Math.min(remainder.length() - TOOLTIP_LINE_LENGTH, UNCERTAINTY);
 
 			String separationString = remainder.substring(TOOLTIP_LINE_LENGTH, TOOLTIP_LINE_LENGTH + testspan);
 
@@ -776,29 +755,12 @@ public final class Globals {
 
 			result.append(separationString.substring(0, i));
 			result.append("<br />");
-			int end = max(remainder.length(), TOOLTIP_LINE_LENGTH);
+			int end = Math.max(remainder.length(), TOOLTIP_LINE_LENGTH);
 			remainder = remainder.substring(TOOLTIP_LINE_LENGTH + i, end);
 		}
 
 		result.append("</html>");
 		return result.toString();
-	}
-
-	public static int max(int a, int b) {
-		int m = a;
-		if (b > a) {
-			m = b;
-		}
-
-		return m;
-	}
-
-	public static int min(int a, int b) {
-		int m = a;
-		if (b < a) {
-			m = b;
-		}
-		return m;
 	}
 
 	public static String produceNonNull(Object o) {
@@ -819,77 +781,6 @@ public final class Globals {
 			}
 		} else {
 			Logging.debug(source.getClass().getName() + " " + cName + " is null");
-		}
-
-		return result;
-	}
-
-	private static Integer stringCompareAsInt(String s1, String s2) throws NumberFormatException {
-
-		if (s1 == null && s2 == null) {
-			return 0;
-		}
-		if (s1 == null) {
-			return -1;
-		}
-		if (s2 == null) {
-			return +1;
-		}
-
-		String s1A = s1.trim();
-		String s2A = s2.trim();
-
-		if (s1A.equals(s2A)) {
-			return 0;
-		}
-
-		if (s1A.length() == 0) {
-			return -1;
-		}
-
-		if (s2A.length() == 0) {
-			return +1;
-		}
-
-		int val1 = Integer.parseInt(s1A);
-		int val2 = Integer.parseInt(s2A);
-
-		return val1 - val2;
-	}
-
-	public static Integer compareDottedNumberStrings(final String ver1, final String ver2)
-			throws NumberFormatException {
-
-		if (ver1 == null && ver2 == null) {
-			return 0;
-		}
-
-		if (ver1 == null) {
-			return -1;
-		}
-
-		if (ver2 == null) {
-			return +1;
-		}
-
-		if (ver1.equals(ver2)) {
-			return 0;
-		}
-
-		String ver1A = ver1.replace('_', '.');
-		String ver2A = ver2.replace('_', '.');
-
-		String[] ver1parts = ver1A.split("\\.");
-		String[] ver2parts = ver2A.split("\\.");
-
-		int i = 0;
-		int result = 0;
-
-		while (result == 0 && i < ver1parts.length && i < ver2parts.length) {
-			result = stringCompareAsInt(ver1parts[i], ver2parts[i]);
-			if (result == 0) {
-				i++;
-			}
 		}
 
 		return result;

@@ -18,6 +18,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
@@ -63,7 +64,9 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 
 	protected void initComponents() {
 
-		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		labelfields = new HashMap<>();
 		datafields = new HashMap<>();

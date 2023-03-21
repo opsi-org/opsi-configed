@@ -91,7 +91,9 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 		super.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		super.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			super.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		wgetAuthPanel.isOpen = true;
@@ -106,8 +108,10 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.OPSI_4_3) {
+			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
@@ -151,7 +155,9 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		});
 		jTextFieldLocalPath = new JTextField();
 		jTextFieldLocalPath.setEditable(false);
-		jTextFieldLocalPath.setBackground(Globals.BACKGROUND_COLOR_9);
+		if (!ConfigedMain.OPSI_4_3) {
+			jTextFieldLocalPath.setBackground(Globals.BACKGROUND_COLOR_9);
+		}
 
 		jComboBoxSetRights = new JCheckBox();
 		jComboBoxSetRights.setSelected(true);

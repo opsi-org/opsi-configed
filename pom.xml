@@ -5,7 +5,7 @@
 	<groupId>configed</groupId>
 	<artifactId>configed</artifactId>
     <packaging>jar</packaging>
-    <version>4.3.0.4</version>
+    <version>4.3.0.8</version>
 
     <properties>
         <!-- use java 11 for backwards compatibility-->
@@ -217,7 +217,6 @@
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
             <version>3.0</version>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>

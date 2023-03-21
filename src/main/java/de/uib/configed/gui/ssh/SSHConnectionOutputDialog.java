@@ -138,8 +138,10 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	private void initOutputGui() {
 		try {
 			Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
-			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			if (!ConfigedMain.OPSI_4_3) {
+				inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+				mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			}
 			getContentPane().add(mainPanel, BorderLayout.CENTER);
 
 			mainPanelLayout = new GroupLayout(mainPanel);
@@ -154,18 +156,24 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 			output = new JTextPane();
 			output.setEditable(false);
-			output.setBackground(Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
+
+			// THEME color question
+			if (!ConfigedMain.OPSI_4_3) {
+				output.setBackground(Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
+			}
 			output.setContentType("text/rtf");
 			output.setPreferredSize(new Dimension(250, 200));
 			StyledDocument doc = (StyledDocument) output.getDocument();
 			Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 			Style readonlyStyle = doc.addStyle("readonlyStyle", defaultStyle);
 
-			// Kein grün :(
-			StyleConstants.setBackground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
+			if (!ConfigedMain.OPSI_4_3) {
+				// Kein grün :(
+				StyleConstants.setBackground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
 
-			// Was ist rot?
-			StyleConstants.setForeground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR);
+				// Was ist rot?
+				StyleConstants.setForeground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_FOREGROUND_COLOR);
+			}
 
 			SimpleAttributeSet readOnlyAttributeSet = new SimpleAttributeSet(doc.getStyle("readonlyStyle"));
 			readOnlyAttributeSet.addAttribute("readonly", true);

@@ -67,7 +67,7 @@ public class TargetConfiguration {
 		labels.add(Globals.CONFLICT_STATE_STRING);
 		labels.add(Globals.NO_VALID_STATE_STRING);
 		labels.add("undefined");
-		labels.add("installed");
+		labels.add(InstallationStatus.KEY_INSTALLED);
 		labels.add("always");
 		labels.add("forbidden");
 
@@ -75,7 +75,7 @@ public class TargetConfiguration {
 		state2label.put(CONFLICT, Globals.CONFLICT_STATE_STRING);
 		state2label.put(INVALID, Globals.NO_VALID_STATE_STRING);
 		state2label.put(UNDEFINED, "undefined");
-		state2label.put(INSTALLED, "installed");
+		state2label.put(INSTALLED, InstallationStatus.KEY_INSTALLED);
 		state2label.put(ALWAYS, "always");
 		state2label.put(FORBIDDEN, "forbidden");
 
@@ -83,7 +83,7 @@ public class TargetConfiguration {
 		label2state.put(Globals.CONFLICT_STATE_STRING, CONFLICT);
 		label2state.put(Globals.NO_VALID_STATE_STRING, INVALID);
 		label2state.put("undefined", UNDEFINED);
-		label2state.put("installed", INSTALLED);
+		label2state.put(InstallationStatus.KEY_INSTALLED, INSTALLED);
 		label2state.put("always", ALWAYS);
 		label2state.put("forbidden", FORBIDDEN);
 
@@ -91,7 +91,7 @@ public class TargetConfiguration {
 		label2displayLabel.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		label2displayLabel.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		label2displayLabel.put("undefined", "undefined");
-		label2displayLabel.put("installed", "installed");
+		label2displayLabel.put(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_INSTALLED);
 		label2displayLabel.put("always", "always");
 		label2displayLabel.put("forbidden", "forbidden");
 
@@ -99,12 +99,13 @@ public class TargetConfiguration {
 		displayLabel2label.put(Globals.CONFLICT_STATE_STRING, Globals.CONFLICT_STATE_STRING);
 		displayLabel2label.put(Globals.NO_VALID_STATE_STRING, Globals.NO_VALID_STATE_STRING);
 		displayLabel2label.put("undefined", "undefined");
-		displayLabel2label.put("installed", "installed");
+		displayLabel2label.put(InstallationStatus.KEY_INSTALLED, InstallationStatus.KEY_INSTALLED);
 		displayLabel2label.put("always", "always");
 		displayLabel2label.put("forbidden", "forbidden");
 
-		choiceLabels = new String[] { label2displayLabel.get("undefined"), label2displayLabel.get("installed"),
-				label2displayLabel.get("always"), label2displayLabel.get("forbidden") };
+		choiceLabels = new String[] { label2displayLabel.get("undefined"),
+				label2displayLabel.get(InstallationStatus.KEY_INSTALLED), label2displayLabel.get("always"),
+				label2displayLabel.get("forbidden") };
 	}
 
 	public static Map<String, String> getLabel2DisplayLabel() {

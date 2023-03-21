@@ -149,13 +149,14 @@ public class FGroupActions extends SecondaryFrame {
 				layout.createParallelGroup().addComponent(topPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addComponent(imageActionPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		Containership csAll = new Containership(getContentPane());
-		csAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
-				JPanel.class);
+		if (!ConfigedMain.OPSI_4_3) {
+			Containership csAll = new Containership(getContentPane());
+			csAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
+					JPanel.class);
 
-		csAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
-				javax.swing.text.JTextComponent.class);
-
+			csAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
+					javax.swing.text.JTextComponent.class);
+		}
 	}
 
 	private void defineImageActionPanel(JPanel panel) {

@@ -305,11 +305,15 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 				final Color saveColor = buttonCallExecute.getBackground();
 
-				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
+				if (!ConfigedMain.OPSI_4_3) {
+					buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
+				}
 
 				execute();
 
-				buttonCallExecute.setBackground(saveColor);
+				if (!ConfigedMain.OPSI_4_3) {
+					buttonCallExecute.setBackground(saveColor);
+				}
 			}
 		});
 

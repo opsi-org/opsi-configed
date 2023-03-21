@@ -240,14 +240,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				invertedSimpleClientPaths.get(leafname).remove(clientPath);
 			}
 		}
-
-		public void remove(String leafname, TreePath clientPath) {
-			Logging.debug(this, "remove leafname, clientPath " + leafname + ", " + clientPath);
-
-			if (invertedSimpleClientPaths.get(leafname) != null) {
-				invertedSimpleClientPaths.get(leafname).remove(new SimpleTreePath(clientPath.getPath()));
-			}
-		}
 	}
 
 	private void init() {
@@ -277,6 +269,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		setShowsRootHandles(true);
 
 		nodeRenderer = new IconNodeRendererClientTree(configedMain);
+
 		setCellRenderer(nodeRenderer);
 
 		model = new DefaultTreeModel(rootNode);

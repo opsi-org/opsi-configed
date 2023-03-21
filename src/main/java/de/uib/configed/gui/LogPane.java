@@ -55,6 +55,8 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.View;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -172,11 +174,18 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		StyleConstants.setForeground(logLevelStyles[5], Globals.logColorNotice);
 
 		logLevelStyles[6] = styleContext.addStyle("loglevel info", null);
-		StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfo);
+		if (FlatLaf.isLafDark()) {
+			StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfoDark);
+		} else {
+			StyleConstants.setForeground(logLevelStyles[6], Globals.logColorInfoLight);
+		}
 
 		logLevelStyles[7] = styleContext.addStyle("loglevel debug", null);
-		StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebug);
-
+		if (FlatLaf.isLafDark()) {
+			StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebugDark);
+		} else {
+			StyleConstants.setForeground(logLevelStyles[7], Globals.logColorDebugLight);
+		}
 		logLevelStyles[8] = styleContext.addStyle("loglevel debug2", null);
 		StyleConstants.setForeground(logLevelStyles[8], Globals.logColorTrace);
 
@@ -193,7 +202,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		jTextPane.setOpaque(true);
-		jTextPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.OPSI_4_3) {
+			jTextPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 		jTextPane.setEditable(true);
 		jTextPane.setFont(Globals.defaultFont);
 		jTextPane.addKeyListener(this);
@@ -1166,7 +1177,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		@Override
 		public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
-			g.setColor(color == null ? c.getSelectionColor() : color);
+			if (!ConfigedMain.OPSI_4_3) {
+				g.setColor(color == null ? c.getSelectionColor() : color);
+			}
 
 			Rectangle alloc = null;
 			if (offs0 == view.getStartOffset() && offs1 == view.getEndOffset()) {
