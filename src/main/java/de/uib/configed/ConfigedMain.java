@@ -108,6 +108,7 @@ import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandNeedParameter;
@@ -156,7 +157,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Dashboard and other features for opsi 4.3 enabled?
-	public static final boolean OPSI_4_3 = true;
+	public static final boolean THEMES = true;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -634,7 +635,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void initDashInfo() {
-		if (!OPSI_4_3) {
+		if (!JSONthroughHTTPS.isOpsi43()) {
 			Logging.info(this, "initDashInfo not enabled");
 			return;
 		}
@@ -754,7 +755,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		allControlMultiTablePanels = new ArrayList<>();
 
 		connectedHostsByMessagebus = persist.getMessagebusConnectedClients();
-		initMessagebus();
+
+		if (JSONthroughHTTPS.isServerVersionAtLeast("4.3")) {
+			initMessagebus();
+		}
 	}
 
 	protected void initSpecialTableProviders() {
@@ -1319,7 +1323,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// we correct the result of the first selection
 		depotsListSelectionChanged = false;
 
-		if (!OPSI_4_3) {
+		if (!THEMES) {
 			depotsList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 

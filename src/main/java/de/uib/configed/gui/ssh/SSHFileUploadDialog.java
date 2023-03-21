@@ -91,7 +91,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 		super.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			super.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -108,7 +108,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
@@ -155,7 +155,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		});
 		jTextFieldLocalPath = new JTextField();
 		jTextFieldLocalPath.setEditable(false);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jTextFieldLocalPath.setBackground(Globals.BACKGROUND_COLOR_9);
 		}
 

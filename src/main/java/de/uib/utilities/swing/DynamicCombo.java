@@ -52,7 +52,7 @@ public class DynamicCombo extends JPanel {
 		tablemodel.addRow(new String[] { "" });
 
 		table.setModel(tablemodel);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			table.setSelectionBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			table.setSelectionForeground(Globals.lightBlack);
 		}

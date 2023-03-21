@@ -275,7 +275,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setFieldBackground(Color color) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			fieldSearch.setBackground(color);
 		}
 	}
@@ -344,7 +344,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initComponents() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -421,7 +421,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
 
 		fieldSearch.setFont(Globals.defaultFontBig);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 		}
 

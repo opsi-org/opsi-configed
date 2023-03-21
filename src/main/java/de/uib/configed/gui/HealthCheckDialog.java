@@ -46,7 +46,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "start allLayout");
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -96,7 +96,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 		textPane.setEditable(false);
 
 		JScrollPane scrollPane = new JScrollPane(textPane);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			scrollPane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
 		}
 		scrollPane.setOpaque(false);

@@ -324,7 +324,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 		this.getContentPane().add(panel);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			Containership csPanel = new Containership(getContentPane());
 
 			csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },

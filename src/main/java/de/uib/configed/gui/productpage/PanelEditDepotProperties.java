@@ -120,7 +120,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				.addComponent(buttonSelectWithEqualProperties, 0, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(buttonSelectAll, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			buttonSelectAll.setForeground(Globals.blue);
 			buttonSelectWithEqualProperties.setForeground(Globals.blue);
 		}
@@ -187,7 +187,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 	@Override
 	public void setTitlePanelActivated(boolean actived) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jLabelEditDepotProductProperties.setForeground(actived ? Globals.lightBlack : Globals.greyed);
 		}
 	}

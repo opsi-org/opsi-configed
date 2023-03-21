@@ -90,7 +90,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		loggingArea = new JTextArea("");
 		loggingArea.setEditable(false);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			loggingArea.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -136,7 +136,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	protected void initComponents() {
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);

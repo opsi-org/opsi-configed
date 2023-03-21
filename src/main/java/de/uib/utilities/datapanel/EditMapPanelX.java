@@ -353,7 +353,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
 						Logging.warning(this, "no default Value found");
 
-						if (!ConfigedMain.OPSI_4_3) {
+						if (!ConfigedMain.THEMES) {
 							jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
 						}
 						jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
@@ -422,7 +422,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		});
 
 		jScrollPane = new JScrollPane(table);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jScrollPane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

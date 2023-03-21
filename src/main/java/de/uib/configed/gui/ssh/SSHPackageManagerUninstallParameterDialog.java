@@ -221,7 +221,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	}
 
 	private void init() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			uninstallPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
@@ -252,7 +252,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelProduct"));
 
 		textFieldProduct = new JTextField();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			textFieldProduct.setBackground(Globals.BACKGROUND_COLOR_9);
 		}
 		textFieldProduct.setEditable(false);
@@ -270,7 +270,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 		IconAsButton iconButtonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png",
 				"images/reload16.png", "images/reload16.png", "images/reload16.png");
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			iconButtonUpdateList.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 		iconButtonUpdateList.setToolTipText(Configed.getResourceValue(

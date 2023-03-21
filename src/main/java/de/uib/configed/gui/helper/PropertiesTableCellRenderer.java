@@ -53,7 +53,7 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 
 		if (value == ListMerger.NO_COMMON_VALUE) {
 
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				comp.setBackground(Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR);
 				comp.setForeground(Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR);
 			}

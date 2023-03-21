@@ -138,7 +138,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	private void initOutputGui() {
 		try {
 			Dimension jButtonDimension = new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3);
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 				mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
@@ -158,7 +158,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			output.setEditable(false);
 
 			// THEME color question
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				output.setBackground(Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
 			}
 			output.setContentType("text/rtf");
@@ -167,7 +167,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 			Style readonlyStyle = doc.addStyle("readonlyStyle", defaultStyle);
 
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				// Kein grün :(
 				StyleConstants.setBackground(readonlyStyle, Globals.SSH_CONNECTION_OUTPUT_INIT_BACKGROUND_COLOR);
 

@@ -295,13 +295,13 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	public void setContentBackground(Color c) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			allpane.setBackground(c);
 		}
 	}
 
 	protected void allLayout() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -313,7 +313,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		southPanel = new JPanel();
 		southPanel.setOpaque(false);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			scrollpane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
 		}
 
@@ -638,7 +638,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
 				g.fillRect(0, 0, getWidth(), getHeight());
 			}

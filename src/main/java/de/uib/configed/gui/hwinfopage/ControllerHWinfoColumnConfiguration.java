@@ -251,7 +251,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(Configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			panel.setTitlePaneBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

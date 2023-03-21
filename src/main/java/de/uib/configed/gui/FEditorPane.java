@@ -22,7 +22,7 @@ public class FEditorPane extends FGeneralDialog {
 	private void init() {
 		editPane.setOpaque(true);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			editPane.setBackground(Globals.BACKGROUND_COLOR_4);
 		}
 

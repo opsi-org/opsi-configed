@@ -286,14 +286,14 @@ public class ExporterToPDF extends AbstractExportTable {
 			symbolFont = small;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			defaultCell.setBackgroundColor(new BaseColor(100, 100, 100));
 		}
 
 		for (int i = 0; i < theTable.getColumnCount(); i++) {
 			h = new PdfPCell(new Phrase(theTable.getColumnName(i)));
 			h.setHorizontalAlignment(Element.ALIGN_CENTER);
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				h.setBackgroundColor(headerBackground);
 			}
 			table.addCell(h);
@@ -323,7 +323,7 @@ public class ExporterToPDF extends AbstractExportTable {
 					default:
 						value = new PdfPCell(new Phrase(s, small));
 					}
-					if (!ConfigedMain.OPSI_4_3) {
+					if (!ConfigedMain.THEMES) {
 						if (j % 2 == 0) {
 							value.setBackgroundColor(evenBackground);
 						} else {

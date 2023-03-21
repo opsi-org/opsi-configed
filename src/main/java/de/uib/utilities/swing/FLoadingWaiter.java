@@ -47,7 +47,7 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 
 		@Override
 		public void paint(Graphics2D gd, JProgressBar t, int width, int height) {
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				gd.setColor(color);
 				gd.fillRect(0, 0, width, height);
 			}
@@ -88,7 +88,7 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 		infoLabel = new JLabel();
 
 		JPanel panel = new JPanel();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			panel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		GroupLayout layout = new GroupLayout(panel);

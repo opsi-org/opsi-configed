@@ -78,12 +78,12 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		// construct content panes
 		JPanel panelInfoWindowsSoftware = new JPanel();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			panelInfoWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
 		JPanel panelInfoConfigWindowsSoftware = new JPanel();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			panelInfoConfigWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -222,7 +222,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		JPanel panelWorkNamebased = new JPanel();
 		panelWorkNamebased.setBorder(new LineBorder(Globals.blueGrey, 3, true));
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			panelWorkNamebased.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		panelWorkNamebased.setOpaque(true);
@@ -286,13 +286,13 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(2, 5, 5));
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			panelRadiobuttonsDirectionOfAssignmentX.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
 		GroupLayout layoutPanelInfo = new GroupLayout(panelInfoWindowsSoftware);
 		panelInfoWindowsSoftware.setLayout(layoutPanelInfo);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			panelInfoWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -498,7 +498,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			bottomPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 

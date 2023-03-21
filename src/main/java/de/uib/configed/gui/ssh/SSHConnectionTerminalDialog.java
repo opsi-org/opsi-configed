@@ -53,7 +53,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		TerminatingPanel(ActionListener closeListener) {
 			super();
 
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				super.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 			jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
@@ -82,7 +82,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		super(title);
 
 		// THEME color question
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			output.setBackground(Globals.lightBlack);
 		}
 		output.addMouseListener(new MouseAdapter() {

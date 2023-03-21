@@ -21,7 +21,7 @@ public class FShowListWithComboSelect extends FShowList {
 
 		labelChoice = new JLabel(choiceTitle + ": ");
 		labelChoice.setOpaque(true);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			labelChoice.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 		northPanel.add(labelChoice);

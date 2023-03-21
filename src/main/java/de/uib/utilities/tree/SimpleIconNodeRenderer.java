@@ -22,7 +22,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	public SimpleIconNodeRenderer() {
 		super();
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			super.setOpaque(true);
 		}
 
@@ -31,7 +31,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 		emphasized = Globals.defaultFontStandardBold;
 
 		super.setFont(standard);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			super.setForeground(Globals.lightBlack);
 			super.setTextSelectionColor(Globals.lightBlack);
 			super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
@@ -67,7 +67,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 				setFont(standard);
 			}
 
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				// assuming that row 0 contains sort of header
 				if (sel && row != 0) {
 					setBackground(Globals.BACKGROUND_COLOR_7);

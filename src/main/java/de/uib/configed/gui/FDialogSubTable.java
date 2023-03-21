@@ -26,7 +26,7 @@ public class FDialogSubTable extends FGeneralDialog {
 	protected void allLayout() {
 
 		Logging.info(this, "allLayout");
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -37,7 +37,7 @@ public class FDialogSubTable extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			centerPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
 		}
 
@@ -65,7 +65,7 @@ public class FDialogSubTable extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			southPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
 		}
 		southPanel.setOpaque(true);

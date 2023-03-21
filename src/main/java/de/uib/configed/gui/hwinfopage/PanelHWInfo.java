@@ -128,7 +128,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		table.getColumnModel().getColumn(1).setPreferredWidth(300);
 
 		table.setDragEnabled(true);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			table.setBackground(Globals.nimbusBackground);
 		}
 		JPanel embed = new JPanel();

@@ -41,7 +41,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 			if (isSelected) {
-				if (!ConfigedMain.OPSI_4_3) {
+				if (!ConfigedMain.THEMES) {
 					setBackground(listBackgroundColorSelected);
 					setForeground(listForegroundColor);
 				}
@@ -50,7 +50,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 					list.setToolTipText(tooltips.get(index));
 				}
 			} else {
-				if (!ConfigedMain.OPSI_4_3) {
+				if (!ConfigedMain.THEMES) {
 					setBackground(listBackgroundColorSelected);
 					setForeground(listForegroundColor);
 				}

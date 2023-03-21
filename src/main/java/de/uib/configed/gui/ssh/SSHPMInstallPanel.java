@@ -25,7 +25,7 @@ public class SSHPMInstallPanel extends JPanel {
 	protected String workbench;
 
 	public SSHPMInstallPanel() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			super.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

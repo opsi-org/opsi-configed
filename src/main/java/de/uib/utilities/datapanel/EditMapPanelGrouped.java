@@ -255,7 +255,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	protected void buildPanel() {
 		splitPane = new JSplitPane();
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			splitPane.setBackground(Globals.EDIT_MAP_PANEL_GROUPED_BACKGROUND_COLOR);
 			setBackground(Globals.backNimbus);
 		}

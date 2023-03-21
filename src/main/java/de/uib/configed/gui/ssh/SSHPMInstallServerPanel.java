@@ -59,7 +59,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			this.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

@@ -109,7 +109,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	 * @param boolean We are in progress
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			if (active) {
 				depotslist.setBackground(Globals.BACKGROUND_COLOR_9);
 			} else {
@@ -128,7 +128,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		}
 		labelDepotServer.setOpaque(false);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -153,7 +153,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 			searchPane.setEnabled(false);
 		}
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			searchPane.setBackground(getMyColor());
 		}
 
@@ -170,7 +170,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 		depotslist.setFont(Globals.defaultFont);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 	}

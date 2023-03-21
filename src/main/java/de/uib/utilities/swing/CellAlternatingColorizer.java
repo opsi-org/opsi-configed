@@ -26,12 +26,12 @@ public final class CellAlternatingColorizer {
 			Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,
 			Color unselectedUnevenColor) {
 		if (textColoring) {
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				cell.setForeground(Globals.lightBlack);
 			}
 		}
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			if (isSelected) {
 				if (isEven) {
 					cell.setBackground(selectedEvenColor);
@@ -49,7 +49,7 @@ public final class CellAlternatingColorizer {
 	}
 
 	public static void colorizeSecret(Component cell) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			cell.setBackground(Globals.defaultTableSelectedRowBright);
 			cell.setForeground(Globals.defaultTableSelectedRowBright);
 		}
@@ -58,7 +58,7 @@ public final class CellAlternatingColorizer {
 	public static void colorize(Component cell, boolean isSelected, boolean rowEven, boolean colEven,
 			boolean textColoring) {
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			if (textColoring) {
 				cell.setForeground(Globals.lightBlack);
 			}

@@ -65,7 +65,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	private void initFrame() {
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -100,14 +100,14 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			JPanel workbenchpanel = new JPanel();
 			mainpanel = new JPanel();
 			JPanel buttonPanel = new JPanel();
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				workbenchpanel.setBackground(Globals.BACKGROUND_COLOR_7);
 				mainpanel.setBackground(Globals.BACKGROUND_COLOR_7);
 				buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 
 			JPanel mainButtonPanel = new JPanel();
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				mainButtonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 			mainButtonPanel.setLayout(new BorderLayout());

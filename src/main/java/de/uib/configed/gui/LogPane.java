@@ -202,7 +202,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		jTextPane.setOpaque(true);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jTextPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		jTextPane.setEditable(true);
@@ -1177,7 +1177,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		@Override
 		public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				g.setColor(color == null ? c.getSelectionColor() : color);
 			}
 

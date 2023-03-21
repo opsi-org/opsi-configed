@@ -252,13 +252,13 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 
 		public void colorize(Component cell, int row, int col) {
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				cell.setForeground(Globals.lightBlack);
 			}
 
 			int kindOfRow = row % 3;
 
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				switch (kindOfRow) {
 				case 0:
 					cell.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -283,7 +283,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	protected static class MyWarningColorizer {
 		public void colorize(Component cell) {
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				cell.setBackground(Globals.ACTION_COLOR);
 			}
 		}

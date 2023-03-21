@@ -35,7 +35,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		super.setProportionOfTotalWidth(0.5);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			super.setForeground(Globals.blue);
 		}
 

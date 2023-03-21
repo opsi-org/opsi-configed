@@ -103,7 +103,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 	 * @param boolean We are in progress
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 
 			if (active) {
 				valueList.setBackground(Globals.BACKGROUND_COLOR_9);
@@ -125,7 +125,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 		labelValue.setOpaque(false);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			labelValue.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		labelValue.setFont(Globals.defaultFontStandardBold);
@@ -149,7 +149,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 			searchPane.setEnabled(false);
 		}
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			searchPane.setBackground(getMyColor());
 		}
 		searchPane.setNarrow(true);
@@ -164,7 +164,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		scrollPaneValueList.setPreferredSize(valueList.getMaximumSize());
 
 		valueList.setFont(Globals.defaultFont);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 	}

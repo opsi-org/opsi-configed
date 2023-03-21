@@ -61,11 +61,11 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 		dependenciesTreePanel = new DependenciesTreePanel();
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			dependenciesTable.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		dependenciesPanel.setViewportView(dependenciesTable);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			dependenciesPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

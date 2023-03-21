@@ -29,7 +29,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 	public static final int INACTIVE = -1;
 	/** a blueGrey LineBorder */
 	private static final LineBorder lineBorderActive = new LineBorder(
-			ConfigedMain.OPSI_4_3 ? Globals.opsiGrey : Globals.blueGrey, 1, true);
+			ConfigedMain.THEMES ? Globals.opsiGrey : Globals.blueGrey, 1, true);
 
 	/** a blackLightBlue LineBorder */
 	private static final LineBorder lineBorderInactive = new LineBorder(new Color(0, 0, 0, 0), 1, true);
@@ -60,21 +60,21 @@ public class ActivityPanel extends JPanel implements Runnable {
 	private void setState(int i) {
 		for (int j = 0; j < partPanels.size(); j++) {
 			setBorder(lineBorderActive);
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				partPanels.get(j).setBackground(colors[0]);
 			} else {
 				partPanels.get(j).setBackground(Globals.opsiBlue);
 			}
 			if (i == INACTIVE) {
 				setBorder(lineBorderInactive);
-				if (!ConfigedMain.OPSI_4_3) {
+				if (!ConfigedMain.THEMES) {
 					partPanels.get(j).setBackground(Globals.BACKGROUND_COLOR_7);
 				} else {
 					partPanels.get(j).setBackground(new Color(0, 0, 0, 0));
 				}
 			} else {
 				setBorder(lineBorderActive);
-				if (!ConfigedMain.OPSI_4_3) {
+				if (!ConfigedMain.THEMES) {
 					partPanels.get(j).setBackground(Globals.backNimbus);
 				} else {
 					partPanels.get(j).setBackground(new Color(0, 0, 0, 0));
@@ -82,7 +82,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 			}
 
 			if (j == i) {
-				if (!ConfigedMain.OPSI_4_3) {
+				if (!ConfigedMain.THEMES) {
 					partPanels.get(j).setBackground(colors[1]);
 				} else {
 					partPanels.get(j).setBackground(Globals.opsiMagenta);

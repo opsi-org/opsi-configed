@@ -151,7 +151,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public void initLayout() {
 		Logging.debug(this, "initLayout ");
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		thisLayout = new GroupLayout(this);

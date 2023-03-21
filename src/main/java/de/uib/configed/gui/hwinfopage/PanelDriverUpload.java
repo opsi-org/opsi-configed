@@ -331,7 +331,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		fieldServerPath = new JTextShowField(true);
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			fieldServerPath.setForeground(Globals.greyed);
 		}
 
@@ -507,11 +507,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 						+ fieldServerPath.getText());
 				final Color saveColor = buttonUploadDrivers.getBackground();
 
-				if (!ConfigedMain.OPSI_4_3) {
+				if (!ConfigedMain.THEMES) {
 					buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 				}
 				execute();
-				if (!ConfigedMain.OPSI_4_3) {
+				if (!ConfigedMain.THEMES) {
 					buttonUploadDrivers.setBackground(saveColor);
 				}
 			}
@@ -672,7 +672,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 

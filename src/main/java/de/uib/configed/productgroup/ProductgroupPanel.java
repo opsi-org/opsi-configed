@@ -467,7 +467,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		listChooseAction.setVisibleRowCount(2);
 		listChooseAction.setFont(Globals.defaultFontSmallBold);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			listChooseAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -487,12 +487,12 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		JLabel labelStrip = new JLabel("  " + Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			labelStrip.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		labelStrip.setOpaque(true);
 		labelStrip.setFont(Globals.defaultFont);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			labelStrip.setForeground(Globals.lightBlack);
 		}
 
@@ -512,7 +512,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		;
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			surroundScrollChooseAction.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 		surroundScrollChooseAction.setOpaque(true);
@@ -535,7 +535,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		groupsEditField = saveNameEditor;
 		groupsEditField.getCaret().setBlinkRate(0);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -561,7 +561,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		groupsCombo.setPreferredSize(Globals.buttonDimension);
 		saveNameEditor.setPreferredSize(Globals.buttonDimension);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -572,7 +572,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		descriptionField = new JTextField("");
 		descriptionField.setPreferredSize(Globals.buttonDimension);
 		descriptionField.setFont(Globals.defaultFont);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			descriptionField.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 		descriptionField.getCaret().setBlinkRate(0);
@@ -588,7 +588,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		panelEdit = new JPanel();
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			panelEdit.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -642,7 +642,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		this.setLayout(layoutMain);
 
 		JPanel separatingPlace = new JPanel();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			separatingPlace.setForeground(Globals.BACKGROUND_COLOR_9);
 			separatingPlace.setBackground(Globals.FAILED_COLOR);
 		}

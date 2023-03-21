@@ -71,7 +71,7 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 			CellAlternatingColorizer.colorize(jc, isSelected, (index % 2 == 0), true, selectedEven, selectedUneven,
 					unselectedEven, unselectedUneven);
 		} else {
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				if (isSelected) {
 					jc.setBackground(uniformSelectedColor);
 				} else {

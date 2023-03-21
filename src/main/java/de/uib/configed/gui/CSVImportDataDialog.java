@@ -70,7 +70,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "allLayout");
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 			allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		}
@@ -81,7 +81,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 
@@ -121,7 +121,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		JPanel northPanel = new JPanel();
 		northPanel.setOpaque(false);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			northPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 
@@ -325,7 +325,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 		southPanel.setOpaque(false);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 		southPanel.setOpaque(true);

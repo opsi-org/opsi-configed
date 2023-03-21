@@ -31,7 +31,7 @@ public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRender
 		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
 				column);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			cell.setBackground(Globals.defaultTableHeaderBgColor);
 		}
 

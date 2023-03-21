@@ -160,7 +160,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 			foreground = Globals.nimbusSelectionBackground;
 		}
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(background);
 			setForeground(foreground);
 		}

@@ -335,7 +335,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	private void initComponents() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -375,7 +375,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -435,7 +435,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		try {
 			scrollpane = new JScrollPane();
 			scrollpane.setViewportView(theTable);
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 		} catch (ClassCastException ex) {
@@ -444,7 +444,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			scrollpane = new JScrollPane();
 			scrollpane.setViewportView(theTable);
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 		}
@@ -570,7 +570,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void setTitlePaneBackground(Color c) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			if (c == null) {
 				titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			} else {

@@ -41,7 +41,7 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 		}
 
 		if (value.equals(InstallationStateTableModel.CONFLICT_STRING)) {
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				c.setBackground(Globals.BACKGROUND_COLOR_4);
 				c.setForeground(Globals.BACKGROUND_COLOR_4);
 			} else {
@@ -55,7 +55,7 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 					if (textcolor.equals(Globals.INVISIBLE)) {
 						c.setForeground(c.getBackground());
 					} else {
-						if (!ConfigedMain.OPSI_4_3 || !isSelected) {
+						if (!ConfigedMain.THEMES || !isSelected) {
 							c.setForeground(textcolor);
 						}
 					}

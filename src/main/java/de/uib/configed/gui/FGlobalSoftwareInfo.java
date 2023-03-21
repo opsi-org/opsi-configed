@@ -61,7 +61,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		allpane.add(panelGlobalSoftware, BorderLayout.CENTER);
 		JLabel infoLabel = new JLabel(Configed.getResourceValue("FGlobalSoftwareInfo.info"));
 		additionalPane.add(infoLabel);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		additionalPane.setVisible(true);

@@ -51,21 +51,21 @@ public class PanelHWByAuditDriver extends JPanel {
 		jLabelTitle.setOpaque(true);
 
 		fieldVendor = new JTextShowField();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			fieldVendor.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 		fieldLabel = new JTextShowField();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			fieldLabel.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
 		fieldVendor2 = new JTextShowField();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			fieldVendor2.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
 		fieldLabel2 = new JTextShowField();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			fieldLabel2.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -142,7 +142,7 @@ public class PanelHWByAuditDriver extends JPanel {
 				.addGap(5 * hGap, 10 * hGap, 10 * hGap).addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
 						Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 				.addGap(2 * hGap, 4 * hGap, Short.MAX_VALUE));
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		setBorder(BorderFactory.createLineBorder(Globals.greyed));

@@ -48,7 +48,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		groups.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		groups.setFont(Globals.defaultFontBig);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			groups.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 

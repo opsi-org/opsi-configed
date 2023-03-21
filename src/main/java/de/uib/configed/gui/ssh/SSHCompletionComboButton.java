@@ -131,7 +131,7 @@ public class SSHCompletionComboButton {
 
 	private void initTextfield() {
 		textfield = new JTextField();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			textfield.setBackground(Globals.BACKGROUND_COLOR_9);
 		}
 	}

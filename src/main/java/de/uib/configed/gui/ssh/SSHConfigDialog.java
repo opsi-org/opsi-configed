@@ -213,7 +213,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 	void init() {
 		Logging.info(this, "init ");
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			connectionPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			settingsPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);

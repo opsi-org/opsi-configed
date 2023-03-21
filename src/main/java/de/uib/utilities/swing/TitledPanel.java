@@ -28,7 +28,7 @@ public class TitledPanel extends JPanel {
 	}
 
 	private void initGui(String title1, String title2) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

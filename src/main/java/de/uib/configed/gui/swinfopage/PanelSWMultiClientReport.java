@@ -89,7 +89,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	private void setupPanel() {
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -246,7 +246,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		Logging.info(this, "kindOfExport   " + kindOfExport);
 
 		JPanel subpanelPreConfig = new JPanel();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			subpanelPreConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 

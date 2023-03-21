@@ -207,7 +207,7 @@ public class Configed {
 			Logging.debug("they are equal");
 		}
 
-		if (ConfigedMain.OPSI_4_3) {
+		if (ConfigedMain.THEMES) {
 			setOpsiLaf();
 		} else {
 			configureUI();
@@ -927,7 +927,7 @@ public class Configed {
 
 		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
 		}
 		// we activate it in case of an appropriate error

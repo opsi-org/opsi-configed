@@ -225,7 +225,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		GroupLayout additionalLayout = new GroupLayout(additionalPane);
 		additionalPane.setLayout(additionalLayout);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -247,7 +247,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			buttonReload.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -275,7 +275,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				"images/reload16_red.png", "images/reload16_over.png", "images/reload16.png",
 				"images/reload16_disabled.png");
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			buttonRestart.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -334,7 +334,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private void init() {
 		contentPane = new JPanel();
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -576,7 +576,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyIdGroup = createSimpleGroup(new PropertyIdElement());
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			propertyIdGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
 		}
 		propertyIdGroup.negateButton.setVisible(false);
@@ -584,7 +584,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyValueGroup = createSimpleGroup(new PropertyValueElement());
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			propertyValueGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
 		}
 		propertyValueGroup.negateButton.setVisible(false);
@@ -621,7 +621,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyIdGroup = createSimpleGroup(new PropertyIdElement());
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			propertyIdGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
 		}
 		propertyIdGroup.negateButton.setVisible(false);
@@ -629,7 +629,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.groupList.getLast().connectionType.setVisible(false);
 
 		SimpleGroup propertyValueGroup = createSimpleGroup(new PropertyValueElement());
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			propertyValueGroup.elementLabel.setForeground(Globals.ClientSelectionDialog_ELEMENT_FOREGROUND);
 		}
 		propertyValueGroup.negateButton.setVisible(false);

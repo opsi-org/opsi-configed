@@ -185,7 +185,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		super.checkAdditionalPane();
 
 		JPanel contentPane = new JPanel();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

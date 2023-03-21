@@ -178,7 +178,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
 				g.fillRect(0, 0, getWidth(), getHeight());
 			}

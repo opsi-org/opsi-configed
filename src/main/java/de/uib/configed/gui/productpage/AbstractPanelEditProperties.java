@@ -39,7 +39,7 @@ public abstract class AbstractPanelEditProperties extends JXPanel {
 		this.mainController = mainController;
 		this.productPropertiesPanel = productPropertiesPanel;
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			super.setBackgroundPainter(new AbstractPainter<AbstractPanelEditProperties>() {
 				@Override
 				public void doPaint(Graphics2D g, AbstractPanelEditProperties obj, int width, int height) {

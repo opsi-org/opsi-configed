@@ -83,7 +83,7 @@ public class FShowList extends FTextArea {
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jTextArea1.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		jTextArea1.setText("          ");

@@ -69,12 +69,12 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			}
 
 			if (columnName.equals(latestChange)) {
-				if (!ConfigedMain.OPSI_4_3) {
+				if (!ConfigedMain.THEMES) {
 					jc.setBackground(Globals.CHECK_COLOR);
 				}
 
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
-					if (!ConfigedMain.OPSI_4_3) {
+					if (!ConfigedMain.THEMES) {
 						jc.setBackground(Globals.darkOrange);
 					}
 					jc.setToolTipText(
@@ -82,21 +82,21 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 									+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
-					if (!ConfigedMain.OPSI_4_3) {
+					if (!ConfigedMain.THEMES) {
 						jc.setBackground(Globals.WARNING_COLOR);
 					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
-					if (!ConfigedMain.OPSI_4_3) {
+					if (!ConfigedMain.THEMES) {
 						jc.setBackground(Globals.darkOrange);
 					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_OVER)) {
-					if (!ConfigedMain.OPSI_4_3) {
+					if (!ConfigedMain.THEMES) {
 						jc.setBackground(Globals.WARNING_COLOR);
 					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"

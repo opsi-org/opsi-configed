@@ -42,7 +42,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private void initComponents() {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
 		jLabelProductProperties.setFont(Globals.defaultFontBold);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jLabelProductProperties.setForeground(Globals.lightBlack);
 		}
 
@@ -105,7 +105,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	@Override
 	public void setTitlePanelActivated(boolean activated) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jLabelProductProperties.setForeground(activated ? Globals.lightBlack : Globals.greyed);
 		}
 		buttonSetValuesFromServerDefaults.setEnabled(activated);

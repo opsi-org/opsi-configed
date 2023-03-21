@@ -78,7 +78,7 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
@@ -198,8 +198,9 @@ public class SSHPackageUpdaterDialog extends FGeneralDialog {
 
 		this.setSize(600, 210);
 		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!ConfigedMain.OPSI_4_3) {
-			this.setBackground(Globals.BACKGROUND_COLOR_7);}
+		if (!ConfigedMain.THEMES) {
+			this.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}

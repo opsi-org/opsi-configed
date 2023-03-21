@@ -64,7 +64,7 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 
 	protected void initComponents() {
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 

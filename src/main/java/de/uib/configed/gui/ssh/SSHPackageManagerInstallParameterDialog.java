@@ -183,7 +183,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 	}
 
 	private void init() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			radioPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			mainPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);

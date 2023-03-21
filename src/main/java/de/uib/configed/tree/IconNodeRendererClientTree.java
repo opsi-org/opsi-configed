@@ -20,7 +20,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 	public IconNodeRendererClientTree(ConfigedMain main) {
 		this.main = main;
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			super.setOpaque(true);
 			super.setForeground(Globals.lightBlack);
 			super.setTextSelectionColor(Globals.lightBlack);
@@ -35,7 +35,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
 		}
 

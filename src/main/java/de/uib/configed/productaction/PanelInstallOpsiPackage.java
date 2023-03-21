@@ -329,7 +329,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonSelectTmpDir.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.chooserTmpDir"));
 
 		fieldServerPath = new JTextField(opsiWorkBenchDirectoryS);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			fieldServerPath.setForeground(Globals.greyed);
 		}
 
@@ -384,7 +384,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			public void actionPerformed(ActionEvent e) {
 				final Color saveColor = buttonCallExecute.getBackground();
 
-				if (!ConfigedMain.OPSI_4_3) {
+				if (!ConfigedMain.THEMES) {
 					buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 				}
 
@@ -393,7 +393,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 				execute();
 
-				if (!ConfigedMain.OPSI_4_3) {
+				if (!ConfigedMain.THEMES) {
 					buttonCallExecute.setBackground(saveColor);
 				}
 			}

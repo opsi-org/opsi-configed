@@ -21,7 +21,7 @@ public class ProgressBarPainter implements Painter<JProgressBar> {
 
 	@Override
 	public void paint(Graphics2D gd, JProgressBar t, int width, int height) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			gd.setColor(color);
 			gd.fillRect(0, 0, width, height);
 		}

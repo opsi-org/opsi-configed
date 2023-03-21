@@ -47,7 +47,7 @@ public class FDriverUpload extends SecondaryFrame {
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(panelDriverUpload, 100,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			Containership containerShipAll = new Containership(getContentPane());
 			containerShipAll.doForAllContainedCompisOfClass("setBackground",
 					new Object[] { Globals.BACKGROUND_COLOR_7 }, JPanel.class);

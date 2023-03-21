@@ -84,7 +84,7 @@ public class ImagePlusTextLabel extends JPanel {
 
 	@Override
 	public void setBackground(Color bg) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			if (textlabel != null) {
 				textlabel.setBackground(bg);
 			}
@@ -96,7 +96,7 @@ public class ImagePlusTextLabel extends JPanel {
 
 	@Override
 	public void setForeground(Color fg) {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			if (textlabel != null) {
 				textlabel.setForeground(fg);
 			}

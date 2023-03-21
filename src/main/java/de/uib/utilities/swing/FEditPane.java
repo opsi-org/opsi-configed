@@ -383,7 +383,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 
 		@Override
 		public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				g.setColor(color == null ? c.getSelectionColor() : color);
 			}
 

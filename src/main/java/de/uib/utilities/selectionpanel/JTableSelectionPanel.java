@@ -104,7 +104,7 @@ public class JTableSelectionPanel extends JPanel
 
 		scrollpane = new JScrollPane();
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -170,7 +170,7 @@ public class JTableSelectionPanel extends JPanel
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
 		fieldSearch.setFont(Globals.defaultFont);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 		}
 
@@ -326,7 +326,7 @@ public class JTableSelectionPanel extends JPanel
 			JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 
 			JPanel mdPanel = new JPanel();
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 

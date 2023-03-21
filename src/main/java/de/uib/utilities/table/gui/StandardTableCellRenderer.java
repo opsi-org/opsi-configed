@@ -57,7 +57,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			((JLabel) jc).setToolTipText(tooltipText);
 		}
 
-		if (ConfigedMain.OPSI_4_3) {
+		if (ConfigedMain.THEMES) {
 			if (isSelected) {
 				jc.setBackground(Globals.opsiBlue);
 				if (FlatLaf.isLafDark()) {

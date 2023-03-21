@@ -19,7 +19,7 @@ public class XList extends JList<String> {
 	}
 
 	private void configure() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setSelectionBackground(Globals.nimbusSelectionBackground);
 			setBackground(Globals.nimbusBackground);
 		}

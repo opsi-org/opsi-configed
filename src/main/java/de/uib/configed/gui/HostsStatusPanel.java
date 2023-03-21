@@ -222,7 +222,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 										Globals.LINE_HEIGHT))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 
 			Containership csStatusPane = new Containership(this);
 			csStatusPane.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },

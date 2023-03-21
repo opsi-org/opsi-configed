@@ -195,7 +195,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	}
 
 	private void initLayout() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 

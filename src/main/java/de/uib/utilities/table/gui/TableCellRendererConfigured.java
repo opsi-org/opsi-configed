@@ -43,7 +43,7 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 		}
 
 		if (bg1 != null) {
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				if (selectionEditingBackground != null && isSelected) {
 					result.setBackground(selectionEditingBackground);
 				} else {
@@ -56,7 +56,7 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 			}
 		}
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			if (color != null) {
 				result.setForeground(color);
 			}

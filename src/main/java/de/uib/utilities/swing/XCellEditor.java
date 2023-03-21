@@ -37,7 +37,7 @@ public class XCellEditor extends DefaultCellEditor {
 			foreground = Globals.X_CELL_EDITOR_NOT_SELECTED_FOREGROUND;
 		}
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			c.setBackground(background);
 			c.setForeground(foreground);
 		}

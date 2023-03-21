@@ -27,7 +27,7 @@ public class ColorHeaderCellRenderer extends DefaultTableCellRenderer {
 			int row, int column) {
 		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
 				column);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			cell.setBackground(Globals.defaultTableHeaderBgColor);
 		}
 

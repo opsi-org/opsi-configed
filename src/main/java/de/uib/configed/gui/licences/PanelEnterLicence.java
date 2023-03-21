@@ -506,7 +506,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						.addGap(0, 1, 5)));
 
 		JPanel panelTask = new JPanel();
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			panelTask.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		GroupLayout layoutTask = new GroupLayout(panelTask);
@@ -576,7 +576,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		JPanel bottomPane = new JPanel();
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			topPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			bottomPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}

@@ -18,7 +18,7 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 	public IconNodeRenderer() {
 		super();
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			super.setOpaque(true);
 			super.setForeground(Globals.lightBlack);
 			super.setTextSelectionColor(Globals.lightBlack);
@@ -48,7 +48,7 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			setEnabled(enabled);
 			node.setEnabled(enabled);
 
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				if (sel) {
 					setBackground(Globals.BACKGROUND_COLOR_7);
 

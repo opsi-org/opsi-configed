@@ -102,7 +102,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	protected void initComponents() {
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);

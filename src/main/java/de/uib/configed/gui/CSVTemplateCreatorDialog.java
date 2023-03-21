@@ -80,7 +80,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "allLayout");
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -91,7 +91,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 		centerPanel.setOpaque(true);
@@ -144,7 +144,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		southPanel.setOpaque(false);
 
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 
@@ -368,7 +368,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		}
 
 		private void init(ListModel<JCheckBox> model) {
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 			}
 
@@ -415,7 +415,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				public Component getListCellRendererComponent(JList<? extends JCheckBox> list, JCheckBox checkbox,
 						int index, boolean isSelected, boolean cellHasFocus) {
 
-					if (!ConfigedMain.OPSI_4_3) {
+					if (!ConfigedMain.THEMES) {
 						checkbox.setBackground(isSelected ? getSelectionBackground() : getBackground());
 						checkbox.setForeground(isSelected ? getSelectionForeground() : getForeground());
 					}

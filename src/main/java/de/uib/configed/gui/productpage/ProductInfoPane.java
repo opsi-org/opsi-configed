@@ -100,7 +100,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jLabelProductID.setFont(Globals.defaultFontStandardBold);
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jLabelProductID.setBackground(null);
 		}
 
@@ -113,12 +113,12 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jLabelProductVersion.setFont(Globals.defaultFontBold);
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jLabelProductVersion.setBackground(null);
 		}
 
 		jTextAreaProductInfo.setFont(Globals.defaultFont);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -127,7 +127,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		jTextAreaProductAdvice.setFont(Globals.defaultFont);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -137,18 +137,18 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		dependenciesTextLabel.setText(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
 		dependenciesTextLabel.setFont(Globals.defaultFontBold);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			dependenciesTextLabel.setForeground(Globals.greyed);
 		}
 
 		depotForDependenciesLabel.setFont(Globals.defaultFontBold);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			depotForDependenciesLabel.setForeground(Globals.greyed);
 		}
 
 		dependenciesActivateButton.setText("▶");
 		dependenciesActivateButton.setFont(Globals.defaultFont);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			dependenciesActivateButton.setForeground(Globals.lightBlack);
 		}
 		dependenciesActivateButton.addActionListener(this);
@@ -157,7 +157,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		propertiesActivateButton.setText("▼");
 		propertiesActivateButton.setFont(Globals.defaultFont);
-		if (!ConfigedMain.OPSI_4_3) {
+		if (!ConfigedMain.THEMES) {
 			propertiesActivateButton.setForeground(Globals.lightBlack);
 		}
 		propertiesActivateButton.addActionListener(this);
@@ -263,13 +263,13 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 			isPanelProductDependenciesVisible = !isPanelProductDependenciesVisible;
 
 			dependenciesActivateButton.setText(isPanelProductDependenciesVisible ? "▼" : "▶");
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				dependenciesTextLabel
 						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
 								: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
 			}
 
-			if (!ConfigedMain.OPSI_4_3) {
+			if (!ConfigedMain.THEMES) {
 				depotForDependenciesLabel.setEnabled(isPanelProductDependenciesVisible);
 				depotForDependenciesLabel
 						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
