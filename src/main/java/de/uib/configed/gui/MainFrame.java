@@ -2729,12 +2729,12 @@ public class MainFrame extends JFrame
 
 		setTitle(configedMain.getAppTitle());
 
+		Containership csJPanelAllContent = new Containership(allPane);
+
+		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
+				new Class[] { boolean.class }, JTextComponent.class);
+
 		if (!ConfigedMain.THEMES) {
-			Containership csJPanelAllContent = new Containership(allPane);
-
-			csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
-					new Class[] { boolean.class }, JTextComponent.class);
-
 			// set colors of panels
 			csJPanelAllContent.doForAllContainedCompisOfClass("setBackground",
 					new Object[] { Globals.BACKGROUND_COLOR_7 }, JPanel.class);
