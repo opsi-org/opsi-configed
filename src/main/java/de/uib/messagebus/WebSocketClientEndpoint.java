@@ -81,9 +81,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 				default:
 					Logging.warning(this, "unhandeld terminal type response caught: " + type);
 				}
-			}
-
-			if ("file_upload_result".equals(type)) {
+			} else if ("file_upload_result".equals(type)) {
 				String filePath = (String) data.get("path");
 
 				data.clear();
@@ -98,6 +96,21 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 
 				byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
 				send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
+			} else if ("event".equals(type)) {
+				String clientId = (String) ((Map<?, ?>) ((Map<?, ?>) data.get("data")).get("host")).get("id");
+
+				switch ((String) data.get("event")) {
+				case "host_connected":
+					configedMain.addClientToConnectedList(clientId);
+					break;
+
+				case "host_disconnected":
+					configedMain.removeClientFromConnectedList(clientId);
+					break;
+
+				default:
+					break;
+				}
 			}
 		} catch (IOException e) {
 			Logging.error(this, "cannot read received message: ", e);

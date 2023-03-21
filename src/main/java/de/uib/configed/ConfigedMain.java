@@ -479,7 +479,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 
-		setReachableInfo();
+		setReachableInfo(selectedClients);
 	}
 
 	private static String getSavedStatesDefaultLocation() {
@@ -659,12 +659,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public void addClientToConnectedList(String clientId) {
 		connectedHostsByMessagebus.add(clientId);
-		setReachableInfo();
+		setReachableInfo(selectedClients);
 	}
 
-	public void removeClientToConnectedList(String clientId) {
+	public void removeClientFromConnectedList(String clientId) {
 		connectedHostsByMessagebus.remove(clientId);
-		setReachableInfo();
+		setReachableInfo(selectedClients);
 	}
 
 	public boolean connectMessagebus() {
@@ -4249,9 +4249,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				mainFrame.iconButtonReachableInfo.setEnabled(true);
 
-				setReachableInfo();
-
-				setSelectedClientsOnPanel(selClients);
+				setReachableInfo(selClients);
 			}
 		}.start();
 	}
@@ -4264,11 +4262,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (connectedHostsByMessagebus.contains(clientName)) {
 			return ConnectionStatusTableCellRenderer.CONNECTED_BY_MESSAGEBUS;
 		} else {
-			return reachableInfo.get(clientName);
+			return getConnectionInfoStateForBoolean(reachableInfo.get(clientName));
 		}
 	}
 
-	private void setReachableInfo() {
+	private static String getConnectionInfoStateForBoolean(Object b) {
+		if (!(b instanceof Boolean)) {
+			return ConnectionStatusTableCellRenderer.UNKNOWN;
+		} else if (Boolean.TRUE.equals(b)) {
+			return ConnectionStatusTableCellRenderer.REACHABLE;
+		} else {
+			return ConnectionStatusTableCellRenderer.NOT_REACHABLE;
+		}
+	}
+
+	private void setReachableInfo(String[] selClients) {
 		// update column
 		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientConnected"))) {
 			AbstractTableModel model = selectionPanel.getTableModel();
@@ -4283,6 +4291,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			model.fireTableDataChanged();
+
+			setSelectedClientsOnPanel(selClients);
 		}
 	}
 
