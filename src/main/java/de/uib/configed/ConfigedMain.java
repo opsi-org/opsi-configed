@@ -4292,8 +4292,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				model.setValueAt(getConnectionInfoForClient(clientName), row, col);
 
 				model.fireTableCellUpdated(row, col);
-
-				setSelectedClientsOnPanel(selectedClients);
 				return;
 			}
 		}
