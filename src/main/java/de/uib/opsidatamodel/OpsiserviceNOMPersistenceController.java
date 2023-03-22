@@ -4183,6 +4183,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public Set<String> getMessagebusConnectedClients() {
 
+		// no messagebus available if not at least opsi 4.3
+		if (!JSONthroughHTTPS.isOpsi43()) {
+			return new HashSet<>();
+		}
+
 		Logging.info(this, "get clients connected with messagebus");
 		OpsiMethodCall omc = new OpsiMethodCall("host_getMessagebusConnectedIds", new Object[] {});
 
