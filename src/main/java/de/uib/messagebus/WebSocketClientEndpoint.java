@@ -112,8 +112,13 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 				case "host_created":
 					configedMain.addClientToTable((String) ((Map<?, ?>) data.get("data")).get("id"));
 					break;
+
 				case "host_deleted":
 					configedMain.removeClientFromTable((String) ((Map<?, ?>) data.get("data")).get("id"));
+					break;
+
+				case "productOnClient_updated":
+					configedMain.updateProduct((Map<?, ?>) data.get("data"));
 					break;
 
 				default:

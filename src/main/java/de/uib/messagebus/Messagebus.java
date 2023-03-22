@@ -153,6 +153,8 @@ public class Messagebus {
 		channels.add("event:host_created");
 		channels.add("event:host_deleted");
 
+		channels.add("event:productOnClient_updated");
+
 		makeChannelSubscriptionRequest(channels);
 	}
 

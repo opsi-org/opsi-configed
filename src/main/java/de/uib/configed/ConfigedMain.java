@@ -666,6 +666,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF CLIENT DELETED
 	}
 
+	public void updateProduct(Map<?, ?> data) {
+		String productId = (String) data.get("productId");
+		String clientId = (String) data.get("clientId");
+
+		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF PRODUCT UPDATED
+	}
+
 	public void addClientToConnectedList(String clientId) {
 		connectedHostsByMessagebus.add(clientId);
 		updateConnectionStatusInTable(clientId);
