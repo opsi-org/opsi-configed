@@ -4080,10 +4080,20 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return productGlobalInfos;
 	}
 
+	@Override
+	public Map<String, Object> getProductInfos(String productId, String clientId) {
+		Map<String, Object> callFilter = new HashMap<>();
+		callFilter.put("productId", productId);
+		callFilter.put("clientId", clientId);
+
+		OpsiMethodCall omc = new OpsiMethodCall("productOnClient_getObjects", new Object[] {});
+
+		return new HashMap<>();
+	}
+
 	public Map<String, Object> getProductInfos(String productname) {
 		checkProductGlobalInfos(theDepot);
 		return productGlobalInfos.get(productname);
-
 	}
 
 	@Override
