@@ -97,15 +97,23 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 				byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
 				send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 			} else if ("event".equals(type)) {
-				String clientId = (String) ((Map<?, ?>) ((Map<?, ?>) data.get("data")).get("host")).get("id");
 
 				switch ((String) data.get("event")) {
 				case "host_connected":
+					String clientId = (String) ((Map<?, ?>) ((Map<?, ?>) data.get("data")).get("host")).get("id");
 					configedMain.addClientToConnectedList(clientId);
 					break;
 
 				case "host_disconnected":
+					clientId = (String) ((Map<?, ?>) ((Map<?, ?>) data.get("data")).get("host")).get("id");
 					configedMain.removeClientFromConnectedList(clientId);
+					break;
+
+				case "host_created":
+					configedMain.addClientToTable(((Map<?, ?>) data.get("data")).get("id"));
+					break;
+				case "host_deleted":
+					configedMain.removeClientFromTable(((Map<?, ?>) data.get("data")).get("id"));
 					break;
 
 				default:

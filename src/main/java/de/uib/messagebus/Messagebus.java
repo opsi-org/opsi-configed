@@ -150,6 +150,9 @@ public class Messagebus {
 		channels.add("event:host_connected");
 		channels.add("event:host_disconnected");
 
+		channels.add("event:host_created");
+		channels.add("event:host_deleted");
+
 		makeChannelSubscriptionRequest(channels);
 	}
 

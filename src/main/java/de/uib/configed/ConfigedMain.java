@@ -658,6 +658,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	}
 
+	public void addClientToTable(String clientId) {
+		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF CLIENT ADDED
+	}
+
+	public void removeClientFromTable(String clientId) {
+		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF CLIENT DELETED
+	}
+
 	public void addClientToConnectedList(String clientId) {
 		connectedHostsByMessagebus.add(clientId);
 		updateConnectionStatusInTable(clientId);
