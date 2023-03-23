@@ -4082,13 +4082,20 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public Map<String, Object> getProductInfos(String productId, String clientId) {
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("productId", productId);
-		callFilter.put("clientId", clientId);
+		try {
+			// Sleep for a little because otherwise we cannot get the needed Data from the Server
+			Thread.sleep(5);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("productOnClient_getObjects", new Object[] {});
+		String[] callAttributes = new String[] {};
 
-		return new HashMap<>();
+		HashMap<String, String> callFilter = new HashMap<>();
+		callFilter.put(ProductOnClient.PRODUCT_ID, productId);
+		callFilter.put(ProductOnClient.CLIENT_ID, clientId);
+
+		return retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjects").get(0);
 	}
 
 	public Map<String, Object> getProductInfos(String productname) {
@@ -4231,6 +4238,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map<?, ?> callFilter, String methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
+
 		Logging.debug(this, "retrieveListOfMapsNOM " + retrieved);
 		return retrieved;
 	}

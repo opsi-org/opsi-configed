@@ -75,6 +75,7 @@ import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.InstallationStateTableModel;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
+import de.uib.opsidatamodel.dbtable.ProductOnClient;
 import de.uib.opsidatamodel.productstate.ActionProgress;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
@@ -1106,5 +1107,20 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		Logging.info(this, "selectedProducts " + selectedProducts);
 
 		return selectedProducts;
+	}
+
+	public void updateRow(Map<String, Object> data) {
+
+		String productId = (String) data.get(ProductOnClient.PRODUCT_ID);
+
+		TableModel model = tableProducts.getModel();
+
+		for (int i = 0; i < model.getRowCount(); i++) {
+			if (model.getValueAt(i, 0).equals(productId)) {
+				for (int col = 0; col < model.getColumnCount(); col++) {
+					Logging.devel(this, model.getValueAt(i, col).toString());
+				}
+			}
+		}
 	}
 }

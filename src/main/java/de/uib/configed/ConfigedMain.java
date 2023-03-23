@@ -670,6 +670,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String productId = (String) data.get("productId");
 		String clientId = (String) data.get("clientId");
 
+		Map<String, Object> productInfo = persist.getProductInfos(productId, clientId);
+
 		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF PRODUCT UPDATED
 	}
 
