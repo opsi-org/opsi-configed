@@ -243,7 +243,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
 
 	protected Map<String, Object> opsiInformation = new HashMap<>();
-	protected JSONObject licencingInfo;
+	protected JSONObject licencingInfoOpsiAdmin;
+	protected Map<String, Object> licencingInfoNoOpsiAdmin;
 	private LicensingInfoMap licInfoMap;
 
 	private boolean hasOpsiLicencingBeenChecked;
@@ -2251,7 +2252,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public Map<String, Integer> getInstalledOsOverview() {
 		Logging.info(this, "getInstalledOsOverview");
 
-		Map<String, Object> producedLicencingInfo = getLicencingInfo();
+		Map<String, Object> producedLicencingInfo = new HashMap<>();
+
+		if (isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
+			producedLicencingInfo = JSONReMapper.getMapResult(getOpsiLicencingInfoOpsiAdmin());
+		} else {
+			producedLicencingInfo = getOpsiLicencingInfoNoOpsiAdmin();
+		}
+
 		Map<String, Integer> map = new HashMap<>();
 		JSONObject jO = (JSONObject) producedLicencingInfo.get("client_numbers");
 
@@ -2269,21 +2277,32 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public Map<String, Object> getLicencingInfo() {
+	public Map<String, Object> getOpsiLicencingInfoNoOpsiAdmin() {
 		Logging.info(this, "getLicensingInfo");
 
-		Object[] callParameters = { true, true, true };
+		Object[] callParameters = {};
 		OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME, callParameters,
 				OpsiMethodCall.BACKGROUND_DEFAULT);
 
-		return exec.getMapResult(omc);
+		if (licencingInfoNoOpsiAdmin == null) {
+			licencingInfoNoOpsiAdmin = exec.getMapResult(omc);
+		}
+
+		return licencingInfoNoOpsiAdmin;
 	}
 
 	@Override
 	public List<Map<String, Object>> getModules() {
 		Logging.info(this, "getModules");
 
-		Map<String, Object> producedLicencingInfo = getLicencingInfo();
+		Map<String, Object> producedLicencingInfo = new HashMap<>();
+
+		if (isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
+			producedLicencingInfo = JSONReMapper.getMapResult(getOpsiLicencingInfoOpsiAdmin());
+		} else {
+			producedLicencingInfo = getOpsiLicencingInfoNoOpsiAdmin();
+		}
+
 		return JSONReMapper.getListOfMaps((JSONArray) producedLicencingInfo.get("licenses"));
 	}
 
@@ -8031,7 +8050,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public final void opsiLicencingInfoRequestRefresh() {
-		licencingInfo = null;
+		licencingInfoOpsiAdmin = null;
+		licencingInfoNoOpsiAdmin = null;
 		licInfoMap = null;
 		LicensingInfoMap.requestRefresh();
 		Logging.info(this, "request worked");
@@ -8039,15 +8059,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	// is not allowed to be overriden in order to prevent changes
 	@Override
-	public final JSONObject getOpsiLicencingInfo() {
-		if (licencingInfo == null && isOpsiLicencingAvailable() && isOpsiUserAdmin()) {
+	public final JSONObject getOpsiLicencingInfoOpsiAdmin() {
+		if (licencingInfoOpsiAdmin == null && isOpsiLicencingAvailable() && isOpsiUserAdmin()) {
 			OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME,
 					new Object[] { true, false, true, false });
 
-			licencingInfo = exec.retrieveJSONObject(omc);
+			licencingInfoOpsiAdmin = exec.retrieveJSONObject(omc);
 		}
 
-		return licencingInfo;
+		return licencingInfoOpsiAdmin;
 	}
 
 	@Override
@@ -8083,9 +8103,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		getHostInfoCollections().retrieveOpsiHosts();
 		Logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
-				.getInstance(getOpsiLicencingInfo(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
+				.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
 
-		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfo(), getConfigDefaultValues(),
+		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(),
 				!FGeneralDialogLicensingInfo.extendedView);
 
 		List<String> availableModules = licInfoMap.getAvailableModules();
@@ -8384,10 +8404,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public final void retrieveOpsiModules() {
 		Logging.info(this, "retrieveOpsiModules ");
 
-		licencingInfo = getOpsiLicencingInfo();
+		licencingInfoOpsiAdmin = getOpsiLicencingInfoOpsiAdmin();
 
 		// probably old opsi service version
-		if (licencingInfo == null) {
+		if (licencingInfoOpsiAdmin == null) {
 			produceOpsiModulesInfoClassic();
 		} else {
 			produceOpsiModulesInfo();
