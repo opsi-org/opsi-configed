@@ -2342,7 +2342,7 @@ public class MainFrame extends JFrame
 				&& configedMain.getPersistenceController().isOpsiUserAdmin() && licensingInfoMap == null) {
 
 			licensingInfoMap = LicensingInfoMap.getInstance(
-					configedMain.getPersistenceController().getOpsiLicencingInfo(),
+					configedMain.getPersistenceController().getOpsiLicencingInfoOpsiAdmin(),
 					configedMain.getPersistenceController().getConfigDefaultValues(),
 					!FGeneralDialogLicensingInfo.extendedView);
 
