@@ -4397,7 +4397,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 									for (int row = 0; row < model.getRowCount(); row++) {
 										String clientId = (String) model.getValueAt(row, 0);
-
 										model.setValueAt(sessionInfo.get(clientId), row, col);
 									}
 
