@@ -115,7 +115,6 @@ import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
-import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.sshcommand.SSHCommand;
@@ -184,6 +183,7 @@ public class MainFrame extends JFrame
 	private JMenuItem jMenuFileExit;
 	private JMenuItem jMenuFileSaveConfigurations;
 	private JMenuItem jMenuFileReload;
+	private JMenuItem jMenuTheme;
 	private JMenuItem jMenuFileLanguage;
 
 	private JMenu jMenuClients = new JMenu();
@@ -488,8 +488,6 @@ public class MainFrame extends JFrame
 
 	private LicenseDisplayer licenseDisplayer;
 
-	private Messagebus messagebus;
-
 	static class GlassPane extends JComponent {
 		GlassPane() {
 			super();
@@ -515,8 +513,10 @@ public class MainFrame extends JFrame
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 0.5));
 
-			g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
-			g.fillRect(0, 0, getWidth(), getHeight());
+			if (!ConfigedMain.THEMES) {
+				g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
+				g.fillRect(0, 0, getWidth(), getHeight());
+			}
 		}
 	}
 
@@ -652,6 +652,7 @@ public class MainFrame extends JFrame
 		jMenuFileExit = new JMenuItem();
 		jMenuFileSaveConfigurations = new JMenuItem();
 		jMenuFileReload = new JMenuItem();
+		jMenuTheme = new JMenu(); // submenu
 		jMenuFileLanguage = new JMenu(); // submenu
 
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
@@ -709,9 +710,41 @@ public class MainFrame extends JFrame
 			});
 		}
 
+		jMenuTheme.setText("Theme");
+		ButtonGroup groupThemes = new ButtonGroup();
+		String selectedTheme = Messages.getSelectedTheme();
+		Logging.debug(this, "selectedLocale " + selectedTheme);
+
+		for (final String themeName : Messages.getAvailableThemes()) {
+			JMenuItem themeItem = new JRadioButtonMenuItem(themeName);
+			Logging.debug(this, "selectedTheme " + themeName);
+			themeItem.setSelected(selectedTheme.equals(themeName));
+			jMenuTheme.add(themeItem);
+			groupThemes.add(themeItem);
+
+			themeItem.addActionListener((ActionEvent e) -> {
+				configedMain.closeInstance(true);
+				Messages.setTheme(themeName);
+				Configed.setOpsiLaf();
+
+				new Thread() {
+
+					@Override
+					public void run() {
+						Configed.startWithLocale();
+					}
+
+				}.start();
+			});
+		}
+
 		jMenuFile.add(jMenuFileSaveConfigurations);
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileLanguage);
+
+		if (JSONthroughHTTPS.isOpsi43()) {
+			jMenuFile.add(jMenuTheme);
+		}
 
 		jMenuFile.add(jMenuFileExit);
 	}
@@ -759,12 +792,12 @@ public class MainFrame extends JFrame
 		jMenuClients.addMenuListener(new MenuListener() {
 			@Override
 			public void menuCanceled(MenuEvent arg0) {
-				// Nothing to do. 
+				// Nothing to do.
 			}
 
 			@Override
 			public void menuDeselected(MenuEvent arg0) {
-				// Nothing to do. 
+				// Nothing to do.
 			}
 
 			@Override
@@ -990,7 +1023,7 @@ public class MainFrame extends JFrame
 		jMenuClients.addSeparator();
 
 		jMenuClients.add(jMenuAddClient);
-		if (ConfigedMain.OPSI_4_3) {
+		if (JSONthroughHTTPS.isOpsi43()) {
 			jMenuClients.add(jMenuCopyClient);
 		}
 		jMenuClients.add(jMenuDeleteClient);
@@ -1015,7 +1048,7 @@ public class MainFrame extends JFrame
 
 		jMenuClients.add(jCheckBoxMenuItemShowWANactiveColumn);
 		jMenuClients.add(jCheckBoxMenuItemShowIPAddressColumn);
-		if (ConfigedMain.OPSI_4_3) {
+		if (JSONthroughHTTPS.isOpsi43()) {
 			jMenuClients.add(jCheckBoxMenuItemShowSystemUUIDColumn);
 		}
 		jMenuClients.add(jCheckBoxMenuItemShowHardwareAddressColumn);
@@ -1033,17 +1066,25 @@ public class MainFrame extends JFrame
 				+ SSHConnectionInfo.getInstance().getHost();
 
 		jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.UNKNOWN);
-		jMenuSSHConnection.setForeground(Globals.UNKNOWN_COLOR);
+		if (!ConfigedMain.THEMES) {
+			jMenuSSHConnection.setForeground(Globals.UNKNOWN_COLOR);
+		}
 		if (status.equals(SSHCommandFactory.NOT_CONNECTED)) {
 
-			jMenuSSHConnection.setForeground(Globals.lightBlack);
+			if (!ConfigedMain.THEMES) {
+				jMenuSSHConnection.setForeground(Globals.lightBlack);
+			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.NOT_CONNECTED);
 		} else if (status.equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-			jMenuSSHConnection.setForeground(Globals.ACTION_COLOR);
+			if (!ConfigedMain.THEMES) {
+				jMenuSSHConnection.setForeground(Globals.ACTION_COLOR);
+			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTION_NOT_ALLOWED);
 
 		} else if (status.equals(SSHCommandFactory.CONNECTED)) {
-			jMenuSSHConnection.setForeground(Globals.OK_COLOR);
+			if (!ConfigedMain.THEMES) {
+				jMenuSSHConnection.setForeground(Globals.OK_COLOR);
+			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTED);
 		}
 	}
@@ -1306,7 +1347,7 @@ public class MainFrame extends JFrame
 
 		jMenuFrameDashboard.setText(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(this);
-		jMenuFrameDashboard.setVisible(ConfigedMain.OPSI_4_3);
+		jMenuFrameDashboard.setVisible(JSONthroughHTTPS.isOpsi43());
 
 		jMenuFrameLicences.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicences"));
 		jMenuFrameLicences.setEnabled(false);
@@ -1325,36 +1366,25 @@ public class MainFrame extends JFrame
 		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
 		jMenuFrameTerminal.setEnabled(true);
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
-			try {
-				if (messagebus == null) {
-					messagebus = new Messagebus();
-				}
+			configedMain.connectMessagebus();
 
-				if (!messagebus.connect()) {
-					return;
-				}
-
-				if (!Terminal.getInstance().isWebSocketConnected()) {
-					messagebus.connectTerminal();
-				} else {
-					Logging.info(this,
-							"terminal is already opened and connected to websocket (displaying current terminal window)");
-					Terminal.getInstance().display();
-				}
-			} catch (InterruptedException ex) {
-				Logging.error(this, "cannot open terminal, thread interrupted", ex);
-				Thread.currentThread().interrupt();
+			if (!Terminal.getInstance().isWebSocketConnected()) {
+				configedMain.connectTerminal();
+			} else {
+				Logging.info(this,
+						"terminal is already opened and connected to websocket (displaying current terminal window)");
+				Terminal.getInstance().display();
 			}
 		});
 
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
-		if (ConfigedMain.OPSI_4_3) {
+		if (JSONthroughHTTPS.isOpsi43()) {
 			jMenuFrames.add(jMenuFrameDashboard);
 		}
 		jMenuFrames.add(jMenuFrameLicences);
-		if (ConfigedMain.OPSI_4_3) {
+		if (JSONthroughHTTPS.isOpsi43()) {
 			jMenuFrames.add(jMenuFrameTerminal);
 		}
 		jMenuFrames.addSeparator();
@@ -1382,7 +1412,9 @@ public class MainFrame extends JFrame
 		jMenuHelpOpsiVersion.setText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": "
 				+ JSONthroughHTTPS.getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
-		jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
+		if (!ConfigedMain.THEMES) {
+			jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
+		}
 
 		jMenuHelp.add(jMenuHelpOpsiVersion);
 
@@ -1437,7 +1469,7 @@ public class MainFrame extends JFrame
 			showHealthDataAction();
 		});
 
-		if (ConfigedMain.OPSI_4_3) {
+		if (JSONthroughHTTPS.isOpsi43()) {
 			jMenuHelp.add(jMenuHelpCheckHealth);
 		}
 
@@ -1482,7 +1514,7 @@ public class MainFrame extends JFrame
 				"images/system-users-query.png", "images/system-users-query_over.png",
 				"images/system-users-query_over.png", waitingCircle,
 
-				500, configedMain.hostDisplayFields.get("clientSessionInfo"));
+				500, configedMain.hostDisplayFields.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL));
 		iconButtonSessionInfo.setEnabled(true);
 
 		iconButtonToggleClientFilter = new IconButton(
@@ -1761,7 +1793,7 @@ public class MainFrame extends JFrame
 
 		// --
 		popupClients.add(popupAddClient);
-		if (ConfigedMain.OPSI_4_3) {
+		if (JSONthroughHTTPS.isOpsi43()) {
 			popupClients.add(popupCopyClient);
 		}
 		popupClients.add(popupDeleteClient);
@@ -1783,7 +1815,7 @@ public class MainFrame extends JFrame
 
 		popupClients.add(popupShowWANactiveColumn);
 		popupClients.add(popupShowIPAddressColumn);
-		if (ConfigedMain.OPSI_4_3) {
+		if (JSONthroughHTTPS.isOpsi43()) {
 			popupClients.add(popupShowSystemUUIDColumn);
 		}
 		popupClients.add(popupShowHardwareAddressColumn);
@@ -1913,7 +1945,7 @@ public class MainFrame extends JFrame
 		labelClientInventoryNumber.setPreferredSize(Globals.buttonDimension);
 		JLabel labelClientNotes = new JLabel(Configed.getResourceValue("MainFrame.jLabelNotes"));
 		JLabel labelClientSystemUUID = new JLabel(Configed.getResourceValue("MainFrame.jLabelSystemUUID"));
-		labelClientSystemUUID.setVisible(ConfigedMain.OPSI_4_3);
+		labelClientSystemUUID.setVisible(JSONthroughHTTPS.isOpsi43());
 		JLabel labelClientMacAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelMacAddress"));
 		JLabel labelClientIPAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelIPAddress"));
 		JLabel labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
@@ -1922,7 +1954,9 @@ public class MainFrame extends JFrame
 		jFieldInDepot = new JTextArea();
 		jFieldInDepot.setEditable(false);
 		jFieldInDepot.setFont(Globals.defaultFontBig);
-		jFieldInDepot.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.THEMES) {
+			jFieldInDepot.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		jTextFieldDescription = new JTextEditorField("");
 		jTextFieldDescription.setEditable(true);
@@ -1959,7 +1993,7 @@ public class MainFrame extends JFrame
 
 		systemUUIDField.addKeyListener(this);
 		systemUUIDField.addMouseListener(this);
-		systemUUIDField.setVisible(ConfigedMain.OPSI_4_3);
+		systemUUIDField.setVisible(JSONthroughHTTPS.isOpsi43());
 
 		macAddressField = new JTextEditorField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3',
 				'4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
@@ -2169,7 +2203,9 @@ public class MainFrame extends JFrame
 		jCheckBoxSorted.setText(Configed.getResourceValue("MainFrame.jCheckBoxSorted"));
 
 		jButtonSaveList.setText(Configed.getResourceValue("MainFrame.jButtonSaveList"));
-		jButtonSaveList.setBackground(Globals.BACKGROUND_COLOR_6);
+		if (!ConfigedMain.THEMES) {
+			jButtonSaveList.setBackground(Globals.BACKGROUND_COLOR_6);
+		}
 		jButtonSaveList.addActionListener(this::jButtonSaveListActionPerformed);
 
 		jRadioRequiredAll.setMargin(new Insets(0, 0, 0, 0));
@@ -2186,7 +2222,9 @@ public class MainFrame extends JFrame
 		buttonGroupRequired.add(jRadioRequiredAll);
 		buttonGroupRequired.add(jRadioRequiredOff);
 
-		jComboBoxProductValues.setBackground(Globals.BACKGROUND_COLOR_6);
+		if (!ConfigedMain.THEMES) {
+			jComboBoxProductValues.setBackground(Globals.BACKGROUND_COLOR_6);
+		}
 
 		treeClients.setFont(Globals.defaultFont);
 
@@ -2296,15 +2334,15 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setPreferredSize(Globals.modeSwitchDimension);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 
-		jButtonDashboard.setEnabled(ConfigedMain.OPSI_4_3);
-		jButtonDashboard.setVisible(ConfigedMain.OPSI_4_3);
+		jButtonDashboard.setEnabled(JSONthroughHTTPS.isOpsi43());
+		jButtonDashboard.setVisible(JSONthroughHTTPS.isOpsi43());
 		jButtonDashboard.addActionListener(this);
 
 		if (configedMain.getPersistenceController().isOpsiLicencingAvailable()
 				&& configedMain.getPersistenceController().isOpsiUserAdmin() && licensingInfoMap == null) {
 
 			licensingInfoMap = LicensingInfoMap.getInstance(
-					configedMain.getPersistenceController().getOpsiLicencingInfo(),
+					configedMain.getPersistenceController().getOpsiLicencingInfoOpsiAdmin(),
 					configedMain.getPersistenceController().getConfigDefaultValues(),
 					!FGeneralDialogLicensingInfo.extendedView);
 
@@ -2383,9 +2421,9 @@ public class MainFrame extends JFrame
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(ConfigedMain.OPSI_4_3 ? Globals.HGAP_SIZE : 0,
-										ConfigedMain.OPSI_4_3 ? Globals.HGAP_SIZE : 0,
-										ConfigedMain.OPSI_4_3 ? Globals.HGAP_SIZE : 0)
+								.addGap(JSONthroughHTTPS.isOpsi43() ? Globals.HGAP_SIZE : 0,
+										JSONthroughHTTPS.isOpsi43() ? Globals.HGAP_SIZE : 0,
+										JSONthroughHTTPS.isOpsi43() ? Globals.HGAP_SIZE : 0)
 								.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
@@ -2414,24 +2452,20 @@ public class MainFrame extends JFrame
 		GroupLayout layoutIconPane0 = new GroupLayout(iconPane0);
 		iconPane0.setLayout(layoutIconPane0);
 
-		layoutIconPane0.setHorizontalGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layoutIconPane0.createSequentialGroup()
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+		layoutIconPane0.setHorizontalGroup(
+				layoutIconPane0.createSequentialGroup().addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Short.MAX_VALUE)
 						.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
+						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE));
+
 		layoutIconPane0.setVerticalGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
-				.addGroup(layoutIconPane0.createSequentialGroup()
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(layoutIconPane0.createParallelGroup(GroupLayout.Alignment.CENTER)
-								.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
+				.addComponent(iconPaneTargets, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(iconPaneExtraFrames, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE));
 
 		setupIcons1();
 		iconPane1 = new JPanel();
@@ -2505,7 +2539,7 @@ public class MainFrame extends JFrame
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weightx = 0.0;
-		c.gridx = 1;
+		c.gridx = 2;
 		c.gridy = 0;
 		iconBarPane.add(iconPane0, c);
 
@@ -2624,7 +2658,9 @@ public class MainFrame extends JFrame
 
 		showSoftwareLogNotFound = new JPanel(new FlowLayout());
 		showSoftwareLogNotFound.add(labelNoSoftware);
-		showSoftwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.THEMES) {
+			showSoftwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		showSoftwareLog = showSoftwareLogNotFound;
 
@@ -2698,27 +2734,29 @@ public class MainFrame extends JFrame
 		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
 				new Class[] { boolean.class }, JTextComponent.class);
 
-		// set colors of panels
-		csJPanelAllContent.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
-				JPanel.class);
+		if (!ConfigedMain.THEMES) {
+			// set colors of panels
+			csJPanelAllContent.doForAllContainedCompisOfClass("setBackground",
+					new Object[] { Globals.BACKGROUND_COLOR_7 }, JPanel.class);
 
-		depotListPresenter.setBackground(depotListPresenter.getMyColor());
+			depotListPresenter.setBackground(depotListPresenter.getMyColor());
 
-		Containership containershipPanelLocalbootProductsettings = new Containership(panelLocalbootProductSettings);
-		containershipPanelLocalbootProductsettings.doForAllContainedCompisOfClass("setBackground",
-				new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
-		panelLocalbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
+			Containership containershipPanelLocalbootProductsettings = new Containership(panelLocalbootProductSettings);
+			containershipPanelLocalbootProductsettings.doForAllContainedCompisOfClass("setBackground",
+					new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
+			panelLocalbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
-		Containership containershipPanelNetbootProductsettings = new Containership(panelNetbootProductSettings);
-		containershipPanelNetbootProductsettings.doForAllContainedCompisOfClass("setBackground",
-				new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
-		panelNetbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
+			Containership containershipPanelNetbootProductsettings = new Containership(panelNetbootProductSettings);
+			containershipPanelNetbootProductsettings.doForAllContainedCompisOfClass("setBackground",
+					new Object[] { Globals.BACKGROUND_COLOR_3 }, VerticalPositioner.class);
+			panelNetbootProductSettings.setBackground(Globals.BACKGROUND_COLOR_3);
 
-		iconPane0.setBackground(Globals.BACKGROUND_COLOR_7);
-		iconBarPane.setBackground(Globals.BACKGROUND_COLOR_7);
-		iconPane1.setBackground(Globals.BACKGROUND_COLOR_7);
-		panelTreeClientSelection.setBackground(Globals.BACKGROUND_COLOR_7);
-		statusPane.setBackground(Globals.BACKGROUND_COLOR_7);
+			iconPane0.setBackground(Globals.BACKGROUND_COLOR_7);
+			iconBarPane.setBackground(Globals.BACKGROUND_COLOR_7);
+			iconPane1.setBackground(Globals.BACKGROUND_COLOR_7);
+			panelTreeClientSelection.setBackground(Globals.BACKGROUND_COLOR_7);
+			statusPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		glass.setVisible(true);
 		glass.setOpaque(true);
@@ -3605,7 +3643,9 @@ public class MainFrame extends JFrame
 		if (showHardwareLogNotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
 			showHardwareLogNotFound = new TitledPanel();
 			showHardwareLogParentOfNotFoundPanel = new JPanel();
-			showHardwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_7);
+			if (!ConfigedMain.THEMES) {
+				showHardwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_7);
+			}
 			showHardwareLogParentOfNotFoundPanel.setLayout(new BorderLayout());
 			showHardwareLogParentOfNotFoundPanel.add(showHardwareLogNotFound);
 		}
@@ -3883,18 +3923,21 @@ public class MainFrame extends JFrame
 			jTextFieldInventoryNumber.setToolTipText(null);
 			jTextFieldOneTimePassword.setToolTipText(null);
 			jTextAreaNotes.setToolTipText(null);
-			jTextFieldDescription.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			jTextFieldInventoryNumber.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			jTextFieldOneTimePassword.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			jTextAreaNotes.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			systemUUIDField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			macAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			ipAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 
-			cbUefiBoot.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			cbWANConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			jTextFieldHostKey.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-			cbInstallByShutdown.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			if (!ConfigedMain.THEMES) {
+				jTextFieldDescription.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				jTextFieldInventoryNumber.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				jTextFieldOneTimePassword.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				jTextAreaNotes.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				systemUUIDField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				macAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				ipAddressField.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+
+				cbUefiBoot.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				cbWANConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				jTextFieldHostKey.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+				cbInstallByShutdown.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			}
 		} else {
 			jTextFieldDescription
 					.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
@@ -3903,18 +3946,20 @@ public class MainFrame extends JFrame
 			jTextFieldOneTimePassword
 					.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
 			jTextAreaNotes.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
-			jTextFieldDescription.setBackground(Globals.BACKGROUND_COLOR_3);
-			jTextFieldInventoryNumber.setBackground(Globals.BACKGROUND_COLOR_3);
-			jTextFieldOneTimePassword.setBackground(Globals.BACKGROUND_COLOR_3);
-			jTextAreaNotes.setBackground(Globals.BACKGROUND_COLOR_3);
+			if (!ConfigedMain.THEMES) {
+				jTextFieldDescription.setBackground(Globals.BACKGROUND_COLOR_3);
+				jTextFieldInventoryNumber.setBackground(Globals.BACKGROUND_COLOR_3);
+				jTextFieldOneTimePassword.setBackground(Globals.BACKGROUND_COLOR_3);
+				jTextAreaNotes.setBackground(Globals.BACKGROUND_COLOR_3);
 
-			systemUUIDField.setBackground(Globals.BACKGROUND_COLOR_3);
-			macAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
-			ipAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
-			cbUefiBoot.setBackground(Globals.BACKGROUND_COLOR_3);
-			cbWANConfig.setBackground(Globals.BACKGROUND_COLOR_3);
-			jTextFieldHostKey.setBackground(Globals.BACKGROUND_COLOR_3);
-			cbInstallByShutdown.setBackground(Globals.BACKGROUND_COLOR_3);
+				systemUUIDField.setBackground(Globals.BACKGROUND_COLOR_3);
+				macAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
+				ipAddressField.setBackground(Globals.BACKGROUND_COLOR_3);
+				cbUefiBoot.setBackground(Globals.BACKGROUND_COLOR_3);
+				cbWANConfig.setBackground(Globals.BACKGROUND_COLOR_3);
+				jTextFieldHostKey.setBackground(Globals.BACKGROUND_COLOR_3);
+				cbInstallByShutdown.setBackground(Globals.BACKGROUND_COLOR_3);
+			}
 		}
 	}
 

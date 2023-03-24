@@ -18,6 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
@@ -108,12 +109,14 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	 * @param boolean We are in progress
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
-		if (active) {
-			depotslist.setBackground(Globals.BACKGROUND_COLOR_9);
-		} else {
-			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.THEMES) {
+			if (active) {
+				depotslist.setBackground(Globals.BACKGROUND_COLOR_9);
+			} else {
+				depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			}
+			// colorize as hint that we have changed the depots selection
 		}
-		// colorize as hint that we have changed the depots selection
 	}
 
 	private void initComponents() {
@@ -125,7 +128,10 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		}
 		labelDepotServer.setOpaque(false);
 
-		labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.THEMES) {
+			labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
+
 		labelDepotServer.setFont(Globals.defaultFontStandardBold);
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
@@ -146,7 +152,11 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		if (!multidepot) {
 			searchPane.setEnabled(false);
 		}
-		searchPane.setBackground(getMyColor());
+
+		if (!ConfigedMain.THEMES) {
+			searchPane.setBackground(getMyColor());
+		}
+
 		searchPane.setNarrow(true);
 
 		// not visible in this panel
@@ -159,7 +169,10 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
 
 		depotslist.setFont(Globals.defaultFont);
-		depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+
+		if (!ConfigedMain.THEMES) {
+			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 	}
 
 	private void layouting() {

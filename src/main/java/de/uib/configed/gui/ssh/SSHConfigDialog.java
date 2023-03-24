@@ -213,9 +213,11 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 	void init() {
 		Logging.info(this, "init ");
-		connectionPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		settingsPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.THEMES) {
+			connectionPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			settingsPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		getContentPane().add(connectionPanel, BorderLayout.NORTH);
 		getContentPane().add(settingsPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);

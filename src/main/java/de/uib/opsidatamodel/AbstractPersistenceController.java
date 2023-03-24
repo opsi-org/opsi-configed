@@ -402,8 +402,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Map<String, Integer> getInstalledOsOverview();
 
-	public abstract Map<String, Object> getLicencingInfo();
-
 	public abstract List<Map<String, Object>> getModules();
 
 	public abstract Map<String, String> sessionInfo(String[] clientIds);
@@ -570,6 +568,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	// (productId -> (infoKey -> info))
 	public abstract Map<String, Map<String, Object>> getProductGlobalInfos(String depotId);
 
+	public abstract Map<String, Object> getProductInfos(String productId, String clientId);
+
 	public abstract List<List<Object>> getProductRows();
 
 	public abstract Map<String, Map<String, List<String>>> getProduct2VersionInfo2Depots();
@@ -583,6 +583,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract void retrieveProductDependencies();
 
 	public abstract Set<String> extendToDependentProducts(final Set<String> startProductSet, final String depot);
+
+	public abstract Set<String> getMessagebusConnectedClients();
 
 	// intersection of the values of the clients
 	public abstract List<String> getCommonProductPropertyValues(List<String> clients, String product, String property);
@@ -867,7 +869,9 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract void opsiLicencingInfoRequestRefresh();
 
-	public abstract JSONObject getOpsiLicencingInfo();
+	public abstract JSONObject getOpsiLicencingInfoOpsiAdmin();
+
+	public abstract Map<String, Object> getOpsiLicencingInfoNoOpsiAdmin();
 
 	public abstract String getCustomer();
 

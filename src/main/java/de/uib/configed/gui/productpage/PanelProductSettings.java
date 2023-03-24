@@ -1,5 +1,6 @@
 package de.uib.configed.gui.productpage;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -79,7 +80,10 @@ import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.InstallationInfo;
+import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
+import de.uib.opsidatamodel.productstate.TargetConfiguration;
+import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
@@ -89,6 +93,7 @@ import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
+import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.gui.AdaptingCellEditorValuesByIndex;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.DynamicCellEditor;
@@ -203,7 +208,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.setPreferredSize(new Dimension(FRAME_WIDTH_LEFTHANDED, FRAME_HEIGHT));
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		tableProducts.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.THEMES) {
+			tableProducts.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 		tableProducts.setShowHorizontalLines(true);
 		tableProducts.setGridColor(Globals.PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR);
 		tableProducts.setRowHeight(Globals.TABLE_ROW_HEIGHT);
@@ -286,7 +293,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir, false,
+				TargetConfiguration.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_TARGET_CONFIGURATION) + ": ");
 
 		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
@@ -294,8 +301,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		installationStatusTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2TextColor(),
-				de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir, false,
+				InstallationStatus.getLabel2TextColor(), InstallationStatus.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_INSTALLATION_STATUS) + ": ");
 
 		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
@@ -362,8 +368,14 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					if (val.equals(InstallationStateTableModel.CONFLICT_STRING)
 							|| val.equals(InstallationStateTableModel.UNEQUAL_ADD_STRING
 									+ InstallationStateTableModel.CONFLICT_STRING)) {
-						c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR);
-						c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
+						if (!ConfigedMain.THEMES) {
+							c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR);
+							c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
+						} else {
+							c.setBackground(Color.PINK);
+							c.setForeground(Color.PINK);
+						}
+
 					} else {
 
 						String productId = (String) table.getModel().getValueAt(table.convertRowIndexToModel(row), 0);
@@ -382,7 +394,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 						if (!val.equals(serverProductVersion)) {
 							c.setForeground(Globals.FAILED_COLOR);
-
 						}
 					}
 				}
@@ -668,7 +679,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 				switch (jTable.getColumnName(i)) {
 				case "Stand":
-					if (!s.equals("not_installed")) {
+					if (!s.equals(InstallationStatus.KEY_NOT_INSTALLED)) {
 						dontStrippIt = true;
 					}
 					break;
@@ -892,7 +903,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			targetCombo.setRenderer(standardListCellRenderer);
 
 			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm,
-					de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir));
+					TargetConfiguration.getLabel2DisplayLabel(), iconsDir));
 			targetColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			targetColumn.setCellRenderer(targetConfigurationTableCellRenderer);
 		}
@@ -909,7 +920,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			statesCombo.setRenderer(standardListCellRenderer);
 
 			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm,
-					de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir));
+					InstallationStatus.getLabel2DisplayLabel(), iconsDir));
 			statusColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			statusColumn.setCellRenderer(installationStatusTableCellRenderer);
 		}
@@ -966,8 +977,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
 			if (sorter instanceof DefaultRowSorter) {
-				((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex,
-						new de.uib.utilities.IntComparatorForStrings());
+				((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new IntComparatorForStrings());
 			}
 
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
@@ -981,7 +991,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
-			((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new de.uib.utilities.IntComparatorForStrings());
+			((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new IntComparatorForStrings());
 
 		}
 
@@ -1041,7 +1051,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			String productVersion, Collection<Map<String, Object>> storableProductProperties,
 			Map editableProductProperties,
 			// editmappanelx
-			Map<String, de.uib.utilities.table.ListCellOptions> productpropertyOptionsMap,
+			Map<String, ListCellOptions> productpropertyOptionsMap,
 			ProductpropertiesUpdateCollection updateCollection) {
 		infoPane.setGrey(false);
 		infoPane.setProductId(productID);

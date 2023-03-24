@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
@@ -30,7 +31,9 @@ public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRender
 		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
 				column);
 
-		cell.setBackground(Globals.defaultTableHeaderBgColor);
+		if (!ConfigedMain.THEMES) {
+			cell.setBackground(Globals.defaultTableHeaderBgColor);
+		}
 
 		JComponent jc = (JComponent) cell;
 

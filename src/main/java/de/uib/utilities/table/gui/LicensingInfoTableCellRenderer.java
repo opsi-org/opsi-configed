@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.logging.Logging;
@@ -68,26 +69,36 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			}
 
 			if (columnName.equals(latestChange)) {
-				jc.setBackground(Globals.CHECK_COLOR);
+				if (!ConfigedMain.THEMES) {
+					jc.setBackground(Globals.CHECK_COLOR);
+				}
 
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
-					jc.setBackground(Globals.darkOrange);
+					if (!ConfigedMain.THEMES) {
+						jc.setBackground(Globals.darkOrange);
+					}
 					jc.setToolTipText(
 							"<html>" + Configed.getResourceValue("LicensingInfo.warning.close_to_limit") + "<br>"
 									+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
-					jc.setBackground(Globals.WARNING_COLOR);
+					if (!ConfigedMain.THEMES) {
+						jc.setBackground(Globals.WARNING_COLOR);
+					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
-					jc.setBackground(Globals.darkOrange);
+					if (!ConfigedMain.THEMES) {
+						jc.setBackground(Globals.darkOrange);
+					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_OVER)) {
-					jc.setBackground(Globals.WARNING_COLOR);
+					if (!ConfigedMain.THEMES) {
+						jc.setBackground(Globals.WARNING_COLOR);
+					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 				}

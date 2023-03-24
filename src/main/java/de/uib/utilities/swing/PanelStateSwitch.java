@@ -30,6 +30,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -194,7 +195,9 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	}
 
 	private void initLayout() {
-		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.THEMES) {
+			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		JLabel labelTitle = new JLabel("");
 		if (title != null) {

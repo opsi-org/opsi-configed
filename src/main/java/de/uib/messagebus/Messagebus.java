@@ -9,6 +9,7 @@ import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,9 +142,23 @@ public class Messagebus {
 		return sslFactory;
 	}
 
-	private void makeChannelSubscriptionRequest(String channel) {
+	public void makeStandardChannelSubscriptions(ConfigedMain configedMain) {
+		messagebusWebSocket.setConfigedMain(configedMain);
+
 		List<String> channels = new ArrayList<>();
-		channels.add(String.format("session:%s", channel));
+
+		channels.add("event:host_connected");
+		channels.add("event:host_disconnected");
+
+		channels.add("event:host_created");
+		channels.add("event:host_deleted");
+
+		channels.add("event:productOnClient_updated");
+
+		makeChannelSubscriptionRequest(channels);
+	}
+
+	private void makeChannelSubscriptionRequest(List<String> channels) {
 
 		Map<String, Object> data = new HashMap<>();
 		data.put("type", "channel_subscription_request");
@@ -169,7 +184,7 @@ public class Messagebus {
 	public void connectTerminal() {
 		String terminalId = UUID.randomUUID().toString();
 
-		makeChannelSubscriptionRequest(terminalId);
+		makeChannelSubscriptionRequest(Collections.singletonList("session:" + terminalId));
 
 		Terminal terminal = Terminal.getInstance();
 		terminal.setMessagebus(this);

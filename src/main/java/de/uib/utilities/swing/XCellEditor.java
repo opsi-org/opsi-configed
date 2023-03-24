@@ -8,6 +8,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class XCellEditor extends DefaultCellEditor {
@@ -36,8 +37,10 @@ public class XCellEditor extends DefaultCellEditor {
 			foreground = Globals.X_CELL_EDITOR_NOT_SELECTED_FOREGROUND;
 		}
 
-		c.setBackground(background);
-		c.setForeground(foreground);
+		if (!ConfigedMain.THEMES) {
+			c.setBackground(background);
+			c.setForeground(foreground);
+		}
 
 		return c;
 	}

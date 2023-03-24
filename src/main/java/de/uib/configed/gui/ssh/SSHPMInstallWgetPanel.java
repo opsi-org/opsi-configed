@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.CommandWget;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
@@ -74,7 +75,9 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 		jButtonAutoCompletion = autocompletion.getButton();
 
 		jTextFieldURL = new JTextField(urlDefText);
-		jTextFieldURL.setBackground(Globals.BACKGROUND_COLOR_9);
+		if (!ConfigedMain.THEMES) {
+			jTextFieldURL.setBackground(Globals.BACKGROUND_COLOR_9);
+		}
 
 		jTextFieldURL.addFocusListener(new FocusAdapter() {
 			@Override
@@ -191,7 +194,9 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-		this.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.THEMES) {
+			this.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

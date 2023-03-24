@@ -42,7 +42,9 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 	private void initComponents() {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
 		jLabelProductProperties.setFont(Globals.defaultFontBold);
-		jLabelProductProperties.setForeground(Globals.lightBlack);
+		if (!ConfigedMain.THEMES) {
+			jLabelProductProperties.setForeground(Globals.lightBlack);
+		}
 
 		buttonSetValuesFromServerDefaults = new IconButton(
 				Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromServerDefaults"),
@@ -103,7 +105,9 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	@Override
 	public void setTitlePanelActivated(boolean activated) {
-		jLabelProductProperties.setForeground(activated ? Globals.lightBlack : Globals.greyed);
+		if (!ConfigedMain.THEMES) {
+			jLabelProductProperties.setForeground(activated ? Globals.lightBlack : Globals.greyed);
+		}
 		buttonSetValuesFromServerDefaults.setEnabled(activated);
 		buttonRemoveSpecificValues.setEnabled(activated);
 	}

@@ -87,7 +87,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		super.pack();
 		super.setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		super.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.THEMES) {
+			super.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		super.setVisible(true);
 
@@ -155,9 +157,11 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-		winAuthPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.THEMES) {
+			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			winAuthPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		getContentPane().add(inputPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 

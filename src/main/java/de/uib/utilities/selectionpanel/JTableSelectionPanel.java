@@ -104,7 +104,9 @@ public class JTableSelectionPanel extends JPanel
 
 		scrollpane = new JScrollPane();
 
-		scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.THEMES) {
+			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		table = new JTable() {
 			@Override
@@ -168,7 +170,10 @@ public class JTableSelectionPanel extends JPanel
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
 		fieldSearch.setFont(Globals.defaultFont);
 
-		fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
+		if (!ConfigedMain.THEMES) {
+			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
+		}
+
 		fieldSearch.getCaret().setBlinkRate(0);
 		fieldSearch.getDocument().addDocumentListener(this);
 
@@ -321,7 +326,9 @@ public class JTableSelectionPanel extends JPanel
 			JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 
 			JPanel mdPanel = new JPanel();
-			mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			if (!ConfigedMain.THEMES) {
+				mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			}
 
 			GroupLayout mdLayout = new GroupLayout(mdPanel);
 			mdPanel.setLayout(mdLayout);

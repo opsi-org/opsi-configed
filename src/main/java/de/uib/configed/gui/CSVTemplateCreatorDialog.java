@@ -80,7 +80,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "allLayout");
 
-		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.THEMES) {
+			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
+
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
@@ -88,7 +91,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+		if (!ConfigedMain.THEMES) {
+			centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+		}
 		centerPanel.setOpaque(true);
 
 		southPanel = createSouthPanel();
@@ -138,7 +143,11 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+
+		if (!ConfigedMain.THEMES) {
+			southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+		}
+
 		southPanel.setOpaque(true);
 
 		return southPanel;
@@ -359,7 +368,10 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		}
 
 		private void init(ListModel<JCheckBox> model) {
-			setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+			if (!ConfigedMain.THEMES) {
+				setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+			}
+
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
 			CheckBoxList list = new CheckBoxList(model);
@@ -402,8 +414,12 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				@Override
 				public Component getListCellRendererComponent(JList<? extends JCheckBox> list, JCheckBox checkbox,
 						int index, boolean isSelected, boolean cellHasFocus) {
-					checkbox.setBackground(isSelected ? getSelectionBackground() : getBackground());
-					checkbox.setForeground(isSelected ? getSelectionForeground() : getForeground());
+
+					if (!ConfigedMain.THEMES) {
+						checkbox.setBackground(isSelected ? getSelectionBackground() : getBackground());
+						checkbox.setForeground(isSelected ? getSelectionForeground() : getForeground());
+					}
+
 					checkbox.setEnabled(isEnabled());
 					checkbox.setFont(getFont());
 					checkbox.setFocusPainted(false);

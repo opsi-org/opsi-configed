@@ -13,6 +13,7 @@ import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
@@ -28,9 +29,11 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 	public DepotsList(AbstractPersistenceController persist) {
 		this.persist = persist;
-		super.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
-		super.setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
-		super.setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
+		if (!ConfigedMain.THEMES) {
+			super.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+			super.setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
+			super.setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
+		}
 
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		myListCellRenderer = new MyListCellRenderer(persist);
@@ -151,7 +154,10 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 				String depot = (String) value;
 				if (!persist.hasDepotPermission(depot)) {
-					((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
+					if (!ConfigedMain.THEMES) {
+						((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
+					}
+
 					((JLabel) jc).setToolTipText(
 							"Depot " + depot + " " + Configed.getResourceValue("Permission.depot.not_accessible"));
 				} else {

@@ -100,7 +100,9 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jLabelProductID.setFont(Globals.defaultFontStandardBold);
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
-		jLabelProductID.setBackground(null);
+		if (!ConfigedMain.THEMES) {
+			jLabelProductID.setBackground(null);
+		}
 
 		jLabelProductName.setFont(Globals.defaultFontBold);
 
@@ -111,17 +113,23 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jLabelProductVersion.setFont(Globals.defaultFontBold);
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
-		jLabelProductVersion.setBackground(null);
+		if (!ConfigedMain.THEMES) {
+			jLabelProductVersion.setBackground(null);
+		}
 
 		jTextAreaProductInfo.setFont(Globals.defaultFont);
-		jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.THEMES) {
+			jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		jScrollPaneProductInfo.setViewportView(jTextAreaProductInfo);
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		jTextAreaProductAdvice.setFont(Globals.defaultFont);
-		jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
+		if (!ConfigedMain.THEMES) {
+			jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
 
 		jScrollPaneProductAdvice.setViewportView(jTextAreaProductAdvice);
 		jScrollPaneProductAdvice.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -129,21 +137,29 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 		dependenciesTextLabel.setText(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
 		dependenciesTextLabel.setFont(Globals.defaultFontBold);
-		dependenciesTextLabel.setForeground(Globals.greyed);
+		if (!ConfigedMain.THEMES) {
+			dependenciesTextLabel.setForeground(Globals.greyed);
+		}
 
 		depotForDependenciesLabel.setFont(Globals.defaultFontBold);
-		depotForDependenciesLabel.setForeground(Globals.greyed);
+		if (!ConfigedMain.THEMES) {
+			depotForDependenciesLabel.setForeground(Globals.greyed);
+		}
 
 		dependenciesActivateButton.setText("▶");
 		dependenciesActivateButton.setFont(Globals.defaultFont);
-		dependenciesActivateButton.setForeground(Globals.lightBlack);
+		if (!ConfigedMain.THEMES) {
+			dependenciesActivateButton.setForeground(Globals.lightBlack);
+		}
 		dependenciesActivateButton.addActionListener(this);
 
 		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 
 		propertiesActivateButton.setText("▼");
 		propertiesActivateButton.setFont(Globals.defaultFont);
-		propertiesActivateButton.setForeground(Globals.lightBlack);
+		if (!ConfigedMain.THEMES) {
+			propertiesActivateButton.setForeground(Globals.lightBlack);
+		}
 		propertiesActivateButton.addActionListener(this);
 
 		panelEditProperties.setVisible(isPanelEditPropertiesVisible);
@@ -247,14 +263,18 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 			isPanelProductDependenciesVisible = !isPanelProductDependenciesVisible;
 
 			dependenciesActivateButton.setText(isPanelProductDependenciesVisible ? "▼" : "▶");
-			dependenciesTextLabel
-					.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
-							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
+			if (!ConfigedMain.THEMES) {
+				dependenciesTextLabel
+						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
+								: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
+			}
 
-			depotForDependenciesLabel.setEnabled(isPanelProductDependenciesVisible);
-			depotForDependenciesLabel
-					.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
-							: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
+			if (!ConfigedMain.THEMES) {
+				depotForDependenciesLabel.setEnabled(isPanelProductDependenciesVisible);
+				depotForDependenciesLabel
+						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
+								: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
+			}
 
 			panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 		} else if (event.getSource() == propertiesActivateButton) {

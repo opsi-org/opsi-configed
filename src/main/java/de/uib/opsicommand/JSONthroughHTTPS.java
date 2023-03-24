@@ -61,6 +61,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	private static final int EXPECTED_SERVER_VERSION_LENGTH = 4;
 
 	private static int[] serverVersion = { 0, 0, 0, 0 };
+	private static boolean isOpsi43;
 	private static String serverVersionString = "4.2";
 	private static ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
 
@@ -114,6 +115,10 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			Globals.disableCertificateVerification = true;
 		}
 
+		if (isServerVersionAtLeast("4.3")) {
+			isOpsi43 = true;
+		}
+
 		Logging.info("we set the server version: " + serverVersionString);
 		Logging.info("we use now gzip: " + gzipTransmission + " or lz4: " + lz4Transmission);
 		Logging.info("is certificateVerification disabled? " + Globals.disableCertificateVerification);
@@ -125,9 +130,13 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	 * 
 	 * @arg compareVersion version to compare to of format x.y.z...
 	 */
-	public static boolean isServerVersionAtLeast(String compareVersion) {
+	private static boolean isServerVersionAtLeast(String compareVersion) {
 
 		return serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
+	}
+
+	public static boolean isOpsi43() {
+		return isOpsi43;
 	}
 
 	public static String getServerVersion() {

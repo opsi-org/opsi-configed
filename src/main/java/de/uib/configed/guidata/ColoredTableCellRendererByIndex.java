@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.swing.JTable;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.TableCellRendererByIndex {
@@ -40,8 +41,13 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 		}
 
 		if (value.equals(InstallationStateTableModel.CONFLICT_STRING)) {
-			c.setBackground(Globals.BACKGROUND_COLOR_4);
-			c.setForeground(Globals.BACKGROUND_COLOR_4);
+			if (!ConfigedMain.THEMES) {
+				c.setBackground(Globals.BACKGROUND_COLOR_4);
+				c.setForeground(Globals.BACKGROUND_COLOR_4);
+			} else {
+				c.setBackground(Color.PINK);
+				c.setForeground(Color.PINK);
+			}
 		} else {
 			if (mapOfTextColors != null && value instanceof String) {
 				Color textcolor = mapOfTextColors.get(value);
@@ -49,7 +55,9 @@ public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.
 					if (textcolor.equals(Globals.INVISIBLE)) {
 						c.setForeground(c.getBackground());
 					} else {
-						c.setForeground(textcolor);
+						if (!ConfigedMain.THEMES || !isSelected) {
+							c.setForeground(textcolor);
+						}
 					}
 				}
 			}

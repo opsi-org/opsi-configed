@@ -35,7 +35,9 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		super.setProportionOfTotalWidth(0.5);
 
-		super.setForeground(Globals.blue);
+		if (!ConfigedMain.THEMES) {
+			super.setForeground(Globals.blue);
+		}
 
 		textPanes = new LogPane[idents.length];
 

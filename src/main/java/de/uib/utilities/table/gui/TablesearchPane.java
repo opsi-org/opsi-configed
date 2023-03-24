@@ -275,7 +275,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setFieldBackground(Color color) {
-		fieldSearch.setBackground(color);
+		if (!ConfigedMain.THEMES) {
+			fieldSearch.setBackground(color);
+		}
 	}
 
 	@Override
@@ -342,7 +344,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initComponents() {
-		setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.THEMES) {
+			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		navPane = new AbstractNavigationPanel() {
 
@@ -417,7 +421,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
 
 		fieldSearch.setFont(Globals.defaultFontBig);
-		fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
+		if (!ConfigedMain.THEMES) {
+			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
+		}
 
 		fieldSearch.getCaret().setBlinkRate(BLINK_RATE);
 		fieldSearch.setToolTipText(Configed.getResourceValue("SearchPane.searchField.toolTip"));

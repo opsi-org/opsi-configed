@@ -48,6 +48,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellRenderer<String> {
@@ -159,8 +160,10 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 			foreground = Globals.nimbusSelectionBackground;
 		}
 
-		setBackground(background);
-		setForeground(foreground);
+		if (!ConfigedMain.THEMES) {
+			setBackground(background);
+			setForeground(foreground);
+		}
 
 		String selectedString = "";
 		ImageIcon selectedIcon = null;

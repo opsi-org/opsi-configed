@@ -47,13 +47,14 @@ public class FDriverUpload extends SecondaryFrame {
 		layout.setHorizontalGroup(layout.createParallelGroup().addComponent(panelDriverUpload, 100,
 				GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
-		Containership containerShipAll = new Containership(getContentPane());
-		containerShipAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },
-				JPanel.class);
+		if (!ConfigedMain.THEMES) {
+			Containership containerShipAll = new Containership(getContentPane());
+			containerShipAll.doForAllContainedCompisOfClass("setBackground",
+					new Object[] { Globals.BACKGROUND_COLOR_7 }, JPanel.class);
 
-		containerShipAll.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
-				JTextComponent.class);
-
+			containerShipAll.doForAllContainedCompisOfClass("setBackground",
+					new Object[] { Globals.BACKGROUND_COLOR_3 }, JTextComponent.class);
+		}
 	}
 
 	public void setUploadParameters(String byAuditPath) {

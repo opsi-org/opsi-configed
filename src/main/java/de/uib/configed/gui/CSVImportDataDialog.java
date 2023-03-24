@@ -70,15 +70,21 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "allLayout");
 
-		allpane.setBackground(Globals.BACKGROUND_COLOR_7);
-		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
+		if (!ConfigedMain.THEMES) {
+			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
+			allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
+		}
+
 		allpane.setBorder(BorderFactory.createEtchedBorder());
 
 		if (centerPanel == null) {
 			centerPanel = new JPanel();
 		}
 
-		centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+		if (!ConfigedMain.THEMES) {
+			centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+		}
+
 		centerPanel.setOpaque(true);
 
 		northPanel = createNorthPanel();
@@ -114,7 +120,11 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	private JPanel createNorthPanel() {
 		JPanel northPanel = new JPanel();
 		northPanel.setOpaque(false);
-		northPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+
+		if (!ConfigedMain.THEMES) {
+			northPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+		}
+
 		northPanel.setOpaque(true);
 
 		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
@@ -314,7 +324,10 @@ public class CSVImportDataDialog extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
-		southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+
+		if (!ConfigedMain.THEMES) {
+			southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
+		}
 		southPanel.setOpaque(true);
 
 		return southPanel;

@@ -65,7 +65,9 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	private void initFrame() {
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
-		setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.THEMES) {
+			setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setSize(new java.awt.Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH + 100,
 				Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100));
@@ -98,12 +100,16 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			JPanel workbenchpanel = new JPanel();
 			mainpanel = new JPanel();
 			JPanel buttonPanel = new JPanel();
-			workbenchpanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			mainpanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			if (!ConfigedMain.THEMES) {
+				workbenchpanel.setBackground(Globals.BACKGROUND_COLOR_7);
+				mainpanel.setBackground(Globals.BACKGROUND_COLOR_7);
+				buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			}
 
 			JPanel mainButtonPanel = new JPanel();
-			mainButtonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			if (!ConfigedMain.THEMES) {
+				mainButtonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			}
 			mainButtonPanel.setLayout(new BorderLayout());
 			mainButtonPanel.add(mainpanel, BorderLayout.NORTH);
 			mainButtonPanel.add(buttonPanel, BorderLayout.SOUTH);

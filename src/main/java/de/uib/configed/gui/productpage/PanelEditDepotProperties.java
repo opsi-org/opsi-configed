@@ -120,8 +120,10 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				.addComponent(buttonSelectWithEqualProperties, 0, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(buttonSelectAll, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-		buttonSelectAll.setForeground(Globals.blue);
-		buttonSelectWithEqualProperties.setForeground(Globals.blue);
+		if (!ConfigedMain.THEMES) {
+			buttonSelectAll.setForeground(Globals.blue);
+			buttonSelectWithEqualProperties.setForeground(Globals.blue);
+		}
 
 		// jLabelProductProperties = new JLabel (
 
@@ -185,8 +187,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 	@Override
 	public void setTitlePanelActivated(boolean actived) {
-		jLabelEditDepotProductProperties.setForeground(actived ? Globals.lightBlack : Globals.greyed);
-
+		if (!ConfigedMain.THEMES) {
+			jLabelEditDepotProductProperties.setForeground(actived ? Globals.lightBlack : Globals.greyed);
+		}
 	}
 
 	public void clearDepotListData() {

@@ -105,8 +105,10 @@ import de.uib.configed.type.RemoteControl;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
+import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandNeedParameter;
@@ -134,6 +136,7 @@ import de.uib.utilities.swing.tabbedpane.TabClient;
 import de.uib.utilities.swing.tabbedpane.TabController;
 import de.uib.utilities.swing.tabbedpane.TabbedFrame;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
+import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.ExternalSource;
@@ -153,8 +156,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_PRODUCT_PROPERTIES = 7;
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
-	// Dashboard and other features for opsi 4.3 disabled
-	public static final boolean OPSI_4_3 = false;
+	// Are themes enabled?
+	public static final boolean THEMES = false;
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
@@ -365,6 +368,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private int reloadCounter;
 
+	private Messagebus messagebus;
+
+	private Set<String> connectedHostsByMessagebus;
+
 	boolean sessioninfoFinished;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
@@ -472,6 +479,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		});
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
+
+		setReachableInfo(selectedClients);
 	}
 
 	private static String getSavedStatesDefaultLocation() {
@@ -626,7 +635,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void initDashInfo() {
-		if (!OPSI_4_3) {
+		if (!JSONthroughHTTPS.isOpsi43()) {
 			Logging.info(this, "initDashInfo not enabled");
 			return;
 		}
@@ -638,6 +647,61 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		} else {
 			dashboard.show();
 		}
+	}
+
+	private void initMessagebus() {
+		if (connectMessagebus()) {
+			messagebus.makeStandardChannelSubscriptions(this);
+		} else {
+			Logging.error(this, "could not connect to messagebus...");
+		}
+
+	}
+
+	public void addClientToTable(String clientId) {
+		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF CLIENT ADDED
+	}
+
+	public void removeClientFromTable(String clientId) {
+		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF CLIENT DELETED
+	}
+
+	public void updateProduct(Map<?, ?> data) {
+		String productId = (String) data.get("productId");
+		String clientId = (String) data.get("clientId");
+
+		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF PRODUCT UPDATED
+	}
+
+	public void addClientToConnectedList(String clientId) {
+		connectedHostsByMessagebus.add(clientId);
+		updateConnectionStatusInTable(clientId);
+	}
+
+	public void removeClientFromConnectedList(String clientId) {
+		connectedHostsByMessagebus.remove(clientId);
+		updateConnectionStatusInTable(clientId);
+	}
+
+	public boolean connectMessagebus() {
+		if (messagebus == null) {
+			messagebus = new Messagebus();
+		}
+
+		try {
+
+			Logging.info(this, "connect to messagebus");
+			return messagebus.connect();
+		} catch (InterruptedException e) {
+			Logging.error(this, "could not connect to messagebus", e);
+			Thread.currentThread().interrupt();
+		}
+
+		return false;
+	}
+
+	public void connectTerminal() {
+		messagebus.connectTerminal();
 	}
 
 	public void loadDataAndGo() {
@@ -705,6 +769,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		hostConfigsDataChangedKeeper = new HostConfigsDataChangedKeeper();
 		allControlMultiTablePanels = new ArrayList<>();
 
+		connectedHostsByMessagebus = persist.getMessagebusConnectedClients();
+
+		if (JSONthroughHTTPS.isOpsi43()) {
+			initMessagebus();
+		}
 	}
 
 	protected void initSpecialTableProviders() {
@@ -1268,7 +1337,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// we correct the result of the first selection
 		depotsListSelectionChanged = false;
-		depotsList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+
+		if (!THEMES) {
+			depotsList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		// create client selection panel
 		selectionPanel = new JTableSelectionPanel(this) {
@@ -1701,9 +1773,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			Logging.info(this, "buildPclistTableModel host_displayFields " + hostDisplayFields);
 
-			for (String key : pclist.keySet()) {
+			for (String clientName : pclist.keySet()) {
 
-				HostInfo pcinfo = pcinfos.get(key);
+				HostInfo pcinfo = pcinfos.get(clientName);
 				if (pcinfo == null) {
 					pcinfo = new HostInfo();
 				}
@@ -1711,12 +1783,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Map<String, Object> rowmap = pcinfo.getDisplayRowMap0();
 
 				String sessionValue = "";
-				if (sessionInfo.get(key) != null) {
-					sessionValue = "" + sessionInfo.get(key);
+				if (sessionInfo.get(clientName) != null) {
+					sessionValue = "" + sessionInfo.get(clientName);
 				}
 
 				rowmap.put(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL, sessionValue);
-				rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, reachableInfo.get(key));
+				rowmap.put(HostInfo.CLIENT_CONNECTED_DISPLAY_FIELD_LABEL, getConnectionInfoForClient(clientName));
 
 				List<Object> rowItems = new ArrayList<>();
 
@@ -1726,7 +1798,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					}
 				}
 
-				if (key.equals("fscnoteb1.uib.local")) {
+				if (clientName.equals("fscnoteb1.uib.local")) {
 					Logging.info(this, "*** host_displayFields size, content " + hostDisplayFields.size() + ": "
 							+ hostDisplayFields);
 					Logging.info(this, "*** rowmap size, content " + rowmap.size() + ": " + rowmap);
@@ -1977,11 +2049,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			column.setMaxWidth(ICON_COLUMN_MAX_WIDTH);
 
-			column.setCellRenderer(new BooleanIconTableCellRenderer(
-
-					Globals.createImageIcon("images/new_network-connect2.png", ""),
-					Globals.createImageIcon("images/new_network-disconnect.png", ""), false));
-
+			column.setCellRenderer(new ConnectionStatusTableCellRenderer());
 		}
 
 		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get(HostInfo.CLIENT_UEFI_BOOT_DISPLAY_FIELD_LABEL))) {
@@ -4167,8 +4235,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		final String[] selClients = selectedClients;
 
-		Logging.info(this, "we have sel clients " + selClients.length);
-
 		// we put this into a thread since it may never end in case of a name resolving
 		// problem
 		new Thread() {
@@ -4193,6 +4259,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					Logging.info(this, "we have sel clients " + selClients.length);
 					reachableInfo.putAll(persist.reachableInfo(getSelectedClients()));
 				} else {
+					Logging.info(this, "we don't have selected clients, so we check reachable for all clients");
 					reachableInfo = persist.reachableInfo(null);
 				}
 
@@ -4200,25 +4267,69 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				mainFrame.iconButtonReachableInfo.setEnabled(true);
 
-				// update column
-				if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientConnected"))) {
-					AbstractTableModel model = selectionPanel.getTableModel();
-
-					int col = model
-							.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
-
-					for (int row = 0; row < model.getRowCount(); row++) {
-						String clientId = (String) model.getValueAt(row, 0);
-
-						model.setValueAt(reachableInfo.get(clientId), row, col);
-					}
-
-					model.fireTableDataChanged();
-
-					setSelectedClientsOnPanel(selClients);
-				}
+				setReachableInfo(selClients);
 			}
 		}.start();
+	}
+
+	/*
+	 * gets the connection String for the client, depending on whether connected
+	 * to the messagebus, or reachable or not
+	 */
+	private Object getConnectionInfoForClient(String clientName) {
+		if (connectedHostsByMessagebus.contains(clientName)) {
+			return ConnectionStatusTableCellRenderer.CONNECTED_BY_MESSAGEBUS;
+		} else {
+			return getConnectionInfoStateForBoolean(reachableInfo.get(clientName));
+		}
+	}
+
+	private static String getConnectionInfoStateForBoolean(Object b) {
+		if (!(b instanceof Boolean)) {
+			return ConnectionStatusTableCellRenderer.UNKNOWN;
+		} else if (Boolean.TRUE.equals(b)) {
+			return ConnectionStatusTableCellRenderer.REACHABLE;
+		} else {
+			return ConnectionStatusTableCellRenderer.NOT_REACHABLE;
+		}
+	}
+
+	private void updateConnectionStatusInTable(String clientName) {
+
+		AbstractTableModel model = selectionPanel.getTableModel();
+
+		int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+
+		for (int row = 0; row < model.getRowCount(); row++) {
+
+			if (model.getValueAt(row, 0).equals(clientName)) {
+				model.setValueAt(getConnectionInfoForClient(clientName), row, col);
+
+				model.fireTableCellUpdated(row, col);
+				return;
+			}
+		}
+		Logging.warning(this, "could not update connectionStatus for client " + clientName + ": Not found");
+	}
+
+	private void setReachableInfo(String[] selClients) {
+		// update column
+		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientConnected"))) {
+			AbstractTableModel model = selectionPanel.getTableModel();
+
+			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
+
+			for (int row = 0; row < model.getRowCount(); row++) {
+
+				String clientId = (String) model.getValueAt(row, 0);
+
+				model.setValueAt(getConnectionInfoForClient(clientId), row, col);
+			}
+
+			model.fireTableDataChanged();
+
+			setSelectedClientsOnPanel(selClients);
+		}
 	}
 
 	public void getSessionInfo() {
@@ -4277,7 +4388,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 								mainFrame.iconButtonSessionInfo.setEnabled(true);
 
 								// update column
-								if (Boolean.TRUE.equals(persist.getHostDisplayFields().get("clientSessionInfo"))) {
+								if (Boolean.TRUE.equals(persist.getHostDisplayFields()
+										.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
 									AbstractTableModel model = selectionPanel.getTableModel();
 
 									int col = model.findColumn(Configed
@@ -4285,7 +4397,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 									for (int row = 0; row < model.getRowCount(); row++) {
 										String clientId = (String) model.getValueAt(row, 0);
-
 										model.setValueAt(sessionInfo.get(clientId), row, col);
 									}
 

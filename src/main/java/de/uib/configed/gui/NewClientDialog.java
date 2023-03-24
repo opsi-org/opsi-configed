@@ -188,7 +188,9 @@ public final class NewClientDialog extends FGeneralDialog {
 		JPanel panel = new JPanel();
 		GroupLayout gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
-		panel.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.THEMES) {
+			panel.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		JLabel jCSVTemplateLabel = new JLabel(Configed.getResourceValue("NewClientDialog.csvTemplateLabel"));
 		JButton jCSVTemplateButton = new JButton(Configed.getResourceValue("NewClientDialog.csvTemplateButton"));
@@ -297,14 +299,14 @@ public final class NewClientDialog extends FGeneralDialog {
 
 		JLabel jLabelSystemUUID = new JLabel();
 		jLabelSystemUUID.setText(Configed.getResourceValue("NewClientDialog.SystemUUID"));
-		jLabelSystemUUID.setVisible(ConfigedMain.OPSI_4_3);
+		jLabelSystemUUID.setVisible(ConfigedMain.THEMES);
 		systemUUIDField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true), "",
 				36);
 
 		systemUUIDField.addKeyListener(this);
 		systemUUIDField.addMouseListener(this);
-		systemUUIDField.setVisible(ConfigedMain.OPSI_4_3);
+		systemUUIDField.setVisible(ConfigedMain.THEMES);
 
 		JLabel jLabelMacAddress = new JLabel();
 		jLabelMacAddress.setText(Configed.getResourceValue("NewClientDialog.HardwareAddress"));

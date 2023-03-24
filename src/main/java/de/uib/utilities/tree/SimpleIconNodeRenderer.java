@@ -9,6 +9,7 @@ import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
@@ -21,16 +22,20 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	public SimpleIconNodeRenderer() {
 		super();
 
-		super.setOpaque(true);
+		if (!ConfigedMain.THEMES) {
+			super.setOpaque(true);
+		}
 
 		standard = Globals.defaultFontBig;
 
 		emphasized = Globals.defaultFontStandardBold;
 
 		super.setFont(standard);
-		super.setForeground(Globals.lightBlack);
-		super.setTextSelectionColor(Globals.lightBlack);
-		super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
+		if (!ConfigedMain.THEMES) {
+			super.setForeground(Globals.lightBlack);
+			super.setTextSelectionColor(Globals.lightBlack);
+			super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
+		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
 		super.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
 	}
@@ -38,6 +43,8 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
+
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
 		if (value instanceof SimpleIconNode) {
 
@@ -60,13 +67,14 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 				setFont(standard);
 			}
 
-			// assuming that row 0 contains sort of header
-			if (sel && row != 0) {
-				setBackground(Globals.BACKGROUND_COLOR_7);
+			if (!ConfigedMain.THEMES) {
+				// assuming that row 0 contains sort of header
+				if (sel && row != 0) {
+					setBackground(Globals.BACKGROUND_COLOR_7);
 
-			} else {
-				setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
-
+				} else {
+					setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
+				}
 			}
 
 			if (leaf) {

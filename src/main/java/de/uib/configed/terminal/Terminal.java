@@ -162,7 +162,9 @@ public final class Terminal {
 		frame.setIconImage(Globals.mainIcon);
 
 		JPanel allPane = new JPanel();
-		allPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		if (!ConfigedMain.THEMES) {
+			allPane.setBackground(Globals.BACKGROUND_COLOR_7);
+		}
 
 		GroupLayout allLayout = new GroupLayout(allPane);
 		allPane.setLayout(allLayout);
@@ -196,6 +198,7 @@ public final class Terminal {
 					messagebus.disconnect();
 					widget.stop();
 					frame.dispose();
+					frame = null;
 				} catch (InterruptedException ex) {
 					Logging.warning(this, "thread was interrupted");
 					Thread.currentThread().interrupt();
@@ -385,6 +388,8 @@ public final class Terminal {
 		} else {
 			frame.setVisible(true);
 		}
+
+		widget.requestFocus();
 	}
 
 	public void close() {
@@ -392,6 +397,7 @@ public final class Terminal {
 	}
 
 	public void connectWebSocket() {
+		WebSocketInputStream.init();
 		TtyConnector connector = new WebSocketTtyConnector(new WebSocketOutputStream(messagebus.getWebSocket()),
 				WebSocketInputStream.getReader());
 		widget.setTtyConnector(connector);

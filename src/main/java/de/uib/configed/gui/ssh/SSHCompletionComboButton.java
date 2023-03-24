@@ -15,6 +15,7 @@ import javax.swing.JList;
 import javax.swing.JTextField;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -130,7 +131,9 @@ public class SSHCompletionComboButton {
 
 	private void initTextfield() {
 		textfield = new JTextField();
-		textfield.setBackground(Globals.BACKGROUND_COLOR_9);
+		if (!ConfigedMain.THEMES) {
+			textfield.setBackground(Globals.BACKGROUND_COLOR_9);
+		}
 	}
 
 	private void createInstances() {

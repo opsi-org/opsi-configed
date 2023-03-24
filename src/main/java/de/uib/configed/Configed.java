@@ -16,6 +16,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.tree.ClientTreeUI;
 import de.uib.messages.Messages;
@@ -122,7 +126,6 @@ public class Configed {
 					"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)" }
 
 			// undocumented
-
 	};
 
 	public static final Charset serverCharset = StandardCharsets.UTF_8;
@@ -204,7 +207,11 @@ public class Configed {
 			Logging.debug("they are equal");
 		}
 
-		configureUI();
+		if (ConfigedMain.THEMES) {
+			setOpsiLaf();
+		} else {
+			configureUI();
+		}
 
 		try {
 			String resourceS = "opsi.gif";
@@ -757,6 +764,27 @@ public class Configed {
 		// destroys some popups, saves others
 	}
 
+	public static void setOpsiLaf() {
+		Logging.info("set look and feel " + Messages.getSelectedTheme());
+
+		// Location of the theme property files - register them
+		FlatLaf.registerCustomDefaultsSource("de.uib.configed.themes");
+
+		switch (Messages.getSelectedTheme()) {
+		case "Light":
+			FlatLightLaf.setup();
+			break;
+
+		case "Dark":
+			FlatDarkLaf.setup();
+			break;
+
+		default:
+			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + Messages.getSelectedTheme());
+			break;
+		}
+	}
+
 	private static void addMissingArgs() {
 		if (host == null) {
 			host = Globals.getCLIparam("Host: ", false);
@@ -899,7 +927,9 @@ public class Configed {
 
 		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
 
-		fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
+		if (!ConfigedMain.THEMES) {
+			fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
+		}
 		// we activate it in case of an appropriate error
 
 		fErrorOutOfMemory.setFont(Globals.defaultFontBig);

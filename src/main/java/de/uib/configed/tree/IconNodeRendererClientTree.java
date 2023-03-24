@@ -3,8 +3,7 @@ package de.uib.configed.tree;
 import java.awt.Component;
 import java.awt.Insets;
 import java.awt.font.TextAttribute;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
 
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
@@ -20,17 +19,26 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 	public IconNodeRendererClientTree(ConfigedMain main) {
 		this.main = main;
-		super.setOpaque(true);
-		super.setForeground(Globals.lightBlack);
-		super.setTextSelectionColor(Globals.lightBlack);
-		super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
+
+		if (!ConfigedMain.THEMES) {
+			super.setOpaque(true);
+			super.setForeground(Globals.lightBlack);
+			super.setTextSelectionColor(Globals.lightBlack);
+			super.setBackground(Globals.ICON_NODE_RENDERER_BACKGROUND_COLOR);
+		}
 		super.setBorder(new EmptyBorder(new Insets(0, 0, 0, 0)));
 	}
 
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
 			int row, boolean hasFocus) {
-		setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
+
+		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
+		if (!ConfigedMain.THEMES) {
+			setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
+		}
+
 		if (value instanceof IconNode) {
 			String stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
 
@@ -47,9 +55,8 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			if (!node.getAllowsChildren()) {
 				// client
 
-				if (
+				if (main.getActiveTreeNodes().containsKey(stringValue)) {
 
-				main.getActiveTreeNodes().containsKey(stringValue)) {
 					setFont(Globals.defaultFontStandardBold);
 
 					setIcon(node.getLeafIcon());
@@ -58,7 +65,6 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 					setFont(Globals.defaultFont);
 					setIcon(node.getNonSelectedLeafIcon());
-
 				}
 			} else {
 				// group
@@ -74,9 +80,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 					setIcon(node.getEmphasizedIcon());
 				}
 
-				if (
-
-				main.getActiveTreeNodes().containsKey(stringValue)) {
+				if (main.getActiveTreeNodes().containsKey(stringValue)) {
 					setFont(Globals.defaultFontStandardBold);
 
 				} else {
@@ -88,17 +92,13 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 			if (tree.getSelectionPath() != null && node.equals(tree.getSelectionPath().getLastPathComponent())
 					&& tree.hasFocus()) {
 
-				Map<TextAttribute, Integer> newAttributes = new HashMap<>();
-				newAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-				setFont(getFont().deriveFont(newAttributes));
-
+				setFont(getFont()
+						.deriveFont(Collections.singletonMap(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON)));
 			}
 
 			setComponentOrientation(tree.getComponentOrientation());
-			return this;
 		}
 
-		return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
+		return this;
 	}
 }

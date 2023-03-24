@@ -31,6 +31,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.utilities.logging.Logging;
@@ -89,7 +90,9 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 		loggingArea = new JTextArea("");
 		loggingArea.setEditable(false);
 
-		loggingArea.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.THEMES) {
+			loggingArea.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 
 		scrollpaneL = new JScrollPane();
 		scrollpaneL.setViewportView(loggingArea);
@@ -133,7 +136,9 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	protected void initComponents() {
 
-		framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		if (!ConfigedMain.THEMES) {
+			framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
+		}
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		editingArea.addKeyListener(this);
