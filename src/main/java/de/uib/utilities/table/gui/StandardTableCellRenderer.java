@@ -73,7 +73,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 				jc.setForeground(Globals.opsiForegroundLight);
 			}
 
-			if (row % 2 == 1) {
+			if (row % 2 != 0) {
 				if (!FlatLaf.isLafDark() || isSelected) {
 					jc.setBackground(jc.getBackground().darker());
 				} else {

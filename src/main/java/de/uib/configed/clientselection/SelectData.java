@@ -80,14 +80,12 @@ public class SelectData {
 			}
 			break;
 
-		case DATE_TYPE: {
+		case DATE_TYPE:
 
 			if (!(data instanceof String)) {
 				throw new IllegalArgumentException("Data is not a (date) string");
 			}
-
 			break;
-		}
 
 		case DOUBLE_TYPE:
 			if (!(data instanceof Double)) {

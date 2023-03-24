@@ -82,6 +82,8 @@ import de.uib.opsidatamodel.productstate.ActionSequence;
 import de.uib.opsidatamodel.productstate.InstallationInfo;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
+import de.uib.opsidatamodel.productstate.TargetConfiguration;
+import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
@@ -91,6 +93,7 @@ import de.uib.utilities.swing.list.StandardListCellRenderer;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
+import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.gui.AdaptingCellEditorValuesByIndex;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.DynamicCellEditor;
@@ -290,7 +293,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 
 		targetConfigurationTableCellRenderer = new ColoredTableCellRendererByIndex(
-				de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir, false,
+				TargetConfiguration.getLabel2DisplayLabel(), iconsDir, false,
 				InstallationStateTableModel.getColumnTitle(ProductState.KEY_TARGET_CONFIGURATION) + ": ");
 
 		if (Globals.SHOW_ICONS_IN_PRODUCT_TABLE) {
@@ -900,7 +903,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			targetCombo.setRenderer(standardListCellRenderer);
 
 			targetColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(targetCombo, istm,
-					de.uib.opsidatamodel.productstate.TargetConfiguration.getLabel2DisplayLabel(), iconsDir));
+					TargetConfiguration.getLabel2DisplayLabel(), iconsDir));
 			targetColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			targetColumn.setCellRenderer(targetConfigurationTableCellRenderer);
 		}
@@ -917,7 +920,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			statesCombo.setRenderer(standardListCellRenderer);
 
 			statusColumn.setCellEditor(new AdaptingCellEditorValuesByIndex(statesCombo, istm,
-					de.uib.opsidatamodel.productstate.InstallationStatus.getLabel2DisplayLabel(), iconsDir));
+					InstallationStatus.getLabel2DisplayLabel(), iconsDir));
 			statusColumn.setPreferredWidth(WIDTH_COLUMN_PRODUCT_STATE);
 			statusColumn.setCellRenderer(installationStatusTableCellRenderer);
 		}
@@ -974,8 +977,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
 			if (sorter instanceof DefaultRowSorter) {
-				((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex,
-						new de.uib.utilities.IntComparatorForStrings());
+				((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new IntComparatorForStrings());
 			}
 
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
@@ -989,7 +991,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			priorityclassTableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 			priorityclassColumn.setCellRenderer(priorityclassTableCellRenderer);
 
-			((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new de.uib.utilities.IntComparatorForStrings());
+			((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new IntComparatorForStrings());
 
 		}
 
@@ -1049,7 +1051,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			String productVersion, Collection<Map<String, Object>> storableProductProperties,
 			Map editableProductProperties,
 			// editmappanelx
-			Map<String, de.uib.utilities.table.ListCellOptions> productpropertyOptionsMap,
+			Map<String, ListCellOptions> productpropertyOptionsMap,
 			ProductpropertiesUpdateCollection updateCollection) {
 		infoPane.setGrey(false);
 		infoPane.setProductId(productID);

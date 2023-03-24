@@ -2252,7 +2252,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public Map<String, Integer> getInstalledOsOverview() {
 		Logging.info(this, "getInstalledOsOverview");
 
-		Map<String, Object> producedLicencingInfo = new HashMap<>();
+		Map<String, Object> producedLicencingInfo;
 
 		if (isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
 			producedLicencingInfo = JSONReMapper.getMapResult(getOpsiLicencingInfoOpsiAdmin());
@@ -2295,7 +2295,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public List<Map<String, Object>> getModules() {
 		Logging.info(this, "getModules");
 
-		Map<String, Object> producedLicencingInfo = new HashMap<>();
+		Map<String, Object> producedLicencingInfo;
 
 		if (isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
 			producedLicencingInfo = JSONReMapper.getMapResult(getOpsiLicencingInfoOpsiAdmin());
@@ -8102,8 +8102,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		// displaying to the user
 
 		getHostInfoCollections().retrieveOpsiHosts();
-		Logging.info(this, "getOverLimitModuleList() " + LicensingInfoMap
-				.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(), true).getCurrentOverLimitModuleList());
+		Logging.info(this,
+				"getOverLimitModuleList() "
+						+ LicensingInfoMap.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(), true)
+								.getCurrentOverLimitModuleList());
 
 		licInfoMap = LicensingInfoMap.getInstance(getOpsiLicencingInfoOpsiAdmin(), getConfigDefaultValues(),
 				!FGeneralDialogLicensingInfo.extendedView);
