@@ -669,10 +669,26 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void updateProduct(Map<?, ?> data) {
 		String productId = (String) data.get("productId");
 		String clientId = (String) data.get("clientId");
+		String productType = (String) data.get("productType");
 
-		Map<String, Object> productInfo = persist.getProductInfos(productId, clientId);
+		// Maybe we need this later
+		//Map<String, Object> productInfo = persist.getProductInfos(productId, clientId);
 
-		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF PRODUCT UPDATED
+		for (String selectedClient : selectedClients) {
+			if (selectedClient.equals(clientId)) {
+				int selectedView = getViewIndex();
+
+				if (selectedView == VIEW_LOCALBOOT_PRODUCTS
+						&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
+					localbootStatesAndActions = null;
+					setLocalbootProductsPage();
+				} else if (selectedView == VIEW_NETBOOT_PRODUCTS
+						&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
+					netbootStatesAndActions = null;
+					setNetbootProductsPage();
+				}
+			}
+		}
 	}
 
 	public void addClientToConnectedList(String clientId) {
@@ -2815,8 +2831,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		try {
 			clearProductEditing();
-
-			// null,
 
 			// we reload since at the moment we do not track changes if anyDataChanged
 			if (localbootStatesAndActions == null || istmForSelectedClientsLocalboot == null
