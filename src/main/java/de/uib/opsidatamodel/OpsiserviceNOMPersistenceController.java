@@ -53,6 +53,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -2316,16 +2319,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 		String methodname = "hostControl_getActiveSessions";
 
-		Map<String, Object> result0 = JSONReMapper.getResponses(
-				exec.retrieveJSONObject(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT // background																																									
-				)));
+		Map<String, Object> result0 = JSONReMapper.getResponses(exec
+				.retrieveJSONObject(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT)));
 
 		for (Entry<String, Object> resultEntry : result0.entrySet()) {
 			StringBuilder value = new StringBuilder();
 
 			if (resultEntry.getValue() instanceof String) {
-				// error
-
 				String errorStr = (String) resultEntry.getValue();
 				value = new StringBuilder("no response");
 				if (errorStr.indexOf("Opsi timeout") > -1) {
@@ -2339,23 +2339,30 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					value.append("  (" + methodname + " not valid)");
 				} else if (errorStr.indexOf("Name or service not known") > -1) {
 					value.append(" (name or service not known)");
+				} else {
+					Logging.notice(this, "unexpected output occured in session Info");
 				}
 			} else if (resultEntry.getValue() instanceof List) {
-				// should then hold
-
 				List<?> sessionlist = (List<?>) resultEntry.getValue();
 				for (Object element : sessionlist) {
-					Map<String, Object> session = JSONReMapper.getMapObject((JSONObject) element);
+					try {
+						Map<String, Object> session = JSONReMapper
+								.getMapObject(new JSONObject(new ObjectMapper().writeValueAsString(element)));
 
-					String username = "" + session.get("UserName");
-					String logondomain = "" + session.get("LogonDomain");
+						String username = "" + session.get("UserName");
+						String logondomain = "" + session.get("LogonDomain");
 
-					if (!value.toString().equals("")) {
-						value.append("; ");
+						if (!value.toString().isEmpty()) {
+							value.append("; ");
+						}
+
+						value.append(username + " (" + logondomain + "\\" + username + ")");
+					} catch (JsonProcessingException | JSONException e) {
+						Logging.warning(this, "exception occured while parsing JSON: " + e.getMessage());
 					}
-
-					value.append(username + " (" + logondomain + "\\" + username + ")");
 				}
+			} else {
+				Logging.warning(this, "resultEntry's value is neither a String nor a List");
 			}
 
 			result.put(resultEntry.getKey(), value.toString());
