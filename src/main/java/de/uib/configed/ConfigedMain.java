@@ -674,13 +674,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// Maybe we need this later
 		//Map<String, Object> productInfo = persist.getProductInfos(productId, clientId);
 
-		for (String selectedClient : selectedClients) {
+		/*for (String selectedClient : selectedClients) {
 			if (selectedClient.equals(clientId)) {
 				int selectedView = getViewIndex();
-
+		
 				if (selectedView == VIEW_LOCALBOOT_PRODUCTS
 						&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
-					localbootStatesAndActions = null;
+					localbootStatesAndActionsUPDATE = true;
 					setLocalbootProductsPage();
 				} else if (selectedView == VIEW_NETBOOT_PRODUCTS
 						&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
@@ -688,6 +688,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					setNetbootProductsPage();
 				}
 			}
+		}*/
+
+		if (localbootStatesAndActions.containsKey(clientId)) {
+			Logging.devel(
+					localbootStatesAndActions.get(clientId).removeIf((arg0 -> arg0.get("productId").equals(productId)))
+							+ " " + productId);
 		}
 	}
 
@@ -2869,9 +2875,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// we rebuild only if we reloaded
 				istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
 						collectChangedLocalbootStates, persist.getAllLocalbootProductNames(depotRepresentative),
-						localbootStatesAndActions, possibleActions, // persist.getPossibleActions(depotRepresentative),
-						persist.getProductGlobalInfos(depotRepresentative), getLocalbootProductDisplayFieldsList(),
-						Configed.savedStates.saveLocalbootproductFilter
+						localbootStatesAndActions, possibleActions, persist.getProductGlobalInfos(depotRepresentative),
+						getLocalbootProductDisplayFieldsList(), Configed.savedStates.saveLocalbootproductFilter
 
 				);
 			}

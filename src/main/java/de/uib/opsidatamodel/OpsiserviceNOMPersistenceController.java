@@ -4082,12 +4082,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public Map<String, Object> getProductInfos(String productId, String clientId) {
-		try {
-			// Sleep for a little because otherwise we cannot get the needed Data from the Server
-			Thread.sleep(5);
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		}
 
 		String[] callAttributes = new String[] {};
 
