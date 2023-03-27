@@ -65,8 +65,8 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
-		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(command
+		SSHCommand commandHelp = new CommandHelp(this);
+		SSHConnectExec exec = new SSHConnectExec(commandHelp
 
 		);
 
