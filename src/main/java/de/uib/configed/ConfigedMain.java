@@ -275,8 +275,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// marker variables for requests for reload when clientlist changes
 	private Map<String, List<Map<String, String>>> localbootStatesAndActions;
-	private boolean localbootStatesAndActionsUPDATE;
+	private boolean localbootStatesAndActionsUpdate;
 	private Map<String, List<Map<String, String>>> netbootStatesAndActions;
+	private boolean netbootStatesAndActionsUpdate;
 	private Map<String, Map<String, Object>> hostConfigs;
 
 	// collection of retrieved software audit and hardware maps
@@ -672,7 +673,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String productType = (String) data.get("productType");
 
 		// Maybe we need this later
-		//Map<String, Object> productInfo = persist.getProductInfos(productId, clientId);
+		Map<String, Object> productInfo = persist.getProductInfos(productId, clientId);
 
 		/*for (String selectedClient : selectedClients) {
 			if (selectedClient.equals(clientId)) {
@@ -689,11 +690,66 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 		}*/
+		Logging.devel(this, "Data: " + data);
+		Logging.devel(this, "collectChangedLocalbootStates: " + collectChangedLocalbootStates);
 
 		if (localbootStatesAndActions.containsKey(clientId)) {
-			Logging.devel(
-					localbootStatesAndActions.get(clientId).removeIf((arg0 -> arg0.get("productId").equals(productId)))
-							+ " " + productId);
+			if (!collectChangedLocalbootStates.containsKey(clientId)
+					|| !collectChangedLocalbootStates.get(clientId).containsKey(productId)) {
+
+				Map<String, String> productStates = null;
+
+				for (Map<String, String> iteratedProductStates : localbootStatesAndActions.get(clientId)) {
+					if (iteratedProductStates.get("productId").equals(productId)) {
+						for (String key : iteratedProductStates.keySet()) {
+							if (productInfo.get(key) != null) {
+								iteratedProductStates.put(key, productInfo.get(key).toString());
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// update table
+		Set<String> oldProductSelection = mainFrame.panelLocalbootProductSettings.getSelectedIDs();
+		List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panelLocalbootProductSettings
+				.getSortKeys();
+
+		Logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
+
+		Logging.debug(this, "setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
+
+		// we rebuild !
+		istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
+				collectChangedLocalbootStates, persist.getAllLocalbootProductNames(depotRepresentative),
+				localbootStatesAndActions, possibleActions, persist.getProductGlobalInfos(depotRepresentative),
+				getLocalbootProductDisplayFieldsList(), Configed.savedStates.saveLocalbootproductFilter
+
+		);
+
+		try {
+			int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
+			mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
+			mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
+
+			mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
+
+			Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
+
+			Set<String> savedFilter = Configed.savedStates.saveLocalbootproductFilter.deserialize();
+
+			(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
+
+			Logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
+			mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection); // (*)
+
+			mainFrame.panelLocalbootProductSettings.setSearchFields(
+					InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
+
+			setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
+		} catch (Exception ex) {
+			Logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -1922,21 +1978,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void requestReloadStatesAndActions() {
-		requestReloadStatesAndActions(false);
-	}
-
-	public void requestReloadStatesAndActions(boolean onlyUpdate) {
-		Logging.info(this, "requestReloadStatesAndActions , only updating " + onlyUpdate);
+		Logging.info(this, "requestReloadStatesAndActions");
 
 		persist.productpropertiesRequestRefresh();
 
-		if (onlyUpdate) {
-			localbootStatesAndActionsUPDATE = true;
-		} else {
-			localbootStatesAndActions = null;
-		}
-
-		netbootStatesAndActions = null;
+		localbootStatesAndActionsUpdate = true;
+		netbootStatesAndActionsUpdate = true;
 	}
 
 	public String[] getSelectedClients() {
@@ -2840,8 +2887,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// we reload since at the moment we do not track changes if anyDataChanged
 			if (localbootStatesAndActions == null || istmForSelectedClientsLocalboot == null
-					|| localbootStatesAndActionsUPDATE) {
-				localbootStatesAndActionsUPDATE = false;
+					|| localbootStatesAndActionsUpdate) {
+				localbootStatesAndActionsUpdate = false;
 
 				localbootStatesAndActions = persist.getMapOfLocalbootProductStatesAndActions(getSelectedClients());
 
@@ -2927,7 +2974,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					"setLocalbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  start "
 							+ startmillis);
 
-			if (netbootStatesAndActions == null) {
+			if (netbootStatesAndActions == null || netbootStatesAndActionsUpdate) {
 				// we reload since at the moment we do not track changes if anyDataChanged
 				netbootStatesAndActions = persist.getMapOfNetbootProductStatesAndActions(getSelectedClients());
 
@@ -3427,11 +3474,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "setViewIndex anyDataChanged " + anyDataChanged);
 
 		if (anyDataChanged && (viewIndex == VIEW_LOCALBOOT_PRODUCTS || viewIndex == VIEW_NETBOOT_PRODUCTS)) {
-			if (depotsListSelectionChanged) {
-				requestReloadStatesAndActions();
-			} else {
-				requestReloadStatesAndActions(true);
-			}
+			requestReloadStatesAndActions();
 		}
 
 		saveIfIndicated();
@@ -4486,7 +4529,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.resetNetbootProducts(getSelectedClients(), withDependencies);
 		}
 
-		requestReloadStatesAndActions(true);
+		requestReloadStatesAndActions();
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
