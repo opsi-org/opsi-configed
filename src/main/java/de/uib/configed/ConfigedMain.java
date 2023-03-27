@@ -4256,8 +4256,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		final String[] selClients = selectedClients;
 
-		Logging.info(this, "we have sel clients " + selClients.length);
-
 		// we put this into a thread since it may never end in case of a name resolving
 		// problem
 		new Thread() {
@@ -4282,6 +4280,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					Logging.info(this, "we have sel clients " + selClients.length);
 					reachableInfo.putAll(persist.reachableInfo(getSelectedClients()));
 				} else {
+					Logging.info(this, "we don't have selected clients, so we check reachable for all clients");
 					reachableInfo = persist.reachableInfo(null);
 				}
 
@@ -4419,7 +4418,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 									for (int row = 0; row < model.getRowCount(); row++) {
 										String clientId = (String) model.getValueAt(row, 0);
-
 										model.setValueAt(sessionInfo.get(clientId), row, col);
 									}
 

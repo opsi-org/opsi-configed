@@ -169,7 +169,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				persist.configOptionsRequestRefresh();
 				persist.opsiLicencingInfoRequestRefresh();
 				LicensingInfoMap.requestRefresh();
-				licenseMap = LicensingInfoMap.getInstance(persist.getOpsiLicencingInfo(),
+				licenseMap = LicensingInfoMap.getInstance(persist.getOpsiLicencingInfoOpsiAdmin(),
 						persist.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
 				retrieveData();
 
