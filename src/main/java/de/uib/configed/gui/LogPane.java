@@ -1097,14 +1097,14 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// occurrences found.
 		public int search(String word) {
 
-			Highlighter highlighter = comp.getHighlighter();
+			Highlighter compHighlighter = comp.getHighlighter();
 
 			// Remove any existing highlights for last word
-			Highlighter.Highlight[] highlights = highlighter.getHighlights();
+			Highlighter.Highlight[] highlights = compHighlighter.getHighlights();
 			for (int i = 0; i < highlights.length; i++) {
 				Highlighter.Highlight h = highlights[i];
 				if (h.getPainter() instanceof UnderlineHighlightPainter) {
-					highlighter.removeHighlight(h);
+					compHighlighter.removeHighlight(h);
 				}
 			}
 
@@ -1124,6 +1124,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				}
 			} catch (BadLocationException e) {
 				// Cannot happen
+				Logging.warning(this, "unexpected exception in search", e);
 				return -1;
 			}
 
@@ -1139,7 +1140,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			while ((lastIndex = content.indexOf(word, lastIndex)) != -1) {
 				int endIndex = lastIndex + wordSize;
 				try {
-					highlighter.addHighlight(lastIndex, endIndex, painter);
+					compHighlighter.addHighlight(lastIndex, endIndex, painter);
 				} catch (BadLocationException e) {
 					// Nothing to do
 				}

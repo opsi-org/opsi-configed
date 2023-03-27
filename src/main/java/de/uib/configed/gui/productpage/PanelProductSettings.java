@@ -1099,14 +1099,14 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		List<Integer> selectedRows = getSelectedRowsInModelTerms();
 
-		List<String> selectedProducts = new ArrayList<>();
+		List<String> selectedProductsList = new ArrayList<>();
 
 		for (int row : selectedRows) {
-			selectedProducts.add((String) tableProducts.getModel().getValueAt(row, 0));
+			selectedProductsList.add((String) tableProducts.getModel().getValueAt(row, 0));
 		}
 
-		Logging.info(this, "selectedProducts " + selectedProducts);
+		Logging.info(this, "selectedProducts " + selectedProductsList);
 
-		return selectedProducts;
+		return selectedProductsList;
 	}
 }
