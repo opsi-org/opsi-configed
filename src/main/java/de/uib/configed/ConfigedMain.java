@@ -667,7 +667,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF CLIENT DELETED
 	}
 
-	public void updateProduct(Map<?, ?> data) {
+	public synchronized void updateProduct(Map<?, ?> data) {
 		String productId = (String) data.get("productId");
 		String clientId = (String) data.get("clientId");
 		String productType = (String) data.get("productType");
@@ -690,13 +690,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 		}*/
-		Logging.devel("\n" + collectChangedLocalbootStates.toString());
 		if (localbootStatesAndActions.containsKey(clientId)) {
 			if (!collectChangedLocalbootStates.containsKey(clientId)
 					|| !collectChangedLocalbootStates.get(clientId).containsKey(productId)) {
 				boolean wasProductRemovedFromList = localbootStatesAndActions.get(clientId)
 						.removeIf(arg0 -> arg0.get("productId").equals(productId));
-				Logging.devel(this, "removed product" + productId + ": " + wasProductRemovedFromList);
+
 				localbootStatesAndActions.get(clientId).add(productInfo);
 
 				updateAndRebuildTable();
