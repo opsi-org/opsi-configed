@@ -690,10 +690,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 		}*/
-		Logging.devel(this, "Data: " + data);
-		Logging.devel(this,
-				"collectcollectChangedLocalbootStatesChangedLocalbootStates: " + collectChangedLocalbootStates);
-
+		Logging.devel("\n" + collectChangedLocalbootStates.toString());
 		if (localbootStatesAndActions.containsKey(clientId)) {
 			if (!collectChangedLocalbootStates.containsKey(clientId)
 					|| !collectChangedLocalbootStates.get(clientId).containsKey(productId)) {
@@ -702,9 +699,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Logging.devel(this, "removed product" + productId + ": " + wasProductRemovedFromList);
 				localbootStatesAndActions.get(clientId).add(productInfo);
 
+				updateAndRebuildTable();
 			}
 		}
+	}
 
+	private void updateAndRebuildTable() {
 		// update table
 		Set<String> oldProductSelection = mainFrame.panelLocalbootProductSettings.getSelectedIDs();
 		List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panelLocalbootProductSettings
