@@ -7502,33 +7502,35 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		// product_sort_algorithm
+		// will not be used in opsi 4.3
+		if (!JSONthroughHTTPS.isOpsi43()) {
+			key = KEY_PRODUCT_SORT_ALGORITHM;
+			// defaultValues
+			defaultValues = configDefaultValues.get(key);
+			Logging.info(this, "checkStandardConfigs:  from server product_sort_algorithm " + defaultValues);
 
-		key = KEY_PRODUCT_SORT_ALGORITHM;
-		// defaultValues
-		defaultValues = configDefaultValues.get(key);
-		Logging.info(this, "checkStandardConfigs:  from server product_sort_algorithm " + defaultValues);
+			if (defaultValues == null) {
+				Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
 
-		if (defaultValues == null) {
-			Logging.warning(this, "checkStandardConfigs:  since no values found setting values for  " + key);
+				defaultValues = new ArrayList<>();
+				defaultValues.add("algorithm1");
 
-			defaultValues = new ArrayList<>();
-			defaultValues.add("algorithm1");
+				possibleValues = new ArrayList<>();
+				possibleValues.add("algorithm1");
+				possibleValues.add("algorithm2");
 
-			possibleValues = new ArrayList<>();
-			possibleValues.add("algorithm1");
-			possibleValues.add("algorithm2");
+				// create config for service
+				item = createNOMitem("UnicodeConfig");
+				item.put("ident", key);
+				item.put("description", "algorithm1 = dependencies first; algorithm2 = priorities first");
+				item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
 
-			// create config for service
-			item = createNOMitem("UnicodeConfig");
-			item.put("ident", key);
-			item.put("description", "algorithm1 = dependencies first; algorithm2 = priorities first");
-			item.put("defaultValues", AbstractExecutioner.jsonArray(defaultValues));
+				item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
+				item.put("editable", false);
+				item.put("multiValue", false);
 
-			item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
-			item.put("editable", false);
-			item.put("multiValue", false);
-
-			readyObjects.add(AbstractExecutioner.jsonMap(item));
+				readyObjects.add(AbstractExecutioner.jsonMap(item));
+			}
 		}
 
 		// extra display fields in licencing
