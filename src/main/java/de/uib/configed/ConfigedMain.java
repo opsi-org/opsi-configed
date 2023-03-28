@@ -673,7 +673,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String productType = (String) data.get("productType");
 
 		// Maybe we need this later
-		Map<String, Object> productInfo = persist.getProductInfos(productId, clientId);
+		Map<String, String> productInfo = persist.getProductInfos(productId, clientId);
 
 		/*for (String selectedClient : selectedClients) {
 			if (selectedClient.equals(clientId)) {
@@ -691,23 +691,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 		}*/
 		Logging.devel(this, "Data: " + data);
-		Logging.devel(this, "collectChangedLocalbootStates: " + collectChangedLocalbootStates);
+		Logging.devel(this,
+				"collectcollectChangedLocalbootStatesChangedLocalbootStates: " + collectChangedLocalbootStates);
 
 		if (localbootStatesAndActions.containsKey(clientId)) {
 			if (!collectChangedLocalbootStates.containsKey(clientId)
 					|| !collectChangedLocalbootStates.get(clientId).containsKey(productId)) {
+				boolean wasProductRemovedFromList = localbootStatesAndActions.get(clientId)
+						.removeIf(arg0 -> arg0.get("productId").equals(productId));
+				Logging.devel(this, "removed product" + productId + ": " + wasProductRemovedFromList);
+				localbootStatesAndActions.get(clientId).add(productInfo);
 
-				Map<String, String> productStates = null;
-
-				for (Map<String, String> iteratedProductStates : localbootStatesAndActions.get(clientId)) {
-					if (iteratedProductStates.get("productId").equals(productId)) {
-						for (String key : iteratedProductStates.keySet()) {
-							if (productInfo.get(key) != null) {
-								iteratedProductStates.put(key, productInfo.get(key).toString());
-							}
-						}
-					}
-				}
 			}
 		}
 
@@ -742,7 +736,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
 
 			Logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
-			mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection); // (*)
+			mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
 
 			mainFrame.panelLocalbootProductSettings.setSearchFields(
 					InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));

@@ -3867,7 +3867,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			Map<String, String> aState = new ProductState(JSONReMapper.giveEmptyForNull(m), true);
 			states1Client.add(aState);
-
 		}
 
 		return result;
@@ -4107,7 +4106,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public Map<String, Object> getProductInfos(String productId, String clientId) {
+	public Map<String, String> getProductInfos(String productId, String clientId) {
 
 		String[] callAttributes = new String[] {};
 
@@ -4115,7 +4114,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		callFilter.put(ProductOnClient.PRODUCT_ID, productId);
 		callFilter.put(ProductOnClient.CLIENT_ID, clientId);
 
-		return retrieveListOfMapsNOM(callAttributes, callFilter, "productOnClient_getObjects").get(0);
+		Map<String, Object> retrievedMap = retrieveListOfMapsNOM(callAttributes, callFilter,
+				"productOnClient_getHashes").get(0);
+
+		return new ProductState(JSONReMapper.giveEmptyForNull(retrievedMap), true);
 	}
 
 	public Map<String, Object> getProductInfos(String productname) {
