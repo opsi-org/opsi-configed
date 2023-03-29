@@ -667,7 +667,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF CLIENT DELETED
 	}
 
-	public synchronized void updateProduct(Map<?, ?> data) {
+	public void updateProduct(Map<?, ?> data) {
 		String productId = (String) data.get("productId");
 		String clientId = (String) data.get("clientId");
 		String productType = (String) data.get("productType");
@@ -690,6 +690,17 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				}
 			}
 		}*/
+
+		int selectedView = getViewIndex();
+
+		if (selectedView == VIEW_LOCALBOOT_PRODUCTS
+				&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
+			istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
+		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
+				&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
+			istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
+		}
+
 		if (localbootStatesAndActions.containsKey(clientId)) {
 			if (!collectChangedLocalbootStates.containsKey(clientId)
 					|| !collectChangedLocalbootStates.get(clientId).containsKey(productId)) {
@@ -697,8 +708,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						.removeIf(arg0 -> arg0.get("productId").equals(productId));
 
 				localbootStatesAndActions.get(clientId).add(productInfo);
-
-				updateAndRebuildTable();
+				istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
+				//updateAndRebuildTable();
 			}
 		}
 	}

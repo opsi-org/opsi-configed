@@ -251,6 +251,31 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return result;
 	}
 
+	@Override
+	public synchronized void updateTable(String clientId, String productId, Map<String, String> stateAndAction) {
+
+		// Don't update if client not selected / part of this table
+		if (!allClientsProductStates.containsKey(clientId)) {
+			return;
+		}
+
+		// Don't apply update if something has been changed on the product on the client by the user
+		if (collectChangedStates.containsKey(clientId) && collectChangedStates.get(clientId).containsKey(productId)) {
+			return;
+		}
+
+		// add update to list
+		allClientsProductStates.get(clientId).put(productId, stateAndAction);
+
+		// TODO refactoring needed in these methods; 
+		// It seems to me that too many unnecessary operations are made in these methods
+		produceVisualStatesFromExistingEntries();
+
+		int row = getRowFromProductID(productId);
+
+		fireTableRowsUpdated(row, row);
+	}
+
 	private void initalizeProductStates(Map<String, List<Map<String, String>>> client2listProductState) {
 		allClientsProductStates = new HashMap<>();
 		remaptoClient2Product2Rowmap(client2listProductState);
