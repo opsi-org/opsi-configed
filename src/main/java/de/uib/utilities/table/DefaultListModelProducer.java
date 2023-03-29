@@ -1,6 +1,7 @@
 package de.uib.utilities.table;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.ListModel;
@@ -55,9 +56,8 @@ public class DefaultListModelProducer<O> implements ListModelProducer<O> {
 			return (List<O>) value;
 		}
 
-		Logging.warning(this, "value is not instance of List<O>");
-		return new ArrayList<>();
-
+		Logging.warning(this, "value is not instance of List<O>, create List with element value");
+		return Collections.singletonList((O) value);
 	}
 
 }

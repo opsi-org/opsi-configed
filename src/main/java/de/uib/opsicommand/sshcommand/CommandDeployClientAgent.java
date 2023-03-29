@@ -23,7 +23,6 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	private String user = "";
 	private String passw = "";
 	private String finishAction = "";
-	private String keepClientOnFailure = "";
 	private String verbosity = "";
 
 	public CommandDeployClientAgent() {
@@ -120,8 +119,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getCommand() {
-		command = baseName + " " + verbosity + user + passw + finishAction + keepClientOnFailure + getPingOption()
-				+ client;
+		command = baseName + " " + verbosity + user + passw + finishAction + getPingOption() + client;
 		if (needSudo()) {
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		}
@@ -190,8 +188,8 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
-		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(command);
+		SSHCommand commandHelp = new CommandHelp(this);
+		SSHConnectExec exec = new SSHConnectExec(commandHelp);
 
 		return exec.getDialog();
 	}
@@ -235,18 +233,6 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 		} else {
 			passw = "";
 		}
-	}
-
-	public void setKeepClient(boolean kc) {
-		if (kc) {
-			keepClientOnFailure = " --keep-client-on-failure ";
-		} else {
-			keepClientOnFailure = "";
-		}
-	}
-
-	public boolean checkCommand() {
-		return !client.equals("") && !passw.equals("");
 	}
 
 	@Override

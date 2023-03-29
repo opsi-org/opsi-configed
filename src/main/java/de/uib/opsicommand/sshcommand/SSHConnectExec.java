@@ -210,10 +210,10 @@ public class SSHConnectExec extends SSHConnect {
 				}
 
 				pmethodHandler.canceled = false;
-				boolean foundError = false;
+				boolean foundErrorInCommandList = false;
 				List<SSHCommand> commandList = commandToExec.getCommands();
 				for (SSHCommand co : commandToExec.getCommands()) {
-					if (!foundError) {
+					if (!foundErrorInCommandList) {
 
 						// ???????? sollte hier eigentlich stehen?!
 						// # nein! co wird vom phander verändert
@@ -228,11 +228,11 @@ public class SSHConnectExec extends SSHConnect {
 										commandList.size());
 							}
 						} else {
-							foundError = true;
+							foundErrorInCommandList = true;
 						}
 					}
 				}
-				if (foundError) {
+				if (foundErrorInCommandList) {
 					finalDialog.appendLater("[" + Configed.getResourceValue("SSHConnection.Exec.dialog.commandlist")
 							+ "]     " + "" + Configed.getResourceValue("SSHConnection.Exec.exitClosed"));
 				}

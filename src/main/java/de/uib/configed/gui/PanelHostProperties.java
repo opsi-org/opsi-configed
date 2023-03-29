@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
@@ -43,7 +44,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		combo = new JComboBox<>();
 		combo.setVisible(false);
 		combo.addItemListener(this);
-		de.uib.configed.gui.helper.PropertiesTableCellRenderer cellRenderer = new de.uib.configed.gui.helper.PropertiesTableCellRenderer();
+		PropertiesTableCellRenderer cellRenderer = new PropertiesTableCellRenderer();
 		Logging.info(this, "buildPanel, produce editMapPanel");
 		editMapPanel = new EditMapPanelX(cellRenderer, false, false);
 		((EditMapPanelX) editMapPanel)
