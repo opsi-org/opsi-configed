@@ -44,6 +44,7 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
@@ -1109,7 +1110,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.info(this, "trying to make connection");
 		boolean result = false;
 		try {
-			result = exec1.doCall(new OpsiMethodCall("authenticated", new String[] {}));
+			result = exec1.doCall(new OpsiMethodCall("accessControl_authenticated", new String[] {}));
 
 			if (!result) {
 				Logging.info(this, "connection does not work");
@@ -3493,13 +3494,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		String s = "";
 		try {
-			Logging.debug(this, "OpsiMethodCall readLog " + logtypes[i] + " max size " + Globals.getMaxLogSize(i));
+			Logging.debug(this, "OpsiMethodCall log_read " + logtypes[i] + " max size " + Globals.getMaxLogSize(i));
 
 			try {
 				if (Globals.getMaxLogSize(i) == 0) {
-					s = exec.getStringResult(new OpsiMethodCall("readLog", new String[] { logtype, clientId }));
+					s = exec.getStringResult(new OpsiMethodCall("log_read", new String[] { logtype, clientId }));
 				} else {
-					s = exec.getStringResult(new OpsiMethodCall("readLog",
+					s = exec.getStringResult(new OpsiMethodCall("log_read",
 							new String[] { logtype, clientId, String.valueOf(Globals.getMaxLogSize(i)) }));
 				}
 
@@ -3553,23 +3554,43 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public List<String> getAllProductNames(String depotId) {
-		OpsiMethodCall cmd = new OpsiMethodCall("getProductIds_list", new String[] { "", depotId, "" });
+		String callReturnType = "dict";
+		Map<String, String> callFilter = new HashMap<>();
+		callFilter.put("depotId", depotId);
 
-		return exec.getStringListResult(cmd);
+		OpsiMethodCall omc = new OpsiMethodCall("productOnDepot_getIdents",
+				new Object[] { callReturnType, callFilter });
+		List<Map<String, Object>> result = exec.getListOfMaps(omc);
+
+		return result.stream().map(v -> (String) v.get("productId")).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<String> getProvidedLocalbootProducts(String depotId) {
-		OpsiMethodCall cmd = new OpsiMethodCall("getProvidedLocalBootProductIds_list", new String[] { depotId });
+		String callReturnType = "dict";
+		Map<String, String> callFilter = new HashMap<>();
+		callFilter.put("depotId", depotId);
+		callFilter.put("productType", OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
-		return exec.getStringListResult(cmd);
+		OpsiMethodCall omc = new OpsiMethodCall("productOnDepot_getIdents",
+				new Object[] { callReturnType, callFilter });
+		List<Map<String, Object>> result = exec.getListOfMaps(omc);
+
+		return result.stream().map(v -> (String) v.get("productId")).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<String> getProvidedNetbootProducts(String depotId) {
-		OpsiMethodCall cmd = new OpsiMethodCall("getProvidedNetBootProductIds_list", new String[] { depotId });
+		String callReturnType = "dict";
+		Map<String, String> callFilter = new HashMap<>();
+		callFilter.put("depotId", depotId);
+		callFilter.put("productType", OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING);
 
-		return exec.getStringListResult(cmd);
+		OpsiMethodCall omc = new OpsiMethodCall("productOnDepot_getIdents",
+				new Object[] { callReturnType, callFilter });
+		List<Map<String, Object>> result = exec.getListOfMaps(omc);
+
+		return result.stream().map(v -> (String) v.get("productId")).collect(Collectors.toList());
 	}
 
 	@Override
@@ -3577,8 +3598,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.debug(this, "getAllLocalbootProductNames for depot " + depotId);
 		Logging.info(this, "getAllLocalbootProductNames, producing " + (localbootProductNames == null));
 		if (localbootProductNames == null) {
-			// opsi 4.0
-
 			Map<String, List<String>> productOrderingResult = exec
 					.getMapOfStringLists(new OpsiMethodCall("getProductOrdering", new String[] { depotId }));
 
@@ -3608,7 +3627,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Logging.info(this, "localbootProductNames sorted, size " + localbootProductNames.size());
 
-		return localbootProductNames;
+		return new ArrayList<>(localbootProductNames);
 	}
 
 	@Override
@@ -3662,7 +3681,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		if (netbootProductNames == null) {
 			retrieveDepotProducts(depotId);
 		}
-		return netbootProductNames;
+		return new ArrayList<>(netbootProductNames);
 	}
 
 	@Override
