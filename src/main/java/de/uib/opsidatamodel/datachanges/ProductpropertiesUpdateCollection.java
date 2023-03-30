@@ -43,13 +43,13 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	}
 
 	@Override
-	public boolean addAll(Collection c) {
+	public boolean addAll(Collection<? extends UpdateCommand> c) {
 		boolean result = true;
 
 		if (!c.isEmpty()) {
-			Iterator it = c.iterator();
-			Object ob = it.next();
-			Logging.info(this, "addAll on collection of size " + c.size() + " of type " + ob.getClass()
+			Iterator<? extends UpdateCommand> it = c.iterator();
+			UpdateCommand updateCommand = it.next();
+			Logging.info(this, "addAll on collection of size " + c.size() + " of type " + updateCommand.getClass()
 					+ " should produce values for all " + clients.size() + " hosts");
 		}
 
@@ -62,7 +62,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		}
 
 		if (result) {
-			Iterator it = c.iterator();
+			Iterator<? extends UpdateCommand> it = c.iterator();
 			int i = 0;
 			while (it.hasNext()) {
 				Map map = null;
@@ -71,7 +71,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 				Logging.debug(this, "addAll, element of Collection: " + obj);
 
 				try {
-					map = (Map) obj;
+					map = (Map<?, ?>) obj;
 				} catch (ClassCastException ccex) {
 					Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
 				}
@@ -100,11 +100,11 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 	@Override
 	public void revert() {
-		for (Object ob : implementor) {
-			if (ob instanceof ProductpropertiesUpdate) {
-				((ProductpropertiesUpdate) ob).revert();
+		for (UpdateCommand updateCommand : implementor) {
+			if (updateCommand instanceof ProductpropertiesUpdate) {
+				((ProductpropertiesUpdate) updateCommand).revert();
 			} else {
-				Logging.info(this, "revert: not a ProductpropertiesUpdate : " + ob);
+				Logging.info(this, "revert: not a ProductpropertiesUpdate : " + updateCommand);
 			}
 		}
 	}
