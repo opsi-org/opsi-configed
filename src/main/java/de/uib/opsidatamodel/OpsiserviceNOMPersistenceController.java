@@ -5989,16 +5989,16 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		if (withLicenceManagement) {
 			List<String> callAttributes = new ArrayList<>();
 			Map<String, Object> callFilter = new HashMap<>();
-			List<Map<String, Object>> softwareL2Pools = exec.getListOfMaps(new OpsiMethodCall(
+			List<Map<String, Object>> softwareL2LPools = exec.getListOfMaps(new OpsiMethodCall(
 					"softwareLicenseToLicensePool_getObjects", new Object[] { callAttributes, callFilter }));
 
-			for (Map<String, Object> softwareL2Pool : softwareL2Pools) {
-				softwareL2Pool.remove("ident");
-				softwareL2Pool.remove("type");
+			for (Map<String, Object> softwareL2LPool : softwareL2LPools) {
+				softwareL2LPool.remove("ident");
+				softwareL2LPool.remove("type");
 
 				rowsSoftwareL2LPool
-						.put(Globals.pseudokey(new String[] { (String) softwareL2Pool.get("softwareLicenseId"),
-								(String) softwareL2Pool.get("licensePoolId") }), softwareL2Pool);
+						.put(Globals.pseudokey(new String[] { (String) softwareL2LPool.get("softwareLicenseId"),
+								(String) softwareL2LPool.get("licensePoolId") }), softwareL2LPool);
 			}
 		}
 
