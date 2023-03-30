@@ -5987,42 +5987,18 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Map<String, Map<String, Object>> rowsSoftwareL2LPool = new HashMap<>();
 
 		if (withLicenceManagement) {
-			List<Object> li0 = exec
-					.getListResult(new OpsiMethodCall("getSoftwareLicenses_listOfHashes", new String[] {}));
+			List<String> callAttributes = new ArrayList<>();
+			Map<String, Object> callFilter = new HashMap<>();
+			List<Map<String, Object>> softwareL2Pools = exec.getListOfMaps(new OpsiMethodCall(
+					"softwareLicenseToLicensePool_getObjects", new Object[] { callAttributes, callFilter }));
 
-			Iterator<Object> iter0 = li0.iterator();
+			for (Map<String, Object> softwareL2Pool : softwareL2Pools) {
+				softwareL2Pool.remove("ident");
+				softwareL2Pool.remove("type");
 
-			while (iter0.hasNext()) {
-				Object ob = iter0.next();
-
-				Map<String, Object> m0 = exec.getMapFromItem(ob);
-				String softwareLicenseId = (String) m0.get("softwareLicenseId");
-
-				List<Object> li1 = exec.getListFromItem("" + m0.get("licensePoolIds"));
-				Map<String, Object> m1 = exec.getMapFromItem("" + m0.get("licenseKeys"));
-
-				Iterator<Object> iter1 = li1.iterator();
-
-				while (iter1.hasNext()) {
-					Map<String, Object> m = new HashMap<>();
-					String licensePoolId = (String) iter1.next();
-					m.put("licensePoolId", licensePoolId);
-
-					String licenseKey = null;
-					if (m1 != null) {
-						licenseKey = (String) m1.get(licensePoolId);
-					}
-
-					if (licenseKey == null) {
-						licenseKey = "";
-					}
-
-					m.put("licenseKey", licenseKey);
-
-					m.put("softwareLicenseId", softwareLicenseId);
-
-					rowsSoftwareL2LPool.put(Globals.pseudokey(new String[] { softwareLicenseId, licensePoolId }), m);
-				}
+				rowsSoftwareL2LPool
+						.put(Globals.pseudokey(new String[] { (String) softwareL2Pool.get("softwareLicenseId"),
+								(String) softwareL2Pool.get("licensePoolId") }), softwareL2Pool);
 			}
 		}
 
