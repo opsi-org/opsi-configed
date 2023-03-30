@@ -5866,8 +5866,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.debug(this, "editLicenceContract " + licenseContractId);
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("createLicenseContract", new String[] { licenseContractId, partner,
-					conclusionDate, notificationDate, expirationDate, notes });
+			OpsiMethodCall omc = new OpsiMethodCall("licenseContract_create", new String[] { licenseContractId, "",
+					notes, partner, conclusionDate, notificationDate, expirationDate });
 
 			// the method gives the first letter instead of the complete string as return
 			// value, therefore we set it in a shortcut:
@@ -5890,7 +5890,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		boolean result = false;
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("deleteLicenseContract", new String[] { licenseContractId });
+			OpsiMethodCall omc = new OpsiMethodCall("licenseContract_delete", new String[] { licenseContractId });
 			result = exec.doCall(omc);
 		}
 
@@ -5907,7 +5907,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		String result = "";
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("createLicensePool", new String[] { licensePoolId, description });
+			OpsiMethodCall omc = new OpsiMethodCall("licensePool_create", new String[] { licensePoolId, description });
 			result = exec.getStringResult(omc);
 		}
 
@@ -5926,7 +5926,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		if (withLicenceManagement) {
 			// does not get reach into the crucial data structures
-			OpsiMethodCall omc = new OpsiMethodCall("deleteLicensePool", new Object[] { licensePoolId, false });
+			OpsiMethodCall omc = new OpsiMethodCall("licensePool_delete", new Object[] { licensePoolId });
 			result = exec.doCall(omc);
 			// comes too late
 		}
@@ -5957,8 +5957,27 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		String result = "";
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("createSoftwareLicense", new String[] { softwareLicenseId,
-					licenceContractId, licenceType, maxInstallations, boundToHost, expirationDate });
+			String methodName = "softwareLicense_";
+
+			switch (licenceType) {
+			case LicenceEntry.VOLUME:
+				methodName = methodName + "createVolume";
+				break;
+			case LicenceEntry.OEM:
+				methodName = methodName + "createOEM";
+				break;
+			case LicenceEntry.CONCURRENT:
+				methodName = methodName + "createConcurrent";
+				break;
+			case LicenceEntry.RETAIL:
+				methodName = methodName + "createRetail";
+				break;
+			default:
+				Logging.notice(this, "encountered UNKNOWN license type");
+			}
+
+			OpsiMethodCall omc = new OpsiMethodCall(methodName, new String[] { softwareLicenseId, licenceContractId,
+					maxInstallations, boundToHost, expirationDate });
 			result = exec.getStringResult(omc);
 		}
 
@@ -5974,7 +5993,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		boolean result = false;
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("deleteSoftwareLicense", new Object[] { softwareLicenseId, false });
+			OpsiMethodCall omc = new OpsiMethodCall("softwareLicense_delete", new Object[] { softwareLicenseId });
 			result = exec.doCall(omc);
 		}
 
@@ -6012,7 +6031,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("addSoftwareLicenseToLicensePool",
+			OpsiMethodCall omc = new OpsiMethodCall("softwareLicenseToLicensePool_create",
 					new String[] { softwareLicenseId, licensePoolId, licenseKey });
 
 			exec.getStringResult(omc);
@@ -6030,7 +6049,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		boolean result = false;
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("removeSoftwareLicenseFromLicensePool",
+			OpsiMethodCall omc = new OpsiMethodCall("softwareLicenseFromLicensePool_delete",
 					new String[] { softwareLicenseId, licensePoolId });
 
 			result = exec.doCall(omc);
@@ -6070,10 +6089,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		String result = "";
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("addProductIdsToLicensePool",
-					new String[] { productId, licensePoolId });
+			Map<String, Object> licensePool = getLicensePool(licensePoolId);
+			List<Object> licensePoolProductIds = exec.getListFromItem(licensePool.get("productIds").toString());
+			licensePoolProductIds.add(productId);
 
-			exec.doCall(omc);
+			exec.doCall(new OpsiMethodCall("licensePool_updateObject", new Object[] { licensePool }));
 			result = licensePoolId;
 		}
 
@@ -6089,13 +6109,24 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		boolean result = false;
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("removeProductIdsFromLicensePool",
-					new String[] { productId, licensePoolId });
+			Map<String, Object> licensePool = getLicensePool(licensePoolId);
+			List<Object> licensePoolProductIds = exec.getListFromItem(licensePool.get("productIds").toString());
+			licensePoolProductIds.remove(productId);
 
-			result = exec.doCall(omc);
+			result = exec.doCall(new OpsiMethodCall("licensePool_updateObject", new Object[] { licensePool }));
 		}
 
 		return result;
+	}
+
+	private Map<String, Object> getLicensePool(String licensePoolId) {
+		List<String> callAttributes = new ArrayList<>();
+		Map<String, String> callFilter = new HashMap<>();
+		callFilter.put("id", licensePoolId);
+		return exec
+				.getListOfMaps(
+						new OpsiMethodCall("licensePool_getObjects", new Object[] { callAttributes, callFilter }))
+				.get(0);
 	}
 
 	@Override
@@ -6807,7 +6838,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Map<String, Object> resultMap = null;
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc0 = new OpsiMethodCall("getOrCreateSoftwareLicenseUsage_hash",
+			OpsiMethodCall omc0 = new OpsiMethodCall("licenseOnClient_getOrCreateObject",
 					new String[] { hostId, licensePoolId });
 
 			resultMap = exec.getMapResult(omc0);
@@ -6832,8 +6863,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Map<String, Object> resultMap = null;
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("setSoftwareLicenseUsage",
-					new String[] { hostId, licensePoolId, softwareLicenseId, licenseKey, notes });
+			OpsiMethodCall omc = new OpsiMethodCall("licenseOnClient_create",
+					new String[] { softwareLicenseId, licensePoolId, hostId, licenseKey, notes });
 
 			resultMap = exec.getMapResult(omc);
 
@@ -6929,8 +6960,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		boolean result = false;
 
 		if (withLicenceManagement) {
-			OpsiMethodCall omc = new OpsiMethodCall("deleteSoftwareLicenseUsage",
-					new String[] { hostId, softwareLicenseId, licensePoolId });
+			OpsiMethodCall omc = new OpsiMethodCall("licenseOnClient_delete",
+					new String[] { softwareLicenseId, licensePoolId, hostId });
 
 			result = exec.doCall(omc);
 
