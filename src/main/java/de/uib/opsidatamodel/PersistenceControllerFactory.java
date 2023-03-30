@@ -29,10 +29,6 @@ public final class PersistenceControllerFactory {
 	public static boolean sqlAndGetRows;
 	public static boolean avoidSqlRawData;
 	public static boolean sqlAndGetHashes;
-	public static boolean sqlDirect;
-	public static String directmethodcall = "";
-
-	public static final String DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE = "cleanupAuditsoftware";
 
 	// private constructor to hide the implicit public one
 	private PersistenceControllerFactory() {
@@ -62,13 +58,6 @@ public final class PersistenceControllerFactory {
 			sqlAndGetRows = false;
 			persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 			Logging.info("a PersistenceController initiated by option avoidSqlRawData got " + (persistControl == null));
-		} else if (sqlDirect) {
-			persistControl = new OpsiDirectSQLPersistenceController(server, user, password);
-			if (directmethodcall.equals(DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE)) {
-				persistControl.cleanUpAuditSoftware();
-			}
-			Logging.info("a PersistenceController initiated by option sqlDirect got " + (persistControl == null));
-			System.exit(0);
 		} else {
 			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
 			sqlAndGetRows = true;

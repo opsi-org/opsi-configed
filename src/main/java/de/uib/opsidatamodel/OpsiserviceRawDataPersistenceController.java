@@ -88,5 +88,4 @@ public class OpsiserviceRawDataPersistenceController extends OpsiserviceNOMPersi
 
 		return opsiHosts;
 	}
-
 }
