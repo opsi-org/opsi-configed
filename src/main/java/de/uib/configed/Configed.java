@@ -123,7 +123,10 @@ public class Configed {
 			new String[] { "--swaudit-pdf FILE_WITH_CLIENT_IDS_EACH_IN_A_LINE [OUTPUT_PATH]", "",
 					"export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)" },
 			new String[] { "--swaudit-csv FILE_WITH_CLIENT_IDS_EACH_IN_A_LINE [OUTPUT_PATH]", "",
-					"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)" }
+					"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)" },
+
+			new String[] { "--disable-certificate-verification", "",
+					"Disable opsi-certificate verification with server, by DEFAULT enabled" }
 
 			// undocumented
 	};
@@ -607,6 +610,9 @@ public class Configed {
 						i = i + 1;
 					}
 				} else if (args[i].equals("--halt")) {
+					i = i + 1;
+				} else if (args[i].equals("--disable-certificate-verification")) {
+					Globals.disableCertificateVerification = true;
 					i = i + 1;
 				} else {
 					Logging.debug("an option is not valid: " + args[i]);

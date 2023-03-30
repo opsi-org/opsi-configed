@@ -66,7 +66,7 @@ public final class Globals {
 
 	public static boolean disableCertificateVerification;
 
-	// Hier to prevent initialization
+	// Here to prevent initialization
 
 	public static final Color opsiDarkGrey = new Color(63, 63, 62);
 	public static final Color opsiGrey = new Color(178, 178, 178);
