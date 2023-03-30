@@ -24,4 +24,5 @@ public interface IFInstallationStateTableModel extends TableModel, ComboBoxModel
 
 	void finishCollectiveChange();
 
+	void updateTable(String clientId, String productId, Map<String, String> stateAndAction);
 }

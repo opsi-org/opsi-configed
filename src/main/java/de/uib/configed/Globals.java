@@ -35,7 +35,7 @@ public final class Globals {
 
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-03-29";
+	public static final String VERDATE = "2023-03-30";
 
 	public static final String VERHASHTAG = "";
 
@@ -66,7 +66,7 @@ public final class Globals {
 
 	public static boolean disableCertificateVerification;
 
-	// Hier to prevent initialization
+	// Here to prevent initialization
 
 	public static final Color opsiDarkGrey = new Color(63, 63, 62);
 	public static final Color opsiGrey = new Color(178, 178, 178);
