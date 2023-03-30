@@ -44,7 +44,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -3127,13 +3126,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				result.put((String) hardwareInfo.get("hardwareClass"), hardwareClassInfos);
 			}
 			LocalDateTime lastSeen = LocalDateTime.parse(hardwareInfo.get("lastseen").toString(), timeFormatter);
-			List<LocalDateTime> times = new ArrayList<>();
-			times.add(scanTime);
-			times.add(lastSeen);
-			Optional<LocalDateTime> time = times.stream().max(LocalDateTime::compareTo);
 
-			if (time.isPresent()) {
-				scanTime = time.get();
+			if (scanTime.compareTo(lastSeen) < 0) {
+				scanTime = lastSeen;
 			}
 		}
 
