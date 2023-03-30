@@ -3081,15 +3081,26 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return new HashMap<>();
 		}
 
-		Map<String, List<Map<String, Object>>> info = exec
-				.getMapOfListsOfMaps(new OpsiMethodCall("getHardwareInformation_hash", new String[] { clientId }));
+		List<String> callAttributes = new ArrayList<>();
+		Map<String, String> callFilter = new HashMap<>();
+		callFilter.put("hostId", clientId);
 
-		// the first element is a default scantime
-		if (info.size() > 1) {
-			return info;
+		List<Map<String, Object>> hardwareInfos = exec.getListOfMaps(
+				new OpsiMethodCall("auditHardwareOnHost_getObjects", new Object[] { callAttributes, callFilter }));
+
+		Map<String, List<Map<String, Object>>> result = new HashMap<>();
+		for (Map<String, Object> hardwareInfo : hardwareInfos) {
+			if (result.containsKey(hardwareInfo.get("hardwareClass"))) {
+				List<Map<String, Object>> hardwareClassInfos = result.get(hardwareInfo.get("hardwareClass"));
+				hardwareClassInfos.add(hardwareInfo);
+			} else {
+				List<Map<String, Object>> hardwareClassInfos = new ArrayList<>();
+				hardwareClassInfos.add(hardwareInfo);
+				result.put((String) hardwareInfo.get("hardwareClass"), hardwareClassInfos);
+			}
 		}
 
-		return new HashMap<>();
+		return result;
 	}
 
 	@Override
