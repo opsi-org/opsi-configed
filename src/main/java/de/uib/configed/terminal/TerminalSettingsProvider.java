@@ -8,26 +8,84 @@ import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 
 public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	private static int fontSize = 12;
-
-	protected static final Color[] COLORS = new Color[16];
+	protected static final Color[] DARK_COLORS = new Color[16];
 	static {
-		COLORS[0] = Color.decode("#d0d0d0");
-		COLORS[1] = Color.decode("#d0d0d0");
-		COLORS[2] = Color.decode("#ff0000");
-		COLORS[3] = Color.decode("#33ff00");
-		COLORS[4] = Color.decode("#ff0099");
-		COLORS[5] = Color.decode("#0066ff");
-		COLORS[6] = Color.decode("#cc00ff");
-		COLORS[7] = Color.decode("#00ffff");
-		COLORS[8] = Color.decode("#d0d0d0");
-		COLORS[9] = Color.decode("#808080");
-		COLORS[10] = Color.decode("#ff0000");
-		COLORS[11] = Color.decode("#33ff00");
-		COLORS[12] = Color.decode("#ff0099");
-		COLORS[13] = Color.decode("#0066ff");
-		COLORS[14] = Color.decode("#cc00ff");
-		COLORS[15] = Color.decode("#000000");
+		// Black
+		DARK_COLORS[0] = Color.decode("#ffffff");
+		// Red
+		DARK_COLORS[1] = Color.decode("#ff0000");
+		// Green
+		DARK_COLORS[2] = Color.decode("#33ff00");
+		// Yellow
+		DARK_COLORS[3] = Color.decode("#ff0099");
+		// Blue
+		DARK_COLORS[4] = Color.decode("#0066ff");
+		// Magenta
+		DARK_COLORS[5] = Color.decode("#cc00ff");
+		// Cyan
+		DARK_COLORS[6] = Color.decode("#00ffff");
+		// White
+		DARK_COLORS[7] = Color.decode("#d0d0d0");
+
+		// Bright versions of the ISO colors
+
+		// Black
+		DARK_COLORS[8] = Color.decode("#808080");
+		// Red
+		DARK_COLORS[9] = Color.decode("#ff0000");
+		// Green
+		DARK_COLORS[10] = Color.decode("#33ff00");
+		// Yellow
+		DARK_COLORS[11] = Color.decode("#ff0099");
+		// Blue
+		DARK_COLORS[12] = Color.decode("#0066ff");
+		// Magenta
+		DARK_COLORS[13] = Color.decode("#cc00ff");
+		// Cyan
+		DARK_COLORS[14] = Color.decode("#00ffff");
+		// White
+		DARK_COLORS[15] = Color.decode("#000000");
 	}
+	protected static final Color[] LIGHT_COLORS = new Color[16];
+	static {
+		// Black
+		LIGHT_COLORS[0] = Color.decode("#000000");
+		// Red
+		LIGHT_COLORS[1] = Color.decode("#ff0000");
+		// Green
+		LIGHT_COLORS[2] = Color.decode("#33ff00");
+		// Yellow
+		LIGHT_COLORS[3] = Color.decode("#ff0099");
+		// Blue
+		LIGHT_COLORS[4] = Color.decode("#0066ff");
+		// Magenta
+		LIGHT_COLORS[5] = Color.decode("#cc00ff");
+		// Cyan
+		LIGHT_COLORS[6] = Color.decode("#00ffff");
+		// White
+		LIGHT_COLORS[7] = Color.decode("#d0d0d0");
+
+		// Bright versions of the ISO colors
+
+		// Black
+		LIGHT_COLORS[8] = Color.decode("#808080");
+		// Red
+		LIGHT_COLORS[9] = Color.decode("#ff0000");
+		// Green
+		LIGHT_COLORS[10] = Color.decode("#33ff00");
+		// Yellow
+		LIGHT_COLORS[11] = Color.decode("#ff0099");
+		// Blue
+		LIGHT_COLORS[12] = Color.decode("#0066ff");
+		// Magenta
+		LIGHT_COLORS[13] = Color.decode("#cc00ff");
+		// Cyan
+		LIGHT_COLORS[14] = Color.decode("#00ffff");
+		// White
+		LIGHT_COLORS[15] = Color.decode("#ffffff");
+	}
+
+	private static MyColorPalette colorPalette = new MyColorPalette(DARK_COLORS);
 
 	@Override
 	public Font getTerminalFont() {
@@ -46,17 +104,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 
 	@Override
 	public ColorPalette getTerminalColorPalette() {
-		return new ColorPalette() {
-			@Override
-			protected Color getBackgroundByColorIndex(int arg0) {
-				return COLORS[arg0];
-			}
-
-			@Override
-			protected Color getForegroundByColorIndex(int arg0) {
-				return COLORS[arg0];
-			}
-		};
+		return colorPalette;
 	}
 
 	@Override
@@ -79,40 +127,28 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	}
 
 	public static void setTerminalLightTheme() {
-		COLORS[0] = Color.decode("#606060");
-		COLORS[1] = Color.decode("#606060");
-		COLORS[2] = Color.decode("#ff0000");
-		COLORS[3] = Color.decode("#33ff00");
-		COLORS[4] = Color.decode("#ff0099");
-		COLORS[5] = Color.decode("#0066ff");
-		COLORS[6] = Color.decode("#cc00ff");
-		COLORS[7] = Color.decode("#00ffff");
-		COLORS[8] = Color.decode("#d0d0d0");
-		COLORS[9] = Color.decode("#808080");
-		COLORS[10] = Color.decode("#ff0000");
-		COLORS[11] = Color.decode("#33ff00");
-		COLORS[12] = Color.decode("#ff0099");
-		COLORS[13] = Color.decode("#0066ff");
-		COLORS[14] = Color.decode("#cc00ff");
-		COLORS[15] = Color.decode("#ffffff");
+		colorPalette = new MyColorPalette(LIGHT_COLORS);
 	}
 
 	public static void setTerminalDarkTheme() {
-		COLORS[0] = Color.decode("#d0d0d0");
-		COLORS[1] = Color.decode("#d0d0d0");
-		COLORS[2] = Color.decode("#ff0000");
-		COLORS[3] = Color.decode("#33ff00");
-		COLORS[4] = Color.decode("#ff0099");
-		COLORS[5] = Color.decode("#0066ff");
-		COLORS[6] = Color.decode("#cc00ff");
-		COLORS[7] = Color.decode("#00ffff");
-		COLORS[8] = Color.decode("#d0d0d0");
-		COLORS[9] = Color.decode("#808080");
-		COLORS[10] = Color.decode("#ff0000");
-		COLORS[11] = Color.decode("#33ff00");
-		COLORS[12] = Color.decode("#ff0099");
-		COLORS[13] = Color.decode("#0066ff");
-		COLORS[14] = Color.decode("#cc00ff");
-		COLORS[15] = Color.decode("#000000");
+		colorPalette = new MyColorPalette(DARK_COLORS);
+	}
+
+	private static class MyColorPalette extends ColorPalette {
+		private Color[] colors;
+
+		public MyColorPalette(Color[] colors) {
+			this.colors = colors.clone();
+		}
+
+		@Override
+		public Color getForegroundByColorIndex(int colorIndex) {
+			return colors[colorIndex];
+		}
+
+		@Override
+		public Color getBackgroundByColorIndex(int colorIndex) {
+			return colors[colorIndex];
+		}
 	}
 }
