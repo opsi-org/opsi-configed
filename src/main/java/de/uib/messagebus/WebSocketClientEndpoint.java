@@ -97,6 +97,12 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 				byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
 				send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
 			} else if ("event".equals(type)) {
+				try {
+					// Sleep for a little because otherwise we cannot get the needed Data from the Server
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
 
 				switch ((String) data.get("event")) {
 				case "host_connected":

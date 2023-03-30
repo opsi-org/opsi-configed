@@ -3864,7 +3864,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			Map<String, String> aState = new ProductState(JSONReMapper.giveEmptyForNull(m), true);
 			states1Client.add(aState);
-
 		}
 
 		return result;
@@ -4104,14 +4103,18 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public Map<String, Object> getProductInfos(String productId, String clientId) {
-		Map<String, Object> callFilter = new HashMap<>();
-		callFilter.put("productId", productId);
-		callFilter.put("clientId", clientId);
+	public Map<String, String> getProductInfos(String productId, String clientId) {
 
-		OpsiMethodCall omc = new OpsiMethodCall("productOnClient_getObjects", new Object[] {});
+		String[] callAttributes = new String[] {};
 
-		return new HashMap<>();
+		HashMap<String, String> callFilter = new HashMap<>();
+		callFilter.put(ProductOnClient.PRODUCT_ID, productId);
+		callFilter.put(ProductOnClient.CLIENT_ID, clientId);
+
+		Map<String, Object> retrievedMap = retrieveListOfMapsNOM(callAttributes, callFilter,
+				"productOnClient_getHashes").get(0);
+
+		return new ProductState(JSONReMapper.giveEmptyForNull(retrievedMap), true);
 	}
 
 	public Map<String, Object> getProductInfos(String productname) {
@@ -4254,6 +4257,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map<?, ?> callFilter, String methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
+
 		Logging.debug(this, "retrieveListOfMapsNOM " + retrieved);
 		return retrieved;
 	}

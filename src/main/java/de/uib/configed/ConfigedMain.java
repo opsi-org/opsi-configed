@@ -275,8 +275,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// marker variables for requests for reload when clientlist changes
 	private Map<String, List<Map<String, String>>> localbootStatesAndActions;
-	private boolean localbootStatesAndActionsUPDATE;
+	private boolean localbootStatesAndActionsUpdate;
 	private Map<String, List<Map<String, String>>> netbootStatesAndActions;
+	private boolean netbootStatesAndActionsUpdate;
 	private Map<String, Map<String, Object>> hostConfigs;
 
 	// collection of retrieved software audit and hardware maps
@@ -669,8 +670,91 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void updateProduct(Map<?, ?> data) {
 		String productId = (String) data.get("productId");
 		String clientId = (String) data.get("clientId");
+		String productType = (String) data.get("productType");
 
-		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF PRODUCT UPDATED
+		// Maybe we need this later
+		Map<String, String> productInfo = persist.getProductInfos(productId, clientId);
+
+		/*for (String selectedClient : selectedClients) {
+			if (selectedClient.equals(clientId)) {
+				int selectedView = getViewIndex();
+		
+				if (selectedView == VIEW_LOCALBOOT_PRODUCTS
+						&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
+					localbootStatesAndActionsUPDATE = true;
+					setLocalbootProductsPage();
+				} else if (selectedView == VIEW_NETBOOT_PRODUCTS
+						&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
+					netbootStatesAndActions = null;
+					setNetbootProductsPage();
+				}
+			}
+		}*/
+
+		int selectedView = getViewIndex();
+
+		if (selectedView == VIEW_LOCALBOOT_PRODUCTS
+				&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
+			istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
+		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
+				&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
+			istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
+		}
+
+		if (localbootStatesAndActions.containsKey(clientId)) {
+			if (!collectChangedLocalbootStates.containsKey(clientId)
+					|| !collectChangedLocalbootStates.get(clientId).containsKey(productId)) {
+				boolean wasProductRemovedFromList = localbootStatesAndActions.get(clientId)
+						.removeIf(arg0 -> arg0.get("productId").equals(productId));
+
+				localbootStatesAndActions.get(clientId).add(productInfo);
+				istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
+				//updateAndRebuildTable();
+			}
+		}
+	}
+
+	private void updateAndRebuildTable() {
+		// update table
+		Set<String> oldProductSelection = mainFrame.panelLocalbootProductSettings.getSelectedIDs();
+		List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panelLocalbootProductSettings
+				.getSortKeys();
+
+		Logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
+
+		Logging.debug(this, "setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
+
+		// we rebuild !
+		istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
+				collectChangedLocalbootStates, persist.getAllLocalbootProductNames(depotRepresentative),
+				localbootStatesAndActions, possibleActions, persist.getProductGlobalInfos(depotRepresentative),
+				getLocalbootProductDisplayFieldsList(), Configed.savedStates.saveLocalbootproductFilter
+
+		);
+
+		try {
+			int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
+			mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
+			mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
+
+			mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
+
+			Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
+
+			Set<String> savedFilter = Configed.savedStates.saveLocalbootproductFilter.deserialize();
+
+			(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
+
+			Logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
+			mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
+
+			mainFrame.panelLocalbootProductSettings.setSearchFields(
+					InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
+
+			setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
+		} catch (Exception ex) {
+			Logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
+		}
 	}
 
 	public void addClientToConnectedList(String clientId) {
@@ -1898,21 +1982,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void requestReloadStatesAndActions() {
-		requestReloadStatesAndActions(false);
-	}
-
-	public void requestReloadStatesAndActions(boolean onlyUpdate) {
-		Logging.info(this, "requestReloadStatesAndActions , only updating " + onlyUpdate);
+		Logging.info(this, "requestReloadStatesAndActions");
 
 		persist.productpropertiesRequestRefresh();
 
-		if (onlyUpdate) {
-			localbootStatesAndActionsUPDATE = true;
-		} else {
-			localbootStatesAndActions = null;
-		}
-
-		netbootStatesAndActions = null;
+		localbootStatesAndActionsUpdate = true;
+		netbootStatesAndActionsUpdate = true;
 	}
 
 	public String[] getSelectedClients() {
@@ -2814,12 +2889,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		try {
 			clearProductEditing();
 
-			// null,
-
 			// we reload since at the moment we do not track changes if anyDataChanged
 			if (localbootStatesAndActions == null || istmForSelectedClientsLocalboot == null
-					|| localbootStatesAndActionsUPDATE) {
-				localbootStatesAndActionsUPDATE = false;
+					|| localbootStatesAndActionsUpdate) {
+				localbootStatesAndActionsUpdate = false;
 
 				localbootStatesAndActions = persist.getMapOfLocalbootProductStatesAndActions(getSelectedClients());
 
@@ -2853,9 +2926,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				// we rebuild only if we reloaded
 				istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
 						collectChangedLocalbootStates, persist.getAllLocalbootProductNames(depotRepresentative),
-						localbootStatesAndActions, possibleActions, // persist.getPossibleActions(depotRepresentative),
-						persist.getProductGlobalInfos(depotRepresentative), getLocalbootProductDisplayFieldsList(),
-						Configed.savedStates.saveLocalbootproductFilter
+						localbootStatesAndActions, possibleActions, persist.getProductGlobalInfos(depotRepresentative),
+						getLocalbootProductDisplayFieldsList(), Configed.savedStates.saveLocalbootproductFilter
 
 				);
 			}
@@ -2906,7 +2978,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					"setLocalbootProductsPage, # getMapOfNetbootProductStatesAndActions(selectedClients)  start "
 							+ startmillis);
 
-			if (netbootStatesAndActions == null) {
+			if (netbootStatesAndActions == null || netbootStatesAndActionsUpdate) {
 				// we reload since at the moment we do not track changes if anyDataChanged
 				netbootStatesAndActions = persist.getMapOfNetbootProductStatesAndActions(getSelectedClients());
 
@@ -3406,11 +3478,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "setViewIndex anyDataChanged " + anyDataChanged);
 
 		if (anyDataChanged && (viewIndex == VIEW_LOCALBOOT_PRODUCTS || viewIndex == VIEW_NETBOOT_PRODUCTS)) {
-			if (depotsListSelectionChanged) {
-				requestReloadStatesAndActions();
-			} else {
-				requestReloadStatesAndActions(true);
-			}
+			requestReloadStatesAndActions();
 		}
 
 		saveIfIndicated();
@@ -4465,7 +4533,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.resetNetbootProducts(getSelectedClients(), withDependencies);
 		}
 
-		requestReloadStatesAndActions(true);
+		requestReloadStatesAndActions();
 	}
 
 	public boolean freeAllPossibleLicencesForSelectedClients() {
