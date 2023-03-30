@@ -30,6 +30,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1487,8 +1488,33 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public boolean areDepotsSynchronous(Set<String> depots) {
-		OpsiMethodCall omc = new OpsiMethodCall("areDepotsSynchronous", new Object[] { depots.toArray() });
-		return exec.getBooleanResult(omc);
+		String lastIdent = null;
+
+		for (String depot : depots) {
+			String callReturnType = "dict";
+			Map<String, String> callFilter = new HashMap<>();
+			callFilter.put("depotId", depot);
+
+			List<Map<String, Object>> products = exec.getListOfMaps(
+					new OpsiMethodCall("productOnDepot_getIdents", new Object[] { callReturnType, callFilter }));
+			List<String> productIdents = new ArrayList<>();
+
+			for (Map<String, Object> product : products) {
+				productIdents.add(product.get("productId") + ";" + product.get("productVersion") + ";"
+						+ product.get("packageVersion"));
+			}
+
+			Collections.sort(productIdents);
+			String ident = String.join("|", productIdents);
+
+			if (lastIdent != null && !ident.equals(lastIdent)) {
+				return false;
+			}
+
+			lastIdent = ident;
+		}
+
+		return true;
 	}
 
 	protected Map<String, ConfigOption> extractSubConfigOptionsByInitial(final String s) {
