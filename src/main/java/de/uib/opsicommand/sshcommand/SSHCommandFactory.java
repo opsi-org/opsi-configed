@@ -183,6 +183,7 @@ public final class SSHCommandFactory {
 
 	private static void addAditionalParamCommands() {
 
+		sshCommandsParam.add(new CommandPackageUpdater());
 		sshCommandsParam.add(new CommandOpsiPackageManagerInstall());
 		sshCommandsParam.add(new CommandOpsiPackageManagerUninstall());
 		sshCommandsParam.add(new CommandOpsimakeproductfile());
