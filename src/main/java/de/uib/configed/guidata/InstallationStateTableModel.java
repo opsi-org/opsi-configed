@@ -270,6 +270,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		// TODO refactoring needed in these methods; 
 		// It seems to me that too many unnecessary operations are made in these methods
 		produceVisualStatesFromExistingEntries();
+		completeVisualStatesByDefaults();
 
 		int row = getRowFromProductID(productId);
 

@@ -672,24 +672,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String clientId = (String) data.get("clientId");
 		String productType = (String) data.get("productType");
 
-		// Maybe we need this later
+		// get the data for the updated client
 		Map<String, String> productInfo = persist.getProductInfos(productId, clientId);
-
-		/*for (String selectedClient : selectedClients) {
-			if (selectedClient.equals(clientId)) {
-				int selectedView = getViewIndex();
-		
-				if (selectedView == VIEW_LOCALBOOT_PRODUCTS
-						&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
-					localbootStatesAndActionsUPDATE = true;
-					setLocalbootProductsPage();
-				} else if (selectedView == VIEW_NETBOOT_PRODUCTS
-						&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
-					netbootStatesAndActions = null;
-					setNetbootProductsPage();
-				}
-			}
-		}*/
 
 		int selectedView = getViewIndex();
 
@@ -699,61 +683,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
 				&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
 			istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
-		}
-
-		if (localbootStatesAndActions.containsKey(clientId)) {
-			if (!collectChangedLocalbootStates.containsKey(clientId)
-					|| !collectChangedLocalbootStates.get(clientId).containsKey(productId)) {
-				boolean wasProductRemovedFromList = localbootStatesAndActions.get(clientId)
-						.removeIf(arg0 -> arg0.get("productId").equals(productId));
-
-				localbootStatesAndActions.get(clientId).add(productInfo);
-				istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
-				//updateAndRebuildTable();
-			}
-		}
-	}
-
-	private void updateAndRebuildTable() {
-		// update table
-		Set<String> oldProductSelection = mainFrame.panelLocalbootProductSettings.getSelectedIDs();
-		List<? extends RowSorter.SortKey> currentSortKeysLocalbootProducts = mainFrame.panelLocalbootProductSettings
-				.getSortKeys();
-
-		Logging.info(this, "setLocalbootProductsPage: oldProductSelection " + oldProductSelection);
-
-		Logging.debug(this, "setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
-
-		// we rebuild !
-		istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
-				collectChangedLocalbootStates, persist.getAllLocalbootProductNames(depotRepresentative),
-				localbootStatesAndActions, possibleActions, persist.getProductGlobalInfos(depotRepresentative),
-				getLocalbootProductDisplayFieldsList(), Configed.savedStates.saveLocalbootproductFilter
-
-		);
-
-		try {
-			int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
-			mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
-			mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
-
-			mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
-
-			Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
-
-			Set<String> savedFilter = Configed.savedStates.saveLocalbootproductFilter.deserialize();
-
-			(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
-
-			Logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
-			mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
-
-			mainFrame.panelLocalbootProductSettings.setSearchFields(
-					InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
-
-			setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
-		} catch (Exception ex) {
-			Logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
 		}
 	}
 
