@@ -257,9 +257,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private boolean hasIsOpisUserAdminBeenChecked;
 	private boolean isOpsiUserAdmin;
 
-	// the may as read in
-	protected Map<String, Object> opsiModulesInfo;
-
 	// the infos that are displayed in the gui
 	protected Map<String, Object> opsiModulesDisplayInfo;
 
@@ -8128,11 +8125,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return opsiInformation;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("backend_info", new String[] {});
+		OpsiMethodCall omc = new OpsiMethodCall("backend_getLicensingInfo", new String[] {});
 		opsiInformation = new HashMap<>();
 
 		// method does not exist before opsi 3.4
-		if (getMethodSignature("backend_info") != NONE_LIST) {
+		if (getMethodSignature("backend_getLicensingInfo") != NONE_LIST) {
 			opsiInformation = exec.getMapResult(omc);
 		}
 
@@ -8189,7 +8186,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		// the part of it which delivers the service information on checked
 		// modules
-		opsiModulesInfo = new HashMap<>();
+		Map<String, Object> opsiModulesInfo = new HashMap<>();
 		// keeps the info for displaying to the user
 		opsiModulesDisplayInfo = new HashMap<>();
 
@@ -8205,20 +8202,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			// prepare the user info
 			opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
-
-			opsiModulesInfo.remove("signature");
 			Logging.info(this, "opsi module information " + opsiModulesInfo);
-			opsiModulesInfo.remove("valid");
-
-			opsiModulesDisplayInfo = new HashMap<>(opsiModulesInfo);
 
 			ExtendedDate validUntil = ExtendedDate.INFINITE;
-			if (opsiModulesInfo.get(expiresKey) != null) {
-				validUntil = new ExtendedDate(opsiModulesInfo.get(expiresKey));
-			}
 
 			// analyse the real module info
-			opsiCountModules = exec.getMapFromItem(opsiInformation.get("realmodules"));
+			opsiCountModules = exec.getMapFromItem(opsiInformation.get("modules"));
+			opsiCountModules.keySet()
+					.removeAll(exec.getListFromItem(((JSONArray) opsiInformation.get("obsolete_modules")).toString()));
 			getHostInfoCollections().retrieveOpsiHosts();
 
 			ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
@@ -8233,15 +8224,20 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			// read in modules
 			for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
-				Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo.getKey());
-				ModulePermissionValue modulePermission = new ModulePermissionValue(exec, opsiModuleInfo.getValue(),
-						validUntil);
+				Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo);
+				Map<String, Object> opsiModuleData = JSONReMapper.getMapObject((JSONObject) opsiModuleInfo.getValue());
+				ModulePermissionValue modulePermission = new ModulePermissionValue(exec,
+						opsiModuleData.get("available"), validUntil);
 
 				Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
 				Boolean permissionCheck = modulePermission.getBoolean();
 				opsiModulesPermissions.put(opsiModuleInfo.getKey(), modulePermission);
 				if (permissionCheck != null) {
 					opsiModules.put(opsiModuleInfo.getKey(), permissionCheck);
+				}
+
+				if (opsiModuleData.get("available") != null) {
+					opsiModulesDisplayInfo.put(opsiModuleInfo.getKey(), opsiModuleData.get("available"));
 				}
 			}
 
@@ -8252,16 +8248,21 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
 				Logging.info(this,
 						"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
+				Map<String, Object> opsiModuleData = JSONReMapper.getMapObject((JSONObject) opsiCountModule.getValue());
 
-				modulePermission = new ModulePermissionValue(exec, opsiCountModule.getValue(), validUntil);
+				if (opsiModuleData.get("state").equals("free")) {
+					continue;
+				}
+
+				modulePermission = new ModulePermissionValue(exec, opsiModuleData.get("client_number"), validUntil);
 
 				Logging.info(this,
 						"handle modules key " + opsiCountModule.getKey() + " permission set " + modulePermission);
 				// replace value got from modulesInfo
 				opsiModulesPermissions.put(opsiCountModule.getKey(), modulePermission);
 
-				if (opsiCountModule.getValue() != null) {
-					opsiModulesDisplayInfo.put(opsiCountModule.getKey(), opsiCountModule.getValue());
+				if (opsiModuleData.get("client_number") != null) {
+					opsiModulesDisplayInfo.put(opsiCountModule.getKey(), opsiModuleData.get("client_number"));
 				}
 			}
 

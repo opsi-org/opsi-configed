@@ -111,7 +111,7 @@ public class ModulePermissionValue {
 
 		}
 
-		if (result == null) {
+		if (result == null || result.getDate() == null) {
 			result = ExtendedDate.ZERO;
 		}
 
