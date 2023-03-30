@@ -27,6 +27,8 @@ package de.uib.opsidatamodel;
 
 import java.io.File;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -42,6 +44,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -3111,6 +3114,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		List<Map<String, Object>> hardwareInfos = exec.getListOfMaps(
 				new OpsiMethodCall("auditHardwareOnHost_getObjects", new Object[] { callAttributes, callFilter }));
 
+		DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime scanTime = LocalDateTime.parse("2000-01-01 00:00:00", timeFormatter);
 		Map<String, List<Map<String, Object>>> result = new HashMap<>();
 		for (Map<String, Object> hardwareInfo : hardwareInfos) {
 			if (result.containsKey(hardwareInfo.get("hardwareClass"))) {
@@ -3121,9 +3126,28 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				hardwareClassInfos.add(hardwareInfo);
 				result.put((String) hardwareInfo.get("hardwareClass"), hardwareClassInfos);
 			}
+			LocalDateTime lastSeen = LocalDateTime.parse(hardwareInfo.get("lastseen").toString(), timeFormatter);
+			List<LocalDateTime> times = new ArrayList<>();
+			times.add(scanTime);
+			times.add(lastSeen);
+			Optional<LocalDateTime> time = times.stream().max(LocalDateTime::compareTo);
+
+			if (time.isPresent()) {
+				scanTime = time.get();
+			}
 		}
 
-		return result;
+		List<Map<String, Object>> scanProperties = new ArrayList<>();
+		Map<String, Object> scanProperty = new HashMap<>();
+		scanProperty.put("scantime", scanTime.format(timeFormatter));
+		scanProperties.add(scanProperty);
+		result.put("SCANPROPERTIES", scanProperties);
+
+		if (result.size() > 1) {
+			return result;
+		}
+
+		return new HashMap<>();
 	}
 
 	@Override
