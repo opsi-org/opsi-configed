@@ -198,7 +198,11 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 			return Configed.getResourceValue("SSHConnection.CommandControl.parameterTest.failed");
 		}
 
-		return result.contains("ssh://") ? result.replace("ssh://", "") : result;
+		if (result.contains("ssh://")) {
+			return result.replace("ssh://", "");
+		} else {
+			return result;
+		}
 	}
 
 	private void init() {

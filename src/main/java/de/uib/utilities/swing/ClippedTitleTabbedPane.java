@@ -69,7 +69,11 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 
 	@Override
 	public void insertTab(String title, Icon icon, Component component, String tip, int index) {
-		super.insertTab(title, icon, component, tip == null ? title : tip, index);
+		if (tip == null) {
+			tip = title;
+		}
+
+		super.insertTab(title, icon, component, tip, index);
 		JLabel label = new JLabel(title, SwingConstants.CENTER);
 		Dimension dim = label.getPreferredSize();
 		Insets tabInsets = getTabInsets();
@@ -106,7 +110,10 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 				break;
 			}
 
-			l.setPreferredSize(new Dimension(tabWidth + (i < gap ? 1 : 0), l.getPreferredSize().height));
+			if (i < gap) {
+				tabWidth = tabWidth + 1;
+			}
+			l.setPreferredSize(new Dimension(tabWidth, l.getPreferredSize().height));
 		}
 		revalidate();
 	}

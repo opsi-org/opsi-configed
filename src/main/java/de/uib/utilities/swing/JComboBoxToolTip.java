@@ -56,7 +56,13 @@ public class JComboBoxToolTip extends JComboBox<String> {
 				}
 			}
 			setFont(list.getFont());
-			setText((value == null) ? "" : value.toString());
+
+			if (value == null) {
+				setText("");
+			} else {
+				setText(value.toString());
+			}
+
 			return this;
 		}
 	}

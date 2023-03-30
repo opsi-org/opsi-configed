@@ -1192,7 +1192,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			} else {
 				try {
 					Shape shape = view.modelToView(offs0, Position.Bias.Forward, offs1, Position.Bias.Backward, bounds);
-					alloc = (shape instanceof Rectangle) ? (Rectangle) shape : shape.getBounds();
+
+					if ((shape instanceof Rectangle)) {
+						alloc = (Rectangle) shape;
+					} else {
+						alloc = shape.getBounds();
+					}
 				} catch (BadLocationException e) {
 					return null;
 				}
@@ -1216,7 +1221,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		protected Highlighter.HighlightPainter painter;
 
 		public UnderlineHighlighter(Color c) {
-			painter = (c == null ? sharedPainter : new UnderlineHighlightPainter(c));
+			if (c == null) {
+				painter = sharedPainter;
+			} else {
+				painter = new UnderlineHighlightPainter(c);
+			}
 		}
 
 		// Convenience method to add a highlight with

@@ -22,7 +22,13 @@ public class JComboBoxSimpleToolTip extends JComboBox<String> {
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
 
-			String val = (value == null) ? "" : value.toString();
+			String val;
+			if (value == null) {
+				val = "";
+			} else {
+				val = value.toString();
+			}
+
 			setText(val);
 
 			String tooltipText = Globals.fillStringToLength(val + " ", FILL_LENGTH);

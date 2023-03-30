@@ -370,20 +370,38 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		jButton1.setFont(Globals.defaultFont);
 		jButton1.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
-		jButton1.setText(button1Text == null ? Configed.getResourceValue("FGeneralDialog.ok") : button1Text);
+
+		if (button1Text == null) {
+			jButton1.setText(Configed.getResourceValue("FGeneralDialog.ok"));
+		} else {
+			jButton1.setText(button1Text);
+		}
+
 		jPanelButtonGrid.add(jButton1, null);
 
 		if (noOfButtons > 1) {
 			jButton2.setFont(Globals.defaultFont);
 			jButton2.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
-			jButton2.setText(button2Text == null ? Configed.getResourceValue("FGeneralDialog.ignore") : button2Text);
+
+			if (button2Text == null) {
+				jButton2.setText(Configed.getResourceValue("FGeneralDialog.ignore"));
+			} else {
+				jButton2.setText(button2Text);
+			}
+
 			jPanelButtonGrid.add(jButton2, null);
 
 		}
 		if (noOfButtons > 2) {
 			jButton3.setFont(Globals.defaultFont);
 			jButton3.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
-			jButton3.setText(button3Text == null ? Configed.getResourceValue("FGeneralDialog.empty") : button3Text);
+
+			if (button3Text == null) {
+				jButton3.setText(Configed.getResourceValue("FGeneralDialog.empty"));
+			} else {
+				jButton3.setText(button3Text);
+			}
+
 			jPanelButtonGrid.add(jButton3, null);
 		}
 

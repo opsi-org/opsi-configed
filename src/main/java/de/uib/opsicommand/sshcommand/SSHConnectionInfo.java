@@ -101,8 +101,19 @@ public final class SSHConnectionInfo {
 
 	public void useKeyfile(boolean v, String k, String p) {
 		useKeyfile = v;
-		keyfilepath = (k == null) ? "" : k;
-		keyfilepassphrase = (p == null) ? "" : p;
+
+		if (k == null) {
+			keyfilepath = "";
+		} else {
+			keyfilepath = k;
+		}
+
+		if (p == null) {
+			keyfilepassphrase = "";
+		} else {
+			keyfilepassphrase = p;
+		}
+
 		Logging.info("useKeyfile " + v + " now keyfilepath " + keyfilepath);
 	}
 
@@ -132,10 +143,12 @@ public final class SSHConnectionInfo {
 			setUser(ConfigedMain.user);
 		}
 
-		if ((getPassw() == null) && (!usesKeyfile())) {
-			setPassw(ConfigedMain.password);
-		} else if (getPassw() == null) {
-			setPassw("");
+		if (getPassw() == null) {
+			if (usesKeyfile()) {
+				setPassw("");
+			} else {
+				setPassw(ConfigedMain.password);
+			}
 		}
 
 		Logging.info(this, "checkUserData " + this.toString());
@@ -155,7 +168,14 @@ public final class SSHConnectionInfo {
 
 	@Override
 	public String toString() {
-		String tempSSH = usesKeyfile() ? (keyfilepath + "-" + keyfilepassphrase) : "no sshkey";
+		String tempSSH;
+
+		if (usesKeyfile()) {
+			tempSSH = keyfilepath + "-" + keyfilepassphrase;
+		} else {
+			tempSSH = "no sshkey";
+		}
+
 		return getUser() + "@" + getHost() + ":" + getPort() + "|" + tempSSH;
 	}
 }
