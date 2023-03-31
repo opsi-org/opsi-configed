@@ -556,7 +556,7 @@ public final class SSHCommandFactory {
 		} catch (Exception e) {
 			Logging.info(this, "testConnection not connected");
 			connectionState = NOT_CONNECTED;
-			Logging.warning(this, "cannot connect to " + user + "@" + host);
+			Logging.warning(this, "cannot connect to " + user + "@" + host, e);
 		}
 		updateConnectionInfo(connectionState);
 		Logging.info(this, "testConnection connection state " + connectionState);
@@ -573,5 +573,4 @@ public final class SSHCommandFactory {
 			mainFrame.updateSSHConnectedInfoMenu(status);
 		}
 	}
-
 }

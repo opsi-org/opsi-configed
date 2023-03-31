@@ -265,7 +265,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 		try {
 			component.getDocument().insertString(component.getCaretPosition(), paramText, null);
 		} catch (BadLocationException ble) {
-			Logging.warning(this, " BadLocationException  add parameter method to command failed.");
+			Logging.warning(this, " BadLocationException  add parameter method to command failed.", ble);
 		}
 	}
 }

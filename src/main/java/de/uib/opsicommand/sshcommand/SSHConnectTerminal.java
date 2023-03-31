@@ -204,7 +204,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		ch.setInputStream(new FilterInputStream(System.in) {
 			@Override
 			public int read(byte[] b, int off, int len) throws IOException {
-				return in.read(b, off, (len > 1024 ? 1024 : len));
+				return in.read(b, off, Math.min(len, 1024));
 			}
 		});
 

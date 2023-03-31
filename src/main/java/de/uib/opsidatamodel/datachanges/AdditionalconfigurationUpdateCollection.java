@@ -29,7 +29,7 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	}
 
 	@Override
-	public boolean addAll(Collection c) {
+	public boolean addAll(Collection<? extends UpdateCommand> c) {
 		boolean result = true;
 
 		if (c.size() != objectIds.length) {
@@ -40,16 +40,18 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		}
 
 		if (result) {
-			Iterator it = c.iterator();
+			Iterator<? extends UpdateCommand> it = c.iterator();
 			int i = 0;
 			while (it.hasNext()) {
-				Map map = null;
-				Object obj = it.next();
+				Map<?, ?> map = null;
+				UpdateCommand updateCommand = it.next();
 
 				try {
-					map = (Map) obj;
+					map = (Map<?, ?>) updateCommand;
 				} catch (ClassCastException ccex) {
-					Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
+					Logging.error(
+							"Wrong element type, found " + updateCommand.getClass().getName() + ", expected a Map",
+							ccex);
 				}
 
 				Logging.debug(this, "addAll for one obj, map " + map);

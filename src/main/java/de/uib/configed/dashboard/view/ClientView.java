@@ -197,9 +197,14 @@ public class ClientView implements View {
 
 			final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			final LocalDate current = LocalDate.now();
-			final LocalDate lastSeenDate = client.getLastSeen()
-					.equals(Configed.getResourceValue("Dashboard.lastSeen.never")) ? LocalDate.parse("9999-12-31", dtf)
-							: LocalDate.parse(client.getLastSeen().substring(0, 10), dtf);
+			final LocalDate lastSeenDate;
+
+			if (client.getLastSeen().equals(Configed.getResourceValue("Dashboard.lastSeen.never"))) {
+				lastSeenDate = LocalDate.parse("9999-12-31", dtf);
+			} else {
+				lastSeenDate = LocalDate.parse(client.getLastSeen().substring(0, 10), dtf);
+			}
+
 			final long days = ChronoUnit.DAYS.between(lastSeenDate, current);
 
 			return (clientLastSeenComboBox.getValue()

@@ -673,7 +673,11 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				String s;
 				Object cellValue = jTable.getValueAt(j, i);
 
-				s = cellValue == null ? "" : cellValue.toString();
+				if (cellValue == null) {
+					s = "";
+				} else {
+					s = cellValue.toString();
+				}
 
 				actCol[i] = s;
 

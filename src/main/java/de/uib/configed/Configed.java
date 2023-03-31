@@ -520,10 +520,6 @@ public class Configed {
 				} else if (args[i].equals("--nosqlrawdata")) {
 					PersistenceControllerFactory.avoidSqlRawData = true;
 					i = i + 1;
-				} else if (args[i].equals("--sqldirect-cleanup-auditsoftware")) {
-					PersistenceControllerFactory.sqlDirect = true;
-					PersistenceControllerFactory.directmethodcall = PersistenceControllerFactory.DIRECT_METHOD_CALL_CLEANUP_AUDIT_SOFTWARE;
-					i = i + 1;
 				} else if (args[i].equals("--version")) {
 					System.out.println("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
 					System.exit(0);
@@ -902,14 +898,6 @@ public class Configed {
 
 			System.exit(0);
 
-		}
-
-		if (PersistenceControllerFactory.sqlDirect) {
-			Logging.debug("PersistenceControllerFactory.sqlDirect");
-
-			addMissingArgs();
-
-			System.exit(0);
 		}
 
 		try {

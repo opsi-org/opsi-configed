@@ -282,6 +282,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		try {
 			v = new BigInteger(value);
 		} catch (Exception e) {
+			Logging.warning(this, "could not create BigInteger from value " + value, e);
 			return value + " " + unit;
 		}
 
@@ -370,6 +371,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					String key = iter.next();
 					if (key.equalsIgnoreCase(opsi)) {
 						String cv = "";
+
+						if (deviceInfo.get(key) == null) {
+							continue;
+						}
+
 						if (deviceInfo.get(key) instanceof String) {
 							cv = (String) deviceInfo.get(key);
 						} else {

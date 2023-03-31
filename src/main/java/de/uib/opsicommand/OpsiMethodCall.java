@@ -187,7 +187,7 @@ public class OpsiMethodCall {
 			result = jO.toString();
 
 		} catch (JSONException jex) {
-			Logging.error(this, "Exception while producing a JSONObject, " + jex.toString());
+			Logging.error(this, "Exception while producing a JSONObject", jex);
 		}
 
 		return result;

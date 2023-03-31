@@ -378,7 +378,11 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		parser.setIgnoreErrors(false);
 		boolean updatedSuccessfull = modifier.updateTable(parser, startLine, thePanel);
 
-		return updatedSuccessfull ? thePanel : null;
+		if (updatedSuccessfull) {
+			return thePanel;
+		} else {
+			return null;
+		}
 	}
 
 	private static class InputListener implements DocumentListener {
@@ -398,6 +402,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		@Override
 		public void removeUpdate(DocumentEvent e) {
 			/* Not needed */}
+
 	}
 
 	public CSVImportDataModifier getModifier() {

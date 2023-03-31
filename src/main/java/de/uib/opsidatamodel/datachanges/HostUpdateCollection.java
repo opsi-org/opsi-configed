@@ -24,18 +24,18 @@ public class HostUpdateCollection extends UpdateCollection {
 	}
 
 	@Override
-	public boolean addAll(Collection c) {
+	public boolean addAll(Collection<? extends UpdateCommand> c) {
 		boolean result = true;
 
-		Iterator it = c.iterator();
+		Iterator<? extends UpdateCommand> it = c.iterator();
 		while (it.hasNext()) {
 			Map map = null;
 			Object obj = it.next();
 
 			try {
-				map = (Map) obj;
+				map = (Map<?, ?>) obj;
 			} catch (ClassCastException ccex) {
-				Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
+				Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map", ccex);
 			}
 
 			result = add(new HostUpdate(persis, map));

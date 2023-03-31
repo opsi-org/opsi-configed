@@ -330,14 +330,11 @@ public class MainFrame extends JFrame
 	private JMenuItemFormatted popupCreatePdf = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
 			Globals.createImageIcon("images/acrobat_reader16.png", ""));
 
-	private JPanel iconPaneTargets;
 	private JButton jButtonServerConfiguration;
 	private JButton jButtonDepotsConfiguration;
 	private JButton jButtonClientsConfiguration;
 	private JButton jButtonWorkOnGroups;
 	private JButton jButtonWorkOnProducts;
-
-	private JPanel iconPaneExtraFrames;
 
 	private JButton jButtonDashboard;
 	private JButton jButtonLicences;
@@ -742,7 +739,7 @@ public class MainFrame extends JFrame
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileLanguage);
 
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ConfigedMain.THEMES) {
 			jMenuFile.add(jMenuTheme);
 		}
 
@@ -1425,7 +1422,10 @@ public class MainFrame extends JFrame
 
 		jMenuHelpInternalConfiguration.setText(Configed.getResourceValue("MainFrame.jMenuHelpInternalConfiguration"));
 		jMenuHelpInternalConfiguration.addActionListener((ActionEvent e) -> showBackendConfigurationAction());
-		jMenuHelp.add(jMenuHelpInternalConfiguration);
+
+		if (!JSONthroughHTTPS.isOpsi43()) {
+			jMenuHelp.add(jMenuHelpInternalConfiguration);
+		}
 
 		ActionListener selectLoglevelListener = (ActionEvent e) -> {
 			for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
@@ -2373,7 +2373,7 @@ public class MainFrame extends JFrame
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelOpsiLicenses"));
 		jButtonOpsiLicenses.addActionListener(this);
 
-		iconPaneTargets = new JPanel();
+		JPanel iconPaneTargets = new JPanel();
 		iconPaneTargets.setBorder(new LineBorder(Globals.blueGrey, 1, true));
 
 		GroupLayout layoutIconPaneTargets = new GroupLayout(iconPaneTargets);
@@ -2403,7 +2403,7 @@ public class MainFrame extends JFrame
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		iconPaneExtraFrames = new JPanel();
+		JPanel iconPaneExtraFrames = new JPanel();
 		iconPaneExtraFrames.setBorder(new LineBorder(Globals.blueGrey, 1, true));
 
 		GroupLayout layoutIconPaneExtraFrames = new GroupLayout(iconPaneExtraFrames);
@@ -3217,7 +3217,7 @@ public class MainFrame extends JFrame
 			writer.write(HealthInfo.getHealthData(true));
 			writer.flush();
 		} catch (IOException e) {
-			Logging.error("unable to write to a file: " + healthDataFile.getAbsolutePath());
+			Logging.error("unable to write to a file: " + healthDataFile.getAbsolutePath(), e);
 		}
 	}
 
@@ -3554,7 +3554,7 @@ public class MainFrame extends JFrame
 				try {
 					initFX();
 				} catch (IOException ioE) {
-					Logging.error(this, "Unable to open fxml file");
+					Logging.error(this, "Unable to open fxml file", ioE);
 				}
 			});
 		}

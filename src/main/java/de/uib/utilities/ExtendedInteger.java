@@ -42,9 +42,9 @@ public class ExtendedInteger implements Comparable<Integer> {
 				number = Integer.decode(s);
 				// no exception:
 				value = s;
-			} catch (Exception ex) {
+			} catch (NumberFormatException ex) {
 				Logging.error("possible values are numbers  or \"" + INFINITE_IMPORT + "\" resp. \"" + DISPLAY_INFINITE
-						+ "\"");
+						+ "\"", ex);
 			}
 		}
 	}

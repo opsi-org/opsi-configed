@@ -125,8 +125,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	protected Set<String> directlyAllowedGroups;
 
-	private boolean mouseClicked;
-
 	ConfigedMain configedMain;
 
 	static {
@@ -349,7 +347,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		mouseClicked = false;
 
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			TreePath selectedPath = getSelectionPath();
@@ -382,10 +379,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// interface TreeSelectionListener
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		if (mouseClicked) {
-			mouseClicked = false;
-			return;
-		}
 
 		TreePath selectedPath = getSelectionPath();
 
@@ -398,8 +391,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	@Override
 	public void mousePressed(final MouseEvent e) {
 		Logging.debug(this, "mousePressed event " + e);
-
-		mouseClicked = true;
 
 		final Cursor initialCursor = getCursor();
 		final JTree theTree = this;

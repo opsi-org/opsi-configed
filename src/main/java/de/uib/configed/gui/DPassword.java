@@ -162,7 +162,11 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		jProgressBar.setVisible(!active);
 		jProgressBar.setValue(0);
 
-		waitingLabel.setText(active ? "" : Configed.getResourceValue("DPassword.WaitInfo.label"));
+		if (active) {
+			waitingLabel.setText("");
+		} else {
+			waitingLabel.setText(Configed.getResourceValue("DPassword.WaitInfo.label"));
+		}
 
 		fieldHost.setEnabled(active);
 		fieldUser.setEnabled(active);

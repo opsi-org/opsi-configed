@@ -812,7 +812,7 @@ public final class NewClientDialog extends FGeneralDialog {
 				format.detectFormat(csvFile);
 			}
 		} catch (IOException e) {
-			Logging.error(this, "Unable to read CSV file");
+			Logging.error(this, "Unable to read CSV file", e);
 		}
 
 		List<String> columnNames = new ArrayList<>();

@@ -290,7 +290,7 @@ public class SSHCompletionComboButton {
 
 					} catch (Exception ei) {
 						Logging.warning(this, "Could not find .opsi files in directory " + curdir
-								+ " (It may be the rights are setted wrong.)");
+								+ " (It may be the rights are setted wrong.)", ei);
 					}
 					setItems(result, curdir);
 					enableComponents(true);

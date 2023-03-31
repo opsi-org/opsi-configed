@@ -176,7 +176,7 @@ public class ExporterToCSV extends AbstractExportTable {
 				}
 
 			} catch (Exception ex) {
-				Logging.error(Configed.getResourceValue("ExportTable.error") + " " + ex.toString());
+				Logging.error(Configed.getResourceValue("ExportTable.error"), ex);
 			}
 		}
 

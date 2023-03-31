@@ -10,21 +10,21 @@ import de.uib.utilities.logging.Logging;
 
 public class UpdateCollection implements UpdateCommand, CountedCollection {
 
-	protected Collection<Object> implementor;
+	protected Collection<UpdateCommand> implementor;
 
 	// we delegate all Collection methods to this object extending only add()
-	public UpdateCollection(Collection<Object> implementor) {
+	public UpdateCollection(Collection<UpdateCommand> implementor) {
 		this.implementor = implementor;
 	}
 
 	@Override
-	public boolean addAll(Collection c) {
+	public boolean addAll(Collection<? extends UpdateCommand> c) {
 		boolean success = true;
-		Iterator it = c.iterator();
+		Iterator<? extends UpdateCommand> it = c.iterator();
 		while (it.hasNext() && success) {
-			Object ob = it.next();
-			Logging.debug(this, "addAll, element of Collection: " + ob);
-			if (!add(ob)) {
+			UpdateCommand updateCommand = it.next();
+			Logging.debug(this, "addAll, element of Collection: " + updateCommand);
+			if (!add(updateCommand)) {
 				success = false;
 			}
 		}
@@ -34,13 +34,13 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	@Override
 	public void clear() {
 		Logging.debug(this, "clear()");
-		Iterator<Object> it = implementor.iterator();
+		Iterator<UpdateCommand> it = implementor.iterator();
 		while (it.hasNext()) {
-			Object obj = it.next();
+			UpdateCommand updateCommand = it.next();
 			// a element of the collection is a collection, we do our best to clear recursively
-			if (obj instanceof Collection) {
-				Logging.debug(this, "by recursion, we will clear " + obj);
-				((Collection) obj).clear();
+			if (updateCommand instanceof Collection) {
+				Logging.debug(this, "by recursion, we will clear " + updateCommand);
+				((Collection<?>) updateCommand).clear();
 			}
 
 		}
@@ -53,13 +53,13 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		// *** perhaps we should instead implement a recursive empty which clears only
 		// the implementors but does not remove the elements
 
-		Iterator<Object> it = implementor.iterator();
+		Iterator<UpdateCommand> it = implementor.iterator();
 		while (it.hasNext()) {
-			Object obj = it.next();
+			UpdateCommand updateCommand = it.next();
 
 			// a element of the collection is a collection, we do our best to clear recursively
-			if (obj instanceof UpdateCollection) {
-				((UpdateCollection) obj).clearElements();
+			if (updateCommand instanceof UpdateCollection) {
+				((UpdateCollection) updateCommand).clearElements();
 			}
 		}
 	}
@@ -67,14 +67,14 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	public void revert() {
 		Logging.info(this, "revert()");
 
-		Iterator<Object> it = implementor.iterator();
+		Iterator<UpdateCommand> it = implementor.iterator();
 		while (it.hasNext()) {
-			Object obj = it.next();
-			if (obj instanceof UpdateCollection) {
+			UpdateCommand updateCommand = it.next();
+			if (updateCommand instanceof UpdateCollection) {
 				// a element of the collection is a collection, we do our best to clear
 				// recursively
 
-				((UpdateCollection) obj).revert();
+				((UpdateCollection) updateCommand).revert();
 
 			}
 		}
@@ -91,7 +91,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	}
 
 	@Override
-	public boolean containsAll(Collection c) {
+	public boolean containsAll(Collection<?> c) {
 		return implementor.containsAll(c);
 	}
 
@@ -111,7 +111,7 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	}
 
 	@Override
-	public Iterator<Object> iterator() {
+	public Iterator<UpdateCommand> iterator() {
 		return implementor.iterator();
 	}
 
@@ -121,12 +121,12 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 	}
 
 	@Override
-	public boolean removeAll(Collection c) {
+	public boolean removeAll(Collection<?> c) {
 		return implementor.removeAll(c);
 	}
 
 	@Override
-	public boolean retainAll(Collection c) {
+	public boolean retainAll(Collection<?> c) {
 		return implementor.retainAll(c);
 	}
 
@@ -147,13 +147,8 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 
 	@Override
 	@SuppressWarnings("unused")
-	public boolean add(Object obj) {
+	public boolean add(UpdateCommand obj) {
 		Logging.debug(this, "###### UpdateCollection add Object  " + obj);
-		if (!(obj instanceof UpdateCommand)) {
-			Logging.error("Wrong element type, found" + obj.getClass().getName() + ", expected an UpdateCommand");
-
-			return false;
-		}
 
 		if (obj == null) {
 			return true;
@@ -175,13 +170,13 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 
 		int result = 0;
 
-		Iterator<Object> it = implementor.iterator();
+		Iterator<UpdateCommand> it = implementor.iterator();
 		while (it.hasNext()) {
-			Object obj = it.next();
-			if (obj != null) {
+			UpdateCommand updateCommand = it.next();
+			if (updateCommand != null) {
 				// a element of the collection is a collection, we retrieve the size recursively
-				if (obj instanceof CountedCollection) {
-					result = result + ((CountedCollection) obj).accumulatedSize();
+				if (updateCommand instanceof CountedCollection) {
+					result = result + ((CountedCollection) updateCommand).accumulatedSize();
 				} else {
 					// we found an 'ordinary' element and add 1
 					result++;
@@ -213,9 +208,9 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 			return;
 		}
 
-		Iterator<Object> it = implementor.iterator();
+		Iterator<UpdateCommand> it = implementor.iterator();
 		while (it.hasNext()) {
-			UpdateCommand theCommand = ((UpdateCommand) it.next());
+			UpdateCommand theCommand = it.next();
 
 			if (theCommand != null) {
 				theCommand.doCall();

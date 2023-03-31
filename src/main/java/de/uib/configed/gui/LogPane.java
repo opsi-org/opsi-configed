@@ -1142,7 +1142,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				try {
 					compHighlighter.addHighlight(lastIndex, endIndex, painter);
 				} catch (BadLocationException e) {
-					// Nothing to do
+					Logging.warning(this, "could not add highlight to comphighlighter", e);
 				}
 				if (firstOffset == -1) {
 					firstOffset = lastIndex;
@@ -1192,8 +1192,14 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			} else {
 				try {
 					Shape shape = view.modelToView(offs0, Position.Bias.Forward, offs1, Position.Bias.Backward, bounds);
-					alloc = (shape instanceof Rectangle) ? (Rectangle) shape : shape.getBounds();
+
+					if ((shape instanceof Rectangle)) {
+						alloc = (Rectangle) shape;
+					} else {
+						alloc = shape.getBounds();
+					}
 				} catch (BadLocationException e) {
+					Logging.warning(this, "could not get shape for location", e);
 					return null;
 				}
 			}
@@ -1216,7 +1222,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		protected Highlighter.HighlightPainter painter;
 
 		public UnderlineHighlighter(Color c) {
-			painter = (c == null ? sharedPainter : new UnderlineHighlightPainter(c));
+			if (c == null) {
+				painter = sharedPainter;
+			} else {
+				painter = new UnderlineHighlightPainter(c);
+			}
 		}
 
 		// Convenience method to add a highlight with

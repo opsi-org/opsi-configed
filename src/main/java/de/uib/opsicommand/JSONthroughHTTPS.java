@@ -363,7 +363,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			try {
 				peerName = session.getPeerPrincipal().getName();
 			} catch (SSLPeerUnverifiedException e) {
-				Logging.error(this, "peer's identity wasn't verified");
+				Logging.error(this, "peer's identity wasn't verified", e);
 			}
 
 			Logging.info(this, "protocol " + protocol + "  peerName " + peerName);
@@ -391,13 +391,13 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (KeyStoreException e) {
-			Logging.error(this, "keystore wasn't initialized: " + e.toString());
+			Logging.error(this, "keystore wasn't initialized: " + e.toString(), e);
 		} catch (NoSuchAlgorithmException e) {
-			Logging.error(this, "provider doesn't support algorithm");
+			Logging.error(this, "provider doesn't support algorithm", e);
 		} catch (UnrecoverableKeyException e) {
-			Logging.error(this, "unable to provide key");
+			Logging.error(this, "unable to provide key", e);
 		} catch (KeyManagementException e) {
-			Logging.error(this, "failed to initialize SSL context: " + e.toString());
+			Logging.error(this, "failed to initialize SSL context: " + e.toString(), e);
 		}
 
 		return sslFactory;
@@ -468,14 +468,14 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		try {
 			tmpCertFile = File.createTempFile(Globals.CERTIFICATE_FILE_NAME, "." + Globals.CERTIFICATE_FILE_EXTENSION);
 		} catch (IOException e) {
-			Logging.error(this, "unable to create tmp certificate file");
+			Logging.error(this, "unable to create tmp certificate file", e);
 		}
 
 		try (ReadableByteChannel rbc = Channels.newChannel(url.openStream());
 				FileOutputStream fos = new FileOutputStream(tmpCertFile)) {
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		} catch (IOException e) {
-			Logging.error(this, "unable to download certificate from specified url: " + url.toString());
+			Logging.error(this, "unable to download certificate from specified url: " + url.toString(), e);
 
 			if (tmpCertFile != null && tmpCertFile.exists()) {
 				deleteFile(tmpCertFile);
@@ -490,7 +490,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		try {
 			Files.delete(file.toPath());
 		} catch (IOException e) {
-			Logging.error(this, "unable to delete file");
+			Logging.error(this, "unable to delete file", e);
 		}
 	}
 
@@ -521,9 +521,9 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 			sslContext.init(null, trustAllCerts, new SecureRandom());
 			sslFactory = new SecureSSLSocketFactory(sslContext.getSocketFactory(), new MyHandshakeCompletedListener());
 		} catch (NoSuchAlgorithmException e) {
-			Logging.error(this, "provider doesn't support algorithm");
+			Logging.error(this, "provider doesn't support algorithm", e);
 		} catch (KeyManagementException e) {
-			Logging.error(this, "failed to initialize SSL context");
+			Logging.error(this, "failed to initialize SSL context", e);
 		}
 
 		return sslFactory;
@@ -575,7 +575,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 					throw new IllegalStateException("Peer does not have any certificates or they aren't X.509");
 				}
 			} catch (SSLPeerUnverifiedException ex) {
-				Logging.error(this, "peer's identity wasn't verified");
+				Logging.error(this, "peer's identity wasn't verified", ex);
 			}
 
 			return validCertificate;
@@ -588,6 +588,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 				validCertificate = certificate.getSubjectAlternativeNames().stream()
 						.anyMatch(peerHostname -> hostname.equals(peerHostname.get(1)));
 			} catch (CertificateException ex) {
+				Logging.warning(this, "certificate exception, could not validate certificate", ex);
 				validCertificate = false;
 			}
 
@@ -601,7 +602,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 				subjectAlternativeNames = certificate.getSubjectAlternativeNames().stream()
 						.map(peerHostname -> (String) peerHostname.get(1)).collect(Collectors.toList());
 			} catch (CertificateParsingException e) {
-				e.printStackTrace();
+				Logging.warning(this, "problem in parsing certificate", e);
 			}
 
 			return subjectAlternativeNames;

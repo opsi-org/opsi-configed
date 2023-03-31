@@ -59,6 +59,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
+import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -69,6 +70,7 @@ import de.uib.utilities.table.CursorrowObserver;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.JTableWithToolTips;
 import de.uib.utilities.table.RowNoTableModelFilterCondition;
 import de.uib.utilities.table.TableCellRendererByBoolean;
 import de.uib.utilities.table.TableCellRendererCurrency;
@@ -379,7 +381,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
-		theTable = new de.uib.utilities.table.JTableWithToolTips();
+		theTable = new JTableWithToolTips();
 
 		theTable.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
@@ -877,7 +879,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					Logging.debug(this, " comparator for col " + column + " is " + super.getComparator(column));
 					return super.getComparator(column);
 				} catch (Exception ex) {
-					Logging.warning(this, "column " + column + " ------------------- not getting comparator ");
+					Logging.warning(this, "column " + column + " ------------------- not getting comparator ", ex);
 					return null;
 				}
 
@@ -895,7 +897,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					((DefaultRowSorter) sorter).setComparator(j, comparators[j]);
 				} else if (tableModel.getClassNames().get(j).equals("java.lang.Integer")) {
 
-					((DefaultRowSorter) sorter).setComparator(j, new de.uib.utilities.IntComparatorForStrings());
+					((DefaultRowSorter) sorter).setComparator(j, new IntComparatorForStrings());
 				}
 			}
 		}
