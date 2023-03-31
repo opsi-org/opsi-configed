@@ -398,7 +398,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		theTree.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		configedMain.treeClientsMouseAction(true, e);
 		theTree.setCursor(initialCursor);
-
 	}
 
 	@Override
