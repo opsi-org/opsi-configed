@@ -35,7 +35,7 @@ public class HostUpdateCollection extends UpdateCollection {
 			try {
 				map = (Map<?, ?>) obj;
 			} catch (ClassCastException ccex) {
-				Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
+				Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map", ccex);
 			}
 
 			result = add(new HostUpdate(persis, map));

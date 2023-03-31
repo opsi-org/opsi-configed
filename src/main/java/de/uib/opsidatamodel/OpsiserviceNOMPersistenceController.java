@@ -26,6 +26,7 @@
 package de.uib.opsidatamodel;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -597,8 +598,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 								configedWorkbenchDefaultValue = filepath;
 								packageServerDirectoryS = filepath;
-							} catch (Exception netex) {
-								Logging.error("not a correctly formed file URL: " + val);
+							} catch (MalformedURLException netex) {
+								Logging.error("not a correctly formed file URL: " + val, netex);
 							}
 						}
 					}
@@ -2299,7 +2300,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				map.put(key, (Integer) jO.get(key));
 			}
 		} catch (JSONException jex) {
-			Logging.error(this, "Exception on getting Map " + jex.toString());
+			Logging.error(this, "Exception on getting Map ", jex);
 		}
 
 		return map;

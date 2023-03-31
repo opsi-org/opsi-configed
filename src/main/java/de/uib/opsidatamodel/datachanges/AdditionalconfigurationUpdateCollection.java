@@ -50,7 +50,8 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 					map = (Map<?, ?>) updateCommand;
 				} catch (ClassCastException ccex) {
 					Logging.error(
-							"Wrong element type, found " + updateCommand.getClass().getName() + ", expected a Map");
+							"Wrong element type, found " + updateCommand.getClass().getName() + ", expected a Map",
+							ccex);
 				}
 
 				Logging.debug(this, "addAll for one obj, map " + map);

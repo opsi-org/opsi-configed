@@ -21,7 +21,7 @@ public class IntComparatorForObjects implements Comparator<Object> {
 			}
 
 			i1 = Integer.parseInt(s1);
-		} catch (Exception ex) {
+		} catch (NumberFormatException ex) {
 			Logging.info("o1 no number " + o1 + " s1: " + s1);
 		}
 
@@ -31,7 +31,7 @@ public class IntComparatorForObjects implements Comparator<Object> {
 			}
 
 			i2 = Integer.parseInt(s2);
-		} catch (Exception ex) {
+		} catch (NumberFormatException ex) {
 			Logging.info(this, "exception " + ex);
 			Logging.info("o2 no number " + o2 + " s2: " + s2);
 		}

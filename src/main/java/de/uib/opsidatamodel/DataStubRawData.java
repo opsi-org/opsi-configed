@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
@@ -200,9 +201,9 @@ public class DataStubRawData extends DataStubNOM {
 				JSONArray values = null;
 				try {
 					values = new JSONArray(row.get(3));
-				} catch (Exception ex) {
+				} catch (JSONException ex) {
 					Logging.warning(this, "produceProductPropertyStates, error when json parsing database string \n"
-							+ row.get(3) + " for propertyId " + row.get(1));
+							+ row.get(3) + " for propertyId " + row.get(1), ex);
 				}
 
 				m.put(ProductPropertyState.VALUES, values);
@@ -411,9 +412,9 @@ public class DataStubRawData extends DataStubNOM {
 				List<Object> values = new ArrayList<>();
 				try {
 					values = (new JSONArray(valueString)).toList();
-				} catch (Exception ex) {
+				} catch (JSONException ex) {
 					Logging.warning(this, "retrieveHostConfigs, error when json parsing database string \n"
-							+ valueString + " for configId " + configId);
+							+ valueString + " for configId " + configId, ex);
 				}
 
 				// put into host configs
@@ -674,7 +675,5 @@ public class DataStubRawData extends DataStubNOM {
 		timeCheck.stop();
 		Logging.info(this, "retrieveClient2HwRows finished  ");
 		persist.notifyDataRefreshedObservers("client2HwRows");
-
 	}
-
 }

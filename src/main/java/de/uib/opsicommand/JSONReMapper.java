@@ -305,7 +305,7 @@ public final class JSONReMapper {
 			}
 
 		} catch (JSONException jex) {
-			Logging.error("JSONReMapper: Exception on getting list " + jex.toString());
+			Logging.error("JSONReMapper: Exception on getting list ", jex);
 		}
 
 		JSONObject item = null;

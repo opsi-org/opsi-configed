@@ -123,7 +123,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				String urlEnc = URLEncoder.encode(json, "UTF8");
 				urlS += "?" + urlEnc;
 			} catch (UnsupportedEncodingException ux) {
-				Logging.error(this, ux.toString());
+				Logging.error(this, "coding UTF8 not supported", ux);
 			}
 		}
 
@@ -354,7 +354,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			}
 
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-			Logging.error("Exception on connecting, " + ex.toString());
+			Logging.error("Exception on connecting, ", ex);
 
 			return null;
 		}
@@ -471,7 +471,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 					waitCursor.stop();
 				}
 				WaitCursor.stopAll();
-				Logging.error(this, "Exception while data reading, " + ex.toString());
+				Logging.error(this, "Exception while data reading", ex);
 			}
 		}
 
