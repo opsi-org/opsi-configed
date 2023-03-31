@@ -477,23 +477,23 @@ public final class Globals {
 
 			String val = ((String) value).toLowerCase();
 
-			if (val.equals("")) {
+			if (val.isEmpty()) {
 				return false;
 			}
 
-			if (val.equals("true")) {
+			if ("true".equals(val)) {
 				return true;
 			}
 
-			if (val.equals("false")) {
+			if ("false".equals(val)) {
 				return false;
 			}
 
-			if (val.equals("1")) {
+			if ("1".equals(val)) {
 				return true;
 			}
 
-			if (val.equals("0")) {
+			if ("0".equals(val)) {
 				return false;
 			}
 

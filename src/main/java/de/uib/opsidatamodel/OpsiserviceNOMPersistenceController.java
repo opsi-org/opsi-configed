@@ -406,7 +406,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		if (ob instanceof String) {
-			return ((String) ob).equals("1");
+			return "1".equals((String) ob);
 		}
 
 		Logging.warning("could not find boolean in interpretAsBoolean, returning false");
@@ -590,7 +590,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 						Object val = host.get(HostInfo.DEPOT_WORKBENCH_KEY);
 
-						if (val != null && !val.equals("")) {
+						if (val != null && !"".equals(val)) {
 							try {
 								String filepath = new URL((String) val).getPath();
 								Logging.info(this, "retrieveOpsiHosts workbenchpath " + filepath);
@@ -1898,7 +1898,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			}
 
 			HostInfo hostInfo = new HostInfo(hostItem);
-			if (depotId == null || depotId.equals("")) {
+			if (depotId == null || depotId.isEmpty()) {
 				depotId = getHostInfoCollections().getConfigServer();
 			}
 			hostInfo.setInDepot(depotId);
@@ -1959,7 +1959,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			notes = "";
 		}
 
-		if (ipaddress.equals("")) {
+		if (ipaddress.isEmpty()) {
 			ipaddress = null;
 			// null works, "" does not in the opsi call
 		}
@@ -2067,7 +2067,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		if (result) {
-			if (depotId == null || depotId.equals("")) {
+			if (depotId == null || depotId.isEmpty()) {
 				depotId = getHostInfoCollections().getConfigServer();
 			}
 			hostInfo.setInDepot(depotId);
@@ -3065,7 +3065,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public String getLastSoftwareAuditModification(String clientId) {
 		String result = "";
 
-		if (clientId != null && !clientId.equals("") && dataStub.getClient2Software() != null
+		if (clientId != null && !clientId.isEmpty() && dataStub.getClient2Software() != null
 				&& dataStub.getClient2Software().get(clientId) != null
 				&& !dataStub.getClient2Software().get(clientId).isEmpty()) {
 			result = dataStub.getClient2Software().get(clientId).get(0).getLastModification();
@@ -3078,7 +3078,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public Map<String, Map<String, Object>> retrieveSoftwareAuditData(String clientId) {
 		Map<String, Map<String, Object>> result = new TreeMap<>();
 
-		if (clientId == null || clientId.equals("")) {
+		if (clientId == null || clientId.isEmpty()) {
 			return result;
 		}
 
@@ -3240,7 +3240,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				Map<?, ?> ma = (Map<?, ?>) m;
 
-				if (ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY).equals("i")) {
+				if ("i".equals(ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY))) {
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
 					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
 					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
@@ -3250,7 +3250,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					hwAuditDeviceClass.setHostConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
 							+ OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE).toLowerCase());
 
-				} else if (ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY).equals("g")) {
+				} else if ("g".equals(ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY))) {
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
 					devProperty.setOpsiDbColumnName((String) ma.get(OpsiHwAuditDeviceClass.OPSI_KEY));
 					devProperty.setOpsiDbColumnType((String) ma.get(OpsiHwAuditDeviceClass.TYPE_KEY));
@@ -3860,7 +3860,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		if (!theDepot.equals(depotId)) {
 			Logging.warning(this, "depot irregular, preset " + theDepot);
 		}
-		if (depotId == null || depotId.equals("")) {
+		if (depotId == null || depotId.isEmpty()) {
 			Logging.notice(this, "checkProductGlobalInfos called for no depot");
 		}
 		Logging.debug(this, "checkProductGlobalInfos depotId " + depotId + " productGlobaInfos  = null "
@@ -5018,7 +5018,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 				while (eIt.hasNext()) {
 					String key = eIt.next();
-					if (key.equals("name")) {
+					if ("name".equals(key)) {
 						continue;
 					}
 
@@ -5034,7 +5034,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					buf.append("<td width='200px'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
 							+ fontSizeBig + "'>" + key + "</font></td>");
 
-					if (key.equals("config")) {
+					if ("config".equals(key)) {
 						buf.append("<td colspan='2'  bgcolor='" + bgColor + "' align='left' valign='top'><font size='"
 								+ fontSizeBig + "'>&nbsp;</font></td>");
 						buf.append("</tr>");
@@ -8299,7 +8299,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 						"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
 				Map<String, Object> opsiModuleData = JSONReMapper.getMapObject((JSONObject) opsiCountModule.getValue());
 
-				if (opsiModuleData.get("state").equals("free")) {
+				if ("free".equals(opsiModuleData.get("state"))) {
 					continue;
 				}
 
@@ -8402,7 +8402,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				}
 
 				if (problemToIndicate
-						&& (key.equals("linux_agent") || (key.equals("userroles") && !isUserRegisterActivated()))) {
+						&& ("linux_agent".equals(key) || ("userroles".equals(key) && !isUserRegisterActivated()))) {
 					problemToIndicate = false;
 				}
 

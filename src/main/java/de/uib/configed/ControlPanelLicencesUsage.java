@@ -42,7 +42,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 	}
 
 	public String getSoftwareLicenceReservation(String clientId) {
-		if (clientId == null || clientId.equals("")) {
+		if (clientId == null || clientId.isEmpty()) {
 			JOptionPane.showMessageDialog(mainController.licencesFrame,
 					Configed.getResourceValue("ConfigedMain.Licences.hint.pleaseSelectClient"),
 					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);

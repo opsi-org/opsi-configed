@@ -58,7 +58,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					}
 					Logging.debug(this, "save with filename " + filename);
 					String pathname = openFile(filename + ".log");
-					if (pathname != null && !pathname.equals("")) {
+					if (pathname != null && !pathname.isEmpty()) {
 						saveToFile(pathname, lines);
 					}
 
@@ -73,7 +73,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 						filename = getInfo().replace('.', '_') + "___" + ident + ".log";
 					}
 					String pathname = openFile(filename + ".zip");
-					if (pathname != null && !pathname.equals("")) {
+					if (pathname != null && !pathname.isEmpty()) {
 						saveToZipFile(pathname, filename, lines);
 					}
 
@@ -91,7 +91,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					Logging.info(this, "saveAllAsZip, start getting pathname");
 					String pathname = openFile(fname + ".zip");
 
-					if (pathname != null && !pathname.equals("")) {
+					if (pathname != null && !pathname.isEmpty()) {
 						Logging.info(this, "saveAllAsZip, got pathname");
 
 						if (loadMissingDocs) {

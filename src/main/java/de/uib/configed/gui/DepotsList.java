@@ -144,7 +144,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 				if (extendedInfo != null && extendedInfo.get(key) != null
 						&& extendedInfo.get(key).get("description") != null
-						&& !("" + extendedInfo.get(key).get("description")).equals("")) {
+						&& !("" + extendedInfo.get(key).get("description")).isEmpty()) {
 					tooltipText = "" + extendedInfo.get(value).get("description");
 				} else {
 					tooltipText = key;

@@ -483,10 +483,10 @@ public final class OpsiDataBackend extends AbstractBackend {
 				String type = (String) valuesMap.get("Type");
 				String name = (String) valuesMap.get("UI");
 				String localizedName = (String) valuesLocalized.get(j).get("UI");
-				if (type.equals("int") || type.equals("tinyint")) {
+				if ("int".equals(type) || "tinyint".equals(type)) {
 					elementList.add(new GenericIntegerElement(new String[] { hardwareName, name },
 							hardwareNameLocalized, localizedName));
-				} else if (type.equals("bigint")) {
+				} else if ("bigint".equals(type)) {
 					elementList.add(new GenericBigIntegerElement(new String[] { hardwareName, name },
 							hardwareNameLocalized, localizedName));
 				} else {
@@ -518,10 +518,10 @@ public final class OpsiDataBackend extends AbstractBackend {
 				String type = (String) valuesMap.get("Type");
 				String name = (String) valuesMap.get("UI");
 				String localizedName = (String) valuesLocalized.get(j).get("UI");
-				if (type.equals("int") || type.equals("tinyint")) {
+				if ("int".equals(type) || "tinyint".equals(type)) {
 					elementList.add(new GenericIntegerElement(new String[] { hardwareName, name },
 							hardwareNameLocalized, localizedName));
-				} else if (type.equals("bigint")) {
+				} else if ("bigint".equals(type)) {
 					elementList.add(new GenericBigIntegerElement(new String[] { hardwareName, name },
 							hardwareNameLocalized, localizedName));
 				} else {

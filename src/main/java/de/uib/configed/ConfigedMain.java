@@ -1561,7 +1561,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		// check if we started with preferred values
-		if (host != null && !host.equals("")) {
+		if (host != null && !host.isEmpty()) {
 			dPassword.setHost(host);
 		}
 
@@ -1809,7 +1809,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					}
 				}
 
-				if (clientName.equals("fscnoteb1.uib.local")) {
+				if ("fscnoteb1.uib.local".equals(clientName)) {
 					Logging.info(this, "*** host_displayFields size, content " + hostDisplayFields.size() + ": "
 							+ hostDisplayFields);
 					Logging.info(this, "*** rowmap size, content " + rowmap.size() + ": " + rowmap);
@@ -3276,7 +3276,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public boolean logfileExists(String logtype) {
-		return logfiles != null && logfiles.get(logtype) != null && !logfiles.get(logtype).equals("")
+		return logfiles != null && logfiles.get(logtype) != null && !logfiles.get(logtype).isEmpty()
 				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
 	}
 
@@ -4597,7 +4597,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		final String targetDepot = (String) fChangeDepotForClients.getChoice();
 
-		if (targetDepot == null || targetDepot.equals("")) {
+		if (targetDepot == null || targetDepot.isEmpty()) {
 			return;
 		}
 
@@ -4961,7 +4961,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							values.put("%depotid%", pcInfo.getInDepot());
 
 							String configServerId = myServer;
-							if (myServer == null || myServer.equals("")) {
+							if (myServer == null || myServer.isEmpty()) {
 								myServer = "localhost";
 							}
 							values.put("%configserverid%", configServerId);
@@ -5282,7 +5282,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		GroupnameChoice choiceDialog = new GroupnameChoice(Configed.getResourceValue("ConfigedMain.saveGroup"),
 				groupSelectionIds, i);
 
-		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().equals("")) {
+		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().isEmpty()) {
 
 			IconNode newGroupNode = treeClients.makeSubgroupAt(null);
 			if (newGroupNode == null) {
@@ -5312,7 +5312,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		GroupnameChoice choiceDialog = new GroupnameChoice(Configed.getResourceValue("ConfigedMain.deleteGroup"),
 				groupSelectionIds, i);
 
-		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().equals("")) {
+		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().isEmpty()) {
 			persist.deleteGroup(choiceDialog.getResultString());
 			persist.hostGroupsRequestRefresh();
 			if (clientSelectionDialog != null) {
@@ -5322,7 +5322,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void setGroupname(String name) {
-		if (name == null || name.equals("")) {
+		if (name == null || name.isEmpty()) {
 			groupname = TEMPGROUPNAME;
 		} else {
 			groupname = name;
@@ -5403,7 +5403,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void selectClientsByFailedAtSomeTimeAgo(String arg) {
 		SelectionManager manager = new SelectionManager(null);
 
-		if (arg == null || arg.equals("")) {
+		if (arg == null || arg.isEmpty()) {
 			manager.setSearch(de.uib.opsidatamodel.SavedSearches.SEARCH_FAILED_AT_ANY_TIME);
 		} else {
 			String timeAgo = DateExtendedByVars.dayValueOf(arg);

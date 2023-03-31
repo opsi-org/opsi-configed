@@ -487,7 +487,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		String labelText = Configed
 				.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToGloballySelectedPool");
 		boolean buttonActive = false;
-		if (licencePool != null && !licencePool.equals("")) {
+		if (licencePool != null && !licencePool.isEmpty()) {
 			labelText = labelText + " " + licencePool;
 			buttonActive = true;
 		}

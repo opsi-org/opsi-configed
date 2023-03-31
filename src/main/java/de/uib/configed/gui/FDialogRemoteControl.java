@@ -60,7 +60,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList
 	}
 
 	private void checkSelected() {
-		if (visibleList.getSelectedValue() != null && selValue != null && !selValue.equals("")) {
+		if (visibleList.getSelectedValue() != null && selValue != null && !"".equals(selValue)) {
 			setDataChanged(true);
 		} else {
 			setDataChanged(false);
@@ -119,7 +119,7 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList
 	}
 
 	private void saveEditedText() {
-		if (extraField.isEditable() && selText != null && !selText.equals("") && meanings.get(selText) != null) {
+		if (extraField.isEditable() && selText != null && !selText.isEmpty() && meanings.get(selText) != null) {
 			meanings.put(selText, extraField.getText());
 		}
 	}

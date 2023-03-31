@@ -273,7 +273,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	protected String addUnit(String value, String unit) {
-		if (value.equals("")) {
+		if (value.isEmpty()) {
 			return value;
 		}
 
@@ -287,7 +287,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 
 		int mult = 1000;
-		if (unit.equalsIgnoreCase("byte")) {
+		if ("byte".equalsIgnoreCase(unit)) {
 			mult = 1024;
 		}
 		// TODO: nano, micro
@@ -549,7 +549,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			for (int j = 0; j < devices.size(); j++) {
 				Map<String, Object> deviceInfo = devices.get(j);
 				String displayName = (String) deviceInfo.get("name");
-				if ((displayName == null) || displayName.equals("")) {
+				if ((displayName == null) || displayName.isEmpty()) {
 					displayName = hwClass + "_" + j;
 				}
 
@@ -694,7 +694,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					boolean firstValue = true;
 					while (hmIterator.hasNext()) {
 						String hmKey = hmIterator.next();
-						if (!hmKey.equals("displayName") && !hmKey.equals("type")) {
+						if (!"displayName".equals(hmKey) && !"type".equals(hmKey)) {
 							if (firstValue) {
 								childValues.add(hwOpsiToUI.get(hmKey));
 								childValues.add(hm.get(hmKey).toString());
@@ -721,7 +721,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 					boolean firstValue = true;
 					while (hmIterator.hasNext()) {
 						String hmKey = hmIterator.next();
-						if (!hmKey.equals("displayName") && !hmKey.equals("type")) {
+						if (!"displayName".equals(hmKey) && !"type".equals(hmKey)) {
 							if (firstValue) {
 								firstValue = false;
 								childValues.add(hwOpsiToUI.get(hmKey));

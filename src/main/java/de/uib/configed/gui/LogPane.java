@@ -429,11 +429,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void setFontSize(String s) {
-		if (s.equals("+")) {
+		if ("+".equals(s)) {
 			displayFontSize = displayFontSize + 2;
 			monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 			buildDocument();
-		} else if (s.equals("-")) {
+		} else if ("-".equals(s)) {
 			if (displayFontSize > 10) {
 				displayFontSize = displayFontSize - 2;
 				monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
@@ -981,7 +981,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public void search() {
 		Logging.debug(this, "Searching string in log");
 
-		if (jComboBoxSearch.getSelectedItem() == null || jComboBoxSearch.getSelectedItem().toString().equals("")) {
+		if (jComboBoxSearch.getSelectedItem() == null || jComboBoxSearch.getSelectedItem().toString().isEmpty()) {
 			Logging.info(this, "item to search for is null or empty, do nothing");
 			return;
 		}
@@ -1108,7 +1108,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				}
 			}
 
-			if (word == null || word.equals("")) {
+			if (word == null || word.isEmpty()) {
 				return -1;
 			}
 

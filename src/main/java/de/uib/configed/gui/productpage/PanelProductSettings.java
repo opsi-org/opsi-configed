@@ -361,7 +361,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				if (value instanceof String) {
 					String val = (String) value;
 
-					if (val.equals("")) {
+					if (val.isEmpty()) {
 						return c;
 					}
 
@@ -496,8 +496,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				int row, int column) {
 
 			Component result = null;
-			if (value != null && !value.equals("") && !value.toString().equals("null")
-					&& !value.toString().equalsIgnoreCase("none")
+			if (value != null && !"".equals(value) && !"null".equals(value.toString())
+					&& !"none".equalsIgnoreCase(value.toString())
 					&& !value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
 				result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row, column);
 
@@ -637,7 +637,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		while (iter.hasNext()) {
 			final String columnName = iter.next();
 
-			if (columnName.equals("productId")) {
+			if ("productId".equals(columnName)) {
 				// fixed column
 				continue;
 			}
@@ -688,12 +688,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					}
 					break;
 				case "Report":
-					if (!s.equals("")) {
+					if (!s.isEmpty()) {
 						dontStrippIt = true;
 					}
 					break;
 				case "Angefordert":
-					if (!s.equals("none")) {
+					if (!"none".equals(s)) {
 						dontStrippIt = true;
 					}
 					break;

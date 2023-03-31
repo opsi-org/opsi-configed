@@ -54,7 +54,7 @@ public final class ModuleData {
 		for (Map<String, Object> moduleInfo : modules) {
 			String moduleId = moduleInfo.get("module_id").toString();
 
-			if ((moduleInfo.get("_state")).toString().equals("valid")) {
+			if ("valid".equals(moduleInfo.get("_state").toString())) {
 				activeModules.add(moduleId);
 			} else {
 				expiredModules.add(moduleId);

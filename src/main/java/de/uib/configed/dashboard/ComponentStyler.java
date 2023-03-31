@@ -90,7 +90,7 @@ public final class ComponentStyler {
 		String scrollbarBackground = getHexColor(UIManager.getColor("ScrollBar.background"));
 		String scrollbarTrackColor = getHexColor(UIManager.getColor("ScrollBar.track"));
 
-		if (!scrollbarBackground.equals("") || !scrollbarThumbColor.equals("") || !scrollbarTrackColor.equals("")) {
+		if (!scrollbarBackground.isEmpty() || !scrollbarThumbColor.isEmpty() || !scrollbarTrackColor.isEmpty()) {
 
 			scrollBar.setStyle("-fx-background-color: #" + scrollbarBackground);
 			scrollBar.lookup(".track").setStyle("-fx-background-color: #" + scrollbarTrackColor);
@@ -99,7 +99,7 @@ public final class ComponentStyler {
 
 		Node thumb = scrollBar.lookup(".thumb");
 
-		if (thumb != null && !scrollbarThumbColor.equals("")) {
+		if (thumb != null && !scrollbarThumbColor.isEmpty()) {
 			thumb.setStyle("-fx-background-color: #" + scrollbarThumbColor);
 		}
 	}
