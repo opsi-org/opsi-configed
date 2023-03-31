@@ -1425,7 +1425,10 @@ public class MainFrame extends JFrame
 
 		jMenuHelpInternalConfiguration.setText(Configed.getResourceValue("MainFrame.jMenuHelpInternalConfiguration"));
 		jMenuHelpInternalConfiguration.addActionListener((ActionEvent e) -> showBackendConfigurationAction());
-		jMenuHelp.add(jMenuHelpInternalConfiguration);
+
+		if (!JSONthroughHTTPS.isOpsi43()) {
+			jMenuHelp.add(jMenuHelpInternalConfiguration);
+		}
 
 		ActionListener selectLoglevelListener = (ActionEvent e) -> {
 			for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {

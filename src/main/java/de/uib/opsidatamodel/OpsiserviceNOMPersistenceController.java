@@ -4962,6 +4962,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return mapOfMethodSignatures.get(methodname);
 	}
 
+	// Will not be called in opsi 4.3 (or later) because we don't need backend-infos any more
 	@Override
 	public String getBackendInfos() {
 		String bgColor0 = "#dedeff";
