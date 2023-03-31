@@ -492,7 +492,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			writer.write(headers);
 			writer.close();
 		} catch (IOException e) {
-			Logging.error(this, "Unable to write to file");
+			Logging.error(this, "Unable to write to file", e);
 		}
 	}
 

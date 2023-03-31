@@ -54,9 +54,9 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 		try {
 			value = ((JSONObject) o).get(key);
 		} catch (JSONException jex) {
-			Logging.error("json error on getting value,  " + jex.toString());
+			Logging.error("json error on getting value  ", jex);
 		} catch (Exception ex) {
-			Logging.error("error on getting value,  " + ex.toString());
+			Logging.error("error on getting value ", ex);
 		}
 
 		return value;
@@ -114,7 +114,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				}
 			}
 		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting Map " + ex.toString());
+			Logging.error(this, "Exception on getting Map ", ex);
 		}
 		return result;
 	}
@@ -152,7 +152,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				}
 			}
 		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting Map " + ex.toString());
+			Logging.error(this, "Exception on getting Map ", ex);
 		}
 		return result;
 	}
@@ -200,7 +200,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				}
 			}
 		} catch (Exception ex) {
-			Logging.error("this, getMap2_Object : " + ex.toString());
+			Logging.error("this, getMap2_Object  ", ex);
 		}
 
 		return result;
@@ -238,7 +238,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 			}
 
 		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting list for key \"result\" " + ex.toString());
+			Logging.error(this, "Exception on getting list for key \"result\" ", ex);
 		}
 
 		// extract key
@@ -313,7 +313,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				}
 
 			} catch (Exception ex) {
-				Logging.error(this, "Exception on building string maps  " + ex.toString());
+				Logging.error(this, "Exception on building string maps  ", ex);
 			}
 		}
 
@@ -357,7 +357,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				}
 			}
 		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting Map " + ex.toString());
+			Logging.error(this, "Exception on getting Map ", ex);
 		}
 		return result;
 	}
@@ -439,7 +439,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				}
 			}
 		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting ListOfMapsOfListsOfMaps " + ex.toString());
+			Logging.error(this, "Exception on getting ListOfMapsOfListsOfMaps ", ex);
 		}
 		return result;
 	}
@@ -514,7 +514,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 					jO = new JSONObject("" + s);
 				} catch (Exception ex) {
 					Logging.warning("JSONExecutioner.getMapFromItem \"" + s + "\"  "
-							+ " cannot be interpreted as a JSON Object, " + ex);
+							+ " cannot be interpreted as a JSON Object, ", ex);
 					wehavejO = false;
 				}
 			}
@@ -542,7 +542,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				}
 			}
 		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting map from item  " + s + " : " + ex.toString());
+			Logging.error(this, "Exception on getting map from item  " + s + " : ", ex);
 		}
 
 		return result;
@@ -562,7 +562,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				result.add(ar.get(i));
 			}
 		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting list from item    " + s + " : " + ex.toString());
+			Logging.error(this, "Exception on getting list from item    " + s + " : ", ex);
 		}
 
 		return result;

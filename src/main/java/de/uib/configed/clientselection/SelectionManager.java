@@ -198,17 +198,11 @@ public class SelectionManager {
 		Logging.info(this, "in selectClientsSQL gotten json-string: " + json);
 		List<String> clientsSelected = new ArrayList<>();
 
-		try {
-			BackendMySQL backendMySQL = new BackendMySQL(controller);
-			List<String> list = backendMySQL.getClientListFromJSONString(json);
+		BackendMySQL backendMySQL = new BackendMySQL(controller);
+		List<String> list = backendMySQL.getClientListFromJSONString(json);
 
-			for (int i = 0; i < list.size(); i++) {
-				clientsSelected.add(list.get(i));
-			}
-		} catch (Exception e) {
-			for (int i = 0; i < 100; i++) {
-				Logging.error(this, "EXCEPTION");
-			}
+		for (int i = 0; i < list.size(); i++) {
+			clientsSelected.add(list.get(i));
 		}
 
 		return clientsSelected;

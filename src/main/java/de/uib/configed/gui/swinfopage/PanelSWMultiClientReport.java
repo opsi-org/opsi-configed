@@ -158,7 +158,7 @@ public class PanelSWMultiClientReport extends JPanel {
 				exportDirectory = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
 			}
 		} catch (Exception ex) {
-			Logging.warning(this, "could not define exportDirectory)");
+			Logging.warning(this, "could not define exportDirectory)", ex);
 		}
 
 		chooserDirectory = new JFileChooser();

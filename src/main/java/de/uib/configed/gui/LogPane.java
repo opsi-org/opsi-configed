@@ -1142,7 +1142,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				try {
 					compHighlighter.addHighlight(lastIndex, endIndex, painter);
 				} catch (BadLocationException e) {
-					// Nothing to do
+					Logging.warning(this, "could not add highlight to comphighlighter", e);
 				}
 				if (firstOffset == -1) {
 					firstOffset = lastIndex;
@@ -1199,6 +1199,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						alloc = shape.getBounds();
 					}
 				} catch (BadLocationException e) {
+					Logging.warning(this, "could not get shape for location", e);
 					return null;
 				}
 			}

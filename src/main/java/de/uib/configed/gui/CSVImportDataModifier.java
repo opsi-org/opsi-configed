@@ -87,7 +87,7 @@ public class CSVImportDataModifier {
 				}
 			}
 		} catch (IOException ex) {
-			Logging.error(this, "Failed to read CSV file");
+			Logging.error(this, "Failed to read CSV file", ex);
 		} catch (CSVException ex) {
 			String title = "";
 			StringBuilder message = new StringBuilder("");

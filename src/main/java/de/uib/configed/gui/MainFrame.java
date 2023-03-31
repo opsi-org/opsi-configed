@@ -3220,7 +3220,7 @@ public class MainFrame extends JFrame
 			writer.write(HealthInfo.getHealthData(true));
 			writer.flush();
 		} catch (IOException e) {
-			Logging.error("unable to write to a file: " + healthDataFile.getAbsolutePath());
+			Logging.error("unable to write to a file: " + healthDataFile.getAbsolutePath(), e);
 		}
 	}
 
@@ -3557,7 +3557,7 @@ public class MainFrame extends JFrame
 				try {
 					initFX();
 				} catch (IOException ioE) {
-					Logging.error(this, "Unable to open fxml file");
+					Logging.error(this, "Unable to open fxml file", ioE);
 				}
 			});
 		}
