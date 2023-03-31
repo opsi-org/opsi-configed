@@ -601,7 +601,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 				subjectAlternativeNames = certificate.getSubjectAlternativeNames().stream()
 						.map(peerHostname -> (String) peerHostname.get(1)).collect(Collectors.toList());
 			} catch (CertificateParsingException e) {
-				e.printStackTrace();
+				Logging.warning(this, "problem in parsing certificate", e);
 			}
 
 			return subjectAlternativeNames;

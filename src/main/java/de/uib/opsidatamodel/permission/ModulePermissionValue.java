@@ -9,9 +9,6 @@ import de.uib.utilities.logging.Logging;
 
 public class ModulePermissionValue {
 
-	public static final String KEY_EXPIRES = "expires";
-	public static final String KEY_MAX_CLIENTS = "maxclients";
-
 	public static final Map<String, Boolean> MODULE_CHECKED = Map.ofEntries(Map.entry("license_management", true),
 			Map.entry("local_imaging", true), Map.entry("monitoring", true), Map.entry("wim-capture", true),
 			Map.entry("scalability1", true), Map.entry("linux_agent", true), Map.entry("vpn", true),

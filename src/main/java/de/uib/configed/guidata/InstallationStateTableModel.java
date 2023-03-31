@@ -267,7 +267,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		// add update to list
 		allClientsProductStates.get(clientId).put(productId, stateAndAction);
 
-		// TODO refactoring needed in these methods; 
+		// TODO refactoring needed in these methods...
 		// It seems to me that too many unnecessary operations are made in these methods
 		produceVisualStatesFromExistingEntries();
 		completeVisualStatesByDefaults();

@@ -8245,7 +8245,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		opsiModules = new HashMap<>();
 
 		Map<String, Object> opsiCountModules = new HashMap<>();
-		String expiresKey = ModulePermissionValue.KEY_EXPIRES;
 
 		try {
 			final List<String> missingModulesPermissionInfo = new ArrayList<>();
