@@ -1551,7 +1551,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// returns true if we have a PersistenceController and are connected
 	protected void login(List<String> savedServers) {
-
 		Logging.debug(this, " create password dialog ");
 		dPassword = new DPassword(this);
 
@@ -4776,7 +4775,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
 			@Override
 			protected List<String> getErrors() {
-				return persist.wakeOnLan(clients);
+				List<String> errors = new ArrayList<>();
+
+				if (JSONthroughHTTPS.isOpsi43()) {
+					errors = persist.wakeOnLanOpsi43(clients);
+				} else {
+					errors = persist.wakeOnLan(clients);
+				}
+
+				return errors;
 			}
 		}.start();
 	}
