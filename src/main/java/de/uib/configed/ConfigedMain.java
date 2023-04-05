@@ -1589,7 +1589,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			dPassword.tryConnecting();
 		}
-
 	}
 
 	public AbstractPersistenceController getPersistenceController() {

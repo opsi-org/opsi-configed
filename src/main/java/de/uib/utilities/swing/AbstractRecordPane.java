@@ -17,6 +17,8 @@ import java.util.Map.Entry;
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -31,33 +33,37 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 
 	// GUI
 	protected Map<String, JLabel> labelfields;
-	protected Map<String, JTextFieldObserved> datafields;
+	protected Map<String, JTextField> datafields;
 
 	// Data
 	protected Map<String, String> data;
 	protected Map<String, String> labels;
 	protected Map<String, String> hints;
 	protected Map<String, Boolean> editable;
+	protected Map<String, Boolean> secrets;
+
+	private JTextField jTextField;
 
 	protected AbstractRecordPane() {
 	}
 
 	protected AbstractRecordPane(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
-			Map<String, Boolean> editable) {
-		init(data, labels, hints, editable);
+			Map<String, Boolean> editable, Map<String, Boolean> secrets) {
+		init(data, labels, hints, editable, secrets);
 	}
 
 	public void setData(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
-			Map<String, Boolean> editable) {
-		init(data, labels, hints, editable);
+			Map<String, Boolean> editable, Map<String, Boolean> secrets) {
+		init(data, labels, hints, editable, secrets);
 	}
 
 	private void init(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
-			Map<String, Boolean> editable) {
+			Map<String, Boolean> editable, Map<String, Boolean> secrets) {
 		this.data = data;
 		this.labels = labels;
 		this.editable = editable;
 		this.hints = hints;
+		this.secrets = secrets;
 
 		initComponents();
 	}
@@ -90,7 +96,12 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 			jLabel.setFont(Globals.defaultFontBig);
 			labelfields.put(dataEntry.getKey(), jLabel);
 
-			JTextFieldObserved jTextField = new JTextFieldObserved();
+			if (secrets != null && !secrets.isEmpty() && Boolean.TRUE.equals(secrets.get(dataEntry.getKey()))) {
+				jTextField = new JPasswordField();
+			} else {
+				jTextField = new JTextFieldObserved();
+			}
+
 			if (dataEntry.getValue() != null) {
 				jTextField.setText("" + dataEntry.getValue());
 			} else {
@@ -142,12 +153,15 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 		vGroup.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE);
 
 		baseLayout.setVerticalGroup(vGroup);
-
 	}
 
 	public Map<String, String> getData() {
 		for (String key : data.keySet()) {
-			data.put(key, datafields.get(key).getText());
+			if (datafields.get(key) instanceof JPasswordField) {
+				data.put(key, new String(((JPasswordField) datafields.get(key)).getPassword()));
+			} else {
+				data.put(key, datafields.get(key).getText());
+			}
 		}
 		return data;
 	}

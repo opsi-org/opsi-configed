@@ -392,6 +392,8 @@ public final class Globals {
 
 	private static final String IMAGE_BASE = "de/uib/configed/gui/";
 
+	public static boolean isMultiFactorAuthenticationEnabled = false;
+
 	private Globals() {
 	}
 

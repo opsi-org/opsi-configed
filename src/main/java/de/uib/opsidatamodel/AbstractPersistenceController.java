@@ -238,6 +238,12 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract String getOpsiCACert();
 
+	public abstract boolean usesMultiFactorAuthentication();
+
+	public abstract void checkMultiFactorAuthentication();
+
+	public abstract String getOTPSecret(String userId);
+
 	/* connection state handling */
 	public abstract ConnectionState getConnectionState();
 
