@@ -114,6 +114,8 @@ public class CheckedLabel extends JPanel implements FocusListener {
 		unselectedLabel = new JLabel(unselectedIcon);
 		nullLabel = new JLabel(nullIcon);
 
+		this.selected = selected;
+
 		setLayout();
 
 		addInternalListeners();

@@ -1404,10 +1404,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public boolean installPackage(String filename) {
-		return installPackage(filename, true, "");
+		return installPackage(filename, true);
 	}
 
-	public boolean installPackage(String filename, boolean force, String tempDir) {
+	public boolean installPackage(String filename, boolean force) {
 		String method = "depot_installPackage";
 
 		Logging.notice(this, method);
