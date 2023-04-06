@@ -25,10 +25,8 @@ public final class CellAlternatingColorizer {
 	public static void colorize(Component cell, boolean isSelected, boolean isEven, boolean textColoring,
 			Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,
 			Color unselectedUnevenColor) {
-		if (textColoring) {
-			if (!ConfigedMain.THEMES) {
-				cell.setForeground(Globals.lightBlack);
-			}
+		if (textColoring && !ConfigedMain.THEMES) {
+			cell.setForeground(Globals.lightBlack);
 		}
 
 		if (!ConfigedMain.THEMES) {

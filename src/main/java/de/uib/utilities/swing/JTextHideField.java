@@ -128,10 +128,8 @@ public class JTextHideField extends JPanel {
 
 	@Override
 	public void setBackground(Color c) {
-		if (!ConfigedMain.THEMES) {
-			if (visibleField != null) {
-				visibleField.setBackground(c);
-			}
+		if (!ConfigedMain.THEMES && visibleField != null) {
+			visibleField.setBackground(c);
 		}
 	}
 

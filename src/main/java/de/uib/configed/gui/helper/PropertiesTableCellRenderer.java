@@ -51,12 +51,9 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 
 	protected void mergeColorize(Component comp, Object value) {
 
-		if (value == ListMerger.NO_COMMON_VALUE) {
-
-			if (!ConfigedMain.THEMES) {
-				comp.setBackground(Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR);
-				comp.setForeground(Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR);
-			}
+		if (value == ListMerger.NO_COMMON_VALUE && !ConfigedMain.THEMES) {
+			comp.setBackground(Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR);
+			comp.setForeground(Globals.LIST_MERGER_NO_COMMON_VALUE_TEXT_COLOR);
 		}
 	}
 }
