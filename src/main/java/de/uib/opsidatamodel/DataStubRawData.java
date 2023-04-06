@@ -433,11 +433,11 @@ public class DataStubRawData extends DataStubNOM {
 			return null;
 		}
 
-		if (time0 == null || time0.equals("")) {
+		if (time0 == null || time0.isEmpty()) {
 			return time1;
 		}
 
-		if (time1 == null || time1.equals("")) {
+		if (time1 == null || time1.isEmpty()) {
 			return time0;
 		}
 
@@ -568,7 +568,7 @@ public class DataStubRawData extends DataStubNOM {
 			for (int i = 1; i < specificColumns.size(); i++) {
 				Object value = rowMap.get(specificColumns.get(i));
 				String valInRow = row.get(i);
-				if (valInRow == null || valInRow.equals("null")) {
+				if (valInRow == null || "null".equals(valInRow)) {
 					valInRow = "";
 				}
 

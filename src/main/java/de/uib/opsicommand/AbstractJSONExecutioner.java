@@ -552,7 +552,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	public List<Object> getListFromItem(String s) {
 		List<Object> result = new ArrayList<>();
 
-		if (s == null || s.equals("null")) {
+		if (s == null || "null".equals(s)) {
 			return result;
 		}
 

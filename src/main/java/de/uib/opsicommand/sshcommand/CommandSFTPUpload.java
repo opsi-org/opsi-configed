@@ -51,7 +51,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	@Override
 	public String getDescription() {
-		if (description.equals("")) {
+		if (description.isEmpty()) {
 			description = "copy " + sourcePath + sourceFilename + " to " + targetPath + targetFilename
 					+ " on connected server";
 		}
@@ -174,7 +174,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();

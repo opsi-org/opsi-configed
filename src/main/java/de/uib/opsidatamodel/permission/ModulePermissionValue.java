@@ -53,9 +53,9 @@ public class ModulePermissionValue {
 			result = (Boolean) ob;
 		} else if (ob instanceof String) {
 			String sValue = ((String) ob).trim();
-			boolean checked = sValue.equalsIgnoreCase("yes") || sValue.equalsIgnoreCase("true");
+			boolean checked = "yes".equalsIgnoreCase(sValue) || "true".equalsIgnoreCase(sValue);
 			if (checked) {
-				result = sValue.equalsIgnoreCase("yes");
+				result = "yes".equalsIgnoreCase(sValue);
 			}
 		}
 

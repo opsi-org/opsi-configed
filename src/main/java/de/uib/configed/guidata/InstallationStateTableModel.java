@@ -331,7 +331,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 				// change values for visual output
 				String targetConfiguration = stateAndAction.get(ProductState.KEY_TARGET_CONFIGURATION);
-				if (targetConfiguration == null || targetConfiguration.equals("")) {
+				if (targetConfiguration == null || targetConfiguration.isEmpty()) {
 					targetConfiguration = TargetConfiguration.getLabel(TargetConfiguration.UNDEFINED);
 				}
 
@@ -599,7 +599,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		Logging.info(this, "checkForContradictingAssignments " + info + " state " + state);
 
-		if (existingRequest == null || existingRequest.equals("")) {
+		if (existingRequest == null || existingRequest.isEmpty()) {
 			product2request.put(product, state);
 			Logging.debug(this, "checkForContradictingAssignments client " + clientId + ", actualproduct "
 					+ actualProduct + ", product " + product + ", stateType " + stateType + ", state " + state);
@@ -1232,7 +1232,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
 					.get(ProductState.KEY_VERSION_INFO);
 			String result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
-			if (result != null && !(result.equals("")) && serverProductVersion != null
+			if (result != null && !(result.isEmpty()) && serverProductVersion != null
 					&& !(serverProductVersion.equals(result))) {
 				return UNEQUAL_ADD_STRING + result;
 			} else {

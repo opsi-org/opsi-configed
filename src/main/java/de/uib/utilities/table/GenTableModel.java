@@ -639,7 +639,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		boolean valueChanged = false;
 
-		if (((rows.get(row)).get(col) == null && (value == null || value.equals("")))
+		if (((rows.get(row)).get(col) == null && (value == null || "".equals(value)))
 				|| (oldValueString.equals(newValueString))) {
 			valueChanged = false;
 		} else {

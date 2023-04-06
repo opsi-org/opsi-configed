@@ -62,7 +62,7 @@ public class Containership {
 
 			Logging.debug("  " + i + " " + theComp.getClass().getName() + "\n" + theComp.toString() + "\n");
 
-			if (selClass.isInstance(theComp) && !methodName.equals("")) {
+			if (selClass.isInstance(theComp) && !methodName.isEmpty()) {
 				try {
 					theMethod = theCompClass.getMethod(methodName, theArgsTypes);
 					theMethod.invoke(theComp, args);

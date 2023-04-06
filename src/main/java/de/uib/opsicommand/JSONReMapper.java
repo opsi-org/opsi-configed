@@ -625,16 +625,16 @@ public final class JSONReMapper {
 	}
 
 	public static boolean isNull(Object ob) {
-		return ob == null || (ob instanceof String && ((String) ob).equalsIgnoreCase("null"))
+		return ob == null || (ob instanceof String && "null".equalsIgnoreCase((String) ob))
 				|| ((ob instanceof JSONObject) && (JSONObject.NULL.equals(ob)));
 	}
 
 	public static boolean equalsNull(String ob) {
-		return ob == null || ob.equalsIgnoreCase("null");
+		return ob == null || "null".equalsIgnoreCase(ob);
 	}
 
 	public static String giveEmptyForNullString(String ob) {
-		if (ob == null || ob.equalsIgnoreCase("null")) {
+		if (ob == null || "null".equalsIgnoreCase(ob)) {
 			return "";
 		} else {
 			return ob;

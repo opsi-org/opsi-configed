@@ -230,7 +230,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			String result = buf.toString();
 
-			if (result.equalsIgnoreCase("null")) {
+			if ("null".equalsIgnoreCase(result)) {
 				return JSONObject.NULL;
 			}
 

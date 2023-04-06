@@ -110,7 +110,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			return;
 		}
 
-		if (SSHCommandFactory.sshColoredOutput && (!line.trim().replace("\\t", "").replace(" ", "").equals(""))) {
+		if (SSHCommandFactory.sshColoredOutput && (!line.trim().replace("\\t", "").replace(" ", "").isEmpty())) {
 			for (Entry<String, Color> entry : ansiCodeColors.entrySet()) {
 				line = findAnsiCodeColor(entry, entry.getKey(), line);
 			}

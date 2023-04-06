@@ -247,7 +247,7 @@ public class ActionRequest {
 	public static Integer getVal(String label) {
 		checkCollections();
 
-		if (label == null || label.equals("")) {
+		if (label == null || label.isEmpty()) {
 			return NONE;
 		}
 

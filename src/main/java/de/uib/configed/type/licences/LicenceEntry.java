@@ -121,7 +121,7 @@ public class LicenceEntry extends TreeMap<String, Object> {
 			return null;
 		}
 
-		if (count.trim().equals("0")) {
+		if ("0".equals(count.trim())) {
 			return "0";
 		}
 

@@ -100,7 +100,7 @@ public class SimpleTreeModel extends DefaultTreeModel {
 					if (tooltips != null) {
 						String key = partialPath.dottedString(0, partialPath.size());
 						String description = tooltips.get(key);
-						if (description == null || description.trim().equals("")) {
+						if (description == null || description.trim().isEmpty()) {
 							node.setToolTipText(key);
 						} else {
 							node.setToolTipText(description);

@@ -60,7 +60,7 @@ public class FEditDate extends FEdit implements DateSelectionListener, MouseList
 		Logging.info(this, "setStartText(): " + s);
 		setDataChanged(false);
 
-		if (s == null || s.equals("")) {
+		if (s == null || s.isEmpty()) {
 			dateEditor.setDate(false);
 		} else {
 			String s1 = null;

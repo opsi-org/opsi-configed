@@ -101,7 +101,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	}
 
 	public void setOpsiproduct(String prod) {
-		if (prod != null && !prod.equals("")) {
+		if (prod != null && !prod.isEmpty()) {
 			opsiproduct = " -r " + prod;
 		} else {
 			opsiproduct = " ";
@@ -109,7 +109,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	}
 
 	public void setDepot(String depotlist) {
-		if (depotlist != null && !depotlist.equals("")) {
+		if (depotlist != null && !depotlist.isEmpty()) {
 			depots = " -d " + depotlist;
 		} else {
 			depots = " ";
@@ -130,7 +130,7 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	}
 
 	public boolean checkCommand() {
-		if (opsiproduct == null || opsiproduct.trim().equals("")) {
+		if (opsiproduct == null || opsiproduct.trim().isEmpty()) {
 			Logging.info(this, "no product given");
 			return false;
 		}

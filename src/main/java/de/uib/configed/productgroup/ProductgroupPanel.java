@@ -256,7 +256,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		String currentKey = saveNameEditor.getText();
 
-		if (currentKey == null || currentKey.equals("")) {
+		if (currentKey == null || currentKey.isEmpty()) {
 			return false;
 		}
 
@@ -975,7 +975,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 
 		if (result) {
-			boolean forbidden = proposedName.equals(SAVE_GROUP_ID) || proposedName.equals("");
+			boolean forbidden = proposedName.equals(SAVE_GROUP_ID) || proposedName.isEmpty();
 
 			result = !forbidden;
 		}

@@ -133,7 +133,7 @@ public final class Messages {
 	public static Locale setLocale(String characteristics) {
 		Logging.debug("Messages, setLocale");
 		Locale loc = null;
-		if (characteristics != null && !characteristics.equals("")) {
+		if (characteristics != null && !characteristics.isEmpty()) {
 
 			if (characteristics.length() == 5 && characteristics.indexOf('_') == 2) {
 				try {

@@ -89,7 +89,7 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 				put("type", retrieved.get("type"));
 			}
 
-			if (get("type").equals(BOOL_TYPE) || get("type").equals("BoolProductProperty")) {
+			if (get("type").equals(BOOL_TYPE) || "BoolProductProperty".equals(get("type"))) {
 				type = TYPE.BOOL_CONFIG;
 			} else {
 				type = TYPE.UNICODE_CONFIG;

@@ -367,12 +367,12 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	public void doAction2() {
 		Logging.info(this, "doAction2 upload ");
 		if (jRadioButtonLocal.isSelected()) {
-			if (jTextFieldLocalPath.getText().equals("")) {
+			if (jTextFieldLocalPath.getText().isEmpty()) {
 				Logging.warning(this, "Please select local file.");
 				return;
 			}
 		} else if (jRadioButtonFromServer.isSelected()
-				&& (jTextFieldURL.getText().equals("") || (jTextFieldURL.getText().equals(wgetDefText)))) {
+				&& (jTextFieldURL.getText().isEmpty() || (jTextFieldURL.getText().equals(wgetDefText)))) {
 			Logging.warning(this, "Please enter url to file.");
 			return;
 		}

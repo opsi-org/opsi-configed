@@ -30,7 +30,7 @@ public class SavedSearches extends HashMap<String, SavedSearch> {
 
 			if (i == -1) {
 				SavedSearch rc = retrieveRC(rcPartOfKey);
-				if (rc.getSerialization().equals("")) {
+				if (rc.getSerialization().isEmpty()) {
 					rc.setSerialization(value);
 				}
 

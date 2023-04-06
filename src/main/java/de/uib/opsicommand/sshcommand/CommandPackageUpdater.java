@@ -50,7 +50,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -97,12 +97,12 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public String getCommand() {
-		if (action.equals("list")) {
+		if ("list".equals(action)) {
 			action = " list --repos ";
 			repo = " ";
 		}
 		setCommand(baseName + verbosity + repo + action);
-		if (needSudo() && !action.equals("list")) {
+		if (needSudo() && !"list".equals(action)) {
 			return SSHCommandFactory.SUDO_TEXT + " " + command + " 2>&1";
 		}
 
@@ -207,7 +207,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	}
 
 	public boolean checkCommand() {
-		return !action.equals("");
+		return !action.isEmpty();
 	}
 
 	@Override

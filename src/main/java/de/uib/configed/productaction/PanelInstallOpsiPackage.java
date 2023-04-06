@@ -114,7 +114,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 			opsiPackageOnWorkbench = new File(opsiPackageOnWorkbenchS);
 
-			if (opsiPackageNameS == null || opsiPackageNameS.trim().equals("")) {
+			if (opsiPackageNameS == null || opsiPackageNameS.trim().isEmpty()) {
 				return false;
 			} else {
 

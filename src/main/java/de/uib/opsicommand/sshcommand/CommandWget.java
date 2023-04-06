@@ -59,7 +59,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setFileName(String newFilename) {
-		if ((newFilename != null) && (!newFilename.trim().equals(""))) {
+		if ((newFilename != null) && (!newFilename.trim().isEmpty())) {
 			fileName = " --output-document=" + newFilename + " ";
 		}
 	}
@@ -107,7 +107,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getCommand() {
-		if (!freeInput.equals("")) {
+		if (!freeInput.isEmpty()) {
 			command = "wget " + authentication + fileName + freeInput + verbosity + dir + url + " " + additionalURL;
 		} else {
 			command = "wget " + authentication + fileName + verbosity + dir + url + " " + additionalURL;
@@ -125,7 +125,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -175,7 +175,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setDir(String d) {
-		if (!d.equals("")) {
+		if (!d.isEmpty()) {
 			dir = " -P " + d;
 		} else {
 			dir = "";
@@ -183,7 +183,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setUrl(String u) {
-		if (!u.equals("")) {
+		if (!u.isEmpty()) {
 			url = " " + u;
 		} else {
 			url = "";
@@ -220,7 +220,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public boolean checkCommand() {
-		return dir.equals("") && url.equals("");
+		return dir.isEmpty() && url.isEmpty();
 	}
 
 	private static String getFilenameFromUrl(String url) {

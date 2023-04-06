@@ -1037,7 +1037,7 @@ public class DataStubNOM extends AbstractDataStub {
 		for (Map<String, Object> listElement : retrieved) {
 			Object id = listElement.get("objectId");
 
-			if (id instanceof String && !id.equals("")) {
+			if (id instanceof String && !"".equals(id)) {
 				String hostId = (String) id;
 				Map<String, Object> configs1Host = hostConfigs.computeIfAbsent(hostId, arg -> new HashMap<>());
 

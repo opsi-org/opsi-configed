@@ -25,7 +25,7 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 
 			if (i == -1) {
 				RemoteControl rc = retrieveRC(rcPartOfKey);
-				if (rc.getCommand().equals("")) {
+				if (rc.getCommand().isEmpty()) {
 					rc.setCommand(value);
 				}
 

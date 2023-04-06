@@ -384,7 +384,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	@Override
 	public void doAction2() {
 		Logging.info(this, "doAction2 deploy-clientagent ");
-		if (jTextFieldClient.getText().equals("")) {
+		if (jTextFieldClient.getText().isEmpty()) {
 			Logging.warning(this, "Client name(s) missing.");
 			return;
 		}

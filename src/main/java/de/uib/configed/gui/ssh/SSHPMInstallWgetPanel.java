@@ -113,7 +113,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	}
 
 	public SSHCommandTemplate getCommand(SSHCommandTemplate commands) {
-		if ((jTextFieldURL.getText() == null) || (jTextFieldURL.getText().trim().equals(""))
+		if ((jTextFieldURL.getText() == null) || (jTextFieldURL.getText().trim().isEmpty())
 				|| (jTextFieldURL.getText().trim().equals(urlDefText))) {
 			return null;
 		}
@@ -153,7 +153,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 		String tempTextFieldDir = "<" + Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory")
 				+ ">";
-		if (!wgetDir.equals("") || !wgetDir.equals(tempTextFieldDir)) {
+		if (!wgetDir.isEmpty() || !wgetDir.equals(tempTextFieldDir)) {
 			d = wgetDir;
 		} else {
 			return null;
@@ -166,7 +166,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 		String u = "";
 
-		if (!jTextFieldURL.getText().equals("") || !jTextFieldURL.getText().equals(tempTextFieldURL)) {
+		if (!jTextFieldURL.getText().isEmpty() || !jTextFieldURL.getText().equals(tempTextFieldURL)) {
 			u = jTextFieldURL.getText();
 		} else {
 			return null;

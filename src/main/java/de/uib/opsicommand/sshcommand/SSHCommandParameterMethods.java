@@ -273,7 +273,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		} else if (method.contains("ssh://")) {
 			result = getSelectedValue(method);
 			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
-		} else if (format.equals("")) {
+		} else if (format.isEmpty()) {
 			result = getUserText(method, outputDia);
 			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
 		}
@@ -549,7 +549,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	}
 
 	private String getSelectedValue(String method) {
-		if (method.equals("ssh://path/to/file")) {
+		if ("ssh://path/to/file".equals(method)) {
 			final List<String> values = new ArrayList<>();
 			values.add("Test 1");
 			values.add("Test 2");

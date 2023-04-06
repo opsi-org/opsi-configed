@@ -188,7 +188,7 @@ public class PanelMountShare extends JPanel {
 	protected boolean checkConnectionToShare() {
 		boolean found = false;
 
-		if (np.produceName() == null || np.produceName().equals("")) {
+		if (np.produceName() == null || np.produceName().isEmpty()) {
 			Logging.info(this, "checkConnectionToShare no filename " + np.produceName());
 		} else {
 			File f = new File(np.produceName());

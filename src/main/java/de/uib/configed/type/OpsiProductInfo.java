@@ -41,7 +41,7 @@ public class OpsiProductInfo extends OpsiPackage {
 		possibleActions.add(ActionRequest.getState2Label().get(ActionRequest.NONE));
 		// keys are the possible script types
 		for (String scriptKey : ActionRequest.getScriptKeys()) {
-			if (m.get(scriptKey) != null && !("" + m.get(scriptKey)).equals("")) {
+			if (m.get(scriptKey) != null && !("" + m.get(scriptKey)).isEmpty()) {
 				possibleActions.add(ActionRequest.getScriptKey2Label().get(scriptKey));
 			}
 		}
@@ -68,7 +68,7 @@ public class OpsiProductInfo extends OpsiPackage {
 		}
 
 		hasUserLoginScript = (m.get(SERVICE_KEY_USER_LOGIN_SCRIPT) != null
-				&& !("" + m.get(SERVICE_KEY_USER_LOGIN_SCRIPT)).equals(""));
+				&& !("" + m.get(SERVICE_KEY_USER_LOGIN_SCRIPT)).isEmpty());
 
 		Logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
 				+ ", hasUserLoginScript " + hasUserLoginScript);

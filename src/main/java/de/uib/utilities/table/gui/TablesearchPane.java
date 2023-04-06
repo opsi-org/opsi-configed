@@ -482,7 +482,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		popupMarkHits.setText(Configed.getResourceValue("SearchPane.popup.markall"));
 
 		popupMarkHits.addActionListener((ActionEvent actionEvent) -> {
-			if (!fieldSearch.getText().equals("")) {
+			if (!fieldSearch.getText().isEmpty()) {
 				markAll();
 			}
 		});
@@ -926,8 +926,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 				String compareVal = buffRow.toString();
 
-				if (compareVal.equals("")) {
-					if (val.equals("")) {
+				if (compareVal.isEmpty()) {
+					if (val.isEmpty()) {
 						found = true;
 					}
 				} else {
@@ -951,7 +951,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					);
 
 					if (compareValue == null) {
-						if (val.equals("")) {
+						if (val.isEmpty()) {
 							found = true;
 						}
 					} else {
@@ -1034,7 +1034,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			return;
 		}
 
-		if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals("")) {
+		if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty()) {
 			markAll();
 		}
 	}
@@ -1224,7 +1224,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public void keyPressed(KeyEvent e) {
 
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
-			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals("")) {
+			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty()) {
 				markAll();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_F8) {
@@ -1232,14 +1232,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			markAllAndFilter();
 			switchFilterOn();
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
-			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().equals("")) {
+			if (!disabledSinceWeAreInFilteredMode() && !fieldSearch.getText().isEmpty()) {
 				searchNextRow(selectMode);
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			Logging.debug(this, "key pressed ENTER on fieldSearch, with content " + fieldSearch.getText()
 					+ " searchInputType " + searchInputType);
 
-			if (searchInputType == SearchInputType.LINE && !fieldSearch.getText().equals("")) {
+			if (searchInputType == SearchInputType.LINE && !fieldSearch.getText().isEmpty()) {
 				switchFilterOff();
 				markAllAndFilter();
 				switchFilterOn();

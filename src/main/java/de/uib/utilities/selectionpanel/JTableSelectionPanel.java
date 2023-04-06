@@ -688,7 +688,7 @@ public class JTableSelectionPanel extends JPanel
 		List<String> result = new ArrayList<>();
 		String[] splitted = line.split("\\s+");
 		for (String s : splitted) {
-			if (!s.equals(" ")) {
+			if (!" ".equals(s)) {
 				result.add(s);
 			}
 		}
@@ -756,7 +756,7 @@ public class JTableSelectionPanel extends JPanel
 				);
 
 				if (compareValue == null) {
-					found = (val == null || val.equals(""));
+					found = (val == null || val.isEmpty());
 				} else {
 					String compareVal = ("" + compareValue).toLowerCase();
 
@@ -892,7 +892,7 @@ public class JTableSelectionPanel extends JPanel
 	private void searchTheRow(int startrow, boolean addSelection) {
 		String value = fieldSearch.getText();
 
-		if (value.length() > 10 && value.substring(0, 4).equalsIgnoreCase("http") && value.indexOf("host=") > 0) {
+		if (value.length() > 10 && "http".equalsIgnoreCase(value.substring(0, 4)) && value.indexOf("host=") > 0) {
 			value = value.substring(value.indexOf("host=") + ("host=").length());
 		}
 
@@ -935,7 +935,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	private void searchOnDocumentChange() {
-		if (fieldSearch.getText().equals("")) {
+		if (fieldSearch.getText().isEmpty()) {
 			setSelectedRow(0);
 			lastCountOfSearchWords = 0;
 		} else {
@@ -996,12 +996,12 @@ public class JTableSelectionPanel extends JPanel
 		}
 
 		if (e.getKeyCode() == KeyEvent.VK_F5) {
-			if (!fieldSearch.getText().equals("")) {
+			if (!fieldSearch.getText().isEmpty()) {
 				markAll();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_F3) {
 
-			if (!fieldSearch.getText().equals("")) {
+			if (!fieldSearch.getText().isEmpty()) {
 				searchTheNextRow();
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
