@@ -200,6 +200,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		}
 	}
 
+	@SuppressWarnings("java:S106")
 	private ChannelShell setStreams(ChannelShell ch) throws IOException {
 		ch.setInputStream(new FilterInputStream(System.in) {
 			@Override

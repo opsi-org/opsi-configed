@@ -448,6 +448,7 @@ public class SSHConnectExec extends SSHConnect {
 
 		}
 
+		@SuppressWarnings("java:S106")
 		@Override
 		public String doInBackground() throws java.net.SocketException {
 			StringBuilder buf = new StringBuilder();

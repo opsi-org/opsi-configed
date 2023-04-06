@@ -255,6 +255,7 @@ public class Configed {
 		return buf.toString();
 	}
 
+	@SuppressWarnings("java:S106")
 	protected static void usage() {
 		System.out.println("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		System.out.println(USAGE_INFO);
@@ -381,6 +382,7 @@ public class Configed {
 		return refreshMinutes;
 	}
 
+	@SuppressWarnings("java:S106")
 	protected static void processArgs(String[] args) {
 		Logging.debug("args " + Arrays.toString(args));
 

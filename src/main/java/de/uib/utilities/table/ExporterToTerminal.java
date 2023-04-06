@@ -15,6 +15,7 @@ public class ExporterToTerminal extends AbstractExportTable {
 
 	}
 
+	@SuppressWarnings("java:S106")
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
 

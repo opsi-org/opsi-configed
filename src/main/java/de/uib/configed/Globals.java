@@ -852,6 +852,7 @@ public final class Globals {
 		return " " + (((total - free) / 1024) / 1024) + " MB ";
 	}
 
+	@SuppressWarnings("java:S106")
 	public static String getCLIparam(String question, boolean password) {
 		java.io.Console con = System.console();
 		if (con == null) {
