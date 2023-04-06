@@ -18,6 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.text.TextFlow;
 
+@SuppressWarnings("java:S3242")
 public final class ComponentStyler {
 	private ComponentStyler() {
 	}

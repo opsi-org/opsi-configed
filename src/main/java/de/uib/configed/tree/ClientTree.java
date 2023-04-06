@@ -1028,7 +1028,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
-	public boolean removeClientNodes(List<DefaultMutableTreeNode> clientNodes) {
+	public boolean removeClientNodes(Iterable<DefaultMutableTreeNode> clientNodes) {
 		List<Object2GroupEntry> groupEntries = new ArrayList<>();
 
 		for (DefaultMutableTreeNode clientNode : clientNodes) {
@@ -1261,7 +1261,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return result;
 	}
 
-	public boolean isChildOfALL(DefaultMutableTreeNode node) {
+	public boolean isChildOfALL(TreeNode node) {
 		return (node.getParent() == groupNodeAllClients);
 	}
 
@@ -1510,8 +1510,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return locationsInDIRECTORY.get(clientId);
 	}
 
+	@SuppressWarnings("java:S3242")
 	public DefaultMutableTreeNode getChildWithUserObjectString(String objectID, DefaultMutableTreeNode groupNode) {
-
 		Enumeration<TreeNode> enumer = groupNode.children();
 		DefaultMutableTreeNode result = null;
 

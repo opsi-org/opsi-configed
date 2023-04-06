@@ -56,7 +56,7 @@ public class FShowList extends FTextArea {
 		jTextArea1.setCaretPosition(jTextArea1.getText().length());
 	}
 
-	public void setLines(List<String> lines) {
+	public void setLines(Iterable<String> lines) {
 		for (String line : lines) {
 			appendLine(line);
 		}

@@ -1,8 +1,12 @@
 package de.uib.utilities.swing;
 
+import java.io.IOException;
+
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
+
+import de.uib.utilities.logging.Logging;
 
 public class CheckedDocument extends PlainDocument {
 	char[] allowedChars;
@@ -18,7 +22,7 @@ public class CheckedDocument extends PlainDocument {
 		this.size = realSize;
 	}
 
-	public boolean appendCharIfAllowed(StringBuilder s, char c) {
+	public boolean appendCharIfAllowed(Appendable s, char c) {
 
 		if (allowedChars == null) {
 			return false;
@@ -35,7 +39,11 @@ public class CheckedDocument extends PlainDocument {
 					cCorrected = Character.toUpperCase(c);
 				}
 
-				s.append(cCorrected);
+				try {
+					s.append(cCorrected);
+				} catch (IOException e) {
+					Logging.debug(this, "error encountered while appending: " + e);
+				}
 				result = true;
 				break;
 			}
