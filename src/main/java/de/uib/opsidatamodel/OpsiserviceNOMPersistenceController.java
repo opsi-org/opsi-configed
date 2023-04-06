@@ -4650,7 +4650,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			}
 
 			if (newValue != oldValue) {
-				if (newValue == MapTableModel.nullLIST) {
+				if (newValue.equals(MapTableModel.nullLIST)) {
 					Logging.debug(this, "setProductProperties,  requested deletion " + properties.get(key));
 					deleteCollection.add(AbstractExecutioner.jsonMap(state));
 
@@ -5455,7 +5455,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					typesOfUsedConfigIds.put(ident, "UnicodeConfig");
 				}
 
-				if (valueList == MapTableModel.nullLIST) {
+				if (valueList.equals(MapTableModel.nullLIST)) {
 					Map<String, Object> item = createNOMitem("ConfigState");
 					item.put("objectId", configState.get("objectId"));
 					item.put("configId", configState.get("configId"));
