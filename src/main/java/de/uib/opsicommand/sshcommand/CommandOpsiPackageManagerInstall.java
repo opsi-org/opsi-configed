@@ -89,8 +89,8 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
-		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(command);
+		SSHCommand commandHelp = new CommandHelp(this);
+		SSHConnectExec exec = new SSHConnectExec(commandHelp);
 		return exec.getDialog();
 	}
 
