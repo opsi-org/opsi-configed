@@ -68,7 +68,7 @@ public class Containership {
 					theMethod.invoke(theComp, args);
 				} catch (NoSuchMethodException | SecurityException | IllegalAccessException
 						| InvocationTargetException ex) {
-					Logging.debug(methodName + ": not found >>>>> " + ex.toString() + "\n");
+					Logging.debug(methodName + ": not found >>>>> " + ex + "\n");
 
 				}
 

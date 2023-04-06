@@ -557,6 +557,7 @@ public final class SSHCommandFactory {
 			Logging.info(this, "testConnection not connected");
 			connectionState = NOT_CONNECTED;
 			Logging.warning(this, "cannot connect to " + user + "@" + host);
+			Logging.debug(this, "" + e);
 		}
 		updateConnectionInfo(connectionState);
 		Logging.info(this, "testConnection connection state " + connectionState);

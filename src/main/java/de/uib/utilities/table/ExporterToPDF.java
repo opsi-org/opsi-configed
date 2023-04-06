@@ -128,6 +128,7 @@ public class ExporterToPDF extends AbstractExportTable {
 						}
 					} catch (Exception e) {
 						Logging.error("no valid filename " + fileName);
+						Logging.debug("thrown exception: " + e);
 					}
 
 					Logging.notice(this, "selected fileName is: " + fileName);
@@ -310,6 +311,7 @@ public class ExporterToPDF extends AbstractExportTable {
 						s = theTable.getValueAt(j, i).toString();
 					} catch (Exception ex) {
 						s = "";
+						Logging.debug(this, "thrown excpetion: " + ex);
 					}
 					switch (s) {
 					case "∞":

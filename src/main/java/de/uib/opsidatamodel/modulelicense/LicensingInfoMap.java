@@ -212,7 +212,7 @@ public final class LicensingInfoMap {
 				result = clientX.getMap();
 			}
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " getClientNumersMap : " + ex.toString());
+			Logging.error(CLASSNAME + " getClientNumersMap : " + ex);
 		}
 
 		return result;
@@ -253,7 +253,7 @@ public final class LicensingInfoMap {
 			}
 
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceLicenses " + ex.toString());
+			Logging.error(CLASSNAME + " produceLicenses " + ex);
 		}
 
 		return result;
@@ -271,7 +271,7 @@ public final class LicensingInfoMap {
 			}
 
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex.toString());
+			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex);
 		}
 
 		return producedCustomerIDs;
@@ -296,7 +296,7 @@ public final class LicensingInfoMap {
 			}
 
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex.toString());
+			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex);
 		}
 
 		return producedCustomerNames;
@@ -600,7 +600,7 @@ public final class LicensingInfoMap {
 			}
 
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceDatesMap : " + ex.toString() + ", ");
+			Logging.error(CLASSNAME + " produceDatesMap : " + ex + ", ");
 		}
 
 		return new TreeMap<>(checkTimeWarning(resultMap));

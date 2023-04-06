@@ -866,7 +866,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				try {
 					return super.useToString(column);
 				} catch (Exception ex) {
-					Logging.debug(this, "column " + column + " ------------------- no way to string");
+					Logging.debug(this, "column " + column + " ------------------- no way to string: " + ex);
 					return false;
 				}
 			}
@@ -877,7 +877,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					Logging.debug(this, " comparator for col " + column + " is " + super.getComparator(column));
 					return super.getComparator(column);
 				} catch (Exception ex) {
-					Logging.warning(this, "column " + column + " ------------------- not getting comparator ");
+					Logging.warning(this, "column " + column + " ------------------- not getting comparator: " + ex);
 					return null;
 				}
 
@@ -1303,6 +1303,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		try {
 			return tableModel.getValueAt(theTable.convertRowIndexToModel(row), theTable.convertColumnIndexToModel(col));
 		} catch (Exception ex) {
+			Logging.debug("encountered error while trying to retrieve value from table: " + ex);
 			return null;
 		}
 	}

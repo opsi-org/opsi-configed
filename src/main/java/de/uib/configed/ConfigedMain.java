@@ -574,6 +574,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				success = success && savedStatesLocation.setReadable(true);
 			} catch (Exception ex) {
 				success = false;
+				Logging.notice(this, "failed to create saved states' directory: " + ex);
 			}
 		}
 
@@ -4206,7 +4207,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							}
 						}
 					} catch (Exception ex) {
-						Logging.info(this, "we could not update the model");
+						Logging.info(this, "we could not update the model: " + ex);
 					}
 				}
 

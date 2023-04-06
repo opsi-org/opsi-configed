@@ -123,7 +123,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				String urlEnc = URLEncoder.encode(json, "UTF8");
 				urlS += "?" + urlEnc;
 			} catch (UnsupportedEncodingException ux) {
-				Logging.error(this, ux.toString());
+				Logging.error(this, "" + ux);
 			}
 		}
 
@@ -271,6 +271,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				}
 			}
 		} catch (SSLException ex) {
+			Logging.debug(this, "SSLException encountered: " + ex);
 			if (!background) {
 				if (waitCursor != null) {
 					waitCursor.stop();
@@ -329,7 +330,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				Logging.info("Thread was interrupted");
 				Thread.currentThread().interrupt();
 			} catch (InvocationTargetException e) {
-				Logging.debug("exception thrown during doRun");
+				Logging.debug("exception thrown during doRun: " + e);
 			}
 
 			int choice = fErrorMsg.getResult();
@@ -354,7 +355,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			}
 
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-			Logging.error("Exception on connecting, " + ex.toString());
+			Logging.error("Exception on connecting, " + ex);
 
 			return null;
 		}
@@ -471,7 +472,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 					waitCursor.stop();
 				}
 				WaitCursor.stopAll();
-				Logging.error(this, "Exception while data reading, " + ex.toString());
+				Logging.error(this, "Exception while data reading, " + ex);
 			}
 		}
 

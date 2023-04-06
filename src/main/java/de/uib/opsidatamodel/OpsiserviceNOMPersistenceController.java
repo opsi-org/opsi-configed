@@ -599,6 +599,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 								packageServerDirectoryS = filepath;
 							} catch (Exception netex) {
 								Logging.error("not a correctly formed file URL: " + val);
+								Logging.debug(this, "thrown exception: " + netex);
 							}
 						}
 					}
@@ -1117,7 +1118,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			}
 
 		} catch (ClassCastException ex) {
-			Logging.info(this, "JSONthroughHTTPS failed to make connection");
+			Logging.info(this, "JSONthroughHTTPS failed to make connection: " + ex);
 		}
 
 		result = result && getConnectionState().getState() == ConnectionState.CONNECTED;
@@ -2299,7 +2300,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				map.put(key, (Integer) jO.get(key));
 			}
 		} catch (JSONException jex) {
-			Logging.error(this, "Exception on getting Map " + jex.toString());
+			Logging.error(this, "Exception on getting Map " + jex);
 		}
 
 		return map;
@@ -3559,6 +3560,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			} catch (OutOfMemoryError e) {
 				s = "--- file too big for showing, enlarge java memory  ---";
+				Logging.debug(this, "thrown exception: " + e);
 			}
 		} catch (Exception ex) {
 			s = "not found, " + ex;
@@ -5054,7 +5056,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 								try {
 									configVal = jO.toString();
 								} catch (Exception jsonEx) {
-									Logging.debug(this, jsonEx.toString());
+									Logging.debug(this, "" + jsonEx);
 								}
 								buf.append("<td bgcolor='" + bgColor + "'>&nbsp;</td>");
 								buf.append("<td width='200px'  bgcolor='" + bgColor

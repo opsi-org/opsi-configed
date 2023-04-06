@@ -86,6 +86,7 @@ public final class Messages {
 
 		} catch (MissingResourceException ex) {
 			messagesBundle = getResourceEN();
+			Logging.notice("missing resource, using EN resources: " + ex);
 		}
 		return messagesBundle;
 	}
@@ -165,7 +166,7 @@ public final class Messages {
 			messagesBundle = getResource();
 			messagesEnBundle = getResourceEN();
 		} catch (MissingResourceException e) {
-			Logging.info("Missing messages for locale EN");
+			Logging.info("Missing messages for locale EN: " + e);
 		}
 
 		return loc;

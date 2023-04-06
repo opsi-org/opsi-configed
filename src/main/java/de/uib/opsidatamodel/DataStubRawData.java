@@ -203,6 +203,7 @@ public class DataStubRawData extends DataStubNOM {
 				} catch (Exception ex) {
 					Logging.warning(this, "produceProductPropertyStates, error when json parsing database string \n"
 							+ row.get(3) + " for propertyId " + row.get(1));
+					Logging.debug(this, "thrown exception: " + ex);
 				}
 
 				m.put(ProductPropertyState.VALUES, values);
@@ -414,6 +415,7 @@ public class DataStubRawData extends DataStubNOM {
 				} catch (Exception ex) {
 					Logging.warning(this, "retrieveHostConfigs, error when json parsing database string \n"
 							+ valueString + " for configId " + configId);
+					Logging.debug(this, "thrown exception: " + ex);
 				}
 
 				// put into host configs

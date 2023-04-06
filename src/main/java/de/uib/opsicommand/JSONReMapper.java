@@ -197,7 +197,7 @@ public final class JSONReMapper {
 				result.put(key1, map1R);
 			}
 		} catch (Exception ex) {
-			Logging.debug(CLASSNAME + ".getMap3_String: ");
+			Logging.debug(CLASSNAME + ".getMap3_String: " + ex);
 		}
 
 		return result;
@@ -243,7 +243,7 @@ public final class JSONReMapper {
 				}
 			}
 		} catch (Exception ex) {
-			Logging.debug(CLASSNAME + ".getMap3_String: " + ex.toString());
+			Logging.debug(CLASSNAME + ".getMap3_String: " + ex);
 		}
 
 		return result;
@@ -305,7 +305,7 @@ public final class JSONReMapper {
 			}
 
 		} catch (JSONException jex) {
-			Logging.error("JSONReMapper: Exception on getting list " + jex.toString());
+			Logging.error("JSONReMapper: Exception on getting list " + jex);
 		}
 
 		JSONObject item = null;

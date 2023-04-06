@@ -104,6 +104,7 @@ public class ModulePermissionValue {
 				Logging.warning(this, "not a String: " + ob, ex);
 			} catch (Exception ex) {
 				Logging.debug(this, "DateParseException for " + ob);
+				Logging.debug(this, "thrown exception: " + ex);
 			}
 
 		}
