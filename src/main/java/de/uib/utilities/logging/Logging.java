@@ -200,7 +200,7 @@ public class Logging implements LogEventSubject {
 	}
 
 	private static boolean showOnGUI(int level) {
-		return (level <= MIN_LEVEL_FOR_SHOWING_MESSAGES);
+		return level != LEVEL_ESSENTIAL && level <= MIN_LEVEL_FOR_SHOWING_MESSAGES;
 	}
 
 	private static String now() {
