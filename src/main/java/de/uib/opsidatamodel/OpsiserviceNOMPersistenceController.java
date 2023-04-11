@@ -2259,6 +2259,24 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
+	public List<String> wakeOnLanOpsi43(String[] hostIds) {
+		Map<String, Object> response = new HashMap<>();
+
+		AbstractExecutioner exec1 = retrieveWorkingExec(getHostInfoCollections().getConfigServer());
+
+		Logging.info(this,
+				"working exec for config server " + getHostInfoCollections().getConfigServer() + " " + (exec1 != null));
+
+		if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
+			OpsiMethodCall omc = new OpsiMethodCall("hostControl_start", new Object[] { hostIds });
+
+			response = exec1.getMapResult(omc);
+		}
+
+		return collectErrorsFromResponsesByHost(response, "wakeOnLan");
+	}
+
+	@Override
 	public List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds) {
 		OpsiMethodCall omc = new OpsiMethodCall("hostControl_fireEvent", new Object[] { event, clientIds });
 		Map<String, Object> responses = exec.getMapResult(omc);
