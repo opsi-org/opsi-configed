@@ -16,7 +16,7 @@ import de.uib.utilities.logging.Logging;
 /**
  * This class extends the Executioner abstract class in such a way that the data
  * will be retrieved by means of a JSON interface.
- * 
+ *
  * @author Rupert Roeder
  */
 public abstract class AbstractJSONExecutioner extends AbstractExecutioner {

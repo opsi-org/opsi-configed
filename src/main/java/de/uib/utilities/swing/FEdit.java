@@ -171,7 +171,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	}
 
-	protected boolean isDataChenged() {
+	protected boolean isDataChanged() {
 		return dataChanged;
 	}
 

@@ -42,9 +42,9 @@ import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
 
 /*  Copyright (c) 2006-2016, 2021 uib.de
- 
+
 Usage of this portion of software is allowed unter the restrictions of the GPL
- 
+
 */
 
 /**
@@ -115,7 +115,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	 * opsiconfd.
 	 * <p>
 	 * The HTTPS subclass overwrites the method to modify "http" to "https".
-	 * 
+	 *
 	 * @param omc
 	 */
 	protected String produceBaseURL(String rpcPath) {
@@ -392,8 +392,10 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
 					conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
 
-					if (Globals.isMultiFactorAuthenticationEnabled && sessionId == null
-							&& ConfigedMain.getMainFrame() != null) {
+					Logging.debug("Unauthorized: background=" + background + ", " + sessionId + ", mfa="
+							+ Globals.isMultiFactorAuthenticationEnabled);
+					if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
+						Logging.info("Unauthorized, show password dialog");
 						if (!background) {
 							if (waitCursor != null) {
 								waitCursor.stop();
@@ -401,45 +403,46 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 							WaitCursor.stopAll();
 						}
 
-						SwingUtilities.invokeAndWait(() -> {
-							Map<String, String> groupData = new LinkedHashMap<>();
-							groupData.put("password", "");
-							Map<String, String> labels = new HashMap<>();
-							labels.put("password", Configed.getResourceValue("DPassword.jLabelPassword"));
-							Map<String, Boolean> editable = new HashMap<>();
-							editable.put("password", true);
-							Map<String, Boolean> secrets = new HashMap<>();
-							secrets.put("password", true);
+						Map<String, String> groupData = new LinkedHashMap<>();
+						groupData.put("password", "");
+						Map<String, String> labels = new HashMap<>();
+						labels.put("password", Configed.getResourceValue("DPassword.jLabelPassword"));
+						Map<String, Boolean> editable = new HashMap<>();
+						editable.put("password", true);
+						Map<String, Boolean> secrets = new HashMap<>();
+						secrets.put("password", true);
 
-							FEditRecord fEdit = new FEditRecord(
-									Configed.getResourceValue("JSONthroughHTTP.provideNewPassword"));
-							fEdit.setRecord(groupData, labels, null, editable, secrets);
-							fEdit.setTitle(Configed.getResourceValue("JSONthroughHTTP.enterNewPassword") + " ("
-									+ Globals.APPNAME + ")");
-							fEdit.init();
-							fEdit.setSize(420, 210);
-							fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
-							fEdit.addWindowListener(new WindowAdapter() {
-								@Override
-								public void windowOpened(WindowEvent event) {
-									// For some unknown reason the paint method isn't
-									// called, when dialog is initialized in Windows
-									// OS. To fix that we call paint method manually
-									// by requesting the dialog to be repainted, when
-									// it is opened.
-									fEdit.repaint();
-								}
-							});
-
-							fEdit.setModal(true);
-							fEdit.setAlwaysOnTop(true);
-							fEdit.setVisible(true);
-
-							if (!fEdit.isCancelled()) {
-								ConfigedMain.password = fEdit.getData().get("password");
-								password = fEdit.getData().get("password");
+						FEditRecord fEdit = new FEditRecord(
+								Configed.getResourceValue("JSONthroughHTTP.provideNewPassword"));
+						fEdit.setRecord(groupData, labels, null, editable, secrets);
+						fEdit.setTitle(Configed.getResourceValue("JSONthroughHTTP.enterNewPassword") + " ("
+								+ Globals.APPNAME + ")");
+						fEdit.init();
+						fEdit.setSize(420, 210);
+						fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
+						fEdit.addWindowListener(new WindowAdapter() {
+							@Override
+							public void windowOpened(WindowEvent event) {
+								// For some unknown reason the paint method isn't
+								// called, when dialog is initialized in Windows
+								// OS. To fix that we call paint method manually
+								// by requesting the dialog to be repainted, when
+								// it is opened.
+								fEdit.repaint();
+								fEdit.setDataChanged(true);
 							}
 						});
+
+						fEdit.setModal(true);
+						fEdit.setAlwaysOnTop(true);
+						fEdit.setVisible(true);
+
+						if (!fEdit.isCancelled()) {
+							ConfigedMain.password = fEdit.getData().get("password");
+							password = fEdit.getData().get("password");
+							return retrieveJSONObject(omc);
+						}
+
 					}
 				} else {
 					conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
