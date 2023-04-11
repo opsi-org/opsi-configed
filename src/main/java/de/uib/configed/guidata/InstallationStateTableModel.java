@@ -35,17 +35,17 @@ test cases:
 
 if several clients are selected:
 	changes are saved / initiated for all clients
-	
+
 if several products are selected:
 	changes are saved / initiated for all clients and all products
-	changes can be combined with manual changes for one product 
+	changes can be combined with manual changes for one product
 
-if several products with contradicting dependencies are set by one action 
+if several products with contradicting dependencies are set by one action
 	a warning is issued
 
 	There is no warning if an existing setting is reversed by a second action
 
-	
+
 local cancel button (not implemented)
 	all changes are reverted
 
@@ -55,7 +55,7 @@ local cancel button (not implemented)
 /*
 tests:
 
-setting a value 
+setting a value
 setting setup for several rows
 setting setup with dependency
 setting setup with dependencies, also for uninstall
@@ -647,6 +647,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 									existingRequest);
 
 					new Thread() {
+
 						@Override
 						public void run() {
 							JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo,
@@ -654,6 +655,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 											"InstallationStateTableModel.contradictingProductRequirements.title"),
 									JOptionPane.WARNING_MESSAGE);
 						}
+
 					}.start();
 				}
 
@@ -1064,35 +1066,33 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			// selection of actions
 
 			Logging.debug(this, " possible actions  " + possibleActions);
-			String[] actionsForProduct = null;
+			List<String> actionsForProduct = new ArrayList<>();
 			if (possibleActions != null) {
+
 				List<String> actionList = new ArrayList<>();
-
-				// actionList.addALL (List) possibleActions.get(actualProduct)
-				// instead of this we take the display strings:
-
-				// we shall iterate throught all possible actionRequest ID strings for the actual product
 				Iterator<String> iter = possibleActions.get(actualProduct).iterator();
-
 				while (iter.hasNext()) {
 					String label = iter.next();
 					ActionRequest ar = ActionRequest.produceFromLabel(label);
 					actionList.add(ActionRequest.getDisplayLabel(ar.getVal()));
 				}
 
-				// add UNDEFINED string only to local copy but we dont want to set anything to
-				// UNDEFINED
-
-				actionsForProduct = actionList.toArray(new String[0]);
+				// Add in values in correct ordering
+				String[] displayLabels = ActionRequest.getDisplayLabelsForChoice();
+				for (int i = 0; i < displayLabels.length; i += 1) {
+					if (actionList.contains(displayLabels[i])) {
+						actionsForProduct.add(displayLabels[i]);
+					}
+				}
 
 				Logging.debug("Possible actions as array  " + actionsForProduct);
 			}
 
-			if (actionsForProduct == null) {
-				actionsForProduct = new String[] { "null" };
+			if (actionsForProduct.size() == 0) {
+				actionsForProduct.add("null");
 			}
 
-			return new DefaultComboBoxModel<>(actionsForProduct);
+			return new DefaultComboBoxModel<>(actionsForProduct.toArray(new String[0]));
 		} else if (column == displayColumns.indexOf(InstallationStatus.KEY)) {
 			// selection of status
 

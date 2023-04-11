@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-	<groupId>configed</groupId>
-	<artifactId>configed</artifactId>
+    <groupId>configed</groupId>
+    <artifactId>configed</artifactId>
     <packaging>jar</packaging>
-    <version>4.2.20.15</version>
+    <version>4.2.20.16</version>
 
     <properties>
         <!-- use java 11 for backwards compatibility-->
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        
+
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
     </properties>
 
     <repositories>
-      <repository>
-        <id>jediterm-pty</id>
-        <url>https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/</url>
-      </repository>
+        <repository>
+            <id>jediterm-pty</id>
+            <url>https://packages.jetbrains.team/maven/p/ij/intellij-dependencies/</url>
+        </repository>
     </repositories>
 
     <build>
@@ -141,7 +142,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>19</version>
-	    <classifier>win</classifier>
+            <classifier>win</classifier>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
@@ -149,7 +150,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>19</version>
-	    <classifier>win</classifier>
+            <classifier>win</classifier>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base -->
@@ -157,7 +158,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
             <version>19</version>
-	    <classifier>win</classifier>
+            <classifier>win</classifier>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
@@ -165,7 +166,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>19</version>
-	    <classifier>win</classifier>
+            <classifier>win</classifier>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics -->
@@ -173,7 +174,7 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
             <version>19</version>
-	    <classifier>win</classifier>
+            <classifier>win</classifier>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
@@ -197,7 +198,7 @@
             <artifactId>fontawesomefx-commons</artifactId>
             <version>9.1.2</version>
         </dependency>
-        
+
         <!-- https://mvnrepository.com/artifact/org.commonmark/commonmark -->
         <dependency>
             <groupId>org.commonmark</groupId>
@@ -220,27 +221,27 @@
         </dependency>
 
         <dependency>
-          <groupId>org.java-websocket</groupId>
-          <artifactId>Java-WebSocket</artifactId>
-          <version>1.5.3</version>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>1.5.3</version>
         </dependency>
 
         <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-databind</artifactId>
-          <version>2.14.1</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.14.1</version>
         </dependency>
 
         <dependency>
-          <groupId>org.msgpack</groupId>
-          <artifactId>msgpack-core</artifactId>
-          <version>0.9.3</version>
+            <groupId>org.msgpack</groupId>
+            <artifactId>msgpack-core</artifactId>
+            <version>0.9.3</version>
         </dependency>
 
         <dependency>
-          <groupId>org.msgpack</groupId>
-          <artifactId>jackson-dataformat-msgpack</artifactId>
-          <version>0.9.3</version>
+            <groupId>org.msgpack</groupId>
+            <artifactId>jackson-dataformat-msgpack</artifactId>
+            <version>0.9.3</version>
         </dependency>
 
         <dependency>
@@ -253,7 +254,7 @@
             <groupId>org.jetbrains.jediterm</groupId>
             <artifactId>jediterm-typeahead</artifactId>
             <version>2.69</version>
-        </dependency> 
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-artifact -->
         <dependency>

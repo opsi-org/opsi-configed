@@ -888,7 +888,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		editable.put("description", true);
 
 		FEditRecord fEdit = new FEditRecord(Configed.getResourceValue("ClientTree.editGroup"));
-		fEdit.setRecord(groupData, labels, null, editable);
+		fEdit.setRecord(groupData, labels, null, editable, null);
 		fEdit.setTitle(Configed.getResourceValue("ClientTree.editNode.title") + " (" + Globals.APPNAME + ")");
 		fEdit.init();
 		fEdit.setSize(450, 250);
@@ -940,7 +940,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			String inscription = "";
 
 			FEditRecord fEdit = new FEditRecord(inscription);
-			fEdit.setRecord(groupData, labels, null, editable);
+			fEdit.setRecord(groupData, labels, null, editable, null);
 			fEdit.setTitle(Configed.getResourceValue("ClientTree.addNode.title") + " (" + Globals.APPNAME + ")");
 			fEdit.init();
 			fEdit.setSize(450, 250);

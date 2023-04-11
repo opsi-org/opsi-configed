@@ -260,6 +260,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	private boolean hasIsOpisUserAdminBeenChecked;
 	private boolean isOpsiUserAdmin;
+	private boolean isMultiFactorAuthenticationEnabled;
 
 	// the infos that are displayed in the gui
 	protected Map<String, Object> opsiModulesDisplayInfo;
@@ -1130,6 +1131,38 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public String getOpsiCACert() {
 		OpsiMethodCall omc = new OpsiMethodCall("getOpsiCACert", new Object[0]);
 		return exec.getStringResult(omc);
+	}
+
+	@Override
+	public boolean usesMultiFactorAuthentication() {
+		return isMultiFactorAuthenticationEnabled;
+	}
+
+	@Override
+	public void checkMultiFactorAuthentication() {
+		isMultiFactorAuthenticationEnabled = getOTPSecret(ConfigedMain.user) != null;
+	}
+
+	@Override
+	public String getOTPSecret(String userId) {
+		List<String> callAttributes = new ArrayList<>();
+		Map<String, String> callFilter = new HashMap<>();
+		callFilter.put("id", userId);
+		OpsiMethodCall omc = new OpsiMethodCall("user_getObjects", new Object[] { callAttributes, callFilter });
+		List<Map<String, Object>> result = exec.getListOfMaps(omc);
+
+		if (result.isEmpty()) {
+			return null;
+		}
+
+		Map<String, Object> userDetails = result.get(0);
+		String otpSecret = null;
+
+		if (userDetails.containsKey("otpSecret")) {
+			otpSecret = (String) userDetails.get("otpSecret");
+		}
+
+		return otpSecret;
 	}
 
 	// we delegate method calls to the executioner
@@ -2223,6 +2256,24 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		return collectErrorsFromResponsesByHost(responses, "wakeOnLan");
+	}
+
+	@Override
+	public List<String> wakeOnLanOpsi43(String[] hostIds) {
+		Map<String, Object> response = new HashMap<>();
+
+		AbstractExecutioner exec1 = retrieveWorkingExec(getHostInfoCollections().getConfigServer());
+
+		Logging.info(this,
+				"working exec for config server " + getHostInfoCollections().getConfigServer() + " " + (exec1 != null));
+
+		if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
+			OpsiMethodCall omc = new OpsiMethodCall("hostControl_start", new Object[] { hostIds });
+
+			response = exec1.getMapResult(omc);
+		}
+
+		return collectErrorsFromResponsesByHost(response, "wakeOnLan");
 	}
 
 	@Override

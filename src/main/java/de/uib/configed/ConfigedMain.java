@@ -1551,7 +1551,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// returns true if we have a PersistenceController and are connected
 	protected void login(List<String> savedServers) {
-
 		Logging.debug(this, " create password dialog ");
 		dPassword = new DPassword(this);
 
@@ -1589,7 +1588,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			dPassword.tryConnecting();
 		}
-
 	}
 
 	public AbstractPersistenceController getPersistenceController() {
@@ -4287,7 +4285,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void updateConnectionStatusInTable(String clientName) {
-
 		AbstractTableModel model = selectionPanel.getTableModel();
 
 		int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
@@ -4776,7 +4773,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
 			@Override
 			protected List<String> getErrors() {
-				return persist.wakeOnLan(clients);
+				List<String> errors = new ArrayList<>();
+
+				if (JSONthroughHTTPS.isOpsi43()) {
+					errors = persist.wakeOnLanOpsi43(clients);
+				} else {
+					errors = persist.wakeOnLan(clients);
+				}
+
+				return errors;
 			}
 		}.start();
 	}

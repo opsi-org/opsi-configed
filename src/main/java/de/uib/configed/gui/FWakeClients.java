@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.AbstractExecutioner;
+import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
@@ -83,7 +84,11 @@ public class FWakeClients extends FShowList {
 				}
 			}
 
-			persist.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
+			if (JSONthroughHTTPS.isOpsi43()) {
+				persist.wakeOnLanOpsi43(hostsToWakeOnThisTurn.toArray(new String[0]));
+			} else {
+				persist.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
+			}
 
 			Globals.threadSleep(this, 1000L * delaySecs);
 			turn++;
