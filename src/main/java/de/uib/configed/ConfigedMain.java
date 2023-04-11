@@ -4285,7 +4285,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void updateConnectionStatusInTable(String clientName) {
-
 		AbstractTableModel model = selectionPanel.getTableModel();
 
 		int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientConnected"));
