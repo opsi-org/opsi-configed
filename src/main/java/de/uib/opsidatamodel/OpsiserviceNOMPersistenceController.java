@@ -15,7 +15,7 @@
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation; 
+* License as published by the Free Software Foundation;
 * version  AGPLv3
 *
 *  copyright:     Copyright (c) 2000-2022
@@ -1140,7 +1140,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public void checkMultiFactorAuthentication() {
-		isMultiFactorAuthenticationEnabled = getOTPSecret(ConfigedMain.user) != null;
+		isMultiFactorAuthenticationEnabled = JSONthroughHTTPS.isOpsi43() && getOTPSecret(ConfigedMain.user) != null;
 	}
 
 	@Override
@@ -4398,7 +4398,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	/**
 	 * Collects the common property values of some product for a client
 	 * collection,<br \> needed for local imaging handling <br \>
-	 * 
+	 *
 	 * @param List<String> clients -
 	 * @param String       product
 	 * @param String       property
@@ -4447,7 +4447,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	 * This method collects properties for all selected clients and all
 	 * products,<br \> as a sideeffect, it produces the depot specific default
 	 * values <br \>
-	 * 
+	 *
 	 * @param clientNames -
 	 */
 	@Override
@@ -4528,7 +4528,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	 * This method collects properties for all selected clients and all
 	 * products,<br \> as a sideeffect, it produces the depot specific default
 	 * values <br \>
-	 * 
+	 *
 	 * @param clientNames -
 	 */
 	public void retrieveProductProperties(final Set<String> clientNames) {
@@ -7933,7 +7933,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			readyObjects.add(AbstractExecutioner.jsonMap(item));
 		}
 
-		// for warnings for opsi licences 
+		// for warnings for opsi licences
 
 		// percentage number of clients
 		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT;
@@ -8618,7 +8618,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Test if sshcommand methods exists
-	 * 
+	 *
 	 * @param method name
 	 * @return True if exists
 	 */
@@ -8697,7 +8697,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Exec the python-opsi command "SSHCommand_getObjects"
-	 * 
+	 *
 	 * @return command objects
 	 */
 	@Override
@@ -8712,7 +8712,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Exec a python-opsi command
-	 * 
+	 *
 	 * @param method      name
 	 * @param jsonObjects to do sth
 	 * @return result true if everything is ok
@@ -8731,7 +8731,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Exec the python-opsi command "SSHCommand_deleteObjects"
-	 * 
+	 *
 	 * @param jsonObjects to remove
 	 * @return result true if successfull
 	 */
@@ -8751,7 +8751,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Exec the python-opsi command "SSHCommand_createObjects"
-	 * 
+	 *
 	 * @param jsonObjects to create
 	 * @return result true if successfull
 	 */
@@ -8762,7 +8762,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Exec the python-opsi command "SSHCommand_updateObjects"
-	 * 
+	 *
 	 * @param jsonObjects to update
 	 * @return result true if successfull
 	 */
