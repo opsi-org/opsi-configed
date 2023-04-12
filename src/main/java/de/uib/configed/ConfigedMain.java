@@ -1295,7 +1295,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				@Override
 				public void valueChanged(ListSelectionEvent e) {
 					counter++;
-					Logging.info(this, "============ depotSelection event count  " + counter);
+					Logging.info(this, "depotSelection event count  " + counter);
 
 					if (!e.getValueIsAdjusting()) {
 						depotsListValueChanged();

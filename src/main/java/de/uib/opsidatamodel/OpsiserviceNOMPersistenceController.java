@@ -5884,7 +5884,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public void setDepot(String depotId) {
-		Logging.info(this, "setDepot =========== " + depotId);
+		Logging.info(this, "setDepot: " + depotId);
 		theDepot = depotId;
 	}
 

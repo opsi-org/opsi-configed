@@ -215,7 +215,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
 		makeURL(omc);
 
-		TimeCheck timeCheck = new TimeCheck(this, "retrieveJSONObject  FROM " + serviceURL + "  ++ " + omc);
+		TimeCheck timeCheck = new TimeCheck(this, "retrieveJSONObject " + omc);
 		timeCheck.start();
 
 		HttpURLConnection connection = null;
@@ -530,7 +530,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			}
 		}
 
-		timeCheck.stop("retrieveJSONObject  got result " + (result != null) + " ");
+		timeCheck.stop("retrieveJSONObject " + (result == null ? "empty result" : "non empty result"));
 		Logging.info(this, "retrieveJSONObject ready");
 		if (waitCursor != null) {
 			waitCursor.stop();

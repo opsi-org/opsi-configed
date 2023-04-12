@@ -4,11 +4,11 @@
  * modify it under the terms of the GNU General Public
  * License as published by the Free Software Foundation; either
  * version 2.1 of the License, or (at your option) any later version.
- *  
- *    
+ *
+ *
  *  copyright:     Copyright (c) 2014-2018
  *  organization: uib.de
- * @author  R. Roeder 
+ * @author  R. Roeder
  */
 
 package de.uib.opsidatamodel;
@@ -131,11 +131,11 @@ public class DataStubRawData extends DataStubNOM {
 
 	/*
 	 * in superclass
-	 * 
-	 * 
+	 *
+	 *
 	 * //will only be refreshed when all product data are refreshed
-	 * 
-	 * 
+	 *
+	 *
 	 */
 
 	// client is a set of added hosts, host represents the totality and will be
@@ -224,7 +224,7 @@ public class DataStubRawData extends DataStubNOM {
 
 		retrieveInstalledSoftwareInformation();
 		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
-				+ "  clients count ======  " + clients.size());
+				+ "  clients count: " + clients.size());
 
 		List<String> newClients = new ArrayList<>(clients);
 
@@ -236,7 +236,7 @@ public class DataStubRawData extends DataStubNOM {
 		}
 
 		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
-				+ "  new clients count  ====== " + newClients.size());
+				+ "  new clients count: " + newClients.size());
 
 		int missingEntries = 0;
 
@@ -348,10 +348,10 @@ public class DataStubRawData extends DataStubNOM {
 
 	/*
 	 * getAuditSoftwareUsage
-	 * 
+	 *
 	 * select count(*) as Anzahl, name, version, subversion, language, architecture
 	 * from SOFTWARE_CONFIG group by name, version, subversion, language,
-	 * architecture order by name, version, subversion, language, architecture 
+	 * architecture order by name, version, subversion, language, architecture
 	 */
 
 	@Override
@@ -598,17 +598,17 @@ public class DataStubRawData extends DataStubNOM {
 		 * SELECT HOST.hostId,
 		 * HARDWARE_DEVICE_DISK_PARTITION.name,
 		 * HARDWARE_DEVICE_DISK_PARTITION.description
-		 * 
+		 *
 		 * from HOST, HARDWARE_DEVICE_DISK_PARTITION, HARDWARE_CONFIG_DISK_PARTITION
 		 * where
 		 * HOST.hostId = "vbrupertwin7-64.uib.local" and
 		 * HARDWARE_DEVICE_DISK_PARTITION.hardware_id =
 		 * HARDWARE_CONFIG_DISK_PARTITION.hardware_id
-		 * 
+		 *
 		 * and HOST.hostId = HARDWARE_CONFIG_DISK_PARTITION.hostId
-		 * 
-		 * and HARDWARE_CONFIG_DISK_PARTITION.state=1 
-		 * 
+		 *
+		 * and HARDWARE_CONFIG_DISK_PARTITION.state=1
+		 *
 		 */
 
 	}

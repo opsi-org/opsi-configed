@@ -119,7 +119,7 @@ public class SSHCompletionComboButton {
 			}
 		}
 
-		Logging.info(this, "init =======================================");
+		Logging.info(this, "init");
 		for (String elem : defaultvalues) {
 			Logging.debug(this, "init defaultvalues contains " + elem);
 		}
