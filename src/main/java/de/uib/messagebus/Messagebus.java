@@ -38,6 +38,8 @@ import de.uib.utilities.logging.Logging;
 public class Messagebus implements MessagebusListener {
 	private WebSocketClientEndpoint messagebusWebSocket;
 	private ConfigedMain configedMain;
+	private int reconnectWaitMillis = 15000;
+	private boolean reconnecting = false;
 
 	public Messagebus(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
@@ -235,7 +237,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	public boolean isBusy() {
-		return messagebusWebSocket.hasBufferedData();
+		return messagebusWebSocket != null && messagebusWebSocket.hasBufferedData();
 	}
 
 	public boolean isConnected() {
@@ -259,8 +261,24 @@ public class Messagebus implements MessagebusListener {
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame
-		Logging.info(this, "Messagebus connection closed closed by " + (remote ? "opsi service" : "us") + " Code: "
-				+ code + " Reason: " + reason);
+		Logging.info(this, "Messagebus connection closed by " + (remote ? "opsi service" : "us") + " Code: " + code
+				+ " Reason: " + reason);
+
+		if (remote && !reconnecting) {
+			reconnecting = true;
+			while (!isConnected()) {
+				Logging.notice(this, "Connection to messagebus lost, reconnecting in " + reconnectWaitMillis + " ms");
+				try {
+					Thread.sleep(reconnectWaitMillis);
+					if (connect()) {
+						break;
+					}
+				} catch (InterruptedException ie) {
+				}
+			}
+			reconnecting = false;
+		}
+
 	}
 
 	@Override
