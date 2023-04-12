@@ -60,7 +60,7 @@ import de.uib.utilities.thread.WaitingWorker;
 /**
  * DPassword description: A JDialog for logging in copyright: Copyright (c)
  * 2000-2016 organization: uib.de
- * 
+ *
  * @author D. Oertel; R. Roeder
  */
 public class DPassword extends JDialog implements WaitingSleeper {
@@ -399,7 +399,6 @@ public class DPassword extends JDialog implements WaitingSleeper {
 						JOptionPane.INFORMATION_MESSAGE);
 			}
 
-			passwordField.setText("");
 			if (PersistenceControllerFactory.getConnectionState().getMessage().indexOf("authorized") > -1) {
 				Logging.info(this, "(not) authorized");
 
