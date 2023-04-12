@@ -49,6 +49,6 @@ public class TimeCheck {
 			info = mesg;
 		}
 		long endmillis = System.currentTimeMillis();
-		Logging.log(caller, loglevel, "ended (" + (endmillis - startmillis) + " ms) " + info);
+		Logging.log(caller, loglevel, "ended (" + (endmillis - startmillis) + " ms): " + info);
 	}
 }
