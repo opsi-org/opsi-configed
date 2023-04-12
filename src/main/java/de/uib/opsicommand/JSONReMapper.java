@@ -15,7 +15,7 @@ import de.uib.utilities.logging.Logging;
 
 /**
  * This class contains utility methods for remapping JSON data
- * 
+ *
  * @author Rupert Roeder
  */
 
@@ -258,11 +258,11 @@ public final class JSONReMapper {
 				jsonList = getJsonList(jO, "result");
 			}
 		} catch (Exception ex) {
-			Logging.error("JSONReMapper: Exception on getting list for key \"result\" ", ex);
+			Logging.error("JSONReMapper: Exception on getting list for key \"result\" " + retrieved, ex);
 		}
 
 		if (jsonList == null) {
-			Logging.error("JSONReMapper: Error on getting list for key \"result\": jsonList is null");
+			Logging.error("JSONReMapper: Error on getting list for key \"result\": jsonList is null " + retrieved);
 			return new ArrayList<>();
 		}
 

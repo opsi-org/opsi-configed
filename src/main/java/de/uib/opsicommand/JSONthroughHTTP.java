@@ -249,7 +249,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	 * This method receives the JSONObject via HTTP.
 	 */
 	@Override
-	public JSONObject retrieveJSONObject(OpsiMethodCall omc) {
+	public synchronized JSONObject retrieveJSONObject(OpsiMethodCall omc) {
 		boolean background = false;
 		Logging.info(this, "retrieveJSONObjects started");
 		WaitCursor waitCursor = null;
@@ -282,16 +282,15 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				connection.setRequestMethod("GET");
 			}
 
-			Logging.info(this, "retrieveJSONObject by connection " + connection);
-			Logging.info(this, "retrieveJSONObject request properties " + connection.getRequestProperties());
-			Logging.info(this, "retrieveJSONObject request method " + connection.getRequestMethod());
-			Logging.info(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
+			Logging.debug(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
+			Logging.info(this,
+					"retrieveJSONObject method=" + connection.getRequestMethod() + ", headers="
+							+ connection.getRequestProperties() + ", cookie="
+							+ (sessionId == null ? "null" : (sessionId.substring(0, 26) + "...")));
 
 			if (sessionId != null) {
 				connection.setRequestProperty("Cookie", sessionId);
 			}
-			Logging.info(this, "retrieveJSONObjects request old or " + " new session ");
-			Logging.info(this, "retrieveJSONObjects connected " + " new session ");
 
 			try {
 				connection.connect();
@@ -299,7 +298,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				String s = "" + ex;
 				int i = s.indexOf("Unsupported ciphersuite");
 				if (i > -1) {
-					s = "\n\n" + s.substring(i) + "\n" + "In this SSL configuration, a connection is not possible";
+					s = "\n\n" + s.substring(i) + "\nIn this SSL configuration, a connection is not possible";
 
 					Logging.error(s);
 					Logging.checkErrorList(null);
