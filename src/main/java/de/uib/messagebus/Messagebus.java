@@ -264,17 +264,21 @@ public class Messagebus implements MessagebusListener {
 		if (isConnected()) {
 			messagebusWebSocket.send(message);
 		} else {
-			Logging.info(this, "Message not sent, messagebus not connected");
+			Logging.warning(this, "Message not sent, messagebus not connected");
 		}
 	}
 
 	public void sendMessage(Map<String, Object> message) {
-		try {
-			ObjectMapper mapper = new MessagePackMapper();
-			byte[] msgpackBytes = mapper.writeValueAsBytes(message);
-			send(ByteBuffer.wrap(msgpackBytes, 0, msgpackBytes.length));
-		} catch (JsonProcessingException ex) {
-			Logging.warning(this, "error occurred while processing msgpack: ", ex);
+		if (isConnected()) {
+			try {
+				ObjectMapper mapper = new MessagePackMapper();
+				byte[] msgpackBytes = mapper.writeValueAsBytes(message);
+				send(ByteBuffer.wrap(msgpackBytes, 0, msgpackBytes.length));
+			} catch (JsonProcessingException ex) {
+				Logging.warning(this, "error occurred while processing msgpack: ", ex);
+			}
+		} else {
+			Logging.warning(this, "Message of type '" + message.get("type") + "' not sent, messagebus not connected");
 		}
 	}
 
