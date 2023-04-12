@@ -3,10 +3,10 @@ package de.uib.messagebus;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.UUID;
 
+import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.handshake.ServerHandshake;
@@ -15,15 +15,12 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.uib.configed.ConfigedMain;
-import de.uib.configed.terminal.Terminal;
-import de.uib.configed.terminal.WebSocketInputStream;
 import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S109")
 public class WebSocketClientEndpoint extends WebSocketClient {
 
-	private ConfigedMain configedMain;
+	private ArrayList<MessagebusListener> listeners = new ArrayList<>();
 
 	public WebSocketClientEndpoint(URI serverUri, Draft draft) {
 		super(serverUri, draft);
@@ -37,99 +34,50 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 		super(serverUri, httpHeaders);
 	}
 
-	public void setConfigedMain(ConfigedMain configedMain) {
-		this.configedMain = configedMain;
+	public void registerListener(MessagebusListener listener) {
+		if (!listeners.contains(listener)) {
+			listeners.add(listener);
+		}
+	}
+
+	public void unregisterListener(MessagebusListener listener) {
+		if (listeners.contains(listener)) {
+			listeners.remove(listener);
+		}
 	}
 
 	@Override
-	public void onOpen(ServerHandshake handshakedata) {
-		Logging.info(this, "Websocket is opened");
+	public boolean isOpen() {
+		WebSocket con = getConnection();
+		if (con == null) {
+			return false;
+		}
+		return con.isOpen();
 	}
 
 	@Override
-	public void onMessage(String message) {
+	public void onOpen(ServerHandshake handshakeData) {
+		Logging.debug(this, "Websocket opened");
+		for (MessagebusListener listener : listeners) {
+			listener.onOpen(handshakeData);
+		}
+	}
+
+	@Override
+	public void onMessage(String data) {
 		// We receive message in bytes rather than Strings. Therefore, there is
 		// nothing to handle in this method.
 	}
 
 	@Override
-	public void onMessage(ByteBuffer message) {
+	public void onMessage(ByteBuffer data) {
+		Logging.debug(this, "Websocket received message");
+		ObjectMapper mapper = new MessagePackMapper();
 		try {
-			ObjectMapper mapper = new MessagePackMapper();
-			Map<String, Object> data = mapper.readValue(message.array(), new TypeReference<Map<String, Object>>() {
+			Map<String, Object> message = mapper.readValue(data.array(), new TypeReference<Map<String, Object>>() {
 			});
-
-			String type = (String) data.get("type");
-			Logging.debug(this, "response data: " + data.toString());
-
-			if (type.startsWith("terminal_")) {
-				switch (type) {
-				case "terminal_data_read":
-					WebSocketInputStream.write((byte[]) data.get("data"));
-					break;
-				case "terminal_open_event":
-					Terminal terminal = Terminal.getInstance();
-					terminal.setTerminalId((String) data.get("terminal_id"));
-					terminal.setTerminalChannel((String) data.get("back_channel"));
-					terminal.unlock();
-					break;
-				case "terminal_close_event":
-					Terminal.getInstance().close();
-					break;
-				case "terminal_resize_event":
-					break;
-				default:
-					Logging.warning(this, "unhandeld terminal type response caught: " + type);
-				}
-			} else if ("file_upload_result".equals(type)) {
-				String filePath = (String) data.get("path");
-
-				data.clear();
-				data.put("type", "terminal_data_write");
-				data.put("id", UUID.randomUUID().toString());
-				data.put("sender", "@");
-				data.put("channel", Terminal.getInstance().getTerminalChannel());
-				data.put("created", System.currentTimeMillis());
-				data.put("expires", System.currentTimeMillis() + 10000);
-				data.put("terminal_id", Terminal.getInstance().getTerminalId());
-				data.put("data", filePath.getBytes(StandardCharsets.UTF_8));
-
-				byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-				send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
-			} else if ("event".equals(type)) {
-				try {
-					// Sleep for a little because otherwise we cannot get the needed Data from the Server
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					Thread.currentThread().interrupt();
-				}
-
-				switch ((String) data.get("event")) {
-				case "host_connected":
-					String clientId = (String) ((Map<?, ?>) ((Map<?, ?>) data.get("data")).get("host")).get("id");
-					configedMain.addClientToConnectedList(clientId);
-					break;
-
-				case "host_disconnected":
-					clientId = (String) ((Map<?, ?>) ((Map<?, ?>) data.get("data")).get("host")).get("id");
-					configedMain.removeClientFromConnectedList(clientId);
-					break;
-
-				case "host_created":
-					configedMain.addClientToTable((String) ((Map<?, ?>) data.get("data")).get("id"));
-					break;
-
-				case "host_deleted":
-					configedMain.removeClientFromTable((String) ((Map<?, ?>) data.get("data")).get("id"));
-					break;
-
-				case "productOnClient_updated":
-					configedMain.updateProduct((Map<?, ?>) data.get("data"));
-					break;
-
-				default:
-					break;
-				}
+			for (MessagebusListener listener : listeners) {
+				listener.onMessageReceived(message);
 			}
 		} catch (IOException e) {
 			Logging.error(this, "cannot read received message: ", e);
@@ -140,12 +88,18 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame
-		Logging.info(this,
+		Logging.debug(this,
 				"Websocket closed by " + (remote ? "remote peer" : "us") + " Code: " + code + " Reason: " + reason);
+		for (MessagebusListener listener : listeners) {
+			listener.onClose(code, reason, remote);
+		}
 	}
 
 	@Override
 	public void onError(Exception ex) {
-		Logging.warning(this, "error encountered in messagebus: " + ex);
+		Logging.debug(this, "Websocket error: " + ex);
+		for (MessagebusListener listener : listeners) {
+			listener.onError(ex);
+		}
 	}
 }
