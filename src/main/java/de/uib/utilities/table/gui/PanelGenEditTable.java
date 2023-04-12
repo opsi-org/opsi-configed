@@ -3,7 +3,7 @@
  *
  * By uib, www.uib.de, 2008-2017,2020-2021
  * Author: Rupert Röder
- * 
+ *
  */
 
 package de.uib.utilities.table.gui;
@@ -298,7 +298,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * sets frame to return to e.g. from option dialogs
-	 * 
+	 *
 	 * @param javax.swing.JFrame
 	 */
 	public void setMasterFrame(JFrame masterFrame) {
@@ -868,7 +868,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				try {
 					return super.useToString(column);
 				} catch (Exception ex) {
-					Logging.debug(this, "column " + column + " ------------------- no way to string");
+					Logging.debug(this, "column " + column + " no way to string");
 					return false;
 				}
 			}
@@ -879,7 +879,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					Logging.debug(this, " comparator for col " + column + " is " + super.getComparator(column));
 					return super.getComparator(column);
 				} catch (Exception ex) {
-					Logging.warning(this, "column " + column + " ------------------- not getting comparator ", ex);
+					Logging.warning(this, "column " + column + " not getting comparator", ex);
 					return null;
 				}
 
@@ -977,7 +977,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	/**
 	 * set if filter mode is reset on new search (this is default but may be
 	 * disabled for special implementations of selection
-	 * 
+	 *
 	 * @parameter boolean
 	 */
 	public void setResetFilterModeOnNewSearch(boolean b) {
@@ -998,7 +998,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * sets a filter symbol belonging to searchPane
-	 * 
+	 *
 	 * @parameter boolean
 	 */
 	public void showFilterIcon(boolean b) {
@@ -1021,7 +1021,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * activates popupMark or this as well as popupMarkAndFilter in context menu
-	 * 
+	 *
 	 * @parameter boolean
 	 */
 	public void setFiltering(boolean b, boolean withFilterPopup) {
@@ -1035,7 +1035,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * activates popupMark and popupMarkAndFilter in context menu
-	 * 
+	 *
 	 * @parameter boolean
 	 */
 	public void setFiltering(boolean b) {
@@ -1044,7 +1044,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * sets an alternative ActionListener
-	 * 
+	 *
 	 * @parameter ActionListener
 	 */
 	public void setFiltermarkActionListener(ActionListener li) {
@@ -1053,7 +1053,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * sets an alternative tooltip for the filtermark
-	 * 
+	 *
 	 * @parameter String
 	 */
 	public void setFiltermarkToolTipText(String s) {

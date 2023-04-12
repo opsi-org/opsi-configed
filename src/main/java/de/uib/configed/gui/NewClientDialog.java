@@ -269,7 +269,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			public void insertUpdate(DocumentEvent e) {
 				try {
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
-					Logging.debug(this, " --------->" + newPiece + "<");
+					Logging.debug(this, "newPiece: '" + newPiece + "'");
 
 					if (newPiece.equals("\t")) {
 						systemUUIDField.requestFocus();

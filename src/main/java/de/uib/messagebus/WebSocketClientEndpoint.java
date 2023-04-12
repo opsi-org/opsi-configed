@@ -96,8 +96,8 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame
-		Logging.debug(this,
-				"Websocket closed by " + (remote ? "remote peer" : "us") + " Code: " + code + " Reason: " + reason);
+		Logging.debug(this, "Websocket closed by " + (remote ? "opsi service" : "us") + " Code=" + code + " Reason='"
+				+ reason + "'");
 		for (MessagebusListener listener : listeners) {
 			listener.onClose(code, reason, remote);
 		}

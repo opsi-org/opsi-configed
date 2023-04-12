@@ -157,7 +157,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	}
 
 	private void setActivated(boolean active) {
-		Logging.info(this, "------------ activate");
+		Logging.info(this, "activate");
 
 		jProgressBar.setVisible(!active);
 		jProgressBar.setValue(0);

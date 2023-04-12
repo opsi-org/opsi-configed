@@ -880,8 +880,8 @@ public class DataStubNOM extends AbstractDataStub {
 		List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
-			Logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
-					+ client2software.keySet().size());
+			Logging.info(this,
+					"retrieveSoftwareAuditOnClients client2Software.keySet size: " + client2software.keySet().size());
 
 			newClients.removeAll(client2software.keySet());
 		}

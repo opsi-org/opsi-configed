@@ -1102,7 +1102,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	protected boolean makeConnection() {
+	public boolean makeConnection() {
 		return makeConnection(exec);
 	}
 
@@ -1732,7 +1732,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				+ notWanConfiguration.keySet().size());
 
 		setConfig(notWanConfiguration);
-		Logging.info(this, "set notWanConfiguration members where no entry exists ----------------------------- ");
+		Logging.info(this, "set notWanConfiguration members where no entry exists");
 		// send to opsiserver only new configs
 		setConfig(true);
 
@@ -3593,7 +3593,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return logfiles;
 		}
 
-		Logging.debug(this, "------------- getLogfile logtye " + logtype);
+		Logging.debug(this, "getLogfile logtye " + logtype);
 
 		String[] logtypes = Globals.getLogTypes();
 

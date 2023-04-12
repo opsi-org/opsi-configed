@@ -220,23 +220,23 @@ public class DataStubRawData extends DataStubNOM {
 
 	@Override
 	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
-		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
+		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start: " + Globals.usedMemory());
 
 		retrieveInstalledSoftwareInformation();
-		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
+		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null: " + (client2software == null)
 				+ "  clients count: " + clients.size());
 
 		List<String> newClients = new ArrayList<>(clients);
 
 		if (client2software != null) {
-			Logging.info(this, "retrieveSoftwareAuditOnClients client2Software.keySet size " + "   +++  "
-					+ client2software.keySet().size());
+			Logging.info(this,
+					"retrieveSoftwareAuditOnClients client2Software.keySet size: " + client2software.keySet().size());
 
 			newClients.removeAll(client2software.keySet());
 		}
 
-		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null " + (client2software == null)
-				+ "  new clients count: " + newClients.size());
+		Logging.info(this, "retrieveSoftwareAuditOnClients client2Software null: " + (client2software == null)
+				+ ", new clients count: " + newClients.size());
 
 		int missingEntries = 0;
 

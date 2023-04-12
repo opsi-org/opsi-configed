@@ -12,6 +12,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.terminal.WebSocketInputStream;
+import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S1258")
@@ -39,7 +41,11 @@ public class Messagebus implements MessagebusListener {
 	private WebSocketClientEndpoint messagebusWebSocket;
 	private ConfigedMain configedMain;
 	private int reconnectWaitMillis = 15000;
+	private boolean connected = false;
+	private boolean disconnecting = false;
+	private boolean authenticationError = false;
 	private boolean reconnecting = false;
+	private boolean initialSubscriptionReceived = false;
 
 	public Messagebus(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
@@ -55,22 +61,55 @@ public class Messagebus implements MessagebusListener {
 			return true;
 		}
 
+		Logging.info(this, "Connecting to messagebus");
+
+		initialSubscriptionReceived = false;
+		disconnecting = false;
 		URI uri = createUri();
 		String basicAuthEnc = createEncBasicAuth();
 		SSLSocketFactory factory = createDullSSLSocketFactory();
+		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
 
 		messagebusWebSocket = new WebSocketClientEndpoint(uri);
 		messagebusWebSocket.registerListener(this);
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
+		if (exec.sessionId != null) {
+			Logging.debug("Adding cookie header");
+			messagebusWebSocket.addHeader("Cookie", exec.sessionId);
+		}
+
 		messagebusWebSocket.setSocketFactory(factory);
 		messagebusWebSocket.setReuseAddr(true);
 		messagebusWebSocket.setTcpNoDelay(true);
 
-		boolean connected = messagebusWebSocket.connectBlocking();
-		if (connected) {
-			makeStandardChannelSubscriptions();
+		if (messagebusWebSocket.connectBlocking()) {
+			// Socket is open, but may be closed again soon if unauthorized
+			if (waitForInitialChannelSubscritionEvent(10000)) {
+				connected = true;
+				Logging.notice(this, "Connected to messagebus");
+				makeStandardChannelSubscriptions();
+			}
 		}
 		return connected;
+	}
+
+	private boolean waitForInitialChannelSubscritionEvent(long timeoutMs) {
+		long start = (new Date()).getTime();
+		while (!initialSubscriptionReceived) {
+			if (!messagebusWebSocket.isOpen()) {
+				Logging.info("Websocket closed while waiting for inital subscription event");
+				return false;
+			}
+			if ((new Date()).getTime() - start >= timeoutMs) {
+				Logging.warning("Timed out after " + timeoutMs + " ms while waiting for inital subscription event");
+				return false;
+			}
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException ie) {
+			}
+		}
+		return true;
 	}
 
 	private URI createUri() {
@@ -116,10 +155,13 @@ public class Messagebus implements MessagebusListener {
 		return result;
 	}
 
-	private static String createEncBasicAuth() {
-		String username = ConfigedMain.user;
-		String password = ConfigedMain.password;
-		String basicAuth = String.format("%s:%s", username, password);
+	private JSONthroughHTTPS getJSONthroughHTTPSExecutor() {
+		return (JSONthroughHTTPS) configedMain.getPersistenceController().exec;
+	}
+
+	private String createEncBasicAuth() {
+		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
+		String basicAuth = String.format("%s:%s", exec.username, exec.password);
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes());
 	}
 
@@ -222,7 +264,7 @@ public class Messagebus implements MessagebusListener {
 		if (isConnected()) {
 			messagebusWebSocket.send(message);
 		} else {
-			Logging.info(this, "messagebus not connected");
+			Logging.info(this, "Message not sent, messagebus not connected");
 		}
 	}
 
@@ -241,11 +283,12 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	public boolean isConnected() {
-		return messagebusWebSocket != null && messagebusWebSocket.isOpen();
+		return connected;
 	}
 
 	public void disconnect() throws InterruptedException {
 		if (messagebusWebSocket != null && isConnected()) {
+			disconnecting = true;
 			messagebusWebSocket.closeBlocking();
 			Logging.info(this, "connection to messagebus closed");
 		} else {
@@ -255,26 +298,38 @@ public class Messagebus implements MessagebusListener {
 
 	@Override
 	public void onOpen(ServerHandshake handshakeData) {
-		Logging.info(this, "Connected to messagebus");
 	}
 
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame
-		Logging.info(this, "Messagebus connection closed by " + (remote ? "opsi service" : "us") + " Code: " + code
-				+ " Reason: " + reason);
+		Logging.info(this, "Messagebus connection closed by " + (remote ? "opsi service" : "us") + " Code=" + code
+				+ " Reason='" + reason + "', disconnecting=" + disconnecting + ", reconnecting=" + reconnecting);
+		boolean wasDisconnecting = disconnecting;
+		connected = false;
+		disconnecting = false;
+		authenticationError = reason != null && reason.toLowerCase().contains("authentication");
 
-		if (remote && !reconnecting) {
+		if (!wasDisconnecting && !reconnecting) {
 			reconnecting = true;
 			while (!isConnected()) {
-				Logging.notice(this, "Connection to messagebus lost, reconnecting in " + reconnectWaitMillis + " ms");
+				int waitMillis = reconnectWaitMillis;
+				if (authenticationError) {
+					Logging.notice(this, "Connection to messagebus lost, authentication error");
+					configedMain.getPersistenceController().makeConnection();
+					waitMillis = 1000;
+				} else {
+					Logging.notice(this,
+							"Connection to messagebus lost, reconnecting in " + reconnectWaitMillis + " ms");
+				}
 				try {
-					Thread.sleep(reconnectWaitMillis);
+					Thread.sleep(waitMillis);
 					if (connect()) {
 						break;
 					}
 				} catch (InterruptedException ie) {
 				}
+
 			}
 			reconnecting = false;
 		}
@@ -288,10 +343,8 @@ public class Messagebus implements MessagebusListener {
 
 	@Override
 	public void onMessageReceived(Map<String, Object> message) {
-		Logging.debug(this, "Messagebus message received");
-
 		String type = (String) message.get("type");
-		Logging.debug(this, "response data: " + message.toString());
+		Logging.trace(this, "Messagebus message received: " + message.toString());
 
 		if (type.startsWith("terminal_")) {
 			switch (type) {
@@ -314,7 +367,7 @@ public class Messagebus implements MessagebusListener {
 			case "terminal_resize_event":
 				break;
 			default:
-				Logging.warning(this, "unhandeld terminal type response caught: " + type);
+				Logging.warning(this, "unhandled terminal type response caught: " + type);
 			}
 		} else if ("file_upload_result".equals(type)) {
 			String filePath = (String) message.get("path");
@@ -330,6 +383,8 @@ public class Messagebus implements MessagebusListener {
 			message.put("data", filePath.getBytes(StandardCharsets.UTF_8));
 
 			sendMessage(message);
+		} else if ("channel_subscription_event".equals(type)) {
+			initialSubscriptionReceived = true;
 		} else if ("event".equals(type)) {
 			try {
 				// Sleep for a little because otherwise we cannot get the needed Data from the Server

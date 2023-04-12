@@ -462,7 +462,7 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void sendToPDF() {
-		Logging.info(this, "------------- create report swaudit for " + hostId + " check");
+		Logging.info(this, "create report swaudit for " + hostId + " check");
 
 		HashMap<String, String> metaData = new HashMap<>();
 
@@ -510,17 +510,14 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	public void updateModel() {
-		Logging.info(this, "update+++++");
-
-		Logging.info(this, "update+++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
-
+		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
-
+		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 	}
 
 	public void setSoftwareNullInfo(String hostId) {
-		Logging.info(this, "setSoftwareNullInfo,  " + hostId + " -- ");
+		Logging.info(this, "setSoftwareNullInfo,  " + hostId);
 
 		this.hostId = "" + hostId;
 		title = this.hostId;

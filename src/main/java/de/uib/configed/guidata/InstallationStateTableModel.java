@@ -350,8 +350,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				for (String colKey : ProductState.KEYS) {
 
 					if (colKey.equals(ProductState.KEY_ACTION_REQUEST)) {
-						Logging.debug(this, " ------------before   mixtovisualstate " + "product " + productId
-								+ " value " + stateAndAction.get(colKey));
+						Logging.debug(this, "before mixtovisualstate product " + productId + " value "
+								+ stateAndAction.get(colKey));
 					}
 
 					mixToVisualState(combinedVisualValues.get(colKey), productId, stateAndAction.get(colKey));
