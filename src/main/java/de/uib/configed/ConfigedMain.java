@@ -681,16 +681,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String productType = (String) data.get("productType");
 
 		// get the data for the updated client
-		Map<String, String> productInfo = persist.getProductInfos(productId, clientId);
+		try {
+			Map<String, String> productInfo = persist.getProductInfos(productId, clientId);
 
-		int selectedView = getViewIndex();
+			int selectedView = getViewIndex();
 
-		if (selectedView == VIEW_LOCALBOOT_PRODUCTS
-				&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
-			istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
-		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
-				&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
-			istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
+			if (selectedView == VIEW_LOCALBOOT_PRODUCTS
+					&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
+				istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
+			} else if (selectedView == VIEW_NETBOOT_PRODUCTS
+					&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
+				istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
+			}
+		} catch (NullPointerException ex) {
+			// Can happen if this function is triggered by messagebus event during configed startup
+			Logging.warning(this, "Failed to update product (failed to get product info)");
 		}
 	}
 
