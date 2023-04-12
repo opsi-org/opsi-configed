@@ -649,13 +649,22 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private void initMessagebus() {
-		if (connectMessagebus()) {
-			messagebus.makeStandardChannelSubscriptions(this);
-		} else {
-			Logging.error(this, "could not connect to messagebus...");
+	public boolean initMessagebus() {
+		if (messagebus == null) {
+			messagebus = new Messagebus(this);
 		}
 
+		if (!messagebus.isConnected()) {
+			try {
+				Logging.info(this, "connecting to messagebus");
+				messagebus.connect();
+				Logging.info(this, "connected to messagebus");
+			} catch (InterruptedException e) {
+				Logging.error(this, "could not connect to messagebus", e);
+				Thread.currentThread().interrupt();
+			}
+		}
+		return messagebus.isConnected();
 	}
 
 	public void addClientToTable(String clientId) {
@@ -693,23 +702,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public void removeClientFromConnectedList(String clientId) {
 		connectedHostsByMessagebus.remove(clientId);
 		updateConnectionStatusInTable(clientId);
-	}
-
-	public boolean connectMessagebus() {
-		if (messagebus == null) {
-			messagebus = new Messagebus();
-		}
-
-		try {
-
-			Logging.info(this, "connect to messagebus");
-			return messagebus.connect();
-		} catch (InterruptedException e) {
-			Logging.error(this, "could not connect to messagebus", e);
-			Thread.currentThread().interrupt();
-		}
-
-		return false;
 	}
 
 	public void connectTerminal() {

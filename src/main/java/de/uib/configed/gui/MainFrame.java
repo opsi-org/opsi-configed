@@ -97,7 +97,7 @@ import de.uib.configed.Configed;
  * modify it under the terms of the GNU General Public
  * License, version AGPLv3, as published by the Free Software Foundation
  *
- 
+
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.CopyrightInfos;
@@ -1363,7 +1363,7 @@ public class MainFrame extends JFrame
 		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
 		jMenuFrameTerminal.setEnabled(true);
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
-			configedMain.connectMessagebus();
+			configedMain.initMessagebus();
 
 			if (!Terminal.getInstance().isWebSocketConnected()) {
 				configedMain.connectTerminal();
@@ -2874,7 +2874,7 @@ public class MainFrame extends JFrame
 
 	/**
 	 * Calls method from configedMain to start the execution of given command
-	 * 
+	 *
 	 * @param SSHCommand command
 	 */
 	public void remoteSSHExecAction(SSHCommand command) {
