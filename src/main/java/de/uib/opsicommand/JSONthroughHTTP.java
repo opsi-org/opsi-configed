@@ -60,19 +60,20 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	protected static final int GET = 1;
 	protected static final String CODING_TABLE = "UTF8";
 	protected String host;
-	protected String username;
-	protected String password;
+	public String username;
+	public String password;
 	protected int portHTTP = 4444;
 	protected int portHTTPS = DEFAULT_PORT;
 	protected boolean startConnecting;
 	protected boolean endConnecting;
 	protected URL serviceURL;
-	protected String sessionId;
+	public String sessionId;
 	protected String lastSessionId;
 	protected int requestMethod = POST;
 	protected boolean certificateExists;
 	protected boolean trustOnlyOnce;
 	protected boolean trustAlways;
+	private FEditRecord newPasswordDialog;
 
 	static class JSONCommunicationException extends Exception {
 		JSONCommunicationException(String message) {
@@ -194,6 +195,54 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	 */
 	protected HttpURLConnection produceConnection() throws IOException {
 		return (HttpURLConnection) serviceURL.openConnection();
+	}
+
+	public boolean showNewPasswordDialog() {
+		Logging.info("Unauthorized, show password dialog");
+		if (newPasswordDialog != null) {
+			return false;
+		}
+
+		Map<String, String> groupData = new LinkedHashMap<>();
+		groupData.put("password", "");
+		Map<String, String> labels = new HashMap<>();
+		labels.put("password", Configed.getResourceValue("DPassword.jLabelPassword"));
+		Map<String, Boolean> editable = new HashMap<>();
+		editable.put("password", true);
+		Map<String, Boolean> secrets = new HashMap<>();
+		secrets.put("password", true);
+
+		newPasswordDialog = new FEditRecord(Configed.getResourceValue("JSONthroughHTTP.provideNewPassword"));
+		newPasswordDialog.setRecord(groupData, labels, null, editable, secrets);
+		newPasswordDialog
+				.setTitle(Configed.getResourceValue("JSONthroughHTTP.enterNewPassword") + " (" + Globals.APPNAME + ")");
+		newPasswordDialog.init();
+		newPasswordDialog.setSize(420, 210);
+		newPasswordDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		newPasswordDialog.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent event) {
+				// For some unknown reason the paint method isn't
+				// called, when dialog is initialized in Windows
+				// OS. To fix that we call paint method manually
+				// by requesting the dialog to be repainted, when
+				// it is opened.
+				newPasswordDialog.repaint();
+				newPasswordDialog.setDataChanged(true);
+			}
+		});
+
+		newPasswordDialog.setModal(true);
+		newPasswordDialog.setAlwaysOnTop(true);
+		newPasswordDialog.setVisible(true);
+
+		boolean cancelled = newPasswordDialog.isCancelled();
+		ConfigedMain.password = newPasswordDialog.getData().get("password");
+		password = newPasswordDialog.getData().get("password");
+
+		newPasswordDialog = null;
+
+		return !cancelled;
 	}
 
 	/**
@@ -395,54 +444,15 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 					Logging.debug("Unauthorized: background=" + background + ", " + sessionId + ", mfa="
 							+ Globals.isMultiFactorAuthenticationEnabled);
 					if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
-						Logging.info("Unauthorized, show password dialog");
 						if (!background) {
 							if (waitCursor != null) {
 								waitCursor.stop();
 							}
 							WaitCursor.stopAll();
 						}
-
-						Map<String, String> groupData = new LinkedHashMap<>();
-						groupData.put("password", "");
-						Map<String, String> labels = new HashMap<>();
-						labels.put("password", Configed.getResourceValue("DPassword.jLabelPassword"));
-						Map<String, Boolean> editable = new HashMap<>();
-						editable.put("password", true);
-						Map<String, Boolean> secrets = new HashMap<>();
-						secrets.put("password", true);
-
-						FEditRecord fEdit = new FEditRecord(
-								Configed.getResourceValue("JSONthroughHTTP.provideNewPassword"));
-						fEdit.setRecord(groupData, labels, null, editable, secrets);
-						fEdit.setTitle(Configed.getResourceValue("JSONthroughHTTP.enterNewPassword") + " ("
-								+ Globals.APPNAME + ")");
-						fEdit.init();
-						fEdit.setSize(420, 210);
-						fEdit.setLocationRelativeTo(ConfigedMain.getMainFrame());
-						fEdit.addWindowListener(new WindowAdapter() {
-							@Override
-							public void windowOpened(WindowEvent event) {
-								// For some unknown reason the paint method isn't
-								// called, when dialog is initialized in Windows
-								// OS. To fix that we call paint method manually
-								// by requesting the dialog to be repainted, when
-								// it is opened.
-								fEdit.repaint();
-								fEdit.setDataChanged(true);
-							}
-						});
-
-						fEdit.setModal(true);
-						fEdit.setAlwaysOnTop(true);
-						fEdit.setVisible(true);
-
-						if (!fEdit.isCancelled()) {
-							ConfigedMain.password = fEdit.getData().get("password");
-							password = fEdit.getData().get("password");
+						if (showNewPasswordDialog()) {
 							return retrieveJSONObject(omc);
 						}
-
 					}
 				} else {
 					conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
@@ -461,7 +471,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 						boolean gotNewSession = sessionId != null && !sessionId.equals(lastSessionId);
 
 						if (gotNewSession) {
-							Logging.info(this, "retrieveJSONObjects " + " got new session ");
+							Logging.info(this, "retrieveJSONObjects got new session");
 						}
 					}
 

@@ -234,7 +234,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	/* ============================ */
 	public abstract AbstractExecutioner retrieveWorkingExec(String depot);
 
-	protected abstract boolean makeConnection();
+	public abstract boolean makeConnection();
 
 	public abstract String getOpsiCACert();
 

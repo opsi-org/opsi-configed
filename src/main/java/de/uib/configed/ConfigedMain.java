@@ -3635,7 +3635,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		depotsList.setListData(getLinkedDepots());
 
-		Logging.debug(this, " ----------  selected after fetch " + getSelectedDepots().length);
+		Logging.debug(this, "selected after fetch " + getSelectedDepots().length);
 
 		boolean[] depotsListIsSelected = new boolean[depotsList.getModel().getSize()];
 
@@ -3672,7 +3672,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void reloadLicensesData() {
-		Logging.info(this, " reloadLicensesData _______________________________ ");
+		Logging.info(this, "reloadLicensesData");
 		if (dataReady) {
 			persist.licencesUsageRequestRefresh();
 			persist.relationsAuditSoftwareToLicencePoolsRequestRefresh();
@@ -3696,7 +3696,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// dont do anything if we did not finish another thread for this
 		if (dataReady) {
 			String oldGroupSelection = activatedGroupModel.getGroupName();
-			Logging.info(this, " ==== refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
+			Logging.info(this, " refreshClientListKeepingGroup oldGroupSelection " + oldGroupSelection);
 
 			refreshClientList();
 			activateGroup(true, oldGroupSelection);
@@ -3730,7 +3730,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		checkSaveAll(true);
 		int saveViewIndex = getViewIndex();
 
-		Logging.info(this, " reloadData _______________________________  saveViewIndex " + saveViewIndex);
+		Logging.info(this, " reloadData saveViewIndex " + saveViewIndex);
 
 		// stop all old waiting threads if there should be any left
 		WaitCursor.stopAll();
@@ -4066,7 +4066,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// if data are changed then save or - after asking - abandon changes
 	protected void saveIfIndicated() {
-		Logging.info(this, "---------------- saveIfIndicated : anyDataChanged, " + anyDataChanged);
+		Logging.info(this, "saveIfIndicated : anyDataChanged, " + anyDataChanged);
 
 		if (!anyDataChanged) {
 			return;
@@ -4100,7 +4100,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// save if not otherwise stated
 	public void checkSaveAll(boolean ask) {
-		Logging.debug(this, "----------------  checkSaveAll: anyDataChanged, ask  " + anyDataChanged + ", " + ask);
+		Logging.debug(this, "checkSaveAll: anyDataChanged, ask  " + anyDataChanged + ", " + ask);
 
 		if (anyDataChanged) {
 			// without showing, but must be on first place since we run in this method again
@@ -4157,7 +4157,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		@Override
 		public void run() {
 			while (true) {
-				Logging.debug(this, " " + " suspended , editingTarget, viewIndex " +
+				Logging.debug(this, " suspended, editingTarget, viewIndex " +
 
 						suspended + ", " + editingTarget + ", " + viewIndex
 
@@ -5527,13 +5527,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected void saveConfigs() {
-		Logging.info(this, " --------  saveConfigs ");
+		Logging.info(this, "saveConfigs ");
 
 		updateProductStates();
 		Logging.debug(this, "saveConfigs: collectChangedLocalbootStates " + collectChangedLocalbootStates);
 
-		Logging.info(this,
-				" ------- we should now start working on the update collection of size  " + updateCollection.size());
+		Logging.info(this, "we should now start working on the update collection of size  " + updateCollection.size());
 
 		updateCollection.doCall();
 		checkErrorList();
@@ -5542,7 +5541,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void clearUpdateCollectionAndTell() {
-		Logging.info(this, " --- we clear the update collection " + updateCollection.getClass());
+		Logging.info(this, "we clear the update collection " + updateCollection.getClass());
 
 		updateCollection.clearElements();
 	}

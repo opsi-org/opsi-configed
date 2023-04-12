@@ -1102,7 +1102,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	protected boolean makeConnection() {
+	public boolean makeConnection() {
 		return makeConnection(exec);
 	}
 
