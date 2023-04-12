@@ -227,14 +227,10 @@ public abstract class AbstractSWExporter {
 	protected abstract String getExtension();
 
 	public void updateModel() {
-		Logging.info(this, "update++");
-
-		Logging.info(this, "update++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
-
+		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 		modelSWInfo.requestReload();
 		modelSWInfo.reset();
-		Logging.info(this, "update++++++ modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
-
+		Logging.debug(this, "update modelSWInfo.getRowCount() " + modelSWInfo.getRowCount());
 	}
 
 }

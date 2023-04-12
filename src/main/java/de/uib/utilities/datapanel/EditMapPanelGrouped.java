@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * (c) uib, www.uib.de, 2013
  *
@@ -191,7 +191,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		String client = tree.getSelectionPath().getPathComponent(0).toString().trim();
 
 		// TODO get Depotname
-		Logging.info(this, "------------- create report");
+		Logging.info(this, "create report");
 		HashMap<String, String> metaData = new HashMap<>();
 		metaData.put("header", Configed.getResourceValue("EditMapPanelGrouped.createPDF.title"));
 		metaData.put("title", Configed.getResourceValue("Client: " + client));
@@ -329,7 +329,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	/**
 	 * setting all data for displaying and editing <br />
-	 * 
+	 *
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
 	 */

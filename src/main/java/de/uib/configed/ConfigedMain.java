@@ -1646,7 +1646,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	protected TableModel buildClientListTableModel(boolean rebuildTree) {
-		Logging.debug(this, " --------- buildPclistTableModel rebuildTree " + rebuildTree);
+		Logging.debug(this, "buildPclistTableModel rebuildTree " + rebuildTree);
 		DefaultTableModel model = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1662,7 +1662,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Set<String> permittedHostGroups = null;
 
 		if (!persist.accessToHostgroupsOnlyIfExplicitlyStated()) {
-			Logging.info(this, " --------- buildPclistTableModel not full hostgroups permission");
+			Logging.info(this, "buildPclistTableModel not full hostgroups permission");
 			permittedHostGroups = persist.getHostgroupsPermitted();
 		}
 
@@ -1675,7 +1675,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				"buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  " + rebuildTree);
 
 		if (rebuildTree) {
-			Logging.info(this, "------------ buildPclistTableModel, rebuildTree " + rebuildTree);
+			Logging.info(this, "buildPclistTableModel, rebuildTree " + rebuildTree);
 
 			unfilteredList = produceClientListForDepots(getSelectedDepots(), null);
 			String[] allPCs = new TreeMap<>(unfilteredList).keySet().toArray(new String[] {});
@@ -1689,13 +1689,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			treeClients.produceAndLinkGroups(persist.getHostGroups());
 
-			Logging.info(this, "------------ buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
-			Logging.info(this, "------------ buildPclistTableModel, allPCs " + allPCs.length);
+			Logging.info(this, "buildPclistTableModel, permittedHostGroups " + permittedHostGroups);
+			Logging.info(this, "buildPclistTableModel, allPCs " + allPCs.length);
 			allowedClients = treeClients.associateClientsToGroups(allPCs, persist.getFObject2Groups(),
 					permittedHostGroups);
 
 			if (allowedClients != null) {
-				Logging.info(this, "------------ buildPclistTableModel, allowedClients " + allowedClients.size());
+				Logging.info(this, "buildPclistTableModel, allowedClients " + allowedClients.size());
 			}
 
 		}
@@ -1711,7 +1711,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					+ rebuildTree);
 
 			if (rebuildTree) {
-				Logging.info(this, "------------ buildPclistTableModel, rebuildTree " + rebuildTree);
+				Logging.info(this, "buildPclistTableModel, rebuildTree " + rebuildTree);
 				String[] allPCs = new TreeMap<>(unfilteredList).keySet().toArray(new String[] {});
 
 				Logging.debug(this, "buildPclistTableModel, rebuildTree, allPCs  " + Arrays.toString(allPCs));
@@ -1721,11 +1721,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				treeClients.produceTreeForALL(allPCs);
 
-				Logging.info(this, "----------- buildPclistTableModel, directly allowed groups "
-						+ treeClients.getDirectlyAllowedGroups());
+				Logging.info(this,
+						"buildPclistTableModel, directly allowed groups " + treeClients.getDirectlyAllowedGroups());
 				treeClients.produceAndLinkGroups(persist.getHostGroups());
 
-				Logging.info(this, "------------ buildPclistTableModel, allPCs (2) " + allPCs.length);
+				Logging.info(this, "buildPclistTableModel, allPCs (2) " + allPCs.length);
 
 				// we got already allowedClients, therefore don't need the parameter
 				// hostgroupsPermitted
@@ -2642,7 +2642,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 		}
 
-		Logging.info(this, "----    depotsList selection changed");
+		Logging.info(this, "depotsList selection changed");
 
 		changeDepotSelection();
 
@@ -2657,7 +2657,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		selectedDepots = depotsList.getSelectedValuesList().toArray(new String[0]);
 		selectedDepotsV = new ArrayList<>(depotsList.getSelectedValuesList());
 
-		Logging.debug(this, "--------------------  selectedDepotsV         " + selectedDepotsV);
+		Logging.debug(this, "selectedDepotsV: " + selectedDepotsV);
 
 		Configed.savedStates.saveDepotSelection.serialize(selectedDepots);
 
@@ -2733,7 +2733,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					}
 				}
 
-				Logging.debug(this, " --------------- depotRepresentative " + depotRepresentative);
+				Logging.debug(this, "depotRepresentative: " + depotRepresentative);
 
 				Logging.info(this,
 						"setDepotRepresentative  change depotRepresentative " + " up to now " + oldRepresentative
@@ -2866,7 +2866,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
 
-				Logging.info(this, "setLocalbootProductsPage oldProductSelection -----------  " + oldProductSelection);
+				Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
 				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection); // (*)
 
 				mainFrame.panelLocalbootProductSettings.setSearchFields(
