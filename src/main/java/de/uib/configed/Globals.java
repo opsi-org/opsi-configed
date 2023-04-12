@@ -35,7 +35,7 @@ public final class Globals {
 
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-04-11";
+	public static final String VERDATE = "2023-04-12";
 
 	public static final String VERHASHTAG = "";
 
