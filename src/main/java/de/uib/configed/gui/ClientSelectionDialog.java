@@ -224,6 +224,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		GroupLayout additionalLayout = new GroupLayout(additionalPane);
 		additionalPane.setLayout(additionalLayout);
+		additionalPane.setMinimumSize(new Dimension(200, 200));
 
 		if (!ConfigedMain.THEMES) {
 			additionalPane.setBackground(Globals.BACKGROUND_COLOR_7);
