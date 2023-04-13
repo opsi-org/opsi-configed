@@ -651,6 +651,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.topLabel.setFont(Globals.defaultFontStandardBold);
 
 		List<AbstractSelectElement> elements = manager.getLocalizedHardwareList().get(hardware);
+		if (elements == null) {
+			throw new RuntimeException(hardware + " not found in localized hardware list");
+		}
 		for (AbstractSelectElement element : elements) {
 			result.groupList.add(createSimpleGroup(element));
 		}
