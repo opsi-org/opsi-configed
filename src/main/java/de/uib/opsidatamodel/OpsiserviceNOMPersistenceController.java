@@ -3177,8 +3177,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				hardwareClassInfos.add(hardwareInfo);
 				result.put((String) hardwareInfo.get("hardwareClass"), hardwareClassInfos);
 			}
-			LocalDateTime lastSeen = LocalDateTime.parse(hardwareInfo.get("lastseen").toString(), timeFormatter);
-
+			Object lastSeenStr = hardwareInfo.get("lastseen");
+			LocalDateTime lastSeen = scanTime;
+			if (lastSeenStr != null) {
+				lastSeen = LocalDateTime.parse(lastSeenStr.toString(), timeFormatter);
+			}
 			if (scanTime.compareTo(lastSeen) < 0) {
 				scanTime = lastSeen;
 			}
