@@ -1303,7 +1303,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				complexElements.add(createPropertiesGroup());
 			} else if (index == 4 && withMySQL) {
 				complexElements.add(createSoftwareWithPropertiesGroup());
-			} else if (index == 5) {
+			} else if ((index == 5 && withMySQL) || (index == 3 && !withMySQL)) {
 				complexElements.add(createSwAuditGroup());
 			} else {
 				complexElements.add(createHardwareGroup(newElementBox.getSelectedItem().toString()));
