@@ -1,4 +1,10 @@
 [Changelog]
+opsi-configed (4.2.21.2) 	EXPERIMENTAL; urgency=medium
+
+* Strip whitespace when adding new configs
+
+-- Jan Schneider <j.schneider@uib.de> Wed, 14. Apr 2023 15:30:00 +0200
+
 opsi-configed (4.2.21.1) 	EXPERIMENTAL; urgency=medium
 
 * Fix client selection dialog for non MySQL
