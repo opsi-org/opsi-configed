@@ -5287,34 +5287,31 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected Boolean getHostBooleanConfigValue(String key, String hostName, boolean useGlobalFallback,
 			Boolean defaultVal) {
-		Boolean result = null;
 
-		boolean globalDefault = getGlobalBooleanConfigValue(key, null);
+		Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName + "'");
+		Boolean value = null;
 
-		if (getConfigs().get(hostName) != null && getConfigs().get(hostName).get(key) != null
-				&& !((List<?>) (getConfigs().get(hostName).get(key))).isEmpty()) {
-
-			result = interpretAsBoolean(((List<?>) getConfigs().get(hostName).get(key)).get(0), (Boolean) null);
-
+		Map<String, Object> hostConfig = getConfigs().get(hostName);
+		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
+			value = interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
 			Logging.debug(this,
-					"getHostBooleanConfigValue for key, host " + key + ", " + hostName + " giving " + result);
-
-		}
-
-		if (result == null && useGlobalFallback) {
-			result = globalDefault;
-			if (result != null) {
-				Logging.debug(this, "getHostBooleanConfigValue for key " + key + ", taking global value  " + result);
+					"getHostBooleanConfigValue key '" + key + "', host '" + hostName + "', value: " + value);
+			if (value != null) {
+				return value;
 			}
 		}
 
-		if (result == null) {
-			Logging.info(this,
-					"got no value for key " + key + " and host " + hostName + " setting default " + defaultVal);
-			result = defaultVal;
+		if (useGlobalFallback) {
+			value = getGlobalBooleanConfigValue(key, null);
+			if (value != null) {
+				Logging.debug(this,
+						"getHostBooleanConfigValue key '" + key + "', host '" + hostName + "', global value: " + value);
+				return value;
+			}
 		}
-
-		return result;
+		Logging.info(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName
+				+ "', returning default value: " + defaultVal);
+		return defaultVal;
 	}
 
 	@Override
