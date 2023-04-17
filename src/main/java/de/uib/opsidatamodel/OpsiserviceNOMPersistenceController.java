@@ -1598,7 +1598,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public Boolean isInstallByShutdownConfigured(String host) {
-		return getHostBooleanConfigValue(KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, host, true, null);
+		return getHostBooleanConfigValue(KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, host, true, false);
 	}
 
 	@Override
@@ -5320,23 +5320,26 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {
 		Boolean val = defaultVal;
-		Object ob = getConfigOptions().get(key);
+		Object obj = getConfigOptions().get(key);
 
-		Logging.debug(this, "getGlobalBooleanConfigValue key " + key + ", ob " + ob);
-		if (ob == null) {
-			Logging.warning(this, "getGlobalBooleanConfigValue key " + key + " gives no value, take " + val);
-		} else {
-			ConfigOption option = (ConfigOption) ob;
+		Logging.debug(this, "getGlobalBooleanConfigValue '" + key + "'='" + obj + "'");
+		if (obj == null) {
+			Logging.warning(this, "getGlobalBooleanConfigValue '" + key + "' is null, returning default value: " + val);
+			return val;
+		}
 
-			if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
-				Logging.warning(this, "entry for " + key + " should be boolean");
-			} else {
-				List<Object> li = option.getDefaultValues();
-				if (li != null && !li.isEmpty()) {
-					val = (Boolean) li.get(0);
-				}
-				Logging.debug(this, "getGlobalBooleanConfigValue key, defaultValues " + key + ", " + li);
-			}
+		ConfigOption option = (ConfigOption) obj;
+		if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
+			Logging.warning(this, "getGlobalBooleanConfigValue type of '" + key + "' should be boolean, but is "
+					+ option.getType() + ", returning default value: " + val);
+			return val;
+
+		}
+
+		List<Object> values = option.getDefaultValues();
+		Logging.debug(this, "getGlobalBooleanConfigValue '" + key + "' defaultValues: " + values);
+		if (values != null && !values.isEmpty()) {
+			val = (Boolean) values.get(0);
 		}
 
 		return val;
