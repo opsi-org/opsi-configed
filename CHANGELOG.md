@@ -1,5 +1,5 @@
 # Changelog
-## [4.2.21.2] - 2023-04-14
+## [4.2.21.2] - 2023-04-18
 
 ### Changed
 - Strip whitespace when adding new configs
@@ -7,6 +7,7 @@
 
 ### Fixed
 - Fix startup if opsiclientd.event_on_shutdown.active is not boolean / null
+- Remove product property tls_alternative_cipher
 
 ## [4.2.21.1] - 2023-04-14
 
