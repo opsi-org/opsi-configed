@@ -211,7 +211,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	private void changeFreeInput() {
-		if (!jTextFieldFreeInput.getText().trim().equals("")) {
+		if (!jTextFieldFreeInput.getText().trim().isEmpty()) {
 			commandWget.setFreeInput(jTextFieldFreeInput.getText().trim());
 		} else {
 			commandWget.setFreeInput("");
@@ -221,7 +221,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	}
 
 	private void changeUrl() {
-		if (!(jTextFieldURL.getText().equals(""))) {
+		if (!(jTextFieldURL.getText().isEmpty())) {
 			commandWget.setUrl(jTextFieldURL.getText().trim());
 		} else {
 			commandWget.setUrl("");
@@ -235,7 +235,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	public void doAction3() {
 		if ((jTextFieldURL.getText()
 				.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url")))
-				|| (jTextFieldURL.getText().equals(""))) {
+				|| (jTextFieldURL.getText().isEmpty())) {
 			Logging.warning(this, "Please enter url.");
 			return;
 		}

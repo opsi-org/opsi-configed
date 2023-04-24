@@ -324,27 +324,27 @@ public abstract class AbstractSerializer {
 			}
 			throw new IllegalArgumentException("While parsing ver 1 saved search: " + name);
 		}
-		if (name.equals("Hardware")) {
+		if ("Hardware".equals(name)) {
 			return new HardwareOperation(children);
 		}
 
-		if (name.equals("Software")) {
+		if ("Software".equals(name)) {
 			return new SoftwareOperation(children);
 		}
 
-		if (name.equals("SwAudit")) {
+		if ("SwAudit".equals(name)) {
 			return new SwAuditOperation(children);
 		}
 
-		if (name.equals("and")) {
+		if ("and".equals(name)) {
 			return new AndOperation(children);
 		}
 
-		if (name.equals("or")) {
+		if ("or".equals(name)) {
 			return new OrOperation(children);
 		}
 
-		if (name.equals("not")) {
+		if ("not".equals(name)) {
 			return new NotOperation(children);
 		}
 

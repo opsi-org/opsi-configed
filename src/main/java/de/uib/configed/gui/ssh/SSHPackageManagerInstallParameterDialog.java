@@ -80,7 +80,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 		group.add(jRadioButtonServer);
 		group.add(jRadioButtonWGet);
 
-		if ((fromMakeProductfile != null) && (!fromMakeProductfile.equals(""))) {
+		if ((fromMakeProductfile != null) && (!fromMakeProductfile.isEmpty())) {
 			jRadioButtonServer.setSelected(true);
 
 			// if true, it can be closed

@@ -113,7 +113,7 @@ public class SSHCompletionComboButton {
 		// Is element in defaultValues?
 		if (defvalues != null) {
 			for (String elem : defvalues) {
-				if ((elem != null) && (!elem.trim().equals(""))) {
+				if ((elem != null) && (!elem.trim().isEmpty())) {
 					defaultvalues.add(elem);
 				}
 			}
@@ -152,7 +152,7 @@ public class SSHCompletionComboButton {
 			combobox.setSelectedItem(comboboxDefaultPath);
 		}
 
-		if (searchSpecificFiles != null && (!searchSpecificFiles.equals(""))) {
+		if (searchSpecificFiles != null && (!searchSpecificFiles.isEmpty())) {
 			combobox.addActionListener((ActionEvent actionEvent) -> {
 				if (combobox.getSelectedItem() != null
 						&& ((String) combobox.getSelectedItem()).endsWith(searchSpecificFiles)) {
@@ -178,7 +178,7 @@ public class SSHCompletionComboButton {
 		enableComponents(false);
 
 		String strcbtext = combobox.getEditor().getItem().toString();
-		if ((strcbtext != null) && (!strcbtext.equals(""))
+		if ((strcbtext != null) && (!strcbtext.isEmpty())
 				&& !strcbtext.substring(strcbtext.length() - 1).equals(ROOT_DIRECTORY)) {
 			combobox.removeItem(strcbtext);
 			Logging.info(this, "doButtonAction combo.removeItem(" + strcbtext + ")");
@@ -188,7 +188,7 @@ public class SSHCompletionComboButton {
 			combobox.setSelectedItem(strcbtext);
 		}
 
-		if (searchSpecificFiles != null && (!searchSpecificFiles.equals(""))) {
+		if (searchSpecificFiles != null && (!searchSpecificFiles.isEmpty())) {
 			getDirectoriesAndFilesIn(strcbtext);
 		} else {
 			getDirectoriesIn(strcbtext);
@@ -245,7 +245,7 @@ public class SSHCompletionComboButton {
 
 					SSHConnectExec ssh = new SSHConnectExec();
 					String result = ssh.exec(getDirectories, false);
-					if (result == null || result.equals("")) {
+					if (result == null || result.isEmpty()) {
 						result = HOME_DIRECTORY;
 					}
 
@@ -267,7 +267,7 @@ public class SSHCompletionComboButton {
 							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir));
 					SSHConnectExec ssh = new SSHConnectExec();
 					String result = ssh.exec(getFiles, false);
-					if (result == null || result.equals("")) {
+					if (result == null || result.isEmpty()) {
 						result = ROOT_DIRECTORY;
 					}
 
@@ -284,7 +284,7 @@ public class SSHCompletionComboButton {
 						////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
 						// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
 						String tempResult = ssh.exec(getFiles, false);
-						if ((tempResult != null) && !tempResult.trim().equals("null")) {
+						if ((tempResult != null) && !"null".equals(tempResult.trim())) {
 							result += tempResult;
 						}
 
@@ -332,7 +332,7 @@ public class SSHCompletionComboButton {
 			}
 			combobox.setSelectedItem(curdir);
 		}
-		if (comboboxDefaultPath != null && !comboboxDefaultPath.equals("")) {
+		if (comboboxDefaultPath != null && !comboboxDefaultPath.isEmpty()) {
 			combobox.setSelectedItem(comboboxDefaultPath);
 			setComboDefault(null);
 		}
@@ -361,7 +361,7 @@ public class SSHCompletionComboButton {
 
 			if (jc instanceof JLabel) {
 				String getText = ((JLabel) jc).getText();
-				if (autocompletion == null || getText == null || getText.equals("")) {
+				if (autocompletion == null || getText == null || getText.isEmpty()) {
 					return c;
 				}
 
@@ -370,7 +370,7 @@ public class SSHCompletionComboButton {
 				Logging.debug(this, "(1)  basicPath " + basicPath + " getText " + getText);
 
 				// könnte eigtl raus. funktiniert sonst aber nicht...
-				if ((!basicPath.equals("")) && (!getText.equals(""))) {
+				if ((!basicPath.isEmpty()) && (!getText.isEmpty())) {
 					if (basicPath.contains("//")) {
 						basicPath = basicPath.replace("//", "/");
 					}

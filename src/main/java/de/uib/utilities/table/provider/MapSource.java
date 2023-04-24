@@ -52,6 +52,7 @@ public class MapSource implements TableSource {
 		this.columnNames = columnNames;
 		this.classNames = classNames;
 		this.table = table;
+		this.rowCounting = rowCounting;
 
 		init();
 	}

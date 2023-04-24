@@ -639,7 +639,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		m.put(LicenceEntry.EXPIRATION_DATE_KEY, jTextFieldEndOfLicence.getText());
 
 		String contractSendValue = jTextFieldLicenceContract.getText();
-		if (contractSendValue.equals("null")) {
+		if ("null".equals(contractSendValue)) {
 			contractSendValue = "";
 		}
 

@@ -271,7 +271,7 @@ public final class NewClientDialog extends FGeneralDialog {
 					String newPiece = e.getDocument().getText(e.getOffset(), e.getLength());
 					Logging.debug(this, "newPiece: '" + newPiece + "'");
 
-					if (newPiece.equals("\t")) {
+					if ("\t".equals(newPiece)) {
 						systemUUIDField.requestFocus();
 					}
 				} catch (BadLocationException ex) {
@@ -685,10 +685,10 @@ public final class NewClientDialog extends FGeneralDialog {
 	private boolean checkClientCorrectness(String hostname, String selectedDomain) {
 		boolean goOn = true;
 
-		if (hostname == null || hostname.equals("")) {
+		if (hostname == null || hostname.isEmpty()) {
 			goOn = false;
 		}
-		if (selectedDomain == null || selectedDomain.equals("")) {
+		if (selectedDomain == null || selectedDomain.isEmpty()) {
 			goOn = false;
 		}
 

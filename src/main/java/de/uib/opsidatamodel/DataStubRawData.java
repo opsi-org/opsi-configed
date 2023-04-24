@@ -203,7 +203,8 @@ public class DataStubRawData extends DataStubNOM {
 					values = new JSONArray(row.get(3));
 				} catch (JSONException ex) {
 					Logging.warning(this, "produceProductPropertyStates, error when json parsing database string \n"
-							+ row.get(3) + " for propertyId " + row.get(1), ex);
+							+ row.get(3) + " for propertyId " + row.get(1));
+					Logging.debug(this, "thrown exception: " + ex);
 				}
 
 				m.put(ProductPropertyState.VALUES, values);
@@ -414,7 +415,8 @@ public class DataStubRawData extends DataStubNOM {
 					values = (new JSONArray(valueString)).toList();
 				} catch (JSONException ex) {
 					Logging.warning(this, "retrieveHostConfigs, error when json parsing database string \n"
-							+ valueString + " for configId " + configId, ex);
+							+ valueString + " for configId " + configId);
+					Logging.debug(this, "thrown exception: " + ex);
 				}
 
 				// put into host configs
@@ -434,11 +436,11 @@ public class DataStubRawData extends DataStubNOM {
 			return null;
 		}
 
-		if (time0 == null || time0.equals("")) {
+		if (time0 == null || time0.isEmpty()) {
 			return time1;
 		}
 
-		if (time1 == null || time1.equals("")) {
+		if (time1 == null || time1.isEmpty()) {
 			return time0;
 		}
 
@@ -569,7 +571,7 @@ public class DataStubRawData extends DataStubNOM {
 			for (int i = 1; i < specificColumns.size(); i++) {
 				Object value = rowMap.get(specificColumns.get(i));
 				String valInRow = row.get(i);
-				if (valInRow == null || valInRow.equals("null")) {
+				if (valInRow == null || "null".equals(valInRow)) {
 					valInRow = "";
 				}
 

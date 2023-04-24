@@ -25,7 +25,7 @@ public class StringValuedRelationElement extends RelationElement<String, String>
 
 	protected void produceFrom(Map<String, ? extends Object> map) {
 		for (String attribute : allowedAttributes) {
-			if (map.get(attribute) != null && !map.get(attribute).equals("null")) {
+			if (map.get(attribute) != null && !"null".equals(map.get(attribute))) {
 				if (map.get(attribute) instanceof String) {
 					put(attribute, (String) map.get(attribute));
 				} else {

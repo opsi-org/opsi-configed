@@ -238,7 +238,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void addToHistory(String co) {
-		if ((co != null) && (!co.trim().equals(""))) {
+		if ((co != null) && (!co.trim().isEmpty())) {
 			Logging.debug(this,
 					"addToHistory \"" + co + "\" at index " + historyAddIndex + " getIndex " + (historyAddIndex + 1));
 			commandHistory.add(historyAddIndex, co);

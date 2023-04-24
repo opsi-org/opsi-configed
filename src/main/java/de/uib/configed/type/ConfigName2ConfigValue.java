@@ -59,7 +59,7 @@ public class ConfigName2ConfigValue extends RetrievedMap {
 			if (configOptions != null && configOptions.get(entry.getKey()) != null) {
 				ConfigOption configOption = configOptions.get(entry.getKey());
 
-				if (configOption.get("classname").equals("java.lang.Boolean")) {
+				if ("java.lang.Boolean".equals(configOption.get("classname"))) {
 					put(entry.getKey(), list.get(0));
 				} else {
 					put(entry.getKey(), list);

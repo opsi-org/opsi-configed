@@ -121,15 +121,15 @@ public class SelectionManager {
 
 		groupWithStatusList.add(groupStatus);
 
-		if (name.equals("Software")) {
+		if ("Software".equals(name)) {
 			hasSoftware = true;
 		}
 
-		if (name.equals("Hardware")) {
+		if ("Hardware".equals(name)) {
 			hasHardware = true;
 		}
 
-		if (name.equals("SwAudit")) {
+		if ("SwAudit".equals(name)) {
 			hasSwAudit = true;
 		}
 	}

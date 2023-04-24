@@ -343,7 +343,7 @@ public class SSHConnectExec extends SSHConnect {
 	}
 
 	protected String setAsInfoString(String s) {
-		if (outputDialog != null && s.length() > 0 && !s.equals("\n")) {
+		if (outputDialog != null && s.length() > 0 && !"\n".equals(s)) {
 			return SSHConnectionOutputDialog.ANSI_CODE_INFO + s;
 		}
 		return s;
@@ -448,6 +448,7 @@ public class SSHConnectExec extends SSHConnect {
 
 		}
 
+		@SuppressWarnings("java:S106")
 		@Override
 		public String doInBackground() throws java.net.SocketException {
 			StringBuilder buf = new StringBuilder();
@@ -626,7 +627,7 @@ public class SSHConnectExec extends SSHConnect {
 		private String getCommandName() {
 			String commandinfo = "[" + this.command.getMenuText() + "]";
 			if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
-				if ((commandInfoName != null) && (!commandInfoName.equals(""))) {
+				if ((commandInfoName != null) && (!commandInfoName.isEmpty())) {
 					commandinfo = "[" + commandInfoName + "(" + Integer.toString(this.commandNumber) + "/"
 							+ Integer.toString(this.maxCommandNumber) + ")]";
 				} else {

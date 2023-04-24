@@ -348,7 +348,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 		pack();
 
-		if (host.equals("")) {
+		if (host.isEmpty()) {
 			setHost("localhost");
 			fieldHost.requestFocus();
 			((JTextField) fieldHost.getEditor().getEditorComponent())

@@ -267,7 +267,7 @@ public class BackendMySQL {
 				JSONArray jsonArray = jsonObject.getJSONArray(KEY_CHILDREN);
 				return getListFromJSONObject((JSONObject) jsonArray.get(0));
 			}
-		} else if (jsonObject.getJSONArray("elementPath").getString(0).equals("GroupWithSubgroups")) {
+		} else if ("GroupWithSubgroups".equals(jsonObject.getJSONArray("elementPath").getString(0))) {
 			// Group with subgroups
 
 			return getGroupWithSubgroup(jsonObject.getString("data").replace("*", "%"));

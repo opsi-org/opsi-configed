@@ -310,6 +310,7 @@ public class ExporterToPDF extends AbstractExportTable {
 						s = theTable.getValueAt(j, i).toString();
 					} catch (Exception ex) {
 						s = "";
+						Logging.debug(this, "thrown excpetion: " + ex);
 					}
 					switch (s) {
 					case "∞":

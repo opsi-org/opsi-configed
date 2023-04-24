@@ -71,7 +71,7 @@ public abstract class AbstractSWExporter {
 			server = Globals.getCLIparam("Host (default: localhost): ", false);
 		}
 
-		if (server.equals("")) {
+		if (server.isEmpty()) {
 			server = "localhost";
 		}
 
@@ -79,7 +79,7 @@ public abstract class AbstractSWExporter {
 			user = Globals.getCLIparam("User (default: " + System.getProperty("user.name") + ") : ", false);
 		}
 
-		if (user.equals("")) {
+		if (user.isEmpty()) {
 			user = System.getProperty("user.name");
 		}
 
@@ -91,7 +91,7 @@ public abstract class AbstractSWExporter {
 			clientsFile = Globals.getCLIparam("File with client names: ", false);
 		}
 
-		if (clientsFile.equals("")) {
+		if (clientsFile.isEmpty()) {
 			finish(de.uib.configed.ErrorCode.CLIENTNAMES_FILENAME_MISSING);
 		}
 
@@ -102,7 +102,7 @@ public abstract class AbstractSWExporter {
 			outDir = Globals.getCLIparam("Export directory (default: " + userHomeS + "): ", false);
 		}
 
-		if (outDir.equals("")) {
+		if (outDir.isEmpty()) {
 			outDir = userHomeS;
 		}
 

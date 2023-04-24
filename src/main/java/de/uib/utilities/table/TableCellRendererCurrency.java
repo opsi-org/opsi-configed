@@ -33,7 +33,7 @@ public class TableCellRendererCurrency extends ColorTableCellRenderer {
 		String selectedString = "";
 		ImageIcon selectedIcon = null;
 
-		if (value instanceof String && !((String) value).equals("")) {
+		if (value instanceof String && !((String) value).isEmpty()) {
 
 			try {
 				double number = Double.parseDouble((String) value);
