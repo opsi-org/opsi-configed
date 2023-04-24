@@ -82,6 +82,8 @@ public final class PersistenceControllerFactory {
 				}
 
 				persistControl.makeConnection();
+				persistControl.checkMultiFactorAuthentication();
+				Globals.isMultiFactorAuthenticationEnabled = persistControl.usesMultiFactorAuthentication();
 				persistControl.checkConfiguration();
 				persistControl.retrieveOpsiModules();
 
@@ -91,6 +93,8 @@ public final class PersistenceControllerFactory {
 					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
 
 					persistControl.makeConnection();
+					persistControl.checkMultiFactorAuthentication();
+					Globals.isMultiFactorAuthenticationEnabled = persistControl.usesMultiFactorAuthentication();
 					persistControl.checkConfiguration();
 					persistControl.retrieveOpsiModules();
 				}

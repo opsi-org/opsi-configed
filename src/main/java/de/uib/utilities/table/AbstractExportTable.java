@@ -224,7 +224,8 @@ public abstract class AbstractExportTable {
 						}
 					}
 				} catch (Exception exception) {
-					Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
+					Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename,
+							exception);
 				}
 			}
 		} else {
@@ -301,7 +302,7 @@ public abstract class AbstractExportTable {
 				result = filename;
 			}
 		} catch (HeadlessException ex) {
-			Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename);
+			Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename, ex);
 
 		}
 

@@ -85,26 +85,38 @@ public class ConnectionState {
 	 */
 	@Override
 	public String toString() {
+		String state = null;
+
 		switch (myState) {
 		case UNDEFINED:
-			return "Undefined state";
+			state = "Undefined state";
+			break;
 		case INTERRUPTED:
-			return "Interrupted ";
+			state = "Interrupted ";
+			break;
 		case NOT_CONNECTED:
-			return "Not connected";
+			state = "Not connected";
+			break;
 		case STARTED_CONNECTING:
-			return "Started connecting";
+			state = "Started connecting";
+			break;
 		case CONNECTED:
-			return "Connected";
+			state = "Connected";
+			break;
 		case RETRY_CONNECTION:
-			return "Reconnecting";
+			state = "Reconnecting";
+			break;
 		case CLOSING:
-			return "Closing";
+			state = "Closing";
+			break;
 		case ERROR:
-			return "Error";
+			state = "Error";
+			break;
 		default:
-			return "UNKNOWN State";
+			state = "UNKNOWN State";
 		}
+
+		return state;
 	}
 
 	public void waitForConnection(int timeoutSecs) {

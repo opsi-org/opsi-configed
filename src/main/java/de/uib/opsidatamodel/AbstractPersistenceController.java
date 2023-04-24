@@ -234,9 +234,15 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	/* ============================ */
 	public abstract AbstractExecutioner retrieveWorkingExec(String depot);
 
-	protected abstract boolean makeConnection();
+	public abstract boolean makeConnection();
 
 	public abstract String getOpsiCACert();
+
+	public abstract boolean usesMultiFactorAuthentication();
+
+	public abstract void checkMultiFactorAuthentication();
+
+	public abstract String getOTPSecret(String userId);
 
 	/* connection state handling */
 	public abstract ConnectionState getConnectionState();
@@ -389,6 +395,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract List<String> wakeOnLan(Set<String> hostIds, Map<String, List<String>> hostSeparationByDepot,
 			Map<String, AbstractExecutioner> execsByDepot);
+
+	public abstract List<String> wakeOnLanOpsi43(String[] hostIds);
 
 	public abstract List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds);
 

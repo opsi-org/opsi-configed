@@ -5,7 +5,7 @@ package de.uib.utilities.table.gui;
  * (open pc server integration) www.opsi.org
  *
  * BooleanIconTableCellRenderer.java
- * Copyright (C) uib.de 2018 
+ * Copyright (C) uib.de 2018
  *
  *	GPL licensed
  *   Author Rupert Röder
@@ -16,6 +16,8 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+
+import de.uib.utilities.logging.Logging;
 
 public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 	Icon trueIcon;
@@ -36,41 +38,36 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (!(c instanceof JLabel)) {
-			return c;
+		Logging.debug("row=" + row + ", column=" + column + ", comp=" + comp.getClass() + ", cls=" + value.getClass()
+				+ ", value=" + value + ", allowingString=" + allowingString + ", trueIcon=" + trueIcon + ", falseIcon="
+				+ falseIcon);
+
+		if (!(comp instanceof JLabel)) {
+			return comp;
 		}
 
 		if (value != null && !(value instanceof Boolean) && !(value instanceof String)) {
-			return c;
+			return comp;
 		}
 
 		if (value != null && !allowingString && !(value instanceof Boolean)) {
-			return c;
+			return comp;
 		}
 
-		JLabel label = (JLabel) c;
+		JLabel label = (JLabel) comp;
 
 		label.setText("");
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 
-		if (value == null) {
-			label.setIcon(null);
+		if (Boolean.TRUE.equals(value)) {
+			label.setIcon(trueIcon);
 		} else {
-			if (Boolean.TRUE.equals(value)) {
-				if (trueIcon != null) {
-					label.setIcon(trueIcon);
-				}
-			} else {
-				if (falseIcon != null) {
-					label.setIcon(falseIcon);
-				}
-			}
+			label.setIcon(falseIcon);
 		}
 
-		return c;
-
+		return comp;
 	}
 
 }

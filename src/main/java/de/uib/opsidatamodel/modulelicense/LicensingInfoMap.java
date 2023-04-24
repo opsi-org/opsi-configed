@@ -212,7 +212,7 @@ public final class LicensingInfoMap {
 				result = clientX.getMap();
 			}
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " getClientNumersMap : " + ex);
+			Logging.error(CLASSNAME + " getClientNumersMap ", ex);
 		}
 
 		return result;
@@ -253,7 +253,7 @@ public final class LicensingInfoMap {
 			}
 
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceLicenses " + ex);
+			Logging.error(CLASSNAME + " produceLicenses ", ex);
 		}
 
 		return result;
@@ -271,7 +271,7 @@ public final class LicensingInfoMap {
 			}
 
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex);
+			Logging.error(CLASSNAME + " produceCustomerIdSet ", ex);
 		}
 
 		return producedCustomerIDs;
@@ -296,7 +296,7 @@ public final class LicensingInfoMap {
 			}
 
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceCustomerIdSet " + ex);
+			Logging.error(CLASSNAME + " produceCustomerIdSet ", ex);
 		}
 
 		return producedCustomerNames;
@@ -314,7 +314,7 @@ public final class LicensingInfoMap {
 				result.add(jsResult.getString(i));
 			}
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " getAvailableModules : " + ex);
+			Logging.error(CLASSNAME + " getAvailableModules : ", ex);
 		}
 
 		Collections.sort(result);
@@ -338,7 +338,7 @@ public final class LicensingInfoMap {
 				result = availableModules;
 			}
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceKnownModules " + ex);
+			Logging.error(CLASSNAME + " produceKnownModules ", ex);
 		}
 
 		Collections.sort(result);
@@ -361,7 +361,7 @@ public final class LicensingInfoMap {
 				return new ArrayList<>();
 			}
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceObsoleteModules " + ex);
+			Logging.error(CLASSNAME + " produceObsoleteModules ", ex);
 		}
 
 		Collections.sort(result);
@@ -433,7 +433,7 @@ public final class LicensingInfoMap {
 			}
 
 		} catch (NumberFormatException ex) {
-			Logging.error(this, " produceConfigs " + ex);
+			Logging.error(this, " produceConfigs ", ex);
 		}
 	}
 
@@ -443,7 +443,7 @@ public final class LicensingInfoMap {
 		try {
 			newChecksum = jOResult.getString(CHECKSUM_ID);
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceChecksum : " + ex);
+			Logging.error(CLASSNAME + " produceChecksum : ", ex);
 		}
 
 		return newChecksum;
@@ -479,7 +479,7 @@ public final class LicensingInfoMap {
 			}
 
 		} catch (ParseException ex) {
-			Logging.error(CLASSNAME + " produceDatesKeys : " + ex.toString() + ", ");
+			Logging.error(CLASSNAME + " parsing exeption in produceDatesKeys ", ex);
 		}
 
 		return dates;
@@ -600,7 +600,7 @@ public final class LicensingInfoMap {
 			}
 
 		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceDatesMap : " + ex + ", ");
+			Logging.error(CLASSNAME + " json exception in produceDatesMap ", ex);
 		}
 
 		return new TreeMap<>(checkTimeWarning(resultMap));
@@ -649,7 +649,7 @@ public final class LicensingInfoMap {
 				resultMap.put(currentModule, line);
 			}
 		} catch (Exception ex) {
-			Logging.error(CLASSNAME + "getTableMapFromDatesMap() " + ex);
+			Logging.error(CLASSNAME + "getTableMapFromDatesMap() ", ex);
 		}
 
 		return new TreeMap<>(resultMap);
@@ -699,7 +699,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (ParseException ex) {
-			Logging.error(CLASSNAME + " findLatestChangeDate" + ex);
+			Logging.error(CLASSNAME + " findLatestChangeDate", ex);
 		}
 
 		return newest;
@@ -715,7 +715,7 @@ public final class LicensingInfoMap {
 				}
 			}
 		} catch (ParseException ex) {
-			Logging.error(CLASSNAME + " findNextChangeDate " + ex);
+			Logging.error(CLASSNAME + " findNextChangeDate ", ex);
 		}
 
 		return null;
@@ -733,7 +733,7 @@ public final class LicensingInfoMap {
 			return TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
 		} catch (ParseException ex) {
-			Logging.error(CLASSNAME + " getDaysLeftUntilNextChange " + ex);
+			Logging.error(CLASSNAME + " getDaysLeftUntilNextChange ", ex);
 		}
 
 		return null;
@@ -764,7 +764,7 @@ public final class LicensingInfoMap {
 
 				}
 			} catch (ParseException ex) {
-				Logging.error(CLASSNAME + " checkTimeLeft " + ex);
+				Logging.error(CLASSNAME + " checkTimeLeft ", ex);
 			}
 
 		}

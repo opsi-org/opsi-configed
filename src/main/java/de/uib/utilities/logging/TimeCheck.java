@@ -35,7 +35,7 @@ public class TimeCheck {
 
 	public TimeCheck start() {
 		startmillis = System.currentTimeMillis();
-		Logging.log(caller, loglevel, " ------  started: " + mesg + " ");
+		Logging.log(caller, loglevel, "started: " + mesg + " ");
 		return this;
 	}
 
@@ -49,7 +49,6 @@ public class TimeCheck {
 			info = mesg;
 		}
 		long endmillis = System.currentTimeMillis();
-		Logging.log(caller, loglevel, " ------  stopped: " + info + " ");
-		Logging.log(caller, loglevel, " ======  diff " + (endmillis - startmillis) + " ms  (" + info + ")");
+		Logging.log(caller, loglevel, "ended (" + (endmillis - startmillis) + " ms): " + info);
 	}
 }

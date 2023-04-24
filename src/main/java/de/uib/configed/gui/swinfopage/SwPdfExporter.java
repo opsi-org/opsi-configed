@@ -24,9 +24,9 @@ public class SwPdfExporter extends AbstractSWExporter {
 	@Override
 	public void export() {
 		String clientName = theHost;
-		Logging.info(this, "------------- create pdf report swaudit for " + clientName);
+		Logging.info(this, "create pdf report swaudit for " + clientName);
 
-		Logging.debug("------------- create pdf report swaudit for " + clientName);
+		Logging.debug(this, "create pdf report swaudit for " + clientName);
 
 		HashMap<String, String> metaData = new HashMap<>();
 

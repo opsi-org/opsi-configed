@@ -35,7 +35,7 @@ public final class Globals {
 
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-03-30";
+	public static final String VERDATE = "2023-04-18";
 
 	public static final String VERHASHTAG = "";
 
@@ -115,7 +115,7 @@ public final class Globals {
 	public static final Color FAILED_COLOR = Color.RED;
 	public static final Color ACTION_COLOR = new Color(239, 4, 4);
 	public static final Color WARNING_COLOR = new Color(204, 51, 0);
-	public static final Color CHECK_COLOR = new Color(198, 225, 171); // succesful? 
+	public static final Color CHECK_COLOR = new Color(198, 225, 171); // succesful?
 	public static final Color OK_COLOR = new Color(20, 140, 20);
 	public static final Color UNKNOWN_COLOR = new Color(40, 17, 213);
 
@@ -391,6 +391,8 @@ public final class Globals {
 			DIALOG_FRAME_DEFAULT_HEIGHT);
 
 	private static final String IMAGE_BASE = "de/uib/configed/gui/";
+
+	public static boolean isMultiFactorAuthenticationEnabled = false;
 
 	private Globals() {
 	}

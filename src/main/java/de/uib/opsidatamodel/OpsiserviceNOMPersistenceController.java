@@ -15,7 +15,7 @@
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation; 
+* License as published by the Free Software Foundation;
 * version  AGPLv3
 *
 *  copyright:     Copyright (c) 2000-2022
@@ -26,6 +26,7 @@
 package de.uib.opsidatamodel;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -259,6 +260,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	private boolean hasIsOpisUserAdminBeenChecked;
 	private boolean isOpsiUserAdmin;
+	private boolean isMultiFactorAuthenticationEnabled;
 
 	// the infos that are displayed in the gui
 	protected Map<String, Object> opsiModulesDisplayInfo;
@@ -597,9 +599,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 								configedWorkbenchDefaultValue = filepath;
 								packageServerDirectoryS = filepath;
+<<<<<<< HEAD
 							} catch (Exception netex) {
 								Logging.error("not a correctly formed file URL: " + val);
 								Logging.debug(this, "thrown exception: " + netex);
+=======
+							} catch (MalformedURLException netex) {
+								Logging.error("not a correctly formed file URL: " + val, netex);
+>>>>>>> main
 							}
 						}
 					}
@@ -1101,7 +1108,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	protected boolean makeConnection() {
+	public boolean makeConnection() {
 		return makeConnection(exec);
 	}
 
@@ -1130,6 +1137,38 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public String getOpsiCACert() {
 		OpsiMethodCall omc = new OpsiMethodCall("getOpsiCACert", new Object[0]);
 		return exec.getStringResult(omc);
+	}
+
+	@Override
+	public boolean usesMultiFactorAuthentication() {
+		return isMultiFactorAuthenticationEnabled;
+	}
+
+	@Override
+	public void checkMultiFactorAuthentication() {
+		isMultiFactorAuthenticationEnabled = JSONthroughHTTPS.isOpsi43() && getOTPSecret(ConfigedMain.user) != null;
+	}
+
+	@Override
+	public String getOTPSecret(String userId) {
+		List<String> callAttributes = new ArrayList<>();
+		Map<String, String> callFilter = new HashMap<>();
+		callFilter.put("id", userId);
+		OpsiMethodCall omc = new OpsiMethodCall("user_getObjects", new Object[] { callAttributes, callFilter });
+		List<Map<String, Object>> result = exec.getListOfMaps(omc);
+
+		if (result.isEmpty()) {
+			return null;
+		}
+
+		Map<String, Object> userDetails = result.get(0);
+		String otpSecret = null;
+
+		if (userDetails.containsKey("otpSecret")) {
+			otpSecret = (String) userDetails.get("otpSecret");
+		}
+
+		return otpSecret;
 	}
 
 	// we delegate method calls to the executioner
@@ -1565,7 +1604,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public Boolean isInstallByShutdownConfigured(String host) {
-		return getHostBooleanConfigValue(KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, host, true, null);
+		return getHostBooleanConfigValue(KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN, host, true, false);
 	}
 
 	@Override
@@ -1699,7 +1738,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				+ notWanConfiguration.keySet().size());
 
 		setConfig(notWanConfiguration);
-		Logging.info(this, "set notWanConfiguration members where no entry exists ----------------------------- ");
+		Logging.info(this, "set notWanConfiguration members where no entry exists");
 		// send to opsiserver only new configs
 		setConfig(true);
 
@@ -2226,6 +2265,24 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
+	public List<String> wakeOnLanOpsi43(String[] hostIds) {
+		Map<String, Object> response = new HashMap<>();
+
+		AbstractExecutioner exec1 = retrieveWorkingExec(getHostInfoCollections().getConfigServer());
+
+		Logging.info(this,
+				"working exec for config server " + getHostInfoCollections().getConfigServer() + " " + (exec1 != null));
+
+		if (exec1 != null && exec1 != AbstractExecutioner.getNoneExecutioner()) {
+			OpsiMethodCall omc = new OpsiMethodCall("hostControl_start", new Object[] { hostIds });
+
+			response = exec1.getMapResult(omc);
+		}
+
+		return collectErrorsFromResponsesByHost(response, "wakeOnLan");
+	}
+
+	@Override
 	public List<String> fireOpsiclientdEventOnClients(String event, String[] clientIds) {
 		OpsiMethodCall omc = new OpsiMethodCall("hostControl_fireEvent", new Object[] { event, clientIds });
 		Map<String, Object> responses = exec.getMapResult(omc);
@@ -2300,7 +2357,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				map.put(key, (Integer) jO.get(key));
 			}
 		} catch (JSONException jex) {
+<<<<<<< HEAD
 			Logging.error(this, "Exception on getting Map " + jex);
+=======
+			Logging.error(this, "Exception on getting Map ", jex);
+>>>>>>> main
 		}
 
 		return map;
@@ -3126,8 +3187,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				hardwareClassInfos.add(hardwareInfo);
 				result.put((String) hardwareInfo.get("hardwareClass"), hardwareClassInfos);
 			}
-			LocalDateTime lastSeen = LocalDateTime.parse(hardwareInfo.get("lastseen").toString(), timeFormatter);
-
+			Object lastSeenStr = hardwareInfo.get("lastseen");
+			LocalDateTime lastSeen = scanTime;
+			if (lastSeenStr != null) {
+				lastSeen = LocalDateTime.parse(lastSeenStr.toString(), timeFormatter);
+			}
 			if (scanTime.compareTo(lastSeen) < 0) {
 				scanTime = lastSeen;
 			}
@@ -3542,7 +3606,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return logfiles;
 		}
 
-		Logging.debug(this, "------------- getLogfile logtye " + logtype);
+		Logging.debug(this, "getLogfile logtye " + logtype);
 
 		String[] logtypes = Globals.getLogTypes();
 
@@ -4348,7 +4412,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	/**
 	 * Collects the common property values of some product for a client
 	 * collection,<br \> needed for local imaging handling <br \>
-	 * 
+	 *
 	 * @param List<String> clients -
 	 * @param String       product
 	 * @param String       property
@@ -4397,7 +4461,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	 * This method collects properties for all selected clients and all
 	 * products,<br \> as a sideeffect, it produces the depot specific default
 	 * values <br \>
-	 * 
+	 *
 	 * @param clientNames -
 	 */
 	@Override
@@ -4478,7 +4542,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	 * This method collects properties for all selected clients and all
 	 * products,<br \> as a sideeffect, it produces the depot specific default
 	 * values <br \>
-	 * 
+	 *
 	 * @param clientNames -
 	 */
 	public void retrieveProductProperties(final Set<String> clientNames) {
@@ -5234,56 +5298,56 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected Boolean getHostBooleanConfigValue(String key, String hostName, boolean useGlobalFallback,
 			Boolean defaultVal) {
-		Boolean result = null;
 
-		boolean globalDefault = getGlobalBooleanConfigValue(key, null);
+		Logging.debug(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName + "'");
+		Boolean value = null;
 
-		if (getConfigs().get(hostName) != null && getConfigs().get(hostName).get(key) != null
-				&& !((List<?>) (getConfigs().get(hostName).get(key))).isEmpty()) {
-
-			result = interpretAsBoolean(((List<?>) getConfigs().get(hostName).get(key)).get(0), (Boolean) null);
-
+		Map<String, Object> hostConfig = getConfigs().get(hostName);
+		if (hostConfig != null && hostConfig.get(key) != null && !((List<?>) (hostConfig.get(key))).isEmpty()) {
+			value = interpretAsBoolean(((List<?>) hostConfig.get(key)).get(0), (Boolean) null);
 			Logging.debug(this,
-					"getHostBooleanConfigValue for key, host " + key + ", " + hostName + " giving " + result);
-
-		}
-
-		if (result == null && useGlobalFallback) {
-			result = globalDefault;
-			if (result != null) {
-				Logging.debug(this, "getHostBooleanConfigValue for key " + key + ", taking global value  " + result);
+					"getHostBooleanConfigValue key '" + key + "', host '" + hostName + "', value: " + value);
+			if (value != null) {
+				return value;
 			}
 		}
 
-		if (result == null) {
-			Logging.info(this,
-					"got no value for key " + key + " and host " + hostName + " setting default " + defaultVal);
-			result = defaultVal;
+		if (useGlobalFallback) {
+			value = getGlobalBooleanConfigValue(key, null);
+			if (value != null) {
+				Logging.debug(this,
+						"getHostBooleanConfigValue key '" + key + "', host '" + hostName + "', global value: " + value);
+				return value;
+			}
 		}
-
-		return result;
+		Logging.info(this, "getHostBooleanConfigValue key '" + key + "', host '" + hostName
+				+ "', returning default value: " + defaultVal);
+		return defaultVal;
 	}
 
 	@Override
 	public Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal) {
 		Boolean val = defaultVal;
-		Object ob = getConfigOptions().get(key);
+		Object obj = getConfigOptions().get(key);
 
-		Logging.debug(this, "getGlobalBooleanConfigValue key " + key + ", ob " + ob);
-		if (ob == null) {
-			Logging.warning(this, "getGlobalBooleanConfigValue key " + key + " gives no value, take " + val);
-		} else {
-			ConfigOption option = (ConfigOption) ob;
+		Logging.debug(this, "getGlobalBooleanConfigValue '" + key + "'='" + obj + "'");
+		if (obj == null) {
+			Logging.warning(this, "getGlobalBooleanConfigValue '" + key + "' is null, returning default value: " + val);
+			return val;
+		}
 
-			if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
-				Logging.warning(this, "entry for " + key + " should be boolean");
-			} else {
-				List<Object> li = option.getDefaultValues();
-				if (li != null && !li.isEmpty()) {
-					val = (Boolean) li.get(0);
-				}
-				Logging.debug(this, "getGlobalBooleanConfigValue key, defaultValues " + key + ", " + li);
-			}
+		ConfigOption option = (ConfigOption) obj;
+		if (option.getType() != ConfigOption.TYPE.BOOL_CONFIG) {
+			Logging.warning(this, "getGlobalBooleanConfigValue type of '" + key + "' should be boolean, but is "
+					+ option.getType() + ", returning default value: " + val);
+			return val;
+
+		}
+
+		List<Object> values = option.getDefaultValues();
+		Logging.debug(this, "getGlobalBooleanConfigValue '" + key + "' defaultValues: " + values);
+		if (values != null && !values.isEmpty()) {
+			val = (Boolean) values.get(0);
 		}
 
 		return val;
@@ -5834,7 +5898,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public void setDepot(String depotId) {
-		Logging.info(this, "setDepot =========== " + depotId);
+		Logging.info(this, "setDepot: " + depotId);
 		theDepot = depotId;
 	}
 
@@ -7883,7 +7947,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			readyObjects.add(AbstractExecutioner.jsonMap(item));
 		}
 
-		// for warnings for opsi licences 
+		// for warnings for opsi licences
 
 		// percentage number of clients
 		key = LicensingInfoMap.CONFIG_KEY + "." + LicensingInfoMap.CLIENT_LIMIT_WARNING_PERCENT;
@@ -8568,7 +8632,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Test if sshcommand methods exists
-	 * 
+	 *
 	 * @param method name
 	 * @return True if exists
 	 */
@@ -8647,7 +8711,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Exec the python-opsi command "SSHCommand_getObjects"
-	 * 
+	 *
 	 * @return command objects
 	 */
 	@Override
@@ -8662,7 +8726,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Exec a python-opsi command
-	 * 
+	 *
 	 * @param method      name
 	 * @param jsonObjects to do sth
 	 * @return result true if everything is ok
@@ -8681,7 +8745,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Exec the python-opsi command "SSHCommand_deleteObjects"
-	 * 
+	 *
 	 * @param jsonObjects to remove
 	 * @return result true if successfull
 	 */
@@ -8701,7 +8765,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Exec the python-opsi command "SSHCommand_createObjects"
-	 * 
+	 *
 	 * @param jsonObjects to create
 	 * @return result true if successfull
 	 */
@@ -8712,7 +8776,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	/**
 	 * Exec the python-opsi command "SSHCommand_updateObjects"
-	 * 
+	 *
 	 * @param jsonObjects to update
 	 * @return result true if successfull
 	 */

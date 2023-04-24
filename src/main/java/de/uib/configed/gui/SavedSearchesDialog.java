@@ -101,7 +101,7 @@ public class SavedSearchesDialog extends FEditStringList {
 		reload.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "------------- reload action");
+				Logging.debug(this, "reload action");
 				reloadAction();
 			}
 		});
@@ -114,7 +114,7 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		remove.setFont(Globals.defaultFont);
 		remove.addActionListener((ActionEvent actionEvent) -> {
-			Logging.debug(this, "------------- remove action");
+			Logging.debug(this, "remove action");
 			removeSelectedEntry();
 		});
 		popup.add(remove);

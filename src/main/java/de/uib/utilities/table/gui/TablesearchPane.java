@@ -388,7 +388,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		try {
 			checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
 		} catch (ClassCastException ex) {
-			Logging.warning(this, "strange nimbus exception, retry creating: " + ex);
+			Logging.warning(this, "strange nimbus exception, retry creating", ex);
 			checkmarkSearch = new CheckedLabel(selectedIconSearch, unselectedIconSearch, false);
 		}
 

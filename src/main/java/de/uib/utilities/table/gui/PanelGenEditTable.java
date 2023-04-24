@@ -3,7 +3,7 @@
  *
  * By uib, www.uib.de, 2008-2017,2020-2021
  * Author: Rupert Röder
- * 
+ *
  */
 
 package de.uib.utilities.table.gui;
@@ -59,6 +59,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
+import de.uib.utilities.IntComparatorForStrings;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -69,6 +70,7 @@ import de.uib.utilities.table.CursorrowObserver;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
 import de.uib.utilities.table.GenTableModel;
+import de.uib.utilities.table.JTableWithToolTips;
 import de.uib.utilities.table.RowNoTableModelFilterCondition;
 import de.uib.utilities.table.TableCellRendererByBoolean;
 import de.uib.utilities.table.TableCellRendererCurrency;
@@ -296,7 +298,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * sets frame to return to e.g. from option dialogs
-	 * 
+	 *
 	 * @param javax.swing.JFrame
 	 */
 	public void setMasterFrame(JFrame masterFrame) {
@@ -379,7 +381,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
-		theTable = new de.uib.utilities.table.JTableWithToolTips();
+		theTable = new JTableWithToolTips();
 
 		theTable.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
@@ -866,7 +868,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				try {
 					return super.useToString(column);
 				} catch (Exception ex) {
-					Logging.debug(this, "column " + column + " ------------------- no way to string: " + ex);
+					Logging.debug(this, "column " + column + " no way to string");
 					return false;
 				}
 			}
@@ -877,7 +879,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					Logging.debug(this, " comparator for col " + column + " is " + super.getComparator(column));
 					return super.getComparator(column);
 				} catch (Exception ex) {
-					Logging.warning(this, "column " + column + " ------------------- not getting comparator: " + ex);
+					Logging.warning(this, "column " + column + " not getting comparator", ex);
 					return null;
 				}
 
@@ -895,7 +897,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					((DefaultRowSorter) sorter).setComparator(j, comparators[j]);
 				} else if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
 
-					((DefaultRowSorter) sorter).setComparator(j, new de.uib.utilities.IntComparatorForStrings());
+					((DefaultRowSorter) sorter).setComparator(j, new IntComparatorForStrings());
 				}
 			}
 		}
@@ -939,7 +941,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			Logging.warning(this, "invalid column name");
 			return;
 		}
-		DefaultRowSorter sorter = (DefaultRowSorter) theTable.getRowSorter();
+		DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>) theTable.getRowSorter();
 		if (sorter == null) {
 			Logging.warning(this, "no sorter");
 		} else {
@@ -975,7 +977,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	/**
 	 * set if filter mode is reset on new search (this is default but may be
 	 * disabled for special implementations of selection
-	 * 
+	 *
 	 * @parameter boolean
 	 */
 	public void setResetFilterModeOnNewSearch(boolean b) {
@@ -996,7 +998,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * sets a filter symbol belonging to searchPane
-	 * 
+	 *
 	 * @parameter boolean
 	 */
 	public void showFilterIcon(boolean b) {
@@ -1019,7 +1021,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * activates popupMark or this as well as popupMarkAndFilter in context menu
-	 * 
+	 *
 	 * @parameter boolean
 	 */
 	public void setFiltering(boolean b, boolean withFilterPopup) {
@@ -1033,7 +1035,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * activates popupMark and popupMarkAndFilter in context menu
-	 * 
+	 *
 	 * @parameter boolean
 	 */
 	public void setFiltering(boolean b) {
@@ -1042,7 +1044,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * sets an alternative ActionListener
-	 * 
+	 *
 	 * @parameter ActionListener
 	 */
 	public void setFiltermarkActionListener(ActionListener li) {
@@ -1051,7 +1053,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	/**
 	 * sets an alternative tooltip for the filtermark
-	 * 
+	 *
 	 * @parameter String
 	 */
 	public void setFiltermarkToolTipText(String s) {

@@ -51,7 +51,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support) {
-		Logging.debug(this, "----------- can import ??");
+		Logging.debug(this, "can import?");
 
 		if (Globals.isGlobalReadOnly()) {
 			return false;
@@ -121,8 +121,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		}
 
 		Logging.debug(this, "canImport, dropOnThis " + dropOnThis.getUserObject());
-
-		Logging.debug(this, "----------- can import " + result);
+		Logging.debug(this, "can import: " + result);
 
 		return result;
 	}
@@ -305,7 +304,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 		// what is to be moved/copied
 
-		Logging.debug(this, "importData. ++++++++++ getActivePaths(): " + tree.getActivePaths());
+		Logging.debug(this, "importData, getActivePaths(): " + tree.getActivePaths());
 
 		String[] values = tree.getSelectedClientsInTable().toArray(new String[] {});
 
@@ -319,10 +318,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			}
 		}
 
-		Logging.debug(this, "importData, ------------- values " + Arrays.toString(values));
+		Logging.debug(this, "importData, values: " + Arrays.toString(values));
 
 		TreePath groupPathActivatedByTree = tree.getGroupPathActivatedByTree();
-		Logging.debug(this, "importData,  ++++++++++++++++ groupPathActivatedByTree " + groupPathActivatedByTree);
+		Logging.debug(this, "importData, groupPathActivatedByTree: " + groupPathActivatedByTree);
 
 		// if the source is the tree then we arranged lines for the transfer
 		// the other possible source are lines from the JTable, as well arranged to
@@ -352,10 +351,10 @@ public class ClientTreeTransferHandler extends TransferHandler {
 				Logging.info(this, " no tree parts got " + ex);
 			}
 
-			Logging.debug(this, "importData  ----------------   " + i + " values[i] " + importID);
+			Logging.debug(this, "importData " + i + " values[i] " + importID);
 
 			TreePath sourcePath = tree.getActiveTreePath(importID);
-			Logging.debug(this, " active source tree path ++++++++++++++ for importID " + importID + ": " + sourcePath);
+			Logging.debug(this, "active source tree path for importID " + importID + ": " + sourcePath);
 
 			GroupNode sourceParentNode = null;
 			GroupNode groupNode = null;
@@ -389,7 +388,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 
 			}
 
-			Logging.debug(this, "importData  ----------------  ready " + i + " importID " + importID);
+			Logging.debug(this, "importData ready " + i + " importID " + importID);
 
 		}
 

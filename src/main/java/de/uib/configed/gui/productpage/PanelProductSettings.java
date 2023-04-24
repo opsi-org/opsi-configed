@@ -51,7 +51,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 /*
- *   class PanelProductSettings 
+ *   class PanelProductSettings
  *   for editing client specific product settings
  *   part of:
  *
@@ -579,7 +579,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		reload.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "------------- reload action");
+				Logging.info(this, "reload action");
 				reloadAction();
 			}
 		});
@@ -592,7 +592,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		createReport.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "------------- create report");
+				Logging.info(this, "create report");
 				HashMap<String, String> metaData = new HashMap<>();
 
 				// TODO: getFilter
@@ -618,7 +618,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				pdfExportTable.setMetaData(metaData);
 				pdfExportTable.setPageSizeA4Landscape();
 
-				// create pdf 
+				// create pdf
 				pdfExportTable.execute(null, false);
 
 			}
@@ -843,7 +843,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				try {
 					return super.useToString(column);
 				} catch (Exception ex) {
-					Logging.info(this, "------------------- no way to string");
+					Logging.info(this, "no way to string");
 					return false;
 				}
 			}
@@ -857,7 +857,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 						return super.getComparator(column);
 					}
 				} catch (Exception ex) {
-					Logging.info(this, "------------------- not getting comparator ");
+					Logging.info(this, "not getting comparator");
 					return null;
 				}
 

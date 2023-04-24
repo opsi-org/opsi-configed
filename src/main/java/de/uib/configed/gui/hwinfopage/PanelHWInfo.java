@@ -184,7 +184,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						floatExternal();
 						break;
 					case PopupMenuTrait.POPUP_PDF:
-						Logging.info(this, "------------- create report");
+						Logging.info(this, "create report");
 						// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
 						HashMap<String, String> metaData = new HashMap<>();
 						metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));

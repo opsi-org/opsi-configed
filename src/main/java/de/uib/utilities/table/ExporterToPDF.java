@@ -127,8 +127,7 @@ public class ExporterToPDF extends AbstractExportTable {
 							filePath = file.getAbsolutePath();
 						}
 					} catch (Exception e) {
-						Logging.error("no valid filename " + fileName);
-						Logging.debug("thrown exception: " + e);
+						Logging.error("no valid filename " + fileName, e);
 					}
 
 					Logging.notice(this, "selected fileName is: " + fileName);
@@ -184,8 +183,8 @@ public class ExporterToPDF extends AbstractExportTable {
 			if (Boolean.FALSE.equals(saveAction) && temp != null && temp.getAbsolutePath() != null) {
 				try {
 					Desktop.getDesktop().open(temp);
-				} catch (Exception e) {
-					Logging.error("cannot show: " + temp.getAbsolutePath() + " : " + e);
+				} catch (IOException e) {
+					Logging.error("cannot show: " + temp.getAbsolutePath(), e);
 				}
 			}
 		}

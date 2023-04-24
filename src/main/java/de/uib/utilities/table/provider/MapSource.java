@@ -102,7 +102,7 @@ public class MapSource implements TableSource {
 							Logging.info(this, "class should be " + cl);
 						}
 					} catch (ClassNotFoundException e) {
-						Logging.error(this, "could not find class " + classNames.get(i));
+						Logging.error(this, "could not find class " + classNames.get(i), e);
 					}
 
 				} else {

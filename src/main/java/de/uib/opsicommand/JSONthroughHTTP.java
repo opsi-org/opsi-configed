@@ -18,7 +18,10 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -30,16 +33,18 @@ import org.json.JSONObject;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
+import de.uib.utilities.swing.FEditRecord;
 import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
 
 /*  Copyright (c) 2006-2016, 2021 uib.de
- 
+
 Usage of this portion of software is allowed unter the restrictions of the GPL
- 
+
 */
 
 /**
@@ -55,19 +60,20 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	protected static final int GET = 1;
 	protected static final String CODING_TABLE = "UTF8";
 	protected String host;
-	protected String username;
-	protected String password;
+	public String username;
+	public String password;
 	protected int portHTTP = 4444;
 	protected int portHTTPS = DEFAULT_PORT;
 	protected boolean startConnecting;
 	protected boolean endConnecting;
 	protected URL serviceURL;
-	protected String sessionId;
+	public String sessionId;
 	protected String lastSessionId;
 	protected int requestMethod = POST;
 	protected boolean certificateExists;
 	protected boolean trustOnlyOnce;
 	protected boolean trustAlways;
+	private FEditRecord newPasswordDialog;
 
 	static class JSONCommunicationException extends Exception {
 		JSONCommunicationException(String message) {
@@ -110,7 +116,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	 * opsiconfd.
 	 * <p>
 	 * The HTTPS subclass overwrites the method to modify "http" to "https".
-	 * 
+	 *
 	 * @param omc
 	 */
 	protected String produceBaseURL(String rpcPath) {
@@ -123,7 +129,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				String urlEnc = URLEncoder.encode(json, "UTF8");
 				urlS += "?" + urlEnc;
 			} catch (UnsupportedEncodingException ux) {
-				Logging.error(this, "" + ux);
+				Logging.error(this, "coding UTF8 not supported", ux);
 			}
 		}
 
@@ -191,12 +197,59 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 		return (HttpURLConnection) serviceURL.openConnection();
 	}
 
+	public boolean showNewPasswordDialog() {
+		Logging.info("Unauthorized, show password dialog");
+		if (newPasswordDialog != null) {
+			return false;
+		}
+
+		Map<String, String> groupData = new LinkedHashMap<>();
+		groupData.put("password", "");
+		Map<String, String> labels = new HashMap<>();
+		labels.put("password", Configed.getResourceValue("DPassword.jLabelPassword"));
+		Map<String, Boolean> editable = new HashMap<>();
+		editable.put("password", true);
+		Map<String, Boolean> secrets = new HashMap<>();
+		secrets.put("password", true);
+
+		newPasswordDialog = new FEditRecord(Configed.getResourceValue("JSONthroughHTTP.provideNewPassword"));
+		newPasswordDialog.setRecord(groupData, labels, null, editable, secrets);
+		newPasswordDialog
+				.setTitle(Configed.getResourceValue("JSONthroughHTTP.enterNewPassword") + " (" + Globals.APPNAME + ")");
+		newPasswordDialog.init();
+		newPasswordDialog.setSize(420, 210);
+		newPasswordDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		newPasswordDialog.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent event) {
+				// For some unknown reason the paint method isn't
+				// called, when dialog is initialized in Windows
+				// OS. To fix that we call paint method manually
+				// by requesting the dialog to be repainted, when
+				// it is opened.
+				newPasswordDialog.repaint();
+				newPasswordDialog.setDataChanged(true);
+			}
+		});
+
+		newPasswordDialog.setModal(true);
+		newPasswordDialog.setAlwaysOnTop(true);
+		newPasswordDialog.setVisible(true);
+
+		boolean cancelled = newPasswordDialog.isCancelled();
+		ConfigedMain.password = newPasswordDialog.getData().get("password");
+		password = newPasswordDialog.getData().get("password");
+
+		newPasswordDialog = null;
+
+		return !cancelled;
+	}
+
 	/**
 	 * This method receives the JSONObject via HTTP.
 	 */
 	@Override
-	public JSONObject retrieveJSONObject(OpsiMethodCall omc) {
-
+	public synchronized JSONObject retrieveJSONObject(OpsiMethodCall omc) {
 		boolean background = false;
 		Logging.info(this, "retrieveJSONObjects started");
 		WaitCursor waitCursor = null;
@@ -211,7 +264,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
 		makeURL(omc);
 
-		TimeCheck timeCheck = new TimeCheck(this, "retrieveJSONObject  FROM " + serviceURL + "  ++ " + omc);
+		TimeCheck timeCheck = new TimeCheck(this, "retrieveJSONObject " + omc);
 		timeCheck.start();
 
 		HttpURLConnection connection = null;
@@ -229,16 +282,15 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				connection.setRequestMethod("GET");
 			}
 
-			Logging.info(this, "retrieveJSONObject by connection " + connection);
-			Logging.info(this, "retrieveJSONObject request properties " + connection.getRequestProperties());
-			Logging.info(this, "retrieveJSONObject request method " + connection.getRequestMethod());
-			Logging.info(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
+			Logging.debug(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
+			Logging.info(this,
+					"retrieveJSONObject method=" + connection.getRequestMethod() + ", headers="
+							+ connection.getRequestProperties() + ", cookie="
+							+ (sessionId == null ? "null" : (sessionId.substring(0, 26) + "...")));
 
 			if (sessionId != null) {
 				connection.setRequestProperty("Cookie", sessionId);
 			}
-			Logging.info(this, "retrieveJSONObjects request old or " + " new session ");
-			Logging.info(this, "retrieveJSONObjects connected " + " new session ");
 
 			try {
 				connection.connect();
@@ -246,7 +298,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				String s = "" + ex;
 				int i = s.indexOf("Unsupported ciphersuite");
 				if (i > -1) {
-					s = "\n\n" + s.substring(i) + "\n" + "In this SSL configuration, a connection is not possible";
+					s = "\n\n" + s.substring(i) + "\nIn this SSL configuration, a connection is not possible";
 
 					Logging.error(s);
 					Logging.checkErrorList(null);
@@ -355,7 +407,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			}
 
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-			Logging.error("Exception on connecting, " + ex);
+			Logging.error("Exception on connecting, ", ex);
 
 			return null;
 		}
@@ -386,14 +438,26 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
 						|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 					conStat = new ConnectionState(ConnectionState.CONNECTED, "ok");
+				} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+					conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
+
+					Logging.debug("Unauthorized: background=" + background + ", " + sessionId + ", mfa="
+							+ Globals.isMultiFactorAuthenticationEnabled);
+					if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
+						if (!background) {
+							if (waitCursor != null) {
+								waitCursor.stop();
+							}
+							WaitCursor.stopAll();
+						}
+						if (showNewPasswordDialog()) {
+							return retrieveJSONObject(omc);
+						}
+					}
 				} else {
 					conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
-					if (connection.getResponseCode() != HttpURLConnection.HTTP_UNAUTHORIZED) {
-						// this case is handled by the login routine
-						Logging.error(this, "Response " + connection.getResponseCode() + " "
-								+ connection.getResponseMessage() + " " + errorInfo.toString());
-					}
-
+					Logging.error(this, "Response " + connection.getResponseCode() + " "
+							+ connection.getResponseMessage() + " " + errorInfo.toString());
 				}
 
 				if (conStat.getState() == ConnectionState.CONNECTED) {
@@ -407,7 +471,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 						boolean gotNewSession = sessionId != null && !sessionId.equals(lastSessionId);
 
 						if (gotNewSession) {
-							Logging.info(this, "retrieveJSONObjects " + " got new session ");
+							Logging.info(this, "retrieveJSONObjects got new session");
 						}
 					}
 
@@ -472,11 +536,11 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 					waitCursor.stop();
 				}
 				WaitCursor.stopAll();
-				Logging.error(this, "Exception while data reading, " + ex);
+				Logging.error(this, "Exception while data reading", ex);
 			}
 		}
 
-		timeCheck.stop("retrieveJSONObject  got result " + (result != null) + " ");
+		timeCheck.stop("retrieveJSONObject " + (result == null ? "empty result" : "non empty result"));
 		Logging.info(this, "retrieveJSONObject ready");
 		if (waitCursor != null) {
 			waitCursor.stop();

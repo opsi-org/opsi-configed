@@ -2,6 +2,7 @@ package de.uib.utilities.logging;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
@@ -184,8 +185,8 @@ public class Logging implements LogEventSubject {
 
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename));
 			logFilenameInUse = logFilename;
-		} catch (Exception ex) {
-			Logging.error(ex.toString());
+		} catch (IOException ex) {
+			Logging.error("file " + logFilename + " or directory " + logDirectoryName + " not found...", ex);
 			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
 		}
 	}
@@ -199,7 +200,7 @@ public class Logging implements LogEventSubject {
 	}
 
 	private static boolean showOnGUI(int level) {
-		return (level <= MIN_LEVEL_FOR_SHOWING_MESSAGES);
+		return level != LEVEL_ESSENTIAL && level <= MIN_LEVEL_FOR_SHOWING_MESSAGES;
 	}
 
 	private static String now() {

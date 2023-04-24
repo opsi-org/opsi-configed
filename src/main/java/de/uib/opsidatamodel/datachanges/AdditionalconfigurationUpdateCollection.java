@@ -44,13 +44,14 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 			int i = 0;
 			while (it.hasNext()) {
 				Map<?, ?> map = null;
-				UpdateCommand updateCommand = it.next();
+				Object updateCommand = it.next();
 
 				try {
 					map = (Map<?, ?>) updateCommand;
 				} catch (ClassCastException ccex) {
 					Logging.error(
-							"Wrong element type, found " + updateCommand.getClass().getName() + ", expected a Map");
+							"Wrong element type, found " + updateCommand.getClass().getName() + ", expected a Map",
+							ccex);
 				}
 
 				Logging.debug(this, "addAll for one obj, map " + map);

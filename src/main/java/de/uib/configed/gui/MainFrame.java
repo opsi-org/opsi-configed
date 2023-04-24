@@ -97,7 +97,7 @@ import de.uib.configed.Configed;
  * modify it under the terms of the GNU General Public
  * License, version AGPLv3, as published by the Free Software Foundation
  *
- 
+
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.CopyrightInfos;
@@ -330,14 +330,11 @@ public class MainFrame extends JFrame
 	private JMenuItemFormatted popupCreatePdf = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
 			Globals.createImageIcon("images/acrobat_reader16.png", ""));
 
-	private JPanel iconPaneTargets;
 	private JButton jButtonServerConfiguration;
 	private JButton jButtonDepotsConfiguration;
 	private JButton jButtonClientsConfiguration;
 	private JButton jButtonWorkOnGroups;
 	private JButton jButtonWorkOnProducts;
-
-	private JPanel iconPaneExtraFrames;
 
 	private JButton jButtonDashboard;
 	private JButton jButtonLicences;
@@ -742,7 +739,7 @@ public class MainFrame extends JFrame
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileLanguage);
 
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ConfigedMain.THEMES) {
 			jMenuFile.add(jMenuTheme);
 		}
 
@@ -1366,7 +1363,7 @@ public class MainFrame extends JFrame
 		jMenuFrameTerminal.setText(Configed.getResourceValue("Terminal.title"));
 		jMenuFrameTerminal.setEnabled(true);
 		jMenuFrameTerminal.addActionListener((ActionEvent e) -> {
-			configedMain.connectMessagebus();
+			configedMain.initMessagebus();
 
 			if (!Terminal.getInstance().isWebSocketConnected()) {
 				configedMain.connectTerminal();
@@ -2376,7 +2373,7 @@ public class MainFrame extends JFrame
 		jButtonOpsiLicenses.setToolTipText(Configed.getResourceValue("MainFrame.labelOpsiLicenses"));
 		jButtonOpsiLicenses.addActionListener(this);
 
-		iconPaneTargets = new JPanel();
+		JPanel iconPaneTargets = new JPanel();
 		iconPaneTargets.setBorder(new LineBorder(Globals.blueGrey, 1, true));
 
 		GroupLayout layoutIconPaneTargets = new GroupLayout(iconPaneTargets);
@@ -2406,7 +2403,7 @@ public class MainFrame extends JFrame
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		iconPaneExtraFrames = new JPanel();
+		JPanel iconPaneExtraFrames = new JPanel();
 		iconPaneExtraFrames.setBorder(new LineBorder(Globals.blueGrey, 1, true));
 
 		GroupLayout layoutIconPaneExtraFrames = new GroupLayout(iconPaneExtraFrames);
@@ -2877,7 +2874,7 @@ public class MainFrame extends JFrame
 
 	/**
 	 * Calls method from configedMain to start the execution of given command
-	 * 
+	 *
 	 * @param SSHCommand command
 	 */
 	public void remoteSSHExecAction(SSHCommand command) {

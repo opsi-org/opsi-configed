@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * (c) uib, www.uib.de, 2009-2017
  *
@@ -436,7 +436,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	/**
 	 * setting all data for displaying and editing <br />
-	 * 
+	 *
 	 * @param Map visualdata - the source for the table model
 	 * @param Map optionsMap - the description for producing cell editors
 	 */
@@ -521,7 +521,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			@Override
 			protected void commit() {
 				super.commit();
-				String s = getText();
+				String s = getText().strip();
 
 				if (checkKey(s)) {
 					setVisible(false);
@@ -579,7 +579,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	/**
 	 * adding an entry to the table model and, finally, to the table
-	 * 
+	 *
 	 * @param String key
 	 * @param Object value (if null then an empty String is the value)
 	 */
@@ -591,7 +591,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	/**
 	 * deleting an entry
-	 * 
+	 *
 	 * @param String key - the key to delete
 	 */
 	public void removeProperty(String key) {

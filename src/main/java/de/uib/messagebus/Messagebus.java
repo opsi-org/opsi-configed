@@ -1,8 +1,10 @@
 package de.uib.messagebus;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -10,6 +12,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +24,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import org.java_websocket.WebSocket;
+import org.java_websocket.handshake.ServerHandshake;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,11 +32,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
+import de.uib.configed.terminal.WebSocketInputStream;
+import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S1258")
-public class Messagebus {
+public class Messagebus implements MessagebusListener {
 	private WebSocketClientEndpoint messagebusWebSocket;
+	private ConfigedMain configedMain;
+	private int reconnectWaitMillis = 15000;
+	private boolean connected = false;
+	private boolean disconnecting = false;
+	private boolean authenticationError = false;
+	private boolean reconnecting = false;
+	private boolean initialSubscriptionReceived = false;
+
+	public Messagebus(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
+	}
 
 	public WebSocket getWebSocket() {
 		return messagebusWebSocket;
@@ -44,17 +61,55 @@ public class Messagebus {
 			return true;
 		}
 
+		Logging.info(this, "Connecting to messagebus");
+
+		initialSubscriptionReceived = false;
+		disconnecting = false;
 		URI uri = createUri();
 		String basicAuthEnc = createEncBasicAuth();
 		SSLSocketFactory factory = createDullSSLSocketFactory();
+		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
 
 		messagebusWebSocket = new WebSocketClientEndpoint(uri);
+		messagebusWebSocket.registerListener(this);
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
+		if (exec.sessionId != null) {
+			Logging.debug("Adding cookie header");
+			messagebusWebSocket.addHeader("Cookie", exec.sessionId);
+		}
+
 		messagebusWebSocket.setSocketFactory(factory);
 		messagebusWebSocket.setReuseAddr(true);
 		messagebusWebSocket.setTcpNoDelay(true);
 
-		return messagebusWebSocket.connectBlocking();
+		if (messagebusWebSocket.connectBlocking()) {
+			// Socket is open, but may be closed again soon if unauthorized
+			if (waitForInitialChannelSubscritionEvent(10000)) {
+				connected = true;
+				Logging.notice(this, "Connected to messagebus");
+				makeStandardChannelSubscriptions();
+			}
+		}
+		return connected;
+	}
+
+	private boolean waitForInitialChannelSubscritionEvent(long timeoutMs) {
+		long start = (new Date()).getTime();
+		while (!initialSubscriptionReceived) {
+			if (!messagebusWebSocket.isOpen()) {
+				Logging.info("Websocket closed while waiting for inital subscription event");
+				return false;
+			}
+			if ((new Date()).getTime() - start >= timeoutMs) {
+				Logging.warning("Timed out after " + timeoutMs + " ms while waiting for inital subscription event");
+				return false;
+			}
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException ie) {
+			}
+		}
+		return true;
 	}
 
 	private URI createUri() {
@@ -100,10 +155,13 @@ public class Messagebus {
 		return result;
 	}
 
-	private static String createEncBasicAuth() {
-		String username = ConfigedMain.user;
-		String password = ConfigedMain.password;
-		String basicAuth = String.format("%s:%s", username, password);
+	private JSONthroughHTTPS getJSONthroughHTTPSExecutor() {
+		return (JSONthroughHTTPS) configedMain.getPersistenceController().exec;
+	}
+
+	private String createEncBasicAuth() {
+		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
+		String basicAuth = String.format("%s:%s", exec.username, exec.password);
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes());
 	}
 
@@ -142,9 +200,7 @@ public class Messagebus {
 		return sslFactory;
 	}
 
-	public void makeStandardChannelSubscriptions(ConfigedMain configedMain) {
-		messagebusWebSocket.setConfigedMain(configedMain);
-
+	public void makeStandardChannelSubscriptions() {
 		List<String> channels = new ArrayList<>();
 
 		channels.add("event:host_connected");
@@ -160,25 +216,19 @@ public class Messagebus {
 
 	private void makeChannelSubscriptionRequest(List<String> channels) {
 
-		Map<String, Object> data = new HashMap<>();
-		data.put("type", "channel_subscription_request");
-		data.put("id", UUID.randomUUID().toString());
-		data.put("sender", "@");
-		data.put("channel", "service:messagebus");
-		data.put("created", System.currentTimeMillis());
-		data.put("expires", System.currentTimeMillis() + 10000);
-		data.put("operation", "add");
-		data.put("channels", channels);
+		Map<String, Object> message = new HashMap<>();
+		message.put("type", "channel_subscription_request");
+		message.put("id", UUID.randomUUID().toString());
+		message.put("sender", "@");
+		message.put("channel", "service:messagebus");
+		message.put("created", System.currentTimeMillis());
+		message.put("expires", System.currentTimeMillis() + 10000);
+		message.put("operation", "add");
+		message.put("channels", channels);
 
-		Logging.debug(this, "channel subscription request: " + data.toString());
+		Logging.debug(this, "channel subscription request: " + message.toString());
 
-		try {
-			ObjectMapper mapper = new MessagePackMapper();
-			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-			send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
-		} catch (JsonProcessingException ex) {
-			Logging.warning(this, "error occurred while processing JSON: ", ex);
-		}
+		sendMessage(message);
 	}
 
 	public void connectTerminal() {
@@ -190,54 +240,190 @@ public class Messagebus {
 		terminal.setMessagebus(this);
 		terminal.display();
 
-		Map<String, Object> data = new HashMap<>();
-		data.put("type", "terminal_open_request");
-		data.put("id", UUID.randomUUID().toString());
-		data.put("sender", "@");
-		data.put("channel", "service:config:terminal");
-		data.put("back_channel", String.format("session:%s", terminalId));
-		data.put("created", System.currentTimeMillis());
-		data.put("expires", System.currentTimeMillis() + 10000);
-		data.put("terminal_id", terminalId);
-		data.put("cols", terminal.getColumnCount());
-		data.put("rows", terminal.getRowCount());
+		Map<String, Object> message = new HashMap<>();
+		message.put("type", "terminal_open_request");
+		message.put("id", UUID.randomUUID().toString());
+		message.put("sender", "@");
+		message.put("channel", "service:config:terminal");
+		message.put("back_channel", String.format("session:%s", terminalId));
+		message.put("created", System.currentTimeMillis());
+		message.put("expires", System.currentTimeMillis() + 10000);
+		message.put("terminal_id", terminalId);
+		message.put("cols", terminal.getColumnCount());
+		message.put("rows", terminal.getRowCount());
 
-		Logging.debug(this, "terminal open request: " + data.toString());
+		Logging.debug(this, "terminal open request: " + message.toString());
 
-		try {
-			ObjectMapper mapper = new MessagePackMapper();
-			byte[] dataJsonBytes = mapper.writeValueAsBytes(data);
-			send(ByteBuffer.wrap(dataJsonBytes, 0, dataJsonBytes.length));
-		} catch (JsonProcessingException ex) {
-			Logging.warning(this, "error occurred while processing JSON: ", ex);
-		}
+		sendMessage(message);
 
 		terminal.lock();
 		terminal.connectWebSocket();
 	}
 
 	public void send(ByteBuffer message) {
-		if (messagebusWebSocket.getConnection().isOpen()) {
+		if (isConnected()) {
 			messagebusWebSocket.send(message);
 		} else {
-			Logging.info(this, "messagebus not connected");
+			Logging.warning(this, "Message not sent, messagebus not connected");
+		}
+	}
+
+	public void sendMessage(Map<String, Object> message) {
+		if (isConnected()) {
+			try {
+				ObjectMapper mapper = new MessagePackMapper();
+				byte[] msgpackBytes = mapper.writeValueAsBytes(message);
+				send(ByteBuffer.wrap(msgpackBytes, 0, msgpackBytes.length));
+			} catch (JsonProcessingException ex) {
+				Logging.warning(this, "error occurred while processing msgpack: ", ex);
+			}
+		} else {
+			Logging.warning(this, "Message of type '" + message.get("type") + "' not sent, messagebus not connected");
 		}
 	}
 
 	public boolean isBusy() {
-		return messagebusWebSocket.hasBufferedData();
+		return messagebusWebSocket != null && messagebusWebSocket.hasBufferedData();
 	}
 
 	public boolean isConnected() {
-		return messagebusWebSocket.getConnection().isOpen();
+		return connected;
 	}
 
 	public void disconnect() throws InterruptedException {
 		if (messagebusWebSocket != null && isConnected()) {
+			disconnecting = true;
 			messagebusWebSocket.closeBlocking();
 			Logging.info(this, "connection to messagebus closed");
 		} else {
 			Logging.info(this, "messagebus not connected");
 		}
+	}
+
+	@Override
+	public void onOpen(ServerHandshake handshakeData) {
+	}
+
+	@Override
+	public void onClose(int code, String reason, boolean remote) {
+		// The close codes are documented in class org.java_websocket.framing.CloseFrame
+		Logging.info(this, "Messagebus connection closed by " + (remote ? "opsi service" : "us") + " Code=" + code
+				+ " Reason='" + reason + "', disconnecting=" + disconnecting + ", reconnecting=" + reconnecting);
+		boolean wasDisconnecting = disconnecting;
+		connected = false;
+		disconnecting = false;
+		authenticationError = reason != null && reason.toLowerCase().contains("authentication");
+
+		if (!wasDisconnecting && !reconnecting) {
+			reconnecting = true;
+			while (!isConnected()) {
+				int waitMillis = reconnectWaitMillis;
+				if (authenticationError) {
+					Logging.notice(this, "Connection to messagebus lost, authentication error");
+					configedMain.getPersistenceController().makeConnection();
+					waitMillis = 1000;
+				} else {
+					Logging.notice(this,
+							"Connection to messagebus lost, reconnecting in " + reconnectWaitMillis + " ms");
+				}
+				try {
+					Thread.sleep(waitMillis);
+					if (connect()) {
+						break;
+					}
+				} catch (InterruptedException ie) {
+				}
+
+			}
+			reconnecting = false;
+		}
+
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		Logging.warning(this, "Messagebus connection error: " + ex);
+	}
+
+	@Override
+	public void onMessageReceived(Map<String, Object> message) {
+		String type = (String) message.get("type");
+		Logging.trace(this, "Messagebus message received: " + message.toString());
+
+		if (type.startsWith("terminal_")) {
+			switch (type) {
+			case "terminal_data_read":
+				try {
+					WebSocketInputStream.write((byte[]) message.get("data"));
+				} catch (IOException e) {
+					Logging.error(this, "failed to write message: ", e);
+				}
+				break;
+			case "terminal_open_event":
+				Terminal terminal = Terminal.getInstance();
+				terminal.setTerminalId((String) message.get("terminal_id"));
+				terminal.setTerminalChannel((String) message.get("back_channel"));
+				terminal.unlock();
+				break;
+			case "terminal_close_event":
+				Terminal.getInstance().close();
+				break;
+			case "terminal_resize_event":
+				break;
+			default:
+				Logging.warning(this, "unhandled terminal type response caught: " + type);
+			}
+		} else if ("file_upload_result".equals(type)) {
+			String filePath = (String) message.get("path");
+
+			message.clear();
+			message.put("type", "terminal_data_write");
+			message.put("id", UUID.randomUUID().toString());
+			message.put("sender", "@");
+			message.put("channel", Terminal.getInstance().getTerminalChannel());
+			message.put("created", System.currentTimeMillis());
+			message.put("expires", System.currentTimeMillis() + 10000);
+			message.put("terminal_id", Terminal.getInstance().getTerminalId());
+			message.put("data", filePath.getBytes(StandardCharsets.UTF_8));
+
+			sendMessage(message);
+		} else if ("channel_subscription_event".equals(type)) {
+			initialSubscriptionReceived = true;
+		} else if ("event".equals(type)) {
+			try {
+				// Sleep for a little because otherwise we cannot get the needed Data from the Server
+				Thread.sleep(5);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+
+			switch ((String) message.get("event")) {
+			case "host_connected":
+				String clientId = (String) ((Map<?, ?>) ((Map<?, ?>) message.get("data")).get("host")).get("id");
+				configedMain.addClientToConnectedList(clientId);
+				break;
+
+			case "host_disconnected":
+				clientId = (String) ((Map<?, ?>) ((Map<?, ?>) message.get("data")).get("host")).get("id");
+				configedMain.removeClientFromConnectedList(clientId);
+				break;
+
+			case "host_created":
+				configedMain.addClientToTable((String) ((Map<?, ?>) message.get("data")).get("id"));
+				break;
+
+			case "host_deleted":
+				configedMain.removeClientFromTable((String) ((Map<?, ?>) message.get("data")).get("id"));
+				break;
+
+			case "productOnClient_updated":
+				configedMain.updateProduct((Map<?, ?>) message.get("data"));
+				break;
+
+			default:
+				break;
+			}
+		}
+
 	}
 }

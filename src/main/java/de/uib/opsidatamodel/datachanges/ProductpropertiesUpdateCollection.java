@@ -43,26 +43,26 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends UpdateCommand> c) {
+	public boolean addAll(Collection<? extends UpdateCommand> collection) {
 		boolean result = true;
 
-		if (!c.isEmpty()) {
-			Iterator<? extends UpdateCommand> it = c.iterator();
-			UpdateCommand updateCommand = it.next();
-			Logging.info(this, "addAll on collection of size " + c.size() + " of type " + updateCommand.getClass()
+		if (!collection.isEmpty()) {
+			Iterator<? extends UpdateCommand> it = collection.iterator();
+			Object obj = it.next();
+			Logging.info(this, "addAll on collection of size " + collection.size() + " of type " + obj.getClass()
 					+ " should produce values for all " + clients.size() + " hosts");
 		}
 
-		if (c.size() != clients.size()) {
+		if (collection.size() != clients.size()) {
 			result = false;
 
-			Logging.error(
-					"list of data has size " + c.size() + " differs from  length of clients list  " + clients.size());
+			Logging.error("list of data has size " + collection.size() + " differs from  length of clients list  "
+					+ clients.size());
 
 		}
 
 		if (result) {
-			Iterator<? extends UpdateCommand> it = c.iterator();
+			Iterator<? extends UpdateCommand> it = collection.iterator();
 			int i = 0;
 			while (it.hasNext()) {
 				Map map = null;
@@ -73,7 +73,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 				try {
 					map = (Map<?, ?>) obj;
 				} catch (ClassCastException ccex) {
-					Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map");
+					Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map", ccex);
 				}
 
 				result = add(new ProductpropertiesUpdate(persis, clients.get(i), productname, map));

@@ -155,7 +155,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	}
 
 	public void setDocuments(final Map<String, String> documents, final String info) {
-		Logging.info(this, " ------------------------------  idents.length " + idents.length + " info: " + info);
+		Logging.info(this, "idents.length " + idents.length + " info: " + info);
 		for (int i = 0; i < idents.length; i++) {
 			setDocument(idents[i], documents.get(idents[i]), info);
 		}

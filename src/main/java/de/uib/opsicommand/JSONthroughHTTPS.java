@@ -196,9 +196,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	}
 
 	private void setGeneralRequestProperties(HttpURLConnection connection) {
-
 		String authorization = Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
-
 		connection.setRequestProperty("Authorization", "Basic " + authorization);
 
 		// has to be value between 1 and 43300 [sec]
