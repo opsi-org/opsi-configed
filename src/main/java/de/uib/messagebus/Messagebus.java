@@ -81,13 +81,13 @@ public class Messagebus implements MessagebusListener {
 		messagebusWebSocket.setReuseAddr(true);
 		messagebusWebSocket.setTcpNoDelay(true);
 
-		if (messagebusWebSocket.connectBlocking()) {
-			// Socket is open, but may be closed again soon if unauthorized
-			if (waitForInitialChannelSubscritionEvent(10000)) {
-				connected = true;
-				Logging.notice(this, "Connected to messagebus");
-				makeStandardChannelSubscriptions();
-			}
+		if (messagebusWebSocket.connectBlocking() &&
+		// Socket is open, but may be closed again soon if unauthorized
+				waitForInitialChannelSubscritionEvent(10000)) {
+			connected = true;
+			Logging.notice(this, "Connected to messagebus");
+			makeStandardChannelSubscriptions();
+
 		}
 		return connected;
 	}
@@ -332,6 +332,7 @@ public class Messagebus implements MessagebusListener {
 						break;
 					}
 				} catch (InterruptedException ie) {
+					Thread.currentThread().interrupt();
 				}
 
 			}
