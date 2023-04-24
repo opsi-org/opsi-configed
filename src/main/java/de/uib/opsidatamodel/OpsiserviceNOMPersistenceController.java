@@ -599,14 +599,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 								configedWorkbenchDefaultValue = filepath;
 								packageServerDirectoryS = filepath;
-<<<<<<< HEAD
-							} catch (Exception netex) {
-								Logging.error("not a correctly formed file URL: " + val);
-								Logging.debug(this, "thrown exception: " + netex);
-=======
 							} catch (MalformedURLException netex) {
 								Logging.error("not a correctly formed file URL: " + val, netex);
->>>>>>> main
 							}
 						}
 					}
@@ -2357,11 +2351,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				map.put(key, (Integer) jO.get(key));
 			}
 		} catch (JSONException jex) {
-<<<<<<< HEAD
-			Logging.error(this, "Exception on getting Map " + jex);
-=======
 			Logging.error(this, "Exception on getting Map ", jex);
->>>>>>> main
 		}
 
 		return map;
