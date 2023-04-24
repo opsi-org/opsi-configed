@@ -195,7 +195,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			button.addItemListener((ItemEvent e) -> {
 				otherSeparatorInput.setEnabled(e.getItem() == otherOption);
 
-				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().equals("")) {
+				if (e.getStateChange() == ItemEvent.SELECTED && !button.getActionCommand().isEmpty()) {
 					format.setFieldSeparator(button.getActionCommand().charAt(0));
 					modifier.updateTable(parser, startLine, thePanel);
 				}

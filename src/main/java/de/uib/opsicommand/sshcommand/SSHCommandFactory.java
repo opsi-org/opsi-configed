@@ -295,7 +295,7 @@ public final class SSHCommandFactory {
 
 			Logging.info(this, "parent menu text " + parent);
 
-			if (parent == null || parent.equalsIgnoreCase("null") || parent.equals(PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
+			if (parent == null || "null".equalsIgnoreCase(parent) || parent.equals(PARENT_DEFAULT_FOR_OWN_COMMANDS)) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 			}
 			if (!listKnownParents.contains(parent)) {
@@ -358,7 +358,7 @@ public final class SSHCommandFactory {
 
 		for (SSHCommandTemplate com : sshCommandList) {
 			String parent = com.getParentMenuText();
-			if ((parent == null) || (parent.trim().equals(""))) {
+			if ((parent == null) || (parent.trim().isEmpty())) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 
 			}
@@ -539,7 +539,7 @@ public final class SSHCommandFactory {
 			if (connection.connect(command)) {
 				String result = connection.exec(command, false);
 				Logging.info(this, "connection.exec produces " + result);
-				if (result == null || result.trim().equals("")) {
+				if (result == null || result.trim().isEmpty()) {
 					Logging.info(this, "testConnection not allowed");
 					connectionState = CONNECTION_NOT_ALLOWED;
 					Logging.warning(this, "cannot connect to " + user + "@" + host);

@@ -48,7 +48,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 
 		if (jc instanceof JLabel) {
 			String tooltipText = null;
-			if (tooltipPrefix != null && !tooltipPrefix.equals("")) {
+			if (tooltipPrefix != null && !tooltipPrefix.isEmpty()) {
 				tooltipText = Globals.fillStringToLength(tooltipPrefix + separator + value + " ", FILL_LENGTH);
 			} else {
 				tooltipText = Globals.fillStringToLength(value + " ", FILL_LENGTH);

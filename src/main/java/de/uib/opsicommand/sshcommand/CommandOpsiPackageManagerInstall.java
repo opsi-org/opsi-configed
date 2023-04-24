@@ -89,8 +89,8 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 
 	@Override
 	public SSHConnectionExecDialog startHelpDialog() {
-		SSHCommand command = new CommandHelp(this);
-		SSHConnectExec exec = new SSHConnectExec(command);
+		SSHCommand commandHelp = new CommandHelp(this);
+		SSHConnectExec exec = new SSHConnectExec(commandHelp);
 		return exec.getDialog();
 	}
 
@@ -100,7 +100,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public void setOpsiproduct(String prod) {
-		if (prod != null && !prod.equals("")) {
+		if (prod != null && !prod.isEmpty()) {
 			opsiproduct = " -i " + prod;
 		} else {
 			opsiproduct = "";
@@ -108,7 +108,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public void setDepotForPInstall(String dep) {
-		if (!dep.equals("")) {
+		if (!dep.isEmpty()) {
 			depot = " -d " + dep;
 		} else {
 			depot = "";
@@ -128,7 +128,7 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	public boolean checkCommand() {
-		return !opsiproduct.equals("");
+		return !opsiproduct.isEmpty();
 	}
 
 	public void setProperty(boolean keepDepotDefaults) {

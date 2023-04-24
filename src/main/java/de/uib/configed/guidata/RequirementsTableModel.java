@@ -77,7 +77,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		requDeinstallMap = null;
 		keyArray = zeroArray;
 
-		if (product != null && !product.trim().equals("")) {
+		if (product != null && !product.trim().isEmpty()) {
 			retrieveRequirements(depotId, product);
 
 			keySet = new TreeSet<>();

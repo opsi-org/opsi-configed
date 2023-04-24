@@ -489,7 +489,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private boolean checkKey(String s) {
 		boolean ok = false;
 
-		if (s != null && !s.equals("")) {
+		if (s != null && !s.isEmpty()) {
 			ok = true;
 
 			if (names.indexOf(s) > -1) {
@@ -525,7 +525,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 				if (checkKey(s)) {
 					setVisible(false);
-					if (classname.equals("java.lang.Boolean")) {
+					if ("java.lang.Boolean".equals(classname)) {
 						addBooleanProperty(s);
 					} else {
 						if (multiselection) {

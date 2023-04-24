@@ -51,7 +51,7 @@ public class SavedSearchQuery {
 		String lastOption = null;
 		searchName = null;
 		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("-h") || args[i].equals("-u") || args[i].equals("-p")) {
+			if ("-h".equals(args[i]) || "-u".equals(args[i]) || "-p".equals(args[i])) {
 				if (lastOption != null) {
 					return false;
 				}

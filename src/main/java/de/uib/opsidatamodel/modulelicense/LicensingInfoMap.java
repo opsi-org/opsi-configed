@@ -287,7 +287,7 @@ public final class LicensingInfoMap {
 			for (int i = 0; i < producedLicences.length(); i++) {
 				JSONObject l = producedLicences.getJSONObject(i);
 				String customerName = l.getString(CUSTOMER_NAME);
-				if (!l.get(CUSTOMER_UNIT).toString().equals("null")) {
+				if (!"null".equals(l.get(CUSTOMER_UNIT).toString())) {
 					producedCustomerNames.add(customerName + " - " + l.get(CUSTOMER_UNIT).toString());
 				} else {
 					producedCustomerNames.add(customerName);

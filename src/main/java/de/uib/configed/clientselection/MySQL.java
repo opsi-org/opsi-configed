@@ -140,7 +140,7 @@ public class MySQL {
 
 					// In der Datenbank sind die 'values' immer in Anführungszeichen,
 					// Außnahme: true, false
-					if (data.equals("false") || data.equals("true")) {
+					if ("false".equals(data) || "true".equals(data)) {
 						return " (h.values LIKE '%" + data + "%' OR h.values LIKE '\"%" + data + "\"%') ";
 					}
 
@@ -222,7 +222,7 @@ public class MySQL {
 		String spaltenName = (String) spalte.get("Opsi");
 		String scope = (String) spalte.get("Scope");
 
-		if (scope.equals("g")) {
+		if ("g".equals(scope)) {
 			hardwareWithDevice = true;
 		}
 

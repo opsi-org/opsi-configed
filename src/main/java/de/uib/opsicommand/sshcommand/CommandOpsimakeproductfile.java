@@ -60,7 +60,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -126,7 +126,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	@Override
 	public String getCommand() {
 
-		if (!packageVersion.equals("") || !productVersion.equals("")) {
+		if (!packageVersion.isEmpty() || !productVersion.isEmpty()) {
 			keepVersions = "--keep-versions ";
 		}
 
@@ -214,7 +214,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	}
 
 	private void setPackageVersion(String pav) {
-		if (!pav.equals("")) {
+		if (!pav.isEmpty()) {
 			packageVersion = "--package-version " + pav;
 		} else {
 			packageVersion = "";
@@ -222,7 +222,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	}
 
 	private void setProductVersion(String prv) {
-		if (!prv.equals("")) {
+		if (!prv.isEmpty()) {
 			productVersion = "--product-version " + prv;
 		} else {
 			productVersion = "";

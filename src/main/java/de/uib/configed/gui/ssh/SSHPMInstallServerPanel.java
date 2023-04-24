@@ -34,7 +34,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 	}
 
 	public void setPackagePath(String pPath) {
-		if (!(pPath.equals(""))) {
+		if (!(pPath.isEmpty())) {
 			jComboBoxAutoCompletion.addItem(pPath);
 			jComboBoxAutoCompletion.setSelectedItem(pPath);
 		}
@@ -104,7 +104,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 
 	public static CommandOpsiPackageManagerInstall getCommand(String product) {
 
-		if ((product == null) || (product.equals(""))) {
+		if ((product == null) || (product.isEmpty())) {
 			return null;
 		}
 

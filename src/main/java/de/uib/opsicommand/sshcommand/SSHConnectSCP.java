@@ -149,7 +149,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 			this.outputDialog = outputDialog;
 			this.withGui = withGui;
 			retriedTimes = 1;
-			if ((this.command.getDescription() != null) && (!this.command.getDescription().equals(""))) {
+			if ((this.command.getDescription() != null) && (!this.command.getDescription().isEmpty())) {
 				publishInfo("exec:  " + this.command.getDescription() + "");
 			}
 			publishInfo(
@@ -316,7 +316,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 		}
 
 		protected void publishError(String s) {
-			if (outputDialog != null && s.length() > 0 && !s.equals("\n")) {
+			if (outputDialog != null && s.length() > 0 && !"\n".equals(s)) {
 				s = SSHConnectionOutputDialog.ANSI_CODE_ERROR + s;
 			}
 			publish(s);
@@ -336,7 +336,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 			}
 
 			String commandinfo = "[" + this.command.getId() + counterInfo + "]";
-			if ((commandInfoName != null) && (!commandInfoName.equals(""))) {
+			if ((commandInfoName != null) && (!commandInfoName.isEmpty())) {
 				commandinfo = "[" + commandInfoName + counterInfo + "]";
 			}
 

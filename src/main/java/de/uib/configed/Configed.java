@@ -255,6 +255,7 @@ public class Configed {
 		return buf.toString();
 	}
 
+	@SuppressWarnings("java:S106")
 	protected static void usage() {
 		System.out.println("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		System.out.println(USAGE_INFO);
@@ -381,16 +382,17 @@ public class Configed {
 		return refreshMinutes;
 	}
 
+	@SuppressWarnings("java:S106")
 	protected static void processArgs(String[] args) {
 		Logging.debug("args " + Arrays.toString(args));
 
-		if (args.length == 2 && args[0].equals("--args")) {
+		if (args.length == 2 && "--args".equals(args[0])) {
 			args = args[1].split(";;");
 		}
 
 		for (int i = 0; i < args.length; i++) {
 
-			if (args[i].equals("--help")) {
+			if ("--help".equals(args[i])) {
 				usage();
 				endApp(NO_ERROR);
 			}
@@ -414,25 +416,25 @@ public class Configed {
 			} else {
 				// options
 
-				if (args[i].equals("-l") || args[i].equals("--locale")) {
+				if ("-l".equals(args[i]) || "--locale".equals(args[i])) {
 					locale = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("-h") || args[i].equals("--host")) {
+				} else if ("-h".equals(args[i]) || "--host".equals(args[i])) {
 					host = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("-u") || args[i].equals("--user")) {
+				} else if ("-u".equals(args[i]) || "--user".equals(args[i])) {
 					user = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("-p") || args[i].equals("--password")) {
+				} else if ("-p".equals(args[i]) || "--password".equals(args[i])) {
 					password = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("-c") || args[i].equals("--client")) {
+				} else if ("-c".equals(args[i]) || "--client".equals(args[i])) {
 					client = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("-g") || args[i].equals("--group")) {
+				} else if ("-g".equals(args[i]) || "--group".equals(args[i])) {
 					clientgroup = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("-t") || args[i].equals("--tab")) {
+				} else if ("-t".equals(args[i]) || "--tab".equals(args[i])) {
 					String tabS = getArg(args, i);
 					try {
 						tab = Integer.parseInt(tabS);
@@ -442,10 +444,10 @@ public class Configed {
 						endApp(ERROR_INVALID_OPTION);
 					}
 					i = i + 2;
-				} else if (args[i].equals("-d") || args[i].equals("--logdirectory")) {
+				} else if ("-d".equals(args[i]) || "--logdirectory".equals(args[i])) {
 					Logging.logDirectoryName = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("-s") || args[i].equals("--savedstates")) {
+				} else if ("-s".equals(args[i]) || "--savedstates".equals(args[i])) {
 					savedStatesLocationName = getArg(args, i);
 					String canonicalPath = null;
 					try {
@@ -458,7 +460,7 @@ public class Configed {
 					}
 
 					i = i + 2;
-				} else if (args[i].equals("-r") || args[i].equals("--refreshminutes")) {
+				} else if ("-r".equals(args[i]) || "--refreshminutes".equals(args[i])) {
 					String test = getArg(args, i);
 
 					try {
@@ -470,14 +472,14 @@ public class Configed {
 					}
 
 					i = i + 2;
-				} else if (args[i].equals("--ssh-immediate-connect")) {
+				} else if ("--ssh-immediate-connect".equals(args[i])) {
 					i = i + 1;
 
 					if (isValue(args, i)) {
-						if (args[i].equalsIgnoreCase("Y")) {
+						if ("Y".equalsIgnoreCase(args[i])) {
 							sshConnectOnStart = true;
 
-						} else if (args[i].equalsIgnoreCase("N")) {
+						} else if ("N".equalsIgnoreCase(args[i])) {
 							sshConnectOnStart = false;
 
 						} else {
@@ -486,47 +488,47 @@ public class Configed {
 						}
 					}
 					i = i + 1;
-				} else if (args[i].equals("--ssh-key")) {
+				} else if ("--ssh-key".equals(args[i])) {
 					sshKey = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("--ssh-passphrase")) {
+				} else if ("--ssh-passphrase".equals(args[i])) {
 					sshKeyPass = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("-qs") || args[i].equals("--querysavedsearch")) {
+				} else if ("-qs".equals(args[i]) || "--querysavedsearch".equals(args[i])) {
 					optionCLIQuerySearch = true;
 					savedSearch = getArg(args, i);
 					i = i + 2;
 
-				} else if (args[i].equals("-qg") || args[i].equals("--definegroupbysearch")) {
+				} else if ("-qg".equals(args[i]) || "--definegroupbysearch".equals(args[i])) {
 					optionCLIDefineGroupBySearch = true;
 					savedSearch = getArg(args, i);
 					i++;
 					group = getArg(args, i);
 					i = i + 2;
 
-				} else if (args[i].equals("--initUserRoles")) {
+				} else if ("--initUserRoles".equals(args[i])) {
 					optionCLIuserConfigProducing = true;
 
 					i++;
-				} else if (args[i].equals("-me") || args[i].equals("--testPersistenceControllerMethod")) {
+				} else if ("-me".equals(args[i]) || "--testPersistenceControllerMethod".equals(args[i])) {
 					optionPersistenceControllerMethodCall = true;
 					i = i + 1;
-				} else if (args[i].equals("--sqlgethashes")) {
+				} else if ("--sqlgethashes".equals(args[i])) {
 					PersistenceControllerFactory.sqlAndGetHashes = true;
 					i = i + 1;
-				} else if (args[i].equals("--sqlgetrows")) {
+				} else if ("--sqlgetrows".equals(args[i])) {
 					PersistenceControllerFactory.sqlAndGetRows = true;
 					i = i + 1;
-				} else if (args[i].equals("--nosqlrawdata")) {
+				} else if ("--nosqlrawdata".equals(args[i])) {
 					PersistenceControllerFactory.avoidSqlRawData = true;
 					i = i + 1;
-				} else if (args[i].equals("--version")) {
+				} else if ("--version".equals(args[i])) {
 					System.out.println("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
 					System.exit(0);
-				} else if (args[i].equals("--help")) {
+				} else if ("--help".equals(args[i])) {
 					usage();
 					System.exit(0);
-				} else if (args[i].equals("--collect_queries_until_no")) {
+				} else if ("--collect_queries_until_no".equals(args[i])) {
 					String no = getArg(args, i);
 					try {
 						OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
@@ -536,7 +538,7 @@ public class Configed {
 						endApp(ERROR_INVALID_OPTION);
 					}
 					i = i + 2;
-				} else if (args[i].equals("--loglevel")) {
+				} else if ("--loglevel".equals(args[i])) {
 					String s = "?";
 					try {
 						s = getArg(args, i);
@@ -545,7 +547,7 @@ public class Configed {
 						Logging.debug(" \n\nArgument >" + s + "< has no integer format");
 					}
 					i = i + 2;
-				} else if (args[i].equals("--localizationfile")) {
+				} else if ("--localizationfile".equals(args[i])) {
 					String extraLocalizationFileName = getArg(args, i);
 
 					boolean success = false;
@@ -586,10 +588,10 @@ public class Configed {
 					if (!success) {
 						endApp(ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
 					}
-				} else if (args[i].equals("--localizationstrings")) {
+				} else if ("--localizationstrings".equals(args[i])) {
 					showLocalizationStrings = true;
 					i = i + 1;
-				} else if (args[i].equals("--swaudit-pdf")) {
+				} else if ("--swaudit-pdf".equals(args[i])) {
 					optionCLISwAuditPDF = true;
 					clientsFile = getArg(args, i);
 					i = i + 2;
@@ -597,7 +599,7 @@ public class Configed {
 						outDir = args[i];
 						i = i + 1;
 					}
-				} else if (args[i].equals("--swaudit-csv")) {
+				} else if ("--swaudit-csv".equals(args[i])) {
 					optionCLISwAuditCSV = true;
 					clientsFile = getArg(args, i);
 					i = i + 2;
@@ -605,9 +607,9 @@ public class Configed {
 						outDir = args[i];
 						i = i + 1;
 					}
-				} else if (args[i].equals("--halt")) {
+				} else if ("--halt".equals(args[i])) {
 					i = i + 1;
-				} else if (args[i].equals("--disable-certificate-verification")) {
+				} else if ("--disable-certificate-verification".equals(args[i])) {
 					Globals.disableCertificateVerification = true;
 					i = i + 1;
 				} else {

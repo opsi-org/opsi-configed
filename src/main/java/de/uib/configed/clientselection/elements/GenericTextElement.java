@@ -37,7 +37,7 @@ public class GenericTextElement extends AbstractSelectElement {
 	}
 
 	public SelectData.DataType dataNeeded(String operation) {
-		if (operation.equals("=")) {
+		if ("=".equals(operation)) {
 			return SelectData.DataType.TEXT_TYPE;
 		}
 

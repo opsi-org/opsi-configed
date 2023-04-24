@@ -91,7 +91,7 @@ public class ListCellRendererByIndex extends StandardListCellRenderer {
 		}
 
 		String tooltip = mapOfTooltips.get(value);
-		if (tooltip == null || tooltip.equals("")) {
+		if (tooltip == null || tooltip.isEmpty()) {
 			if (mapOfStrings == null) {
 				tooltip = "" + value;
 			} else {

@@ -178,7 +178,7 @@ public class ProductState extends HashMap<String, String> {
 
 		LastAction lastAction = LastAction.produceFromLabel(get(KEY_LAST_ACTION));
 
-		if (!get(KEY_ACTION_PROGRESS).equals("")) {
+		if (!get(KEY_ACTION_PROGRESS).isEmpty()) {
 			ActionResult result = ActionResult.produceFromLabel(get(KEY_ACTION_RESULT));
 			if (result.getVal() == ActionResult.FAILED) {
 				installationInfo.append(ActionResult.getDisplayLabel(result.getVal()));
@@ -217,7 +217,7 @@ public class ProductState extends HashMap<String, String> {
 
 		String versionInfo = "";
 
-		if (!get(KEY_PRODUCT_VERSION).equals("")) {
+		if (!get(KEY_PRODUCT_VERSION).isEmpty()) {
 			versionInfo = get(KEY_PRODUCT_VERSION) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
 					+ get(KEY_PACKAGE_VERSION);
 		}
@@ -256,7 +256,7 @@ public class ProductState extends HashMap<String, String> {
 			return "";
 		}
 
-		if (retrieved.get(key) == null || (retrieved.get(key) instanceof String && retrieved.get(key).equals("null"))) {
+		if (retrieved.get(key) == null || (retrieved.get(key) instanceof String && "null".equals(retrieved.get(key)))) {
 			return "";
 		}
 

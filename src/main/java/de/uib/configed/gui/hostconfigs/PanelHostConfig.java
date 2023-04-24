@@ -75,7 +75,7 @@ public class PanelHostConfig extends JPanel {
 				String user = key.split("\\.")[1];
 				Logging.info(this,
 						"putUsersToPropertyclassesTreeMap found user " + user + " by config key " + key + "");
-				if (!user.equals("{}")) {
+				if (!"{}".equals(user)) {
 					handleUserInPropertyClass(PROPERTY_CLASS_USER, user);
 				}
 			}

@@ -273,7 +273,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 			throw new IllegalArgumentException("Unexpected EOF");
 		}
 
-		if (name.equals("elementPath")) {
+		if ("elementPath".equals(name)) {
 			return list.toArray(new String[0]);
 		}
 
@@ -282,11 +282,11 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 
 	private Object stringToObject(String value, String name) {
 		Logging.debug(this, "stringToObject: " + name);
-		if (value.equals("null")) {
+		if ("null".equals(value)) {
 			return null;
 		}
 
-		if (name.equals("data")) {
+		if ("data".equals(name)) {
 			value = value.substring(1, value.length() - 1);
 			switch (lastDataType) {
 			case NONE_TYPE:
@@ -311,7 +311,7 @@ public class OpsiDataSerializer extends de.uib.configed.clientselection.Abstract
 			return value.substring(1, value.length() - 1);
 		}
 
-		if (name.equals("dataType")) {
+		if ("dataType".equals(name)) {
 
 			switch (value) {
 			case "TextType":

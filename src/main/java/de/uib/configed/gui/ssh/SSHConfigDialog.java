@@ -442,7 +442,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			checkComponentStates();
 		});
 
-		if (!connectionInfo.getKeyfilePath().equals("")) {
+		if (!connectionInfo.getKeyfilePath().isEmpty()) {
 			jCheckBoxUseKeyFile.setSelected(true);
 		}
 

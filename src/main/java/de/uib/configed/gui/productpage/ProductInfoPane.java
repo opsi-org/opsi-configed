@@ -288,7 +288,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	}
 
 	protected String fillEmpty(String content) {
-		if (content == null || content.equals("") || content.equals("-")) {
+		if (content == null || content.isEmpty() || "-".equals(content)) {
 			return " ";
 		}
 

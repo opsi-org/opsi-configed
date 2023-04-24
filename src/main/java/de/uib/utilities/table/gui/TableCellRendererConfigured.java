@@ -42,24 +42,20 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 			result.setFont(f);
 		}
 
-		if (bg1 != null) {
-			if (!ConfigedMain.THEMES) {
-				if (selectionEditingBackground != null && isSelected) {
-					result.setBackground(selectionEditingBackground);
+		if (bg1 != null && !ConfigedMain.THEMES) {
+			if (selectionEditingBackground != null && isSelected) {
+				result.setBackground(selectionEditingBackground);
+			} else {
+				if (row % 2 == 0) {
+					result.setBackground(bg2);
 				} else {
-					if (row % 2 == 0) {
-						result.setBackground(bg2);
-					} else {
-						result.setBackground(bg1);
-					}
+					result.setBackground(bg1);
 				}
 			}
 		}
 
-		if (!ConfigedMain.THEMES) {
-			if (color != null) {
-				result.setForeground(color);
-			}
+		if (!ConfigedMain.THEMES && color != null) {
+			result.setForeground(color);
 		}
 
 		return result;

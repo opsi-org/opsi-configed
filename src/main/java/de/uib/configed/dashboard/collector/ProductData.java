@@ -164,7 +164,7 @@ public final class ProductData {
 						product.setId(productId);
 						product.setDepot(depot);
 
-						if (productInfo.get("installationStatus").equals("installed")) {
+						if ("installed".equals(productInfo.get("installationStatus"))) {
 							product.setStatus(Configed.getResourceValue("Dashboard.products.installed"));
 
 							Optional<Product> matchedProduct = installedProductsList.keySet().stream()
@@ -185,7 +185,7 @@ public final class ProductData {
 							}
 
 							allUnusedProducts.remove(productId);
-						} else if (productInfo.get("actionResult").equals("failed")) {
+						} else if ("failed".equals(productInfo.get("actionResult"))) {
 							product.setStatus(Configed.getResourceValue("Dashboard.products.failed"));
 
 							Optional<Product> matchedProduct = failedProductsList.keySet().stream()

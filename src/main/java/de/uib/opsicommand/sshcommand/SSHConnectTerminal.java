@@ -102,7 +102,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				Logging.info(this, "connect user@host " + SSHConnectionInfo.getInstance().getUser() + "@"
 						+ SSHConnectionInfo.getInstance().getHost());
 				if (SSHConnectionInfo.getInstance().usesKeyfile()) {
-					if (!SSHConnectionInfo.getInstance().getKeyfilePassphrase().equals("")) {
+					if (!SSHConnectionInfo.getInstance().getKeyfilePassphrase().isEmpty()) {
 						jsch.addIdentity(SSHConnectionInfo.getInstance().getKeyfilePath(),
 								SSHConnectionInfo.getInstance().getKeyfilePassphrase());
 					}
@@ -200,6 +200,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		}
 	}
 
+	@SuppressWarnings("java:S106")
 	private ChannelShell setStreams(ChannelShell ch) throws IOException {
 		ch.setInputStream(new FilterInputStream(System.in) {
 			@Override
@@ -274,7 +275,7 @@ public class SSHConnectTerminal extends SSHConnect {
 					Logging.info(this, "initInputFieldFromDialog keyReleased ENTER ");
 					Logging.info(this, "initInputFieldFromDialog inputfield " + textField);
 					Logging.info(this, "initInputFieldFromDialog dialog " + dialog);
-					if (textField.getText().trim().equalsIgnoreCase("clear")) {
+					if ("clear".equalsIgnoreCase(textField.getText().trim())) {
 						clear();
 						((Component) textField).requestFocusInWindow();
 					} else {
@@ -315,7 +316,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	}
 
 	private static List<String> getList(String str) {
-		if (str.equals("")) {
+		if (str.isEmpty()) {
 			return new ArrayList<>();
 		}
 

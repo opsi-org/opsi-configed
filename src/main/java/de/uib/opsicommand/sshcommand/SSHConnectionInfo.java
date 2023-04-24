@@ -118,7 +118,7 @@ public final class SSHConnectionInfo {
 	}
 
 	public void setUserData(String h, String u, String ps, String p) {
-		Logging.info(this, "setUserData " + h + ", " + u + ", password " + (ps != null && ps.equals("")));
+		Logging.info(this, "setUserData " + h + ", " + u + ", password " + (ps != null && ps.isEmpty()));
 		setHost(getHostnameFromOpsihost(h));
 		setPort(p);
 		setUser(u);

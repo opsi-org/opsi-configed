@@ -535,7 +535,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 			}
 		}
 
-		if ((selectedCommand == null) || (selectedCommand.trim().equals(""))) {
+		if ((selectedCommand == null) || (selectedCommand.trim().isEmpty())) {
 			selectedCommand = SSHCommandFactory.MENU_NEW;
 		}
 
@@ -566,7 +566,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 				StringBuilder combuf = new StringBuilder("");
 				for (SSHCommand c : thiscommand.getCommands()) {
 					String rawCommand = c.getCommandRaw();
-					if ((rawCommand != null) && !rawCommand.equals("")) {
+					if ((rawCommand != null) && !rawCommand.isEmpty()) {
 						combuf.append(rawCommand).append("\n");
 					}
 				}
@@ -589,7 +589,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	 * @param coms    The commands
 	 **/
 	private void updateComponents(String parent, String tooltip, int prio, boolean ns, String coms) {
-		if ((parent == null) || (parent.trim().equals(""))) {
+		if ((parent == null) || (parent.trim().isEmpty())) {
 
 			parent = SSHCommandFactory.PARENT_DEFAULT_FOR_OWN_COMMANDS;
 		}
@@ -694,7 +694,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		}
 		List<String> coms = new LinkedList<>();
 		for (String c : jTextPaneommands.getText().split("\n")) {
-			if (!((c == null) || (c.trim().equals("")))) {
+			if (!((c == null) || (c.trim().isEmpty()))) {
 				coms.add(c);
 			}
 		}

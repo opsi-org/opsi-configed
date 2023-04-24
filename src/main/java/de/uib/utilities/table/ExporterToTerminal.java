@@ -15,6 +15,7 @@ public class ExporterToTerminal extends AbstractExportTable {
 
 	}
 
+	@SuppressWarnings("java:S106")
 	@Override
 	public void execute(String fileName, boolean onlySelectedRows) {
 
@@ -35,7 +36,7 @@ public class ExporterToTerminal extends AbstractExportTable {
 					}
 				}
 				for (int i = 0; i < rowV.size(); i++) {
-					if (!rowV.get(i).equals(" ")) {
+					if (!" ".equals(rowV.get(i))) {
 						System.out.print(rowV.get(i));
 						if (i != rowV.size() - 1) {
 							System.out.print(", ");

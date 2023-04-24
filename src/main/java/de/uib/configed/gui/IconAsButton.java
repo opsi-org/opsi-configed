@@ -103,7 +103,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 		tooltipInactive = desc;
 		imageURLActive = active;
 		imageURLAttention = attentionImage;
-		if (imageURLAttention == null || imageURLAttention.equals("")) {
+		if (imageURLAttention == null || imageURLAttention.isEmpty()) {
 			imageURLAttention = imageURLActive;
 		}
 

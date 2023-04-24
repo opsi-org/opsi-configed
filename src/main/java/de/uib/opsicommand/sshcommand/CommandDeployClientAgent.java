@@ -36,7 +36,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -200,7 +200,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public void setClient(String c) {
-		if (!c.equals("")) {
+		if (!c.isEmpty()) {
 			client = " " + c;
 		} else {
 			client = "";
@@ -208,7 +208,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public void setUser(String u) {
-		if (!u.equals("")) {
+		if (!u.isEmpty()) {
 			user = " -u " + u;
 		} else {
 			user = "";
@@ -228,7 +228,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	}
 
 	public void setPassw(String pw) {
-		if (!pw.equals("")) {
+		if (!pw.isEmpty()) {
 			passw = " -p " + pw;
 		} else {
 			passw = "";

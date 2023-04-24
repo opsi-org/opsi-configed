@@ -263,16 +263,16 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			JCheckBox headerBox = new JCheckBox(header);
 			headerBox.setActionCommand(header);
 
-			if (header.equals("hostname")) {
+			if ("hostname".equals(header)) {
 				headerBox.setSelected(true);
 			}
-			if (header.equals("selectedDomain")) {
+			if ("selectedDomain".equals(header)) {
 				headerBox.setSelected(true);
 			}
-			if (header.equals("depotID")) {
+			if ("depotID".equals(header)) {
 				headerBox.setSelected(true);
 			}
-			if (header.equals("macaddress")) {
+			if ("macaddress".equals(header)) {
 				headerBox.setSelected(true);
 			}
 

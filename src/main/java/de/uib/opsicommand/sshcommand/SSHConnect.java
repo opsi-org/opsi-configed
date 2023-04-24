@@ -230,7 +230,7 @@ public class SSHConnect {
 			Logging.info(this, "connect user " + connectionInfo.getUser());
 
 			if (connectionInfo.usesKeyfile()) {
-				if (!connectionInfo.getKeyfilePassphrase().equals("")) {
+				if (!connectionInfo.getKeyfilePassphrase().isEmpty()) {
 					jsch.addIdentity(connectionInfo.getKeyfilePath(), connectionInfo.getKeyfilePassphrase());
 				}
 

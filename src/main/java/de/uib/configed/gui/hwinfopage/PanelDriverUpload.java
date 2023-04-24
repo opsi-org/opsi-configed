@@ -810,7 +810,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 					+ " , " + depotProductDirectory);
 		}
 
-		if (fieldServerPath == null || fieldServerPath.getText().equals("")
+		if (fieldServerPath == null || fieldServerPath.getText().isEmpty()
 				|| fieldServerPath.getText().startsWith(depotProductDirectory)) {
 			return depotProductDirectory;
 		}

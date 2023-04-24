@@ -207,7 +207,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 	public String produceName() {
 		Logging.info(this, "produceName ? fieldTargetPath , depotProductDirectory " + fieldTargetPath + " , "
 				+ depotProductDirectory);
-		if (fieldTargetPath == null || fieldTargetPath.getText().equals("")
+		if (fieldTargetPath == null || fieldTargetPath.getText().isEmpty()
 				|| fieldTargetPath.getText().startsWith(depotProductDirectory)) {
 			return depotProductDirectory;
 		}
@@ -329,14 +329,14 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 			String pathWinPE = fieldPathWinPE.getText().trim();
 			Logging.debug(this, "copy  " + pathWinPE + " to " + targetDirectory);
 
-			if (!pathWinPE.equals("")) {
+			if (!pathWinPE.isEmpty()) {
 				targetDirectory = new File(fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_PE);
 				FileUtils.copyDirectory(new File(pathWinPE), targetDirectory);
 			}
 
 			String pathInstallFiles = fieldPathInstallFiles.getText().trim();
 			Logging.debug(this, "copy  " + pathInstallFiles + " to " + targetDirectory);
-			if (!pathInstallFiles.equals("")) {
+			if (!pathInstallFiles.isEmpty()) {
 				targetDirectory = new File(
 						fieldTargetPath.getText() + File.separator + SmbConnect.DIRECTORY_INSTALL_FILES);
 				FileUtils.copyDirectory(new File(pathInstallFiles), targetDirectory);
@@ -364,7 +364,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 			if (propsMap != null && propsMap.get("productkey") != null && propsMap.get("productkey") instanceof List
 					&& !((List<?>) propsMap.get("productkey")).isEmpty()
-					&& !((List<?>) propsMap.get("productkey")).get(0).equals("")) {
+					&& !"".equals(((List<?>) propsMap.get("productkey")).get(0))) {
 				oldProductKey = (String) ((List<?>) propsMap.get("productkey")).get(0);
 			}
 

@@ -469,7 +469,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	@Override
 	public void doAction2() {
 		if ((jLabelProductVersionControlFile.getText() == null)
-				|| (jLabelProductVersionControlFile.getText().equals(""))) {
+				|| (jLabelProductVersionControlFile.getText().isEmpty())) {
 			Logging.warning(this, "Please select a valid opsi product directory.");
 			return;
 		}

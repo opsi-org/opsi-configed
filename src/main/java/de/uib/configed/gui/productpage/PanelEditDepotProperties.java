@@ -432,7 +432,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private void selectDepotsWithEqualProperties() {
 		String selectedDepot0 = listDepots.getSelectedValue();
 
-		if (selectedDepot0 == null || selectedDepot0.equals("")) {
+		if (selectedDepot0 == null || selectedDepot0.isEmpty()) {
 			return;
 		}
 

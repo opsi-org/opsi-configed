@@ -88,7 +88,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().equals(""))) {
+		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -118,7 +118,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 		LinkedList<String> commandsStringList = new LinkedList<>();
 		for (SSHCommand c : sshCommand) {
 			String comstr = c.getCommandRaw();
-			if (!((comstr == null) || (comstr.trim().equals("")))) {
+			if (!((comstr == null) || (comstr.trim().isEmpty()))) {
 				commandsStringList.add(c.getCommandRaw());
 			}
 		}
@@ -241,7 +241,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	}
 
 	public final void setDir(String d) {
-		if (!d.equals("")) {
+		if (!d.isEmpty()) {
 			dir = " " + d;
 		} else {
 			dir = "";

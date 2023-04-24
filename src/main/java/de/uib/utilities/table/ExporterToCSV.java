@@ -115,7 +115,7 @@ public class ExporterToCSV extends AbstractExportTable {
 
 								} else {
 
-									if (classNames.get(colI).equals("java.lang.String")) {
+									if ("java.lang.String".equals(classNames.get(colI))) {
 
 										String inString = removeStringDelimiter(theTable.getValueAt(rowI, colI));
 
@@ -123,27 +123,27 @@ public class ExporterToCSV extends AbstractExportTable {
 										line.append(inString);
 										line.append(STRING_DELIMITER);
 
-									} else if (classNames.get(colI).equals("java.lang.Integer")) {
+									} else if ("java.lang.Integer".equals(classNames.get(colI))) {
 										line.append(theTable.getValueAt(rowI, colI));
-									} else if (classNames.get(colI).equals("java.lang.Double")) {
+									} else if ("java.lang.Double".equals(classNames.get(colI))) {
 										Logging.debug(this,
 												"decimal place --- double: " + theTable.getValueAt(rowI, colI));
 										line.append(theTable.getValueAt(rowI, colI));
-									} else if (classNames.get(colI).equals("java.lang.Float")) {
+									} else if ("java.lang.Float".equals(classNames.get(colI))) {
 										Logging.debug(this,
 												"decimal place --- float: " + theTable.getValueAt(rowI, colI));
 										line.append(theTable.getValueAt(rowI, colI));
-									} else if (classNames.get(colI).equals("java.math.BigDecimal")) {
+									} else if ("java.math.BigDecimal".equals(classNames.get(colI))) {
 										Logging.debug(this,
 												"decimal place --- bigdecimal: " + theTable.getValueAt(rowI, colI));
 										line.append(f.format(
 												Double.parseDouble(theTable.getValueAt(rowI, colI).toString())));
-									} else if (classNames.get(colI).equals("java.lang.Boolean")) {
+									} else if ("java.lang.Boolean".equals(classNames.get(colI))) {
 										boolean booleanValue = (Boolean) theTable.getValueAt(rowI, colI);
 										line.append(booleanValue);
-									} else if (classNames.get(colI).equals("java.sql.Timestamp")) {
+									} else if ("java.sql.Timestamp".equals(classNames.get(colI))) {
 										if ((theTable.getValueAt(rowI, colI) != null)
-												&& (!theTable.getValueAt(rowI, colI).equals(""))) {
+												&& (!"".equals(theTable.getValueAt(rowI, colI)))) {
 											try {
 												date1 = java.sql.Timestamp
 														.valueOf((String) theTable.getValueAt(rowI, colI));

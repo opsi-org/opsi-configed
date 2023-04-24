@@ -144,7 +144,7 @@ public class HostInfo {
 		boolean result = true;
 		String hintMessage = null;
 
-		if (proposal == null || proposal.trim().equals("")) {
+		if (proposal == null || proposal.trim().isEmpty()) {
 			hintMessage = "name must not be empty";
 			result = false;
 		}
@@ -406,7 +406,7 @@ public class HostInfo {
 	}
 
 	private static String showValue(String value) {
-		if (value == null || value.equals("null")) {
+		if (value == null || "null".equals(value)) {
 			return "";
 		} else {
 			return value;
@@ -540,7 +540,7 @@ public class HostInfo {
 
 	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, MainFrame mainFrame,
 			AbstractPersistenceController persist, String client, Map<String, String> sourceOfChanges) {
-		if (client == null || client.equals("")) {
+		if (client == null || client.isEmpty()) {
 			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
 			return;
 		}
@@ -607,7 +607,7 @@ public class HostInfo {
 		}
 
 		if ((sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null)
-				&& !(sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY).trim()).equals("")) {
+				&& !(sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY).trim()).isEmpty()) {
 			clientMacAddress = (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim();
 
 			int col = findCol(selectionPanel,
@@ -624,7 +624,7 @@ public class HostInfo {
 		}
 
 		if ((sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null)
-				&& !(sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY).trim()).equals("")) {
+				&& !(sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY).trim()).isEmpty()) {
 			clientMacAddress = (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim();
 
 			int col = findCol(selectionPanel,
@@ -641,7 +641,7 @@ public class HostInfo {
 		}
 
 		if ((sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null)
-				&& !(sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY).trim()).equals("")) {
+				&& !(sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY).trim()).isEmpty()) {
 			clientIpAddress = (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim();
 
 			int col = findCol(selectionPanel,
@@ -660,7 +660,7 @@ public class HostInfo {
 		if (sourceOfChanges.get(CLIENT_SHUTDOWN_INSTALL_KEY) != null) {
 			boolean shutdownInstall = false;
 
-			if (sourceOfChanges.get(CLIENT_SHUTDOWN_INSTALL_KEY).equals("true")) {
+			if ("true".equals(sourceOfChanges.get(CLIENT_SHUTDOWN_INSTALL_KEY))) {
 				shutdownInstall = true;
 			}
 
@@ -679,7 +679,7 @@ public class HostInfo {
 		if (sourceOfChanges.get(CLIENT_UEFI_BOOT_KEY) != null) {
 			boolean uefiboot = false;
 
-			if (sourceOfChanges.get(CLIENT_UEFI_BOOT_KEY).equals("true")) {
+			if ("true".equals(sourceOfChanges.get(CLIENT_UEFI_BOOT_KEY))) {
 				uefiboot = true;
 			}
 
@@ -698,7 +698,7 @@ public class HostInfo {
 		if (sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY) != null) {
 			boolean wanStandard = false;
 
-			if (sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY).equals("true")) {
+			if ("true".equals(sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY))) {
 				wanStandard = true;
 			}
 

@@ -102,7 +102,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	protected String makeRpcPath(OpsiMethodCall omc) {
 		StringBuilder result = new StringBuilder("/rpc");
 
-		if (omc.getRpcPath() != null && !(omc.getRpcPath().equals(""))) {
+		if (omc.getRpcPath() != null && !(omc.getRpcPath().isEmpty())) {
 			result.append("/");
 			result.append(omc.getRpcPath());
 		}
@@ -323,6 +323,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				}
 			}
 		} catch (SSLException ex) {
+			Logging.debug(this, "SSLException encountered: " + ex);
 			if (!background) {
 				if (waitCursor != null) {
 					waitCursor.stop();
@@ -381,7 +382,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 				Logging.info("Thread was interrupted");
 				Thread.currentThread().interrupt();
 			} catch (InvocationTargetException e) {
-				Logging.debug("exception thrown during doRun");
+				Logging.debug("exception thrown during doRun: " + e);
 			}
 
 			int choice = fErrorMsg.getResult();
@@ -479,11 +480,11 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 					boolean lz4compressed = false;
 
 					if (connection.getHeaderField("Content-Encoding") != null) {
-						gzipped = connection.getHeaderField("Content-Encoding").equalsIgnoreCase("gzip");
+						gzipped = "gzip".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 						Logging.debug(this, "gzipped " + gzipped);
-						deflated = connection.getHeaderField("Content-Encoding").equalsIgnoreCase("deflate");
+						deflated = "deflate".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 						Logging.debug(this, "deflated " + deflated);
-						lz4compressed = connection.getHeaderField("Content-Encoding").equalsIgnoreCase("lz4");
+						lz4compressed = "lz4".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 						Logging.debug(this, "lz4compressed " + lz4compressed);
 					}
 

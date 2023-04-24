@@ -365,7 +365,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		label = new JLabel(title);
 		label.setFont(Globals.defaultFontStandardBold);
-		if (title == null || title.equals("")) {
+		if (title == null || title.isEmpty()) {
 			label.setVisible(false);
 		}
 
@@ -895,7 +895,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					Logging.info(this, " set sorter for column " + j + " " + comparators[j]);
 					// restore previously explicitly assigned comparator
 					((DefaultRowSorter) sorter).setComparator(j, comparators[j]);
-				} else if (tableModel.getClassNames().get(j).equals("java.lang.Integer")) {
+				} else if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
 
 					((DefaultRowSorter) sorter).setComparator(j, new IntComparatorForStrings());
 				}
@@ -941,7 +941,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			Logging.warning(this, "invalid column name");
 			return;
 		}
-		DefaultRowSorter sorter = (DefaultRowSorter) theTable.getRowSorter();
+		DefaultRowSorter<?, ?> sorter = (DefaultRowSorter<?, ?>) theTable.getRowSorter();
 		if (sorter == null) {
 			Logging.warning(this, "no sorter");
 		} else {
@@ -1109,21 +1109,21 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected void setTimestampRenderer(String classname, TableColumn col) {
 
-		if (classname.equals("java.sql.Timestamp")) {
+		if ("java.sql.Timestamp".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererDate());
 		}
 
 	}
 
 	protected void setBigDecimalRenderer(String classname, TableColumn col) {
-		if (classname.equals("java.math.BigDecimal")) {
+		if ("java.math.BigDecimal".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererCurrency());
 		}
 
 	}
 
 	protected void setBooleanRenderer(String classname, TableColumn col) {
-		if (classname.equals("java.lang.Boolean")) {
+		if ("java.lang.Boolean".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererByBoolean());
 		}
 
@@ -1305,6 +1305,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		try {
 			return tableModel.getValueAt(theTable.convertRowIndexToModel(row), theTable.convertColumnIndexToModel(col));
 		} catch (Exception ex) {
+			Logging.debug("encountered error while trying to retrieve value from table: " + ex);
 			return null;
 		}
 	}
@@ -1404,7 +1405,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			);
 
 			if (compareValue == null) {
-				if (val == null || val.equals("")) {
+				if (val == null || val.isEmpty()) {
 					found = true;
 				}
 			} else {

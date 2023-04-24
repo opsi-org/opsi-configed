@@ -230,7 +230,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 				if (result) {
 					Object val = getValueAt(row, col);
-					if (val == null || (val instanceof String && ((String) val).trim().equals(""))) {
+					if (val == null || (val instanceof String && ((String) val).trim().isEmpty())) {
 						result = false;
 					}
 				}

@@ -3348,7 +3348,7 @@ public class MainFrame extends JFrame
 	@Override
 	public void executeCommandOnInstances(String command, Set<JDialog> instances) {
 		Logging.info(this, "executeCommandOnInstances " + command + " for count instances " + instances.size());
-		if (command.equals("arrange")) {
+		if ("arrange".equals(command)) {
 			arrangeWs(instances);
 		}
 	}
