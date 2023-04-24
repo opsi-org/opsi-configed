@@ -408,7 +408,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		if (ob instanceof String) {
-			return "1".equals((String) ob);
+			return "1".equals(ob);
 		}
 
 		Logging.warning("could not find boolean in interpretAsBoolean, returning false");

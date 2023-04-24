@@ -41,11 +41,10 @@ public class Messagebus implements MessagebusListener {
 	private WebSocketClientEndpoint messagebusWebSocket;
 	private ConfigedMain configedMain;
 	private int reconnectWaitMillis = 15000;
-	private boolean connected = false;
-	private boolean disconnecting = false;
-	private boolean authenticationError = false;
-	private boolean reconnecting = false;
-	private boolean initialSubscriptionReceived = false;
+	private boolean connected;
+	private boolean disconnecting;
+	private boolean reconnecting;
+	private boolean initialSubscriptionReceived;
 
 	public Messagebus(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
@@ -107,6 +106,7 @@ public class Messagebus implements MessagebusListener {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {
+				Thread.currentThread().interrupt();
 			}
 		}
 		return true;
@@ -312,7 +312,7 @@ public class Messagebus implements MessagebusListener {
 		boolean wasDisconnecting = disconnecting;
 		connected = false;
 		disconnecting = false;
-		authenticationError = reason != null && reason.toLowerCase().contains("authentication");
+		boolean authenticationError = reason != null && reason.toLowerCase().contains("authentication");
 
 		if (!wasDisconnecting && !reconnecting) {
 			reconnecting = true;

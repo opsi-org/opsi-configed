@@ -4771,7 +4771,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		new AbstractErrorListProducer(Configed.getResourceValue("ConfigedMain.infoWakeClients") + " " + startInfo) {
 			@Override
 			protected List<String> getErrors() {
-				List<String> errors = new ArrayList<>();
+				List<String> errors;
 
 				if (JSONthroughHTTPS.isOpsi43()) {
 					errors = persist.wakeOnLanOpsi43(clients);

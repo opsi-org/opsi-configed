@@ -5,6 +5,7 @@ import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.java_websocket.WebSocket;
@@ -21,7 +22,7 @@ import de.uib.utilities.logging.Logging;
 @SuppressWarnings("java:S109")
 public class WebSocketClientEndpoint extends WebSocketClient {
 
-	private ArrayList<MessagebusListener> listeners = new ArrayList<>();
+	private List<MessagebusListener> listeners = new ArrayList<>();
 
 	public WebSocketClientEndpoint(URI serverUri, Draft draft) {
 		super(serverUri, draft);

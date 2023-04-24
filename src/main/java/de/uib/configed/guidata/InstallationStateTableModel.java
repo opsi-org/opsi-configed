@@ -1088,7 +1088,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				Logging.debug("Possible actions as array  " + actionsForProduct);
 			}
 
-			if (actionsForProduct.size() == 0) {
+			if (actionsForProduct.isEmpty()) {
 				actionsForProduct.add("null");
 			}
 
