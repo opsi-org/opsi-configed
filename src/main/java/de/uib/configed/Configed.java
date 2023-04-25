@@ -257,8 +257,8 @@ public class Configed {
 
 	@SuppressWarnings("java:S106")
 	protected static void usage() {
-		System.out.println("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-		System.out.println(USAGE_INFO);
+		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+		Logging.essential(USAGE_INFO);
 
 		final int TAB_WIDTH = 8;
 		int length0 = 0;
@@ -297,7 +297,7 @@ public class Configed {
 			int startedTabs0 = (usageLines[i][0].length() / TAB_WIDTH);
 			int startedTabs1 = (usageLines[i][1].length() / TAB_WIDTH);
 
-			System.out.println("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
+			Logging.essential("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
 					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
 		}
 	}
@@ -523,7 +523,7 @@ public class Configed {
 					PersistenceControllerFactory.avoidSqlRawData = true;
 					i = i + 1;
 				} else if ("--version".equals(args[i])) {
-					System.out.println("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
+					Logging.devel("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
 					System.exit(0);
 				} else if ("--help".equals(args[i])) {
 					usage();
