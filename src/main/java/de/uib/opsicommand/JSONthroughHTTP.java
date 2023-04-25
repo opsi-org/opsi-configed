@@ -337,24 +337,28 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
 			final StringBuilder message = new StringBuilder();
 
+			message.append(Configed.getResourceValue("JSONthroughHTTP.certificateWarning") + "\n\n");
+
 			if (!certificateExists) {
 				message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
-				message.append(Configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
-				message.append("\n\n\n");
 				message.append(Configed.getResourceValue("JSONthroughHTTP.noCertificateFound"));
 			} else {
 				message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsInvalid") + "\n");
-				message.append(Configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
-				message.append("\n\n\n");
 				message.append(Configed.getResourceValue("JSONthroughHTTP.unableToVerify"));
 			}
+
+			message.append("\n\n");
+			message.append(Configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
 
 			final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
 					Configed.getResourceValue("JSONthroughHTTP.failedServerVerification"), true,
 					new String[] { Configed.getResourceValue(Configed.getResourceValue("UIManager.cancelButtonText")),
 							Configed.getResourceValue("JSONthroughHTTP.alwaysTrust"),
 							Configed.getResourceValue("JSONthroughHTTP.trustOnlyOnce") },
-					420, 200);
+					420, 260);
+
+			fErrorMsg.setTooltipButtons(null, Configed.getResourceValue("JSONthroughHTTP.alwaysTrustTooltip"),
+					Configed.getResourceValue("JSONthroughHTTP.trustOnlyOnceTooltip"));
 
 			try {
 				SwingUtilities.invokeAndWait(() -> {
