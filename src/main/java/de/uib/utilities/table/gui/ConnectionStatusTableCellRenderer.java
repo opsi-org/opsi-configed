@@ -24,7 +24,7 @@ public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer
 	public static final String CONNECTED_BY_MESSAGEBUS = "connected_by_messagebus";
 	public static final String REACHABLE = "reachable";
 	public static final String NOT_REACHABLE = "unreachable";
-	public static final String UNKNOWN = "untested";
+	public static final String UNKNOWN = "unknown";
 
 	Icon messagebusIcon;
 	Icon trueIcon;
