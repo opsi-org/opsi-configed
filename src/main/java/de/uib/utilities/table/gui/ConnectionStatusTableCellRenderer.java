@@ -21,10 +21,11 @@ import de.uib.utilities.logging.Logging;
 
 public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer {
 
+	// These strings should be in an alphabetic order since the table will be sorted by these strings
 	public static final String CONNECTED_BY_MESSAGEBUS = "connected_by_messagebus";
 	public static final String REACHABLE = "reachable";
 	public static final String NOT_REACHABLE = "unreachable";
-	public static final String UNKNOWN = "unknown";
+	public static final String UNKNOWN = "unverified";
 
 	Icon messagebusIcon;
 	Icon trueIcon;

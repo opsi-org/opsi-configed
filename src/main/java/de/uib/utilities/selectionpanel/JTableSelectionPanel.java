@@ -749,11 +749,8 @@ public class JTableSelectionPanel extends JPanel
 					continue;
 				}
 
-				Object compareValue = getTableModel().getValueAt(
-
-						table.convertRowIndexToModel(viewrow), table.convertColumnIndexToModel(j)
-
-				);
+				Object compareValue = getTableModel().getValueAt(table.convertRowIndexToModel(viewrow),
+						table.convertColumnIndexToModel(j));
 
 				if (compareValue == null) {
 					found = (val == null || val.isEmpty());
