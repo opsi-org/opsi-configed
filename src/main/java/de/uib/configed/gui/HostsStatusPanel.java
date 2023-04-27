@@ -173,7 +173,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 		fieldInvolvedDepots.setPreferredSize(Globals.counterfieldDimension);
 		fieldInvolvedDepots.setEditable(false);
 
-		connectedIcon = Globals.createImageIcon("images/green_circle.png", "");
+		connectedIcon = Globals.createImageIcon("images/network-wireless-connected-100.png", "");
 		disconnectedIcon = Globals.createImageIcon("images/network-wireless-disconnected.png", "");
 
 		connectionStateLabel = new JLabel(connectedIcon);

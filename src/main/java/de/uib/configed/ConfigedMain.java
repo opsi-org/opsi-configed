@@ -454,6 +454,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		initMainFrame();
 
+		Logging.info(this, "Is messagebus null? " + (messagebus == null));
+
 		if (messagebus != null) {
 			messagebus.getWebSocket().registerListener(mainFrame.getMessagebusListener());
 		}
