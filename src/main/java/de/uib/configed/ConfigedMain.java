@@ -454,6 +454,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		initMainFrame();
 
+		if (messagebus != null) {
+			messagebus.getWebSocket().registerListener(mainFrame);
+		}
+
 		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusInfo());
 
 		setEditingTarget(EditingTarget.CLIENTS);

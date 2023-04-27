@@ -60,6 +60,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 	@Override
 	public void onOpen(ServerHandshake handshakeData) {
 		Logging.debug(this, "Websocket opened");
+
 		for (MessagebusListener listener : listeners) {
 			listener.onOpen(handshakeData);
 		}
@@ -99,6 +100,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame
 		Logging.debug(this, "Websocket closed by " + (remote ? "opsi service" : "us") + " Code=" + code + " Reason='"
 				+ reason + "'");
+
 		for (MessagebusListener listener : listeners) {
 			listener.onClose(code, reason, remote);
 		}

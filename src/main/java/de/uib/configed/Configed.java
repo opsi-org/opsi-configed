@@ -523,7 +523,7 @@ public class Configed {
 					PersistenceControllerFactory.avoidSqlRawData = true;
 					i = i + 1;
 				} else if ("--version".equals(args[i])) {
-					Logging.devel("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
+					Logging.essential("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
 					System.exit(0);
 				} else if ("--help".equals(args[i])) {
 					usage();

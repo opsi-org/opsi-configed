@@ -86,6 +86,8 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
+import org.java_websocket.handshake.ServerHandshake;
+
 import de.uib.configed.Configed;
 /**
  * configed - configuration editor for client work stations in opsi
@@ -115,6 +117,7 @@ import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
+import de.uib.messagebus.MessagebusListener;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.sshcommand.SSHCommand;
@@ -148,8 +151,8 @@ import de.uib.utilities.thread.WaitCursor;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-public class MainFrame extends JFrame
-		implements WindowListener, KeyListener, MouseListener, ActionListener, RunningInstancesObserver<JDialog> {
+public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
+		RunningInstancesObserver<JDialog>, MessagebusListener {
 
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
 	private static final int MIN_WIDTH_TREE_PANEL = 150;
@@ -386,7 +389,10 @@ public class MainFrame extends JFrame
 	public CombinedMenuItem combinedMenuItemDepotColumn = new CombinedMenuItem(jCheckBoxMenuItemShowDepotColumn,
 			popupShowDepotColumn);
 
-	JPanel proceeding;
+	private JPanel proceeding;
+	private JLabel connectionStateLabel;
+	private ImageIcon connectedIcon;
+	private ImageIcon disconnectedIcon;
 
 	protected JButton buttonSelectDepotsWithEqualProperties;
 	protected JButton buttonSelectDepotsAll;
@@ -1549,7 +1555,14 @@ public class MainFrame extends JFrame
 		iconButtonSaveGroup.addActionListener((ActionEvent e) -> saveGroupAction());
 
 		proceeding = new JPanel();
+
+		connectedIcon = Globals.createImageIcon("images/network-wireless-connected-100.png", "");
+		disconnectedIcon = Globals.createImageIcon("images/network-wireless-disconnected.png", "");
+
+		connectionStateLabel = new JLabel(connectedIcon);
+
 		ActivityPanel activity = new ActivityPanel();
+		proceeding.add(connectionStateLabel);
 		proceeding.add(activity);
 		new Thread(activity).start();
 		proceeding.setToolTipText("activity indicator");
@@ -3975,5 +3988,25 @@ public class MainFrame extends JFrame
 			Logging.warning(this, "the ugly well known exception " + ex);
 			WaitCursor.stopAll();
 		}
+	}
+
+	@Override
+	public void onOpen(ServerHandshake handshakeData) {
+		connectionStateLabel.setIcon(connectedIcon);
+	}
+
+	@Override
+	public void onClose(int code, String reason, boolean remote) {
+		connectionStateLabel.setIcon(disconnectedIcon);
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		//Not Needed
+	}
+
+	@Override
+	public void onMessageReceived(Map<String, Object> message) {
+		// Not Needed
 	}
 }

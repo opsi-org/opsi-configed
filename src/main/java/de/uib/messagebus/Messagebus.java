@@ -23,7 +23,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ServerHandshake;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
@@ -50,7 +49,7 @@ public class Messagebus implements MessagebusListener {
 		this.configedMain = configedMain;
 	}
 
-	public WebSocket getWebSocket() {
+	public WebSocketClientEndpoint getWebSocket() {
 		return messagebusWebSocket;
 	}
 
@@ -71,6 +70,9 @@ public class Messagebus implements MessagebusListener {
 
 		messagebusWebSocket = new WebSocketClientEndpoint(uri);
 		messagebusWebSocket.registerListener(this);
+		if (ConfigedMain.getMainFrame() != null) {
+			messagebusWebSocket.registerListener(ConfigedMain.getMainFrame());
+		}
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
 		if (exec.sessionId != null) {
 			Logging.debug("Adding cookie header");
@@ -302,6 +304,7 @@ public class Messagebus implements MessagebusListener {
 
 	@Override
 	public void onOpen(ServerHandshake handshakeData) {
+		// Not needed
 	}
 
 	@Override
@@ -315,6 +318,19 @@ public class Messagebus implements MessagebusListener {
 		boolean authenticationError = reason != null && reason.toLowerCase().contains("authentication");
 
 		if (!wasDisconnecting && !reconnecting) {
+			new RetryConnectingThread(authenticationError).start();
+		}
+	}
+
+	private class RetryConnectingThread extends Thread {
+		private boolean authenticationError;
+
+		public RetryConnectingThread(boolean authenticationError) {
+			this.authenticationError = authenticationError;
+		}
+
+		@Override
+		public void run() {
 			reconnecting = true;
 			while (!isConnected()) {
 				int waitMillis = reconnectWaitMillis;
@@ -334,11 +350,9 @@ public class Messagebus implements MessagebusListener {
 				} catch (InterruptedException ie) {
 					Thread.currentThread().interrupt();
 				}
-
 			}
 			reconnecting = false;
 		}
-
 	}
 
 	@Override
