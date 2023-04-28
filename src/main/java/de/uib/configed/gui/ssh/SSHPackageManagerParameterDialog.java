@@ -119,9 +119,9 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		if (!(Globals.isGlobalReadOnly())) {
 			jButtonExecute.addActionListener((ActionEvent actionEvent) -> {
 				if (caller instanceof SSHPackageManagerUninstallParameterDialog) {
-					((SSHPackageManagerUninstallParameterDialog) caller).doAction2();
+					((SSHPackageManagerUninstallParameterDialog) caller).doAction3();
 				} else if (caller instanceof SSHPackageManagerInstallParameterDialog) {
-					((SSHPackageManagerInstallParameterDialog) caller).doAction2();
+					((SSHPackageManagerInstallParameterDialog) caller).doAction3();
 				}
 			});
 		}
