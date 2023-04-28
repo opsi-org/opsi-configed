@@ -23,6 +23,10 @@ import de.uib.utilities.swing.Containership;
 public class HostsStatusPanel extends JPanel implements HostsStatusInfo, MessagebusListener {
 	public static final int MAX_CLIENT_NAMES_IN_FIELD = 10;
 
+	private static final String CONNECTED_TOOLTIP = Configed.getResourceValue("HostsStatusPanel.ConnectedTooltip");
+	private static final String DISCONNECTED_TOOLTIP = Configed
+			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
+
 	JLabel labelAllClientsCount;
 	JTextField fieldGroupActivated;
 
@@ -176,7 +180,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 		connectedIcon = Globals.createImageIcon("images/network-wireless-connected-100.png", "");
 		disconnectedIcon = Globals.createImageIcon("images/network-wireless-disconnected.png", "");
 
-		connectionStateLabel = new JLabel(connectedIcon);
+		connectionStateLabel = new JLabel();
 
 		ActivityPanel activity = new ActivityPanel();
 		activity.setToolTipText("activity indicator");
@@ -254,11 +258,13 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 	@Override
 	public void onOpen(ServerHandshake handshakeData) {
 		connectionStateLabel.setIcon(connectedIcon);
+		connectionStateLabel.setToolTipText(CONNECTED_TOOLTIP);
 	}
 
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		connectionStateLabel.setIcon(disconnectedIcon);
+		connectionStateLabel.setToolTipText(DISCONNECTED_TOOLTIP);
 	}
 
 	@Override

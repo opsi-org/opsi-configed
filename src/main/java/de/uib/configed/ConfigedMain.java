@@ -458,6 +458,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		if (messagebus != null) {
 			messagebus.getWebSocket().registerListener(mainFrame.getMessagebusListener());
+
+			if (messagebus.getWebSocket().isOpen()) {
+
+				// Fake opening event on registering listener since this listener
+				// does not know yet if it's open
+				mainFrame.getMessagebusListener().onOpen(null);
+			} else {
+				Logging.warning(this, "Messagebus is not open, but should be on start");
+			}
 		}
 
 		activatedGroupModel = new ActivatedGroupModel(mainFrame.getHostsStatusInfo());
