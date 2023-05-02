@@ -4308,10 +4308,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				model.setValueAt(getConnectionInfoForClient(clientName), row, col);
 
 				model.fireTableCellUpdated(row, col);
+
+				Logging.info(this, "connectionStatus for client " + clientName + " updated in table");
 				return;
 			}
 		}
-		Logging.warning(this, "could not update connectionStatus for client " + clientName + ": Not found");
+		Logging.info(this,
+				"could not update connectionStatus for client " + clientName + ": not in list of shown table");
 	}
 
 	private void setReachableInfo(String[] selClients) {
