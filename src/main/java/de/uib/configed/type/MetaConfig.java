@@ -1,8 +1,12 @@
 package de.uib.configed.type;
 
 //currently only the CONFIG_KEY is used
+// TODO
+public final class MetaConfig {
 
-public abstract class AbstractMetaConfig {
+	private MetaConfig() {
+	}
+
 	// we have eight class members to define a property (a config) by a meta-config:
 	// giving four meta configs
 

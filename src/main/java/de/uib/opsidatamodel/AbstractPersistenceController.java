@@ -23,11 +23,11 @@ import java.util.TreeMap;
 import org.json.JSONObject;
 
 import de.uib.configed.Configed;
-import de.uib.configed.type.AbstractMetaConfig;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.DatedRowList;
+import de.uib.configed.type.MetaConfig;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiProductInfo;
@@ -151,7 +151,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "dash configuration");
 		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
-		PROPERTY_CLASSES_SERVER.put(AbstractMetaConfig.CONFIG_KEY, "default configuration for other properties");
+		PROPERTY_CLASSES_SERVER.put(MetaConfig.CONFIG_KEY, "default configuration for other properties");
 		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
 				"<html><p>saved search configurations ,<br />do not edit here <br />- editing via the search form</p></html>");
 		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY,
