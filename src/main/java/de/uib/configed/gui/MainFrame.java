@@ -3192,7 +3192,6 @@ public class MainFrame extends JFrame
 	private static void showHealthDataAction() {
 		HealthCheckDialog dialog = new HealthCheckDialog();
 		dialog.setupLayout();
-		dialog.setMessage(HealthInfo.getHealthData(false));
 		dialog.setVisible(true);
 	}
 
