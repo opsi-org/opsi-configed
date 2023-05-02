@@ -3,22 +3,30 @@ package de.uib.configed.gui;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SwingUtilities;
-import javax.swing.text.AttributeSet;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.DocumentFilter;
+import javax.swing.text.Element;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
@@ -28,15 +36,22 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.swing.JMenuItemFormatted;
 
 public class HealthCheckDialog extends FGeneralDialog {
+	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
 	private final StyleContext styleContext = StyleContext.getDefaultStyleContext();
 
 	private JTextPane textPane = new JTextPane();
 	private DefaultStyledDocument styledDocument = new DefaultStyledDocument();
 
+	private JButton jButtonCollapseAll;
+	private JButton jButtonExpandAll;
+
+	private Map<String, Map<String, Object>> healthData;
+
 	public HealthCheckDialog() {
-		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("HealthCheckDialog.title"), true,
+		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("HealthCheckDialog.title"), false,
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok") },
 				new Icon[] { Globals.createImageIcon("images/checked_withoutbox_blue14.png", "") }, 1, 700, 500, true,
 				null);
@@ -60,15 +75,15 @@ public class HealthCheckDialog extends FGeneralDialog {
 		allpane.setLayout(allLayout);
 
 		allLayout.setVerticalGroup(allLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
-				.addComponent(northPanel, 100, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE)
-				.addComponent(centerPanel).addGap(Globals.HGAP_SIZE)
-				.addComponent(southPanel, Globals.LINE_HEIGHT, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addComponent(northPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE)
+				.addComponent(centerPanel).addGap(Globals.HGAP_SIZE).addComponent(southPanel, 2 * Globals.LINE_HEIGHT,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(Globals.HGAP_SIZE));
 
 		allLayout.setHorizontalGroup(allLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(allLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
-						.addComponent(northPanel, 100, 300, Short.MAX_VALUE)
+						.addComponent(northPanel, 0, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE))
 				.addGroup(allLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
@@ -86,25 +101,72 @@ public class HealthCheckDialog extends FGeneralDialog {
 		JPanel northPanel = new JPanel();
 		northPanel.setOpaque(false);
 
+		JPopupMenu popupMenu = createPopupMenu();
+		northPanel.setComponentPopupMenu(popupMenu);
+
 		GroupLayout northLayout = new GroupLayout(northPanel);
 		northPanel.setLayout(northLayout);
 
-		styledDocument.setDocumentFilter(new CustomDocumentFilter());
 		textPane.setStyledDocument(styledDocument);
 
 		textPane.setAutoscrolls(false);
 		textPane.setEditable(false);
+		textPane.setInheritsPopupMenu(true);
+		textPane.addMouseListener(new MyMouseListener());
+
+		healthData = HealthInfo.getHealthDataMap(false);
+		setMessage(healthData);
+		textPane.setCaretPosition(0);
 
 		JScrollPane scrollPane = new JScrollPane(textPane);
 		if (!ConfigedMain.THEMES) {
 			scrollPane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
 		}
 		scrollPane.setOpaque(false);
+		scrollPane.setInheritsPopupMenu(true);
 
 		northLayout.setHorizontalGroup(northLayout.createSequentialGroup().addComponent(scrollPane));
 		northLayout.setVerticalGroup(northLayout.createSequentialGroup().addComponent(scrollPane));
 
 		return northPanel;
+	}
+
+	private JPopupMenu createPopupMenu() {
+		JPopupMenu popupMenu = new JPopupMenu();
+		JMenuItemFormatted popupSaveHealthData = new JMenuItemFormatted(
+				Configed.getResourceValue("PopupMenuTrait.save"), Globals.createImageIcon("images/save.png", ""));
+
+		popupSaveHealthData.addActionListener((ActionEvent e) -> saveHealthDataAction());
+		popupMenu.add(popupSaveHealthData);
+
+		return popupMenu;
+	}
+
+	private void saveHealthDataAction() {
+		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Log file (.log)", "log");
+		jFileChooser.addChoosableFileFilter(fileFilter);
+		jFileChooser.setAcceptAllFileFilterUsed(false);
+
+		int returnValue = jFileChooser.showSaveDialog(ConfigedMain.getMainFrame());
+
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			String fileName = jFileChooser.getSelectedFile().getAbsolutePath();
+			if (!fileName.endsWith(".log")) {
+				fileName = fileName.concat(".log");
+			}
+
+			File healthDataFile = new File(Configed.savedStatesLocationName, Globals.HEALTH_CHECK_LOG_FILE_NAME);
+			copyFile(healthDataFile, new File(fileName));
+		}
+	}
+
+	private void copyFile(File sourceFile, File targetFile) {
+		try {
+			Files.copy(sourceFile.toPath(), targetFile.toPath());
+		} catch (IOException ex) {
+			Logging.warning(this, "unable to copy file to its new destination", ex);
+		}
 	}
 
 	private JPanel createCenterPanel() {
@@ -114,27 +176,46 @@ public class HealthCheckDialog extends FGeneralDialog {
 		GroupLayout centerPanelLayout = new GroupLayout(centerPanel);
 		centerPanel.setLayout(centerPanelLayout);
 
-		JCheckBox jCheckBoxShowDetailedInformation = new JCheckBox(
-				Configed.getResourceValue("HealthCheckDialog.showDetailedInformation"));
+		jButtonCollapseAll = new JButton(Configed.getResourceValue("HealthCheckDialog.collapseAll"));
+		jButtonCollapseAll.setEnabled(false);
+
+		jButtonExpandAll = new JButton(Configed.getResourceValue("HealthCheckDialog.expandAll"));
+		jButtonExpandAll.setEnabled(true);
+
 		JButton jButtonCopyHealthInformation = new JButton(
 				Configed.getResourceValue("HealthCheckDialog.copyHealthInformation"));
 
 		centerPanelLayout.setHorizontalGroup(centerPanelLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
-				.addComponent(jCheckBoxShowDetailedInformation, 10, GroupLayout.PREFERRED_SIZE,
-						GroupLayout.PREFERRED_SIZE)
+				.addComponent(jButtonExpandAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE)
+				.addComponent(jButtonCollapseAll, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(
 						jButtonCopyHealthInformation, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
 		centerPanelLayout.setVerticalGroup(centerPanelLayout.createSequentialGroup()
 				.addGap(0, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(jCheckBoxShowDetailedInformation, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonExpandAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addComponent(jButtonCollapseAll, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
 						.addComponent(jButtonCopyHealthInformation, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 				.addGap(Globals.HGAP_SIZE));
 
-		jCheckBoxShowDetailedInformation.addActionListener(
-				event -> setMessage(HealthInfo.getHealthData(jCheckBoxShowDetailedInformation.isSelected())));
+		jButtonCollapseAll.addActionListener((ActionEvent event) -> {
+			healthData = HealthInfo.getHealthDataMap(false);
+			setMessage(healthData);
+			textPane.setCaretPosition(0);
+			jButtonCollapseAll.setEnabled(false);
+			jButtonExpandAll.setEnabled(true);
+		});
+		jButtonExpandAll.addActionListener((ActionEvent event) -> {
+			healthData = HealthInfo.getHealthDataMap(true);
+			setMessage(healthData);
+			textPane.setCaretPosition(0);
+			jButtonCollapseAll.setEnabled(true);
+			jButtonExpandAll.setEnabled(false);
+		});
 		jButtonCopyHealthInformation.addActionListener(event -> Toolkit.getDefaultToolkit().getSystemClipboard()
 				.setContents(new StringSelection(textPane.getText()), null));
 
@@ -155,7 +236,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, Short.MAX_VALUE))
 				.addGroup(southLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE / 2)
-						.addComponent(additionalPane, 100, 200, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE / 2)));
+						.addComponent(additionalPane, 50, 100, Short.MAX_VALUE).addGap(Globals.HGAP_SIZE / 2)));
 
 		southLayout.setVerticalGroup(southLayout.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
@@ -173,69 +254,122 @@ public class HealthCheckDialog extends FGeneralDialog {
 			styledDocument.remove(0, styledDocument.getLength());
 			styledDocument.insertString(styledDocument.getLength(), message, null);
 		} catch (BadLocationException e) {
-			Logging.warning("could not insert message into health check dialog, ", e);
+			Logging.warning(this, "could not insert message into health check dialog, ", e);
 		}
-		textPane.setCaretPosition(0);
 	}
 
-	private class CustomDocumentFilter extends DocumentFilter {
+	public void setMessage(Map<String, Map<String, Object>> message) {
+		try {
+			styledDocument.remove(0, styledDocument.getLength());
+			for (Map<String, Object> healthInfo : message.values()) {
+				String imagePath = "images/arrows/arrow_green_16x16-right.png";
+
+				if ((boolean) healthInfo.get("showDetails")) {
+					imagePath = "images/arrows/arrow_green_16x16-down.png";
+				}
+
+				if (!((String) healthInfo.get("details")).isEmpty()) {
+					textPane.insertIcon(Globals.createImageIcon(imagePath, ""));
+				} else {
+					styledDocument.insertString(styledDocument.getLength(), "    ", null);
+				}
+
+				styledDocument.insertString(styledDocument.getLength(), (String) healthInfo.get("message"), null);
+
+				if ((boolean) healthInfo.get("showDetails")) {
+					styledDocument.insertString(styledDocument.getLength(), (String) healthInfo.get("details"), null);
+				}
+
+			}
+		} catch (BadLocationException e) {
+			Logging.warning(this, "could not insert message into health check dialog, ", e);
+		}
+
+		Matcher matcher = pattern.matcher(textPane.getText());
+		while (matcher.find()) {
+			Style style = getStyle(matcher.group());
+			styledDocument.setCharacterAttributes(matcher.start(), matcher.end() - matcher.start(), style, false);
+		}
+	}
+
+	private Style getStyle(String token) {
+		Style style = null;
+
+		switch (token) {
+		case "OK":
+			style = styleContext.addStyle("ok", null);
+			StyleConstants.setForeground(style, Globals.logColorNotice);
+			break;
+		case "WARNING":
+			style = styleContext.addStyle("warning", null);
+			StyleConstants.setForeground(style, Globals.logColorWarning);
+			break;
+		case "ERROR":
+			style = styleContext.addStyle("error", null);
+			StyleConstants.setForeground(style, Globals.logColorError);
+			break;
+		default:
+			Logging.notice(this, "unsupported token: " + token);
+		}
+
+		return style;
+	}
+
+	private class MyMouseListener extends MouseAdapter {
 		@Override
-		public void insertString(FilterBypass fb, int offset, String text, AttributeSet attributeSet)
-				throws BadLocationException {
-			super.insertString(fb, offset, text, attributeSet);
+		public void mouseClicked(MouseEvent arg0) {
+			try {
+				Element element = styledDocument.getParagraphElement(textPane.viewToModel2D(arg0.getPoint()));
+				String text = textPane
+						.getText(element.getStartOffset(), element.getEndOffset() - element.getStartOffset()).trim();
 
-			handleTextChanged();
-		}
+				if (text.isEmpty() || !text.contains(":")) {
+					return;
+				}
 
-		@Override
-		public void remove(FilterBypass fb, int offset, int length) throws BadLocationException {
-			super.remove(fb, offset, length);
+				String key = text.substring(0, text.indexOf(":"));
 
-			handleTextChanged();
-		}
+				if (healthData.containsKey(key)) {
+					Map<String, Object> details = healthData.get(key);
 
-		@Override
-		public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attributeSet)
-				throws BadLocationException {
-			super.replace(fb, offset, length, text, attributeSet);
+					if (((String) details.get("details")).isEmpty()) {
+						return;
+					}
 
-			handleTextChanged();
-		}
+					details.put("showDetails", !((boolean) details.get("showDetails")));
+					healthData.put(key, details);
+				}
 
-		private void handleTextChanged() {
-			SwingUtilities.invokeLater(this::updateTextStyles);
-		}
+				jButtonExpandAll.setEnabled(!isAllDetailsShown());
 
-		private void updateTextStyles() {
-			Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
-			Matcher matcher = pattern.matcher(textPane.getText());
-			while (matcher.find()) {
-				Style style = getStyle(matcher.group());
-				styledDocument.setCharacterAttributes(matcher.start(), matcher.end() - matcher.start(), style, false);
+				setMessage(healthData);
+				textPane.setCaretPosition(textPane.viewToModel2D(arg0.getPoint()));
+
+				jButtonCollapseAll.setEnabled(isDetailsShown());
+			} catch (BadLocationException e) {
+				Logging.warning("could not retrieve text from JTextPane, ", e);
 			}
 		}
 
-		private Style getStyle(String token) {
-			Style style = null;
-
-			switch (token) {
-			case "OK":
-				style = styleContext.addStyle("ok", null);
-				StyleConstants.setForeground(style, Globals.logColorNotice);
-				break;
-			case "WARNING":
-				style = styleContext.addStyle("warning", null);
-				StyleConstants.setForeground(style, Globals.logColorWarning);
-				break;
-			case "ERROR":
-				style = styleContext.addStyle("error", null);
-				StyleConstants.setForeground(style, Globals.logColorError);
-				break;
-			default:
-				Logging.warning(this, "unsupported token: " + token);
+		private boolean isDetailsShown() {
+			for (Map<String, Object> healthDetails : healthData.values()) {
+				if ((boolean) healthDetails.get("showDetails")) {
+					return true;
+				}
 			}
 
-			return style;
+			return false;
+		}
+
+		private boolean isAllDetailsShown() {
+			for (Map<String, Object> healthDetails : healthData.values()) {
+				if (!((boolean) healthDetails.get("showDetails"))
+						&& !((String) healthDetails.get("details")).isEmpty()) {
+					return false;
+				}
+			}
+
+			return true;
 		}
 	}
 }
