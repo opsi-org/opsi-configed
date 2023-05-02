@@ -40,16 +40,6 @@ public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer
 		messagebusIcon = Globals.createImageIcon("images/ok22.png", "");
 	}
 
-	public static String getReachableStringForBoolean(Object b) {
-		if (!(b instanceof Boolean)) {
-			return UNKNOWN;
-		} else if (Boolean.TRUE.equals(b)) {
-			return REACHABLE;
-		} else {
-			return NOT_REACHABLE;
-		}
-	}
-
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {

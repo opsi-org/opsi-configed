@@ -245,10 +245,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		// double click expands
 		setToggleClickCount(0);
 		ToolTipManager.sharedInstance().registerComponent(this);
-		if (!configedMain.treeViewAllowed()) {
-			setEnabled(false);
-			setToolTipText(Globals.wrapToHTML(Configed.getResourceValue("ConfigedMain.TreeViewNotActive")));
-		}
 
 		Logging.debug(this, "UI " + getUI());
 

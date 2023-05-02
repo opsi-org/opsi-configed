@@ -1035,11 +1035,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.combinedMenuItemDepotColumn.show(!visible);
 	}
 
-	public boolean treeViewAllowed() {
-		return true;
-
-	}
-
 	public void handleGroupActionRequest() {
 		if (persist.isWithLocalImaging()) {
 			startGroupActionFrame();
