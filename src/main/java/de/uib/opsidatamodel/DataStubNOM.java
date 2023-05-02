@@ -49,8 +49,21 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.table.ListCellOptions;
 
-public class DataStubNOM extends AbstractDataStub {
+public class DataStubNOM {
 
+	protected static final Set<String> linuxSWnameMarkers = new HashSet<>();
+	static {
+		linuxSWnameMarkers.add("linux");
+		linuxSWnameMarkers.add("Linux");
+		linuxSWnameMarkers.add("lib");
+		linuxSWnameMarkers.add("ubuntu");
+		linuxSWnameMarkers.add("ubuntu");
+	}
+
+	protected static final Set<String> linuxSubversionMarkers = new HashSet<>();
+	static {
+		linuxSubversionMarkers.add("lin:");
+	}
 	protected static Integer classCounter = 0;
 
 	OpsiserviceNOMPersistenceController persist;
@@ -126,7 +139,6 @@ public class DataStubNOM extends AbstractDataStub {
 		classCounter++;
 	}
 
-	@Override
 	public void productDataRequestRefresh() {
 		product2versionInfoRequestRefresh();
 		productsAllDepotsRequestRefresh();
@@ -140,17 +152,14 @@ public class DataStubNOM extends AbstractDataStub {
 	// localbootStatesAndActions
 
 	// can only return true if overriden in a subclass
-	@Override
 	public boolean canCallMySQL() {
 		return false;
 	}
 
-	@Override
 	public void product2versionInfoRequestRefresh() {
 		product2versionInfo2infos = null;
 	}
 
-	@Override
 	public Map<String, Map<String, OpsiProductInfo>> getProduct2versionInfo2infos() {
 		retrieveProductInfos();
 		return product2versionInfo2infos;
@@ -210,36 +219,30 @@ public class DataStubNOM extends AbstractDataStub {
 
 	}
 
-	@Override
 	public void productsAllDepotsRequestRefresh() {
 		depot2LocalbootProducts = null;
 	}
 
-	@Override
 	public Map<String, TreeSet<OpsiPackage>> getDepot2Packages() {
 		retrieveProductsAllDepots();
 		return depot2Packages;
 	}
 
-	@Override
 	public List<List<Object>> getProductRows() {
 		retrieveProductsAllDepots();
 		return productRows;
 	}
 
-	@Override
 	public Map<String, Map<String, List<String>>> getProduct2VersionInfo2Depots() {
 		retrieveProductsAllDepots();
 		return product2VersionInfo2Depots;
 	}
 
-	@Override
 	public Object2Product2VersionList getDepot2LocalbootProducts() {
 		retrieveProductsAllDepots();
 		return depot2LocalbootProducts;
 	}
 
-	@Override
 	public Object2Product2VersionList getDepot2NetbootProducts() {
 		retrieveProductsAllDepots();
 		return depot2NetbootProducts;
@@ -356,12 +359,10 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void productPropertyDefinitionsRequestRefresh() {
 		depot2Product2PropertyDefinitions = null;
 	}
 
-	@Override
 	public Map<String, Map<String, Map<String, ListCellOptions>>> getDepot2Product2PropertyDefinitions() {
 		retrieveAllProductPropertyDefinitions();
 		return depot2Product2PropertyDefinitions;
@@ -438,12 +439,10 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void productDependenciesRequestRefresh() {
 		depot2product2dependencyInfos = null;
 	}
 
-	@Override
 	public Map<String, Map<String, List<Map<String, String>>>> getDepot2product2dependencyInfos() {
 		retrieveAllProductDependencies();
 		return depot2product2dependencyInfos;
@@ -524,14 +523,12 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void productPropertyStatesRequestRefresh() {
 		Logging.info(this, "productPropertyStatesRequestRefresh");
 		productPropertyStates = null;
 		hostsWithProductProperties = null;
 	}
 
-	@Override
 	public List<Map<String, Object>> getProductPropertyStates() {
 		retrieveProductPropertyStates();
 		return productPropertyStates;
@@ -542,13 +539,11 @@ public class DataStubNOM extends AbstractDataStub {
 		productPropertyDepotStates = null;
 	}
 
-	@Override
 	public List<Map<String, Object>> getProductPropertyDepotStates(Set<String> depots) {
 		retrieveProductPropertyDepotStates(depots);
 		return productPropertyDepotStates;
 	}
 
-	@Override
 	public void fillProductPropertyStates(Collection<String> clients) {
 		Logging.info(this, "fillProductPropertyStates for " + clients);
 		if (productPropertyStates == null) {
@@ -612,26 +607,22 @@ public class DataStubNOM extends AbstractDataStub {
 		return result;
 	}
 
-	@Override
 	public void installedSoftwareInformationRequestRefresh() {
 		installedSoftwareInformation = null;
 		installedSoftwareInformationForLicensing = null;
 		name2SWIdents = null;
 	}
 
-	@Override
 	public List<String> getSoftwareList() {
 		retrieveInstalledSoftwareInformation();
 		return softwareList;
 	}
 
-	@Override
 	public NavigableMap<String, Integer> getSoftware2Number() {
 		retrieveInstalledSoftwareInformation();
 		return software2Number;
 	}
 
-	@Override
 	public String getSWident(Integer i) {
 		Logging.debug(this, "getSWident for " + i);
 		retrieveInstalledSoftwareInformation();
@@ -664,25 +655,21 @@ public class DataStubNOM extends AbstractDataStub {
 		return softwareList.get(i);
 	}
 
-	@Override
 	public NavigableMap<String, SWAuditEntry> getInstalledSoftwareInformation() {
 		retrieveInstalledSoftwareInformation();
 		return installedSoftwareInformation;
 	}
 
-	@Override
 	public NavigableMap<String, SWAuditEntry> getInstalledSoftwareInformationForLicensing() {
 		retrieveInstalledSoftwareInformation();
 		return installedSoftwareInformationForLicensing;
 	}
 
-	@Override
 	public NavigableMap<String, Map<String, String>> getInstalledSoftwareName2SWinfo() {
 		retrieveInstalledSoftwareInformation();
 		return installedSoftwareName2SWinfo;
 	}
 
-	@Override
 	public NavigableMap<String, Set<String>> getName2SWIdents() {
 		retrieveInstalledSoftwareInformation();
 		return name2SWIdents;
@@ -817,14 +804,12 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void softwareAuditOnClientsRequestRefresh() {
 		Logging.info(this, "softwareAuditOnClientsRequestRefresh");
 		client2software = null;
 		softwareIdent2clients = null;
 	}
 
-	@Override
 	public void fillClient2Software(String client) {
 		Logging.info(this, "fillClient2Software " + client);
 		if (client2software == null) {
@@ -838,7 +823,6 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void fillClient2Software(List<String> clients) {
 		if (clients == null) {
 			Logging.info(this, "fillClient2Software for clients null");
@@ -848,14 +832,12 @@ public class DataStubNOM extends AbstractDataStub {
 		retrieveSoftwareAuditOnClients(clients);
 	}
 
-	@Override
 	public Map<String, List<SWAuditClientEntry>> getClient2Software() {
 		Logging.info(this, "getClient2Software");
 		retrieveInstalledSoftwareInformation();
 		return client2software;
 	}
 
-	@Override
 	public Map<String, Set<String>> getSoftwareIdent2clients() {
 		return softwareIdent2clients;
 	}
@@ -967,13 +949,11 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void auditSoftwareXLicencePoolRequestRefresh() {
 		Logging.info(this, "auditSoftwareXLicencePoolRequestRefresh");
 		auditSoftwareXLicencePool = null;
 	}
 
-	@Override
 	public AuditSoftwareXLicencePool getAuditSoftwareXLicencePool() {
 		retrieveAuditSoftwareXLicencePool();
 		return auditSoftwareXLicencePool;
@@ -1003,13 +983,11 @@ public class DataStubNOM extends AbstractDataStub {
 		Logging.info(this, "retrieveAuditSoftwareXLicencePool retrieved ");
 	}
 
-	@Override
 	public void hostConfigsRequestRefresh() {
 		Logging.info(this, "hostConfigsRequestRefresh");
 		hostConfigs = null;
 	}
 
-	@Override
 	public Map<String, Map<String, Object>> getConfigs() {
 		retrieveHostConfigs();
 		return hostConfigs;
@@ -1060,13 +1038,11 @@ public class DataStubNOM extends AbstractDataStub {
 		persist.notifyDataRefreshedObservers("configState");
 	}
 
-	@Override
 	public void licencepoolsRequestRefresh() {
 		Logging.info(this, "licencepoolsRequestRefresh");
 		licencepools = null;
 	}
 
-	@Override
 	public Map<String, LicencepoolEntry> getLicencepools() {
 		retrieveLicencepools();
 		return licencepools;
@@ -1095,7 +1071,6 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void licenceContractsRequestRefresh() {
 		Logging.info(this, "licenceContractsRequestRefresh");
 
@@ -1104,21 +1079,18 @@ public class DataStubNOM extends AbstractDataStub {
 		contractsToNotify = null;
 	}
 
-	@Override
 	public Map<String, LicenceContractEntry> getLicenceContracts() {
 		retrieveLicenceContracts();
 		return licenceContracts;
 	}
 
 	// date in sql time format, contract ID
-	@Override
 	public NavigableMap<String, NavigableSet<String>> getLicenceContractsExpired() {
 		retrieveLicenceContracts();
 		return contractsExpired;
 	}
 
 	// date in sql time format, contract ID
-	@Override
 	public NavigableMap<String, NavigableSet<String>> getLicenceContractsToNotify() {
 		retrieveLicenceContracts();
 		return contractsToNotify;
@@ -1175,13 +1147,11 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void licencesRequestRefresh() {
 		Logging.info(this, "licencesRequestRefresh");
 		licences = null;
 	}
 
-	@Override
 	public Map<String, LicenceEntry> getLicences() {
 		retrieveLicences();
 		return licences;
@@ -1208,13 +1178,11 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void licenceUsabilitiesRequestRefresh() {
 		Logging.info(this, "licenceUsabilitiesRequestRefresh");
 		licenceUsabilities = null;
 	}
 
-	@Override
 	public List<LicenceUsableForEntry> getLicenceUsabilities() {
 		retrieveLicenceUsabilities();
 		return licenceUsabilities;
@@ -1242,13 +1210,11 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void licenceUsagesRequestRefresh() {
 		Logging.info(this, "licenceUsagesRequestRefresh");
 		licenceUsages = null;
 	}
 
-	@Override
 	public List<LicenceUsageEntry> getLicenceUsages() {
 		retrieveLicenceUsages();
 		return licenceUsages;
@@ -1277,13 +1243,11 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void licencePoolXOpsiProductRequestRefresh() {
 		Logging.info(this, "licencePoolXOpsiProductRequestRefresh");
 		licencePoolXOpsiProduct = null;
 	}
 
-	@Override
 	public LicencePoolXOpsiProduct getLicencePoolXOpsiProduct() {
 		retrieveLicencePoolXOpsiProduct();
 		return licencePoolXOpsiProduct;
@@ -1312,26 +1276,22 @@ public class DataStubNOM extends AbstractDataStub {
 		}
 	}
 
-	@Override
 	public void client2HwRowsRequestRefresh() {
 		Logging.info(this, "client2HwRowsRequestRefresh");
 		client2HwRows = null;
 	}
 
-	@Override
 	protected void retrieveClient2HwRows(String[] hosts) {
 		if (client2HwRows == null) {
 			client2HwRows = new HashMap<>();
 		}
 	}
 
-	@Override
 	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {
 		retrieveClient2HwRows(hosts);
 		return client2HwRows;
 	}
 
-	@Override
 	public List<Map<String, Object>> checkHealth() {
 		retrieveHealthData();
 		return healthData;

@@ -307,7 +307,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected List<Map<String, Object>> healthData;
 
-	AbstractDataStub dataStub;
+	DataStubNOM dataStub;
 
 	protected Boolean acceptMySQL;
 
