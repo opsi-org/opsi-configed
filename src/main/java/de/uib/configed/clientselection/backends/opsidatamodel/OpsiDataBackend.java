@@ -10,11 +10,11 @@ import java.util.Map.Entry;
 import java.util.NavigableSet;
 import java.util.Set;
 
-import de.uib.configed.clientselection.AbstractBackend;
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.Client;
+import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntEqualsOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntGreaterOrEqualOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.operations.OpsiDataBigIntGreaterThanOperation;
@@ -94,9 +94,19 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.Logging;
 
-public final class OpsiDataBackend extends AbstractBackend {
+public final class OpsiDataBackend {
 
 	private static OpsiDataBackend instance;
+
+	/*
+	* These variables tell you which data you have to fetch. E.g. if hasSoftware is
+	* true, there is an software
+	* operation and so you need to get the data about software.
+	*/
+	private boolean hasSoftware;
+	private boolean hasHardware;
+	private boolean hasSwAudit;
+	private boolean reloadRequested;
 
 	// data which will be cached
 	Map<String, HostInfo> clientMaps;
@@ -140,7 +150,50 @@ public final class OpsiDataBackend extends AbstractBackend {
 		instance = null;
 	}
 
-	@Override
+	/**
+	 * Goes through the list of clients and filters them with operation. The
+	 * boolean arguments give hints which data is needed.
+	 */
+	public List<String> checkClients(ExecutableOperation operation, boolean hasSoftware, boolean hasHardware,
+			boolean hasSwAudit) {
+		Logging.debug(this, "Starting the filtering.. , operation " + operation);
+		this.hasSoftware = hasSoftware;
+		this.hasHardware = hasHardware;
+		this.hasSwAudit = hasSwAudit;
+		List<Client> clients = getClients();
+		Logging.debug(this, "Number of clients to filter: " + clients.size());
+
+		List<String> matchingClients = new LinkedList<>();
+		for (Client client : clients) {
+			if (operation.doesMatch(client)) {
+
+				matchingClients.add(client.getId());
+			}
+		}
+		return matchingClients;
+	}
+
+	/**
+	 * This function translates the operations tree with the root operation into
+	 * an executable operation tree by replacing the non-executable operations
+	 * with their backend-specific executable operations.
+	 */
+	public ExecutableOperation createExecutableOperation(AbstractSelectOperation operation) {
+		Logging.debug(this, "createFromOperationData " + operation.getClassName());
+
+		if (operation instanceof AbstractSelectGroupOperation) {
+			AbstractSelectGroupOperation groupOperation = (AbstractSelectGroupOperation) operation;
+			List<AbstractSelectOperation> children = new LinkedList<>();
+			for (AbstractSelectOperation child : groupOperation.getChildOperations()) {
+				children.add((AbstractSelectOperation) createExecutableOperation(child));
+			}
+
+			return (ExecutableOperation) createGroupOperation(groupOperation, children);
+		} else {
+			return (ExecutableOperation) createOperation(operation);
+		}
+	}
+
 	protected AbstractSelectOperation createOperation(AbstractSelectOperation operation) {
 		Logging.info(this, "createOperation operation, data, element: " + operation.getClassName() + ", "
 				+ operation.getData().toString() + ",  " + operation.getElement().getClassName());
@@ -318,7 +371,6 @@ public final class OpsiDataBackend extends AbstractBackend {
 		throw new IllegalArgumentException("The operation " + operation + " was not found on " + element);
 	}
 
-	@Override
 	protected AbstractSelectGroupOperation createGroupOperation(AbstractSelectGroupOperation operation,
 			List<AbstractSelectOperation> operations) {
 		if (operation instanceof AndOperation && operations.size() >= 2) {
@@ -356,10 +408,10 @@ public final class OpsiDataBackend extends AbstractBackend {
 
 	}
 
-	@Override
 	public void setReloadRequested() {
 		Logging.info(this, "setReloadRequested");
-		super.setReloadRequested();
+		reloadRequested = true;
+
 		clientMaps = null;
 		groups = null;
 		superGroups = null;
@@ -416,8 +468,7 @@ public final class OpsiDataBackend extends AbstractBackend {
 
 	}
 
-	@Override
-	protected List<Client> getClients() {
+	private List<Client> getClients() {
 		List<Client> clients = new LinkedList<>();
 
 		checkInitData();
@@ -456,17 +507,14 @@ public final class OpsiDataBackend extends AbstractBackend {
 		return clients;
 	}
 
-	@Override
 	public List<String> getGroups() {
 		return controller.getHostGroupIds();
 	}
 
-	@Override
 	public NavigableSet<String> getProductIDs() {
 		return controller.getProductIds();
 	}
 
-	@Override
 	public Map<String, List<AbstractSelectElement>> getHardwareList() {
 		Map<String, List<AbstractSelectElement>> result = new HashMap<>();
 
@@ -501,7 +549,6 @@ public final class OpsiDataBackend extends AbstractBackend {
 		return result;
 	}
 
-	@Override
 	public Map<String, List<AbstractSelectElement>> getLocalizedHardwareList() {
 		Map<String, List<AbstractSelectElement>> result = new HashMap<>();
 

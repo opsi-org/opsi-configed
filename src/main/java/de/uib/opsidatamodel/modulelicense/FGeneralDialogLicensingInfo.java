@@ -30,6 +30,7 @@ import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.LicensingInfoPanelGenEditTable;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapSource;
 import de.uib.utilities.table.provider.TableSource;
 import de.uib.utilities.table.updates.GenericTableUpdateItemFactory;
@@ -378,7 +379,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		GenTableModel theModel = new GenTableModel(null, // updateItemFactory,
 
 				// tableProvider
-				new de.uib.utilities.table.provider.DefaultTableProvider(tableSource),
+				new DefaultTableProvider(tableSource),
 
 				// keycol
 				0,
