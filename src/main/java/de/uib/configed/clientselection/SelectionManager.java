@@ -38,7 +38,7 @@ public class SelectionManager {
 	private AbstractSelectOperation loadedSearch;
 
 	private OpsiDataBackend backend;
-	private de.uib.configed.clientselection.AbstractSerializer serializer;
+	private OpsiDataSerializer serializer;
 
 	public SelectionManager(String backend) {
 		if (backend == null || backend.isEmpty()) {
