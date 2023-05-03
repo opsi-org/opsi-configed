@@ -45,10 +45,8 @@ public final class PersistenceControllerFactory {
 			return staticPersistControl;
 		}
 
-		AbstractPersistenceController persistControl;
-
-		persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
-		Logging.info("a PersistenceController initiated, got " + (persistControl == null));
+		AbstractPersistenceController persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
+		Logging.info("a PersistenceController initiated, got null? " + (persistControl == null));
 
 		boolean connected = persistControl.makeConnection();
 
