@@ -26,10 +26,6 @@ public final class PersistenceControllerFactory {
 
 	private static AbstractPersistenceController staticPersistControl;
 
-	public static boolean sqlAndGetRows;
-	public static boolean avoidSqlRawData;
-	public static boolean sqlAndGetHashes;
-
 	// private constructor to hide the implicit public one
 	private PersistenceControllerFactory() {
 	}
@@ -51,18 +47,8 @@ public final class PersistenceControllerFactory {
 
 		AbstractPersistenceController persistControl;
 
-		if (sqlAndGetRows) {
-			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
-			Logging.info("a PersistenceController initiated by option sqlAndGetRows got " + (persistControl == null));
-		} else if (avoidSqlRawData) {
-			sqlAndGetRows = false;
-			persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
-			Logging.info("a PersistenceController initiated by option avoidSqlRawData got " + (persistControl == null));
-		} else {
-			persistControl = new OpsiserviceRawDataPersistenceController(server, user, password);
-			sqlAndGetRows = true;
-			Logging.info("a PersistenceController initiated by default, try RawData " + (persistControl == null));
-		}
+		persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
+		Logging.info("a PersistenceController initiated, got " + (persistControl == null));
 
 		boolean connected = persistControl.makeConnection();
 
@@ -72,32 +58,10 @@ public final class PersistenceControllerFactory {
 
 		try {
 			if (connected) {
-				Logging.info("factory: check source accepted");
-				boolean sourceAccepted = persistControl.canCallMySQL();
-				Logging.info("factory: source accepted " + sourceAccepted);
-
-				if (sqlAndGetRows && !sourceAccepted) {
-					sqlAndGetRows = false;
-					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
-				}
-
-				persistControl.makeConnection();
 				persistControl.checkMultiFactorAuthentication();
 				Globals.isMultiFactorAuthenticationEnabled = persistControl.usesMultiFactorAuthentication();
 				persistControl.checkConfiguration();
 				persistControl.retrieveOpsiModules();
-
-				if (sqlAndGetRows && !persistControl.isWithMySQL()) {
-					Logging.info(" fall back to  " + OpsiserviceNOMPersistenceController.class);
-					sqlAndGetRows = false;
-					persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
-
-					persistControl.makeConnection();
-					persistControl.checkMultiFactorAuthentication();
-					Globals.isMultiFactorAuthenticationEnabled = persistControl.usesMultiFactorAuthentication();
-					persistControl.checkConfiguration();
-					persistControl.retrieveOpsiModules();
-				}
 			}
 		} catch (Exception ex) {
 			Logging.error("Error", ex);

@@ -116,7 +116,6 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.AbstractPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
@@ -3207,12 +3206,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			if (firstSelectedClient == null || getSelectedClients().length == 0) {
 				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.noClientSelected1"), null);
 			} else if (getSelectedClients().length > 1) {
-				if (!PersistenceControllerFactory.sqlAndGetRows) {
-					mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.backendSQLrequired1"),
-							Configed.getResourceValue("MainFrame.backendSQLrequired2"));
-				} else {
-					mainFrame.setHardwareInfoMultiClients(getSelectedClients());
-				}
+				mainFrame.setHardwareInfoMultiClients(getSelectedClients());
 			} else {
 				checkHwInfo();
 				Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.get(firstSelectedClient);

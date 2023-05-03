@@ -110,10 +110,6 @@ public class Configed {
 							+ " . DEFAULT: " + Logging.getLogLevelConsole() },
 			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code" },
 
-			// implemented in PersistenceController,
-			new String[] { "--sqlgetrows", "", "Force use sql statements by getRawData" },
-			new String[] { "--nosqlrawdata", "", "Avoid getRawData" },
-
 			// if possible in PersistenceController,
 			new String[] { "--localizationfile EXTRA_LOCALIZATION_FILENAME", "",
 					"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: "
@@ -512,15 +508,6 @@ public class Configed {
 					i++;
 				} else if ("-me".equals(args[i]) || "--testPersistenceControllerMethod".equals(args[i])) {
 					optionPersistenceControllerMethodCall = true;
-					i = i + 1;
-				} else if ("--sqlgethashes".equals(args[i])) {
-					PersistenceControllerFactory.sqlAndGetHashes = true;
-					i = i + 1;
-				} else if ("--sqlgetrows".equals(args[i])) {
-					PersistenceControllerFactory.sqlAndGetRows = true;
-					i = i + 1;
-				} else if ("--nosqlrawdata".equals(args[i])) {
-					PersistenceControllerFactory.avoidSqlRawData = true;
 					i = i + 1;
 				} else if ("--version".equals(args[i])) {
 					Logging.essential("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
