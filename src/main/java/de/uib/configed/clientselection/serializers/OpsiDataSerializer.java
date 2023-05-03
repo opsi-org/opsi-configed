@@ -174,7 +174,7 @@ public class OpsiDataSerializer {
 	/**
 	 * produce map format of serializiation object
 	 */
-	protected Map<String, Object> decipher(String serialization) throws WrongVersionException {
+	protected Map<String, Object> decipher(String serialization) {
 		Map<String, Object> map = new HashMap<>();
 		parser = new JsonParser(serialization);
 		try {

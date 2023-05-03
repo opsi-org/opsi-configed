@@ -373,9 +373,6 @@ public final class Globals {
 
 	public static final String PSEUDO_KEY_SEPARATOR = ";";
 
-	private static final int TOOLTIP_LINE_LENGTH = 50;
-	private static final int UNCERTAINTY = 20;
-
 	// these two things can be changed
 	public static JFrame frame1;
 	public static Container container1;

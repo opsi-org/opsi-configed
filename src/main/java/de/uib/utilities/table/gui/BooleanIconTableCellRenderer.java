@@ -40,9 +40,8 @@ public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 			int row, int column) {
 		Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		Logging.debug("row=" + row + ", column=" + column + ", comp=" + comp.getClass() + ", cls=" + value.getClass()
-				+ ", value=" + value + ", allowingString=" + allowingString + ", trueIcon=" + trueIcon + ", falseIcon="
-				+ falseIcon);
+		Logging.debug("row=" + row + ", column=" + column + ", comp=" + comp.getClass() + ", value=" + value
+				+ ", allowingString=" + allowingString + ", trueIcon=" + trueIcon + ", falseIcon=" + falseIcon);
 
 		if (!(comp instanceof JLabel)) {
 			return comp;
