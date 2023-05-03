@@ -686,7 +686,7 @@ public class JTableSelectionPanel extends JPanel
 
 	private static List<String> getWords(String line) {
 		List<String> result = new ArrayList<>();
-		String[] splitted = line.split("\\s+");
+		String[] splitted = line.split("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 		for (String s : splitted) {
 			if (!" ".equals(s)) {
 				result.add(s);

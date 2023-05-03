@@ -530,7 +530,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 
 			setSortOrder(sortDescriptor);
-			((DefaultRowSorter) getRowSorter()).sort();
+			((DefaultRowSorter<?, ?>) getRowSorter()).sort();
 			setSorter();
 
 			if (selVal != null) {
@@ -1612,7 +1612,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		moveToRow(n);
 	}
 
-	public RowSorter getRowSorter() {
+	@SuppressWarnings("squid:S1452")
+	public RowSorter<? extends TableModel> getRowSorter() {
 		return theTable.getRowSorter();
 	}
 

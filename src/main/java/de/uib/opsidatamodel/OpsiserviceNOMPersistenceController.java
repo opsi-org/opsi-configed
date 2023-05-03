@@ -75,7 +75,6 @@ import de.uib.configed.type.ConfigStateEntry;
 import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.HWAuditClientEntry;
 import de.uib.configed.type.HostInfo;
-import de.uib.configed.type.MetaConfig;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
@@ -1569,27 +1568,25 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected List<Object> buildWANConfigOptions(List<Object> readyObjects) {
 		// NOT_WAN meta configs
 		Map<String, Object> item = createJSONBoolConfig(
-				MetaConfig.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_GUISTARTUP, true,
+				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_GUISTARTUP, true,
 				"meta configuration for default not wan behaviour");
 
 		readyObjects.add(AbstractExecutioner.jsonMap(item));
 
 		item = createJSONBoolConfig(
-				MetaConfig.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "."
-						+ CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN,
+				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_GUISTARTUP_USERLOGGEDIN,
 				true, "meta configuration for default not wan behaviour");
 
 		readyObjects.add(AbstractExecutioner.jsonMap(item));
 
 		item = createJSONBoolConfig(
-				MetaConfig.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_NET_CONNECTION,
-				false, "meta configuration for default not wan behaviour");
+				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_NET_CONNECTION, false,
+				"meta configuration for default not wan behaviour");
 
 		readyObjects.add(AbstractExecutioner.jsonMap(item));
 
-		item = createJSONBoolConfig(
-				MetaConfig.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_TIMER, false,
-				"meta configuration for default not wan behaviour");
+		item = createJSONBoolConfig(CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_TIMER,
+				false, "meta configuration for default not wan behaviour");
 
 		readyObjects.add(AbstractExecutioner.jsonMap(item));
 
@@ -1683,12 +1680,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected Map<String, ConfigOption> getWANConfigOptions() {
 		Map<String, ConfigOption> allWanConfigOptions = extractSubConfigOptionsByInitial(
-				MetaConfig.CONFIG_KEY + "." + WAN_PARTKEY);
+				CONFIG_KEY + "." + WAN_PARTKEY);
 
 		Logging.info(this, " getWANConfigOptions   " + allWanConfigOptions);
 
 		Map<String, ConfigOption> notWanConfigOptions = extractSubConfigOptionsByInitial(
-				MetaConfig.CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + ".");
+				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + ".");
 
 		notWanConfiguration = new HashMap<>();
 		wanConfiguration = new HashMap<>();

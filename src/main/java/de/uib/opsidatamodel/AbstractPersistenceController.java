@@ -27,7 +27,6 @@ import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.DatedRowList;
-import de.uib.configed.type.MetaConfig;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiProductInfo;
@@ -72,6 +71,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
 	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
+	public static final String CONFIG_KEY = "configed.meta_config";
 
 	public static final String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = CONTROL_DASH_CONFIG_KEY
 			+ ".show_dash_for_showlicenses";
@@ -151,7 +151,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "dash configuration");
 		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
-		PROPERTY_CLASSES_SERVER.put(MetaConfig.CONFIG_KEY, "default configuration for other properties");
+		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY, "default configuration for other properties");
 		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
 				"<html><p>saved search configurations ,<br />do not edit here <br />- editing via the search form</p></html>");
 		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY,

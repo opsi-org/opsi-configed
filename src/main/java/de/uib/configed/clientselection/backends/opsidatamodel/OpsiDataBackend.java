@@ -194,7 +194,7 @@ public final class OpsiDataBackend {
 		}
 	}
 
-	protected AbstractSelectOperation createOperation(AbstractSelectOperation operation) {
+	private AbstractSelectOperation createOperation(AbstractSelectOperation operation) {
 		Logging.info(this, "createOperation operation, data, element: " + operation.getClassName() + ", "
 				+ operation.getData().toString() + ",  " + operation.getElement().getClassName());
 
@@ -371,7 +371,7 @@ public final class OpsiDataBackend {
 		throw new IllegalArgumentException("The operation " + operation + " was not found on " + element);
 	}
 
-	protected AbstractSelectGroupOperation createGroupOperation(AbstractSelectGroupOperation operation,
+	private AbstractSelectGroupOperation createGroupOperation(AbstractSelectGroupOperation operation,
 			List<AbstractSelectOperation> operations) {
 		if (operation instanceof AndOperation && operations.size() >= 2) {
 			return new AndOperation(operations);
