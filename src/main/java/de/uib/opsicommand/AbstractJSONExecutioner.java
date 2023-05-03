@@ -22,9 +22,6 @@ import de.uib.utilities.logging.Logging;
 public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	protected ConnectionState conStat;
 
-	@Override
-	public abstract JSONObject retrieveJSONObject(OpsiMethodCall omc);
-
 	public JSONObject retrieveJSONResult(OpsiMethodCall omc) {
 		JSONObject jO = retrieveJSONObject(omc);
 		if (checkResponse(jO)) {
