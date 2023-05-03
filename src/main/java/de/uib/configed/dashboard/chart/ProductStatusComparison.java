@@ -17,6 +17,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
+@SuppressWarnings("java:S110")
 public class ProductStatusComparison extends StackPane implements DataChangeListener {
 	@FXML
 	private Text productStatusNoDataText;

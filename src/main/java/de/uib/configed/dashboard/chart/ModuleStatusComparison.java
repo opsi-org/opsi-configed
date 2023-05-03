@@ -17,6 +17,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
+@SuppressWarnings("java:S110")
 public class ModuleStatusComparison extends StackPane implements DataChangeListener {
 	@FXML
 	private Text moduleStatusNoDataText;
