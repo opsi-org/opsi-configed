@@ -42,7 +42,6 @@ import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataLoadingObservable;
 import de.uib.utilities.observer.DataLoadingObserver;
 import de.uib.utilities.observer.DataRefreshedObservable;
@@ -214,8 +213,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public AbstractExecutioner exec;
 
-	protected final Map<String, AbstractExecutioner> execs = new HashMap<>();
-
 	// offer observing of data loading
 	protected List<DataLoadingObserver> dataLoadingObservers;
 
@@ -247,16 +244,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	/* connection state handling */
 	public abstract ConnectionState getConnectionState();
 
-	public abstract void setConnectionState(ConnectionState state);
-
 	public abstract Map<String, Map<String, Object>> getDepotPropertiesForPermittedDepots();
-
-	public boolean hasUserPrivilegesData() {
-		// user has roles
-		// a role has privileges
-		// a privilege is implemented by conditions referring to targets
-		return false;
-	}
 
 	public abstract void checkPermissions();
 
@@ -273,22 +261,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract boolean accessToHostgroupsOnlyIfExplicitlyStated();
 
 	public abstract Set<String> getHostgroupsPermitted();
-
-	public abstract boolean hasHostgroupPermission(String hostgroupId);
-
-	public abstract boolean isProductgroupsFullPermission();
-
-	public abstract boolean hasProductgroupPermission(String productgroupId);
-
-	/* ============================ */
-	/* data retrieving and setting */
-
-	public void syncTables() {
-	}
-
-	public void cleanUpAuditSoftware() {
-		Logging.error(this, "cleanUpAuditSoftware not implemented");
-	}
 
 	// ---------------------------------------------------------------
 	// implementation of observer patterns

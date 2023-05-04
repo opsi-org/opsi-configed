@@ -36,11 +36,6 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 		return conStat;
 	}
 
-	@Override
-	public void setConnectionState(ConnectionState state) {
-		conStat = state;
-	}
-
 	public boolean checkResponse(JSONObject retrieved) {
 		return JSONReMapper.checkResponse(retrieved);
 	}

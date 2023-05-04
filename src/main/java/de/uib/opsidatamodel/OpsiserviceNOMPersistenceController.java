@@ -322,8 +322,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		exec = new JSONthroughHTTPS(server, user, password);
 
-		execs.put(server, exec);
-
 		hwAuditConf = new HashMap<>();
 
 		initMembers();
@@ -1171,11 +1169,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public void setConnectionState(ConnectionState state) {
-		exec.setConnectionState(state);
-	}
-
-	@Override
 	public boolean isGlobalReadOnly() {
 		return globalReadOnly;
 	}
@@ -1389,47 +1382,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		Logging.info(this, "getHostgroupsPermitted " + result);
-
-		return result;
-	}
-
-	@Override
-	public boolean hasHostgroupPermission(String hostgroupId) {
-		if (hostgroupsOnlyIfExplicitlyStated) {
-			return true;
-		}
-
-		boolean result = false;
-
-		if (hostgroupsPermitted != null) {
-			result = hostgroupsPermitted.contains(hostgroupId);
-		}
-
-		Logging.info(this, "getHostgroupPermission false for " + hostgroupId);
-
-		if (!result) {
-			Logging.info(this, "getHostgroupPermission, permitted " + hostgroupsPermitted);
-		}
-
-		return result;
-	}
-
-	@Override
-	public boolean isProductgroupsFullPermission() {
-		return productgroupsFullPermission;
-	}
-
-	@Override
-	public boolean hasProductgroupPermission(String productgroupId) {
-		if (productgroupsFullPermission) {
-			return true;
-		}
-
-		boolean result = false;
-
-		if (productgroupsPermitted != null) {
-			result = productgroupsPermitted.contains(productgroupId);
-		}
 
 		return result;
 	}

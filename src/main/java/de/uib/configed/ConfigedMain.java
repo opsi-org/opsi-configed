@@ -744,8 +744,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// too early, raises a NPE, if the user entry does not exist
 
-		persist.syncTables();
-
 		strategyForLoadingData = new GuiStrategyForLoadingData(dPassword);
 
 		((DataLoadingObservable) persist).registerDataLoadingObserver(strategyForLoadingData);
