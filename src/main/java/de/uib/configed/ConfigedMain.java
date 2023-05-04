@@ -81,7 +81,6 @@ import de.uib.configed.gui.FShowListWithComboSelect;
 import de.uib.configed.gui.FStartWakeOnLan;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.FWakeClients;
-import de.uib.configed.gui.GroupnameChoice;
 import de.uib.configed.gui.HostsStatusPanel;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
@@ -112,7 +111,6 @@ import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandNeedParameter;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsicommand.sshcommand.SSHConnectTerminal;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
@@ -5080,13 +5078,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		SSHCommandControlDialog.getInstance(this);
 	}
 
-	/** Starts the terminal */
-	public void startSSHOpsiServerTerminal() {
-		final ConfigedMain m = this;
-
-		new Thread(() -> new SSHConnectTerminal(m)).start();
-	}
-
 	private boolean confirmActionForSelectedClients(String confirmInfo) {
 		FShowList fConfirmActionForClients = new FShowList(mainFrame, Globals.APPNAME, true,
 				new String[] { Configed.getResourceValue("buttonNO"), Configed.getResourceValue("buttonYES") }, 350,
@@ -5254,25 +5245,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		fAskOverwriteExsitingHost.setVisible(true);
 
 		return fAskOverwriteExsitingHost.getResult() == 2;
-	}
-
-	public void callDeleteGroupDialog() {
-		List<String> groupList = persist.getHostGroupIds();
-		Collections.sort(groupList);
-		List<String> groupSelectionIds = new ArrayList<>(groupList);
-
-		int i = groupSelectionIds.indexOf(groupname);
-
-		GroupnameChoice choiceDialog = new GroupnameChoice(Configed.getResourceValue("ConfigedMain.deleteGroup"),
-				groupSelectionIds, i);
-
-		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().isEmpty()) {
-			persist.deleteGroup(choiceDialog.getResultString());
-			persist.hostGroupsRequestRefresh();
-			if (clientSelectionDialog != null) {
-				clientSelectionDialog.refreshGroups();
-			}
-		}
 	}
 
 	public void setGroupname(String name) {

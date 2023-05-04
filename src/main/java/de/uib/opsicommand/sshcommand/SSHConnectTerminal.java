@@ -38,22 +38,8 @@ public class SSHConnectTerminal extends SSHConnect {
 	private KeyListener inputKeyListener;
 	private ActionListener connectionKeyListener;
 	private OutputStream out;
-	String currentDirectory = "";
-	boolean getCurrentDirectorySilent;
 
 	public List<String> commandsCompgen;
-
-	public SSHConnectTerminal(ConfigedMain main, SSHConnectionTerminalDialog dialog) {
-		super(main);
-		this.dialog = dialog;
-		if (dialog == null) {
-			dialog = new SSHConnectionTerminalDialog(Configed.getResourceValue("MainFrame.jMenuSSHTerminal") + " "
-					+ SSHConnectionInfo.getInstance().getUser() + "@" + SSHConnectionInfo.getInstance().getHost(),
-					this);
-		}
-
-		connect();
-	}
 
 	public SSHConnectTerminal(ConfigedMain main) {
 		super(main);

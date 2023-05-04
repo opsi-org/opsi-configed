@@ -349,7 +349,6 @@ public class MainFrame extends JFrame
 	/* gibts nicht **/ // TODO
 	private IconButton iconButtonSetGroup;
 	private IconButton iconButtonSaveConfiguration;
-	private IconButton iconButtonCancelChanges;
 	private IconButton iconButtonToggleClientFilter;
 
 	public IconButton iconButtonReachableInfo;
@@ -389,7 +388,6 @@ public class MainFrame extends JFrame
 	protected JButton buttonSelectDepotsAll;
 
 	BorderLayout borderLayout1 = new BorderLayout();
-	GroupLayout contentLayout;
 	JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
 	private JSplitPane panelClientSelection;
 
@@ -466,10 +464,7 @@ public class MainFrame extends JFrame
 
 	protected FShowList fListSelectedClients;
 
-	JPanel jPanelChooseDomain;
-
 	JPanel panelTreeClientSelection;
-	JPanel jPanelProductsConfig;
 
 	boolean multidepot;
 
@@ -1501,9 +1496,6 @@ public class MainFrame extends JFrame
 		iconButtonSaveConfiguration = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
 
-		iconButtonCancelChanges = new IconButton(Configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
-				"images/cancel-32.png", "images/cancel_over-32.png", " ", false);
-
 		iconButtonReachableInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
 				"images/new_networkconnection.png", "images/new_networkconnection.png",
 				"images/new_networkconnection.png", configedMain.hostDisplayFields.get("clientConnected"));
@@ -1532,8 +1524,6 @@ public class MainFrame extends JFrame
 		iconButtonSetGroup.addActionListener((ActionEvent e) -> callSelectionDialog());
 
 		iconButtonSaveConfiguration.addActionListener((ActionEvent e) -> saveAction());
-
-		iconButtonCancelChanges.addActionListener((ActionEvent e) -> cancelAction());
 
 		iconButtonReachableInfo.addActionListener((ActionEvent e) -> getReachableInfo());
 
@@ -2783,7 +2773,6 @@ public class MainFrame extends JFrame
 
 		jMenuFileSaveConfigurations.setEnabled(b);
 		iconButtonSaveConfiguration.setEnabled(b);
-		iconButtonCancelChanges.setEnabled(b);
 	}
 
 	// ----------------------------------------------------------------------------------------
@@ -2858,14 +2847,6 @@ public class MainFrame extends JFrame
 	}
 
 	/**
-	 * Calls method from configedMain to start the terminal
-	 */
-	public void remoteSSHTerminalAction() {
-		Logging.debug(this, "jMenuRemoteSSHTerminalAction");
-		configedMain.startSSHOpsiServerTerminal();
-	}
-
-	/**
 	 * Calls method from configedMain to start the config dialog
 	 */
 	public void startSSHConfigAction() {
@@ -2893,10 +2874,6 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	public void invertClientselection() {
-		configedMain.invertClientselection();
-	}
-
 	public void exitAction() {
 		configedMain.finishApp(true, 0);
 	}
@@ -2905,14 +2882,9 @@ public class MainFrame extends JFrame
 		configedMain.checkSaveAll(false);
 	}
 
-	public void cancelAction() {
-		configedMain.cancelChanges();
-	}
-
 	public void getSessionInfo() {
 
 		configedMain.getSessionInfo();
-
 	}
 
 	protected void getReachableInfo() {
@@ -2966,18 +2938,6 @@ public class MainFrame extends JFrame
 		if (!products.isEmpty()) {
 			configedMain.selectClientsWithFailedProduct(products);
 		}
-	}
-
-	public void deleteGroupAction() {
-		configedMain.callDeleteGroupDialog();
-	}
-
-	public void menuClientSelectionSetEnabled(boolean b) {
-		jMenuClientselectionGetGroup.setEnabled(b);
-		jMenuClientselectionGetSavedSearch.setEnabled(b);
-		jMenuClientselectionProductNotUptodate.setEnabled(b);
-		jMenuClientselectionProductNotUptodateOrBroken.setEnabled(b);
-		iconButtonSetGroup.setEnabled(b);
 	}
 
 	public void reloadAction() {
