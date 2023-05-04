@@ -197,7 +197,7 @@ public class OpsiDataSerializer {
 	}
 
 	/** Get the data for the given saved search */
-	protected Map<String, Object> getData(String name) throws WrongVersionException {
+	protected Map<String, Object> getData(String name) {
 
 		// we take version from server and not the (possibly edited own version! )
 		searches.put(name, controller.getSavedSearches().get(name).getSerialization());
@@ -718,5 +718,4 @@ public class OpsiDataSerializer {
 		ops.add(0, host);
 		return new AndOperation(ops);
 	}
-
 }
