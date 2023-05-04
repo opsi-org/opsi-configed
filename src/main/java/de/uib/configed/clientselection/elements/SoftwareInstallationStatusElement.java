@@ -6,7 +6,7 @@ import de.uib.opsidatamodel.productstate.InstallationStatus;
 public class SoftwareInstallationStatusElement extends GenericEnumElement {
 	public SoftwareInstallationStatusElement() {
 		super(removeFirst(2, InstallationStatus.getLabels().toArray(new String[0])),
-				new String[] { de.uib.opsidatamodel.OpsiProduct.NAME, "Installation Status" },
+				new String[] { NAME, "Installation Status" },
 				Configed.getResourceValue("ClientSelectionDialog.softwareName"),
 				Configed.getResourceValue("ClientSelectionDialog.softwareInstallationStatus"));
 	}

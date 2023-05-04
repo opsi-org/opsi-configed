@@ -3756,7 +3756,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				Map<String, OpsiProductInfo> productAllInfos = dataStub.getProduct2versionInfo2infos().get(productId);
 
 				// look for associated product on depot info
-				Product2VersionList product2VersionList = dataStub.getDepot2LocalbootProducts().get(depotId);
+				HashMap<String, List<String>> product2VersionList = dataStub.getDepot2LocalbootProducts().get(depotId);
 				if (product2VersionList != null && product2VersionList.get(productId) != null
 						&& !product2VersionList.get(productId).isEmpty()) {
 					versionInfo = product2VersionList.get(productId).get(0);
