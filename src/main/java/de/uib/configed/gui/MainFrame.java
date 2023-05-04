@@ -347,7 +347,6 @@ public class MainFrame extends JFrame
 	private IconButton iconButtonNewClient;
 
 	/* gibts nicht **/ // TODO
-	private IconButton iconButtonSaveGroup;
 	private IconButton iconButtonSetGroup;
 	private IconButton iconButtonSaveConfiguration;
 	private IconButton iconButtonCancelChanges;
@@ -1524,9 +1523,6 @@ public class MainFrame extends JFrame
 				"images/view-filter_disabled-32.png", "images/view-filter_over-32.png", "images/view-filter-32.png",
 				true);
 
-		iconButtonSaveGroup = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveGroup"),
-				"images/saveGroup.gif", "images/saveGroup_over.gif", " ");
-
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadAction());
 
 		iconButtonReloadLicenses.addActionListener((ActionEvent e) -> reloadLicensesAction());
@@ -1547,8 +1543,6 @@ public class MainFrame extends JFrame
 		});
 
 		iconButtonToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
-
-		iconButtonSaveGroup.addActionListener((ActionEvent e) -> saveGroupAction());
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -2792,17 +2786,8 @@ public class MainFrame extends JFrame
 		iconButtonCancelChanges.setEnabled(b);
 	}
 
-	public void saveGroupSetEnabled(boolean b) {
-
-		iconButtonSaveGroup.setEnabled(b);
-	}
-
 	// ----------------------------------------------------------------------------------------
 	// action methods for visual interactions
-	public void wakeOnLanActionWithDelay(int secs) {
-
-		configedMain.wakeSelectedClientsWithDelay(secs);
-	}
 
 	public void wakeOnLanAction() {
 		configedMain.wakeSelectedClients();
@@ -2981,10 +2966,6 @@ public class MainFrame extends JFrame
 		if (!products.isEmpty()) {
 			configedMain.selectClientsWithFailedProduct(products);
 		}
-	}
-
-	public void saveGroupAction() {
-		configedMain.callSaveGroupDialog();
 	}
 
 	public void deleteGroupAction() {

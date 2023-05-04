@@ -96,7 +96,6 @@ import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.productaction.FProductActions;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.tree.GroupNode;
-import de.uib.configed.tree.IconNode;
 import de.uib.configed.type.DateExtendedByVars;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
@@ -1190,14 +1189,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.info(this, "selectionPanel.getSelectedValues().size(): " + selectionPanel.getSelectedValues().size());
 
-		boolean groupingExists = selectionPanel.getSelectedValues().size() > 1;
-
 		// when initializing the program the frame may not exist
 		if (mainFrame != null) {
 			Logging.info(this, "ListSelectionListener valueChanged selectionPanel.isSelectionEmpty() "
 					+ selectionPanel.isSelectionEmpty());
-
-			mainFrame.saveGroupSetEnabled(groupingExists);
 
 			if (selectionPanel.isSelectionEmpty()) {
 				setSelectedClients((List<String>) null);
@@ -1397,8 +1392,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// init visual states
 		Logging.debug(this, "mainframe nearly initialized");
-
-		mainFrame.saveGroupSetEnabled(false);
 	}
 
 	private void locateAndDisplay() {
@@ -5261,41 +5254,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		fAskOverwriteExsitingHost.setVisible(true);
 
 		return fAskOverwriteExsitingHost.getResult() == 2;
-	}
-
-	public void callSaveGroupDialog() {
-		List<String> groupList = persist.getHostGroupIds();
-		Collections.sort(groupList);
-		List<String> groupSelectionIds = new ArrayList<>(groupList);
-
-		int i = groupSelectionIds.indexOf(groupname);
-
-		if (i < 0) {
-			groupSelectionIds.add(0, TEMPGROUPNAME);
-			i = 0;
-		}
-
-		GroupnameChoice choiceDialog = new GroupnameChoice(Configed.getResourceValue("ConfigedMain.saveGroup"),
-				groupSelectionIds, i);
-
-		if (choiceDialog.getResult() == 1 && !choiceDialog.getResultString().isEmpty()) {
-
-			IconNode newGroupNode = treeClients.makeSubgroupAt(null);
-			if (newGroupNode == null) {
-				return;
-			}
-
-			String newGroupName = choiceDialog.getResultString();
-
-			TreePath newGroupPath = treeClients.getPathToGROUPS().pathByAddingChild(newGroupNode);
-
-			for (int j = 0; j < getSelectedClients().length; j++) {
-				treeClients.copyClientTo(getSelectedClients()[j], null, newGroupName, newGroupNode, newGroupPath);
-			}
-
-			treeClients.makeVisible(newGroupPath);
-			treeClients.repaint();
-		}
 	}
 
 	public void callDeleteGroupDialog() {
