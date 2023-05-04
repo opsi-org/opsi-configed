@@ -9,6 +9,7 @@
 
 ### Fixed
 - Installing and removing of opsi-packages
+- Problems with different actions in Licensemanagement
 
 ## [4.2.21.2] - 2023-04-18
 
