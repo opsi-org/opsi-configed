@@ -164,7 +164,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected Map<String, List<String>> mapOfMethodSignatures;
 
-	protected List<OpsiProductInfo> productInfos;
 	protected Map<String, Map<String, Object>> productGlobalInfos;
 
 	protected Map<String, Map<String, ConfigName2ConfigValue>> productProperties;
@@ -189,16 +188,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	private Map<String, List<String>> possibleActions; // product-->possibleActions
 
-	protected List<Map<String, Object>> softwareAuditOnClients;
-
 	// key --> rowmap for auditSoftware
 
 	protected List<Map<String, Object>> relationsAuditHardwareOnHost;
 
 	protected AuditSoftwareXLicencePool relationsAuditSoftwareToLicencePools;
-
-	// TODO Still needed?
-	protected Map<String, Map<String, String>> rowmapAuditSoftware;
 
 	// function softwareIdent --> pool
 	protected Map<String, String> fSoftware2LicencePool;
@@ -231,7 +225,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected List<String> client2HwRowsColumnNames;
 	protected List<String> client2HwRowsJavaclassNames;
 	protected List<String> hwInfoClassNames;
-	protected List<String> hwTableNames;
 
 	protected Map<String, Map<String, String>> productGroups;
 
@@ -280,7 +273,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected Map<String, ConfigOption> configOptions;
 	protected Map<String, ListCellOptions> configListCellOptions;
 	protected Map<String, List<Object>> configDefaultValues;
-	protected Map<String, Map<String, Object>> hostConfigs;
 
 	protected RemoteControls remoteControls;
 	protected SavedSearches savedSearches;
@@ -300,8 +292,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	protected NavigableSet<String> productIds;
 	protected Map<String, Map<String, String>> productDefaultStates;
-
-	protected List< /* JSON */Object> licenceOnClientDeleteItems;
 
 	protected List<Map<String, Object>> healthData;
 
@@ -6145,7 +6135,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		relationsAuditSoftwareToLicencePools = dataStub.getAuditSoftwareXLicencePool();
 
-		rowmapAuditSoftware = new TreeMap<>();
 		// function softwareIdent --> pool
 		fSoftware2LicencePool = new HashMap<>();
 		// function pool --> list of assigned software
@@ -6171,7 +6160,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				row.put(colName, entry.get(colName));
 
 			}
-			rowmapAuditSoftware.put(swKEY, row);
 
 			// build fSoftware2LicencePool
 			if (fSoftware2LicencePool.get(swKEY) != null && !fSoftware2LicencePool.get(swKEY).equals(licencePoolKEY)) {

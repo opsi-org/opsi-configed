@@ -48,7 +48,6 @@ import de.uib.utilities.observer.DataRefreshedObservable;
 import de.uib.utilities.observer.DataRefreshedObserver;
 
 public abstract class AbstractPersistenceController implements DataRefreshedObservable, DataLoadingObservable {
-	public static final String CLIENT_GLOBAL_SEPARATOR = "/";
 
 	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = new HashSet<>();
 	static {
