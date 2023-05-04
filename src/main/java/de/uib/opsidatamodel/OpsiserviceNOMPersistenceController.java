@@ -274,7 +274,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	protected boolean withUEFI;
 	protected boolean withWAN;
 
-	protected boolean withLinuxAgent;
 	protected boolean withUserRoles;
 
 	// for internal use, for external cast to:
@@ -2077,17 +2076,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public void deleteClient(String hostId) {
-		if (globalReadOnly) {
-			return;
-		}
-
-		OpsiMethodCall omc = new OpsiMethodCall("host_delete", new String[] { hostId });
-		exec.doCall(omc);
-		hostInfoCollections.opsiHostsRequestRefresh();
-	}
-
-	@Override
 	public void deleteClients(String[] hostIds) {
 		if (globalReadOnly) {
 			return;
@@ -2474,12 +2462,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public void setIpAddress(String hostId, String address) {
 		updateHost(hostId, HostInfo.CLIENT_IP_ADDRESS_KEY, address);
-	}
-
-	// opsi 3 compatibility
-	@Override
-	public String getMacAddress(String hostId) {
-		return "";
 	}
 
 	@Override
@@ -3169,12 +3151,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	/* multiclient hwinfo */
 
 	@Override
-	public List<String> getHostColumnNames() {
-		retrieveClient2HwRowsColumnNames();
-		return hostColumnNames;
-	}
-
-	@Override
 	public List<String> getClient2HwRowsColumnNames() {
 		retrieveClient2HwRowsColumnNames();
 		return client2HwRowsColumnNames;
@@ -3570,19 +3546,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		logfiles.put(logtype, s);
-
-		return logfiles;
-	}
-
-	@Override
-	public Map<String, String> getLogfiles(String clientId) {
-		logfiles = new HashMap<>();
-
-		String[] logtypes = Globals.getLogTypes();
-
-		for (int i = 0; i < logtypes.length; i++) {
-			getLogfiles(clientId, logtypes[i]);
-		}
 
 		return logfiles;
 	}
@@ -4321,11 +4284,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	@Override
 	public Boolean hasClientSpecificProperties(String productname) {
 		return productHavingClientSpecificProperties.get(productname);
-	}
-
-	@Override
-	public Map<String, Boolean> getProductHavingClientSpecificProperties() {
-		return productHavingClientSpecificProperties;
 	}
 
 	List<Map<String, Object>> retrieveListOfMapsNOM(String methodName) {
@@ -5290,23 +5248,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		return val;
-	}
-
-	@Override
-	public void setGlobalBooleanConfigValue(String key, Boolean val, String description) {
-		List<Object> readyObjects = new ArrayList<>();
-		Map<String, Object> configItem = createJSONBoolConfig(key, val, description);
-		readyObjects.add(AbstractExecutioner.jsonMap(configItem));
-
-		OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
-				new Object[] { AbstractExecutioner.jsonArray(readyObjects) });
-
-		if (exec.doCall(omc)) {
-			ConfigOption configOption = createBoolConfig(key, val, description);
-			configOptions.put(key, configOption);
-			configListCellOptions.put(key, configOption);
-			// entails class cast errors
-		}
 	}
 
 	@Override
@@ -8178,12 +8119,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return licencingInfoOpsiAdmin;
 	}
 
-	@Override
-	public String getCustomer() {
-		retrieveOpsiModules();
-		return (String) opsiModulesDisplayInfo.get("customer");
-	}
-
 	private Map<String, Object> produceOpsiInformation() {
 		if (!opsiInformation.isEmpty()) {
 			// we are initialized
@@ -8226,7 +8161,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Logging.info(this, "opsiModules result " + opsiModules);
 
-		withLinuxAgent = (opsiModules.get("linux_agent") != null) && (opsiModules.get("linux_agent"));
 		withLicenceManagement = (opsiModules.get("license_management") != null)
 				&& (opsiModules.get("license_management"));
 		withLocalImaging = (opsiModules.get("local_imaging") != null) && (opsiModules.get("local_imaging"));
@@ -8498,7 +8432,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			Logging.warning("opsi module information problem", ex);
 		}
 
-		withLinuxAgent = (opsiModules.get("linux_agent") != null) && opsiModules.get("linux_agent");
 		withLicenceManagement = (opsiModules.get("license_management") != null)
 				&& opsiModules.get("license_management");
 		withLocalImaging = (opsiModules.get("local_imaging") != null) && opsiModules.get("local_imaging");
@@ -8527,7 +8460,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		Logging.info(this, " withMySQL " + withMySQL);
-		Logging.info(this, " withLinuxAgent " + withLinuxAgent);
 		Logging.info(this, " withUserRoles " + withUserRoles);
 	}
 
@@ -8553,18 +8485,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	@Override
-	public boolean isWithLinuxAgent() {
-		return withLinuxAgent;
-	}
-
-	@Override
 	public boolean isWithLicenceManagement() {
 		return withLicenceManagement;
-	}
-
-	@Override
-	public boolean isWithUserRoles() {
-		return withUserRoles;
 	}
 
 	@Override

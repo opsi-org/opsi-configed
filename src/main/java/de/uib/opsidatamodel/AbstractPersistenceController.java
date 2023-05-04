@@ -357,8 +357,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract boolean renameClient(String hostname, String newHostname);
 
-	public abstract void deleteClient(String hostId);
-
 	public abstract void deleteClients(String[] hostIds);
 
 	public abstract List<String> deletePackageCaches(String[] hostIds);
@@ -396,8 +394,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract void setClientOneTimePassword(String hostId, String oneTimePassword);
 
 	public abstract void setHostNotes(String hostId, String notes);
-
-	public abstract String getMacAddress(String hostId);
 
 	public abstract void setSystemUUID(String hostId, String uuid);
 
@@ -486,8 +482,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract List<String> getHwInfoClassNames();
 
-	public abstract List<String> getHostColumnNames();
-
 	public abstract List<String> getClient2HwRowsColumnNames();
 
 	public abstract List<String> getClient2HwRowsJavaclassNames();
@@ -503,8 +497,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract Map<String, String> getEmptyLogfiles();
 
 	public abstract Map<String, String> getLogfiles(String clientId, String logtype);
-
-	public abstract Map<String, String> getLogfiles(String clientId);
 
 	/* list of boot images */
 
@@ -635,8 +627,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Boolean hasClientSpecificProperties(String productname);
 
-	public abstract Map<String, Boolean> getProductHavingClientSpecificProperties();
-
 	public abstract Map<String, Map<String, ConfigName2ConfigValue>> getDepot2product2properties();
 
 	public abstract Map<String, ConfigName2ConfigValue> getDefaultProductProperties(String depotId);
@@ -673,8 +663,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract Map<String, List<Object>> getConfigDefaultValues();
 
 	public abstract Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal);
-
-	public abstract void setGlobalBooleanConfigValue(String key, Boolean val, String description);
 
 	protected abstract boolean setHostBooleanConfigValue(String key, String hostName, boolean val);
 
@@ -853,8 +841,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Map<String, Object> getOpsiLicencingInfoNoOpsiAdmin();
 
-	public abstract String getCustomer();
-
 	public abstract boolean isWithLocalImaging();
 
 	public abstract boolean isWithLicenceManagement();
@@ -864,10 +850,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract boolean isWithUEFI();
 
 	public abstract boolean isWithWAN();
-
-	public abstract boolean isWithLinuxAgent();
-
-	public abstract boolean isWithUserRoles();
 
 	public abstract boolean applyUserSpecializedConfig();
 
@@ -910,22 +892,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		return item;
 	}
 
-	public static ConfigOption createConfig(ConfigOption.TYPE type, String key, String description, boolean editable,
-			boolean multiValue, List<Object> defaultValues, List<Object> possibleValues) {
-		Map<String, Object> item = createNOMitem(type.toString());
-
-		item.put("ident", key.toLowerCase());
-		item.put("description", description);
-		item.put("editable", editable);
-		item.put("multiValue", multiValue);
-
-		item.put("defaultValues", defaultValues);
-
-		item.put("possibleValues", possibleValues);
-
-		return new ConfigOption(item);
-	}
-
 	public static Map<String, Object> createJSONConfig(ConfigOption.TYPE type, String key, String description,
 			boolean editable, boolean multiValue, List<Object> defaultValues, List<Object> possibleValues) {
 
@@ -941,18 +907,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
 
 		return item;
-	}
-
-	public static ConfigOption createBoolConfig(String key, Boolean value, String description) {
-		List<Object> defaultValues = new ArrayList<>();
-		defaultValues.add(value);
-
-		List<Object> possibleValues = new ArrayList<>();
-		possibleValues.add(true);
-		possibleValues.add(false);
-
-		return createConfig(ConfigOption.TYPE.BOOL_CONFIG, key, description, false, false, defaultValues,
-				possibleValues);
 	}
 
 	public static Map<String, Object> createJSONBoolConfig(String key, Boolean value, String description) {
