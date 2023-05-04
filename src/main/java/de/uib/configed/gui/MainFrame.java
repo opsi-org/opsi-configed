@@ -75,7 +75,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -3464,42 +3463,6 @@ public class MainFrame extends JFrame
 			configedMain.initDashInfo();
 		} else if (e.getSource() == jButtonOpsiLicenses) {
 			showOpsiModules();
-		}
-
-	}
-
-	public class LicenseDash {
-		private final JFrame frame = new JFrame();
-		private LicenseDisplayer licenseDisplayer;
-
-		public void initAndShowGUI() {
-			final JFXPanel fxPanel = new JFXPanel();
-			frame.add(fxPanel);
-			frame.setIconImage(Globals.mainIcon);
-			frame.setTitle(Configed.getResourceValue("Dashboard.licenseTitle"));
-			frame.setVisible(true);
-			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-			Platform.runLater(() -> {
-				try {
-					initFX();
-				} catch (IOException ioE) {
-					Logging.error(this, "Unable to open fxml file", ioE);
-				}
-			});
-		}
-
-		public void initFX() throws IOException {
-			try {
-				licenseDisplayer = new LicenseDisplayer();
-				licenseDisplayer.initAndShowGUI();
-			} catch (IOException ioE) {
-				Logging.debug(this, "Unable to open FXML file.");
-			}
-		}
-
-		public void show() {
-			licenseDisplayer.display();
 		}
 	}
 
