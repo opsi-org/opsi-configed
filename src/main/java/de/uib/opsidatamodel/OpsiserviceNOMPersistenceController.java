@@ -73,7 +73,6 @@ import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
 import de.uib.configed.type.ConfigStateEntry;
 import de.uib.configed.type.DatedRowList;
-import de.uib.configed.type.HWAuditClientEntry;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
@@ -129,6 +128,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return -1;
 		}
 	};
+
+	public static final String HOST_KEY = "hostId";
 
 	private static final String BACKEND_LICENSING_INFO_METHOD_NAME = "backend_getLicensingInfo";
 
@@ -3081,7 +3082,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		List<String> callAttributes = new ArrayList<>();
 		Map<String, String> callFilter = new HashMap<>();
-		callFilter.put("hostId", clientId);
+		callFilter.put(HOST_KEY, clientId);
 
 		List<Map<String, Object>> hardwareInfos = exec.getListOfMaps(
 				new OpsiMethodCall("auditHardwareOnHost_getObjects", new Object[] { callAttributes, callFilter }));
@@ -6555,7 +6556,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					for (String pool : licencePools.keySet()) {
 						HashMap<String, Object> rowMap = new HashMap<>();
 
-						rowMap.put(HWAuditClientEntry.HOST_KEY, clientEntry.getKey());
+						rowMap.put(HOST_KEY, clientEntry.getKey());
 
 						for (String fieldName : extraHostFields) {
 							rowMap.put(fieldName, clientEntry.getValue().getMap().get(fieldName));
@@ -6835,7 +6836,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			resultMap = exec.getMapResult(omc0);
 
 			if (!resultMap.isEmpty()) {
-				result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
+				result = Globals.pseudokey(new String[] { "" + resultMap.get(HOST_KEY),
 						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 			}
 		}
@@ -6860,7 +6861,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			resultMap = exec.getMapResult(omc);
 
 			if (!resultMap.isEmpty()) {
-				result = Globals.pseudokey(new String[] { "" + resultMap.get(HWAuditClientEntry.HOST_KEY),
+				result = Globals.pseudokey(new String[] { "" + resultMap.get(HOST_KEY),
 						"" + resultMap.get("softwareLicenseId"), "" + resultMap.get("licensePoolId") });
 			}
 		}

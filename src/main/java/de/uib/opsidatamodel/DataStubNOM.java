@@ -29,7 +29,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
-import de.uib.configed.type.HWAuditClientEntry;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
 import de.uib.configed.type.SWAuditClientEntry;
@@ -88,9 +87,6 @@ public class DataStubNOM {
 	protected List<Map<String, Object>> productPropertyDepotStates;
 
 	protected Set<String> hostsWithProductProperties;
-
-	protected NavigableMap<String, List<HWAuditClientEntry>> client2hwAuditHostEntries;
-	protected NavigableMap<String, Map<String, List<HWAuditClientEntry>>> client2hwType2hwAuditHostEntries;
 
 	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformation;
 	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;

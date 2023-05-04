@@ -2,6 +2,8 @@ package de.uib.opsidatamodel.dbtable;
 
 import java.util.Map;
 
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+
 // TODO what is the need of this class? only static values are accessed, never instanciated
 public final class Host extends Table {
 	public static final String TABLE_NAME = "HOST";
@@ -16,8 +18,8 @@ public final class Host extends Table {
 	public static Map<java.lang.String, java.lang.Object> db2ServiceRowMap(
 			Map<java.lang.String, java.lang.Object> map) {
 		map.remove("ident");
-		map.put("id", map.get("hostId"));
-		map.remove("hostId");
+		map.put("id", map.get(OpsiserviceNOMPersistenceController.HOST_KEY));
+		map.remove(OpsiserviceNOMPersistenceController.HOST_KEY);
 
 		return map;
 	}

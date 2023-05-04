@@ -185,7 +185,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	protected GeneralDataChangedKeeper generalDataChangedKeeper;
 	protected ClientInfoDataChangedKeeper clientInfoDataChangedKeeper;
-	protected HostConfigsDataChangedKeeper hostConfigsDataChangedKeeper;
+	protected GeneralDataChangedKeeper hostConfigsDataChangedKeeper;
 
 	protected DependenciesModel dependenciesModel;
 
@@ -788,7 +788,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		dependenciesModel = new DependenciesModel(persist);
 		generalDataChangedKeeper = new GeneralDataChangedKeeper();
 		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper();
-		hostConfigsDataChangedKeeper = new HostConfigsDataChangedKeeper();
+		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper();
 		allControlMultiTablePanels = new ArrayList<>();
 
 		connectedHostsByMessagebus = persist.getMessagebusConnectedClients();
@@ -3930,20 +3930,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	/* ============================================ */
 
-	public HostConfigsDataChangedKeeper getHostConfigsDataChangedKeeper() {
+	public GeneralDataChangedKeeper getHostConfigsDataChangedKeeper() {
 		return hostConfigsDataChangedKeeper;
-	}
-
-	/*
-	 * ============================================
-	 * inner class userconfigDataChangedKeeper
-	 * ===========================================
-	 */
-	public class HostConfigsDataChangedKeeper extends GeneralDataChangedKeeper {
-		// TODO remove? Because it actually does not change anything
-		public HostConfigsDataChangedKeeper() {
-			super();
-		}
 	}
 
 	/* ============================================ */

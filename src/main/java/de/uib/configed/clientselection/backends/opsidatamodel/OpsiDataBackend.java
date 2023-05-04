@@ -90,6 +90,7 @@ import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.utilities.logging.Logging;
@@ -604,7 +605,7 @@ public final class OpsiDataBackend {
 			clientToHardware.put(clientNames[i], new LinkedList<>());
 		}
 		for (Map<String, Object> map : hardwareOnClient) {
-			String name = (String) map.get("hostId");
+			String name = (String) map.get(OpsiserviceNOMPersistenceController.HOST_KEY);
 			if (!clientToHardware.containsKey(name)) {
 				Logging.debug(this, "Non-client hostid: " + name);
 				continue;
