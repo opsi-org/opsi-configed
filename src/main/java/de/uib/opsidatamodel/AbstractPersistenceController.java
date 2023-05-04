@@ -58,9 +58,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	// constants for building hw queries
 	public static final String HW_INFO_CONFIG = "HARDWARE_CONFIG_";
 	public static final String HW_INFO_DEVICE = "HARDWARE_DEVICE_";
-	public static final String HOST_ID_FIELD = ".hostId";
-	public static final String HARDWARE_ID_FIELD = ".hardware_id";
-	public static final String LAST_SEEN_COL_NAME = "lastseen";
 	public static final String LAST_SEEN_VISIBLE_COL_NAME = "HOST.last_scan_time";
 
 	public static final String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT = "configed.productonclient_displayfields_localboot";
@@ -88,8 +85,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public static final String OPSI_CLIENTD_EVENT_SILENT_INSTALL = "silent_install";
 
 	public static final String KEY_PRODUCT_SORT_ALGORITHM = "product_sort_algorithm";
-
-	public static final String KEY_CHOICES_FOR_WOL_DELAY = "wol_delays_sec";
 
 	public static final String LOCAL_IMAGE_RESTORE_PRODUCT_KEY = "opsi-local-image-restore";
 	public static final String LOCAL_IMAGE_LIST_PROPERTY_KEY = "imagefiles_list";
@@ -192,7 +187,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	// wan meta configuration
 	public static final String WAN_PARTKEY = "wan_";
-	public static final String WAN_CONFIGURED_PARTKEY = "wan_mode_on";
 	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
 
 	protected Map<String, List<Object>> wanConfiguration;
