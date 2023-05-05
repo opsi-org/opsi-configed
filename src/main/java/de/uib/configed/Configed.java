@@ -181,7 +181,6 @@ public class Configed {
 	public static final int NO_ERROR = 0;
 	public static final int ERROR_INVALID_OPTION = 1;
 	public static final int ERROR_MISSING_VALUE_FOR_OPTION = 2;
-	public static final int ERROR_UNSUPPORTED_CIPHERSUITE = 12;
 
 	public static final int ERROR_CANNOT_READ_EXTRA_LOCALIZATION = 11;
 
@@ -368,10 +367,6 @@ public class Configed {
 		Configed.paramTab = paramTab;
 		Configed.paramClient = paramClient;
 		Configed.paramClientgroup = paramClientgroup;
-	}
-
-	protected void revalidate() {
-		configedMain.initialTreeActivation();
 	}
 
 	public static Integer getRefreshMinutes() {

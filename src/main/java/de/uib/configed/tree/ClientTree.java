@@ -1022,7 +1022,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			DefaultMutableTreeNode parent = (DefaultMutableTreeNode) clientNode.getParent();
 
 			removeClientInternally(clientId, (GroupNode) parent);
-			groupEntries.add(new Object2GroupEntry(null, clientId, parent.toString()));
+			groupEntries.add(new Object2GroupEntry(clientId, parent.toString()));
 		}
 
 		return configedMain.removeHostGroupElements(groupEntries);

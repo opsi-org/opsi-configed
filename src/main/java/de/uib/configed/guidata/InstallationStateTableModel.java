@@ -69,7 +69,6 @@ import de.uib.configed.gui.FShowList;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
-import de.uib.opsidatamodel.productstate.Config;
 import de.uib.opsidatamodel.productstate.InstallationInfo;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.LastAction;
@@ -84,11 +83,13 @@ import de.uib.utilities.logging.Logging;
  */
 public class InstallationStateTableModel extends AbstractTableModel implements IFInstallationStateTableModel {
 
-	public static final String EMPTYFIELD = "_";
-
 	public static final String CONFLICT_STRING = Globals.CONFLICT_STATE_STRING;
 
 	public static final String UNEQUAL_ADD_STRING = "≠ ";
+
+	public static final Map<String, String> REQUIRED_ACTION_FOR_STATUS = Map.ofEntries(
+			Map.entry(InstallationStatus.KEY_INSTALLED, "setup"),
+			Map.entry(InstallationStatus.KEY_NOT_INSTALLED, "uninstall"));
 
 	protected static Map<String, String> columnDict;
 	protected static List<String> columnsLocalized;
@@ -1006,7 +1007,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 							String requiredStatusS = InstallationStatus.getLabel(requiredIS);
 							Logging.debug(this, " requiredStatusS " + requiredStatusS);
 
-							String neededAction = Config.requiredActionForStatus.get(requiredStatusS);
+							String neededAction = REQUIRED_ACTION_FOR_STATUS.get(requiredStatusS);
 							Logging.debug(this, " needed action therefore " + neededAction);
 
 							requiredAR = ActionRequest.getVal(neededAction);
