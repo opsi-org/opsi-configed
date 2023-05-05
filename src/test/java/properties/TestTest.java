@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,8 +15,6 @@ import de.uib.messages.Messages;
 class TestTest {
 
 	private static final String FILENAME_VALID_LOCALISATIONS = "valid_localisations.conf";
-
-	Logger log = Logger.getGlobal();
 
 	/**
 	 * This Test checks if all translation files are complete, i.e. if they all
