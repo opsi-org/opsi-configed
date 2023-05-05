@@ -99,9 +99,6 @@ import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.JSONReMapper;
 import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.dbtable.Host;
-import de.uib.opsidatamodel.dbtable.ProductOnClient;
-import de.uib.opsidatamodel.dbtable.ProductPropertyState;
 import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
@@ -1425,8 +1422,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		String[] callAttributes = new String[] {};
 
 		HashMap<String, String> callFilter = new HashMap<>();
-		callFilter.put(ProductOnClient.PRODUCT_ID, productId);
-		callFilter.put(ProductOnClient.PRODUCT_TYPE, ProductOnClient.LOCALBOOT_ID);
+		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productId);
+		callFilter.put(OpsiPackage.SERVICE_KEY_PRODUCT_TYPE, OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING);
 
 		List<Map<String, Object>> retrievedList = retrieveListOfMapsNOM(callAttributes, callFilter,
 				"productOnClient_getObjects");
@@ -1434,7 +1431,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		List<String> result = new ArrayList<>();
 
 		for (Map<String, Object> m : retrievedList) {
-			String client = (String) m.get(ProductOnClient.CLIENT_ID);
+			String client = (String) m.get("clientId");
 
 			String clientProductVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PRODUCT_VERSION);
 			String clientPackageVersion = (String) m.get(OpsiPackage.SERVICE_KEY_PACKAGE_VERSION);
@@ -3276,9 +3273,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		if (client2HwRowsColumnNames == null || client2HwRowsJavaclassNames == null || hwInfoClassNames == null) {
 			hostColumnNames = new ArrayList<>();
 
-			hostColumnNames.add(Host.ID_COLUMN);
-			hostColumnNames.add(Host.DESCRIPTION_COLUMN);
-			hostColumnNames.add(Host.HW_ADRESS_COLUMN);
+			// todo make static variables
+			hostColumnNames.add("HOST.hostId");
+			hostColumnNames.add("HOST.description");
+			hostColumnNames.add("HOST.hardwareAdress");
 			hostColumnNames.add(LAST_SEEN_VISIBLE_COL_NAME);
 
 			getConfigOptions();
@@ -3893,7 +3891,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		for (Map<String, Object> m : productOnClients) {
 
-			String client = (String) m.get(ProductOnClient.CLIENT_ID);
+			String client = (String) m.get("clientId");
 			List<Map<String, String>> states1Client = result.computeIfAbsent(client, arg -> new ArrayList<>());
 
 			Map<String, String> aState = new ProductState(JSONReMapper.giveEmptyForNull(m), true);
@@ -4142,8 +4140,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		String[] callAttributes = new String[] {};
 
 		HashMap<String, String> callFilter = new HashMap<>();
-		callFilter.put(ProductOnClient.PRODUCT_ID, productId);
-		callFilter.put(ProductOnClient.CLIENT_ID, clientId);
+		callFilter.put(OpsiPackage.DB_KEY_PRODUCT_ID, productId);
+		callFilter.put("clientId", clientId);
 
 		Map<String, Object> retrievedMap = retrieveListOfMapsNOM(callAttributes, callFilter,
 				"productOnClient_getHashes").get(0);
@@ -4401,7 +4399,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				.getProductPropertyDepotStates(hostInfoCollections.getDepots().keySet());
 
 		for (Map<String, Object> map : retrieved) {
-			String host = (String) map.get(ProductPropertyState.OBJECT_ID);
+			String host = (String) map.get("objectId");
 
 			if (!hostInfoCollections.getDepots().keySet().contains(host)) {
 				Logging.warning(this, "should be a productPropertyState for a depot, but host " + host);
@@ -4412,16 +4410,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					arg -> new HashMap<>());
 
 			ConfigName2ConfigValue properties = productproperties1Host.computeIfAbsent(
-					(String) map.get(ProductPropertyState.PRODUCT_ID),
+					(String) map.get(OpsiPackage.DB_KEY_PRODUCT_ID),
 					arg -> new ConfigName2ConfigValue(new HashMap<>()));
 
-			properties.put((String) map.get(ProductPropertyState.PROPERTY_ID),
-					((JSONArray) map.get(ProductPropertyState.VALUES)).toList());
-			properties.getRetrieved().put((String) map.get(ProductPropertyState.PROPERTY_ID),
-					((JSONArray) map.get(ProductPropertyState.VALUES)).toList());
+			properties.put((String) map.get("propertyId"), ((JSONArray) map.get("values")).toList());
+			properties.getRetrieved().put((String) map.get("propertyId"), ((JSONArray) map.get("values")).toList());
 
 			Logging.debug(this,
-					"retrieveDepotProductProperties product properties " + map.get(ProductPropertyState.PRODUCT_ID));
+					"retrieveDepotProductProperties product properties " + map.get(OpsiPackage.DB_KEY_PRODUCT_ID));
 		}
 
 	}
