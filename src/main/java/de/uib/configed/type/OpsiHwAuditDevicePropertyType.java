@@ -4,7 +4,6 @@ public class OpsiHwAuditDevicePropertyType {
 	private String opsiDbColumnName;
 	private String opsiDbColumnType;
 
-	private String reportFunction;
 	private String uiName;
 	private String hwClassName;
 

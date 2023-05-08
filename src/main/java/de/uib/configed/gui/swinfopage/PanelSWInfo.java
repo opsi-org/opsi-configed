@@ -25,7 +25,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
-import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.AbstractPersistenceController;
@@ -55,27 +54,21 @@ public class PanelSWInfo extends JPanel {
 
 	private JPanel subPanelTitle;
 
-	private JScrollPane scrollPaneSWInfo;
-	private JTable jTable;
 	private final SWInfoTableModel voidTableModel = new SWInfoTableModel();
 	private GenTableModel modelSWInfo;
 
 	private JLabel labelSuperTitle;
 
-	private String supertitle = "";
 	private String title = "";
-	private DatedRowList swRows;
 	private String hostId = "";
 	private boolean withPopup;
 
 	private String scanInfo = "";
 
-	private Boolean askingForKindOfAction;
 	private boolean askForOverwrite = true;
 
 	private int hGap = Globals.HGAP_SIZE / 2;
 	private int vGap = Globals.VGAP_SIZE / 2;
-	private int hLabel = Globals.BUTTON_HEIGHT;
 
 	private ConfigedMain mainController;
 	private AbstractPersistenceController persist;
@@ -130,7 +123,6 @@ public class PanelSWInfo extends JPanel {
 
 	public PanelSWInfo(ConfigedMain mainController) {
 		this(true, mainController);
-		askingForKindOfAction = false;
 	}
 
 	public PanelSWInfo(boolean withPopup, ConfigedMain mainController) {
@@ -141,7 +133,6 @@ public class PanelSWInfo extends JPanel {
 		initTable();
 
 		buildPanel();
-		askingForKindOfAction = true;
 	}
 
 	private void initTable() {
@@ -288,7 +279,7 @@ public class PanelSWInfo extends JPanel {
 			labelSuperTitle.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
-		jTable = new JTable(voidTableModel, null);
+		JTable jTable = new JTable(voidTableModel, null);
 
 		jTable.setAutoCreateRowSorter(true);
 		TableRowSorter<? extends TableModel> tableSorter = (TableRowSorter<? extends TableModel>) jTable.getRowSorter();
@@ -306,7 +297,7 @@ public class PanelSWInfo extends JPanel {
 		jTable.setColumnSelectionAllowed(true);
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);
-		scrollPaneSWInfo = new JScrollPane(jTable);
+		JScrollPane scrollPaneSWInfo = new JScrollPane(jTable);
 		if (!ConfigedMain.THEMES) {
 			scrollPaneSWInfo.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		}
@@ -374,10 +365,6 @@ public class PanelSWInfo extends JPanel {
 
 		}
 
-	}
-
-	public void setAskingForKindOfAction(boolean b) {
-		askingForKindOfAction = b;
 	}
 
 	public void setWriteToFile(String path) {
@@ -480,7 +467,7 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void setSuperTitle(String s) {
-		supertitle = "" + s;
+		String supertitle = s;
 		Logging.info(this, "setSuperTitle " + s);
 		labelSuperTitle.setText(supertitle);
 
@@ -521,7 +508,6 @@ public class PanelSWInfo extends JPanel {
 
 		this.hostId = "" + hostId;
 		title = this.hostId;
-		this.swRows = new DatedRowList();
 
 		String timeS = "" + Globals.getToday();
 		String[] parts = timeS.split(":");
@@ -546,12 +532,6 @@ public class PanelSWInfo extends JPanel {
 			data = new ArrayList<>();
 		}
 
-		public void setData(DatedRowList datedList) {
-			this.data = datedList.getRows();
-
-			fireTableDataChanged();
-		}
-
 		@Override
 		public int getRowCount() {
 			return data.size();
@@ -572,5 +552,4 @@ public class PanelSWInfo extends JPanel {
 			return (/* encodeString */ data.get(row))[col + 1];
 		}
 	}
-
 }

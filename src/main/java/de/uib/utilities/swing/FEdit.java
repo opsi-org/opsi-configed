@@ -43,7 +43,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected IconButton buttonCommit;
 	private IconButton buttonCancel;
 
-	private boolean dataChanged;
 	private boolean cancelled;
 	private boolean starting = true;
 
@@ -165,7 +164,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	public void setDataChanged(boolean b) {
 
-		dataChanged = b;
 		buttonCommit.setEnabled(b);
 		buttonCancel.setEnabled(true);
 

@@ -296,13 +296,11 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	public class LinkSearcher {
 		private JTextComponent comp;
 		private Highlighter.HighlightPainter painter;
-		private int lastReturnedOffset;
 		private boolean cS;
 
 		public LinkSearcher(JTextComponent comp) {
 			this.comp = comp;
 			this.painter = new UnderlineHighlightPainter(Globals.F_EDIT_PANE_UNDERLINE_HIGHLIGHTER_PAINTER);
-			this.lastReturnedOffset = -1;
 		}
 
 		// Set case sensitivity

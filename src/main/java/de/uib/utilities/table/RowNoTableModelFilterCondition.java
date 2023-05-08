@@ -6,19 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JTable;
-
 import de.uib.utilities.logging.Logging;
 
 public class RowNoTableModelFilterCondition implements TableModelFilterCondition {
 
 	private Map<Object, Boolean> selectionInfo;
-
-	private JTable table;
-
-	public RowNoTableModelFilterCondition(JTable table) {
-		this.table = table;
-	}
 
 	@Override
 	public void setFilter(Set<Object> filter) {

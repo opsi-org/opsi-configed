@@ -155,8 +155,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	private List<? extends SortKey> currentSortKeys;
 
-	private ArrayList<String> selectedProducts;
-
 	private JPopupMenu popup;
 	private JMenuItem itemOnDemand;
 
@@ -197,8 +195,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		exportTable = new ExporterToCSV(tableProducts);
 
 		initTopPane();
-
-		selectedProducts = new ArrayList<>();
 
 		JScrollPane paneProducts = new JScrollPane();
 

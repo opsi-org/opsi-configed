@@ -55,7 +55,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	private int keyCol = -1;
 	private List<TableEditItem> updates;
-	private String tableName;
 	private boolean modelDataValid;
 	private boolean modelStructureValid;
 
@@ -68,8 +67,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	private TableModelFilter workingFilter;
 
 	private Map<Integer, RowStringMap> primarykey2Rowmap;
-	private Map<Integer, String> primarykeyTranslation;
-	private Mapping<Integer, String> primarykeyRepresentation;
 
 	private Integer sortCol;
 	private boolean sorting;
@@ -962,8 +959,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	private void requestRefreshDerivedMaps() {
 		primarykey2Rowmap = null;
-		primarykeyTranslation = null;
-		primarykeyRepresentation = null;
 	}
 
 	@Override

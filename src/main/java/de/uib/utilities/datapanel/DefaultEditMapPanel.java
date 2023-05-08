@@ -37,8 +37,6 @@ public class DefaultEditMapPanel extends JPanel {
 	protected boolean keylistExtendible;
 	protected boolean keylistEditable = true;
 
-	private boolean optionsEditable = true;
-
 	protected Actor actor;
 
 	protected JPopupMenu popupmenuAtRow;

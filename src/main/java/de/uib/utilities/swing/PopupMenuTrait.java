@@ -33,16 +33,11 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	public static final int POPUP_PRINT = 30;
 
-	private JMenuItemFormatted menuItemReload;
-	private Integer[] popups;
 	private List<Integer> listPopups;
 
 	private JMenuItemFormatted[] menuItems;
 
-	private JPopupMenu popupMenu;
-
 	public PopupMenuTrait(Integer[] popups) {
-		this.popups = popups;
 		listPopups = Arrays.asList(popups);
 
 		menuItems = new JMenuItemFormatted[popups.length];

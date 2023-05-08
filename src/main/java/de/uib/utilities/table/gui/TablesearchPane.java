@@ -100,7 +100,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private int foundrow = -1;
 
 	private SearchTargetModel targetModel;
-	private PanelGenEditTable associatedTable;
 
 	private final Comparator<Object> comparator;
 	private Map<String, Mapping<Integer, String>> mappedValues;

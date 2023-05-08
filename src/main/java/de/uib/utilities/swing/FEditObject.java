@@ -60,9 +60,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected IconButton buttonAdd;
 	protected IconButton buttonRemove;
 
-	private String tooltipCommit = Configed.getResourceValue("FEditObject.SaveButtonTooltip");
-
-	private boolean dataChanged;
 	protected boolean editable = true;
 	private boolean finished;
 
@@ -251,7 +248,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			return;
 		}
 
-		dataChanged = b;
 		buttonCommit.setEnabled(b);
 
 	}

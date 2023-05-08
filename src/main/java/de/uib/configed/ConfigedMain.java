@@ -210,8 +210,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	// tells if a group of client is loaded via GroupManager (and not by direct
 	// selection)
 
-	private boolean changeListByToggleShowSelection;
-	private boolean hostgroupChanged;
 	private String appTitle = Globals.APPNAME;
 
 	private FTextArea fAskSaveChangedText;
@@ -235,7 +233,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 */
 
 	private ProductpropertiesUpdateCollection clientProductpropertiesUpdateCollection;
-	private ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection;
 
 	private AdditionalconfigurationUpdateCollection additionalconfigurationUpdateCollection;
 
@@ -1980,10 +1977,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void toggleFilterClientList() {
-		changeListByToggleShowSelection = true;
 		Logging.info(this, "toggleFilterClientList   " + filterClientList);
 		setFilterClientList(!filterClientList);
-		changeListByToggleShowSelection = false;
 	}
 
 	public void invertClientselection() {
@@ -2559,7 +2554,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		groupPathActivatedByTree = pathToNode;
 
 		try {
-			activatedGroupModel.setNode("" + node, node, pathToNode);
+			activatedGroupModel.setNode("" + node);
 			activatedGroupModel.setDescription(treeClients.getGroups().get("" + node).get("description"));
 			activatedGroupModel.setAssociatedClients(clientsFilteredByTree);
 			activatedGroupModel.setActive(true);
@@ -4916,7 +4911,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			sortedKeys.sort(Comparator.comparing(String::toString));
 			dialogRemoteControl.setListModel(new DefaultComboBoxModel<>(sortedKeys.toArray(new String[0])));
 
-			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, false, ""));
+			dialogRemoteControl.setCellRenderer(new ListCellRendererByIndex(entries, tooltips, null, ""));
 
 			dialogRemoteControl
 					.setTitle(Globals.APPNAME + ":  " + Configed.getResourceValue("MainFrame.jMenuRemoteControl"));

@@ -33,7 +33,6 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	private JLabel label;
 	private JComboBox<String> combo;
 	private Map<String, Map<String, Object>> multipleMaps;
-	private UpdateCollection updateCollection;
 
 	public PanelHostProperties() {
 		buildPanel();
@@ -89,8 +88,6 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 		Logging.debug(this, "initMultipleHosts " + " configs  " + (multipleMaps)
 
 		);
-
-		this.updateCollection = updateCollection;
 
 		this.multipleMaps = multipleMaps;
 		editMapPanel.setUpdateCollection(updateCollection);

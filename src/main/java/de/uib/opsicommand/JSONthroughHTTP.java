@@ -58,14 +58,11 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
 	private static final int POST = 0;
 	private static final int GET = 1;
-	private static final String CODING_TABLE = "UTF8";
 	protected String host;
 	public String username;
 	public String password;
 	private int portHTTP = 4444;
 	protected int portHTTPS = DEFAULT_PORT;
-	private boolean startConnecting;
-	private boolean endConnecting;
 	protected URL serviceURL;
 	public String sessionId;
 	private String lastSessionId;

@@ -20,7 +20,6 @@ public class JComboBoxToolTip extends JComboBox<String> {
 	private Map<String, String> selectValues;
 
 	private Color listBackgroundColorSelected;
-	private Color listBackgroundColorUnselected;
 	private Color listForegroundColor;
 
 	private boolean addEmpty;
@@ -31,7 +30,6 @@ public class JComboBoxToolTip extends JComboBox<String> {
 		super();
 
 		listBackgroundColorSelected = Globals.SECONDARY_BACKGROUND_COLOR;
-		listBackgroundColorUnselected = Globals.BACKGROUND_COLOR_3;
 		listForegroundColor = Globals.lightBlack;
 
 	}

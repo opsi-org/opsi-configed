@@ -63,7 +63,6 @@ public class ExporterToPDF extends AbstractExportTable {
 	private Boolean saveAction;
 
 	private String defaultFilename = "report.pdf";
-	private boolean askForOverwrite = true;
 
 	private float xHeaderTop = 803;
 	private float headerWidth = 527;

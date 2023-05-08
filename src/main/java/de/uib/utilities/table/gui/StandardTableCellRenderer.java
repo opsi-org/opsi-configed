@@ -19,8 +19,6 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	protected String tooltipPrefix;
 	private String separator = ": ";
 
-	private int currentRow = -1;
-
 	public StandardTableCellRenderer() {
 		super();
 	}
@@ -28,10 +26,6 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	public StandardTableCellRenderer(String tooltipPrefix) {
 		this();
 		this.tooltipPrefix = tooltipPrefix;
-	}
-
-	public void setCurrentRow(int rowNumber) {
-		currentRow = rowNumber;
 	}
 
 	@Override

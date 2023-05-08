@@ -63,14 +63,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	// for creating pdf
 	private Map<String, String> hwOpsiToUI;
 
-	private JSplitPane contentPane;
-	private JScrollPane jScrollPaneTree;
-	private JScrollPane jScrollPaneInfo;
 	private XTree tree;
 	private IconNode root;
 	private TreePath rootPath;
 	private DefaultTreeModel treeModel;
-	private JTable table;
 	private HWInfoTableModel tableModel;
 	private Map<String, Object> hwClassMapping;
 
@@ -81,13 +77,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private PanelHWByAuditDriver panelByAuditInfo;
 
-	private PopupMenuTrait popupMenu;
-
 	private int hGap = Globals.HGAP_SIZE / 2;
 	private int vGap = Globals.VGAP_SIZE / 2;
-	private int hLabel = Globals.BUTTON_HEIGHT;
-
-	private IconNode selectedNode;
 
 	private boolean withPopup;
 
@@ -110,18 +101,18 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	private void buildPanel() {
 
-		panelByAuditInfo = new PanelHWByAuditDriver(title, main);
+		panelByAuditInfo = new PanelHWByAuditDriver(main);
 
 		tree = new XTree(null);
 
-		jScrollPaneTree = new JScrollPane(tree);
+		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		jScrollPaneTree.setMinimumSize(new Dimension(200, 200));
 		jScrollPaneTree.setPreferredSize(new Dimension(400, 200));
 
 		tableModel = new HWInfoTableModel();
-		table = new JTable(tableModel, null);
+		JTable table = new JTable(tableModel, null);
 		table.setDefaultRenderer(Object.class, new ColorTableCellRenderer());
 		table.setTableHeader(null);
 		table.getColumnModel().getColumn(0).setPreferredWidth(80);
@@ -143,10 +134,10 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				.addComponent(table, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
 				.addGap(vGap, vGap, vGap));
 
-		jScrollPaneInfo = new JScrollPane(embed);
+		JScrollPane jScrollPaneInfo = new JScrollPane(embed);
 		jScrollPaneInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
+		JSplitPane contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, jScrollPaneTree, jScrollPaneInfo);
 
 		GroupLayout layoutBase = new GroupLayout(this);
 		setLayout(layoutBase);
@@ -170,8 +161,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 		if (withPopup) {
 
-			popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_PDF,
-					PopupMenuTrait.POPUP_FLOATINGCOPY }) {
+			PopupMenuTrait popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD,
+					PopupMenuTrait.POPUP_PDF, PopupMenuTrait.POPUP_FLOATINGCOPY }) {
 
 				@Override
 				public void action(int p) {
@@ -215,12 +206,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			popupMenu.addPopupListenersTo(new JComponent[] { tree, table });
 		}
-
-	}
-
-	public void setTitle(String s) {
-		title = s;
-		panelByAuditInfo.setTitle(s);
 
 	}
 
@@ -428,7 +413,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	}
 
 	private void setNode(IconNode node) {
-		selectedNode = node;
 		tableModel.setData(getDataForNode(node));
 	}
 

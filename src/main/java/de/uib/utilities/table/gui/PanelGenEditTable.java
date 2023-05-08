@@ -126,9 +126,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	private List<Integer> internalpopups;
 
-	private List<JMenuItem> menuItemsRequesting1SelectedLine;
-	private List<JMenuItem> menuItemsRequestingMultiSelectedLines;
-
 	private JMenuItemFormatted menuItemDeleteRelation;
 	private JMenuItemFormatted menuItemSave;
 	private JMenuItemFormatted menuItemCancel;
@@ -145,7 +142,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	private JLabel labelRowCount;
 	private JLabel labelMarkedCount;
-	private String textMarkedCount = "selected";
 	private JPanel titlePane;
 
 	private Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;
@@ -194,9 +190,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
-
-		menuItemsRequesting1SelectedLine = new ArrayList<>();
-		menuItemsRequestingMultiSelectedLines = new ArrayList<>();
 
 		this.generalPopupPosition = generalPopupPosition;
 
@@ -997,7 +990,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private void setModelFilteringBySelection() {
 		if (filteringActive && tableModel != null
 				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
-			filterBySelectionCondition = new RowNoTableModelFilterCondition(theTable);
+			filterBySelectionCondition = new RowNoTableModelFilterCondition();
 			filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
 
 			tableModel.chainFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION, filterBySelection);

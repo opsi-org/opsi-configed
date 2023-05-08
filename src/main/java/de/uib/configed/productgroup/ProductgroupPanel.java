@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JLabel;
@@ -89,7 +88,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private TablesearchPane searchPane;
 	private JTable tableProducts;
-	private IFInstallationStateTableModel insTableModel;
 
 	private JTextField saveNameEditor;
 
@@ -106,7 +104,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private IconButton buttonCollectiveAction;
 
-	private JLabel labelCollectiveAction;
 	private JComboBoxToolTip comboAggregatedEditing;
 
 	private JLabel labelSave;
@@ -116,20 +113,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private PanelGroupedProductSettings associate;
 	private JPanel panelEdit;
 
-	private Set<String> selectedIDs;
-
-	private DefaultComboBoxModel<String> comboModel;
-
 	private Map<String, String> namesAndDescriptions;
 	private Map<String, String> namesAndDescriptionsSave;
 	private MapOfProductGroups productGroupMembers;
-	private int editIndex;
-	private String showKey;
-	private String editedKey;
 	private JTextField groupsEditField;
 	private JTextField descriptionField;
-	private boolean dataChanged;
-	private boolean groupEditing;
 	private boolean deleted;
 
 	abstract static class AbstractDocumentListener implements DocumentListener {
@@ -249,7 +237,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			return false;
 		}
 
-		selectedIDs = associate.getSelectedIDs();
+		Set<String> selectedIDs = associate.getSelectedIDs();
 
 		String currentKey = saveNameEditor.getText();
 
@@ -423,7 +411,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonSaveAndExecute.setPreferredSize(Globals.newSmallButton);
 		buttonSaveAndExecute.setVisible(true);
 
-		labelCollectiveAction = new JLabel(Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
+		JLabel labelCollectiveAction = new JLabel(Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 		labelCollectiveAction.setFont(Globals.defaultFont);
 
 		buttonCollectiveAction = new IconButton(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
@@ -802,7 +790,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			namesAndDescriptions.put(id, theData.get(id).get("description"));
 		}
 		groupsCombo.setValues(namesAndDescriptions);
-		comboModel = (DefaultComboBoxModel<String>) groupsCombo.getModel();
 
 		// for reentry
 		clearChanges();
@@ -828,12 +815,10 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private void setGroupEditing(boolean b) {
 
-		groupEditing = b;
 		if (panelEdit != null) {
 			panelEdit.setVisible(b);
 			buttonEditDialog.setActivated(!b);
 		}
-
 	}
 
 	// ActionListener interface
@@ -952,7 +937,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	public void setDataChanged(boolean b) {
 
-		dataChanged = b;
 		if (buttonCommit != null) {
 			buttonCommit.setEnabled(b);
 		}

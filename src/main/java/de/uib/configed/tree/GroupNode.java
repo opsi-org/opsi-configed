@@ -1,20 +1,14 @@
 package de.uib.configed.tree;
 
 public class GroupNode extends IconNode {
-	private String description;
 	private boolean childsArePersistent = true;
 	private boolean allowingOnlyGroupChilds;
 	private boolean allowingSubGroups = true;
 	private boolean immutable;
 	private boolean fixed;
 
-	public GroupNode(Object userObject, String description) {
-		super(userObject, true);
-		this.description = description;
-	}
-
 	public GroupNode(Object userObject) {
-		this(userObject, "" + userObject);
+		super(userObject, true);
 	}
 
 	public void setChildsArePersistent(boolean b) {

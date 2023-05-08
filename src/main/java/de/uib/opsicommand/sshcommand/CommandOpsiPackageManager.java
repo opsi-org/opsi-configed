@@ -1,7 +1,6 @@
 package de.uib.opsicommand.sshcommand;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.uib.configed.Configed;
@@ -9,13 +8,10 @@ import de.uib.configed.gui.FGeneralDialog;
 
 public class CommandOpsiPackageManager implements SSHCommand {
 
-	private LinkedList<Object> helpLinesSplitted;
 	private FGeneralDialog dialog;
 	private boolean needSudo;
-	private boolean needRoot;
 	private boolean needParameter = true;
 	private boolean isMultiCommand;
-	private int helpColumns = 3;
 	private int priority = 100;
 
 	@Override

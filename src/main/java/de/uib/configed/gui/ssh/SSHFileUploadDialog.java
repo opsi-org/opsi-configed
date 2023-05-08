@@ -35,10 +35,8 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 	private static String wgetDefText;
 
-	private GroupLayout layout;
 	private JPanel inputPanel = new JPanel();
 	private JPanel buttonPanel = new JPanel();
-	private JPanel winAuthPanel = new JPanel();
 
 	private JRadioButton jRadioButtonFromServer;
 	private JRadioButton jRadioButtonLocal;
@@ -55,7 +53,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	private JLabel jLabelURL;
 	protected JLabel jLabelOverwriteExisting;
 
-	private JButton jButtonSearch;
 	protected JCheckBox jComboBoxSetRights;
 	protected JCheckBox jCheckBoxOverwriteExisting;
 	private JTextField jTextFieldURL;
@@ -66,9 +63,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 	private SSHWgetAuthenticationPanel wgetAuthPanel;
 	protected CommandSFTPUpload command;
-	private SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
-	private SSHConnectionExecDialog dia;
-	private ConfigedMain main;
 
 	protected int frameHeight = 410;
 	private int frameWidth = 700;

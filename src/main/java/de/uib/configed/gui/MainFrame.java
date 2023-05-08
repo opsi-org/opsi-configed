@@ -372,9 +372,6 @@ public class MainFrame extends JFrame
 	public CombinedMenuItem combinedMenuItemDepotColumn = new CombinedMenuItem(jCheckBoxMenuItemShowDepotColumn,
 			popupShowDepotColumn);
 
-	private JButton buttonSelectDepotsWithEqualProperties;
-	private JButton buttonSelectDepotsAll;
-
 	private BorderLayout borderLayout1 = new BorderLayout();
 	private JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
 	private JSplitPane panelClientSelection;
@@ -436,8 +433,6 @@ public class MainFrame extends JFrame
 	private JTextEditorField ipAddressField;
 	private JTextEditorField jTextFieldOneTimePassword;
 	private JTextHideField jTextFieldHostKey;
-
-	private FShowList fListSelectedClients;
 
 	private boolean multidepot;
 
@@ -3585,7 +3580,6 @@ public class MainFrame extends JFrame
 			panelSWInfo.setWithMsUpdates(showSoftwareLogMultiClientReport.wantsWithMsUpdates());
 			panelSWInfo.setWithMsUpdates2(showSoftwareLogMultiClientReport.wantsWithMsUpdates2());
 
-			panelSWInfo.setAskingForKindOfAction(false);
 			panelSWInfo.setAskForOverwrite(showSoftwareLogMultiClientReport.wantsAskForOverwrite());
 
 			panelSWInfo.setKindOfExport(showSoftwareLogMultiClientReport.wantsKindOfExport());
@@ -3652,7 +3646,6 @@ public class MainFrame extends JFrame
 		labelNoSoftware.setText(Configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
 
 		Logging.debug(this, "setSoftwareAudit for " + hostId);
-		panelSWInfo.setAskingForKindOfAction(true);
 		panelSWInfo.setAskForOverwrite(true);
 		panelSWInfo.setHost(hostId);
 		panelSWInfo.updateModel();

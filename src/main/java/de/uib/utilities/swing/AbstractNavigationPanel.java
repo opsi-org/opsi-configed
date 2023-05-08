@@ -21,9 +21,6 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 
 	private List<JButton> buttons;
 
-	private boolean hasNext;
-	private boolean hasPrevious;
-
 	protected AbstractNavigationPanel() {
 		initComponents();
 
@@ -111,7 +108,6 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 	protected abstract void first();
 
 	public void setHasNext(boolean b) {
-		hasNext = b;
 		nextButton.setEnabled(b);
 		lastButton.setEnabled(b);
 	}

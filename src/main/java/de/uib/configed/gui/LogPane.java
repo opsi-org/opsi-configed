@@ -98,7 +98,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private final StyleContext styleContext;
 	private final Style[] logLevelStyles;
 
-	private Integer maxLevel = LEVELS[LEVELS.length - 1];
 	private Integer minLevel = LEVELS[0];
 	private Integer maxExistingLevel = minLevel;
 	private Integer showLevel = minLevel;

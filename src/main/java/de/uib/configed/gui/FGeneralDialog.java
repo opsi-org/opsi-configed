@@ -4,7 +4,6 @@ import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -72,7 +71,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected JPanel jPanelButtonGrid = new JPanel();
 	protected JPanel additionalPane = new JPanel();
 	private GridLayout gridLayout1 = new GridLayout();
-	private FlowLayout flowLayout1 = new FlowLayout();
 
 	protected Window owner;
 

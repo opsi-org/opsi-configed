@@ -35,15 +35,11 @@ public class OpsiHwAuditDeviceClass {
 	public static final String LAST_SEEN_COL_NAME = "lastseen";
 
 	private String hwClassName;
-	private String opsiDbTableIdentifier;
-	private String ui;
 	private String wmiQuery;
 	private String linuxQuery;
 	private List<OpsiHwAuditDevicePropertyType> deviceHostProperties;
 	private List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties;
 
-	private ConfigOption hostConfig;
-	private ConfigOption hwItemConfig;
 	private String hostConfigKey;
 	private String hwItemConfigKey;
 

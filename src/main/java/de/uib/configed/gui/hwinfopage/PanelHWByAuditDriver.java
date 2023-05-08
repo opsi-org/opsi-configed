@@ -15,11 +15,9 @@ import de.uib.configed.Globals;
 import de.uib.utilities.swing.JTextShowField;
 
 public class PanelHWByAuditDriver extends JPanel {
-	private JLabel jLabelTitle;
 
 	private int hGap = Globals.HGAP_SIZE / 2;
 	private int vGap = Globals.VGAP_SIZE / 2;
-	private int hLabel = Globals.BUTTON_HEIGHT;
 
 	private String byAuditPath;
 
@@ -31,20 +29,15 @@ public class PanelHWByAuditDriver extends JPanel {
 	private JTextField fieldVendor2;
 	private JTextField fieldLabel2;
 
-	private String title;
-
 	private FDriverUpload fDriverUpload;
 	private ConfigedMain main;
 
-	public PanelHWByAuditDriver(String title, ConfigedMain main) {
-		this.title = title;
+	public PanelHWByAuditDriver(ConfigedMain main) {
 		this.main = main;
 		buildPanel();
 	}
 
 	private void buildPanel() {
-		jLabelTitle = new JLabel(title);
-		jLabelTitle.setOpaque(true);
 
 		fieldVendor = new JTextShowField();
 		if (!ConfigedMain.THEMES) {
@@ -142,10 +135,6 @@ public class PanelHWByAuditDriver extends JPanel {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		setBorder(BorderFactory.createLineBorder(Globals.greyed));
-	}
-
-	public void setTitle(String s) {
-		title = s;
 	}
 
 	public void emptyByAuditStrings() {

@@ -430,7 +430,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	private static GroupNode produceGroupNode(Object x, String description) {
-		GroupNode n = new GroupNode(x, description);
+		GroupNode n = new GroupNode(x);
 		n.setToolTipText(description);
 		n.setEnabled(true);
 		n.setIcon(Globals.createImageIcon("images/group_small.png", "group"));
