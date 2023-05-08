@@ -12,7 +12,6 @@ public abstract class AbstractSaveState {
 		this.key = key;
 		this.defaultValue = defaultValue;
 		this.states = states;
-		// states.addKey(key, ""); //for classifiedpropertiesstore
 	}
 
 	public void setDefaultValue(Object val) {

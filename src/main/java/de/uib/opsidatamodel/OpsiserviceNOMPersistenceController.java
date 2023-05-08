@@ -3329,7 +3329,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {
-		Map<String, Map<String, Object>> client2HwRows = dataStub.getClient2HwRows(hosts);
+		Map<String, Map<String, Object>> client2HwRows = dataStub.getClient2HwRows();
 
 		for (String host : hosts) {
 			Logging.info(this, "getClient2HwRows host " + host);

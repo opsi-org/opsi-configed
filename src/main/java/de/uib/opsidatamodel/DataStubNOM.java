@@ -1277,14 +1277,14 @@ public class DataStubNOM {
 		client2HwRows = null;
 	}
 
-	protected void retrieveClient2HwRows(String[] hosts) {
+	protected void retrieveClient2HwRows() {
 		if (client2HwRows == null) {
 			client2HwRows = new HashMap<>();
 		}
 	}
 
-	public Map<String, Map<String, Object>> getClient2HwRows(String[] hosts) {
-		retrieveClient2HwRows(hosts);
+	public Map<String, Map<String, Object>> getClient2HwRows() {
+		retrieveClient2HwRows();
 		return client2HwRows;
 	}
 
