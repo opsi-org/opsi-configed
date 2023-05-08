@@ -341,7 +341,7 @@ public class MapTableModel extends AbstractTableModel {
 		}
 	}
 
-	void weHaveChangedStoredMaps() {
+	private void weHaveChangedStoredMaps() {
 		// updateCollection has been emptied since last change
 		if (!datachanged || updateCollection.isEmpty()) {
 			datachanged = true;
@@ -377,12 +377,12 @@ public class MapTableModel extends AbstractTableModel {
 
 	// we put a new entry into each map in the given collection and preserve the
 	// change data
-	void putEntryIntoStoredMaps(String myKey, Object value) {
+	private void putEntryIntoStoredMaps(String myKey, Object value) {
 		putEntryIntoStoredMaps(myKey, value, true);
 	}
 
 	// we put a new entry into each map in the given collection
-	void putEntryIntoStoredMaps(String myKey, Object value, boolean toStore) {
+	private void putEntryIntoStoredMaps(String myKey, Object value, boolean toStore) {
 		Logging.debug(this, "putEntryIntoStoredMaps myKey, value: " + myKey + ", " + value);
 		Logging.debug(this, "putEntryIntoStoredMaps storeData  counting " + storeData.size());
 		if (storeData != null) {
@@ -496,7 +496,7 @@ public class MapTableModel extends AbstractTableModel {
 		return observers;
 	}
 
-	void setObservers(List<DataChangedObserver> observers) {
+	public void setObservers(List<DataChangedObserver> observers) {
 		this.observers = observers;
 	}
 

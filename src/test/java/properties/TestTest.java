@@ -22,7 +22,7 @@ class TestTest {
 	 * the same keywords or if a translation-file cannot be found
 	 */
 	@Test
-	void testIfEverythingTranslated() {
+	private void testIfEverythingTranslated() {
 		Properties properties = new Properties();
 		InputStream is = Messages.class.getResourceAsStream(FILENAME_VALID_LOCALISATIONS);
 
@@ -60,7 +60,7 @@ class TestTest {
 	 * @param code   first for first language
 	 * @param second code for second language
 	 */
-	void compareTwoLocals(String first, String second) {
+	private void compareTwoLocals(String first, String second) {
 		String firstFileName = "configed_" + first + ".properties";
 		String secondFileName = "configed_" + second + ".properties";
 
@@ -95,7 +95,7 @@ class TestTest {
 	 * Checks if some elements from the second set are missing in the first set;
 	 * test fails in that case
 	 */
-	void checkIfFirstSetComplete(Set<String> firstSet, String firstFileName, Set<String> secondSet) {
+	private void checkIfFirstSetComplete(Set<String> firstSet, String firstFileName, Set<String> secondSet) {
 		// Creates a set with the elements existing in secondSet,
 		// but missing in the firstSet
 		Set<String> differenceSet = new HashSet<>(secondSet);

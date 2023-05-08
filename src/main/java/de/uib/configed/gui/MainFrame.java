@@ -3193,7 +3193,7 @@ public class MainFrame extends JFrame
 
 	// ----------------------------------------------------------------------------------------
 
-	void jButtonSaveListActionPerformed(ActionEvent e) {
+	private void jButtonSaveListActionPerformed(ActionEvent e) {
 		configedMain.checkSaveAll(false);
 	}
 
