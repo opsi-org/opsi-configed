@@ -160,11 +160,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		}
 	}
 
-	RadioButtonIntegrationType buttonStandard;
-	RadioButtonIntegrationType buttonPreferred;
-	RadioButtonIntegrationType buttonNotPreferred;
-	RadioButtonIntegrationType buttonAdditional;
-	RadioButtonIntegrationType buttonByAudit;
+	private RadioButtonIntegrationType buttonStandard;
+	private RadioButtonIntegrationType buttonPreferred;
+	private RadioButtonIntegrationType buttonNotPreferred;
+	private RadioButtonIntegrationType buttonAdditional;
+	private RadioButtonIntegrationType buttonByAudit;
 
 	private List<RadioButtonIntegrationType> radioButtons;
 
