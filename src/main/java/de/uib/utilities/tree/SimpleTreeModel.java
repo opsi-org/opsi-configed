@@ -13,7 +13,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class SimpleTreeModel extends DefaultTreeModel {
-	java.util.LinkedHashMap<String, Object> virtualLines;
 
 	public final SimpleIconNode rootNode;
 
