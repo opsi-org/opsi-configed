@@ -285,11 +285,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	ClientTree treeClients;
 
-	Map<String, Map<String, String>> productGroups;
-	Map<String, Set<String>> productGroupMembers;
+	private Map<String, Map<String, String>> productGroups;
+	private Map<String, Set<String>> productGroupMembers;
 
 	private DepotsList depotsList;
-	Map<String, Map<String, Object>> depots;
+	private Map<String, Map<String, Object>> depots;
 	private List<String> depotNamesLinked;
 	private String depotRepresentative;
 	private ListSelectionListener depotsListSelectionListener;
@@ -314,8 +314,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private Dashboard dashboard;
 
-	MyDialogRemoteControl dialogRemoteControl;
-	Map<String, RemoteControl> remoteControls;
+	private MyDialogRemoteControl dialogRemoteControl;
+	private Map<String, RemoteControl> remoteControls;
 
 	private int clientCount;
 	private boolean firstDepotListChange = true;

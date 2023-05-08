@@ -102,7 +102,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	protected int onGoingCollectiveChangeEventCount = -1;
 
-	Map<Integer, Map<String, String>> changeEventCount2product2request;
+	private Map<Integer, Map<String, String>> changeEventCount2product2request;
 
 	// state key (column name) --> product name --> visual value
 	protected Map<String, Map<String, String>> combinedVisualValues;

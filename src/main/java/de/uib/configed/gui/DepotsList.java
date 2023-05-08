@@ -20,10 +20,10 @@ import de.uib.utilities.logging.Logging;
 
 public class DepotsList extends JList<String> implements ComponentListener {
 
-	MyListCellRenderer myListCellRenderer;
+	private MyListCellRenderer myListCellRenderer;
 	private List<String> saveV;
 
-	Map<String, Map<String, Object>> depotInfo;
+	private Map<String, Map<String, Object>> depotInfo;
 
 	private AbstractPersistenceController persist;
 

@@ -25,8 +25,8 @@ public class UserConfigProducing {
 	Collection<String> existingHostgroups;
 	Collection<String> existingProductgroups;
 
-	Map<String, List<Object>> serverconfigValuesMap;
-	Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
+	private Map<String, List<Object>> serverconfigValuesMap;
+	private Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
 
 	private List<Object> readyObjects;
 

@@ -14,8 +14,8 @@ import javax.swing.SwingConstants;
 import de.uib.configed.Globals;
 
 public class TableCellRendererByIndex extends StandardTableCellRenderer {
-	Map<String, String> mapOfStrings;
-	Map<String, ImageIcon> mapOfImages;
+	private Map<String, String> mapOfStrings;
+	private Map<String, ImageIcon> mapOfImages;
 	private boolean showOnlyIcon = true;
 
 	public TableCellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase) {

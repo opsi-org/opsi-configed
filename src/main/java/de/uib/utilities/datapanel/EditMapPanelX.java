@@ -66,8 +66,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	private ListModelProducer<String> modelProducer;
 
-	MouseListener popupListener;
-	MouseListener popupNoEditOptionsListener;
+	private MouseListener popupListener;
+	private MouseListener popupNoEditOptionsListener;
 
 	private JMenuItem popupItemDeleteEntry0;
 	private JMenuItem popupItemDeleteEntry1;

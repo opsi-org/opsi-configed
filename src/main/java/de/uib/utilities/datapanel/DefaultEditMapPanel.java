@@ -46,9 +46,9 @@ public class DefaultEditMapPanel extends JPanel {
 	protected JPopupMenu popupNoEditOptions;
 
 	protected List<String> names;
-	Map<String, ListCellOptions> optionsMap;
-	Map<String, String> descriptionsMap;
-	Map<String, Object> defaultsMap;
+	protected Map<String, ListCellOptions> optionsMap;
+	protected Map<String, String> descriptionsMap;
+	protected Map<String, Object> defaultsMap;
 
 	TableCellRenderer tableCellRenderer;
 

@@ -22,11 +22,11 @@ import de.uib.utilities.table.ListCellOptions;
 */
 
 public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProducer<O> {
-	Map<Integer, ListModel> listmodels = new HashMap<>();
+	private Map<Integer, ListModel> listmodels = new HashMap<>();
 
-	Map<String, ListCellOptions> optionsMap;
-	Map<String, List> currentData;
-	Map<String, Class<?>> originalTypes;
+	private Map<String, ListCellOptions> optionsMap;
+	private Map<String, List> currentData;
+	private Map<String, Class<?>> originalTypes;
 	private JTable table;
 
 	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ListCellOptions> optionsMap,

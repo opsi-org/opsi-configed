@@ -108,7 +108,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	protected PanelGenEditTable associatedTable;
 
 	private final Comparator<Object> comparator;
-	Map<String, Mapping<Integer, String>> mappedValues;
+	private Map<String, Mapping<Integer, String>> mappedValues;
 
 	public enum SearchInputType {
 		LINE, PROGRESSIVE

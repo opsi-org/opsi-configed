@@ -7,7 +7,7 @@ import de.uib.utilities.logging.Logging;
 
 public class ConfigUpdate implements UpdateCommand {
 	String objectId;
-	Map newdata;
+	private Map newdata;
 
 	private AbstractPersistenceController persis;
 

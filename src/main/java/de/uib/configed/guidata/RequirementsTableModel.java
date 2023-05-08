@@ -31,10 +31,10 @@ public class RequirementsTableModel extends AbstractTableModel {
 	Object[] keyArray;
 	private final Object[] zeroArray = new Object[] {};
 
-	Map<String, String> requMap;
-	Map<String, String> requBeforeMap;
-	Map<String, String> requAfterMap;
-	Map<String, String> requDeinstallMap;
+	private Map<String, String> requMap;
+	private Map<String, String> requBeforeMap;
+	private Map<String, String> requAfterMap;
+	private Map<String, String> requDeinstallMap;
 
 	private AbstractPersistenceController perCon;
 

@@ -70,7 +70,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	private LinkedList<String> minutes;
 	String nullDelayValue;
 
-	Map<String, List<String>> hostSeparationByDepots;
+	private Map<String, List<String>> hostSeparationByDepots;
 	Set<String> usedDepots;
 	private int clientCount;
 	String[] currentlySelectedClients;

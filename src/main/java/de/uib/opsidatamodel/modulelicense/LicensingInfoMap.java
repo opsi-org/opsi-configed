@@ -93,7 +93,7 @@ public final class LicensingInfoMap {
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	private JSONObject jOResult;
-	Map<String, List<Object>> configs;
+	private Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
 	private List<List<String>> clientNumbersList;
 	private Set<String> customerIDs;
