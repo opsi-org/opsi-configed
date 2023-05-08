@@ -51,7 +51,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	private CSVImportDataModifier modifier;
 
-	int startLine = 1;
+	private int startLine = 1;
 
 	public CSVImportDataDialog(CSVImportDataModifier modifier, CSVFormat format) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true,

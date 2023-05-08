@@ -10,7 +10,7 @@ import de.uib.utilities.logging.Logging;
 
 public class CheckedDocument extends PlainDocument {
 	protected char[] allowedChars;
-	int size;
+	protected int size;
 	protected boolean checkMask;
 
 	public CheckedDocument() {

@@ -53,8 +53,8 @@ import de.uib.utilities.thread.WaitCursor;
 
 public class PanelDriverUpload extends JPanel implements de.uib.utilities.NameProducer {
 
-	int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
-	int hFirstGap = Globals.HFIRST_GAP;
+	private int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
+	private int hFirstGap = Globals.HFIRST_GAP;
 
 	protected int hGap = Globals.HGAP_SIZE / 2;
 	protected int vGap = Globals.VGAP_SIZE / 2;
@@ -186,7 +186,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	String winProduct = "";
 
 	JLabel jLabelTopic;
-	int wLeftText;
+	private int wLeftText;
 
 	private AbstractPersistenceController persist;
 	ConfigedMain main;

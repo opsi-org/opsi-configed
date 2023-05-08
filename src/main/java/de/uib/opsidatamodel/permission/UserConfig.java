@@ -16,7 +16,7 @@ import de.uib.utilities.logging.Logging;
 		cf.
 		de.uib.configed.type.user.UserXRole.getRole()
 
-	if GLOBAL_READONLY (can be specified by user group or in config)
+	private if GLOBAL_READONLY (can be specified by user group or in config)
 		everything readonly (ignoring a config  SERVER_READWRITE)
 
 		if DEPOTACCESS_ONLY_AS_SPECIFIED: (default general access!)

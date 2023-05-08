@@ -1,7 +1,7 @@
 /*
 	OpsiHwAuditDeviceClass.java
 	
-	is identified by a hwclass name
+	private is identified by a hwclass name
 	has as members, on principle, the db columns of all properties 
 	which describe a hwclass device of this hwclass instance:
 	1) the properties which are global for a device

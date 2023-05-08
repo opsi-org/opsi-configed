@@ -17,7 +17,7 @@ public class WaitCursor {
 	private static AtomicInteger objectCounting = new AtomicInteger();
 	private static boolean allStopped;
 
-	int objectNo;
+	private int objectNo;
 
 	private boolean ready;
 

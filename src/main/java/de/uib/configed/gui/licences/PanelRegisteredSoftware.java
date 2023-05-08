@@ -20,7 +20,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public class PanelRegisteredSoftware extends PanelGenEditTable {
 	ControlPanelAssignToLPools controller;
 
-	int[] saveRowSelection;
+	private int[] saveRowSelection;
 
 	public PanelRegisteredSoftware(ControlPanelAssignToLPools controller) {
 		super("", 0, true, 2, true, new int[] { PanelGenEditTable.POPUP_RELOAD }, true);

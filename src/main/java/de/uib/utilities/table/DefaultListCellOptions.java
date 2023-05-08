@@ -10,7 +10,7 @@ import de.uib.utilities.logging.Logging;
 public class DefaultListCellOptions implements ListCellOptions {
 	List<Object> possibleValues;
 	List<Object> defaultValues;
-	int selectionMode;
+	private int selectionMode;
 	private boolean editable;
 	private boolean nullable;
 	String description;

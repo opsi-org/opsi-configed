@@ -51,9 +51,9 @@ public class FGroupActions extends SecondaryFrame {
 	private AbstractPersistenceController persist;
 	ConfigedMain main;
 
-	int hFirstGap = Globals.HFIRST_GAP;
+	private int hFirstGap = Globals.HFIRST_GAP;
 
-	int firstLabelWidth = Globals.BUTTON_WIDTH;
+	private int firstLabelWidth = Globals.BUTTON_WIDTH;
 
 	public FGroupActions(ConfigedMain main, AbstractPersistenceController persist) {
 		super();

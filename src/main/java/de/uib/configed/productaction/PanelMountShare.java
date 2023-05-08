@@ -48,7 +48,7 @@ public class PanelMountShare extends JPanel {
 
 	private boolean smbMounted;
 
-	int leftBound = -1;
+	private int leftBound = -1;
 
 	NameProducer np;
 

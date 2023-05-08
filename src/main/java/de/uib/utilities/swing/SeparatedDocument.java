@@ -13,7 +13,7 @@ import javax.swing.text.BadLocationException;
 import de.uib.utilities.logging.Logging;
 
 public class SeparatedDocument extends CheckedDocument {
-	int partsLength;
+	private int partsLength;
 	String separator;
 
 	public SeparatedDocument(char[] allowedChars, int realSize, char separatingChar, int partsLength,

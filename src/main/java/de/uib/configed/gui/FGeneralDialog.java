@@ -37,9 +37,6 @@ import de.uib.utilities.swing.FEditObject;
 
 public class FGeneralDialog extends JDialog implements ActionListener, KeyListener, MouseListener {
 
-	static final int OK = 1;
-	static final int NO = 2;
-
 	private static final int DEFAULT_PREFERRED_WIDTH = 250;
 	private static final int DEFAULT_PREFERRED_HEIGHT = 300;
 
@@ -71,9 +68,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected int noOfButtons = 3;
 
-	int result = 1;
-	int value1 = OK;
-	int value2 = NO;
+	protected int result = 1;
 
 	protected JPanel jPanelButtonGrid = new JPanel();
 	protected JPanel additionalPane = new JPanel();

@@ -87,7 +87,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	private Integer totalUnassignedSWEntries;
 	private Integer totalShownEntries;
 
-	int colMarkCursorRow;
+	private int colMarkCursorRow;
 
 	private Map<String, List<String>> removeKeysFromOtherLicencePool;
 

@@ -92,7 +92,7 @@ public class PanelSWInfo extends JPanel {
 
 	JCheckBox checkWithMsUpdates;
 
-	int indexOfColWindowsSoftwareID;
+	private int indexOfColWindowsSoftwareID;
 
 	TableModelFilterCondition filterConditionWithMsUpdates = new TableModelFilterCondition() {
 		@Override
