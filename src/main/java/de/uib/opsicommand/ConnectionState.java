@@ -114,6 +114,7 @@ public class ConnectionState {
 			break;
 		default:
 			state = "UNKNOWN State";
+			break;
 		}
 
 		return state;

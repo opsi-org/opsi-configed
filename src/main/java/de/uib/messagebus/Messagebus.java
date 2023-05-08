@@ -387,6 +387,7 @@ public class Messagebus implements MessagebusListener {
 				break;
 			default:
 				Logging.warning(this, "unhandled terminal type response caught: " + type);
+				break;
 			}
 		} else if ("file_upload_result".equals(type)) {
 			String filePath = (String) message.get("path");

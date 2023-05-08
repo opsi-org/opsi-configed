@@ -101,7 +101,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private JTextField saveDescriptionField;
 	private JButton saveButton;
 
-	private LinkedList<ComplexGroup> complexElements;
+	private List<ComplexGroup> complexElements;
 
 	private SelectionManager manager;
 	private JTableSelectionPanel selectionPanel;
@@ -1214,6 +1214,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		case OR_NOT:
 			andOr.selectOr();
 			not.setActivated(true);
+			break;
 		}
 	}
 

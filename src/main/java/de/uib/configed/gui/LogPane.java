@@ -109,8 +109,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	protected int[] lineTypes;
 
-	TreeMap<Integer, Integer> docLinestartPosition2lineCount;
-	TreeMap<Integer, Integer> lineCount2docLinestartPosition;
+	Map<Integer, Integer> docLinestartPosition2lineCount;
+	Map<Integer, Integer> lineCount2docLinestartPosition;
 
 	int selTypeIndex = -1;
 
@@ -548,11 +548,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// probably we already are in a floating instance
 
 		LogPane copyOfMe;
-		de.uib.configed.gui.GeneralFrame externalView;
+		GeneralFrame externalView;
 
 		copyOfMe = new LogPane("", false);
 
-		externalView = new de.uib.configed.gui.GeneralFrame(null, title, false);
+		externalView = new GeneralFrame(null, title, false);
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());

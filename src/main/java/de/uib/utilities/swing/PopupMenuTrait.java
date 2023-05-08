@@ -163,7 +163,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		default:
 			Logging.info(this, "popuptype " + p + " not implemented");
-
+			break;
 		}
 	}
 

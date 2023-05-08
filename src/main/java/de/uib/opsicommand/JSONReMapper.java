@@ -37,7 +37,7 @@ public final class JSONReMapper {
 
 				JSONObject jOError = retrieved.optJSONObject("error");
 
-				if ((jOError != null) && (!jOError.isNull("class")) && (!jOError.isNull("message"))) {
+				if (jOError != null && !jOError.isNull("class") && !jOError.isNull("message")) {
 					errorMessage = " [" + jOError.get("class") + "] " + jOError.get("message");
 				} else {
 					errorMessage = " " + retrieved.get("error");
@@ -625,8 +625,8 @@ public final class JSONReMapper {
 	}
 
 	public static boolean isNull(Object ob) {
-		return ob == null || (ob instanceof String && "null".equalsIgnoreCase((String) ob))
-				|| ((ob instanceof JSONObject) && (JSONObject.NULL.equals(ob)));
+		return ob == null || ob instanceof String && "null".equalsIgnoreCase((String) ob)
+				|| (ob instanceof JSONObject) && (JSONObject.NULL.equals(ob));
 	}
 
 	public static boolean equalsNull(String ob) {

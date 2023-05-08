@@ -177,7 +177,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 
 	private void setOutSize() {
 
-		double noOutputHeight = (Globals.GAP_SIZE * 4) + jTextFieldCommand.getHeight() + parameterPanel.getHeight()
+		double noOutputHeight = Globals.GAP_SIZE * 4 + jTextFieldCommand.getHeight() + parameterPanel.getHeight()
 				+ jButtonDimension.getHeight() + terminatingPanel.getHeight();
 
 		this.thissize = this.getSize();
@@ -238,7 +238,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 	}
 
 	public void addToHistory(String co) {
-		if ((co != null) && (!co.trim().isEmpty())) {
+		if (co != null && !co.trim().isEmpty()) {
 			Logging.debug(this,
 					"addToHistory \"" + co + "\" at index " + historyAddIndex + " getIndex " + (historyAddIndex + 1));
 			commandHistory.add(historyAddIndex, co);

@@ -856,10 +856,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 							newValUntilNow = Globals.CONFLICT_STATE_STRING;
 						}
 					} else {
-						if (newValUntilNow
+						if (!newValUntilNow
 								.equals(getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST))) {
-							// it remains
-						} else {
 							newValUntilNow = Globals.CONFLICT_STATE_STRING;
 						}
 					}
@@ -910,7 +908,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		Logging.debug(this, " change action request for client " + clientId + ",  product " + product + " to " + ar);
 		if (ar.getVal() == ActionRequest.NONE) {
-			// don't follow
+			Logging.debug(this, "don't follow");
 		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
 			Logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product " + product);
 
@@ -918,7 +916,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Logging.debug(this, "ProductRequirements for uninstall for " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		} else {
-
 			Map<String, String> requirements = persist.getProductPreRequirements(null, product);
 			Logging.debug(this, "ProductPreRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);

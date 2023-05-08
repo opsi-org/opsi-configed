@@ -364,6 +364,7 @@ public class PanelSWInfo extends JPanel {
 
 					default:
 						Logging.warning(this, "no case found for popupmenutrait");
+						break;
 					}
 				}
 

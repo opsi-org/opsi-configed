@@ -101,6 +101,7 @@ public class ClippedTitleTabbedPane extends JTabbedPane {
 		default:
 			tabWidth = areaWidth / tabCount;
 			gap = areaWidth - (tabWidth * tabCount);
+			break;
 		}
 
 		tabWidth = tabWidth - tabInsets.left - tabInsets.right - 3;

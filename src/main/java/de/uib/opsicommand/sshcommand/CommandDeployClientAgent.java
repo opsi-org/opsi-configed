@@ -78,6 +78,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 			break;
 		default:
 			finishAction = "";
+			break;
 		}
 	}
 
@@ -94,6 +95,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 			break;
 		default:
 			finishAction = "";
+			break;
 		}
 	}
 

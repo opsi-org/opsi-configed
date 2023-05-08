@@ -66,8 +66,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	int stepsTotal;
 	boolean waitingMode;
 
-	LinkedList<String> oneDayHours;
-	LinkedList<String> minutes;
+	List<String> oneDayHours;
+	List<String> minutes;
 	String nullDelayValue;
 
 	Map<String, List<String>> hostSeparationByDepots;

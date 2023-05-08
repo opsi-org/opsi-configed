@@ -317,6 +317,7 @@ public class HostInfo {
 		}
 		default: {
 			Logging.warning(this, "key " + key + " not expected");
+			break;
 		}
 		}
 	}

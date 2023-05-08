@@ -10,9 +10,10 @@ package de.uib.utilities.table.updates;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
+
+import de.uib.utilities.table.GenTableModel;
 
 public class TableUpdateCollection extends ArrayList<TableEditItem> {
-
-	HashSet<de.uib.utilities.table.GenTableModel> modelsToReload = new HashSet<>();
-
+	Set<GenTableModel> modelsToReload = new HashSet<>();
 }

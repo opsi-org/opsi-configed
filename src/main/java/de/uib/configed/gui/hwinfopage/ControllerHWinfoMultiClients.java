@@ -55,7 +55,7 @@ public class ControllerHWinfoMultiClients {
 	List<String> columnNames;
 	List<String> classNames;
 
-	TreeSet<Object> theFilterSet;
+	Set<Object> theFilterSet;
 
 	String[] hosts;
 	ConfigedMain main;

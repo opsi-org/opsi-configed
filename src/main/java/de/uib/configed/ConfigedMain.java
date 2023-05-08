@@ -69,6 +69,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import de.uib.configed.clientselection.SelectionManager;
+import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend;
 import de.uib.configed.dashboard.Dashboard;
 import de.uib.configed.groupaction.ActivatedGroupModel;
 import de.uib.configed.groupaction.FGroupActions;
@@ -588,7 +589,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.warning(this, "cannot not find saved states in " + Configed.savedStatesLocationName);
 		}
 
-		if (Configed.savedStatesLocationName == null || (!success)) {
+		if (Configed.savedStatesLocationName == null || !success) {
 			Logging.info(this, "searching saved states in " + getSavedStatesDefaultLocation());
 			Configed.savedStatesLocationName = getSavedStatesDefaultLocation();
 			savedStatesLocation = new File(getSavedStatesDefaultLocation());
@@ -1315,7 +1316,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			for (int i = 0; i < oldSelectedDepots.length; i++) {
 				for (int j = 0; j < depotsList.getModel().getSize(); j++) {
-					if ((depotsList.getModel().getElementAt(j)).equals(oldSelectedDepots[i])) {
+					if (depotsList.getModel().getElementAt(j).equals(oldSelectedDepots[i])) {
 						savedSelectedDepots.add(j);
 					}
 				}
@@ -1961,7 +1962,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		setSelectedClientsArray(new String[] {});
 
 		if (!clientNames.isEmpty()) {
-			setSelectedClientsArray(clientNames.toArray(new String[clientNames.size()]));
+			setSelectedClientsArray(clientNames.toArray(new String[0]));
 		}
 
 		treeClients.produceActiveParents(getSelectedClients());
@@ -2008,7 +2009,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "invertClientselection selected " + selectionPanel.getSelectedValues());
 		List<String> selectedValues = new ArrayList<>(selectionPanel.getInvertedSet());
 
-		String[] selected = selectedValues.toArray(new String[selectedValues.size()]);
+		String[] selected = selectedValues.toArray(new String[0]);
 
 		Logging.info(this, "new selection " + Arrays.toString(selected));
 
@@ -2247,7 +2248,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mergedProductProperties = new HashMap<>();
 		productProperties = new ArrayList<>(getSelectedClients().length);
 
-		if ((getSelectedClients().length > 0) && (possibleActions.get(productEdited) != null)) {
+		if (getSelectedClients().length > 0 && possibleActions.get(productEdited) != null) {
 
 			Map<String, Object> productPropertiesFor1Client = persist.getProductProperties(getSelectedClients()[0],
 					productEdited);
@@ -2411,9 +2412,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				if (clicked) {
 					// on client activation a group activation is ended
-					if ((activePaths.size() == 1)
-							&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent())
-									.getAllowsChildren()) {
+					if (activePaths.size() == 1 && ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent())
+							.getAllowsChildren()) {
 						clearTree();
 					} else {
 						if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
@@ -2476,7 +2476,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public boolean treeClientsSelectAction(TreePath newSelectedPath) {
 		Logging.info(this, "treeClientsSelectAction");
 
-		DefaultMutableTreeNode selectedNode = ((DefaultMutableTreeNode) newSelectedPath.getLastPathComponent());
+		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) newSelectedPath.getLastPathComponent();
 		Logging.info(this, "treeClientsSelectAction selected node " + selectedNode);
 
 		if (!selectedNode.getAllowsChildren()) {
@@ -3372,8 +3372,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// check if change of view index to the value of visualViewIndex can be allowed
 		if (visualViewIndex != VIEW_CLIENTS
-				&& (!(((visualViewIndex == VIEW_NETWORK_CONFIGURATION) && (editingTarget == EditingTarget.SERVER))
-						|| ((visualViewIndex == VIEW_HOST_PROPERTIES) && (editingTarget == EditingTarget.DEPOTS))))) {
+				&& !(visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER
+						|| visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS)) {
 
 			Logging.debug(this, " selected clients " + Arrays.toString(getSelectedClients()));
 
@@ -3725,7 +3725,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			persist.auditHardwareOnHostRequestRefresh();
 
 			// clearing softwareMap in OpsiDataBackend
-			de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend.getInstance().setReloadRequested();
+			OpsiDataBackend.getInstance().setReloadRequested();
 
 			clearSwInfo();
 			clearHwInfo();
@@ -3825,7 +3825,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				fAskSaveProductConfiguration.setLocationRelativeTo(mainFrame);
 				fAskSaveProductConfiguration.setVisible(true);
 
-				result = (fAskSaveProductConfiguration.getResult() == 2);
+				result = fAskSaveProductConfiguration.getResult() == 2;
 
 				fAskSaveProductConfiguration.setVisible(false);
 			}
@@ -3912,7 +3912,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				fAskSaveChangedText.setLocationRelativeTo(mainFrame);
 				fAskSaveChangedText.setVisible(true);
-				result = (fAskSaveChangedText.getResult() == 2);
+				result = fAskSaveChangedText.getResult() == 2;
 
 				fAskSaveChangedText.setVisible(false);
 			}
@@ -4130,7 +4130,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void getReachableInfo() {
-		final boolean onlySelectedClients = (selectedClients != null && selectedClients.length > 0);
+		final boolean onlySelectedClients = selectedClients != null && selectedClients.length > 0;
 
 		final String[] selClients = selectedClients;
 
@@ -4234,7 +4234,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void getSessionInfo() {
-		final boolean onlySelectedClients = (selectedClients != null) && (selectedClients.length > 0);
+		final boolean onlySelectedClients = selectedClients != null && selectedClients.length > 0;
 
 		final String[] selClients = selectedClients;
 		sessioninfoFinished = false;
@@ -5199,7 +5199,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (selected == null) {
 			setSelectedClientsArray(new String[0]);
 		} else {
-			setSelectedClientsArray(selected.toArray(new String[selected.size()]));
+			setSelectedClientsArray(selected.toArray(new String[0]));
 		}
 
 	}

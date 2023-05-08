@@ -323,6 +323,7 @@ public class ExporterToPDF extends AbstractExportTable {
 						break;
 					default:
 						value = new PdfPCell(new Phrase(s, small));
+						break;
 					}
 					if (!ConfigedMain.THEMES) {
 						if (j % 2 == 0) {

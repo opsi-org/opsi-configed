@@ -266,9 +266,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected void processWindowEvent(WindowEvent e) {
 		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			cancel();
-
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
-
 			enter();
 		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
 			// TODO what to do here?

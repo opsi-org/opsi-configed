@@ -48,7 +48,7 @@ public class UncaughtConfigedExceptionHandlerLocalized extends UncaughtConfigedE
 			}
 		} else {
 			Logging.warning("Thread " + t + " - RunTime Error", e);
-			if (e instanceof java.lang.OutOfMemoryError) {
+			if (e instanceof OutOfMemoryError) {
 				Configed.endApp(Configed.ERROR_OUT_OF_MEMORY);
 			}
 

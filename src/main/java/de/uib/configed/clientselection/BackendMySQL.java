@@ -47,7 +47,7 @@ public class BackendMySQL {
 
 		Logging.info(this, query);
 
-		List<List<java.lang.String>> clients = controller.exec
+		List<List<String>> clients = controller.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 
 		List<String> list = new ArrayList<>();

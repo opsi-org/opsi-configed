@@ -51,8 +51,8 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	protected JMenuItem popupItemDeleteEntry;
 
-	protected LinkedList<String> theUsers;
-	protected LinkedList<String> theRoles;
+	protected List<String> theUsers;
+	protected List<String> theRoles;
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
 			boolean keylistEditable, boolean reloadable, final DefaultEditMapPanel.Actor actor) {

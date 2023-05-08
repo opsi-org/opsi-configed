@@ -30,6 +30,7 @@ public final class ErrorCode {
 			break;
 		default:
 			result = result + "_";
+			break;
 		}
 
 		return result;

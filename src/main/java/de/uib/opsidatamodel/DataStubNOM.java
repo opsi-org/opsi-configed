@@ -483,8 +483,8 @@ public class DataStubNOM {
 					requiredInstallationStatus = "" + dependencyItem.get("requiredInstallationStatus");
 				}
 
-				if ((product2VersionInfo2Depots == null) || (product2VersionInfo2Depots.get(productId) == null)
-						|| (product2VersionInfo2Depots.get(productId).get(versionInfo) == null)) {
+				if (product2VersionInfo2Depots == null || product2VersionInfo2Depots.get(productId) == null
+						|| product2VersionInfo2Depots.get(productId).get(versionInfo) == null) {
 					Logging.warning(this, "unexpected null for product2VersionInfo2Depots productId, versionInfo   "
 							+ productId + ", " + versionInfo);
 					continue;
@@ -1114,7 +1114,7 @@ public class DataStubNOM {
 				licenceContracts.put(entry.getId(), entry);
 
 				String notiDate = entry.get(TableLicenceContracts.NOTIFICATION_DATE_KEY);
-				if (notiDate != null && (notiDate.trim().length() > 0) && notiDate.compareTo(today) <= 0) {
+				if (notiDate != null && notiDate.trim().length() > 0 && notiDate.compareTo(today) <= 0) {
 					NavigableSet<String> contractSet = contractsToNotify.get(notiDate);
 
 					if (contractSet == null) {
@@ -1126,7 +1126,7 @@ public class DataStubNOM {
 				}
 
 				String expireDate = entry.get(TableLicenceContracts.EXPIRATION_DATE_KEY);
-				if (expireDate != null && (expireDate.trim().length() > 0) && expireDate.compareTo(today) <= 0) {
+				if (expireDate != null && expireDate.trim().length() > 0 && expireDate.compareTo(today) <= 0) {
 					NavigableSet<String> contractSet = contractsExpired.get(expireDate);
 
 					if (contractSet == null) {

@@ -122,7 +122,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 
 			ListCellOptions cellOptions = null;
 
-			if ((entry.getValue()) instanceof java.lang.Boolean) {
+			if ((entry.getValue()) instanceof Boolean) {
 				cellOptions = DefaultListCellOptions.getNewBooleanListCellOptions();
 			} else {
 				cellOptions = DefaultListCellOptions.getNewEmptyListCellOptions();

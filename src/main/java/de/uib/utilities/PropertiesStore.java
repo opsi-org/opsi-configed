@@ -52,9 +52,7 @@ public class PropertiesStore {
 				Logging.debug(this, "line: " + line);
 				String trimmed = line.trim();
 
-				if (trimmed.length() == 0 || trimmed.charAt(0) == '#' || trimmed.charAt(0) == ';') {
-					// continue
-				} else {
+				if (trimmed.length() != 0 || trimmed.charAt(0) != '#' || trimmed.charAt(0) != ';') {
 					int posSeparator = line.indexOf(KEY_SEPARATOR);
 
 					String key = line.substring(0, posSeparator);

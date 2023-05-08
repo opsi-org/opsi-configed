@@ -157,7 +157,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected List<? extends SortKey> currentSortKeys;
 
-	protected ArrayList<String> selectedProducts;
+	protected List<String> selectedProducts;
 
 	JPopupMenu popup;
 	JMenuItem itemOnDemand;
@@ -229,13 +229,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				if (lsm.isSelectionEmpty()) {
 					Logging.debug(this, "no rows selected");
-
 				} else {
 					int selectedRow = lsm.getMinSelectionIndex();
-					if (selectedRow != lsm.getMaxSelectionIndex()) {
-						// multiselection
-
-					} else {
+					if (selectedRow == lsm.getMaxSelectionIndex()) {
 						Logging.debug(this, "selected " + selectedRow);
 						Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
 						Logging.debug(this, "selected  value at "
@@ -243,9 +239,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 						mainController.setProductEdited(
 								(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
 					}
-
 				}
-
 			}
 		});
 

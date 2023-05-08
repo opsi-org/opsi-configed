@@ -199,7 +199,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 
 			int n = list.size();
 
-			if (java.lang.Integer.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
+			if (Integer.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
 
 				if (n == 0) {
 					return null;
@@ -208,7 +208,7 @@ public class SensitiveCellEditor extends AbstractCellEditor implements TableCell
 				return list.get(0);
 			}
 
-			if (java.lang.Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
+			if (Boolean.class.isAssignableFrom(modelProducer.getClass(editingRow, editingColumn))) {
 
 				if (n == 0) {
 					return null;

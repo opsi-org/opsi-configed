@@ -118,7 +118,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	// clientid --> client node
 	// is a function, when the directory has been cleared
 
-	protected HashSet<String> activeParents = new HashSet<>();
+	protected Set<String> activeParents = new HashSet<>();
 	// groups containing clients (especially the selected ones)
 
 	protected Map<String, HostInfo> host2HostInfo;

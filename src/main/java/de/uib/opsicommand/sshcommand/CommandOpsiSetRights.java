@@ -22,8 +22,8 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	private boolean needSudo = true;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = true;
-	private LinkedList<SSHCommand> sshCommand = new LinkedList<>();
-	private LinkedList<SSHCommand> sshCommandOriginal = new LinkedList<>();
+	private List<SSHCommand> sshCommand = new LinkedList<>();
+	private List<SSHCommand> sshCommandOriginal = new LinkedList<>();
 	private String mainName = "";
 	private String dir;
 	private String myTmpCommand;

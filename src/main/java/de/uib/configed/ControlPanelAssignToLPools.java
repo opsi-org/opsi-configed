@@ -207,7 +207,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.fieldCountAssignedStatus.setToolTipText(" <html><br /></html>");
 
 		// softwareIdsForPool is guaranteed not null
-		thePanel.fieldCountAssignedStatus.setText(produceCount(softwareIdsForPool.size(), (poolID == null)));
+		thePanel.fieldCountAssignedStatus.setText(produceCount(softwareIdsForPool.size(), poolID == null));
 
 		StringBuilder b = new StringBuilder("<html>");
 		b.append(Configed.getResourceValue("PanelAssignToLPools.assignedStatusListTitle"));
@@ -242,7 +242,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
 			selectKeys = softwareIdsForPool;
-			thePanel.fieldCountAssignedInEditing.setText(produceCount(softwareIdsForPool.size(), (poolID == null)));
+			thePanel.fieldCountAssignedInEditing.setText(produceCount(softwareIdsForPool.size(), poolID == null));
 		} else {
 			// selectKeys old keys
 			Set<Object> existingKeys = modelWindowsSoftwareIds.getExistingKeys();
@@ -338,7 +338,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		for (String key : selKeys) {
 			// key is already assigned to a different licencePool?
 
-			boolean gotAssociation = (persist.getFSoftware2LicencePool(key) != null);
+			boolean gotAssociation = persist.getFSoftware2LicencePool(key) != null;
 			Logging.debug(this, "validateWindowsSoftwareKeys key " + key + " gotAssociation " + gotAssociation);
 
 			Boolean newAssociation = null;
@@ -450,8 +450,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
 						// hack for avoiding unvoluntary reuse of a licence pool id
-						boolean existsNewRow = (mainController.licencePoolTableProvider.getRows()
-								.size() < modelLicencepools.getRowCount());
+						boolean existsNewRow = mainController.licencePoolTableProvider.getRows()
+								.size() < modelLicencepools.getRowCount();
 
 						if (existsNewRow && persist.getLicencepools().containsKey(rowmap.get("licensePoolId"))) {
 							// but we leave it until the service methods reflect the situation more
@@ -919,7 +919,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "setSWAssignments usingFilter " + (softwareShow == SoftwareShowMode.ASSIGNED)
 				+ " selected keys " + selectedKeys);
 
-		boolean usingShowSelectedFilter = (softwareShow == SoftwareShowMode.ASSIGNED);
+		boolean usingShowSelectedFilter = softwareShow == SoftwareShowMode.ASSIGNED;
 		if (usingShowSelectedFilter) {
 			windowsSoftwareFilterConditonShowOnlySelected.setFilter(new TreeSet<>(selectedKeys));
 		} else {

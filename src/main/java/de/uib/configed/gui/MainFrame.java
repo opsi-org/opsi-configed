@@ -222,7 +222,7 @@ public class MainFrame extends JFrame
 	private JMenuItem jMenuSSHConnection = new JMenuItem();
 	private JMenuItem jMenuSSHCommandControl = new JMenuItem();
 
-	private LinkedHashMap<String, Integer> labelledDelays;
+	private Map<String, Integer> labelledDelays;
 
 	private Map<String, String> searchedTimeSpans;
 	private Map<String, String> searchedTimeSpansText;
@@ -1132,9 +1132,9 @@ public class MainFrame extends JFrame
 
 		Logging.info(this, "setupMenuServer getCurrentUserConfig " + UserConfig.getCurrentUserConfig());
 
-		boolean commandsAreDeactivated = (UserConfig.getCurrentUserConfig() == null
+		boolean commandsAreDeactivated = UserConfig.getCurrentUserConfig() == null
 				|| UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE) == null
-				|| !UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE));
+				|| !UserConfig.getCurrentUserConfig().getBooleanValue(UserSshConfig.KEY_SSH_COMMANDS_ACTIVE);
 		Logging.info(this, "setupMenuServer commandsAreDeactivated " + commandsAreDeactivated);
 
 		if (methodsExists) {
@@ -2759,7 +2759,7 @@ public class MainFrame extends JFrame
 	}
 
 	public int getTabIndex(String tabname) {
-		return (jTabbedPaneConfigPanes.indexOfTab(tabname));
+		return jTabbedPaneConfigPanes.indexOfTab(tabname);
 	}
 
 	// -- helper methods for interaction
@@ -3264,7 +3264,7 @@ public class MainFrame extends JFrame
 	// RunningInstancesObserver
 	@Override
 	public void instancesChanged(Set<JDialog> instances) {
-		boolean existJDialogInstances = (instances != null && !instances.isEmpty());
+		boolean existJDialogInstances = instances != null && !instances.isEmpty();
 
 		if (jMenuShowScheduledWOL != null) {
 			jMenuShowScheduledWOL.setEnabled(existJDialogInstances);
@@ -3398,8 +3398,8 @@ public class MainFrame extends JFrame
 			for (String client : configedMain.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
-				changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
-						(cbInstallByShutdown.isSelected()).toString());
+				changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, cbInstallByShutdown.isSelected())
+						.toString();
 
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
@@ -3409,7 +3409,7 @@ public class MainFrame extends JFrame
 			for (String client : configedMain.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
-				changedClientInfo.put(HostInfo.CLIENT_UEFI_BOOT_KEY, (cbUefiBoot.isSelected()).toString());
+				changedClientInfo.put(HostInfo.CLIENT_UEFI_BOOT_KEY, cbUefiBoot.isSelected()).toString();
 
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
@@ -3419,7 +3419,7 @@ public class MainFrame extends JFrame
 			for (String client : configedMain.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
 
-				changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, (cbWANConfig.isSelected()).toString());
+				changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, cbWANConfig.isSelected()).toString();
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
 		} else if (e.getSource() == jButtonClientsConfiguration) {
@@ -3864,7 +3864,7 @@ public class MainFrame extends JFrame
 	public void paint(Graphics g) {
 		try {
 			super.paint(g);
-		} catch (java.lang.ClassCastException ex) {
+		} catch (ClassCastException ex) {
 			Logging.warning(this, "the ugly well known exception " + ex);
 			WaitCursor.stopAll();
 		}
