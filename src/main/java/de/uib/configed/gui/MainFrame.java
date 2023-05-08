@@ -467,7 +467,7 @@ public class MainFrame extends JFrame
 
 	private boolean multidepot;
 
-	DepotListPresenter depotListPresenter;
+	private DepotListPresenter depotListPresenter;
 
 	ClientTree treeClients;
 	JScrollPane scrollpaneTreeClients;

@@ -70,7 +70,7 @@ public class JTableSelectionPanel extends JPanel
 	// we put a JTable on a standard JScrollPane
 	JTable table;
 
-	DefaultListSelectionModel selectionmodel;
+	private DefaultListSelectionModel selectionmodel;
 	ConfigedMain main;
 	List<RowSorter.SortKey> primaryOrderingKeys;
 

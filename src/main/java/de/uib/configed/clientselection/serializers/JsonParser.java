@@ -17,7 +17,7 @@ class JsonParser {
 	private PositionType currentPosition = PositionType.JSON_VALUE;
 	private String currentValue;
 	private boolean inList;
-	Deque<PositionType> stack;
+	private Deque<PositionType> stack;
 
 	public enum PositionType {
 		OBJECT_BEGIN, OBJECT_END, LIST_BEGIN, LIST_END, JSON_NAME, JSON_VALUE

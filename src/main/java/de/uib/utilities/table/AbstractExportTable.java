@@ -46,7 +46,7 @@ public abstract class AbstractExportTable {
 
 	protected String extension;
 
-	DecimalFormat f = new DecimalFormat("#0.00");
+	protected DecimalFormat f = new DecimalFormat("#0.00");
 
 	protected AbstractExportTable(JTable table, List<String> classNames) {
 		this.theTable = table;

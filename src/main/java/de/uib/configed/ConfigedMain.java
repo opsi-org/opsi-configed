@@ -288,7 +288,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	Map<String, Map<String, String>> productGroups;
 	Map<String, Set<String>> productGroupMembers;
 
-	DepotsList depotsList;
+	private DepotsList depotsList;
 	Map<String, Map<String, Object>> depots;
 	List<String> depotNamesLinked;
 	private String depotRepresentative;

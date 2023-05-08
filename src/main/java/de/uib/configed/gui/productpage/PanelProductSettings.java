@@ -129,7 +129,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	// right pane
 	ProductInfoPane infoPane;
 	protected AbstractPanelEditProperties panelEditProperties;
-	DefaultEditMapPanel propertiesPanel;
+	private DefaultEditMapPanel propertiesPanel;
 
 	ListCellRenderer standardListCellRenderer;
 

@@ -28,7 +28,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 	FEdit fEdit;
 	private boolean globalFEdit;
 	private boolean fEditInitialized;
-	Dimension initSize;
+	private Dimension initSize;
 
 	public CellEditor4TableText(FEdit fEdit, Dimension initSize) {
 		super(new JTextField());

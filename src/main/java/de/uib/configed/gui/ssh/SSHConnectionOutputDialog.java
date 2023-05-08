@@ -71,7 +71,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		}
 	}
 
-	DialogCloseListener closeListener;
+	protected DialogCloseListener closeListener;
 
 	public SSHConnectionOutputDialog(String title) {
 		super(null, "", false);
