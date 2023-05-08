@@ -34,7 +34,7 @@ import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class PanelProductProperties extends JSplitPane {
 
@@ -60,7 +60,7 @@ public class PanelProductProperties extends JSplitPane {
 
 		depotsOfPackage = new ArrayList<>();
 
-		TableUpdateCollection updateCollection = new TableUpdateCollection();
+		ArrayList<TableEditItem> updateCollection = new ArrayList<TableEditItem>();
 		GenTableModel model = new GenTableModel(null, mainController.globalProductsTableProvider, -1, paneProducts,
 				updateCollection);
 

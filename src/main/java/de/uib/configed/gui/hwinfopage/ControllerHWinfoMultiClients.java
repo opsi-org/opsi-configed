@@ -186,7 +186,7 @@ public class ControllerHWinfoMultiClients {
 				// table model listener
 				panel,
 
-				// TableUpdateCollection updates
+				// ArrayList<TableEditItem> updates
 				// updateCollection
 				null);
 

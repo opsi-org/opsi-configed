@@ -21,10 +21,10 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 	private GenTableModel tablemodel;
 	PanelGenEditTable panel;
 	MapBasedUpdater updater;
-	TableUpdateCollection updateCollection;
+	ArrayList<TableEditItem> updateCollection;
 
 	public MapItemsUpdateController(PanelGenEditTable panel, GenTableModel model, MapBasedUpdater updater,
-			TableUpdateCollection updateCollection) {
+			ArrayList<TableEditItem> updateCollection) {
 		this.panel = panel;
 		this.tablemodel = model;
 		this.updater = updater;

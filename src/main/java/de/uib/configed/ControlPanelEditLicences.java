@@ -27,7 +27,6 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
-import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	// tab edit licence
@@ -57,7 +56,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 	@Override
 	public final void init() {
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 
 		List<String> columnNames;
 		List<String> classNames;

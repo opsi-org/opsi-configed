@@ -45,7 +45,7 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public static final String VALUE_NO_LICENCE_POOL = "---";
@@ -63,7 +63,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	private TableModelFilterCondition showOnlyNamesWithVariantLicences;
 	private TableModelFilterCondition showOnlyNamesWithoutLicences;
 
-	private TableUpdateCollection updateCollection;
+	private ArrayList<TableEditItem> updateCollection;
 
 	protected int keyCol;
 
@@ -303,7 +303,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			classNames.add("java.lang.String");
 		}
 
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 
 		columnNamesSWxLicencepool = new ArrayList<>();
 		columnNamesSWxLicencepool.add(AuditSoftwareXLicencePool.SW_ID);

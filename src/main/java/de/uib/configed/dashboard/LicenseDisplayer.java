@@ -39,7 +39,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.RetrieverMapSource;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -194,7 +194,7 @@ public class LicenseDisplayer {
 		List<String> columnNames;
 		List<String> classNames;
 
-		TableUpdateCollection updateCollection;
+		ArrayList<TableEditItem> updateCollection;
 
 		columnNames = new ArrayList<>();
 		for (String key : SWAuditEntry.ID_VARIANTS_COLS) {
@@ -206,7 +206,7 @@ public class LicenseDisplayer {
 			classNames.add("java.lang.String");
 		}
 
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 
 		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 

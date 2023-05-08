@@ -26,14 +26,14 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public PanelGenEditTable panelGlobalSoftware;
 
 	public List<String> columnNames;
 	public List<String> classNames;
-	TableUpdateCollection updateCollection;
+	ArrayList<TableEditItem> updateCollection;
 
 	protected int keyCol;
 
@@ -88,7 +88,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 			classNames.add("java.lang.String");
 		}
 
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 
 		panelGlobalSoftware.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 

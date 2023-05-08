@@ -42,7 +42,7 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControllerHWinfoColumnConfiguration {
 
@@ -66,7 +66,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 	public PanelGenEditTable panel;
 	private GenTableModel model;
-	TableUpdateCollection updateCollection;
+	ArrayList<TableEditItem> updateCollection;
 
 	List<String> columnNames;
 	List<String> classNames;
@@ -193,7 +193,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 	private void initModel() {
 
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 		columnNames = new ArrayList<>();
 		columnNames.add(COL_LINE_NO);
 		columnNames.add(COL_HW_CLASS);
@@ -222,7 +222,7 @@ public class ControllerHWinfoColumnConfiguration {
 				// table model listener
 				panel,
 
-				// TableUpdateCollection updates
+				// ArrayList<TableEditItem> updates
 				updateCollection) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
