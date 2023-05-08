@@ -45,11 +45,6 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 	protected AbstractRecordPane() {
 	}
 
-	private AbstractRecordPane(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
-			Map<String, Boolean> editable, Map<String, Boolean> secrets) {
-		init(data, labels, hints, editable, secrets);
-	}
-
 	public void setData(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable, Map<String, Boolean> secrets) {
 		init(data, labels, hints, editable, secrets);

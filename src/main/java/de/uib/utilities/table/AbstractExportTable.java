@@ -1,6 +1,5 @@
 package de.uib.utilities.table;
 
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
@@ -33,15 +32,11 @@ public abstract class AbstractExportTable {
 
 	private File exportDirectory;
 
-	private List<Integer> excludeCols;
-
 	private boolean askForOverwrite;
 
 	protected String writeToFile;
 
 	protected String client;
-	private String title;
-	private String subtitle;
 
 	protected String extension;
 
@@ -49,10 +44,6 @@ public abstract class AbstractExportTable {
 		this.theTable = table;
 		this.classNames = classNames;
 		askForOverwrite = true;
-	}
-
-	private AbstractExportTable(JTable table) {
-		this(table, null);
 	}
 
 	public void setTableAndClassNames(JTable table, List<String> classNames) {
@@ -66,12 +57,6 @@ public abstract class AbstractExportTable {
 
 	public void setAskForOverwrite(boolean b) {
 		askForOverwrite = b;
-	}
-
-	public void setExcludeCols(List<Integer> excludeCols) {
-		// only take into account for excel export at the moment
-
-		this.excludeCols = excludeCols;
 	}
 
 	protected abstract void execute(String fileName, boolean onlySelectedRows);
@@ -269,40 +254,5 @@ public abstract class AbstractExportTable {
 			}
 		}
 		return fileName;
-	}
-
-	private String checkFileForExistence(String filename) {
-		String result = null;
-		try {
-			Logging.info(this, "checkFileForExistence " + filename + " askForOverwrite " + askForOverwrite);
-
-			if (!askForOverwrite) {
-				return filename;
-			}
-
-			File file = new File(filename);
-
-			boolean fileExists = file.exists();
-
-			if (!fileExists) {
-				return filename;
-			}
-
-			int option = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
-					Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
-					JOptionPane.OK_CANCEL_OPTION);
-
-			if (option == JOptionPane.CANCEL_OPTION) {
-				result = null;
-			} else {
-				result = filename;
-			}
-		} catch (HeadlessException ex) {
-			Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename, ex);
-
-		}
-
-		return result;
 	}
 }

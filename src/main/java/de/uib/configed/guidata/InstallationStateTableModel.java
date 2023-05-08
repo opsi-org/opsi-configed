@@ -1338,8 +1338,4 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 
 	}
-
-	private void clearUpdates() {
-		main.getGeneralDataChangedKeeper().cancel();
-	}
 }

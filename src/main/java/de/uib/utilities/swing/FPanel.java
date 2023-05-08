@@ -47,17 +47,6 @@ public class FPanel extends SecondaryFrame {
 		super.setVisible(true);
 	}
 
-	private boolean wantToBeRegisteredWithRunningInstances() {
-		return true;
-	}
-
-	private void registerWithRunningInstances() {
-		Logging.info(this, "registerWithRunningInstances");
-		if (wantToBeRegisteredWithRunningInstances()) {
-			FPanel.runningInstances.add(this, "");
-		}
-	}
-
 	@Override
 	public void setVisible(boolean b) {
 

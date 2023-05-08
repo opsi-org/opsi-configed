@@ -53,7 +53,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 	private JSplitPane splitPane;
 	protected XTree tree;
 	private JPanel rightPane;
-	private JLabel labelForRightPane;
 	private SimpleTreeModel treemodel;
 
 	private NavigableMap<String, String> givenClasses;
@@ -273,7 +272,9 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		rightPane = new JPanel();
-		labelForRightPane = new JLabel("");
+
+		// TODO why empty label?
+		JLabel labelForRightPane = new JLabel("");
 		rightPane.add(labelForRightPane);
 
 		splitPane.setLeftComponent(jScrollPaneTree);
@@ -402,21 +403,6 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		}
 
 		treemodel.setRootLabel(s);
-	}
-
-	private String getCurrentKey() {
-		TreePath p = tree.getSelectionPath();
-		if (p == null) {
-			return null;
-		}
-
-		boolean isRoot = (p.getPathCount() == 1);
-
-		if (isRoot) {
-			return null;
-		}
-
-		return SimpleTreePath.dottedString(1, p);
 	}
 
 	// TreeSelectionListener

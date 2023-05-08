@@ -1335,10 +1335,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
-	private GroupNode insertGroup(Object groupObject, DefaultMutableTreeNode parent) {
-		return insertGroup(groupObject, groupObject.toString(), parent);
-	}
-
 	private GroupNode insertGroup(Object groupObject, String groupDescription, DefaultMutableTreeNode parent) {
 		String xGroupDescription = groupDescription;
 		if (groupDescription == null || "".equals(groupDescription.trim())) {

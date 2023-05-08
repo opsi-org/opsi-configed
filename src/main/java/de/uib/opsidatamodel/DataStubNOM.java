@@ -838,10 +838,6 @@ public class DataStubNOM {
 		return softwareIdent2clients;
 	}
 
-	private void retrieveSoftwareAuditOnClients() {
-		retrieveSoftwareAuditOnClients(new ArrayList<>());
-	}
-
 	private void retrieveSoftwareAuditOnClients(String client) {
 		List<String> clients = new ArrayList<>();
 		clients.add(client);

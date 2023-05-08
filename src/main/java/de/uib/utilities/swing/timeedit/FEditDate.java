@@ -44,8 +44,6 @@ public class FEditDate extends FEdit implements DateSelectionListener, MouseList
 
 		editingArea.add(dateEditor);
 
-		dateEditor.setEditable(true);
-
 		dateEditor.addDateSelectionListener(this);
 		dateEditor.addKeyListener(this);
 		dateEditor.addMonthViewMouseListener(this);

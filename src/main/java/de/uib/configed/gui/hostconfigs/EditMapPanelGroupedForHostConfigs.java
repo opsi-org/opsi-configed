@@ -13,12 +13,10 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import javax.swing.Icon;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.TableCellRenderer;
@@ -48,8 +46,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 	private PopupMenuTrait popupForUserpathes;
 	private PopupMenuTrait popupForRolepath;
 	private PopupMenuTrait popupForRolepathes;
-
-	private JMenuItem popupItemDeleteEntry;
 
 	private LinkedList<String> theUsers;
 	private LinkedList<String> theRoles;
@@ -418,15 +414,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		return path != null && path.getPathCount() == 3
 				&& path.getPathComponent(1).toString().equals(UserConfig.CONFIGKEY_STR_USER)
 				&& !path.getPathComponent(2).toString().equals(UserConfig.ROLE);
-	}
-
-	private void rebuildTree() {
-		Logging.info(this, "rebuild tree, hopefully");
-		buildUserConfig();
-
-		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
-
-		setEditableMap((Map) persist.getConfigDefaultValues(), persist.getConfigOptions());
 	}
 
 	@Override

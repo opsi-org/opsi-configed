@@ -36,10 +36,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 	private TablesearchPane searchPane;
 
-	private List<String> unfilteredV;
-
-	private boolean filtered;
-
 	private boolean multidepot;
 
 	private AbstractPersistenceController persist;
@@ -188,20 +184,6 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 						.addGap(10, 10, 10))
 				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));
-	}
-
-	private void filterOnSelect() {
-		Logging.info(this, "filterOnSelect, we have " + valueList.getListData());
-
-		if (!filtered) {
-			unfilteredV = valueList.getListData();
-			valueList.setListData(new ArrayList<>(valueList.getSelectedValuesList()));
-		} else {
-			valueList.setListData(unfilteredV);
-		}
-
-		filtered = !filtered;
-
 	}
 
 	public String getSelectedValue() {

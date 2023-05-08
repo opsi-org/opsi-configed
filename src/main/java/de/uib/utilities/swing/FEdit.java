@@ -171,10 +171,6 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	}
 
-	private boolean isDataChanged() {
-		return dataChanged;
-	}
-
 	public void setAreaDimension(Dimension dim) {
 		areaDimension = dim;
 	}

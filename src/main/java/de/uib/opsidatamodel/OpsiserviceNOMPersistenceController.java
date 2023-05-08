@@ -462,10 +462,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return mapPcBelongsToDepot;
 		}
 
-		private Map<String, Boolean> getMapOfPCs() {
-			return mapOfPCs;
-		}
-
 		@Override
 		public List<String> getOpsiHostNames() {
 			retrieveOpsiHosts();
@@ -4262,14 +4258,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return new HashSet<>(exec.getStringListResult(omc));
 	}
 
-	/**
-	 * returns a set which depends on the momentarily selected hosts as
-	 * specified by a call to retrieveProductProperties
-	 */
-	private Set<String> getProductsHavingSpecificProperties() {
-		return productsHavingSpecificProperties;
-	}
-
 	@Override
 	public Boolean hasClientSpecificProperties(String productname) {
 		return productHavingClientSpecificProperties.get(productname);
@@ -7103,24 +7091,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				FOpsiLicenseMissingText.callInstanceWith(info.toString());
 			});
 		}
-
-		return keyUserRegisterValue;
-	}
-
-	// configurations and algorithms sets KEY_USER_REGISTER_VALUE; should not be
-	// overwritten to avoid privileges confusion.
-	private final boolean applyUserConfiguration() {
-		// do it only once
-
-		if (keyUserRegisterValue == null) {
-			keyUserRegisterValue = isUserRegisterActivated();
-
-			if (Boolean.TRUE.equals(keyUserRegisterValue)) {
-				keyUserRegisterValue = checkUserRolesModule();
-			}
-		}
-
-		Logging.info(this, "applyUserConfiguration result " + keyUserRegisterValue);
 
 		return keyUserRegisterValue;
 	}

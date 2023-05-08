@@ -2,8 +2,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.util.Map;
-import java.util.NavigableMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -16,13 +14,9 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
-import de.uib.opsidatamodel.AbstractPersistenceController;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHPackageManagerParameterDialog extends FGeneralDialog {
-
-	private AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 	protected int frameWidth = 900;
 	protected int frameHeight = 600;
@@ -35,14 +29,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 	protected JButton jButtonExecute;
 	private JButton jButtonReload;
 	private JButton jButtonClose;
-
-	private String defaultProduct = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultProduct");
-	private String defaultDepot = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultDepot");
-
-	private String opsiProd = AbstractPersistenceController.configedWorkbenchDefaultValue;
-	private String opsiRepo = "/var/lib/opsi/repository/";
-
-	private String configRepo = "repositoryLocalUrl";
 
 	protected ConfigedMain main;
 
@@ -69,36 +55,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		if (jButtonExecute != null) {
 			jButtonExecute.setEnabled(value);
 		}
-	}
-
-	private void getRepositoriesFromConfigs(String depot) {
-		Logging.info(this, "getRepositoriesFromConfigs depot " + depot);
-		NavigableMap<String, Map<String, Object>> depotProperties = (NavigableMap<String, Map<String, Object>>) persist
-				.getHostInfoCollections().getAllDepots();
-		Logging.info(this, "getRepositoriesFromConfigs depotProperties " + depotProperties);
-
-		Map<String, Object> firstDepot;
-		if (depot == null || depot.equals(defaultDepot) || "all".equals(depot)) {
-			firstDepot = depotProperties.get(depotProperties.firstKey());
-		} else {
-			firstDepot = depotProperties.get(depot);
-		}
-
-		Logging.info(this, "getRepositoriesFromConfigs firstDepot " + firstDepot);
-
-		String oRepo = ((String) firstDepot.get(configRepo)).replace("file://", "");
-		if (oRepo != null && !"null".equals(oRepo) && !"".equals(oRepo.trim())) {
-			opsiRepo = oRepo + "/";
-		}
-
-		Logging.info(this, "getRepositoriesFromConfigs o_repo " + oRepo);
-		Logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
-
-		// try
-
-		Logging.info(this, "getRepositoriesFromConfigs opsiRepo " + opsiRepo);
-		Logging.info(this, "getRepositoriesFromConfigs opsiProd " + opsiProd);
-
 	}
 
 	protected void initLabels() {
@@ -155,7 +111,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		main.reload();
 	}
 
-	private void doActionHelp(final SSHPackageManagerParameterDialog caller) {
+	private static void doActionHelp(final SSHPackageManagerParameterDialog caller) {
 		SSHConnectionExecDialog dia = null;
 		if (caller instanceof SSHPackageManagerUninstallParameterDialog) {
 			dia = new CommandOpsiPackageManagerUninstall().startHelpDialog();
