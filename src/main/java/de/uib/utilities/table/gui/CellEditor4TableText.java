@@ -22,8 +22,8 @@ import de.uib.utilities.swing.FEdit;
 import de.uib.utilities.swing.FEditText;
 
 public class CellEditor4TableText extends DefaultCellEditor implements MouseListener, KeyListener, FocusListener {
-	String oldValue;
-	String currentValue;
+	private String oldValue;
+	private String currentValue;
 	private JTextField editorContent;
 	private FEdit fEdit;
 	private boolean globalFEdit;

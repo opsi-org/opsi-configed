@@ -55,7 +55,7 @@ public class SSHConnect {
 	protected String pwRoot;
 	protected ConfigedMain main;
 
-	SSHConnectionInfo connectionInfo;
+	private SSHConnectionInfo connectionInfo;
 
 	private int retriedTimesJschex = 1;
 	private int retriedTimesAuth = 1;

@@ -27,8 +27,8 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 	private JTextField theField;
 	private JLabel labelField;
 	private JLabel labelList;
-	String selectedListElement;
-	String resultingText;
+	private String selectedListElement;
+	private String resultingText;
 
 	public FDialogTextfieldWithListSelection(JFrame owner, String title, boolean modal, String[] buttonList,
 			Icon[] icons, int lastButtonNo, int preferredWidth, int preferredHeight, boolean lazyLayout,

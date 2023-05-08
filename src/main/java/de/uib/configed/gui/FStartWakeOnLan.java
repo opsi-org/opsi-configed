@@ -45,7 +45,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
 			FStartWakeOnLan.class, Configed.getResourceValue("RunningInstances.askStop.text"));
 
-	String scheduleTitleStarter;
+	private String scheduleTitleStarter;
 	private Map<String, Integer> labelledDelays;
 	private JSpinner spinnerDelay;
 	private JSpinner spinnerHour;
@@ -68,16 +68,16 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	private LinkedList<String> oneDayHours;
 	private LinkedList<String> minutes;
-	String nullDelayValue;
+	private String nullDelayValue;
 
 	private Map<String, List<String>> hostSeparationByDepots;
-	Set<String> usedDepots;
+	private Set<String> usedDepots;
 	private int clientCount;
-	String[] currentlySelectedClients;
+	private String[] currentlySelectedClients;
 
 	private WaitingWorker waitingTask;
 
-	String scheduleTitle;
+	private String scheduleTitle;
 
 	ConfigedMain main;
 

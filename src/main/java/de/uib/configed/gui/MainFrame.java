@@ -425,7 +425,7 @@ public class MainFrame extends JFrame
 	private JCheckBox jCheckBoxSorted = new JCheckBox();
 	private JButton jButtonSaveList = new JButton();
 	private JPanel jPanelButtonSaveList = new JPanel();
-	String[] options = new String[] { "off", "on", "setup" };
+	private String[] options = new String[] { "off", "on", "setup" };
 	private JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
 
 	private JLabel jLabelproperty = new JLabel();

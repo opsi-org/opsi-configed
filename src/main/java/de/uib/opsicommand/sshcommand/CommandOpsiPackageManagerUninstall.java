@@ -12,11 +12,11 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	private String command;
 	private int priority = 10;
 
-	String opsiproduct;
-	String depots;
-	String verbosity = " -vvv ";
-	String keepFiles = " ";
-	String freeInput = " ";
+	private String opsiproduct;
+	private String depots;
+	private String verbosity = " -vvv ";
+	private String keepFiles = " ";
+	private String freeInput = " ";
 
 	public CommandOpsiPackageManagerUninstall() {
 		command = "opsi-package-manager";

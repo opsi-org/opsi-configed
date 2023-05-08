@@ -12,7 +12,7 @@ import de.uib.utilities.logging.Logging;
 public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList {
 	private Map<String, String> meanings;
 	private Map<String, Boolean> editable;
-	String selText;
+	private String selText;
 
 	public FDialogRemoteControl() {
 

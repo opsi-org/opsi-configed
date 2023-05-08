@@ -5,7 +5,7 @@ import java.util.Map;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 
 public class AdditionalconfigurationUpdate implements UpdateCommand {
-	String objectId;
+	private String objectId;
 	private Map<?, ?> newdata;
 
 	private AbstractPersistenceController persis;

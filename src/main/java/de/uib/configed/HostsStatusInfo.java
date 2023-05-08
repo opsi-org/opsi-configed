@@ -13,5 +13,4 @@ public interface HostsStatusInfo {
 	String getInvolvedDepots();
 
 	String getGroupName();
-
 }

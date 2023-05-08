@@ -20,7 +20,7 @@ import de.uib.utilities.logging.Logging;
 public class UserConfigProducing {
 	private boolean notUsingDefaultUser;
 
-	String configserver;
+	private String configserver;
 	Collection<String> existingDepots;
 	Collection<String> existingHostgroups;
 	Collection<String> existingProductgroups;

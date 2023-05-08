@@ -23,7 +23,7 @@ public class WaitCursor {
 
 	Cursor saveCursor;
 	Component c;
-	String callLocation;
+	private String callLocation;
 
 	public WaitCursor() {
 		this(null, new Cursor(Cursor.DEFAULT_CURSOR));

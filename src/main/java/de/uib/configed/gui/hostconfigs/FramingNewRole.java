@@ -15,10 +15,10 @@ import de.uib.configed.gui.FramingTextfieldWithListselection;
 public class FramingNewRole implements FramingTextfieldWithListselection {
 
 	private List<String> list;
-	String title;
-	String textfieldLabel;
-	String listLabel;
-	String listLabelToolTip;
+	private String title;
+	private String textfieldLabel;
+	private String listLabel;
+	private String listLabelToolTip;
 
 	@Override
 	public String getTitle() {

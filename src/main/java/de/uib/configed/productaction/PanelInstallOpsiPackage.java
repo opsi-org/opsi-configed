@@ -55,17 +55,17 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private JComboBox<String> comboChooseDepot;
 	private JButton buttonCallExecute;
 
-	String opsiPackagePathToHandleS;
-	String opsiPackageOnWorkbenchS;
+	private String opsiPackagePathToHandleS;
+	private String opsiPackageOnWorkbenchS;
 	private File opsiPackageOnWorkbench;
-	String opsiPackageNameS;
+	private String opsiPackageNameS;
 
 	private JTextField fieldOpsiPackageName;
 	private JTextField fieldTmpDir;
 
-	String opsiWorkBenchDirectoryS;
+	private String opsiWorkBenchDirectoryS;
 	private File opsiWorkBenchDirectory;
-	String opsiPackageServerPathS;
+	private String opsiPackageServerPathS;
 
 	private boolean smbMounted;
 	private PanelMountShare panelMountShare;

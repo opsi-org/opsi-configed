@@ -6,7 +6,7 @@ public class TimeCheck {
 	static final int MAX_SHOWN = 500;
 
 	private Object caller;
-	String mesg;
+	private String mesg;
 	private long startmillis;
 
 	private TimeCheck(Object caller, int loglevel, String mesg) {

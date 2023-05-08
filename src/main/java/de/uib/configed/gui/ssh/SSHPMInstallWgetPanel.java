@@ -33,9 +33,9 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 	private JLabel jLabelCompareMD5Sum = new JLabel();
 	private JCheckBox jCheckBoxCompareMD5;
-	SSHCompletionComboButton autocompletion;
+	private SSHCompletionComboButton autocompletion;
 
-	SSHWgetAuthenticationPanel wgetAuthPanel;
+	private SSHWgetAuthenticationPanel wgetAuthPanel;
 
 	private String mainProduct;
 	private String mainDir;

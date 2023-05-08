@@ -88,7 +88,7 @@ public class PanelSWInfo extends JPanel {
 
 	private boolean withMsUpdates;
 	private boolean withMsUpdates2 = true;
-	String exportFilename;
+	private String exportFilename;
 
 	private JCheckBox checkWithMsUpdates;
 

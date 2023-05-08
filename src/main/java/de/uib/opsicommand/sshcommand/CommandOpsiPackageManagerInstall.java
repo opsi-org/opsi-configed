@@ -13,14 +13,14 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	protected FGeneralDialog dialog;
 	private boolean isMultiCommand;
 
-	String opsiproduct = "";
-	String depot = "";
-	String verbosity = "-vvv";
-	String freeInput = "";
-	String property = " -p keep ";
+	private String opsiproduct = "";
+	private String depot = "";
+	private String verbosity = "-vvv";
+	private String freeInput = "";
+	private String property = " -p keep ";
 
-	String updateInstalled = "";
-	String setupInstalled = "";
+	private String updateInstalled = "";
+	private String setupInstalled = "";
 
 	public CommandOpsiPackageManagerInstall() {
 		command = "opsi-package-manager";

@@ -27,8 +27,8 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
  */
 public abstract class AbstractSWExporter {
 	private File exportDirectory;
-	String exportDirectoryS;
-	String filepathStart;
+	private String exportDirectoryS;
+	private String filepathStart;
 
 	protected String filenamePrefix = "report_swaudit_";
 

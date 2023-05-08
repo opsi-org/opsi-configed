@@ -18,7 +18,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 
 	private JComboBox<String> jComboBoxAutoCompletion;
 	private JButton jButtonAutoCompletion;
-	SSHCompletionComboButton autocompletion;
+	private SSHCompletionComboButton autocompletion;
 
 	public SSHPMInstallServerPanel(String fullPathToPackage) {
 		super();

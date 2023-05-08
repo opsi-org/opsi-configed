@@ -15,7 +15,6 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	private boolean needParameter = true;
 	private boolean isMultiCommand;
 	private boolean needSudo;
-	String command = "";
 
 	private String title = "File Upload";
 	private String baseName = "File Upload";
@@ -28,6 +27,8 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	private boolean overwriteMode = true;
 
 	private boolean showOutputDialog = true;
+
+	protected String command = "";
 
 	public CommandSFTPUpload(String title) {
 		setTitle(title);

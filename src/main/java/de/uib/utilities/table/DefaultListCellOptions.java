@@ -13,7 +13,7 @@ public class DefaultListCellOptions implements ListCellOptions {
 	private int selectionMode;
 	private boolean editable;
 	private boolean nullable;
-	String description;
+	private String description;
 
 	public DefaultListCellOptions() {
 		possibleValues = new ArrayList<>();

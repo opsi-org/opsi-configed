@@ -73,9 +73,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	private JLabel labelDriverToIntegrate;
 	private PanelMountShare panelMountShare;
 
-	String depotProductDirectory = "";
+	private String depotProductDirectory = "";
 	private boolean smbMounted;
-	String driverDirectory = "";
+	private String driverDirectory = "";
 
 	private boolean stateDriverPath;
 	CheckedLabel driverPathChecked;
@@ -182,15 +182,15 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	private JButton buttonUploadDrivers;
 
-	String selectedDepot;
-	String winProduct = "";
+	private String selectedDepot;
+	private String winProduct = "";
 
 	private JLabel jLabelTopic;
 	private int wLeftText;
 
 	private AbstractPersistenceController persist;
 	ConfigedMain main;
-	String server;
+	private String server;
 	private JFrame rootFrame;
 
 	public PanelDriverUpload(ConfigedMain main, AbstractPersistenceController persist, JFrame root) {

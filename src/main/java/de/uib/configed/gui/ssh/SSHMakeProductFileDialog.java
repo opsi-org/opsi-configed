@@ -46,7 +46,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private String filename;
 	private ConfigedMain main;
 	private boolean isAdvancedOpen = true;
-	SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
+	private SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
 
 	public SSHMakeProductFileDialog(ConfigedMain m) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.title"), false);

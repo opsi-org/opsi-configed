@@ -5,8 +5,8 @@ import java.util.Map;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 
 public class ProductpropertiesUpdate implements UpdateCommand {
-	String pcname;
-	String productname;
+	private String pcname;
+	private String productname;
 	private Map<?, ?> newdata;
 
 	private AbstractPersistenceController persis;

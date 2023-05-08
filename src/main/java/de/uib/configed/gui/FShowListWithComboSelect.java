@@ -11,7 +11,7 @@ import de.uib.configed.Globals;
  * This class is intended to show a list in text area
  */
 public class FShowListWithComboSelect extends FShowList {
-	String[] choices;
+	private String[] choices;
 	private JComboBox<String> combo;
 	private JLabel labelChoice;
 

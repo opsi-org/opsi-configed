@@ -12,7 +12,7 @@ import de.uib.utilities.logging.Logging;
 /**
 */
 public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
-	String[] objectIds;
+	private String[] objectIds;
 	private AbstractPersistenceController persis;
 	private boolean determineConfigOptions;
 	private boolean masterConfig;

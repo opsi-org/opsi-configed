@@ -27,7 +27,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 	protected static List<String> rowType;
 	protected static int noOfRowTypes;
 
-	Set<String> keySet;
+	private Set<String> keySet;
 	private Object[] keyArray;
 	private final Object[] zeroArray = new Object[] {};
 

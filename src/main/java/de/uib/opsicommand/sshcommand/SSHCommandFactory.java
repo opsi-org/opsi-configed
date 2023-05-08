@@ -105,11 +105,11 @@ public final class SSHCommandFactory {
 	/** SSHCommandFactory instance **/
 	private static SSHCommandFactory instance;
 
-	Set<String> allowedHosts = new HashSet<>();
+	private Set<String> allowedHosts = new HashSet<>();
 
-	SSHConnectExec connection;
+	private SSHConnectExec connection;
 
-	String connectionState = NOT_CONNECTED;
+	private String connectionState = NOT_CONNECTED;
 
 	/**
 	 * List<Map<String,Object>> list elements are commands with key value pairs
@@ -128,8 +128,8 @@ public final class SSHCommandFactory {
 
 	private List<String> createdProducts = new ArrayList<>();
 
-	SSHCommandParameterMethods pmethodHandler;
-	SSHConnectionInfo connectionInfo;
+	private SSHCommandParameterMethods pmethodHandler;
+	private SSHConnectionInfo connectionInfo;
 
 	/**
 	 * Factory Instance for SSH Command

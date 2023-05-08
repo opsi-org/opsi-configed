@@ -14,7 +14,7 @@ import de.uib.utilities.logging.Logging;
 
 public class SeparatedDocument extends CheckedDocument {
 	private int partsLength;
-	String separator;
+	private String separator;
 
 	public SeparatedDocument(char[] allowedChars, int realSize, char separatingChar, int partsLength,
 			boolean checkMask) {

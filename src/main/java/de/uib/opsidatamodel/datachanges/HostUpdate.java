@@ -7,7 +7,7 @@ import de.uib.utilities.logging.Logging;
 
 public class HostUpdate implements UpdateCommand {
 
-	String objectId;
+	private String objectId;
 	private Map<String, Object> newdata;
 
 	private AbstractPersistenceController persis;

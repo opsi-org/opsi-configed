@@ -28,7 +28,7 @@ This class those the Right SwingWorker to execute it.
  * @inheritDoc Class for executing commands.
  */
 public class SSHConnectSCP extends SSHConnectExec {
-	SSHConnectionExecDialog outputDialog;
+	private SSHConnectionExecDialog outputDialog;
 
 	public SSHConnectSCP() {
 	}

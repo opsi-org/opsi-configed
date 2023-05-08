@@ -1,9 +1,9 @@
 package de.uib.utilities.savedstates;
 
 public abstract class AbstractSaveState {
-	String key;
+	protected String key;
 	protected Object defaultValue;
-	SavedStates states;
+	protected SavedStates states;
 
 	AbstractSaveState() {
 	}

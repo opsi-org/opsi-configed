@@ -57,12 +57,12 @@ public class ControllerHWinfoMultiClients {
 
 	TreeSet<Object> theFilterSet;
 
-	String[] hosts;
+	private String[] hosts;
 	ConfigedMain main;
 	protected AbstractPersistenceController persist;
 	TableModelFilter tableModelFilter;
 
-	SecondaryFrame fTable;
+	private SecondaryFrame fTable;
 
 	TableModelFilterCondition filterConditionHwForSelectedHosts = new TableModelFilterCondition() {
 		private Set<Object> filter;

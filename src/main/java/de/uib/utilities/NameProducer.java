@@ -16,5 +16,4 @@ public interface NameProducer {
 	String produceName();
 
 	String getDefaultName();
-
 }

@@ -16,7 +16,7 @@ public class SimpleTreeModel extends DefaultTreeModel {
 
 	public final SimpleIconNode rootNode;
 
-	Set<SimpleTreePath> allPathes;
+	private Set<SimpleTreePath> allPathes;
 	private Map<SimpleTreePath, SimpleIconNode> path2Node;
 
 	private Map<String, String> tooltips;

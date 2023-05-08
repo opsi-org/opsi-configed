@@ -49,7 +49,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JTextField jTextFieldFreeInput;
 
 	CommandWget commandWget = new CommandWget();
-	SSHCompletionComboButton completion = new SSHCompletionComboButton();
+	private SSHCompletionComboButton completion = new SSHCompletionComboButton();
 	private SSHWgetAuthenticationPanel wgetAuthPanel;
 
 	public SSHWgetParameterDialog() {
