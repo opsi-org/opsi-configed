@@ -5,7 +5,7 @@ public abstract class AbstractSaveState {
 	protected Object defaultValue;
 	protected SavedStates states;
 
-	AbstractSaveState() {
+	protected AbstractSaveState() {
 	}
 
 	protected AbstractSaveState(String key, Object defaultValue, SavedStates states) {

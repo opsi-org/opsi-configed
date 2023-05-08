@@ -129,7 +129,6 @@ public final class SSHCommandFactory {
 	private List<String> createdProducts = new ArrayList<>();
 
 	private SSHCommandParameterMethods pmethodHandler;
-	private SSHConnectionInfo connectionInfo;
 
 	/**
 	 * Factory Instance for SSH Command
@@ -142,7 +141,6 @@ public final class SSHCommandFactory {
 		instance = this;
 		addAditionalParamCommands();
 		connection = new SSHConnectExec(this.main);
-		connectionInfo = SSHConnectionInfo.getInstance();
 		pmethodHandler = SSHCommandParameterMethods.getInstance(this.main);
 	}
 

@@ -374,7 +374,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	private void buildModel() {
 
-		ArrayList<TableEditItem> updateCollection = new ArrayList<TableEditItem>();
+		ArrayList<TableEditItem> updateCollection = new ArrayList<>();
 
 		GenTableModel theModel = new GenTableModel(null, // updateItemFactory,
 

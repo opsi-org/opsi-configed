@@ -20,7 +20,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.utilities.thread.WaitCursor;
 
-public class Logging {
+public final class Logging {
 
 	public static String logDirectoryName;
 	private static String logFilenameInUse;

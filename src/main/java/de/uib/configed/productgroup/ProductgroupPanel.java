@@ -115,7 +115,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private PanelGroupedProductSettings associate;
 	private JPanel panelEdit;
-	private JPanel panelCombinedSettings;
 
 	protected Set<String> selectedIDs;
 
