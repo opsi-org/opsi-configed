@@ -386,7 +386,7 @@ public class MainFrame extends JFrame
 	protected JButton buttonSelectDepotsWithEqualProperties;
 	protected JButton buttonSelectDepotsAll;
 
-	BorderLayout borderLayout1 = new BorderLayout();
+	private BorderLayout borderLayout1 = new BorderLayout();
 	JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
 	private JSplitPane panelClientSelection;
 
@@ -429,7 +429,7 @@ public class MainFrame extends JFrame
 	JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
 
 	JLabel jLabelproperty = new JLabel();
-	ButtonGroup buttonGroupRequired = new ButtonGroup();
+	private ButtonGroup buttonGroupRequired = new ButtonGroup();
 	JRadioButton jRadioRequiredAll = new JRadioButton();
 	JRadioButton jRadioRequiredOff = new JRadioButton();
 

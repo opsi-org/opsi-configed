@@ -15,7 +15,7 @@ public class OpenSaveDialog implements ActionListener {
 
 	JButton openBtn;
 	JButton saveBtn;
-	Boolean saveAction;
+	private Boolean saveAction;
 	de.uib.configed.gui.GeneralFrame dialogView;
 
 	public OpenSaveDialog(String title) {

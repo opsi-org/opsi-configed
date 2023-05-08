@@ -23,7 +23,7 @@ public class PanelHWByAuditDriver extends JPanel {
 
 	protected String byAuditPath;
 
-	ButtonGroup selectionGroup;
+	private ButtonGroup selectionGroup;
 	JRadioButton selectionComputerSystem;
 	JRadioButton selectionBaseBoard;
 
