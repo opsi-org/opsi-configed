@@ -29,11 +29,6 @@ public class Autocomplete implements DocumentListener {
 		Collections.sort(keywords);
 	}
 
-	public void setKeywordsList(List<String> l) {
-
-		this.keywords = l;
-	}
-
 	@Override
 	public void changedUpdate(DocumentEvent ev) {
 		/* Not needed */}

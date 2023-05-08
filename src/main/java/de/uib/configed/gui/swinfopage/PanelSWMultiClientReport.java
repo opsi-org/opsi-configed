@@ -404,5 +404,4 @@ public class PanelSWMultiClientReport extends JPanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE));
 	}
-
 }

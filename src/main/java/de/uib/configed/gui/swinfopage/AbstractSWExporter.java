@@ -30,8 +30,6 @@ public abstract class AbstractSWExporter {
 	String exportDirectoryS;
 	String filepathStart;
 
-	protected Boolean askingForKindOfAction;
-	protected boolean askForOverwrite;
 	protected String filenamePrefix = "report_swaudit_";
 
 	protected AbstractPersistenceController persist;
