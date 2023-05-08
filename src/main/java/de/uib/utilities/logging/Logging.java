@@ -20,7 +20,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.utilities.thread.WaitCursor;
 
-public class Logging implements LogEventSubject {
+public class Logging {
 
 	public static String logDirectoryName;
 	private static String logFilenameInUse;
@@ -441,15 +441,7 @@ public class Logging implements LogEventSubject {
 		return result.toString();
 	}
 
-	// used instead of interface LogEventSubject
 	public static void registLogEventObserver(LogEventObserver o) {
 		logEventObservers.add(o);
 	}
-
-	// interface LogEventSubject
-	@Override
-	public void registerLogEventObserver(LogEventObserver o) {
-		// not implemented since static method is needed
-	}
-
 }
