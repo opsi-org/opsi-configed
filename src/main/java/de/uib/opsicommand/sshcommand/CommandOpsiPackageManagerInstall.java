@@ -78,11 +78,6 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	}
 
 	@Override
-	public void startParameterGui() {
-		dialog = new SSHPackageManagerInstallParameterDialog();
-	}
-
-	@Override
 	public void startParameterGui(ConfigedMain main) {
 		dialog = new SSHPackageManagerInstallParameterDialog(main);
 	}

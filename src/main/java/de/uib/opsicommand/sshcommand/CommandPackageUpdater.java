@@ -141,10 +141,6 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	}
 
 	@Override
-	public void startParameterGui() {
-		/* Not needed */}
-
-	@Override
 	public void startParameterGui(ConfigedMain main) {
 
 		dialog = new SSHPackageUpdaterDialog();

@@ -221,11 +221,6 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 	}
 
 	@Override
-	public void startParameterGui() {
-		dialog = new SSHOpsiSetRightsParameterDialog(this);
-	}
-
-	@Override
 	public void startParameterGui(ConfigedMain main) {
 		dialog = new SSHOpsiSetRightsParameterDialog(this);
 	}
