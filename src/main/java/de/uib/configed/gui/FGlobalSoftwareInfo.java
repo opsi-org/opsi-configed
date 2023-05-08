@@ -33,7 +33,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 	public List<String> columnNames;
 	public List<String> classNames;
-	ArrayList<TableEditItem> updateCollection;
+	private ArrayList<TableEditItem> updateCollection;
 
 	protected int keyCol;
 

@@ -66,7 +66,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 	public PanelGenEditTable panel;
 	private GenTableModel model;
-	ArrayList<TableEditItem> updateCollection;
+	private ArrayList<TableEditItem> updateCollection;
 
 	List<String> columnNames;
 	List<String> classNames;
