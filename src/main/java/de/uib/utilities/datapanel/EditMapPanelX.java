@@ -64,7 +64,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private JComboBox<?> editorfield;
 	TableCellEditor defaultCellEditor;
 
-	ListModelProducer<String> modelProducer;
+	private ListModelProducer<String> modelProducer;
 
 	MouseListener popupListener;
 	MouseListener popupNoEditOptionsListener;

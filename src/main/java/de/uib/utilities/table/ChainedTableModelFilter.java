@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class ChainedTableModelFilter extends TableModelFilter {
-	LinkedHashMap<String, TableModelFilter> chain;
+	private LinkedHashMap<String, TableModelFilter> chain;
 
 	public ChainedTableModelFilter() {
 		chain = new LinkedHashMap<>();

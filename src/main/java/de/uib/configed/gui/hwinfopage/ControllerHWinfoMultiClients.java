@@ -52,8 +52,8 @@ public class ControllerHWinfoMultiClients {
 	private JButton buttonReload;
 	private JButton buttonCopySelection;
 
-	List<String> columnNames;
-	List<String> classNames;
+	private List<String> columnNames;
+	private List<String> classNames;
 
 	TreeSet<Object> theFilterSet;
 

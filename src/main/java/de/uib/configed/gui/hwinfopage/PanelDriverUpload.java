@@ -166,7 +166,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	RadioButtonIntegrationType buttonAdditional;
 	RadioButtonIntegrationType buttonByAudit;
 
-	List<RadioButtonIntegrationType> radioButtons;
+	private List<RadioButtonIntegrationType> radioButtons;
 
 	private JButton buttonCallSelectDriverFiles;
 	protected JTextShowField fieldDriverPath;

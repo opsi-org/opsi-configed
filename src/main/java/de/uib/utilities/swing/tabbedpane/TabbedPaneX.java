@@ -20,7 +20,7 @@ public class TabbedPaneX extends JPanel {
 
 	TabController controller;
 
-	List<LicencesTabStatus> tabOrder;
+	private List<LicencesTabStatus> tabOrder;
 
 	Map<String, Object> globals;
 

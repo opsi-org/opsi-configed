@@ -8,8 +8,8 @@ import javax.swing.ListSelectionModel;
 import de.uib.utilities.logging.Logging;
 
 public class DefaultListCellOptions implements ListCellOptions {
-	List<Object> possibleValues;
-	List<Object> defaultValues;
+	private List<Object> possibleValues;
+	private List<Object> defaultValues;
 	private int selectionMode;
 	private boolean editable;
 	private boolean nullable;

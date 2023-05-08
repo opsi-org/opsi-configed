@@ -25,7 +25,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 
 	protected boolean addEmpty;
 
-	List<String> tooltips = new ArrayList<>();
+	private List<String> tooltips = new ArrayList<>();
 
 	public JComboBoxToolTip() {
 		super();

@@ -11,10 +11,10 @@ package de.uib.utilities.table.updates;
 import java.util.List;
 
 public class MapDeliveryItem extends MapBasedTableEditItem {
-	List<String> columnNames;
-	List<String> classNames;
-	List<Object> oldValues;
-	List<Object> rowV;
+	private List<String> columnNames;
+	private List<String> classNames;
+	private List<Object> oldValues;
+	private List<Object> rowV;
 
 	public MapDeliveryItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
 			List<Object> oldValues, List<Object> rowV) {

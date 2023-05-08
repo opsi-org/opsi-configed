@@ -14,7 +14,7 @@ import de.uib.configed.gui.FramingTextfieldWithListselection;
 
 public class FramingNewRole implements FramingTextfieldWithListselection {
 
-	List<String> list;
+	private List<String> list;
 	String title;
 	String textfieldLabel;
 	String listLabel;

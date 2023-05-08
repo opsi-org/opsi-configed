@@ -119,7 +119,7 @@ public final class OpsiDataBackend {
 	Map<String, Set<String>> superGroups;
 	Map<String, List<Map<String, String>>> softwareMap;
 	Map<String, List<SWAuditClientEntry>> swauditMap;
-	List<Map<String, Object>> hardwareOnClient;
+	private List<Map<String, Object>> hardwareOnClient;
 	Map<String, List<Map<String, Object>>> clientToHardware;
 
 	private List<Map<String, List<Map<String, Object>>>> hwConfig;

@@ -187,8 +187,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected IFInstallationStateTableModel istmForSelectedClientsNetboot;
 	protected String firstSelectedClient;
 	private String[] selectedClients = new String[] {};
-	List<String> saveSelectedClients;
-	List<String> preSaveSelectedClients;
+	private List<String> saveSelectedClients;
+	private List<String> preSaveSelectedClients;
 
 	// we do not work with selection
 
@@ -290,9 +290,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private DepotsList depotsList;
 	Map<String, Map<String, Object>> depots;
-	List<String> depotNamesLinked;
+	private List<String> depotNamesLinked;
 	private String depotRepresentative;
-	ListSelectionListener depotsListSelectionListener;
+	private ListSelectionListener depotsListSelectionListener;
 
 	private ReachableUpdater reachableUpdater = new ReachableUpdater(0);
 
@@ -310,7 +310,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	ControlPanelLicencesUsage controlPanelLicencesUsage;
 	ControlPanelLicencesReconciliation controlPanelLicencesReconciliation;
 
-	List<AbstractControlMultiTablePanel> allControlMultiTablePanels;
+	private List<AbstractControlMultiTablePanel> allControlMultiTablePanels;
 
 	private Dashboard dashboard;
 
@@ -334,7 +334,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public Map<String, Boolean> hostDisplayFields;
 
-	LicensingInfoMap licensingInfoMap;
+	private LicensingInfoMap licensingInfoMap;
 
 	public enum LicencesTabStatus {
 		LICENCEPOOL, ENTER_LICENCE, EDIT_LICENCE, USAGE, RECONCILIATION, STATISTICS

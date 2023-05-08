@@ -72,7 +72,7 @@ public class JTableSelectionPanel extends JPanel
 
 	private DefaultListSelectionModel selectionmodel;
 	ConfigedMain main;
-	List<RowSorter.SortKey> primaryOrderingKeys;
+	private List<RowSorter.SortKey> primaryOrderingKeys;
 
 	private JLabel labelSearch;
 	CheckedLabel checkmarkSearch;

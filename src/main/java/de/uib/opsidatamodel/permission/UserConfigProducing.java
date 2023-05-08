@@ -28,7 +28,7 @@ public class UserConfigProducing {
 	Map<String, List<Object>> serverconfigValuesMap;
 	Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
 
-	List<Object> readyObjects;
+	private List<Object> readyObjects;
 
 	public UserConfigProducing(
 			// command tools

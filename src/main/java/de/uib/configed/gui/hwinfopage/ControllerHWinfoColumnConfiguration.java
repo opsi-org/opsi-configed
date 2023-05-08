@@ -68,8 +68,8 @@ public class ControllerHWinfoColumnConfiguration {
 	private GenTableModel model;
 	private ArrayList<TableEditItem> updateCollection;
 
-	List<String> columnNames;
-	List<String> classNames;
+	private List<String> columnNames;
+	private List<String> classNames;
 
 	private Map<String, Map<String, Boolean>> updateItems;
 

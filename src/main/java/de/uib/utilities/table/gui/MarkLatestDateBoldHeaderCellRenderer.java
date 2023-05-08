@@ -13,7 +13,7 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
 public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRenderer {
 	private TableCellRenderer rend;
-	LicensingInfoMap licensingInfoMap;
+	private LicensingInfoMap licensingInfoMap;
 
 	public MarkLatestDateBoldHeaderCellRenderer(TableCellRenderer rend, LicensingInfoMap lInfoMap) {
 		this.rend = rend;

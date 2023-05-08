@@ -492,7 +492,7 @@ public class MapTableModel extends AbstractTableModel {
 	}
 
 	// for transport between a class family
-	List<DataChangedObserver> getObservers() {
+	public List<DataChangedObserver> getObservers() {
 		return observers;
 	}
 

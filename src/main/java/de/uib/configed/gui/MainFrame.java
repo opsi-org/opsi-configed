@@ -416,7 +416,7 @@ public class MainFrame extends JFrame
 	private JPanel jPanelSchalterstellung;
 
 	public FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
-	LicensingInfoMap licensingInfoMap;
+	private LicensingInfoMap licensingInfoMap;
 
 	private JTextField jTextFieldConfigdir = new JTextField();
 	private JButton jButtonFileChooserConfigdir = new JButton();

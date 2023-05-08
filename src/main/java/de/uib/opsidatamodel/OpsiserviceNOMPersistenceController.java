@@ -4275,13 +4275,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return productHavingClientSpecificProperties.get(productname);
 	}
 
-	List<Map<String, Object>> retrieveListOfMapsNOM(String methodName) {
+	public List<Map<String, Object>> retrieveListOfMapsNOM(String methodName) {
 		String[] callAttributes = new String[] {};
 		Map<String, Object> callFilter = new HashMap<>();
 		return retrieveListOfMapsNOM(callAttributes, callFilter, methodName);
 	}
 
-	List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map<?, ?> callFilter, String methodName) {
+	public List<Map<String, Object>> retrieveListOfMapsNOM(String[] callAttributes, Map<?, ?> callFilter,
+			String methodName) {
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
 
@@ -4289,7 +4290,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return retrieved;
 	}
 
-	List<Map<String, Object>> retrieveListOfMapsNOM(String methodName, Object[] data) {
+	public List<Map<String, Object>> retrieveListOfMapsNOM(String methodName, Object[] data) {
 		List<Map<String, Object>> retrieved = exec.getListOfMaps(new OpsiMethodCall(methodName, data));
 		Logging.debug(this, "retrieveListOfMapsNOM " + retrieved);
 		return retrieved;

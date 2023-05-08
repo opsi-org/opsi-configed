@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 
 public class MapBasedTableEditItem extends TableEditItem {
-	List<String> columnNames;
-	List<String> classNames;
-	List<Object> oldValues;
-	List<Object> rowV;
+	private List<String> columnNames;
+	private List<String> classNames;
+	private List<Object> oldValues;
+	private List<Object> rowV;
 
 	public MapBasedTableEditItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
 			List<Object> oldValues, List<Object> rowV) {

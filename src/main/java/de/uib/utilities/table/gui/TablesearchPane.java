@@ -83,7 +83,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private boolean withNavPane;
 
 	private JPopupMenu searchMenu;
-	LinkedHashMap<JMenuItemFormatted, Boolean> searchMenuEntries;
+	private LinkedHashMap<JMenuItemFormatted, Boolean> searchMenuEntries;
 
 	private JMenuItemFormatted popupSearch;
 	private JMenuItemFormatted popupSearchNext;

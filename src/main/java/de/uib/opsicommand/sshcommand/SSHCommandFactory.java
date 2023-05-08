@@ -126,7 +126,7 @@ public final class SSHCommandFactory {
 	private ConfigedMain main;
 	private MainFrame mainFrame;
 
-	List<String> createdProducts = new ArrayList<>();
+	private List<String> createdProducts = new ArrayList<>();
 
 	SSHCommandParameterMethods pmethodHandler;
 	SSHConnectionInfo connectionInfo;

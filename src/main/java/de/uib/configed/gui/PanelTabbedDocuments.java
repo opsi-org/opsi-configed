@@ -20,7 +20,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
 
 public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
-	LogPane[] textPanes;
+	private LogPane[] textPanes;
 	String[] idents;
 	private final List<String> identsList;
 

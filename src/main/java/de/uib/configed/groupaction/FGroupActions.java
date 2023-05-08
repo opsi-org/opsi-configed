@@ -46,7 +46,7 @@ public class FGroupActions extends SecondaryFrame {
 
 	private JComboBox<String> comboSelectImage;
 
-	List<String> associatedClients;
+	private List<String> associatedClients;
 
 	private AbstractPersistenceController persist;
 	ConfigedMain main;
