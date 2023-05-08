@@ -37,7 +37,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 		super(title, mainController, productDisplayFields);
 	}
 
-	protected void activatePacketSelectionHandling(boolean b) {
+	private void activatePacketSelectionHandling(boolean b) {
 		if (b) {
 			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
 		} else {

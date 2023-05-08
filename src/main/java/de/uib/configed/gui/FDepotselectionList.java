@@ -14,7 +14,7 @@ import de.uib.utilities.logging.Logging;
 public class FDepotselectionList extends FGeneralDialog {
 	private DepotsList depotsList;
 
-	protected Window masterWindow;
+	private Window masterWindow;
 
 	public FDepotselectionList(JDialog masterWindow) {
 		super(

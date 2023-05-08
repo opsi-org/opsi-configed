@@ -164,7 +164,7 @@ public class MainFrame extends JFrame
 	public static final String ITEM_DELETE_CLIENT = "remove client";
 	public static final String ITEM_FREE_LICENCES = "free licences for client";
 
-	protected String oldNotes;
+	private String oldNotes;
 
 	private Map<String, Map<String, String>> changedClientInfos;
 
@@ -372,8 +372,8 @@ public class MainFrame extends JFrame
 	public CombinedMenuItem combinedMenuItemDepotColumn = new CombinedMenuItem(jCheckBoxMenuItemShowDepotColumn,
 			popupShowDepotColumn);
 
-	protected JButton buttonSelectDepotsWithEqualProperties;
-	protected JButton buttonSelectDepotsAll;
+	private JButton buttonSelectDepotsWithEqualProperties;
+	private JButton buttonSelectDepotsAll;
 
 	private BorderLayout borderLayout1 = new BorderLayout();
 	private JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
@@ -437,7 +437,7 @@ public class MainFrame extends JFrame
 	private JTextEditorField jTextFieldOneTimePassword;
 	private JTextHideField jTextFieldHostKey;
 
-	protected FShowList fListSelectedClients;
+	private FShowList fListSelectedClients;
 
 	private boolean multidepot;
 
@@ -2859,7 +2859,7 @@ public class MainFrame extends JFrame
 		configedMain.getSessionInfo();
 	}
 
-	protected void getReachableInfo() {
+	private void getReachableInfo() {
 		iconButtonReachableInfo.setEnabled(false);
 		try {
 			SwingUtilities.invokeLater(configedMain::getReachableInfo);
@@ -3210,7 +3210,7 @@ public class MainFrame extends JFrame
 	}
 
 	// TODO: kann das weg? arrange dialogs for opsi-client wake on LAN...
-	protected void arrangeWs(Set<JDialog> frames) {
+	private void arrangeWs(Set<JDialog> frames) {
 		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
 		// Can iconify, but not deiconify a modal JDialog
 

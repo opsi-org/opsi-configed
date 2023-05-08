@@ -37,7 +37,7 @@ public class DefaultEditMapPanel extends JPanel {
 	protected boolean keylistExtendible;
 	protected boolean keylistEditable = true;
 
-	protected boolean optionsEditable = true;
+	private boolean optionsEditable = true;
 
 	protected Actor actor;
 
@@ -52,7 +52,7 @@ public class DefaultEditMapPanel extends JPanel {
 
 	protected TableCellRenderer tableCellRenderer;
 
-	protected static class DefaultPropertyHandler extends AbstractPropertyHandler {
+	private static class DefaultPropertyHandler extends AbstractPropertyHandler {
 		@Override
 		public void removeValue(String key) {
 			Logging.debug(this, "removing value for key " + key);

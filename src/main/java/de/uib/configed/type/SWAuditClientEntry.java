@@ -68,7 +68,7 @@ public class SWAuditClientEntry {
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 	}
 
-	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
+	private static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
@@ -170,7 +170,7 @@ public class SWAuditClientEntry {
 		return result;
 	}
 
-	protected void updateSoftware() {
+	private void updateSoftware() {
 		Logging.info(this, "updateSoftware");
 		if (lastUpdateTime != null && (System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE)) {
 			controller.installedSoftwareInformationRequestRefresh();
@@ -219,7 +219,7 @@ public class SWAuditClientEntry {
 
 	}
 
-	protected Integer produceSWid() {
+	private Integer produceSWid() {
 		swId = getIndex(software, swIdent);
 		Logging.debug(this, "search index for software with ident " + swIdent + " \nswId " + swId);
 

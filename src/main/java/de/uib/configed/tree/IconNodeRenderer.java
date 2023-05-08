@@ -12,8 +12,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class IconNodeRenderer extends DefaultTreeCellRenderer {
-	protected static final int LABEL_WIDTH = 200;
-	protected static final int LABEL_HEIGHT = 20;
+	private static final int LABEL_WIDTH = 200;
+	private static final int LABEL_HEIGHT = 20;
 
 	public IconNodeRenderer() {
 		super();

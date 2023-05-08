@@ -20,9 +20,9 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	public static final String FILTER_BY_SELECTION = "filterBySelection";
 
-	protected JTable table;
+	private JTable table;
 
-	protected int[] viewRowfilter = new int[0];
+	private int[] viewRowfilter = new int[0];
 
 	private PanelGroupedProductSettings panelProductSettings;
 
@@ -40,7 +40,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 		this.panelProductSettings = panelProductSettings;
 	}
 
-	protected AbstractTableModel getTableModel() {
+	private AbstractTableModel getTableModel() {
 		return (AbstractTableModel) table.getModel();
 	}
 

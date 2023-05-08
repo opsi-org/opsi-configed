@@ -11,7 +11,7 @@ public class CommandHelp /* extends */ implements SSHCommand {
 
 	private boolean needParameter;
 	private SSHCommand basicCommand;
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 
 	private boolean isMultiCommand;
 

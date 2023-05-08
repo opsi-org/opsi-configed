@@ -28,9 +28,9 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 public abstract class AbstractSWExporter {
 	private String filepathStart;
 
-	protected String filenamePrefix = "report_swaudit_";
+	private String filenamePrefix = "report_swaudit_";
 
-	protected AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	protected GenTableModel modelSWInfo;
 	protected String scanInfo = "";
@@ -166,7 +166,7 @@ public abstract class AbstractSWExporter {
 
 	}
 
-	protected void initModel(String hostId) {
+	private void initModel(String hostId) {
 		theHost = hostId;
 
 		List<String> columnNames;

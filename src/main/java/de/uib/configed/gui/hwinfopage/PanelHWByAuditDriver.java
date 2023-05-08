@@ -15,23 +15,23 @@ import de.uib.configed.Globals;
 import de.uib.utilities.swing.JTextShowField;
 
 public class PanelHWByAuditDriver extends JPanel {
-	protected JLabel jLabelTitle;
+	private JLabel jLabelTitle;
 
-	protected int hGap = Globals.HGAP_SIZE / 2;
-	protected int vGap = Globals.VGAP_SIZE / 2;
-	protected int hLabel = Globals.BUTTON_HEIGHT;
+	private int hGap = Globals.HGAP_SIZE / 2;
+	private int vGap = Globals.VGAP_SIZE / 2;
+	private int hLabel = Globals.BUTTON_HEIGHT;
 
-	protected String byAuditPath;
+	private String byAuditPath;
 
 	private JRadioButton selectionBaseBoard;
 
-	protected JTextField fieldVendor;
-	protected JTextField fieldLabel;
+	private JTextField fieldVendor;
+	private JTextField fieldLabel;
 
-	protected JTextField fieldVendor2;
-	protected JTextField fieldLabel2;
+	private JTextField fieldVendor2;
+	private JTextField fieldLabel2;
 
-	protected String title;
+	private String title;
 
 	private FDriverUpload fDriverUpload;
 	private ConfigedMain main;

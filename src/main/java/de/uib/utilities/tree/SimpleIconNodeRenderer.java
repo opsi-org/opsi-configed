@@ -16,8 +16,8 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	private static final int LABEL_WIDTH = 300;
 	private static final int LABEL_HEIGHT = 22;
 
-	protected Font emphasized;
-	protected Font standard;
+	private Font emphasized;
+	private Font standard;
 
 	public SimpleIconNodeRenderer() {
 		super();

@@ -79,7 +79,7 @@ public class TabbedPaneX extends JPanel {
 	}
 
 	/**
-	 * adds a tab to the incorporated JTabbedMainprotected
+	 * adds a tab to the incorporated JTabbedMainprivate
 	 */
 	public void addTab(LicencesTabStatus s, Component c) {
 		tabOrder.add(s);

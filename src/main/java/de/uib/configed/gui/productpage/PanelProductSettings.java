@@ -122,12 +122,12 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private static final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
 
 	public JTable tableProducts;
-	protected AbstractExportTable exportTable;
+	private AbstractExportTable exportTable;
 	protected JPanel topPane;
 
 	// right pane
 	private ProductInfoPane infoPane;
-	protected AbstractPanelEditProperties panelEditProperties;
+	private AbstractPanelEditProperties panelEditProperties;
 	private DefaultEditMapPanel propertiesPanel;
 
 	private ListCellRenderer standardListCellRenderer;
@@ -151,18 +151,18 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	private ColoredTableCellRenderer lastStateChangeTableCellRenderer;
 
-	protected Map<String, Boolean> productDisplayFields;
+	private Map<String, Boolean> productDisplayFields;
 
-	protected List<? extends SortKey> currentSortKeys;
+	private List<? extends SortKey> currentSortKeys;
 
-	protected ArrayList<String> selectedProducts;
+	private ArrayList<String> selectedProducts;
 
 	private JPopupMenu popup;
 	private JMenuItem itemOnDemand;
 
 	private JMenuItem itemSaveAndExecute;
 
-	protected String title;
+	private String title;
 
 	protected ConfigedMain mainController;
 
@@ -525,7 +525,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		infoPane.setProductAdvice("");
 	}
 
-	protected void producePopupMenu(final Map<String, Boolean> checkColumns) {
+	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
 		popup = new JPopupMenu("");
 
 		JMenuItem save = new JMenuItemFormatted();
@@ -655,7 +655,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 	}
 
-	protected JTable strippTable(JTable jTable) {
+	private JTable strippTable(JTable jTable) {
 		boolean dontStrippIt;
 		List<String[]> data = new ArrayList<>();
 		String[] headers = new String[jTable.getColumnCount()];

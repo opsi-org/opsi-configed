@@ -8,8 +8,8 @@ public class Object2GroupEntry {
 	public static final String GROUP_ID_KEY = "groupId";
 	public static final String MEMBER_KEY = "objectId";
 
-	protected String groupId;
-	protected String member;
+	private String groupId;
+	private String member;
 
 	public Object2GroupEntry(String member, String groupId) {
 		this.groupId = groupId;

@@ -22,12 +22,12 @@ public class PanelLicencesReconciliation extends MultiTablePanel {
 
 	public PanelGenEditTable panelReconciliation;
 
-	protected int minVSize = 50;
-	protected int tablesMaxWidth = 1000;
-	protected int buttonHeight = 15;
-	protected int buttonWidth = 140;
+	private int minVSize = 50;
+	private int tablesMaxWidth = 1000;
+	private int buttonHeight = 15;
+	private int buttonWidth = 140;
 
-	protected ControlPanelLicencesReconciliation licencesReconciliationController;
+	private ControlPanelLicencesReconciliation licencesReconciliationController;
 
 	/** Creates new form panelLicencesReconciliation */
 	public PanelLicencesReconciliation(ControlPanelLicencesReconciliation licencesReconciliationController) {

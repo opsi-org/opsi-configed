@@ -50,20 +50,20 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	private static final int INITIAL_DIVIDER_LOCATION = 350;
 
-	protected JSplitPane splitPane;
+	private JSplitPane splitPane;
 	protected XTree tree;
-	protected JPanel rightPane;
-	protected JLabel labelForRightPane;
-	protected SimpleTreeModel treemodel;
+	private JPanel rightPane;
+	private JLabel labelForRightPane;
+	private SimpleTreeModel treemodel;
 
-	protected NavigableMap<String, String> givenClasses;
-	protected NavigableSet<String> keyclasses;
-	protected Map<String, String> tooltips4Keys;
+	private NavigableMap<String, String> givenClasses;
+	private NavigableSet<String> keyclasses;
+	private Map<String, String> tooltips4Keys;
 	protected Map<String, DefaultEditMapPanel> partialPanels;
-	protected NavigableMap<String, Map<String, Object>> virtualLines;
+	private NavigableMap<String, Map<String, Object>> virtualLines;
 
-	protected int hGap = Globals.HGAP_SIZE / 2;
-	protected int vGap = Globals.VGAP_SIZE / 2;
+	private int hGap = Globals.HGAP_SIZE / 2;
+	private int vGap = Globals.VGAP_SIZE / 2;
 
 	public EditMapPanelGrouped() {
 		this(null);
@@ -136,7 +136,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 			EditMapPanelX editMapPanel = new EditMapPanelX(tableCellRenderer, keylistExtendible, keylistEditable,
 					reloadable) {
-				protected void reload() {
+				private void reload() {
 					TreePath p = tree.getSelectionPath();
 					int row = tree.getRowForPath(p);
 
@@ -291,7 +291,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	}
 
-	protected void classify(Map<String, Object> data, NavigableSet<String> classIds) {
+	private void classify(Map<String, Object> data, NavigableSet<String> classIds) {
 
 		virtualLines = new TreeMap<>();
 
@@ -404,7 +404,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		treemodel.setRootLabel(s);
 	}
 
-	protected String getCurrentKey() {
+	private String getCurrentKey() {
 		TreePath p = tree.getSelectionPath();
 		if (p == null) {
 			return null;

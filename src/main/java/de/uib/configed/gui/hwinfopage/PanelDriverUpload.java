@@ -54,13 +54,13 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	private int hFirstGap = Globals.HFIRST_GAP;
 
-	protected int hGap = Globals.HGAP_SIZE / 2;
-	protected int vGap = Globals.VGAP_SIZE / 2;
+	private int hGap = Globals.HGAP_SIZE / 2;
+	private int vGap = Globals.VGAP_SIZE / 2;
 
-	protected String byAuditPath = "";
+	private String byAuditPath = "";
 
-	protected JTextShowField fieldByAuditPath;
-	protected JTextShowField fieldClientname;
+	private JTextShowField fieldByAuditPath;
+	private JTextShowField fieldClientname;
 
 	private JComboBox<String> comboChooseDepot;
 	private JComboBox<String> comboChooseWinProduct;
@@ -154,7 +154,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	private RadioButtonIntegrationType buttonByAudit;
 
-	protected JTextShowField fieldDriverPath;
+	private JTextShowField fieldDriverPath;
 	private JFileChooser chooserDriverPath;
 
 	// server path finding
@@ -679,7 +679,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		Logging.info(this, "makePath result " + path);
 	}
 
-	protected void execute() {
+	private void execute() {
 
 		final FLoadingWaiter waiter = new FLoadingWaiter(this, Globals.APPNAME,
 				Configed.getResourceValue("PanelDriverUpload.execute.running"));

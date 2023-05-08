@@ -34,8 +34,8 @@ public class PanelSWMultiClientReport extends JPanel {
 	private boolean withMsUpdates2;
 	private boolean askForOverwrite;
 
-	protected PanelStateSwitch<KindOfExport> panelSelectExportType;
-	protected PanelSWInfo.KindOfExport kindOfExport;
+	private PanelStateSwitch<KindOfExport> panelSelectExportType;
+	private PanelSWInfo.KindOfExport kindOfExport;
 
 	private File exportDirectory;
 	private String exportDirectoryS;

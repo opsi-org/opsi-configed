@@ -25,9 +25,9 @@ public class IconNode extends DefaultMutableTreeNode {
 
 	private Icon emphasizedIcon;
 
-	protected String toolTipText;
+	private String toolTipText;
 
-	protected boolean emphasized;
+	private boolean emphasized;
 
 	private Map<String, Object> deviceInfo;
 

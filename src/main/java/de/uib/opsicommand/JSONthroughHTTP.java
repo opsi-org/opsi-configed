@@ -56,20 +56,20 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
 	public static final int DEFAULT_PORT = 4447;
 
-	protected static final int POST = 0;
-	protected static final int GET = 1;
-	protected static final String CODING_TABLE = "UTF8";
+	private static final int POST = 0;
+	private static final int GET = 1;
+	private static final String CODING_TABLE = "UTF8";
 	protected String host;
 	public String username;
 	public String password;
-	protected int portHTTP = 4444;
+	private int portHTTP = 4444;
 	protected int portHTTPS = DEFAULT_PORT;
-	protected boolean startConnecting;
-	protected boolean endConnecting;
+	private boolean startConnecting;
+	private boolean endConnecting;
 	protected URL serviceURL;
 	public String sessionId;
-	protected String lastSessionId;
-	protected int requestMethod = POST;
+	private String lastSessionId;
+	private int requestMethod = POST;
 	protected boolean certificateExists;
 	protected boolean trustOnlyOnce;
 	protected boolean trustAlways;
@@ -99,7 +99,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 		conStat = new ConnectionState();
 	}
 
-	protected String makeRpcPath(OpsiMethodCall omc) {
+	private String makeRpcPath(OpsiMethodCall omc) {
 		StringBuilder result = new StringBuilder("/rpc");
 
 		if (omc.getRpcPath() != null && !(omc.getRpcPath().isEmpty())) {
@@ -151,11 +151,11 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 		appendGETParameter(urlS, json);
 	}
 
-	protected String produceJSONstring(OpsiMethodCall omc) {
+	private String produceJSONstring(OpsiMethodCall omc) {
 		return omc.getJsonString();
 	}
 
-	protected String produceJSONstring(List<OpsiMethodCall> omcList) {
+	private String produceJSONstring(List<OpsiMethodCall> omcList) {
 		StringBuilder json = new StringBuilder("[");
 		for (int i = 0; i < omcList.size(); i++) {
 			json.append(omcList.get(i).getJsonString());

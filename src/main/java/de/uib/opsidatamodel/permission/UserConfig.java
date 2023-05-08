@@ -78,13 +78,13 @@ public class UserConfig {
 
 	private static UserConfig currentConfig;
 
-	protected String username;
+	private String username;
 
-	protected UserConfig prototypeConfig;
+	private UserConfig prototypeConfig;
 
-	protected Map<String, Boolean> booleanMap;
-	protected Map<String, List<Object>> valuesMap;
-	protected Map<String, List<Object>> possibleValuesMap;
+	private Map<String, Boolean> booleanMap;
+	private Map<String, List<Object>> valuesMap;
+	private Map<String, List<Object>> possibleValuesMap;
 
 	public UserConfig(String userName) {
 		Logging.info(this, "create for " + userName);

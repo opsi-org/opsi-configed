@@ -43,16 +43,16 @@ public class SSHConnect {
 
 	/** Hostname for server to connected with **/
 	protected String commandInfoName;
-	protected String host;
+	private String host;
 	/** Username for server to connected as **/
-	protected String user;
+	private String user;
 
 	/** Password for server and username **/
-	protected String password;
+	private String password;
 	/** If needed the sudo password **/
-	protected String pwSudo;
+	private String pwSudo;
 	/** If needed the root password **/
-	protected String pwRoot;
+	private String pwRoot;
 	protected ConfigedMain main;
 
 	private SSHConnectionInfo connectionInfo;
@@ -81,7 +81,7 @@ public class SSHConnect {
 	 * @param result Result
 	 * @return True - if result is not an error
 	 **/
-	protected boolean isNotError(String result) {
+	private boolean isNotError(String result) {
 		return result.compareTo("error") != 0;
 	}
 
@@ -90,7 +90,7 @@ public class SSHConnect {
 	 * 
 	 * @param msg Message
 	 **/
-	protected void showMessage(String msg) {
+	private void showMessage(String msg) {
 		JOptionPane.showMessageDialog(null, msg);
 		Logging.info(this, "show message: " + msg);
 	}
@@ -119,7 +119,7 @@ public class SSHConnect {
 	/**
 	 * Calls {@link getSudoPass(Component)} with null.
 	 **/
-	protected String getSudoPass() {
+	private String getSudoPass() {
 		return getSudoPass(null);
 	}
 

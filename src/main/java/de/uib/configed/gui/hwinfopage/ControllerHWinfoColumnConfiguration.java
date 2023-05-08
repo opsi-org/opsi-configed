@@ -132,7 +132,7 @@ public class ControllerHWinfoColumnConfiguration {
 		}
 	}
 
-	protected AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	public ControllerHWinfoColumnConfiguration(AbstractPersistenceController persist) {
 		this.persist = persist;
@@ -327,7 +327,7 @@ public class ControllerHWinfoColumnConfiguration {
 		return "(" + no + ")";
 	}
 
-	protected Map<String, Map<String, Object>> getHwColumnConfig() {
+	private Map<String, Map<String, Object>> getHwColumnConfig() {
 		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();

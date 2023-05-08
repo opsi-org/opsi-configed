@@ -10,7 +10,7 @@ import java.util.Set;
 import de.uib.utilities.logging.Logging;
 
 public class UserConfigModule {
-	protected String username;
+	private String username;
 
 	private Set<String> boolKeys;
 	private Set<String> listKeys;

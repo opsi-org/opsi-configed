@@ -208,11 +208,11 @@ public class PanelMountShare extends JPanel {
 		return smbMounted;
 	}
 
-	protected void initialMount() {
+	private void initialMount() {
 		// for overriding
 	}
 
-	protected void checkConnectionToShare(final int seconds) {
+	private void checkConnectionToShare(final int seconds) {
 		new Thread() {
 			@Override
 			public void run() {

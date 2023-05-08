@@ -27,12 +27,12 @@ public class OpsiProductInfo extends OpsiPackage {
 	public static final String SERVICE_KEY_PRODUCT_DESCRIPTION = "description";
 	public static final String SERVICE_KEY_PRODUCT_NAME = "name";
 
-	protected List<String> possibleActions;
-	protected String productName;
-	protected String description;
-	protected String advice;
-	protected boolean hasUserLoginScript;
-	protected Integer priority;
+	private List<String> possibleActions;
+	private String productName;
+	private String description;
+	private String advice;
+	private boolean hasUserLoginScript;
+	private Integer priority;
 
 	public OpsiProductInfo(Map<String, Object> m) {
 		super(m);

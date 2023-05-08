@@ -127,7 +127,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		jButtonExecute.setEnabled(false);
 	}
 
-	protected String produceDepotParameter() {
+	private String produceDepotParameter() {
 		String depotParameter = "";
 		List<String> selectedDepots = fDepotList.getSelectedDepots();
 
@@ -175,7 +175,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		return depotParameter;
 	}
 
-	protected List<String> getPossibleDepots() {
+	private List<String> getPossibleDepots() {
 		String selectedProduct = (String) jComboBoxOpsiProducts.getSelectedItem();
 
 		List<String> result = new ArrayList<>();
@@ -204,7 +204,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	}
 
-	protected void initDepots() {
+	private void initDepots() {
 		possibleDepots = getPossibleDepots();
 		fDepotList.setListData(possibleDepots);
 		if (possibleDepots.isEmpty()) {

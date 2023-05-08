@@ -33,45 +33,45 @@ import de.uib.utilities.logging.Logging;
 
 public class SSHFileUploadDialog extends FGeneralDialog {
 
-	protected static String wgetDefText;
+	private static String wgetDefText;
 
-	protected GroupLayout layout;
-	protected JPanel inputPanel = new JPanel();
-	protected JPanel buttonPanel = new JPanel();
-	protected JPanel winAuthPanel = new JPanel();
+	private GroupLayout layout;
+	private JPanel inputPanel = new JPanel();
+	private JPanel buttonPanel = new JPanel();
+	private JPanel winAuthPanel = new JPanel();
 
-	protected JRadioButton jRadioButtonFromServer;
-	protected JRadioButton jRadioButtonLocal;
+	private JRadioButton jRadioButtonFromServer;
+	private JRadioButton jRadioButtonLocal;
 
 	protected JFileChooser jFileChooserLocal;
-	protected JTextField jTextFieldLocalPath;
+	private JTextField jTextFieldLocalPath;
 
-	protected JButton jButtonFileChooser;
-	protected JButton jButtonExecute;
-	protected JButton jButtonClose;
+	private JButton jButtonFileChooser;
+	private JButton jButtonExecute;
+	private JButton jButtonClose;
 
 	protected JLabel jLabelSetRights;
 	protected JLabel jLabelmodulesFrom;
-	protected JLabel jLabelURL;
+	private JLabel jLabelURL;
 	protected JLabel jLabelOverwriteExisting;
 
-	protected JButton jButtonSearch;
+	private JButton jButtonSearch;
 	protected JCheckBox jComboBoxSetRights;
 	protected JCheckBox jCheckBoxOverwriteExisting;
-	protected JTextField jTextFieldURL;
+	private JTextField jTextFieldURL;
 
 	protected GroupLayout.Group horizontalParallelGroup;
 	protected GroupLayout.Group verticalParallelGroup;
 	protected GroupLayout inputPanelLayout;
 
-	protected SSHWgetAuthenticationPanel wgetAuthPanel;
+	private SSHWgetAuthenticationPanel wgetAuthPanel;
 	protected CommandSFTPUpload command;
-	protected SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
-	protected SSHConnectionExecDialog dia;
-	protected ConfigedMain main;
+	private SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
+	private SSHConnectionExecDialog dia;
+	private ConfigedMain main;
 
 	protected int frameHeight = 410;
-	protected int frameWidth = 700;
+	private int frameWidth = 700;
 
 	public SSHFileUploadDialog() {
 		this(Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.title"), null);
@@ -217,7 +217,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	protected void initAdditional() {
 		/* To be implemented in subclass(es) */}
 
-	protected void enableComponents(boolean isSelected) {
+	private void enableComponents(boolean isSelected) {
 		((JCheckBox) wgetAuthPanel.get(SSHWgetAuthenticationPanel.CBNEEDAUTH)).setEnabled(isSelected);
 		jTextFieldURL.setEnabled(isSelected);
 		jTextFieldLocalPath.setEnabled(!isSelected);
@@ -422,7 +422,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		return modulesServerPath;
 	}
 
-	protected void addListener(Component comp) {
+	private void addListener(Component comp) {
 		if (comp instanceof JRadioButton) {
 			((JRadioButton) comp)
 					.addActionListener(actionEvent -> enableComponents(jRadioButtonFromServer.isSelected()));

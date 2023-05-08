@@ -17,7 +17,7 @@ public class JComboBoxSimpleToolTip extends JComboBox<String> {
 		super.setRenderer(new MyComboBoxRenderer());
 	}
 
-	protected static class MyComboBoxRenderer extends BasicComboBoxRenderer {
+	private static class MyComboBoxRenderer extends BasicComboBoxRenderer {
 		@Override
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {

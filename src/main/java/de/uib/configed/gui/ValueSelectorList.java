@@ -190,7 +190,7 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));
 	}
 
-	protected void filterOnSelect() {
+	private void filterOnSelect() {
 		Logging.info(this, "filterOnSelect, we have " + valueList.getListData());
 
 		if (!filtered) {

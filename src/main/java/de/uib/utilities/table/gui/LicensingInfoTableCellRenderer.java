@@ -15,7 +15,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CellAlternatingColorizer;
 
 public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
-	private LicensingInfoMap licensingInfoMap;
+	protected LicensingInfoMap licensingInfoMap;
 
 	public LicensingInfoTableCellRenderer(LicensingInfoMap lInfoMap) {
 		super();

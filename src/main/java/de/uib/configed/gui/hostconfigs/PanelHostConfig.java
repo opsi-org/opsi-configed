@@ -25,12 +25,12 @@ public class PanelHostConfig extends JPanel {
 	public static final String PROPERTY_CLASS_ROLE = UserConfig.KEY_USER_ROLE_ROOT;
 
 	// delegate
-	protected EditMapPanelGrouped editMapPanel;
-	protected JLabel label;
+	private EditMapPanelGrouped editMapPanel;
+	private JLabel label;
 
-	protected boolean keylistExtendible = true;
-	protected boolean entryRemovable = true;
-	protected boolean reloadable = true;
+	private boolean keylistExtendible = true;
+	private boolean entryRemovable = true;
+	private boolean reloadable = true;
 
 	public PanelHostConfig() {
 

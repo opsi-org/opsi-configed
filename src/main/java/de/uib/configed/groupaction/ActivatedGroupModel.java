@@ -22,14 +22,14 @@ import de.uib.configed.HostsStatusInfo;
 import de.uib.utilities.logging.Logging;
 
 public class ActivatedGroupModel {
-	protected String groupName;
-	protected String groupDescription;
-	protected TreePath path;
-	protected DefaultMutableTreeNode node;
+	private String groupName;
+	private String groupDescription;
+	private TreePath path;
+	private DefaultMutableTreeNode node;
 
-	protected Set<String> associatedClients;
+	private Set<String> associatedClients;
 
-	protected boolean active;
+	private boolean active;
 
 	private HostsStatusInfo hostsInfo;
 

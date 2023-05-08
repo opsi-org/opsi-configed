@@ -22,25 +22,25 @@ import de.uib.utilities.logging.Logging;
 
 public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
-	protected AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 	protected int frameWidth = 900;
 	protected int frameHeight = 600;
 
 	protected JPanel buttonPanel = new JPanel();
 	protected JLabel jLabelVerbosity = new JLabel();
-	protected JLabel jLabelFreeInput = new JLabel();
+	private JLabel jLabelFreeInput = new JLabel();
 
-	protected JButton jButtonHelp;
+	private JButton jButtonHelp;
 	protected JButton jButtonExecute;
-	protected JButton jButtonReload;
-	protected JButton jButtonClose;
+	private JButton jButtonReload;
+	private JButton jButtonClose;
 
-	protected String defaultProduct = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultProduct");
-	protected String defaultDepot = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultDepot");
+	private String defaultProduct = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultProduct");
+	private String defaultDepot = Configed.getResourceValue("SSHConnection.ParameterDialog.defaultDepot");
 
-	protected String opsiProd = AbstractPersistenceController.configedWorkbenchDefaultValue;
-	protected String opsiRepo = "/var/lib/opsi/repository/";
+	private String opsiProd = AbstractPersistenceController.configedWorkbenchDefaultValue;
+	private String opsiRepo = "/var/lib/opsi/repository/";
 
 	private String configRepo = "repositoryLocalUrl";
 
@@ -71,7 +71,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		}
 	}
 
-	protected void getRepositoriesFromConfigs(String depot) {
+	private void getRepositoriesFromConfigs(String depot) {
 		Logging.info(this, "getRepositoriesFromConfigs depot " + depot);
 		NavigableMap<String, Map<String, Object>> depotProperties = (NavigableMap<String, Map<String, Object>>) persist
 				.getHostInfoCollections().getAllDepots();
@@ -155,7 +155,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		main.reload();
 	}
 
-	protected void doActionHelp(final SSHPackageManagerParameterDialog caller) {
+	private void doActionHelp(final SSHPackageManagerParameterDialog caller) {
 		SSHConnectionExecDialog dia = null;
 		if (caller instanceof SSHPackageManagerUninstallParameterDialog) {
 			dia = new CommandOpsiPackageManagerUninstall().startHelpDialog();

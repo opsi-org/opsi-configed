@@ -32,24 +32,24 @@ import de.uib.configed.Globals;
  */
 public class IconAsButton extends JPanel implements MouseListener {
 
-	protected String imageURLActive;
-	protected String imageURLAttention;
-	protected String imageURLInactive;
-	protected String imageURLOver;
-	protected String imageURLDisabled;
-	protected ImageIcon iconActive;
-	protected ImageIcon iconInactive;
-	protected ImageIcon iconOver;
-	protected ImageIcon iconDisabled;
-	protected String tooltipActive;
-	protected String tooltipInactive;
+	private String imageURLActive;
+	private String imageURLAttention;
+	private String imageURLInactive;
+	private String imageURLOver;
+	private String imageURLDisabled;
+	private ImageIcon iconActive;
+	private ImageIcon iconInactive;
+	private ImageIcon iconOver;
+	private ImageIcon iconDisabled;
+	private String tooltipActive;
+	private String tooltipInactive;
 
-	protected JLabel label;
+	private JLabel label;
 	protected boolean activated;
-	protected boolean enabled;
-	protected boolean getAttention;
-	protected boolean mouseOver;
-	protected List<ActionListener> actionListeners;
+	private boolean enabled;
+	private boolean getAttention;
+	private boolean mouseOver;
+	private List<ActionListener> actionListeners;
 	private String description;
 
 	/**

@@ -22,7 +22,7 @@ public class PanelLicencesStatistics extends MultiTablePanel {
 
 	public PanelGenEditTable panelStatistics;
 
-	protected int minVSize = 50;
+	private int minVSize = 50;
 
 	/** Creates new form panelLicencesStatistics */
 	public PanelLicencesStatistics(AbstractControlMultiTablePanel controller) {

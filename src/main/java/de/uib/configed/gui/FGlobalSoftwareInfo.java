@@ -33,7 +33,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public List<String> columnNames;
 	public List<String> classNames;
 
-	protected int keyCol;
+	private int keyCol;
 
 	private AbstractPersistenceController persist;
 

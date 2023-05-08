@@ -87,54 +87,54 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private JComboBoxToolTip groupsCombo;
 
-	protected TablesearchPane searchPane;
-	protected JTable tableProducts;
-	protected IFInstallationStateTableModel insTableModel;
+	private TablesearchPane searchPane;
+	private JTable tableProducts;
+	private IFInstallationStateTableModel insTableModel;
 
 	private JTextField saveNameEditor;
 
-	protected IconButton buttonCommit;
-	protected IconButton buttonCancel;
+	private IconButton buttonCommit;
+	private IconButton buttonCancel;
 
 	// use the filter icon of the tablesearchpane
-	protected IconButton buttonEditDialog;
-	protected IconButton buttonDelete;
+	private IconButton buttonEditDialog;
+	private IconButton buttonDelete;
 
-	protected IconButton buttonReloadProductStates;
+	private IconButton buttonReloadProductStates;
 
-	protected IconButton buttonSaveAndExecute;
+	private IconButton buttonSaveAndExecute;
 
-	protected IconButton buttonCollectiveAction;
+	private IconButton buttonCollectiveAction;
 
-	protected JLabel labelCollectiveAction;
-	protected JComboBoxToolTip comboAggregatedEditing;
+	private JLabel labelCollectiveAction;
+	private JComboBoxToolTip comboAggregatedEditing;
 
-	protected JLabel labelSave;
+	private JLabel labelSave;
 
-	protected Map<String, Map<String, String>> theData;
+	private Map<String, Map<String, String>> theData;
 
 	private PanelGroupedProductSettings associate;
 	private JPanel panelEdit;
 
-	protected Set<String> selectedIDs;
+	private Set<String> selectedIDs;
 
-	protected DefaultComboBoxModel<String> comboModel;
+	private DefaultComboBoxModel<String> comboModel;
 
-	protected Map<String, String> namesAndDescriptions;
-	protected Map<String, String> namesAndDescriptionsSave;
-	protected MapOfProductGroups productGroupMembers;
-	protected int editIndex;
-	protected String showKey;
-	protected String editedKey;
-	protected JTextField groupsEditField;
-	protected JTextField descriptionField;
-	protected boolean dataChanged;
-	protected boolean groupEditing;
-	protected boolean deleted;
+	private Map<String, String> namesAndDescriptions;
+	private Map<String, String> namesAndDescriptionsSave;
+	private MapOfProductGroups productGroupMembers;
+	private int editIndex;
+	private String showKey;
+	private String editedKey;
+	private JTextField groupsEditField;
+	private JTextField descriptionField;
+	private boolean dataChanged;
+	private boolean groupEditing;
+	private boolean deleted;
 
 	abstract static class AbstractDocumentListener implements DocumentListener {
 
-		protected boolean enabled = true;
+		private boolean enabled = true;
 
 		public abstract void doAction();
 
@@ -166,7 +166,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private AbstractDocumentListener descriptionFieldListener;
 
-	protected ConfigedMain mainController;
+	private ConfigedMain mainController;
 
 	public ProductgroupPanel(PanelGroupedProductSettings associate, ConfigedMain mainController, JTable table) {
 		this.associate = associate;
@@ -206,7 +206,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	}
 
-	protected void enterExistingGroup() {
+	private void enterExistingGroup() {
 		Logging.info(this, "enterExistingGroup" + groupsCombo.getSelectedItem());
 
 		saveNameEditorShallFollow();
@@ -225,7 +225,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		isDeleteLegal();
 	}
 
-	protected void enterEditGroup() {
+	private void enterEditGroup() {
 
 		descriptionFieldListener.setEnabled(false);
 
@@ -359,7 +359,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		return result;
 	}
 
-	protected void updateDescription() {
+	private void updateDescription() {
 		if (isDescriptionChanged()) {
 			setDataChanged(true);
 		}
@@ -708,7 +708,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	}
 
-	protected boolean save() {
+	private boolean save() {
 		boolean result = false;
 
 		if (deleted) {
@@ -774,7 +774,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		return result;
 	}
 
-	protected void setMembers() {
+	private void setMembers() {
 
 		if (productGroupMembers == null || groupsCombo == null) {
 			associate.clearSelection();
@@ -786,7 +786,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		associate.setSelection(productGroupMembers.get(groupsCombo.getSelectedItem()));
 	}
 
-	protected void setInternalGroupsData() {
+	private void setInternalGroupsData() {
 
 		namesAndDescriptionsSave = new LinkedHashMap<>();
 		namesAndDescriptionsSave.put(SAVE_GROUP_ID, NO_GROUP_DESCRIPTION);
@@ -858,7 +858,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 	}
 
-	protected void handleCollectiveAction(String selected, IFInstallationStateTableModel insTableModel) {
+	private void handleCollectiveAction(String selected, IFInstallationStateTableModel insTableModel) {
 
 		Logging.info(this, "handleCollectiveAction on " + comboAggregatedEditing.getSelectedItem());
 
@@ -962,7 +962,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 	}
 
-	protected boolean isSaveLegal() {
+	private boolean isSaveLegal() {
 		String proposedName = groupsEditField.getText();
 
 		boolean result = true;
@@ -982,7 +982,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		return result;
 	}
 
-	protected boolean isDeleteLegal() {
+	private boolean isDeleteLegal() {
 		boolean result = false;
 
 		if (groupsCombo != null) {
@@ -994,7 +994,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		return result;
 	}
 
-	protected void setDeleted(boolean b) {
+	private void setDeleted(boolean b) {
 		if (saveNameEditor != null && descriptionField != null) {
 			saveNameEditor.setEnabled(!b);
 			saveNameEditor.setEditable(!b);

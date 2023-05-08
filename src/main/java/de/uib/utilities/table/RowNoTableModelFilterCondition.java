@@ -12,9 +12,9 @@ import de.uib.utilities.logging.Logging;
 
 public class RowNoTableModelFilterCondition implements TableModelFilterCondition {
 
-	protected Map<Object, Boolean> selectionInfo;
+	private Map<Object, Boolean> selectionInfo;
 
-	protected JTable table;
+	private JTable table;
 
 	public RowNoTableModelFilterCondition(JTable table) {
 		this.table = table;

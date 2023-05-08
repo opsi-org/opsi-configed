@@ -8,10 +8,10 @@ import java.util.Map;
 import de.uib.utilities.logging.Logging;
 
 public class Table {
-	protected String highTimestampS = new Timestamp(0).toString();
+	private String highTimestampS = new Timestamp(0).toString();
 
-	protected String localTablePath;
-	protected String localFileName;
+	private String localTablePath;
+	private String localFileName;
 
 	public Table(String localTablePath) {
 		this.localTablePath = localTablePath;
@@ -37,7 +37,7 @@ public class Table {
 		}
 	}
 
-	protected String valueAssertion(String key, String value) {
+	private String valueAssertion(String key, String value) {
 		StringBuilder sb = new StringBuilder("");
 		sb.append(key);
 		sb.append("=");
@@ -51,7 +51,7 @@ public class Table {
 		return sb.toString();
 	}
 
-	protected String conjunction(Map<String, String> rowMap, String[] keys) {
+	private String conjunction(Map<String, String> rowMap, String[] keys) {
 		Logging.debug(this, "conjunction keys " + Arrays.toString(keys));
 		if (keys == null || keys.length == 0) {
 			return null;

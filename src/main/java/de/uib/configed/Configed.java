@@ -249,7 +249,7 @@ public class Configed {
 	}
 
 	@SuppressWarnings("java:S106")
-	protected static void usage() {
+	private static void usage() {
 		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		Logging.essential(USAGE_INFO);
 
@@ -295,11 +295,11 @@ public class Configed {
 		}
 	}
 
-	protected static boolean isValue(String[] args, int i) {
+	private static boolean isValue(String[] args, int i) {
 		return i < args.length && args[i].indexOf('-') != 0;
 	}
 
-	protected static String getArg(String[] args, int i) {
+	private static String getArg(String[] args, int i) {
 		if (args.length <= i + 1 || args[i + 1].indexOf('-') == 0) {
 			Logging.error("Missing value for option " + args[i]);
 			usage();
@@ -372,7 +372,7 @@ public class Configed {
 	}
 
 	@SuppressWarnings("java:S106")
-	protected static void processArgs(String[] args) {
+	private static void processArgs(String[] args) {
 		Logging.debug("args " + Arrays.toString(args));
 
 		if (args.length == 2 && "--args".equals(args[0])) {

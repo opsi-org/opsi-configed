@@ -75,55 +75,55 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public static final String ALL_CLIENTS_NAME;
 
-	protected DefaultTreeModel model;
+	private DefaultTreeModel model;
 
 	private GroupNode groupNodeAllClients;
-	protected GroupNode groupNodeGroups;
+	private GroupNode groupNodeGroups;
 
-	protected GroupNode groupNodeDirectory;
-	protected GroupNode groupNodeDirectoryNotAssigned;
+	private GroupNode groupNodeDirectory;
+	private GroupNode groupNodeDirectoryNotAssigned;
 
-	protected TreePath pathToROOT;
-	protected TreePath pathToALL;
-	protected TreePath pathToGROUPS;
+	private TreePath pathToROOT;
+	private TreePath pathToALL;
+	private TreePath pathToGROUPS;
 
-	protected TreePath pathToDIRECTORY;
-	protected TreePath pathToDirectoryNotAssigned;
+	private TreePath pathToDIRECTORY;
+	private TreePath pathToDirectoryNotAssigned;
 
-	protected final Map<String, String> mapAllClients = new HashMap<>();
-	protected final Map<String, String> mapGroups = new HashMap<>();
-	protected final Map<String, String> mapDirectory = new HashMap<>();
-	protected final Map<String, String> mapDirectoryNotAssigned = new HashMap<>();
+	private final Map<String, String> mapAllClients = new HashMap<>();
+	private final Map<String, String> mapGroups = new HashMap<>();
+	private final Map<String, String> mapDirectory = new HashMap<>();
+	private final Map<String, String> mapDirectoryNotAssigned = new HashMap<>();
 
 	public final GroupNode rootNode = new GroupNode("top");
 
-	protected IconNodeRendererClientTree nodeRenderer;
+	private IconNodeRendererClientTree nodeRenderer;
 
 	// supervising data
-	protected Map<String, Set<GroupNode>> locationsInDIRECTORY;
+	private Map<String, Set<GroupNode>> locationsInDIRECTORY;
 	// clientId --> set of all containing groups
 
-	protected Leafname2AllItsPaths leafname2AllItsPaths;
+	private Leafname2AllItsPaths leafname2AllItsPaths;
 	// clientId --> list of all paths that have the leaf clientid
 
-	protected Map<String, Map<String, String>> groups;
+	private Map<String, Map<String, String>> groups;
 	// map of all group maps,
 	// groupid --> group map
 
-	protected Map<String, GroupNode> groupNodes;
+	private Map<String, GroupNode> groupNodes;
 	// groupid --> group node
 	// is a function since a group name cannot occur twice
 
-	protected Map<String, DefaultMutableTreeNode> clientNodesInDIRECTORY;
+	private Map<String, DefaultMutableTreeNode> clientNodesInDIRECTORY;
 	// clientid --> client node
 	// is a function, when the directory has been cleared
 
-	protected HashSet<String> activeParents = new HashSet<>();
+	private HashSet<String> activeParents = new HashSet<>();
 	// groups containing clients (especially the selected ones)
 
-	protected Map<String, HostInfo> host2HostInfo;
+	private Map<String, HostInfo> host2HostInfo;
 
-	protected Set<String> directlyAllowedGroups;
+	private Set<String> directlyAllowedGroups;
 
 	private ConfigedMain configedMain;
 
@@ -306,7 +306,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		this.host2HostInfo = host2HostInfo;
 	}
 
-	// publishing the protected method
+	// publishing the private method
 	@Override
 	public TreePath[] getPathBetweenRows(int index0, int index1) {
 		return super.getPathBetweenRows(index0, index1);
@@ -593,7 +593,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 	}
 
-	protected TreePath addClientNodeInfo(DefaultMutableTreeNode node) {
+	private TreePath addClientNodeInfo(DefaultMutableTreeNode node) {
 		TreePath clientPath = new TreePath(node.getPath());
 		String clientId = (String) node.getUserObject();
 
@@ -630,7 +630,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
-	protected void produceClients(Object[] x) {
+	private void produceClients(Object[] x) {
 		produceClients(x, groupNodeAllClients);
 	}
 
@@ -640,7 +640,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		produceClients(x);
 	}
 
-	protected void initTopGroups() {
+	private void initTopGroups() {
 		mapAllClients.put("groupId", ALL_CLIENTS_NAME);
 		mapAllClients.put("description", "root of complete client listing");
 		groupNodes.put(ALL_CLIENTS_NAME, groupNodeAllClients);
@@ -1335,11 +1335,11 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	}
 
-	protected GroupNode insertGroup(Object groupObject, DefaultMutableTreeNode parent) {
+	private GroupNode insertGroup(Object groupObject, DefaultMutableTreeNode parent) {
 		return insertGroup(groupObject, groupObject.toString(), parent);
 	}
 
-	protected GroupNode insertGroup(Object groupObject, String groupDescription, DefaultMutableTreeNode parent) {
+	private GroupNode insertGroup(Object groupObject, String groupDescription, DefaultMutableTreeNode parent) {
 		String xGroupDescription = groupDescription;
 		if (groupDescription == null || "".equals(groupDescription.trim())) {
 			xGroupDescription = groupObject.toString();

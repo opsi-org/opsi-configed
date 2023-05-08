@@ -106,27 +106,27 @@ public class HostInfo {
 	private static int numberOfInstances;
 	private final int instanceNumber;
 
-	protected String depotOfClient;
-	protected String clientDescription;
-	protected String clientInventoryNumber;
-	protected String clientOneTimePassword;
-	protected String clientNotes;
+	private String depotOfClient;
+	private String clientDescription;
+	private String clientInventoryNumber;
+	private String clientOneTimePassword;
+	private String clientNotes;
 
-	protected String clientSystemUUID;
-	protected String clientMacAddress;
-	protected String lastSeen;
-	protected String created;
-	protected String clientName;
-	protected String hostKey;
+	private String clientSystemUUID;
+	private String clientMacAddress;
+	private String lastSeen;
+	private String created;
+	private String clientName;
+	private String hostKey;
 
-	protected String hostType;
-	protected String clientIpAddress;
-	protected Boolean clientUefiBoot;
-	protected Boolean clientWanConfig;
-	protected String clientSessionInfo;
+	private String hostType;
+	private String clientIpAddress;
+	private Boolean clientUefiBoot;
+	private Boolean clientWanConfig;
+	private String clientSessionInfo;
 
-	protected Boolean clientConnected;
-	protected Boolean clientShutdownInstall;
+	private Boolean clientConnected;
+	private Boolean clientShutdownInstall;
 
 	public HostInfo() {
 		initialize();

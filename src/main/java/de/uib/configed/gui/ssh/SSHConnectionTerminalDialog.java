@@ -387,7 +387,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		}
 	}
 
-	protected void createLayout() {
+	private void createLayout() {
 		Logging.info(this, "createLayout ");
 		jScrollPane.setPreferredSize(output.getMaximumSize());
 

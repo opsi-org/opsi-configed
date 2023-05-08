@@ -27,10 +27,10 @@ import de.uib.configed.Globals;
 
 public class ListCellRendererByIndex extends StandardListCellRenderer {
 
-	protected Map<String, String> mapOfStrings;
-	protected Map<String, String> mapOfTooltips;
-	protected Map<String, ImageIcon> mapOfImages;
-	protected boolean showOnlyIcon;
+	private Map<String, String> mapOfStrings;
+	private Map<String, String> mapOfTooltips;
+	private Map<String, ImageIcon> mapOfImages;
+	private boolean showOnlyIcon;
 
 	public ListCellRendererByIndex(Map<String, String> mapOfStringValues, Map<String, String> mapOfDescriptions,
 			String tooltipPrefix) {

@@ -33,11 +33,11 @@ public class MapTableModel extends AbstractTableModel {
 		nullLIST.add(null);
 	}
 
-	protected List<DataChangedObserver> observers;
+	private List<DataChangedObserver> observers;
 
-	protected Collection updateCollection;
-	protected Collection<Map<String, Object>> storeData;
-	protected boolean datachanged;
+	private Collection updateCollection;
+	private Collection<Map<String, Object>> storeData;
+	private boolean datachanged;
 
 	// values set cannot be set for any key
 	private List<Object> showOnlyValues;
@@ -47,7 +47,7 @@ public class MapTableModel extends AbstractTableModel {
 
 	private Function<String, Boolean> editDenier;
 
-	protected Map<String, ListCellOptions> optionsMap;
+	private Map<String, ListCellOptions> optionsMap;
 
 	// shall be sorted
 	private SortedMap<String, Object> data;

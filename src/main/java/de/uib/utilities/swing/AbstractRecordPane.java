@@ -32,20 +32,20 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 	private static final int MAX_LABEL_WIDTH = 100;
 
 	// GUI
-	protected Map<String, JLabel> labelfields;
-	protected Map<String, JTextField> datafields;
+	private Map<String, JLabel> labelfields;
+	private Map<String, JTextField> datafields;
 
 	// Data
-	protected Map<String, String> data;
-	protected Map<String, String> labels;
-	protected Map<String, String> hints;
-	protected Map<String, Boolean> editable;
-	protected Map<String, Boolean> secrets;
+	private Map<String, String> data;
+	private Map<String, String> labels;
+	private Map<String, String> hints;
+	private Map<String, Boolean> editable;
+	private Map<String, Boolean> secrets;
 
 	protected AbstractRecordPane() {
 	}
 
-	protected AbstractRecordPane(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
+	private AbstractRecordPane(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
 			Map<String, Boolean> editable, Map<String, Boolean> secrets) {
 		init(data, labels, hints, editable, secrets);
 	}
@@ -66,7 +66,7 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 		initComponents();
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 
 		if (!ConfigedMain.THEMES) {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);

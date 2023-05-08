@@ -43,10 +43,10 @@ public class PanelProductProperties extends JSplitPane {
 
 	// right pane
 	private ProductInfoPane infoPane;
-	protected PanelEditDepotProperties panelEditProperties;
+	private PanelEditDepotProperties panelEditProperties;
 	public DefaultEditMapPanel propertiesPanel;
 
-	protected ConfigedMain mainController;
+	private ConfigedMain mainController;
 
 	public PanelProductProperties(ConfigedMain mainController) {
 		super(JSplitPane.HORIZONTAL_SPLIT);

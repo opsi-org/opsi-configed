@@ -64,7 +64,7 @@ public class FGroupActions extends SecondaryFrame {
 		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FGroupAction.title"));
 	}
 
-	protected void setGroupLabelling(String label, String clientCount) {
+	private void setGroupLabelling(String label, String clientCount) {
 		fieldGroupname.setText(label);
 		fieldInvolvedClientsCount.setText(clientCount);
 	}
@@ -75,7 +75,7 @@ public class FGroupActions extends SecondaryFrame {
 		reload();
 	}
 
-	protected void setImages() {
+	private void setImages() {
 		List<String> imagesCollection = new ArrayList<>();
 
 		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
@@ -93,7 +93,7 @@ public class FGroupActions extends SecondaryFrame {
 		setImages();
 	}
 
-	protected void replay() {
+	private void replay() {
 		Logging.debug(this, "replay " + comboSelectImage.getSelectedItem());
 
 		if (comboSelectImage.getSelectedItem() == null) {

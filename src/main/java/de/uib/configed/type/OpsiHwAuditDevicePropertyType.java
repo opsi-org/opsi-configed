@@ -1,14 +1,14 @@
 package de.uib.configed.type;
 
 public class OpsiHwAuditDevicePropertyType {
-	protected String opsiDbColumnName;
-	protected String opsiDbColumnType;
+	private String opsiDbColumnName;
+	private String opsiDbColumnType;
 
-	protected String reportFunction;
-	protected String uiName;
-	protected String hwClassName;
+	private String reportFunction;
+	private String uiName;
+	private String hwClassName;
 
-	protected Boolean displayed;
+	private Boolean displayed;
 
 	public OpsiHwAuditDevicePropertyType(String hwClass) {
 		this.hwClassName = hwClass;

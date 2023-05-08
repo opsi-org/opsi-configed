@@ -65,7 +65,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private ArrayList<TableEditItem> updateCollection;
 
-	protected int keyCol;
+	private int keyCol;
 
 	private AbstractPersistenceController persist;
 
@@ -86,7 +86,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
 	private JLabel labelSetAllAssignmentsToPoolFromSelectedRow;
 
-	protected String globalLicencePool;
+	private String globalLicencePool;
 
 	private boolean foundVariantLicencepools;
 

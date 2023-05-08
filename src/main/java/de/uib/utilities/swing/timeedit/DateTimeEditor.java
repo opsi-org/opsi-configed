@@ -25,22 +25,22 @@ import org.jdesktop.swingx.calendar.DateSelectionModel;
 import de.uib.utilities.logging.Logging;
 
 public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.DateSelectionListener {
-	protected static final int BUTTON_H = 25;
-	protected static final int BUTTON_W = 30;
+	private static final int BUTTON_H = 25;
+	private static final int BUTTON_W = 30;
 
-	protected JXMonthView monthView;
-	protected TimeEditor timeSetter;
-	protected Calendar calendar;
-	protected DateFormat hourDateFormat;
-	protected JSpinner monthSpinner;
-	protected SpinnerModel monthSpinnerModel;
-	protected JButton buttonBack;
-	protected JButton buttonForward;
-	protected JButton buttonYearBack;
-	protected JButton buttonYearForward;
-	protected boolean editable = true;
-	protected boolean withMovingSelectionDate = true;
-	protected boolean withTime = true;
+	private JXMonthView monthView;
+	private TimeEditor timeSetter;
+	private Calendar calendar;
+	private DateFormat hourDateFormat;
+	private JSpinner monthSpinner;
+	private SpinnerModel monthSpinnerModel;
+	private JButton buttonBack;
+	private JButton buttonForward;
+	private JButton buttonYearBack;
+	private JButton buttonYearForward;
+	private boolean editable = true;
+	private boolean withMovingSelectionDate = true;
+	private boolean withTime = true;
 
 	public DateTimeEditor() {
 		this(true);
@@ -291,7 +291,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 	 * DateFormatSymbols returns an extra, empty value at the end of the array
 	 * of months. Remove it.
 	 */
-	protected static String[] getMonthStrings() {
+	private static String[] getMonthStrings() {
 		String[] months = new java.text.DateFormatSymbols().getMonths();
 		int lastIndex = months.length - 1;
 

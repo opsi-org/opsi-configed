@@ -40,13 +40,13 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 	private JPanel panelGetAndAssignSL;
 	private de.uib.utilities.swing.DynamicCombo comboClient;
 
-	protected int minVSize = 50;
-	protected int tablesMaxWidth = 1000;
-	protected int buttonHeight = 15;
-	protected int buttonWidth = 140;
-	protected int lPoolHeight = 100;
+	private int minVSize = 50;
+	private int tablesMaxWidth = 1000;
+	private int buttonHeight = 15;
+	private int buttonWidth = 140;
+	private int lPoolHeight = 100;
 
-	protected ControlPanelLicencesUsage licencesUsageController;
+	private ControlPanelLicencesUsage licencesUsageController;
 	private int initialSplit;
 
 	/** Creates new form panelLicencesUsage */

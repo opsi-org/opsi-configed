@@ -24,8 +24,8 @@ import de.uib.utilities.logging.Logging;
 
 public class RequirementsTableModel extends AbstractTableModel {
 
-	protected static List<String> rowType;
-	protected static int noOfRowTypes;
+	private static List<String> rowType;
+	private static int noOfRowTypes;
 
 	private Object[] keyArray;
 	private final Object[] zeroArray = new Object[] {};
@@ -206,7 +206,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		return new MyTableCellRenderer();
 	}
 
-	protected static class MyTableCellRenderer extends DefaultTableCellRenderer {
+	private static class MyTableCellRenderer extends DefaultTableCellRenderer {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
@@ -242,10 +242,10 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 	}
 
-	protected static class MyColorizer {
+	private static class MyColorizer {
 		String cellValue;
 
-		protected MyColorizer(String value) {
+		private MyColorizer(String value) {
 			cellValue = value;
 		}
 
@@ -279,7 +279,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 	}
 
-	protected static class MyWarningColorizer {
+	private static class MyWarningColorizer {
 		public void colorize(Component cell) {
 			if (!ConfigedMain.THEMES) {
 				cell.setBackground(Globals.ACTION_COLOR);
@@ -287,7 +287,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 	}
 
-	protected static class MyTableCellRendererWarning extends DefaultTableCellRenderer {
+	private static class MyTableCellRendererWarning extends DefaultTableCellRenderer {
 		MyWarningColorizer colorizer = new MyWarningColorizer();
 
 		@Override

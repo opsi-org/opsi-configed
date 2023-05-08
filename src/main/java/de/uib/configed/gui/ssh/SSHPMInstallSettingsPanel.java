@@ -187,7 +187,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 				.addGap(Globals.GAP_SIZE));
 	}
 
-	protected List<String> getAllowedInstallTargets() {
+	private List<String> getAllowedInstallTargets() {
 		List<String> result = new ArrayList<>();
 
 		if (persist.isDepotsFullPermission()) {
@@ -209,7 +209,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		return result;
 	}
 
-	protected String produceDepotParameter() {
+	private String produceDepotParameter() {
 		String depotParameter = "";
 		List<String> selectedDepots = fDepotList.getSelectedDepots();
 

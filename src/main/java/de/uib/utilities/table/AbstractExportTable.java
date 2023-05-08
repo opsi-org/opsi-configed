@@ -3,7 +3,6 @@ package de.uib.utilities.table;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -32,21 +31,19 @@ public abstract class AbstractExportTable {
 	protected FileNameExtensionFilter extensionFilter;
 	protected String defaultExportFilename;
 
-	protected File exportDirectory;
+	private File exportDirectory;
 
-	protected List<Integer> excludeCols;
+	private List<Integer> excludeCols;
 
-	protected boolean askForOverwrite;
+	private boolean askForOverwrite;
 
 	protected String writeToFile;
 
 	protected String client;
-	protected String title;
-	protected String subtitle;
+	private String title;
+	private String subtitle;
 
 	protected String extension;
-
-	protected DecimalFormat f = new DecimalFormat("#0.00");
 
 	protected AbstractExportTable(JTable table, List<String> classNames) {
 		this.theTable = table;
@@ -54,7 +51,7 @@ public abstract class AbstractExportTable {
 		askForOverwrite = true;
 	}
 
-	protected AbstractExportTable(JTable table) {
+	private AbstractExportTable(JTable table) {
 		this(table, null);
 	}
 
@@ -274,7 +271,7 @@ public abstract class AbstractExportTable {
 		return fileName;
 	}
 
-	protected String checkFileForExistence(String filename) {
+	private String checkFileForExistence(String filename) {
 		String result = null;
 		try {
 			Logging.info(this, "checkFileForExistence " + filename + " askForOverwrite " + askForOverwrite);

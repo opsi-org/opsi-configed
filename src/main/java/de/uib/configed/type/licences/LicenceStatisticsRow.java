@@ -15,9 +15,9 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 
 	private static final String ZERO = "0";
 
-	protected ExtendedInteger allowedUsages;
-	protected Integer opsiUsages;
-	protected Integer swInventoryUsages;
+	private ExtendedInteger allowedUsages;
+	private Integer opsiUsages;
+	private Integer swInventoryUsages;
 
 	public LicenceStatisticsRow(String licencePool) {
 		super();

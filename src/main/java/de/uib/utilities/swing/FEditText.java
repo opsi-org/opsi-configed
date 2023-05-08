@@ -28,7 +28,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 	protected JScrollPane scrollpane;
 	protected JTextArea textarea;
 
-	protected boolean singleLine;
+	private boolean singleLine;
 
 	public FEditText(String initialText, String hint) {
 		super(initialText, hint);

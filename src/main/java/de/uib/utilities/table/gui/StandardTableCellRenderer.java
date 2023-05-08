@@ -17,9 +17,9 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	protected static final int FILL_LENGTH = 20;
 
 	protected String tooltipPrefix;
-	protected String separator = ": ";
+	private String separator = ": ";
 
-	protected int currentRow = -1;
+	private int currentRow = -1;
 
 	public StandardTableCellRenderer() {
 		super();

@@ -49,7 +49,7 @@ public class PropertiesTableCellRenderer extends ColorTableCellRenderer {
 		return result;
 	}
 
-	protected void mergeColorize(Component comp, Object value) {
+	private void mergeColorize(Component comp, Object value) {
 
 		if (value == ListMerger.NO_COMMON_VALUE && !ConfigedMain.THEMES) {
 			comp.setBackground(Globals.LIST_MERGER_NO_COMMON_VALUE_BACKGROUND_COLOR);

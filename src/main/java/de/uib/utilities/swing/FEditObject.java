@@ -45,14 +45,14 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	private Dimension areaDimension = new Dimension(300, 240);
 
-	protected Object initialValue = "";
+	private Object initialValue = "";
 	protected boolean leaveOnCommit = true;
 
-	protected JPanel framingPanel;
+	private JPanel framingPanel;
 	protected JPanel editingArea;
 	protected JPanel loggingPanel;
-	protected JScrollPane scrollpaneL;
-	protected JSplitPane splitPane;
+	private JScrollPane scrollpaneL;
+	private JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
 	protected IconButton buttonCommit;
@@ -60,14 +60,14 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected IconButton buttonAdd;
 	protected IconButton buttonRemove;
 
-	protected String tooltipCommit = Configed.getResourceValue("FEditObject.SaveButtonTooltip");
+	private String tooltipCommit = Configed.getResourceValue("FEditObject.SaveButtonTooltip");
 
-	protected boolean dataChanged;
+	private boolean dataChanged;
 	protected boolean editable = true;
-	protected boolean finished;
+	private boolean finished;
 
 	protected JTextField extraField;
-	protected JLabel extraLabel;
+	private JLabel extraLabel;
 	protected JTextArea loggingArea;
 
 	public FEditObject(Object initialValue) {

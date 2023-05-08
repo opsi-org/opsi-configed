@@ -9,7 +9,7 @@ import de.uib.utilities.logging.Logging;
 public class RelationElement<S, O> extends HashMap<S, O> {
 
 	protected List<S> allowedAttributes;
-	protected List<S> minimalAttributes;
+	private List<S> minimalAttributes;
 
 	public RelationElement() {
 		super();

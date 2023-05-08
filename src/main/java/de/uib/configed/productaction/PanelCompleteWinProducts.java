@@ -319,7 +319,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 	}
 
-	protected void execute() {
+	private void execute() {
 
 		WaitCursor waitCursor = new WaitCursor(rootFrame);
 

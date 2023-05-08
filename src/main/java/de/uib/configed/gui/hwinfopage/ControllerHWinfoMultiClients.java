@@ -48,7 +48,7 @@ public class ControllerHWinfoMultiClients {
 	private GenTableModel model;
 
 	private ConfigedMain main;
-	protected AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 	private TableModelFilter tableModelFilter;
 
 	private SecondaryFrame fTable;
@@ -115,7 +115,7 @@ public class ControllerHWinfoMultiClients {
 
 	}
 
-	protected void initPanel() {
+	private void initPanel() {
 		panel = new PanelGenEditTable("", 0, false, 0, false, PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
 			@Override
 			public void reload() {
@@ -146,7 +146,7 @@ public class ControllerHWinfoMultiClients {
 
 	}
 
-	protected void initModel() {
+	private void initModel() {
 
 		List<String> columnNames = persist.getClient2HwRowsColumnNames();
 		List<String> classNames = persist.getClient2HwRowsJavaclassNames();
@@ -200,7 +200,7 @@ public class ControllerHWinfoMultiClients {
 		panel.reset();
 	}
 
-	protected void buildSurrounding() {
+	private void buildSurrounding() {
 
 		// Icon iconConfigure =
 

@@ -384,7 +384,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		}
 
 		private static class CheckBoxList extends JList<JCheckBox> {
-			protected Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
+			private Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
 
 			public CheckBoxList() {
 				super.setCellRenderer(new CellRenderer());
@@ -408,7 +408,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				super.setModel(model);
 			}
 
-			protected class CellRenderer implements ListCellRenderer<JCheckBox> {
+			private class CellRenderer implements ListCellRenderer<JCheckBox> {
 				@Override
 				public Component getListCellRendererComponent(JList<? extends JCheckBox> list, JCheckBox checkbox,
 						int index, boolean isSelected, boolean cellHasFocus) {

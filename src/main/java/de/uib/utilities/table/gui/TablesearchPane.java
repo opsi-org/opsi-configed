@@ -61,7 +61,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private JTextField fieldSearch;
 
 	private boolean searchActive;
-	protected boolean filtering;
+	private boolean filtering;
 
 	private JComboBox<String> comboSearchFields;
 	private JComboBoxToolTip comboSearchFieldsMode;
@@ -91,16 +91,16 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
 	}
 
-	protected int preferredColumnIndex;
+	private int preferredColumnIndex;
 
-	protected boolean withRegEx = true;
-	protected boolean selectMode = true;
-	protected boolean resetFilterModeOnNewSearch = true;
+	private boolean withRegEx = true;
+	private boolean selectMode = true;
+	private boolean resetFilterModeOnNewSearch = true;
 
 	private int foundrow = -1;
 
-	protected SearchTargetModel targetModel;
-	protected PanelGenEditTable associatedTable;
+	private SearchTargetModel targetModel;
+	private PanelGenEditTable associatedTable;
 
 	private final Comparator<Object> comparator;
 	private Map<String, Mapping<Integer, String>> mappedValues;
@@ -109,11 +109,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		LINE, PROGRESSIVE
 	}
 
-	protected SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
+	private SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
 
-	protected SaveInteger saveSearchpaneProgressiveSearch;
-	protected SaveInteger saveSearchpaneAllColumnsSearch;
-	protected SaveInteger saveSearchpaneFullTextSearch;
+	private SaveInteger saveSearchpaneProgressiveSearch;
+	private SaveInteger saveSearchpaneAllColumnsSearch;
+	private SaveInteger saveSearchpaneFullTextSearch;
 
 	private boolean filteredMode;
 
@@ -825,7 +825,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		return (comparator.compare(realS.substring(0, part.length()), part) == 0);
 	}
 
-	protected int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
+	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
 			boolean regex, boolean combineCols) {
 
 		Logging.debug(this,

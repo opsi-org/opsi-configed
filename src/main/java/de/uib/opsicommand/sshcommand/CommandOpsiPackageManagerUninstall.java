@@ -8,7 +8,7 @@ import de.uib.configed.gui.ssh.SSHPackageManagerUninstallParameterDialog;
 import de.uib.utilities.logging.Logging;
 
 public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 	private String command;
 	private int priority = 10;
 

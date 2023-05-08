@@ -44,15 +44,15 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	private static final int USER_START_INDEX = 1;
 
-	protected PopupMenuTrait popupForUserpath;
-	protected PopupMenuTrait popupForUserpathes;
-	protected PopupMenuTrait popupForRolepath;
-	protected PopupMenuTrait popupForRolepathes;
+	private PopupMenuTrait popupForUserpath;
+	private PopupMenuTrait popupForUserpathes;
+	private PopupMenuTrait popupForRolepath;
+	private PopupMenuTrait popupForRolepathes;
 
-	protected JMenuItem popupItemDeleteEntry;
+	private JMenuItem popupItemDeleteEntry;
 
-	protected LinkedList<String> theUsers;
-	protected LinkedList<String> theRoles;
+	private LinkedList<String> theUsers;
+	private LinkedList<String> theRoles;
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
 			boolean keylistEditable, boolean reloadable, final DefaultEditMapPanel.Actor actor) {
@@ -420,7 +420,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				&& !path.getPathComponent(2).toString().equals(UserConfig.ROLE);
 	}
 
-	protected void rebuildTree() {
+	private void rebuildTree() {
 		Logging.info(this, "rebuild tree, hopefully");
 		buildUserConfig();
 
@@ -441,7 +441,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	}
 
-	protected void addUser() {
+	private void addUser() {
 
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add user", false,
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok"),
@@ -527,7 +527,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		}
 	}
 
-	protected void addRole() {
+	private void addRole() {
 
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add role", // title
 				false, // modal
@@ -571,7 +571,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	}
 
-	protected void deleteUser() {
+	private void deleteUser() {
 
 		TreePath p = tree.getSelectionPath();
 
@@ -605,12 +605,12 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		}
 	}
 
-	protected void setRoleConfig(String name, String rolename) {
+	private void setRoleConfig(String name, String rolename) {
 		Logging.info(this, "setRoleConfig " + name + "," + rolename);
 		PersistenceControllerFactory.getPersistenceController().addRoleConfig(name, rolename);
 	}
 
-	protected void setUserConfig(String name, String rolename) {
+	private void setUserConfig(String name, String rolename) {
 		Logging.info(this, "setUserConfig " + name + "," + rolename);
 		PersistenceControllerFactory.getPersistenceController().addUserConfig(name, rolename);
 	}

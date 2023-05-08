@@ -34,18 +34,18 @@ public class OpsiHwAuditDeviceClass {
 	public static final String FIRST_SEEN_COL_NAME = "firstseen";
 	public static final String LAST_SEEN_COL_NAME = "lastseen";
 
-	protected String hwClassName;
-	protected String opsiDbTableIdentifier;
-	protected String ui;
-	protected String wmiQuery;
-	protected String linuxQuery;
-	protected List<OpsiHwAuditDevicePropertyType> deviceHostProperties;
-	protected List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties;
+	private String hwClassName;
+	private String opsiDbTableIdentifier;
+	private String ui;
+	private String wmiQuery;
+	private String linuxQuery;
+	private List<OpsiHwAuditDevicePropertyType> deviceHostProperties;
+	private List<OpsiHwAuditDevicePropertyType> deviceHwItemProperties;
 
-	protected ConfigOption hostConfig;
-	protected ConfigOption hwItemConfig;
-	protected String hostConfigKey;
-	protected String hwItemConfigKey;
+	private ConfigOption hostConfig;
+	private ConfigOption hwItemConfig;
+	private String hostConfigKey;
+	private String hwItemConfigKey;
 
 	public OpsiHwAuditDeviceClass(String hwClassName) {
 		this.hwClassName = hwClassName;

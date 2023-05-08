@@ -27,7 +27,7 @@ public class FEditDate extends FEdit implements DateSelectionListener, MouseList
 	public static final Dimension AREA_DIMENSION = new Dimension(380, 300);
 	private DateTimeEditor dateEditor;
 
-	protected DateFormat dateFormat;
+	private DateFormat dateFormat;
 
 	public FEditDate(String initialText, boolean withTime) {
 		super(initialText);
@@ -116,7 +116,7 @@ public class FEditDate extends FEdit implements DateSelectionListener, MouseList
 		return dateEditor.getSelectedSqlTime().toString();
 	}
 
-	protected String getSelectedDateString() {
+	private String getSelectedDateString() {
 		// at the moment, the implementation decides about the date formatting
 
 		return getSelectedDateTime();

@@ -52,44 +52,44 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 	private static final String KEY_MODEL = "model";
 	private static final String KEY_PRODUCT = "product";
 
-	protected static final String SCANPROPERTYNAME = "SCANPROPERTIES";
-	protected static final String SCANTIME = "scantime";
+	private static final String SCANPROPERTYNAME = "SCANPROPERTIES";
+	private static final String SCANTIME = "scantime";
 
-	protected Map<String, List<Map<String, Object>>> hwInfo;
-	protected String treeRootTitle;
-	protected List<Map<String, List<Map<String, Object>>>> hwConfig;
-	protected String title = "HW Information";
+	private Map<String, List<Map<String, Object>>> hwInfo;
+	private String treeRootTitle;
+	private List<Map<String, List<Map<String, Object>>>> hwConfig;
+	private String title = "HW Information";
 
 	// for creating pdf
 	private Map<String, String> hwOpsiToUI;
 
-	protected JSplitPane contentPane;
-	protected JScrollPane jScrollPaneTree;
-	protected JScrollPane jScrollPaneInfo;
-	protected XTree tree;
-	protected IconNode root;
-	protected TreePath rootPath;
-	protected DefaultTreeModel treeModel;
-	protected JTable table;
-	protected HWInfoTableModel tableModel;
-	protected Map<String, Object> hwClassMapping;
+	private JSplitPane contentPane;
+	private JScrollPane jScrollPaneTree;
+	private JScrollPane jScrollPaneInfo;
+	private XTree tree;
+	private IconNode root;
+	private TreePath rootPath;
+	private DefaultTreeModel treeModel;
+	private JTable table;
+	private HWInfoTableModel tableModel;
+	private Map<String, Object> hwClassMapping;
 
-	protected String vendorStringComputerSystem;
-	protected String vendorStringBaseBoard;
-	protected String modelString;
-	protected String productString;
+	private String vendorStringComputerSystem;
+	private String vendorStringBaseBoard;
+	private String modelString;
+	private String productString;
 
 	private PanelHWByAuditDriver panelByAuditInfo;
 
-	protected PopupMenuTrait popupMenu;
+	private PopupMenuTrait popupMenu;
 
-	protected int hGap = Globals.HGAP_SIZE / 2;
-	protected int vGap = Globals.VGAP_SIZE / 2;
-	protected int hLabel = Globals.BUTTON_HEIGHT;
+	private int hGap = Globals.HGAP_SIZE / 2;
+	private int vGap = Globals.VGAP_SIZE / 2;
+	private int hLabel = Globals.BUTTON_HEIGHT;
 
-	protected IconNode selectedNode;
+	private IconNode selectedNode;
 
-	protected boolean withPopup;
+	private boolean withPopup;
 
 	private ConfigedMain main;
 
@@ -229,7 +229,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		Logging.debug(this, "reload action");
 	}
 
-	protected void floatExternal() {
+	private void floatExternal() {
 		PanelHWInfo copyOfMe;
 		de.uib.configed.gui.GeneralFrame externalView;
 
@@ -255,7 +255,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	}
 
-	protected void createRoot(String name) {
+	private void createRoot(String name) {
 		root = new IconNode(name);
 		Icon icon = createImageIcon("hwinfo_images/DEVICE.png");
 		root.setClosedIcon(icon);
@@ -272,7 +272,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		rootPath = tree.getPathForRow(0);
 	}
 
-	protected String addUnit(String value, String unit) {
+	private String addUnit(String value, String unit) {
 		if (value.isEmpty()) {
 			return value;
 		}
@@ -474,7 +474,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		}
 	}
 
-	protected void initByAuditStrings() {
+	private void initByAuditStrings() {
 		vendorStringComputerSystem = "";
 		vendorStringBaseBoard = "";
 		modelString = "";

@@ -309,13 +309,13 @@ public class SSHConnectSCP extends SSHConnectExec {
 			}
 		}
 
-		protected void publishInfo(String s) {
+		private void publishInfo(String s) {
 			if (outputDialog != null) {
 				publish(setAsInfoString(s));
 			}
 		}
 
-		protected void publishError(String s) {
+		private void publishError(String s) {
 			if (outputDialog != null && s.length() > 0 && !"\n".equals(s)) {
 				s = SSHConnectionOutputDialog.ANSI_CODE_ERROR + s;
 			}

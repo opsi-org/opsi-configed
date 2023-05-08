@@ -15,8 +15,8 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	//
 	private boolean ready;
 	private boolean stopped;
-	protected final JLabel statusLabel;
-	protected final JProgressBar progressBar;
+	private final JLabel statusLabel;
+	private final JProgressBar progressBar;
 	private final long startActionMillis;
 	private boolean timeoutReached;
 

@@ -19,7 +19,7 @@ import de.uib.utilities.logging.Logging;
 // is a decorator of a HashMap
 public class PropertiesStore {
 
-	protected static final String KEY_SEPARATOR = "=";
+	private static final String KEY_SEPARATOR = "=";
 
 	private File myStore;
 
@@ -86,7 +86,7 @@ public class PropertiesStore {
 	}
 
 	// used by subsubclasses
-	protected final String getProp(String key, String defaultValue) {
+	private final String getProp(String key, String defaultValue) {
 		String result = internalStore.get(key);
 		if (result == null) {
 			return defaultValue;
@@ -101,7 +101,7 @@ public class PropertiesStore {
 	}
 
 	// used by subsubclasses
-	protected final void setProp(String key, String value) {
+	private final void setProp(String key, String value) {
 		internalStore.put(key, value);
 	}
 

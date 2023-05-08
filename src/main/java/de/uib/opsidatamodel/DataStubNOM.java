@@ -50,7 +50,7 @@ import de.uib.utilities.table.ListCellOptions;
 
 public class DataStubNOM {
 
-	protected static final Set<String> linuxSWnameMarkers = new HashSet<>();
+	private static final Set<String> linuxSWnameMarkers = new HashSet<>();
 	static {
 		linuxSWnameMarkers.add("linux");
 		linuxSWnameMarkers.add("Linux");
@@ -59,76 +59,76 @@ public class DataStubNOM {
 		linuxSWnameMarkers.add("ubuntu");
 	}
 
-	protected static final Set<String> linuxSubversionMarkers = new HashSet<>();
+	private static final Set<String> linuxSubversionMarkers = new HashSet<>();
 	static {
 		linuxSubversionMarkers.add("lin:");
 	}
-	protected static Integer classCounter = 0;
+	private static Integer classCounter = 0;
 
 	private OpsiserviceNOMPersistenceController persist;
 
-	protected Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
+	private Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
 
-	protected Object2Product2VersionList depot2LocalbootProducts;
-	protected Object2Product2VersionList depot2NetbootProducts;
-	protected List<List<Object>> productRows;
-	protected Map<String, TreeSet<OpsiPackage>> depot2Packages;
-	protected Map<String, Map<String, List<String>>> product2VersionInfo2Depots;
+	private Object2Product2VersionList depot2LocalbootProducts;
+	private Object2Product2VersionList depot2NetbootProducts;
+	private List<List<Object>> productRows;
+	private Map<String, TreeSet<OpsiPackage>> depot2Packages;
+	private Map<String, Map<String, List<String>>> product2VersionInfo2Depots;
 
 	// depotId-->productId --> (propertyId --> value)
-	protected Map<String, Map<String, Map<String, ListCellOptions>>> depot2Product2PropertyDefinitions;
+	private Map<String, Map<String, Map<String, ListCellOptions>>> depot2Product2PropertyDefinitions;
 
 	// depotId-->productId --> (dependencyKey--> value)
-	protected Map<String, Map<String, List<Map<String, String>>>> depot2product2dependencyInfos;
+	private Map<String, Map<String, List<Map<String, String>>>> depot2product2dependencyInfos;
 
-	protected List<Map<String, Object>> productPropertyStates;
+	private List<Map<String, Object>> productPropertyStates;
 
 	// will only be refreshed when all product data are refreshed
-	protected List<Map<String, Object>> productPropertyDepotStates;
+	private List<Map<String, Object>> productPropertyDepotStates;
 
-	protected Set<String> hostsWithProductProperties;
+	private Set<String> hostsWithProductProperties;
 
-	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformation;
-	protected NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
+	private NavigableMap<String, SWAuditEntry> installedSoftwareInformation;
+	private NavigableMap<String, SWAuditEntry> installedSoftwareInformationForLicensing;
 
 	// giving the idents which have the name in their ident
-	protected NavigableMap<String, Set<String>> name2SWIdents;
-	protected NavigableMap<String, Map<String, String>> installedSoftwareName2SWinfo;
-	protected NavigableMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool;
+	private NavigableMap<String, Set<String>> name2SWIdents;
+	private NavigableMap<String, Map<String, String>> installedSoftwareName2SWinfo;
+	private NavigableMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool;
 
 	// List of idents of software
-	protected List<String> softwareList;
+	private List<String> softwareList;
 
 	// the same with a numbering index
-	protected NavigableMap<String, Integer> software2Number;
+	private NavigableMap<String, Integer> software2Number;
 
-	protected Map<String, List<SWAuditClientEntry>> client2software;
-	protected Map<String, Set<String>> softwareIdent2clients;
+	private Map<String, List<SWAuditClientEntry>> client2software;
+	private Map<String, Set<String>> softwareIdent2clients;
 
-	protected AuditSoftwareXLicencePool auditSoftwareXLicencePool;
+	private AuditSoftwareXLicencePool auditSoftwareXLicencePool;
 
-	protected Map<String, Map<String, Object>> hostConfigs;
+	private Map<String, Map<String, Object>> hostConfigs;
 
-	protected NavigableMap<String, LicencepoolEntry> licencepools;
+	private NavigableMap<String, LicencepoolEntry> licencepools;
 
-	protected Map<String, LicenceContractEntry> licenceContracts;
+	private Map<String, LicenceContractEntry> licenceContracts;
 
-	protected NavigableMap<String, NavigableSet<String>> contractsExpired;
+	private NavigableMap<String, NavigableSet<String>> contractsExpired;
 	// date in sql time format, contrad ID
-	protected NavigableMap<String, NavigableSet<String>> contractsToNotify;
+	private NavigableMap<String, NavigableSet<String>> contractsToNotify;
 	// date in sql time format, contrad ID
 
-	protected List<LicenceUsableForEntry> licenceUsabilities;
+	private List<LicenceUsableForEntry> licenceUsabilities;
 
-	protected List<LicenceUsageEntry> licenceUsages;
+	private List<LicenceUsageEntry> licenceUsages;
 
-	protected LicencePoolXOpsiProduct licencePoolXOpsiProduct;
+	private LicencePoolXOpsiProduct licencePoolXOpsiProduct;
 
-	protected Map<String, Map<String, Object>> client2HwRows;
+	private Map<String, Map<String, Object>> client2HwRows;
 
-	protected List<Map<String, Object>> healthData;
+	private List<Map<String, Object>> healthData;
 
-	protected Map<String, LicenceEntry> licences;
+	private Map<String, LicenceEntry> licences;
 
 	public DataStubNOM(OpsiserviceNOMPersistenceController controller) {
 		this.persist = controller;
@@ -161,7 +161,7 @@ public class DataStubNOM {
 		return product2versionInfo2infos;
 	}
 
-	protected void retrieveProductInfos() {
+	private void retrieveProductInfos() {
 		Logging.debug(this, "retrieveProductInfos data == null " + (product2versionInfo2infos == null));
 
 		if (product2versionInfo2infos == null) {
@@ -244,7 +244,7 @@ public class DataStubNOM {
 		return depot2NetbootProducts;
 	}
 
-	protected void retrieveProductsAllDepots() {
+	private void retrieveProductsAllDepots() {
 		Logging.debug(this, "retrieveProductsAllDepots ? ");
 		if (depot2LocalbootProducts != null) {
 			Logging.debug(this, "depot2LocalbootProducts " + depot2LocalbootProducts.size());
@@ -364,7 +364,7 @@ public class DataStubNOM {
 		return depot2Product2PropertyDefinitions;
 	}
 
-	protected void retrieveAllProductPropertyDefinitions() {
+	private void retrieveAllProductPropertyDefinitions() {
 		retrieveProductsAllDepots();
 
 		if (depot2Product2PropertyDefinitions == null) {
@@ -444,7 +444,7 @@ public class DataStubNOM {
 		return depot2product2dependencyInfos;
 	}
 
-	protected void retrieveAllProductDependencies() {
+	private void retrieveAllProductDependencies() {
 		retrieveProductsAllDepots();
 
 		if (depot2product2dependencyInfos == null) {
@@ -530,7 +530,7 @@ public class DataStubNOM {
 		return productPropertyStates;
 	}
 
-	protected void productPropertyDepotStatesRequestRefresh() {
+	private void productPropertyDepotStatesRequestRefresh() {
 		Logging.info(this, "productPropertyDepotStatesRequestRefresh");
 		productPropertyDepotStates = null;
 	}
@@ -549,11 +549,11 @@ public class DataStubNOM {
 		}
 	}
 
-	protected void retrieveProductPropertyStates() {
+	private void retrieveProductPropertyStates() {
 		produceProductPropertyStates((Collection<String>) null, hostsWithProductProperties);
 	}
 
-	protected void retrieveProductPropertyDepotStates(Set<String> depots) {
+	private void retrieveProductPropertyDepotStates(Set<String> depots) {
 		Logging.info(this, "retrieveProductPropertyDepotStates for depots " + depots + " depotStates == null "
 				+ (productPropertyDepotStates == null));
 		if (productPropertyDepotStates == null) {
@@ -565,7 +565,7 @@ public class DataStubNOM {
 
 	// client is a set of added hosts, host represents the totality and will be
 	// updated as a side effect
-	protected List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
+	private List<Map<String, Object>> produceProductPropertyStates(final Collection<String> clients,
 			Set<String> hosts) {
 		Logging.info(this, "produceProductPropertyStates new hosts " + clients + " old hosts " + hosts);
 		List<String> newClients = null;
@@ -671,7 +671,7 @@ public class DataStubNOM {
 		return name2SWIdents;
 	}
 
-	protected void retrieveInstalledSoftwareInformation() {
+	private void retrieveInstalledSoftwareInformation() {
 		if (installedSoftwareInformation == null || name2SWIdents == null) {
 			persist.notifyDataLoadingObservers(Configed.getResourceValue("LoadingObserver.loadtable") + " software");
 
@@ -838,17 +838,17 @@ public class DataStubNOM {
 		return softwareIdent2clients;
 	}
 
-	protected void retrieveSoftwareAuditOnClients() {
+	private void retrieveSoftwareAuditOnClients() {
 		retrieveSoftwareAuditOnClients(new ArrayList<>());
 	}
 
-	protected void retrieveSoftwareAuditOnClients(String client) {
+	private void retrieveSoftwareAuditOnClients(String client) {
 		List<String> clients = new ArrayList<>();
 		clients.add(client);
 		retrieveSoftwareAuditOnClients(clients);
 	}
 
-	protected void retrieveSoftwareAuditOnClients(final List<String> clients) {
+	private void retrieveSoftwareAuditOnClients(final List<String> clients) {
 		Logging.info(this, "retrieveSoftwareAuditOnClients used memory on start " + Globals.usedMemory());
 
 		retrieveInstalledSoftwareInformation();
@@ -956,7 +956,7 @@ public class DataStubNOM {
 	}
 
 	// AUDIT_SOFTWARE_TO_LICENSE_POOL
-	protected void retrieveAuditSoftwareXLicencePool() {
+	private void retrieveAuditSoftwareXLicencePool() {
 		if (auditSoftwareXLicencePool != null) {
 			return;
 		}
@@ -989,7 +989,7 @@ public class DataStubNOM {
 		return hostConfigs;
 	}
 
-	protected void retrieveHostConfigs() {
+	private void retrieveHostConfigs() {
 		if (hostConfigs != null) {
 			return;
 		}
@@ -1044,7 +1044,7 @@ public class DataStubNOM {
 		return licencepools;
 	}
 
-	protected void retrieveLicencepools() {
+	private void retrieveLicencepools() {
 		if (licencepools != null) {
 			return;
 		}
@@ -1093,7 +1093,7 @@ public class DataStubNOM {
 	}
 
 	// LICENSE_CONTRACT
-	protected void retrieveLicenceContracts() {
+	private void retrieveLicenceContracts() {
 		if (licenceContracts != null) {
 			return;
 		}
@@ -1154,7 +1154,7 @@ public class DataStubNOM {
 	}
 
 	// SOFTWARE_LICENSE
-	protected void retrieveLicences() {
+	private void retrieveLicences() {
 		if (licences != null) {
 			return;
 		}
@@ -1185,7 +1185,7 @@ public class DataStubNOM {
 	}
 
 	// SOFTWARE_LICENSE_TO_LICENSE_POOL
-	protected void retrieveLicenceUsabilities() {
+	private void retrieveLicenceUsabilities() {
 		if (licenceUsabilities != null) {
 			return;
 		}
@@ -1217,7 +1217,7 @@ public class DataStubNOM {
 	}
 
 	// LICENSE_ON_CLIENT
-	protected void retrieveLicenceUsages() {
+	private void retrieveLicenceUsages() {
 		Logging.info(this, "retrieveLicenceUsages");
 		if (licenceUsages != null) {
 			return;
@@ -1250,7 +1250,7 @@ public class DataStubNOM {
 	}
 
 	// LICENSE_POOL
-	protected void retrieveLicencePoolXOpsiProduct() {
+	private void retrieveLicencePoolXOpsiProduct() {
 		if (licencePoolXOpsiProduct != null) {
 			return;
 		}
@@ -1277,7 +1277,7 @@ public class DataStubNOM {
 		client2HwRows = null;
 	}
 
-	protected void retrieveClient2HwRows() {
+	private void retrieveClient2HwRows() {
 		if (client2HwRows == null) {
 			client2HwRows = new HashMap<>();
 		}
@@ -1293,7 +1293,7 @@ public class DataStubNOM {
 		return healthData;
 	}
 
-	protected void retrieveHealthData() {
+	private void retrieveHealthData() {
 		persist.notifyDataLoadingObservers(Configed.getResourceValue("LoadingObserver.checkHealth"));
 		healthData = persist.retrieveListOfMapsNOM("service_healthCheck", new Object[0]);
 	}

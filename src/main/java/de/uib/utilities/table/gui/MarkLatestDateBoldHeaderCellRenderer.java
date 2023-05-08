@@ -21,7 +21,7 @@ public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRender
 	}
 
 	// to override in subclasses for manipulation the value
-	protected Object modifyValue(Object value) {
+	private Object modifyValue(Object value) {
 		return value;
 	}
 

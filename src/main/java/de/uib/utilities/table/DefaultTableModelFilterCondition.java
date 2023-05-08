@@ -5,9 +5,9 @@ import java.util.Set;
 
 public class DefaultTableModelFilterCondition implements TableModelFilterCondition {
 
-	protected Set<? extends Object> filterSet;
-	protected int keyCol = -1;
-	protected String filterLabel = "";
+	private Set<? extends Object> filterSet;
+	private int keyCol = -1;
+	private String filterLabel = "";
 
 	public DefaultTableModelFilterCondition(int keyCol, String label) {
 		this.keyCol = keyCol;

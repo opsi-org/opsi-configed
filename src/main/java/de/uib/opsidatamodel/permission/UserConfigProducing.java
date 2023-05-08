@@ -206,7 +206,7 @@ public class UserConfigProducing {
 	}
 
 	/** we call up the cascade of default role, other roles, and the users */
-	protected void supplyAllPermissionEntries(Set<String> userParts, Set<String> roleParts) {
+	private void supplyAllPermissionEntries(Set<String> userParts, Set<String> roleParts) {
 		Logging.info(this, "supplyAllPermissionEntries start");
 
 		Logging.info(this, "supplyAllPermissionEntries all roles " + roleParts);

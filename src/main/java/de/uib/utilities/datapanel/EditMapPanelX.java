@@ -74,7 +74,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	private ToolTipManager ttm;
 
-	protected class RemovingSpecificHandler extends AbstractPropertyHandler {
+	private class RemovingSpecificHandler extends AbstractPropertyHandler {
 
 		@Override
 		public void removeValue(String key) {
@@ -93,7 +93,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 	}
 
-	protected class SettingDefaultValuesHandler extends AbstractPropertyHandler {
+	private class SettingDefaultValuesHandler extends AbstractPropertyHandler {
 
 		@Override
 		public void removeValue(String key) {
@@ -112,10 +112,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 	}
 
-	protected final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
-	protected final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
+	private final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
+	private final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
-	protected boolean markDeviation = true;
+	private boolean markDeviation = true;
 
 	public EditMapPanelX() {
 		this(null);
@@ -580,10 +580,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	 * @param String key
 	 * @param Object value (if null then an empty String is the value)
 	 */
-	protected final void addProperty(String key, Object newval) {
+	private final void addProperty(String key, Object newval) {
 		mapTableModel.addEntry(key, newval);
 		names = mapTableModel.getKeys();
-
 	}
 
 	/**
@@ -626,13 +625,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	public void focusGained(FocusEvent e) {
 		/* Not needed */}
 
-	protected void setSelectedRow(int row) {
+	private void setSelectedRow(int row) {
 		table.setRowSelectionInterval(row, row);
 
 		showSelectedRow();
 	}
 
-	protected void showSelectedRow() {
+	private void showSelectedRow() {
 		int row = table.getSelectedRow();
 		if (row != -1) {
 			table.scrollRectToVisible(table.getCellRect(row, 0, false));
@@ -644,13 +643,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		Logging.debug(this, "setOptionsEditable " + b);
 
 		if (b) {
-
 			popupmenuAtRow = popupEditOptions;
-
 		} else {
-
 			popupmenuAtRow = popupNoEditOptions;
-
 		}
 
 		MouseListener popupListener = new utils.PopupMouseListener(popupmenuAtRow);

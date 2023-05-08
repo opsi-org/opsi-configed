@@ -153,7 +153,7 @@ public class LicenseDisplayer {
 		stage.setY(mainRectangle.getY() + mainRectangle.getHeight() / 2 - stage.getHeight() / 2);
 	}
 
-	protected String showLicenceContractWarnings() {
+	private String showLicenceContractWarnings() {
 		StringBuilder result = new StringBuilder();
 		NavigableMap<String, NavigableSet<String>> contractsExpired = persist.getLicenceContractsExpired();
 		NavigableMap<String, NavigableSet<String>> contractsToNotify = persist.getLicenceContractsExpired();
@@ -187,7 +187,7 @@ public class LicenseDisplayer {
 		return result.toString();
 	}
 
-	protected String calculateVariantLicencepools() {
+	private String calculateVariantLicencepools() {
 		StringBuilder result = new StringBuilder();
 		GenTableModel modelSWnames;
 

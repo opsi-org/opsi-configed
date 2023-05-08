@@ -7,7 +7,7 @@ import javax.swing.JPopupMenu;
 
 public class PopupMouseListener extends MouseAdapter {
 
-	protected JPopupMenu popupMenu;
+	private JPopupMenu popupMenu;
 
 	public PopupMouseListener(JPopupMenu popup) {
 		popupMenu = popup;

@@ -124,70 +124,70 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	};
 
-	protected List<Integer> internalpopups;
+	private List<Integer> internalpopups;
 
-	protected List<JMenuItem> menuItemsRequesting1SelectedLine;
-	protected List<JMenuItem> menuItemsRequestingMultiSelectedLines;
+	private List<JMenuItem> menuItemsRequesting1SelectedLine;
+	private List<JMenuItem> menuItemsRequestingMultiSelectedLines;
 
 	private JMenuItemFormatted menuItemDeleteRelation;
 	private JMenuItemFormatted menuItemSave;
 	private JMenuItemFormatted menuItemCancel;
 
-	protected Comparator[] comparators;
+	private Comparator[] comparators;
 
-	protected JScrollPane scrollpane;
+	private JScrollPane scrollpane;
 	protected JTable theTable;
 	protected GenTableModel tableModel;
 
-	protected IconButton buttonCommit;
-	protected IconButton buttonCancel;
-	protected JLabel label;
+	private IconButton buttonCommit;
+	private IconButton buttonCancel;
+	private JLabel label;
 
-	protected JLabel labelRowCount;
-	protected JLabel labelMarkedCount;
-	protected String textMarkedCount = "selected";
-	protected JPanel titlePane;
+	private JLabel labelRowCount;
+	private JLabel labelMarkedCount;
+	private String textMarkedCount = "selected";
+	private JPanel titlePane;
 
-	protected Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;
+	private Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;
 
-	protected JPopupMenu popupMenu;
+	private JPopupMenu popupMenu;
 
-	protected boolean dataChanged;
+	private boolean dataChanged;
 
-	protected UpdateController myController;
+	private UpdateController myController;
 
-	protected int maxTableWidth = Short.MAX_VALUE;
+	private int maxTableWidth = Short.MAX_VALUE;
 
-	protected boolean editing = true;
+	private boolean editing = true;
 
-	protected boolean deleteAllowed = true;
+	private boolean deleteAllowed = true;
 
-	protected boolean switchLineColors = true;
+	private boolean switchLineColors = true;
 
-	protected boolean awareOfSelectionListener;
-	protected boolean followSelectionListener = true;
-	protected boolean awareOfTableChangedListener = true;
+	private boolean awareOfSelectionListener;
+	private boolean followSelectionListener = true;
+	private boolean awareOfTableChangedListener = true;
 
-	protected boolean withTablesearchPane;
+	private boolean withTablesearchPane;
 
 	protected TablesearchPane searchPane;
 
-	protected RowNoTableModelFilterCondition filterBySelectionCondition;
-	protected TableModelFilter filterBySelection;
-	protected boolean filteringActive;
-	protected boolean selectionEmpty = true;
-	protected boolean singleSelection;
+	private RowNoTableModelFilterCondition filterBySelectionCondition;
+	private TableModelFilter filterBySelection;
+	private boolean filteringActive;
+	private boolean selectionEmpty = true;
+	private boolean singleSelection;
 
-	protected String title = "";
+	private String title = "";
 
-	protected int generalPopupPosition;
+	private int generalPopupPosition;
 
-	protected int popupIndex;
+	private int popupIndex;
 
 	private int oldrowcount = -1;
 
-	protected Map<Integer, SortOrder> sortDescriptor;
-	protected Map<Integer, SortOrder> specialSortDescriptor;
+	private Map<Integer, SortOrder> sortDescriptor;
+	private Map<Integer, SortOrder> specialSortDescriptor;
 
 	private AbstractExportTable exportTable;
 
@@ -400,7 +400,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					protected Object modifyValue(Object value) {
 						return modifyHeaderValue(value);
 					}
-
 				}
 
 				);
@@ -605,7 +604,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		return augmentedList;
 	}
 
-	protected void addPopupmenuStandardpart() {
+	private void addPopupmenuStandardpart() {
 		Logging.info(this, "addPopupmenuStandardpart, internalpopups " + giveMenuitemNames(internalpopups));
 
 		if (generalPopupPosition > 0) {
@@ -795,7 +794,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	protected List<RowSorter.SortKey> buildSortkeysFromColumns() {
+	private List<RowSorter.SortKey> buildSortkeysFromColumns() {
 		Logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor " + sortDescriptor);
 		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
 
@@ -1093,7 +1092,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	}
 
-	protected void setTimestampRenderer(String classname, TableColumn col) {
+	private void setTimestampRenderer(String classname, TableColumn col) {
 
 		if ("java.sql.Timestamp".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererDate());
@@ -1101,14 +1100,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	protected void setBigDecimalRenderer(String classname, TableColumn col) {
+	private void setBigDecimalRenderer(String classname, TableColumn col) {
 		if ("java.math.BigDecimal".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererCurrency());
 		}
 
 	}
 
-	protected void setBooleanRenderer(String classname, TableColumn col) {
+	private void setBooleanRenderer(String classname, TableColumn col) {
 		if ("java.lang.Boolean".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererByBoolean());
 		}
@@ -1183,7 +1182,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	}
 
-	protected void deleteCurrentRow() {
+	private void deleteCurrentRow() {
 		if (!deleteAllowed) {
 			return;
 		}
@@ -1365,7 +1364,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	protected int findViewRowFromValue(int startviewrow, Object value, int col) {
+	private int findViewRowFromValue(int startviewrow, Object value, int col) {
 		Logging.debug(this,
 				"findViewRowFromValue startviewrow, value, col " + startviewrow + ", " + value + ", " + col);
 
@@ -1754,7 +1753,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		return scrollpane;
 	}
 
-	protected void floatExternal() {
+	private void floatExternal() {
 
 		PanelGenEditTable copyOfMe;
 		de.uib.configed.gui.GeneralFrame externalView;

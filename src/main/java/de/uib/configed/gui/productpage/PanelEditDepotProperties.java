@@ -63,7 +63,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 	private JPanel titlePanel;
 
-	protected final Map<String, Object> emptyVisualData = new HashMap<>();
+	private final Map<String, Object> emptyVisualData = new HashMap<>();
 
 	public PanelEditDepotProperties(ConfigedMain mainController, DefaultEditMapPanel productPropertiesPanel) {
 		super(mainController, productPropertiesPanel);

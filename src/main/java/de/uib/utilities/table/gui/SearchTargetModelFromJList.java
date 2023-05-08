@@ -21,14 +21,14 @@ import de.uib.utilities.logging.Logging;
 
 public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 
-	protected JList<String> jList;
+	private JList<String> jList;
 
-	protected AbstractTableModel tableModel;
-	protected List<String> theValues;
-	protected List<String> theDescriptions;
+	private AbstractTableModel tableModel;
+	private List<String> theValues;
+	private List<String> theDescriptions;
 	private List<String> unfilteredV;
 	private List<String> unfilteredD;
-	protected int[] unfilteredSelection;
+	private int[] unfilteredSelection;
 
 	private boolean filtered;
 

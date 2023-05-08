@@ -21,7 +21,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class ClientTreeTransferHandler extends TransferHandler {
-	protected ClientTree tree;
+	private ClientTree tree;
 
 	public ClientTreeTransferHandler(ClientTree tree) {
 		super();

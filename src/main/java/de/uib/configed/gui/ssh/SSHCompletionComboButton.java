@@ -339,7 +339,7 @@ public class SSHCompletionComboButton {
 	}
 
 	public class ItemElementListener extends DefaultListCellRenderer {
-		protected SSHCompletionComboButton autocompletion;
+		private SSHCompletionComboButton autocompletion;
 
 		public ItemElementListener(SSHCompletionComboButton autocompletion) {
 			super();

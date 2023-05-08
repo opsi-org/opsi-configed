@@ -53,38 +53,38 @@ public class PanelSWInfo extends JPanel {
 	private PanelGenEditTable panelTable;
 	private ExporterToCSV csvExportTable;
 
-	protected JPanel subPanelTitle;
+	private JPanel subPanelTitle;
 
-	protected JScrollPane scrollPaneSWInfo;
-	protected JTable jTable;
-	protected final SWInfoTableModel voidTableModel = new SWInfoTableModel();
-	protected GenTableModel modelSWInfo;
+	private JScrollPane scrollPaneSWInfo;
+	private JTable jTable;
+	private final SWInfoTableModel voidTableModel = new SWInfoTableModel();
+	private GenTableModel modelSWInfo;
 
-	protected JLabel labelSuperTitle;
+	private JLabel labelSuperTitle;
 
-	protected String supertitle = "";
-	protected String title = "";
-	protected DatedRowList swRows;
-	protected String hostId = "";
-	protected boolean withPopup;
+	private String supertitle = "";
+	private String title = "";
+	private DatedRowList swRows;
+	private String hostId = "";
+	private boolean withPopup;
 
-	protected String scanInfo = "";
+	private String scanInfo = "";
 
-	protected Boolean askingForKindOfAction;
-	protected boolean askForOverwrite = true;
+	private Boolean askingForKindOfAction;
+	private boolean askForOverwrite = true;
 
-	protected int hGap = Globals.HGAP_SIZE / 2;
-	protected int vGap = Globals.VGAP_SIZE / 2;
-	protected int hLabel = Globals.BUTTON_HEIGHT;
+	private int hGap = Globals.HGAP_SIZE / 2;
+	private int vGap = Globals.VGAP_SIZE / 2;
+	private int hLabel = Globals.BUTTON_HEIGHT;
 
-	protected ConfigedMain mainController;
-	protected AbstractPersistenceController persist;
+	private ConfigedMain mainController;
+	private AbstractPersistenceController persist;
 
 	public enum KindOfExport {
 		PDF, CSV
 	}
 
-	protected KindOfExport kindOfExport;
+	private KindOfExport kindOfExport;
 
 	private boolean withMsUpdates;
 	private boolean withMsUpdates2 = true;
@@ -491,7 +491,7 @@ public class PanelSWInfo extends JPanel {
 		Logging.debug(this, "reload action");
 	}
 
-	protected void floatExternalX() {
+	private void floatExternalX() {
 
 		PanelSWInfo copyOfMe;
 		GeneralFrame externalView;
@@ -538,7 +538,7 @@ public class PanelSWInfo extends JPanel {
 		this.hostId = "" + hostId;
 	}
 
-	protected static class SWInfoTableModel extends AbstractTableModel {
+	private static class SWInfoTableModel extends AbstractTableModel {
 		private List<String[]> data;
 
 		public SWInfoTableModel() {

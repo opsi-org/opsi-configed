@@ -47,11 +47,11 @@ public class FPanel extends SecondaryFrame {
 		super.setVisible(true);
 	}
 
-	protected boolean wantToBeRegisteredWithRunningInstances() {
+	private boolean wantToBeRegisteredWithRunningInstances() {
 		return true;
 	}
 
-	protected void registerWithRunningInstances() {
+	private void registerWithRunningInstances() {
 		Logging.info(this, "registerWithRunningInstances");
 		if (wantToBeRegisteredWithRunningInstances()) {
 			FPanel.runningInstances.add(this, "");
@@ -70,7 +70,7 @@ public class FPanel extends SecondaryFrame {
 		super.setVisible(b);
 	}
 
-	protected boolean leaveChecked() {
+	private boolean leaveChecked() {
 		if (!checkLeave) {
 			return true;
 		}

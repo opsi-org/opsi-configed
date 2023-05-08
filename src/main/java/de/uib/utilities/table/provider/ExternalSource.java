@@ -13,13 +13,13 @@ import java.util.List;
 public class ExternalSource implements TableSource {
 	// adapter for external source for table data
 
-	protected List<String> columnNames;
+	private List<String> columnNames;
 
-	protected List<String> classNames;
+	private List<String> classNames;
 
-	protected boolean reloadRequested = true;
+	private boolean reloadRequested = true;
 
-	protected RowsProvider rowsProvider;
+	private RowsProvider rowsProvider;
 
 	public ExternalSource(List<String> columnNames, List<String> classNames, RowsProvider rowsProvider) {
 		this.columnNames = columnNames;

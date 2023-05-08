@@ -24,7 +24,7 @@ import de.uib.utilities.logging.Logging;
 // classname
 // has to be String)
 public class MapSource implements TableSource {
-	protected static final String ROW_COUNTER_NAME = "rowcounter";
+	private static final String ROW_COUNTER_NAME = "rowcounter";
 
 	private static final Map<String, Object> class2defaultValue;
 	static {
@@ -33,17 +33,17 @@ public class MapSource implements TableSource {
 		class2defaultValue.put("java.lang.String", "");
 	}
 
-	protected boolean rowCounting;
+	private boolean rowCounting;
 
-	protected List<String> columnNames;
+	private List<String> columnNames;
 
-	protected List<String> classNames;
+	private List<String> classNames;
 
 	protected Map<String, Map<String, Object>> table;
 
 	protected List<List<Object>> rows;
 
-	protected boolean reloadRequested = true;
+	private boolean reloadRequested = true;
 
 	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map<String, Object>> table,
 			boolean rowCounting) {

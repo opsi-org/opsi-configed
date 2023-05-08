@@ -13,7 +13,7 @@ import de.uib.configed.Globals;
 
 public class IconNodeRendererClientTree extends IconNodeRenderer {
 
-	protected ConfigedMain main;
+	private ConfigedMain main;
 
 	private VisualClientNodeNameModifier modifier = new VisualClientNodeNameModifierFactory().getModifier();
 

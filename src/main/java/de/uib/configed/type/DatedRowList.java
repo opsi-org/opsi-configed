@@ -5,8 +5,8 @@ import java.util.List;
 
 public class DatedRowList {
 
-	protected List<String[]> rowList;
-	protected String dateS;
+	private List<String[]> rowList;
+	private String dateS;
 
 	public DatedRowList() {
 		rowList = new ArrayList<>();

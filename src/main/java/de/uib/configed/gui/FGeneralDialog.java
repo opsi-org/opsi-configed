@@ -25,7 +25,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
 
@@ -42,7 +41,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected boolean shiftPressed = true;
 
-	protected FadingMirror glass;
+	private FadingMirror glass;
 	protected JPanel allpane = new JPanel();
 
 	protected JScrollPane scrollpane = new JScrollPane();
@@ -51,7 +50,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	protected JPanel southPanel;
 	protected IconButton jButton1 = new IconButton();
 	protected IconButton jButton2 = new IconButton();
-	protected IconButton jButton3 = new IconButton();
+	private IconButton jButton3 = new IconButton();
 	private int defaultResult = 1;
 
 	protected int preferredWidth;
@@ -59,26 +58,23 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	protected int additionalPaneMaxWidth = GroupLayout.PREFERRED_SIZE;
 
-	protected String button1Text;
-	protected String button2Text;
-	protected String button3Text;
+	private String button1Text;
+	private String button2Text;
+	private String button3Text;
 
-	protected String[] buttonNames;
-	protected Icon[] icons;
+	private String[] buttonNames;
+	private Icon[] icons;
 
-	protected int noOfButtons = 3;
+	private int noOfButtons = 3;
 
 	protected int result = 1;
 
 	protected JPanel jPanelButtonGrid = new JPanel();
 	protected JPanel additionalPane = new JPanel();
-	protected GridLayout gridLayout1 = new GridLayout();
-	protected FlowLayout flowLayout1 = new FlowLayout();
+	private GridLayout gridLayout1 = new GridLayout();
+	private FlowLayout flowLayout1 = new FlowLayout();
 
 	protected Window owner;
-
-	// for use in derived classes
-	protected JProgressBar waitingProgressBar;
 
 	public FGeneralDialog(JFrame owner, String title) {
 		super(owner, false);
@@ -231,7 +227,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		}
 	}
 
-	protected void initIcons() {
+	private void initIcons() {
 		if (icons != null && icons.length != buttonNames.length) {
 			Logging.error(this, "icons not correctly specified");
 			icons = null;
@@ -247,7 +243,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		}
 	}
 
-	protected void setButtons() {
+	private void setButtons() {
 		Logging.info(this, "setButtons and icons " + Arrays.asList(buttonNames));
 
 		jButton1.setText(buttonNames[0]);
@@ -541,7 +537,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	// executed at the end of action listener event
-	protected void postAction1() {
+	private void postAction1() {
 		Logging.info(this, "postAction1");
 	}
 
@@ -556,12 +552,12 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	// activated by mouse and key listener events
-	protected void preAction3() {
+	private void preAction3() {
 		Logging.info(this, "preAction3");
 	}
 
 	// executed at the end of action listener event
-	protected void postAction3() {
+	private void postAction3() {
 		Logging.info(this, "postAction3");
 	}
 

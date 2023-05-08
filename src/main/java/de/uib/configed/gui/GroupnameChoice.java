@@ -24,12 +24,12 @@ import de.uib.utilities.swing.XList;
 
 public class GroupnameChoice extends FGeneralDialog implements DocumentListener, ListSelectionListener {
 
-	protected int selIndex = -1;
+	private int selIndex = -1;
 
-	protected XList groups;
+	private XList groups;
 	private List<String> dataList;
 
-	protected String resultString = "";
+	private String resultString = "";
 
 	private JTextField groupnameField;
 
@@ -106,7 +106,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		leave();
 	}
 
-	protected void textvalueChanged() {
+	private void textvalueChanged() {
 
 		if (dataList.contains(groupnameField.getText())) {
 			groups.setSelectedValue(groupnameField.getText(), true);

@@ -55,6 +55,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	private JTextField fieldClientCount;
 	private JTextField fieldInvolvedDepotsCount;
 	private JLabel labelTimeYetToWait;
+	private JProgressBar waitingProgressBar;
 
 	private IconButton buttonRefreshTime;
 	private IconButton buttonSetNew;
@@ -110,7 +111,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		fieldInvolvedDepotsCount.setText("" + usedDepots.size());
 	}
 
-	protected void disableSettingOfTimes() {
+	private void disableSettingOfTimes() {
 		jButton2.setEnabled(false);
 		spinnerDelay.setEnabled(false);
 		spinnerDelay.setEnabled(false);
@@ -164,7 +165,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		labelStarttime.setText(readTime(cal));
 	}
 
-	protected void setNowTimeAsTarget() {
+	private void setNowTimeAsTarget() {
 		setCalToNow();
 
 		if (scheduleTitleStarter == null) {

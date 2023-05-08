@@ -24,8 +24,8 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	private String[] idents;
 	private final List<String> identsList;
 
-	protected JFileChooser chooser;
-	protected File chooserDirectory;
+	private JFileChooser chooser;
+	private File chooserDirectory;
 
 	public PanelTabbedDocuments(final String[] idents, String defaultText) {
 

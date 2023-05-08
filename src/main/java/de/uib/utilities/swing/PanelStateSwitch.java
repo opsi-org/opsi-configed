@@ -36,19 +36,19 @@ import de.uib.utilities.logging.Logging;
 
 public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 
-	protected Enum<E> producedValue;
-	protected Enum<E> startValue;
-	protected Class<?> myenumClass;
-	protected Enum<E>[] values;
-	protected Map<Enum<E>, String> labels;
-	protected String title;
-	protected Map<Enum<E>, JRadioButton> groupedButtons;
-	protected Consumer<Enum<E>> enumSetter;
-	protected Font primaryFont;
-	protected int vGap;
-	protected int hGap;
+	private Enum<E> producedValue;
+	private Enum<E> startValue;
+	private Class<?> myenumClass;
+	private Enum<E>[] values;
+	private Map<Enum<E>, String> labels;
+	private String title;
+	private Map<Enum<E>, JRadioButton> groupedButtons;
+	private Consumer<Enum<E>> enumSetter;
+	private Font primaryFont;
+	private int vGap;
+	private int hGap;
 
-	protected List<ChangeListener> changeListeners;
+	private List<ChangeListener> changeListeners;
 
 	public PanelStateSwitch(Enum<E> startValue, Enum<E>[] values, Class<?> myenum, Consumer<Enum<E>> enumSetter) {
 		this(null, startValue, values, null, myenum, enumSetter);

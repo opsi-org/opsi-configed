@@ -22,27 +22,27 @@ import de.uib.utilities.logging.Logging;
 
 public class GeneralFrame extends JDialog implements ActionListener {
 
-	protected FadingMirror glass;
-	protected JPanel allpane = new JPanel();
+	private FadingMirror glass;
+	private JPanel allpane = new JPanel();
 
-	protected JPanel topPane = new JPanel();
-	protected JPanel southPanel = new JPanel();
+	private JPanel topPane = new JPanel();
+	private JPanel southPanel = new JPanel();
 
-	protected JButton jButton1 = new JButton();
+	private JButton jButton1 = new JButton();
 
-	protected int preferredWidth;
-	protected int preferredHeight;
+	private int preferredWidth;
+	private int preferredHeight;
 
-	protected int noOfButtons = 1;
-	protected int result = -1;
-	protected int defaultResult;
+	private int noOfButtons = 1;
+	private int result = -1;
+	private int defaultResult;
 
-	protected JPanel jPanelButtonGrid = new JPanel();
-	protected GridLayout gridLayout1 = new GridLayout();
-	protected BorderLayout borderLayout1 = new BorderLayout();
-	protected FlowLayout flowLayout1 = new FlowLayout();
+	private JPanel jPanelButtonGrid = new JPanel();
+	private GridLayout gridLayout1 = new GridLayout();
+	private BorderLayout borderLayout1 = new BorderLayout();
+	private FlowLayout flowLayout1 = new FlowLayout();
 
-	protected JPanel additionalPane;
+	private JPanel additionalPane;
 
 	public GeneralFrame(Frame owner, String title, boolean modal) {
 		super(owner, modal);
@@ -75,7 +75,7 @@ public class GeneralFrame extends JDialog implements ActionListener {
 		jButton1.requestFocus();
 	}
 
-	protected void doAction1() {
+	private void doAction1() {
 		Logging.debug(this, "doAction1");
 		result = 1;
 		leave();
