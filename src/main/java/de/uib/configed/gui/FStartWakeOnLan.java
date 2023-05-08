@@ -60,8 +60,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	private IconButton buttonSetNew;
 
 	Calendar cal;
-	long startActionMillis;
-	long waitingMillis;
+	private long startActionMillis;
+	private long waitingMillis;
 
 	private int stepsTotal;
 	private boolean waitingMode;

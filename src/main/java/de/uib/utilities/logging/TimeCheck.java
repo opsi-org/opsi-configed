@@ -7,7 +7,7 @@ public class TimeCheck {
 
 	Object caller;
 	String mesg;
-	long startmillis;
+	private long startmillis;
 
 	private TimeCheck(Object caller, int loglevel, String mesg) {
 		this.caller = caller;
