@@ -50,7 +50,7 @@ public class PanelMountShare extends JPanel {
 
 	private int leftBound = -1;
 
-	NameProducer np;
+	private NameProducer np;
 
 	public PanelMountShare(NameProducer np, ConfigedMain main, JFrame root) {
 		this(np, main, root, -1);
