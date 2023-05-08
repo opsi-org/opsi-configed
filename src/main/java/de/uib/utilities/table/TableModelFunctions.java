@@ -14,7 +14,7 @@ import java.util.Map;
 import de.uib.utilities.Mapping;
 
 public interface TableModelFunctions {
-	class PairOfInt {
+	public class PairOfInt {
 		public final int col1;
 		public final int col2;
 

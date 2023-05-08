@@ -9,7 +9,7 @@ import javax.swing.text.PlainDocument;
 import de.uib.utilities.logging.Logging;
 
 public class CheckedDocument extends PlainDocument {
-	char[] allowedChars;
+	protected char[] allowedChars;
 	int size;
 	protected boolean checkMask;
 

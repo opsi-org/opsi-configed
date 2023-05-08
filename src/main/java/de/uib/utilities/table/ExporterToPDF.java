@@ -349,7 +349,7 @@ public class ExporterToPDF extends AbstractExportTable {
 	/**
 	 * Inner class to add a table as header.
 	 */
-	class TableHeader extends PdfPageEventHelper {
+	private class TableHeader extends PdfPageEventHelper {
 		/** The header text. */
 		String header = "";
 		/** The template with the total number of pages. */

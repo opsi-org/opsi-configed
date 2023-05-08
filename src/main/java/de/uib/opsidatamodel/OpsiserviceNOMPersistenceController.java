@@ -314,7 +314,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		initMembers();
 	}
 
-	class HostGroups extends TreeMap<String, Map<String, String>> {
+	private class HostGroups extends TreeMap<String, Map<String, String>> {
 		public HostGroups(Map<String, Map<String, String>> source) {
 			super(source);
 		}
