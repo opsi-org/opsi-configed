@@ -83,7 +83,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	CheckedLabel serverPathChecked;
 
 	JLabel jLabelUploading;
-	ImagePanel waitingImage;
+	private ImagePanel waitingImage;
 
 	private static class RadioButtonIntegrationType extends JRadioButton {
 		private String subdir;

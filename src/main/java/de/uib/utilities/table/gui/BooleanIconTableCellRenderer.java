@@ -20,8 +20,8 @@ import javax.swing.SwingConstants;
 import de.uib.utilities.logging.Logging;
 
 public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
-	Icon trueIcon;
-	Icon falseIcon;
+	private Icon trueIcon;
+	private Icon falseIcon;
 	private boolean allowingString;
 
 	public BooleanIconTableCellRenderer(Icon trueIcon, Icon falseIcon) {

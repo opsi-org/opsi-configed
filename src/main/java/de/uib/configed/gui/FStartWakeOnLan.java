@@ -56,8 +56,8 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	JTextField fieldInvolvedDepotsCount;
 	JLabel labelTimeYetToWait;
 
-	IconButton buttonRefreshTime;
-	IconButton buttonSetNew;
+	private IconButton buttonRefreshTime;
+	private IconButton buttonSetNew;
 
 	Calendar cal;
 	long startActionMillis;

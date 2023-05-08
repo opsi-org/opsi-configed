@@ -83,9 +83,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private SoftwareDirectionOfAssignment softwareDirectionOfAssignment = SoftwareDirectionOfAssignment.POOL2SOFTWARE;
 
-	Integer totalSWEntries;
-	Integer totalUnassignedSWEntries;
-	Integer totalShownEntries;
+	private Integer totalSWEntries;
+	private Integer totalUnassignedSWEntries;
+	private Integer totalShownEntries;
 
 	int colMarkCursorRow;
 
