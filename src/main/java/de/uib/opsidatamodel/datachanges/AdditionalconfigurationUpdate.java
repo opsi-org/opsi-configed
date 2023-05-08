@@ -6,11 +6,11 @@ import de.uib.opsidatamodel.AbstractPersistenceController;
 
 public class AdditionalconfigurationUpdate implements UpdateCommand {
 	String objectId;
-	Map newdata;
+	Map<?, ?> newdata;
 
 	AbstractPersistenceController persis;
 
-	public AdditionalconfigurationUpdate(AbstractPersistenceController persis, String objectId, Map newdata) {
+	public AdditionalconfigurationUpdate(AbstractPersistenceController persis, String objectId, Map<?, ?> newdata) {
 		this.objectId = objectId;
 		this.newdata = newdata;
 		setController(persis);

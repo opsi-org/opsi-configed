@@ -54,16 +54,6 @@ public class ExternalSource implements TableSource {
 	}
 
 	@Override
-	public String getRowCounterName() {
-		return null;
-	}
-
-	@Override
-	public boolean isRowCounting() {
-		return false;
-	}
-
-	@Override
 	public void setRowCounting(boolean b) {
 		/* Not needed */}
 }

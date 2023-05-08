@@ -11,7 +11,6 @@ package de.uib.utilities.table.provider;
 import java.util.List;
 
 public interface TableSource {
-	int ROW_COUNT_START = 1;
 
 	List<String> retrieveColumnNames();
 
@@ -21,10 +20,6 @@ public interface TableSource {
 	List<List<Object>> retrieveRows();
 
 	void setRowCounting(boolean b);
-
-	boolean isRowCounting();
-
-	String getRowCounterName();
 
 	void requestReload();
 }

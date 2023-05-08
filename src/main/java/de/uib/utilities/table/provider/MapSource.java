@@ -172,16 +172,6 @@ public class MapSource implements TableSource {
 	}
 
 	@Override
-	public String getRowCounterName() {
-		return ROW_COUNTER_NAME;
-	}
-
-	@Override
-	public boolean isRowCounting() {
-		return rowCounting;
-	}
-
-	@Override
 	public void setRowCounting(boolean b) {
 		if (!rowCounting && b) {
 			rowCounting = true;
