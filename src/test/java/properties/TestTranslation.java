@@ -51,7 +51,7 @@ class TestTranslation {
 			second = iterator.next();
 
 			compareTwoLocals(first, second);
-			checkIfUsedResourceValuesAreTranslated(first);
+			checkIfUsedPropertiesAreTranslated(first);
 
 			first = second;
 		}
@@ -111,7 +111,7 @@ class TestTranslation {
 	 *                     so on)
 	 * @throws IOException if an I/O error occurs
 	 */
-	void checkIfUsedResourceValuesAreTranslated(String languageCode) throws IOException {
+	void checkIfUsedPropertiesAreTranslated(String languageCode) throws IOException {
 		String propertiesFileName = "configed_" + languageCode + ".properties";
 
 		Properties properties = new Properties();
