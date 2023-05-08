@@ -210,7 +210,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			MyColorizer colorizer = new MyColorizer(String.valueOf(value));
+			MyColorizer colorizer = new MyColorizer();
 
 			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
@@ -243,10 +243,8 @@ public class RequirementsTableModel extends AbstractTableModel {
 	}
 
 	private static class MyColorizer {
-		String cellValue;
 
-		private MyColorizer(String value) {
-			cellValue = value;
+		private MyColorizer() {
 		}
 
 		public void colorize(Component cell, int row, int col) {
@@ -278,31 +276,4 @@ public class RequirementsTableModel extends AbstractTableModel {
 			}
 		}
 	}
-
-	private static class MyWarningColorizer {
-		public void colorize(Component cell) {
-			if (!ConfigedMain.THEMES) {
-				cell.setBackground(Globals.ACTION_COLOR);
-			}
-		}
-	}
-
-	private static class MyTableCellRendererWarning extends DefaultTableCellRenderer {
-		MyWarningColorizer colorizer = new MyWarningColorizer();
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int col) {
-			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-
-			colorizer.colorize(cell);
-
-			if (cell instanceof JComponent) {
-				((JComponent) cell).setToolTipText("" + value);
-			}
-
-			return cell;
-		}
-	}
-
 }
