@@ -178,20 +178,14 @@ public class MainFrame extends JFrame
 	private JMenuBar jMenuBar1 = new JMenuBar();
 
 	private JMenu jMenuFile;
-	private JMenuItem jMenuFileExit;
 	private JMenuItem jMenuFileSaveConfigurations;
-	private JMenuItem jMenuFileReload;
-	private JMenuItem jMenuTheme;
-	private JMenuItem jMenuFileLanguage;
 
 	private JMenu jMenuClients = new JMenu();
 
-	private JMenu jMenuWakeOnLan;
 	private JMenuItem jMenuDirectWOL = new JMenuItem();
 	private JMenuItem jMenuNewScheduledWOL = new JMenuItem();
 
 	private JMenuItem jMenuShowScheduledWOL = new JMenuItem();
-	private JMenuItem jMenuOpsiClientdEvent;
 	private JMenuItem jMenuShowPopupMessage = new JMenuItem();
 	private JMenuItem jMenuRequestSessionInfo = new JMenuItem();
 	private JMenuItem jMenuShutdownClient = new JMenuItem();
@@ -217,7 +211,6 @@ public class MainFrame extends JFrame
 
 	private JMenu jMenuServer = new JMenu();
 
-	private JMenuItem jMenuSSHConfig = new JMenuItem();
 	private JMenuItem jMenuSSHConnection = new JMenuItem();
 	private JMenuItem jMenuSSHCommandControl = new JMenuItem();
 
@@ -293,7 +286,6 @@ public class MainFrame extends JFrame
 	private JMenuItemFormatted popupWakeOnLanDirect = new JMenuItemFormatted();
 	private JMenuItemFormatted popupWakeOnLanScheduler = new JMenuItemFormatted();
 
-	private JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 	private JMenuItemFormatted popupShowPopupMessage = new JMenuItemFormatted();
 	private JMenuItemFormatted popupRequestSessionInfo = new JMenuItemFormatted();
 	private JMenuItemFormatted popupShutdownClient = new JMenuItemFormatted();
@@ -337,8 +329,6 @@ public class MainFrame extends JFrame
 	private JButton jButtonDashboard;
 	private JButton jButtonLicences;
 	private JButton jButtonOpsiLicenses;
-
-	private JPanel iconPane1;
 
 	private IconButton iconButtonReload;
 	private IconButton iconButtonReloadLicenses;
@@ -449,14 +439,11 @@ public class MainFrame extends JFrame
 
 	protected FShowList fListSelectedClients;
 
-	private JPanel panelTreeClientSelection;
-
 	private boolean multidepot;
 
 	private DepotListPresenter depotListPresenter;
 
 	private ClientTree treeClients;
-	private JScrollPane scrollpaneTreeClients;
 
 	private JPanel clientPane;
 
@@ -627,11 +614,11 @@ public class MainFrame extends JFrame
 
 	private void setupMenuFile() {
 		jMenuFile = new JMenu();
-		jMenuFileExit = new JMenuItem();
+		JMenuItem jMenuFileExit = new JMenuItem();
 		jMenuFileSaveConfigurations = new JMenuItem();
-		jMenuFileReload = new JMenuItem();
-		jMenuTheme = new JMenu(); // submenu
-		jMenuFileLanguage = new JMenu(); // submenu
+		JMenuItem jMenuFileReload = new JMenuItem();
+		JMenu jMenuTheme = new JMenu(); // submenu
+		JMenu jMenuFileLanguage = new JMenu(); // submenu
 
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
 
@@ -904,7 +891,7 @@ public class MainFrame extends JFrame
 
 		menuItemsHost.get(ITEM_ADD_CLIENT).add(jMenuAddClient);
 
-		jMenuWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
+		JMenu jMenuWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
 
 		jMenuDirectWOL.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.direct"));
 		jMenuDirectWOL.addActionListener((ActionEvent e) -> wakeOnLanAction());
@@ -941,7 +928,7 @@ public class MainFrame extends JFrame
 		jMenuDeletePackageCaches.setText(Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
 		jMenuDeletePackageCaches.addActionListener((ActionEvent e) -> deletePackageCachesAction());
 
-		jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
+		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
 		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
@@ -1091,7 +1078,7 @@ public class MainFrame extends JFrame
 		boolean methodsExists = factory.checkSSHCommandMethod();
 
 		Logging.info(this, "setupMenuServer add configpage");
-		jMenuSSHConfig = new JMenuItem();
+		JMenuItem jMenuSSHConfig = new JMenuItem();
 		jMenuSSHConfig.setText(Configed.getResourceValue("MainFrame.jMenuSSHConfig"));
 		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
 
@@ -1732,7 +1719,7 @@ public class MainFrame extends JFrame
 
 		popupClients.add(popupWakeOnLan);
 
-		menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
+		JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
 		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItemFormatted(event);
@@ -2193,7 +2180,7 @@ public class MainFrame extends JFrame
 
 		treeClients.setFont(Globals.defaultFont);
 
-		scrollpaneTreeClients = new JScrollPane();
+		JScrollPane scrollpaneTreeClients = new JScrollPane();
 
 		scrollpaneTreeClients.getViewport().add(treeClients);
 		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -2227,7 +2214,7 @@ public class MainFrame extends JFrame
 			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT);
 		}
 
-		panelTreeClientSelection = new JPanel();
+		JPanel panelTreeClientSelection = new JPanel();
 		GroupLayout layoutPanelTreeClientSelection = new GroupLayout(panelTreeClientSelection);
 		panelTreeClientSelection.setLayout(layoutPanelTreeClientSelection);
 
@@ -2433,7 +2420,7 @@ public class MainFrame extends JFrame
 						GroupLayout.PREFERRED_SIZE));
 
 		setupIcons1();
-		iconPane1 = new JPanel();
+		JPanel iconPane1 = new JPanel();
 
 		GroupLayout layoutIconPane1 = new GroupLayout(iconPane1);
 		iconPane1.setLayout(layoutIconPane1);
