@@ -96,7 +96,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 		conStat = new ConnectionState();
 	}
 
-	private String makeRpcPath(OpsiMethodCall omc) {
+	private static String makeRpcPath(OpsiMethodCall omc) {
 		StringBuilder result = new StringBuilder("/rpc");
 
 		if (omc.getRpcPath() != null && !(omc.getRpcPath().isEmpty())) {
@@ -148,11 +148,11 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 		appendGETParameter(urlS, json);
 	}
 
-	private String produceJSONstring(OpsiMethodCall omc) {
+	private static String produceJSONstring(OpsiMethodCall omc) {
 		return omc.getJsonString();
 	}
 
-	private String produceJSONstring(List<OpsiMethodCall> omcList) {
+	private static String produceJSONstring(List<OpsiMethodCall> omcList) {
 		StringBuilder json = new StringBuilder("[");
 		for (int i = 0; i < omcList.size(); i++) {
 			json.append(omcList.get(i).getJsonString());

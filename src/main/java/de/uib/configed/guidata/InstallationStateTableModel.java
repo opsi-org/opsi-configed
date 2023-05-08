@@ -403,7 +403,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 	}
 
-	private String mixToVisualState(Map<String, String> visualStates, final String productId, final String mixinValue) {
+	private static String mixToVisualState(Map<String, String> visualStates, final String productId,
+			final String mixinValue) {
 		String oldValue = visualStates.get(productId);
 
 		String resultValue = oldValue;

@@ -1085,7 +1085,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	}
 
-	private void setTimestampRenderer(String classname, TableColumn col) {
+	private static void setTimestampRenderer(String classname, TableColumn col) {
 
 		if ("java.sql.Timestamp".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererDate());
@@ -1093,14 +1093,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	private void setBigDecimalRenderer(String classname, TableColumn col) {
+	private static void setBigDecimalRenderer(String classname, TableColumn col) {
 		if ("java.math.BigDecimal".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererCurrency());
 		}
 
 	}
 
-	private void setBooleanRenderer(String classname, TableColumn col) {
+	private static void setBooleanRenderer(String classname, TableColumn col) {
 		if ("java.lang.Boolean".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererByBoolean());
 		}

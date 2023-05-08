@@ -1601,7 +1601,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return m;
 	}
 
-	private Map<String, Boolean> filterMap(Map<String, Boolean> map0, Set<String> filterset) {
+	private static Map<String, Boolean> filterMap(Map<String, Boolean> map0, Set<String> filterset) {
 		HashMap<String, Boolean> result = new HashMap<>();
 
 		if (filterset == null) {
@@ -2284,12 +2284,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	}
 
-	private void clearProductEditing() {
+	private static void clearProductEditing() {
 		mainFrame.panelLocalbootProductSettings.clearEditing();
 		mainFrame.panelNetbootProductSettings.clearEditing();
 	}
 
-	private void clearListEditors() {
+	private static void clearListEditors() {
 		mainFrame.panelLocalbootProductSettings.clearListEditors();
 		mainFrame.panelNetbootProductSettings.clearListEditors();
 	}
@@ -3184,7 +3184,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private void clearSoftwareInfoPage() {
+	private static void clearSoftwareInfoPage() {
 		mainFrame.setSoftwareAuditNullInfo("");
 	}
 
@@ -3213,7 +3213,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private void clearLogPage() {
+	private static void clearLogPage() {
 		mainFrame.setLogfilePanel(new HashMap<>());
 	}
 

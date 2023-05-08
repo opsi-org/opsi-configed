@@ -1500,7 +1500,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return result;
 	}
 
-	private List<Object> buildWANConfigOptions(List<Object> readyObjects) {
+	private static List<Object> buildWANConfigOptions(List<Object> readyObjects) {
 		// NOT_WAN meta configs
 		Map<String, Object> item = createJSONBoolConfig(
 				CONFIG_KEY + "." + NOT_WAN_CONFIGURED_PARTKEY + "." + CONFIG_CLIENTD_EVENT_GUISTARTUP, true,
