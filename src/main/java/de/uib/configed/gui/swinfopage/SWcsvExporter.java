@@ -10,7 +10,7 @@ import de.uib.utilities.table.ExporterToCSV;
  */
 public class SWcsvExporter extends AbstractSWExporter {
 	JTable theTable;
-	ExporterToCSV exportTable;
+	private ExporterToCSV exportTable;
 
 	public SWcsvExporter() {
 		theTable = new JTable();

@@ -11,7 +11,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public class SwPdfExporter extends AbstractSWExporter {
 
 	JTable theTable;
-	ExporterToPDF exportTable;
+	private ExporterToPDF exportTable;
 	private boolean onlySelectedRows;
 
 	public SwPdfExporter() {
