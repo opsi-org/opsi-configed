@@ -188,7 +188,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	JLabel jLabelTopic;
 	int wLeftText;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 	ConfigedMain main;
 	String server;
 	JFrame rootFrame;

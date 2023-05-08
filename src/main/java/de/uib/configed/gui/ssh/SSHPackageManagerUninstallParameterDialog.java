@@ -53,7 +53,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private JButton jButtonDepotSelection;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	FDepotselectionList fDepotList;
 

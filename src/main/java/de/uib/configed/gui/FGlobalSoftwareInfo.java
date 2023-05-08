@@ -37,7 +37,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 	protected int keyCol;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	ControlPanelAssignToLPools myController;
 

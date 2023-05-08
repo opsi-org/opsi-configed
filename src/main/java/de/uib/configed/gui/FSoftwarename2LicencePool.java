@@ -67,7 +67,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	protected int keyCol;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	private ControlPanelAssignToLPools myController;
 

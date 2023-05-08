@@ -27,7 +27,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	PanelLicencesReconciliation thePanel;
 	GenTableModel modelLicencesReconciliation;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	boolean initialized;
 

@@ -16,7 +16,7 @@ public class ModulePermissionValue {
 			Map.entry("directory-connector", true), Map.entry("macos_agent", true), Map.entry("secureboot", true),
 			Map.entry("win-vhd", true), Map.entry("os_install_by_wlan", true));
 
-	AbstractExecutioner exec;
+	private AbstractExecutioner exec;
 
 	private ExtendedInteger maxClients;
 	private ExtendedDate expiresDate;

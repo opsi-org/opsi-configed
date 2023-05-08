@@ -106,7 +106,7 @@ public class SWAuditClientEntry {
 	protected List<String> software;
 	protected NavigableMap<String, Integer> software2Number;
 
-	AbstractPersistenceController controller;
+	private AbstractPersistenceController controller;
 
 	public SWAuditClientEntry(final List<String> keys, final List<String> values,
 			AbstractPersistenceController controller) {

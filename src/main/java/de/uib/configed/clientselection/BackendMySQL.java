@@ -34,7 +34,7 @@ public class BackendMySQL {
 	List<Map<String, List<Map<String, Object>>>> hwConfig;
 
 	// For the queries to the opsi-server
-	AbstractPersistenceController controller;
+	private AbstractPersistenceController controller;
 
 	public BackendMySQL(AbstractPersistenceController controller) {
 		this.controller = controller;

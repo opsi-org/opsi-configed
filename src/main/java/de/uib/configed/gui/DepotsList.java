@@ -25,7 +25,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 	Map<String, Map<String, Object>> depotInfo;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	public DepotsList(AbstractPersistenceController persist) {
 		this.persist = persist;

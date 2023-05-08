@@ -36,7 +36,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 	Map<String, String> requAfterMap;
 	Map<String, String> requDeinstallMap;
 
-	AbstractPersistenceController perCon;
+	private AbstractPersistenceController perCon;
 
 	static {
 		rowType = new ArrayList<>();

@@ -30,7 +30,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 	GenTableModel modelWindowsSoftwareIds;
 	GenTableModel modelLicencepools;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 	ConfigedMain mainController;
 
 	public ControlPanelLicencesUsage(AbstractPersistenceController persist, ConfigedMain mainController) {

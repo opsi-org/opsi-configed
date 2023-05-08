@@ -16,7 +16,7 @@ import de.uib.utilities.logging.Logging;
 public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	List<String> clients;
 	String productname;
-	AbstractPersistenceController persis;
+	private AbstractPersistenceController persis;
 	ConfigedMain mainController;
 
 	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, String[] clients,

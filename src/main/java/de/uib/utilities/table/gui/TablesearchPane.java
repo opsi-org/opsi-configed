@@ -78,7 +78,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	JLabel labelFilterMarkGap;
 
-	AbstractNavigationPanel navPane;
+	private AbstractNavigationPanel navPane;
 	PanelGenEditTable associatedPanel;
 	boolean withNavPane;
 

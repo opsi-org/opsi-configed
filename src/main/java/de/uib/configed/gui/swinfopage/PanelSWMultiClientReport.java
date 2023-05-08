@@ -28,7 +28,7 @@ public class PanelSWMultiClientReport extends JPanel {
 	public static final String FILENAME_PREFIX_DEFAULT = "report_";
 
 	JButton buttonStart;
-	ActionListener actionListenerForStart;
+	private ActionListener actionListenerForStart;
 
 	boolean withMsUpdates;
 	boolean withMsUpdates2;

@@ -10,7 +10,7 @@ public class HostUpdate implements UpdateCommand {
 	String objectId;
 	Map<String, Object> newdata;
 
-	AbstractPersistenceController persis;
+	private AbstractPersistenceController persis;
 
 	public HostUpdate(AbstractPersistenceController persis, Map<String, Object> newdata) {
 		super();

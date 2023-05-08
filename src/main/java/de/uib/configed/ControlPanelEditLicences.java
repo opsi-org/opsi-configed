@@ -38,7 +38,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	GenTableModel modelSoftwarelicences;
 	GenTableModel modelLicencecontracts;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 	ConfigedMain mainController;
 
 	public ControlPanelEditLicences(AbstractPersistenceController persist, ConfigedMain mainController) {

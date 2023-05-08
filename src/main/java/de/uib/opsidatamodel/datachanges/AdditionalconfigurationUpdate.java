@@ -8,7 +8,7 @@ public class AdditionalconfigurationUpdate implements UpdateCommand {
 	String objectId;
 	Map<?, ?> newdata;
 
-	AbstractPersistenceController persis;
+	private AbstractPersistenceController persis;
 
 	public AdditionalconfigurationUpdate(AbstractPersistenceController persis, String objectId, Map<?, ?> newdata) {
 		this.objectId = objectId;

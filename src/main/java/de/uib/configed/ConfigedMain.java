@@ -167,7 +167,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	// global table providers for licence management
 	TableProvider licencePoolTableProvider;
@@ -305,7 +305,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	ControlPanelEnterLicence controlPanelEnterLicence;
 	ControlPanelEditLicences controlPanelEditLicences;
-	AbstractControlMultiTablePanel controlPanelAssignToLPools;
+	private AbstractControlMultiTablePanel controlPanelAssignToLPools;
 	ControlPanelLicencesStatistics controlPanelLicencesStatistics;
 	ControlPanelLicencesUsage controlPanelLicencesUsage;
 	ControlPanelLicencesReconciliation controlPanelLicencesReconciliation;

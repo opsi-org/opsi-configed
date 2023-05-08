@@ -31,7 +31,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	GenTableModel modelLicencepools;
 	GenTableModel modelLicencecontracts;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 	private ConfigedMain configedMain;
 
 	public ControlPanelEnterLicence(AbstractPersistenceController persist, ConfigedMain configedMain) {

@@ -77,7 +77,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	JButton buttonCallChooserServerpath;
 	JFileChooser chooserServerpath;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 	ConfigedMain main;
 	JFrame rootFrame;
 

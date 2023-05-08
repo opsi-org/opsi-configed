@@ -48,7 +48,7 @@ public class FGroupActions extends SecondaryFrame {
 
 	List<String> associatedClients;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 	ConfigedMain main;
 
 	int hFirstGap = Globals.HFIRST_GAP;

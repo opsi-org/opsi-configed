@@ -166,8 +166,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 	}
 
-	AbstractDocumentListener descriptionFieldListener;
-	AbstractDocumentListener groupsEditFieldListener;
+	private AbstractDocumentListener descriptionFieldListener;
+	private AbstractDocumentListener groupsEditFieldListener;
 
 	protected ConfigedMain mainController;
 

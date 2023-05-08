@@ -9,7 +9,7 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 	String productname;
 	Map<?, ?> newdata;
 
-	AbstractPersistenceController persis;
+	private AbstractPersistenceController persis;
 
 	public ProductpropertiesUpdate(AbstractPersistenceController persis, String pcname, String productname,
 			Map<?, ?> newdata) {

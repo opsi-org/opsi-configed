@@ -19,7 +19,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 	PanelLicencesStatistics thePanel;
 	GenTableModel modelStatistics;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	boolean initialized;
 
