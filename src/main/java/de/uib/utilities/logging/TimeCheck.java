@@ -5,7 +5,7 @@ public class TimeCheck {
 	static int loglevel = Logging.LEVEL_NOTICE;
 	static final int MAX_SHOWN = 500;
 
-	Object caller;
+	private Object caller;
 	String mesg;
 	private long startmillis;
 

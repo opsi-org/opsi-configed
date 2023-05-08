@@ -2,7 +2,7 @@ package de.uib.utilities.savedstates;
 
 public abstract class AbstractSaveState {
 	String key;
-	Object defaultValue;
+	protected Object defaultValue;
 	SavedStates states;
 
 	AbstractSaveState() {

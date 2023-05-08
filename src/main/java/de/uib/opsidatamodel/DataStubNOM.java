@@ -65,7 +65,7 @@ public class DataStubNOM {
 	}
 	protected static Integer classCounter = 0;
 
-	OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
 	protected Map<String, Map<String, OpsiProductInfo>> product2versionInfo2infos;
 
