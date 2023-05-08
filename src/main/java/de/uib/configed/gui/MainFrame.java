@@ -476,7 +476,7 @@ public class MainFrame extends JFrame
 
 	private LicenseDisplayer licenseDisplayer;
 
-	static class GlassPane extends JComponent {
+	private static class GlassPane extends JComponent {
 		GlassPane() {
 			super();
 			Logging.debug(this, "glass pane initialized");

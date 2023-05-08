@@ -91,27 +91,18 @@ public class SWAuditClientEntry {
 		}
 	}
 
-	static long startmillis1stPartOfConstructor;
-	static long startmillis2ndPartOfConstructor;
-	static long endmillis1stPartOfConstructor;
-	static long endmillis2ndPartOfConstructor;
-	public static long summillis1stPartOfConstructor;
-	public static long summillis2ndPartOfConstructor;
+	private Integer swId;
+	private String swIdent;
+	private String lastModificationS;
 
-	protected Integer swId;
-	protected String swIdent;
-	protected String lastModificationS;
-
-	protected final Map<String, String> data;
-	protected List<String> software;
-	protected NavigableMap<String, Integer> software2Number;
+	private final Map<String, String> data;
+	private List<String> software;
+	private NavigableMap<String, Integer> software2Number;
 
 	private AbstractPersistenceController controller;
 
 	public SWAuditClientEntry(final List<String> keys, final List<String> values,
 			AbstractPersistenceController controller) {
-
-		startmillis1stPartOfConstructor = System.currentTimeMillis();
 
 		data = new HashMap<>();
 
@@ -123,17 +114,8 @@ public class SWAuditClientEntry {
 		this.controller = controller;
 		this.software = controller.getSoftwareList();
 		this.software2Number = controller.getSoftware2Number();
-		endmillis1stPartOfConstructor = System.currentTimeMillis();
-		summillis1stPartOfConstructor = summillis1stPartOfConstructor
-				+ (endmillis1stPartOfConstructor - startmillis1stPartOfConstructor);
 
-		startmillis2ndPartOfConstructor = System.currentTimeMillis();
 		produceSWid();
-		endmillis2ndPartOfConstructor = System.currentTimeMillis();
-
-		summillis2ndPartOfConstructor = summillis2ndPartOfConstructor
-				+ (endmillis2ndPartOfConstructor - startmillis2ndPartOfConstructor);
-
 	}
 
 	public SWAuditClientEntry(final Map<String, Object> m, AbstractPersistenceController controller) {

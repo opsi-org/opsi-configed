@@ -3,8 +3,8 @@ package de.uib.utilities;
 import java.util.Date;
 
 public class ExtendedDate {
-	static final String INFINITE_IMPORT = "never";
-	static final String STRING_INFINITE = "INFINITE";
+	private static final String INFINITE_IMPORT = "never";
+	private static final String STRING_INFINITE = "INFINITE";
 
 	public static final ExtendedDate INFINITE = new ExtendedDate(STRING_INFINITE);
 	public static final ExtendedDate ZERO = new ExtendedDate("1900-01-01 00:00:0");

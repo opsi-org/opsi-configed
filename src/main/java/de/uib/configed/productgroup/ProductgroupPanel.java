@@ -75,12 +75,12 @@ import de.uib.utilities.table.gui.TablesearchPane;
 
 public class ProductgroupPanel extends JPanel implements ListSelectionListener, ActionListener, ItemListener {
 
-	static final String NO_GROUP_ID = Configed.getResourceValue("GroupPanel.NO_GROUP_ID");
-	static final String SAVE_GROUP_ID = Configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
-	static final String NO_GROUP_DESCRIPTION = Configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
-	static final String EMPTIED_GROUPID = "";
-	static final String TEXT_SAVE = Configed.getResourceValue("GroupPanel.TEXT_SAVE");
-	static final String TEXT_DELETE = Configed.getResourceValue("GroupPanel.TEXT_DELETE");
+	private static final String NO_GROUP_ID = Configed.getResourceValue("GroupPanel.NO_GROUP_ID");
+	private static final String SAVE_GROUP_ID = Configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
+	private static final String NO_GROUP_DESCRIPTION = Configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
+	private static final String EMPTIED_GROUPID = "";
+	private static final String TEXT_SAVE = Configed.getResourceValue("GroupPanel.TEXT_SAVE");
+	private static final String TEXT_DELETE = Configed.getResourceValue("GroupPanel.TEXT_DELETE");
 
 	private static final int MIN_FIELD_WIDTH = 30;
 	private static final int MAX_COMBO_WIDTH = 200;

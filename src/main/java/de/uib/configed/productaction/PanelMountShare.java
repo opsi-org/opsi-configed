@@ -32,7 +32,7 @@ import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 
 public class PanelMountShare extends JPanel {
-	static List<PanelMountShare> instances = new ArrayList<>();
+	private static List<PanelMountShare> instances = new ArrayList<>();
 
 	private static final int FIRST_LABEL_WIDTH = Globals.FIRST_LABEL_WIDTH;
 

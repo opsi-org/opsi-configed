@@ -26,7 +26,7 @@ import de.uib.utilities.logging.Logging;
 public class MapSource implements TableSource {
 	protected static final String ROW_COUNTER_NAME = "rowcounter";
 
-	static final Map<String, Object> class2defaultValue;
+	private static final Map<String, Object> class2defaultValue;
 	static {
 		class2defaultValue = new HashMap<>();
 		class2defaultValue.put("java.lang.Boolean", false);

@@ -75,7 +75,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	protected boolean trustAlways;
 	private FEditRecord newPasswordDialog;
 
-	static class JSONCommunicationException extends Exception {
+	private static class JSONCommunicationException extends Exception {
 		JSONCommunicationException(String message) {
 			super(message);
 		}

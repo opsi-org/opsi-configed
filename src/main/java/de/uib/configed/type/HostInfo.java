@@ -16,7 +16,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
 public class HostInfo {
-	static int callCounter;
+	private static int callCounter;
 	private static Map<String, Integer> id2InstanceNumber;
 
 	// ---
@@ -95,8 +95,8 @@ public class HostInfo {
 
 	public static final String HOST_SUB_CLASS_TAG_OPSI_CLIENT_PROTOTYPE = "OpsiPrototype";
 
-	static final String NOT_LEGAL_CHARS_0 = ",:!@#$%^&',(){} ";
-	static final Set<Character> notLegalChars = new HashSet<>();
+	private static final String NOT_LEGAL_CHARS_0 = ",:!@#$%^&',(){} ";
+	private static final Set<Character> notLegalChars = new HashSet<>();
 	static {
 		for (int i = 0; i < NOT_LEGAL_CHARS_0.length(); i++) {
 			notLegalChars.add(NOT_LEGAL_CHARS_0.charAt(i));

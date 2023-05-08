@@ -21,15 +21,15 @@ public final class Messages {
 	private static final String BUNDLE_NAME = "de/uib/messages/configed";
 	private static final String LOCALISATIONS_CONF = "valid_localisations.conf";
 
-	static List<LocaleRepresentation> existingLocales;
-	static List<String> existingLocalesNames;
-	static Map<String, String> localeInfo;
-	static String selectedLocaleString;
-	static Locale myLocale;
+	private static List<LocaleRepresentation> existingLocales;
+	private static List<String> existingLocalesNames;
+	private static Map<String, String> localeInfo;
+	private static String selectedLocaleString;
+	private static Locale myLocale;
 	public static ResourceBundle messagesBundle;
 	public static ResourceBundle messagesEnBundle;
-	static List<String> myLocaleCharacteristics;
-	static List<String> myLocaleCharacteristicsEN;
+	private static List<String> myLocaleCharacteristics;
+	private static List<String> myLocaleCharacteristicsEN;
 	private static final List<String> availableThemes = Arrays.asList("Light", "Dark");
 	private static String selectedTheme = availableThemes.get(0);
 

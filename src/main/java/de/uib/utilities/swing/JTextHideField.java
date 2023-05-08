@@ -25,7 +25,7 @@ public class JTextHideField extends JPanel {
 	private boolean hiddenMode;
 	private boolean multiValue;
 
-	static class FixedDocument extends PlainDocument {
+	private static class FixedDocument extends PlainDocument {
 
 		private String fixed = "xxx";
 

@@ -378,7 +378,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return hostInfoCollections;
 	}
 
-	static Boolean interpretAsBoolean(Object ob, Boolean defaultValue) {
+	private static Boolean interpretAsBoolean(Object ob, Boolean defaultValue) {
 		if (ob == null) {
 			return defaultValue;
 		}

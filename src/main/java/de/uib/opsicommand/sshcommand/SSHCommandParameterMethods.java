@@ -79,7 +79,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	private static final String BRACKETS_NONE = " x ";
 	private static final String BRACKETS_SQUARE = "[x]";
 
-	static final Map<String, String> methods = new HashMap<>();
+	private static final Map<String, String> methods = new HashMap<>();
 
 	private ConfigedMain main;
 
