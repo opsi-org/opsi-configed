@@ -22,7 +22,7 @@ import de.uib.utilities.thread.WaitCursor;
 
 public final class Logging {
 
-	public static String logDirectoryName;
+	public static final String logDirectoryName;
 	private static String logFilenameInUse;
 
 	private static String logfileDelimiter = "configed";
@@ -133,7 +133,7 @@ public final class Logging {
 		}
 	}
 
-	private static final synchronized void initLogFile() {
+	private static synchronized void initLogFile() {
 		// Try to initialize only once!
 		logFileInitialized = true;
 		String logFilename = "";
@@ -195,7 +195,7 @@ public final class Logging {
 		}
 	}
 
-	public static final synchronized void init() {
+	public static synchronized void init() {
 		initLogFile();
 	}
 
