@@ -23,11 +23,10 @@ import javax.swing.table.AbstractTableModel;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.DataChangedObserver;
-import de.uib.utilities.DataChangedSubject;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
-public class MapTableModel extends AbstractTableModel implements DataChangedSubject {
+public class MapTableModel extends AbstractTableModel {
 
 	public static final List<?> nullLIST = new ArrayList<>();
 	static {
@@ -488,8 +487,6 @@ public class MapTableModel extends AbstractTableModel implements DataChangedSubj
 		setValueAt(value, row, 1);
 	}
 
-	// implementation of DataChangedSubject
-	@Override
 	public void registerDataChangedObserver(DataChangedObserver o) {
 		observers.add(o);
 	}
