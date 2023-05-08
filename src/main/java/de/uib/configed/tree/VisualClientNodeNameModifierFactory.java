@@ -1,7 +1,7 @@
 package de.uib.configed.tree;
 
 public class VisualClientNodeNameModifierFactory {
-	VisualClientNodeNameModifier mod;
+	private VisualClientNodeNameModifier mod;
 
 	private static class SuppressTerminatingUnderscores implements VisualClientNodeNameModifier {
 		@Override

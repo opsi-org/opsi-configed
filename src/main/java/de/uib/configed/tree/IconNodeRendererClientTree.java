@@ -15,7 +15,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 	protected ConfigedMain main;
 
-	VisualClientNodeNameModifier modifier = new VisualClientNodeNameModifierFactory().getModifier();
+	private VisualClientNodeNameModifier modifier = new VisualClientNodeNameModifierFactory().getModifier();
 
 	public IconNodeRendererClientTree(ConfigedMain main) {
 		this.main = main;
