@@ -280,7 +280,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private JTableSelectionPanel selectionPanel;
 
-	ClientTree treeClients;
+	private ClientTree treeClients;
 
 	private Map<String, Map<String, String>> productGroups;
 	private Map<String, Set<String>> productGroupMembers;
@@ -300,11 +300,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private FGroupActions groupActionFrame;
 	private FProductActions productActionFrame;
 
-	ControlPanelEnterLicence controlPanelEnterLicence;
-	ControlPanelEditLicences controlPanelEditLicences;
-	ControlPanelLicencesStatistics controlPanelLicencesStatistics;
-	ControlPanelLicencesUsage controlPanelLicencesUsage;
-	ControlPanelLicencesReconciliation controlPanelLicencesReconciliation;
+	private ControlPanelEnterLicence controlPanelEnterLicence;
+	private ControlPanelEditLicences controlPanelEditLicences;
+	private ControlPanelLicencesStatistics controlPanelLicencesStatistics;
+	private ControlPanelLicencesUsage controlPanelLicencesUsage;
+	private ControlPanelLicencesReconciliation controlPanelLicencesReconciliation;
 
 	private List<AbstractControlMultiTablePanel> allControlMultiTablePanels;
 

@@ -16,8 +16,8 @@ import de.uib.utilities.swing.CellRendererByIndex;
 public class DynamicCellEditor extends DefaultCellEditor {
 
 	private JComboBox<String> cc;
-	ComboBoxModeller cbm;
-	ComboBoxModel<String> nullModel;
+	private ComboBoxModeller cbm;
+	private ComboBoxModel<String> nullModel;
 
 	public DynamicCellEditor(JComboBox<String> cc, ComboBoxModeller cbm, Set<String> knownKeys) {
 		super(cc);

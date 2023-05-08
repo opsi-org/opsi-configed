@@ -37,7 +37,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 	private AbstractPersistenceController persist;
 
-	ControlPanelAssignToLPools myController;
+	private ControlPanelAssignToLPools myController;
 
 	public FGlobalSoftwareInfo(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(owner, Configed.getResourceValue("FGlobalSoftwareInfo.title"), false,

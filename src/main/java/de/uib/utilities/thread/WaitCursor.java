@@ -21,8 +21,8 @@ public class WaitCursor {
 
 	private boolean ready;
 
-	Cursor saveCursor;
-	Component c;
+	private Cursor saveCursor;
+	private Component c;
 	private String callLocation;
 
 	public WaitCursor() {

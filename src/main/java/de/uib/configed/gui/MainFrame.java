@@ -434,9 +434,9 @@ public class MainFrame extends JFrame
 
 	private JLabel labelHost;
 	private JLabel labelHostID;
-	CheckedLabel cbInstallByShutdown;
-	CheckedLabel cbUefiBoot;
-	CheckedLabel cbWANConfig;
+	private CheckedLabel cbInstallByShutdown;
+	private CheckedLabel cbUefiBoot;
+	private CheckedLabel cbWANConfig;
 
 	private JTextEditorField jTextFieldDescription;
 	private JTextEditorField jTextFieldInventoryNumber;
@@ -455,7 +455,7 @@ public class MainFrame extends JFrame
 
 	private DepotListPresenter depotListPresenter;
 
-	ClientTree treeClients;
+	private ClientTree treeClients;
 	private JScrollPane scrollpaneTreeClients;
 
 	private JPanel clientPane;

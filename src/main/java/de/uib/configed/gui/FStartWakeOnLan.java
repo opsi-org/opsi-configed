@@ -59,7 +59,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	private IconButton buttonRefreshTime;
 	private IconButton buttonSetNew;
 
-	Calendar cal;
+	private Calendar cal;
 	private long startActionMillis;
 	private long waitingMillis;
 
@@ -73,7 +73,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	private String scheduleTitle;
 
-	ConfigedMain main;
+	private ConfigedMain main;
 
 	public FStartWakeOnLan(String title, ConfigedMain main) {
 		super(null, title, false, new String[] { Configed.getResourceValue("FStartWakeOnLan.cancel"),

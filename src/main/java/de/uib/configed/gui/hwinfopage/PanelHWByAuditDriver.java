@@ -34,7 +34,7 @@ public class PanelHWByAuditDriver extends JPanel {
 	protected String title;
 
 	private FDriverUpload fDriverUpload;
-	ConfigedMain main;
+	private ConfigedMain main;
 
 	public PanelHWByAuditDriver(String title, ConfigedMain main) {
 		this.title = title;

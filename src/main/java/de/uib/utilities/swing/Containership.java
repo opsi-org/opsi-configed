@@ -15,7 +15,7 @@ import de.uib.utilities.logging.Logging;
 
 public class Containership {
 
-	Container theContainer;
+	private Container theContainer;
 
 	public Containership(Container conti) {
 		theContainer = conti;

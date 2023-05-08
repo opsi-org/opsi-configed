@@ -18,7 +18,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
  * @author roeder
  */
 public class PanelRegisteredSoftware extends PanelGenEditTable {
-	ControlPanelAssignToLPools controller;
+	private ControlPanelAssignToLPools controller;
 
 	private int[] saveRowSelection;
 

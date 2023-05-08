@@ -1,5 +1,5 @@
 /**
-	ColoredTableCellRendererByIndex.java
+	private ColoredTableCellRendererByIndex.java
 	
 	utility class for PanelProductSettings
 	

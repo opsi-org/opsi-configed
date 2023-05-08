@@ -73,9 +73,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	private String driverDirectory = "";
 
 	private boolean stateDriverPath;
-	CheckedLabel driverPathChecked;
+	private CheckedLabel driverPathChecked;
 	private boolean stateServerPath;
-	CheckedLabel serverPathChecked;
+	private CheckedLabel serverPathChecked;
 
 	private static class RadioButtonIntegrationType extends JRadioButton {
 		private String subdir;
@@ -173,7 +173,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	private int wLeftText;
 
 	private AbstractPersistenceController persist;
-	ConfigedMain main;
+	private ConfigedMain main;
 	private String server;
 	private JFrame rootFrame;
 

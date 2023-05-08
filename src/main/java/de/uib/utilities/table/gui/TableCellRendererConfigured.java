@@ -11,11 +11,11 @@ import de.uib.configed.ConfigedMain;
 
 public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 	private Font f;
-	Color color;
-	Color bg1;
-	Color bg2;
-	Color selectionBackground;
-	Color selectionEditingBackground;
+	private Color color;
+	private Color bg1;
+	private Color bg2;
+	private Color selectionBackground;
+	private Color selectionEditingBackground;
 
 	public TableCellRendererConfigured(Font f, Color c, Color bg1, Color bg2, Color selectionBackground,
 			Color selectionEditingBackground) {

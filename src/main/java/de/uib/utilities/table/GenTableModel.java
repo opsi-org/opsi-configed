@@ -77,7 +77,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	protected boolean markCursorRow;
 	protected int colMarkCursorRow = -1;
 
-	CursorrowObserved cursorrowObservable;
+	private CursorrowObserved cursorrowObservable;
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
 			int[] finalColumns, TableModelListener l, List<TableEditItem> updates) {

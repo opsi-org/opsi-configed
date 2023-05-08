@@ -125,7 +125,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	protected Set<String> directlyAllowedGroups;
 
-	ConfigedMain configedMain;
+	private ConfigedMain configedMain;
 
 	static {
 		ALL_CLIENTS_NAME = Configed.getResourceValue("ClientTree.ALLname");

@@ -141,16 +141,16 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private TableCellRenderer lastActionTableCellRenderer;
 	private TableCellRenderer actionResultTableCellRenderer;
 	private TableCellRenderer actionRequestTableCellRenderer;
-	ColoredTableCellRendererByIndex priorityclassTableCellRenderer;
-	ColoredTableCellRenderer productsequenceTableCellRenderer;
-	ColoredTableCellRenderer productversionTableCellRenderer;
-	ColoredTableCellRenderer packageversionTableCellRenderer;
+	private ColoredTableCellRendererByIndex priorityclassTableCellRenderer;
+	private ColoredTableCellRenderer productsequenceTableCellRenderer;
+	private ColoredTableCellRenderer productversionTableCellRenderer;
+	private ColoredTableCellRenderer packageversionTableCellRenderer;
 
-	ColoredTableCellRenderer versionInfoTableCellRenderer;
-	ColoredTableCellRenderer installationInfoTableCellRenderer;
+	private ColoredTableCellRenderer versionInfoTableCellRenderer;
+	private ColoredTableCellRenderer installationInfoTableCellRenderer;
 
-	ColoredTableCellRenderer positionTableCellRenderer;
-	ColoredTableCellRenderer lastStateChangeTableCellRenderer;
+	private ColoredTableCellRenderer positionTableCellRenderer;
+	private ColoredTableCellRenderer lastStateChangeTableCellRenderer;
 
 	protected Map<String, Boolean> productDisplayFields;
 

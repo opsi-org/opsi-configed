@@ -132,7 +132,7 @@ public class ControllerHWinfoColumnConfiguration {
 		}
 	}
 
-	ConfigedMain main;
+	private ConfigedMain main;
 	protected AbstractPersistenceController persist;
 
 	public ControllerHWinfoColumnConfiguration(ConfigedMain main, AbstractPersistenceController persist) {

@@ -29,7 +29,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 	private GenTableModel modelLicencepools;
 
 	private AbstractPersistenceController persist;
-	ConfigedMain mainController;
+	private ConfigedMain mainController;
 
 	public ControlPanelLicencesUsage(AbstractPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelLicencesUsage(this);

@@ -33,7 +33,7 @@ public class SSHConnectTerminal extends SSHConnect {
 	public static final String SOME_COMMAND = "/bin/bash";
 
 	private Session session;
-	ChannelShell channel;
+	private ChannelShell channel;
 	private SSHConnectionTerminalDialog dialog;
 	private KeyListener inputKeyListener;
 	private ActionListener connectionKeyListener;

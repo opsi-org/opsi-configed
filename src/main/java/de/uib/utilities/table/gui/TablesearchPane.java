@@ -66,15 +66,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	private JComboBox<String> comboSearchFields;
 	private JComboBoxToolTip comboSearchFieldsMode;
 
-	CheckedLabel markReload;
+	private CheckedLabel markReload;
 
 	private JLabel labelSearch;
-	CheckedLabel checkmarkSearch;
-	CheckedLabel checkmarkSearchProgressive;
+	private CheckedLabel checkmarkSearch;
+	private CheckedLabel checkmarkSearchProgressive;
 	private JLabel labelSearchMode;
-	CheckedLabel filtermark;
-	CheckedLabel checkmarkAllColumns;
-	CheckedLabel checkmarkFullText;
+	private CheckedLabel filtermark;
+	private CheckedLabel checkmarkAllColumns;
+	private CheckedLabel checkmarkFullText;
 
 	private JLabel labelFilterMarkGap;
 

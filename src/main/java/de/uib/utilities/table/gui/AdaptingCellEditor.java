@@ -14,8 +14,8 @@ import de.uib.utilities.swing.ColoredListCellRenderer;
 public class AdaptingCellEditor extends DefaultCellEditor {
 
 	private JComboBox<String> cc;
-	ComboBoxModeller cbm;
-	ComboBoxModel<String> nullModel;
+	private ComboBoxModeller cbm;
+	private ComboBoxModel<String> nullModel;
 
 	public AdaptingCellEditor(JComboBox<String> cc, ComboBoxModeller cbm) {
 		super(cc);

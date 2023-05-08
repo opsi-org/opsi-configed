@@ -69,7 +69,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private JFileChooser chooserServerpath;
 
 	private AbstractPersistenceController persist;
-	ConfigedMain main;
+	private ConfigedMain main;
 	private JFrame rootFrame;
 
 	public PanelInstallOpsiPackage(ConfigedMain main, AbstractPersistenceController persist, JFrame root) {

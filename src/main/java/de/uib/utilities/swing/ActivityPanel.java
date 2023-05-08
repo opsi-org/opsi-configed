@@ -40,7 +40,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 	/** an List for panels */
 	private ArrayList<JPanel> partPanels = new ArrayList<>();
 
-	Color[] colors;
+	private Color[] colors;
 
 	/**
 	 * call the "initGui" method

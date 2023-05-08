@@ -47,7 +47,7 @@ public class FGroupActions extends SecondaryFrame {
 	private List<String> associatedClients;
 
 	private AbstractPersistenceController persist;
-	ConfigedMain main;
+	private ConfigedMain main;
 
 	private int firstLabelWidth = Globals.BUTTON_WIDTH;
 

@@ -35,7 +35,7 @@ public class PanelMountShare extends JPanel {
 
 	private static final int FIRST_LABEL_WIDTH = Globals.FIRST_LABEL_WIDTH;
 
-	ConfigedMain main;
+	private ConfigedMain main;
 	private JFrame rootFrame;
 
 	private JButton buttonMountShare;

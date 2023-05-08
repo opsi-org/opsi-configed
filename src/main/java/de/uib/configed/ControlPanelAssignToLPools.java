@@ -61,7 +61,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private TableModelFilterCondition windowsSoftwareFilterConditionDontShowAssociatedToOtherPool;
 
-	ConfigedMain mainController;
+	private ConfigedMain mainController;
 
 	public AbstractPersistenceController persist;
 

@@ -91,7 +91,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 	protected boolean withPopup;
 
-	ConfigedMain main;
+	private ConfigedMain main;
 
 	public PanelHWInfo(ConfigedMain main) {
 		this(true, main);

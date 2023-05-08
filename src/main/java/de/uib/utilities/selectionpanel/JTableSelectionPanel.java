@@ -71,11 +71,11 @@ public class JTableSelectionPanel extends JPanel
 	private JTable table;
 
 	private DefaultListSelectionModel selectionmodel;
-	ConfigedMain main;
+	private ConfigedMain main;
 	private List<RowSorter.SortKey> primaryOrderingKeys;
 
-	CheckedLabel checkmarkSearch;
-	CheckedLabel checkmarkSearchProgressive;
+	private CheckedLabel checkmarkSearch;
+	private CheckedLabel checkmarkSearchProgressive;
 
 	private JTextField fieldSearch;
 	private JComboBox<String> comboSearch;

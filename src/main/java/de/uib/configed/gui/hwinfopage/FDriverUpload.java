@@ -17,7 +17,7 @@ public class FDriverUpload extends SecondaryFrame {
 	private PanelDriverUpload panelDriverUpload;
 
 	private AbstractPersistenceController persist;
-	ConfigedMain main;
+	private ConfigedMain main;
 
 	public FDriverUpload(ConfigedMain main, AbstractPersistenceController persist) {
 		super();

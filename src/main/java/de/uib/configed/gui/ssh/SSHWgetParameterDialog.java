@@ -48,7 +48,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	private JComboBox<Integer> jComboBoxVerbosity;
 	private JTextField jTextFieldFreeInput;
 
-	CommandWget commandWget = new CommandWget();
+	private CommandWget commandWget = new CommandWget();
 	private SSHCompletionComboButton completion = new SSHCompletionComboButton();
 	private SSHWgetAuthenticationPanel wgetAuthPanel;
 

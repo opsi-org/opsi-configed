@@ -17,7 +17,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	private List<String> clients;
 	private String productname;
 	private AbstractPersistenceController persis;
-	ConfigedMain mainController;
+	private ConfigedMain mainController;
 
 	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, String[] clients,
 			String productname) {

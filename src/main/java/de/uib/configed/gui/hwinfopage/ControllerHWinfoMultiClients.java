@@ -47,7 +47,7 @@ public class ControllerHWinfoMultiClients {
 	public PanelGenEditTable panel;
 	private GenTableModel model;
 
-	ConfigedMain main;
+	private ConfigedMain main;
 	protected AbstractPersistenceController persist;
 	private TableModelFilter tableModelFilter;
 

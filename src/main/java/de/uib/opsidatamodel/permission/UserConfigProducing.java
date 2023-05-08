@@ -21,9 +21,9 @@ public class UserConfigProducing {
 	private boolean notUsingDefaultUser;
 
 	private String configserver;
-	Collection<String> existingDepots;
-	Collection<String> existingHostgroups;
-	Collection<String> existingProductgroups;
+	private Collection<String> existingDepots;
+	private Collection<String> existingHostgroups;
+	private Collection<String> existingProductgroups;
 
 	private Map<String, List<Object>> serverconfigValuesMap;
 	private Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
