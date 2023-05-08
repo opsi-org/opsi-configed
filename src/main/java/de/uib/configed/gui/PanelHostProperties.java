@@ -15,7 +15,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
@@ -40,7 +39,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 	}
 
 	private void buildPanel() {
-		label = new JLabel(Configed.getResourceValue("MainFrame.jLabel_Config"));
+		label = new JLabel();
 		combo = new JComboBox<>();
 		combo.setVisible(false);
 		combo.addItemListener(this);

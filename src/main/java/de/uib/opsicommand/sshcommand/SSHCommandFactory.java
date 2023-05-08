@@ -89,7 +89,7 @@ public final class SSHCommandFactory {
 
 	public static final String CONNECTED = Configed.getResourceValue("SSHConnection.connected");
 	public static final String CONNECTION_NOT_ALLOWED = Configed
-			.getResourceValue("SSHConnection.CONNECTION_NOT_ALLOWED");
+			.getResourceValue("SSHConnection.connected_not_allowed");
 	public static final String UNKNOWN = Configed.getResourceValue("SSHConnection.unknown");
 	public static final String NOT_CONNECTED = Configed.getResourceValue("SSHConnection.not_connected");
 

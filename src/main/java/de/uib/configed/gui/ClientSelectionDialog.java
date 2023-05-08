@@ -468,16 +468,12 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.dataComponent = new JLabel();
 		result.dataComponent.setMaximumSize(new Dimension(result.dataComponent.getMaximumSize().width,
 				result.dataComponent.getPreferredSize().height));
-		result.openParenthesis = new IconAsButton(
-				"" /* configed.getResourceValue("ClientSelectionDialog.parenthesisOpen") */,
-				"images/parenthesis_open_disabled.png", "images/parenthesis_open_over.png",
-				"images/parenthesis_open.png", null);
+		result.openParenthesis = new IconAsButton("", "images/parenthesis_open_disabled.png",
+				"images/parenthesis_open_over.png", "images/parenthesis_open.png", null);
 		result.openParenthesis.setActivated(true);
 		result.openParenthesis.setVisible(false);
-		result.closeParenthesis = new IconAsButton(
-				"" /* configed.getResourceValue("ClientSelectionDialog.parenthesisClose") */,
-				"images/parenthesis_close_disabled.png", "images/parenthesis_close_over.png",
-				"images/parenthesis_close.png", null);
+		result.closeParenthesis = new IconAsButton("", "images/parenthesis_close_disabled.png",
+				"images/parenthesis_close_over.png", "images/parenthesis_close.png", null);
 		result.closeParenthesis.setActivated(true);
 		result.closeParenthesis.setVisible(false);
 
