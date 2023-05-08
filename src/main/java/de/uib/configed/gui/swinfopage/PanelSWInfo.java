@@ -111,7 +111,7 @@ public class PanelSWInfo extends JPanel {
 
 	JCheckBox checkWithMsUpdates2;
 
-	final Pattern patternWithKB = Pattern.compile("\\{.*\\}\\p{Punct}kb.*", Pattern.UNICODE_CHARACTER_CLASS);
+	private final Pattern patternWithKB = Pattern.compile("\\{.*\\}\\p{Punct}kb.*", Pattern.UNICODE_CHARACTER_CLASS);
 
 	TableModelFilterCondition filterConditionWithMsUpdates2 = new TableModelFilterCondition() {
 		@Override

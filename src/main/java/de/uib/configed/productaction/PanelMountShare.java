@@ -44,7 +44,7 @@ public class PanelMountShare extends JPanel {
 	JLabel mountShareLabel;
 	JLabel mountShareDescriptionLabel;
 
-	final boolean isWindows;
+	private final boolean isWindows;
 
 	private boolean smbMounted;
 

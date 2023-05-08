@@ -29,7 +29,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	Set<String> keySet;
 	Object[] keyArray;
-	final Object[] zeroArray = new Object[] {};
+	private final Object[] zeroArray = new Object[] {};
 
 	Map<String, String> requMap;
 	Map<String, String> requBeforeMap;

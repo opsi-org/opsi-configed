@@ -22,7 +22,7 @@ import de.uib.utilities.swing.ClippedTitleTabbedPane;
 public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	LogPane[] textPanes;
 	String[] idents;
-	final List<String> identsList;
+	private final List<String> identsList;
 
 	protected JFileChooser chooser;
 	protected File chooserDirectory;

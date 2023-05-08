@@ -18,7 +18,7 @@ import de.uib.utilities.table.ListCellOptions;
 /*
 	ListModelProducerForDatamap 
 	produces list models based on keys (given in column 0 of a table) 
-	for which data exist (to be placed in column 1 of the table)
+	private for which data exist (to be placed in column 1 of the table)
 */
 
 public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProducer<O> {

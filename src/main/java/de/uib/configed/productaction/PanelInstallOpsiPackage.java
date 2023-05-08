@@ -70,7 +70,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private boolean smbMounted;
 	PanelMountShare panelMountShare;
 
-	final boolean isWindows;
+	private final boolean isWindows;
 
 	// server path finding
 	JTextField fieldServerPath;
