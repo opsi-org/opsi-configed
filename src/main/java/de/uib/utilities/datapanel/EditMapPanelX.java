@@ -59,10 +59,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private JScrollPane jScrollPane;
 	private JTable table;
 
-	TableColumn editableColumn;
-	TableCellEditor theCellEditor;
+	private TableColumn editableColumn;
+	private TableCellEditor theCellEditor;
 	private JComboBox<?> editorfield;
-	TableCellEditor defaultCellEditor;
+	private TableCellEditor defaultCellEditor;
 
 	private ListModelProducer<String> modelProducer;
 
@@ -75,7 +75,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	private JMenuItem popupItemAddStringListEntry;
 	private JMenuItem popupItemAddBooleanListEntry;
 
-	ToolTipManager ttm;
+	private ToolTipManager ttm;
 
 	protected class RemovingSpecificHandler extends AbstractPropertyHandler {
 

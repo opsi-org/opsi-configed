@@ -55,16 +55,16 @@ public class ControllerHWinfoMultiClients {
 	private List<String> columnNames;
 	private List<String> classNames;
 
-	TreeSet<Object> theFilterSet;
+	private TreeSet<Object> theFilterSet;
 
 	private String[] hosts;
 	ConfigedMain main;
 	protected AbstractPersistenceController persist;
-	TableModelFilter tableModelFilter;
+	private TableModelFilter tableModelFilter;
 
 	private SecondaryFrame fTable;
 
-	TableModelFilterCondition filterConditionHwForSelectedHosts = new TableModelFilterCondition() {
+	private TableModelFilterCondition filterConditionHwForSelectedHosts = new TableModelFilterCondition() {
 		private Set<Object> filter;
 
 		@Override

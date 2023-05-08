@@ -13,7 +13,7 @@ import java.util.List;
 import de.uib.utilities.logging.Logging;
 
 public class TableModelFilter {
-	TableModelFilterCondition condition;
+	private TableModelFilterCondition condition;
 	protected boolean inverted;
 	protected boolean inUse;
 

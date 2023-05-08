@@ -43,7 +43,7 @@ if several products are selected:
 if several products with contradicting dependencies are set by one action
 	a warning is issued
 
-	There is no warning if an existing setting is reversed by a second action
+	private There is no warning if an existing setting is reversed by a second action
 
 
 local cancel button (not implemented)

@@ -399,7 +399,7 @@ public class MainFrame extends JFrame
 	public PanelProductProperties panelProductProperties;
 
 	private PanelHWInfo showHardwareLogVersion2;
-	TitledPanel showHardwareLogNotFound;
+	private TitledPanel showHardwareLogNotFound;
 	public ControllerHWinfoMultiClients controllerHWinfoMultiClients;
 	private JPanel showHardwareLogMultiClientReport;
 	private JPanel showHardwareLogParentOfNotFoundPanel;

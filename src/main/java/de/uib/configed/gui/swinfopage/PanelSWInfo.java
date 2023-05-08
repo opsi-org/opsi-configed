@@ -94,7 +94,7 @@ public class PanelSWInfo extends JPanel {
 
 	private int indexOfColWindowsSoftwareID;
 
-	TableModelFilterCondition filterConditionWithMsUpdates = new TableModelFilterCondition() {
+	private TableModelFilterCondition filterConditionWithMsUpdates = new TableModelFilterCondition() {
 		@Override
 		public void setFilter(Set<Object> filter) {
 			/* Not needed */}
@@ -113,7 +113,7 @@ public class PanelSWInfo extends JPanel {
 
 	private final Pattern patternWithKB = Pattern.compile("\\{.*\\}\\p{Punct}kb.*", Pattern.UNICODE_CHARACTER_CLASS);
 
-	TableModelFilterCondition filterConditionWithMsUpdates2 = new TableModelFilterCondition() {
+	private TableModelFilterCondition filterConditionWithMsUpdates2 = new TableModelFilterCondition() {
 		@Override
 		public void setFilter(Set<Object> filter) {
 			/* Not needed */}

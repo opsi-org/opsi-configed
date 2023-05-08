@@ -18,7 +18,7 @@ import de.uib.configed.ConfigedMain.LicencesTabStatus;
 public class TabbedPaneX extends JPanel {
 	private JTabbedPane jTabbedPaneMain;
 
-	TabController controller;
+	private TabController controller;
 
 	private List<LicencesTabStatus> tabOrder;
 

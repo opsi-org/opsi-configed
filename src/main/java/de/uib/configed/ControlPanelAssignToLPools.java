@@ -57,9 +57,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	private GenTableModel modelWindowsSoftwareIds;
 
 	// we replace the filter from GenTableModel
-	TableModelFilterCondition windowsSoftwareFilterConditonShowOnlySelected;
+	private TableModelFilterCondition windowsSoftwareFilterConditonShowOnlySelected;
 
-	TableModelFilterCondition windowsSoftwareFilterConditionDontShowAssociatedToOtherPool;
+	private TableModelFilterCondition windowsSoftwareFilterConditionDontShowAssociatedToOtherPool;
 
 	ConfigedMain mainController;
 

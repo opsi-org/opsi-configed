@@ -50,7 +50,7 @@ public class DefaultEditMapPanel extends JPanel {
 	protected Map<String, String> descriptionsMap;
 	protected Map<String, Object> defaultsMap;
 
-	TableCellRenderer tableCellRenderer;
+	protected TableCellRenderer tableCellRenderer;
 
 	protected static class DefaultPropertyHandler extends AbstractPropertyHandler {
 		@Override

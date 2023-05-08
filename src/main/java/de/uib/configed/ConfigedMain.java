@@ -170,10 +170,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private AbstractPersistenceController persist;
 
 	// global table providers for licence management
-	TableProvider licencePoolTableProvider;
-	TableProvider licenceOptionsTableProvider;
-	TableProvider licenceContractsTableProvider;
-	TableProvider softwarelicencesTableProvider;
+	protected TableProvider licencePoolTableProvider;
+	protected TableProvider licenceOptionsTableProvider;
+	protected TableProvider licenceContractsTableProvider;
+	protected TableProvider softwarelicencesTableProvider;
 
 	public TableProvider globalProductsTableProvider;
 

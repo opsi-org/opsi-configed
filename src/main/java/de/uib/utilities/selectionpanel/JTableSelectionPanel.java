@@ -85,7 +85,7 @@ public class JTableSelectionPanel extends JPanel
 	private JComboBox<String> comboSearch;
 	private JComboBoxToolTip comboSearchMode;
 
-	TablesearchPane.SearchMode searchMode;
+	private TablesearchPane.SearchMode searchMode;
 
 	private int foundrow = -1;
 

@@ -109,8 +109,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	protected int[] lineTypes;
 
-	TreeMap<Integer, Integer> docLinestartPosition2lineCount;
-	TreeMap<Integer, Integer> lineCount2docLinestartPosition;
+	private TreeMap<Integer, Integer> docLinestartPosition2lineCount;
+	private TreeMap<Integer, Integer> lineCount2docLinestartPosition;
 
 	private int selTypeIndex = -1;
 
