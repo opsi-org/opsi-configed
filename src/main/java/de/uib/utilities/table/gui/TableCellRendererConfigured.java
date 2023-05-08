@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import de.uib.configed.ConfigedMain;
 
 public class TableCellRendererConfigured extends DefaultTableCellRenderer {
-	Font f;
+	private Font f;
 	Color color;
 	Color bg1;
 	Color bg2;

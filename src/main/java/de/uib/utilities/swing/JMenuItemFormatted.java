@@ -17,7 +17,7 @@ import javax.swing.JMenuItem;
 import de.uib.configed.Globals;
 
 public class JMenuItemFormatted extends JMenuItem {
-	Font specialFont = Globals.defaultFontBig;
+	private Font specialFont = Globals.defaultFontBig;
 
 	public JMenuItemFormatted() {
 		super();

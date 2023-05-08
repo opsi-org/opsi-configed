@@ -177,8 +177,8 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	JButton buttonCallChooserServerpath;
 	JFileChooser chooserServerpath;
 
-	File driverPath;
-	File targetPath;
+	private File driverPath;
+	private File targetPath;
 
 	JButton buttonUploadDrivers;
 

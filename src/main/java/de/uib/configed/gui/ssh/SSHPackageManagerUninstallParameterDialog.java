@@ -55,7 +55,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private AbstractPersistenceController persist;
 
-	FDepotselectionList fDepotList;
+	private FDepotselectionList fDepotList;
 
 	private List<String> possibleDepots;
 

@@ -37,7 +37,7 @@ public class PanelHWByAuditDriver extends JPanel {
 
 	JButton buttonUploadDrivers;
 
-	FDriverUpload fDriverUpload;
+	private FDriverUpload fDriverUpload;
 	ConfigedMain main;
 
 	public PanelHWByAuditDriver(String title, ConfigedMain main) {

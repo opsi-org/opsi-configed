@@ -21,7 +21,7 @@ public class PropertiesStore {
 
 	protected static final String KEY_SEPARATOR = "=";
 
-	File myStore;
+	private File myStore;
 
 	private Map<String, String> internalStore;
 

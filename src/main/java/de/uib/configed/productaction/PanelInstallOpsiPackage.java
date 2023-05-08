@@ -57,14 +57,14 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 	String opsiPackagePathToHandleS;
 	String opsiPackageOnWorkbenchS;
-	File opsiPackageOnWorkbench;
+	private File opsiPackageOnWorkbench;
 	String opsiPackageNameS;
 
 	JTextField fieldOpsiPackageName;
 	JTextField fieldTmpDir;
 
 	String opsiWorkBenchDirectoryS;
-	File opsiWorkBenchDirectory;
+	private File opsiWorkBenchDirectory;
 	String opsiPackageServerPathS;
 
 	private boolean smbMounted;

@@ -26,7 +26,7 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
  * the type of export
  */
 public abstract class AbstractSWExporter {
-	File exportDirectory;
+	private File exportDirectory;
 	String exportDirectoryS;
 	String filepathStart;
 

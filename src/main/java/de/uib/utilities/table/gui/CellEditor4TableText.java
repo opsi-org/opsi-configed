@@ -25,7 +25,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 	String oldValue;
 	String currentValue;
 	JTextField editorContent;
-	FEdit fEdit;
+	private FEdit fEdit;
 	private boolean globalFEdit;
 	private boolean fEditInitialized;
 	private Dimension initSize;
