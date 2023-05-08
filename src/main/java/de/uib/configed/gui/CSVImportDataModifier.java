@@ -26,6 +26,7 @@ import de.uib.configed.csv.exceptions.CSVParserException;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
+import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapSource;
 import de.uib.utilities.table.provider.TableSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
@@ -126,7 +127,7 @@ public class CSVImportDataModifier {
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, 0);
 
 		GenTableModel createdModel = new GenTableModel(updateItemFactory, // updateItemFactory,
-				new de.uib.utilities.table.provider.DefaultTableProvider(source), // tableProvider
+				new DefaultTableProvider(source), // tableProvider
 				0,
 				// final columns int array
 				new int[] {},

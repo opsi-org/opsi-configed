@@ -15,6 +15,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
+@SuppressWarnings("java:S110")
 public class InstalledOSComparison extends StackPane implements DataChangeListener {
 	private static final String LINUX = "Linux";
 	private static final String WINDOWS = "Windows";

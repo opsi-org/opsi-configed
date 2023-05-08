@@ -21,10 +21,11 @@ import de.uib.utilities.logging.Logging;
 
 public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer {
 
+	// These strings should be in an alphabetic order since the table will be sorted by these strings
 	public static final String CONNECTED_BY_MESSAGEBUS = "connected_by_messagebus";
 	public static final String REACHABLE = "reachable";
 	public static final String NOT_REACHABLE = "unreachable";
-	public static final String UNKNOWN = "untested";
+	public static final String UNKNOWN = "unverified";
 
 	Icon messagebusIcon;
 	Icon trueIcon;
@@ -37,16 +38,6 @@ public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer
 		trueIcon = Globals.createImageIcon("images/new_network-connect2.png", "");
 		falseIcon = Globals.createImageIcon("images/new_network-disconnect.png", "");
 		messagebusIcon = Globals.createImageIcon("images/ok22.png", "");
-	}
-
-	public static String getReachableStringForBoolean(Object b) {
-		if (!(b instanceof Boolean)) {
-			return UNKNOWN;
-		} else if (Boolean.TRUE.equals(b)) {
-			return REACHABLE;
-		} else {
-			return NOT_REACHABLE;
-		}
 	}
 
 	@Override

@@ -130,7 +130,7 @@ public class LicenseDisplayer {
 		Set<Node> scrollBars = controller.scrollPane.lookupAll(".scroll-bar");
 
 		if (scrollBars.isEmpty()) {
-			System.out.println("no scrollbars were found");
+			Logging.warning("no scrollbars were found");
 		}
 
 		for (Node scrollBar : scrollBars) {

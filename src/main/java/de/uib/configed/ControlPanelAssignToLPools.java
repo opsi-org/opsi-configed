@@ -698,16 +698,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 							public boolean sendUpdate(String poolId, List<String> softwareIds) {
 
 								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
 								Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicencePool "
 										+ removeKeysFromOtherLicencePool);
 
@@ -742,16 +732,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 								setSoftwareIdsFromLicencePool(poolId);
 
 								// doing it locally for fSoftware2LicencePool
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
 								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
 								Logging.info(this, "sendUpdate, we have software ids " + softwareIds.size());
 								Logging.info(this,

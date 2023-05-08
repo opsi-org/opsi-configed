@@ -12,8 +12,6 @@ public abstract class AbstractExecutioner {
 
 	public abstract ConnectionState getConnectionState();
 
-	public abstract void setConnectionState(ConnectionState state);
-
 	public abstract boolean doCall(OpsiMethodCall omc);
 
 	public abstract JSONObject retrieveJSONObject(OpsiMethodCall omc);

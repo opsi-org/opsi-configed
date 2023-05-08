@@ -1,4 +1,16 @@
 # Changelog
+## [unpublished] - 2023-x-x
+
+### Added
+- Icon for connection status to Messagebus shown on bottom right
+
+### Changed
+- Activity Panel moved to bottom right
+
+### Fixed
+- Installing and removing of opsi-packages
+- Problems with different actions in Licensemanagement
+
 ## [4.2.21.2] - 2023-04-18
 
 ### Changed

@@ -226,7 +226,6 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 	public void setAdditionalPane(JPanel p) {
 		additionalPane = p;
-
 	}
 
 	public void checkAdditionalPane() {
@@ -292,6 +291,12 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		}
 
 		Logging.info(this, "with icons " + iconsLog);
+	}
+
+	public void setTooltipButtons(String tooltip1, String tooltip2, String tooltip3) {
+		jButton1.setToolTipText(tooltip1);
+		jButton2.setToolTipText(tooltip2);
+		jButton3.setToolTipText(tooltip3);
 	}
 
 	public void setContentBackground(Color c) {

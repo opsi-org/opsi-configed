@@ -75,7 +75,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.WindowConstants;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -115,6 +114,7 @@ import de.uib.configed.gui.swinfopage.PanelSWMultiClientReport;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
+import de.uib.messagebus.MessagebusListener;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.sshcommand.SSHCommand;
@@ -129,7 +129,6 @@ import de.uib.opsidatamodel.permission.UserSshConfig;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstancesObserver;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
-import de.uib.utilities.swing.ActivityPanel;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.FEditObject;
@@ -347,10 +346,8 @@ public class MainFrame extends JFrame
 	private IconButton iconButtonNewClient;
 
 	/* gibts nicht **/ // TODO
-	private IconButton iconButtonSaveGroup;
 	private IconButton iconButtonSetGroup;
 	private IconButton iconButtonSaveConfiguration;
-	private IconButton iconButtonCancelChanges;
 	private IconButton iconButtonToggleClientFilter;
 
 	public IconButton iconButtonReachableInfo;
@@ -386,13 +383,10 @@ public class MainFrame extends JFrame
 	public CombinedMenuItem combinedMenuItemDepotColumn = new CombinedMenuItem(jCheckBoxMenuItemShowDepotColumn,
 			popupShowDepotColumn);
 
-	JPanel proceeding;
-
 	protected JButton buttonSelectDepotsWithEqualProperties;
 	protected JButton buttonSelectDepotsAll;
 
 	BorderLayout borderLayout1 = new BorderLayout();
-	GroupLayout contentLayout;
 	JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
 	private JSplitPane panelClientSelection;
 
@@ -469,10 +463,7 @@ public class MainFrame extends JFrame
 
 	protected FShowList fListSelectedClients;
 
-	JPanel jPanelChooseDomain;
-
 	JPanel panelTreeClientSelection;
-	JPanel jPanelProductsConfig;
 
 	boolean multidepot;
 
@@ -560,6 +551,10 @@ public class MainFrame extends JFrame
 	}
 
 	public HostsStatusInfo getHostsStatusInfo() {
+		return statusPane;
+	}
+
+	public MessagebusListener getMessagebusListener() {
 		return statusPane;
 	}
 
@@ -1500,9 +1495,6 @@ public class MainFrame extends JFrame
 		iconButtonSaveConfiguration = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveConfiguration"),
 				"images/apply_over.gif", " ", "images/apply_disabled.gif", false);
 
-		iconButtonCancelChanges = new IconButton(Configed.getResourceValue("MainFrame.iconButtonCancelChanges"),
-				"images/cancel-32.png", "images/cancel_over-32.png", " ", false);
-
 		iconButtonReachableInfo = new IconButton(Configed.getResourceValue("MainFrame.iconButtonReachableInfo"),
 				"images/new_networkconnection.png", "images/new_networkconnection.png",
 				"images/new_networkconnection.png", configedMain.hostDisplayFields.get("clientConnected"));
@@ -1522,9 +1514,6 @@ public class MainFrame extends JFrame
 				"images/view-filter_disabled-32.png", "images/view-filter_over-32.png", "images/view-filter-32.png",
 				true);
 
-		iconButtonSaveGroup = new IconButton(Configed.getResourceValue("MainFrame.iconButtonSaveGroup"),
-				"images/saveGroup.gif", "images/saveGroup_over.gif", " ");
-
 		iconButtonReload.addActionListener((ActionEvent e) -> reloadAction());
 
 		iconButtonReloadLicenses.addActionListener((ActionEvent e) -> reloadLicensesAction());
@@ -1535,8 +1524,6 @@ public class MainFrame extends JFrame
 
 		iconButtonSaveConfiguration.addActionListener((ActionEvent e) -> saveAction());
 
-		iconButtonCancelChanges.addActionListener((ActionEvent e) -> cancelAction());
-
 		iconButtonReachableInfo.addActionListener((ActionEvent e) -> getReachableInfo());
 
 		iconButtonSessionInfo.addActionListener((ActionEvent e) -> {
@@ -1545,14 +1532,6 @@ public class MainFrame extends JFrame
 		});
 
 		iconButtonToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
-
-		iconButtonSaveGroup.addActionListener((ActionEvent e) -> saveGroupAction());
-
-		proceeding = new JPanel();
-		ActivityPanel activity = new ActivityPanel();
-		proceeding.add(activity);
-		new Thread(activity).start();
-		proceeding.setToolTipText("activity indicator");
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -2498,11 +2477,8 @@ public class MainFrame extends JFrame
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(iconButtonSessionInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE / 2, 2 * Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)
-						.addComponent(proceeding, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)));
+								GroupLayout.PREFERRED_SIZE)));
+
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutIconPane1.createSequentialGroup()
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
@@ -2522,10 +2498,7 @@ public class MainFrame extends JFrame
 								.addComponent(iconButtonSessionInfo, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(iconButtonToggleClientFilter, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(proceeding, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
+										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))));
 
 		JPanel iconBarPane = new JPanel();
 		iconBarPane.setLayout(new GridBagLayout());
@@ -2799,20 +2772,10 @@ public class MainFrame extends JFrame
 
 		jMenuFileSaveConfigurations.setEnabled(b);
 		iconButtonSaveConfiguration.setEnabled(b);
-		iconButtonCancelChanges.setEnabled(b);
-	}
-
-	public void saveGroupSetEnabled(boolean b) {
-
-		iconButtonSaveGroup.setEnabled(b);
 	}
 
 	// ----------------------------------------------------------------------------------------
 	// action methods for visual interactions
-	public void wakeOnLanActionWithDelay(int secs) {
-
-		configedMain.wakeSelectedClientsWithDelay(secs);
-	}
 
 	public void wakeOnLanAction() {
 		configedMain.wakeSelectedClients();
@@ -2883,14 +2846,6 @@ public class MainFrame extends JFrame
 	}
 
 	/**
-	 * Calls method from configedMain to start the terminal
-	 */
-	public void remoteSSHTerminalAction() {
-		Logging.debug(this, "jMenuRemoteSSHTerminalAction");
-		configedMain.startSSHOpsiServerTerminal();
-	}
-
-	/**
 	 * Calls method from configedMain to start the config dialog
 	 */
 	public void startSSHConfigAction() {
@@ -2918,10 +2873,6 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	public void invertClientselection() {
-		configedMain.invertClientselection();
-	}
-
 	public void exitAction() {
 		configedMain.finishApp(true, 0);
 	}
@@ -2930,14 +2881,9 @@ public class MainFrame extends JFrame
 		configedMain.checkSaveAll(false);
 	}
 
-	public void cancelAction() {
-		configedMain.cancelChanges();
-	}
-
 	public void getSessionInfo() {
 
 		configedMain.getSessionInfo();
-
 	}
 
 	protected void getReachableInfo() {
@@ -2991,22 +2937,6 @@ public class MainFrame extends JFrame
 		if (!products.isEmpty()) {
 			configedMain.selectClientsWithFailedProduct(products);
 		}
-	}
-
-	public void saveGroupAction() {
-		configedMain.callSaveGroupDialog();
-	}
-
-	public void deleteGroupAction() {
-		configedMain.callDeleteGroupDialog();
-	}
-
-	public void menuClientSelectionSetEnabled(boolean b) {
-		jMenuClientselectionGetGroup.setEnabled(b);
-		jMenuClientselectionGetSavedSearch.setEnabled(b);
-		jMenuClientselectionProductNotUptodate.setEnabled(b);
-		jMenuClientselectionProductNotUptodateOrBroken.setEnabled(b);
-		iconButtonSetGroup.setEnabled(b);
 	}
 
 	public void reloadAction() {
@@ -3202,7 +3132,6 @@ public class MainFrame extends JFrame
 	private static void showHealthDataAction() {
 		HealthCheckDialog dialog = new HealthCheckDialog();
 		dialog.setupLayout();
-		dialog.setMessage(HealthInfo.getHealthData(false));
 		dialog.setVisible(true);
 	}
 
@@ -3534,42 +3463,6 @@ public class MainFrame extends JFrame
 			configedMain.initDashInfo();
 		} else if (e.getSource() == jButtonOpsiLicenses) {
 			showOpsiModules();
-		}
-
-	}
-
-	public class LicenseDash {
-		private final JFrame frame = new JFrame();
-		private LicenseDisplayer licenseDisplayer;
-
-		public void initAndShowGUI() {
-			final JFXPanel fxPanel = new JFXPanel();
-			frame.add(fxPanel);
-			frame.setIconImage(Globals.mainIcon);
-			frame.setTitle(Configed.getResourceValue("Dashboard.licenseTitle"));
-			frame.setVisible(true);
-			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-			Platform.runLater(() -> {
-				try {
-					initFX();
-				} catch (IOException ioE) {
-					Logging.error(this, "Unable to open fxml file", ioE);
-				}
-			});
-		}
-
-		public void initFX() throws IOException {
-			try {
-				licenseDisplayer = new LicenseDisplayer();
-				licenseDisplayer.initAndShowGUI();
-			} catch (IOException ioE) {
-				Logging.debug(this, "Unable to open FXML file.");
-			}
-		}
-
-		public void show() {
-			licenseDisplayer.display();
 		}
 	}
 

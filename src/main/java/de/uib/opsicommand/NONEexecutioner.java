@@ -14,10 +14,6 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public void setConnectionState(ConnectionState state) {
-		/* Do nothing, because this Executioner should do nothing */}
-
-	@Override
 	public boolean doCall(OpsiMethodCall omc) {
 		return false;
 	}

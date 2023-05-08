@@ -1,16 +1,42 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
 import java.sql.Date;
+import java.util.Map;
 
+import de.uib.configed.clientselection.Client;
+import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.utilities.logging.Logging;
 
-public abstract class AbstractOpsiDataDateMatcher extends AbstractOpsiDataMatcher {
+public abstract class AbstractOpsiDataDateMatcher {
+
+	protected String map;
+	protected String key;
+	protected String data;
 
 	protected AbstractOpsiDataDateMatcher(String map, String key, String data) {
-		super(map, key, data);
+		Logging.debug(this, "created:  maptype, key, data: " + map + ", " + key + ", " + data);
+
+		this.map = map;
+		this.key = key;
+		this.data = data;
 	}
 
-	@Override
+	public boolean doesMatch(Client client) {
+		OpsiDataClient oClient = (OpsiDataClient) client;
+		Logging.debug(this, "doesMatch client " + oClient);
+
+		Map<String, Object> realMap = oClient.getMap(map);
+
+		if (!realMap.containsKey(key) || realMap.get(key) == null) {
+
+			return false;
+		}
+
+		String realData = realMap.get(key).toString();
+
+		return checkData(realData);
+	}
+
 	protected boolean checkData(final String realdata) {
 
 		Date date = null;

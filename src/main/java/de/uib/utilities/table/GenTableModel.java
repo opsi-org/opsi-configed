@@ -67,10 +67,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	protected final TableModelFilter emptyFilter;
 	private TableModelFilter workingFilter;
 
-	// maps for TableModelFunctions TODO: Remove these things, they don't do anything
-	protected Map<TableModelFunctions.PairOfInt, Map<Object, List<Object>>> functions;
-	protected Map<TableModelFunctions.PairOfInt, Map<Integer, Mapping<Integer, String>>> xFunctions;
-
 	protected Map<Integer, RowStringMap> primarykey2Rowmap;
 	protected Map<Integer, String> primarykeyTranslation;
 	protected Mapping<Integer, String> primarykeyRepresentation;
@@ -965,11 +961,9 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	// interface TableModelFunctions
 
 	protected void requestRefreshDerivedMaps() {
-		functions = null;
 		primarykey2Rowmap = null;
 		primarykeyTranslation = null;
 		primarykeyRepresentation = null;
-		xFunctions = null;
 	}
 
 	@Override
@@ -980,17 +974,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	public Map<Object, List<Object>> getFunction(int col1, int col2, TableModelFilterCondition specialFilterCondition) {
 		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1, col2);
 
-		if (functions == null) {
-			functions = new HashMap<>();
-		}
-
-		Map<Object, List<Object>> function = functions.get(pair);
-
-		if (function == null) {
-			function = buildFunction(pair.col1, pair.col2, specialFilterCondition);
-		}
-
-		return function;
+		return buildFunction(pair.col1, pair.col2, specialFilterCondition);
 	}
 
 	@Override
@@ -1016,24 +1000,18 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	@Override
 	public Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd, Mapping col2ndMapping) {
 
-		if (xFunctions == null) {
-			xFunctions = new HashMap<>();
-		}
-
 		Map<Object, List<Object>> function = getFunction(col1st, col2nd);
 
 		if (function == null) {
 			return new HashMap<>();
 		}
-		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1st, col2nd);
-		Map<Integer, Mapping<Integer, String>> xFunction = xFunctions.get(pair);
-		if (xFunction == null) {
-			xFunction = new HashMap<>();
-			for (Entry<Object, List<Object>> functionEntry : function.entrySet()) {
-				Integer keyVal = (Integer) functionEntry.getKey();
-				xFunction.put(keyVal, col2ndMapping.restrictedTo(new HashSet<>(functionEntry.getValue())));
-			}
+		Map<Integer, Mapping<Integer, String>> xFunction = new HashMap<>();
+
+		for (Entry<Object, List<Object>> functionEntry : function.entrySet()) {
+			Integer keyVal = (Integer) functionEntry.getKey();
+			xFunction.put(keyVal, col2ndMapping.restrictedTo(new HashSet<>(functionEntry.getValue())));
 		}
+
 		return xFunction;
 	}
 

@@ -132,7 +132,6 @@ public class UserConfig {
 		if (userListKeys == null) {
 			userListKeys = new LinkedHashSet<>();
 
-			userListKeys.addAll(UserSshConfig.LIST_KEYS);
 			userListKeys.addAll(UserOpsipermission.LIST_KEYS);
 		}
 

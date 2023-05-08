@@ -5,6 +5,7 @@ import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.java_websocket.WebSocket;
@@ -21,7 +22,7 @@ import de.uib.utilities.logging.Logging;
 @SuppressWarnings("java:S109")
 public class WebSocketClientEndpoint extends WebSocketClient {
 
-	private ArrayList<MessagebusListener> listeners = new ArrayList<>();
+	private List<MessagebusListener> listeners = new ArrayList<>();
 
 	public WebSocketClientEndpoint(URI serverUri, Draft draft) {
 		super(serverUri, draft);
@@ -59,6 +60,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 	@Override
 	public void onOpen(ServerHandshake handshakeData) {
 		Logging.debug(this, "Websocket opened");
+
 		for (MessagebusListener listener : listeners) {
 			listener.onOpen(handshakeData);
 		}
@@ -98,6 +100,7 @@ public class WebSocketClientEndpoint extends WebSocketClient {
 		// The close codes are documented in class org.java_websocket.framing.CloseFrame
 		Logging.debug(this, "Websocket closed by " + (remote ? "opsi service" : "us") + " Code=" + code + " Reason='"
 				+ reason + "'");
+
 		for (MessagebusListener listener : listeners) {
 			listener.onClose(code, reason, remote);
 		}

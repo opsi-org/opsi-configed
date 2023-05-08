@@ -1,20 +1,31 @@
 package de.uib.configed.gui;
 
+import java.util.Map;
+
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 
+import org.java_websocket.handshake.ServerHandshake;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.HostsStatusInfo;
+import de.uib.messagebus.MessagebusListener;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.swing.ActivityPanel;
 import de.uib.utilities.swing.Containership;
 
-public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
+public class HostsStatusPanel extends JPanel implements HostsStatusInfo, MessagebusListener {
 	public static final int MAX_CLIENT_NAMES_IN_FIELD = 10;
+
+	private static final String CONNECTED_TOOLTIP = Configed.getResourceValue("HostsStatusPanel.ConnectedTooltip");
+	private static final String DISCONNECTED_TOOLTIP = Configed
+			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
 
 	JLabel labelAllClientsCount;
 	JTextField fieldGroupActivated;
@@ -22,6 +33,10 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 	JTextField fieldSelectedClientsNames;
 	JTextField fieldActivatedClientsCount;
 	JTextField fieldInvolvedDepots;
+
+	private JLabel connectionStateLabel;
+	private ImageIcon connectedIcon;
+	private ImageIcon disconnectedIcon;
 
 	public HostsStatusPanel() {
 		super();
@@ -148,8 +163,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 
 		JLabel labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
 
-		JLabel labelInvolvedDepots2 = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot2"));
-
 		fieldActivatedClientsCount = new JTextField("");
 		fieldActivatedClientsCount.setPreferredSize(Globals.counterfieldDimension);
 		fieldActivatedClientsCount.setEditable(false);
@@ -163,6 +176,16 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 		fieldInvolvedDepots = new JTextField("");
 		fieldInvolvedDepots.setPreferredSize(Globals.counterfieldDimension);
 		fieldInvolvedDepots.setEditable(false);
+
+		connectedIcon = Globals.createImageIcon("images/network-wireless-connected-100.png", "");
+		disconnectedIcon = Globals.createImageIcon("images/network-wireless-disconnected.png", "");
+
+		connectionStateLabel = new JLabel();
+
+		ActivityPanel activity = new ActivityPanel();
+		activity.setToolTipText("activity indicator");
+
+		new Thread(activity).start();
 
 		initializeValues();
 
@@ -191,7 +214,8 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 				.addComponent(labelInvolvedDepots, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
-				.addComponent(labelInvolvedDepots2, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(activity)
+				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(connectionStateLabel)
 				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE));
 
 		layoutStatusPane.setVerticalGroup(layoutStatusPane.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -216,10 +240,11 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 										Globals.LINE_HEIGHT)
 								.addComponent(labelInvolvedDepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 										Globals.LINE_HEIGHT)
-								.addComponent(labelInvolvedDepots2, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT)
 								.addComponent(fieldInvolvedDepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-										Globals.LINE_HEIGHT))
+										Globals.LINE_HEIGHT)
+								.addGroup(layoutStatusPane.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
+										.addComponent(activity).addGap(0, 0, Short.MAX_VALUE))
+								.addComponent(connectionStateLabel))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		if (!ConfigedMain.THEMES) {
@@ -228,5 +253,27 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo {
 			csStatusPane.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },
 					JTextComponent.class);
 		}
+	}
+
+	@Override
+	public void onOpen(ServerHandshake handshakeData) {
+		connectionStateLabel.setIcon(connectedIcon);
+		connectionStateLabel.setToolTipText(CONNECTED_TOOLTIP);
+	}
+
+	@Override
+	public void onClose(int code, String reason, boolean remote) {
+		connectionStateLabel.setIcon(disconnectedIcon);
+		connectionStateLabel.setToolTipText(DISCONNECTED_TOOLTIP);
+	}
+
+	@Override
+	public void onError(Exception ex) {
+		//Not Needed
+	}
+
+	@Override
+	public void onMessageReceived(Map<String, Object> message) {
+		// Not Needed
 	}
 }

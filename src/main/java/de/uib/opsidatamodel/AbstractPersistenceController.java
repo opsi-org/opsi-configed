@@ -23,7 +23,6 @@ import java.util.TreeMap;
 import org.json.JSONObject;
 
 import de.uib.configed.Configed;
-import de.uib.configed.type.AbstractMetaConfig;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
@@ -43,14 +42,12 @@ import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
-import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataLoadingObservable;
 import de.uib.utilities.observer.DataLoadingObserver;
 import de.uib.utilities.observer.DataRefreshedObservable;
 import de.uib.utilities.observer.DataRefreshedObserver;
 
 public abstract class AbstractPersistenceController implements DataRefreshedObservable, DataLoadingObservable {
-	public static final String CLIENT_GLOBAL_SEPARATOR = "/";
 
 	public static final Set<String> KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT = new HashSet<>();
 	static {
@@ -61,9 +58,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	// constants for building hw queries
 	public static final String HW_INFO_CONFIG = "HARDWARE_CONFIG_";
 	public static final String HW_INFO_DEVICE = "HARDWARE_DEVICE_";
-	public static final String HOST_ID_FIELD = ".hostId";
-	public static final String HARDWARE_ID_FIELD = ".hardware_id";
-	public static final String LAST_SEEN_COL_NAME = "lastseen";
 	public static final String LAST_SEEN_VISIBLE_COL_NAME = "HOST.last_scan_time";
 
 	public static final String KEY_PRODUCTONCLIENT_DISPLAYFIELDS_LOCALBOOT = "configed.productonclient_displayfields_localboot";
@@ -72,6 +66,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public static final String KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION = "configed.license_inventory_extradisplayfields";
 
 	public static final String CONTROL_DASH_CONFIG_KEY = "configed.dash_config";
+	public static final String CONFIG_KEY = "configed.meta_config";
 
 	public static final String KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT = CONTROL_DASH_CONFIG_KEY
 			+ ".show_dash_for_showlicenses";
@@ -90,8 +85,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public static final String OPSI_CLIENTD_EVENT_SILENT_INSTALL = "silent_install";
 
 	public static final String KEY_PRODUCT_SORT_ALGORITHM = "product_sort_algorithm";
-
-	public static final String KEY_CHOICES_FOR_WOL_DELAY = "wol_delays_sec";
 
 	public static final String LOCAL_IMAGE_RESTORE_PRODUCT_KEY = "opsi-local-image-restore";
 	public static final String LOCAL_IMAGE_LIST_PROPERTY_KEY = "imagefiles_list";
@@ -151,7 +144,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "dash configuration");
 		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
-		PROPERTY_CLASSES_SERVER.put(AbstractMetaConfig.CONFIG_KEY, "default configuration for other properties");
+		PROPERTY_CLASSES_SERVER.put(CONFIG_KEY, "default configuration for other properties");
 		PROPERTY_CLASSES_SERVER.put(SavedSearch.CONFIG_KEY,
 				"<html><p>saved search configurations ,<br />do not edit here <br />- editing via the search form</p></html>");
 		PROPERTY_CLASSES_SERVER.put(RemoteControl.CONFIG_KEY,
@@ -194,7 +187,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	// wan meta configuration
 	public static final String WAN_PARTKEY = "wan_";
-	public static final String WAN_CONFIGURED_PARTKEY = "wan_mode_on";
 	public static final String NOT_WAN_CONFIGURED_PARTKEY = "wan_mode_off";
 
 	protected Map<String, List<Object>> wanConfiguration;
@@ -213,8 +205,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	protected List<DataRefreshedObserver> dataRefreshedObservers;
 
 	public AbstractExecutioner exec;
-
-	protected final Map<String, AbstractExecutioner> execs = new HashMap<>();
 
 	// offer observing of data loading
 	protected List<DataLoadingObserver> dataLoadingObservers;
@@ -247,16 +237,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	/* connection state handling */
 	public abstract ConnectionState getConnectionState();
 
-	public abstract void setConnectionState(ConnectionState state);
-
 	public abstract Map<String, Map<String, Object>> getDepotPropertiesForPermittedDepots();
-
-	public boolean hasUserPrivilegesData() {
-		// user has roles
-		// a role has privileges
-		// a privilege is implemented by conditions referring to targets
-		return false;
-	}
 
 	public abstract void checkPermissions();
 
@@ -273,22 +254,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract boolean accessToHostgroupsOnlyIfExplicitlyStated();
 
 	public abstract Set<String> getHostgroupsPermitted();
-
-	public abstract boolean hasHostgroupPermission(String hostgroupId);
-
-	public abstract boolean isProductgroupsFullPermission();
-
-	public abstract boolean hasProductgroupPermission(String productgroupId);
-
-	/* ============================ */
-	/* data retrieving and setting */
-
-	public void syncTables() {
-	}
-
-	public void cleanUpAuditSoftware() {
-		Logging.error(this, "cleanUpAuditSoftware not implemented");
-	}
 
 	// ---------------------------------------------------------------
 	// implementation of observer patterns
@@ -385,8 +350,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract boolean renameClient(String hostname, String newHostname);
 
-	public abstract void deleteClient(String hostId);
-
 	public abstract void deleteClients(String[] hostIds);
 
 	public abstract List<String> deletePackageCaches(String[] hostIds);
@@ -424,8 +387,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract void setClientOneTimePassword(String hostId, String oneTimePassword);
 
 	public abstract void setHostNotes(String hostId, String notes);
-
-	public abstract String getMacAddress(String hostId);
 
 	public abstract void setSystemUUID(String hostId, String uuid);
 
@@ -514,8 +475,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract List<String> getHwInfoClassNames();
 
-	public abstract List<String> getHostColumnNames();
-
 	public abstract List<String> getClient2HwRowsColumnNames();
 
 	public abstract List<String> getClient2HwRowsJavaclassNames();
@@ -531,8 +490,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract Map<String, String> getEmptyLogfiles();
 
 	public abstract Map<String, String> getLogfiles(String clientId, String logtype);
-
-	public abstract Map<String, String> getLogfiles(String clientId);
 
 	/* list of boot images */
 
@@ -663,8 +620,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Boolean hasClientSpecificProperties(String productname);
 
-	public abstract Map<String, Boolean> getProductHavingClientSpecificProperties();
-
 	public abstract Map<String, Map<String, ConfigName2ConfigValue>> getDepot2product2properties();
 
 	public abstract Map<String, ConfigName2ConfigValue> getDefaultProductProperties(String depotId);
@@ -701,8 +656,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract Map<String, List<Object>> getConfigDefaultValues();
 
 	public abstract Boolean getGlobalBooleanConfigValue(String key, Boolean defaultVal);
-
-	public abstract void setGlobalBooleanConfigValue(String key, Boolean val, String description);
 
 	protected abstract boolean setHostBooleanConfigValue(String key, String hostName, boolean val);
 
@@ -881,8 +834,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract Map<String, Object> getOpsiLicencingInfoNoOpsiAdmin();
 
-	public abstract String getCustomer();
-
 	public abstract boolean isWithLocalImaging();
 
 	public abstract boolean isWithLicenceManagement();
@@ -892,10 +843,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	public abstract boolean isWithUEFI();
 
 	public abstract boolean isWithWAN();
-
-	public abstract boolean isWithLinuxAgent();
-
-	public abstract boolean isWithUserRoles();
 
 	public abstract boolean applyUserSpecializedConfig();
 
@@ -938,22 +885,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		return item;
 	}
 
-	public static ConfigOption createConfig(ConfigOption.TYPE type, String key, String description, boolean editable,
-			boolean multiValue, List<Object> defaultValues, List<Object> possibleValues) {
-		Map<String, Object> item = createNOMitem(type.toString());
-
-		item.put("ident", key.toLowerCase());
-		item.put("description", description);
-		item.put("editable", editable);
-		item.put("multiValue", multiValue);
-
-		item.put("defaultValues", defaultValues);
-
-		item.put("possibleValues", possibleValues);
-
-		return new ConfigOption(item);
-	}
-
 	public static Map<String, Object> createJSONConfig(ConfigOption.TYPE type, String key, String description,
 			boolean editable, boolean multiValue, List<Object> defaultValues, List<Object> possibleValues) {
 
@@ -969,18 +900,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		item.put("possibleValues", AbstractExecutioner.jsonArray(possibleValues));
 
 		return item;
-	}
-
-	public static ConfigOption createBoolConfig(String key, Boolean value, String description) {
-		List<Object> defaultValues = new ArrayList<>();
-		defaultValues.add(value);
-
-		List<Object> possibleValues = new ArrayList<>();
-		possibleValues.add(true);
-		possibleValues.add(false);
-
-		return createConfig(ConfigOption.TYPE.BOOL_CONFIG, key, description, false, false, defaultValues,
-				possibleValues);
 	}
 
 	public static Map<String, Object> createJSONBoolConfig(String key, Boolean value, String description) {

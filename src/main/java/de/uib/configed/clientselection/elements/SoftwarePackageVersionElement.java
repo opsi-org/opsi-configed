@@ -10,8 +10,7 @@ import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
 public class SoftwarePackageVersionElement extends AbstractSelectElement {
 	public SoftwarePackageVersionElement() {
-		super(new String[] { de.uib.opsidatamodel.OpsiProduct.NAME, "Package Version" },
-				Configed.getResourceValue("ClientSelectionDialog.softwareName"),
+		super(new String[] { NAME, "Package Version" }, Configed.getResourceValue("ClientSelectionDialog.softwareName"),
 				Configed.getResourceValue("ClientSelectionDialog.softwarePackageVersion"));
 	}
 

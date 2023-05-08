@@ -23,7 +23,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ServerHandshake;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
@@ -41,17 +40,16 @@ public class Messagebus implements MessagebusListener {
 	private WebSocketClientEndpoint messagebusWebSocket;
 	private ConfigedMain configedMain;
 	private int reconnectWaitMillis = 15000;
-	private boolean connected = false;
-	private boolean disconnecting = false;
-	private boolean authenticationError = false;
-	private boolean reconnecting = false;
-	private boolean initialSubscriptionReceived = false;
+	private boolean connected;
+	private boolean disconnecting;
+	private boolean reconnecting;
+	private boolean initialSubscriptionReceived;
 
 	public Messagebus(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
 	}
 
-	public WebSocket getWebSocket() {
+	public WebSocketClientEndpoint getWebSocket() {
 		return messagebusWebSocket;
 	}
 
@@ -72,6 +70,9 @@ public class Messagebus implements MessagebusListener {
 
 		messagebusWebSocket = new WebSocketClientEndpoint(uri);
 		messagebusWebSocket.registerListener(this);
+		if (ConfigedMain.getMainFrame() != null) {
+			messagebusWebSocket.registerListener(ConfigedMain.getMainFrame().getMessagebusListener());
+		}
 		messagebusWebSocket.addHeader("Authorization", String.format("Basic %s", basicAuthEnc));
 		if (exec.sessionId != null) {
 			Logging.debug("Adding cookie header");
@@ -82,13 +83,13 @@ public class Messagebus implements MessagebusListener {
 		messagebusWebSocket.setReuseAddr(true);
 		messagebusWebSocket.setTcpNoDelay(true);
 
-		if (messagebusWebSocket.connectBlocking()) {
-			// Socket is open, but may be closed again soon if unauthorized
-			if (waitForInitialChannelSubscritionEvent(10000)) {
-				connected = true;
-				Logging.notice(this, "Connected to messagebus");
-				makeStandardChannelSubscriptions();
-			}
+		if (messagebusWebSocket.connectBlocking() &&
+		// Socket is open, but may be closed again soon if unauthorized
+				waitForInitialChannelSubscritionEvent(10000)) {
+			connected = true;
+			Logging.notice(this, "Connected to messagebus");
+			makeStandardChannelSubscriptions();
+
 		}
 		return connected;
 	}
@@ -107,6 +108,7 @@ public class Messagebus implements MessagebusListener {
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {
+				Thread.currentThread().interrupt();
 			}
 		}
 		return true;
@@ -302,6 +304,7 @@ public class Messagebus implements MessagebusListener {
 
 	@Override
 	public void onOpen(ServerHandshake handshakeData) {
+		// Not needed
 	}
 
 	@Override
@@ -312,9 +315,22 @@ public class Messagebus implements MessagebusListener {
 		boolean wasDisconnecting = disconnecting;
 		connected = false;
 		disconnecting = false;
-		authenticationError = reason != null && reason.toLowerCase().contains("authentication");
+		boolean authenticationError = reason != null && reason.toLowerCase().contains("authentication");
 
 		if (!wasDisconnecting && !reconnecting) {
+			new RetryConnectingThread(authenticationError).start();
+		}
+	}
+
+	private class RetryConnectingThread extends Thread {
+		private boolean authenticationError;
+
+		public RetryConnectingThread(boolean authenticationError) {
+			this.authenticationError = authenticationError;
+		}
+
+		@Override
+		public void run() {
 			reconnecting = true;
 			while (!isConnected()) {
 				int waitMillis = reconnectWaitMillis;
@@ -332,12 +348,11 @@ public class Messagebus implements MessagebusListener {
 						break;
 					}
 				} catch (InterruptedException ie) {
+					Thread.currentThread().interrupt();
 				}
-
 			}
 			reconnecting = false;
 		}
-
 	}
 
 	@Override

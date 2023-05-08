@@ -432,23 +432,12 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		fieldSearch.addKeyListener(this);
 
-		try {
-			popupSearch = new JMenuItemFormatted();
-			popupSearchNext = new JMenuItemFormatted();
-			popupNewSearch = new JMenuItemFormatted();
-			popupMarkHits = new JMenuItemFormatted();
-			popupMarkAndFilter = new JMenuItemFormatted();
-			popupEmptySearchfield = new JMenuItemFormatted();
-		} catch (Exception ex) {
-			// TODO WHAT? WHY DOING EXACTLY THE SAME AGAIN?
-			// we often get a class cast error
-			popupSearch = new JMenuItemFormatted();
-			popupSearchNext = new JMenuItemFormatted();
-			popupNewSearch = new JMenuItemFormatted();
-			popupMarkHits = new JMenuItemFormatted();
-			popupMarkAndFilter = new JMenuItemFormatted();
-			popupEmptySearchfield = new JMenuItemFormatted();
-		}
+		popupSearch = new JMenuItemFormatted();
+		popupSearchNext = new JMenuItemFormatted();
+		popupNewSearch = new JMenuItemFormatted();
+		popupMarkHits = new JMenuItemFormatted();
+		popupMarkAndFilter = new JMenuItemFormatted();
+		popupEmptySearchfield = new JMenuItemFormatted();
 
 		searchMenuEntries = new LinkedHashMap<>();
 		searchMenuEntries.put(popupSearch, true);

@@ -110,10 +110,6 @@ public class Configed {
 							+ " . DEFAULT: " + Logging.getLogLevelConsole() },
 			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code" },
 
-			// implemented in PersistenceController,
-			new String[] { "--sqlgetrows", "", "Force use sql statements by getRawData" },
-			new String[] { "--nosqlrawdata", "", "Avoid getRawData" },
-
 			// if possible in PersistenceController,
 			new String[] { "--localizationfile EXTRA_LOCALIZATION_FILENAME", "",
 					"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: "
@@ -185,7 +181,6 @@ public class Configed {
 	public static final int NO_ERROR = 0;
 	public static final int ERROR_INVALID_OPTION = 1;
 	public static final int ERROR_MISSING_VALUE_FOR_OPTION = 2;
-	public static final int ERROR_UNSUPPORTED_CIPHERSUITE = 12;
 
 	public static final int ERROR_CANNOT_READ_EXTRA_LOCALIZATION = 11;
 
@@ -257,8 +252,8 @@ public class Configed {
 
 	@SuppressWarnings("java:S106")
 	protected static void usage() {
-		System.out.println("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-		System.out.println(USAGE_INFO);
+		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+		Logging.essential(USAGE_INFO);
 
 		final int TAB_WIDTH = 8;
 		int length0 = 0;
@@ -297,7 +292,7 @@ public class Configed {
 			int startedTabs0 = (usageLines[i][0].length() / TAB_WIDTH);
 			int startedTabs1 = (usageLines[i][1].length() / TAB_WIDTH);
 
-			System.out.println("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
+			Logging.essential("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
 					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
 		}
 	}
@@ -372,10 +367,6 @@ public class Configed {
 		Configed.paramTab = paramTab;
 		Configed.paramClient = paramClient;
 		Configed.paramClientgroup = paramClientgroup;
-	}
-
-	protected void revalidate() {
-		configedMain.initialTreeActivation();
 	}
 
 	public static Integer getRefreshMinutes() {
@@ -513,17 +504,8 @@ public class Configed {
 				} else if ("-me".equals(args[i]) || "--testPersistenceControllerMethod".equals(args[i])) {
 					optionPersistenceControllerMethodCall = true;
 					i = i + 1;
-				} else if ("--sqlgethashes".equals(args[i])) {
-					PersistenceControllerFactory.sqlAndGetHashes = true;
-					i = i + 1;
-				} else if ("--sqlgetrows".equals(args[i])) {
-					PersistenceControllerFactory.sqlAndGetRows = true;
-					i = i + 1;
-				} else if ("--nosqlrawdata".equals(args[i])) {
-					PersistenceControllerFactory.avoidSqlRawData = true;
-					i = i + 1;
 				} else if ("--version".equals(args[i])) {
-					System.out.println("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
+					Logging.essential("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
 					System.exit(0);
 				} else if ("--help".equals(args[i])) {
 					usage();

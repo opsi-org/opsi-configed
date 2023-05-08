@@ -262,7 +262,8 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		if (event.getSource() == dependenciesActivateButton) {
 			isPanelProductDependenciesVisible = !isPanelProductDependenciesVisible;
 
-			dependenciesActivateButton.setText(isPanelProductDependenciesVisible ? "▼" : "▶");
+			setActivatedButton(dependenciesActivateButton, isPanelProductDependenciesVisible);
+
 			if (!ConfigedMain.THEMES) {
 				dependenciesTextLabel
 						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
@@ -280,10 +281,18 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		} else if (event.getSource() == propertiesActivateButton) {
 			isPanelEditPropertiesVisible = !isPanelEditPropertiesVisible;
 
-			propertiesActivateButton.setText(isPanelEditPropertiesVisible ? "▼" : "▶");
+			setActivatedButton(propertiesActivateButton, isPanelEditPropertiesVisible);
 
 			panelEditProperties.setVisible(isPanelEditPropertiesVisible);
 			panelEditProperties.setTitlePanelActivated(isPanelEditPropertiesVisible);
+		}
+	}
+
+	private static void setActivatedButton(JButton jButton, boolean isPropertiesVisible) {
+		if (isPropertiesVisible) {
+			jButton.setText("▼");
+		} else {
+			jButton.setText("▶");
 		}
 	}
 

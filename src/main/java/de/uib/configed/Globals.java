@@ -35,7 +35,7 @@ public final class Globals {
 
 	// get version from pom.xml
 	public static final String VERSION = Globals.class.getPackage().getImplementationVersion();
-	public static final String VERDATE = "2023-04-18";
+	public static final String VERDATE = "2023-04-28";
 
 	public static final String VERHASHTAG = "";
 
@@ -373,9 +373,6 @@ public final class Globals {
 
 	public static final String PSEUDO_KEY_SEPARATOR = ";";
 
-	private static final int TOOLTIP_LINE_LENGTH = 50;
-	private static final int UNCERTAINTY = 20;
-
 	// these two things can be changed
 	public static JFrame frame1;
 	public static Container container1;
@@ -392,7 +389,7 @@ public final class Globals {
 
 	private static final String IMAGE_BASE = "de/uib/configed/gui/";
 
-	public static boolean isMultiFactorAuthenticationEnabled = false;
+	public static boolean isMultiFactorAuthenticationEnabled;
 
 	private Globals() {
 	}
@@ -722,47 +719,6 @@ public final class Globals {
 		}
 
 		return resultBuilder.toString();
-	}
-
-	public static String wrapToHTML(String s) {
-		StringBuilder result = new StringBuilder("<html>");
-		String remainder = s;
-		while (remainder.length() > 0) {
-			Logging.debug("Globals, remainder " + remainder);
-			if (remainder.length() <= TOOLTIP_LINE_LENGTH) {
-				result.append(remainder.replace("\\n", "<br />"));
-				break;
-			}
-			result.append(remainder.substring(0, TOOLTIP_LINE_LENGTH).replace("\\n", "<br />"));
-
-			int testspan = Math.min(remainder.length() - TOOLTIP_LINE_LENGTH, UNCERTAINTY);
-
-			String separationString = remainder.substring(TOOLTIP_LINE_LENGTH, TOOLTIP_LINE_LENGTH + testspan);
-
-			boolean found = false;
-			int i = 0;
-			Logging.debug("Globals, separationString " + separationString);
-
-			while (!found && i < testspan) {
-				if (separationString.charAt(i) == ' ' || separationString.charAt(i) == '\n'
-						|| separationString.charAt(i) == '\t') {
-					found = true;
-					if (separationString.charAt(i) == '\n') {
-						result.append("<br />");
-					}
-				} else {
-					i++;
-				}
-			}
-
-			result.append(separationString.substring(0, i));
-			result.append("<br />");
-			int end = Math.max(remainder.length(), TOOLTIP_LINE_LENGTH);
-			remainder = remainder.substring(TOOLTIP_LINE_LENGTH + i, end);
-		}
-
-		result.append("</html>");
-		return result.toString();
 	}
 
 	public static String produceNonNull(Object o) {

@@ -8,18 +8,12 @@ public class Object2GroupEntry {
 	public static final String GROUP_ID_KEY = "groupId";
 	public static final String MEMBER_KEY = "objectId";
 
-	protected String groupType;
 	protected String groupId;
 	protected String member;
 
-	public Object2GroupEntry(String groupType, String member, String groupId) {
-		this.groupType = groupType;
+	public Object2GroupEntry(String member, String groupId) {
 		this.groupId = groupId;
 		this.member = member;
-	}
-
-	public String getGroupType() {
-		return groupType;
 	}
 
 	public String getGroupId() {
