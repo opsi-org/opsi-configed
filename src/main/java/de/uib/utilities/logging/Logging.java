@@ -22,7 +22,7 @@ import de.uib.utilities.thread.WaitCursor;
 
 public final class Logging {
 
-	public static final String logDirectoryName;
+	public static String logDirectoryName;
 	private static String logFilenameInUse;
 
 	private static String logfileDelimiter = "configed";
