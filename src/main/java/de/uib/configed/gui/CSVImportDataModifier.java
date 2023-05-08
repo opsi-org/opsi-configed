@@ -122,7 +122,7 @@ public class CSVImportDataModifier {
 		Map<String, Map<String, Object>> theSourceMap = new HashMap<>();
 		populateSourceMap(theSourceMap, csvData);
 
-		ArrayList<TableEditItem> updateCollection = new ArrayList<TableEditItem>();
+		ArrayList<TableEditItem> updateCollection = new ArrayList<>();
 		TableSource source = new MapSource(columnNames, classNames, theSourceMap, false);
 		MapTableUpdateItemFactory updateItemFactory = new MapTableUpdateItemFactory(columnNames, classNames, 0);
 

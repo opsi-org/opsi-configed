@@ -21,7 +21,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class GeneralFrame extends JDialog implements ActionListener {
-	private boolean shiftPressed = true;
 
 	protected FadingMirror glass;
 	protected JPanel allpane = new JPanel();

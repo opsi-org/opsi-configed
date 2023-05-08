@@ -66,10 +66,8 @@ public class ControllerHWinfoColumnConfiguration {
 
 	public PanelGenEditTable panel;
 	private GenTableModel model;
-	private ArrayList<TableEditItem> updateCollection;
 
 	private List<String> columnNames;
-	private List<String> classNames;
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
@@ -193,7 +191,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 	private void initModel() {
 
-		updateCollection = new ArrayList<TableEditItem>();
+		List<TableEditItem> updateCollection = new ArrayList<>();
 		columnNames = new ArrayList<>();
 		columnNames.add(COL_LINE_NO);
 		columnNames.add(COL_HW_CLASS);
@@ -204,7 +202,7 @@ public class ControllerHWinfoColumnConfiguration {
 		columnNames.add(COL_USE_IN_QUERY);
 		columnNames.add(COL_OPSI_DB_COLUMN_TYPE);
 
-		classNames = new ArrayList<>();
+		List<String> classNames = new ArrayList<>();
 
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");

@@ -47,18 +47,15 @@ import de.uib.utilities.FileX;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FLoadingWaiter;
-import de.uib.utilities.swing.ImagePanel;
 import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.thread.WaitCursor;
 
 public class PanelDriverUpload extends JPanel implements de.uib.utilities.NameProducer {
 
-	private int firstLabelWidth = Globals.FIRST_LABEL_WIDTH;
 	private int hFirstGap = Globals.HFIRST_GAP;
 
 	protected int hGap = Globals.HGAP_SIZE / 2;
 	protected int vGap = Globals.VGAP_SIZE / 2;
-	protected int hLabel = Globals.BUTTON_HEIGHT;
 
 	protected String byAuditPath = "";
 
@@ -67,8 +64,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	private JComboBox<String> comboChooseDepot;
 	private JComboBox<String> comboChooseWinProduct;
-	private JButton btnShowDrivers;
-	private JButton btnCreateDrivers;
 
 	private JLabel labelDriverToIntegrate;
 	private PanelMountShare panelMountShare;
@@ -81,9 +76,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	CheckedLabel driverPathChecked;
 	private boolean stateServerPath;
 	CheckedLabel serverPathChecked;
-
-	private JLabel jLabelUploading;
-	private ImagePanel waitingImage;
 
 	private static class RadioButtonIntegrationType extends JRadioButton {
 		private String subdir;
@@ -160,21 +152,13 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		}
 	}
 
-	private RadioButtonIntegrationType buttonStandard;
-	private RadioButtonIntegrationType buttonPreferred;
-	private RadioButtonIntegrationType buttonNotPreferred;
-	private RadioButtonIntegrationType buttonAdditional;
 	private RadioButtonIntegrationType buttonByAudit;
 
-	private List<RadioButtonIntegrationType> radioButtons;
-
-	private JButton buttonCallSelectDriverFiles;
 	protected JTextShowField fieldDriverPath;
 	private JFileChooser chooserDriverPath;
 
 	// server path finding
 	private JTextShowField fieldServerPath;
-	private JButton buttonCallChooserServerpath;
 	private JFileChooser chooserServerpath;
 
 	private File driverPath;
@@ -225,8 +209,6 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				return connected;
 			}
 		};
-
-		jLabelUploading = new JLabel("uploading");
 
 		initComponents();
 
@@ -322,7 +304,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		JLabel jLabelDepotServer = new JLabel(Configed.getResourceValue("PanelDriverUpload.DepotServer"));
 		JLabel jLabelWinProduct = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelWinProduct"));
 
-		buttonCallSelectDriverFiles = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
+		JButton buttonCallSelectDriverFiles = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectDriverFiles.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallSelectDriverFiles.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallSelectDriverFiles
@@ -335,7 +317,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			fieldServerPath.setForeground(Globals.greyed);
 		}
 
-		buttonCallChooserServerpath = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
+		JButton buttonCallChooserServerpath = new JButton("", Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setSelectedIcon(Globals.createImageIcon("images/folder_16.png", ""));
 		buttonCallChooserServerpath.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallChooserServerpath.setToolTipText(Configed.getResourceValue("PanelDriverUpload.determineServerPath"));
@@ -343,7 +325,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
 		JLabel jLabelShowDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
-		btnShowDrivers = new JButton("", Globals.createImageIcon("images/show-menu.png", ""));
+		JButton btnShowDrivers = new JButton("", Globals.createImageIcon("images/show-menu.png", ""));
 		btnShowDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
 		btnShowDrivers.addActionListener(actionEvent -> new Thread() {
 			@Override
@@ -362,7 +344,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		}.start());
 
 		JLabel jLabelCreateDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
-		btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
+		JButton btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
 		btnCreateDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnCreateDrivers.tooltip"));
 		btnCreateDrivers.addActionListener(actionEvent -> new SSHConnectExec(main,
 				// id not needed
@@ -398,16 +380,18 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				Configed.getResourceValue("PanelDriverUpload.byAuditDriverLocationPath"));
 		JLabel labelDriverLocationType = new JLabel(Configed.getResourceValue("PanelDriverUpload.type"));
 
-		radioButtons = new ArrayList<>();
+		List<RadioButtonIntegrationType> radioButtons = new ArrayList<>();
 
-		buttonStandard = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.standard"),
+		RadioButtonIntegrationType buttonStandard = new RadioButtonIntegrationType(
+				Configed.getResourceValue("PanelDriverUpload.type.standard"),
 				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS));
-		buttonPreferred = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.preferred"),
+		RadioButtonIntegrationType buttonPreferred = new RadioButtonIntegrationType(
+				Configed.getResourceValue("PanelDriverUpload.type.preferred"),
 				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS_PREFERRED));
-		buttonNotPreferred = new RadioButtonIntegrationType(
+		RadioButtonIntegrationType buttonNotPreferred = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.excluded"),
 				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS_EXCLUDED));
-		buttonAdditional = new RadioButtonIntegrationType(
+		RadioButtonIntegrationType buttonAdditional = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.additional"),
 				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS_ADDITIONAL));
 		buttonByAudit = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),

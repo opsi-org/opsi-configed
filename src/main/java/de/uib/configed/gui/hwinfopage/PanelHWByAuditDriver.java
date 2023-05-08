@@ -23,8 +23,6 @@ public class PanelHWByAuditDriver extends JPanel {
 
 	protected String byAuditPath;
 
-	private ButtonGroup selectionGroup;
-	private JRadioButton selectionComputerSystem;
 	private JRadioButton selectionBaseBoard;
 
 	protected JTextField fieldVendor;
@@ -34,8 +32,6 @@ public class PanelHWByAuditDriver extends JPanel {
 	protected JTextField fieldLabel2;
 
 	protected String title;
-
-	private JButton buttonUploadDrivers;
 
 	private FDriverUpload fDriverUpload;
 	ConfigedMain main;
@@ -76,15 +72,15 @@ public class PanelHWByAuditDriver extends JPanel {
 		JLabel labelVendor = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsVendor"));
 		JLabel labelProduct = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProduct"));
 
-		buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
+		JButton buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setToolTipText(Configed.getResourceValue("PanelHWInfo.uploadDrivers"));
 
 		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
 
-		selectionComputerSystem = new JRadioButton("", true);
+		JRadioButton selectionComputerSystem = new JRadioButton("", true);
 		selectionBaseBoard = new JRadioButton("");
-		selectionGroup = new ButtonGroup();
+		ButtonGroup selectionGroup = new ButtonGroup();
 		selectionGroup.add(selectionComputerSystem);
 		selectionGroup.add(selectionBaseBoard);
 
@@ -211,7 +207,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		}
 
 		if (fDriverUpload == null) {
-			fDriverUpload = new FDriverUpload(main, main.getPersistenceController(), null);
+			fDriverUpload = new FDriverUpload(main, main.getPersistenceController());
 		}
 
 		fDriverUpload.setSize(Globals.helperFormDimension);

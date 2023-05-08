@@ -25,10 +25,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 	private Map<String, Map<String, Object>> depotInfo;
 
-	private AbstractPersistenceController persist;
-
 	public DepotsList(AbstractPersistenceController persist) {
-		this.persist = persist;
 		if (!ConfigedMain.THEMES) {
 			super.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			super.setSelectionBackground(Globals.defaultTableCellSelectedBgColor);

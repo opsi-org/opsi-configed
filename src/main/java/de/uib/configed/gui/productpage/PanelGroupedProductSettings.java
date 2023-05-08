@@ -24,7 +24,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.guidata.InstallationStateTableModelFiltered;
 import de.uib.configed.productgroup.ProductgroupPanel;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.JMenuItemFormatted;
 
 public class PanelGroupedProductSettings extends PanelProductSettings {
 
@@ -32,8 +31,6 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 	// List reductionList
 
 	private ProductgroupPanel groupPanel;
-
-	private JMenuItemFormatted popupMarkHits;
 
 	public PanelGroupedProductSettings(String title, ConfigedMain mainController,
 			Map<String, Boolean> productDisplayFields) {

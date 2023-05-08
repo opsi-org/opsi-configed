@@ -38,8 +38,6 @@ import de.uib.utilities.swing.SecondaryFrame;
 import de.uib.utilities.thread.WaitCursor;
 
 public class FGroupActions extends SecondaryFrame {
-	private JPanel topPanel;
-	private JPanel imageActionPanel;
 
 	private JTextField fieldGroupname;
 	private JTextField fieldInvolvedClientsCount;
@@ -50,8 +48,6 @@ public class FGroupActions extends SecondaryFrame {
 
 	private AbstractPersistenceController persist;
 	ConfigedMain main;
-
-	private int hFirstGap = Globals.HFIRST_GAP;
 
 	private int firstLabelWidth = Globals.BUTTON_WIDTH;
 
@@ -127,11 +123,11 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	private void define() {
-		topPanel = new JPanel();
+		JPanel topPanel = new JPanel();
 
 		defineTopPanel(topPanel);
 
-		imageActionPanel = new JPanel();
+		JPanel imageActionPanel = new JPanel();
 		imageActionPanel.setBorder(Globals.createPanelBorder());
 
 		defineImageActionPanel(imageActionPanel);

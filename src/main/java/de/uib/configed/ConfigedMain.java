@@ -117,7 +117,6 @@ import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
-import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
@@ -153,8 +152,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// Are themes enabled?
 	public static final boolean THEMES = false;
-
-	private static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
 	private static GuiStrategyForLoadingData strategyForLoadingData;
 
@@ -333,8 +330,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	protected Map<String, String> logfiles;
 
 	public Map<String, Boolean> hostDisplayFields;
-
-	private LicensingInfoMap licensingInfoMap;
 
 	public enum LicencesTabStatus {
 		LICENCEPOOL, ENTER_LICENCE, EDIT_LICENCE, USAGE, RECONCILIATION, STATISTICS

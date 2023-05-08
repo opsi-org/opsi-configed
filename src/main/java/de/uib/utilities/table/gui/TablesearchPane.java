@@ -80,9 +80,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private AbstractNavigationPanel navPane;
 	private PanelGenEditTable associatedPanel;
-	private boolean withNavPane;
 
-	private JPopupMenu searchMenu;
 	private LinkedHashMap<JMenuItemFormatted, Boolean> searchMenuEntries;
 
 	private JMenuItemFormatted popupSearch;
@@ -232,7 +230,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void setWithNavPane(boolean b) {
 		navPane.setVisible(b);
-		withNavPane = b;
 	}
 
 	public void setMultiSelection(boolean b) {
@@ -645,7 +642,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void buildMenuSearchfield() {
 		Logging.info(this, "buildMenuSearchfield");
-		searchMenu = new JPopupMenu();
+		JPopupMenu searchMenu = new JPopupMenu();
 		for (Entry<JMenuItemFormatted, Boolean> searchMenuEntry : searchMenuEntries.entrySet()) {
 			if (Boolean.TRUE.equals(searchMenuEntry.getValue())) {
 				searchMenu.add(searchMenuEntry.getKey());

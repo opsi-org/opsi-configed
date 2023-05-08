@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 
@@ -36,7 +35,6 @@ public class PanelMountShare extends JPanel {
 
 	private static final int FIRST_LABEL_WIDTH = Globals.FIRST_LABEL_WIDTH;
 
-	private AbstractPersistenceController persist;
 	ConfigedMain main;
 	private JFrame rootFrame;
 
@@ -89,6 +87,7 @@ public class PanelMountShare extends JPanel {
 
 		// mountShareLabel = new JLabel(
 
+		// TODO WHY EMPTY LABEL?
 		mountShareLabel = new JLabel("");
 
 		mountShareDescriptionLabel = new JLabel(

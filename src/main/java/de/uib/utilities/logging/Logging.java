@@ -75,6 +75,10 @@ public class Logging {
 
 	protected static List<LogEventObserver> logEventObservers = new ArrayList<>();
 
+	// private constructor to hide the implicit public one
+	private Logging() {
+	}
+
 	public static final String levelText(int level) {
 		return LEVEL_TO_NAME.get(level);
 	}

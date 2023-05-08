@@ -26,8 +26,6 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 	private PanelLicencesUsage thePanel;
 
 	private GenTableModel modelLicencesUsage;
-	private GenTableModel modelLicencekeys;
-	private GenTableModel modelWindowsSoftwareIds;
 	private GenTableModel modelLicencepools;
 
 	private AbstractPersistenceController persist;

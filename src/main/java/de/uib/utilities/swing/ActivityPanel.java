@@ -42,8 +42,6 @@ public class ActivityPanel extends JPanel implements Runnable {
 
 	Color[] colors;
 
-	private Thread colorSwitching;
-
 	/**
 	 * call the "initGui" method
 	 */

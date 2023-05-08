@@ -54,7 +54,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	// columns which are editable in principle (but they may be final)
 
 	protected int keyCol = -1;
-	protected ArrayList<TableEditItem> updates;
+	protected List<TableEditItem> updates;
 	protected String tableName;
 	protected boolean modelDataValid;
 	protected boolean modelStructureValid;
@@ -80,7 +80,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	CursorrowObserved cursorrowObservable;
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
-			int[] finalColumns, TableModelListener l, ArrayList<TableEditItem> updates) {
+			int[] finalColumns, TableModelListener l, List<TableEditItem> updates) {
 		this.keyCol = keyCol;
 		this.updates = updates;
 		this.tableProvider = dataProvider;
@@ -125,7 +125,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
-			TableModelListener l, ArrayList<TableEditItem> updates) {
+			TableModelListener l, List<TableEditItem> updates) {
 		this(itemFactory, dataProvider, keyCol, null, l, updates);
 	}
 

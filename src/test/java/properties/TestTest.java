@@ -22,7 +22,7 @@ class TestTest {
 	 * the same keywords or if a translation-file cannot be found
 	 */
 	@Test
-	private void testIfEverythingTranslated() {
+	void testIfEverythingTranslated() {
 		Properties properties = new Properties();
 		InputStream is = Messages.class.getResourceAsStream(FILENAME_VALID_LOCALISATIONS);
 

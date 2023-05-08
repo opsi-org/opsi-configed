@@ -60,7 +60,7 @@ public class PanelProductProperties extends JSplitPane {
 
 		depotsOfPackage = new ArrayList<>();
 
-		ArrayList<TableEditItem> updateCollection = new ArrayList<TableEditItem>();
+		List<TableEditItem> updateCollection = new ArrayList<>();
 		GenTableModel model = new GenTableModel(null, mainController.globalProductsTableProvider, -1, paneProducts,
 				updateCollection);
 

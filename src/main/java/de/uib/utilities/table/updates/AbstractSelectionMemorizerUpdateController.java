@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.thread.WaitCursor;
 
@@ -22,15 +21,13 @@ public abstract class AbstractSelectionMemorizerUpdateController
 	private PanelGenEditTable keysPanel;
 	private int keyCol;
 	private PanelGenEditTable panel;
-	private GenTableModel tablemodel;
 	private StrList2BooleanFunction updater;
 
 	protected AbstractSelectionMemorizerUpdateController(PanelGenEditTable keysPanel, int keyCol,
-			PanelGenEditTable panel, GenTableModel tablemodel, StrList2BooleanFunction updater) {
+			PanelGenEditTable panel, StrList2BooleanFunction updater) {
 		this.keysPanel = keysPanel;
 		this.keyCol = keyCol;
 		this.panel = panel;
-		this.tablemodel = tablemodel;
 		this.updater = updater;
 	}
 

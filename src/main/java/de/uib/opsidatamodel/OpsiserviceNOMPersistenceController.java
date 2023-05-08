@@ -8210,8 +8210,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
 				Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo);
 				Map<String, Object> opsiModuleData = JSONReMapper.getMapObject((JSONObject) opsiModuleInfo.getValue());
-				ModulePermissionValue modulePermission = new ModulePermissionValue(exec,
-						opsiModuleData.get("available"), validUntil);
+				ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleData.get("available"),
+						validUntil);
 
 				Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
 				Boolean permissionCheck = modulePermission.getBoolean();
@@ -8238,7 +8238,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					continue;
 				}
 
-				modulePermission = new ModulePermissionValue(exec, opsiModuleData.get("client_number"), validUntil);
+				modulePermission = new ModulePermissionValue(opsiModuleData.get("client_number"), validUntil);
 
 				Logging.info(this,
 						"handle modules key " + opsiCountModule.getKey() + " permission set " + modulePermission);

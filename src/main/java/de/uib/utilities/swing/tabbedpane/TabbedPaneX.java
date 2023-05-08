@@ -22,15 +22,12 @@ public class TabbedPaneX extends JPanel {
 
 	private List<LicencesTabStatus> tabOrder;
 
-	private Map<String, Object> globals;
-
 	public TabbedPaneX(TabController controller) {
 		this.controller = controller;
 		init();
 	}
 
 	public void setGlobals(Map<String, Object> globals) {
-		this.globals = globals;
 		setFont((Font) globals.get("defaultFont"));
 	}
 

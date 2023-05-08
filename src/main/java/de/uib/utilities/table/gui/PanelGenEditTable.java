@@ -135,16 +135,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private JMenuItemFormatted menuItemReload;
 	private JMenuItemFormatted menuItemSortAgain;
 	private JMenuItemFormatted menuItemPrint;
-	private JMenuItemFormatted menuItemExportExcel;
-	private JMenuItemFormatted menuItemExportSelectedExcel;
 	private JMenuItemFormatted menuItemExportCSV;
 	private JMenuItemFormatted menuItemExportSelectedCSV;
-	private JMenuItemFormatted menuItemNewRow;
-	private JMenuItemFormatted menuItemCopyRelation;
 	private JMenuItemFormatted menuItemFloatingCopy;
 	private JMenuItemFormatted menuItemPDF;
-
-	private JFrame masterFrame = ConfigedMain.getMainFrame();
 
 	protected Comparator[] comparators;
 
@@ -302,7 +296,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * @param javax.swing.JFrame
 	 */
 	public void setMasterFrame(JFrame masterFrame) {
-		this.masterFrame = masterFrame;
 		if (searchPane != null) {
 			searchPane.setMasterFrame(masterFrame);
 		}

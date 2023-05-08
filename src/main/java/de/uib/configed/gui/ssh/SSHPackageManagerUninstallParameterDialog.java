@@ -61,8 +61,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private CommandOpsiPackageManagerUninstall commandPMUninstall = new CommandOpsiPackageManagerUninstall();
 
-	private boolean execFinished;
-
 	public SSHPackageManagerUninstallParameterDialog() {
 		this(null);
 	}
@@ -403,7 +401,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 					new SSHConnectExec(commandPMUninstall);
 
-					execFinished = true;
 					Logging.debug(this, "end exec thread");
 				} catch (Exception e) {
 					Logging.warning(this, "doAction3, exception occurred", e);
@@ -421,7 +418,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	@Override
 	public void doAction1() {
-		execFinished = true;
 		this.setVisible(false);
 		this.dispose();
 	}

@@ -26,8 +26,6 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
  * the type of export
  */
 public abstract class AbstractSWExporter {
-	private File exportDirectory;
-	private String exportDirectoryS;
 	private String filepathStart;
 
 	protected String filenamePrefix = "report_swaudit_";
@@ -44,8 +42,6 @@ public abstract class AbstractSWExporter {
 	private String password;
 	private String clientsFile;
 	private String outDir;
-
-	protected String title;
 
 	/* constructor for use in a initialized context */
 	protected AbstractSWExporter(AbstractPersistenceController controller) {
@@ -172,19 +168,6 @@ public abstract class AbstractSWExporter {
 
 	protected void initModel(String hostId) {
 		theHost = hostId;
-
-		exportDirectoryS = "";
-		if (exportDirectory == null) {
-			try {
-				exportDirectory = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
-			} catch (Exception ex) {
-				Logging.warning(this, "could not define exportDirectory)", ex);
-			}
-		}
-
-		if (exportDirectory != null) {
-			exportDirectoryS = exportDirectory.toString();
-		}
 
 		List<String> columnNames;
 		List<String> classNames;

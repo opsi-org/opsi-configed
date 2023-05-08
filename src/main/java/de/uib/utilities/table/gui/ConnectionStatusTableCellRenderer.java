@@ -30,7 +30,6 @@ public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer
 	private Icon messagebusIcon;
 	private Icon trueIcon;
 	private Icon falseIcon;
-	private boolean allowingString;
 
 	public ConnectionStatusTableCellRenderer() {
 		super();

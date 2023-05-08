@@ -691,86 +691,85 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col.setMaxWidth(60);
 
 		// updates
-		thePanel.panelRegisteredSoftware
-				.setUpdateController(new AbstractSelectionMemorizerUpdateController(thePanel.panelLicencepools, 0,
-						thePanel.panelRegisteredSoftware, modelWindowsSoftwareIds, new StrList2BooleanFunction() {
-							@Override
-							public boolean sendUpdate(String poolId, List<String> softwareIds) {
+		thePanel.panelRegisteredSoftware.setUpdateController(new AbstractSelectionMemorizerUpdateController(
+				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, new StrList2BooleanFunction() {
+					@Override
+					public boolean sendUpdate(String poolId, List<String> softwareIds) {
 
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicencePool "
-										+ removeKeysFromOtherLicencePool);
+						Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
+						Logging.info(this,
+								"sendUpdate poolId, removeKeysFromOtherLicencePool " + removeKeysFromOtherLicencePool);
 
-								boolean result = true;
+						boolean result = true;
 
-								if (removeKeysFromOtherLicencePool != null) {
-									for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicencePool
-											.entrySet()) {
-										if (result && !otherStringPoolEntry.getValue().isEmpty()) {
-											result = persist.removeAssociations(otherStringPoolEntry.getKey(),
-													otherStringPoolEntry.getValue());
-											if (result) {
-												removeKeysFromOtherLicencePool.remove(otherStringPoolEntry.getKey());
-											}
-										}
+						if (removeKeysFromOtherLicencePool != null) {
+							for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicencePool
+									.entrySet()) {
+								if (result && !otherStringPoolEntry.getValue().isEmpty()) {
+									result = persist.removeAssociations(otherStringPoolEntry.getKey(),
+											otherStringPoolEntry.getValue());
+									if (result) {
+										removeKeysFromOtherLicencePool.remove(otherStringPoolEntry.getKey());
 									}
 								}
-
-								if (!result) {
-									return false;
-								}
-
-								// cleanup assignments to other pools since an update would not change them
-								// (redmine #3282)
-								if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
-									result = persist.setWindowsSoftwareIds2LPool(poolId, softwareIds);
-								} else {
-									result = persist.addWindowsSoftwareIds2LPool(poolId, softwareIds);
-								}
-
-								Logging.info(this, "sendUpdate, setSoftwareIdsFromLicencePool poolId " + poolId);
-								setSoftwareIdsFromLicencePool(poolId);
-
-								// doing it locally for fSoftware2LicencePool
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, we have software ids " + softwareIds.size());
-								Logging.info(this,
-										"sendUpdate, we have software ids "
-												+ persist.getSoftwareListByLicencePool(poolId).size() + " they are "
-												+ persist.getSoftwareListByLicencePool(poolId));
-
-								List<String> oldSWListForPool = persist.getSoftwareListByLicencePool(poolId);
-
-								// remove all old assignements
-								for (String swId : oldSWListForPool) {
-									Logging.info(this, "sendUpdate remove " + swId + " from Software2LicencePool ");
-									persist.getFSoftware2LicencePool().remove(swId);
-								}
-								// set the current ones
-								for (String ident : softwareIds) {
-									persist.setFSoftware2LicencePool(ident, poolId);
-								}
-
-								if (thePanel.fSoftwarename2LicencePool != null) {
-									thePanel.fSoftwarename2LicencePool.panelSWnames.requestReload();
-								}
-
-								if (thePanel.fSoftwarename2LicencePool != null) {
-									thePanel.fSoftwarename2LicencePool.panelSWxLicencepool.requestReload();
-								}
-
-								return result;
 							}
-						}) {
+						}
 
-					@Override
-					public boolean cancelChanges() {
-						setSoftwareIdsFromLicencePool(null);
-						return true;
+						if (!result) {
+							return false;
+						}
+
+						// cleanup assignments to other pools since an update would not change them
+						// (redmine #3282)
+						if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
+							result = persist.setWindowsSoftwareIds2LPool(poolId, softwareIds);
+						} else {
+							result = persist.addWindowsSoftwareIds2LPool(poolId, softwareIds);
+						}
+
+						Logging.info(this, "sendUpdate, setSoftwareIdsFromLicencePool poolId " + poolId);
+						setSoftwareIdsFromLicencePool(poolId);
+
+						// doing it locally for fSoftware2LicencePool
+						Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
+						Logging.info(this, "sendUpdate, we have software ids " + softwareIds.size());
+						Logging.info(this,
+								"sendUpdate, we have software ids "
+										+ persist.getSoftwareListByLicencePool(poolId).size() + " they are "
+										+ persist.getSoftwareListByLicencePool(poolId));
+
+						List<String> oldSWListForPool = persist.getSoftwareListByLicencePool(poolId);
+
+						// remove all old assignements
+						for (String swId : oldSWListForPool) {
+							Logging.info(this, "sendUpdate remove " + swId + " from Software2LicencePool ");
+							persist.getFSoftware2LicencePool().remove(swId);
+						}
+						// set the current ones
+						for (String ident : softwareIds) {
+							persist.setFSoftware2LicencePool(ident, poolId);
+						}
+
+						if (thePanel.fSoftwarename2LicencePool != null) {
+							thePanel.fSoftwarename2LicencePool.panelSWnames.requestReload();
+						}
+
+						if (thePanel.fSoftwarename2LicencePool != null) {
+							thePanel.fSoftwarename2LicencePool.panelSWxLicencepool.requestReload();
+						}
+
+						return result;
 					}
-				}
+				}) {
 
-				);
+			@Override
+			public boolean cancelChanges() {
+				setSoftwareIdsFromLicencePool(null);
+				return true;
+			}
+		}
+
+		);
 
 		// -- Softwarename --> LicencePool
 

@@ -206,7 +206,7 @@ public class LicenseDisplayer {
 			classNames.add("java.lang.String");
 		}
 
-		updateCollection = new ArrayList<TableEditItem>();
+		updateCollection = new ArrayList<>();
 
 		final TreeSet<String> namesWithVariantPools = new TreeSet<>();
 

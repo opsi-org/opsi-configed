@@ -303,7 +303,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			classNames.add("java.lang.String");
 		}
 
-		updateCollection = new ArrayList<TableEditItem>();
+		updateCollection = new ArrayList<>();
 
 		columnNamesSWxLicencepool = new ArrayList<>();
 		columnNamesSWxLicencepool.add(AuditSoftwareXLicencePool.SW_ID);

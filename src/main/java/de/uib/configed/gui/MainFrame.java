@@ -69,7 +69,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -413,36 +412,26 @@ public class MainFrame extends JFrame
 
 	private PanelTabbedDocuments showLogfiles;
 
-	private JPanel jPanelSchalterstellung;
-
 	public FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
 	private LicensingInfoMap licensingInfoMap;
 
-	private JTextField jTextFieldConfigdir = new JTextField();
-	private JButton jButtonFileChooserConfigdir = new JButton();
 	private JPanel jPanel3 = new JPanel();
 
 	private JCheckBox jCheckBoxSorted = new JCheckBox();
 	private JButton jButtonSaveList = new JButton();
-	private JPanel jPanelButtonSaveList = new JPanel();
 	private String[] options = new String[] { "off", "on", "setup" };
 	private JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
 
-	private JLabel jLabelproperty = new JLabel();
 	private ButtonGroup buttonGroupRequired = new ButtonGroup();
 	private JRadioButton jRadioRequiredAll = new JRadioButton();
 	private JRadioButton jRadioRequiredOff = new JRadioButton();
 
-	private JButton jBtnAllOff = new JButton();
-
 	private JTableSelectionPanel panelClientlist;
-	private boolean shiftpressed;
 
 	private JLabel jLabelHostinfos = new JLabel();
 
 	private JLabel jLabelPath = new JLabel();
 
-	private JTextArea jFieldInDepot;
 	private JLabel labelHost;
 	private JLabel labelHostID;
 	CheckedLabel cbInstallByShutdown;
@@ -457,9 +446,6 @@ public class MainFrame extends JFrame
 	private JTextEditorField ipAddressField;
 	private JTextEditorField jTextFieldOneTimePassword;
 	private JTextHideField jTextFieldHostKey;
-	private JScrollPane scrollpaneNotes;
-
-	private JPopupMenu jPopupMenu = new JPopupMenu();
 
 	protected FShowList fListSelectedClients;
 
@@ -1930,7 +1916,7 @@ public class MainFrame extends JFrame
 		JLabel labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
 		JLabel labelOpsiHostKey = new JLabel("opsiHostKey");
 
-		jFieldInDepot = new JTextArea();
+		JTextArea jFieldInDepot = new JTextArea();
 		jFieldInDepot.setEditable(false);
 		jFieldInDepot.setFont(Globals.defaultFontBig);
 		if (!ConfigedMain.THEMES) {
@@ -1961,7 +1947,7 @@ public class MainFrame extends JFrame
 		jTextAreaNotes.addKeyListener(this);
 		jTextAreaNotes.addMouseListener(this);
 
-		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
+		JScrollPane scrollpaneNotes = new JScrollPane(jTextAreaNotes);
 		scrollpaneNotes.setPreferredSize(Globals.textfieldDimension);
 		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);

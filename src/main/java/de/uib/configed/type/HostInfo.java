@@ -16,7 +16,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
 public class HostInfo {
-	private static int callCounter;
 	private static Map<String, Integer> id2InstanceNumber;
 
 	// ---

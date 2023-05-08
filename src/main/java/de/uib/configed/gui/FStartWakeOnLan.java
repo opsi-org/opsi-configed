@@ -63,16 +63,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	private long startActionMillis;
 	private long waitingMillis;
 
-	private int stepsTotal;
 	private boolean waitingMode;
 
-	private LinkedList<String> oneDayHours;
-	private LinkedList<String> minutes;
 	private String nullDelayValue;
 
-	private Map<String, List<String>> hostSeparationByDepots;
-	private Set<String> usedDepots;
-	private int clientCount;
 	private String[] currentlySelectedClients;
 
 	private WaitingWorker waitingTask;
@@ -100,9 +94,12 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	public void setClients() {
-		hostSeparationByDepots = main.getPersistenceController().getHostSeparationByDepots(main.getSelectedClients());
-		usedDepots = hostSeparationByDepots.keySet();
+		Map<String, List<String>> hostSeparationByDepots = main.getPersistenceController()
+				.getHostSeparationByDepots(main.getSelectedClients());
+		Set<String> usedDepots = hostSeparationByDepots.keySet();
 		currentlySelectedClients = main.getSelectedClients();
+
+		int clientCount;
 		if (main.getSelectedClients() != null) {
 			clientCount = main.getSelectedClients().length;
 		} else {

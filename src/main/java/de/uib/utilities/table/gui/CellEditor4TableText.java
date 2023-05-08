@@ -22,11 +22,9 @@ import de.uib.utilities.swing.FEdit;
 import de.uib.utilities.swing.FEditText;
 
 public class CellEditor4TableText extends DefaultCellEditor implements MouseListener, KeyListener, FocusListener {
-	private String oldValue;
 	private String currentValue;
 	private JTextField editorContent;
 	private FEdit fEdit;
-	private boolean globalFEdit;
 	private boolean fEditInitialized;
 	private Dimension initSize;
 
@@ -38,7 +36,6 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 			this.fEdit = new FEditText("");
 		} else {
 			this.fEdit = fEdit;
-			globalFEdit = true;
 		}
 
 		fEditInitialized = false;
@@ -137,7 +134,7 @@ public class CellEditor4TableText extends DefaultCellEditor implements MouseList
 	// Implement the one method defined by TableCellEditor.
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-		oldValue = (String) value;
+		String oldValue = (String) value;
 		fEdit.setCaller(editorContent);
 		fEdit.setStartText(oldValue);
 

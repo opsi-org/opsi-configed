@@ -14,23 +14,13 @@ import java.util.Map;
 
 public class MapBasedTableEditItem extends TableEditItem {
 	private List<String> columnNames;
-	private List<String> classNames;
-	private List<Object> oldValues;
 	private List<Object> rowV;
 
-	public MapBasedTableEditItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
-			List<Object> oldValues, List<Object> rowV) {
+	public MapBasedTableEditItem(Object source, int keyCol, List<String> columnNames, List<Object> rowV) {
 		this.columnNames = columnNames;
-		this.classNames = classNames;
-		this.oldValues = oldValues;
 		this.rowV = rowV;
 		this.source = source;
 		this.keyCol = keyCol;
-	}
-
-	public MapBasedTableEditItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
-			List<Object> rowV) {
-		this(source, keyCol, columnNames, classNames, null, rowV);
 	}
 
 	public Map<String, Object> getRowAsMap() {

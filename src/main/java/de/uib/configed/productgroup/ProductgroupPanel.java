@@ -78,7 +78,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private static final String NO_GROUP_ID = Configed.getResourceValue("GroupPanel.NO_GROUP_ID");
 	private static final String SAVE_GROUP_ID = Configed.getResourceValue("GroupPanel.SAVE_GROUP_ID");
 	private static final String NO_GROUP_DESCRIPTION = Configed.getResourceValue("GroupPanel.NO_GROUP_DESCRIPTION");
-	private static final String EMPTIED_GROUPID = "";
 	private static final String TEXT_SAVE = Configed.getResourceValue("GroupPanel.TEXT_SAVE");
 	private static final String TEXT_DELETE = Configed.getResourceValue("GroupPanel.TEXT_DELETE");
 
@@ -167,7 +166,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	}
 
 	private AbstractDocumentListener descriptionFieldListener;
-	private AbstractDocumentListener groupsEditFieldListener;
 
 	protected ConfigedMain mainController;
 
@@ -539,7 +537,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
-		groupsEditFieldListener = new AbstractDocumentListener() {
+		AbstractDocumentListener groupsEditFieldListener = new AbstractDocumentListener() {
 			@Override
 			public void doAction() {
 
