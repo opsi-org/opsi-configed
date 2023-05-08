@@ -27,7 +27,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 	protected static List<String> rowType;
 	protected static int noOfRowTypes;
 
-	private Set<String> keySet;
 	private Object[] keyArray;
 	private final Object[] zeroArray = new Object[] {};
 
@@ -70,7 +69,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	public void setActualProduct(String depotId, String product) {
 
-		keySet = null;
 		requMap = null;
 		requBeforeMap = null;
 		requAfterMap = null;
@@ -80,7 +78,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		if (product != null && !product.trim().isEmpty()) {
 			retrieveRequirements(depotId, product);
 
-			keySet = new TreeSet<>();
+			Set<String> keySet = new TreeSet<>();
 			if (requMap != null && requMap.keySet() != null) {
 				keySet.addAll(requMap.keySet());
 			}

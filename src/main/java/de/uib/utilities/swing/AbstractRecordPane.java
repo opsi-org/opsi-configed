@@ -42,8 +42,6 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 	protected Map<String, Boolean> editable;
 	protected Map<String, Boolean> secrets;
 
-	private JTextField jTextField;
-
 	protected AbstractRecordPane() {
 	}
 
@@ -95,6 +93,8 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 
 			jLabel.setFont(Globals.defaultFontBig);
 			labelfields.put(dataEntry.getKey(), jLabel);
+
+			JTextField jTextField;
 
 			if (secrets != null && !secrets.isEmpty() && Boolean.TRUE.equals(secrets.get(dataEntry.getKey()))) {
 				jTextField = new JPasswordField();

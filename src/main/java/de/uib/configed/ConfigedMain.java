@@ -302,7 +302,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	ControlPanelEnterLicence controlPanelEnterLicence;
 	ControlPanelEditLicences controlPanelEditLicences;
-	private AbstractControlMultiTablePanel controlPanelAssignToLPools;
 	ControlPanelLicencesStatistics controlPanelLicencesStatistics;
 	ControlPanelLicencesUsage controlPanelLicencesUsage;
 	ControlPanelLicencesReconciliation controlPanelLicencesReconciliation;
@@ -1475,7 +1474,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// panelAssignToLPools
 		licencesPanelsTabNames.put(LicencesTabStatus.LICENCEPOOL,
 				Configed.getResourceValue("ConfigedMain.Licences.TabLicencepools"));
-		controlPanelAssignToLPools = new ControlPanelAssignToLPools(persist, this);
+		ControlPanelAssignToLPools controlPanelAssignToLPools = new ControlPanelAssignToLPools(persist, this);
 		addClient(LicencesTabStatus.LICENCEPOOL, controlPanelAssignToLPools.getTabClient());
 		allControlMultiTablePanels.add(controlPanelAssignToLPools);
 

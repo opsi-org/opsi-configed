@@ -60,7 +60,6 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private List<String> listSelectedDepots;
 	private JButton buttonSelectWithEqualProperties;
 	private JButton buttonSelectAll;
-	private JPopupMenu popupDepot = new JPopupMenu();
 
 	private JPanel titlePanel;
 
@@ -89,7 +88,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		JScrollPane scrollpaneDepots = new JScrollPane();
 		scrollpaneDepots.setViewportView(listDepots);
 
-		popupDepot = new JPopupMenu();
+		JPopupMenu popupDepot = new JPopupMenu();
 		listDepots.setComponentPopupMenu(popupDepot);
 
 		buttonSelectWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));

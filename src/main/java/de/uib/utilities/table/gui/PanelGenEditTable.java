@@ -132,13 +132,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private JMenuItemFormatted menuItemDeleteRelation;
 	private JMenuItemFormatted menuItemSave;
 	private JMenuItemFormatted menuItemCancel;
-	private JMenuItemFormatted menuItemReload;
-	private JMenuItemFormatted menuItemSortAgain;
-	private JMenuItemFormatted menuItemPrint;
-	private JMenuItemFormatted menuItemExportCSV;
-	private JMenuItemFormatted menuItemExportSelectedCSV;
-	private JMenuItemFormatted menuItemFloatingCopy;
-	private JMenuItemFormatted menuItemPDF;
 
 	protected Comparator[] comparators;
 
@@ -652,7 +645,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case POPUP_RELOAD:
 
-				menuItemReload = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.reload"),
+				JMenuItemFormatted menuItemReload = new JMenuItemFormatted(
+						Configed.getResourceValue("PanelGenEditTable.reload"),
 						Globals.createImageIcon("images/reload16.png", ""));
 
 				// does not work
@@ -666,7 +660,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_SORT_AGAIN:
-				menuItemSortAgain = new JMenuItemFormatted(
+				JMenuItemFormatted menuItemSortAgain = new JMenuItemFormatted(
 						Configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
 				menuItemSortAgain.addActionListener(actionEvent -> sortAgainAsConfigured());
 
@@ -694,7 +688,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_PRINT:
-				menuItemPrint = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.print"));
+				JMenuItemFormatted menuItemPrint = new JMenuItemFormatted(
+						Configed.getResourceValue("PanelGenEditTable.print"));
 				menuItemPrint.addActionListener((ActionEvent actionEvent) -> {
 					try {
 						theTable.print();
@@ -709,7 +704,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case POPUP_FLOATINGCOPY:
 
-				menuItemFloatingCopy = new JMenuItemFormatted(
+				JMenuItemFormatted menuItemFloatingCopy = new JMenuItemFormatted(
 						Configed.getResourceValue("PanelGenEditTable.floatingCopy"));
 				menuItemFloatingCopy.addActionListener(actionEvent -> floatExternal());
 
@@ -721,19 +716,19 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_EXPORT_CSV:
-				menuItemExportCSV = exportTable.getMenuItemExport();
+				JMenuItemFormatted menuItemExportCSV = exportTable.getMenuItemExport();
 				addPopupItem(menuItemExportCSV);
 
 				break;
 
 			case POPUP_EXPORT_SELECTED_CSV:
-				menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
+				JMenuItemFormatted menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
 				addPopupItem(menuItemExportSelectedCSV);
 
 				break;
 
 			case POPUP_PDF:
-				menuItemPDF = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
+				JMenuItemFormatted menuItemPDF = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
 						Globals.createImageIcon("images/acrobat_reader16.png", ""));
 				menuItemPDF.addActionListener((ActionEvent actionEvent) -> {
 					try {

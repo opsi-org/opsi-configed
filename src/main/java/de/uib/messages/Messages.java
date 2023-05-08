@@ -24,12 +24,9 @@ public final class Messages {
 	private static List<LocaleRepresentation> existingLocales;
 	private static List<String> existingLocalesNames;
 	private static Map<String, String> localeInfo;
-	private static String selectedLocaleString;
 	private static Locale myLocale;
 	public static ResourceBundle messagesBundle;
 	public static ResourceBundle messagesEnBundle;
-	private static List<String> myLocaleCharacteristics;
-	private static List<String> myLocaleCharacteristicsEN;
 	private static final List<String> availableThemes = Arrays.asList("Light", "Dark");
 	private static String selectedTheme = availableThemes.get(0);
 
@@ -39,7 +36,7 @@ public final class Messages {
 
 	private static String findSelectedLocale(String language, String country) {
 		String result = null;
-		myLocaleCharacteristics = new ArrayList<>();
+		List<String> myLocaleCharacteristics = new ArrayList<>();
 		String characteristics = language + "_" + country;
 
 		myLocaleCharacteristics.add(characteristics);
@@ -57,7 +54,7 @@ public final class Messages {
 	}
 
 	public static String getSelectedLocale() {
-		selectedLocaleString = findSelectedLocale(myLocale.getLanguage(), myLocale.getCountry());
+		String selectedLocaleString = findSelectedLocale(myLocale.getLanguage(), myLocale.getCountry());
 
 		if (selectedLocaleString == null) {
 			// not found, now try again for default locale
@@ -96,7 +93,7 @@ public final class Messages {
 		messagesEnBundle = ResourceBundle.getBundle(BUNDLE_NAME,
 				new Locale.Builder().setLanguage("en").setRegion("US").build());
 
-		myLocaleCharacteristicsEN = new ArrayList<>();
+		List<String> myLocaleCharacteristicsEN = new ArrayList<>();
 		myLocaleCharacteristicsEN.add("en_US");
 		myLocaleCharacteristicsEN.add("en");
 		return messagesEnBundle;

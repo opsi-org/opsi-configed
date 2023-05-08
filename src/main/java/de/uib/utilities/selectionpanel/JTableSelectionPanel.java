@@ -74,12 +74,8 @@ public class JTableSelectionPanel extends JPanel
 	ConfigedMain main;
 	private List<RowSorter.SortKey> primaryOrderingKeys;
 
-	private JLabel labelSearch;
 	CheckedLabel checkmarkSearch;
 	CheckedLabel checkmarkSearchProgressive;
-
-	private JButton buttonMarkAll;
-	private JButton buttonInvertSelection;
 
 	private JTextField fieldSearch;
 	private JComboBox<String> comboSearch;
@@ -155,7 +151,7 @@ public class JTableSelectionPanel extends JPanel
 
 		JPanel topPane = new JPanel();
 
-		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
+		JLabel labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
 
 		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
@@ -213,9 +209,9 @@ public class JTableSelectionPanel extends JPanel
 
 		Icon markAllIcon = Globals.createImageIcon("images/selection-all.png", "");
 		Icon invertSelectionIcon = Globals.createImageIcon("images/selection-invert.png", "");
-		buttonMarkAll = new JButton("", markAllIcon);
+		JButton buttonMarkAll = new JButton("", markAllIcon);
 		buttonMarkAll.setToolTipText(Configed.getResourceValue("SearchPane.popup.markall"));
-		buttonInvertSelection = new JButton("", invertSelectionIcon);
+		JButton buttonInvertSelection = new JButton("", invertSelectionIcon);
 		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
 
 		buttonMarkAll.addActionListener((ActionEvent e) -> markAll());

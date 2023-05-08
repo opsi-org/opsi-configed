@@ -17,7 +17,6 @@ public class SimpleTreeModel extends DefaultTreeModel {
 	public final SimpleIconNode rootNode;
 
 	private Set<SimpleTreePath> allPathes;
-	private Map<SimpleTreePath, SimpleIconNode> path2Node;
 
 	private Map<String, String> tooltips;
 
@@ -41,7 +40,6 @@ public class SimpleTreeModel extends DefaultTreeModel {
 		}
 
 		return result;
-
 	}
 
 	public void setRootLabel(String s) {
@@ -50,7 +48,7 @@ public class SimpleTreeModel extends DefaultTreeModel {
 
 	private void generateFrom(Set<String> dottedKeys) {
 		allPathes = new TreeSet<>();
-		path2Node = new TreeMap<>();
+		Map<SimpleTreePath, SimpleIconNode> path2Node = new TreeMap<>();
 
 		if (dottedKeys != null) {
 			for (String key : dottedKeys) {

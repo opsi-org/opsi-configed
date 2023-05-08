@@ -39,7 +39,6 @@ public class PanelMountShare extends JPanel {
 	private JFrame rootFrame;
 
 	private JButton buttonMountShare;
-	private JLabel mountShareLabel;
 	private JLabel mountShareDescriptionLabel;
 
 	private final boolean isWindows;
@@ -88,7 +87,7 @@ public class PanelMountShare extends JPanel {
 		// mountShareLabel = new JLabel(
 
 		// TODO WHY EMPTY LABEL?
-		mountShareLabel = new JLabel("");
+		JLabel mountShareLabel = new JLabel("");
 
 		mountShareDescriptionLabel = new JLabel(
 				Configed.getResourceValue("PanelMountShare.mountShareResult0") + " " + np.getDefaultName());

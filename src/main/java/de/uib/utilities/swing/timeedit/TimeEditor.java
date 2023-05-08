@@ -14,7 +14,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class TimeEditor extends JPanel {
-	private JLabel labelTime;
 	private JSpinner spinnerHour;
 	private JSpinner spinnerMin;
 
@@ -56,7 +55,7 @@ public class TimeEditor extends JPanel {
 		setOpaque(false);
 		setLayout(new GridLayout(1, 2));
 		setPreferredSize(new Dimension(250, 22));
-		labelTime = new JLabel(" hh:mm");
+		JLabel labelTime = new JLabel(" hh:mm");
 		labelTime.setFont(Globals.defaultFontBig);
 
 		hours = new ArrayList<>();

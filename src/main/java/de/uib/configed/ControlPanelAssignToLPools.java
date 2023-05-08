@@ -83,8 +83,6 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private SoftwareDirectionOfAssignment softwareDirectionOfAssignment = SoftwareDirectionOfAssignment.POOL2SOFTWARE;
 
-	private Integer totalSWEntries;
-	private Integer totalUnassignedSWEntries;
 	private Integer totalShownEntries;
 
 	private int colMarkCursorRow;
@@ -153,7 +151,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "setSoftwareIdsFromLicencePool  unknown softwareIds for licencePool  " + poolID + " : "
 				+ persist.getUnknownSoftwareListForLicencePool(poolID).size());
 
-		totalUnassignedSWEntries = getUnAssignedSoftwareIds().size();
+		Integer totalUnassignedSWEntries = getUnAssignedSoftwareIds().size();
 		Logging.info(this, "setSoftwareIdsFromLicencePool unAssignedSoftwareIds " + totalUnassignedSWEntries);
 
 		resetCounters(poolID);
@@ -220,7 +218,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		b.append("</html>");
 		thePanel.fieldCountAssignedStatus.setToolTipText(b.toString());
 
-		totalSWEntries = modelWindowsSoftwareIds.getRowCount();
+		Integer totalSWEntries = modelWindowsSoftwareIds.getRowCount();
 
 		produceFilterSets(softwareIdsForPool);
 

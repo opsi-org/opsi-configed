@@ -66,9 +66,6 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 	private ListModelProducer<String> modelProducer;
 
-	private MouseListener popupListener;
-	private MouseListener popupNoEditOptionsListener;
-
 	private JMenuItem popupItemDeleteEntry0;
 	private JMenuItem popupItemDeleteEntry1;
 	private JMenuItem popupItemDeleteEntry2;
@@ -172,7 +169,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		super.logPopupElements();
 
-		popupNoEditOptionsListener = new utils.PopupMouseListener(popupNoEditOptions);
+		MouseListener popupNoEditOptionsListener = new utils.PopupMouseListener(popupNoEditOptions);
 		table.addMouseListener(popupNoEditOptionsListener);
 		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
@@ -656,7 +653,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		}
 
-		popupListener = new utils.PopupMouseListener(popupmenuAtRow);
+		MouseListener popupListener = new utils.PopupMouseListener(popupmenuAtRow);
 		table.addMouseListener(popupListener);
 		jScrollPane.getViewport().addMouseListener(popupListener);
 	}

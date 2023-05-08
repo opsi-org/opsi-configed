@@ -135,8 +135,6 @@ public class Configed {
 	private static PropertiesStore extraLocalization;
 	private static boolean showLocalizationStrings;
 
-	private static ConfigedMain configedMain;
-
 	private static String locale;
 	private static String host;
 	public static String user;
@@ -326,9 +324,9 @@ public class Configed {
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
+		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
 
-		SwingUtilities.invokeLater(() -> configedMain.init());
+		SwingUtilities.invokeLater(configedMain::init);
 
 		try {
 
