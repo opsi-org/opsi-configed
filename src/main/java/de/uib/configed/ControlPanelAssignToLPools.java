@@ -52,9 +52,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	public PanelAssignToLPools thePanel;
 
-	GenTableModel modelLicencepools;
-	GenTableModel modelProductId2LPool;
-	GenTableModel modelWindowsSoftwareIds;
+	private GenTableModel modelLicencepools;
+	private GenTableModel modelProductId2LPool;
+	private GenTableModel modelWindowsSoftwareIds;
 
 	// we replace the filter from GenTableModel
 	TableModelFilterCondition windowsSoftwareFilterConditonShowOnlySelected;

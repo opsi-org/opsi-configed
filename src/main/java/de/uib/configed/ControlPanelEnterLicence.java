@@ -27,9 +27,9 @@ import de.uib.utilities.thread.WaitCursor;
 public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	PanelEnterLicence thePanel;
 
-	GenTableModel modelLicencekeys;
-	GenTableModel modelLicencepools;
-	GenTableModel modelLicencecontracts;
+	private GenTableModel modelLicencekeys;
+	private GenTableModel modelLicencepools;
+	private GenTableModel modelLicencecontracts;
 
 	private AbstractPersistenceController persist;
 	private ConfigedMain configedMain;

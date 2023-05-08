@@ -25,10 +25,10 @@ import de.uib.utilities.table.updates.TableUpdateCollection;
 public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 	PanelLicencesUsage thePanel;
 
-	GenTableModel modelLicencesUsage;
-	GenTableModel modelLicencekeys;
-	GenTableModel modelWindowsSoftwareIds;
-	GenTableModel modelLicencepools;
+	private GenTableModel modelLicencesUsage;
+	private GenTableModel modelLicencekeys;
+	private GenTableModel modelWindowsSoftwareIds;
+	private GenTableModel modelLicencepools;
 
 	private AbstractPersistenceController persist;
 	ConfigedMain mainController;

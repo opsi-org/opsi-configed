@@ -22,7 +22,7 @@ public abstract class AbstractSelectionMemorizerUpdateController
 	PanelGenEditTable keysPanel;
 	int keyCol;
 	PanelGenEditTable panel;
-	GenTableModel tablemodel;
+	private GenTableModel tablemodel;
 	StrList2BooleanFunction updater;
 
 	protected AbstractSelectionMemorizerUpdateController(PanelGenEditTable keysPanel, int keyCol,

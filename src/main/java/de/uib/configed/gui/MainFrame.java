@@ -508,7 +508,7 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	GlassPane glass;
+	private GlassPane glass;
 
 	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
 			ClientTree treeClients, boolean multidepot) {
