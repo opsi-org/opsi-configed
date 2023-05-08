@@ -10,13 +10,14 @@ import javax.swing.JPanel;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.GeneralFrame;
 
 public class OpenSaveDialog implements ActionListener {
 
 	JButton openBtn;
 	JButton saveBtn;
 	private Boolean saveAction;
-	de.uib.configed.gui.GeneralFrame dialogView;
+	private GeneralFrame dialogView;
 
 	public OpenSaveDialog(String title) {
 
@@ -36,7 +37,7 @@ public class OpenSaveDialog implements ActionListener {
 		JPanel qPanel = new JPanel();
 
 		qPanel.add(buttonPane);
-		dialogView = new de.uib.configed.gui.GeneralFrame(null, Globals.APPNAME + " " + title, true); // modal
+		dialogView = new GeneralFrame(null, Globals.APPNAME + " " + title, true); // modal
 		dialogView.addPanel(qPanel);
 		dialogView.setSize(new Dimension(400, 90));
 		dialogView.setLocationRelativeTo(ConfigedMain.getMainFrame());
