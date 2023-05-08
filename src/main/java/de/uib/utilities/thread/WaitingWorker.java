@@ -20,7 +20,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 	private final long startActionMillis;
 	private boolean timeoutReached;
 
-	WaitingSleeper waitingSleeper;
+	private WaitingSleeper waitingSleeper;
 
 	public WaitingWorker(WaitingSleeper waitingSleeper) {
 		this.waitingSleeper = waitingSleeper;
