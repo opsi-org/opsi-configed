@@ -14,7 +14,7 @@ import de.uib.configed.Globals;
 
 public class FTextArea extends FGeneralDialog {
 
-	JTextArea jTextArea1 = new JTextArea();
+	private JTextArea jTextArea1 = new JTextArea();
 
 	public FTextArea(JFrame owner, String title, boolean modal) {
 		super(owner, title, modal);

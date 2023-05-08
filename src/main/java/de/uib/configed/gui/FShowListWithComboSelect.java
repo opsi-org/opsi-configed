@@ -12,8 +12,8 @@ import de.uib.configed.Globals;
  */
 public class FShowListWithComboSelect extends FShowList {
 	String[] choices;
-	JComboBox<String> combo;
-	JLabel labelChoice;
+	private JComboBox<String> combo;
+	private JLabel labelChoice;
 
 	public FShowListWithComboSelect(JFrame owner, String title, boolean modal, String choiceTitle, String[] choices,
 			String[] buttonList) {

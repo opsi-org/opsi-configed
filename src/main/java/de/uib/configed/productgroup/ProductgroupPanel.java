@@ -86,13 +86,13 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private static final int MAX_COMBO_WIDTH = 200;
 	private static final int MIN_COMBO_WIDTH = 30;
 
-	JComboBoxToolTip groupsCombo;
+	private JComboBoxToolTip groupsCombo;
 
 	protected TablesearchPane searchPane;
 	protected JTable tableProducts;
 	protected IFInstallationStateTableModel insTableModel;
 
-	JTextField saveNameEditor;
+	private JTextField saveNameEditor;
 
 	protected IconButton buttonCommit;
 	protected IconButton buttonCancel;
@@ -115,8 +115,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	protected Map<String, Map<String, String>> theData;
 
 	PanelGroupedProductSettings associate;
-	JPanel panelEdit;
-	JPanel panelCombinedSettings;
+	private JPanel panelEdit;
+	private JPanel panelCombinedSettings;
 
 	protected Set<String> selectedIDs;
 

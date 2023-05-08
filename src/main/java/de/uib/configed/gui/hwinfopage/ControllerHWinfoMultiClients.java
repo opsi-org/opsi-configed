@@ -47,10 +47,10 @@ public class ControllerHWinfoMultiClients {
 	public PanelGenEditTable panel;
 	private GenTableModel model;
 
-	JButton buttonConfigureColumns;
+	private JButton buttonConfigureColumns;
 
-	JButton buttonReload;
-	JButton buttonCopySelection;
+	private JButton buttonReload;
+	private JButton buttonCopySelection;
 
 	List<String> columnNames;
 	List<String> classNames;

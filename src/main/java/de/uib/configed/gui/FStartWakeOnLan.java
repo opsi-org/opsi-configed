@@ -47,14 +47,14 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	String scheduleTitleStarter;
 	private Map<String, Integer> labelledDelays;
-	JSpinner spinnerDelay;
-	JSpinner spinnerHour;
-	JSpinner spinnerMinute;
-	JLabel labelStarttime;
-	JTextField fieldTaskname;
-	JTextField fieldClientCount;
-	JTextField fieldInvolvedDepotsCount;
-	JLabel labelTimeYetToWait;
+	private JSpinner spinnerDelay;
+	private JSpinner spinnerHour;
+	private JSpinner spinnerMinute;
+	private JLabel labelStarttime;
+	private JTextField fieldTaskname;
+	private JTextField fieldClientCount;
+	private JTextField fieldInvolvedDepotsCount;
+	private JLabel labelTimeYetToWait;
 
 	private IconButton buttonRefreshTime;
 	private IconButton buttonSetNew;

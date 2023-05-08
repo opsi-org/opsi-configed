@@ -60,7 +60,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private List<String> listSelectedDepots;
 	private JButton buttonSelectWithEqualProperties;
 	private JButton buttonSelectAll;
-	JPopupMenu popupDepot = new JPopupMenu();
+	private JPopupMenu popupDepot = new JPopupMenu();
 
 	private JPanel titlePanel;
 

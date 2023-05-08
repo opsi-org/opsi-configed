@@ -25,7 +25,7 @@ public class FPanel extends SecondaryFrame {
 	public static final RunningInstances<JFrame> runningInstances = new RunningInstances<>(JFrame.class,
 			"edit panel dialog");
 
-	JPanel innerPanel;
+	private JPanel innerPanel;
 	private boolean checkLeave;
 	private boolean left;
 

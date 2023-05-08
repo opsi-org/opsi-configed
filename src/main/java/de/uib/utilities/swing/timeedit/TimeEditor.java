@@ -14,9 +14,9 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class TimeEditor extends JPanel {
-	JLabel labelTime;
-	JSpinner spinnerHour;
-	JSpinner spinnerMin;
+	private JLabel labelTime;
+	private JSpinner spinnerHour;
+	private JSpinner spinnerMin;
 
 	List<String> hours;
 	List<String> mins;

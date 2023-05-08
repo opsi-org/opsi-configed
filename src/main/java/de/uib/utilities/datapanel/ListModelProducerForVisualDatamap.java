@@ -27,7 +27,7 @@ public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProduc
 	Map<String, ListCellOptions> optionsMap;
 	Map<String, List> currentData;
 	Map<String, Class<?>> originalTypes;
-	JTable table;
+	private JTable table;
 
 	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ListCellOptions> optionsMap,
 			Map<String, Object> currentData) {

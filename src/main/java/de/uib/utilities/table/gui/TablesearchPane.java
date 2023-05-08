@@ -56,41 +56,41 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public static final int START_TEXT_SEARCH = 1;
 	public static final int REGEX_SEARCH = 2;
 
-	JFrame masterFrame = ConfigedMain.getMainFrame();
+	private JFrame masterFrame = ConfigedMain.getMainFrame();
 
-	JTextField fieldSearch;
+	private JTextField fieldSearch;
 
 	private boolean searchActive;
 	protected boolean filtering;
 
-	JComboBox<String> comboSearchFields;
-	JComboBoxToolTip comboSearchFieldsMode;
+	private JComboBox<String> comboSearchFields;
+	private JComboBoxToolTip comboSearchFieldsMode;
 
 	CheckedLabel markReload;
 
-	JLabel labelSearch;
+	private JLabel labelSearch;
 	CheckedLabel checkmarkSearch;
 	CheckedLabel checkmarkSearchProgressive;
-	JLabel labelSearchMode;
+	private JLabel labelSearchMode;
 	CheckedLabel filtermark;
 	CheckedLabel checkmarkAllColumns;
 	CheckedLabel checkmarkFullText;
 
-	JLabel labelFilterMarkGap;
+	private JLabel labelFilterMarkGap;
 
 	private AbstractNavigationPanel navPane;
 	PanelGenEditTable associatedPanel;
 	private boolean withNavPane;
 
-	JPopupMenu searchMenu;
+	private JPopupMenu searchMenu;
 	LinkedHashMap<JMenuItemFormatted, Boolean> searchMenuEntries;
 
-	JMenuItemFormatted popupSearch;
-	JMenuItemFormatted popupSearchNext;
-	JMenuItemFormatted popupNewSearch;
-	JMenuItemFormatted popupMarkHits;
-	JMenuItemFormatted popupMarkAndFilter;
-	JMenuItemFormatted popupEmptySearchfield;
+	private JMenuItemFormatted popupSearch;
+	private JMenuItemFormatted popupSearchNext;
+	private JMenuItemFormatted popupNewSearch;
+	private JMenuItemFormatted popupMarkHits;
+	private JMenuItemFormatted popupMarkAndFilter;
+	private JMenuItemFormatted popupEmptySearchfield;
 
 	public enum SearchMode {
 		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING

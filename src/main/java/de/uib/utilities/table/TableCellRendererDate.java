@@ -18,7 +18,7 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class TableCellRendererDate extends ColorTableCellRenderer {
 
-	JLabel label = new JLabel();
+	private JLabel label = new JLabel();
 	private java.text.DateFormat dateFormat;
 
 	public TableCellRendererDate() {

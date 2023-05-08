@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 
 public class FEditTextWithExtra extends FEditText {
 
-	JTextField extraField;
+	private JTextField extraField;
 
 	public FEditTextWithExtra(String initialText, String hint, String extraName) {
 		super(initialText, hint);

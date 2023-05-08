@@ -14,8 +14,8 @@ import de.uib.configed.gui.GeneralFrame;
 
 public class OpenSaveDialog implements ActionListener {
 
-	JButton openBtn;
-	JButton saveBtn;
+	private JButton openBtn;
+	private JButton saveBtn;
 	private Boolean saveAction;
 	private GeneralFrame dialogView;
 

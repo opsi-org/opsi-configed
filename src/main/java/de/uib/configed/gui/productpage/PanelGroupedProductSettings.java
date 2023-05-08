@@ -33,7 +33,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 
 	ProductgroupPanel groupPanel;
 
-	JMenuItemFormatted popupMarkHits;
+	private JMenuItemFormatted popupMarkHits;
 
 	public PanelGroupedProductSettings(String title, ConfigedMain mainController,
 			Map<String, Boolean> productDisplayFields) {

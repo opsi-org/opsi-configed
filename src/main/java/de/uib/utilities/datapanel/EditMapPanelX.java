@@ -56,12 +56,12 @@ import de.uib.utilities.table.gui.SensitiveCellEditor;
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener {
 	private static int objectCounter;
-	JScrollPane jScrollPane;
-	JTable table;
+	private JScrollPane jScrollPane;
+	private JTable table;
 
 	TableColumn editableColumn;
 	TableCellEditor theCellEditor;
-	JComboBox<?> editorfield;
+	private JComboBox<?> editorfield;
 	TableCellEditor defaultCellEditor;
 
 	ListModelProducer<String> modelProducer;
@@ -69,11 +69,11 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	MouseListener popupListener;
 	MouseListener popupNoEditOptionsListener;
 
-	JMenuItem popupItemDeleteEntry0;
-	JMenuItem popupItemDeleteEntry1;
-	JMenuItem popupItemDeleteEntry2;
-	JMenuItem popupItemAddStringListEntry;
-	JMenuItem popupItemAddBooleanListEntry;
+	private JMenuItem popupItemDeleteEntry0;
+	private JMenuItem popupItemDeleteEntry1;
+	private JMenuItem popupItemDeleteEntry2;
+	private JMenuItem popupItemAddStringListEntry;
+	private JMenuItem popupItemAddBooleanListEntry;
 
 	ToolTipManager ttm;
 

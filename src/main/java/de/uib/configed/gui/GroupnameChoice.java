@@ -31,7 +31,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 
 	protected String resultString = "";
 
-	JTextField groupnameField;
+	private JTextField groupnameField;
 
 	public GroupnameChoice(String extraTitle, List<String> v, int selectedIndex) {
 		super(null, extraTitle + " (" + Globals.APPNAME + ")", true, new String[] {

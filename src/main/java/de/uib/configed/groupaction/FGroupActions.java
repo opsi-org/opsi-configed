@@ -38,13 +38,13 @@ import de.uib.utilities.swing.SecondaryFrame;
 import de.uib.utilities.thread.WaitCursor;
 
 public class FGroupActions extends SecondaryFrame {
-	JPanel topPanel;
-	JPanel imageActionPanel;
+	private JPanel topPanel;
+	private JPanel imageActionPanel;
 
-	JTextField fieldGroupname;
-	JTextField fieldInvolvedClientsCount;
+	private JTextField fieldGroupname;
+	private JTextField fieldInvolvedClientsCount;
 
-	JComboBox<String> comboSelectImage;
+	private JComboBox<String> comboSelectImage;
 
 	List<String> associatedClients;
 

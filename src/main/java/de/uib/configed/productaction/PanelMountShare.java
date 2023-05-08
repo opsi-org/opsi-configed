@@ -38,11 +38,11 @@ public class PanelMountShare extends JPanel {
 
 	private AbstractPersistenceController persist;
 	ConfigedMain main;
-	JFrame rootFrame;
+	private JFrame rootFrame;
 
-	JButton buttonMountShare;
-	JLabel mountShareLabel;
-	JLabel mountShareDescriptionLabel;
+	private JButton buttonMountShare;
+	private JLabel mountShareLabel;
+	private JLabel mountShareDescriptionLabel;
 
 	private final boolean isWindows;
 

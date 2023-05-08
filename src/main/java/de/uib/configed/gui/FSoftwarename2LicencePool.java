@@ -79,12 +79,12 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		NO_CHANGE, REMOVE_ALL_ASSIGNEMENTS, SET_ALL_TO_GLOBAL_SELECTED_LICENCEPOOL, SET_ALL_TO_SELECTED_LINE
 	}
 
-	JButton buttonRemoveAllAssignments;
-	JLabel labelRemoveAllAssignments;
-	JButton buttonSetAllAssignmentsToGloballySelectedPool;
-	JLabel labelSetAllAssignmentsToGloballySelectedPool;
-	JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
-	JLabel labelSetAllAssignmentsToPoolFromSelectedRow;
+	private JButton buttonRemoveAllAssignments;
+	private JLabel labelRemoveAllAssignments;
+	private JButton buttonSetAllAssignmentsToGloballySelectedPool;
+	private JLabel labelSetAllAssignmentsToGloballySelectedPool;
+	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
+	private JLabel labelSetAllAssignmentsToPoolFromSelectedRow;
 
 	protected String globalLicencePool;
 

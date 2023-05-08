@@ -90,7 +90,7 @@ public class PanelSWInfo extends JPanel {
 	private boolean withMsUpdates2 = true;
 	String exportFilename;
 
-	JCheckBox checkWithMsUpdates;
+	private JCheckBox checkWithMsUpdates;
 
 	private int indexOfColWindowsSoftwareID;
 
@@ -109,7 +109,7 @@ public class PanelSWInfo extends JPanel {
 		}
 	};
 
-	JCheckBox checkWithMsUpdates2;
+	private JCheckBox checkWithMsUpdates2;
 
 	private final Pattern patternWithKB = Pattern.compile("\\{.*\\}\\p{Punct}kb.*", Pattern.UNICODE_CHARACTER_CLASS);
 

@@ -121,10 +121,10 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private static final int WIDTH_COLUMN_PACKAGE_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
 	private static final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
 
-	JScrollPane paneProducts;
+	private JScrollPane paneProducts;
 	public JTable tableProducts;
 	protected AbstractExportTable exportTable;
-	JPanel topPane;
+	protected JPanel topPane;
 
 	// right pane
 	ProductInfoPane infoPane;
@@ -159,10 +159,10 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 	protected ArrayList<String> selectedProducts;
 
-	JPopupMenu popup;
-	JMenuItem itemOnDemand;
+	private JPopupMenu popup;
+	private JMenuItem itemOnDemand;
 
-	JMenuItem itemSaveAndExecute;
+	private JMenuItem itemSaveAndExecute;
 
 	protected String title;
 

@@ -387,7 +387,7 @@ public class MainFrame extends JFrame
 	protected JButton buttonSelectDepotsAll;
 
 	private BorderLayout borderLayout1 = new BorderLayout();
-	JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
+	private JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
 	private JSplitPane panelClientSelection;
 
 	private HostsStatusPanel statusPane;
@@ -401,78 +401,78 @@ public class MainFrame extends JFrame
 	PanelHWInfo showHardwareLogVersion2;
 	TitledPanel showHardwareLogNotFound;
 	public ControllerHWinfoMultiClients controllerHWinfoMultiClients;
-	JPanel showHardwareLogMultiClientReport;
-	JPanel showHardwareLogParentOfNotFoundPanel;
-	JPanel showHardwareLog;
-	JLabel labelNoSoftware;
+	private JPanel showHardwareLogMultiClientReport;
+	private JPanel showHardwareLogParentOfNotFoundPanel;
+	private JPanel showHardwareLog;
+	private JLabel labelNoSoftware;
 
 	PanelSWInfo panelSWInfo;
-	JPanel showSoftwareLogNotFound;
+	private JPanel showSoftwareLogNotFound;
 	PanelSWMultiClientReport showSoftwareLogMultiClientReport;
-	JPanel showSoftwareLog;
+	private JPanel showSoftwareLog;
 
 	PanelTabbedDocuments showLogfiles;
 
-	JPanel jPanelSchalterstellung;
+	private JPanel jPanelSchalterstellung;
 
 	public FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
 	LicensingInfoMap licensingInfoMap;
 
-	JTextField jTextFieldConfigdir = new JTextField();
-	JButton jButtonFileChooserConfigdir = new JButton();
-	JPanel jPanel3 = new JPanel();
+	private JTextField jTextFieldConfigdir = new JTextField();
+	private JButton jButtonFileChooserConfigdir = new JButton();
+	private JPanel jPanel3 = new JPanel();
 
-	JCheckBox jCheckBoxSorted = new JCheckBox();
-	JButton jButtonSaveList = new JButton();
-	JPanel jPanelButtonSaveList = new JPanel();
+	private JCheckBox jCheckBoxSorted = new JCheckBox();
+	private JButton jButtonSaveList = new JButton();
+	private JPanel jPanelButtonSaveList = new JPanel();
 	String[] options = new String[] { "off", "on", "setup" };
-	JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
+	private JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
 
-	JLabel jLabelproperty = new JLabel();
+	private JLabel jLabelproperty = new JLabel();
 	private ButtonGroup buttonGroupRequired = new ButtonGroup();
-	JRadioButton jRadioRequiredAll = new JRadioButton();
-	JRadioButton jRadioRequiredOff = new JRadioButton();
+	private JRadioButton jRadioRequiredAll = new JRadioButton();
+	private JRadioButton jRadioRequiredOff = new JRadioButton();
 
-	JButton jBtnAllOff = new JButton();
+	private JButton jBtnAllOff = new JButton();
 
-	JTableSelectionPanel panelClientlist;
+	private JTableSelectionPanel panelClientlist;
 	private boolean shiftpressed;
 
-	JLabel jLabelHostinfos = new JLabel();
+	private JLabel jLabelHostinfos = new JLabel();
 
-	JLabel jLabelPath = new JLabel();
+	private JLabel jLabelPath = new JLabel();
 
-	JTextArea jFieldInDepot;
-	JLabel labelHost;
-	JLabel labelHostID;
+	private JTextArea jFieldInDepot;
+	private JLabel labelHost;
+	private JLabel labelHostID;
 	CheckedLabel cbInstallByShutdown;
 	CheckedLabel cbUefiBoot;
 	CheckedLabel cbWANConfig;
 
-	JTextEditorField jTextFieldDescription;
-	JTextEditorField jTextFieldInventoryNumber;
-	JTextArea jTextAreaNotes;
-	JTextEditorField systemUUIDField;
-	JTextEditorField macAddressField;
-	JTextEditorField ipAddressField;
-	JTextEditorField jTextFieldOneTimePassword;
-	JTextHideField jTextFieldHostKey;
-	JScrollPane scrollpaneNotes;
+	private JTextEditorField jTextFieldDescription;
+	private JTextEditorField jTextFieldInventoryNumber;
+	private JTextArea jTextAreaNotes;
+	private JTextEditorField systemUUIDField;
+	private JTextEditorField macAddressField;
+	private JTextEditorField ipAddressField;
+	private JTextEditorField jTextFieldOneTimePassword;
+	private JTextHideField jTextFieldHostKey;
+	private JScrollPane scrollpaneNotes;
 
-	JPopupMenu jPopupMenu = new JPopupMenu();
+	private JPopupMenu jPopupMenu = new JPopupMenu();
 
 	protected FShowList fListSelectedClients;
 
-	JPanel panelTreeClientSelection;
+	private JPanel panelTreeClientSelection;
 
 	private boolean multidepot;
 
 	private DepotListPresenter depotListPresenter;
 
 	ClientTree treeClients;
-	JScrollPane scrollpaneTreeClients;
+	private JScrollPane scrollpaneTreeClients;
 
-	JPanel clientPane;
+	private JPanel clientPane;
 
 	private LicenseDisplayer licenseDisplayer;
 

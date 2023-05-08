@@ -281,7 +281,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private WaitCursor waitCursorInitGui;
 
-	JTableSelectionPanel selectionPanel;
+	private JTableSelectionPanel selectionPanel;
 
 	ClientTree treeClients;
 

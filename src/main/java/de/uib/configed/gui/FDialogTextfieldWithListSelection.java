@@ -22,11 +22,11 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
 
 public class FDialogTextfieldWithListSelection extends FGeneralDialog implements ListSelectionListener {
-	JList<String> theList;
-	JScrollPane scrollpaneForList;
-	JTextField theField;
-	JLabel labelField;
-	JLabel labelList;
+	private JList<String> theList;
+	private JScrollPane scrollpaneForList;
+	private JTextField theField;
+	private JLabel labelField;
+	private JLabel labelList;
 	String selectedListElement;
 	String resultingText;
 

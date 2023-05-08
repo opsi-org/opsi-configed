@@ -27,7 +27,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	public static final String FILENAME_PREFIX_DEFAULT = "report_";
 
-	JButton buttonStart;
+	private JButton buttonStart;
 	private ActionListener actionListenerForStart;
 
 	private boolean withMsUpdates;
@@ -39,13 +39,13 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	private File exportDirectory;
 	String exportDirectoryS;
-	JFileChooser chooserDirectory;
-	JTextShowField fieldExportDirectory;
-	JTextShowField fieldFilenamePrefix;
+	private JFileChooser chooserDirectory;
+	private JTextShowField fieldExportDirectory;
+	private JTextShowField fieldFilenamePrefix;
 
-	JCheckBox checkWithMsUpdates;
-	JCheckBox checkWithMsUpdates2;
-	JCheckBox checkAskForOverwrite;
+	private JCheckBox checkWithMsUpdates;
+	private JCheckBox checkWithMsUpdates2;
+	private JCheckBox checkAskForOverwrite;
 
 	public PanelSWMultiClientReport() {
 		setupPanel();

@@ -567,7 +567,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		externalView.setVisible(true);
 	}
 
-	JTextComponent getTextComponent() {
+	private JTextComponent getTextComponent() {
 		return jTextPane;
 	}
 

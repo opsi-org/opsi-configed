@@ -48,20 +48,20 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 	private static final String PAGE_SHARE_S = "opsi_workbench";
 
-	JButton buttonCallChooserPackage;
-	JButton buttonSelectTmpDir;
-	JFileChooser chooserPackage;
-	JFileChooser chooserTmpDir;
-	JComboBox<String> comboChooseDepot;
-	JButton buttonCallExecute;
+	private JButton buttonCallChooserPackage;
+	private JButton buttonSelectTmpDir;
+	private JFileChooser chooserPackage;
+	private JFileChooser chooserTmpDir;
+	private JComboBox<String> comboChooseDepot;
+	private JButton buttonCallExecute;
 
 	String opsiPackagePathToHandleS;
 	String opsiPackageOnWorkbenchS;
 	private File opsiPackageOnWorkbench;
 	String opsiPackageNameS;
 
-	JTextField fieldOpsiPackageName;
-	JTextField fieldTmpDir;
+	private JTextField fieldOpsiPackageName;
+	private JTextField fieldTmpDir;
 
 	String opsiWorkBenchDirectoryS;
 	private File opsiWorkBenchDirectory;
@@ -73,13 +73,13 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private final boolean isWindows;
 
 	// server path finding
-	JTextField fieldServerPath;
-	JButton buttonCallChooserServerpath;
-	JFileChooser chooserServerpath;
+	private JTextField fieldServerPath;
+	private JButton buttonCallChooserServerpath;
+	private JFileChooser chooserServerpath;
 
 	private AbstractPersistenceController persist;
 	ConfigedMain main;
-	JFrame rootFrame;
+	private JFrame rootFrame;
 
 	public PanelInstallOpsiPackage(ConfigedMain main, AbstractPersistenceController persist, JFrame root) {
 		this.main = main;

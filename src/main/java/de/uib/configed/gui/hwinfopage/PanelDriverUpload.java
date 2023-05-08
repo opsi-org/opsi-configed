@@ -65,12 +65,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	protected JTextShowField fieldByAuditPath;
 	protected JTextShowField fieldClientname;
 
-	JComboBox<String> comboChooseDepot;
-	JComboBox<String> comboChooseWinProduct;
-	JButton btnShowDrivers;
-	JButton btnCreateDrivers;
+	private JComboBox<String> comboChooseDepot;
+	private JComboBox<String> comboChooseWinProduct;
+	private JButton btnShowDrivers;
+	private JButton btnCreateDrivers;
 
-	JLabel labelDriverToIntegrate;
+	private JLabel labelDriverToIntegrate;
 	PanelMountShare panelMountShare;
 
 	String depotProductDirectory = "";
@@ -82,7 +82,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	private boolean stateServerPath;
 	CheckedLabel serverPathChecked;
 
-	JLabel jLabelUploading;
+	private JLabel jLabelUploading;
 	private ImagePanel waitingImage;
 
 	private static class RadioButtonIntegrationType extends JRadioButton {
@@ -168,30 +168,30 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 	List<RadioButtonIntegrationType> radioButtons;
 
-	JButton buttonCallSelectDriverFiles;
+	private JButton buttonCallSelectDriverFiles;
 	protected JTextShowField fieldDriverPath;
-	JFileChooser chooserDriverPath;
+	private JFileChooser chooserDriverPath;
 
 	// server path finding
-	JTextShowField fieldServerPath;
-	JButton buttonCallChooserServerpath;
-	JFileChooser chooserServerpath;
+	private JTextShowField fieldServerPath;
+	private JButton buttonCallChooserServerpath;
+	private JFileChooser chooserServerpath;
 
 	private File driverPath;
 	private File targetPath;
 
-	JButton buttonUploadDrivers;
+	private JButton buttonUploadDrivers;
 
 	String selectedDepot;
 	String winProduct = "";
 
-	JLabel jLabelTopic;
+	private JLabel jLabelTopic;
 	private int wLeftText;
 
 	private AbstractPersistenceController persist;
 	ConfigedMain main;
 	String server;
-	JFrame rootFrame;
+	private JFrame rootFrame;
 
 	public PanelDriverUpload(ConfigedMain main, AbstractPersistenceController persist, JFrame root) {
 		this.main = main;

@@ -16,7 +16,7 @@ import de.uib.utilities.logging.Logging;
  */
 public class FShowList extends FTextArea {
 
-	JTextArea jTextArea1 = new JTextArea();
+	private JTextArea jTextArea1 = new JTextArea();
 
 	public FShowList(JFrame owner, String title, boolean modal) {
 		super(owner, title, modal);

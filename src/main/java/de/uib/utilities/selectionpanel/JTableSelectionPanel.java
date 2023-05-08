@@ -65,25 +65,25 @@ public class JTableSelectionPanel extends JPanel
 
 	private static final int MIN_HEIGHT = 200;
 
-	JScrollPane scrollpane;
+	private JScrollPane scrollpane;
 
 	// we put a JTable on a standard JScrollPane
-	JTable table;
+	private JTable table;
 
 	private DefaultListSelectionModel selectionmodel;
 	ConfigedMain main;
 	List<RowSorter.SortKey> primaryOrderingKeys;
 
-	JLabel labelSearch;
+	private JLabel labelSearch;
 	CheckedLabel checkmarkSearch;
 	CheckedLabel checkmarkSearchProgressive;
 
-	JButton buttonMarkAll;
-	JButton buttonInvertSelection;
+	private JButton buttonMarkAll;
+	private JButton buttonInvertSelection;
 
-	JTextField fieldSearch;
-	JComboBox<String> comboSearch;
-	JComboBoxToolTip comboSearchMode;
+	private JTextField fieldSearch;
+	private JComboBox<String> comboSearch;
+	private JComboBoxToolTip comboSearchMode;
 
 	TablesearchPane.SearchMode searchMode;
 

@@ -9,7 +9,7 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class SWterminalExporter extends AbstractSWExporter {
 
-	JTable theTable;
+	private JTable theTable;
 	private ExporterToTerminal exportTable;
 	private boolean onlySelectedRows;
 

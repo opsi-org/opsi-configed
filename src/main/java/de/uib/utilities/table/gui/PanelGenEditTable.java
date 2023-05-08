@@ -129,22 +129,22 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected List<JMenuItem> menuItemsRequesting1SelectedLine;
 	protected List<JMenuItem> menuItemsRequestingMultiSelectedLines;
 
-	JMenuItemFormatted menuItemDeleteRelation;
-	JMenuItemFormatted menuItemSave;
-	JMenuItemFormatted menuItemCancel;
-	JMenuItemFormatted menuItemReload;
-	JMenuItemFormatted menuItemSortAgain;
-	JMenuItemFormatted menuItemPrint;
-	JMenuItemFormatted menuItemExportExcel;
-	JMenuItemFormatted menuItemExportSelectedExcel;
-	JMenuItemFormatted menuItemExportCSV;
-	JMenuItemFormatted menuItemExportSelectedCSV;
-	JMenuItemFormatted menuItemNewRow;
-	JMenuItemFormatted menuItemCopyRelation;
-	JMenuItemFormatted menuItemFloatingCopy;
-	JMenuItemFormatted menuItemPDF;
+	private JMenuItemFormatted menuItemDeleteRelation;
+	private JMenuItemFormatted menuItemSave;
+	private JMenuItemFormatted menuItemCancel;
+	private JMenuItemFormatted menuItemReload;
+	private JMenuItemFormatted menuItemSortAgain;
+	private JMenuItemFormatted menuItemPrint;
+	private JMenuItemFormatted menuItemExportExcel;
+	private JMenuItemFormatted menuItemExportSelectedExcel;
+	private JMenuItemFormatted menuItemExportCSV;
+	private JMenuItemFormatted menuItemExportSelectedCSV;
+	private JMenuItemFormatted menuItemNewRow;
+	private JMenuItemFormatted menuItemCopyRelation;
+	private JMenuItemFormatted menuItemFloatingCopy;
+	private JMenuItemFormatted menuItemPDF;
 
-	JFrame masterFrame = ConfigedMain.getMainFrame();
+	private JFrame masterFrame = ConfigedMain.getMainFrame();
 
 	protected Comparator[] comparators;
 

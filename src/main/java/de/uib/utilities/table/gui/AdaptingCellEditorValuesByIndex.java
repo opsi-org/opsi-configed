@@ -15,7 +15,7 @@ import de.uib.utilities.swing.CellRendererByIndex;
 
 public class AdaptingCellEditorValuesByIndex extends DefaultCellEditor {
 
-	JComboBox<String> cc;
+	private JComboBox<String> cc;
 	ComboBoxModeller cbm;
 	ComboBoxModel<String> nullModel;
 

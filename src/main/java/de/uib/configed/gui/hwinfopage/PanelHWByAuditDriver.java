@@ -24,8 +24,8 @@ public class PanelHWByAuditDriver extends JPanel {
 	protected String byAuditPath;
 
 	private ButtonGroup selectionGroup;
-	JRadioButton selectionComputerSystem;
-	JRadioButton selectionBaseBoard;
+	private JRadioButton selectionComputerSystem;
+	private JRadioButton selectionBaseBoard;
 
 	protected JTextField fieldVendor;
 	protected JTextField fieldLabel;
@@ -35,7 +35,7 @@ public class PanelHWByAuditDriver extends JPanel {
 
 	protected String title;
 
-	JButton buttonUploadDrivers;
+	private JButton buttonUploadDrivers;
 
 	private FDriverUpload fDriverUpload;
 	ConfigedMain main;
