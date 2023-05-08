@@ -255,8 +255,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 			// updateCollection (the real updates)
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
-					mainController, mainController.getPersistenceController(), listDepots.getSelectedValuesList(),
-					productEdited);
+					mainController.getPersistenceController(), listDepots.getSelectedValuesList(), productEdited);
 			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
 			mainController.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 		}

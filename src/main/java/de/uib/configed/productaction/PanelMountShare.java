@@ -25,7 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
@@ -35,7 +34,6 @@ public class PanelMountShare extends JPanel {
 
 	private static final int FIRST_LABEL_WIDTH = Globals.FIRST_LABEL_WIDTH;
 
-	private ConfigedMain main;
 	private JFrame rootFrame;
 
 	private JButton buttonMountShare;
@@ -49,13 +47,12 @@ public class PanelMountShare extends JPanel {
 
 	private NameProducer np;
 
-	public PanelMountShare(NameProducer np, ConfigedMain main, JFrame root) {
-		this(np, main, root, -1);
+	public PanelMountShare(NameProducer np, JFrame root) {
+		this(np, root, -1);
 	}
 
-	public PanelMountShare(NameProducer np, ConfigedMain main, JFrame root, int leftBound) {
+	public PanelMountShare(NameProducer np, JFrame root, int leftBound) {
 		instances.add(this);
-		this.main = main;
 		this.rootFrame = root;
 		this.np = np;
 		this.leftBound = leftBound;

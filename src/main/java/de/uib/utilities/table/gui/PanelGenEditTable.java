@@ -150,8 +150,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;
 
-	protected Color backgroundColorSelected = Globals.defaultTableCellSelectedBgColorNotEditable;
-
 	protected JPopupMenu popupMenu;
 
 	protected boolean dataChanged;
@@ -1090,7 +1088,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				theTable.getColumnModel().getColumn(cols[j])
 						.setCellRenderer(new TableCellRendererConfigured(null, Globals.lightBlack,
 								Globals.defaultTableCellBgColor1, Globals.defaultTableCellBgColor2,
-								backgroundColorSelected, backgroundColorEditFieldsSelected));
+								backgroundColorEditFieldsSelected));
 			}
 		}
 	}

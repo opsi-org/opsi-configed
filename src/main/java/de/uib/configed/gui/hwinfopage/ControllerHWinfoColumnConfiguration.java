@@ -132,11 +132,9 @@ public class ControllerHWinfoColumnConfiguration {
 		}
 	}
 
-	private ConfigedMain main;
 	protected AbstractPersistenceController persist;
 
-	public ControllerHWinfoColumnConfiguration(ConfigedMain main, AbstractPersistenceController persist) {
-		this.main = main;
+	public ControllerHWinfoColumnConfiguration(AbstractPersistenceController persist) {
 		this.persist = persist;
 
 		initPanel();

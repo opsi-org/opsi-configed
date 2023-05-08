@@ -222,7 +222,7 @@ public class ControllerHWinfoMultiClients {
 			Logging.info(this, "action performed " + actionEvent);
 
 			ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration(
-					main, persist);
+					persist);
 			if (fTable == null || ((FPanel) fTable).isLeft()) {
 				fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel,
 						true);

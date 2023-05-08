@@ -300,12 +300,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private FGroupActions groupActionFrame;
 	private FProductActions productActionFrame;
 
-	private ControlPanelEnterLicence controlPanelEnterLicence;
-	private ControlPanelEditLicences controlPanelEditLicences;
-	private ControlPanelLicencesStatistics controlPanelLicencesStatistics;
-	private ControlPanelLicencesUsage controlPanelLicencesUsage;
-	private ControlPanelLicencesReconciliation controlPanelLicencesReconciliation;
-
 	private List<AbstractControlMultiTablePanel> allControlMultiTablePanels;
 
 	private Dashboard dashboard;
@@ -1481,35 +1475,36 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// panelEnterLicence
 		licencesPanelsTabNames.put(LicencesTabStatus.ENTER_LICENCE,
 				Configed.getResourceValue("ConfigedMain.Licences.TabNewLicence"));
-		controlPanelEnterLicence = new ControlPanelEnterLicence(persist, this);
+		ControlPanelEnterLicence controlPanelEnterLicence = new ControlPanelEnterLicence(persist, this);
 		addClient(LicencesTabStatus.ENTER_LICENCE, controlPanelEnterLicence.getTabClient());
 		allControlMultiTablePanels.add(controlPanelEnterLicence);
 
 		// panelEditLicence
 		licencesPanelsTabNames.put(LicencesTabStatus.EDIT_LICENCE,
 				Configed.getResourceValue("ConfigedMain.Licences.TabEditLicence"));
-		controlPanelEditLicences = new ControlPanelEditLicences(persist, this);
+		ControlPanelEditLicences controlPanelEditLicences = new ControlPanelEditLicences(persist, this);
 		addClient(LicencesTabStatus.EDIT_LICENCE, controlPanelEditLicences.getTabClient());
 		allControlMultiTablePanels.add(controlPanelEditLicences);
 
 		// panelUsage
 		licencesPanelsTabNames.put(LicencesTabStatus.USAGE,
 				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceUsage"));
-		controlPanelLicencesUsage = new ControlPanelLicencesUsage(persist, this);
+		ControlPanelLicencesUsage controlPanelLicencesUsage = new ControlPanelLicencesUsage(persist, this);
 		addClient(LicencesTabStatus.USAGE, controlPanelLicencesUsage.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesUsage);
 
 		// panelReconciliation
 		licencesPanelsTabNames.put(LicencesTabStatus.RECONCILIATION,
 				Configed.getResourceValue("ConfigedMain.Licences.TabLicenceReconciliation"));
-		controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation(persist);
+		ControlPanelLicencesReconciliation controlPanelLicencesReconciliation = new ControlPanelLicencesReconciliation(
+				persist);
 		addClient(LicencesTabStatus.RECONCILIATION, controlPanelLicencesReconciliation.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesReconciliation);
 
 		// panelStatistics
 		licencesPanelsTabNames.put(LicencesTabStatus.STATISTICS,
 				Configed.getResourceValue("ConfigedMain.Licences.TabStatistics"));
-		controlPanelLicencesStatistics = new ControlPanelLicencesStatistics(persist);
+		ControlPanelLicencesStatistics controlPanelLicencesStatistics = new ControlPanelLicencesStatistics(persist);
 		addClient(LicencesTabStatus.STATISTICS, controlPanelLicencesStatistics.getTabClient());
 		allControlMultiTablePanels.add(controlPanelLicencesStatistics);
 
@@ -2325,7 +2320,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// product?
 			// if not, we produce one
 
-			clientProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(this, persist,
+			clientProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(persist,
 					getSelectedClients(), productEdited);
 
 			clientProductpropertiesUpdateCollections.put(productEdited, clientProductpropertiesUpdateCollection);

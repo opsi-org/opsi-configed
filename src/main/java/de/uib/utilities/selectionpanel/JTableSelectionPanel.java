@@ -75,7 +75,6 @@ public class JTableSelectionPanel extends JPanel
 	private List<RowSorter.SortKey> primaryOrderingKeys;
 
 	private CheckedLabel checkmarkSearch;
-	private CheckedLabel checkmarkSearchProgressive;
 
 	private JTextField fieldSearch;
 	private JComboBox<String> comboSearch;

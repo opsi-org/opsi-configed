@@ -81,7 +81,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		initComponents();
 
-		panelMountShare = new PanelMountShare(this, main, root);
+		panelMountShare = new PanelMountShare(this, root);
 
 		defineLayout();
 	}

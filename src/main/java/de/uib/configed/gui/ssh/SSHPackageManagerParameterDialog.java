@@ -78,7 +78,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		Logging.info(this, "getRepositoriesFromConfigs depotProperties " + depotProperties);
 
 		Map<String, Object> firstDepot;
-		if (depot == null || depot.equals(defaultDepot) || depot.equals("all")) {
+		if (depot == null || depot.equals(defaultDepot) || "all".equals(depot)) {
 			firstDepot = depotProperties.get(depotProperties.firstKey());
 		} else {
 			firstDepot = depotProperties.get(depot);
@@ -87,7 +87,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		Logging.info(this, "getRepositoriesFromConfigs firstDepot " + firstDepot);
 
 		String oRepo = ((String) firstDepot.get(configRepo)).replace("file://", "");
-		if (oRepo != null && !oRepo.equals("null") && !oRepo.trim().equals("")) {
+		if (oRepo != null && !"null".equals(oRepo) && !"".equals(oRepo.trim())) {
 			opsiRepo = oRepo + "/";
 		}
 

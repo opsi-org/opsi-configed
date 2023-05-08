@@ -416,7 +416,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		IconNode n = new IconNode(x, false);
 		n.setEnabled(false);
 		if (host2HostInfo != null && host2HostInfo.get(x) != null
-				&& !host2HostInfo.get(x).getDescription().equals("")) {
+				&& !"".equals(host2HostInfo.get(x).getDescription())) {
 			n.setToolTipText(host2HostInfo.get(x).getDescription());
 		} else {
 			n.setToolTipText(x.toString());
@@ -444,7 +444,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	private static GroupNode produceGroupNode(Map<String, String> group) {
 		String description = group.get("description");
-		if (description == null || description.trim().equals("")) {
+		if (description == null || "".equals(description.trim())) {
 			description = group.get("groupId");
 		}
 
@@ -709,7 +709,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			String parentId = group.getValue().get("parentGroupId");
 
-			if (parentId == null || parentId.equalsIgnoreCase("null")) {
+			if (parentId == null || "null".equalsIgnoreCase(parentId)) {
 				parentId = ALL_GROUPS_NAME;
 			}
 
@@ -931,7 +931,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 			String newGroupKey = "";
 
-			boolean gotName = !(newGroupKey.equals("")) && !(groups.keySet().contains(newGroupKey));
+			boolean gotName = !("".equals(newGroupKey)) && !(groups.keySet().contains(newGroupKey));
 
 			String inscription = "";
 
@@ -945,7 +945,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			fEdit.setModal(true);
 
 			while (!gotName) {
-				if (newGroupKey.equals("")) {
+				if ("".equals(newGroupKey)) {
 					inscription = Configed.getResourceValue("ClientTree.requestGroup");
 				} else if (groups.keySet().contains(newGroupKey)) {
 					inscription = "'" + newGroupKey + "' "
@@ -1341,7 +1341,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	protected GroupNode insertGroup(Object groupObject, String groupDescription, DefaultMutableTreeNode parent) {
 		String xGroupDescription = groupDescription;
-		if (groupDescription == null || groupDescription.trim().equals("")) {
+		if (groupDescription == null || "".equals(groupDescription.trim())) {
 			xGroupDescription = groupObject.toString();
 		}
 

@@ -58,7 +58,7 @@ public abstract class AbstractOpsiDataDateMatcher {
 			return false;
 		}
 
-		if (realdata.equals("")) {
+		if ("".equals(realdata)) {
 			return false;
 		}
 

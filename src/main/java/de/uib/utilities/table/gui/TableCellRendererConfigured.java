@@ -14,11 +14,9 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 	private Color color;
 	private Color bg1;
 	private Color bg2;
-	private Color selectionBackground;
 	private Color selectionEditingBackground;
 
-	public TableCellRendererConfigured(Font f, Color c, Color bg1, Color bg2, Color selectionBackground,
-			Color selectionEditingBackground) {
+	public TableCellRendererConfigured(Font f, Color c, Color bg1, Color bg2, Color selectionEditingBackground) {
 		super();
 		this.f = f;
 		this.color = c;
@@ -29,7 +27,6 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 			this.bg2 = bg1;
 		}
 
-		this.selectionBackground = selectionBackground;
 		this.selectionEditingBackground = selectionEditingBackground;
 	}
 
@@ -60,5 +57,4 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 
 		return result;
 	}
-
 }
