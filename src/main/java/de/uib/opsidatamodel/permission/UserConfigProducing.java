@@ -18,7 +18,7 @@ import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class UserConfigProducing {
-	boolean notUsingDefaultUser;
+	private boolean notUsingDefaultUser;
 
 	String configserver;
 	Collection<String> existingDepots;

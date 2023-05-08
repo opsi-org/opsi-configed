@@ -26,7 +26,7 @@ public class FPanel extends SecondaryFrame {
 			"edit panel dialog");
 
 	JPanel innerPanel;
-	boolean checkLeave;
+	private boolean checkLeave;
 	private boolean left;
 
 	public FPanel(String title, JPanel panel, boolean checkLeave) {

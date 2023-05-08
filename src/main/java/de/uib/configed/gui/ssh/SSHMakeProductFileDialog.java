@@ -45,7 +45,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private JButton jButtonExec;
 	private String filename;
 	private ConfigedMain main;
-	boolean isAdvancedOpen = true;
+	private boolean isAdvancedOpen = true;
 	SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
 
 	public SSHMakeProductFileDialog(ConfigedMain m) {

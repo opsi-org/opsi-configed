@@ -43,7 +43,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	private static final int DEFAULT_PREFERRED_WIDTH = 250;
 	private static final int DEFAULT_PREFERRED_HEIGHT = 300;
 
-	boolean shiftPressed = true;
+	protected boolean shiftPressed = true;
 
 	protected FadingMirror glass;
 	protected JPanel allpane = new JPanel();

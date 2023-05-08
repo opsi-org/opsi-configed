@@ -61,7 +61,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private CommandOpsiPackageManagerUninstall commandPMUninstall = new CommandOpsiPackageManagerUninstall();
 
-	boolean execFinished;
+	private boolean execFinished;
 
 	public SSHPackageManagerUninstallParameterDialog() {
 		this(null);

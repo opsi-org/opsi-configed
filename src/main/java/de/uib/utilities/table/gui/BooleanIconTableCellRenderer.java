@@ -22,7 +22,7 @@ import de.uib.utilities.logging.Logging;
 public class BooleanIconTableCellRenderer extends StandardTableCellRenderer {
 	Icon trueIcon;
 	Icon falseIcon;
-	boolean allowingString;
+	private boolean allowingString;
 
 	public BooleanIconTableCellRenderer(Icon trueIcon, Icon falseIcon) {
 		this(trueIcon, falseIcon, false);

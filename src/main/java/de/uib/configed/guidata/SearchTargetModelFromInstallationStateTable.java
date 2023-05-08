@@ -26,7 +26,7 @@ public class SearchTargetModelFromInstallationStateTable implements SearchTarget
 
 	private PanelGroupedProductSettings panelProductSettings;
 
-	boolean filtered;
+	private boolean filtered;
 
 	public SearchTargetModelFromInstallationStateTable() {
 		this(null, null);

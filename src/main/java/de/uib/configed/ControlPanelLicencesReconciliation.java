@@ -29,7 +29,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 
 	private AbstractPersistenceController persist;
 
-	boolean initialized;
+	private boolean initialized;
 
 	public ControlPanelLicencesReconciliation(AbstractPersistenceController persist) {
 		thePanel = new PanelLicencesReconciliation(this);

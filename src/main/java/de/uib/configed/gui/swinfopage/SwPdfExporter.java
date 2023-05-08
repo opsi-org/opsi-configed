@@ -12,7 +12,7 @@ public class SwPdfExporter extends AbstractSWExporter {
 
 	JTable theTable;
 	ExporterToPDF exportTable;
-	boolean onlySelectedRows;
+	private boolean onlySelectedRows;
 
 	public SwPdfExporter() {
 

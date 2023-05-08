@@ -27,7 +27,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	private String sourceFilename = "";
 	private boolean overwriteMode = true;
 
-	boolean showOutputDialog = true;
+	private boolean showOutputDialog = true;
 
 	public CommandSFTPUpload(String title) {
 		setTitle(title);

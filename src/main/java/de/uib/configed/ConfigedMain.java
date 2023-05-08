@@ -362,7 +362,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private Set<String> connectedHostsByMessagebus;
 
-	boolean sessioninfoFinished;
+	private boolean sessioninfoFinished;
 
 	public ConfigedMain(String host, String user, String password, String sshKey, String sshKeyPass) {
 		if (ConfigedMain.host == null) {

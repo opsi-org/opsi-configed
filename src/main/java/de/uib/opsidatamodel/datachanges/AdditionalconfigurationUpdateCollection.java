@@ -14,8 +14,8 @@ import de.uib.utilities.logging.Logging;
 public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	String[] objectIds;
 	private AbstractPersistenceController persis;
-	boolean determineConfigOptions;
-	boolean masterConfig;
+	private boolean determineConfigOptions;
+	private boolean masterConfig;
 
 	public AdditionalconfigurationUpdateCollection(Object persis, String[] objectIds) {
 		super(new ArrayList<>(0));

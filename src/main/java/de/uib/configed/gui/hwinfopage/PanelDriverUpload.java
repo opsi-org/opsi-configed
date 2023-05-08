@@ -74,12 +74,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	PanelMountShare panelMountShare;
 
 	String depotProductDirectory = "";
-	boolean smbMounted;
+	private boolean smbMounted;
 	String driverDirectory = "";
 
-	boolean stateDriverPath;
+	private boolean stateDriverPath;
 	CheckedLabel driverPathChecked;
-	boolean stateServerPath;
+	private boolean stateServerPath;
 	CheckedLabel serverPathChecked;
 
 	JLabel jLabelUploading;

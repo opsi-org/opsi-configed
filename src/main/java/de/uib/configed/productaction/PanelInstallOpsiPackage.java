@@ -67,7 +67,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	File opsiWorkBenchDirectory;
 	String opsiPackageServerPathS;
 
-	boolean smbMounted;
+	private boolean smbMounted;
 	PanelMountShare panelMountShare;
 
 	final boolean isWindows;

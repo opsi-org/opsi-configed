@@ -30,7 +30,7 @@ public class SearchTargetModelFromJList extends SearchTargetModelFromTable {
 	private List<String> unfilteredD;
 	protected int[] unfilteredSelection;
 
-	boolean filtered;
+	private boolean filtered;
 
 	public SearchTargetModelFromJList(JList<String> jList, final List<String> values, final List<String> descriptions) {
 

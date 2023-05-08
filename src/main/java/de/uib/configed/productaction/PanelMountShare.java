@@ -46,7 +46,7 @@ public class PanelMountShare extends JPanel {
 
 	final boolean isWindows;
 
-	boolean smbMounted;
+	private boolean smbMounted;
 
 	int leftBound = -1;
 

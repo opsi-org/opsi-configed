@@ -19,7 +19,7 @@ public class WaitCursor {
 
 	int objectNo;
 
-	boolean ready;
+	private boolean ready;
 
 	Cursor saveCursor;
 	Component c;

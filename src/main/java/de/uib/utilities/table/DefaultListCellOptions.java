@@ -11,8 +11,8 @@ public class DefaultListCellOptions implements ListCellOptions {
 	List<Object> possibleValues;
 	List<Object> defaultValues;
 	int selectionMode;
-	boolean editable;
-	boolean nullable;
+	private boolean editable;
+	private boolean nullable;
 	String description;
 
 	public DefaultListCellOptions() {

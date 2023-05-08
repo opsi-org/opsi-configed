@@ -11,7 +11,7 @@ public class SWterminalExporter extends AbstractSWExporter {
 
 	JTable theTable;
 	ExporterToTerminal exportTable;
-	boolean onlySelectedRows;
+	private boolean onlySelectedRows;
 
 	public SWterminalExporter(AbstractPersistenceController controller) {
 		super(controller);

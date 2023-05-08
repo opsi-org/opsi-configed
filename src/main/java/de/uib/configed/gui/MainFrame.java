@@ -436,7 +436,7 @@ public class MainFrame extends JFrame
 	JButton jBtnAllOff = new JButton();
 
 	JTableSelectionPanel panelClientlist;
-	boolean shiftpressed;
+	private boolean shiftpressed;
 
 	JLabel jLabelHostinfos = new JLabel();
 
@@ -465,7 +465,7 @@ public class MainFrame extends JFrame
 
 	JPanel panelTreeClientSelection;
 
-	boolean multidepot;
+	private boolean multidepot;
 
 	DepotListPresenter depotListPresenter;
 

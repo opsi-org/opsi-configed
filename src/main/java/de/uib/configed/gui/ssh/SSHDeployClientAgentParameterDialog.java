@@ -72,7 +72,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private CommandDeployClientAgent commandDeployClientAgent = new CommandDeployClientAgent();
 	private ConfigedMain main;
 
-	boolean aktive;
+	private boolean aktive;
 
 	public SSHDeployClientAgentParameterDialog() {
 		this(null);

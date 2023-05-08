@@ -30,9 +30,9 @@ public class PanelSWMultiClientReport extends JPanel {
 	JButton buttonStart;
 	private ActionListener actionListenerForStart;
 
-	boolean withMsUpdates;
-	boolean withMsUpdates2;
-	boolean askForOverwrite;
+	private boolean withMsUpdates;
+	private boolean withMsUpdates2;
+	private boolean askForOverwrite;
 
 	protected PanelStateSwitch<KindOfExport> panelSelectExportType;
 	protected PanelSWInfo.KindOfExport kindOfExport;

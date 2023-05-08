@@ -58,7 +58,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 
 	private SensitiveCellEditor celleditor;
 
-	boolean nullable;
+	private boolean nullable;
 
 	public FEditList() {
 		this(null);

@@ -22,8 +22,8 @@ public class JTextHideField extends JPanel {
 	JPasswordField invisibleField;
 	JTextField visibleField;
 	JButton button;
-	boolean hiddenMode;
-	boolean multiValue;
+	private boolean hiddenMode;
+	private boolean multiValue;
 
 	static class FixedDocument extends PlainDocument {
 
