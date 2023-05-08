@@ -97,8 +97,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public final GroupNode rootNode = new GroupNode("top");
 
-	private IconNodeRendererClientTree nodeRenderer;
-
 	// supervising data
 	private Map<String, Set<GroupNode>> locationsInDIRECTORY;
 	// clientId --> set of all containing groups
@@ -262,8 +260,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 		setShowsRootHandles(true);
 
-		nodeRenderer = new IconNodeRendererClientTree(configedMain);
-
+		IconNodeRendererClientTree nodeRenderer = new IconNodeRendererClientTree(configedMain);
 		setCellRenderer(nodeRenderer);
 
 		model = new DefaultTreeModel(rootNode);

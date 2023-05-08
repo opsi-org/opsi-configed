@@ -47,7 +47,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 	private PopupMenuTrait popupForRolepath;
 	private PopupMenuTrait popupForRolepathes;
 
-	private LinkedList<String> theUsers;
 	private LinkedList<String> theRoles;
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
@@ -280,7 +279,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 	protected void generateParts() {
 		super.generateParts();
 
-		theUsers = new LinkedList<>();
+		List<String> theUsers = new LinkedList<>();
 		theRoles = new LinkedList<>();
 
 		theRoles.add(UserConfig.NONE_PROTOTYPE);

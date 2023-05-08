@@ -19,12 +19,6 @@ public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 		entryRetrieved = entry;
 	}
 
-	private void remap(String key) {
-		// if key are identically named
-
-		remap(key, key);
-	}
-
 	protected void remap(String key, String keyRetrieved) {
 		remap(key, keyRetrieved, true);
 	}

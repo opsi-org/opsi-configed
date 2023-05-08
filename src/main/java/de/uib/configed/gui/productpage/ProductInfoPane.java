@@ -43,7 +43,6 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	private JXPanel bottomComponent;
 	private JTextField jLabelProductID;
 	private JTextField jLabelProductVersion;
-	private JLabel jLabelLabelProductVersion;
 	private JLabel jLabelProductName;
 
 	private JLabel dependenciesTextLabel;
@@ -81,7 +80,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jLabelProductName = new JLabel();
 		jLabelProductID = new JTextField();
 		jLabelProductVersion = new JTextField();
-		jLabelLabelProductVersion = new JLabel();
+		JLabel jLabelLabelProductVersion = new JLabel();
 
 		JScrollPane jScrollPaneProductInfo = new JScrollPane();
 		jTextAreaProductInfo = new TextMarkdownPane();

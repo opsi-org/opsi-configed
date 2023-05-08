@@ -65,7 +65,6 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	protected int portHTTPS = DEFAULT_PORT;
 	protected URL serviceURL;
 	public String sessionId;
-	private String lastSessionId;
 	private int requestMethod = POST;
 	protected boolean certificateExists;
 	protected boolean trustOnlyOnce;
@@ -466,7 +465,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 					String cookieVal = connection.getHeaderField("Set-Cookie");
 
 					if (cookieVal != null) {
-						lastSessionId = sessionId;
+						String lastSessionId = sessionId;
 						sessionId = cookieVal.substring(0, cookieVal.indexOf(";"));
 
 						boolean gotNewSession = sessionId != null && !sessionId.equals(lastSessionId);

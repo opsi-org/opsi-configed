@@ -140,8 +140,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private IconButton buttonCancel;
 	private JLabel label;
 
-	private JLabel labelRowCount;
-	private JLabel labelMarkedCount;
 	private JPanel titlePane;
 
 	private Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;
@@ -168,8 +166,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	protected TablesearchPane searchPane;
 
-	private RowNoTableModelFilterCondition filterBySelectionCondition;
-	private TableModelFilter filterBySelection;
 	private boolean filteringActive;
 	private boolean selectionEmpty = true;
 	private boolean singleSelection;
@@ -346,10 +342,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			label.setVisible(false);
 		}
 
-		labelRowCount = new JLabel(title);
+		JLabel labelRowCount = new JLabel(title);
 		labelRowCount.setFont(Globals.defaultFontStandardBold);
 
-		labelMarkedCount = new JLabel("");
+		JLabel labelMarkedCount = new JLabel("");
 		labelMarkedCount.setFont(Globals.defaultFont);
 
 		titlePane = new PanelLinedComponents();
@@ -990,8 +986,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private void setModelFilteringBySelection() {
 		if (filteringActive && tableModel != null
 				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
-			filterBySelectionCondition = new RowNoTableModelFilterCondition();
-			filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
+			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
+			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
 
 			tableModel.chainFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION, filterBySelection);
 		}

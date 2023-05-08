@@ -94,7 +94,6 @@ public class DataStubNOM {
 	// giving the idents which have the name in their ident
 	private NavigableMap<String, Set<String>> name2SWIdents;
 	private NavigableMap<String, Map<String, String>> installedSoftwareName2SWinfo;
-	private NavigableMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool;
 
 	// List of idents of software
 	private List<String> softwareList;
@@ -696,7 +695,7 @@ public class DataStubNOM {
 			installedSoftwareInformationForLicensing = new TreeMap<>();
 			name2SWIdents = new TreeMap<>();
 			installedSoftwareName2SWinfo = new TreeMap<>();
-			name2ident2infoWithPool = new TreeMap<>();
+			NavigableMap<String, Map<String, Map<String, String>>> name2ident2infoWithPool = new TreeMap<>();
 
 			int i = 0;
 			Logging.info(this, "getInstalledSoftwareInformation build map");

@@ -34,7 +34,6 @@ public class PanelSWMultiClientReport extends JPanel {
 	private boolean withMsUpdates2;
 	private boolean askForOverwrite;
 
-	private PanelStateSwitch<KindOfExport> panelSelectExportType;
 	private PanelSWInfo.KindOfExport kindOfExport;
 
 	private File exportDirectory;
@@ -229,7 +228,7 @@ public class PanelSWMultiClientReport extends JPanel {
 			}
 		});
 
-		panelSelectExportType = new PanelStateSwitch<>(
+		PanelStateSwitch<KindOfExport> panelSelectExportType = new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), PanelSWInfo.KindOfExport.PDF,
 				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, ((Enum<KindOfExport> val) -> {
 					Logging.info(this, "change to " + val);

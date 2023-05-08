@@ -92,7 +92,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Map.entry(InstallationStatus.KEY_NOT_INSTALLED, "uninstall"));
 
 	private static Map<String, String> columnDict;
-	private static List<String> columnsLocalized;
 
 	private String actualProduct = "";
 
@@ -122,11 +121,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	private final String[] selectedClients;
 	private Map<String, List<String>> possibleActions; // product-->possibleActions
 	private Map<String, Map<String, Object>> globalProductInfos;
-	private String theClient;
 	protected NavigableSet<String> tsProductNames;
 	private List<String> productNamesInDeliveryOrder;
-
-	private ActionRequest actionInTreatment;
 
 	private Set<String> missingProducts = new HashSet<>();
 

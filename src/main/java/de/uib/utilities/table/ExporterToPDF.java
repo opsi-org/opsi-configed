@@ -45,7 +45,6 @@ public class ExporterToPDF extends AbstractExportTable {
 
 	// TODO why static fields here everywhere?
 	private static Document document;
-	private static PdfWriter writer;
 
 	private static final String FILE_EXTENSION = ".pdf";
 
@@ -145,6 +144,7 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			// Write file now
 			try {
+				PdfWriter writer;
 				if (filePath == null) {
 					writer = PdfWriter.getInstance(document, new FileOutputStream(defaultFilename));
 				} else {

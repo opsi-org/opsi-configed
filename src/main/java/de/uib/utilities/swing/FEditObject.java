@@ -51,7 +51,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	private JPanel framingPanel;
 	protected JPanel editingArea;
 	protected JPanel loggingPanel;
-	private JScrollPane scrollpaneL;
 	private JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
@@ -91,7 +90,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			loggingArea.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
-		scrollpaneL = new JScrollPane();
+		JScrollPane scrollpaneL = new JScrollPane();
 		scrollpaneL.setViewportView(loggingArea);
 		scrollpaneL.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		loggingPanel.add(scrollpaneL, BorderLayout.CENTER);

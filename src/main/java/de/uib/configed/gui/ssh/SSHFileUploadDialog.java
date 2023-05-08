@@ -45,8 +45,6 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	private JTextField jTextFieldLocalPath;
 
 	private JButton jButtonFileChooser;
-	private JButton jButtonExecute;
-	private JButton jButtonClose;
 
 	protected JLabel jLabelSetRights;
 	protected JLabel jLabelmodulesFrom;
@@ -184,14 +182,14 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 				jTextFieldLocalPath.setText("");
 			}
 		});
-		jButtonExecute = new JButton();
+		JButton jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
 		if (!(Globals.isGlobalReadOnly())) {
 			jButtonExecute.addActionListener(actionEvent -> doAction2());
 		}
 
-		jButtonClose = new JButton();
+		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());

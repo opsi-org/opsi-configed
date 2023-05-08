@@ -237,8 +237,6 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			return false;
 		}
 
-		Set<String> selectedIDs = associate.getSelectedIDs();
-
 		String currentKey = saveNameEditor.getText();
 
 		if (currentKey == null || currentKey.isEmpty()) {
@@ -246,6 +244,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 
 		boolean result = false;
+		Set<String> selectedIDs = associate.getSelectedIDs();
 
 		if (namesAndDescriptions.get(currentKey) != null) {
 			// case we have an old key

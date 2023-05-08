@@ -151,7 +151,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private Set<String> hostgroupsPermitted;
 
 	private boolean productgroupsFullPermission;
-	private Set<String> productgroupsPermitted;
 
 	/* ------------------------------------------ */
 
@@ -167,7 +166,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private Map<String, Map<String, ConfigName2ConfigValue>> productProperties;
 	// (pcname -> (productname -> (propertyname -> propertyvalue))) NOM
 	private Map<String, Map<String, ConfigName2ConfigValue>> depot2product2properties;
-	private Set<String> productsHavingSpecificProperties;
 	private Map<String, Boolean> productHavingClientSpecificProperties;
 
 	// for depot
@@ -211,13 +209,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	private Map<String, Map<String, Object>> rowsLicencesReconciliation;
 
-	private NavigableMap<String, LicenceStatisticsRow> rowsLicenceStatistics;
-
 	private Map<String, List<Map<String, List<Map<String, Object>>>>> hwAuditConf;
 
 	private List<String> opsiHwClassNames;
 	private Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
-	private OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes;
 
 	private List<String> hostColumnNames;
 	private List<String> client2HwRowsColumnNames;
@@ -1300,11 +1295,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		configKeyUseList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPACCESS_ONLY_AS_SPECIFIED;
 		configKeyList = userPart() + UserOpsipermission.PARTKEY_USER_PRIVILEGE_PRODUCTGROUPS_ACCESSIBLE;
-		productgroupsPermitted = new HashSet<>();
+		Set<String> productgroupsPermitted = new HashSet<>();
 
-		productgroupsFullPermission = checkFullPermission(productgroupsPermitted,
-				// false,
-				configKeyUseList, configKeyList, serverPropertyMap);
+		productgroupsFullPermission = checkFullPermission(productgroupsPermitted, configKeyUseList, configKeyList,
+				serverPropertyMap);
 
 		permittedProducts = null;
 
@@ -4479,7 +4473,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Set<String> products = defaultPropertiesRetrieved.keySet();
 
-		productsHavingSpecificProperties = new TreeSet<>(products);
+		Set<String> productsHavingSpecificProperties = new TreeSet<>(products);
 
 		for (String host : clientNames) {
 			HashMap<String, ConfigName2ConfigValue> productproperties1Client = new HashMap<>();
@@ -5048,7 +5042,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				remoteControls = new RemoteControls();
 				savedSearches = new SavedSearches();
 
-				hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(hwAuditDeviceClasses);
+				OpsiHwAuditDevicePropertyTypes hwAuditDevicePropertyTypes = new OpsiHwAuditDevicePropertyTypes(
+						hwAuditDeviceClasses);
 
 				// metaConfig for wan configuration is rebuilt in
 				// getWANConfigOptions
@@ -6720,7 +6715,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			pool2installationsCount.put(poolEntry.getKey(), poolEntry.getValue().size());
 		}
 
-		rowsLicenceStatistics = new TreeMap<>();
+		Map<String, LicenceStatisticsRow> rowsLicenceStatistics = new TreeMap<>();
 
 		if (withLicenceManagement) {
 			for (String licencePoolId : licencePools.keySet()) {

@@ -198,7 +198,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private TreePath groupPathActivatedByTree;
 	private ActivatedGroupModel activatedGroupModel;
 
-	private String[] objectIds = new String[] {};
 	private String[] selectedDepots = new String[] {};
 	private String[] oldSelectedDepots;
 
@@ -218,9 +217,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private SavedSearchesDialog savedSearchesDialog;
 	private ClientSelectionDialog clientSelectionDialog;
 	private FShowList fShowReachableInfo;
-
-	// null serves als marker that we were not editing products
-	private String productEdited;
 
 	// the properties for one product and all selected clients
 	private Collection<Map<String, Object>> productProperties;
@@ -255,7 +251,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private List<String> localbootProductnames;
 	private List<String> netbootProductnames;
-	private List<Map<String, List<Map<String, Object>>>> hwAuditConfig;
 
 	// marker variables for requests for reload when clientlist changes
 	private Map<String, List<Map<String, String>>> localbootStatesAndActions;
@@ -269,7 +264,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private Map<String, Map<String, List<Map<String, Object>>>> hwInfoClientmap;
 
 	private String myServer;
-	private String opsiDefaultDomain;
 	private List<String> editableDomains;
 	private boolean multiDepot;
 
@@ -817,7 +811,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		persist.setDepot(depotRepresentative);
 		persist.depotChange();
 
-		opsiDefaultDomain = persist.getOpsiDefaultDomain();
+		String opsiDefaultDomain = persist.getOpsiDefaultDomain();
 		editableDomains = persist.getDomains();
 		if (!editableDomains.contains(opsiDefaultDomain)) {
 			editableDomains.add(opsiDefaultDomain);
@@ -841,7 +835,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		productGroups = persist.getProductGroups();
 		productGroupMembers = persist.getFProductGroup2Members();
 
-		hwAuditConfig = persist
+		List<Map<String, List<Map<String, Object>>>> hwAuditConfig = persist
 				.getOpsiHWAuditConf(Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry());
 		mainFrame.initHardwareInfo(hwAuditConfig);
 		Logging.info(this, "preloadData, hw classes " + persist.getAllHwClassNames());
@@ -2299,8 +2293,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.debug(this, "setProductEdited " + productname);
 
-		productEdited = productname;
-
 		if (clientProductpropertiesUpdateCollection != null) {
 			try {
 				updateCollection.remove(clientProductpropertiesUpdateCollection);
@@ -2310,57 +2302,57 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 		clientProductpropertiesUpdateCollection = null;
 
-		if (clientProductpropertiesUpdateCollections.get(productEdited) == null) {
+		if (clientProductpropertiesUpdateCollections.get(productname) == null) {
 			// have we got already a clientProductpropertiesUpdateCollection for this
 			// product?
 			// if not, we produce one
 
 			clientProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(persist,
-					getSelectedClients(), productEdited);
+					getSelectedClients(), productname);
 
-			clientProductpropertiesUpdateCollections.put(productEdited, clientProductpropertiesUpdateCollection);
+			clientProductpropertiesUpdateCollections.put(productname, clientProductpropertiesUpdateCollection);
 			addToGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
 
 		} else {
-			clientProductpropertiesUpdateCollection = clientProductpropertiesUpdateCollections.get(productEdited);
+			clientProductpropertiesUpdateCollection = clientProductpropertiesUpdateCollections.get(productname);
 		}
 
-		collectTheProductProperties(productEdited);
+		collectTheProductProperties(productname);
 
-		dependenciesModel.setActualProduct(productEdited);
+		dependenciesModel.setActualProduct(productname);
 
 		Logging.debug(this, " --- mergedProductProperties " + mergedProductProperties);
 
 		Logging.debug(this, "setProductEdited " + productname + " client specific properties "
 				+ persist.hasClientSpecificProperties(productname));
 
-		mainFrame.panelLocalbootProductSettings.initEditing(productEdited, persist.getProductTitle(productEdited),
-				persist.getProductInfo(productEdited), persist.getProductHint(productEdited),
-				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
-						+ persist.getProductPackageVersion(productEdited) + "   "
-						+ persist.getProductLockedInfo(productEdited),
+		mainFrame.panelLocalbootProductSettings.initEditing(productname, persist.getProductTitle(productname),
+				persist.getProductInfo(productname), persist.getProductHint(productname),
+				persist.getProductVersion(productname) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
+						+ persist.getProductPackageVersion(productname) + "   "
+						+ persist.getProductLockedInfo(productname),
 				// List of the properties map of all selected clients
 				productProperties,
 				// these properties merged to one map
 				mergedProductProperties,
 
 				// editmappanelx
-				persist.getProductPropertyOptionsMap(productEdited),
+				persist.getProductPropertyOptionsMap(productname),
 
 				clientProductpropertiesUpdateCollection);
 
-		mainFrame.panelNetbootProductSettings.initEditing(productEdited, persist.getProductTitle(productEdited),
-				persist.getProductInfo(productEdited), persist.getProductHint(productEdited),
-				persist.getProductVersion(productEdited) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
-						+ persist.getProductPackageVersion(productEdited) + "   "
-						+ persist.getProductLockedInfo(productEdited),
+		mainFrame.panelNetbootProductSettings.initEditing(productname, persist.getProductTitle(productname),
+				persist.getProductInfo(productname), persist.getProductHint(productname),
+				persist.getProductVersion(productname) + Globals.ProductPackageVersionSeparator.FOR_DISPLAY
+						+ persist.getProductPackageVersion(productname) + "   "
+						+ persist.getProductLockedInfo(productname),
 				// array of the properties map of all selected clients
 				productProperties,
 				// these properties merged to one map
 				mergedProductProperties,
 
 				// editmappanelx
-				persist.getProductPropertyOptionsMap(productEdited),
+				persist.getProductPropertyOptionsMap(productname),
 
 				clientProductpropertiesUpdateCollection);
 	}
@@ -3063,6 +3055,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				"setNetworkconfigurationPage  getSelectedClients() " + Arrays.toString(getSelectedClients()));
 
 		try {
+			String[] objectIds;
 			if (editingTarget == EditingTarget.SERVER) {
 				objectIds = new String[] { myServer };
 			} else {
@@ -3814,6 +3807,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			return result;
+		}
+
+		private void saveConfigs() {
+			Logging.info(this, "saveConfigs ");
+
+			updateProductStates();
+			Logging.debug(this, "saveConfigs: collectChangedLocalbootStates " + collectChangedLocalbootStates);
+
+			Logging.info(this,
+					"we should now start working on the update collection of size  " + updateCollection.size());
+
+			updateCollection.doCall();
+			checkErrorList();
+
+			clearUpdateCollectionAndTell();
 		}
 
 		public void save() {
@@ -5294,20 +5302,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (!found) {
 			Logging.checkErrorList(mainFrame);
 		}
-	}
-
-	private void saveConfigs() {
-		Logging.info(this, "saveConfigs ");
-
-		updateProductStates();
-		Logging.debug(this, "saveConfigs: collectChangedLocalbootStates " + collectChangedLocalbootStates);
-
-		Logging.info(this, "we should now start working on the update collection of size  " + updateCollection.size());
-
-		updateCollection.doCall();
-		checkErrorList();
-
-		clearUpdateCollectionAndTell();
 	}
 
 	private void clearUpdateCollectionAndTell() {

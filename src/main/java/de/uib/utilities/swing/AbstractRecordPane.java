@@ -32,7 +32,6 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 	private static final int MAX_LABEL_WIDTH = 100;
 
 	// GUI
-	private Map<String, JLabel> labelfields;
 	private Map<String, JTextField> datafields;
 
 	// Data
@@ -67,7 +66,7 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
-		labelfields = new HashMap<>();
+		Map<String, JLabel> labelfields = new HashMap<>();
 		datafields = new HashMap<>();
 
 		GroupLayout baseLayout = new GroupLayout(this);

@@ -206,7 +206,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		return new MyTableCellRenderer();
 	}
 
-	private static class MyTableCellRenderer extends DefaultTableCellRenderer {
+	private static final class MyTableCellRenderer extends DefaultTableCellRenderer {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
