@@ -214,7 +214,7 @@ public class Logging implements LogEventSubject {
 		errorList.add(String.format("[%s] %s", time, mesg));
 
 		for (int i = 0; i < logEventObservers.size(); i++) {
-			logEventObservers.get(i).logEventOccurred(new LogEvent(null, "", -1, true));
+			logEventObservers.get(i).logEventOccurred();
 		}
 	}
 

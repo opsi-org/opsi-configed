@@ -119,7 +119,6 @@ import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.opsidatamodel.datachanges.UpdateCollection;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.DataChangedKeeper;
-import de.uib.utilities.logging.LogEvent;
 import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataLoadingObservable;
@@ -5288,7 +5287,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// interface LogEventObserver
 	@Override
-	public void logEventOccurred(LogEvent event) {
+	public void logEventOccurred() {
 
 		if (allFrames == null) {
 			return;
