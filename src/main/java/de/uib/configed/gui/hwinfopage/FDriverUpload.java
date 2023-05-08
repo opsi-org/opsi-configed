@@ -15,7 +15,7 @@ import de.uib.utilities.swing.SecondaryFrame;
 
 public class FDriverUpload extends SecondaryFrame {
 
-	PanelDriverUpload panelDriverUpload;
+	private PanelDriverUpload panelDriverUpload;
 
 	private AbstractPersistenceController persist;
 	ConfigedMain main;

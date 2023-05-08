@@ -16,7 +16,7 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePanel {
-	PanelLicencesStatistics thePanel;
+	private PanelLicencesStatistics thePanel;
 	private GenTableModel modelStatistics;
 
 	private AbstractPersistenceController persist;

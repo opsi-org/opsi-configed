@@ -31,7 +31,7 @@ import de.uib.utilities.table.updates.TableEditItem;
 public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	// tab edit licence
 
-	PanelEditLicences thePanel;
+	private PanelEditLicences thePanel;
 
 	private GenTableModel modelLicencekeys;
 	private GenTableModel modelSoftwarelicences;

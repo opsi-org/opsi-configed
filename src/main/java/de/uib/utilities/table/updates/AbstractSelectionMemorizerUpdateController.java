@@ -19,9 +19,9 @@ import de.uib.utilities.thread.WaitCursor;
 
 public abstract class AbstractSelectionMemorizerUpdateController
 		implements de.uib.utilities.table.updates.UpdateController {
-	PanelGenEditTable keysPanel;
+	private PanelGenEditTable keysPanel;
 	private int keyCol;
-	PanelGenEditTable panel;
+	private PanelGenEditTable panel;
 	private GenTableModel tablemodel;
 	StrList2BooleanFunction updater;
 

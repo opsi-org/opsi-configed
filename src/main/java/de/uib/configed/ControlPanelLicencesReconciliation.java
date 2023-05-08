@@ -24,7 +24,7 @@ import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelLicencesReconciliation extends AbstractControlMultiTablePanel {
 
-	PanelLicencesReconciliation thePanel;
+	private PanelLicencesReconciliation thePanel;
 	private GenTableModel modelLicencesReconciliation;
 
 	private AbstractPersistenceController persist;

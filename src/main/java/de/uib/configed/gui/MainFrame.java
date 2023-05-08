@@ -398,7 +398,7 @@ public class MainFrame extends JFrame
 	public PanelHostProperties panelHostProperties;
 	public PanelProductProperties panelProductProperties;
 
-	PanelHWInfo showHardwareLogVersion2;
+	private PanelHWInfo showHardwareLogVersion2;
 	TitledPanel showHardwareLogNotFound;
 	public ControllerHWinfoMultiClients controllerHWinfoMultiClients;
 	private JPanel showHardwareLogMultiClientReport;
@@ -406,12 +406,12 @@ public class MainFrame extends JFrame
 	private JPanel showHardwareLog;
 	private JLabel labelNoSoftware;
 
-	PanelSWInfo panelSWInfo;
+	private PanelSWInfo panelSWInfo;
 	private JPanel showSoftwareLogNotFound;
-	PanelSWMultiClientReport showSoftwareLogMultiClientReport;
+	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
 	private JPanel showSoftwareLog;
 
-	PanelTabbedDocuments showLogfiles;
+	private PanelTabbedDocuments showLogfiles;
 
 	private JPanel jPanelSchalterstellung;
 

@@ -23,7 +23,7 @@ import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
-	PanelLicencesUsage thePanel;
+	private PanelLicencesUsage thePanel;
 
 	private GenTableModel modelLicencesUsage;
 	private GenTableModel modelLicencekeys;
