@@ -1,5 +1,5 @@
 # Changelog
-## [unpublished] - 2023-x-x
+## [4.2.21.3] - 2023-05-09
 
 ### Added
 - Icon for connection status to Messagebus shown on bottom right
@@ -10,6 +10,8 @@
 ### Fixed
 - Installing and removing of opsi-packages
 - Problems with different actions in Licensemanagement
+- Problem with client selection with CTRL-key
+- Startup of configed on some filebackend servers
 
 ## [4.2.21.2] - 2023-04-18
 
