@@ -101,7 +101,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 	private JTextField saveDescriptionField;
 	private JButton saveButton;
 
-	private List<ComplexGroup> complexElements;
+	private LinkedList<ComplexGroup> complexElements;
 
 	private SelectionManager manager;
 	private JTableSelectionPanel selectionPanel;

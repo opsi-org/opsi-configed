@@ -412,7 +412,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		protected Map<String, Map<String, Object>> masterDepots;
 		protected Map<String, Map<String, Object>> allDepots;
 		protected Map<String, Map<String, HostInfo>> depot2Host2HostInfo;
-		protected List<String> depotNamesList;
+		protected LinkedList<String> depotNamesList;
 
 		protected Map<String, Boolean> mapOfPCs;
 

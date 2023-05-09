@@ -3397,10 +3397,8 @@ public class MainFrame extends JFrame
 
 			for (String client : configedMain.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-
-				changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, cbInstallByShutdown.isSelected())
-						.toString();
-
+				changedClientInfo.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
+						cbInstallByShutdown.isSelected().toString());
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
 		} else if (e.getSource() == cbUefiBoot) {
@@ -3408,9 +3406,7 @@ public class MainFrame extends JFrame
 
 			for (String client : configedMain.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-
-				changedClientInfo.put(HostInfo.CLIENT_UEFI_BOOT_KEY, cbUefiBoot.isSelected()).toString();
-
+				changedClientInfo.put(HostInfo.CLIENT_UEFI_BOOT_KEY, cbUefiBoot.isSelected().toString());
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
 		} else if (e.getSource() == cbWANConfig) {
@@ -3418,8 +3414,7 @@ public class MainFrame extends JFrame
 
 			for (String client : configedMain.getSelectedClients()) {
 				Map<String, String> changedClientInfo = getChangedClientInfoFor(client);
-
-				changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, cbWANConfig.isSelected()).toString();
+				changedClientInfo.put(HostInfo.CLIENT_WAN_CONFIG_KEY, cbWANConfig.isSelected().toString());
 				configedMain.getClientInfoDataChangedKeeper().dataHaveChanged(changedClientInfos);
 			}
 		} else if (e.getSource() == jButtonClientsConfiguration) {
