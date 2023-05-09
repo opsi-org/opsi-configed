@@ -377,7 +377,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public boolean isSelectionEmpty() {
-		return (table.getSelectedRowCount() == 0);
+		return table.getSelectedRowCount() == 0;
 	}
 
 	public int getSelectedRow() {
@@ -713,8 +713,8 @@ public class JTableSelectionPanel extends JPanel
 
 		// describe search parameters
 
-		boolean fulltext = (searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES
-				|| searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING);
+		boolean fulltext = searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES
+				|| searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING;
 		// with another data configuration, it could be combined with regex
 
 		String val = value.toString();
@@ -753,7 +753,7 @@ public class JTableSelectionPanel extends JPanel
 						table.convertColumnIndexToModel(j));
 
 				if (compareValue == null) {
-					found = (val == null || val.isEmpty());
+					found = val == null || val.isEmpty();
 				} else {
 					String compareVal = ("" + compareValue).toLowerCase();
 
@@ -766,7 +766,7 @@ public class JTableSelectionPanel extends JPanel
 					case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES:
 						for (String word : alternativeWords) {
 
-							found = (compareVal.indexOf(word) >= 0);
+							found = compareVal.indexOf(word) >= 0;
 							if (found) {
 								break;
 							}
@@ -774,7 +774,7 @@ public class JTableSelectionPanel extends JPanel
 						break;
 
 					case FULL_TEXT_SEARCHING_ONE_STRING:
-						found = (compareVal.indexOf(valLower) >= 0);
+						found = compareVal.indexOf(valLower) >= 0;
 						break;
 
 					default:

@@ -277,10 +277,10 @@ public final class SSHCommandFactory {
 		listKnownMenus.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
 
 		for (Map<String, Object> map : commandlist) {
-			SSHCommandTemplate com = buildSSHCommand(((String) map.get(COMMAND_MAP_ID)),
-					((String) map.get(COMMAND_MAP_PARENT_MENU_TEXT)), ((String) map.get(COMMAND_MAP_MENU_TEXT)),
-					((String) map.get(COMMAND_MAP_TOOLTIP_TEXT)), ((int) map.get(COMMAND_MAP_POSITION)),
-					((boolean) map.get(COMMAND_MAP_NEED_SUDO)), null);
+			SSHCommandTemplate com = buildSSHCommand((String) map.get(COMMAND_MAP_ID),
+					(String) map.get(COMMAND_MAP_PARENT_MENU_TEXT), (String) map.get(COMMAND_MAP_MENU_TEXT),
+					(String) map.get(COMMAND_MAP_TOOLTIP_TEXT), (int) map.get(COMMAND_MAP_POSITION),
+					(boolean) map.get(COMMAND_MAP_NEED_SUDO), null);
 			if (map.get(COMMAND_MAP_COMMANDS) != null) {
 				// Achtung Reihenfolge könnte sich ändern !" toList = ArrayList! JsonArray muss
 				// nicht sortiert sein!"
@@ -358,7 +358,7 @@ public final class SSHCommandFactory {
 
 		for (SSHCommandTemplate com : sshCommandList) {
 			String parent = com.getParentMenuText();
-			if ((parent == null) || (parent.trim().isEmpty())) {
+			if (parent == null || parent.trim().isEmpty()) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 
 			}

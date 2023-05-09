@@ -12,7 +12,7 @@ public class VisualClientNodeNameModifierFactory {
 
 			int l = in.length();
 			int i = l - 1;
-			while (i > 0 && (in.charAt(i) == '_')) {
+			while (i > 0 && in.charAt(i) == '_') {
 				i--;
 			}
 

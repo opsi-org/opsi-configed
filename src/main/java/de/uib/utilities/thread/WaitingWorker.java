@@ -57,7 +57,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 		long elapsedMillis = 0;
 		long elapsedMins = 0;
 
-		timeoutReached = (elapsedMillis >= waitingSleeper.getWaitingMillis());
+		timeoutReached = elapsedMillis >= waitingSleeper.getWaitingMillis();
 		while (!ready && !timeoutReached && !stopped) {
 			Globals.threadSleep(this, timeStepMillis);
 
@@ -71,7 +71,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 			publish(elapsedMillis);
 
-			timeoutReached = (elapsedMillis >= waitingSleeper.getWaitingMillis());
+			timeoutReached = elapsedMillis >= waitingSleeper.getWaitingMillis();
 
 		}
 

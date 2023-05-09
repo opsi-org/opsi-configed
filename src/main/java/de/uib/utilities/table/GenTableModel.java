@@ -246,7 +246,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	 * tell if some filter is working
 	 */
 	public boolean isFiltered() {
-		return (workingFilter != null && workingFilter.isInUse());
+		return workingFilter != null && workingFilter.isInUse();
 	}
 
 	public void clearFilter() {
@@ -488,7 +488,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			result = true;
 		} else {
 
-			result = (rows.get(row)).get(col);
+			result = rows.get(row).get(col);
 		}
 
 		return result;
@@ -635,8 +635,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 		boolean valueChanged = false;
 
-		if (((rows.get(row)).get(col) == null && (value == null || "".equals(value)))
-				|| (oldValueString.equals(newValueString))) {
+		if ((rows.get(row).get(col) == null && value == null || "".equals(value))
+				|| oldValueString.equals(newValueString)) {
 			valueChanged = false;
 		} else {
 			valueChanged = true;
@@ -868,7 +868,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public boolean isRowAdded(int rowNum) {
-		return (addedRows.indexOf(rowNum) > -1);
+		return addedRows.indexOf(rowNum) > -1;
 	}
 
 	public boolean someRowAdded(int[] rowNums) {

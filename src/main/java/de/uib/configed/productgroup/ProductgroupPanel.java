@@ -239,7 +239,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		}
 		descriptionFieldListener.setEnabled(true);
 
-		if ((!currentKey.equals(SAVE_GROUP_ID) && !currentKey.equals(groupsCombo.getSelectedItem()))) {
+		if (!currentKey.equals(SAVE_GROUP_ID) && !currentKey.equals(groupsCombo.getSelectedItem())) {
 			setDataChanged(true);
 		}
 
@@ -989,7 +989,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		boolean result = false;
 
 		if (groupsCombo != null) {
-			result = (groupsCombo.getSelectedIndex() > 0);
+			result = groupsCombo.getSelectedIndex() > 0;
 		}
 
 		buttonDelete.setEnabled(result);

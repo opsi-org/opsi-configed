@@ -190,7 +190,7 @@ public class SWAuditClientEntry {
 
 	protected void updateSoftware() {
 		Logging.info(this, "updateSoftware");
-		if (lastUpdateTime != null && (System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE)) {
+		if (lastUpdateTime != null && System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE) {
 			controller.installedSoftwareInformationRequestRefresh();
 			software = controller.getSoftwareList();
 			lastUpdateTime = System.currentTimeMillis();

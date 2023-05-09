@@ -34,7 +34,7 @@ public class WaitingCycle extends SwingWorker<Void, Integer> {
 
 			publish(waitSecs);
 
-			timeoutReached = (waitSecs > maxWaitSecs);
+			timeoutReached = waitSecs > maxWaitSecs;
 
 		}
 

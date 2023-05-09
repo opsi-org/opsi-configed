@@ -220,7 +220,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 
 	public String[] splitParameter(String m) {
 		Logging.info(this, "splitParameter param " + m);
-		if ((m.startsWith(REPLACEMENT_DEFAULT_1)) && (m.contains(REPLACEMENT_DEFAULT_2))) {
+		if (m.startsWith(REPLACEMENT_DEFAULT_1) && m.contains(REPLACEMENT_DEFAULT_2)) {
 			m = m.replace(REPLACEMENT_DEFAULT_1, "").replace(REPLACEMENT_DEFAULT_2, "");
 		}
 
@@ -481,8 +481,8 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		String[] depotIPs = new String[depotnames.length];
 		int counter = 0;
 		for (String name : depotnames) {
-			String depotip = ((String) main.getPersistenceController().getHostInfoCollections().getDepots().get(name)
-					.get(HostInfo.CLIENT_IP_ADDRESS_KEY));
+			String depotip = (String) main.getPersistenceController().getHostInfoCollections().getDepots().get(name)
+					.get(HostInfo.CLIENT_IP_ADDRESS_KEY);
 			Logging.info(this, "getSelected_depotIPs host " + name + " depotip " + depotip);
 			if (depotip != null) {
 				depotIPs[counter] = depotip;

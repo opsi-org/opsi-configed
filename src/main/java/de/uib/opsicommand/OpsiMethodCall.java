@@ -58,7 +58,7 @@ public class OpsiMethodCall {
 
 	private void collectCall() {
 		// -1 means deactivated; 0 means infinite
-		if ((maxCollectSize < 0) || (maxCollectSize != 0 && collectedCalls.size() >= maxCollectSize)) {
+		if (maxCollectSize < 0 || (maxCollectSize != 0 && collectedCalls.size() >= maxCollectSize)) {
 			return;
 		}
 

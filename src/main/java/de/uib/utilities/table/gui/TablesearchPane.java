@@ -402,7 +402,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		boolean active = true;
 
 		if (saveSearchpaneProgressiveSearch != null) {
-			active = (saveSearchpaneProgressiveSearch.deserializeAsInt() == 0);
+			active = saveSearchpaneProgressiveSearch.deserializeAsInt() == 0;
 		}
 
 		checkmarkSearchProgressive = new CheckedLabel(selectedIconSearch, unselectedIconSearch, active);
@@ -551,7 +551,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		active = true;
 		if (saveSearchpaneAllColumnsSearch != null) {
-			active = (saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0);
+			active = saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0;
 		}
 
 		checkmarkAllColumns = new CheckedLabel(selectedIcon, unselectedIcon, active);
@@ -564,7 +564,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		active = true;
 		if (saveSearchpaneFullTextSearch != null) {
-			active = (saveSearchpaneFullTextSearch.deserializeAsInt() == 0);
+			active = saveSearchpaneFullTextSearch.deserializeAsInt() == 0;
 		}
 
 		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active);
@@ -672,7 +672,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			}
 
-			if ((saveSearchpaneAllColumnsSearch == null) || saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0
+			if (saveSearchpaneAllColumnsSearch == null || saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0
 					|| preferredColumnIndex >= targetModel.getColumnCount()) {
 				comboSearchFields.setSelectedIndex(0);
 			} else {
@@ -808,7 +808,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		int end = realS.length() - part.length() + 1;
 
 		while (!result.success && i < end) {
-			result.success = (comparator.compare(realS.substring(i, i + part.length()), part) == 0);
+			result.success = comparator.compare(realS.substring(i, i + part.length()), part) == 0;
 			result.endChar = i + part.length() - 1;
 			i++;
 		}
@@ -838,7 +838,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			return true;
 		}
 
-		return (comparator.compare(realS.substring(0, part.length()), part) == 0);
+		return comparator.compare(realS.substring(0, part.length()), part) == 0;
 	}
 
 	protected int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
@@ -1108,8 +1108,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		final Set<Integer> selectedCols = selectedCols0;
 
-		final boolean fulltextSearch = (comboSearchFieldsMode.getSelectedIndex() == FULL_TEXT_SEARCH);
-		final boolean regexSearch = (comboSearchFieldsMode.getSelectedIndex() == REGEX_SEARCH);
+		final boolean fulltextSearch = comboSearchFieldsMode.getSelectedIndex() == FULL_TEXT_SEARCH;
+		final boolean regexSearch = comboSearchFieldsMode.getSelectedIndex() == REGEX_SEARCH;
 		final boolean combineCols = fulltextSearch;
 
 		fieldSearch.getCaret().setVisible(false);

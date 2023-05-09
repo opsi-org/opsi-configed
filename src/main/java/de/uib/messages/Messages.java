@@ -49,7 +49,7 @@ public final class Messages {
 
 		characteristics = language;
 		myLocaleCharacteristics.add(characteristics);
-		if (result == null && (existingLocalesNames.indexOf(characteristics) > -1)) {
+		if (result == null && existingLocalesNames.indexOf(characteristics) > -1) {
 			result = characteristics;
 		}
 

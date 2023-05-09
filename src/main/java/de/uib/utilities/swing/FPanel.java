@@ -126,15 +126,9 @@ public class FPanel extends SecondaryFrame {
 
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
-
 		boolean leaving = true;
 
-		if ((e.getID() == WindowEvent.WINDOW_CLOSING)
-		// ||
-		// (e.getID() == WindowEvent.WINDOW_DEACTIVATED)
-		// ||
-		// (e.getID() == WindowEvent.WINDOW_CLOSED)
-		) {
+		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			leaving = leaveChecked();
 			if (leaving) {
 

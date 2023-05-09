@@ -95,13 +95,13 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private boolean waitForInitialChannelSubscritionEvent(long timeoutMs) {
-		long start = (new Date()).getTime();
+		long start = new Date().getTime();
 		while (!initialSubscriptionReceived) {
 			if (!messagebusWebSocket.isOpen()) {
 				Logging.info("Websocket closed while waiting for inital subscription event");
 				return false;
 			}
-			if ((new Date()).getTime() - start >= timeoutMs) {
+			if (new Date().getTime() - start >= timeoutMs) {
 				Logging.warning("Timed out after " + timeoutMs + " ms while waiting for inital subscription event");
 				return false;
 			}

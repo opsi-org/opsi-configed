@@ -811,7 +811,7 @@ public final class LicensingInfoMap {
 				}
 
 				if (diff <= absolutClientLimitWarning
-						|| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning)) {
+						|| (futureNum != 0 && clientNum * 100 / futureNum >= percentClientLimitWarning)) {
 					return STATE_CLOSE_TO_LIMIT;
 				}
 

@@ -44,7 +44,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 		}
 
 		JComponent jc = (JComponent) c;
-		CellAlternatingColorizer.colorize(jc, isSelected, (row % 2 == 0), (column % 2 == 0), true);
+		CellAlternatingColorizer.colorize(jc, isSelected, row % 2 == 0, column % 2 == 0, true);
 
 		if (jc instanceof JLabel) {
 			String tooltipText = null;

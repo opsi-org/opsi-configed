@@ -149,7 +149,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 			this.outputDialog = outputDialog;
 			this.withGui = withGui;
 			retriedTimes = 1;
-			if ((this.command.getDescription() != null) && (!this.command.getDescription().isEmpty())) {
+			if (this.command.getDescription() != null && !this.command.getDescription().isEmpty()) {
 				publishInfo("exec:  " + this.command.getDescription() + "");
 			}
 			publishInfo(
@@ -182,7 +182,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 					publishError(Configed.getResourceValue("SSHConnection.Exec.exit127"));
 					Logging.info(this, "2. publish");
 				}
-			} else if ((exitCode != 0) && (exitCode != -1)) {
+			} else if (exitCode != 0 && exitCode != -1) {
 				foundError = true;
 				Logging.info(this, "exec exit code " + exitCode + ".");
 				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitError")
@@ -191,7 +191,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 					publishError(Configed.getResourceValue("SSHConnection.Exec.exitError")
 							+ Configed.getResourceValue("SSHConnection.Exec.exitCode") + " " + exitCode);
 				}
-			} else if ((exitCode == 0) || (exitCode == -1)) {
+			} else if (exitCode == 0 || exitCode == -1) {
 				Logging.info(this, "exec exit code 0");
 				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitNoError"));
 				Logging.debug(this, Configed.getResourceValue("SSHConnection.Exec.exitPlsCheck"));
@@ -254,7 +254,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				session.disconnect();
 
 				checkExitCode(channel.getExitStatus(), withGui, channel);
-				if ((channel.getExitStatus() != 0) && (channel.getExitStatus() != -1)) {
+				if (channel.getExitStatus() != 0 && channel.getExitStatus() != -1) {
 					Logging.info(this, "exec ready (2)");
 					foundError = true;
 					if (outputDialog != null) {
@@ -336,7 +336,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 			}
 
 			String commandinfo = "[" + this.command.getId() + counterInfo + "]";
-			if ((commandInfoName != null) && (!commandInfoName.isEmpty())) {
+			if (commandInfoName != null && !commandInfoName.isEmpty()) {
 				commandinfo = "[" + commandInfoName + counterInfo + "]";
 			}
 

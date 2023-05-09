@@ -1627,7 +1627,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		if (awareOfTableChangedListener && tableModel != null
-				&& !((tableModel.getColMarkCursorRow() > -1) && (e.getColumn() == tableModel.getColMarkCursorRow()))) {
+				&& !(tableModel.getColMarkCursorRow() > -1 && e.getColumn() == tableModel.getColMarkCursorRow())) {
 
 			Logging.info(this, " tableChanged, datachanged set to true");
 			setDataChanged(true);
@@ -1702,7 +1702,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemDeleteRelation.setEnabled(true);
 			}
 
-			singleSelection = (selectedRow == lsm.getMaxSelectionIndex());
+			singleSelection = selectedRow == lsm.getMaxSelectionIndex();
 		}
 
 	}

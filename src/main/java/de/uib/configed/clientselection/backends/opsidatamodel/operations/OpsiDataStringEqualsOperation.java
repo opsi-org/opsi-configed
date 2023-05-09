@@ -24,7 +24,7 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 		this.key = key;
 		this.data = data.toLowerCase();
 		if (data.contains("*")) {
-			dataSplitted = (this.data).split("\\*");
+			dataSplitted = this.data.split("\\*");
 			Logging.debug(this, "OpsiDataStringEqualsOperation " + dataSplitted.length);
 		}
 		startsWith = data.startsWith("*");

@@ -16,7 +16,7 @@ public class IntComparatorForObjects implements Comparator<Object> {
 		String s2 = ("" + o2).trim();
 
 		try {
-			if ((s1.length() > 1) && (s1.charAt(0) == '(' && (s1.charAt(s1.length() - 1)) == ')')) {
+			if (s1.length() > 1 && (s1.charAt(0) == '(' && (s1.charAt(s1.length() - 1)) == ')')) {
 				s1 = s1.substring(1, s1.length() - 1);
 			}
 
@@ -26,7 +26,7 @@ public class IntComparatorForObjects implements Comparator<Object> {
 		}
 
 		try {
-			if ((s2.length() > 1) && (s2.charAt(0) == '(' && (s2.charAt(s2.length() - 1)) == ')')) {
+			if (s2.length() > 1 && (s2.charAt(0) == '(' && (s2.charAt(s2.length() - 1)) == ')')) {
 				s2 = s2.substring(1, s2.length() - 1);
 			}
 

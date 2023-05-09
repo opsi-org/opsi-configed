@@ -499,7 +499,7 @@ public class SSHConnectExec extends SSHConnect {
 
 						String str = new String(tmp, 0, i, StandardCharsets.UTF_8);
 
-						if ((command.needSudo()) && (str.contains(SSHCommandFactory.SUDO_FAILED_TEXT))) {
+						if (command.needSudo() && str.contains(SSHCommandFactory.SUDO_FAILED_TEXT)) {
 							String pw = "";
 							if (supwRetriedTimes >= 1) {
 								pw = getSudoPass(outputDialog);
@@ -539,7 +539,7 @@ public class SSHConnectExec extends SSHConnect {
 					}
 
 					if (channel.isClosed() || interruptChannel || interruptChannelWorker) {
-						if ((in.available() > 0) && (!interruptChannel)) {
+						if (in.available() > 0 && !interruptChannel) {
 							continue;
 						}
 						checkExitCode(channel.getExitStatus(), withGui, channel);
@@ -627,7 +627,7 @@ public class SSHConnectExec extends SSHConnect {
 		private String getCommandName() {
 			String commandinfo = "[" + this.command.getMenuText() + "]";
 			if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
-				if ((commandInfoName != null) && (!commandInfoName.isEmpty())) {
+				if (commandInfoName != null && !commandInfoName.isEmpty()) {
 					commandinfo = "[" + commandInfoName + "(" + Integer.toString(this.commandNumber) + "/"
 							+ Integer.toString(this.maxCommandNumber) + ")]";
 				} else {

@@ -800,7 +800,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	private boolean checkActionIsSupported(String productId, ActionRequest ar) {
-		if ((possibleActions == null) || ((possibleActions.get(productId).indexOf(ar.toString())) < 0)) {
+		if (possibleActions == null || possibleActions.get(productId).indexOf(ar.toString()) < 0) {
 			missingImplementationForAR.add(productId);
 			return false;
 		}
@@ -819,7 +819,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		initChangeActionRequests();
 
-		if ((possibleActions == null) || ((possibleActions.get(productId).indexOf(ar.toString())) < 0)) {
+		if (possibleActions == null || possibleActions.get(productId).indexOf(ar.toString()) < 0) {
 			Logging.error(" the required action is not supported for " + productId);
 			return;
 		}

@@ -63,7 +63,7 @@ public class ExtendedDate {
 
 	@Override
 	public boolean equals(Object ob) {
-		return (this == ob) || (ob instanceof ExtendedDate && toString().equals(ob.toString()));
+		return this == ob || (ob instanceof ExtendedDate && toString().equals(ob.toString()));
 	}
 
 	public Date getDate() {

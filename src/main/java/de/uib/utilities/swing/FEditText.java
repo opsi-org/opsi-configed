@@ -88,7 +88,7 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 			if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
 					&& e.getKeyCode() == KeyEvent.VK_TAB) {
 				buttonCommit.requestFocusInWindow();
-			} else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && singleLine) {
+			} else if (e.getKeyCode() == KeyEvent.VK_ENTER && singleLine) {
 				commit();
 			}
 		}

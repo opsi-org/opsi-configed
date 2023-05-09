@@ -213,7 +213,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 
-				Configed.sshConnectOnStart = (e.getStateChange() == ItemEvent.SELECTED);
+				Configed.sshConnectOnStart = e.getStateChange() == ItemEvent.SELECTED;
 
 				Logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
 			}
@@ -520,7 +520,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 			long interval = 2000;
 			long waited = 0;
 
-			while ((PersistenceControllerFactory.getConnectionState() == ConnectionState.ConnectionUndefined)
+			while (PersistenceControllerFactory.getConnectionState() == ConnectionState.ConnectionUndefined
 					&& waited < TIMEOUT_MS) {
 				Globals.threadSleep(this, interval);
 				waited = waited + interval;

@@ -17,7 +17,7 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer {
 			int row, int column) {
 		Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		CellAlternatingColorizer.colorize(cell, isSelected, (row % 2 == 0), true);
+		CellAlternatingColorizer.colorize(cell, isSelected, row % 2 == 0, true);
 
 		return cell;
 

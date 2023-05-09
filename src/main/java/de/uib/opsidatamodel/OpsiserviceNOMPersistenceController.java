@@ -1995,7 +1995,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			result = exec.doCall(omc);
 		}
 
-		if (result && (group != null && !group.isEmpty())) {
+		if (result && group != null && !group.isEmpty()) {
 			Logging.info(this, "createClient" + " group " + group);
 			List<Object> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemGroup = createNOMitem(Object2GroupEntry.TYPE_NAME);
@@ -2022,7 +2022,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			result = exec.doCall(omc);
 		}
 
-		if (result && (productLocalboot != null && !productLocalboot.isEmpty())) {
+		if (result && productLocalboot != null && !productLocalboot.isEmpty()) {
 			Logging.info(this, "createClient" + " productLocalboot " + productLocalboot);
 			List<Object> jsonObjects = new ArrayList<>();
 			Map<String, Object> itemProducts = createNOMitem("ProductOnClient");
@@ -3677,7 +3677,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		for (String testdepot : getHostInfoCollections().getAllDepots().keySet()) {
 			if (depot.equals(testdepot) || first == null && dataStub.getDepot2Packages().get(testdepot) == null
-					|| (first != null && first.equals(dataStub.getDepot2Packages().get(testdepot)))) {
+					|| first != null && first.equals(dataStub.getDepot2Packages().get(testdepot))) {
 				result.add(testdepot);
 			}
 		}
@@ -8336,7 +8336,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				}
 
 				if (problemToIndicate
-						&& ("linux_agent".equals(key) || ("userroles".equals(key) && !isUserRegisterActivated()))) {
+						&& ("linux_agent".equals(key) || "userroles".equals(key) && !isUserRegisterActivated())) {
 					problemToIndicate = false;
 				}
 
@@ -8417,14 +8417,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			Logging.warning("opsi module information problem", ex);
 		}
 
-		withLicenceManagement = (opsiModules.get("license_management") != null)
-				&& opsiModules.get("license_management");
-		withLocalImaging = (opsiModules.get("local_imaging") != null) && opsiModules.get("local_imaging");
+		withLicenceManagement = opsiModules.get("license_management") != null && opsiModules.get("license_management");
+		withLocalImaging = opsiModules.get("local_imaging") != null && opsiModules.get("local_imaging");
 
-		withMySQL = (opsiModules.get("mysql_backend") != null) && opsiModules.get("mysql_backend");
-		withUEFI = (opsiModules.get("uefi") != null) && opsiModules.get("uefi");
-		withWAN = (opsiModules.get("vpn") != null) && opsiModules.get("vpn");
-		withUserRoles = (opsiModules.get("userroles") != null) && opsiModules.get("userroles");
+		withMySQL = opsiModules.get("mysql_backend") != null && opsiModules.get("mysql_backend");
+		withUEFI = opsiModules.get("uefi") != null && opsiModules.get("uefi");
+		withWAN = opsiModules.get("vpn") != null && opsiModules.get("vpn");
+		withUserRoles = opsiModules.get("userroles" != null) && opsiModules.get("userroles");
 
 		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);

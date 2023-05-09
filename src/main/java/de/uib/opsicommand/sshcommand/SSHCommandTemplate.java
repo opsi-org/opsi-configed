@@ -157,7 +157,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().isEmpty())) {
+		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().isEmpty()) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -313,7 +313,7 @@ public class SSHCommandTemplate implements SSHCommand, Comparable<SSHCommandTemp
 		List<String> commandsStringList = new LinkedList<>();
 		for (SSHCommand c : sshCommand) {
 			String comstr = c.getCommandRaw();
-			if (!((comstr == null) || (comstr.trim().isEmpty()))) {
+			if (!(comstr == null || comstr.trim().isEmpty())) {
 				commandsStringList.add(c.getCommandRaw());
 			}
 		}

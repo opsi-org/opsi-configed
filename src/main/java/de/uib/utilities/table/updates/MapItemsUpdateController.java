@@ -57,7 +57,7 @@ public class MapItemsUpdateController implements UpdateController {
 				if (updateItem instanceof MapDeliveryItem) {
 					String result = updater.sendUpdate(updateItem.getRowAsMap());
 
-					success = (result != null);
+					success = result != null;
 					if (success && updateItem.keyChanged()) {
 						successfullInsertsWithNewKeys.add(updateItem);
 

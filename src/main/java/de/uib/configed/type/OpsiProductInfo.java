@@ -67,8 +67,8 @@ public class OpsiProductInfo extends OpsiPackage {
 			Logging.info(this, "no priority " + m.get(SERVICE_KEY_PRIORITY));
 		}
 
-		hasUserLoginScript = (m.get(SERVICE_KEY_USER_LOGIN_SCRIPT) != null
-				&& !("" + m.get(SERVICE_KEY_USER_LOGIN_SCRIPT)).isEmpty());
+		hasUserLoginScript = m.get(SERVICE_KEY_USER_LOGIN_SCRIPT) != null
+				&& !("" + m.get(SERVICE_KEY_USER_LOGIN_SCRIPT)).isEmpty();
 
 		Logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
 				+ ", hasUserLoginScript " + hasUserLoginScript);

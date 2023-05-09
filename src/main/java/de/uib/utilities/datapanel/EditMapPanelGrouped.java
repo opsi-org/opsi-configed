@@ -410,7 +410,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			return null;
 		}
 
-		boolean isRoot = (p.getPathCount() == 1);
+		boolean isRoot = p.getPathCount() == 1;
 
 		if (isRoot) {
 			return null;
@@ -432,7 +432,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 			return;
 		}
 
-		boolean isRoot = (p.getPathCount() == 1);
+		boolean isRoot = p.getPathCount() == 1;
 
 		if (isRoot) {
 			splitPane.setRightComponent(rightPane);

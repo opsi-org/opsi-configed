@@ -141,13 +141,13 @@ public class InstallationStatus {
 	public static boolean existsState(int state) {
 		checkCollections();
 
-		return (states.contains(state));
+		return states.contains(state);
 	}
 
 	public static boolean existsLabel(String label) {
 		checkCollections();
 
-		return (labels.contains(label));
+		return labels.contains(label);
 	}
 
 	public static String getLabel(int state) {

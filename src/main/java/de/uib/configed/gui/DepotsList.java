@@ -150,7 +150,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 					tooltipText = key;
 				}
 
-				tooltipText = (Globals.fillStringToLength(tooltipText + " ", FILL_LENGTH));
+				tooltipText = Globals.fillStringToLength(tooltipText + " ", FILL_LENGTH);
 
 				String depot = (String) value;
 				if (!persist.hasDepotPermission(depot)) {

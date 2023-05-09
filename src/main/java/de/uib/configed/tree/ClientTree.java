@@ -1122,7 +1122,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			String newParentID, Boolean moving) {
 
 		Logging.debug(this, "clientCopyOrMoveTo moving " + moving);
-		if ((moving != null && moving)) {
+		if (moving != null && moving) {
 			moveClientTo(importID, sourcePath, sourceParentID, sourceParentNode, newParentNode, newParentPath,
 					newParentID);
 		} else {
@@ -1248,7 +1248,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	}
 
 	public boolean isChildOfALL(TreeNode node) {
-		return (node.getParent() == groupNodeAllClients);
+		return node.getParent() == groupNodeAllClients;
 	}
 
 	public boolean isInGROUPS(String groupName) {
@@ -1279,12 +1279,12 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public boolean isInDIRECTORY(DefaultMutableTreeNode node) {
 		TreeNode[] path = node.getPath();
-		return (path.length >= 2 && path[1] == groupNodeDirectory);
+		return path.length >= 2 && path[1] == groupNodeDirectory;
 	}
 
 	public boolean isInGROUPS(DefaultMutableTreeNode node) {
 		TreeNode[] path = node.getPath();
-		return (path.length >= 2 && path[1] == groupNodeGroups);
+		return path.length >= 2 && path[1] == groupNodeGroups;
 	}
 
 	public void insertNodeInOrder(DefaultMutableTreeNode node, DefaultMutableTreeNode parent) {

@@ -33,7 +33,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 
 		JLabel jc = (JLabel) cell;
 
-		CellAlternatingColorizer.colorize(jc, isSelected, (row % 2 == 0), (column % 2 == 0), true);
+		CellAlternatingColorizer.colorize(jc, isSelected, row % 2 == 0, column % 2 == 0, true);
 
 		String latestChange = licensingInfoMap.getLatestDate();
 		String columnName = licensingInfoMap.getColumnNames().get(column);

@@ -104,7 +104,7 @@ public class SSHPMInstallServerPanel extends SSHPMInstallPanel {
 
 	public static CommandOpsiPackageManagerInstall getCommand(String product) {
 
-		if ((product == null) || (product.isEmpty())) {
+		if (product == null || product.isEmpty()) {
 			return null;
 		}
 

@@ -93,10 +93,10 @@ public class CSVParser {
 					fieldStart = true;
 				}
 
-				if (((tokens.get(i - 1).tokenEquals(CSVToken.FIELD)
+				if ((tokens.get(i - 1).tokenEquals(CSVToken.FIELD)
 						|| tokens.get(i - 1).tokenEquals(CSVToken.EMBEDDED_QUOTE))
 						&& (tokens.get(i + 1).tokenEquals(CSVToken.FIELD_SEPARATOR)
-								|| tokens.get(i + 1).tokenEquals(CSVToken.LINE_END)))) {
+								|| tokens.get(i + 1).tokenEquals(CSVToken.LINE_END))) {
 					fieldEnd = true;
 				}
 

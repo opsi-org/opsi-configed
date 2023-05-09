@@ -49,7 +49,7 @@ public class MapBasedTableEditItem extends TableEditItem {
 			return null;
 		}
 
-		return (rowV.get(keyCol).toString());
+		return rowV.get(keyCol).toString();
 	}
 
 	@Override

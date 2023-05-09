@@ -339,7 +339,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 								theRole = "" + values.get(0);
 							}
 
-							boolean obeyToRole = (theRole != null && !(theRole.equals(UserConfig.NONE_PROTOTYPE)));
+							boolean obeyToRole = theRole != null && !(theRole.equals(UserConfig.NONE_PROTOTYPE));
 
 							if (obeyToRole) {
 								result = true;

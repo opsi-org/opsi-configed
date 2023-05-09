@@ -132,7 +132,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	private String readTime(Calendar cal) {
-		String result = " (" + cal.get(Calendar.YEAR) + "-" + formatNaturalNumber((cal.get(Calendar.MONTH) + 1)) + "-"
+		String result = " (" + cal.get(Calendar.YEAR) + "-" + formatNaturalNumber(cal.get(Calendar.MONTH) + 1) + "-"
 				+ formatNaturalNumber(cal.get(Calendar.DAY_OF_MONTH)) + ") "
 				+ formatNaturalNumber(cal.get(Calendar.HOUR_OF_DAY)) + ":"
 				+ formatNaturalNumber(cal.get(Calendar.MINUTE));
@@ -236,11 +236,11 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		int clientCountWidth = 100;
 
 		spinnerHour = new JSpinner();
-		JFormattedTextField textFieldHour = (((JSpinner.DefaultEditor) spinnerHour.getEditor()).getTextField());
+		JFormattedTextField textFieldHour = ((JSpinner.DefaultEditor) spinnerHour.getEditor()).getTextField();
 		textFieldHour.setEditable(false);
 
 		spinnerMinute = new JSpinner();
-		JFormattedTextField textFieldMinute = (((JSpinner.DefaultEditor) spinnerMinute.getEditor()).getTextField());
+		JFormattedTextField textFieldMinute = ((JSpinner.DefaultEditor) spinnerMinute.getEditor()).getTextField();
 		textFieldMinute.setEditable(false);
 
 		InternationalFormatter internationalFormatter = new InternationalFormatter(new DecimalFormat("00"));
@@ -540,7 +540,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 					Configed.getResourceValue("FStartWakeOnLan.allowClose.title"), JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-			reallyLeave = (returnedOption == JOptionPane.YES_OPTION);
+			reallyLeave = returnedOption == JOptionPane.YES_OPTION;
 		}
 
 		Logging.info(this, "leave  reallyLeave  " + reallyLeave);

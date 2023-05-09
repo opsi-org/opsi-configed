@@ -372,7 +372,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 				return;
 			}
 		} else if (jRadioButtonFromServer.isSelected()
-				&& (jTextFieldURL.getText().isEmpty() || (jTextFieldURL.getText().equals(wgetDefText)))) {
+				&& (jTextFieldURL.getText().isEmpty() || jTextFieldURL.getText().equals(wgetDefText))) {
 			Logging.warning(this, "Please enter url to file.");
 			return;
 		}
@@ -401,7 +401,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 			}
 
 			if (jComboBoxSetRights.isSelected()) {
-				fullcommand.addCommand((new CommandOpsiSetRights("")));
+				fullcommand.addCommand(new CommandOpsiSetRights(""));
 			}
 
 			new SSHConnectExec(fullcommand);

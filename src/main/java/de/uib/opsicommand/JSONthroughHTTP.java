@@ -304,7 +304,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 					Logging.checkErrorList(null);
 				}
 
-				throw (ex);
+				throw ex;
 			}
 
 			if (connection instanceof HttpsURLConnection) {

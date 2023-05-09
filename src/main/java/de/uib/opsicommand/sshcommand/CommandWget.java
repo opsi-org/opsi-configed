@@ -59,7 +59,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setFileName(String newFilename) {
-		if ((newFilename != null) && (!newFilename.trim().isEmpty())) {
+		if (newFilename != null && !newFilename.trim().isEmpty()) {
 			fileName = " --output-document=" + newFilename + " ";
 		}
 	}
@@ -125,7 +125,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
+		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().trim().isEmpty()) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();

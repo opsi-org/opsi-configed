@@ -134,11 +134,11 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	}
 
 	public boolean isLocalbootProduct() {
-		return (productType == TYPE_LOCALBOOT);
+		return productType == TYPE_LOCALBOOT;
 	}
 
 	public boolean isNetbootProduct() {
-		return (productType == TYPE_NETBOOT);
+		return productType == TYPE_NETBOOT;
 	}
 
 	public static String giveProductType(int type) {

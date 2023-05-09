@@ -132,7 +132,7 @@ public class SSHConnect {
 	 **/
 	protected String getSudoPass(Component dialog, boolean rememberPw) {
 		Logging.debug(this, "getSudoPass dialog " + dialog + " newConfirmDialog " + rememberPw);
-		if ((rememberPw) && (pwSudo != null)) {
+		if (rememberPw && pwSudo != null) {
 			return pwSudo;
 		}
 

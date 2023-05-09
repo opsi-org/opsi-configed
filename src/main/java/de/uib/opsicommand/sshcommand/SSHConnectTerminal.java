@@ -158,7 +158,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			try {
 				Logging.info(this, "exec out " + out);
 				Logging.info(this, "exec text " + text);
-				if ((out != null) && (text.trim().length() >= 0)) {
+				if (out != null && text.trim().length() >= 0) {
 					SSHCommand command = new EmptyCommand(text);
 					String ntext = SSHCommandFactory.getInstance(main).getParameterHandler()
 							.parseParameterToString(command, this);
@@ -246,7 +246,7 @@ public class SSHConnectTerminal extends SSHConnect {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if ((e.getKeyCode() == KeyEvent.VK_C) && ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
+				if (e.getKeyCode() == KeyEvent.VK_C && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 					Logging.info(this, "interrupt with keys ");
 					exec(new String(new byte[] { 3 }) + "\n");
 				}
@@ -271,10 +271,10 @@ public class SSHConnectTerminal extends SSHConnect {
 						((Component) textField).requestFocusInWindow();
 						dialog.getInputField().setText("");
 					}
-				} else if ((key == KeyEvent.VK_UP) || (key == KeyEvent.VK_KP_UP)) {
+				} else if (key == KeyEvent.VK_UP || key == KeyEvent.VK_KP_UP) {
 					dialog.getInputField().setText(dialog.getPrevCommandUp());
 					((Component) textField).requestFocusInWindow();
-				} else if ((key == KeyEvent.VK_DOWN) || (key == KeyEvent.VK_KP_DOWN)) {
+				} else if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_KP_DOWN) {
 					dialog.getInputField().setText(dialog.getPrevCommandDown());
 					((Component) textField).requestFocusInWindow();
 				}

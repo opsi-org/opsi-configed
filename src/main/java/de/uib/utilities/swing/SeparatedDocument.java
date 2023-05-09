@@ -37,7 +37,7 @@ public class SeparatedDocument extends CheckedDocument {
 		for (int i = 0; i < startchars.length; i++) {
 			if (appendCharIfAllowed(textBuf, startchars[i])) {
 				try {
-					if (checkMask && (getText(offset, 1).equals(separator))) {
+					if (checkMask && getText(offset, 1).equals(separator)) {
 
 						// remove old separators
 						remove(offset, 1);
@@ -57,7 +57,7 @@ public class SeparatedDocument extends CheckedDocument {
 		int oriLength = getLength();
 		int insertOffs = 0;
 		for (int i = 0; i < oriLength - 1; i++) {
-			if ((i % partsLength) == 0) {
+			if (i % partsLength == 0) {
 				insertOffs = insertOffs + partsLength;
 				if (!getText(insertOffs, 1).equals(separator) && insertOffs < size) {
 					insertStringPlain(insertOffs, separator, a);

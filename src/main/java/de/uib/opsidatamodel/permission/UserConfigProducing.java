@@ -177,7 +177,7 @@ public class UserConfigProducing {
 		Logging.debug(this, "currentPossibleValuesListed " + currentPossibleValuesListed);
 		Logging.debug(this, "oldPossibleValues " + oldPossibleValues);
 
-		if ((serverconfigValuesMap.get(configKeyList) == null)
+		if (serverconfigValuesMap.get(configKeyList) == null
 				|| !serverconfigValuesMap.get(configKeyList).equals(selectedValues)
 				|| !currentPossibleValuesListed.equals(oldPossibleValues)) {
 

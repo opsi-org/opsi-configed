@@ -121,7 +121,7 @@ public class PanelSWInfo extends JPanel {
 		@Override
 		public boolean test(List<Object> row) {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
-			boolean isKb = (patternWithKB.matcher(entry)).matches();
+			boolean isKb = patternWithKB.matcher(entry).matches();
 
 			return !isKb;
 			// on filtering active everything is taken if not isKb
@@ -570,7 +570,7 @@ public class PanelSWInfo extends JPanel {
 
 		@Override
 		public Object getValueAt(int row, int col) {
-			return (/* encodeString */ data.get(row))[col + 1];
+			return data.get(row)[col + 1];
 		}
 	}
 

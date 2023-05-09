@@ -146,7 +146,7 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 
 		jComboBoxVerbosity.setSelectedItem(1);
 		jComboBoxVerbosity.addItemListener((ItemEvent itemEvent) -> {
-			commandWget.setVerbosity(((int) jComboBoxVerbosity.getSelectedItem()));
+			commandWget.setVerbosity((int) jComboBoxVerbosity.getSelectedItem());
 			updateCommand();
 		});
 
@@ -233,9 +233,9 @@ public class SSHWgetParameterDialog extends FGeneralDialog {
 	/* This method is called when button 3 is pressed */
 	@Override
 	public void doAction3() {
-		if ((jTextFieldURL.getText()
-				.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url")))
-				|| (jTextFieldURL.getText().isEmpty())) {
+		if (jTextFieldURL.getText()
+				.equals(Configed.getResourceValue("SSHConnection.ParameterDialog.wget.tooltip.tf_wget_url"))
+				|| jTextFieldURL.getText().isEmpty()) {
 			Logging.warning(this, "Please enter url.");
 			return;
 		}
