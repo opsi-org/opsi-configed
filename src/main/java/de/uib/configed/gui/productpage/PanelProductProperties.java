@@ -196,7 +196,7 @@ public class PanelProductProperties extends JSplitPane {
 						retrieval = false;
 					}
 					// no exception
-					if (retrieval && (depotsOfPackageAsRetrieved == null)) {
+					if (retrieval && depotsOfPackageAsRetrieved == null) {
 						retrieval = false;
 					}
 

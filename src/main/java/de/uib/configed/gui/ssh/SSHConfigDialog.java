@@ -121,7 +121,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 				Logging.debug(this, "tf.getPW " + new String(jTextFieldPassword.getPassword()));
 				return false;
 			}
-			if ((!connectionInfo.getPort().equals(jTextFieldPort.getText())) && (!connectionInfo.usesKeyfile())) {
+			if (!connectionInfo.getPort().equals(jTextFieldPort.getText()) && !connectionInfo.usesKeyfile()) {
 				Logging.debug(this, "compareStates 4");
 				return false;
 			}
@@ -140,7 +140,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 				Logging.debug(this, "compareStates 7");
 				return false;
 			}
-			if ((!connectionInfo.getPassw().equals(ConfigedMain.password)) && (!connectionInfo.usesKeyfile())) {
+			if (!connectionInfo.getPassw().equals(ConfigedMain.password) && !connectionInfo.usesKeyfile()) {
 				Logging.debug(this, "compareStates 8");
 				return false;
 			}
@@ -148,7 +148,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		Logging.debug(this, "compareStates until now == ");
 
-		if (connectionInfo.usesKeyfile() != (jCheckBoxUseKeyFile.isSelected())) {
+		if (connectionInfo.usesKeyfile() != jCheckBoxUseKeyFile.isSelected()) {
 			Logging.info(this, "compareStates 9");
 			return false;
 		} else if (jCheckBoxUseKeyFile.isSelected()) {

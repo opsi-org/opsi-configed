@@ -849,7 +849,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		int countLines = lines.length;
 		for (int i = 0; i < countLines; i++) {
 			// keep last levC if not newly set
-			if ((lines[i].length() >= 3) && (lines[i].charAt(0) == '[') && (lines[i].charAt(2) == ']')) {
+			if (lines[i].length() >= 3 && lines[i].charAt(0) == '[' && lines[i].charAt(2) == ']') {
 				levC = lines[i].charAt(1);
 			}
 			if (Character.isDigit(levC)) {
@@ -1018,14 +1018,14 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				search();
 			}
 		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
-			if ((e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER)) {
+			if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
 				search();
-			} else if (e.getSource() == jTextPane && (e.getKeyChar() == '+')
-					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
+			} else if (e.getSource() == jTextPane && e.getKeyChar() == '+'
+					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Plus");
 				setFontSize("+");
-			} else if (e.getSource() == jTextPane && (e.getKeyChar() == '-')
-					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
+			} else if (e.getSource() == jTextPane && e.getKeyChar() == '-'
+					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Minus");
 				setFontSize("-");
 			}
@@ -1146,7 +1146,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				if (firstOffset == -1) {
 					firstOffset = lastIndex;
 				}
-				if ((returnOffset == lastReturnedOffset) && (lastIndex > lastReturnedOffset)) {
+				if (returnOffset == lastReturnedOffset && lastIndex > lastReturnedOffset) {
 					returnOffset = lastIndex;
 				}
 				lastIndex = endIndex;
@@ -1192,7 +1192,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				try {
 					Shape shape = view.modelToView(offs0, Position.Bias.Forward, offs1, Position.Bias.Backward, bounds);
 
-					if ((shape instanceof Rectangle)) {
+					if (shape instanceof Rectangle) {
 						alloc = (Rectangle) shape;
 					} else {
 						alloc = shape.getBounds();

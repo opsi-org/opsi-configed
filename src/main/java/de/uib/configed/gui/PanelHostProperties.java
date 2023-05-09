@@ -108,8 +108,8 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 			combo.setModel(model);
 		}
 
-		combo.setEnabled((model != null));
-		combo.setVisible((model != null));
+		combo.setEnabled(model != null);
+		combo.setVisible(model != null);
 	}
 
 	private Map<String, ListCellOptions> deriveOptionsMap(Map<String, Object> m) {
