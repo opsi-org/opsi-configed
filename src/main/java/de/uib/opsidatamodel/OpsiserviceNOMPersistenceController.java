@@ -2282,13 +2282,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public Map<String, Object> getOpsiLicencingInfoNoOpsiAdmin() {
-		Logging.info(this, "getLicensingInfo");
+		Logging.info(this, "getLicensingInfoNoOpsiAdmin");
 
-		Object[] callParameters = {};
-		OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME, callParameters,
-				OpsiMethodCall.BACKGROUND_DEFAULT);
+		if (licencingInfoOpsiAdmin == null && isOpsiLicencingAvailable()) {
+			Object[] callParameters = {};
+			OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME, callParameters,
+					OpsiMethodCall.BACKGROUND_DEFAULT);
 
-		if (licencingInfoNoOpsiAdmin == null) {
 			licencingInfoNoOpsiAdmin = exec.getMapResult(omc);
 		}
 
@@ -8064,11 +8064,17 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			return opsiInformation;
 		}
 
-		OpsiMethodCall omc = new OpsiMethodCall("backend_getLicensingInfo", new String[] {});
+		String methodName = "backend_info";
+
+		if (JSONthroughHTTPS.isOpsi43()) {
+			methodName = BACKEND_LICENSING_INFO_METHOD_NAME;
+		}
+
+		OpsiMethodCall omc = new OpsiMethodCall(methodName, new String[] {});
 		opsiInformation = new HashMap<>();
 
 		// method does not exist before opsi 3.4
-		if (getMethodSignature("backend_getLicensingInfo") != NONE_LIST) {
+		if (getMethodSignature(methodName) != NONE_LIST) {
 			opsiInformation = exec.getMapResult(omc);
 		}
 
@@ -8118,7 +8124,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		// underlicensed
 	}
 
-	private void produceOpsiModulesInfoClassic() {
+	private void produceOpsiModulesInfoClassicOpsi43() {
 		produceOpsiInformation();
 
 		// the part of it which delivers the service information on checked
@@ -8383,6 +8389,272 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
 	}
 
+	private void produceOpsiModulesInfoClassic() {
+		produceOpsiInformation();
+
+		// the part of it which delivers the service information on checked
+		// modules
+		Map<String, Object> opsiModulesInfo = new HashMap<>();
+		// keeps the info for displaying to the user
+		opsiModulesDisplayInfo = new HashMap<>();
+		String opsiVersion = "4";
+		HashMap<String, ModulePermissionValue> opsiModulesPermissions = new HashMap<>();
+		// has the actual signal if a module is active
+		opsiModules = new HashMap<>();
+
+		Map<String, Object> opsiCountModules = new HashMap<>();
+		// String expiresKey = ModulePermissionValue.KEY_EXPIRES;
+
+		try {
+			opsiVersion = (String) opsiInformation.get("opsiVersion");
+			Logging.info(this, "opsi version information " + opsiVersion);
+
+			final List<String> missingModulesPermissionInfo = new ArrayList<>();
+
+			// prepare the user info
+			opsiModulesInfo = exec.getMapFromItem(opsiInformation.get("modules"));
+
+			opsiModulesInfo.remove("signature");
+			Logging.info(this, "opsi module information " + opsiModulesInfo);
+			opsiModulesInfo.remove("valid");
+
+			opsiModulesDisplayInfo = new HashMap<>(opsiModulesInfo);
+
+			ExtendedDate validUntil = ExtendedDate.INFINITE;
+			// if (opsiModulesInfo.get(expiresKey) != null) {
+			// 	validUntil = new ExtendedDate(opsiModulesInfo.get(expiresKey));
+			// }
+
+			// analyse the real module info
+			opsiCountModules = exec.getMapFromItem(opsiInformation.get("realmodules"));
+			getHostInfoCollections().retrieveOpsiHosts();
+
+			ExtendedInteger globalMaxClients = ExtendedInteger.INFINITE;
+
+			int countClients = hostInfoCollections.getCountClients();
+
+			Date today = new Date();
+			Calendar nowCal = Calendar.getInstance();
+			nowCal.setTime(today);
+
+			Logging.info(this, "opsiModulesInfo " + opsiModulesInfo);
+
+			// read in modules
+			for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
+				Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo.getKey());
+				ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleInfo.getValue(),
+						validUntil);
+
+				Logging.info(this, "handle modules key, modulePermission  " + modulePermission);
+				Boolean permissionCheck = modulePermission.getBoolean();
+				opsiModulesPermissions.put(opsiModuleInfo.getKey(), modulePermission);
+				if (permissionCheck != null) {
+					opsiModules.put(opsiModuleInfo.getKey(), permissionCheck);
+				}
+			}
+
+			Logging.info(this, "modules resulting step 0  " + opsiModules);
+
+			// existing
+			for (Entry<String, Object> opsiCountModule : opsiCountModules.entrySet()) {
+				ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
+				Logging.info(this,
+						"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
+
+				modulePermission = new ModulePermissionValue(opsiCountModule.getValue(), validUntil);
+
+				Logging.info(this,
+						"handle modules key " + opsiCountModule.getKey() + " permission set " + modulePermission);
+				// replace value got from modulesInfo
+				opsiModulesPermissions.put(opsiCountModule.getKey(), modulePermission);
+
+				if (opsiCountModule.getValue() != null) {
+					opsiModulesDisplayInfo.put(opsiCountModule.getKey(), opsiCountModule.getValue());
+				}
+			}
+
+			Logging.info(this, "modules resulting step 1 " + opsiModules);
+			Logging.info(this, "countModules is  " + opsiCountModules);
+
+			// set values for modules checked by configed
+			for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
+				ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
+				ExtendedInteger maxClientsForThisModule = modulePermission.getMaxClients();
+				ExtendedDate expiresForThisModule = modulePermission.getExpires();
+
+				if (modulePermission.getBoolean() != null) {
+					opsiModules.put(key, modulePermission.getBoolean());
+					Logging.info(this, " retrieveOpsiModules, set opsiModules for key " + key + ": "
+							+ modulePermission.getBoolean());
+				} else {
+					opsiModules.put(key, true);
+					Logging.info(this, " retrieveOpsiModules " + key + " " + maxClientsForThisModule.getNumber());
+
+					if (maxClientsForThisModule.equals(ExtendedInteger.ZERO)) {
+						opsiModules.put(key, false);
+					} else {
+
+						Integer warningLimit = null;
+						Integer stopLimit = null;
+
+						Logging.info(this,
+								" retrieveOpsiModules " + key + " up to now globalMaxClients " + globalMaxClients);
+
+						Logging.info(this, " retrieveOpsiModules " + key + " maxClientsForThisModule.getNumber "
+								+ maxClientsForThisModule.getNumber());
+
+						globalMaxClients = calculateModulePermission(globalMaxClients,
+								maxClientsForThisModule.getNumber());
+
+						Logging.info(this,
+								" retrieveOpsiModules " + key + " result:  globalMaxClients is " + globalMaxClients);
+
+						Integer newGlobalLimit = globalMaxClients.getNumber();
+
+						// global limit is changed by this module a real warning
+						// and error limit exists
+						if (newGlobalLimit != null) {
+							warningLimit = newGlobalLimit - CLIENT_COUNT_WARNING_LIMIT;
+							stopLimit = newGlobalLimit + CLIENT_COUNT_TOLERANCE_LIMIT;
+						}
+
+						Logging.info(this, " retrieveOpsiModules " + key + " old  warningLimit " + warningLimit
+								+ " stopLimit " + stopLimit);
+
+						if (stopLimit != null && hostInfoCollections.getCountClients() > stopLimit) {
+							opsiModules.put(key, false);
+						} else {
+							if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
+								Date expiresDate = expiresForThisModule.getDate();
+
+								if (today.after(expiresDate)) {
+									opsiModules.put(key, false);
+								}
+							}
+						}
+
+					}
+
+				}
+			}
+
+			Logging.info(this, "modules resulting step 2  " + opsiModules);
+			Logging.info(this, "count Modules is  " + opsiCountModules);
+
+			for (String key : ModulePermissionValue.MODULE_CHECKED.keySet()) {
+				int countClientsInThisBlock = countClients;
+
+				// tests
+
+				Logging.info(this, "check module " + key + " problem on start " + (!(opsiModules.get(key))));
+				boolean problemToIndicate = true;
+				ModulePermissionValue modulePermission = opsiModulesPermissions.get(key);
+				ExtendedInteger maxAllowedClientsForThisModule = modulePermission.getMaxClients();
+				ExtendedDate expiresForThisModule = modulePermission.getExpires();
+
+				Logging.info(this, "check  module " + key + " maxAllowedClientsForThisModule "
+						+ maxAllowedClientsForThisModule + " expiresForThisModule " + expiresForThisModule);
+
+				if (maxAllowedClientsForThisModule.equals(ExtendedInteger.ZERO)) {
+					problemToIndicate = false;
+				}
+
+				if (problemToIndicate
+						&& (key.equals("linux_agent") || (key.equals("userroles") && !isUserRegisterActivated()))) {
+					problemToIndicate = false;
+				}
+
+				Logging.info(this, "check module " + key + "  problemToIndicate " + problemToIndicate);
+
+				if (problemToIndicate) {
+					Logging.info(this, "retrieveOpsiModules " + key + " , maxClients " + maxAllowedClientsForThisModule
+							+ " count " + countClientsInThisBlock);
+
+					if (!expiresForThisModule.equals(ExtendedDate.INFINITE)) {
+						Date expiresDate = expiresForThisModule.getDate();
+						Calendar noticeCal = Calendar.getInstance();
+						noticeCal.setTime(expiresDate);
+						noticeCal.add(Calendar.DAY_OF_MONTH, -14);
+
+						if (nowCal.after(noticeCal)) {
+							missingModulesPermissionInfo.add("Module " + key + ", expires: " + expiresForThisModule);
+						}
+					}
+
+					if (!ExtendedInteger.INFINITE.equals(maxAllowedClientsForThisModule)) {
+						int startWarningCount = maxAllowedClientsForThisModule.getNumber() - CLIENT_COUNT_WARNING_LIMIT;
+						int stopCount = maxAllowedClientsForThisModule.getNumber() + CLIENT_COUNT_TOLERANCE_LIMIT;
+
+						if (countClientsInThisBlock > stopCount) {
+							Logging.info(this, "retrieveOpsiModules " + key + " stopCount " + stopCount
+									+ " count clients " + countClients);
+
+							String warningText =
+
+									String.format(
+											// locale.
+											Configed.getResourceValue("Permission.modules.clientcount.error"),
+											"" + countClientsInThisBlock, "" + key,
+											"" + maxAllowedClientsForThisModule.getNumber());
+
+							missingModulesPermissionInfo.add(warningText);
+
+							Logging.warning(this, warningText);
+						} else if (countClientsInThisBlock > startWarningCount) {
+							Logging.info(this, "retrieveOpsiModules " + key + " startWarningCount " + startWarningCount
+									+ " count clients " + countClients);
+
+							String warningText =
+
+									String.format(
+											// locale,
+											Configed.getResourceValue("Permission.modules.clientcount.warning"),
+											"" + countClientsInThisBlock, "" + key,
+											"" + maxAllowedClientsForThisModule.getNumber());
+
+							missingModulesPermissionInfo.add(warningText);
+							Logging.warning(this, warningText);
+						}
+					}
+				}
+			}
+
+			Logging.info(this, "modules resulting  " + opsiModules);
+			Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
+
+			if (!missingModulesPermissionInfo.isEmpty()) {
+				SwingUtilities.invokeLater(() -> {
+					StringBuilder info = new StringBuilder("");
+
+					info.append(Configed.getResourceValue("Permission.modules.clientcount.2"));
+					info.append(":\n");
+					for (String moduleInfo : missingModulesPermissionInfo) {
+						info.append(moduleInfo);
+						info.append("\n");
+					}
+
+					Logging.info(this, "missingModules " + info);
+					FOpsiLicenseMissingText.callInstanceWith(info.toString());
+				});
+			}
+		} catch (Exception ex) {
+			Logging.warning("opsi module information problem", ex);
+		}
+
+		withLicenceManagement = (opsiModules.get("license_management") != null)
+				&& opsiModules.get("license_management");
+		withLocalImaging = (opsiModules.get("local_imaging") != null) && opsiModules.get("local_imaging");
+
+		withMySQL = (opsiModules.get("mysql_backend") != null) && opsiModules.get("mysql_backend");
+		withUEFI = (opsiModules.get("uefi") != null) && opsiModules.get("uefi");
+		withWAN = (opsiModules.get("vpn") != null) && opsiModules.get("vpn");
+		withUserRoles = (opsiModules.get("userroles") != null) && opsiModules.get("userroles");
+
+		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
+		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
+		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
+	}
+
 	@Override
 	public final void retrieveOpsiModules() {
 		Logging.info(this, "retrieveOpsiModules ");
@@ -8391,7 +8663,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		// probably old opsi service version
 		if (licencingInfoOpsiAdmin == null) {
-			produceOpsiModulesInfoClassic();
+			if (JSONthroughHTTPS.isOpsi43()) {
+				produceOpsiModulesInfoClassicOpsi43();
+			} else {
+				produceOpsiModulesInfoClassic();
+			}
 		} else {
 			produceOpsiModulesInfo();
 		}
