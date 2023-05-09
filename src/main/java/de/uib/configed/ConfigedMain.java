@@ -2374,7 +2374,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return viewIndex;
 	}
 
-	public void treeClientsMouseAction(boolean clicked, MouseEvent mouseEvent) {
+	public void treeClientsMouseAction(MouseEvent mouseEvent) {
 		Logging.debug(this, "treeClients_mouseAction");
 
 		if (!treeClients.isEnabled()) {
@@ -2394,58 +2394,45 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			mouseNode = (DefaultMutableTreeNode) mousePath.getLastPathComponent();
 
 			if (!mouseNode.getAllowsChildren()) {
-
-				// we manage the active nodes
-
-				if (clicked) {
-					// on client activation a group activation is ended
-					if (activePaths.size() == 1 && ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent())
-							.getAllowsChildren()) {
+				if (activePaths.size() == 1
+						&& ((DefaultMutableTreeNode) activePaths.get(0).getLastPathComponent()).getAllowsChildren()) {
+					clearTree();
+				} else {
+					if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
+							|| (mouseEvent.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
 						clearTree();
-					} else {
-						if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
 
-							clearTree();
+						TreePath[] selTreePaths = treeClients.getSelectionPaths();
 
-							TreePath[] selTreePaths = treeClients.getSelectionPaths();
-
-							for (int i = 0; i < selTreePaths.length; i++) {
-								DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[i]
-										.getLastPathComponent();
-								activeTreeNodes.put((String) selNode.getUserObject(), selTreePaths[i]);
-								activePaths.add(selTreePaths[i]);
-								treeClients.collectParentIDsFrom(selNode);
-							}
-						} else {
-							clearTree();
+						for (int i = 0; i < selTreePaths.length; i++) {
+							DefaultMutableTreeNode selNode = (DefaultMutableTreeNode) selTreePaths[i]
+									.getLastPathComponent();
+							activeTreeNodes.put((String) selNode.getUserObject(), selTreePaths[i]);
+							activePaths.add(selTreePaths[i]);
+							treeClients.collectParentIDsFrom(selNode);
 						}
-					}
-
-					activateClientByTree((String) mouseNode.getUserObject(), mousePath);
-
-					setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
-
-					Logging.info(this,
-							" treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
-
-					if (getSelectedClients().length == 1) {
-						mainFrame.getHostsStatusInfo().setGroupName(mouseNode.getParent().toString());
 					} else {
-						mainFrame.getHostsStatusInfo().setGroupName("");
+						clearTree();
 					}
-
-					mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
-							getSelectedClientsString(), clientInDepot);
-
-					// restore keys, do not rebuild tree, select clientsFilteredByTree
 				}
+
+				activateClientByTree((String) mouseNode.getUserObject(), mousePath);
+				setRebuiltClientListTableModel(true, false, clientsFilteredByTree);
+
+				Logging.info(this,
+						" treeClients_mouseAction getSelectedClients().length " + getSelectedClients().length);
+
+				if (getSelectedClients().length == 1) {
+					mainFrame.getHostsStatusInfo().setGroupName(mouseNode.getParent().toString());
+				} else {
+					mainFrame.getHostsStatusInfo().setGroupName("");
+				}
+
+				mainFrame.getHostsStatusInfo().updateValues(clientCount, getSelectedClients().length,
+						getSelectedClientsString(), clientInDepot);
 			} else {
-				if (clicked) {
-					activateGroupByTree(false, mouseNode, mousePath);
-					// fails!!
-				}
+				activateGroupByTree(false, mouseNode, mousePath);
 			}
-
 		}
 
 		if (mouseEvent.getClickCount() == 2) {
@@ -2457,7 +2444,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				setGroup(mouseNode.toString());
 			}
 		}
-
 	}
 
 	public boolean treeClientsSelectAction(TreePath newSelectedPath) {
