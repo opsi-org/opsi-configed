@@ -193,7 +193,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		Logging.info(this, "create report");
 		HashMap<String, String> metaData = new HashMap<>();
 		metaData.put("header", Configed.getResourceValue("EditMapPanelGrouped.createPDF.title"));
-		metaData.put("title", Configed.getResourceValue("Client: " + client));
+		metaData.put("title", "Client: " + client);
 		metaData.put("subject", "report of table");
 		metaData.put("keywords", Configed.getResourceValue("EditMapPanelGrouped.createPDF.title") + " " + client);
 

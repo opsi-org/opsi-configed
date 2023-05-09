@@ -84,7 +84,7 @@ public final class SSHConnectionExecDialog extends SSHConnectionOutputDialog {
 			jButtonClear = new IconButton(Configed.getResourceValue("SSHConnection.buttonClear"),
 					"images/user-trash.png", "images/user-trash.png", "images/user-trash.png", true);
 			jButtonClear.setPreferredSize(new Dimension(Globals.GRAPHIC_BUTTON_WIDTH + 15, Globals.BUTTON_HEIGHT + 3));
-			jButtonClear.setToolTipText(Configed.getResourceValue("SSHConnection.btn_clear"));
+			jButtonClear.setToolTipText(Configed.getResourceValue("SSHConnection.buttonClear"));
 			jButtonClear.addActionListener(actionEvent -> clear());
 			createLayout(konsolePanelLayout, jScrollPane, Globals.GAP_SIZE, Globals.GAP_SIZE, true);
 			createLayout(mainPanelLayout, inputPanel, 0, 0, false);

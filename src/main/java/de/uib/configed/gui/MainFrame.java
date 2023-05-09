@@ -1143,7 +1143,7 @@ public class MainFrame extends JFrame
 										+ " " + factory.getConnectionState());
 							} else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
 								Logging.error(this,
-										Configed.getResourceValue("SSHConnection.CONNECTION_NOT_ALLOWED.message"));
+										Configed.getResourceValue("SSHConnection.connected_not_allowed.message"));
 							} else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN)) {
 								Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message")
 										+ " " + factory.getConnectionState());
@@ -1198,7 +1198,7 @@ public class MainFrame extends JFrame
 						Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
 								+ factory.getConnectionState());
 					} else if (factory.getConnectionState().equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-						Logging.error(this, Configed.getResourceValue("SSHConnection.CONNECTION_NOT_ALLOWED.message"));
+						Logging.error(this, Configed.getResourceValue("SSHConnection.connected_not_allowed.message"));
 					} else if (factory.getConnectionState().equals(SSHCommandFactory.UNKNOWN)) {
 						Logging.error(this, Configed.getResourceValue("SSHConnection.not_connected.message") + " "
 								+ factory.getConnectionState());
@@ -1967,8 +1967,8 @@ public class MainFrame extends JFrame
 				unselectedIcon, nullIcon, false);
 		cbUefiBoot.addActionListener(this);
 
-		cbWANConfig = new CheckedLabel(Configed.getResourceValue("WAN Konfiguration"), selectedIcon, unselectedIcon,
-				nullIcon, false);
+		cbWANConfig = new CheckedLabel(Configed.getResourceValue("NewClientDialog.wan_not_activated"), selectedIcon,
+				unselectedIcon, nullIcon, false);
 		cbWANConfig.setSelected(false);
 		cbWANConfig.setEnabled(true);
 		cbWANConfig.addActionListener(this);

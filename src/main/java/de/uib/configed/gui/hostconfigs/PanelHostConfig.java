@@ -5,10 +5,8 @@ import java.util.Map;
 import java.util.NavigableMap;
 
 import javax.swing.GroupLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -26,7 +24,6 @@ public class PanelHostConfig extends JPanel {
 
 	// delegate
 	private EditMapPanelGrouped editMapPanel;
-	private JLabel label;
 
 	private boolean keylistExtendible = true;
 	private boolean entryRemovable = true;
@@ -83,9 +80,6 @@ public class PanelHostConfig extends JPanel {
 	}
 
 	private void buildPanel() {
-
-		label = new JLabel(Configed.getResourceValue("MainFrame.jLabel_Config"));
-
 		PersistenceControllerFactory.getPersistenceController().checkConfiguration();
 		putUsersToPropertyclassesTreeMap();
 
@@ -125,8 +119,6 @@ public class PanelHostConfig extends JPanel {
 			Map<String, de.uib.utilities.table.ListCellOptions> configOptions, Collection collectionConfigStored,
 			AdditionalconfigurationUpdateCollection configurationUpdateCollection, boolean optionsEditable,
 			NavigableMap<String, String> classesMap) {
-		label.setText(labeltext);
-
 		Logging.info(this, "initEditing "
 
 				+ " optionsEditable " + optionsEditable);

@@ -264,7 +264,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		buttonRefreshTime = new IconButton(Configed.getResourceValue("FStartWakeOnLan.buttonRefreshTime"),
 				"images/clock16.png", "images/clock16.png", "images/clock16.png");
 
-		buttonRefreshTime.setToolTipText("Zeit neu setzen");
+		buttonRefreshTime.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.buttonRefreshTime"));
 
 		buttonRefreshTime.addActionListener(new ActionListener() {
 			@Override
@@ -486,8 +486,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
-		return " " + Configed.getResourceValue("FStartWakeOnLan.timeLeft") + "  "
-				+ Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
+		return "   " + Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
 	}
 
 	@Override
