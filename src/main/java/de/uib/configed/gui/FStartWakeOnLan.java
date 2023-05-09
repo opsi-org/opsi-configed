@@ -488,8 +488,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	@Override
 	public String setLabellingStrategy(long millisLevel) {
-		return " " + Configed.getResourceValue("FStartWakeOnLan.timeLeft") + "  "
-				+ Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
+		return "   " + Globals.giveTimeSpan(getWaitingMillis() - millisLevel);
 	}
 
 	@Override
