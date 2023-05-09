@@ -2391,7 +2391,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							.getAllowsChildren()) {
 						clearTree();
 					} else {
-						if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK) {
+						if ((mouseEvent.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) == InputEvent.SHIFT_DOWN_MASK
+								|| (mouseEvent.getModifiersEx()
+										& InputEvent.CTRL_DOWN_MASK) == InputEvent.CTRL_DOWN_MASK) {
 
 							clearTree();
 
