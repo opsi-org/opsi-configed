@@ -33,6 +33,10 @@ public interface HostInfoCollections {
 
 	void addOpsiHostNames(String[] newNames);
 
+	void removeOpsiHostName(String name);
+
+	void removeOpsiHostNames(String[] names);
+
 	List<String> getOpsiHostNames();
 
 	// only master depots
