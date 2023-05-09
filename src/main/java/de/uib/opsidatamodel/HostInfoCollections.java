@@ -22,6 +22,8 @@ import de.uib.configed.type.HostInfo;
  * 
  * @author Rupert Roeder
  */
+
+// TODO Remove? since only implemented once
 public interface HostInfoCollections {
 	int getCountClients();
 

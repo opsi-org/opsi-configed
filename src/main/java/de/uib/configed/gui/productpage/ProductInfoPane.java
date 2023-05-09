@@ -41,10 +41,9 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 	private JXPanel productDescriptionsPanel;
 	private JXPanel bottomComponent;
-	protected JTextField jLabelProductID;
-	protected JTextField jLabelProductVersion;
-	protected JLabel jLabelLabelProductVersion;
-	protected JLabel jLabelProductName;
+	private JTextField jLabelProductID;
+	private JTextField jLabelProductVersion;
+	private JLabel jLabelProductName;
 
 	private JLabel dependenciesTextLabel;
 	private JButton dependenciesActivateButton;
@@ -56,13 +55,13 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	private JButton propertiesActivateButton;
 	private boolean isPanelEditPropertiesVisible = true;
 
-	protected TextMarkdownPane jTextAreaProductAdvice;
-	protected TextMarkdownPane jTextAreaProductInfo;
+	private TextMarkdownPane jTextAreaProductAdvice;
+	private TextMarkdownPane jTextAreaProductInfo;
 
-	protected String productName = "";
+	private String productName = "";
 	private Map<String, Boolean> specificPropertiesExisting;
 
-	protected ConfigedMain mainController;
+	private ConfigedMain mainController;
 
 	/** Creates new ProductInfoPane */
 	public ProductInfoPane(ConfigedMain mainController, AbstractPanelEditProperties panelEditProperties) {
@@ -81,7 +80,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jLabelProductName = new JLabel();
 		jLabelProductID = new JTextField();
 		jLabelProductVersion = new JTextField();
-		jLabelLabelProductVersion = new JLabel();
+		JLabel jLabelLabelProductVersion = new JLabel();
 
 		JScrollPane jScrollPaneProductInfo = new JScrollPane();
 		jTextAreaProductInfo = new TextMarkdownPane();
@@ -296,7 +295,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		}
 	}
 
-	protected String fillEmpty(String content) {
+	private static String fillEmpty(String content) {
 		if (content == null || content.isEmpty() || "-".equals(content)) {
 			return " ";
 		}

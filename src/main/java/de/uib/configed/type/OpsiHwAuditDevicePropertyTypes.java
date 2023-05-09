@@ -7,7 +7,7 @@ import java.util.Map;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditDeviceClass> {
-	Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
+	private Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses;
 
 	public OpsiHwAuditDevicePropertyTypes(Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses) {
 		super();

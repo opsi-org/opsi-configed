@@ -13,7 +13,7 @@ import java.util.List;
 public class MapDeleteItem extends MapBasedTableEditItem {
 	public MapDeleteItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
 			List<Object> rowV) {
-		super(source, keyCol, columnNames, classNames, null, rowV);
+		super(source, keyCol, columnNames, rowV);
 	}
 
 	@Override

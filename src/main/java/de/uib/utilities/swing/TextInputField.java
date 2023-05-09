@@ -21,9 +21,9 @@ import javax.swing.JTextField;
 public class TextInputField extends JPanel {
 	// common wrapper class for JTextField and JCombBox
 
-	protected JTextField textfield;
-	protected JComboBox<String> combo;
-	protected List<String> proposedValues;
+	private JTextField textfield;
+	private JComboBox<String> combo;
+	private List<String> proposedValues;
 	private Character[] orderedBeginChars;
 
 	public enum InputType {

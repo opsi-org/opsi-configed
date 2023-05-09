@@ -26,15 +26,11 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
  * the type of export
  */
 public abstract class AbstractSWExporter {
-	File exportDirectory;
-	String exportDirectoryS;
-	String filepathStart;
+	private String filepathStart;
 
-	protected Boolean askingForKindOfAction;
-	protected boolean askForOverwrite;
-	protected String filenamePrefix = "report_swaudit_";
+	private String filenamePrefix = "report_swaudit_";
 
-	protected AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	protected GenTableModel modelSWInfo;
 	protected String scanInfo = "";
@@ -46,8 +42,6 @@ public abstract class AbstractSWExporter {
 	private String password;
 	private String clientsFile;
 	private String outDir;
-
-	protected String title;
 
 	/* constructor for use in a initialized context */
 	protected AbstractSWExporter(AbstractPersistenceController controller) {
@@ -172,21 +166,8 @@ public abstract class AbstractSWExporter {
 
 	}
 
-	protected void initModel(String hostId) {
+	private void initModel(String hostId) {
 		theHost = hostId;
-
-		exportDirectoryS = "";
-		if (exportDirectory == null) {
-			try {
-				exportDirectory = new File(System.getProperty(Logging.ENV_VARIABLE_FOR_USER_DIRECTORY));
-			} catch (Exception ex) {
-				Logging.warning(this, "could not define exportDirectory)", ex);
-			}
-		}
-
-		if (exportDirectory != null) {
-			exportDirectoryS = exportDirectory.toString();
-		}
 
 		List<String> columnNames;
 		List<String> classNames;

@@ -45,41 +45,36 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	public static final RunningInstances<FStartWakeOnLan> runningInstances = new RunningInstances<>(
 			FStartWakeOnLan.class, Configed.getResourceValue("RunningInstances.askStop.text"));
 
-	String scheduleTitleStarter;
+	private String scheduleTitleStarter;
 	private Map<String, Integer> labelledDelays;
-	JSpinner spinnerDelay;
-	JSpinner spinnerHour;
-	JSpinner spinnerMinute;
-	JLabel labelStarttime;
-	JTextField fieldTaskname;
-	JTextField fieldClientCount;
-	JTextField fieldInvolvedDepotsCount;
-	JLabel labelTimeYetToWait;
+	private JSpinner spinnerDelay;
+	private JSpinner spinnerHour;
+	private JSpinner spinnerMinute;
+	private JLabel labelStarttime;
+	private JTextField fieldTaskname;
+	private JTextField fieldClientCount;
+	private JTextField fieldInvolvedDepotsCount;
+	private JLabel labelTimeYetToWait;
+	private JProgressBar waitingProgressBar;
 
-	IconButton buttonRefreshTime;
-	IconButton buttonSetNew;
+	private IconButton buttonRefreshTime;
+	private IconButton buttonSetNew;
 
-	Calendar cal;
-	long startActionMillis;
-	long waitingMillis;
+	private Calendar cal;
+	private long startActionMillis;
+	private long waitingMillis;
 
-	int stepsTotal;
-	boolean waitingMode;
+	private boolean waitingMode;
 
-	List<String> oneDayHours;
-	List<String> minutes;
-	String nullDelayValue;
+	private String nullDelayValue;
 
-	Map<String, List<String>> hostSeparationByDepots;
-	Set<String> usedDepots;
-	int clientCount;
-	String[] currentlySelectedClients;
+	private String[] currentlySelectedClients;
 
 	private WaitingWorker waitingTask;
 
-	String scheduleTitle;
+	private String scheduleTitle;
 
-	ConfigedMain main;
+	private ConfigedMain main;
 
 	public FStartWakeOnLan(String title, ConfigedMain main) {
 		super(null, title, false, new String[] { Configed.getResourceValue("FStartWakeOnLan.cancel"),
@@ -100,9 +95,12 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	public void setClients() {
-		hostSeparationByDepots = main.getPersistenceController().getHostSeparationByDepots(main.getSelectedClients());
-		usedDepots = hostSeparationByDepots.keySet();
+		Map<String, List<String>> hostSeparationByDepots = main.getPersistenceController()
+				.getHostSeparationByDepots(main.getSelectedClients());
+		Set<String> usedDepots = hostSeparationByDepots.keySet();
 		currentlySelectedClients = main.getSelectedClients();
+
+		int clientCount;
 		if (main.getSelectedClients() != null) {
 			clientCount = main.getSelectedClients().length;
 		} else {
@@ -113,7 +111,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		fieldInvolvedDepotsCount.setText("" + usedDepots.size());
 	}
 
-	protected void disableSettingOfTimes() {
+	private void disableSettingOfTimes() {
 		jButton2.setEnabled(false);
 		spinnerDelay.setEnabled(false);
 		spinnerDelay.setEnabled(false);
@@ -167,7 +165,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		labelStarttime.setText(readTime(cal));
 	}
 
-	protected void setNowTimeAsTarget() {
+	private void setNowTimeAsTarget() {
 		setCalToNow();
 
 		if (scheduleTitleStarter == null) {

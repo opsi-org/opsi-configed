@@ -18,7 +18,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 
 	private String command = BASE_NAME;
 
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 	private boolean needSudo = true;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = true;
@@ -218,11 +218,6 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 		}
 		Logging.debug(this, "counterString placeholders count  " + times);
 		return times;
-	}
-
-	@Override
-	public void startParameterGui() {
-		dialog = new SSHOpsiSetRightsParameterDialog(this);
 	}
 
 	@Override

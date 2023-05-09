@@ -10,17 +10,17 @@ import de.uib.utilities.logging.Logging;
 public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
 	private String command;
 	private int priority = 8;
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 	private boolean isMultiCommand;
 
-	String opsiproduct = "";
-	String depot = "";
-	String verbosity = "-vvv";
-	String freeInput = "";
-	String property = " -p keep ";
+	private String opsiproduct = "";
+	private String depot = "";
+	private String verbosity = "-vvv";
+	private String freeInput = "";
+	private String property = " -p keep ";
 
-	String updateInstalled = "";
-	String setupInstalled = "";
+	private String updateInstalled = "";
+	private String setupInstalled = "";
 
 	public CommandOpsiPackageManagerInstall() {
 		command = "opsi-package-manager";
@@ -75,11 +75,6 @@ public class CommandOpsiPackageManagerInstall extends CommandOpsiPackageManager 
 	@Override
 	public int getPriority() {
 		return priority;
-	}
-
-	@Override
-	public void startParameterGui() {
-		dialog = new SSHPackageManagerInstallParameterDialog();
 	}
 
 	@Override

@@ -24,26 +24,26 @@ import de.uib.utilities.logging.Logging;
 // classname
 // has to be String)
 public class MapSource implements TableSource {
-	protected static final String ROW_COUNTER_NAME = "rowcounter";
+	private static final String ROW_COUNTER_NAME = "rowcounter";
 
-	static final Map<String, Object> class2defaultValue;
+	private static final Map<String, Object> class2defaultValue;
 	static {
 		class2defaultValue = new HashMap<>();
 		class2defaultValue.put("java.lang.Boolean", false);
 		class2defaultValue.put("java.lang.String", "");
 	}
 
-	protected boolean rowCounting;
+	private boolean rowCounting;
 
-	protected List<String> columnNames;
+	private List<String> columnNames;
 
-	protected List<String> classNames;
+	private List<String> classNames;
 
 	protected Map<String, Map<String, Object>> table;
 
 	protected List<List<Object>> rows;
 
-	protected boolean reloadRequested = true;
+	private boolean reloadRequested = true;
 
 	public MapSource(List<String> columnNames, List<String> classNames, Map<String, Map<String, Object>> table,
 			boolean rowCounting) {
@@ -169,16 +169,6 @@ public class MapSource implements TableSource {
 	@Override
 	public void requestReload() {
 		reloadRequested = true;
-	}
-
-	@Override
-	public String getRowCounterName() {
-		return ROW_COUNTER_NAME;
-	}
-
-	@Override
-	public boolean isRowCounting() {
-		return rowCounting;
 	}
 
 	@Override

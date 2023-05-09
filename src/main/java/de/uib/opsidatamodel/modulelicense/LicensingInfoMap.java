@@ -90,10 +90,10 @@ public final class LicensingInfoMap {
 
 	private static boolean reducedView = !FGeneralDialogLicensingInfo.extendedView;
 
-	final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	private JSONObject jOResult;
-	Map<String, List<Object>> configs;
+	private Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
 	private List<List<String>> clientNumbersList;
 	private Set<String> customerIDs;

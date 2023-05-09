@@ -6,10 +6,10 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 
 public class CombinedMenuItem {
-	JCheckBoxMenuItem standardMenuItem;
-	JCheckBoxMenuItem popupItem;
+	private JCheckBoxMenuItem standardMenuItem;
+	private JCheckBoxMenuItem popupItem;
 
-	CombinedMenuItem(JCheckBoxMenuItem menuItem, JCheckBoxMenuItem popupItem) {
+	public CombinedMenuItem(JCheckBoxMenuItem menuItem, JCheckBoxMenuItem popupItem) {
 		this.standardMenuItem = menuItem;
 		this.popupItem = popupItem;
 	}

@@ -6,7 +6,7 @@ import de.uib.utilities.logging.Logging;
 
 //capsulates line spitting and putting the parts into a cmd array
 public class CmdLauncher {
-	String cmdPrefix;
+	private String cmdPrefix;
 
 	public CmdLauncher() {
 		cmdPrefix = "";

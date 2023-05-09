@@ -15,9 +15,9 @@ public class ConnectionState {
 	public static final ConnectionState ConnectionUndefined = new ConnectionState(UNDEFINED, "not initialized");
 	private static int instancesCount;
 
-	protected int myState = NOT_CONNECTED;
+	private int myState = NOT_CONNECTED;
 
-	protected String message = "";
+	private String message = "";
 
 	/**
 	 * constructor

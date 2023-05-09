@@ -55,7 +55,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	protected JButton jButtonClose;
 	protected boolean buildFrame;
 
-	protected JPanel mainPanel = new JPanel();
+	private JPanel mainPanel = new JPanel();
 	protected JPanel inputPanel = new JPanel();
 
 	protected GroupLayout konsolePanelLayout;
@@ -71,7 +71,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		}
 	}
 
-	DialogCloseListener closeListener;
+	protected DialogCloseListener closeListener;
 
 	public SSHConnectionOutputDialog(String title) {
 		super(null, "", false);

@@ -53,15 +53,13 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private JButton jButtonDepotSelection;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
-	FDepotselectionList fDepotList;
+	private FDepotselectionList fDepotList;
 
 	private List<String> possibleDepots;
 
 	private CommandOpsiPackageManagerUninstall commandPMUninstall = new CommandOpsiPackageManagerUninstall();
-
-	boolean execFinished;
 
 	public SSHPackageManagerUninstallParameterDialog() {
 		this(null);
@@ -129,7 +127,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		jButtonExecute.setEnabled(false);
 	}
 
-	protected String produceDepotParameter() {
+	private String produceDepotParameter() {
 		String depotParameter = "";
 		List<String> selectedDepots = fDepotList.getSelectedDepots();
 
@@ -177,7 +175,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		return depotParameter;
 	}
 
-	protected List<String> getPossibleDepots() {
+	private List<String> getPossibleDepots() {
 		String selectedProduct = (String) jComboBoxOpsiProducts.getSelectedItem();
 
 		List<String> result = new ArrayList<>();
@@ -206,7 +204,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	}
 
-	protected void initDepots() {
+	private void initDepots() {
 		possibleDepots = getPossibleDepots();
 		fDepotList.setListData(possibleDepots);
 		if (possibleDepots.isEmpty()) {
@@ -403,7 +401,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 					new SSHConnectExec(commandPMUninstall);
 
-					execFinished = true;
 					Logging.debug(this, "end exec thread");
 				} catch (Exception e) {
 					Logging.warning(this, "doAction3, exception occurred", e);
@@ -421,7 +418,6 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	@Override
 	public void doAction1() {
-		execFinished = true;
 		this.setVisible(false);
 		this.dispose();
 	}

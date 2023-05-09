@@ -56,28 +56,25 @@ import de.uib.utilities.table.gui.SensitiveCellEditor;
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener {
 	private static int objectCounter;
-	JScrollPane jScrollPane;
-	JTable table;
+	private JScrollPane jScrollPane;
+	private JTable table;
 
-	TableColumn editableColumn;
-	TableCellEditor theCellEditor;
-	JComboBox<?> editorfield;
-	TableCellEditor defaultCellEditor;
+	private TableColumn editableColumn;
+	private TableCellEditor theCellEditor;
+	private JComboBox<?> editorfield;
+	private TableCellEditor defaultCellEditor;
 
-	ListModelProducer<String> modelProducer;
+	private ListModelProducer<String> modelProducer;
 
-	MouseListener popupListener;
-	MouseListener popupNoEditOptionsListener;
+	private JMenuItem popupItemDeleteEntry0;
+	private JMenuItem popupItemDeleteEntry1;
+	private JMenuItem popupItemDeleteEntry2;
+	private JMenuItem popupItemAddStringListEntry;
+	private JMenuItem popupItemAddBooleanListEntry;
 
-	JMenuItem popupItemDeleteEntry0;
-	JMenuItem popupItemDeleteEntry1;
-	JMenuItem popupItemDeleteEntry2;
-	JMenuItem popupItemAddStringListEntry;
-	JMenuItem popupItemAddBooleanListEntry;
+	private ToolTipManager ttm;
 
-	ToolTipManager ttm;
-
-	protected class RemovingSpecificHandler extends AbstractPropertyHandler {
+	private class RemovingSpecificHandler extends AbstractPropertyHandler {
 
 		@Override
 		public void removeValue(String key) {
@@ -96,7 +93,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 	}
 
-	protected class SettingDefaultValuesHandler extends AbstractPropertyHandler {
+	private class SettingDefaultValuesHandler extends AbstractPropertyHandler {
 
 		@Override
 		public void removeValue(String key) {
@@ -115,10 +112,10 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 	}
 
-	protected final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
-	protected final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
+	private final AbstractPropertyHandler removingSpecificValuesPropertyHandler;
+	private final AbstractPropertyHandler settingDefaultValuesPropertyHandler;
 
-	protected boolean markDeviation = true;
+	private boolean markDeviation = true;
 
 	public EditMapPanelX() {
 		this(null);
@@ -172,7 +169,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		super.logPopupElements();
 
-		popupNoEditOptionsListener = new utils.PopupMouseListener(popupNoEditOptions);
+		MouseListener popupNoEditOptionsListener = new utils.PopupMouseListener(popupNoEditOptions);
 		table.addMouseListener(popupNoEditOptionsListener);
 		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
@@ -581,10 +578,9 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	 * @param String key
 	 * @param Object value (if null then an empty String is the value)
 	 */
-	protected final void addProperty(String key, Object newval) {
+	private final void addProperty(String key, Object newval) {
 		mapTableModel.addEntry(key, newval);
 		names = mapTableModel.getKeys();
-
 	}
 
 	/**
@@ -627,13 +623,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 	public void focusGained(FocusEvent e) {
 		/* Not needed */}
 
-	protected void setSelectedRow(int row) {
+	private void setSelectedRow(int row) {
 		table.setRowSelectionInterval(row, row);
 
 		showSelectedRow();
 	}
 
-	protected void showSelectedRow() {
+	private void showSelectedRow() {
 		int row = table.getSelectedRow();
 		if (row != -1) {
 			table.scrollRectToVisible(table.getCellRect(row, 0, false));
@@ -645,16 +641,12 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		Logging.debug(this, "setOptionsEditable " + b);
 
 		if (b) {
-
 			popupmenuAtRow = popupEditOptions;
-
 		} else {
-
 			popupmenuAtRow = popupNoEditOptions;
-
 		}
 
-		popupListener = new utils.PopupMouseListener(popupmenuAtRow);
+		MouseListener popupListener = new utils.PopupMouseListener(popupmenuAtRow);
 		table.addMouseListener(popupListener);
 		jScrollPane.getViewport().addMouseListener(popupListener);
 	}

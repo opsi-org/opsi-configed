@@ -68,7 +68,7 @@ public class SWAuditClientEntry {
 		KEYS_FOR_GUI_TABLES.add(SWAuditEntry.WINDOWS_SOFTWARE_ID);
 	}
 
-	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
+	private static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	public static final String DB_TABLE_NAME = "SOFTWARE_CONFIG";
 
@@ -91,27 +91,18 @@ public class SWAuditClientEntry {
 		}
 	}
 
-	static long startmillis1stPartOfConstructor;
-	static long startmillis2ndPartOfConstructor;
-	static long endmillis1stPartOfConstructor;
-	static long endmillis2ndPartOfConstructor;
-	public static long summillis1stPartOfConstructor;
-	public static long summillis2ndPartOfConstructor;
+	private Integer swId;
+	private String swIdent;
+	private String lastModificationS;
 
-	protected Integer swId;
-	protected String swIdent;
-	protected String lastModificationS;
+	private final Map<String, String> data;
+	private List<String> software;
+	private NavigableMap<String, Integer> software2Number;
 
-	protected final Map<String, String> data;
-	protected List<String> software;
-	protected NavigableMap<String, Integer> software2Number;
-
-	AbstractPersistenceController controller;
+	private AbstractPersistenceController controller;
 
 	public SWAuditClientEntry(final List<String> keys, final List<String> values,
 			AbstractPersistenceController controller) {
-
-		startmillis1stPartOfConstructor = System.currentTimeMillis();
 
 		data = new HashMap<>();
 
@@ -123,17 +114,8 @@ public class SWAuditClientEntry {
 		this.controller = controller;
 		this.software = controller.getSoftwareList();
 		this.software2Number = controller.getSoftware2Number();
-		endmillis1stPartOfConstructor = System.currentTimeMillis();
-		summillis1stPartOfConstructor = summillis1stPartOfConstructor
-				+ (endmillis1stPartOfConstructor - startmillis1stPartOfConstructor);
 
-		startmillis2ndPartOfConstructor = System.currentTimeMillis();
 		produceSWid();
-		endmillis2ndPartOfConstructor = System.currentTimeMillis();
-
-		summillis2ndPartOfConstructor = summillis2ndPartOfConstructor
-				+ (endmillis2ndPartOfConstructor - startmillis2ndPartOfConstructor);
-
 	}
 
 	public SWAuditClientEntry(final Map<String, Object> m, AbstractPersistenceController controller) {
@@ -188,7 +170,7 @@ public class SWAuditClientEntry {
 		return result;
 	}
 
-	protected void updateSoftware() {
+	private void updateSoftware() {
 		Logging.info(this, "updateSoftware");
 		if (lastUpdateTime != null && System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE) {
 			controller.installedSoftwareInformationRequestRefresh();
@@ -237,7 +219,7 @@ public class SWAuditClientEntry {
 
 	}
 
-	protected Integer produceSWid() {
+	private Integer produceSWid() {
 		swId = getIndex(software, swIdent);
 		Logging.debug(this, "search index for software with ident " + swIdent + " \nswId " + swId);
 

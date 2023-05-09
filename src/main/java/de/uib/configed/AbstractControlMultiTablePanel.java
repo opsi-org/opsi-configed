@@ -14,14 +14,14 @@ import javax.swing.JOptionPane;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public abstract class AbstractControlMultiTablePanel {
 	protected List<GenTableModel> tableModels = new ArrayList<>();
 
 	protected List<PanelGenEditTable> tablePanes = new ArrayList<>();
 
-	protected TableUpdateCollection updateCollection = new TableUpdateCollection();
+	protected ArrayList<TableEditItem> updateCollection = new ArrayList<>();
 
 	public abstract TabClientAdapter getTabClient();
 

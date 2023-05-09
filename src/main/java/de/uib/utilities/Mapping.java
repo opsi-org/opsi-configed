@@ -22,13 +22,13 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class Mapping<K, V> {
-	protected Map<K, V> map;
-	protected Map<String, V> mapOfStrings;
-	protected boolean invertible;
-	protected Map<V, K> inverseMap;
-	protected List<K> domain;
-	protected List<V> range;
-	protected List<String> rangeAsStrings;
+	private Map<K, V> map;
+	private Map<String, V> mapOfStrings;
+	private boolean invertible;
+	private Map<V, K> inverseMap;
+	private List<K> domain;
+	private List<V> range;
+	private List<String> rangeAsStrings;
 
 	public Mapping() {
 		this(null);

@@ -92,7 +92,7 @@ public class SWAuditEntry extends AbstractTableEntry {
 		key2serverKey.put(WINDOWS_SOFTWARE_ID, "windowsSoftwareId");
 	}
 
-	protected static Map<String, String> locale = new StringIdentityMap(KEYS);
+	private static Map<String, String> locale = new StringIdentityMap(KEYS);
 
 	private String lastseen = "";
 	private String ident;

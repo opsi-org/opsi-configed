@@ -56,9 +56,9 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 	private Font uhOhFont;
 
-	protected Map<String, String> mapOfStrings;
-	protected Map<String, String> mapOfTooltips;
-	protected Map<String, ImageIcon> mapOfImages;
+	private Map<String, String> mapOfStrings;
+	private Map<String, String> mapOfTooltips;
+	private Map<String, ImageIcon> mapOfImages;
 
 	public CellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase) {
 		this(mapOfStringValues, imagesBase, IMAGE_DEFAULT_WIDTH);

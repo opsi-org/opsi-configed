@@ -10,7 +10,7 @@ import de.uib.utilities.swing.SecondaryFrame;
 
 //adapting TabbedPaneX to a JFrame
 public class TabbedFrame extends SecondaryFrame {
-	protected TabbedPaneX panel;
+	private TabbedPaneX panel;
 
 	public TabbedFrame(TabController controller) {
 		super();

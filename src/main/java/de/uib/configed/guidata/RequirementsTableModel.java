@@ -24,19 +24,18 @@ import de.uib.utilities.logging.Logging;
 
 public class RequirementsTableModel extends AbstractTableModel {
 
-	protected static List<String> rowType;
-	protected static int noOfRowTypes;
+	private static List<String> rowType;
+	private static int noOfRowTypes;
 
-	Set<String> keySet;
-	Object[] keyArray;
-	final Object[] zeroArray = new Object[] {};
+	private Object[] keyArray;
+	private final Object[] zeroArray = new Object[] {};
 
-	Map<String, String> requMap;
-	Map<String, String> requBeforeMap;
-	Map<String, String> requAfterMap;
-	Map<String, String> requDeinstallMap;
+	private Map<String, String> requMap;
+	private Map<String, String> requBeforeMap;
+	private Map<String, String> requAfterMap;
+	private Map<String, String> requDeinstallMap;
 
-	AbstractPersistenceController perCon;
+	private AbstractPersistenceController perCon;
 
 	static {
 		rowType = new ArrayList<>();
@@ -70,7 +69,6 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	public void setActualProduct(String depotId, String product) {
 
-		keySet = null;
 		requMap = null;
 		requBeforeMap = null;
 		requAfterMap = null;
@@ -80,7 +78,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		if (product != null && !product.trim().isEmpty()) {
 			retrieveRequirements(depotId, product);
 
-			keySet = new TreeSet<>();
+			Set<String> keySet = new TreeSet<>();
 			if (requMap != null && requMap.keySet() != null) {
 				keySet.addAll(requMap.keySet());
 			}
@@ -208,11 +206,11 @@ public class RequirementsTableModel extends AbstractTableModel {
 		return new MyTableCellRenderer();
 	}
 
-	protected static class MyTableCellRenderer extends DefaultTableCellRenderer {
+	private static final class MyTableCellRenderer extends DefaultTableCellRenderer {
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			MyColorizer colorizer = new MyColorizer(String.valueOf(value));
+			MyColorizer colorizer = new MyColorizer();
 
 			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
@@ -244,11 +242,9 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 	}
 
-	protected static class MyColorizer {
-		String cellValue;
+	private static class MyColorizer {
 
-		protected MyColorizer(String value) {
-			cellValue = value;
+		private MyColorizer() {
 		}
 
 		public void colorize(Component cell, int row, int col) {
@@ -280,31 +276,4 @@ public class RequirementsTableModel extends AbstractTableModel {
 			}
 		}
 	}
-
-	protected static class MyWarningColorizer {
-		public void colorize(Component cell) {
-			if (!ConfigedMain.THEMES) {
-				cell.setBackground(Globals.ACTION_COLOR);
-			}
-		}
-	}
-
-	protected static class MyTableCellRendererWarning extends DefaultTableCellRenderer {
-		MyWarningColorizer colorizer = new MyWarningColorizer();
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int col) {
-			Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-
-			colorizer.colorize(cell);
-
-			if (cell instanceof JComponent) {
-				((JComponent) cell).setToolTipText("" + value);
-			}
-
-			return cell;
-		}
-	}
-
 }

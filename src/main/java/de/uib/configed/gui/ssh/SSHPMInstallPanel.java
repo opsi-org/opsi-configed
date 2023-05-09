@@ -21,7 +21,7 @@ public class SSHPMInstallPanel extends JPanel {
 
 	protected List<String> additionalDefaultPaths = new ArrayList<>();
 
-	AbstractPersistenceController persist;
+	protected AbstractPersistenceController persist;
 	protected String workbench;
 
 	public SSHPMInstallPanel() {

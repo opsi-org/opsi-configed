@@ -17,7 +17,7 @@ import de.uib.utilities.logging.Logging;
 public class DataChangedKeeper implements DataChangedObserver {
 	protected boolean dataChanged;
 
-	protected Consumer<Object> actUpon;
+	private Consumer<Object> actUpon;
 
 	public static class TellWhat implements Consumer<Object> {
 		@Override

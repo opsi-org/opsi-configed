@@ -8,7 +8,7 @@ import com.jediterm.terminal.ui.settings.DefaultSettingsProvider;
 
 public class TerminalSettingsProvider extends DefaultSettingsProvider {
 	private static int fontSize = 12;
-	protected static final Color[] DARK_COLORS = new Color[16];
+	private static final Color[] DARK_COLORS = new Color[16];
 	static {
 		// Black
 		DARK_COLORS[0] = Color.decode("#ffffff");
@@ -46,7 +46,7 @@ public class TerminalSettingsProvider extends DefaultSettingsProvider {
 		// White
 		DARK_COLORS[15] = Color.decode("#000000");
 	}
-	protected static final Color[] LIGHT_COLORS = new Color[16];
+	private static final Color[] LIGHT_COLORS = new Color[16];
 	static {
 		// Black
 		LIGHT_COLORS[0] = Color.decode("#000000");

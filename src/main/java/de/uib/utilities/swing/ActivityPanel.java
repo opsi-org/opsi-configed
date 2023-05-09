@@ -39,11 +39,9 @@ public class ActivityPanel extends JPanel implements Runnable {
 	private static boolean acting;
 
 	/** an List for panels */
-	List<JPanel> partPanels = new ArrayList<>();
+	private List<JPanel> partPanels = new ArrayList<>();
 
-	Color[] colors;
-
-	Thread colorSwitching;
+	private Color[] colors;
 
 	/**
 	 * call the "initGui" method

@@ -13,9 +13,9 @@ import de.uib.configed.Globals;
 
 public class IconNodeRendererClientTree extends IconNodeRenderer {
 
-	protected ConfigedMain main;
+	private ConfigedMain main;
 
-	VisualClientNodeNameModifier modifier = new VisualClientNodeNameModifierFactory().getModifier();
+	private VisualClientNodeNameModifier modifier = new VisualClientNodeNameModifierFactory().getModifier();
 
 	public IconNodeRendererClientTree(ConfigedMain main) {
 		this.main = main;

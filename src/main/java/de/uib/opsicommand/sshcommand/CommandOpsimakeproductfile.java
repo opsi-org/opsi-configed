@@ -16,7 +16,7 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	private String baseName = "opsi-makepackage ";
 	private String commandName = "opsi-makepackage ";
 
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 	private boolean needSudo;
 	private boolean needParameter = true;
 	private boolean isMultiCommand;
@@ -167,11 +167,6 @@ public class CommandOpsimakeproductfile implements SSHCommand, SSHCommandNeedPar
 	@Override
 	public boolean needParameter() {
 		return needParameter;
-	}
-
-	@Override
-	public void startParameterGui() {
-		dialog = new SSHMakeProductFileDialog(null);
 	}
 
 	@Override

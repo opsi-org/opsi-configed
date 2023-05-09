@@ -1,5 +1,5 @@
 /**
-	ColoredTableCellRendererByIndex.java
+	private ColoredTableCellRendererByIndex.java
 	
 	utility class for PanelProductSettings
 	
@@ -18,7 +18,7 @@ import de.uib.configed.Globals;
 
 public class ColoredTableCellRendererByIndex extends de.uib.utilities.table.gui.TableCellRendererByIndex {
 
-	Map<String, Color> mapOfTextColors;
+	private Map<String, Color> mapOfTextColors;
 
 	public ColoredTableCellRendererByIndex(Map<String, String> mapOfStringValues, String imagesBase,
 			boolean showOnlyIcon, String tooltipPrefix) {

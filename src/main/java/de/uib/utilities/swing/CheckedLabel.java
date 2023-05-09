@@ -37,22 +37,22 @@ public class CheckedLabel extends JPanel implements FocusListener {
 	private static final int SET_CHECKED_OFF = 0;
 	private static final String CMD_SET_CHECKED_ON = "cmdSetOn";
 	private static final String CMD_SET_CHECKED_OFF = "cmdSetOff";
-	protected boolean changeStateAutonomously = true;
+	private boolean changeStateAutonomously = true;
 
-	protected JLabel selectedLabel;
-	protected JLabel unselectedLabel;
-	protected JLabel nullLabel;
-	protected JLabel textLabel;
+	private JLabel selectedLabel;
+	private JLabel unselectedLabel;
+	private JLabel nullLabel;
+	private JLabel textLabel;
 
-	protected Font textFont;
-	protected Font focusedTextFont;
+	private Font textFont;
+	private Font focusedTextFont;
 
-	protected Boolean selected;
+	private Boolean selected;
 
-	protected List<ActionListener> myListeners;
+	private List<ActionListener> myListeners;
 
-	protected static class GeneralMouseListener extends MouseAdapter {
-		protected String source;
+	private static class GeneralMouseListener extends MouseAdapter {
+		private String source;
 
 		public GeneralMouseListener(String source) {
 			this.source = source;

@@ -9,8 +9,8 @@ import de.uib.utilities.table.ExporterToCSV;
  * A class to implement pdf export of SWAudit data
  */
 public class SWcsvExporter extends AbstractSWExporter {
-	JTable theTable;
-	ExporterToCSV exportTable;
+	private JTable theTable;
+	private ExporterToCSV exportTable;
 
 	public SWcsvExporter() {
 		theTable = new JTable();

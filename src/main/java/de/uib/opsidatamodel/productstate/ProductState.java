@@ -109,7 +109,7 @@ public class ProductState extends HashMap<String, String> {
 		key2servicekey.put(KEY_LAST_STATE_CHANGE, "modificationTime");
 	}
 
-	protected final Map<String, String> retrieved;
+	private final Map<String, String> retrieved;
 
 	public ProductState(Map<String, String> retrievedState, boolean transform) {
 		super();

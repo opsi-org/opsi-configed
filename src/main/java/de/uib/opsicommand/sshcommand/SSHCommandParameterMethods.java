@@ -79,14 +79,14 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	private static final String BRACKETS_NONE = " x ";
 	private static final String BRACKETS_SQUARE = "[x]";
 
-	static final Map<String, String> methods = new HashMap<>();
+	private static final Map<String, String> methods = new HashMap<>();
 
 	private ConfigedMain main;
 
 	private String[] formats;
 
 	public boolean canceled;
-	SSHConnectionOutputDialog outputDia;
+	private SSHConnectionOutputDialog outputDia;
 
 	private SSHCommandParameterMethods(ConfigedMain main) {
 		methods.put(METHOD_INTERACTIVE_ELEMENT, METHOD_INTERACTIVE_ELEMENT);
@@ -391,7 +391,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return Arrays.toString(list).replace("[", "").replace(",", " ").replace("]", "");
 	}
 
-	String getUserText(String text, Component dialog) {
+	private String getUserText(String text, Component dialog) {
 		if (dialog == null) {
 			dialog = ConfigedMain.getMainFrame();
 		}

@@ -27,10 +27,9 @@ public class ConnectionStatusTableCellRenderer extends StandardTableCellRenderer
 	public static final String NOT_REACHABLE = "unreachable";
 	public static final String UNKNOWN = "unverified";
 
-	Icon messagebusIcon;
-	Icon trueIcon;
-	Icon falseIcon;
-	boolean allowingString;
+	private Icon messagebusIcon;
+	private Icon trueIcon;
+	private Icon falseIcon;
 
 	public ConnectionStatusTableCellRenderer() {
 		super();

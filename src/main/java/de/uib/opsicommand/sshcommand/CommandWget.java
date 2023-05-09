@@ -28,7 +28,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	private String verbosity = " ";
 	private String freeInput = " ";
 
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 
 	public CommandWget() {
 	}
@@ -150,11 +150,6 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	@Override
 	public boolean needParameter() {
 		return needParameter;
-	}
-
-	@Override
-	public void startParameterGui() {
-		dialog = new SSHWgetParameterDialog();
 	}
 
 	@Override

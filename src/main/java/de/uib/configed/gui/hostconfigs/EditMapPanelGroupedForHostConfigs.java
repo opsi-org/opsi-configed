@@ -13,12 +13,10 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import javax.swing.Icon;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.TableCellRenderer;
@@ -44,15 +42,12 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	private static final int USER_START_INDEX = 1;
 
-	protected PopupMenuTrait popupForUserpath;
-	protected PopupMenuTrait popupForUserpathes;
-	protected PopupMenuTrait popupForRolepath;
-	protected PopupMenuTrait popupForRolepathes;
+	private PopupMenuTrait popupForUserpath;
+	private PopupMenuTrait popupForUserpathes;
+	private PopupMenuTrait popupForRolepath;
+	private PopupMenuTrait popupForRolepathes;
 
-	protected JMenuItem popupItemDeleteEntry;
-
-	protected List<String> theUsers;
-	protected List<String> theRoles;
+	private LinkedList<String> theRoles;
 
 	public EditMapPanelGroupedForHostConfigs(TableCellRenderer tableCellRenderer, boolean keylistExtendible,
 			boolean keylistEditable, boolean reloadable, final DefaultEditMapPanel.Actor actor) {
@@ -284,7 +279,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 	protected void generateParts() {
 		super.generateParts();
 
-		theUsers = new LinkedList<>();
+		List<String> theUsers = new LinkedList<>();
 		theRoles = new LinkedList<>();
 
 		theRoles.add(UserConfig.NONE_PROTOTYPE);
@@ -420,15 +415,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				&& !path.getPathComponent(2).toString().equals(UserConfig.ROLE);
 	}
 
-	protected void rebuildTree() {
-		Logging.info(this, "rebuild tree, hopefully");
-		buildUserConfig();
-
-		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
-
-		setEditableMap((Map) persist.getConfigDefaultValues(), persist.getConfigOptions());
-	}
-
 	@Override
 	protected void reload() {
 		// partial reload
@@ -441,7 +427,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	}
 
-	protected void addUser() {
+	private void addUser() {
 
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add user", false,
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok"),
@@ -527,7 +513,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		}
 	}
 
-	protected void addRole() {
+	private void addRole() {
 
 		FDialogTextfieldWithListSelection f = new FDialogTextfieldWithListSelection(null, "add role", // title
 				false, // modal
@@ -571,7 +557,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	}
 
-	protected void deleteUser() {
+	private void deleteUser() {
 
 		TreePath p = tree.getSelectionPath();
 
@@ -605,12 +591,12 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		}
 	}
 
-	protected void setRoleConfig(String name, String rolename) {
+	private void setRoleConfig(String name, String rolename) {
 		Logging.info(this, "setRoleConfig " + name + "," + rolename);
 		PersistenceControllerFactory.getPersistenceController().addRoleConfig(name, rolename);
 	}
 
-	protected void setUserConfig(String name, String rolename) {
+	private void setUserConfig(String name, String rolename) {
 		Logging.info(this, "setUserConfig " + name + "," + rolename);
 		PersistenceControllerFactory.getPersistenceController().addUserConfig(name, rolename);
 	}

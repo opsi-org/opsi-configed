@@ -174,7 +174,7 @@ public class OpsiDataSerializer {
 	/**
 	 * produce map format of serializiation object
 	 */
-	protected Map<String, Object> decipher(String serialization) {
+	private Map<String, Object> decipher(String serialization) {
 		Map<String, Object> map = new HashMap<>();
 		parser = new JsonParser(serialization);
 		try {
@@ -197,7 +197,7 @@ public class OpsiDataSerializer {
 	}
 
 	/** Get the data for the given saved search */
-	protected Map<String, Object> getData(String name) {
+	private Map<String, Object> getData(String name) {
 
 		// we take version from server and not the (possibly edited own version! )
 		searches.put(name, controller.getSavedSearches().get(name).getSerialization());
@@ -209,7 +209,7 @@ public class OpsiDataSerializer {
 	}
 
 	/** Save the search data with the given name. */
-	protected void saveData(String name, String description, Map<String, Object> data) {
+	private void saveData(String name, String description, Map<String, Object> data) {
 		String jsonString;
 		try {
 			jsonString = "{ \"version\" : \"" + DATA_VERSION + "\", \"data\" : ";
@@ -227,7 +227,7 @@ public class OpsiDataSerializer {
 	}
 
 	/** Get the data version of the currently loaded saved search */
-	protected int getSearchDataVersion() {
+	private int getSearchDataVersion() {
 		return searchDataVersion;
 	}
 

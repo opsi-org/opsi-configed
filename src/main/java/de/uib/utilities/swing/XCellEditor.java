@@ -44,5 +44,4 @@ public class XCellEditor extends DefaultCellEditor {
 
 		return c;
 	}
-
 }

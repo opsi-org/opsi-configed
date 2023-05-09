@@ -17,14 +17,14 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.thread.WaitCursor;
 
-public class MapItemsUpdateController implements UpdateController {
-	GenTableModel tablemodel;
-	PanelGenEditTable panel;
-	MapBasedUpdater updater;
-	TableUpdateCollection updateCollection;
+public class MapItemsUpdateController implements de.uib.utilities.table.updates.UpdateController {
+	private GenTableModel tablemodel;
+	private PanelGenEditTable panel;
+	private MapBasedUpdater updater;
+	private List<TableEditItem> updateCollection;
 
 	public MapItemsUpdateController(PanelGenEditTable panel, GenTableModel model, MapBasedUpdater updater,
-			TableUpdateCollection updateCollection) {
+			List<TableEditItem> updateCollection) {
 		this.panel = panel;
 		this.tablemodel = model;
 		this.updater = updater;

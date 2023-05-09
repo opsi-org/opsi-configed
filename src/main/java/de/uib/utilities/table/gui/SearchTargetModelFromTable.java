@@ -20,14 +20,14 @@ import de.uib.utilities.table.RowNoTableModelFilterCondition;
 public class SearchTargetModelFromTable implements SearchTargetModel {
 	public static final String FILTER_BY_SELECTION = "filterBySelection";
 
-	protected JTable table;
+	private JTable table;
 
 	// in case that we are working in our standard context
-	protected PanelGenEditTable thePanel;
+	private PanelGenEditTable thePanel;
 
-	protected int[] viewRowfilter = new int[0];
+	private int[] viewRowfilter = new int[0];
 
-	protected boolean filtered;
+	private boolean filtered;
 
 	public SearchTargetModelFromTable() {
 		this((JTable) null);
@@ -47,7 +47,7 @@ public class SearchTargetModelFromTable implements SearchTargetModel {
 		Logging.info(this, "setTable null? " + (table == null));
 	}
 
-	protected AbstractTableModel getTableModel() {
+	private AbstractTableModel getTableModel() {
 		return (AbstractTableModel) table.getModel();
 	}
 

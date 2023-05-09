@@ -12,10 +12,10 @@ import de.uib.utilities.logging.Logging;
 /**
 */
 public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
-	String[] objectIds;
-	AbstractPersistenceController persis;
-	boolean determineConfigOptions;
-	boolean masterConfig;
+	private String[] objectIds;
+	private AbstractPersistenceController persis;
+	private boolean determineConfigOptions;
+	private boolean masterConfig;
 
 	public AdditionalconfigurationUpdateCollection(Object persis, String[] objectIds) {
 		super(new ArrayList<>(0));

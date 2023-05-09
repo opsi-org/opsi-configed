@@ -11,7 +11,7 @@ import de.uib.configed.Globals;
 
 public class FEditorPane extends FGeneralDialog {
 
-	JEditorPane editPane = new JEditorPane();
+	private JEditorPane editPane = new JEditorPane();
 
 	public FEditorPane(JFrame owner, String title, boolean modal, String[] buttonList, int preferredWidth,
 			int preferredHeight) {

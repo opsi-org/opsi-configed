@@ -10,12 +10,12 @@ import de.uib.configed.clientselection.operations.StringEqualsOperation;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataStringEqualsOperation extends StringEqualsOperation implements ExecutableOperation {
-	protected String map;
-	protected String key;
-	protected String data;
-	protected String[] dataSplitted;
-	protected boolean startsWith;
-	protected boolean endsWith;
+	private String map;
+	private String key;
+	private String data;
+	private String[] dataSplitted;
+	private boolean startsWith;
+	private boolean endsWith;
 
 	public OpsiDataStringEqualsOperation(String map, String key, String data, AbstractSelectElement element) {
 		super(element);

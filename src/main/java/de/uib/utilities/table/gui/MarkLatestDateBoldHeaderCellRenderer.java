@@ -13,23 +13,17 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
 public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRenderer {
 	private TableCellRenderer rend;
-	LicensingInfoMap licensingInfoMap;
+	private LicensingInfoMap licensingInfoMap;
 
 	public MarkLatestDateBoldHeaderCellRenderer(TableCellRenderer rend, LicensingInfoMap lInfoMap) {
 		this.rend = rend;
 		licensingInfoMap = lInfoMap;
 	}
 
-	// to override in subclasses for manipulation the value
-	protected Object modifyValue(Object value) {
-		return value;
-	}
-
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-		Component cell = rend.getTableCellRendererComponent(table, modifyValue(value), isSelected, hasFocus, row,
-				column);
+		Component cell = rend.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 		if (!ConfigedMain.THEMES) {
 			cell.setBackground(Globals.defaultTableHeaderBgColor);

@@ -202,12 +202,12 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	 * PersistenceController getPersistenceController () { return null; }
 	 */
 
-	protected List<DataRefreshedObserver> dataRefreshedObservers;
+	private List<DataRefreshedObserver> dataRefreshedObservers;
 
 	public AbstractExecutioner exec;
 
 	// offer observing of data loading
-	protected List<DataLoadingObserver> dataLoadingObservers;
+	private List<DataLoadingObserver> dataLoadingObservers;
 
 	public abstract void userConfigurationRequestReload();
 

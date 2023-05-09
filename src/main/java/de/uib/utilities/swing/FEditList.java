@@ -58,7 +58,7 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 
 	private SensitiveCellEditor celleditor;
 
-	boolean nullable;
+	private boolean nullable;
 
 	public FEditList() {
 		this(null);
@@ -140,18 +140,18 @@ public class FEditList<O> extends FEditObject implements ListSelectionListener, 
 		buttonAdd.setVisible(b);
 	}
 
-	protected Object getValueAt(Point location) {
+	private Object getValueAt(Point location) {
 		return visibleList.getModel().getElementAt(visibleList.locationToIndex(location));
 	}
 
-	protected void setExtraFieldToListValueAt(Point location) {
+	private void setExtraFieldToListValueAt(Point location) {
 		String txt = "" + getValueAt(location);
 
 		extraField.setText(txt);
 		extraFieldChanged(false);
 	}
 
-	protected void addSelectedValues(List<O> toSelect) {
+	private void addSelectedValues(List<O> toSelect) {
 		if (toSelect == null) {
 			return;
 		}

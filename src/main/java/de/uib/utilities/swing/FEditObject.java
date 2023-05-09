@@ -45,14 +45,13 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 
 	private Dimension areaDimension = new Dimension(300, 240);
 
-	protected Object initialValue = "";
+	private Object initialValue = "";
 	protected boolean leaveOnCommit = true;
 
-	protected JPanel framingPanel;
+	private JPanel framingPanel;
 	protected JPanel editingArea;
 	protected JPanel loggingPanel;
-	protected JScrollPane scrollpaneL;
-	protected JSplitPane splitPane;
+	private JSplitPane splitPane;
 	private int splitPaneHMargin = 1;
 
 	protected IconButton buttonCommit;
@@ -60,14 +59,11 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	protected IconButton buttonAdd;
 	protected IconButton buttonRemove;
 
-	protected String tooltipCommit = Configed.getResourceValue("FEditObject.SaveButtonTooltip");
-
-	protected boolean dataChanged;
 	protected boolean editable = true;
-	protected boolean finished;
+	private boolean finished;
 
 	protected JTextField extraField;
-	protected JLabel extraLabel;
+	private JLabel extraLabel;
 	protected JTextArea loggingArea;
 
 	public FEditObject(Object initialValue) {
@@ -94,7 +90,7 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			loggingArea.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
-		scrollpaneL = new JScrollPane();
+		JScrollPane scrollpaneL = new JScrollPane();
 		scrollpaneL.setViewportView(loggingArea);
 		scrollpaneL.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		loggingPanel.add(scrollpaneL, BorderLayout.CENTER);
@@ -251,7 +247,6 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			return;
 		}
 
-		dataChanged = b;
 		buttonCommit.setEnabled(b);
 
 	}

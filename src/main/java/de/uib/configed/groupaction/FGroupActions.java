@@ -38,22 +38,18 @@ import de.uib.utilities.swing.SecondaryFrame;
 import de.uib.utilities.thread.WaitCursor;
 
 public class FGroupActions extends SecondaryFrame {
-	JPanel topPanel;
-	JPanel imageActionPanel;
 
-	JTextField fieldGroupname;
-	JTextField fieldInvolvedClientsCount;
+	private JTextField fieldGroupname;
+	private JTextField fieldInvolvedClientsCount;
 
-	JComboBox<String> comboSelectImage;
+	private JComboBox<String> comboSelectImage;
 
-	List<String> associatedClients;
+	private List<String> associatedClients;
 
-	AbstractPersistenceController persist;
-	ConfigedMain main;
+	private AbstractPersistenceController persist;
+	private ConfigedMain main;
 
-	int hFirstGap = Globals.HFIRST_GAP;
-
-	int firstLabelWidth = Globals.BUTTON_WIDTH;
+	private int firstLabelWidth = Globals.BUTTON_WIDTH;
 
 	public FGroupActions(ConfigedMain main, AbstractPersistenceController persist) {
 		super();
@@ -68,7 +64,7 @@ public class FGroupActions extends SecondaryFrame {
 		super.setTitle(Globals.APPNAME + " " + Configed.getResourceValue("FGroupAction.title"));
 	}
 
-	protected void setGroupLabelling(String label, String clientCount) {
+	private void setGroupLabelling(String label, String clientCount) {
 		fieldGroupname.setText(label);
 		fieldInvolvedClientsCount.setText(clientCount);
 	}
@@ -79,7 +75,7 @@ public class FGroupActions extends SecondaryFrame {
 		reload();
 	}
 
-	protected void setImages() {
+	private void setImages() {
 		List<String> imagesCollection = new ArrayList<>();
 
 		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
@@ -97,7 +93,7 @@ public class FGroupActions extends SecondaryFrame {
 		setImages();
 	}
 
-	protected void replay() {
+	private void replay() {
 		Logging.debug(this, "replay " + comboSelectImage.getSelectedItem());
 
 		if (comboSelectImage.getSelectedItem() == null) {
@@ -127,11 +123,11 @@ public class FGroupActions extends SecondaryFrame {
 	}
 
 	private void define() {
-		topPanel = new JPanel();
+		JPanel topPanel = new JPanel();
 
 		defineTopPanel(topPanel);
 
-		imageActionPanel = new JPanel();
+		JPanel imageActionPanel = new JPanel();
 		imageActionPanel.setBorder(Globals.createPanelBorder());
 
 		defineImageActionPanel(imageActionPanel);

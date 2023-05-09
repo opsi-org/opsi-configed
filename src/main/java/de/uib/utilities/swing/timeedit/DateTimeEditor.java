@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
-import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,22 +24,14 @@ import org.jdesktop.swingx.calendar.DateSelectionModel;
 import de.uib.utilities.logging.Logging;
 
 public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.DateSelectionListener {
-	protected static final int BUTTON_H = 25;
-	protected static final int BUTTON_W = 30;
+	private static final int BUTTON_H = 25;
+	private static final int BUTTON_W = 30;
 
-	protected JXMonthView monthView;
-	protected TimeEditor timeSetter;
-	protected Calendar calendar;
-	protected DateFormat hourDateFormat;
-	protected JSpinner monthSpinner;
-	protected SpinnerModel monthSpinnerModel;
-	protected JButton buttonBack;
-	protected JButton buttonForward;
-	protected JButton buttonYearBack;
-	protected JButton buttonYearForward;
-	protected boolean editable = true;
-	protected boolean withMovingSelectionDate = true;
-	protected boolean withTime = true;
+	private JXMonthView monthView;
+	private TimeEditor timeSetter;
+	private Calendar calendar;
+	private boolean withMovingSelectionDate = true;
+	private boolean withTime = true;
 
 	public DateTimeEditor() {
 		this(true);
@@ -77,8 +68,6 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 			setToMidnight();
 		}
 
-		hourDateFormat = new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm");
-
 		monthView = new JXMonthView();
 
 		monthView.setSelectionMode(DateSelectionModel.SelectionMode.SINGLE_SELECTION);
@@ -95,21 +84,21 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		monthView.addMouseListener(new utils.PopupMouseListener(popup));
 
-		monthSpinnerModel = new SpinnerListModel();
-		monthSpinner = new JSpinner(monthSpinnerModel);
+		SpinnerModel monthSpinnerModel = new SpinnerListModel();
+		JSpinner monthSpinner = new JSpinner(monthSpinnerModel);
 		monthSpinner.setPreferredSize(new Dimension(17, 27));
 
-		buttonBack = new JButton("<");
+		JButton buttonBack = new JButton("<");
 		buttonBack.setBorder(new EmptyBorder(1, 1, 1, 1));
 		buttonBack.addActionListener(actionEvent -> switchMonth(-1));
-		buttonForward = new JButton(">");
+		JButton buttonForward = new JButton(">");
 		buttonForward.setBorder(new EmptyBorder(1, 1, 1, 1));
 		buttonForward.addActionListener(actionEvent -> switchMonth(+1));
 
-		buttonYearBack = new JButton("<<");
+		JButton buttonYearBack = new JButton("<<");
 		buttonYearBack.setBorder(new EmptyBorder(1, 1, 1, 1));
 		buttonYearBack.addActionListener(actionEvent -> switchYear(-1));
-		buttonYearForward = new JButton(">>");
+		JButton buttonYearForward = new JButton(">>");
 		buttonYearForward.setBorder(new EmptyBorder(1, 1, 1, 1));
 		buttonYearForward.addActionListener(actionEvent -> switchYear(+1));
 
@@ -174,13 +163,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		if (withMovingSelectionDate) {
 			setSelectionDate(newDate);
-
 		}
-	}
-
-	public void setEditable(boolean b) {
-		editable = b;
-
 	}
 
 	@Override
@@ -286,24 +269,4 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 			}
 		}
 	}
-
-	/**
-	 * DateFormatSymbols returns an extra, empty value at the end of the array
-	 * of months. Remove it.
-	 */
-	protected static String[] getMonthStrings() {
-		String[] months = new java.text.DateFormatSymbols().getMonths();
-		int lastIndex = months.length - 1;
-
-		if (months[lastIndex] == null || months[lastIndex].length() <= 0) {
-			// last item empty
-			String[] monthStrings = new String[lastIndex];
-			System.arraycopy(months, 0, monthStrings, 0, lastIndex);
-			return monthStrings;
-		} else {
-			// last item not empty
-			return months;
-		}
-	}
-
 }

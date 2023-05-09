@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -15,9 +16,11 @@ import de.uib.utilities.logging.Logging;
 
 public class ExporterToCSV extends AbstractExportTable {
 
-	protected static final String CSV_SEPARATOR = ";";
+	private static final String CSV_SEPARATOR = ";";
 	public static final Character STRING_DELIMITER = '"';
-	protected static final String THIS_EXTENSION = ".csv";
+	private static final String THIS_EXTENSION = ".csv";
+
+	private DecimalFormat f = new DecimalFormat("#0.00");
 
 	public ExporterToCSV(JTable table, List<String> classNames) {
 		super(table, classNames);

@@ -59,8 +59,8 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private JTextField jTextFieldUser;
 	private JPasswordField jTextFieldPassword;
 
-	protected CommandDeployClientAgent.FinalActionType finalAction;
-	protected PanelStateSwitch<FinalActionType> panelFinalAction;
+	private CommandDeployClientAgent.FinalActionType finalAction;
+	private PanelStateSwitch<FinalActionType> panelFinalAction;
 
 	private JButton jButtonShowPassword;
 	private JCheckBox jCheckBoxApplySudo;
@@ -72,7 +72,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private CommandDeployClientAgent commandDeployClientAgent = new CommandDeployClientAgent();
 	private ConfigedMain main;
 
-	boolean aktive;
+	private boolean aktive;
 
 	public SSHDeployClientAgentParameterDialog() {
 		this(null);

@@ -14,41 +14,26 @@ import de.uib.configed.gui.FramingTextfieldWithListselection;
 
 public class FramingNewRole implements FramingTextfieldWithListselection {
 
-	List<String> list;
-	String title;
-	String textfieldLabel;
-	String listLabel;
-	String listLabelToolTip;
+	private List<String> list;
 
 	@Override
 	public String getTitle() {
-		title = Configed.getResourceValue("FramingNewRole.title");
-
-		return title;
-
+		return Configed.getResourceValue("FramingNewRole.title");
 	}
 
 	@Override
 	public String getTextfieldLabel() {
-
-		textfieldLabel = Configed.getResourceValue("FramingNewRole.textfieldLabel");
-
-		return textfieldLabel;
-
+		return Configed.getResourceValue("FramingNewRole.textfieldLabel");
 	}
 
 	@Override
 	public String getListLabel() {
-		listLabel = Configed.getResourceValue("FramingNewRole.listLabel");
-
-		return listLabel;
+		return Configed.getResourceValue("FramingNewRole.listLabel");
 	}
 
 	@Override
 	public String getListLabelToolTip() {
-		listLabelToolTip = Configed.getResourceValue("FramingNewRole.listLabel.ToolTip");
-
-		return listLabelToolTip;
+		return Configed.getResourceValue("FramingNewRole.listLabel.ToolTip");
 	}
 
 	@Override
@@ -67,7 +52,5 @@ public class FramingNewRole implements FramingTextfieldWithListselection {
 		}
 
 		return list;
-
 	}
-
 }

@@ -9,9 +9,9 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class SWterminalExporter extends AbstractSWExporter {
 
-	JTable theTable;
-	ExporterToTerminal exportTable;
-	boolean onlySelectedRows;
+	private JTable theTable;
+	private ExporterToTerminal exportTable;
+	private boolean onlySelectedRows;
 
 	public SWterminalExporter(AbstractPersistenceController controller) {
 		super(controller);

@@ -27,19 +27,18 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.TableEditItem;
-import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 	// tab edit licence
 
-	PanelEditLicences thePanel;
+	private PanelEditLicences thePanel;
 
-	GenTableModel modelLicencekeys;
-	GenTableModel modelSoftwarelicences;
-	GenTableModel modelLicencecontracts;
+	private GenTableModel modelLicencekeys;
+	private GenTableModel modelSoftwarelicences;
+	private GenTableModel modelLicencecontracts;
 
-	AbstractPersistenceController persist;
-	ConfigedMain mainController;
+	private AbstractPersistenceController persist;
+	private ConfigedMain mainController;
 
 	public ControlPanelEditLicences(AbstractPersistenceController persist, ConfigedMain mainController) {
 
@@ -57,7 +56,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 	@Override
 	public final void init() {
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 
 		List<String> columnNames;
 		List<String> classNames;

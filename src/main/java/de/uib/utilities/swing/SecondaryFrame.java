@@ -42,7 +42,7 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 	}
 
 	// for overriding
-	protected void callExit() {
+	private void callExit() {
 		setVisible(false);
 	}
 

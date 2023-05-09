@@ -26,7 +26,7 @@ public class PanelEditLicences extends MultiTablePanel {
 
 	private int splitPaneHMargin = 1;
 
-	protected int minVSize = 100;
+	private int minVSize = 100;
 
 	/** Creates new form PanelEditLicences */
 	public PanelEditLicences(AbstractControlMultiTablePanel controller) {

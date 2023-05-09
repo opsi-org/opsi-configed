@@ -16,18 +16,18 @@ import de.uib.utilities.table.DefaultListModelProducer;
 import de.uib.utilities.table.ListCellOptions;
 
 /*
-	ListModelProducerForDatamap 
+	private ListModelProducerForDatamap 
 	produces list models based on keys (given in column 0 of a table) 
-	for which data exist (to be placed in column 1 of the table)
+	private for which data exist (to be placed in column 1 of the table)
 */
 
 public class ListModelProducerForVisualDatamap<O> extends DefaultListModelProducer<O> {
-	Map<Integer, ListModel> listmodels = new HashMap<>();
+	private Map<Integer, ListModel> listmodels = new HashMap<>();
 
-	Map<String, ListCellOptions> optionsMap;
-	Map<String, List> currentData;
-	Map<String, Class<?>> originalTypes;
-	JTable table;
+	private Map<String, ListCellOptions> optionsMap;
+	private Map<String, List> currentData;
+	private Map<String, Class<?>> originalTypes;
+	private JTable table;
 
 	public ListModelProducerForVisualDatamap(JTable tableVisualizingMap, Map<String, ListCellOptions> optionsMap,
 			Map<String, Object> currentData) {

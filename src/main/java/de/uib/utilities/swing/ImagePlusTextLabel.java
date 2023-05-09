@@ -13,9 +13,9 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class ImagePlusTextLabel extends JPanel {
-	JLabel textlabel;
-	JLabel imagefield;
-	int imageWidth;
+	private JLabel textlabel;
+	private JLabel imagefield;
+	private int imageWidth;
 
 	public ImagePlusTextLabel(int imageWidth) {
 		super();

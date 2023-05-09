@@ -121,7 +121,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 		}
 	}
 
-	protected void setPropertyResetActivated(boolean b) {
+	private void setPropertyResetActivated(boolean b) {
 
 		buttonRemoveSpecificValues.setEnabled(b);
 	}

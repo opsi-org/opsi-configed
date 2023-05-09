@@ -1,9 +1,7 @@
 package de.uib.utilities.table;
 
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -32,30 +30,20 @@ public abstract class AbstractExportTable {
 	protected FileNameExtensionFilter extensionFilter;
 	protected String defaultExportFilename;
 
-	protected File exportDirectory;
+	private File exportDirectory;
 
-	protected List<Integer> excludeCols;
-
-	protected boolean askForOverwrite;
+	private boolean askForOverwrite;
 
 	protected String writeToFile;
 
 	protected String client;
-	protected String title;
-	protected String subtitle;
 
 	protected String extension;
-
-	DecimalFormat f = new DecimalFormat("#0.00");
 
 	protected AbstractExportTable(JTable table, List<String> classNames) {
 		this.theTable = table;
 		this.classNames = classNames;
 		askForOverwrite = true;
-	}
-
-	protected AbstractExportTable(JTable table) {
-		this(table, null);
 	}
 
 	public void setTableAndClassNames(JTable table, List<String> classNames) {
@@ -69,12 +57,6 @@ public abstract class AbstractExportTable {
 
 	public void setAskForOverwrite(boolean b) {
 		askForOverwrite = b;
-	}
-
-	public void setExcludeCols(List<Integer> excludeCols) {
-		// only take into account for excel export at the moment
-
-		this.excludeCols = excludeCols;
 	}
 
 	protected abstract void execute(String fileName, boolean onlySelectedRows);
@@ -272,40 +254,5 @@ public abstract class AbstractExportTable {
 			}
 		}
 		return fileName;
-	}
-
-	protected String checkFileForExistence(String filename) {
-		String result = null;
-		try {
-			Logging.info(this, "checkFileForExistence " + filename + " askForOverwrite " + askForOverwrite);
-
-			if (!askForOverwrite) {
-				return filename;
-			}
-
-			File file = new File(filename);
-
-			boolean fileExists = file.exists();
-
-			if (!fileExists) {
-				return filename;
-			}
-
-			int option = JOptionPane.showConfirmDialog(ConfigedMain.getMainFrame(),
-					Configed.getResourceValue("DocumentExport.showConfirmDialog") + "\n" + file.getName(),
-					Globals.APPNAME + " " + Configed.getResourceValue("DocumentExport.question"),
-					JOptionPane.OK_CANCEL_OPTION);
-
-			if (option == JOptionPane.CANCEL_OPTION) {
-				result = null;
-			} else {
-				result = filename;
-			}
-		} catch (HeadlessException ex) {
-			Logging.error(Configed.getResourceValue("DocumentExport.errorNoValidFilename") + "\n" + filename, ex);
-
-		}
-
-		return result;
 	}
 }

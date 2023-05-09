@@ -48,10 +48,10 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 	private JButton jButtonAddParam;
 	private JButton jButtonTestParam;
 
-	int lGap = Globals.GAP_SIZE;
-	int rGap = Globals.GAP_SIZE;
-	int uGap = Globals.GAP_SIZE;
-	int oGap = Globals.GAP_SIZE;
+	private int lGap = Globals.GAP_SIZE;
+	private int rGap = Globals.GAP_SIZE;
+	private int uGap = Globals.GAP_SIZE;
+	private int oGap = Globals.GAP_SIZE;
 
 	public SSHCommandControlParameterMethodsPanel(JDialog owner, int lg, int rg, int ug, int og) {
 		super();

@@ -14,9 +14,9 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSoftwareOperation extends SoftwareOperation implements ExecutableOperation {
-	protected Map<String, Map<String, String>> productDefaultStates;
-	protected Set<String> productsWithDefaultValues;
-	protected de.uib.opsidatamodel.AbstractPersistenceController controller;
+	private Map<String, Map<String, String>> productDefaultStates;
+	private Set<String> productsWithDefaultValues;
+	private de.uib.opsidatamodel.AbstractPersistenceController controller;
 
 	public OpsiDataSoftwareOperation(AbstractSelectOperation operation) {
 		super(operation);

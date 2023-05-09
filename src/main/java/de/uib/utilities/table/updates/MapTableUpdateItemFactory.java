@@ -11,10 +11,10 @@ package de.uib.utilities.table.updates;
 import java.util.List;
 
 public class MapTableUpdateItemFactory implements TableUpdateItemInterface {
-	protected List<String> columnNames;
-	protected List<String> classNames;
-	protected int keyCol;
-	protected Object source;
+	private List<String> columnNames;
+	private List<String> classNames;
+	private int keyCol;
+	private Object source;
 
 	public MapTableUpdateItemFactory(Object source, List<String> columnNames, List<String> classNames, int keyCol) {
 		this.columnNames = columnNames;
@@ -33,12 +33,12 @@ public class MapTableUpdateItemFactory implements TableUpdateItemInterface {
 
 	@Override
 	public TableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV) {
-		return new MapDeliveryItem(source, keyCol, columnNames, classNames, oldValues, rowV);
+		return new MapDeliveryItem(source, keyCol, columnNames, rowV);
 	}
 
 	@Override
 	public TableEditItem produceInsertItem(List<Object> rowV) {
-		return new MapDeliveryItem(source, keyCol, columnNames, classNames, rowV);
+		return new MapDeliveryItem(source, keyCol, columnNames, rowV);
 	}
 
 	@Override

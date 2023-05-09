@@ -110,17 +110,17 @@ public final class OpsiDataBackend {
 	private boolean reloadRequested;
 
 	// data which will be cached
-	Map<String, HostInfo> clientMaps;
+	private Map<String, HostInfo> clientMaps;
 
 	// client -> groups with it
-	Map<String, Set<String>> groups;
+	private Map<String, Set<String>> groups;
 
 	// client -> all groups for which the client belongs to directly or by virtue of some path
-	Map<String, Set<String>> superGroups;
-	Map<String, List<Map<String, String>>> softwareMap;
-	Map<String, List<SWAuditClientEntry>> swauditMap;
-	List<Map<String, Object>> hardwareOnClient;
-	Map<String, List<Map<String, Object>>> clientToHardware;
+	private Map<String, Set<String>> superGroups;
+	private Map<String, List<Map<String, String>>> softwareMap;
+	private Map<String, List<SWAuditClientEntry>> swauditMap;
+	private List<Map<String, Object>> hardwareOnClient;
+	private Map<String, List<Map<String, Object>>> clientToHardware;
 
 	private List<Map<String, List<Map<String, Object>>>> hwConfig;
 	private List<Map<String, List<Map<String, Object>>>> hwConfigLocalized;

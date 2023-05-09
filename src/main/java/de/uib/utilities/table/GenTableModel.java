@@ -26,7 +26,7 @@ import javax.swing.table.AbstractTableModel;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.provider.TableProvider;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
 public class GenTableModel extends AbstractTableModel implements TableModelFunctions {
@@ -35,52 +35,49 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	public static final String LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED = "showOnlySelected";
 
-	protected int rowsLength;
-	protected int colsLength;
-	protected List<String> columnNames;
-	protected List<String> classNames;
+	private int rowsLength;
+	private int colsLength;
+	private List<String> columnNames;
+	private List<String> classNames;
 	private List<List<Object>> rows;
 
-	protected List<Integer> addedRows;
+	private List<Integer> addedRows;
 	// rows which are added and not yet saved
-	protected List<Integer> updatedRows;
+	private List<Integer> updatedRows;
 	// rows which are updated and not yet saved
 
-	protected List<Integer> finalCols;
+	private List<Integer> finalCols;
 	// columns for which the values can only be entered and changed as long as the
 	// row is not saved
 
-	protected boolean[] colEditable;
+	private boolean[] colEditable;
 	// columns which are editable in principle (but they may be final)
 
-	protected int keyCol = -1;
-	protected TableUpdateCollection updates;
-	protected String tableName;
-	protected boolean modelDataValid;
-	protected boolean modelStructureValid;
+	private int keyCol = -1;
+	private List<TableEditItem> updates;
+	private boolean modelDataValid;
+	private boolean modelStructureValid;
 
-	protected TableProvider tableProvider;
-	protected TableUpdateItemInterface itemFactory;
-	protected int saveUpdatesSize;
+	private TableProvider tableProvider;
+	private TableUpdateItemInterface itemFactory;
+	private int saveUpdatesSize;
 
-	protected final ChainedTableModelFilter chainedFilter;
-	protected final TableModelFilter emptyFilter;
+	private final ChainedTableModelFilter chainedFilter;
+	private final TableModelFilter emptyFilter;
 	private TableModelFilter workingFilter;
 
-	protected Map<Integer, RowStringMap> primarykey2Rowmap;
-	protected Map<Integer, String> primarykeyTranslation;
-	protected Mapping<Integer, String> primarykeyRepresentation;
+	private Map<Integer, RowStringMap> primarykey2Rowmap;
 
-	protected Integer sortCol;
-	protected boolean sorting;
-	protected int cursorrow = -1;
-	protected boolean markCursorRow;
-	protected int colMarkCursorRow = -1;
+	private Integer sortCol;
+	private boolean sorting;
+	private int cursorrow = -1;
+	private boolean markCursorRow;
+	private int colMarkCursorRow = -1;
 
-	CursorrowObserved cursorrowObservable;
+	private CursorrowObserved cursorrowObservable;
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
-			int[] finalColumns, TableModelListener l, TableUpdateCollection updates) {
+			int[] finalColumns, TableModelListener l, List<TableEditItem> updates) {
 		this.keyCol = keyCol;
 		this.updates = updates;
 		this.tableProvider = dataProvider;
@@ -125,7 +122,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
-			TableModelListener l, TableUpdateCollection updates) {
+			TableModelListener l, List<TableEditItem> updates) {
 		this(itemFactory, dataProvider, keyCol, null, l, updates);
 	}
 
@@ -367,7 +364,7 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	}
 
-	protected void refresh() {
+	private void refresh() {
 		if (!modelDataValid) {
 			// perhaps the action should not depend on this condition,
 			// since the necessary requests are already sent to the
@@ -960,10 +957,8 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	// interface TableModelFunctions
 
-	protected void requestRefreshDerivedMaps() {
+	private void requestRefreshDerivedMaps() {
 		primarykey2Rowmap = null;
-		primarykeyTranslation = null;
-		primarykeyRepresentation = null;
 	}
 
 	@Override

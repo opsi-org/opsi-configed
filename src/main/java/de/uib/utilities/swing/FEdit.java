@@ -34,23 +34,22 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	protected Dimension areaDimension = new Dimension(100, 40);
 
 	protected String initialText = "";
-	protected String hint;
+	private String hint;
 
-	protected JPanel framingPanel;
+	private JPanel framingPanel;
 	protected JComponent editingArea;
-	protected JLabel labelHint;
+	private JLabel labelHint;
 
 	protected IconButton buttonCommit;
-	protected IconButton buttonCancel;
+	private IconButton buttonCancel;
 
-	protected boolean dataChanged;
-	protected boolean cancelled;
-	protected boolean starting = true;
+	private boolean cancelled;
+	private boolean starting = true;
 
-	protected AbstractCellEditor servedCellEditor;
+	private AbstractCellEditor servedCellEditor;
 
-	protected JTextComponent caller;
-	protected Font callerFont;
+	private JTextComponent caller;
+	private Font callerFont;
 
 	public FEdit(String initialText) {
 		this(initialText, null);
@@ -101,7 +100,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	}
 
-	protected void initComponents() {
+	private void initComponents() {
 		if (!ConfigedMain.THEMES) {
 			framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
@@ -165,14 +164,9 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	public void setDataChanged(boolean b) {
 
-		dataChanged = b;
 		buttonCommit.setEnabled(b);
 		buttonCancel.setEnabled(true);
 
-	}
-
-	protected boolean isDataChanged() {
-		return dataChanged;
 	}
 
 	public void setAreaDimension(Dimension dim) {
@@ -236,7 +230,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		return init(areaDimension);
 	}
 
-	protected void enter() {
+	private void enter() {
 		if (caller != null) {
 			callerFont = caller.getFont();
 			caller.setFont(callerFont.deriveFont(Font.ITALIC));
@@ -252,7 +246,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		}
 	}
 
-	protected void leave() {
+	private void leave() {
 		Logging.debug(this, "leave");
 		updateCaller(initialText);
 		buttonCommit.setEnabled(false);

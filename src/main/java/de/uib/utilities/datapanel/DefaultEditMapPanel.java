@@ -37,22 +37,20 @@ public class DefaultEditMapPanel extends JPanel {
 	protected boolean keylistExtendible;
 	protected boolean keylistEditable = true;
 
-	protected boolean optionsEditable = true;
-
 	protected Actor actor;
 
 	protected JPopupMenu popupmenuAtRow;
 	protected JPopupMenu popupEditOptions;
 	protected JPopupMenu popupNoEditOptions;
 
-	List<String> names;
-	Map<String, ListCellOptions> optionsMap;
-	Map<String, String> descriptionsMap;
-	Map<String, Object> defaultsMap;
+	protected List<String> names;
+	protected Map<String, ListCellOptions> optionsMap;
+	protected Map<String, String> descriptionsMap;
+	protected Map<String, Object> defaultsMap;
 
-	TableCellRenderer tableCellRenderer;
+	protected TableCellRenderer tableCellRenderer;
 
-	protected static class DefaultPropertyHandler extends AbstractPropertyHandler {
+	private static class DefaultPropertyHandler extends AbstractPropertyHandler {
 		@Override
 		public void removeValue(String key) {
 			Logging.debug(this, "removing value for key " + key);

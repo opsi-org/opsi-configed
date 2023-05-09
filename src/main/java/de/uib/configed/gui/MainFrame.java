@@ -69,7 +69,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -165,7 +164,7 @@ public class MainFrame extends JFrame
 	public static final String ITEM_DELETE_CLIENT = "remove client";
 	public static final String ITEM_FREE_LICENCES = "free licences for client";
 
-	protected String oldNotes;
+	private String oldNotes;
 
 	private Map<String, Map<String, String>> changedClientInfos;
 
@@ -179,20 +178,14 @@ public class MainFrame extends JFrame
 	private JMenuBar jMenuBar1 = new JMenuBar();
 
 	private JMenu jMenuFile;
-	private JMenuItem jMenuFileExit;
 	private JMenuItem jMenuFileSaveConfigurations;
-	private JMenuItem jMenuFileReload;
-	private JMenuItem jMenuTheme;
-	private JMenuItem jMenuFileLanguage;
 
 	private JMenu jMenuClients = new JMenu();
 
-	private JMenu jMenuWakeOnLan;
 	private JMenuItem jMenuDirectWOL = new JMenuItem();
 	private JMenuItem jMenuNewScheduledWOL = new JMenuItem();
 
 	private JMenuItem jMenuShowScheduledWOL = new JMenuItem();
-	private JMenuItem jMenuOpsiClientdEvent;
 	private JMenuItem jMenuShowPopupMessage = new JMenuItem();
 	private JMenuItem jMenuRequestSessionInfo = new JMenuItem();
 	private JMenuItem jMenuShutdownClient = new JMenuItem();
@@ -218,7 +211,6 @@ public class MainFrame extends JFrame
 
 	private JMenu jMenuServer = new JMenu();
 
-	private JMenuItem jMenuSSHConfig = new JMenuItem();
 	private JMenuItem jMenuSSHConnection = new JMenuItem();
 	private JMenuItem jMenuSSHCommandControl = new JMenuItem();
 
@@ -294,7 +286,6 @@ public class MainFrame extends JFrame
 	private JMenuItemFormatted popupWakeOnLanDirect = new JMenuItemFormatted();
 	private JMenuItemFormatted popupWakeOnLanScheduler = new JMenuItemFormatted();
 
-	private JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 	private JMenuItemFormatted popupShowPopupMessage = new JMenuItemFormatted();
 	private JMenuItemFormatted popupRequestSessionInfo = new JMenuItemFormatted();
 	private JMenuItemFormatted popupShutdownClient = new JMenuItemFormatted();
@@ -339,8 +330,6 @@ public class MainFrame extends JFrame
 	private JButton jButtonLicences;
 	private JButton jButtonOpsiLicenses;
 
-	private JPanel iconPane1;
-
 	private IconButton iconButtonReload;
 	private IconButton iconButtonReloadLicenses;
 	private IconButton iconButtonNewClient;
@@ -383,11 +372,8 @@ public class MainFrame extends JFrame
 	public CombinedMenuItem combinedMenuItemDepotColumn = new CombinedMenuItem(jCheckBoxMenuItemShowDepotColumn,
 			popupShowDepotColumn);
 
-	protected JButton buttonSelectDepotsWithEqualProperties;
-	protected JButton buttonSelectDepotsAll;
-
-	BorderLayout borderLayout1 = new BorderLayout();
-	JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
+	private BorderLayout borderLayout1 = new BorderLayout();
+	private JTabbedPane jTabbedPaneConfigPanes = new JTabbedPane();
 	private JSplitPane panelClientSelection;
 
 	private HostsStatusPanel statusPane;
@@ -398,85 +384,67 @@ public class MainFrame extends JFrame
 	public PanelHostProperties panelHostProperties;
 	public PanelProductProperties panelProductProperties;
 
-	PanelHWInfo showHardwareLogVersion2;
-	TitledPanel showHardwareLogNotFound;
+	private PanelHWInfo showHardwareLogVersion2;
+	private TitledPanel showHardwareLogNotFound;
 	public ControllerHWinfoMultiClients controllerHWinfoMultiClients;
-	JPanel showHardwareLogMultiClientReport;
-	JPanel showHardwareLogParentOfNotFoundPanel;
-	JPanel showHardwareLog;
-	JLabel labelNoSoftware;
+	private JPanel showHardwareLogMultiClientReport;
+	private JPanel showHardwareLogParentOfNotFoundPanel;
+	private JPanel showHardwareLog;
+	private JLabel labelNoSoftware;
 
-	PanelSWInfo panelSWInfo;
-	JPanel showSoftwareLogNotFound;
-	PanelSWMultiClientReport showSoftwareLogMultiClientReport;
-	JPanel showSoftwareLog;
+	private PanelSWInfo panelSWInfo;
+	private JPanel showSoftwareLogNotFound;
+	private PanelSWMultiClientReport showSoftwareLogMultiClientReport;
+	private JPanel showSoftwareLog;
 
-	PanelTabbedDocuments showLogfiles;
-
-	JPanel jPanelSchalterstellung;
+	private PanelTabbedDocuments showLogfiles;
 
 	public FGeneralDialogLicensingInfo fDialogOpsiLicensingInfo;
-	LicensingInfoMap licensingInfoMap;
+	private LicensingInfoMap licensingInfoMap;
 
-	JTextField jTextFieldConfigdir = new JTextField();
-	JButton jButtonFileChooserConfigdir = new JButton();
-	JPanel jPanel3 = new JPanel();
+	private JPanel jPanel3 = new JPanel();
 
-	JCheckBox jCheckBoxSorted = new JCheckBox();
-	JButton jButtonSaveList = new JButton();
-	JPanel jPanelButtonSaveList = new JPanel();
-	String[] options = new String[] { "off", "on", "setup" };
-	JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
+	private JCheckBox jCheckBoxSorted = new JCheckBox();
+	private JButton jButtonSaveList = new JButton();
+	private String[] options = new String[] { "off", "on", "setup" };
+	private JComboBox<String> jComboBoxProductValues = new JComboBox<>(options);
 
-	JLabel jLabelproperty = new JLabel();
-	ButtonGroup buttonGroupRequired = new ButtonGroup();
-	JRadioButton jRadioRequiredAll = new JRadioButton();
-	JRadioButton jRadioRequiredOff = new JRadioButton();
+	private ButtonGroup buttonGroupRequired = new ButtonGroup();
+	private JRadioButton jRadioRequiredAll = new JRadioButton();
+	private JRadioButton jRadioRequiredOff = new JRadioButton();
 
-	JButton jBtnAllOff = new JButton();
+	private JTableSelectionPanel panelClientlist;
 
-	JTableSelectionPanel panelClientlist;
-	boolean shiftpressed;
+	private JLabel jLabelHostinfos = new JLabel();
 
-	JLabel jLabelHostinfos = new JLabel();
+	private JLabel jLabelPath = new JLabel();
 
-	JLabel jLabelPath = new JLabel();
+	private JLabel labelHost;
+	private JLabel labelHostID;
+	private CheckedLabel cbInstallByShutdown;
+	private CheckedLabel cbUefiBoot;
+	private CheckedLabel cbWANConfig;
 
-	JTextArea jFieldInDepot;
-	JLabel labelHost;
-	JLabel labelHostID;
-	CheckedLabel cbInstallByShutdown;
-	CheckedLabel cbUefiBoot;
-	CheckedLabel cbWANConfig;
+	private JTextEditorField jTextFieldDescription;
+	private JTextEditorField jTextFieldInventoryNumber;
+	private JTextArea jTextAreaNotes;
+	private JTextEditorField systemUUIDField;
+	private JTextEditorField macAddressField;
+	private JTextEditorField ipAddressField;
+	private JTextEditorField jTextFieldOneTimePassword;
+	private JTextHideField jTextFieldHostKey;
 
-	JTextEditorField jTextFieldDescription;
-	JTextEditorField jTextFieldInventoryNumber;
-	JTextArea jTextAreaNotes;
-	JTextEditorField systemUUIDField;
-	JTextEditorField macAddressField;
-	JTextEditorField ipAddressField;
-	JTextEditorField jTextFieldOneTimePassword;
-	JTextHideField jTextFieldHostKey;
-	JScrollPane scrollpaneNotes;
+	private boolean multidepot;
 
-	JPopupMenu jPopupMenu = new JPopupMenu();
+	private DepotListPresenter depotListPresenter;
 
-	protected FShowList fListSelectedClients;
+	private ClientTree treeClients;
 
-	JPanel panelTreeClientSelection;
-
-	boolean multidepot;
-
-	DepotListPresenter depotListPresenter;
-
-	ClientTree treeClients;
-	JScrollPane scrollpaneTreeClients;
-
-	JPanel clientPane;
+	private JPanel clientPane;
 
 	private LicenseDisplayer licenseDisplayer;
 
-	static class GlassPane extends JComponent {
+	private static class GlassPane extends JComponent {
 		GlassPane() {
 			super();
 			Logging.debug(this, "glass pane initialized");
@@ -508,7 +476,7 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	GlassPane glass;
+	private GlassPane glass;
 
 	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
 			ClientTree treeClients, boolean multidepot) {
@@ -641,11 +609,11 @@ public class MainFrame extends JFrame
 
 	private void setupMenuFile() {
 		jMenuFile = new JMenu();
-		jMenuFileExit = new JMenuItem();
+		JMenuItem jMenuFileExit = new JMenuItem();
 		jMenuFileSaveConfigurations = new JMenuItem();
-		jMenuFileReload = new JMenuItem();
-		jMenuTheme = new JMenu(); // submenu
-		jMenuFileLanguage = new JMenu(); // submenu
+		JMenuItem jMenuFileReload = new JMenuItem();
+		JMenu jMenuTheme = new JMenu(); // submenu
+		JMenu jMenuFileLanguage = new JMenu(); // submenu
 
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
 
@@ -918,7 +886,7 @@ public class MainFrame extends JFrame
 
 		menuItemsHost.get(ITEM_ADD_CLIENT).add(jMenuAddClient);
 
-		jMenuWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
+		JMenu jMenuWakeOnLan = new JMenu(Configed.getResourceValue("MainFrame.jMenuWakeOnLan"));
 
 		jMenuDirectWOL.setText(Configed.getResourceValue("MainFrame.jMenuWakeOnLan.direct"));
 		jMenuDirectWOL.addActionListener((ActionEvent e) -> wakeOnLanAction());
@@ -955,7 +923,7 @@ public class MainFrame extends JFrame
 		jMenuDeletePackageCaches.setText(Configed.getResourceValue("MainFrame.jMenuDeletePackageCaches"));
 		jMenuDeletePackageCaches.addActionListener((ActionEvent e) -> deletePackageCachesAction());
 
-		jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
+		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
 		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
@@ -1105,7 +1073,7 @@ public class MainFrame extends JFrame
 		boolean methodsExists = factory.checkSSHCommandMethod();
 
 		Logging.info(this, "setupMenuServer add configpage");
-		jMenuSSHConfig = new JMenuItem();
+		JMenuItem jMenuSSHConfig = new JMenuItem();
 		jMenuSSHConfig.setText(Configed.getResourceValue("MainFrame.jMenuSSHConfig"));
 		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
 
@@ -1746,7 +1714,7 @@ public class MainFrame extends JFrame
 
 		popupClients.add(popupWakeOnLan);
 
-		menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
+		JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
 		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItemFormatted(event);
@@ -1930,7 +1898,7 @@ public class MainFrame extends JFrame
 		JLabel labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
 		JLabel labelOpsiHostKey = new JLabel("opsiHostKey");
 
-		jFieldInDepot = new JTextArea();
+		JTextArea jFieldInDepot = new JTextArea();
 		jFieldInDepot.setEditable(false);
 		jFieldInDepot.setFont(Globals.defaultFontBig);
 		if (!ConfigedMain.THEMES) {
@@ -1961,7 +1929,7 @@ public class MainFrame extends JFrame
 		jTextAreaNotes.addKeyListener(this);
 		jTextAreaNotes.addMouseListener(this);
 
-		scrollpaneNotes = new JScrollPane(jTextAreaNotes);
+		JScrollPane scrollpaneNotes = new JScrollPane(jTextAreaNotes);
 		scrollpaneNotes.setPreferredSize(Globals.textfieldDimension);
 		scrollpaneNotes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollpaneNotes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -2207,7 +2175,7 @@ public class MainFrame extends JFrame
 
 		treeClients.setFont(Globals.defaultFont);
 
-		scrollpaneTreeClients = new JScrollPane();
+		JScrollPane scrollpaneTreeClients = new JScrollPane();
 
 		scrollpaneTreeClients.getViewport().add(treeClients);
 		scrollpaneTreeClients.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -2241,7 +2209,7 @@ public class MainFrame extends JFrame
 			splitpaneClientSelection.setDividerLocation(DIVIDER_LOCATION_CLIENT_TREE_SIGLE_DEPOT);
 		}
 
-		panelTreeClientSelection = new JPanel();
+		JPanel panelTreeClientSelection = new JPanel();
 		GroupLayout layoutPanelTreeClientSelection = new GroupLayout(panelTreeClientSelection);
 		panelTreeClientSelection.setLayout(layoutPanelTreeClientSelection);
 
@@ -2447,7 +2415,7 @@ public class MainFrame extends JFrame
 						GroupLayout.PREFERRED_SIZE));
 
 		setupIcons1();
-		iconPane1 = new JPanel();
+		JPanel iconPane1 = new JPanel();
 
 		GroupLayout layoutIconPane1 = new GroupLayout(iconPane1);
 		iconPane1.setLayout(layoutIconPane1);
@@ -2886,7 +2854,7 @@ public class MainFrame extends JFrame
 		configedMain.getSessionInfo();
 	}
 
-	protected void getReachableInfo() {
+	private void getReachableInfo() {
 		iconButtonReachableInfo.setEnabled(false);
 		try {
 			SwingUtilities.invokeLater(configedMain::getReachableInfo);
@@ -3193,7 +3161,7 @@ public class MainFrame extends JFrame
 
 	// ----------------------------------------------------------------------------------------
 
-	void jButtonSaveListActionPerformed(ActionEvent e) {
+	private void jButtonSaveListActionPerformed(ActionEvent e) {
 		configedMain.checkSaveAll(false);
 	}
 
@@ -3237,7 +3205,7 @@ public class MainFrame extends JFrame
 	}
 
 	// TODO: kann das weg? arrange dialogs for opsi-client wake on LAN...
-	protected void arrangeWs(Set<JDialog> frames) {
+	private void arrangeWs(Set<JDialog> frames) {
 		// problem: https://bugs.openjdk.java.net/browse/JDK-7074504
 		// Can iconify, but not deiconify a modal JDialog
 
@@ -3607,7 +3575,6 @@ public class MainFrame extends JFrame
 			panelSWInfo.setWithMsUpdates(showSoftwareLogMultiClientReport.wantsWithMsUpdates());
 			panelSWInfo.setWithMsUpdates2(showSoftwareLogMultiClientReport.wantsWithMsUpdates2());
 
-			panelSWInfo.setAskingForKindOfAction(false);
 			panelSWInfo.setAskForOverwrite(showSoftwareLogMultiClientReport.wantsAskForOverwrite());
 
 			panelSWInfo.setKindOfExport(showSoftwareLogMultiClientReport.wantsKindOfExport());
@@ -3674,7 +3641,6 @@ public class MainFrame extends JFrame
 		labelNoSoftware.setText(Configed.getResourceValue("MainFrame.NoSoftwareConfiguration"));
 
 		Logging.debug(this, "setSoftwareAudit for " + hostId);
-		panelSWInfo.setAskingForKindOfAction(true);
 		panelSWInfo.setAskForOverwrite(true);
 		panelSWInfo.setHost(hostId);
 		panelSWInfo.updateModel();

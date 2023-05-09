@@ -40,7 +40,7 @@ import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
 import de.uib.utilities.table.updates.StrList2BooleanFunction;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	private static final int MAX_WIDTH_ID_COLUMN_FOR_REGISTERED_SOFTWARE = 300;
@@ -52,16 +52,16 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	public PanelAssignToLPools thePanel;
 
-	GenTableModel modelLicencepools;
-	GenTableModel modelProductId2LPool;
-	GenTableModel modelWindowsSoftwareIds;
+	private GenTableModel modelLicencepools;
+	private GenTableModel modelProductId2LPool;
+	private GenTableModel modelWindowsSoftwareIds;
 
 	// we replace the filter from GenTableModel
-	TableModelFilterCondition windowsSoftwareFilterConditonShowOnlySelected;
+	private TableModelFilterCondition windowsSoftwareFilterConditonShowOnlySelected;
 
-	TableModelFilterCondition windowsSoftwareFilterConditionDontShowAssociatedToOtherPool;
+	private TableModelFilterCondition windowsSoftwareFilterConditionDontShowAssociatedToOtherPool;
 
-	ConfigedMain mainController;
+	private ConfigedMain mainController;
 
 	public AbstractPersistenceController persist;
 
@@ -83,11 +83,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private SoftwareDirectionOfAssignment softwareDirectionOfAssignment = SoftwareDirectionOfAssignment.POOL2SOFTWARE;
 
-	Integer totalSWEntries;
-	Integer totalUnassignedSWEntries;
-	Integer totalShownEntries;
+	private Integer totalShownEntries;
 
-	int colMarkCursorRow;
+	private int colMarkCursorRow;
 
 	private Map<String, List<String>> removeKeysFromOtherLicencePool;
 
@@ -153,7 +151,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		Logging.info(this, "setSoftwareIdsFromLicencePool  unknown softwareIds for licencePool  " + poolID + " : "
 				+ persist.getUnknownSoftwareListForLicencePool(poolID).size());
 
-		totalUnassignedSWEntries = getUnAssignedSoftwareIds().size();
+		Integer totalUnassignedSWEntries = getUnAssignedSoftwareIds().size();
 		Logging.info(this, "setSoftwareIdsFromLicencePool unAssignedSoftwareIds " + totalUnassignedSWEntries);
 
 		resetCounters(poolID);
@@ -220,7 +218,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		b.append("</html>");
 		thePanel.fieldCountAssignedStatus.setToolTipText(b.toString());
 
-		totalSWEntries = modelWindowsSoftwareIds.getRowCount();
+		Integer totalSWEntries = modelWindowsSoftwareIds.getRowCount();
 
 		produceFilterSets(softwareIdsForPool);
 
@@ -402,7 +400,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	@Override
 	public final void init() {
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 
 		List<String> columnNames;
 		List<String> classNames;
@@ -691,86 +689,85 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		col.setMaxWidth(60);
 
 		// updates
-		thePanel.panelRegisteredSoftware
-				.setUpdateController(new AbstractSelectionMemorizerUpdateController(thePanel.panelLicencepools, 0,
-						thePanel.panelRegisteredSoftware, modelWindowsSoftwareIds, new StrList2BooleanFunction() {
-							@Override
-							public boolean sendUpdate(String poolId, List<String> softwareIds) {
+		thePanel.panelRegisteredSoftware.setUpdateController(new AbstractSelectionMemorizerUpdateController(
+				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, new StrList2BooleanFunction() {
+					@Override
+					public boolean sendUpdate(String poolId, List<String> softwareIds) {
 
-								Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-								Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicencePool "
-										+ removeKeysFromOtherLicencePool);
+						Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
+						Logging.info(this,
+								"sendUpdate poolId, removeKeysFromOtherLicencePool " + removeKeysFromOtherLicencePool);
 
-								boolean result = true;
+						boolean result = true;
 
-								if (removeKeysFromOtherLicencePool != null) {
-									for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicencePool
-											.entrySet()) {
-										if (result && !otherStringPoolEntry.getValue().isEmpty()) {
-											result = persist.removeAssociations(otherStringPoolEntry.getKey(),
-													otherStringPoolEntry.getValue());
-											if (result) {
-												removeKeysFromOtherLicencePool.remove(otherStringPoolEntry.getKey());
-											}
-										}
+						if (removeKeysFromOtherLicencePool != null) {
+							for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicencePool
+									.entrySet()) {
+								if (result && !otherStringPoolEntry.getValue().isEmpty()) {
+									result = persist.removeAssociations(otherStringPoolEntry.getKey(),
+											otherStringPoolEntry.getValue());
+									if (result) {
+										removeKeysFromOtherLicencePool.remove(otherStringPoolEntry.getKey());
 									}
 								}
-
-								if (!result) {
-									return false;
-								}
-
-								// cleanup assignments to other pools since an update would not change them
-								// (redmine #3282)
-								if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
-									result = persist.setWindowsSoftwareIds2LPool(poolId, softwareIds);
-								} else {
-									result = persist.addWindowsSoftwareIds2LPool(poolId, softwareIds);
-								}
-
-								Logging.info(this, "sendUpdate, setSoftwareIdsFromLicencePool poolId " + poolId);
-								setSoftwareIdsFromLicencePool(poolId);
-
-								// doing it locally for fSoftware2LicencePool
-								Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-								Logging.info(this, "sendUpdate, we have software ids " + softwareIds.size());
-								Logging.info(this,
-										"sendUpdate, we have software ids "
-												+ persist.getSoftwareListByLicencePool(poolId).size() + " they are "
-												+ persist.getSoftwareListByLicencePool(poolId));
-
-								List<String> oldSWListForPool = persist.getSoftwareListByLicencePool(poolId);
-
-								// remove all old assignements
-								for (String swId : oldSWListForPool) {
-									Logging.info(this, "sendUpdate remove " + swId + " from Software2LicencePool ");
-									persist.getFSoftware2LicencePool().remove(swId);
-								}
-								// set the current ones
-								for (String ident : softwareIds) {
-									persist.setFSoftware2LicencePool(ident, poolId);
-								}
-
-								if (thePanel.fSoftwarename2LicencePool != null) {
-									thePanel.fSoftwarename2LicencePool.panelSWnames.requestReload();
-								}
-
-								if (thePanel.fSoftwarename2LicencePool != null) {
-									thePanel.fSoftwarename2LicencePool.panelSWxLicencepool.requestReload();
-								}
-
-								return result;
 							}
-						}) {
+						}
 
-					@Override
-					public boolean cancelChanges() {
-						setSoftwareIdsFromLicencePool(null);
-						return true;
+						if (!result) {
+							return false;
+						}
+
+						// cleanup assignments to other pools since an update would not change them
+						// (redmine #3282)
+						if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
+							result = persist.setWindowsSoftwareIds2LPool(poolId, softwareIds);
+						} else {
+							result = persist.addWindowsSoftwareIds2LPool(poolId, softwareIds);
+						}
+
+						Logging.info(this, "sendUpdate, setSoftwareIdsFromLicencePool poolId " + poolId);
+						setSoftwareIdsFromLicencePool(poolId);
+
+						// doing it locally for fSoftware2LicencePool
+						Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
+						Logging.info(this, "sendUpdate, we have software ids " + softwareIds.size());
+						Logging.info(this,
+								"sendUpdate, we have software ids "
+										+ persist.getSoftwareListByLicencePool(poolId).size() + " they are "
+										+ persist.getSoftwareListByLicencePool(poolId));
+
+						List<String> oldSWListForPool = persist.getSoftwareListByLicencePool(poolId);
+
+						// remove all old assignements
+						for (String swId : oldSWListForPool) {
+							Logging.info(this, "sendUpdate remove " + swId + " from Software2LicencePool ");
+							persist.getFSoftware2LicencePool().remove(swId);
+						}
+						// set the current ones
+						for (String ident : softwareIds) {
+							persist.setFSoftware2LicencePool(ident, poolId);
+						}
+
+						if (thePanel.fSoftwarename2LicencePool != null) {
+							thePanel.fSoftwarename2LicencePool.panelSWnames.requestReload();
+						}
+
+						if (thePanel.fSoftwarename2LicencePool != null) {
+							thePanel.fSoftwarename2LicencePool.panelSWxLicencepool.requestReload();
+						}
+
+						return result;
 					}
-				}
+				}) {
 
-				);
+			@Override
+			public boolean cancelChanges() {
+				setSoftwareIdsFromLicencePool(null);
+				return true;
+			}
+		}
+
+		);
 
 		// -- Softwarename --> LicencePool
 

@@ -14,7 +14,7 @@ import java.util.Set;
 import de.uib.utilities.logging.Logging;
 
 public class CursorrowObserved {
-	Set<CursorrowObserver> observers = new HashSet<>();
+	private Set<CursorrowObserver> observers = new HashSet<>();
 
 	public void notifyObservers(int newrow) {
 		Logging.info(this, "notify Observers with " + newrow);

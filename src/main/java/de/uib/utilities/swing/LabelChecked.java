@@ -7,9 +7,9 @@ import de.uib.configed.Globals;
 
 public class LabelChecked extends JLabel {
 
-	Icon iconChecked = Globals.createImageIcon("images/checked_box_blue_14.png", "");
-	Icon iconUnchecked = Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
-	Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
+	private Icon iconChecked = Globals.createImageIcon("images/checked_box_blue_14.png", "");
+	private Icon iconUnchecked = Globals.createImageIcon("images/checked_box_blue_empty_14.png", "");
+	private Icon iconEmpty = Globals.createImageIcon("images/checked_void.png", "");
 
 	public LabelChecked() {
 		setUnchecked();

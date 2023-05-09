@@ -44,10 +44,9 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 public class ExporterToPDF extends AbstractExportTable {
 
 	// TODO why static fields here everywhere?
-	protected static Document document;
-	protected static PdfWriter writer;
+	private static Document document;
 
-	protected static final String FILE_EXTENSION = ".pdf";
+	private static final String FILE_EXTENSION = ".pdf";
 
 	private static final float M_LEFT = 36;
 	private static final float M_RIGHT = 36;
@@ -59,11 +58,10 @@ public class ExporterToPDF extends AbstractExportTable {
 	private static Font small = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
 	private static List<Integer> leftAlignmentlist = new ArrayList<>();
 
-	protected OpenSaveDialog dialog;
+	private OpenSaveDialog dialog;
 	private Boolean saveAction;
 
-	protected String defaultFilename = "report.pdf";
-	protected boolean askForOverwrite = true;
+	private String defaultFilename = "report.pdf";
 
 	private float xHeaderTop = 803;
 	private float headerWidth = 527;
@@ -146,6 +144,7 @@ public class ExporterToPDF extends AbstractExportTable {
 
 			// Write file now
 			try {
+				PdfWriter writer;
 				if (filePath == null) {
 					writer = PdfWriter.getInstance(document, new FileOutputStream(defaultFilename));
 				} else {
@@ -265,7 +264,7 @@ public class ExporterToPDF extends AbstractExportTable {
 		return content;
 	}
 
-	protected PdfPTable createTableDataElement(JTable theTable) {
+	private PdfPTable createTableDataElement(JTable theTable) {
 		boolean onlySelectedRows = theTable.getSelectedRowCount() > 0;
 
 		PdfPTable table = new PdfPTable(theTable.getColumnCount());
@@ -350,7 +349,7 @@ public class ExporterToPDF extends AbstractExportTable {
 	/**
 	 * Inner class to add a table as header.
 	 */
-	class TableHeader extends PdfPageEventHelper {
+	private class TableHeader extends PdfPageEventHelper {
 		/** The header text. */
 		String header = "";
 		/** The template with the total number of pages. */

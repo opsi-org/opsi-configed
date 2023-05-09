@@ -9,9 +9,9 @@ import de.uib.utilities.logging.Logging;
 
 public abstract class AbstractOpsiDataDateMatcher {
 
-	protected String map;
-	protected String key;
-	protected String data;
+	private String map;
+	private String key;
+	private String data;
 
 	protected AbstractOpsiDataDateMatcher(String map, String key, String data) {
 		Logging.debug(this, "created:  maptype, key, data: " + map + ", " + key + ", " + data);
@@ -37,7 +37,7 @@ public abstract class AbstractOpsiDataDateMatcher {
 		return checkData(realData);
 	}
 
-	protected boolean checkData(final String realdata) {
+	private boolean checkData(final String realdata) {
 
 		Date date = null;
 
@@ -58,7 +58,7 @@ public abstract class AbstractOpsiDataDateMatcher {
 			return false;
 		}
 
-		if (realdata.equals("")) {
+		if ("".equals(realdata)) {
 			return false;
 		}
 

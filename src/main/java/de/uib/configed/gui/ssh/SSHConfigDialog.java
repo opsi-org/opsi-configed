@@ -211,7 +211,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		Logging.debug(this, "setSSHState setText " + labeltext);
 	}
 
-	void init() {
+	private void init() {
 		Logging.info(this, "init ");
 		if (!ConfigedMain.THEMES) {
 			connectionPanel.setBackground(Globals.BACKGROUND_COLOR_7);

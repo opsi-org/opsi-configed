@@ -6,10 +6,9 @@ import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class ConfigUpdate implements UpdateCommand {
-	String objectId;
-	Map newdata;
+	private Map newdata;
 
-	AbstractPersistenceController persis;
+	private AbstractPersistenceController persis;
 
 	public ConfigUpdate(AbstractPersistenceController persis, Map newdata) {
 		this.newdata = newdata;

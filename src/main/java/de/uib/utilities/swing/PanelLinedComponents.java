@@ -15,9 +15,9 @@ import de.uib.configed.Globals;
 
 public class PanelLinedComponents extends JPanel {
 
-	protected JComponent[] components;
+	private JComponent[] components;
 
-	protected int myHeight;
+	private int myHeight;
 
 	public PanelLinedComponents(JComponent[] components) {
 		setComponents(components);
@@ -37,7 +37,7 @@ public class PanelLinedComponents extends JPanel {
 		setComponents(components, Globals.LINE_HEIGHT);
 	}
 
-	protected void defineLayout() {
+	private void defineLayout() {
 		GroupLayout layout = new GroupLayout(this);
 		setLayout(layout);
 

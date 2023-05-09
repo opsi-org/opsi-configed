@@ -32,16 +32,16 @@ import de.uib.utilities.ssh.SSHOutputCollector;
  * @inheritDoc Class for executing commands.
  */
 public class SSHConnectExec extends SSHConnect {
-	protected SSHConnectionExecDialog outputDialog;
+	private SSHConnectionExecDialog outputDialog;
 	protected boolean multiCommand;
-	protected ActionListener killProcessListener;
-	protected JButton responseButton;
+	private ActionListener killProcessListener;
+	private JButton responseButton;
 
 	private int supwRetriedTimes;
 
 	protected boolean foundError;
 
-	protected boolean interruptChannel;
+	private boolean interruptChannel;
 
 	public SSHConnectExec() {
 		super(null);
@@ -602,14 +602,14 @@ public class SSHConnectExec extends SSHConnect {
 			}
 		}
 
-		protected void publishInfo(String s) {
+		private void publishInfo(String s) {
 			if (outputDialog != null) {
 
 				outputDialog.setStartAnsi(Globals.SSH_CONNECTION_SET_START_ANSI);
 			}
 		}
 
-		protected void publishError(String s) {
+		private void publishError(String s) {
 			// TODO what to do if publishError?
 		}
 

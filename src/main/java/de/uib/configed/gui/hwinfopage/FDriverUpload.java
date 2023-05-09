@@ -7,7 +7,6 @@ import javax.swing.text.JTextComponent;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
@@ -15,17 +14,15 @@ import de.uib.utilities.swing.SecondaryFrame;
 
 public class FDriverUpload extends SecondaryFrame {
 
-	PanelDriverUpload panelDriverUpload;
+	private PanelDriverUpload panelDriverUpload;
 
-	AbstractPersistenceController persist;
-	ConfigedMain main;
-	MainFrame mainframe;
+	private AbstractPersistenceController persist;
+	private ConfigedMain main;
 
-	public FDriverUpload(ConfigedMain main, AbstractPersistenceController persist, MainFrame mainframe) {
+	public FDriverUpload(ConfigedMain main, AbstractPersistenceController persist) {
 		super();
 
 		this.main = main;
-		this.mainframe = mainframe;
 		this.persist = persist;
 
 		init();

@@ -26,9 +26,9 @@ public class SimpleIconNode extends DefaultMutableTreeNode {
 
 	private Icon emphasizedIcon;
 
-	protected String toolTipText;
+	private String toolTipText;
 
-	protected boolean emphasized;
+	private boolean emphasized;
 
 	public SimpleIconNode(Object userObject, boolean allowsChildren) {
 		super(userObject, allowsChildren);

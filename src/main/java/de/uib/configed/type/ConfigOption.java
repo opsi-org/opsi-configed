@@ -42,7 +42,7 @@ public class ConfigOption extends RetrievedMap implements ListCellOptions {
 	public static final String UNICODE_TYPE = TYPE.UNICODE_CONFIG.toString();
 	public static final String UNDEFINED_TYPE = TYPE.UNDEFINED_CONFIG.toString();
 
-	protected TYPE type;
+	private TYPE type;
 
 	public ConfigOption(Map<String, Object> object) {
 		super(object);

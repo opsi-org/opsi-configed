@@ -25,40 +25,34 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 
 public class PanelMountShare extends JPanel {
-	static List<PanelMountShare> instances = new ArrayList<>();
+	private static List<PanelMountShare> instances = new ArrayList<>();
 
 	private static final int FIRST_LABEL_WIDTH = Globals.FIRST_LABEL_WIDTH;
 
-	AbstractPersistenceController persist;
-	ConfigedMain main;
-	JFrame rootFrame;
+	private JFrame rootFrame;
 
-	JButton buttonMountShare;
-	JLabel mountShareLabel;
-	JLabel mountShareDescriptionLabel;
+	private JButton buttonMountShare;
+	private JLabel mountShareDescriptionLabel;
 
-	final boolean isWindows;
+	private final boolean isWindows;
 
-	boolean smbMounted;
+	private boolean smbMounted;
 
-	int leftBound = -1;
+	private int leftBound = -1;
 
-	NameProducer np;
+	private NameProducer np;
 
-	public PanelMountShare(NameProducer np, ConfigedMain main, JFrame root) {
-		this(np, main, root, -1);
+	public PanelMountShare(NameProducer np, JFrame root) {
+		this(np, root, -1);
 	}
 
-	public PanelMountShare(NameProducer np, ConfigedMain main, JFrame root, int leftBound) {
+	public PanelMountShare(NameProducer np, JFrame root, int leftBound) {
 		instances.add(this);
-		this.main = main;
 		this.rootFrame = root;
 		this.np = np;
 		this.leftBound = leftBound;
@@ -89,7 +83,8 @@ public class PanelMountShare extends JPanel {
 
 		// mountShareLabel = new JLabel(
 
-		mountShareLabel = new JLabel("");
+		// TODO WHY EMPTY LABEL?
+		JLabel mountShareLabel = new JLabel("");
 
 		mountShareDescriptionLabel = new JLabel(
 				Configed.getResourceValue("PanelMountShare.mountShareResult0") + " " + np.getDefaultName());
@@ -213,11 +208,11 @@ public class PanelMountShare extends JPanel {
 		return smbMounted;
 	}
 
-	protected void initialMount() {
+	private void initialMount() {
 		// for overriding
 	}
 
-	protected void checkConnectionToShare(final int seconds) {
+	private void checkConnectionToShare(final int seconds) {
 		new Thread() {
 			@Override
 			public void run() {

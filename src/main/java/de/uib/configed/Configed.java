@@ -138,8 +138,6 @@ public class Configed {
 	private static PropertiesStore extraLocalization;
 	private static boolean showLocalizationStrings;
 
-	private static ConfigedMain configedMain;
-
 	private static String locale;
 	private static String host;
 	public static String user;
@@ -254,7 +252,7 @@ public class Configed {
 	}
 
 	@SuppressWarnings("java:S106")
-	protected static void usage() {
+	private static void usage() {
 		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		Logging.essential(USAGE_INFO);
 
@@ -300,11 +298,11 @@ public class Configed {
 		}
 	}
 
-	protected static boolean isValue(String[] args, int i) {
+	private static boolean isValue(String[] args, int i) {
 		return i < args.length && args[i].indexOf('-') != 0;
 	}
 
-	protected static String getArg(String[] args, int i) {
+	private static String getArg(String[] args, int i) {
 		if (args.length <= i + 1 || args[i + 1].indexOf('-') == 0) {
 			Logging.error("Missing value for option " + args[i]);
 			usage();
@@ -329,9 +327,9 @@ public class Configed {
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
+		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
 
-		SwingUtilities.invokeLater(() -> configedMain.init());
+		SwingUtilities.invokeLater(configedMain::init);
 
 		try {
 
@@ -377,7 +375,7 @@ public class Configed {
 	}
 
 	@SuppressWarnings("java:S106")
-	protected static void processArgs(String[] args) {
+	private static void processArgs(String[] args) {
 		Logging.debug("args " + Arrays.toString(args));
 
 		if (args.length == 2 && "--args".equals(args[0])) {

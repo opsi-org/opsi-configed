@@ -56,69 +56,63 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	public static final int START_TEXT_SEARCH = 1;
 	public static final int REGEX_SEARCH = 2;
 
-	JFrame masterFrame = ConfigedMain.getMainFrame();
+	private JFrame masterFrame = ConfigedMain.getMainFrame();
 
-	JTextField fieldSearch;
+	private JTextField fieldSearch;
 
 	private boolean searchActive;
-	protected boolean filtering;
+	private boolean filtering;
 
-	JComboBox<String> comboSearchFields;
-	JComboBoxToolTip comboSearchFieldsMode;
+	private JComboBox<String> comboSearchFields;
+	private JComboBoxToolTip comboSearchFieldsMode;
 
-	CheckedLabel markReload;
+	private JLabel labelSearch;
+	private CheckedLabel checkmarkSearch;
+	private CheckedLabel checkmarkSearchProgressive;
+	private JLabel labelSearchMode;
+	private CheckedLabel filtermark;
+	private CheckedLabel checkmarkAllColumns;
+	private CheckedLabel checkmarkFullText;
 
-	JLabel labelSearch;
-	CheckedLabel checkmarkSearch;
-	CheckedLabel checkmarkSearchProgressive;
-	JLabel labelSearchMode;
-	CheckedLabel filtermark;
-	CheckedLabel checkmarkAllColumns;
-	CheckedLabel checkmarkFullText;
+	private JLabel labelFilterMarkGap;
 
-	JLabel labelFilterMarkGap;
+	private AbstractNavigationPanel navPane;
+	private PanelGenEditTable associatedPanel;
 
-	AbstractNavigationPanel navPane;
-	PanelGenEditTable associatedPanel;
-	boolean withNavPane;
+	private LinkedHashMap<JMenuItemFormatted, Boolean> searchMenuEntries;
 
-	JPopupMenu searchMenu;
-	Map<JMenuItemFormatted, Boolean> searchMenuEntries;
-
-	JMenuItemFormatted popupSearch;
-	JMenuItemFormatted popupSearchNext;
-	JMenuItemFormatted popupNewSearch;
-	JMenuItemFormatted popupMarkHits;
-	JMenuItemFormatted popupMarkAndFilter;
-	JMenuItemFormatted popupEmptySearchfield;
+	private JMenuItemFormatted popupSearch;
+	private JMenuItemFormatted popupSearchNext;
+	private JMenuItemFormatted popupMarkHits;
+	private JMenuItemFormatted popupMarkAndFilter;
+	private JMenuItemFormatted popupEmptySearchfield;
 
 	public enum SearchMode {
 		FULL_TEXT_SEARCHING_WITH_ALTERNATIVES, FULL_TEXT_SEARCHING_ONE_STRING, START_TEXT_SEARCHING, REGEX_SEARCHING
 	}
 
-	protected int preferredColumnIndex;
+	private int preferredColumnIndex;
 
-	protected boolean withRegEx = true;
-	protected boolean selectMode = true;
-	protected boolean resetFilterModeOnNewSearch = true;
+	private boolean withRegEx = true;
+	private boolean selectMode = true;
+	private boolean resetFilterModeOnNewSearch = true;
 
 	private int foundrow = -1;
 
-	protected SearchTargetModel targetModel;
-	protected PanelGenEditTable associatedTable;
+	private SearchTargetModel targetModel;
 
-	final Comparator<Object> comparator;
-	Map<String, Mapping<Integer, String>> mappedValues;
+	private final Comparator<Object> comparator;
+	private Map<String, Mapping<Integer, String>> mappedValues;
 
 	public enum SearchInputType {
 		LINE, PROGRESSIVE
 	}
 
-	protected SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
+	private SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
 
-	protected SaveInteger saveSearchpaneProgressiveSearch;
-	protected SaveInteger saveSearchpaneAllColumnsSearch;
-	protected SaveInteger saveSearchpaneFullTextSearch;
+	private SaveInteger saveSearchpaneProgressiveSearch;
+	private SaveInteger saveSearchpaneAllColumnsSearch;
+	private SaveInteger saveSearchpaneFullTextSearch;
 
 	private boolean filteredMode;
 
@@ -232,7 +226,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	public void setWithNavPane(boolean b) {
 		navPane.setVisible(b);
-		withNavPane = b;
 	}
 
 	public void setMultiSelection(boolean b) {
@@ -373,12 +366,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		navPane.setVisible(false);
 
-		Icon iconReload = Globals.createImageIcon("images/reload_blue16.png", "");
-		markReload = new CheckedLabel(iconReload, true);
-
-		// in the moment, it's a proof of concept
-		markReload.setVisible(false);
-
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
 
@@ -434,7 +421,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		popupSearch = new JMenuItemFormatted();
 		popupSearchNext = new JMenuItemFormatted();
-		popupNewSearch = new JMenuItemFormatted();
+		JMenuItemFormatted popupNewSearch = new JMenuItemFormatted();
 		popupMarkHits = new JMenuItemFormatted();
 		popupMarkAndFilter = new JMenuItemFormatted();
 		popupEmptySearchfield = new JMenuItemFormatted();
@@ -585,9 +572,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		layoutTablesearchPane.setHorizontalGroup(layoutTablesearchPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(layoutTablesearchPane.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(markReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
@@ -620,7 +604,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		layoutTablesearchPane.setVerticalGroup(layoutTablesearchPane.createSequentialGroup()
 
 				.addGroup(layoutTablesearchPane.createParallelGroup(Alignment.CENTER)
-						.addComponent(markReload, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(navPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addComponent(labelSearch, 10, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -645,7 +628,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private void buildMenuSearchfield() {
 		Logging.info(this, "buildMenuSearchfield");
-		searchMenu = new JPopupMenu();
+		JPopupMenu searchMenu = new JPopupMenu();
 		for (Entry<JMenuItemFormatted, Boolean> searchMenuEntry : searchMenuEntries.entrySet()) {
 			if (Boolean.TRUE.equals(searchMenuEntry.getValue())) {
 				searchMenu.add(searchMenuEntry.getKey());
@@ -841,7 +824,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		return comparator.compare(realS.substring(0, part.length()), part) == 0;
 	}
 
-	protected int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
+	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices, boolean fulltext,
 			boolean regex, boolean combineCols) {
 
 		Logging.debug(this,

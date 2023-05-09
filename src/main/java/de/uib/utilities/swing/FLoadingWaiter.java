@@ -37,7 +37,7 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 
 	private WaitingWorker worker;
 
-	static class MyPainter implements Painter<JProgressBar> {
+	private static class MyPainter implements Painter<JProgressBar> {
 
 		private final Color color;
 

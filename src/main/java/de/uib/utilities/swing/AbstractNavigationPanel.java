@@ -14,15 +14,12 @@ import de.uib.utilities.logging.Logging;
 
 public abstract class AbstractNavigationPanel extends JPanel implements ActionListener {
 
-	protected JButton nextButton;
-	protected JButton previousButton;
-	protected JButton firstButton;
-	protected JButton lastButton;
+	private JButton nextButton;
+	private JButton previousButton;
+	private JButton firstButton;
+	private JButton lastButton;
 
-	protected List<JButton> buttons;
-
-	protected boolean hasNext;
-	protected boolean hasPrevious;
+	private List<JButton> buttons;
 
 	protected AbstractNavigationPanel() {
 		initComponents();
@@ -111,7 +108,6 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 	protected abstract void first();
 
 	public void setHasNext(boolean b) {
-		hasNext = b;
 		nextButton.setEnabled(b);
 		lastButton.setEnabled(b);
 	}
@@ -135,5 +131,4 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 			first();
 		}
 	}
-
 }

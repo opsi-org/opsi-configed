@@ -34,13 +34,13 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 
 	protected String tooltipPrefix = "";
 
-	protected Color uniformColor;
-	protected Color uniformSelectedColor;
+	private Color uniformColor;
+	private Color uniformSelectedColor;
 
-	protected Color selectedEven = Globals.defaultTableSelectedRowDark;
-	protected Color selectedUneven = Globals.defaultTableSelectedRowBright;
-	protected Color unselectedEven = Globals.defaultTableCellBgColor2;
-	protected Color unselectedUneven = Globals.defaultTableCellBgColor1;
+	private Color selectedEven = Globals.defaultTableSelectedRowDark;
+	private Color selectedUneven = Globals.defaultTableSelectedRowBright;
+	private Color unselectedEven = Globals.defaultTableCellBgColor2;
+	private Color unselectedUneven = Globals.defaultTableCellBgColor1;
 
 	public StandardListCellRenderer() {
 		super();

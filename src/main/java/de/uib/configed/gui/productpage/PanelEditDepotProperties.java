@@ -60,11 +60,10 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private List<String> listSelectedDepots;
 	private JButton buttonSelectWithEqualProperties;
 	private JButton buttonSelectAll;
-	JPopupMenu popupDepot = new JPopupMenu();
 
 	private JPanel titlePanel;
 
-	protected final Map<String, Object> emptyVisualData = new HashMap<>();
+	private final Map<String, Object> emptyVisualData = new HashMap<>();
 
 	public PanelEditDepotProperties(ConfigedMain mainController, DefaultEditMapPanel productPropertiesPanel) {
 		super(mainController, productPropertiesPanel);
@@ -89,7 +88,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		JScrollPane scrollpaneDepots = new JScrollPane();
 		scrollpaneDepots.setViewportView(listDepots);
 
-		popupDepot = new JPopupMenu();
+		JPopupMenu popupDepot = new JPopupMenu();
 		listDepots.setComponentPopupMenu(popupDepot);
 
 		buttonSelectWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
@@ -256,8 +255,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 			// updateCollection (the real updates)
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
-					mainController, mainController.getPersistenceController(), listDepots.getSelectedValuesList(),
-					productEdited);
+					mainController.getPersistenceController(), listDepots.getSelectedValuesList(), productEdited);
 			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
 			mainController.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 		}

@@ -42,7 +42,7 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControllerHWinfoColumnConfiguration {
 
@@ -66,10 +66,8 @@ public class ControllerHWinfoColumnConfiguration {
 
 	public PanelGenEditTable panel;
 	private GenTableModel model;
-	TableUpdateCollection updateCollection;
 
-	List<String> columnNames;
-	List<String> classNames;
+	private List<String> columnNames;
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
@@ -134,11 +132,9 @@ public class ControllerHWinfoColumnConfiguration {
 		}
 	}
 
-	ConfigedMain main;
-	protected AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
-	public ControllerHWinfoColumnConfiguration(ConfigedMain main, AbstractPersistenceController persist) {
-		this.main = main;
+	public ControllerHWinfoColumnConfiguration(AbstractPersistenceController persist) {
 		this.persist = persist;
 
 		initPanel();
@@ -193,7 +189,7 @@ public class ControllerHWinfoColumnConfiguration {
 
 	private void initModel() {
 
-		updateCollection = new TableUpdateCollection();
+		List<TableEditItem> updateCollection = new ArrayList<>();
 		columnNames = new ArrayList<>();
 		columnNames.add(COL_LINE_NO);
 		columnNames.add(COL_HW_CLASS);
@@ -204,7 +200,7 @@ public class ControllerHWinfoColumnConfiguration {
 		columnNames.add(COL_USE_IN_QUERY);
 		columnNames.add(COL_OPSI_DB_COLUMN_TYPE);
 
-		classNames = new ArrayList<>();
+		List<String> classNames = new ArrayList<>();
 
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
@@ -222,7 +218,7 @@ public class ControllerHWinfoColumnConfiguration {
 				// table model listener
 				panel,
 
-				// TableUpdateCollection updates
+				// ArrayList<TableEditItem> updates
 				updateCollection) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
@@ -331,7 +327,7 @@ public class ControllerHWinfoColumnConfiguration {
 		return "(" + no + ")";
 	}
 
-	protected Map<String, Map<String, Object>> getHwColumnConfig() {
+	private Map<String, Map<String, Object>> getHwColumnConfig() {
 		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 
 		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();

@@ -51,10 +51,10 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	public static final String LINUX_LINK_INTERPRETER = "firefox";
 	private JTextPane textpane;
 
-	protected LinkSearcher searcher;
-	protected CmdLauncher cmdLauncher;
+	private LinkSearcher searcher;
+	private CmdLauncher cmdLauncher;
 
-	protected String[] linesplits;
+	private String[] linesplits;
 
 	private boolean singleLine;
 
@@ -172,7 +172,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 		return -1;
 	}
 
-	protected String getMarkedLine(int charpos) {
+	private String getMarkedLine(int charpos) {
 		boolean found = false;
 		int i = 0;
 		int startIndex = 0;
@@ -294,15 +294,13 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	// A simple class that searches for a word in
 	// a document and highlights occurrences of that word
 	public class LinkSearcher {
-		protected JTextComponent comp;
-		protected Highlighter.HighlightPainter painter;
-		protected int lastReturnedOffset;
-		protected boolean cS;
+		private JTextComponent comp;
+		private Highlighter.HighlightPainter painter;
+		private boolean cS;
 
 		public LinkSearcher(JTextComponent comp) {
 			this.comp = comp;
 			this.painter = new UnderlineHighlightPainter(Globals.F_EDIT_PANE_UNDERLINE_HIGHLIGHTER_PAINTER);
-			this.lastReturnedOffset = -1;
 		}
 
 		// Set case sensitivity
@@ -370,7 +368,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	// Painter for underlined highlights
 	public class UnderlineHighlightPainter extends LayeredHighlighter.LayerPainter {
 		// The color for the underline
-		protected Color color;
+		private Color color;
 
 		public UnderlineHighlightPainter(Color c) {
 			color = c;
@@ -419,10 +417,10 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 	public class UnderlineHighlighter extends DefaultHighlighter {
 
 		// Shared painter used for default highlighting
-		protected final Highlighter.HighlightPainter sharedPainter = new UnderlineHighlightPainter(null);
+		private final Highlighter.HighlightPainter sharedPainter = new UnderlineHighlightPainter(null);
 
 		// Painter used for this highlighter
-		protected Highlighter.HighlightPainter painter;
+		private Highlighter.HighlightPainter painter;
 
 		public UnderlineHighlighter(Color c) {
 			if (c == null) {

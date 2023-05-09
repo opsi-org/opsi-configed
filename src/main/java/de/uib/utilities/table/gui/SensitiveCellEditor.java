@@ -29,15 +29,15 @@ import de.uib.utilities.table.ListModelProducer;
 public class SensitiveCellEditor extends AbstractCellEditor implements TableCellEditor, MouseListener {
 	private static final Map<Object, SensitiveCellEditor> instances = new HashMap<>();
 
-	protected JTextField field;
+	private JTextField field;
 
-	protected FEditStringList listeditor;
+	private FEditStringList listeditor;
 	private int editingRow = -1;
 	private int editingColumn = -1;
 	protected String myKey;
 
-	protected ListModelProducer<String> modelProducer;
-	protected List<Object> forbiddenValues;
+	private ListModelProducer<String> modelProducer;
+	private List<Object> forbiddenValues;
 
 	private boolean usingListEditor;
 

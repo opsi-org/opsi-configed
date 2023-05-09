@@ -18,11 +18,9 @@ import de.uib.configed.ConfigedMain.LicencesTabStatus;
 public class TabbedPaneX extends JPanel {
 	private JTabbedPane jTabbedPaneMain;
 
-	TabController controller;
+	private TabController controller;
 
-	List<LicencesTabStatus> tabOrder;
-
-	Map<String, Object> globals;
+	private List<LicencesTabStatus> tabOrder;
 
 	public TabbedPaneX(TabController controller) {
 		this.controller = controller;
@@ -30,7 +28,6 @@ public class TabbedPaneX extends JPanel {
 	}
 
 	public void setGlobals(Map<String, Object> globals) {
-		this.globals = globals;
 		setFont((Font) globals.get("defaultFont"));
 	}
 
@@ -82,7 +79,7 @@ public class TabbedPaneX extends JPanel {
 	}
 
 	/**
-	 * adds a tab to the incorporated JTabbedMainprotected
+	 * adds a tab to the incorporated JTabbedMainprivate
 	 */
 	public void addTab(LicencesTabStatus s, Component c) {
 		tabOrder.add(s);

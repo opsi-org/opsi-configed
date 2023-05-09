@@ -14,7 +14,7 @@ import de.uib.configed.Globals;
 
 public class FTextArea extends FGeneralDialog {
 
-	JTextArea jTextArea1 = new JTextArea();
+	private JTextArea jTextArea1 = new JTextArea();
 
 	public FTextArea(JFrame owner, String title, boolean modal) {
 		super(owner, title, modal);
@@ -104,7 +104,6 @@ public class FTextArea extends FGeneralDialog {
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			shiftPressed = false;
-
 		}
 
 		if (!shiftPressed && e.getSource() == jTextArea1 && e.getKeyCode() == KeyEvent.VK_TAB) {

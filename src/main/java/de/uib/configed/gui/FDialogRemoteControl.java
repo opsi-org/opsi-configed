@@ -10,9 +10,9 @@ import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
 public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList {
-	Map<String, String> meanings;
-	Map<String, Boolean> editable;
-	String selText;
+	private Map<String, String> meanings;
+	private Map<String, Boolean> editable;
+	private String selText;
 
 	public FDialogRemoteControl() {
 

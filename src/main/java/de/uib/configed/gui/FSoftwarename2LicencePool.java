@@ -45,7 +45,7 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class FSoftwarename2LicencePool extends FDialogSubTable {
 	public static final String VALUE_NO_LICENCE_POOL = "---";
@@ -63,11 +63,11 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	private TableModelFilterCondition showOnlyNamesWithVariantLicences;
 	private TableModelFilterCondition showOnlyNamesWithoutLicences;
 
-	private TableUpdateCollection updateCollection;
+	private ArrayList<TableEditItem> updateCollection;
 
-	protected int keyCol;
+	private int keyCol;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
 	private ControlPanelAssignToLPools myController;
 
@@ -79,16 +79,16 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		NO_CHANGE, REMOVE_ALL_ASSIGNEMENTS, SET_ALL_TO_GLOBAL_SELECTED_LICENCEPOOL, SET_ALL_TO_SELECTED_LINE
 	}
 
-	JButton buttonRemoveAllAssignments;
-	JLabel labelRemoveAllAssignments;
-	JButton buttonSetAllAssignmentsToGloballySelectedPool;
-	JLabel labelSetAllAssignmentsToGloballySelectedPool;
-	JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
-	JLabel labelSetAllAssignmentsToPoolFromSelectedRow;
+	private JButton buttonRemoveAllAssignments;
+	private JLabel labelRemoveAllAssignments;
+	private JButton buttonSetAllAssignmentsToGloballySelectedPool;
+	private JLabel labelSetAllAssignmentsToGloballySelectedPool;
+	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
+	private JLabel labelSetAllAssignmentsToPoolFromSelectedRow;
 
-	protected String globalLicencePool;
+	private String globalLicencePool;
 
-	boolean foundVariantLicencepools;
+	private boolean foundVariantLicencepools;
 
 	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(
@@ -303,7 +303,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			classNames.add("java.lang.String");
 		}
 
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<>();
 
 		columnNamesSWxLicencepool = new ArrayList<>();
 		columnNamesSWxLicencepool.add(AuditSoftwareXLicencePool.SW_ID);

@@ -14,22 +14,17 @@ package de.uib.configed.groupaction;
 
 import java.util.Set;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
-
 import de.uib.configed.Configed;
 import de.uib.configed.HostsStatusInfo;
 import de.uib.utilities.logging.Logging;
 
 public class ActivatedGroupModel {
-	protected String groupName;
-	protected String groupDescription;
-	protected TreePath path;
-	protected DefaultMutableTreeNode node;
+	private String groupName;
+	private String groupDescription;
 
-	protected Set<String> associatedClients;
+	private Set<String> associatedClients;
 
-	protected boolean active;
+	private boolean active;
 
 	private HostsStatusInfo hostsInfo;
 
@@ -54,11 +49,9 @@ public class ActivatedGroupModel {
 		return active;
 	}
 
-	public void setNode(String name, DefaultMutableTreeNode n, TreePath p) {
+	public void setNode(String name) {
 		Logging.info(this, "setNode " + name);
 		groupName = name;
-		node = n;
-		path = p;
 		hostsInfo.setGroupName(name);
 	}
 
