@@ -436,15 +436,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		searchMenuEntries.put(popupEmptySearchfield, true);
 		buildMenuSearchfield();
 
-		popupSearch.setText("Suchen");
+		popupSearch.setText(Configed.getResourceValue("SearchPane.popup.search"));
 		popupSearch.addActionListener(actionEvent -> searchTheRow(selectMode));
 
 		popupSearchNext.setText(Configed.getResourceValue("SearchPane.popup.searchnext"));
-
 		popupSearchNext.addActionListener(actionEvent -> searchNextRow(selectMode));
 
 		popupNewSearch.setText(Configed.getResourceValue("SearchPane.popup.searchnew"));
-
 		popupNewSearch.addActionListener((ActionEvent actionEvent) -> {
 
 			targetModel.setFiltered(false);

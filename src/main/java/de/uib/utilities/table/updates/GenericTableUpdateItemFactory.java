@@ -45,7 +45,7 @@ public class GenericTableUpdateItemFactory implements TableUpdateItemInterface {
 
 	@Override
 	public TableEditItem produceUpdateItem(List<Object> oldValues, List<Object> rowV) {
-		return new GenericTableUpdateItem(source, keyCol, columnNames, classNames, oldValues, rowV);
+		return new MapBasedTableEditItem(source, keyCol, columnNames, rowV);
 	}
 
 	@Override
