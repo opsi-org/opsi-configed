@@ -25,8 +25,8 @@ public class FPanel extends SecondaryFrame {
 	public static final RunningInstances<JFrame> runningInstances = new RunningInstances<>(JFrame.class,
 			"edit panel dialog");
 
-	JPanel innerPanel;
-	boolean checkLeave;
+	private JPanel innerPanel;
+	private boolean checkLeave;
 	private boolean left;
 
 	public FPanel(String title, JPanel panel, boolean checkLeave) {
@@ -47,17 +47,6 @@ public class FPanel extends SecondaryFrame {
 		super.setVisible(true);
 	}
 
-	protected boolean wantToBeRegisteredWithRunningInstances() {
-		return true;
-	}
-
-	protected void registerWithRunningInstances() {
-		Logging.info(this, "registerWithRunningInstances");
-		if (wantToBeRegisteredWithRunningInstances()) {
-			FPanel.runningInstances.add(this, "");
-		}
-	}
-
 	@Override
 	public void setVisible(boolean b) {
 
@@ -70,7 +59,7 @@ public class FPanel extends SecondaryFrame {
 		super.setVisible(b);
 	}
 
-	protected boolean leaveChecked() {
+	private boolean leaveChecked() {
 		if (!checkLeave) {
 			return true;
 		}
@@ -126,15 +115,9 @@ public class FPanel extends SecondaryFrame {
 
 	@Override
 	protected void processWindowEvent(WindowEvent e) {
-
 		boolean leaving = true;
 
-		if ((e.getID() == WindowEvent.WINDOW_CLOSING)
-		// ||
-		// (e.getID() == WindowEvent.WINDOW_DEACTIVATED)
-		// ||
-		// (e.getID() == WindowEvent.WINDOW_CLOSED)
-		) {
+		if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 			leaving = leaveChecked();
 			if (leaving) {
 

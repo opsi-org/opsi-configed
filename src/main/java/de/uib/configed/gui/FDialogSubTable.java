@@ -90,5 +90,4 @@ public class FDialogSubTable extends FGeneralDialog {
 						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE, 2 * Globals.HGAP_SIZE)));
 
 	}
-
 }

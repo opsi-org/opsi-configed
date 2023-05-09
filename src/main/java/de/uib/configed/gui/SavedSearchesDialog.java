@@ -238,7 +238,7 @@ public class SavedSearchesDialog extends FEditStringList {
 			descMap.put(ele, savedSearches.get(ele).getDescription());
 		}
 
-		setCellRenderer(new ListCellRendererByIndex(valueMap, descMap, null, false, ""));
+		setCellRenderer(new ListCellRendererByIndex(valueMap, descMap, null, ""));
 
 		initSelection();
 	}

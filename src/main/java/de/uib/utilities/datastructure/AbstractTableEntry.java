@@ -11,7 +11,7 @@ public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 	// must be defined in subclasses
 
 	// object values and methods
-	protected Map<String, Object> pureEntry;
+	private Map<String, Object> pureEntry;
 	protected Map<String, String> entryRetrieved;
 
 	protected AbstractTableEntry(Map entry) {
@@ -19,17 +19,11 @@ public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 		entryRetrieved = entry;
 	}
 
-	protected void remap(String key) {
-		// if key are identically named
-
-		remap(key, key);
-	}
-
 	protected void remap(String key, String keyRetrieved) {
 		remap(key, keyRetrieved, true);
 	}
 
-	protected void remap(String key, String keyRetrieved, boolean replaceNull) {
+	private void remap(String key, String keyRetrieved, boolean replaceNull) {
 
 		try {
 			if (entryRetrieved.get(keyRetrieved) != null) {

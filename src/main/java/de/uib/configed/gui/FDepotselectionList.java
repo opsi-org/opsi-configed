@@ -14,7 +14,7 @@ import de.uib.utilities.logging.Logging;
 public class FDepotselectionList extends FGeneralDialog {
 	private DepotsList depotsList;
 
-	protected Window masterWindow;
+	private Window masterWindow;
 
 	public FDepotselectionList(JDialog masterWindow) {
 		super(
@@ -45,17 +45,8 @@ public class FDepotselectionList extends FGeneralDialog {
 		depotsList.setListData(v);
 	}
 
-	public List<String> getListData() {
-		Logging.info(this, "getListData() : " + depotsList.getListData());
-		return depotsList.getListData();
-	}
-
 	public List<String> getSelectedDepots() {
 		return depotsList.getSelectedValuesList();
-	}
-
-	public int[] getSelectedIndices() {
-		return depotsList.getSelectedIndices();
 	}
 
 	@Override
@@ -84,5 +75,4 @@ public class FDepotselectionList extends FGeneralDialog {
 	public void exit() {
 		super.leave();
 	}
-
 }

@@ -15,9 +15,9 @@ public class ConnectionState {
 	public static final ConnectionState ConnectionUndefined = new ConnectionState(UNDEFINED, "not initialized");
 	private static int instancesCount;
 
-	protected int myState = NOT_CONNECTED;
+	private int myState = NOT_CONNECTED;
 
-	protected String message = "";
+	private String message = "";
 
 	/**
 	 * constructor
@@ -70,9 +70,9 @@ public class ConnectionState {
 	@Override
 	public boolean equals(Object state) {
 		if (state instanceof Integer) {
-			return (myState == (Integer) state);
+			return myState == (Integer) state;
 		} else if (state instanceof ConnectionState) {
-			return (myState == ((ConnectionState) state).getState());
+			return myState == ((ConnectionState) state).getState();
 		} else {
 			return false;
 		}
@@ -114,6 +114,7 @@ public class ConnectionState {
 			break;
 		default:
 			state = "UNKNOWN State";
+			break;
 		}
 
 		return state;

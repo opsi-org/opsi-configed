@@ -66,67 +66,66 @@ import de.uib.utilities.swing.PopupMenuTrait;
 public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
 
-	protected static final int FIELD_H = Globals.LINE_HEIGHT;
-	protected static final int SLIDER_H = 35;
-	protected static final int SLIDER_W = 180;
-	protected static final String DEFAULT_TYPE = "(all)";
+	private static final int FIELD_H = Globals.LINE_HEIGHT;
+	private static final int SLIDER_H = 35;
+	private static final int SLIDER_W = 180;
+	private static final String DEFAULT_TYPE = "(all)";
 
 	private static final Integer[] LEVELS = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	private static final List<Integer> levelList = Arrays.asList(LEVELS);
 
-	protected JTextPane jTextPane;
-	protected JScrollPane scrollpane;
-	protected JPanel commandpane;
-	protected JLabel labelSearch;
+	private JTextPane jTextPane;
+	private JScrollPane scrollpane;
+	private JPanel commandpane;
+	private JLabel labelSearch;
 
-	protected JComboBox<String> jComboBoxSearch;
+	private JComboBox<String> jComboBoxSearch;
 
-	protected JButton buttonSearch;
-	protected JCheckBox jCheckBoxCaseSensitive;
-	protected JButton buttonFontPlus;
-	protected JButton buttonFontMinus;
-	protected JLabel labelLevel;
-	protected AdaptingSlider sliderLevel;
-	protected ChangeListener sliderListener;
-	protected JLabel labelDisplayRestriction;
-	protected JComboBox<String> comboType;
-	protected DefaultComboBoxModel<String> comboModelTypes;
+	private JButton buttonSearch;
+	private JCheckBox jCheckBoxCaseSensitive;
+	private JButton buttonFontPlus;
+	private JButton buttonFontMinus;
+	private JLabel labelLevel;
+	private AdaptingSlider sliderLevel;
+	private ChangeListener sliderListener;
+	private JLabel labelDisplayRestriction;
+	private JComboBox<String> comboType;
+	private DefaultComboBoxModel<String> comboModelTypes;
 
-	protected JPanel jTextPanel;
-	protected WordSearcher searcher;
-	protected Highlighter highlighter;
-	protected final StyleContext styleContext;
-	protected final Style[] logLevelStyles;
+	private JPanel jTextPanel;
+	private WordSearcher searcher;
+	private Highlighter highlighter;
+	private final StyleContext styleContext;
+	private final Style[] logLevelStyles;
 
-	protected Integer maxLevel = LEVELS[LEVELS.length - 1];
-	protected Integer minLevel = LEVELS[0];
-	protected Integer maxExistingLevel = minLevel;
-	protected Integer showLevel = minLevel;
+	private Integer minLevel = LEVELS[0];
+	private Integer maxExistingLevel = minLevel;
+	private Integer showLevel = minLevel;
 
-	protected boolean showTypeRestricted;
-	protected List<String> typesList;
-	protected int typesListMaxShowCount = 25;
+	private boolean showTypeRestricted;
+	private List<String> typesList;
+	private int typesListMaxShowCount = 25;
 
-	protected int[] lineTypes;
+	private int[] lineTypes;
 
-	TreeMap<Integer, Integer> docLinestartPosition2lineCount;
-	TreeMap<Integer, Integer> lineCount2docLinestartPosition;
+	private TreeMap<Integer, Integer> docLinestartPosition2lineCount;
+	private TreeMap<Integer, Integer> lineCount2docLinestartPosition;
 
-	int selTypeIndex = -1;
+	private int selTypeIndex = -1;
 
 	protected String title;
-	protected String info;
+	private String info;
 
-	protected Integer displayFontSize = 11;
-	protected Font monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+	private Integer displayFontSize = 11;
+	private Font monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
 
-	protected ImmutableDefaultStyledDocument document;
+	private ImmutableDefaultStyledDocument document;
 
 	protected String[] lines;
-	protected int[] lineLevels;
-	protected Style[] lineStyles;
+	private int[] lineLevels;
+	private Style[] lineStyles;
 
-	protected PopupMenuTrait popupMenu;
+	private PopupMenuTrait popupMenu;
 
 	public LogPane(String defaultText) {
 		this(defaultText, true);
@@ -442,7 +441,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
-	protected static class AdaptingSlider extends JSlider implements ChangeListener {
+	private static class AdaptingSlider extends JSlider implements ChangeListener {
 
 		int min;
 		int max;
@@ -494,7 +493,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	// We create this class because the JTextPane should be editable only to show the caret position,
 	// but then you should not be able to change anything in the Text...
-	protected static class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
+	private static class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
 		ImmutableDefaultStyledDocument() {
 			super();
 		}
@@ -540,7 +539,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		Logging.debug(this, "save all as zip action");
 	}
 
-	protected void floatExternal() {
+	private void floatExternal() {
 		if (document == null) {
 			return;
 		}
@@ -548,11 +547,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		// probably we already are in a floating instance
 
 		LogPane copyOfMe;
-		de.uib.configed.gui.GeneralFrame externalView;
+		GeneralFrame externalView;
 
 		copyOfMe = new LogPane("", false);
 
-		externalView = new de.uib.configed.gui.GeneralFrame(null, title, false);
+		externalView = new GeneralFrame(null, title, false);
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
@@ -567,7 +566,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		externalView.setVisible(true);
 	}
 
-	JTextComponent getTextComponent() {
+	private JTextComponent getTextComponent() {
 		return jTextPane;
 	}
 
@@ -819,7 +818,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
-	protected Style getStyleByLevelNo(int lev) {
+	private Style getStyleByLevelNo(int lev) {
 		Style result = null;
 
 		if (lev < logLevelStyles.length) {
@@ -831,7 +830,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		return result;
 	}
 
-	protected void parse() {
+	private void parse() {
 
 		char levC = '0';
 		int lev = 0;
@@ -850,7 +849,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		int countLines = lines.length;
 		for (int i = 0; i < countLines; i++) {
 			// keep last levC if not newly set
-			if ((lines[i].length() >= 3) && (lines[i].charAt(0) == '[') && (lines[i].charAt(2) == ']')) {
+			if (lines[i].length() >= 3 && lines[i].charAt(0) == '[' && lines[i].charAt(2) == ']') {
 				levC = lines[i].charAt(1);
 			}
 			if (Character.isDigit(levC)) {
@@ -1019,14 +1018,14 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				search();
 			}
 		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
-			if ((e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER)) {
+			if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
 				search();
-			} else if (e.getSource() == jTextPane && (e.getKeyChar() == '+')
-					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
+			} else if (e.getSource() == jTextPane && e.getKeyChar() == '+'
+					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Plus");
 				setFontSize("+");
-			} else if (e.getSource() == jTextPane && (e.getKeyChar() == '-')
-					&& ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0)) {
+			} else if (e.getSource() == jTextPane && e.getKeyChar() == '-'
+					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Minus");
 				setFontSize("-");
 			}
@@ -1076,10 +1075,10 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	// A simple class that searches for a word in
 	// a document and highlights occurrences of that word
 	public class WordSearcher {
-		protected JTextComponent comp;
-		protected Highlighter.HighlightPainter painter;
-		protected int lastReturnedOffset;
-		protected boolean cS;
+		private JTextComponent comp;
+		private Highlighter.HighlightPainter painter;
+		private int lastReturnedOffset;
+		private boolean cS;
 
 		public WordSearcher(JTextComponent comp) {
 			this.comp = comp;
@@ -1147,7 +1146,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				if (firstOffset == -1) {
 					firstOffset = lastIndex;
 				}
-				if ((returnOffset == lastReturnedOffset) && (lastIndex > lastReturnedOffset)) {
+				if (returnOffset == lastReturnedOffset && lastIndex > lastReturnedOffset) {
 					returnOffset = lastIndex;
 				}
 				lastIndex = endIndex;
@@ -1165,7 +1164,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public class UnderlineHighlightPainter extends LayeredHighlighter.LayerPainter {
 
 		// The color for the underline
-		protected Color color;
+		private Color color;
 
 		public UnderlineHighlightPainter(Color c) {
 			color = c;
@@ -1193,7 +1192,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				try {
 					Shape shape = view.modelToView(offs0, Position.Bias.Forward, offs1, Position.Bias.Backward, bounds);
 
-					if ((shape instanceof Rectangle)) {
+					if (shape instanceof Rectangle) {
 						alloc = (Rectangle) shape;
 					} else {
 						alloc = shape.getBounds();
@@ -1216,10 +1215,10 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public class UnderlineHighlighter extends DefaultHighlighter {
 
 		// Shared painter used for default highlighting
-		protected final Highlighter.HighlightPainter sharedPainter = new UnderlineHighlightPainter(null);
+		private final Highlighter.HighlightPainter sharedPainter = new UnderlineHighlightPainter(null);
 
 		// Painter used for this highlighter
-		protected Highlighter.HighlightPainter painter;
+		private Highlighter.HighlightPainter painter;
 
 		public UnderlineHighlighter(Color c) {
 			if (c == null) {

@@ -12,7 +12,7 @@ import de.uib.utilities.logging.Logging;
 //a very rough class for simple command interpreting
 public class Interpreter {
 
-	protected Map<String, String> specialValues;
+	private Map<String, String> specialValues;
 
 	private String command;
 

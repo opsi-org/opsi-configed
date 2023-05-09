@@ -39,7 +39,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 	private JLabel depotLabel;
 	private DependenciesTreePanel dependenciesTreePanel;
 
-	protected JTable dependenciesTable;
+	private JTable dependenciesTable;
 
 	private DependenciesModel dependenciesModel;
 

@@ -20,7 +20,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.utilities.thread.WaitCursor;
 
-public class Logging implements LogEventSubject {
+public final class Logging {
 
 	public static String logDirectoryName;
 	private static String logFilenameInUse;
@@ -73,9 +73,13 @@ public class Logging implements LogEventSubject {
 
 	private static FShowList fErrors;
 
-	protected static List<LogEventObserver> logEventObservers = new ArrayList<>();
+	private static List<LogEventObserver> logEventObservers = new ArrayList<>();
 
-	public static final String levelText(int level) {
+	// private constructor to hide the implicit public one
+	private Logging() {
+	}
+
+	public static String levelText(int level) {
 		return LEVEL_TO_NAME.get(level);
 	}
 
@@ -129,7 +133,7 @@ public class Logging implements LogEventSubject {
 		}
 	}
 
-	private static final synchronized void initLogFile() {
+	private static synchronized void initLogFile() {
 		// Try to initialize only once!
 		logFileInitialized = true;
 		String logFilename = "";
@@ -191,7 +195,7 @@ public class Logging implements LogEventSubject {
 		}
 	}
 
-	public static final synchronized void init() {
+	public static synchronized void init() {
 		initLogFile();
 	}
 
@@ -214,7 +218,7 @@ public class Logging implements LogEventSubject {
 		errorList.add(String.format("[%s] %s", time, mesg));
 
 		for (int i = 0; i < logEventObservers.size(); i++) {
-			logEventObservers.get(i).logEventOccurred(new LogEvent(null, "", -1, true));
+			logEventObservers.get(i).logEventOccurred();
 		}
 	}
 
@@ -441,15 +445,7 @@ public class Logging implements LogEventSubject {
 		return result.toString();
 	}
 
-	// used instead of interface LogEventSubject
 	public static void registLogEventObserver(LogEventObserver o) {
 		logEventObservers.add(o);
 	}
-
-	// interface LogEventSubject
-	@Override
-	public void registerLogEventObserver(LogEventObserver o) {
-		// not implemented since static method is needed
-	}
-
 }

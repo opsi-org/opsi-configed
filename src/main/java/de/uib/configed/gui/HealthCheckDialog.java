@@ -310,6 +310,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 			break;
 		default:
 			Logging.notice(this, "unsupported token: " + token);
+			break;
 		}
 
 		return style;

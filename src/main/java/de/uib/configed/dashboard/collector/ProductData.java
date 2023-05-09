@@ -149,7 +149,7 @@ public final class ProductData {
 
 			List<String> clientsMap = persist.getHostInfoCollections().getMapOfAllPCInfoMaps().values().stream()
 					.filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
-			String[] clientIds = clientsMap.toArray(new String[clientsMap.size()]);
+			String[] clientIds = clientsMap.toArray(new String[0]);
 			Map<String, List<Map<String, String>>> productsStatesAndActions = persist
 					.getMapOfProductStatesAndActions(clientIds);
 

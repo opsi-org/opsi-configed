@@ -45,8 +45,8 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 	private JButton jButtonExec;
 	private String filename;
 	private ConfigedMain main;
-	boolean isAdvancedOpen = true;
-	SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
+	private boolean isAdvancedOpen = true;
+	private SSHCompletionComboButton autocompletion = new SSHCompletionComboButton();
 
 	public SSHMakeProductFileDialog(ConfigedMain m) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.makeproductfile.title"), false);
@@ -468,8 +468,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	@Override
 	public void doAction2() {
-		if ((jLabelProductVersionControlFile.getText() == null)
-				|| (jLabelProductVersionControlFile.getText().isEmpty())) {
+		if (jLabelProductVersionControlFile.getText() == null || jLabelProductVersionControlFile.getText().isEmpty()) {
 			Logging.warning(this, "Please select a valid opsi product directory.");
 			return;
 		}

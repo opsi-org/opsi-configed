@@ -105,11 +105,11 @@ public final class SSHCommandFactory {
 	/** SSHCommandFactory instance **/
 	private static SSHCommandFactory instance;
 
-	Set<String> allowedHosts = new HashSet<>();
+	private Set<String> allowedHosts = new HashSet<>();
 
-	SSHConnectExec connection;
+	private SSHConnectExec connection;
 
-	String connectionState = NOT_CONNECTED;
+	private String connectionState = NOT_CONNECTED;
 
 	/**
 	 * List<Map<String,Object>> list elements are commands with key value pairs
@@ -126,10 +126,9 @@ public final class SSHCommandFactory {
 	private ConfigedMain main;
 	private MainFrame mainFrame;
 
-	List<String> createdProducts = new ArrayList<>();
+	private List<String> createdProducts = new ArrayList<>();
 
-	SSHCommandParameterMethods pmethodHandler;
-	SSHConnectionInfo connectionInfo;
+	private SSHCommandParameterMethods pmethodHandler;
 
 	/**
 	 * Factory Instance for SSH Command
@@ -142,7 +141,6 @@ public final class SSHCommandFactory {
 		instance = this;
 		addAditionalParamCommands();
 		connection = new SSHConnectExec(this.main);
-		connectionInfo = SSHConnectionInfo.getInstance();
 		pmethodHandler = SSHCommandParameterMethods.getInstance(this.main);
 	}
 
@@ -277,10 +275,10 @@ public final class SSHCommandFactory {
 		listKnownMenus.add(PARENT_DEFAULT_FOR_OWN_COMMANDS);
 
 		for (Map<String, Object> map : commandlist) {
-			SSHCommandTemplate com = buildSSHCommand(((String) map.get(COMMAND_MAP_ID)),
-					((String) map.get(COMMAND_MAP_PARENT_MENU_TEXT)), ((String) map.get(COMMAND_MAP_MENU_TEXT)),
-					((String) map.get(COMMAND_MAP_TOOLTIP_TEXT)), ((int) map.get(COMMAND_MAP_POSITION)),
-					((boolean) map.get(COMMAND_MAP_NEED_SUDO)), null);
+			SSHCommandTemplate com = buildSSHCommand((String) map.get(COMMAND_MAP_ID),
+					(String) map.get(COMMAND_MAP_PARENT_MENU_TEXT), (String) map.get(COMMAND_MAP_MENU_TEXT),
+					(String) map.get(COMMAND_MAP_TOOLTIP_TEXT), (int) map.get(COMMAND_MAP_POSITION),
+					(boolean) map.get(COMMAND_MAP_NEED_SUDO), null);
 			if (map.get(COMMAND_MAP_COMMANDS) != null) {
 				// Achtung Reihenfolge könnte sich ändern !" toList = ArrayList! JsonArray muss
 				// nicht sortiert sein!"
@@ -358,7 +356,7 @@ public final class SSHCommandFactory {
 
 		for (SSHCommandTemplate com : sshCommandList) {
 			String parent = com.getParentMenuText();
-			if ((parent == null) || (parent.trim().isEmpty())) {
+			if (parent == null || parent.trim().isEmpty()) {
 				parent = PARENT_DEFAULT_FOR_OWN_COMMANDS;
 
 			}

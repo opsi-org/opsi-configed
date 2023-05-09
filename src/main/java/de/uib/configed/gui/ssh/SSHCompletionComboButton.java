@@ -113,7 +113,7 @@ public class SSHCompletionComboButton {
 		// Is element in defaultValues?
 		if (defvalues != null) {
 			for (String elem : defvalues) {
-				if ((elem != null) && (!elem.trim().isEmpty())) {
+				if (elem != null && !elem.trim().isEmpty()) {
 					defaultvalues.add(elem);
 				}
 			}
@@ -152,7 +152,7 @@ public class SSHCompletionComboButton {
 			combobox.setSelectedItem(comboboxDefaultPath);
 		}
 
-		if (searchSpecificFiles != null && (!searchSpecificFiles.isEmpty())) {
+		if (searchSpecificFiles != null && !searchSpecificFiles.isEmpty()) {
 			combobox.addActionListener((ActionEvent actionEvent) -> {
 				if (combobox.getSelectedItem() != null
 						&& ((String) combobox.getSelectedItem()).endsWith(searchSpecificFiles)) {
@@ -178,7 +178,7 @@ public class SSHCompletionComboButton {
 		enableComponents(false);
 
 		String strcbtext = combobox.getEditor().getItem().toString();
-		if ((strcbtext != null) && (!strcbtext.isEmpty())
+		if (strcbtext != null && !strcbtext.isEmpty()
 				&& !strcbtext.substring(strcbtext.length() - 1).equals(ROOT_DIRECTORY)) {
 			combobox.removeItem(strcbtext);
 			Logging.info(this, "doButtonAction combo.removeItem(" + strcbtext + ")");
@@ -188,7 +188,7 @@ public class SSHCompletionComboButton {
 			combobox.setSelectedItem(strcbtext);
 		}
 
-		if (searchSpecificFiles != null && (!searchSpecificFiles.isEmpty())) {
+		if (searchSpecificFiles != null && !searchSpecificFiles.isEmpty()) {
 			getDirectoriesAndFilesIn(strcbtext);
 		} else {
 			getDirectoriesIn(strcbtext);
@@ -284,7 +284,7 @@ public class SSHCompletionComboButton {
 						////// FUNKTIONIERT NUR WENN BERECHTIGUNGEN RICHTIG SIND.....
 						// Bricht nach nächster Bedingung ab und schreibt keinen result ---> try-catch
 						String tempResult = ssh.exec(getFiles, false);
-						if ((tempResult != null) && !"null".equals(tempResult.trim())) {
+						if (tempResult != null && !"null".equals(tempResult.trim())) {
 							result += tempResult;
 						}
 
@@ -339,7 +339,7 @@ public class SSHCompletionComboButton {
 	}
 
 	public class ItemElementListener extends DefaultListCellRenderer {
-		protected SSHCompletionComboButton autocompletion;
+		private SSHCompletionComboButton autocompletion;
 
 		public ItemElementListener(SSHCompletionComboButton autocompletion) {
 			super();
@@ -370,7 +370,7 @@ public class SSHCompletionComboButton {
 				Logging.debug(this, "(1)  basicPath " + basicPath + " getText " + getText);
 
 				// könnte eigtl raus. funktiniert sonst aber nicht...
-				if ((!basicPath.isEmpty()) && (!getText.isEmpty())) {
+				if (!basicPath.isEmpty() && !getText.isEmpty()) {
 					if (basicPath.contains("//")) {
 						basicPath = basicPath.replace("//", "/");
 					}
@@ -384,8 +384,8 @@ public class SSHCompletionComboButton {
 						CellAlternatingColorizer.colorize(jc, isSelected, true, true);
 					}
 
-					if ((getText.startsWith(basicPath)) && (!getText.equals(basicPath))
-							&& (!basicPath.equals(ROOT_DIRECTORY))) {
+					if (getText.startsWith(basicPath) && !getText.equals(basicPath)
+							&& !basicPath.equals(ROOT_DIRECTORY)) {
 						((JLabel) jc).setText(getText.replace(basicPath, ""));
 					}
 					Logging.debug(this, "(2) basicPath " + basicPath + " getText " + getText);

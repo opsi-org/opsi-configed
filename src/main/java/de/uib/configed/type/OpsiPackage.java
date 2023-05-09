@@ -49,13 +49,13 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	public static final int TYPE_NETBOOT = 1;
 
 	protected String productId;
-	protected int productType;
-	protected String versionInfo;
-	protected String productVersion;
-	protected String packageVersion;
+	private int productType;
+	private String versionInfo;
+	private String productVersion;
+	private String packageVersion;
 
-	protected String representation;
-	protected String lockedText;
+	private String representation;
+	private String lockedText;
 
 	public OpsiPackage(String productId, String productVersion, String packageVersion, String productType) {
 		this(productId, productVersion, packageVersion, productType, false);
@@ -134,11 +134,11 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 	}
 
 	public boolean isLocalbootProduct() {
-		return (productType == TYPE_LOCALBOOT);
+		return productType == TYPE_LOCALBOOT;
 	}
 
 	public boolean isNetbootProduct() {
-		return (productType == TYPE_NETBOOT);
+		return productType == TYPE_NETBOOT;
 	}
 
 	public static String giveProductType(int type) {
@@ -154,7 +154,7 @@ public class OpsiPackage implements Comparable<OpsiPackage> {
 		}
 	}
 
-	protected String buildRepresentation() {
+	private String buildRepresentation() {
 		return "{" + DB_KEY_PRODUCT_ID + ":\"" + productId + "\";" + SERVICE_KEY_PRODUCT_TYPE + ":\""
 				+ giveProductType(productType) + "\";" + VERSION_INFO + ":\"" + versionInfo + "\"}";
 	}

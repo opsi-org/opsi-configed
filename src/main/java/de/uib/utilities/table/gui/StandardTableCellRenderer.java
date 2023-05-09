@@ -17,9 +17,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	protected static final int FILL_LENGTH = 20;
 
 	protected String tooltipPrefix;
-	protected String separator = ": ";
-
-	protected int currentRow = -1;
+	private String separator = ": ";
 
 	public StandardTableCellRenderer() {
 		super();
@@ -28,10 +26,6 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	public StandardTableCellRenderer(String tooltipPrefix) {
 		this();
 		this.tooltipPrefix = tooltipPrefix;
-	}
-
-	public void setCurrentRow(int rowNumber) {
-		currentRow = rowNumber;
 	}
 
 	@Override
@@ -44,7 +38,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 		}
 
 		JComponent jc = (JComponent) c;
-		CellAlternatingColorizer.colorize(jc, isSelected, (row % 2 == 0), (column % 2 == 0), true);
+		CellAlternatingColorizer.colorize(jc, isSelected, row % 2 == 0, column % 2 == 0, true);
 
 		if (jc instanceof JLabel) {
 			String tooltipText = null;

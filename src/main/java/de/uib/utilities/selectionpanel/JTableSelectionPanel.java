@@ -65,27 +65,22 @@ public class JTableSelectionPanel extends JPanel
 
 	private static final int MIN_HEIGHT = 200;
 
-	JScrollPane scrollpane;
+	private JScrollPane scrollpane;
 
 	// we put a JTable on a standard JScrollPane
-	JTable table;
+	private JTable table;
 
-	DefaultListSelectionModel selectionmodel;
-	ConfigedMain main;
-	List<RowSorter.SortKey> primaryOrderingKeys;
+	private DefaultListSelectionModel selectionmodel;
+	private ConfigedMain main;
+	private List<RowSorter.SortKey> primaryOrderingKeys;
 
-	JLabel labelSearch;
-	CheckedLabel checkmarkSearch;
-	CheckedLabel checkmarkSearchProgressive;
+	private CheckedLabel checkmarkSearch;
 
-	JButton buttonMarkAll;
-	JButton buttonInvertSelection;
+	private JTextField fieldSearch;
+	private JComboBox<String> comboSearch;
+	private JComboBoxToolTip comboSearchMode;
 
-	JTextField fieldSearch;
-	JComboBox<String> comboSearch;
-	JComboBoxToolTip comboSearchMode;
-
-	TablesearchPane.SearchMode searchMode;
+	private TablesearchPane.SearchMode searchMode;
 
 	private int foundrow = -1;
 
@@ -155,7 +150,7 @@ public class JTableSelectionPanel extends JPanel
 
 		JPanel topPane = new JPanel();
 
-		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
+		JLabel labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
 		labelSearch.setFont(Globals.defaultFont);
 
 		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
@@ -213,9 +208,9 @@ public class JTableSelectionPanel extends JPanel
 
 		Icon markAllIcon = Globals.createImageIcon("images/selection-all.png", "");
 		Icon invertSelectionIcon = Globals.createImageIcon("images/selection-invert.png", "");
-		buttonMarkAll = new JButton("", markAllIcon);
+		JButton buttonMarkAll = new JButton("", markAllIcon);
 		buttonMarkAll.setToolTipText(Configed.getResourceValue("SearchPane.popup.markall"));
-		buttonInvertSelection = new JButton("", invertSelectionIcon);
+		JButton buttonInvertSelection = new JButton("", invertSelectionIcon);
 		buttonInvertSelection.setToolTipText(Configed.getResourceValue("SearchPane.invertselection"));
 
 		buttonMarkAll.addActionListener((ActionEvent e) -> markAll());
@@ -377,7 +372,7 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	public boolean isSelectionEmpty() {
-		return (table.getSelectedRowCount() == 0);
+		return table.getSelectedRowCount() == 0;
 	}
 
 	public int getSelectedRow() {
@@ -680,7 +675,7 @@ public class JTableSelectionPanel extends JPanel
 		return result;
 	}
 
-	protected int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices) {
+	private int findViewRowFromValue(int startviewrow, Object value, Set<Integer> colIndices) {
 		return findViewRowFromValue(startviewrow, value, colIndices, searchMode);
 	}
 
@@ -695,7 +690,7 @@ public class JTableSelectionPanel extends JPanel
 		return result;
 	}
 
-	protected int findViewRowFromValue(final int startviewrow, Object value, Set<Integer> colIndices,
+	private int findViewRowFromValue(final int startviewrow, Object value, Set<Integer> colIndices,
 			TablesearchPane.SearchMode searchMode) {
 
 		Logging.info(this, "findViewRowFromValue(int startviewrow, Object value, Set colIndices, searchMode: "
@@ -713,8 +708,8 @@ public class JTableSelectionPanel extends JPanel
 
 		// describe search parameters
 
-		boolean fulltext = (searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES
-				|| searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING);
+		boolean fulltext = searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_WITH_ALTERNATIVES
+				|| searchMode == TablesearchPane.SearchMode.FULL_TEXT_SEARCHING_ONE_STRING;
 		// with another data configuration, it could be combined with regex
 
 		String val = value.toString();
@@ -753,7 +748,7 @@ public class JTableSelectionPanel extends JPanel
 						table.convertColumnIndexToModel(j));
 
 				if (compareValue == null) {
-					found = (val == null || val.isEmpty());
+					found = val == null || val.isEmpty();
 				} else {
 					String compareVal = ("" + compareValue).toLowerCase();
 
@@ -766,7 +761,7 @@ public class JTableSelectionPanel extends JPanel
 					case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES:
 						for (String word : alternativeWords) {
 
-							found = (compareVal.indexOf(word) >= 0);
+							found = compareVal.indexOf(word) >= 0;
 							if (found) {
 								break;
 							}
@@ -774,7 +769,7 @@ public class JTableSelectionPanel extends JPanel
 						break;
 
 					case FULL_TEXT_SEARCHING_ONE_STRING:
-						found = (compareVal.indexOf(valLower) >= 0);
+						found = compareVal.indexOf(valLower) >= 0;
 						break;
 
 					default:

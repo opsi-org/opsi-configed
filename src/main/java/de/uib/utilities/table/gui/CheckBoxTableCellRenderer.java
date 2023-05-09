@@ -60,5 +60,4 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 		setSelected(Boolean.TRUE.equals(value));
 		return this;
 	}
-
 }

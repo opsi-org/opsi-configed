@@ -47,24 +47,13 @@ public class ControllerHWinfoMultiClients {
 	public PanelGenEditTable panel;
 	private GenTableModel model;
 
-	JButton buttonConfigureColumns;
+	private ConfigedMain main;
+	private AbstractPersistenceController persist;
+	private TableModelFilter tableModelFilter;
 
-	JButton buttonReload;
-	JButton buttonCopySelection;
+	private SecondaryFrame fTable;
 
-	List<String> columnNames;
-	List<String> classNames;
-
-	TreeSet<Object> theFilterSet;
-
-	String[] hosts;
-	ConfigedMain main;
-	protected AbstractPersistenceController persist;
-	TableModelFilter tableModelFilter;
-
-	SecondaryFrame fTable;
-
-	TableModelFilterCondition filterConditionHwForSelectedHosts = new TableModelFilterCondition() {
+	private TableModelFilterCondition filterConditionHwForSelectedHosts = new TableModelFilterCondition() {
 		private Set<Object> filter;
 
 		@Override
@@ -112,7 +101,7 @@ public class ControllerHWinfoMultiClients {
 	}
 
 	public void setFilter() {
-		theFilterSet = new TreeSet<>(main.getSelectedClientsInTable());
+		Set<Object> theFilterSet = new TreeSet<>(main.getSelectedClientsInTable());
 		filterConditionHwForSelectedHosts.setFilter(theFilterSet);
 		model.invalidate();
 		model.reset();
@@ -126,7 +115,7 @@ public class ControllerHWinfoMultiClients {
 
 	}
 
-	protected void initPanel() {
+	private void initPanel() {
 		panel = new PanelGenEditTable("", 0, false, 0, false, PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF, true) {
 			@Override
 			public void reload() {
@@ -157,12 +146,12 @@ public class ControllerHWinfoMultiClients {
 
 	}
 
-	protected void initModel() {
+	private void initModel() {
 
-		columnNames = persist.getClient2HwRowsColumnNames();
-		classNames = persist.getClient2HwRowsJavaclassNames();
+		List<String> columnNames = persist.getClient2HwRowsColumnNames();
+		List<String> classNames = persist.getClient2HwRowsJavaclassNames();
 		Logging.info(this, "initmodel: columns " + columnNames);
-		hosts = new String[0];
+		String[] hosts = new String[0];
 
 		// GenericTableUpdateItemFactory updateItemFactory = new
 
@@ -186,7 +175,7 @@ public class ControllerHWinfoMultiClients {
 				// table model listener
 				panel,
 
-				// TableUpdateCollection updates
+				// ArrayList<TableEditItem> updates
 				// updateCollection
 				null);
 
@@ -211,15 +200,15 @@ public class ControllerHWinfoMultiClients {
 		panel.reset();
 	}
 
-	protected void buildSurrounding() {
+	private void buildSurrounding() {
 
 		// Icon iconConfigure =
 
-		buttonConfigureColumns = new JButton("", Globals.createImageIcon("images/configure16.png", ""));
+		JButton buttonConfigureColumns = new JButton("", Globals.createImageIcon("images/configure16.png", ""));
 		buttonConfigureColumns.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.configure"));
 		buttonConfigureColumns.setPreferredSize(Globals.smallButtonDimension);
 
-		buttonReload = new JButton("", Globals.createImageIcon("images/reload16.png", ""));
+		JButton buttonReload = new JButton("", Globals.createImageIcon("images/reload16.png", ""));
 		buttonReload.setToolTipText(Configed.getResourceValue("PanelHWInfo.overview.loadNewConfiguration"));
 
 		buttonReload.setPreferredSize(Globals.smallButtonDimension);
@@ -233,7 +222,7 @@ public class ControllerHWinfoMultiClients {
 			Logging.info(this, "action performed " + actionEvent);
 
 			ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration(
-					main, persist);
+					persist);
 			if (fTable == null || ((FPanel) fTable).isLeft()) {
 				fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel,
 						true);
@@ -247,7 +236,7 @@ public class ControllerHWinfoMultiClients {
 			fTable.setVisible(true);
 		});
 
-		buttonCopySelection = new JButton("", Globals.createImageIcon("images/memorize_selection.png", ""));
+		JButton buttonCopySelection = new JButton("", Globals.createImageIcon("images/memorize_selection.png", ""));
 		buttonCopySelection.setPreferredSize(Globals.smallButtonDimension);
 		buttonCopySelection.setEnabled(false);
 

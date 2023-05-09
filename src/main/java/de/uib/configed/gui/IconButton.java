@@ -19,48 +19,48 @@ import de.uib.utilities.thread.WaitingCycle;
  */
 public class IconButton extends JButton {
 	/** The status if button is active */
-	protected boolean activated;
+	private boolean activated;
 	/** The status if button is/should be enabled */
-	protected boolean enabled;
+	private boolean enabled;
 
 	/** A description used for tooltip if button is active */
-	protected String tooltipActive;
+	private String tooltipActive;
 
 	/** A description used for tooltip if button is inactive */
-	protected String tooltipInactive;
+	private String tooltipInactive;
 
 	/** The url for the image displayed if active */
-	protected String imageURLActive;
+	private String imageURLActive;
 
 	/**
 	 * The url for the image displayed if the cursor is hovering over the button
 	 */
-	protected String imageURLOver;
+	private String imageURLOver;
 
 	/** The url for the disabled image */
-	protected String imageURLDisabled;
+	private String imageURLDisabled;
 
 	/**
 	 * Default image (if change between default image and special image is used)
 	 */
-	protected Icon defaultIcon;
+	private Icon defaultIcon;
 
 	/** Running action icon */
-	protected Icon runningActionIcon;
+	private Icon runningActionIcon;
 
 	/** A description used for tooltips anyway */
-	protected String description;
+	private String description;
 
 	/** the sequence of images for animation */
-	protected ImageIcon[] imagesForAnimation;
+	private ImageIcon[] imagesForAnimation;
 
 	/**
 	 * we make a composition to a WaitingCycle for implementing a waiting state
 	 */
-	protected WaitingCycle waitingCycle;
+	private WaitingCycle waitingCycle;
 
 	/** timeout for the waitingCycle **/
-	protected int maxWaitSecs;
+	private int maxWaitSecs;
 
 	/**
 	 * Just calling super constructor

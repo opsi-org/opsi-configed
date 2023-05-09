@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JTextField;
 
 public class JTextFieldObserved extends JTextField implements KeyListener {
-	protected String startText = "";
+	private String startText = "";
 
 	public JTextFieldObserved() {
 		super("");

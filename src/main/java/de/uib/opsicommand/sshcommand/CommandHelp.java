@@ -11,7 +11,7 @@ public class CommandHelp /* extends */ implements SSHCommand {
 
 	private boolean needParameter;
 	private SSHCommand basicCommand;
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 
 	private boolean isMultiCommand;
 
@@ -38,7 +38,7 @@ public class CommandHelp /* extends */ implements SSHCommand {
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
+		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().trim().isEmpty()) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();

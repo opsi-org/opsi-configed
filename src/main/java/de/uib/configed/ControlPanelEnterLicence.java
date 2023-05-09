@@ -20,18 +20,18 @@ import de.uib.utilities.table.gui.CellEditor4TableText;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.thread.WaitCursor;
 
 // tab new licence
 public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
-	PanelEnterLicence thePanel;
+	private PanelEnterLicence thePanel;
 
-	GenTableModel modelLicencekeys;
-	GenTableModel modelLicencepools;
-	GenTableModel modelLicencecontracts;
+	private GenTableModel modelLicencekeys;
+	private GenTableModel modelLicencepools;
+	private GenTableModel modelLicencecontracts;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 	private ConfigedMain configedMain;
 
 	public ControlPanelEnterLicence(AbstractPersistenceController persist, ConfigedMain configedMain) {
@@ -73,7 +73,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 
 	@Override
 	public final void init() {
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 
 		List<String> columnNames;
 		List<String> classNames;

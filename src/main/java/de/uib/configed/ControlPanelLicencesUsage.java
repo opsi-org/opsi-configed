@@ -20,18 +20,16 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
-	PanelLicencesUsage thePanel;
+	private PanelLicencesUsage thePanel;
 
-	GenTableModel modelLicencesUsage;
-	GenTableModel modelLicencekeys;
-	GenTableModel modelWindowsSoftwareIds;
-	GenTableModel modelLicencepools;
+	private GenTableModel modelLicencesUsage;
+	private GenTableModel modelLicencepools;
 
-	AbstractPersistenceController persist;
-	ConfigedMain mainController;
+	private AbstractPersistenceController persist;
+	private ConfigedMain mainController;
 
 	public ControlPanelLicencesUsage(AbstractPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelLicencesUsage(this);
@@ -87,7 +85,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 
 	@Override
 	public final void init() {
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 
 		List<String> columnNames;
 		List<String> classNames;

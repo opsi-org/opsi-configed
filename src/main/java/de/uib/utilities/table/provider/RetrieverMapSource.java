@@ -14,7 +14,7 @@ import java.util.List;
 public class RetrieverMapSource extends MapSource {
 	// the map is not given via a parameter but by a pointer to a function
 
-	protected MapRetriever retriever;
+	private MapRetriever retriever;
 
 	public RetrieverMapSource(List<String> columnNames, List<String> classNames, MapRetriever retriever,
 			boolean rowCounting) {

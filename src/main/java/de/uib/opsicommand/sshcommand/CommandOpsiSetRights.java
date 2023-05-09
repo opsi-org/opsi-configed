@@ -18,12 +18,12 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 
 	private String command = BASE_NAME;
 
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 	private boolean needSudo = true;
 	private boolean needParameter = true;
 	private boolean isMultiCommand = true;
-	private LinkedList<SSHCommand> sshCommand = new LinkedList<>();
-	private LinkedList<SSHCommand> sshCommandOriginal = new LinkedList<>();
+	private List<SSHCommand> sshCommand = new LinkedList<>();
+	private List<SSHCommand> sshCommandOriginal = new LinkedList<>();
 	private String mainName = "";
 	private String dir;
 	private String myTmpCommand;
@@ -88,7 +88,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
+		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().trim().isEmpty()) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -118,7 +118,7 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 		LinkedList<String> commandsStringList = new LinkedList<>();
 		for (SSHCommand c : sshCommand) {
 			String comstr = c.getCommandRaw();
-			if (!((comstr == null) || (comstr.trim().isEmpty()))) {
+			if (!(comstr == null || comstr.trim().isEmpty())) {
 				commandsStringList.add(c.getCommandRaw());
 			}
 		}
@@ -218,11 +218,6 @@ public class CommandOpsiSetRights extends SSHCommandTemplate implements SSHComma
 		}
 		Logging.debug(this, "counterString placeholders count  " + times);
 		return times;
-	}
-
-	@Override
-	public void startParameterGui() {
-		dialog = new SSHOpsiSetRightsParameterDialog(this);
 	}
 
 	@Override

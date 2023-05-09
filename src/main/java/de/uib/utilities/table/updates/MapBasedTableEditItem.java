@@ -13,24 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 public class MapBasedTableEditItem extends TableEditItem {
-	List<String> columnNames;
-	List<String> classNames;
-	List<Object> oldValues;
-	List<Object> rowV;
+	private List<String> columnNames;
+	private List<Object> rowV;
 
-	public MapBasedTableEditItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
-			List<Object> oldValues, List<Object> rowV) {
+	public MapBasedTableEditItem(Object source, int keyCol, List<String> columnNames, List<Object> rowV) {
 		this.columnNames = columnNames;
-		this.classNames = classNames;
-		this.oldValues = oldValues;
 		this.rowV = rowV;
 		this.source = source;
 		this.keyCol = keyCol;
-	}
-
-	public MapBasedTableEditItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
-			List<Object> rowV) {
-		this(source, keyCol, columnNames, classNames, null, rowV);
 	}
 
 	public Map<String, Object> getRowAsMap() {
@@ -49,7 +39,7 @@ public class MapBasedTableEditItem extends TableEditItem {
 			return null;
 		}
 
-		return (rowV.get(keyCol).toString());
+		return rowV.get(keyCol).toString();
 	}
 
 	@Override

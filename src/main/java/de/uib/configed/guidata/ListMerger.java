@@ -13,8 +13,7 @@ public class ListMerger extends ArrayList {
 		NO_COMMON_VALUE.setHavingNoCommonValue();
 	}
 
-	boolean onlyPartiallyExisting;
-	boolean havingCommonValue;
+	private boolean havingCommonValue;
 
 	// prevents correct recognition
 

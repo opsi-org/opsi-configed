@@ -33,16 +33,11 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	public static final int POPUP_PRINT = 30;
 
-	protected JMenuItemFormatted menuItemReload;
-	protected Integer[] popups;
-	protected List<Integer> listPopups;
+	private List<Integer> listPopups;
 
-	protected JMenuItemFormatted[] menuItems;
-
-	protected JPopupMenu popupMenu;
+	private JMenuItemFormatted[] menuItems;
 
 	public PopupMenuTrait(Integer[] popups) {
-		this.popups = popups;
 		listPopups = Arrays.asList(popups);
 
 		menuItems = new JMenuItemFormatted[popups.length];
@@ -163,7 +158,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 		default:
 			Logging.info(this, "popuptype " + p + " not implemented");
-
+			break;
 		}
 	}
 
@@ -187,7 +182,7 @@ public class PopupMenuTrait extends JPopupMenu {
 		menuItems[i].setToolTipText(s);
 	}
 
-	protected void addItem(final int p) {
+	private void addItem(final int p) {
 		int i = listPopups.indexOf(p);
 		menuItems[i].addActionListener(actionEvent -> action(p));
 

@@ -2,7 +2,6 @@ package de.uib.opsidatamodel.permission;
 
 import java.util.Map;
 
-import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.utilities.ExtendedDate;
 import de.uib.utilities.ExtendedInteger;
 import de.uib.utilities.logging.Logging;
@@ -16,14 +15,11 @@ public class ModulePermissionValue {
 			Map.entry("directory-connector", true), Map.entry("macos_agent", true), Map.entry("secureboot", true),
 			Map.entry("win-vhd", true), Map.entry("os_install_by_wlan", true));
 
-	AbstractExecutioner exec;
-
 	private ExtendedInteger maxClients;
 	private ExtendedDate expiresDate;
 	private Boolean booleanValue;
 
-	public ModulePermissionValue(AbstractExecutioner exec, Object ob, ExtendedDate defaultExpires) {
-		this.exec = exec;
+	public ModulePermissionValue(Object ob, ExtendedDate defaultExpires) {
 		Logging.info(this, "value object given: " + ob);
 		booleanValue = null;
 		expiresDate = ExtendedDate.ZERO;

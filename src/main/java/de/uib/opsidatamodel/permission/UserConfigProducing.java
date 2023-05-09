@@ -18,17 +18,17 @@ import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class UserConfigProducing {
-	boolean notUsingDefaultUser;
+	private boolean notUsingDefaultUser;
 
-	String configserver;
-	Collection<String> existingDepots;
-	Collection<String> existingHostgroups;
-	Collection<String> existingProductgroups;
+	private String configserver;
+	private Collection<String> existingDepots;
+	private Collection<String> existingHostgroups;
+	private Collection<String> existingProductgroups;
 
-	Map<String, List<Object>> serverconfigValuesMap;
-	Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
+	private Map<String, List<Object>> serverconfigValuesMap;
+	private Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap;
 
-	List<Object> readyObjects;
+	private List<Object> readyObjects;
 
 	public UserConfigProducing(
 			// command tools
@@ -177,7 +177,7 @@ public class UserConfigProducing {
 		Logging.debug(this, "currentPossibleValuesListed " + currentPossibleValuesListed);
 		Logging.debug(this, "oldPossibleValues " + oldPossibleValues);
 
-		if ((serverconfigValuesMap.get(configKeyList) == null)
+		if (serverconfigValuesMap.get(configKeyList) == null
 				|| !serverconfigValuesMap.get(configKeyList).equals(selectedValues)
 				|| !currentPossibleValuesListed.equals(oldPossibleValues)) {
 
@@ -206,7 +206,7 @@ public class UserConfigProducing {
 	}
 
 	/** we call up the cascade of default role, other roles, and the users */
-	protected void supplyAllPermissionEntries(Set<String> userParts, Set<String> roleParts) {
+	private void supplyAllPermissionEntries(Set<String> userParts, Set<String> roleParts) {
 		Logging.info(this, "supplyAllPermissionEntries start");
 
 		Logging.info(this, "supplyAllPermissionEntries all roles " + roleParts);

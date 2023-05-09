@@ -118,6 +118,7 @@ public final class HealthInfo {
 			break;
 		default:
 			Logging.notice(HealthInfo.class, "Unknown check id: " + healthData.get("check_id"));
+			break;
 		}
 
 		return detailsBuilder.toString();

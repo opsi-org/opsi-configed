@@ -13,7 +13,7 @@ import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
 public class GenericTextElement extends AbstractSelectElement {
 
-	protected List<String> proposedData;
+	private List<String> proposedData;
 
 	public GenericTextElement(Set<String> proposedData, String[] name, String... localizedName) {
 		super(name, localizedName);

@@ -125,5 +125,4 @@ public class UserOpsipermission extends UserConfigModule {
 		Logging.info(this,
 				"created for username " + uname + " with " + super.getBooleanMap() + " -- " + super.getValuesMap());
 	}
-
 }

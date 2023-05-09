@@ -28,7 +28,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	private String verbosity = " ";
 	private String freeInput = " ";
 
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 
 	public CommandWget() {
 	}
@@ -59,7 +59,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	}
 
 	public void setFileName(String newFilename) {
-		if ((newFilename != null) && (!newFilename.trim().isEmpty())) {
+		if (newFilename != null && !newFilename.trim().isEmpty()) {
 			fileName = " --output-document=" + newFilename + " ";
 		}
 	}
@@ -125,7 +125,7 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
+		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().trim().isEmpty()) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -150,11 +150,6 @@ public class CommandWget implements SSHCommand, SSHCommandNeedParameter {
 	@Override
 	public boolean needParameter() {
 		return needParameter;
-	}
-
-	@Override
-	public void startParameterGui() {
-		dialog = new SSHWgetParameterDialog();
 	}
 
 	@Override

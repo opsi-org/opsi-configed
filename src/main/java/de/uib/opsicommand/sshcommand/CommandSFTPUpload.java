@@ -15,7 +15,6 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	private boolean needParameter = true;
 	private boolean isMultiCommand;
 	private boolean needSudo;
-	String command = "";
 
 	private String title = "File Upload";
 	private String baseName = "File Upload";
@@ -27,7 +26,9 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	private String sourceFilename = "";
 	private boolean overwriteMode = true;
 
-	boolean showOutputDialog = true;
+	private boolean showOutputDialog = true;
+
+	protected String command = "";
 
 	public CommandSFTPUpload(String title) {
 		setTitle(title);
@@ -174,7 +175,7 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
+		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().trim().isEmpty()) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -222,10 +223,6 @@ public class CommandSFTPUpload implements SSHCommandNeedParameter, SSHSFTPComman
 	public boolean needParameter() {
 		return needParameter;
 	}
-
-	@Override
-	public void startParameterGui() {
-		/* Not needed */}
 
 	@Override
 	public void startParameterGui(ConfigedMain main) {

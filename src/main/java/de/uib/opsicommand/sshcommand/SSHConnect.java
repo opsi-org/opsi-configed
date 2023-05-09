@@ -43,19 +43,11 @@ public class SSHConnect {
 
 	/** Hostname for server to connected with **/
 	protected String commandInfoName;
-	protected String host;
-	/** Username for server to connected as **/
-	protected String user;
-
-	/** Password for server and username **/
-	protected String password;
 	/** If needed the sudo password **/
-	protected String pwSudo;
-	/** If needed the root password **/
-	protected String pwRoot;
+	private String pwSudo;
 	protected ConfigedMain main;
 
-	SSHConnectionInfo connectionInfo;
+	private SSHConnectionInfo connectionInfo;
 
 	private int retriedTimesJschex = 1;
 	private int retriedTimesAuth = 1;
@@ -73,26 +65,6 @@ public class SSHConnect {
 
 	public static boolean isConnectionAllowed() {
 		return SSHConnectionInfo.getInstance().isSSHActivate();
-	}
-
-	/**
-	 * Check if result is not an error.
-	 * 
-	 * @param result Result
-	 * @return True - if result is not an error
-	 **/
-	protected boolean isNotError(String result) {
-		return result.compareTo("error") != 0;
-	}
-
-	/**
-	 * Shows a message to the user.
-	 * 
-	 * @param msg Message
-	 **/
-	protected void showMessage(String msg) {
-		JOptionPane.showMessageDialog(null, msg);
-		Logging.info(this, "show message: " + msg);
 	}
 
 	/**
@@ -117,13 +89,6 @@ public class SSHConnect {
 	}
 
 	/**
-	 * Calls {@link getSudoPass(Component)} with null.
-	 **/
-	protected String getSudoPass() {
-		return getSudoPass(null);
-	}
-
-	/**
 	 * If newConfirmDialog is false and sudo password already given return sudo
 	 * password. Overwise calls {@link getSudoPass(Component)}.
 	 * 
@@ -132,7 +97,7 @@ public class SSHConnect {
 	 **/
 	protected String getSudoPass(Component dialog, boolean rememberPw) {
 		Logging.debug(this, "getSudoPass dialog " + dialog + " newConfirmDialog " + rememberPw);
-		if ((rememberPw) && (pwSudo != null)) {
+		if (rememberPw && pwSudo != null) {
 			return pwSudo;
 		}
 

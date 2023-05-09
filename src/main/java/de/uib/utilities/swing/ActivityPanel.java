@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
@@ -38,11 +39,9 @@ public class ActivityPanel extends JPanel implements Runnable {
 	private static boolean acting;
 
 	/** an List for panels */
-	ArrayList<JPanel> partPanels = new ArrayList<>();
+	private List<JPanel> partPanels = new ArrayList<>();
 
-	Color[] colors;
-
-	Thread colorSwitching;
+	private Color[] colors;
 
 	/**
 	 * call the "initGui" method
@@ -173,7 +172,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 				public void paint(Graphics g) {
 					try {
 						super.paint(g);
-					} catch (java.lang.ClassCastException ex) {
+					} catch (ClassCastException ex) {
 						setActing(false);
 						Logging.warning(this, "the ugly well known exception " + ex);
 						try {

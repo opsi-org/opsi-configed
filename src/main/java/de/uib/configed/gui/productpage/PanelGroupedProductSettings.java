@@ -24,23 +24,20 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.guidata.InstallationStateTableModelFiltered;
 import de.uib.configed.productgroup.ProductgroupPanel;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.JMenuItemFormatted;
 
 public class PanelGroupedProductSettings extends PanelProductSettings {
 
 	// State reducedTo1stSelection
 	// List reductionList
 
-	ProductgroupPanel groupPanel;
-
-	JMenuItemFormatted popupMarkHits;
+	private ProductgroupPanel groupPanel;
 
 	public PanelGroupedProductSettings(String title, ConfigedMain mainController,
 			Map<String, Boolean> productDisplayFields) {
 		super(title, mainController, productDisplayFields);
 	}
 
-	protected void activatePacketSelectionHandling(boolean b) {
+	private void activatePacketSelectionHandling(boolean b) {
 		if (b) {
 			tableProducts.getSelectionModel().addListSelectionListener(groupPanel);
 		} else {

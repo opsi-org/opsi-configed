@@ -8,7 +8,7 @@ import java.util.Map;
 public class Relation extends ArrayList<StringValuedRelationElement> {
 	protected final List<String> attributes;
 
-	protected Map<String, Map<String, Relation>> functionByAttribute;
+	private Map<String, Map<String, Relation>> functionByAttribute;
 
 	public Relation(List<String> attributes) {
 		super();

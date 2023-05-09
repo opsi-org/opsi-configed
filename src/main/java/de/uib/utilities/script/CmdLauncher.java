@@ -6,7 +6,7 @@ import de.uib.utilities.logging.Logging;
 
 //capsulates line spitting and putting the parts into a cmd array
 public class CmdLauncher {
-	String cmdPrefix;
+	private String cmdPrefix;
 
 	public CmdLauncher() {
 		cmdPrefix = "";
@@ -18,7 +18,7 @@ public class CmdLauncher {
 
 	public void launch(final String s) {
 		String cmd = cmdPrefix + " " + s;
-		List<String> parts = de.uib.utilities.script.Interpreter.splitToList(cmd);
+		List<String> parts = Interpreter.splitToList(cmd);
 
 		try {
 			Logging.debug(this, "start OS call cmd: " + cmd + " splitted to " + parts);

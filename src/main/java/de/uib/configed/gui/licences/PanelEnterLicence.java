@@ -77,7 +77,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	private FEditDate fEditDate;
 
-	protected ControlPanelEnterLicence enterLicenceController;
+	private ControlPanelEnterLicence enterLicenceController;
 
 	private ConfigedMain configedMain;
 

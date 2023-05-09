@@ -27,12 +27,11 @@ import de.uib.utilities.table.gui.AdaptingCellEditor;
  */
 public class DynamicCombo extends JPanel {
 
-	protected JTable table;
-	protected DefaultTableModel tablemodel;
-	protected JComboBox<String> combo;
-	protected ComboBoxModeller modelsource;
+	private JTable table;
+	private JComboBox<String> combo;
+	private ComboBoxModeller modelsource;
 
-	protected TableColumn col;
+	private TableColumn col;
 
 	public DynamicCombo(ComboBoxModeller modelsource) {
 		this.modelsource = modelsource;
@@ -47,7 +46,7 @@ public class DynamicCombo extends JPanel {
 
 		table = new JTable();
 
-		tablemodel = new DefaultTableModel(new String[] { "column 0" }, 0);
+		DefaultTableModel tablemodel = new DefaultTableModel(new String[] { "column 0" }, 0);
 
 		tablemodel.addRow(new String[] { "" });
 

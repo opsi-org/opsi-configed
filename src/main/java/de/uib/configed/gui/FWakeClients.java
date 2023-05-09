@@ -17,8 +17,8 @@ import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class FWakeClients extends FShowList {
-	boolean cancelled;
-	AbstractPersistenceController persist;
+	private boolean cancelled;
+	private AbstractPersistenceController persist;
 
 	public FWakeClients(JFrame master, String title, AbstractPersistenceController persist) {
 		super(master, title, false, new String[] { Configed.getResourceValue("FWakeClients.cancel") });

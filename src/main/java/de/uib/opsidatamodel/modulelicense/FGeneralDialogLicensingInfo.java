@@ -34,7 +34,7 @@ import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapSource;
 import de.uib.utilities.table.provider.TableSource;
 import de.uib.utilities.table.updates.GenericTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
@@ -374,7 +374,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 	private void buildModel() {
 
-		TableUpdateCollection updateCollection = new TableUpdateCollection();
+		ArrayList<TableEditItem> updateCollection = new ArrayList<>();
 
 		GenTableModel theModel = new GenTableModel(null, // updateItemFactory,
 
@@ -390,7 +390,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				// table model listener
 				thePanel,
 
-				// TableUpdateCollection updates
+				// ArrayList<TableEditItem> updates
 				updateCollection);
 
 		GenericTableUpdateItemFactory updateItemFactory = new GenericTableUpdateItemFactory(0);

@@ -1,9 +1,9 @@
 package de.uib.configed.tree;
 
 public class VisualClientNodeNameModifierFactory {
-	VisualClientNodeNameModifier mod;
+	private VisualClientNodeNameModifier mod;
 
-	static class SuppressTerminatingUnderscores implements VisualClientNodeNameModifier {
+	private static class SuppressTerminatingUnderscores implements VisualClientNodeNameModifier {
 		@Override
 		public String modify(final String in) {
 			if (in == null) {
@@ -12,7 +12,7 @@ public class VisualClientNodeNameModifierFactory {
 
 			int l = in.length();
 			int i = l - 1;
-			while (i > 0 && (in.charAt(i) == '_')) {
+			while (i > 0 && in.charAt(i) == '_') {
 				i--;
 			}
 

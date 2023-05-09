@@ -27,12 +27,12 @@ public class OpsiProductInfo extends OpsiPackage {
 	public static final String SERVICE_KEY_PRODUCT_DESCRIPTION = "description";
 	public static final String SERVICE_KEY_PRODUCT_NAME = "name";
 
-	protected List<String> possibleActions;
-	protected String productName;
-	protected String description;
-	protected String advice;
-	protected boolean hasUserLoginScript;
-	protected Integer priority;
+	private List<String> possibleActions;
+	private String productName;
+	private String description;
+	private String advice;
+	private boolean hasUserLoginScript;
+	private Integer priority;
 
 	public OpsiProductInfo(Map<String, Object> m) {
 		super(m);
@@ -67,8 +67,8 @@ public class OpsiProductInfo extends OpsiPackage {
 			Logging.info(this, "no priority " + m.get(SERVICE_KEY_PRIORITY));
 		}
 
-		hasUserLoginScript = (m.get(SERVICE_KEY_USER_LOGIN_SCRIPT) != null
-				&& !("" + m.get(SERVICE_KEY_USER_LOGIN_SCRIPT)).isEmpty());
+		hasUserLoginScript = m.get(SERVICE_KEY_USER_LOGIN_SCRIPT) != null
+				&& !("" + m.get(SERVICE_KEY_USER_LOGIN_SCRIPT)).isEmpty();
 
 		Logging.debug(this, "created with description " + description + "\n," + " possible actions " + possibleActions
 				+ ", hasUserLoginScript " + hasUserLoginScript);

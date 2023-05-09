@@ -26,20 +26,18 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.table.updates.TableUpdateCollection;
 
 public class FGlobalSoftwareInfo extends FGeneralDialog {
 	public PanelGenEditTable panelGlobalSoftware;
 
 	public List<String> columnNames;
 	public List<String> classNames;
-	TableUpdateCollection updateCollection;
 
-	protected int keyCol;
+	private int keyCol;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
-	ControlPanelAssignToLPools myController;
+	private ControlPanelAssignToLPools myController;
 
 	public FGlobalSoftwareInfo(JFrame owner, ControlPanelAssignToLPools myController) {
 		super(owner, Configed.getResourceValue("FGlobalSoftwareInfo.title"), false,
@@ -87,8 +85,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		for (int i = 0; i < columnNames.size(); i++) {
 			classNames.add("java.lang.String");
 		}
-
-		updateCollection = new TableUpdateCollection();
 
 		panelGlobalSoftware.setListSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 

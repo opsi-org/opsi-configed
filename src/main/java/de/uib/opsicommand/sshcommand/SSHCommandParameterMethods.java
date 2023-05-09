@@ -79,14 +79,14 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	private static final String BRACKETS_NONE = " x ";
 	private static final String BRACKETS_SQUARE = "[x]";
 
-	static final Map<String, String> methods = new HashMap<>();
+	private static final Map<String, String> methods = new HashMap<>();
 
 	private ConfigedMain main;
 
 	private String[] formats;
 
 	public boolean canceled;
-	SSHConnectionOutputDialog outputDia;
+	private SSHConnectionOutputDialog outputDia;
 
 	private SSHCommandParameterMethods(ConfigedMain main) {
 		methods.put(METHOD_INTERACTIVE_ELEMENT, METHOD_INTERACTIVE_ELEMENT);
@@ -220,7 +220,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 
 	public String[] splitParameter(String m) {
 		Logging.info(this, "splitParameter param " + m);
-		if ((m.startsWith(REPLACEMENT_DEFAULT_1)) && (m.contains(REPLACEMENT_DEFAULT_2))) {
+		if (m.startsWith(REPLACEMENT_DEFAULT_1) && m.contains(REPLACEMENT_DEFAULT_2)) {
 			m = m.replace(REPLACEMENT_DEFAULT_1, "").replace(REPLACEMENT_DEFAULT_2, "");
 		}
 
@@ -391,7 +391,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		return Arrays.toString(list).replace("[", "").replace(",", " ").replace("]", "");
 	}
 
-	String getUserText(String text, Component dialog) {
+	private String getUserText(String text, Component dialog) {
 		if (dialog == null) {
 			dialog = ConfigedMain.getMainFrame();
 		}
@@ -481,8 +481,8 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		String[] depotIPs = new String[depotnames.length];
 		int counter = 0;
 		for (String name : depotnames) {
-			String depotip = ((String) main.getPersistenceController().getHostInfoCollections().getDepots().get(name)
-					.get(HostInfo.CLIENT_IP_ADDRESS_KEY));
+			String depotip = (String) main.getPersistenceController().getHostInfoCollections().getDepots().get(name)
+					.get(HostInfo.CLIENT_IP_ADDRESS_KEY);
 			Logging.info(this, "getSelected_depotIPs host " + name + " depotip " + depotip);
 			if (depotip != null) {
 				depotIPs[counter] = depotip;

@@ -13,14 +13,11 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class SimpleTreeModel extends DefaultTreeModel {
-	java.util.LinkedHashMap<String, Object> virtualLines;
-
 	public final SimpleIconNode rootNode;
 
-	Set<SimpleTreePath> allPathes;
-	Map<SimpleTreePath, SimpleIconNode> path2Node;
+	private Set<SimpleTreePath> allPathes;
 
-	Map<String, String> tooltips;
+	private Map<String, String> tooltips;
 
 	public SimpleTreeModel(Set<String> dottedKeys, Map<String, String> tooltips) {
 		super(new SimpleIconNode(""));
@@ -42,7 +39,6 @@ public class SimpleTreeModel extends DefaultTreeModel {
 		}
 
 		return result;
-
 	}
 
 	public void setRootLabel(String s) {
@@ -51,7 +47,7 @@ public class SimpleTreeModel extends DefaultTreeModel {
 
 	private void generateFrom(Set<String> dottedKeys) {
 		allPathes = new TreeSet<>();
-		path2Node = new TreeMap<>();
+		Map<SimpleTreePath, SimpleIconNode> path2Node = new TreeMap<>();
 
 		if (dottedKeys != null) {
 			for (String key : dottedKeys) {

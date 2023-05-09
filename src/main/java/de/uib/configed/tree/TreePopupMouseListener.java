@@ -99,7 +99,7 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 		}
 	}
 
-	protected boolean checkAccepted(MouseEvent e) {
+	private boolean checkAccepted(MouseEvent e) {
 		if (!tree.isEnabled()) {
 			return false;
 		}
@@ -173,7 +173,7 @@ public class TreePopupMouseListener extends utils.PopupMouseListener {
 			numberVisibleItems++;
 		}
 
-		return (numberVisibleItems > 0);
+		return numberVisibleItems > 0;
 	}
 
 	@Override

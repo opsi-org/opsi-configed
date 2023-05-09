@@ -90,10 +90,10 @@ public final class LicensingInfoMap {
 
 	private static boolean reducedView = !FGeneralDialogLicensingInfo.extendedView;
 
-	final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 	private JSONObject jOResult;
-	Map<String, List<Object>> configs;
+	private Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
 	private List<List<String>> clientNumbersList;
 	private Set<String> customerIDs;
@@ -811,7 +811,7 @@ public final class LicensingInfoMap {
 				}
 
 				if (diff <= absolutClientLimitWarning
-						|| (futureNum != 0 && (clientNum * 100) / futureNum >= percentClientLimitWarning)) {
+						|| (futureNum != 0 && clientNum * 100 / futureNum >= percentClientLimitWarning)) {
 					return STATE_CLOSE_TO_LIMIT;
 				}
 

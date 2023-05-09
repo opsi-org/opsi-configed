@@ -124,94 +124,68 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	};
 
-	protected List<Integer> internalpopups;
+	private List<Integer> internalpopups;
 
-	protected List<JMenuItem> menuItemsRequesting1SelectedLine;
-	protected List<JMenuItem> menuItemsRequestingMultiSelectedLines;
+	private JMenuItemFormatted menuItemDeleteRelation;
+	private JMenuItemFormatted menuItemSave;
+	private JMenuItemFormatted menuItemCancel;
 
-	JMenuItemFormatted menuItemDeleteRelation;
-	JMenuItemFormatted menuItemSave;
-	JMenuItemFormatted menuItemCancel;
-	JMenuItemFormatted menuItemReload;
-	JMenuItemFormatted menuItemSortAgain;
-	JMenuItemFormatted menuItemPrint;
-	JMenuItemFormatted menuItemExportExcel;
-	JMenuItemFormatted menuItemExportSelectedExcel;
-	JMenuItemFormatted menuItemExportCSV;
-	JMenuItemFormatted menuItemExportSelectedCSV;
-	JMenuItemFormatted menuItemNewRow;
-	JMenuItemFormatted menuItemCopyRelation;
-	JMenuItemFormatted menuItemFloatingCopy;
-	JMenuItemFormatted menuItemPDF;
+	private Comparator[] comparators;
 
-	JFrame masterFrame = ConfigedMain.getMainFrame();
-
-	protected Comparator[] comparators;
-
-	protected JScrollPane scrollpane;
+	private JScrollPane scrollpane;
 	protected JTable theTable;
 	protected GenTableModel tableModel;
 
-	protected IconButton buttonCommit;
-	protected IconButton buttonCancel;
-	protected JLabel label;
+	private IconButton buttonCommit;
+	private IconButton buttonCancel;
+	private JLabel label;
 
-	protected JLabel labelRowCount;
-	protected JLabel labelMarkedCount;
-	protected String textMarkedCount = "selected";
-	protected JPanel titlePane;
+	private JPanel titlePane;
 
-	protected Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;
+	private Color backgroundColorEditFieldsSelected = Globals.defaultTableCellSelectedBgColor;
 
-	protected Color backgroundColorSelected = Globals.defaultTableCellSelectedBgColorNotEditable;
+	private JPopupMenu popupMenu;
 
-	protected JPopupMenu popupMenu;
+	private boolean dataChanged;
 
-	protected boolean dataChanged;
+	private UpdateController myController;
 
-	protected UpdateController myController;
+	private int maxTableWidth = Short.MAX_VALUE;
 
-	protected int maxTableWidth = Short.MAX_VALUE;
+	private boolean editing = true;
 
-	protected boolean editing = true;
+	private boolean deleteAllowed = true;
 
-	protected boolean deleteAllowed = true;
+	private boolean switchLineColors = true;
 
-	protected boolean switchLineColors = true;
+	private boolean awareOfSelectionListener;
+	private boolean followSelectionListener = true;
+	private boolean awareOfTableChangedListener = true;
 
-	protected boolean awareOfSelectionListener;
-	protected boolean followSelectionListener = true;
-	protected boolean awareOfTableChangedListener = true;
-
-	protected boolean withTablesearchPane;
+	private boolean withTablesearchPane;
 
 	protected TablesearchPane searchPane;
 
-	protected RowNoTableModelFilterCondition filterBySelectionCondition;
-	protected TableModelFilter filterBySelection;
-	protected boolean filteringActive;
-	protected boolean selectionEmpty = true;
-	protected boolean singleSelection;
+	private boolean filteringActive;
+	private boolean selectionEmpty = true;
+	private boolean singleSelection;
 
-	protected String title = "";
+	private String title = "";
 
-	protected int generalPopupPosition;
+	private int generalPopupPosition;
 
-	protected int popupIndex;
+	private int popupIndex;
 
 	private int oldrowcount = -1;
 
-	protected Map<Integer, SortOrder> sortDescriptor;
-	protected Map<Integer, SortOrder> specialSortDescriptor;
+	private Map<Integer, SortOrder> sortDescriptor;
+	private Map<Integer, SortOrder> specialSortDescriptor;
 
 	private AbstractExportTable exportTable;
 
 	public PanelGenEditTable(String title, int maxTableWidth, boolean editing, int generalPopupPosition,
 			boolean switchLineColors, int[] popupsWanted, boolean withTablesearchPane) {
 		this.withTablesearchPane = withTablesearchPane;
-
-		menuItemsRequesting1SelectedLine = new ArrayList<>();
-		menuItemsRequestingMultiSelectedLines = new ArrayList<>();
 
 		this.generalPopupPosition = generalPopupPosition;
 
@@ -302,7 +276,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	 * @param javax.swing.JFrame
 	 */
 	public void setMasterFrame(JFrame masterFrame) {
-		this.masterFrame = masterFrame;
 		if (searchPane != null) {
 			searchPane.setMasterFrame(masterFrame);
 		}
@@ -369,10 +342,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			label.setVisible(false);
 		}
 
-		labelRowCount = new JLabel(title);
+		JLabel labelRowCount = new JLabel(title);
 		labelRowCount.setFont(Globals.defaultFontStandardBold);
 
-		labelMarkedCount = new JLabel("");
+		JLabel labelMarkedCount = new JLabel("");
 		labelMarkedCount.setFont(Globals.defaultFont);
 
 		titlePane = new PanelLinedComponents();
@@ -416,7 +389,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					protected Object modifyValue(Object value) {
 						return modifyHeaderValue(value);
 					}
-
 				}
 
 				);
@@ -621,7 +593,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		return augmentedList;
 	}
 
-	protected void addPopupmenuStandardpart() {
+	private void addPopupmenuStandardpart() {
 		Logging.info(this, "addPopupmenuStandardpart, internalpopups " + giveMenuitemNames(internalpopups));
 
 		if (generalPopupPosition > 0) {
@@ -659,7 +631,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case POPUP_RELOAD:
 
-				menuItemReload = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.reload"),
+				JMenuItemFormatted menuItemReload = new JMenuItemFormatted(
+						Configed.getResourceValue("PanelGenEditTable.reload"),
 						Globals.createImageIcon("images/reload16.png", ""));
 
 				// does not work
@@ -673,7 +646,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_SORT_AGAIN:
-				menuItemSortAgain = new JMenuItemFormatted(
+				JMenuItemFormatted menuItemSortAgain = new JMenuItemFormatted(
 						Configed.getResourceValue("PanelGenEditTable.sortAsConfigured"));
 				menuItemSortAgain.addActionListener(actionEvent -> sortAgainAsConfigured());
 
@@ -701,7 +674,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_PRINT:
-				menuItemPrint = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.print"));
+				JMenuItemFormatted menuItemPrint = new JMenuItemFormatted(
+						Configed.getResourceValue("PanelGenEditTable.print"));
 				menuItemPrint.addActionListener((ActionEvent actionEvent) -> {
 					try {
 						theTable.print();
@@ -716,7 +690,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case POPUP_FLOATINGCOPY:
 
-				menuItemFloatingCopy = new JMenuItemFormatted(
+				JMenuItemFormatted menuItemFloatingCopy = new JMenuItemFormatted(
 						Configed.getResourceValue("PanelGenEditTable.floatingCopy"));
 				menuItemFloatingCopy.addActionListener(actionEvent -> floatExternal());
 
@@ -728,19 +702,19 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_EXPORT_CSV:
-				menuItemExportCSV = exportTable.getMenuItemExport();
+				JMenuItemFormatted menuItemExportCSV = exportTable.getMenuItemExport();
 				addPopupItem(menuItemExportCSV);
 
 				break;
 
 			case POPUP_EXPORT_SELECTED_CSV:
-				menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
+				JMenuItemFormatted menuItemExportSelectedCSV = exportTable.getMenuItemExportSelected();
 				addPopupItem(menuItemExportSelectedCSV);
 
 				break;
 
 			case POPUP_PDF:
-				menuItemPDF = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
+				JMenuItemFormatted menuItemPDF = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
 						Globals.createImageIcon("images/acrobat_reader16.png", ""));
 				menuItemPDF.addActionListener((ActionEvent actionEvent) -> {
 					try {
@@ -809,7 +783,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	protected List<RowSorter.SortKey> buildSortkeysFromColumns() {
+	private List<RowSorter.SortKey> buildSortkeysFromColumns() {
 		Logging.debug(this, "buildSortkeysFromColumns,  sortDescriptor " + sortDescriptor);
 		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
 
@@ -1012,8 +986,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private void setModelFilteringBySelection() {
 		if (filteringActive && tableModel != null
 				&& tableModel.getFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION) == null) {
-			filterBySelectionCondition = new RowNoTableModelFilterCondition(theTable);
-			filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
+			RowNoTableModelFilterCondition filterBySelectionCondition = new RowNoTableModelFilterCondition();
+			TableModelFilter filterBySelection = new TableModelFilter(filterBySelectionCondition, false, false);
 
 			tableModel.chainFilter(SearchTargetModelFromTable.FILTER_BY_SELECTION, filterBySelection);
 		}
@@ -1102,12 +1076,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				theTable.getColumnModel().getColumn(cols[j])
 						.setCellRenderer(new TableCellRendererConfigured(null, Globals.lightBlack,
 								Globals.defaultTableCellBgColor1, Globals.defaultTableCellBgColor2,
-								backgroundColorSelected, backgroundColorEditFieldsSelected));
+								backgroundColorEditFieldsSelected));
 			}
 		}
 	}
 
-	protected void setTimestampRenderer(String classname, TableColumn col) {
+	private static void setTimestampRenderer(String classname, TableColumn col) {
 
 		if ("java.sql.Timestamp".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererDate());
@@ -1115,14 +1089,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	protected void setBigDecimalRenderer(String classname, TableColumn col) {
+	private static void setBigDecimalRenderer(String classname, TableColumn col) {
 		if ("java.math.BigDecimal".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererCurrency());
 		}
 
 	}
 
-	protected void setBooleanRenderer(String classname, TableColumn col) {
+	private static void setBooleanRenderer(String classname, TableColumn col) {
 		if ("java.lang.Boolean".equals(classname)) {
 			col.setCellRenderer(new TableCellRendererByBoolean());
 		}
@@ -1197,7 +1171,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 	}
 
-	protected void deleteCurrentRow() {
+	private void deleteCurrentRow() {
 		if (!deleteAllowed) {
 			return;
 		}
@@ -1379,7 +1353,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 	}
 
-	protected int findViewRowFromValue(int startviewrow, Object value, int col) {
+	private int findViewRowFromValue(int startviewrow, Object value, int col) {
 		Logging.debug(this,
 				"findViewRowFromValue startviewrow, value, col " + startviewrow + ", " + value + ", " + col);
 
@@ -1627,7 +1601,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		if (awareOfTableChangedListener && tableModel != null
-				&& !((tableModel.getColMarkCursorRow() > -1) && (e.getColumn() == tableModel.getColMarkCursorRow()))) {
+				&& !(tableModel.getColMarkCursorRow() > -1 && e.getColumn() == tableModel.getColMarkCursorRow())) {
 
 			Logging.info(this, " tableChanged, datachanged set to true");
 			setDataChanged(true);
@@ -1702,7 +1676,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemDeleteRelation.setEnabled(true);
 			}
 
-			singleSelection = (selectedRow == lsm.getMaxSelectionIndex());
+			singleSelection = selectedRow == lsm.getMaxSelectionIndex();
 		}
 
 	}
@@ -1768,7 +1742,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		return scrollpane;
 	}
 
-	protected void floatExternal() {
+	private void floatExternal() {
 
 		PanelGenEditTable copyOfMe;
 		de.uib.configed.gui.GeneralFrame externalView;

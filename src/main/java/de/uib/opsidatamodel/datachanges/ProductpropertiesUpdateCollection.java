@@ -7,25 +7,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 /**
 */
 public class ProductpropertiesUpdateCollection extends UpdateCollection {
-	List<String> clients;
-	String productname;
-	AbstractPersistenceController persis;
-	ConfigedMain mainController;
+	private List<String> clients;
+	private String productname;
+	private AbstractPersistenceController persis;
 
-	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, String[] clients,
-			String productname) {
-		this(mainController, persis, Arrays.asList(clients), productname);
+	public ProductpropertiesUpdateCollection(Object persis, String[] clients, String productname) {
+		this(persis, Arrays.asList(clients), productname);
 	}
 
-	public ProductpropertiesUpdateCollection(ConfigedMain mainController, Object persis, List<String> clients,
-			String productname) {
+	public ProductpropertiesUpdateCollection(Object persis, List<String> clients, String productname) {
 		super(new ArrayList<>(0));
 		if (clients == null) {
 			this.clients = new ArrayList<>();
@@ -34,7 +30,6 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 		}
 		this.productname = productname;
 		setController(persis);
-		this.mainController = mainController;
 	}
 
 	@Override

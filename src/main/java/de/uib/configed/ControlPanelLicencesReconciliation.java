@@ -20,16 +20,16 @@ import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelLicencesReconciliation extends AbstractControlMultiTablePanel {
 
-	PanelLicencesReconciliation thePanel;
-	GenTableModel modelLicencesReconciliation;
+	private PanelLicencesReconciliation thePanel;
+	private GenTableModel modelLicencesReconciliation;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
-	boolean initialized;
+	private boolean initialized;
 
 	public ControlPanelLicencesReconciliation(AbstractPersistenceController persist) {
 		thePanel = new PanelLicencesReconciliation(this);
@@ -45,7 +45,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 
 	@Override
 	public final void init() {
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 
 		List<String> columnNames;
 		List<String> classNames;

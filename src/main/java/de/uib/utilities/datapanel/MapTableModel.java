@@ -23,22 +23,21 @@ import javax.swing.table.AbstractTableModel;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.DataChangedObserver;
-import de.uib.utilities.DataChangedSubject;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ListCellOptions;
 
-public class MapTableModel extends AbstractTableModel implements DataChangedSubject {
+public class MapTableModel extends AbstractTableModel {
 
 	public static final List<?> nullLIST = new ArrayList<>();
 	static {
 		nullLIST.add(null);
 	}
 
-	protected List<DataChangedObserver> observers;
+	private List<DataChangedObserver> observers;
 
-	protected Collection updateCollection;
-	protected Collection<Map<String, Object>> storeData;
-	protected boolean datachanged;
+	private Collection updateCollection;
+	private Collection<Map<String, Object>> storeData;
+	private boolean datachanged;
 
 	// values set cannot be set for any key
 	private List<Object> showOnlyValues;
@@ -48,7 +47,7 @@ public class MapTableModel extends AbstractTableModel implements DataChangedSubj
 
 	private Function<String, Boolean> editDenier;
 
-	protected Map<String, ListCellOptions> optionsMap;
+	private Map<String, ListCellOptions> optionsMap;
 
 	// shall be sorted
 	private SortedMap<String, Object> data;
@@ -342,7 +341,7 @@ public class MapTableModel extends AbstractTableModel implements DataChangedSubj
 		}
 	}
 
-	void weHaveChangedStoredMaps() {
+	private void weHaveChangedStoredMaps() {
 		// updateCollection has been emptied since last change
 		if (!datachanged || updateCollection.isEmpty()) {
 			datachanged = true;
@@ -378,12 +377,12 @@ public class MapTableModel extends AbstractTableModel implements DataChangedSubj
 
 	// we put a new entry into each map in the given collection and preserve the
 	// change data
-	void putEntryIntoStoredMaps(String myKey, Object value) {
+	private void putEntryIntoStoredMaps(String myKey, Object value) {
 		putEntryIntoStoredMaps(myKey, value, true);
 	}
 
 	// we put a new entry into each map in the given collection
-	void putEntryIntoStoredMaps(String myKey, Object value, boolean toStore) {
+	private void putEntryIntoStoredMaps(String myKey, Object value, boolean toStore) {
 		Logging.debug(this, "putEntryIntoStoredMaps myKey, value: " + myKey + ", " + value);
 		Logging.debug(this, "putEntryIntoStoredMaps storeData  counting " + storeData.size());
 		if (storeData != null) {
@@ -488,18 +487,16 @@ public class MapTableModel extends AbstractTableModel implements DataChangedSubj
 		setValueAt(value, row, 1);
 	}
 
-	// implementation of DataChangedSubject
-	@Override
 	public void registerDataChangedObserver(DataChangedObserver o) {
 		observers.add(o);
 	}
 
 	// for transport between a class family
-	List<DataChangedObserver> getObservers() {
+	public List<DataChangedObserver> getObservers() {
 		return observers;
 	}
 
-	void setObservers(List<DataChangedObserver> observers) {
+	public void setObservers(List<DataChangedObserver> observers) {
 		this.observers = observers;
 	}
 

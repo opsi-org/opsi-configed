@@ -60,11 +60,10 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private List<String> listSelectedDepots;
 	private JButton buttonSelectWithEqualProperties;
 	private JButton buttonSelectAll;
-	JPopupMenu popupDepot = new JPopupMenu();
 
 	private JPanel titlePanel;
 
-	protected final Map<String, Object> emptyVisualData = new HashMap<>();
+	private final Map<String, Object> emptyVisualData = new HashMap<>();
 
 	public PanelEditDepotProperties(ConfigedMain mainController, DefaultEditMapPanel productPropertiesPanel) {
 		super(mainController, productPropertiesPanel);
@@ -89,7 +88,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		JScrollPane scrollpaneDepots = new JScrollPane();
 		scrollpaneDepots.setViewportView(listDepots);
 
-		popupDepot = new JPopupMenu();
+		JPopupMenu popupDepot = new JPopupMenu();
 		listDepots.setComponentPopupMenu(popupDepot);
 
 		buttonSelectWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
@@ -256,8 +255,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 			// updateCollection (the real updates)
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
-					mainController, mainController.getPersistenceController(), listDepots.getSelectedValuesList(),
-					productEdited);
+					mainController.getPersistenceController(), listDepots.getSelectedValuesList(), productEdited);
 			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
 			mainController.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 		}
@@ -276,9 +274,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		Map<String, ConfigName2ConfigValue> propertiesDepot0 = depot2product2properties.get(depots.get(0));
 
 		if (depots.size() == 1) {
-			if (propertiesDepot0 == null || propertiesDepot0.get(productId) == null) {
-				// ready
-			} else {
+			if (propertiesDepot0 != null && propertiesDepot0.get(productId) != null) {
 				result = propertiesDepot0.get(productId);
 			}
 		} else {
@@ -289,9 +285,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				n++;
 			}
 
-			if (n == depots.size()) {
-				// ready
-			} else {
+			if (n != depots.size()) {
 				// create start mergers
 				ConfigName2ConfigValue properties = depot2product2properties.get(depots.get(n)).get(productId);
 

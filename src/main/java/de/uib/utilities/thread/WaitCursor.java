@@ -17,13 +17,13 @@ public class WaitCursor {
 	private static AtomicInteger objectCounting = new AtomicInteger();
 	private static boolean allStopped;
 
-	int objectNo;
+	private int objectNo;
 
-	boolean ready;
+	private boolean ready;
 
-	Cursor saveCursor;
-	Component c;
-	String callLocation;
+	private Cursor saveCursor;
+	private Component c;
+	private String callLocation;
 
 	public WaitCursor() {
 		this(null, new Cursor(Cursor.DEFAULT_CURSOR));

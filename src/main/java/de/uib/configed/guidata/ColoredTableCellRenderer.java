@@ -1,5 +1,5 @@
 /**
-	ColoredTableCellRenderer.java
+	private ColoredTableCellRenderer.java
 	
 	utility class for PanelProductSettings
 	
@@ -26,7 +26,7 @@ public class ColoredTableCellRenderer extends de.uib.utilities.table.gui.Standar
 			int row, int column) {
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (value != null && (value.equals(InstallationStateTableModel.CONFLICT_STRING))) {
+		if (value != null && value.equals(InstallationStateTableModel.CONFLICT_STRING)) {
 			if (!ConfigedMain.THEMES) {
 				c.setBackground(Globals.BACKGROUND_COLOR_4);
 				c.setForeground(Globals.BACKGROUND_COLOR_4);

@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 import java.util.Map;
 
 public class FEditRecord extends FEdit {
-	protected AbstractRecordPane recordPane;
+	private AbstractRecordPane recordPane;
 
 	public FEditRecord(String hint) {
 		super("", hint);

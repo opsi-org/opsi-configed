@@ -11,7 +11,7 @@ import de.uib.utilities.logging.Logging;
 /**
 */
 public class HostUpdateCollection extends UpdateCollection {
-	AbstractPersistenceController persis;
+	private AbstractPersistenceController persis;
 
 	public HostUpdateCollection(Object persis) {
 		super(new ArrayList<>(0));

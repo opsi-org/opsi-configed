@@ -26,9 +26,9 @@ public class SimpleIconNode extends DefaultMutableTreeNode {
 
 	private Icon emphasizedIcon;
 
-	protected String toolTipText;
+	private String toolTipText;
 
-	protected boolean emphasized;
+	private boolean emphasized;
 
 	public SimpleIconNode(Object userObject, boolean allowsChildren) {
 		super(userObject, allowsChildren);
@@ -50,13 +50,13 @@ public class SimpleIconNode extends DefaultMutableTreeNode {
 		if (!aFlag) {
 			// Lazy creation: avoids unneccessary objects if the tree
 			// could not have disabled state.
-			if ((closedIcon != null) && (disabledClosedIcon == null)) {
+			if (closedIcon != null && disabledClosedIcon == null) {
 				disabledClosedIcon = createDisabledIcon(enabledClosedIcon);
 			}
 
 			setDisabledLeafIcon();
 
-			if ((openIcon != null) && (disabledOpenIcon == null)) {
+			if (openIcon != null && disabledOpenIcon == null) {
 				disabledOpenIcon = createDisabledIcon(enabledOpenIcon);
 			}
 			// end of lazy creation

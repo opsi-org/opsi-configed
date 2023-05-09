@@ -110,8 +110,7 @@ public class SavedSearchQuery {
 			System.exit(1);
 		}
 
-		Map<String, Map<java.lang.String, java.lang.Object>> depots = controller.getHostInfoCollections()
-				.getAllDepots();
+		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
 
 		controller.getHostInfoCollections().getClientListForDepots(depots.keySet().toArray(new String[0]), null);
 

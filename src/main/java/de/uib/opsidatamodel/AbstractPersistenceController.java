@@ -41,6 +41,7 @@ import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.observer.DataLoadingObservable;
 import de.uib.utilities.observer.DataLoadingObserver;
@@ -139,8 +140,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	static {
 		PROPERTY_CLASSES_SERVER.put("", "general configuration items");
 		PROPERTY_CLASSES_SERVER.put("clientconfig", "network configuration");
-		PROPERTY_CLASSES_SERVER.put(de.uib.opsidatamodel.modulelicense.LicensingInfoMap.CONFIG_KEY,
-				"opsi module status display");
+		PROPERTY_CLASSES_SERVER.put(LicensingInfoMap.CONFIG_KEY, "opsi module status display");
 		PROPERTY_CLASSES_SERVER.put(CONTROL_DASH_CONFIG_KEY, "dash configuration");
 		PROPERTY_CLASSES_SERVER.put(AdditionalQuery.CONFIG_KEY,
 				"<html><p>sql queries can be defined here<br />- for purposes other than are fulfilled by the standard tables</p></html>");
@@ -202,12 +202,12 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 	 * PersistenceController getPersistenceController () { return null; }
 	 */
 
-	protected List<DataRefreshedObserver> dataRefreshedObservers;
+	private List<DataRefreshedObserver> dataRefreshedObservers;
 
 	public AbstractExecutioner exec;
 
 	// offer observing of data loading
-	protected List<DataLoadingObserver> dataLoadingObservers;
+	private List<DataLoadingObserver> dataLoadingObservers;
 
 	public abstract void userConfigurationRequestReload();
 
@@ -320,7 +320,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	/* relating to the PC list */
 
-	public abstract List<Map<java.lang.String, java.lang.Object>> hostRead();
+	public abstract List<Map<String, Object>> hostRead();
 
 	public abstract HostInfoCollections getHostInfoCollections();
 
@@ -846,7 +846,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract boolean applyUserSpecializedConfig();
 
-	public abstract List<Map<java.lang.String, java.lang.Object>> retrieveCommandList();
+	public abstract List<Map<String, Object>> retrieveCommandList();
 
 	public abstract boolean doActionSSHCommand(String method, List<Object> jsonObjects);
 

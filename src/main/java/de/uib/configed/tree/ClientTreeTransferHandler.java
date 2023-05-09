@@ -21,7 +21,7 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
 public class ClientTreeTransferHandler extends TransferHandler {
-	protected ClientTree tree;
+	private ClientTree tree;
 
 	public ClientTreeTransferHandler(ClientTree tree) {
 		super();
@@ -235,13 +235,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		Logging.info(this,
 				"chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS " + stayInsideDIRECTORY + ", " + stayInsideGROUPS);
 
-		if (stayInsideDIRECTORY || (stayInsideGROUPS && !isLeaf)
-		// stayInsideDIRECTORY || stayInsideGROUPS
-		// moving inside DIRECTORY or inside GROUPS
-
-		// stayInsideDIRECTORY
-		// inside DIRECTORY only moving
-		) {
+		if (stayInsideDIRECTORY || stayInsideGROUPS && !isLeaf) {
 			result = true;
 		}
 
@@ -336,7 +330,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 			try {
 				// if values not got from transferable, the following reduces
 
-				if ((value.split("\t").length > 1)) {
+				if (value.split("\t").length > 1) {
 					// probably an import from the JTable
 
 					// we assume a table source with first fieldvalue being a clientID

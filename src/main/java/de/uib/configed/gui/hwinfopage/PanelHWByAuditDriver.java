@@ -15,40 +15,29 @@ import de.uib.configed.Globals;
 import de.uib.utilities.swing.JTextShowField;
 
 public class PanelHWByAuditDriver extends JPanel {
-	protected JLabel jLabelTitle;
 
-	protected int hGap = Globals.HGAP_SIZE / 2;
-	protected int vGap = Globals.VGAP_SIZE / 2;
-	protected int hLabel = Globals.BUTTON_HEIGHT;
+	private int hGap = Globals.HGAP_SIZE / 2;
+	private int vGap = Globals.VGAP_SIZE / 2;
 
-	protected String byAuditPath;
+	private String byAuditPath;
 
-	ButtonGroup selectionGroup;
-	JRadioButton selectionComputerSystem;
-	JRadioButton selectionBaseBoard;
+	private JRadioButton selectionBaseBoard;
 
-	protected JTextField fieldVendor;
-	protected JTextField fieldLabel;
+	private JTextField fieldVendor;
+	private JTextField fieldLabel;
 
-	protected JTextField fieldVendor2;
-	protected JTextField fieldLabel2;
+	private JTextField fieldVendor2;
+	private JTextField fieldLabel2;
 
-	protected String title;
+	private FDriverUpload fDriverUpload;
+	private ConfigedMain main;
 
-	JButton buttonUploadDrivers;
-
-	FDriverUpload fDriverUpload;
-	ConfigedMain main;
-
-	public PanelHWByAuditDriver(String title, ConfigedMain main) {
-		this.title = title;
+	public PanelHWByAuditDriver(ConfigedMain main) {
 		this.main = main;
 		buildPanel();
 	}
 
 	private void buildPanel() {
-		jLabelTitle = new JLabel(title);
-		jLabelTitle.setOpaque(true);
 
 		fieldVendor = new JTextShowField();
 		if (!ConfigedMain.THEMES) {
@@ -76,15 +65,15 @@ public class PanelHWByAuditDriver extends JPanel {
 		JLabel labelVendor = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsVendor"));
 		JLabel labelProduct = new JLabel(Configed.getResourceValue("PanelHWInfo.byAuditDriverLocationLabelsProduct"));
 
-		buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
+		JButton buttonUploadDrivers = new JButton("", Globals.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setSelectedIcon(Globals.createImageIcon("images/upload2product.png", ""));
 		buttonUploadDrivers.setToolTipText(Configed.getResourceValue("PanelHWInfo.uploadDrivers"));
 
 		buttonUploadDrivers.addActionListener(actionEvent -> startDriverUploadFrame());
 
-		selectionComputerSystem = new JRadioButton("", true);
+		JRadioButton selectionComputerSystem = new JRadioButton("", true);
 		selectionBaseBoard = new JRadioButton("");
-		selectionGroup = new ButtonGroup();
+		ButtonGroup selectionGroup = new ButtonGroup();
 		selectionGroup.add(selectionComputerSystem);
 		selectionGroup.add(selectionBaseBoard);
 
@@ -148,10 +137,6 @@ public class PanelHWByAuditDriver extends JPanel {
 		setBorder(BorderFactory.createLineBorder(Globals.greyed));
 	}
 
-	public void setTitle(String s) {
-		title = s;
-	}
-
 	public void emptyByAuditStrings() {
 		byAuditPath = "";
 		fieldVendor.setText("");
@@ -211,7 +196,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		}
 
 		if (fDriverUpload == null) {
-			fDriverUpload = new FDriverUpload(main, main.getPersistenceController(), null);
+			fDriverUpload = new FDriverUpload(main, main.getPersistenceController());
 		}
 
 		fDriverUpload.setSize(Globals.helperFormDimension);

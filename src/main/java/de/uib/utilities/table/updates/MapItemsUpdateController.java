@@ -18,13 +18,13 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.thread.WaitCursor;
 
 public class MapItemsUpdateController implements de.uib.utilities.table.updates.UpdateController {
-	GenTableModel tablemodel;
-	PanelGenEditTable panel;
-	MapBasedUpdater updater;
-	TableUpdateCollection updateCollection;
+	private GenTableModel tablemodel;
+	private PanelGenEditTable panel;
+	private MapBasedUpdater updater;
+	private List<TableEditItem> updateCollection;
 
 	public MapItemsUpdateController(PanelGenEditTable panel, GenTableModel model, MapBasedUpdater updater,
-			TableUpdateCollection updateCollection) {
+			List<TableEditItem> updateCollection) {
 		this.panel = panel;
 		this.tablemodel = model;
 		this.updater = updater;
@@ -57,7 +57,7 @@ public class MapItemsUpdateController implements de.uib.utilities.table.updates.
 				if (updateItem instanceof MapDeliveryItem) {
 					String result = updater.sendUpdate(updateItem.getRowAsMap());
 
-					success = (result != null);
+					success = result != null;
 					if (success && updateItem.keyChanged()) {
 						successfullInsertsWithNewKeys.add(updateItem);
 

@@ -14,16 +14,16 @@ public class RowMap<K, V> extends java.util.HashMap<K, V> {
 	public V get(Object key) {
 		V result = super.get(key);
 
-		if (!(key instanceof java.lang.String)) {
+		if (!(key instanceof String)) {
 			return result;
 		}
 
 		if (result == null) {
-			result = super.get(((java.lang.String) key).toUpperCase());
+			result = super.get(((String) key).toUpperCase());
 		}
 
 		if (result == null) {
-			result = super.get(((java.lang.String) key).toLowerCase());
+			result = super.get(((String) key).toLowerCase());
 		}
 
 		return result;

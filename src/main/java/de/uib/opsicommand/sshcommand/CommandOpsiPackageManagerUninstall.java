@@ -8,15 +8,15 @@ import de.uib.configed.gui.ssh.SSHPackageManagerUninstallParameterDialog;
 import de.uib.utilities.logging.Logging;
 
 public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManager implements SSHCommandNeedParameter {
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 	private String command;
 	private int priority = 10;
 
-	String opsiproduct;
-	String depots;
-	String verbosity = " -vvv ";
-	String keepFiles = " ";
-	String freeInput = " ";
+	private String opsiproduct;
+	private String depots;
+	private String verbosity = " -vvv ";
+	private String keepFiles = " ";
+	private String freeInput = " ";
 
 	public CommandOpsiPackageManagerUninstall() {
 		command = "opsi-package-manager";
@@ -51,11 +51,6 @@ public class CommandOpsiPackageManagerUninstall extends CommandOpsiPackageManage
 	@Override
 	public FGeneralDialog getDialog() {
 		return dialog;
-	}
-
-	@Override
-	public void startParameterGui() {
-		dialog = new SSHPackageManagerUninstallParameterDialog();
 	}
 
 	@Override

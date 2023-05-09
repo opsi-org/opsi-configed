@@ -16,7 +16,7 @@ import de.uib.utilities.logging.Logging;
 		cf.
 		de.uib.configed.type.user.UserXRole.getRole()
 
-	if GLOBAL_READONLY (can be specified by user group or in config)
+	private if GLOBAL_READONLY (can be specified by user group or in config)
 		everything readonly (ignoring a config  SERVER_READWRITE)
 
 		if DEPOTACCESS_ONLY_AS_SPECIFIED: (default general access!)
@@ -78,13 +78,13 @@ public class UserConfig {
 
 	private static UserConfig currentConfig;
 
-	protected String username;
+	private String username;
 
-	protected UserConfig prototypeConfig;
+	private UserConfig prototypeConfig;
 
-	protected Map<String, Boolean> booleanMap;
-	protected Map<String, List<Object>> valuesMap;
-	protected Map<String, List<Object>> possibleValuesMap;
+	private Map<String, Boolean> booleanMap;
+	private Map<String, List<Object>> valuesMap;
+	private Map<String, List<Object>> possibleValuesMap;
 
 	public UserConfig(String userName) {
 		Logging.info(this, "create for " + userName);

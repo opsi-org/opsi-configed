@@ -14,6 +14,6 @@ import java.util.List;
 public class GenericTableUpdateItem extends MapBasedTableEditItem {
 	public GenericTableUpdateItem(Object source, int keyCol, List<String> columnNames, List<String> classNames,
 			List<Object> oldValues, List<Object> rowV) {
-		super(source, keyCol, columnNames, classNames, oldValues, rowV);
+		super(source, keyCol, columnNames, rowV);
 	}
 }

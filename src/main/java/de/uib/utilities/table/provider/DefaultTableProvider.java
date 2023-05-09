@@ -15,11 +15,11 @@ import java.util.TreeSet;
 import de.uib.utilities.logging.Logging;
 
 public class DefaultTableProvider implements TableProvider {
-	protected TableSource source;
-	protected List<String> columnNames;
-	protected List<String> classNames;
-	protected List<List<Object>> rows;
-	protected List<List<Object>> rowsCopy;
+	private TableSource source;
+	private List<String> columnNames;
+	private List<String> classNames;
+	private List<List<Object>> rows;
+	private List<List<Object>> rowsCopy;
 
 	public DefaultTableProvider(TableSource source) {
 		this.source = source;
@@ -61,7 +61,7 @@ public class DefaultTableProvider implements TableProvider {
 	}
 
 	// should set back the copy of the data to the original values
-	protected void resetRows() {
+	private void resetRows() {
 		Logging.info(this, " -- resetRows()");
 		if (rowsCopy != null) {
 			rowsCopy.clear();
@@ -134,7 +134,7 @@ public class DefaultTableProvider implements TableProvider {
 		for (int row = 0; row < rowsCopy.size(); row++) {
 			String val = (String) rowsCopy.get(row).get(col);
 
-			if (emptyAllowed || (val != null && !val.isEmpty())) {
+			if (emptyAllowed || val != null && !val.isEmpty()) {
 
 				set.add((String) rowsCopy.get(row).get(col));
 			}

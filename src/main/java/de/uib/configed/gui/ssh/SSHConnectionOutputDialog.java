@@ -55,7 +55,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 	protected JButton jButtonClose;
 	protected boolean buildFrame;
 
-	protected JPanel mainPanel = new JPanel();
+	private JPanel mainPanel = new JPanel();
 	protected JPanel inputPanel = new JPanel();
 
 	protected GroupLayout konsolePanelLayout;
@@ -71,7 +71,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 		}
 	}
 
-	DialogCloseListener closeListener;
+	protected DialogCloseListener closeListener;
 
 	public SSHConnectionOutputDialog(String title) {
 		super(null, "", false);
@@ -110,7 +110,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 			return;
 		}
 
-		if (SSHCommandFactory.sshColoredOutput && (!line.trim().replace("\\t", "").replace(" ", "").isEmpty())) {
+		if (SSHCommandFactory.sshColoredOutput && !line.trim().replace("\\t", "").replace(" ", "").isEmpty()) {
 			for (Entry<String, Color> entry : ansiCodeColors.entrySet()) {
 				line = findAnsiCodeColor(entry, entry.getKey(), line);
 			}
@@ -123,7 +123,7 @@ public class SSHConnectionOutputDialog extends FGeneralDialog {
 
 		output.setCaretPosition(output.getDocument().getLength());
 		output.setCharacterAttributes(aset, false);
-		if ((line.contains(ANSI_CODE_END)) || (line.contains(ANSI_CODE_END_1)) || (line.contains(ANSI_CODE_END_2))) {
+		if (line.contains(ANSI_CODE_END) || line.contains(ANSI_CODE_END_1) || line.contains(ANSI_CODE_END_2)) {
 			line = line.replace(ANSI_CODE_END, "").replace(ANSI_CODE_END_1, "").replace(ANSI_CODE_END_2, "");
 			linecolor = Globals.SSH_CONNECTION_OUTPUT_DIALOG_DIFFERENT_LINE_COLOR;
 		}

@@ -10,10 +10,9 @@ import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class SwPdfExporter extends AbstractSWExporter {
 
-	JTable theTable;
-	ExporterToPDF exportTable;
-	boolean onlySelectedRows;
-	String fileName;
+	private JTable theTable;
+	private ExporterToPDF exportTable;
+	private boolean onlySelectedRows;
 
 	public SwPdfExporter() {
 

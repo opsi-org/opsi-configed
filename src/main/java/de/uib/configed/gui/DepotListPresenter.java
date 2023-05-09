@@ -43,13 +43,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 
 	private TablesearchPane searchPane;
 
-	private List<String> unfilteredV;
-
 	private boolean multidepot;
 
 	private AbstractPersistenceController persist;
-
-	boolean filtered;
 
 	/**
 	 * A component for managing (but not displaying) the depotlist
@@ -201,19 +197,6 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 						.addGap(10, 10, 10))
 				.addGroup(layout.createSequentialGroup().addGap(5, 5, 5)
 						.addComponent(searchPane, 80, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE).addGap(5, 5, 5)));
-	}
-
-	protected void filterOnSelect() {
-		Logging.info(this, "filterOnSelect, we have " + depotslist.getListData());
-
-		if (!filtered) {
-			unfilteredV = depotslist.getListData();
-			depotslist.setListData(new ArrayList<>(depotslist.getSelectedValuesList()));
-		} else {
-			depotslist.setListData(unfilteredV);
-		}
-
-		filtered = !filtered;
 	}
 
 	// ActionListener implementation

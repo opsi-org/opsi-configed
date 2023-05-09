@@ -33,9 +33,9 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 	private JLabel jLabelCompareMD5Sum = new JLabel();
 	private JCheckBox jCheckBoxCompareMD5;
-	SSHCompletionComboButton autocompletion;
+	private SSHCompletionComboButton autocompletion;
 
-	SSHWgetAuthenticationPanel wgetAuthPanel;
+	private SSHWgetAuthenticationPanel wgetAuthPanel;
 
 	private String mainProduct;
 	private String mainDir;
@@ -113,8 +113,8 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 	}
 
 	public SSHCommandTemplate getCommand(SSHCommandTemplate commands) {
-		if ((jTextFieldURL.getText() == null) || (jTextFieldURL.getText().trim().isEmpty())
-				|| (jTextFieldURL.getText().trim().equals(urlDefText))) {
+		if (jTextFieldURL.getText() == null || jTextFieldURL.getText().trim().isEmpty()
+				|| jTextFieldURL.getText().trim().equals(urlDefText)) {
 			return null;
 		}
 
@@ -149,7 +149,7 @@ public class SSHPMInstallWgetPanel extends SSHPMInstallPanel {
 
 	private CommandWget getWgetCommand() {
 		String d;
-		String wgetDir = ((String) jComboBoxAutoCompletion.getSelectedItem());
+		String wgetDir = (String) jComboBoxAutoCompletion.getSelectedItem();
 
 		String tempTextFieldDir = "<" + Configed.getResourceValue("SSHConnection.ParameterDialog.wget.jLabelDirectory")
 				+ ">";

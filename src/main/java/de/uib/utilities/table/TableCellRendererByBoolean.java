@@ -19,9 +19,7 @@ public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 	/**
 	 * 
 	 */
-	JLabel booleanString = new JLabel();
-
-	protected boolean fontVariation;
+	private JLabel booleanString = new JLabel();
 
 	public TableCellRendererByBoolean() {
 		booleanString.setText("");

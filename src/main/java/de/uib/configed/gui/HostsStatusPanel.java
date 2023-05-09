@@ -27,12 +27,12 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 	private static final String DISCONNECTED_TOOLTIP = Configed
 			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
 
-	JLabel labelAllClientsCount;
-	JTextField fieldGroupActivated;
+	private JLabel labelAllClientsCount;
+	private JTextField fieldGroupActivated;
 
-	JTextField fieldSelectedClientsNames;
-	JTextField fieldActivatedClientsCount;
-	JTextField fieldInvolvedDepots;
+	private JTextField fieldSelectedClientsNames;
+	private JTextField fieldActivatedClientsCount;
+	private JTextField fieldInvolvedDepots;
 
 	private JLabel connectionStateLabel;
 	private ImageIcon connectedIcon;

@@ -15,7 +15,7 @@ import de.uib.utilities.logging.Logging;
 public class OpsiMethodCall {
 
 	public static final boolean BACKGROUND_DEFAULT = true;
-	protected static final int DEFAULT_JSON_ID = 1;
+	private static final int DEFAULT_JSON_ID = 1;
 	private static String extendRpcPath = "extend/configed";
 	private static final List<String> collectedCalls = new ArrayList<>();
 	public static int maxCollectSize = -1;
@@ -58,7 +58,7 @@ public class OpsiMethodCall {
 
 	private void collectCall() {
 		// -1 means deactivated; 0 means infinite
-		if ((maxCollectSize < 0) || (maxCollectSize != 0 && collectedCalls.size() >= maxCollectSize)) {
+		if (maxCollectSize < 0 || (maxCollectSize != 0 && collectedCalls.size() >= maxCollectSize)) {
 			return;
 		}
 

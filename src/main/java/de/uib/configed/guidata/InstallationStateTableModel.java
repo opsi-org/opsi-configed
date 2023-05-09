@@ -43,7 +43,7 @@ if several products are selected:
 if several products with contradicting dependencies are set by one action
 	a warning is issued
 
-	There is no warning if an existing setting is reversed by a second action
+	private There is no warning if an existing setting is reversed by a second action
 
 
 local cancel button (not implemented)
@@ -91,53 +91,49 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Map.entry(InstallationStatus.KEY_INSTALLED, "setup"),
 			Map.entry(InstallationStatus.KEY_NOT_INSTALLED, "uninstall"));
 
-	protected static Map<String, String> columnDict;
-	protected static List<String> columnsLocalized;
+	private static Map<String, String> columnDict;
 
-	protected String actualProduct = "";
+	private String actualProduct = "";
 
-	protected ConfigedMain main;
+	private ConfigedMain main;
 
 	protected List<String> productsV;
 
-	protected int onGoingCollectiveChangeEventCount = -1;
+	private int onGoingCollectiveChangeEventCount = -1;
 
-	Map<Integer, Map<String, String>> changeEventCount2product2request;
+	private Map<Integer, Map<String, String>> changeEventCount2product2request;
 
 	// state key (column name) --> product name --> visual value
-	protected Map<String, Map<String, String>> combinedVisualValues;
+	private Map<String, Map<String, String>> combinedVisualValues;
 
-	protected Map<String, Set<String>> product2setOfClientsWithNewAction;
+	private Map<String, Set<String>> product2setOfClientsWithNewAction;
 	// for each product, we shall collect the clients that have a changed action
 	// request
 
 	// for each product, we remember the visual action that is set
-	protected NavigableSet<String> missingImplementationForAR;
+	private NavigableSet<String> missingImplementationForAR;
 
 	// (clientId -> (productId -> (product state key -> product state value)))
-	protected Map<String, Map<String, Map<String, String>>> allClientsProductStates;
+	private Map<String, Map<String, Map<String, String>>> allClientsProductStates;
 
-	protected AbstractPersistenceController persist;
-	protected Map<String, Map<String, Map<String, String>>> collectChangedStates;
-	protected final String[] selectedClients;
-	protected Map<String, List<String>> possibleActions; // product-->possibleActions
-	protected Map<String, Map<String, Object>> globalProductInfos;
-	protected String theClient;
+	private AbstractPersistenceController persist;
+	private Map<String, Map<String, Map<String, String>>> collectChangedStates;
+	private final String[] selectedClients;
+	private Map<String, List<String>> possibleActions; // product-->possibleActions
+	private Map<String, Map<String, Object>> globalProductInfos;
 	protected NavigableSet<String> tsProductNames;
-	protected List<String> productNamesInDeliveryOrder;
+	private List<String> productNamesInDeliveryOrder;
 
-	protected ActionRequest actionInTreatment;
+	private Set<String> missingProducts = new HashSet<>();
 
-	protected Set<String> missingProducts = new HashSet<>();
-
-	protected List<String> displayColumns;
-	protected int numberOfColumns;
+	private List<String> displayColumns;
+	private int numberOfColumns;
 	// the columns for which code exists
-	protected List<String> preparedColumns;
-	protected List<String> columnTitles;
+	private List<String> preparedColumns;
+	private List<String> columnTitles;
 	// the indices of the displayColumns in the displayColumns
-	protected int[] indexPreparedColumns;
-	protected boolean[] editablePreparedColumns;
+	private int[] indexPreparedColumns;
+	private boolean[] editablePreparedColumns;
 
 	public InstallationStateTableModel(String[] selectedClients, ConfigedMain main,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
@@ -403,7 +399,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		}
 	}
 
-	protected String mixToVisualState(Map<String, String> visualStates, final String productId,
+	private static String mixToVisualState(Map<String, String> visualStates, final String productId,
 			final String mixinValue) {
 		String oldValue = visualStates.get(productId);
 
@@ -544,7 +540,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	}
 
-	protected void setInstallationInfo(String product, String value) {
+	private void setInstallationInfo(String product, String value) {
 		combinedVisualValues.get(ProductState.KEY_INSTALLATION_INFO).put(product, value);
 
 		for (String clientId : selectedClients) {
@@ -711,7 +707,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return false;
 	}
 
-	protected void registerStateChange(String product, String stateType, String value) {
+	private void registerStateChange(String product, String stateType, String value) {
 		for (String clientId : selectedClients) {
 			setChangedState(clientId, product, stateType, value);
 		}
@@ -779,7 +775,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	}
 
-	protected void initChangeActionRequests() {
+	private void initChangeActionRequests() {
 
 		product2setOfClientsWithNewAction.clear();
 
@@ -789,7 +785,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	}
 
-	protected void setActionRequest(ActionRequest ar, String productId, String clientId) {
+	private void setActionRequest(ActionRequest ar, String productId, String clientId) {
 
 		Map<String, Map<String, String>> productStates = allClientsProductStates.computeIfAbsent(clientId,
 				arg -> new HashMap<>());
@@ -800,7 +796,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	}
 
 	private boolean checkActionIsSupported(String productId, ActionRequest ar) {
-		if ((possibleActions == null) || ((possibleActions.get(productId).indexOf(ar.toString())) < 0)) {
+		if (possibleActions == null || possibleActions.get(productId).indexOf(ar.toString()) < 0) {
 			missingImplementationForAR.add(productId);
 			return false;
 		}
@@ -819,7 +815,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		initChangeActionRequests();
 
-		if ((possibleActions == null) || ((possibleActions.get(productId).indexOf(ar.toString())) < 0)) {
+		if (possibleActions == null || possibleActions.get(productId).indexOf(ar.toString()) < 0) {
 			Logging.error(" the required action is not supported for " + productId);
 			return;
 		}
@@ -856,10 +852,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 							newValUntilNow = Globals.CONFLICT_STATE_STRING;
 						}
 					} else {
-						if (newValUntilNow
+						if (!newValUntilNow
 								.equals(getChangedState(clientId, product.getKey(), ProductState.KEY_ACTION_REQUEST))) {
-							// it remains
-						} else {
 							newValUntilNow = Globals.CONFLICT_STATE_STRING;
 						}
 					}
@@ -878,7 +872,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 	}
 
-	protected void recursivelyChangeActionRequest(String clientId, String product, ActionRequest ar) {
+	private void recursivelyChangeActionRequest(String clientId, String product, ActionRequest ar) {
 		// adds the new value to the collection of changed states
 		// calls the dependencies for the next turn
 
@@ -910,7 +904,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		Logging.debug(this, " change action request for client " + clientId + ",  product " + product + " to " + ar);
 		if (ar.getVal() == ActionRequest.NONE) {
-			// don't follow
+			Logging.debug(this, "don't follow");
 		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
 			Logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product " + product);
 
@@ -918,7 +912,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			Logging.debug(this, "ProductRequirements for uninstall for " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		} else {
-
 			Map<String, String> requirements = persist.getProductPreRequirements(null, product);
 			Logging.debug(this, "ProductPreRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
@@ -1167,7 +1160,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		return combinedVisualValues.get(ProductState.KEY_LAST_STATE_CHANGE).get(product);
 	}
 
-	protected void setOnGoingCollectiveChangeCount() {
+	private void setOnGoingCollectiveChangeCount() {
 		onGoingCollectiveChangeEventCount++;
 	}
 
@@ -1338,9 +1331,5 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			main.getGeneralDataChangedKeeper().dataHaveChanged(this);
 		}
 
-	}
-
-	protected void clearUpdates() {
-		main.getGeneralDataChangedKeeper().cancel();
 	}
 }

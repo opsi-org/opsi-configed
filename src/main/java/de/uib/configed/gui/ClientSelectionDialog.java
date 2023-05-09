@@ -1210,6 +1210,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		case OR_NOT:
 			andOr.selectOr();
 			not.setActivated(true);
+			break;
 		}
 	}
 

@@ -15,9 +15,7 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 
 	private static final String ZERO = "0";
 
-	protected ExtendedInteger allowedUsages;
-	protected Integer opsiUsages;
-	protected Integer swInventoryUsages;
+	private ExtendedInteger allowedUsages;
 
 	public LicenceStatisticsRow(String licencePool) {
 		super();
@@ -28,9 +26,6 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 		super.put(SW_INVENTORY_USED_KEY, ZERO);
 		super.put(SW_INVENTORY_REMAINING_KEY, ZERO);
 		allowedUsages = ExtendedInteger.ZERO;
-		opsiUsages = 0;
-		swInventoryUsages = 0;
-
 	}
 
 	public void setAllowedUsagesCount(ExtendedInteger count) {
@@ -48,16 +43,14 @@ public class LicenceStatisticsRow extends HashMap<String, String> {
 	public void setOpsiUsagesCount(Integer count) {
 		if (count != null) {
 			put(USED_BY_OPSI_KEY, count.toString());
-			opsiUsages = count;
-			put(REMAINING_OPSI_KEY, (allowedUsages.add(-count)).getDisplay());
+			put(REMAINING_OPSI_KEY, allowedUsages.add(count).getDisplay());
 		}
 	}
 
 	public void setSWauditUsagesCount(Integer count) {
 		if (count != null) {
 			put(SW_INVENTORY_USED_KEY, count.toString());
-			swInventoryUsages = count;
-			put(SW_INVENTORY_REMAINING_KEY, (allowedUsages.add(-count)).getDisplay());
+			put(SW_INVENTORY_REMAINING_KEY, allowedUsages.add(count).getDisplay());
 		}
 	}
 

@@ -13,15 +13,15 @@ import de.uib.utilities.table.provider.DefaultTableProvider;
 import de.uib.utilities.table.provider.MapRetriever;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.TableUpdateCollection;
+import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePanel {
-	PanelLicencesStatistics thePanel;
-	GenTableModel modelStatistics;
+	private PanelLicencesStatistics thePanel;
+	private GenTableModel modelStatistics;
 
-	AbstractPersistenceController persist;
+	private AbstractPersistenceController persist;
 
-	boolean initialized;
+	private boolean initialized;
 
 	public ControlPanelLicencesStatistics(AbstractPersistenceController persist) {
 		thePanel = new PanelLicencesStatistics(this);
@@ -37,7 +37,7 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 
 	@Override
 	public final void init() {
-		updateCollection = new TableUpdateCollection();
+		updateCollection = new ArrayList<TableEditItem>();
 
 		List<String> columnNames;
 		List<String> classNames;

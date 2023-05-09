@@ -12,7 +12,7 @@ import de.uib.configed.gui.ssh.SSHDeployClientAgentParameterDialog;
 public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParameter {
 	private String command;
 	private String baseName = "/var/lib/opsi/depot/opsi-client-agent/opsi-deploy-client-agent";
-	protected FGeneralDialog dialog;
+	private FGeneralDialog dialog;
 	private boolean needingSudo = true;
 	private boolean pingIsRequired = true;
 	private boolean needParameter = true;
@@ -36,7 +36,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
+		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().trim().isEmpty()) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -78,6 +78,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 			break;
 		default:
 			finishAction = "";
+			break;
 		}
 	}
 
@@ -94,6 +95,7 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 			break;
 		default:
 			finishAction = "";
+			break;
 		}
 	}
 
@@ -174,11 +176,6 @@ public class CommandDeployClientAgent implements SSHCommand, SSHCommandNeedParam
 	@Override
 	public boolean needParameter() {
 		return needParameter;
-	}
-
-	@Override
-	public void startParameterGui() {
-		dialog = new SSHDeployClientAgentParameterDialog();
 	}
 
 	@Override

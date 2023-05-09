@@ -731,7 +731,7 @@ public final class Globals {
 	}
 
 	public static boolean checkCollection(Object source, String cName, Object c) {
-		boolean result = (c != null);
+		boolean result = c != null;
 		if (result) {
 			if (!(c instanceof Collection) && !(c instanceof Map)) {
 				Logging.info(source.getClass().getName() + " " + cName + " is neither a Collection nor a Map  ");
@@ -779,9 +779,10 @@ public final class Globals {
 			default:
 				indentDone = true;
 				b.append(s.charAt(c));
+				break;
 			}
-			if ((charsInLine >= MAX_LINE_LENGTH && c + 1 < s.length())
-					&& ((s.charAt(c + 1) == ' ') || (s.charAt(c + 1) == '\t') || (s.charAt(c + 1) == '\n'))) {
+			if (charsInLine >= MAX_LINE_LENGTH && c + 1 < s.length()
+					&& (s.charAt(c + 1) == ' ' || s.charAt(c + 1) == '\t' || s.charAt(c + 1) == '\n')) {
 				c++;
 				b.append("<br/>");
 				if (s.charAt(c) != '\n') {

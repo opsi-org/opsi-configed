@@ -78,11 +78,11 @@ public class SimpleTreePath extends ArrayList<String> implements Comparable<Simp
 			i++;
 		}
 
-		if (result == 0 && (size() < o.size())) {
+		if (result == 0 && size() < o.size()) {
 			result = -1;
 		}
 
-		if (result == 0 && (size() > o.size())) {
+		if (result == 0 && size() > o.size()) {
 			result = +1;
 		}
 

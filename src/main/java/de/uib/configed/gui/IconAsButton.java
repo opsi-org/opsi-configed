@@ -32,44 +32,36 @@ import de.uib.configed.Globals;
  */
 public class IconAsButton extends JPanel implements MouseListener {
 
-	protected String imageURLActive;
-	protected String imageURLAttention;
-	protected String imageURLInactive;
-	protected String imageURLOver;
-	protected String imageURLDisabled;
-	protected ImageIcon iconActive;
-	protected ImageIcon iconInactive;
-	protected ImageIcon iconOver;
-	protected ImageIcon iconDisabled;
-	protected String tooltipActive;
-	protected String tooltipInactive;
+	private ImageIcon iconActive;
+	private ImageIcon iconInactive;
+	private ImageIcon iconOver;
+	private ImageIcon iconDisabled;
+	private String tooltipActive;
+	private String tooltipInactive;
 
-	protected JLabel label;
+	private JLabel label;
 	protected boolean activated;
-	protected boolean enabled;
-	protected boolean getAttention;
-	protected boolean mouseOver;
-	protected List<ActionListener> actionListeners;
+	private boolean enabled;
+	private boolean mouseOver;
+	private List<ActionListener> actionListeners;
 	private String description;
 
 	/**
-	 * @param desc           : a description used for tooltips and event action
-	 *                       performed
-	 * @param inactive       : the url for the image displayed if inactive
-	 * @param over           : the url for the image displayed if the cursor is
-	 *                       hovering over the buttion
-	 * @param active         : the url for the image displayed if active
-	 * @param disabled       : the url for the disabled image
-	 * @param attentionImage : the url for the image displayed if active and
-	 *                       shall get special attention
+	 * @param desc     : a description used for tooltips and event action
+	 *                 performed
+	 * @param inactive : the url for the image displayed if inactive
+	 * @param over     : the url for the image displayed if the cursor is
+	 *                 hovering over the buttion
+	 * @param active   : the url for the image displayed if active
+	 * @param disabled : the url for the disabled image shall get special
+	 *                 attention
 	 */
-	public IconAsButton(String desc, String inactive, String over, String active, String attentionImage,
-			String disabled) {
+	public IconAsButton(String desc, String inactive, String over, String active, String disabled) {
 		super();
 
 		super.setOpaque(false);
 
-		setDisplay(desc, inactive, over, active, attentionImage, disabled);
+		setDisplay(desc, inactive, over, active, disabled);
 		label = new JLabel(iconInactive, SwingConstants.CENTER);
 		label.setToolTipText(desc);
 
@@ -88,46 +80,27 @@ public class IconAsButton extends JPanel implements MouseListener {
 		this(desc, imageRelPath, imageRelPath, imageRelPath, imageRelPath);
 	}
 
-	public IconAsButton(String desc, String inactive, String over, String active, String disabled) {
-		this(desc, inactive, over, active, null, disabled);
-	}
-
-	public void setDisplay(String desc, String inactive, String over, String active, String disabled) {
-		setDisplay(desc, inactive, over, active, null, disabled);
-	}
-
-	private void setDisplay(String desc, String inactive, String over, String active, String attentionImage,
-			String disabled) {
+	private void setDisplay(String desc, String inactive, String over, String active, String disabled) {
 		description = desc;
 		tooltipActive = desc;
 		tooltipInactive = desc;
-		imageURLActive = active;
-		imageURLAttention = attentionImage;
-		if (imageURLAttention == null || imageURLAttention.isEmpty()) {
-			imageURLAttention = imageURLActive;
+
+		iconInactive = Globals.createImageIcon(inactive, description);
+		if (active != null) {
+			iconActive = Globals.createImageIcon(active, description);
 		}
 
-		imageURLInactive = inactive;
-		imageURLOver = over;
-		imageURLDisabled = disabled;
-
-		iconInactive = Globals.createImageIcon(imageURLInactive, description);
-		if (imageURLActive != null) {
-			iconActive = Globals.createImageIcon(imageURLActive, description);
+		if (over != null) {
+			iconOver = Globals.createImageIcon(over, description);
 		}
 
-		if (imageURLOver != null) {
-			iconOver = Globals.createImageIcon(imageURLOver, description);
-		}
-
-		if (imageURLDisabled != null) {
-			iconDisabled = Globals.createImageIcon(imageURLDisabled, description);
+		if (disabled != null) {
+			iconDisabled = Globals.createImageIcon(disabled, description);
 		}
 
 		if (label != null) {
 			label.setToolTipText(desc);
 		}
-
 	}
 
 	@Override
@@ -158,10 +131,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 	@Override
 	public boolean isEnabled() {
 		return enabled;
-	}
-
-	public void setAttention(boolean b) {
-		getAttention = b;
 	}
 
 	private void setIcon() {
@@ -209,10 +178,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	public boolean isActivated() {
 		return activated;
-	}
-
-	public List<ActionListener> getActionListeners() {
-		return actionListeners;
 	}
 
 	public void addActionListener(ActionListener l) {

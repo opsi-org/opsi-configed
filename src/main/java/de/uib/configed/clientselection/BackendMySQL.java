@@ -31,10 +31,10 @@ public class BackendMySQL {
 
 	private List<String> allHosts;
 
-	List<Map<String, List<Map<String, Object>>>> hwConfig;
+	private List<Map<String, List<Map<String, Object>>>> hwConfig;
 
 	// For the queries to the opsi-server
-	AbstractPersistenceController controller;
+	private AbstractPersistenceController controller;
 
 	public BackendMySQL(AbstractPersistenceController controller) {
 		this.controller = controller;
@@ -47,7 +47,7 @@ public class BackendMySQL {
 
 		Logging.info(this, query);
 
-		List<List<java.lang.String>> clients = controller.exec
+		List<List<String>> clients = controller.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 
 		List<String> list = new ArrayList<>();

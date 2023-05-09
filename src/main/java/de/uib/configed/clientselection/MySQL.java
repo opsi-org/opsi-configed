@@ -24,7 +24,7 @@ public class MySQL {
 	private String hardwareTableName = "";
 
 	// Die Hardwarekonfiguration
-	List<Map<String, List<Map<String, Object>>>> hwConfig;
+	private List<Map<String, List<Map<String, Object>>>> hwConfig;
 
 	public MySQL(List<Map<String, List<Map<String, Object>>>> hwConfig) {
 		this.hwConfig = hwConfig;

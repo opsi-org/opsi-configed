@@ -84,6 +84,7 @@ public class ByteUnitConverter {
 			break;
 		default:
 			Logging.warning(this, "unknown unit byte: " + byteUnitToUse);
+			break;
 		}
 
 		return size;

@@ -28,11 +28,10 @@ import de.uib.utilities.table.ListCellOptions;
 
 public class PanelHostProperties extends JPanel implements ItemListener {
 	// delegate
-	protected DefaultEditMapPanel editMapPanel;
-	protected JLabel label;
-	protected JComboBox<String> combo;
-	protected Map<String, Map<String, Object>> multipleMaps;
-	protected UpdateCollection updateCollection;
+	private DefaultEditMapPanel editMapPanel;
+	private JLabel label;
+	private JComboBox<String> combo;
+	private Map<String, Map<String, Object>> multipleMaps;
 
 	public PanelHostProperties() {
 		buildPanel();
@@ -89,8 +88,6 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 
 		);
 
-		this.updateCollection = updateCollection;
-
 		this.multipleMaps = multipleMaps;
 		editMapPanel.setUpdateCollection(updateCollection);
 		editMapPanel.setReadOnlyEntries(keysOfReadOnlyEntries);
@@ -110,18 +107,18 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 			combo.setModel(model);
 		}
 
-		combo.setEnabled((model != null));
-		combo.setVisible((model != null));
+		combo.setEnabled(model != null);
+		combo.setVisible(model != null);
 	}
 
-	protected Map<String, ListCellOptions> deriveOptionsMap(Map<String, Object> m) {
+	private Map<String, ListCellOptions> deriveOptionsMap(Map<String, Object> m) {
 		Map<String, ListCellOptions> result = new HashMap<>();
 
 		for (Entry<String, Object> entry : m.entrySet()) {
 
 			ListCellOptions cellOptions = null;
 
-			if ((entry.getValue()) instanceof java.lang.Boolean) {
+			if ((entry.getValue()) instanceof Boolean) {
 				cellOptions = DefaultListCellOptions.getNewBooleanListCellOptions();
 			} else {
 				cellOptions = DefaultListCellOptions.getNewEmptyListCellOptions();
@@ -135,7 +132,7 @@ public class PanelHostProperties extends JPanel implements ItemListener {
 
 	}
 
-	protected void setMap(String selectedItem) {
+	private void setMap(String selectedItem) {
 		List<Map<String, Object>> editedMaps = new ArrayList<>(1);
 		editedMaps.add(multipleMaps.get(selectedItem));
 		Logging.debug(this, "setMap " + multipleMaps.get(selectedItem));

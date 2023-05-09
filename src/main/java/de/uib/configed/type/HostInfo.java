@@ -16,7 +16,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
 public class HostInfo {
-	static int callCounter;
 	private static Map<String, Integer> id2InstanceNumber;
 
 	// ---
@@ -95,8 +94,8 @@ public class HostInfo {
 
 	public static final String HOST_SUB_CLASS_TAG_OPSI_CLIENT_PROTOTYPE = "OpsiPrototype";
 
-	static final String NOT_LEGAL_CHARS_0 = ",:!@#$%^&',(){} ";
-	static final Set<Character> notLegalChars = new HashSet<>();
+	private static final String NOT_LEGAL_CHARS_0 = ",:!@#$%^&',(){} ";
+	private static final Set<Character> notLegalChars = new HashSet<>();
 	static {
 		for (int i = 0; i < NOT_LEGAL_CHARS_0.length(); i++) {
 			notLegalChars.add(NOT_LEGAL_CHARS_0.charAt(i));
@@ -107,27 +106,27 @@ public class HostInfo {
 	private static int numberOfInstances;
 	private final int instanceNumber;
 
-	protected String depotOfClient;
-	protected String clientDescription;
-	protected String clientInventoryNumber;
-	protected String clientOneTimePassword;
-	protected String clientNotes;
+	private String depotOfClient;
+	private String clientDescription;
+	private String clientInventoryNumber;
+	private String clientOneTimePassword;
+	private String clientNotes;
 
-	protected String clientSystemUUID;
-	protected String clientMacAddress;
-	protected String lastSeen;
-	protected String created;
-	protected String clientName;
-	protected String hostKey;
+	private String clientSystemUUID;
+	private String clientMacAddress;
+	private String lastSeen;
+	private String created;
+	private String clientName;
+	private String hostKey;
 
-	protected String hostType;
-	protected String clientIpAddress;
-	protected Boolean clientUefiBoot;
-	protected Boolean clientWanConfig;
-	protected String clientSessionInfo;
+	private String hostType;
+	private String clientIpAddress;
+	private Boolean clientUefiBoot;
+	private Boolean clientWanConfig;
+	private String clientSessionInfo;
 
-	protected Boolean clientConnected;
-	protected Boolean clientShutdownInstall;
+	private Boolean clientConnected;
+	private Boolean clientShutdownInstall;
 
 	public HostInfo() {
 		initialize();
@@ -317,6 +316,7 @@ public class HostInfo {
 		}
 		default: {
 			Logging.warning(this, "key " + key + " not expected");
+			break;
 		}
 		}
 	}
@@ -496,8 +496,8 @@ public class HostInfo {
 			return;
 		}
 
-		clientUefiBoot = showValue(((Boolean) infoMap.get(CLIENT_UEFI_BOOT_KEY)));
-		clientWanConfig = showValue(((Boolean) infoMap.get(CLIENT_WAN_CONFIG_KEY)));
+		clientUefiBoot = showValue((Boolean) infoMap.get(CLIENT_UEFI_BOOT_KEY));
+		clientWanConfig = showValue((Boolean) infoMap.get(CLIENT_WAN_CONFIG_KEY));
 		clientShutdownInstall = showValue((Boolean) infoMap.get(CLIENT_SHUTDOWN_INSTALL_KEY));
 
 		clientDescription = showValue("" + infoMap.get(CLIENT_DESCRIPTION_KEY));
@@ -606,9 +606,9 @@ public class HostInfo {
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
 		}
 
-		if ((sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null)
+		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null
 				&& !(sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY).trim()).isEmpty()) {
-			clientMacAddress = (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim();
+			clientMacAddress = sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY).trim();
 
 			int col = findCol(selectionPanel,
 					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSystemUUID"));
@@ -623,9 +623,9 @@ public class HostInfo {
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SYSTEM_UUID_KEY, clientSystemUUID);
 		}
 
-		if ((sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null)
+		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null
 				&& !(sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY).trim()).isEmpty()) {
-			clientMacAddress = (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim();
+			clientMacAddress = sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY).trim();
 
 			int col = findCol(selectionPanel,
 					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
@@ -640,9 +640,9 @@ public class HostInfo {
 			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_MAC_ADRESS_KEY, clientMacAddress);
 		}
 
-		if ((sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null)
+		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null
 				&& !(sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY).trim()).isEmpty()) {
-			clientIpAddress = (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim();
+			clientIpAddress = sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY).trim();
 
 			int col = findCol(selectionPanel,
 					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientIPAddress"));

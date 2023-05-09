@@ -33,7 +33,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
 public class CSVImportDataDialog extends FGeneralDialog {
-	protected int wLeftLabel = Globals.BUTTON_WIDTH + 20;
+	private static final int WIDTH_LEFT_LABEL = Globals.BUTTON_WIDTH + 20;
 
 	private PanelGenEditTable thePanel;
 	private CSVFormat format;
@@ -51,7 +51,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 	private CSVImportDataModifier modifier;
 
-	int startLine = 1;
+	private int startLine = 1;
 
 	public CSVImportDataDialog(CSVImportDataModifier modifier, CSVFormat format) {
 		super(ConfigedMain.getMainFrame(), Configed.getResourceValue("CSVImportDataDialog.title"), true,
@@ -233,18 +233,18 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		northLayout.setHorizontalGroup(northLayout.createParallelGroup()
 				.addGroup(northLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(importOptionsLabel, wLeftLabel, wLeftLabel, wLeftLabel)
+						.addComponent(importOptionsLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(northLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(startLineLabel, wLeftLabel, wLeftLabel, wLeftLabel)
+						.addComponent(startLineLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 						.addComponent(startLineInput, Globals.BUTTON_WIDTH, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(northLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(splittingOptionsLabel, wLeftLabel, wLeftLabel, wLeftLabel)
+						.addComponent(splittingOptionsLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(northLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
@@ -268,9 +268,9 @@ public class CSVImportDataDialog extends FGeneralDialog {
 						.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE))
 				.addGroup(northLayout.createSequentialGroup()
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(stringSeparatorLabel, wLeftLabel, wLeftLabel, wLeftLabel)
+						.addComponent(stringSeparatorLabel, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)
 						.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-						.addComponent(stringSeparatorOptions, wLeftLabel, wLeftLabel, wLeftLabel)));
+						.addComponent(stringSeparatorOptions, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL, WIDTH_LEFT_LABEL)));
 
 		northLayout.setVerticalGroup(northLayout.createSequentialGroup()
 				.addGap(Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE, Globals.MIN_VGAP_SIZE)

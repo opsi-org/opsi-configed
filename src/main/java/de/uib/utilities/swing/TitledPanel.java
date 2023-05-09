@@ -8,8 +8,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class TitledPanel extends JPanel {
-	protected JLabel label1;
-	protected JLabel label2;
+	private JLabel label1;
+	private JLabel label2;
 
 	public TitledPanel() {
 		this("", "");

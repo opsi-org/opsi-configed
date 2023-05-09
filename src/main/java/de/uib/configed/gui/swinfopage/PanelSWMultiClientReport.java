@@ -27,25 +27,24 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	public static final String FILENAME_PREFIX_DEFAULT = "report_";
 
-	JButton buttonStart;
-	ActionListener actionListenerForStart;
+	private JButton buttonStart;
+	private ActionListener actionListenerForStart;
 
-	boolean withMsUpdates;
-	boolean withMsUpdates2;
-	boolean askForOverwrite;
+	private boolean withMsUpdates;
+	private boolean withMsUpdates2;
+	private boolean askForOverwrite;
 
-	protected PanelStateSwitch<KindOfExport> panelSelectExportType;
-	protected PanelSWInfo.KindOfExport kindOfExport;
+	private PanelSWInfo.KindOfExport kindOfExport;
 
-	File exportDirectory;
-	String exportDirectoryS;
-	JFileChooser chooserDirectory;
-	JTextShowField fieldExportDirectory;
-	JTextShowField fieldFilenamePrefix;
+	private File exportDirectory;
+	private String exportDirectoryS;
+	private JFileChooser chooserDirectory;
+	private JTextShowField fieldExportDirectory;
+	private JTextShowField fieldFilenamePrefix;
 
-	JCheckBox checkWithMsUpdates;
-	JCheckBox checkWithMsUpdates2;
-	JCheckBox checkAskForOverwrite;
+	private JCheckBox checkWithMsUpdates;
+	private JCheckBox checkWithMsUpdates2;
+	private JCheckBox checkAskForOverwrite;
 
 	public PanelSWMultiClientReport() {
 		setupPanel();
@@ -229,7 +228,7 @@ public class PanelSWMultiClientReport extends JPanel {
 			}
 		});
 
-		panelSelectExportType = new PanelStateSwitch<>(
+		PanelStateSwitch<KindOfExport> panelSelectExportType = new PanelStateSwitch<>(
 				Configed.getResourceValue("PanelSWMultiClientReport.selectExportType"), PanelSWInfo.KindOfExport.PDF,
 				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, ((Enum<KindOfExport> val) -> {
 					Logging.info(this, "change to " + val);
@@ -404,5 +403,4 @@ public class PanelSWMultiClientReport extends JPanel {
 								GroupLayout.PREFERRED_SIZE))
 				.addGap(3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE, 3 * Globals.HGAP_SIZE));
 	}
-
 }

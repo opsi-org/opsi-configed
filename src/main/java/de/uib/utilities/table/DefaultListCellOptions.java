@@ -8,12 +8,12 @@ import javax.swing.ListSelectionModel;
 import de.uib.utilities.logging.Logging;
 
 public class DefaultListCellOptions implements ListCellOptions {
-	List<Object> possibleValues;
-	List<Object> defaultValues;
-	int selectionMode;
-	boolean editable;
-	boolean nullable;
-	String description;
+	private List<Object> possibleValues;
+	private List<Object> defaultValues;
+	private int selectionMode;
+	private boolean editable;
+	private boolean nullable;
+	private String description;
 
 	public DefaultListCellOptions() {
 		possibleValues = new ArrayList<>();

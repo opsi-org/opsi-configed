@@ -121,50 +121,45 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	private static final int WIDTH_COLUMN_PACKAGE_VERSION = WIDTH_COLUMN_PRODUCT_STATE;
 	private static final int WIDTH_COLUMN_INSTALLATION_INFO = WIDTH_COLUMN_PRODUCT_STATE;
 
-	JScrollPane paneProducts;
 	public JTable tableProducts;
-	protected AbstractExportTable exportTable;
-	JPanel topPane;
+	private AbstractExportTable exportTable;
+	protected JPanel topPane;
 
 	// right pane
-	ProductInfoPane infoPane;
-	protected AbstractPanelEditProperties panelEditProperties;
-	DefaultEditMapPanel propertiesPanel;
+	private ProductInfoPane infoPane;
+	private DefaultEditMapPanel propertiesPanel;
 
-	ListCellRenderer standardListCellRenderer;
+	private ListCellRenderer standardListCellRenderer;
 
-	TableCellRenderer productNameTableCellRenderer;
-	TableCellRenderer productCompleteNameTableCellRenderer;
+	private TableCellRenderer productNameTableCellRenderer;
+	private TableCellRenderer productCompleteNameTableCellRenderer;
 
-	TableCellRenderer targetConfigurationTableCellRenderer;
-	TableCellRenderer installationStatusTableCellRenderer;
-	TableCellRenderer actionProgressTableCellRenderer;
-	TableCellRenderer lastActionTableCellRenderer;
-	TableCellRenderer actionResultTableCellRenderer;
-	TableCellRenderer actionRequestTableCellRenderer;
-	ColoredTableCellRendererByIndex priorityclassTableCellRenderer;
-	ColoredTableCellRenderer productsequenceTableCellRenderer;
-	ColoredTableCellRenderer productversionTableCellRenderer;
-	ColoredTableCellRenderer packageversionTableCellRenderer;
+	private TableCellRenderer targetConfigurationTableCellRenderer;
+	private TableCellRenderer installationStatusTableCellRenderer;
+	private TableCellRenderer actionProgressTableCellRenderer;
+	private TableCellRenderer lastActionTableCellRenderer;
+	private TableCellRenderer actionResultTableCellRenderer;
+	private TableCellRenderer actionRequestTableCellRenderer;
+	private ColoredTableCellRendererByIndex priorityclassTableCellRenderer;
+	private ColoredTableCellRenderer productsequenceTableCellRenderer;
+	private ColoredTableCellRenderer productversionTableCellRenderer;
+	private ColoredTableCellRenderer packageversionTableCellRenderer;
 
-	ColoredTableCellRenderer versionInfoTableCellRenderer;
-	ColoredTableCellRenderer installationInfoTableCellRenderer;
+	private ColoredTableCellRenderer versionInfoTableCellRenderer;
+	private ColoredTableCellRenderer installationInfoTableCellRenderer;
 
-	ColoredTableCellRenderer positionTableCellRenderer;
-	ColoredTableCellRenderer lastStateChangeTableCellRenderer;
+	private ColoredTableCellRenderer lastStateChangeTableCellRenderer;
 
-	protected Map<String, Boolean> productDisplayFields;
+	private Map<String, Boolean> productDisplayFields;
 
-	protected List<? extends SortKey> currentSortKeys;
+	private List<? extends SortKey> currentSortKeys;
 
-	protected ArrayList<String> selectedProducts;
+	private JPopupMenu popup;
+	private JMenuItem itemOnDemand;
 
-	JPopupMenu popup;
-	JMenuItem itemOnDemand;
+	private JMenuItem itemSaveAndExecute;
 
-	JMenuItem itemSaveAndExecute;
-
-	protected String title;
+	private String title;
 
 	protected ConfigedMain mainController;
 
@@ -200,9 +195,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		initTopPane();
 
-		selectedProducts = new ArrayList<>();
-
-		paneProducts = new JScrollPane();
+		JScrollPane paneProducts = new JScrollPane();
 
 		paneProducts.getViewport().add(tableProducts);
 		paneProducts.setPreferredSize(new Dimension(FRAME_WIDTH_LEFTHANDED, FRAME_HEIGHT));
@@ -229,13 +222,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 				if (lsm.isSelectionEmpty()) {
 					Logging.debug(this, "no rows selected");
-
 				} else {
 					int selectedRow = lsm.getMinSelectionIndex();
-					if (selectedRow != lsm.getMaxSelectionIndex()) {
-						// multiselection
-
-					} else {
+					if (selectedRow == lsm.getMaxSelectionIndex()) {
 						Logging.debug(this, "selected " + selectedRow);
 						Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
 						Logging.debug(this, "selected  value at "
@@ -243,9 +232,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 						mainController.setProductEdited(
 								(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
 					}
-
 				}
-
 			}
 		});
 
@@ -466,7 +453,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			}
 		});
 
-		panelEditProperties = new PanelEditClientProperties(mainController, propertiesPanel);
+		AbstractPanelEditProperties panelEditProperties = new PanelEditClientProperties(mainController,
+				propertiesPanel);
 		infoPane = new ProductInfoPane(panelEditProperties);
 
 		propertiesPanel.registerDataChangedObserver(infoPane);
@@ -527,7 +515,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		infoPane.setProductAdvice("");
 	}
 
-	protected void producePopupMenu(final Map<String, Boolean> checkColumns) {
+	private void producePopupMenu(final Map<String, Boolean> checkColumns) {
 		popup = new JPopupMenu("");
 
 		JMenuItem save = new JMenuItemFormatted();
@@ -657,7 +645,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		}
 	}
 
-	protected JTable strippTable(JTable jTable) {
+	private JTable strippTable(JTable jTable) {
 		boolean dontStrippIt;
 		List<String[]> data = new ArrayList<>();
 		String[] headers = new String[jTable.getColumnCount()];

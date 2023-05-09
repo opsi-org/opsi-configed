@@ -10,7 +10,7 @@ import de.uib.configed.clientselection.AbstractSelectOperation;
 import de.uib.configed.clientselection.operations.StringEqualsOperation;
 
 public class GenericEnumElement extends AbstractSelectElement {
-	protected List<String> enumData;
+	private List<String> enumData;
 
 	public GenericEnumElement(String[] enumData, String[] name, String... localizedName) {
 		super(name, localizedName);

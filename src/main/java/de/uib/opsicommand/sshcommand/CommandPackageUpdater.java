@@ -17,8 +17,8 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	private String command;
 	private String baseName = "opsi-package-updater";
-	protected FGeneralDialog dialog;
-	protected boolean needSudo;
+	private FGeneralDialog dialog;
+	private boolean needSudo;
 	private boolean needParameter = true;
 	private boolean isMultiCommand;
 
@@ -50,7 +50,7 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 
 	@Override
 	public String getSecuredCommand() {
-		if ((getSecureInfoInCommand() != null) && (!getSecureInfoInCommand().trim().isEmpty())) {
+		if (getSecureInfoInCommand() != null && !getSecureInfoInCommand().trim().isEmpty()) {
 			return getCommand().replace(getSecureInfoInCommand(), SSHCommandFactory.CONFIDENTIAL);
 		} else {
 			return getCommand();
@@ -139,10 +139,6 @@ public class CommandPackageUpdater implements SSHCommand, SSHCommandNeedParamete
 	public boolean needParameter() {
 		return needParameter;
 	}
-
-	@Override
-	public void startParameterGui() {
-		/* Not needed */}
 
 	@Override
 	public void startParameterGui(ConfigedMain main) {

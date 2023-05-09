@@ -20,7 +20,10 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
+import de.uib.configed.clientselection.SavedSearchQuery;
 import de.uib.configed.gui.FTextArea;
+import de.uib.configed.gui.swinfopage.SWcsvExporter;
+import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.configed.tree.ClientTreeUI;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
@@ -134,8 +137,6 @@ public class Configed {
 
 	private static PropertiesStore extraLocalization;
 	private static boolean showLocalizationStrings;
-
-	private static ConfigedMain configedMain;
 
 	private static String locale;
 	private static String host;
@@ -251,11 +252,11 @@ public class Configed {
 	}
 
 	@SuppressWarnings("java:S106")
-	protected static void usage() {
+	private static void usage() {
 		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 		Logging.essential(USAGE_INFO);
 
-		final int TAB_WIDTH = 8;
+		final int tabWidth = 8;
 		int length0 = 0;
 		int length1 = 0;
 
@@ -275,33 +276,33 @@ public class Configed {
 		}
 
 		int allTabs0 = 0;
-		if (length0 % TAB_WIDTH == 0) {
-			allTabs0 = length0 / TAB_WIDTH + 1;
+		if (length0 % tabWidth == 0) {
+			allTabs0 = length0 / tabWidth + 1;
 		} else {
-			allTabs0 = (length0 / TAB_WIDTH) + 1;
+			allTabs0 = length0 / tabWidth + 1;
 		}
 
 		int allTabs1 = 0;
-		if (length1 % TAB_WIDTH == 0) {
-			allTabs1 = length1 / TAB_WIDTH + 1;
+		if (length1 % tabWidth == 0) {
+			allTabs1 = length1 / tabWidth + 1;
 		} else {
-			allTabs1 = (length1 / TAB_WIDTH) + 1;
+			allTabs1 = length1 / tabWidth + 1;
 		}
 
 		for (int i = 0; i < usageLines.length; i++) {
-			int startedTabs0 = (usageLines[i][0].length() / TAB_WIDTH);
-			int startedTabs1 = (usageLines[i][1].length() / TAB_WIDTH);
+			int startedTabs0 = usageLines[i][0].length() / tabWidth;
+			int startedTabs1 = usageLines[i][1].length() / tabWidth;
 
 			Logging.essential("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
 					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
 		}
 	}
 
-	protected static boolean isValue(String[] args, int i) {
+	private static boolean isValue(String[] args, int i) {
 		return i < args.length && args[i].indexOf('-') != 0;
 	}
 
-	protected static String getArg(String[] args, int i) {
+	private static String getArg(String[] args, int i) {
 		if (args.length <= i + 1 || args[i + 1].indexOf('-') == 0) {
 			Logging.error("Missing value for option " + args[i]);
 			usage();
@@ -326,9 +327,9 @@ public class Configed {
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
-		configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
+		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
 
-		SwingUtilities.invokeLater(() -> configedMain.init());
+		SwingUtilities.invokeLater(configedMain::init);
 
 		try {
 
@@ -374,7 +375,7 @@ public class Configed {
 	}
 
 	@SuppressWarnings("java:S106")
-	protected static void processArgs(String[] args) {
+	private static void processArgs(String[] args) {
 		Logging.debug("args " + Arrays.toString(args));
 
 		if (args.length == 2 && "--args".equals(args[0])) {
@@ -399,9 +400,6 @@ public class Configed {
 				if (i < firstPossibleNonOptionIndex) {
 					usage();
 					endApp(NO_ERROR);
-				} else {
-
-					// only one of them can be used
 				}
 				i++;
 			} else {
@@ -812,7 +810,7 @@ public class Configed {
 		if (optionCLIQuerySearch) {
 
 			Logging.debug("optionCLIQuerySearch");
-			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
+			SavedSearchQuery query = new SavedSearchQuery();
 
 			query.setArgs(host, user, password, savedSearch);
 			query.addMissingArgs();
@@ -827,7 +825,7 @@ public class Configed {
 			// addGroup
 			// addObject2Group
 
-			de.uib.configed.clientselection.SavedSearchQuery query = new de.uib.configed.clientselection.SavedSearchQuery();
+			SavedSearchQuery query = new SavedSearchQuery();
 
 			query.setArgs(host, user, password, savedSearch);
 			query.addMissingArgs();
@@ -837,7 +835,7 @@ public class Configed {
 			System.exit(0);
 		} else if (optionCLISwAuditPDF) {
 			Logging.debug("optionCLISwAuditPDF");
-			de.uib.configed.gui.swinfopage.SwPdfExporter exporter = new de.uib.configed.gui.swinfopage.SwPdfExporter();
+			SwPdfExporter exporter = new SwPdfExporter();
 			exporter.setArgs(host, user, password, clientsFile, outDir);
 			exporter.addMissingArgs();
 			exporter.run();
@@ -845,7 +843,7 @@ public class Configed {
 			System.exit(0);
 		} else if (optionCLISwAuditCSV) {
 			Logging.debug("optionCLISwAuditCSV");
-			de.uib.configed.gui.swinfopage.SWcsvExporter exporter = new de.uib.configed.gui.swinfopage.SWcsvExporter();
+			SWcsvExporter exporter = new SWcsvExporter();
 			exporter.setArgs(host, user, password, clientsFile, outDir);
 			exporter.addMissingArgs();
 			exporter.run();

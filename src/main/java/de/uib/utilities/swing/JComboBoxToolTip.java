@@ -19,24 +19,22 @@ public class JComboBoxToolTip extends JComboBox<String> {
 
 	private Map<String, String> selectValues;
 
-	protected Color listBackgroundColorSelected;
-	protected Color listBackgroundColorUnselected;
-	protected Color listForegroundColor;
+	private Color listBackgroundColorSelected;
+	private Color listForegroundColor;
 
-	protected boolean addEmpty;
+	private boolean addEmpty;
 
-	List<String> tooltips = new ArrayList<>();
+	private List<String> tooltips = new ArrayList<>();
 
 	public JComboBoxToolTip() {
 		super();
 
 		listBackgroundColorSelected = Globals.SECONDARY_BACKGROUND_COLOR;
-		listBackgroundColorUnselected = Globals.BACKGROUND_COLOR_3;
 		listForegroundColor = Globals.lightBlack;
 
 	}
 
-	protected class NewComboBoxRenderer extends BasicComboBoxRenderer {
+	private class NewComboBoxRenderer extends BasicComboBoxRenderer {
 		@Override
 		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
 				boolean cellHasFocus) {
@@ -83,7 +81,7 @@ public class JComboBoxToolTip extends JComboBox<String> {
 		this.setToolTips();
 	}
 
-	protected void setComboValues() {
+	private void setComboValues() {
 		boolean addE = addEmpty && !selectValues.containsKey("");
 
 		this.removeAllItems();

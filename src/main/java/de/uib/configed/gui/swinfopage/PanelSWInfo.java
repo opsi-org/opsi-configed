@@ -25,7 +25,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
-import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.opsidatamodel.AbstractPersistenceController;
@@ -53,48 +52,42 @@ public class PanelSWInfo extends JPanel {
 	private PanelGenEditTable panelTable;
 	private ExporterToCSV csvExportTable;
 
-	protected JPanel subPanelTitle;
+	private JPanel subPanelTitle;
 
-	protected JScrollPane scrollPaneSWInfo;
-	protected JTable jTable;
-	protected final SWInfoTableModel voidTableModel = new SWInfoTableModel();
-	protected GenTableModel modelSWInfo;
+	private final SWInfoTableModel voidTableModel = new SWInfoTableModel();
+	private GenTableModel modelSWInfo;
 
-	protected JLabel labelSuperTitle;
+	private JLabel labelSuperTitle;
 
-	protected String supertitle = "";
-	protected String title = "";
-	protected DatedRowList swRows;
-	protected String hostId = "";
-	protected boolean withPopup;
+	private String title = "";
+	private String hostId = "";
+	private boolean withPopup;
 
-	protected String scanInfo = "";
+	private String scanInfo = "";
 
-	protected Boolean askingForKindOfAction;
-	protected boolean askForOverwrite = true;
+	private boolean askForOverwrite = true;
 
-	protected int hGap = Globals.HGAP_SIZE / 2;
-	protected int vGap = Globals.VGAP_SIZE / 2;
-	protected int hLabel = Globals.BUTTON_HEIGHT;
+	private int hGap = Globals.HGAP_SIZE / 2;
+	private int vGap = Globals.VGAP_SIZE / 2;
 
-	protected ConfigedMain mainController;
-	protected AbstractPersistenceController persist;
+	private ConfigedMain mainController;
+	private AbstractPersistenceController persist;
 
 	public enum KindOfExport {
 		PDF, CSV
 	}
 
-	protected KindOfExport kindOfExport;
+	private KindOfExport kindOfExport;
 
-	boolean withMsUpdates;
-	boolean withMsUpdates2 = true;
-	String exportFilename;
+	private boolean withMsUpdates;
+	private boolean withMsUpdates2 = true;
+	private String exportFilename;
 
-	JCheckBox checkWithMsUpdates;
+	private JCheckBox checkWithMsUpdates;
 
-	int indexOfColWindowsSoftwareID;
+	private int indexOfColWindowsSoftwareID;
 
-	TableModelFilterCondition filterConditionWithMsUpdates = new TableModelFilterCondition() {
+	private TableModelFilterCondition filterConditionWithMsUpdates = new TableModelFilterCondition() {
 		@Override
 		public void setFilter(Set<Object> filter) {
 			/* Not needed */}
@@ -109,11 +102,11 @@ public class PanelSWInfo extends JPanel {
 		}
 	};
 
-	JCheckBox checkWithMsUpdates2;
+	private JCheckBox checkWithMsUpdates2;
 
-	final Pattern patternWithKB = Pattern.compile("\\{.*\\}\\p{Punct}kb.*", Pattern.UNICODE_CHARACTER_CLASS);
+	private final Pattern patternWithKB = Pattern.compile("\\{.*\\}\\p{Punct}kb.*", Pattern.UNICODE_CHARACTER_CLASS);
 
-	TableModelFilterCondition filterConditionWithMsUpdates2 = new TableModelFilterCondition() {
+	private TableModelFilterCondition filterConditionWithMsUpdates2 = new TableModelFilterCondition() {
 		@Override
 		public void setFilter(Set<Object> filter) {
 			/* Not needed */}
@@ -121,7 +114,7 @@ public class PanelSWInfo extends JPanel {
 		@Override
 		public boolean test(List<Object> row) {
 			String entry = (String) row.get(indexOfColWindowsSoftwareID);
-			boolean isKb = (patternWithKB.matcher(entry)).matches();
+			boolean isKb = patternWithKB.matcher(entry).matches();
 
 			return !isKb;
 			// on filtering active everything is taken if not isKb
@@ -130,7 +123,6 @@ public class PanelSWInfo extends JPanel {
 
 	public PanelSWInfo(ConfigedMain mainController) {
 		this(true, mainController);
-		askingForKindOfAction = false;
 	}
 
 	public PanelSWInfo(boolean withPopup, ConfigedMain mainController) {
@@ -141,7 +133,6 @@ public class PanelSWInfo extends JPanel {
 		initTable();
 
 		buildPanel();
-		askingForKindOfAction = true;
 	}
 
 	private void initTable() {
@@ -288,7 +279,7 @@ public class PanelSWInfo extends JPanel {
 			labelSuperTitle.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
-		jTable = new JTable(voidTableModel, null);
+		JTable jTable = new JTable(voidTableModel, null);
 
 		jTable.setAutoCreateRowSorter(true);
 		TableRowSorter<? extends TableModel> tableSorter = (TableRowSorter<? extends TableModel>) jTable.getRowSorter();
@@ -306,7 +297,7 @@ public class PanelSWInfo extends JPanel {
 		jTable.setColumnSelectionAllowed(true);
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);
-		scrollPaneSWInfo = new JScrollPane(jTable);
+		JScrollPane scrollPaneSWInfo = new JScrollPane(jTable);
 		if (!ConfigedMain.THEMES) {
 			scrollPaneSWInfo.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		}
@@ -364,6 +355,7 @@ public class PanelSWInfo extends JPanel {
 
 					default:
 						Logging.warning(this, "no case found for popupmenutrait");
+						break;
 					}
 				}
 
@@ -374,10 +366,6 @@ public class PanelSWInfo extends JPanel {
 
 		}
 
-	}
-
-	public void setAskingForKindOfAction(boolean b) {
-		askingForKindOfAction = b;
 	}
 
 	public void setWriteToFile(String path) {
@@ -480,7 +468,7 @@ public class PanelSWInfo extends JPanel {
 	}
 
 	private void setSuperTitle(String s) {
-		supertitle = "" + s;
+		String supertitle = s;
 		Logging.info(this, "setSuperTitle " + s);
 		labelSuperTitle.setText(supertitle);
 
@@ -491,7 +479,7 @@ public class PanelSWInfo extends JPanel {
 		Logging.debug(this, "reload action");
 	}
 
-	protected void floatExternalX() {
+	private void floatExternalX() {
 
 		PanelSWInfo copyOfMe;
 		GeneralFrame externalView;
@@ -521,7 +509,6 @@ public class PanelSWInfo extends JPanel {
 
 		this.hostId = "" + hostId;
 		title = this.hostId;
-		this.swRows = new DatedRowList();
 
 		String timeS = "" + Globals.getToday();
 		String[] parts = timeS.split(":");
@@ -538,18 +525,12 @@ public class PanelSWInfo extends JPanel {
 		this.hostId = "" + hostId;
 	}
 
-	protected static class SWInfoTableModel extends AbstractTableModel {
+	private static class SWInfoTableModel extends AbstractTableModel {
 		private List<String[]> data;
 
 		public SWInfoTableModel() {
 			super();
 			data = new ArrayList<>();
-		}
-
-		public void setData(DatedRowList datedList) {
-			this.data = datedList.getRows();
-
-			fireTableDataChanged();
 		}
 
 		@Override
@@ -569,8 +550,7 @@ public class PanelSWInfo extends JPanel {
 
 		@Override
 		public Object getValueAt(int row, int col) {
-			return (/* encodeString */ data.get(row))[col + 1];
+			return data.get(row)[col + 1];
 		}
 	}
-
 }

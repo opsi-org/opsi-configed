@@ -20,15 +20,12 @@ import de.uib.utilities.logging.Logging;
 
 public class DepotsList extends JList<String> implements ComponentListener {
 
-	MyListCellRenderer myListCellRenderer;
+	private MyListCellRenderer myListCellRenderer;
 	private List<String> saveV;
 
-	Map<String, Map<String, Object>> depotInfo;
-
-	AbstractPersistenceController persist;
+	private Map<String, Map<String, Object>> depotInfo;
 
 	public DepotsList(AbstractPersistenceController persist) {
-		this.persist = persist;
 		if (!ConfigedMain.THEMES) {
 			super.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			super.setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
@@ -104,7 +101,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		getSelectionModel().setValueIsAdjusting(false);
 	}
 
-	static class MyListCellRenderer extends DefaultListCellRenderer {
+	private static class MyListCellRenderer extends DefaultListCellRenderer {
 		private static final int FILL_LENGTH = 30;
 
 		Map<String, Map<String, Object>> extendedInfo;
@@ -150,7 +147,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 					tooltipText = key;
 				}
 
-				tooltipText = (Globals.fillStringToLength(tooltipText + " ", FILL_LENGTH));
+				tooltipText = Globals.fillStringToLength(tooltipText + " ", FILL_LENGTH);
 
 				String depot = (String) value;
 				if (!persist.hasDepotPermission(depot)) {

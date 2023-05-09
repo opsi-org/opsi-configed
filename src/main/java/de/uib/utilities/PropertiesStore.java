@@ -19,9 +19,9 @@ import de.uib.utilities.logging.Logging;
 // is a decorator of a HashMap
 public class PropertiesStore {
 
-	protected static final String KEY_SEPARATOR = "=";
+	private static final String KEY_SEPARATOR = "=";
 
-	File myStore;
+	private File myStore;
 
 	private Map<String, String> internalStore;
 
@@ -52,9 +52,7 @@ public class PropertiesStore {
 				Logging.debug(this, "line: " + line);
 				String trimmed = line.trim();
 
-				if (trimmed.length() == 0 || trimmed.charAt(0) == '#' || trimmed.charAt(0) == ';') {
-					// continue
-				} else {
+				if (trimmed.length() != 0 || trimmed.charAt(0) != '#' || trimmed.charAt(0) != ';') {
 					int posSeparator = line.indexOf(KEY_SEPARATOR);
 
 					String key = line.substring(0, posSeparator);
@@ -86,7 +84,7 @@ public class PropertiesStore {
 	}
 
 	// used by subsubclasses
-	protected final String getProp(String key, String defaultValue) {
+	private final String getProp(String key, String defaultValue) {
 		String result = internalStore.get(key);
 		if (result == null) {
 			return defaultValue;
@@ -101,7 +99,7 @@ public class PropertiesStore {
 	}
 
 	// used by subsubclasses
-	protected final void setProp(String key, String value) {
+	private final void setProp(String key, String value) {
 		internalStore.put(key, value);
 	}
 
