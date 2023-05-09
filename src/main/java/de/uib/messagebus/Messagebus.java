@@ -27,6 +27,7 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.ConfigedMain;
@@ -211,7 +212,9 @@ public class Messagebus implements MessagebusListener {
 		channels.add("event:host_created");
 		channels.add("event:host_deleted");
 
+		channels.add("event:productOnClient_created");
 		channels.add("event:productOnClient_updated");
+		channels.add("event:productOnClient_deleted");
 
 		makeChannelSubscriptionRequest(channels);
 	}
@@ -413,27 +416,48 @@ public class Messagebus implements MessagebusListener {
 				Thread.currentThread().interrupt();
 			}
 
+			ObjectMapper objectMapper = new ObjectMapper();
+			TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+			};
+			Map<String, Object> eventData = objectMapper.convertValue(message.get("data"), typeRef);
+
 			switch ((String) message.get("event")) {
 			case "host_connected":
-				String clientId = (String) ((Map<?, ?>) ((Map<?, ?>) message.get("data")).get("host")).get("id");
-				configedMain.addClientToConnectedList(clientId);
+				Map<String, Object> connectedHostData = objectMapper.convertValue(eventData.get("host"), typeRef);
+				String connectedClientId = (String) connectedHostData.get("id");
+				configedMain.addClientToConnectedList(connectedClientId);
 				break;
 
 			case "host_disconnected":
-				clientId = (String) ((Map<?, ?>) ((Map<?, ?>) message.get("data")).get("host")).get("id");
-				configedMain.removeClientFromConnectedList(clientId);
+				Map<String, Object> disconnectedHostData = objectMapper.convertValue(eventData.get("host"), typeRef);
+				String disconnectedClientId = (String) disconnectedHostData.get("id");
+				configedMain.removeClientFromConnectedList(disconnectedClientId);
 				break;
 
 			case "host_created":
-				configedMain.addClientToTable((String) ((Map<?, ?>) message.get("data")).get("id"));
+				configedMain.addClientToTable((String) eventData.get("id"));
 				break;
 
 			case "host_deleted":
-				configedMain.removeClientFromTable((String) ((Map<?, ?>) message.get("data")).get("id"));
+				configedMain.removeClientFromTable((String) eventData.get("id"));
+				break;
+
+			case "productOnClient_created":
+				configedMain.updateProduct(
+						objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
+						}));
 				break;
 
 			case "productOnClient_updated":
-				configedMain.updateProduct((Map<?, ?>) message.get("data"));
+				configedMain.updateProduct(
+						objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
+						}));
+				break;
+
+			case "productOnClient_deleted":
+				configedMain.updateProduct(
+						objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
+						}));
 				break;
 
 			default:

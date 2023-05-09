@@ -863,6 +863,16 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			opsiHostNames.addAll(Arrays.asList(newNames));
 		}
 
+		@Override
+		public void removeOpsiHostName(String name) {
+			opsiHostNames.remove(name);
+		}
+
+		@Override
+		public void removeOpsiHostNames(String[] names) {
+			opsiHostNames.removeAll(Arrays.asList(names));
+		}
+
 		// for table
 		@Override
 		public void updateLocalHostInfo(String hostId, String property, Object value) {

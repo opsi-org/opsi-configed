@@ -654,17 +654,36 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void addClientToTable(String clientId) {
-		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF CLIENT ADDED
+		if (persist.getHostInfoCollections().getOpsiHostNames().contains(clientId) || getViewIndex() != VIEW_CLIENTS) {
+			return;
+		}
+
+		persist.getHostInfoCollections().opsiHostsRequestRefresh();
+		persist.getHostInfoCollections().retrieveOpsiHosts();
+
+		SwingUtilities.invokeLater(() -> {
+			List<String> selectedValues = selectionPanel.getSelectedValues();
+			selectionPanel.clearSelection();
+			refreshClientListKeepingGroup();
+			setClients(selectedValues.toArray(new String[0]));
+		});
 	}
 
 	public void removeClientFromTable(String clientId) {
-		// TODO TO IMPLEMENT; WHAT TO DO WHEN MESSAGEBUS HAS EVENT OF CLIENT DELETED
+		if (!persist.getHostInfoCollections().getOpsiHostNames().contains(clientId) || getViewIndex() != VIEW_CLIENTS) {
+			return;
+		}
+
+		persist.getHostInfoCollections().opsiHostsRequestRefresh();
+		persist.getHostInfoCollections().retrieveOpsiHosts();
+
+		SwingUtilities.invokeLater(this::refreshClientListKeepingGroup);
 	}
 
-	public void updateProduct(Map<?, ?> data) {
-		String productId = (String) data.get("productId");
-		String clientId = (String) data.get("clientId");
-		String productType = (String) data.get("productType");
+	public void updateProduct(Map<String, String> data) {
+		String productId = data.get("productId");
+		String clientId = data.get("clientId");
+		String productType = data.get("productType");
 
 		// get the data for the updated client
 		try {
@@ -1771,13 +1790,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					if (Boolean.TRUE.equals(entry.getValue())) {
 						rowItems.add(rowmap.get(entry.getKey()));
 					}
-				}
-
-				if ("fscnoteb1.uib.local".equals(clientName)) {
-					Logging.info(this, "*** host_displayFields size, content " + hostDisplayFields.size() + ": "
-							+ hostDisplayFields);
-					Logging.info(this, "*** rowmap size, content " + rowmap.size() + ": " + rowmap);
-					Logging.info(this, "*** rowItems size, content " + rowItems.size() + ": " + rowItems);
 				}
 
 				model.addRow(rowItems.toArray());
@@ -4535,7 +4547,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private void refreshClientList() {
 		Logging.info(this, "refreshClientList");
-
 		produceClientListForDepots(getSelectedDepots(), allowedClients);
 
 		setRebuiltClientListTableModel();
@@ -4586,13 +4597,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						+ inventorynumber + ", " + notes + shutdownInstall + ", " + uefiBoot + ", " + wanConfig + ", "
 						+ group + ", " + productNetboot + ", " + productLocalboot);
 
+		String newClientID = hostname + "." + domainname;
+
+		persist.getHostInfoCollections().addOpsiHostName(newClientID);
+
 		if (persist.createClient(hostname, domainname, depotID, description, inventorynumber, notes, ipaddress,
 				systemUUID, macaddress, shutdownInstall, uefiBoot, wanConfig, group, productNetboot,
 				productLocalboot)) {
-			String newClientID = hostname + "." + domainname;
-
 			checkErrorList();
-			persist.getHostInfoCollections().addOpsiHostName(newClientID);
 			persist.fObject2GroupsRequestRefresh();
 
 			refreshClientList();
@@ -4605,6 +4617,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			// Sets the client on the table
 			setClient(newClientID);
+		} else {
+			persist.getHostInfoCollections().removeOpsiHostName(newClientID);
 		}
 	}
 
