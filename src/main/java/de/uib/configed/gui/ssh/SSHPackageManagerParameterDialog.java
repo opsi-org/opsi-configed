@@ -27,8 +27,6 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 
 	private JButton jButtonHelp;
 	protected JButton jButtonExecute;
-	private JButton jButtonReload;
-	private JButton jButtonClose;
 
 	protected ConfigedMain main;
 
@@ -82,7 +80,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 			});
 		}
 
-		jButtonReload = new JButton();
+		JButton jButtonReload = new JButton();
 		jButtonReload.setText(Configed.getResourceValue("SSHConnection.buttonPackagesReload"));
 		jButtonReload.setIcon(Globals.createImageIcon("images/reloadcomplete16.png", ""));
 		jButtonReload.setToolTipText(Configed.getResourceValue("SSHConnection.buttonPackagesReload.tooltip"));
@@ -95,7 +93,7 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 			});
 		}
 
-		jButtonClose = new JButton();
+		JButton jButtonClose = new JButton();
 		jButtonClose.setText(Configed.getResourceValue("SSHConnection.buttonClose"));
 		jButtonClose.setIcon(Globals.createImageIcon("images/cancelbluelight16.png", ""));
 		jButtonClose.addActionListener(actionEvent -> cancel());

@@ -66,15 +66,15 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
-		Map<String, JLabel> labelfields = new HashMap<>();
-		datafields = new HashMap<>();
-
 		GroupLayout baseLayout = new GroupLayout(this);
 		this.setLayout(baseLayout);
 
 		if (data == null) {
 			return;
 		}
+
+		Map<String, JLabel> labelfields = new HashMap<>();
+		datafields = new HashMap<>();
 
 		for (Entry<String, String> dataEntry : data.entrySet()) {
 			JLabel jLabel = new JLabel();

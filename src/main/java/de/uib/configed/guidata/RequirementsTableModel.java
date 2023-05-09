@@ -242,7 +242,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 	}
 
-	private static class MyColorizer {
+	private static final class MyColorizer {
 
 		private MyColorizer() {
 		}

@@ -275,19 +275,8 @@ public class Configed {
 			}
 		}
 
-		int allTabs0 = 0;
-		if (length0 % tabWidth == 0) {
-			allTabs0 = length0 / tabWidth + 1;
-		} else {
-			allTabs0 = length0 / tabWidth + 1;
-		}
-
-		int allTabs1 = 0;
-		if (length1 % tabWidth == 0) {
-			allTabs1 = length1 / tabWidth + 1;
-		} else {
-			allTabs1 = length1 / tabWidth + 1;
-		}
+		int allTabs0 = length0 / tabWidth + 1;
+		int allTabs1 = length1 / tabWidth + 1;
 
 		for (int i = 0; i < usageLines.length; i++) {
 			int startedTabs0 = usageLines[i][0].length() / tabWidth;

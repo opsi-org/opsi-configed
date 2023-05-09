@@ -87,9 +87,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	private TreePath pathToALL;
 	private TreePath pathToGROUPS;
 
-	private TreePath pathToDIRECTORY;
-	private TreePath pathToDirectoryNotAssigned;
-
 	private final Map<String, String> mapAllClients = new HashMap<>();
 	private final Map<String, String> mapGroups = new HashMap<>();
 	private final Map<String, String> mapDirectory = new HashMap<>();
@@ -159,13 +156,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 	public static String translateToPersistentName(String name) {
 		if (translationsToPersistentNames.get(name) != null) {
 			return translationsToPersistentNames.get(name);
-		}
-		return name;
-	}
-
-	public static String translateFromPersistentName(String name) {
-		if (translationsFromPersistentNames.get(name) != null) {
-			return translationsFromPersistentNames.get(name);
 		}
 		return name;
 	}
@@ -458,9 +448,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		groupNodeDirectoryNotAssigned.setChildsArePersistent(false);
 
 		groupNodeDirectory.add(groupNodeDirectoryNotAssigned);
-
-		pathToDirectoryNotAssigned = new TreePath(
-				new Object[] { rootNode, groupNodeDirectory, groupNodeDirectoryNotAssigned });
 	}
 
 	// generate tree structure
@@ -490,8 +477,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		groupNodeDirectory.setFixed(true);
 
 		rootNode.add(groupNodeDirectory);
-
-		pathToDIRECTORY = new TreePath(new Object[] { rootNode, groupNodeDirectory });
 
 		// ALL
 		groupNodeAllClients = produceGroupNode(ALL_CLIENTS_NAME,
@@ -1356,10 +1341,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public TreePath getPathToGROUPS() {
 		return pathToGROUPS;
-	}
-
-	public TreePath getPathToDIRECTORY() {
-		return pathToDIRECTORY;
 	}
 
 	public List<TreePath> getActivePaths() {

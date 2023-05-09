@@ -409,8 +409,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		private Map<String, Map<String, HostInfo>> depot2Host2HostInfo;
 		private LinkedList<String> depotNamesList;
 
-		private Map<String, Boolean> mapOfPCs;
-
 		// for some depots
 		private Map<String, HostInfo> mapPCInfomap;
 
@@ -768,7 +766,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			Logging.debug(this, " ------ building pcList");
 			mapPcBelongsToDepot = new HashMap<>();
 
-			mapOfPCs = new HashMap<>();
+			Map<String, Boolean> mapOfPCs = new HashMap<>();
 			mapPCInfomap = new HashMap<>();
 
 			List<String> depotList = new ArrayList<>();
@@ -3839,19 +3837,11 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public Map<String, List<Map<String, String>>> getMapOfProductStatesAndActions(String[] clientIds) {
 		Logging.debug(this, "getMapOfProductStatesAndActions for : " + Arrays.toString(clientIds));
 
-		Map<String, List<Map<String, String>>> result = new HashMap<>();
-
 		if (clientIds == null || clientIds.length == 0) {
-			return result;
+			return new HashMap<>();
 		}
 
-		Map<String, List<Map<String, String>>> states = getProductStatesNOM(clientIds);
-
-		if (states != null) {
-			return states;
-		}
-
-		return result;
+		return getProductStatesNOM(clientIds);
 	}
 
 	private Map<String, List<Map<String, String>>> getLocalBootProductStates(String[] clientIds) {
@@ -3907,18 +3897,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.debug(this, "getMapOfLocalbootProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		if (clientIds == null || clientIds.length == 0) {
-			return null;
+			return new HashMap<>();
 		}
 
-		Map<String, List<Map<String, String>>> states = null;
-
-		states = getLocalBootProductStates(clientIds);
-
-		if (states != null) {
-			return states;
-		}
-
-		return new HashMap<>();
+		return getLocalBootProductStates(clientIds);
 	}
 
 	private Map<String, List<Map<String, String>>> getNetBootProductStatesNOM(String[] clientIds) {
@@ -3948,15 +3930,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.debug(this, "getMapOfNetbootProductStatesAndActions for : " + Arrays.toString(clientIds));
 
 		if (clientIds == null || clientIds.length == 0) {
-			return null;
+			return new HashMap<>();
 		}
 
-		Map<String, List<Map<String, String>>> states = getNetBootProductStatesNOM(clientIds);
-
-		if (states != null) {
-			return states;
-		}
-		return new HashMap<>();
+		return getNetBootProductStatesNOM(clientIds);
 	}
 
 	private boolean updateProductOnClient(String pcname, String productname, int producttype,
@@ -8399,7 +8376,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		withMySQL = opsiModules.get("mysql_backend") != null && opsiModules.get("mysql_backend");
 		withUEFI = opsiModules.get("uefi") != null && opsiModules.get("uefi");
 		withWAN = opsiModules.get("vpn") != null && opsiModules.get("vpn");
-		withUserRoles = opsiModules.get("userroles" != null) && opsiModules.get("userroles");
+		withUserRoles = opsiModules.get("userroles") != null && opsiModules.get("userroles");
 
 		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);

@@ -3488,11 +3488,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private void updateProductStates() {
-		updateLocalbootProductStates();
-		updateNetbootProductStates();
-	}
-
 	public void initServer() {
 		checkSaveAll(true);
 		preSaveSelectedClients = saveSelectedClients;
@@ -3820,6 +3815,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			checkErrorList();
 
 			clearUpdateCollectionAndTell();
+		}
+
+		private void updateProductStates() {
+			updateLocalbootProductStates();
+			updateNetbootProductStates();
 		}
 
 		public void save() {
