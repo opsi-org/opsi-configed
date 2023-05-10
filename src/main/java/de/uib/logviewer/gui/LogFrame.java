@@ -29,6 +29,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +58,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ActivityPanel;
 import utils.ExtractorUtil;
 
-public class LogFrame extends JFrame implements WindowListener, ActionListener, KeyListener {
+public class LogFrame extends JFrame implements WindowListener, KeyListener {
 
 	protected static JFileChooser chooser;
 	protected static File logDirectory;
@@ -188,7 +189,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 
 	}
 
-	public class SizeListeningPanel extends JPanel implements ComponentListener {
+	public static class SizeListeningPanel extends JPanel implements ComponentListener {
 		SizeListeningPanel() {
 			super.addComponentListener(this);
 		}
@@ -196,11 +197,11 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		//ComponentListener implementation
 		@Override
 		public void componentHidden(ComponentEvent e) {
-		}
+			/* Not needed */}
 
 		@Override
 		public void componentMoved(ComponentEvent e) {
-		}
+			/* Not needed */}
 
 		@Override
 		public void componentResized(ComponentEvent e) {
@@ -211,16 +212,14 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 				Logging.info(this, "componentResized " + ex);
 			}
 			Logging.debug(this, "componentResized ready");
-
 		}
 
 		@Override
 		public void componentShown(ComponentEvent e) {
-		}
+			/* Not needed */}
 
 		public void repairSizes() {
-		}
-
+			/* Not needed */}
 	}
 
 	//------------------------------------------------------------------------------------------
@@ -241,12 +240,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		jMenuFile.setText(Logview.getResourceValue("MainFrame.jMenuFile"));
 
 		jMenuFileExit.setText(Logview.getResourceValue("MainFrame.jMenuFileExit"));
-		jMenuFileExit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				exitAction();
-			}
-		});
+		jMenuFileExit.addActionListener((ActionEvent e) -> exitAction());
 
 		jMenuFileOpen.setText(Logview.getResourceValue("MainFrame.jMenuFileOpen"));
 		jMenuFileOpen.addActionListener(new ActionListener() {
@@ -262,46 +256,32 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 					showLogfile.removeAllHighlights();
 				}
 			}
-
 		});
+
 		jMenuFileClose.setText(Logview.getResourceValue("MainFrame.jMenuFileClose"));
-		jMenuFileClose.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showLogfile.close();
-				setTitle(Globals.APPNAME);
-			}
-
+		jMenuFileClose.addActionListener((ActionEvent e) -> {
+			showLogfile.close();
+			setTitle(Globals.APPNAME);
 		});
+
 		jMenuFileSave.setText(Logview.getResourceValue("MainFrame.jMenuFileSave"));
-		jMenuFileSave.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showLogfile.save();
-			}
+		jMenuFileSave.addActionListener((ActionEvent e) -> showLogfile.save());
 
-		});
 		jMenuFileNew.setText(Logview.getResourceValue("MainFrame.jMenuFileNew"));
-		jMenuFileNew.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showLogfile.close();
-				setTitle(Globals.APPNAME);
-			}
-
+		jMenuFileNew.addActionListener((ActionEvent e) -> {
+			showLogfile.close();
+			setTitle(Globals.APPNAME);
 		});
+
 		jMenuFileReload.setText(Logview.getResourceValue("MainFrame.jMenuFileReload"));
-		jMenuFileReload.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (fileName != null) {
-					showLogfile.setFontSize("+");
-					showLogfile.reload();
-					setTitle(Globals.APPNAME + " : " + fileName);
-				}
+		jMenuFileReload.addActionListener((ActionEvent e) -> {
+			if (fileName != null) {
+				showLogfile.setFontSize("+");
+				showLogfile.reload();
+				setTitle(Globals.APPNAME + " : " + fileName);
 			}
-
 		});
+
 		jMenuFile.add(jMenuFileOpen);
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileClose);
@@ -318,21 +298,17 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		jMenuView.setText(Logview.getResourceValue("MainFrame.jMenuView"));
 
 		jMenuViewFontsizePlus.setText(Logview.getResourceValue("MainFrame.jMenuViewFontsizePlus"));
-		jMenuViewFontsizePlus.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showLogfile.setFontSize("+");
-				showLogfile.reload();
-			}
+		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
+			showLogfile.setFontSize("+");
+			showLogfile.reload();
 		});
+
 		jMenuViewFontsizeMinus.setText(Logview.getResourceValue("MainFrame.jMenuViewFontsizeMinus"));
-		jMenuViewFontsizeMinus.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showLogfile.setFontSize("-");
-				showLogfile.reload();
-			}
+		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
+			showLogfile.setFontSize("-");
+			showLogfile.reload();
 		});
+
 		jMenuView.add(jMenuViewFontsizePlus);
 		jMenuView.add(jMenuViewFontsizeMinus);
 
@@ -342,40 +318,20 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		jMenuHelp.setText(Logview.getResourceValue("MainFrame.jMenuHelp"));
 
 		jMenuHelpDoc.setText(Logview.getResourceValue("MainFrame.jMenuDoc"));
-		jMenuHelpDoc.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				main.showExternalDocument(Globals.OPSI_DOC_PAGE);
-			}
-		});
+		jMenuHelpDoc.addActionListener((ActionEvent e) -> main.showExternalDocument(Globals.OPSI_DOC_PAGE));
+
 		jMenuHelp.add(jMenuHelpDoc);
 
 		jMenuHelpForum.setText(Logview.getResourceValue("MainFrame.jMenuForum"));
-		jMenuHelpForum.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				main.showExternalDocument(Globals.OPSI_FORUM_PAGE);
-			}
-		});
+		jMenuHelpForum.addActionListener((ActionEvent e) -> main.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
 		jMenuHelpSupport.setText(Logview.getResourceValue("MainFrame.jMenuSupport"));
-		jMenuHelpSupport.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				main.showExternalDocument(Globals.OPSI_SUPPORT_PAGE);
-			}
-		});
+		jMenuHelpSupport.addActionListener((ActionEvent e) -> main.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 		jMenuHelp.add(jMenuHelpSupport);
 
 		jMenuHelpAbout.setText(Logview.getResourceValue("MainFrame.jMenuHelpAbout"));
-		jMenuHelpAbout.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				showAboutAction();
-			}
-		});
+		jMenuHelpAbout.addActionListener((ActionEvent e) -> showAboutAction());
 
 		jMenuHelp.add(jMenuHelpAbout);
 
@@ -397,63 +353,46 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 
 		iconButtonOpen = new IconButton(Configed.getResourceValue("MainFrame.buttonOpen"), "images/openfile.gif",
 				"images/images/openfile.gif", "");
-		iconButtonOpen.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				openFile();
-				if (fileName != null) {
-					showLogfile.setMainText(readFile(fileName).toString());
-					showLogfile.setTitle(fileName);
-					setTitle(Globals.APPNAME + " : " + fileName);
-					showLogfile.removeAllHighlights();
-				}
+		iconButtonOpen.addActionListener((ActionEvent e) -> {
+			openFile();
+			if (fileName != null) {
+				showLogfile.setMainText(readFile(fileName).toString());
+				showLogfile.setTitle(fileName);
+				setTitle(Globals.APPNAME + " : " + fileName);
+				showLogfile.removeAllHighlights();
 			}
 		});
 		icons.add(iconButtonOpen);
 
 		iconButtonReload = new IconButton(Configed.getResourceValue("MainFrame.buttonReload"), "images/reload16.png",
 				"images/images/reload16.png", "");
-		iconButtonReload.addActionListener(new java.awt.event.ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (fileName != null) {
-					showLogfile.reload();
-				}
+		iconButtonReload.addActionListener((ActionEvent e) -> {
+			if (fileName != null) {
+				showLogfile.reload();
 			}
 		});
 		icons.add(iconButtonReload);
 
 		iconButtonSave = new IconButton(Configed.getResourceValue("MainFrame.jButtonSave"), "images/save.png",
 				"images/images/save.png", "");
-		iconButtonSave.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (fileName != null) {
-					showLogfile.save();
-				}
+		iconButtonSave.addActionListener((ActionEvent e) -> {
+			if (fileName != null) {
+				showLogfile.save();
 			}
 		});
 		icons.add(iconButtonSave);
 
 		iconButtonCopy = new IconButton(Configed.getResourceValue("MainFrame.buttonCopy"), "images/edit-copy.png",
 				"images/images/edit-copy.png", "");
-		iconButtonCopy.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showLogfile.floatExternal();
-			}
-		});
+		iconButtonCopy.addActionListener((ActionEvent e) -> showLogfile.floatExternal());
 		icons.add(iconButtonCopy);
 
 		iconButtonPlus = new IconButton(Configed.getResourceValue("MainFrame.jButtonPlus"), "images/font-plus.png",
 				"images/images/font-plus.png", "");
 		iconButtonPlus.setToolTipText("Ctrl - \"+\"");
-		iconButtonPlus.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showLogfile.setFontSize("+");
-				showLogfile.reload();
-			}
+		iconButtonPlus.addActionListener((ActionEvent e) -> {
+			showLogfile.setFontSize("+");
+			showLogfile.reload();
 		});
 		icons.add(iconButtonPlus);
 
@@ -461,12 +400,9 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 				"images/images/font-minus.png", "");
 		iconButtonMinus.setToolTipText("Ctrl - \"-\"");
 
-		iconButtonMinus.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				showLogfile.setFontSize("-");
-				showLogfile.reload();
-			}
+		iconButtonMinus.addActionListener((ActionEvent e) -> {
+			showLogfile.setFontSize("-");
+			showLogfile.reload();
 		});
 		icons.add(iconButtonMinus);
 
@@ -615,64 +551,33 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 
 	@Override
 	public void windowOpened(WindowEvent e) {
-		;
-	}
+		/* Not needed */}
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-		;
-	}
+		/* Not needed */}
 
 	@Override
 	public void windowActivated(WindowEvent e) {
-		;
-	}
+		/* Not needed */}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
-		;
-	}
+		/* Not needed */}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
-		;
-	}
+		/* Not needed */}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
-		;
-	}
-
-	//MouseListener implementation
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	public void mouseExited(MouseEvent e) {
-	}
-
-	public void mousePressed(MouseEvent e) {
-	}
-
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	// ActionListener implementation
-	@Override
-	public void actionPerformed(ActionEvent e) {
-	}
-
-	public void enableAfterLoading() {
-
-	}
+		/* Not needed */}
 
 	@Override
-	public void paint(java.awt.Graphics g) {
+	public void paint(Graphics g) {
 		try {
 			super.paint(g);
-		} catch (java.lang.ClassCastException ex) {
+		} catch (ClassCastException ex) {
 			Logging.info(this, "the ugly well known exception " + ex);
 		}
 	}
@@ -736,7 +641,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		}
 	}
 
-	private void showDialog(String errorMsg) {
+	private static void showDialog(String errorMsg) {
 		JOptionPane.showMessageDialog(null, errorMsg, "Attention", JOptionPane.WARNING_MESSAGE);
 	}
 
@@ -804,23 +709,16 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 	}
 
 	private StringBuilder readInputStream(InputStream fis) {
-		boolean fileRead = false;
 		StringBuilder sb = new StringBuilder();
 
 		String thisLine = null;
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(fis, "UTF8"));
-			if (br != null) {
-				while ((thisLine = br.readLine()) != null) {
-					sb.append(thisLine);
-					sb.append("\n");
-					fileRead = true;
-				}
-				br.close();
-			} else {
-				Logging.error("Error in reading file " + file);
-				showDialog("Error in reading file " + file);
+			BufferedReader br = new BufferedReader(new InputStreamReader(fis, StandardCharsets.UTF_8));
+			while ((thisLine = br.readLine()) != null) {
+				sb.append(thisLine);
+				sb.append("\n");
 			}
+			br.close();
 		} catch (Exception ex) {
 			Logging.error("Error reading file: " + ex);
 			showDialog("Error reading file: " + ex);
@@ -832,19 +730,13 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
+		/* Not needed */}
 }
