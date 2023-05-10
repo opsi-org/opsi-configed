@@ -74,7 +74,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private static final Integer[] LEVELS = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	private static final List<Integer> levelList = Arrays.asList(LEVELS);
 
-	private JTextPane jTextPane;
+	public JTextPane jTextPane;
 	private JScrollPane scrollpane;
 	private JPanel commandpane;
 	private JLabel labelSearch;
@@ -92,7 +92,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private JComboBox<String> comboType;
 	private DefaultComboBoxModel<String> comboModelTypes;
 
-	private JPanel jTextPanel;
+	public JPanel jTextPanel;
 	private WordSearcher searcher;
 	private Highlighter highlighter;
 	private final StyleContext styleContext;
@@ -121,7 +121,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	private ImmutableDefaultStyledDocument document;
 
-	protected String[] lines;
+	public String[] lines;
 	private int[] lineLevels;
 	private Style[] lineStyles;
 
@@ -427,6 +427,10 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
+	public void removeAllHighlights() {
+		highlighter.removeAllHighlights();;
+	}
+
 	public void setFontSize(String s) {
 		if ("+".equals(s)) {
 			displayFontSize = displayFontSize + 2;
@@ -519,13 +523,21 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
-	protected void reload() {
+	public void reload() {
 		Logging.info(this, "reload action");
 		setLevelWithoutAction(produceInitialMaxShowLevel());
 	}
 
-	protected void save() {
+	public void save() {
 		Logging.debug(this, "save action");
+	}
+
+	public void paste(String text) {
+		Logging.debug(this, "paste action");
+	}
+
+	public void close() {
+		Logging.debug(this, "close action");
 	}
 
 	protected void saveAsZip() {
@@ -536,7 +548,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		Logging.debug(this, "save all as zip action");
 	}
 
-	private void floatExternal() {
+	public void floatExternal() {
 		if (document == null) {
 			return;
 		}
@@ -950,6 +962,38 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		sliderLevel.setValue(showLevel);
 		buildDocument();
+		jTextPane.setCaretPosition(0);
+		jTextPane.getCaret().setVisible(true);
+	}
+
+	public void setMainText(String s) {
+		Logging.info(this, "setMainText ...");
+		Logging.info(this, "usedmemory " + Globals.usedMemory());
+		if (s == null) {
+			Logging.warning(this, "wont set main text, argument s is null");
+			return;
+		}
+
+		Logging.info(this, "Setting text");
+
+		lines = s.split("\n");
+		parse();
+		if (lines.length > 1) {
+			if (maxExistingLevel > 4) {
+				showLevel = 5;
+			} else {
+				showLevel = maxExistingLevel;
+			}
+			adaptSlider();
+		} else {
+			showLevel = 1;
+			sliderLevel.produceLabels(0);
+		}
+
+		sliderLevel.setValue(showLevel);
+		buildDocument();
+		Logging.info(this, "usedmemory " + Globals.usedMemory());
+
 		jTextPane.setCaretPosition(0);
 		jTextPane.getCaret().setVisible(true);
 	}

@@ -802,7 +802,7 @@ public class Configed {
 		processArgs(args);
 
 		if (logviewer) {
-			new Logview(JAVA_VENDOR, locale, LOCALIZATION_FILENAME_REGEX);
+			Logview.main(args);
 		}
 
 		Logging.debug("initiating configed");

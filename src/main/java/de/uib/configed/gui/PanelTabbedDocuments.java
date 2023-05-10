@@ -45,13 +45,13 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			final String ident = idents[i];
 			LogPane showPane = new LogPane(defaultText) {
 				@Override
-				protected void reload() {
+				public void reload() {
 					super.reload();
 					loadDocument(ident);
 				}
 
 				@Override
-				protected void save() {
+				public void save() {
 					String filename = ident;
 					if (getInfo() != null) {
 						filename = getInfo().replace('.', '_') + "___" + ident + ".log";

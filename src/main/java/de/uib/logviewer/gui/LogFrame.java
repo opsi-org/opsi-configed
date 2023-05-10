@@ -9,7 +9,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.datatransfer.Clipboard;
 import java.awt.event.ActionEvent;
@@ -45,7 +44,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSplitPane;
 import javax.swing.UIManager;
 
 import de.uib.configed.Configed;
@@ -59,38 +57,27 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ActivityPanel;
 import utils.ExtractorUtil;
 
-public class LogFrame extends JFrame implements WindowListener, ActionListener, KeyListener
-//,PropertyChangeListener 
-{
+public class LogFrame extends JFrame implements WindowListener, ActionListener, KeyListener {
+
+	protected static JFileChooser chooser;
+	protected static File logDirectory;
+	protected static String fileName;
+
+	public static final int fwidth = 800;
+	public static final int fheight = 600;
 
 	protected int dividerLocationCentralPane = 300;
 	protected int minHSizeTreePanel = 150;
-
-	public final static int fwidth = 800;
-	public final static int fheight = 600;
-
-	final int fwidth_lefthanded = 420;
-	final int fwidth_righthanded = fwidth - fwidth_lefthanded;
-	final int splitterLeftRight = 15;
-
-	final int labelproductselection_width = 200;
-	final int labelproductselection_height = 40;
-	final int line_height = 23;
 
 	protected String oldNotes;
 
 	protected Clipboard clipboard;
 
-	protected HashMap<String, String> changedClientInfo = new HashMap();
-
 	LogviewMain main;
 
-	public SizeListeningPanel allPane;
+	private SizeListeningPanel allPane;
 
 	//menu system
-
-	public static final String ITEM_ADD_CLIENT = "add client";
-	public static final String ITEM_DELETE_CLIENT = "remove client";
 
 	Map<String, List<JMenuItem>> menuItemsHost;
 
@@ -105,15 +92,11 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 	JMenuItem jMenuFileSave;
 	JMenuItem jMenuFileNew;
 	JMenuItem jMenuFileReload;
-	//JMenuItem jMenuFileCopy;
 
 	JMenu jMenuView;
 	JMenuItem jMenuViewFontsizePlus;
 	JMenuItem jMenuViewFontsizeMinus;
 
-	protected static JFileChooser chooser;
-	protected static File logDirectory;
-	protected static String fileName;
 	protected File file;
 	Map<String, Integer> labelledDelays;
 
@@ -155,21 +138,21 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 
 	protected FShowList fListSelectedClients;
 
-	public Container baseContainer;
+	private Container baseContainer;
 
 	class GlassPane extends JComponent {
 		GlassPane() {
 			super();
 			Logging.debug(this, "glass pane initialized");
-			setVisible(true);
-			setOpaque(true);
-			addKeyListener(new KeyAdapter() {
+			super.setVisible(true);
+			super.setOpaque(true);
+			super.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyTyped(KeyEvent e) {
 					Logging.debug(this, "key typed on glass pane");
 				}
 			});
-			addMouseListener(new MouseAdapter() {
+			super.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					Logging.info(this, "mouse on glass pane");
@@ -191,18 +174,16 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 	GlassPane glass;
 
 	public LogFrame(LogviewMain main) {
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		this.main = main;
-		baseContainer = this.getContentPane();
+		baseContainer = super.getContentPane();
 
-		Globals.masterFrame = baseContainer;
+		Globals.container1 = baseContainer;
 
 		glass = new GlassPane();
 
-		//guiInit(appletHost);
 		guiInit();
-		//initData();
 
 		UIManager.put("OptionPane.yesButtonText", Logview.getResourceValue("UIManager.yesButtonText"));
 		UIManager.put("OptionPane.noButtonText", Logview.getResourceValue("UIManager.noButtonText"));
@@ -212,56 +193,16 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 
 	public class SizeListeningPanel extends JPanel implements ComponentListener {
 		SizeListeningPanel() {
-			addComponentListener(this);
+			super.addComponentListener(this);
 		}
-		//ComponentListener implementation
 
+		//ComponentListener implementation
 		@Override
 		public void componentHidden(ComponentEvent e) {
 		}
 
 		@Override
 		public void componentMoved(ComponentEvent e) {
-		}
-
-		private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int min_right_width, int min_left_width,
-				int max_right_width) {
-			if (splitpane == null || rightpane == null)
-				return;
-
-			int dividerLocation = splitpane.getDividerLocation();
-			//dividerLocation initially was (fwidth_lefthanded + splitterLeftRight);
-			int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
-			int missingSpace = min_right_width - sizeOfRightPanel;
-			if (missingSpace > 0 && dividerLocation > min_left_width) {
-				splitpane.setDividerLocation(dividerLocation - missingSpace);
-			}
-
-			//logging.info(this, "moveDivider1 ");
-
-			if (sizeOfRightPanel > max_right_width) {
-				splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - max_right_width));
-			}
-
-		}
-
-		private void moveDivider2(JSplitPane splitpane, JComponent rightpane, int min_left_width) {
-			if (splitpane == null || rightpane == null)
-				return;
-
-			int completeWidth = (int) splitpane.getSize().getWidth();
-			int preferred_right_width = (int) rightpane.getPreferredSize().getWidth();
-
-			int dividerabslocation = completeWidth - preferred_right_width - splitterLeftRight;
-
-			if (dividerabslocation < min_left_width)
-				dividerabslocation = min_left_width;
-
-			if (dividerabslocation > completeWidth - 20)
-				dividerabslocation = completeWidth - 20;
-
-			// result < 0 splitpane resets itself 
-			splitpane.setDividerLocation(dividerabslocation);
 		}
 
 		@Override
@@ -300,8 +241,6 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		jMenuFileNew = new JMenuItem();
 		jMenuFileReload = new JMenuItem();
 
-		//jMenuFileCopy = new JMenuItem();
-
 		jMenuFile.setText(Logview.getResourceValue("MainFrame.jMenuFile"));
 
 		jMenuFileExit.setText(Logview.getResourceValue("MainFrame.jMenuFileExit"));
@@ -321,12 +260,9 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 					Logging.info(this, "usedmemory " + Globals.usedMemory());
 					showLogfile.setMainText(readFile(fileName).toString());
 					Logging.info(this, "usedmemory " + Globals.usedMemory());
-					// decoding before files restricted to utf-8 
-					//showLogfile.setMainText(Normalizer.normalize(readFile(fileName).toString(), Form.NFD)
-					//		.replaceAll("\\p{InCombiningDiacriticalMarks}+", ""));
 					showLogfile.setTitle(fileName);
 					setTitle(Globals.APPNAME + " : " + fileName);
-					showLogfile.highlighter.removeAllHighlights();
+					showLogfile.removeAllHighlights();
 				}
 			}
 
@@ -412,7 +348,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		jMenuHelpDoc.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				main.showExternalDocument(Globals.opsiDocpage);
+				main.showExternalDocument(Globals.OPSI_DOC_PAGE);
 			}
 		});
 		jMenuHelp.add(jMenuHelpDoc);
@@ -421,7 +357,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		jMenuHelpForum.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				main.showExternalDocument(Globals.opsiForumpage);
+				main.showExternalDocument(Globals.OPSI_FORUM_PAGE);
 			}
 		});
 		jMenuHelp.add(jMenuHelpForum);
@@ -430,7 +366,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		jMenuHelpSupport.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				main.showExternalDocument(Globals.opsiSupportpage);
+				main.showExternalDocument(Globals.OPSI_SUPPORT_PAGE);
 			}
 		});
 		jMenuHelp.add(jMenuHelpSupport);
@@ -472,7 +408,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 					showLogfile.setMainText(readFile(fileName).toString());
 					showLogfile.setTitle(fileName);
 					setTitle(Globals.APPNAME + " : " + fileName);
-					showLogfile.highlighter.removeAllHighlights();
+					showLogfile.removeAllHighlights();
 				}
 			}
 		});
@@ -492,7 +428,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 
 		iconButtonSave = new IconButton(Configed.getResourceValue("MainFrame.jButtonSave"), "images/save.png",
 				"images/images/save.png", "");
-		iconButtonSave.addActionListener(new java.awt.event.ActionListener() {
+		iconButtonSave.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (fileName != null) {
@@ -504,7 +440,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 
 		iconButtonCopy = new IconButton(Configed.getResourceValue("MainFrame.buttonCopy"), "images/edit-copy.png",
 				"images/images/edit-copy.png", "");
-		iconButtonCopy.addActionListener(new java.awt.event.ActionListener() {
+		iconButtonCopy.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				showLogfile.floatExternal();
@@ -548,7 +484,6 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 	}
 
 	private void guiInit() {
-		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 
 		this.addWindowListener(this);
 		this.setFont(Globals.defaultFont);
@@ -564,13 +499,13 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 				.addGroup(layoutIconPane1.createSequentialGroup()
 						.addComponent(icons, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.hGapSize / 2, Globals.hGapSize / 2, Globals.hGapSize / 2)));
+						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)));
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutIconPane1.createSequentialGroup()
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 						.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(icons,
 								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(Globals.vGapSize / 2, Globals.vGapSize / 2, Globals.vGapSize / 2)));
+						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -578,7 +513,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		c.gridx = 0;
 		c.gridy = 0;
 		iconPane.add(icons, c);
-		iconPane.setBackground(Globals.backLightBlue);
+		iconPane.setBackground(Globals.BACKGROUND_COLOR_7);
 
 		iconBarPane = new JPanel();
 		iconBarPane.setLayout(new GridBagLayout());
@@ -596,42 +531,42 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		//only one LogPane
 		showLogfile = new LogPane("", true) {
 			@Override
-			protected void reload() {
+			public void reload() {
 				int caretPosition = showLogfile.jTextPane.getCaretPosition();
 				showLogfile.setMainText(reloadFile(fileName));
 				showLogfile.setTitle(fileName);
 				showLogfile.jTextPane.setCaretPosition(caretPosition);
-				showLogfile.highlighter.removeAllHighlights();
+				showLogfile.removeAllHighlights();
 			}
 
 			@Override
-			protected void close() {
+			public void close() {
 				fileName = "";
 				showLogfile.setMainText("");
 				showLogfile.setTitle(fileName);
-				showLogfile.highlighter.removeAllHighlights();
+				showLogfile.removeAllHighlights();
 			}
 
 			@Override
-			protected void save() {
+			public void save() {
 				String fn = openFile();
-				if (!fn.equals("") && fn != null) {
+				if (!"".equals(fn) && fn != null) {
 					saveToFile(fn, showLogfile.lines);
 					showLogfile.setTitle(fn);
 				}
 			}
 
 			@Override
-			protected void paste(String text) {
+			public void paste(String text) {
 				fileName = "";
 				showLogfile.setMainText(text);
 				showLogfile.setTitle(fileName);
-				showLogfile.highlighter.removeAllHighlights();
+				showLogfile.removeAllHighlights();
 			}
 
 		};
 
-		Globals.masterFrame = baseContainer;
+		Globals.container1 = baseContainer;
 		showLogfile.setMainText("");
 		showLogfile.setTitle("unknown");
 		setTitle(Globals.APPNAME);
@@ -834,26 +769,16 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 				showDialog("This is not a file, it is a directory: \n" + fn);
 			} else {
 				if (file.exists()) { // TODO
-					if (fn.endsWith(".log") || fn.endsWith(".txt") || !fn.contains(".") || fn.endsWith(".ini"))
-					// .log, .txt, .ini  and without extension
-					{
+					if (fn.endsWith(".log") || fn.endsWith(".txt") || !fn.contains(".") || fn.endsWith(".ini")) {
 						sb = readNotCompressedFile(file, sb);
-					} else //unknown extension
-					{
-						//extractable?
-						//boolean extractable = true;
+					} else {
+						//unknown extension
 						try {
 							sb = ExtractorUtil.unzip(file);
 						} catch (Exception e) {
-							//extractable = false;
 							sb = readNotCompressedFile(file, sb);
 							Logging.warning("Error ExtractorUtil.unzip: " + e);
 						}
-						/*
-						if (!extractable)
-						{
-							sb = readNotCompressedFile(file, sb);
-						}*/
 					}
 				}
 

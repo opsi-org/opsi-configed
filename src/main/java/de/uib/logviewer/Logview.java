@@ -30,71 +30,6 @@ public class Logview {
 	private static String fileName = "";
 	private static String logdirectory = "";
 
-	private static String tabs(int count) {
-		StringBuilder buf = new StringBuilder("");
-		for (int j = 0; j < count; j++) {
-			buf.append("\t");
-		}
-
-		return buf.toString();
-	}
-
-	protected static void usage() {
-		System.out.println(usage);
-
-		final int tabWidth = 8;
-		int length0 = 0;
-		int length1 = 0;
-
-		for (int i = 0; i < usageLines.length; i++) {
-			//we find max of fillTabs0, fillTabs1
-			int len = usageLines[i][0].length();
-
-			if (len > length0) {
-				length0 = len;
-			}
-
-			len = usageLines[i][1].length();
-
-			if (len > length1) {
-				length1 = len;
-			}
-		}
-
-		int allTabs0 = length0 / tabWidth + 1;
-
-		int allTabs1 = length1 / tabWidth + 1;
-
-		for (int i = 0; i < usageLines.length; i++) {
-
-			int startedTabs0 = usageLines[i][0].length() / tabWidth;
-			int startedTabs1 = usageLines[i][1].length() / tabWidth;
-
-			System.out.println("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
-					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
-		}
-
-	}
-
-	protected static String getArg(String[] args, int i) {
-		if (args.length <= i + 1 || args[i + 1].indexOf('-') == 0) {
-			System.err.println("Missing value for option " + args[i]);
-			usage();
-			endApp(1);
-		}
-		i++;
-		return args[i];
-	}
-
-	protected static boolean isValue(String[] args, int i) {
-
-		if (i >= args.length || args[i].indexOf('-') == 0) {
-			return false;
-		}
-
-		return true;
-	}
-
 	/** construct the application */
 	public Logview(String paramLogdirectory, String paramLocale, String paramFilename) {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
@@ -156,11 +91,6 @@ public class Logview {
 			System.out.println(" --  fileName " + Logging.logDirectoryName);
 		}
 
-		String[] nameParts = getClass().getName().split("\\.");
-		if (nameParts.length > 0) {
-			Logging.programSubDir = "." + nameParts[nameParts.length - 1];
-		}
-
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -168,13 +98,68 @@ public class Logview {
 				cm.init();
 			}
 		});
+	}
 
+	private static String tabs(int count) {
+		StringBuilder buf = new StringBuilder("");
+		for (int j = 0; j < count; j++) {
+			buf.append("\t");
+		}
+
+		return buf.toString();
+	}
+
+	protected static void usage() {
+		System.out.println(usage);
+
+		final int tabWidth = 8;
+		int length0 = 0;
+		int length1 = 0;
+
+		for (int i = 0; i < usageLines.length; i++) {
+			//we find max of fillTabs0, fillTabs1
+			int len = usageLines[i][0].length();
+
+			if (len > length0) {
+				length0 = len;
+			}
+
+			len = usageLines[i][1].length();
+
+			if (len > length1) {
+				length1 = len;
+			}
+		}
+
+		int allTabs0 = length0 / tabWidth + 1;
+
+		int allTabs1 = length1 / tabWidth + 1;
+
+		for (int i = 0; i < usageLines.length; i++) {
+
+			int startedTabs0 = usageLines[i][0].length() / tabWidth;
+			int startedTabs1 = usageLines[i][1].length() / tabWidth;
+
+			System.out.println("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
+					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
+		}
+
+	}
+
+	protected static String getArg(String[] args, int i) {
+		if (args.length <= i + 1 || args[i + 1].indexOf('-') == 0) {
+			System.err.println("Missing value for option " + args[i]);
+			usage();
+			endApp(1);
+		}
+		i++;
+		return args[i];
 	}
 
 	protected static void processArgs(String[] args) {
 
 		for (int i = 0; i < args.length; i++) {
-			if (args[i].equals("--help")) {
+			if ("--help".equals(args[i])) {
 				usage();
 				endApp(0);
 			}
@@ -195,13 +180,13 @@ public class Logview {
 			} else {
 				// options
 
-				if (args[i].equals("-d") || args[i].equals("--logdirectory")) {
+				if ("-d".equals(args[i]) || "--logdirectory".equals(args[i])) {
 					logdirectory = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("-f") || args[i].equals("--filename")) {
+				} else if ("-f".equals(args[i]) || "--filename".equals(args[i])) {
 					fileName = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("--help")) {
+				} else if ("--help".equals(args[i])) {
 					usage();
 					System.exit(0);
 				} else {
@@ -312,19 +297,6 @@ public class Logview {
 				System.out.println("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')," + ex);
 			}
 		}
-	}
-
-	public static String getInfo(String question, boolean password) {
-		if (System.console() == null) {
-			return "";
-		}
-		System.out.print(question);
-
-		if (password) {
-			return String.valueOf(System.console().readPassword()).trim();
-		}
-
-		return String.valueOf(System.console().readLine()).trim();
 	}
 
 	/**
