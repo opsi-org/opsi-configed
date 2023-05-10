@@ -205,7 +205,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			jTextPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		jTextPane.setEditable(true);
-		jTextPane.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			jTextPane.setFont(Globals.defaultFont);
+		}
 		jTextPane.addKeyListener(this);
 
 		jTextPanel.add(jTextPane, BorderLayout.CENTER);
@@ -216,14 +218,18 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		super.add(scrollpane, BorderLayout.CENTER);
 
 		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
-		labelSearch.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelSearch.setFont(Globals.defaultFont);
+		}
 
 		jComboBoxSearch = new JComboBox<>();
 		jComboBoxSearch.setEditable(true);
 		jComboBoxSearch.addActionListener(this);
 
 		buttonSearch = new JButton(Configed.getResourceValue("TextPane.jButton_search"));
-		buttonSearch.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			buttonSearch.setFont(Globals.defaultFont);
+		}
 		buttonSearch.addActionListener(this);
 		buttonSearch.addKeyListener(this);
 
@@ -241,7 +247,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		buttonFontMinus.addActionListener(this);
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
-		labelLevel.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelLevel.setFont(Globals.defaultFont);
+		}
 
 		int minL = 1;
 		int maxL = 9;
@@ -303,11 +311,15 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		});
 
 		labelDisplayRestriction = new JLabel(Configed.getResourceValue("TextPane.EventType"));
-		labelDisplayRestriction.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelDisplayRestriction.setFont(Globals.defaultFont);
+		}
 
 		comboModelTypes = new DefaultComboBoxModel<>();
 		comboType = new JComboBox<>(comboModelTypes);
-		comboType.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			comboType.setFont(Globals.defaultFont);
+		}
 		comboType.setEnabled(false);
 		comboType.setEditable(false);
 
@@ -455,7 +467,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			this.max = max;
 			this.value = value;
 
-			super.setFont(Globals.defaultFont);
+			if (!ConfigedMain.FONT) {
+				super.setFont(Globals.defaultFont);
+			}
 
 			produceLabels(max);
 

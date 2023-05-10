@@ -153,6 +153,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// Are themes enabled?
 	public static final boolean THEMES = false;
+	public static final boolean FONT = false;
 
 	private static GuiStrategyForLoadingData strategyForLoadingData;
 
@@ -4622,7 +4623,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		public void run() {
 			// final
 			FShowList fListFeedback = new FShowList(mainFrame, title, false, new String[] { "ok" }, 800, 200);
-			fListFeedback.setFont(Globals.defaultFont);
+			if (!FONT) {
+				fListFeedback.setFont(Globals.defaultFont);
+			}
 			fListFeedback.setMessage("");
 			fListFeedback.setButtonsEnabled(true);
 			Cursor oldCursor = fListFeedback.getCursor();

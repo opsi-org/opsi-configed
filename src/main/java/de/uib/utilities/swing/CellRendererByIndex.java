@@ -173,7 +173,9 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 			// lazily create this font
 			uhOhFont = list.getFont().deriveFont((float) 10);
 		}
-		setFont(uhOhFont);
+		if (!ConfigedMain.FONT) {
+			setFont(uhOhFont);
+		}
 
 		if (value != null) {
 			if (mapOfStrings != null) {
@@ -198,7 +200,9 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 		setToolTipText(selectedTooltip);
 
-		setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			setFont(Globals.defaultFont);
+		}
 
 		return this;
 	}

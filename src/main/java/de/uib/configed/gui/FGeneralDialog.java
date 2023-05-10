@@ -82,7 +82,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		registerWithRunningInstances();
 		super.setIconImage(Globals.mainIcon);
 		super.setTitle(title);
-		super.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			super.setFont(Globals.defaultFont);
+		}
 		checkAdditionalPane();
 		super.setLocationRelativeTo(owner);
 	}
@@ -94,7 +96,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		Logging.info(this, "created by constructor 2, owner " + owner);
 		registerWithRunningInstances();
 		super.setTitle(title);
-		super.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			super.setFont(Globals.defaultFont);
+		}
 		super.setIconImage(Globals.mainIcon);
 		checkAdditionalPane();
 		additionalPane.setVisible(false);
@@ -176,7 +180,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		this.preferredHeight = preferredHeight;
 
 		setTitle(title);
-		setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			setFont(Globals.defaultFont);
+		}
 
 		additionalPane = addPane;
 
@@ -362,7 +368,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jPanelButtonGrid.setLayout(gridLayout1);
 		jPanelButtonGrid.setOpaque(false);
 
-		jButton1.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			jButton1.setFont(Globals.defaultFont);
+		}
 		jButton1.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
 		if (button1Text == null) {
@@ -374,7 +382,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jPanelButtonGrid.add(jButton1, null);
 
 		if (noOfButtons > 1) {
-			jButton2.setFont(Globals.defaultFont);
+			if (!ConfigedMain.FONT) {
+				jButton2.setFont(Globals.defaultFont);
+			}
 			jButton2.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
 			if (button2Text == null) {
@@ -387,7 +397,9 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		}
 		if (noOfButtons > 2) {
-			jButton3.setFont(Globals.defaultFont);
+			if (!ConfigedMain.FONT) {
+				jButton3.setFont(Globals.defaultFont);
+			}
 			jButton3.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
 
 			if (button3Text == null) {

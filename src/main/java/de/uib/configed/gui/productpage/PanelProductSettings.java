@@ -521,7 +521,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		JMenuItem save = new JMenuItemFormatted();
 		save.setText(Configed.getResourceValue("ConfigedMain.saveConfiguration"));
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		save.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			save.setFont(Globals.defaultFont);
+		}
 		save.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -534,7 +536,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		itemOnDemand = new JMenuItemFormatted();
 		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
-		itemOnDemand.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			itemOnDemand.setFont(Globals.defaultFont);
+		}
 		itemOnDemand.addActionListener((ActionEvent e) -> mainController
 				.fireOpsiclientdEventOnSelectedClients(AbstractPersistenceController.OPSI_CLIENTD_EVENT_ON_DEMAND));
 
@@ -545,7 +549,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		// dies bit get its intended context
 		itemSaveAndExecute.setIcon(Globals.createImageIcon("images/executing_command_blue_16.png", ""));
-		itemSaveAndExecute.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			itemSaveAndExecute.setFont(Globals.defaultFont);
+		}
 		itemSaveAndExecute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -563,7 +569,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		// find itscontext
 		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
-		reload.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			reload.setFont(Globals.defaultFont);
+		}
 		reload.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -576,7 +584,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		JMenuItem createReport = new JMenuItemFormatted();
 		createReport.setText(Configed.getResourceValue("PanelProductSettings.pdf"));
 		createReport.setIcon(Globals.createImageIcon("images/acrobat_reader16.png", ""));
-		createReport.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			createReport.setFont(Globals.defaultFont);
+		}
 		createReport.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -616,7 +626,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		exportTable.addMenuItemsTo(popup);
 
 		JMenu sub = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
-		sub.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			sub.setFont(Globals.defaultFont);
+		}
 		popup.addSeparator();
 		popup.add(sub);
 
@@ -632,7 +644,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			JMenuItem item = new JCheckBoxMenuItem();
 			item.setText(InstallationStateTableModel.getColumnTitle(columnName));
-			item.setFont(Globals.defaultFont);
+			if (!ConfigedMain.FONT) {
+				item.setFont(Globals.defaultFont);
+			}
 			((JCheckBoxMenuItem) item).setState(checkColumns.get(columnName));
 			item.addItemListener((ItemEvent e) -> {
 				boolean oldstate = checkColumns.get(columnName);

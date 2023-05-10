@@ -30,7 +30,9 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 
 		emphasized = Globals.defaultFontStandardBold;
 
-		super.setFont(standard);
+		if (!ConfigedMain.FONT) {
+			super.setFont(standard);
+		}
 		if (!ConfigedMain.THEMES) {
 			super.setForeground(Globals.lightBlack);
 			super.setTextSelectionColor(Globals.lightBlack);
@@ -62,9 +64,13 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 			node.setEnabled(enabled);
 
 			if (row == 0) {
-				setFont(emphasized);
+				if (!ConfigedMain.FONT) {
+					setFont(emphasized);
+				}
 			} else {
-				setFont(standard);
+				if (!ConfigedMain.FONT) {
+					setFont(standard);
+				}
 			}
 
 			if (!ConfigedMain.THEMES) {

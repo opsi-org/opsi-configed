@@ -128,7 +128,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 			labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
-		labelDepotServer.setFont(Globals.defaultFontStandardBold);
+		if (!ConfigedMain.FONT) {
+			labelDepotServer.setFont(Globals.defaultFontStandardBold);
+		}
 
 		buttonSelectDepotsWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 		buttonSelectDepotsWithEqualProperties
@@ -164,7 +166,9 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		scrollpaneDepotslist.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
 
-		depotslist.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			depotslist.setFont(Globals.defaultFont);
+		}
 
 		if (!ConfigedMain.THEMES) {
 			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
