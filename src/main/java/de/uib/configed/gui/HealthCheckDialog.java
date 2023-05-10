@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,8 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
+import org.json.JSONObject;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -48,7 +52,6 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 public class HealthCheckDialog extends FGeneralDialog {
 	private static final Pattern pattern = Pattern.compile("OK|WARNING|ERROR");
 	private final StyleContext styleContext = StyleContext.getDefaultStyleContext();
-	private final AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 	private JTextPane textPane = new JTextPane();
 	private DefaultStyledDocument styledDocument = new DefaultStyledDocument();
@@ -141,16 +144,21 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
-		JMenuItemFormatted popupSaveHealthData = new JMenuItemFormatted(
-				Configed.getResourceValue("PopupMenuTrait.save"), Globals.createImageIcon("images/save.png", ""));
+		JMenuItemFormatted popupSaveAsZip = new JMenuItemFormatted(
+				Configed.getResourceValue("PopupMenuTrait.saveAsZip"), Globals.createImageIcon("images/save.png", ""));
+		JMenuItemFormatted popupSaveAsZipWithDiagnosticData = new JMenuItemFormatted(
+				Configed.getResourceValue("HealthCheckDialog.saveAsZipWithDiagnosticData"),
+				Globals.createImageIcon("images/save.png", ""));
 
-		popupSaveHealthData.addActionListener((ActionEvent e) -> saveHealthDataAction());
-		popupMenu.add(popupSaveHealthData);
+		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
+		popupSaveAsZipWithDiagnosticData.addActionListener((ActionEvent e) -> saveAsZipWithDiagnosticData());
+		popupMenu.add(popupSaveAsZip);
+		popupMenu.add(popupSaveAsZipWithDiagnosticData);
 
 		return popupMenu;
 	}
 
-	private void saveHealthDataAction() {
+	private void saveAsZip() {
 		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Zip file (.zip)", "zip");
 		jFileChooser.addChoosableFileFilter(fileFilter);
@@ -173,10 +181,78 @@ public class HealthCheckDialog extends FGeneralDialog {
 			List<File> files = new ArrayList<>();
 			files.add(new File(Configed.savedStatesLocationName,
 					dirname + File.separator + Globals.HEALTH_CHECK_LOG_FILE_NAME));
-			files.add(new File(Configed.savedStatesLocationName,
-					dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME));
 			files.add(new File(Logging.getCurrentLogfilePath()));
 			zipFiles(fileName, files);
+		}
+	}
+
+	private void saveAsZipWithDiagnosticData() {
+		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Zip file (.zip)", "zip");
+		jFileChooser.addChoosableFileFilter(fileFilter);
+		jFileChooser.setAcceptAllFileFilterUsed(false);
+
+		int returnValue = jFileChooser.showSaveDialog(ConfigedMain.getMainFrame());
+
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			String fileName = jFileChooser.getSelectedFile().getAbsolutePath();
+			if (!fileName.endsWith(".zip")) {
+				fileName = fileName.concat(".zip");
+			}
+
+			final String fileNameCopy = fileName;
+
+			Thread backgroundThread = new Thread(() -> {
+				saveDiagnosticDataToFile();
+
+				String dirname = ConfigedMain.host;
+
+				if (dirname.contains(":")) {
+					dirname = dirname.replace(":", "_");
+				}
+
+				List<File> files = new ArrayList<>();
+				files.add(new File(Configed.savedStatesLocationName,
+						dirname + File.separator + Globals.HEALTH_CHECK_LOG_FILE_NAME));
+				files.add(new File(Configed.savedStatesLocationName,
+						dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME));
+				files.add(new File(Logging.getCurrentLogfilePath()));
+				zipFiles(fileNameCopy, files);
+			});
+
+			backgroundThread.start();
+		}
+	}
+
+	private void saveDiagnosticDataToFile() {
+		String dirname = ConfigedMain.host;
+
+		if (dirname.contains(":")) {
+			dirname = dirname.replace(":", "_");
+		}
+
+		File diagnosticDataFile = new File(Configed.savedStatesLocationName,
+				dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
+
+		if (diagnosticDataFile.exists() && diagnosticDataFile.length() != 0) {
+			Logging.debug(this, "file already exists");
+			return;
+		}
+
+		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		JSONObject jo = new JSONObject(persist.getDiagnosticData());
+		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString().getBytes()));
+	}
+
+	private void writeToFile(File file, ByteBuffer data) {
+		if (file == null) {
+			Logging.error(this, "provided file is null");
+		}
+
+		try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
+			channel.write(data);
+		} catch (IOException e) {
+			Logging.error(this, "" + e);
 		}
 	}
 

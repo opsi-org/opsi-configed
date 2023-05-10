@@ -85,8 +85,6 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
-import org.json.JSONObject;
-
 import de.uib.configed.Configed;
 /**
  * configed - configuration editor for client work stations in opsi
@@ -1432,8 +1430,6 @@ public class MainFrame extends JFrame
 		jMenuHelpCheckHealth.setText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> {
 			saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME, ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes()));
-			JSONObject jo = new JSONObject(configedMain.getPersistenceController().getDiagnosticData());
-			saveToFile(Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME, ByteBuffer.wrap(jo.toString().getBytes()));
 			showHealthDataAction();
 		});
 
@@ -3115,14 +3111,14 @@ public class MainFrame extends JFrame
 			dirname = dirname.replace(":", "_");
 		}
 
-		File diagnosticDataFile = new File(Configed.savedStatesLocationName, dirname + File.separator + fileName);
+		File file = new File(Configed.savedStatesLocationName, dirname + File.separator + fileName);
 
-		if (diagnosticDataFile.exists() && diagnosticDataFile.length() != 0) {
+		if (file.exists() && file.length() != 0) {
 			Logging.debug(this, "file already exists");
 			return;
 		}
 
-		writeToFile(diagnosticDataFile, data);
+		writeToFile(file, data);
 	}
 
 	private void writeToFile(File file, ByteBuffer data) {
