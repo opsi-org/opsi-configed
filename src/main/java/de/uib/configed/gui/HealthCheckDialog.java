@@ -29,6 +29,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.BadLocationException;
@@ -200,59 +201,95 @@ public class HealthCheckDialog extends FGeneralDialog {
 				fileName = fileName.concat(".zip");
 			}
 
-			final String fileNameCopy = fileName;
+			Logging.debug(this, "starting background thread (informing user)");
+			showDialogWithMessage(Configed.getResourceValue("HealthCheckDialog.backgroundThreadStarted"));
 
-			Thread backgroundThread = new Thread(() -> {
-				saveDiagnosticDataToFile();
-
-				String dirname = ConfigedMain.host;
-
-				if (dirname.contains(":")) {
-					dirname = dirname.replace(":", "_");
-				}
-
-				List<File> files = new ArrayList<>();
-				files.add(new File(Configed.savedStatesLocationName,
-						dirname + File.separator + Globals.HEALTH_CHECK_LOG_FILE_NAME));
-				files.add(new File(Configed.savedStatesLocationName,
-						dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME));
-				files.add(new File(Logging.getCurrentLogfilePath()));
-				zipFiles(fileNameCopy, files);
-			});
-
-			backgroundThread.start();
+			ZipArchiverWithDiagnosticDataThread backgroundThread = new ZipArchiverWithDiagnosticDataThread(fileName);
+			backgroundThread.execute();
 		}
 	}
 
-	private void saveDiagnosticDataToFile() {
-		String dirname = ConfigedMain.host;
+	private static void showDialogWithMessage(String message) {
+		FTextArea fInfoDialog = new FTextArea(ConfigedMain.getMainFrame(),
+				Configed.getResourceValue("HealthCheckDialog.dialog.title") + " (" + Globals.APPNAME + ") ", true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.ok") });
 
-		if (dirname.contains(":")) {
-			dirname = dirname.replace(":", "_");
-		}
-
-		File diagnosticDataFile = new File(Configed.savedStatesLocationName,
-				dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
-
-		if (diagnosticDataFile.exists() && diagnosticDataFile.length() != 0) {
-			Logging.debug(this, "file already exists");
-			return;
-		}
-
-		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
-		JSONObject jo = new JSONObject(persist.getDiagnosticData());
-		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString().getBytes()));
+		fInfoDialog.setMessage(message);
+		fInfoDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		fInfoDialog.setAlwaysOnTop(true);
+		fInfoDialog.setVisible(true);
 	}
 
-	private void writeToFile(File file, ByteBuffer data) {
-		if (file == null) {
-			Logging.error(this, "provided file is null");
+	@SuppressWarnings("java:S2972")
+	private class ZipArchiverWithDiagnosticDataThread extends SwingWorker<Void, Void> {
+		private String fileName;
+
+		public ZipArchiverWithDiagnosticDataThread(String fileName) {
+			this.fileName = fileName;
 		}
 
-		try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
-			channel.write(data);
-		} catch (IOException e) {
-			Logging.error(this, "" + e);
+		@Override
+		protected Void doInBackground() {
+			Logging.debug(this,
+					"starting background thread to retrieve diagnostic data and save it in a zip file (including server health check and current log file)");
+			saveDiagnosticDataToFile();
+
+			String dirname = ConfigedMain.host;
+
+			if (dirname.contains(":")) {
+				dirname = dirname.replace(":", "_");
+			}
+
+			List<File> files = new ArrayList<>();
+			files.add(new File(Configed.savedStatesLocationName,
+					dirname + File.separator + Globals.HEALTH_CHECK_LOG_FILE_NAME));
+			files.add(new File(Configed.savedStatesLocationName,
+					dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME));
+			files.add(new File(Logging.getCurrentLogfilePath()));
+			zipFiles(fileName, files);
+
+			return null;
+		}
+
+		@Override
+		protected void done() {
+			Logging.debug("background thread is finished (informing user)");
+			StringBuilder message = new StringBuilder();
+			message.append(Configed.getResourceValue("HealthCheckDialog.backgroundThreadFinished"));
+			message.append(" " + fileName);
+			showDialogWithMessage(message.toString());
+		}
+
+		private void saveDiagnosticDataToFile() {
+			String dirname = ConfigedMain.host;
+
+			if (dirname.contains(":")) {
+				dirname = dirname.replace(":", "_");
+			}
+
+			File diagnosticDataFile = new File(Configed.savedStatesLocationName,
+					dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
+
+			if (diagnosticDataFile.exists() && diagnosticDataFile.length() != 0) {
+				Logging.debug(this, "file already exists");
+				return;
+			}
+
+			AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+			JSONObject jo = new JSONObject(persist.getDiagnosticData());
+			writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString().getBytes()));
+		}
+
+		private void writeToFile(File file, ByteBuffer data) {
+			if (file == null) {
+				Logging.error(this, "provided file is null");
+			}
+
+			try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
+				channel.write(data);
+			} catch (IOException e) {
+				Logging.error(this, "" + e);
+			}
 		}
 	}
 
