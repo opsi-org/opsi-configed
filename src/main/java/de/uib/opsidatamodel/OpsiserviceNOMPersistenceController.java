@@ -287,6 +287,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private Map<String, Map<String, String>> productDefaultStates;
 
 	private List<Map<String, Object>> healthData;
+	private Map<String, Object> diagnosticData;
 
 	private DataStubNOM dataStub;
 
@@ -4255,13 +4256,19 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		List<Map<String, Object>> retrieved = exec
 				.getListOfMaps(new OpsiMethodCall(methodName, new Object[] { callAttributes, callFilter }));
 
-		Logging.debug(this, "retrieveListOfMapsNOM " + retrieved);
+		Logging.debug(this, "retrieveListOfMapsNOM: " + retrieved);
 		return retrieved;
 	}
 
 	public List<Map<String, Object>> retrieveListOfMapsNOM(String methodName, Object[] data) {
 		List<Map<String, Object>> retrieved = exec.getListOfMaps(new OpsiMethodCall(methodName, data));
-		Logging.debug(this, "retrieveListOfMapsNOM " + retrieved);
+		Logging.debug(this, "retrieveListOfMapsNOM: " + retrieved);
+		return retrieved;
+	}
+
+	public Map<String, Object> retrieveMapNOM(String methodName, Object[] data) {
+		Map<String, Object> retrieved = exec.getMapResult(new OpsiMethodCall(methodName, data));
+		Logging.debug(this, "retrieveMapNOM: " + retrieved);
 		return retrieved;
 	}
 
@@ -8791,6 +8798,15 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 
 		return healthData;
+	}
+
+	@Override
+	public Map<String, Object> getDiagnosticData() {
+		if (diagnosticData == null) {
+			diagnosticData = dataStub.getDiagnosticData();
+		}
+
+		return diagnosticData;
 	}
 
 	/**

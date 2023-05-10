@@ -127,6 +127,8 @@ public class DataStubNOM {
 
 	private List<Map<String, Object>> healthData;
 
+	private Map<String, Object> diagnosticData;
+
 	private Map<String, LicenceEntry> licences;
 
 	public DataStubNOM(OpsiserviceNOMPersistenceController controller) {
@@ -1289,7 +1291,15 @@ public class DataStubNOM {
 	}
 
 	private void retrieveHealthData() {
-		persist.notifyDataLoadingObservers(Configed.getResourceValue("LoadingObserver.checkHealth"));
 		healthData = persist.retrieveListOfMapsNOM("service_healthCheck", new Object[0]);
+	}
+
+	public Map<String, Object> getDiagnosticData() {
+		retrieveDiagnosticData();
+		return diagnosticData;
+	}
+
+	private void retrieveDiagnosticData() {
+		diagnosticData = persist.retrieveMapNOM("service_getDiagnosticData", new Object[0]);
 	}
 }
