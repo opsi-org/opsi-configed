@@ -29,7 +29,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.BadLocationException;
@@ -147,14 +146,9 @@ public class HealthCheckDialog extends FGeneralDialog {
 		JPopupMenu popupMenu = new JPopupMenu();
 		JMenuItemFormatted popupSaveAsZip = new JMenuItemFormatted(
 				Configed.getResourceValue("PopupMenuTrait.saveAsZip"), Globals.createImageIcon("images/save.png", ""));
-		JMenuItemFormatted popupSaveAsZipWithDiagnosticData = new JMenuItemFormatted(
-				Configed.getResourceValue("HealthCheckDialog.saveAsZipWithDiagnosticData"),
-				Globals.createImageIcon("images/save.png", ""));
 
 		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
-		popupSaveAsZipWithDiagnosticData.addActionListener((ActionEvent e) -> saveAsZipWithDiagnosticData());
 		popupMenu.add(popupSaveAsZip);
-		popupMenu.add(popupSaveAsZipWithDiagnosticData);
 
 		return popupMenu;
 	}
@@ -179,66 +173,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 				dirname = dirname.replace(":", "_");
 			}
 
-			List<File> files = new ArrayList<>();
-			files.add(new File(Configed.savedStatesLocationName,
-					dirname + File.separator + Globals.HEALTH_CHECK_LOG_FILE_NAME));
-			files.add(new File(Logging.getCurrentLogfilePath()));
-			zipFiles(fileName, files);
-		}
-	}
-
-	private void saveAsZipWithDiagnosticData() {
-		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Zip file (.zip)", "zip");
-		jFileChooser.addChoosableFileFilter(fileFilter);
-		jFileChooser.setAcceptAllFileFilterUsed(false);
-
-		int returnValue = jFileChooser.showSaveDialog(ConfigedMain.getMainFrame());
-
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			String fileName = jFileChooser.getSelectedFile().getAbsolutePath();
-			if (!fileName.endsWith(".zip")) {
-				fileName = fileName.concat(".zip");
-			}
-
-			Logging.debug(this, "starting background thread (informing user)");
-			showDialogWithMessage(Configed.getResourceValue("HealthCheckDialog.backgroundThreadStarted"));
-
-			ZipArchiverWithDiagnosticDataThread backgroundThread = new ZipArchiverWithDiagnosticDataThread(fileName);
-			backgroundThread.execute();
-		}
-	}
-
-	private static void showDialogWithMessage(String message) {
-		FTextArea fInfoDialog = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("HealthCheckDialog.dialog.title") + " (" + Globals.APPNAME + ") ", true,
-				new String[] { Configed.getResourceValue("FGeneralDialog.ok") });
-
-		fInfoDialog.setMessage(message);
-		fInfoDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		fInfoDialog.setAlwaysOnTop(true);
-		fInfoDialog.setVisible(true);
-	}
-
-	@SuppressWarnings("java:S2972")
-	private class ZipArchiverWithDiagnosticDataThread extends SwingWorker<Void, Void> {
-		private String fileName;
-
-		public ZipArchiverWithDiagnosticDataThread(String fileName) {
-			this.fileName = fileName;
-		}
-
-		@Override
-		protected Void doInBackground() {
-			Logging.debug(this,
-					"starting background thread to retrieve diagnostic data and save it in a zip file (including server health check and current log file)");
 			saveDiagnosticDataToFile();
-
-			String dirname = ConfigedMain.host;
-
-			if (dirname.contains(":")) {
-				dirname = dirname.replace(":", "_");
-			}
 
 			List<File> files = new ArrayList<>();
 			files.add(new File(Configed.savedStatesLocationName,
@@ -247,49 +182,38 @@ public class HealthCheckDialog extends FGeneralDialog {
 					dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME));
 			files.add(new File(Logging.getCurrentLogfilePath()));
 			zipFiles(fileName, files);
+		}
+	}
 
-			return null;
+	private void saveDiagnosticDataToFile() {
+		String dirname = ConfigedMain.host;
+
+		if (dirname.contains(":")) {
+			dirname = dirname.replace(":", "_");
 		}
 
-		@Override
-		protected void done() {
-			Logging.debug("background thread is finished (informing user)");
-			StringBuilder message = new StringBuilder();
-			message.append(Configed.getResourceValue("HealthCheckDialog.backgroundThreadFinished"));
-			message.append(" " + fileName);
-			showDialogWithMessage(message.toString());
+		File diagnosticDataFile = new File(Configed.savedStatesLocationName,
+				dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
+
+		if (diagnosticDataFile.exists() && diagnosticDataFile.length() != 0) {
+			Logging.debug(this, "file already exists");
+			return;
 		}
 
-		private void saveDiagnosticDataToFile() {
-			String dirname = ConfigedMain.host;
+		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		JSONObject jo = new JSONObject(persist.getDiagnosticData());
+		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes()));
+	}
 
-			if (dirname.contains(":")) {
-				dirname = dirname.replace(":", "_");
-			}
-
-			File diagnosticDataFile = new File(Configed.savedStatesLocationName,
-					dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
-
-			if (diagnosticDataFile.exists() && diagnosticDataFile.length() != 0) {
-				Logging.debug(this, "file already exists");
-				return;
-			}
-
-			AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
-			JSONObject jo = new JSONObject(persist.getDiagnosticData());
-			writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString().getBytes()));
+	private void writeToFile(File file, ByteBuffer data) {
+		if (file == null) {
+			Logging.error(this, "provided file is null");
 		}
 
-		private void writeToFile(File file, ByteBuffer data) {
-			if (file == null) {
-				Logging.error(this, "provided file is null");
-			}
-
-			try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
-				channel.write(data);
-			} catch (IOException e) {
-				Logging.error(this, "" + e);
-			}
+		try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
+			channel.write(data);
+		} catch (IOException e) {
+			Logging.error(this, "" + e);
 		}
 	}
 
