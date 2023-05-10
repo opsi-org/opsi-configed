@@ -52,7 +52,7 @@ public class FrameInfodialog extends JDialog implements ActionListener, KeyListe
 		setResizable(false);
 		label1.setText("Version " + Globals.VERSION + " " + Globals.VERDATE);
 		label1.setEditable(false);
-		label1.setBackground(Globals.backgroundLightGrey);
+		label1.setBackground(Globals.BACKGROUND_COLOR_3);
 		label1.setFont(Globals.defaultFont);
 		label3.setText(Globals.COPYRIGHT1);
 		label3.setFont(Globals.defaultFont);

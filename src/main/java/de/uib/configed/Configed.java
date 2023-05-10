@@ -25,6 +25,7 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.configed.tree.ClientTreeUI;
+import de.uib.logviewer.Logview;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.OpsiMethodCall;
@@ -37,6 +38,8 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
 
 public class Configed {
+
+	private static boolean logviewer;
 
 	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
 
@@ -215,10 +218,9 @@ public class Configed {
 		}
 
 		try {
-			String resourceS = "opsi.gif";
-			URL resource = Globals.class.getResource(resourceS);
+			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
 			if (resource == null) {
-				Logging.debug("image resource " + resourceS + "  not found");
+				Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
 			} else {
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 			}
@@ -584,8 +586,8 @@ public class Configed {
 					Globals.disableCertificateVerification = true;
 					i = i + 1;
 				} else if ("--logviewer".equals(args[i])) {
+					logviewer = true;
 					i = i + 1;
-					Logging.devel("start logviewer");
 				} else {
 					Logging.debug("an option is not valid: " + args[i]);
 					usage();
@@ -798,6 +800,10 @@ public class Configed {
 	public static void main(String[] args) {
 
 		processArgs(args);
+
+		if (logviewer) {
+			new Logview(JAVA_VENDOR, locale, LOCALIZATION_FILENAME_REGEX);
+		}
 
 		Logging.debug("initiating configed");
 

@@ -494,9 +494,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	// We create this class because the JTextPane should be editable only to show the caret position,
 	// but then you should not be able to change anything in the Text...
 	private static class ImmutableDefaultStyledDocument extends DefaultStyledDocument {
-		ImmutableDefaultStyledDocument() {
-			super();
-		}
 
 		ImmutableDefaultStyledDocument(StyleContext styles) {
 			super(styles);

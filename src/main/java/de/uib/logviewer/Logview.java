@@ -107,10 +107,9 @@ public class Logview {
 		String imageHandled = "(we start image retrieving)";
 		System.out.println(imageHandled);
 		try {
-			String resourceS = "opsi.gif";
-			URL resource = Globals.class.getResource(resourceS);
+			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
 			if (resource == null) {
-				System.out.println("image resource " + resourceS + "  not found");
+				System.out.println("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
 			} else {
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 				imageHandled = "setIconImage";
@@ -119,7 +118,7 @@ public class Logview {
 			System.out.println("imageHandled failed: " + ex.toString());
 		}
 
-		System.out.println("--  wantedDirectory " + Logging.wantedDirectory);
+		System.out.println("--  wantedDirectory " + Logging.logDirectoryName);
 
 		//
 		List<String> existingLocales = Messages.getLocaleNames();
@@ -130,17 +129,17 @@ public class Logview {
 
 		// set wanted directory for logging
 		if (logdirectory != null) {
-			if (new File(logdirectory).isDirectory())
-				Logging.wantedDirectory = logdirectory;
-			else {
+			if (new File(logdirectory).isDirectory()) {
+				Logging.logDirectoryName = logdirectory;
+			} else {
 				Logging.error("This is no directory: " + logdirectory);
-				Logging.wantedDirectory = "";
+				Logging.logDirectoryName = "";
 			}
 		} else {
-			System.out.println(" --  wantedDirectory " + Logging.wantedDirectory);
+			System.out.println(" --  wantedDirectory " + Logging.logDirectoryName);
 		}
 
-		Logging.wantedDirectory = "";
+		Logging.logDirectoryName = "";
 
 		// set wanted fileName
 		if (fileName != null) {
@@ -154,7 +153,7 @@ public class Logview {
 				LogFrame.setFileName(fileName);
 			}
 		} else {
-			System.out.println(" --  fileName " + Logging.wantedDirectory);
+			System.out.println(" --  fileName " + Logging.logDirectoryName);
 		}
 
 		String[] nameParts = getClass().getName().split("\\.");
@@ -193,8 +192,8 @@ public class Logview {
 					endApp(0);
 				}
 				i++;
-			} else // options
-			{
+			} else {
+				// options
 
 				if (args[i].equals("-d") || args[i].equals("--logdirectory")) {
 					logdirectory = getArg(args, i);
@@ -202,33 +201,9 @@ public class Logview {
 				} else if (args[i].equals("-f") || args[i].equals("--filename")) {
 					fileName = getArg(args, i);
 					i = i + 2;
-				} else if (args[i].equals("--version")) {
-					System.out.println("logview version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
-					System.exit(0);
-				}
-
-				else if (args[i].equals("--help")) {
+				} else if (args[i].equals("--help")) {
 					usage();
 					System.exit(0);
-				} else if (args[i].equals("--loglevel")) {
-					int newlevel = Logging.AKT_DEBUG_LEVEL;
-					try {
-						newlevel = Integer.parseInt(getArg(args, i));
-						if (newlevel != Logging.AKT_DEBUG_LEVEL) {
-							// ? is setting allowed
-							if (newlevel <= Logging.LEVEL_DEBUG && newlevel >= Logging.LEVEL_FATAL)
-
-								Logging.setAktDebugLevel(newlevel);
-							else
-								Logging.info(" valid log levels between " + Logging.LEVEL_FATAL + " and "
-										+ Logging.LEVEL_DEBUG);
-
-						}
-					} catch (NumberFormatException ex) {
-						System.out.println(" \n\nArgument " + getArg(args, i) + " has no integer format");
-					}
-					i = i + 2;
-
 				} else {
 					usage();
 					endApp(0);
@@ -244,13 +219,13 @@ public class Logview {
 	public static String getResourceValue(String key) {
 		String result = key;
 		try {
-			result = Messages.messages.getString(key);
+			result = Messages.messagesBundle.getString(key);
 		} catch (MissingResourceException mre) {
 			// we return the key and log the problem:
 			Logging.debug("Problem: " + mre.toString());
 
 			try {
-				result = Messages.messagesEN.getString(key);
+				result = Messages.messagesEnBundle.getString(key);
 			} catch (MissingResourceException mre2) {
 				Logging.debug("Problem: " + mre2.toString());
 			}
@@ -359,10 +334,9 @@ public class Logview {
 
 		processArgs(args);
 		try {
-			String resourceS = Globals.iconresourcename;
-			URL resource = Globals.class.getResource(resourceS);
+			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
 			if (resource == null) {
-				System.out.println("image resource " + resourceS + "  not found");
+				System.out.println("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
 			} else {
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 			}

@@ -131,7 +131,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 	JMenuItem jMenuHelpAbout = new JMenuItem();
 	JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem();
 	JMenu jMenuHelpLoglevel = new JMenu();
-	JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_DONT_SHOW_IT];
+	JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET];
 
 	BorderLayout borderLayout1 = new BorderLayout();
 	GroupLayout contentLayout;
@@ -594,11 +594,9 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		allPane.setLayout(borderLayout1);
 
 		//only one LogPane
-		showLogfile = new LogPane("", true) // defaulttext
-		{
+		showLogfile = new LogPane("", true) {
 			@Override
 			protected void reload() {
-				//super.reload();
 				int caretPosition = showLogfile.jTextPane.getCaretPosition();
 				showLogfile.setMainText(reloadFile(fileName));
 				showLogfile.setTitle(fileName);
@@ -638,7 +636,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		showLogfile.setTitle("unknown");
 		setTitle(Globals.APPNAME);
 		if (!fileName.equals("")) {
-			StringBuffer sbf = readFile(fileName);
+			StringBuilder sbf = readFile(fileName);
 			if ((sbf != null) && sbf.length() > 0) {
 				showLogfile.setTitle(fileName);
 				setTitle(Globals.APPNAME + " : " + fileName);
@@ -826,9 +824,8 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		return fileName;
 	}
 
-	//@SuppressWarnings("unused")
-	private StringBuffer readFile(String fn) {
-		StringBuffer sb = new StringBuffer();
+	private StringBuilder readFile(String fn) {
+		StringBuilder sb = new StringBuilder();
 		try {
 			file = new File(fn);
 
@@ -868,7 +865,7 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 		return sb;
 	}
 
-	private StringBuffer readNotCompressedFile(File file, StringBuffer sb) {
+	private StringBuilder readNotCompressedFile(File file, StringBuilder sb) {
 		Logging.info(this, "start readNotCompressedFile");
 		InputStream fis;
 		try {
@@ -884,9 +881,9 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 
 	}
 
-	private StringBuffer readInputStream(InputStream fis) {
+	private StringBuilder readInputStream(InputStream fis) {
 		boolean fileRead = false;
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		String thisLine = null;
 		try {

@@ -281,6 +281,13 @@
             <artifactId>maven-pmd-plugin</artifactId>
             <version>3.20.0</version>
         </dependency>
+        
+        <!-- https://mvnrepository.com/artifact/net.sf.sevenzipjbinding/sevenzipjbinding -->
+        <dependency>
+            <groupId>net.sf.sevenzipjbinding</groupId>
+            <artifactId>sevenzipjbinding</artifactId>
+            <version>16.02-2.01</version>
+        </dependency>
 
 
     </dependencies>

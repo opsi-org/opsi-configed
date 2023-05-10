@@ -17,14 +17,9 @@ import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
-import java.net.URL;
-import java.util.ArrayList;
-
-import javax.swing.JFrame;
 
 import de.uib.configed.Globals;
 import de.uib.logviewer.gui.LogFrame;
-import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -33,15 +28,11 @@ import de.uib.utilities.logging.Logging;
  * 
  * @author D. Oertel, R. Roeder, J. Schneider, M. Hammel
  */
-public class LogviewMain implements LogEventObserver {
+public class LogviewMain {
 
 	LogFrame mainFrame;
 
-	private ArrayList<JFrame> allFrames;
-
 	protected void initGui() {
-
-		allFrames = new ArrayList<>();
 
 		initMainFrame();
 	}
@@ -55,25 +46,17 @@ public class LogviewMain implements LogEventObserver {
 
 	}
 
-	protected void initMainFrame()
-	// we call this after we have a PersistenceController - but we don't need one here :-)
-	{
+	protected void initMainFrame() {
 
-		boolean packFrame = false;
 		mainFrame = new LogFrame(this);
 
 		// for passing it to message frames everywhere
-		Globals.mainFrame = mainFrame;
 
 		Globals.container1 = mainFrame;
-		Globals.mainContainer = mainFrame;
+		Globals.frame1 = mainFrame;
 
 		//rearranging visual components
-		if (packFrame) {
-			mainFrame.pack();
-		} else {
-			mainFrame.validate();
-		}
+		mainFrame.pack();
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
@@ -96,11 +79,13 @@ public class LogviewMain implements LogEventObserver {
 		Logging.info(this, "startSizing width, height " + wTaken + ", " + hTaken);
 
 		int wDiff = wTaken - 30 - LogFrame.fwidth;
-		if (wDiff < 0)
+		if (wDiff < 0) {
 			wDiff = 0;
+		}
 		int hDiff = hTaken - 30 - LogFrame.fheight;
-		if (hDiff < 0)
+		if (hDiff < 0) {
 			hDiff = 0;
+		}
 
 		final int width = LogFrame.fwidth + (wDiff * 2) / 3;
 		final int height = LogFrame.fheight + (hDiff * 2) / 3;
@@ -126,44 +111,19 @@ public class LogviewMain implements LogEventObserver {
 
 	public void showExternalDocument(String urlS) {
 		try {
-			URL url = new URL(urlS);
 			Runtime rt = Runtime.getRuntime();
 			String osName = System.getProperty("os.name");
 			if (osName.toLowerCase().startsWith("windows")) {
 				String title = "";
 				Process proc = rt.exec("cmd.exe /c start \"" + title + "\" \"" + urlS.replace("\\", "\\\\") + "\"");
-			} else
-			//Linux, we assume that there is a firefox and it will handle the url
-			{
+			} else {
+				//Linux, we assume that there is a firefox and it will handle the url // TODO use something different
 				String[] cmdarray = new String[] { "firefox", urlS };
 				Process proc = rt.exec(cmdarray);
 			}
 		} catch (Exception ex) {
 			Logging.error("" + ex);
 		}
-	}
-
-	//interface LogEventObserver
-	public void logEventOccurred(LogEvent event) {
-		boolean found = false;
-
-		if (allFrames == null)
-			return;
-
-		for (JFrame f : allFrames) {
-			Logging.debug(this, "log event occurred in frame f , is focused " + f.isFocused() + " " + f);
-			if (f != null) {
-				Logging.checkErrorList(f);
-				found = true;
-				break;
-			}
-
-		}
-
-		if (!found) {
-			Logging.checkErrorList(mainFrame);
-		}
-
 	}
 
 	protected void checkErrorList() {
