@@ -30,6 +30,9 @@ import de.uib.utilities.logging.Logging;
  */
 public class LogviewMain {
 
+	private static final int FRAME_WIDTH = 800;
+	private static final int FRAME_HEIGHT = 600;
+
 	LogFrame mainFrame;
 
 	protected void initGui() {
@@ -61,8 +64,8 @@ public class LogviewMain {
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
 
-		int wTaken = LogFrame.fwidth;
-		int hTaken = LogFrame.fheight;
+		int wTaken = FRAME_WIDTH;
+		int hTaken = FRAME_HEIGHT;
 
 		for (int i = 0; i < gs.length; i++) {
 			DisplayMode dm = gs[i].getDisplayMode();
@@ -78,17 +81,17 @@ public class LogviewMain {
 
 		Logging.info(this, "startSizing width, height " + wTaken + ", " + hTaken);
 
-		int wDiff = wTaken - 30 - LogFrame.fwidth;
+		int wDiff = wTaken - 30 - FRAME_WIDTH;
 		if (wDiff < 0) {
 			wDiff = 0;
 		}
-		int hDiff = hTaken - 30 - LogFrame.fheight;
+		int hDiff = hTaken - 30 - FRAME_HEIGHT;
 		if (hDiff < 0) {
 			hDiff = 0;
 		}
 
-		final int width = LogFrame.fwidth + (wDiff * 2) / 3;
-		final int height = LogFrame.fheight + (hDiff * 2) / 3;
+		final int width = FRAME_WIDTH + (wDiff * 2) / 3;
+		final int height = FRAME_HEIGHT + (hDiff * 2) / 3;
 
 		mainFrame.startSizing(width, height);
 

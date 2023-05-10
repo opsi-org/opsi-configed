@@ -304,7 +304,7 @@ public class Logview {
 	 */
 	public static void main(String[] args) {
 
-		processArgs(args);
+		//processArgs(args);
 		try {
 			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
 			if (resource == null) {
@@ -316,7 +316,7 @@ public class Logview {
 			System.out.println("imageHandled failed: " + ex.toString());
 		}
 
-		// Turn on antialiasing for text (not for applets)
+		// Turn on antialiasing for text 
 		try {
 			System.setProperty("swing.aatext", "true");
 		} catch (Exception ex) {

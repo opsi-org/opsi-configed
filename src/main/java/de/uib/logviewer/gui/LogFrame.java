@@ -63,9 +63,6 @@ public class LogFrame extends JFrame implements WindowListener, ActionListener, 
 	protected static File logDirectory;
 	protected static String fileName;
 
-	public static final int fwidth = 800;
-	public static final int fheight = 600;
-
 	protected int dividerLocationCentralPane = 300;
 	protected int minHSizeTreePanel = 150;
 
