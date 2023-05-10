@@ -35,7 +35,7 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 			int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (f != null) {
+		if (f != null && !ConfigedMain.FONT) {
 			result.setFont(f);
 		}
 

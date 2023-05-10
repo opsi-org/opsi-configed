@@ -92,7 +92,7 @@ public class DynamicCombo extends JPanel {
 
 	@Override
 	public void setFont(Font font) {
-		if (combo != null) {
+		if (combo != null && !ConfigedMain.FONT) {
 			combo.setFont(font);
 		}
 	}

@@ -34,7 +34,9 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		super(null, title);
 
 		super.setTitle(title);
-		super.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			super.setFont(Globals.defaultFont);
+		}
 		super.setIconImage(Globals.mainIcon);
 
 		super.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));

@@ -411,7 +411,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonSaveAndExecute.setVisible(true);
 
 		JLabel labelCollectiveAction = new JLabel(Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
-		labelCollectiveAction.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelCollectiveAction.setFont(Globals.defaultFont);
+		}
 
 		buttonCollectiveAction = new IconButton(Configed.getResourceValue("GroupPanel.buttonAggregateProducts.tooltip"),
 				"images/execute16_lightblue.png", "images/execute16_lightblue.png", " ", true);
@@ -449,7 +451,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		listChooseAction.setCellRenderer(renderActionList);
 		listChooseAction.setVisibleRowCount(2);
-		listChooseAction.setFont(Globals.defaultFontSmallBold);
+		if (!ConfigedMain.FONT) {
+			listChooseAction.setFont(Globals.defaultFontSmallBold);
+		}
 
 		if (!ConfigedMain.THEMES) {
 			listChooseAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
@@ -475,7 +479,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 			labelStrip.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		labelStrip.setOpaque(true);
-		labelStrip.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelStrip.setFont(Globals.defaultFont);
+		}
 		if (!ConfigedMain.THEMES) {
 			labelStrip.setForeground(Globals.lightBlack);
 		}
@@ -502,7 +508,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		surroundScrollChooseAction.setOpaque(true);
 
 		comboAggregatedEditing.setValues(values);
-		comboAggregatedEditing.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			comboAggregatedEditing.setFont(Globals.defaultFont);
+		}
 
 		buttonEditDialog = new IconButton(Configed.getResourceValue("GroupPanel.EditButtonTooltip"),
 				"images/packagegroup_save.png", "images/packagegroup_save_over.png",
@@ -515,7 +523,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		JLabel labelSelectedGroup = new JLabel(Configed.getResourceValue("GroupPanel.selectgroup.label"));
 
-		labelSelectedGroup.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelSelectedGroup.setFont(Globals.defaultFont);
+		}
 
 		groupsEditField = saveNameEditor;
 		groupsEditField.getCaret().setBlinkRate(0);
@@ -551,11 +561,15 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		labelSave = new JLabel();
 		labelSave.setText(TEXT_SAVE);
-		labelSave.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelSave.setFont(Globals.defaultFont);
+		}
 
 		descriptionField = new JTextField("");
 		descriptionField.setPreferredSize(Globals.buttonDimension);
-		descriptionField.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			descriptionField.setFont(Globals.defaultFont);
+		}
 		if (!ConfigedMain.THEMES) {
 			descriptionField.setBackground(Globals.BACKGROUND_COLOR_3);
 		}

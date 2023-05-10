@@ -14,6 +14,7 @@ import javax.swing.JMenuItem;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.utilities.logging.Logging;
@@ -97,7 +98,9 @@ public class SavedSearchesDialog extends FEditStringList {
 		// find itscontext
 		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
-		reload.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			reload.setFont(Globals.defaultFont);
+		}
 		reload.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -112,7 +115,9 @@ public class SavedSearchesDialog extends FEditStringList {
 		// find itscontext
 		remove.setText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 
-		remove.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			remove.setFont(Globals.defaultFont);
+		}
 		remove.addActionListener((ActionEvent actionEvent) -> {
 			Logging.debug(this, "remove action");
 			removeSelectedEntry();
@@ -121,7 +126,9 @@ public class SavedSearchesDialog extends FEditStringList {
 
 		JMenuItem edit = new JMenuItemFormatted();
 		edit.setText(Configed.getResourceValue("SavedSearchesDialog.EditSearchMenu"));
-		edit.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			edit.setFont(Globals.defaultFont);
+		}
 		edit.addActionListener(actionEvent -> editSearch(visibleList.getSelectedValue()));
 		popup.add(edit);
 

@@ -97,11 +97,15 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		JLabel labelSwauditMultiClientReport1 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title1"));
-		labelSwauditMultiClientReport1.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			labelSwauditMultiClientReport1.setFont(Globals.defaultFontBig);
+		}
 
 		JLabel labelSwauditMultiClientReport2 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title2"));
-		labelSwauditMultiClientReport2.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			labelSwauditMultiClientReport2.setFont(Globals.defaultFontBold);
+		}
 
 		JLabel labelFilenamePrefix = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
@@ -122,7 +126,9 @@ public class PanelSWMultiClientReport extends JPanel {
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenameInformation"));
 
 		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
-		labelAskForOverwrite.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelAskForOverwrite.setFont(Globals.defaultFont);
+		}
 		checkAskForOverwrite = new JCheckBox("", askForOverwrite);
 
 		checkAskForOverwrite.addItemListener(new ItemListener() {
@@ -206,9 +212,13 @@ public class PanelSWMultiClientReport extends JPanel {
 		});
 
 		JLabel labelWithMsUpdates = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates"));
-		labelWithMsUpdates.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelWithMsUpdates.setFont(Globals.defaultFont);
+		}
 		JLabel labelWithMsUpdates2 = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates2"));
-		labelWithMsUpdates2.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelWithMsUpdates2.setFont(Globals.defaultFont);
+		}
 
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		checkWithMsUpdates.addItemListener(new ItemListener() {

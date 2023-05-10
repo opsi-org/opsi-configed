@@ -22,13 +22,18 @@ public class OpenSaveDialog implements ActionListener {
 	public OpenSaveDialog(String title) {
 
 		saveBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.save"));
-		saveBtn.setFont(Globals.defaultFont);
+
+		if (!ConfigedMain.FONT) {
+			saveBtn.setFont(Globals.defaultFont);
+		}
 
 		saveBtn.addActionListener(this);
 
 		openBtn = new JButton(Configed.getResourceValue("OpenSaveDialog.open"));
 
-		openBtn.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			openBtn.setFont(Globals.defaultFont);
+		}
 		openBtn.addActionListener(this);
 
 		JPanel buttonPane = new JPanel();

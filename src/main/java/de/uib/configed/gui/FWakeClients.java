@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.swing.JFrame;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.JSONthroughHTTPS;
@@ -22,7 +23,9 @@ public class FWakeClients extends FShowList {
 
 	public FWakeClients(JFrame master, String title, AbstractPersistenceController persist) {
 		super(master, title, false, new String[] { Configed.getResourceValue("FWakeClients.cancel") });
-		super.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			super.setFont(Globals.defaultFont);
+		}
 		super.setMessage("");
 		super.setButtonsEnabled(true);
 		this.persist = persist;

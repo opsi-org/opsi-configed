@@ -155,11 +155,15 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		format = new CSVFormat();
 
 		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
-		importOptionsLabel.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			importOptionsLabel.setFont(Globals.defaultFontBold);
+		}
 
 		JLabel splittingOptionsLabel = new JLabel(
 				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
-		splittingOptionsLabel.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			splittingOptionsLabel.setFont(Globals.defaultFontBold);
+		}
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);
@@ -244,11 +248,15 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		centerPanel.setLayout(centerLayout);
 
 		JLabel dataLabel = new JLabel(Configed.getResourceValue("CSVTemplateCreatorDialog.dataOptionsLabel"));
-		dataLabel.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			dataLabel.setFont(Globals.defaultFontBold);
+		}
 		JLabel dataSelectionLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.dataSelectionLabel"));
 		JLabel csvFormatLabel = new JLabel(Configed.getResourceValue("CSVTemplateCreatorDialog.csvFormatLabel"));
-		csvFormatLabel.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			csvFormatLabel.setFont(Globals.defaultFontBold);
+		}
 		JLabel fieldSeparatorLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.fieldSeparatorLabel"));
 
@@ -419,7 +427,9 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 					}
 
 					checkbox.setEnabled(isEnabled());
-					checkbox.setFont(getFont());
+					if (!ConfigedMain.FONT) {
+						checkbox.setFont(getFont());
+					}
 					checkbox.setFocusPainted(false);
 					checkbox.setBorderPainted(true);
 					checkbox.setBorder(noFocusBorder);

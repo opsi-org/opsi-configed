@@ -128,10 +128,14 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		northPanel.setOpaque(true);
 
 		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
-		importOptionsLabel.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			importOptionsLabel.setFont(Globals.defaultFontBold);
+		}
 		JLabel splittingOptionsLabel = new JLabel(
 				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
-		splittingOptionsLabel.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			splittingOptionsLabel.setFont(Globals.defaultFontBold);
+		}
 
 		NumberFormat numberFormat = NumberFormat.getIntegerInstance();
 		numberFormat.setGroupingUsed(false);

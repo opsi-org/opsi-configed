@@ -439,7 +439,9 @@ public final class Globals {
 	}
 
 	public static void formatButtonSmallText(AbstractButton button) {
-		button.setFont(defaultFontSmall);
+		if (!ConfigedMain.FONT) {
+			button.setFont(defaultFontSmall);
+		}
 		button.setPreferredSize(new Dimension(45, 20));
 		if (!ConfigedMain.THEMES) {
 			button.setForeground(lightBlack);

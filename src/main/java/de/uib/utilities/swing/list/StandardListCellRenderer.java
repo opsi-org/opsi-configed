@@ -80,7 +80,9 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 			}
 		}
 
-		jc.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			jc.setFont(Globals.defaultFont);
+		}
 
 		if (jc instanceof JLabel) {
 			((JLabel) jc).setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));

@@ -927,7 +927,9 @@ public class MainFrame extends JFrame
 
 		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
-			item.setFont(Globals.defaultFont);
+			if (!ConfigedMain.FONT) {
+				item.setFont(Globals.defaultFont);
+			}
 
 			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
 
@@ -1267,7 +1269,9 @@ public class MainFrame extends JFrame
 
 		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
 			JMenuItem item = new JMenuItemFormatted(entry.getValue());
-			item.setFont(Globals.defaultFont);
+			if (!ConfigedMain.FONT) {
+				item.setFont(Globals.defaultFont);
+			}
 
 			item.addActionListener((ActionEvent e) -> configedMain
 					.selectClientsByFailedAtSomeTimeAgo(searchedTimeSpans.get(entry.getKey())));
@@ -1687,7 +1691,9 @@ public class MainFrame extends JFrame
 		popupSelectionToggleClientFilter
 				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		popupSelectionToggleClientFilter.setState(false);
-		popupSelectionToggleClientFilter.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			popupSelectionToggleClientFilter.setFont(Globals.defaultFontBig);
+		}
 
 		popupSelectionToggleClientFilter.addActionListener((ActionEvent e) -> toggleClientFilterAction());
 
@@ -1718,7 +1724,9 @@ public class MainFrame extends JFrame
 
 		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItemFormatted(event);
-			item.setFont(Globals.defaultFont);
+			if (!ConfigedMain.FONT) {
+				item.setFont(Globals.defaultFont);
+			}
 
 			item.addActionListener((ActionEvent e) -> fireOpsiclientdEventAction(event));
 
@@ -1839,7 +1847,9 @@ public class MainFrame extends JFrame
 
 	private void guiInit() {
 		this.addWindowListener(this);
-		this.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			this.setFont(Globals.defaultFont);
+		}
 		this.setIconImage(Globals.mainIcon);
 
 		SizeListeningPanel allPane = new SizeListeningPanel();
@@ -1884,7 +1894,9 @@ public class MainFrame extends JFrame
 		labelHost.setPreferredSize(Globals.buttonDimension);
 
 		labelHostID = new JLabel("");
-		labelHostID.setFont(Globals.defaultFontStandardBold);
+		if (!ConfigedMain.FONT) {
+			labelHostID.setFont(Globals.defaultFontStandardBold);
+		}
 
 		JLabel labelClientDescription = new JLabel(Configed.getResourceValue("MainFrame.jLabelDescription"));
 		labelClientDescription.setPreferredSize(Globals.buttonDimension);
@@ -1900,7 +1912,9 @@ public class MainFrame extends JFrame
 
 		JTextArea jFieldInDepot = new JTextArea();
 		jFieldInDepot.setEditable(false);
-		jFieldInDepot.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			jFieldInDepot.setFont(Globals.defaultFontBig);
+		}
 		if (!ConfigedMain.THEMES) {
 			jFieldInDepot.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
@@ -1908,14 +1922,18 @@ public class MainFrame extends JFrame
 		jTextFieldDescription = new JTextEditorField("");
 		jTextFieldDescription.setEditable(true);
 		jTextFieldDescription.setPreferredSize(Globals.textfieldDimension);
-		jTextFieldDescription.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			jTextFieldDescription.setFont(Globals.defaultFontBig);
+		}
 		jTextFieldDescription.addKeyListener(this);
 		jTextFieldDescription.addMouseListener(this);
 
 		jTextFieldInventoryNumber = new JTextEditorField("");
 		jTextFieldInventoryNumber.setEditable(true);
 		jTextFieldInventoryNumber.setPreferredSize(Globals.textfieldDimension);
-		jTextFieldInventoryNumber.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			jTextFieldInventoryNumber.setFont(Globals.defaultFontBig);
+		}
 		jTextFieldInventoryNumber.addKeyListener(this);
 		jTextFieldInventoryNumber.addMouseListener(this);
 
@@ -1924,7 +1942,9 @@ public class MainFrame extends JFrame
 		jTextAreaNotes.setEditable(true);
 		jTextAreaNotes.setLineWrap(true);
 		jTextAreaNotes.setWrapStyleWord(true);
-		jTextAreaNotes.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			jTextAreaNotes.setFont(Globals.defaultFontBig);
+		}
 		GraphicsEnvironment.getLocalGraphicsEnvironment();
 		jTextAreaNotes.addKeyListener(this);
 		jTextAreaNotes.addMouseListener(this);
@@ -2173,7 +2193,9 @@ public class MainFrame extends JFrame
 			jComboBoxProductValues.setBackground(Globals.BACKGROUND_COLOR_6);
 		}
 
-		treeClients.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			treeClients.setFont(Globals.defaultFont);
+		}
 
 		JScrollPane scrollpaneTreeClients = new JScrollPane();
 
@@ -2595,7 +2617,9 @@ public class MainFrame extends JFrame
 		};
 
 		labelNoSoftware = new JLabel();
-		labelNoSoftware.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			labelNoSoftware.setFont(Globals.defaultFontBig);
+		}
 
 		showSoftwareLogNotFound = new JPanel(new FlowLayout());
 		showSoftwareLogNotFound.add(labelNoSoftware);
