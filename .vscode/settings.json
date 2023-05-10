@@ -18,4 +18,5 @@
         "connectionId": "https-sonarqube-uib-gmbh",
         "projectKey": "configed"
     },
+    "java.compile.nullAnalysis.mode": "automatic",
 }
