@@ -81,7 +81,9 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		editingArea = new JPanel(new BorderLayout());
 
 		labelHint = new JLabel();
-		labelHint.setFont(Globals.defaultFontStandardBold);
+		if (!ConfigedMain.FONT) {
+			labelHint.setFont(Globals.defaultFontStandardBold);
+		}
 
 		buttonCommit = new IconButton(Configed.getResourceValue("PanelGenEditTable.SaveButtonTooltip"),
 				"images/apply.png", "images/apply_over.png", "images/apply_disabled.png", true) {
@@ -233,15 +235,17 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	private void enter() {
 		if (caller != null) {
 			callerFont = caller.getFont();
-			caller.setFont(callerFont.deriveFont(Font.ITALIC));
-
+			if (!ConfigedMain.FONT) {
+				caller.setFont(callerFont.deriveFont(Font.ITALIC));
+			}
 		}
 	}
 
 	public void deactivate() {
 		if (caller != null) {
-
-			caller.setFont(callerFont);
+			if (!ConfigedMain.FONT) {
+				caller.setFont(callerFont);
+			}
 			caller.validate();
 		}
 	}

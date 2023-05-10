@@ -116,7 +116,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 							.toString();
 
 					if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules")) && clientNum != null
-							&& prevClientNum != null && !clientNum.equals(prevClientNum)) {
+							&& prevClientNum != null && !clientNum.equals(prevClientNum) && !ConfigedMain.FONT) {
 						jc.setFont(Globals.defaultFontBold);
 					}
 				}

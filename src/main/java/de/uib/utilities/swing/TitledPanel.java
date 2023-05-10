@@ -32,8 +32,10 @@ public class TitledPanel extends JPanel {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
-		label1.setFont(Globals.defaultFontBig);
-		label2.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			label1.setFont(Globals.defaultFontBig);
+			label2.setFont(Globals.defaultFontBig);
+		}
 
 		GroupLayout innerLayout = new GroupLayout(this);
 		this.setLayout(innerLayout);

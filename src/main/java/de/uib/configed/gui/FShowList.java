@@ -63,7 +63,7 @@ public class FShowList extends FTextArea {
 
 	@Override
 	public void setFont(Font f) {
-		if (jTextArea1 != null) {
+		if (jTextArea1 != null && !ConfigedMain.FONT) {
 			jTextArea1.setFont(f);
 		}
 	}
@@ -87,7 +87,9 @@ public class FShowList extends FTextArea {
 		}
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
-		jTextArea1.setFont(new Font("Dialog", 0, 14));
+		if (!ConfigedMain.FONT) {
+			jTextArea1.setFont(new Font("Dialog", 0, 14));
+		}
 
 		scrollpane.getViewport().add(jTextArea1, null);
 

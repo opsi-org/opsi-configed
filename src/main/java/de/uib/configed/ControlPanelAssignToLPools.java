@@ -525,7 +525,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		// special treatment of columns
 		TableColumn col = thePanel.panelProductId2LPool.getColumnModel().getColumn(0);
 		JComboBox<String> comboLP0 = new JComboBox<>();
-		comboLP0.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			comboLP0.setFont(Globals.defaultFontBig);
+		}
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
 					mainController.licencePoolTableProvider.getColumnNames().indexOf("licensePoolId"), false);
@@ -540,7 +542,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP1 = new JComboBox<>();
-		comboLP1.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			comboLP1.setFont(Globals.defaultFontBig);
+		}
 		col.setCellEditor(new AdaptingCellEditor(comboLP1,
 				(row, column) -> new DefaultComboBoxModel<>(persist.getProductIds().toArray(new String[0]))));
 

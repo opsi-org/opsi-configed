@@ -46,7 +46,9 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 
 		groups = new XList(v);
 		groups.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		groups.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			groups.setFont(Globals.defaultFontBig);
+		}
 
 		if (!ConfigedMain.THEMES) {
 			groups.setBackground(Globals.BACKGROUND_COLOR_3);
@@ -57,7 +59,9 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		selIndex = selectedIndex;
 
 		groupnameField = new JTextField();
-		groupnameField.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			groupnameField.setFont(Globals.defaultFontBold);
+		}
 		groupnameField.setPreferredSize(new Dimension(this.getWidth() * 9 / 10, Globals.LINE_HEIGHT + 5));
 
 		groupnameField.getDocument().addDocumentListener(this);
@@ -73,7 +77,9 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		}
 
 		JLabel labelExistingGroups = new JLabel(Configed.getResourceValue("GroupnameChoice.existingGroups") + ":");
-		labelExistingGroups.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			labelExistingGroups.setFont(Globals.defaultFontBig);
+		}
 		JPanel panelExistingGroups = new JPanel(new GridLayout(1, 2));
 		panelExistingGroups.add(labelExistingGroups);
 		panelExistingGroups.add(new JLabel(""));

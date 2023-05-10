@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -20,7 +21,9 @@ public class GeneralFrame extends JDialog implements ActionListener {
 	public GeneralFrame(Frame owner, String title, boolean modal) {
 		super(owner, modal);
 		super.setTitle(title);
-		super.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			super.setFont(Globals.defaultFont);
+		}
 		super.setIconImage(Globals.mainIcon);
 	}
 

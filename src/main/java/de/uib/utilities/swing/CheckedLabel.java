@@ -27,6 +27,7 @@ import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -221,12 +222,16 @@ public class CheckedLabel extends JPanel implements FocusListener {
 	// FocusListener
 	@Override
 	public void focusGained(FocusEvent e) {
-		textLabel.setFont(focusedTextFont);
+		if (!ConfigedMain.FONT) {
+			textLabel.setFont(focusedTextFont);
+		}
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		textLabel.setFont(textFont);
+		if (!ConfigedMain.FONT) {
+			textLabel.setFont(textFont);
+		}
 	}
 
 	private void setLayout() {

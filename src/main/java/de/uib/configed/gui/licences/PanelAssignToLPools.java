@@ -89,63 +89,91 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		JLabel titleWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool"));
-		titleWindowsSoftware.setFont(Globals.defaultFontStandardBold);
+		if (!ConfigedMain.FONT) {
+			titleWindowsSoftware.setFont(Globals.defaultFontStandardBold);
+		}
 
 		JLabel titleWindowsSoftware2 = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool.supplement"));
-		titleWindowsSoftware2.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			titleWindowsSoftware2.setFont(Globals.defaultFont);
+		}
 
 		JLabel labelSelectedLicencePoolId = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelSelectedLicencePoolId"));
 
-		labelSelectedLicencePoolId.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelSelectedLicencePoolId.setFont(Globals.defaultFont);
+		}
 
 		fieldSelectedLicencePoolId = new JLabel("");
 		fieldSelectedLicencePoolId.setPreferredSize(new Dimension(250, Globals.LINE_HEIGHT));
-		fieldSelectedLicencePoolId.setFont(Globals.defaultFontStandardBold);
+		if (!ConfigedMain.FONT) {
+			fieldSelectedLicencePoolId.setFont(Globals.defaultFontStandardBold);
+		}
 
 		JLabel labelCountAllWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAllWindowsSoftware"));
 
-		labelCountAllWindowsSoftware.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelCountAllWindowsSoftware.setFont(Globals.defaultFont);
+		}
 
 		fieldCountAllWindowsSoftware = new JLabel("");
 		fieldCountAllWindowsSoftware.setPreferredSize(Globals.shortlabelDimension);
-		fieldCountAllWindowsSoftware.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			fieldCountAllWindowsSoftware.setFont(Globals.defaultFont);
+		}
 
 		JLabel labelCountDisplayedWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountDisplayedWindowsSoftware"));
-		labelCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
+		}
 
 		fieldCountDisplayedWindowsSoftware = new JLabel("");
 		fieldCountDisplayedWindowsSoftware.setPreferredSize(Globals.shortlabelDimension);
-		fieldCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			fieldCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
+		}
 
 		JLabel labelCountNotAssignedSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountNotAssignedSoftware"));
-		labelCountNotAssignedSoftware.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelCountNotAssignedSoftware.setFont(Globals.defaultFont);
+		}
 
 		fieldCountNotAssignedSoftware = new JLabel("");
 		fieldCountNotAssignedSoftware.setPreferredSize(Globals.shortlabelDimension);
-		fieldCountNotAssignedSoftware.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			fieldCountNotAssignedSoftware.setFont(Globals.defaultFont);
+		}
 
 		JLabel labelCountAssignedStatus = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedStatus"));
 
-		labelCountAssignedStatus.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelCountAssignedStatus.setFont(Globals.defaultFont);
+		}
 
 		fieldCountAssignedStatus = new JLabel("");
 		fieldCountAssignedStatus.setPreferredSize(Globals.shortlabelDimension);
-		fieldCountAssignedStatus.setFont(Globals.defaultFontStandardBold);
+		if (!ConfigedMain.FONT) {
+			fieldCountAssignedStatus.setFont(Globals.defaultFontStandardBold);
+		}
 
 		JLabel labelCountAssignedInEditing = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedInEditing"));
 
-		labelCountAssignedInEditing.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelCountAssignedInEditing.setFont(Globals.defaultFont);
+		}
 
 		fieldCountAssignedInEditing = new JLabel("");
 		fieldCountAssignedInEditing.setPreferredSize(Globals.shortlabelDimension);
-		fieldCountAssignedInEditing.setFont(Globals.defaultFontStandardBold);
+		if (!ConfigedMain.FONT) {
+			fieldCountAssignedInEditing.setFont(Globals.defaultFontStandardBold);
+		}
 
 		buttonShowAssignedNotExisting = new JButton(
 				Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing"),
@@ -153,7 +181,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		buttonShowAssignedNotExisting
 				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
-		buttonShowAssignedNotExisting.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			buttonShowAssignedNotExisting.setFont(Globals.defaultFont);
+		}
 		buttonShowAssignedNotExisting.addActionListener((ActionEvent actionEvent) -> {
 			fMissingSoftwareInfo.setLocationRelativeTo(Globals.frame1);
 			fMissingSoftwareInfo.setVisible(true);
@@ -163,7 +193,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries"));
 
 		labelSupplementSimilar.setVisible(true);
-		labelSupplementSimilar.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelSupplementSimilar.setFont(Globals.defaultFont);
+		}
 
 		JButton buttonSupplementSimilar = new JButton(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.button"),
@@ -171,7 +203,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		buttonSupplementSimilar.setToolTipText(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.tooltip"));
-		buttonSupplementSimilar.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			buttonSupplementSimilar.setFont(Globals.defaultFont);
+		}
 
 		buttonSupplementSimilar.addActionListener(new ActionListener() {
 			@Override
@@ -195,7 +229,9 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		labelSimilarEntriesExist = new JLabel();
 		labelSimilarEntriesExist.setVisible(true);
-		labelSimilarEntriesExist.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelSimilarEntriesExist.setFont(Globals.defaultFont);
+		}
 
 		panelRadiobuttonsPreselectionForName2Pool = new PanelStateSwitch<>(
 

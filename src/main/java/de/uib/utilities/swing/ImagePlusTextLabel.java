@@ -68,7 +68,7 @@ public class ImagePlusTextLabel extends JPanel {
 	 */
 	@Override
 	public void setFont(Font font) {
-		if (textlabel != null) {
+		if (textlabel != null && !ConfigedMain.FONT) {
 			textlabel.setFont(font);
 		}
 	}

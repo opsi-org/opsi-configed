@@ -223,24 +223,32 @@ public final class NewClientDialog extends FGeneralDialog {
 		JLabel jLabelDepot = new JLabel();
 		jLabelDepot.setText(Configed.getResourceValue("NewClientDialog.belongsToDepot"));
 		jComboDepots = new JComboBox<>(depots.toArray(new String[0]));
-		jComboDepots.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			jComboDepots.setFont(Globals.defaultFontBig);
+		}
 
 		JLabel labelPrimaryGroup = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
 		jComboPrimaryGroup = new JComboBox<>(new String[] { "a", "ab" });
 		jComboPrimaryGroup.setMaximumRowCount(10);
-		jComboPrimaryGroup.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			jComboPrimaryGroup.setFont(Globals.defaultFontBig);
+		}
 
 		JLabel jLabelNetboot = new JLabel();
 		jLabelNetboot.setText(Configed.getResourceValue("NewClientDialog.netbootProduct"));
 		jComboNetboot = new JComboBox<>(new String[] { "a", "ab" });
 		jComboNetboot.setMaximumRowCount(10);
-		jComboNetboot.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			jComboNetboot.setFont(Globals.defaultFontBig);
+		}
 
 		JLabel jLabelLocalboot = new JLabel();
 		jLabelLocalboot.setText(Configed.getResourceValue("NewClientDialog.localbootProduct"));
 		jComboLocalboot = new JComboBox<>(new String[] { "a", "ab" });
 		jComboLocalboot.setMaximumRowCount(10);
-		jComboLocalboot.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			jComboLocalboot.setFont(Globals.defaultFontBig);
+		}
 		jComboLocalboot.setEnabled(false);
 
 		JLabel jLabelNotes = new JLabel();
@@ -292,10 +300,14 @@ public final class NewClientDialog extends FGeneralDialog {
 		jTextNotes.setBorder(BorderFactory.createLineBorder(Globals.NEW_CLIENT_DIALOG_BORDER_COLOR));
 
 		JLabel labelInfoMac = new JLabel(Configed.getResourceValue("NewClientDialog.infoMac"));
-		labelInfoMac.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			labelInfoMac.setFont(Globals.defaultFontBig);
+		}
 
 		JLabel labelInfoIP = new JLabel(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
-		labelInfoIP.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			labelInfoIP.setFont(Globals.defaultFontBig);
+		}
 
 		JLabel jLabelSystemUUID = new JLabel();
 		jLabelSystemUUID.setText(Configed.getResourceValue("NewClientDialog.SystemUUID"));

@@ -293,7 +293,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextFieldMaxInstallations = new JTextField();
 
 		comboClient = new JComboBox<>();
-		comboClient.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			comboClient.setFont(Globals.defaultFontBig);
+		}
 
 		comboClient.setPreferredSize(new Dimension(200, 20));
 
@@ -383,9 +385,13 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jButtonSend.addActionListener(this);
 
 		jLabelTask.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Task") + ":");
-		jLabelTask.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			jLabelTask.setFont(Globals.defaultFontBold);
+		}
 		jLabelConfigure.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ChooseType"));
-		jLabelConfigure.setFont(Globals.defaultFontStandardBold);
+		if (!ConfigedMain.FONT) {
+			jLabelConfigure.setFont(Globals.defaultFontStandardBold);
+		}
 
 		panelLicenceModel.setBorder(BorderFactory.createEtchedBorder());
 
