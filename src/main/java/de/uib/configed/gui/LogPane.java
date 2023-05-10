@@ -249,7 +249,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		Logging.info(this, "levels minL, maxL, valL " + minL + ", " + maxL + ", " + valL);
 
-		sliderLevel = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
+		sliderLevel = new AdaptingSlider(minL, maxL, 3 /*produceInitialMaxShowLevel()*/);
 
 		sliderListener = new ChangeListener() {
 			@Override

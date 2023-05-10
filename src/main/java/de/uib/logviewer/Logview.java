@@ -25,7 +25,7 @@ public class Logview {
 			new String[] { "--version", "", "Tell logview version" },
 			new String[] { "--help", "", "Give this help" }, };
 
-	private static LogviewMain cm;
+	private static LogviewMain logviewMain;
 
 	private static String fileName = "";
 	private static String logdirectory = "";
@@ -91,12 +91,9 @@ public class Logview {
 			System.out.println(" --  fileName " + Logging.logDirectoryName);
 		}
 
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				cm = new LogviewMain();
-				cm.init();
-			}
+		SwingUtilities.invokeLater(() -> {
+			logviewMain = new LogviewMain();
+			logviewMain.init();
 		});
 	}
 

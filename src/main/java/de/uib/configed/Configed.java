@@ -803,8 +803,12 @@ public class Configed {
 
 		if (logviewer) {
 			Logview.main(args);
+		} else {
+			startConfiged();
 		}
+	}
 
+	private static void startConfiged() {
 		Logging.debug("initiating configed");
 
 		if (optionCLIQuerySearch) {
@@ -819,11 +823,6 @@ public class Configed {
 			System.exit(0);
 		} else if (optionCLIDefineGroupBySearch) {
 			Logging.debug("optionCLIDefineGroupBySearch");
-			// group_getObjects // exists group?
-			// parentGroupId
-			// removeHostGroupElements
-			// addGroup
-			// addObject2Group
 
 			SavedSearchQuery query = new SavedSearchQuery();
 
@@ -879,7 +878,6 @@ public class Configed {
 			connect();
 
 			System.exit(0);
-
 		}
 
 		try {

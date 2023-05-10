@@ -35,21 +35,14 @@ public class LogviewMain {
 
 	LogFrame mainFrame;
 
-	protected void initGui() {
-
-		initMainFrame();
-	}
-
 	public void init() {
 		Logging.debug(this, "init");
-
 		Logging.clearErrorList();
 
 		initGui();
-
 	}
 
-	protected void initMainFrame() {
+	protected void initGui() {
 
 		mainFrame = new LogFrame(this);
 
