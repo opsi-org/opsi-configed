@@ -125,7 +125,9 @@ public class Configed {
 					"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)" },
 
 			new String[] { "--disable-certificate-verification", "",
-					"Disable opsi-certificate verification with server, by DEFAULT enabled" }
+					"Disable opsi-certificate verification with server, by DEFAULT enabled" },
+
+			new String[] { "--logviewer", "", "this option will start the logviewer instead of the configed" }
 
 			// undocumented
 	};
@@ -581,6 +583,9 @@ public class Configed {
 				} else if ("--disable-certificate-verification".equals(args[i])) {
 					Globals.disableCertificateVerification = true;
 					i = i + 1;
+				} else if ("--logviewer".equals(args[i])) {
+					i = i + 1;
+					Logging.devel("start logviewer");
 				} else {
 					Logging.debug("an option is not valid: " + args[i]);
 					usage();
