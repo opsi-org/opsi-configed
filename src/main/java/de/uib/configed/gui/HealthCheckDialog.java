@@ -7,11 +7,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.swing.GroupLayout;
 import javax.swing.Icon;
@@ -31,10 +38,14 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 
+import org.json.JSONObject;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
+import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 
@@ -133,18 +144,18 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
-		JMenuItemFormatted popupSaveHealthData = new JMenuItemFormatted(
-				Configed.getResourceValue("PopupMenuTrait.save"), Globals.createImageIcon("images/save.png", ""));
+		JMenuItemFormatted popupSaveAsZip = new JMenuItemFormatted(
+				Configed.getResourceValue("PopupMenuTrait.saveAsZip"), Globals.createImageIcon("images/save.png", ""));
 
-		popupSaveHealthData.addActionListener((ActionEvent e) -> saveHealthDataAction());
-		popupMenu.add(popupSaveHealthData);
+		popupSaveAsZip.addActionListener((ActionEvent e) -> saveAsZip());
+		popupMenu.add(popupSaveAsZip);
 
 		return popupMenu;
 	}
 
-	private void saveHealthDataAction() {
+	private void saveAsZip() {
 		JFileChooser jFileChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Log file (.log)", "log");
+		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Zip file (.zip)", "zip");
 		jFileChooser.addChoosableFileFilter(fileFilter);
 		jFileChooser.setAcceptAllFileFilterUsed(false);
 
@@ -152,20 +163,103 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			String fileName = jFileChooser.getSelectedFile().getAbsolutePath();
-			if (!fileName.endsWith(".log")) {
-				fileName = fileName.concat(".log");
+			if (!fileName.endsWith(".zip")) {
+				fileName = fileName.concat(".zip");
 			}
 
-			File healthDataFile = new File(Configed.savedStatesLocationName, Globals.HEALTH_CHECK_LOG_FILE_NAME);
-			copyFile(healthDataFile, new File(fileName));
+			String dirname = ConfigedMain.host;
+
+			if (dirname.contains(":")) {
+				dirname = dirname.replace(":", "_");
+			}
+
+			saveDiagnosticDataToFile();
+
+			List<File> files = new ArrayList<>();
+			files.add(new File(Configed.savedStatesLocationName,
+					dirname + File.separator + Globals.HEALTH_CHECK_LOG_FILE_NAME));
+			files.add(new File(Configed.savedStatesLocationName,
+					dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME));
+			files.add(new File(Logging.getCurrentLogfilePath()));
+			zipFiles(fileName, files);
 		}
 	}
 
-	private void copyFile(File sourceFile, File targetFile) {
-		try {
-			Files.copy(sourceFile.toPath(), targetFile.toPath());
-		} catch (IOException ex) {
-			Logging.warning(this, "unable to copy file to its new destination", ex);
+	private void saveDiagnosticDataToFile() {
+		String dirname = ConfigedMain.host;
+
+		if (dirname.contains(":")) {
+			dirname = dirname.replace(":", "_");
+		}
+
+		File diagnosticDataFile = new File(Configed.savedStatesLocationName,
+				dirname + File.separator + Globals.DIAGNOSTIC_DATA_JSON_FILE_NAME);
+
+		if (diagnosticDataFile.exists() && diagnosticDataFile.length() != 0) {
+			Logging.debug(this, "file already exists");
+			return;
+		}
+
+		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		JSONObject jo = new JSONObject(persist.getDiagnosticData());
+		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes()));
+	}
+
+	private void writeToFile(File file, ByteBuffer data) {
+		if (file == null) {
+			Logging.error(this, "provided file is null");
+		}
+
+		try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
+			channel.write(data);
+		} catch (IOException e) {
+			Logging.error(this, "" + e);
+		}
+	}
+
+	private void zipFiles(String zipFile, List<File> files) {
+		if (zipFile == null || zipFile.isEmpty()) {
+			Logging.info(this, "invalid file name: " + zipFile);
+			return;
+		}
+
+		if (files.isEmpty()) {
+			Logging.info(this, "no files provided");
+			return;
+		}
+
+		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile))) {
+			for (File file : files) {
+				zipFile(zos, file);
+			}
+		} catch (IOException e) {
+			Logging.error(this, "" + e);
+		}
+	}
+
+	private void zipFile(ZipOutputStream zos, File file) {
+		if (zos == null) {
+			Logging.info(this, "ZIP outputstream is null");
+			return;
+		}
+
+		if (file == null || !file.exists()) {
+			Logging.info(this, "provided file doesn't exist");
+			return;
+		}
+
+		try (FileInputStream fis = new FileInputStream(file)) {
+			ZipEntry ze = new ZipEntry(file.getName());
+			zos.putNextEntry(ze);
+
+			byte[] buffer = new byte[1024];
+			int len = 0;
+
+			while ((len = fis.read(buffer)) > 0) {
+				zos.write(buffer, 0, len);
+			}
+		} catch (IOException e) {
+			Logging.error(this, "" + e);
 		}
 	}
 

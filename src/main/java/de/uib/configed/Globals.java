@@ -63,6 +63,7 @@ public final class Globals {
 	public static final String CERTIFICATE_FILE = CERTIFICATE_FILE_NAME + "." + CERTIFICATE_FILE_EXTENSION;
 
 	public static final String HEALTH_CHECK_LOG_FILE_NAME = "healthCheck.log";
+	public static final String DIAGNOSTIC_DATA_JSON_FILE_NAME = "diagnosticData.json";
 
 	public static boolean disableCertificateVerification;
 

@@ -876,6 +876,8 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract List<Map<String, Object>> checkHealth();
 
+	public abstract Map<String, Object> getDiagnosticData();
+
 	// json generating
 
 	public static Map<String, Object> createNOMitem(String type) {

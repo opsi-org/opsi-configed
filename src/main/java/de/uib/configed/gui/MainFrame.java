@@ -27,10 +27,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1432,7 +1433,7 @@ public class MainFrame extends JFrame
 
 		jMenuHelpCheckHealth.setText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> {
-			saveHealthDataToFile();
+			saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME, ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes()));
 			showHealthDataAction();
 		});
 
@@ -3127,25 +3128,38 @@ public class MainFrame extends JFrame
 		dialog.setVisible(true);
 	}
 
-	private static void saveHealthDataToFile() {
-		File healthDataFile = new File(Configed.savedStatesLocationName, Globals.HEALTH_CHECK_LOG_FILE_NAME);
+	private void saveToFile(String fileName, ByteBuffer data) {
+		String dirname = ConfigedMain.host;
 
-		if (healthDataFile.exists() && healthDataFile.length() != 0) {
+		if (dirname.contains(":")) {
+			dirname = dirname.replace(":", "_");
+		}
+
+		File file = new File(Configed.savedStatesLocationName, dirname + File.separator + fileName);
+
+		if (file.exists() && file.length() != 0) {
+			Logging.debug(this, "file already exists");
 			return;
 		}
 
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(healthDataFile))) {
-			writer.write(HealthInfo.getHealthData(true));
-			writer.flush();
+		writeToFile(file, data);
+	}
+
+	private void writeToFile(File file, ByteBuffer data) {
+		if (file == null) {
+			Logging.error(this, "provided file is null");
+		}
+
+		try (FileOutputStream fos = new FileOutputStream(file); FileChannel channel = fos.getChannel()) {
+			channel.write(data);
 		} catch (IOException e) {
-			Logging.error("unable to write to a file: " + healthDataFile.getAbsolutePath(), e);
+			Logging.error(this, "" + e);
 		}
 	}
 
 	private void showOpsiModules() {
 		if (!configedMain.getPersistenceController().isOpsiLicencingAvailable()
 				|| !configedMain.getPersistenceController().isOpsiUserAdmin()) {
-
 			StringBuilder message = new StringBuilder();
 			Map<String, Object> modulesInfo = configedMain.getPersistenceController().getOpsiModulesInfos();
 
