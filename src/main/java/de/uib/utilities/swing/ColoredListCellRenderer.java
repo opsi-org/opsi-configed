@@ -5,6 +5,7 @@ import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
 public class ColoredListCellRenderer extends DefaultListCellRenderer {
@@ -15,7 +16,9 @@ public class ColoredListCellRenderer extends DefaultListCellRenderer {
 
 		CellAlternatingColorizer.colorize(c, isSelected, index % 2 == 0, true);
 
-		c.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			c.setFont(Globals.defaultFont);
+		}
 
 		return c;
 	}

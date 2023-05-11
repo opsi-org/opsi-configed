@@ -357,14 +357,18 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 						Font gotFont = jc.getFont();
 						gotFont = gotFont.deriveFont(Font.BOLD);
-						jc.setFont(gotFont);
+						if (!ConfigedMain.FONT) {
+							jc.setFont(gotFont);
+						}
 					} else {
 
 						Object gotValue = table.getValueAt(rowIndex, 1);
 						if (markDeviation && !defaultValue.equals(gotValue)) {
 							Font gotFont = jc.getFont();
 							gotFont = gotFont.deriveFont(Font.BOLD);
-							jc.setFont(gotFont);
+							if (!ConfigedMain.FONT) {
+								jc.setFont(gotFont);
+							}
 						}
 					}
 

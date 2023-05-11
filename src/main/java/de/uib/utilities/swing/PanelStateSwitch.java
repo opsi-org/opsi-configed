@@ -148,7 +148,9 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 			button.setIcon(deactivatedIcon);
 			button.setSelectedIcon(activatedIcon);
 			button.setHorizontalTextPosition(SwingConstants.RIGHT);
-			button.setFont(primaryFont);
+			if (!ConfigedMain.FONT) {
+				button.setFont(primaryFont);
+			}
 
 			buttonGroup.add(button);
 
@@ -204,7 +206,9 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 			labelTitle.setText(title);
 		}
 
-		labelTitle.setFont(primaryFont);
+		if (!ConfigedMain.FONT) {
+			labelTitle.setFont(primaryFont);
+		}
 
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);

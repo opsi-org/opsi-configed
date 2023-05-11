@@ -56,14 +56,15 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				// client
 
 				if (main.getActiveTreeNodes().containsKey(stringValue)) {
-
-					setFont(Globals.defaultFontStandardBold);
+					if (!ConfigedMain.FONT) {
+						setFont(Globals.defaultFontStandardBold);
+					}
 
 					setIcon(node.getLeafIcon());
-
 				} else {
-
-					setFont(Globals.defaultFont);
+					if (!ConfigedMain.FONT) {
+						setFont(Globals.defaultFont);
+					}
 					setIcon(node.getNonSelectedLeafIcon());
 				}
 			} else {
@@ -81,11 +82,13 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				}
 
 				if (main.getActiveTreeNodes().containsKey(stringValue)) {
-					setFont(Globals.defaultFontStandardBold);
-
+					if (!ConfigedMain.FONT) {
+						setFont(Globals.defaultFontStandardBold);
+					}
 				} else {
-					setFont(Globals.defaultFont);
-
+					if (!ConfigedMain.FONT) {
+						setFont(Globals.defaultFont);
+					}
 				}
 			}
 

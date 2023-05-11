@@ -104,7 +104,9 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 		col = thePanel.panelKeys.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP0 = new JComboBox<>();
-		comboLP0.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			comboLP0.setFont(Globals.defaultFontBig);
+		}
 
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(
@@ -171,12 +173,16 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(2);
 		JComboBox<String> comboLicenceTypes = new JComboBox<>(LicenceEntry.LICENCE_TYPES);
-		comboLicenceTypes.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			comboLicenceTypes.setFont(Globals.defaultFontBig);
+		}
 		col.setCellEditor(new DefaultCellEditor(comboLicenceTypes));
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(4);
 		JComboBox<String> combo = new JComboBox<>();
-		combo.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			combo.setFont(Globals.defaultFontBig);
+		}
 
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
 			List<String> poolIds = mainController.licencePoolTableProvider.getOrderedColumn(

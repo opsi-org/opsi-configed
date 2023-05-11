@@ -124,7 +124,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		if (!ConfigedMain.THEMES) {
 			labelValue.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
-		labelValue.setFont(Globals.defaultFontStandardBold);
+		if (!ConfigedMain.FONT) {
+			labelValue.setFont(Globals.defaultFontStandardBold);
+		}
 
 		buttonSelectValuesWithEqualProperties = new JButton("", Globals.createImageIcon("images/equalplus.png", ""));
 		buttonSelectValuesWithEqualProperties
@@ -159,7 +161,9 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 		scrollPaneValueList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneValueList.setPreferredSize(valueList.getMaximumSize());
 
-		valueList.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			valueList.setFont(Globals.defaultFont);
+		}
 		if (!ConfigedMain.THEMES) {
 			valueList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}

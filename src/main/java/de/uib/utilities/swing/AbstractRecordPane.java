@@ -85,7 +85,9 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 				jLabel.setText(labels.get(dataEntry.getKey()));
 			}
 
-			jLabel.setFont(Globals.defaultFontBig);
+			if (!ConfigedMain.FONT) {
+				jLabel.setFont(Globals.defaultFontBig);
+			}
 			labelfields.put(dataEntry.getKey(), jLabel);
 
 			JTextField jTextField;
@@ -102,7 +104,9 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 				jTextField.setText("");
 			}
 
-			jTextField.setFont(Globals.defaultFontBig);
+			if (!ConfigedMain.FONT) {
+				jTextField.setFont(Globals.defaultFontBig);
+			}
 			jTextField.getCaret().setBlinkRate(0);
 
 			if (hints != null) {

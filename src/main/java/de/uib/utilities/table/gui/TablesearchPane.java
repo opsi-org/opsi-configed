@@ -263,8 +263,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setFieldFont(java.awt.Font font) {
-		fieldSearch.setFont(font);
-
+		if (!ConfigedMain.FONT) {
+			fieldSearch.setFont(font);
+		}
 	}
 
 	public void setFieldBackground(Color color) {
@@ -367,7 +368,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		navPane.setVisible(false);
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
-		labelSearch.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelSearch.setFont(Globals.defaultFont);
+		}
 
 		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
 		Icon selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_x.png", "");
@@ -407,7 +410,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
 
-		fieldSearch.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			fieldSearch.setFont(Globals.defaultFontBig);
+		}
 		if (!ConfigedMain.THEMES) {
 			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 		}
@@ -481,12 +486,16 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.lowerButtonDimension);
-		comboSearchFields.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			comboSearchFields.setFont(Globals.defaultFont);
+		}
 
 		setSearchFieldsAll();
 
 		labelSearchMode = new JLabel(Configed.getResourceValue("SearchPane.searchmode.searchmode"));
-		labelSearchMode.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelSearchMode.setFont(Globals.defaultFont);
+		}
 
 		Map<String, String> tooltipsMap = new LinkedHashMap<>();
 
@@ -502,13 +511,17 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		try {
 
 			comboSearchFieldsMode = new JComboBoxToolTip();
-			comboSearchFieldsMode.setFont(Globals.defaultFont);
+			if (!ConfigedMain.FONT) {
+				comboSearchFieldsMode.setFont(Globals.defaultFont);
+			}
 		} catch (Exception ex) {
 
 			Logging.warning(this, "strange nimbus exception, retry creating JComboBox " + ex);
 
 			comboSearchFieldsMode = new JComboBoxToolTip();
-			comboSearchFieldsMode.setFont(Globals.defaultFont);
+			if (!ConfigedMain.FONT) {
+				comboSearchFieldsMode.setFont(Globals.defaultFont);
+			}
 		}
 
 		comboSearchFieldsMode.setValues(tooltipsMap, false);

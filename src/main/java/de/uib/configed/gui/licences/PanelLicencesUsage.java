@@ -19,6 +19,7 @@ import javax.swing.JSplitPane;
 import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelLicencesUsage;
 import de.uib.configed.Globals;
 import de.uib.utilities.ComboBoxModeller;
@@ -80,7 +81,9 @@ public class PanelLicencesUsage extends MultiTablePanel implements ActionListene
 				Configed.getResourceValue("ConfigedMain.Licences.Usage.LabelAssignLicense"));
 
 		comboClient = new de.uib.utilities.swing.DynamicCombo();
-		comboClient.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			comboClient.setFont(Globals.defaultFontBig);
+		}
 		comboClient.setPreferredSize(new Dimension(200, 20));
 		buttonGet = new JButton(Configed.getResourceValue("ConfigedMain.Licences.Usage.AssignLicense"));
 		buttonGet.addActionListener(this);

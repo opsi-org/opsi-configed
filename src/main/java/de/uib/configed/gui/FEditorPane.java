@@ -28,7 +28,9 @@ public class FEditorPane extends FGeneralDialog {
 
 		editPane.setText("          ");
 		editPane.setEditable(false);
-		editPane.setFont(new Font("Dialog", 0, 10));
+		if (!ConfigedMain.FONT) {
+			editPane.setFont(new Font("Dialog", 0, 10));
+		}
 
 		scrollpane.getViewport().add(editPane, null);
 

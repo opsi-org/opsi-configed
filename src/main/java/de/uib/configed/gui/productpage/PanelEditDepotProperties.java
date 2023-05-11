@@ -128,7 +128,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		jLabelEditDepotProductProperties = new JLabel(
 				Configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
-		jLabelEditDepotProductProperties.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			jLabelEditDepotProductProperties.setFont(Globals.defaultFontBold);
+		}
 
 		IconButton buttonSetValuesFromPackage = new IconButton(
 				Configed.getResourceValue("ProductInfoPane.buttonSetValuesFromPackage"),

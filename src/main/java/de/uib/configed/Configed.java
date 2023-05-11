@@ -906,7 +906,9 @@ public class Configed {
 		}
 		// we activate it in case of an appropriate error
 
-		fErrorOutOfMemory.setFont(Globals.defaultFontBig);
+		if (!ConfigedMain.FONT) {
+			fErrorOutOfMemory.setFont(Globals.defaultFontBig);
+		}
 		fErrorOutOfMemory
 				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
 

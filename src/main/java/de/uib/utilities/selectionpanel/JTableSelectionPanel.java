@@ -151,7 +151,9 @@ public class JTableSelectionPanel extends JPanel
 		JPanel topPane = new JPanel();
 
 		JLabel labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
-		labelSearch.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			labelSearch.setFont(Globals.defaultFont);
+		}
 
 		Icon unselectedIconSearch = Globals.createImageIcon("images/loupe_light_16.png", "");
 		Icon selectedIconSearch = Globals.createImageIcon("images/loupe_light_16_x.png", "");
@@ -163,7 +165,9 @@ public class JTableSelectionPanel extends JPanel
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
-		fieldSearch.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			fieldSearch.setFont(Globals.defaultFont);
+		}
 
 		if (!ConfigedMain.THEMES) {
 			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
@@ -316,7 +320,9 @@ public class JTableSelectionPanel extends JPanel
 			JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
 
 			JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
-			missingData1.setFont(Globals.defaultFontTitle);
+			if (!ConfigedMain.FONT) {
+				missingData1.setFont(Globals.defaultFontTitle);
+			}
 
 			JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 

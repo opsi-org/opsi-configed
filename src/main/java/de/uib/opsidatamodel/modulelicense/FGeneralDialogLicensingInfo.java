@@ -242,12 +242,18 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JLabel customerNames = new JLabel(
 				customerSet.toString().replace("[", "<html>").replace(", ", "<br>").replace("]", "</html>"));
 
-		clientTitle.setFont(Globals.defaultFontBold);
-		checksumTitle.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			clientTitle.setFont(Globals.defaultFontBold);
+			checksumTitle.setFont(Globals.defaultFontBold);
+		}
 		checksumTitle.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
-		checksum.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			checksum.setFont(Globals.defaultFontBold);
+		}
 		checksum.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
-		customerTitle.setFont(Globals.defaultFontBold);
+		if (!ConfigedMain.FONT) {
+			customerTitle.setFont(Globals.defaultFontBold);
+		}
 
 		JLabel labelExtendedView = new JLabel(Configed.getResourceValue("LicensingInfo.buttonExtendedView"));
 		JCheckBox checkExtendedView = new JCheckBox(""
