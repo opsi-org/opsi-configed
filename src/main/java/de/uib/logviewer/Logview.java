@@ -1,5 +1,6 @@
 package de.uib.logviewer;
 
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 import java.net.URL;
@@ -23,8 +24,6 @@ public class Logview {
 			new String[] { "-f FILENAME", "--filename FILENAME", "filename for the log file" },
 			new String[] { "--version", "", "Tell logview version" },
 			new String[] { "--help", "", "Give this help" }, };
-
-	private static LogviewMain logviewMain;
 
 	private static String fileName = "";
 	private static String logdirectory = "";
@@ -90,10 +89,36 @@ public class Logview {
 			System.out.println(" --  fileName " + Logging.logDirectoryName);
 		}
 
-		SwingUtilities.invokeLater(() -> {
-			logviewMain = new LogviewMain();
-			logviewMain.init();
-		});
+		SwingUtilities.invokeLater(this::init);
+	}
+
+	private void init() {
+		Logging.debug(this, "init");
+		Logging.clearErrorList();
+
+		LogFrame logFrame = new LogFrame();
+
+		// for passing it to message frames everywhere
+
+		Globals.container1 = logFrame;
+		Globals.frame1 = logFrame;
+
+		//rearranging visual components
+		logFrame.pack();
+
+		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+		Logging.info(this, "screensize " + screenSize);
+		logFrame.setSize((int) screenSize.getWidth() - 150, (int) screenSize.getHeight() - 150);
+
+		logFrame.setLocationRelativeTo(null);
+
+		// init visual states
+		Logging.info(this, "mainframe nearly initialized");
+
+		logFrame.setVisible(true);
+		logFrame.setFocusToJTextPane();
+
 	}
 
 	private static String tabs(int count) {

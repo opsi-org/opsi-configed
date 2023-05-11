@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.CenterPositioner;
 import de.uib.utilities.swing.VerticalPositioner;
@@ -41,12 +42,21 @@ public class FrameInfodialog extends JDialog implements ActionListener, KeyListe
 		setResizable(false);
 		label1.setText("Version " + Globals.VERSION + " " + Globals.VERDATE);
 		label1.setEditable(false);
-		label1.setBackground(Globals.BACKGROUND_COLOR_3);
-		label1.setFont(Globals.defaultFont);
+
+		if (!ConfigedMain.THEMES) {
+			label1.setBackground(Globals.BACKGROUND_COLOR_3);
+		}
+		if (!ConfigedMain.FONT) {
+			label1.setFont(Globals.defaultFont);
+		}
 		label3.setText(Globals.COPYRIGHT1);
-		label3.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			label3.setFont(Globals.defaultFont);
+		}
 		label4.setText(Globals.COPYRIGHT2);
-		label4.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			label4.setFont(Globals.defaultFont);
+		}
 		textPanel = new VerticalPositioner(new CenterPositioner(label1), new CenterPositioner(label3),
 				new CenterPositioner(label4));
 		button1.setText("o.k.");
@@ -56,7 +66,6 @@ public class FrameInfodialog extends JDialog implements ActionListener, KeyListe
 		infoPanel.add(textPanel, BorderLayout.CENTER);
 		infoPanel.add(new CenterPositioner(button1), BorderLayout.SOUTH);
 		this.getContentPane().add(infoPanel);
-
 	}
 
 	/**

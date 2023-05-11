@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.LogPane;
@@ -232,7 +233,9 @@ public class LogFrame extends JFrame implements WindowListener {
 	private void guiInit() {
 
 		this.addWindowListener(this);
-		this.setFont(Globals.defaultFont);
+		if (!ConfigedMain.FONT) {
+			this.setFont(Globals.defaultFont);
+		}
 		this.setIconImage(Globals.mainIcon);
 
 		setupIcons();
@@ -345,7 +348,6 @@ public class LogFrame extends JFrame implements WindowListener {
 		this.setJMenuBar(jMenuBar);
 		showLogfile.jTextPanel.transferFocus();
 		showLogfile.jTextPanel.requestFocusInWindow();
-
 	}
 
 	public void setFocusToJTextPane() {

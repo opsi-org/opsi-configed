@@ -803,7 +803,6 @@ public final class Globals {
 		b.append("</html>");
 
 		return b.toString();
-
 	}
 
 	public static String usedMemory() {
