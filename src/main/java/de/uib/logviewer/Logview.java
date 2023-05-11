@@ -7,7 +7,6 @@ import java.net.URL;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 import de.uib.configed.Globals;
 import de.uib.logviewer.gui.LogFrame;
@@ -33,25 +32,23 @@ public class Logview {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
-		System.out.println("starting " + getClass().getName());
-
-		configureUI();
+		Logging.devel(this, "starting " + getClass().getName());
 
 		String imageHandled = "(we start image retrieving)";
-		System.out.println(imageHandled);
+		Logging.info(this, imageHandled);
 		try {
 			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
 			if (resource == null) {
-				System.out.println("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+				Logging.devel(this, "image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
 			} else {
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 				imageHandled = "setIconImage";
 			}
 		} catch (Exception ex) {
-			System.out.println("imageHandled failed: " + ex.toString());
+			Logging.warning(this, "imageHandled failed: " + ex.toString());
 		}
 
-		System.out.println("--  wantedDirectory " + Logging.logDirectoryName);
+		Logging.info(this, "--  wantedDirectory " + Logging.logDirectoryName);
 
 		//
 		List<String> existingLocales = Messages.getLocaleNames();
@@ -69,7 +66,7 @@ public class Logview {
 				Logging.logDirectoryName = "";
 			}
 		} else {
-			System.out.println(" --  wantedDirectory " + Logging.logDirectoryName);
+			Logging.info(" --  wantedDirectory " + Logging.logDirectoryName);
 		}
 
 		Logging.logDirectoryName = "";
@@ -86,7 +83,7 @@ public class Logview {
 				LogFrame.setFileName(fileName);
 			}
 		} else {
-			System.out.println(" --  fileName " + Logging.logDirectoryName);
+			Logging.info(" --  fileName " + Logging.logDirectoryName);
 		}
 
 		SwingUtilities.invokeLater(this::init);
@@ -131,9 +128,9 @@ public class Logview {
 	}
 
 	private static void usage() {
-		System.out.println(usage);
+		Logging.essential(usage);
 
-		final int tabWidth = 8;
+		final int TAB_WIDTH = 8;
 		int length0 = 0;
 		int length1 = 0;
 
@@ -152,16 +149,16 @@ public class Logview {
 			}
 		}
 
-		int allTabs0 = length0 / tabWidth + 1;
+		int allTabs0 = length0 / TAB_WIDTH + 1;
 
-		int allTabs1 = length1 / tabWidth + 1;
+		int allTabs1 = length1 / TAB_WIDTH + 1;
 
 		for (int i = 0; i < usageLines.length; i++) {
 
-			int startedTabs0 = usageLines[i][0].length() / tabWidth;
-			int startedTabs1 = usageLines[i][1].length() / tabWidth;
+			int startedTabs0 = usageLines[i][0].length() / TAB_WIDTH;
+			int startedTabs1 = usageLines[i][1].length() / TAB_WIDTH;
 
-			System.out.println("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
+			Logging.info("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
 					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
 		}
 
@@ -210,6 +207,9 @@ public class Logview {
 				} else if ("--help".equals(args[i])) {
 					usage();
 					System.exit(0);
+				} else if ("--logviewer".equals(args[i])) {
+					// Do nothing since it was used for starting the logviewer
+					i++;
 				} else {
 					usage();
 					endApp(0);
@@ -222,67 +222,22 @@ public class Logview {
 		System.exit(exitcode);
 	}
 
-	public static void configureUI() {
-		boolean trynimbus = true;
-		boolean found = false;
-
-		if (trynimbus) {
-			try {
-				for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-					if ("Nimbus".equals(info.getName())) {
-						Logging.info("setting Nimbus look&feel");
-						UIManager.setLookAndFeel(info.getClassName());
-						Logging.info("Nimbus look&feel set");
-
-						UIManager.put("Tree.selectionBackground", UIManager.get("controlHighlight"));
-
-						found = true;
-						break;
-					}
-				}
-			} catch (javax.swing.UnsupportedLookAndFeelException e) {
-				// handle exception
-				System.out.println(e);
-			} catch (ClassNotFoundException e) {
-				// handle exception
-				System.out.println(e);
-			} catch (InstantiationException e) {
-				// handle exception
-				System.out.println(e);
-			} catch (IllegalAccessException e) {
-				// handle exception
-				System.out.println(e);
-			}
-		}
-
-		if (!found) {
-			trynimbus = false;
-		}
-
-		if (!trynimbus) {
-			try {
-				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-			} catch (Exception ex) {
-				System.out.println("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')," + ex);
-			}
-		}
-	}
-
 	/**
 	 * main-Methode
 	 */
 	public static void main(String[] args) {
 
-		//processArgs(args);
+		processArgs(args);
+
 		try {
 			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
 			if (resource == null) {
-				System.out.println("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+				Logging.warning("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
 			} else {
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 			}
 		} catch (Exception ex) {
-			System.out.println("imageHandled failed: " + ex.toString());
+			Logging.warning("imageHandled failed: " + ex.toString());
 		}
 
 		// Turn on antialiasing for text 

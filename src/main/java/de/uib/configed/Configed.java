@@ -211,12 +211,6 @@ public class Configed {
 			Logging.debug("they are equal");
 		}
 
-		if (ConfigedMain.THEMES) {
-			setOpsiLaf();
-		} else {
-			configureUI();
-		}
-
 		try {
 			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
 			if (resource == null) {
@@ -800,6 +794,12 @@ public class Configed {
 	public static void main(String[] args) {
 
 		processArgs(args);
+
+		if (ConfigedMain.THEMES) {
+			setOpsiLaf();
+		} else {
+			configureUI();
+		}
 
 		if (logviewer) {
 			Logview.main(args);
