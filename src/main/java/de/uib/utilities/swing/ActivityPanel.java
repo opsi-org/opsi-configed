@@ -151,7 +151,6 @@ public class ActivityPanel extends JPanel implements Runnable {
 				Thread.currentThread().interrupt();
 			}
 		}
-
 	}
 
 	private void initGui() {

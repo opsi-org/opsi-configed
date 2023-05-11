@@ -43,7 +43,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		for (int i = 0; i < idents.length; i++) {
 			final String ident = idents[i];
-			LogPane showPane = new LogPane(defaultText) {
+			LogPane showPane = new LogPane(defaultText, true) {
 				@Override
 				public void reload() {
 					super.reload();

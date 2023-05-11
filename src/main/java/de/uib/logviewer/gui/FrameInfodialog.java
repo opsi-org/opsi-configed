@@ -2,7 +2,6 @@ package de.uib.logviewer.gui;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,32 +20,22 @@ import de.uib.utilities.swing.CenterPositioner;
 import de.uib.utilities.swing.VerticalPositioner;
 
 public class FrameInfodialog extends JDialog implements ActionListener, KeyListener {
-	JPanel infoPanel;
-	VerticalPositioner textPanel;
-	JButton button1 = new JButton();
-	JTextField label1 = new JTextField();
-	JLabel labelVersion = new JLabel();
-	JLabel label3 = new JLabel();
-	JLabel label4 = new JLabel();
-	BorderLayout borderLayout1 = new BorderLayout();
-	BorderLayout borderLayout2 = new BorderLayout();
-	FlowLayout flowLayout1 = new FlowLayout();
-	String product = Globals.APPNAME;
-	String version = "2.0";
+	private JPanel infoPanel;
+	private VerticalPositioner textPanel;
+	private JButton button1 = new JButton();
+	private JTextField label1 = new JTextField();
+	private JLabel label3 = new JLabel();
+	private JLabel label4 = new JLabel();
 
 	public FrameInfodialog(Frame parent) {
 		super(parent);
 		enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-		try {
-			jbInit();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		pack();
+		jbInit();
+		super.pack();
 	}
 
 	/** Initialisierung der Komponenten */
-	private void jbInit() throws Exception {
+	private void jbInit() {
 		infoPanel = new JPanel(new BorderLayout());
 		this.setTitle(Globals.APPNAME);
 		setResizable(false);
@@ -99,18 +88,16 @@ public class FrameInfodialog extends JDialog implements ActionListener, KeyListe
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			if (e.getSource() == button1) {
-				cancel();
-			}
+		if (e.getSource() == button1 && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			cancel();
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-	}
+		/* Not needed */}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-	}
+		/* Not needed */}
 }

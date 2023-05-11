@@ -14,7 +14,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -27,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 import javax.swing.GroupLayout;
 import javax.swing.JComponent;
@@ -38,13 +36,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.UIManager;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.LogPane;
 import de.uib.logviewer.Logview;
@@ -53,66 +48,36 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ActivityPanel;
 import utils.ExtractorUtil;
 
-public class LogFrame extends JFrame implements WindowListener, KeyListener {
+public class LogFrame extends JFrame implements WindowListener {
 
-	protected static JFileChooser chooser;
-	protected static String fileName;
+	private static JFileChooser chooser;
+	private static String fileName;
 
 	private LogviewMain main;
 
 	private SizeListeningPanel allPane;
 	//menu system
 
-	JMenuBar jMenuBar1 = new JMenuBar();
+	private JMenuBar jMenuBar = new JMenuBar();
 
-	JMenu jMenuFile;
-	JMenuItem jMenuFileExit;
-	JMenuItem jMenuFileOpen;
-	JMenuItem jMenuFileClose;
-	JMenuItem jMenuFileSave;
-	JMenuItem jMenuFileNew;
-	JMenuItem jMenuFileReload;
+	private JMenu jMenuFile;
 
-	JMenu jMenuView;
-	JMenuItem jMenuViewFontsizePlus;
-	JMenuItem jMenuViewFontsizeMinus;
+	private JMenu jMenuView;
 
-	protected File file;
-	Map<String, Integer> labelledDelays;
+	private JMenu jMenuHelp = new JMenu();
+	private JMenuItem jMenuHelpSupport = new JMenuItem();
+	private JMenuItem jMenuHelpDoc = new JMenuItem();
+	private JMenuItem jMenuHelpForum = new JMenuItem();
+	private JMenuItem jMenuHelpAbout = new JMenuItem();
 
-	Map<String, String> searchedTimeSpans;
-	Map<String, String> searchedTimeSpansText;
+	private BorderLayout borderLayout1 = new BorderLayout();
 
-	JMenuItem jMenuRemoteControl = new JMenuItem();
+	private LogPane showLogfile;
 
-	JMenu jMenuHelp = new JMenu();
-	JMenuItem jMenuHelpSupport = new JMenuItem();
-	JMenuItem jMenuHelpDoc = new JMenuItem();
-	JMenuItem jMenuHelpDocSpecial = new JMenuItem();
-	JMenuItem jMenuHelpForum = new JMenuItem();
-	JMenuItem jMenuHelpInternalConfiguration = new JMenuItem();
-	JMenuItem jMenuHelpAbout = new JMenuItem();
-	JMenuItem jMenuHelpOpsiModuleInformation = new JMenuItem();
-	JMenu jMenuHelpLoglevel = new JMenu();
-	JRadioButtonMenuItem[] rbLoglevelItems = new JRadioButtonMenuItem[Logging.LEVEL_SECRET];
-
-	BorderLayout borderLayout1 = new BorderLayout();
-
-	LogPane showLogfile;
-
-	IconButton iconButtonOpen;
-	IconButton iconButtonClose;
-	IconButton iconButtonSave;
-	IconButton iconButtonCopy;
-	IconButton iconButtonReload;
-
-	JPanel iconsPanel;
-	JPanel iconPane;
-
-	JPopupMenu popupLogfiles = new JPopupMenu();
-	JPopupMenu jPopupMenu = new JPopupMenu();
-
-	protected FShowList fListSelectedClients;
+	private IconButton iconButtonOpen;
+	private IconButton iconButtonReload;
+	private IconButton iconButtonSave;
+	private IconButton iconButtonCopy;
 
 	private Container baseContainer;
 
@@ -207,12 +172,11 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 	private void setupMenuFile() {
 		jMenuFile = new JMenu();
 
-		jMenuFileExit = new JMenuItem();
-		jMenuFileOpen = new JMenuItem();
-		jMenuFileClose = new JMenuItem();
-		jMenuFileSave = new JMenuItem();
-		jMenuFileNew = new JMenuItem();
-		jMenuFileReload = new JMenuItem();
+		JMenuItem jMenuFileExit = new JMenuItem();
+		JMenuItem jMenuFileOpen = new JMenuItem();
+		JMenuItem jMenuFileClose = new JMenuItem();
+		JMenuItem jMenuFileSave = new JMenuItem();
+		JMenuItem jMenuFileReload = new JMenuItem();
 
 		jMenuFile.setText(Logview.getResourceValue("MainFrame.jMenuFile"));
 
@@ -247,7 +211,6 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 		jMenuFileReload.setText(Logview.getResourceValue("MainFrame.jMenuFileReload"));
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			if (fileName != null) {
-				showLogfile.setFontSize("+");
 				showLogfile.reload();
 				setTitle(Globals.APPNAME + " : " + fileName);
 			}
@@ -262,8 +225,8 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 
 	private void setupMenuView() {
 		jMenuView = new JMenu();
-		jMenuViewFontsizePlus = new JMenuItem();
-		jMenuViewFontsizeMinus = new JMenuItem();
+		JMenuItem jMenuViewFontsizePlus = new JMenuItem();
+		JMenuItem jMenuViewFontsizeMinus = new JMenuItem();
 
 		jMenuView.setText(Logview.getResourceValue("LogFrame.jMenuView"));
 
@@ -318,9 +281,7 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 		dlg.setVisible(true);
 	}
 
-	private void setupIcons1() {
-		iconsPanel = new JPanel();
-
+	private void setupIcons() {
 		iconButtonOpen = new IconButton(Configed.getResourceValue("LogFrame.jMenuFileOpen"), "images/openfile.gif",
 				"images/images/openfile.gif", "");
 		iconButtonOpen.addActionListener((ActionEvent e) -> {
@@ -332,7 +293,6 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 				showLogfile.removeAllHighlights();
 			}
 		});
-		iconsPanel.add(iconButtonOpen);
 
 		iconButtonReload = new IconButton(Configed.getResourceValue("LogFrame.buttonReload"), "images/reload16.png",
 				"images/images/reload16.png", "");
@@ -341,7 +301,6 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 				showLogfile.reload();
 			}
 		});
-		iconsPanel.add(iconButtonReload);
 
 		iconButtonSave = new IconButton(Configed.getResourceValue("PopupMenuTrait.save"), "images/save.png",
 				"images/images/save.png", "");
@@ -350,17 +309,10 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 				showLogfile.save();
 			}
 		});
-		iconsPanel.add(iconButtonSave);
 
 		iconButtonCopy = new IconButton(Configed.getResourceValue("LogFrame.buttonCopy"), "images/edit-copy.png",
 				"images/images/edit-copy.png", "");
 		iconButtonCopy.addActionListener((ActionEvent e) -> showLogfile.floatExternal());
-		iconsPanel.add(iconButtonCopy);
-
-		ActivityPanel activity = new ActivityPanel();
-		iconsPanel.add(activity);
-		new Thread(activity).start();
-		activity.setToolTipText("activity indicator");
 	}
 
 	public void clear() {
@@ -373,27 +325,48 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 		this.setFont(Globals.defaultFont);
 		this.setIconImage(Globals.mainIcon);
 
-		setupIcons1();
-		iconPane = new JPanel();
+		setupIcons();
+
+		ActivityPanel activity = new ActivityPanel();
+		new Thread(activity).start();
+		activity.setToolTipText("activity indicator");
+
+		JPanel iconPane = new JPanel();
 
 		GroupLayout layoutIconPane1 = new GroupLayout(iconPane);
 		iconPane.setLayout(layoutIconPane1);
 
-		layoutIconPane1.setHorizontalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
-				.addGroup(layoutIconPane1.createSequentialGroup()
-						.addComponent(iconsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)));
+		layoutIconPane1.setHorizontalGroup(layoutIconPane1.createSequentialGroup()
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2)
+				.addComponent(iconButtonOpen, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(iconButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(iconButtonCopy, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addComponent(activity, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
+				.addGap(Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2, Globals.HGAP_SIZE / 2));
+
 		layoutIconPane1.setVerticalGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.LEADING)
 				.addGroup(layoutIconPane1.createSequentialGroup()
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
-						.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER).addComponent(
-								iconsPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
+						.addGroup(layoutIconPane1.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addComponent(iconButtonOpen, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(iconButtonReload, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(iconButtonSave, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addComponent(iconButtonCopy, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+										GroupLayout.PREFERRED_SIZE)
+								.addGroup(layoutIconPane1.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
+										.addComponent(activity).addGap(0, 0, Short.MAX_VALUE)))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
 		allPane = new SizeListeningPanel();
-
 		allPane.setLayout(borderLayout1);
 
 		//only one LogPane
@@ -447,18 +420,19 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 			}
 		}
 
-		allPane.add(showLogfile, BorderLayout.CENTER);
 		allPane.add(iconPane, BorderLayout.NORTH);
+		allPane.add(showLogfile, BorderLayout.CENTER);
+
 		baseContainer.add(allPane);
 
 		setupMenuFile();
 		setupMenuView();
 		setupMenuHelp();
-		jMenuBar1.add(jMenuFile);
-		jMenuBar1.add(jMenuView);
-		jMenuBar1.add(jMenuHelp);
+		jMenuBar.add(jMenuFile);
+		jMenuBar.add(jMenuView);
+		jMenuBar.add(jMenuHelp);
 
-		this.setJMenuBar(jMenuBar1);
+		this.setJMenuBar(jMenuBar);
 		showLogfile.jTextPanel.transferFocus();
 		showLogfile.jTextPanel.requestFocusInWindow();
 
@@ -481,7 +455,7 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 	/* WindowListener implementation */
 	@Override
 	public void windowClosing(WindowEvent e) {
-		main.finishApp(true, 0);
+		exitAction();
 	}
 
 	@Override
@@ -599,7 +573,7 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 	private StringBuilder readFile(String fn) {
 		StringBuilder sb = new StringBuilder();
 		try {
-			file = new File(fn);
+			File file = new File(fn);
 
 			if (file.isDirectory()) {
 				Logging.error("This is not a file, it is a directory: " + fn);
@@ -643,7 +617,7 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 
 	}
 
-	private StringBuilder readInputStream(InputStream fis) {
+	private static StringBuilder readInputStream(InputStream fis) {
 		StringBuilder sb = new StringBuilder();
 
 		String thisLine = null;
@@ -660,18 +634,4 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 		}
 		return sb;
 	}
-
-	/*****************************************************************************************/
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		/* Not needed */}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		/* Not needed */}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		/* Not needed */}
 }

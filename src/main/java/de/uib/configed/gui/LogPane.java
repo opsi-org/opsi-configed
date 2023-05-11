@@ -127,10 +127,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	private PopupMenuTrait popupMenu;
 
-	public LogPane(String defaultText) {
-		this(defaultText, true);
-	}
-
 	public LogPane(String defaultText, boolean withPopup) {
 		super(new BorderLayout());
 		Logging.info(this, "initializing");
