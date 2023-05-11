@@ -73,7 +73,7 @@ public final class Messages {
 		return selectedLocaleString;
 	}
 
-	public static ResourceBundle getResource() throws MissingResourceException {
+	public static ResourceBundle getResource() {
 		try {
 			Logging.info("Messages, getResource from " + BUNDLE_NAME);
 

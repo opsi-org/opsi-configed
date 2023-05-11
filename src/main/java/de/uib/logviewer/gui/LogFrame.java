@@ -32,7 +32,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.LogPane;
-import de.uib.logviewer.Logview;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ActivityPanel;
 import utils.ExtractorUtil;
@@ -42,7 +41,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	private static JFileChooser chooser;
 	private static String fileName;
 
-	private JPanel allPane;
 	//menu system
 
 	private JMenuBar jMenuBar = new JMenuBar();
@@ -56,8 +54,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	private JMenuItem jMenuHelpDoc = new JMenuItem();
 	private JMenuItem jMenuHelpForum = new JMenuItem();
 	private JMenuItem jMenuHelpAbout = new JMenuItem();
-
-	private BorderLayout borderLayout1 = new BorderLayout();
 
 	private LogPane showLogfile;
 
@@ -77,9 +73,9 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		guiInit();
 
-		UIManager.put("OptionPane.yesButtonText", Logview.getResourceValue("UIManager.yesButtonText"));
-		UIManager.put("OptionPane.noButtonText", Logview.getResourceValue("UIManager.noButtonText"));
-		UIManager.put("OptionPane.cancelButtonText", Logview.getResourceValue("UIManager.cancelButtonText"));
+		UIManager.put("OptionPane.yesButtonText", Configed.getResourceValue("UIManager.yesButtonText"));
+		UIManager.put("OptionPane.noButtonText", Configed.getResourceValue("UIManager.noButtonText"));
+		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("UIManager.cancelButtonText"));
 	}
 
 	//------------------------------------------------------------------------------------------
@@ -96,12 +92,12 @@ public class LogFrame extends JFrame implements WindowListener {
 		JMenuItem jMenuFileSave = new JMenuItem();
 		JMenuItem jMenuFileReload = new JMenuItem();
 
-		jMenuFile.setText(Logview.getResourceValue("MainFrame.jMenuFile"));
+		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
 
-		jMenuFileExit.setText(Logview.getResourceValue("MainFrame.jMenuFileExit"));
+		jMenuFileExit.setText(Configed.getResourceValue("MainFrame.jMenuFileExit"));
 		jMenuFileExit.addActionListener((ActionEvent e) -> exitAction());
 
-		jMenuFileOpen.setText(Logview.getResourceValue("LogFrame.jMenuFileOpen"));
+		jMenuFileOpen.setText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 		jMenuFileOpen.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -117,16 +113,16 @@ public class LogFrame extends JFrame implements WindowListener {
 			}
 		});
 
-		jMenuFileClose.setText(Logview.getResourceValue("LogFrame.jMenuFileClose"));
+		jMenuFileClose.setText(Configed.getResourceValue("LogFrame.jMenuFileClose"));
 		jMenuFileClose.addActionListener((ActionEvent e) -> {
 			showLogfile.close();
 			setTitle(Globals.APPNAME);
 		});
 
-		jMenuFileSave.setText(Logview.getResourceValue("LogFrame.jMenuFileSave"));
+		jMenuFileSave.setText(Configed.getResourceValue("LogFrame.jMenuFileSave"));
 		jMenuFileSave.addActionListener((ActionEvent e) -> showLogfile.save());
 
-		jMenuFileReload.setText(Logview.getResourceValue("MainFrame.jMenuFileReload"));
+		jMenuFileReload.setText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			if (fileName != null) {
 				showLogfile.reload();
@@ -146,15 +142,15 @@ public class LogFrame extends JFrame implements WindowListener {
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem();
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem();
 
-		jMenuView.setText(Logview.getResourceValue("LogFrame.jMenuView"));
+		jMenuView.setText(Configed.getResourceValue("LogFrame.jMenuView"));
 
-		jMenuViewFontsizePlus.setText(Logview.getResourceValue("TextPane.fontPlus"));
+		jMenuViewFontsizePlus.setText(Configed.getResourceValue("TextPane.fontPlus"));
 		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
 			showLogfile.increaseFontSize();
 			showLogfile.reload();
 		});
 
-		jMenuViewFontsizeMinus.setText(Logview.getResourceValue("TextPane.fontMinus"));
+		jMenuViewFontsizeMinus.setText(Configed.getResourceValue("TextPane.fontMinus"));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
 			showLogfile.reduceFontSize();
 			showLogfile.reload();
@@ -166,22 +162,22 @@ public class LogFrame extends JFrame implements WindowListener {
 	}
 
 	private void setupMenuHelp() {
-		jMenuHelp.setText(Logview.getResourceValue("MainFrame.jMenuHelp"));
+		jMenuHelp.setText(Configed.getResourceValue("MainFrame.jMenuHelp"));
 
-		jMenuHelpDoc.setText(Logview.getResourceValue("MainFrame.jMenuDoc"));
+		jMenuHelpDoc.setText(Configed.getResourceValue("MainFrame.jMenuDoc"));
 		jMenuHelpDoc.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_DOC_PAGE));
 
 		jMenuHelp.add(jMenuHelpDoc);
 
-		jMenuHelpForum.setText(Logview.getResourceValue("MainFrame.jMenuForum"));
+		jMenuHelpForum.setText(Configed.getResourceValue("MainFrame.jMenuForum"));
 		jMenuHelpForum.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
-		jMenuHelpSupport.setText(Logview.getResourceValue("MainFrame.jMenuSupport"));
+		jMenuHelpSupport.setText(Configed.getResourceValue("MainFrame.jMenuSupport"));
 		jMenuHelpSupport.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 		jMenuHelp.add(jMenuHelpSupport);
 
-		jMenuHelpAbout.setText(Logview.getResourceValue("MainFrame.jMenuHelpAbout"));
+		jMenuHelpAbout.setText(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> showAboutAction());
 
 		jMenuHelp.add(jMenuHelpAbout);
@@ -233,10 +229,6 @@ public class LogFrame extends JFrame implements WindowListener {
 		iconButtonCopy.addActionListener((ActionEvent e) -> showLogfile.floatExternal());
 	}
 
-	public void clear() {
-		baseContainer.remove(allPane);
-	}
-
 	private void guiInit() {
 
 		this.addWindowListener(this);
@@ -283,9 +275,6 @@ public class LogFrame extends JFrame implements WindowListener {
 								.addGroup(layoutIconPane1.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
 										.addComponent(activity).addGap(0, 0, Short.MAX_VALUE)))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
-
-		allPane = new JPanel();
-		allPane.setLayout(borderLayout1);
 
 		//only one LogPane
 		showLogfile = new LogPane("", true) {
@@ -337,6 +326,9 @@ public class LogFrame extends JFrame implements WindowListener {
 				showLogfile.setMainText(sbf.toString());
 			}
 		}
+
+		JPanel allPane = new JPanel();
+		allPane.setLayout(new BorderLayout());
 
 		allPane.add(iconPane, BorderLayout.NORTH);
 		allPane.add(showLogfile, BorderLayout.CENTER);
@@ -419,7 +411,7 @@ public class LogFrame extends JFrame implements WindowListener {
 					"log", "zip", "gz", "7z"));
 			chooser.setApproveButtonText("O.K.");
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			chooser.setDialogTitle(Globals.APPNAME + " " + Logview.getResourceValue("LogFrame.jMenuFileOpen"));
+			chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 		}
 	}
 
