@@ -106,8 +106,6 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 	IconButton iconButtonCopy;
 	IconButton iconButtonReload;
 
-	IconButton iconButtonPlus;
-	IconButton iconButtonMinus;
 	JPanel iconsPanel;
 	JPanel iconPane;
 
@@ -166,7 +164,6 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 		UIManager.put("OptionPane.yesButtonText", Logview.getResourceValue("UIManager.yesButtonText"));
 		UIManager.put("OptionPane.noButtonText", Logview.getResourceValue("UIManager.noButtonText"));
 		UIManager.put("OptionPane.cancelButtonText", Logview.getResourceValue("UIManager.cancelButtonText"));
-
 	}
 
 	public static class SizeListeningPanel extends JPanel implements ComponentListener {
@@ -360,28 +357,10 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 		iconButtonCopy.addActionListener((ActionEvent e) -> showLogfile.floatExternal());
 		iconsPanel.add(iconButtonCopy);
 
-		iconButtonPlus = new IconButton(Configed.getResourceValue("LogFrame.jButtonPlus"), "images/font-plus.png",
-				"images/images/font-plus.png", "");
-
-		iconButtonPlus.addActionListener((ActionEvent e) -> {
-			showLogfile.setFontSize("+");
-			showLogfile.reload();
-		});
-		iconsPanel.add(iconButtonPlus);
-
-		iconButtonMinus = new IconButton(Configed.getResourceValue("LogFrame.jButtonMinus"), "images/font-minus.png",
-				"images/images/font-minus.png", "");
-
-		iconButtonMinus.addActionListener((ActionEvent e) -> {
-			showLogfile.setFontSize("-");
-			showLogfile.reload();
-		});
-		iconsPanel.add(iconButtonMinus);
-
 		ActivityPanel activity = new ActivityPanel();
 		iconsPanel.add(activity);
 		new Thread(activity).start();
-		iconsPanel.setToolTipText("activity indicator");
+		activity.setToolTipText("activity indicator");
 	}
 
 	public void clear() {
