@@ -7,8 +7,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -110,7 +108,6 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 
 	IconButton iconButtonPlus;
 	IconButton iconButtonMinus;
-	JPanel iconBarPane;
 	JPanel iconsPanel;
 	JPanel iconPane;
 
@@ -416,23 +413,6 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 								GroupLayout.PREFERRED_SIZE))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1.0;
-		c.gridx = 0;
-		c.gridy = 0;
-		iconPane.add(iconsPanel, c);
-		iconPane.setBackground(Globals.BACKGROUND_COLOR_7);
-
-		iconBarPane = new JPanel();
-		iconBarPane.setLayout(new GridBagLayout());
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 1.0;
-		c.gridx = 0;
-		c.gridy = 0;
-		iconBarPane.add(iconPane, c);
-
 		allPane = new SizeListeningPanel();
 
 		allPane.setLayout(borderLayout1);
@@ -489,7 +469,7 @@ public class LogFrame extends JFrame implements WindowListener, KeyListener {
 		}
 
 		allPane.add(showLogfile, BorderLayout.CENTER);
-		allPane.add(iconBarPane, BorderLayout.NORTH);
+		allPane.add(iconPane, BorderLayout.NORTH);
 		baseContainer.add(allPane);
 
 		setupMenuFile();
