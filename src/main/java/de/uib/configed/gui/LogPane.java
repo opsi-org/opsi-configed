@@ -66,7 +66,6 @@ import de.uib.utilities.swing.PopupMenuTrait;
 public class LogPane extends JPanel implements KeyListener, ActionListener {
 	public static final int DEFAULT_MAX_SHOW_LEVEL = 3;
 
-	private static final int FIELD_H = Globals.LINE_HEIGHT;
 	private static final int SLIDER_H = 35;
 	private static final int SLIDER_W = 180;
 	private static final String DEFAULT_TYPE = "(all)";
@@ -339,11 +338,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						.addComponent(jCheckBoxCaseSensitive, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH,
 								Globals.BUTTON_WIDTH)
 
-						.addComponent(buttonFontPlus, Globals.GRAPHIC_BUTTON_WIDTH / 2,
-								Globals.GRAPHIC_BUTTON_WIDTH / 2, Globals.GRAPHIC_BUTTON_WIDTH / 2)
+						.addComponent(buttonFontPlus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addGap(Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2, Globals.GAP_SIZE / 2)
-						.addComponent(buttonFontMinus, Globals.GRAPHIC_BUTTON_WIDTH / 2,
-								Globals.GRAPHIC_BUTTON_WIDTH / 2, Globals.GRAPHIC_BUTTON_WIDTH / 2)
+						.addComponent(buttonFontMinus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addGap(Globals.GAP_SIZE, Globals.GAP_SIZE, Globals.GAP_SIZE)
 						.addComponent(labelDisplayRestriction, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -361,19 +358,16 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		layoutCommandpane.setVerticalGroup(layoutCommandpane.createSequentialGroup()
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)
 				.addGroup(layoutCommandpane.createParallelGroup(Alignment.CENTER)
-						.addComponent(labelSearch, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(jComboBoxSearch, FIELD_H, FIELD_H, FIELD_H)
-						.addComponent(buttonSearch, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(labelSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(jComboBoxSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(buttonSearch, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(jCheckBoxCaseSensitive, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT,
 								Globals.BUTTON_HEIGHT)
-						.addComponent(buttonFontPlus, Globals.GRAPHIC_BUTTON_WIDTH / 2,
-								Globals.GRAPHIC_BUTTON_WIDTH / 2, Globals.GRAPHIC_BUTTON_WIDTH / 2)
-						.addComponent(buttonFontMinus, Globals.GRAPHIC_BUTTON_WIDTH / 2,
-								Globals.GRAPHIC_BUTTON_WIDTH / 2, Globals.GRAPHIC_BUTTON_WIDTH / 2)
+						.addComponent(buttonFontPlus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+						.addComponent(buttonFontMinus, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(labelDisplayRestriction, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 								Globals.LINE_HEIGHT)
-						.addComponent(comboType, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT, Globals.BUTTON_HEIGHT)
+						.addComponent(comboType, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(labelLevel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 						.addComponent(sliderLevel, SLIDER_H, SLIDER_H, SLIDER_H)
 
