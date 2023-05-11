@@ -1,21 +1,12 @@
 package de.uib.logviewer.gui;
 
-import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedReader;
@@ -28,7 +19,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
 import javax.swing.GroupLayout;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -43,7 +33,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.LogPane;
 import de.uib.logviewer.Logview;
-import de.uib.logviewer.LogviewMain;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ActivityPanel;
 import utils.ExtractorUtil;
@@ -53,9 +42,7 @@ public class LogFrame extends JFrame implements WindowListener {
 	private static JFileChooser chooser;
 	private static String fileName;
 
-	private LogviewMain main;
-
-	private SizeListeningPanel allPane;
+	private JPanel allPane;
 	//menu system
 
 	private JMenuBar jMenuBar = new JMenuBar();
@@ -81,87 +68,18 @@ public class LogFrame extends JFrame implements WindowListener {
 
 	private Container baseContainer;
 
-	class GlassPane extends JComponent {
-		GlassPane() {
-			super();
-			Logging.debug(this, "glass pane initialized");
-			super.setVisible(true);
-			super.setOpaque(true);
-			super.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyTyped(KeyEvent e) {
-					Logging.debug(this, "key typed on glass pane");
-				}
-			});
-			super.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					Logging.info(this, "mouse on glass pane");
-				}
-			});
-
-		}
-
-		@Override
-		public void paintComponent(Graphics g) {
-			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 0.5));
-
-			g.setColor(new Color(230, 230, 250));
-			g.fillRect(0, 0, getWidth(), getHeight());
-		}
-
-	}
-
-	GlassPane glass;
-
-	public LogFrame(LogviewMain main) {
+	public LogFrame() {
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-		this.main = main;
 		baseContainer = super.getContentPane();
 
 		Globals.container1 = baseContainer;
-
-		glass = new GlassPane();
 
 		guiInit();
 
 		UIManager.put("OptionPane.yesButtonText", Logview.getResourceValue("UIManager.yesButtonText"));
 		UIManager.put("OptionPane.noButtonText", Logview.getResourceValue("UIManager.noButtonText"));
 		UIManager.put("OptionPane.cancelButtonText", Logview.getResourceValue("UIManager.cancelButtonText"));
-	}
-
-	public static class SizeListeningPanel extends JPanel implements ComponentListener {
-		SizeListeningPanel() {
-			super.addComponentListener(this);
-		}
-
-		//ComponentListener implementation
-		@Override
-		public void componentHidden(ComponentEvent e) {
-			/* Not needed */}
-
-		@Override
-		public void componentMoved(ComponentEvent e) {
-			/* Not needed */}
-
-		@Override
-		public void componentResized(ComponentEvent e) {
-
-			try {
-				repairSizes();
-			} catch (Exception ex) {
-				Logging.info(this, "componentResized " + ex);
-			}
-			Logging.debug(this, "componentResized ready");
-		}
-
-		@Override
-		public void componentShown(ComponentEvent e) {
-			/* Not needed */}
-
-		public void repairSizes() {
-			/* Not needed */}
 	}
 
 	//------------------------------------------------------------------------------------------
@@ -232,13 +150,13 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		jMenuViewFontsizePlus.setText(Logview.getResourceValue("TextPane.fontPlus"));
 		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
-			showLogfile.setFontSize("+");
+			showLogfile.increaseFontSize();
 			showLogfile.reload();
 		});
 
 		jMenuViewFontsizeMinus.setText(Logview.getResourceValue("TextPane.fontMinus"));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
-			showLogfile.setFontSize("-");
+			showLogfile.reduceFontSize();
 			showLogfile.reload();
 		});
 
@@ -251,16 +169,16 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuHelp.setText(Logview.getResourceValue("MainFrame.jMenuHelp"));
 
 		jMenuHelpDoc.setText(Logview.getResourceValue("MainFrame.jMenuDoc"));
-		jMenuHelpDoc.addActionListener((ActionEvent e) -> main.showExternalDocument(Globals.OPSI_DOC_PAGE));
+		jMenuHelpDoc.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_DOC_PAGE));
 
 		jMenuHelp.add(jMenuHelpDoc);
 
 		jMenuHelpForum.setText(Logview.getResourceValue("MainFrame.jMenuForum"));
-		jMenuHelpForum.addActionListener((ActionEvent e) -> main.showExternalDocument(Globals.OPSI_FORUM_PAGE));
+		jMenuHelpForum.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 		jMenuHelp.add(jMenuHelpForum);
 
 		jMenuHelpSupport.setText(Logview.getResourceValue("MainFrame.jMenuSupport"));
-		jMenuHelpSupport.addActionListener((ActionEvent e) -> main.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
+		jMenuHelpSupport.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 		jMenuHelp.add(jMenuHelpSupport);
 
 		jMenuHelpAbout.setText(Logview.getResourceValue("MainFrame.jMenuHelpAbout"));
@@ -366,7 +284,7 @@ public class LogFrame extends JFrame implements WindowListener {
 										.addComponent(activity).addGap(0, 0, Short.MAX_VALUE)))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		allPane = new SizeListeningPanel();
+		allPane = new JPanel();
 		allPane.setLayout(borderLayout1);
 
 		//only one LogPane
@@ -443,13 +361,8 @@ public class LogFrame extends JFrame implements WindowListener {
 		showLogfile.jTextPane.requestFocusInWindow();
 	}
 
-	public void startSizing(int width, int height) {
-		Logging.info(this, "startSizing width, height " + width + ", " + height);
-		setSize(width, height);
-	}
-
 	public void exitAction() {
-		main.finishApp(true, 0);
+		System.exit(0);
 	}
 
 	/* WindowListener implementation */
@@ -560,12 +473,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 		int returnVal = chooser.showOpenDialog(Globals.frame1);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			if (chooser != null) {
-				fileName = chooser.getSelectedFile().getAbsolutePath();
-			} else {
-				Logging.error("Not a valid filename: " + fileName);
-				showDialog("Not a valid filename: \n" + fileName);
-			}
+			fileName = chooser.getSelectedFile().getAbsolutePath();
 		}
 		return fileName;
 	}

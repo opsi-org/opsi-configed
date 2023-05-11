@@ -106,7 +106,7 @@ public class Logview {
 		return buf.toString();
 	}
 
-	protected static void usage() {
+	private static void usage() {
 		System.out.println(usage);
 
 		final int tabWidth = 8;
@@ -143,7 +143,7 @@ public class Logview {
 
 	}
 
-	protected static String getArg(String[] args, int i) {
+	private static String getArg(String[] args, int i) {
 		if (args.length <= i + 1 || args[i + 1].indexOf('-') == 0) {
 			System.err.println("Missing value for option " + args[i]);
 			usage();
@@ -153,7 +153,7 @@ public class Logview {
 		return args[i];
 	}
 
-	protected static void processArgs(String[] args) {
+	private static void processArgs(String[] args) {
 
 		for (int i = 0; i < args.length; i++) {
 			if ("--help".equals(args[i])) {
@@ -194,7 +194,7 @@ public class Logview {
 		}
 	}
 
-	public static void endApp(int exitcode) {
+	private static void endApp(int exitcode) {
 		System.exit(exitcode);
 	}
 

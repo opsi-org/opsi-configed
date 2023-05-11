@@ -245,7 +245,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		Logging.info(this, "levels minL, maxL, valL " + minL + ", " + maxL + ", " + valL);
 
-		sliderLevel = new AdaptingSlider(minL, maxL, 3 /*produceInitialMaxShowLevel()*/);
+		sliderLevel = new AdaptingSlider(minL, maxL, 4/*TODO produceInitialMaxShowLevel()*/);
 
 		sliderListener = new ChangeListener() {
 			@Override
@@ -270,7 +270,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						sliderLevel.setCursor(startingCursor);
 					}
 				});
-
 			}
 		};
 
@@ -292,9 +291,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 				Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
 
-				sliderLevel.setValue(levelList.get(newIndex))
-
-				;
+				sliderLevel.setValue(levelList.get(newIndex));
 			}
 		});
 
@@ -424,28 +421,33 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void removeAllHighlights() {
-		highlighter.removeAllHighlights();;
+		highlighter.removeAllHighlights();
+		applyFontSize();
+
 	}
 
-	public void setFontSize(String s) {
-		if ("+".equals(s)) {
-			displayFontSize = displayFontSize + 2;
-			monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
-			buildDocument();
-		} else if ("-".equals(s)) {
-			if (displayFontSize > 10) {
-				displayFontSize = displayFontSize - 2;
-				monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
-			}
-			buildDocument();
+	public void reduceFontSize() {
+		if (displayFontSize > 10) {
+			displayFontSize = (int) ((displayFontSize + 1) / 1.1);
+			applyFontSize();
 		}
+	}
+
+	public void increaseFontSize() {
+		displayFontSize = (int) (displayFontSize * 1.1);
+		applyFontSize();
+	}
+
+	private void applyFontSize() {
+		monospacedFont = new Font("Monospaced", Font.PLAIN, displayFontSize);
+		buildDocument();
 	}
 
 	private static class AdaptingSlider extends JSlider implements ChangeListener {
 
-		int min;
-		int max;
-		int value;
+		private int min;
+		private int max;
+		private int value;
 
 		public AdaptingSlider(int min, int max, int value) {
 			super(min, max, value);
@@ -741,29 +743,29 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private static class StringBlock {
-		String s;
-		int iEnd;
+		private String s;
+		private int iEnd;
 		private int contentStart;
 		private int contentEnd;
-		boolean found;
+		private boolean found;
 
-		char startC;
-		char endC;
+		private char startC;
+		private char endC;
 
-		void setString(String s) {
+		private void setString(String s) {
 			this.s = s;
 		}
 
-		String getContent() {
+		private String getContent() {
 			return s.substring(contentStart, contentEnd).trim();
 		}
 
-		boolean hasFound() {
+		private boolean hasFound() {
 
 			return found;
 		}
 
-		int getIEnd() {
+		private int getIEnd() {
 			return iEnd;
 		}
 
@@ -790,7 +792,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			return result;
 		}
 
-		void forward(int iStart, char startC, char endC) {
+		private void forward(int iStart, char startC, char endC) {
 
 			iEnd = iStart;
 			found = false;
@@ -931,7 +933,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
-	public void adaptSlider() {
+	private void adaptSlider() {
 		sliderLevel.produceLabels(maxExistingLevel);
 	}
 
@@ -1010,11 +1012,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		buildDocument();
 	}
 
-	public void editSearchString() {
+	private void editSearchString() {
 		jComboBoxSearch.requestFocus();
 	}
 
-	public void search() {
+	private void search() {
 		Logging.debug(this, "Searching string in log");
 
 		if (jComboBoxSearch.getSelectedItem() == null || jComboBoxSearch.getSelectedItem().toString().isEmpty()) {
@@ -1060,11 +1062,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			} else if (e.getSource() == jTextPane && e.getKeyChar() == '+'
 					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Plus");
-				setFontSize("+");
+				increaseFontSize();
 			} else if (e.getSource() == jTextPane && e.getKeyChar() == '-'
 					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Minus");
-				setFontSize("-");
+				reduceFontSize();
 			}
 		}
 	}
@@ -1087,7 +1089,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			}
 			e.consume();
 		}
-
 	}
 
 	// Interface ActionListener
@@ -1103,9 +1104,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		} else if (e.getSource() == jCheckBoxCaseSensitive) {
 			searcher.setCaseSensitivity(jCheckBoxCaseSensitive.isSelected());
 		} else if (e.getSource() == buttonFontPlus) {
-			setFontSize("+");
+			increaseFontSize();
 		} else if (e.getSource() == buttonFontMinus) {
-			setFontSize("-");
+			reduceFontSize();
 		}
 	}
 

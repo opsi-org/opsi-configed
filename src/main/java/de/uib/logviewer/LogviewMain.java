@@ -33,7 +33,7 @@ public class LogviewMain {
 	private static final int FRAME_WIDTH = 800;
 	private static final int FRAME_HEIGHT = 600;
 
-	LogFrame mainFrame;
+	private LogFrame logFrame;
 
 	public void init() {
 		Logging.debug(this, "init");
@@ -42,17 +42,17 @@ public class LogviewMain {
 		initGui();
 	}
 
-	protected void initGui() {
+	private void initGui() {
 
-		mainFrame = new LogFrame(this);
+		logFrame = new LogFrame();
 
 		// for passing it to message frames everywhere
 
-		Globals.container1 = mainFrame;
-		Globals.frame1 = mainFrame;
+		Globals.container1 = logFrame;
+		Globals.frame1 = logFrame;
 
 		//rearranging visual components
-		mainFrame.pack();
+		logFrame.pack();
 
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] gs = ge.getScreenDevices();
@@ -86,47 +86,22 @@ public class LogviewMain {
 		final int width = FRAME_WIDTH + (wDiff * 2) / 3;
 		final int height = FRAME_HEIGHT + (hDiff * 2) / 3;
 
-		mainFrame.startSizing(width, height);
+		logFrame.setSize(width, height);
 
-		Dimension frameSize = mainFrame.getSize();
+		Dimension frameSize = logFrame.getSize();
 		if (frameSize.height > screenSize.height) {
 			frameSize.height = screenSize.height;
 		}
 		if (frameSize.width > screenSize.width) {
 			frameSize.width = screenSize.width;
 		}
-		mainFrame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
+		logFrame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
 
 		// init visual states
 		Logging.info(this, "mainframe nearly initialized");
 
-		mainFrame.setVisible(true);
-		mainFrame.setFocusToJTextPane();
+		logFrame.setVisible(true);
+		logFrame.setFocusToJTextPane();
 
-	}
-
-	public void showExternalDocument(String urlS) {
-		try {
-			Runtime rt = Runtime.getRuntime();
-			String osName = System.getProperty("os.name");
-			if (osName.toLowerCase().startsWith("windows")) {
-				String title = "";
-				Process proc = rt.exec("cmd.exe /c start \"" + title + "\" \"" + urlS.replace("\\", "\\\\") + "\"");
-			} else {
-				//Linux, we assume that there is a firefox and it will handle the url // TODO use something different
-				String[] cmdarray = new String[] { "firefox", urlS };
-				Process proc = rt.exec(cmdarray);
-			}
-		} catch (Exception ex) {
-			Logging.error("" + ex);
-		}
-	}
-
-	protected void checkErrorList() {
-		Logging.checkErrorList(mainFrame);
-	}
-
-	public void finishApp(boolean checkdirty, int exitcode) {
-		System.exit(exitcode);
 	}
 }
