@@ -16,6 +16,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -45,7 +53,7 @@ public class Configed {
 
 	public static boolean sshConnectOnStart;
 
-	public static final String USAGE_INFO = "\n" + "\tconfiged [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
+	public static final String USAGE_INFO = "configed [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
 	/*
 	 * "-l LOC, \t--locale LOC \t\t\t(Set locale LOC (format: <language>_<country>)) \n"
 	 * +
@@ -788,12 +796,64 @@ public class Configed {
 		return controller;
 	}
 
+	private static Options createOptions() {
+		Options options = new Options();
+		options.addOption(new Option("l", "locale", true,
+				"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale"));
+		options.addOption("h", "host", true, "Configuration server HOST to connect to. DEFAULT: choose interactive");
+		options.addOption("u", "user", true, "user for authentication. DEFAULT: give interactive");
+		options.addOption("p", "password", true, "password for authentication. DEFAULT: give interactive");
+		options.addOption("c", "client", true, "CLIENT to preselect.  DEFAULT: no client selected");
+		options.addOption("g", "clientgroup", true,
+				"clientgroup to preselect. DEFAULT: last selected group reselected");
+		options.addOption("t", "tab", true,
+				"Start with tab number <arg>, index counting starts with 0, works only if a CLIENT is preselected. DEFAULT 0");
+		options.addOption("d", "directory", true,
+				"Directory for the log files. DEFAULT: an opsi log directory, dependent on system and user privileges, lookup in /help/logfile");
+		options.addOption("s", "savedstates", true,
+				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");
+		options.addOption("r", "refreshminutes", true,
+				"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never).DEFAULT: 0");
+		options.addOption("qs", "querysavedsearch", true,
+				"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])");
+		options.addOption("qg", "definegroupbysearch", true,
+				"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME");
+		options.addOption("initUserRoles", false,
+				"On command line, perform  the complete initialization of user roles if something was changed");
+		options.addOption("gzip", true, "Activate compressed transmission of data from opsi server yes/no. DEFAULT: y");
+
+		options.addOption("lv", "logviewer", false, "description of logviewer");
+
+		return options;
+	}
+
+	private static void processARGS(Options options, String[] args) {
+		CommandLineParser parser = new DefaultParser(false);
+		try {
+			CommandLine cmd = parser.parse(options, args);
+
+			if (cmd.hasOption("l")) {
+				Logging.devel(cmd.getOptionValue("l"));
+			}
+			if (cmd.hasOption("h")) {
+				Logging.devel(options.toString());
+			}
+		} catch (ParseException pe) {
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp("Configed " + Globals.VERSION, USAGE_INFO, options, "footer", true);
+			Logging.error("could not parse parameters", pe);
+		}
+	}
+
 	/**
 	 * main-Methode
 	 */
 	public static void main(String[] args) {
 
-		processArgs(args);
+		//processArgs(args);
+
+		Options options = createOptions();
+		processARGS(options, args);
 
 		if (ConfigedMain.THEMES) {
 			setOpsiLaf();
