@@ -293,7 +293,6 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			}
 
 			try {
-				connection.setRequestProperty("Accept", "application/msgpack");
 				connection.connect();
 			} catch (Exception ex) {
 				String s = "" + ex;
@@ -518,31 +517,10 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
 					Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
 
-					if ("application/msgpack".equals(connection.getContentType())) {
-						ObjectMapper mapper = new MessagePackMapper();
-						Map<String, Object> message = mapper.readValue(stream,
-								new TypeReference<Map<String, Object>>() {
-								});
-						result = new JSONObject(new ObjectMapper().writeValueAsString(message));
-					} else {
-						String line;
-						try (BufferedReader in = new BufferedReader(new InputStreamReader(stream, UTF8DEFAULT))) {
-							line = in.readLine();
-
-							Logging.info(this, "received line of length " + line.length());
-							if (line != null) {
-								result = new JSONObject(line);
-							}
-
-							line = in.readLine();
-							if (line != null) {
-								Logging.debug(this, "received second line of length " + line.length());
-							}
-						} catch (IOException iox) {
-							Logging.warning(this, "exception on receiving json", iox);
-							throw new JSONCommunicationException("receiving json");
-						}
-					}
+					ObjectMapper mapper = new MessagePackMapper();
+					Map<String, Object> message = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+					});
+					result = new JSONObject(new ObjectMapper().writeValueAsString(message));
 				}
 			} catch (Exception ex) {
 				if (waitCursor != null) {
