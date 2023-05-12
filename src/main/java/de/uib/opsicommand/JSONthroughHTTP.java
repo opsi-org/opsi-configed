@@ -523,7 +523,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 						Map<String, Object> message = mapper.readValue(stream,
 								new TypeReference<Map<String, Object>>() {
 								});
-						Logging.devel(this, "elapsed: " + (System.currentTimeMillis() - started));
+						result = new JSONObject(new ObjectMapper().writeValueAsString(message));
 					} else {
 						String line;
 						try (BufferedReader in = new BufferedReader(new InputStreamReader(stream, UTF8DEFAULT))) {
