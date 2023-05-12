@@ -821,7 +821,17 @@ public class Configed {
 		options.addOption("initUserRoles", false,
 				"On command line, perform  the complete initialization of user roles if something was changed");
 		options.addOption("gzip", true, "Activate compressed transmission of data from opsi server yes/no. DEFAULT: y");
+		options.addOption("ssh-immediate-connect", true,
+				"Try to create a SSH connection on start. DEFAULT: " + getYNforBoolean(sshConnectOnStart) + "");
+		options.addOption("ssh-key", true, "Full path with filename from sshkey used for authentication on ssh server");
+		options.addOption("ssh-passphrase", true, "Passphrase for given sshkey used for authentication on ssh server");
+		options.addOption("v", "version", false, "Tell configed version");
+		options.addOption("collect_queries_until_no", true, "Collect the first N queries; N = "
+				+ OpsiMethodCall.maxCollectSize + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
+		options.addOption("help", false, "Give this help");
+		options.addOption("halt", false, "Use  first occurring debug halt point that may be in the code");
 
+		// TODO some options still missing
 		options.addOption("lv", "logviewer", false, "description of logviewer");
 
 		return options;
