@@ -30,6 +30,10 @@ import javax.net.ssl.SSLException;
 import javax.swing.SwingUtilities;
 
 import org.json.JSONObject;
+import org.msgpack.jackson.dataformat.MessagePackMapper;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -289,6 +293,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			}
 
 			try {
+				connection.setRequestProperty("Accept", "application/msgpack");
 				connection.connect();
 			} catch (Exception ex) {
 				String s = "" + ex;
@@ -513,22 +518,30 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
 					Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
 
-					String line;
-					try (BufferedReader in = new BufferedReader(new InputStreamReader(stream, UTF8DEFAULT))) {
-						line = in.readLine();
+					if ("application/msgpack".equals(connection.getContentType())) {
+						ObjectMapper mapper = new MessagePackMapper();
+						Map<String, Object> message = mapper.readValue(stream,
+								new TypeReference<Map<String, Object>>() {
+								});
+						Logging.devel(this, "elapsed: " + (System.currentTimeMillis() - started));
+					} else {
+						String line;
+						try (BufferedReader in = new BufferedReader(new InputStreamReader(stream, UTF8DEFAULT))) {
+							line = in.readLine();
 
-						Logging.info(this, "received line of length " + line.length());
-						if (line != null) {
-							result = new JSONObject(line);
-						}
+							Logging.info(this, "received line of length " + line.length());
+							if (line != null) {
+								result = new JSONObject(line);
+							}
 
-						line = in.readLine();
-						if (line != null) {
-							Logging.debug(this, "received second line of length " + line.length());
+							line = in.readLine();
+							if (line != null) {
+								Logging.debug(this, "received second line of length " + line.length());
+							}
+						} catch (IOException iox) {
+							Logging.warning(this, "exception on receiving json", iox);
+							throw new JSONCommunicationException("receiving json");
 						}
-					} catch (IOException iox) {
-						Logging.warning(this, "exception on receiving json", iox);
-						throw new JSONCommunicationException("receiving json");
 					}
 				}
 			} catch (Exception ex) {
