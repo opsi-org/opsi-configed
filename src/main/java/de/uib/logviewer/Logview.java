@@ -32,14 +32,14 @@ public class Logview {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
-		Logging.devel(this, "starting " + getClass().getName());
+		Logging.essential(this, "starting " + getClass().getName());
 
 		String imageHandled = "(we start image retrieving)";
 		Logging.info(this, imageHandled);
 		try {
 			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
 			if (resource == null) {
-				Logging.devel(this, "image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
+				Logging.warning(this, "image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
 			} else {
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 				imageHandled = "setIconImage";
