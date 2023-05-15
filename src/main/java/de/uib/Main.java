@@ -1,5 +1,8 @@
 package de.uib;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -8,7 +11,6 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -30,19 +32,25 @@ public class Main {
 
 	private static boolean isLogviewer;
 
-	public static OptionGroup getGeneralOptions() {
-		OptionGroup optionGroup = new OptionGroup();
-		optionGroup.addOption(
-				new Option("lv", "logviewer", false, "MUST BE FIRST OPTION, use this option to start logviewer"));
-		optionGroup.addOption(new Option("d", "directory", true,
-				"Directory for the log files. DEFAULT: an opsi log directory, dependent on system and user privileges, lookup in /help/logfile"));
+	public static List<Option> getGeneralOptions() {
+		List<Option> options = new ArrayList<>();
 
-		return optionGroup;
+		options.add(new Option("lv", "logviewer", false, "MUST BE FIRST OPTION, use this option to start logviewer"));
+		options.add(new Option("d", "directory", true,
+				"Directory for the log files. DEFAULT: an opsi log directory, dependent on system and user privileges, lookup in /help/logfile"));
+		options.add(new Option(null, "loglevel", true, "Set logging level L, L is a number >= " + Logging.LEVEL_NONE
+				+ ", <= " + Logging.LEVEL_SECRET + " . DEFAULT: " + Logging.getLogLevelConsole()));
+
+		return options;
 	}
 
 	private static Options createGeneralOptions() {
 		Options options = new Options();
-		options.addOptionGroup(getGeneralOptions());
+
+		// Get the general options
+		for (Option option : getGeneralOptions()) {
+			options.addOption(option);
+		}
 
 		return options;
 	}
@@ -66,6 +74,19 @@ public class Main {
 
 		if (cmd.hasOption("d")) {
 			Logging.logDirectoryName = cmd.getOptionValue("d");
+		}
+
+		if (cmd.hasOption("loglevel")) {
+			String loglevelString = "";
+			try {
+				loglevelString = cmd.getOptionValue("loglevel");
+				Integer loglevel = Integer.valueOf(loglevelString);
+
+				Logging.setLogLevelConsole(loglevel);
+				Logging.setLogLevelFile(loglevel);
+			} catch (NumberFormatException ex) {
+				Logging.debug(" \n\nArgument >" + loglevelString + "< has no integer format");
+			}
 		}
 	}
 

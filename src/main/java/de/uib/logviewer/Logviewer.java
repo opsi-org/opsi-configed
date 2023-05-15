@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -81,7 +82,10 @@ public class Logviewer {
 		options.addOption("v", "version", false, "Tell logviewer version");
 		options.addOption(null, "help", false, "Give this help");
 
-		options.addOptionGroup(Main.getGeneralOptions());
+		// Add the general options to configed-specific options
+		for (Option option : Main.getGeneralOptions()) {
+			options.addOption(option);
+		}
 
 		return options;
 	}

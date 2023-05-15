@@ -55,8 +55,6 @@ public class Configed {
 	private static String host;
 	public static String user;
 	private static String password;
-	private static int loglevelConsole = Logging.getLogLevelConsole();
-	private static int loglevelFile = Logging.getLogLevelFile();
 
 	private static String sshKey;
 	private static String sshKeyPass;
@@ -329,7 +327,10 @@ public class Configed {
 		options.addOption(null, "disable-certificate-verification", false,
 				"Disable opsi-certificate verification with server, by DEFAULT enabled");
 
-		options.addOptionGroup(Main.getGeneralOptions());
+		// Add the general options to configed-specific options
+		for (Option option : Main.getGeneralOptions()) {
+			options.addOption(option);
+		}
 
 		return options;
 	}
@@ -459,16 +460,6 @@ public class Configed {
 			}
 		}
 
-		if (cmd.hasOption("loglevel")) {
-			String loglevelString = "";
-			try {
-				loglevelString = cmd.getOptionValue("loglevel");
-				loglevelFile = loglevelConsole = Integer.valueOf(loglevelString);
-			} catch (NumberFormatException ex) {
-				Logging.debug(" \n\nArgument >" + loglevelString + "< has no integer format");
-			}
-		}
-
 		if (cmd.hasOption("localizationfile")) {
 			String extraLocalizationFileName = cmd.getOptionValue("localizationfile");
 			boolean success = false;
@@ -535,8 +526,6 @@ public class Configed {
 
 		Logging.debug("configed: args recognized");
 
-		Logging.setLogLevelConsole(loglevelConsole);
-		Logging.setLogLevelFile(loglevelFile);
 		Logging.setLogfileMarker(host);
 		Logging.init();
 		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
@@ -604,8 +593,6 @@ public class Configed {
 			System.exit(0);
 		} else if (optionCLIuserConfigProducing) {
 			Logging.debug("UserConfigProducing");
-			Logging.setLogLevelConsole(loglevelConsole);
-			Logging.setLogLevelFile(loglevelFile);
 
 			addMissingArgs();
 
