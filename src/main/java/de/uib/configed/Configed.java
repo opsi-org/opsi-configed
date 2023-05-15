@@ -35,7 +35,6 @@ import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.configed.tree.ClientTreeUI;
 import de.uib.logviewer.Logview;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -53,7 +52,7 @@ public class Configed {
 
 	public static boolean sshConnectOnStart;
 
-	public static final String USAGE_INFO = "configed [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
+	public static final String USAGE_INFO = "configed [OPTIONS] " + ", where an OPTION may be\n";
 	/*
 	 * "-l LOC, \t--locale LOC \t\t\t(Set locale LOC (format: <language>_<country>)) \n"
 	 * +
@@ -171,8 +170,6 @@ public class Configed {
 	private static boolean optionCLISwAuditCSV;
 	private static String clientsFile;
 	private static String outDir;
-
-	private static boolean optionPersistenceControllerMethodCall;
 
 	private static boolean optionCLIuserConfigProducing;
 
@@ -494,9 +491,6 @@ public class Configed {
 					optionCLIuserConfigProducing = true;
 
 					i++;
-				} else if ("-me".equals(args[i]) || "--testPersistenceControllerMethod".equals(args[i])) {
-					optionPersistenceControllerMethodCall = true;
-					i = i + 1;
 				} else if ("--version".equals(args[i])) {
 					Logging.essential("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
 					System.exit(0);
@@ -674,38 +668,6 @@ public class Configed {
 		return result;
 	}
 
-	// from the JGoodies Library, we take the following function, observing
-
-	/*
-	 * Copyright (c) 2001-2008 JGoodies Karsten Lentzsch. All Rights Reserved.
-	 *
-	 * Redistribution and use in source and binary forms, with or without
-	 * modification, are permitted provided that the following conditions are met:
-	 *
-	 * o Redistributions of source code must retain the above copyright notice,
-	 * this list of conditions and the following disclaimer.
-	 *
-	 * o Redistributions in binary form must reproduce the above copyright notice,
-	 * this list of conditions and the following disclaimer in the documentation
-	 * and/or other materials provided with the distribution.
-	 *
-	 * o Neither the name of JGoodies Karsten Lentzsch nor the names of
-	 * its contributors may be used to endorse or promote products derived
-	 * from this software without specific prior written permission.
-	 *
-	 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-	 * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-	 * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-	 * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-	 * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-	 * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-	 * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS,
-	 * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-	 * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-	 * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
-	 * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	 */
-
 	public static void configureUI() {
 		boolean trynimbus = true;
 		boolean found = false;
@@ -779,23 +741,6 @@ public class Configed {
 		}
 	}
 
-	public static AbstractPersistenceController connect() {
-		Messages.setLocale("en");
-		AbstractPersistenceController controller = PersistenceControllerFactory.getNewPersistenceController(host, user,
-				password);
-		if (controller == null) {
-			Logging.error("Authentication error.");
-			System.exit(1);
-		}
-
-		if (controller.getConnectionState().getState() != ConnectionState.CONNECTED) {
-			Logging.error("Authentication error.");
-			System.exit(1);
-		}
-
-		return controller;
-	}
-
 	private static Options createOptions() {
 		Options options = new Options();
 		options.addOption(new Option("l", "locale", true,
@@ -818,27 +763,30 @@ public class Configed {
 				"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])");
 		options.addOption("qg", "definegroupbysearch", true,
 				"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME");
-		options.addOption("initUserRoles", false,
+		options.addOption(null, "initUserRoles", false,
 				"On command line, perform  the complete initialization of user roles if something was changed");
-		options.addOption("gzip", true, "Activate compressed transmission of data from opsi server yes/no. DEFAULT: y");
-		options.addOption("ssh-immediate-connect", true,
+		options.addOption(null, "gzip", true,
+				"Activate compressed transmission of data from opsi server yes/no. DEFAULT: y");
+		options.addOption(null, "ssh-immediate-connect", true,
 				"Try to create a SSH connection on start. DEFAULT: " + getYNforBoolean(sshConnectOnStart) + "");
-		options.addOption("ssh-key", true, "Full path with filename from sshkey used for authentication on ssh server");
-		options.addOption("ssh-passphrase", true, "Passphrase for given sshkey used for authentication on ssh server");
+		options.addOption(null, "ssh-key", true,
+				"Full path with filename from sshkey used for authentication on ssh server");
+		options.addOption(null, "ssh-passphrase", true,
+				"Passphrase for given sshkey used for authentication on ssh server");
 		options.addOption("v", "version", false, "Tell configed version");
-		options.addOption("collect_queries_until_no", true, "Collect the first N queries; N = "
+		options.addOption(null, "collect_queries_until_no", true, "Collect the first N queries; N = "
 				+ OpsiMethodCall.maxCollectSize + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
-		options.addOption("help", false, "Give this help");
-		options.addOption("halt", false, "Use  first occurring debug halt point that may be in the code");
-		options.addOption("localizationfile", false,
+		options.addOption(null, "help", false, "Give this help");
+		options.addOption(null, "halt", false, "Use  first occurring debug halt point that may be in the code");
+		options.addOption(null, "localizationfile", false,
 				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
-		options.addOption("localizationstrings", true,
+		options.addOption(null, "localizationstrings", true,
 				"For translation work, show internal labels together with the strings of selected localization");
-		options.addOption("swaudit-pdf", true,
+		options.addOption(null, "swaudit-pdf", true,
 				"export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
-		options.addOption("swaudit-csv", true,
+		options.addOption(null, "swaudit-csv", true,
 				"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
-		options.addOption("disable-certificate-verification", false,
+		options.addOption(null, "disable-certificate-verification", false,
 				"Disable opsi-certificate verification with server, by DEFAULT enabled");
 
 		// TODO some options still missing
@@ -847,22 +795,145 @@ public class Configed {
 		return options;
 	}
 
-	private static void processARGS(Options options, String[] args) {
+	private static void processARGS(Options options, String[] args) throws ParseException {
 		CommandLineParser parser = new DefaultParser(false);
-		try {
-			CommandLine cmd = parser.parse(options, args);
+		CommandLine cmd = parser.parse(options, args);
 
-			if (cmd.hasOption("l")) {
-				Logging.devel(cmd.getOptionValue("l"));
-			}
-			if (cmd.hasOption("h")) {
-				Logging.devel(options.toString());
-			}
-		} catch (ParseException pe) {
-			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("Configed " + Globals.VERSION, USAGE_INFO, options, "footer", true);
-			Logging.error("could not parse parameters", pe);
+		if (cmd.hasOption("l")) {
+			locale = cmd.getOptionValue("");
 		}
+
+		if (cmd.hasOption("h")) {
+			host = cmd.getOptionValue("h");
+		}
+
+		if (cmd.hasOption("p")) {
+			password = cmd.getOptionValue("p");
+		}
+
+		if (cmd.hasOption("c")) {
+			client = cmd.getOptionValue("c");
+		}
+
+		if (cmd.hasOption("g")) {
+			clientgroup = cmd.getOptionValue("g");
+		}
+
+		if (cmd.hasOption("t")) {
+			String tabString = cmd.getOptionValue("t");
+			try {
+				tab = Integer.parseInt(tabString);
+			} catch (NumberFormatException ex) {
+				Logging.debug("  \n\nArgument >" + tabString + "< has no integer format");
+				usage();
+				endApp(ERROR_INVALID_OPTION);
+			}
+		}
+
+		if (cmd.hasOption("d")) {
+			Logging.logDirectoryName = cmd.getOptionValue("d");
+		}
+
+		if (cmd.hasOption("s")) {
+			savedStatesLocationName = cmd.getOptionValue("s");
+
+			String canonicalPath = null;
+			try {
+				canonicalPath = new File(savedStatesLocationName).getCanonicalPath();
+			} catch (IOException ex) {
+				Logging.debug("savedstates argument " + ex);
+			}
+			if (canonicalPath != null) {
+				savedStatesLocationName = canonicalPath;
+			}
+		}
+
+		if (cmd.hasOption("r")) {
+			String refreshMinutesString = cmd.getOptionValue("r");
+
+			try {
+				refreshMinutes = Integer.valueOf(refreshMinutesString);
+			} catch (NumberFormatException ex) {
+				Logging.debug("  \n\nArgument >" + refreshMinutesString + "< has no integer format");
+				usage();
+				endApp(ERROR_INVALID_OPTION);
+			}
+		}
+
+		if (cmd.hasOption("ssh-immediate-connect")) {
+			String sshImmediateConnectString = cmd.getOptionValue("ssh-immediate-connect");
+
+			if ("Y".equalsIgnoreCase(sshImmediateConnectString)) {
+				sshConnectOnStart = true;
+			} else if ("N".equalsIgnoreCase(sshImmediateConnectString)) {
+				sshConnectOnStart = false;
+			} else {
+				usage();
+				endApp(ERROR_INVALID_OPTION);
+			}
+		}
+
+		if (cmd.hasOption("ssh-key")) {
+			sshKey = cmd.getOptionValue("ssh-key");
+		}
+
+		if (cmd.hasOption("ssh-passphrase")) {
+			sshKeyPass = cmd.getOptionValue("ssh-passphrase");
+		}
+
+		if (cmd.hasOption("qs")) {
+			optionCLIQuerySearch = true;
+			savedSearch = cmd.getOptionValue("qs");
+		}
+
+		if (cmd.hasOption("qg")) {
+			optionCLIDefineGroupBySearch = true;
+			String[] values = cmd.getOptionValues("qg");
+			savedSearch = values[0];
+			group = values[1];
+		}
+
+		if (cmd.hasOption("initUserRoles")) {
+			optionCLIuserConfigProducing = true;
+		}
+
+		if (cmd.hasOption("version")) {
+			Logging.essential("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
+			System.exit(0);
+		}
+
+		if (cmd.hasOption("help")) {
+			showHelp(options);
+			endApp(NO_ERROR);
+		}
+
+		if (cmd.hasOption("collect_queries_until_no")) {
+			String no = cmd.getOptionValue("collect_queries_until_no");
+
+			try {
+				OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
+			} catch (NumberFormatException ex) {
+				Logging.debug("  \n\nArgument >" + no + "< has no integer format");
+				usage();
+				endApp(ERROR_INVALID_OPTION);
+			}
+		}
+
+		if (cmd.hasOption("loglevel")) {
+			String loglevelString = "";
+			try {
+				loglevelString = cmd.getOptionValue("loglevel");
+				loglevelFile = loglevelConsole = Integer.valueOf(loglevelString);
+			} catch (NumberFormatException ex) {
+				Logging.debug(" \n\nArgument >" + loglevelString + "< has no integer format");
+			}
+		}
+	}
+
+	private static void showHelp(Options options) {
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.setWidth(Integer.MAX_VALUE);
+		formatter.printHelp(USAGE_INFO, options);
 	}
 
 	/**
@@ -873,7 +944,13 @@ public class Configed {
 		//processArgs(args);
 
 		Options options = createOptions();
-		processARGS(options, args);
+		try {
+			processARGS(options, args);
+		} catch (ParseException pe) {
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp("Configed " + Globals.VERSION, USAGE_INFO, options, "footer", true);
+			Logging.error("could not parse parameters", pe);
+		}
 
 		if (ConfigedMain.THEMES) {
 			setOpsiLaf();
@@ -947,15 +1024,6 @@ public class Configed {
 
 			List<Object> newData = up.produce();
 			Logging.debug("UserConfigProducing: newData " + newData);
-
-			System.exit(0);
-		}
-
-		if (optionPersistenceControllerMethodCall) {
-			Logging.debug("optionPersistenceControllerMethodCall");
-			addMissingArgs();
-
-			connect();
 
 			System.exit(0);
 		}
