@@ -25,6 +25,8 @@ import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
 
+import org.json.JSONArray;
+
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -1020,7 +1022,7 @@ public class DataStubNOM {
 					configs1Host.put(configId, new ArrayList<>());
 					// is a data error but can occur
 				} else {
-					configs1Host.put(configId, ((org.json.JSONArray) (listElement.get("values"))).toList());
+					configs1Host.put(configId, new JSONArray((List) listElement.get("values")).toList());
 				}
 			}
 		}

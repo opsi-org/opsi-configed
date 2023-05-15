@@ -85,6 +85,12 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.uib.configed.Configed;
 /**
  * configed - configuration editor for client work stations in opsi
@@ -2311,10 +2317,19 @@ public class MainFrame extends JFrame
 		if (configedMain.getPersistenceController().isOpsiLicencingAvailable()
 				&& configedMain.getPersistenceController().isOpsiUserAdmin() && licensingInfoMap == null) {
 
-			licensingInfoMap = LicensingInfoMap.getInstance(
-					configedMain.getPersistenceController().getOpsiLicencingInfoOpsiAdmin(),
-					configedMain.getPersistenceController().getConfigDefaultValues(),
-					!FGeneralDialogLicensingInfo.extendedView);
+			try {
+				licensingInfoMap = LicensingInfoMap.getInstance(
+						new JSONObject(new ObjectMapper().writeValueAsString(
+								configedMain.getPersistenceController().getOpsiLicencingInfoOpsiAdmin())),
+						configedMain.getPersistenceController().getConfigDefaultValues(),
+						!FGeneralDialogLicensingInfo.extendedView);
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:

@@ -7,9 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.utilities.logging.Logging;
 
@@ -22,186 +26,184 @@ import de.uib.utilities.logging.Logging;
 public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	protected ConnectionState conStat;
 
-	public JSONObject retrieveJSONResult(OpsiMethodCall omc) {
-		JSONObject jO = retrieveJSONObject(omc);
-		if (checkResponse(jO)) {
-			return jO.optJSONObject("result");
-		}
-
-		return null;
-	}
-
 	@Override
 	public ConnectionState getConnectionState() {
 		return conStat;
 	}
 
-	public boolean checkResponse(JSONObject retrieved) {
-		return JSONReMapper.checkResponse(retrieved);
-	}
-
-	@Override
-	public Object getValueFromJSONObject(Object o, String key) {
-		Object value = null;
-		try {
-			value = ((JSONObject) o).get(key);
-		} catch (JSONException jex) {
-			Logging.error("json error on getting value  ", jex);
-		} catch (Exception ex) {
-			Logging.error("error on getting value ", ex);
-		}
-
-		return value;
-	}
-
 	@Override
 	public boolean doCall(OpsiMethodCall omc) {
-		JSONObject jO = retrieveJSONObject(omc);
+		Map<String, Object> jO = retrieveJSONObject(omc);
 
 		return checkResponse(jO);
 	}
 
 	@Override
 	public List<List<String>> getListOfStringLists(OpsiMethodCall omc) {
-		return JSONReMapper.getListOfStringLists(retrieveJSONObject(omc));
+		List<List<String>> result = new ArrayList<>();
+		Map<String, Object> response = retrieveJSONObject(omc);
+
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			result = convertToObject(response.get("result"), new TypeReference<List<List<String>>>() {
+			});
+		}
+
+		return result;
 	}
 
 	@Override
 	public List<Object> getListResult(OpsiMethodCall omc) {
-		return JSONReMapper.getListResult(retrieveJSONObject(omc));
+		List<Object> result = new ArrayList<>();
+		Map<String, Object> response = retrieveJSONObject(omc);
+
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			result = convertToObject(response.get("result"), new TypeReference<List<Object>>() {
+			});
+		}
+
+		return result;
 	}
 
 	@Override
 	public List<String> getStringListResult(OpsiMethodCall omc) {
-		return JSONReMapper.getStringListResult(retrieveJSONObject(omc));
+		List<String> result = new ArrayList<>();
+		Map<String, Object> response = retrieveJSONObject(omc);
+
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			result = convertToObject(response.get("result"), new TypeReference<List<String>>() {
+			});
+		}
+
+		return result;
 	}
 
 	@Override
 	public Map<String, Object> getMapResult(OpsiMethodCall omc) {
 		// yields possibly JSON objects and arrays as values
 		// compare getMap_Object
+		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> response = retrieveJSONObject(omc);
 
-		return JSONReMapper.getMapResult(retrieveJSONObject(omc));
-	}
-
-	private Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc, boolean recursive) {
-		Map<String, List<String>> result = new HashMap<>();
-		try {
-			JSONObject jO = retrieveJSONObject(omc);
-
-			if (recursive && !JSONReMapper.checkForNotValidOpsiMethod(jO)) {
-				result = getMapOfStringLists(omc.activateExtendedRpcPath(), false);
-			} else {
-				if (checkResponse(jO)) {
-					JSONObject jOResult = jO.optJSONObject("result");
-
-					if (jOResult != null) {
-						Iterator<String> iter = jOResult.keys();
-						while (iter.hasNext()) {
-							String key = iter.next();
-
-							result.put(key, JSONReMapper.getJsonStringList(jOResult, key));
-						}
-					}
-				}
-			}
-		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting Map ", ex);
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			result = convertToObject(response.get("result"), new TypeReference<HashMap<String, Object>>() {
+			});
 		}
+
 		return result;
 	}
 
 	@Override
 	public Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc) {
-		return getMapOfStringLists(omc, true);
-	}
+		Map<String, List<String>> result = new HashMap<>();
+		Map<String, Object> response = retrieveJSONObject(omc);
 
-	@Override
-	public Map<String, Map<String, Object>> getMapOfMaps(OpsiMethodCall omc) {
-		Map<String, Map<String, Object>> result = new HashMap<>();
-		try {
-			JSONObject jO = retrieveJSONObject(omc);
-			if (checkResponse(jO)) {
-				JSONObject jOResult = jO.optJSONObject("result");
-
-				if (jOResult != null) {
-					Iterator<String> iter = jOResult.keys();
-					while (iter.hasNext()) {
-						String key = iter.next();
-						Map<String, Object> inner = new HashMap<>();
-						JSONObject jsonInner = (JSONObject) jOResult.get(key);
-						if (jsonInner != null) {
-							Iterator<String> iter2 = jsonInner.keys();
-							while (iter2.hasNext()) {
-								String key2 = iter2.next();
-								if (!jsonInner.isNull(key2)) {
-									inner.put(key2, jsonInner.get(key2));
-								}
-							}
-						}
-						result.put(key, inner);
-					}
-				}
-			}
-		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting Map ", ex);
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			result = convertToObject(response.get("result"), new TypeReference<HashMap<String, List<String>>>() {
+			});
 		}
+
 		return result;
 	}
 
-	@Override
-	public Map<String, Object> getMapObject(OpsiMethodCall omc) {
-		// this method tries to return Java lists in comparison with getMapResult
+	private static <T> T convertToObject(Object obj, TypeReference<T> typeRef) {
+		T result = null;
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
+		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
 
-		return JSONReMapper.getMapObject(retrieveJSONObject(omc));
+		result = mapper.convertValue(obj, typeRef);
+
+		return result;
 	}
 
-	@Override
-	public Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc) {
-		// including a conversion of json objects to a standard java object
-
-		HashMap<String, Map<String, Object>> result = new HashMap<>();
-		HashMap<String, Map<String, Object>> resultNull = new HashMap<>();
+	public static String getErrorFromResponse(Map<String, Object> retrieved) {
+		String errorMessage = null;
 
 		try {
-			JSONObject jO = retrieveJSONObject(omc);
-			if (checkResponse(jO)) {
-				JSONObject jOResult = jO.optJSONObject("result");
-				JSONObjectX jOX = new JSONObjectX(jOResult);
+			if (retrieved.containsKey("error") && retrieved.get("error") != null) {
+				ObjectMapper mapper = new ObjectMapper();
+				Map<String, Object> error = mapper.readValue(mapper.writeValueAsString(retrieved.get("error")),
+						new TypeReference<Map<String, Object>>() {
+						});
 
-				if (!jOX.isMap()) {
-					Logging.error(this, "map expected " + jOX);
+				if (error != null && error.get("class") != null && error.get("message") != null) {
+					errorMessage = " [" + error.get("class") + "] " + error.get("message");
 				} else {
-					Logging.debug(this, "map retrieved ");
-
-					Map<String, Object> map0 = jOX.getMap();
-
-					Iterator<String> iter0 = map0.keySet().iterator();
-					while (iter0.hasNext()) {
-						String key1 = iter0.next();
-
-						JSONObjectX jOX1 = new JSONObjectX((JSONObject) map0.get(key1));
-
-						if (!jOX1.isMap()) {
-							Logging.error(this, "map expected in level 2 " + jOX1);
-							result = resultNull;
-						} else {
-							result.put(key1, jOX1.getMap());
-						}
-					}
+					errorMessage = " " + retrieved.get("error");
 				}
 			}
-		} catch (Exception ex) {
-			Logging.error("this, getMap2_Object  ", ex);
+		} catch (JSONException | JsonProcessingException jex) {
+			errorMessage = "JSON Error on retrieving result value,  " + jex;
 		}
 
-		return result;
-
+		return errorMessage;
 	}
 
 	@Override
-	public Map<String, Map<String, Map<String, Object>>> getMap3Object(OpsiMethodCall omc) {
-		return JSONReMapper.getMap3Object(retrieveJSONObject(omc));
+	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
+		Map<String, Object> result = new HashMap<>();
+
+		try {
+			if (retrieved.get("error") == null) {
+				List<?> list = (List<?>) retrieved.get("result");
+				result.put("result", list);
+			} else {
+				String str = "" + retrieved.get("error");
+				result.put("error", str);
+			}
+		} catch (Exception ex) {
+			Logging.error("JSONReMapper getResponses ", ex);
+		}
+
+		Logging.debug("JSONReMapper getResponses  result " + result);
+
+		return result;
+	}
+
+	public static boolean checkForNotValidOpsiMethod(Map<String, Object> retrieved) {
+		String errorFromResponse = getErrorFromResponse(retrieved);
+
+		if (errorFromResponse != null && errorFromResponse.indexOf("Opsi rpc error: Method") > -1
+				&& errorFromResponse.endsWith("is not valid")) {
+			Logging.info("JSONReMapper: checkForNotValidOpsiMethod " + getErrorFromResponse(retrieved));
+			return false;
+		}
+
+		return true;
+	}
+
+	public static boolean checkResponse(Map<String, Object> retrieved) {
+		boolean responseFound = true;
+
+		if (retrieved == null) {
+			responseFound = false;
+		} else {
+			Object resultValue = null;
+
+			try {
+
+				String errorMessage = getErrorFromResponse(retrieved);
+
+				if (errorMessage != null) {
+
+					String logMessage = "Opsi service error: " + errorMessage;
+					Logging.error(logMessage);
+				} else {
+					resultValue = retrieved.get("result");
+
+				}
+			} catch (JSONException jex) {
+				Logging.error("JSON Error on retrieving result value,  ", jex);
+			}
+
+			if (resultValue == null) {
+				Logging.debug("Null result in response ");
+				responseFound = false;
+			}
+		}
+
+		return responseFound;
 	}
 
 	@Override
@@ -223,14 +225,11 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 
 		List<Object> resultlist = null;
 
-		try {
-			JSONObject jO = retrieveJSONObject(omc);
-			if (checkResponse(jO)) {
-				resultlist = JSONReMapper.getJsonList(jO, "result");
-			}
+		Map<String, Object> response = retrieveJSONObject(omc);
 
-		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting list for key \"result\" ", ex);
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			resultlist = convertToObject(response.get("result"), new TypeReference<List<Object>>() {
+			});
 		}
 
 		// extract key
@@ -314,140 +313,40 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, List<Map<String, Object>>> getMapOfListsOfMaps(OpsiMethodCall omc) {
-		// TODO: Performance
-		Map<String, List<Map<String, Object>>> result = new HashMap<>();
-		try {
-			JSONObject jO = retrieveJSONObject(omc);
-			if (checkResponse(jO)) {
-				JSONObject jOResult = jO.optJSONObject("result");
+	public List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc) {
+		List<Map<String, Object>> result = new ArrayList<>();
+		Map<String, Object> response = retrieveJSONObject(omc);
 
-				if (jOResult != null) {
-					Iterator<String> iter = jOResult.keys();
-					while (iter.hasNext()) {
-						String key = iter.next();
-
-						JSONArray jA = jOResult.optJSONArray(key);
-						List<Map<String, Object>> al = new ArrayList<>(jA.length());
-
-						for (int i = 0; i < jA.length(); i++) {
-							Map<String, Object> inner = new HashMap<>();
-							JSONObject jsonInner = (JSONObject) jA.get(i);
-							if (jsonInner != null) {
-								Iterator<String> iter2 = jsonInner.keys();
-								while (iter2.hasNext()) {
-									String key2 = iter2.next();
-									if (!jsonInner.isNull(key2)) {
-										inner.put(key2, jsonInner.get(key2));
-									}
-								}
-							}
-							al.add(inner);
-						}
-						result.put(key, al);
-					}
-				}
-			}
-		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting Map ", ex);
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			result = convertToObject(response.get("result"), new TypeReference<List<Map<String, Object>>>() {
+			});
 		}
+
 		return result;
 	}
 
 	@Override
-	public List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc) {
-		return JSONReMapper.getListOfMaps(retrieveJSONObject(omc));
-	}
-
-	@Override
-	public List<Map<String, Object>> getListOfStringMaps(OpsiMethodCall omc) {
-		return JSONReMapper.getListOfStringMaps(retrieveJSONObject(omc));
-	}
-
-	@Override
 	public List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc) {
-		// TODO: Performance
-		List<Map<String, List<Map<String, Object>>>> result = null;
-		try {
-			JSONObject jO = retrieveJSONObject(omc);
-			if (checkResponse(jO)) {
+		List<Map<String, List<Map<String, Object>>>> result = new ArrayList<>();
+		Map<String, Object> response = retrieveJSONObject(omc);
 
-				JSONArray jA1 = jO.optJSONArray("result");
-
-				if (jA1 != null) {
-					result = new ArrayList<>(jA1.length());
-
-					for (int i = 0; i < jA1.length(); i++) {
-						Map<String, List<Map<String, Object>>> inner1 = new HashMap<>();
-						JSONObject jsonInner1 = (JSONObject) jA1.get(i);
-						if (jsonInner1 != null) {
-							Iterator<String> iter = jsonInner1.keys();
-							while (iter.hasNext()) {
-								String key = iter.next();
-
-								JSONArray jA2 = jsonInner1.optJSONArray(key);
-								if (jA2 != null) {
-
-									List<Map<String, Object>> al2 = new ArrayList<>(jA2.length());
-									for (int j = 0; j < jA2.length(); j++) {
-										Map<String, Object> inner2 = new HashMap<>();
-										JSONObject jsonInner2 = (JSONObject) jA2.get(j);
-										if (jsonInner2 != null) {
-											Iterator<String> iter2 = jsonInner2.keys();
-											while (iter2.hasNext()) {
-												String key2 = iter2.next();
-												if (!jsonInner2.isNull(key2)) {
-													inner2.put(key2, jsonInner2.get(key2));
-												}
-											}
-										}
-										al2.add(inner2);
-									}
-									inner1.put(key, al2);
-								} else {
-									// Now we don't have a JSONArray, but a JSONObject.
-									// We will put what there is inside into a List of one element
-									List<Map<String, Object>> al2 = new ArrayList<>();
-
-									Map<String, Object> inner2 = new HashMap<>();
-									JSONObject jsonInner2 = (JSONObject) jsonInner1.get(key);
-
-									if (jsonInner2 != null) {
-										Iterator<String> iter2 = jsonInner2.keys();
-										while (iter2.hasNext()) {
-											String key2 = iter2.next();
-											if (!jsonInner2.isNull(key2)) {
-												inner2.put(key2, jsonInner2.get(key2));
-											}
-										}
-									}
-									al2.add(inner2);
-									inner1.put(key, al2);
-								}
-							}
-						}
-						result.add(inner1);
-					}
-				}
-			}
-		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting ListOfMapsOfListsOfMaps ", ex);
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			result = convertToObject(response.get("result"),
+					new TypeReference<List<Map<String, List<Map<String, Object>>>>>() {
+					});
 		}
+
 		return result;
 	}
 
 	@Override
 	public String getStringResult(OpsiMethodCall omc) {
-		String result = null;
+		String result = "";
+		Map<String, Object> response = retrieveJSONObject(omc);
 
-		JSONObject jO = retrieveJSONObject(omc);
-
-		if (checkResponse(jO)) {
-			try {
-				result = (String) jO.get("result");
-			} catch (JSONException jsonEx) {
-				Logging.warning(this, "Cannot get 'result' from jsonobject in getStringResult", jsonEx);
-			}
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			result = convertToObject(response.get("result"), new TypeReference<String>() {
+			});
 		}
 
 		return result;
@@ -455,107 +354,33 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 
 	@Override
 	public boolean getBooleanResult(OpsiMethodCall omc) {
-
 		Boolean result = null;
+		Map<String, Object> response = retrieveJSONObject(omc);
 
-		JSONObject jO = retrieveJSONObject(omc);
-
-		if (!JSONReMapper.checkForNotValidOpsiMethod(jO)) {
-			result = getBooleanResult(omc.activateExtendedRpcPath());
-		} else {
-			if (checkResponse(jO)) {
-				try {
-					result = (Boolean) jO.get("result");
-				} catch (Exception jsonEx) {
-					Logging.warning(this, "Cannot get 'result' from jsonobject in getStringResult", jsonEx);
-				}
-
-			}
-		}
-
-		if (result == null) {
-			return false;
-		}
-
-		return result.booleanValue();
-	}
-
-	@Override
-	public String getStringValueFromItem(Object s) {
-		if (s instanceof String) {
-			return (String) s;
-		}
-		return null;
-	}
-
-	@Override
-	public Map<String, Object> getMapFromItem(Object s) {
-		HashMap<String, Object> result = new HashMap<>();
-		if (s == null) {
-			return result;
-		}
-
-		try {
-			JSONObject jO = null;
-			boolean wehavejO = true;
-
-			if (s instanceof JSONObject) {
-				jO = (JSONObject) s;
-			} else {
-				try {
-					jO = new JSONObject("" + s);
-				} catch (Exception ex) {
-					Logging.warning("JSONExecutioner.getMapFromItem \"" + s + "\"  "
-							+ " cannot be interpreted as a JSON Object, ", ex);
-					wehavejO = false;
-				}
-			}
-
-			// Surely jO does not equal null
-			if (wehavejO && jO != JSONObject.NULL) {
-
-				Iterator<String> iter = jO.keys();
-				while (iter.hasNext()) {
-					String key = iter.next();
-
-					result.put(key, jO.get(key));
-				}
-
-			}
-
-			if (!wehavejO || jO == JSONObject.NULL) {
-				if (s == JSONObject.NULL) {
-					Logging.warning("JSONExecutioner.getMapFromItem \"" + s
-							+ "\" is  JSONObject.NULL and cannot be cast to a JSON Object");
-				} else {
-
-					Logging.warning("JSONExecutioner.getMapFromItem \"" + s + "\" has class " + s.getClass().getName()
-							+ " cannot be cast to a JSON Object");
-				}
-			}
-		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting map from item  " + s + " : ", ex);
+		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
+			result = convertToObject(response.get("result"), new TypeReference<Boolean>() {
+			});
 		}
 
 		return result;
 	}
 
 	@Override
+	public Map<String, Object> getMapFromItem(Object s) {
+		Map<String, Object> result = null;
+
+		result = convertToObject(s, new TypeReference<Map<String, Object>>() {
+		});
+
+		return result;
+	}
+
+	@Override
 	public List<Object> getListFromItem(String s) {
-		List<Object> result = new ArrayList<>();
+		List<Object> result = null;
 
-		if (s == null || "null".equals(s)) {
-			return result;
-		}
-
-		try {
-			JSONArray ar = new JSONArray(s);
-			for (int i = 0; i < ar.length(); i++) {
-				result.add(ar.get(i));
-			}
-		} catch (Exception ex) {
-			Logging.error(this, "Exception on getting list from item    " + s + " : ", ex);
-		}
+		result = convertToObject(s, new TypeReference<List<Object>>() {
+		});
 
 		return result;
 	}

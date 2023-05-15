@@ -29,7 +29,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONObject;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -249,7 +248,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	 * This method receives the JSONObject via HTTP.
 	 */
 	@Override
-	public synchronized JSONObject retrieveJSONObject(OpsiMethodCall omc) {
+	public synchronized Map<String, Object> retrieveJSONObject(OpsiMethodCall omc) {
 		boolean background = false;
 		Logging.info(this, "retrieveJSONObjects started");
 		WaitCursor waitCursor = null;
@@ -416,7 +415,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			return null;
 		}
 
-		JSONObject result = null;
+		Map<String, Object> result = new HashMap<>();
 
 		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) {
 			try {
@@ -518,9 +517,8 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 					Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
 
 					ObjectMapper mapper = new MessagePackMapper();
-					Map<String, Object> message = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
-					});
-					result = new JSONObject(new ObjectMapper().writeValueAsString(message));
+					result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+					});;
 				}
 			} catch (Exception ex) {
 				if (waitCursor != null) {

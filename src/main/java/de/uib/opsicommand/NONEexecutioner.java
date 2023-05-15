@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
-
 public class NONEexecutioner extends AbstractExecutioner {
 	@Override
 	public ConnectionState getConnectionState() {
@@ -19,12 +17,12 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public JSONObject retrieveJSONObject(OpsiMethodCall omc) {
+	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
 		return null;
 	}
 
 	@Override
-	public Object getValueFromJSONObject(Object o, String key) {
+	public Map<String, Object> retrieveJSONObject(OpsiMethodCall omc) {
 		return null;
 	}
 
@@ -54,33 +52,8 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, Map<String, Object>> getMapOfMaps(OpsiMethodCall omc) {
-		return new HashMap<>();
-	}
-
-	@Override
 	public List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc) {
 		return new ArrayList<>();
-	}
-
-	@Override
-	public List<Map<String, Object>> getListOfStringMaps(OpsiMethodCall omc) {
-		return new ArrayList<>();
-	}
-
-	@Override
-	public Map<String, Object> getMapObject(OpsiMethodCall omc) {
-		return new HashMap<>();
-	}
-
-	@Override
-	public Map<String, Map<String, Object>> getMap2Object(OpsiMethodCall omc) {
-		return new HashMap<>();
-	}
-
-	@Override
-	public Map<String, Map<String, Map<String, Object>>> getMap3Object(OpsiMethodCall omc) {
-		return new HashMap<>();
 	}
 
 	@Override
@@ -97,11 +70,6 @@ public class NONEexecutioner extends AbstractExecutioner {
 
 	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key) {
-		return new HashMap<>();
-	}
-
-	@Override
-	public Map<String, List<Map<String, Object>>> getMapOfListsOfMaps(OpsiMethodCall omc) {
 		return new HashMap<>();
 	}
 
@@ -129,10 +97,4 @@ public class NONEexecutioner extends AbstractExecutioner {
 	public List<Object> getListFromItem(String s) {
 		return new ArrayList<>();
 	}
-
-	@Override
-	public String getStringValueFromItem(Object s) {
-		return null;
-	}
-
 }
