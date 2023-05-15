@@ -33,11 +33,12 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.configed.tree.ClientTreeUI;
-import de.uib.logviewer.Logview;
+import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
+import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.PropertiesStore;
@@ -170,7 +171,7 @@ public class Configed {
 					" we get max memory " + formatter.format("%,d MB", Runtime.getRuntime().maxMemory() / 1_000_000));
 		}
 
-		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
+		FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
 
 		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
@@ -657,7 +658,7 @@ public class Configed {
 		}
 
 		if (logviewer) {
-			Logview.main(args);
+			Logviewer.main(args);
 		} else {
 			startConfiged();
 		}

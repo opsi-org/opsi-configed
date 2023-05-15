@@ -34,7 +34,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.uib.configed.Configed</mainClass>
+                            <mainClass>de.uib.Main</mainClass>
                             <addDefaultImplementationEntries>
                                 true
                             </addDefaultImplementationEntries>

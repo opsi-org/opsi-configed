@@ -14,7 +14,7 @@ import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 
-public class Logview {
+public class Logviewer {
 
 	public static final String usage = "\n" + "\tlogview [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
 
@@ -28,7 +28,7 @@ public class Logview {
 	private static String logdirectory = "";
 
 	/** construct the application */
-	public Logview(String paramLogdirectory, String paramLocale, String paramFilename) {
+	public Logviewer(String paramLogdirectory, String paramLocale, String paramFilename) {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
@@ -247,6 +247,6 @@ public class Logview {
 			Logging.info(" setting property swing.aatext" + ex);
 		}
 
-		new Logview(logdirectory, "de", fileName);
+		new Logviewer(logdirectory, "de", fileName);
 	}
 }
