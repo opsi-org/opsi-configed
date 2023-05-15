@@ -4890,7 +4890,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dialogRemoteControl = new MyDialogRemoteControl();
 		}
 
-		if (!remoteControls.equals(getRemoteControls())) {
+		if (remoteControls == null || !remoteControls.equals(getRemoteControls())) {
 			remoteControls = getRemoteControls();
 
 			Logging.debug(this, "remoteControls " + remoteControls);
