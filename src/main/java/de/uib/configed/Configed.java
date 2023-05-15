@@ -53,93 +53,6 @@ public class Configed {
 	public static boolean sshConnectOnStart;
 
 	public static final String USAGE_INFO = "configed [OPTIONS] " + ", where an OPTION may be\n";
-	/*
-	 * "-l LOC, \t--locale LOC \t\t\t(Set locale LOC (format: <language>_<country>)) \n"
-	 * +
-	 * "-h HOST, \t--host HOST \t\t\t(Configuration server HOST to connect to, --help shows the command usage) \n"
-	 * +
-	 * "-u NAME, \t--user NAME \t\t\t(user for authentication) \n" +
-	 * "-p PASSWORD, \t--password PASSWORD\t\t(password for authentication) \n" +
-	 * "-c CLIENT, \t--client CLIENT \t\t(CLIENT to preselect) + \n" +
-	 * "-t INDEX, \t--tab INDEX\t\t\t(Start with tab number INDEX, index counting starts with 0, works only if a CLIENT is preselected ) + \n"
-	 * +
-	 * "-d PATH, \t--logdirectory PATH \t\t(Directory for the log files) \n" +
-	 * "-qs [SAVEDSEARCH_NAME], \t\t--querysavedsearch [SAVEDSEARCH_NAME]\t\t(On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])\n"
-	 * +
-	 * //"-qsj, \t--querysavedsearchjson \t(CLI: same as querysavedsearch, but output as jsonlist)\n"
-	 * +
-	 * "--gzip \t\t\t\t\t\t(Activate gzip transmission of data from opsi server) \n"
-	 * +
-	 * "--version \t\t\t\t\t(Tell configed version)\n" +
-	 * "--help \t\t\t\t\t\t(Give this help)\n" +
-	 * "--loglevel L \t\t\t\t\t(Set logging level L, L is a number >= " +
-	 */
-
-	private static final String[][] usageLines = new String[][] {
-			new String[] { "-l LOC", "--locale LOC",
-					"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale" },
-			new String[] { "-h HOST", "--host HOST",
-					"Configuration server HOST to connect to. DEFAULT: choose interactive" },
-			new String[] { "-u NAME", "--user NAME", "user for authentication. DEFAULT: give interactive" },
-			new String[] { "-p PASSWORD", "--password PASSWORD",
-					"password for authentication. DEFAULT: give interactive " },
-			new String[] { "-c CLIENT", "--client CLIENT", "CLIENT to preselect.  DEFAULT: no client selected" },
-			new String[] { "-g CLIENTGROUP", "--group CLIENTGROUP",
-					"CLIENTGROUP to preselect. DEFAULT: last selected group reselected" },
-			new String[] { "-t INDEX", "--tab INDEX",
-					"Start with tab number INDEX, index counting starts with 0, works only if a CLIENT is preselected. DEFAULT 0" },
-			new String[] { "-d PATH", "--logdirectory PATH",
-					"Directory for the log files. DEFAULT: an opsi log directory, dependent on system and user privileges, lookup in /help/logfile" },
-			new String[] { "-s PATH", "--savedstates PATH",
-					"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory" },
-
-			new String[] { "-r REFRESHMINUTES", "--refreshminutes REFRESHMINUTES",
-					"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never).DEFAULT: 0" },
-			new String[] { "-qs [SAVEDSEARCH_NAME]", "--querysavedsearch [SAVEDSEARCH_NAME]",
-					"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])" },
-			// "-qsj, \t--querysavedsearchjson \t(CLI: same as querysavedsearch, but output
-			// as jsonlist)\n" +
-
-			new String[] { "-qg SAVEDSEARCH_NAME GROUP_NAME", "--definegroupbysearch SAVEDSEARCH_NAME GROUP_NAME",
-					"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME" },
-			new String[] { "--initUserRoles", "",
-					"On command line, perform  the complete initialization of user roles if something was changed" },
-
-			new String[] { "--gzip [y/n]", "",
-					"Activate compressed transmission of data from opsi server yes/no. DEFAULT: y" },
-			new String[] { "--ssh-immediate-connect [y/n]", "",
-					"Try to create a SSH connection on start. DEFAULT: " + getYNforBoolean(sshConnectOnStart) + "" },
-			new String[] { "--ssh-key SSHKEY", "",
-					"Full path with filename from sshkey used for authentication on ssh server" },
-			new String[] { "--ssh-passphrase PASSPHRASE", "",
-					"Passphrase for given sshkey used for authentication on ssh server" },
-			new String[] { "--version", "", "Tell configed version" },
-			new String[] { "--collect_queries_until_no N", "",
-					"Collect the first N queries; N = " + OpsiMethodCall.maxCollectSize
-							+ " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' " },
-			new String[] { "--help", "", "Give this help" },
-			new String[] { "--loglevel L", "",
-					"Set logging level L, L is a number >= " + Logging.LEVEL_NONE + ", <= " + Logging.LEVEL_SECRET
-							+ " . DEFAULT: " + Logging.getLogLevelConsole() },
-
-			// if possible in PersistenceController,
-			new String[] { "--localizationfile EXTRA_LOCALIZATION_FILENAME", "",
-					"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: "
-							+ LOCALIZATION_FILENAME_REGEX.replace("...*\\", "LOCALENAME") },
-			new String[] { "--localizationstrings", "",
-					"For translation work, show internal labels together with the strings of selected localization" },
-			new String[] { "--swaudit-pdf FILE_WITH_CLIENT_IDS_EACH_IN_A_LINE [OUTPUT_PATH]", "",
-					"export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)" },
-			new String[] { "--swaudit-csv FILE_WITH_CLIENT_IDS_EACH_IN_A_LINE [OUTPUT_PATH]", "",
-					"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)" },
-
-			new String[] { "--disable-certificate-verification", "",
-					"Disable opsi-certificate verification with server, by DEFAULT enabled" },
-
-			new String[] { "--logviewer", "", "this option will start the logviewer instead of the configed" }
-
-			// undocumented
-	};
 
 	public static final Charset serverCharset = StandardCharsets.UTF_8;
 	public static final String JAVA_VERSION = System.getProperty("java.version");
@@ -245,64 +158,6 @@ public class Configed {
 		}
 	}
 
-	private static String tabs(int count) {
-		StringBuilder buf = new StringBuilder("");
-		for (int j = 0; j < count; j++) {
-			buf.append("\t");
-		}
-		return buf.toString();
-	}
-
-	@SuppressWarnings("java:S106")
-	private static void usage() {
-		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-		Logging.essential(USAGE_INFO);
-
-		final int tabWidth = 8;
-		int length0 = 0;
-		int length1 = 0;
-
-		for (int i = 0; i < usageLines.length; i++) {
-			// we find max of fillTabs0, fillTabs1
-			int len = usageLines[i][0].length();
-
-			if (len > length0) {
-				length0 = len;
-			}
-
-			len = usageLines[i][1].length();
-
-			if (len > length1) {
-				length1 = len;
-			}
-		}
-
-		int allTabs0 = length0 / tabWidth + 1;
-		int allTabs1 = length1 / tabWidth + 1;
-
-		for (int i = 0; i < usageLines.length; i++) {
-			int startedTabs0 = usageLines[i][0].length() / tabWidth;
-			int startedTabs1 = usageLines[i][1].length() / tabWidth;
-
-			Logging.essential("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
-					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
-		}
-	}
-
-	private static boolean isValue(String[] args, int i) {
-		return i < args.length && args[i].indexOf('-') != 0;
-	}
-
-	private static String getArg(String[] args, int i) {
-		if (args.length <= i + 1 || args[i + 1].indexOf('-') == 0) {
-			Logging.error("Missing value for option " + args[i]);
-			usage();
-			endApp(ERROR_MISSING_VALUE_FOR_OPTION);
-		}
-		i++;
-		return args[i];
-	}
-
 	public static void startWithLocale() {
 		Logging.info("system information: ");
 
@@ -323,7 +178,6 @@ public class Configed {
 		SwingUtilities.invokeLater(configedMain::init);
 
 		try {
-
 			SwingUtilities.invokeAndWait(() -> {
 				if (paramClient != null || paramClientgroup != null) {
 					if (paramClientgroup != null) {
@@ -365,243 +219,6 @@ public class Configed {
 		return refreshMinutes;
 	}
 
-	@SuppressWarnings("java:S106")
-	private static void processArgs(String[] args) {
-		Logging.debug("args " + Arrays.toString(args));
-
-		if (args.length == 2 && "--args".equals(args[0])) {
-			args = args[1].split(";;");
-		}
-
-		for (int i = 0; i < args.length; i++) {
-
-			if ("--help".equals(args[i])) {
-				usage();
-				endApp(NO_ERROR);
-			}
-		}
-
-		int firstPossibleNonOptionIndex = args.length - 1;
-
-		int i = 0;
-		while (i < args.length) {
-
-			// no option
-			if (args[i].charAt(0) != '-') {
-				if (i < firstPossibleNonOptionIndex) {
-					usage();
-					endApp(NO_ERROR);
-				}
-				i++;
-			} else {
-				// options
-
-				if ("-l".equals(args[i]) || "--locale".equals(args[i])) {
-					locale = getArg(args, i);
-					i = i + 2;
-				} else if ("-h".equals(args[i]) || "--host".equals(args[i])) {
-					host = getArg(args, i);
-					i = i + 2;
-				} else if ("-u".equals(args[i]) || "--user".equals(args[i])) {
-					user = getArg(args, i);
-					i = i + 2;
-				} else if ("-p".equals(args[i]) || "--password".equals(args[i])) {
-					password = getArg(args, i);
-					i = i + 2;
-				} else if ("-c".equals(args[i]) || "--client".equals(args[i])) {
-					client = getArg(args, i);
-					i = i + 2;
-				} else if ("-g".equals(args[i]) || "--group".equals(args[i])) {
-					clientgroup = getArg(args, i);
-					i = i + 2;
-				} else if ("-t".equals(args[i]) || "--tab".equals(args[i])) {
-					String tabS = getArg(args, i);
-					try {
-						tab = Integer.parseInt(tabS);
-					} catch (NumberFormatException ex) {
-						Logging.debug("  \n\nArgument >" + tabS + "< has no integer format");
-						usage();
-						endApp(ERROR_INVALID_OPTION);
-					}
-					i = i + 2;
-				} else if ("-d".equals(args[i]) || "--logdirectory".equals(args[i])) {
-					Logging.logDirectoryName = getArg(args, i);
-					i = i + 2;
-				} else if ("-s".equals(args[i]) || "--savedstates".equals(args[i])) {
-					savedStatesLocationName = getArg(args, i);
-					String canonicalPath = null;
-					try {
-						canonicalPath = new File(savedStatesLocationName).getCanonicalPath();
-					} catch (IOException ex) {
-						Logging.debug("savedstates argument " + ex);
-					}
-					if (canonicalPath != null) {
-						savedStatesLocationName = canonicalPath;
-					}
-
-					i = i + 2;
-				} else if ("-r".equals(args[i]) || "--refreshminutes".equals(args[i])) {
-					String test = getArg(args, i);
-
-					try {
-						refreshMinutes = Integer.valueOf(test);
-					} catch (NumberFormatException ex) {
-						Logging.debug("  \n\nArgument >" + test + "< has no integer format");
-						usage();
-						endApp(ERROR_INVALID_OPTION);
-					}
-
-					i = i + 2;
-				} else if ("--ssh-immediate-connect".equals(args[i])) {
-					i = i + 1;
-
-					if (isValue(args, i)) {
-						if ("Y".equalsIgnoreCase(args[i])) {
-							sshConnectOnStart = true;
-
-						} else if ("N".equalsIgnoreCase(args[i])) {
-							sshConnectOnStart = false;
-
-						} else {
-							usage();
-							endApp(ERROR_INVALID_OPTION);
-						}
-					}
-					i = i + 1;
-				} else if ("--ssh-key".equals(args[i])) {
-					sshKey = getArg(args, i);
-					i = i + 2;
-				} else if ("--ssh-passphrase".equals(args[i])) {
-					sshKeyPass = getArg(args, i);
-					i = i + 2;
-				} else if ("-qs".equals(args[i]) || "--querysavedsearch".equals(args[i])) {
-					optionCLIQuerySearch = true;
-					savedSearch = getArg(args, i);
-					i = i + 2;
-
-				} else if ("-qg".equals(args[i]) || "--definegroupbysearch".equals(args[i])) {
-					optionCLIDefineGroupBySearch = true;
-					savedSearch = getArg(args, i);
-					i++;
-					group = getArg(args, i);
-					i = i + 2;
-
-				} else if ("--initUserRoles".equals(args[i])) {
-					optionCLIuserConfigProducing = true;
-
-					i++;
-				} else if ("--version".equals(args[i])) {
-					Logging.essential("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
-					System.exit(0);
-				} else if ("--help".equals(args[i])) {
-					usage();
-					System.exit(0);
-				} else if ("--collect_queries_until_no".equals(args[i])) {
-					String no = getArg(args, i);
-					try {
-						OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
-					} catch (NumberFormatException ex) {
-						Logging.debug("  \n\nArgument >" + no + "< has no integer format");
-						usage();
-						endApp(ERROR_INVALID_OPTION);
-					}
-					i = i + 2;
-				} else if ("--loglevel".equals(args[i])) {
-					String s = "?";
-					try {
-						s = getArg(args, i);
-						loglevelFile = loglevelConsole = Integer.valueOf(s);
-					} catch (NumberFormatException ex) {
-						Logging.debug(" \n\nArgument >" + s + "< has no integer format");
-					}
-					i = i + 2;
-				} else if ("--localizationfile".equals(args[i])) {
-					String extraLocalizationFileName = getArg(args, i);
-
-					boolean success = false;
-
-					String[] parts = null;
-
-					try {
-						File extraLocalizationFile = new File(extraLocalizationFileName);
-						if (!extraLocalizationFile.exists()) {
-							Logging.debug("File not found: " + extraLocalizationFileName);
-						} else if (!extraLocalizationFile.canRead()) {
-							Logging.debug("File not readable " + extraLocalizationFileName);
-						} else {
-							Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
-									+ extraLocalizationFileName.matches("configed_...*\\.properties") + " --  "
-									+ extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX));
-
-							parts = extraLocalizationFileName.split("_");
-
-							Logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
-
-							if (!extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX)) {
-								Logging.debug("localization file does not have the expected format " + Messages.APPNAME
-										+ "_LOCALE.properties");
-							} else {
-								extraLocalization = new PropertiesStore(extraLocalizationFile);
-								extraLocalization.load();
-
-								success = true;
-							}
-						}
-					} catch (Exception ex) {
-						Logging.error(extraLocalizationFileName + " problem", ex);
-					}
-
-					i = i + 2;
-
-					if (!success) {
-						endApp(ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
-					}
-				} else if ("--localizationstrings".equals(args[i])) {
-					showLocalizationStrings = true;
-					i = i + 1;
-				} else if ("--swaudit-pdf".equals(args[i])) {
-					optionCLISwAuditPDF = true;
-					clientsFile = getArg(args, i);
-					i = i + 2;
-					if (args.length > i && args[i].charAt(0) != '-') {
-						outDir = args[i];
-						i = i + 1;
-					}
-				} else if ("--swaudit-csv".equals(args[i])) {
-					optionCLISwAuditCSV = true;
-					clientsFile = getArg(args, i);
-					i = i + 2;
-					if (args.length > i && args[i].charAt(0) != '-') {
-						outDir = args[i];
-						i = i + 1;
-					}
-				} else if ("--halt".equals(args[i])) {
-					i = i + 1;
-				} else if ("--disable-certificate-verification".equals(args[i])) {
-					Globals.disableCertificateVerification = true;
-					i = i + 1;
-				} else if ("--logviewer".equals(args[i])) {
-					logviewer = true;
-					i = i + 1;
-				} else {
-					Logging.debug("an option is not valid: " + args[i]);
-					usage();
-					endApp(ERROR_INVALID_OPTION);
-				}
-			}
-		}
-		Logging.debug("configed: args recognized");
-
-		Logging.setLogLevelConsole(loglevelConsole);
-		Logging.setLogLevelFile(loglevelFile);
-		Logging.setLogfileMarker(host);
-		Logging.init();
-		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
-		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
-			Logging.setSuppressConsole();
-		}
-	}
-
 	public static void endApp(int exitcode) {
 		if (savedStates != null) {
 			try {
@@ -619,7 +236,6 @@ public class Configed {
 		}
 
 		System.exit(exitcode);
-
 	}
 
 	public static String getResourceValue(String key) {
@@ -794,6 +410,7 @@ public class Configed {
 	}
 
 	private static void processARGS(Options options, String[] args) throws ParseException {
+
 		CommandLineParser parser = new DefaultParser(false);
 		CommandLine cmd = parser.parse(options, args);
 
@@ -827,7 +444,7 @@ public class Configed {
 				tab = Integer.parseInt(tabString);
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + tabString + "< has no integer format");
-				usage();
+				showHelp(options);
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -857,7 +474,7 @@ public class Configed {
 				refreshMinutes = Integer.valueOf(refreshMinutesString);
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + refreshMinutesString + "< has no integer format");
-				usage();
+				showHelp(options);
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -870,7 +487,7 @@ public class Configed {
 			} else if ("N".equalsIgnoreCase(sshImmediateConnectString)) {
 				sshConnectOnStart = false;
 			} else {
-				usage();
+				showHelp(options);
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -916,7 +533,7 @@ public class Configed {
 				OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + no + "< has no integer format");
-				usage();
+				showHelp(options);
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -998,9 +615,22 @@ public class Configed {
 		if (cmd.hasOption("logviewer")) {
 			logviewer = true;
 		}
+
+		Logging.debug("configed: args recognized");
+
+		Logging.setLogLevelConsole(loglevelConsole);
+		Logging.setLogLevelFile(loglevelFile);
+		Logging.setLogfileMarker(host);
+		Logging.init();
+		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
+		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
+			Logging.setSuppressConsole();
+		}
 	}
 
 	private static void showHelp(Options options) {
+		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setWidth(Integer.MAX_VALUE);
 		formatter.printHelp(USAGE_INFO, options);
@@ -1011,15 +641,13 @@ public class Configed {
 	 */
 	public static void main(String[] args) {
 
-		//processArgs(args);
-
 		Options options = createOptions();
 		try {
 			processARGS(options, args);
 		} catch (ParseException pe) {
-			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("Configed " + Globals.VERSION, USAGE_INFO, options, "footer", true);
+			showHelp(options);
 			Logging.error("could not parse parameters", pe);
+			endApp(ERROR_MISSING_VALUE_FOR_OPTION);
 		}
 
 		if (ConfigedMain.THEMES) {
@@ -1099,10 +727,9 @@ public class Configed {
 		}
 
 		try {
-			String resourceS = Globals.ICON_RESOURCE_NAME;
-			URL resource = Globals.class.getResource(resourceS);
+			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
 			if (resource == null) {
-				Logging.debug("image resource " + resourceS + "  not found");
+				Logging.debug("image resource " + Globals.ICON_RESOURCE_NAME + "  not found");
 			} else {
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 			}
