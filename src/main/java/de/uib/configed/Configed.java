@@ -121,7 +121,6 @@ public class Configed {
 			new String[] { "--loglevel L", "",
 					"Set logging level L, L is a number >= " + Logging.LEVEL_NONE + ", <= " + Logging.LEVEL_SECRET
 							+ " . DEFAULT: " + Logging.getLogLevelConsole() },
-			new String[] { "--halt", "", "Use  first occurring debug halt point that may be in the code" },
 
 			// if possible in PersistenceController,
 			new String[] { "--localizationfile EXTRA_LOCALIZATION_FILENAME", "",
@@ -777,7 +776,6 @@ public class Configed {
 		options.addOption(null, "collect_queries_until_no", true, "Collect the first N queries; N = "
 				+ OpsiMethodCall.maxCollectSize + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
 		options.addOption(null, "help", false, "Give this help");
-		options.addOption(null, "halt", false, "Use  first occurring debug halt point that may be in the code");
 		options.addOption(null, "localizationfile", false,
 				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
 		options.addOption(null, "localizationstrings", true,
@@ -927,6 +925,74 @@ public class Configed {
 			} catch (NumberFormatException ex) {
 				Logging.debug(" \n\nArgument >" + loglevelString + "< has no integer format");
 			}
+		}
+
+		if (cmd.hasOption("localizationfile")) {
+			String extraLocalizationFileName = cmd.getOptionValue("localizationfile");
+			boolean success = false;
+
+			String[] parts = null;
+
+			try {
+				File extraLocalizationFile = new File(extraLocalizationFileName);
+				if (!extraLocalizationFile.exists()) {
+					Logging.debug("File not found: " + extraLocalizationFileName);
+				} else if (!extraLocalizationFile.canRead()) {
+					Logging.debug("File not readable " + extraLocalizationFileName);
+				} else {
+					Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
+							+ extraLocalizationFileName.matches("configed_...*\\.properties") + " --  "
+							+ extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX));
+
+					parts = extraLocalizationFileName.split("_");
+
+					Logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
+
+					if (!extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX)) {
+						Logging.debug("localization file does not have the expected format " + Messages.APPNAME
+								+ "_LOCALE.properties");
+					} else {
+						extraLocalization = new PropertiesStore(extraLocalizationFile);
+						extraLocalization.load();
+
+						success = true;
+					}
+				}
+			} catch (Exception ex) {
+				Logging.error(extraLocalizationFileName + " problem", ex);
+			}
+
+			if (!success) {
+				endApp(ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
+			}
+		}
+
+		if (cmd.hasOption("localizationstrings")) {
+			showLocalizationStrings = true;
+		}
+
+		if (cmd.hasOption("swaudit-pdf")) {
+			optionCLISwAuditPDF = true;
+			String[] values = cmd.getOptionValues("swaudit-pdf");
+			clientsFile = values[0];
+
+			outDir = args[1];
+		}
+
+		if (cmd.hasOption("swaudit-csv")) {
+			optionCLISwAuditCSV = true;
+			String[] values = cmd.getOptionValues("swaudit-pdf");
+			clientsFile = values[0];
+
+			outDir = args[1];
+		}
+
+		if (cmd.hasOption("disable-certificate-verification")) {
+			Globals.disableCertificateVerification = true;
+		}
+
+		if (cmd.hasOption("logviewer")) {
+			logviewer = true;
 		}
 	}
 
