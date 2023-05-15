@@ -35,7 +35,7 @@ public class Main {
 	private static void parseArgs(Options options, String[] args) throws ParseException {
 
 		CommandLineParser parser = new DefaultParser(false);
-		CommandLine cmd = parser.parse(options, args);
+		CommandLine cmd = parser.parse(options, args, true);
 
 		if (cmd.hasOption("lv")) {
 			isLogviewer = true;
@@ -107,7 +107,7 @@ public class Main {
 		try {
 			parseArgs(options, args);
 		} catch (ParseException e) {
-			// TODO 
+			Logging.error("could not parse arguments in main", e);
 		}
 
 		if (ConfigedMain.THEMES) {

@@ -8,6 +8,13 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import de.uib.configed.Globals;
 import de.uib.logviewer.gui.LogFrame;
 import de.uib.messages.Messages;
@@ -16,16 +23,43 @@ import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 
 public class Logviewer {
 
-	public static final String usage = "\n" + "\tlogview [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
-
-	public static final String[][] usageLines = new String[][] {
-			new String[] { "-d PATH", "--logdirectory PATH", "Directory for the log files" },
-			new String[] { "-f FILENAME", "--filename FILENAME", "filename for the log file" },
-			new String[] { "--version", "", "Tell logview version" },
-			new String[] { "--help", "", "Give this help" }, };
+	public static final String USAGE_INFO = "\n" + "\tlogview [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
 
 	private static String fileName = "";
 	private static String logdirectory = "";
+
+	private static Options createOptions() {
+		Options options = new Options();
+		options.addOption("d", "logdirectory", true, "Directory for the log files");
+		options.addOption("f", "filename", true, "filename for the log file");
+		options.addOption(null, "version", false, "Tell logviewer version");
+		options.addOption(null, "help", false, "Give this help");
+
+		return options;
+	}
+
+	private static void processArgs(Options options, String[] args) throws ParseException {
+		CommandLineParser parser = new DefaultParser(false);
+		CommandLine cmd = parser.parse(options, args);
+
+		if (cmd.hasOption("help")) {
+			showHelp(options);
+			endApp(0);
+		}
+
+		if (cmd.hasOption("logdirectory")) {
+			logdirectory = cmd.getOptionValue("logdirectory");
+		}
+
+		if (cmd.hasOption("f")) {
+			fileName = cmd.getOptionValue("f");
+		}
+
+		if (cmd.hasOption("version")) {
+			Logging.essential(
+					"configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+		}
+	}
 
 	/** construct the application */
 	public Logviewer(String paramLogdirectory, String paramLocale, String paramFilename) {
@@ -127,95 +161,12 @@ public class Logviewer {
 		return buf.toString();
 	}
 
-	private static void usage() {
-		Logging.essential(usage);
+	private static void showHelp(Options options) {
+		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 
-		final int TAB_WIDTH = 8;
-		int length0 = 0;
-		int length1 = 0;
-
-		for (int i = 0; i < usageLines.length; i++) {
-			//we find max of fillTabs0, fillTabs1
-			int len = usageLines[i][0].length();
-
-			if (len > length0) {
-				length0 = len;
-			}
-
-			len = usageLines[i][1].length();
-
-			if (len > length1) {
-				length1 = len;
-			}
-		}
-
-		int allTabs0 = length0 / TAB_WIDTH + 1;
-
-		int allTabs1 = length1 / TAB_WIDTH + 1;
-
-		for (int i = 0; i < usageLines.length; i++) {
-
-			int startedTabs0 = usageLines[i][0].length() / TAB_WIDTH;
-			int startedTabs1 = usageLines[i][1].length() / TAB_WIDTH;
-
-			Logging.info("\t" + usageLines[i][0] + tabs(allTabs0 - startedTabs0) + usageLines[i][1]
-					+ tabs(allTabs1 - startedTabs1) + usageLines[i][2]);
-		}
-
-	}
-
-	private static String getArg(String[] args, int i) {
-		if (args.length <= i + 1 || args[i + 1].indexOf('-') == 0) {
-			System.err.println("Missing value for option " + args[i]);
-			usage();
-			endApp(1);
-		}
-		i++;
-		return args[i];
-	}
-
-	private static void processArgs(String[] args) {
-
-		for (int i = 0; i < args.length; i++) {
-			if ("--help".equals(args[i])) {
-				usage();
-				endApp(0);
-			}
-		}
-
-		int firstPossibleNonOptionIndex = args.length - 1;
-
-		int i = 0;
-		while (i < args.length) {
-
-			if (args[i].charAt(0) != '-') {
-				//no option
-				if (i < firstPossibleNonOptionIndex) {
-					usage();
-					endApp(0);
-				}
-				i++;
-			} else {
-				// options
-
-				if ("-d".equals(args[i]) || "--logdirectory".equals(args[i])) {
-					logdirectory = getArg(args, i);
-					i = i + 2;
-				} else if ("-f".equals(args[i]) || "--filename".equals(args[i])) {
-					fileName = getArg(args, i);
-					i = i + 2;
-				} else if ("--help".equals(args[i])) {
-					usage();
-					System.exit(0);
-				} else if ("--logviewer".equals(args[i])) {
-					// Do nothing since it was used for starting the logviewer
-					i++;
-				} else {
-					usage();
-					endApp(0);
-				}
-			}
-		}
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.setWidth(Integer.MAX_VALUE);
+		formatter.printHelp(USAGE_INFO, options);
 	}
 
 	private static void endApp(int exitcode) {
@@ -227,7 +178,12 @@ public class Logviewer {
 	 */
 	public static void main(String[] args) {
 
-		processArgs(args);
+		Options options = createOptions();
+
+		try {
+			processArgs(options, args);
+		} catch (ParseException e) {
+		}
 
 		try {
 			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);
@@ -247,6 +203,6 @@ public class Logviewer {
 			Logging.info(" setting property swing.aatext" + ex);
 		}
 
-		new Logviewer(logdirectory, "de", fileName);
+		new Logviewer(logdirectory, "en", fileName);
 	}
 }
