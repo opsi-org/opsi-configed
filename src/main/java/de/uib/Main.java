@@ -6,6 +6,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -15,6 +18,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.Globals;
 import de.uib.configed.tree.ClientTreeUI;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
@@ -22,14 +26,33 @@ import de.uib.utilities.logging.Logging;
 
 public class Main {
 
+	public static final String USAGE_INFO = "configed [OPTIONS] " + ", where an OPTION may be\n";
+
 	private static boolean isLogviewer;
 
-	private static Options createOptions() {
-		Options options = new Options();
+	public static OptionGroup getGeneralOptions() {
+		OptionGroup optionGroup = new OptionGroup();
+		optionGroup.addOption(
+				new Option("lv", "logviewer", false, "MUST BE FIRST OPTION, use this option to start logviewer"));
+		optionGroup.addOption(new Option("d", "directory", true,
+				"Directory for the log files. DEFAULT: an opsi log directory, dependent on system and user privileges, lookup in /help/logfile"));
 
-		options.addOption("lv", "logviewer", false, "description of logviewer");
+		return optionGroup;
+	}
+
+	private static Options createGeneralOptions() {
+		Options options = new Options();
+		options.addOptionGroup(getGeneralOptions());
 
 		return options;
+	}
+
+	public static void showHelp(Options options) {
+		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+
+		HelpFormatter formatter = new HelpFormatter();
+		formatter.setWidth(Integer.MAX_VALUE);
+		formatter.printHelp(Main.USAGE_INFO, options);
 	}
 
 	private static void parseArgs(Options options, String[] args) throws ParseException {
@@ -39,6 +62,10 @@ public class Main {
 
 		if (cmd.hasOption("lv")) {
 			isLogviewer = true;
+		}
+
+		if (cmd.hasOption("d")) {
+			Logging.logDirectoryName = cmd.getOptionValue("d");
 		}
 	}
 
@@ -103,7 +130,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		Options options = createOptions();
+		Options options = createGeneralOptions();
 		try {
 			parseArgs(options, args);
 		} catch (ParseException e) {

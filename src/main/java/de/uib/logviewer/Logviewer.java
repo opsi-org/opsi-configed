@@ -11,10 +11,11 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import de.uib.Main;
+import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.logviewer.gui.LogFrame;
 import de.uib.messages.Messages;
@@ -23,46 +24,10 @@ import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 
 public class Logviewer {
 
-	public static final String USAGE_INFO = "\n" + "\tlogview [OPTIONS] \n" + "\t\twhere an OPTION may be \n";
-
 	private static String fileName = "";
-	private static String logdirectory = "";
-
-	private static Options createOptions() {
-		Options options = new Options();
-		options.addOption("d", "logdirectory", true, "Directory for the log files");
-		options.addOption("f", "filename", true, "filename for the log file");
-		options.addOption(null, "version", false, "Tell logviewer version");
-		options.addOption(null, "help", false, "Give this help");
-
-		return options;
-	}
-
-	private static void processArgs(Options options, String[] args) throws ParseException {
-		CommandLineParser parser = new DefaultParser(false);
-		CommandLine cmd = parser.parse(options, args);
-
-		if (cmd.hasOption("help")) {
-			showHelp(options);
-			endApp(0);
-		}
-
-		if (cmd.hasOption("logdirectory")) {
-			logdirectory = cmd.getOptionValue("logdirectory");
-		}
-
-		if (cmd.hasOption("f")) {
-			fileName = cmd.getOptionValue("f");
-		}
-
-		if (cmd.hasOption("version")) {
-			Logging.essential(
-					"configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-		}
-	}
 
 	/** construct the application */
-	public Logviewer(String paramLogdirectory, String paramLocale, String paramFilename) {
+	public Logviewer(String paramLocale) {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
@@ -91,20 +56,6 @@ public class Logviewer {
 		Logging.info("getLocales: " + existingLocales);
 		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
 
-		// set wanted directory for logging
-		if (logdirectory != null) {
-			if (new File(logdirectory).isDirectory()) {
-				Logging.logDirectoryName = logdirectory;
-			} else {
-				Logging.error("This is no directory: " + logdirectory);
-				Logging.logDirectoryName = "";
-			}
-		} else {
-			Logging.info(" --  wantedDirectory " + Logging.logDirectoryName);
-		}
-
-		Logging.logDirectoryName = "";
-
 		// set wanted fileName
 		if (fileName != null) {
 			if (new File(fileName).isDirectory()) {
@@ -121,6 +72,38 @@ public class Logviewer {
 		}
 
 		SwingUtilities.invokeLater(this::init);
+	}
+
+	private static Options createLogviewerOptions() {
+		Options options = new Options();
+
+		options.addOption("f", "filename", true, "filename for the log file");
+		options.addOption("v", "version", false, "Tell logviewer version");
+		options.addOption(null, "help", false, "Give this help");
+
+		options.addOptionGroup(Main.getGeneralOptions());
+
+		return options;
+	}
+
+	private static void processArgs(Options options, String[] args) throws ParseException {
+		CommandLineParser parser = new DefaultParser(false);
+		CommandLine cmd = parser.parse(options, args);
+
+		if (cmd.hasOption("help")) {
+			Main.showHelp(options);
+			endApp(0);
+		}
+
+		if (cmd.hasOption("f")) {
+			fileName = cmd.getOptionValue("f");
+		}
+
+		if (cmd.hasOption("version")) {
+			Logging.essential(
+					"configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+			endApp(0);
+		}
 	}
 
 	private void init() {
@@ -152,14 +135,6 @@ public class Logviewer {
 
 	}
 
-	private static void showHelp(Options options) {
-		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-
-		HelpFormatter formatter = new HelpFormatter();
-		formatter.setWidth(Integer.MAX_VALUE);
-		formatter.printHelp(USAGE_INFO, options);
-	}
-
 	private static void endApp(int exitcode) {
 		System.exit(exitcode);
 	}
@@ -169,11 +144,13 @@ public class Logviewer {
 	 */
 	public static void main(String[] args) {
 
-		Options options = createOptions();
+		Options options = createLogviewerOptions();
 
 		try {
 			processArgs(options, args);
 		} catch (ParseException e) {
+			Logging.error("Problem parsing arguments in logviewer main", e);
+			endApp(Configed.ERROR_INVALID_OPTION);
 		}
 
 		try {
@@ -184,16 +161,16 @@ public class Logviewer {
 				Globals.mainIcon = Toolkit.getDefaultToolkit().createImage(resource);
 			}
 		} catch (Exception ex) {
-			Logging.warning("imageHandled failed: " + ex.toString());
+			Logging.warning("imageHandled failed: ", ex);
 		}
 
 		// Turn on antialiasing for text 
 		try {
 			System.setProperty("swing.aatext", "true");
 		} catch (Exception ex) {
-			Logging.info(" setting property swing.aatext" + ex);
+			Logging.info(" setting property swing.aatext" + ex.toString());
 		}
 
-		new Logviewer(logdirectory, "en", fileName);
+		new Logviewer("en");
 	}
 }

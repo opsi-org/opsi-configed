@@ -17,11 +17,11 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import de.uib.Main;
 import de.uib.configed.clientselection.SavedSearchQuery;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.swinfopage.SWcsvExporter;
@@ -42,8 +42,6 @@ public class Configed {
 	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
 
 	public static boolean sshConnectOnStart;
-
-	public static final String USAGE_INFO = "configed [OPTIONS] " + ", where an OPTION may be\n";
 
 	public static final Charset serverCharset = StandardCharsets.UTF_8;
 	public static final String JAVA_VERSION = System.getProperty("java.version");
@@ -286,7 +284,7 @@ public class Configed {
 		}
 	}
 
-	private static Options createOptions() {
+	private static Options createConfigedOptions() {
 		Options options = new Options();
 		options.addOption(new Option("l", "locale", true,
 				"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale"));
@@ -298,8 +296,6 @@ public class Configed {
 				"clientgroup to preselect. DEFAULT: last selected group reselected");
 		options.addOption("t", "tab", true,
 				"Start with tab number <arg>, index counting starts with 0, works only if a CLIENT is preselected. DEFAULT 0");
-		options.addOption("d", "directory", true,
-				"Directory for the log files. DEFAULT: an opsi log directory, dependent on system and user privileges, lookup in /help/logfile");
 		options.addOption("s", "savedstates", true,
 				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");
 		options.addOption("r", "refreshminutes", true,
@@ -322,9 +318,9 @@ public class Configed {
 		options.addOption(null, "collect_queries_until_no", true, "Collect the first N queries; N = "
 				+ OpsiMethodCall.maxCollectSize + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
 		options.addOption(null, "help", false, "Give this help");
-		options.addOption(null, "localizationfile", false,
+		options.addOption(null, "localizationfile", true,
 				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
-		options.addOption(null, "localizationstrings", true,
+		options.addOption(null, "localizationstrings", false,
 				"For translation work, show internal labels together with the strings of selected localization");
 		options.addOption(null, "swaudit-pdf", true,
 				"export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
@@ -332,6 +328,8 @@ public class Configed {
 				"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
 		options.addOption(null, "disable-certificate-verification", false,
 				"Disable opsi-certificate verification with server, by DEFAULT enabled");
+
+		options.addOptionGroup(Main.getGeneralOptions());
 
 		return options;
 	}
@@ -371,13 +369,9 @@ public class Configed {
 				tab = Integer.parseInt(tabString);
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + tabString + "< has no integer format");
-				showHelp(options);
+				Main.showHelp(options);
 				endApp(ERROR_INVALID_OPTION);
 			}
-		}
-
-		if (cmd.hasOption("d")) {
-			Logging.logDirectoryName = cmd.getOptionValue("d");
 		}
 
 		if (cmd.hasOption("s")) {
@@ -401,7 +395,7 @@ public class Configed {
 				refreshMinutes = Integer.valueOf(refreshMinutesString);
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + refreshMinutesString + "< has no integer format");
-				showHelp(options);
+				Main.showHelp(options);
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -414,7 +408,7 @@ public class Configed {
 			} else if ("N".equalsIgnoreCase(sshImmediateConnectString)) {
 				sshConnectOnStart = false;
 			} else {
-				showHelp(options);
+				Main.showHelp(options);
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -449,7 +443,7 @@ public class Configed {
 		}
 
 		if (cmd.hasOption("help")) {
-			showHelp(options);
+			Main.showHelp(options);
 			endApp(NO_ERROR);
 		}
 
@@ -460,7 +454,7 @@ public class Configed {
 				OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + no + "< has no integer format");
-				showHelp(options);
+				Main.showHelp(options);
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -551,24 +545,16 @@ public class Configed {
 		}
 	}
 
-	private static void showHelp(Options options) {
-		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-
-		HelpFormatter formatter = new HelpFormatter();
-		formatter.setWidth(Integer.MAX_VALUE);
-		formatter.printHelp(USAGE_INFO, options);
-	}
-
 	/**
 	 * main-Methode
 	 */
 	public static void main(String[] args) {
 
-		Options options = createOptions();
+		Options options = createConfigedOptions();
 		try {
 			parseArgs(options, args);
 		} catch (ParseException pe) {
-			showHelp(options);
+			Main.showHelp(options);
 			Logging.error("could not parse parameters", pe);
 			endApp(ERROR_MISSING_VALUE_FOR_OPTION);
 		}
