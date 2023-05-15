@@ -152,15 +152,6 @@ public class Logviewer {
 
 	}
 
-	private static String tabs(int count) {
-		StringBuilder buf = new StringBuilder("");
-		for (int j = 0; j < count; j++) {
-			buf.append("\t");
-		}
-
-		return buf.toString();
-	}
-
 	private static void showHelp(Options options) {
 		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 

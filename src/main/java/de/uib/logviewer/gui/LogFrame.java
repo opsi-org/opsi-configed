@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -26,13 +27,16 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.UIManager;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.LogPane;
+import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ActivityPanel;
 import utils.ExtractorUtil;
@@ -47,14 +51,13 @@ public class LogFrame extends JFrame implements WindowListener {
 	private JMenuBar jMenuBar = new JMenuBar();
 
 	private JMenu jMenuFile;
-
 	private JMenu jMenuView;
+	private JMenu jMenuHelp;
 
-	private JMenu jMenuHelp = new JMenu();
-	private JMenuItem jMenuHelpSupport = new JMenuItem();
-	private JMenuItem jMenuHelpDoc = new JMenuItem();
-	private JMenuItem jMenuHelpForum = new JMenuItem();
-	private JMenuItem jMenuHelpAbout = new JMenuItem();
+	private JMenuItem jMenuHelpSupport;
+	private JMenuItem jMenuHelpDoc;
+	private JMenuItem jMenuHelpForum;
+	private JMenuItem jMenuHelpAbout;
 
 	private LogPane showLogfile;
 
@@ -87,16 +90,13 @@ public class LogFrame extends JFrame implements WindowListener {
 	private void setupMenuFile() {
 		jMenuFile = new JMenu();
 
-		JMenuItem jMenuFileExit = new JMenuItem();
 		JMenuItem jMenuFileOpen = new JMenuItem();
 		JMenuItem jMenuFileClose = new JMenuItem();
 		JMenuItem jMenuFileSave = new JMenuItem();
 		JMenuItem jMenuFileReload = new JMenuItem();
+		JMenuItem jMenuFileExit = new JMenuItem();
 
 		jMenuFile.setText(Configed.getResourceValue("MainFrame.jMenuFile"));
-
-		jMenuFileExit.setText(Configed.getResourceValue("MainFrame.jMenuFileExit"));
-		jMenuFileExit.addActionListener((ActionEvent e) -> exitAction());
 
 		jMenuFileOpen.setText(Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 		jMenuFileOpen.addActionListener(new ActionListener() {
@@ -131,56 +131,85 @@ public class LogFrame extends JFrame implements WindowListener {
 			}
 		});
 
+		JMenu jMenuTheme = new JMenu("Theme");
+		ButtonGroup groupThemes = new ButtonGroup();
+		String selectedTheme = Messages.getSelectedTheme();
+		Logging.debug(this, "selectedLocale " + selectedTheme);
+
+		for (final String themeName : Messages.getAvailableThemes()) {
+			JMenuItem themeItem = new JRadioButtonMenuItem(themeName);
+			Logging.debug(this, "selectedTheme " + themeName);
+			themeItem.setSelected(selectedTheme.equals(themeName));
+			jMenuTheme.add(themeItem);
+			groupThemes.add(themeItem);
+
+			themeItem.addActionListener((ActionEvent e) -> {
+				Messages.setTheme(themeName);
+				Main.setOpsiLaf();
+
+				new Thread() {
+
+					@Override
+					public void run() {
+						// Configed.startWithLocale();
+						Logging.error(this, "not yet implemented");
+					}
+
+				}.start();
+			});
+		}
+
+		jMenuFileExit.setText(Configed.getResourceValue("MainFrame.jMenuFileExit"));
+		jMenuFileExit.addActionListener((ActionEvent e) -> exitAction());
+
 		jMenuFile.add(jMenuFileOpen);
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileClose);
 		jMenuFile.add(jMenuFileSave);
+		if (ConfigedMain.THEMES) {
+			jMenuFile.add(jMenuTheme);
+		}
 		jMenuFile.add(jMenuFileExit);
 	}
 
 	private void setupMenuView() {
-		jMenuView = new JMenu();
-		JMenuItem jMenuViewFontsizePlus = new JMenuItem();
-		JMenuItem jMenuViewFontsizeMinus = new JMenuItem();
 
-		jMenuView.setText(Configed.getResourceValue("LogFrame.jMenuView"));
-
-		jMenuViewFontsizePlus.setText(Configed.getResourceValue("TextPane.fontPlus"));
+		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
 		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
 			showLogfile.increaseFontSize();
 			showLogfile.reload();
 		});
 
-		jMenuViewFontsizeMinus.setText(Configed.getResourceValue("TextPane.fontMinus"));
+		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
 			showLogfile.reduceFontSize();
 			showLogfile.reload();
 		});
 
+		jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
 		jMenuView.add(jMenuViewFontsizePlus);
 		jMenuView.add(jMenuViewFontsizeMinus);
 
 	}
 
 	private void setupMenuHelp() {
-		jMenuHelp.setText(Configed.getResourceValue("MainFrame.jMenuHelp"));
+		jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
 
-		jMenuHelpDoc.setText(Configed.getResourceValue("MainFrame.jMenuDoc"));
+		jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
 		jMenuHelpDoc.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_DOC_PAGE));
 
-		jMenuHelp.add(jMenuHelpDoc);
-
-		jMenuHelpForum.setText(Configed.getResourceValue("MainFrame.jMenuForum"));
+		jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
 		jMenuHelpForum.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_FORUM_PAGE));
-		jMenuHelp.add(jMenuHelpForum);
 
-		jMenuHelpSupport.setText(Configed.getResourceValue("MainFrame.jMenuSupport"));
+		jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
 		jMenuHelpSupport.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
-		jMenuHelp.add(jMenuHelpSupport);
 
-		jMenuHelpAbout.setText(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
+		jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> showAboutAction());
 
+		jMenuHelp.add(jMenuHelpDoc);
+		jMenuHelp.add(jMenuHelpForum);
+		jMenuHelp.add(jMenuHelpSupport);
 		jMenuHelp.add(jMenuHelpAbout);
 
 	}

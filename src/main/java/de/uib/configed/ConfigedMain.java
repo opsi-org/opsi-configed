@@ -152,8 +152,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Are themes enabled?
-	public static final boolean THEMES = false;
-	public static final boolean FONT = false;
+	public static final boolean THEMES = true;
+	public static final boolean FONT = true;
 
 	private static GuiStrategyForLoadingData strategyForLoadingData;
 
