@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.MissingResourceException;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -24,16 +22,10 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-
 import de.uib.configed.clientselection.SavedSearchQuery;
 import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
-import de.uib.configed.tree.ClientTreeUI;
-import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.AbstractPersistenceController;
@@ -46,8 +38,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
 
 public class Configed {
-
-	private static boolean logviewer;
 
 	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
 
@@ -284,67 +274,6 @@ public class Configed {
 		return result;
 	}
 
-	public static void configureUI() {
-		boolean trynimbus = true;
-		boolean found = false;
-
-		try {
-			for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					Logging.info("setting Nimbus look&feel");
-					UIManager.setLookAndFeel(info.getClassName());
-					Logging.info("Nimbus look&feel set, by " + info.getClassName());
-
-					UIManager.put("Tree.selectionBackground", UIManager.get("controlHighlight"));
-
-					UIManager.put("TreeUI", ClientTreeUI.class.getName());
-
-					found = true;
-					break;
-				}
-			}
-		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException
-				| IllegalAccessException e) {
-			// handle exception
-			Logging.error("Failed to configure ui " + e);
-		}
-
-		if (!found) {
-			trynimbus = false;
-		}
-
-		if (!trynimbus) {
-			try {
-				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-			} catch (Exception ex) {
-				Logging.debug("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')," + ex);
-			}
-		}
-
-		// destroys some popups, saves others
-	}
-
-	public static void setOpsiLaf() {
-		Logging.info("set look and feel " + Messages.getSelectedTheme());
-
-		// Location of the theme property files - register them
-		FlatLaf.registerCustomDefaultsSource("de.uib.configed.themes");
-
-		switch (Messages.getSelectedTheme()) {
-		case "Light":
-			FlatLightLaf.setup();
-			break;
-
-		case "Dark":
-			FlatDarkLaf.setup();
-			break;
-
-		default:
-			Logging.warning("tried to set theme in setOpsiLaf that does not exist: " + Messages.getSelectedTheme());
-			break;
-		}
-	}
-
 	private static void addMissingArgs() {
 		if (host == null) {
 			host = Globals.getCLIparam("Host: ", false);
@@ -404,13 +333,10 @@ public class Configed {
 		options.addOption(null, "disable-certificate-verification", false,
 				"Disable opsi-certificate verification with server, by DEFAULT enabled");
 
-		// TODO some options still missing
-		options.addOption("lv", "logviewer", false, "description of logviewer");
-
 		return options;
 	}
 
-	private static void processARGS(Options options, String[] args) throws ParseException {
+	private static void parseArgs(Options options, String[] args) throws ParseException {
 
 		CommandLineParser parser = new DefaultParser(false);
 		CommandLine cmd = parser.parse(options, args);
@@ -613,10 +539,6 @@ public class Configed {
 			Globals.disableCertificateVerification = true;
 		}
 
-		if (cmd.hasOption("logviewer")) {
-			logviewer = true;
-		}
-
 		Logging.debug("configed: args recognized");
 
 		Logging.setLogLevelConsole(loglevelConsole);
@@ -644,24 +566,14 @@ public class Configed {
 
 		Options options = createOptions();
 		try {
-			processARGS(options, args);
+			parseArgs(options, args);
 		} catch (ParseException pe) {
 			showHelp(options);
 			Logging.error("could not parse parameters", pe);
 			endApp(ERROR_MISSING_VALUE_FOR_OPTION);
 		}
 
-		if (ConfigedMain.THEMES) {
-			setOpsiLaf();
-		} else {
-			configureUI();
-		}
-
-		if (logviewer) {
-			Logviewer.main(args);
-		} else {
-			startConfiged();
-		}
+		startConfiged();
 	}
 
 	private static void startConfiged() {

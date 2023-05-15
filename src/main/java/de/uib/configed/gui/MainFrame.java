@@ -84,6 +84,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 /**
  * configed - configuration editor for client work stations in opsi
@@ -685,7 +686,7 @@ public class MainFrame extends JFrame
 			themeItem.addActionListener((ActionEvent e) -> {
 				configedMain.closeInstance(true);
 				Messages.setTheme(themeName);
-				Configed.setOpsiLaf();
+				Main.setOpsiLaf();
 
 				new Thread() {
 

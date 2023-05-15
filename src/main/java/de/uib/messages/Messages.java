@@ -1,6 +1,7 @@
 package de.uib.messages;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -222,8 +223,8 @@ public final class Messages {
 				}
 				line = reader.readLine();
 			}
-		} catch (Exception ex) {
-			Logging.warning("Messages exception on reading: " + ex);
+		} catch (IOException ex) {
+			Logging.warning("Messages exception on reading!", ex);
 		}
 
 		TreeSet<String> names = new TreeSet<>();
