@@ -129,7 +129,7 @@ public final class Messages {
 		return myLocale;
 	}
 
-	public static Locale setLocale(String characteristics) {
+	public static void setLocale(String characteristics) {
 		Logging.debug("Messages, setLocale");
 		Locale loc = null;
 		if (characteristics != null && !characteristics.isEmpty()) {
@@ -166,8 +166,6 @@ public final class Messages {
 		} catch (MissingResourceException e) {
 			Logging.info("Missing messages for locale EN: " + e);
 		}
-
-		return loc;
 	}
 
 	public static List<String> getLocaleNames() {
