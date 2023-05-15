@@ -830,6 +830,16 @@ public class Configed {
 				+ OpsiMethodCall.maxCollectSize + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
 		options.addOption("help", false, "Give this help");
 		options.addOption("halt", false, "Use  first occurring debug halt point that may be in the code");
+		options.addOption("localizationfile", false,
+				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
+		options.addOption("localizationstrings", true,
+				"For translation work, show internal labels together with the strings of selected localization");
+		options.addOption("swaudit-pdf", true,
+				"export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
+		options.addOption("swaudit-csv", true,
+				"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
+		options.addOption("disable-certificate-verification", false,
+				"Disable opsi-certificate verification with server, by DEFAULT enabled");
 
 		// TODO some options still missing
 		options.addOption("lv", "logviewer", false, "description of logviewer");
