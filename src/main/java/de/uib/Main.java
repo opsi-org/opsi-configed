@@ -36,6 +36,8 @@ public class Main {
 		List<Option> options = new ArrayList<>();
 
 		options.add(new Option("lv", "logviewer", false, "MUST BE FIRST OPTION, use this option to start logviewer"));
+		options.add(new Option("l", "locale", true,
+		"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale"));
 		options.add(new Option("d", "directory", true,
 				"Directory for the log files. DEFAULT: an opsi log directory, dependent on system and user privileges, lookup in /help/logfile"));
 		options.add(new Option(null, "loglevel", true, "Set logging level L, L is a number >= " + Logging.LEVEL_NONE
@@ -70,6 +72,16 @@ public class Main {
 
 		if (cmd.hasOption("lv")) {
 			isLogviewer = true;
+		}
+
+		if (cmd.hasOption("l")) {
+			String locale = cmd.getOptionValue("l");		
+			
+			// Set locale
+			List<String> existingLocales = Messages.getLocaleNames();
+			Messages.setLocale(locale);
+			Logging.info("getLocales: " + existingLocales);
+			Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
 		}
 
 		if (cmd.hasOption("d")) {

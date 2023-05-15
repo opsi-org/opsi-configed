@@ -51,7 +51,6 @@ public class Configed {
 	private static PropertiesStore extraLocalization;
 	private static boolean showLocalizationStrings;
 
-	private static String locale;
 	private static String host;
 	public static String user;
 	private static String password;
@@ -99,8 +98,8 @@ public class Configed {
 	private static FTextArea fErrorOutOfMemory;
 
 	/** construct the application */
-	public Configed(String paramLocale, String paramHost, String paramUser, String paramPassword,
-			final String paramClient, final String paramClientgroup, final Integer paramTab) {
+	public Configed(String paramHost, String paramUser, String paramPassword, final String paramClient,
+			final String paramClientgroup, final Integer paramTab) {
 
 		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);
 
@@ -125,12 +124,6 @@ public class Configed {
 		} catch (Exception ex) {
 			Logging.debug("imageHandled failed: " + ex.toString());
 		}
-
-		// Set locale
-		List<String> existingLocales = Messages.getLocaleNames();
-		Messages.setLocale(paramLocale);
-		Logging.info("getLocales: " + existingLocales);
-		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
 
 		startWithLocale();
 	}
@@ -284,8 +277,6 @@ public class Configed {
 
 	private static Options createConfigedOptions() {
 		Options options = new Options();
-		options.addOption(new Option("l", "locale", true,
-				"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale"));
 		options.addOption("h", "host", true, "Configuration server HOST to connect to. DEFAULT: choose interactive");
 		options.addOption("u", "user", true, "user for authentication. DEFAULT: give interactive");
 		options.addOption("p", "password", true, "password for authentication. DEFAULT: give interactive");
@@ -339,10 +330,6 @@ public class Configed {
 
 		CommandLineParser parser = new DefaultParser(false);
 		CommandLine cmd = parser.parse(options, args);
-
-		if (cmd.hasOption("l")) {
-			locale = cmd.getOptionValue("");
-		}
 
 		if (cmd.hasOption("h")) {
 			host = cmd.getOptionValue("h");
@@ -643,6 +630,6 @@ public class Configed {
 		fErrorOutOfMemory
 				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
 
-		new Configed(locale, host, user, password, client, clientgroup, tab);
+		new Configed(host, user, password, client, clientgroup, tab);
 	}
 }

@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 import java.net.URL;
-import java.util.List;
 
 import javax.swing.SwingUtilities;
 
@@ -19,7 +18,6 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.logviewer.gui.LogFrame;
-import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 
@@ -28,7 +26,7 @@ public class Logviewer {
 	private static String fileName = "";
 
 	/** construct the application */
-	public Logviewer(String paramLocale) {
+	public Logviewer() {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 
@@ -49,13 +47,6 @@ public class Logviewer {
 		}
 
 		Logging.info(this, "--  wantedDirectory " + Logging.logDirectoryName);
-
-		//
-		List<String> existingLocales = Messages.getLocaleNames();
-		Messages.setLocale(paramLocale);
-
-		Logging.info("getLocales: " + existingLocales);
-		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
 
 		// set wanted fileName
 		if (fileName != null) {
@@ -136,7 +127,6 @@ public class Logviewer {
 
 		logFrame.setVisible(true);
 		logFrame.setFocusToJTextPane();
-
 	}
 
 	private static void endApp(int exitcode) {
@@ -175,6 +165,6 @@ public class Logviewer {
 			Logging.info(" setting property swing.aatext" + ex.toString());
 		}
 
-		new Logviewer("en");
+		new Logviewer();
 	}
 }
