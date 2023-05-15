@@ -805,6 +805,10 @@ public class Configed {
 			host = cmd.getOptionValue("h");
 		}
 
+		if (cmd.hasOption("u")) {
+			user = cmd.getOptionValue("u");
+		}
+
 		if (cmd.hasOption("p")) {
 			password = cmd.getOptionValue("p");
 		}
