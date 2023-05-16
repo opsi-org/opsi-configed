@@ -245,12 +245,12 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 	}
 
 	/**
-	 * This method receives the JSONObject via HTTP.
+	 * This method receives response via HTTP in MessagePack format.
 	 */
 	@Override
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		boolean background = false;
-		Logging.info(this, "retrieveJSONObjects started");
+		Logging.info(this, "retrieveResponse started");
 		WaitCursor waitCursor = null;
 
 		if (omc != null && !omc.isBackgroundDefault()) {
@@ -263,7 +263,7 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 
 		makeURL(omc);
 
-		TimeCheck timeCheck = new TimeCheck(this, "retrieveJSONObject " + omc);
+		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
 
 		HttpURLConnection connection = null;
@@ -283,7 +283,7 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 
 			Logging.debug(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
 			Logging.info(this,
-					"retrieveJSONObject method=" + connection.getRequestMethod() + ", headers="
+					"retrieveResponse method=" + connection.getRequestMethod() + ", headers="
 							+ connection.getRequestProperties() + ", cookie="
 							+ (sessionId == null ? "null" : (sessionId.substring(0, 26) + "...")));
 
@@ -474,7 +474,7 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 						boolean gotNewSession = sessionId != null && !sessionId.equals(lastSessionId);
 
 						if (gotNewSession) {
-							Logging.info(this, "retrieveJSONObjects got new session");
+							Logging.info(this, "retrieveResponse got new session");
 						}
 					}
 
@@ -529,8 +529,8 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 			}
 		}
 
-		timeCheck.stop("retrieveJSONObject " + (result == null ? "empty result" : "non empty result"));
-		Logging.info(this, "retrieveJSONObject ready");
+		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
+		Logging.info(this, "retrieveResponse ready");
 		if (waitCursor != null) {
 			waitCursor.stop();
 		}
