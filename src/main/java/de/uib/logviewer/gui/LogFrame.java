@@ -182,6 +182,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		if (ConfigedMain.THEMES) {
 			jMenuFile.add(jMenuTheme);
 		}
+		jMenuFile.add(jMenuFileLanguage);
 		jMenuFile.add(jMenuFileExit);
 	}
 
