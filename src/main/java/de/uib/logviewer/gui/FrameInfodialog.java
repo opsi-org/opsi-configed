@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.CenterPositioner;
@@ -59,7 +60,7 @@ public class FrameInfodialog extends JDialog implements ActionListener, KeyListe
 		}
 		textPanel = new VerticalPositioner(new CenterPositioner(label1), new CenterPositioner(label3),
 				new CenterPositioner(label4));
-		button1.setText("o.k.");
+		button1.setText(Configed.getResourceValue("buttonOK"));
 		button1.addActionListener(this);
 		button1.addKeyListener(this);
 

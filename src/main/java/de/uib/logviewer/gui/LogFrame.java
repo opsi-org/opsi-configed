@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -138,17 +139,36 @@ public class LogFrame extends JFrame implements WindowListener {
 				Messages.setTheme(themeName);
 				Main.setOpsiLaf();
 
-				new Thread() {
+				restartLogFrame();
+			});
+		}
 
-					@Override
-					public void run() {
-						LogFrame.this.dispose();
+		JMenu jMenuFileLanguage = new JMenu(Configed.getResourceValue("MainFrame.jMenuFileChooseLanguage")); // submenu
+		ButtonGroup groupLanguages = new ButtonGroup();
 
-						Logging.info(this, "init new logviewer");
-						Logviewer.init();
-					}
+		String selectedLocale = Messages.getSelectedLocale();
+		Logging.debug(this, "selectedLocale " + selectedLocale);
 
-				}.start();
+		for (final String localeName : Messages.getLocaleInfo().keySet()) {
+			ImageIcon localeIcon = null;
+			String imageIconName = Messages.getLocaleInfo().get(localeName);
+			if (imageIconName != null && imageIconName.length() > 0) {
+				try {
+					localeIcon = new ImageIcon(Messages.class.getResource(imageIconName));
+				} catch (Exception ex) {
+					Logging.info(this, "icon not found: " + imageIconName + ", " + ex);
+				}
+			}
+
+			JMenuItem menuItem = new JRadioButtonMenuItem(localeName, localeIcon);
+			Logging.debug(this, "selectedLocale " + selectedLocale);
+			menuItem.setSelected(selectedLocale.equals(localeName));
+			jMenuFileLanguage.add(menuItem);
+			groupLanguages.add(menuItem);
+
+			menuItem.addActionListener((ActionEvent e) -> {
+				Messages.setLocale(localeName);
+				restartLogFrame();
 			});
 		}
 
@@ -163,6 +183,21 @@ public class LogFrame extends JFrame implements WindowListener {
 			jMenuFile.add(jMenuTheme);
 		}
 		jMenuFile.add(jMenuFileExit);
+	}
+
+	private void restartLogFrame() {
+		new Thread() {
+			@Override
+			public void run() {
+				LogFrame.this.dispose();
+
+				Logging.info(this, "init new logviewer");
+				Logviewer.init();
+
+			}
+		}.start();
+
+		// we put it into to special thread to avoid invokeAndWait runtime error
 	}
 
 	private void setupMenuView() {

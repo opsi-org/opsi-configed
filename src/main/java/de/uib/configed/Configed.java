@@ -478,7 +478,7 @@ public class Configed {
 						success = true;
 					}
 				}
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				Logging.error(extraLocalizationFileName + " problem", ex);
 			}
 
