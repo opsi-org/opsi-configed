@@ -25,6 +25,8 @@ public class Logviewer {
 
 	private static String fileName = "";
 
+	private static LogFrame logFrame;
+
 	/** construct the application */
 	public Logviewer() {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
@@ -105,7 +107,7 @@ public class Logviewer {
 		Logging.debug("init in logviewer");
 		Logging.clearErrorList();
 
-		LogFrame logFrame = new LogFrame();
+		logFrame = new LogFrame();
 
 		// for passing it to message frames everywhere
 
@@ -126,6 +128,10 @@ public class Logviewer {
 
 		logFrame.setVisible(true);
 		logFrame.setFocusToJTextPane();
+	}
+
+	public static LogFrame getLogFrame() {
+		return logFrame;
 	}
 
 	private static void endApp(int exitcode) {

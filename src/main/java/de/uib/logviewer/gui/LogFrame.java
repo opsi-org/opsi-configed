@@ -511,7 +511,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 		chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("LogFrame.jMenuFileOpen"));
 
-		int returnVal = chooser.showOpenDialog(Globals.frame1);
+		int returnVal = chooser.showOpenDialog(Main.getMainFrame());
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 		}

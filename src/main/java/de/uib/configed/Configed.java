@@ -139,10 +139,10 @@ public class Configed {
 	}
 
 	public static void startWithLocale() {
-		Logging.info("system information: ");
+		Logging.notice("system information: ");
 
-		Logging.info(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-		Logging.info(" running by java version " + JAVA_VERSION);
+		Logging.notice(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+		Logging.notice(" running by java version " + JAVA_VERSION + " and java vendor " + JAVA_VENDOR);
 
 		// Try with resources so that it will be closed in implicit finally statement
 		try (Formatter formatter = new Formatter()) {

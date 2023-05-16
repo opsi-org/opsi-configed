@@ -83,9 +83,8 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 	private Containership containership;
 
+	private JLabel jLabelTitle = new JLabel();
 	private JLabel jLabelVersion = new JLabel();
-	private JLabel jLabelJavaVersion = new JLabel();
-	private JLabel jLabelLabelJavaVersion = new JLabel(Configed.getResourceValue("DPassword.jdkVersionBased"));
 
 	private JLabel jLabelUser = new JLabel();
 	private JTextField fieldUser = new JTextField();
@@ -116,7 +115,6 @@ public class DPassword extends JDialog implements WaitingSleeper {
 				endProgram();
 			}
 		}
-
 	};
 
 	public DPassword(ConfigedMain main) {
@@ -242,13 +240,10 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		panel.setLayout(groupLayout);
 
 		groupLayout.setVerticalGroup(groupLayout.createSequentialGroup()
+				.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+						GroupLayout.PREFERRED_SIZE)
 				.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
-
-				.addGroup(groupLayout.createParallelGroup()
-						.addComponent(jLabelLabelJavaVersion, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)
-						.addComponent(jLabelJavaVersion, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 
 				.addGap(Globals.LINE_HEIGHT)
 				.addComponent(jLabelHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -279,52 +274,44 @@ public class DPassword extends JDialog implements WaitingSleeper {
 						.addComponent(jButtonCommit, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								GroupLayout.PREFERRED_SIZE)));
 
-		groupLayout
-				.setHorizontalGroup(groupLayout.createParallelGroup()
-						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
-								.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
-						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup()
+				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 100, Short.MAX_VALUE)
+						.addComponent(jLabelTitle, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, 100, Short.MAX_VALUE))
+				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 100, Short.MAX_VALUE)
+						.addComponent(jLabelVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+								GroupLayout.PREFERRED_SIZE)
+						.addGap(Globals.HGAP_SIZE, 100, Short.MAX_VALUE))
 
-								.addComponent(jLabelLabelJavaVersion, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.HGAP_SIZE / 2)
-								.addComponent(jLabelJavaVersion, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
-						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(jLabelHost,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(jLabelHost,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
 
-						.addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
+				.addComponent(fieldHost, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
+				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(jLabelUser,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+
+				.addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
+				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(jLabelPassword,
+						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+
+				.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
+
+				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE)
+						.addComponent(jPanelParameters, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 								Short.MAX_VALUE)
+						.addGap(Globals.VGAP_SIZE))
 
-						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(jLabelUser,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE))
+				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
+						.addComponent(waitingLabel).addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
 
-						.addComponent(fieldUser, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
+				.addComponent(jProgressBar)
 
-						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE).addComponent(
-								jLabelPassword, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								GroupLayout.PREFERRED_SIZE))
-
-						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-								Short.MAX_VALUE)
-
-						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.VGAP_SIZE)
-								.addComponent(jPanelParameters, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-										Short.MAX_VALUE)
-								.addGap(Globals.VGAP_SIZE))
-
-						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
-								.addComponent(waitingLabel).addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
-
-						.addComponent(jProgressBar)
-
-						.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
-								.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
-								.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.HGAP_SIZE)));
+				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
+						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
+						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.HGAP_SIZE)));
 
 		this.getContentPane().add(panel);
 
@@ -335,11 +322,9 @@ public class DPassword extends JDialog implements WaitingSleeper {
 					JPanel.class);
 		}
 
-		MessageFormat messageFormatVersion = new MessageFormat(Configed.getResourceValue("DPassword.jLabelVersion"));
-		jLabelVersion.setText(messageFormatVersion
-				.format(new Object[] { Globals.VERSION, "(" + Globals.VERDATE + ")", Globals.VERHASHTAG }));
-
-		jLabelJavaVersion.setText(Configed.JAVA_VENDOR + " " + Configed.JAVA_VERSION);
+		jLabelTitle.setText(Globals.APPNAME);
+		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
+				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
 
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");

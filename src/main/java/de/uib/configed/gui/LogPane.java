@@ -57,6 +57,7 @@ import javax.swing.text.View;
 
 import com.formdev.flatlaf.FlatLaf;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -570,7 +571,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		externalView.addPanel(copyOfMe);
 		externalView.setup();
 		externalView.setSize(this.getSize());
-		externalView.setLocationRelativeTo(this);
+		externalView.setLocationRelativeTo(Main.getMainFrame());
 
 		copyOfMe.setLevelWithoutAction(showLevel);
 		copyOfMe.setParsedText(lines, lineLevels, lineStyles, lineTypes, typesList, showTypeRestricted, selTypeIndex,

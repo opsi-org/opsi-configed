@@ -3,6 +3,7 @@ package de.uib;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -55,6 +56,14 @@ public class Main {
 		}
 
 		return options;
+	}
+
+	public static JFrame getMainFrame() {
+		if (isLogviewer) {
+			return Logviewer.getLogFrame();
+		} else {
+			return ConfigedMain.getMainFrame();
+		}
 	}
 
 	public static void showHelp(Options options) {
