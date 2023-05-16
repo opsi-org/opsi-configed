@@ -74,18 +74,16 @@ public class Main {
 			isLogviewer = true;
 		}
 
+		String locale = null;
 		if (cmd.hasOption("l")) {
-			String locale = cmd.getOptionValue("l");
-
-			// Set locale
-			List<String> existingLocales = Messages.getLocaleNames();
-			Messages.setLocale(locale);
-			Logging.info("getLocales: " + existingLocales);
-			Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
-		} else {
-			// we need to call this function to get the default locale
-			Messages.setLocale(null);
+			locale = cmd.getOptionValue("l");
 		}
+
+		// Set locale, then we can use localization values
+		List<String> existingLocales = Messages.getLocaleNames();
+		Messages.setLocale(locale);
+		Logging.info("getLocales: " + existingLocales);
+		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
 
 		if (cmd.hasOption("d")) {
 			Logging.logDirectoryName = cmd.getOptionValue("d");
