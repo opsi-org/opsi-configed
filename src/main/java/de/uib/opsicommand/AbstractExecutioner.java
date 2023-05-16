@@ -14,9 +14,11 @@ public abstract class AbstractExecutioner {
 
 	public abstract boolean doCall(OpsiMethodCall omc);
 
+	public abstract String getErrorFromResponse(Map<String, Object> retrieved);
+
 	public abstract Map<String, Object> getResponses(Map<String, Object> retrieved);
 
-	public abstract Map<String, Object> retrieveJSONObject(OpsiMethodCall omc);
+	public abstract Map<String, Object> retrieveResponse(OpsiMethodCall omc);
 
 	public static JSONObject jsonMap(Map<String, ? extends Object> m) {
 		return new JSONObject(m);

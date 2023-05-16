@@ -652,7 +652,6 @@ public final class JSONReMapper {
 	}
 
 	public static Map<String, String> giveEmptyForNull(Map<String, Object> m) {
-
 		HashMap<String, String> result = new HashMap<>();
 		for (Entry<String, Object> entry : m.entrySet()) {
 			if (isNull(entry.getValue())) {

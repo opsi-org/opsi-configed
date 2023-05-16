@@ -18,12 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -176,18 +170,9 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				persist.configOptionsRequestRefresh();
 				persist.opsiLicencingInfoRequestRefresh();
 				LicensingInfoMap.requestRefresh();
-				try {
-					licenseMap = LicensingInfoMap.getInstance(
-							new JSONObject(
-									new ObjectMapper().writeValueAsString(persist.getOpsiLicencingInfoOpsiAdmin())),
-							persist.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
-				} catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				licenseMap = LicensingInfoMap.getInstance(persist.getOpsiLicencingInfoOpsiAdmin(),
+						persist.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
+
 				retrieveData();
 
 				tableSource = new MapSource(columnNames, classNames, theSourceMap, false);

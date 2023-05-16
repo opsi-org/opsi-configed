@@ -8,11 +8,9 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.utilities.logging.Logging;
@@ -23,7 +21,7 @@ import de.uib.utilities.logging.Logging;
  *
  * @author Rupert Roeder
  */
-public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
+public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	protected ConnectionState conStat;
 
 	@Override
@@ -33,7 +31,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 
 	@Override
 	public boolean doCall(OpsiMethodCall omc) {
-		Map<String, Object> jO = retrieveJSONObject(omc);
+		Map<String, Object> jO = retrieveResponse(omc);
 
 		return checkResponse(jO);
 	}
@@ -41,10 +39,10 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	@Override
 	public List<List<String>> getListOfStringLists(OpsiMethodCall omc) {
 		List<List<String>> result = new ArrayList<>();
-		Map<String, Object> response = retrieveJSONObject(omc);
+		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = convertToObject(response.get("result"), new TypeReference<List<List<String>>>() {
+			result = POJOReMapper.remap(response.get("result"), new TypeReference<List<List<String>>>() {
 			});
 		}
 
@@ -54,10 +52,10 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	@Override
 	public List<Object> getListResult(OpsiMethodCall omc) {
 		List<Object> result = new ArrayList<>();
-		Map<String, Object> response = retrieveJSONObject(omc);
+		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = convertToObject(response.get("result"), new TypeReference<List<Object>>() {
+			result = POJOReMapper.remap(response.get("result"), new TypeReference<List<Object>>() {
 			});
 		}
 
@@ -67,10 +65,10 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	@Override
 	public List<String> getStringListResult(OpsiMethodCall omc) {
 		List<String> result = new ArrayList<>();
-		Map<String, Object> response = retrieveJSONObject(omc);
+		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = convertToObject(response.get("result"), new TypeReference<List<String>>() {
+			result = POJOReMapper.remap(response.get("result"), new TypeReference<List<String>>() {
 			});
 		}
 
@@ -82,10 +80,10 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 		// yields possibly JSON objects and arrays as values
 		// compare getMap_Object
 		Map<String, Object> result = new HashMap<>();
-		Map<String, Object> response = retrieveJSONObject(omc);
+		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = convertToObject(response.get("result"), new TypeReference<HashMap<String, Object>>() {
+			result = POJOReMapper.remap(response.get("result"), new TypeReference<HashMap<String, Object>>() {
 			});
 		}
 
@@ -95,29 +93,18 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	@Override
 	public Map<String, List<String>> getMapOfStringLists(OpsiMethodCall omc) {
 		Map<String, List<String>> result = new HashMap<>();
-		Map<String, Object> response = retrieveJSONObject(omc);
+		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = convertToObject(response.get("result"), new TypeReference<HashMap<String, List<String>>>() {
+			result = POJOReMapper.remap(response.get("result"), new TypeReference<HashMap<String, List<String>>>() {
 			});
 		}
 
 		return result;
 	}
 
-	private static <T> T convertToObject(Object obj, TypeReference<T> typeRef) {
-		T result = null;
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
-		mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-
-		result = mapper.convertValue(obj, typeRef);
-
-		return result;
-	}
-
-	public static String getErrorFromResponse(Map<String, Object> retrieved) {
+	@Override
+	public String getErrorFromResponse(Map<String, Object> retrieved) {
 		String errorMessage = null;
 
 		try {
@@ -153,27 +140,15 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 				result.put("error", str);
 			}
 		} catch (Exception ex) {
-			Logging.error("JSONReMapper getResponses ", ex);
+			Logging.error(this, "getResponses ", ex);
 		}
 
-		Logging.debug("JSONReMapper getResponses  result " + result);
+		Logging.debug(this, "getResponses  result " + result);
 
 		return result;
 	}
 
-	public static boolean checkForNotValidOpsiMethod(Map<String, Object> retrieved) {
-		String errorFromResponse = getErrorFromResponse(retrieved);
-
-		if (errorFromResponse != null && errorFromResponse.indexOf("Opsi rpc error: Method") > -1
-				&& errorFromResponse.endsWith("is not valid")) {
-			Logging.info("JSONReMapper: checkForNotValidOpsiMethod " + getErrorFromResponse(retrieved));
-			return false;
-		}
-
-		return true;
-	}
-
-	public static boolean checkResponse(Map<String, Object> retrieved) {
+	private boolean checkResponse(Map<String, Object> retrieved) {
 		boolean responseFound = true;
 
 		if (retrieved == null) {
@@ -220,105 +195,99 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	@Override
 	public Map<String, Map<String, String>> getStringMappedObjectsByKey(OpsiMethodCall omc, String key,
 			String[] sourceVars, String[] targetVars, Map<String, String> translateValues) {
-
 		Map<String, Map<String, String>> result = new TreeMap<>();
+		List<Object> resultlist = getListResult(omc);
 
-		List<Object> resultlist = null;
-
-		Map<String, Object> response = retrieveJSONObject(omc);
-
-		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			resultlist = convertToObject(response.get("result"), new TypeReference<List<Object>>() {
-			});
+		if (resultlist == null) {
+			return result;
 		}
 
-		// extract key
-		if (resultlist != null) {
-			try {
+		Iterator<Object> iter = resultlist.iterator();
 
-				Iterator<Object> iter = resultlist.iterator();
+		while (iter.hasNext()) {
+			Map<String, String> originalMap = POJOReMapper.remap(iter.next(), new TypeReference<Map<String, String>>() {
+			});
 
-				// loop through list elements
-				while (iter.hasNext()) {
-					JSONObject jO = (JSONObject) iter.next();
-
-					String keyOfItem = null;
-
-					if (jO.get(key) == null) {
-						Logging.error(this, "Missing key " + key + " in output list for " + omc);
-						continue;
-					}
-
-					keyOfItem = jO.get(key).toString();
-
-					if (translateValues != null && translateValues.get(keyOfItem) != null) {
-						keyOfItem = translateValues.get(keyOfItem);
-					}
-
-					HashMap<String, String> detailMap = new HashMap<>();
-
-					if (sourceVars == null) {
-						// take original keys
-
-						Iterator<String> iterKeys = jO.keys();
-						while (iterKeys.hasNext()) {
-							String value = iterKeys.next();
-							String val = jO.get(value).toString();
-							detailMap.put(value, val);
-						}
-					} else {
-						if (targetVars == null) {
-							for (int i = 0; i < sourceVars.length; i++) {
-								String value = sourceVars[i];
-								String val = jO.get(value).toString();
-
-								if (translateValues != null && translateValues.get(val) != null) {
-									val = translateValues.get(val);
-								}
-
-								detailMap.put(value, val);
-							}
-						} else {
-							if (targetVars.length != sourceVars.length) {
-								Logging.warning(this, "getStringMappedObjectsByKey targetVars not assignable");
-							}
-
-							for (int i = 0; i < sourceVars.length; i++) {
-								String value = sourceVars[i];
-								String val = jO.get(value).toString();
-								if (i < targetVars.length) {
-									value = targetVars[i];
-
-									if (translateValues != null && translateValues.get(val) != null) {
-										val = translateValues.get(val);
-									}
-
-									detailMap.put(value, val);
-
-								}
-							}
-						}
-					}
-
-					result.put(keyOfItem, detailMap);
-				}
-
-			} catch (Exception ex) {
-				Logging.error(this, "Exception on building string maps  ", ex);
+			if (originalMap.get(key) == null) {
+				Logging.error(this, "Missing key " + key + " in output list for " + omc);
+				continue;
 			}
+
+			String keyOfItem = originalMap.get(key);
+
+			if (translateValues != null && translateValues.get(keyOfItem) != null) {
+				keyOfItem = translateValues.get(keyOfItem);
+			}
+
+			Map<String, String> detailMap = new HashMap<>();
+
+			if (sourceVars == null) {
+				detailMap.putAll(originalMap);
+			} else {
+				if (targetVars == null) {
+					detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars, translateValues);
+				} else {
+					detailMap = generateDetailMapBasedOnKeys(originalMap, sourceVars, targetVars, translateValues);
+				}
+			}
+
+			result.put(keyOfItem, detailMap);
 		}
 
 		return result;
+	}
 
+	private static Map<String, String> generateDetailMapBasedOnKeys(Map<String, String> originalMap,
+			String[] sourceVars, Map<String, String> translateValues) {
+		Map<String, String> detailMap = new HashMap<>();
+
+		for (int i = 0; i < sourceVars.length; i++) {
+			String value = sourceVars[i];
+			String val = String.valueOf(originalMap.get(value));
+
+			if (translateValues != null && translateValues.get(val) != null) {
+				val = translateValues.get(val);
+			}
+
+			detailMap.put(value, val);
+		}
+
+		return detailMap;
+	}
+
+	private Map<String, String> generateDetailMapBasedOnKeys(Map<String, String> originalMap, String[] sourceVars,
+			String[] targetVars, Map<String, String> translateValues) {
+		Map<String, String> detailMap = new HashMap<>();
+
+		if (targetVars.length != sourceVars.length) {
+			Logging.warning(this, "generateDetailMapBasedOnKeys targetVars not assignable");
+		}
+
+		for (int i = 0; i < sourceVars.length; i++) {
+			String value = sourceVars[i];
+			String val = String.valueOf(originalMap.get(value));
+
+			if (i < targetVars.length) {
+				value = targetVars[i];
+
+				if (translateValues != null && translateValues.get(val) != null) {
+					val = translateValues.get(val);
+				}
+
+				detailMap.put(value, val);
+			}
+		}
+
+		return detailMap;
 	}
 
 	@Override
 	public List<Map<String, Object>> getListOfMaps(OpsiMethodCall omc) {
 		List<Map<String, Object>> result = new ArrayList<>();
-		Map<String, Object> response = retrieveJSONObject(omc);
+		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = convertToObject(response.get("result"), new TypeReference<List<Map<String, Object>>>() {
+			result = POJOReMapper.remap(response.get("result"), new TypeReference<List<Map<String, Object>>>() {
 			});
 		}
 
@@ -328,10 +297,10 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	@Override
 	public List<Map<String, List<Map<String, Object>>>> getListOfMapsOfListsOfMaps(OpsiMethodCall omc) {
 		List<Map<String, List<Map<String, Object>>>> result = new ArrayList<>();
-		Map<String, Object> response = retrieveJSONObject(omc);
+		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = convertToObject(response.get("result"),
+			result = POJOReMapper.remap(response.get("result"),
 					new TypeReference<List<Map<String, List<Map<String, Object>>>>>() {
 					});
 		}
@@ -342,10 +311,10 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	@Override
 	public String getStringResult(OpsiMethodCall omc) {
 		String result = "";
-		Map<String, Object> response = retrieveJSONObject(omc);
+		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = convertToObject(response.get("result"), new TypeReference<String>() {
+			result = POJOReMapper.remap(response.get("result"), new TypeReference<String>() {
 			});
 		}
 
@@ -355,10 +324,10 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	@Override
 	public boolean getBooleanResult(OpsiMethodCall omc) {
 		Boolean result = null;
-		Map<String, Object> response = retrieveJSONObject(omc);
+		Map<String, Object> response = retrieveResponse(omc);
 
 		if (checkResponse(response) && response.containsKey("result") && response.get("result") != null) {
-			result = convertToObject(response.get("result"), new TypeReference<Boolean>() {
+			result = POJOReMapper.remap(response.get("result"), new TypeReference<Boolean>() {
 			});
 		}
 
@@ -369,7 +338,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	public Map<String, Object> getMapFromItem(Object s) {
 		Map<String, Object> result = null;
 
-		result = convertToObject(s, new TypeReference<Map<String, Object>>() {
+		result = POJOReMapper.remap(s, new TypeReference<Map<String, Object>>() {
 		});
 
 		return result;
@@ -379,7 +348,7 @@ public abstract class AbstractJSONExecutioner extends AbstractExecutioner {
 	public List<Object> getListFromItem(String s) {
 		List<Object> result = null;
 
-		result = convertToObject(s, new TypeReference<List<Object>>() {
+		result = POJOReMapper.remap(s, new TypeReference<List<Object>>() {
 		});
 
 		return result;

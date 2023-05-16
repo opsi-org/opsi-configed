@@ -54,7 +54,7 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
  * @author Rupert Roeder, Jan Schneider, Naglis Vidziunas
  */
 
-public class JSONthroughHTTP extends AbstractJSONExecutioner {
+public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 
 	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
 	public static final int DEFAULT_PORT = 4447;
@@ -248,7 +248,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	 * This method receives the JSONObject via HTTP.
 	 */
 	@Override
-	public synchronized Map<String, Object> retrieveJSONObject(OpsiMethodCall omc) {
+	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		boolean background = false;
 		Logging.info(this, "retrieveJSONObjects started");
 		WaitCursor waitCursor = null;
@@ -454,7 +454,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 							WaitCursor.stopAll();
 						}
 						if (showNewPasswordDialog()) {
-							return retrieveJSONObject(omc);
+							return retrieveResponse(omc);
 						}
 					}
 				} else {

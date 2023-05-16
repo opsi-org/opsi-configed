@@ -17,12 +17,17 @@ public class NONEexecutioner extends AbstractExecutioner {
 	}
 
 	@Override
+	public String getErrorFromResponse(Map<String, Object> retrieved) {
+		return null;
+	}
+
+	@Override
 	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
 		return null;
 	}
 
 	@Override
-	public Map<String, Object> retrieveJSONObject(OpsiMethodCall omc) {
+	public Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		return null;
 	}
 
