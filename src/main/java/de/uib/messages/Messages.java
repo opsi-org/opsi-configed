@@ -105,9 +105,8 @@ public final class Messages {
 		return myLocale;
 	}
 
-	private static Locale produceLocale() {
+	private static void produceLocale() {
 		myLocale = Locale.getDefault();
-		return giveLocale("default");
 	}
 
 	private static Locale produceLocale(String language) {
@@ -157,7 +156,7 @@ public final class Messages {
 		}
 
 		if (loc == null) {
-			loc = produceLocale();
+			produceLocale();
 		}
 
 		try {
