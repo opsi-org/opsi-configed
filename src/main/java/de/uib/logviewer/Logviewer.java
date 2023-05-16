@@ -63,7 +63,7 @@ public class Logviewer {
 			Logging.info(" --  fileName " + Logging.logDirectoryName);
 		}
 
-		SwingUtilities.invokeLater(this::init);
+		SwingUtilities.invokeLater(Logviewer::init);
 	}
 
 	private static Options createLogviewerOptions() {
@@ -101,15 +101,14 @@ public class Logviewer {
 		}
 	}
 
-	private void init() {
-		Logging.debug(this, "init");
+	public static void init() {
+		Logging.debug("init in logviewer");
 		Logging.clearErrorList();
 
 		LogFrame logFrame = new LogFrame();
 
 		// for passing it to message frames everywhere
 
-		Globals.container1 = logFrame;
 		Globals.frame1 = logFrame;
 
 		//rearranging visual components
@@ -117,13 +116,13 @@ public class Logviewer {
 
 		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-		Logging.info(this, "screensize " + screenSize);
+		Logging.info("screensize " + screenSize);
 		logFrame.setSize((int) screenSize.getWidth() - 150, (int) screenSize.getHeight() - 150);
 
 		logFrame.setLocationRelativeTo(null);
 
 		// init visual states
-		Logging.info(this, "mainframe nearly initialized");
+		Logging.info("mainframe nearly initialized");
 
 		logFrame.setVisible(true);
 		logFrame.setFocusToJTextPane();

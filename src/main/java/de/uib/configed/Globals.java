@@ -1,7 +1,6 @@
 package de.uib.configed;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
@@ -375,7 +374,6 @@ public final class Globals {
 
 	// these two things can be changed
 	public static JFrame frame1;
-	public static Container container1;
 
 	public static final Dimension helperFormDimension = new Dimension(1100, 600);
 

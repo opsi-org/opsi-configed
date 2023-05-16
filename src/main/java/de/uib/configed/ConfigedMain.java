@@ -1364,8 +1364,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// setting the similar global values as well
 
-		Globals.container1 = mainFrame;
-
 		mainFrame.enableMenuItemsForClients(0);
 
 		// rearranging visual components
@@ -1407,7 +1405,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		licencesFrame = new TabbedFrame(this);
 
 		Globals.frame1 = licencesFrame;
-		Globals.container1 = licencesFrame.getContentPane();
 
 		licencesFrame.setGlobals(Globals.getMap());
 		licencesFrame.setTitle(

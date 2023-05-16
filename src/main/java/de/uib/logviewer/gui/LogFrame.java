@@ -2,9 +2,7 @@ package de.uib.logviewer.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -36,6 +34,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.LogPane;
+import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ActivityPanel;
@@ -43,7 +42,6 @@ import utils.ExtractorUtil;
 
 public class LogFrame extends JFrame implements WindowListener {
 
-	private static JFileChooser chooser;
 	private static String fileName;
 
 	//menu system
@@ -53,11 +51,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	private JMenu jMenuFile;
 	private JMenu jMenuView;
 	private JMenu jMenuHelp;
-
-	private JMenuItem jMenuHelpSupport;
-	private JMenuItem jMenuHelpDoc;
-	private JMenuItem jMenuHelpForum;
-	private JMenuItem jMenuHelpAbout;
 
 	private LogPane showLogfile;
 
@@ -72,8 +65,6 @@ public class LogFrame extends JFrame implements WindowListener {
 		super.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 		baseContainer = super.getContentPane();
-
-		Globals.container1 = baseContainer;
 
 		guiInit();
 
@@ -151,8 +142,10 @@ public class LogFrame extends JFrame implements WindowListener {
 
 					@Override
 					public void run() {
-						// Configed.startWithLocale();
-						Logging.error(this, "not yet implemented");
+						LogFrame.this.dispose();
+
+						Logging.info(this, "init new logviewer");
+						Logviewer.init();
 					}
 
 				}.start();
@@ -195,31 +188,27 @@ public class LogFrame extends JFrame implements WindowListener {
 	private void setupMenuHelp() {
 		jMenuHelp = new JMenu(Configed.getResourceValue("MainFrame.jMenuHelp"));
 
-		jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
+		JMenuItem jMenuHelpDoc = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuDoc"));
 		jMenuHelpDoc.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_DOC_PAGE));
 
-		jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
+		JMenuItem jMenuHelpForum = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuForum"));
 		jMenuHelpForum.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_FORUM_PAGE));
 
-		jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
+		JMenuItem jMenuHelpSupport = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuSupport"));
 		jMenuHelpSupport.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 
-		jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
+		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
 		jMenuHelpAbout.addActionListener((ActionEvent e) -> showAboutAction());
 
 		jMenuHelp.add(jMenuHelpDoc);
 		jMenuHelp.add(jMenuHelpForum);
 		jMenuHelp.add(jMenuHelpSupport);
 		jMenuHelp.add(jMenuHelpAbout);
-
 	}
 
 	public void showAboutAction() {
 		FrameInfodialog dlg = new FrameInfodialog(this);
-		Dimension dlgSize = dlg.getPreferredSize();
-		Dimension frmSize = getSize();
-		Point loc = getLocation();
-		dlg.setLocation((frmSize.width - dlgSize.width) / 2 + loc.x, (frmSize.height - dlgSize.height) / 2 + loc.y);
+		dlg.setLocationRelativeTo(this);
 		dlg.setModal(true);
 		dlg.setAlwaysOnTop(true);
 		dlg.setVisible(true);
@@ -346,11 +335,10 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		};
 
-		Globals.container1 = baseContainer;
 		showLogfile.setMainText("");
 		showLogfile.setTitle("unknown");
 		setTitle(Globals.APPNAME);
-		if (!fileName.equals("")) {
+		if (!"".equals(fileName)) {
 			StringBuilder sbf = readFile(fileName);
 			if ((sbf != null) && sbf.length() > 0) {
 				showLogfile.setTitle(fileName);
@@ -431,19 +419,6 @@ public class LogFrame extends JFrame implements WindowListener {
 	// File operations
 	public static void setFileName(String fn) {
 		LogFrame.fileName = fn;
-		setFileChooser(fn);
-	}
-
-	private static void setFileChooser(String fn) {
-		if (chooser == null) {
-			chooser = new JFileChooser(fn);
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z",
-					"log", "zip", "gz", "7z"));
-			chooser.setApproveButtonText("O.K.");
-			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
-			chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("LogFrame.jMenuFileOpen"));
-		}
 	}
 
 	public String reloadFile(String fn) {
@@ -467,7 +442,8 @@ public class LogFrame extends JFrame implements WindowListener {
 		try {
 			fWriter = new FileWriter(fn);
 		} catch (IOException ex) {
-			Logging.error("Error opening file: " + fn + "\n --- " + ex);
+			Logging.error("Error opening file: " + fn + "\n --- ; stop saving to file", ex);
+			return;
 		}
 		int i = 0;
 		while (i < logfilelines.length) {
@@ -490,14 +466,20 @@ public class LogFrame extends JFrame implements WindowListener {
 		JOptionPane.showMessageDialog(null, errorMsg, "Attention", JOptionPane.WARNING_MESSAGE);
 	}
 
-	private String openFile() {
-		if (chooser == null) {
-			setFileChooser("");
-		}
+	private static String openFile() {
+
+		JFileChooser chooser = new JFileChooser(fileName);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z",
+				"log", "zip", "gz", "7z"));
+		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+		chooser.setDialogTitle(Globals.APPNAME + " " + Configed.getResourceValue("LogFrame.jMenuFileOpen"));
+
 		int returnVal = chooser.showOpenDialog(Globals.frame1);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			fileName = chooser.getSelectedFile().getAbsolutePath();
 		}
+
 		return fileName;
 	}
 
@@ -539,7 +521,7 @@ public class LogFrame extends JFrame implements WindowListener {
 			fis = new FileInputStream(file);
 			sb = readInputStream(fis);
 			fis.close();
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			Logging.error("Error opening file: " + ex);
 			showDialog("Error opening file: " + ex);
 		}
@@ -559,7 +541,7 @@ public class LogFrame extends JFrame implements WindowListener {
 				sb.append("\n");
 			}
 			br.close();
-		} catch (Exception ex) {
+		} catch (IOException ex) {
 			Logging.error("Error reading file: " + ex);
 			showDialog("Error reading file: " + ex);
 		}
