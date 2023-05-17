@@ -1,7 +1,6 @@
 package utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 
@@ -15,20 +14,22 @@ import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 
-public class ExtractorUtil {
+public final class ExtractorUtil {
+
+	// Private constructor to hide public one, 
+	// Must not be instanciated
+	private ExtractorUtil() {
+	}
 
 	public static StringBuilder unzip(File file) throws Exception {
 
-		RandomAccessFile randomAccessFile = null;
-
 		Logging.info("ExtractorUtil: starting extract");
-		IInArchive inArchive = null;
 		final StringBuilder sb = new StringBuilder();
 
-		try {
-			randomAccessFile = new RandomAccessFile(file, "r");
-			inArchive = SevenZip.openInArchive(null, // autodetect archive type
-					new RandomAccessFileInStream(randomAccessFile));
+		try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+				// Autodetect archiveFormat
+				IInArchive inArchive = SevenZip.openInArchive(null, new RandomAccessFileInStream(randomAccessFile))) {
+
 			Logging.info("\n   Archiv Format" + inArchive.getArchiveFormat());
 			// Getting simple interface of the archive inArchive
 			ISimpleInArchive simpleInArchive = inArchive.getSimpleInterface();
@@ -46,9 +47,12 @@ public class ExtractorUtil {
 						@Override
 						public int write(byte[] data) throws SevenZipException {
 							sb.append(new String(data));
-							hash[0] ^= Arrays.hashCode(data); // Consume data
+							// Consume data
+							hash[0] ^= Arrays.hashCode(data);
 							sizeArray[0] += data.length;
-							return data.length; // Return amount of consumed data
+
+							// Return amount of consumed data
+							return data.length;
 						}
 					});
 					if (result == ExtractOperationResult.OK) {
@@ -58,24 +62,8 @@ public class ExtractorUtil {
 					}
 				}
 			}
-		} catch (Exception e) {
-			throw (e);
-		} finally {
-			if (inArchive != null) {
-				try {
-					inArchive.close();
-				} catch (SevenZipException e) {
-					Logging.error("Error closing archive: " + e);
-				}
-			}
-			if (randomAccessFile != null) {
-				try {
-					randomAccessFile.close();
-				} catch (IOException e) {
-					Logging.error("Error closing file: " + e);
-				}
-			}
 		}
+
 		return sb;
 	}
 
