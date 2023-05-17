@@ -9,7 +9,7 @@
  *
  * @author D. Oertel, R. Roeder, J. Schneider, A. Sucher, N. Otto
  * configed - configuration editor for client work stations in opsi
- * (open pc server integration) www.opsi.org
+ * (open pc server integration) www.opsi.orgF
  *
 */
 
@@ -152,8 +152,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
 	// Are themes enabled?
-	public static final boolean THEMES = true;
-	public static final boolean FONT = true;
+	public static final boolean THEMES = false;
+	public static final boolean FONT = false;
 
 	private static GuiStrategyForLoadingData strategyForLoadingData;
 

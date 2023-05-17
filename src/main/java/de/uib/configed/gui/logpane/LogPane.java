@@ -115,8 +115,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private int[] lineLevels;
 	private Style[] lineStyles;
 
-	private PopupMenuTrait popupMenu;
-
 	public LogPane(String defaultText, boolean withPopup) {
 		super(new BorderLayout());
 		Logging.info(this, "initializing");
@@ -234,13 +232,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			labelLevel.setFont(Globals.defaultFont);
 		}
 
-		int minL = 1;
-		int maxL = 9;
-		int valL = 1;
+		Logging.info(this, "levels minL, maxL " + MIN_LEVEL + ", " + MAX_LEVEL);
 
-		Logging.info(this, "levels minL, maxL, valL " + minL + ", " + maxL + ", " + valL);
-
-		sliderLevel = new AdaptingSlider(this, minL, maxL, produceInitialMaxShowLevel());
+		sliderLevel = new AdaptingSlider(this, MIN_LEVEL, MAX_LEVEL, produceInitialMaxShowLevel());
 
 		labelDisplayRestriction = new JLabel(Configed.getResourceValue("TextPane.EventType"));
 		if (!ConfigedMain.FONT) {
@@ -328,41 +322,55 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		super.add(commandpane, BorderLayout.SOUTH);
 
 		if (withPopup) {
-			popupMenu = new PopupMenuTrait(new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_SAVE,
-					PopupMenuTrait.POPUP_SAVE_AS_ZIP, PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP,
-					PopupMenuTrait.POPUP_FLOATINGCOPY }) {
-				@Override
-				public void action(int p) {
-					switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
-						reload();
-						break;
-
-					case PopupMenuTrait.POPUP_SAVE:
-						save();
-						break;
-					case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
-						saveAsZip();
-						break;
-					case PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP:
-						saveAllAsZip(false);
-						break;
-					case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
-						saveAllAsZip(true);
-						break;
-					case PopupMenuTrait.POPUP_FLOATINGCOPY:
-						floatExternal();
-						break;
-
-					default:
-						Logging.warning(this, "no case found for popupMenuTrait in LogPane");
-						break;
-					}
-				}
-			};
-
-			popupMenu.addPopupListenersTo(new JComponent[] { jTextPane });
+			initPopupMenu();
 		}
+	}
+
+	private void initPopupMenu() {
+
+		Integer[] popups;
+
+		if (Main.isLogviewer()) {
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_SAVE,
+					PopupMenuTrait.POPUP_FLOATINGCOPY };
+		} else {
+			popups = new Integer[] { PopupMenuTrait.POPUP_RELOAD, PopupMenuTrait.POPUP_SAVE,
+					PopupMenuTrait.POPUP_SAVE_AS_ZIP, PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP,
+					PopupMenuTrait.POPUP_FLOATINGCOPY };
+		}
+
+		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
+			@Override
+			public void action(int p) {
+				switch (p) {
+				case PopupMenuTrait.POPUP_RELOAD:
+					reload();
+					break;
+
+				case PopupMenuTrait.POPUP_SAVE:
+					save();
+					break;
+				case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
+					saveAsZip();
+					break;
+				case PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP:
+					saveAllAsZip(false);
+					break;
+				case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
+					saveAllAsZip(true);
+					break;
+				case PopupMenuTrait.POPUP_FLOATINGCOPY:
+					floatExternal();
+					break;
+
+				default:
+					Logging.warning(this, "no case found for popupMenuTrait in LogPane");
+					break;
+				}
+			}
+		};
+
+		popupMenu.addPopupListenersTo(new JComponent[] { jTextPane });
 	}
 
 	public Integer getMaxExistingLevel() {

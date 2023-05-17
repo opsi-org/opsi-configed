@@ -112,6 +112,10 @@ public class Main {
 		}
 	}
 
+	public static boolean isLogviewer() {
+		return isLogviewer;
+	}
+
 	public static void configureUI() {
 		boolean trynimbus = true;
 		boolean found = false;
