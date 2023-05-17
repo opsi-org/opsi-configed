@@ -1,6 +1,8 @@
 package utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
 
@@ -21,7 +23,7 @@ public final class ExtractorUtil {
 	private ExtractorUtil() {
 	}
 
-	public static StringBuilder unzip(File file) throws Exception {
+	public static StringBuilder unzip(File file) throws SevenZipException {
 
 		Logging.info("ExtractorUtil: starting extract");
 		final StringBuilder sb = new StringBuilder();
@@ -55,6 +57,7 @@ public final class ExtractorUtil {
 							return data.length;
 						}
 					});
+
 					if (result == ExtractOperationResult.OK) {
 						Logging.info(String.format("%9X | %10s | %s", hash[0], sizeArray[0], item.getPath()));
 					} else {
@@ -62,6 +65,10 @@ public final class ExtractorUtil {
 					}
 				}
 			}
+		} catch (FileNotFoundException ex) {
+			Logging.error("Could not find file....", ex);
+		} catch (IOException ex) {
+			Logging.warning("Could not close file, exception thrown...", ex);
 		}
 
 		return sb;

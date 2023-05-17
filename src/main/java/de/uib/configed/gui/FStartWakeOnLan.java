@@ -130,7 +130,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	private String readTime(Calendar cal) {
-		String result = " (" + cal.get(Calendar.YEAR) + "-" + formatNaturalNumber(cal.get(Calendar.MONTH) + 1) + "-"
+		String result = " (" + cal.get(Calendar.YEAR) + "-" + formatNaturalNumber(cal.get(Calendar.MONTH) + 1L) + "-"
 				+ formatNaturalNumber(cal.get(Calendar.DAY_OF_MONTH)) + ") "
 				+ formatNaturalNumber(cal.get(Calendar.HOUR_OF_DAY)) + ":"
 				+ formatNaturalNumber(cal.get(Calendar.MINUTE));
@@ -481,7 +481,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 	@Override
 	public long getOneProgressBarLengthWaitingMillis() {
-		return waitingMillis;
+		return getWaitingMillis();
 	}
 
 	@Override
