@@ -55,7 +55,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -2266,20 +2265,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			producedLicencingInfo = getOpsiLicencingInfoNoOpsiAdmin();
 		}
 
-		Map<String, Integer> map = new HashMap<>();
-		JSONObject jO = (JSONObject) producedLicencingInfo.get("client_numbers");
-
-		try {
-			Iterator<String> iter = jO.keys();
-			while (iter.hasNext()) {
-				String key = iter.next();
-				map.put(key, (Integer) jO.get(key));
-			}
-		} catch (JSONException jex) {
-			Logging.error(this, "Exception on getting Map ", jex);
-		}
-
-		return map;
+		return POJOReMapper.remap(producedLicencingInfo.get("client_numbers"),
+				new TypeReference<Map<String, Integer>>() {
+				});
 	}
 
 	@Override

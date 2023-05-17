@@ -14,6 +14,8 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import de.uib.configed.Configed;
 /*
  * configed - configuration editor for client work stations in opsi
@@ -31,6 +33,7 @@ import de.uib.configed.Configed;
  */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.MainFrame;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -282,7 +285,9 @@ public final class SSHCommandFactory {
 			if (map.get(COMMAND_MAP_COMMANDS) != null) {
 				// Achtung Reihenfolge könnte sich ändern !" toList = ArrayList! JsonArray muss
 				// nicht sortiert sein!"
-				List commandCommands = new LinkedList<>(((JSONArray) map.get(COMMAND_MAP_COMMANDS)).toList());
+				List<String> commandCommands = new LinkedList<>(
+						POJOReMapper.remap(map.get(COMMAND_MAP_COMMANDS), new TypeReference<List<String>>() {
+						}));
 				commandCommands.add("echo ... ");
 				commandCommands.add("echo READY");
 				com.setCommands(commandCommands);
