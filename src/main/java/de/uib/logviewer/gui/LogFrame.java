@@ -74,6 +74,15 @@ public class LogFrame extends JFrame implements WindowListener {
 		UIManager.put("OptionPane.cancelButtonText", Configed.getResourceValue("UIManager.cancelButtonText"));
 	}
 
+	@Override
+	public void setTitle(String filename) {
+		if (filename == null || "".equals(filename)) {
+			super.setTitle("opsi-logviewer (" + Globals.APPNAME + ")");
+		} else {
+			super.setTitle("opsi-logviewer (" + Globals.APPNAME + ") : " + filename);
+		}
+	}
+
 	//------------------------------------------------------------------------------------------
 	//configure interaction
 	//------------------------------------------------------------------------------------------
@@ -100,7 +109,7 @@ public class LogFrame extends JFrame implements WindowListener {
 					showLogfile.setMainText(readFile(fileName).toString());
 					Logging.info(this, "usedmemory " + Globals.usedMemory());
 					showLogfile.setTitle(fileName);
-					setTitle(Globals.APPNAME + " : " + fileName);
+					setTitle(fileName);
 					showLogfile.removeAllHighlights();
 				}
 			}
@@ -109,7 +118,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuFileClose.setText(Configed.getResourceValue("LogFrame.jMenuFileClose"));
 		jMenuFileClose.addActionListener((ActionEvent e) -> {
 			showLogfile.close();
-			setTitle(Globals.APPNAME);
+			setTitle(null);
 		});
 
 		jMenuFileSave.setText(Configed.getResourceValue("LogFrame.jMenuFileSave"));
@@ -119,7 +128,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			if (fileName != null) {
 				showLogfile.reload();
-				setTitle(Globals.APPNAME + " : " + fileName);
+				setTitle(fileName);
 			}
 		});
 
@@ -234,20 +243,12 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuHelpSupport.addActionListener((ActionEvent e) -> Globals.showExternalDocument(Globals.OPSI_SUPPORT_PAGE));
 
 		JMenuItem jMenuHelpAbout = new JMenuItem(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
-		jMenuHelpAbout.addActionListener((ActionEvent e) -> showAboutAction());
+		jMenuHelpAbout.addActionListener((ActionEvent e) -> Globals.showAboutAction(this));
 
 		jMenuHelp.add(jMenuHelpDoc);
 		jMenuHelp.add(jMenuHelpForum);
 		jMenuHelp.add(jMenuHelpSupport);
 		jMenuHelp.add(jMenuHelpAbout);
-	}
-
-	public void showAboutAction() {
-		FrameInfodialog dlg = new FrameInfodialog(this);
-		dlg.setLocationRelativeTo(this);
-		dlg.setModal(true);
-		dlg.setAlwaysOnTop(true);
-		dlg.setVisible(true);
 	}
 
 	private void setupIcons() {
@@ -258,7 +259,7 @@ public class LogFrame extends JFrame implements WindowListener {
 			if (fileName != null) {
 				showLogfile.setMainText(readFile(fileName).toString());
 				showLogfile.setTitle(fileName);
-				setTitle(Globals.APPNAME + " : " + fileName);
+				setTitle(fileName);
 				showLogfile.removeAllHighlights();
 			}
 		});
@@ -373,12 +374,12 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		showLogfile.setMainText("");
 		showLogfile.setTitle("unknown");
-		setTitle(Globals.APPNAME);
+		setTitle(null);
 		if (!"".equals(fileName)) {
 			StringBuilder sbf = readFile(fileName);
 			if ((sbf != null) && sbf.length() > 0) {
 				showLogfile.setTitle(fileName);
-				setTitle(Globals.APPNAME + " : " + fileName);
+				setTitle(fileName);
 				showLogfile.setMainText(sbf.toString());
 			}
 		}
@@ -485,7 +486,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		while (i < logfilelines.length) {
 			try {
 				fWriter.write(logfilelines[i] + "\n");
-				setTitle(Globals.APPNAME + " : " + fn);
+				setTitle(fn);
 			} catch (IOException ex) {
 				Logging.error("Error writing file: " + fn + "\n --- " + ex);
 			}

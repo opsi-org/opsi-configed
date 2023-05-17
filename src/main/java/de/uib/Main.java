@@ -39,8 +39,8 @@ public class Main {
 		options.add(new Option("lv", "logviewer", false, "MUST BE FIRST OPTION, use this option to start logviewer"));
 		options.add(new Option("l", "locale", true,
 				"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale"));
-		options.add(new Option("d", "directory", true,
-				"Directory for the log files. DEFAULT: an opsi log directory, dependent on system and user privileges, lookup in /help/logfile"));
+		options.add(new Option("d", "directory", true, "Directory for log files. DEFAULT: an opsi log directory "
+				+ "dependent on system and user privileges, see /help/logfile"));
 		options.add(new Option(null, "loglevel", true, "Set logging level L, L is a number >= " + Logging.LEVEL_NONE
 				+ ", <= " + Logging.LEVEL_SECRET + " . DEFAULT: " + Logging.getLogLevelConsole()));
 
@@ -144,8 +144,9 @@ public class Main {
 		if (!trynimbus) {
 			try {
 				UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-			} catch (Exception ex) {
-				Logging.debug("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')," + ex);
+			} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException
+					| IllegalAccessException ex) {
+				Logging.warning("UIManager.setLookAndFeel('javax.swing.plaf.metal.MetalLookAndFeel')", ex);
 			}
 		}
 	}

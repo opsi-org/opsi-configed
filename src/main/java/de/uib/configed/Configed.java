@@ -52,7 +52,7 @@ public class Configed {
 	private static boolean showLocalizationStrings;
 
 	private static String host;
-	public static String user;
+	private static String user;
 	private static String password;
 
 	private static String sshKey;
@@ -126,16 +126,6 @@ public class Configed {
 		}
 
 		startWithLocale();
-	}
-
-	// --------------------------------------------------------------------------------------------------------
-
-	private static String getYNforBoolean(boolean b) {
-		if (b) {
-			return "y";
-		} else {
-			return "n";
-		}
 	}
 
 	public static void startWithLocale() {
@@ -297,8 +287,7 @@ public class Configed {
 				"On command line, perform  the complete initialization of user roles if something was changed");
 		options.addOption(null, "gzip", true,
 				"Activate compressed transmission of data from opsi server yes/no. DEFAULT: y");
-		options.addOption(null, "ssh-immediate-connect", true,
-				"Try to create a SSH connection on start. DEFAULT: " + getYNforBoolean(sshConnectOnStart) + "");
+		options.addOption(null, "ssh-immediate-connect", true, "Try to create a SSH connection on start. DEFAULT: N");
 		options.addOption(null, "ssh-key", true,
 				"Full path with filename from sshkey used for authentication on ssh server");
 		options.addOption(null, "ssh-passphrase", true,

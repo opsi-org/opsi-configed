@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
+import de.uib.configed.gui.FTextArea;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import javafx.application.Application;
@@ -449,6 +450,21 @@ public final class Globals {
 
 		button.setBorderPainted(false);
 
+	}
+
+	public static void showAboutAction(JFrame parent) {
+		FTextArea info = new FTextArea(parent, Globals.APPNAME + " Copyright Information", true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 500, 300);
+
+		StringBuilder message = new StringBuilder();
+
+		for (String line : CopyrightInfos.get()) {
+			message.append("\n");
+			message.append(line);
+		}
+
+		info.setMessage(message.toString());
+		info.setVisible(true);
 	}
 
 	public static boolean interpretAsBoolean(Object value) {

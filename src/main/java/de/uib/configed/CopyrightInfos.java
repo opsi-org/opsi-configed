@@ -16,9 +16,11 @@ public final class CopyrightInfos {
 	static {
 		infos = new ArrayList<>();
 
-		infos.add(
-				Globals.APPNAME + "  Version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-		infos.add("_________________________________________________________________________________");
+		infos.add(Globals.APPNAME + "  " + Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION
+				+ " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+		infos.add("");
+		infos.add("The opsi-logviewer is part of the " + Globals.APPNAME + " since version 4.2.22.1");
+		infos.add("______________________________________________________________________");
 		infos.add("");
 		infos.add(Globals.COPYRIGHT1);
 		infos.add(Globals.COPYRIGHT2);
@@ -34,7 +36,7 @@ public final class CopyrightInfos {
 		infos.add("KDE oxygen icon library");
 		infos.add("licensed by a Creative Commons Public License");
 		infos.add("");
-		infos.add("iText® 5.4.5 ©2000-2013 pdf library");
+		infos.add("iText® 5.5.13.3 ©2000-2023 pdf library");
 		infos.add("licensed by AGPL");
 		infos.add("");
 		infos.add("jSch 0.1.55 SSH library");
