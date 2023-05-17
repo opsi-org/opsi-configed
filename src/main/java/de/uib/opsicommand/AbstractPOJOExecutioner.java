@@ -7,11 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.json.JSONException;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.utilities.logging.Logging;
 
@@ -105,21 +101,16 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	public String getErrorFromResponse(Map<String, Object> retrieved) {
 		String errorMessage = null;
 
-		try {
-			if (retrieved.containsKey("error") && retrieved.get("error") != null) {
-				ObjectMapper mapper = new ObjectMapper();
-				Map<String, Object> error = mapper.readValue(mapper.writeValueAsString(retrieved.get("error")),
-						new TypeReference<Map<String, Object>>() {
-						});
+		if (retrieved.containsKey("error") && retrieved.get("error") != null) {
+			Map<String, Object> error = POJOReMapper.remap(retrieved.get("error"),
+					new TypeReference<Map<String, Object>>() {
+					});
 
-				if (error != null && error.get("class") != null && error.get("message") != null) {
-					errorMessage = " [" + error.get("class") + "] " + error.get("message");
-				} else {
-					errorMessage = " " + retrieved.get("error");
-				}
+			if (error != null && error.get("class") != null && error.get("message") != null) {
+				errorMessage = " [" + error.get("class") + "] " + error.get("message");
+			} else {
+				errorMessage = " " + retrieved.get("error");
 			}
-		} catch (JSONException | JsonProcessingException jex) {
-			errorMessage = "JSON Error on retrieving result value,  " + jex;
 		}
 
 		return errorMessage;
@@ -153,21 +144,15 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 			responseFound = false;
 		} else {
 			Object resultValue = null;
+			String errorMessage = getErrorFromResponse(retrieved);
 
-			try {
+			if (errorMessage != null) {
 
-				String errorMessage = getErrorFromResponse(retrieved);
+				String logMessage = "Opsi service error: " + errorMessage;
+				Logging.error(logMessage);
+			} else {
+				resultValue = retrieved.get("result");
 
-				if (errorMessage != null) {
-
-					String logMessage = "Opsi service error: " + errorMessage;
-					Logging.error(logMessage);
-				} else {
-					resultValue = retrieved.get("result");
-
-				}
-			} catch (JSONException jex) {
-				Logging.error("JSON Error on retrieving result value,  ", jex);
 			}
 
 			if (resultValue == null) {
