@@ -518,7 +518,7 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 
 					ObjectMapper mapper = new MessagePackMapper();
 					result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
-					});;
+					});
 				}
 			} catch (Exception ex) {
 				if (waitCursor != null) {

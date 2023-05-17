@@ -331,7 +331,7 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 			});
 		}
 
-		return result;
+		return Boolean.TRUE.equals(result);
 	}
 
 	@Override

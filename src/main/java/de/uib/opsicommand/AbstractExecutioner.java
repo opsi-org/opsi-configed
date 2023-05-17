@@ -24,8 +24,6 @@ public abstract class AbstractExecutioner {
 		return new JSONObject(m);
 	}
 
-	// public abstract Object getValueFromJSONObject(Object o, String key);
-
 	public static JSONArray jsonArray(List<?> l) {
 		JSONArray result = null;
 
