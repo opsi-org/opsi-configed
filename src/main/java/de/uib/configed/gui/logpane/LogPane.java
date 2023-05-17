@@ -1,4 +1,4 @@
-package de.uib.configed.gui;
+package de.uib.configed.gui.logpane;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,15 +14,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.DefaultComboBoxModel;
@@ -35,12 +29,9 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -61,6 +52,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.GeneralFrame;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
 
@@ -71,8 +63,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private static final int SLIDER_W = 180;
 	private static final String DEFAULT_TYPE = "(all)";
 
-	private static final Integer[] LEVELS = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-	private static final List<Integer> levelList = Arrays.asList(LEVELS);
+	private static final int MIN_LEVEL = 1;
+	private static final int MAX_LEVEL = 9;
 
 	private JTextPane jTextPane;
 	private JScrollPane scrollpane;
@@ -87,7 +79,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private JButton buttonFontMinus;
 	private JLabel labelLevel;
 	private AdaptingSlider sliderLevel;
-	private ChangeListener sliderListener;
 	private JLabel labelDisplayRestriction;
 	private JComboBox<String> comboType;
 	private DefaultComboBoxModel<String> comboModelTypes;
@@ -97,7 +88,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private final StyleContext styleContext;
 	private final Style[] logLevelStyles;
 
-	private Integer minLevel = LEVELS[0];
+	private Integer minLevel = MIN_LEVEL;
 	private Integer maxExistingLevel = minLevel;
 	private Integer showLevel = minLevel;
 
@@ -112,7 +103,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	private int selTypeIndex = -1;
 
-	protected String title;
+	private String title;
 	private String info;
 
 	private Integer displayFontSize = 11;
@@ -249,7 +240,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		Logging.info(this, "levels minL, maxL, valL " + minL + ", " + maxL + ", " + valL);
 
-		sliderLevel = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
+		sliderLevel = new AdaptingSlider(this, minL, maxL, produceInitialMaxShowLevel());
 
 		labelDisplayRestriction = new JLabel(Configed.getResourceValue("TextPane.EventType"));
 		if (!ConfigedMain.FONT) {
@@ -367,12 +358,15 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 						Logging.warning(this, "no case found for popupMenuTrait in LogPane");
 						break;
 					}
-
 				}
 			};
 
 			popupMenu.addPopupListenersTo(new JComponent[] { jTextPane });
 		}
+	}
+
+	public Integer getMaxExistingLevel() {
+		return maxExistingLevel;
 	}
 
 	public void removeAllHighlights() {
@@ -406,84 +400,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPane.setCaretPosition(caretPosition);
 	}
 
-	private class AdaptingSlider extends JSlider implements ChangeListener, MouseWheelListener {
-
-		public AdaptingSlider(int min, int max, int value) {
-			super(min, max, value);
-			super.addChangeListener(this);
-
-			if (!ConfigedMain.FONT) {
-				super.setFont(Globals.defaultFont);
-			}
-
-			produceLabels(max);
-
-			super.setPaintLabels(true);
-			super.setSnapToTicks(true);
-
-		}
-
-		@Override
-		public void stateChanged(ChangeEvent e) {
-
-			Logging.debug(this, "change event from sliderLevel, " + getValue());
-			if (getValueIsAdjusting()) {
-				return;
-			}
-
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					Logging.debug(this, "activateShowLevel call");
-					Cursor startingCursor = getCursor();
-					setCursor(new Cursor(Cursor.WAIT_CURSOR));
-					try {
-						LogPane.this.activateShowLevel();
-					} catch (Exception ex) {
-						Logging.debug(this, "Exception in activateShowLevel " + ex);
-					}
-					setCursor(startingCursor);
-				}
-			});
-		}
-
-		@Override
-		public void mouseWheelMoved(MouseWheelEvent e) {
-			Logging.debug(this, "MouseWheelEvent " + e);
-
-			int newIndex = levelList.indexOf(sliderLevel.getValue()) - e.getWheelRotation();
-
-			Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
-
-			if (newIndex > LEVELS.length - 1) {
-				newIndex = LEVELS.length - 1;
-			} else if (newIndex < 0) {
-				newIndex = 0;
-			}
-
-			Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
-
-			sliderLevel.setValue(levelList.get(newIndex));
-		}
-
-		private void produceLabels(int upTo) {
-
-			Map<Integer, JLabel> levelMap = new LinkedHashMap<>();
-
-			for (int i = getMinimum(); i <= upTo; i++) {
-				levelMap.put(i, new JLabel("" + i));
-			}
-
-			for (int i = upTo + 1; i <= getMaximum(); i++) {
-				levelMap.put(i, new JLabel(" . "));
-			}
-
-			try {
-				setLabelTable(new Hashtable<>(levelMap));
-			} catch (Exception ex) {
-				Logging.info(this, "setLabelTable levelDict " + levelMap + " ex " + ex);
-			}
-		}
+	public String getFilenameFromTitle() {
+		return title.replace(" ", "_").replace(".", "_") + ".log";
 	}
 
 	// We create this class because the JTextPane should be editable only to show the caret position,
@@ -612,8 +530,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		document = new ImmutableDefaultStyledDocument(styleContext);
 
-		int selLevel = levelList.indexOf(sliderLevel.getValue()) + 1;
-
 		docLinestartPosition2lineCount = new TreeMap<>();
 		lineCount2docLinestartPosition = new TreeMap<>();
 
@@ -625,7 +541,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 				boolean show = false;
 
-				if (lineLevels[i] <= selLevel) {
+				if (lineLevels[i] <= sliderLevel.getValue()) {
 					show = true;
 				}
 
@@ -656,15 +572,14 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		Logging.debug(this, "setLevel " + l);
 
 		Integer levelO = sliderLevel.getValue();
-		if (levelO != l && sliderListener != null) {
-			sliderLevel.removeChangeListener(sliderListener);
+		if (levelO != l) {
+			sliderLevel.removeChangeListener(sliderLevel);
 			sliderLevel.setValue((Integer) l);
-			sliderLevel.addChangeListener(sliderListener);
+			sliderLevel.addChangeListener(sliderLevel);
 		}
-
 	}
 
-	private void activateShowLevel() {
+	public void activateShowLevel() {
 
 		Integer level = sliderLevel.getValue();
 		if (level > maxExistingLevel) {
@@ -673,7 +588,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			return;
 		}
 
-		Configed.savedStates.savedMaxShownLogLevel.serialize(level);
+		if (Configed.savedStates != null) {
+			Configed.savedStates.savedMaxShownLogLevel.serialize(level);
+		}
 
 		Integer oldLevel = showLevel;
 		showLevel = level;
@@ -928,7 +845,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	}
 
 	private void adaptSlider() {
-		sliderLevel.produceLabels(maxExistingLevel);
+		sliderLevel.produceLabels();
 	}
 
 	public void setText(String s) {
@@ -949,7 +866,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			adaptSlider();
 		} else {
 			showLevel = 1;
-			sliderLevel.produceLabels(0);
+			sliderLevel.produceLabels();
 		}
 
 		sliderLevel.setValue(showLevel);
@@ -979,7 +896,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			adaptSlider();
 		} else {
 			showLevel = 1;
-			sliderLevel.produceLabels(0);
+			sliderLevel.produceLabels();
 		}
 
 		sliderLevel.setValue(showLevel);

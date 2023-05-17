@@ -34,7 +34,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
-import de.uib.configed.gui.LogPane;
+import de.uib.configed.gui.logpane.LogPane;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;

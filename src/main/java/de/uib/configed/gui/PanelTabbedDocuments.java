@@ -16,6 +16,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.logpane.LogPane;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
 
@@ -236,7 +237,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				//
 				// save only if not empty
 				if (textPanes[logNo].lines.length > 1) {
-					ZipEntry entry = new ZipEntry(textPanes[logNo].title.replace(" ", "_").replace(".", "_") + ".log");
+					ZipEntry entry = new ZipEntry(textPanes[logNo].getFilenameFromTitle());
 					out.putNextEntry(entry);
 					int i = 0;
 					while (i < textPanes[logNo].lines.length) {
