@@ -74,7 +74,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private static final Integer[] LEVELS = new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	private static final List<Integer> levelList = Arrays.asList(LEVELS);
 
-	public JTextPane jTextPane;
+	private JTextPane jTextPane;
 	private JScrollPane scrollpane;
 	private JPanel commandpane;
 	private JLabel labelSearch;
@@ -92,7 +92,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	private JComboBox<String> comboType;
 	private DefaultComboBoxModel<String> comboModelTypes;
 
-	public JPanel jTextPanel;
 	private WordSearcher searcher;
 	private Highlighter highlighter;
 	private final StyleContext styleContext;
@@ -133,7 +132,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		title = "";
 		info = "";
 
-		jTextPanel = new JPanel(new BorderLayout());
 		scrollpane = new JScrollPane();
 		jTextPane = new JTextPane() {
 			@Override
@@ -206,11 +204,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 		jTextPane.addKeyListener(this);
 
-		jTextPanel.add(jTextPane, BorderLayout.CENTER);
-
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpane.getVerticalScrollBar().setUnitIncrement(20);
-		scrollpane.getViewport().add(jTextPanel);
+		scrollpane.getViewport().add(jTextPane);
 		super.add(scrollpane, BorderLayout.CENTER);
 
 		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
@@ -253,55 +249,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		Logging.info(this, "levels minL, maxL, valL " + minL + ", " + maxL + ", " + valL);
 
-		sliderLevel = new AdaptingSlider(minL, maxL, 4/*TODO produceInitialMaxShowLevel()*/);
-
-		sliderListener = new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-
-				Logging.debug(this, "change event from sliderLevel, " + sliderLevel.getValue());
-				if (sliderLevel.getValueIsAdjusting()) {
-					return;
-				}
-
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						Logging.debug(this, "activateShowLevel call");
-						Cursor startingCursor = sliderLevel.getCursor();
-						sliderLevel.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-						try {
-							activateShowLevel();
-						} catch (Exception ex) {
-							Logging.debug(this, "Exception in activateShowLevel " + ex);
-						}
-						sliderLevel.setCursor(startingCursor);
-					}
-				});
-			}
-		};
-
-		sliderLevel.addChangeListener(sliderListener);
-		sliderLevel.addMouseWheelListener(new MouseWheelListener() {
-			@Override
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				Logging.debug(this, "MouseWheelEvent " + e);
-
-				int newIndex = levelList.indexOf(sliderLevel.getValue()) - e.getWheelRotation();
-
-				Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
-
-				if (newIndex > LEVELS.length - 1) {
-					newIndex = LEVELS.length - 1;
-				} else if (newIndex < 0) {
-					newIndex = 0;
-				}
-
-				Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
-
-				sliderLevel.setValue(levelList.get(newIndex));
-			}
-		});
+		sliderLevel = new AdaptingSlider(minL, maxL, produceInitialMaxShowLevel());
 
 		labelDisplayRestriction = new JLabel(Configed.getResourceValue("TextPane.EventType"));
 		if (!ConfigedMain.FONT) {
@@ -450,19 +398,19 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		buildDocument();
 	}
 
-	private static class AdaptingSlider extends JSlider implements ChangeListener {
+	public int getCaretPosition() {
+		return jTextPane.getCaretPosition();
+	}
 
-		private int min;
-		private int max;
-		private int value;
+	public void setCaretPosition(int caretPosition) {
+		jTextPane.setCaretPosition(caretPosition);
+	}
+
+	private class AdaptingSlider extends JSlider implements ChangeListener, MouseWheelListener {
 
 		public AdaptingSlider(int min, int max, int value) {
 			super(min, max, value);
 			super.addChangeListener(this);
-
-			this.min = min;
-			this.max = max;
-			this.value = value;
 
 			if (!ConfigedMain.FONT) {
 				super.setFont(Globals.defaultFont);
@@ -475,22 +423,58 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		}
 
-		// ChangeListener
 		@Override
 		public void stateChanged(ChangeEvent e) {
-			// for debugging
-			Logging.info(this, "min, max, value " + min + ", " + max + ", " + value + " -- ChangeEvent " + e);
+
+			Logging.debug(this, "change event from sliderLevel, " + getValue());
+			if (getValueIsAdjusting()) {
+				return;
+			}
+
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					Logging.debug(this, "activateShowLevel call");
+					Cursor startingCursor = getCursor();
+					setCursor(new Cursor(Cursor.WAIT_CURSOR));
+					try {
+						LogPane.this.activateShowLevel();
+					} catch (Exception ex) {
+						Logging.debug(this, "Exception in activateShowLevel " + ex);
+					}
+					setCursor(startingCursor);
+				}
+			});
+		}
+
+		@Override
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			Logging.debug(this, "MouseWheelEvent " + e);
+
+			int newIndex = levelList.indexOf(sliderLevel.getValue()) - e.getWheelRotation();
+
+			Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
+
+			if (newIndex > LEVELS.length - 1) {
+				newIndex = LEVELS.length - 1;
+			} else if (newIndex < 0) {
+				newIndex = 0;
+			}
+
+			Logging.debug(this, "MouseWheelEvent newIndex " + newIndex);
+
+			sliderLevel.setValue(levelList.get(newIndex));
 		}
 
 		private void produceLabels(int upTo) {
 
 			Map<Integer, JLabel> levelMap = new LinkedHashMap<>();
 
-			for (int i = min; i <= upTo; i++) {
+			for (int i = getMinimum(); i <= upTo; i++) {
 				levelMap.put(i, new JLabel("" + i));
 			}
 
-			for (int i = upTo + 1; i <= max; i++) {
+			for (int i = upTo + 1; i <= getMaximum(); i++) {
 				levelMap.put(i, new JLabel(" . "));
 			}
 
@@ -603,8 +587,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		int savedMaxShownLogLevel = 0;
 		try {
-			savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.savedMaxShownLogLevel.deserialize());
-
+			if (Configed.savedStates != null) {
+				savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.savedMaxShownLogLevel.deserialize());
+			}
 		} catch (NumberFormatException ex) {
 			Logging.warning(this, "savedMaxShownLogLevel could not be read, value "
 					+ Configed.savedStates.savedMaxShownLogLevel.deserialize());

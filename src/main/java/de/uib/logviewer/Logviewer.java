@@ -127,7 +127,6 @@ public class Logviewer {
 		Logging.info("mainframe nearly initialized");
 
 		logFrame.setVisible(true);
-		logFrame.setFocusToJTextPane();
 	}
 
 	public static LogFrame getLogFrame() {

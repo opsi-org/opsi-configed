@@ -53,7 +53,7 @@ public class LogFrame extends JFrame implements WindowListener {
 	private JMenu jMenuView;
 	private JMenu jMenuHelp;
 
-	private LogPane showLogfile;
+	private LogPane logPane;
 
 	private IconButton iconButtonOpen;
 	private IconButton iconButtonReload;
@@ -106,28 +106,28 @@ public class LogFrame extends JFrame implements WindowListener {
 				fileName = openFile();
 				if (fileName != null) {
 					Logging.info(this, "usedmemory " + Globals.usedMemory());
-					showLogfile.setMainText(readFile(fileName).toString());
+					logPane.setMainText(readFile(fileName).toString());
 					Logging.info(this, "usedmemory " + Globals.usedMemory());
-					showLogfile.setTitle(fileName);
+					logPane.setTitle(fileName);
 					setTitle(fileName);
-					showLogfile.removeAllHighlights();
+					logPane.removeAllHighlights();
 				}
 			}
 		});
 
 		jMenuFileClose.setText(Configed.getResourceValue("LogFrame.jMenuFileClose"));
 		jMenuFileClose.addActionListener((ActionEvent e) -> {
-			showLogfile.close();
+			logPane.close();
 			setTitle(null);
 		});
 
 		jMenuFileSave.setText(Configed.getResourceValue("LogFrame.jMenuFileSave"));
-		jMenuFileSave.addActionListener((ActionEvent e) -> showLogfile.save());
+		jMenuFileSave.addActionListener((ActionEvent e) -> logPane.save());
 
 		jMenuFileReload.setText(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		jMenuFileReload.addActionListener((ActionEvent e) -> {
 			if (fileName != null) {
-				showLogfile.reload();
+				logPane.reload();
 				setTitle(fileName);
 			}
 		});
@@ -214,14 +214,14 @@ public class LogFrame extends JFrame implements WindowListener {
 
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
 		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
-			showLogfile.increaseFontSize();
-			showLogfile.reload();
+			logPane.increaseFontSize();
+			logPane.reload();
 		});
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
-			showLogfile.reduceFontSize();
-			showLogfile.reload();
+			logPane.reduceFontSize();
+			logPane.reload();
 		});
 
 		jMenuView = new JMenu(Configed.getResourceValue("LogFrame.jMenuView"));
@@ -257,10 +257,10 @@ public class LogFrame extends JFrame implements WindowListener {
 		iconButtonOpen.addActionListener((ActionEvent e) -> {
 			openFile();
 			if (fileName != null) {
-				showLogfile.setMainText(readFile(fileName).toString());
-				showLogfile.setTitle(fileName);
+				logPane.setMainText(readFile(fileName).toString());
+				logPane.setTitle(fileName);
 				setTitle(fileName);
-				showLogfile.removeAllHighlights();
+				logPane.removeAllHighlights();
 			}
 		});
 
@@ -268,7 +268,7 @@ public class LogFrame extends JFrame implements WindowListener {
 				"images/images/reload16.png", "");
 		iconButtonReload.addActionListener((ActionEvent e) -> {
 			if (fileName != null) {
-				showLogfile.reload();
+				logPane.reload();
 			}
 		});
 
@@ -276,13 +276,13 @@ public class LogFrame extends JFrame implements WindowListener {
 				"images/images/save.png", "");
 		iconButtonSave.addActionListener((ActionEvent e) -> {
 			if (fileName != null) {
-				showLogfile.save();
+				logPane.save();
 			}
 		});
 
 		iconButtonCopy = new IconButton(Configed.getResourceValue("LogFrame.buttonCopy"), "images/edit-copy.png",
 				"images/images/edit-copy.png", "");
-		iconButtonCopy.addActionListener((ActionEvent e) -> showLogfile.floatExternal());
+		iconButtonCopy.addActionListener((ActionEvent e) -> logPane.floatExternal());
 	}
 
 	private void guiInit() {
@@ -334,64 +334,6 @@ public class LogFrame extends JFrame implements WindowListener {
 										.addComponent(activity).addGap(0, 0, Short.MAX_VALUE)))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		//only one LogPane
-		showLogfile = new LogPane("", true) {
-			@Override
-			public void reload() {
-				int caretPosition = showLogfile.jTextPane.getCaretPosition();
-				showLogfile.setMainText(reloadFile(fileName));
-				showLogfile.setTitle(fileName);
-				showLogfile.jTextPane.setCaretPosition(caretPosition);
-				showLogfile.removeAllHighlights();
-			}
-
-			@Override
-			public void close() {
-				fileName = "";
-				showLogfile.setMainText("");
-				showLogfile.setTitle(fileName);
-				showLogfile.removeAllHighlights();
-			}
-
-			@Override
-			public void save() {
-				String fn = openFile();
-				if (!"".equals(fn) && fn != null) {
-					saveToFile(fn, showLogfile.lines);
-					showLogfile.setTitle(fn);
-				}
-			}
-
-			@Override
-			public void paste(String text) {
-				fileName = "";
-				showLogfile.setMainText(text);
-				showLogfile.setTitle(fileName);
-				showLogfile.removeAllHighlights();
-			}
-
-		};
-
-		showLogfile.setMainText("");
-		showLogfile.setTitle("unknown");
-		setTitle(null);
-		if (!"".equals(fileName)) {
-			StringBuilder sbf = readFile(fileName);
-			if ((sbf != null) && sbf.length() > 0) {
-				showLogfile.setTitle(fileName);
-				setTitle(fileName);
-				showLogfile.setMainText(sbf.toString());
-			}
-		}
-
-		JPanel allPane = new JPanel();
-		allPane.setLayout(new BorderLayout());
-
-		allPane.add(iconPane, BorderLayout.NORTH);
-		allPane.add(showLogfile, BorderLayout.CENTER);
-
-		baseContainer.add(allPane);
-
 		setupMenuFile();
 		setupMenuView();
 		setupMenuHelp();
@@ -400,13 +342,68 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuBar.add(jMenuHelp);
 
 		this.setJMenuBar(jMenuBar);
-		showLogfile.jTextPanel.transferFocus();
-		showLogfile.jTextPanel.requestFocusInWindow();
+
+		initLogpane();
+
+		JPanel allPane = new JPanel();
+		allPane.setLayout(new BorderLayout());
+
+		allPane.add(iconPane, BorderLayout.NORTH);
+		allPane.add(logPane, BorderLayout.CENTER);
+
+		baseContainer.add(allPane);
 	}
 
-	public void setFocusToJTextPane() {
-		Logging.info(this, "setFocusToJTextPane");
-		showLogfile.jTextPane.requestFocusInWindow();
+	private void initLogpane() {
+		//only one LogPane
+		logPane = new LogPane("", true) {
+			@Override
+			public void reload() {
+				int caretPosition = logPane.getCaretPosition();
+				logPane.setMainText(reloadFile(fileName));
+				logPane.setTitle(fileName);
+				logPane.setCaretPosition(caretPosition);
+				logPane.removeAllHighlights();
+			}
+
+			@Override
+			public void close() {
+				fileName = "";
+				logPane.setMainText("");
+				logPane.setTitle(fileName);
+				logPane.removeAllHighlights();
+			}
+
+			@Override
+			public void save() {
+				String fn = openFile();
+				if (!"".equals(fn) && fn != null) {
+					saveToFile(fn, logPane.lines);
+					logPane.setTitle(fn);
+				}
+			}
+
+			@Override
+			public void paste(String text) {
+				fileName = "";
+				logPane.setMainText(text);
+				logPane.setTitle(fileName);
+				logPane.removeAllHighlights();
+			}
+
+		};
+
+		logPane.setMainText("");
+		logPane.setTitle("unknown");
+		setTitle(null);
+		if (!"".equals(fileName)) {
+			StringBuilder sbf = readFile(fileName);
+			if ((sbf != null) && sbf.length() > 0) {
+				logPane.setTitle(fileName);
+				setTitle(fileName);
+				logPane.setMainText(sbf.toString());
+			}
+		}
 	}
 
 	public void exitAction() {
@@ -564,7 +561,6 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 
 		return sb;
-
 	}
 
 	private static StringBuilder readInputStream(InputStream fis) {
