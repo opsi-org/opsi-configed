@@ -8,7 +8,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class POJOReMapper {
+public final class POJOReMapper {
+	private POJOReMapper() {
+	}
+
 	public static <T> T remap(Object obj, TypeReference<T> typeRef) {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enable(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT);
