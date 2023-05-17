@@ -110,7 +110,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		JLabel labelFilenamePrefix = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenamePrefix"));
 
-		String filenamePrefix = Configed.savedStates.saveSWauditExportFilePrefix.deserialize();
+		String filenamePrefix = Configed.savedStates.getProperty("swaudit_export_file_prefix");
 
 		if (filenamePrefix == null || filenamePrefix.length() == 0) {
 			filenamePrefix = Configed.getResourceValue("PanelSWMultiClientReport.filenamePrefix");
@@ -143,7 +143,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		exportDirectory = null;
 
-		exportDirectoryS = Configed.savedStates.saveSWauditExportDir.deserialize();
+		exportDirectoryS = Configed.savedStates.getProperty("swaudit_export_dir");
 		if (exportDirectoryS == null) {
 			exportDirectoryS = "";
 		}
@@ -204,7 +204,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 					fieldExportDirectory.setText(exportDirectoryS);
 
-					Configed.savedStates.saveSWauditExportDir.serialize(exportDirectoryS);
+					Configed.savedStates.setProperty("swaudit_export_dir", exportDirectoryS);
 
 				}
 
@@ -243,10 +243,10 @@ public class PanelSWMultiClientReport extends JPanel {
 				PanelSWInfo.KindOfExport.values(), PanelSWInfo.KindOfExport.class, ((Enum<KindOfExport> val) -> {
 					Logging.info(this, "change to " + val);
 					kindOfExport = (PanelSWInfo.KindOfExport) val;
-					Configed.savedStates.saveSWauditKindOfExport.serialize("" + val);
+					Configed.savedStates.setProperty("swaudit_kind_of_export", "" + val);
 				}));
 
-		String koe = Configed.savedStates.saveSWauditKindOfExport.deserialize();
+		String koe = Configed.savedStates.getProperty("swaudit_kind_of_export");
 		panelSelectExportType.setValueByString(koe);
 
 		kindOfExport = (PanelSWInfo.KindOfExport) panelSelectExportType.getValue();

@@ -8,9 +8,9 @@ import java.util.Set;
 
 import javax.swing.ComboBoxModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.SessionSaveSet;
 
 public class InstallationStateTableModelFiltered extends InstallationStateTableModel {
 
@@ -23,29 +23,26 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 	private int[] filterInverse;
 
-	private SessionSaveSet<String> filterSaver;
-
 	public InstallationStateTableModelFiltered(String[] selectedClients, ConfigedMain main,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
-			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns,
-			SessionSaveSet<String> filterSaver) {
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
 		super(selectedClients, main, collectChangedStates, listOfInstallableProducts, statesAndActions, possibleActions,
 				productGlobalInfos, displayColumns);
-
-		this.filterSaver = filterSaver;
 	}
 
 	private void saveFilterSet(Set<String> filterSet) {
-
-		filterSaver.serialize(filterSet);
-
-		Logging.info(this, "saveFilterSet " + filterSet);
+		if (filterSet != null) {
+			Configed.savedStates.setProperty("filteredStateTableFilters", filterSet.toString());
+			Logging.info(this, "saveFilterSet " + filterSet);
+		}
 	}
 
 	public void resetFilter() {
-		Set<String> filterSaved = filterSaver.deserialize();
-		if (filterSaved == null || filterSaved.isEmpty()) {
+		Set<String> filterSaved = new HashSet<>(Arrays.asList(Configed.savedStates
+				.getProperty("filteredStateTableFilters", "").replaceAll("\\[|\\]|\\s", "").split(",")));
+
+		if (filterSaved.isEmpty()) {
 			setFilterFrom((Set<String>) null);
 		} else {
 			Set<String> productsOnlyInFilterSet = new HashSet<>(filterSaved);
@@ -56,7 +53,6 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			setFilterFrom(filterSaved);
 			Logging.debug(this, "resetFilter " + filterSaved);
 		}
-
 	}
 
 	public void setFilterFrom(Set<String> ids) {

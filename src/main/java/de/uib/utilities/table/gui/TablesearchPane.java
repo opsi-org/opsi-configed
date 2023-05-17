@@ -43,7 +43,6 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.SaveInteger;
 import de.uib.utilities.swing.AbstractNavigationPanel;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
@@ -51,6 +50,9 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 
 public class TablesearchPane extends JPanel implements DocumentListener, KeyListener, ActionListener {
 	private static final int BLINK_RATE = 0;
+	private static final String FULL_TEXT_SEARCH_PROPERTY = "fullTextSearch";
+	private static final String ALL_COLUMNS_SEARCH_PROPERTY = "allColumnsSearch";
+	private static final String PROGRESSIVE_SEARCH_PROPERTY = "progressiveSearch";
 
 	public static final int FULL_TEXT_SEARCH = 0;
 	public static final int START_TEXT_SEARCH = 1;
@@ -110,9 +112,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
 
-	private SaveInteger saveSearchpaneProgressiveSearch;
-	private SaveInteger saveSearchpaneAllColumnsSearch;
-	private SaveInteger saveSearchpaneFullTextSearch;
+	// private SaveInteger saveSearchpaneProgressiveSearch;
+	// private SaveInteger saveSearchpaneAllColumnsSearch;
+	// private SaveInteger saveSearchpaneFullTextSearch;
+
+	private String savedStatesObjectTag;
 
 	private boolean filteredMode;
 
@@ -135,7 +139,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		filtering = true;
 
-		initSavedStates(savedStatesObjectTag);
+		this.savedStatesObjectTag = savedStatesObjectTag;
+		initSavedStates();
 		init();
 
 		this.targetModel = targetModel;
@@ -213,14 +218,11 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		this.masterFrame = masterFrame;
 	}
 
-	private void initSavedStates(String savedStatesObject) {
-		if (savedStatesObject != null) {
-			saveSearchpaneProgressiveSearch = new SaveInteger(savedStatesObject + ".progressiveSearch", 0,
-					Configed.savedStates);
-			saveSearchpaneAllColumnsSearch = new SaveInteger(savedStatesObject + ".allColumnsSearch", 0,
-					Configed.savedStates);
-			saveSearchpaneFullTextSearch = new SaveInteger(savedStatesObject + ".fullTextSearch", 0,
-					Configed.savedStates);
+	private void initSavedStates() {
+		if (savedStatesObjectTag != null) {
+			Configed.savedStates.setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
+			Configed.savedStates.setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
+			Configed.savedStates.setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
 		}
 	}
 
@@ -391,8 +393,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		boolean active = true;
 
-		if (saveSearchpaneProgressiveSearch != null) {
-			active = saveSearchpaneProgressiveSearch.deserializeAsInt() == 0;
+		if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
+			active = Integer.valueOf(
+					Configed.savedStates.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY)) == 0;
 		}
 
 		checkmarkSearchProgressive = new CheckedLabel(selectedIconSearch, unselectedIconSearch, active);
@@ -548,8 +551,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		selectedIcon = Globals.createImageIcon("images/loupe_light_16_multicolumnsearch.png", "");
 
 		active = true;
-		if (saveSearchpaneAllColumnsSearch != null) {
-			active = saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0;
+		if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
+			active = Integer.valueOf(
+					Configed.savedStates.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY)) == 0;
 		}
 
 		checkmarkAllColumns = new CheckedLabel(selectedIcon, unselectedIcon, active);
@@ -561,8 +565,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		selectedIcon = Globals.createImageIcon("images/loupe_light_16_fulltextsearch.png", "");
 
 		active = true;
-		if (saveSearchpaneFullTextSearch != null) {
-			active = saveSearchpaneFullTextSearch.deserializeAsInt() == 0;
+		if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
+			active = Integer.valueOf(
+					Configed.savedStates.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY)) == 0;
 		}
 
 		checkmarkFullText = new CheckedLabel(selectedIcon, unselectedIcon, active);
@@ -666,7 +671,9 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			}
 
-			if (saveSearchpaneAllColumnsSearch == null || saveSearchpaneAllColumnsSearch.deserializeAsInt() == 0
+			if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) == null
+					|| Integer.valueOf(Configed.savedStates
+							.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY)) == 0
 					|| preferredColumnIndex >= targetModel.getColumnCount()) {
 				comboSearchFields.setSelectedIndex(0);
 			} else {
@@ -1247,13 +1254,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			if (Boolean.TRUE.equals(checkmarkAllColumns.isSelected())) {
 				// all columns
 				comboSearchFields.setSelectedIndex(0);
-				if (saveSearchpaneAllColumnsSearch != null) {
-					saveSearchpaneAllColumnsSearch.serialize(0);
+				if (Configed.savedStates
+						.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
+					Configed.savedStates.setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "0");
 				}
 			} else {
 				comboSearchFields.setSelectedIndex(preferredColumnIndex);
-				if (saveSearchpaneAllColumnsSearch != null) {
-					saveSearchpaneAllColumnsSearch.serialize(1);
+				if (Configed.savedStates
+						.getProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY) != null) {
+					Configed.savedStates.setProperty(savedStatesObjectTag + "." + ALL_COLUMNS_SEARCH_PROPERTY, "1");
 				}
 			}
 		} else if (e.getSource() == checkmarkFullText) {
@@ -1261,13 +1270,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			if (Boolean.TRUE.equals(checkmarkFullText.isSelected())) {
 				comboSearchFieldsMode.setSelectedIndex(FULL_TEXT_SEARCH);
-				if (saveSearchpaneFullTextSearch != null) {
-					saveSearchpaneFullTextSearch.serialize(0);
+				if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
+					Configed.savedStates.setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "0");
 				}
 			} else {
 				comboSearchFieldsMode.setSelectedIndex(START_TEXT_SEARCH);
-				if (saveSearchpaneFullTextSearch != null) {
-					saveSearchpaneFullTextSearch.serialize(1);
+				if (Configed.savedStates.getProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY) != null) {
+					Configed.savedStates.setProperty(savedStatesObjectTag + "." + FULL_TEXT_SEARCH_PROPERTY, "1");
 				}
 			}
 		} else if (e.getSource() == filtermark) {
@@ -1296,13 +1305,15 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					"actionPerformed on checkmarkSearchProgressiv, set to  " + checkmarkSearchProgressive.isSelected());
 			if (Boolean.TRUE.equals(checkmarkSearchProgressive.isSelected())) {
 				searchInputType = SearchInputType.PROGRESSIVE;
-				if (saveSearchpaneProgressiveSearch != null) {
-					saveSearchpaneProgressiveSearch.serialize(0);
+				if (Configed.savedStates
+						.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
+					Configed.savedStates.setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "0");
 				}
 			} else {
 				searchInputType = SearchInputType.LINE;
-				if (saveSearchpaneProgressiveSearch != null) {
-					saveSearchpaneProgressiveSearch.serialize(1);
+				if (Configed.savedStates
+						.getProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY) != null) {
+					Configed.savedStates.setProperty(savedStatesObjectTag + "." + PROGRESSIVE_SEARCH_PROPERTY, "1");
 				}
 			}
 

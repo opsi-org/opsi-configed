@@ -3602,8 +3602,8 @@ public class MainFrame extends JFrame
 
 			// save states now
 
-			Configed.savedStates.saveSWauditExportFilePrefix
-					.serialize(showSoftwareLogMultiClientReport.getExportfilePrefix());
+			Configed.savedStates.setProperty("swaudit_export_file_prefix",
+					showSoftwareLogMultiClientReport.getExportfilePrefix());
 
 			String filepathStart = showSoftwareLogMultiClientReport.getExportDirectory() + File.separator
 					+ showSoftwareLogMultiClientReport.getExportfilePrefix();
