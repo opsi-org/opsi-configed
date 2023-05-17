@@ -48,7 +48,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	}
 
 	public void saveNewLicence(Map<String, String> m) {
-		WaitCursor waitCursor = new WaitCursor(Globals.container1, configedMain.licencesFrame.getCursor());
+		WaitCursor waitCursor = new WaitCursor(Globals.frame1, configedMain.licencesFrame.getCursor());
 		persist.editSoftwareLicence(m.get(LicenceEntry.ID_KEY), m.get(LicenceEntry.LICENCE_CONTRACT_ID_KEY),
 				m.get(LicenceEntry.TYPE_KEY), m.get(LicenceEntry.MAX_INSTALLATIONS_KEY),
 				m.get(LicenceEntry.BOUND_TO_HOST_KEY), m.get(LicenceEntry.EXPIRATION_DATE_KEY));

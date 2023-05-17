@@ -34,7 +34,7 @@ public class TabbedPaneX extends JPanel {
 		}
 	}
 
-	protected void init() {
+	private void init() {
 		setLayout(new BorderLayout());
 		setSize(600, 400);
 
@@ -107,5 +107,4 @@ public class TabbedPaneX extends JPanel {
 			tabOrder.remove(tabIndex);
 		}
 	}
-
 }

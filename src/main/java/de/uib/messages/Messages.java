@@ -1,6 +1,7 @@
 package de.uib.messages;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -73,7 +74,7 @@ public final class Messages {
 		return selectedLocaleString;
 	}
 
-	public static ResourceBundle getResource() throws MissingResourceException {
+	public static ResourceBundle getResource() {
 		try {
 			Logging.info("Messages, getResource from " + BUNDLE_NAME);
 
@@ -104,9 +105,8 @@ public final class Messages {
 		return myLocale;
 	}
 
-	private static Locale produceLocale() {
+	private static void produceLocale() {
 		myLocale = Locale.getDefault();
-		return giveLocale("default");
 	}
 
 	private static Locale produceLocale(String language) {
@@ -128,7 +128,7 @@ public final class Messages {
 		return myLocale;
 	}
 
-	public static Locale setLocale(String characteristics) {
+	public static void setLocale(String characteristics) {
 		Logging.debug("Messages, setLocale");
 		Locale loc = null;
 		if (characteristics != null && !characteristics.isEmpty()) {
@@ -156,7 +156,7 @@ public final class Messages {
 		}
 
 		if (loc == null) {
-			loc = produceLocale();
+			produceLocale();
 		}
 
 		try {
@@ -165,8 +165,6 @@ public final class Messages {
 		} catch (MissingResourceException e) {
 			Logging.info("Missing messages for locale EN: " + e);
 		}
-
-		return loc;
 	}
 
 	public static List<String> getLocaleNames() {
@@ -222,8 +220,8 @@ public final class Messages {
 				}
 				line = reader.readLine();
 			}
-		} catch (Exception ex) {
-			Logging.warning("Messages exception on reading: " + ex);
+		} catch (IOException ex) {
+			Logging.warning("Messages exception on reading!", ex);
 		}
 
 		TreeSet<String> names = new TreeSet<>();

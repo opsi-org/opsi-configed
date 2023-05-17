@@ -16,6 +16,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.logpane.LogPane;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ClippedTitleTabbedPane;
 
@@ -43,15 +44,15 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		for (int i = 0; i < idents.length; i++) {
 			final String ident = idents[i];
-			LogPane showPane = new LogPane(defaultText) {
+			LogPane showPane = new LogPane(defaultText, true) {
 				@Override
-				protected void reload() {
+				public void reload() {
 					super.reload();
 					loadDocument(ident);
 				}
 
 				@Override
-				protected void save() {
+				public void save() {
 					String filename = ident;
 					if (getInfo() != null) {
 						filename = getInfo().replace('.', '_') + "___" + ident + ".log";
@@ -169,8 +170,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(
 					new FileNameExtensionFilter("logfiles: .log, .zip, .gz, .7z", "log", "zip", "gz", "7z"));
-
-			chooser.setApproveButtonText("O.K.");
 			chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 			chooser.setDialogTitle(
 					Globals.APPNAME + " " + Configed.getResourceValue("PanelTabbedDocument.saveFileChooser"));
@@ -238,7 +237,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 				//
 				// save only if not empty
 				if (textPanes[logNo].lines.length > 1) {
-					ZipEntry entry = new ZipEntry(textPanes[logNo].title.replace(" ", "_").replace(".", "_") + ".log");
+					ZipEntry entry = new ZipEntry(textPanes[logNo].getFilenameFromTitle());
 					out.putNextEntry(entry);
 					int i = 0;
 					while (i < textPanes[logNo].lines.length) {
