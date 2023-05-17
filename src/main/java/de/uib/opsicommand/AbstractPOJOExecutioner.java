@@ -120,16 +120,12 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	public Map<String, Object> getResponses(Map<String, Object> retrieved) {
 		Map<String, Object> result = new HashMap<>();
 
-		try {
-			if (retrieved.get("error") == null) {
-				List<?> list = (List<?>) retrieved.get("result");
-				result.put("result", list);
-			} else {
-				String str = "" + retrieved.get("error");
-				result.put("error", str);
-			}
-		} catch (Exception ex) {
-			Logging.error(this, "getResponses ", ex);
+		if (retrieved.get("error") == null) {
+			List<?> list = (List<?>) retrieved.get("result");
+			result.put("result", list);
+		} else {
+			String str = "" + retrieved.get("error");
+			result.put("error", str);
 		}
 
 		Logging.debug(this, "getResponses  result " + result);
