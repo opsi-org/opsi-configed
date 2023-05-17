@@ -744,7 +744,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		new Thread() {
 			@Override
 			public void run() {
-				long start = System.currentTimeMillis();
 				initGui();
 
 				waitCursorInitGui.stop();
@@ -754,7 +753,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				strategyForLoadingData.actAfterWaiting();
 
 				mainFrame.toFront();
-				Logging.devel(this, "elapsed: " + (System.currentTimeMillis() - start));
 			}
 		}.start();
 	}
