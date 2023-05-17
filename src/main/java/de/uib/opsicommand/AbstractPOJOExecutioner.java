@@ -17,9 +17,9 @@ import de.uib.utilities.logging.Logging;
 
 /**
  * This class extends the Executioner abstract class in such a way that the data
- * will be retrieved by means of a JSON interface.
+ * will be retrieved in POJO.
  *
- * @author Rupert Roeder
+ * @author Rupert Roeder, Naglis Vidziunas
  */
 public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	protected ConnectionState conStat;
@@ -77,8 +77,6 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 
 	@Override
 	public Map<String, Object> getMapResult(OpsiMethodCall omc) {
-		// yields possibly JSON objects and arrays as values
-		// compare getMap_Object
 		Map<String, Object> result = new HashMap<>();
 		Map<String, Object> response = retrieveResponse(omc);
 
@@ -335,20 +333,20 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 	}
 
 	@Override
-	public Map<String, Object> getMapFromItem(Object s) {
+	public Map<String, Object> getMapFromItem(Object item) {
 		Map<String, Object> result = null;
 
-		result = POJOReMapper.remap(s, new TypeReference<Map<String, Object>>() {
+		result = POJOReMapper.remap(item, new TypeReference<Map<String, Object>>() {
 		});
 
 		return result;
 	}
 
 	@Override
-	public List<Object> getListFromItem(String s) {
+	public List<Object> getListFromItem(String item) {
 		List<Object> result = null;
 
-		result = POJOReMapper.remap(s, new TypeReference<List<Object>>() {
+		result = POJOReMapper.remap(item, new TypeReference<List<Object>>() {
 		});
 
 		return result;
