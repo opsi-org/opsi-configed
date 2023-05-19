@@ -128,6 +128,7 @@ import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.opsidatamodel.permission.UserSshConfig;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstancesObserver;
+import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.Containership;
@@ -659,6 +660,7 @@ public class MainFrame extends JFrame
 
 			menuItem.addActionListener((ActionEvent e) -> {
 				configedMain.closeInstance(true);
+				UserPreferences.set(UserPreferences.LANGUAGE, localeName);
 				Messages.setLocale(localeName);
 				new Thread() {
 					@Override
@@ -685,6 +687,7 @@ public class MainFrame extends JFrame
 
 			themeItem.addActionListener((ActionEvent e) -> {
 				configedMain.closeInstance(true);
+				UserPreferences.set(UserPreferences.THEME, themeName);
 				Messages.setTheme(themeName);
 				Configed.setOpsiLaf();
 

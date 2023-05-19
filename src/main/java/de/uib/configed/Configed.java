@@ -29,6 +29,7 @@ import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.configed.tree.ClientTreeUI;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -36,6 +37,7 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
+import de.uib.utilities.savedstates.UserPreferences;
 
 public class Configed {
 
@@ -316,6 +318,15 @@ public class Configed {
 
 		de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
+
+		if (UserPreferences.get(UserPreferences.LANGUAGE) != null) {
+			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
+		}
+
+		if (UserPreferences.get(UserPreferences.THEME) != null && JSONthroughHTTPS.isOpsi43()) {
+			Messages.setTheme(UserPreferences.get(UserPreferences.THEME));
+			setOpsiLaf();
+		}
 
 		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
 
