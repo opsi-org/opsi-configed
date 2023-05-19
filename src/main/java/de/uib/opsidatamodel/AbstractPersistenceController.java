@@ -20,8 +20,6 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.json.JSONObject;
-
 import de.uib.configed.Configed;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
@@ -830,7 +828,7 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	public abstract void opsiLicencingInfoRequestRefresh();
 
-	public abstract JSONObject getOpsiLicencingInfoOpsiAdmin();
+	public abstract Map<String, Object> getOpsiLicencingInfoOpsiAdmin();
 
 	public abstract Map<String, Object> getOpsiLicencingInfoNoOpsiAdmin();
 

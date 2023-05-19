@@ -26,7 +26,6 @@ public class TabbedFrame extends SecondaryFrame {
 	}
 
 	private void init() {
-		panel.init();
 		add(panel);
 		pack();
 	}

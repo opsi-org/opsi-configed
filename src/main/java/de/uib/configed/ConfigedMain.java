@@ -9,7 +9,7 @@
  *
  * @author D. Oertel, R. Roeder, J. Schneider, A. Sucher, N. Otto
  * configed - configuration editor for client work stations in opsi
- * (open pc server integration) www.opsi.org
+ * (open pc server integration) www.opsi.orgF
  *
 */
 
@@ -752,6 +752,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				strategyForLoadingData.actAfterWaiting();
 
 				mainFrame.toFront();
+
 			}
 		}.start();
 	}
@@ -1362,8 +1363,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// setting the similar global values as well
 
-		Globals.container1 = mainFrame;
-
 		mainFrame.enableMenuItemsForClients(0);
 
 		// rearranging visual components
@@ -1405,7 +1404,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		licencesFrame = new TabbedFrame(this);
 
 		Globals.frame1 = licencesFrame;
-		Globals.container1 = licencesFrame.getContentPane();
 
 		licencesFrame.setGlobals(Globals.getMap());
 		licencesFrame.setTitle(
@@ -4898,7 +4896,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dialogRemoteControl = new MyDialogRemoteControl();
 		}
 
-		if (!remoteControls.equals(getRemoteControls())) {
+		if (remoteControls == null || !remoteControls.equals(getRemoteControls())) {
 			remoteControls = getRemoteControls();
 
 			Logging.debug(this, "remoteControls " + remoteControls);

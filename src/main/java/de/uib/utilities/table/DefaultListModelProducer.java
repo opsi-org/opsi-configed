@@ -56,7 +56,7 @@ public class DefaultListModelProducer<O> implements ListModelProducer<O> {
 			return (List<O>) value;
 		}
 
-		Logging.warning(this, "value is not instance of List<O>, create List with element value");
+		Logging.info(this, "value is not instance of List<O>, create List with element value");
 		return Collections.singletonList((O) value);
 	}
 

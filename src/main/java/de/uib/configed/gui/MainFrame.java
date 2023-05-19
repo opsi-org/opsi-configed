@@ -85,6 +85,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 /**
  * configed - configuration editor for client work stations in opsi
@@ -99,7 +100,6 @@ import de.uib.configed.Configed;
 
  */
 import de.uib.configed.ConfigedMain;
-import de.uib.configed.CopyrightInfos;
 import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
 import de.uib.configed.HostsStatusInfo;
@@ -689,7 +689,7 @@ public class MainFrame extends JFrame
 				configedMain.closeInstance(true);
 				UserPreferences.set(UserPreferences.THEME, themeName);
 				Messages.setTheme(themeName);
-				Configed.setOpsiLaf();
+				Main.setOpsiLaf();
 
 				new Thread() {
 
@@ -1447,7 +1447,7 @@ public class MainFrame extends JFrame
 		jMenuHelp.addSeparator();
 
 		jMenuHelpAbout.setText(Configed.getResourceValue("MainFrame.jMenuHelpAbout"));
-		jMenuHelpAbout.addActionListener((ActionEvent e) -> showAboutAction());
+		jMenuHelpAbout.addActionListener((ActionEvent e) -> Globals.showAboutAction(this));
 
 		jMenuHelp.add(jMenuHelpAbout);
 	}
@@ -2313,7 +2313,6 @@ public class MainFrame extends JFrame
 
 		if (configedMain.getPersistenceController().isOpsiLicencingAvailable()
 				&& configedMain.getPersistenceController().isOpsiUserAdmin() && licensingInfoMap == null) {
-
 			licensingInfoMap = LicensingInfoMap.getInstance(
 					configedMain.getPersistenceController().getOpsiLicencingInfoOpsiAdmin(),
 					configedMain.getPersistenceController().getConfigDefaultValues(),
@@ -3068,21 +3067,6 @@ public class MainFrame extends JFrame
 		backendInfoDialog.insertHTMLTable(configedMain.getBackendInfos(), "");
 
 		backendInfoDialog.setVisible(true);
-	}
-
-	private void showAboutAction() {
-		FTextArea info = new FTextArea(this, Globals.APPNAME + " Copyright Information", true,
-				new String[] { Configed.getResourceValue("FGeneralDialog.ok") }, 700, 300);
-
-		StringBuilder message = new StringBuilder();
-
-		for (String line : CopyrightInfos.get()) {
-			message.append("\n");
-			message.append(line);
-		}
-
-		info.setMessage(message.toString());
-		info.setVisible(true);
 	}
 
 	private void showLogfileLocationAction() {
