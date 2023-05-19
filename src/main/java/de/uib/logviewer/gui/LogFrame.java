@@ -38,6 +38,7 @@ import de.uib.configed.gui.logpane.LogPane;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.savedstates.UserPreferences;
 import de.uib.utilities.swing.ActivityPanel;
 import utils.ExtractorUtil;
 
@@ -145,6 +146,7 @@ public class LogFrame extends JFrame implements WindowListener {
 			groupThemes.add(themeItem);
 
 			themeItem.addActionListener((ActionEvent e) -> {
+				UserPreferences.set(UserPreferences.THEME, themeName);
 				Messages.setTheme(themeName);
 				Main.setOpsiLaf();
 
@@ -152,7 +154,7 @@ public class LogFrame extends JFrame implements WindowListener {
 			});
 		}
 
-		JMenu jMenuFileLanguage = new JMenu(Configed.getResourceValue("MainFrame.jMenuFileChooseLanguage")); // submenu
+		JMenu jMenuFileLanguage = new JMenu(Configed.getResourceValue("MainFrame.jMenuFileChooseLanguage"));
 		ButtonGroup groupLanguages = new ButtonGroup();
 
 		String selectedLocale = Messages.getSelectedLocale();
@@ -176,6 +178,7 @@ public class LogFrame extends JFrame implements WindowListener {
 			groupLanguages.add(menuItem);
 
 			menuItem.addActionListener((ActionEvent e) -> {
+				UserPreferences.set(UserPreferences.LANGUAGE, localeName);
 				Messages.setLocale(localeName);
 				restartLogFrame();
 			});

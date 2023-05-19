@@ -29,7 +29,6 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
@@ -150,7 +149,7 @@ public class Configed {
 			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
 		}
 
-		if (UserPreferences.get(UserPreferences.THEME) != null && JSONthroughHTTPS.isOpsi43()) {
+		if (UserPreferences.get(UserPreferences.THEME) != null && ConfigedMain.THEMES) {
 			Messages.setTheme(UserPreferences.get(UserPreferences.THEME));
 			Main.setOpsiLaf();
 		}
