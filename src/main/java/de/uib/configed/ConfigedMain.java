@@ -15,16 +15,13 @@
 
 package de.uib.configed;
 
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -297,7 +294,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private Dashboard dashboard;
 
-	private MyDialogRemoteControl dialogRemoteControl;
+	private FDialogRemoteControl dialogRemoteControl;
 	private Map<String, RemoteControl> remoteControls;
 
 	private int clientCount;
@@ -1277,6 +1274,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private void initMainFrame() {
 
 		myServer = persist.getHostInfoCollections().getConfigServer();
+		Logging.devel(myServer);
 
 		// create depotsList
 		depotsList = new DepotsList(persist);
@@ -4615,44 +4613,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	private abstract static class AbstractErrorListProducer extends Thread {
-		String title;
-
-		AbstractErrorListProducer(String specificPartOfTitle) {
-			String part = specificPartOfTitle;
-			title = Globals.APPNAME + ":  " + part;
-		}
-
-		protected abstract List<String> getErrors();
-
-		@Override
-		public void run() {
-			// final
-			FShowList fListFeedback = new FShowList(mainFrame, title, false, new String[] { "ok" }, 800, 200);
-			if (!FONT) {
-				fListFeedback.setFont(Globals.defaultFont);
-			}
-			fListFeedback.setMessage("");
-			fListFeedback.setButtonsEnabled(true);
-			Cursor oldCursor = fListFeedback.getCursor();
-			fListFeedback.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-			fListFeedback.setVisible(true);
-			fListFeedback.glassTransparency(true, 800, 200, 0.04F);
-
-			List<String> errors = getErrors();
-
-			if (!errors.isEmpty()) {
-				fListFeedback.setLines(errors);
-				fListFeedback.setCursor(oldCursor);
-				fListFeedback.setButtonsEnabled(true);
-
-				fListFeedback.setVisible(true);
-			} else {
-				fListFeedback.leave();
-			}
-		}
-	}
-
 	public void wakeUp(final String[] clients, String startInfo) {
 		if (clients == null) {
 			return;
@@ -4797,103 +4757,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		savedSearchesDialog.setVisible(true);
 	}
 
-	private class MyDialogRemoteControl extends FDialogRemoteControl {
-		public void appendLog(final String s) {
-			SwingUtilities.invokeLater(() -> {
-				if (s == null) {
-					loggingArea.setText("");
-				} else {
-					loggingArea.append(s);
-					loggingArea.setCaretPosition(loggingArea.getText().length());
-				}
-			});
-		}
-
-		@Override
-		public void commit() {
-			super.commit();
-			setVisible(true);
-
-			Logging.debug(this, "getSelectedValue " + getSelectedList());
-
-			appendLog(null);
-
-			if (!getSelectedList().isEmpty()) {
-				final String selected = "" + getSelectedList().get(0);
-
-				for (int j = 0; j < getSelectedClients().length; j++) {
-					final String targetClient = getSelectedClients()[j];
-
-					new Thread() {
-						@Override
-						public void run() {
-							String cmd = getValue(selected);
-
-							de.uib.utilities.script.Interpreter trans = new de.uib.utilities.script.Interpreter(
-									new String[] { "%host%", "%hostname%", "%ipaddress%", "%inventorynumber%",
-											"%hardwareaddress%", "%opsihostkey%", "%depotid%", "%configserverid%" });
-
-							trans.setCommand(cmd);
-
-							HashMap<String, String> values = new HashMap<>();
-							values.put("%host%", targetClient);
-							String hostName = targetClient;
-							Logging.info(this, " targetClient " + targetClient);
-							if (targetClient.indexOf(".") > 0) {
-								String[] parts = targetClient.split("\\.");
-								Logging.info(this, " targetClient " + Arrays.toString(parts));
-								hostName = parts[0];
-							}
-
-							values.put("%hostname%", hostName);
-
-							HostInfo pcInfo = persist.getHostInfoCollections().getMapOfPCInfoMaps().get(targetClient);
-							values.put("%ipaddress%", pcInfo.getIpAddress());
-							values.put("%hardwareaddress%", pcInfo.getMacAddress());
-							values.put("%inventorynumber%", pcInfo.getInventoryNumber());
-							values.put("%opsihostkey%", pcInfo.getHostKey());
-							values.put("%depotid%", pcInfo.getInDepot());
-
-							String configServerId = myServer;
-							if (myServer == null || myServer.isEmpty()) {
-								myServer = "localhost";
-							}
-							values.put("%configserverid%", configServerId);
-
-							trans.setValues(values);
-
-							cmd = trans.interpret();
-
-							List<String> parts = de.uib.utilities.script.Interpreter.splitToList(cmd);
-
-							try {
-								Logging.debug(this,
-										"startRemoteControlForSelectedClients, cmd: " + cmd + " splitted to " + parts);
-
-								ProcessBuilder pb = new ProcessBuilder(parts);
-								pb.redirectErrorStream(true);
-
-								Process proc = pb.start();
-
-								BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-
-								String line = null;
-								while ((line = br.readLine()) != null) {
-									appendLog(selected + " on " + targetClient + " >" + line + "\n");
-								}
-							} catch (Exception ex) {
-								Logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
-							}
-						}
-					}.start();
-				}
-			}
-		}
-	}
-
 	public void startRemoteControlForSelectedClients() {
 		if (dialogRemoteControl == null) {
-			dialogRemoteControl = new MyDialogRemoteControl();
+			dialogRemoteControl = new FDialogRemoteControl(this);
 		}
 
 		if (remoteControls == null || !remoteControls.equals(getRemoteControls())) {

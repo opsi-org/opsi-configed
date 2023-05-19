@@ -1,20 +1,34 @@
 package de.uib.configed.gui;
 
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.ListSelectionEvent;
 
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
+import de.uib.configed.type.HostInfo;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.script.Interpreter;
+import de.uib.utilities.swing.FEditStringList;
 
-public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList {
+public class FDialogRemoteControl extends FEditStringList {
 	private Map<String, String> meanings;
 	private Map<String, Boolean> editable;
 	private String selText;
 
-	public FDialogRemoteControl() {
+	private ConfigedMain configedMain;
+
+	public FDialogRemoteControl(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 
 		loggingPanel.setVisible(true);
 	}
@@ -71,6 +85,98 @@ public class FDialogRemoteControl extends de.uib.utilities.swing.FEditStringList
 	public void resetValue() {
 		visibleList.setSelectedValue(selValue, true);
 		checkSelected();
+	}
+
+	public void appendLog(final String s) {
+		SwingUtilities.invokeLater(() -> {
+			if (s == null) {
+				loggingArea.setText("");
+			} else {
+				loggingArea.append(s);
+				loggingArea.setCaretPosition(loggingArea.getText().length());
+			}
+		});
+	}
+
+	@Override
+	public void commit() {
+		super.commit();
+		setVisible(true);
+
+		Logging.debug(this, "getSelectedValue " + getSelectedList());
+
+		appendLog(null);
+
+		if (!getSelectedList().isEmpty()) {
+			final String firstSelectedClient = "" + getSelectedList().get(0);
+
+			for (int j = 0; j < configedMain.getSelectedClients().length; j++) {
+				final String targetClient = configedMain.getSelectedClients()[j];
+
+				new Thread() {
+					@Override
+					public void run() {
+						executeCommand(firstSelectedClient, targetClient);
+					}
+				}.start();
+			}
+		}
+	}
+
+	private void executeCommand(String firstSelectedClient, String targetClient) {
+
+		String cmd = getValue(firstSelectedClient);
+
+		Interpreter trans = new Interpreter(new String[] { "%host%", "%hostname%", "%ipaddress%", "%inventorynumber%",
+				"%hardwareaddress%", "%opsihostkey%", "%depotid%", "%configserverid%" });
+
+		trans.setCommand(cmd);
+
+		HashMap<String, String> values = new HashMap<>();
+		values.put("%host%", targetClient);
+		String hostName = targetClient;
+		Logging.info(this, " targetClient " + targetClient);
+		if (targetClient.indexOf(".") > 0) {
+			String[] parts = targetClient.split("\\.");
+			Logging.info(this, " targetClient " + Arrays.toString(parts));
+			hostName = parts[0];
+		}
+
+		values.put("%hostname%", hostName);
+
+		HostInfo pcInfo = configedMain.getPersistenceController().getHostInfoCollections().getMapOfPCInfoMaps()
+				.get(targetClient);
+		values.put("%ipaddress%", pcInfo.getIpAddress());
+		values.put("%hardwareaddress%", pcInfo.getMacAddress());
+		values.put("%inventorynumber%", pcInfo.getInventoryNumber());
+		values.put("%opsihostkey%", pcInfo.getHostKey());
+		values.put("%depotid%", pcInfo.getInDepot());
+		values.put("%configserverid%",
+				configedMain.getPersistenceController().getHostInfoCollections().getConfigServer());
+
+		trans.setValues(values);
+
+		cmd = trans.interpret();
+
+		List<String> parts = Interpreter.splitToList(cmd);
+
+		try {
+			Logging.debug(this, "startRemoteControlForSelectedClients, cmd: " + cmd + " splitted to " + parts);
+
+			ProcessBuilder pb = new ProcessBuilder(parts);
+			pb.redirectErrorStream(true);
+
+			Process proc = pb.start();
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				appendLog(firstSelectedClient + " on " + targetClient + " >" + line + "\n");
+			}
+		} catch (IOException ex) {
+			Logging.error("Runtime error for command >>" + cmd + "<<, : " + ex, ex);
+		}
 	}
 
 	@Override

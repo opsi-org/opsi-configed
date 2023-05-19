@@ -104,5 +104,4 @@ public class Interpreter {
 		Logging.debug(this, "produced command " + command);
 		return command;
 	}
-
 }

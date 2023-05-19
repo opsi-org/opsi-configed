@@ -42,7 +42,6 @@ public class ActivatedGroupModel {
 			hostsInfo.setGroupClientsCount(associatedClients.size());
 			Configed.savedStates.setProperty("groupname", groupName);
 		}
-
 	}
 
 	public boolean isActive() {

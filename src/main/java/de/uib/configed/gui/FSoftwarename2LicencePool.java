@@ -383,44 +383,35 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 				.get(AuditSoftwareXLicencePool.produceMapFromSWident(swId).get(SWAuditEntry.NAME)));
 	}
 
-	public void setTableModel(GenTableModel model) {
-		if (model == null) {
-			// TODO can this be removed inside if? There was a comment "test" here
+	public void setTableModel() {
+		Logging.info(this, "init modelSWnames");
 
-			Logging.info(this, "init modelSWnames");
+		this.modelSWnames = new GenTableModel(null,
+				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
+						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
+				0, new int[] {}, panelSWnames, updateCollection) {
 
-			this.modelSWnames = new GenTableModel(null,
-					new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-							() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
-					0, new int[] {}, panelSWnames, updateCollection) {
-
-				@Override
-				public void produceRows() {
-					super.produceRows();
-					Logging.info(this, "producing rows for modelSWnames");
-					foundVariantLicencepools = false;
-					int i = 0;
-					while (!foundVariantLicencepools && i < getRowCount()) {
-						foundVariantLicencepools = checkExistNamesWithVariantLicencepools((String) getValueAt(i, 0));
-						i++;
-					}
-					myController.thePanel.setDisplaySimilarExist(foundVariantLicencepools);
+			@Override
+			public void produceRows() {
+				super.produceRows();
+				Logging.info(this, "producing rows for modelSWnames");
+				foundVariantLicencepools = false;
+				int i = 0;
+				while (!foundVariantLicencepools && i < getRowCount()) {
+					foundVariantLicencepools = checkExistNamesWithVariantLicencepools((String) getValueAt(i, 0));
+					i++;
 				}
+				myController.thePanel.setDisplaySimilarExist(foundVariantLicencepools);
+			}
 
-				@Override
-				public void reset() {
-					Logging.info(this, "reset");
-					super.reset();
-				}
-			};
-
-		} else {
-			Logging.info(this, "set modelSWnames");
-			this.modelSWnames = model;
-		}
+			@Override
+			public void reset() {
+				Logging.info(this, "reset");
+				super.reset();
+			}
+		};
 
 		panelSWnames.setTableModel(this.modelSWnames);
-
 	}
 
 	public void setPreselectionForName2Pool(Softwarename2LicencepoolRestriction val) {

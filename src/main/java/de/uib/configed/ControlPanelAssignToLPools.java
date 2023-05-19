@@ -779,7 +779,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		final ControlPanelAssignToLPools contr = this;
 		thePanel.fSoftwarename2LicencePool = new FSoftwarename2LicencePool(Globals.frame1, contr);
-		thePanel.fSoftwarename2LicencePool.setTableModel(null); // test
+		thePanel.fSoftwarename2LicencePool.setTableModel(); // test
 		thePanel.setDisplaySimilarExist(thePanel.fSoftwarename2LicencePool.checkExistNamesWithVariantLicencepools());
 		thePanel.fSoftwarename2LicencePool.setButtonsEnabled(true);
 
