@@ -13,6 +13,9 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
 public class InstallationStateTableModelFiltered extends InstallationStateTableModel {
+	public static final String STATE_TABLE_FILTERS_PROPERTY = "stateTableFilters";
+
+	private String savedStateObjTag;
 
 	private int[] filter;
 	// filter is a function
@@ -26,21 +29,25 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	public InstallationStateTableModelFiltered(String[] selectedClients, ConfigedMain main,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
-			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns) {
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns, String savedStateObjTag) {
 		super(selectedClients, main, collectChangedStates, listOfInstallableProducts, statesAndActions, possibleActions,
 				productGlobalInfos, displayColumns);
+
+		this.savedStateObjTag = savedStateObjTag;
 	}
 
 	private void saveFilterSet(Set<String> filterSet) {
 		if (filterSet != null) {
-			Configed.savedStates.setProperty("filteredStateTableFilters", filterSet.toString());
+			Configed.savedStates.setProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY,
+					filterSet.toString());
 			Logging.info(this, "saveFilterSet " + filterSet);
 		}
 	}
 
 	public void resetFilter() {
-		Set<String> filterSaved = new HashSet<>(Arrays.asList(Configed.savedStates
-				.getProperty("filteredStateTableFilters", "").replaceAll("\\[|\\]|\\s", "").split(",")));
+		Set<String> filterSaved = new HashSet<>(Arrays
+				.asList(Configed.savedStates.getProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY, "")
+						.replaceAll("\\[|\\]|\\s", "").split(",")));
 
 		if (filterSaved.isEmpty()) {
 			setFilterFrom((Set<String>) null);
@@ -79,7 +86,6 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 			for (i = 0; i < reducedIds.size(); i++) {
 				filter[i] = productsV.indexOf(products[i]);
-
 			}
 
 			setFilter(filter);
@@ -162,5 +168,4 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 		return super.getComboBoxModel(originRow(row), column);
 	}
-
 }

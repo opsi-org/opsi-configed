@@ -2802,33 +2802,40 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.debug(this,
 					"setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
 
+			String localbootProductsSavedStateObjTag = "localbootProducts";
+
 			if (istmForSelectedClientsLocalboot == null) {
 				// we rebuild only if we reloaded
 				istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
 						collectChangedLocalbootStates, persist.getAllLocalbootProductNames(depotRepresentative),
 						localbootStatesAndActions, possibleActions, persist.getProductGlobalInfos(depotRepresentative),
-						getLocalbootProductDisplayFieldsList());
+						getLocalbootProductDisplayFieldsList(), localbootProductsSavedStateObjTag);
 			}
 
 			try {
 				int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
 				mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
 				mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
-
 				mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 
-				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty("filteredStateTableFilters"));
+				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(localbootProductsSavedStateObjTag
+						+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
 
-				Set<String> savedFilter = new HashSet<>();
+				Set<String> savedFilter = null;
 
-				(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
+				if (Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+						+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
+					savedFilter = new HashSet<>(Arrays.asList(Configed.savedStates
+							.getProperty(localbootProductsSavedStateObjTag + "."
+									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY)
+							.replaceAll("\\[|\\]|\\s", "").split(",")));
+				}
+				mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
 
 				Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
-				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection); // (*)
-
+				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
 				mainFrame.panelLocalbootProductSettings.setSearchFields(
 						InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
-
 				setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
 			} catch (Exception ex) {
 				Logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
@@ -2843,7 +2850,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private boolean setNetbootProductsPage() {
-
 		if (!setDepotRepresentative()) {
 			return false;
 		}
@@ -2881,30 +2887,36 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			persist.retrieveProductProperties(selectionPanel.getSelectedValues());
 
+			String netbootProductsSavedStateObjTag = "netbootProducts";
+
 			if (istmForSelectedClientsNetboot == null) {
 				// we rebuild only if we reloaded
 				istmForSelectedClientsNetboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
 						collectChangedNetbootStates, persist.getAllNetbootProductNames(depotRepresentative),
 						netbootStatesAndActions, possibleActions, persist.getProductGlobalInfos(depotRepresentative),
-						getNetbootProductDisplayFieldsList());
+						getNetbootProductDisplayFieldsList(), netbootProductsSavedStateObjTag);
 			}
 
 			try {
 				int[] columnWidths = getTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts);
 				mainFrame.panelNetbootProductSettings.setTableModel(istmForSelectedClientsNetboot);
-
 				mainFrame.panelNetbootProductSettings.setSortKeys(currentSortKeysNetbootProducts);
-
 				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 
-				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty("filteredStateTableFilters"));
+				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(netbootProductsSavedStateObjTag
+						+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
 
-				Set<String> savedFilter = new HashSet<>();
+				Set<String> savedFilter = null;
 
+				if (Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
+						+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
+					savedFilter = new HashSet<>(Arrays.asList(Configed.savedStates
+							.getProperty(netbootProductsSavedStateObjTag + "."
+									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, "")
+							.replaceAll("\\[|\\]|\\s", "").split(",")));
+				}
 				mainFrame.panelNetbootProductSettings.reduceToSet(savedFilter);
-
 				mainFrame.panelNetbootProductSettings.setSelection(oldProductSelection);
-
 				setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
 			} catch (Exception ex) {
 				Logging.error(" setNetbootInstallationStateTableModel,  exception Occurred", ex);
