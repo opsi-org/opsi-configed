@@ -1274,7 +1274,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private void initMainFrame() {
 
 		myServer = persist.getHostInfoCollections().getConfigServer();
-		Logging.devel(myServer);
 
 		// create depotsList
 		depotsList = new DepotsList(persist);

@@ -8,14 +8,9 @@ import java.net.URL;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 
 import de.uib.Main;
-import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.logviewer.gui.LogFrame;
 import de.uib.utilities.logging.Logging;
@@ -68,27 +63,10 @@ public class Logviewer {
 		SwingUtilities.invokeLater(Logviewer::init);
 	}
 
-	private static Options createLogviewerOptions() {
-		Options options = new Options();
-
-		options.addOption("f", "filename", true, "filename for the log file");
-		options.addOption("v", "version", false, "Tell logviewer version");
-		options.addOption(null, "help", false, "Give this help");
-
-		// Add the general options to configed-specific options
-		for (Option option : Main.getGeneralOptions()) {
-			options.addOption(option);
-		}
-
-		return options;
-	}
-
-	private static void processArgs(Options options, String[] args) throws ParseException {
-		CommandLineParser parser = new DefaultParser(false);
-		CommandLine cmd = parser.parse(options, args);
+	private static void processArgs(Options options, CommandLine cmd) {
 
 		if (cmd.hasOption("help")) {
-			Main.showHelp(options);
+			Main.showHelp();
 			endApp(0);
 		}
 
@@ -140,16 +118,9 @@ public class Logviewer {
 	/**
 	 * main-Methode
 	 */
-	public static void main(String[] args) {
+	public static void main(Options options, CommandLine cmd) {
 
-		Options options = createLogviewerOptions();
-
-		try {
-			processArgs(options, args);
-		} catch (ParseException e) {
-			Logging.error("Problem parsing arguments in logviewer main", e);
-			endApp(Configed.ERROR_INVALID_OPTION);
-		}
+		processArgs(options, cmd);
 
 		try {
 			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);

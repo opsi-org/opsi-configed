@@ -1,6 +1,5 @@
 package de.uib;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -11,7 +10,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
@@ -25,6 +23,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.tree.ClientTreeUI;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
+import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.utilities.logging.Logging;
 
 public class Main {
@@ -33,29 +32,62 @@ public class Main {
 
 	private static boolean isLogviewer;
 
-	public static List<Option> getGeneralOptions() {
-		List<Option> options = new ArrayList<>();
+	private static Options options;
 
-		options.add(new Option("lv", "logviewer", false, "MUST BE FIRST OPTION, use this option to start logviewer"));
-		options.add(new Option("l", "locale", true,
-				"Set locale LOC (format: <language>_<country>). DEFAULT: System.locale"));
-		options.add(new Option("d", "directory", true, "Directory for log files. DEFAULT: an opsi log directory "
-				+ "dependent on system and user privileges, see /help/logfile"));
-		options.add(new Option(null, "loglevel", true, "Set logging level L, L is a number >= " + Logging.LEVEL_NONE
-				+ ", <= " + Logging.LEVEL_SECRET + " . DEFAULT: " + Logging.getLogLevelConsole()));
+	private static void createOptions() {
+		options = new Options();
 
-		return options;
-	}
+		// General options
+		options.addOption("lv", "logviewer", false, "Use this option to start logviewer instead of configed");
+		options.addOption("l", "locale", true, "Set locale LOC (format: <language>_<country>). DEFAULT: System.locale");
+		options.addOption("d", "directory", true, "Directory for log files. DEFAULT: an opsi log directory "
+				+ "dependent on system and user privileges, see /help/logfile");
+		options.addOption(null, "loglevel", true, "Set logging level L, L is a number >= " + Logging.LEVEL_NONE
+				+ ", <= " + Logging.LEVEL_SECRET + " . DEFAULT: " + Logging.getLogLevelConsole());
+		options.addOption(null, "help", false, "Give this help");
+		options.addOption("v", "version", false, "Tell configed version");
 
-	private static Options createGeneralOptions() {
-		Options options = new Options();
+		// Configed specific options 
+		options.addOption("h", "host", true, "Configuration server HOST to connect to. DEFAULT: choose interactive");
+		options.addOption("u", "user", true, "user for authentication. DEFAULT: give interactive");
+		options.addOption("p", "password", true, "password for authentication. DEFAULT: give interactive");
+		options.addOption("c", "client", true, "CLIENT to preselect.  DEFAULT: no client selected");
+		options.addOption("g", "clientgroup", true,
+				"clientgroup to preselect. DEFAULT: last selected group reselected");
+		options.addOption("t", "tab", true,
+				"Start with tab number <arg>, index counting starts with 0, works only if a CLIENT is preselected. DEFAULT 0");
+		options.addOption("s", "savedstates", true,
+				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");
+		options.addOption("r", "refreshminutes", true,
+				"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never).DEFAULT: 0");
+		options.addOption("qs", "querysavedsearch", true,
+				"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])");
+		options.addOption("qg", "definegroupbysearch", true,
+				"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME");
+		options.addOption(null, "initUserRoles", false,
+				"On command line, perform  the complete initialization of user roles if something was changed");
+		options.addOption(null, "gzip", true,
+				"Activate compressed transmission of data from opsi server yes/no. DEFAULT: y");
+		options.addOption(null, "ssh-immediate-connect", true, "Try to create a SSH connection on start. DEFAULT: N");
+		options.addOption(null, "ssh-key", true,
+				"Full path with filename from sshkey used for authentication on ssh server");
+		options.addOption(null, "ssh-passphrase", true,
+				"Passphrase for given sshkey used for authentication on ssh server");
+		options.addOption(null, "collect_queries_until_no", true, "Collect the first N queries; N = "
+				+ OpsiMethodCall.maxCollectSize + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
+		options.addOption(null, "localizationfile", true,
+				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
+		options.addOption(null, "localizationstrings", false,
+				"For translation work, show internal labels together with the strings of selected localization");
+		options.addOption(null, "swaudit-pdf", true,
+				"export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
+		options.addOption(null, "swaudit-csv", true,
+				"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
+		options.addOption(null, "disable-certificate-verification", false,
+				"Disable opsi-certificate verification with server, by DEFAULT enabled");
 
-		// Get the general options
-		for (Option option : getGeneralOptions()) {
-			options.addOption(option);
-		}
-
-		return options;
+		// Logviewer specific options
+		options.addOption("f", "filename", true, "filename for the log file");
 	}
 
 	public static JFrame getMainFrame() {
@@ -66,7 +98,7 @@ public class Main {
 		}
 	}
 
-	public static void showHelp(Options options) {
+	public static void showHelp() {
 		Logging.essential("configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
 
 		HelpFormatter formatter = new HelpFormatter();
@@ -74,10 +106,7 @@ public class Main {
 		formatter.printHelp(Main.USAGE_INFO, options);
 	}
 
-	private static void parseArgs(Options options, String[] args) throws ParseException {
-
-		CommandLineParser parser = new DefaultParser(false);
-		CommandLine cmd = parser.parse(options, args, true);
+	private static void parseArgs(CommandLine cmd) {
 
 		if (cmd.hasOption("lv")) {
 			isLogviewer = true;
@@ -177,24 +206,29 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+		createOptions();
 
-		Options options = createGeneralOptions();
 		try {
-			parseArgs(options, args);
+			CommandLineParser parser = new DefaultParser(false);
+
+			CommandLine cmd = parser.parse(options, args, false);
+
+			parseArgs(cmd);
+
+			if (ConfigedMain.THEMES) {
+				setOpsiLaf();
+			} else {
+				configureUI();
+			}
+
+			if (isLogviewer) {
+				Logviewer.main(options, cmd);
+			} else {
+				Configed.main(options, cmd);
+			}
 		} catch (ParseException e) {
-			Logging.error("could not parse arguments in main", e);
-		}
-
-		if (ConfigedMain.THEMES) {
-			setOpsiLaf();
-		} else {
-			configureUI();
-		}
-
-		if (isLogviewer) {
-			Logviewer.main(args);
-		} else {
-			Configed.main(args);
+			Logging.error("Problem parsing arguments", e);
+			showHelp();
 		}
 	}
 }

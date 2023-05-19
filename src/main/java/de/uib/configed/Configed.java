@@ -17,11 +17,7 @@ import java.util.Properties;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 
 import de.uib.Main;
 import de.uib.configed.clientselection.SavedSearchQuery;
@@ -276,60 +272,7 @@ public class Configed {
 		}
 	}
 
-	private static Options createConfigedOptions() {
-		Options options = new Options();
-		options.addOption("h", "host", true, "Configuration server HOST to connect to. DEFAULT: choose interactive");
-		options.addOption("u", "user", true, "user for authentication. DEFAULT: give interactive");
-		options.addOption("p", "password", true, "password for authentication. DEFAULT: give interactive");
-		options.addOption("c", "client", true, "CLIENT to preselect.  DEFAULT: no client selected");
-		options.addOption("g", "clientgroup", true,
-				"clientgroup to preselect. DEFAULT: last selected group reselected");
-		options.addOption("t", "tab", true,
-				"Start with tab number <arg>, index counting starts with 0, works only if a CLIENT is preselected. DEFAULT 0");
-		options.addOption("s", "savedstates", true,
-				"Directory for the files which keep states specific for a server connection. DEFAULT: Similar to log directory");
-		options.addOption("r", "refreshminutes", true,
-				"Refresh data every REFRESHMINUTES  (where this feature is implemented, 0 = never).DEFAULT: 0");
-		options.addOption("qs", "querysavedsearch", true,
-				"On command line: tell saved host searches list resp. the search result for [SAVEDSEARCH_NAME])");
-		options.addOption("qg", "definegroupbysearch", true,
-				"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME");
-		options.addOption(null, "initUserRoles", false,
-				"On command line, perform  the complete initialization of user roles if something was changed");
-		options.addOption(null, "gzip", true,
-				"Activate compressed transmission of data from opsi server yes/no. DEFAULT: y");
-		options.addOption(null, "ssh-immediate-connect", true, "Try to create a SSH connection on start. DEFAULT: N");
-		options.addOption(null, "ssh-key", true,
-				"Full path with filename from sshkey used for authentication on ssh server");
-		options.addOption(null, "ssh-passphrase", true,
-				"Passphrase for given sshkey used for authentication on ssh server");
-		options.addOption("v", "version", false, "Tell configed version");
-		options.addOption(null, "collect_queries_until_no", true, "Collect the first N queries; N = "
-				+ OpsiMethodCall.maxCollectSize + " (DEFAULT).  -1 meaning 'no collect'. 0 meaning 'infinite' ");
-		options.addOption(null, "help", false, "Give this help");
-		options.addOption(null, "localizationfile", true,
-				"For translation work, use  EXTRA_LOCALIZATION_FILENAME as localization file, the file name format has to be: ");
-		options.addOption(null, "localizationstrings", false,
-				"For translation work, show internal labels together with the strings of selected localization");
-		options.addOption(null, "swaudit-pdf", true,
-				"export pdf swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
-		options.addOption(null, "swaudit-csv", true,
-				"export csv swaudit reports for given clients (if no OUTPUT_PATH given, use home directory)");
-		options.addOption(null, "disable-certificate-verification", false,
-				"Disable opsi-certificate verification with server, by DEFAULT enabled");
-
-		// Add the general options to configed-specific options
-		for (Option option : Main.getGeneralOptions()) {
-			options.addOption(option);
-		}
-
-		return options;
-	}
-
-	private static void parseArgs(Options options, String[] args) throws ParseException {
-
-		CommandLineParser parser = new DefaultParser(false);
-		CommandLine cmd = parser.parse(options, args);
+	private static void processArgs(Options options, CommandLine cmd) {
 
 		if (cmd.hasOption("h")) {
 			host = cmd.getOptionValue("h");
@@ -357,7 +300,7 @@ public class Configed {
 				tab = Integer.parseInt(tabString);
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + tabString + "< has no integer format");
-				Main.showHelp(options);
+				Main.showHelp();
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -383,7 +326,7 @@ public class Configed {
 				refreshMinutes = Integer.valueOf(refreshMinutesString);
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + refreshMinutesString + "< has no integer format");
-				Main.showHelp(options);
+				Main.showHelp();
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -396,7 +339,7 @@ public class Configed {
 			} else if ("N".equalsIgnoreCase(sshImmediateConnectString)) {
 				sshConnectOnStart = false;
 			} else {
-				Main.showHelp(options);
+				Main.showHelp();
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -431,7 +374,7 @@ public class Configed {
 		}
 
 		if (cmd.hasOption("help")) {
-			Main.showHelp(options);
+			Main.showHelp();
 			endApp(NO_ERROR);
 		}
 
@@ -442,7 +385,7 @@ public class Configed {
 				OpsiMethodCall.maxCollectSize = Integer.parseInt(no);
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + no + "< has no integer format");
-				Main.showHelp(options);
+				Main.showHelp();
 				endApp(ERROR_INVALID_OPTION);
 			}
 		}
@@ -495,16 +438,14 @@ public class Configed {
 			optionCLISwAuditPDF = true;
 			String[] values = cmd.getOptionValues("swaudit-pdf");
 			clientsFile = values[0];
-
-			outDir = args[1];
+			outDir = values[1];
 		}
 
 		if (cmd.hasOption("swaudit-csv")) {
 			optionCLISwAuditCSV = true;
 			String[] values = cmd.getOptionValues("swaudit-pdf");
 			clientsFile = values[0];
-
-			outDir = args[1];
+			outDir = values[1];
 		}
 
 		if (cmd.hasOption("disable-certificate-verification")) {
@@ -524,16 +465,9 @@ public class Configed {
 	/**
 	 * main-Methode
 	 */
-	public static void main(String[] args) {
+	public static void main(Options options, CommandLine cmd) {
 
-		Options options = createConfigedOptions();
-		try {
-			parseArgs(options, args);
-		} catch (ParseException pe) {
-			Main.showHelp(options);
-			Logging.error("could not parse parameters", pe);
-			endApp(ERROR_MISSING_VALUE_FOR_OPTION);
-		}
+		processArgs(options, cmd);
 
 		startConfiged();
 	}
