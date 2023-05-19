@@ -5,6 +5,9 @@
 ### Added
 - opsi-logviewer is now part of opsi-configed
 
+### Changed
+- Were using now Messagepack for datatransfer with server -> performance boost
+
 ## [4.2.21.3] - 2023-05-09
 
 ### Added
