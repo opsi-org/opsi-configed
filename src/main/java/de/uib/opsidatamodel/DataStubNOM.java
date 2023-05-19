@@ -311,11 +311,7 @@ public class DataStubNOM {
 				}
 				depotsWithThisVersion.add(depot);
 
-				TreeSet<OpsiPackage> depotpackages = depot2Packages.get(depot);
-				if (depotpackages == null) {
-					depotpackages = new TreeSet<>();
-					depot2Packages.put(depot, depotpackages);
-				}
+				TreeSet<OpsiPackage> depotpackages = depot2Packages.computeIfAbsent(depot, s -> new TreeSet<>());
 				depotpackages.add(p);
 
 				List<Object> productRow = new ArrayList<>();
@@ -411,18 +407,10 @@ public class DataStubNOM {
 				} else {
 					for (String depot : product2VersionInfo2Depots.get(productId).get(versionInfo)) {
 						Map<String, Map<String, ListCellOptions>> product2PropertyDefinitions = depot2Product2PropertyDefinitions
-								.get(depot);
-						if (product2PropertyDefinitions == null) {
-							product2PropertyDefinitions = new HashMap<>();
-							depot2Product2PropertyDefinitions.put(depot, product2PropertyDefinitions);
-						}
+								.computeIfAbsent(depot, s -> new HashMap<>());
 
-						Map<String, ListCellOptions> propertyDefinitions = product2PropertyDefinitions.get(productId);
-
-						if (propertyDefinitions == null) {
-							propertyDefinitions = new HashMap<>();
-							product2PropertyDefinitions.put(productId, propertyDefinitions);
-						}
+						Map<String, ListCellOptions> propertyDefinitions = product2PropertyDefinitions
+								.computeIfAbsent(productId, s -> new HashMap<>());
 
 						propertyDefinitions.put(propertyId, productPropertyMap);
 					}
@@ -491,18 +479,10 @@ public class DataStubNOM {
 				}
 				for (String depot : product2VersionInfo2Depots.get(productId).get(versionInfo)) {
 					Map<String, List<Map<String, String>>> product2dependencyInfos = depot2product2dependencyInfos
-							.get(depot);
-					if (product2dependencyInfos == null) {
-						product2dependencyInfos = new HashMap<>();
-						depot2product2dependencyInfos.put(depot, product2dependencyInfos);
-					}
+							.computeIfAbsent(depot, s -> new HashMap<>());
 
-					List<Map<String, String>> dependencyInfos = product2dependencyInfos.get(productId);
-
-					if (dependencyInfos == null) {
-						dependencyInfos = new ArrayList<>();
-						product2dependencyInfos.put(productId, dependencyInfos);
-					}
+					List<Map<String, String>> dependencyInfos = product2dependencyInfos.computeIfAbsent(productId,
+							s -> new ArrayList<>());
 
 					Map<String, String> dependencyInfo = new HashMap<>();
 					dependencyInfo.put("action", action);
@@ -735,10 +715,9 @@ public class DataStubNOM {
 				if (showForLicensing) {
 					installedSoftwareInformationForLicensing.put(entry.getIdent(), entry);
 
-					if (name2SWIdents.get(swName) == null) {
-						name2SWIdents.put(swName, new TreeSet<>());
-					}
-					name2SWIdents.get(swName).add(entry.getIdent());
+					Set<String> nameSWIdents = name2SWIdents.computeIfAbsent(swName, s -> new TreeSet<>());
+
+					nameSWIdents.add(entry.getIdent());
 
 					Map<String, String> identInfoRow = installedSoftwareName2SWinfo.get(swName);
 
@@ -758,19 +737,12 @@ public class DataStubNOM {
 
 					installedSoftwareName2SWinfo.put(swName, identInfoRow);
 
-					Map<String, Map<String, String>> ident2infoWithPool = name2ident2infoWithPool.get(swName);
+					Map<String, Map<String, String>> ident2infoWithPool = name2ident2infoWithPool
+							.computeIfAbsent(swName, s -> new TreeMap<>());
 
-					if (ident2infoWithPool == null) {
-						ident2infoWithPool = new TreeMap<>();
-						name2ident2infoWithPool.put(swName, ident2infoWithPool);
-					}
+					Map<String, String> infoWithPool = ident2infoWithPool.computeIfAbsent(entry.getIdent(),
+							s -> new LinkedHashMap<>());
 
-					Map<String, String> infoWithPool = ident2infoWithPool.get(entry.getIdent());
-
-					if (infoWithPool == null) {
-						infoWithPool = new LinkedHashMap<>();
-						ident2infoWithPool.put(entry.getIdent(), infoWithPool);
-					}
 					String licencePoolAssigned = "x " + i;
 
 					infoWithPool.put(SWAuditEntry.ID, entry.getIdent());
@@ -913,11 +885,8 @@ public class DataStubNOM {
 					String clientId = clientEntry.getClientId();
 					String swIdent = clientEntry.getSWident();
 
-					Set<String> clientsWithThisSW = softwareIdent2clients.get(swIdent);
-					if (clientsWithThisSW == null) {
-						clientsWithThisSW = new HashSet<>();
-						softwareIdent2clients.put(swIdent, clientsWithThisSW);
-					}
+					Set<String> clientsWithThisSW = softwareIdent2clients.computeIfAbsent(swIdent,
+							s -> new HashSet<>());
 
 					clientsWithThisSW.add(clientId);
 
@@ -1111,24 +1080,16 @@ public class DataStubNOM {
 
 				String notiDate = entry.get(TableLicenceContracts.NOTIFICATION_DATE_KEY);
 				if (notiDate != null && notiDate.trim().length() > 0 && notiDate.compareTo(today) <= 0) {
-					NavigableSet<String> contractSet = contractsToNotify.get(notiDate);
-
-					if (contractSet == null) {
-						contractSet = new TreeSet<>();
-						contractsToNotify.put(notiDate, contractSet);
-					}
+					NavigableSet<String> contractSet = contractsToNotify.computeIfAbsent(notiDate,
+							s -> new TreeSet<>());
 
 					contractSet.add(entry.getId());
 				}
 
 				String expireDate = entry.get(TableLicenceContracts.EXPIRATION_DATE_KEY);
 				if (expireDate != null && expireDate.trim().length() > 0 && expireDate.compareTo(today) <= 0) {
-					NavigableSet<String> contractSet = contractsExpired.get(expireDate);
-
-					if (contractSet == null) {
-						contractSet = new TreeSet<>();
-						contractsExpired.put(expireDate, contractSet);
-					}
+					NavigableSet<String> contractSet = contractsExpired.computeIfAbsent(expireDate,
+							s -> new TreeSet<>());
 
 					contractSet.add(entry.getId());
 				}

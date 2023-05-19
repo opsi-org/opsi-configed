@@ -641,7 +641,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 			hwOpsiToUI.putIfAbsent(hardwareOpsi, hardwareName);
 		}
-
 	}
 
 	private JTable createHWInfoTableModelComplete() {

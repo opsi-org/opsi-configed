@@ -2903,10 +2903,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	@Override
 	public List<Map<String, List<Map<String, Object>>>> getOpsiHWAuditConf(String locale) {
-		hwAuditConf.putIfAbsent(locale, exec
+		return hwAuditConf.computeIfAbsent(locale, s -> exec
 				.getListOfMapsOfListsOfMaps(new OpsiMethodCall("auditHardware_getConfig", new String[] { locale })));
-
-		return hwAuditConf.get(locale);
 	}
 
 	@Override
