@@ -17,11 +17,9 @@ import java.util.Properties;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
 
 import de.uib.Main;
 import de.uib.configed.clientselection.SavedSearchQuery;
-import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.messages.Messages;
@@ -81,19 +79,6 @@ public class Configed {
 	private static String paramClient;
 	private static String paramClientgroup;
 	private static Integer paramTab;
-
-	// --------------------------------------------------------------------------------------------------------
-	// exit codes
-
-	public static final int NO_ERROR = 0;
-	public static final int ERROR_INVALID_OPTION = 1;
-	public static final int ERROR_MISSING_VALUE_FOR_OPTION = 2;
-
-	public static final int ERROR_CANNOT_READ_EXTRA_LOCALIZATION = 11;
-
-	public static final int ERROR_OUT_OF_MEMORY = 21;
-
-	private static FTextArea fErrorOutOfMemory;
 
 	/** construct the application */
 	public Configed(String paramHost, String paramUser, String paramPassword, final String paramClient,
@@ -196,25 +181,6 @@ public class Configed {
 		return refreshMinutes;
 	}
 
-	public static void endApp(int exitcode) {
-		if (savedStates != null) {
-			try {
-				savedStates.store("states on finishing configed");
-			} catch (IOException iox) {
-				Logging.debug("could not store saved states, " + iox);
-			}
-		}
-
-		OpsiMethodCall.report();
-		Logging.info("regularly exiting app with code " + exitcode);
-
-		if (exitcode == ERROR_OUT_OF_MEMORY) {
-			fErrorOutOfMemory.setVisible(true);
-		}
-
-		System.exit(exitcode);
-	}
-
 	public static String getResourceValue(String key) {
 		String result = null;
 		try {
@@ -272,7 +238,7 @@ public class Configed {
 		}
 	}
 
-	private static void processArgs(Options options, CommandLine cmd) {
+	private static void processArgs(CommandLine cmd) {
 
 		if (cmd.hasOption("h")) {
 			host = cmd.getOptionValue("h");
@@ -301,7 +267,7 @@ public class Configed {
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + tabString + "< has no integer format");
 				Main.showHelp();
-				endApp(ERROR_INVALID_OPTION);
+				Main.endApp(Main.ERROR_INVALID_OPTION);
 			}
 		}
 
@@ -327,7 +293,7 @@ public class Configed {
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + refreshMinutesString + "< has no integer format");
 				Main.showHelp();
-				endApp(ERROR_INVALID_OPTION);
+				Main.endApp(Main.ERROR_INVALID_OPTION);
 			}
 		}
 
@@ -340,7 +306,7 @@ public class Configed {
 				sshConnectOnStart = false;
 			} else {
 				Main.showHelp();
-				endApp(ERROR_INVALID_OPTION);
+				Main.endApp(Main.ERROR_INVALID_OPTION);
 			}
 		}
 
@@ -368,16 +334,6 @@ public class Configed {
 			optionCLIuserConfigProducing = true;
 		}
 
-		if (cmd.hasOption("version")) {
-			Logging.essential("configed version: " + Globals.VERSION + " (" + Globals.VERDATE + ") ");
-			System.exit(0);
-		}
-
-		if (cmd.hasOption("help")) {
-			Main.showHelp();
-			endApp(NO_ERROR);
-		}
-
 		if (cmd.hasOption("collect_queries_until_no")) {
 			String no = cmd.getOptionValue("collect_queries_until_no");
 
@@ -386,7 +342,7 @@ public class Configed {
 			} catch (NumberFormatException ex) {
 				Logging.debug("  \n\nArgument >" + no + "< has no integer format");
 				Main.showHelp();
-				endApp(ERROR_INVALID_OPTION);
+				Main.endApp(Main.ERROR_INVALID_OPTION);
 			}
 		}
 
@@ -426,7 +382,7 @@ public class Configed {
 			}
 
 			if (!success) {
-				endApp(ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
+				Main.endApp(Main.ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
 			}
 		}
 
@@ -465,9 +421,9 @@ public class Configed {
 	/**
 	 * main-Methode
 	 */
-	public static void main(Options options, CommandLine cmd) {
+	public static void main(CommandLine cmd) {
 
-		processArgs(options, cmd);
+		processArgs(cmd);
 
 		startConfiged();
 	}
@@ -484,7 +440,7 @@ public class Configed {
 			query.addMissingArgs();
 
 			query.runSearch(true);
-			System.exit(0);
+			Main.endApp(Main.NO_ERROR);
 		} else if (optionCLIDefineGroupBySearch) {
 			Logging.debug("optionCLIDefineGroupBySearch");
 
@@ -495,7 +451,7 @@ public class Configed {
 			List<String> newGroupMembers = query.runSearch(false);
 
 			query.populateHostGroup(newGroupMembers, group);
-			System.exit(0);
+			Main.endApp(Main.NO_ERROR);
 		} else if (optionCLISwAuditPDF) {
 			Logging.debug("optionCLISwAuditPDF");
 			SwPdfExporter exporter = new SwPdfExporter();
@@ -503,7 +459,7 @@ public class Configed {
 			exporter.addMissingArgs();
 			exporter.run();
 
-			System.exit(0);
+			Main.endApp(Main.NO_ERROR);
 		} else if (optionCLISwAuditCSV) {
 			Logging.debug("optionCLISwAuditCSV");
 			SWcsvExporter exporter = new SWcsvExporter();
@@ -511,7 +467,7 @@ public class Configed {
 			exporter.addMissingArgs();
 			exporter.run();
 
-			System.exit(0);
+			Main.endApp(Main.NO_ERROR);
 		} else if (optionCLIuserConfigProducing) {
 			Logging.debug("UserConfigProducing");
 
@@ -530,7 +486,7 @@ public class Configed {
 			List<Object> newData = up.produce();
 			Logging.debug("UserConfigProducing: newData " + newData);
 
-			System.exit(0);
+			Main.endApp(Main.NO_ERROR);
 		}
 
 		try {
@@ -550,19 +506,6 @@ public class Configed {
 		} catch (Exception ex) {
 			Logging.info(" setting property swing.aatext" + ex);
 		}
-
-		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
-
-		if (!ConfigedMain.THEMES) {
-			fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
-		}
-		// we activate it in case of an appropriate error
-
-		if (!ConfigedMain.FONT) {
-			fErrorOutOfMemory.setFont(Globals.defaultFontBig);
-		}
-		fErrorOutOfMemory
-				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
 
 		new Configed(host, user, password, client, clientgroup, tab);
 	}

@@ -186,7 +186,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 
 		jMenuFileExit.setText(Configed.getResourceValue("MainFrame.jMenuFileExit"));
-		jMenuFileExit.addActionListener((ActionEvent e) -> exitAction());
+		jMenuFileExit.addActionListener((ActionEvent e) -> Main.endApp(Main.NO_ERROR));
 
 		jMenuFile.add(jMenuFileOpen);
 		jMenuFile.add(jMenuFileReload);
@@ -410,14 +410,10 @@ public class LogFrame extends JFrame implements WindowListener {
 		}
 	}
 
-	public void exitAction() {
-		System.exit(0);
-	}
-
 	/* WindowListener implementation */
 	@Override
 	public void windowClosing(WindowEvent e) {
-		exitAction();
+		Main.endApp(Main.NO_ERROR);
 	}
 
 	@Override

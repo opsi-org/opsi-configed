@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
@@ -16,13 +17,7 @@ import de.uib.utilities.logging.Logging;
  * This class is a little command line tool which can execute saved searches.
  */
 public class SavedSearchQuery {
-	private static final String USAGE = "\n" + "configed_savedsearch [OPTIONS] [NAME]\n\n"
-			+ "Runs the given search NAME and returns the matching clients. "
-			+ "If NAME is not set, list all available searches.\n\n" + "OPTIONS:\n"
-			+ "  -h\tConfiguration server to connect to\n" + "  -u\tUsername for authentication\n"
-			+ "  -p\tPassword for authentication\n";
 
-	private String[] args;
 	private String host;
 	private String user;
 	private String password;
@@ -33,46 +28,6 @@ public class SavedSearchQuery {
 	public SavedSearchQuery() {
 		Logging.setLogLevelFile(Logging.LEVEL_NONE);
 		Logging.setLogLevelConsole(Logging.LEVEL_NONE);
-	}
-
-	/*
-	 * constructor for standalone call of this class
-	 */
-	public SavedSearchQuery(String[] args) {
-		this();
-		this.args = args;
-		if (!parseArgs()) {
-			showUsage();
-			System.exit(10);
-		}
-	}
-
-	private boolean parseArgs() {
-		String lastOption = null;
-		searchName = null;
-		for (int i = 0; i < args.length; i++) {
-			if ("-h".equals(args[i]) || "-u".equals(args[i]) || "-p".equals(args[i])) {
-				if (lastOption != null) {
-					return false;
-				}
-				lastOption = args[i];
-			} else {
-				if (lastOption != null) {
-					addInfo(lastOption.trim(), args[i]);
-					lastOption = null;
-				} else {
-					if (searchName != null) {
-						return false;
-					}
-					searchName = args[i];
-				}
-			}
-		}
-		return true;
-	}
-
-	private static void showUsage() {
-		Logging.debug(USAGE);
 	}
 
 	public void setArgs(String host, String user, String password, String searchName) {
@@ -100,14 +55,9 @@ public class SavedSearchQuery {
 		Messages.setLocale("en");
 		controller = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
 
-		if (controller == null) {
+		if (controller == null || controller.getConnectionState().getState() != ConnectionState.CONNECTED) {
 			Logging.error("Authentication error.");
-			System.exit(1);
-		}
-
-		if (controller.getConnectionState().getState() != ConnectionState.CONNECTED) {
-			Logging.error("Authentication error.");
-			System.exit(1);
+			Main.endApp(1);
 		}
 
 		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
@@ -123,7 +73,7 @@ public class SavedSearchQuery {
 
 		if (!searches.contains(searchName)) {
 			Logging.error("Search not found.");
-			System.exit(2);
+			Main.endApp(2);
 		}
 
 		manager.loadSearch(searchName);
@@ -138,19 +88,19 @@ public class SavedSearchQuery {
 	public void populateHostGroup(List<String> hosts, String groupName) {
 		if (controller == null) {
 			Logging.error("controller not initialized");
-			System.exit(3);
+			Main.endApp(3);
 		}
 
 		if (hosts == null) {
 			Logging.error("hosts collection not initialized");
-			System.exit(4);
+			Main.endApp(4);
 		}
 
 		Map<String, Map<String, String>> hostGroups = controller.getHostGroups();
 
 		if (!hostGroups.keySet().contains(groupName)) {
 			Logging.error("group not found");
-			System.exit(5);
+			Main.endApp(5);
 		}
 
 		List<String> groupAttributes = new de.uib.configed.type.HostGroupRelation().getAttributes();
@@ -159,38 +109,17 @@ public class SavedSearchQuery {
 
 		if (!controller.deleteGroup(groupName)) {
 			Logging.error("delete group error, groupName " + groupName);
-			System.exit(6);
+			Main.endApp(6);
 		}
 
 		if (!controller.addGroup(saveGroupRelation)) {
 			Logging.error("add group error, group " + saveGroupRelation);
-			System.exit(7);
+			Main.endApp(7);
 		}
 
 		if (!controller.addHosts2Group(hosts, groupName)) {
 			Logging.error("addHosts2Group error, group " + groupName);
-			System.exit(8);
-		}
-
-	}
-
-	private void addInfo(String option, String value) {
-
-		switch (option) {
-		case "-h":
-			host = value;
-			break;
-
-		case "-u":
-			user = value;
-			break;
-
-		case "-p":
-			password = value;
-			break;
-
-		default:
-			throw new IllegalArgumentException("Unknown option " + option);
+			Main.endApp(8);
 		}
 	}
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditClientEntry;
@@ -145,7 +146,7 @@ public abstract class AbstractSWExporter {
 
 	public void finish(int exitcode) {
 		Logging.error(de.uib.configed.ErrorCode.tell(exitcode));
-		Configed.endApp(exitcode);
+		Main.endApp(exitcode);
 	}
 
 	public void setWriteToFile(String path) {

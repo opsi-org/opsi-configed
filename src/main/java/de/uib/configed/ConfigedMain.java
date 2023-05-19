@@ -65,6 +65,7 @@ import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import de.uib.Main;
 import de.uib.configed.clientselection.SelectionManager;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataBackend;
 import de.uib.configed.dashboard.Dashboard;
@@ -5272,7 +5273,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public void finishApp(boolean checkdirty, int exitcode) {
 		if (closeInstance(checkdirty)) {
-			Configed.endApp(exitcode);
+			Main.endApp(exitcode);
 		}
 	}
 }

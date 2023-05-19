@@ -1,5 +1,6 @@
 package de.uib.configed;
 
+import de.uib.Main;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 import de.uib.utilities.thread.WaitCursor;
@@ -49,9 +50,8 @@ public class UncaughtConfigedExceptionHandlerLocalized extends UncaughtConfigedE
 		} else {
 			Logging.warning("Thread " + t + " - RunTime Error", e);
 			if (e instanceof OutOfMemoryError) {
-				Configed.endApp(Configed.ERROR_OUT_OF_MEMORY);
+				Main.endApp(Main.ERROR_OUT_OF_MEMORY);
 			}
-
 		}
 	}
 }

@@ -8,9 +8,7 @@ import java.net.URL;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.Options;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.logviewer.gui.LogFrame;
 import de.uib.utilities.logging.Logging;
@@ -63,21 +61,10 @@ public class Logviewer {
 		SwingUtilities.invokeLater(Logviewer::init);
 	}
 
-	private static void processArgs(Options options, CommandLine cmd) {
-
-		if (cmd.hasOption("help")) {
-			Main.showHelp();
-			endApp(0);
-		}
+	private static void processArgs(CommandLine cmd) {
 
 		if (cmd.hasOption("f")) {
 			fileName = cmd.getOptionValue("f");
-		}
-
-		if (cmd.hasOption("version")) {
-			Logging.essential(
-					"configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
-			endApp(0);
 		}
 	}
 
@@ -111,16 +98,12 @@ public class Logviewer {
 		return logFrame;
 	}
 
-	private static void endApp(int exitcode) {
-		System.exit(exitcode);
-	}
-
 	/**
 	 * main-Methode
 	 */
-	public static void main(Options options, CommandLine cmd) {
+	public static void main(CommandLine cmd) {
 
-		processArgs(options, cmd);
+		processArgs(cmd);
 
 		try {
 			URL resource = Globals.class.getResource(Globals.ICON_RESOURCE_NAME);

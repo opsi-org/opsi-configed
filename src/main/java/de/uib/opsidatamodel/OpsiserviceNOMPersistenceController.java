@@ -59,6 +59,7 @@ import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -602,7 +603,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 					f.setVisible(true);
 
-					System.exit(1);
+					Main.endApp(1);
 				}
 
 				depot2Host2HostInfo = new TreeMap<>();

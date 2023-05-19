@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.swing.ListSelectionModel;
 
+import de.uib.Main;
 /*
  * configed - configuration editor for client work stations in opsi
  * (open pc server integration) www.opsi.org
@@ -53,7 +54,7 @@ public class PanelGroupedProductSettings extends PanelProductSettings {
 	protected void initTopPane() {
 		if (tableProducts == null) {
 			Logging.error(this, " tableProducts == null ");
-			System.exit(0);
+			Main.endApp(Main.NO_ERROR);
 		}
 		topPane = new ProductgroupPanel(this, mainController, tableProducts);
 		topPane.setVisible(true);

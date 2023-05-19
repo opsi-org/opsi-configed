@@ -15,7 +15,7 @@ package de.uib.opsidatamodel;
 
 import javax.swing.JOptionPane;
 
-import de.uib.configed.Configed;
+import de.uib.Main;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.CertificateManager;
@@ -69,7 +69,7 @@ public final class PersistenceControllerFactory {
 			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), errorInfo, Globals.APPNAME,
 					JOptionPane.OK_OPTION);
 
-			Configed.endApp(2);
+			Main.endApp(2);
 
 			return null;
 		}

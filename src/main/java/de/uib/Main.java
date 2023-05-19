@@ -1,5 +1,6 @@
 package de.uib;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -20,6 +21,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.FTextArea;
 import de.uib.configed.tree.ClientTreeUI;
 import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
@@ -28,7 +30,20 @@ import de.uib.utilities.logging.Logging;
 
 public class Main {
 
+	// --------------------------------------------------------------------------------------------------------
+	// exit codes
+
+	public static final int NO_ERROR = 0;
+	public static final int ERROR_INVALID_OPTION = 1;
+	public static final int ERROR_MISSING_VALUE_FOR_OPTION = 2;
+
+	public static final int ERROR_CANNOT_READ_EXTRA_LOCALIZATION = 11;
+
+	public static final int ERROR_OUT_OF_MEMORY = 21;
+
 	public static final String USAGE_INFO = "configed [OPTIONS] " + ", where an OPTION may be\n";
+
+	private static FTextArea fErrorOutOfMemory;
 
 	private static boolean isLogviewer;
 
@@ -139,6 +154,36 @@ public class Main {
 				Logging.debug(" \n\nArgument >" + loglevelString + "< has no integer format");
 			}
 		}
+
+		if (cmd.hasOption("version")) {
+			Logging.essential(
+					"configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
+			endApp(0);
+		}
+
+		if (cmd.hasOption("help")) {
+			Main.showHelp();
+			endApp(0);
+		}
+	}
+
+	public static void endApp(int exitcode) {
+		if (Configed.savedStates != null) {
+			try {
+				Configed.savedStates.store("states on finishing configed");
+			} catch (IOException iox) {
+				Logging.debug("could not store saved states, " + iox);
+			}
+		}
+
+		OpsiMethodCall.report();
+		Logging.info("regularly exiting app with code " + exitcode);
+
+		if (exitcode == ERROR_OUT_OF_MEMORY) {
+			fErrorOutOfMemory.setVisible(true);
+		}
+
+		System.exit(exitcode);
 	}
 
 	public static boolean isLogviewer() {
@@ -222,13 +267,27 @@ public class Main {
 			}
 
 			if (isLogviewer) {
-				Logviewer.main(options, cmd);
+				Logviewer.main(cmd);
 			} else {
-				Configed.main(options, cmd);
+				Configed.main(cmd);
 			}
 		} catch (ParseException e) {
 			Logging.error("Problem parsing arguments", e);
 			showHelp();
 		}
+
+		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
+
+		if (!ConfigedMain.THEMES) {
+			fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
+		}
+		// we activate it in case of an appropriate error
+
+		if (!ConfigedMain.FONT) {
+			fErrorOutOfMemory.setFont(Globals.defaultFontBig);
+		}
+		fErrorOutOfMemory
+				.setMessage("The program will be terminated,\nsince more memory is required than was assigned.");
+
 	}
 }
