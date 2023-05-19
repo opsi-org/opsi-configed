@@ -29,7 +29,10 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLException;
 import javax.swing.SwingUtilities;
 
-import org.json.JSONObject;
+import org.msgpack.jackson.dataformat.MessagePackMapper;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -51,7 +54,7 @@ Usage of this portion of software is allowed unter the restrictions of the GPL
  * @author Rupert Roeder, Jan Schneider, Naglis Vidziunas
  */
 
-public class JSONthroughHTTP extends AbstractJSONExecutioner {
+public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 
 	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
 	public static final int DEFAULT_PORT = 4447;
@@ -242,12 +245,12 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 	}
 
 	/**
-	 * This method receives the JSONObject via HTTP.
+	 * This method receives response via HTTP in MessagePack format.
 	 */
 	@Override
-	public synchronized JSONObject retrieveJSONObject(OpsiMethodCall omc) {
+	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		boolean background = false;
-		Logging.info(this, "retrieveJSONObjects started");
+		Logging.info(this, "retrieveResponse started");
 		WaitCursor waitCursor = null;
 
 		if (omc != null && !omc.isBackgroundDefault()) {
@@ -260,7 +263,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
 		makeURL(omc);
 
-		TimeCheck timeCheck = new TimeCheck(this, "retrieveJSONObject " + omc);
+		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
 
 		HttpURLConnection connection = null;
@@ -280,7 +283,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
 			Logging.debug(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
 			Logging.info(this,
-					"retrieveJSONObject method=" + connection.getRequestMethod() + ", headers="
+					"retrieveResponse method=" + connection.getRequestMethod() + ", headers="
 							+ connection.getRequestProperties() + ", cookie="
 							+ (sessionId == null ? "null" : (sessionId.substring(0, 26) + "...")));
 
@@ -412,7 +415,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			return null;
 		}
 
-		JSONObject result = null;
+		Map<String, Object> result = new HashMap<>();
 
 		if (conStat.getState() == ConnectionState.STARTED_CONNECTING) {
 			try {
@@ -451,7 +454,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 							WaitCursor.stopAll();
 						}
 						if (showNewPasswordDialog()) {
-							return retrieveJSONObject(omc);
+							return retrieveResponse(omc);
 						}
 					}
 				} else {
@@ -471,7 +474,7 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 						boolean gotNewSession = sessionId != null && !sessionId.equals(lastSessionId);
 
 						if (gotNewSession) {
-							Logging.info(this, "retrieveJSONObjects got new session");
+							Logging.info(this, "retrieveResponse got new session");
 						}
 					}
 
@@ -513,22 +516,16 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 
 					Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
 
-					String line;
-					try (BufferedReader in = new BufferedReader(new InputStreamReader(stream, UTF8DEFAULT))) {
-						line = in.readLine();
-
-						Logging.info(this, "received line of length " + line.length());
-						if (line != null) {
-							result = new JSONObject(line);
-						}
-
-						line = in.readLine();
-						if (line != null) {
-							Logging.debug(this, "received second line of length " + line.length());
-						}
-					} catch (IOException iox) {
-						Logging.warning(this, "exception on receiving json", iox);
-						throw new JSONCommunicationException("receiving json");
+					if (connection.getContentType().contains("application/json")) {
+						ObjectMapper mapper = new ObjectMapper();
+						result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+						});
+					} else if (connection.getContentType().contains("application/msgpack")) {
+						ObjectMapper mapper = new MessagePackMapper();
+						result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+						});
+					} else {
+						Logging.error(this, "Unsupported Content-Type: " + connection.getContentType());
 					}
 				}
 			} catch (Exception ex) {
@@ -540,8 +537,8 @@ public class JSONthroughHTTP extends AbstractJSONExecutioner {
 			}
 		}
 
-		timeCheck.stop("retrieveJSONObject " + (result == null ? "empty result" : "non empty result"));
-		Logging.info(this, "retrieveJSONObject ready");
+		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
+		Logging.info(this, "retrieveResponse ready");
 		if (waitCursor != null) {
 			waitCursor.stop();
 		}

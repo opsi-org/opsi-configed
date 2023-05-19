@@ -42,7 +42,6 @@ import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.configed.type.licences.TableLicenceContracts;
 import de.uib.opsicommand.AbstractExecutioner;
-import de.uib.opsicommand.JSONReMapper;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
@@ -390,7 +389,7 @@ public class DataStubNOM {
 				Iterator<String> iterInner = retrievedMap.keySet().iterator();
 				while (iterInner.hasNext()) {
 					String key = iterInner.next();
-					adaptedMap.put(key, JSONReMapper.deriveStandard(retrievedMap.get(key)));
+					adaptedMap.put(key, retrievedMap.get(key));
 				}
 
 				ConfigOption productPropertyMap = new ConfigOption(adaptedMap);
@@ -1020,7 +1019,7 @@ public class DataStubNOM {
 					configs1Host.put(configId, new ArrayList<>());
 					// is a data error but can occur
 				} else {
-					configs1Host.put(configId, ((org.json.JSONArray) (listElement.get("values"))).toList());
+					configs1Host.put(configId, listElement.get("values"));
 				}
 			}
 		}

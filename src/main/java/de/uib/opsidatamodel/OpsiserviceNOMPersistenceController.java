@@ -55,11 +55,9 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
@@ -96,9 +94,9 @@ import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.JSONReMapper;
 import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.OpsiMethodCall;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
@@ -236,7 +234,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private List<LicenceUsageEntry> itemsDeletionLicenceUsage;
 
 	private Map<String, Object> opsiInformation = new HashMap<>();
-	private JSONObject licencingInfoOpsiAdmin;
+	private Map<String, Object> licencingInfoOpsiAdmin;
 	private Map<String, Object> licencingInfoNoOpsiAdmin;
 	private LicensingInfoMap licInfoMap;
 
@@ -539,8 +537,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					opsiHostNames.add(name);
 
 					for (Entry<String, Object> hostEntry : host.entrySet()) {
-						if (JSONReMapper.isNull(hostEntry.getValue())) {
-							host.put(hostEntry.getKey(), JSONReMapper.NULL_REPRESENTER);
+						if (hostEntry.getValue() == null) {
+							host.put(hostEntry.getKey(), "");
 						}
 					}
 
@@ -1443,9 +1441,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState) ||
 			// has wrong product version
 					InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
-							&& (!JSONReMapper.equalsNull(clientProductVersion)
+							&& (!POJOReMapper.equalsNull(clientProductVersion)
 									&& !productVersion.equals(clientProductVersion)
-									|| !JSONReMapper.equalsNull(clientPackageVersion)
+									|| !POJOReMapper.equalsNull(clientPackageVersion)
 											&& !packageVersion.equals(clientPackageVersion))) {
 				Logging.debug("getClientsWithOtherProductVersion hit " + m);
 				result.add(client);
@@ -2076,13 +2074,13 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// hostControl methods
-	private static List<String> collectErrorsFromResponsesByHost(Map<String, Object> responses,
-			String callingMethodName) {
+	private List<String> collectErrorsFromResponsesByHost(Map<String, Object> responses, String callingMethodName) {
 		List<String> errors = new ArrayList<>();
 
 		for (Entry<String, Object> response : responses.entrySet()) {
-			JSONObject jO = (JSONObject) response.getValue();
-			String error = JSONReMapper.getErrorFromResponse(jO);
+			Map<String, Object> jO = POJOReMapper.remap(response.getValue(), new TypeReference<Map<String, Object>>() {
+			});
+			String error = exec.getErrorFromResponse(jO);
 
 			if (error != null) {
 				error = response.getKey() + ":\t" + error;
@@ -2260,25 +2258,16 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Map<String, Object> producedLicencingInfo;
 
 		if (isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
-			producedLicencingInfo = JSONReMapper.getMapResult(getOpsiLicencingInfoOpsiAdmin());
+			producedLicencingInfo = POJOReMapper.remap(getOpsiLicencingInfoOpsiAdmin().get("result"),
+					new TypeReference<Map<String, Object>>() {
+					});
 		} else {
 			producedLicencingInfo = getOpsiLicencingInfoNoOpsiAdmin();
 		}
 
-		Map<String, Integer> map = new HashMap<>();
-		JSONObject jO = (JSONObject) producedLicencingInfo.get("client_numbers");
-
-		try {
-			Iterator<String> iter = jO.keys();
-			while (iter.hasNext()) {
-				String key = iter.next();
-				map.put(key, (Integer) jO.get(key));
-			}
-		} catch (JSONException jex) {
-			Logging.error(this, "Exception on getting Map ", jex);
-		}
-
-		return map;
+		return POJOReMapper.remap(producedLicencingInfo.get("client_numbers"),
+				new TypeReference<Map<String, Integer>>() {
+				});
 	}
 
 	@Override
@@ -2303,12 +2292,16 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Map<String, Object> producedLicencingInfo;
 
 		if (isOpsiUserAdmin() && licencingInfoOpsiAdmin != null) {
-			producedLicencingInfo = JSONReMapper.getMapResult(getOpsiLicencingInfoOpsiAdmin());
+			producedLicencingInfo = POJOReMapper.remap(getOpsiLicencingInfoOpsiAdmin().get("result"),
+					new TypeReference<Map<String, Object>>() {
+					});
 		} else {
 			producedLicencingInfo = getOpsiLicencingInfoNoOpsiAdmin();
 		}
 
-		return JSONReMapper.getListOfMaps((JSONArray) producedLicencingInfo.get("licenses"));
+		return POJOReMapper.remap(producedLicencingInfo.get("licenses"),
+				new TypeReference<List<Map<String, Object>>>() {
+				});
 	}
 
 	@Override
@@ -2321,8 +2314,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		}
 		String methodname = "hostControl_getActiveSessions";
 
-		Map<String, Object> result0 = JSONReMapper.getResponses(exec
-				.retrieveJSONObject(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT)));
+		Map<String, Object> result0 = exec.getResponses(exec
+				.retrieveResponse(new OpsiMethodCall(methodname, callParameters, OpsiMethodCall.BACKGROUND_DEFAULT)));
 
 		for (Entry<String, Object> resultEntry : result0.entrySet()) {
 			StringBuilder value = new StringBuilder();
@@ -2347,21 +2340,17 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			} else if (resultEntry.getValue() instanceof List) {
 				List<?> sessionlist = (List<?>) resultEntry.getValue();
 				for (Object element : sessionlist) {
-					try {
-						Map<String, Object> session = JSONReMapper
-								.getMapObject(new JSONObject(new ObjectMapper().writeValueAsString(element)));
+					Map<String, Object> session = POJOReMapper.remap(element, new TypeReference<Map<String, Object>>() {
+					});
 
-						String username = "" + session.get("UserName");
-						String logondomain = "" + session.get("LogonDomain");
+					String username = "" + session.get("UserName");
+					String logondomain = "" + session.get("LogonDomain");
 
-						if (!value.toString().isEmpty()) {
-							value.append("; ");
-						}
-
-						value.append(username + " (" + logondomain + "\\" + username + ")");
-					} catch (JsonProcessingException | JSONException e) {
-						Logging.warning(this, "exception occured while parsing JSON: " + e.getMessage());
+					if (!value.toString().isEmpty()) {
+						value.append("; ");
 					}
+
+					value.append(username + " (" + logondomain + "\\" + username + ")");
 				}
 			} else {
 				Logging.warning(this, "resultEntry's value is neither a String nor a List");
@@ -3863,7 +3852,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			String client = (String) m.get("clientId");
 
 			result.computeIfAbsent(client, arg -> new ArrayList<>())
-					.add(new ProductState(JSONReMapper.giveEmptyForNull(m), true));
+					.add(new ProductState(POJOReMapper.giveEmptyForNull(m), true));
 		}
 		return result;
 	}
@@ -3885,7 +3874,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			String client = (String) m.get("clientId");
 			List<Map<String, String>> states1Client = result.computeIfAbsent(client, arg -> new ArrayList<>());
 
-			Map<String, String> aState = new ProductState(JSONReMapper.giveEmptyForNull(m), true);
+			Map<String, String> aState = new ProductState(POJOReMapper.giveEmptyForNull(m), true);
 			states1Client.add(aState);
 		}
 
@@ -3919,7 +3908,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 			String client = (String) m.get("clientId");
 			result.computeIfAbsent(client, arg -> new ArrayList<>())
-					.add(new ProductState(JSONReMapper.giveEmptyForNull(m), true));
+					.add(new ProductState(POJOReMapper.giveEmptyForNull(m), true));
 
 		}
 		return result;
@@ -4124,7 +4113,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Map<String, Object> retrievedMap = retrieveListOfMapsNOM(callAttributes, callFilter,
 				"productOnClient_getHashes").get(0);
 
-		return new ProductState(JSONReMapper.giveEmptyForNull(retrievedMap), true);
+		return new ProductState(POJOReMapper.giveEmptyForNull(retrievedMap), true);
 	}
 
 	public Map<String, Object> getProductInfos(String productname) {
@@ -4390,8 +4379,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					(String) map.get(OpsiPackage.DB_KEY_PRODUCT_ID),
 					arg -> new ConfigName2ConfigValue(new HashMap<>()));
 
-			properties.put((String) map.get("propertyId"), ((JSONArray) map.get("values")).toList());
-			properties.getRetrieved().put((String) map.get("propertyId"), ((JSONArray) map.get("values")).toList());
+			properties.put((String) map.get("propertyId"), new JSONArray((List) map.get("values")).toList());
+			properties.getRetrieved().put((String) map.get("propertyId"),
+					new JSONArray((List) map.get("values")).toList());
 
 			Logging.debug(this,
 					"retrieveDepotProductProperties product properties " + map.get(OpsiPackage.DB_KEY_PRODUCT_ID));
@@ -5256,8 +5246,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Map<String, Object> corrected = new HashMap<>();
 		for (Entry<String, Object> setting : settings.entrySet()) {
-			if (setting.getValue() instanceof String
-					&& ((String) setting.getValue()).trim().equals(JSONReMapper.NULL_REPRESENTER)) {
+			if (setting.getValue() instanceof String && ((String) setting.getValue()).trim().equals("")) {
 				corrected.put(setting.getKey(), JSONObject.NULL);
 			} else {
 				corrected.put(setting.getKey(), setting.getValue());
@@ -8030,10 +8019,10 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private void retrieveIsOpsiUserAdmin() {
 		OpsiMethodCall omc = new OpsiMethodCall("accessControl_userIsAdmin", new Object[] {});
 
-		JSONObject json = exec.retrieveJSONObject(omc);
+		Map<String, Object> json = exec.retrieveResponse(omc);
 
-		if (json.has("result") && !json.isNull("result")) {
-			isOpsiUserAdmin = json.getBoolean("result");
+		if (json.containsKey("result") && json.get("result") != null) {
+			isOpsiUserAdmin = (Boolean) json.get("result");
 		} else {
 			Logging.warning(this, "cannot check if user is admin, fallback to false...");
 
@@ -8054,12 +8043,12 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 	// is not allowed to be overriden in order to prevent changes
 	@Override
-	public final JSONObject getOpsiLicencingInfoOpsiAdmin() {
+	public final Map<String, Object> getOpsiLicencingInfoOpsiAdmin() {
 		if (licencingInfoOpsiAdmin == null && isOpsiLicencingAvailable() && isOpsiUserAdmin()) {
 			OpsiMethodCall omc = new OpsiMethodCall(BACKEND_LICENSING_INFO_METHOD_NAME,
 					new Object[] { true, false, true, false });
 
-			licencingInfoOpsiAdmin = exec.retrieveJSONObject(omc);
+			licencingInfoOpsiAdmin = exec.retrieveResponse(omc);
 		}
 
 		return licencingInfoOpsiAdmin;
@@ -8174,7 +8163,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			// read in modules
 			for (Entry<String, Object> opsiModuleInfo : opsiModulesInfo.entrySet()) {
 				Logging.info(this, "module from opsiModulesInfo, key " + opsiModuleInfo);
-				Map<String, Object> opsiModuleData = JSONReMapper.getMapObject((JSONObject) opsiModuleInfo.getValue());
+				Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiModuleInfo.getValue(),
+						new TypeReference<Map<String, Object>>() {
+						});
 				ModulePermissionValue modulePermission = new ModulePermissionValue(opsiModuleData.get("available"),
 						validUntil);
 
@@ -8197,7 +8188,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				ModulePermissionValue modulePermission = opsiModulesPermissions.get(opsiCountModule.getKey());
 				Logging.info(this,
 						"handle modules key " + opsiCountModule.getKey() + " permission was " + modulePermission);
-				Map<String, Object> opsiModuleData = JSONReMapper.getMapObject((JSONObject) opsiCountModule.getValue());
+				Map<String, Object> opsiModuleData = POJOReMapper.remap(opsiCountModule.getValue(),
+						new TypeReference<Map<String, Object>>() {
+						});
 
 				if ("free".equals(opsiModuleData.get("state"))) {
 					continue;
@@ -8783,7 +8776,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		for (Map<String, Object> data : checkHealth()) {
 			if (((String) data.get("check_id")).equals(checkId)) {
-				result = JSONReMapper.getListOfMaps((JSONArray) data.get("partial_results"));
+				result = POJOReMapper.remap(data.get("partial_results"),
+						new TypeReference<List<Map<String, Object>>>() {
+						});
 				break;
 			}
 		}

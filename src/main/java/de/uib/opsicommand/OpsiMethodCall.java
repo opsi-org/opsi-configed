@@ -130,29 +130,10 @@ public class OpsiMethodCall {
 				} else {
 					sb.append("" + paramI);
 				}
-
 			}
-
 		}
 		sb.append("]");
 		sb.append("}");
-		return sb.toString();
-	}
-
-	public String getCommandLineString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(methodname);
-		sb.append("(");
-		if (parameters.length > 0) {
-			sb.append(parameters[0].toString());
-			for (int i = 1; i < parameters.length; i++) {
-				sb.append("&");
-
-				sb.append(parameters[i].toString());
-			}
-		}
-		sb.append(")");
-
 		return sb.toString();
 	}
 

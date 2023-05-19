@@ -209,6 +209,7 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 		}
 
 		connection.setRequestProperty("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
+		connection.setRequestProperty("Accept", "application/msgpack");
 	}
 
 	@Override

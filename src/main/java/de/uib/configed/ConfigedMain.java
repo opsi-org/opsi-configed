@@ -753,6 +753,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				strategyForLoadingData.actAfterWaiting();
 
 				mainFrame.toFront();
+
 			}
 		}.start();
 	}

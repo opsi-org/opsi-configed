@@ -15,12 +15,12 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import de.uib.configed.Configed;
-import de.uib.opsicommand.JSONObjectX;
+import de.uib.opsicommand.POJOReMapper;
 import de.uib.utilities.logging.Logging;
 
 public final class LicensingInfoMap {
@@ -92,7 +92,7 @@ public final class LicensingInfoMap {
 
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-	private JSONObject jOResult;
+	private Map<String, Object> jOResult;
 	private Map<String, List<Object>> configs;
 	private Map<String, Object> clientNumbersMap;
 	private List<List<String>> clientNumbersList;
@@ -123,16 +123,12 @@ public final class LicensingInfoMap {
 	private Integer percentClientLimitWarning;
 	private List<String> disabledWarningModules;
 
-	private LicensingInfoMap(JSONObject jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
+	private LicensingInfoMap(Map<String, Object> jsonObj, Map<String, List<Object>> configVals, Boolean reduced) {
 		Logging.info(CLASSNAME + "generate with reducedView " + reduced + " at the moment ignored, we set false");
 		reducedView = reduced;
 
-		try {
-			jOResult = jsonObj.getJSONObject(RESULT);
-		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " constructor, could not load jsonObject " + ex);
-			return;
-		}
+		jOResult = POJOReMapper.remap(jsonObj.get(RESULT), new TypeReference<Map<String, Object>>() {
+		});
 
 		configs = configVals;
 		produceConfigs();
@@ -155,7 +151,7 @@ public final class LicensingInfoMap {
 		instance = this;
 	}
 
-	public static LicensingInfoMap getInstance(JSONObject jsonObj, Map<String, List<Object>> configVals,
+	public static LicensingInfoMap getInstance(Map<String, Object> jsonObj, Map<String, List<Object>> configVals,
 			boolean reduced) {
 		Logging.info("reduced, instance here " + reduced + ", " + instance);
 
@@ -199,23 +195,8 @@ public final class LicensingInfoMap {
 	}
 
 	private Map<String, Object> produceClientNumbersMap() {
-		Map<String, Object> result = new HashMap<>();
-		try {
-			JSONObject client = jOResult.getJSONObject(CLIENT_NUMBERS_INFO);
-			JSONObjectX clientX = new JSONObjectX(client);
-
-			if (!clientX.isMap()) {
-				Logging.error(CLASSNAME + " map expected " + clientX);
-			} else {
-				Logging.debug(CLASSNAME + " map retrieved");
-
-				result = clientX.getMap();
-			}
-		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " getClientNumersMap ", ex);
-		}
-
-		return result;
+		return POJOReMapper.remap(jOResult.get(CLIENT_NUMBERS_INFO), new TypeReference<Map<String, Object>>() {
+		});
 	}
 
 	private List<List<String>> produceListFromClientNumbersMap() {
@@ -239,39 +220,37 @@ public final class LicensingInfoMap {
 	private Map<String, Map<String, Object>> produceLicenses() {
 		Map<String, Map<String, Object>> result = new HashMap<>();
 
-		try {
-			JSONArray producedLicences = jOResult.getJSONArray(LICENSES_ID);
-			for (int i = 0; i < producedLicences.length(); i++) {
-				Map<String, Object> tmp = new HashMap<>();
-				JSONObject obj = producedLicences.getJSONObject(i);
+		List<Object> producedLicences = POJOReMapper.remap(jOResult.get(LICENSES_ID),
+				new TypeReference<List<Object>>() {
+				});
 
-				tmp.put(MODULE_ID, obj.get(MODULE_ID));
-				tmp.put(VALID_UNTIL, obj.get(VALID_UNTIL));
-				tmp.put(REVOKED_IDS, obj.get(REVOKED_IDS));
+		for (Object producedLicence : producedLicences) {
+			Map<String, Object> tmp = new HashMap<>();
+			Map<String, Object> originalMap = POJOReMapper.remap(producedLicence,
+					new TypeReference<Map<String, Object>>() {
+					});
 
-				result.put(obj.get(ID).toString(), tmp);
-			}
+			tmp.put(MODULE_ID, originalMap.get(MODULE_ID));
+			tmp.put(VALID_UNTIL, originalMap.get(VALID_UNTIL));
+			tmp.put(REVOKED_IDS, originalMap.get(REVOKED_IDS));
 
-		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceLicenses ", ex);
+			result.put(originalMap.get(ID).toString(), tmp);
 		}
-
 		return result;
 	}
 
 	private Set<String> produceCustomerIDSet() {
 		Set<String> producedCustomerIDs = new LinkedHashSet<>();
 
-		try {
-			JSONArray producedLicences = jOResult.getJSONArray(LICENSES_ID);
+		List<Object> producedLicences = POJOReMapper.remap(jOResult.get(LICENSES_ID),
+				new TypeReference<List<Object>>() {
+				});
 
-			for (int i = 0; i < producedLicences.length(); i++) {
-				JSONObject l = producedLicences.getJSONObject(i);
-				producedCustomerIDs.add(l.get(CUSTOMER_ID).toString());
-			}
-
-		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceCustomerIdSet ", ex);
+		for (Object producedLicence : producedLicences) {
+			Map<String, Object> originalMap = POJOReMapper.remap(producedLicence,
+					new TypeReference<Map<String, Object>>() {
+					});
+			producedCustomerIDs.add(String.valueOf(originalMap.get(CUSTOMER_ID)));
 		}
 
 		return producedCustomerIDs;
@@ -280,65 +259,41 @@ public final class LicensingInfoMap {
 	private Set<String> produceCustomerNameSet() {
 		Set<String> producedCustomerNames = new LinkedHashSet<>();
 
-		try {
+		List<Object> producedLicences = POJOReMapper.remap(jOResult.get(LICENSES_ID),
+				new TypeReference<List<Object>>() {
+				});
 
-			JSONArray producedLicences = jOResult.getJSONArray(LICENSES_ID);
+		for (Object producedLicence : producedLicences) {
+			Map<String, Object> originalMap = POJOReMapper.remap(producedLicence,
+					new TypeReference<Map<String, Object>>() {
+					});
+			String customerName = String.valueOf(originalMap.get(CUSTOMER_NAME));
 
-			for (int i = 0; i < producedLicences.length(); i++) {
-				JSONObject l = producedLicences.getJSONObject(i);
-				String customerName = l.getString(CUSTOMER_NAME);
-				if (!"null".equals(l.get(CUSTOMER_UNIT).toString())) {
-					producedCustomerNames.add(customerName + " - " + l.get(CUSTOMER_UNIT).toString());
-				} else {
-					producedCustomerNames.add(customerName);
-				}
-
+			if (originalMap.get(CUSTOMER_UNIT) != null) {
+				producedCustomerNames.add(customerName + " - " + originalMap.get(CUSTOMER_UNIT).toString());
+			} else {
+				producedCustomerNames.add(customerName);
 			}
-
-		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceCustomerIdSet ", ex);
 		}
 
 		return producedCustomerNames;
 	}
 
 	private List<String> produceAvailableModules() {
-		List<String> result = new ArrayList<>();
-		JSONArray jsResult = new JSONArray();
-
-		try {
-
-			jsResult = jOResult.getJSONArray(AVAILABLE_MODULES);
-
-			for (int i = 0; i < jsResult.length(); i++) {
-				result.add(jsResult.getString(i));
-			}
-		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " getAvailableModules : ", ex);
-		}
-
+		List<String> result = POJOReMapper.remap(jOResult.get(AVAILABLE_MODULES), new TypeReference<List<String>>() {
+		});
 		Collections.sort(result);
+
 		return result;
 
 	}
 
 	private List<String> produceKnownModules() {
-		JSONArray jsResult = new JSONArray();
-		List<String> result = new ArrayList<>();
+		List<String> result = availableModules;
 
-		try {
-			if (jOResult.has(KNOWN_MODULES)) {
-
-				jsResult = jOResult.getJSONArray(KNOWN_MODULES);
-
-				for (int i = 0; i < jsResult.length(); i++) {
-					result.add(jsResult.getString(i));
-				}
-			} else {
-				result = availableModules;
-			}
-		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceKnownModules ", ex);
+		if (jOResult.containsKey(KNOWN_MODULES)) {
+			result = POJOReMapper.remap(jOResult.get(KNOWN_MODULES), new TypeReference<List<String>>() {
+			});
 		}
 
 		Collections.sort(result);
@@ -346,22 +301,12 @@ public final class LicensingInfoMap {
 	}
 
 	private List<String> produceObsoleteModules() {
-		JSONArray jsResult = new JSONArray();
 		List<String> result = new ArrayList<>();
 
-		try {
-			if (jOResult.has(OBSOLETE_MODULES)) {
+		if (jOResult.containsKey(OBSOLETE_MODULES)) {
 
-				jsResult = jOResult.getJSONArray(OBSOLETE_MODULES);
-
-				for (int i = 0; i < jsResult.length(); i++) {
-					result.add(jsResult.getString(i));
-				}
-			} else {
-				return new ArrayList<>();
-			}
-		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceObsoleteModules ", ex);
+			result = POJOReMapper.remap(jOResult.get(OBSOLETE_MODULES), new TypeReference<List<String>>() {
+			});
 		}
 
 		Collections.sort(result);
@@ -369,7 +314,7 @@ public final class LicensingInfoMap {
 	}
 
 	private List<String> produceShownModules() {
-		if (!jOResult.has(OBSOLETE_MODULES)) {
+		if (!jOResult.containsKey(OBSOLETE_MODULES)) {
 			return produceKnownModules();
 		}
 
@@ -381,32 +326,24 @@ public final class LicensingInfoMap {
 			}
 		}
 
-		//
 		Collections.sort(result);
 		return result;
 	}
 
 	private void produceConfigs() {
-
 		try {
-			if (jOResult.has(CONFIG)) {
+			if (jOResult.containsKey(CONFIG)) {
+				Map<String, Object> config = POJOReMapper.remap(jOResult.get(CONFIG),
+						new TypeReference<Map<String, Object>>() {
+						});
 
-				JSONObject config = jOResult.getJSONObject(CONFIG);
-
-				percentClientLimitWarning = config.getInt(CLIENT_LIMIT_WARNING_PERCENT);
-				absolutClientLimitWarning = config.getInt(CLIENT_LIMIT_WARNING_ABSOLUTE);
-				daysClientLimitWarning = config.getInt(CLIENT_LIMIT_WARNING_DAYS);
-
-				JSONArray tmp = config.getJSONArray(DISABLE_WARNING_FOR_MODULES);
-				List<String> result = new ArrayList<>();
-
-				for (int i = 0; i < tmp.length(); i++) {
-					result.add(tmp.getString(i));
-				}
-				disabledWarningModules = result;
-
+				percentClientLimitWarning = Integer.parseInt(config.get(CLIENT_LIMIT_WARNING_PERCENT).toString());
+				absolutClientLimitWarning = Integer.parseInt(config.get(CLIENT_LIMIT_WARNING_ABSOLUTE).toString());
+				daysClientLimitWarning = Integer.parseInt(config.get(CLIENT_LIMIT_WARNING_DAYS).toString());
+				disabledWarningModules = POJOReMapper.remap(config.get(DISABLE_WARNING_FOR_MODULES),
+						new TypeReference<List<String>>() {
+						});
 			} else {
-
 				String key = CONFIG_KEY + "." + CLIENT_LIMIT_WARNING_PERCENT;
 
 				if (configs.get(key) != null) {
@@ -440,10 +377,8 @@ public final class LicensingInfoMap {
 	private String produceChecksum() {
 		String newChecksum = "";
 
-		try {
-			newChecksum = jOResult.getString(CHECKSUM_ID);
-		} catch (JSONException ex) {
-			Logging.error(CLASSNAME + " produceChecksum : ", ex);
+		if (jOResult.containsKey(CHECKSUM_ID) && jOResult.get(CHECKSUM_ID) != null) {
+			newChecksum = jOResult.get(CHECKSUM_ID).toString();
 		}
 
 		return newChecksum;
@@ -453,10 +388,9 @@ public final class LicensingInfoMap {
 		List<String> dates = new ArrayList<>();
 
 		try {
-			JSONObject jsonDates = jOResult.getJSONObject(DATES);
-			JSONObjectX datesX = new JSONObjectX(jsonDates);
-
-			Map<String, Object> datesM = datesX.getMap();
+			Map<String, Object> datesM = POJOReMapper.remap(jOResult.get(DATES),
+					new TypeReference<Map<String, Object>>() {
+					});
 
 			for (Map.Entry<String, Object> entry : datesM.entrySet()) {
 				dates.add(entry.getKey());
@@ -468,7 +402,6 @@ public final class LicensingInfoMap {
 			List<String> reducedDatesKeys = new ArrayList<>();
 
 			if (reducedView) {
-
 				for (String key : dates) {
 					if ((sdf.parse(key)).compareTo(latest) >= 0) {
 						reducedDatesKeys.add(key);
@@ -477,7 +410,6 @@ public final class LicensingInfoMap {
 
 				dates = reducedDatesKeys;
 			}
-
 		} catch (ParseException ex) {
 			Logging.error(CLASSNAME + " parsing exeption in produceDatesKeys ", ex);
 		}
@@ -486,7 +418,6 @@ public final class LicensingInfoMap {
 	}
 
 	private Map<String, Map<String, Map<String, Object>>> produceDatesMap() {
-
 		if (currentCloseToLimitModuleList == null) {
 			currentCloseToLimitModuleList = new ArrayList<>();
 		}
@@ -522,40 +453,40 @@ public final class LicensingInfoMap {
 		Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
 
 		try {
-			JSONObject modulesJSOb;
-			JSONObjectX modulesJSObX;
-			JSONObject dates = jOResult.getJSONObject(DATES);
+			Map<String, Map<String, Map<String, Object>>> dates = POJOReMapper.remap(jOResult.get(DATES),
+					new TypeReference<Map<String, Map<String, Map<String, Object>>>>() {
+					});
 
 			for (String key : datesKeys) {
 				Map<String, Object> moduleToDate;
 				Map<String, Map<String, Object>> modulesMapToDate = new HashMap<>();
 
 				// iterate over date entries
-				modulesJSOb = dates.getJSONObject(key).getJSONObject(MODULES);
-				modulesJSObX = new JSONObjectX(modulesJSOb);
-				moduleToDate = modulesJSObX.getMap();
+				moduleToDate = POJOReMapper.remap(dates.get(key).get(MODULES),
+						new TypeReference<Map<String, Object>>() {
+						});
 				// iterate over module entries to every date entry
 
 				// also warning state should be none
 				for (String currentModule : shownModules) {
-
-					JSONObject moduleInfo;
+					Map<String, Object> moduleInfo;
 					boolean available = availableModules.contains(currentModule);
 
 					if (moduleToDate.containsKey(currentModule)) {
-						moduleInfo = (JSONObject) moduleToDate.get(currentModule);
+						moduleInfo = POJOReMapper.remap(moduleToDate.get(currentModule),
+								new TypeReference<Map<String, Object>>() {
+								});
 						if (disabledWarningModules != null && disabledWarningModules.contains(currentModule)) {
 							moduleInfo.put(STATE, STATE_IGNORE_WARNING);
 						}
 					} else {
-						moduleInfo = new JSONObject();
+						moduleInfo = new HashMap<>();
 						moduleInfo.put(CLIENT_NUMBER, "0");
 						moduleInfo.put(LICENSE_IDS, "[]");
 						moduleInfo.put(STATE, "unlicensed");
 					}
 
 					moduleInfo.put(AVAILABLE, available);
-					JSONObjectX tmp = new JSONObjectX(moduleInfo);
 					if (((String) moduleInfo.get(STATE)).equals(STATE_CLOSE_TO_LIMIT)) {
 						allCloseToLimitModules.add(currentModule);
 
@@ -569,16 +500,17 @@ public final class LicensingInfoMap {
 						if (key.equals(latestDateString)) {
 							currentOverLimitModuleList.add(currentModule);
 						}
-					} else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_WARNING)) {
+					} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_WARNING)) {
 						moduleInfo.put(STATE, STATE_DAYS_WARNING);
 						currentTimeWarningModuleList.add(currentModule);
-					} else if (key.equals(getLatestDate()) && checkTimeLeft(tmp.getMap()).equals(STATE_DAYS_OVER)) {
+					} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_OVER)) {
 						moduleInfo.put(STATE, STATE_DAYS_OVER);
 						currentTimeOverModuleList.add(currentModule);
 					}
 
-					String futureCheck = checkFuture(tmp.getMap(), currentModule, key);
-					if (futureCheck != null && !moduleInfo.getString(STATE).equals(STATE_IGNORE_WARNING)) {
+					String futureCheck = checkFuture(moduleInfo, currentModule, key);
+					if (futureCheck != null && moduleInfo.get(STATE) != null
+							&& !moduleInfo.get(STATE).toString().equals(STATE_IGNORE_WARNING)) {
 						moduleInfo.put(FUTURE_STATE, futureCheck);
 
 						if (futureCheck.equals(STATE_OVER_LIMIT)) {
@@ -590,9 +522,7 @@ public final class LicensingInfoMap {
 						moduleInfo.put(FUTURE_STATE, "null");
 					}
 
-					JSONObjectX moduleInfoX = new JSONObjectX(moduleInfo);
-
-					modulesMapToDate.put(currentModule, moduleInfoX.getMap());
+					modulesMapToDate.put(currentModule, moduleInfo);
 
 				}
 				resultMap.put(key, new TreeMap<>(modulesMapToDate));
@@ -878,7 +808,6 @@ public final class LicensingInfoMap {
 	 * @return list of modules for every possible warning state (4)
 	 */
 	public Map<String, List<String>> getWarnings() {
-
 		if (currentCloseToLimitModuleList.isEmpty() && currentOverLimitModuleList.isEmpty()
 				&& currentTimeWarningModuleList.isEmpty() && currentTimeOverModuleList.isEmpty()
 				&& futureCloseToLimitModuleList.isEmpty() && futureOverLimitModuleList.isEmpty()) {
