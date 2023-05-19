@@ -41,6 +41,8 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			Configed.savedStates.setProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY,
 					filterSet.toString());
 			Logging.info(this, "saveFilterSet " + filterSet);
+		} else {
+			Configed.savedStates.remove(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY);
 		}
 	}
 
@@ -69,7 +71,9 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 		if (ids != null) {
 			Logging.info(this, "setFilterFrom, save set " + ids.size());
 			reducedIds = new HashSet<>(productsV);
-			reducedIds.retainAll(ids);
+			if (!ids.isEmpty()) {
+				reducedIds.retainAll(ids);
+			}
 		}
 
 		if (reducedIds == null) {

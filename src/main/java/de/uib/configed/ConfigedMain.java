@@ -2815,7 +2815,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
 				mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
 				mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
-				mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 
 				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(localbootProductsSavedStateObjTag
 						+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
@@ -2829,6 +2828,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY)
 							.replaceAll("\\[|\\]|\\s", "").split(",")));
 				}
+				mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 				mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
 
 				Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
@@ -2900,7 +2900,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				int[] columnWidths = getTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts);
 				mainFrame.panelNetbootProductSettings.setTableModel(istmForSelectedClientsNetboot);
 				mainFrame.panelNetbootProductSettings.setSortKeys(currentSortKeysNetbootProducts);
-				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 
 				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(netbootProductsSavedStateObjTag
 						+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
@@ -2914,6 +2913,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, "")
 							.replaceAll("\\[|\\]|\\s", "").split(",")));
 				}
+
+				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 				mainFrame.panelNetbootProductSettings.reduceToSet(savedFilter);
 				mainFrame.panelNetbootProductSettings.setSelection(oldProductSelection);
 				setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
