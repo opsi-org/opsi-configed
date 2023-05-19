@@ -819,14 +819,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		return selectionInModelTerms;
 	}
 
-	private static class StringComparator implements Comparator<String> {
-		@Override
-		public int compare(String o1, String o2) {
-
-			return o1.compareTo(o2);
-		}
-	}
-
 	public void setTableModel(IFInstallationStateTableModel istm) {
 
 		// delete old row sorter before setting new model
@@ -836,7 +828,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		// try bugfix:
 
-		final StringComparator myComparator = new StringComparator();
+		final Comparator<String> myComparator = Comparator.comparing(String::toString);
 
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableProducts.getModel()) {
 
@@ -864,9 +856,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 				}
 
 			}
-		}
-
-		;
+		};
 
 		tableProducts.setRowSorter(sorter);
 		sorter.addRowSorterListener(this);
@@ -1030,7 +1020,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			versionInfoColumn.setPreferredWidth(WIDTH_COLUMN_VERSION_INFO);
 			versionInfoColumn.setCellRenderer(versionInfoTableCellRenderer);
 
-			((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, new StringComparator());
+			((DefaultRowSorter<?, ?>) sorter).setComparator(colIndex, Comparator.comparing(String::toString));
 
 		}
 

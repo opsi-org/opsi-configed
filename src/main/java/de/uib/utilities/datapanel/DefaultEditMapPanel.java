@@ -62,7 +62,6 @@ public class DefaultEditMapPanel extends JPanel {
 			super.getRemovalMenuText();
 			return Configed.getResourceValue("EditMapPanel.PopupMenu.RemoveEntry");
 		}
-
 	}
 
 	public static class Actor {

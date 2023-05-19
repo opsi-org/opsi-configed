@@ -543,10 +543,9 @@ public class LogFrame extends JFrame implements WindowListener {
 						}
 					}
 				}
-
 			}
-		} catch (Exception fc_e) {
-			Logging.error("Not a valid filename: " + fn);
+		} catch (Exception ex) {
+			Logging.error("Not a valid filename: " + fn, ex);
 			showDialog("Not a valid filename: " + fn);
 		}
 		return sb;

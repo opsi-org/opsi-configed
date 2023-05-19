@@ -37,5 +37,4 @@ public class LowerCaseTextField extends JTextField {
 			super.insertString(offs, new String(lower), a);
 		}
 	}
-
 }

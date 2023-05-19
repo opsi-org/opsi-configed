@@ -38,5 +38,4 @@ public class JComboBoxSimpleToolTip extends JComboBox<String> {
 			return this;
 		}
 	}
-
 }

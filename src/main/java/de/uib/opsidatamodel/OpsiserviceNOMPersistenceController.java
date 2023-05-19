@@ -395,8 +395,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return false;
 	}
 
-	private static class CheckingEntryMapOfMaps extends LinkedHashMap<String, Map<String, Object>> {}
-
 	private class DefaultHostInfoCollections implements HostInfoCollections {
 		private String configServer;
 		private List<String> opsiHostNames;
@@ -520,7 +518,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				opsiHostNames = new ArrayList<>();
 				allDepots = new TreeMap<>();
 
-				masterDepots = new CheckingEntryMapOfMaps();
+				masterDepots = new LinkedHashMap<>();
 				depotNamesList = new LinkedList<>();
 
 				countHosts = opsiHosts.size();
