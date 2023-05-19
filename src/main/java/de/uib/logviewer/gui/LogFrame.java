@@ -39,6 +39,7 @@ import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ActivityPanel;
+import net.sf.sevenzipjbinding.SevenZipException;
 import utils.ExtractorUtil;
 
 public class LogFrame extends JFrame implements WindowListener {
@@ -533,9 +534,9 @@ public class LogFrame extends JFrame implements WindowListener {
 						//unknown extension
 						try {
 							sb = ExtractorUtil.unzip(file);
-						} catch (Exception e) {
+						} catch (SevenZipException e) {
 							sb = readNotCompressedFile(file, sb);
-							Logging.warning("Error ExtractorUtil.unzip: " + e);
+							Logging.warning("Error unzipping: ", e);
 						}
 					}
 				}

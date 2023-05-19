@@ -1,14 +1,9 @@
 package de.uib.configed.gui.logpane;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -34,17 +29,12 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
-import javax.swing.text.LayeredHighlighter;
-import javax.swing.text.Position;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
-import javax.swing.text.View;
 
 import com.formdev.flatlaf.FlatLaf;
 
@@ -131,13 +121,12 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 		jTextPane.getCaret().setBlinkRate(0);
 
-		class LogStyleContext extends StyleContext {
+		styleContext = new StyleContext() {
 			@Override
 			public Font getFont(AttributeSet attr) {
 				return monospacedFont;
 			}
-		}
-		styleContext = new LogStyleContext();
+		};
 		logLevelStyles = new Style[10];
 
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
@@ -944,9 +933,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		jTextPane.requestFocus();
-		searcher.comp.setCaretPosition(jTextPane.getCaretPosition());
+		jTextPane.setCaretPosition(jTextPane.getCaretPosition());
 		// change 08/2015: set lastReturnedOffset to start search at last caretPosition
-		searcher.lastReturnedOffset = jTextPane.getCaretPosition();
+		searcher.setLastReturnedOffset(jTextPane.getCaretPosition());
 		int offset = searcher.search(jComboBoxSearch.getSelectedItem().toString());
 
 		// does not exist
@@ -961,7 +950,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 				jTextPane.setCaretPosition(offset);
 				jTextPane.getCaret().setVisible(true);
-				searcher.comp.setCaretPosition(offset);
+				jTextPane.setCaretPosition(offset);
 			} catch (BadLocationException e) {
 				Logging.warning(this, "error with setting the caret in LogPane: " + e);
 			}
@@ -1028,177 +1017,4 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			reduceFontSize();
 		}
 	}
-
-	// A simple class that searches for a word in
-	// a document and highlights occurrences of that word
-	public class WordSearcher {
-		private JTextComponent comp;
-		private Highlighter.HighlightPainter painter;
-		private int lastReturnedOffset;
-		private boolean cS;
-
-		public WordSearcher(JTextComponent comp) {
-			this.comp = comp;
-			this.painter = new UnderlineHighlightPainter(Globals.FAILED_COLOR);
-			this.lastReturnedOffset = -1;
-		}
-
-		// Set case sensitivity
-		public void setCaseSensitivity(boolean cs) {
-			this.cS = cs;
-		}
-
-		// Search for a word and return the offset of the
-		// next occurrence. Highlights are added for all
-		// occurrences found.
-		public int search(String word) {
-
-			Highlighter compHighlighter = comp.getHighlighter();
-
-			// Remove any existing highlights for last word
-			Highlighter.Highlight[] highlights = compHighlighter.getHighlights();
-			for (int i = 0; i < highlights.length; i++) {
-				Highlighter.Highlight h = highlights[i];
-				if (h.getPainter() instanceof UnderlineHighlightPainter) {
-					compHighlighter.removeHighlight(h);
-				}
-			}
-
-			if (word == null || word.isEmpty()) {
-				return -1;
-			}
-
-			// Look for the word we are given - insensitive search
-			String content = null;
-			try {
-				Document d = comp.getDocument();
-
-				if (cS) {
-					content = d.getText(0, d.getLength());
-				} else {
-					content = d.getText(0, d.getLength()).toLowerCase();
-				}
-			} catch (BadLocationException e) {
-				// Cannot happen
-				Logging.warning(this, "unexpected exception in search", e);
-				return -1;
-			}
-
-			if (!cS) {
-				word = word.toLowerCase();
-			}
-
-			int lastIndex = 0;
-			int wordSize = word.length();
-			int firstOffset = -1;
-			int returnOffset = lastReturnedOffset;
-
-			while ((lastIndex = content.indexOf(word, lastIndex)) != -1) {
-				int endIndex = lastIndex + wordSize;
-				try {
-					compHighlighter.addHighlight(lastIndex, endIndex, painter);
-				} catch (BadLocationException e) {
-					Logging.warning(this, "could not add highlight to comphighlighter", e);
-				}
-				if (firstOffset == -1) {
-					firstOffset = lastIndex;
-				}
-				if (returnOffset == lastReturnedOffset && lastIndex > lastReturnedOffset) {
-					returnOffset = lastIndex;
-				}
-				lastIndex = endIndex;
-			}
-
-			if (returnOffset == lastReturnedOffset) {
-				returnOffset = firstOffset;
-			}
-			lastReturnedOffset = returnOffset;
-			return returnOffset;
-		}
-	}
-
-	// Painter for underlined highlights
-	public class UnderlineHighlightPainter extends LayeredHighlighter.LayerPainter {
-
-		// The color for the underline
-		private Color color;
-
-		public UnderlineHighlightPainter(Color c) {
-			color = c;
-		}
-
-		@Override
-		public void paint(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c) {
-			// Do nothing: this method will never be called
-		}
-
-		@Override
-		public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
-			if (!ConfigedMain.THEMES) {
-				g.setColor(color == null ? c.getSelectionColor() : color);
-			}
-
-			Rectangle alloc = null;
-			if (offs0 == view.getStartOffset() && offs1 == view.getEndOffset()) {
-				if (bounds instanceof Rectangle) {
-					alloc = (Rectangle) bounds;
-				} else {
-					alloc = bounds.getBounds();
-				}
-			} else {
-				try {
-					Shape shape = view.modelToView(offs0, Position.Bias.Forward, offs1, Position.Bias.Backward, bounds);
-
-					if (shape instanceof Rectangle) {
-						alloc = (Rectangle) shape;
-					} else {
-						alloc = shape.getBounds();
-					}
-				} catch (BadLocationException e) {
-					Logging.warning(this, "could not get shape for location", e);
-					return null;
-				}
-			}
-
-			FontMetrics fm = c.getFontMetrics(c.getFont());
-			int baseline = alloc.y + alloc.height - fm.getDescent() + 1;
-			g.drawLine(alloc.x, baseline, alloc.x + alloc.width, baseline);
-			g.drawLine(alloc.x, baseline + 1, alloc.x + alloc.width, baseline + 1);
-
-			return alloc;
-		}
-	}
-
-	public class UnderlineHighlighter extends DefaultHighlighter {
-
-		// Shared painter used for default highlighting
-		private final Highlighter.HighlightPainter sharedPainter = new UnderlineHighlightPainter(null);
-
-		// Painter used for this highlighter
-		private Highlighter.HighlightPainter painter;
-
-		public UnderlineHighlighter(Color c) {
-			if (c == null) {
-				painter = sharedPainter;
-			} else {
-				painter = new UnderlineHighlightPainter(c);
-			}
-		}
-
-		// Convenience method to add a highlight with
-		// the default painter.
-		public Object addHighlight(int p0, int p1) throws BadLocationException {
-			return addHighlight(p0, p1, painter);
-		}
-
-		@Override
-		public void setDrawsLayeredHighlights(boolean newValue) {
-			// Illegal if false - we only support layered highlights
-			if (!newValue) {
-				throw new IllegalArgumentException("UnderlineHighlighter only draws layered highlights");
-			}
-			super.setDrawsLayeredHighlights(true);
-		}
-	}
-
 }

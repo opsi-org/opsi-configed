@@ -12,14 +12,9 @@ package de.uib.utilities.swing;
  * @author roeder
  */
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -32,16 +27,13 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
 import javax.swing.text.JTextComponent;
-import javax.swing.text.LayeredHighlighter;
-import javax.swing.text.Position;
-import javax.swing.text.View;
 
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.logpane.UnderlineHighlightPainter;
+import de.uib.configed.gui.logpane.UnderlineHighlighter;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.script.CmdLauncher;
 
@@ -362,87 +354,6 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 			}
 
 			return lastFoundIndex;
-		}
-	}
-
-	// Painter for underlined highlights
-	public class UnderlineHighlightPainter extends LayeredHighlighter.LayerPainter {
-		// The color for the underline
-		private Color color;
-
-		public UnderlineHighlightPainter(Color c) {
-			color = c;
-		}
-
-		@Override
-		public void paint(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c) {
-			// Do nothing: this method will never be called
-		}
-
-		@Override
-		public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
-			if (!ConfigedMain.THEMES) {
-				g.setColor(color == null ? c.getSelectionColor() : color);
-			}
-
-			Rectangle alloc = null;
-			if (offs0 == view.getStartOffset() && offs1 == view.getEndOffset()) {
-				if (bounds instanceof Rectangle) {
-					alloc = (Rectangle) bounds;
-				} else {
-					alloc = bounds.getBounds();
-				}
-			} else {
-				try {
-					Shape shape = view.modelToView(offs0, Position.Bias.Forward, offs1, Position.Bias.Backward, bounds);
-					if (shape instanceof Rectangle) {
-						alloc = (Rectangle) shape;
-					} else {
-						alloc = shape.getBounds();
-					}
-				} catch (BadLocationException e) {
-					return null;
-				}
-			}
-
-			FontMetrics fm = c.getFontMetrics(c.getFont());
-			int baseline = alloc.y + alloc.height - fm.getDescent() + 1;
-			g.drawLine(alloc.x, baseline, alloc.x + alloc.width, baseline);
-			g.drawLine(alloc.x, baseline + 1, alloc.x + alloc.width, baseline + 1);
-
-			return alloc;
-		}
-	}
-
-	public class UnderlineHighlighter extends DefaultHighlighter {
-
-		// Shared painter used for default highlighting
-		private final Highlighter.HighlightPainter sharedPainter = new UnderlineHighlightPainter(null);
-
-		// Painter used for this highlighter
-		private Highlighter.HighlightPainter painter;
-
-		public UnderlineHighlighter(Color c) {
-			if (c == null) {
-				painter = sharedPainter;
-			} else {
-				painter = new UnderlineHighlightPainter(c);
-			}
-		}
-
-		// Convenience method to add a highlight with
-		// the default painter.
-		public Object addHighlight(int p0, int p1) throws BadLocationException {
-			return addHighlight(p0, p1, painter);
-		}
-
-		@Override
-		public void setDrawsLayeredHighlights(boolean newValue) {
-			// Illegal if false - we only support layered highlights
-			if (!newValue) {
-				throw new IllegalArgumentException("UnderlineHighlighter only draws layered highlights");
-			}
-			super.setDrawsLayeredHighlights(true);
 		}
 	}
 }
