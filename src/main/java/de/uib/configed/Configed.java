@@ -2,6 +2,7 @@ package de.uib.configed;
 
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Properties;
 
 import javax.swing.SwingUtilities;
 
@@ -33,9 +35,9 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
-import de.uib.utilities.PropertiesStore;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
+import de.uib.utilities.savedstates.UserPreferences;
 
 public class Configed {
 
@@ -48,7 +50,7 @@ public class Configed {
 	public static final String JAVA_VENDOR = System.getProperty("java.vendor", "");
 	public static final String SYSTEM_SSL_VERSION = System.getProperty("https.protocols");
 
-	private static PropertiesStore extraLocalization;
+	private static Properties extraLocalization;
 	private static boolean showLocalizationStrings;
 
 	private static String host;
@@ -142,6 +144,15 @@ public class Configed {
 
 		FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
+
+		if (UserPreferences.get(UserPreferences.LANGUAGE) != null) {
+			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
+		}
+
+		if (UserPreferences.get(UserPreferences.THEME) != null && ConfigedMain.THEMES) {
+			Messages.setTheme(UserPreferences.get(UserPreferences.THEME));
+			Main.setOpsiLaf();
+		}
 
 		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
 
@@ -461,8 +472,8 @@ public class Configed {
 						Logging.debug("localization file does not have the expected format " + Messages.APPNAME
 								+ "_LOCALE.properties");
 					} else {
-						extraLocalization = new PropertiesStore(extraLocalizationFile);
-						extraLocalization.load();
+						extraLocalization = new Properties();
+						extraLocalization.load(new FileInputStream(extraLocalizationFile));
 
 						success = true;
 					}

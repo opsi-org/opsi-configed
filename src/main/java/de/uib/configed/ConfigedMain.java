@@ -431,7 +431,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			messagebus.getWebSocket().registerListener(mainFrame.getMessagebusListener());
 
 			if (messagebus.getWebSocket().isOpen()) {
-
 				// Fake opening event on registering listener since this listener
 				// does not know yet if it's open
 				mainFrame.getMessagebusListener().onOpen(null);
@@ -473,7 +472,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String result = "";
 
 		if (System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) != null) {
-			// Windows
 			result = System.getenv(Logging.WINDOWS_ENV_VARIABLE_APPDATA_DIRECTORY) + File.separator + "opsi.org"
 					+ File.separator + "configed";
 		} else {
@@ -540,8 +538,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.warning(this, "saved states file could not be loaded", iox);
 		}
 
-		Integer oldUsageCount = Integer.valueOf(Configed.savedStates.saveUsageCount.deserialize());
-		Configed.savedStates.saveUsageCount.serialize(oldUsageCount + 1);
+		Integer oldUsageCount = Integer.valueOf(Configed.savedStates.getProperty("saveUsageCount", "0"));
+		Configed.savedStates.setProperty("saveUsageCount", String.valueOf(oldUsageCount + 1));
 	}
 
 	private List<String> readLocallySavedServerNames() {
@@ -731,7 +729,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "call initData");
 		initData();
 		initSavedStates();
-		oldSelectedDepots = Configed.savedStates.saveDepotSelection.deserialize();
+		oldSelectedDepots = Configed.savedStates.getProperty("selectedDepots", "").replaceAll("\\[|\\]|\\s", "")
+				.split(",");
 
 		// too early, raises a NPE, if the user entry does not exist
 
@@ -776,7 +775,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void initData() {
-
 		dependenciesModel = new DependenciesModel(persist);
 		generalDataChangedKeeper = new GeneralDataChangedKeeper();
 		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper();
@@ -2617,7 +2615,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		selectedDepots = depotsList.getSelectedValuesList().toArray(new String[0]);
 
-		Configed.savedStates.saveDepotSelection.serialize(selectedDepots);
+		Configed.savedStates.setProperty("selectedDepots", Arrays.toString(selectedDepots));
 
 		try {
 			Logging.info(this, " depotsList_valueChanged, omitted initialTreeActivation");
@@ -2759,7 +2757,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private boolean setLocalbootProductsPage() {
 		Logging.debug(this, "setLocalbootProductsPage() with filter "
-				+ Configed.savedStates.saveLocalbootproductFilter.deserialize());
+				+ Configed.savedStates.getProperty("filteredTableModelfilters"));
 
 		if (!setDepotRepresentative()) {
 			return false;
@@ -2801,14 +2799,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			Logging.debug(this,
 					"setLocalbootProductsPage: collectChangedLocalbootStates " + collectChangedLocalbootStates);
 
+			String localbootProductsSavedStateObjTag = "localbootProducts";
+
 			if (istmForSelectedClientsLocalboot == null) {
 				// we rebuild only if we reloaded
 				istmForSelectedClientsLocalboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
 						collectChangedLocalbootStates, persist.getAllLocalbootProductNames(depotRepresentative),
 						localbootStatesAndActions, possibleActions, persist.getProductGlobalInfos(depotRepresentative),
-						getLocalbootProductDisplayFieldsList(), Configed.savedStates.saveLocalbootproductFilter
-
-				);
+						getLocalbootProductDisplayFieldsList(), localbootProductsSavedStateObjTag);
 			}
 
 			try {
@@ -2816,20 +2814,25 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
 				mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
 
+				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(localbootProductsSavedStateObjTag
+						+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
+
+				Set<String> savedFilter = null;
+
+				if (Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+						+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
+					savedFilter = new HashSet<>(Arrays.asList(Configed.savedStates
+							.getProperty(localbootProductsSavedStateObjTag + "."
+									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY)
+							.replaceAll("\\[|\\]|\\s", "").split(",")));
+				}
 				mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
-
-				Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
-
-				Set<String> savedFilter = Configed.savedStates.saveLocalbootproductFilter.deserialize();
-
-				(mainFrame.panelLocalbootProductSettings).reduceToSet(savedFilter);
+				mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
 
 				Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
-				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection); // (*)
-
+				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
 				mainFrame.panelLocalbootProductSettings.setSearchFields(
 						InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
-
 				setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
 			} catch (Exception ex) {
 				Logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
@@ -2844,7 +2847,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private boolean setNetbootProductsPage() {
-
 		if (!setDepotRepresentative()) {
 			return false;
 		}
@@ -2882,31 +2884,37 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			persist.retrieveProductProperties(selectionPanel.getSelectedValues());
 
+			String netbootProductsSavedStateObjTag = "netbootProducts";
+
 			if (istmForSelectedClientsNetboot == null) {
 				// we rebuild only if we reloaded
-				istmForSelectedClientsNetboot = new InstallationStateTableModelFiltered(// Netbootproducts(
-						getSelectedClients(), this, collectChangedNetbootStates,
-						persist.getAllNetbootProductNames(depotRepresentative), netbootStatesAndActions,
-						possibleActions, persist.getProductGlobalInfos(depotRepresentative),
-						getNetbootProductDisplayFieldsList(), Configed.savedStates.saveNetbootproductFilter);
+				istmForSelectedClientsNetboot = new InstallationStateTableModelFiltered(getSelectedClients(), this,
+						collectChangedNetbootStates, persist.getAllNetbootProductNames(depotRepresentative),
+						netbootStatesAndActions, possibleActions, persist.getProductGlobalInfos(depotRepresentative),
+						getNetbootProductDisplayFieldsList(), netbootProductsSavedStateObjTag);
 			}
 
 			try {
 				int[] columnWidths = getTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts);
 				mainFrame.panelNetbootProductSettings.setTableModel(istmForSelectedClientsNetboot);
-
 				mainFrame.panelNetbootProductSettings.setSortKeys(currentSortKeysNetbootProducts);
 
+				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(netbootProductsSavedStateObjTag
+						+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
+
+				Set<String> savedFilter = null;
+
+				if (Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
+						+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
+					savedFilter = new HashSet<>(Arrays.asList(Configed.savedStates
+							.getProperty(netbootProductsSavedStateObjTag + "."
+									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, "")
+							.replaceAll("\\[|\\]|\\s", "").split(",")));
+				}
+
 				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
-
-				Logging.info(this, "resetFilter " + Configed.savedStates.saveLocalbootproductFilter.deserialize());
-
-				Set<String> savedFilter = Configed.savedStates.saveNetbootproductFilter.deserialize();
-
 				mainFrame.panelNetbootProductSettings.reduceToSet(savedFilter);
-
 				mainFrame.panelNetbootProductSettings.setSelection(oldProductSelection);
-
 				setTableColumnWidths(mainFrame.panelNetbootProductSettings.tableProducts, columnWidths);
 			} catch (Exception ex) {
 				Logging.error(" setNetbootInstallationStateTableModel,  exception Occurred", ex);
@@ -4510,7 +4518,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		String oldGroupSelection = groupName;
 		if (oldGroupSelection == null) {
-			oldGroupSelection = Configed.savedStates.saveGroupSelection.deserialize();
+			oldGroupSelection = Configed.savedStates.getProperty("groupname");
 		}
 
 		if (oldGroupSelection != null && activateGroup(true, oldGroupSelection)) {

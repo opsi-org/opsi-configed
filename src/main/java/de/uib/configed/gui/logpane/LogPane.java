@@ -503,11 +503,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		int savedMaxShownLogLevel = 0;
 		try {
 			if (Configed.savedStates != null) {
-				savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.savedMaxShownLogLevel.deserialize());
+				savedMaxShownLogLevel = Integer.valueOf(Configed.savedStates.getProperty("savedMaxShownLogLevel"));
 			}
 		} catch (NumberFormatException ex) {
 			Logging.warning(this, "savedMaxShownLogLevel could not be read, value "
-					+ Configed.savedStates.savedMaxShownLogLevel.deserialize());
+					+ Configed.savedStates.getProperty("savedMaxShownLogLevel"));
 		}
 		if (savedMaxShownLogLevel > 0) {
 			result = savedMaxShownLogLevel;
@@ -586,7 +586,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		if (Configed.savedStates != null) {
-			Configed.savedStates.savedMaxShownLogLevel.serialize(level);
+			Configed.savedStates.setProperty("savedMaxShownLogLevel", String.valueOf(level));
 		}
 
 		Integer oldLevel = showLevel;

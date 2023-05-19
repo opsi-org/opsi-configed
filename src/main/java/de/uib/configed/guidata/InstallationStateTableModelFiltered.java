@@ -8,11 +8,14 @@ import java.util.Set;
 
 import javax.swing.ComboBoxModel;
 
+import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.savedstates.SessionSaveSet;
 
 public class InstallationStateTableModelFiltered extends InstallationStateTableModel {
+	public static final String STATE_TABLE_FILTERS_PROPERTY = "stateTableFilters";
+
+	private String savedStateObjTag;
 
 	private int[] filter;
 	// filter is a function
@@ -23,29 +26,32 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 	private int[] filterInverse;
 
-	private SessionSaveSet<String> filterSaver;
-
 	public InstallationStateTableModelFiltered(String[] selectedClients, ConfigedMain main,
 			Map<String, Map<String, Map<String, String>>> collectChangedStates, List<String> listOfInstallableProducts,
 			Map<String, List<Map<String, String>>> statesAndActions, Map<String, List<String>> possibleActions,
-			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns,
-			SessionSaveSet<String> filterSaver) {
+			Map<String, Map<String, Object>> productGlobalInfos, List<String> displayColumns, String savedStateObjTag) {
 		super(selectedClients, main, collectChangedStates, listOfInstallableProducts, statesAndActions, possibleActions,
 				productGlobalInfos, displayColumns);
 
-		this.filterSaver = filterSaver;
+		this.savedStateObjTag = savedStateObjTag;
 	}
 
 	private void saveFilterSet(Set<String> filterSet) {
-
-		filterSaver.serialize(filterSet);
-
-		Logging.info(this, "saveFilterSet " + filterSet);
+		if (filterSet != null) {
+			Configed.savedStates.setProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY,
+					filterSet.toString());
+			Logging.info(this, "saveFilterSet " + filterSet);
+		} else {
+			Configed.savedStates.remove(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY);
+		}
 	}
 
 	public void resetFilter() {
-		Set<String> filterSaved = filterSaver.deserialize();
-		if (filterSaved == null || filterSaved.isEmpty()) {
+		Set<String> filterSaved = new HashSet<>(Arrays
+				.asList(Configed.savedStates.getProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY, "")
+						.replaceAll("\\[|\\]|\\s", "").split(",")));
+
+		if (filterSaved.isEmpty()) {
 			setFilterFrom((Set<String>) null);
 		} else {
 			Set<String> productsOnlyInFilterSet = new HashSet<>(filterSaved);
@@ -56,7 +62,6 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 			setFilterFrom(filterSaved);
 			Logging.debug(this, "resetFilter " + filterSaved);
 		}
-
 	}
 
 	public void setFilterFrom(Set<String> ids) {
@@ -66,7 +71,9 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 		if (ids != null) {
 			Logging.info(this, "setFilterFrom, save set " + ids.size());
 			reducedIds = new HashSet<>(productsV);
-			reducedIds.retainAll(ids);
+			if (!ids.isEmpty()) {
+				reducedIds.retainAll(ids);
+			}
 		}
 
 		if (reducedIds == null) {
@@ -83,7 +90,6 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 
 			for (i = 0; i < reducedIds.size(); i++) {
 				filter[i] = productsV.indexOf(products[i]);
-
 			}
 
 			setFilter(filter);
@@ -166,5 +172,4 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	public ComboBoxModel<String> getComboBoxModel(int row, int column) {
 		return super.getComboBoxModel(originRow(row), column);
 	}
-
 }

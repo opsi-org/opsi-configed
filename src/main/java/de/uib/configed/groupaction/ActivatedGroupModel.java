@@ -40,7 +40,7 @@ public class ActivatedGroupModel {
 		if (b && groupName != null) {
 			hostsInfo.setGroupName(groupName);
 			hostsInfo.setGroupClientsCount(associatedClients.size());
-			Configed.savedStates.saveGroupSelection.serialize(groupName);
+			Configed.savedStates.setProperty("groupname", groupName);
 		}
 
 	}

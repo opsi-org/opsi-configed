@@ -907,13 +907,14 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		if (Configed.savedStates == null) {
 			Logging.trace(this, "savedStates.saveRegisterUser not initialized");
 		} else {
-			locallySavedValueUserRegister = Configed.savedStates.saveRegisterUser.deserializeAsBoolean();
+			locallySavedValueUserRegister = Boolean
+					.parseBoolean(Configed.savedStates.getProperty(AbstractPersistenceController.KEY_USER_REGISTER));
 			Logging.info(this, "setAgainUserRegistration, userRegister was activated " + locallySavedValueUserRegister);
 
 			if (userRegisterValueFromConfigs) {
 				if (locallySavedValueUserRegister == null || !locallySavedValueUserRegister) {
 					// we save true
-					Configed.savedStates.saveRegisterUser.serialize(true);
+					Configed.savedStates.setProperty(AbstractPersistenceController.KEY_USER_REGISTER, "true");
 				}
 			} else {
 				if (locallySavedValueUserRegister != null && locallySavedValueUserRegister) {
@@ -953,8 +954,8 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					case 2:
 						Logging.info(this, "setAgainUserRegistration remove warning locally ");
 						// remove from store
-						Configed.savedStates.saveRegisterUser.serialize(null);
-						Configed.savedStates.store();
+						Configed.savedStates.remove(AbstractPersistenceController.KEY_USER_REGISTER);
+						// Configed.savedStates.store();
 						break;
 
 					case 3:
@@ -4441,7 +4442,9 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				productproperties1Client.put((String) map.get("productId"), properties);
 			}
 
-			properties.put((String) map.get("propertyId"), ((JSONArray) map.get("values")).toList());
+			properties.put((String) map.get("propertyId"),
+					POJOReMapper.remap(map.get("values"), new TypeReference<List<Object>>() {
+					}));
 		}
 
 		Logging.info(this,
