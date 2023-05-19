@@ -516,9 +516,17 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 
 					Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
 
-					ObjectMapper mapper = new MessagePackMapper();
-					result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
-					});
+					if (connection.getContentType().contains("application/json")) {
+						ObjectMapper mapper = new ObjectMapper();
+						result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+						});
+					} else if (connection.getContentType().contains("application/msgpack")) {
+						ObjectMapper mapper = new MessagePackMapper();
+						result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+						});
+					} else {
+						Logging.error(this, "Unsupported Content-Type: " + connection.getContentType());
+					}
 				}
 			} catch (Exception ex) {
 				if (waitCursor != null) {
