@@ -4,8 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONArray;
-
 import de.uib.utilities.datastructure.Relation;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
@@ -50,7 +48,7 @@ public class LicencePoolXOpsiProduct extends Relation {
 		String licensePoolId = (String) m.get(ID_KEY);
 		try {
 
-			List<Object> productList = ((JSONArray) m.get(PRODUCTS_KEY)).toList();
+			List<?> productList = (List<?>) m.get(PRODUCTS_KEY);
 
 			for (Object p : productList) {
 				String productId = (String) p;
