@@ -20,7 +20,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
@@ -152,40 +151,6 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 
 	private static String produceJSONstring(OpsiMethodCall omc) {
 		return omc.getJsonString();
-	}
-
-	private static String produceJSONstring(List<OpsiMethodCall> omcList) {
-		StringBuilder json = new StringBuilder("[");
-		for (int i = 0; i < omcList.size(); i++) {
-			json.append(omcList.get(i).getJsonString());
-			if (i < omcList.size() - 1) {
-				json.append(",");
-			}
-		}
-		json.append("]");
-		return json.toString();
-	}
-
-	public void makeURL(List<OpsiMethodCall> omcList) {
-		Logging.debug(this, "make url for " + omcList);
-		if (omcList == null || omcList.isEmpty()) {
-			Logging.error("missing method call");
-			return;
-		}
-
-		String rpcPath0 = makeRpcPath(omcList.get(0));
-
-		for (OpsiMethodCall omc : omcList) {
-			String rpcPath = makeRpcPath(omc);
-			if (!rpcPath.equals(rpcPath0)) {
-				Logging.error("no common RPC path:  " + rpcPath0 + " cf. " + omcList.get(0));
-				return;
-			}
-		}
-
-		String urlS = produceBaseURL(rpcPath0);
-		String json = produceJSONstring(omcList);
-		appendGETParameter(urlS, json);
 	}
 
 	/**
