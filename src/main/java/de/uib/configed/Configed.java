@@ -31,7 +31,6 @@ import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
-import de.uib.utilities.savedstates.UserPreferences;
 
 public class Configed {
 
@@ -125,15 +124,6 @@ public class Configed {
 
 		FOpsiLicenseMissingText.reset();
 		LicensingInfoMap.requestRefresh();
-
-		if (UserPreferences.get(UserPreferences.LANGUAGE) != null) {
-			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
-		}
-
-		if (UserPreferences.get(UserPreferences.THEME) != null && ConfigedMain.THEMES) {
-			Messages.setTheme(UserPreferences.get(UserPreferences.THEME));
-			Main.setOpsiLaf();
-		}
 
 		ConfigedMain configedMain = new ConfigedMain(paramHost, paramUser, paramPassword, sshKey, sshKeyPass);
 

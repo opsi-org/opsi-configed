@@ -33,6 +33,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 
 /*
@@ -411,7 +412,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		buttonSaveAndExecute.setVisible(true);
 
 		JLabel labelCollectiveAction = new JLabel(Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelCollectiveAction.setFont(Globals.defaultFont);
 		}
 
@@ -451,11 +452,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		listChooseAction.setCellRenderer(renderActionList);
 		listChooseAction.setVisibleRowCount(2);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			listChooseAction.setFont(Globals.defaultFontSmallBold);
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			listChooseAction.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -475,14 +476,14 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		JLabel labelStrip = new JLabel("  " + Configed.getResourceValue("GroupPanel.labelAggregateProducts"));
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			labelStrip.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		labelStrip.setOpaque(true);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelStrip.setFont(Globals.defaultFont);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			labelStrip.setForeground(Globals.lightBlack);
 		}
 
@@ -502,13 +503,13 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		;
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			surroundScrollChooseAction.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 		surroundScrollChooseAction.setOpaque(true);
 
 		comboAggregatedEditing.setValues(values);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			comboAggregatedEditing.setFont(Globals.defaultFont);
 		}
 
@@ -523,13 +524,13 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		JLabel labelSelectedGroup = new JLabel(Configed.getResourceValue("GroupPanel.selectgroup.label"));
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSelectedGroup.setFont(Globals.defaultFont);
 		}
 
 		groupsEditField = saveNameEditor;
 		groupsEditField.getCaret().setBlinkRate(0);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -555,22 +556,22 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		groupsCombo.setPreferredSize(Globals.buttonDimension);
 		saveNameEditor.setPreferredSize(Globals.buttonDimension);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			groupsEditField.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
 		labelSave = new JLabel();
 		labelSave.setText(TEXT_SAVE);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSave.setFont(Globals.defaultFont);
 		}
 
 		descriptionField = new JTextField("");
 		descriptionField.setPreferredSize(Globals.buttonDimension);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			descriptionField.setFont(Globals.defaultFont);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			descriptionField.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 		descriptionField.getCaret().setBlinkRate(0);
@@ -586,7 +587,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 		panelEdit = new JPanel();
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			panelEdit.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -640,7 +641,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		this.setLayout(layoutMain);
 
 		JPanel separatingPlace = new JPanel();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			separatingPlace.setForeground(Globals.BACKGROUND_COLOR_9);
 			separatingPlace.setBackground(Globals.FAILED_COLOR);
 		}

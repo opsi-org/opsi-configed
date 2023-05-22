@@ -23,6 +23,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -53,7 +54,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		TerminatingPanel(ActionListener closeListener) {
 			super();
 
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				super.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 			jButtonClose = new IconButton(Configed.getResourceValue("SSHConnection.buttonClose"), "images/cancel.png",
@@ -82,7 +83,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		super(title);
 
 		// THEME color question
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			output.setBackground(Globals.lightBlack);
 		}
 		output.addMouseListener(new MouseAdapter() {

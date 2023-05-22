@@ -38,6 +38,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -265,13 +266,13 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	public void setFieldFont(java.awt.Font font) {
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			fieldSearch.setFont(font);
 		}
 	}
 
 	public void setFieldBackground(Color color) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			fieldSearch.setBackground(color);
 		}
 	}
@@ -340,7 +341,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 	}
 
 	private void initComponents() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -370,7 +371,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		navPane.setVisible(false);
 
 		labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSearch.setFont(Globals.defaultFont);
 		}
 
@@ -413,10 +414,10 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			fieldSearch.setFont(Globals.defaultFontBig);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 		}
 
@@ -489,14 +490,14 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 		comboSearchFields = new JComboBox<>(new String[] { Configed.getResourceValue("SearchPane.search.allfields") });
 		comboSearchFields.setPreferredSize(Globals.lowerButtonDimension);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			comboSearchFields.setFont(Globals.defaultFont);
 		}
 
 		setSearchFieldsAll();
 
 		labelSearchMode = new JLabel(Configed.getResourceValue("SearchPane.searchmode.searchmode"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSearchMode.setFont(Globals.defaultFont);
 		}
 
@@ -514,7 +515,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		try {
 
 			comboSearchFieldsMode = new JComboBoxToolTip();
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				comboSearchFieldsMode.setFont(Globals.defaultFont);
 			}
 		} catch (Exception ex) {
@@ -522,7 +523,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			Logging.warning(this, "strange nimbus exception, retry creating JComboBox " + ex);
 
 			comboSearchFieldsMode = new JComboBoxToolTip();
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				comboSearchFieldsMode.setFont(Globals.defaultFont);
 			}
 		}

@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import javax.swing.JProgressBar;
 import javax.swing.Painter;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 
 //Version:
 //Copyright:    Copyright (c) 2013 uib.de
@@ -21,7 +21,7 @@ public class ProgressBarPainter implements Painter<JProgressBar> {
 
 	@Override
 	public void paint(Graphics2D gd, JProgressBar t, int width, int height) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			gd.setColor(color);
 			gd.fillRect(0, 0, width, height);
 		}

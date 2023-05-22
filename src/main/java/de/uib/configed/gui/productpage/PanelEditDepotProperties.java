@@ -28,6 +28,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 /*
  * configed - configuration editor for client work stations in opsi
@@ -119,7 +120,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				.addComponent(buttonSelectWithEqualProperties, 0, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addComponent(buttonSelectAll, 0, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE));
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			buttonSelectAll.setForeground(Globals.blue);
 			buttonSelectWithEqualProperties.setForeground(Globals.blue);
 		}
@@ -128,7 +129,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 		jLabelEditDepotProductProperties = new JLabel(
 				Configed.getResourceValue("ProductInfoPane.jLabelEditDepotProductProperties"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jLabelEditDepotProductProperties.setFont(Globals.defaultFontBold);
 		}
 
@@ -188,7 +189,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 	@Override
 	public void setTitlePanelActivated(boolean actived) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jLabelEditDepotProductProperties.setForeground(actived ? Globals.lightBlack : Globals.greyed);
 		}
 	}

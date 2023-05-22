@@ -13,9 +13,9 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.uib.Main;
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.ControlPanelAssignToLPools.SoftwareDirectionOfAssignment;
 import de.uib.configed.ControlPanelAssignToLPools.SoftwareShowAllMeans;
@@ -78,100 +78,100 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		// construct content panes
 		JPanel panelInfoWindowsSoftware = new JPanel();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			panelInfoWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
 		JPanel panelInfoConfigWindowsSoftware = new JPanel();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			panelInfoConfigWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
 		JLabel titleWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			titleWindowsSoftware.setFont(Globals.defaultFontStandardBold);
 		}
 
 		JLabel titleWindowsSoftware2 = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.SectiontitleWindowsSoftware2LPool.supplement"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			titleWindowsSoftware2.setFont(Globals.defaultFont);
 		}
 
 		JLabel labelSelectedLicencePoolId = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelSelectedLicencePoolId"));
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSelectedLicencePoolId.setFont(Globals.defaultFont);
 		}
 
 		fieldSelectedLicencePoolId = new JLabel("");
 		fieldSelectedLicencePoolId.setPreferredSize(new Dimension(250, Globals.LINE_HEIGHT));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			fieldSelectedLicencePoolId.setFont(Globals.defaultFontStandardBold);
 		}
 
 		JLabel labelCountAllWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAllWindowsSoftware"));
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelCountAllWindowsSoftware.setFont(Globals.defaultFont);
 		}
 
 		fieldCountAllWindowsSoftware = new JLabel("");
 		fieldCountAllWindowsSoftware.setPreferredSize(Globals.shortlabelDimension);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			fieldCountAllWindowsSoftware.setFont(Globals.defaultFont);
 		}
 
 		JLabel labelCountDisplayedWindowsSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountDisplayedWindowsSoftware"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
 		}
 
 		fieldCountDisplayedWindowsSoftware = new JLabel("");
 		fieldCountDisplayedWindowsSoftware.setPreferredSize(Globals.shortlabelDimension);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			fieldCountDisplayedWindowsSoftware.setFont(Globals.defaultFont);
 		}
 
 		JLabel labelCountNotAssignedSoftware = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountNotAssignedSoftware"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelCountNotAssignedSoftware.setFont(Globals.defaultFont);
 		}
 
 		fieldCountNotAssignedSoftware = new JLabel("");
 		fieldCountNotAssignedSoftware.setPreferredSize(Globals.shortlabelDimension);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			fieldCountNotAssignedSoftware.setFont(Globals.defaultFont);
 		}
 
 		JLabel labelCountAssignedStatus = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedStatus"));
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelCountAssignedStatus.setFont(Globals.defaultFont);
 		}
 
 		fieldCountAssignedStatus = new JLabel("");
 		fieldCountAssignedStatus.setPreferredSize(Globals.shortlabelDimension);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			fieldCountAssignedStatus.setFont(Globals.defaultFontStandardBold);
 		}
 
 		JLabel labelCountAssignedInEditing = new JLabel(
 				Configed.getResourceValue("PanelAssignToLPools.labelCountAssignedInEditing"));
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelCountAssignedInEditing.setFont(Globals.defaultFont);
 		}
 
 		fieldCountAssignedInEditing = new JLabel("");
 		fieldCountAssignedInEditing.setPreferredSize(Globals.shortlabelDimension);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			fieldCountAssignedInEditing.setFont(Globals.defaultFontStandardBold);
 		}
 
@@ -181,7 +181,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		buttonShowAssignedNotExisting
 				.setToolTipText(Configed.getResourceValue("PanelAssignToLPools.buttonAssignedButMissing.tooltip"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			buttonShowAssignedNotExisting.setFont(Globals.defaultFont);
 		}
 		buttonShowAssignedNotExisting.addActionListener((ActionEvent actionEvent) -> {
@@ -193,7 +193,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries"));
 
 		labelSupplementSimilar.setVisible(true);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSupplementSimilar.setFont(Globals.defaultFont);
 		}
 
@@ -203,7 +203,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		buttonSupplementSimilar.setToolTipText(
 				Configed.getResourceValue("PanelAssignToLPools.Licences.supplementSimilarSWEntries.tooltip"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			buttonSupplementSimilar.setFont(Globals.defaultFont);
 		}
 
@@ -229,7 +229,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		labelSimilarEntriesExist = new JLabel();
 		labelSimilarEntriesExist.setVisible(true);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSimilarEntriesExist.setFont(Globals.defaultFont);
 		}
 
@@ -258,7 +258,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		JPanel panelWorkNamebased = new JPanel();
 		panelWorkNamebased.setBorder(new LineBorder(Globals.blueGrey, 3, true));
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			panelWorkNamebased.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		panelWorkNamebased.setOpaque(true);
@@ -322,13 +322,13 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 						GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addGap(2, 5, 5));
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			panelRadiobuttonsDirectionOfAssignmentX.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
 		GroupLayout layoutPanelInfo = new GroupLayout(panelInfoWindowsSoftware);
 		panelInfoWindowsSoftware.setLayout(layoutPanelInfo);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			panelInfoWindowsSoftware.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -534,7 +534,7 @@ public class PanelAssignToLPools extends MultiTablePanel implements ChangeListen
 
 		GroupLayout layoutBottomPane = new GroupLayout(bottomPane);
 		bottomPane.setLayout(layoutBottomPane);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			bottomPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 

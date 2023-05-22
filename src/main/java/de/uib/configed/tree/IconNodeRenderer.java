@@ -8,7 +8,7 @@ import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class IconNodeRenderer extends DefaultTreeCellRenderer {
@@ -18,7 +18,7 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 	public IconNodeRenderer() {
 		super();
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setOpaque(true);
 			super.setForeground(Globals.lightBlack);
 			super.setTextSelectionColor(Globals.lightBlack);
@@ -48,7 +48,7 @@ public class IconNodeRenderer extends DefaultTreeCellRenderer {
 			setEnabled(enabled);
 			node.setEnabled(enabled);
 
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				if (sel) {
 					setBackground(Globals.BACKGROUND_COLOR_7);
 

@@ -46,6 +46,7 @@ import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.model.JediTerminal;
 import com.jediterm.terminal.ui.JediTermWidget;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -162,7 +163,7 @@ public final class Terminal {
 		frame.setIconImage(Globals.mainIcon);
 
 		JPanel allPane = new JPanel();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			allPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

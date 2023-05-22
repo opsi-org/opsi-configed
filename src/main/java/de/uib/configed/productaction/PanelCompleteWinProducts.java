@@ -39,6 +39,7 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -305,13 +306,13 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 				final Color saveColor = buttonCallExecute.getBackground();
 
-				if (!ConfigedMain.THEMES) {
+				if (!Main.THEMES) {
 					buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 				}
 
 				execute();
 
-				if (!ConfigedMain.THEMES) {
+				if (!Main.THEMES) {
 					buttonCallExecute.setBackground(saveColor);
 				}
 			}

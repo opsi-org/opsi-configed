@@ -7,7 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 
@@ -25,7 +25,7 @@ public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRender
 			int row, int column) {
 		Component cell = rend.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			cell.setBackground(Globals.defaultTableHeaderBgColor);
 		}
 
@@ -34,7 +34,7 @@ public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRender
 		if (value != null) {
 			String latestDate = licensingInfoMap.getLatestDate();
 			if (value.toString().equals(latestDate)) {
-				if (!ConfigedMain.FONT) {
+				if (!Main.FONT) {
 					jc.setFont(Globals.defaultFontBold);
 				}
 			}

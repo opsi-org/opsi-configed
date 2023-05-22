@@ -12,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
 
+import de.uib.Main;
 import de.uib.configed.gui.licences.PanelEditLicences;
 import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.opsidatamodel.AbstractPersistenceController;
@@ -104,7 +105,7 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 		col = thePanel.panelKeys.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP0 = new JComboBox<>();
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			comboLP0.setFont(Globals.defaultFontBig);
 		}
 
@@ -173,14 +174,14 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(2);
 		JComboBox<String> comboLicenceTypes = new JComboBox<>(LicenceEntry.LICENCE_TYPES);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			comboLicenceTypes.setFont(Globals.defaultFontBig);
 		}
 		col.setCellEditor(new DefaultCellEditor(comboLicenceTypes));
 
 		col = thePanel.panelSoftwarelicences.getColumnModel().getColumn(4);
 		JComboBox<String> combo = new JComboBox<>();
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			combo.setFont(Globals.defaultFontBig);
 		}
 

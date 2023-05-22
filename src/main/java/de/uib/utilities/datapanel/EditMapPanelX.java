@@ -37,6 +37,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.JTextComponent;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -350,14 +351,14 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 					} else if ((defaultValue = defaultsMap.get(table.getValueAt(rowIndex, 0))) == null) {
 						Logging.warning(this, "no default Value found");
 
-						if (!ConfigedMain.THEMES) {
+						if (!Main.THEMES) {
 							jc.setForeground(Globals.EDIT_MAP_PANEL_X_FOREGROUND_COLOR);
 						}
 						jc.setToolTipText(Configed.getResourceValue("EditMapPanel.MissingDefaultValue"));
 
 						Font gotFont = jc.getFont();
 						gotFont = gotFont.deriveFont(Font.BOLD);
-						if (!ConfigedMain.FONT) {
+						if (!Main.FONT) {
 							jc.setFont(gotFont);
 						}
 					} else {
@@ -366,7 +367,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 						if (markDeviation && !defaultValue.equals(gotValue)) {
 							Font gotFont = jc.getFont();
 							gotFont = gotFont.deriveFont(Font.BOLD);
-							if (!ConfigedMain.FONT) {
+							if (!Main.FONT) {
 								jc.setFont(gotFont);
 							}
 						}
@@ -423,7 +424,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		});
 
 		jScrollPane = new JScrollPane(table);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jScrollPane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

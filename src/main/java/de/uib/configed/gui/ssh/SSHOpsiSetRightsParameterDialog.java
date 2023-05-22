@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -53,7 +54,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 		additionalDefaultPaths.add(SSHCommandFactory.OPSI_PATH_VAR_DEPOT);
 		completion = new SSHCompletionComboButton(additionalDefaultPaths);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
@@ -152,7 +153,7 @@ public class SSHOpsiSetRightsParameterDialog extends FGeneralDialog {
 
 		this.setSize(600, 200);
 		this.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			this.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

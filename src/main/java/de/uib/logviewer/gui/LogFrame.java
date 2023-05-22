@@ -192,7 +192,7 @@ public class LogFrame extends JFrame implements WindowListener {
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileClose);
 		jMenuFile.add(jMenuFileSave);
-		if (ConfigedMain.THEMES) {
+		if (Main.THEMES) {
 			jMenuFile.add(jMenuTheme);
 		}
 		jMenuFile.add(jMenuFileLanguage);
@@ -292,7 +292,7 @@ public class LogFrame extends JFrame implements WindowListener {
 	private void guiInit() {
 
 		this.addWindowListener(this);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			this.setFont(Globals.defaultFont);
 		}
 		this.setIconImage(Globals.mainIcon);

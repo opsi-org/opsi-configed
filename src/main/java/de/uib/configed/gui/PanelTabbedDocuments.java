@@ -13,6 +13,7 @@ import java.util.zip.ZipOutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -36,7 +37,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 
 		super.setProportionOfTotalWidth(0.5);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setForeground(Globals.blue);
 		}
 

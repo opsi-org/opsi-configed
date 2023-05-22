@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -219,7 +220,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 	}
 
 	private void init() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			uninstallPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
@@ -250,7 +251,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 				Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_uninstall.jLabelProduct"));
 
 		textFieldProduct = new JTextField();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			textFieldProduct.setBackground(Globals.BACKGROUND_COLOR_9);
 		}
 		textFieldProduct.setEditable(false);
@@ -268,7 +269,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 		IconAsButton iconButtonUpdateList = new IconAsButton("buttonUpdateList", "images/reload16.png",
 				"images/reload16.png", "images/reload16.png", "images/reload16.png");
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			iconButtonUpdateList.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 		iconButtonUpdateList.setToolTipText(Configed.getResourceValue(

@@ -7,7 +7,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -63,7 +63,7 @@ public class FShowList extends FTextArea {
 
 	@Override
 	public void setFont(Font f) {
-		if (jTextArea1 != null && !ConfigedMain.FONT) {
+		if (jTextArea1 != null && !Main.FONT) {
 			jTextArea1.setFont(f);
 		}
 	}
@@ -82,12 +82,12 @@ public class FShowList extends FTextArea {
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jTextArea1.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jTextArea1.setFont(new Font("Dialog", 0, 14));
 		}
 

@@ -9,7 +9,7 @@ import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -26,7 +26,7 @@ public class FDialogSubTable extends FGeneralDialog {
 	protected void allLayout() {
 
 		Logging.info(this, "allLayout");
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -37,7 +37,7 @@ public class FDialogSubTable extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			centerPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
 		}
 
@@ -65,7 +65,7 @@ public class FDialogSubTable extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			southPanel.setBackground(Globals.F_DIALOG_BACKGROUND_COLOR);
 		}
 		southPanel.setOpaque(true);

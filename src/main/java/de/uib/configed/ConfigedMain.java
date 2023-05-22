@@ -149,10 +149,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	public static final int VIEW_PRODUCT_PROPERTIES = 7;
 	public static final int VIEW_HOST_PROPERTIES = 8;
 
-	// Are themes enabled?
-	public static final boolean THEMES = false;
-	public static final boolean FONT = false;
-
 	private static GuiStrategyForLoadingData strategyForLoadingData;
 
 	private static MainFrame mainFrame;
@@ -1333,7 +1329,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// we correct the result of the first selection
 
-		if (!THEMES) {
+		if (!Main.THEMES) {
 			depotsList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 

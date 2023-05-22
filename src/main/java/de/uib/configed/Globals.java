@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
+import de.uib.Main;
 import de.uib.configed.gui.FTextArea;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -439,11 +440,11 @@ public final class Globals {
 	}
 
 	public static void formatButtonSmallText(AbstractButton button) {
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			button.setFont(defaultFontSmall);
 		}
 		button.setPreferredSize(new Dimension(45, 20));
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			button.setForeground(lightBlack);
 			button.setBackground(BACKGROUND_COLOR_6);
 		}

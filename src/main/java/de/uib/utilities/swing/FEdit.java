@@ -24,8 +24,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.text.JTextComponent;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.utilities.logging.Logging;
@@ -81,7 +81,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 		editingArea = new JPanel(new BorderLayout());
 
 		labelHint = new JLabel();
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelHint.setFont(Globals.defaultFontStandardBold);
 		}
 
@@ -103,7 +103,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	}
 
 	private void initComponents() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			framingPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
@@ -235,7 +235,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 	private void enter() {
 		if (caller != null) {
 			callerFont = caller.getFont();
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				caller.setFont(callerFont.deriveFont(Font.ITALIC));
 			}
 		}
@@ -243,7 +243,7 @@ public class FEdit extends JDialog implements ActionListener, KeyListener {
 
 	public void deactivate() {
 		if (caller != null) {
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				caller.setFont(callerFont);
 			}
 			caller.validate();

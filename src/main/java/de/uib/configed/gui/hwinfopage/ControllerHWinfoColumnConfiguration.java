@@ -28,6 +28,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 import javax.swing.table.TableColumn;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -247,7 +248,7 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.setTitlePane(
 				new JComponent[] { new JLabel(Configed.getResourceValue("HWinfoColumnConfiguration.infoTitle")) }, 20);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			panel.setTitlePaneBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

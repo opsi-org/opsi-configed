@@ -17,8 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
@@ -105,7 +105,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 	 * @param boolean We are in progress
 	 */
 	public void setChangedDepotSelectionActive(boolean active) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			if (active) {
 				depotslist.setBackground(Globals.BACKGROUND_COLOR_9);
 			} else {
@@ -124,11 +124,11 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		}
 		labelDepotServer.setOpaque(false);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			labelDepotServer.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelDepotServer.setFont(Globals.defaultFontStandardBold);
 		}
 
@@ -151,7 +151,7 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 			searchPane.setEnabled(false);
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			searchPane.setBackground(getMyColor());
 		}
 
@@ -166,11 +166,11 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 		scrollpaneDepotslist.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollpaneDepotslist.setPreferredSize(depotslist.getMaximumSize());
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			depotslist.setFont(Globals.defaultFont);
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			depotslist.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 	}

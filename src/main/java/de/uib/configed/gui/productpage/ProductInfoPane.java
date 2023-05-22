@@ -29,6 +29,7 @@ import javax.swing.ScrollPaneConstants;
 
 import org.jdesktop.swingx.JXPanel;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -96,38 +97,38 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		propertiesActivateButton = new JButton();
 
 		// do this so that you can mark and copy content of the label
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jLabelProductID.setFont(Globals.defaultFontStandardBold);
 		}
 		jLabelProductID.setBorder(null);
 		jLabelProductID.setEditable(false);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jLabelProductID.setBackground(null);
 		}
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jLabelProductName.setFont(Globals.defaultFontBold);
 		}
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jLabelLabelProductVersion.setFont(Globals.defaultFontBig);
 		}
 		jLabelLabelProductVersion.setText(Configed.getResourceValue("ProductInfoPane.jLabelProductVersion") + " ");
 
 		// do this so that you can mark and copy content of the label
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jLabelProductVersion.setFont(Globals.defaultFontBold);
 		}
 		jLabelProductVersion.setBorder(null);
 		jLabelProductVersion.setEditable(false);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jLabelProductVersion.setBackground(null);
 		}
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jTextAreaProductInfo.setFont(Globals.defaultFont);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jTextAreaProductInfo.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -135,10 +136,10 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jScrollPaneProductInfo.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		jScrollPaneProductInfo.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jTextAreaProductAdvice.setFont(Globals.defaultFont);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jTextAreaProductAdvice.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -147,25 +148,25 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		jScrollPaneProductAdvice.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
 		dependenciesTextLabel.setText(Configed.getResourceValue("ProductInfoPane.dependenciesTextLabel"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			dependenciesTextLabel.setFont(Globals.defaultFontBold);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			dependenciesTextLabel.setForeground(Globals.greyed);
 		}
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			depotForDependenciesLabel.setFont(Globals.defaultFontBold);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			depotForDependenciesLabel.setForeground(Globals.greyed);
 		}
 
 		dependenciesActivateButton.setText("▶");
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			dependenciesActivateButton.setFont(Globals.defaultFont);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			dependenciesActivateButton.setForeground(Globals.lightBlack);
 		}
 		dependenciesActivateButton.addActionListener(this);
@@ -173,10 +174,10 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		panelProductDependencies.setVisible(isPanelProductDependenciesVisible);
 
 		propertiesActivateButton.setText("▼");
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			propertiesActivateButton.setFont(Globals.defaultFont);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			propertiesActivateButton.setForeground(Globals.lightBlack);
 		}
 		propertiesActivateButton.addActionListener(this);
@@ -283,13 +284,13 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 			setActivatedButton(dependenciesActivateButton, isPanelProductDependenciesVisible);
 
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				dependenciesTextLabel
 						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE
 								: Globals.PANEL_PRODUCT_INFO_PANE_INACTIVE);
 			}
 
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				depotForDependenciesLabel.setEnabled(isPanelProductDependenciesVisible);
 				depotForDependenciesLabel
 						.setForeground(isPanelProductDependenciesVisible ? Globals.PANEL_PRODUCT_INFO_PANE_ACTIVE

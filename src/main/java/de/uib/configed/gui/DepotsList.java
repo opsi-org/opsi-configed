@@ -12,8 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.utilities.logging.Logging;
@@ -26,7 +26,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 	private Map<String, Map<String, Object>> depotInfo;
 
 	public DepotsList(AbstractPersistenceController persist) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			super.setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
 			super.setSelectionForeground(Globals.DEPOTS_LIST_FOREGROUND_COLOR);
@@ -151,7 +151,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 				String depot = (String) value;
 				if (!persist.hasDepotPermission(depot)) {
-					if (!ConfigedMain.THEMES) {
+					if (!Main.THEMES) {
 						((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
 					}
 

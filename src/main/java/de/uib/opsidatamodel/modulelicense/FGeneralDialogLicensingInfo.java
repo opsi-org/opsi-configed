@@ -18,8 +18,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconAsButton;
@@ -74,7 +74,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		// we could design an adapted layout and infuse it in guiInit
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -85,7 +85,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			centerPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
 		}
 
@@ -115,7 +115,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		southPanel.setOpaque(false);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			southPanel.setBackground(Globals.F_GENERAL_DIALOG_LICENSING_INFO_BACKGROUND_COLOR);
 		}
 		southPanel.setOpaque(true);
@@ -243,16 +243,16 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JLabel customerNames = new JLabel(
 				customerSet.toString().replace("[", "<html>").replace(", ", "<br>").replace("]", "</html>"));
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			clientTitle.setFont(Globals.defaultFontBold);
 			checksumTitle.setFont(Globals.defaultFontBold);
 		}
 		checksumTitle.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			checksum.setFont(Globals.defaultFontBold);
 		}
 		checksum.setToolTipText(Configed.getResourceValue("LicensingInfo.client.checksum.info"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			customerTitle.setFont(Globals.defaultFontBold);
 		}
 
@@ -284,7 +284,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		};
 
 		JPanel extraInfoPanel = new PanelLinedComponents(linedComponents);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			extraInfoPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		extraInfoPanel.setOpaque(true);
@@ -364,7 +364,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		JPanel xPanel = new JPanel();
 		GroupLayout xLayout = new GroupLayout(xPanel);
 		xPanel.setLayout(xLayout);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			xPanel.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		xPanel.setOpaque(true);

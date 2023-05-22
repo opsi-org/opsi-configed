@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.text.JTextComponent;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class FTextArea extends FGeneralDialog {
@@ -84,12 +84,12 @@ public class FTextArea extends FGeneralDialog {
 		jTextArea1.setLineWrap(true);
 		jTextArea1.setWrapStyleWord(true);
 		jTextArea1.setOpaque(true);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jTextArea1.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		jTextArea1.setText("          ");
 		jTextArea1.setEditable(false);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jTextArea1.setFont(Globals.defaultFontBig);
 		}
 

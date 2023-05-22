@@ -13,8 +13,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -128,7 +128,7 @@ public class JTextHideField extends JPanel {
 
 	@Override
 	public void setBackground(Color c) {
-		if (!ConfigedMain.THEMES && visibleField != null) {
+		if (!Main.THEMES && visibleField != null) {
 			visibleField.setBackground(c);
 		}
 	}

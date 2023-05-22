@@ -15,8 +15,8 @@ import javax.swing.Painter;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataLoadingObserver;
@@ -47,7 +47,7 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 
 		@Override
 		public void paint(Graphics2D gd, JProgressBar t, int width, int height) {
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				gd.setColor(color);
 				gd.fillRect(0, 0, width, height);
 			}
@@ -88,7 +88,7 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 		infoLabel = new JLabel();
 
 		JPanel panel = new JPanel();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			panel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		GroupLayout layout = new GroupLayout(panel);

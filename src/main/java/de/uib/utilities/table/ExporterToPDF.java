@@ -34,8 +34,8 @@ import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.pdf.OpenSaveDialog;
@@ -285,14 +285,14 @@ public class ExporterToPDF extends AbstractExportTable {
 			symbolFont = small;
 		}
 		PdfPCell defaultCell = table.getDefaultCell();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			defaultCell.setBackgroundColor(new BaseColor(100, 100, 100));
 		}
 
 		for (int i = 0; i < theTable.getColumnCount(); i++) {
 			h = new PdfPCell(new Phrase(theTable.getColumnName(i)));
 			h.setHorizontalAlignment(Element.ALIGN_CENTER);
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				h.setBackgroundColor(headerBackground);
 			}
 			table.addCell(h);
@@ -324,7 +324,7 @@ public class ExporterToPDF extends AbstractExportTable {
 						value = new PdfPCell(new Phrase(s, small));
 						break;
 					}
-					if (!ConfigedMain.THEMES) {
+					if (!Main.THEMES) {
 						if (j % 2 == 0) {
 							value.setBackgroundColor(evenBackground);
 						} else {

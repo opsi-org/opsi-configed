@@ -173,11 +173,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 
 		jTextPane.setOpaque(true);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jTextPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		jTextPane.setEditable(true);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jTextPane.setFont(Globals.defaultFont);
 		}
 		jTextPane.addKeyListener(this);
@@ -188,7 +188,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		super.add(scrollpane, BorderLayout.CENTER);
 
 		labelSearch = new JLabel(Configed.getResourceValue("TextPane.jLabel_search"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSearch.setFont(Globals.defaultFont);
 		}
 
@@ -197,7 +197,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jComboBoxSearch.addActionListener(this);
 
 		buttonSearch = new JButton(Configed.getResourceValue("TextPane.jButton_search"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			buttonSearch.setFont(Globals.defaultFont);
 		}
 		buttonSearch.addActionListener(this);
@@ -217,7 +217,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		buttonFontMinus.addActionListener(this);
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelLevel.setFont(Globals.defaultFont);
 		}
 
@@ -226,13 +226,13 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		sliderLevel = new AdaptingSlider(this, MIN_LEVEL, MAX_LEVEL, produceInitialMaxShowLevel());
 
 		labelDisplayRestriction = new JLabel(Configed.getResourceValue("TextPane.EventType"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelDisplayRestriction.setFont(Globals.defaultFont);
 		}
 
 		comboModelTypes = new DefaultComboBoxModel<>();
 		comboType = new JComboBox<>(comboModelTypes);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			comboType.setFont(Globals.defaultFont);
 		}
 		comboType.setEnabled(false);

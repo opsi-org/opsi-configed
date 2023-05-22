@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -57,7 +57,7 @@ public class TimeEditor extends JPanel {
 		setLayout(new GridLayout(1, 2));
 		setPreferredSize(new Dimension(250, 22));
 		JLabel labelTime = new JLabel(" hh:mm");
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelTime.setFont(Globals.defaultFontBig);
 		}
 

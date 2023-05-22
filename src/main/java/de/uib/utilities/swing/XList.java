@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.swing.JList;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class XList extends JList<String> {
@@ -19,7 +19,7 @@ public class XList extends JList<String> {
 	}
 
 	private void configure() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setSelectionBackground(Globals.nimbusSelectionBackground);
 			setBackground(Globals.nimbusBackground);
 		}

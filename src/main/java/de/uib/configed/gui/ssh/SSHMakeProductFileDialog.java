@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -65,7 +66,7 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 
 	private void initFrame() {
 		setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -100,14 +101,14 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 			JPanel workbenchpanel = new JPanel();
 			mainpanel = new JPanel();
 			JPanel buttonPanel = new JPanel();
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				workbenchpanel.setBackground(Globals.BACKGROUND_COLOR_7);
 				mainpanel.setBackground(Globals.BACKGROUND_COLOR_7);
 				buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 
 			JPanel mainButtonPanel = new JPanel();
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				mainButtonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 			mainButtonPanel.setLayout(new BorderLayout());

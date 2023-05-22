@@ -37,6 +37,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -173,7 +174,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	private void init() {
 		Logging.debug(this, "init setting up components ");
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			controlPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			commandlistPanel.setBackground(Globals.BACKGROUND_COLOR_7);

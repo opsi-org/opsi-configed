@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsidatamodel.AbstractPersistenceController;
@@ -25,7 +25,7 @@ public class SSHPMInstallPanel extends JPanel {
 	protected String workbench;
 
 	public SSHPMInstallPanel() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

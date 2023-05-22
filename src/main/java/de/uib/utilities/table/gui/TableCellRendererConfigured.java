@@ -7,7 +7,7 @@ import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 
 public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 	private Font f;
@@ -35,11 +35,11 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 			int row, int column) {
 		Component result = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-		if (f != null && !ConfigedMain.FONT) {
+		if (f != null && !Main.FONT) {
 			result.setFont(f);
 		}
 
-		if (bg1 != null && !ConfigedMain.THEMES) {
+		if (bg1 != null && !Main.THEMES) {
 			if (selectionEditingBackground != null && isSelected) {
 				result.setBackground(selectionEditingBackground);
 			} else {
@@ -51,7 +51,7 @@ public class TableCellRendererConfigured extends DefaultTableCellRenderer {
 			}
 		}
 
-		if (!ConfigedMain.THEMES && color != null) {
+		if (!Main.THEMES && color != null) {
 			result.setForeground(color);
 		}
 

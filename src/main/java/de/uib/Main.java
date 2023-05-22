@@ -27,8 +27,15 @@ import de.uib.logviewer.Logviewer;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.savedstates.UserPreferences;
 
 public class Main {
+
+	// Flags
+
+	// Are themes enabled?
+	public static final boolean THEMES = false;
+	public static final boolean FONT = false;
 
 	// --------------------------------------------------------------------------------------------------------
 	// exit codes
@@ -119,6 +126,17 @@ public class Main {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setWidth(Integer.MAX_VALUE);
 		formatter.printHelp(Main.USAGE_INFO, options);
+	}
+
+	private static void setGlobalValues() {
+		if (UserPreferences.get(UserPreferences.LANGUAGE) != null) {
+			Messages.setLocale(UserPreferences.get(UserPreferences.LANGUAGE));
+		}
+
+		if (UserPreferences.get(UserPreferences.THEME) != null && THEMES) {
+			Messages.setTheme(UserPreferences.get(UserPreferences.THEME));
+			Main.setOpsiLaf();
+		}
 	}
 
 	private static void parseArgs(CommandLine cmd) {
@@ -252,6 +270,9 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
+
+		setGlobalValues();
+
 		createOptions();
 
 		try {
@@ -261,7 +282,7 @@ public class Main {
 
 			parseArgs(cmd);
 
-			if (ConfigedMain.THEMES) {
+			if (THEMES) {
 				setOpsiLaf();
 			} else {
 				configureUI();
@@ -279,12 +300,12 @@ public class Main {
 
 		fErrorOutOfMemory = new FTextArea(null, "configed", true, new String[] { "ok" }, 400, 400);
 
-		if (!ConfigedMain.THEMES) {
+		if (!THEMES) {
 			fErrorOutOfMemory.setContentBackground(Globals.darkOrange);
 		}
 		// we activate it in case of an appropriate error
 
-		if (!ConfigedMain.FONT) {
+		if (!FONT) {
 			fErrorOutOfMemory.setFont(Globals.defaultFontBig);
 		}
 		fErrorOutOfMemory

@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.swinfopage.PanelSWInfo.KindOfExport;
 import de.uib.utilities.logging.Logging;
@@ -88,7 +88,7 @@ public class PanelSWMultiClientReport extends JPanel {
 
 	private void setupPanel() {
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -97,13 +97,13 @@ public class PanelSWMultiClientReport extends JPanel {
 
 		JLabel labelSwauditMultiClientReport1 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title1"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSwauditMultiClientReport1.setFont(Globals.defaultFontBig);
 		}
 
 		JLabel labelSwauditMultiClientReport2 = new JLabel(
 				Configed.getResourceValue("PanelSWMultiClientReport.title2"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSwauditMultiClientReport2.setFont(Globals.defaultFontBold);
 		}
 
@@ -126,7 +126,7 @@ public class PanelSWMultiClientReport extends JPanel {
 				Configed.getResourceValue("PanelSWMultiClientReport.labelFilenameInformation"));
 
 		JLabel labelAskForOverwrite = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.askForOverwrite"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelAskForOverwrite.setFont(Globals.defaultFont);
 		}
 		checkAskForOverwrite = new JCheckBox("", askForOverwrite);
@@ -212,11 +212,11 @@ public class PanelSWMultiClientReport extends JPanel {
 		});
 
 		JLabel labelWithMsUpdates = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelWithMsUpdates.setFont(Globals.defaultFont);
 		}
 		JLabel labelWithMsUpdates2 = new JLabel(Configed.getResourceValue("PanelSWMultiClientReport.withMsUpdates2"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelWithMsUpdates2.setFont(Globals.defaultFont);
 		}
 
@@ -255,7 +255,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		Logging.info(this, "kindOfExport   " + kindOfExport);
 
 		JPanel subpanelPreConfig = new JPanel();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			subpanelPreConfig.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 

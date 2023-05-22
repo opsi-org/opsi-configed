@@ -13,7 +13,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.ConfigedMain.LicencesTabStatus;
 
 public class TabbedPaneX extends JPanel {
@@ -29,7 +29,7 @@ public class TabbedPaneX extends JPanel {
 	}
 
 	public void setGlobals(Map<String, Object> globals) {
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			setFont((Font) globals.get("defaultFont"));
 		}
 	}

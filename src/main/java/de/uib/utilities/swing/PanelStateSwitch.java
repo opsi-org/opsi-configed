@@ -30,7 +30,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -148,7 +148,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 			button.setIcon(deactivatedIcon);
 			button.setSelectedIcon(activatedIcon);
 			button.setHorizontalTextPosition(SwingConstants.RIGHT);
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				button.setFont(primaryFont);
 			}
 
@@ -197,7 +197,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 	}
 
 	private void initLayout() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -206,7 +206,7 @@ public class PanelStateSwitch<E extends Enum<E>> extends JPanel {
 			labelTitle.setText(title);
 		}
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelTitle.setFont(primaryFont);
 		}
 

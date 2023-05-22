@@ -42,8 +42,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.DependenciesTreeModel;
 
@@ -73,7 +73,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		// Den Tree bauen
 		dependenciesTree = new JTree();
 		dependenciesTree.setToggleClickCount(0);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			dependenciesTree.setBackground(Globals.BACKGROUND_COLOR_8);
 		}
 
@@ -133,7 +133,7 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 		JScrollPane dependenciesTreeScrollPanel = new JScrollPane();
 
 		dependenciesTreeScrollPanel.setViewportView(dependenciesTree);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			dependenciesTreeScrollPanel.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -143,17 +143,17 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 				Configed.getResourceValue("DependenciesTree.dependenciesNeededByButton"));
 
 		copyListButton = new JButton(Configed.getResourceValue("DependenciesTree.copyListButton"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			copyListButton.setFont(Globals.defaultFont);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			copyListButton.setForeground(Globals.lightBlack);
 		}
 
 		dependenciesTreePathLabel = new JLabel();
 		dependenciesTreePathLabel.setBorder(BorderFactory.createLineBorder(Globals.greyed, 1));
 		dependenciesTreePathLabel.setOpaque(true);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			dependenciesTreePathLabel.setBackground(Globals.BACKGROUND_COLOR_8);
 		}
 

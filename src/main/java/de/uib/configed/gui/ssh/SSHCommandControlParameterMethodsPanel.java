@@ -27,8 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -151,7 +151,7 @@ public class SSHCommandControlParameterMethodsPanel extends JPanel {
 
 	public void initLayout() {
 		Logging.debug(this, "initLayout ");
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		thisLayout = new GroupLayout(this);

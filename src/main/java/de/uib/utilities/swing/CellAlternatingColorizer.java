@@ -3,7 +3,7 @@ package de.uib.utilities.swing;
 import java.awt.Color;
 import java.awt.Component;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 public final class CellAlternatingColorizer {
@@ -25,11 +25,11 @@ public final class CellAlternatingColorizer {
 	public static void colorize(Component cell, boolean isSelected, boolean isEven, boolean textColoring,
 			Color selectedEvenColor, Color selectedUnevenColor, Color unselectedEvenColor,
 			Color unselectedUnevenColor) {
-		if (textColoring && !ConfigedMain.THEMES) {
+		if (textColoring && !Main.THEMES) {
 			cell.setForeground(Globals.lightBlack);
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			if (isSelected) {
 				if (isEven) {
 					cell.setBackground(selectedEvenColor);
@@ -47,7 +47,7 @@ public final class CellAlternatingColorizer {
 	}
 
 	public static void colorizeSecret(Component cell) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			cell.setBackground(Globals.defaultTableSelectedRowBright);
 			cell.setForeground(Globals.defaultTableSelectedRowBright);
 		}
@@ -56,7 +56,7 @@ public final class CellAlternatingColorizer {
 	public static void colorize(Component cell, boolean isSelected, boolean rowEven, boolean colEven,
 			boolean textColoring) {
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			if (textColoring) {
 				cell.setForeground(Globals.lightBlack);
 			}

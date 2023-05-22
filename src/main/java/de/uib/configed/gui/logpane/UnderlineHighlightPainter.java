@@ -12,7 +12,7 @@ import javax.swing.text.LayeredHighlighter;
 import javax.swing.text.Position;
 import javax.swing.text.View;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.utilities.logging.Logging;
 
 // Painter for underlined highlights
@@ -32,7 +32,7 @@ public class UnderlineHighlightPainter extends LayeredHighlighter.LayerPainter {
 
 	@Override
 	public Shape paintLayer(Graphics g, int offs0, int offs1, Shape bounds, JTextComponent c, View view) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			g.setColor(color == null ? c.getSelectionColor() : color);
 		}
 

@@ -21,6 +21,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -139,7 +140,7 @@ public class PanelSWInfo extends JPanel {
 
 		labelSuperTitle = new JLabel();
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSuperTitle.setFont(Globals.defaultFontBold);
 		}
 
@@ -201,7 +202,7 @@ public class PanelSWInfo extends JPanel {
 
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			checkWithMsUpdates.setForeground(Globals.blue);
 		}
 		checkWithMsUpdates.addItemListener(itemEvent -> setWithMsUpdatesValue(checkWithMsUpdates.isSelected()));
@@ -212,7 +213,7 @@ public class PanelSWInfo extends JPanel {
 
 		panelTable.setDataChanged(false);
 		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			checkWithMsUpdates2.setForeground(Globals.blue);
 		}
 		checkWithMsUpdates2.addItemListener(itemEvent -> setWithMsUpdatesValue2(checkWithMsUpdates2.isSelected()));
@@ -223,7 +224,7 @@ public class PanelSWInfo extends JPanel {
 		JLabel labelWithMSUpdates = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates"));
 		JLabel labelWithMSUpdates2 = new JLabel(Configed.getResourceValue("PanelSWInfo.withMsUpdates2"));
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			subPanelTitle.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -277,7 +278,7 @@ public class PanelSWInfo extends JPanel {
 	private void buildPanel() {
 
 		labelSuperTitle.setOpaque(true);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			labelSuperTitle.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -300,7 +301,7 @@ public class PanelSWInfo extends JPanel {
 		jTable.setRowSelectionAllowed(true);
 		jTable.setDragEnabled(true);
 		JScrollPane scrollPaneSWInfo = new JScrollPane(jTable);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			scrollPaneSWInfo.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

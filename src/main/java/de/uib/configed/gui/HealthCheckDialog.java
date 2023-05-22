@@ -40,6 +40,7 @@ import javax.swing.text.StyleContext;
 
 import org.json.JSONObject;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -72,7 +73,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "start allLayout");
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -130,7 +131,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 		textPane.setCaretPosition(0);
 
 		JScrollPane scrollPane = new JScrollPane(textPane);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			scrollPane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
 		}
 		scrollPane.setOpaque(false);

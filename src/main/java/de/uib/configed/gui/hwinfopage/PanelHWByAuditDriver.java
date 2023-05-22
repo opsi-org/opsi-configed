@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -40,21 +41,21 @@ public class PanelHWByAuditDriver extends JPanel {
 	private void buildPanel() {
 
 		fieldVendor = new JTextShowField();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			fieldVendor.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 		fieldLabel = new JTextShowField();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			fieldLabel.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
 		fieldVendor2 = new JTextShowField();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			fieldVendor2.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
 		fieldLabel2 = new JTextShowField();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			fieldLabel2.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -131,7 +132,7 @@ public class PanelHWByAuditDriver extends JPanel {
 				.addGap(5 * hGap, 10 * hGap, 10 * hGap).addComponent(buttonUploadDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
 						Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 				.addGap(2 * hGap, 4 * hGap, Short.MAX_VALUE));
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		setBorder(BorderFactory.createLineBorder(Globals.greyed));

@@ -14,8 +14,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.AbstractPersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
@@ -248,13 +248,13 @@ public class RequirementsTableModel extends AbstractTableModel {
 		}
 
 		public void colorize(Component cell, int row, int col) {
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				cell.setForeground(Globals.lightBlack);
 			}
 
 			int kindOfRow = row % 3;
 
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				switch (kindOfRow) {
 				case 0:
 					cell.setBackground(Globals.BACKGROUND_COLOR_7);

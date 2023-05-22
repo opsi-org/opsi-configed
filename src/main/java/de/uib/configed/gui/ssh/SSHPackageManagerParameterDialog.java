@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -34,14 +35,14 @@ public class SSHPackageManagerParameterDialog extends FGeneralDialog {
 		super(null, title);
 
 		super.setTitle(title);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			super.setFont(Globals.defaultFont);
 		}
 		super.setIconImage(Globals.mainIcon);
 
 		super.setSize(new Dimension(Globals.DIALOG_FRAME_DEFAULT_WIDTH, frameHeight));
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

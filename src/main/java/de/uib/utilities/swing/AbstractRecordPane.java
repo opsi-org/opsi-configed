@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.observer.swing.JTextFieldObserved;
 
@@ -62,7 +62,7 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 
 	private void initComponents() {
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -85,7 +85,7 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 				jLabel.setText(labels.get(dataEntry.getKey()));
 			}
 
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				jLabel.setFont(Globals.defaultFontBig);
 			}
 			labelfields.put(dataEntry.getKey(), jLabel);
@@ -104,7 +104,7 @@ public abstract class AbstractRecordPane extends JPanel implements KeyListener {
 				jTextField.setText("");
 			}
 
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				jTextField.setFont(Globals.defaultFontBig);
 			}
 			jTextField.getCaret().setBlinkRate(0);

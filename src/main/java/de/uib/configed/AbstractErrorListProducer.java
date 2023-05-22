@@ -3,6 +3,7 @@ package de.uib.configed;
 import java.awt.Cursor;
 import java.util.List;
 
+import de.uib.Main;
 import de.uib.configed.gui.FShowList;
 
 public abstract class AbstractErrorListProducer extends Thread {
@@ -20,7 +21,7 @@ public abstract class AbstractErrorListProducer extends Thread {
 		// final
 		FShowList fListFeedback = new FShowList(ConfigedMain.getMainFrame(), title, false, new String[] { "ok" }, 800,
 				200);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			fListFeedback.setFont(Globals.defaultFont);
 		}
 		fListFeedback.setMessage("");

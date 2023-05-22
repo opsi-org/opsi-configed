@@ -11,8 +11,8 @@ import javax.swing.text.JTextComponent;
 
 import org.java_websocket.handshake.ServerHandshake;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.HostsStatusInfo;
 import de.uib.messagebus.MessagebusListener;
@@ -247,7 +247,7 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 								.addComponent(connectionStateLabel))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 
 			Containership csStatusPane = new Containership(this);
 			csStatusPane.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_3 },

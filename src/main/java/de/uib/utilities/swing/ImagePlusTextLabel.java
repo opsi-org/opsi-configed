@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class ImagePlusTextLabel extends JPanel {
@@ -68,7 +68,7 @@ public class ImagePlusTextLabel extends JPanel {
 	 */
 	@Override
 	public void setFont(Font font) {
-		if (textlabel != null && !ConfigedMain.FONT) {
+		if (textlabel != null && !Main.FONT) {
 			textlabel.setFont(font);
 		}
 	}
@@ -84,7 +84,7 @@ public class ImagePlusTextLabel extends JPanel {
 
 	@Override
 	public void setBackground(Color bg) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			if (textlabel != null) {
 				textlabel.setBackground(bg);
 			}
@@ -96,7 +96,7 @@ public class ImagePlusTextLabel extends JPanel {
 
 	@Override
 	public void setForeground(Color fg) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			if (textlabel != null) {
 				textlabel.setForeground(fg);
 			}

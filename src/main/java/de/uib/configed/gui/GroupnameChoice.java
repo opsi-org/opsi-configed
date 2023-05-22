@@ -15,8 +15,8 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.SurroundPanel;
 import de.uib.utilities.swing.VerticalPositioner;
@@ -46,11 +46,11 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 
 		groups = new XList(v);
 		groups.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			groups.setFont(Globals.defaultFontBig);
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			groups.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -59,7 +59,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		selIndex = selectedIndex;
 
 		groupnameField = new JTextField();
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			groupnameField.setFont(Globals.defaultFontBold);
 		}
 		groupnameField.setPreferredSize(new Dimension(this.getWidth() * 9 / 10, Globals.LINE_HEIGHT + 5));
@@ -77,7 +77,7 @@ public class GroupnameChoice extends FGeneralDialog implements DocumentListener,
 		}
 
 		JLabel labelExistingGroups = new JLabel(Configed.getResourceValue("GroupnameChoice.existingGroups") + ":");
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelExistingGroups.setFont(Globals.defaultFontBig);
 		}
 		JPanel panelExistingGroups = new JPanel(new GridLayout(1, 2));

@@ -21,6 +21,7 @@ import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -213,7 +214,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 	private void init() {
 		Logging.info(this, "init ");
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			connectionPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			settingsPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);

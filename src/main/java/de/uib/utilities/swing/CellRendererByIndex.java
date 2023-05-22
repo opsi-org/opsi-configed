@@ -48,7 +48,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellRenderer<String> {
@@ -160,7 +160,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 			foreground = Globals.nimbusSelectionBackground;
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(background);
 			setForeground(foreground);
 		}
@@ -173,7 +173,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 			// lazily create this font
 			uhOhFont = list.getFont().deriveFont((float) 10);
 		}
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			setFont(uhOhFont);
 		}
 
@@ -200,7 +200,7 @@ public class CellRendererByIndex extends ImagePlusTextLabel implements ListCellR
 
 		setToolTipText(selectedTooltip);
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			setFont(Globals.defaultFont);
 		}
 

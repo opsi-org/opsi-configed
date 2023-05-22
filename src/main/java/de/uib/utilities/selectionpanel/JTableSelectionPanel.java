@@ -48,6 +48,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -99,7 +100,7 @@ public class JTableSelectionPanel extends JPanel
 
 		scrollpane = new JScrollPane();
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -151,7 +152,7 @@ public class JTableSelectionPanel extends JPanel
 		JPanel topPane = new JPanel();
 
 		JLabel labelSearch = new JLabel(Configed.getResourceValue("SearchPane.search"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelSearch.setFont(Globals.defaultFont);
 		}
 
@@ -165,11 +166,11 @@ public class JTableSelectionPanel extends JPanel
 
 		fieldSearch = new JTextField("");
 		fieldSearch.setPreferredSize(Globals.textfieldDimension);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			fieldSearch.setFont(Globals.defaultFont);
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			fieldSearch.setBackground(Globals.BACKGROUND_COLOR_8);
 		}
 
@@ -320,14 +321,14 @@ public class JTableSelectionPanel extends JPanel
 			JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
 
 			JLabel missingData1 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label1"));
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				missingData1.setFont(Globals.defaultFontTitle);
 			}
 
 			JLabel missingData2 = new JLabel(Configed.getResourceValue("JTableSelectionPanel.missingDataPanel.label2"));
 
 			JPanel mdPanel = new JPanel();
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				mdPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 

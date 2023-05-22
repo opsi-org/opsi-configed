@@ -21,7 +21,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.CellAlternatingColorizer;
 
@@ -71,7 +71,7 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 			CellAlternatingColorizer.colorize(jc, isSelected, index % 2 == 0, true, selectedEven, selectedUneven,
 					unselectedEven, unselectedUneven);
 		} else {
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				if (isSelected) {
 					jc.setBackground(uniformSelectedColor);
 				} else {
@@ -80,7 +80,7 @@ public class StandardListCellRenderer extends DefaultListCellRenderer {
 			}
 		}
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jc.setFont(Globals.defaultFont);
 		}
 

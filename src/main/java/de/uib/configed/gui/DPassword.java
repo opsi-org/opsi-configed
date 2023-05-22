@@ -43,6 +43,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
 import javax.swing.border.Border;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -315,7 +316,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 		this.getContentPane().add(panel);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			Containership csPanel = new Containership(getContentPane());
 
 			csPanel.doForAllContainedCompisOfClass("setBackground", new Object[] { Globals.BACKGROUND_COLOR_7 },

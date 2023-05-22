@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.AbstractPainter;
 
+import de.uib.Main;
 /*
  * configed - configuration editor for client work stations in opsi
  * (open pc server integration) www.opsi.org
@@ -39,7 +40,7 @@ public abstract class AbstractPanelEditProperties extends JXPanel {
 		this.mainController = mainController;
 		this.productPropertiesPanel = productPropertiesPanel;
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setBackgroundPainter(new AbstractPainter<AbstractPanelEditProperties>() {
 				@Override
 				public void doPaint(Graphics2D g, AbstractPanelEditProperties obj, int width, int height) {

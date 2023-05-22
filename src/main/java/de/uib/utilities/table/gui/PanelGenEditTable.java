@@ -55,6 +55,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -310,7 +311,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	private void initComponents() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -337,7 +338,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		setDataChanged(false);
 
 		label = new JLabel(title);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			label.setFont(Globals.defaultFontStandardBold);
 		}
 		if (title == null || title.isEmpty()) {
@@ -345,18 +346,18 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		}
 
 		JLabel labelRowCount = new JLabel(title);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelRowCount.setFont(Globals.defaultFontStandardBold);
 		}
 
 		JLabel labelMarkedCount = new JLabel("");
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelMarkedCount.setFont(Globals.defaultFont);
 		}
 
 		titlePane = new PanelLinedComponents();
 		titlePane.setVisible(false);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
@@ -415,7 +416,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		try {
 			scrollpane = new JScrollPane();
 			scrollpane.setViewportView(theTable);
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 		} catch (ClassCastException ex) {
@@ -424,7 +425,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			scrollpane = new JScrollPane();
 			scrollpane.setViewportView(theTable);
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				scrollpane.getViewport().setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 		}
@@ -550,7 +551,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	}
 
 	public void setTitlePaneBackground(Color c) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			if (c == null) {
 				titlePane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			} else {

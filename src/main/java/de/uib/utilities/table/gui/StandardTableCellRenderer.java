@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.CellAlternatingColorizer;
 
@@ -51,7 +51,7 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			((JLabel) jc).setToolTipText(tooltipText);
 		}
 
-		if (ConfigedMain.THEMES) {
+		if (Main.THEMES) {
 			if (isSelected) {
 				jc.setBackground(Globals.opsiBlue);
 				if (FlatLaf.isLafDark()) {

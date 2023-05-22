@@ -8,6 +8,7 @@ import java.util.Collections;
 import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 
+import de.uib.Main;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 
@@ -20,7 +21,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 	public IconNodeRendererClientTree(ConfigedMain main) {
 		this.main = main;
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setOpaque(true);
 			super.setForeground(Globals.lightBlack);
 			super.setTextSelectionColor(Globals.lightBlack);
@@ -35,7 +36,7 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(Globals.PRIMARY_BACKGROUND_COLOR);
 		}
 
@@ -56,13 +57,13 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				// client
 
 				if (main.getActiveTreeNodes().containsKey(stringValue)) {
-					if (!ConfigedMain.FONT) {
+					if (!Main.FONT) {
 						setFont(Globals.defaultFontStandardBold);
 					}
 
 					setIcon(node.getLeafIcon());
 				} else {
-					if (!ConfigedMain.FONT) {
+					if (!Main.FONT) {
 						setFont(Globals.defaultFont);
 					}
 					setIcon(node.getNonSelectedLeafIcon());
@@ -82,11 +83,11 @@ public class IconNodeRendererClientTree extends IconNodeRenderer {
 				}
 
 				if (main.getActiveTreeNodes().containsKey(stringValue)) {
-					if (!ConfigedMain.FONT) {
+					if (!Main.FONT) {
 						setFont(Globals.defaultFontStandardBold);
 					}
 				} else {
-					if (!ConfigedMain.FONT) {
+					if (!Main.FONT) {
 						setFont(Globals.defaultFont);
 					}
 				}

@@ -10,7 +10,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitCursor;
@@ -29,8 +29,8 @@ public class ActivityPanel extends JPanel implements Runnable {
 	/** inactive status is -1 */
 	public static final int INACTIVE = -1;
 	/** a blueGrey LineBorder */
-	private static final LineBorder lineBorderActive = new LineBorder(
-			ConfigedMain.THEMES ? Globals.opsiGrey : Globals.blueGrey, 1, true);
+	private static final LineBorder lineBorderActive = new LineBorder(Main.THEMES ? Globals.opsiGrey : Globals.blueGrey,
+			1, true);
 
 	/** a blackLightBlue LineBorder */
 	private static final LineBorder lineBorderInactive = new LineBorder(new Color(0, 0, 0, 0), 1, true);
@@ -59,21 +59,21 @@ public class ActivityPanel extends JPanel implements Runnable {
 	private void setState(int i) {
 		for (int j = 0; j < partPanels.size(); j++) {
 			setBorder(lineBorderActive);
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				partPanels.get(j).setBackground(colors[0]);
 			} else {
 				partPanels.get(j).setBackground(Globals.opsiBlue);
 			}
 			if (i == INACTIVE) {
 				setBorder(lineBorderInactive);
-				if (!ConfigedMain.THEMES) {
+				if (!Main.THEMES) {
 					partPanels.get(j).setBackground(Globals.BACKGROUND_COLOR_7);
 				} else {
 					partPanels.get(j).setBackground(new Color(0, 0, 0, 0));
 				}
 			} else {
 				setBorder(lineBorderActive);
-				if (!ConfigedMain.THEMES) {
+				if (!Main.THEMES) {
 					partPanels.get(j).setBackground(Globals.backNimbus);
 				} else {
 					partPanels.get(j).setBackground(new Color(0, 0, 0, 0));
@@ -81,7 +81,7 @@ public class ActivityPanel extends JPanel implements Runnable {
 			}
 
 			if (j == i) {
-				if (!ConfigedMain.THEMES) {
+				if (!Main.THEMES) {
 					partPanels.get(j).setBackground(colors[1]);
 				} else {
 					partPanels.get(j).setBackground(Globals.opsiMagenta);

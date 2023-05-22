@@ -32,6 +32,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.BadLocationException;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 /**
  * NewClientDialog
@@ -188,7 +189,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		JPanel panel = new JPanel();
 		GroupLayout gpl = new GroupLayout(panel);
 		panel.setLayout(gpl);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			panel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -223,14 +224,14 @@ public final class NewClientDialog extends FGeneralDialog {
 		JLabel jLabelDepot = new JLabel();
 		jLabelDepot.setText(Configed.getResourceValue("NewClientDialog.belongsToDepot"));
 		jComboDepots = new JComboBox<>(depots.toArray(new String[0]));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jComboDepots.setFont(Globals.defaultFontBig);
 		}
 
 		JLabel labelPrimaryGroup = new JLabel(Configed.getResourceValue("NewClientDialog.primaryGroup"));
 		jComboPrimaryGroup = new JComboBox<>(new String[] { "a", "ab" });
 		jComboPrimaryGroup.setMaximumRowCount(10);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jComboPrimaryGroup.setFont(Globals.defaultFontBig);
 		}
 
@@ -238,7 +239,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		jLabelNetboot.setText(Configed.getResourceValue("NewClientDialog.netbootProduct"));
 		jComboNetboot = new JComboBox<>(new String[] { "a", "ab" });
 		jComboNetboot.setMaximumRowCount(10);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jComboNetboot.setFont(Globals.defaultFontBig);
 		}
 
@@ -246,7 +247,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		jLabelLocalboot.setText(Configed.getResourceValue("NewClientDialog.localbootProduct"));
 		jComboLocalboot = new JComboBox<>(new String[] { "a", "ab" });
 		jComboLocalboot.setMaximumRowCount(10);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jComboLocalboot.setFont(Globals.defaultFontBig);
 		}
 		jComboLocalboot.setEnabled(false);
@@ -300,25 +301,25 @@ public final class NewClientDialog extends FGeneralDialog {
 		jTextNotes.setBorder(BorderFactory.createLineBorder(Globals.NEW_CLIENT_DIALOG_BORDER_COLOR));
 
 		JLabel labelInfoMac = new JLabel(Configed.getResourceValue("NewClientDialog.infoMac"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelInfoMac.setFont(Globals.defaultFontBig);
 		}
 
 		JLabel labelInfoIP = new JLabel(Configed.getResourceValue("NewClientDialog.infoIpAddress"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelInfoIP.setFont(Globals.defaultFontBig);
 		}
 
 		JLabel jLabelSystemUUID = new JLabel();
 		jLabelSystemUUID.setText(Configed.getResourceValue("NewClientDialog.SystemUUID"));
-		jLabelSystemUUID.setVisible(ConfigedMain.THEMES);
+		jLabelSystemUUID.setVisible(Main.THEMES);
 		systemUUIDField = new JTextField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3', '4',
 				'5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', '-' }, 36, Character.MIN_VALUE, 36, true), "",
 				36);
 
 		systemUUIDField.addKeyListener(this);
 		systemUUIDField.addMouseListener(this);
-		systemUUIDField.setVisible(ConfigedMain.THEMES);
+		systemUUIDField.setVisible(Main.THEMES);
 
 		JLabel jLabelMacAddress = new JLabel();
 		jLabelMacAddress.setText(Configed.getResourceValue("NewClientDialog.HardwareAddress"));

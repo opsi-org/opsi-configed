@@ -16,7 +16,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.list.StandardListCellRenderer;
@@ -60,7 +60,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 		// we could design an adapted layout and infuse it in guiInit
 		Logging.info(this, "allLayout");
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
@@ -70,7 +70,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 			centerPanel = new JPanel();
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -96,7 +96,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 				.addComponent(jPanelButtonGrid, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 				.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			southPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -130,7 +130,7 @@ public class FDialogTextfieldWithListSelection extends FGeneralDialog implements
 
 	public JPanel initPanel() {
 		JPanel thePanel = new JPanel();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			thePanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

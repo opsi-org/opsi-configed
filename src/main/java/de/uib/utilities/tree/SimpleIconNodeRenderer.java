@@ -9,7 +9,7 @@ import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
@@ -22,7 +22,7 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 	public SimpleIconNodeRenderer() {
 		super();
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setOpaque(true);
 		}
 
@@ -30,10 +30,10 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 
 		emphasized = Globals.defaultFontStandardBold;
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			super.setFont(standard);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setForeground(Globals.lightBlack);
 			super.setTextSelectionColor(Globals.lightBlack);
 			super.setBackground(Globals.SIMPLE_ICON_NODE_RENDERER_BACKGROUND_COLOR);
@@ -64,16 +64,16 @@ public class SimpleIconNodeRenderer extends DefaultTreeCellRenderer {
 			node.setEnabled(enabled);
 
 			if (row == 0) {
-				if (!ConfigedMain.FONT) {
+				if (!Main.FONT) {
 					setFont(emphasized);
 				}
 			} else {
-				if (!ConfigedMain.FONT) {
+				if (!Main.FONT) {
 					setFont(standard);
 				}
 			}
 
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				// assuming that row 0 contains sort of header
 				if (sel && row != 0) {
 					setBackground(Globals.BACKGROUND_COLOR_7);

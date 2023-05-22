@@ -44,6 +44,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -78,7 +79,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "allLayout");
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -89,7 +90,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 		centerPanel.setOpaque(true);
@@ -142,7 +143,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		southPanel.setOpaque(false);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 
@@ -155,13 +156,13 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		format = new CSVFormat();
 
 		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			importOptionsLabel.setFont(Globals.defaultFontBold);
 		}
 
 		JLabel splittingOptionsLabel = new JLabel(
 				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			splittingOptionsLabel.setFont(Globals.defaultFontBold);
 		}
 
@@ -248,13 +249,13 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		centerPanel.setLayout(centerLayout);
 
 		JLabel dataLabel = new JLabel(Configed.getResourceValue("CSVTemplateCreatorDialog.dataOptionsLabel"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			dataLabel.setFont(Globals.defaultFontBold);
 		}
 		JLabel dataSelectionLabel = new JLabel(
 				Configed.getResourceValue("CSVTemplateCreatorDialog.dataSelectionLabel"));
 		JLabel csvFormatLabel = new JLabel(Configed.getResourceValue("CSVTemplateCreatorDialog.csvFormatLabel"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			csvFormatLabel.setFont(Globals.defaultFontBold);
 		}
 		JLabel fieldSeparatorLabel = new JLabel(
@@ -374,7 +375,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		}
 
 		private void init(ListModel<JCheckBox> model) {
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 			}
 
@@ -421,13 +422,13 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				public Component getListCellRendererComponent(JList<? extends JCheckBox> list, JCheckBox checkbox,
 						int index, boolean isSelected, boolean cellHasFocus) {
 
-					if (!ConfigedMain.THEMES) {
+					if (!Main.THEMES) {
 						checkbox.setBackground(isSelected ? getSelectionBackground() : getBackground());
 						checkbox.setForeground(isSelected ? getSelectionForeground() : getForeground());
 					}
 
 					checkbox.setEnabled(isEnabled());
-					if (!ConfigedMain.FONT) {
+					if (!Main.FONT) {
 						checkbox.setFont(getFont());
 					}
 					checkbox.setFocusPainted(false);

@@ -7,8 +7,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.utilities.logging.Logging;
@@ -69,12 +69,12 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			}
 
 			if (columnName.equals(latestChange)) {
-				if (!ConfigedMain.THEMES) {
+				if (!Main.THEMES) {
 					jc.setBackground(Globals.CHECK_COLOR);
 				}
 
 				if (state.equals(LicensingInfoMap.STATE_CLOSE_TO_LIMIT)) {
-					if (!ConfigedMain.THEMES) {
+					if (!Main.THEMES) {
 						jc.setBackground(Globals.darkOrange);
 					}
 					jc.setToolTipText(
@@ -82,21 +82,21 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 									+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_OVER_LIMIT)) {
-					if (!ConfigedMain.THEMES) {
+					if (!Main.THEMES) {
 						jc.setBackground(Globals.WARNING_COLOR);
 					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.over_limit") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_WARNING)) {
-					if (!ConfigedMain.THEMES) {
+					if (!Main.THEMES) {
 						jc.setBackground(Globals.darkOrange);
 					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
 
 				} else if (state.equals(LicensingInfoMap.STATE_DAYS_OVER)) {
-					if (!ConfigedMain.THEMES) {
+					if (!Main.THEMES) {
 						jc.setBackground(Globals.WARNING_COLOR);
 					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
@@ -116,7 +116,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 							.toString();
 
 					if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules")) && clientNum != null
-							&& prevClientNum != null && !clientNum.equals(prevClientNum) && !ConfigedMain.FONT) {
+							&& prevClientNum != null && !clientNum.equals(prevClientNum) && !Main.FONT) {
 						jc.setFont(Globals.defaultFontBold);
 					}
 				}

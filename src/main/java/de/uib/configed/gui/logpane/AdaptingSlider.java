@@ -13,7 +13,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
@@ -32,7 +32,7 @@ public class AdaptingSlider extends JSlider implements ChangeListener, MouseWhee
 
 		super.addChangeListener(this);
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			super.setFont(Globals.defaultFont);
 		}
 

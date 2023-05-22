@@ -31,6 +31,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.ControlPanelEnterLicence;
@@ -293,7 +294,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jTextFieldMaxInstallations = new JTextField();
 
 		comboClient = new JComboBox<>();
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			comboClient.setFont(Globals.defaultFontBig);
 		}
 
@@ -385,11 +386,11 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		jButtonSend.addActionListener(this);
 
 		jLabelTask.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.Task") + ":");
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jLabelTask.setFont(Globals.defaultFontBold);
 		}
 		jLabelConfigure.setText(Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.ChooseType"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jLabelConfigure.setFont(Globals.defaultFontStandardBold);
 		}
 
@@ -512,7 +513,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 						.addGap(0, 1, 5)));
 
 		JPanel panelTask = new JPanel();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			panelTask.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		GroupLayout layoutTask = new GroupLayout(panelTask);
@@ -582,7 +583,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 		JPanel bottomPane = new JPanel();
 		splitPane.setTopComponent(topPane);
 		splitPane.setBottomComponent(bottomPane);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			topPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			bottomPane.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}

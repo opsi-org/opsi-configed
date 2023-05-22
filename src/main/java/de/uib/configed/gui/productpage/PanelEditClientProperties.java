@@ -8,6 +8,7 @@ import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 /*
  * configed - configuration editor for client work stations in opsi
@@ -41,10 +42,10 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	private void initComponents() {
 		jLabelProductProperties = new JLabel(Configed.getResourceValue("ProductInfoPane.jLabelProductProperties"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jLabelProductProperties.setFont(Globals.defaultFontBold);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jLabelProductProperties.setForeground(Globals.lightBlack);
 		}
 
@@ -107,7 +108,7 @@ public class PanelEditClientProperties extends AbstractPanelEditProperties {
 
 	@Override
 	public void setTitlePanelActivated(boolean activated) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jLabelProductProperties.setForeground(activated ? Globals.lightBlack : Globals.greyed);
 		}
 		buttonSetValuesFromServerDefaults.setEnabled(activated);

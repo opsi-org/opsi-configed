@@ -4,7 +4,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 /**
@@ -20,12 +20,12 @@ public class FShowListWithComboSelect extends FShowList {
 
 		labelChoice = new JLabel(choiceTitle + ": ");
 		labelChoice.setOpaque(true);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			labelChoice.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 		northPanel.add(labelChoice);
 		combo = new JComboBox<>(choices);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			combo.setFont(Globals.defaultFontBold);
 		}
 		northPanel.add(combo);

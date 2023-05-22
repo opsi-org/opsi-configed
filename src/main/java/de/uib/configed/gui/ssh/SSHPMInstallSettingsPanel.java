@@ -12,8 +12,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
@@ -117,7 +117,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	}
 
 	private void initLayout() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			this.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 

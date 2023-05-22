@@ -18,6 +18,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
+import de.uib.Main;
 import de.uib.configed.gui.FGlobalSoftwareInfo;
 import de.uib.configed.gui.FSoftwarename2LicencePool;
 import de.uib.configed.gui.FTextArea;
@@ -525,7 +526,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		// special treatment of columns
 		TableColumn col = thePanel.panelProductId2LPool.getColumnModel().getColumn(0);
 		JComboBox<String> comboLP0 = new JComboBox<>();
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			comboLP0.setFont(Globals.defaultFontBig);
 		}
 		col.setCellEditor(new AdaptingCellEditor(comboLP0, (int row, int column) -> {
@@ -542,7 +543,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		col = thePanel.panelProductId2LPool.getColumnModel().getColumn(1);
 		JComboBox<String> comboLP1 = new JComboBox<>();
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			comboLP1.setFont(Globals.defaultFontBig);
 		}
 		col.setCellEditor(new AdaptingCellEditor(comboLP1,

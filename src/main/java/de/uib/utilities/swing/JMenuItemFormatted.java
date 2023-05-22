@@ -14,7 +14,7 @@ import java.awt.Font;
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class JMenuItemFormatted extends JMenuItem {
@@ -22,21 +22,21 @@ public class JMenuItemFormatted extends JMenuItem {
 
 	public JMenuItemFormatted() {
 		super();
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			super.setFont(specialFont);
 		}
 	}
 
 	public JMenuItemFormatted(String text) {
 		super(text);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			super.setFont(specialFont);
 		}
 	}
 
 	public JMenuItemFormatted(String text, Icon icon) {
 		super(text, icon);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			super.setFont(specialFont);
 		}
 	}

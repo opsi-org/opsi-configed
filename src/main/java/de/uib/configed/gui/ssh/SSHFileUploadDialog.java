@@ -18,6 +18,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -83,7 +84,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 
 		super.setSize(Globals.DIALOG_FRAME_DEFAULT_WIDTH, Globals.DIALOG_FRAME_DEFAULT_HEIGHT + 100);
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -100,7 +101,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
@@ -147,7 +148,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		});
 		jTextFieldLocalPath = new JTextField();
 		jTextFieldLocalPath.setEditable(false);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jTextFieldLocalPath.setBackground(Globals.BACKGROUND_COLOR_9);
 		}
 

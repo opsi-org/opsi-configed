@@ -50,6 +50,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import de.uib.Main;
 /*
  *   class PanelProductSettings
  *   for editing client specific product settings
@@ -201,7 +202,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.setPreferredSize(new Dimension(FRAME_WIDTH_LEFTHANDED, FRAME_HEIGHT));
 		paneProducts.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			tableProducts.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 		tableProducts.setShowHorizontalLines(true);
@@ -355,7 +356,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					if (val.equals(InstallationStateTableModel.CONFLICT_STRING)
 							|| val.equals(InstallationStateTableModel.UNEQUAL_ADD_STRING
 									+ InstallationStateTableModel.CONFLICT_STRING)) {
-						if (!ConfigedMain.THEMES) {
+						if (!Main.THEMES) {
 							c.setBackground(Globals.CONFLICT_STATE_CELL_COLOR);
 							c.setForeground(Globals.CONFLICT_STATE_CELL_COLOR);
 						} else {
@@ -521,7 +522,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		JMenuItem save = new JMenuItemFormatted();
 		save.setText(Configed.getResourceValue("ConfigedMain.saveConfiguration"));
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			save.setFont(Globals.defaultFont);
 		}
 		save.addActionListener(new ActionListener() {
@@ -536,7 +537,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		itemOnDemand = new JMenuItemFormatted();
 		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			itemOnDemand.setFont(Globals.defaultFont);
 		}
 		itemOnDemand.addActionListener((ActionEvent e) -> mainController
@@ -549,7 +550,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		// dies bit get its intended context
 		itemSaveAndExecute.setIcon(Globals.createImageIcon("images/executing_command_blue_16.png", ""));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			itemSaveAndExecute.setFont(Globals.defaultFont);
 		}
 		itemSaveAndExecute.addActionListener(new ActionListener() {
@@ -569,7 +570,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		// find itscontext
 		reload.setText(Configed.getResourceValue("ConfigedMain.reloadTable"));
 		reload.setIcon(Globals.createImageIcon("images/reload16.png", ""));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			reload.setFont(Globals.defaultFont);
 		}
 		reload.addActionListener(new ActionListener() {
@@ -584,7 +585,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		JMenuItem createReport = new JMenuItemFormatted();
 		createReport.setText(Configed.getResourceValue("PanelProductSettings.pdf"));
 		createReport.setIcon(Globals.createImageIcon("images/acrobat_reader16.png", ""));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			createReport.setFont(Globals.defaultFont);
 		}
 		createReport.addActionListener(new ActionListener() {
@@ -626,7 +627,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		exportTable.addMenuItemsTo(popup);
 
 		JMenu sub = new JMenu(Configed.getResourceValue("ConfigedMain.columnVisibility"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			sub.setFont(Globals.defaultFont);
 		}
 		popup.addSeparator();
@@ -644,7 +645,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			JMenuItem item = new JCheckBoxMenuItem();
 			item.setText(InstallationStateTableModel.getColumnTitle(columnName));
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				item.setFont(Globals.defaultFont);
 			}
 			((JCheckBoxMenuItem) item).setState(checkColumns.get(columnName));

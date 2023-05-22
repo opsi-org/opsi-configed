@@ -10,7 +10,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRenderer {
@@ -31,11 +31,11 @@ public class CheckBoxTableCellRenderer extends JCheckBox implements TableCellRen
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setForeground(Globals.lightBlack);
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			if (isSelected) {
 				setBackground(Globals.defaultTableCellSelectedBgColorNotEditable);
 			} else if (row % 2 == 0) {

@@ -24,6 +24,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -70,7 +71,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 	protected void allLayout() {
 		Logging.info(this, "allLayout");
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 			allpane.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
 		}
@@ -81,7 +82,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 			centerPanel = new JPanel();
 		}
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			centerPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 
@@ -121,19 +122,19 @@ public class CSVImportDataDialog extends FGeneralDialog {
 		JPanel northPanel = new JPanel();
 		northPanel.setOpaque(false);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			northPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 
 		northPanel.setOpaque(true);
 
 		JLabel importOptionsLabel = new JLabel(Configed.getResourceValue("CSVImportDataDialog.importOptionsLabel"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			importOptionsLabel.setFont(Globals.defaultFontBold);
 		}
 		JLabel splittingOptionsLabel = new JLabel(
 				Configed.getResourceValue("CSVImportDataDialog.splittingOptionsLabel"));
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			splittingOptionsLabel.setFont(Globals.defaultFontBold);
 		}
 
@@ -329,7 +330,7 @@ public class CSVImportDataDialog extends FGeneralDialog {
 
 		southPanel.setOpaque(false);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			southPanel.setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
 		}
 		southPanel.setOpaque(true);

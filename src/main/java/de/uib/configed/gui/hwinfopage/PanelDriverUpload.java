@@ -35,6 +35,7 @@ import javax.swing.event.DocumentListener;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -312,7 +313,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		fieldServerPath = new JTextShowField(true);
 		fieldServerPath.getDocument().addDocumentListener(new FileNameDocumentListener());
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			fieldServerPath.setForeground(Globals.greyed);
 		}
 
@@ -490,11 +491,11 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 						+ fieldServerPath.getText());
 				final Color saveColor = buttonUploadDrivers.getBackground();
 
-				if (!ConfigedMain.THEMES) {
+				if (!Main.THEMES) {
 					buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 				}
 				execute();
-				if (!ConfigedMain.THEMES) {
+				if (!Main.THEMES) {
 					buttonUploadDrivers.setBackground(saveColor);
 				}
 			}
@@ -655,7 +656,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 										.addGap(hFirstGap / 2, hFirstGap / 2, hFirstGap / 2)));
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 

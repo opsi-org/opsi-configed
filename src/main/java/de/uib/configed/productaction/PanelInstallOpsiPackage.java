@@ -34,6 +34,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.FileUtils;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -298,7 +299,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallChooserPackage.addActionListener(actionEvent -> choosePackage());
 
 		fieldServerPath = new JTextField(opsiWorkBenchDirectoryS);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			fieldServerPath.setForeground(Globals.greyed);
 		}
 
@@ -322,7 +323,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 			public void actionPerformed(ActionEvent e) {
 				final Color saveColor = buttonCallExecute.getBackground();
 
-				if (!ConfigedMain.THEMES) {
+				if (!Main.THEMES) {
 					buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 				}
 
@@ -331,7 +332,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 				execute();
 
-				if (!ConfigedMain.THEMES) {
+				if (!Main.THEMES) {
 					buttonCallExecute.setBackground(saveColor);
 				}
 			}

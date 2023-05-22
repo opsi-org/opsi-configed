@@ -27,8 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditObject;
@@ -82,7 +82,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		registerWithRunningInstances();
 		super.setIconImage(Globals.mainIcon);
 		super.setTitle(title);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			super.setFont(Globals.defaultFont);
 		}
 		checkAdditionalPane();
@@ -96,7 +96,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		Logging.info(this, "created by constructor 2, owner " + owner);
 		registerWithRunningInstances();
 		super.setTitle(title);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			super.setFont(Globals.defaultFont);
 		}
 		super.setIconImage(Globals.mainIcon);
@@ -180,7 +180,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		this.preferredHeight = preferredHeight;
 
 		setTitle(title);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			setFont(Globals.defaultFont);
 		}
 
@@ -295,13 +295,13 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	public void setContentBackground(Color c) {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			allpane.setBackground(c);
 		}
 	}
 
 	protected void allLayout() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			allpane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
@@ -313,7 +313,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		southPanel = new JPanel();
 		southPanel.setOpaque(false);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			scrollpane.setBackground(Globals.F_GENERAL_DIALOG_BACKGROUND_COLOR);
 		}
 
@@ -368,7 +368,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jPanelButtonGrid.setLayout(gridLayout1);
 		jPanelButtonGrid.setOpaque(false);
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jButton1.setFont(Globals.defaultFont);
 		}
 		jButton1.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
@@ -382,7 +382,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		jPanelButtonGrid.add(jButton1, null);
 
 		if (noOfButtons > 1) {
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				jButton2.setFont(Globals.defaultFont);
 			}
 			jButton2.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
@@ -397,7 +397,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		}
 		if (noOfButtons > 2) {
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				jButton3.setFont(Globals.defaultFont);
 			}
 			jButton3.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH, Globals.BUTTON_HEIGHT - 2));
@@ -662,7 +662,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, opacity));
 
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
 				g.fillRect(0, 0, getWidth(), getHeight());
 			}

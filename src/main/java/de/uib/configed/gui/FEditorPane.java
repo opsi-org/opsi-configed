@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 
 public class FEditorPane extends FGeneralDialog {
@@ -22,13 +22,13 @@ public class FEditorPane extends FGeneralDialog {
 	private void init() {
 		editPane.setOpaque(true);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			editPane.setBackground(Globals.BACKGROUND_COLOR_4);
 		}
 
 		editPane.setText("          ");
 		editPane.setEditable(false);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			editPane.setFont(new Font("Dialog", 0, 10));
 		}
 

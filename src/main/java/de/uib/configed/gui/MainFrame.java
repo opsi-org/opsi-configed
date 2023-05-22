@@ -471,7 +471,7 @@ public class MainFrame extends JFrame
 		public void paintComponent(Graphics g) {
 			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 0.5));
 
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
 				g.fillRect(0, 0, getWidth(), getHeight());
 			}
@@ -706,7 +706,7 @@ public class MainFrame extends JFrame
 		jMenuFile.add(jMenuFileReload);
 		jMenuFile.add(jMenuFileLanguage);
 
-		if (ConfigedMain.THEMES) {
+		if (Main.THEMES) {
 			jMenuFile.add(jMenuTheme);
 		}
 
@@ -931,7 +931,7 @@ public class MainFrame extends JFrame
 
 		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				item.setFont(Globals.defaultFont);
 			}
 
@@ -1032,23 +1032,23 @@ public class MainFrame extends JFrame
 				+ SSHConnectionInfo.getInstance().getHost();
 
 		jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.UNKNOWN);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jMenuSSHConnection.setForeground(Globals.UNKNOWN_COLOR);
 		}
 		if (status.equals(SSHCommandFactory.NOT_CONNECTED)) {
 
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				jMenuSSHConnection.setForeground(Globals.lightBlack);
 			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.NOT_CONNECTED);
 		} else if (status.equals(SSHCommandFactory.CONNECTION_NOT_ALLOWED)) {
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				jMenuSSHConnection.setForeground(Globals.ACTION_COLOR);
 			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTION_NOT_ALLOWED);
 
 		} else if (status.equals(SSHCommandFactory.CONNECTED)) {
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				jMenuSSHConnection.setForeground(Globals.OK_COLOR);
 			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTED);
@@ -1273,7 +1273,7 @@ public class MainFrame extends JFrame
 
 		for (Entry<String, String> entry : searchedTimeSpansText.entrySet()) {
 			JMenuItem item = new JMenuItemFormatted(entry.getValue());
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				item.setFont(Globals.defaultFont);
 			}
 
@@ -1380,7 +1380,7 @@ public class MainFrame extends JFrame
 		jMenuHelpOpsiVersion.setText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": "
 				+ JSONthroughHTTPS.getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
 		}
 
@@ -1695,7 +1695,7 @@ public class MainFrame extends JFrame
 		popupSelectionToggleClientFilter
 				.setText(Configed.getResourceValue("MainFrame.jMenuClientselectionToggleClientFilter"));
 		popupSelectionToggleClientFilter.setState(false);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			popupSelectionToggleClientFilter.setFont(Globals.defaultFontBig);
 		}
 
@@ -1728,7 +1728,7 @@ public class MainFrame extends JFrame
 
 		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItemFormatted(event);
-			if (!ConfigedMain.FONT) {
+			if (!Main.FONT) {
 				item.setFont(Globals.defaultFont);
 			}
 
@@ -1851,7 +1851,7 @@ public class MainFrame extends JFrame
 
 	private void guiInit() {
 		this.addWindowListener(this);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			this.setFont(Globals.defaultFont);
 		}
 		this.setIconImage(Globals.mainIcon);
@@ -1898,7 +1898,7 @@ public class MainFrame extends JFrame
 		labelHost.setPreferredSize(Globals.buttonDimension);
 
 		labelHostID = new JLabel("");
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelHostID.setFont(Globals.defaultFontStandardBold);
 		}
 
@@ -1916,17 +1916,17 @@ public class MainFrame extends JFrame
 
 		JTextArea jFieldInDepot = new JTextArea();
 		jFieldInDepot.setEditable(false);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jFieldInDepot.setFont(Globals.defaultFontBig);
 		}
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jFieldInDepot.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
 		jTextFieldDescription = new JTextEditorField("");
 		jTextFieldDescription.setEditable(true);
 		jTextFieldDescription.setPreferredSize(Globals.textfieldDimension);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jTextFieldDescription.setFont(Globals.defaultFontBig);
 		}
 		jTextFieldDescription.addKeyListener(this);
@@ -1935,7 +1935,7 @@ public class MainFrame extends JFrame
 		jTextFieldInventoryNumber = new JTextEditorField("");
 		jTextFieldInventoryNumber.setEditable(true);
 		jTextFieldInventoryNumber.setPreferredSize(Globals.textfieldDimension);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jTextFieldInventoryNumber.setFont(Globals.defaultFontBig);
 		}
 		jTextFieldInventoryNumber.addKeyListener(this);
@@ -1946,7 +1946,7 @@ public class MainFrame extends JFrame
 		jTextAreaNotes.setEditable(true);
 		jTextAreaNotes.setLineWrap(true);
 		jTextAreaNotes.setWrapStyleWord(true);
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			jTextAreaNotes.setFont(Globals.defaultFontBig);
 		}
 		GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -2174,7 +2174,7 @@ public class MainFrame extends JFrame
 		jCheckBoxSorted.setText(Configed.getResourceValue("MainFrame.jCheckBoxSorted"));
 
 		jButtonSaveList.setText(Configed.getResourceValue("MainFrame.jButtonSaveList"));
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jButtonSaveList.setBackground(Globals.BACKGROUND_COLOR_6);
 		}
 		jButtonSaveList.addActionListener(this::jButtonSaveListActionPerformed);
@@ -2193,11 +2193,11 @@ public class MainFrame extends JFrame
 		buttonGroupRequired.add(jRadioRequiredAll);
 		buttonGroupRequired.add(jRadioRequiredOff);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			jComboBoxProductValues.setBackground(Globals.BACKGROUND_COLOR_6);
 		}
 
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			treeClients.setFont(Globals.defaultFont);
 		}
 
@@ -2620,13 +2620,13 @@ public class MainFrame extends JFrame
 		};
 
 		labelNoSoftware = new JLabel();
-		if (!ConfigedMain.FONT) {
+		if (!Main.FONT) {
 			labelNoSoftware.setFont(Globals.defaultFontBig);
 		}
 
 		showSoftwareLogNotFound = new JPanel(new FlowLayout());
 		showSoftwareLogNotFound.add(labelNoSoftware);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			showSoftwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_3);
 		}
 
@@ -2702,7 +2702,7 @@ public class MainFrame extends JFrame
 		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
 				new Class[] { boolean.class }, JTextComponent.class);
 
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			// set colors of panels
 			csJPanelAllContent.doForAllContainedCompisOfClass("setBackground",
 					new Object[] { Globals.BACKGROUND_COLOR_7 }, JPanel.class);
@@ -3524,7 +3524,7 @@ public class MainFrame extends JFrame
 		if (showHardwareLogNotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
 			showHardwareLogNotFound = new TitledPanel();
 			showHardwareLogParentOfNotFoundPanel = new JPanel();
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				showHardwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_7);
 			}
 			showHardwareLogParentOfNotFoundPanel.setLayout(new BorderLayout());
@@ -3803,7 +3803,7 @@ public class MainFrame extends JFrame
 			jTextFieldOneTimePassword.setToolTipText(null);
 			jTextAreaNotes.setToolTipText(null);
 
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				jTextFieldDescription.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 				jTextFieldInventoryNumber.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 				jTextFieldOneTimePassword.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
@@ -3825,7 +3825,7 @@ public class MainFrame extends JFrame
 			jTextFieldOneTimePassword
 					.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
 			jTextAreaNotes.setToolTipText(Configed.getResourceValue("MainFrame.Only_active_for_a_single_client"));
-			if (!ConfigedMain.THEMES) {
+			if (!Main.THEMES) {
 				jTextFieldDescription.setBackground(Globals.BACKGROUND_COLOR_3);
 				jTextFieldInventoryNumber.setBackground(Globals.BACKGROUND_COLOR_3);
 				jTextFieldOneTimePassword.setBackground(Globals.BACKGROUND_COLOR_3);

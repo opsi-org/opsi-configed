@@ -20,6 +20,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
@@ -87,7 +88,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 		super.pack();
 		super.setSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
 		super.setLocationRelativeTo(ConfigedMain.getMainFrame());
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			super.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -157,7 +158,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 
 	private void init() {
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			inputPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			winAuthPanel.setBackground(Globals.BACKGROUND_COLOR_7);

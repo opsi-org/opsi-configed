@@ -17,7 +17,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import de.uib.configed.ConfigedMain;
+import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.table.gui.AdaptingCellEditor;
@@ -51,7 +51,7 @@ public class DynamicCombo extends JPanel {
 		tablemodel.addRow(new String[] { "" });
 
 		table.setModel(tablemodel);
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			table.setSelectionBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			table.setSelectionForeground(Globals.lightBlack);
 		}
@@ -92,7 +92,7 @@ public class DynamicCombo extends JPanel {
 
 	@Override
 	public void setFont(Font font) {
-		if (combo != null && !ConfigedMain.FONT) {
+		if (combo != null && !Main.FONT) {
 			combo.setFont(font);
 		}
 	}

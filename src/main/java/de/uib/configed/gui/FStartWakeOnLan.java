@@ -26,6 +26,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.InternationalFormatter;
 
+import de.uib.Main;
 import de.uib.configed.Configed;
 /**
  * FStartWakeOnLan
@@ -183,7 +184,7 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 		super.checkAdditionalPane();
 
 		JPanel contentPane = new JPanel();
-		if (!ConfigedMain.THEMES) {
+		if (!Main.THEMES) {
 			contentPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
