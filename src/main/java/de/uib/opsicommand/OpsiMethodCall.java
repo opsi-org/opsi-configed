@@ -2,7 +2,6 @@ package de.uib.opsicommand;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,18 +15,14 @@ public class OpsiMethodCall {
 
 	public static final boolean BACKGROUND_DEFAULT = true;
 	private static final int DEFAULT_JSON_ID = 1;
-	private static String extendRpcPath = "extend/configed";
 	private static final List<String> collectedCalls = new ArrayList<>();
 	public static int maxCollectSize = -1;
 
-	private Map<String, Object> theCall;
 	private String methodname;
 
 	private Object[] parameters;
 
 	private boolean background;
-
-	private String rpcPath = "";
 
 	/**
 	 * @param rpcPath    subpath for the rpc call (not including "/rpc/")
@@ -38,10 +33,6 @@ public class OpsiMethodCall {
 	public OpsiMethodCall(String methodname, Object[] parameters, boolean background) {
 		this.methodname = methodname;
 		this.parameters = parameters;
-		theCall = new HashMap<>();
-		theCall.put("method", methodname);
-		theCall.put("params", parameters);
-		theCall.put("rpcpath", rpcPath);
 		this.background = background;
 		collectCall();
 	}
@@ -75,16 +66,6 @@ public class OpsiMethodCall {
 		Logging.debug("================================================");
 	}
 
-	public String getRpcPath() {
-		return rpcPath;
-	}
-
-	public OpsiMethodCall activateExtendedRpcPath() {
-		Logging.info(this, "activateExtendedRpcPath");
-		rpcPath = extendRpcPath;
-		return this;
-	}
-
 	public String getMethodname() {
 		return methodname;
 	}
@@ -100,9 +81,6 @@ public class OpsiMethodCall {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder("{");
-		sb.append("rpcpath=");
-		sb.append(rpcPath);
-		sb.append(", ");
 		sb.append("method=");
 		sb.append(methodname);
 		sb.append(", ");

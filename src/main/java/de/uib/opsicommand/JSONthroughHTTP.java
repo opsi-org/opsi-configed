@@ -9,13 +9,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -59,7 +57,6 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 	public static final int DEFAULT_PORT = 4447;
 
 	private static final int POST = 0;
-	private static final int GET = 1;
 	protected String host;
 	public String username;
 	public String password;
@@ -97,17 +94,6 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 		conStat = new ConnectionState();
 	}
 
-	private static String makeRpcPath(OpsiMethodCall omc) {
-		StringBuilder result = new StringBuilder("/rpc");
-
-		if (omc.getRpcPath() != null && !(omc.getRpcPath().isEmpty())) {
-			result.append("/");
-			result.append(omc.getRpcPath());
-		}
-
-		return result.toString();
-	}
-
 	/**
 	 * This method takes hostname, port and the OpsiMethodCall rpcPath
 	 * transformed to String in order to build an URL as expected by the
@@ -121,17 +107,15 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 		return "http://" + host + ":" + portHTTP + rpcPath;
 	}
 
-	private void appendGETParameter(String urlS, String json) {
-		if (requestMethod == GET) {
-			try {
-				String urlEnc = URLEncoder.encode(json, "UTF8");
-				urlS += "?" + urlEnc;
-			} catch (UnsupportedEncodingException ux) {
-				Logging.error(this, "coding UTF8 not supported", ux);
-			}
+	public void makeURL() {
+		if (serviceURL != null) {
+			return;
 		}
 
-		Logging.debug(this, "we shall try to connect to " + urlS);
+		Logging.debug(this, "make url ");
+
+		String urlS = produceBaseURL("/rpc");
+
 		try {
 			serviceURL = new URL(urlS);
 		} catch (MalformedURLException ex) {
@@ -139,14 +123,6 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 					+ " nhttps://learn.microsoft.com/id-id/windows-hardware/manufacture/desktop/oscdimg-command-line-options?view=windows-11o legal URL, "
 					+ ex.toString());
 		}
-	}
-
-	public void makeURL(OpsiMethodCall omc) {
-		Logging.debug(this, "make url for " + omc);
-
-		String urlS = produceBaseURL(makeRpcPath(omc));
-		String json = omc.getJsonString();
-		appendGETParameter(urlS, json);
 	}
 
 	private static String produceJSONstring(OpsiMethodCall omc) {
@@ -226,7 +202,7 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 
 		conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 
-		makeURL(omc);
+		makeURL();
 
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
