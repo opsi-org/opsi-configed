@@ -133,31 +133,27 @@ public abstract class AbstractPOJOExecutioner extends AbstractExecutioner {
 		return result;
 	}
 
+	// returns false if the "error" key does not exist or is null
+	// Otherwise returns true which means call was successful
 	private boolean checkResponse(Map<String, Object> retrieved) {
-		boolean responseFound = true;
 
 		if (retrieved == null) {
-			responseFound = false;
+			return false;
 		} else {
-			Object resultValue = null;
 			String errorMessage = getErrorFromResponse(retrieved);
 
 			if (errorMessage != null) {
 
-				String logMessage = "Opsi service error: " + errorMessage;
-				Logging.error(logMessage);
+				Logging.error("Opsi service error: " + errorMessage);
+
+				return false;
 			} else {
-				resultValue = retrieved.get("result");
+				Object resultValue = retrieved.get("result");
+				Logging.debug(this, "got result " + resultValue);
 
-			}
-
-			if (resultValue == null) {
-				Logging.debug("Null result in response ");
-				responseFound = false;
+				return true;
 			}
 		}
-
-		return responseFound;
 	}
 
 	@Override
