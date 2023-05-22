@@ -123,21 +123,6 @@ public class Main {
 
 	private static void parseArgs(CommandLine cmd) {
 
-		if (cmd.hasOption("lv")) {
-			isLogviewer = true;
-		}
-
-		String locale = null;
-		if (cmd.hasOption("l")) {
-			locale = cmd.getOptionValue("l");
-		}
-
-		// Set locale, then we can use localization values
-		List<String> existingLocales = Messages.getLocaleNames();
-		Messages.setLocale(locale);
-		Logging.info("getLocales: " + existingLocales);
-		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
-
 		if (cmd.hasOption("d")) {
 			Logging.logDirectoryName = cmd.getOptionValue("d");
 		}
@@ -165,6 +150,22 @@ public class Main {
 			Main.showHelp();
 			endApp(0);
 		}
+
+		Logging.devel("parseArgs");
+		if (cmd.hasOption("lv")) {
+			isLogviewer = true;
+		}
+
+		String locale = null;
+		if (cmd.hasOption("l")) {
+			locale = cmd.getOptionValue("l");
+		}
+
+		// Set locale, then we can use localization values
+		Messages.setLocale(locale);
+		List<String> existingLocales = Messages.getLocaleNames();
+		Logging.info("getLocales: " + existingLocales);
+		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());
 	}
 
 	public static void endApp(int exitcode) {
