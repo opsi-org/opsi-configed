@@ -309,6 +309,14 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		}
 	}
 
+	public Map<String, List<Object>> getWanConfiguration() {
+		return wanConfiguration;
+	}
+
+	public Map<String, List<Object>> getNotWanConfiguration() {
+		return notWanConfiguration;
+	}
+
 	// ---------------------------------------------------------------
 
 	/* server related */
@@ -913,5 +921,4 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 		return createJSONConfig(ConfigOption.TYPE.BOOL_CONFIG, key, description, false, false, defaultValues,
 				possibleValues);
 	}
-
 }

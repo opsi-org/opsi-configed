@@ -169,7 +169,6 @@ public class Main {
 			endApp(0);
 		}
 
-		Logging.devel("parseArgs");
 		if (cmd.hasOption("lv")) {
 			isLogviewer = true;
 		}
