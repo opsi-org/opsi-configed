@@ -14,14 +14,14 @@ import de.uib.logviewer.gui.LogFrame;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.UncaughtConfigedExceptionHandler;
 
-public class Logviewer {
+public final class Logviewer {
 
 	private static String fileName = "";
 
 	private static LogFrame logFrame;
 
 	/** construct the application */
-	public Logviewer() {
+	private Logviewer() {
 		UncaughtConfigedExceptionHandler errorHandler = new UncaughtConfigedExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(errorHandler);
 

@@ -32,7 +32,7 @@ import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.savedstates.SavedStates;
 
-public class Configed {
+public final class Configed {
 
 	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
 
@@ -80,7 +80,7 @@ public class Configed {
 	private static Integer paramTab;
 
 	/** construct the application */
-	public Configed(String paramHost, String paramUser, String paramPassword, final String paramClient,
+	private Configed(String paramHost, String paramUser, String paramPassword, final String paramClient,
 			final String paramClientgroup, final Integer paramTab) {
 
 		setParamValues(paramHost, paramUser, paramPassword, paramTab, paramClient, paramClientgroup);

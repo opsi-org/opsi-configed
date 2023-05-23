@@ -5928,6 +5928,18 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				break;
 			}
 
+			if (maxInstallations != null && maxInstallations.isBlank()) {
+				maxInstallations = null;
+			}
+
+			if (boundToHost != null && boundToHost.isBlank()) {
+				boundToHost = null;
+			}
+
+			if (expirationDate != null && expirationDate.isBlank()) {
+				expirationDate = null;
+			}
+
 			OpsiMethodCall omc = new OpsiMethodCall(methodName, new String[] { softwareLicenseId, licenceContractId,
 					maxInstallations, boundToHost, expirationDate });
 
