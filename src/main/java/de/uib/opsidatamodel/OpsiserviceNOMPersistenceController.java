@@ -5928,6 +5928,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				break;
 			}
 
+			// The jsonRPC-calls would fail sometimes if we use empty / blank Strings...
 			if (maxInstallations != null && maxInstallations.isBlank()) {
 				maxInstallations = null;
 			}

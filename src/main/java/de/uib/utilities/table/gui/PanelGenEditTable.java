@@ -168,7 +168,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	protected TablesearchPane searchPane;
 
 	private boolean filteringActive;
-	private boolean selectionEmpty = true;
 	private boolean singleSelection;
 
 	private String title = "";
@@ -280,7 +279,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (searchPane != null) {
 			searchPane.setMasterFrame(masterFrame);
 		}
-
 	}
 
 	@Override
@@ -292,10 +290,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (withTablesearchPane) {
 			searchPane.requestFocus();
 		}
-	}
-
-	public void setAutoResizeMode(int mode) {
-		theTable.setAutoResizeMode(mode);
 	}
 
 	public void setUpdateController(UpdateController c) {
@@ -485,10 +479,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.setColumnSelectionAllowed(b);
 	}
 
-	public void setRowSelectionAllowed(boolean b) {
-		theTable.setRowSelectionAllowed(b);
-	}
-
 	public void setDeleteAllowed(boolean b) {
 		deleteAllowed = b;
 	}
@@ -531,7 +521,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	public void reset() {
 
 		tableModel.reset();
-
 	}
 
 	public void reload() {
@@ -1667,13 +1656,11 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 		if (lsm.isSelectionEmpty()) {
 			Logging.info(this, "no rows selected");
-			selectionEmpty = true;
 			singleSelection = false;
 			if (menuItemDeleteRelation != null) {
 				menuItemDeleteRelation.setEnabled(false);
 			}
 		} else {
-			selectionEmpty = false;
 			int selectedRow = lsm.getMinSelectionIndex();
 			if (followSelectionListener) {
 				selectedRowChanged();
@@ -1686,10 +1673,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			singleSelection = selectedRow == lsm.getMaxSelectionIndex();
 		}
 
-	}
-
-	public boolean isSelectionEmpty() {
-		return selectionEmpty;
 	}
 
 	public boolean isSingleSelection() {
@@ -1740,13 +1723,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	@Override
 	public void rowUpdated(int modelrow) {
 		Logging.info(this, " in PanelGenEditTable rowUpdated to modelrow " + modelrow);
-	}
-
-	/*
-	 * extract scrollpane for use in other components
-	 */
-	public JScrollPane getScrollPane() {
-		return scrollpane;
 	}
 
 	private void floatExternal() {

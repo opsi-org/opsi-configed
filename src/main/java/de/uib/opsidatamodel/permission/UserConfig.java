@@ -238,14 +238,6 @@ public class UserConfig {
 		return possibleValuesMap.get(key);
 	}
 
-	public String getUser() {
-		return username;
-	}
-
-	public void setUser(String uname) {
-		username = uname;
-	}
-
 	public UserConfig getPrototype() {
 		if (prototypeConfig == null) {
 			return archeoPrototypeConfig;
