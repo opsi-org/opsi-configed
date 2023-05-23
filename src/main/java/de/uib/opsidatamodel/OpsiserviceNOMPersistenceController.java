@@ -211,6 +211,17 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	public static final String DEPOT_SELECTION_ALL_WHERE_INSTALLED = Configed
 			.getResourceValue("SSHConnection.command.opsipackagemanager.DEPOT_SELECTION_ALL_WHERE_INSTALLED");
 
+	public static final String HOST_KEY = "hostId";
+
+	private static final String BACKEND_LICENSING_INFO_METHOD_NAME = "backend_getLicensingInfo";
+
+	private static final String NAME_REQUIREMENT_TYPE_BEFORE = "before";
+	private static final String NAME_REQUIREMENT_TYPE_AFTER = "after";
+	private static final String NAME_REQUIREMENT_TYPE_NEUTRAL = "";
+	private static final String NAME_REQUIREMENT_TYPE_ON_DEINSTALL = "on_deinstall";
+
+	private static Boolean keyUserRegisterValue;
+
 	public static final NavigableMap<String, String> PROPERTY_CLASSES_SERVER = new TreeMap<>();
 	static {
 		PROPERTY_CLASSES_SERVER.put("", "general configuration items");
@@ -283,17 +294,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 	// offer observing of data loading
 	private List<DataLoadingObserver> dataLoadingObservers;
-
-	public static final String HOST_KEY = "hostId";
-
-	private static final String BACKEND_LICENSING_INFO_METHOD_NAME = "backend_getLicensingInfo";
-
-	private static final String NAME_REQUIREMENT_TYPE_BEFORE = "before";
-	private static final String NAME_REQUIREMENT_TYPE_AFTER = "after";
-	private static final String NAME_REQUIREMENT_TYPE_NEUTRAL = "";
-	private static final String NAME_REQUIREMENT_TYPE_ON_DEINSTALL = "on_deinstall";
-
-	private static Boolean keyUserRegisterValue;
 
 	/* data for checking permissions */
 	private boolean globalReadOnly;
