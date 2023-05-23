@@ -8,7 +8,7 @@ import java.util.Set;
 import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesReconciliation;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
@@ -27,11 +27,11 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	private PanelLicencesReconciliation thePanel;
 	private GenTableModel modelLicencesReconciliation;
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
 	private boolean initialized;
 
-	public ControlPanelLicencesReconciliation(AbstractPersistenceController persist) {
+	public ControlPanelLicencesReconciliation(OpsiserviceNOMPersistenceController persist) {
 		thePanel = new PanelLicencesReconciliation(this);
 		this.persist = persist;
 
@@ -51,7 +51,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		List<String> classNames;
 
 		List<String> extraHostFields = persist.getServerConfigStrings(
-				AbstractPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
+				OpsiserviceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 
 		// --- panelLicencesReconciliation
 		columnNames = new ArrayList<>();

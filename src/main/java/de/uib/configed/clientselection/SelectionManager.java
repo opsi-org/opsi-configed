@@ -17,7 +17,7 @@ import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.SoftwareWithPropertiesOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.clientselection.serializers.OpsiDataSerializer;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.utilities.logging.Logging;
@@ -173,11 +173,11 @@ public class SelectionManager {
 			Logging.info("\n" + operation.printOperation(""));
 		}
 
-		AbstractPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
+		OpsiserviceNOMPersistenceController controller = PersistenceControllerFactory.getPersistenceController();
 
 		boolean withMySQL = controller.isWithMySQL()
-				&& controller.getGlobalBooleanConfigValue(AbstractPersistenceController.KEY_SEARCH_BY_SQL,
-						AbstractPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
+				&& controller.getGlobalBooleanConfigValue(OpsiserviceNOMPersistenceController.KEY_SEARCH_BY_SQL,
+						OpsiserviceNOMPersistenceController.DEFAULTVALUE_SEARCH_BY_SQL);
 
 		if (withMySQL) {
 			long startTime = System.nanoTime();
@@ -193,7 +193,8 @@ public class SelectionManager {
 	}
 
 	// Filter the clients and get the matching clients back with MySQL backend
-	public List<String> selectClientsSQL(AbstractPersistenceController controller, AbstractSelectOperation operation) {
+	public List<String> selectClientsSQL(OpsiserviceNOMPersistenceController controller,
+			AbstractSelectOperation operation) {
 		String json = serializer.getJson(operation);
 		Logging.info(this, "in selectClientsSQL gotten json-string: " + json);
 		List<String> clientsSelected = new ArrayList<>();

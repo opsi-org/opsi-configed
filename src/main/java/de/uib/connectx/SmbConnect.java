@@ -19,7 +19,7 @@ package de.uib.connectx;
 import java.io.File;
 import java.util.Map;
 
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -40,7 +40,7 @@ public final class SmbConnect {
 
 	private static SmbConnect instance;
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
 	private SmbConnect() {
 		persist = PersistenceControllerFactory.getPersistenceController();

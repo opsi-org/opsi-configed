@@ -24,7 +24,7 @@ import de.uib.utilities.logging.Logging;
 
 public final class PersistenceControllerFactory {
 
-	private static AbstractPersistenceController staticPersistControl;
+	private static OpsiserviceNOMPersistenceController staticPersistControl;
 
 	// private constructor to hide the implicit public one
 	private PersistenceControllerFactory() {
@@ -36,7 +36,7 @@ public final class PersistenceControllerFactory {
 	 * choose if we take the already constructed one - returned from the static
 	 * method getPersistenceController - or construct a new one
 	 */
-	public static AbstractPersistenceController getNewPersistenceController(String server, String user,
+	public static OpsiserviceNOMPersistenceController getNewPersistenceController(String server, String user,
 			String password) {
 		Logging.info("getNewPersistenceController");
 		if (staticPersistControl != null
@@ -45,7 +45,8 @@ public final class PersistenceControllerFactory {
 			return staticPersistControl;
 		}
 
-		AbstractPersistenceController persistControl = new OpsiserviceNOMPersistenceController(server, user, password);
+		OpsiserviceNOMPersistenceController persistControl = new OpsiserviceNOMPersistenceController(server, user,
+				password);
 		Logging.info("a PersistenceController initiated, got null? " + (persistControl == null));
 
 		boolean connected = persistControl.makeConnection();
@@ -84,7 +85,7 @@ public final class PersistenceControllerFactory {
 		return staticPersistControl;
 	}
 
-	public static AbstractPersistenceController getPersistenceController() {
+	public static OpsiserviceNOMPersistenceController getPersistenceController() {
 		return staticPersistControl;
 	}
 

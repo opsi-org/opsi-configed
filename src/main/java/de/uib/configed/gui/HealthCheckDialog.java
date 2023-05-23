@@ -45,7 +45,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.HealthInfo;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
@@ -201,7 +201,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 			return;
 		}
 
-		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		JSONObject jo = new JSONObject(persist.getDiagnosticData());
 		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes()));
 	}

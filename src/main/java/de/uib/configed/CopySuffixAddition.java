@@ -2,7 +2,7 @@ package de.uib.configed;
 
 import java.util.List;
 
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 /**
@@ -10,7 +10,8 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
  */
 public class CopySuffixAddition {
 	private static final String COPY_SUFFIX = "-copy";
-	private static AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private String clientName;
 

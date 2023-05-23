@@ -28,7 +28,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.configed.type.SWAuditEntry;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
@@ -72,7 +72,7 @@ public class PanelSWInfo extends JPanel {
 	private int vGap = Globals.VGAP_SIZE / 2;
 
 	private ConfigedMain mainController;
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
 	public enum KindOfExport {
 		PDF, CSV

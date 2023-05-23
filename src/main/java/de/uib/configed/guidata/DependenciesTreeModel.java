@@ -32,7 +32,7 @@ import java.util.Set;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
 
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class DependenciesTreeModel {
@@ -46,10 +46,10 @@ public class DependenciesTreeModel {
 
 	private boolean graphIsInitialized;
 
-	private AbstractPersistenceController pc;
+	private OpsiserviceNOMPersistenceController pc;
 
 	// Nur Persistencecontroller verwenden
-	public DependenciesTreeModel(AbstractPersistenceController pc) {
+	public DependenciesTreeModel(OpsiserviceNOMPersistenceController pc) {
 		this.pc = pc;
 
 		graphIsInitialized = false;

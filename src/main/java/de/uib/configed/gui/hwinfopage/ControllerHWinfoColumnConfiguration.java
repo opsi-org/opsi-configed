@@ -34,7 +34,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -133,9 +133,9 @@ public class ControllerHWinfoColumnConfiguration {
 		}
 	}
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
-	public ControllerHWinfoColumnConfiguration(AbstractPersistenceController persist) {
+	public ControllerHWinfoColumnConfiguration(OpsiserviceNOMPersistenceController persist) {
 		this.persist = persist;
 
 		initPanel();

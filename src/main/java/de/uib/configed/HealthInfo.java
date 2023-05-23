@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
@@ -13,7 +13,8 @@ import de.uib.utilities.logging.Logging;
  * way, that retrieved data could be displayed in a frame and saved in a file.
  */
 public final class HealthInfo {
-	private static AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private HealthInfo() {
 	}

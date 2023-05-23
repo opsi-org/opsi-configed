@@ -5,13 +5,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 /**
 */
 public class HostUpdateCollection extends UpdateCollection {
-	private AbstractPersistenceController persis;
+	private OpsiserviceNOMPersistenceController persis;
 
 	public HostUpdateCollection(Object persis) {
 		super(new ArrayList<>(0));
@@ -20,7 +20,7 @@ public class HostUpdateCollection extends UpdateCollection {
 
 	@Override
 	public void setController(Object obj) {
-		this.persis = (AbstractPersistenceController) obj;
+		this.persis = (OpsiserviceNOMPersistenceController) obj;
 	}
 
 	@Override

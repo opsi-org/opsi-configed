@@ -28,7 +28,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FPanel;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -49,7 +49,7 @@ public class ControllerHWinfoMultiClients {
 	private GenTableModel model;
 
 	private ConfigedMain main;
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 	private TableModelFilter tableModelFilter;
 
 	private SecondaryFrame fTable;
@@ -85,7 +85,7 @@ public class ControllerHWinfoMultiClients {
 
 	};
 
-	public ControllerHWinfoMultiClients(ConfigedMain main, AbstractPersistenceController persist) {
+	public ControllerHWinfoMultiClients(ConfigedMain main, OpsiserviceNOMPersistenceController persist) {
 		this.main = main;
 		this.persist = persist;
 		start();

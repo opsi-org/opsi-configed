@@ -14,7 +14,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditClientEntry;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
@@ -31,7 +31,7 @@ public abstract class AbstractSWExporter {
 
 	private String filenamePrefix = "report_swaudit_";
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
 	protected GenTableModel modelSWInfo;
 	protected String scanInfo = "";
@@ -45,7 +45,7 @@ public abstract class AbstractSWExporter {
 	private String outDir;
 
 	/* constructor for use in a initialized context */
-	protected AbstractSWExporter(AbstractPersistenceController controller) {
+	protected AbstractSWExporter(OpsiserviceNOMPersistenceController controller) {
 		this.persist = controller;
 	}
 

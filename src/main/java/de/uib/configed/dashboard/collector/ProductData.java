@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import de.uib.configed.Configed;
 import de.uib.configed.dashboard.Helper;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 public final class ProductData {
@@ -27,7 +27,8 @@ public final class ProductData {
 	private static int totalWindowsInstallations;
 	private static int totalMacOSInstallations;
 
-	private static AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private static String selectedDepot;
 	private static List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());

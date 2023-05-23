@@ -202,8 +202,8 @@ public class HostInfoCollections {
 							String filepath = new URL((String) val).getPath();
 							Logging.info(this, "retrieveOpsiHosts workbenchpath " + filepath);
 
-							AbstractPersistenceController.configedWorkbenchDefaultValue = filepath;
-							AbstractPersistenceController.packageServerDirectoryS = filepath;
+							OpsiserviceNOMPersistenceController.configedWorkbenchDefaultValue = filepath;
+							OpsiserviceNOMPersistenceController.packageServerDirectoryS = filepath;
 						} catch (MalformedURLException netex) {
 							Logging.error("not a correctly formed file URL: " + val, netex);
 						}
@@ -275,14 +275,15 @@ public class HostInfoCollections {
 					String depotId = null;
 
 					if (pc.getConfigs().get(name) == null
-							|| pc.getConfigs().get(name).get(AbstractPersistenceController.CONFIG_DEPOT_ID) == null
+							|| pc.getConfigs().get(name)
+									.get(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID) == null
 							|| ((List<?>) (pc.getConfigs().get(name)
-									.get(AbstractPersistenceController.CONFIG_DEPOT_ID))).isEmpty()) {
+									.get(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID))).isEmpty()) {
 						Logging.debug(this, "retrieveOpsiHosts client  " + name + " has no config for "
-								+ AbstractPersistenceController.CONFIG_DEPOT_ID);
+								+ OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID);
 					} else {
 						depotId = (String) ((List<?>) (pc.getConfigs().get(name)
-								.get(AbstractPersistenceController.CONFIG_DEPOT_ID))).get(0);
+								.get(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID))).get(0);
 					}
 
 					if (depotId != null && masterDepots.keySet().contains(depotId)) {
@@ -439,7 +440,7 @@ public class HostInfoCollections {
 		}
 		List<String> depotList = new ArrayList<>();
 		depotList.add(depotId);
-		pc.getConfigs().get(clientName).put(AbstractPersistenceController.CONFIG_DEPOT_ID, depotList);
+		pc.getConfigs().get(clientName).put(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID, depotList);
 
 		// set in mapPC_Infomap
 		HostInfo hostInfo = mapPCInfomap.get(clientName);
@@ -467,7 +468,7 @@ public class HostInfoCollections {
 		ConfigName2ConfigValue config = new ConfigName2ConfigValue(null);
 		depots.add(depotId);
 
-		config.put(AbstractPersistenceController.CONFIG_DEPOT_ID, depots);
+		config.put(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID, depots);
 		for (int i = 0; i < clients.length; i++) {
 			// collect data
 			pc.setAdditionalConfiguration(clients[i], config);

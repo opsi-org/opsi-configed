@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 public final class ModuleData {
@@ -12,7 +12,8 @@ public final class ModuleData {
 	private static List<String> activeModules = new ArrayList<>();
 	private static List<String> expiredModules = new ArrayList<>();
 
-	private static AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private ModuleData() {
 	}

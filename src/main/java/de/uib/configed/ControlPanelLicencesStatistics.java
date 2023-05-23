@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.configed.gui.licences.PanelLicencesStatistics;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -19,11 +19,11 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 	private PanelLicencesStatistics thePanel;
 	private GenTableModel modelStatistics;
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
 	private boolean initialized;
 
-	public ControlPanelLicencesStatistics(AbstractPersistenceController persist) {
+	public ControlPanelLicencesStatistics(OpsiserviceNOMPersistenceController persist) {
 		thePanel = new PanelLicencesStatistics(this);
 		this.persist = persist;
 

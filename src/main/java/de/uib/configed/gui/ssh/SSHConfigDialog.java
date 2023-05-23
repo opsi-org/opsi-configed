@@ -30,7 +30,7 @@ import de.uib.configed.gui.IconButton;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnect;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
@@ -248,7 +248,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 
 		jComboBoxHost.addItem(host);
 
-		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		Set<String> depots = persist.getDepotPropertiesForPermittedDepots().keySet();
 
 		// remove login host name if identical with depot fqdn

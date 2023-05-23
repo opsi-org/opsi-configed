@@ -24,7 +24,7 @@ import de.uib.configed.gui.swinfopage.SWcsvExporter;
 import de.uib.configed.gui.swinfopage.SwPdfExporter;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
@@ -463,8 +463,8 @@ public final class Configed {
 
 			addMissingArgs();
 
-			AbstractPersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host, user,
-					password);
+			OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getNewPersistenceController(host,
+					user, password);
 
 			UserConfigProducing up = new UserConfigProducing(false, host,
 					persist.getHostInfoCollections().getDepotNamesList(), persist.getHostGroupIds(),

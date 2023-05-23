@@ -111,7 +111,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandNeedParameter;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.datachanges.AdditionalconfigurationUpdateCollection;
 import de.uib.opsidatamodel.datachanges.HostUpdateCollection;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
@@ -160,7 +160,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	public static EditingTarget editingTarget = EditingTarget.CLIENTS;
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
 	// global table providers for licence management
 	protected TableProvider licencePoolTableProvider;
@@ -1566,11 +1566,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	public AbstractPersistenceController getPersistenceController() {
+	public OpsiserviceNOMPersistenceController getPersistenceController() {
 		return persist;
 	}
 
-	public void setPersistenceController(AbstractPersistenceController persis) {
+	public void setPersistenceController(OpsiserviceNOMPersistenceController persis) {
 		persist = persis;
 	}
 
@@ -3022,7 +3022,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						Configed.getResourceValue("PanelHostProperties.SelectHost"),
 						new DefaultComboBoxModel<>(depotPropertiesForPermittedDepots.keySet().toArray(new String[0])),
 						depotPropertiesForPermittedDepots, hostUpdateCollection,
-						AbstractPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
+						OpsiserviceNOMPersistenceController.KEYS_OF_HOST_PROPERTIES_NOT_TO_EDIT);
 			}
 
 			return true;
@@ -3085,7 +3085,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						additionalConfigs.get(0), persist.getConfigOptions(), additionalConfigs,
 						additionalconfigurationUpdateCollection, true,
 						// editableOptions
-						AbstractPersistenceController.PROPERTY_CLASSES_SERVER);
+						OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER);
 			} else {
 				List<Map<String, Object>> additionalConfigs = new ArrayList<>(getSelectedClients().length);
 
@@ -3111,11 +3111,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Map<String, de.uib.utilities.table.ListCellOptions> configOptions = persist.getConfigOptions();
 
 				removeKeysStartingWith(mergedVisualMap,
-						AbstractPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
+						OpsiserviceNOMPersistenceController.CONFIG_KEY_STARTERS_NOT_FOR_CLIENTS);
 
 				mainFrame.panelHostConfig.initEditing("  " + getSelectedClientsString(), mergedVisualMap, configOptions,
 						additionalConfigs, additionalconfigurationUpdateCollection, false, // editableOptions
-						AbstractPersistenceController.PROPERTYCLASSES_CLIENT);
+						OpsiserviceNOMPersistenceController.PROPERTYCLASSES_CLIENT);
 
 			}
 

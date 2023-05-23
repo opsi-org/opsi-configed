@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.OpsiPackage;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 /**
@@ -17,7 +17,8 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
  * properties and config states.
  */
 public class CopyClient {
-	private static AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private HostInfo clientToCopy;
 	private String newClientName;

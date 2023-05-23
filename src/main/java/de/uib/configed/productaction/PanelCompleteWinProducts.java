@@ -44,7 +44,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.connectx.SmbConnect;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataRefreshedObserver;
@@ -81,11 +81,11 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 	private JFileChooser chooserFolder;
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 	private ConfigedMain configedMain;
 	private JFrame rootFrame;
 
-	public PanelCompleteWinProducts(ConfigedMain main, AbstractPersistenceController persist, JFrame root) {
+	public PanelCompleteWinProducts(ConfigedMain main, OpsiserviceNOMPersistenceController persist, JFrame root) {
 		this.configedMain = main;
 		this.persist = persist;
 		this.rootFrame = root;

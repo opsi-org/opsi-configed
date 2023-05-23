@@ -14,7 +14,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.ConfigOption;
 import de.uib.opsicommand.AbstractExecutioner;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class UserConfigProducing {
@@ -73,7 +73,7 @@ public class UserConfigProducing {
 			userparts.add(ConfigedMain.user);
 			String propertyclass = UserConfig.START_USER_KEY + ConfigedMain.user + '}';
 
-			AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, (String arg) -> {
+			OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass, (String arg) -> {
 				Logging.info(this, "createUserPropertySubclass for logged in user " + ConfigedMain.user);
 				return "";
 			});
@@ -110,7 +110,7 @@ public class UserConfigProducing {
 					String propertyclass = startRoleKey + rolename + '}';
 
 					final String role = rolename;
-					AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass,
+					OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass,
 							(String arg) -> {
 								Logging.info(this, "createRolePropertySubclass for role  " + role);
 								return "";
@@ -133,7 +133,7 @@ public class UserConfigProducing {
 						Logging.debug(this, "usernames, add " + username + " for key " + key);
 						String propertyclass = UserConfig.START_USER_KEY + username + '}';
 
-						AbstractPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass,
+						OpsiserviceNOMPersistenceController.PROPERTY_CLASSES_SERVER.computeIfAbsent(propertyclass,
 								(String arg) -> {
 									Logging.info(this, "createUserPropertySubclass for user  " + username);
 									return "";
@@ -164,7 +164,7 @@ public class UserConfigProducing {
 
 		if (serverconfigValuesMap.get(configKeyUseList) == null) {
 			Logging.info(this, "supplyPermissionList. serverconfigValuesMap has no value for key " + configKeyUseList);
-			item = AbstractPersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
+			item = OpsiserviceNOMPersistenceController.createJSONBoolConfig(configKeyUseList, initialValue,
 					"the primary value setting is " + initialValue);
 			readyObjects.add(AbstractExecutioner.jsonMap(item));
 		}
@@ -190,7 +190,7 @@ public class UserConfigProducing {
 
 			Logging.info(this, "supplyPermissionList products List " + listOptions);
 
-			item = AbstractPersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
+			item = OpsiserviceNOMPersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
 
 			item.put("ident", configKeyList);
 			item.put("editable", false);
@@ -277,7 +277,7 @@ public class UserConfigProducing {
 
 				List<Object> possibleValuesRole = new ArrayList<>(possibleValuesSet);
 
-				Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(
+				Map<String, Object> itemRole = OpsiserviceNOMPersistenceController.createJSONConfig(
 						ConfigOption.TYPE.UNICODE_CONFIG, roleKey,
 						"which role should determine this users configuration", false, false, selectedValuesRole,
 						possibleValuesRole);
@@ -360,7 +360,7 @@ public class UserConfigProducing {
 				value = prototypeConfig.getBooleanValue(partkey);
 
 				userConfig.setBooleanValue(partkey, value);
-				item = AbstractPersistenceController.createJSONBoolConfig(configKey, value,
+				item = OpsiserviceNOMPersistenceController.createJSONBoolConfig(configKey, value,
 						"the primary value setting is based on the user group");
 
 				readyObjects.add(AbstractExecutioner.jsonMap(item));
@@ -395,7 +395,7 @@ public class UserConfigProducing {
 				List<Object> selectedValuesRole = new ArrayList<>();
 				selectedValuesRole.add(UserConfig.NONE_PROTOTYPE);
 
-				Map<String, Object> itemRole = AbstractPersistenceController.createJSONConfig(
+				Map<String, Object> itemRole = OpsiserviceNOMPersistenceController.createJSONConfig(
 						ConfigOption.TYPE.UNICODE_CONFIG, configKey,
 						"which role should determine this users configuration", false, false, selectedValuesRole,
 						selectedValuesRole);
@@ -425,7 +425,7 @@ public class UserConfigProducing {
 
 				userConfig.setValues(partkey, values);
 
-				item = AbstractPersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey,
+				item = OpsiserviceNOMPersistenceController.createJSONConfig(ConfigOption.TYPE.UNICODE_CONFIG, configKey,
 						configKey, false, false, values, values);
 
 				// TODO
@@ -638,7 +638,8 @@ public class UserConfigProducing {
 					+ ": " + (readyObjects.size() - 1));
 			List<Object> timeVal = Globals.getNowTimeListValue("set by role prototype");
 
-			Map<String, Object> itemModifyTime = AbstractPersistenceController.createNOMitem(ConfigOption.UNICODE_TYPE);
+			Map<String, Object> itemModifyTime = OpsiserviceNOMPersistenceController
+					.createNOMitem(ConfigOption.UNICODE_TYPE);
 
 			itemModifyTime.put("ident", startkey + UserConfig.MODIFICATION_INFO_KEY);
 			itemModifyTime.put("editable", false);

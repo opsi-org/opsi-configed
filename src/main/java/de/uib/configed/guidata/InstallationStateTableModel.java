@@ -66,7 +66,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationInfo;
@@ -116,7 +116,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	// (clientId -> (productId -> (product state key -> product state value)))
 	private Map<String, Map<String, Map<String, String>>> allClientsProductStates;
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 	private Map<String, Map<String, Map<String, String>>> collectChangedStates;
 	private final String[] selectedClients;
 	private Map<String, List<String>> possibleActions; // product-->possibleActions

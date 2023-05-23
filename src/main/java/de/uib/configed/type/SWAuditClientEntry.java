@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class SWAuditClientEntry {
@@ -99,10 +99,10 @@ public class SWAuditClientEntry {
 	private List<String> software;
 	private NavigableMap<String, Integer> software2Number;
 
-	private AbstractPersistenceController controller;
+	private OpsiserviceNOMPersistenceController controller;
 
 	public SWAuditClientEntry(final List<String> keys, final List<String> values,
-			AbstractPersistenceController controller) {
+			OpsiserviceNOMPersistenceController controller) {
 
 		data = new HashMap<>();
 
@@ -118,7 +118,7 @@ public class SWAuditClientEntry {
 		produceSWid();
 	}
 
-	public SWAuditClientEntry(final Map<String, Object> m, AbstractPersistenceController controller) {
+	public SWAuditClientEntry(final Map<String, Object> m, OpsiserviceNOMPersistenceController controller) {
 
 		data = new HashMap<>();
 		data.put(SWAuditEntry.ID, Globals.produceNonNull(m.get(CLIENT_ID)));

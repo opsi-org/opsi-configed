@@ -25,7 +25,7 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.configed.gui.licences.PanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
@@ -64,7 +64,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private ConfigedMain mainController;
 
-	public AbstractPersistenceController persist;
+	public OpsiserviceNOMPersistenceController persist;
 
 	// activate filter for selection in software table
 	public enum SoftwareShowMode {
@@ -90,7 +90,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private Map<String, List<String>> removeKeysFromOtherLicencePool;
 
-	public ControlPanelAssignToLPools(AbstractPersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelAssignToLPools(OpsiserviceNOMPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelAssignToLPools(this);
 		this.persist = persist;
 		this.mainController = mainController;

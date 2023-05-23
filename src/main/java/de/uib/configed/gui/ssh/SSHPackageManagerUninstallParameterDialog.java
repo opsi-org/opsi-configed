@@ -28,7 +28,7 @@ import de.uib.configed.gui.FShowList;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxSimpleToolTip;
@@ -54,7 +54,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private JButton jButtonDepotSelection;
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
 	private FDepotselectionList fDepotList;
 
@@ -136,7 +136,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 		if (selectedDepots.isEmpty()) {
 			if (persist.isDepotsFullPermission()) {
-				depotParameter = AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS;
+				depotParameter = OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!possibleDepots.isEmpty()) {
 				depotParameter = possibleDepots.get(0);
 			} else {
@@ -146,12 +146,13 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		} else {
 			jButtonExecute.setEnabled(true);
 
-			if (selectedDepots.contains(AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
-				depotParameter = AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS;
-			} else if (selectedDepots.contains(AbstractPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
+			if (selectedDepots.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
+				depotParameter = OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
+			} else if (selectedDepots
+					.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED)) {
 				StringBuilder sb = new StringBuilder();
 				int startIndex = possibleDepots
-						.indexOf(AbstractPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
+						.indexOf(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 
 				for (int i = startIndex + 1; i < possibleDepots.size() - 1; i++) {
 
@@ -183,8 +184,8 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 		if (persist.isDepotsFullPermission()) {
 			textFieldSelectedDepots.setEditable(true);
-			result.add(AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS);
-			result.add(AbstractPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
+			result.add(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
+			result.add(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL_WHERE_INSTALLED);
 		} else {
 			textFieldSelectedDepots.setEditable(false);
 		}

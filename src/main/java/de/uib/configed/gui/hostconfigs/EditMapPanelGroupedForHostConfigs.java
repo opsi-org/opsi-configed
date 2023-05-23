@@ -29,7 +29,7 @@ import de.uib.configed.gui.FDialogTextfieldWithListSelection;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.OpsiMethodCall;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
@@ -418,7 +418,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 	@Override
 	protected void reload() {
 		// partial reload
-		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		buildUserConfig();
 
 		persist.hostConfigsRequestRefresh();
@@ -472,7 +472,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 	}
 
 	private void buildUserConfig() {
-		AbstractPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+		OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
 		de.uib.opsidatamodel.permission.UserConfigProducing up = new de.uib.opsidatamodel.permission.UserConfigProducing(
 				// boolean notUsingDefaultUser, if true, we would supply the logged in user)

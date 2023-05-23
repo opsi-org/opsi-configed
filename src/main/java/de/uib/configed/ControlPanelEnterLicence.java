@@ -10,7 +10,7 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelEnterLicence;
 import de.uib.configed.type.licences.LicenceEntry;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.swing.FEditPane;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
@@ -31,10 +31,10 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 	private GenTableModel modelLicencepools;
 	private GenTableModel modelLicencecontracts;
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 	private ConfigedMain configedMain;
 
-	public ControlPanelEnterLicence(AbstractPersistenceController persist, ConfigedMain configedMain) {
+	public ControlPanelEnterLicence(OpsiserviceNOMPersistenceController persist, ConfigedMain configedMain) {
 
 		thePanel = new PanelEnterLicence(this, configedMain);
 		this.persist = persist;

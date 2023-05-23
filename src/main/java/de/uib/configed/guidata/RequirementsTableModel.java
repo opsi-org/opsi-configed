@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utilities.logging.Logging;
@@ -35,7 +35,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 	private Map<String, String> requAfterMap;
 	private Map<String, String> requDeinstallMap;
 
-	private AbstractPersistenceController perCon;
+	private OpsiserviceNOMPersistenceController perCon;
 
 	static {
 		rowType = new ArrayList<>();
@@ -46,7 +46,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	}
 
-	public RequirementsTableModel(AbstractPersistenceController persis) {
+	public RequirementsTableModel(OpsiserviceNOMPersistenceController persis) {
 		Logging.info(this, "creating");
 		perCon = persis;
 

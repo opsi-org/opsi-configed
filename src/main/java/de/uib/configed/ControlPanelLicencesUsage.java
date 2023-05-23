@@ -11,7 +11,7 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesUsage;
 import de.uib.configed.type.licences.LicenceUsageEntry;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -28,10 +28,10 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 	private GenTableModel modelLicencesUsage;
 	private GenTableModel modelLicencepools;
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 	private ConfigedMain mainController;
 
-	public ControlPanelLicencesUsage(AbstractPersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelLicencesUsage(OpsiserviceNOMPersistenceController persist, ConfigedMain mainController) {
 		thePanel = new PanelLicencesUsage(this);
 		this.persist = persist;
 		this.mainController = mainController;

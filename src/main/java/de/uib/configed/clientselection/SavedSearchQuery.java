@@ -8,7 +8,7 @@ import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
@@ -23,7 +23,7 @@ public class SavedSearchQuery {
 	private String password;
 	private String searchName;
 
-	private AbstractPersistenceController controller;
+	private OpsiserviceNOMPersistenceController controller;
 
 	public SavedSearchQuery() {
 		Logging.setLogLevelFile(Logging.LEVEL_NONE);

@@ -48,7 +48,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
@@ -76,7 +76,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
 	private ConfigedMain configedMain;
-	private AbstractPersistenceController persis;
+	private OpsiserviceNOMPersistenceController persis;
 
 	private WaitCursor waitCursor;
 

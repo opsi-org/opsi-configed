@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -15,7 +15,7 @@ import de.uib.utilities.logging.Logging;
 public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	private List<String> clients;
 	private String productname;
-	private AbstractPersistenceController persis;
+	private OpsiserviceNOMPersistenceController persis;
 
 	public ProductpropertiesUpdateCollection(Object persis, String[] clients, String productname) {
 		this(persis, Arrays.asList(clients), productname);
@@ -34,7 +34,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 
 	@Override
 	public void setController(Object obj) {
-		this.persis = (AbstractPersistenceController) obj;
+		this.persis = (OpsiserviceNOMPersistenceController) obj;
 	}
 
 	@Override

@@ -2,7 +2,7 @@ package de.uib.configed.gui.swinfopage;
 
 import javax.swing.JTable;
 
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.ExporterToTerminal;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -13,7 +13,7 @@ public class SWterminalExporter extends AbstractSWExporter {
 	private ExporterToTerminal exportTable;
 	private boolean onlySelectedRows;
 
-	public SWterminalExporter(AbstractPersistenceController controller) {
+	public SWterminalExporter(OpsiserviceNOMPersistenceController controller) {
 		super(controller);
 		theTable = new JTable();
 		exportTable = new ExporterToTerminal(theTable);

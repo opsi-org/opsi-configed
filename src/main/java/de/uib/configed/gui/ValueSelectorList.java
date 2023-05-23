@@ -19,7 +19,7 @@ import javax.swing.ScrollPaneConstants;
 import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
@@ -38,12 +38,12 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 	private boolean multidepot;
 
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
-	public ValueSelectorList(DepotsList valueList, boolean multidepot, AbstractPersistenceController persist) {
+	public ValueSelectorList(DepotsList valueList, boolean multidepot, OpsiserviceNOMPersistenceController persist) {
 		this.valueList = valueList;
 		this.multidepot = multidepot;
 		this.persist = persist;

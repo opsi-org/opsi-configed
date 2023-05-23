@@ -23,7 +23,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FGeneralDialog;
 import de.uib.configed.gui.IconAsButton;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelLinedComponents;
@@ -41,7 +41,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	public static boolean extendedView;
 
 	public LicensingInfoPanelGenEditTable thePanel;
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 	private LicensingInfoMap licenseMap;
 
 	private TableSource tableSource;

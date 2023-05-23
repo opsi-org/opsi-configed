@@ -2,16 +2,16 @@ package de.uib.opsidatamodel.datachanges;
 
 import java.util.Map;
 
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class HostUpdate implements UpdateCommand {
 
 	private Map<String, Object> newdata;
 
-	private AbstractPersistenceController persis;
+	private OpsiserviceNOMPersistenceController persis;
 
-	public HostUpdate(AbstractPersistenceController persis, Map<String, Object> newdata) {
+	public HostUpdate(OpsiserviceNOMPersistenceController persis, Map<String, Object> newdata) {
 		super();
 		this.newdata = newdata;
 		setController(persis);
@@ -25,7 +25,7 @@ public class HostUpdate implements UpdateCommand {
 
 	@Override
 	public void setController(Object obj) {
-		this.persis = (AbstractPersistenceController) obj;
+		this.persis = (OpsiserviceNOMPersistenceController) obj;
 	}
 
 	@Override

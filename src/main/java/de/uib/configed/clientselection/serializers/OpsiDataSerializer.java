@@ -25,7 +25,7 @@ import de.uib.configed.clientselection.operations.OrOperation;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
 import de.uib.configed.clientselection.operations.SwAuditOperation;
 import de.uib.configed.type.SavedSearch;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.SavedSearches;
 import de.uib.utilities.logging.Logging;
@@ -47,7 +47,7 @@ public class OpsiDataSerializer {
 
 	private SelectionManager manager;
 
-	private AbstractPersistenceController controller;
+	private OpsiserviceNOMPersistenceController controller;
 	private JsonParser parser;
 	private SelectData.DataType lastDataType;
 	private Map<String, String> searches;

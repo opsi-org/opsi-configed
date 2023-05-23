@@ -23,7 +23,7 @@ package de.uib.configed.guidata;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 
 public class DependenciesModel {
 
@@ -32,9 +32,9 @@ public class DependenciesModel {
 	private RequirementsTableModel requirementsTableModel;
 	private DependenciesTreeModel dependenciesTreeModel;
 
-	private AbstractPersistenceController persistenceController;
+	private OpsiserviceNOMPersistenceController persistenceController;
 
-	public DependenciesModel(AbstractPersistenceController persistenceController) {
+	public DependenciesModel(OpsiserviceNOMPersistenceController persistenceController) {
 		this.persistenceController = persistenceController;
 
 		requirementsTableModel = new RequirementsTableModel(persistenceController);

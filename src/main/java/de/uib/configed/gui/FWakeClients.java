@@ -14,14 +14,14 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.JSONthroughHTTPS;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class FWakeClients extends FShowList {
 	private boolean cancelled;
-	private AbstractPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist;
 
-	public FWakeClients(JFrame master, String title, AbstractPersistenceController persist) {
+	public FWakeClients(JFrame master, String title, OpsiserviceNOMPersistenceController persist) {
 		super(master, title, false, new String[] { Configed.getResourceValue("FWakeClients.cancel") });
 		if (!Main.FONT) {
 			super.setFont(Globals.defaultFont);

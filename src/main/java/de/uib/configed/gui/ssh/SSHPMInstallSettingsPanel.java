@@ -17,7 +17,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
-import de.uib.opsidatamodel.AbstractPersistenceController;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
@@ -192,8 +192,8 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		if (persist.isDepotsFullPermission()) {
 			jTextFieldSelecteddepots.setEditable(true);
-			result.add(AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS);
-			result.add(AbstractPersistenceController.DEPOT_SELECTION_ALL);
+			result.add(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
+			result.add(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL);
 		} else {
 			jTextFieldSelecteddepots.setEditable(false);
 		}
@@ -215,18 +215,18 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 		if (selectedDepots.isEmpty()) {
 			if (persist.isDepotsFullPermission()) {
-				depotParameter = AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS;
+				depotParameter = OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!depots.isEmpty()) {
 				depotParameter = depots.get(0);
 			}
 		} else {
 			if (selectedDepots.contains(
 
-					AbstractPersistenceController.DEPOT_SELECTION_NODEPOTS)
+					OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)
 
 			) {
 				depotParameter = "";
-			} else if (selectedDepots.contains(AbstractPersistenceController.DEPOT_SELECTION_ALL)) {
+			} else if (selectedDepots.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL)) {
 				depotParameter = "all";
 			} else {
 				StringBuilder sb = new StringBuilder();
