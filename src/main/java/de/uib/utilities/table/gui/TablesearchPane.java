@@ -113,10 +113,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 	private SearchInputType searchInputType = SearchInputType.PROGRESSIVE;
 
-	// private SaveInteger saveSearchpaneProgressiveSearch;
-	// private SaveInteger saveSearchpaneAllColumnsSearch;
-	// private SaveInteger saveSearchpaneFullTextSearch;
-
 	private String savedStatesObjectTag;
 
 	private boolean filteredMode;
@@ -244,7 +240,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		buildMenuSearchfield();
 
 		filtering = b;
-
 	}
 
 	public void setFiltering(boolean b) {

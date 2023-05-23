@@ -2685,7 +2685,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return result;
 	}
 
-	public Map<String, List<Map<String, Object>>> getHardwareInfo(String clientId, boolean asHTMLtable) {
+	public Map<String, List<Map<String, Object>>> getHardwareInfo(String clientId) {
 		if (clientId == null) {
 			return new HashMap<>();
 		}
@@ -6441,14 +6441,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return rowsLicencesReconciliation;
 	}
 
-	public String editLicencesReconciliation(String clientId, String licensePoolId) {
-		return "";
-	}
-
-	public boolean deleteLicencesReconciliation(String clientId, String licensePoolId) {
-		return false;
-	}
-
 	@SuppressWarnings("java:S1168")
 	private List<String> produceProductOnClientDisplayfieldsLocalboot() {
 		if (globalReadOnly) {
@@ -7868,7 +7860,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		opsiModules = new HashMap<>();
 
 		Map<String, Object> opsiCountModules = new HashMap<>();
-		// String expiresKey = ModulePermissionValue.KEY_EXPIRES;
 
 		try {
 			opsiVersion = (String) opsiInformation.get("opsiVersion");

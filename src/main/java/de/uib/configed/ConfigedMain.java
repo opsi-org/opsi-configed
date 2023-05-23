@@ -3162,7 +3162,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				checkHwInfo();
 				Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.get(firstSelectedClient);
 				if (hwInfo == null) {
-					hwInfo = persist.getHardwareInfo(firstSelectedClient, true);
+					hwInfo = persist.getHardwareInfo(firstSelectedClient);
 					hwInfoClientmap.put(firstSelectedClient, hwInfo);
 				}
 				mainFrame.setHardwareInfo(hwInfo);

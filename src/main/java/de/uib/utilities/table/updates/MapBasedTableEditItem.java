@@ -46,5 +46,4 @@ public class MapBasedTableEditItem extends TableEditItem {
 	public String toString() {
 		return getRowAsMap().toString() + " keyCol " + keyCol + " source " + source;
 	}
-
 }

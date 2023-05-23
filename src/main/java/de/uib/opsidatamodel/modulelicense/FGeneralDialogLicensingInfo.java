@@ -410,7 +410,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		classNames = theModel.getClassNames();
 
 		updateItemFactory.setColumnNames(columnNames);
-		updateItemFactory.setClassNames(classNames);
 
 		thePanel.setTableModel(theModel);
 	}

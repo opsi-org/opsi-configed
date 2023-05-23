@@ -437,10 +437,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		Logging.debug(this, "save action");
 	}
 
-	public void paste(String text) {
-		Logging.debug(this, "paste action");
-	}
-
 	public void close() {
 		Logging.debug(this, "close action");
 	}

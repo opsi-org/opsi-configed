@@ -9,7 +9,6 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesReconciliation;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -139,17 +138,13 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 				modelLicencesReconciliation, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persist.editLicencesReconciliation(
-								(String) rowmap.get(OpsiserviceNOMPersistenceController.HOST_KEY),
-								(String) rowmap.get("licensePoolId"));
+						return "";
 					}
 
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesReconciliation.requestReload();
-						return persist.deleteLicencesReconciliation(
-								(String) rowmap.get(OpsiserviceNOMPersistenceController.HOST_KEY),
-								(String) rowmap.get("licensePoolId"));
+						return false;
 					}
 				}, updateCollection));
 

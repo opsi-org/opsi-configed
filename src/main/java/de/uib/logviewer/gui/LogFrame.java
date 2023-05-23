@@ -385,15 +385,6 @@ public class LogFrame extends JFrame implements WindowListener {
 					logPane.setTitle(fn);
 				}
 			}
-
-			@Override
-			public void paste(String text) {
-				fileName = "";
-				logPane.setMainText(text);
-				logPane.setTitle(fileName);
-				logPane.removeAllHighlights();
-			}
-
 		};
 
 		logPane.setMainText("");
