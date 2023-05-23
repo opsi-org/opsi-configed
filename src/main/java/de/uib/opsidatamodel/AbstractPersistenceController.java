@@ -479,8 +479,6 @@ public abstract class AbstractPersistenceController implements DataRefreshedObse
 
 	/* multiclient hwinfo */
 
-	public abstract List<String> getHwInfoClassNames();
-
 	public abstract List<String> getClient2HwRowsColumnNames();
 
 	public abstract List<String> getClient2HwRowsJavaclassNames();

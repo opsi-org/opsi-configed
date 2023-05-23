@@ -212,7 +212,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	private List<String> hostColumnNames;
 	private List<String> client2HwRowsColumnNames;
 	private List<String> client2HwRowsJavaclassNames;
-	private List<String> hwInfoClassNames;
 
 	private Map<String, Map<String, String>> productGroups;
 
@@ -303,56 +302,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		hwAuditConf = new HashMap<>();
 
 		initMembers();
-	}
-
-	private class HostGroups extends TreeMap<String, Map<String, String>> {
-		public HostGroups(Map<String, Map<String, String>> source) {
-			super(source);
-		}
-
-		HostGroups addSpecialGroups() {
-			Logging.debug(this, "addSpecialGroups check");
-			List<StringValuedRelationElement> groups = new ArrayList<>();
-
-			// create
-			if (get(ClientTree.DIRECTORY_PERSISTENT_NAME) == null) {
-				Logging.debug(this, "addSpecialGroups");
-				StringValuedRelationElement directoryGroup = new StringValuedRelationElement();
-
-				directoryGroup.put("groupId", ClientTree.DIRECTORY_PERSISTENT_NAME);
-				directoryGroup.put("parentGroupId", null);
-				directoryGroup.put("description", "root of directory");
-
-				addGroup(directoryGroup, false);
-
-				groups.add(directoryGroup);
-
-				put(ClientTree.DIRECTORY_PERSISTENT_NAME, directoryGroup);
-
-				Logging.debug(this, "addSpecialGroups we have " + this);
-
-			}
-
-			return this;
-		}
-
-		private void alterToWorkingVersion() {
-			Logging.debug(this, "alterToWorkingVersion we have " + this);
-
-			for (Map<String, String> groupInfo : values()) {
-				if (ClientTree.DIRECTORY_PERSISTENT_NAME.equals(groupInfo.get("parentGroupId"))) {
-					groupInfo.put("parentGroupId", ClientTree.DIRECTORY_NAME);
-				}
-			}
-
-			Map<String, String> directoryGroup = get(ClientTree.DIRECTORY_PERSISTENT_NAME);
-			if (directoryGroup != null) {
-				directoryGroup.put("groupId", ClientTree.DIRECTORY_NAME);
-			}
-
-			put(ClientTree.DIRECTORY_NAME, directoryGroup);
-			remove(ClientTree.DIRECTORY_PERSISTENT_NAME);
-		}
 	}
 
 	@Override
@@ -1984,7 +1933,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		hostGroups = new HostGroups(exec.getStringMappedObjectsByKey(
 				new OpsiMethodCall("group_getObjects", new Object[] { callAttributes, callFilter }), "ident",
 				new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" }));
+				new String[] { "groupId", "parentGroupId", "description" }), this);
 
 		Logging.debug(this, "getHostGroups " + hostGroups);
 
@@ -2065,10 +2014,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 						"ident", new String[] { "objectId", "groupId" }, new String[] { memberIdName, "groupId" });
 
 		return projectToFunction(mappedRelations, "groupId", memberIdName);
-	}
-
-	public void fObject2ProductGroupsRequestRefresh() {
-		fObject2Groups = null;
 	}
 
 	@Override
@@ -2185,7 +2130,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		return addGroup(newgroup, true);
 	}
 
-	private boolean addGroup(StringValuedRelationElement newgroup, boolean requestRefresh) {
+	public boolean addGroup(StringValuedRelationElement newgroup, boolean requestRefresh) {
 		if (!serverFullPermission) {
 			return false;
 		}
@@ -2734,13 +2679,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 		Logging.info(this, "produceHwAuditDeviceClasses hwAuditDeviceClasses size " + hwAuditDeviceClasses.size());
 	}
 
-	@Override
-	public List<String> getHwInfoClassNames() {
-		retrieveClient2HwRowsColumnNames();
-		Logging.info(this, "getHwInfoClassNames " + hwInfoClassNames);
-		return hwInfoClassNames;
-	}
-
 	private String cutClassName(String columnName) {
 		String result = null;
 
@@ -2762,7 +2700,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 
 		Logging.info(this, "retrieveClient2HwRowsColumnNames " + "client2HwRowsColumnNames == null "
 				+ (client2HwRowsColumnNames == null));
-		if (client2HwRowsColumnNames == null || client2HwRowsJavaclassNames == null || hwInfoClassNames == null) {
+		if (client2HwRowsColumnNames == null || client2HwRowsJavaclassNames == null) {
 			hostColumnNames = new ArrayList<>();
 
 			// todo make static variables
@@ -2804,10 +2742,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 					hwInfoClasses.add(className);
 				}
 			}
-
-			hwInfoClassNames = new ArrayList<>(hwInfoClasses);
-
-			Logging.info(this, "retrieveClient2HwRowsColumnNames hwInfoClassNames " + hwInfoClassNames);
 		}
 	}
 
@@ -2815,7 +2749,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	public void client2HwRowsRequestRefresh() {
 		hostColumnNames = null;
 		client2HwRowsColumnNames = null;
-		hwInfoClassNames = null;
 		dataStub.client2HwRowsRequestRefresh();
 	}
 
@@ -3457,7 +3390,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 	}
 
 	// hopefully we get only updateItems for allowed clients
-	public boolean updateProductOnClients(List<JSONObject> updateItems) {
+	private boolean updateProductOnClients(List<JSONObject> updateItems) {
 		Logging.info(this, "updateProductOnClients ");
 
 		if (globalReadOnly) {
@@ -3618,11 +3551,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 				"productOnClient_getHashes").get(0);
 
 		return new ProductState(POJOReMapper.giveEmptyForNull(retrievedMap), true);
-	}
-
-	public Map<String, Object> getProductInfos(String productname) {
-		checkProductGlobalInfos(theDepot);
-		return productGlobalInfos.get(productname);
 	}
 
 	@Override
@@ -7940,9 +7868,6 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 			opsiModulesDisplayInfo = new HashMap<>(opsiModulesInfo);
 
 			ExtendedDate validUntil = ExtendedDate.INFINITE;
-			// if (opsiModulesInfo.get(expiresKey) != null) {
-			// 	validUntil = new ExtendedDate(opsiModulesInfo.get(expiresKey));
-			// }
 
 			// analyse the real module info
 			opsiCountModules = exec.getMapFromItem(opsiInformation.get("realmodules"));
@@ -8051,9 +7976,7 @@ public class OpsiserviceNOMPersistenceController extends AbstractPersistenceCont
 								}
 							}
 						}
-
 					}
-
 				}
 			}
 
