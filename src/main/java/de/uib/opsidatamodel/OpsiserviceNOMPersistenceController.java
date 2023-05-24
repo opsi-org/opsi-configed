@@ -66,7 +66,6 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.AdditionalQuery;
 import de.uib.configed.type.ConfigName2ConfigValue;
 import de.uib.configed.type.ConfigOption;
-import de.uib.configed.type.ConfigStateEntry;
 import de.uib.configed.type.DatedRowList;
 import de.uib.configed.type.HostInfo;
 import de.uib.configed.type.Object2GroupEntry;
@@ -219,6 +218,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	private static final String NAME_REQUIREMENT_TYPE_AFTER = "after";
 	private static final String NAME_REQUIREMENT_TYPE_NEUTRAL = "";
 	private static final String NAME_REQUIREMENT_TYPE_ON_DEINSTALL = "on_deinstall";
+
+	public static final String CONFIG_STATE_TYPE = "ConfigState";
+
+	public static final String OBJECT_ID = "objectId";
+	public static final String CONFIG_ID = "configId";
+	public static final String VALUES_ID = "values";
 
 	private static Boolean keyUserRegisterValue;
 
@@ -1373,15 +1378,15 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		for (Entry<String, List<Object>> config : specifiedConfiguration.entrySet()) {
 			Logging.info(this, "addWANConfigState configId " + config.getKey());
-			Map<String, Object> item = createNOMitem(ConfigStateEntry.TYPE);
+			Map<String, Object> item = createNOMitem(CONFIG_STATE_TYPE);
 
-			item.put(ConfigStateEntry.CONFIG_ID, config.getKey());
+			item.put(CONFIG_ID, config.getKey());
 
 			Logging.info(this, "addWANConfigState values " + config.getValue());
 
-			item.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(config.getValue()));
+			item.put(VALUES_ID, AbstractExecutioner.jsonArray(config.getValue()));
 
-			item.put(ConfigStateEntry.OBJECT_ID, clientId);
+			item.put(OBJECT_ID, clientId);
 
 			Logging.info(this, "addWANConfigState configId, item " + config.getKey() + ", " + item);
 
@@ -1501,12 +1506,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			clientsJsonObject.add(AbstractExecutioner.jsonMap(hostItem));
 
-			Map<String, Object> itemDepot = createNOMitem(ConfigStateEntry.TYPE);
+			Map<String, Object> itemDepot = createNOMitem(CONFIG_STATE_TYPE);
 			List<String> valuesDepot = new ArrayList<>();
 			valuesDepot.add(depotId);
-			itemDepot.put(ConfigStateEntry.OBJECT_ID, newClientId);
-			itemDepot.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(valuesDepot));
-			itemDepot.put(ConfigStateEntry.CONFIG_ID, CONFIG_DEPOT_ID);
+			itemDepot.put(OBJECT_ID, newClientId);
+			itemDepot.put(VALUES_ID, AbstractExecutioner.jsonArray(valuesDepot));
+			itemDepot.put(CONFIG_ID, CONFIG_DEPOT_ID);
 
 			configStatesJsonObject.add(AbstractExecutioner.jsonMap(itemDepot));
 
@@ -1522,10 +1527,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				List<Object> valuesShI = new ArrayList<>();
 				valuesShI.add(true);
 
-				Map<String, Object> itemShI = createNOMitem(ConfigStateEntry.TYPE);
-				itemShI.put(ConfigStateEntry.OBJECT_ID, newClientId);
-				itemShI.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(valuesShI));
-				itemShI.put(ConfigStateEntry.CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
+				Map<String, Object> itemShI = createNOMitem(CONFIG_STATE_TYPE);
+				itemShI.put(OBJECT_ID, newClientId);
+				itemShI.put(VALUES_ID, AbstractExecutioner.jsonArray(valuesShI));
+				itemShI.put(CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
 				Logging.info(this, "create client, config item for shutdownInstall " + itemShI);
 
@@ -1641,12 +1646,12 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		if (result) {
 			List<Object> jsonObjects = new ArrayList<>();
 
-			Map<String, Object> itemDepot = createNOMitem(ConfigStateEntry.TYPE);
+			Map<String, Object> itemDepot = createNOMitem(CONFIG_STATE_TYPE);
 			List<String> valuesDepot = new ArrayList<>();
 			valuesDepot.add(depotId);
-			itemDepot.put(ConfigStateEntry.OBJECT_ID, newClientId);
-			itemDepot.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(valuesDepot));
-			itemDepot.put(ConfigStateEntry.CONFIG_ID, CONFIG_DEPOT_ID);
+			itemDepot.put(OBJECT_ID, newClientId);
+			itemDepot.put(VALUES_ID, AbstractExecutioner.jsonArray(valuesDepot));
+			itemDepot.put(CONFIG_ID, CONFIG_DEPOT_ID);
 
 			jsonObjects.add(AbstractExecutioner.jsonMap(itemDepot));
 
@@ -1662,10 +1667,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				List<Object> valuesShI = new ArrayList<>();
 				valuesShI.add(true);
 
-				Map<String, Object> itemShI = createNOMitem(ConfigStateEntry.TYPE);
-				itemShI.put(ConfigStateEntry.OBJECT_ID, newClientId);
-				itemShI.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(valuesShI));
-				itemShI.put(ConfigStateEntry.CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
+				Map<String, Object> itemShI = createNOMitem(CONFIG_STATE_TYPE);
+				itemShI.put(OBJECT_ID, newClientId);
+				itemShI.put(VALUES_ID, AbstractExecutioner.jsonArray(valuesShI));
+				itemShI.put(CONFIG_ID, KEY_CLIENTCONFIG_INSTALL_BY_SHUTDOWN);
 
 				Logging.info(this, "create client, config item for shutdownInstall " + itemShI);
 
@@ -4669,10 +4674,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		List<Object> values = new ArrayList<>();
 		values.add(val);
 
-		Map<String, Object> item = createNOMitem(ConfigStateEntry.TYPE);
-		item.put(ConfigStateEntry.OBJECT_ID, hostName);
-		item.put(ConfigStateEntry.VALUES_ID, AbstractExecutioner.jsonArray(values));
-		item.put(ConfigStateEntry.CONFIG_ID, configId);
+		Map<String, Object> item = createNOMitem(CONFIG_STATE_TYPE);
+		item.put(OBJECT_ID, hostName);
+		item.put(VALUES_ID, AbstractExecutioner.jsonArray(values));
+		item.put(CONFIG_ID, configId);
 
 		List<Object> jsonObjects = new ArrayList<>();
 		jsonObjects.add(AbstractExecutioner.jsonMap(item));

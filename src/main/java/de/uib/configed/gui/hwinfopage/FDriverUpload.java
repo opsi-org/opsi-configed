@@ -68,5 +68,4 @@ public class FDriverUpload extends SecondaryFrame {
 
 		panelDriverUpload.setDepot(main.getConfigserver());
 	}
-
 }

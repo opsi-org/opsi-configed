@@ -1339,10 +1339,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		return pathToALL;
 	}
 
-	public TreePath getPathToGROUPS() {
-		return pathToGROUPS;
-	}
-
 	public List<TreePath> getActivePaths() {
 		return configedMain.getActivePaths();
 	}
@@ -1401,10 +1397,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	public List<SimpleTreePath> getSimpleTreePaths(String leafname) {
 		return leafname2AllItsPaths.getSimpleTreePaths(leafname);
-	}
-
-	public void remove(String leafname, SimpleTreePath clientPath) {
-		leafname2AllItsPaths.remove(leafname, clientPath);
 	}
 
 	public Set<String> collectParentIDs(String nodeID) {
@@ -1502,4 +1494,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 	}
 
+	public void remove(String leafname, SimpleTreePath clientPath) {
+		leafname2AllItsPaths.remove(leafname, clientPath);
+	}
 }

@@ -36,16 +36,6 @@ public class ByteUnitConverter {
 		}
 	}
 
-	private ByteUnit byteUnit;
-
-	public ByteUnitConverter(ByteUnit byteUnit) {
-		this.byteUnit = byteUnit;
-	}
-
-	public ByteUnitConverter() {
-
-	}
-
 	public ByteUnit detectByteUnit(int bytes) {
 		ByteUnit result = null;
 
@@ -60,10 +50,6 @@ public class ByteUnitConverter {
 		}
 
 		return result;
-	}
-
-	public double convertByteUnit(int bytes) {
-		return convertByteUnit(bytes, byteUnit);
 	}
 
 	public double convertByteUnit(int bytes, ByteUnit byteUnitToUse) {

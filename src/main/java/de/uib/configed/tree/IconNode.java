@@ -168,5 +168,4 @@ public class IconNode extends DefaultMutableTreeNode {
 	public boolean isEmphasized() {
 		return emphasized;
 	}
-
 }
