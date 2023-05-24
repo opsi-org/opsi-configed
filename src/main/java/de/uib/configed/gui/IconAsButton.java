@@ -41,7 +41,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	private JLabel label;
 	protected boolean activated;
-	private boolean enabled;
 	private boolean mouseOver;
 	private List<ActionListener> actionListeners;
 	private String description;
@@ -66,7 +65,6 @@ public class IconAsButton extends JPanel implements MouseListener {
 		label.setToolTipText(desc);
 
 		activated = false;
-		enabled = true;
 		mouseOver = false;
 		actionListeners = new ArrayList<>();
 
@@ -119,22 +117,15 @@ public class IconAsButton extends JPanel implements MouseListener {
 	@Override
 	public void setEnabled(boolean b) {
 
-		enabled = b;
-		super.setEnabled(enabled);
+		super.setEnabled(b);
 		setIcon();
-		if (enabled) {
+		if (isEnabled()) {
 			label.setEnabled(true);
 		}
-
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return enabled;
 	}
 
 	private void setIcon() {
-		if (!enabled) {
+		if (!isEnabled()) {
 			if (iconDisabled != null) {
 				label.setIcon(iconDisabled);
 			} else {
@@ -222,7 +213,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseEntered(java.awt.event.MouseEvent e) {
-		if (enabled && !mouseOver) {
+		if (isEnabled() && !mouseOver) {
 			mouseOver = true;
 			setIcon();
 		}
@@ -230,7 +221,7 @@ public class IconAsButton extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseExited(java.awt.event.MouseEvent e) {
-		if (enabled && mouseOver) {
+		if (isEnabled() && mouseOver) {
 			mouseOver = false;
 			setIcon();
 		}

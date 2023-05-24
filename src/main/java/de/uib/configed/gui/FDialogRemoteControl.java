@@ -23,7 +23,7 @@ import de.uib.utilities.swing.FEditStringList;
 
 public class FDialogRemoteControl extends FEditStringList {
 	private Map<String, String> meanings;
-	private Map<String, Boolean> editable;
+	private Map<String, Boolean> editableFields;
 	private String selText;
 
 	private ConfigedMain configedMain;
@@ -38,8 +38,8 @@ public class FDialogRemoteControl extends FEditStringList {
 		this.meanings = meanings;
 	}
 
-	public void setEditable(Map<String, Boolean> editable) {
-		this.editable = editable;
+	public void setEditableFields(Map<String, Boolean> editable) {
+		this.editableFields = editable;
 	}
 
 	public String getValue(String key) {
@@ -221,8 +221,8 @@ public class FDialogRemoteControl extends FEditStringList {
 
 		if (meanings != null && selText != null && meanings.get(selText) != null) {
 			extraField.setText(meanings.get(selText));
-			extraField.setEditable(editable.get(selText));
-			extraField.setEnabled(editable.get(selText));
+			extraField.setEditable(editableFields.get(selText));
+			extraField.setEnabled(editableFields.get(selText));
 		}
 	}
 

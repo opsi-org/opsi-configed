@@ -20,8 +20,6 @@ import de.uib.utilities.thread.WaitingCycle;
 public class IconButton extends JButton {
 	/** The status if button is active */
 	private boolean activated;
-	/** The status if button is/should be enabled */
-	private boolean enabled;
 
 	/** A description used for tooltip if button is active */
 	private String tooltipActive;
@@ -97,10 +95,9 @@ public class IconButton extends JButton {
 		this.imageURLActive = imageURLActive;
 		this.imageURLOver = imageURLOver;
 		this.imageURLDisabled = imageURLDisabled;
-		this.enabled = enabled;
 		this.maxWaitSecs = maxWaitSecs;
 
-		createIconButton();
+		createIconButton(enabled);
 
 		if (imageURLsForAnimatedWaiting != null) {
 			imagesForAnimation = new ImageIcon[imageURLsForAnimatedWaiting.length];
@@ -148,11 +145,11 @@ public class IconButton extends JButton {
 	 * (icon, description, preferred size, enabled status, selected icon and (if
 	 * given) a disabled icon)
 	 */
-	private void createIconButton() {
+	private void createIconButton(boolean enabled) {
 		setIcon(Globals.createImageIcon(this.imageURLActive, ""));
 		setToolTipText(description);
 		setPreferredSize(Globals.graphicButtonDimension);
-		setEnabled(this.enabled);
+		setEnabled(enabled);
 		setSelectedIcon(Globals.createImageIcon(this.imageURLOver, ""));
 		if (imageURLDisabled.length() > 3) {
 			setDisabledIcon(Globals.createImageIcon(this.imageURLDisabled, ""));

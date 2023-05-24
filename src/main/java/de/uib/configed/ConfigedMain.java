@@ -4783,7 +4783,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 
 			dialogRemoteControl.setMeanings(rcCommands);
-			dialogRemoteControl.setEditable(commandsEditable);
+			dialogRemoteControl.setEditableFields(commandsEditable);
 
 			// we want to present a sorted list of the keys
 			List<String> sortedKeys = new ArrayList<>(remoteControls.keySet());

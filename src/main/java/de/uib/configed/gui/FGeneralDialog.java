@@ -62,7 +62,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	private String button3Text;
 
 	private String[] buttonNames;
-	private Icon[] icons;
+	private Icon[] buttonIcons;
 
 	private int noOfButtons = 3;
 
@@ -172,7 +172,7 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		this.buttonNames = buttonList;
 
-		this.icons = icons;
+		this.buttonIcons = icons;
 		initIcons();
 		setButtons();
 
@@ -232,17 +232,17 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 	}
 
 	private void initIcons() {
-		if (icons != null && icons.length != buttonNames.length) {
+		if (buttonIcons != null && buttonIcons.length != buttonNames.length) {
 			Logging.error(this, "icons not correctly specified");
-			icons = null;
+			buttonIcons = null;
 		}
 
-		if (icons == null) {
+		if (buttonIcons == null) {
 			Logging.info(this, "init null icons");
-			icons = new Icon[buttonNames.length];
+			buttonIcons = new Icon[buttonNames.length];
 
 			for (int i = 0; i < buttonNames.length; i++) {
-				icons[i] = null;
+				buttonIcons[i] = null;
 			}
 		}
 	}
@@ -252,32 +252,32 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 
 		jButton1.setText(buttonNames[0]);
 		button1Text = buttonNames[0];
-		if (icons[0] != null) {
-			jButton1.setIcon(icons[0]);
-			((ImageIcon) icons[0]).setDescription(buttonNames[0]);
+		if (buttonIcons[0] != null) {
+			jButton1.setIcon(buttonIcons[0]);
+			((ImageIcon) buttonIcons[0]).setDescription(buttonNames[0]);
 		}
 
 		if (noOfButtons > 1) {
 			jButton2.setText(buttonNames[1]);
 			button2Text = buttonNames[1];
-			if (icons[1] != null) {
-				jButton2.setIcon(icons[1]);
-				((ImageIcon) icons[1]).setDescription(buttonNames[1]);
+			if (buttonIcons[1] != null) {
+				jButton2.setIcon(buttonIcons[1]);
+				((ImageIcon) buttonIcons[1]).setDescription(buttonNames[1]);
 			}
 		}
 
 		if (noOfButtons > 2) {
 			jButton3.setText(buttonNames[2]);
 			button3Text = buttonNames[2];
-			if (icons[2] != null) {
-				jButton3.setIcon(icons[2]);
-				((ImageIcon) icons[2]).setDescription(buttonNames[2]);
+			if (buttonIcons[2] != null) {
+				jButton3.setIcon(buttonIcons[2]);
+				((ImageIcon) buttonIcons[2]).setDescription(buttonNames[2]);
 			}
 		}
 
 		StringBuilder iconsLog = new StringBuilder();
 
-		for (Icon icon : icons) {
+		for (Icon icon : buttonIcons) {
 			if (icon == null) {
 				iconsLog.append(icon + "  ");
 			} else {

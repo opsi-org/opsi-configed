@@ -67,14 +67,14 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	/** command control panel instance **/
 	private JPanel controlPanel = new JPanel();
 	/** command - commands control panel instance **/
-	private JPanel centerPanel = new JPanel();
+	private JPanel commandPanel = new JPanel();
 	private JPanel commandlistPanel = new JPanel();
 	private JPanel parameterPanel;
 
 	/** command control panel Layout instance **/
 	private GroupLayout controlPanelLayout;
 	/** command - commands control panel Layout instance **/
-	private GroupLayout centerPanelLayout;
+	private GroupLayout commandPanelLayout;
 
 	private GroupLayout commandlistPanelLayout;
 
@@ -161,12 +161,12 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 
 	private void setCenterLayout() {
 		Logging.debug(this, "setCenterLayout ");
-		centerPanelLayout.setAutoCreateGaps(true);
+		commandPanelLayout.setAutoCreateGaps(true);
 
-		centerPanelLayout.setHorizontalGroup(
-				centerPanelLayout.createParallelGroup().addComponent(commandlistPanel).addComponent(parameterPanel));
-		centerPanelLayout.setVerticalGroup(
-				centerPanelLayout.createSequentialGroup().addComponent(commandlistPanel).addComponent(parameterPanel));
+		commandPanelLayout.setHorizontalGroup(
+				commandPanelLayout.createParallelGroup().addComponent(commandlistPanel).addComponent(parameterPanel));
+		commandPanelLayout.setVerticalGroup(
+				commandPanelLayout.createSequentialGroup().addComponent(commandlistPanel).addComponent(parameterPanel));
 
 		parameterPanel.setVisible(true);
 	}
@@ -177,26 +177,26 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 
 		if (!Main.THEMES) {
 			controlPanel.setBackground(Globals.BACKGROUND_COLOR_7);
-			centerPanel.setBackground(Globals.BACKGROUND_COLOR_7);
+			commandPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			commandlistPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 			buttonPanel.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
-		centerPanelLayout = new GroupLayout(centerPanel);
+		commandPanelLayout = new GroupLayout(commandPanel);
 		controlPanelLayout = new GroupLayout(controlPanel);
 		commandlistPanelLayout = new GroupLayout(commandlistPanel);
 
 		getContentPane().add(controlPanel, BorderLayout.NORTH);
-		getContentPane().add(centerPanel, BorderLayout.CENTER);
+		getContentPane().add(commandPanel, BorderLayout.CENTER);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 		commandlistPanel.setPreferredSize(new Dimension(FRAME_WIDTH - 30, 150));
 		commandlistPanel.setSize(new Dimension(FRAME_WIDTH - 30, 150));
 		controlPanel.setLayout(controlPanelLayout);
-		centerPanel.setLayout(centerPanelLayout);
+		commandPanel.setLayout(commandPanelLayout);
 		commandlistPanel.setLayout(commandlistPanelLayout);
 
 		controlPanel.setBorder(BorderFactory.createTitledBorder(""));
-		centerPanel.setBorder(BorderFactory.createTitledBorder(""));
+		commandPanel.setBorder(BorderFactory.createTitledBorder(""));
 		buttonPanel.setBorder(BorderFactory.createTitledBorder(""));
 		setCenterLayout();
 
@@ -712,7 +712,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 		Logging.info(this, "showPanel helpPanelStatus always true");
 
 		setCenterLayout();
-		centerPanel.setSize(centerPanel.getWidth(), centerPanel.getHeight() + parameterPanel.getHeight());
+		commandPanel.setSize(commandPanel.getWidth(), commandPanel.getHeight() + parameterPanel.getHeight());
 		this.setSize(this.getWidth(), this.getHeight() + parameterPanel.getHeight());
 
 		repaint();

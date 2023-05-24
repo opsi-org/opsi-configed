@@ -31,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -1158,7 +1159,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return result;
 	}
 
-	public boolean areDepotsSynchronous(Set<String> depots) {
+	public boolean areDepotsSynchronous(Iterable<String> depots) {
 		String lastIdent = null;
 
 		for (String depot : depots) {
@@ -1472,7 +1473,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return result;
 	}
 
-	public boolean createClients(List<List<Object>> clients) {
+	public boolean createClients(Iterable<List<Object>> clients) {
 		List<Object> clientsJsonObject = new ArrayList<>();
 		List<Object> productsNetbootJsonObject = new ArrayList<>();
 		List<Object> groupsJsonObject = new ArrayList<>();
@@ -2282,7 +2283,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return exec.doCall(omc);
 	}
 
-	public boolean removeHostGroupElements(List<Object2GroupEntry> entries) {
+	public boolean removeHostGroupElements(Iterable<Object2GroupEntry> entries) {
 		if (globalReadOnly) {
 			return false;
 		}
@@ -3644,7 +3645,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return result;
 	}
 
-	public boolean resetProducts(List<Map<String, Object>> productItems, boolean withDependencies) {
+	public boolean resetProducts(Collection<Map<String, Object>> productItems, boolean withDependencies) {
 		if (globalReadOnly) {
 			return false;
 		}
@@ -4197,7 +4198,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		}
 	}
 
-	public void setCommonProductPropertyValue(Set<String> clientNames, String productName, String propertyName,
+	public void setCommonProductPropertyValue(Iterable<String> clientNames, String productName, String propertyName,
 			List<String> values) {
 		List<JSONObject> updateCollection = new ArrayList<>();
 		List<JSONObject> deleteCollection = new ArrayList<>();
