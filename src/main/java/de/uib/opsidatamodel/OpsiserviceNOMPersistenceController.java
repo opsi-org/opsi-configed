@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
@@ -484,7 +485,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		Map<String, Object> item = createNOMitem(type.toString());
 
-		item.put("id", key.toLowerCase());
+		item.put("id", key.toLowerCase(Locale.ROOT));
 		item.put("description", description);
 		item.put("editable", editable);
 		item.put("multiValue", multiValue);
@@ -2830,7 +2831,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 					hwAuditDeviceClass.addHostRelatedProperty(devProperty);
 					hwAuditDeviceClass.setHostConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
-							+ OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE).toLowerCase());
+							+ OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE).toLowerCase(Locale.ROOT));
 
 				} else if ("g".equals(ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY))) {
 					OpsiHwAuditDevicePropertyType devProperty = new OpsiHwAuditDevicePropertyType(hwClass);
@@ -2840,7 +2841,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 					hwAuditDeviceClass.addHwItemRelatedProperty(devProperty);
 					hwAuditDeviceClass.setHwItemConfigKey((OpsiHwAuditDeviceClass.CONFIG_KEY + "." + hwClass + "_"
-							+ OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE).toLowerCase());
+							+ OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE).toLowerCase(Locale.ROOT));
 				} else {
 					Logging.warning(this, "getAllHwClassNames illegal value for key " + OpsiHwAuditDeviceClass.SCOPE_KEY
 							+ " " + ma.get(OpsiHwAuditDeviceClass.SCOPE_KEY));
@@ -2997,7 +2998,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			Logging.debug(this, " saveHwColumnConfig for HOST configIdent " + configIdent);
 
-			Map<String, Boolean> tableConfigUpdates = updateItems.get(configIdent.toUpperCase());
+			Map<String, Boolean> tableConfigUpdates = updateItems.get(configIdent.toUpperCase(Locale.ROOT));
 
 			if (tableConfigUpdates != null) {
 				Logging.info(this,
@@ -3038,7 +3039,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			Logging.debug(this, " saveHwColumnConfig for HW configIdent " + configIdent);
 
-			tableConfigUpdates = updateItems.get(configIdent.toUpperCase());
+			tableConfigUpdates = updateItems.get(configIdent.toUpperCase(Locale.ROOT));
 
 			if (tableConfigUpdates != null) {
 				Logging.info(this,
@@ -4779,7 +4780,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		Map<String, Object> corrected = new HashMap<>();
 		for (Entry<String, Object> setting : settings.entrySet()) {
-			if (setting.getValue() instanceof String && ((String) setting.getValue()).trim().equals("")) {
+			if (setting.getValue() instanceof String && "".equals(((String) setting.getValue()).trim())) {
 				corrected.put(setting.getKey(), JSONObject.NULL);
 			} else {
 				corrected.put(setting.getKey(), setting.getValue());
@@ -8016,7 +8017,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				}
 
 				if (problemToIndicate
-						&& (key.equals("linux_agent") || (key.equals("userroles") && !isUserRegisterActivated()))) {
+						&& ("linux_agent".equals(key) || ("userroles".equals(key) && !isUserRegisterActivated()))) {
 					problemToIndicate = false;
 				}
 

@@ -1,5 +1,7 @@
 package de.uib.configed.gui.logpane;
 
+import java.util.Locale;
+
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Highlighter;
@@ -59,7 +61,7 @@ public class WordSearcher {
 			if (cS) {
 				content = d.getText(0, d.getLength());
 			} else {
-				content = d.getText(0, d.getLength()).toLowerCase();
+				content = d.getText(0, d.getLength()).toLowerCase(Locale.ROOT);
 			}
 		} catch (BadLocationException e) {
 			// Cannot happen
@@ -68,7 +70,7 @@ public class WordSearcher {
 		}
 
 		if (!cS) {
-			word = word.toLowerCase();
+			word = word.toLowerCase(Locale.ROOT);
 		}
 
 		int lastIndex = 0;

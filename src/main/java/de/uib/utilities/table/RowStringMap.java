@@ -10,6 +10,7 @@
 package de.uib.utilities.table;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 public class RowStringMap extends HashMap<String, Object> {
 	@Override
@@ -17,11 +18,11 @@ public class RowStringMap extends HashMap<String, Object> {
 		String result = (String) super.get(key);
 
 		if (result == null) {
-			result = (String) super.get(((String) key).toUpperCase());
+			result = (String) super.get(((String) key).toUpperCase(Locale.ROOT));
 		}
 
 		if (result == null) {
-			result = (String) super.get(((String) key).toLowerCase());
+			result = (String) super.get(((String) key).toLowerCase(Locale.ROOT));
 		}
 
 		return result;

@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -631,7 +632,7 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 	 * @param name The command menu text
 	 **/
 	private static String generateId(String name) {
-		return name.replace(" ", "_").toLowerCase().trim();
+		return name.replace(" ", "_").toLowerCase(Locale.ROOT).trim();
 	}
 
 	public void doActionTestCommand() {

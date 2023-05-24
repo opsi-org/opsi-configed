@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
@@ -736,7 +737,7 @@ public class JTableSelectionPanel extends JPanel
 			}
 		}
 
-		String valLower = val.toLowerCase();
+		String valLower = val.toLowerCase(Locale.ROOT);
 
 		List<String> alternativeWords = getWords(valLower);
 		lastCountOfSearchWords = alternativeWords.size();
@@ -757,7 +758,7 @@ public class JTableSelectionPanel extends JPanel
 				if (compareValue == null) {
 					found = val == null || val.isEmpty();
 				} else {
-					String compareVal = ("" + compareValue).toLowerCase();
+					String compareVal = ("" + compareValue).toLowerCase(Locale.ROOT);
 
 					switch (searchMode) {
 					case REGEX_SEARCHING:

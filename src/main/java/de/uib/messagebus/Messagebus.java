@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -318,7 +319,7 @@ public class Messagebus implements MessagebusListener {
 		boolean wasDisconnecting = disconnecting;
 		connected = false;
 		disconnecting = false;
-		boolean authenticationError = reason != null && reason.toLowerCase().contains("authentication");
+		boolean authenticationError = reason != null && reason.toLowerCase(Locale.ROOT).contains("authentication");
 
 		if (!wasDisconnecting && !reconnecting) {
 			new RetryConnectingThread(authenticationError).start();

@@ -3,6 +3,7 @@ package de.uib.utilities.table;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
@@ -109,7 +110,7 @@ public abstract class AbstractExportTable {
 			return null;
 		}
 
-		if (!path.toLowerCase().endsWith(extension)) {
+		if (!path.toLowerCase(Locale.ROOT).endsWith(extension)) {
 			path = path + extension;
 		}
 
@@ -186,7 +187,7 @@ public abstract class AbstractExportTable {
 					if (file.isDirectory()) {
 						filename = filename + File.separator + defaultExportFilename;
 					} else {
-						if (!filename.toLowerCase().endsWith(".csv")) {
+						if (!filename.toLowerCase(Locale.ROOT).endsWith(".csv")) {
 							filename = filename + ".csv";
 						}
 					}

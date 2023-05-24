@@ -9,6 +9,8 @@
 
 package de.uib.utilities.table;
 
+import java.util.Locale;
+
 public class RowMap<K, V> extends java.util.HashMap<K, V> {
 	@Override
 	public V get(Object key) {
@@ -19,11 +21,11 @@ public class RowMap<K, V> extends java.util.HashMap<K, V> {
 		}
 
 		if (result == null) {
-			result = super.get(((String) key).toUpperCase());
+			result = super.get(((String) key).toUpperCase(Locale.ROOT));
 		}
 
 		if (result == null) {
-			result = super.get(((String) key).toLowerCase());
+			result = super.get(((String) key).toLowerCase(Locale.ROOT));
 		}
 
 		return result;

@@ -2,6 +2,7 @@ package de.uib.configed.type;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import de.uib.utilities.logging.Logging;
@@ -45,7 +46,7 @@ public class OpsiHwAuditDevicePropertyTypes extends HashMap<String, OpsiHwAuditD
 
 		Logging.info(this, "checkIn key " + key + " hwClass " + hwClass + " tableType " + tableType);
 
-		OpsiHwAuditDeviceClass auditDeviceClass = hwAuditDeviceClasses.get(hwClass.toUpperCase());
+		OpsiHwAuditDeviceClass auditDeviceClass = hwAuditDeviceClasses.get(hwClass.toUpperCase(Locale.ROOT));
 
 		Logging.info(this, "checkIn key " + key + " auditDeviceClass " + auditDeviceClass);
 		Logging.info(this, "checkIn auditDeviceClasses for keys " + hwAuditDeviceClasses.keySet());

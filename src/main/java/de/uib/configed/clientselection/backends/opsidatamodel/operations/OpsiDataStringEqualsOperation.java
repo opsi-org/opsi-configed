@@ -1,5 +1,6 @@
 package de.uib.configed.clientselection.backends.opsidatamodel.operations;
 
+import java.util.Locale;
 import java.util.Map;
 
 import de.uib.configed.clientselection.AbstractSelectElement;
@@ -22,7 +23,7 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 		Logging.debug(this, "OpsiDataStringEqualsOperation maptype, key, data: " + map + ", " + key + ", " + data);
 		this.map = map;
 		this.key = key;
-		this.data = data.toLowerCase();
+		this.data = data.toLowerCase(Locale.ROOT);
 		if (data.contains("*")) {
 			dataSplitted = this.data.split("\\*");
 			Logging.debug(this, "OpsiDataStringEqualsOperation " + dataSplitted.length);
@@ -44,14 +45,14 @@ public class OpsiDataStringEqualsOperation extends StringEqualsOperation impleme
 			return false;
 		}
 
-		String realData = realMap.get(key).toString().toLowerCase();
+		String realData = realMap.get(key).toString().toLowerCase(Locale.ROOT);
 		Logging.debug(this, " (OpsiDataStringEqualsOperation) doesMatch realData " + realData);
 		return checkData(realData);
 	}
 
 	protected boolean checkData(final String realData) {
 
-		String rData = realData.toLowerCase();
+		String rData = realData.toLowerCase(Locale.ROOT);
 
 		// simple case: no '*'
 		if (dataSplitted == null) {

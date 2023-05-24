@@ -3,6 +3,7 @@ package de.uib.configed.gui;
 import java.awt.event.ActionEvent;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.AbstractAction;
 import javax.swing.JTextField;
@@ -67,7 +68,7 @@ public class Autocomplete implements DocumentListener {
 			return;
 		}
 
-		String prefix = content.substring(w + 1).toLowerCase();
+		String prefix = content.substring(w + 1).toLowerCase(Locale.ROOT);
 		int n = Collections.binarySearch(this.keywords, prefix);
 		if (n < 0 && -n <= this.keywords.size()) {
 			String match = this.keywords.get(-n - 1);

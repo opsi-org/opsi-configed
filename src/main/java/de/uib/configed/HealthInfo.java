@@ -1,6 +1,7 @@
 package de.uib.configed;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -78,7 +79,7 @@ public final class HealthInfo {
 	private static String produceMessages(Map<String, Object> healthData) {
 		StringBuilder messageBuilder = new StringBuilder();
 		messageBuilder.append((String) healthData.get("check_name") + ": ");
-		messageBuilder.append(((String) healthData.get("check_status")).toUpperCase() + " ");
+		messageBuilder.append(((String) healthData.get("check_status")).toUpperCase(Locale.ROOT) + " ");
 		messageBuilder.append("\n\t");
 		messageBuilder.append((String) healthData.get("message"));
 		messageBuilder.append("\n");
@@ -131,7 +132,7 @@ public final class HealthInfo {
 
 		for (Map<String, Object> details : healthDetails) {
 			healthDetailsBuilder.append("\t");
-			healthDetailsBuilder.append(((String) details.get("check_status")).toUpperCase() + " - ");
+			healthDetailsBuilder.append(((String) details.get("check_status")).toUpperCase(Locale.ROOT) + " - ");
 			healthDetailsBuilder.append(((String) details.get("message")).replace("\n", "\n\t\t"));
 			healthDetailsBuilder.append("\n");
 		}

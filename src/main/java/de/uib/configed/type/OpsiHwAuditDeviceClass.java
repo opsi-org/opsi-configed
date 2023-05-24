@@ -12,15 +12,16 @@ package de.uib.configed.type;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class OpsiHwAuditDeviceClass {
 
 	public static final String CONFIG_KEY = "configed.usecolumns_hwaudit";
 
 	public static final String HOST_ASSIGNED_TABLE_TYPE = "CONFIG";
-	public static final String HOST_ASSIGNED_TABLE_TYPE_LOWER = HOST_ASSIGNED_TABLE_TYPE.toLowerCase();
+	public static final String HOST_ASSIGNED_TABLE_TYPE_LOWER = HOST_ASSIGNED_TABLE_TYPE.toLowerCase(Locale.ROOT);
 	public static final String HW_ITEM_ASSIGNED_TABLE_TYPE = "DEVICE";
-	public static final String HW_ITEM_ASSIGNED_TABLE_TYPE_LOWER = HW_ITEM_ASSIGNED_TABLE_TYPE.toLowerCase();
+	public static final String HW_ITEM_ASSIGNED_TABLE_TYPE_LOWER = HW_ITEM_ASSIGNED_TABLE_TYPE.toLowerCase(Locale.ROOT);
 
 	public static final String CLASS_KEY = "Class";
 	public static final String OPSI_KEY = "Opsi";

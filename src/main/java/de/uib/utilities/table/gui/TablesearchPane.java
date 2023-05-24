@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -850,7 +851,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 			return -1;
 		}
 
-		String val = value.toString().toLowerCase();
+		String val = value.toString().toLowerCase(Locale.ROOT);
 
 		if (val.length() < 2) {
 			return -1;
@@ -898,7 +899,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 					Object valJ = targetModel.getValueAt(targetModel.getRowForVisualRow(viewrow), colJ);
 
 					if (valJ != null) {
-						String valSJ = ("" + valJ).toLowerCase();
+						String valSJ = ("" + valJ).toLowerCase(Locale.ROOT);
 
 						String colname = targetModel.getColumnName(colJ);
 
@@ -941,7 +942,7 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 							found = true;
 						}
 					} else {
-						String compareVal = ("" + compareValue).toLowerCase();
+						String compareVal = ("" + compareValue).toLowerCase(Locale.ROOT);
 
 						if (regex) {
 

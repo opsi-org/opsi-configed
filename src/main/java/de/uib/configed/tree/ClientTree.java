@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableSet;
@@ -938,7 +939,7 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 				if (!gotName) {
 					fEdit.setVisible(true);
 
-					newGroupKey = fEdit.getData().get("groupname").toLowerCase();
+					newGroupKey = fEdit.getData().get("groupname").toLowerCase(Locale.ROOT);
 
 					if (fEdit.isCancelled()) {
 						return null;

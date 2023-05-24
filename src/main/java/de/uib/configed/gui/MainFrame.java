@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -1373,7 +1374,8 @@ public class MainFrame extends JFrame
 		jMenuHelpLoglevel.setText(Configed.getResourceValue("MainFrame.jMenuLoglevel"));
 
 		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
-			rbLoglevelItems[i] = new JRadioButtonMenuItem("[" + i + "] " + Logging.levelText(i).toLowerCase());
+			rbLoglevelItems[i] = new JRadioButtonMenuItem(
+					"[" + i + "] " + Logging.levelText(i).toLowerCase(Locale.ROOT));
 
 			jMenuHelpLoglevel.add(rbLoglevelItems[i]);
 			if (i == Logging.getLogLevelConsole()) {
@@ -3552,7 +3554,8 @@ public class MainFrame extends JFrame
 			String filepathStart = showSoftwareLogMultiClientReport.getExportDirectory() + File.separator
 					+ showSoftwareLogMultiClientReport.getExportfilePrefix();
 
-			String extension = "." + showSoftwareLogMultiClientReport.wantsKindOfExport().toString().toLowerCase();
+			String extension = "."
+					+ showSoftwareLogMultiClientReport.wantsKindOfExport().toString().toLowerCase(Locale.ROOT);
 
 			panelSWInfo.setWithMsUpdates(showSoftwareLogMultiClientReport.wantsWithMsUpdates());
 			panelSWInfo.setWithMsUpdates2(showSoftwareLogMultiClientReport.wantsWithMsUpdates2());

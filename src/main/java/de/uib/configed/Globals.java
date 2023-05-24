@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -492,7 +493,7 @@ public final class Globals {
 
 		if (value instanceof String) {
 
-			String val = ((String) value).toLowerCase();
+			String val = ((String) value).toLowerCase(Locale.ROOT);
 
 			if (val.isEmpty()) {
 				return false;
@@ -552,7 +553,7 @@ public final class Globals {
 
 	public static boolean isWindows() {
 		String osName = System.getProperty("os.name");
-		return osName.toLowerCase().startsWith("windows");
+		return osName.toLowerCase(Locale.ROOT).startsWith("windows");
 	}
 
 	public static String fillStringToLength(String s, int len) {
@@ -881,7 +882,7 @@ public final class Globals {
 	}
 
 	public static boolean isKeyForSecretValue(String s) {
-		String t = s.toLowerCase();
+		String t = s.toLowerCase(Locale.ROOT);
 
 		return t.indexOf("password") > -1 || t.startsWith("secret");
 	}

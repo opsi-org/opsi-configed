@@ -20,6 +20,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.Locale;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -323,7 +324,7 @@ public class FEditPane extends FEdit implements DocumentListener, MouseListener,
 				if (cS) {
 					content = d.getText(0, d.getLength());
 				} else {
-					content = d.getText(0, d.getLength()).toLowerCase();
+					content = d.getText(0, d.getLength()).toLowerCase(Locale.ROOT);
 				}
 			} catch (BadLocationException e) {
 				Logging.warning(this, "Exception thrown when getting Document: " + e);
