@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
@@ -73,7 +74,7 @@ public class ExporterToCSV extends AbstractExportTable {
 		if (fileName != null) {
 
 			try (OutputStream os = new FileOutputStream(fileName);
-					OutputStreamWriter osw = new OutputStreamWriter(os);
+					OutputStreamWriter osw = new OutputStreamWriter(os, StandardCharsets.UTF_8);
 					BufferedWriter bw = new BufferedWriter(osw)) {
 
 				// write header

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import de.uib.utilities.logging.Logging;
@@ -48,7 +49,7 @@ public final class ExtractorUtil {
 					result = item.extractSlow(new ISequentialOutStream() {
 						@Override
 						public int write(byte[] data) throws SevenZipException {
-							sb.append(new String(data));
+							sb.append(new String(data, StandardCharsets.UTF_8));
 							// Consume data
 							hash[0] ^= Arrays.hashCode(data);
 							sizeArray[0] += data.length;
@@ -73,5 +74,4 @@ public final class ExtractorUtil {
 
 		return sb;
 	}
-
 }

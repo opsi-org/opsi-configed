@@ -61,7 +61,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		SSHConnectionTerminalDialog theDialog;
 
 		MyOutputPrinter(SSHConnectionTerminalDialog dialog, OutputStream out) {
-			super(out);
+			super(out, false, StandardCharsets.UTF_8);
 			theDialog = dialog;
 		}
 
@@ -162,7 +162,7 @@ public class SSHConnectTerminal extends SSHConnect {
 					SSHCommand command = new EmptyCommand(text);
 					String ntext = SSHCommandFactory.getInstance(main).getParameterHandler()
 							.parseParameterToString(command, this);
-					out.write(ntext.getBytes());
+					out.write(ntext.getBytes(StandardCharsets.UTF_8));
 					Logging.debug(this, " exec getPrivateStatus " + dialog.hasPrivateStatus());
 					Logging.info(this, " exec text " + text);
 					Logging.info(this, " exec ntext " + ntext);
@@ -222,7 +222,7 @@ public class SSHConnectTerminal extends SSHConnect {
 		dialog.getInputField().setText("");
 		try {
 			if (out != null) {
-				out.write("\n".getBytes());
+				out.write("\n".getBytes(StandardCharsets.UTF_8));
 			} else {
 				Logging.warning(this, "Pipe closed");
 			}
@@ -236,7 +236,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Logging.info(this, "interrupt with btn ");
-				exec(new String(new byte[] { 3 }) + "\n");
+				exec(new String(new byte[] { 3 }, StandardCharsets.UTF_8) + "\n");
 			}
 		};
 		inputKeyListener = new KeyListener() {
@@ -248,7 +248,7 @@ public class SSHConnectTerminal extends SSHConnect {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_C && (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 					Logging.info(this, "interrupt with keys ");
-					exec(new String(new byte[] { 3 }) + "\n");
+					exec(new String(new byte[] { 3 }, StandardCharsets.UTF_8) + "\n");
 				}
 			}
 

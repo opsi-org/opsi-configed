@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -191,7 +192,7 @@ public final class CertificateManager {
 	}
 
 	private static void writeToCertificate(File certificateFile, String certificateContent) {
-		try (FileWriter writer = new FileWriter(certificateFile, false)) {
+		try (FileWriter writer = new FileWriter(certificateFile, StandardCharsets.UTF_8, false)) {
 			writer.write(certificateContent);
 			writer.flush();
 		} catch (IOException e) {

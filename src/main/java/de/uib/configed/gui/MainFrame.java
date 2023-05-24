@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1394,7 +1395,8 @@ public class MainFrame extends JFrame
 
 		jMenuHelpCheckHealth.setText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
 		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> {
-			saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME, ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes()));
+			saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME,
+					ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes(StandardCharsets.UTF_8)));
 			showHealthDataAction();
 		});
 

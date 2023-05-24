@@ -2,6 +2,7 @@ package de.uib.configed.gui;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,7 +32,7 @@ public class CSVFileDataUpdater implements MapBasedUpdater {
 		CSVWriter writer = null;
 
 		try {
-			writer = new CSVWriter(new FileWriter(csvFile), format);
+			writer = new CSVWriter(new FileWriter(csvFile, StandardCharsets.UTF_8), format);
 
 			// Create a copy of columnNames List to avoid global modification
 			// of columnNames List, that exists in GenTableModel class.

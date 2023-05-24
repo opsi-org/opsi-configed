@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
@@ -414,7 +415,7 @@ public final class Terminal {
 
 		public WebSocketTtyConnector(OutputStream outputStream, InputStream inputStream) {
 			this.writer = new BufferedOutputStream(outputStream);
-			this.reader = new BufferedReader(new InputStreamReader(inputStream));
+			this.reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 		}
 
 		@Override
@@ -495,7 +496,7 @@ public final class Terminal {
 
 		@Override
 		public void write(String string) throws IOException {
-			write(string.getBytes());
+			write(string.getBytes(StandardCharsets.UTF_8));
 		}
 
 		@Override

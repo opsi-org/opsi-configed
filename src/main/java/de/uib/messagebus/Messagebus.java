@@ -165,7 +165,7 @@ public class Messagebus implements MessagebusListener {
 	private String createEncBasicAuth() {
 		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
 		String basicAuth = String.format("%s:%s", exec.username, exec.password);
-		return Base64.getEncoder().encodeToString(basicAuth.getBytes());
+		return Base64.getEncoder().encodeToString(basicAuth.getBytes(StandardCharsets.UTF_8));
 	}
 
 	private SSLSocketFactory createDullSSLSocketFactory() {

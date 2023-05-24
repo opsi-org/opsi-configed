@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -210,7 +211,7 @@ public final class Messages {
 		localeInfo = new TreeMap<>();
 
 		InputStream stream = Messages.class.getResourceAsStream(LOCALISATIONS_CONF);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
 		try {
 			String line = reader.readLine();
 			while (line != null) {

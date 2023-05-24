@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -485,7 +486,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 	public void write(String csvFile) {
 		try {
-			CSVWriter writer = new CSVWriter(new FileWriter(csvFile), format);
+			CSVWriter writer = new CSVWriter(new FileWriter(csvFile, StandardCharsets.UTF_8), format);
 			List<String> headers = new ArrayList<>();
 
 			headerButtons.forEach((JCheckBox header) -> {

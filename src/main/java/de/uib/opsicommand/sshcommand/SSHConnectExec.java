@@ -516,7 +516,7 @@ public class SSHConnectExec extends SSHConnect {
 								}
 								return null;
 							} else {
-								out.write((pw + "\n").getBytes());
+								out.write((pw + "\n").getBytes(StandardCharsets.UTF_8));
 								out.flush();
 								supwRetriedTimes += 1;
 							}

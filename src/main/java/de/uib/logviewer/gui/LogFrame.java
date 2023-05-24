@@ -464,7 +464,7 @@ public class LogFrame extends JFrame implements WindowListener {
 	public void saveToFile(String fn, String[] logfilelines) {
 		FileWriter fWriter = null;
 		try {
-			fWriter = new FileWriter(fn);
+			fWriter = new FileWriter(fn, StandardCharsets.UTF_8);
 		} catch (IOException ex) {
 			Logging.error("Error opening file: " + fn + "\n --- ; stop saving to file", ex);
 			return;

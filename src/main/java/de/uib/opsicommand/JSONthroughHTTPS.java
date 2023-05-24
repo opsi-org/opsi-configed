@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -153,7 +154,8 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 
 		try {
 			connection = (HttpsURLConnection) new URL(produceBaseURL("/")).openConnection();
-			String authorization = Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
+			String authorization = Base64.getEncoder()
+					.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
 			connection.setRequestProperty("Authorization", "Basic " + authorization);
 			connection.setSSLSocketFactory(createDullSSLSocketFactory());
 			connection.setHostnameVerifier(new DullHostnameVerifier());
@@ -196,7 +198,8 @@ public class JSONthroughHTTPS extends JSONthroughHTTP {
 	}
 
 	private void setGeneralRequestProperties(HttpURLConnection connection) {
-		String authorization = Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
+		String authorization = Base64.getEncoder()
+				.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
 		connection.setRequestProperty("Authorization", "Basic " + authorization);
 
 		// has to be value between 1 and 43300 [sec]

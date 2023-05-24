@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -201,7 +202,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 	private static void saveToFile(String fn, String[] lines) {
 		FileWriter fWriter = null;
 		try {
-			fWriter = new FileWriter(fn);
+			fWriter = new FileWriter(fn, StandardCharsets.UTF_8);
 		} catch (IOException ex) {
 			Logging.error("Error opening file: " + fn + "\n --- " + ex);
 			return;
@@ -243,7 +244,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 					int i = 0;
 					while (i < textPanes[logNo].lines.length) {
 						try {
-							buffer = textPanes[logNo].lines[i].getBytes();
+							buffer = textPanes[logNo].lines[i].getBytes(StandardCharsets.UTF_8);
 							out.write(buffer, 0, textPanes[logNo].lines[i].length());
 							out.write(crlf, 0, 2);
 						} catch (IOException ex) {
@@ -273,7 +274,7 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			while (i < lines.length) {
 				try {
 
-					buffer = lines[i].getBytes();
+					buffer = lines[i].getBytes(StandardCharsets.UTF_8);
 					out.write(buffer, 0, lines[i].length());
 					out.write(crlf, 0, 2);
 				} catch (IOException ex) {

@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -203,7 +204,7 @@ public class HealthCheckDialog extends FGeneralDialog {
 
 		OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		JSONObject jo = new JSONObject(persist.getDiagnosticData());
-		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes()));
+		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes(StandardCharsets.UTF_8)));
 	}
 
 	private void writeToFile(File file, ByteBuffer data) {

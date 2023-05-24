@@ -119,9 +119,7 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 		try {
 			serviceURL = new URL(urlS);
 		} catch (MalformedURLException ex) {
-			Logging.error(urlS
-					+ " nhttps://learn.microsoft.com/id-id/windows-hardware/manufacture/desktop/oscdimg-command-line-options?view=windows-11o legal URL, "
-					+ ex.toString());
+			Logging.error("Malformed URL: " + urlS, ex);
 		}
 	}
 

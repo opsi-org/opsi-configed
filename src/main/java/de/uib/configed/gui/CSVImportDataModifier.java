@@ -2,6 +2,7 @@ package de.uib.configed.gui;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,9 +63,9 @@ public class CSVImportDataModifier {
 			CSVReader reader = null;
 
 			if (parser.getFormat().hasHeader()) {
-				reader = new CSVReader(new FileReader(csvFile), parser, startLine);
+				reader = new CSVReader(new FileReader(csvFile, StandardCharsets.UTF_8), parser, startLine);
 			} else {
-				reader = new CSVReader(new FileReader(csvFile), parser, startLine, columnNames);
+				reader = new CSVReader(new FileReader(csvFile, StandardCharsets.UTF_8), parser, startLine, columnNames);
 			}
 
 			List<Map<String, Object>> csvData = reader.readAll();

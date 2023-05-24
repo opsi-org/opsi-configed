@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -187,7 +188,7 @@ public final class Logging {
 				}
 			}
 
-			logFileWriter = new PrintWriter(new FileOutputStream(logFilename));
+			logFileWriter = new PrintWriter(new FileOutputStream(logFilename), false, StandardCharsets.UTF_8);
 			logFilenameInUse = logFilename;
 		} catch (IOException ex) {
 			Logging.error("file " + logFilename + " or directory " + logDirectoryName + " not found...", ex);

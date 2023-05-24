@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -121,7 +122,7 @@ public abstract class AbstractSWExporter {
 
 		Logging.info(this, "starting");
 
-		try (BufferedReader in = new BufferedReader(new FileReader(clientsFile))) {
+		try (BufferedReader in = new BufferedReader(new FileReader(clientsFile, StandardCharsets.UTF_8))) {
 			Logging.info(this, " in " + in);
 			String line = in.readLine();
 			while (line != null) {
