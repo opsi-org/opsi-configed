@@ -14,7 +14,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
 public class HostInfo {
-	private static Map<String, Integer> id2InstanceNumber;
 
 	// ---
 	public static final String DEPOT_OF_CLIENT_KEY = "depotId";
@@ -137,7 +136,6 @@ public class HostInfo {
 
 	public static void resetInstancesCount() {
 		numberOfInstances = 0;
-		id2InstanceNumber = new HashMap<>();
 	}
 
 	public static int getInstancesCount() {

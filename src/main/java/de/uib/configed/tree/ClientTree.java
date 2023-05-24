@@ -85,7 +85,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 
 	private TreePath pathToROOT;
 	private TreePath pathToALL;
-	private TreePath pathToGROUPS;
 
 	private final Map<String, String> mapAllClients = new HashMap<>();
 	private final Map<String, String> mapGroups = new HashMap<>();
@@ -465,8 +464,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		groupNodeGroups.setFixed(true);
 
 		rootNode.add(groupNodeGroups);
-
-		pathToGROUPS = new TreePath(new Object[] { rootNode, groupNodeGroups });
 
 		// DIRECTORY
 		groupNodeDirectory = produceGroupNode(DIRECTORY_NAME,
