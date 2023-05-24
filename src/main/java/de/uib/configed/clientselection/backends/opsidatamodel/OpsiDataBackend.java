@@ -146,10 +146,6 @@ public final class OpsiDataBackend {
 		return instance;
 	}
 
-	public static void renew() {
-		instance = null;
-	}
-
 	/**
 	 * Goes through the list of clients and filters them with operation. The
 	 * boolean arguments give hints which data is needed.

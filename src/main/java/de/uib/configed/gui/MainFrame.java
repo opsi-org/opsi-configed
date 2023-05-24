@@ -1,12 +1,10 @@
 package de.uib.configed.gui;
 
-import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,10 +17,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
@@ -335,8 +331,6 @@ public class MainFrame extends JFrame
 	private IconButton iconButtonReload;
 	private IconButton iconButtonReloadLicenses;
 	private IconButton iconButtonNewClient;
-
-	/* gibts nicht **/ // TODO
 	private IconButton iconButtonSetGroup;
 	private IconButton iconButtonSaveConfiguration;
 	private IconButton iconButtonToggleClientFilter;
@@ -446,40 +440,6 @@ public class MainFrame extends JFrame
 
 	private LicenseDisplayer licenseDisplayer;
 
-	private static class GlassPane extends JComponent {
-		GlassPane() {
-			super();
-			Logging.debug(this, "glass pane initialized");
-			super.setVisible(true);
-			super.setOpaque(true);
-			super.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyTyped(KeyEvent e) {
-					Logging.debug(this, "key typed on glass pane");
-				}
-			});
-			super.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					Logging.info(this, "mouse on glass pane");
-				}
-			});
-
-		}
-
-		@Override
-		public void paintComponent(Graphics g) {
-			((Graphics2D) g).setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 0.5));
-
-			if (!Main.THEMES) {
-				g.setColor(Globals.F_GENERAL_DIALOG_FADING_MIRROR_COLOR);
-				g.fillRect(0, 0, getWidth(), getHeight());
-			}
-		}
-	}
-
-	private GlassPane glass;
-
 	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
 			ClientTree treeClients, boolean multidepot) {
 
@@ -497,8 +457,6 @@ public class MainFrame extends JFrame
 		depotListPresenter = new DepotListPresenter(depotsList, multidepot, main.getPersistenceController());
 
 		this.configedMain = main;
-
-		glass = new GlassPane();
 
 		guiInit();
 		initData();
@@ -536,7 +494,7 @@ public class MainFrame extends JFrame
 		panelProductProperties.setDividerLocation(0.75);
 	}
 
-	public class SizeListeningPanel extends JPanel implements ComponentListener {
+	private class SizeListeningPanel extends JPanel implements ComponentListener {
 		SizeListeningPanel() {
 			super.addComponentListener(this);
 		}
@@ -1799,7 +1757,7 @@ public class MainFrame extends JFrame
 		exportTable.addMenuItemsTo(popupClients);
 	}
 
-	public void createPdf() {
+	private void createPdf() {
 		TableModel tm = configedMain.getSelectedClientsTableModel();
 		JTable jTable = new JTable(tm);
 
@@ -2726,9 +2684,6 @@ public class MainFrame extends JFrame
 			statusPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
-		glass.setVisible(true);
-		glass.setOpaque(true);
-		setGlassPane(glass);
 		pack();
 	}
 
@@ -2772,19 +2727,19 @@ public class MainFrame extends JFrame
 	// ----------------------------------------------------------------------------------------
 	// action methods for visual interactions
 
-	public void wakeOnLanAction() {
+	private void wakeOnLanAction() {
 		configedMain.wakeSelectedClients();
 	}
 
-	public void deletePackageCachesAction() {
+	private void deletePackageCachesAction() {
 		configedMain.deletePackageCachesOfSelectedClients();
 	}
 
-	public void fireOpsiclientdEventAction(String event) {
+	private void fireOpsiclientdEventAction(String event) {
 		configedMain.fireOpsiclientdEventOnSelectedClients(event);
 	}
 
-	public void showPopupOnClientsAction() {
+	private void showPopupOnClientsAction() {
 		FEditTextWithExtra fText = new FEditTextWithExtra("", Configed.getResourceValue("MainFrame.writePopupMessage"),
 				Configed.getResourceValue("MainFrame.writePopupDuration")) {
 			@Override
@@ -2804,28 +2759,28 @@ public class MainFrame extends JFrame
 		fText.setVisible(true);
 	}
 
-	public void shutdownClientsAction() {
+	private void shutdownClientsAction() {
 		configedMain.shutdownSelectedClients();
 	}
 
-	public void rebootClientsAction() {
+	private void rebootClientsAction() {
 		configedMain.rebootSelectedClients();
 	}
 
-	public void deleteClientAction() {
+	private void deleteClientAction() {
 		configedMain.deleteSelectedClients();
 	}
 
-	public void copyClientAction() {
+	private void copyClientAction() {
 		configedMain.copySelectedClient();
 	}
 
-	public void freeLicencesAction() {
+	private void freeLicencesAction() {
 		Logging.info(this, "freeLicencesAction ");
 		configedMain.freeAllPossibleLicencesForSelectedClients();
 	}
 
-	public void remoteControlAction() {
+	private void remoteControlAction() {
 		Logging.debug(this, "jMenuRemoteControl");
 		configedMain.startRemoteControlForSelectedClients();
 	}
@@ -2835,7 +2790,7 @@ public class MainFrame extends JFrame
 	 *
 	 * @param SSHCommand command
 	 */
-	public void remoteSSHExecAction(SSHCommand command) {
+	private void remoteSSHExecAction(SSHCommand command) {
 		Logging.debug(this, "jMenuRemoteSSHExecAction");
 		configedMain.startSSHOpsiServerExec(command);
 	}
@@ -2843,7 +2798,7 @@ public class MainFrame extends JFrame
 	/**
 	 * Calls method from configedMain to start the config dialog
 	 */
-	public void startSSHConfigAction() {
+	private void startSSHConfigAction() {
 		Logging.debug(this, "jMenuSSHConfigAction");
 		configedMain.startSSHConfigDialog();
 	}
@@ -2851,7 +2806,7 @@ public class MainFrame extends JFrame
 	/**
 	 * Calls method from configedMain to start the command control dialog
 	 */
-	public void startSSHControlAction() {
+	private void startSSHControlAction() {
 		Logging.debug(this, "jMenuSSHControlAction");
 		configedMain.startSSHControlDialog();
 	}
@@ -2868,15 +2823,15 @@ public class MainFrame extends JFrame
 		}
 	}
 
-	public void exitAction() {
+	private void exitAction() {
 		configedMain.finishApp(true, 0);
 	}
 
-	public void saveAction() {
+	private void saveAction() {
 		configedMain.checkSaveAll(false);
 	}
 
-	public void getSessionInfo() {
+	private void getSessionInfo() {
 
 		configedMain.getSessionInfo();
 	}

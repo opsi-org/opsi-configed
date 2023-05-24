@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import de.uib.configed.Configed;
 import de.uib.configed.gui.MainFrame;
@@ -104,7 +102,6 @@ public class HostInfo {
 
 	// an AtomicInteger would be threadsafe
 	private static int numberOfInstances;
-	private final int instanceNumber;
 
 	private String depotOfClient;
 	private String clientDescription;
@@ -130,50 +127,12 @@ public class HostInfo {
 
 	public HostInfo() {
 		initialize();
-		instanceNumber = incAndGetInstancesCount();
+		increaseInstancesCount();
 	}
 
 	public HostInfo(Map<String, Object> pcInfo) {
-		instanceNumber = incAndGetInstancesCount();
+		increaseInstancesCount();
 		setBy(pcInfo);
-	}
-
-	// https://support.microsoft.com/en-us/kb/909264
-	public static String checkADNamingConvention(String proposal) {
-		boolean result = true;
-		String hintMessage = null;
-
-		if (proposal == null || proposal.trim().isEmpty()) {
-			hintMessage = "name must not be empty";
-			result = false;
-		}
-
-		if (result && proposal.length() > 15) {
-			hintMessage = "netbios names are restricted to 15 characters";
-			result = false;
-		}
-
-		final Pattern onlyDigitsP = Pattern.compile("\\d*");
-		Matcher m = onlyDigitsP.matcher(proposal);
-
-		if (result && m.matches()) {
-			hintMessage = "only digits are not allowed";
-			result = false;
-		}
-
-		if (result) {
-			StringBuilder found = new StringBuilder();
-			for (int i = 0; i < proposal.length(); i++) {
-				if (notLegalChars.contains(proposal.charAt(i))) {
-					found.append(proposal.charAt(i));
-				}
-			}
-			if (found.length() > 0) {
-				hintMessage = "not allowed character(s)>>>  '" + found + "'";
-			}
-		}
-
-		return hintMessage;
 	}
 
 	public static void resetInstancesCount() {
@@ -185,17 +144,8 @@ public class HostInfo {
 		return numberOfInstances;
 	}
 
-	public static int incAndGetInstancesCount() {
+	private static void increaseInstancesCount() {
 		numberOfInstances++;
-		return numberOfInstances;
-	}
-
-	public Integer getInstanceNumber(String key) {
-		return id2InstanceNumber.get(key);
-	}
-
-	public boolean isInstanceNumber(int compareNumber) {
-		return instanceNumber == compareNumber;
 	}
 
 	public Map<String, Object> getDisplayRowMap0() {
@@ -221,12 +171,6 @@ public class HostInfo {
 
 		Logging.debug(this, "getMap clientName " + clientName + " : " + unordered);
 
-		return unordered;
-	}
-
-	public Map<String, Object> getDisplayRowMap() {
-		HashMap<String, Object> unordered = new HashMap<>(getDisplayRowMap0());
-		unordered.put(HOST_NAME_DISPLAY_FIELD_LABEL, clientName);
 		return unordered;
 	}
 
@@ -327,10 +271,6 @@ public class HostInfo {
 
 	public void setInDepot(String depot) {
 		depotOfClient = depot;
-	}
-
-	public boolean isClientInDepot(String depot) {
-		return depotOfClient.equalsIgnoreCase(depot);
 	}
 
 	public String getHostType() {
@@ -486,31 +426,6 @@ public class HostInfo {
 
 		return this;
 
-	}
-
-	public void setMap(Map<String, Object> infoMap) {
-		Logging.debug(this, "setMap " + infoMap);
-		initialize();
-
-		if (infoMap == null) {
-			return;
-		}
-
-		clientUefiBoot = showValue((Boolean) infoMap.get(CLIENT_UEFI_BOOT_KEY));
-		clientWanConfig = showValue((Boolean) infoMap.get(CLIENT_WAN_CONFIG_KEY));
-		clientShutdownInstall = showValue((Boolean) infoMap.get(CLIENT_SHUTDOWN_INSTALL_KEY));
-
-		clientDescription = showValue("" + infoMap.get(CLIENT_DESCRIPTION_KEY));
-		clientInventoryNumber = showValue("" + infoMap.get(CLIENT_INVENTORY_NUMBER_KEY));
-		clientNotes = showValue("" + infoMap.get(CLIENT_NOTES_KEY));
-		clientOneTimePassword = showValue("" + infoMap.get(CLIENT_ONE_TIME_PASSWORD_KEY));
-		clientSystemUUID = showValue("" + infoMap.get(CLIENT_SYSTEM_UUID_KEY));
-		clientMacAddress = showValue("" + infoMap.get(CLIENT_MAC_ADRESS_KEY));
-		clientIpAddress = showValue("" + infoMap.get(CLIENT_IP_ADDRESS_KEY));
-		hostKey = showValue("" + infoMap.get(HOST_KEY_KEY));
-		clientName = showValue("" + infoMap.get(HOSTNAME_KEY));
-		created = showValue("" + infoMap.get(CREATED_KEY));
-		lastSeen = showValue("" + infoMap.get(LAST_SEEN_KEY));
 	}
 
 	private static int findCol(JTableSelectionPanel selectionPanel, String colName) {
