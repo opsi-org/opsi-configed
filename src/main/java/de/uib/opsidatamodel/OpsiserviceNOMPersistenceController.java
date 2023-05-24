@@ -8267,7 +8267,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	 */
 	public boolean doActionSSHCommand(String method, List<Object> jsonObjects) {
 		Logging.info(this, "doActionSSHCommand method " + method);
-		if (isGlobalReadOnly()) {
+		if (globalReadOnly) {
 			return false;
 		}
 		OpsiMethodCall omc = new OpsiMethodCall(method, new Object[] { AbstractExecutioner.jsonArray(jsonObjects) });
@@ -8285,7 +8285,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	public boolean deleteSSHCommand(List<String> jsonObjects) {
 		// Strings not object!
 		Logging.info(this, "deleteSSHCommand ");
-		if (isGlobalReadOnly()) {
+		if (globalReadOnly) {
 			return false;
 		}
 		OpsiMethodCall omc = new OpsiMethodCall("SSHCommand_deleteObjects",

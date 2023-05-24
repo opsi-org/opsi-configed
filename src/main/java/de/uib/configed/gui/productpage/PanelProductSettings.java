@@ -520,6 +520,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		JMenuItem save = new JMenuItemFormatted();
 		save.setText(Configed.getResourceValue("ConfigedMain.saveConfiguration"));
+		save.setEnabled(!Globals.isGlobalReadOnly());
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		if (!Main.FONT) {
 			save.setFont(Globals.defaultFont);
@@ -536,6 +537,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		itemOnDemand = new JMenuItemFormatted();
 		itemOnDemand.setText(Configed.getResourceValue("ConfigedMain.OpsiclientdEvent_on_demand"));
+		itemOnDemand.setEnabled(!Globals.isGlobalReadOnly());
+
 		if (!Main.FONT) {
 			itemOnDemand.setFont(Globals.defaultFont);
 		}
@@ -546,7 +549,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		itemSaveAndExecute = new JMenuItemFormatted();
 		itemSaveAndExecute.setText(Configed.getResourceValue("ConfigedMain.savePOCAndExecute"));
-
+		itemSaveAndExecute.setEnabled(!Globals.isGlobalReadOnly());
 		// dies bit get its intended context
 		itemSaveAndExecute.setIcon(Globals.createImageIcon("images/executing_command_blue_16.png", ""));
 		if (!Main.FONT) {
