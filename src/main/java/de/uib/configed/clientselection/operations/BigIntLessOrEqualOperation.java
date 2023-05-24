@@ -6,9 +6,9 @@
 
 package de.uib.configed.clientselection.operations;
 
-import de.uib.configed.clientselection.SelectData;
 import de.uib.configed.clientselection.AbstractSelectElement;
 import de.uib.configed.clientselection.AbstractSelectOperation;
+import de.uib.configed.clientselection.SelectData;
 
 public class BigIntLessOrEqualOperation extends AbstractSelectOperation {
 	public BigIntLessOrEqualOperation(AbstractSelectElement element) {

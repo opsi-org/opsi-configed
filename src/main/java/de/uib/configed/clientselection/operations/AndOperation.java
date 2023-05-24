@@ -9,10 +9,10 @@ package de.uib.configed.clientselection.operations;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.uib.configed.clientselection.Client;
-import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.AbstractSelectGroupOperation;
 import de.uib.configed.clientselection.AbstractSelectOperation;
+import de.uib.configed.clientselection.Client;
+import de.uib.configed.clientselection.ExecutableOperation;
 
 /**
  * Connects two or more operations with a logical and, i.e. this Operation only
