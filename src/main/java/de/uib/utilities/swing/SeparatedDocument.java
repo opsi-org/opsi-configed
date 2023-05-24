@@ -1,9 +1,3 @@
-/**
- * SeparatedDocument.java
- * Copyright:     Copyright (c) 2006-2015
- * Organisation:  uib
- * @author Rupert Roeder, Anna Sucher
- */
 
 package de.uib.utilities.swing;
 

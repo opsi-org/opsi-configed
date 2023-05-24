@@ -1,27 +1,3 @@
-/**
-*   PersistenceController
-*   implementation for the New Object Model (opsi 4.0)
-*   description: instances of PersistenceController give
-*   access to proxy objects which mediate access to remote objects (and buffer the data)
-*
-*
-* The PersistenceController retrieves its data from a server that is compatible with the
-*  opsi data server resp. its stub (proxy)
-*  It has a Executioner component that transmits requests to the opsi server and receives the responses.
-*
-*  There are several classes which implement the Executioner methods in different ways
-*  dependent on the used means and protocols
-*
-*
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public
-* License as published by the Free Software Foundation;
-* version  AGPLv3
-*
-*  copyright:     Copyright (c) 2000-2022
-*  organization: uib.de
-* @author  R. Roeder
-*/
 
 package de.uib.opsidatamodel;
 
@@ -117,6 +93,16 @@ import de.uib.utilities.observer.DataRefreshedObservable;
 import de.uib.utilities.observer.DataRefreshedObserver;
 import de.uib.utilities.table.ListCellOptions;
 
+/**
+ * PersistenceController implementation for the New Object Model (opsi 4.0)
+ * description: instances of PersistenceController give access to proxy objects
+ * which mediate access to remote objects (and buffer the data) The
+ * PersistenceController retrieves its data from a server that is compatible
+ * with the opsi data server resp. its stub (proxy) It has a Executioner
+ * component that transmits requests to the opsi server and receives the
+ * responses. There are several classes which implement the Executioner methods
+ * in different ways dependent on the used means and protocols
+ */
 public class OpsiserviceNOMPersistenceController implements DataRefreshedObservable, DataLoadingObservable {
 	private static final String EMPTYFIELD = "-";
 	private static final List<String> NONE_LIST = new ArrayList<>() {

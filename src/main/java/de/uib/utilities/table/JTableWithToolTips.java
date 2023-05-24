@@ -1,10 +1,5 @@
 package de.uib.utilities.table;
 
-/* 
-*	Copyright uib (uib.de) 2008
-*	Author Rupert Röder
-*
-*/
 import java.awt.Component;
 
 import javax.swing.JComponent;

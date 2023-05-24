@@ -8,10 +8,6 @@ import javax.swing.Painter;
 
 import de.uib.Main;
 
-//Version:
-//Copyright:    Copyright (c) 2013 uib.de
-//Author:       Rupert Röder
-
 public class ProgressBarPainter implements Painter<JProgressBar> {
 	private final Color color;
 

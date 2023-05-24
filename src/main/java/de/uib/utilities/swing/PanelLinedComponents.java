@@ -1,8 +1,3 @@
-//Titel:		PanelLinedComponents
-//Copyright: 	Copyright (c) 2011
-//Autor:		Martina Hammel, Rupert Röder
-//Organisation:	uib
-//Beschreibung:		
 
 package de.uib.utilities.swing;
 

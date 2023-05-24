@@ -1,9 +1,3 @@
-/**
- *
- *  copyright:     Copyright (c) 2014-2018
- *  organization: uib.de
- * @author  R. Roeder
- */
 
 package de.uib.opsidatamodel;
 

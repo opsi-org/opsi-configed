@@ -1,10 +1,3 @@
-/**
- * FOpsiLicenseMissingText
- * Special window for this kind of problem info
- * Copyright:     Copyright (c) 2022
- * Organisation:  uib
- * @author Rupert Röder
- */
 
 package de.uib.opsidatamodel.modulelicense;
 

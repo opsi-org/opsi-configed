@@ -1,7 +1,3 @@
-/* 
- * Copyright (C) 2009 uib.de
- *
- */
 
 package de.uib.configed;
 

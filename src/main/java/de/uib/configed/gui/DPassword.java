@@ -1,15 +1,3 @@
-/*
- * configed - configuration editor for client work stations in opsi
- * (open pc server integration) www.opsi.org
- *
- * Copyright (C) 2000-2021 uib.de
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- */
 
 package de.uib.configed.gui;
 
@@ -58,12 +46,6 @@ import de.uib.utilities.thread.WaitCursor;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-/**
- * DPassword description: A JDialog for logging in copyright: Copyright (c)
- * 2000-2016 organization: uib.de
- *
- * @author D. Oertel; R. Roeder
- */
 public class DPassword extends JDialog implements WaitingSleeper {
 	private static final String TESTSERVER = "";
 	private static final String TESTUSER = "";

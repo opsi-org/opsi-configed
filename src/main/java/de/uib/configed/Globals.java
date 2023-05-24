@@ -29,8 +29,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * This class contains app constants (including some global functions) Copyright
- * (c) uib 2001-2022
+ * This class contains app constants (including some global functions)
  */
 
 public final class Globals {

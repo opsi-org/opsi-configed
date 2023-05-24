@@ -1,12 +1,3 @@
-/**
- *   OpsiProductInfo
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- *    
- *  copyright:  2014
- *  organization: uib.de
- *  @author  R. Roeder 
- */
 
 package de.uib.configed.type;
 

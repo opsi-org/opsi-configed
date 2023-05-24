@@ -13,11 +13,6 @@ import de.uib.configed.ControlPanelLicencesReconciliation;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-/**
- * Copyright (C) 2008-2009, 2017 uib.de
- * 
- * @author rupert roeder
- */
 public class PanelLicencesReconciliation extends MultiTablePanel {
 
 	public PanelGenEditTable panelReconciliation;

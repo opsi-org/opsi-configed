@@ -1,20 +1,3 @@
-/*
- * ProductInfoPanes.java
- *
- * (open pc server integration) www.opsi.org
- *
- * Copyright (C) 2022 uib.de
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License, version AGPLv3, as published by the Free Software Foundation
- * 
- * Shows a tree of the dependencies for a given product, with some
- * features and uses the information of the dependencies tree model
- * 
- * @author Nils Otto
- 
- */
 
 package de.uib.configed.gui.productpage;
 

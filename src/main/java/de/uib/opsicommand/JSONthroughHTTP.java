@@ -41,16 +41,6 @@ import de.uib.utilities.swing.FEditRecord;
 import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
 
-/*  Copyright (c) 2006-2016, 2021 uib.de
-
-Usage of this portion of software is allowed unter the restrictions of the GPL
-
-*/
-
-/**
- * @author Rupert Roeder, Jan Schneider, Naglis Vidziunas
- */
-
 public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 
 	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;

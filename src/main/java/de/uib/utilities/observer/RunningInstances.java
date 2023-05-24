@@ -1,11 +1,3 @@
-/* 
- * Copyright (C) 2016 uib.de
- *
- * This program is free software; you may redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License, version AGPLv3, as published by the Free Software Foundation
- *
- */
 
 package de.uib.utilities.observer;
 
@@ -26,9 +18,6 @@ import de.uib.utilities.logging.Logging;
  * that class and check for running instances on ending the program. Implements
  * an observable pattern so that another class can react to relevant events or
  * execute something on all instances
- * 
- * @version 2016/01/15
- * @author Rupert Roeder
  */
 
 public class RunningInstances<T> {

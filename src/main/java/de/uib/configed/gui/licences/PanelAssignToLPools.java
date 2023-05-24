@@ -28,11 +28,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelStateSwitch;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-/**
- * Copyright (C) 2008-2020 uib.de
- * 
- * @author roeder
- */
 public class PanelAssignToLPools extends MultiTablePanel implements ChangeListener {
 
 	private static final int SPLIT_PANE_H_MARGIN = 1;

@@ -1,10 +1,3 @@
-/*
-  * DataChangedKeeper
-	* description: keeps the information when data have changed
-	* organization: uib.de
-	* copyright:     Copyright (c) 2000-2022
-	* @author  R. Roeder 
- */
 
 package de.uib.utilities;
 

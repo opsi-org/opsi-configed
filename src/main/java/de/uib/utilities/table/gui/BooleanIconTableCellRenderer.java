@@ -1,15 +1,5 @@
 package de.uib.utilities.table.gui;
 
-/*
- * configed - configuration editor for client work stations in opsi
- * (open pc server integration) www.opsi.org
- *
- * BooleanIconTableCellRenderer.java
- * Copyright (C) uib.de 2018
- *
- *	GPL licensed
- *   Author Rupert Röder
-*/
 import java.awt.Component;
 
 import javax.swing.Icon;

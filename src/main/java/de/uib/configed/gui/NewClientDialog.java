@@ -34,12 +34,6 @@ import javax.swing.text.BadLocationException;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
-/**
- * NewClientDialog
- * Copyright:     Copyright (c) 2006-2022
- * Organisation:  uib
- * @author Jan Schneider, Rupert Roeder, Anna Sucher, Naglis Vidziunas
- */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;

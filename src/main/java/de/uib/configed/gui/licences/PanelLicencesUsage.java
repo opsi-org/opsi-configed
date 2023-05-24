@@ -25,11 +25,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-/**
- * Copyright (C) 2008-2009 uib.de
- * 
- * @author roeder
- */
 public class PanelLicencesUsage extends MultiTablePanel implements ActionListener {
 	private JSplitPane splitPane;
 	private int splitPaneHMargin = 1;

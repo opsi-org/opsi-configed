@@ -13,11 +13,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-/**
- * Copyright (C) 2008-2009 uib.de
- * 
- * @author roeder
- */
 public class PanelLicencesStatistics extends MultiTablePanel {
 
 	public PanelGenEditTable panelStatistics;

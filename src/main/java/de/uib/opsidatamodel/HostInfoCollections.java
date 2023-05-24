@@ -1,11 +1,3 @@
-/*
- * configed - configuration editor for client work stations in opsi
- * (open pc server integration) www.opsi.org
- *
- * Copyright (C) 2000 - 2017 uib.de
- *
- *  @author  Rupert Roeder
- */
 
 package de.uib.opsidatamodel;
 
@@ -34,9 +26,6 @@ import de.uib.utilities.logging.Logging;
 
 /**
  * HostInfoCollections description: abstract methods for retrieving and setting
- * host table data copyright: Copyright (c) 2014-2017 organization: uib.de
- * 
- * @author Rupert Roeder
  */
 
 public class HostInfoCollections {

@@ -12,12 +12,6 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
-/**
- * FGlobalSoftwareInfo
- * Copyright:     Copyright (c) 2017
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;

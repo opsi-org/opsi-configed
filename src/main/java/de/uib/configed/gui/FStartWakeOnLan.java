@@ -28,12 +28,6 @@ import javax.swing.text.InternationalFormatter;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
-/**
- * FStartWakeOnLan
- * Copyright:     Copyright (c) 2015-2016
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;

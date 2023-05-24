@@ -1,15 +1,5 @@
 package de.uib.utilities.table.gui;
 
-/*
- * configed - configuration editor for client work stations in opsi
- * (open pc server integration) www.opsi.org
- *
- * ConnectionStatusTableCellRenderer.java
- * Copyright (C) uib.de 2023 
- *
- *	GPL licensed
- *   Author Nils Otto
-*/
 import java.awt.Component;
 
 import javax.swing.Icon;

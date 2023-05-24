@@ -51,21 +51,6 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.uib.Main;
-/*
- *   class PanelProductSettings
- *   for editing client specific product settings
- *   part of:
- *
- * configed - configuration editor for client work stations in opsi
- * (open pc server integration) www.opsi.org
- *
- * Copyright (C) 2000-2019 uib.de
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License, version AGPLv3, as published by the Free Software Foun
- *
- */
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;

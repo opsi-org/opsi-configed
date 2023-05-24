@@ -12,11 +12,6 @@ import de.uib.configed.type.SWAuditEntry;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-/**
- * Copyright (C) 2020 uib.de
- * 
- * @author roeder
- */
 public class PanelRegisteredSoftware extends PanelGenEditTable {
 	private ControlPanelAssignToLPools controller;
 

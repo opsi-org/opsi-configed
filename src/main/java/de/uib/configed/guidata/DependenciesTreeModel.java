@@ -1,19 +1,3 @@
-/*
- * (open pc server integration) www.opsi.org
- *
- * Copyright (C) 2022 uib.de
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License, version AGPLv3, as published by the Free Software Foundation
- * 
- * Models the Dependencies Tree; Creates a graph of all dependencies for
- * a given depot and can create a Tree of the dependencies of any product;
- * For both directions ('requires' or 'is required by')
- * 
- * @author Nils Otto
- 
- */
 
 package de.uib.configed.guidata;
 

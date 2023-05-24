@@ -3,12 +3,6 @@ package de.uib.configed.gui.hostconfigs;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * Copyright:     Copyright (c) 2022
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.Configed;
 import de.uib.configed.gui.FramingTextfieldWithListselection;
 

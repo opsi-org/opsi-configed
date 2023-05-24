@@ -26,12 +26,6 @@ import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
 import de.uib.utilities.table.gui.TablesearchPane;
 
-/**
- * DepotListPresenter.java Copyright (c) 2017 Organisation: uib
- * 
- * @author Rupert Röder
- */
-
 public class DepotListPresenter extends JPanel implements ActionListener {
 	private DepotsList depotslist;
 	private JScrollPane scrollpaneDepotslist;

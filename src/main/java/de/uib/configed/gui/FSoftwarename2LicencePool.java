@@ -21,12 +21,6 @@ import javax.swing.event.ListSelectionListener;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
-/**
- * FSoftwarename2LicencePool
- * Copyright:     Copyright (c) 2020
- * Organisation:  uib
- * @author Rupert Röder
- */
 import de.uib.configed.ControlPanelAssignToLPools;
 import de.uib.configed.Globals;
 import de.uib.configed.type.SWAuditEntry;

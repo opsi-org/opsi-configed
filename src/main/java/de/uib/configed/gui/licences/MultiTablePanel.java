@@ -1,17 +1,9 @@
-/*
- * MultiTablePanel.java
- */
 
 package de.uib.configed.gui.licences;
 
 import de.uib.configed.AbstractControlMultiTablePanel;
 import de.uib.configed.Globals;
 
-/**
- * Copyright (C) 2009 uib.de
- * 
- * @author roeder
- */
 public class MultiTablePanel extends de.uib.utilities.swing.tabbedpane.TabClientAdapter {
 	protected AbstractControlMultiTablePanel controller;
 

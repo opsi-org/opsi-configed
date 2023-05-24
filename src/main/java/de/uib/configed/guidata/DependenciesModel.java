@@ -1,22 +1,3 @@
-/*
- * ProductInfoPanes.java
- *
- * (open pc server integration) www.opsi.org
- *
- * Copyright (C) 2022 uib.de
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License, version AGPLv3, as published by the Free Software Foundation
- * 
- * This class encloses the two models for the RequirementsTable and the DependenciesTree
- * since they belong together one panel.
- * It also adds more properties to the whole model for the whole panel,
- * You can add a listener to listen to changes to the model (new depot/product)
- * 
- * @author Nils Otto
- 
- */
 
 package de.uib.configed.guidata;
 

@@ -18,50 +18,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
-/*
- * configed - configuration editor for client work stations in opsi
- * (open pc server integration) www.opsi.org
- *
- * Copyright (c) 2000-2020 uib.de
- *
- * This program is free software; you may redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License, version AGPLv3, as published by the Free Software Foundation
- *
- */
-
-/*
-test cases:
-
-if several clients are selected:
-	changes are saved / initiated for all clients
-
-if several products are selected:
-	changes are saved / initiated for all clients and all products
-	changes can be combined with manual changes for one product
-
-if several products with contradicting dependencies are set by one action
-	a warning is issued
-
-	private There is no warning if an existing setting is reversed by a second action
-
-
-local cancel button (not implemented)
-	all changes are reverted
-
-
-*/
-
-/*
-tests:
-
-setting a value
-setting setup for several rows
-setting setup with dependency
-setting setup with dependencies, also for uninstall
-
-*/
-
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;

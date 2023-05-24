@@ -1,17 +1,3 @@
-/**
- * ConfigedMain description: The main controller of the program copyright:
- * Copyright (c) 2000-2022 organization: uib.de
- * This program is free software; you may redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License, version AGPLv3, as published by the Free Software Foundation
- *
- * Copyright (c) 2000-2022 uib.de
- *
- * @author D. Oertel, R. Roeder, J. Schneider, A. Sucher, N. Otto
- * configed - configuration editor for client work stations in opsi
- * (open pc server integration) www.opsi.orgF
- *
-*/
 
 package de.uib.configed;
 
