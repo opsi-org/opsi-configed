@@ -4,7 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-
 package de.uib.utilities.swing;
 
 import javax.swing.text.AttributeSet;
