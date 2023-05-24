@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
 // from http://terai.xrea.jp/Swing/ClippedTabLabel.html
 // thanks to Terai Atsuhiro !
 // a little bit extended by uib, 2008 

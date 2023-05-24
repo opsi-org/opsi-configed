@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
 /*
  *
  * 	uib, www.uib.de, 2008-2013, 2017, 2020

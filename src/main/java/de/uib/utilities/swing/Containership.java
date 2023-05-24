@@ -1,3 +1,9 @@
+/**
+ * Copyright (c) uib GmbH <info@uib.de>
+ * License: AGPL-3.0
+ * This file is part of opsi - https://www.opsi.org
+ */
+
 /* class Containership
    Author Rupert Roeder 1999
    By the Reflection API, this class establishes und helps to use the
