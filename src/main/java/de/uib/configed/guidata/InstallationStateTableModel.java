@@ -69,7 +69,6 @@ import de.uib.configed.gui.FShowList;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
-import de.uib.opsidatamodel.productstate.InstallationInfo;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.LastAction;
 import de.uib.opsidatamodel.productstate.ProductState;
@@ -90,6 +89,20 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	public static final Map<String, String> REQUIRED_ACTION_FOR_STATUS = Map.ofEntries(
 			Map.entry(InstallationStatus.KEY_INSTALLED, "setup"),
 			Map.entry(InstallationStatus.KEY_NOT_INSTALLED, "uninstall"));
+
+	private static final String NONE_STRING = "";
+	private static final String NONE_DISPLAY_STRING = "none";
+	private static final String FAILED_DISPLAY_STRING = "failed";
+	private static final String SUCCESS_DISPLAY_STRING = "success";
+
+	public static final Set<String> defaultDisplayValues = new LinkedHashSet<>();
+	static {
+		defaultDisplayValues.add(NONE_DISPLAY_STRING);
+		defaultDisplayValues.add(SUCCESS_DISPLAY_STRING);
+		defaultDisplayValues.add(FAILED_DISPLAY_STRING);
+	}
+
+	private static final String MANUALLY = "manually set";
 
 	private static Map<String, String> columnDict;
 
@@ -560,19 +573,19 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		// reverse from putting together the values in ProductState
 
-		// `value.equals(InstallationInfo.NONE_DISPLAY_STRING)` is asked only for formal independence of the method
-		if (value.equals(InstallationInfo.NONE_STRING) || value.equals(InstallationInfo.NONE_DISPLAY_STRING)) {
+		// `value.equals(NONE_DISPLAY_STRING)` is asked only for formal independence of the method
+		if (value.equals(NONE_STRING) || value.equals(NONE_DISPLAY_STRING)) {
 			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
-			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.NONE_STRING);
-		} else if (value.equals(InstallationInfo.FAILED_DISPLAY_STRING)) {
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, NONE_STRING);
+		} else if (value.equals(FAILED_DISPLAY_STRING)) {
 			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.FAILED));
-			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.MANUALLY);
-		} else if (value.equals(InstallationInfo.SUCCESS_DISPLAY_STRING)) {
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, MANUALLY);
+		} else if (value.equals(SUCCESS_DISPLAY_STRING)) {
 			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, LastAction.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, ActionResult.getLabel(ActionResult.SUCCESSFUL));
-			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, InstallationInfo.MANUALLY);
+			changedStatesForProduct.put(ProductState.KEY_ACTION_PROGRESS, MANUALLY);
 		} else {
 			changedStatesForProduct.put(ProductState.KEY_LAST_ACTION, ActionResult.getLabel(ActionResult.NONE));
 			changedStatesForProduct.put(ProductState.KEY_ACTION_RESULT, LastAction.getLabel(ActionResult.NONE));
@@ -1123,11 +1136,11 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 			LinkedHashSet<String> values = new LinkedHashSet<>();
 
-			if (!InstallationInfo.defaultDisplayValues.contains(delivered)) {
+			if (!defaultDisplayValues.contains(delivered)) {
 				values.add(delivered);
 			}
 
-			values.addAll(InstallationInfo.defaultDisplayValues);
+			values.addAll(defaultDisplayValues);
 
 			return new DefaultComboBoxModel<>(values.toArray(new String[0]));
 		}
@@ -1321,8 +1334,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 				collectiveChangeActionRequest(actualProduct, ActionRequest.produceFromLabel((String) value));
 				finishCollectiveChange();
 			} else if (indexPreparedColumns[col] == preparedColumns.indexOf(ProductState.KEY_INSTALLATION_INFO)) {
-				if (value.equals(InstallationInfo.NONE_DISPLAY_STRING)) {
-					value = InstallationInfo.NONE_STRING;
+				if (value.equals(NONE_DISPLAY_STRING)) {
+					value = NONE_STRING;
 				}
 
 				setInstallationInfo(actualProduct, (String) value);

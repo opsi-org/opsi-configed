@@ -80,7 +80,6 @@ import de.uib.opsidatamodel.productstate.ActionProgress;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.ActionSequence;
-import de.uib.opsidatamodel.productstate.InstallationInfo;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.opsidatamodel.productstate.ProductState;
 import de.uib.opsidatamodel.productstate.TargetConfiguration;
@@ -1035,7 +1034,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			installationInfoCombo.setRenderer(standardListCellRenderer);
 
 			DynamicCellEditor cellEditor = new DynamicCellEditor(installationInfoCombo, istm,
-					InstallationInfo.defaultDisplayValues);
+					InstallationStateTableModel.defaultDisplayValues);
 
 			installationInfoColumn.setCellEditor(cellEditor);
 		}

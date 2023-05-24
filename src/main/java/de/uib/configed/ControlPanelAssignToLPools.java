@@ -49,7 +49,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 	// introducing a column for displaying the cursor row
 	public static final int WINDOWS_SOFTWARE_ID_KEY_COL = 1;
 
-	private static final String LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_SHOW_ONLY_NON_ASSOCIATED = "restrictToNonAssociated";
+	private static final String LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED = "restrictToNonAssociated";
 
 	public PanelAssignToLPools thePanel;
 
@@ -135,7 +135,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		// wasUsingSelectedFilter
 		modelWindowsSoftwareIds.setUsingFilter(GenTableModel.LABEL_FILTER_CONDITION_SHOW_ONLY_SELECTED, false);
 
-		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_SHOW_ONLY_NON_ASSOCIATED, false);
+		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED, false);
 
 		thePanel.panelRegisteredSoftware.showFiltered(false);
 
@@ -229,7 +229,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				wasUsingSelectedFilter);
 		thePanel.panelRegisteredSoftware.showFiltered(wasUsingSelectedFilter);
 
-		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_SHOW_ONLY_NON_ASSOCIATED,
+		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED,
 				getSoftwareShowAllMeans() != SoftwareShowAllMeans.ALL);
 
 		totalShownEntries = modelWindowsSoftwareIds.getRowCount();
@@ -632,9 +632,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		windowsSoftwareFilterConditionDontShowAssociatedToOtherPool = new DefaultTableModelFilterCondition(
 				WINDOWS_SOFTWARE_ID_KEY_COL);
-		modelWindowsSoftwareIds.chainFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_SHOW_ONLY_NON_ASSOCIATED,
+		modelWindowsSoftwareIds.chainFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED,
 				new TableModelFilter(windowsSoftwareFilterConditionDontShowAssociatedToOtherPool));
-		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_SHOW_ONLY_NON_ASSOCIATED, false);
+		modelWindowsSoftwareIds.setUsingFilter(LABEL_WINDOWS_SOFTWARE_FILTER_CONDITION_ONLY_NON_ASSOCIATED, false);
 
 		thePanel.panelRegisteredSoftware.showFiltered(false);
 		thePanel.panelRegisteredSoftware.setDataChanged(false);
