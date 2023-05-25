@@ -174,18 +174,7 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 		// --- PopupMenu
 		JMenuItemFormatted menuItemAddContract = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
-		menuItemAddContract.addActionListener((ActionEvent e) -> {
-			Object[] a = new Object[6];
-			a[0] = "c_" + Globals.getSeconds();
-			a[1] = "";
-			a[2] = Globals.getDate();
-			a[3] = Globals.ZERODATE;
-			a[4] = Globals.ZERODATE;
-			a[5] = "";
-
-			modelLicencecontracts.addRow(a);
-			thePanel.panelLicencecontracts.moveToValue("" + a[0], 0);
-		});
+		menuItemAddContract.addActionListener((ActionEvent e) -> addContract());
 
 		thePanel.panelLicencecontracts.addPopupItem(menuItemAddContract);
 
@@ -251,5 +240,18 @@ public class ControlPanelEnterLicence extends AbstractControlMultiTablePanel {
 					}
 				}, updateCollection));
 
+	}
+
+	private void addContract() {
+		Object[] a = new Object[6];
+		a[0] = "c_" + Globals.getSeconds();
+		a[1] = "";
+		a[2] = Globals.getDate();
+		a[3] = Globals.ZERODATE;
+		a[4] = Globals.ZERODATE;
+		a[5] = "";
+
+		modelLicencecontracts.addRow(a);
+		thePanel.panelLicencecontracts.moveToValue("" + a[0], 0);
 	}
 }

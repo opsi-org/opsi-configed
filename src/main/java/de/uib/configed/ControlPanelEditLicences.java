@@ -211,59 +211,13 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		// --- PopupMenu
 		JMenuItemFormatted menuItemAddLicence = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewSoftwarelicence"));
-		menuItemAddLicence.addActionListener((ActionEvent e) -> {
-			Object[] a = new Object[6];
-			a[0] = "l_" + Globals.getSeconds();
-			a[1] = "";
-			a[2] = LicenceEntry.LICENCE_TYPES[0];
-			a[3] = "1";
-			a[4] = "";
-			a[5] = Globals.ZERODATE;
-
-			modelSoftwarelicences.addRow(a);
-			thePanel.panelSoftwarelicences.moveToValue("" + a[0], 0);
-		});
+		menuItemAddLicence.addActionListener((ActionEvent e) -> addLicence());
 
 		thePanel.panelSoftwarelicences.addPopupItem(menuItemAddLicence);
 
 		JMenuItemFormatted menuItemPickSoftwarelicence = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.MenuItemTransferIDFromSoftwarelicenceToLicencekey"));
-		menuItemPickSoftwarelicence.addActionListener((ActionEvent e) -> {
-			boolean keyNew = false;
-			Iterator<TableEditItem> iter = updateCollection.iterator();
-			while (iter.hasNext() && !keyNew) {
-				TableEditItem update = iter.next();
-				if (update.getSource() == modelSoftwarelicences && update.keyChanged()) {
-					keyNew = true;
-				}
-			}
-			if (keyNew) {
-				JOptionPane.showMessageDialog(mainController.licencesFrame,
-						Configed.getResourceValue("ConfigedMain.Licences.PleaseSaveKeyRow"),
-						Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
-				return;
-			}
-
-			if (thePanel.panelSoftwarelicences.getSelectedRow() == -1) {
-				JOptionPane.showMessageDialog(mainController.licencesFrame,
-						Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
-						Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
-				return;
-			}
-
-			if (thePanel.panelKeys.getSelectedRow() == -1) {
-				JOptionPane.showMessageDialog(mainController.licencesFrame,
-						Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
-						Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
-
-				return;
-			}
-
-			String val = (String) modelSoftwarelicences
-					.getValueAt(thePanel.panelSoftwarelicences.getSelectedRowInModelTerms(), 0);
-
-			thePanel.panelKeys.setValueAt(val, thePanel.panelKeys.getSelectedRow(), 0);
-		});
+		menuItemPickSoftwarelicence.addActionListener((ActionEvent e) -> pickSoftwareLicence());
 
 		thePanel.panelSoftwarelicences.addPopupItem(menuItemPickSoftwarelicence);
 
@@ -317,58 +271,13 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 		// --- PopupMenu
 		JMenuItemFormatted menuItemAddContract = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.NewLicencecontract"));
-		menuItemAddContract.addActionListener((ActionEvent e) -> {
-			Object[] a = new Object[6];
-			a[0] = "c_" + Globals.getSeconds();
-			a[1] = "";
-			a[2] = Globals.getDate();
-			a[3] = Globals.ZERODATE;
-			a[4] = Globals.ZERODATE;
-			a[5] = "";
-
-			modelLicencecontracts.addRow(a);
-			thePanel.panelLicencecontracts.moveToValue("" + a[0], 0);
-		});
+		menuItemAddContract.addActionListener((ActionEvent e) -> addContract());
 
 		thePanel.panelLicencecontracts.addPopupItem(menuItemAddContract);
 
 		JMenuItemFormatted menuItemPickLicencecontract = new JMenuItemFormatted(Configed
 				.getResourceValue("ConfigedMain.Licences.MenuItemTransferIDFromLicencecontractToSoftwarelicence"));
-		menuItemPickLicencecontract.addActionListener((ActionEvent e) -> {
-			boolean keyNew = false;
-			Iterator<TableEditItem> iter = updateCollection.iterator();
-			while (iter.hasNext() && !keyNew) {
-				TableEditItem update = iter.next();
-				if (update.getSource() == modelLicencecontracts && update.keyChanged()) {
-					keyNew = true;
-				}
-			}
-			if (keyNew) {
-				JOptionPane.showMessageDialog(mainController.licencesFrame,
-						Configed.getResourceValue("ConfigedMain.Licences.PleaseSaveKeyRow"),
-						Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
-				return;
-			}
-
-			if (thePanel.panelLicencecontracts.getSelectedRow() == -1) {
-				JOptionPane.showMessageDialog(mainController.licencesFrame,
-						Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
-						Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
-				return;
-			}
-
-			if (thePanel.panelSoftwarelicences.getSelectedRow() == -1) {
-				JOptionPane.showMessageDialog(mainController.licencesFrame,
-						Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
-						Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
-				return;
-			}
-
-			String val = (String) modelLicencecontracts
-					.getValueAt(thePanel.panelLicencecontracts.getSelectedRowInModelTerms(), 0);
-
-			thePanel.panelSoftwarelicences.setValueAt(val, thePanel.panelSoftwarelicences.getSelectedRow(), 1);
-		});
+		menuItemPickLicencecontract.addActionListener((ActionEvent e) -> pickLicenceContract());
 
 		thePanel.panelLicencecontracts.addPopupItem(menuItemPickLicencecontract);
 
@@ -434,5 +343,104 @@ public class ControlPanelEditLicences extends AbstractControlMultiTablePanel {
 					}
 				}, updateCollection));
 
+	}
+
+	private void addLicence() {
+		Object[] a = new Object[6];
+		a[0] = "l_" + Globals.getSeconds();
+		a[1] = "";
+		a[2] = LicenceEntry.LICENCE_TYPES[0];
+		a[3] = "1";
+		a[4] = "";
+		a[5] = Globals.ZERODATE;
+
+		modelSoftwarelicences.addRow(a);
+		thePanel.panelSoftwarelicences.moveToValue("" + a[0], 0);
+	}
+
+	private void pickSoftwareLicence() {
+		boolean keyNew = false;
+		Iterator<TableEditItem> iter = updateCollection.iterator();
+		while (iter.hasNext() && !keyNew) {
+			TableEditItem update = iter.next();
+			if (update.getSource() == modelSoftwarelicences && update.keyChanged()) {
+				keyNew = true;
+			}
+		}
+		if (keyNew) {
+			JOptionPane.showMessageDialog(mainController.licencesFrame,
+					Configed.getResourceValue("ConfigedMain.Licences.PleaseSaveKeyRow"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+			return;
+		}
+
+		if (thePanel.panelSoftwarelicences.getSelectedRow() == -1) {
+			JOptionPane.showMessageDialog(mainController.licencesFrame,
+					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+			return;
+		}
+
+		if (thePanel.panelKeys.getSelectedRow() == -1) {
+			JOptionPane.showMessageDialog(mainController.licencesFrame,
+					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+
+			return;
+		}
+
+		String val = (String) modelSoftwarelicences
+				.getValueAt(thePanel.panelSoftwarelicences.getSelectedRowInModelTerms(), 0);
+
+		thePanel.panelKeys.setValueAt(val, thePanel.panelKeys.getSelectedRow(), 0);
+	}
+
+	private void addContract() {
+		Object[] a = new Object[6];
+		a[0] = "c_" + Globals.getSeconds();
+		a[1] = "";
+		a[2] = Globals.getDate();
+		a[3] = Globals.ZERODATE;
+		a[4] = Globals.ZERODATE;
+		a[5] = "";
+
+		modelLicencecontracts.addRow(a);
+		thePanel.panelLicencecontracts.moveToValue("" + a[0], 0);
+	}
+
+	private void pickLicenceContract() {
+		boolean keyNew = false;
+		Iterator<TableEditItem> iter = updateCollection.iterator();
+		while (iter.hasNext() && !keyNew) {
+			TableEditItem update = iter.next();
+			if (update.getSource() == modelLicencecontracts && update.keyChanged()) {
+				keyNew = true;
+			}
+		}
+		if (keyNew) {
+			JOptionPane.showMessageDialog(mainController.licencesFrame,
+					Configed.getResourceValue("ConfigedMain.Licences.PleaseSaveKeyRow"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+			return;
+		}
+
+		if (thePanel.panelLicencecontracts.getSelectedRow() == -1) {
+			JOptionPane.showMessageDialog(mainController.licencesFrame,
+					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+			return;
+		}
+
+		if (thePanel.panelSoftwarelicences.getSelectedRow() == -1) {
+			JOptionPane.showMessageDialog(mainController.licencesFrame,
+					Configed.getResourceValue("ConfigedMain.Licences.SourceOrTargetRowNotSelected.text"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+			return;
+		}
+
+		String val = (String) modelLicencecontracts
+				.getValueAt(thePanel.panelLicencecontracts.getSelectedRowInModelTerms(), 0);
+
+		thePanel.panelSoftwarelicences.setValueAt(val, thePanel.panelSoftwarelicences.getSelectedRow(), 1);
 	}
 }
