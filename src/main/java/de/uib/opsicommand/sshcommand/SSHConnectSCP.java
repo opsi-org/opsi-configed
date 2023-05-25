@@ -34,9 +34,11 @@ This class those the Right SwingWorker to execute it.
  * @inheritDoc Class for executing commands.
  */
 public class SSHConnectSCP extends SSHConnectExec {
+	private static final String SEPARATING_LINE = "-".repeat(147);
 	private SSHConnectionExecDialog outputDialog;
 
 	public SSHConnectSCP() {
+
 	}
 
 	public SSHConnectSCP(String commandInfo) {
@@ -158,8 +160,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 			if (this.command.getDescription() != null && !this.command.getDescription().isEmpty()) {
 				publishInfo("exec:  " + this.command.getDescription() + "");
 			}
-			publishInfo(
-					"---------------------------------------------------------------------------------------------------------------------------------------------------");
+			publishInfo(SEPARATING_LINE);
 		}
 
 		public void setMaxCommandNumber(int mc) {
@@ -173,8 +174,8 @@ public class SSHConnectSCP extends SSHConnectExec {
 		private void checkExitCode(int exitCode, boolean withGui, Channel channel) {
 			String s = "checkExitCode " + exitCode;
 			Logging.debug(this, "publish " + s);
-			publishInfo(
-					"---------------------------------------------------------------------------------------------------------------------------------------------------");
+			publishInfo(SEPARATING_LINE);
+
 			if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
 				publishInfo(Configed.getResourceValue("SSHConnection.Exec.commandcountertext")
 						.replace("xX0Xx", Integer.toString(this.commandNumber))
@@ -220,8 +221,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 				interruptChannel = true;
 				Globals.threadSleep(this, 50);
 			}
-			publishInfo(
-					"---------------------------------------------------------------------------------------------------------------------------------------------------");
+			publishInfo(SEPARATING_LINE);
 		}
 
 		@Override

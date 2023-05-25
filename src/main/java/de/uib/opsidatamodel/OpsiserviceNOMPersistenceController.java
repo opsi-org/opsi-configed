@@ -1130,14 +1130,14 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 			if (
 			// has state unknown, probably because of a failed installation)
-			includeFailedInstallations
-					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState) ||
+			(includeFailedInstallations
+					&& InstallationStatus.getLabel(InstallationStatus.UNKNOWN).equals(clientProductState)) ||
 			// has wrong product version
-					InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
-							&& (!POJOReMapper.equalsNull(clientProductVersion)
-									&& !productVersion.equals(clientProductVersion)
-									|| !POJOReMapper.equalsNull(clientPackageVersion)
-											&& !packageVersion.equals(clientPackageVersion))) {
+					((InstallationStatus.getLabel(InstallationStatus.INSTALLED).equals(clientProductState)
+							&& (!POJOReMapper.equalsNull(clientProductVersion))
+							&& !productVersion.equals(clientProductVersion))
+							|| (!POJOReMapper.equalsNull(clientPackageVersion)
+									&& !packageVersion.equals(clientPackageVersion)))) {
 				Logging.debug("getClientsWithOtherProductVersion hit " + m);
 				result.add(client);
 			}
@@ -3257,8 +3257,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		Logging.info(this, "getAllDepotsWithIdenticalProductStock " + first);
 
 		for (String testdepot : getHostInfoCollections().getAllDepots().keySet()) {
-			if (depot.equals(testdepot) || first == null && dataStub.getDepot2Packages().get(testdepot) == null
-					|| first != null && first.equals(dataStub.getDepot2Packages().get(testdepot))) {
+			if (depot.equals(testdepot) || (first == null && dataStub.getDepot2Packages().get(testdepot) == null)
+					|| (first != null && first.equals(dataStub.getDepot2Packages().get(testdepot)))) {
 				result.add(testdepot);
 			}
 		}
@@ -7750,7 +7750,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				}
 
 				if (problemToIndicate
-						&& ("linux_agent".equals(key) || "userroles".equals(key) && !isUserRegisterActivated())) {
+						&& ("linux_agent".equals(key) || ("userroles".equals(key) && !isUserRegisterActivated()))) {
 					problemToIndicate = false;
 				}
 

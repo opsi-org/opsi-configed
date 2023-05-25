@@ -39,10 +39,8 @@ public class MarkLatestDateBoldHeaderCellRenderer extends DefaultTableCellRender
 
 		if (value != null) {
 			String latestDate = licensingInfoMap.getLatestDate();
-			if (value.toString().equals(latestDate)) {
-				if (!Main.FONT) {
-					jc.setFont(Globals.defaultFontBold);
-				}
+			if (value.toString().equals(latestDate) && !Main.FONT) {
+				jc.setFont(Globals.defaultFontBold);
 			}
 		}
 

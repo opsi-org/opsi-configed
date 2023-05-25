@@ -241,7 +241,7 @@ public class ClientTreeTransferHandler extends TransferHandler {
 		Logging.info(this,
 				"chooseMOVE  stayInsideDIRECTORY,  stayInsideGROUPS " + stayInsideDIRECTORY + ", " + stayInsideGROUPS);
 
-		if (stayInsideDIRECTORY || stayInsideGROUPS && !isLeaf) {
+		if (stayInsideDIRECTORY || (stayInsideGROUPS && !isLeaf)) {
 			result = true;
 		}
 

@@ -213,7 +213,7 @@ public final class Configed {
 
 			}
 		} catch (Exception ex) {
-			Logging.warning("Failed to message " + key + ": " + ex);
+			Logging.warning("Failed to message " + key, ex);
 		}
 
 		if (result == null) {
@@ -344,38 +344,7 @@ public final class Configed {
 
 		if (cmd.hasOption("localizationfile")) {
 			String extraLocalizationFileName = cmd.getOptionValue("localizationfile");
-			boolean success = false;
-
-			String[] parts = null;
-
-			try {
-				File extraLocalizationFile = new File(extraLocalizationFileName);
-				if (!extraLocalizationFile.exists()) {
-					Logging.debug("File not found: " + extraLocalizationFileName);
-				} else if (!extraLocalizationFile.canRead()) {
-					Logging.debug("File not readable " + extraLocalizationFileName);
-				} else {
-					Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
-							+ extraLocalizationFileName.matches("configed_...*\\.properties") + " --  "
-							+ extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX));
-
-					parts = extraLocalizationFileName.split("_");
-
-					Logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
-
-					if (!extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX)) {
-						Logging.debug("localization file does not have the expected format " + Messages.APPNAME
-								+ "_LOCALE.properties");
-					} else {
-						extraLocalization = new Properties();
-						extraLocalization.load(new FileInputStream(extraLocalizationFile));
-
-						success = true;
-					}
-				}
-			} catch (IOException ex) {
-				Logging.error(extraLocalizationFileName + " problem", ex);
-			}
+			boolean success = loadLocalizationFile(extraLocalizationFileName);
 
 			if (!success) {
 				Main.endApp(Main.ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
@@ -412,6 +381,49 @@ public final class Configed {
 		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
 			Logging.setSuppressConsole();
 		}
+	}
+
+	private static boolean loadLocalizationFile(String extraLocalizationFileName) {
+
+		String[] parts = null;
+
+		File extraLocalizationFile = new File(extraLocalizationFileName);
+		if (!extraLocalizationFile.exists()) {
+			Logging.debug("File not found: " + extraLocalizationFileName);
+		} else if (!extraLocalizationFile.canRead()) {
+			Logging.debug("File not readable " + extraLocalizationFileName);
+		} else {
+			Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
+					+ extraLocalizationFileName.matches("configed_...*\\.properties") + " --  "
+					+ extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX));
+
+			parts = extraLocalizationFileName.split("_");
+
+			Logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
+
+			if (!extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX)) {
+				Logging.debug("localization file does not have the expected format " + Messages.APPNAME
+						+ "_LOCALE.properties");
+			} else {
+				return loadExtraLocalization(extraLocalizationFile);
+			}
+		}
+
+		return false;
+	}
+
+	private static boolean loadExtraLocalization(File extraLocalizationFile) {
+
+		extraLocalization = new Properties();
+
+		try (FileInputStream inputStream = new FileInputStream(extraLocalizationFile)) {
+			extraLocalization.load(inputStream);
+		} catch (IOException ex) {
+			Logging.warning("could not load properties file " + extraLocalizationFile, ex);
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

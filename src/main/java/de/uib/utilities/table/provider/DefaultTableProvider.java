@@ -140,7 +140,7 @@ public class DefaultTableProvider implements TableProvider {
 		for (int row = 0; row < rowsCopy.size(); row++) {
 			String val = (String) rowsCopy.get(row).get(col);
 
-			if (emptyAllowed || val != null && !val.isEmpty()) {
+			if (emptyAllowed || (val != null && !val.isEmpty())) {
 
 				set.add((String) rowsCopy.get(row).get(col));
 			}

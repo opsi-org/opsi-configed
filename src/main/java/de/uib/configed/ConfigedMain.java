@@ -221,9 +221,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private HostUpdateCollection hostUpdateCollection;
 
-	private Map<String /* client */, Map<String /* product */, Map<String /* propertykey */, String/* propertyvalue */>>> collectChangedLocalbootStates = new HashMap<>();
-
-	private Map<String /* client */, Map<String /* product */, Map<String /* propertykey */, String/* propertyvalue */>>> collectChangedNetbootStates = new HashMap<>();
+	// Map<client, <product, <propertykey, propertyvalue>>>
+	private Map<String, Map<String, Map<String, String>>> collectChangedLocalbootStates = new HashMap<>();
+	private Map<String, Map<String, Map<String, String>>> collectChangedNetbootStates = new HashMap<>();
 
 	// a map of products, product --> list of used as an indicator that a product is in the depot
 	private Map<String, List<String>> possibleActions = new HashMap<>();
@@ -3338,8 +3338,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// check if change of view index to the value of visualViewIndex can be allowed
 		if (visualViewIndex != VIEW_CLIENTS
-				&& !(visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER
-						|| visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS)) {
+				&& !((visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER)
+						|| (visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS))) {
 
 			Logging.debug(this, " selected clients " + Arrays.toString(getSelectedClients()));
 

@@ -56,12 +56,7 @@ public class WaitCursor {
 		this.callLocation = callLocation;
 
 		if (componentCalling == null) {
-			try {
-				c = ConfigedMain.getMainFrame();
-			} catch (Exception ex) {
-				Logging.info(this, "retrieveBasePane " + ex);
-				c = null;
-			}
+			c = ConfigedMain.getMainFrame();
 		} else {
 			c = componentCalling;
 		}
@@ -89,7 +84,6 @@ public class WaitCursor {
 				}
 			});
 		}
-
 	}
 
 	public void stop() {
@@ -125,5 +119,4 @@ public class WaitCursor {
 	public static void stopAll() {
 		allStopped = true;
 	}
-
 }
