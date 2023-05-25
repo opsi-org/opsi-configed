@@ -4,12 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/**
-	(c) uib.de
-	2016-2017
-	
-*/
-
 package de.uib.configed.gui.hwinfopage;
 
 import java.awt.Color;
@@ -331,23 +325,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		buttonCallChooserServerpath.addActionListener(actionEvent -> chooseServerpath());
 
 		JLabel jLabelShowDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelShowDrivers"));
-		JButton btnShowDrivers = new JButton("", Globals.createImageIcon("images/show-menu.png", ""));
-		btnShowDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
-		btnShowDrivers.addActionListener(actionEvent -> new Thread() {
-			@Override
-			public void run() {
-				new SSHConnectExec(main,
-						// Empty_Command(String id, String c, String mt, boolean ns)
-						// id not needed
-						new EmptyCommand("show_drivers.py",
-								"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/show_drivers.py "
-										+ fieldClientname.getText(),
-								// menuText - not needed
-								"show_drivers.py",
-								// need Sudo?
-								false));
-			}
-		}.start());
+		JButton buttonShowDrivers = new JButton("", Globals.createImageIcon("images/show-menu.png", ""));
+		buttonShowDrivers.setToolTipText(Configed.getResourceValue("PanelDriverUpload.btnShowDrivers.tooltip"));
+		buttonShowDrivers.addActionListener(actionEvent -> showDrivers());
 
 		JLabel jLabelCreateDrivers = new JLabel(Configed.getResourceValue("PanelDriverUpload.labelCreateDriverLinks"));
 		JButton btnCreateDrivers = new JButton("", Globals.createImageIcon("images/run-build-file.png", ""));
@@ -523,7 +503,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 				.addGap(2 * vGap, 3 * vGap, 3 * vGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(jLabelShowDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(btnShowDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
+						.addComponent(buttonShowDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT))
 				.addGap(2 * vGap, 3 * vGap, 3 * vGap)
 				.addGroup(layoutByAuditInfo.createParallelGroup(GroupLayout.Alignment.BASELINE)
 						.addComponent(jLabelCreateDrivers, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
@@ -597,7 +577,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 																.addComponent(jLabelShowDrivers, Globals.BUTTON_WIDTH,
 																		Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
 																.addGap(hGap, hGap, hGap).addComponent(
-																		btnShowDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
+																		buttonShowDrivers, Globals.GRAPHIC_BUTTON_WIDTH,
 																		Globals.GRAPHIC_BUTTON_WIDTH,
 																		Globals.GRAPHIC_BUTTON_WIDTH))
 														.addGroup(layoutByAuditInfo.createSequentialGroup()
@@ -686,59 +666,74 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 		Logging.info(this, "makePath result " + path);
 	}
 
-	private void execute() {
-
-		final FLoadingWaiter waiter = new FLoadingWaiter(this, Globals.APPNAME,
-				Configed.getResourceValue("PanelDriverUpload.execute.running"));
-		waiter.startWaiting();
-
-		final WaitCursor waitCursor = new WaitCursor(rootFrame);
-
+	private void showDrivers() {
 		new Thread() {
 			@Override
 			public void run() {
-				try {
-
-					Logging.info(this, "copy  " + driverPath + " to " + targetPath);
-
-					makePath(targetPath);
-
-					stateServerPath = targetPath.exists();
-					serverPathChecked.setSelected(stateServerPath);
-					if (stateServerPath) {
-						try {
-							if (driverPath.isDirectory()) {
-								FileUtils.copyDirectoryToDirectory(driverPath, targetPath);
-							} else {
-								FileUtils.copyFileToDirectory(driverPath, targetPath);
-							}
-						} catch (IOException iox) {
-							waitCursor.stop();
-							Logging.error("copy error:\n" + iox, iox);
-						}
-					} else {
-						Logging.info(this, "execute: targetPath does not exist");
-					}
-
-					if (stateServerPath) {
-						String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct
-								+ "/" + SmbConnect.unixPath(SmbConnect.DIRECTORY_DRIVERS);
-						Logging.info(this, "set rights for " + driverDir);
-						persist.setRights(driverDir);
-					}
-
-					waitCursor.stop();
-
-					if (waiter != null) {
-						waiter.setReady();
-					}
-				} catch (Exception ex) {
-					waitCursor.stop();
-					Logging.error("error in uploading :\n" + ex, ex);
-				}
-
+				new SSHConnectExec(main,
+						// Empty_Command(String id, String c, String mt, boolean ns)
+						// id not needed
+						new EmptyCommand("show_drivers.py",
+								"/var/lib/opsi/depot/" + comboChooseWinProduct.getSelectedItem() + "/show_drivers.py "
+										+ fieldClientname.getText(),
+								// menuText - not needed
+								"show_drivers.py",
+								// need Sudo?
+								false));
 			}
 		}.start();
+	}
+
+	private void execute() {
+		new PanelDriverUploadThread().start();
+	}
+
+	private class PanelDriverUploadThread extends Thread {
+
+		@Override
+		public void run() {
+			final FLoadingWaiter waiter = new FLoadingWaiter(PanelDriverUpload.this, Globals.APPNAME,
+					Configed.getResourceValue("PanelDriverUpload.execute.running"));
+			waiter.startWaiting();
+			final WaitCursor waitCursor = new WaitCursor(rootFrame);
+
+			try {
+				Logging.info(this, "copy  " + driverPath + " to " + targetPath);
+
+				makePath(targetPath);
+
+				stateServerPath = targetPath.exists();
+				serverPathChecked.setSelected(stateServerPath);
+				if (stateServerPath) {
+					try {
+						if (driverPath.isDirectory()) {
+							FileUtils.copyDirectoryToDirectory(driverPath, targetPath);
+						} else {
+							FileUtils.copyFileToDirectory(driverPath, targetPath);
+						}
+					} catch (IOException iox) {
+						waitCursor.stop();
+						Logging.error("copy error:\n" + iox, iox);
+					}
+				} else {
+					Logging.info(this, "execute: targetPath does not exist");
+				}
+
+				if (stateServerPath) {
+					String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
+							+ SmbConnect.unixPath(SmbConnect.DIRECTORY_DRIVERS);
+					Logging.info(this, "set rights for " + driverDir);
+					persist.setRights(driverDir);
+				}
+
+				waitCursor.stop();
+
+				waiter.setReady();
+			} catch (Exception ex) {
+				waitCursor.stop();
+				Logging.error("error in uploading :\n" + ex, ex);
+			}
+		}
 	}
 
 	public void setByAuditPath(String s) {

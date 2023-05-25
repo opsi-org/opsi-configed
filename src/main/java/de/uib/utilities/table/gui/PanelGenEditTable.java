@@ -718,22 +718,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			case POPUP_PDF:
 				JMenuItemFormatted menuItemPDF = new JMenuItemFormatted(Configed.getResourceValue("FGeneralDialog.pdf"),
 						Globals.createImageIcon("images/acrobat_reader16.png", ""));
-				menuItemPDF.addActionListener((ActionEvent actionEvent) -> {
-					try {
-						HashMap<String, String> metaData = new HashMap<>();
-						metaData.put("header", title);
-						metaData.put("subject", "report of table");
-						metaData.put("keywords", "");
-
-						ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
-						pdfExportTable.setMetaData(metaData);
-						pdfExportTable.setPageSizeA4Landscape();
-						pdfExportTable.execute(null, true);
-
-					} catch (Exception ex) {
-						Logging.error("PDF printing error " + ex);
-					}
-				});
+				menuItemPDF.addActionListener((ActionEvent actionEvent) -> exportTable());
 
 				addPopupItem(menuItemPDF);
 
@@ -743,6 +728,23 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				Logging.warning(this, "no case found for popuptype in addPopupmenuStandardpart");
 				break;
 			}
+		}
+	}
+
+	private void exportTable() {
+		try {
+			HashMap<String, String> metaData = new HashMap<>();
+			metaData.put("header", title);
+			metaData.put("subject", "report of table");
+			metaData.put("keywords", "");
+
+			ExporterToPDF pdfExportTable = new ExporterToPDF(theTable);
+			pdfExportTable.setMetaData(metaData);
+			pdfExportTable.setPageSizeA4Landscape();
+			pdfExportTable.execute(null, true);
+
+		} catch (Exception ex) {
+			Logging.error("PDF printing error " + ex);
 		}
 	}
 

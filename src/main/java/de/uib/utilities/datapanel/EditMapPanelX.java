@@ -17,12 +17,9 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -213,64 +210,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 			if (entryRemovable) {
 
-				// the crucial point of the different action listeners is that each uses its
-				// special property handler
-				// which get associated to different menu items (and they are handled each
-				// therefore in a specific manner)
-
-				ActionListener listenerForRemoval = (ActionEvent actionEvent) -> {
-					Logging.info(this, "popupItemDeleteEntry action");
-					if (table.getSelectedRowCount() == 0) {
-
-						FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
-								Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-								new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
-
-						fAsk.setVisible(true);
-					} else if (names != null) {
-
-						propertyHandler = defaultPropertyHandler;
-
-						removeProperty(names.get(table.getSelectedRow()));
-
-					}
-				};
-
-				ActionListener listenerForRemovalRemoveSpecific = (ActionEvent actionEvent) -> {
-					Logging.info(this, "popupItemDeleteEntry action");
-					if (table.getSelectedRowCount() == 0) {
-
-						FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
-								Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-								new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
-
-						fAsk.setVisible(true);
-					} else if (names != null) {
-						propertyHandler = removingSpecificValuesPropertyHandler;
-
-						removeProperty(names.get(table.getSelectedRow()));
-					}
-				};
-
-				ActionListener listenerForRemovalSetDefaultAsSpecific = (ActionEvent actionEvent) -> {
-					Logging.info(this, "popupItemDeleteEntry action");
-					if (table.getSelectedRowCount() == 0) {
-
-						FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
-								Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
-								new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
-
-						fAsk.setVisible(true);
-					} else if (names != null) {
-
-						propertyHandler = settingDefaultValuesPropertyHandler;
-
-						removeProperty(names.get(table.getSelectedRow()));
-					}
-				};
-
 				popupItemDeleteEntry0 = new JMenuItemFormatted(defaultPropertyHandler.getRemovalMenuText());
-				popupItemDeleteEntry0.addActionListener(listenerForRemoval);
+				popupItemDeleteEntry0.addActionListener(actionEvent -> deleteEntry());
 
 				popupEditOptions.add(popupItemDeleteEntry0);
 				// the menu item seems to work only for one menu
@@ -278,13 +219,13 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 				popupItemDeleteEntry1 = new JMenuItemFormatted(
 						removingSpecificValuesPropertyHandler.getRemovalMenuText(),
 						Globals.createImageIcon("images/no-value.png", ""));
-				popupItemDeleteEntry1.addActionListener(listenerForRemovalRemoveSpecific);
+				popupItemDeleteEntry1.addActionListener(actionEvent -> deleteSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry1);
 
 				popupItemDeleteEntry2 = new JMenuItemFormatted(settingDefaultValuesPropertyHandler.getRemovalMenuText(),
 						Globals.createImageIcon("images/fixed-value.png", ""));
-				popupItemDeleteEntry2.addActionListener(listenerForRemovalSetDefaultAsSpecific);
+				popupItemDeleteEntry2.addActionListener(actionEvent -> removeDefaultAsSpecificEntry());
 
 				popupNoEditOptions.add(popupItemDeleteEntry2);
 
@@ -293,6 +234,56 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		propertyHandler.setMapTableModel(mapTableModel);
 
+	}
+
+	private void deleteEntry() {
+		Logging.info(this, "popupItemDeleteEntry action");
+		if (table.getSelectedRowCount() == 0) {
+
+			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
+					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
+					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+
+			fAsk.setVisible(true);
+		} else if (names != null) {
+
+			propertyHandler = defaultPropertyHandler;
+
+			removeProperty(names.get(table.getSelectedRow()));
+		}
+	}
+
+	private void deleteSpecificEntry() {
+		Logging.info(this, "popupItemDeleteEntry action");
+		if (table.getSelectedRowCount() == 0) {
+
+			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
+					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
+					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+
+			fAsk.setVisible(true);
+		} else if (names != null) {
+			propertyHandler = removingSpecificValuesPropertyHandler;
+
+			removeProperty(names.get(table.getSelectedRow()));
+		}
+	}
+
+	private void removeDefaultAsSpecificEntry() {
+		Logging.info(this, "popupItemDeleteEntry action");
+		if (table.getSelectedRowCount() == 0) {
+
+			FTextArea fAsk = new FTextArea(ConfigedMain.getMainFrame(), Globals.APPNAME,
+					Configed.getResourceValue("EditMapPanel.RowToRemoveMustBeSelected"), true,
+					new String[] { Configed.getResourceValue("buttonOK") }, 200, 200);
+
+			fAsk.setVisible(true);
+		} else if (names != null) {
+
+			propertyHandler = settingDefaultValuesPropertyHandler;
+
+			removeProperty(names.get(table.getSelectedRow()));
+		}
 	}
 
 	protected JPopupMenu definePopup() {
@@ -402,32 +393,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		table.setShowGrid(true);
 		table.setGridColor(Globals.EDIT_MAP_PANEL_X_GRID_COLOR);
 
-		table.addMouseWheelListener((MouseWheelEvent mouseWheelEvent) -> {
-
-			int selRow = -1;
-
-			if (table.getSelectedRows() == null || table.getSelectedRows().length == 0) {
-				selRow = -1;
-			} else {
-				selRow = table.getSelectedRows()[0];
-			}
-
-			int diff = mouseWheelEvent.getWheelRotation();
-
-			selRow = selRow + diff;
-
-			if (selRow >= table.getRowCount()) {
-				selRow = table.getRowCount() - 1;
-			}
-
-			int startRow = 0;
-
-			if (selRow < startRow) {
-				selRow = startRow;
-			}
-
-			setSelectedRow(selRow);
-		});
+		table.addMouseWheelListener(mouseWheelEvent -> reactToMouseWheelEvent(mouseWheelEvent.getWheelRotation()));
 
 		jScrollPane = new JScrollPane(table);
 		if (!Main.THEMES) {
@@ -435,6 +401,30 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 		}
 
 		add(jScrollPane, BorderLayout.CENTER);
+	}
+
+	private void reactToMouseWheelEvent(int wheelRotation) {
+		int selRow = -1;
+
+		if (table.getSelectedRows() == null || table.getSelectedRows().length == 0) {
+			selRow = -1;
+		} else {
+			selRow = table.getSelectedRows()[0];
+		}
+
+		selRow = selRow + wheelRotation;
+
+		if (selRow >= table.getRowCount()) {
+			selRow = table.getRowCount() - 1;
+		}
+
+		int startRow = 0;
+
+		if (selRow < startRow) {
+			selRow = startRow;
+		}
+
+		setSelectedRow(selRow);
 	}
 
 	@Override

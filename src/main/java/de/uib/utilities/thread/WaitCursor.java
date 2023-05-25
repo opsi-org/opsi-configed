@@ -90,26 +90,27 @@ public class WaitCursor {
 		Logging.info(this, " stop wait cursor " + objectNo + ", was located at (" + callLocation + ")");
 		ready = true;
 
-		SwingUtilities.invokeLater(() -> {
+		SwingUtilities.invokeLater(this::stopCursor);
+	}
 
-			if (c != null) {
-				c.setCursor(saveCursor);
+	private void stopCursor() {
+
+		if (c != null) {
+			c.setCursor(saveCursor);
+		}
+
+		if (isStopped()) {
+			objectCounting.decrementAndGet();
+			Logging.debug(this, "removing instance " + objectNo);
+			if (objectCounting.get() <= 0) {
+
+				Logging.info(this, "seemed to be last living instance");
+				ActivityPanel.setActing(false);
+			} else {
+				Logging.debug(this, " stopped wait cursor " + " instance " + objectNo + ", " + " still active  "
+						+ objectCounting + " the stopped cursor was initiated from " + callLocation);
 			}
-
-			if (isStopped()) {
-				objectCounting.decrementAndGet();
-				Logging.debug(this, "removing instance " + objectNo);
-				if (objectCounting.get() <= 0) {
-
-					Logging.info(this, "seemed to be last living instance");
-					ActivityPanel.setActing(false);
-				} else {
-					Logging.debug(this, " stopped wait cursor " + " instance " + objectNo + ", " + " still active  "
-							+ objectCounting + " the stopped cursor was initiated from " + callLocation);
-				}
-			}
-		});
-
+		}
 	}
 
 	public boolean isStopped() {

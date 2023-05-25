@@ -8,7 +8,6 @@ package de.uib.configed.gui.ssh;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -176,19 +175,7 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		jButtonFileChooser.setPreferredSize(Globals.smallButtonDimension);
 		jButtonFileChooser.setToolTipText(
 				Configed.getResourceValue("SSHConnection.ParameterDialog.fileupload.filechooser.tooltip"));
-		jButtonFileChooser.addActionListener((ActionEvent actionEvent) -> {
-			int returnVal = jFileChooserLocal.showOpenDialog(inputPanel);
-
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				String pathModules = jFileChooserLocal.getSelectedFile().getPath();
-				jTextFieldLocalPath.setText(pathModules);
-
-				command.setFullSourcePath(pathModules);
-				jTextFieldLocalPath.setCaretPosition(pathModules.length());
-			} else {
-				jTextFieldLocalPath.setText("");
-			}
-		});
+		jButtonFileChooser.addActionListener(actionEvent -> chooseFileDialog());
 		JButton jButtonExecute = new JButton();
 		jButtonExecute.setText(Configed.getResourceValue("SSHConnection.buttonExec"));
 		jButtonExecute.setIcon(Globals.createImageIcon("images/execute16_blue.png", ""));
@@ -211,6 +198,20 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		), false);
 
 		initAdditional();
+	}
+
+	private void chooseFileDialog() {
+		int returnVal = jFileChooserLocal.showOpenDialog(inputPanel);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			String pathModules = jFileChooserLocal.getSelectedFile().getPath();
+			jTextFieldLocalPath.setText(pathModules);
+
+			command.setFullSourcePath(pathModules);
+			jTextFieldLocalPath.setCaretPosition(pathModules.length());
+		} else {
+			jTextFieldLocalPath.setText("");
+		}
 	}
 
 	protected void initAdditional() {

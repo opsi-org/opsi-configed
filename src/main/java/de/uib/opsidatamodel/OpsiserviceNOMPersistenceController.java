@@ -6523,23 +6523,23 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		if (Boolean.TRUE.equals(keyUserRegisterValue) && !withUserRoles) {
 			keyUserRegisterValue = false;
 
-			SwingUtilities.invokeLater(() -> {
-				StringBuilder info = new StringBuilder();
-				info.append(Configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
-				info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
-				info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.2") + "\n");
-				info.append(
-						KEY_USER_REGISTER + " " + Configed.getResourceValue("Permission.modules.missing_user_roles.3"));
-				info.append("\n");
-
-				Logging.warning(this,
-						" user role administration configured but not permitted by the modules file " + info);
-
-				FOpsiLicenseMissingText.callInstanceWith(info.toString());
-			});
+			SwingUtilities.invokeLater(this::callOpsiLicenceMissingText);
 		}
 
 		return keyUserRegisterValue;
+	}
+
+	private void callOpsiLicenceMissingText() {
+		StringBuilder info = new StringBuilder();
+		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles") + "\n");
+		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.1") + "\n");
+		info.append(Configed.getResourceValue("Permission.modules.missing_user_roles.2") + "\n");
+		info.append(KEY_USER_REGISTER + " " + Configed.getResourceValue("Permission.modules.missing_user_roles.3"));
+		info.append("\n");
+
+		Logging.warning(this, " user role administration configured but not permitted by the modules file " + info);
+
+		FOpsiLicenseMissingText.callInstanceWith(info.toString());
 	}
 
 	public Map<String, Boolean> getProductOnClientsDisplayFieldsLocalbootProducts() {
@@ -7812,21 +7812,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			Logging.info(this, "modules resulting  " + opsiModules);
 			Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
 
-			if (!missingModulesPermissionInfo.isEmpty()) {
-				SwingUtilities.invokeLater(() -> {
-					StringBuilder info = new StringBuilder("");
+			// Will be called only, when info empty
+			callOpsiLicenceMissingModules(missingModulesPermissionInfo);
 
-					info.append(Configed.getResourceValue("Permission.modules.clientcount.2"));
-					info.append(":\n");
-					for (String moduleInfo : missingModulesPermissionInfo) {
-						info.append(moduleInfo);
-						info.append("\n");
-					}
-
-					Logging.info(this, "missingModules " + info);
-					FOpsiLicenseMissingText.callInstanceWith(info.toString());
-				});
-			}
 		} catch (Exception ex) {
 			Logging.warning("opsi module information problem", ex);
 		}
@@ -7842,6 +7830,24 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		Logging.info(this, "retrieveOpsiModules opsiCountModules " + opsiCountModules);
 		Logging.info(this, "retrieveOpsiModules opsiModulesPermissions " + opsiModulesPermissions);
 		Logging.info(this, "retrieveOpsiModules opsiModules " + opsiModules);
+	}
+
+	private void callOpsiLicenceMissingModules(List<String> missingModulesPermissionInfo) {
+		if (!missingModulesPermissionInfo.isEmpty()) {
+
+			SwingUtilities.invokeLater(() -> {
+				StringBuilder info = new StringBuilder();
+
+				info.append(Configed.getResourceValue("Permission.modules.clientcount.2"));
+				info.append(":\n");
+				for (String moduleInfo : missingModulesPermissionInfo) {
+					info.append(moduleInfo + "\n");
+				}
+
+				Logging.info(this, "missingModules " + info);
+				FOpsiLicenseMissingText.callInstanceWith(info.toString());
+			});
+		}
 	}
 
 	private void produceOpsiModulesInfoClassic() {
@@ -8071,21 +8077,9 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			Logging.info(this, "modules resulting  " + opsiModules);
 			Logging.info(this, " retrieveOpsiModules missingModulesPermissionInfos " + missingModulesPermissionInfo);
 
-			if (!missingModulesPermissionInfo.isEmpty()) {
-				SwingUtilities.invokeLater(() -> {
-					StringBuilder info = new StringBuilder("");
+			// Will be called only when info empty
+			callOpsiLicenceMissingModules(missingModulesPermissionInfo);
 
-					info.append(Configed.getResourceValue("Permission.modules.clientcount.2"));
-					info.append(":\n");
-					for (String moduleInfo : missingModulesPermissionInfo) {
-						info.append(moduleInfo);
-						info.append("\n");
-					}
-
-					Logging.info(this, "missingModules " + info);
-					FOpsiLicenseMissingText.callInstanceWith(info.toString());
-				});
-			}
 		} catch (Exception ex) {
 			Logging.warning("opsi module information problem", ex);
 		}
