@@ -255,7 +255,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		if (!Main.FONT) {
 			saveButton.setFont(Globals.defaultFont);
 		}
-		saveButton.addActionListener(new SaveButtonListener());
+		saveButton.addActionListener(actionEvent -> save());
 
 		buttonReload = new IconAsButton(Configed.getResourceValue("ClientSelectionDialog.buttonReload"),
 				"images/reload16.png", "images/reload16_over.png", "images/reload16.png",
@@ -440,7 +440,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			newElementBox.addItem(hardware);
 		}
 
-		newElementBox.addActionListener(new AddElementListener());
+		newElementBox.addActionListener(actionEvent -> addElement());
 
 		vMainGroup.addComponent(newElementBox, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT);
 		hMainGroup.addComponent(newElementBox, Globals.BUTTON_WIDTH, Globals.BUTTON_WIDTH, 2 * Globals.BUTTON_WIDTH);
@@ -467,9 +467,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.negateButton.setActivated(false);
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
-		result.negateButton.addActionListener(new NotButtonListener());
+		result.negateButton.addActionListener(this::notButtonAction);
 		result.connectionType = new AndOrSelectButtonByIcon();
-		result.connectionType.addActionListener(new AndOrButtonListener());
+		result.connectionType.addActionListener(actionEvent -> buildParentheses());
 		result.connectionType.setMaximumSize(new Dimension(result.connectionType.getMaximumSize().width,
 				result.connectionType.getPreferredSize().height));
 		result.elementLabel = new JLabel(element.getLocalizedPath());
@@ -528,7 +528,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		contentPane.add(result.closeParenthesis);
 
 		if (operations.length > 1) {
-			((JComboBox<?>) result.operationComponent).addActionListener(new SelectOperationListener());
+			((JComboBox<?>) result.operationComponent).addActionListener(actionEvent -> selectOperation(actionEvent));
 			addDataComponent(result, ((JComboBox<?>) result.operationComponent).getSelectedIndex());
 		} else if (operations.length == 1) {
 			addDataComponent(result, 0);
@@ -727,13 +727,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				"images/user-trash.png", "images/user-trash_disabled.png");
 		result.removeButton.setMaximumSize(new Dimension(result.removeButton.getPreferredSize().width,
 				result.removeButton.getPreferredSize().height));
-		result.removeButton.addActionListener(new RemoveButtonListener());
+		result.removeButton.addActionListener(this::removeButton);
 		result.negateButton = new IconAsButton("", "images/boolean_not_disabled.png", "images/boolean_not_over.png",
 				"images/boolean_not.png", null);
 		result.negateButton.setActivated(false);
 		result.negateButton.setMaximumSize(new Dimension(result.negateButton.getMaximumSize().width,
 				result.negateButton.getPreferredSize().height));
-		result.negateButton.addActionListener(new NotButtonListener());
+		result.negateButton.addActionListener(this::notButtonAction);
 		result.topLabel = new JLabel();
 		result.topLabel.setMaximumSize(
 				new Dimension(result.topLabel.getMaximumSize().width, result.removeButton.getPreferredSize().height));
@@ -743,7 +743,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		result.openParenthesis = new IconAsButton("", "images/parenthesis_open_disabled.png",
 				"images/parenthesis_open_over.png", "images/parenthesis_open.png", null);
 		result.openParenthesis.setActivated(false);
-		result.openParenthesis.addActionListener(new ParenthesisListener());
+		result.openParenthesis.addActionListener(ClientSelectionDialog::parenthesisAction);
 
 		GroupLayout.ParallelGroup vRow = layout.createParallelGroup();
 		vRow.addComponent(result.topLabel, GroupLayout.Alignment.CENTER, 20, 20, 20);
@@ -766,9 +766,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		group.closeParenthesis = new IconAsButton("", "images/parenthesis_close_disabled.png",
 				"images/parenthesis_close_over.png", "images/parenthesis_close.png", null);
 		group.closeParenthesis.setActivated(false);
-		group.closeParenthesis.addActionListener(new ParenthesisListener());
+		group.closeParenthesis.addActionListener(ClientSelectionDialog::parenthesisAction);
 		group.connectionType = new AndOrSelectButtonByIcon();
-		group.connectionType.addActionListener(new AndOrButtonListener());
+		group.connectionType.addActionListener(actionEvent -> buildParentheses());
 		group.connectionType.setMaximumSize(new Dimension(group.connectionType.getMaximumSize().width,
 				group.connectionType.getPreferredSize().height));
 		GroupLayout.ParallelGroup vRow = layout.createParallelGroup();
@@ -1285,143 +1285,121 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 	}
 
-	private class RemoveButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			Iterator<ComplexGroup> complexIterator = complexElements.iterator();
-			while (complexIterator.hasNext()) {
-				ComplexGroup group = complexIterator.next();
+	private void removeButton(ActionEvent e) {
+		Iterator<ComplexGroup> complexIterator = complexElements.iterator();
+		while (complexIterator.hasNext()) {
+			ComplexGroup group = complexIterator.next();
 
-				Logging.info(this, "removing group of type " + group.type);
+			Logging.info(this, "removing group of type " + group.type);
 
-				if (group.removeButton == e.getSource()) {
-					contentPane.remove(group.topLabel);
-					contentPane.remove(group.removeButton);
-					contentPane.remove(group.connectionType);
-					contentPane.remove(group.negateButton);
-					contentPane.remove(group.openParenthesis);
-					contentPane.remove(group.closeParenthesis);
-					for (SimpleGroup simple : group.groupList) {
-						removeGroup(simple);
-					}
-					contentPane.revalidate();
-					contentPane.repaint();
-					complexIterator.remove();
-					buildParentheses();
-					break;
+			if (group.removeButton == e.getSource()) {
+				contentPane.remove(group.topLabel);
+				contentPane.remove(group.removeButton);
+				contentPane.remove(group.connectionType);
+				contentPane.remove(group.negateButton);
+				contentPane.remove(group.openParenthesis);
+				contentPane.remove(group.closeParenthesis);
+				for (SimpleGroup simple : group.groupList) {
+					removeGroup(simple);
 				}
-			}
-
-			if (!complexElements.isEmpty()) {
-				complexElements.getLast().connectionType.setVisible(false);
+				contentPane.revalidate();
+				contentPane.repaint();
+				complexIterator.remove();
+				buildParentheses();
+				break;
 			}
 		}
-	}
 
-	private class AddElementListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (!complexElements.isEmpty()) {
-				complexElements.getLast().connectionType.setVisible(true);
-			}
-
-			int index = newElementBox.getSelectedIndex();
-
-			if (index == 0) {
-				return;
-			} else if (index == 1) {
-				complexElements.add(createHostGroup());
-			} else if (index == 2) {
-				complexElements.add(createSoftwareGroup());
-			} else if (index == 3 && withMySQL) {
-				complexElements.add(createPropertiesGroup());
-			} else if (index == 4 && withMySQL) {
-				complexElements.add(createSoftwareWithPropertiesGroup());
-			} else if ((index == 5 && withMySQL) || (index == 3 && !withMySQL)) {
-				complexElements.add(createSwAuditGroup());
-			} else {
-				complexElements.add(createHardwareGroup(newElementBox.getSelectedItem().toString()));
-			}
-
-			contentPane.revalidate();
-			contentPane.repaint();
-			newElementBox.setSelectedIndex(0);
+		if (!complexElements.isEmpty()) {
 			complexElements.getLast().connectionType.setVisible(false);
 		}
 	}
 
-	private class SelectOperationListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			JComponent source = null;
-			SimpleGroup sourceGroup = null;
-			for (ComplexGroup group : complexElements) {
-				for (SimpleGroup simple : group.groupList) {
-					if (simple.operationComponent == e.getSource()) {
-						source = simple.operationComponent;
-						sourceGroup = simple;
-						break;
-					}
-				}
-				if (source != null) {
+	private void addElement() {
+		if (!complexElements.isEmpty()) {
+			complexElements.getLast().connectionType.setVisible(true);
+		}
+
+		int index = newElementBox.getSelectedIndex();
+
+		if (index == 0) {
+			return;
+		} else if (index == 1) {
+			complexElements.add(createHostGroup());
+		} else if (index == 2) {
+			complexElements.add(createSoftwareGroup());
+		} else if (index == 3 && withMySQL) {
+			complexElements.add(createPropertiesGroup());
+		} else if (index == 4 && withMySQL) {
+			complexElements.add(createSoftwareWithPropertiesGroup());
+		} else if ((index == 5 && withMySQL) || (index == 3 && !withMySQL)) {
+			complexElements.add(createSwAuditGroup());
+		} else {
+			complexElements.add(createHardwareGroup(newElementBox.getSelectedItem().toString()));
+		}
+
+		contentPane.revalidate();
+		contentPane.repaint();
+		newElementBox.setSelectedIndex(0);
+		complexElements.getLast().connectionType.setVisible(false);
+	}
+
+	private void selectOperation(ActionEvent actionEvent) {
+		JComponent source = null;
+		SimpleGroup sourceGroup = null;
+		for (ComplexGroup group : complexElements) {
+			for (SimpleGroup simple : group.groupList) {
+				if (simple.operationComponent == actionEvent.getSource()) {
+					source = simple.operationComponent;
+					sourceGroup = simple;
 					break;
 				}
 			}
-			if (source == null) {
-				return;
+			if (source != null) {
+				break;
 			}
-
-			if (sourceGroup.dataComponent != null) {
-				contentPane.remove(sourceGroup.dataComponent);
-				sourceGroup.dataComponent = null;
-			}
-
-			int index = 0;
-			if (source instanceof JComboBox) {
-				index = ((JComboBox<?>) source).getSelectedIndex();
-			} else if (source instanceof JLabel) {
-				index = 0;
-			}
-			addDataComponent(sourceGroup, index);
-
-			buildParentheses();
-
-			contentPane.revalidate();
-			contentPane.repaint();
 		}
+		if (source == null) {
+			return;
+		}
+
+		if (sourceGroup.dataComponent != null) {
+			contentPane.remove(sourceGroup.dataComponent);
+			sourceGroup.dataComponent = null;
+		}
+
+		int index = 0;
+		if (source instanceof JComboBox) {
+			index = ((JComboBox<?>) source).getSelectedIndex();
+		} else if (source instanceof JLabel) {
+			index = 0;
+		}
+		addDataComponent(sourceGroup, index);
+
+		buildParentheses();
+
+		contentPane.revalidate();
+		contentPane.repaint();
 	}
 
-	private static class NotButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			if (!(event.getSource() instanceof IconAsButton)) {
-				return;
-			}
-			IconAsButton button = (IconAsButton) event.getSource();
-			button.setActivated(!button.isActivated());
-			Logging.debug(this, "Negate button is activated: " + button.isActivated());
+	private void notButtonAction(ActionEvent event) {
+		if (!(event.getSource() instanceof IconAsButton)) {
+			return;
 		}
+		IconAsButton button = (IconAsButton) event.getSource();
+		button.setActivated(!button.isActivated());
+		Logging.debug(this, "Negate button is activated: " + button.isActivated());
 	}
 
-	private static class ParenthesisListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			if (!(event.getSource() instanceof IconAsButton)) {
-				return;
-			}
-			IconAsButton button = (IconAsButton) event.getSource();
-			button.setActivated(!button.isActivated());
+	private static void parenthesisAction(ActionEvent event) {
+		if (!(event.getSource() instanceof IconAsButton)) {
+			return;
 		}
+		IconAsButton button = (IconAsButton) event.getSource();
+		button.setActivated(!button.isActivated());
 	}
 
-	private class AndOrButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			buildParentheses();
-		}
-	}
-
-	/*
+	/*ctionEvent -> parenthesisAction(actionEvent)
 	 * A spinner for big numbers, with a metric prefix (kilo, mega, ...) selection.
 	 */
 	private static class SpinnerWithExt extends JPanel {
@@ -1462,28 +1440,24 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 	}
 
-	private class SaveButtonListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			String text = saveNameField.getText();
-			if (text.isEmpty()) {
-				JOptionPane.showMessageDialog(saveButton, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
-						Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME
-								+ ")",
-						JOptionPane.OK_OPTION);
-				toFront();
+	private void save() {
+		String text = saveNameField.getText();
+		if (text.isEmpty()) {
+			JOptionPane.showMessageDialog(saveButton, Configed.getResourceValue("ClientSelectionDialog.emptyName"),
+					Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME + ")",
+					JOptionPane.OK_OPTION);
+			toFront();
 
-				return;
-			} else if (!text.matches("[\\p{javaLowerCase}\\d_-]*")) {
-				JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
-				toFront();
+			return;
+		} else if (!text.matches("[\\p{javaLowerCase}\\d_-]*")) {
+			JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
+			toFront();
 
-				return;
-			}
-
-			collectData();
-			manager.saveSearch(text, saveDescriptionField.getText());
-			savedSearchesDialog.reloadAction();
+			return;
 		}
+
+		collectData();
+		manager.saveSearch(text, saveDescriptionField.getText());
+		savedSearchesDialog.reloadAction();
 	}
 }

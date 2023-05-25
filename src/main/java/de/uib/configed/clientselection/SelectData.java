@@ -15,6 +15,7 @@ public class SelectData {
 	private DataType dataType;
 	private Object dataObject;
 
+	// TODO: Dont use toString() method anywhere
 	public enum DataType {
 		TEXT_TYPE {
 			@Override

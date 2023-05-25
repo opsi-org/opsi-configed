@@ -263,9 +263,8 @@ public class ExporterToPDF extends AbstractExportTable {
 			}
 		}
 
-		content.add(new Paragraph(Configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", " //$NON-NLS-3$
-				+ dateFormatter.format(new Date()), //$NON-NLS-2$ //$NON-NLS-3$
-				smallBold));
+		content.add(new Paragraph(Configed.getResourceValue("DocumentExport.summonedBy") + ": " + userInitial + ", "
+				+ dateFormatter.format(new Date()), smallBold));
 		content.add(addEmptyLines(1));
 		return content;
 	}
