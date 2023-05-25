@@ -136,29 +136,30 @@ public final class Configed {
 		SwingUtilities.invokeLater(configedMain::init);
 
 		try {
-			SwingUtilities.invokeAndWait(() -> {
-				if (paramClient != null || paramClientgroup != null) {
-					if (paramClientgroup != null) {
-						configedMain.setGroup(paramClientgroup);
-					}
-
-					if (paramClient != null) {
-						configedMain.setClient(paramClient);
-					}
-
-					Logging.info("set client " + paramClient);
-
-					if (paramTab != null) {
-						configedMain.setVisualViewIndex(paramTab);
-					}
-				}
-			});
-
+			SwingUtilities.invokeAndWait(() -> setStartSettings(configedMain));
 		} catch (InvocationTargetException ex) {
 			Logging.info(" run " + ex);
 		} catch (InterruptedException ie) {
 			Logging.info(" run " + ie);
 			Thread.currentThread().interrupt();
+		}
+	}
+
+	private static void setStartSettings(ConfigedMain configedMain) {
+		if (paramClient != null || paramClientgroup != null) {
+			if (paramClientgroup != null) {
+				configedMain.setGroup(paramClientgroup);
+			}
+
+			if (paramClient != null) {
+				configedMain.setClient(paramClient);
+			}
+
+			Logging.info("set client " + paramClient);
+
+			if (paramTab != null) {
+				configedMain.setVisualViewIndex(paramTab);
+			}
 		}
 	}
 

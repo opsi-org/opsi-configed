@@ -4215,9 +4215,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void getSessionInfo() {
-		final boolean onlySelectedClients = selectedClients != null && selectedClients.length > 0;
+		boolean onlySelectedClients = selectedClients != null && selectedClients.length > 0;
 
-		final String[] selClients = selectedClients;
 		sessioninfoFinished = false;
 
 		Logging.info(this, "getSessionInfo start, onlySelectedClients " + onlySelectedClients);
@@ -4233,82 +4232,92 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				@Override
 				public void run() {
 					// disable the button
-					try {
-						SwingUtilities.invokeAndWait(() -> mainFrame.iconButtonSessionInfo.setEnabled(false));
-					} catch (InvocationTargetException ex) {
-						Logging.info(this,
-								"invocation target or interrupt ex at  iconButtonSessionInfo.setEnabled(false) " + ex);
-					} catch (InterruptedException ie) {
-						Thread.currentThread().interrupt();
-					}
+					disableSessionInfoButton();
 
 					// handling the main perspective
-					final int MAX_WAIT_SECONDS = 600;
-
-					new Thread() {
-						@Override
-						public void run() {
-							int waitSecs = 0;
-
-							Logging.info(this, "counting thread started");
-							while (!sessioninfoFinished && waitSecs <= MAX_WAIT_SECONDS) {
-								Logging.debug(this, "wait secs for session infoi " + waitSecs);
-								try {
-									sleep(1000);
-								} catch (InterruptedException iex) {
-									Logging.info(this, "interrupt at " + waitSecs);
-									Thread.currentThread().interrupt();
-								}
-								waitSecs++;
-							}
-
-							// finishing the task
-							SwingUtilities.invokeLater(() -> {
-								Logging.info(this, "when sessioninfoFinished");
-								mainFrame.iconButtonSessionInfo.setWaitingState(false);
-
-								mainFrame.iconButtonSessionInfo.setEnabled(true);
-
-								// update column
-								if (Boolean.TRUE.equals(persist.getHostDisplayFields()
-										.get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
-									AbstractTableModel model = selectionPanel.getTableModel();
-
-									int col = model.findColumn(Configed
-											.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));
-
-									for (int row = 0; row < model.getRowCount(); row++) {
-										String clientId = (String) model.getValueAt(row, 0);
-										model.setValueAt(sessionInfo.get(clientId), row, col);
-									}
-
-									model.fireTableDataChanged();
-									setSelectedClientsOnPanel(selClients);
-								}
-							});
-						}
-					}.start();
+					startThreadForUpdatingSessionInfo();
 
 					// fetch the data in a separated thread
-					new Thread() {
-						@Override
-						public void run() {
-							Logging.info(this, "thread started");
-
-							if (onlySelectedClients) {
-								sessionInfo.putAll(persist.sessionInfo(getSelectedClients()));
-							} else {
-								sessionInfo = persist.sessionInfo(null);
-							}
-
-							sessioninfoFinished = true;
-						}
-					}.start();
+					startThreadForLoadingSessionInfo(onlySelectedClients);
 				}
 			}.start();
 		} catch (Exception ex) {
 			Logging.info(this, "getSessionInfo Exception " + ex);
 		}
+	}
+
+	private void disableSessionInfoButton() {
+		try {
+			SwingUtilities.invokeAndWait(() -> mainFrame.iconButtonSessionInfo.setEnabled(false));
+		} catch (InvocationTargetException ex) {
+			Logging.info(this, "invocation target or interrupt ex at  iconButtonSessionInfo.setEnabled(false) " + ex);
+		} catch (InterruptedException ie) {
+			Thread.currentThread().interrupt();
+		}
+	}
+
+	private void startThreadForUpdatingSessionInfo() {
+		final int MAX_WAIT_SECONDS = 600;
+		new Thread() {
+			@Override
+			public void run() {
+				int waitSecs = 0;
+
+				Logging.info(this, "counting thread started");
+				while (!sessioninfoFinished && waitSecs <= MAX_WAIT_SECONDS) {
+					Logging.debug(this, "wait secs for session infoi " + waitSecs);
+					try {
+						sleep(1000);
+					} catch (InterruptedException iex) {
+						Logging.info(this, "interrupt at " + waitSecs);
+						Thread.currentThread().interrupt();
+					}
+					waitSecs++;
+				}
+
+				// finishing the task
+				SwingUtilities.invokeLater(ConfigedMain.this::sessionInfoFinished);
+			}
+		}.start();
+	}
+
+	private void sessionInfoFinished() {
+		Logging.info(this, "when sessioninfoFinished");
+		mainFrame.iconButtonSessionInfo.setWaitingState(false);
+
+		mainFrame.iconButtonSessionInfo.setEnabled(true);
+
+		// update column
+		if (Boolean.TRUE.equals(persist.getHostDisplayFields().get(HostInfo.CLIENT_SESSION_INFO_DISPLAY_FIELD_LABEL))) {
+			AbstractTableModel model = selectionPanel.getTableModel();
+
+			int col = model.findColumn(Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSessionInfo"));
+
+			for (int row = 0; row < model.getRowCount(); row++) {
+				String clientId = (String) model.getValueAt(row, 0);
+				model.setValueAt(sessionInfo.get(clientId), row, col);
+			}
+
+			model.fireTableDataChanged();
+			setSelectedClientsOnPanel(selectedClients);
+		}
+	}
+
+	private void startThreadForLoadingSessionInfo(boolean onlySelectedClients) {
+		new Thread() {
+			@Override
+			public void run() {
+				Logging.info(this, "thread started");
+
+				if (onlySelectedClients) {
+					sessionInfo.putAll(persist.sessionInfo(getSelectedClients()));
+				} else {
+					sessionInfo = persist.sessionInfo(null);
+				}
+
+				sessioninfoFinished = true;
+			}
+		}.start();
 	}
 
 	public String getBackendInfos() {
