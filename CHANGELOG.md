@@ -8,6 +8,10 @@
 ### Changed
 - Were using now Messagepack for datatransfer with server -> performance boost
 
+### Fixed
+- You cannot make on-demand actions when in readonly mode
+- Issue with creating Licences fixed (Volume, etc.)
+
 ## [4.2.21.3] - 2023-05-09
 
 ### Added
