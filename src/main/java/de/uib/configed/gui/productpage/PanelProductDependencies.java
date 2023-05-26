@@ -85,7 +85,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 	public void clearEditing() {
 
-		dependenciesModel = new DependenciesModel(mainController.getPersistenceController());
+		dependenciesModel = new DependenciesModel();
 		dependenciesModel.addListener(this);
 
 		dependenciesTable.setModel(dependenciesModel.getRequirementsModel());

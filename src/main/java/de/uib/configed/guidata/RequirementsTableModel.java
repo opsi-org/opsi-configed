@@ -24,6 +24,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
 import de.uib.utilities.logging.Logging;
@@ -41,7 +42,8 @@ public class RequirementsTableModel extends AbstractTableModel {
 	private Map<String, String> requAfterMap;
 	private Map<String, String> requDeinstallMap;
 
-	private OpsiserviceNOMPersistenceController perCon;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	static {
 		rowType = new ArrayList<>();
@@ -52,19 +54,18 @@ public class RequirementsTableModel extends AbstractTableModel {
 
 	}
 
-	public RequirementsTableModel(OpsiserviceNOMPersistenceController persis) {
+	public RequirementsTableModel() {
 		Logging.info(this, "creating");
-		perCon = persis;
 
 		init();
 	}
 
 	private void retrieveRequirements(String depotId, String product) {
 		// if depotId == null the depot representative is used
-		requMap = perCon.getProductRequirements(depotId, product);
-		requBeforeMap = perCon.getProductPreRequirements(depotId, product);
-		requAfterMap = perCon.getProductPostRequirements(depotId, product);
-		requDeinstallMap = perCon.getProductDeinstallRequirements(depotId, product);
+		requMap = persistenceController.getProductRequirements(depotId, product);
+		requBeforeMap = persistenceController.getProductPreRequirements(depotId, product);
+		requAfterMap = persistenceController.getProductPostRequirements(depotId, product);
+		requDeinstallMap = persistenceController.getProductDeinstallRequirements(depotId, product);
 	}
 
 	private void init() {

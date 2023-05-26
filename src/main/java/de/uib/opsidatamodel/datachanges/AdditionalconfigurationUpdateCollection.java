@@ -13,26 +13,24 @@ import java.util.Iterator;
 import java.util.Map;
 
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
 */
 public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 	private String[] objectIds;
-	private OpsiserviceNOMPersistenceController persis;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private boolean determineConfigOptions;
 	private boolean masterConfig;
 
-	public AdditionalconfigurationUpdateCollection(Object persis, String[] objectIds) {
+	public AdditionalconfigurationUpdateCollection(String[] objectIds) {
 		super(new ArrayList<>(0));
 		this.objectIds = objectIds;
-		setController(persis);
 	}
 
-	@Override
-	public void setController(Object obj) {
-		this.persis = (OpsiserviceNOMPersistenceController) obj;
-	}
+	
 
 	@Override
 	public boolean addAll(Collection<? extends UpdateCommand> c) {
@@ -64,10 +62,10 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 
 				if (masterConfig) {
 					Logging.debug(this, "adding ConfigUpdate");
-					result = add(new ConfigUpdate(persis, map));
+					result = add(new ConfigUpdate(map));
 				} else {
 					Logging.debug(this, "adding AdditionalconfigurationUpdate");
-					result = add(new AdditionalconfigurationUpdate(persis, objectIds[i], map));
+					result = add(new AdditionalconfigurationUpdate(objectIds[i], map));
 				}
 				i++;
 			}
@@ -87,9 +85,9 @@ public class AdditionalconfigurationUpdateCollection extends UpdateCollection {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion, element count: " + size());
 		if (masterConfig) {
-			persis.setConfig();
+			persistenceController.setConfig();
 		} else {
-			persis.setAdditionalConfiguration(determineConfigOptions);
+			persistenceController.setAdditionalConfiguration(determineConfigOptions);
 		}
 		clear();
 	}

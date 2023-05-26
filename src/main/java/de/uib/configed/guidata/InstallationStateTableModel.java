@@ -29,6 +29,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.opsidatamodel.productstate.ActionResult;
 import de.uib.opsidatamodel.productstate.InstallationStatus;
@@ -91,7 +92,8 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 	// (clientId -> (productId -> (product state key -> product state value)))
 	private Map<String, Map<String, Map<String, String>>> allClientsProductStates;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private Map<String, Map<String, Map<String, String>>> collectChangedStates;
 	private final String[] selectedClients;
 	private Map<String, List<String>> possibleActions; // product-->possibleActions
@@ -135,7 +137,6 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		missingImplementationForAR = new TreeSet<>();
 		product2setOfClientsWithNewAction = new HashMap<>();
 
-		persist = main.getPersistenceController();
 		Collator myCollator = Collator.getInstance();
 
 		myCollator.setStrength(Collator.SECONDARY);
@@ -883,19 +884,19 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 		} else if (ar.getVal() == ActionRequest.UNINSTALL) {
 			Logging.debug(this, " follow requirements for ActionRequest.UNINSTALL, product " + product);
 
-			Map<String, String> requirements = persist.getProductDeinstallRequirements(null, product);
+			Map<String, String> requirements = persistenceController.getProductDeinstallRequirements(null, product);
 			Logging.debug(this, "ProductRequirements for uninstall for " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		} else {
-			Map<String, String> requirements = persist.getProductPreRequirements(null, product);
+			Map<String, String> requirements = persistenceController.getProductPreRequirements(null, product);
 			Logging.debug(this, "ProductPreRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 
-			requirements = persist.getProductRequirements(null, product);
+			requirements = persistenceController.getProductRequirements(null, product);
 			Logging.debug(this, "ProductRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 
-			requirements = persist.getProductPostRequirements(null, product);
+			requirements = persistenceController.getProductPostRequirements(null, product);
 			Logging.debug(this, "ProductPostRequirements for  " + product + ": " + requirements);
 			followRequirements(clientId, requirements);
 		}

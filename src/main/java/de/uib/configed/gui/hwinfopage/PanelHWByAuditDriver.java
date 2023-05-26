@@ -203,7 +203,7 @@ public class PanelHWByAuditDriver extends JPanel {
 		}
 
 		if (fDriverUpload == null) {
-			fDriverUpload = new FDriverUpload(main, main.getPersistenceController());
+			fDriverUpload = new FDriverUpload(main);
 		}
 
 		fDriverUpload.setSize(Globals.helperFormDimension);

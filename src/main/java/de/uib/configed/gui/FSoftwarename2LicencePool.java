@@ -67,7 +67,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private int keyCol;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private ControlPanelAssignToLPools myController;
 
@@ -102,7 +103,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 				1, 700, 800);
 
 		this.myController = myController;
-		persist = PersistenceControllerFactory.getPersistenceController();
 
 		panelSWnames = new PanelGenEditTable("",
 
@@ -379,7 +379,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 	private void setSWInfo(String swId, String pool) {
 		Logging.info(this, " setSWInfo for " + swId + " pool " + pool);
-		Logging.info(this, " setSWInfo in " + persist.getInstalledSoftwareName2SWinfo()
+		Logging.info(this, " setSWInfo in " + persistenceController.getInstalledSoftwareName2SWinfo()
 				.get(AuditSoftwareXLicencePool.produceMapFromSWident(swId).get(SWAuditEntry.NAME)));
 	}
 
@@ -388,7 +388,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		this.modelSWnames = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persist.getInstalledSoftwareName2SWinfo())),
+						() -> (Map) persistenceController.getInstalledSoftwareName2SWinfo())),
 				0, new int[] {}, panelSWnames, updateCollection) {
 
 			@Override
@@ -439,8 +439,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		Set<String> range = new HashSet<>();
 
-		for (String swID : persist.getName2SWIdents().get(swName)) {
-			String licpool = persist.getFSoftware2LicencePool(swID);
+		for (String swID : persistenceController.getName2SWIdents().get(swName)) {
+			String licpool = persistenceController.getFSoftware2LicencePool(swID);
 
 			if (licpool == null) {
 				range.add(VALUE_NO_LICENCE_POOL);
@@ -497,10 +497,10 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		TreeMap<String, Map<String, String>> result = new TreeMap<>();
 
-		for (String swID : persist.getName2SWIdents().get(swName)) {
+		for (String swID : persistenceController.getName2SWIdents().get(swName)) {
 			LinkedHashMap<String, String> rowMap = new LinkedHashMap<>();
 			rowMap.put(AuditSoftwareXLicencePool.SW_ID, swID);
-			String licpool = persist.getFSoftware2LicencePool(swID);
+			String licpool = persistenceController.getFSoftware2LicencePool(swID);
 
 			if (licpool == null) {
 				rowMap.put(LicencepoolEntry.ID_SERVICE_KEY, VALUE_NO_LICENCE_POOL);
@@ -550,14 +550,14 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 						// reloads local data (which are not yet updated)
 						String swID = (String) rowmap.get(AuditSoftwareXLicencePool.SW_ID);
-						String licensePoolIDOld = persist.getFSoftware2LicencePool(swID);
+						String licensePoolIDOld = persistenceController.getFSoftware2LicencePool(swID);
 						String licensePoolIDNew = (String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY);
 
 						if (!VALUE_NO_LICENCE_POOL.equals(licensePoolIDNew)) {
 							setSWInfo(swID, licensePoolIDNew);
 						}
 
-						return persist.editPool2AuditSoftware(swID, licensePoolIDOld, licensePoolIDNew);
+						return persistenceController.editPool2AuditSoftware(swID, licensePoolIDOld, licensePoolIDNew);
 
 					}
 

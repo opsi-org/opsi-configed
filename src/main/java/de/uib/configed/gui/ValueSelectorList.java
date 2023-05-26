@@ -26,6 +26,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.SearchTargetModel;
 import de.uib.utilities.table.gui.SearchTargetModelFromJList;
@@ -44,15 +45,15 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 	private boolean multidepot;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	/**
 	 * A component for managing (but not displaying) the depotlist
 	 */
-	public ValueSelectorList(DepotsList valueList, boolean multidepot, OpsiserviceNOMPersistenceController persist) {
+	public ValueSelectorList(DepotsList valueList, boolean multidepot) {
 		this.valueList = valueList;
 		this.multidepot = multidepot;
-		this.persist = persist;
 
 		List<String> values = new ArrayList<>();
 		List<String> descriptions = new ArrayList<>();
@@ -212,7 +213,8 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 
 			if (valueList.getSelectedIndex() > -1) {
 				String depotSelected = valueList.getSelectedValue();
-				List<String> depotsWithEqualStock = persist.getAllDepotsWithIdenticalProductStock(depotSelected);
+				List<String> depotsWithEqualStock = persistenceController
+						.getAllDepotsWithIdenticalProductStock(depotSelected);
 				valueList.addToSelection(depotsWithEqualStock);
 
 			}

@@ -47,7 +47,8 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 	public static boolean extendedView;
 
 	public LicensingInfoPanelGenEditTable thePanel;
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private LicensingInfoMap licenseMap;
 
 	private TableSource tableSource;
@@ -61,7 +62,6 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 		super(owner, title, modal, buttonList, icons, lastButtonNo, preferredWidth, preferredHeight, lazyLayout,
 				addPane);
 
-		persist = PersistenceControllerFactory.getPersistenceController();
 		PanelGenEditTable centerPanel = new PanelGenEditTable();
 		JPanel bottomPanel = new JPanel();
 
@@ -173,11 +173,11 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 				Logging.info(this,
 						" LicInfoPanelGenTable reload, reduced " + !FGeneralDialogLicensingInfo.extendedView);
-				persist.configOptionsRequestRefresh();
-				persist.opsiLicencingInfoRequestRefresh();
+				persistenceController.configOptionsRequestRefresh();
+				persistenceController.opsiLicencingInfoRequestRefresh();
 				LicensingInfoMap.requestRefresh();
-				licenseMap = LicensingInfoMap.getInstance(persist.getOpsiLicencingInfoOpsiAdmin(),
-						persist.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
+				licenseMap = LicensingInfoMap.getInstance(persistenceController.getOpsiLicencingInfoOpsiAdmin(),
+						persistenceController.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
 
 				retrieveData();
 
@@ -232,7 +232,7 @@ public class FGeneralDialogLicensingInfo extends FGeneralDialog {
 
 		Map<String, Object> clientNumbers = licenseMap.getClientNumbersMap();
 		JLabel clientTitle = new JLabel("<html>" + Configed.getResourceValue("LicensingInfo.client.title") + "  ("
-				+ persist.getHostInfoCollections().getConfigServer() + ") </html>");
+				+ persistenceController.getHostInfoCollections().getConfigServer() + ") </html>");
 		JLabel allClient = new JLabel(Configed.getResourceValue("LicensingInfo.client.all_clients") + ": ");
 		JLabel allClientNum = new JLabel(clientNumbers.get(LicensingInfoMap.ALL).toString());
 		JLabel macos = new JLabel(Configed.getResourceValue("LicensingInfo.client.macos_clients") + ": ");

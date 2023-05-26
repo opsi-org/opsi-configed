@@ -9,33 +9,24 @@ package de.uib.opsidatamodel.datachanges;
 import java.util.Map;
 
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class HostUpdate implements UpdateCommand {
 
 	private Map<String, Object> newdata;
 
-	private OpsiserviceNOMPersistenceController persis;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
-	public HostUpdate(OpsiserviceNOMPersistenceController persis, Map<String, Object> newdata) {
+	public HostUpdate(Map<String, Object> newdata) {
 		super();
 		this.newdata = newdata;
-		setController(persis);
 	}
 
 	@Override
 	public void doCall() {
 		Logging.debug(this, "doCall, newdata " + newdata);
-		persis.setHostValues(newdata);
-	}
-
-	@Override
-	public void setController(Object obj) {
-		this.persis = (OpsiserviceNOMPersistenceController) obj;
-	}
-
-	@Override
-	public Object getController() {
-		return persis;
+		persistenceController.setHostValues(newdata);
 	}
 }

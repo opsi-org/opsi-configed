@@ -193,15 +193,6 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 		return result;
 	}
 
-	@Override
-	public Object getController() {
-		return null;
-	}
-
-	@Override
-	public void setController(Object cont) {
-		/* Not needed */}
-
 	/**
 	 * doCall calls doCall on all members. This will give a recursion for
 	 * members being update collections themselves.
@@ -222,7 +213,5 @@ public class UpdateCollection implements UpdateCommand, CountedCollection {
 				theCommand.doCall();
 			}
 		}
-
 	}
-
 }

@@ -35,7 +35,8 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 
 	private int keyCol;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private ControlPanelAssignToLPools myController;
 
@@ -46,8 +47,6 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 				10, 10);
 
 		this.myController = myController;
-
-		persist = PersistenceControllerFactory.getPersistenceController();
 
 		panelGlobalSoftware = new PanelGenEditTable("",
 
@@ -119,7 +118,7 @@ public class FGlobalSoftwareInfo extends FGeneralDialog {
 		Logging.info(this, "removeAssociations for " + " licencePool " + myController.getSelectedLicencePool()
 				+ " selected SW keys " + panelGlobalSoftware.getSelectedKeys());
 
-		boolean success = persist.removeAssociations(myController.getSelectedLicencePool(),
+		boolean success = persistenceController.removeAssociations(myController.getSelectedLicencePool(),
 				panelGlobalSoftware.getSelectedKeys());
 
 		if (success) {

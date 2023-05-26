@@ -11,22 +11,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.logging.Logging;
 
 /**
 */
 public class HostUpdateCollection extends UpdateCollection {
-	private OpsiserviceNOMPersistenceController persis;
 
-	public HostUpdateCollection(Object persis) {
+	public HostUpdateCollection() {
 		super(new ArrayList<>(0));
-		setController(persis);
-	}
-
-	@Override
-	public void setController(Object obj) {
-		this.persis = (OpsiserviceNOMPersistenceController) obj;
 	}
 
 	@Override
@@ -44,7 +36,7 @@ public class HostUpdateCollection extends UpdateCollection {
 				Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map", ccex);
 			}
 
-			result = add(new HostUpdate(persis, map));
+			result = add(new HostUpdate(map));
 		}
 		return result;
 	}

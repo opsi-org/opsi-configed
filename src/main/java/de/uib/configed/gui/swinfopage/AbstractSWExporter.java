@@ -38,7 +38,8 @@ public abstract class AbstractSWExporter {
 
 	private String filenamePrefix = "report_swaudit_";
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	protected GenTableModel modelSWInfo;
 	protected String scanInfo = "";
@@ -50,11 +51,6 @@ public abstract class AbstractSWExporter {
 	private String password;
 	private String clientsFile;
 	private String outDir;
-
-	/* constructor for use in a initialized context */
-	protected AbstractSWExporter(OpsiserviceNOMPersistenceController controller) {
-		this.persist = controller;
-	}
 
 	/* constructor for standalone use */
 	protected AbstractSWExporter() {
@@ -117,12 +113,12 @@ public abstract class AbstractSWExporter {
 
 	public void run() {
 		Messages.setLocale("en");
-		persist = PersistenceControllerFactory.getNewPersistenceController(server, user, password);
-		if (persist == null) {
+		persistenceController = PersistenceControllerFactory.getNewPersistenceController(server, user, password);
+		if (persistenceController == null) {
 			finish(de.uib.configed.ErrorCode.INITIALIZATION_ERROR);
 		}
 
-		if (persist.getConnectionState().getState() != ConnectionState.CONNECTED) {
+		if (persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
 			finish(de.uib.configed.ErrorCode.CONNECTION_ERROR);
 		}
 
@@ -195,7 +191,8 @@ public abstract class AbstractSWExporter {
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + theHost);
-						Map<String, Map<String, Object>> tableData = persist.retrieveSoftwareAuditData(theHost);
+						Map<String, Map<String, Object>> tableData = persistenceController
+								.retrieveSoftwareAuditData(theHost);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
 							Logging.debug(this, "tableData is empty or null");
@@ -203,7 +200,7 @@ public abstract class AbstractSWExporter {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 						} else {
 							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
-							scanInfo = "Scan " + persist.getLastSoftwareAuditModification(theHost);
+							scanInfo = "Scan " + persistenceController.getLastSoftwareAuditModification(theHost);
 						}
 
 						return tableData;

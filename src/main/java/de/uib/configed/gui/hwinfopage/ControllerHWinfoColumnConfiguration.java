@@ -29,6 +29,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.type.OpsiHwAuditDeviceClass;
 import de.uib.configed.type.OpsiHwAuditDevicePropertyType;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -66,10 +67,10 @@ public class ControllerHWinfoColumnConfiguration {
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
-	public ControllerHWinfoColumnConfiguration(OpsiserviceNOMPersistenceController persist) {
-		this.persist = persist;
+	public ControllerHWinfoColumnConfiguration() {
 
 		initPanel();
 		initModel();
@@ -88,7 +89,7 @@ public class ControllerHWinfoColumnConfiguration {
 				Logging.info(this, "commit, we do the saving");
 
 				Logging.info(this, " we have got updateItems " + updateItems);
-				persist.saveHwColumnConfig(updateItems);
+				persistenceController.saveHwColumnConfig(updateItems);
 				updateItems.clear();
 
 			}
@@ -96,11 +97,11 @@ public class ControllerHWinfoColumnConfiguration {
 			@Override
 			public void reload() {
 
-				persist.hwAuditConfRequestRefresh();
-				persist.configOptionsRequestRefresh();
+				persistenceController.hwAuditConfRequestRefresh();
+				persistenceController.configOptionsRequestRefresh();
 				model.requestReload();
 
-				persist.getConfigOptions();
+				persistenceController.getConfigOptions();
 
 				model.reset();
 				setDataChanged(false);
@@ -263,7 +264,7 @@ public class ControllerHWinfoColumnConfiguration {
 	private Map<String, Map<String, Object>> getHwColumnConfig() {
 		Map<String, Map<String, Object>> result = new LinkedHashMap<>();
 
-		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persist.getHwAuditDeviceClasses();
+		Map<String, OpsiHwAuditDeviceClass> hwAuditDeviceClasses = persistenceController.getHwAuditDeviceClasses();
 		int id = 0;
 
 		for (Entry<String, OpsiHwAuditDeviceClass> hwClassEntry : hwAuditDeviceClasses.entrySet()) {

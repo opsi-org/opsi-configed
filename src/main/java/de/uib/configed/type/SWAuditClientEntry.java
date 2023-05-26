@@ -16,6 +16,7 @@ import java.util.NavigableMap;
 
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SWAuditClientEntry {
@@ -105,33 +106,16 @@ public class SWAuditClientEntry {
 	private List<String> software;
 	private NavigableMap<String, Integer> software2Number;
 
-	private OpsiserviceNOMPersistenceController controller;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
-	public SWAuditClientEntry(final List<String> keys, final List<String> values,
-			OpsiserviceNOMPersistenceController controller) {
-
-		data = new HashMap<>();
-
-		data.put(SWAuditEntry.ID, values.get(keys.indexOf(DB_COLUMNS.get(CLIENT_ID))));
-		data.put(LICENCE_KEY, values.get(keys.indexOf(DB_COLUMNS.get(LICENCE_KEY))));
-
-		lastModificationS = values.get(keys.indexOf(DB_COLUMNS.get(LAST_MODIFICATION)));
-		swIdent = produceSWident(keys, values);
-		this.controller = controller;
-		this.software = controller.getSoftwareList();
-		this.software2Number = controller.getSoftware2Number();
-
-		produceSWid();
-	}
-
-	public SWAuditClientEntry(final Map<String, Object> m, OpsiserviceNOMPersistenceController controller) {
+	public SWAuditClientEntry(final Map<String, Object> m) {
 
 		data = new HashMap<>();
 		data.put(SWAuditEntry.ID, Globals.produceNonNull(m.get(CLIENT_ID)));
 		swIdent = produceSWident(m);
-		this.controller = controller;
-		this.software = controller.getSoftwareList();
-		this.software2Number = controller.getSoftware2Number();
+		this.software = persistenceController.getSoftwareList();
+		this.software2Number = persistenceController.getSoftware2Number();
 		produceSWid();
 		data.put(LICENCE_KEY, Globals.produceNonNull(m.get(LICENCE_KEY)));
 		lastModificationS = Globals.produceNonNull(m.get(LAST_MODIFICATION));
@@ -179,8 +163,8 @@ public class SWAuditClientEntry {
 	private void updateSoftware() {
 		Logging.info(this, "updateSoftware");
 		if (lastUpdateTime != null && System.currentTimeMillis() - lastUpdateTime > MS_AFTER_THIS_ALLOW_NEXT_UPDATE) {
-			controller.installedSoftwareInformationRequestRefresh();
-			software = controller.getSoftwareList();
+			persistenceController.installedSoftwareInformationRequestRefresh();
+			software = persistenceController.getSoftwareList();
 			lastUpdateTime = System.currentTimeMillis();
 			notFoundSoftwareIDs = new ArrayList<>();
 		} else {

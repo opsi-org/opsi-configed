@@ -763,7 +763,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	private void initData() {
-		dependenciesModel = new DependenciesModel(persistenceController);
+		dependenciesModel = new DependenciesModel();
 		generalDataChangedKeeper = new GeneralDataChangedKeeper();
 		clientInfoDataChangedKeeper = new ClientInfoDataChangedKeeper();
 		hostConfigsDataChangedKeeper = new GeneralDataChangedKeeper();
@@ -2323,8 +2323,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			// product?
 			// if not, we produce one
 
-			clientProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(persistenceController,
-					getSelectedClients(), productname);
+			clientProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(getSelectedClients(),
+					productname);
 
 			clientProductpropertiesUpdateCollections.put(productname, clientProductpropertiesUpdateCollection);
 			addToGlobalUpdateCollection(clientProductpropertiesUpdateCollection);
@@ -3036,7 +3036,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 					updateCollection.remove(hostUpdateCollection);
 				}
 
-				hostUpdateCollection = new HostUpdateCollection(persistenceController);
+				hostUpdateCollection = new HostUpdateCollection();
 				addToGlobalUpdateCollection(hostUpdateCollection);
 
 				mainFrame.panelHostProperties.initMultipleHostsEditing(
@@ -3090,8 +3090,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 							ex);
 				}
 			}
-			additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(persistenceController,
-					objectIds);
+			additionalconfigurationUpdateCollection = new AdditionalconfigurationUpdateCollection(objectIds);
 			addToGlobalUpdateCollection(additionalconfigurationUpdateCollection);
 
 			if (editingTarget == EditingTarget.SERVER) {
@@ -4690,8 +4689,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 
 		final FWakeClients result = new FWakeClients(mainFrame,
-				Globals.APPNAME + ": " + Configed.getResourceValue("FWakeClients.title") + " " + startInfo,
-				persistenceController);
+				Globals.APPNAME + ": " + Configed.getResourceValue("FWakeClients.title") + " " + startInfo);
 
 		new Thread() {
 			@Override

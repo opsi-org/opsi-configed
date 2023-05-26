@@ -44,6 +44,7 @@ import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.sshcommand.EmptyCommand;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.FileX;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
@@ -52,7 +53,12 @@ import de.uib.utilities.swing.JTextShowField;
 import de.uib.utilities.thread.WaitCursor;
 
 public class PanelDriverUpload extends JPanel implements de.uib.utilities.NameProducer {
-
+	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
+	private static final String[] DIRECTORY_DRIVERS_PREFERRED = new String[] { "drivers", "drivers", "preferred" };
+	private static final String[] DIRECTORY_DRIVERS_EXCLUDED = new String[] { "drivers", "drivers", "excluded" };
+	private static final String[] DIRECTORY_DRIVERS_ADDITIONAL = new String[] { "drivers", "drivers", "additional" };
+	private static final String[] DIRECTORY_DRIVERS_BY_AUDIT = new String[] { "drivers", "drivers", "additional",
+			"byAudit" };
 	private int hFirstGap = Globals.HFIRST_GAP;
 
 	private int hGap = Globals.HGAP_SIZE / 2;
@@ -173,14 +179,14 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 	private JLabel jLabelTopic;
 	private int wLeftText;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private ConfigedMain main;
 	private String server;
 	private JFrame rootFrame;
 
-	public PanelDriverUpload(ConfigedMain main, OpsiserviceNOMPersistenceController persist, JFrame root) {
+	public PanelDriverUpload(ConfigedMain main, JFrame root) {
 		this.main = main;
-		this.persist = persist;
 		this.rootFrame = root;
 		server = main.getConfigserver();
 
@@ -290,7 +296,7 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		Logging.info(this, "retrieveWinProducts smbMounted " + smbMounted);
 
-		List<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
+		List<String> winProducts = persistenceController.getWinProducts(server, depotProductDirectory);
 
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
@@ -370,18 +376,18 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		RadioButtonIntegrationType buttonStandard = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.standard"),
-				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS));
+				FileX.getLocalsystemPath(DIRECTORY_DRIVERS));
 		RadioButtonIntegrationType buttonPreferred = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.preferred"),
-				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS_PREFERRED));
+				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_PREFERRED));
 		RadioButtonIntegrationType buttonNotPreferred = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.excluded"),
-				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS_EXCLUDED));
+				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_EXCLUDED));
 		RadioButtonIntegrationType buttonAdditional = new RadioButtonIntegrationType(
 				Configed.getResourceValue("PanelDriverUpload.type.additional"),
-				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS_ADDITIONAL));
+				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_ADDITIONAL));
 		buttonByAudit = new RadioButtonIntegrationType(Configed.getResourceValue("PanelDriverUpload.type.byAudit"),
-				FileX.getLocalsystemPath(SmbConnect.DIRECTORY_DRIVERS_BY_AUDIT));
+				FileX.getLocalsystemPath(DIRECTORY_DRIVERS_BY_AUDIT));
 
 		radioButtons.add(buttonStandard);
 		radioButtons.add(buttonPreferred);
@@ -721,9 +727,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 				if (stateServerPath) {
 					String driverDir = "/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-							+ SmbConnect.unixPath(SmbConnect.DIRECTORY_DRIVERS);
+							+ SmbConnect.unixPath(DIRECTORY_DRIVERS);
 					Logging.info(this, "set rights for " + driverDir);
-					persist.setRights(driverDir);
+					persistenceController.setRights(driverDir);
 				}
 
 				waitCursor.stop();

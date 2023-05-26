@@ -9,30 +9,20 @@ package de.uib.opsidatamodel.datachanges;
 import java.util.Map;
 
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 public class ProductpropertiesUpdate implements UpdateCommand {
 	private String pcname;
 	private String productname;
 	private Map<?, ?> newdata;
 
-	private OpsiserviceNOMPersistenceController persis;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
-	public ProductpropertiesUpdate(OpsiserviceNOMPersistenceController persis, String pcname, String productname,
-			Map<?, ?> newdata) {
+	public ProductpropertiesUpdate(String pcname, String productname, Map<?, ?> newdata) {
 		this.pcname = pcname;
 		this.productname = productname;
 		this.newdata = newdata;
-		setController(persis);
-	}
-
-	@Override
-	public void setController(Object obj) {
-		this.persis = (OpsiserviceNOMPersistenceController) obj;
-	}
-
-	@Override
-	public Object getController() {
-		return persis;
 	}
 
 	@Override
@@ -40,7 +30,7 @@ public class ProductpropertiesUpdate implements UpdateCommand {
 
 		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
 
-			persis.setProductProperties(pcname, productname, newdata);
+			persistenceController.setProductProperties(pcname, productname, newdata);
 		}
 	}
 

@@ -450,7 +450,7 @@ public class MainFrame extends JFrame
 
 		this.treeClients = treeClients;
 
-		depotListPresenter = new DepotListPresenter(depotsList, multidepot, main.getPersistenceController());
+		depotListPresenter = new DepotListPresenter(depotsList, multidepot);
 
 		this.configedMain = main;
 
@@ -3482,8 +3482,7 @@ public class MainFrame extends JFrame
 
 	public void setHardwareInfoMultiClients(String[] clients) {
 		if (showHardwareLogMultiClientReport == null || controllerHWinfoMultiClients == null) {
-			controllerHWinfoMultiClients = new ControllerHWinfoMultiClients(configedMain,
-					configedMain.getPersistenceController());
+			controllerHWinfoMultiClients = new ControllerHWinfoMultiClients(configedMain);
 			showHardwareLogMultiClientReport = controllerHWinfoMultiClients.panel;
 		}
 

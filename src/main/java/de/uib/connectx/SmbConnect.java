@@ -21,19 +21,12 @@ public final class SmbConnect {
 	public static final String DIRECTORY_I368 = "i386";
 	public static final String DIRECTORY_INSTALL_FILES = "installfiles";
 
-	public static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
-	public static final String[] DIRECTORY_DRIVERS_PREFERRED = new String[] { "drivers", "drivers", "preferred" };
-	public static final String[] DIRECTORY_DRIVERS_EXCLUDED = new String[] { "drivers", "drivers", "excluded" };
-	public static final String[] DIRECTORY_DRIVERS_ADDITIONAL = new String[] { "drivers", "drivers", "additional" };
-	public static final String[] DIRECTORY_DRIVERS_BY_AUDIT = new String[] { "drivers", "drivers", "additional",
-			"byAudit" };
-
 	private static SmbConnect instance;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
+	// Private constructor to hide public one; We use only one instance
 	private SmbConnect() {
-		persist = PersistenceControllerFactory.getPersistenceController();
 	}
 
 	public static SmbConnect getInstance() {

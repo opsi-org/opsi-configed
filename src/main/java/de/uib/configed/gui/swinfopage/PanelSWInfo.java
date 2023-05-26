@@ -78,7 +78,8 @@ public class PanelSWInfo extends JPanel {
 	private int vGap = Globals.VGAP_SIZE / 2;
 
 	private ConfigedMain mainController;
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public enum KindOfExport {
 		PDF, CSV
@@ -135,7 +136,6 @@ public class PanelSWInfo extends JPanel {
 	public PanelSWInfo(boolean withPopup, ConfigedMain mainController) {
 		this.withPopup = withPopup;
 		this.mainController = mainController;
-		persist = mainController.getPersistenceController();
 
 		initTable();
 
@@ -182,14 +182,15 @@ public class PanelSWInfo extends JPanel {
 					@Override
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.info(this, "retrieving data for " + hostId);
-						Map<String, Map<String, Object>> tableData = persist.retrieveSoftwareAuditData(hostId);
+						Map<String, Map<String, Object>> tableData = persistenceController
+								.retrieveSoftwareAuditData(hostId);
 
 						if (tableData == null || tableData.keySet().isEmpty()) {
 							scanInfo = Configed.getResourceValue("PanelSWInfo.noScanResult");
 							title = scanInfo;
 						} else {
 							Logging.debug(this, "retrieved size  " + tableData.keySet().size());
-							scanInfo = "Scan " + persist.getLastSoftwareAuditModification(hostId);
+							scanInfo = "Scan " + persistenceController.getLastSoftwareAuditModification(hostId);
 							title = scanInfo;
 
 						}
@@ -425,7 +426,7 @@ public class PanelSWInfo extends JPanel {
 
 	public void sendToTerminal() {
 
-		SWterminalExporter exporter = new SWterminalExporter(PersistenceControllerFactory.getPersistenceController());
+		SWterminalExporter exporter = new SWterminalExporter();
 
 		exporter.setHost(hostId);
 

@@ -23,6 +23,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FPanel;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -43,7 +44,8 @@ public class ControllerHWinfoMultiClients {
 	private GenTableModel model;
 
 	private ConfigedMain main;
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private TableModelFilter tableModelFilter;
 
 	private SecondaryFrame fTable;
@@ -79,9 +81,8 @@ public class ControllerHWinfoMultiClients {
 
 	};
 
-	public ControllerHWinfoMultiClients(ConfigedMain main, OpsiserviceNOMPersistenceController persist) {
+	public ControllerHWinfoMultiClients(ConfigedMain main) {
 		this.main = main;
-		this.persist = persist;
 		start();
 	}
 
@@ -115,7 +116,7 @@ public class ControllerHWinfoMultiClients {
 			@Override
 			public void reload() {
 
-				persist.client2HwRowsRequestRefresh();
+				persistenceController.client2HwRowsRequestRefresh();
 
 				super.reload();
 
@@ -143,8 +144,8 @@ public class ControllerHWinfoMultiClients {
 
 	private void initModel() {
 
-		List<String> columnNames = persist.getClient2HwRowsColumnNames();
-		List<String> classNames = persist.getClient2HwRowsJavaclassNames();
+		List<String> columnNames = persistenceController.getClient2HwRowsColumnNames();
+		List<String> classNames = persistenceController.getClient2HwRowsJavaclassNames();
 		Logging.info(this, "initmodel: columns " + columnNames);
 		String[] hosts = new String[0];
 
@@ -158,7 +159,7 @@ public class ControllerHWinfoMultiClients {
 
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
 					Logging.info(this, "retrieveMap: getClient2HwRows");
-					return persist.getClient2HwRows(hosts);
+					return persistenceController.getClient2HwRows(hosts);
 				})),
 
 				// keycol
@@ -187,8 +188,8 @@ public class ControllerHWinfoMultiClients {
 			return;
 		}
 		// the window exists
-		persist.configOptionsRequestRefresh();
-		persist.client2HwRowsRequestRefresh();
+		persistenceController.configOptionsRequestRefresh();
+		persistenceController.client2HwRowsRequestRefresh();
 		initModel();
 
 		// we apply filter
@@ -249,8 +250,8 @@ public class ControllerHWinfoMultiClients {
 	private void configureColumns(ActionEvent actionEvent) {
 		Logging.info(this, "action performed " + actionEvent);
 
-		ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration(
-				persist);
+		ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration();
+
 		if (fTable == null || ((FPanel) fTable).isLeft()) {
 			fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel, true);
 

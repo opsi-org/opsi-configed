@@ -21,26 +21,28 @@ import de.uib.configed.Globals;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class FWakeClients extends FShowList {
 	private boolean cancelled;
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
-	public FWakeClients(JFrame master, String title, OpsiserviceNOMPersistenceController persist) {
+	public FWakeClients(JFrame master, String title) {
 		super(master, title, false, new String[] { Configed.getResourceValue("FWakeClients.cancel") });
 		if (!Main.FONT) {
 			super.setFont(Globals.defaultFont);
 		}
 		super.setMessage("");
 		super.setButtonsEnabled(true);
-		this.persist = persist;
 	}
 
 	public void act(String[] selectedClients, int delaySecs) {
 		setVisible(true);
 		glassTransparency(true, 1000, 200, 0.04F);
-		Map<String, List<String>> hostSeparationByDepots = persist.getHostSeparationByDepots(selectedClients);
+		Map<String, List<String>> hostSeparationByDepots = persistenceController
+				.getHostSeparationByDepots(selectedClients);
 		Map<String, Integer> counterByDepots = new HashMap<>();
 		Map<String, AbstractExecutioner> executionerForDepots = new HashMap<>();
 
@@ -67,7 +69,7 @@ public class FWakeClients extends FShowList {
 						&& counterByDepots.get(depotEntry.getKey()) < depotEntry.getValue().size()) {
 
 					if (executionerForDepots.get(depotEntry.getKey()) == null) {
-						AbstractExecutioner exec1 = persist.retrieveWorkingExec(depotEntry.getKey());
+						AbstractExecutioner exec1 = persistenceController.retrieveWorkingExec(depotEntry.getKey());
 						// we try to connect when the first client of a depot should be connected
 
 						// may be Executioner.NONE
@@ -94,9 +96,9 @@ public class FWakeClients extends FShowList {
 			}
 
 			if (JSONthroughHTTPS.isOpsi43()) {
-				persist.wakeOnLanOpsi43(hostsToWakeOnThisTurn.toArray(new String[0]));
+				persistenceController.wakeOnLanOpsi43(hostsToWakeOnThisTurn.toArray(new String[0]));
 			} else {
-				persist.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
+				persistenceController.wakeOnLan(hostsToWakeOnThisTurn, hostSeparationByDepots, executionerForDepots);
 			}
 
 			Globals.threadSleep(this, 1000L * delaySecs);

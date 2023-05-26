@@ -500,8 +500,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		valueList.setListData(data);
 		valueList.setInfo(info);
 
-		final ValueSelectorList valueSelectorList = new ValueSelectorList(valueList, true,
-				PersistenceControllerFactory.getPersistenceController());
+		final ValueSelectorList valueSelectorList = new ValueSelectorList(valueList, true);
 		valueSelectorList.setVisible(true);
 
 		return valueSelectorList;

@@ -9,28 +9,18 @@ package de.uib.opsidatamodel.datachanges;
 import java.util.Map;
 
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 public class AdditionalconfigurationUpdate implements UpdateCommand {
 	private String objectId;
 	private Map<?, ?> newdata;
 
-	private OpsiserviceNOMPersistenceController persis;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
-	public AdditionalconfigurationUpdate(OpsiserviceNOMPersistenceController persis, String objectId,
-			Map<?, ?> newdata) {
+	public AdditionalconfigurationUpdate(String objectId, Map<?, ?> newdata) {
 		this.objectId = objectId;
 		this.newdata = newdata;
-		setController(persis);
-	}
-
-	@Override
-	public void setController(Object obj) {
-		this.persis = (OpsiserviceNOMPersistenceController) obj;
-	}
-
-	@Override
-	public Object getController() {
-		return persis;
 	}
 
 	@Override
@@ -39,7 +29,7 @@ public class AdditionalconfigurationUpdate implements UpdateCommand {
 		if (newdata instanceof de.uib.configed.type.ConfigName2ConfigValue) {
 			de.uib.configed.type.ConfigName2ConfigValue configState = (de.uib.configed.type.ConfigName2ConfigValue) newdata;
 
-			persis.setAdditionalConfiguration(objectId, configState);
+			persistenceController.setAdditionalConfiguration(objectId, configState);
 			// for opsi 4.0, this only collects the data
 		}
 	}

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -21,13 +22,14 @@ import de.uib.utilities.logging.Logging;
 public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	private List<String> clients;
 	private String productname;
-	private OpsiserviceNOMPersistenceController persis;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
-	public ProductpropertiesUpdateCollection(Object persis, String[] clients, String productname) {
-		this(persis, Arrays.asList(clients), productname);
+	public ProductpropertiesUpdateCollection(String[] clients, String productname) {
+		this(Arrays.asList(clients), productname);
 	}
 
-	public ProductpropertiesUpdateCollection(Object persis, List<String> clients, String productname) {
+	public ProductpropertiesUpdateCollection(List<String> clients, String productname) {
 		super(new ArrayList<>(0));
 		if (clients == null) {
 			this.clients = new ArrayList<>();
@@ -35,12 +37,6 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 			this.clients = clients;
 		}
 		this.productname = productname;
-		setController(persis);
-	}
-
-	@Override
-	public void setController(Object obj) {
-		this.persis = (OpsiserviceNOMPersistenceController) obj;
 	}
 
 	@Override
@@ -77,7 +73,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 					Logging.error("Wrong element type, found " + obj.getClass().getName() + ", expected a Map", ccex);
 				}
 
-				result = add(new ProductpropertiesUpdate(persis, clients.get(i), productname, map));
+				result = add(new ProductpropertiesUpdate(clients.get(i), productname, map));
 				i++;
 			}
 		}
@@ -95,7 +91,7 @@ public class ProductpropertiesUpdateCollection extends UpdateCollection {
 	public void doCall() {
 		super.doCall();
 		Logging.debug(this, "doCall, after recursion");
-		persis.setProductProperties();
+		persistenceController.setProductProperties();
 
 	}
 

@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 
 public class DependenciesModel {
 
@@ -18,13 +19,13 @@ public class DependenciesModel {
 	private RequirementsTableModel requirementsTableModel;
 	private DependenciesTreeModel dependenciesTreeModel;
 
-	private OpsiserviceNOMPersistenceController persistenceController;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
-	public DependenciesModel(OpsiserviceNOMPersistenceController persistenceController) {
-		this.persistenceController = persistenceController;
+	public DependenciesModel() {
 
-		requirementsTableModel = new RequirementsTableModel(persistenceController);
-		dependenciesTreeModel = new DependenciesTreeModel(persistenceController);
+		requirementsTableModel = new RequirementsTableModel();
+		dependenciesTreeModel = new DependenciesTreeModel();
 
 		listeners = new HashSet<>();
 	}

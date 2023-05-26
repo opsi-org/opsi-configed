@@ -462,7 +462,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		hwAuditConf = new HashMap<>();
 
-		initMembers();
+		dataStub = new DataStubNOM(this);
 	}
 
 	public static Map<String, Object> createNOMitem(String type) {
@@ -602,12 +602,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		return false;
 	}
 
-	private void initMembers() {
-		if (dataStub == null) {
-			dataStub = new DataStubNOM(this);
-		}
-	}
-
 	// final in order to avoid deactiviating by override
 	private final boolean setAgainUserRegistration(final boolean userRegisterValueFromConfigs) {
 		Logging.info(this, "setAgainUserRegistration, userRoles can be used " + withUserRoles);
@@ -706,7 +700,6 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	public final void checkConfiguration() {
 		retrieveOpsiModules();
 		Logging.info(this, "checkConfiguration, modules " + opsiModules);
-		initMembers();
 
 		Map<String, List<Object>> serverPropertyMap = getConfigDefaultValues();
 
