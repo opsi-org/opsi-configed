@@ -32,6 +32,7 @@ import de.uib.configed.gui.licences.PanelAssignToLPools;
 import de.uib.configed.type.SWAuditEntry;
 import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
@@ -70,7 +71,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private ConfigedMain mainController;
 
-	public OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	// activate filter for selection in software table
 	public enum SoftwareShowMode {
@@ -96,9 +98,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private Map<String, List<String>> removeKeysFromOtherLicencePool;
 
-	public ControlPanelAssignToLPools(OpsiserviceNOMPersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelAssignToLPools(ConfigedMain mainController) {
 		thePanel = new PanelAssignToLPools(this);
-		this.persist = persist;
 		this.mainController = mainController;
 		init();
 	}
@@ -110,7 +111,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 	private NavigableSet<Object> getUnAssignedSoftwareIds() {
 		// the object is cached in persist
-		return persist.getSoftwareWithoutAssociatedLicencePool();
+		return persistenceController.getSoftwareWithoutAssociatedLicencePool();
 	}
 
 	public void setSoftwareIdsFromLicencePool() {
@@ -150,13 +151,13 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		List<String> softwareIdsForPool = new ArrayList<>();
 		if (poolID != null) {
-			softwareIdsForPool = persist.getSoftwareListByLicencePool(poolID);
+			softwareIdsForPool = persistenceController.getSoftwareListByLicencePool(poolID);
 		}
 
 		Logging.info(this, "setSoftwareIdsFromLicencePool  softwareIds for licencePool  " + poolID + " : "
 				+ softwareIdsForPool.size());
 		Logging.info(this, "setSoftwareIdsFromLicencePool  unknown softwareIds for licencePool  " + poolID + " : "
-				+ persist.getUnknownSoftwareListForLicencePool(poolID).size());
+				+ persistenceController.getUnknownSoftwareListForLicencePool(poolID).size());
 
 		Integer totalUnassignedSWEntries = getUnAssignedSoftwareIds().size();
 		Logging.info(this, "setSoftwareIdsFromLicencePool unAssignedSoftwareIds " + totalUnassignedSWEntries);
@@ -165,15 +166,15 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.fieldCountAllWindowsSoftware.setText("0");
 
 		thePanel.buttonShowAssignedNotExisting
-				.setEnabled(!persist.getUnknownSoftwareListForLicencePool(poolID).isEmpty());
+				.setEnabled(!persistenceController.getUnknownSoftwareListForLicencePool(poolID).isEmpty());
 		if (thePanel.fMissingSoftwareInfo == null) {
 			thePanel.fMissingSoftwareInfo = new FGlobalSoftwareInfo(Globals.frame1, this);
 		}
 
-		if (!persist.getUnknownSoftwareListForLicencePool(poolID).isEmpty()) {
+		if (!persistenceController.getUnknownSoftwareListForLicencePool(poolID).isEmpty()) {
 			Map<String, Map<String, Object>> missingSoftwareMap = new HashMap<>();
 
-			for (String ID : persist.getUnknownSoftwareListForLicencePool(poolID)) {
+			for (String ID : persistenceController.getUnknownSoftwareListForLicencePool(poolID)) {
 				String[] rowValues = ID.split(Globals.PSEUDO_KEY_SEPARATOR);
 
 				Map<String, Object> rowMap = new HashMap<>();
@@ -343,18 +344,18 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		for (String key : selKeys) {
 			// key is already assigned to a different licencePool?
 
-			boolean gotAssociation = persist.getFSoftware2LicencePool(key) != null;
+			boolean gotAssociation = persistenceController.getFSoftware2LicencePool(key) != null;
 			Logging.debug(this, "validateWindowsSoftwareKeys key " + key + " gotAssociation " + gotAssociation);
 
 			Boolean newAssociation = null;
 			if (gotAssociation) {
-				newAssociation = !(persist.getFSoftware2LicencePool(key).equals(selectedLicencePool));
-				Logging.debug(this,
-						"validateWindowsSoftwareKeys has association to " + persist.getFSoftware2LicencePool(key));
+				newAssociation = !(persistenceController.getFSoftware2LicencePool(key).equals(selectedLicencePool));
+				Logging.debug(this, "validateWindowsSoftwareKeys has association to "
+						+ persistenceController.getFSoftware2LicencePool(key));
 			}
 
 			if (newAssociation != null && newAssociation) {
-				String otherPool = persist.getFSoftware2LicencePool(key);
+				String otherPool = persistenceController.getFSoftware2LicencePool(key);
 
 				if (otherPool.equals(FSoftwarename2LicencePool.VALUE_NO_LICENCE_POOL)) {
 					Logging.info(this, "validateWindowsSoftwareKeys, assigned to valNoLicencepool");
@@ -458,7 +459,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 						boolean existsNewRow = mainController.licencePoolTableProvider.getRows()
 								.size() < modelLicencepools.getRowCount();
 
-						if (existsNewRow && persist.getLicencepools().containsKey(rowmap.get("licensePoolId"))) {
+						if (existsNewRow
+								&& persistenceController.getLicencepools().containsKey(rowmap.get("licensePoolId"))) {
 							// but we leave it until the service methods reflect the situation more
 							// accurately
 
@@ -477,14 +479,15 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 							modelLicencepools.requestReload();
 						}
 
-						return persist.editLicencePool((String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY),
+						return persistenceController.editLicencePool(
+								(String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY),
 								(String) rowmap.get(LicencepoolEntry.DESCRIPTION_KEY));
 					}
 
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencepools.requestReload();
-						return persist.deleteLicencePool((String) rowmap.get("licensePoolId"));
+						return persistenceController.deleteLicencePool((String) rowmap.get("licensePoolId"));
 					}
 				}, updateCollection));
 
@@ -499,7 +502,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				columnNames, classNames, 0);
 		modelProductId2LPool = new GenTableModel(updateItemFactoryProductId2LPool,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames,
-						() -> (Map) persist.getRelationsProductId2LPool())),
+						() -> (Map) persistenceController.getRelationsProductId2LPool())),
 				-1, new int[] { 0, 1 }, thePanel.panelProductId2LPool, updateCollection);
 		updateItemFactoryProductId2LPool.setSource(modelProductId2LPool);
 
@@ -552,22 +555,22 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		if (!Main.FONT) {
 			comboLP1.setFont(Globals.defaultFontBig);
 		}
-		col.setCellEditor(new AdaptingCellEditor(comboLP1,
-				(row, column) -> new DefaultComboBoxModel<>(persist.getProductIds().toArray(new String[0]))));
+		col.setCellEditor(new AdaptingCellEditor(comboLP1, (row,
+				column) -> new DefaultComboBoxModel<>(persistenceController.getProductIds().toArray(new String[0]))));
 
 		// updates
 		thePanel.panelProductId2LPool.setUpdateController(new MapItemsUpdateController(thePanel.panelProductId2LPool,
 				modelProductId2LPool, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> m) {
-						return persist.editRelationProductId2LPool((String) m.get("productId"),
+						return persistenceController.editRelationProductId2LPool((String) m.get("productId"),
 								(String) m.get("licensePoolId"));
 					}
 
 					@Override
 					public boolean sendDelete(Map<String, Object> m) {
 						modelProductId2LPool.requestReload();
-						return persist.deleteRelationProductId2LPool((String) m.get("productId"),
+						return persistenceController.deleteRelationProductId2LPool((String) m.get("productId"),
 								(String) m.get("licensePoolId"));
 					}
 				}, updateCollection));
@@ -597,8 +600,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		boolean withRowCounter = false;
 		modelWindowsSoftwareIds = new GenTableModel(null,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					persist.installedSoftwareInformationRequestRefresh();
-					return (Map) persist.getInstalledSoftwareInformationForLicensing();
+					persistenceController.installedSoftwareInformationRequestRefresh();
+					return (Map) persistenceController.getInstalledSoftwareInformationForLicensing();
 
 				}, withRowCounter)), WINDOWS_SOFTWARE_ID_KEY_COL, new int[] {}, thePanel.panelRegisteredSoftware,
 				updateCollection);
@@ -715,7 +718,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 							for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicencePool
 									.entrySet()) {
 								if (result && !otherStringPoolEntry.getValue().isEmpty()) {
-									result = persist.removeAssociations(otherStringPoolEntry.getKey(),
+									result = persistenceController.removeAssociations(otherStringPoolEntry.getKey(),
 											otherStringPoolEntry.getValue());
 									if (result) {
 										removeKeysFromOtherLicencePool.remove(otherStringPoolEntry.getKey());
@@ -731,9 +734,9 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 						// cleanup assignments to other pools since an update would not change them
 						// (redmine #3282)
 						if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
-							result = persist.setWindowsSoftwareIds2LPool(poolId, softwareIds);
+							result = persistenceController.setWindowsSoftwareIds2LPool(poolId, softwareIds);
 						} else {
-							result = persist.addWindowsSoftwareIds2LPool(poolId, softwareIds);
+							result = persistenceController.addWindowsSoftwareIds2LPool(poolId, softwareIds);
 						}
 
 						Logging.info(this, "sendUpdate, setSoftwareIdsFromLicencePool poolId " + poolId);
@@ -744,19 +747,19 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 						Logging.info(this, "sendUpdate, we have software ids " + softwareIds.size());
 						Logging.info(this,
 								"sendUpdate, we have software ids "
-										+ persist.getSoftwareListByLicencePool(poolId).size() + " they are "
-										+ persist.getSoftwareListByLicencePool(poolId));
+										+ persistenceController.getSoftwareListByLicencePool(poolId).size()
+										+ " they are " + persistenceController.getSoftwareListByLicencePool(poolId));
 
-						List<String> oldSWListForPool = persist.getSoftwareListByLicencePool(poolId);
+						List<String> oldSWListForPool = persistenceController.getSoftwareListByLicencePool(poolId);
 
 						// remove all old assignements
 						for (String swId : oldSWListForPool) {
 							Logging.info(this, "sendUpdate remove " + swId + " from Software2LicencePool ");
-							persist.getFSoftware2LicencePool().remove(swId);
+							persistenceController.getFSoftware2LicencePool().remove(swId);
 						}
 						// set the current ones
 						for (String ident : softwareIds) {
-							persist.setFSoftware2LicencePool(ident, poolId);
+							persistenceController.setFSoftware2LicencePool(ident, poolId);
 						}
 
 						if (thePanel.fSoftwarename2LicencePool != null) {
@@ -999,7 +1002,7 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			return false;
 		}
 
-		List<String> oldSWList = persist.getSoftwareListByLicencePool(selectedLicencePool);
+		List<String> oldSWList = persistenceController.getSoftwareListByLicencePool(selectedLicencePool);
 		List<String> newKeys = new ArrayList<>(thePanel.panelRegisteredSoftware.getSelectedKeys());
 		newKeys.removeAll(oldSWList);
 

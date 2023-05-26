@@ -452,9 +452,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		ConfigedMain.user = fieldUser.getText();
 		ConfigedMain.password = String.valueOf(passwordField.getPassword());
 		Logging.info(this, "invoking PersistenceControllerFactory host, user, " + fieldHost.getSelectedItem() + ", "
-				+ fieldUser.getText()
-
-		);
+				+ fieldUser.getText());
 
 		if (waitingWorker != null && !waitingWorker.isReady()) {
 

@@ -65,6 +65,7 @@ public class Main {
 	private static void createOptions() {
 		options = new Options();
 
+		// TODO remove CLI-options
 		// General options
 		options.addOption("lv", "logviewer", false, "Use this option to start logviewer instead of configed");
 		options.addOption("l", "locale", true, "Set locale LOC (format: <language>_<country>). DEFAULT: System.locale");
