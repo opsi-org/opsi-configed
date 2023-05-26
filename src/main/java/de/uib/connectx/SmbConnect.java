@@ -23,7 +23,8 @@ public final class SmbConnect {
 
 	private static SmbConnect instance;
 
-	private OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	// Private constructor to hide public one; We use only one instance
 	private SmbConnect() {
@@ -53,7 +54,7 @@ public final class SmbConnect {
 
 	public String buildSambaTarget(String depotserver, String share) {
 		String result = "";
-		Map<String, Map<String, Object>> depot2depotMap = persist.getHostInfoCollections().getDepots();
+		Map<String, Map<String, Object>> depot2depotMap = persistenceController.getHostInfoCollections().getDepots();
 
 		Logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 

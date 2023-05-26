@@ -17,12 +17,10 @@ import de.uib.utilities.logging.Logging;
 
 public class HostGroups extends TreeMap<String, Map<String, String>> {
 
-	OpsiserviceNOMPersistenceController pc;
+	OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory.getPersistenceController();
 
-	public HostGroups(Map<String, Map<String, String>> source, OpsiserviceNOMPersistenceController pc) {
+	public HostGroups(Map<String, Map<String, String>> source) {
 		super(source);
-
-		this.pc = pc;
 	}
 
 	HostGroups addSpecialGroups() {
@@ -38,7 +36,7 @@ public class HostGroups extends TreeMap<String, Map<String, String>> {
 			directoryGroup.put("parentGroupId", null);
 			directoryGroup.put("description", "root of directory");
 
-			pc.addGroup(directoryGroup, false);
+			persistenceController.addGroup(directoryGroup, false);
 
 			groups.add(directoryGroup);
 

@@ -15,7 +15,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 public final class DepotData {
 	private static Map<String, Map<String, Object>> depots = new HashMap<>();
 
-	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+	private static OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private DepotData() {
@@ -30,8 +30,8 @@ public final class DepotData {
 			return;
 		}
 
-		persist.getHostInfoCollections().opsiHostsRequestRefresh();
-		depots = persist.getHostInfoCollections().getDepots();
+		persistenceController.getHostInfoCollections().opsiHostsRequestRefresh();
+		depots = persistenceController.getHostInfoCollections().getDepots();
 	}
 
 	public static void clear() {

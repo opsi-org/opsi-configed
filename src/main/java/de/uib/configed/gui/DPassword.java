@@ -63,7 +63,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
 	private ConfigedMain configedMain;
-	private OpsiserviceNOMPersistenceController persis;
+	private OpsiserviceNOMPersistenceController persistenceController;
 
 	private WaitCursor waitCursor;
 
@@ -341,8 +341,8 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED) {
 			// we can finish
-			Logging.info(this, "connected with persis " + persis);
-			configedMain.setPersistenceController(persis);
+			Logging.info(this, "connected with persis " + persistenceController);
+			configedMain.setPersistenceController(persistenceController);
 
 			MessageFormat messageFormatMainTitle = new MessageFormat(
 					Configed.getResourceValue("ConfigedMain.appTitle"));
@@ -473,11 +473,11 @@ public class DPassword extends JDialog implements WaitingSleeper {
 				@Override
 				public void run() {
 					Logging.info(this, "get persis");
-					persis = PersistenceControllerFactory.getNewPersistenceController(
+					persistenceController = PersistenceControllerFactory.getNewPersistenceController(
 							(String) fieldHost.getSelectedItem(), fieldUser.getText(),
 							String.valueOf(passwordField.getPassword()));
 
-					Logging.info(this, "got persis, == null " + (persis == null));
+					Logging.info(this, "got persis, == null " + (persistenceController == null));
 
 					Logging.info(this, "waitingTask can be set to ready");
 					waitingWorker.setReady();
@@ -485,8 +485,9 @@ public class DPassword extends JDialog implements WaitingSleeper {
 				}
 			}.start();
 		} else {
-			persis = PersistenceControllerFactory.getNewPersistenceController((String) fieldHost.getSelectedItem(),
-					fieldUser.getText(), String.valueOf(passwordField.getPassword()));
+			persistenceController = PersistenceControllerFactory.getNewPersistenceController(
+					(String) fieldHost.getSelectedItem(), fieldUser.getText(),
+					String.valueOf(passwordField.getPassword()));
 
 			long interval = 2000;
 			long waited = 0;

@@ -31,6 +31,7 @@ import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.permission.UserConfig;
+import de.uib.opsidatamodel.permission.UserConfigProducing;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
@@ -40,6 +41,9 @@ import de.uib.utilities.swing.PopupMenuTrait;
 public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 	private static final int USER_START_INDEX = 1;
+
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private PopupMenuTrait popupForUserpath;
 	private PopupMenuTrait popupForUserpathes;
@@ -417,11 +421,10 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 	@Override
 	protected void reload() {
 		// partial reload
-		OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 		buildUserConfig();
 
-		persist.hostConfigsRequestRefresh();
-		persist.configOptionsRequestRefresh();
+		persistenceController.hostConfigsRequestRefresh();
+		persistenceController.configOptionsRequestRefresh();
 		super.reload();
 
 	}
@@ -471,29 +474,28 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 	}
 
 	private void buildUserConfig() {
-		OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 
-		de.uib.opsidatamodel.permission.UserConfigProducing up = new de.uib.opsidatamodel.permission.UserConfigProducing(
+		UserConfigProducing up = new UserConfigProducing(
 				// boolean notUsingDefaultUser, if true, we would supply the logged in user)
 				false,
 
 				// String configserver,
-				persist.getHostInfoCollections().getConfigServer(),
+				persistenceController.getHostInfoCollections().getConfigServer(),
 
 				// Collection<String> existingDepots,
-				persist.getHostInfoCollections().getDepotNamesList(),
+				persistenceController.getHostInfoCollections().getDepotNamesList(),
 
 				// Collection<String> existingHostgroups,
-				persist.getHostGroupIds(),
+				persistenceController.getHostGroupIds(),
 				// Collection<String> existingProductgroups,
-				persist.getProductGroups().keySet(),
+				persistenceController.getProductGroups().keySet(),
 
 				// data. on which changes are based
 				// Map<String, List<Object>> serverconfigValuesMap,
-				persist.getConfigDefaultValues(),
+				persistenceController.getConfigDefaultValues(),
 
 				// Map<String, de.uib.utilities.table.ListCellOptions> configOptionsMap
-				persist.getConfigOptions());
+				persistenceController.getConfigOptions());
 
 		List<Object> newData = up.produce();
 
@@ -505,7 +507,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				OpsiMethodCall omc = new OpsiMethodCall("config_updateObjects",
 						new Object[] { AbstractExecutioner.jsonArray(newData) });
 
-				persist.exec.doCall(omc);
+				persistenceController.exec.doCall(omc);
 			}
 
 			Logging.info(this, "readyObjects for userparts " + newData.size());

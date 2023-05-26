@@ -46,7 +46,8 @@ public class SSHCompletionComboButton {
 	// will be overwritten with config
 	private String opsiRepo = "/";
 
-	private OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public SSHCompletionComboButton() {
 		this(null, null, null);
@@ -94,7 +95,7 @@ public class SSHCompletionComboButton {
 	}
 
 	private void init(List<String> defvalues) {
-		if (persist == null) {
+		if (persistenceController == null) {
 			Logging.info(this, "init PersistenceController null");
 		} else {
 			opsiRepo = OpsiserviceNOMPersistenceController.configedWorkbenchDefaultValue;

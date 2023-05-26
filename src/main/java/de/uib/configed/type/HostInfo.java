@@ -16,6 +16,7 @@ import java.util.Set;
 import de.uib.configed.Configed;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 
@@ -457,8 +458,8 @@ public class HostInfo {
 		mainFrame.setOpsiHostKey(hostKey);
 	}
 
-	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, MainFrame mainFrame,
-			OpsiserviceNOMPersistenceController persist, String client, Map<?, ?> sourceOfChanges) {
+	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, MainFrame mainFrame, String client,
+			Map<?, ?> sourceOfChanges) {
 		if (client == null || client.isEmpty()) {
 			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
 			return;
@@ -469,6 +470,9 @@ public class HostInfo {
 		if (sourceOfChanges == null) {
 			return;
 		}
+
+		OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
 
 		int row = findRow(selectionPanel, client);
 
@@ -483,8 +487,9 @@ public class HostInfo {
 			// restoring old value
 			mainFrame.setClientDescriptionText(clientDescription);
 
-			persist.setHostDescription(client, clientDescription);
-			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_DESCRIPTION_KEY, clientDescription);
+			persistenceController.setHostDescription(client, clientDescription);
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_DESCRIPTION_KEY,
+					clientDescription);
 		}
 
 		if (sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY) != null) {
@@ -499,8 +504,8 @@ public class HostInfo {
 			// restoring old value
 			mainFrame.setClientInventoryNumberText(clientInventoryNumber);
 
-			persist.setClientInventoryNumber(client, clientInventoryNumber);
-			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_INVENTORY_NUMBER_KEY,
+			persistenceController.setClientInventoryNumber(client, clientInventoryNumber);
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_INVENTORY_NUMBER_KEY,
 					clientInventoryNumber);
 		}
 
@@ -510,8 +515,8 @@ public class HostInfo {
 			// restoring old value
 			mainFrame.setClientOneTimePasswordText(clientOneTimePassword);
 
-			persist.setClientOneTimePassword(client, clientOneTimePassword);
-			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_ONE_TIME_PASSWORD_KEY,
+			persistenceController.setClientOneTimePassword(client, clientOneTimePassword);
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_ONE_TIME_PASSWORD_KEY,
 					clientOneTimePassword);
 		}
 
@@ -521,8 +526,8 @@ public class HostInfo {
 			// restoring old value
 			mainFrame.setClientNotesText(clientNotes);
 
-			persist.setHostNotes(client, clientNotes);
-			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
+			persistenceController.setHostNotes(client, clientNotes);
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_NOTES_KEY, clientNotes);
 		}
 
 		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null
@@ -538,8 +543,9 @@ public class HostInfo {
 			// restoring old value
 			mainFrame.setClientMacAddress(clientSystemUUID);
 
-			persist.setSystemUUID(client, clientSystemUUID);
-			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SYSTEM_UUID_KEY, clientSystemUUID);
+			persistenceController.setSystemUUID(client, clientSystemUUID);
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SYSTEM_UUID_KEY,
+					clientSystemUUID);
 		}
 
 		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null
@@ -555,8 +561,9 @@ public class HostInfo {
 			// restoring old value
 			mainFrame.setClientMacAddress(clientMacAddress);
 
-			persist.setMacAddress(client, clientMacAddress);
-			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_MAC_ADRESS_KEY, clientMacAddress);
+			persistenceController.setMacAddress(client, clientMacAddress);
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_MAC_ADRESS_KEY,
+					clientMacAddress);
 		}
 
 		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null
@@ -572,8 +579,9 @@ public class HostInfo {
 			// restoring old value
 			mainFrame.setClientIpAddress(clientIpAddress);
 
-			persist.setIpAddress(client, clientIpAddress);
-			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_IP_ADDRESS_KEY, clientIpAddress);
+			persistenceController.setIpAddress(client, clientIpAddress);
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_IP_ADDRESS_KEY,
+					clientIpAddress);
 		}
 
 		if (sourceOfChanges.get(CLIENT_SHUTDOWN_INSTALL_KEY) != null) {
@@ -591,8 +599,9 @@ public class HostInfo {
 				selectionPanel.getTableModel().setValueAt(shutdownInstall, row, col);
 			}
 
-			persist.configureInstallByShutdown(client, shutdownInstall);
-			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SHUTDOWN_INSTALL_KEY, shutdownInstall);
+			persistenceController.configureInstallByShutdown(client, shutdownInstall);
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_SHUTDOWN_INSTALL_KEY,
+					shutdownInstall);
 		}
 
 		if (sourceOfChanges.get(CLIENT_UEFI_BOOT_KEY) != null) {
@@ -610,8 +619,8 @@ public class HostInfo {
 				selectionPanel.getTableModel().setValueAt(uefiboot, row, col);
 			}
 
-			persist.configureUefiBoot(client, uefiboot);
-			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_UEFI_BOOT_KEY, uefiboot);
+			persistenceController.configureUefiBoot(client, uefiboot);
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_UEFI_BOOT_KEY, uefiboot);
 		}
 
 		if (sourceOfChanges.get(CLIENT_WAN_CONFIG_KEY) != null) {
@@ -631,11 +640,12 @@ public class HostInfo {
 				selectionPanel.getTableModel().setValueAt(wanStandard, row, col);
 			}
 
-			if (!(persist.setWANConfigs(client, wanStandard))) {
+			if (!(persistenceController.setWANConfigs(client, wanStandard))) {
 				Logging.error(this, "wan settings could not be set");
 			}
 
-			persist.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_WAN_CONFIG_KEY, wanStandard);
+			persistenceController.getHostInfoCollections().updateLocalHostInfo(client, CLIENT_WAN_CONFIG_KEY,
+					wanStandard);
 		}
 
 	}

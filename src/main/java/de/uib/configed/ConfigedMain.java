@@ -3940,8 +3940,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Logging.info(this, "save for clients " + getSelectedClients().length);
 
 				for (String client : getSelectedClients()) {
-					hostInfo.showAndSaveInternally(selectionPanel, mainFrame, persistenceController, client,
-							(Map<?, ?>) source.get(client));
+					hostInfo.showAndSaveInternally(selectionPanel, mainFrame, client, (Map<?, ?>) source.get(client));
 				}
 				persistenceController.updateHosts();
 

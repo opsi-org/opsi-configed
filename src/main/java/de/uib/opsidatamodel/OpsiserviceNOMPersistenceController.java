@@ -456,7 +456,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		Logging.debug(this, "create");
 
-		hostInfoCollections = new HostInfoCollections(this);
+		hostInfoCollections = new HostInfoCollections();
 
 		exec = new JSONthroughHTTPS(server, user, password);
 
@@ -2128,7 +2128,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 		hostGroups = new HostGroups(exec.getStringMappedObjectsByKey(
 				new OpsiMethodCall("group_getObjects", new Object[] { callAttributes, callFilter }), "ident",
 				new String[] { "id", "parentGroupId", "description" },
-				new String[] { "groupId", "parentGroupId", "description" }), this);
+				new String[] { "groupId", "parentGroupId", "description" }));
 
 		Logging.debug(this, "getHostGroups " + hostGroups);
 

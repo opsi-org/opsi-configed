@@ -187,7 +187,7 @@ public class SelectionManager {
 
 		if (withMySQL) {
 			long startTime = System.nanoTime();
-			List<String> l = selectClientsSQL(controller, operation);
+			List<String> l = selectClientsSQL(operation);
 			Logging.notice(this, "select Clients with MySQL " + ((System.nanoTime() - startTime) / 1_000_000));
 			return l;
 		} else {
@@ -199,8 +199,7 @@ public class SelectionManager {
 	}
 
 	// Filter the clients and get the matching clients back with MySQL backend
-	public List<String> selectClientsSQL(OpsiserviceNOMPersistenceController controller,
-			AbstractSelectOperation operation) {
+	public List<String> selectClientsSQL(AbstractSelectOperation operation) {
 		String json = serializer.getJson(operation);
 		Logging.info(this, "in selectClientsSQL gotten json-string: " + json);
 		List<String> clientsSelected = new ArrayList<>();
