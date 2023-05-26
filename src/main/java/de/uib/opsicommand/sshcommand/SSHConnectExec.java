@@ -38,6 +38,8 @@ import de.uib.utilities.ssh.SSHOutputCollector;
  * @inheritDoc Class for executing commands.
  */
 public class SSHConnectExec extends SSHConnect {
+	public static final String SEPARATING_LINE = "-".repeat(147);
+
 	private SSHConnectionExecDialog outputDialog;
 	protected boolean multiCommand;
 	private ActionListener killProcessListener;
@@ -409,8 +411,7 @@ public class SSHConnectExec extends SSHConnect {
 		private void checkExitCode(int exitCode, boolean withGui, Channel channel) {
 			String s = "checkExitCode " + exitCode;
 			Logging.debug(this, "publish " + s);
-			publishInfo(
-					"---------------------------------------------------------------------------------------------------------------------------------------------------");
+			publishInfo(SEPARATING_LINE);
 			if (this.commandNumber != -1 && this.maxCommandNumber != -1) {
 				publishInfo(Configed.getResourceValue("SSHConnection.Exec.commandcountertext")
 						.replace("xX0Xx", Integer.toString(this.commandNumber))

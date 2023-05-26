@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -253,45 +254,50 @@ public final class ProductData {
 	public static void retrieveUnusedProducts() {
 		depots.forEach((String depot) -> {
 
-			if (clientUnusedProductsList.get(depot) == null) {
-				return;
+			if (clientUnusedProductsList.get(depot) != null) {
+
+				unusedProducts.put(depot, createUnusedProductList(depot));
 			}
-
-			Map<Product, Product> unusedProductsList = new HashMap<>();
-
-			for (Map.Entry<String, List<String>> entry : clientUnusedProductsList.get(depot).entrySet()) {
-				String hostname = entry.getKey();
-
-				entry.getValue().forEach((String productId) -> {
-					Product product = new Product();
-					product.setDepot(depot);
-					product.setId(productId);
-					product.setStatus(Configed.getResourceValue("Dashboard.products.unused"));
-
-					Optional<Product> matchedProduct = unusedProductsList.keySet().stream()
-							.filter(p -> p.getId().equals(productId)
-									&& p.getStatus().equals(Configed.getResourceValue("Dashboard.products.unused")))
-							.findFirst();
-
-					if (matchedProduct.isPresent()) {
-						List<String> clientss = matchedProduct.get().getClients();
-						clientss.add(hostname);
-						product.setClients(clientss);
-						unusedProductsList.replace(matchedProduct.get(), product);
-					} else {
-						List<String> clientss = new ArrayList<>();
-						clientss.add(hostname);
-						product.setClients(clientss);
-						unusedProductsList.put(product, product);
-					}
-				});
-			}
-
-			unusedProducts.put(depot, unusedProductsList);
 		});
 
 		Map<Product, Product> allUnusedProducts = Helper.combineMapsFromMap2(unusedProducts);
 		unusedProducts.get(selectedDepot).putAll(allUnusedProducts);
+	}
+
+	private static Map<Product, Product> createUnusedProductList(String depot) {
+		Map<Product, Product> unusedProductsList = new HashMap<>();
+
+		for (Entry<String, List<String>> entry : clientUnusedProductsList.get(depot).entrySet()) {
+			String hostname = entry.getKey();
+
+			entry.getValue().forEach(
+					(String productId) -> addUnusedProductToList(depot, productId, hostname, unusedProductsList));
+		}
+
+		return unusedProductsList;
+	}
+
+	private static void addUnusedProductToList(String depot, String productId, String hostname,
+			Map<Product, Product> unusedProductsList) {
+		Product product = new Product();
+		product.setDepot(depot);
+		product.setId(productId);
+		product.setStatus(Configed.getResourceValue("Dashboard.products.unused"));
+
+		Optional<Product> matchedProduct = unusedProductsList.keySet().stream().filter(p -> p.getId().equals(productId)
+				&& p.getStatus().equals(Configed.getResourceValue("Dashboard.products.unused"))).findFirst();
+
+		if (matchedProduct.isPresent()) {
+			List<String> clientss = matchedProduct.get().getClients();
+			clientss.add(hostname);
+			product.setClients(clientss);
+			unusedProductsList.replace(matchedProduct.get(), product);
+		} else {
+			List<String> clientss = new ArrayList<>();
+			clientss.add(hostname);
+			product.setClients(clientss);
+			unusedProductsList.put(product, product);
+		}
 	}
 
 	public static int getTotalOSInstallations() {
