@@ -4,13 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/* 
- *
- * (c) uib, www.uib.de, 2016, 2022
- *
- * author Rupert Röder
- */
-
 package de.uib.configed.gui.hostconfigs;
 
 import java.awt.Dimension;
@@ -310,57 +303,57 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		Logging.info(this, "theUsers found " + theUsers);
 
 		for (Entry<String, DefaultEditMapPanel> entry : partialPanels.entrySet()) {
-			entry.getValue().setEditDenier((String key) -> {
+			entry.getValue().setEditDenier(key -> canEdit(key, entry));
+		}
+	}
 
-				Logging.info(this, "entry " + entry + " key " + key);
+	private boolean canEdit(String key, Entry<String, DefaultEditMapPanel> partialPanelEntry) {
 
-				Boolean result = false;
+		Logging.info(this, "entry " + partialPanelEntry + " key " + key);
 
-				if (key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
-					result = true;
+		Boolean result = false;
 
-					JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-							Configed.getResourceValue("EditMapPanelGrouped.noManualEditing"), key,
-							JOptionPane.INFORMATION_MESSAGE);
-				} else {
-					String user = UserConfig.getUserFromKey(key);
-					// we really are in a user branch
-					if (user != null) {
+		if (key.endsWith(UserConfig.MODIFICATION_INFO_KEY)) {
+			result = true;
 
-						String rolekey = entry.getKey() + "." + UserConfig.HAS_ROLE_ATTRIBUT;
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("EditMapPanelGrouped.noManualEditing"), key,
+					JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			String user = UserConfig.getUserFromKey(key);
+			// we really are in a user branch
+			if (user != null) {
 
-						// rolekey may be edited
-						if (!(key.equals(rolekey))) {
-							String theRole = null;
+				String rolekey = partialPanelEntry.getKey() + "." + UserConfig.HAS_ROLE_ATTRIBUT;
 
-							List<Object> values = PersistenceControllerFactory.getPersistenceController()
-									.getConfigDefaultValues().get(rolekey);
+				// rolekey may be edited
+				if (!(key.equals(rolekey))) {
+					String theRole = null;
 
-							if (values != null && !values.isEmpty()) {
-								theRole = "" + values.get(0);
-							}
+					List<Object> values = PersistenceControllerFactory.getPersistenceController()
+							.getConfigDefaultValues().get(rolekey);
 
-							boolean obeyToRole = theRole != null && !(theRole.equals(UserConfig.NONE_PROTOTYPE));
+					if (values != null && !values.isEmpty()) {
+						theRole = "" + values.get(0);
+					}
 
-							if (obeyToRole) {
-								result = true;
-								JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(), Configed.getResourceValue(
-										"EditMapPanelGroupedForHostConfigs.noManualEditingWhereRoleDefined")
+					boolean obeyToRole = theRole != null && !(theRole.equals(UserConfig.NONE_PROTOTYPE));
 
-										, key, JOptionPane.INFORMATION_MESSAGE);
-
-							}
-						}
+					if (obeyToRole) {
+						result = true;
+						JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+								Configed.getResourceValue(
+										"EditMapPanelGroupedForHostConfigs.noManualEditingWhereRoleDefined"),
+								key, JOptionPane.INFORMATION_MESSAGE);
 
 					}
 				}
 
-				Logging.info(this, "key denied ? " + key + " : " + result);
-				return result;
 			}
-
-			);
 		}
+
+		Logging.info(this, "key denied ? " + key + " : " + result);
+		return result;
 	}
 
 	private static String roleFromRolerootKey(String key) {
