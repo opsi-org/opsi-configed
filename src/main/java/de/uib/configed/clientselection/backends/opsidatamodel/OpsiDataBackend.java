@@ -132,15 +132,12 @@ public final class OpsiDataBackend {
 	private Map<String, String> hwUiToOpsi;
 	private Map<String, List<Map<String, Object>>> hwClassToValues;
 
-	private OpsiserviceNOMPersistenceController controller;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private OpsiDataBackend() {
-		controller = PersistenceControllerFactory.getPersistenceController();
-		if (controller == null) {
-			Logging.warning(this, "Warning, controller is null!");
-		}
-		getHardwareConfig();
 
+		getHardwareConfig();
 	}
 
 	// we make a singleton in order to avoid data reloading
@@ -418,10 +415,10 @@ public final class OpsiDataBackend {
 		groups = null;
 		superGroups = null;
 		softwareMap = null;
-		controller.productDataRequestRefresh();
+		persistenceController.productDataRequestRefresh();
 
 		swauditMap = null;
-		controller.softwareAuditOnClientsRequestRefresh();
+		persistenceController.softwareAuditOnClientsRequestRefresh();
 
 		hardwareOnClient = null;
 		clientToHardware = null;
@@ -435,21 +432,21 @@ public final class OpsiDataBackend {
 
 		// take always the current host infos
 
-		clientMaps = controller.getHostInfoCollections().getMapOfPCInfoMaps();
+		clientMaps = persistenceController.getHostInfoCollections().getMapOfPCInfoMaps();
 		Logging.info(this, "client maps size " + clientMaps.size());
 
 		if (groups == null || reloadRequested) {
-			groups = controller.getFObject2Groups();
+			groups = persistenceController.getFObject2Groups();
 		}
 
 		if (superGroups == null || reloadRequested) {
-			superGroups = controller.getHostInfoCollections().getFNode2Treeparents();
+			superGroups = persistenceController.getHostInfoCollections().getFNode2Treeparents();
 		}
 
 		String[] clientNames = clientMaps.keySet().toArray(new String[0]);
 
 		if (hasSoftware) {
-			softwareMap = controller.getMapOfProductStatesAndActions(clientNames);
+			softwareMap = persistenceController.getMapOfProductStatesAndActions(clientNames);
 			Logging.debug(this, "getClients softwareMap ");
 		}
 
@@ -510,11 +507,11 @@ public final class OpsiDataBackend {
 	}
 
 	public List<String> getGroups() {
-		return controller.getHostGroupIds();
+		return persistenceController.getHostGroupIds();
 	}
 
 	public NavigableSet<String> getProductIDs() {
-		return controller.getProductIds();
+		return persistenceController.getProductIds();
 	}
 
 	public Map<String, List<AbstractSelectElement>> getHardwareList() {
@@ -600,7 +597,7 @@ public final class OpsiDataBackend {
 	}
 
 	private void getHardwareOnClient(String[] clientNames) {
-		hardwareOnClient = controller.getHardwareOnClient();
+		hardwareOnClient = persistenceController.getHardwareOnClient();
 		clientToHardware = new HashMap<>();
 		for (int i = 0; i < clientNames.length; i++) {
 			clientToHardware.put(clientNames[i], new LinkedList<>());
@@ -621,8 +618,8 @@ public final class OpsiDataBackend {
 			return result;
 		}
 
-		controller.fillClient2Software(new ArrayList<>(clientMaps.keySet()));
-		result = controller.getClient2Software();
+		persistenceController.fillClient2Software(new ArrayList<>(clientMaps.keySet()));
+		result = persistenceController.getClient2Software();
 
 		return result;
 	}
@@ -630,8 +627,8 @@ public final class OpsiDataBackend {
 	private void getHardwareConfig() {
 		String locale = Messages.getLocale().getLanguage() + "_" + Messages.getLocale().getCountry();
 		Logging.debug(this, locale);
-		hwConfig = controller.getOpsiHWAuditConf("en_");
-		hwConfigLocalized = controller.getOpsiHWAuditConf(locale);
+		hwConfig = persistenceController.getOpsiHWAuditConf("en_");
+		hwConfigLocalized = persistenceController.getOpsiHWAuditConf(locale);
 		Logging.debug(this, "" + hwConfig);
 		hwUiToOpsi = new HashMap<>();
 		hwClassToValues = new HashMap<>();

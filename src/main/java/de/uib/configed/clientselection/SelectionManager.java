@@ -205,7 +205,7 @@ public class SelectionManager {
 		Logging.info(this, "in selectClientsSQL gotten json-string: " + json);
 		List<String> clientsSelected = new ArrayList<>();
 
-		BackendMySQL backendMySQL = new BackendMySQL(controller);
+		BackendMySQL backendMySQL = new BackendMySQL();
 		List<String> list = backendMySQL.getClientListFromJSONString(json);
 
 		for (int i = 0; i < list.size(); i++) {

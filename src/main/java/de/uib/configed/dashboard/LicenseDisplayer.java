@@ -63,14 +63,10 @@ public class LicenseDisplayer {
 	private ScrollPane scrollPane;
 
 	private String message = "";
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
 	private LicenseDisplayer controller;
 
 	private Stage stage;
-
-	public LicenseDisplayer() {
-		persist = PersistenceControllerFactory.getPersistenceController();
-	}
 
 	public void loadData() {
 		message = "";

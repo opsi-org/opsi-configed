@@ -15,6 +15,7 @@ import javax.swing.table.TableColumn;
 
 import de.uib.configed.gui.licences.PanelLicencesReconciliation;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -32,13 +33,13 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 	private PanelLicencesReconciliation thePanel;
 	private GenTableModel modelLicencesReconciliation;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private boolean initialized;
 
-	public ControlPanelLicencesReconciliation(OpsiserviceNOMPersistenceController persist) {
+	public ControlPanelLicencesReconciliation() {
 		thePanel = new PanelLicencesReconciliation(this);
-		this.persist = persist;
 
 		init();
 	}
@@ -55,7 +56,7 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 		List<String> columnNames;
 		List<String> classNames;
 
-		List<String> extraHostFields = persist.getServerConfigStrings(
+		List<String> extraHostFields = persistenceController.getServerConfigStrings(
 				OpsiserviceNOMPersistenceController.KEY_HOST_EXTRA_DISPLAYFIELDS_IN_PANEL_LICENCES_RECONCILIATION);
 
 		// --- panelLicencesReconciliation
@@ -90,10 +91,10 @@ public class ControlPanelLicencesReconciliation extends AbstractControlMultiTabl
 					public Map<String, Map<String, Object>> retrieveMap() {
 						Logging.debug(this, "retrieveMap");
 						if (initialized) {
-							persist.reconciliationInfoRequestRefresh();
+							persistenceController.reconciliationInfoRequestRefresh();
 						}
 						initialized = true;
-						return persist.getLicencesReconciliation();
+						return persistenceController.getLicencesReconciliation();
 					}
 				})),
 

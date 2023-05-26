@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class BackendMySQL {
@@ -40,11 +41,11 @@ public class BackendMySQL {
 	private List<Map<String, List<Map<String, Object>>>> hwConfig;
 
 	// For the queries to the opsi-server
-	private OpsiserviceNOMPersistenceController controller;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
-	public BackendMySQL(OpsiserviceNOMPersistenceController controller) {
-		this.controller = controller;
-		hwConfig = controller.getOpsiHWAuditConf("en_");
+	public BackendMySQL() {
+		hwConfig = persistenceController.getOpsiHWAuditConf("en_");
 
 		allHosts = getListFromSQL("SELECT hostId FROM HOST;");
 	}
@@ -53,7 +54,7 @@ public class BackendMySQL {
 
 		Logging.info(this, query);
 
-		List<List<String>> clients = controller.exec
+		List<List<String>> clients = persistenceController.exec
 				.getListOfStringLists(new OpsiMethodCall("getRawData", new Object[] { query }));
 
 		List<String> list = new ArrayList<>();

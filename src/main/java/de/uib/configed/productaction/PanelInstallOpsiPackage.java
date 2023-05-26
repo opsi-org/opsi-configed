@@ -33,6 +33,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitCursor;
@@ -63,13 +64,13 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private JButton buttonCallChooserServerpath;
 	private JFileChooser chooserServerpath;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private ConfigedMain main;
 	private JFrame rootFrame;
 
-	public PanelInstallOpsiPackage(ConfigedMain main, OpsiserviceNOMPersistenceController persist, JFrame root) {
+	public PanelInstallOpsiPackage(ConfigedMain main, JFrame root) {
 		this.main = main;
-		this.persist = persist;
 		this.rootFrame = root;
 
 		isWindows = Globals.isWindows();
@@ -157,7 +158,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	}
 
 	private void buildSambaTarget(String depotserver) {
-		Map<String, Map<String, Object>> depot2depotMap = persist.getHostInfoCollections().getDepots();
+		Map<String, Map<String, Object>> depot2depotMap = persistenceController.getHostInfoCollections().getDepots();
 
 		Logging.info(this, "buildSambaTarget for depotserver " + depotserver);
 
@@ -188,8 +189,8 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		if (installProductFromWorkbench()) {
 			produceServerPath();
 			WaitCursor waitCursor = new WaitCursor(rootFrame);
-			persist.setRights(opsiPackageServerPathS);
-			boolean result = persist.installPackage(opsiPackageServerPathS);
+			persistenceController.setRights(opsiPackageServerPathS);
+			boolean result = persistenceController.installPackage(opsiPackageServerPathS);
 			waitCursor.stop();
 
 			Logging.info(this, "installPackage wrongly reporesult " + result);
@@ -233,7 +234,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		comboChooseDepot = new JComboBox<>();
 		comboChooseDepot.setSize(Globals.textfieldDimension);
 
-		Logging.debug(this, "defineChoosers, depots: " + persist.getHostInfoCollections().getDepots());
+		Logging.debug(this, "defineChoosers, depots: " + persistenceController.getHostInfoCollections().getDepots());
 
 		comboChooseDepot.setModel(new DefaultComboBoxModel<>(main.getLinkedDepots().toArray(new String[0])));
 

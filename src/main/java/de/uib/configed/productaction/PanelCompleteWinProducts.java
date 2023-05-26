@@ -39,6 +39,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataRefreshedObserver;
@@ -75,13 +76,13 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 	private JFileChooser chooserFolder;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private ConfigedMain configedMain;
 	private JFrame rootFrame;
 
-	public PanelCompleteWinProducts(ConfigedMain main, OpsiserviceNOMPersistenceController persist, JFrame root) {
+	public PanelCompleteWinProducts(ConfigedMain main, JFrame root) {
 		this.configedMain = main;
-		this.persist = persist;
 		this.rootFrame = root;
 		server = main.getConfigserver();
 
@@ -111,8 +112,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 		defineLayout();
 
-		persist.registerDataRefreshedObserver(this);
-
+		persistenceController.registerDataRefreshedObserver(this);
 	}
 
 	private void evaluateWinProducts() {
@@ -137,7 +137,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 		smbMounted = new File(depotProductDirectory).exists();
 
-		List<String> winProducts = persist.getWinProducts(server, depotProductDirectory);
+		List<String> winProducts = persistenceController.getWinProducts(server, depotProductDirectory);
 
 		comboChooseWinProduct.setModel(new DefaultComboBoxModel<>(winProducts.toArray(new String[0])));
 	}
@@ -337,10 +337,10 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 				FileUtils.copyDirectory(new File(pathInstallFiles), targetDirectory);
 			}
 
-			persist.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-					+ SmbConnect.DIRECTORY_PE);
-			persist.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct + "/"
-					+ SmbConnect.DIRECTORY_INSTALL_FILES);
+			persistenceController.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct
+					+ "/" + SmbConnect.DIRECTORY_PE);
+			persistenceController.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct
+					+ "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
 			waitCursor.stop();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
@@ -352,7 +352,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 			values.add(productKey);
 
 			// check if product key is new and should be changed
-			Map<String, Object> propsMap = persist.getProductProperties(server, winProduct);
+			Map<String, Object> propsMap = persistenceController.getProductProperties(server, winProduct);
 			Logging.debug(this, " getProductproperties " + propsMap);
 
 			String oldProductKey = null;
@@ -380,7 +380,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 				if (returnedOption == JOptionPane.YES_OPTION) {
 					waitCursor = new WaitCursor(rootFrame);
 					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
-					persist.setCommonProductPropertyValue(depots, winProduct, "productkey", values);
+					persistenceController.setCommonProductPropertyValue(depots, winProduct, "productkey", values);
 
 					waitCursor.stop();
 				}

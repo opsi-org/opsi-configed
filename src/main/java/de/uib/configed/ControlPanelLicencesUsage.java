@@ -18,6 +18,7 @@ import javax.swing.table.TableColumn;
 import de.uib.configed.gui.licences.PanelLicencesUsage;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -34,12 +35,12 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 	private GenTableModel modelLicencesUsage;
 	private GenTableModel modelLicencepools;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private ConfigedMain mainController;
 
-	public ControlPanelLicencesUsage(OpsiserviceNOMPersistenceController persist, ConfigedMain mainController) {
+	public ControlPanelLicencesUsage(ConfigedMain mainController) {
 		thePanel = new PanelLicencesUsage(this);
-		this.persist = persist;
 		this.mainController = mainController;
 
 		init();
@@ -65,7 +66,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		}
 
 		String licencePoolId = selectedLPoolIds.iterator().next();
-		String result = persist.getLicenceUsage(clientId, licencePoolId);
+		String result = persistenceController.getLicenceUsage(clientId, licencePoolId);
 
 		if (result != null) {
 			thePanel.panelUsage.reload();
@@ -113,8 +114,8 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 				columnNames, classNames, 0);
 		modelLicencesUsage = new GenTableModel(updateItemFactoryLicencesUsage,
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, () -> {
-					persist.licencesUsageRequestRefresh();
-					return (Map) persist.getLicencesUsage();
+					persistenceController.licencesUsageRequestRefresh();
+					return (Map) persistenceController.getLicencesUsage();
 				})), -1, new int[] { 0, 1, 2 }, thePanel.panelUsage, updateCollection);
 		updateItemFactoryLicencesUsage.setSource(modelLicencesUsage);
 
@@ -136,7 +137,8 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 				new MapItemsUpdateController(thePanel.panelUsage, modelLicencesUsage, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						return persist.editLicenceUsage((String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
+						return persistenceController.editLicenceUsage(
+								(String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_KEY_KEY),
@@ -147,7 +149,8 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
 						modelLicencesUsage.requestReload();
-						return persist.deleteLicenceUsage((String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
+						return persistenceController.deleteLicenceUsage(
+								(String) rowmap.get(LicenceUsageEntry.CLIENT_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_ID_KEY),
 								(String) rowmap.get(LicenceUsageEntry.LICENCE_POOL_ID_KEY));
 					}
@@ -176,7 +179,7 @@ public class ControlPanelLicencesUsage extends AbstractControlMultiTablePanel {
 		thePanel.setClientsSource(new de.uib.utilities.ComboBoxModeller() {
 			@Override
 			public ComboBoxModel<String> getComboBoxModel(int row, int column) {
-				List<String> choicesAllHosts = new ArrayList<>(persist.getHostInfoCollections()
+				List<String> choicesAllHosts = new ArrayList<>(persistenceController.getHostInfoCollections()
 						.getClientListForDepots(mainController.getSelectedDepots(), mainController.getAllowedClients())
 						.keySet());
 

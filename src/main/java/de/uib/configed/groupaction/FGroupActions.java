@@ -27,6 +27,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -41,16 +42,16 @@ public class FGroupActions extends SecondaryFrame {
 
 	private List<String> associatedClients;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private ConfigedMain main;
 
 	private int firstLabelWidth = Globals.BUTTON_WIDTH;
 
-	public FGroupActions(ConfigedMain main, OpsiserviceNOMPersistenceController persist) {
+	public FGroupActions(ConfigedMain main) {
 		super();
 
 		this.main = main;
-		this.persist = persist;
 
 		define();
 		reload();
@@ -73,7 +74,7 @@ public class FGroupActions extends SecondaryFrame {
 	private void setImages() {
 		List<String> imagesCollection = new ArrayList<>();
 
-		imagesCollection.addAll(new TreeSet<>(persist.getCommonProductPropertyValues(associatedClients,
+		imagesCollection.addAll(new TreeSet<>(persistenceController.getCommonProductPropertyValues(associatedClients,
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_LIST_PROPERTY_KEY)));
 
@@ -104,14 +105,14 @@ public class FGroupActions extends SecondaryFrame {
 
 		WaitCursor waitCursor = new WaitCursor(this);
 
-		persist.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
+		persistenceController.setCommonProductPropertyValue(main.getActivatedGroupModel().getAssociatedClients(),
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY,
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_TO_RESTORE_PROPERTY_KEY, values);
 
 		Map<String, String> changedValues = new HashMap<>();
 		changedValues.put(de.uib.opsidatamodel.productstate.ProductState.KEY_ACTION_REQUEST, "setup");
 
-		persist.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
+		persistenceController.updateProductOnClients(main.getActivatedGroupModel().getAssociatedClients(),
 				OpsiserviceNOMPersistenceController.LOCAL_IMAGE_RESTORE_PRODUCT_KEY, OpsiPackage.TYPE_NETBOOT,
 				changedValues);
 

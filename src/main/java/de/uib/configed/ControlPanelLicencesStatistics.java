@@ -12,6 +12,7 @@ import java.util.Map;
 
 import de.uib.configed.gui.licences.PanelLicencesStatistics;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.tabbedpane.TabClientAdapter;
 import de.uib.utilities.table.GenTableModel;
@@ -25,13 +26,13 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 	private PanelLicencesStatistics thePanel;
 	private GenTableModel modelStatistics;
 
-	private OpsiserviceNOMPersistenceController persist;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private boolean initialized;
 
-	public ControlPanelLicencesStatistics(OpsiserviceNOMPersistenceController persist) {
+	public ControlPanelLicencesStatistics() {
 		thePanel = new PanelLicencesStatistics(this);
-		this.persist = persist;
 
 		init();
 	}
@@ -71,11 +72,11 @@ public class ControlPanelLicencesStatistics extends AbstractControlMultiTablePan
 					public Map retrieveMap() {
 						Logging.info(this, "retrieveMap() for modelStatistics");
 						if (initialized) {
-							persist.reconciliationInfoRequestRefresh();
+							persistenceController.reconciliationInfoRequestRefresh();
 						} else {
 							initialized = true;
 						}
-						return persist.getLicenceStatistics();
+						return persistenceController.getLicenceStatistics();
 					}
 				})), 0, thePanel.panelStatistics, updateCollection);
 		updateItemFactoryStatistics.setSource(modelStatistics);

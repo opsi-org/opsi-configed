@@ -14,20 +14,17 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
 
 public class FProductActions extends SecondaryFrame {
 
-	private OpsiserviceNOMPersistenceController persist;
 	private ConfigedMain main;
 
-	public FProductActions(ConfigedMain main, OpsiserviceNOMPersistenceController persist) {
+	public FProductActions(ConfigedMain main) {
 		super();
 
 		this.main = main;
-		this.persist = persist;
 
 		define();
 
@@ -36,11 +33,11 @@ public class FProductActions extends SecondaryFrame {
 	}
 
 	private void define() {
-		PanelInstallOpsiPackage panelInstallOpsiPackage = new PanelInstallOpsiPackage(main, persist, this);
+		PanelInstallOpsiPackage panelInstallOpsiPackage = new PanelInstallOpsiPackage(main, this);
 
 		JPanel imageActionPanel = new JPanel();
 
-		PanelCompleteWinProducts panelCompleteWinProducts = new PanelCompleteWinProducts(main, persist, this);
+		PanelCompleteWinProducts panelCompleteWinProducts = new PanelCompleteWinProducts(main, this);
 
 		GroupLayout layout = new GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);

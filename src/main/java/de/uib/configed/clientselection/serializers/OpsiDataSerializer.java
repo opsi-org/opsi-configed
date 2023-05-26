@@ -53,7 +53,8 @@ public class OpsiDataSerializer {
 
 	private SelectionManager manager;
 
-	private OpsiserviceNOMPersistenceController controller;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 	private JsonParser parser;
 	private SelectData.DataType lastDataType;
 	private Map<String, String> searches;
@@ -61,7 +62,6 @@ public class OpsiDataSerializer {
 
 	public OpsiDataSerializer(SelectionManager manager) {
 		this.manager = manager;
-		controller = PersistenceControllerFactory.getPersistenceController();
 		searches = new HashMap<>();
 		searchDataVersion = DATA_VERSION;
 	}
@@ -82,7 +82,7 @@ public class OpsiDataSerializer {
 	public List<String> getSaved() {
 		HashSet<String> set = new HashSet<>();
 		set.addAll(searches.keySet());
-		set.addAll(controller.getSavedSearches().keySet());
+		set.addAll(persistenceController.getSavedSearches().keySet());
 		return new LinkedList<>(set);
 	}
 
@@ -90,7 +90,7 @@ public class OpsiDataSerializer {
 	 * Get the saved searches map
 	 */
 	public SavedSearches getSavedSearches() {
-		return controller.getSavedSearches();
+		return persistenceController.getSavedSearches();
 	}
 
 	/**
@@ -206,7 +206,7 @@ public class OpsiDataSerializer {
 	private Map<String, Object> getData(String name) {
 
 		// we take version from server and not the (possibly edited own version! )
-		searches.put(name, controller.getSavedSearches().get(name).getSerialization());
+		searches.put(name, persistenceController.getSavedSearches().get(name).getSerialization());
 
 		// controller.getSavedSearches().get(name)
 
@@ -229,7 +229,7 @@ public class OpsiDataSerializer {
 		Logging.info(this, name + ": " + jsonString);
 		searches.put(name, jsonString);
 		SavedSearch saveObj = new SavedSearch(name, jsonString, description);
-		controller.saveSearch(saveObj);
+		persistenceController.saveSearch(saveObj);
 	}
 
 	/** Get the data version of the currently loaded saved search */
