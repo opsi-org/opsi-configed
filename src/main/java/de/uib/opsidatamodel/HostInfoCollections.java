@@ -56,8 +56,12 @@ public class HostInfoCollections {
 
 	private ClientTree connectedTree;
 
-	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
-			.getPersistenceController();
+	private OpsiserviceNOMPersistenceController persistenceController;
+
+	// We need the argument here since the controller is not loaded yet
+	public HostInfoCollections(OpsiserviceNOMPersistenceController pc) {
+		this.persistenceController = pc;
+	}
 
 	// deliver data
 

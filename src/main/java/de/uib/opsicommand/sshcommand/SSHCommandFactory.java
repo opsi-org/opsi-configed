@@ -26,6 +26,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.MainFrame;
 import de.uib.opsicommand.POJOReMapper;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 /**
@@ -118,12 +120,15 @@ public final class SSHCommandFactory {
 	private List<String> listKnownParents;
 
 	/** ConfigedMain instance **/
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 	private MainFrame mainFrame;
 
 	private List<String> createdProducts = new ArrayList<>();
 
 	private SSHCommandParameterMethods pmethodHandler;
+
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	/**
 	 * Factory Instance for SSH Command
@@ -131,12 +136,12 @@ public final class SSHCommandFactory {
 	 * @param main {@link de.uib.configed.ConfigedMain} class
 	 **/
 	private SSHCommandFactory(ConfigedMain main) {
-		this.main = main;
+		this.configedMain = main;
 		Logging.info(this, "SSHComandFactory new instance");
 		instance = this;
 		addAditionalParamCommands();
-		connection = new SSHConnectExec(this.main);
-		pmethodHandler = SSHCommandParameterMethods.getInstance(this.main);
+		connection = new SSHConnectExec(this.configedMain);
+		pmethodHandler = SSHCommandParameterMethods.getInstance(this.configedMain);
 	}
 
 	/**
@@ -199,7 +204,7 @@ public final class SSHCommandFactory {
 		if (pmethodHandler != null) {
 			return pmethodHandler;
 		} else {
-			pmethodHandler = SSHCommandParameterMethods.getInstance(this.main);
+			pmethodHandler = SSHCommandParameterMethods.getInstance(this.configedMain);
 			return pmethodHandler;
 		}
 	}
@@ -216,7 +221,7 @@ public final class SSHCommandFactory {
 	 * @return True if method exists
 	 **/
 	public boolean checkSSHCommandMethod() {
-		return main.getPersistenceController().checkSSHCommandMethod("SSHCommand_getObjects");
+		return persistenceController.checkSSHCommandMethod("SSHCommand_getObjects");
 	}
 
 	/**
@@ -256,7 +261,7 @@ public final class SSHCommandFactory {
 	public List<SSHCommandTemplate> retrieveSSHCommandList() {
 		Logging.info(this, "retrieveSSHCommandList ");
 		if (commandlist == null) {
-			commandlist = main.getPersistenceController().retrieveCommandList();
+			commandlist = persistenceController.retrieveCommandList();
 		}
 
 		sshCommandList = new ArrayList<>();
@@ -313,7 +318,7 @@ public final class SSHCommandFactory {
 	 **/
 	public List<String> getSSHCommandMenuNames() {
 		if (commandlist == null) {
-			commandlist = main.getPersistenceController().retrieveCommandList();
+			commandlist = persistenceController.retrieveCommandList();
 		}
 		Collections.sort(listKnownMenus, String::compareToIgnoreCase);
 		return listKnownMenus;
@@ -326,7 +331,7 @@ public final class SSHCommandFactory {
 	 **/
 	public List<String> getSSHCommandMenuParents() {
 		if (commandlist == null) {
-			commandlist = main.getPersistenceController().retrieveCommandList();
+			commandlist = persistenceController.retrieveCommandList();
 		}
 		Collections.sort(listKnownParents, String::compareToIgnoreCase);
 		return listKnownParents;
@@ -340,7 +345,7 @@ public final class SSHCommandFactory {
 	 **/
 	public Map<String, List<SSHCommandTemplate>> getSSHCommandMapSortedByParent() {
 		if (commandlist == null) {
-			commandlist = main.getPersistenceController().retrieveCommandList();
+			commandlist = persistenceController.retrieveCommandList();
 		}
 
 		Logging.info(this, "getSSHCommandMapSortedByParent sorting commands ");
@@ -389,7 +394,7 @@ public final class SSHCommandFactory {
 	 **/
 	public SSHCommandTemplate getSSHCommandByMenu(String menu) {
 		if (sshCommandList == null) {
-			commandlist = main.getPersistenceController().retrieveCommandList();
+			commandlist = persistenceController.retrieveCommandList();
 		}
 		for (SSHCommandTemplate c : sshCommandList) {
 			if (c.getMenuText().equals(menu)) {
@@ -435,13 +440,13 @@ public final class SSHCommandFactory {
 
 		if (listKnownMenus.contains(command.getMenuText())) {
 			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) true");
-			if (main.getPersistenceController().updateSSHCommand(jsonObjects)) {
+			if (persistenceController.updateSSHCommand(jsonObjects)) {
 				sshCommandList.get(sshCommandList.indexOf(getSSHCommandByMenu(command.getMenuText()))).update(command);
 				return true;
 			}
 		} else {
 			Logging.info(this, "saveSSHCommand sshcommand_list.contains(command) false");
-			if (main.getPersistenceController().createSSHCommand(jsonObjects)) {
+			if (persistenceController.createSSHCommand(jsonObjects)) {
 				sshCommandList.add(command);
 				listKnownMenus.add(command.getMenuText());
 				return true;
@@ -492,7 +497,7 @@ public final class SSHCommandFactory {
 		// return
 		List<String> jsonObjects = new ArrayList<>();
 		jsonObjects.add(menu);
-		if (main.getPersistenceController().deleteSSHCommand(jsonObjects)) {
+		if (persistenceController.deleteSSHCommand(jsonObjects)) {
 			sshCommandList.remove(getSSHCommandByMenu(menu));
 			listKnownMenus.remove(menu);
 		}
@@ -505,7 +510,7 @@ public final class SSHCommandFactory {
 		new Thread() {
 			@Override
 			public void run() {
-				main.reloadServerMenu();
+				configedMain.reloadServerMenu();
 			}
 		}.start();
 	}

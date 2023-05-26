@@ -602,9 +602,6 @@ public class JTableSelectionPanel extends JPanel
 
 		tm.addTableModelListener(table);
 
-		Logging.info(this, "setModel all hosts size "
-				+ main.getPersistenceController().getHostInfoCollections().getMapOfAllPCInfoMaps().size());
-
 		table.setModel(tm);
 	}
 

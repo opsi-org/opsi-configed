@@ -41,6 +41,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.terminal.WebSocketInputStream;
 import de.uib.opsicommand.JSONthroughHTTPS;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S1258")
@@ -52,6 +54,9 @@ public class Messagebus implements MessagebusListener {
 	private boolean disconnecting;
 	private boolean reconnecting;
 	private boolean initialSubscriptionReceived;
+
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public Messagebus(ConfigedMain configedMain) {
 		this.configedMain = configedMain;
@@ -166,7 +171,7 @@ public class Messagebus implements MessagebusListener {
 	}
 
 	private JSONthroughHTTPS getJSONthroughHTTPSExecutor() {
-		return (JSONthroughHTTPS) configedMain.getPersistenceController().exec;
+		return (JSONthroughHTTPS) persistenceController.exec;
 	}
 
 	private String createEncBasicAuth() {
@@ -346,7 +351,7 @@ public class Messagebus implements MessagebusListener {
 				int waitMillis = reconnectWaitMillis;
 				if (authenticationError) {
 					Logging.notice(this, "Connection to messagebus lost, authentication error");
-					configedMain.getPersistenceController().makeConnection();
+					persistenceController.makeConnection();
 					waitMillis = 1000;
 				} else {
 					Logging.notice(this,

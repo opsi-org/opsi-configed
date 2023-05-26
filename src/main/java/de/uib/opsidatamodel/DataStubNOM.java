@@ -129,6 +129,7 @@ public class DataStubNOM {
 
 	private Map<String, LicenceEntry> licences;
 
+	// We need the argument here since the controller is not yet loaded when calling this constructor
 	public DataStubNOM(OpsiserviceNOMPersistenceController persistenceController) {
 		this.persistenceController = persistenceController;
 		classCounter++;

@@ -48,6 +48,8 @@ import de.uib.configed.gui.IconButton;
 import de.uib.configed.gui.productpage.PanelGroupedProductSettings;
 import de.uib.configed.guidata.IFInstallationStateTableModel;
 import de.uib.configed.guidata.SearchTargetModelFromInstallationStateTable;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.productstate.ActionRequest;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxToolTip;
@@ -103,6 +105,9 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 	private JTextField descriptionField;
 	private boolean deleted;
 
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
 	abstract static class AbstractDocumentListener implements DocumentListener {
 
 		private boolean enabled = true;
@@ -137,11 +142,11 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 	private AbstractDocumentListener descriptionFieldListener;
 
-	private ConfigedMain mainController;
+	private ConfigedMain configedMain;
 
-	public ProductgroupPanel(PanelGroupedProductSettings associate, ConfigedMain mainController, JTable table) {
+	public ProductgroupPanel(PanelGroupedProductSettings associate, ConfigedMain configedMain, JTable table) {
 		this.associate = associate;
-		this.mainController = mainController;
+		this.configedMain = configedMain;
 		this.tableProducts = table;
 
 		initData();
@@ -700,7 +705,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 			theData.remove(removeGroupID);
 
-			if (mainController.deleteGroup(removeGroupID)) {
+			if (configedMain.deleteGroup(removeGroupID)) {
 				result = true;
 				setInternalGroupsData();
 			}
@@ -714,8 +719,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 					+ newDescription + ", " + selectedProducts);
 
 			Set<String> originalSelection = associate.getSelectedIDs();
-			Set<String> extendedSelection = mainController.getPersistenceController()
-					.extendToDependentProducts(associate.getSelectedIDs(), "bonifax.uib.local");
+			Set<String> extendedSelection = persistenceController.extendToDependentProducts(associate.getSelectedIDs(),
+					"bonifax.uib.local");
 			Set<String> addedElements = new TreeSet<>(extendedSelection);
 			addedElements.removeAll(originalSelection);
 
@@ -740,7 +745,7 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 
 			selectedProducts = associate.getSelectedIDs();
 
-			if (mainController.setProductGroup(newGroupID, newDescription, selectedProducts)) {
+			if (configedMain.setProductGroup(newGroupID, newDescription, selectedProducts)) {
 				result = true;
 
 				// modify internal model

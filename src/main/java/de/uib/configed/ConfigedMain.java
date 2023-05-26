@@ -1572,10 +1572,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	public OpsiserviceNOMPersistenceController getPersistenceController() {
-		return persistenceController;
-	}
-
 	public void setPersistenceController(OpsiserviceNOMPersistenceController persis) {
 		persistenceController = persis;
 	}

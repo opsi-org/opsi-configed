@@ -36,6 +36,7 @@ import de.uib.opsicommand.sshcommand.CommandDeployClientAgent.FinalActionType;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PanelStateSwitch;
 
@@ -77,9 +78,12 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	private String defaultWinUser = "";
 
 	private CommandDeployClientAgent commandDeployClientAgent = new CommandDeployClientAgent();
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 
 	private boolean aktive;
+
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public SSHDeployClientAgentParameterDialog() {
 		this(null);
@@ -87,7 +91,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 	public SSHDeployClientAgentParameterDialog(ConfigedMain m) {
 		super(null, Configed.getResourceValue("SSHConnection.ParameterDialog.deploy-clientagent.title"), false);
-		main = m;
+		configedMain = m;
 		getDefaultAuthData();
 
 		init();
@@ -106,9 +110,9 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 
 	private void getDefaultAuthData() {
-		Map<String, Object> configs = main.getPersistenceController()
-				.getConfig(main.getPersistenceController().getHostInfoCollections().getConfigServer());
-		main.getPersistenceController();
+		Map<String, Object> configs = persistenceController
+				.getConfig(persistenceController.getHostInfoCollections().getConfigServer());
+
 		List<Object> resultConfigList = (List<Object>) configs
 				.get(OpsiserviceNOMPersistenceController.KEY_SSH_DEFAULTWINUSER);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
@@ -122,7 +126,6 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 
 		}
 
-		main.getPersistenceController();
 		resultConfigList = (List<Object>) configs.get(OpsiserviceNOMPersistenceController.KEY_SSH_DEFAULTWINPW);
 		if (resultConfigList == null || resultConfigList.isEmpty()) {
 
@@ -405,7 +408,7 @@ public class SSHDeployClientAgentParameterDialog extends FGeneralDialog {
 	}
 
 	public void doCopySelectedClients() {
-		String[] clientsList = main.getSelectedClients();
+		String[] clientsList = configedMain.getSelectedClients();
 		if (clientsList.length > 0) {
 			StringBuilder clients = new StringBuilder();
 			for (String c : clientsList) {

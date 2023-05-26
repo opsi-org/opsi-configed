@@ -36,6 +36,8 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.RunningInstances;
 import de.uib.utilities.swing.ProgressBarPainter;
@@ -96,7 +98,10 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 	}
 
 	public void setClients() {
-		Map<String, List<String>> hostSeparationByDepots = main.getPersistenceController()
+		OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
+
+		Map<String, List<String>> hostSeparationByDepots = persistenceController
 				.getHostSeparationByDepots(main.getSelectedClients());
 		Set<String> usedDepots = hostSeparationByDepots.keySet();
 		currentlySelectedClients = main.getSelectedClients();

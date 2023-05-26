@@ -114,6 +114,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -435,6 +436,9 @@ public class MainFrame extends JFrame
 	private JPanel clientPane;
 
 	private LicenseDisplayer licenseDisplayer;
+
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
 			ClientTree treeClients, boolean multidepot) {
@@ -874,7 +878,7 @@ public class MainFrame extends JFrame
 
 		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
-		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
+		for (final String event : persistenceController.getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
 			if (!Main.FONT) {
 				item.setFont(Globals.defaultFont);
@@ -1252,7 +1256,7 @@ public class MainFrame extends JFrame
 		jMenuFrames.setText(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
 		jMenuFrameWorkOnGroups.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jMenuFrameWorkOnGroups.setVisible(configedMain.getPersistenceController().isWithLocalImaging());
+		jMenuFrameWorkOnGroups.setVisible(persistenceController.isWithLocalImaging());
 		jMenuFrameWorkOnGroups.addActionListener(this);
 
 		jMenuFrameWorkOnProducts.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
@@ -1673,7 +1677,7 @@ public class MainFrame extends JFrame
 
 		JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
-		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
+		for (final String event : persistenceController.getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItemFormatted(event);
 			if (!Main.FONT) {
 				item.setFont(Globals.defaultFont);
@@ -1781,14 +1785,14 @@ public class MainFrame extends JFrame
 	// ------------------------------------------------------------------------------------------
 
 	public void updateHostCheckboxenText() {
-		if (configedMain.getPersistenceController().isWithUEFI()) {
+		if (persistenceController.isWithUEFI()) {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
 		} else {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			cbUefiBoot.setEnabled(false);
 		}
 
-		if (configedMain.getPersistenceController().isWithWAN()) {
+		if (persistenceController.isWithWAN()) {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		} else {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
@@ -2239,7 +2243,7 @@ public class MainFrame extends JFrame
 		jButtonWorkOnGroups.setPreferredSize(Globals.modeSwitchDimension);
 		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnGroups"));
 
-		jButtonWorkOnGroups.setEnabled(configedMain.getPersistenceController().isWithLocalImaging());
+		jButtonWorkOnGroups.setEnabled(persistenceController.isWithLocalImaging());
 		jButtonWorkOnGroups.addActionListener(this);
 
 		jButtonWorkOnProducts = new JButton("", Globals.createImageIcon("images/packagebutton.png", ""));
@@ -2258,12 +2262,10 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setVisible(JSONthroughHTTPS.isOpsi43());
 		jButtonDashboard.addActionListener(this);
 
-		if (configedMain.getPersistenceController().isOpsiLicencingAvailable()
-				&& configedMain.getPersistenceController().isOpsiUserAdmin() && licensingInfoMap == null) {
-			licensingInfoMap = LicensingInfoMap.getInstance(
-					configedMain.getPersistenceController().getOpsiLicencingInfoOpsiAdmin(),
-					configedMain.getPersistenceController().getConfigDefaultValues(),
-					!FGeneralDialogLicensingInfo.extendedView);
+		if (persistenceController.isOpsiLicencingAvailable() && persistenceController.isOpsiUserAdmin()
+				&& licensingInfoMap == null) {
+			licensingInfoMap = LicensingInfoMap.getInstance(persistenceController.getOpsiLicencingInfoOpsiAdmin(),
+					persistenceController.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
@@ -2528,9 +2530,9 @@ public class MainFrame extends JFrame
 				super.reloadHostConfig();
 				configedMain.cancelChanges();
 
-				configedMain.getPersistenceController().configOptionsRequestRefresh();
+				persistenceController.configOptionsRequestRefresh();
 
-				configedMain.getPersistenceController().hostConfigsRequestRefresh();
+				persistenceController.hostConfigsRequestRefresh();
 				configedMain.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 			}
 
@@ -2560,8 +2562,8 @@ public class MainFrame extends JFrame
 			protected void reload() {
 				super.reload();
 				configedMain.clearSwInfo();
-				configedMain.getPersistenceController().installedSoftwareInformationRequestRefresh();
-				configedMain.getPersistenceController().softwareAuditOnClientsRequestRefresh();
+				persistenceController.installedSoftwareInformationRequestRefresh();
+				persistenceController.softwareAuditOnClientsRequestRefresh();
 				configedMain.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
 			}
 		};
@@ -2893,7 +2895,7 @@ public class MainFrame extends JFrame
 			return;
 		}
 
-		List<String> disabledClientMenuEntries = configedMain.getPersistenceController().getDisabledClientMenuEntries();
+		List<String> disabledClientMenuEntries = persistenceController.getDisabledClientMenuEntries();
 
 		if (disabledClientMenuEntries != null) {
 			for (String menuActionType : disabledClientMenuEntries) {
@@ -2905,7 +2907,7 @@ public class MainFrame extends JFrame
 
 			iconButtonNewClient.setEnabled(!disabledClientMenuEntries.contains(ITEM_ADD_CLIENT));
 
-			if (!configedMain.getPersistenceController().isCreateClientPermission()) {
+			if (!persistenceController.isCreateClientPermission()) {
 				jMenuAddClient.setEnabled(false);
 				jMenuCopyClient.setEnabled(false);
 				popupAddClient.setEnabled(false);
@@ -3089,10 +3091,9 @@ public class MainFrame extends JFrame
 	}
 
 	private void showOpsiModules() {
-		if (!configedMain.getPersistenceController().isOpsiLicencingAvailable()
-				|| !configedMain.getPersistenceController().isOpsiUserAdmin()) {
+		if (!persistenceController.isOpsiLicencingAvailable() || !persistenceController.isOpsiUserAdmin()) {
 			StringBuilder message = new StringBuilder();
-			Map<String, Object> modulesInfo = configedMain.getPersistenceController().getOpsiModulesInfos();
+			Map<String, Object> modulesInfo = persistenceController.getOpsiModulesInfos();
 
 			int count = 0;
 			for (Entry<String, Object> modulesInfoEntry : modulesInfo.entrySet()) {
@@ -3362,7 +3363,7 @@ public class MainFrame extends JFrame
 			configedMain.setEditingTarget(ConfigedMain.EditingTarget.SERVER);
 		} else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
 			configedMain.handleLicencesManagementRequest();
-			if (Boolean.TRUE.equals(configedMain.getPersistenceController().getGlobalBooleanConfigValue(
+			if (Boolean.TRUE.equals(persistenceController.getGlobalBooleanConfigValue(
 					OpsiserviceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
 					OpsiserviceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
 				// Starting JavaFX-Thread by creating a new JFXPanel, but not
@@ -3551,8 +3552,7 @@ public class MainFrame extends JFrame
 			List<String> clientsWithoutScan = new ArrayList<>();
 
 			for (String client : configedMain.getSelectedClients()) {
-				Map<String, Map<String, Object>> tableData = configedMain.getPersistenceController()
-						.retrieveSoftwareAuditData(client);
+				Map<String, Map<String, Object>> tableData = persistenceController.retrieveSoftwareAuditData(client);
 				if (tableData == null || tableData.isEmpty()) {
 					clientsWithoutScan.add(client);
 				}
@@ -3565,7 +3565,7 @@ public class MainFrame extends JFrame
 
 				panelSWInfo.updateModel();
 
-				String scandate = configedMain.getPersistenceController().getLastSoftwareAuditModification(client);
+				String scandate = persistenceController.getLastSoftwareAuditModification(client);
 				if (scandate != null) {
 					int timePos = scandate.indexOf(' ');
 					if (timePos >= 0) {
@@ -3734,8 +3734,8 @@ public class MainFrame extends JFrame
 		ipAddressField.setEditable(b1);
 
 		// multi host editing allowed
-		cbUefiBoot.setEnabled(gb && configedMain.getPersistenceController().isWithUEFI());
-		cbWANConfig.setEnabled(gb && configedMain.getPersistenceController().isWithWAN());
+		cbUefiBoot.setEnabled(gb && persistenceController.isWithUEFI());
+		cbWANConfig.setEnabled(gb && persistenceController.isWithWAN());
 		cbInstallByShutdown.setEnabled(gb);
 
 		jTextFieldHostKey.setMultiValue(!singleClient);

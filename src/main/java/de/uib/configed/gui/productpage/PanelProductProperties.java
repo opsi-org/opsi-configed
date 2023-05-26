@@ -19,6 +19,8 @@ import javax.swing.event.ListSelectionEvent;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.gui.helper.PropertiesTableCellRenderer;
 import de.uib.configed.type.OpsiPackage;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelX;
 import de.uib.utilities.datapanel.SensitiveCellEditorForDataPanel;
@@ -37,11 +39,14 @@ public class PanelProductProperties extends JSplitPane {
 	private PanelEditDepotProperties panelEditProperties;
 	public DefaultEditMapPanel propertiesPanel;
 
-	private ConfigedMain mainController;
+	private ConfigedMain configedMain;
+
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public PanelProductProperties(ConfigedMain mainController) {
 		super(JSplitPane.HORIZONTAL_SPLIT);
-		this.mainController = mainController;
+		this.configedMain = mainController;
 		init();
 
 		super.setResizeWeight(0.7);
@@ -52,7 +57,7 @@ public class PanelProductProperties extends JSplitPane {
 		depotsOfPackage = new ArrayList<>();
 
 		List<TableEditItem> updateCollection = new ArrayList<>();
-		GenTableModel model = new GenTableModel(null, mainController.globalProductsTableProvider, -1, paneProducts,
+		GenTableModel model = new GenTableModel(null, configedMain.globalProductsTableProvider, -1, paneProducts,
 				updateCollection);
 
 		final List<String> columnNames = model.getColumnNames();
@@ -77,14 +82,14 @@ public class PanelProductProperties extends JSplitPane {
 		Logging.info(this, " created properties Panel, is  EditMapPanelX");
 		((EditMapPanelX) propertiesPanel)
 				.setCellEditor(SensitiveCellEditorForDataPanel.getInstance(this.getClass().getName()));
-		propertiesPanel.registerDataChangedObserver(mainController.getGeneralDataChangedKeeper());
+		propertiesPanel.registerDataChangedObserver(configedMain.getGeneralDataChangedKeeper());
 		propertiesPanel.setStoreData(null);
 		propertiesPanel.setUpdateCollection(null);
 
-		panelEditProperties = new PanelEditDepotProperties(mainController, propertiesPanel);
-		infoPane = new ProductInfoPane(mainController, panelEditProperties);
+		panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel);
+		infoPane = new ProductInfoPane(configedMain, panelEditProperties);
 
-		infoPane.getPanelProductDependencies().setDependenciesModel(mainController.getDependenciesModel());
+		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
 		setRightComponent(infoPane);
 	}
@@ -103,8 +108,8 @@ public class PanelProductProperties extends JSplitPane {
 		public void reload() {
 			Logging.info(this, "reload()");
 
-			mainController.getPersistenceController().productPropertyDefinitionsRequestRefresh();
-			mainController.getPersistenceController().productpropertiesRequestRefresh();
+			persistenceController.productPropertyDefinitionsRequestRefresh();
+			persistenceController.productpropertiesRequestRefresh();
 			super.reload();
 		}
 
@@ -176,8 +181,7 @@ public class PanelProductProperties extends JSplitPane {
 								"" + theTable.getValueAt(row, columnNames.indexOf("productVersion")),
 								"" + theTable.getValueAt(row, columnNames.indexOf("packageVersion")));
 
-						depotsOfPackageAsRetrieved = mainController.getPersistenceController()
-								.getProduct2VersionInfo2Depots()
+						depotsOfPackageAsRetrieved = persistenceController.getProduct2VersionInfo2Depots()
 								.get(theTable.getValueAt(row, columnNames.indexOf("productId"))).get(versionInfo);
 
 						Logging.info(this, "valueChanged  versionInfo (depotsOfPackageAsRetrieved == null)  "
@@ -194,8 +198,7 @@ public class PanelProductProperties extends JSplitPane {
 					depotsOfPackage = new LinkedList<>();
 
 					if (retrieval) {
-						for (String depot : mainController.getPersistenceController().getHostInfoCollections()
-								.getDepots().keySet()) {
+						for (String depot : persistenceController.getHostInfoCollections().getDepots().keySet()) {
 							if (depotsOfPackageAsRetrieved.indexOf(depot) > -1) {
 								depotsOfPackage.add(depot);
 							}

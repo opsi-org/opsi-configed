@@ -456,7 +456,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		Logging.debug(this, "create");
 
-		hostInfoCollections = new HostInfoCollections();
+		hostInfoCollections = new HostInfoCollections(this);
 
 		exec = new JSONthroughHTTPS(server, user, password);
 
