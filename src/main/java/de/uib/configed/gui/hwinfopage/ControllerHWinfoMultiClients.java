@@ -213,23 +213,7 @@ public class ControllerHWinfoMultiClients {
 			rebuildModel();
 		});
 
-		buttonConfigureColumns.addActionListener((ActionEvent actionEvent) -> {
-			Logging.info(this, "action performed " + actionEvent);
-
-			ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration(
-					persist);
-			if (fTable == null || ((FPanel) fTable).isLeft()) {
-				fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel,
-						true);
-
-				fTable.setSize(new Dimension(ConfigedMain.getMainFrame().getSize().width - 50,
-						ConfigedMain.getMainFrame().getSize().height / 2));
-			}
-
-			fTable.centerOnParent();
-
-			fTable.setVisible(true);
-		});
+		buttonConfigureColumns.addActionListener(actionEvent -> configureColumns(actionEvent));
 
 		JButton buttonCopySelection = new JButton("", Globals.createImageIcon("images/memorize_selection.png", ""));
 		buttonCopySelection.setPreferredSize(Globals.smallButtonDimension);
@@ -262,4 +246,20 @@ public class ControllerHWinfoMultiClients {
 
 	}
 
+	private void configureColumns(ActionEvent actionEvent) {
+		Logging.info(this, "action performed " + actionEvent);
+
+		ControllerHWinfoColumnConfiguration controllerHWinfoColumnConfiguration = new ControllerHWinfoColumnConfiguration(
+				persist);
+		if (fTable == null || ((FPanel) fTable).isLeft()) {
+			fTable = new FPanel("hardware classes / database columns", controllerHWinfoColumnConfiguration.panel, true);
+
+			fTable.setSize(new Dimension(ConfigedMain.getMainFrame().getSize().width - 50,
+					ConfigedMain.getMainFrame().getSize().height / 2));
+		}
+
+		fTable.centerOnParent();
+
+		fTable.setVisible(true);
+	}
 }

@@ -458,7 +458,7 @@ public class HostInfo {
 	}
 
 	public void showAndSaveInternally(JTableSelectionPanel selectionPanel, MainFrame mainFrame,
-			OpsiserviceNOMPersistenceController persist, String client, Map<String, String> sourceOfChanges) {
+			OpsiserviceNOMPersistenceController persist, String client, Map<?, ?> sourceOfChanges) {
 		if (client == null || client.isEmpty()) {
 			Logging.warning(this, "show and save: no hostId given: " + sourceOfChanges);
 			return;
@@ -473,7 +473,7 @@ public class HostInfo {
 		int row = findRow(selectionPanel, client);
 
 		if (sourceOfChanges.get(CLIENT_DESCRIPTION_KEY) != null) {
-			clientDescription = sourceOfChanges.get(CLIENT_DESCRIPTION_KEY);
+			clientDescription = (String) sourceOfChanges.get(CLIENT_DESCRIPTION_KEY);
 			int col = findCol(selectionPanel,
 					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientDescription"));
 			if (col > -1) {
@@ -488,7 +488,7 @@ public class HostInfo {
 		}
 
 		if (sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY) != null) {
-			clientInventoryNumber = sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY);
+			clientInventoryNumber = (String) sourceOfChanges.get(CLIENT_INVENTORY_NUMBER_KEY);
 
 			int col = findCol(selectionPanel,
 					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientInventoryNumber"));
@@ -505,7 +505,7 @@ public class HostInfo {
 		}
 
 		if (sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY) != null) {
-			clientOneTimePassword = sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY);
+			clientOneTimePassword = (String) sourceOfChanges.get(CLIENT_ONE_TIME_PASSWORD_KEY);
 
 			// restoring old value
 			mainFrame.setClientOneTimePasswordText(clientOneTimePassword);
@@ -516,7 +516,7 @@ public class HostInfo {
 		}
 
 		if (sourceOfChanges.get(CLIENT_NOTES_KEY) != null) {
-			clientNotes = sourceOfChanges.get(CLIENT_NOTES_KEY);
+			clientNotes = (String) sourceOfChanges.get(CLIENT_NOTES_KEY);
 
 			// restoring old value
 			mainFrame.setClientNotesText(clientNotes);
@@ -526,8 +526,8 @@ public class HostInfo {
 		}
 
 		if (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY) != null
-				&& !(sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY).trim()).isEmpty()) {
-			clientMacAddress = sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY).trim();
+				&& !((String) (sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY))).trim().isEmpty()) {
+			clientMacAddress = ((String) sourceOfChanges.get(CLIENT_SYSTEM_UUID_KEY)).trim();
 
 			int col = findCol(selectionPanel,
 					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientSystemUUID"));
@@ -543,8 +543,8 @@ public class HostInfo {
 		}
 
 		if (sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY) != null
-				&& !(sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY).trim()).isEmpty()) {
-			clientMacAddress = sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY).trim();
+				&& !((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim().isEmpty()) {
+			clientMacAddress = ((String) sourceOfChanges.get(CLIENT_MAC_ADRESS_KEY)).trim();
 
 			int col = findCol(selectionPanel,
 					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientHardwareAddress"));
@@ -560,8 +560,8 @@ public class HostInfo {
 		}
 
 		if (sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY) != null
-				&& !(sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY).trim()).isEmpty()) {
-			clientIpAddress = sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY).trim();
+				&& !((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim().isEmpty()) {
+			clientIpAddress = ((String) sourceOfChanges.get(CLIENT_IP_ADDRESS_KEY)).trim();
 
 			int col = findCol(selectionPanel,
 					Configed.getResourceValue("ConfigedMain.pclistTableModel.clientIPAddress"));

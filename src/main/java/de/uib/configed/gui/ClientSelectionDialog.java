@@ -32,11 +32,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
-import javax.swing.event.ChangeListener;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -813,7 +811,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			data = value;
 			break;
 		case BIG_INTEGER_TYPE:
-			Long value2 = ((SpinnerWithExt) group.dataComponent).getValue();
+			Long value2 = ((SpinnerWithExtension) group.dataComponent).getValue();
 			if (value2 == 0) {
 				return null;
 			}
@@ -1025,7 +1023,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			sourceGroup.dataComponent = spinner;
 			break;
 		case BIG_INTEGER_TYPE:
-			SpinnerWithExt swx = new SpinnerWithExt();
+			SpinnerWithExtension swx = new SpinnerWithExtension();
 			swx.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
 				@Override
 				protected void actOnChange() {
@@ -1224,8 +1222,9 @@ public class ClientSelectionDialog extends FGeneralDialog {
 
 		if (component instanceof TextInputField) {
 			((TextInputField) component).setText(data.getData().toString());
-		} else if (component instanceof SpinnerWithExt && data.getType() == SelectData.DataType.BIG_INTEGER_TYPE) {
-			((SpinnerWithExt) component).setValue((Long) data.getData());
+		} else if (component instanceof SpinnerWithExtension
+				&& data.getType() == SelectData.DataType.BIG_INTEGER_TYPE) {
+			((SpinnerWithExtension) component).setValue((Long) data.getData());
 		} else if (component instanceof JSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
 			((JSpinner) component).setValue(data.getData());
 		}
@@ -1397,47 +1396,6 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 		IconAsButton button = (IconAsButton) event.getSource();
 		button.setActivated(!button.isActivated());
-	}
-
-	/*ctionEvent -> parenthesisAction(actionEvent)
-	 * A spinner for big numbers, with a metric prefix (kilo, mega, ...) selection.
-	 */
-	private static class SpinnerWithExt extends JPanel {
-		private JSpinner spinner;
-		private JComboBox<String> box;
-
-		public SpinnerWithExt() {
-			spinner = new JSpinner(
-					new SpinnerNumberModel((Number) Long.valueOf(0), Long.MIN_VALUE, Long.MAX_VALUE, Long.valueOf(1)));
-			spinner.setMinimumSize(new Dimension(0, 0));
-			box = new JComboBox<>(new String[] { "", "k", "M", "G", "T" });
-			box.setMinimumSize(new Dimension(50, 0));
-			GroupLayout spinnerLayout = new GroupLayout(this);
-			spinnerLayout.setVerticalGroup(spinnerLayout.createParallelGroup().addComponent(spinner).addComponent(box));
-			spinnerLayout
-					.setHorizontalGroup(spinnerLayout.createSequentialGroup().addComponent(spinner).addComponent(box));
-
-			super.setLayout(spinnerLayout);
-			super.add(spinner);
-			super.add(box);
-		}
-
-		public long getValue() {
-			long value = (Long) spinner.getValue();
-			for (int i = 0; i < box.getSelectedIndex(); i++) {
-				value *= 1024L;
-			}
-			return value;
-		}
-
-		public void setValue(long val) {
-			spinner.setValue(val);
-			box.setSelectedIndex(0);
-		}
-
-		public void addChangeListener(ChangeListener listener) {
-			spinner.addChangeListener(listener);
-		}
 	}
 
 	private void save() {

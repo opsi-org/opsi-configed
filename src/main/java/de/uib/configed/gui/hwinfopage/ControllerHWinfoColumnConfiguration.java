@@ -66,67 +66,6 @@ public class ControllerHWinfoColumnConfiguration {
 
 	private Map<String, Map<String, Boolean>> updateItems;
 
-	private static class ColumnIdent {
-		String dbColumnName;
-		String hwClass;
-		String tableType;
-		String configIdent;
-
-		ColumnIdent(String tableValue) {
-			if (tableValue == null) {
-				return;
-			}
-
-			int indexCurly = tableValue.indexOf('{');
-
-			if (indexCurly == -1) {
-				dbColumnName = tableValue.trim();
-				return;
-			}
-
-			dbColumnName = tableValue.substring(0, indexCurly).trim();
-			String tableIdent = tableValue.substring(indexCurly + 1);
-
-			String checkType = OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE + "}";
-
-			if (tableIdent.endsWith(checkType)) {
-				tableType = OpsiHwAuditDeviceClass.HOST_ASSIGNED_TABLE_TYPE;
-			} else {
-				checkType = OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE + "}";
-				if (tableIdent.endsWith(checkType)) {
-					tableType = OpsiHwAuditDeviceClass.HW_ITEM_ASSIGNED_TABLE_TYPE;
-				}
-			}
-
-			int indexUnderline = tableIdent.lastIndexOf("_");
-			hwClass = tableIdent.substring(0, indexUnderline);
-
-			configIdent = hwClass + "_" + tableType;
-
-			Logging.debug(this, "from '" + tableValue + "' we get " + " col name " + dbColumnName + " type " + tableType
-					+ " hw class " + hwClass);
-
-		}
-
-		ColumnIdent(String hwClass, String tableType, String colName) {
-			this.dbColumnName = colName;
-			this.hwClass = hwClass;
-			this.tableType = tableType;
-		}
-
-		String produceColumnCellValue() {
-			String result = dbColumnName + " {" + hwClass + "_" + tableType + "}";
-			Logging.debug(this, "produceColumnCellValue " + result);
-
-			return result;
-		}
-
-		@Override
-		public String toString() {
-			return "dbColumnName " + dbColumnName + " " + "hwClass " + hwClass + " " + "tableType " + tableType;
-		}
-	}
-
 	private OpsiserviceNOMPersistenceController persist;
 
 	public ControllerHWinfoColumnConfiguration(OpsiserviceNOMPersistenceController persist) {
@@ -179,7 +118,6 @@ public class ControllerHWinfoColumnConfiguration {
 		panel.showFilterIcon(true);
 		panel.setFiltering(true);
 		panel.setDeleteAllowed(false);
-
 	}
 
 	private void initModel() {
@@ -305,17 +243,17 @@ public class ControllerHWinfoColumnConfiguration {
 	private void buildUpdateItem(ColumnIdent col, Boolean use) {
 		Logging.info(this, " buildUpdateItem value " + use + " for col ident " + col);
 
-		Map<String, Boolean> tableConfigUpdates = updateItems.get(col.configIdent);
+		Map<String, Boolean> tableConfigUpdates = updateItems.get(col.getConfigIdent());
 
-		Logging.info(this, "add this item to items for configIdent " + col.configIdent);
+		Logging.info(this, "add this item to items for configIdent " + col.getConfigIdent());
 
-		Logging.info(this, "add this item to items for configIdent " + col.configIdent);
+		Logging.info(this, "add this item to items for configIdent " + col.getConfigIdent());
 
 		if (tableConfigUpdates == null) {
 			tableConfigUpdates = new HashMap<>();
-			updateItems.put(col.configIdent, tableConfigUpdates);
+			updateItems.put(col.getConfigIdent(), tableConfigUpdates);
 		}
-		tableConfigUpdates.put(col.dbColumnName, use);
+		tableConfigUpdates.put(col.getDBColumnName(), use);
 	}
 
 	private static String formatLineNo(int no) {

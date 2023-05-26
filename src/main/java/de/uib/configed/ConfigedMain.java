@@ -3847,21 +3847,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 * inner class ClientInfoDataChangedKeeper
 	 */
 	public class ClientInfoDataChangedKeeper extends DataChangedKeeper {
-		Map<String, Map<String, String>> source;
+		Map<?, ?> source;
 
 		// we use this, but it would not override, therefore we perform a cast
 		// it does not guarantee that the values of the map are maps!
 
 		@Override
 		public void dataHaveChanged(Object source1) {
-			this.source = (Map<String, Map<String, String>>) source1;
+			this.source = (Map<?, ?>) source1;
 
 			Logging.debug(this, "dataHaveChanged source " + source);
 
 			if (source == null) {
 				Logging.info(this, "dataHaveChanged null");
 			} else {
-				for (Entry<String, Map<String, String>> clientEntry : source.entrySet()) {
+				for (Entry<?, ?> clientEntry : source.entrySet()) {
 					Logging.debug(this, "dataHaveChanged for client " + clientEntry.getKey() + " with values"
 							+ clientEntry.getValue());
 				}
@@ -3907,7 +3907,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Logging.info(this, "save for clients " + getSelectedClients().length);
 
 				for (String client : getSelectedClients()) {
-					hostInfo.showAndSaveInternally(selectionPanel, mainFrame, persist, client, source.get(client));
+					hostInfo.showAndSaveInternally(selectionPanel, mainFrame, persist, client,
+							(Map<?, ?>) source.get(client));
 				}
 				persist.updateHosts();
 
@@ -4056,7 +4057,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				);
 
-				if (!suspended && editingTarget == EditingTarget.CLIENTS && viewIndex == VIEW_CLIENTS) {
+				if (!suspended && /*editingTarget == EditingTarget.CLIENTS && */viewIndex == VIEW_CLIENTS) {
 					try {
 						// we catch exceptions especially if we are on some updating process for the
 						// model
@@ -4111,9 +4112,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void getReachableInfo() {
-		final boolean onlySelectedClients = selectedClients != null && selectedClients.length > 0;
-
-		final String[] selClients = selectedClients;
 
 		// we put this into a thread since it may never end in case of a name resolving
 		// problem
@@ -4121,22 +4119,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			@Override
 			public void run() {
 
-				if (fShowReachableInfo == null) {
-					fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
-							new String[] { Configed.getResourceValue("ConfigedMain.reachableInfoCancel") }, 350, 100);
-				}
+				showReachableInfoDialog();
 
-				fShowReachableInfo.setMessage(Configed.getResourceValue("ConfigedMain.reachableInfoRequested"));
-
-				fShowReachableInfo.setAlwaysOnTop(true);
-				fShowReachableInfo.setSize(Globals.REACHABLE_INFO_FRAME_WIDTH, Globals.REACHABLE_INFO_FRAME_HEIGHT);
-				fShowReachableInfo.setLocationRelativeTo(ConfigedMain.getMainFrame());
-				fShowReachableInfo.setVisible(true);
-				fShowReachableInfo.toFront();
 				reachableInfo = new HashMap<>();
 
-				if (onlySelectedClients) {
-					Logging.info(this, "we have sel clients " + selClients.length);
+				if (selectedClients != null && selectedClients.length > 0) {
+					Logging.info(this, "we have sel clients " + selectedClients.length);
 					reachableInfo.putAll(persist.reachableInfo(getSelectedClients()));
 				} else {
 					Logging.info(this, "we don't have selected clients, so we check reachable for all clients");
@@ -4147,9 +4135,24 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				mainFrame.iconButtonReachableInfo.setEnabled(true);
 
-				setReachableInfo(selClients);
+				setReachableInfo(selectedClients);
 			}
 		}.start();
+	}
+
+	private void showReachableInfoDialog() {
+		if (fShowReachableInfo == null) {
+			fShowReachableInfo = new FShowList(null, Globals.APPNAME, false,
+					new String[] { Configed.getResourceValue("ConfigedMain.reachableInfoCancel") }, 350, 100);
+		}
+
+		fShowReachableInfo.setMessage(Configed.getResourceValue("ConfigedMain.reachableInfoRequested"));
+
+		fShowReachableInfo.setAlwaysOnTop(true);
+		fShowReachableInfo.setSize(Globals.REACHABLE_INFO_FRAME_WIDTH, Globals.REACHABLE_INFO_FRAME_HEIGHT);
+		fShowReachableInfo.setLocationRelativeTo(ConfigedMain.getMainFrame());
+		fShowReachableInfo.setVisible(true);
+		fShowReachableInfo.toFront();
 	}
 
 	/*

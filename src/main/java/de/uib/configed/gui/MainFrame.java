@@ -513,7 +513,9 @@ public class MainFrame extends JFrame
 			Logging.debug(this, "componentResized");
 
 			try {
-				repairSizes();
+
+				moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+						(int) (F_WIDTH_RIGHTHANDED * 1.5));
 			} catch (Exception ex) {
 				Logging.info(this, "componentResized " + ex);
 			}
@@ -537,17 +539,6 @@ public class MainFrame extends JFrame
 			if (sizeOfRightPanel > maxRightWidth) {
 				splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - maxRightWidth));
 			}
-		}
-
-		public void repairSizes() {
-			// repair sizes when the frame is resized
-
-			if (panelClientSelection == null) {
-				return;
-			}
-
-			moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
-					(int) (F_WIDTH_RIGHTHANDED * 1.5));
 		}
 	}
 
