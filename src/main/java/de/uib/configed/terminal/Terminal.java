@@ -55,7 +55,6 @@ import de.uib.messagebus.Messagebus;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.ProgressBarPainter;
 
-@SuppressWarnings("java:S109")
 public final class Terminal {
 	private static final int DEFAULT_TERMINAL_COLUMNS = 80;
 	private static final int DEFAULT_TERMINAL_ROWS = 24;
