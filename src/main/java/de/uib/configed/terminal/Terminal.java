@@ -7,11 +7,6 @@
 package de.uib.configed.terminal;
 
 import java.awt.Dimension;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -25,7 +20,6 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -513,57 +507,6 @@ public final class Terminal {
 		@Override
 		public boolean ready() throws IOException {
 			return reader.ready();
-		}
-	}
-
-	@SuppressWarnings("java:S2972")
-	private static class FileUpload extends DropTarget {
-		private FileUploadQueue queue;
-		private BackgroundFileUploader fileUploader;
-
-		public FileUpload() {
-			this.queue = new FileUploadQueue();
-			this.fileUploader = new BackgroundFileUploader(queue);
-		}
-
-		@SuppressWarnings("unchecked")
-		private List<File> getDroppedFiles(DropTargetDropEvent e) {
-			List<File> droppedFiles = null;
-
-			try {
-				droppedFiles = (List<File>) e.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-				Logging.info(this, "dropped files: " + droppedFiles);
-			} catch (UnsupportedFlavorException ex) {
-				Logging.warning(this,
-						"this should not happen, unless javaFileListFlavor is no longer supported: " + ex);
-			} catch (IOException ex) {
-				Logging.warning(this, "cannot retrieve dropped file: ", ex);
-			}
-
-			return droppedFiles;
-		}
-
-		@Override
-		public synchronized void drop(DropTargetDropEvent e) {
-			e.acceptDrop(DnDConstants.ACTION_COPY);
-			List<File> files = getDroppedFiles(e);
-
-			if (files == null || files.isEmpty()) {
-				Logging.info(this, "files are null or empty: " + files);
-				return;
-			}
-
-			queue.addAll(files);
-
-			if (fileUploader.isDone()) {
-				fileUploader = new BackgroundFileUploader(queue);
-				fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + files.size());
-			} else {
-				fileUploader.setTotalFilesToUpload(fileUploader.getTotalFilesToUpload() + files.size());
-				fileUploader.updateTotalFilesToUpload();
-			}
-
-			fileUploader.execute();
 		}
 	}
 }

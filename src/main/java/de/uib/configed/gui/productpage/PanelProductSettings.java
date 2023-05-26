@@ -31,7 +31,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -459,45 +458,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.addMouseListener(new utils.PopupMouseListener(popup));
 		tableProducts.addMouseListener(new utils.PopupMouseListener(popup));
 
-	}
-
-	private static class ActionProgressTableCellRenderer extends ColoredTableCellRendererByIndex {
-		ActionProgressTableCellRenderer(Map<String, String> mapOfStringValues, String imagesBase, boolean showOnlyIcon,
-				String tooltipPrefix) {
-			super(mapOfStringValues, imagesBase, showOnlyIcon, tooltipPrefix);
-		}
-
-		// overwrite the renderer in order to get the behaviour:
-		// - if the cell value is not empty or null, display the installing gif
-		// - write the cell value text as tooltip
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
-
-			Component result = null;
-			if (value != null && !"".equals(value) && !"null".equals(value.toString())
-					&& !"none".equalsIgnoreCase(value.toString())
-					&& !value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
-				result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row, column);
-
-				((JLabel) result)
-						.setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
-
-			} else if (value != null && value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
-				result = super.getTableCellRendererComponent(table, Globals.CONFLICT_STATE_STRING, isSelected, hasFocus,
-						row, column);
-
-				((JLabel) result).setToolTipText(Globals
-						.fillStringToLength(tooltipPrefix + " " + Globals.CONFLICT_STATE_STRING + " ", FILL_LENGTH));
-			} else {
-				result = super.getTableCellRendererComponent(table, "none", isSelected, hasFocus, row, column);
-
-				((JLabel) result).setToolTipText(Globals.fillStringToLength(
-						tooltipPrefix + " " + ActionProgress.getDisplayLabel(ActionProgress.NONE) + " ", FILL_LENGTH));
-			}
-
-			return result;
-		}
 	}
 
 	public void initAllProperties() {
