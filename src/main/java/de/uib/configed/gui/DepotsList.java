@@ -6,23 +6,16 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Component;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
 import de.uib.Main;
-import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
-import de.uib.utilities.logging.Logging;
 
 public class DepotsList extends JList<String> implements ComponentListener {
 
@@ -31,7 +24,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 
 	private Map<String, Map<String, Object>> depotInfo;
 
-	public DepotsList(OpsiserviceNOMPersistenceController persist) {
+	public DepotsList() {
 		if (!Main.THEMES) {
 			super.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 			super.setSelectionBackground(Globals.defaultTableCellSelectedBgColor);
@@ -39,7 +32,7 @@ public class DepotsList extends JList<String> implements ComponentListener {
 		}
 
 		super.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-		myListCellRenderer = new MyListCellRenderer(persist);
+		myListCellRenderer = new MyListCellRenderer();
 		super.setCellRenderer(myListCellRenderer);
 	}
 
@@ -105,70 +98,5 @@ public class DepotsList extends JList<String> implements ComponentListener {
 			}
 		}
 		getSelectionModel().setValueIsAdjusting(false);
-	}
-
-	private static class MyListCellRenderer extends DefaultListCellRenderer {
-		private static final int FILL_LENGTH = 30;
-
-		Map<String, Map<String, Object>> extendedInfo;
-
-		OpsiserviceNOMPersistenceController persist;
-
-		public MyListCellRenderer(OpsiserviceNOMPersistenceController persist) {
-			super();
-			this.persist = persist;
-		}
-
-		public void setInfo(Map<String, Map<String, Object>> extendedInfo) {
-			Logging.debug(this, "setInfo " + extendedInfo);
-			this.extendedInfo = extendedInfo;
-		}
-
-		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-
-			Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-
-			if (!(c instanceof JComponent)) {
-				return c;
-			}
-
-			JComponent jc = (JComponent) c;
-
-			if (jc instanceof JLabel) {
-				String tooltipText = null;
-
-				String key = "";
-
-				if (value != null) {
-					key = "" + value;
-				}
-
-				if (extendedInfo != null && extendedInfo.get(key) != null
-						&& extendedInfo.get(key).get("description") != null
-						&& !("" + extendedInfo.get(key).get("description")).isEmpty()) {
-					tooltipText = "" + extendedInfo.get(value).get("description");
-				} else {
-					tooltipText = key;
-				}
-
-				tooltipText = Globals.fillStringToLength(tooltipText + " ", FILL_LENGTH);
-
-				String depot = (String) value;
-				if (!persist.hasDepotPermission(depot)) {
-					if (!Main.THEMES) {
-						((JLabel) jc).setBackground(Globals.BACKGROUND_COLOR_3);
-					}
-
-					((JLabel) jc).setToolTipText(
-							"Depot " + depot + " " + Configed.getResourceValue("Permission.depot.not_accessible"));
-				} else {
-					((JLabel) jc).setToolTipText(tooltipText);
-				}
-			}
-
-			return jc;
-		}
 	}
 }

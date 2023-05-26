@@ -26,7 +26,6 @@ import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -592,41 +591,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 		tree.expandRow(0);
 		tree.expandRow(1);
 
-	}
-
-	private static class HWInfoTableModel extends AbstractTableModel {
-		private List<String[]> data;
-		private final String[] header = { "Name", "Wert" };
-
-		public HWInfoTableModel() {
-			super();
-			data = new ArrayList<>();
-		}
-
-		public void setData(List<String[]> data) {
-			this.data = data;
-			fireTableDataChanged();
-		}
-
-		@Override
-		public int getRowCount() {
-			return data.size();
-		}
-
-		@Override
-		public int getColumnCount() {
-			return 2;
-		}
-
-		@Override
-		public String getColumnName(int column) {
-			return header[column];
-		}
-
-		@Override
-		public Object getValueAt(int row, int col) {
-			return data.get(row)[col];
-		}
 	}
 
 	private void getLocalizedHashMap() {

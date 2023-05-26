@@ -34,7 +34,6 @@ import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.ValueSelectorList;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.configed.type.HostInfo;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
 
@@ -485,7 +484,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	}
 
 	private static ValueSelectorList fillValueSelectorList(final List<String> values) {
-		final DepotsList valueList = new DepotsList(PersistenceControllerFactory.getPersistenceController());
+		final DepotsList valueList = new DepotsList();
 		valueList.setVisible(true);
 		final Map<String, Object> extendedInfo = new TreeMap<>();
 		final Map<String, Map<String, Object>> info = new TreeMap<>();

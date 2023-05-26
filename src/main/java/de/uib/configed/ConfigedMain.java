@@ -1279,7 +1279,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		myServer = persistenceController.getHostInfoCollections().getConfigServer();
 
 		// create depotsList
-		depotsList = new DepotsList(persistenceController);
+		depotsList = new DepotsList();
 
 		if (depotsListSelectionListener == null) {
 			Logging.info(this, "create depotsListSelectionListener");
