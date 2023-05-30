@@ -47,6 +47,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 	private static JCheckBox jCheckBoxUseKeyFile;
 
 	private static JComboBox<String> jComboBoxHost;
+	private static JButton iconButtonOpenChooser;
 	private static JTextField jTextFieldKeyFile;
 	private static JPasswordField jTextFieldPassphrase;
 	private static JTextField jTextFieldUser;
@@ -357,9 +358,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			jButtonSave.addActionListener(actionEvent -> doAction3());
 		}
 
-		IconButton iconButtonOpenChooser = new IconButton(
-				Configed.getResourceValue("SSHConnection.Config.SelectKeyFile"), "images/folder_16.png", " ",
-				"images/folder_16.png", true);
+		iconButtonOpenChooser = new IconButton(Configed.getResourceValue("SSHConnection.Config.SelectKeyFile"),
+				"images/folder_16.png", " ", "images/folder_16.png", true);
 		iconButtonOpenChooser.setPreferredSize(new Dimension(Globals.BUTTON_WIDTH / 4, Globals.BUTTON_HEIGHT));
 		if (!(Globals.isGlobalReadOnly())) {
 			iconButtonOpenChooser.addActionListener(actionEvent -> doActionOeffnen());
@@ -416,38 +416,14 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		jCheckBoxUseKeyFile.setSelected(false);
 		jTextFieldPassword.setEnabled(false);
 		jTextFieldKeyFile.setEnabled(false);
-		jCheckBoxUseKeyFile.addItemListener((ItemEvent itemEvent) -> {
-			Boolean value = false;
-			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
-				value = true;
-			}
-			if (!jCheckBoxDefault.isSelected()) {
-				jTextFieldPassword.setEnabled(!value);
-			}
-			iconButtonOpenChooser.setEnabled(value);
-			jTextFieldKeyFile.setEnabled(value);
-			jTextFieldPassphrase.setEnabled(value);
-			checkComponentStates();
-		});
+		jCheckBoxUseKeyFile.addItemListener((ItemEvent itemEvent) -> applyUseKeyFile(itemEvent));
 
 		jCheckBoxDefault = new JCheckBox();
 		jCheckBoxDefault.setText(Configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));
 		jCheckBoxDefault.setSelected(true);
 
 		setComponentsEditable(false);
-		jCheckBoxDefault.addItemListener((ItemEvent itemEvent) -> {
-			if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
-				setComponentsEditable(false);
-				jComboBoxHost.setSelectedItem(connectionInfo.getHost());
-				jTextFieldUser.setText(connectionInfo.getUser());
-				jTextFieldPassword.setText(connectionInfo.getPassw());
-				jTextFieldPort.setText(connectionInfo.getPort());
-			} else {
-				setComponentsEditable(true);
-			}
-
-			checkComponentStates();
-		});
+		jCheckBoxDefault.addItemListener(this::applyDefault);
 
 		if (!connectionInfo.getKeyfilePath().isEmpty()) {
 			jCheckBoxUseKeyFile.setSelected(true);
@@ -674,6 +650,20 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		Logging.info(this, "request focus");
 	}
 
+	private void applyUseKeyFile(ItemEvent itemEvent) {
+		Boolean value = false;
+		if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
+			value = true;
+		}
+		if (!jCheckBoxDefault.isSelected()) {
+			jTextFieldPassword.setEnabled(!value);
+		}
+		iconButtonOpenChooser.setEnabled(value);
+		jTextFieldKeyFile.setEnabled(value);
+		jTextFieldPassphrase.setEnabled(value);
+		checkComponentStates();
+	}
+
 	public void doActionOeffnen() {
 		final JFileChooser chooser = new JFileChooser("Choose directory");
 		chooser.setPreferredSize(Globals.filechooserSize);
@@ -697,6 +687,20 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		}
 		Logging.info(this, "doActionOeffnen canceled");
 		chooser.setVisible(false);
+	}
+
+	private void applyDefault(ItemEvent itemEvent) {
+		if (itemEvent.getStateChange() == ItemEvent.SELECTED) {
+			setComponentsEditable(false);
+			jComboBoxHost.setSelectedItem(connectionInfo.getHost());
+			jTextFieldUser.setText(connectionInfo.getUser());
+			jTextFieldPassword.setText(connectionInfo.getPassw());
+			jTextFieldPort.setText(connectionInfo.getPort());
+		} else {
+			setComponentsEditable(true);
+		}
+
+		checkComponentStates();
 	}
 
 	private static void checkComponents() {

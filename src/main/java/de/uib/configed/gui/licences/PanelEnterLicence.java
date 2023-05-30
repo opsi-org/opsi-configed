@@ -102,42 +102,44 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 	}
 
 	private void defineListeners() {
-		panelLicencecontracts.getListSelectionModel()
-				.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
-					// Ignore extra messages.
-					if (listSelectionEvent.getValueIsAdjusting()) {
-						return;
-					}
+		panelLicencecontracts.getListSelectionModel().addListSelectionListener(this::selectPanelLicenceContracts);
 
-					ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
+		panelLicencepools.addListSelectionListener(this::selectPanelLicencepools);
+	}
 
-					if (!lsm.isSelectionEmpty()) {
-						int selectedRow = lsm.getMinSelectionIndex();
-						String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
+	private void selectPanelLicenceContracts(ListSelectionEvent listSelectionEvent) {
+		// Ignore extra messages.
+		if (listSelectionEvent.getValueIsAdjusting()) {
+			return;
+		}
 
-						if (jTextFieldLicenceContract.isEnabled()) {
-							jTextFieldLicenceContract.setText(keyValue);
-						}
-					}
-				});
+		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
 
-		panelLicencepools.addListSelectionListener((ListSelectionEvent listSelectionEvent) -> {
-			if (listSelectionEvent.getValueIsAdjusting()) {
-				return;
+		if (!lsm.isSelectionEmpty()) {
+			int selectedRow = lsm.getMinSelectionIndex();
+			String keyValue = panelLicencecontracts.getValueAt(selectedRow, 0).toString();
+
+			if (jTextFieldLicenceContract.isEnabled()) {
+				jTextFieldLicenceContract.setText(keyValue);
 			}
+		}
+	}
 
-			int i = panelLicencepools.getSelectedRow();
+	private void selectPanelLicencepools(ListSelectionEvent listSelectionEvent) {
+		if (listSelectionEvent.getValueIsAdjusting()) {
+			return;
+		}
 
-			selectedLicencePool = "";
+		int i = panelLicencepools.getSelectedRow();
 
-			if (i > -1) {
-				selectedLicencePool = panelLicencepools.getValueAt(i, 0).toString();
-			}
+		selectedLicencePool = "";
 
-			panelLicencepools.setTitle(Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool")
-					+ ": " + selectedLicencePool);
-		});
+		if (i > -1) {
+			selectedLicencePool = panelLicencepools.getValueAt(i, 0).toString();
+		}
 
+		panelLicencepools.setTitle(Configed.getResourceValue("ConfigedMain.Licences.SectiontitleSelectLicencepool")
+				+ ": " + selectedLicencePool);
 	}
 
 	private void deactivate() {

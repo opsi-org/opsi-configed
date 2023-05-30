@@ -243,22 +243,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboType.setEnabled(false);
 		comboType.setEditable(false);
 
-		comboType.addActionListener((ActionEvent actionEvent) -> {
-			int oldSelTypeIndex = selTypeIndex;
-			Object selType = comboType.getSelectedItem();
-			if (selType == null || selType.equals(DEFAULT_TYPE)) {
-				showTypeRestricted = false;
-				selTypeIndex = -1;
-			} else {
-				showTypeRestricted = true;
-				selTypeIndex = typesList.indexOf(selType);
-			}
-
-			if (selTypeIndex != oldSelTypeIndex) {
-				buildDocument();
-				highlighter.removeAllHighlights();
-			}
-		});
+		comboType.addActionListener(actionEvent -> applyType());
 
 		commandpane = new JPanel();
 		GroupLayout layoutCommandpane = new GroupLayout(commandpane);
@@ -317,6 +302,23 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		if (withPopup) {
 			initPopupMenu();
+		}
+	}
+
+	private void applyType() {
+		int oldSelTypeIndex = selTypeIndex;
+		Object selType = comboType.getSelectedItem();
+		if (selType == null || selType.equals(DEFAULT_TYPE)) {
+			showTypeRestricted = false;
+			selTypeIndex = -1;
+		} else {
+			showTypeRestricted = true;
+			selTypeIndex = typesList.indexOf(selType);
+		}
+
+		if (selTypeIndex != oldSelTypeIndex) {
+			buildDocument();
+			highlighter.removeAllHighlights();
 		}
 	}
 
