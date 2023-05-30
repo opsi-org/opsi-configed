@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- *
- * 	uib, www.uib.de, 2008-2013, 2017, 2020
- * 
- *	authors Rupert Röder, Martina Hammel
- *
- */
-
 package de.uib.utilities.table;
 
 import java.util.ArrayList;
@@ -20,7 +12,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -29,13 +20,12 @@ import javax.swing.JOptionPane;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 
-import de.uib.utilities.Mapping;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.table.updates.TableEditItem;
 import de.uib.utilities.table.updates.TableUpdateItemInterface;
 
-public class GenTableModel extends AbstractTableModel implements TableModelFunctions {
+public class GenTableModel extends AbstractTableModel {
 
 	public static final String DEFAULT_FILTER_NAME = "default";
 
@@ -71,8 +61,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	private final ChainedTableModelFilter chainedFilter;
 	private final TableModelFilter emptyFilter;
 	private TableModelFilter workingFilter;
-
-	private Map<Integer, RowStringMap> primarykey2Rowmap;
 
 	private Integer sortCol;
 	private boolean sorting;
@@ -195,7 +183,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		// is needed
 		tableProvider.requestReturnToOriginal();
 		modelDataValid = false;
-		requestRefreshDerivedMaps();
 	}
 
 	public boolean isReloadRequested() {
@@ -204,7 +191,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 
 	public void requestReload() {
 		modelDataValid = false;
-		requestRefreshDerivedMaps();
 		tableProvider.requestReloadRows();
 	}
 
@@ -446,7 +432,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	 */
 	public void reset() {
 		Logging.info(this, "reset()");
-		requestRefreshDerivedMaps();
 		refresh();
 		clearUpdates();
 		cursorrow = -1;
@@ -686,8 +671,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			// in case of an updated row we did this already
 			rows.get(row).set(col, value);
 			fireTableCellUpdated(row, col);
-
-			requestRefreshDerivedMaps();
 		}
 	}
 
@@ -734,8 +717,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		} catch (Exception ex) {
 			Logging.warning(this, "addRow exception " + ex + " row " + rowV, ex);
 		}
-
-		requestRefreshDerivedMaps();
 	}
 
 	public void addRow(Object[] a) {
@@ -826,8 +807,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 			rowsLength--;
 			fireTableRowsDeleted(selection[i], selection[i]);
 		}
-
-		requestRefreshDerivedMaps();
 	}
 
 	public void deleteRow(int rowNum) {
@@ -866,7 +845,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 		rowsLength--;
 		fireTableRowsDeleted(rowNum, rowNum);
 
-		requestRefreshDerivedMaps();
 		Logging.debug(this, "deleted row " + oldValues);
 	}
 
@@ -962,59 +940,6 @@ public class GenTableModel extends AbstractTableModel implements TableModelFunct
 	}
 
 	// interface TableModelFunctions
-
-	private void requestRefreshDerivedMaps() {
-		primarykey2Rowmap = null;
-	}
-
-	@Override
-	public Map<Object, List<Object>> getFunction(int col1, int col2) {
-		return getFunction(col1, col2, null);
-	}
-
-	public Map<Object, List<Object>> getFunction(int col1, int col2, TableModelFilterCondition specialFilterCondition) {
-		TableModelFunctions.PairOfInt pair = new TableModelFunctions.PairOfInt(col1, col2);
-
-		return buildFunction(pair.col1, pair.col2, specialFilterCondition);
-	}
-
-	@Override
-	public Map<Integer, RowStringMap> getPrimarykey2Rowmap() {
-		if (keyCol < 0) {
-			return new HashMap<>();
-		}
-
-		if (primarykey2Rowmap != null) {
-			return primarykey2Rowmap;
-		}
-
-		primarykey2Rowmap = new HashMap<>();
-
-		for (int i = 0; i < rows.size(); i++) {
-			Integer key = Integer.valueOf((String) getValueAt(i, keyCol));
-			primarykey2Rowmap.put(key, getRowStringMap(i));
-		}
-
-		return primarykey2Rowmap;
-	}
-
-	@Override
-	public Map<Integer, Mapping<Integer, String>> getID2Mapping(int col1st, int col2nd, Mapping col2ndMapping) {
-
-		Map<Object, List<Object>> function = getFunction(col1st, col2nd);
-
-		if (function == null) {
-			return new HashMap<>();
-		}
-		Map<Integer, Mapping<Integer, String>> xFunction = new HashMap<>();
-
-		for (Entry<Object, List<Object>> functionEntry : function.entrySet()) {
-			Integer keyVal = (Integer) functionEntry.getKey();
-			xFunction.put(keyVal, col2ndMapping.restrictedTo(new HashSet<>(functionEntry.getValue())));
-		}
-
-		return xFunction;
-	}
 
 	@Override
 	public String toString() {
