@@ -3365,8 +3365,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// check if change of view index to the value of visualViewIndex can be allowed
 		if (visualViewIndex != VIEW_CLIENTS
-				&& !((visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER)
-						|| (visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS))) {
+				&& (!(visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER)
+						&& !(visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS))) {
 
 			Logging.debug(this, " selected clients " + Arrays.toString(getSelectedClients()));
 

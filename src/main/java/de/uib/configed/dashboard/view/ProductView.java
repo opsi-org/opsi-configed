@@ -169,19 +169,8 @@ public class ProductView implements View {
 
 		final ObjectProperty<Predicate<Product>> productStatusFilter = new SimpleObjectProperty<>();
 
-		productStatusFilter.bind(Bindings.createObjectBinding(() -> (Product product) -> {
-			if (productStatusComboBox.getValue() == null || productStatusComboBox.getValue()
-					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
-				return true;
-			}
-
-			return (productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.installed"))
-					&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.installed")))
-					|| (productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.failed"))
-							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.failed")))
-					|| (productStatusComboBox.getValue().equals(Configed.getResourceValue("Dashboard.products.unused"))
-							&& product.getStatus().equals(Configed.getResourceValue("Dashboard.products.unused")));
-		}, productStatusComboBox.valueProperty()));
+		productStatusFilter.bind(
+				Bindings.createObjectBinding(() -> this::isInProductStatus, productStatusComboBox.valueProperty()));
 
 		final FilteredList<Product> filteredData = new FilteredList<>(FXCollections.observableArrayList(products));
 
@@ -205,6 +194,15 @@ public class ProductView implements View {
 
 		productComparison.display();
 		productStatusComparison.display();
+	}
+
+	private boolean isInProductStatus(Product product) {
+		if (productStatusComboBox.getValue() == null || productStatusComboBox.getValue()
+				.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
+			return true;
+		}
+
+		return productStatusComboBox.getValue().equals(product.getStatus());
 	}
 
 	private static void bindDataToListView(List<String> data, ListView<String> view, TextField searchbar) {
