@@ -78,7 +78,6 @@ public class ControllerHWinfoMultiClients {
 
 			return result;
 		}
-
 	};
 
 	public ControllerHWinfoMultiClients(ConfigedMain main) {
@@ -214,7 +213,7 @@ public class ControllerHWinfoMultiClients {
 			rebuildModel();
 		});
 
-		buttonConfigureColumns.addActionListener(actionEvent -> configureColumns(actionEvent));
+		buttonConfigureColumns.addActionListener(this::configureColumns);
 
 		JButton buttonCopySelection = new JButton("", Globals.createImageIcon("images/memorize_selection.png", ""));
 		buttonCopySelection.setPreferredSize(Globals.smallButtonDimension);

@@ -27,7 +27,7 @@ import de.uib.utilities.logging.Logging;
 
 public class DependenciesTreeModel {
 
-	private Graph graph = null;
+	private Graph graph;
 
 	private List<String> productList;
 	private Map<String, Integer> productMap;

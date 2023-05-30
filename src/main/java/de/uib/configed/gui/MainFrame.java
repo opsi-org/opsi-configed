@@ -517,7 +517,6 @@ public class MainFrame extends JFrame
 			Logging.debug(this, "componentResized");
 
 			try {
-
 				moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
 						(int) (F_WIDTH_RIGHTHANDED * 1.5));
 			} catch (Exception ex) {
@@ -2582,7 +2581,7 @@ public class MainFrame extends JFrame
 		showSoftwareLog = showSoftwareLogNotFound;
 
 		showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
-		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo);
+		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
 		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"),
@@ -3514,76 +3513,6 @@ public class MainFrame extends JFrame
 				showSoftwareLog);
 
 		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().repaint());
-	}
-
-	private class SwExporter implements ActionListener {
-		PanelSWMultiClientReport showSoftwareLogMultiClientReport;
-		PanelSWInfo panelSWInfo;
-
-		SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWInfo panelSWInfo) {
-			this.showSoftwareLogMultiClientReport = showSoftwareLogMultiClientReport;
-			this.panelSWInfo = panelSWInfo;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-
-			Logging.info(this, "actionPerformed " + "  showSoftwareLog_MultiClientReport.wantsWithMsUpdates  "
-					+ showSoftwareLogMultiClientReport.wantsWithMsUpdates());
-
-			// save states now
-
-			Configed.savedStates.setProperty("swaudit_export_file_prefix",
-					showSoftwareLogMultiClientReport.getExportfilePrefix());
-
-			String filepathStart = showSoftwareLogMultiClientReport.getExportDirectory() + File.separator
-					+ showSoftwareLogMultiClientReport.getExportfilePrefix();
-
-			String extension = "."
-					+ showSoftwareLogMultiClientReport.wantsKindOfExport().toString().toLowerCase(Locale.ROOT);
-
-			panelSWInfo.setWithMsUpdates(showSoftwareLogMultiClientReport.wantsWithMsUpdates());
-			panelSWInfo.setWithMsUpdates2(showSoftwareLogMultiClientReport.wantsWithMsUpdates2());
-
-			panelSWInfo.setAskForOverwrite(showSoftwareLogMultiClientReport.wantsAskForOverwrite());
-
-			panelSWInfo.setKindOfExport(showSoftwareLogMultiClientReport.wantsKindOfExport());
-
-			List<String> clientsWithoutScan = new ArrayList<>();
-
-			for (String client : configedMain.getSelectedClients()) {
-				Map<String, Map<String, Object>> tableData = persistenceController.retrieveSoftwareAuditData(client);
-				if (tableData == null || tableData.isEmpty()) {
-					clientsWithoutScan.add(client);
-				}
-			}
-
-			Logging.info(this, "clientsWithoutScan " + clientsWithoutScan);
-
-			for (String client : configedMain.getSelectedClients()) {
-				panelSWInfo.setHost(client);
-
-				panelSWInfo.updateModel();
-
-				String scandate = persistenceController.getLastSoftwareAuditModification(client);
-				if (scandate != null) {
-					int timePos = scandate.indexOf(' ');
-					if (timePos >= 0) {
-						scandate = scandate.substring(0, timePos);
-					} else {
-						scandate = "__";
-					}
-				}
-
-				String filepath = filepathStart + client + "__scan_" + scandate + extension;
-				Logging.debug(this, "actionPerformed, write to " + filepath);
-				panelSWInfo.setWriteToFile(filepath);
-
-				panelSWInfo.export();
-			}
-
-			Logging.info(this, "clientsWithoutScan " + clientsWithoutScan);
-		}
 	}
 
 	public void setSoftwareAudit() {

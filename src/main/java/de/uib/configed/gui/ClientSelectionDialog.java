@@ -526,7 +526,7 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		contentPane.add(result.closeParenthesis);
 
 		if (operations.length > 1) {
-			((JComboBox<?>) result.operationComponent).addActionListener(actionEvent -> selectOperation(actionEvent));
+			((JComboBox<?>) result.operationComponent).addActionListener(this::selectOperation);
 			addDataComponent(result, ((JComboBox<?>) result.operationComponent).getSelectedIndex());
 		} else if (operations.length == 1) {
 			addDataComponent(result, 0);

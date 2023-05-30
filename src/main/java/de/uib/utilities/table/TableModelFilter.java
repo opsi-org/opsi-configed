@@ -63,16 +63,11 @@ public class TableModelFilter {
 
 		boolean testresult = condition.test(row);
 
-		if (inverted) {
-			return !testresult;
-		} else {
-			return testresult;
-		}
+		return inverted ? !testresult : testresult;
 	}
 
 	@Override
 	public String toString() {
 		return getClass().getName() + " in use " + inUse + ", inverted " + inverted + " condition " + condition;
 	}
-
 }

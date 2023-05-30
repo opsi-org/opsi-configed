@@ -87,7 +87,7 @@ public class PanelProductProperties extends JSplitPane {
 		propertiesPanel.setUpdateCollection(null);
 
 		panelEditProperties = new PanelEditDepotProperties(configedMain, propertiesPanel);
-		infoPane = new ProductInfoPane(configedMain, panelEditProperties);
+		infoPane = new ProductInfoPane(panelEditProperties);
 
 		infoPane.getPanelProductDependencies().setDependenciesModel(configedMain.getDependenciesModel());
 
