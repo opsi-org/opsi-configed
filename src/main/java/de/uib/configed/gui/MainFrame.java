@@ -108,7 +108,7 @@ import de.uib.configed.tree.ClientTree;
 import de.uib.configed.type.HostInfo;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.JSONthroughHTTPS;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
@@ -934,7 +934,7 @@ public class MainFrame extends JFrame
 		jMenuClients.addSeparator();
 
 		jMenuClients.add(jMenuAddClient);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			jMenuClients.add(jMenuCopyClient);
 		}
 		jMenuClients.add(jMenuDeleteClient);
@@ -959,7 +959,7 @@ public class MainFrame extends JFrame
 
 		jMenuClients.add(jCheckBoxMenuItemShowWANactiveColumn);
 		jMenuClients.add(jCheckBoxMenuItemShowIPAddressColumn);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			jMenuClients.add(jCheckBoxMenuItemShowSystemUUIDColumn);
 		}
 		jMenuClients.add(jCheckBoxMenuItemShowHardwareAddressColumn);
@@ -1260,7 +1260,7 @@ public class MainFrame extends JFrame
 
 		jMenuFrameDashboard.setText(Configed.getResourceValue("Dashboard.title"));
 		jMenuFrameDashboard.addActionListener(this);
-		jMenuFrameDashboard.setVisible(JSONthroughHTTPS.isOpsi43());
+		jMenuFrameDashboard.setVisible(ServerFacade.isOpsi43());
 
 		jMenuFrameLicences.setText(Configed.getResourceValue("MainFrame.jMenuFrameLicences"));
 		jMenuFrameLicences.setEnabled(false);
@@ -1293,11 +1293,11 @@ public class MainFrame extends JFrame
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
 		jMenuFrames.add(jMenuFrameWorkOnGroups);
 		jMenuFrames.add(jMenuFrameWorkOnProducts);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			jMenuFrames.add(jMenuFrameDashboard);
 		}
 		jMenuFrames.add(jMenuFrameLicences);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			jMenuFrames.add(jMenuFrameTerminal);
 		}
 		jMenuFrames.addSeparator();
@@ -1322,8 +1322,8 @@ public class MainFrame extends JFrame
 
 		jMenuHelp.addSeparator();
 
-		jMenuHelpOpsiVersion.setText(Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": "
-				+ JSONthroughHTTPS.getServerVersion());
+		jMenuHelpOpsiVersion.setText(
+				Configed.getResourceValue("MainFrame.jMenuHelpOpsiService") + ": " + ServerFacade.getServerVersion());
 		jMenuHelpOpsiVersion.setEnabled(false);
 		if (!Main.THEMES) {
 			jMenuHelpOpsiVersion.setForeground(Globals.lightBlack);
@@ -1339,7 +1339,7 @@ public class MainFrame extends JFrame
 		jMenuHelpInternalConfiguration.setText(Configed.getResourceValue("MainFrame.jMenuHelpInternalConfiguration"));
 		jMenuHelpInternalConfiguration.addActionListener((ActionEvent e) -> showBackendConfigurationAction());
 
-		if (!JSONthroughHTTPS.isOpsi43()) {
+		if (!ServerFacade.isOpsi43()) {
 			jMenuHelp.add(jMenuHelpInternalConfiguration);
 		}
 
@@ -1387,7 +1387,7 @@ public class MainFrame extends JFrame
 			showHealthDataAction();
 		});
 
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			jMenuHelp.add(jMenuHelpCheckHealth);
 		}
 
@@ -1699,7 +1699,7 @@ public class MainFrame extends JFrame
 
 		// --
 		popupClients.add(popupAddClient);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			popupClients.add(popupCopyClient);
 		}
 		popupClients.add(popupDeleteClient);
@@ -1721,7 +1721,7 @@ public class MainFrame extends JFrame
 
 		popupClients.add(popupShowWANactiveColumn);
 		popupClients.add(popupShowIPAddressColumn);
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			popupClients.add(popupShowSystemUUIDColumn);
 		}
 		popupClients.add(popupShowHardwareAddressColumn);
@@ -1855,7 +1855,7 @@ public class MainFrame extends JFrame
 		labelClientInventoryNumber.setPreferredSize(Globals.buttonDimension);
 		JLabel labelClientNotes = new JLabel(Configed.getResourceValue("MainFrame.jLabelNotes"));
 		JLabel labelClientSystemUUID = new JLabel(Configed.getResourceValue("MainFrame.jLabelSystemUUID"));
-		labelClientSystemUUID.setVisible(JSONthroughHTTPS.isOpsi43());
+		labelClientSystemUUID.setVisible(ServerFacade.isOpsi43());
 		JLabel labelClientMacAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelMacAddress"));
 		JLabel labelClientIPAddress = new JLabel(Configed.getResourceValue("MainFrame.jLabelIPAddress"));
 		JLabel labelOneTimePassword = new JLabel(Configed.getResourceValue("MainFrame.jLabelOneTimePassword"));
@@ -1911,7 +1911,7 @@ public class MainFrame extends JFrame
 
 		systemUUIDField.addKeyListener(this);
 		systemUUIDField.addMouseListener(this);
-		systemUUIDField.setVisible(JSONthroughHTTPS.isOpsi43());
+		systemUUIDField.setVisible(ServerFacade.isOpsi43());
 
 		macAddressField = new JTextEditorField(new SeparatedDocument(/* allowedChars */ new char[] { '0', '1', '2', '3',
 				'4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' }, 12, ':', 2, true), "", 17);
@@ -2254,8 +2254,8 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setPreferredSize(Globals.modeSwitchDimension);
 		jButtonDashboard.setToolTipText(Configed.getResourceValue("Dashboard.title"));
 
-		jButtonDashboard.setEnabled(JSONthroughHTTPS.isOpsi43());
-		jButtonDashboard.setVisible(JSONthroughHTTPS.isOpsi43());
+		jButtonDashboard.setEnabled(ServerFacade.isOpsi43());
+		jButtonDashboard.setVisible(ServerFacade.isOpsi43());
 		jButtonDashboard.addActionListener(this);
 
 		if (configedMain.getPersistenceController().isOpsiLicencingAvailable()
@@ -2340,9 +2340,9 @@ public class MainFrame extends JFrame
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
 								.addComponent(jButtonDashboard, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE)
-								.addGap(JSONthroughHTTPS.isOpsi43() ? Globals.HGAP_SIZE : 0,
-										JSONthroughHTTPS.isOpsi43() ? Globals.HGAP_SIZE : 0,
-										JSONthroughHTTPS.isOpsi43() ? Globals.HGAP_SIZE : 0)
+								.addGap(ServerFacade.isOpsi43() ? Globals.HGAP_SIZE : 0,
+										ServerFacade.isOpsi43() ? Globals.HGAP_SIZE : 0,
+										ServerFacade.isOpsi43() ? Globals.HGAP_SIZE : 0)
 								.addComponent(jButtonOpsiLicenses, GroupLayout.PREFERRED_SIZE,
 										GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)

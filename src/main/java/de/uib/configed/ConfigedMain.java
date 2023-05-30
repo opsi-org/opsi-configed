@@ -96,7 +96,7 @@ import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.JSONthroughHTTPS;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandNeedParameter;
@@ -606,7 +606,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	public void initDashInfo() {
-		if (!JSONthroughHTTPS.isOpsi43()) {
+		if (!ServerFacade.isOpsi43()) {
 			Logging.info(this, "initDashInfo not enabled");
 			return;
 		}
@@ -771,7 +771,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		connectedHostsByMessagebus = persistenceController.getMessagebusConnectedClients();
 
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			initMessagebus();
 		}
 	}
@@ -4662,7 +4662,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			protected List<String> getErrors() {
 				List<String> errors;
 
-				if (JSONthroughHTTPS.isOpsi43()) {
+				if (ServerFacade.isOpsi43()) {
 					errors = persistenceController.wakeOnLanOpsi43(clients);
 				} else {
 					errors = persistenceController.wakeOnLan(clients);

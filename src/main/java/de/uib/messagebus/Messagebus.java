@@ -40,7 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.terminal.Terminal;
 import de.uib.configed.terminal.WebSocketInputStream;
-import de.uib.opsicommand.JSONthroughHTTPS;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.utilities.logging.Logging;
 
 @SuppressWarnings("java:S1258")
@@ -74,7 +74,7 @@ public class Messagebus implements MessagebusListener {
 		URI uri = createUri();
 		String basicAuthEnc = createEncBasicAuth();
 		SSLSocketFactory factory = createDullSSLSocketFactory();
-		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
+		ServerFacade exec = getJSONthroughHTTPSExecutor();
 
 		messagebusWebSocket = new WebSocketClientEndpoint(uri);
 		messagebusWebSocket.registerListener(this);
@@ -165,12 +165,12 @@ public class Messagebus implements MessagebusListener {
 		return result;
 	}
 
-	private JSONthroughHTTPS getJSONthroughHTTPSExecutor() {
-		return (JSONthroughHTTPS) configedMain.getPersistenceController().exec;
+	private ServerFacade getJSONthroughHTTPSExecutor() {
+		return (ServerFacade) configedMain.getPersistenceController().exec;
 	}
 
 	private String createEncBasicAuth() {
-		JSONthroughHTTPS exec = getJSONthroughHTTPSExecutor();
+		ServerFacade exec = getJSONthroughHTTPSExecutor();
 		String basicAuth = String.format("%s:%s", exec.username, exec.password);
 		return Base64.getEncoder().encodeToString(basicAuth.getBytes(StandardCharsets.UTF_8));
 	}

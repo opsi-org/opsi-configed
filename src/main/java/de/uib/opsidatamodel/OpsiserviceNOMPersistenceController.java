@@ -73,9 +73,9 @@ import de.uib.configed.type.licences.LicencepoolEntry;
 import de.uib.connectx.SmbConnect;
 import de.uib.opsicommand.AbstractExecutioner;
 import de.uib.opsicommand.ConnectionState;
-import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.OpsiMethodCall;
 import de.uib.opsicommand.POJOReMapper;
+import de.uib.opsicommand.ServerFacade;
 import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
@@ -458,7 +458,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		hostInfoCollections = new HostInfoCollections(this);
 
-		exec = new JSONthroughHTTPS(server, user, password);
+		exec = new ServerFacade(server, user, password);
 
 		hwAuditConf = new HashMap<>();
 
@@ -776,7 +776,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		String password = (String) getHostInfoCollections().getDepots().get(depot).get(HostInfo.HOST_KEY_KEY);
 
-		AbstractExecutioner exec1 = new JSONthroughHTTPS(depot, depot, password);
+		AbstractExecutioner exec1 = new ServerFacade(depot, depot, password);
 
 		if (makeConnection(exec1)) {
 			Logging.info(this, "retrieveWorkingExec new for server " + depot);
@@ -823,7 +823,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	public void checkMultiFactorAuthentication() {
-		isMultiFactorAuthenticationEnabled = JSONthroughHTTPS.isOpsi43() && getOTPSecret(ConfigedMain.user) != null;
+		isMultiFactorAuthenticationEnabled = ServerFacade.isOpsi43() && getOTPSecret(ConfigedMain.user) != null;
 	}
 
 	public String getOTPSecret(String userId) {
@@ -3774,7 +3774,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	public Set<String> getMessagebusConnectedClients() {
 
 		// no messagebus available if not at least opsi 4.3
-		if (!JSONthroughHTTPS.isOpsi43()) {
+		if (!ServerFacade.isOpsi43()) {
 			return new HashSet<>();
 		}
 
@@ -6928,7 +6928,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		// product_sort_algorithm
 		// will not be used in opsi 4.3
-		if (!JSONthroughHTTPS.isOpsi43()) {
+		if (!ServerFacade.isOpsi43()) {
 			key = KEY_PRODUCT_SORT_ALGORITHM;
 			// defaultValues
 			defaultValues = configDefaultValues.get(key);
@@ -7510,7 +7510,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		String methodName = "backend_info";
 
-		if (JSONthroughHTTPS.isOpsi43()) {
+		if (ServerFacade.isOpsi43()) {
 			methodName = BACKEND_LICENSING_INFO_METHOD_NAME;
 		}
 
@@ -8098,7 +8098,7 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 		// probably old opsi service version
 		if (licencingInfoOpsiAdmin == null) {
-			if (JSONthroughHTTPS.isOpsi43()) {
+			if (ServerFacade.isOpsi43()) {
 				produceOpsiModulesInfoClassicOpsi43();
 			} else {
 				produceOpsiModulesInfoClassic();
