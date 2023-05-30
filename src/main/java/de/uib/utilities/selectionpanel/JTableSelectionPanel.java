@@ -35,7 +35,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -63,13 +62,11 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.JMenuItemFormatted;
-import de.uib.utilities.swing.MissingDataPanel;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 
-public class JTableSelectionPanel extends JPanel
-		implements DocumentListener, KeyListener, MissingDataPanel, ActionListener {
+public class JTableSelectionPanel extends JPanel implements DocumentListener, KeyListener, ActionListener {
 
 	private static final int MIN_HEIGHT = 200;
 
@@ -322,7 +319,6 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	// interface MissingDataPanel
-	@Override
 	public void setMissingDataPanel(boolean b) {
 		if (b) {
 			JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
@@ -358,15 +354,6 @@ public class JTableSelectionPanel extends JPanel
 			scrollpane.getViewport().setView(mdPanel);
 		} else {
 			scrollpane.getViewport().setView(table);
-		}
-	}
-
-	@Override
-	public void setMissingDataPanel(boolean b, JComponent c) {
-		if (b) {
-			scrollpane.getViewport().add(c);
-		} else {
-			scrollpane.getViewport().add(table);
 		}
 	}
 
