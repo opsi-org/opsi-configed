@@ -141,8 +141,8 @@ import de.uib.utilities.thread.WaitCursor;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-public class MainFrame extends JFrame
-		implements WindowListener, KeyListener, MouseListener, ActionListener, RunningInstancesObserver<JDialog> {
+public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
+		ComponentListener, RunningInstancesObserver<JDialog> {
 
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
 	private static final int MIN_WIDTH_TREE_PANEL = 150;
@@ -494,57 +494,6 @@ public class MainFrame extends JFrame
 		panelProductProperties.setDividerLocation(0.75);
 	}
 
-	private class SizeListeningPanel extends JPanel implements ComponentListener {
-		SizeListeningPanel() {
-			super.addComponentListener(this);
-		}
-		// ComponentListener implementation
-
-		@Override
-		public void componentHidden(ComponentEvent e) {
-			/* Not needed */}
-
-		@Override
-		public void componentMoved(ComponentEvent e) {
-			/* Not needed */}
-
-		@Override
-		public void componentShown(ComponentEvent e) {
-			/* Not needed */}
-
-		@Override
-		public void componentResized(ComponentEvent e) {
-			Logging.debug(this, "componentResized");
-
-			try {
-				moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
-						(int) (F_WIDTH_RIGHTHANDED * 1.5));
-			} catch (Exception ex) {
-				Logging.info(this, "componentResized " + ex);
-			}
-			Logging.debug(this, "componentResized ready");
-		}
-
-		private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
-				int maxRightWidth) {
-			if (splitpane == null || rightpane == null) {
-				return;
-			}
-
-			int dividerLocation = splitpane.getDividerLocation();
-
-			int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
-			int missingSpace = minRightWidth - sizeOfRightPanel;
-			if (missingSpace > 0 && dividerLocation > minLeftWidth) {
-				splitpane.setDividerLocation(dividerLocation - missingSpace);
-			}
-
-			if (sizeOfRightPanel > maxRightWidth) {
-				splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - maxRightWidth));
-			}
-		}
-	}
-
 	// ------------------------------------------------------------------------------------------
 	// configure interaction
 	// ------------------------------------------------------------------------------------------
@@ -610,12 +559,8 @@ public class MainFrame extends JFrame
 				configedMain.closeInstance(true);
 				UserPreferences.set(UserPreferences.LANGUAGE, localeName);
 				Messages.setLocale(localeName);
-				new Thread() {
-					@Override
-					public void run() {
-						Configed.startWithLocale();
-					}
-				}.start();
+
+				Configed.restartConfiged();
 
 				// we put it into to special thread to avoid invokeAndWait runtime error
 			});
@@ -639,14 +584,7 @@ public class MainFrame extends JFrame
 				Messages.setTheme(themeName);
 				Main.setOpsiLaf();
 
-				new Thread() {
-
-					@Override
-					public void run() {
-						Configed.startWithLocale();
-					}
-
-				}.start();
+				Configed.restartConfiged();
 			});
 		}
 
@@ -1346,19 +1284,6 @@ public class MainFrame extends JFrame
 			jMenuHelp.add(jMenuHelpInternalConfiguration);
 		}
 
-		ActionListener selectLoglevelListener = (ActionEvent e) -> {
-			for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
-				if (e.getSource() == rbLoglevelItems[i]) {
-					rbLoglevelItems[i].setSelected(true);
-					Logging.setLogLevel(i);
-				} else {
-					if (rbLoglevelItems[i] != null) {
-						rbLoglevelItems[i].setSelected(false);
-					}
-				}
-			}
-		};
-
 		jMenuHelpLoglevel.setText(Configed.getResourceValue("MainFrame.jMenuLoglevel"));
 
 		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
@@ -1370,7 +1295,7 @@ public class MainFrame extends JFrame
 				rbLoglevelItems[i].setSelected(true);
 			}
 
-			rbLoglevelItems[i].addActionListener(selectLoglevelListener);
+			rbLoglevelItems[i].addActionListener(this::applyLoglevel);
 		}
 		jMenuHelp.add(jMenuHelpLoglevel);
 
@@ -1749,6 +1674,19 @@ public class MainFrame extends JFrame
 		exportTable.addMenuItemsTo(popupClients);
 	}
 
+	private void applyLoglevel(ActionEvent actionEvent) {
+		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
+			if (actionEvent.getSource() == rbLoglevelItems[i]) {
+				rbLoglevelItems[i].setSelected(true);
+				Logging.setLogLevel(i);
+			} else {
+				if (rbLoglevelItems[i] != null) {
+					rbLoglevelItems[i].setSelected(false);
+				}
+			}
+		}
+	}
+
 	private void createPdf() {
 		TableModel tm = configedMain.getSelectedClientsTableModel();
 		JTable jTable = new JTable(tm);
@@ -1806,11 +1744,11 @@ public class MainFrame extends JFrame
 		}
 		this.setIconImage(Globals.mainIcon);
 
-		SizeListeningPanel allPane = new SizeListeningPanel();
+		JPanel allPanel = new JPanel();
+		allPanel.addComponentListener(this);
+		allPanel.setLayout(borderLayout1);
 
-		allPane.setLayout(borderLayout1);
-
-		getContentPane().add(allPane);
+		getContentPane().add(allPanel);
 
 		initMenuData();
 
@@ -2465,9 +2403,9 @@ public class MainFrame extends JFrame
 
 		statusPane = new HostsStatusPanel();
 
-		allPane.add(iconBarPane, BorderLayout.NORTH);
-		allPane.add(centralPane, BorderLayout.CENTER);
-		allPane.add(statusPane, BorderLayout.SOUTH);
+		allPanel.add(iconBarPane, BorderLayout.NORTH);
+		allPanel.add(centralPane, BorderLayout.CENTER);
+		allPanel.add(statusPane, BorderLayout.SOUTH);
 
 		// tab panes
 
@@ -2645,7 +2583,7 @@ public class MainFrame extends JFrame
 
 		setTitle(configedMain.getAppTitle());
 
-		Containership csJPanelAllContent = new Containership(allPane);
+		Containership csJPanelAllContent = new Containership(allPanel);
 
 		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
 				new Class[] { boolean.class }, JTextComponent.class);
@@ -3032,7 +2970,7 @@ public class MainFrame extends JFrame
 			public void doAction3() {
 				try {
 					Desktop.getDesktop().open(new File(Logging.getCurrentLogfilePath()));
-				} catch (Exception e) {
+				} catch (IOException e) {
 					Logging.error("cannot open: " + Logging.getCurrentLogfilePath() + " :\n " + e);
 				}
 				super.doAction2();
@@ -3171,6 +3109,51 @@ public class MainFrame extends JFrame
 
 		return changedClientInfos.computeIfAbsent(client, arg -> new HashMap<>());
 
+	}
+
+	// ComponentListener implementation
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		Logging.debug(this, "componentResized");
+
+		try {
+			moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+					(int) (F_WIDTH_RIGHTHANDED * 1.5));
+		} catch (Exception ex) {
+			Logging.info(this, "componentResized " + ex);
+		}
+		Logging.debug(this, "componentResized ready");
+	}
+
+	private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
+			int maxRightWidth) {
+		if (splitpane == null || rightpane == null) {
+			return;
+		}
+
+		int dividerLocation = splitpane.getDividerLocation();
+
+		int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
+		int missingSpace = minRightWidth - sizeOfRightPanel;
+		if (missingSpace > 0 && dividerLocation > minLeftWidth) {
+			splitpane.setDividerLocation(dividerLocation - missingSpace);
+		}
+
+		if (sizeOfRightPanel > maxRightWidth) {
+			splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - maxRightWidth));
+		}
 	}
 
 	// TODO: kann das weg? arrange dialogs for opsi-client wake on LAN...
@@ -3368,22 +3351,9 @@ public class MainFrame extends JFrame
 				// Starting JavaFX-Thread by creating a new JFXPanel, but not
 				// using it since it is not needed.
 
-				// TODO can this be removed?
-				// when do we need it?
 				new JFXPanel();
 
-				Platform.runLater(() -> {
-					if (licenseDisplayer == null) {
-						try {
-							licenseDisplayer = new LicenseDisplayer();
-							licenseDisplayer.initAndShowGUI();
-						} catch (IOException ioE) {
-							Logging.debug(this, "Unable to open FXML file.");
-						}
-					} else {
-						licenseDisplayer.display();
-					}
-				});
+				Platform.runLater(this::startLicenceDisplayer);
 			}
 		} else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
 			configedMain.handleGroupActionRequest();
@@ -3395,6 +3365,19 @@ public class MainFrame extends JFrame
 			configedMain.initDashInfo();
 		} else if (e.getSource() == jButtonOpsiLicenses) {
 			showOpsiModules();
+		}
+	}
+
+	private void startLicenceDisplayer() {
+		if (licenseDisplayer == null) {
+			try {
+				licenseDisplayer = new LicenseDisplayer();
+				licenseDisplayer.initAndShowGUI();
+			} catch (IOException ioE) {
+				Logging.warning(this, "Unable to open FXML file.", ioE);
+			}
+		} else {
+			licenseDisplayer.display();
 		}
 	}
 

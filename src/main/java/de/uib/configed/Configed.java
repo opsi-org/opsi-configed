@@ -113,10 +113,10 @@ public final class Configed {
 			Logging.debug("imageHandled failed: " + ex.toString());
 		}
 
-		startWithLocale();
+		startConfiged();
 	}
 
-	public static void startWithLocale() {
+	public static void startConfiged() {
 		Logging.notice("system information: ");
 
 		Logging.notice(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
@@ -143,6 +143,15 @@ public final class Configed {
 			Logging.info(" run " + ie);
 			Thread.currentThread().interrupt();
 		}
+	}
+
+	public static void restartConfiged() {
+		new Thread() {
+			@Override
+			public void run() {
+				Configed.startConfiged();
+			}
+		}.start();
 	}
 
 	private static void setStartSettings(ConfigedMain configedMain) {
@@ -434,10 +443,10 @@ public final class Configed {
 
 		processArgs(cmd);
 
-		startConfiged();
+		checkArgsAndStart();
 	}
 
-	private static void startConfiged() {
+	private static void checkArgsAndStart() {
 		Logging.debug("initiating configed");
 
 		if (optionCLIQuerySearch) {

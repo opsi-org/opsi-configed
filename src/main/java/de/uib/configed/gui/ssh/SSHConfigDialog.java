@@ -416,7 +416,7 @@ public final class SSHConfigDialog extends FGeneralDialog {
 		jCheckBoxUseKeyFile.setSelected(false);
 		jTextFieldPassword.setEnabled(false);
 		jTextFieldKeyFile.setEnabled(false);
-		jCheckBoxUseKeyFile.addItemListener((ItemEvent itemEvent) -> applyUseKeyFile(itemEvent));
+		jCheckBoxUseKeyFile.addItemListener(this::applyUseKeyFile);
 
 		jCheckBoxDefault = new JCheckBox();
 		jCheckBoxDefault.setText(Configed.getResourceValue("SSHConnection.Config.useDefaultAuthentication"));

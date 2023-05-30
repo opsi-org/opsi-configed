@@ -262,26 +262,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		DefaultListModel<JCheckBox> model = new DefaultListModel<>();
 		headerButtons = new ArrayList<>();
-		columnNames.forEach((String header) -> {
-			JCheckBox headerBox = new JCheckBox(header);
-			headerBox.setActionCommand(header);
-
-			if ("hostname".equals(header)) {
-				headerBox.setSelected(true);
-			}
-			if ("selectedDomain".equals(header)) {
-				headerBox.setSelected(true);
-			}
-			if ("depotID".equals(header)) {
-				headerBox.setSelected(true);
-			}
-			if ("macaddress".equals(header)) {
-				headerBox.setSelected(true);
-			}
-
-			model.addElement(headerBox);
-			headerButtons.add(headerBox);
-		});
+		columnNames.forEach(header -> setSelectedColumn(header, model));
 
 		HeaderOptionsPanel headerOptionsPanel = new HeaderOptionsPanel(model);
 
@@ -363,6 +344,27 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 				.addGap(Globals.VGAP_SIZE, Globals.VGAP_SIZE, Globals.VGAP_SIZE));
 
 		return centerPanel;
+	}
+
+	private void setSelectedColumn(String header, DefaultListModel<JCheckBox> model) {
+		JCheckBox headerBox = new JCheckBox(header);
+		headerBox.setActionCommand(header);
+
+		if ("hostname".equals(header)) {
+			headerBox.setSelected(true);
+		}
+		if ("selectedDomain".equals(header)) {
+			headerBox.setSelected(true);
+		}
+		if ("depotID".equals(header)) {
+			headerBox.setSelected(true);
+		}
+		if ("macaddress".equals(header)) {
+			headerBox.setSelected(true);
+		}
+
+		model.addElement(headerBox);
+		headerButtons.add(headerBox);
 	}
 
 	private static class InputListener implements DocumentListener {

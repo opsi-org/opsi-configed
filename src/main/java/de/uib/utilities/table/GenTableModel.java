@@ -8,7 +8,6 @@ package de.uib.utilities.table;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -864,47 +863,6 @@ public class GenTableModel extends AbstractTableModel {
 				i++;
 			}
 		}
-		return result;
-	}
-
-	private Map<Object, List<Object>> buildFunction(int col1, int col2,
-			TableModelFilterCondition specialFilterCondition) {
-		Map<Object, List<Object>> result = new HashMap<>();
-
-		boolean saveUsingFilter = workingFilter != null && workingFilter.isInUse();
-
-		if (specialFilterCondition != null) {
-			// activate special filter and reproduce rows
-			TableModelFilter filter = new TableModelFilter(specialFilterCondition);
-			Logging.info(this, "buildFunction with filter " + filter);
-			setFilter(filter);
-			produceRows();
-		} else if (saveUsingFilter) {
-			// we filtered but do not want to do it now
-
-			// turn off filter and reproduce rows
-			setFilter(emptyFilter);
-			produceRows();
-		}
-
-		for (int row = 0; row < getRowCount(); row++) {
-			Object val1 = getValueAt(row, col1);
-
-			List<Object> associatedValues = result.computeIfAbsent(val1, arg -> new ArrayList<>());
-
-			Object val2 = getValueAt(row, col2);
-			if (associatedValues.indexOf(val2) == -1) {
-				associatedValues.add(val2);
-			}
-		}
-
-		setFilter(chainedFilter);
-
-		if (specialFilterCondition != null || saveUsingFilter) {
-			// we changed filtering and have to reproduce the rows
-			produceRows();
-		}
-
 		return result;
 	}
 

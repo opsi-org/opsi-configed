@@ -118,7 +118,6 @@ public class ControllerHWinfoMultiClients {
 				persistenceController.client2HwRowsRequestRefresh();
 
 				super.reload();
-
 			}
 
 			@Override
