@@ -228,11 +228,8 @@ public final class ProductData {
 					if (installedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))
 							&& failedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))
 							&& unusedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))) {
-						Product product = new Product();
-						product.setId(productId);
-						product.setDepot(depot);
-						product.setStatus(Configed.getResourceValue("Dashboard.products.unused"));
-						product.setClients(new ArrayList<>());
+
+						Product product = createProduct(productId, depot);
 
 						unusedProductsList.put(product, product);
 					}
@@ -251,6 +248,17 @@ public final class ProductData {
 		installedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allInstalledProducts);
 		failedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allFailedProducts);
 		unusedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allUnusedProducts);
+	}
+
+	private static Product createProduct(String productId, String depot) {
+
+		Product product = new Product();
+		product.setId(productId);
+		product.setDepot(depot);
+		product.setStatus(Configed.getResourceValue("Dashboard.products.unused"));
+		product.setClients(new ArrayList<>());
+
+		return product;
 	}
 
 	public static void retrieveUnusedProducts() {
