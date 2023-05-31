@@ -130,6 +130,9 @@ import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.thread.WaitCursor;
 
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
+
+	private static final boolean MULTI_HW_PANEL_ACTIVATED = false;
+
 	public static final int VIEW_CLIENTS = 0;
 	public static final int VIEW_LOCALBOOT_PRODUCTS = 1;
 	public static final int VIEW_NETBOOT_PRODUCTS = 2;
@@ -3169,9 +3172,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		try {
 			if (firstSelectedClient == null || getSelectedClients().length == 0) {
-				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.noClientSelected1"), null);
+				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.noClientSelected1"));
 			} else if (getSelectedClients().length > 1) {
-				mainFrame.setHardwareInfoMultiClients(getSelectedClients());
+				if (!MULTI_HW_PANEL_ACTIVATED) {
+					mainFrame.setHardwareInfoNotPossible(
+							Configed.getResourceValue("MainFrame.hardwareInfoMultiClientsNotAvailable"));
+				} else {
+					mainFrame.setHardwareInfoMultiClients(getSelectedClients());
+				}
 			} else {
 				checkHwInfo();
 				Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.get(firstSelectedClient);

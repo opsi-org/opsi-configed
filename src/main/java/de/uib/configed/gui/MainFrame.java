@@ -132,7 +132,6 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.JTextEditorField;
 import de.uib.utilities.swing.JTextHideField;
 import de.uib.utilities.swing.SeparatedDocument;
-import de.uib.utilities.swing.TitledPanel;
 import de.uib.utilities.swing.VerticalPositioner;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
@@ -378,7 +377,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	public PanelProductProperties panelProductProperties;
 
 	private PanelHWInfo showHardwareLogVersion2;
-	private TitledPanel showHardwareLogNotFound;
+	private JPanel showHardwareLogNotFound;
 	public ControllerHWinfoMultiClients controllerHWinfoMultiClients;
 	private JPanel showHardwareLogMultiClientReport;
 	private JPanel showHardwareLogParentOfNotFoundPanel;
@@ -3445,11 +3444,13 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		showHardwareLog.repaint();
 	}
 
-	public void setHardwareInfoNotPossible(String label1S, String label2S) {
-		Logging.info(this, "setHardwareInfoNotPossible " + label1S);
+	public void setHardwareInfoNotPossible(String label) {
+		Logging.info(this, "setHardwareInfoNotPossible");
 
 		if (showHardwareLogNotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
-			showHardwareLogNotFound = new TitledPanel();
+			showHardwareLogNotFound = new JPanel();
+			showHardwareLogNotFound
+					.add(new JLabel(label));
 			showHardwareLogParentOfNotFoundPanel = new JPanel();
 			if (!Main.THEMES) {
 				showHardwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -3458,7 +3459,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			showHardwareLogParentOfNotFoundPanel.add(showHardwareLogNotFound);
 		}
 
-		showHardwareLogNotFound.setTitle(label1S, label2S);
 		showHardwareLog = showHardwareLogParentOfNotFoundPanel;
 		showHardwareInfo();
 	}
