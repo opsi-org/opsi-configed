@@ -21,7 +21,6 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
 import de.uib.Main;
@@ -794,81 +793,80 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.fSoftwarename2LicencePool.setButtonsEnabled(true);
 
 		// combine
-		thePanel.panelLicencepools.getListSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				// Ignore extra messages.
-				if (e.getValueIsAdjusting()) {
-					return;
-				}
-
-				String selectedLicencePool = null;
-
-				// clear selection
-				thePanel.panelProductId2LPool.setSelectedValues(null, 0);
-
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-
-				if (lsm.isSelectionEmpty()) {
-					Logging.debug(this, "no rows selected");
-				} else {
-					selectedLicencePool = getSelectedLicencePool();
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-				}
-
-				setSoftwareIdsFromLicencePool(selectedLicencePool);
-
-				if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
-					thePanel.panelRegisteredSoftware.setDataChanged(gotNewSWKeysForLicencePool(selectedLicencePool));
-				}
-
-			}
-		});
+		thePanel.panelLicencepools.getListSelectionModel().addListSelectionListener(this::licencePoolValueChanged);
 
 		setSoftwareIdsFromLicencePool(null);
 		initializeVisualSettings();
+	}
+
+	private void licencePoolValueChanged(ListSelectionEvent listSelectionEvent) {
+		// Ignore extra messages.
+		if (listSelectionEvent.getValueIsAdjusting()) {
+			return;
+		}
+
+		String selectedLicencePool = null;
+
+		// clear selection
+		thePanel.panelProductId2LPool.setSelectedValues(null, 0);
+
+		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
+
+		if (lsm.isSelectionEmpty()) {
+			Logging.debug(this, "no rows selected");
+		} else {
+			selectedLicencePool = getSelectedLicencePool();
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+		}
+
+		setSoftwareIdsFromLicencePool(selectedLicencePool);
+
+		if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
+			thePanel.panelRegisteredSoftware.setDataChanged(gotNewSWKeysForLicencePool(selectedLicencePool));
+		}
+
 	}
 
 	private void setVisualSelection(List<String> keys) {

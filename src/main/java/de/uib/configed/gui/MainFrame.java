@@ -3137,7 +3137,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		Logging.debug(this, "componentResized ready");
 	}
 
-	private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
+	private static void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
 			int maxRightWidth) {
 		if (splitpane == null || rightpane == null) {
 			return;

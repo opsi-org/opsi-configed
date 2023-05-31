@@ -21,9 +21,13 @@ import javax.swing.event.ListSelectionEvent;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
+import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.clientselection.SelectionManager;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.FEditStringList;
 import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
@@ -34,7 +38,16 @@ public class SavedSearchesDialog extends FEditStringList {
 	private List<String> result;
 	private DefaultListModel<String> model;
 
-	public SavedSearchesDialog() {
+	private JTableSelectionPanel selectionPanel;
+	private ConfigedMain configedMain;
+
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
+	public SavedSearchesDialog(JTableSelectionPanel selectionPanel, ConfigedMain configedMain) {
+		this.selectionPanel = selectionPanel;
+		this.configedMain = configedMain;
+
 		initDialog();
 	}
 
@@ -197,6 +210,12 @@ public class SavedSearchesDialog extends FEditStringList {
 			buttonCancel.setEnabled(true);
 			waitCursor.stop();
 		}
+
+		Logging.info(this, "commit result == null " + (result == null));
+		if (result != null) {
+			Logging.info(this, "result size " + result.size());
+			selectionPanel.setSelectedValues(result);
+		}
 	}
 
 	@Override
@@ -207,6 +226,7 @@ public class SavedSearchesDialog extends FEditStringList {
 	}
 
 	private void removeSelectedEntry() {
+
 		int index = visibleList.getSelectedIndex();
 		Logging.debug(this, "remove selected Entry, list index " + index);
 
@@ -222,19 +242,27 @@ public class SavedSearchesDialog extends FEditStringList {
 
 	// overwrite to implement persistency
 	protected void removeSavedSearch(String name) {
+		persistenceController.deleteSavedSearch(name);
+
 		manager.removeSearch(name);
 	}
 
 	protected void reloadAction() {
-		/*override in subclass to implement */}
+		persistenceController.configOptionsRequestRefresh();
+		persistenceController.auditHardwareOnHostRequestRefresh();
+		resetModel();
+	}
 
 	// overwrite to implement
 	protected void addElement() {
-		/*override in subclass to implement */}
+		configedMain.callClientSelectionDialog();
+	}
 
 	// overwrite to implement
 	protected void editSearch(String name) {
-		/*override in subclass to implement */}
+		configedMain.callClientSelectionDialog();
+		configedMain.loadSearch(name);
+	}
 
 	public void resetModel() {
 		Logging.info(this, "resetModel");

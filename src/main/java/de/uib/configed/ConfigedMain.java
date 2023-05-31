@@ -2818,34 +2818,30 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						getLocalbootProductDisplayFieldsList(), localbootProductsSavedStateObjTag);
 			}
 
-			try {
-				int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
-				mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
-				mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
+			int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
+			mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
+			mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
 
-				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(localbootProductsSavedStateObjTag
-						+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
+			Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+					+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
 
-				Set<String> savedFilter = null;
+			Set<String> savedFilter = null;
 
-				if (Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
-						+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
-					savedFilter = new HashSet<>(Arrays.asList(Configed.savedStates
-							.getProperty(localbootProductsSavedStateObjTag + "."
-									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY)
-							.replaceAll("\\[|\\]|\\s", "").split(",")));
-				}
-				mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
-				mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
-
-				Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
-				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
-				mainFrame.panelLocalbootProductSettings.setSearchFields(
-						InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
-				setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
-			} catch (Exception ex) {
-				Logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
+			if (Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+					+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
+				savedFilter = new HashSet<>(Arrays.asList(Configed.savedStates
+						.getProperty(localbootProductsSavedStateObjTag + "."
+								+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY)
+						.replaceAll("\\[|\\]|\\s", "").split(",")));
 			}
+			mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
+			mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
+
+			Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
+			mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
+			mainFrame.panelLocalbootProductSettings.setSearchFields(
+					InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
+			setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
 
 			return true;
 		} catch (Exception ex) {
@@ -4737,42 +4733,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private void initSavedSearchesDialog() {
 		if (savedSearchesDialog == null) {
 			Logging.debug(this, "create SavedSearchesDialog");
-			savedSearchesDialog = new SavedSearchesDialog() {
-				@Override
-				protected void commit() {
-					super.commit();
-					List<String> result = (List<String>) super.getValue();
-					Logging.info(this, "commit result == null " + (result == null));
-					if (result != null) {
-						Logging.info(this, "result size " + result.size());
-						selectionPanel.setSelectedValues(result);
-					}
-				}
-
-				@Override
-				protected void removeSavedSearch(String name) {
-					persistenceController.deleteSavedSearch(name);
-					super.removeSavedSearch(name);
-				}
-
-				@Override
-				protected void reloadAction() {
-					persistenceController.configOptionsRequestRefresh();
-					persistenceController.auditHardwareOnHostRequestRefresh();
-					resetModel();
-				}
-
-				@Override
-				protected void addElement() {
-					callClientSelectionDialog();
-				}
-
-				@Override
-				protected void editSearch(String name) {
-					callClientSelectionDialog();
-					clientSelectionDialog.loadSearch(name);
-				}
-			};
+			savedSearchesDialog = new SavedSearchesDialog(selectionPanel, this);
 			savedSearchesDialog.init(new Dimension(300, 400));
 		}
 		savedSearchesDialog.start();
@@ -5063,6 +5024,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		clientSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		clientSelectionDialog.setVisible(true);
+	}
+
+	public void loadSearch(String name) {
+		clientSelectionDialog.loadSearch(name);
 	}
 
 	public void clearSelectionOnPanel() {

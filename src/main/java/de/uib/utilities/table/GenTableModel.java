@@ -58,7 +58,6 @@ public class GenTableModel extends AbstractTableModel {
 	private int saveUpdatesSize;
 
 	private final ChainedTableModelFilter chainedFilter;
-	private final TableModelFilter emptyFilter;
 	private TableModelFilter workingFilter;
 
 	private Integer sortCol;
@@ -109,9 +108,7 @@ public class GenTableModel extends AbstractTableModel {
 		}
 
 		chainedFilter = new ChainedTableModelFilter();
-		emptyFilter = new TableModelFilter();
 		setFilter(chainedFilter);
-
 	}
 
 	public GenTableModel(TableUpdateItemInterface itemFactory, TableProvider dataProvider, int keyCol,
