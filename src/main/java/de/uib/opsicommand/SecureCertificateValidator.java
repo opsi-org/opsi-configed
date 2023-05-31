@@ -35,6 +35,17 @@ import javax.net.ssl.X509TrustManager;
 import de.uib.configed.Configed;
 import de.uib.utilities.logging.Logging;
 
+/**
+ * {@code SecureCertificateValidator} is a secure implementation of
+ * {@link CertificateValidator}.
+ * <p>
+ * {@code SecureCertificateValidator} verifies all locally available
+ * certificates. However, if the connection with the server is established for
+ * the first time only the downloaded client certificate from the server is
+ * verified. It also verifies hostname with the server's certificate subject
+ * alternative names (SAN).
+ */
+@SuppressWarnings("java:S1258")
 public class SecureCertificateValidator implements CertificateValidator {
 	private boolean certificateExists;
 
@@ -75,7 +86,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 		return sslFactory;
 	}
 
-	public static X509TrustManager getSystemTrustManager(TrustManagerFactory tmf) {
+	private static X509TrustManager getSystemTrustManager(TrustManagerFactory tmf) {
 		TrustManager[] trustManagers = tmf.getTrustManagers();
 		if (trustManagers.length != 1) {
 			throw new IllegalStateException("Unexpected default trust managers: " + Arrays.toString(trustManagers));
@@ -97,14 +108,16 @@ public class SecureCertificateValidator implements CertificateValidator {
 		return certificateExists;
 	}
 
-	// MyHostnameVerifier is an additional hostname verifier to a standard
-	// hostname verifier. It only executes, when the standard hostname
-	// verifier determines that hostname is not verified.
-	//
-	// This class is only here to inform user, that hostname verification
-	// failed and provide with valid hostnames, that server certificate
-	// accepts.
-	private class MyHostnameVerifier implements HostnameVerifier {
+	/**
+	 * {@code MyHostnameVerifier} is an additional hostname verifier to a
+	 * standard hostname verifier. It only executes, when the standard hostname
+	 * verifier determines that hostname is not verified.
+	 * <p>
+	 * This class is only here to inform user, that hostname verification failed
+	 * and provide with valid hostnames (SAN), that server certificate accepts.
+	 */
+	@SuppressWarnings("java:S2972")
+	private static class MyHostnameVerifier implements HostnameVerifier {
 		private List<String> certificateSubjectAlternativeNames;
 
 		private boolean hostnameMatches(String hostname, SSLSession session) {
@@ -178,9 +191,14 @@ public class SecureCertificateValidator implements CertificateValidator {
 		}
 	}
 
-	// Wrapper of systems X509TrustManager. This does not change how X509Certificates
-	// are validated. It only wraps around the system's X509TrustManager to check if
-	// the certificate is locally available before it verifies the certificate.
+	/**
+	 * Wrapper of system's {@code X509TrustManager}.
+	 * <p>
+	 * This does not change how {@code X509Certificate} is validated. It only
+	 * wraps around the system's {@code X509TrustManager} to check if the
+	 * certificate is locally available before it verifies the certificate.
+	 */
+	@SuppressWarnings("java:S2972")
 	private class X509TrustManagerWrapper implements X509TrustManager {
 		X509TrustManager delegate;
 
@@ -214,5 +232,4 @@ public class SecureCertificateValidator implements CertificateValidator {
 			return delegate.getAcceptedIssuers();
 		}
 	}
-
 }

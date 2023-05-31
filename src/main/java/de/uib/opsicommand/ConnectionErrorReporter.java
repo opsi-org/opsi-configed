@@ -20,9 +20,24 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditRecord;
 
+/**
+ * {@code ConnectionErrorReporter} reports connection errors, that occur during
+ * the connection, to the users graphically. Different connection errors are
+ * handled differently (i.e. different dialogs are displayed to the user).
+ * <p>
+ * {@code ConnectionErrorReporter} is built using the Observer design pattern.
+ */
 public class ConnectionErrorReporter implements ConnectionErrorListener {
 	private ConnectionState conStat;
 
+	/**
+	 * Constructs {@code ConnectionErrorReporter} with provided information.
+	 * <p>
+	 * {@link ConnectionState} is used to indicate the connection state. The
+	 * connection state changes based on the user's choice.
+	 * 
+	 * @param conStat current connection state.
+	 */
 	public ConnectionErrorReporter(ConnectionState conStat) {
 		this.conStat = conStat;
 	}
@@ -164,7 +179,22 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 		ConfigedMain.password = newPasswordDialog.getData().get("password");
 	}
 
-	public ConnectionState getConStat() {
+	/**
+	 * Retrieves connection state after user's choice.
+	 * <p>
+	 * Depending on the user's choice, a connection can be in the following
+	 * states:
+	 * <p>
+	 * <ul>
+	 * <li>{@code INTERRUPTED} indicates that the user was informed about the
+	 * error, and that nothing could be done to resolve the error.</li>
+	 * <li>{@code RETRY_CONNECTION} indicates that the user was informed about
+	 * the error, and that the error was resolved.</li>
+	 * </ul>
+	 * 
+	 * @return connection state.
+	 */
+	public ConnectionState getConnectionState() {
 		return conStat;
 	}
 }

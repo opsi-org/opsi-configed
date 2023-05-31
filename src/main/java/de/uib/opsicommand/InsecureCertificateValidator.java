@@ -21,6 +21,18 @@ import javax.net.ssl.X509TrustManager;
 
 import de.uib.utilities.logging.Logging;
 
+/**
+ * {@code InsecureCeritifcateValidator} is an insecure implementation of
+ * {@link CeritifcateValidator}.
+ * <p>
+ * {@code InsecureCertificateValidator} disables certificate and hostname
+ * verification. The usage of this {@link CertificateValidator} is strongly
+ * advised, since it includes multiple vulnerabilites. For validating
+ * certificates it is best to use {@link SecureCertificateValidator}.
+ * <p>
+ * The {@code InsecureCertificateValidator} is only used for downloading a
+ * certificate from the server for the first time.
+ */
 public class InsecureCertificateValidator implements CertificateValidator {
 	@Override
 	public SSLSocketFactory createSSLSocketFactory() {

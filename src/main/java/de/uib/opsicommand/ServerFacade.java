@@ -40,6 +40,19 @@ import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
 
 /**
+ * Provides communication layer with the server for the
+ * {@link AbstractPOJOExecutioner} class.
+ * <p>
+ * {@code ServerFacade} is built using the Facade design pattern. It uses the
+ * {@link ConnectionHandler} to establish connection with the server and verify
+ * the server's certificate. The connection uses HTTPS protocol.
+ * <p>
+ * Before establishing connection with the server, it check server's version to
+ * disable/enable features according to the server's version. Once the
+ * connection is established it sends a {@code POST} request, to send
+ * {@code OpsiMethodCall}, and retrieves data from the response send by the
+ * server.
+ * 
  * @author Rupert Roeder, Naglis Vidziunas
  */
 public class ServerFacade extends AbstractPOJOExecutioner {
@@ -56,6 +69,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	private String password;
 	private String sessionId;
 
+	/**
+	 * Constructs {@code ServerFacade} object with provided information.
+	 * 
+	 * @param host     server FQDN or IPv4/IPv6 address.
+	 * @param username to use for the authentication.
+	 * @param password to use for the authentication.
+	 */
 	public ServerFacade(String host, String username, String password) {
 		this.host = host;
 		int idx = -1;
@@ -76,10 +96,22 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		this.versionRetriever = new OpsiServerVersionRetriever(username, password);
 	}
 
+	/**
+	 * Retrieve opsi server version. The server's version is retrieved before
+	 * the connection with the server is established.
+	 * 
+	 * @return opsi server version.
+	 */
 	public static String getServerVersion() {
 		return versionRetriever.getServerVersion();
 	}
 
+	/**
+	 * Check whether or not opsi server uses opsi 4.3 version. This method is
+	 * used for enabling features that are only available for opsi 4.3 version.
+	 * 
+	 * @return whether or not opsi server uses opsi 4.3 version.
+	 */
 	public static boolean isOpsi43() {
 		return versionRetriever.isServerVersionAtLeast("4.3");
 	}
@@ -110,6 +142,13 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return requestProperties;
 	}
 
+	/**
+	 * Creates a URL string using previously specified {@code host} and
+	 * {@code port}.
+	 * 
+	 * @param rpcPath specific location.
+	 * @return created URL string, that points to some location in the server.
+	 */
 	public static String produceBaseURL(String rpcPath) {
 		return "https://" + host + ":" + portHTTPS + rpcPath;
 	}
@@ -138,7 +177,14 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	/**
-	 * This method receives response via HTTP in MessagePack format.
+	 * Retrieves response from the server.
+	 * <p>
+	 * It establishes connection with the server and sends the {@code POST}
+	 * request. Then retrieves response sent by the server. The response is
+	 * accepted in JSON and MessagePack format.
+	 * 
+	 * @param omc RPC method to execute.
+	 * @return retrieved response from the server.
 	 */
 	@Override
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
@@ -177,8 +223,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			WaitCursor.stopAll();
 		}
 
-		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(), conStat);
+		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties());
 		HttpsURLConnection connection = handler.establishConnection(true);
+		conStat = handler.getConnectionState();
 		sendPOSTReqeust(connection, omc);
 
 		if (connection == null) {
@@ -345,14 +392,29 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return stream;
 	}
 
+	/**
+	 * Retrieve used username by the connection.
+	 * 
+	 * @return used username by the connection.
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * Retrieve used password by the connection.
+	 * 
+	 * @return used password by the connection.
+	 */
 	public String getPassword() {
 		return password;
 	}
 
+	/**
+	 * Retrieve used session by the connection.
+	 * 
+	 * @return used session by the connection.
+	 */
 	public String getSessionId() {
 		return sessionId;
 	}
