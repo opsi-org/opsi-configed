@@ -67,10 +67,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 					break;
 
-				case PopupMenuTrait.POPUP_SAVE:
-
-					break;
-
 				case PopupMenuTrait.POPUP_ADD:
 					addUser();
 					break;
@@ -84,7 +80,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpathes");
 					break;
 				}
-
 			}
 		};
 
@@ -98,18 +93,14 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 
 					break;
 
-				case PopupMenuTrait.POPUP_SAVE:
-
-					break;
-
 				case PopupMenuTrait.POPUP_ADD:
 					addUser();
 					break;
+
 				default:
 					Logging.warning(this, "no case for PopupMenuTrait found in popupForUserpath");
 					break;
 				}
-
 			}
 		};
 
@@ -121,10 +112,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-
-					break;
-
-				case PopupMenuTrait.POPUP_SAVE:
 
 					break;
 
@@ -152,10 +139,6 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 				switch (p) {
 				case PopupMenuTrait.POPUP_RELOAD:
 					reload();
-
-					break;
-
-				case PopupMenuTrait.POPUP_SAVE:
 
 					break;
 

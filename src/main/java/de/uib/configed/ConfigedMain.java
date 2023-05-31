@@ -4454,23 +4454,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				String newID = getText();
 
 				if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newID)) {
-					FTextArea fHostExistsInfo = new FTextArea(
-							getMainFrame(), Configed.getResourceValue("FGeneralDialog.title.information") + " ("
-									+ Globals.APPNAME + ") ",
-							true, new String[] { Configed.getResourceValue("FGeneralDialog.ok") });
-
-					StringBuilder message = new StringBuilder();
-					message.append(Configed.getResourceValue("ConfigedMain.hostExists"));
-					message.append(" \"");
-					message.append(newID);
-					message.append("\" \n");
-
-					fHostExistsInfo.setMessage(message.toString());
-					fHostExistsInfo.setLocationRelativeTo(getMainFrame());
-					fHostExistsInfo.setAlwaysOnTop(true);
-					fHostExistsInfo.setVisible(true);
-
-					return;
+					showInformationHostExistsAlready(newID);
 				}
 
 				Logging.debug(this, "new name " + newID);
@@ -4489,6 +4473,23 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		fEdit.setModal(true);
 		fEdit.setAlwaysOnTop(true);
 		fEdit.setVisible(true);
+	}
+
+	private void showInformationHostExistsAlready(String clientId) {
+		FTextArea fHostExistsInfo = new FTextArea(getMainFrame(),
+				Configed.getResourceValue("FGeneralDialog.title.information") + " (" + Globals.APPNAME + ") ", true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.ok") });
+
+		StringBuilder message = new StringBuilder();
+		message.append(Configed.getResourceValue("ConfigedMain.hostExists"));
+		message.append(" \"");
+		message.append(clientId);
+		message.append("\" \n");
+
+		fHostExistsInfo.setMessage(message.toString());
+		fHostExistsInfo.setLocationRelativeTo(getMainFrame());
+		fHostExistsInfo.setAlwaysOnTop(true);
+		fHostExistsInfo.setVisible(true);
 	}
 
 	public void callChangeDepotDialog() {
