@@ -17,11 +17,9 @@ public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 	// must be defined in subclasses
 
 	// object values and methods
-	private Map<String, Object> pureEntry;
 	protected Map<String, String> entryRetrieved;
 
 	protected AbstractTableEntry(Map entry) {
-		pureEntry = entry;
 		entryRetrieved = entry;
 	}
 
@@ -41,8 +39,7 @@ public abstract class AbstractTableEntry extends LinkedHashMap<String, String> {
 			}
 		} catch (Exception ex) {
 			Logging.debug(this, "remap keyRetrieved, exception " + ex);
-			Logging.debug(this, "remap keyRetrieved " + keyRetrieved + ", value " + pureEntry.get(keyRetrieved)
-					+ ", class " + pureEntry.get(keyRetrieved).getClass());
+
 			put(key, "");
 		}
 	}
