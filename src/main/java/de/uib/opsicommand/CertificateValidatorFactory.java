@@ -6,8 +6,15 @@
 
 package de.uib.opsicommand;
 
-public class CertificateValidatorFactory {
-	public static CertificateValidator create(boolean secure) {
-		return secure ? new SecureCertificateValidator() : new InsecureCertificateValidator();
+public final class CertificateValidatorFactory {
+	private CertificateValidatorFactory() {
+	}
+
+	public static CertificateValidator createSecure() {
+		return new SecureCertificateValidator();
+	}
+
+	public static CertificateValidator createInsecure() {
+		return new InsecureCertificateValidator();
 	}
 }

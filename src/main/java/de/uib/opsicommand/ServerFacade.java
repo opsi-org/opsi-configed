@@ -50,6 +50,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	protected static String host;
 	protected static int portHTTPS = 4447;
+	private static OpsiServerVersionRetriever versionRetriever;
 
 	private boolean gzipTransmission;
 	private boolean lz4Transmission;
@@ -59,8 +60,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	protected URL serviceURL;
 	public String sessionId;
 	private int requestMethod = POST;
-
-	private static OpsiServerVersionRetriever versionRetriever;
 
 	public ServerFacade(String host, String username, String password) {
 		this.host = host;

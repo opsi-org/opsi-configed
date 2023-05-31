@@ -27,7 +27,7 @@ public final class CertificateDownloader {
 	}
 
 	public static void downloadCertificateFile(String urlPath) {
-		CertificateValidator validator = CertificateValidatorFactory.create(false);
+		CertificateValidator validator = CertificateValidatorFactory.createInsecure();
 		HttpsURLConnection.setDefaultSSLSocketFactory(validator.createSSLSocketFactory());
 		HttpsURLConnection.setDefaultHostnameVerifier(validator.createHostnameVerifier());
 

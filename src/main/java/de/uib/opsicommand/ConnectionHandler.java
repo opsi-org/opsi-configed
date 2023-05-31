@@ -32,8 +32,9 @@ public class ConnectionHandler {
 	}
 
 	public boolean establishConnection(HttpsURLConnection connection) {
-		CertificateValidator certValidator = CertificateValidatorFactory
-				.create(!Globals.disableCertificateVerification);
+		CertificateValidator certValidator = !Globals.disableCertificateVerification
+				? CertificateValidatorFactory.createSecure()
+				: CertificateValidatorFactory.createInsecure();
 
 		try {
 			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());

@@ -66,7 +66,7 @@ public class OpsiServerVersionRetriever {
 					.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
 			connection.setRequestProperty("Authorization", "Basic " + authorization);
 
-			CertificateValidator certValidator = CertificateValidatorFactory.create(false);
+			CertificateValidator certValidator = CertificateValidatorFactory.createInsecure();
 			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
 			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
 			connection.setRequestMethod("HEAD");
