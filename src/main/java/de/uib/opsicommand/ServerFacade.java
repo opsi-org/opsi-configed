@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -33,7 +32,6 @@ import org.msgpack.jackson.dataformat.MessagePackMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
@@ -46,20 +44,17 @@ import net.jpountz.lz4.LZ4FrameInputStream;
  */
 public class ServerFacade extends AbstractPOJOExecutioner {
 	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
-	private static final int POST = 0;
 
-	protected static String host;
-	protected static int portHTTPS = 4447;
+	private static String host;
+	private static int portHTTPS = 4447;
 	private static OpsiServerVersionRetriever versionRetriever;
 
 	private boolean gzipTransmission;
 	private boolean lz4Transmission;
 
-	public String username;
-	public String password;
-	protected URL serviceURL;
-	public String sessionId;
-	private int requestMethod = POST;
+	private String username;
+	private String password;
+	private String sessionId;
 
 	public ServerFacade(String host, String username, String password) {
 		this.host = host;
@@ -89,51 +84,34 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return versionRetriever.isServerVersionAtLeast("4.3");
 	}
 
-	private void setGeneralRequestProperties(HttpURLConnection connection) {
+	private Map<String, String> produceGeneralRequestProperties() {
+		Map<String, String> requestProperties = new HashMap<>();
+
 		String authorization = Base64.getEncoder()
 				.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
-		connection.setRequestProperty("Authorization", "Basic " + authorization);
+		requestProperties.put("Authorization", "Basic " + authorization);
 
 		// has to be value between 1 and 43300 [sec]
-		connection.setRequestProperty("X-opsi-session-lifetime", "900");
+		requestProperties.put("X-opsi-session-lifetime", "900");
 
 		if (lz4Transmission) {
-			connection.setRequestProperty("Accept-Encoding", "lz4");
+			requestProperties.put("Accept-Encoding", "lz4");
 		} else if (gzipTransmission) {
-			connection.setRequestProperty("Accept-Encoding", "gzip");
+			requestProperties.put("Accept-Encoding", "gzip");
 		}
 
-		connection.setRequestProperty("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
-		connection.setRequestProperty("Accept", "application/msgpack");
+		requestProperties.put("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
+		requestProperties.put("Accept", "application/msgpack");
+
+		if (sessionId != null) {
+			requestProperties.put("Cookie", sessionId);
+		}
+
+		return requestProperties;
 	}
 
 	public static String produceBaseURL(String rpcPath) {
 		return "https://" + host + ":" + portHTTPS + rpcPath;
-	}
-
-	/**
-	 * Opening the connection and set the SSL parameters
-	 */
-	private HttpsURLConnection produceConnection() throws IOException {
-		versionRetriever.checkServerVersion();
-
-		if (versionRetriever.isServerVersionAtLeast("4.2")) {
-			gzipTransmission = false;
-			lz4Transmission = true;
-		} else {
-			gzipTransmission = true;
-			lz4Transmission = false;
-
-			// The way we check the certificate does not work before opsi server version 4.2
-			Globals.disableCertificateVerification = true;
-		}
-
-		makeURL();
-		Logging.info(this, "produceConnection, url; " + serviceURL);
-		HttpsURLConnection connection = (HttpsURLConnection) serviceURL.openConnection();
-		setGeneralRequestProperties(connection);
-
-		return connection;
 	}
 
 	private static class JSONCommunicationException extends Exception {
@@ -142,20 +120,17 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 	}
 
-	private void makeURL() {
-		if (serviceURL != null) {
-			return;
-		}
-
-		Logging.debug(this, "make url ");
-
-		String urlS = produceBaseURL("/rpc");
+	private URL makeURL() {
+		URL serviceURL = null;
+		String baseURL = produceBaseURL("/rpc");
 
 		try {
-			serviceURL = new URL(urlS);
+			serviceURL = new URL(baseURL);
 		} catch (MalformedURLException ex) {
-			Logging.error("Malformed URL: " + urlS, ex);
+			Logging.error(this, "Malformed URL: " + baseURL, ex);
 		}
+
+		return serviceURL;
 	}
 
 	private static String produceJSONstring(OpsiMethodCall omc) {
@@ -182,42 +157,36 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
 
-		HttpsURLConnection connection = null;
-		try {
-			// the underlying network connection can be shared,
-			// only disconnect() may close the underlying socket.
-			connection = produceConnection();
+		versionRetriever.checkServerVersion();
 
-			if (!background) {
-				if (waitCursor != null) {
-					waitCursor.stop();
-				}
-				WaitCursor.stopAll();
+		if (versionRetriever.isServerVersionAtLeast("4.2")) {
+			gzipTransmission = false;
+			lz4Transmission = true;
+		} else {
+			gzipTransmission = true;
+			lz4Transmission = false;
+
+			// The way we check the certificate does not work before opsi server version 4.2
+			Globals.disableCertificateVerification = true;
+		}
+
+		if (!background) {
+			if (waitCursor != null) {
+				waitCursor.stop();
 			}
+			WaitCursor.stopAll();
+		}
 
-			if (sessionId != null) {
-				connection.setRequestProperty("Cookie", sessionId);
-			}
+		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties(), conStat);
+		HttpsURLConnection connection = handler.establishConnection(true);
+		sendPOSTReqeust(connection, omc);
 
-			if (requestMethod == POST) {
-				sendPOSTReqeust(connection, omc);
-			} else {
-				sendGETRequest(connection);
-			}
-
-		} catch (IOException ex) {
-			if (!background) {
-				if (waitCursor != null) {
-					waitCursor.stop();
-				}
-				WaitCursor.stopAll();
-			}
-
-			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-			Logging.error("Exception on connecting, ", ex);
-
+		if (connection == null) {
+			conStat = handler.getConnectionState();
 			return null;
 		}
+
+		Logging.info(this, "connection cipher suite " + (connection).getCipherSuite());
 
 		Map<String, Object> result = new HashMap<>();
 
@@ -225,7 +194,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			try {
 				Logging.debug(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage());
 
-				StringBuilder errorInfo = retrieveErrorFromResponse(connection);
+				String errorInfo = retrieveErrorFromResponse(connection);
 
 				if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
 						|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
@@ -248,7 +217,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 				} else {
 					conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
 					Logging.error(this, "Response " + connection.getResponseCode() + " "
-							+ connection.getResponseMessage() + " " + errorInfo.toString());
+							+ connection.getResponseMessage() + " " + errorInfo);
 				}
 
 				if (conStat.getState() == ConnectionState.CONNECTED) {
@@ -287,33 +256,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private void sendPOSTReqeust(HttpsURLConnection connection, OpsiMethodCall omc) {
-		ConnectionHandler handler = new ConnectionHandler(conStat);
-
-		try {
-			connection.setRequestMethod("POST");
-		} catch (ProtocolException ex) {
-			Logging.error(this, "method cannot be reset", ex);
-		}
-		connection.setDoOutput(true);
-		connection.setDoInput(true);
-		connection.setUseCaches(false);
-
-		Logging.debug(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
-		Logging.info(this,
-				"retrieveResponse method=" + connection.getRequestMethod() + ", headers="
-						+ connection.getRequestProperties() + ", cookie="
-						+ (sessionId == null ? "null" : (sessionId.substring(0, 26) + "...")));
-
-		if (!handler.establishConnection(connection)) {
-			Logging.error(this, "unable to establish connection");
-			conStat = handler.getConnectionState();
-
+		if (connection == null) {
 			return;
 		}
-
-		Logging.info(this, "connection cipher suite " + (connection).getCipherSuite());
-
-		conStat = handler.getConnectionState();
 
 		try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), UTF8DEFAULT);
 				BufferedWriter out = new BufferedWriter(writer)) {
@@ -326,29 +271,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 	}
 
-	private void sendGETRequest(HttpsURLConnection connection) {
-		ConnectionHandler handler = new ConnectionHandler(conStat);
-
-		try {
-			connection.setRequestMethod("GET");
-		} catch (ProtocolException ex) {
-			Logging.error(this, "method cannot be reset", ex);
-		}
-
-		Logging.debug(this, "https protocols given by system " + Configed.SYSTEM_SSL_VERSION);
-		Logging.info(this,
-				"retrieveResponse method=" + connection.getRequestMethod() + ", headers="
-						+ connection.getRequestProperties() + ", cookie="
-						+ (sessionId == null ? "null" : (sessionId.substring(0, 26) + "...")));
-
-		if (!handler.establishConnection(connection)) {
-			Logging.error(this, "unable to establish connection");
-		}
-
-		Logging.info(this, "connection cipher suite " + (connection).getCipherSuite());
-	}
-
-	private StringBuilder retrieveErrorFromResponse(HttpsURLConnection connection) throws JSONCommunicationException {
+	private String retrieveErrorFromResponse(HttpsURLConnection connection) throws JSONCommunicationException {
 		StringBuilder errorInfo = new StringBuilder("");
 
 		if (connection.getErrorStream() != null) {
@@ -364,7 +287,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			}
 		}
 
-		return errorInfo;
+		return errorInfo.toString();
 	}
 
 	private void retrieveSessionIDFromResponse(HttpsURLConnection connection) {
@@ -420,5 +343,17 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		return stream;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public String getSessionId() {
+		return sessionId;
 	}
 }

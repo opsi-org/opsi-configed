@@ -127,8 +127,8 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 		}
 	}
 
-	private void displayMFADialog() {
-		Logging.info(this, "Unauthorized, show password dialog");
+	private static void displayMFADialog() {
+		Logging.info("Unauthorized, show password dialog");
 
 		Map<String, String> groupData = new LinkedHashMap<>();
 		groupData.put("password", "");
@@ -155,9 +155,9 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 				newPasswordDialog.setVisible(true);
 			});
 		} catch (InvocationTargetException e) {
-			Logging.debug(this, "exception thrown during doRun: " + e);
+			Logging.debug("exception thrown during doRun: " + e);
 		} catch (InterruptedException e) {
-			Logging.info(this, "Thread was interrupted");
+			Logging.info("Thread was interrupted");
 			Thread.currentThread().interrupt();
 		}
 
