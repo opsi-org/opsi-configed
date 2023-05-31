@@ -20,18 +20,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.msgpack.jackson.dataformat.MessagePackMapper;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -49,31 +45,22 @@ import net.jpountz.lz4.LZ4FrameInputStream;
  * @author Rupert Roeder, Naglis Vidziunas
  */
 public class ServerFacade extends AbstractPOJOExecutioner {
-	private static final Pattern versionPattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
-	private static final int EXPECTED_SERVER_VERSION_LENGTH = 4;
-
-	private static int[] serverVersion = { 0, 0, 0, 0 };
-	private static boolean isOpsi43;
-	private static String serverVersionString = "4.2";
-	private static ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
-
-	private static boolean gzipTransmission;
-	private static boolean lz4Transmission;
-
 	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
-	public static final int DEFAULT_PORT = 4447;
-
 	private static final int POST = 0;
+
 	protected static String host;
+	protected static int portHTTPS = 4447;
+
+	private boolean gzipTransmission;
+	private boolean lz4Transmission;
+
 	public String username;
 	public String password;
-	protected static int portHTTPS = DEFAULT_PORT;
 	protected URL serviceURL;
 	public String sessionId;
 	private int requestMethod = POST;
-	protected boolean certificateExists;
-	protected boolean trustOnlyOnce;
-	protected boolean trustAlways;
+
+	private static OpsiServerVersionRetriever versionRetriever;
 
 	public ServerFacade(String host, String username, String password) {
 		this.host = host;
@@ -91,122 +78,16 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		this.username = username;
 		this.password = password;
 		conStat = new ConnectionState();
-	}
 
-	private static void setServerVersion(int[] newServerVersion) {
-		if (newServerVersion == null || newServerVersion.length == 0) {
-			return;
-		}
-
-		serverVersion = Arrays.copyOf(newServerVersion, newServerVersion.length);
-
-		// Produce String of server version 
-		StringBuilder serverVersionBuilder = new StringBuilder(String.valueOf(serverVersion[0]));
-
-		for (int i = 1; i < serverVersion.length; i++) {
-			serverVersionBuilder.append(".");
-			serverVersionBuilder.append(String.valueOf(serverVersion[i]));
-		}
-
-		setServerVersion(serverVersionBuilder.toString());
-	}
-
-	public static void setServerVersion(String newServerVersion) {
-		serverVersionString = newServerVersion;
-		serverComparableVersion = new ComparableVersion(serverVersionString);
-
-		if (isServerVersionAtLeast("4.2")) {
-			gzipTransmission = false;
-			lz4Transmission = true;
-		} else {
-			gzipTransmission = true;
-			lz4Transmission = false;
-
-			// The way we check the certificate does not work before opsi server version 4.2
-			Globals.disableCertificateVerification = true;
-		}
-
-		if (isServerVersionAtLeast("4.3")) {
-			isOpsi43 = true;
-		}
-
-		Logging.info("we set the server version: " + serverVersionString);
-		Logging.info("we use now gzip: " + gzipTransmission + " or lz4: " + lz4Transmission);
-		Logging.info("is certificateVerification disabled? " + Globals.disableCertificateVerification);
-	}
-
-	/**
-	 * returns true, if the server has a newer version (or same version)
-	 * compared to the version in the argument
-	 * 
-	 * @param compareVersion version to compare to of format x.y.z...
-	 */
-	private static boolean isServerVersionAtLeast(String compareVersion) {
-		return serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
-	}
-
-	public static boolean isOpsi43() {
-		return isOpsi43;
+		this.versionRetriever = new OpsiServerVersionRetriever(username, password);
 	}
 
 	public static String getServerVersion() {
-		return serverVersionString;
+		return versionRetriever.getServerVersion();
 	}
 
-	/**
-	 * Checks if the server version is already known, loads it otherwise
-	 */
-	private void checkServerVersion() {
-		if (serverVersion[0] != 0) {
-			return;
-		}
-
-		HttpsURLConnection connection;
-
-		try {
-			connection = (HttpsURLConnection) new URL(produceBaseURL("/")).openConnection();
-			String authorization = Base64.getEncoder()
-					.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
-			connection.setRequestProperty("Authorization", "Basic " + authorization);
-
-			CertificateValidator certValidator = CertificateValidatorFactory.create(false);
-			connection.setSSLSocketFactory(certValidator.createSSLSocketFactory());
-			connection.setHostnameVerifier(certValidator.createHostnameVerifier());
-			connection.setRequestMethod("HEAD");
-
-		} catch (IOException e) {
-			Logging.warning(this, "error in testing connection to server for getting server opsi version", e);
-			return;
-		}
-
-		String server = connection.getHeaderField("Server");
-
-		if (server == null) {
-			Logging.warning("error in getting server version, Headerfield is null");
-			return;
-		}
-
-		int[] newServerVersion = new int[EXPECTED_SERVER_VERSION_LENGTH];
-
-		Matcher matcher = versionPattern.matcher(server);
-		if (matcher.find()) {
-			Logging.info(this, "opsi server version: " + matcher.group(1));
-			String[] versionParts = matcher.group(1).split("\\.");
-			for (int i = 0; i < versionParts.length && i < EXPECTED_SERVER_VERSION_LENGTH; i++) {
-				try {
-					newServerVersion[i] = Integer.parseInt(versionParts[i]);
-				} catch (NumberFormatException nex) {
-					Logging.error(this, "value is unparsable to int");
-				}
-			}
-		} else {
-			// Default is 4.1, if this query does not work
-			Logging.info("we set opsi version 4.1 because we did not find opsiconfd version in header");
-			newServerVersion[0] = 4;
-			newServerVersion[1] = 1;
-		}
-
-		setServerVersion(newServerVersion);
+	public static boolean isOpsi43() {
+		return versionRetriever.isServerVersionAtLeast("4.3");
 	}
 
 	private void setGeneralRequestProperties(HttpURLConnection connection) {
@@ -235,7 +116,18 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 * Opening the connection and set the SSL parameters
 	 */
 	private HttpsURLConnection produceConnection() throws IOException {
-		checkServerVersion();
+		versionRetriever.checkServerVersion();
+
+		if (versionRetriever.isServerVersionAtLeast("4.2")) {
+			gzipTransmission = false;
+			lz4Transmission = true;
+		} else {
+			gzipTransmission = true;
+			lz4Transmission = false;
+
+			// The way we check the certificate does not work before opsi server version 4.2
+			Globals.disableCertificateVerification = true;
+		}
 
 		makeURL();
 		Logging.info(this, "produceConnection, url; " + serviceURL);
@@ -309,7 +201,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			}
 
 			if (requestMethod == POST) {
-				sendPOSTReqeust(omc, connection);
+				sendPOSTReqeust(connection, omc);
 			} else {
 				sendGETRequest(connection);
 			}
@@ -395,7 +287,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	private void sendPOSTReqeust(OpsiMethodCall omc, HttpsURLConnection connection) {
+	private void sendPOSTReqeust(HttpsURLConnection connection, OpsiMethodCall omc) {
 		ConnectionHandler handler = new ConnectionHandler(conStat);
 
 		try {
