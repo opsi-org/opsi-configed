@@ -36,65 +36,8 @@ This class those the Right SwingWorker to execute it.
 public class SSHConnectSCP extends SSHConnectExec {
 	private SSHConnectionExecDialog outputDialog;
 
-	public SSHConnectSCP() {
-
-	}
-
 	public SSHConnectSCP(String commandInfo) {
 		commandInfoName = commandInfo;
-	}
-
-	public SSHConnectSCP(SSHSFTPCommand command) {
-		this(command, null);
-	}
-
-	public SSHConnectSCP(SSHSFTPCommand command, SSHConnectionExecDialog outDia) {
-		connect();
-		start(command, outDia);
-	}
-
-	private String start(SSHSFTPCommand command, SSHConnectionExecDialog outDia) {
-		Logging.debug(this, "starting, create SSHConnectionExecDialog");
-		Logging.info(this, "execsftp command " + command.getDescription());
-		Logging.debug(this, "execsftp withGui " + command.isShowOutputDialog());
-		Logging.debug(this, "execsftp dialog " + outDia);
-		Logging.debug(this, "execsftp isConnected " + isConnected());
-
-		if (!(isConnected())) {
-			connect();
-		}
-
-		if (command.isShowOutputDialog()) {
-			if (outDia != null) {
-				setDialog(outDia);
-			} else {
-				setDialog(SSHConnectionExecDialog.getInstance());
-			}
-			outputDialog = getDialog();
-
-			if (SSHCommandFactory.sshAlwaysExecInBackground) {
-				outputDialog.setVisible(false);
-			}
-		}
-
-		try {
-			Logging.info(this, "exec isConnected " + isConnected());
-			SshSFTPCommandWorker task = new SshSFTPCommandWorker(command, outputDialog, command.isShowOutputDialog());
-			task.execute();
-			Logging.info(this, "execute was called");
-
-			if (SSHCommandFactory.sshAlwaysExecInBackground) {
-				outputDialog.setVisible(command.isShowOutputDialog());
-			}
-
-			return task.get();
-		} catch (ExecutionException e) {
-			Logging.error(this, "exec Exception", e);
-		} catch (InterruptedException e) {
-			Logging.error(this, "interrupted Exception", e);
-			Thread.currentThread().interrupt();
-		}
-		return null;
 	}
 
 	@Override
@@ -113,7 +56,7 @@ public class SSHConnectSCP extends SSHConnectExec {
 		try {
 			SSHSFTPCommand command = (SSHSFTPCommand) com;
 			Logging.info(this, "exec isConnected " + isConnected());
-			SshSFTPCommandWorker task = new SshSFTPCommandWorker(command, dialog, withGui);
+			SSHSFTPCommandWorker task = new SSHSFTPCommandWorker(command, dialog, withGui);
 			task.setMaxCommandNumber(maxcommandnumber);
 			task.setCommandNumber(commandnumber);
 			task.execute();
@@ -139,18 +82,18 @@ public class SSHConnectSCP extends SSHConnectExec {
 
 	// first parameter class is return type of doInBackground
 	// second is element type of the list which is used by process
-	private class SshSFTPCommandWorker extends SwingWorker<String, String> {
-		SSHSFTPCommand command;
-		SSHConnectionExecDialog outputDialog;
-		SSHConnectExec caller;
+	private class SSHSFTPCommandWorker extends SwingWorker<String, String> {
+		private SSHSFTPCommand command;
+		private SSHConnectionExecDialog outputDialog;
+		private SSHConnectExec caller;
 
-		boolean withGui;
-		boolean interruptChannel;
-		int retriedTimes = 1;
-		int commandNumber = -1;
-		int maxCommandNumber = -1;
+		private boolean withGui;
+		private boolean interruptChannel;
+		private int retriedTimes = 1;
+		private int commandNumber = -1;
+		private int maxCommandNumber = -1;
 
-		SshSFTPCommandWorker(SSHSFTPCommand command, SSHConnectionExecDialog outputDialog, boolean withGui) {
+		SSHSFTPCommandWorker(SSHSFTPCommand command, SSHConnectionExecDialog outputDialog, boolean withGui) {
 			super();
 			this.command = command;
 			this.outputDialog = outputDialog;
