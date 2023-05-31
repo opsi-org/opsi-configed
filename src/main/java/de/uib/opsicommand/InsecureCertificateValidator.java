@@ -27,7 +27,7 @@ import de.uib.utilities.logging.Logging;
  * <p>
  * {@code InsecureCertificateValidator} disables certificate and hostname
  * verification. The usage of this {@link CertificateValidator} is strongly
- * advised, since it includes multiple vulnerabilites. For validating
+ * discouraged, since it includes multiple vulnerabilites. For validating
  * certificates it is best to use {@link SecureCertificateValidator}.
  * <p>
  * The {@code InsecureCertificateValidator} is only used for downloading a
