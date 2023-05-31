@@ -118,22 +118,14 @@ public class SecureCertificateValidator implements CertificateValidator {
 	 */
 	@SuppressWarnings("java:S2972")
 	private static class MyHostnameVerifier implements HostnameVerifier {
-		private List<String> certificateSubjectAlternativeNames;
-
-		private boolean hostnameMatches(String hostname, SSLSession session) {
-			boolean validCertificate = false;
+		private X509Certificate retrievePeerCertificate(SSLSession session) {
+			X509Certificate peerCertificate = null;
 
 			try {
 				Certificate[] peerCertificates = session.getPeerCertificates();
 
 				if (peerCertificates.length > 0 && peerCertificates[0] instanceof X509Certificate) {
-					X509Certificate peerCertificate = (X509Certificate) peerCertificates[0];
-
-					validCertificate = verifyCertificate(hostname, peerCertificate);
-
-					if (!validCertificate) {
-						certificateSubjectAlternativeNames = getSubjectAlternativeNames(peerCertificate);
-					}
+					peerCertificate = (X509Certificate) peerCertificates[0];
 				} else {
 					throw new IllegalStateException("Peer does not have any certificates or they aren't X.509");
 				}
@@ -141,21 +133,7 @@ public class SecureCertificateValidator implements CertificateValidator {
 				Logging.error(this, "peer's identity wasn't verified", ex);
 			}
 
-			return validCertificate;
-		}
-
-		private boolean verifyCertificate(String hostname, X509Certificate certificate) {
-			boolean validCertificate = false;
-
-			try {
-				validCertificate = certificate.getSubjectAlternativeNames().stream()
-						.anyMatch(peerHostname -> hostname.equals(peerHostname.get(1)));
-			} catch (CertificateException ex) {
-				Logging.warning(this, "certificate exception, could not validate certificate", ex);
-				validCertificate = false;
-			}
-
-			return validCertificate;
+			return peerCertificate;
 		}
 
 		private List<String> getSubjectAlternativeNames(X509Certificate certificate) {
@@ -171,23 +149,34 @@ public class SecureCertificateValidator implements CertificateValidator {
 			return subjectAlternativeNames;
 		}
 
+		@SuppressWarnings("java:S3516")
 		@Override
 		public boolean verify(String hostname, SSLSession session) {
-			if (hostnameMatches(hostname, session)) {
-				return true;
-			} else {
-				StringBuilder message = new StringBuilder();
-				message.append(Configed.getResourceValue("JSONthroughHTTP.unvalidHostname") + " ");
-				message.append(hostname);
-				message.append("\n\n");
-				message.append(Configed.getResourceValue("JSONthroughHTTP.validHostnames"));
-				message.append("\n\n");
-				message.append(certificateSubjectAlternativeNames.toString().replace("[", "").replace("]", ""));
-				ConnectionErrorObserver.getInstance().notify(message.toString(),
-						ConnectionErrorType.INVALID_HOSTNAME_ERROR);
+			X509Certificate peerCertificate = retrievePeerCertificate(session);
 
+			if (peerCertificate == null) {
+				Logging.warning(this, "peer's certificate could not be retrieved");
 				return false;
 			}
+
+			List<String> subjectAlternativeNames = getSubjectAlternativeNames(peerCertificate);
+
+			if (subjectAlternativeNames == null || subjectAlternativeNames.isEmpty()) {
+				Logging.warning(this, "no SAN found: " + subjectAlternativeNames);
+				return false;
+			}
+
+			StringBuilder message = new StringBuilder();
+			message.append(Configed.getResourceValue("JSONthroughHTTP.unvalidHostname") + " ");
+			message.append(hostname);
+			message.append("\n\n");
+			message.append(Configed.getResourceValue("JSONthroughHTTP.validHostnames"));
+			message.append("\n\n");
+			message.append(subjectAlternativeNames.toString().replace("[", "").replace("]", ""));
+			ConnectionErrorObserver.getInstance().notify(message.toString(),
+					ConnectionErrorType.INVALID_HOSTNAME_ERROR);
+
+			return false;
 		}
 	}
 
