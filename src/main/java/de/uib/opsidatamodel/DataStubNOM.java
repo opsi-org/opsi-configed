@@ -296,6 +296,8 @@ public class DataStubNOM {
 					depot2NetbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
 				} else if (p.isLocalbootProduct()) {
 					depot2LocalbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
+				} else {
+					Logging.warning(this, "unexpected product type " + p.toString());
 				}
 
 				Map<String, List<String>> versionInfo2Depots = product2VersionInfo2Depots.get(p.getProductId());

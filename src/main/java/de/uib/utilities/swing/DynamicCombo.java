@@ -28,9 +28,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.ComboBoxModeller;
 import de.uib.utilities.table.gui.AdaptingCellEditor;
 
-/**
- * @author roeder
- */
 public class DynamicCombo extends JPanel {
 
 	private JTable table;

@@ -11,10 +11,6 @@
 
 package de.uib.utilities.swing;
 
-/**
- *
- * @author roeder
- */
 import java.awt.Font;
 
 import javax.swing.Icon;

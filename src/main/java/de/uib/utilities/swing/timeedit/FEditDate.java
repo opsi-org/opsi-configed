@@ -11,10 +11,6 @@
 
 package de.uib.utilities.swing.timeedit;
 
-/**
- *
- * @author roeder
- */
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -152,10 +148,13 @@ public class FEditDate extends FEdit implements DateSelectionListener, MouseList
 	public void keyPressed(KeyEvent e) {
 		Logging.debug(this, " key event " + e);
 		super.keyPressed(e);
+
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			cancel();
 		} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			commit();
+		} else {
+			// Do nothing on other keys
 		}
 	}
 

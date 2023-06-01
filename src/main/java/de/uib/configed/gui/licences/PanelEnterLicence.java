@@ -49,9 +49,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.timeedit.FEditDate;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-/**
- * @author R. Röder
- */
 public class PanelEnterLicence extends MultiTablePanel implements ActionListener {
 
 	private static final int MIN_HEIGHT = 50;

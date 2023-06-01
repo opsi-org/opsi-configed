@@ -12,12 +12,9 @@
 
 package de.uib.utilities.swing;
 
-/**
- *
- * @author roeder
- */
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -340,8 +337,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			cancel();
 		} else if (e.getID() == WindowEvent.WINDOW_ACTIVATED) {
 			enter();
-		} else if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {
-			// TODO: add cancel()?
+		} else {
+			// do nothing on other events
 		}
 
 		super.processWindowEvent(e);
@@ -369,14 +366,15 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 	// -------------
 	// interface ActionListener
 	@Override
-	public void actionPerformed(java.awt.event.ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		Logging.debug(this, "actionPerformed");
 
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-
 			cancel();
+		} else {
+			Logging.warning(this, "unexpected action on source " + e.getSource());
 		}
 	}
 	// -------------
@@ -390,6 +388,8 @@ public class FEditObject extends JDialog implements ActionListener, KeyListener,
 			commit();
 		} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			cancel();
+		} else {
+			// Do nothing on other keys
 		}
 	}
 

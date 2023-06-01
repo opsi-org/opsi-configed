@@ -475,7 +475,8 @@ public class Messagebus implements MessagebusListener {
 			default:
 				break;
 			}
+		} else {
+			Logging.warning(this, "unexpected message type " + type);
 		}
-
 	}
 }
