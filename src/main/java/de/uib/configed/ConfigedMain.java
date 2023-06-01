@@ -676,21 +676,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String productType = data.get("productType");
 
 		// get the data for the updated client
-		try {
-			Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
 
-			int selectedView = getViewIndex();
+		Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
 
-			if (selectedView == VIEW_LOCALBOOT_PRODUCTS
-					&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
-				istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
-			} else if (selectedView == VIEW_NETBOOT_PRODUCTS
-					&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
-				istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
-			}
-		} catch (NullPointerException ex) {
-			// Can happen if this function is triggered by messagebus event during configed startup
-			Logging.warning(this, "Failed to update product (failed to get product info)");
+		int selectedView = getViewIndex();
+
+		if (selectedView == VIEW_LOCALBOOT_PRODUCTS && productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
+				&& istmForSelectedClientsLocalboot != null) {
+			istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
+		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
+				&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
+				&& istmForSelectedClientsNetboot != null) {
+			istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
+		} else {
+			Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
+					+ "not open or configed not yet initialized");
 		}
 	}
 
@@ -1352,6 +1352,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				} else if (e.getKeyCode() == KeyEvent.VK_F10) {
 					Logging.debug(this, "keypressed: f10");
 					mainFrame.showPopupClients();
+				} else {
+					// Nothing to do for all the other keys
 				}
 			}
 
@@ -4122,6 +4124,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 										model.fireTableRowsUpdated(row, row);
 										// if ordered by col the order does not change although the value changes
 										// is necessary
+									} else {
+										Logging.warning(this, "Reachability of client " + clientId + " with new value "
+												+ newInfo + " could not be updated");
 									}
 								}
 							}

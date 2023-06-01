@@ -219,6 +219,8 @@ public class DepotListPresenter extends JPanel implements ActionListener {
 						.getAllDepotsWithIdenticalProductStock(depotSelected);
 				depotslist.addToSelection(depotsWithEqualStock);
 			}
+		} else {
+			Logging.warning(this, "action was performed on " + e.getSource() + ", but not expected");
 		}
 	}
 }

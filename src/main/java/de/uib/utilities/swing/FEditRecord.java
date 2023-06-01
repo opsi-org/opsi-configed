@@ -30,6 +30,8 @@ public class FEditRecord extends FEdit {
 					commit();
 				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					cancel();
+				} else {
+					// We want to do nothing on other keys
 				}
 			}
 

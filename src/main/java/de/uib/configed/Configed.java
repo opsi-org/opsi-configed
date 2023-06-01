@@ -505,6 +505,8 @@ public final class Configed {
 			Logging.debug("UserConfigProducing: newData " + newData);
 
 			Main.endApp(Main.NO_ERROR);
+		} else {
+			Logging.info("start configed gui since no options for CLI-mode were chosen");
 		}
 
 		try {

@@ -627,15 +627,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			setSWAssignments();
 		});
 
-		thePanel.panelRegisteredSoftware.setFiltermarkActionListener((ActionEvent e) -> {
-			if (softwareShow == SoftwareShowMode.ALL) {
-				softwareShow = SoftwareShowMode.ASSIGNED;
-				setSWAssignments();
-			} else if (softwareShow == SoftwareShowMode.ASSIGNED) {
-				softwareShow = SoftwareShowMode.ALL;
-				setSWAssignments();
-			}
-		});
+		thePanel.panelRegisteredSoftware
+				.setFiltermarkActionListener(actionEvent -> registeredSoftwareFiltermarkAction());
 
 		JMenuItemFormatted menuItemSoftwareShowAll = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.PopupWindowsSoftwareShowAll"));
@@ -698,6 +691,20 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		setSoftwareIdsFromLicencePool(null);
 		initializeVisualSettings();
+	}
+
+	private void registeredSoftwareFiltermarkAction() {
+		if (softwareShow == SoftwareShowMode.ALL) {
+			softwareShow = SoftwareShowMode.ASSIGNED;
+			setSWAssignments();
+		} else if (softwareShow == SoftwareShowMode.ASSIGNED) {
+			softwareShow = SoftwareShowMode.ALL;
+			setSWAssignments();
+		} else {
+			// Should not happen because SoftwareShowMode has only two elements
+			Logging.warning(this,
+					"softwareShow has Value " + softwareShow + " that does not exist in SoftwareShowMode");
+		}
 	}
 
 	private String updateLicencepool(Map<String, Object> rowmap) {
@@ -981,6 +988,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(false);
 				resetCounters(null);
 				thePanel.fieldCountAssignedInEditing.setText("");
+			} else {
+				// Should not happen because enum SoftwareDirectionOfAssignment has only two values
 			}
 
 			Logging.info(this, "switched to " + direction);

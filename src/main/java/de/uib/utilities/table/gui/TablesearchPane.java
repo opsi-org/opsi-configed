@@ -515,7 +515,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		try {
-
 			comboSearchFieldsMode = new JComboBoxToolTip();
 			if (!Main.FONT) {
 				comboSearchFieldsMode.setFont(Globals.defaultFont);
@@ -1237,6 +1236,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				markAllAndFilter();
 				switchFilterOn();
 			}
+		} else {
+			// We want to do nothing on other keys
 		}
 	}
 
@@ -1322,6 +1323,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			Logging.debug(this,
 					"actionPerformed on checkmarkSearchProgressiv, searchInputType set to " + searchInputType);
+		} else {
+			Logging.warning(this, "action performed on source " + e.getSource() + ", but was not expected");
 		}
 	}
 

@@ -101,6 +101,8 @@ public class DPassword extends JDialog implements WaitingSleeper {
 				okAction();
 			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 				endProgram();
+			} else {
+				// Do nothing with other keys
 			}
 		}
 	};
