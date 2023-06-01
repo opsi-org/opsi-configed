@@ -13,6 +13,8 @@
 package de.uib.configed.gui.licences;
 
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -327,12 +329,9 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 					fEditDate.setCaller(jTextFieldEndOfLicence);
 					fEditDate.init();
-					try {
-						java.awt.Point pointField = jTextFieldEndOfLicence.getLocationOnScreen();
-						fEditDate.setLocation((int) pointField.getX() + 30, (int) pointField.getY() + 20);
-					} catch (Exception ex) {
-						Logging.info(this, "locationOnScreen ex " + ex);
-					}
+
+					Point pointField = jTextFieldEndOfLicence.getLocationOnScreen();
+					fEditDate.setLocation((int) pointField.getX() + 30, (int) pointField.getY() + 20);
 
 					fEditDate.setTitle(" (" + Globals.APPNAME + ") "
 							+ Configed.getResourceValue("ConfigedMain.Licences.EnterLicense.LabelSLid5"));
@@ -669,7 +668,7 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 
 	// ActionListener
 	@Override
-	public void actionPerformed(java.awt.event.ActionEvent evt) {
+	public void actionPerformed(ActionEvent evt) {
 		if (evt.getSource() == jButtonCreateStandard) {
 			startStandard();
 		} else if (evt.getSource() == jButtonCreateVolume) {
@@ -682,7 +681,10 @@ public class PanelEnterLicence extends MultiTablePanel implements ActionListener
 			deactivate();
 			saveCurrentLicenceData();
 			jTextFieldLKey.setText("");
+		} else {
+			Logging.error(this, "action performed on non-treated source");
 		}
+
 	}
 
 	@Override

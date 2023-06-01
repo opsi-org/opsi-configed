@@ -65,7 +65,6 @@ public class ControllerHWinfoMultiClients {
 			}
 
 			return filter.contains(row.get(KEY_COL));
-
 		}
 
 		@Override

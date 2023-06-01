@@ -103,12 +103,7 @@ public class CheckedLabel extends JPanel implements FocusListener {
 
 		myListeners = new ArrayList<>();
 
-		textLabel = null;
-		try {
-			textLabel = new JLabel(text);
-		} catch (ClassCastException ignore) {
-			textLabel = new JLabel(text);
-		}
+		textLabel = new JLabel(text);
 
 		textFont = textLabel.getFont();
 
@@ -197,16 +192,10 @@ public class CheckedLabel extends JPanel implements FocusListener {
 
 				super.keyPressed(e);
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					if (selected == null || selected) {
 
-						me.setSelected(false);
-						notifyActionListeners(new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF,
-								System.currentTimeMillis(), 0));
-					} else {
-						me.setSelected(true);
-						notifyActionListeners(new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF,
-								System.currentTimeMillis(), 0));
-					}
+					me.setSelected(selected);
+					notifyActionListeners(
+							new ActionEvent(me, SET_CHECKED_OFF, CMD_SET_CHECKED_OFF, System.currentTimeMillis(), 0));
 				}
 			}
 		});

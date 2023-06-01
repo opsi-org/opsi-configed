@@ -860,7 +860,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					Logging.warning(this, "column " + column + " not getting comparator", ex);
 					return null;
 				}
-
 			}
 		};
 

@@ -208,17 +208,15 @@ public class PanelMountShare extends JPanel {
 		new Thread() {
 			@Override
 			public void run() {
-				int i = 0;
 
-				while (!smbMounted && i < seconds) {
+				for (int i = 0; !smbMounted && i < seconds; i++) {
 
 					try {
 						Logging.debug(this, "trying to find dir, count " + i);
 						sleep(1000);
-						i++;
 						checkConnectionToShare();
 						rootFrame.toFront();
-					} catch (Exception ex) {
+					} catch (InterruptedException ex) {
 						Logging.debug(this, "Exception " + ex);
 						Thread.currentThread().interrupt();
 					}

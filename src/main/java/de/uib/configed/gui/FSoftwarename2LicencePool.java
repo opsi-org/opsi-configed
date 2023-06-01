@@ -119,15 +119,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 			}
 		};
 
-		panelSWxLicencepool = new PanelGenEditTable("",
-
-				0, // width
-				true, // editing,
-				0, true // switchLineColors
-				, new int[] { PanelGenEditTable.POPUP_RELOAD },
-
-				false // searchpane
-		) {
+		panelSWxLicencepool = new PanelGenEditTable("", 0, true, 0, true, new int[] { PanelGenEditTable.POPUP_RELOAD },
+				false) {
 			@Override
 			public void setDataChanged(boolean b) {
 				Logging.info(this, "panelSWxLicencepool setDataChanged " + b);
@@ -156,9 +149,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 				} else {
 					buttonSetAllAssignmentsToPoolFromSelectedRow.setEnabled(false);
 					labelSetAllAssignmentsToPoolFromSelectedRow.setText(labelText);
-					Configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToPoolFromSelectedRow");
 				}
-
 			}
 		};
 

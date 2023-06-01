@@ -212,8 +212,7 @@ public class LicenseDisplayer {
 				int foundVariantLicencepools = 0;
 				namesWithVariantPools.clear();
 
-				int i = 0;
-				while (i < getRowCount()) {
+				for (int i = 0; i < getRowCount(); i++) {
 					String swName = (String) getValueAt(i, 0);
 
 					if (checkExistNamesWithVariantLicencepools(swName)) {
@@ -221,17 +220,9 @@ public class LicenseDisplayer {
 						namesWithVariantPools.add(swName);
 						foundVariantLicencepools++;
 					}
-
-					i++;
 				}
 
 				Logging.info(this, "produced rows, foundVariantLicencepools " + foundVariantLicencepools);
-			}
-
-			@Override
-			public void reset() {
-				Logging.info(this, "reset");
-				super.reset();
 			}
 		};
 
