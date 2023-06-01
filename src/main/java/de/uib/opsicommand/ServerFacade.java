@@ -58,16 +58,19 @@ import net.jpountz.lz4.LZ4FrameInputStream;
 public class ServerFacade extends AbstractPOJOExecutioner {
 	public static final Charset UTF8DEFAULT = StandardCharsets.UTF_8;
 
-	private static String host;
-	private static int portHTTPS = 4447;
 	private static OpsiServerVersionRetriever versionRetriever;
 
 	private boolean gzipTransmission;
 	private boolean lz4Transmission;
 
+	private String host;
 	private String username;
 	private String password;
 	private String sessionId;
+	private int portHTTPS = 4447;
+
+	private boolean background;
+	private WaitCursor waitCursor;
 
 	/**
 	 * Constructs {@code ServerFacade} object with provided information.
@@ -93,7 +96,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		this.password = password;
 		conStat = new ConnectionState();
 
-		this.versionRetriever = new OpsiServerVersionRetriever(username, password);
+		CertificateDownloader.init(produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
 	}
 
 	/**
@@ -130,6 +133,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			requestProperties.put("Accept-Encoding", "lz4");
 		} else if (gzipTransmission) {
 			requestProperties.put("Accept-Encoding", "gzip");
+		} else {
+			/* Theoretically this should never occur, since lz4Transmission and
+			   gzipTransmission cannot be both false at the same time */
+			Logging.info("no encoding is specified");
 		}
 
 		requestProperties.put("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
@@ -142,21 +149,8 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return requestProperties;
 	}
 
-	/**
-	 * Creates a URL string using previously specified {@code host} and
-	 * {@code port}.
-	 * 
-	 * @param rpcPath specific location.
-	 * @return created URL string, that points to some location in the server.
-	 */
-	public static String produceBaseURL(String rpcPath) {
+	private String produceBaseURL(String rpcPath) {
 		return "https://" + host + ":" + portHTTPS + rpcPath;
-	}
-
-	private static class JSONCommunicationException extends Exception {
-		JSONCommunicationException(String message) {
-			super(message);
-		}
 	}
 
 	private URL makeURL() {
@@ -188,9 +182,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 */
 	@Override
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
-		boolean background = false;
+		background = false;
 		Logging.info(this, "retrieveResponse started");
-		WaitCursor waitCursor = null;
+		waitCursor = null;
 
 		if (omc != null && !omc.isBackgroundDefault()) {
 			waitCursor = new WaitCursor(null, new Cursor(Cursor.DEFAULT_CURSOR), this.getClass().getName());
@@ -203,25 +197,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		TimeCheck timeCheck = new TimeCheck(this, "retrieveResponse " + omc);
 		timeCheck.start();
 
-		versionRetriever.checkServerVersion();
+		enableFeaturesBasedOnServerVersion();
 
-		if (versionRetriever.isServerVersionAtLeast("4.2")) {
-			gzipTransmission = false;
-			lz4Transmission = true;
-		} else {
-			gzipTransmission = true;
-			lz4Transmission = false;
-
-			// The way we check the certificate does not work before opsi server version 4.2
-			Globals.disableCertificateVerification = true;
-		}
-
-		if (!background) {
-			if (waitCursor != null) {
-				waitCursor.stop();
-			}
-			WaitCursor.stopAll();
-		}
+		stopWaitCursor();
 
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties());
 		HttpsURLConnection connection = handler.establishConnection(true);
@@ -240,31 +218,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			try {
 				Logging.debug(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage());
 
-				String errorInfo = retrieveErrorFromResponse(connection);
-
-				if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
-						|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-					conStat = new ConnectionState(ConnectionState.CONNECTED, "ok");
-				} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-					conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
-
-					Logging.debug("Unauthorized: background=" + background + ", " + sessionId + ", mfa="
-							+ Globals.isMultiFactorAuthenticationEnabled);
-					if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
-						if (!background) {
-							if (waitCursor != null) {
-								waitCursor.stop();
-							}
-							WaitCursor.stopAll();
-						}
-						ConnectionErrorObserver.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
-						return retrieveResponse(omc);
-					}
-				} else {
-					conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
-					Logging.error(this, "Response " + connection.getResponseCode() + " "
-							+ connection.getResponseMessage() + " " + errorInfo);
-				}
+				handleResponseCode(connection, omc);
 
 				if (conStat.getState() == ConnectionState.CONNECTED) {
 					retrieveSessionIDFromResponse(connection);
@@ -272,17 +226,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 					Logging.info(this, "guessContentType " + URLConnection.guessContentTypeFromStream(stream));
 
-					if (connection.getContentType().contains("application/json")) {
-						ObjectMapper mapper = new ObjectMapper();
-						result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
-						});
-					} else if (connection.getContentType().contains("application/msgpack")) {
-						ObjectMapper mapper = new MessagePackMapper();
-						result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
-						});
-					} else {
-						Logging.error(this, "Unsupported Content-Type: " + connection.getContentType());
-					}
+					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
 				}
 			} catch (Exception ex) {
 				if (waitCursor != null) {
@@ -317,7 +261,68 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 	}
 
-	private String retrieveErrorFromResponse(HttpsURLConnection connection) throws JSONCommunicationException {
+	private synchronized void enableFeaturesBasedOnServerVersion() {
+		if (versionRetriever == null) {
+			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), username, password);
+		}
+
+		versionRetriever.checkServerVersion();
+
+		if (versionRetriever.isServerVersionAtLeast("4.2")) {
+			gzipTransmission = false;
+			lz4Transmission = true;
+		} else {
+			gzipTransmission = true;
+			lz4Transmission = false;
+
+			// The way we check the certificate does not work before opsi server version 4.2
+			Globals.disableCertificateVerification = true;
+		}
+	}
+
+	private Map<String, Object> retrieveResponseBasedOnContentType(String contentType, InputStream stream)
+			throws IOException {
+		Map<String, Object> result = new HashMap<>();
+
+		if (contentType.contains("application/json")) {
+			ObjectMapper mapper = new ObjectMapper();
+			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+			});
+		} else if (contentType.contains("application/msgpack")) {
+			ObjectMapper mapper = new MessagePackMapper();
+			result = mapper.readValue(stream, new TypeReference<Map<String, Object>>() {
+			});
+		} else {
+			Logging.error(this, "Unsupported Content-Type: " + contentType);
+		}
+
+		return result;
+	}
+
+	private void handleResponseCode(HttpsURLConnection connection, OpsiMethodCall omc) throws IOException {
+		String errorInfo = retrieveErrorFromResponse(connection);
+
+		if (connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED
+				|| connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+			conStat = new ConnectionState(ConnectionState.CONNECTED, "ok");
+		} else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+			conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
+
+			Logging.debug("Unauthorized: background=" + background + ", " + sessionId + ", mfa="
+					+ Globals.isMultiFactorAuthenticationEnabled);
+			if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
+				stopWaitCursor();
+				ConnectionErrorObserver.getInstance().notify("", ConnectionErrorType.MFA_ERROR);
+				retrieveResponse(omc);
+			}
+		} else {
+			conStat = new ConnectionState(ConnectionState.ERROR, connection.getResponseMessage());
+			Logging.error(this, "Response " + connection.getResponseCode() + " " + connection.getResponseMessage() + " "
+					+ errorInfo);
+		}
+	}
+
+	private String retrieveErrorFromResponse(HttpsURLConnection connection) {
 		StringBuilder errorInfo = new StringBuilder("");
 
 		if (connection.getErrorStream() != null) {
@@ -328,8 +333,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 					errorInfo.append("  ");
 				}
 			} catch (IOException iox) {
-				Logging.warning(this, "exception on reading error stream " + iox);
-				throw new JSONCommunicationException("error on reading error stream");
+				Logging.error(this, "exception on reading error stream " + iox);
 			}
 		}
 
@@ -389,6 +393,15 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		}
 
 		return stream;
+	}
+
+	private void stopWaitCursor() {
+		if (!background) {
+			if (waitCursor != null) {
+				waitCursor.stop();
+			}
+			WaitCursor.stopAll();
+		}
 	}
 
 	/**

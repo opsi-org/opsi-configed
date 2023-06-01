@@ -22,11 +22,20 @@ import de.uib.utilities.logging.Logging;
 
 public final class CertificateDownloader {
 	private static File downloadedCertificateFile;
+	private static String urlPath;
 
 	private CertificateDownloader() {
 	}
 
-	public static void downloadCertificateFile(String urlPath) {
+	public static void init(String newUrlPath) {
+		urlPath = newUrlPath;
+	}
+
+	public static void downloadCertificateFile() {
+		if (urlPath == null) {
+			Logging.error("CertificateDownloader wasn't initialized");
+		}
+
 		CertificateValidator validator = CertificateValidatorFactory.createInsecure();
 		HttpsURLConnection.setDefaultSSLSocketFactory(validator.createSSLSocketFactory());
 		HttpsURLConnection.setDefaultHostnameVerifier(validator.createHostnameVerifier());

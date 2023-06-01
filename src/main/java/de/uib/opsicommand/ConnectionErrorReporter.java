@@ -101,15 +101,13 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 		if (choice == 1) {
 			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
 		} else if (choice == 2) {
-			CertificateDownloader
-					.downloadCertificateFile(ServerFacade.produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
+			CertificateDownloader.downloadCertificateFile();
 			CertificateManager.saveCertificate(CertificateDownloader.getDownloadedCertificateFile());
 			if (conStat.getState() != ConnectionState.INTERRUPTED) {
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 			}
 		} else if (choice == 3) {
-			CertificateDownloader
-					.downloadCertificateFile(ServerFacade.produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
+			CertificateDownloader.downloadCertificateFile();
 			if (conStat.getState() != ConnectionState.INTERRUPTED) {
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 			}
