@@ -47,7 +47,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.RowSorterEvent;
 import javax.swing.event.RowSorterListener;
 import javax.swing.table.TableCellRenderer;
@@ -198,33 +197,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		tableProducts.setGridColor(Globals.PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR);
 		tableProducts.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
-		tableProducts.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-
-				// Ignore extra messages.
-				if (e.getValueIsAdjusting()) {
-					return;
-				}
-
-				clearEditing();
-
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-				if (lsm.isSelectionEmpty()) {
-					Logging.debug(this, "no rows selected");
-				} else {
-					int selectedRow = lsm.getMinSelectionIndex();
-					if (selectedRow == lsm.getMaxSelectionIndex()) {
-						Logging.debug(this, "selected " + selectedRow);
-						Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
-						Logging.debug(this, "selected  value at "
-								+ tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
-						mainController.setProductEdited(
-								(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
-					}
-				}
-			}
-		});
+		tableProducts.getSelectionModel().addListSelectionListener(this::applyChangedValue);
 
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -610,6 +583,29 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			});
 
 			sub.add(item);
+		}
+	}
+
+	private void applyChangedValue(ListSelectionEvent listSelectionEvent) {
+		if (listSelectionEvent.getValueIsAdjusting()) {
+			return;
+		}
+
+		clearEditing();
+
+		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
+		if (lsm.isSelectionEmpty()) {
+			Logging.debug(this, "no rows selected");
+		} else {
+			int selectedRow = lsm.getMinSelectionIndex();
+			if (selectedRow == lsm.getMaxSelectionIndex()) {
+				Logging.debug(this, "selected " + selectedRow);
+				Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
+				Logging.debug(this, "selected  value at "
+						+ tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
+				mainController.setProductEdited(
+						(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
+			}
 		}
 	}
 

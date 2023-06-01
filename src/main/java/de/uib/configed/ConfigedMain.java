@@ -4475,7 +4475,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		fEdit.setVisible(true);
 	}
 
-	private void showInformationHostExistsAlready(String clientId) {
+	private static void showInformationHostExistsAlready(String clientId) {
 		FTextArea fHostExistsInfo = new FTextArea(getMainFrame(),
 				Configed.getResourceValue("FGeneralDialog.title.information") + " (" + Globals.APPNAME + ") ", true,
 				new String[] { Configed.getResourceValue("FGeneralDialog.ok") });
