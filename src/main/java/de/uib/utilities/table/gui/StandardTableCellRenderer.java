@@ -58,30 +58,51 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 		}
 
 		if (Main.THEMES) {
-			if (isSelected) {
-				jc.setBackground(Globals.opsiBlue);
-				if (FlatLaf.isLafDark()) {
-					jc.setForeground(Globals.opsiForegroundDark);
-				} else {
-					jc.setForeground(Globals.opsiBackgroundLight);
-				}
-			} else if (FlatLaf.isLafDark()) {
-				jc.setBackground(Globals.opsiBackgroundDark);
-				jc.setForeground(Globals.opsiForegroundDark);
-			} else {
-				jc.setBackground(Globals.opsiBackgroundLight);
-				jc.setForeground(Globals.opsiForegroundLight);
-			}
-
-			if (row % 2 != 0) {
-				if (!FlatLaf.isLafDark() || isSelected) {
-					jc.setBackground(jc.getBackground().darker());
-				} else {
-					jc.setBackground(jc.getBackground().brighter());
-				}
-			}
+			colorizeTableCellTheme(jc, isSelected, row % 2 == 0);
 		}
 
 		return jc;
+	}
+
+	public static void colorizeTableCellTheme(Component component, boolean isSelected, boolean isRowEven) {
+		if (FlatLaf.isLafDark()) {
+			colorizeTableCellThemeDark(component, isSelected, isRowEven);
+		} else {
+			colorizeTableCellThemeLight(component, isSelected, isRowEven);
+		}
+	}
+
+	public static void colorizeTableCellThemeDark(Component component, boolean isSelected, boolean isRowEven) {
+
+		if (!isSelected) {
+			if (isRowEven) {
+				component.setBackground(Globals.opsiDarkGrey);
+			} else {
+				component.setBackground(Globals.opsiDarkGrey2);
+			}
+		} else {
+			if (isRowEven) {
+				component.setBackground(Globals.opsiDarkBlue);
+			} else {
+				component.setBackground(Globals.opsiBlue);
+			}
+		}
+	}
+
+	public static void colorizeTableCellThemeLight(Component component, boolean isSelected, boolean isRowEven) {
+
+		if (!isSelected) {
+			if (isRowEven) {
+				component.setBackground(Globals.opsiGrey);
+			} else {
+				component.setBackground(Globals.opsiLightGrey);
+			}
+		} else {
+			if (isRowEven) {
+				component.setBackground(Globals.opsiDarkBlue);
+			} else {
+				component.setBackground(Globals.opsiBlue);
+			}
+		}
 	}
 }

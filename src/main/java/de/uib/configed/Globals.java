@@ -74,19 +74,26 @@ public final class Globals {
 
 	public static boolean disableCertificateVerification;
 
-	// Here to prevent initialization
+	// New colors
 
 	public static final Color opsiDarkGrey = new Color(63, 63, 62);
+	public static final Color opsiDarkGrey2 = new Color(75, 75, 73);
+
 	public static final Color opsiGrey = new Color(178, 178, 178);
 	public static final Color opsiLightGrey = new Color(228, 228, 227);
+
 	public static final Color opsiMagenta = new Color(203, 30, 88);
+
 	public static final Color opsiBlue = new Color(63, 90, 166);
+	public static final Color opsiDarkBlue = new Color(45, 65, 120);
 
 	public static final Color opsiBackgroundLight = new Color(255, 255, 255);
 	public static final Color opsiBackgroundDark = new Color(31, 31, 31);
 
 	public static final Color opsiForegroundLight = new Color(0, 0, 0);
 	public static final Color opsiForegroundDark = new Color(225, 225, 225);
+
+	// End new colors
 
 	public static final Font defaultFont = new Font("SansSerif", 0, 11);
 	public static final Font defaultFontStandardBold = new Font("SansSerif", Font.BOLD, 11);
