@@ -52,7 +52,10 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 			displayGeneralDialog(message);
 			break;
 		case INVALID_HOSTNAME_ERROR:
-			displayGeneralDialog(message);
+
+			if (conStat.getState() != ConnectionState.RETRY_CONNECTION) {
+				displayGeneralDialog(message);
+			}
 			break;
 		case MFA_ERROR:
 			displayMFADialog();
@@ -101,11 +104,15 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 			CertificateDownloader
 					.downloadCertificateFile(ServerFacade.produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
 			CertificateManager.saveCertificate(CertificateDownloader.getDownloadedCertificateFile());
-			conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+			if (conStat.getState() != ConnectionState.INTERRUPTED) {
+				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+			}
 		} else if (choice == 3) {
 			CertificateDownloader
 					.downloadCertificateFile(ServerFacade.produceBaseURL("/ssl/" + Globals.CERTIFICATE_FILE));
-			conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+			if (conStat.getState() != ConnectionState.INTERRUPTED) {
+				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
+			}
 		}
 	}
 
@@ -134,11 +141,8 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 
 		int choice = fErrorMsg.getResult();
 
-		Logging.devel(this, "choice: " + choice);
-
 		if (choice == 1) {
 			conStat = new ConnectionState(ConnectionState.INTERRUPTED);
-			Logging.devel(this, "conStat now: " + conStat);
 		}
 	}
 

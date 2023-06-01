@@ -173,6 +173,11 @@ public class ConnectionHandler {
 		} catch (SSLException ex) {
 			Logging.debug(this, "caught SSLException: " + ex);
 
+			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
+				conStat = reporter.getConnectionState();
+				return null;
+			}
+
 			StringBuilder message = new StringBuilder();
 			message.append(Configed.getResourceValue("JSONthroughHTTP.certificateWarning") + "\n\n");
 
@@ -191,6 +196,11 @@ public class ConnectionHandler {
 			conStat = reporter.getConnectionState();
 			return null;
 		} catch (IOException ex) {
+			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
+				conStat = reporter.getConnectionState();
+				return null;
+			}
+
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
 			Logging.error("Exception on connecting, ", ex);
 			return null;

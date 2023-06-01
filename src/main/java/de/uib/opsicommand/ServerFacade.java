@@ -229,7 +229,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		sendPOSTReqeust(connection, omc);
 
 		if (connection == null) {
-			conStat = handler.getConnectionState();
 			return null;
 		}
 
