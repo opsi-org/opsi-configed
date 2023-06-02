@@ -4,20 +4,14 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/* 
- * Map<String, String> is the map columnname -> value as String for some table row 
- *
- * 	uib, www.uib.de, 2012-2015
- * 
- *	author Rupert Röder
- *
- */
-
 package de.uib.utilities.table;
 
 import java.util.HashMap;
 import java.util.Locale;
 
+/* 
+ * Map<String, String> is the map columnname -> value as String for some table row 
+ */
 public class RowStringMap extends HashMap<String, Object> {
 	@Override
 	public String get(Object key) {

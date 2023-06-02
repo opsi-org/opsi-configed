@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/* 
- *
- * 	uib, www.uib.de, 2008-2009
- * 
- *	author Rupert Röder 
- *
- */
-
 package de.uib.utilities.table.updates;
 
 public class TableEditItem {
@@ -29,5 +21,4 @@ public class TableEditItem {
 	public boolean keyChanged() {
 		return true;
 	}
-
 }

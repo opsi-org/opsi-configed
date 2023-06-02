@@ -163,7 +163,10 @@ public class ExporterToPDF extends AbstractExportTable {
 						event.setHeader(metaData.get("header"));
 					} else if (metaData.containsKey("title")) {
 						event.setHeader(metaData.get("title"));
+					} else {
+						Logging.warning(this, "metadata contain neither header nor title");
 					}
+
 					writer.setPageEvent(event);
 				} catch (Exception ex) {
 					Logging.error("Error PdfWriter --- " + ex);

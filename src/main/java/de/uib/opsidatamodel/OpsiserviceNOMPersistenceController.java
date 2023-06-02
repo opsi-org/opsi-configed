@@ -8065,14 +8065,14 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 							String warningText =
 
-									String.format(
-											// locale,
-											Configed.getResourceValue("Permission.modules.clientcount.warning"),
+									String.format(Configed.getResourceValue("Permission.modules.clientcount.warning"),
 											"" + countClientsInThisBlock, "" + key,
 											"" + maxAllowedClientsForThisModule.getNumber());
 
 							missingModulesPermissionInfo.add(warningText);
 							Logging.warning(this, warningText);
+						} else {
+							// countClientsInThisBlock small enough, so nothing to do
 						}
 					}
 				}

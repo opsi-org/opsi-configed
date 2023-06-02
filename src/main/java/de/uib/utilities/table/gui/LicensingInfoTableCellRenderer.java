@@ -45,12 +45,14 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 		String columnName = licensingInfoMap.getColumnNames().get(column);
 		String rowName = licensingInfoMap.getModules().get(row);
 
-		if ((columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.modules")))
-				|| columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
+		if (columnName != null && (columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))
+				|| columnName.equals(Configed.getResourceValue("LicensingInfo.available")))) {
 			jc.setToolTipText(value.toString());
 		}
 
-		if (columnName != null && columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
+		if (columnName == null) {
+			Logging.warning(this, "columnName is null");
+		} else if (columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 			jc.setText("");
 
 			if (value.equals(true)) {
@@ -59,7 +61,7 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				jc.setIcon(Globals.createImageIcon("images/checked_void.png", ""));
 			}
 
-		} else if (columnName != null && !columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))
+		} else if (!columnName.equals(Configed.getResourceValue("LicensingInfo.modules"))
 				&& !columnName.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 			Map<String, Map<String, Map<String, Object>>> datesMap = licensingInfoMap.getDatesMap();
 			Map<String, Object> moduleToDateData = datesMap.get(columnName).get(rowName);
@@ -107,16 +109,17 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 					}
 					jc.setToolTipText("<html>" + Configed.getResourceValue("LicensingInfo.warning.days_over") + "<br>"
 							+ "clients: " + value.toString() + "<br>" + "license ids: " + licenses + "</html>");
+				} else {
+					Logging.warning(this, "unexpected state " + state);
 				}
-
+			} else {
+				// columnName is Configed.getResourceValue("LicensingInfo.modules"), so do nothing; should remain empty
 			}
 
 			String prevCol = licensingInfoMap.getColumnNames().get(column - 1);
 			try {
 				if (!prevCol.equals(Configed.getResourceValue("LicensingInfo.modules"))
-						&& !prevCol.equals(Configed.getResourceValue("LicensingInfo.available"))
-
-				) {
+						&& !prevCol.equals(Configed.getResourceValue("LicensingInfo.available"))) {
 					String clientNum = moduleToDateData.get(LicensingInfoMap.CLIENT_NUMBER).toString();
 					String prevClientNum = datesMap.get(prevCol).get(rowName).get(LicensingInfoMap.CLIENT_NUMBER)
 							.toString();

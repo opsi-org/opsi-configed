@@ -39,6 +39,8 @@ public class ModulePermissionValue {
 				Logging.debug(this, "maxClients directly given " + maxClients);
 			} else if (Boolean.TRUE.equals(booleanValue)) {
 				maxClients = ExtendedInteger.INFINITE;
+			} else {
+				// maxClients may remain zero since value is false
 			}
 		}
 
@@ -59,6 +61,8 @@ public class ModulePermissionValue {
 			if (checked) {
 				result = "yes".equalsIgnoreCase(sValue);
 			}
+		} else {
+			Logging.info("ob cannot be interpreted as boolean, it is " + ob.toString());
 		}
 
 		return result;
@@ -89,8 +93,9 @@ public class ModulePermissionValue {
 				if (number != null) {
 					result = new ExtendedInteger(number);
 				}
+			} else {
+				Logging.warning(this, "ob has unexpected type " + ob.getClass() + " in retrieveMaxClients");
 			}
-
 		}
 
 		return result;

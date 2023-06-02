@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * TablesearchPane.java // originally named SearchPane.java
- *
- * By uib, www.uib.de, 2011-2013, 2017,2020
- * Author: Rupert Röder
- * 
- */
-
 package de.uib.utilities.table.gui;
 
 import java.awt.Color;

@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * PanelGenEditTable.java
- *
- * By uib, www.uib.de, 2008-2017,2020-2021
- * Author: Rupert Röder
- *
- */
-
 package de.uib.utilities.table.gui;
 
 import java.awt.Color;
@@ -669,6 +661,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 						return;
 					} else if (deleteAllowed) {
 						tableModel.deleteRow(getSelectedRowInModelTerms());
+					} else {
+						Logging.warning(this, "nothing to delete, since nothing selected or deleting not allowed");
 					}
 				});
 				addPopupItem(menuItemDeleteRelation);
@@ -875,6 +869,8 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				} else if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
 
 					((DefaultRowSorter) sorter).setComparator(j, new IntComparatorForStrings());
+				} else {
+					Logging.warning(this, "cannot set comparator...");
 				}
 			}
 		}
@@ -1581,9 +1577,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			if (n + i < theTable.getRowCount()) {
 				n = n + i;
 			}
-
 		} else if (i < 0 && n + i >= 0) {
 			n = n + i;
+		} else {
+			Logging.warning(this, "we cannot move by " + i + " rows");
 		}
 
 		moveToRow(n);
@@ -1622,8 +1619,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-
 			cancel();
+		} else {
+			Logging.warning(this, "unexpected action on source " + e.getSource());
 		}
 	}
 

@@ -996,6 +996,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
 			main.invertClientselection();
+		} else {
+			// Do nothing on other keyPress events
 		}
 	}
 

@@ -4,12 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * (c) uib, www.uib.de, 2009-2013, 2022
- *
- * author Rupert Röder
- */
-
 package de.uib.utilities.datapanel;
 
 import java.text.Collator;
@@ -297,6 +291,8 @@ public class MapTableModel extends AbstractTableModel {
 							"getValueAt " + row + ", " + col + " result corrected for key  " + key + ": " + result);
 				}
 			}
+		} else {
+			Logging.warning(this, "col is neither 0 or 1, but " + col + ", so we don't know what to do...");
 		}
 
 		if (result == null) {
