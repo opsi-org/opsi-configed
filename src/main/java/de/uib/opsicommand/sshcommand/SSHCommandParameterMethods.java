@@ -158,6 +158,8 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 			outputDia = ((SSHConnectExec) caller).getDialog();
 		} else if (caller instanceof SSHConnectTerminal) {
 			outputDia = ((SSHConnectTerminal) caller).getDialog();
+		} else {
+			Logging.warning(this, "caller has unexpected type in parseParameter " + caller.getClass());
 		}
 		List<String> params = command.getParameterList();
 		if (!params.isEmpty()) {
@@ -272,6 +274,8 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		} else if (format.isEmpty()) {
 			result = getUserText(method, outputDia);
 			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
+		} else {
+			Logging.warning(this, "unexpected method " + method + " and format " + format);
 		}
 
 		return result;

@@ -342,40 +342,42 @@ public class PanelSWInfo extends JPanel {
 				@Override
 				public void action(int p) {
 
-					switch (p) {
-					case PopupMenuTrait.POPUP_RELOAD:
-						reload();
-						break;
-
-					case PopupMenuTrait.POPUP_FLOATINGCOPY:
-						floatExternalX();
-						break;
-
-					case PopupMenuTrait.POPUP_PDF:
-						sendToPDF();
-						break;
-
-					case PopupMenuTrait.POPUP_EXPORT_CSV:
-						sendToCSV();
-						break;
-
-					case PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV:
-						sendToCSVonlySelected();
-						break;
-
-					default:
-						Logging.warning(this, "no case found for popupmenutrait");
-						break;
-					}
+					actionOnPopupMenu(p);
 				}
-
 			};
 
 			popupTrait.addPopupListenersTo(new JComponent[] { this, panelTable.getTheTable(),
 					panelTable.getTheScrollpane(), jTable, scrollPaneSWInfo, scrollPaneSWInfo.getViewport() });
 
 		}
+	}
 
+	private void actionOnPopupMenu(int p) {
+		switch (p) {
+		case PopupMenuTrait.POPUP_RELOAD:
+			reload();
+			break;
+
+		case PopupMenuTrait.POPUP_FLOATINGCOPY:
+			floatExternalX();
+			break;
+
+		case PopupMenuTrait.POPUP_PDF:
+			sendToPDF();
+			break;
+
+		case PopupMenuTrait.POPUP_EXPORT_CSV:
+			sendToCSV();
+			break;
+
+		case PopupMenuTrait.POPUP_EXPORT_SELECTED_CSV:
+			sendToCSVonlySelected();
+			break;
+
+		default:
+			Logging.warning(this, "no case found for popupmenutrait");
+			break;
+		}
 	}
 
 	public void setWriteToFile(String path) {
@@ -448,6 +450,8 @@ public class PanelSWInfo extends JPanel {
 			csvExportTable.execute(exportPath, false);
 		} else if (kindOfExport == KindOfExport.PDF) {
 			sendToPDF();
+		} else {
+			Logging.warning(this, "unexpected kindOfExport " + kindOfExport);
 		}
 	}
 

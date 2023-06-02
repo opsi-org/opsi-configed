@@ -283,6 +283,8 @@ public class SSHConnectTerminal extends SSHConnect {
 				} else if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_KP_DOWN) {
 					dialog.getInputField().setText(dialog.getPrevCommandDown());
 					((Component) textField).requestFocusInWindow();
+				} else {
+					// Do nothing with other keys
 				}
 			}
 		};
