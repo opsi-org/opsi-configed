@@ -214,11 +214,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jCheckBoxCaseSensitive.addActionListener(this);
 
 		buttonFontPlus = new JButton(Globals.createImageIcon("images/font-plus.png", ""));
-		buttonFontPlus.setToolTipText(Configed.getResourceValue("TextPane.fontPlus"));
+		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
 		buttonFontPlus.addActionListener(this);
 
 		buttonFontMinus = new JButton(Globals.createImageIcon("images/font-minus.png", ""));
-		buttonFontMinus.setToolTipText(Configed.getResourceValue("TextPane.fontMinus"));
+		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
 		buttonFontMinus.addActionListener(this);
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));

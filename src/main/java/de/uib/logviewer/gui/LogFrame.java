@@ -11,6 +11,8 @@ import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedReader;
@@ -33,6 +35,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 
 import de.uib.Main;
@@ -222,12 +225,14 @@ public class LogFrame extends JFrame implements WindowListener {
 	private void setupMenuView() {
 
 		JMenuItem jMenuViewFontsizePlus = new JMenuItem(Configed.getResourceValue("TextPane.fontPlus"));
+		jMenuViewFontsizePlus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PLUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizePlus.addActionListener((ActionEvent e) -> {
 			logPane.increaseFontSize();
 			logPane.reload();
 		});
 
 		JMenuItem jMenuViewFontsizeMinus = new JMenuItem(Configed.getResourceValue("TextPane.fontMinus"));
+		jMenuViewFontsizeMinus.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, InputEvent.CTRL_DOWN_MASK));
 		jMenuViewFontsizeMinus.addActionListener((ActionEvent e) -> {
 			logPane.reduceFontSize();
 			logPane.reload();
