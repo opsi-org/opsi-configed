@@ -14,6 +14,8 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
+import de.uib.utilities.logging.Logging;
+
 public class JTableWithToolTips extends JTable {
 
 	public JTableWithToolTips() {
@@ -41,6 +43,8 @@ public class JTableWithToolTips extends JTable {
 					valstr = " " + val;
 				} else if (val instanceof String) {
 					valstr = (String) val;
+				} else {
+					Logging.warning(this, "val has unexpected class " + val.getClass());
 				}
 			}
 

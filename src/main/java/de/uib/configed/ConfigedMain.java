@@ -4375,7 +4375,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 		}
 
-		String confirmInfo = "";
+		String confirmInfo;
 
 		if (resetLocalbootProducts && resetNetbootProducts) {
 			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetProducts.question");
@@ -4383,6 +4383,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetLocalbootProducts.question");
 		} else if (resetNetbootProducts) {
 			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetNetbootProducts.question");
+		} else {
+			Logging.warning(this, "cannot reset products because they're neither localboot nor netboot");
+			return;
 		}
 
 		if (!confirmActionForSelectedClients(confirmInfo)) {

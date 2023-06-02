@@ -379,19 +379,21 @@ public class BackendMySQL {
 		StringBuilder mysql = new StringBuilder(" ( ");
 
 		for (int i = 0; i < length; i++) {
-			try {
 
-				if (i == 0) {
-					if (type == Type.NOT) {
-						mysql.append(" " + type);
-					}
-				} else if (type == Type.AND || type == Type.OR) {
-					mysql.append(type);
+			if (i == 0) {
+				if (type == Type.NOT) {
+					mysql.append(" " + type);
 				}
+			} else if (type == Type.AND || type == Type.OR) {
+				mysql.append(type);
+			} else {
+				// nothing to append here
+			}
 
+			try {
 				mysql.append(doJSONObject(mySQLRecursion, (JSONObject) jsonArray.get(i)));
-			} catch (Exception e) {
-				Logging.warning(this, "" + e);
+			} catch (JSONException e) {
+				Logging.warning(this, "cannot get jsonobject from jsonarray", e);
 			}
 		}
 

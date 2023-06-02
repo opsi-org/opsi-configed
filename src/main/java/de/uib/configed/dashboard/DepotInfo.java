@@ -14,6 +14,7 @@ import de.uib.configed.dashboard.collector.DepotData;
 import de.uib.configed.dashboard.collector.ProductData;
 import de.uib.configed.dashboard.view.MainView;
 import de.uib.configed.type.HostInfo;
+import de.uib.utilities.logging.Logging;
 
 public class DepotInfo implements DataChangeListener {
 	private MainView controller;
@@ -31,6 +32,8 @@ public class DepotInfo implements DataChangeListener {
 			controller.selectedDepotComboBox.getItems().addAll(DepotData.getDepots().keySet());
 		} else if (controller.selectedDepotComboBox.getItems().size() == 1) {
 			controller.selectedDepotComboBox.getItems().addAll(DepotData.getDepots().keySet());
+		} else {
+			Logging.warning(this, "it should not be possible to select several values");
 		}
 
 		String depotType = "-";

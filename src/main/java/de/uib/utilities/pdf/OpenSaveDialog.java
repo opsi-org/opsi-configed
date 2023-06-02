@@ -18,6 +18,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.GeneralFrame;
+import de.uib.utilities.logging.Logging;
 
 public class OpenSaveDialog implements ActionListener {
 
@@ -78,7 +79,8 @@ public class OpenSaveDialog implements ActionListener {
 		} else if (e.getSource() == saveBtn) {
 			saveAction = true;
 			leave();
+		} else {
+			Logging.warning(this, "unexpected action event on source " + e.getSource());
 		}
 	}
-
 }

@@ -207,6 +207,8 @@ public final class OpsiDataBackend {
 			attributeTextHost = HostInfo.CLIENT_IP_ADDRESS_KEY;
 		} else if (element instanceof DescriptionElement) {
 			attributeTextHost = HostInfo.CLIENT_DESCRIPTION_KEY;
+		} else {
+			// Not attributeTextHost for other Elements
 		}
 
 		if (attributeTextHost != null) {
@@ -247,6 +249,8 @@ public final class OpsiDataBackend {
 			attributeTextSoftware = ProductState.KEY_LAST_ACTION;
 		} else if (element instanceof SoftwareModificationTimeElement) {
 			attributeTextSoftware = ProductState.KEY_LAST_STATE_CHANGE;
+		} else {
+			// No attributeTextSoftware for other Elements
 		}
 
 		if (attributeTextSoftware != null) {
@@ -306,6 +310,8 @@ public final class OpsiDataBackend {
 			swauditAttributeText = "subVersion";
 		} else if (element instanceof SwAuditSoftwareIdElement) {
 			swauditAttributeText = "windowsSoftwareID";
+		} else {
+			// No swauditAttributeText for other Elements
 		}
 
 		if (swauditAttributeText != null && operation instanceof StringEqualsOperation) {

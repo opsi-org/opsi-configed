@@ -7,6 +7,7 @@
 package de.uib.utilities.swing;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +127,7 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 	// interface
 	// ActionListener
 	@Override
-	public void actionPerformed(java.awt.event.ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == nextButton) {
 			next();
 		} else if (e.getSource() == previousButton) {
@@ -135,6 +136,8 @@ public abstract class AbstractNavigationPanel extends JPanel implements ActionLi
 			last();
 		} else if (e.getSource() == firstButton) {
 			first();
+		} else {
+			Logging.warning(this, "unexpected action performed on source " + e.getSource());
 		}
 	}
 }

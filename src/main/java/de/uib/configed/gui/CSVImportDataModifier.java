@@ -101,6 +101,8 @@ public class CSVImportDataModifier {
 			} else if (ex instanceof CSVFieldCountException) {
 				title = Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.title");
 				message.append(Configed.getResourceValue("CSVImportDataDialog.infoUnequalLineLength.message"));
+			} else {
+				Logging.error(this, "unexpected CSVException of type " + ex.getClass());
 			}
 
 			FTextArea fInfo = new FTextArea(ConfigedMain.getMainFrame(), title + " (" + Globals.APPNAME + ") ", false,

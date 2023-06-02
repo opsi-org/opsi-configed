@@ -895,7 +895,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Minus");
 				reduceFontSize();
+			} else {
+				// Do nothing on other keys on jComboBoxSearch and jTextPane
 			}
+		} else {
+			Logging.warning(this, "unexpected keyevent on source " + e.getSource());
 		}
 	}
 
@@ -935,6 +939,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			increaseFontSize();
 		} else if (e.getSource() == buttonFontMinus) {
 			reduceFontSize();
+		} else {
+			Logging.warning(this, "unexpected action event on source " + e.getSource());
 		}
 	}
 }
