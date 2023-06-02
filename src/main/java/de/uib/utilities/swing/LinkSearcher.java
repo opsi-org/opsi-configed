@@ -59,7 +59,7 @@ public class LinkSearcher {
 
 	// return first pos in line of recognized string
 	// returns -1 if nothing is recognized
-	private int startOfMarkedString(String s) {
+	private static int startOfMarkedString(String s) {
 
 		if (s == null) {
 			return -1;
