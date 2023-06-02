@@ -111,6 +111,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 					reload();
 				} else if (p == PopupMenuTrait.POPUP_SAVE) {
 					actor.saveData();
+				} else {
+					Logging.warning(this, "unexpected action " + p);
 				}
 			}
 		};

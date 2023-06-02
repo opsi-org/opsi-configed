@@ -1108,65 +1108,75 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// what else to do:
 		switch (t) {
 		case CLIENTS:
-			Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
-
-			mainFrame.setConfigPanesEnabled(true);
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
-			mainFrame.setVisualViewIndex(saveClientsViewIndex);
-
-			Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
-
-			if (!reachableUpdater.isInterrupted()) {
-				reachableUpdater.interrupt();
-			}
-
-			if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
-				setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
-			}
-
+			setEditingClients();
 			break;
 		case DEPOTS:
-			Logging.info(this, "setEditingTarget  DEPOTS");
-
-			if (!reachableUpdater.isInterrupted()) {
-				reachableUpdater.interrupt();
-			}
-
-			initServer();
-			mainFrame.setConfigPanesEnabled(false);
-
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
-
-			Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
-					+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
-
-			mainFrame.setVisualViewIndex(saveDepotsViewIndex);
-
+			setEditingDepots();
 			break;
 		case SERVER:
-			if (!reachableUpdater.isInterrupted()) {
-				reachableUpdater.interrupt();
-			}
-
-			initServer();
-			mainFrame.setConfigPanesEnabled(false);
-
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
-
-			mainFrame.setVisualViewIndex(saveServerViewIndex);
+			setEditingServer();
 			break;
 		default:
 			break;
 		}
 
 		resetView(viewIndex);
+	}
+
+	private void setEditingClients() {
+		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+
+		mainFrame.setConfigPanesEnabled(true);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
+		mainFrame.setVisualViewIndex(saveClientsViewIndex);
+
+		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+
+		if (!reachableUpdater.isInterrupted()) {
+			reachableUpdater.interrupt();
+		}
+
+		if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
+			setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
+		}
+	}
+
+	private void setEditingDepots() {
+		Logging.info(this, "setEditingTarget  DEPOTS");
+
+		if (!reachableUpdater.isInterrupted()) {
+			reachableUpdater.interrupt();
+		}
+
+		initServer();
+		mainFrame.setConfigPanesEnabled(false);
+
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
+
+		Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
+				+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+
+		mainFrame.setVisualViewIndex(saveDepotsViewIndex);
+	}
+
+	private void setEditingServer() {
+		if (!reachableUpdater.isInterrupted()) {
+			reachableUpdater.interrupt();
+		}
+
+		initServer();
+		mainFrame.setConfigPanesEnabled(false);
+
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+
+		mainFrame.setVisualViewIndex(saveServerViewIndex);
 	}
 
 	private void actOnListSelection() {

@@ -161,9 +161,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				.addComponent(panelByAuditInfo, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						GroupLayout.PREFERRED_SIZE)
 				.addGap(vGap / 2, vGap / 2, vGap / 2)
-				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE)
-
-		);
+				.addComponent(contentPane, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE, Short.MAX_VALUE));
 
 		if (withPopup) {
 
@@ -181,26 +179,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 						floatExternal();
 						break;
 					case PopupMenuTrait.POPUP_PDF:
-						Logging.info(this, "create report");
-						// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
-						HashMap<String, String> metaData = new HashMap<>();
-						metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
-						title = "";
-						if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
-							title = title + "Depot: " + main.getHostsStatusInfo().getInvolvedDepots();
-						}
-						if (main.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
-							title = title + "; Client: " + main.getHostsStatusInfo().getSelectedClientNames();
-						}
-						metaData.put("title", title);
-						metaData.put("keywords", "hardware infos");
-
-						ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
-						pdfExportTable.setMetaData(metaData);
-						pdfExportTable.setPageSizeA4Landscape();
-						// create pdf // no filename, onlyselectedRows=false
-						pdfExportTable.execute(null, false);
-
+						exportPDF();
 						break;
 
 					default:
@@ -213,6 +192,28 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			popupMenu.addPopupListenersTo(new JComponent[] { tree, table });
 		}
 
+	}
+
+	private void exportPDF() {
+		Logging.info(this, "create report");
+		// TODO letzter scan, Auswahl für den ByAudit-Treiberpfad???
+		HashMap<String, String> metaData = new HashMap<>();
+		metaData.put("header", Configed.getResourceValue("PanelHWInfo.createPDF.title"));
+		title = "";
+		if (main.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
+			title = title + "Depot: " + main.getHostsStatusInfo().getInvolvedDepots();
+		}
+		if (main.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
+			title = title + "; Client: " + main.getHostsStatusInfo().getSelectedClientNames();
+		}
+		metaData.put("title", title);
+		metaData.put("keywords", "hardware infos");
+
+		ExporterToPDF pdfExportTable = new ExporterToPDF(createHWInfoTableModelComplete());
+		pdfExportTable.setMetaData(metaData);
+		pdfExportTable.setPageSizeA4Landscape();
+		// create pdf // no filename, onlyselectedRows=false
+		pdfExportTable.execute(null, false);
 	}
 
 	/** overwrite in subclasses */
@@ -466,7 +467,6 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 				panelByAuditInfo.setByAuditFields(vendorStringComputerSystem, vendorStringBaseBoard, modelString,
 						productString);
 			}
-
 		}
 	}
 

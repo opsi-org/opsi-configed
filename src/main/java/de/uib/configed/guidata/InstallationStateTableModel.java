@@ -1200,15 +1200,7 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 			return productNamesInDeliveryOrder.indexOf(actualProduct);
 
 		case 12:
-			String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
-					.get(ProductState.KEY_VERSION_INFO);
-			String result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
-			if (result != null && !(result.isEmpty()) && serverProductVersion != null
-					&& !(serverProductVersion.equals(result))) {
-				return UNEQUAL_ADD_STRING + result;
-			} else {
-				return result;
-			}
+			return actualProductVersion();
 
 		case 13:
 			return combinedVisualValues.get(ProductState.KEY_PRODUCT_VERSION).get(actualProduct);
@@ -1221,6 +1213,18 @@ public class InstallationStateTableModel extends AbstractTableModel implements I
 
 		default:
 			return null;
+		}
+	}
+
+	private String actualProductVersion() {
+		String serverProductVersion = (String) getGlobalProductInfos().get(actualProduct)
+				.get(ProductState.KEY_VERSION_INFO);
+		String result = combinedVisualValues.get(ProductState.KEY_VERSION_INFO).get(actualProduct);
+		if (result != null && !(result.isEmpty()) && serverProductVersion != null
+				&& !(serverProductVersion.equals(result))) {
+			return UNEQUAL_ADD_STRING + result;
+		} else {
+			return result;
 		}
 	}
 

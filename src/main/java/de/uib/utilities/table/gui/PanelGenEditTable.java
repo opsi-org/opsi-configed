@@ -652,19 +652,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				menuItemDeleteRelation = new JMenuItemFormatted(
 						Configed.getResourceValue("PanelGenEditTable.deleteRow"));
 				menuItemDeleteRelation.setEnabled(false);
-				menuItemDeleteRelation.addActionListener((ActionEvent actionEvent) -> {
-					if (getSelectedRowCount() == 0) {
-						JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-								Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
-								Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
-
-						return;
-					} else if (deleteAllowed) {
-						tableModel.deleteRow(getSelectedRowInModelTerms());
-					} else {
-						Logging.warning(this, "nothing to delete, since nothing selected or deleting not allowed");
-					}
-				});
+				menuItemDeleteRelation.addActionListener((ActionEvent actionEvent) -> deleteRelation());
 				addPopupItem(menuItemDeleteRelation);
 
 				break;
@@ -672,13 +660,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			case POPUP_PRINT:
 				JMenuItemFormatted menuItemPrint = new JMenuItemFormatted(
 						Configed.getResourceValue("PanelGenEditTable.print"));
-				menuItemPrint.addActionListener((ActionEvent actionEvent) -> {
-					try {
-						theTable.print();
-					} catch (PrinterException ex) {
-						Logging.error("Printing error ", ex);
-					}
-				});
+				menuItemPrint.addActionListener((ActionEvent actionEvent) -> print());
 
 				addPopupItem(menuItemPrint);
 
@@ -722,6 +704,26 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				Logging.warning(this, "no case found for popuptype in addPopupmenuStandardpart");
 				break;
 			}
+		}
+	}
+
+	private void print() {
+		try {
+			theTable.print();
+		} catch (PrinterException ex) {
+			Logging.error("Printing error ", ex);
+		}
+	}
+
+	private void deleteRelation() {
+		if (getSelectedRowCount() == 0) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+		} else if (deleteAllowed) {
+			tableModel.deleteRow(getSelectedRowInModelTerms());
+		} else {
+			Logging.warning(this, "nothing to delete, since nothing selected or deleting not allowed");
 		}
 	}
 

@@ -112,8 +112,6 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 				} else {
 					Logging.warning(this, "unexpected state " + state);
 				}
-			} else {
-				// columnName is Configed.getResourceValue("LicensingInfo.modules"), so do nothing; should remain empty
 			}
 
 			String prevCol = licensingInfoMap.getColumnNames().get(column - 1);
@@ -133,6 +131,8 @@ public class LicensingInfoTableCellRenderer extends DefaultTableCellRenderer {
 			} catch (Exception ex) {
 				Logging.error(this, "Exception thrown: " + ex);
 			}
+		} else {
+			// columnName is Configed.getResourceValue("LicensingInfo.modules"), so do nothing; should remain empty
 		}
 
 		return jc;
