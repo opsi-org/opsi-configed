@@ -176,6 +176,8 @@ public final class SSHConfigDialog extends FGeneralDialog {
 			} catch (Exception e) {
 				Logging.warning(this, "Error", e);
 			}
+		} else {
+			// continue with the rest of the method
 		}
 
 		if (jCheckBoxUseOutputColor != null) {

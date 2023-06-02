@@ -52,6 +52,8 @@ public class StringBlock {
 				} else {
 					result = i;
 				}
+			} else {
+				// Do nothing when c is not at start or the end
 			}
 
 			i++;

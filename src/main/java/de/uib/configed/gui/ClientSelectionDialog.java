@@ -530,6 +530,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			addDataComponent(result, ((JComboBox<?>) result.operationComponent).getSelectedIndex());
 		} else if (operations.length == 1) {
 			addDataComponent(result, 0);
+		} else {
+			// Do nothing with no operations
 		}
 
 		return result;
@@ -941,6 +943,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				} else {
 					complex.closeParenthesis.setActivated(false);
 				}
+			} else {
+				// Do nothing when no parenthesis is activated
 			}
 		}
 
@@ -1227,6 +1231,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			((SpinnerWithExtension) component).setValue((Long) data.getData());
 		} else if (component instanceof JSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
 			((JSpinner) component).setValue(data.getData());
+		} else {
+			Logging.warning("component " + component + " with datatype " + data.getType() + " not treated");
 		}
 	}
 
@@ -1372,6 +1378,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			index = ((JComboBox<?>) source).getSelectedIndex();
 		} else if (source instanceof JLabel) {
 			index = 0;
+		} else {
+			Logging.warning(this, "unexpected source in selectOperation: " + source);
 		}
 		addDataComponent(sourceGroup, index);
 
@@ -1406,16 +1414,15 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					JOptionPane.OK_OPTION);
 			toFront();
 
-			return;
 		} else if (!text.matches("[\\p{javaLowerCase}\\d_-]*")) {
 			JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
 			toFront();
 
-			return;
-		}
+		} else {
 
-		collectData();
-		manager.saveSearch(text, saveDescriptionField.getText());
-		savedSearchesDialog.reloadAction();
+			collectData();
+			manager.saveSearch(text, saveDescriptionField.getText());
+			savedSearchesDialog.reloadAction();
+		}
 	}
 }

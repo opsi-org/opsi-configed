@@ -228,13 +228,11 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 				depotParameter = OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!depots.isEmpty()) {
 				depotParameter = depots.get(0);
+			} else {
+				Logging.warning(this, "cannot find depot to set depotParameter");
 			}
 		} else {
-			if (selectedDepots.contains(
-
-					OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)
-
-			) {
+			if (selectedDepots.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = "";
 			} else if (selectedDepots.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL)) {
 				depotParameter = "all";

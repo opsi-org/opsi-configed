@@ -20,8 +20,7 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 
 /**
- * This class is a little command line tool which can execute saved searches. //
- * TODO remove???
+ * This class is a little command line tool which can execute saved searches.
  */
 public class SavedSearchQuery {
 

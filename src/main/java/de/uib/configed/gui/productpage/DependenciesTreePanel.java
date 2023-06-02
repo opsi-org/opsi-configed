@@ -34,6 +34,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.DependenciesTreeModel;
+import de.uib.utilities.logging.Logging;
 
 public class DependenciesTreePanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener {
 
@@ -206,6 +207,8 @@ public class DependenciesTreePanel extends JPanel implements MouseListener, Mous
 				Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 				clipboard.setContents(stringSelection, stringSelection);
 			}
+		} else {
+			Logging.warning(this, "unexpected action on source " + event.getSource());
 		}
 	}
 

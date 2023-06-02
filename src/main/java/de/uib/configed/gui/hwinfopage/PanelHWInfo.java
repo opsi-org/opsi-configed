@@ -288,8 +288,9 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 			return ((float) Math.round(v.floatValue() * 1000 / (mult * mult)) / 1000) + " M" + unit;
 		} else if (v.compareTo(BigInteger.valueOf(mult)) >= 0) {
 			return ((float) Math.round(v.floatValue() * 1000 / (mult)) / 1000) + " k" + unit;
+		} else {
+			return value + " " + unit;
 		}
-		return value + " " + unit;
 	}
 
 	private void expandRows(List<Integer> rows) {
@@ -383,6 +384,8 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 								} else if (opsi.equalsIgnoreCase(KEY_MODEL)) {
 									modelString = cv;
 
+								} else {
+									Logging.warning(this, "unexpected value for opsi: " + opsi);
 								}
 							} else if (hwClass.equals(CLASS_BASE_BOARD)) {
 								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
@@ -390,8 +393,11 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 
 								} else if (opsi.equalsIgnoreCase(KEY_PRODUCT)) {
 									productString = cv;
-
+								} else {
+									Logging.warning(this, "unexpected value for opsi: " + opsi);
 								}
+							} else {
+								Logging.warning(this, "unexpected value for hwclass: " + hwClass);
 							}
 						}
 

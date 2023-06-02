@@ -293,6 +293,8 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 			panelEditProperties.setVisible(isPanelEditPropertiesVisible);
 			panelEditProperties.setTitlePanelActivated(isPanelEditPropertiesVisible);
+		} else {
+			Logging.warning(this, "unexpected action performed on source " + event.getSource());
 		}
 	}
 
