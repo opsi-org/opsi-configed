@@ -82,8 +82,8 @@ public class ConnectionHandler {
 	/**
 	 * Retrieves the {@link ConnectionState}. {@code ConnectionHandler} uses
 	 * {@link ConnectionState} to indicate the state of the connection. The
-	 * connection state can change during the {@code establishConnection} method
-	 * execution.
+	 * connection state can change during the
+	 * {@link #establishConnection(boolean)} method execution.
 	 * <p>
 	 * Currently possible {@link ConnectionState} can be:
 	 * <ul>
@@ -105,8 +105,8 @@ public class ConnectionHandler {
 
 	/**
 	 * Sets the request method to use for the connection (during the
-	 * {@code establishConnection} method execution). By default the request
-	 * method is {@code POST}.
+	 * {@link #establishConnection(boolean)} method execution). By default the
+	 * request method is {@code POST}.
 	 * 
 	 * @param requestMethod to use for the connection.
 	 */
@@ -121,8 +121,8 @@ public class ConnectionHandler {
 	 * enabled.
 	 * <p>
 	 * The request method for the connection is by default set to {@code POST}.
-	 * However, if you want to change it you can use {@code setRequestMethod}
-	 * method. For Example:
+	 * However, if you want to change it you can use
+	 * {@link #setRequestMethod(String)} method. For Example:
 	 * <p>
 	 * <blockquote>
 	 * 

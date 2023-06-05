@@ -13,6 +13,10 @@ import javax.net.ssl.SSLSession;
 
 import de.uib.utilities.logging.Logging;
 
+/**
+ * {@code MyHandshakeCompletedListener} logs some information about the server,
+ * with which the connection was established.
+ */
 public class MyHandshakeCompletedListener implements HandshakeCompletedListener {
 	@Override
 	public void handshakeCompleted(HandshakeCompletedEvent event) {

@@ -20,6 +20,10 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 
+/**
+ * {@code CertificateDownloader} downloads certificate file from the specified
+ * server.
+ */
 public final class CertificateDownloader {
 	private static File downloadedCertificateFile;
 	private static String urlPath;
@@ -27,10 +31,19 @@ public final class CertificateDownloader {
 	private CertificateDownloader() {
 	}
 
+	/**
+	 * Initializes URL path to use for downloaded certificate file.
+	 * 
+	 * @param newUrlPath from which to download certificate.
+	 */
 	public static void init(String newUrlPath) {
 		urlPath = newUrlPath;
 	}
 
+	/**
+	 * Downloades certificate from the specified URL path (in the
+	 * {@link #init(String)} method).
+	 */
 	public static void downloadCertificateFile() {
 		if (urlPath == null) {
 			Logging.error("CertificateDownloader wasn't initialized");
@@ -73,6 +86,11 @@ public final class CertificateDownloader {
 		downloadedCertificateFile = tmpCertFile;
 	}
 
+	/**
+	 * Retrieves downloaded certificate.
+	 * 
+	 * @return downloaded certificate.
+	 */
 	public static File getDownloadedCertificateFile() {
 		return downloadedCertificateFile;
 	}

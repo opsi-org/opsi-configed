@@ -20,6 +20,15 @@ import org.apache.maven.artifact.versioning.ComparableVersion;
 
 import de.uib.utilities.logging.Logging;
 
+/**
+ * {@code OpsiServerVersionRetriever} retrieves version of the opsi server.
+ * <p>
+ * It sends a {@code HEAD} request method to the specified URL to retrieve
+ * headers. The {@code Server} header is then used to retrieve the server
+ * version. For establishing connection with the server, it uses
+ * {@link InsecureCertificateValidator}, to avoid dealing with certificate
+ * verificaiton.
+ */
 public class OpsiServerVersionRetriever {
 	private static final Pattern versionPattern = Pattern.compile("opsiconfd ([\\d\\.]+)");
 	private static final int EXPECTED_SERVER_VERSION_LENGTH = 4;

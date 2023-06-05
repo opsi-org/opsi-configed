@@ -189,7 +189,8 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 	 * <p>
 	 * <ul>
 	 * <li>{@code INTERRUPTED} indicates that the user was informed about the
-	 * error, and that nothing could be done to resolve the error.</li>
+	 * error, and that nothing could be done to resolve the error or user has
+	 * ignored the error.</li>
 	 * <li>{@code RETRY_CONNECTION} indicates that the user was informed about
 	 * the error, and that the error was resolved.</li>
 	 * </ul>
