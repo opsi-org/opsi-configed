@@ -111,6 +111,8 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 			if (conStat.getState() != ConnectionState.INTERRUPTED) {
 				conStat = new ConnectionState(ConnectionState.RETRY_CONNECTION);
 			}
+		} else {
+			// There are only three options a user can select from.
 		}
 	}
 
