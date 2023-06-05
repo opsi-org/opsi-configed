@@ -64,6 +64,7 @@ public class OpsiServerVersionRetriever {
 	/**
 	 * Checks if the server version is already known, loads it otherwise
 	 */
+	@SuppressWarnings("java:S2647")
 	public void checkServerVersion() {
 		if (serverVersion[0] != 0) {
 			return;

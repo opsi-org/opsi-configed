@@ -181,6 +181,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 * @return retrieved response from the server.
 	 */
 	@Override
+	@SuppressWarnings("java:S1168")
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		background = false;
 		Logging.info(this, "retrieveResponse started");
