@@ -57,7 +57,9 @@ import de.uib.utilities.logging.Logging;
  * </blockquote>
  */
 public class ConnectionHandler {
-	private URL serviceUrl;
+	private static final String[] SUPPORTED_REQUEST_METHODS = { "POST", "GET" };
+
+	private URL serviceURL;
 	private Map<String, String> requestProperties;
 	private ConnectionState conStat;
 	private ConnectionErrorObserver observer;
@@ -67,11 +69,11 @@ public class ConnectionHandler {
 	/**
 	 * Constructs {@code ConnectionHandler} object with provided information.
 	 * 
-	 * @param serviceUrl        service URL with which to connect.
+	 * @param serviceURL        service URL with which to connect.
 	 * @param requestProperties additional request properties.
 	 */
-	public ConnectionHandler(URL serviceUrl, Map<String, String> requestProperties) {
-		this.serviceUrl = serviceUrl;
+	public ConnectionHandler(URL serviceURL, Map<String, String> requestProperties) {
+		this.serviceURL = serviceURL;
 		this.requestProperties = new HashMap<>(requestProperties);
 		this.conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 		this.observer = ConnectionErrorObserver.getInstance();
@@ -107,11 +109,31 @@ public class ConnectionHandler {
 	 * Sets the request method to use for the connection (during the
 	 * {@link #establishConnection(boolean)} method execution). By default the
 	 * request method is {@code POST}.
+	 * <p>
+	 * You can only pass supported request methods and a null, if no request
+	 * method should be used. Currently supported request methods are
+	 * {@code POST} and {@code GET}.
 	 * 
 	 * @param requestMethod to use for the connection.
+	 * @throws IllegalArgumentException if request method is not supported.
 	 */
-	public void setRequestMethod(String requestMethod) {
-		this.requestMethod = requestMethod;
+	public void setRequestMethod(String requestMethod) throws IllegalArgumentException {
+		if (requestMethod == null) {
+			Logging.info(this, "no request method is used");
+			this.requestMethod = requestMethod;
+			return;
+		}
+
+		for (String supportedRequestMethod : SUPPORTED_REQUEST_METHODS) {
+			if (supportedRequestMethod.equals(requestMethod)) {
+				Logging.info(this, "request method is supported: " + requestMethod);
+				this.requestMethod = requestMethod;
+				return;
+			} else {
+				Logging.warning(this, "request method is unsupported: " + requestMethod);
+				throw new IllegalArgumentException("request method is unsupported: " + requestMethod);
+			}
+		}
 	}
 
 	/**
@@ -153,7 +175,7 @@ public class ConnectionHandler {
 		HttpsURLConnection connection = null;
 
 		try {
-			connection = (HttpsURLConnection) serviceUrl.openConnection();
+			connection = (HttpsURLConnection) serviceURL.openConnection();
 			connection.setDoOutput(doOutput);
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
@@ -180,39 +202,42 @@ public class ConnectionHandler {
 		} catch (SSLException ex) {
 			Logging.debug(this, "caught SSLException: " + ex);
 
-			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
-				conStat = reporter.getConnectionState();
-				return null;
+			if (reporter.getConnectionState().getState() != ConnectionState.INTERRUPTED) {
+				observer.notify(produceCertificateWarningMessage(certValidator),
+						ConnectionErrorType.FAILED_CERTIFICATE_VALIDATION_ERROR);
 			}
-
-			StringBuilder message = new StringBuilder();
-			message.append(Configed.getResourceValue("JSONthroughHTTP.certificateWarning") + "\n\n");
-
-			if (certValidator.certificateLocallyAvailable()) {
-				message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
-				message.append(Configed.getResourceValue("JSONthroughHTTP.unableToVerify"));
-			} else {
-				message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
-				message.append(Configed.getResourceValue("JSONthroughHTTP.noCertificateFound"));
-			}
-
-			message.append("\n\n");
-			message.append(Configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
-			observer.notify(message.toString(), ConnectionErrorType.FAILED_CERTIFICATE_VALIDATION_ERROR);
 
 			conStat = reporter.getConnectionState();
 			return null;
 		} catch (IOException ex) {
 			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				conStat = reporter.getConnectionState();
-				return null;
+			} else {
+				conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
+				Logging.error("Exception on connecting, ", ex);
 			}
 
-			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
-			Logging.error("Exception on connecting, ", ex);
 			return null;
 		}
 
 		return connection;
+	}
+
+	private static String produceCertificateWarningMessage(CertificateValidator certValidator) {
+		StringBuilder message = new StringBuilder();
+		message.append(Configed.getResourceValue("JSONthroughHTTP.certificateWarning") + "\n\n");
+
+		if (certValidator.certificateLocallyAvailable()) {
+			message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
+			message.append(Configed.getResourceValue("JSONthroughHTTP.unableToVerify"));
+		} else {
+			message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
+			message.append(Configed.getResourceValue("JSONthroughHTTP.noCertificateFound"));
+		}
+
+		message.append("\n\n");
+		message.append(Configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
+
+		return message.toString();
 	}
 }
