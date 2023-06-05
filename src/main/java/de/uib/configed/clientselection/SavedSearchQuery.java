@@ -31,12 +31,17 @@ public class SavedSearchQuery {
 
 	private OpsiserviceNOMPersistenceController controller;
 
-	public SavedSearchQuery() {
+	public SavedSearchQuery(String host, String user, String password, String searchName) {
 		Logging.setLogLevelFile(Logging.LEVEL_NONE);
 		Logging.setLogLevelConsole(Logging.LEVEL_NONE);
+
+		setArgs(host, user, password, searchName);
+		addMissingArgs();
+
+		initConnection();
 	}
 
-	public void setArgs(String host, String user, String password, String searchName) {
+	private void setArgs(String host, String user, String password, String searchName) {
 		Logging.info(this, "setArgs " + host + ", PASSWORD, " + searchName);
 		this.host = host;
 		this.user = user;
@@ -44,7 +49,7 @@ public class SavedSearchQuery {
 		this.searchName = searchName;
 	}
 
-	public void addMissingArgs() {
+	private void addMissingArgs() {
 		if (host == null) {
 			host = Globals.getCLIparam("Host: ", false);
 		}
@@ -56,15 +61,18 @@ public class SavedSearchQuery {
 		}
 	}
 
-	public List<String> runSearch(boolean printing) {
-
-		Messages.setLocale("en");
+	private void initConnection() {
 		controller = PersistenceControllerFactory.getNewPersistenceController(host, user, password);
 
 		if (controller == null || controller.getConnectionState().getState() != ConnectionState.CONNECTED) {
 			Logging.error("Authentication error.");
 			Main.endApp(1);
 		}
+
+		Messages.setLocale("en");
+	}
+
+	public List<String> runSearch(boolean printing) {
 
 		Map<String, Map<String, Object>> depots = controller.getHostInfoCollections().getAllDepots();
 
@@ -92,10 +100,6 @@ public class SavedSearchQuery {
 	}
 
 	public void populateHostGroup(List<String> hosts, String groupName) {
-		if (controller == null) {
-			Logging.error("controller not initialized");
-			Main.endApp(3);
-		}
 
 		if (hosts == null) {
 			Logging.error("hosts collection not initialized");

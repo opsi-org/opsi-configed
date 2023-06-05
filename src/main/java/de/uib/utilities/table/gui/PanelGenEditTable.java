@@ -129,7 +129,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private JMenuItemFormatted menuItemSave;
 	private JMenuItemFormatted menuItemCancel;
 
-	private Comparator[] comparators;
+	private Comparator<?>[] comparators;
 
 	private JScrollPane scrollpane;
 	protected JTable theTable;
@@ -624,19 +624,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_RELOAD:
-
-				JMenuItemFormatted menuItemReload = new JMenuItemFormatted(
-						Configed.getResourceValue("PanelGenEditTable.reload"),
-						Globals.createImageIcon("images/reload16.png", ""));
-
-				// does not work
-				menuItemReload.addActionListener(actionEvent -> reload());
-				if (popupIndex > 1) {
-					popupMenu.addSeparator();
-				}
-
-				addPopupItem(menuItemReload);
-
+				addPopupItemReload();
 				break;
 
 			case POPUP_SORT_AGAIN:
@@ -649,11 +637,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_DELETE_ROW:
-				menuItemDeleteRelation = new JMenuItemFormatted(
-						Configed.getResourceValue("PanelGenEditTable.deleteRow"));
-				menuItemDeleteRelation.setEnabled(false);
-				menuItemDeleteRelation.addActionListener((ActionEvent actionEvent) -> deleteRelation());
-				addPopupItem(menuItemDeleteRelation);
+				addPopupMenuDeleteRow();
 
 				break;
 
@@ -668,15 +652,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case POPUP_FLOATINGCOPY:
 
-				JMenuItemFormatted menuItemFloatingCopy = new JMenuItemFormatted(
-						Configed.getResourceValue("PanelGenEditTable.floatingCopy"));
-				menuItemFloatingCopy.addActionListener(actionEvent -> floatExternal());
-
-				if (popupIndex > 1) {
-					popupMenu.addSeparator();
-				}
-
-				addPopupItem(menuItemFloatingCopy);
+				addPopupMenuFloatingCopy();
 				break;
 
 			case POPUP_EXPORT_CSV:
@@ -705,6 +681,39 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 			}
 		}
+	}
+
+	private void addPopupItemReload() {
+		JMenuItemFormatted menuItemReload = new JMenuItemFormatted(
+				Configed.getResourceValue("PanelGenEditTable.reload"),
+				Globals.createImageIcon("images/reload16.png", ""));
+
+		// does not work
+		menuItemReload.addActionListener(actionEvent -> reload());
+		if (popupIndex > 1) {
+			popupMenu.addSeparator();
+		}
+
+		addPopupItem(menuItemReload);
+	}
+
+	private void addPopupMenuFloatingCopy() {
+		JMenuItemFormatted menuItemFloatingCopy = new JMenuItemFormatted(
+				Configed.getResourceValue("PanelGenEditTable.floatingCopy"));
+		menuItemFloatingCopy.addActionListener(actionEvent -> floatExternal());
+
+		if (popupIndex > 1) {
+			popupMenu.addSeparator();
+		}
+
+		addPopupItem(menuItemFloatingCopy);
+	}
+
+	private void addPopupMenuDeleteRow() {
+		menuItemDeleteRelation = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.deleteRow"));
+		menuItemDeleteRelation.setEnabled(false);
+		menuItemDeleteRelation.addActionListener((ActionEvent actionEvent) -> deleteRelation());
+		addPopupItem(menuItemDeleteRelation);
 	}
 
 	private void print() {
@@ -867,10 +876,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				if (comparators[j] != null) {
 					Logging.info(this, " set sorter for column " + j + " " + comparators[j]);
 					// restore previously explicitly assigned comparator
-					((DefaultRowSorter) sorter).setComparator(j, comparators[j]);
+					((DefaultRowSorter<?, ?>) sorter).setComparator(j, comparators[j]);
 				} else if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
 
-					((DefaultRowSorter) sorter).setComparator(j, new IntComparatorForStrings());
+					((DefaultRowSorter<?, ?>) sorter).setComparator(j, new IntComparatorForStrings());
 				} else {
 					Logging.warning(this, "cannot set comparator...");
 				}

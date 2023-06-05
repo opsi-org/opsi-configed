@@ -240,27 +240,24 @@ public class SSHCompletionComboButton {
 		new Thread() {
 			@Override
 			public void run() {
-				try {
-					EmptyCommand getDirectories = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
-							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
-						/** Sets the command specific error text **/
-						@Override
-						public String getErrorText() {
-							return ROOT_DIRECTORY;
-						}
-					};
 
-					SSHConnectExec ssh = new SSHConnectExec();
-					String result = ssh.exec(getDirectories, false);
-					if (result == null || result.isEmpty()) {
-						result = HOME_DIRECTORY;
+				EmptyCommand getDirectories = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
+						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
+					/** Sets the command specific error text **/
+					@Override
+					public String getErrorText() {
+						return ROOT_DIRECTORY;
 					}
+				};
 
-					setItems(result, curdir);
-					enableComponents(true);
-				} catch (Exception e) {
-					Logging.error("getDirectoriesIn failed", e);
+				SSHConnectExec ssh = new SSHConnectExec();
+				String result = ssh.exec(getDirectories, false);
+				if (result == null || result.isEmpty()) {
+					result = HOME_DIRECTORY;
 				}
+
+				setItems(result, curdir);
+				enableComponents(true);
 			}
 		}.start();
 	}
