@@ -54,6 +54,8 @@ public class RemoteControls extends HashMap<String, RemoteControl> {
 						rc.setCommand(value);
 					} else if (remainder.equals(RemoteControl.EDITABLE_KEY)) {
 						rc.setEditable(value);
+					} else {
+						Logging.warning(this, "unexpected remainder " + remainder);
 					}
 				} else {
 					// there are no 3rd level keys

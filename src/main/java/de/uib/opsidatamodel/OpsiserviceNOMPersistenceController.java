@@ -1243,6 +1243,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 				// something similar should work, but not this:
 				result = true;
 			}
+		} else {
+			// No UEFI configuration
 		}
 
 		return result;
@@ -2524,7 +2526,10 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			if (hwAuditConf.get("") == null) {
 				Logging.warning(this, "got no hardware config");
 			}
+		} else {
+			// hwAuditConf already contains key "" and is initialized
 		}
+
 		return hwAuditConf.get("");
 	}
 
@@ -2956,6 +2961,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			} else if (tableConfigUpdates.get(value) != null && tableConfigUpdates.get(value)) {
 				// change, value is now configured
 				newDefaultValues.add(value);
+			} else {
+				// value is contained nowhere
 			}
 		}
 
@@ -5200,6 +5207,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 						Logging.warning(this, "illegal order format for domain entry: " + entry);
 						unorderedValues.add(entry);
 					}
+				} else {
+					Logging.warning(this, "p has unexpected value " + p);
 				}
 			}
 
@@ -7797,6 +7806,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 							missingModulesPermissionInfo.add(warningText);
 							Logging.warning(this, warningText);
+						} else {
+							// Do nothing when countClientsInThisBlock <= startWarningCount
 						}
 					}
 				}
@@ -8054,14 +8065,14 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 
 							String warningText =
 
-									String.format(
-											// locale,
-											Configed.getResourceValue("Permission.modules.clientcount.warning"),
+									String.format(Configed.getResourceValue("Permission.modules.clientcount.warning"),
 											"" + countClientsInThisBlock, "" + key,
 											"" + maxAllowedClientsForThisModule.getNumber());
 
 							missingModulesPermissionInfo.add(warningText);
 							Logging.warning(this, warningText);
+						} else {
+							// countClientsInThisBlock small enough, so nothing to do
 						}
 					}
 				}

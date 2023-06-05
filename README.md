@@ -1,4 +1,4 @@
-# configed ausprobieren
+# opsi-configed
 
 ## devcontainer on windows
 * install MobaXterm and start it

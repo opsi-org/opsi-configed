@@ -4,13 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- *
- * (c) uib, www.uib.de, 2009-2017
- *
- * author Rupert Röder
- */
-
 package de.uib.utilities.datapanel;
 
 import java.awt.BorderLayout;
@@ -250,6 +243,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			propertyHandler = defaultPropertyHandler;
 
 			removeProperty(names.get(table.getSelectedRow()));
+		} else {
+			Logging.warning(this, "names list is null, so cannot remove property in deleteEntry");
 		}
 	}
 
@@ -266,6 +261,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			propertyHandler = removingSpecificValuesPropertyHandler;
 
 			removeProperty(names.get(table.getSelectedRow()));
+		} else {
+			Logging.warning(this, "names list is null, so cannot remove property in deleteSpecificEntry");
 		}
 	}
 
@@ -283,6 +280,8 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			propertyHandler = settingDefaultValuesPropertyHandler;
 
 			removeProperty(names.get(table.getSelectedRow()));
+		} else {
+			Logging.warning(this, "names list is null, so cannot remove property in removeDefaultAsSpecificEntry");
 		}
 	}
 

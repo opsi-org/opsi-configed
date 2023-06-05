@@ -43,6 +43,8 @@ public class CheckedDocument extends PlainDocument {
 					cCorrected = Character.toLowerCase(c);
 				} else if (Character.isUpperCase(allowedChars[j])) {
 					cCorrected = Character.toUpperCase(c);
+				} else {
+					// Character does not fit, so continue
 				}
 
 				try {

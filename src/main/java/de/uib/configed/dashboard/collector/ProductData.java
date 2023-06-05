@@ -216,6 +216,8 @@ public final class ProductData {
 							}
 
 							allUnusedProducts.remove(productId);
+						} else {
+							// Do nothing when product not installed or installation failed
 						}
 					}
 

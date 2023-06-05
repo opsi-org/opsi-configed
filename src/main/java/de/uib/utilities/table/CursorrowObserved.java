@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- *
- * 	uib, www.uib.de, 2020
- * 
- *	authors Rupert Röder
- *
- */
-
 package de.uib.utilities.table;
 
 import java.util.HashSet;

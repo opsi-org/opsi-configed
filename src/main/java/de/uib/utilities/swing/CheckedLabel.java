@@ -4,13 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
-*	CheckedLabel.java
-*	(c) uib 2017
-*	GPL licensed
-*   Author Rupert Röder
-*/
-
 package de.uib.utilities.swing;
 
 import java.awt.Font;

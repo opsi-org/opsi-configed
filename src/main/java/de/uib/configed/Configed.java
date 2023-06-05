@@ -477,20 +477,15 @@ public final class Configed {
 		if (optionCLIQuerySearch) {
 
 			Logging.debug("optionCLIQuerySearch");
-			SavedSearchQuery query = new SavedSearchQuery();
-
-			query.setArgs(host, user, password, savedSearch);
-			query.addMissingArgs();
+			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
 
 			query.runSearch(true);
 			Main.endApp(Main.NO_ERROR);
 		} else if (optionCLIDefineGroupBySearch) {
 			Logging.debug("optionCLIDefineGroupBySearch");
 
-			SavedSearchQuery query = new SavedSearchQuery();
+			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
 
-			query.setArgs(host, user, password, savedSearch);
-			query.addMissingArgs();
 			List<String> newGroupMembers = query.runSearch(false);
 
 			query.populateHostGroup(newGroupMembers, group);

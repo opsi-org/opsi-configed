@@ -5,13 +5,6 @@
  */
 
 package de.uib.configed.guidata;
-/*
- * SearchTargetModelFromInstallationStateTable.java
- *
- * By uib, www.uib.de, 2017
- * Author: Rupert Röder
- * 
- */
 
 import java.util.Arrays;
 

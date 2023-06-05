@@ -4,13 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- *
- * (c) uib, www.uib.de, 2013
- *
- * author Rupert Röder
- */
-
 package de.uib.utilities.datapanel;
 
 import java.util.ArrayList;
@@ -118,6 +111,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 					reload();
 				} else if (p == PopupMenuTrait.POPUP_SAVE) {
 					actor.saveData();
+				} else {
+					Logging.warning(this, "unexpected action " + p);
 				}
 			}
 		};

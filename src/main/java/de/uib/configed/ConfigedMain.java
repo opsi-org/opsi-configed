@@ -1108,65 +1108,75 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// what else to do:
 		switch (t) {
 		case CLIENTS:
-			Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
-
-			mainFrame.setConfigPanesEnabled(true);
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
-			mainFrame.setVisualViewIndex(saveClientsViewIndex);
-
-			Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
-
-			if (!reachableUpdater.isInterrupted()) {
-				reachableUpdater.interrupt();
-			}
-
-			if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
-				setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
-			}
-
+			setEditingClients();
 			break;
 		case DEPOTS:
-			Logging.info(this, "setEditingTarget  DEPOTS");
-
-			if (!reachableUpdater.isInterrupted()) {
-				reachableUpdater.interrupt();
-			}
-
-			initServer();
-			mainFrame.setConfigPanesEnabled(false);
-
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
-
-			Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
-					+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
-
-			mainFrame.setVisualViewIndex(saveDepotsViewIndex);
-
+			setEditingDepots();
 			break;
 		case SERVER:
-			if (!reachableUpdater.isInterrupted()) {
-				reachableUpdater.interrupt();
-			}
-
-			initServer();
-			mainFrame.setConfigPanesEnabled(false);
-
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
-
-			mainFrame.setVisualViewIndex(saveServerViewIndex);
+			setEditingServer();
 			break;
 		default:
 			break;
 		}
 
 		resetView(viewIndex);
+	}
+
+	private void setEditingClients() {
+		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+
+		mainFrame.setConfigPanesEnabled(true);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
+		mainFrame.setVisualViewIndex(saveClientsViewIndex);
+
+		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+
+		if (!reachableUpdater.isInterrupted()) {
+			reachableUpdater.interrupt();
+		}
+
+		if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
+			setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
+		}
+	}
+
+	private void setEditingDepots() {
+		Logging.info(this, "setEditingTarget  DEPOTS");
+
+		if (!reachableUpdater.isInterrupted()) {
+			reachableUpdater.interrupt();
+		}
+
+		initServer();
+		mainFrame.setConfigPanesEnabled(false);
+
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
+
+		Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
+				+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+
+		mainFrame.setVisualViewIndex(saveDepotsViewIndex);
+	}
+
+	private void setEditingServer() {
+		if (!reachableUpdater.isInterrupted()) {
+			reachableUpdater.interrupt();
+		}
+
+		initServer();
+		mainFrame.setConfigPanesEnabled(false);
+
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+
+		mainFrame.setVisualViewIndex(saveServerViewIndex);
 	}
 
 	private void actOnListSelection() {
@@ -3370,9 +3380,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// we will only leave view 0 if a PC is selected
 
 		// check if change of view index to the value of visualViewIndex can be allowed
-		if (visualViewIndex != VIEW_CLIENTS
-				&& (!(visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER)
-						&& !(visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS))) {
+		if (isVisualIndexAllowed(visualViewIndex)) {
 
 			Logging.debug(this, " selected clients " + Arrays.toString(getSelectedClients()));
 
@@ -3439,6 +3447,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 			// dont keep product editing across views
 		}
+	}
+
+	private static boolean isVisualIndexAllowed(int visualViewIndex) {
+
+		// We cannot change to clients
+		if (visualViewIndex == VIEW_CLIENTS) {
+			return false;
+		}
+
+		// We cannot change to network configuration if the server is edited
+		if (visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER) {
+			return false;
+		}
+
+		return !(visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS);
 	}
 
 	private void updateLocalbootProductStates() {
@@ -4375,7 +4398,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 		}
 
-		String confirmInfo = "";
+		String confirmInfo;
 
 		if (resetLocalbootProducts && resetNetbootProducts) {
 			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetProducts.question");
@@ -4383,6 +4406,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetLocalbootProducts.question");
 		} else if (resetNetbootProducts) {
 			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetNetbootProducts.question");
+		} else {
+			Logging.warning(this, "cannot reset products because they're neither localboot nor netboot");
+			return;
 		}
 
 		if (!confirmActionForSelectedClients(confirmInfo)) {

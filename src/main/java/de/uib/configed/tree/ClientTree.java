@@ -287,6 +287,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			// don't go backwards by this key
 			e.consume();
+		} else {
+			// Do nothing on other key events
 		}
 	}
 

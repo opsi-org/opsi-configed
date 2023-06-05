@@ -512,6 +512,8 @@ public final class LicensingInfoMap {
 					} else if (key.equals(getLatestDate()) && checkTimeLeft(moduleInfo).equals(STATE_DAYS_OVER)) {
 						moduleInfo.put(STATE, STATE_DAYS_OVER);
 						currentTimeOverModuleList.add(currentModule);
+					} else {
+						// no warnings to add
 					}
 
 					String futureCheck = checkFuture(moduleInfo, currentModule, key);
@@ -523,6 +525,8 @@ public final class LicensingInfoMap {
 							futureOverLimitModuleList.add(currentModule);
 						} else if (futureCheck.equals(STATE_CLOSE_TO_LIMIT)) {
 							futureCloseToLimitModuleList.add(currentModule);
+						} else {
+							// Not close to limit, so nothing to do
 						}
 					} else {
 						moduleInfo.put(FUTURE_STATE, "null");

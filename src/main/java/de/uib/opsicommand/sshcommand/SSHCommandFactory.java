@@ -37,12 +37,15 @@ public final class SSHCommandFactory {
 	/** final string commands for linux terminal **/
 	public static final String STRING_REPLACEMENT_DIRECTORY = "*.dir.*";
 	// http://stackoverflow.com/questions/948008/linux-command-to-list-all-available-commands-and-aliases
-	public static final String STRING_COMMAND_GET_LINUX_COMMANDS = "COMMANDS=`echo -n $PATH | xargs -d : -I {} find {} -maxdepth 1 -executable -type f -printf '%P\\n'` ; ALIASES=`alias | cut -d '=' -f 1`; echo \"$COMMANDS\"$'\\n'\"$ALIASES\" | sort -u ";
+	public static final String STRING_COMMAND_GET_LINUX_COMMANDS = "COMMANDS=`echo -n $PATH "
+			+ "| xargs -d : -I {} find {} -maxdepth 1 -executable -type f -printf '%P\\n'` ;"
+			+ " ALIASES=`alias | cut -d '=' -f 1`; echo \"$COMMANDS\"$'\\n'\"$ALIASES\" | sort -u ";
 	public static final String STRING_COMMAND_GET_DIRECTORIES = "ls --color=never -d *.dir.*/*/";
 	public static final String STRING_COMMAND_GET_OPSI_FILES = "ls --color=never *.dir.*/*.opsi";
 	public static final String STRING_COMMAND_GET_VERSIONS = "grep version: *.dir.* --max-count=2  ";
 	public static final String STRING_COMMAND_CAT_DIRECTORY = "cat *.dir.*OPSI/control | grep \"id: \"";
-	public static final String STRING_COMMAND_FILE_EXISTS_NOT_REMOVE = "[ -d .filename. ] && echo \"File exists\" || echo \"File not exist\"";
+	public static final String STRING_COMMAND_FILE_EXISTS_NOT_REMOVE = "[ -d .filename. ] && echo \"File exists\" "
+			+ "|| echo \"File not exist\"";
 
 	public static final String STRING_REPLACEMENT_FILENAME = ".filename.";
 

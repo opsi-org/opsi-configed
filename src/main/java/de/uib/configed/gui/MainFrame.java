@@ -920,6 +920,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		if (!Main.THEMES) {
 			jMenuSSHConnection.setForeground(Globals.UNKNOWN_COLOR);
 		}
+
 		if (status.equals(SSHCommandFactory.NOT_CONNECTED)) {
 
 			if (!Main.THEMES) {
@@ -937,6 +938,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				jMenuSSHConnection.setForeground(Globals.OK_COLOR);
 			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTED);
+		} else {
+			Logging.warning(this, "unexpected status of ssh connection " + status);
 		}
 	}
 
@@ -3263,6 +3266,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 				} else {
 					changedClientInfo.remove(HostInfo.CLIENT_IP_ADDRESS_KEY);
 				}
+			} else {
+				Logging.warning(this, "unexpected source in reactToHostDataChange: " + e.getSource());
 			}
 		}
 	}
@@ -3364,6 +3369,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			configedMain.initDashInfo();
 		} else if (e.getSource() == jButtonOpsiLicenses) {
 			showOpsiModules();
+		} else {
+			Logging.warning(this, "unexpected action on source " + e.getSource());
 		}
 	}
 
@@ -3449,8 +3456,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 
 		if (showHardwareLogNotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
 			showHardwareLogNotFound = new JPanel();
-			showHardwareLogNotFound
-					.add(new JLabel(label));
+			showHardwareLogNotFound.add(new JLabel(label));
 			showHardwareLogParentOfNotFoundPanel = new JPanel();
 			if (!Main.THEMES) {
 				showHardwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_7);

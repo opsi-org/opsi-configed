@@ -1,12 +1,18 @@
 # Changelog
 
-## [unversioned] - undated
+## [unversioned] - 2023-06-01
+
+### Fixed
+- Opening zip-files with the opsi-logviewer works
+
+## [4.2.22.1] - 2023-06-01
 
 ### Added
 - opsi-logviewer is now part of opsi-configed
 
 ### Changed
 - Were using now Messagepack for datatransfer with server -> performance boost
+- Property for language removed, since language changes in configed will be saved for user
 
 ### Fixed
 - You cannot make on-demand actions when in readonly mode

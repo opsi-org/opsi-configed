@@ -500,6 +500,8 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 					doAction2();
 				} else if (e.getSource() == jButton3) {
 					doAction3();
+				} else {
+					Logging.warning(this, "unexpected action on source " + e.getSource());
 				}
 			}
 		}
@@ -592,6 +594,8 @@ public class FGeneralDialog extends JDialog implements ActionListener, KeyListen
 			preAction3();
 			doAction3();
 			postAction3();
+		} else {
+			Logging.warning(this, "unexpected action source " + e.getSource());
 		}
 	}
 

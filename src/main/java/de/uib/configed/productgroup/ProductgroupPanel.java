@@ -841,6 +841,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 		} else if (e.getSource() == buttonCollectiveAction) {
 
 			handleCollectiveAction(s, (IFInstallationStateTableModel) tableProducts.getModel());
+		} else {
+			Logging.warning(this, "unexpected action performed on source " + e.getSource());
 		}
 	}
 
@@ -906,6 +908,8 @@ public class ProductgroupPanel extends JPanel implements ListSelectionListener, 
 				enterExistingGroup();
 			} else if (e.getSource() == saveNameEditor) {
 				enterEditGroup();
+			} else {
+				Logging.warning(this, "unexpected itemEvent on source " + e.getSource());
 			}
 		}
 	}

@@ -92,26 +92,15 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	private boolean foundVariantLicencepools;
 
 	public FSoftwarename2LicencePool(JFrame owner, ControlPanelAssignToLPools myController) {
-		super(
+		super(owner, Configed.getResourceValue("FSoftwarename2LicencePool.title"), false, new String[] {
 
-				owner, Configed.getResourceValue("FSoftwarename2LicencePool.title"), false, new String[] {
-
-						Configed.getResourceValue("FSoftwarename2LicencePool.buttonClose") },
-				new Icon[] {
-
-						Globals.createImageIcon("images/cancel16_small.png", "") },
-				1, 700, 800);
+				Configed.getResourceValue("FSoftwarename2LicencePool.buttonClose") },
+				new Icon[] { Globals.createImageIcon("images/cancel16_small.png", "") }, 1, 700, 800);
 
 		this.myController = myController;
 
-		panelSWnames = new PanelGenEditTable("",
-
-				0, false, // editing,
-				0, true // switchLineColors
-				, new int[] { PanelGenEditTable.POPUP_RELOAD },
-				// , PanelGenEditTable.POPUPS_NOT_EDITABLE_TABLE_PDF,
-				true // searchpane
-		) {
+		panelSWnames = new PanelGenEditTable("", 0, false, 0, true, new int[] { PanelGenEditTable.POPUP_RELOAD },
+				true) {
 			@Override
 			public void setDataChanged(boolean b) {
 				Logging.info(this, "panelSWNames setDataChanged " + b);
@@ -159,6 +148,10 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		initDataStructure();
 
+		initLayout();
+	}
+
+	private void initLayout() {
 		buttonRemoveAllAssignments = new JButton();
 		buttonRemoveAllAssignments.setIcon(Globals.createImageIcon("images/list-remove-14.png", ""));
 		buttonRemoveAllAssignments.setPreferredSize(Globals.shortButtonDimension);
@@ -182,13 +175,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		buttonSetAllAssignmentsToPoolFromSelectedRow.setIcon(Globals.createImageIcon("images/list-add-14.png", ""));
 		labelSetAllAssignmentsToPoolFromSelectedRow = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicencePool.labelSetAllAssignmentsToPoolFromSelectedRow")); // assign
-																																												// each
-																																												// to
-																																												// pool
-																																												// from
-																																												// selected
-																																												// row:
-																																												// ")
 
 		buttonSetAllAssignmentsToPoolFromSelectedRow
 				.addActionListener(actionEvent -> panelSWxLicencepool.setDataChanged(
@@ -252,9 +238,7 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		layoutSWx.setVerticalGroup(layoutSWx.createSequentialGroup().addGap(Globals.VGAP_SIZE)
 				.addComponent(panelSWxLicencepool, 100, 200, Short.MAX_VALUE).addGap(Globals.VGAP_SIZE)
-				.addComponent(panelAction, 70, 70, 100).addGap(Globals.VGAP_SIZE)
-
-		);
+				.addComponent(panelAction, 70, 70, 100).addGap(Globals.VGAP_SIZE));
 
 		layoutSWx.setHorizontalGroup(layoutSWx.createParallelGroup()
 				.addGroup(layoutSWx.createSequentialGroup().addGap(Globals.HGAP_SIZE)

@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/* 
- *
- * 	uib, www.uib.de, 2014
- * 
- *	author Rupert Röder 
- *
- */
-
 package de.uib.utilities.table.provider;
 
 import java.util.List;

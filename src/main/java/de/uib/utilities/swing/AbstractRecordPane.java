@@ -7,15 +7,6 @@
 package de.uib.utilities.swing;
 
 import java.awt.event.KeyListener;
-/*
-* RecordPane.java
-* 
-* (c) uib 2012
-* GPL-licensed
-* author Rupert Röder
-*
-*
-*/
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;

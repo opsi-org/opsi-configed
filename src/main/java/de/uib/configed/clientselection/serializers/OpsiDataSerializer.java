@@ -329,20 +329,12 @@ public class OpsiDataSerializer {
 			while (parser.next()) {
 				switch (parser.getPositionType()) {
 				case OBJECT_BEGIN:
-					if (name == null) {
-						Logging.warning(this, "name is null, in case OBJECT_BEGIN");
-					} else {
-						result.put(name, parseObject());
-					}
+					addObjectToResult(result, name);
 					break;
 				case OBJECT_END:
 					return result;
 				case LIST_BEGIN:
-					if (name == null) {
-						Logging.warning(this, "name is null, in case LIST_BEGIN");
-					} else {
-						result.put(name, parseList(name));
-					}
+					addListToResult(result, name);
 					break;
 				case JSON_NAME:
 					name = parser.getValue();
@@ -350,11 +342,7 @@ public class OpsiDataSerializer {
 					Logging.debug(this, name);
 					break;
 				case JSON_VALUE:
-					if (name == null) {
-						Logging.warning(this, "name is null, in case JSON_VALUE");
-					} else {
-						result.put(name, stringToObject(parser.getValue(), name));
-					}
+					addValueToResult(result, name);
 					break;
 				default:
 					throw new IllegalArgumentException("Type " + parser.getPositionType() + " not expected here");
@@ -402,6 +390,30 @@ public class OpsiDataSerializer {
 		}
 
 		return list;
+	}
+
+	private void addObjectToResult(Map<String, Object> result, String name) {
+		if (name == null) {
+			Logging.warning(this, "name is null, in case OBJECT_BEGIN");
+		} else {
+			result.put(name, parseObject());
+		}
+	}
+
+	private void addListToResult(Map<String, Object> result, String name) {
+		if (name == null) {
+			Logging.warning(this, "name is null, in case LIST_BEGIN");
+		} else {
+			result.put(name, parseList(name));
+		}
+	}
+
+	private void addValueToResult(Map<String, Object> result, String name) {
+		if (name == null) {
+			Logging.warning(this, "name is null, in case JSON_VALUE");
+		} else {
+			result.put(name, stringToObject(parser.getValue(), name));
+		}
 	}
 
 	private Object stringToObject(String value, String name) {

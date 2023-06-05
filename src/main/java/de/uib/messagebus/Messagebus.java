@@ -383,11 +383,7 @@ public class Messagebus implements MessagebusListener {
 		if (type.startsWith("terminal_")) {
 			switch (type) {
 			case "terminal_data_read":
-				try {
-					WebSocketInputStream.write((byte[]) message.get("data"));
-				} catch (IOException e) {
-					Logging.error(this, "failed to write message: ", e);
-				}
+				onTerminalDataRead((byte[]) message.get("data"));
 				break;
 			case "terminal_open_event":
 				Terminal terminal = Terminal.getInstance();
@@ -421,62 +417,74 @@ public class Messagebus implements MessagebusListener {
 		} else if ("channel_subscription_event".equals(type)) {
 			initialSubscriptionReceived = true;
 		} else if ("event".equals(type)) {
-			try {
-				// Sleep for a little because otherwise we cannot get the needed Data from the Server
-				Thread.sleep(5);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-
-			ObjectMapper objectMapper = new ObjectMapper();
-			TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
-			};
-			Map<String, Object> eventData = objectMapper.convertValue(message.get("data"), typeRef);
-
-			switch ((String) message.get("event")) {
-			case "host_connected":
-				Map<String, Object> connectedHostData = objectMapper.convertValue(eventData.get("host"), typeRef);
-				String connectedClientId = (String) connectedHostData.get("id");
-				configedMain.addClientToConnectedList(connectedClientId);
-				break;
-
-			case "host_disconnected":
-				Map<String, Object> disconnectedHostData = objectMapper.convertValue(eventData.get("host"), typeRef);
-				String disconnectedClientId = (String) disconnectedHostData.get("id");
-				configedMain.removeClientFromConnectedList(disconnectedClientId);
-				break;
-
-			case "host_created":
-				configedMain.addClientToTable((String) eventData.get("id"));
-				break;
-
-			case "host_deleted":
-				configedMain.removeClientFromTable((String) eventData.get("id"));
-				break;
-
-			case "productOnClient_created":
-				configedMain.updateProduct(
-						objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
-						}));
-				break;
-
-			case "productOnClient_updated":
-				configedMain.updateProduct(
-						objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
-						}));
-				break;
-
-			case "productOnClient_deleted":
-				configedMain.updateProduct(
-						objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
-						}));
-				break;
-
-			default:
-				break;
-			}
+			onEvent(message);
 		} else {
 			Logging.warning(this, "unexpected message type " + type);
+		}
+	}
+
+	private void onTerminalDataRead(byte[] data) {
+		try {
+			WebSocketInputStream.write(data);
+		} catch (IOException e) {
+			Logging.error(this, "failed to write message: ", e);
+		}
+	}
+
+	private void onEvent(Map<String, Object> message) {
+		try {
+			// Sleep for a little because otherwise we cannot get the needed Data from the Server
+			Thread.sleep(5);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>() {
+		};
+		Map<String, Object> eventData = objectMapper.convertValue(message.get("data"), typeRef);
+
+		switch ((String) message.get("event")) {
+		case "host_connected":
+			Map<String, Object> connectedHostData = objectMapper.convertValue(eventData.get("host"), typeRef);
+			String connectedClientId = (String) connectedHostData.get("id");
+			configedMain.addClientToConnectedList(connectedClientId);
+			break;
+
+		case "host_disconnected":
+			Map<String, Object> disconnectedHostData = objectMapper.convertValue(eventData.get("host"), typeRef);
+			String disconnectedClientId = (String) disconnectedHostData.get("id");
+			configedMain.removeClientFromConnectedList(disconnectedClientId);
+			break;
+
+		case "host_created":
+			configedMain.addClientToTable((String) eventData.get("id"));
+			break;
+
+		case "host_deleted":
+			configedMain.removeClientFromTable((String) eventData.get("id"));
+			break;
+
+		case "productOnClient_created":
+			configedMain.updateProduct(
+					objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
+					}));
+			break;
+
+		case "productOnClient_updated":
+			configedMain.updateProduct(
+					objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
+					}));
+			break;
+
+		case "productOnClient_deleted":
+			configedMain.updateProduct(
+					objectMapper.convertValue(message.get("data"), new TypeReference<Map<String, String>>() {
+					}));
+			break;
+
+		default:
+			break;
 		}
 	}
 }

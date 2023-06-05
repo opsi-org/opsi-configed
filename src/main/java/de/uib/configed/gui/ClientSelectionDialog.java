@@ -76,6 +76,7 @@ import de.uib.configed.type.SavedSearch;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
+import de.uib.utilities.observer.swing.AbstractValueChangeListener;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.LowerCaseTextField;
 import de.uib.utilities.swing.TextInputField;
@@ -530,6 +531,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			addDataComponent(result, ((JComboBox<?>) result.operationComponent).getSelectedIndex());
 		} else if (operations.length == 1) {
 			addDataComponent(result, 0);
+		} else {
+			// Do nothing with no operations
 		}
 
 		return result;
@@ -941,6 +944,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 				} else {
 					complex.closeParenthesis.setActivated(false);
 				}
+			} else {
+				// Do nothing when no parenthesis is activated
 			}
 		}
 
@@ -959,80 +964,29 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		}
 		switch (sourceGroup.element.supportedOperations().get(operationIndex).getDataType()) {
 		case TEXT_TYPE:
-			TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
-			fieldText.setEditable(true);
-			fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-			fieldText.setToolTipText(
-					/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-			fieldText.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
-			sourceGroup.dataComponent = fieldText;
+			addTextTypeComponent(sourceGroup);
 			break;
+
 		case DOUBLE_TYPE:
-
-			TextInputField fieldDouble = new TextInputField("");
-			fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-			fieldDouble.setToolTipText(
-					/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-			fieldDouble.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
-			sourceGroup.dataComponent = fieldDouble;
+			addDoubleTypeComponent(sourceGroup);
 			break;
+
 		case ENUM_TYPE:
-
-			TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
-			box.setEditable(true);
-			box.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
-			box.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
-			sourceGroup.dataComponent = box;
+			addEnumTypeComponent(sourceGroup);
 			break;
+
 		case DATE_TYPE:
-			TextInputField fieldDate = new TextInputField(null);
-			fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
-			fieldDate.setToolTipText("yyyy-mm-dd");
-			fieldDate.addValueChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
-			sourceGroup.dataComponent = fieldDate;
+			addDateTypeComponent(sourceGroup);
 			break;
 
 		case INTEGER_TYPE:
-			JSpinner spinner = new JSpinner();
-			spinner.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
-			sourceGroup.dataComponent = spinner;
+			addIntegerTypeComponent(sourceGroup);
 			break;
-		case BIG_INTEGER_TYPE:
-			SpinnerWithExtension swx = new SpinnerWithExtension();
-			swx.addChangeListener(new de.uib.utilities.observer.swing.AbstractValueChangeListener() {
-				@Override
-				protected void actOnChange() {
-					buildParentheses();
-				}
-			});
 
-			sourceGroup.dataComponent = swx;
+		case BIG_INTEGER_TYPE:
+			addBigIntegerTypeComponent(sourceGroup);
 			break;
+
 		case NONE_TYPE:
 			return;
 		}
@@ -1042,6 +996,84 @@ public class ClientSelectionDialog extends FGeneralDialog {
 		sourceGroup.vRow.addComponent(sourceGroup.dataComponent, GroupLayout.Alignment.CENTER, minHeight, minHeight,
 				minHeight);
 		hGroupData.addComponent(sourceGroup.dataComponent, 100, 100, Short.MAX_VALUE);
+	}
+
+	private void addTextTypeComponent(SimpleGroup sourceGroup) {
+		TextInputField fieldText = new TextInputField("", sourceGroup.element.getEnumData());
+		fieldText.setEditable(true);
+		fieldText.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
+		fieldText.setToolTipText(
+				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		fieldText.addValueChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+		sourceGroup.dataComponent = fieldText;
+	}
+
+	private void addEnumTypeComponent(SimpleGroup sourceGroup) {
+		TextInputField box = new TextInputField("", sourceGroup.element.getEnumData());
+		box.setEditable(true);
+		box.setToolTipText(Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		box.addValueChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+		sourceGroup.dataComponent = box;
+	}
+
+	private void addDateTypeComponent(SimpleGroup sourceGroup) {
+		TextInputField fieldDate = new TextInputField(null);
+		fieldDate.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
+		fieldDate.setToolTipText("yyyy-mm-dd");
+		fieldDate.addValueChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+		sourceGroup.dataComponent = fieldDate;
+	}
+
+	private void addIntegerTypeComponent(SimpleGroup sourceGroup) {
+		JSpinner spinner = new JSpinner();
+		spinner.addChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+		sourceGroup.dataComponent = spinner;
+	}
+
+	private void addBigIntegerTypeComponent(SimpleGroup sourceGroup) {
+		SpinnerWithExtension swx = new SpinnerWithExtension();
+		swx.addChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+
+		sourceGroup.dataComponent = swx;
+	}
+
+	private void addDoubleTypeComponent(SimpleGroup sourceGroup) {
+		TextInputField fieldDouble = new TextInputField("");
+		fieldDouble.setSize(new Dimension(Globals.BUTTON_WIDTH, Globals.LINE_HEIGHT));
+		fieldDouble.setToolTipText(
+				/* "Use * as wildcard" */Configed.getResourceValue("ClientSelectionDialog.textInputToolTip"));
+		fieldDouble.addValueChangeListener(new AbstractValueChangeListener() {
+			@Override
+			protected void actOnChange() {
+				buildParentheses();
+			}
+		});
+		sourceGroup.dataComponent = fieldDouble;
 	}
 
 	/*
@@ -1227,6 +1259,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			((SpinnerWithExtension) component).setValue((Long) data.getData());
 		} else if (component instanceof JSpinner && data.getType() == SelectData.DataType.INTEGER_TYPE) {
 			((JSpinner) component).setValue(data.getData());
+		} else {
+			Logging.warning("component " + component + " with datatype " + data.getType() + " not treated");
 		}
 	}
 
@@ -1372,6 +1406,8 @@ public class ClientSelectionDialog extends FGeneralDialog {
 			index = ((JComboBox<?>) source).getSelectedIndex();
 		} else if (source instanceof JLabel) {
 			index = 0;
+		} else {
+			Logging.warning(this, "unexpected source in selectOperation: " + source);
 		}
 		addDataComponent(sourceGroup, index);
 
@@ -1406,16 +1442,15 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					JOptionPane.OK_OPTION);
 			toFront();
 
-			return;
 		} else if (!text.matches("[\\p{javaLowerCase}\\d_-]*")) {
 			JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
 			toFront();
 
-			return;
-		}
+		} else {
 
-		collectData();
-		manager.saveSearch(text, saveDescriptionField.getText());
-		savedSearchesDialog.reloadAction();
+			collectData();
+			manager.saveSearch(text, saveDescriptionField.getText());
+			savedSearchesDialog.reloadAction();
+		}
 	}
 }
