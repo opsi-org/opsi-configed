@@ -167,7 +167,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	}
 
 	private static String produceJSONstring(OpsiMethodCall omc) {
-		return omc.getJsonString();
+		return omc != null ? omc.getJsonString() : "";
 	}
 
 	/**

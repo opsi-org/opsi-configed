@@ -141,9 +141,14 @@ public class ConnectionHandler {
 	 * @return established HTTPS connection with the server.
 	 */
 	public HttpsURLConnection establishConnection(boolean doOutput) {
+		Logging.info(this, "certificate verification is disabled: " + Globals.disableCertificateVerification);
 		CertificateValidator certValidator = !Globals.disableCertificateVerification
 				? CertificateValidatorFactory.createSecure()
 				: CertificateValidatorFactory.createInsecure();
+
+		if (certValidator instanceof InsecureCertificateValidator) {
+			Logging.info(this, "using insecure certificate validator");
+		}
 
 		HttpsURLConnection connection = null;
 
@@ -152,7 +157,9 @@ public class ConnectionHandler {
 			connection.setDoOutput(doOutput);
 			connection.setDoInput(true);
 			connection.setUseCaches(false);
-			connection.setRequestMethod(requestMethod);
+			if (requestMethod != null) {
+				connection.setRequestMethod(requestMethod);
+			}
 
 			if (requestProperties != null && !requestProperties.isEmpty()) {
 				for (Map.Entry<String, String> entry : requestProperties.entrySet()) {
