@@ -37,12 +37,12 @@ public class OpsiServerVersionRetriever {
 	private static String serverVersionString = "4.2";
 	private static ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
 
-	private String serviceUrl;
+	private String serviceURL;
 	private String username;
 	private String password;
 
-	public OpsiServerVersionRetriever(String serviceUrl, String username, String password) {
-		this.serviceUrl = serviceUrl;
+	public OpsiServerVersionRetriever(String serviceURL, String username, String password) {
+		this.serviceURL = serviceURL;
 		this.username = username;
 		this.password = password;
 	}
@@ -73,7 +73,7 @@ public class OpsiServerVersionRetriever {
 		HttpsURLConnection connection;
 
 		try {
-			connection = (HttpsURLConnection) new URL(serviceUrl).openConnection();
+			connection = (HttpsURLConnection) new URL(serviceURL).openConnection();
 			String authorization = Base64.getEncoder()
 					.encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
 			connection.setRequestProperty("Authorization", "Basic " + authorization);
