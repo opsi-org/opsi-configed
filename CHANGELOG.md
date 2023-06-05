@@ -1,5 +1,10 @@
 # Changelog
 
+## [unversioned] - 2023-06-01
+
+### Fixed
+- Opening zip-files with the opsi-logviewer works
+
 ## [4.2.22.1] - 2023-06-01
 
 ### Added
