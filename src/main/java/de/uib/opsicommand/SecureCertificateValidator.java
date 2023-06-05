@@ -167,10 +167,10 @@ public class SecureCertificateValidator implements CertificateValidator {
 			}
 
 			StringBuilder message = new StringBuilder();
-			message.append(Configed.getResourceValue("JSONthroughHTTP.unvalidHostname") + " ");
+			message.append(Configed.getResourceValue("SecureCertificateValidator.invalidHostname") + " ");
 			message.append(hostname);
 			message.append("\n\n");
-			message.append(Configed.getResourceValue("JSONthroughHTTP.validHostnames"));
+			message.append(Configed.getResourceValue("SecureCertificateValidator.validHostnames"));
 			message.append("\n\n");
 			message.append(subjectAlternativeNames.toString().replace("[", "").replace("]", ""));
 			ConnectionErrorObserver.getInstance().notify(message.toString(),

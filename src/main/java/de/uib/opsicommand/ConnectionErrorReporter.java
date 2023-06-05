@@ -67,14 +67,14 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 
 	private void displayFailedCertificateValidationDialog(String message) {
 		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("JSONthroughHTTP.failedServerVerification"), true,
+				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
 				new String[] { Configed.getResourceValue(Configed.getResourceValue("UIManager.cancelButtonText")),
-						Configed.getResourceValue("JSONthroughHTTP.alwaysTrust"),
-						Configed.getResourceValue("JSONthroughHTTP.trustOnlyOnce") },
+						Configed.getResourceValue("ConnectionErrorReporter.alwaysTrust"),
+						Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnce") },
 				420, 260);
 
-		fErrorMsg.setTooltipButtons(null, Configed.getResourceValue("JSONthroughHTTP.alwaysTrustTooltip"),
-				Configed.getResourceValue("JSONthroughHTTP.trustOnlyOnceTooltip"));
+		fErrorMsg.setTooltipButtons(null, Configed.getResourceValue("ConnectionErrorReporter.alwaysTrustTooltip"),
+				Configed.getResourceValue("ConnectionErrorReporter.trustOnlyOnceTooltip"));
 
 		try {
 			if (!SwingUtilities.isEventDispatchThread()) {
@@ -118,7 +118,7 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 
 	private void displayGeneralDialog(String message) {
 		final FTextArea fErrorMsg = new FTextArea(ConfigedMain.getMainFrame(),
-				Configed.getResourceValue("JSONthroughHTTP.failedServerVerification"), true,
+				Configed.getResourceValue("ConnectionErrorReporter.failedServerVerification"), true,
 				new String[] { Configed.getResourceValue(Configed.getResourceValue("FGeneralDialog.ok")) }, 420, 200);
 
 		try {
@@ -159,13 +159,13 @@ public class ConnectionErrorReporter implements ConnectionErrorListener {
 		secrets.put("password", true);
 
 		final FEditRecord newPasswordDialog = new FEditRecord(
-				Configed.getResourceValue("JSONthroughHTTP.provideNewPassword"));
+				Configed.getResourceValue("ConnectionErrorReporter.provideNewPassword"));
 		newPasswordDialog.setRecord(groupData, labels, null, editable, secrets);
 
 		try {
 			SwingUtilities.invokeAndWait(() -> {
-				newPasswordDialog.setTitle(
-						Configed.getResourceValue("JSONthroughHTTP.enterNewPassword") + " (" + Globals.APPNAME + ")");
+				newPasswordDialog.setTitle(Configed.getResourceValue("ConnectionErrorReporter.enterNewPassword") + " ("
+						+ Globals.APPNAME + ")");
 				newPasswordDialog.init();
 				newPasswordDialog.setSize(420, 210);
 				newPasswordDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());

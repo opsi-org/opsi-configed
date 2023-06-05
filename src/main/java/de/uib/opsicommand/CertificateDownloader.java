@@ -78,7 +78,7 @@ public final class CertificateDownloader {
 			fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		} catch (IOException e) {
 			ConnectionErrorObserver.getInstance().notify(
-					Configed.getResourceValue("JSONthroughHTTP.unableToDownloadCertificate") + " " + url,
+					Configed.getResourceValue("CertificateDownloader.unableToDownloadCertificate") + " " + url,
 					ConnectionErrorType.FAILED_CERTIFICATE_DOWNLOAD_ERROR);
 			Logging.error("unable to download certificate from specified url: " + url.toString(), e);
 		}

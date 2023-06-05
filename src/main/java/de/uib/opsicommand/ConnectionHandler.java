@@ -225,18 +225,18 @@ public class ConnectionHandler {
 
 	private static String produceCertificateWarningMessage(CertificateValidator certValidator) {
 		StringBuilder message = new StringBuilder();
-		message.append(Configed.getResourceValue("JSONthroughHTTP.certificateWarning") + "\n\n");
+		message.append(Configed.getResourceValue("ConnectionHandler.certificateWarning") + "\n\n");
 
 		if (certValidator.certificateLocallyAvailable()) {
-			message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
-			message.append(Configed.getResourceValue("JSONthroughHTTP.unableToVerify"));
+			message.append(Configed.getResourceValue("ConnectionHandler.certificateIsUnverified") + "\n");
+			message.append(Configed.getResourceValue("ConnectionHandler.unableToVerify"));
 		} else {
-			message.append(Configed.getResourceValue("JSONthroughHTTP.certificateIsUnverified") + "\n");
-			message.append(Configed.getResourceValue("JSONthroughHTTP.noCertificateFound"));
+			message.append(Configed.getResourceValue("ConnectionHandler.certificateIsUnverified") + "\n");
+			message.append(Configed.getResourceValue("ConnectionHandler.noCertificateFound"));
 		}
 
 		message.append("\n\n");
-		message.append(Configed.getResourceValue("JSONthroughHTTP.stillConnectToServer"));
+		message.append(Configed.getResourceValue("ConnectionHandler.stillConnectToServer"));
 
 		return message.toString();
 	}
