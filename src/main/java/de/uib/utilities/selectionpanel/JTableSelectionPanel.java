@@ -757,12 +757,8 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 						break;
 
 					case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES:
-						for (String word : alternativeWords) {
-
-							found = compareVal.indexOf(word) >= 0;
-							if (found) {
-								break;
-							}
+						if (fullTextSearchingWithAlternatives(alternativeWords, compareVal)) {
+							found = true;
 						}
 						break;
 
@@ -792,6 +788,16 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		}
 
 		return -1;
+	}
+
+	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
+		for (String word : alternativeWords) {
+
+			if (compareVal.indexOf(word) >= 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean moveToValue(Object value, int col) {
