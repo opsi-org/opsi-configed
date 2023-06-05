@@ -129,7 +129,6 @@ public class PanelTabbedDocuments extends ClippedTitleTabbedPane {
 			super.addTab(ident, textPanes[i]);
 
 		}
-
 	}
 
 	// override in subclasses

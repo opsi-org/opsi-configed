@@ -3380,9 +3380,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// we will only leave view 0 if a PC is selected
 
 		// check if change of view index to the value of visualViewIndex can be allowed
-		if (visualViewIndex != VIEW_CLIENTS
-				&& (!(visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER)
-						&& !(visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS))) {
+		if (isVisualIndexAllowed(visualViewIndex)) {
 
 			Logging.debug(this, " selected clients " + Arrays.toString(getSelectedClients()));
 
@@ -3449,6 +3447,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 			// dont keep product editing across views
 		}
+	}
+
+	private static boolean isVisualIndexAllowed(int visualViewIndex) {
+
+		// We cannot change to clients
+		if (visualViewIndex == VIEW_CLIENTS) {
+			return false;
+		}
+
+		// We cannot change to network configuration if the server is edited
+		if (visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER) {
+			return false;
+		}
+
+		return !(visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS);
 	}
 
 	private void updateLocalbootProductStates() {
