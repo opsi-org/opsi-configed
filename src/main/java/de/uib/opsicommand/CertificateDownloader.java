@@ -47,6 +47,7 @@ public final class CertificateDownloader {
 	public static void downloadCertificateFile() {
 		if (urlPath == null) {
 			Logging.error("CertificateDownloader wasn't initialized");
+			return;
 		}
 
 		CertificateValidator validator = CertificateValidatorFactory.createInsecure();

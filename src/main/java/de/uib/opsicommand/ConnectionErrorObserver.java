@@ -24,6 +24,10 @@ public final class ConnectionErrorObserver {
 		return instance;
 	}
 
+	public static void destroy() {
+		instance = null;
+	}
+
 	public void subscribe(ConnectionErrorListener listener) {
 		listeners.add(listener);
 	}

@@ -74,7 +74,7 @@ public class ConnectionHandler {
 	 */
 	public ConnectionHandler(URL serviceURL, Map<String, String> requestProperties) {
 		this.serviceURL = serviceURL;
-		this.requestProperties = new HashMap<>(requestProperties);
+		this.requestProperties = requestProperties != null ? new HashMap<>(requestProperties) : null;
 		this.conStat = new ConnectionState(ConnectionState.STARTED_CONNECTING);
 		this.observer = ConnectionErrorObserver.getInstance();
 		this.reporter = new ConnectionErrorReporter(conStat);
@@ -124,16 +124,31 @@ public class ConnectionHandler {
 			return;
 		}
 
+		boolean isMethodSupported = false;
+
 		for (String supportedRequestMethod : SUPPORTED_REQUEST_METHODS) {
 			if (supportedRequestMethod.equals(requestMethod)) {
-				Logging.info(this, "request method is supported: " + requestMethod);
-				this.requestMethod = requestMethod;
-				return;
-			} else {
-				Logging.warning(this, "request method is unsupported: " + requestMethod);
-				throw new IllegalArgumentException("request method is unsupported: " + requestMethod);
+				isMethodSupported = true;
+				break;
 			}
 		}
+
+		if (isMethodSupported) {
+			Logging.info(this, "request method is supported: " + requestMethod);
+			this.requestMethod = requestMethod;
+		} else {
+			Logging.warning(this, "request method is unsupported: " + requestMethod);
+			throw new IllegalArgumentException("request method is unsupported: " + requestMethod);
+		}
+	}
+
+	/**
+	 * Retrieve used request method by the {@code ConnectionHandler}.
+	 * 
+	 * @return used request method.
+	 */
+	public String getRequestMethod() {
+		return requestMethod;
 	}
 
 	/**
@@ -160,17 +175,21 @@ public class ConnectionHandler {
 	 * 
 	 * @param doOutput whether or not the DoOutput flag in
 	 *                 {@code HttpsURLConnection} should be enabled.
-	 * @return established HTTPS connection with the server.
+	 * @return established HTTPS connection with the server; null indicates
+	 *         unsuccessful connection.
 	 */
 	public HttpsURLConnection establishConnection(boolean doOutput) {
+		if (serviceURL == null) {
+			return null;
+		}
+
 		Logging.info(this, "certificate verification is disabled: " + Globals.disableCertificateVerification);
 		CertificateValidator certValidator = !Globals.disableCertificateVerification
 				? CertificateValidatorFactory.createSecure()
 				: CertificateValidatorFactory.createInsecure();
 
-		if (certValidator instanceof InsecureCertificateValidator) {
-			Logging.info(this, "using insecure certificate validator");
-		}
+		Logging.info(this,
+				"using insecure certificate validator: " + (certValidator instanceof InsecureCertificateValidator));
 
 		HttpsURLConnection connection = null;
 
@@ -208,7 +227,7 @@ public class ConnectionHandler {
 			}
 
 			conStat = reporter.getConnectionState();
-			return null;
+			connection = null;
 		} catch (IOException ex) {
 			if (reporter.getConnectionState().getState() == ConnectionState.INTERRUPTED) {
 				conStat = reporter.getConnectionState();
@@ -217,7 +236,7 @@ public class ConnectionHandler {
 				Logging.error("Exception on connecting, ", ex);
 			}
 
-			return null;
+			connection = null;
 		}
 
 		return connection;

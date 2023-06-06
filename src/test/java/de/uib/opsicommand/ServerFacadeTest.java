@@ -3,6 +3,7 @@ package de.uib.opsicommand;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 
 import de.uib.Utils;
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
 
 public class ServerFacadeTest {
 	@BeforeAll
@@ -25,7 +25,6 @@ public class ServerFacadeTest {
 		ServerFacade facade = new ServerFacade(Utils.HOST, Utils.USERNAME, Utils.PASSWORD);
 		Map<String, Object> result = facade
 				.retrieveResponse(new OpsiMethodCall("accessControl_authenticated", new Object[0]));
-		Logging.devel(this, "result: " + result);
 
 		assertNotNull(result, "returned result should not equal null");
 		assertFalse(result.isEmpty(), "returned result should not be empty");
@@ -50,12 +49,24 @@ public class ServerFacadeTest {
 	void testIfRetrievingResponseFunctionsWithNonExistingRPCMethod() {
 		ServerFacade facade = new ServerFacade(Utils.HOST, Utils.USERNAME, Utils.PASSWORD);
 		Map<String, Object> result = facade.retrieveResponse(new OpsiMethodCall("non_existing_method", new Object[0]));
-		Logging.devel(this, "result: " + result);
 
 		assertNotNull(result, "returned result should not equal null");
 		assertFalse(result.isEmpty(), "returned result should not be empty");
 		assertFalse(((Map<String, Object>) result.get("error")).isEmpty(), "returned result should contain an error");
 		assertEquals(ConnectionState.CONNECTED, facade.getConnectionState().getState(),
 				"The connection state should be connected");
+	}
+
+	@Test
+	void testRetrieveResponseWithNullParameter() {
+		ServerFacade facade = new ServerFacade(Utils.HOST, Utils.USERNAME, Utils.PASSWORD);
+		Map<String, Object> result = facade.retrieveResponse(null);
+		assertTrue(result.isEmpty(), "Result should be empty");
+	}
+
+	@Test
+	void testServerFacadeWithNullParamters() {
+		assertThrows(IllegalArgumentException.class, () -> new ServerFacade(null, null, null),
+				"Should throw IllegalArgumentException");
 	}
 }

@@ -80,6 +80,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 	 * @param password to use for the authentication.
 	 */
 	public ServerFacade(String host, String username, String password) {
+		if (host == null || username == null || password == null) {
+			throw new IllegalArgumentException("All or some parameters are null");
+		}
+
 		this.host = host;
 		int idx = -1;
 		if (host.contains("[") && host.contains("]")) {
