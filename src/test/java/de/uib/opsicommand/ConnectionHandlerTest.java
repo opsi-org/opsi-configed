@@ -13,7 +13,6 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -24,11 +23,6 @@ public class ConnectionHandlerTest {
 	@BeforeAll
 	static void setup() {
 		Globals.disableCertificateVerification = true;
-	}
-
-	@AfterAll
-	static void close() {
-		ConnectionHandler handler = null;
 	}
 
 	@Test
