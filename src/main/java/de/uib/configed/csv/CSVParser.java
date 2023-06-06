@@ -85,30 +85,7 @@ public class CSVParser {
 
 			switch (token.getName()) {
 			case CSVToken.STRING_SEPARATOR:
-				if (ignoreErrors || i == 0) {
-					break;
-				}
-
-				boolean fieldStart = false;
-				boolean fieldEnd = false;
-
-				if (tokens.get(i - 1).tokenEquals(CSVToken.FIELD_SEPARATOR)
-						&& (tokens.get(i + 1).tokenEquals(CSVToken.FIELD)
-								|| tokens.get(i + 1).tokenEquals(CSVToken.NEW_LINE)
-								|| tokens.get(i + 1).tokenEquals(CSVToken.EMBEDDED_QUOTE))) {
-					fieldStart = true;
-				}
-
-				if ((tokens.get(i - 1).tokenEquals(CSVToken.FIELD)
-						|| tokens.get(i - 1).tokenEquals(CSVToken.EMBEDDED_QUOTE))
-						&& (tokens.get(i + 1).tokenEquals(CSVToken.FIELD_SEPARATOR)
-								|| tokens.get(i + 1).tokenEquals(CSVToken.LINE_END))) {
-					fieldEnd = true;
-				}
-
-				if (!fieldStart && !fieldEnd) {
-					throw new CSVParserException("Syntax error occurred");
-				}
+				stringSeparator(tokens, i);
 				break;
 			case CSVToken.NEW_LINE:
 				pendingFieldCount = fieldCount;
@@ -153,6 +130,31 @@ public class CSVParser {
 		}
 
 		return result;
+	}
+
+	private void stringSeparator(List<CSVToken> tokens, int i) throws CSVParserException {
+		if (ignoreErrors || i == 0) {
+			return;
+		}
+
+		boolean fieldStart = false;
+		boolean fieldEnd = false;
+
+		if (tokens.get(i - 1).tokenEquals(CSVToken.FIELD_SEPARATOR)
+				&& (tokens.get(i + 1).tokenEquals(CSVToken.FIELD) || tokens.get(i + 1).tokenEquals(CSVToken.NEW_LINE)
+						|| tokens.get(i + 1).tokenEquals(CSVToken.EMBEDDED_QUOTE))) {
+			fieldStart = true;
+		}
+
+		if ((tokens.get(i - 1).tokenEquals(CSVToken.FIELD) || tokens.get(i - 1).tokenEquals(CSVToken.EMBEDDED_QUOTE))
+				&& (tokens.get(i + 1).tokenEquals(CSVToken.FIELD_SEPARATOR)
+						|| tokens.get(i + 1).tokenEquals(CSVToken.LINE_END))) {
+			fieldEnd = true;
+		}
+
+		if (!fieldStart && !fieldEnd) {
+			throw new CSVParserException("Syntax error occurred");
+		}
 	}
 
 	private boolean equalFields() {

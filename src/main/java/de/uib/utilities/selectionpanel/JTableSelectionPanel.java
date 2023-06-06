@@ -68,6 +68,8 @@ import de.uib.utilities.table.gui.TablesearchPane;
 
 public class JTableSelectionPanel extends JPanel implements DocumentListener, KeyListener, ActionListener {
 
+	private static final Pattern sPlusPattern = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
+
 	private static final int MIN_HEIGHT = 200;
 
 	private JScrollPane scrollpane;
@@ -679,7 +681,7 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 
 	private static List<String> getWords(String line) {
 		List<String> result = new ArrayList<>();
-		String[] splitted = line.split("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
+		String[] splitted = sPlusPattern.split(line);
 		for (String s : splitted) {
 			if (!" ".equals(s)) {
 				result.add(s);
@@ -715,11 +717,11 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 		// get pattern for regex search mode if needed
 		Pattern pattern = null;
 		if (searchMode == TablesearchPane.SearchMode.REGEX_SEARCHING) {
-			try {
-				if (fulltext) {
-					val = ".*" + val + ".*";
-				}
 
+			if (fulltext) {
+				val = ".*" + val + ".*";
+			}
+			try {
 				pattern = Pattern.compile(val);
 			} catch (java.util.regex.PatternSyntaxException ex) {
 				Logging.error(this, "pattern problem " + ex);
@@ -753,7 +755,10 @@ public class JTableSelectionPanel extends JPanel implements DocumentListener, Ke
 					switch (searchMode) {
 					case REGEX_SEARCHING:
 
-						found = pattern.matcher(compareVal).matches();
+						if (pattern != null) {
+							found = pattern.matcher(compareVal).matches();
+						}
+
 						break;
 
 					case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES:

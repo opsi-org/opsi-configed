@@ -17,8 +17,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class CSVFormat {
+	private static final Pattern containsDigitsPattern = Pattern.compile(".*\\d.*");
+	private static final Pattern doubleMinusPattern = Pattern.compile("--");
+
 	private static final char DEFAULT_FIELD_SEPARATOR = ',';
 	private static final char DEFAULT_STRING_SEPARATOR = '"';
 	private static final String FORMAT_HINT_INDICATOR = "//-";
@@ -78,7 +82,8 @@ public class CSVFormat {
 		if (fileAsList.get(0).startsWith(FORMAT_HINT_INDICATOR)) {
 			hasHint = true;
 
-			String[] formatOptions = fileAsList.get(0).replace(FORMAT_HINT_INDICATOR, "").trim().split("--");
+			String[] formatOptions = doubleMinusPattern
+					.split(fileAsList.get(0).replace(FORMAT_HINT_INDICATOR, "").trim());
 
 			fieldSeparator = formatOptions[0].charAt(formatOptions[0].indexOf("=") + 1);
 			stringSeparator = formatOptions[1].charAt(formatOptions[1].indexOf("=") + 1);
@@ -153,7 +158,7 @@ public class CSVFormat {
 		}
 
 		private boolean containsDigits() {
-			return line.matches(".*\\d.*");
+			return containsDigitsPattern.matcher(line).matches();
 		}
 
 		private boolean containsEmptyFields() {

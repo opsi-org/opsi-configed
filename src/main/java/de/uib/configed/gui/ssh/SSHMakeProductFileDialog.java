@@ -9,6 +9,7 @@ package de.uib.configed.gui.ssh;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -35,6 +36,9 @@ import de.uib.opsicommand.sshcommand.SSHConnectExec;
 import de.uib.utilities.logging.Logging;
 
 public class SSHMakeProductFileDialog extends FGeneralDialog {
+
+	private static final Pattern tripleSemicolonMatcher = Pattern.compile(";;;");
+
 	// In dieser Klasse gibt es Linux-Befehle (folgend), die zu Konstanten
 	// ausgelagert werden sollen (noch nicht funktioniert)
 	private JLabel jLabelProductVersionControlFile;
@@ -438,11 +442,14 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		String versions = doActionGetVersions();
 		if (versions.contains(";;;")) {
 			enableTfVersions(true);
-			jTextFieldPckageVersion.setText(versions.split(";;;")[0]);
-			jLabelPackageVersionControlFile.setText(versions.split(";;;")[0]);
 
-			jTextFieldProductVersion.setText(versions.split(";;;")[1]);
-			jLabelProductVersionControlFile.setText(versions.split(";;;")[1]);
+			String[] versionArray = tripleSemicolonMatcher.split(versions, 2);
+
+			jTextFieldPckageVersion.setText(versionArray[0]);
+			jLabelPackageVersionControlFile.setText(versionArray[0]);
+
+			jTextFieldProductVersion.setText(versionArray[1]);
+			jLabelProductVersionControlFile.setText(versionArray[1]);
 
 			jButtonExec.setEnabled(true);
 		} else {
@@ -493,8 +500,11 @@ public class SSHMakeProductFileDialog extends FGeneralDialog {
 		str2exec.setMainName(makeProductFile.getMenuText());
 		if (jCheckBoxOverwrite.isSelected()) {
 			String versions = doActionGetVersions();
-			prodVersion = checkVersion(prodVersion, "", versions.split(";;;")[1]);
-			packVersion = checkVersion(packVersion, "", versions.split(";;;")[0]);
+
+			String[] versionArray = tripleSemicolonMatcher.split(versions);
+
+			prodVersion = checkVersion(prodVersion, "", versionArray[1]);
+			packVersion = checkVersion(packVersion, "", versionArray[0]);
 			setOpsiPackageFilename(dir + "" + getPackageID(dir) + "_" + prodVersion + "-" + packVersion + ".opsi");
 
 			// ToDo: command_strings in sshcommandfactory auslagern
