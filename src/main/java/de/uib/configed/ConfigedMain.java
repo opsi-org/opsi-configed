@@ -1701,7 +1701,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (allowedClients != null) {
 			unfilteredList = produceClientListForDepots(getSelectedDepots(), allowedClients);
 
-			Logging.info(this, " unfilteredList " + unfilteredList.size());
+			if (unfilteredList == null) {
+				Logging.error(this, "unfilteredList is null in buildClientlistTableModel");
+			} else {
+				Logging.info(this, " unfilteredList " + unfilteredList.size());
+			}
 
 			buildPclistTableModelCounter++;
 			Logging.info(this, "buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  "

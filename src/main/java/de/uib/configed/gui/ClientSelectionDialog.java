@@ -22,6 +22,7 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -85,6 +86,8 @@ import de.uib.utilities.swing.TextInputField;
  * This dialog shows a number of options you can use to select specific clients.
  */
 public class ClientSelectionDialog extends FGeneralDialog {
+
+	private static final Pattern searchNamePattern = Pattern.compile("[\\p{javaLowerCase}\\d_-]*");
 
 	private static final int FRAME_WIDTH = 750;
 	private static final int FRAME_HEIGHT = 650;
@@ -1441,16 +1444,13 @@ public class ClientSelectionDialog extends FGeneralDialog {
 					Configed.getResourceValue("ClientSelectionDialog.emptyNameTitle") + " (" + Globals.APPNAME + ")",
 					JOptionPane.OK_OPTION);
 			toFront();
-
-		} else if (!text.matches("[\\p{javaLowerCase}\\d_-]*")) {
-			JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
-			toFront();
-
-		} else {
-
+		} else if (searchNamePattern.matcher(text).matches()) {
 			collectData();
 			manager.saveSearch(text, saveDescriptionField.getText());
 			savedSearchesDialog.reloadAction();
+		} else {
+			JOptionPane.showMessageDialog(saveButton, "wrong name", "error", JOptionPane.OK_OPTION);
+			toFront();
 		}
 	}
 }

@@ -19,6 +19,7 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.swing.SwingUtilities;
 
@@ -41,6 +42,7 @@ import de.uib.utilities.savedstates.SavedStates;
 public final class Configed {
 
 	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
+	private static final Pattern localizationFilenameRegex = Pattern.compile(LOCALIZATION_FILENAME_REGEX);
 
 	public static boolean sshConnectOnStart;
 
@@ -415,18 +417,17 @@ public final class Configed {
 			Logging.debug("File not readable " + extraLocalizationFileName);
 		} else {
 			Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
-					+ extraLocalizationFileName.matches("configed_...*\\.properties") + " --  "
-					+ extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX));
+					+ localizationFilenameRegex.matcher(extraLocalizationFileName).matches());
 
 			parts = extraLocalizationFileName.split("_");
 
 			Logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
 
-			if (!extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX)) {
+			if (localizationFilenameRegex.matcher(extraLocalizationFileName).matches()) {
+				return loadExtraLocalization(extraLocalizationFile);
+			} else {
 				Logging.debug("localization file does not have the expected format " + Messages.APPNAME
 						+ "_LOCALE.properties");
-			} else {
-				return loadExtraLocalization(extraLocalizationFile);
 			}
 		}
 
