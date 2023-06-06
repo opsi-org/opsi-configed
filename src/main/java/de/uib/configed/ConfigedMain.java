@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
@@ -130,6 +131,7 @@ import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.thread.WaitCursor;
 
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
+	private static final Pattern backslashPattern = Pattern.compile("\\[|\\]|\\s");
 
 	private static final boolean MULTI_HW_PANEL_ACTIVATED = false;
 
@@ -720,8 +722,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "call initData");
 		initData();
 		initSavedStates();
-		oldSelectedDepots = Configed.savedStates.getProperty("selectedDepots", "").replaceAll("\\[|\\]|\\s", "")
-				.split(",");
+
+		oldSelectedDepots = backslashPattern.matcher(Configed.savedStates.getProperty("selectedDepots", ""))
+				.replaceAll("").split(",");
 
 		// too early, raises a NPE, if the user entry does not exist
 
@@ -2848,10 +2851,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			if (Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
 					+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
-				savedFilter = new HashSet<>(Arrays.asList(Configed.savedStates
-						.getProperty(localbootProductsSavedStateObjTag + "."
-								+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY)
-						.replaceAll("\\[|\\]|\\s", "").split(",")));
+				savedFilter = new HashSet<>(Arrays.asList(backslashPattern
+						.matcher(Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+								+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY))
+						.replaceAll("").split(",")));
 			}
 			mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
 			mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
@@ -2932,10 +2935,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				if (Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
 						+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
-					savedFilter = new HashSet<>(Arrays.asList(Configed.savedStates
-							.getProperty(netbootProductsSavedStateObjTag + "."
-									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, "")
-							.replaceAll("\\[|\\]|\\s", "").split(",")));
+					savedFilter = new HashSet<>(Arrays.asList(backslashPattern
+							.matcher(Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
+									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, ""))
+							.replaceAll("").split(",")));
 				}
 
 				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);

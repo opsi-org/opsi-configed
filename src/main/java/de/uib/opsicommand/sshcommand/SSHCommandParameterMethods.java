@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -49,6 +50,8 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	/** default parameter replace id ends with >>> **/
 	public static final String REPLACEMENT_DEFAULT_2 = ">>>";
 	public static final String PARAM_SPLITTER_DEFAULT = "><";
+
+	public static final Pattern paramSplitterDefaultPattern = Pattern.compile(PARAM_SPLITTER_DEFAULT);
 
 	private static SSHCommandParameterMethods instance;
 
@@ -228,15 +231,14 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		splitted[1] = "";
 
 		if (m.contains(PARAM_SPLITTER_DEFAULT)) {
-			splitted[0] = m.split(PARAM_SPLITTER_DEFAULT)[0];
-			Logging.info(this, "splitParameter method " + splitted[0]);
+
+			splitted = paramSplitterDefaultPattern.split(m);
 
 			Logging.info(this, "splitParameter method " + splitted[0]);
-			splitted[1] = m.split(PARAM_SPLITTER_DEFAULT)[1];
 			Logging.info(this, "splitParameter format " + splitted[1]);
 		}
-		return splitted;
 
+		return splitted;
 	}
 
 	public static String getTranslatedMethod(String localeMethod) {

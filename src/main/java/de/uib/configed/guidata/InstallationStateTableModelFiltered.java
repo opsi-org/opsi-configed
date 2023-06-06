@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.swing.ComboBoxModel;
 
@@ -19,6 +20,8 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
 public class InstallationStateTableModelFiltered extends InstallationStateTableModel {
+	private static final Pattern backslashPattern = Pattern.compile("\\[|\\]|\\s", Pattern.UNICODE_CHARACTER_CLASS);
+
 	public static final String STATE_TABLE_FILTERS_PROPERTY = "stateTableFilters";
 
 	private String savedStateObjTag;
@@ -53,9 +56,9 @@ public class InstallationStateTableModelFiltered extends InstallationStateTableM
 	}
 
 	public void resetFilter() {
-		Set<String> filterSaved = new HashSet<>(Arrays
-				.asList(Configed.savedStates.getProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY, "")
-						.replaceAll("\\[|\\]|\\s", "").split(",")));
+		Set<String> filterSaved = new HashSet<>(Arrays.asList(backslashPattern
+				.matcher(Configed.savedStates.getProperty(savedStateObjTag + "." + STATE_TABLE_FILTERS_PROPERTY, ""))
+				.replaceAll("").split(",")));
 
 		if (filterSaved.isEmpty()) {
 			setFilterFrom((Set<String>) null);

@@ -41,7 +41,7 @@ import de.uib.utilities.savedstates.SavedStates;
 
 public final class Configed {
 
-	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
+	private static final String LOCALIZATION_FILENAME_REGEX = "configed_...*\\.properties";
 	private static final Pattern localizationFilenameRegex = Pattern.compile(LOCALIZATION_FILENAME_REGEX);
 
 	public static boolean sshConnectOnStart;
