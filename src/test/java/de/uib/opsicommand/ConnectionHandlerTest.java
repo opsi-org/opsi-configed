@@ -3,6 +3,7 @@ package de.uib.opsicommand;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockserver.model.Header.header;
 import static org.mockserver.model.HttpRequest.request;
 import static org.mockserver.model.HttpResponse.response;
 
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockserver.integration.ClientAndServer;
+import org.mockserver.model.HttpStatusCode;
 
 import de.uib.Utils;
 import de.uib.configed.Globals;
@@ -42,10 +44,11 @@ public class ConnectionHandlerTest {
 		String authorization = Base64.getEncoder()
 				.encodeToString((Utils.USERNAME + ":" + Utils.PASSWORD).getBytes(StandardCharsets.UTF_8));
 
-		clientServer.withSecure(true).when(request().withMethod("POST").withPath("/login")
-				.withHeader("Authorization", "Basic " + authorization).withHeader("X-opsi-session-lifetime", "900")
-				.withHeader("User-Agent", Globals.APPNAME + " " + Globals.VERSION))
-				.respond(response().withStatusCode(200));
+		clientServer.withSecure(true)
+				.when(request().withMethod("POST").withPath("/login").withHeaders(
+						header("Authorization", "Basic " + authorization), header("X-opsi-session-lifetime", "900"),
+						header("User-Agent", Globals.APPNAME + " " + Globals.VERSION)))
+				.respond(response().withStatusCode(HttpStatusCode.OK_200.code()));
 
 		String url = "https://" + Utils.HOST + ":" + clientServer.getPort() + "/login";
 		Map<String, String> requestProperties = new HashMap<>();
@@ -67,10 +70,11 @@ public class ConnectionHandlerTest {
 		String authorization = Base64.getEncoder()
 				.encodeToString(("non-existent:user").getBytes(StandardCharsets.UTF_8));
 
-		clientServer.withSecure(true).when(request().withMethod("POST").withPath("/login")
-				.withHeader("Authorization", "Basic " + authorization).withHeader("X-opsi-session-lifetime", "900")
-				.withHeader("User-Agent", Globals.APPNAME + " " + Globals.VERSION))
-				.respond(response().withStatusCode(401));
+		clientServer.withSecure(true)
+				.when(request().withMethod("POST").withPath("/login").withHeaders(
+						header("Authorization", "Basic " + authorization), header("X-opsi-session-lifetime", "900"),
+						header("User-Agent", Globals.APPNAME + " " + Globals.VERSION)))
+				.respond(response().withStatusCode(HttpStatusCode.UNAUTHORIZED_401.code()));
 
 		String url = "https://" + Utils.HOST + ":" + Utils.PORT + "/login";
 		Map<String, String> requestProperties = new HashMap<>();
