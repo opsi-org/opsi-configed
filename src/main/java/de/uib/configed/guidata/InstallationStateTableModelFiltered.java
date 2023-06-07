@@ -20,7 +20,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.utilities.logging.Logging;
 
 public class InstallationStateTableModelFiltered extends InstallationStateTableModel {
-	private static final Pattern backslashPattern = Pattern.compile("\\[|\\]|\\s", Pattern.UNICODE_CHARACTER_CLASS);
+	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
 	public static final String STATE_TABLE_FILTERS_PROPERTY = "stateTableFilters";
 

@@ -36,6 +36,7 @@ import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.datapanel.EditMapPanelGrouped;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.PopupMenuTrait;
+import utils.PopupMouseListener;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
@@ -203,7 +204,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		popupForRolepathes.setToolTipText(PopupMenuTrait.POPUP_ADD,
 				Configed.getResourceValue("EditMapPanelGroupedForHostConfigs.addRole.ToolTip"));
 
-		MouseListener popupListenerForUserpathes = new utils.PopupMouseListener(popupForUserpathes) {
+		MouseListener popupListenerForUserpathes = new PopupMouseListener(popupForUserpathes) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger()) {
@@ -217,7 +218,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		};
 		tree.addMouseListener(popupListenerForUserpathes);
 
-		MouseListener popupListenerForUserpath = new utils.PopupMouseListener(popupForUserpath) {
+		MouseListener popupListenerForUserpath = new PopupMouseListener(popupForUserpath) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger()) {
@@ -231,7 +232,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		};
 		tree.addMouseListener(popupListenerForUserpath);
 
-		MouseListener popupListenerForRolepathes = new utils.PopupMouseListener(popupForRolepathes) {
+		MouseListener popupListenerForRolepathes = new PopupMouseListener(popupForRolepathes) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger()) {
@@ -245,7 +246,7 @@ public class EditMapPanelGroupedForHostConfigs extends EditMapPanelGrouped {
 		};
 		tree.addMouseListener(popupListenerForRolepathes);
 
-		MouseListener popupListenerForRolepath = new utils.PopupMouseListener(popupForRolepath) {
+		MouseListener popupListenerForRolepath = new PopupMouseListener(popupForRolepath) {
 			@Override
 			protected void maybeShowPopup(MouseEvent e) {
 				if (e.isPopupTrigger()) {

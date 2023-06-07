@@ -8,9 +8,7 @@ package de.uib.configed.gui.hwinfopage;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -399,15 +397,12 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		for (final RadioButtonIntegrationType button : radioButtons) {
 			buttonGroup.add(button);
-			button.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						Logging.debug(this, " " + e);
-						driverDirectory = button.getSubdir();
+			button.addItemListener((ItemEvent e) -> {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					Logging.debug(this, " " + e);
+					driverDirectory = button.getSubdir();
 
-						produceTarget();
-					}
+					produceTarget();
 				}
 			});
 		}
@@ -475,21 +470,17 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		buttonUploadDrivers.setEnabled(false);
 
-		buttonUploadDrivers.addActionListener(new ActionListener() {
+		buttonUploadDrivers.addActionListener((ActionEvent e) -> {
+			Logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
+					+ fieldServerPath.getText());
+			final Color saveColor = buttonUploadDrivers.getBackground();
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
-						+ fieldServerPath.getText());
-				final Color saveColor = buttonUploadDrivers.getBackground();
-
-				if (!Main.THEMES) {
-					buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
-				}
-				execute();
-				if (!Main.THEMES) {
-					buttonUploadDrivers.setBackground(saveColor);
-				}
+			if (!Main.THEMES) {
+				buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
+			}
+			execute();
+			if (!Main.THEMES) {
+				buttonUploadDrivers.setBackground(saveColor);
 			}
 		});
 

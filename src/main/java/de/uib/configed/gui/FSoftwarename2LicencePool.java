@@ -23,7 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -318,12 +317,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		panelSWnames.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		panelSWnames.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting()) {
-					return;
-				}
+		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
+			if (!e.getValueIsAdjusting()) {
 
 				Logging.info(this, "selectedRow " + panelSWnames.getSelectedRow());
 
@@ -333,7 +328,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					Logging.info(this, " setTableModelSWxLicencepool for " + swName);
 
 					setTableModelSWxLicencepool(swName);
-
 				}
 			}
 		});

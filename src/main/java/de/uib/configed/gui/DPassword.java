@@ -10,7 +10,6 @@ import java.awt.Cursor;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -197,14 +196,11 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 		checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"), Configed.sshConnectOnStart);
 		Logging.info(this, "checkTrySSH  " + Configed.sshConnectOnStart);
-		checkTrySSH.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
+		checkTrySSH.addItemListener((ItemEvent e) -> {
 
-				Configed.sshConnectOnStart = e.getStateChange() == ItemEvent.SELECTED;
+			Configed.sshConnectOnStart = e.getStateChange() == ItemEvent.SELECTED;
 
-				Logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
-			}
+			Logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
 		});
 
 		JPanel jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });

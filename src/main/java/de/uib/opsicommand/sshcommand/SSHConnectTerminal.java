@@ -238,12 +238,9 @@ public class SSHConnectTerminal extends SSHConnect {
 	}
 
 	private void initListeners() {
-		connectionKeyListener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "interrupt with btn ");
-				exec(new String(new byte[] { 3 }, StandardCharsets.UTF_8) + "\n");
-			}
+		connectionKeyListener = (ActionEvent e) -> {
+			Logging.info(this, "interrupt with btn ");
+			exec(new String(new byte[] { 3 }, StandardCharsets.UTF_8) + "\n");
 		};
 		inputKeyListener = new KeyListener() {
 			@Override

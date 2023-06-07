@@ -15,6 +15,7 @@ import javax.swing.JPopupMenu;
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
+import utils.PopupMouseListener;
 
 public class PopupMenuTrait extends JPopupMenu {
 
@@ -202,7 +203,7 @@ public class PopupMenuTrait extends JPopupMenu {
 
 	public void addPopupListenersTo(JComponent[] components) {
 		for (int i = 0; i < components.length; i++) {
-			components[i].addMouseListener(new utils.PopupMouseListener(this));
+			components[i].addMouseListener(new PopupMouseListener(this));
 		}
 	}
 

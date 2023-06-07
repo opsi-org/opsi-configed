@@ -270,7 +270,6 @@ public final class NewClientDialog extends FGeneralDialog {
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				/* Not needed */}
-
 		});
 
 		jTextNotes.addKeyListener(this);

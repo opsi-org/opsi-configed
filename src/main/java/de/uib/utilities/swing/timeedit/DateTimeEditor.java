@@ -28,6 +28,7 @@ import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.calendar.DateSelectionModel;
 
 import de.uib.utilities.logging.Logging;
+import utils.PopupMouseListener;
 
 public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.DateSelectionListener {
 	private static final int BUTTON_H = 25;
@@ -67,7 +68,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		popup.add(menuItemNull);
 
-		super.addMouseListener(new utils.PopupMouseListener(popup));
+		super.addMouseListener(new PopupMouseListener(popup));
 
 		calendar = Calendar.getInstance();
 		if (!withTime) {
@@ -88,7 +89,7 @@ public class DateTimeEditor extends JPanel implements org.jdesktop.swingx.event.
 
 		setDate(false);
 
-		monthView.addMouseListener(new utils.PopupMouseListener(popup));
+		monthView.addMouseListener(new PopupMouseListener(popup));
 
 		SpinnerModel monthSpinnerModel = new SpinnerListModel();
 		JSpinner monthSpinner = new JSpinner(monthSpinnerModel);

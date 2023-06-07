@@ -131,7 +131,7 @@ import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.thread.WaitCursor;
 
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
-	private static final Pattern backslashPattern = Pattern.compile("\\[|\\]|\\s");
+	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private static final boolean MULTI_HW_PANEL_ACTIVATED = false;
 

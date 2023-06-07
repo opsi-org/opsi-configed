@@ -49,6 +49,7 @@ import de.uib.utilities.table.ListCellOptions;
 import de.uib.utilities.table.ListModelProducer;
 import de.uib.utilities.table.gui.ColorTableCellRenderer;
 import de.uib.utilities.table.gui.SensitiveCellEditor;
+import utils.PopupMouseListener;
 
 // works on a map of pairs of type String - List
 public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener {
@@ -166,7 +167,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 
 		super.logPopupElements();
 
-		MouseListener popupNoEditOptionsListener = new utils.PopupMouseListener(popupNoEditOptions);
+		MouseListener popupNoEditOptionsListener = new PopupMouseListener(popupNoEditOptions);
 		table.addMouseListener(popupNoEditOptionsListener);
 		jScrollPane.getViewport().addMouseListener(popupNoEditOptionsListener);
 
@@ -646,7 +647,7 @@ public class EditMapPanelX extends DefaultEditMapPanel implements FocusListener 
 			popupmenuAtRow = popupNoEditOptions;
 		}
 
-		MouseListener popupListener = new utils.PopupMouseListener(popupmenuAtRow);
+		MouseListener popupListener = new PopupMouseListener(popupmenuAtRow);
 		table.addMouseListener(popupListener);
 		jScrollPane.getViewport().addMouseListener(popupListener);
 	}
