@@ -23,7 +23,6 @@ import org.mockserver.model.HttpStatusCode;
 
 import de.uib.Utils;
 import de.uib.configed.Globals;
-import de.uib.utilities.logging.Logging;
 
 public class ServerFacadeTest {
 	static ClientAndServer clientServer;

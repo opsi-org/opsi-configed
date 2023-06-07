@@ -34,7 +34,7 @@ public class OpsiServerVersionRetriever {
 	private static final int EXPECTED_SERVER_VERSION_LENGTH = 4;
 
 	private static int[] serverVersion = { 0, 0, 0, 0 };
-	private static String serverVersionString = "4.2";
+	private static String serverVersionString = "Server version not found (assume 4.1)";
 	private static ComparableVersion serverComparableVersion = new ComparableVersion(serverVersionString);
 
 	private String serviceURL;
@@ -42,6 +42,10 @@ public class OpsiServerVersionRetriever {
 	private String password;
 
 	public OpsiServerVersionRetriever(String serviceURL, String username, String password) {
+		if (serviceURL == null || username == null || password == null) {
+			throw new IllegalArgumentException("Provided parameters are null");
+		}
+
 		this.serviceURL = serviceURL;
 		this.username = username;
 		this.password = password;
@@ -54,22 +58,25 @@ public class OpsiServerVersionRetriever {
 	 * @param compareVersion version to compare to of format x.y.z...
 	 */
 	public boolean isServerVersionAtLeast(String compareVersion) {
+		if (compareVersion == null) {
+			return false;
+		}
 		return serverComparableVersion.compareTo(new ComparableVersion(compareVersion)) >= 0;
 	}
 
-	public String getServerVersion() {
+	public synchronized String getServerVersion() {
 		return serverVersionString;
 	}
 
+	public boolean isServerVersionSet() {
+		return serverVersion[0] != 0;
+	}
+
 	/**
-	 * Checks if the server version is already known, loads it otherwise
+	 * Checks if the server version is already known.
 	 */
 	@SuppressWarnings("java:S2647")
-	public void checkServerVersion() {
-		if (serverVersion[0] != 0) {
-			return;
-		}
-
+	public synchronized void checkServerVersion() {
 		HttpsURLConnection connection;
 
 		try {
@@ -90,7 +97,8 @@ public class OpsiServerVersionRetriever {
 		String server = connection.getHeaderField("Server");
 
 		if (server == null) {
-			Logging.warning("error in getting server version, Headerfield is null");
+			Logging.error("error in getting server version, Headerfield is null");
+			serverVersionString = "Server version not found (assume 4.1)";
 			return;
 		}
 
@@ -117,7 +125,7 @@ public class OpsiServerVersionRetriever {
 		setServerVersion(newServerVersion);
 	}
 
-	private static void setServerVersion(int[] newServerVersion) {
+	private static synchronized void setServerVersion(int[] newServerVersion) {
 		if (newServerVersion == null || newServerVersion.length == 0) {
 			return;
 		}

@@ -271,7 +271,9 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			versionRetriever = new OpsiServerVersionRetriever(produceBaseURL("/"), username, password);
 		}
 
-		versionRetriever.checkServerVersion();
+		if (!versionRetriever.isServerVersionSet()) {
+			versionRetriever.checkServerVersion();
+		}
 
 		if (versionRetriever.isServerVersionAtLeast("4.2")) {
 			gzipTransmission = false;
