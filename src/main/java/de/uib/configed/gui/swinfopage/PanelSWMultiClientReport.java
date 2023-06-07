@@ -47,10 +47,6 @@ public class PanelSWMultiClientReport extends JPanel {
 	private JTextShowField fieldExportDirectory;
 	private JTextShowField fieldFilenamePrefix;
 
-	private JCheckBox checkWithMsUpdates;
-	private JCheckBox checkWithMsUpdates2;
-	private JCheckBox checkAskForOverwrite;
-
 	public PanelSWMultiClientReport() {
 		setupPanel();
 	}
@@ -134,7 +130,7 @@ public class PanelSWMultiClientReport extends JPanel {
 		if (!Main.FONT) {
 			labelAskForOverwrite.setFont(Globals.defaultFont);
 		}
-		checkAskForOverwrite = new JCheckBox("", askForOverwrite);
+		JCheckBox checkAskForOverwrite = new JCheckBox("", askForOverwrite);
 
 		checkAskForOverwrite.addItemListener((ItemEvent e) -> {
 			askForOverwrite = checkAskForOverwrite.isSelected();
@@ -198,13 +194,13 @@ public class PanelSWMultiClientReport extends JPanel {
 			labelWithMsUpdates2.setFont(Globals.defaultFont);
 		}
 
-		checkWithMsUpdates = new JCheckBox("", withMsUpdates);
+		JCheckBox checkWithMsUpdates = new JCheckBox("", withMsUpdates);
 		checkWithMsUpdates.addItemListener((ItemEvent e) -> {
 			withMsUpdates = checkWithMsUpdates.isSelected();
 			Logging.info(this, "withMsUpdates new value : " + withMsUpdates);
 		});
 
-		checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
+		JCheckBox checkWithMsUpdates2 = new JCheckBox("", withMsUpdates2);
 		checkWithMsUpdates2.addItemListener((ItemEvent e) -> {
 			withMsUpdates2 = checkWithMsUpdates2.isSelected();
 			Logging.info(this, "withMsUpdates2 new value : " + withMsUpdates2);

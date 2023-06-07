@@ -75,7 +75,6 @@ public class ControllerHWinfoColumnConfiguration {
 		initPanel();
 		initModel();
 		updateItems = new HashMap<>();
-
 	}
 
 	private void initPanel() {
@@ -147,13 +146,7 @@ public class ControllerHWinfoColumnConfiguration {
 				// tableProvider
 
 				new DefaultTableProvider(new RetrieverMapSource(columnNames, classNames, this::getHwColumnConfig)),
-				KEY_COL, new int[] { KEY_COL },
-
-				// table model listener
-				panel,
-
-				// ArrayList<TableEditItem> updates
-				updateCollection) {
+				KEY_COL, new int[] { KEY_COL }, panel, updateCollection) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
 				boolean result = super.isCellEditable(row, col);

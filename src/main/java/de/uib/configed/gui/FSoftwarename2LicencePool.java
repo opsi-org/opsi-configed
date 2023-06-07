@@ -79,8 +79,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		NO_CHANGE, REMOVE_ALL_ASSIGNEMENTS, SET_ALL_TO_GLOBAL_SELECTED_LICENCEPOOL, SET_ALL_TO_SELECTED_LINE
 	}
 
-	private JButton buttonRemoveAllAssignments;
-	private JLabel labelRemoveAllAssignments;
 	private JButton buttonSetAllAssignmentsToGloballySelectedPool;
 	private JLabel labelSetAllAssignmentsToGloballySelectedPool;
 	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
@@ -151,10 +149,10 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	private void initLayout() {
-		buttonRemoveAllAssignments = new JButton();
+		JButton buttonRemoveAllAssignments = new JButton();
 		buttonRemoveAllAssignments.setIcon(Globals.createImageIcon("images/list-remove-14.png", ""));
 		buttonRemoveAllAssignments.setPreferredSize(Globals.shortButtonDimension);
-		labelRemoveAllAssignments = new JLabel(
+		JLabel labelRemoveAllAssignments = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicencePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
 				actionEvent -> panelSWxLicencepool.setDataChanged(setSWxColTo(VALUE_NO_LICENCE_POOL)));

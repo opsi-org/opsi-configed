@@ -6,7 +6,6 @@
 
 package de.uib.configed.gui.hwinfopage;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.File;
@@ -470,17 +469,16 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 
 		buttonUploadDrivers.setEnabled(false);
 
-		buttonUploadDrivers.addActionListener((ActionEvent e) -> {
+		buttonUploadDrivers.addActionListener((ActionEvent actionEvent) -> {
 			Logging.info(this, "actionPerformed on buttonUploadDrivers from " + fieldDriverPath.getText() + " to "
 					+ fieldServerPath.getText());
-			final Color saveColor = buttonUploadDrivers.getBackground();
 
 			if (!Main.THEMES) {
 				buttonUploadDrivers.setBackground(Globals.FAILED_BACKGROUND_COLOR);
 			}
 			execute();
 			if (!Main.THEMES) {
-				buttonUploadDrivers.setBackground(saveColor);
+				buttonUploadDrivers.setBackground(buttonUploadDrivers.getBackground());
 			}
 		});
 
