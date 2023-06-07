@@ -84,7 +84,9 @@ public final class CertificateDownloader {
 			Logging.error("unable to download certificate from specified url: " + url.toString(), e);
 		}
 
-		downloadedCertificateFile = tmpCertFile;
+		if (tmpCertFile != null && tmpCertFile.length() != 0) {
+			downloadedCertificateFile = tmpCertFile;
+		}
 	}
 
 	/**

@@ -3,6 +3,8 @@ package de.uib.opsicommand;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockserver.model.HttpRequest.request;
+import static org.mockserver.model.HttpResponse.response;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -13,34 +15,47 @@ import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mockserver.integration.ClientAndServer;
 
 import de.uib.Utils;
 import de.uib.configed.Globals;
 
 public class ConnectionHandlerTest {
+	static ClientAndServer clientServer;
+
 	@BeforeAll
 	static void setup() {
 		Globals.disableCertificateVerification = true;
+		clientServer = ClientAndServer.startClientAndServer(Utils.PORT);
+	}
+
+	@AfterAll
+	static void close() {
+		clientServer.stop();
 	}
 
 	@Test
 	void testEstablishConnectionWithValidCredentials() throws Exception {
-		String url = "https://" + Utils.HOST + ":" + Utils.PORT + "/login?redirect=/admin";
-		Map<String, String> requestProperties = new HashMap<>();
-
 		String authorization = Base64.getEncoder()
 				.encodeToString((Utils.USERNAME + ":" + Utils.PASSWORD).getBytes(StandardCharsets.UTF_8));
+
+		clientServer.withSecure(true).when(request().withMethod("POST").withPath("/login")
+				.withHeader("Authorization", "Basic " + authorization).withHeader("X-opsi-session-lifetime", "900")
+				.withHeader("User-Agent", Globals.APPNAME + " " + Globals.VERSION))
+				.respond(response().withStatusCode(200));
+
+		String url = "https://" + Utils.HOST + ":" + clientServer.getPort() + "/login";
+		Map<String, String> requestProperties = new HashMap<>();
+
 		requestProperties.put("Authorization", "Basic " + authorization);
 		requestProperties.put("X-opsi-session-lifetime", "900");
-		requestProperties.put("Accept-Encoding", "lz4");
 		requestProperties.put("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
-		requestProperties.put("Accept", "application/msgpack");
 
 		ConnectionHandler handler = new ConnectionHandler(new URL(url), requestProperties);
-		handler.setRequestMethod(null);
-		HttpsURLConnection connection = handler.establishConnection(true);
+		HttpsURLConnection connection = handler.establishConnection(false);
 
 		assertEquals(HttpURLConnection.HTTP_OK, connection.getResponseCode(),
 				"Connecting with valid credentials should return HTTP response code 200: "
@@ -49,16 +64,20 @@ public class ConnectionHandlerTest {
 
 	@Test
 	void testEstablishConnectionWithIncorrectCredentials() throws Exception {
-		String url = "https://" + Utils.HOST + ":" + Utils.PORT + "/rpc";
-		Map<String, String> requestProperties = new HashMap<>();
-
 		String authorization = Base64.getEncoder()
 				.encodeToString(("non-existent:user").getBytes(StandardCharsets.UTF_8));
+
+		clientServer.withSecure(true).when(request().withMethod("POST").withPath("/login")
+				.withHeader("Authorization", "Basic " + authorization).withHeader("X-opsi-session-lifetime", "900")
+				.withHeader("User-Agent", Globals.APPNAME + " " + Globals.VERSION))
+				.respond(response().withStatusCode(401));
+
+		String url = "https://" + Utils.HOST + ":" + Utils.PORT + "/login";
+		Map<String, String> requestProperties = new HashMap<>();
+
 		requestProperties.put("Authorization", "Basic " + authorization);
 		requestProperties.put("X-opsi-session-lifetime", "900");
-		requestProperties.put("Accept-Encoding", "lz4");
 		requestProperties.put("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
-		requestProperties.put("Accept", "application/msgpack");
 
 		ConnectionHandler handler = new ConnectionHandler(new URL(url), requestProperties);
 		HttpsURLConnection connection = handler.establishConnection(false);
@@ -78,7 +97,7 @@ public class ConnectionHandlerTest {
 
 	@Test
 	void testSetRequestMethodWithNull() throws Exception {
-		String url = "https://" + Utils.HOST + ":" + Utils.PORT + "/rpc";
+		String url = "https://" + Utils.HOST + ":" + Utils.PORT;
 		ConnectionHandler handler = new ConnectionHandler(new URL(url), new HashMap<>());
 		handler.setRequestMethod(null);
 
@@ -87,7 +106,7 @@ public class ConnectionHandlerTest {
 
 	@Test
 	void testSetRequestMethodWithSupportedRequestMethod() throws Exception {
-		String url = "https://" + Utils.HOST + ":" + Utils.PORT + "/rpc";
+		String url = "https://" + Utils.HOST + ":" + Utils.PORT;
 		ConnectionHandler handler = new ConnectionHandler(new URL(url), new HashMap<>());
 		handler.setRequestMethod("POST");
 		assertEquals("POST", handler.getRequestMethod(), "Request method should be POST");
@@ -98,7 +117,7 @@ public class ConnectionHandlerTest {
 
 	@Test
 	void testSetRequestMethodWithUnsupportedRequestMethod() throws Exception {
-		String url = "https://" + Utils.HOST + ":" + Utils.PORT + "/rpc";
+		String url = "https://" + Utils.HOST + ":" + Utils.PORT;
 		ConnectionHandler handler = new ConnectionHandler(new URL(url), new HashMap<>());
 		assertThrows(IllegalArgumentException.class, () -> handler.setRequestMethod("UNSUPPORTED_REQUEST_METHOD"),
 				"Should throw IllegalArgumentException");
