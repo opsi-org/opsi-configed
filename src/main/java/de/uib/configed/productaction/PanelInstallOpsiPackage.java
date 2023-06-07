@@ -8,7 +8,6 @@ package de.uib.configed.productaction;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Map;
 
@@ -313,23 +312,20 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 		buttonCallExecute.setPreferredSize(Globals.graphicButtonDimension);
 		buttonCallExecute.setToolTipText(Configed.getResourceValue("InstallOpsiPackage.execute"));
 
-		buttonCallExecute.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				final Color saveColor = buttonCallExecute.getBackground();
+		buttonCallExecute.addActionListener((ActionEvent e) -> {
+			final Color saveColor = buttonCallExecute.getBackground();
 
-				if (!Main.THEMES) {
-					buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
-				}
+			if (!Main.THEMES) {
+				buttonCallExecute.setBackground(Globals.FAILED_BACKGROUND_COLOR);
+			}
 
-				Logging.info(this, "actionPerformed on buttonCallExecute opsiPackageGotPathS,  depot:  "
-						+ fieldOpsiPackageName.getText() + ", " + comboChooseDepot.getSelectedItem());
+			Logging.info(this, "actionPerformed on buttonCallExecute opsiPackageGotPathS,  depot:  "
+					+ fieldOpsiPackageName.getText() + ", " + comboChooseDepot.getSelectedItem());
 
-				execute();
+			execute();
 
-				if (!Main.THEMES) {
-					buttonCallExecute.setBackground(saveColor);
-				}
+			if (!Main.THEMES) {
+				buttonCallExecute.setBackground(saveColor);
 			}
 		});
 	}

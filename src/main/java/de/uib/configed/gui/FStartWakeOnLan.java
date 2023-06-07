@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -257,14 +256,9 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		buttonSetNew.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.buttonSetNew.tooltip"));
 
-		buttonSetNew.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "actionPerformed");
-				setClients();
-
-			}
+		buttonSetNew.addActionListener((ActionEvent e) -> {
+			Logging.debug(this, "actionPerformed");
+			setClients();
 		});
 
 		buttonRefreshTime = new IconButton(Configed.getResourceValue("FStartWakeOnLan.buttonRefreshTime"),
@@ -272,12 +266,9 @@ public class FStartWakeOnLan extends FGeneralDialog implements de.uib.utilities.
 
 		buttonRefreshTime.setToolTipText(Configed.getResourceValue("FStartWakeOnLan.buttonRefreshTime"));
 
-		buttonRefreshTime.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "actionPerformed");
-				setNowTimeAsTarget();
-			}
+		buttonRefreshTime.addActionListener((ActionEvent e) -> {
+			Logging.debug(this, "actionPerformed");
+			setNowTimeAsTarget();
 		});
 
 		setNowTimeAsTarget();

@@ -23,7 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
@@ -80,8 +79,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 		NO_CHANGE, REMOVE_ALL_ASSIGNEMENTS, SET_ALL_TO_GLOBAL_SELECTED_LICENCEPOOL, SET_ALL_TO_SELECTED_LINE
 	}
 
-	private JButton buttonRemoveAllAssignments;
-	private JLabel labelRemoveAllAssignments;
 	private JButton buttonSetAllAssignmentsToGloballySelectedPool;
 	private JLabel labelSetAllAssignmentsToGloballySelectedPool;
 	private JButton buttonSetAllAssignmentsToPoolFromSelectedRow;
@@ -152,10 +149,10 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 	}
 
 	private void initLayout() {
-		buttonRemoveAllAssignments = new JButton();
+		JButton buttonRemoveAllAssignments = new JButton();
 		buttonRemoveAllAssignments.setIcon(Globals.createImageIcon("images/list-remove-14.png", ""));
 		buttonRemoveAllAssignments.setPreferredSize(Globals.shortButtonDimension);
-		labelRemoveAllAssignments = new JLabel(
+		JLabel labelRemoveAllAssignments = new JLabel(
 				Configed.getResourceValue("FSoftwarename2LicencePool.labelRemoveAllAssignments"));
 		buttonRemoveAllAssignments.addActionListener(
 				actionEvent -> panelSWxLicencepool.setDataChanged(setSWxColTo(VALUE_NO_LICENCE_POOL)));
@@ -318,12 +315,8 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 
 		panelSWnames.setListSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		panelSWnames.addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				if (e.getValueIsAdjusting()) {
-					return;
-				}
+		panelSWnames.addListSelectionListener((ListSelectionEvent e) -> {
+			if (!e.getValueIsAdjusting()) {
 
 				Logging.info(this, "selectedRow " + panelSWnames.getSelectedRow());
 
@@ -333,7 +326,6 @@ public class FSoftwarename2LicencePool extends FDialogSubTable {
 					Logging.info(this, " setTableModelSWxLicencepool for " + swName);
 
 					setTableModelSWxLicencepool(swName);
-
 				}
 			}
 		});

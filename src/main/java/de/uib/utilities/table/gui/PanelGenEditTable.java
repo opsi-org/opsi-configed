@@ -77,6 +77,7 @@ import de.uib.utilities.table.TableCellRendererDate;
 import de.uib.utilities.table.TableModelFilter;
 import de.uib.utilities.table.updates.UpdateController;
 import de.uib.utilities.thread.WaitCursor;
+import utils.PopupMouseListener;
 
 public class PanelGenEditTable extends JPanel implements ActionListener, TableModelListener, ListSelectionListener,
 		KeyListener, MouseListener, ComponentListener, CursorrowObserver {
@@ -758,10 +759,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (popupMenu == null) {
 			// for the first item, we create the menu
 			popupMenu = new JPopupMenu();
-			theTable.addMouseListener(new utils.PopupMouseListener(popupMenu));
+			theTable.addMouseListener(new PopupMouseListener(popupMenu));
 
 			// add the popup to the scrollpane if the table is empty
-			scrollpane.addMouseListener(new utils.PopupMouseListener(popupMenu));
+			scrollpane.addMouseListener(new PopupMouseListener(popupMenu));
 
 		}
 

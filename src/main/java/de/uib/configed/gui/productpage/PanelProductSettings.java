@@ -10,7 +10,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
@@ -87,6 +86,7 @@ import de.uib.utilities.table.gui.AdaptingCellEditorValuesByIndex;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.DynamicCellEditor;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
+import utils.PopupMouseListener;
 
 public class PanelProductSettings extends JSplitPane implements RowSorterListener {
 
@@ -430,8 +430,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		producePopupMenu(productDisplayFields);
 
-		paneProducts.addMouseListener(new utils.PopupMouseListener(popup));
-		tableProducts.addMouseListener(new utils.PopupMouseListener(popup));
+		paneProducts.addMouseListener(new PopupMouseListener(popup));
+		tableProducts.addMouseListener(new PopupMouseListener(popup));
 
 	}
 
@@ -451,14 +451,13 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		if (!Main.FONT) {
 			save.setFont(Globals.defaultFont);
 		}
-		save.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "actionevent on save-menue");
-				mainController.checkSaveAll(false);
-				mainController.requestReloadStatesAndActions();
-			}
+
+		save.addActionListener((ActionEvent e) -> {
+			Logging.debug(this, "actionevent on save-menue");
+			mainController.checkSaveAll(false);
+			mainController.requestReloadStatesAndActions();
 		});
+
 		popup.add(save);
 
 		itemOnDemand = new JMenuItemFormatted();
@@ -481,12 +480,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		if (!Main.FONT) {
 			itemSaveAndExecute.setFont(Globals.defaultFont);
 		}
-		itemSaveAndExecute.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "actionevent on save and execute menu item");
-				saveAndExecuteAction();
-			}
+		itemSaveAndExecute.addActionListener((ActionEvent e) -> {
+			Logging.debug(this, "actionevent on save and execute menu item");
+			saveAndExecuteAction();
 		});
 		popup.add(itemSaveAndExecute);
 		popup.addSeparator();
@@ -501,12 +497,9 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		if (!Main.FONT) {
 			reload.setFont(Globals.defaultFont);
 		}
-		reload.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "reload action");
-				reloadAction();
-			}
+		reload.addActionListener((ActionEvent e) -> {
+			Logging.info(this, "reload action");
+			reloadAction();
 		});
 		popup.add(reload);
 
@@ -516,40 +509,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		if (!Main.FONT) {
 			createReport.setFont(Globals.defaultFont);
 		}
-		createReport.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.info(this, "create report");
-				HashMap<String, String> metaData = new HashMap<>();
-
-				// TODO: getFilter
-				// display, if filter is active,
-				// display selected productgroup
-				// depot server, selected clients out of statusPane
-
-				metaData.put("header", title);
-				metaData.put("subject", title);
-				title = "";
-				if (mainController.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
-					title = title + "Depot : " + mainController.getHostsStatusInfo().getInvolvedDepots();
-				}
-				if (mainController.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
-					title = title + "; Clients: " + mainController.getHostsStatusInfo().getSelectedClientNames();
-				}
-				metaData.put("title", title);
-				metaData.put("keywords", "product settings");
-
-				// only relevent rows
-				ExporterToPDF pdfExportTable = new ExporterToPDF(strippTable(tableProducts));
-
-				pdfExportTable.setMetaData(metaData);
-				pdfExportTable.setPageSizeA4Landscape();
-
-				// create pdf
-				pdfExportTable.execute(null, false);
-
-			}
-		});
+		createReport.addActionListener((ActionEvent e) -> createReport());
 		popup.add(createReport);
 
 		exportTable.addMenuItemsTo(popup);
@@ -586,6 +546,38 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 			sub.add(item);
 		}
+	}
+
+	private void createReport() {
+		Logging.info(this, "create report");
+		HashMap<String, String> metaData = new HashMap<>();
+
+		// TODO: getFilter
+		// display, if filter is active,
+		// display selected productgroup
+		// depot server, selected clients out of statusPane
+
+		metaData.put("header", title);
+		metaData.put("subject", title);
+		title = "";
+		if (mainController.getHostsStatusInfo().getInvolvedDepots().length() != 0) {
+			title = title + "Depot : " + mainController.getHostsStatusInfo().getInvolvedDepots();
+		}
+		if (mainController.getHostsStatusInfo().getSelectedClientNames().length() != 0) {
+			title = title + "; Clients: " + mainController.getHostsStatusInfo().getSelectedClientNames();
+		}
+		metaData.put("title", title);
+		metaData.put("keywords", "product settings");
+
+		// only relevent rows
+		ExporterToPDF pdfExportTable = new ExporterToPDF(strippTable(tableProducts));
+
+		pdfExportTable.setMetaData(metaData);
+		pdfExportTable.setPageSizeA4Landscape();
+
+		// create pdf
+		pdfExportTable.execute(null, false);
+
 	}
 
 	private void applyChangedValue(ListSelectionEvent listSelectionEvent) {

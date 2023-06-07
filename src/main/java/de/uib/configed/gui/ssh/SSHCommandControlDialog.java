@@ -325,8 +325,6 @@ public final class SSHCommandControlDialog extends FGeneralDialog {
 			}
 		});
 
-		// btn_changeHelpPanelStatus.addActionListener(new ActionListener()
-
 		showPanel();
 		if (!(Globals.isGlobalReadOnly())) {
 			buttonTestCommand.addActionListener(actionEvent -> doActionTestCommand());

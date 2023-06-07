@@ -7,7 +7,6 @@
 package de.uib.configed.gui;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -93,23 +92,17 @@ public class SavedSearchesDialog extends FEditStringList {
 	protected void initComponents() {
 		super.initComponents();
 
-		buttonRemove.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "actionPerformed");
-				removeSelectedEntry();
-			}
+		buttonRemove.addActionListener((ActionEvent e) -> {
+			Logging.debug(this, "actionPerformed");
+			removeSelectedEntry();
 		});
 
 		buttonRemove.setToolTipText(Configed.getResourceValue("SavedSearchesDialog.RemoveButtonTooltip"));
 
 		buttonAdd.setEnabled(true);
-		buttonAdd.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "actionPerformed on buttonAdd ");
-				addElement();
-			}
+		buttonAdd.addActionListener((ActionEvent e) -> {
+			Logging.debug(this, "actionPerformed on buttonAdd ");
+			addElement();
 		});
 
 		JMenuItem reload = new JMenuItemFormatted();
@@ -120,12 +113,9 @@ public class SavedSearchesDialog extends FEditStringList {
 		if (!Main.FONT) {
 			reload.setFont(Globals.defaultFont);
 		}
-		reload.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Logging.debug(this, "reload action");
-				reloadAction();
-			}
+		reload.addActionListener((ActionEvent e) -> {
+			Logging.debug(this, "reload action");
+			reloadAction();
 		});
 		popup.add(reload);
 
