@@ -4,19 +4,8 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * FEditText.java
- *
- * (c) uib 2009-2010,2021
- *
- */
-
 package de.uib.utilities.swing;
 
-/**
- *
- * @author roeder
- */
 import java.awt.BorderLayout;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -96,6 +85,8 @@ public class FEditText extends FEdit implements DocumentListener, MouseListener 
 				buttonCommit.requestFocusInWindow();
 			} else if (e.getKeyCode() == KeyEvent.VK_ENTER && singleLine) {
 				commit();
+			} else {
+				// Do nothing on other Events
 			}
 		}
 

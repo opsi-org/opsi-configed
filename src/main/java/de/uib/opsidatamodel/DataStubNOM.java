@@ -129,6 +129,7 @@ public class DataStubNOM {
 
 	private Map<String, LicenceEntry> licences;
 
+	// We need the argument here since the controller is not yet loaded when calling this constructor
 	public DataStubNOM(OpsiserviceNOMPersistenceController persistenceController) {
 		this.persistenceController = persistenceController;
 		classCounter++;
@@ -295,6 +296,8 @@ public class DataStubNOM {
 					depot2NetbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
 				} else if (p.isLocalbootProduct()) {
 					depot2LocalbootProducts.addPackage(depot, p.getProductId(), p.getVersionInfo());
+				} else {
+					Logging.warning(this, "unexpected product type " + p.toString());
 				}
 
 				Map<String, List<String>> versionInfo2Depots = product2VersionInfo2Depots.get(p.getProductId());

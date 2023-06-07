@@ -75,11 +75,6 @@ public class PanelMountShare extends JPanel {
 
 	private void defineLayout() {
 
-		// mountShareLabel = new JLabel(
-
-		// TODO WHY EMPTY LABEL?
-		JLabel mountShareLabel = new JLabel("");
-
 		mountShareDescriptionLabel = new JLabel(
 				Configed.getResourceValue("PanelMountShare.mountShareResult0") + " " + np.getDefaultName());
 
@@ -91,18 +86,19 @@ public class PanelMountShare extends JPanel {
 
 		int hFirstGap = Globals.HFIRST_GAP;
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
-						.addComponent(mountShareLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(buttonMountShare, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
-						.addComponent(mountShareDescriptionLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
-								Globals.LINE_HEIGHT)));
+		layout.setVerticalGroup(
+				layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.CENTER)
+								.addGap(Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+								.addComponent(buttonMountShare, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)
+								.addComponent(mountShareDescriptionLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
+										Globals.LINE_HEIGHT)));
 
 		if (leftBound >= 0) {
 			layout.setHorizontalGroup(
 					layout.createParallelGroup()
-							.addGroup(layout.createSequentialGroup().addComponent(mountShareLabel, 0, 0, 0)
-									.addGap(leftBound, leftBound, leftBound)
+							.addGroup(layout.createSequentialGroup().addGap(leftBound, leftBound, leftBound)
 									.addComponent(buttonMountShare, Globals.GRAPHIC_BUTTON_WIDTH,
 											Globals.GRAPHIC_BUTTON_WIDTH, Globals.GRAPHIC_BUTTON_WIDTH)
 									.addGap(hFirstGap, hFirstGap, hFirstGap)
@@ -111,16 +107,18 @@ public class PanelMountShare extends JPanel {
 									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)));
 		} else {
 
-			layout.setHorizontalGroup(layout.createParallelGroup()
-					.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
-							.addComponent(mountShareLabel, FIRST_LABEL_WIDTH, FIRST_LABEL_WIDTH, FIRST_LABEL_WIDTH)
-							.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
-							.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
-									GroupLayout.PREFERRED_SIZE)
-							.addGap(hFirstGap, hFirstGap, hFirstGap)
-							.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
-									Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
-							.addGap(5, 5, 5).addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE)));
+			layout.setHorizontalGroup(
+					layout.createParallelGroup()
+							.addGroup(layout.createSequentialGroup().addGap(hFirstGap, hFirstGap, hFirstGap)
+									.addGap(FIRST_LABEL_WIDTH, FIRST_LABEL_WIDTH, FIRST_LABEL_WIDTH)
+									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)
+									.addComponent(buttonMountShare, GroupLayout.PREFERRED_SIZE,
+											GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGap(hFirstGap, hFirstGap, hFirstGap)
+									.addComponent(mountShareDescriptionLabel, Globals.BUTTON_WIDTH * 2,
+											Globals.BUTTON_WIDTH * 2, Short.MAX_VALUE)
+									.addGap(5, 5, 5)
+									.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE * 3, Short.MAX_VALUE)));
 		}
 	}
 
@@ -210,17 +208,15 @@ public class PanelMountShare extends JPanel {
 		new Thread() {
 			@Override
 			public void run() {
-				int i = 0;
 
-				while (!smbMounted && i < seconds) {
+				for (int i = 0; !smbMounted && i < seconds; i++) {
 
 					try {
 						Logging.debug(this, "trying to find dir, count " + i);
 						sleep(1000);
-						i++;
 						checkConnectionToShare();
 						rootFrame.toFront();
-					} catch (Exception ex) {
+					} catch (InterruptedException ex) {
 						Logging.debug(this, "Exception " + ex);
 						Thread.currentThread().interrupt();
 					}

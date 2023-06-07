@@ -4,12 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/* 
- *
- * Entwickelt von uib, www.uib.de, 2011
- * @Author martina hammel
- *
- */
 package de.uib.utilities.table;
 
 import java.awt.Component;

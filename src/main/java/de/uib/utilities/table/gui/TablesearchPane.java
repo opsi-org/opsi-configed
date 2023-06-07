@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * TablesearchPane.java // originally named SearchPane.java
- *
- * By uib, www.uib.de, 2011-2013, 2017,2020
- * Author: Rupert Röder
- * 
- */
-
 package de.uib.utilities.table.gui;
 
 import java.awt.Color;
@@ -515,7 +507,6 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 		}
 
 		try {
-
 			comboSearchFieldsMode = new JComboBoxToolTip();
 			if (!Main.FONT) {
 				comboSearchFieldsMode.setFont(Globals.defaultFont);
@@ -1237,6 +1228,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 				markAllAndFilter();
 				switchFilterOn();
 			}
+		} else {
+			// We want to do nothing on other keys
 		}
 	}
 
@@ -1322,6 +1315,8 @@ public class TablesearchPane extends JPanel implements DocumentListener, KeyList
 
 			Logging.debug(this,
 					"actionPerformed on checkmarkSearchProgressiv, searchInputType set to " + searchInputType);
+		} else {
+			Logging.warning(this, "action performed on source " + e.getSource() + ", but was not expected");
 		}
 	}
 

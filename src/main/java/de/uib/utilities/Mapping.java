@@ -13,10 +13,6 @@
 package de.uib.utilities;
 
 import java.util.ArrayList;
-/**
- *
- * @author roeder
- */
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;

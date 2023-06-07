@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * PanelGenEditTable.java
- *
- * By uib, www.uib.de, 2008-2017,2020-2021
- * Author: Rupert Röder
- *
- */
-
 package de.uib.utilities.table.gui;
 
 import java.awt.Color;
@@ -137,7 +129,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private JMenuItemFormatted menuItemSave;
 	private JMenuItemFormatted menuItemCancel;
 
-	private Comparator[] comparators;
+	private Comparator<?>[] comparators;
 
 	private JScrollPane scrollpane;
 	protected JTable theTable;
@@ -632,19 +624,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_RELOAD:
-
-				JMenuItemFormatted menuItemReload = new JMenuItemFormatted(
-						Configed.getResourceValue("PanelGenEditTable.reload"),
-						Globals.createImageIcon("images/reload16.png", ""));
-
-				// does not work
-				menuItemReload.addActionListener(actionEvent -> reload());
-				if (popupIndex > 1) {
-					popupMenu.addSeparator();
-				}
-
-				addPopupItem(menuItemReload);
-
+				addPopupItemReload();
 				break;
 
 			case POPUP_SORT_AGAIN:
@@ -657,34 +637,14 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				break;
 
 			case POPUP_DELETE_ROW:
-				menuItemDeleteRelation = new JMenuItemFormatted(
-						Configed.getResourceValue("PanelGenEditTable.deleteRow"));
-				menuItemDeleteRelation.setEnabled(false);
-				menuItemDeleteRelation.addActionListener((ActionEvent actionEvent) -> {
-					if (getSelectedRowCount() == 0) {
-						JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
-								Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
-								Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
-
-						return;
-					} else if (deleteAllowed) {
-						tableModel.deleteRow(getSelectedRowInModelTerms());
-					}
-				});
-				addPopupItem(menuItemDeleteRelation);
+				addPopupMenuDeleteRow();
 
 				break;
 
 			case POPUP_PRINT:
 				JMenuItemFormatted menuItemPrint = new JMenuItemFormatted(
 						Configed.getResourceValue("PanelGenEditTable.print"));
-				menuItemPrint.addActionListener((ActionEvent actionEvent) -> {
-					try {
-						theTable.print();
-					} catch (PrinterException ex) {
-						Logging.error("Printing error ", ex);
-					}
-				});
+				menuItemPrint.addActionListener((ActionEvent actionEvent) -> print());
 
 				addPopupItem(menuItemPrint);
 
@@ -692,15 +652,7 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 
 			case POPUP_FLOATINGCOPY:
 
-				JMenuItemFormatted menuItemFloatingCopy = new JMenuItemFormatted(
-						Configed.getResourceValue("PanelGenEditTable.floatingCopy"));
-				menuItemFloatingCopy.addActionListener(actionEvent -> floatExternal());
-
-				if (popupIndex > 1) {
-					popupMenu.addSeparator();
-				}
-
-				addPopupItem(menuItemFloatingCopy);
+				addPopupMenuFloatingCopy();
 				break;
 
 			case POPUP_EXPORT_CSV:
@@ -728,6 +680,59 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				Logging.warning(this, "no case found for popuptype in addPopupmenuStandardpart");
 				break;
 			}
+		}
+	}
+
+	private void addPopupItemReload() {
+		JMenuItemFormatted menuItemReload = new JMenuItemFormatted(
+				Configed.getResourceValue("PanelGenEditTable.reload"),
+				Globals.createImageIcon("images/reload16.png", ""));
+
+		// does not work
+		menuItemReload.addActionListener(actionEvent -> reload());
+		if (popupIndex > 1) {
+			popupMenu.addSeparator();
+		}
+
+		addPopupItem(menuItemReload);
+	}
+
+	private void addPopupMenuFloatingCopy() {
+		JMenuItemFormatted menuItemFloatingCopy = new JMenuItemFormatted(
+				Configed.getResourceValue("PanelGenEditTable.floatingCopy"));
+		menuItemFloatingCopy.addActionListener(actionEvent -> floatExternal());
+
+		if (popupIndex > 1) {
+			popupMenu.addSeparator();
+		}
+
+		addPopupItem(menuItemFloatingCopy);
+	}
+
+	private void addPopupMenuDeleteRow() {
+		menuItemDeleteRelation = new JMenuItemFormatted(Configed.getResourceValue("PanelGenEditTable.deleteRow"));
+		menuItemDeleteRelation.setEnabled(false);
+		menuItemDeleteRelation.addActionListener((ActionEvent actionEvent) -> deleteRelation());
+		addPopupItem(menuItemDeleteRelation);
+	}
+
+	private void print() {
+		try {
+			theTable.print();
+		} catch (PrinterException ex) {
+			Logging.error("Printing error ", ex);
+		}
+	}
+
+	private void deleteRelation() {
+		if (getSelectedRowCount() == 0) {
+			JOptionPane.showMessageDialog(ConfigedMain.getMainFrame(),
+					Configed.getResourceValue("PanelGenEditTable.noRowSelected"),
+					Configed.getResourceValue("ConfigedMain.Licences.hint.title"), JOptionPane.OK_OPTION);
+		} else if (deleteAllowed) {
+			tableModel.deleteRow(getSelectedRowInModelTerms());
+		} else {
+			Logging.warning(this, "nothing to delete, since nothing selected or deleting not allowed");
 		}
 	}
 
@@ -860,7 +865,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 					Logging.warning(this, "column " + column + " not getting comparator", ex);
 					return null;
 				}
-
 			}
 		};
 
@@ -872,10 +876,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 				if (comparators[j] != null) {
 					Logging.info(this, " set sorter for column " + j + " " + comparators[j]);
 					// restore previously explicitly assigned comparator
-					((DefaultRowSorter) sorter).setComparator(j, comparators[j]);
+					((DefaultRowSorter<?, ?>) sorter).setComparator(j, comparators[j]);
 				} else if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
 
-					((DefaultRowSorter) sorter).setComparator(j, new IntComparatorForStrings());
+					((DefaultRowSorter<?, ?>) sorter).setComparator(j, new IntComparatorForStrings());
+				} else {
+					Logging.warning(this, "cannot set comparator...");
 				}
 			}
 		}
@@ -1582,9 +1588,10 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			if (n + i < theTable.getRowCount()) {
 				n = n + i;
 			}
-
 		} else if (i < 0 && n + i >= 0) {
 			n = n + i;
+		} else {
+			Logging.warning(this, "we cannot move by " + i + " rows");
 		}
 
 		moveToRow(n);
@@ -1623,8 +1630,9 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		if (e.getSource() == buttonCommit) {
 			commit();
 		} else if (e.getSource() == buttonCancel) {
-
 			cancel();
+		} else {
+			Logging.warning(this, "unexpected action on source " + e.getSource());
 		}
 	}
 

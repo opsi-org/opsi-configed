@@ -4,13 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/* 
- *
- * (c) uib, www.uib.de, 2009-2013
- *
- * author Rupert Röder
- */
-
 package de.uib.utilities.datapanel;
 
 import java.awt.BorderLayout;

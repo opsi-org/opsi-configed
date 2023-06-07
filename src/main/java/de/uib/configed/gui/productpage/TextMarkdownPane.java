@@ -57,6 +57,8 @@ public class TextMarkdownPane extends JTextPane implements HyperlinkListener {
 		} else if (event.getEventType().equals(HyperlinkEvent.EventType.EXITED)) {
 			// Deactivates tooltip
 			setToolTipText(null);
+		} else {
+			// Do nothing on other hyperlink events
 		}
 	}
 }

@@ -32,7 +32,6 @@ import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.embed.swing.JFXPanel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -193,34 +192,36 @@ public class MainView implements View {
 			@Override
 			protected Task<Void> createTask() {
 				InitialDataRetriever dataRetriever = new InitialDataRetriever();
-				dataRetriever.setOnSucceeded((WorkerStateEvent e) -> {
-					ViewManager.displayView(Dashboard.MAIN_VIEW);
-
-					// When initial data is retrieved, we create and start another thread.
-					// The created thread makes sure to load extra data, without dissallowing
-					// for user to use dashbaord.
-					Service<Void> extraDataRetrieverThread = new Service<>() {
-						@Override
-						protected Task<Void> createTask() {
-							return new Task<Void>() {
-								@Override
-								protected Void call() throws Exception {
-									ProductData.retrieveUnusedProducts();
-									return null;
-								}
-							};
-						}
-					};
-
-					extraDataRetrieverThread.setOnSucceeded(
-							e2 -> observer.notify(DATA_CHANGED_SERVICE, selectedDepotComboBox.getValue()));
-					extraDataRetrieverThread.start();
-				});
+				dataRetriever.setOnSucceeded(workerStateEvent -> onSucceeded());
 				return dataRetriever;
 			}
 		};
 
 		retrieverThread.start();
+	}
+
+	private void onSucceeded() {
+		ViewManager.displayView(Dashboard.MAIN_VIEW);
+
+		// When initial data is retrieved, we create and start another thread.
+		// The created thread makes sure to load extra data, without dissallowing
+		// for user to use dashbaord.
+		Service<Void> extraDataRetrieverThread = new Service<>() {
+			@Override
+			protected Task<Void> createTask() {
+				return new Task<Void>() {
+					@Override
+					protected Void call() throws Exception {
+						ProductData.retrieveUnusedProducts();
+						return null;
+					}
+				};
+			}
+		};
+
+		extraDataRetrieverThread.setOnSucceeded(
+				workerStateEvent -> observer.notify(DATA_CHANGED_SERVICE, selectedDepotComboBox.getValue()));
+		extraDataRetrieverThread.start();
 	}
 
 	private class InitialDataRetriever extends Task<Void> {
@@ -292,7 +293,7 @@ public class MainView implements View {
 				licenseDisplayer = new LicenseDisplayer();
 				licenseDisplayer.initAndShowGUI();
 			} catch (IOException ioE) {
-				Logging.debug(this, "Unable to open FXML file.");
+				Logging.warning(this, "Unable to open FXML file.", ioE);
 			}
 		} else {
 			licenseDisplayer.display();

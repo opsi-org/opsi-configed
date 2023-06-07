@@ -37,7 +37,7 @@ public class SSHConnect {
 	protected String commandInfoName;
 	/** If needed the sudo password **/
 	private String pwSudo;
-	protected ConfigedMain main;
+	protected ConfigedMain configedMain;
 
 	private SSHConnectionInfo connectionInfo;
 
@@ -47,10 +47,10 @@ public class SSHConnect {
 	/**
 	 * Instanz for SSH connection {@link de.uib.configed.ConfigedMain}
 	 * 
-	 * @param main configed main class
+	 * @param configedMain configed main class
 	 **/
-	public SSHConnect(ConfigedMain main) {
-		this.main = main;
+	public SSHConnect(ConfigedMain configedMain) {
+		this.configedMain = configedMain;
 		connectionInfo = SSHConnectionInfo.getInstance();
 
 	}

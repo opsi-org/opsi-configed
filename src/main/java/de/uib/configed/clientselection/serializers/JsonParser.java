@@ -143,6 +143,8 @@ class JsonParser {
 				inList = true;
 			}
 			currentPosition = PositionType.JSON_VALUE;
+		} else {
+			// Do nothing for JSON_NAME and JSON_VALUE
 		}
 	}
 }

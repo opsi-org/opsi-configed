@@ -4,12 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/* 
- *
- * Entwickelt von uib, www.uib.de, 2011
- * @Author martina hammel
- *
- */
 package de.uib.utilities.table;
 
 import java.awt.Component;
@@ -22,9 +16,6 @@ import de.uib.utilities.table.gui.ColorTableCellRenderer;
 
 public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 
-	/**
-	 * 
-	 */
 	private JLabel booleanString = new JLabel();
 
 	public TableCellRendererByBoolean() {
@@ -64,5 +55,4 @@ public class TableCellRendererByBoolean extends ColorTableCellRenderer {
 
 		return result;
 	}
-
 }

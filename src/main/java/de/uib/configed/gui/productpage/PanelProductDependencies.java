@@ -14,14 +14,11 @@ import javax.swing.JTable;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.guidata.DependenciesModel;
 import de.uib.utilities.logging.Logging;
 
 public class PanelProductDependencies extends JPanel implements DependenciesModel.DependenciesModelListener {
-
-	private transient ConfigedMain mainController;
 
 	// The label shown on top of the dependencies-panel
 	private JLabel depotLabel;
@@ -31,8 +28,7 @@ public class PanelProductDependencies extends JPanel implements DependenciesMode
 
 	private DependenciesModel dependenciesModel;
 
-	public PanelProductDependencies(ConfigedMain mainController, JLabel depotLabel) {
-		this.mainController = mainController;
+	public PanelProductDependencies(JLabel depotLabel) {
 		this.depotLabel = depotLabel;
 
 		initComponents();

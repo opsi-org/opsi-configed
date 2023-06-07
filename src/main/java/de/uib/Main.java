@@ -65,7 +65,6 @@ public class Main {
 	private static void createOptions() {
 		options = new Options();
 
-		// TODO remove CLI-options
 		// General options
 		options.addOption("lv", "logviewer", false, "Use this option to start logviewer instead of configed");
 		options.addOption("l", "locale", true, "Set locale LOC (format: <language>_<country>). DEFAULT: System.locale");
@@ -95,8 +94,6 @@ public class Main {
 				"On command line: populate existing group GROUP_NAME with clients resulting frim search SAVEDSEARCH_NAME");
 		options.addOption(null, "initUserRoles", false,
 				"On command line, perform  the complete initialization of user roles if something was changed");
-		options.addOption(null, "gzip", true,
-				"Activate compressed transmission of data from opsi server yes/no. DEFAULT: y");
 		options.addOption(null, "ssh-immediate-connect", true, "Try to create a SSH connection on start. DEFAULT: N");
 		options.addOption(null, "ssh-key", true,
 				"Full path with filename from sshkey used for authentication on ssh server");
@@ -180,13 +177,12 @@ public class Main {
 			isLogviewer = true;
 		}
 
-		String locale = null;
 		if (cmd.hasOption("l")) {
-			locale = cmd.getOptionValue("l");
+			String locale = cmd.getOptionValue("l");
+			Messages.setLocale(locale);
 		}
 
-		// Set locale, then we can use localization values
-		Messages.setLocale(locale);
+		// After setting locale then we can use localization values
 		List<String> existingLocales = Messages.getLocaleNames();
 		Logging.info("getLocales: " + existingLocales);
 		Logging.info("selected locale characteristic " + Messages.getSelectedLocale());

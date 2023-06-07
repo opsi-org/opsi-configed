@@ -24,6 +24,7 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerInstall;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
@@ -43,6 +44,9 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 
 	private FDepotselectionList fDepotList;
 	private List<String> depots;
+
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public SSHPMInstallSettingsPanel() {
 		this(null);
@@ -196,7 +200,7 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 	private List<String> getAllowedInstallTargets() {
 		List<String> result = new ArrayList<>();
 
-		if (persist.isDepotsFullPermission()) {
+		if (persistenceController.isDepotsFullPermission()) {
 			jTextFieldSelecteddepots.setEditable(true);
 			result.add(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS);
 			result.add(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL);
@@ -204,8 +208,8 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 			jTextFieldSelecteddepots.setEditable(false);
 		}
 
-		for (String depot : persist.getHostInfoCollections().getDepotNamesList()) {
-			if (persist.hasDepotPermission(depot)) {
+		for (String depot : persistenceController.getHostInfoCollections().getDepotNamesList()) {
+			if (persistenceController.hasDepotPermission(depot)) {
 				result.add(depot);
 			}
 		}
@@ -220,17 +224,15 @@ public class SSHPMInstallSettingsPanel extends SSHPMInstallPanel {
 		List<String> selectedDepots = fDepotList.getSelectedDepots();
 
 		if (selectedDepots.isEmpty()) {
-			if (persist.isDepotsFullPermission()) {
+			if (persistenceController.isDepotsFullPermission()) {
 				depotParameter = OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS;
 			} else if (!depots.isEmpty()) {
 				depotParameter = depots.get(0);
+			} else {
+				Logging.warning(this, "cannot find depot to set depotParameter");
 			}
 		} else {
-			if (selectedDepots.contains(
-
-					OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)
-
-			) {
+			if (selectedDepots.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_NODEPOTS)) {
 				depotParameter = "";
 			} else if (selectedDepots.contains(OpsiserviceNOMPersistenceController.DEPOT_SELECTION_ALL)) {
 				depotParameter = "all";

@@ -25,13 +25,13 @@ public abstract class AbstractPanelEditProperties extends JXPanel {
 	protected int minHSize = 50;
 	protected int prefHSize = 80;
 
-	protected ConfigedMain mainController;
+	protected ConfigedMain configedMain;
 
 	protected String productEdited;
 
 	protected AbstractPanelEditProperties(ConfigedMain mainController, DefaultEditMapPanel productPropertiesPanel) {
 		super();
-		this.mainController = mainController;
+		this.configedMain = mainController;
 		this.productPropertiesPanel = productPropertiesPanel;
 
 		if (!Main.THEMES) {

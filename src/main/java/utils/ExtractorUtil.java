@@ -49,10 +49,9 @@ public final class ExtractorUtil {
 			for (final ISimpleInArchiveItem item : simpleInArchive.getArchiveItems()) {
 				final int[] hash = new int[] { 0 };
 				if (!item.isFolder()) {
-					ExtractOperationResult result;
 
 					final long[] sizeArray = new long[1];
-					result = item.extractSlow(new ISequentialOutStream() {
+					ExtractOperationResult result = item.extractSlow(new ISequentialOutStream() {
 						@Override
 						public int write(byte[] data) throws SevenZipException {
 							sb.append(new String(data, StandardCharsets.UTF_8));

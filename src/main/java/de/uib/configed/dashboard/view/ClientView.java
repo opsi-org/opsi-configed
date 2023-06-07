@@ -195,35 +195,8 @@ public class ClientView implements View {
 
 		final ObjectProperty<Predicate<Client>> lastSeenFilter = new SimpleObjectProperty<>();
 
-		lastSeenFilter.bind(Bindings.createObjectBinding(() -> (Client client) -> {
-			if (clientLastSeenComboBox.getValue() == null || clientLastSeenComboBox.getValue()
-					.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
-				return true;
-			}
-
-			final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			final LocalDate current = LocalDate.now();
-			final LocalDate lastSeenDate;
-
-			if (client.getLastSeen().equals(Configed.getResourceValue("Dashboard.lastSeen.never"))) {
-				lastSeenDate = LocalDate.parse("9999-12-31", dtf);
-			} else {
-				lastSeenDate = LocalDate.parse(client.getLastSeen().substring(0, 10), dtf);
-			}
-
-			final long days = ChronoUnit.DAYS.between(lastSeenDate, current);
-
-			return (clientLastSeenComboBox.getValue()
-					.equals(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")) && days <= 14
-					&& days >= 0)
-					|| (clientLastSeenComboBox.getValue()
-							.equals(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays"))
-							&& days > 14 && days <= 30)
-					|| (clientLastSeenComboBox.getValue()
-							.equals(Configed.getResourceValue("Dashboard.lastSeen.moreThanThirtyDays")) && days > 30)
-					|| (clientLastSeenComboBox.getValue().equals(Configed.getResourceValue("Dashboard.lastSeen.never"))
-							&& client.getLastSeen().equals(Configed.getResourceValue("Dashboard.lastSeen.never")));
-		}, clientLastSeenComboBox.valueProperty()));
+		lastSeenFilter.bind(Bindings.createObjectBinding(() -> this::checkIfClientLastSeen,
+				clientLastSeenComboBox.valueProperty()));
 
 		final ObjectProperty<Predicate<Client>> activeFilter = new SimpleObjectProperty<>();
 
@@ -254,6 +227,44 @@ public class ClientView implements View {
 
 		clientActivityComparison.display();
 		clientLastSeenComparison.display();
+	}
+
+	private boolean checkIfClientLastSeen(Client client) {
+		if (clientLastSeenComboBox.getValue() == null || clientLastSeenComboBox.getValue()
+				.equals(Configed.getResourceValue("Dashboard.choiceBoxChoice.all"))) {
+			return true;
+		}
+
+		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		final LocalDate current = LocalDate.now();
+		final LocalDate lastSeenDate;
+
+		if (client.getLastSeen().equals(Configed.getResourceValue("Dashboard.lastSeen.never"))) {
+			lastSeenDate = LocalDate.parse("9999-12-31", dtf);
+		} else {
+			lastSeenDate = LocalDate.parse(client.getLastSeen().substring(0, 10), dtf);
+		}
+
+		final long days = ChronoUnit.DAYS.between(lastSeenDate, current);
+		String value = clientLastSeenComboBox.getValue();
+		String clientLastSeen = client.getLastSeen();
+
+		return isLastSeen(days, value, clientLastSeen);
+	}
+
+	private static boolean isLastSeen(long days, String value, String clientLastSeen) {
+		if (value.equals(Configed.getResourceValue("Dashboard.lastSeen.fourteenOrLowerDays")) && days >= 0
+				&& days <= 14) {
+			return true;
+		}
+
+		if (value.equals(Configed.getResourceValue("Dashboard.lastSeen.betweenFifteenAndThirtyDays")) && days > 14
+				&& days <= 30) {
+			return true;
+		}
+
+		return value.equals(Configed.getResourceValue("Dashboard.lastSeen.never"))
+				&& clientLastSeen.equals(Configed.getResourceValue("Dashboard.lastSeen.never"));
 	}
 
 	@Override

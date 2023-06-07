@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -34,6 +35,7 @@ import de.uib.configed.gui.DepotsList;
 import de.uib.configed.gui.ValueSelectorList;
 import de.uib.configed.gui.ssh.SSHConnectionOutputDialog;
 import de.uib.configed.type.HostInfo;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.ssh.SSHOutputCollector;
@@ -48,6 +50,8 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	/** default parameter replace id ends with >>> **/
 	public static final String REPLACEMENT_DEFAULT_2 = ">>>";
 	public static final String PARAM_SPLITTER_DEFAULT = "><";
+
+	public static final Pattern paramSplitterDefaultPattern = Pattern.compile(PARAM_SPLITTER_DEFAULT);
 
 	private static SSHCommandParameterMethods instance;
 
@@ -73,12 +77,15 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 
 	private static final Map<String, String> methods = new HashMap<>();
 
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 
 	private String[] formats;
 
 	public boolean canceled;
 	private SSHConnectionOutputDialog outputDia;
+
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	private SSHCommandParameterMethods(ConfigedMain main) {
 		methods.put(METHOD_INTERACTIVE_ELEMENT, METHOD_INTERACTIVE_ELEMENT);
@@ -90,7 +97,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		methods.put(METHOD_GET_CONNECTED_SSH_SERVER_NAME, "getConnectedSSHServerName");
 		methods.put(METHOD_OPTION_SELECTION, "ssh://path/to/file");
 
-		this.main = main;
+		this.configedMain = main;
 		instance = this;
 		init();
 	}
@@ -154,6 +161,8 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 			outputDia = ((SSHConnectExec) caller).getDialog();
 		} else if (caller instanceof SSHConnectTerminal) {
 			outputDia = ((SSHConnectTerminal) caller).getDialog();
+		} else {
+			Logging.warning(this, "caller has unexpected type in parseParameter " + caller.getClass());
 		}
 		List<String> params = command.getParameterList();
 		if (!params.isEmpty()) {
@@ -222,15 +231,14 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		splitted[1] = "";
 
 		if (m.contains(PARAM_SPLITTER_DEFAULT)) {
-			splitted[0] = m.split(PARAM_SPLITTER_DEFAULT)[0];
-			Logging.info(this, "splitParameter method " + splitted[0]);
+
+			splitted = paramSplitterDefaultPattern.split(m);
 
 			Logging.info(this, "splitParameter method " + splitted[0]);
-			splitted[1] = m.split(PARAM_SPLITTER_DEFAULT)[1];
 			Logging.info(this, "splitParameter format " + splitted[1]);
 		}
-		return splitted;
 
+		return splitted;
 	}
 
 	public static String getTranslatedMethod(String localeMethod) {
@@ -268,6 +276,8 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		} else if (format.isEmpty()) {
 			result = getUserText(method, outputDia);
 			Logging.info(this, "callMethod replace \"" + method + "\" with \"" + result + "\"");
+		} else {
+			Logging.warning(this, "unexpected method " + method + " and format " + format);
 		}
 
 		return result;
@@ -412,7 +422,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 
 	@Override
 	public String getConfigServerName() {
-		List<String> depots = main.getPersistenceController().getHostInfoCollections().getDepotNamesList();
+		List<String> depots = persistenceController.getHostInfoCollections().getDepotNamesList();
 		for (String depot : depots) {
 			if (depot.startsWith(ConfigedMain.host)) {
 				Logging.debug(this, "getConfig_serverName " + ConfigedMain.host);
@@ -433,15 +443,15 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	}
 
 	public String[] getSelectedClientIPs() {
-		Logging.debug(this, "getSelected_clientIPs " + Arrays.toString(main.getSelectedClients()));
-		String[] clientnames = new String[main.getSelectedClients().length];
-		System.arraycopy(main.getSelectedClients(), 0, clientnames, 0, main.getSelectedClients().length);
+		Logging.debug(this, "getSelected_clientIPs " + Arrays.toString(configedMain.getSelectedClients()));
+		String[] clientnames = new String[configedMain.getSelectedClients().length];
+		System.arraycopy(configedMain.getSelectedClients(), 0, clientnames, 0,
+				configedMain.getSelectedClients().length);
 
 		String[] clientIPs = new String[clientnames.length];
 		int counter = 0;
 		for (String name : clientnames) {
-			HostInfo hostInfo = main.getPersistenceController().getHostInfoCollections().getMapOfAllPCInfoMaps()
-					.get(name);
+			HostInfo hostInfo = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().get(name);
 			if (hostInfo != null) {
 				clientIPs[counter] = hostInfo.getIpAddress();
 				counter++;
@@ -454,26 +464,27 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 
 	@Override
 	public String[] getSelectedClientNames() {
-		Logging.debug(this, "getSelected_clientnames  " + Arrays.toString(main.getSelectedClients()));
-		String[] clientnames = new String[main.getSelectedClients().length];
-		System.arraycopy(main.getSelectedClients(), 0, clientnames, 0, main.getSelectedClients().length);
+		Logging.debug(this, "getSelected_clientnames  " + Arrays.toString(configedMain.getSelectedClients()));
+		String[] clientnames = new String[configedMain.getSelectedClients().length];
+		System.arraycopy(configedMain.getSelectedClients(), 0, clientnames, 0,
+				configedMain.getSelectedClients().length);
 		return clientnames;
 	}
 
 	@Override
 	public String[] getSelectedDepotNames() {
-		Logging.debug(this, "getSelected_depotnames  " + main.getSelectedDepots());
-		return main.getSelectedDepots();
+		Logging.debug(this, "getSelected_depotnames  " + configedMain.getSelectedDepots());
+		return configedMain.getSelectedDepots();
 	}
 
 	public String[] getSelectedDepotIPs() {
-		Logging.debug(this, "getSelected_depotIPs " + main.getSelectedDepots());
-		String[] depotnames = new String[main.getSelectedDepots().length];
-		System.arraycopy(main.getSelectedDepots(), 0, depotnames, 0, main.getSelectedDepots().length);
+		Logging.debug(this, "getSelected_depotIPs " + configedMain.getSelectedDepots());
+		String[] depotnames = new String[configedMain.getSelectedDepots().length];
+		System.arraycopy(configedMain.getSelectedDepots(), 0, depotnames, 0, configedMain.getSelectedDepots().length);
 		String[] depotIPs = new String[depotnames.length];
 		int counter = 0;
 		for (String name : depotnames) {
-			String depotip = (String) main.getPersistenceController().getHostInfoCollections().getDepots().get(name)
+			String depotip = (String) persistenceController.getHostInfoCollections().getDepots().get(name)
 					.get(HostInfo.CLIENT_IP_ADDRESS_KEY);
 			Logging.info(this, "getSelected_depotIPs host " + name + " depotip " + depotip);
 			if (depotip != null) {
@@ -485,7 +496,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 	}
 
 	private static ValueSelectorList fillValueSelectorList(final List<String> values) {
-		final DepotsList valueList = new DepotsList(PersistenceControllerFactory.getPersistenceController());
+		final DepotsList valueList = new DepotsList();
 		valueList.setVisible(true);
 		final Map<String, Object> extendedInfo = new TreeMap<>();
 		final Map<String, Map<String, Object>> info = new TreeMap<>();
@@ -556,7 +567,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		}
 
 		SSHOutputCollector.removeAllValues();
-		final SSHConnect caller = new SSHConnect(main);
+		final SSHConnect caller = new SSHConnect(configedMain);
 
 		final String scriptFile = method.replace("ssh://", "");
 		final LinkedList<String> commands = new LinkedList<>();
@@ -583,7 +594,7 @@ public final class SSHCommandParameterMethods implements SSHCommandParameterInte
 		}
 
 		public void execute() {
-			new SSHConnectExec(main, cmd);
+			new SSHConnectExec(configedMain, cmd);
 
 			final List<String> values = SSHOutputCollector.getValues();
 			value = retrieveSelectedValue(values);

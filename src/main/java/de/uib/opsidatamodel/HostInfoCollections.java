@@ -56,10 +56,11 @@ public class HostInfoCollections {
 
 	private ClientTree connectedTree;
 
-	private OpsiserviceNOMPersistenceController pc;
+	private OpsiserviceNOMPersistenceController persistenceController;
 
+	// We need the argument here since the controller is not loaded yet
 	public HostInfoCollections(OpsiserviceNOMPersistenceController pc) {
-		this.pc = pc;
+		this.persistenceController = pc;
 	}
 
 	// deliver data
@@ -140,7 +141,7 @@ public class HostInfoCollections {
 		int countHosts = 0;
 
 		if (opsiHostNames == null) {
-			List<Map<String, Object>> opsiHosts = pc.hostRead();
+			List<Map<String, Object>> opsiHosts = persistenceController.hostRead();
 			HostInfo.resetInstancesCount();
 
 			opsiHostNames = new ArrayList<>();
@@ -268,15 +269,15 @@ public class HostInfoCollections {
 					boolean depotFound = false;
 					String depotId = null;
 
-					if (pc.getConfigs().get(name) == null
-							|| pc.getConfigs().get(name)
+					if (persistenceController.getConfigs().get(name) == null
+							|| persistenceController.getConfigs().get(name)
 									.get(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID) == null
-							|| ((List<?>) (pc.getConfigs().get(name)
+							|| ((List<?>) (persistenceController.getConfigs().get(name)
 									.get(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID))).isEmpty()) {
 						Logging.debug(this, "retrieveOpsiHosts client  " + name + " has no config for "
 								+ OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID);
 					} else {
-						depotId = (String) ((List<?>) (pc.getConfigs().get(name)
+						depotId = (String) ((List<?>) (persistenceController.getConfigs().get(name)
 								.get(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID))).get(0);
 					}
 
@@ -292,24 +293,27 @@ public class HostInfoCollections {
 
 					// Get Install by Shutdown
 
-					host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY, pc.isInstallByShutdownConfigured(name));
+					host.put(HostInfo.CLIENT_SHUTDOWN_INSTALL_KEY,
+							persistenceController.isInstallByShutdownConfigured(name));
 
 					// Get UEFI Boot
 
-					host.put(HostInfo.CLIENT_UEFI_BOOT_KEY, pc.isUefiConfigured(name));
+					host.put(HostInfo.CLIENT_UEFI_BOOT_KEY, persistenceController.isUefiConfigured(name));
 
 					// CHECK WAN STANDARD CONFIG
-					if (pc.getConfig(name) != null) {
+					if (persistenceController.getConfig(name) != null) {
 
 						Boolean result = false;
-						boolean tested = pc.findBooleanConfigurationComparingToDefaults(name, pc.getWanConfiguration());
+						boolean tested = persistenceController.findBooleanConfigurationComparingToDefaults(name,
+								persistenceController.getWanConfiguration());
 
 						Logging.debug(this, "host " + name + " wan config " + result);
 
 						if (tested) {
 							result = true;
 						} else {
-							tested = pc.findBooleanConfigurationComparingToDefaults(name, pc.getNotWanConfiguration());
+							tested = persistenceController.findBooleanConfigurationComparingToDefaults(name,
+									persistenceController.getNotWanConfiguration());
 
 							if (tested) {
 								result = false;
@@ -400,7 +404,7 @@ public class HostInfoCollections {
 
 		List<String> depotList = new ArrayList<>();
 		for (String depot : depots) {
-			if (pc.hasDepotPermission(depot)) {
+			if (persistenceController.hasDepotPermission(depot)) {
 				depotList.add(depot);
 			}
 		}
@@ -429,12 +433,13 @@ public class HostInfoCollections {
 
 	private void setDepot(String clientName, String depotId) {
 		// set config
-		if (pc.getConfigs().get(clientName) == null) {
-			pc.getConfigs().put(clientName, new HashMap<>());
+		if (persistenceController.getConfigs().get(clientName) == null) {
+			persistenceController.getConfigs().put(clientName, new HashMap<>());
 		}
 		List<String> depotList = new ArrayList<>();
 		depotList.add(depotId);
-		pc.getConfigs().get(clientName).put(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID, depotList);
+		persistenceController.getConfigs().get(clientName).put(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID,
+				depotList);
 
 		// set in mapPC_Infomap
 		HostInfo hostInfo = mapPCInfomap.get(clientName);
@@ -453,7 +458,7 @@ public class HostInfoCollections {
 	}
 
 	public void setDepotForClients(String[] clients, String depotId) {
-		if (!pc.hasDepotPermission(depotId)) {
+		if (!persistenceController.hasDepotPermission(depotId)) {
 			return;
 		}
 
@@ -465,10 +470,10 @@ public class HostInfoCollections {
 		config.put(OpsiserviceNOMPersistenceController.CONFIG_DEPOT_ID, depots);
 		for (int i = 0; i < clients.length; i++) {
 			// collect data
-			pc.setAdditionalConfiguration(clients[i], config);
+			persistenceController.setAdditionalConfiguration(clients[i], config);
 		}
 		// send data
-		pc.setAdditionalConfiguration(false);
+		persistenceController.setAdditionalConfiguration(false);
 
 		// change transitory data
 		for (int i = 0; i < clients.length; i++) {

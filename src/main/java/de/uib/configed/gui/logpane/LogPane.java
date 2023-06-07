@@ -123,6 +123,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				return getUI().getMinimumSize(this);
 			}
 		};
+
 		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
 		jTextPane.getCaret().setBlinkRate(0);
 
@@ -132,6 +133,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				return monospacedFont;
 			}
 		};
+
 		logLevelStyles = new Style[10];
 
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
@@ -214,11 +216,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		jCheckBoxCaseSensitive.addActionListener(this);
 
 		buttonFontPlus = new JButton(Globals.createImageIcon("images/font-plus.png", ""));
-		buttonFontPlus.setToolTipText(Configed.getResourceValue("TextPane.fontPlus"));
+		buttonFontPlus.setToolTipText(Configed.getResourceValue("LogPane.fontPlus"));
 		buttonFontPlus.addActionListener(this);
 
 		buttonFontMinus = new JButton(Globals.createImageIcon("images/font-minus.png", ""));
-		buttonFontMinus.setToolTipText(Configed.getResourceValue("TextPane.fontMinus"));
+		buttonFontMinus.setToolTipText(Configed.getResourceValue("LogPane.fontMinus"));
 		buttonFontMinus.addActionListener(this);
 
 		labelLevel = new JLabel(Configed.getResourceValue("TextPane.jLabel_level"));
@@ -243,22 +245,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboType.setEnabled(false);
 		comboType.setEditable(false);
 
-		comboType.addActionListener((ActionEvent actionEvent) -> {
-			int oldSelTypeIndex = selTypeIndex;
-			Object selType = comboType.getSelectedItem();
-			if (selType == null || selType.equals(DEFAULT_TYPE)) {
-				showTypeRestricted = false;
-				selTypeIndex = -1;
-			} else {
-				showTypeRestricted = true;
-				selTypeIndex = typesList.indexOf(selType);
-			}
-
-			if (selTypeIndex != oldSelTypeIndex) {
-				buildDocument();
-				highlighter.removeAllHighlights();
-			}
-		});
+		comboType.addActionListener(actionEvent -> applyType());
 
 		commandpane = new JPanel();
 		GroupLayout layoutCommandpane = new GroupLayout(commandpane);
@@ -320,6 +307,23 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		}
 	}
 
+	private void applyType() {
+		int oldSelTypeIndex = selTypeIndex;
+		Object selType = comboType.getSelectedItem();
+		if (selType == null || selType.equals(DEFAULT_TYPE)) {
+			showTypeRestricted = false;
+			selTypeIndex = -1;
+		} else {
+			showTypeRestricted = true;
+			selTypeIndex = typesList.indexOf(selType);
+		}
+
+		if (selTypeIndex != oldSelTypeIndex) {
+			buildDocument();
+			highlighter.removeAllHighlights();
+		}
+	}
+
 	private void initPopupMenu() {
 
 		Integer[] popups;
@@ -336,35 +340,39 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		PopupMenuTrait popupMenu = new PopupMenuTrait(popups) {
 			@Override
 			public void action(int p) {
-				switch (p) {
-				case PopupMenuTrait.POPUP_RELOAD:
-					reload();
-					break;
-
-				case PopupMenuTrait.POPUP_SAVE:
-					save();
-					break;
-				case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
-					saveAsZip();
-					break;
-				case PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP:
-					saveAllAsZip(false);
-					break;
-				case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
-					saveAllAsZip(true);
-					break;
-				case PopupMenuTrait.POPUP_FLOATINGCOPY:
-					floatExternal();
-					break;
-
-				default:
-					Logging.warning(this, "no case found for popupMenuTrait in LogPane");
-					break;
-				}
+				treatPopupAction(p);
 			}
 		};
 
 		popupMenu.addPopupListenersTo(new JComponent[] { jTextPane });
+	}
+
+	public void treatPopupAction(int p) {
+		switch (p) {
+		case PopupMenuTrait.POPUP_RELOAD:
+			reload();
+			break;
+
+		case PopupMenuTrait.POPUP_SAVE:
+			save();
+			break;
+		case PopupMenuTrait.POPUP_SAVE_AS_ZIP:
+			saveAsZip();
+			break;
+		case PopupMenuTrait.POPUP_SAVE_LOADED_AS_ZIP:
+			saveAllAsZip(false);
+			break;
+		case PopupMenuTrait.POPUP_SAVE_ALL_AS_ZIP:
+			saveAllAsZip(true);
+			break;
+		case PopupMenuTrait.POPUP_FLOATINGCOPY:
+			floatExternal();
+			break;
+
+		default:
+			Logging.warning(this, "no case found for popupMenuTrait in LogPane");
+			break;
+		}
 	}
 
 	public Integer getMaxExistingLevel() {
@@ -441,10 +449,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	public void save() {
 		Logging.debug(this, "save action");
-	}
-
-	public void close() {
-		Logging.debug(this, "close action");
 	}
 
 	protected void saveAsZip() {
@@ -893,7 +897,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Minus");
 				reduceFontSize();
+			} else {
+				// Do nothing on other keys on jComboBoxSearch and jTextPane
 			}
+		} else {
+			Logging.warning(this, "unexpected keyevent on source " + e.getSource());
 		}
 	}
 
@@ -933,6 +941,8 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			increaseFontSize();
 		} else if (e.getSource() == buttonFontMinus) {
 			reduceFontSize();
+		} else {
+			Logging.warning(this, "unexpected action event on source " + e.getSource());
 		}
 	}
 }

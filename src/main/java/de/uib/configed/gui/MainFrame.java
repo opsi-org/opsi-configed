@@ -114,6 +114,7 @@ import de.uib.opsicommand.sshcommand.SSHCommandFactory;
 import de.uib.opsicommand.sshcommand.SSHCommandTemplate;
 import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.modulelicense.FGeneralDialogLicensingInfo;
 import de.uib.opsidatamodel.modulelicense.LicensingInfoMap;
 import de.uib.opsidatamodel.permission.UserConfig;
@@ -131,7 +132,6 @@ import de.uib.utilities.swing.JMenuItemFormatted;
 import de.uib.utilities.swing.JTextEditorField;
 import de.uib.utilities.swing.JTextHideField;
 import de.uib.utilities.swing.SeparatedDocument;
-import de.uib.utilities.swing.TitledPanel;
 import de.uib.utilities.swing.VerticalPositioner;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
@@ -140,8 +140,8 @@ import de.uib.utilities.thread.WaitCursor;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 
-public class MainFrame extends JFrame
-		implements WindowListener, KeyListener, MouseListener, ActionListener, RunningInstancesObserver<JDialog> {
+public class MainFrame extends JFrame implements WindowListener, KeyListener, MouseListener, ActionListener,
+		ComponentListener, RunningInstancesObserver<JDialog> {
 
 	private static final int DIVIDER_LOCATION_CENTRAL_PANE = 300;
 	private static final int MIN_WIDTH_TREE_PANEL = 150;
@@ -377,7 +377,7 @@ public class MainFrame extends JFrame
 	public PanelProductProperties panelProductProperties;
 
 	private PanelHWInfo showHardwareLogVersion2;
-	private TitledPanel showHardwareLogNotFound;
+	private JPanel showHardwareLogNotFound;
 	public ControllerHWinfoMultiClients controllerHWinfoMultiClients;
 	private JPanel showHardwareLogMultiClientReport;
 	private JPanel showHardwareLogParentOfNotFoundPanel;
@@ -436,6 +436,9 @@ public class MainFrame extends JFrame
 
 	private LicenseDisplayer licenseDisplayer;
 
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
 	public MainFrame(ConfigedMain main, JTableSelectionPanel selectionPanel, DepotsList depotsList,
 			ClientTree treeClients, boolean multidepot) {
 
@@ -488,58 +491,6 @@ public class MainFrame extends JFrame
 		panelLocalbootProductSettings.setDividerLocation(0.75);
 		panelNetbootProductSettings.setDividerLocation(0.75);
 		panelProductProperties.setDividerLocation(0.75);
-	}
-
-	private class SizeListeningPanel extends JPanel implements ComponentListener {
-		SizeListeningPanel() {
-			super.addComponentListener(this);
-		}
-		// ComponentListener implementation
-
-		@Override
-		public void componentHidden(ComponentEvent e) {
-			/* Not needed */}
-
-		@Override
-		public void componentMoved(ComponentEvent e) {
-			/* Not needed */}
-
-		@Override
-		public void componentShown(ComponentEvent e) {
-			/* Not needed */}
-
-		@Override
-		public void componentResized(ComponentEvent e) {
-			Logging.debug(this, "componentResized");
-
-			try {
-
-				moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
-						(int) (F_WIDTH_RIGHTHANDED * 1.5));
-			} catch (Exception ex) {
-				Logging.info(this, "componentResized " + ex);
-			}
-			Logging.debug(this, "componentResized ready");
-		}
-
-		private void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
-				int maxRightWidth) {
-			if (splitpane == null || rightpane == null) {
-				return;
-			}
-
-			int dividerLocation = splitpane.getDividerLocation();
-
-			int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
-			int missingSpace = minRightWidth - sizeOfRightPanel;
-			if (missingSpace > 0 && dividerLocation > minLeftWidth) {
-				splitpane.setDividerLocation(dividerLocation - missingSpace);
-			}
-
-			if (sizeOfRightPanel > maxRightWidth) {
-				splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - maxRightWidth));
-			}
-		}
 	}
 
 	// ------------------------------------------------------------------------------------------
@@ -607,12 +558,8 @@ public class MainFrame extends JFrame
 				configedMain.closeInstance(true);
 				UserPreferences.set(UserPreferences.LANGUAGE, localeName);
 				Messages.setLocale(localeName);
-				new Thread() {
-					@Override
-					public void run() {
-						Configed.startWithLocale();
-					}
-				}.start();
+
+				Configed.restartConfiged();
 
 				// we put it into to special thread to avoid invokeAndWait runtime error
 			});
@@ -636,14 +583,7 @@ public class MainFrame extends JFrame
 				Messages.setTheme(themeName);
 				Main.setOpsiLaf();
 
-				new Thread() {
-
-					@Override
-					public void run() {
-						Configed.startWithLocale();
-					}
-
-				}.start();
+				Configed.restartConfiged();
 			});
 		}
 
@@ -874,7 +814,7 @@ public class MainFrame extends JFrame
 
 		JMenu jMenuOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
-		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
+		for (final String event : persistenceController.getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItem(event);
 			if (!Main.FONT) {
 				item.setFont(Globals.defaultFont);
@@ -980,6 +920,7 @@ public class MainFrame extends JFrame
 		if (!Main.THEMES) {
 			jMenuSSHConnection.setForeground(Globals.UNKNOWN_COLOR);
 		}
+
 		if (status.equals(SSHCommandFactory.NOT_CONNECTED)) {
 
 			if (!Main.THEMES) {
@@ -997,6 +938,8 @@ public class MainFrame extends JFrame
 				jMenuSSHConnection.setForeground(Globals.OK_COLOR);
 			}
 			jMenuSSHConnection.setText(connectiondata.trim() + " " + SSHCommandFactory.CONNECTED);
+		} else {
+			Logging.warning(this, "unexpected status of ssh connection " + status);
 		}
 	}
 
@@ -1252,7 +1195,7 @@ public class MainFrame extends JFrame
 		jMenuFrames.setText(Configed.getResourceValue("MainFrame.jMenuFrames"));
 
 		jMenuFrameWorkOnGroups.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnGroups"));
-		jMenuFrameWorkOnGroups.setVisible(configedMain.getPersistenceController().isWithLocalImaging());
+		jMenuFrameWorkOnGroups.setVisible(persistenceController.isWithLocalImaging());
 		jMenuFrameWorkOnGroups.addActionListener(this);
 
 		jMenuFrameWorkOnProducts.setText(Configed.getResourceValue("MainFrame.jMenuFrameWorkOnProducts"));
@@ -1343,19 +1286,6 @@ public class MainFrame extends JFrame
 			jMenuHelp.add(jMenuHelpInternalConfiguration);
 		}
 
-		ActionListener selectLoglevelListener = (ActionEvent e) -> {
-			for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
-				if (e.getSource() == rbLoglevelItems[i]) {
-					rbLoglevelItems[i].setSelected(true);
-					Logging.setLogLevel(i);
-				} else {
-					if (rbLoglevelItems[i] != null) {
-						rbLoglevelItems[i].setSelected(false);
-					}
-				}
-			}
-		};
-
 		jMenuHelpLoglevel.setText(Configed.getResourceValue("MainFrame.jMenuLoglevel"));
 
 		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
@@ -1367,7 +1297,7 @@ public class MainFrame extends JFrame
 				rbLoglevelItems[i].setSelected(true);
 			}
 
-			rbLoglevelItems[i].addActionListener(selectLoglevelListener);
+			rbLoglevelItems[i].addActionListener(this::applyLoglevel);
 		}
 		jMenuHelp.add(jMenuHelpLoglevel);
 
@@ -1673,7 +1603,7 @@ public class MainFrame extends JFrame
 
 		JMenu menuPopupOpsiClientdEvent = new JMenu(Configed.getResourceValue("MainFrame.jMenuOpsiClientdEvent"));
 
-		for (final String event : configedMain.getPersistenceController().getOpsiclientdExtraEvents()) {
+		for (final String event : persistenceController.getOpsiclientdExtraEvents()) {
 			JMenuItem item = new JMenuItemFormatted(event);
 			if (!Main.FONT) {
 				item.setFont(Globals.defaultFont);
@@ -1746,6 +1676,19 @@ public class MainFrame extends JFrame
 		exportTable.addMenuItemsTo(popupClients);
 	}
 
+	private void applyLoglevel(ActionEvent actionEvent) {
+		for (int i = Logging.LEVEL_NONE; i <= Logging.LEVEL_SECRET; i++) {
+			if (actionEvent.getSource() == rbLoglevelItems[i]) {
+				rbLoglevelItems[i].setSelected(true);
+				Logging.setLogLevel(i);
+			} else {
+				if (rbLoglevelItems[i] != null) {
+					rbLoglevelItems[i].setSelected(false);
+				}
+			}
+		}
+	}
+
 	private void createPdf() {
 		TableModel tm = configedMain.getSelectedClientsTableModel();
 		JTable jTable = new JTable(tm);
@@ -1781,14 +1724,14 @@ public class MainFrame extends JFrame
 	// ------------------------------------------------------------------------------------------
 
 	public void updateHostCheckboxenText() {
-		if (configedMain.getPersistenceController().isWithUEFI()) {
+		if (persistenceController.isWithUEFI()) {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype"));
 		} else {
 			cbUefiBoot.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			cbUefiBoot.setEnabled(false);
 		}
 
-		if (configedMain.getPersistenceController().isWithWAN()) {
+		if (persistenceController.isWithWAN()) {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wanConfig"));
 		} else {
 			cbWANConfig.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
@@ -1803,11 +1746,11 @@ public class MainFrame extends JFrame
 		}
 		this.setIconImage(Globals.mainIcon);
 
-		SizeListeningPanel allPane = new SizeListeningPanel();
+		JPanel allPanel = new JPanel();
+		allPanel.addComponentListener(this);
+		allPanel.setLayout(borderLayout1);
 
-		allPane.setLayout(borderLayout1);
-
-		getContentPane().add(allPane);
+		getContentPane().add(allPanel);
 
 		initMenuData();
 
@@ -2239,7 +2182,7 @@ public class MainFrame extends JFrame
 		jButtonWorkOnGroups.setPreferredSize(Globals.modeSwitchDimension);
 		jButtonWorkOnGroups.setToolTipText(Configed.getResourceValue("MainFrame.labelWorkOnGroups"));
 
-		jButtonWorkOnGroups.setEnabled(configedMain.getPersistenceController().isWithLocalImaging());
+		jButtonWorkOnGroups.setEnabled(persistenceController.isWithLocalImaging());
 		jButtonWorkOnGroups.addActionListener(this);
 
 		jButtonWorkOnProducts = new JButton("", Globals.createImageIcon("images/packagebutton.png", ""));
@@ -2258,12 +2201,10 @@ public class MainFrame extends JFrame
 		jButtonDashboard.setVisible(ServerFacade.isOpsi43());
 		jButtonDashboard.addActionListener(this);
 
-		if (configedMain.getPersistenceController().isOpsiLicencingAvailable()
-				&& configedMain.getPersistenceController().isOpsiUserAdmin() && licensingInfoMap == null) {
-			licensingInfoMap = LicensingInfoMap.getInstance(
-					configedMain.getPersistenceController().getOpsiLicencingInfoOpsiAdmin(),
-					configedMain.getPersistenceController().getConfigDefaultValues(),
-					!FGeneralDialogLicensingInfo.extendedView);
+		if (persistenceController.isOpsiLicencingAvailable() && persistenceController.isOpsiUserAdmin()
+				&& licensingInfoMap == null) {
+			licensingInfoMap = LicensingInfoMap.getInstance(persistenceController.getOpsiLicencingInfoOpsiAdmin(),
+					persistenceController.getConfigDefaultValues(), !FGeneralDialogLicensingInfo.extendedView);
 
 			switch (licensingInfoMap.getWarningLevel()) {
 			case LicensingInfoMap.STATE_OVER_LIMIT:
@@ -2464,9 +2405,9 @@ public class MainFrame extends JFrame
 
 		statusPane = new HostsStatusPanel();
 
-		allPane.add(iconBarPane, BorderLayout.NORTH);
-		allPane.add(centralPane, BorderLayout.CENTER);
-		allPane.add(statusPane, BorderLayout.SOUTH);
+		allPanel.add(iconBarPane, BorderLayout.NORTH);
+		allPanel.add(centralPane, BorderLayout.CENTER);
+		allPanel.add(statusPane, BorderLayout.SOUTH);
 
 		// tab panes
 
@@ -2528,9 +2469,9 @@ public class MainFrame extends JFrame
 				super.reloadHostConfig();
 				configedMain.cancelChanges();
 
-				configedMain.getPersistenceController().configOptionsRequestRefresh();
+				persistenceController.configOptionsRequestRefresh();
 
-				configedMain.getPersistenceController().hostConfigsRequestRefresh();
+				persistenceController.hostConfigsRequestRefresh();
 				configedMain.resetView(ConfigedMain.VIEW_NETWORK_CONFIGURATION);
 			}
 
@@ -2560,8 +2501,8 @@ public class MainFrame extends JFrame
 			protected void reload() {
 				super.reload();
 				configedMain.clearSwInfo();
-				configedMain.getPersistenceController().installedSoftwareInformationRequestRefresh();
-				configedMain.getPersistenceController().softwareAuditOnClientsRequestRefresh();
+				persistenceController.installedSoftwareInformationRequestRefresh();
+				persistenceController.softwareAuditOnClientsRequestRefresh();
 				configedMain.resetView(ConfigedMain.VIEW_SOFTWARE_INFO);
 			}
 		};
@@ -2580,7 +2521,7 @@ public class MainFrame extends JFrame
 		showSoftwareLog = showSoftwareLogNotFound;
 
 		showSoftwareLogMultiClientReport = new PanelSWMultiClientReport();
-		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo);
+		SwExporter swExporter = new SwExporter(showSoftwareLogMultiClientReport, panelSWInfo, configedMain);
 		showSoftwareLogMultiClientReport.setActionListenerForStart(swExporter);
 
 		jTabbedPaneConfigPanes.insertTab(Configed.getResourceValue("MainFrame.jPanel_softwareLog"),
@@ -2644,7 +2585,7 @@ public class MainFrame extends JFrame
 
 		setTitle(configedMain.getAppTitle());
 
-		Containership csJPanelAllContent = new Containership(allPane);
+		Containership csJPanelAllContent = new Containership(allPanel);
 
 		csJPanelAllContent.doForAllContainedCompisOfClass("setDragEnabled", new Object[] { true },
 				new Class[] { boolean.class }, JTextComponent.class);
@@ -2893,7 +2834,7 @@ public class MainFrame extends JFrame
 			return;
 		}
 
-		List<String> disabledClientMenuEntries = configedMain.getPersistenceController().getDisabledClientMenuEntries();
+		List<String> disabledClientMenuEntries = persistenceController.getDisabledClientMenuEntries();
 
 		if (disabledClientMenuEntries != null) {
 			for (String menuActionType : disabledClientMenuEntries) {
@@ -2905,7 +2846,7 @@ public class MainFrame extends JFrame
 
 			iconButtonNewClient.setEnabled(!disabledClientMenuEntries.contains(ITEM_ADD_CLIENT));
 
-			if (!configedMain.getPersistenceController().isCreateClientPermission()) {
+			if (!persistenceController.isCreateClientPermission()) {
 				jMenuAddClient.setEnabled(false);
 				jMenuCopyClient.setEnabled(false);
 				popupAddClient.setEnabled(false);
@@ -3031,7 +2972,7 @@ public class MainFrame extends JFrame
 			public void doAction3() {
 				try {
 					Desktop.getDesktop().open(new File(Logging.getCurrentLogfilePath()));
-				} catch (Exception e) {
+				} catch (IOException e) {
 					Logging.error("cannot open: " + Logging.getCurrentLogfilePath() + " :\n " + e);
 				}
 				super.doAction2();
@@ -3089,10 +3030,9 @@ public class MainFrame extends JFrame
 	}
 
 	private void showOpsiModules() {
-		if (!configedMain.getPersistenceController().isOpsiLicencingAvailable()
-				|| !configedMain.getPersistenceController().isOpsiUserAdmin()) {
+		if (!persistenceController.isOpsiLicencingAvailable() || !persistenceController.isOpsiUserAdmin()) {
 			StringBuilder message = new StringBuilder();
-			Map<String, Object> modulesInfo = configedMain.getPersistenceController().getOpsiModulesInfos();
+			Map<String, Object> modulesInfo = persistenceController.getOpsiModulesInfos();
 
 			int count = 0;
 			for (Entry<String, Object> modulesInfoEntry : modulesInfo.entrySet()) {
@@ -3171,6 +3111,51 @@ public class MainFrame extends JFrame
 
 		return changedClientInfos.computeIfAbsent(client, arg -> new HashMap<>());
 
+	}
+
+	// ComponentListener implementation
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		/* Not needed */}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		Logging.debug(this, "componentResized");
+
+		try {
+			moveDivider1(panelClientSelection, clientPane, (int) (F_WIDTH_RIGHTHANDED * 0.2), 200,
+					(int) (F_WIDTH_RIGHTHANDED * 1.5));
+		} catch (Exception ex) {
+			Logging.info(this, "componentResized " + ex);
+		}
+		Logging.debug(this, "componentResized ready");
+	}
+
+	private static void moveDivider1(JSplitPane splitpane, JComponent rightpane, int minRightWidth, int minLeftWidth,
+			int maxRightWidth) {
+		if (splitpane == null || rightpane == null) {
+			return;
+		}
+
+		int dividerLocation = splitpane.getDividerLocation();
+
+		int sizeOfRightPanel = (int) rightpane.getSize().getWidth();
+		int missingSpace = minRightWidth - sizeOfRightPanel;
+		if (missingSpace > 0 && dividerLocation > minLeftWidth) {
+			splitpane.setDividerLocation(dividerLocation - missingSpace);
+		}
+
+		if (sizeOfRightPanel > maxRightWidth) {
+			splitpane.setDividerLocation(dividerLocation + (sizeOfRightPanel - maxRightWidth));
+		}
 	}
 
 	// TODO: kann das weg? arrange dialogs for opsi-client wake on LAN...
@@ -3281,6 +3266,8 @@ public class MainFrame extends JFrame
 				} else {
 					changedClientInfo.remove(HostInfo.CLIENT_IP_ADDRESS_KEY);
 				}
+			} else {
+				Logging.warning(this, "unexpected source in reactToHostDataChange: " + e.getSource());
 			}
 		}
 	}
@@ -3362,28 +3349,15 @@ public class MainFrame extends JFrame
 			configedMain.setEditingTarget(ConfigedMain.EditingTarget.SERVER);
 		} else if (e.getSource() == jButtonLicences || e.getSource() == jMenuFrameLicences) {
 			configedMain.handleLicencesManagementRequest();
-			if (Boolean.TRUE.equals(configedMain.getPersistenceController().getGlobalBooleanConfigValue(
+			if (Boolean.TRUE.equals(persistenceController.getGlobalBooleanConfigValue(
 					OpsiserviceNOMPersistenceController.KEY_SHOW_DASH_FOR_LICENCEMANAGEMENT,
 					OpsiserviceNOMPersistenceController.DEFAULTVALUE_SHOW_DASH_FOR_LICENCEMANAGEMENT))) {
 				// Starting JavaFX-Thread by creating a new JFXPanel, but not
 				// using it since it is not needed.
 
-				// TODO can this be removed?
-				// when do we need it?
 				new JFXPanel();
 
-				Platform.runLater(() -> {
-					if (licenseDisplayer == null) {
-						try {
-							licenseDisplayer = new LicenseDisplayer();
-							licenseDisplayer.initAndShowGUI();
-						} catch (IOException ioE) {
-							Logging.debug(this, "Unable to open FXML file.");
-						}
-					} else {
-						licenseDisplayer.display();
-					}
-				});
+				Platform.runLater(this::startLicenceDisplayer);
 			}
 		} else if (e.getSource() == jButtonWorkOnGroups || e.getSource() == jMenuFrameWorkOnGroups) {
 			configedMain.handleGroupActionRequest();
@@ -3395,6 +3369,21 @@ public class MainFrame extends JFrame
 			configedMain.initDashInfo();
 		} else if (e.getSource() == jButtonOpsiLicenses) {
 			showOpsiModules();
+		} else {
+			Logging.warning(this, "unexpected action on source " + e.getSource());
+		}
+	}
+
+	private void startLicenceDisplayer() {
+		if (licenseDisplayer == null) {
+			try {
+				licenseDisplayer = new LicenseDisplayer();
+				licenseDisplayer.initAndShowGUI();
+			} catch (IOException ioE) {
+				Logging.warning(this, "Unable to open FXML file.", ioE);
+			}
+		} else {
+			licenseDisplayer.display();
 		}
 	}
 
@@ -3462,11 +3451,12 @@ public class MainFrame extends JFrame
 		showHardwareLog.repaint();
 	}
 
-	public void setHardwareInfoNotPossible(String label1S, String label2S) {
-		Logging.info(this, "setHardwareInfoNotPossible " + label1S);
+	public void setHardwareInfoNotPossible(String label) {
+		Logging.info(this, "setHardwareInfoNotPossible");
 
 		if (showHardwareLogNotFound == null || showHardwareLogParentOfNotFoundPanel == null) {
-			showHardwareLogNotFound = new TitledPanel();
+			showHardwareLogNotFound = new JPanel();
+			showHardwareLogNotFound.add(new JLabel(label));
 			showHardwareLogParentOfNotFoundPanel = new JPanel();
 			if (!Main.THEMES) {
 				showHardwareLogNotFound.setBackground(Globals.BACKGROUND_COLOR_7);
@@ -3475,7 +3465,6 @@ public class MainFrame extends JFrame
 			showHardwareLogParentOfNotFoundPanel.add(showHardwareLogNotFound);
 		}
 
-		showHardwareLogNotFound.setTitle(label1S, label2S);
 		showHardwareLog = showHardwareLogParentOfNotFoundPanel;
 		showHardwareInfo();
 	}
@@ -3513,77 +3502,6 @@ public class MainFrame extends JFrame
 				showSoftwareLog);
 
 		SwingUtilities.invokeLater(() -> ConfigedMain.getMainFrame().repaint());
-	}
-
-	private class SwExporter implements ActionListener {
-		PanelSWMultiClientReport showSoftwareLogMultiClientReport;
-		PanelSWInfo panelSWInfo;
-
-		SwExporter(PanelSWMultiClientReport showSoftwareLogMultiClientReport, PanelSWInfo panelSWInfo) {
-			this.showSoftwareLogMultiClientReport = showSoftwareLogMultiClientReport;
-			this.panelSWInfo = panelSWInfo;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-
-			Logging.info(this, "actionPerformed " + "  showSoftwareLog_MultiClientReport.wantsWithMsUpdates  "
-					+ showSoftwareLogMultiClientReport.wantsWithMsUpdates());
-
-			// save states now
-
-			Configed.savedStates.setProperty("swaudit_export_file_prefix",
-					showSoftwareLogMultiClientReport.getExportfilePrefix());
-
-			String filepathStart = showSoftwareLogMultiClientReport.getExportDirectory() + File.separator
-					+ showSoftwareLogMultiClientReport.getExportfilePrefix();
-
-			String extension = "."
-					+ showSoftwareLogMultiClientReport.wantsKindOfExport().toString().toLowerCase(Locale.ROOT);
-
-			panelSWInfo.setWithMsUpdates(showSoftwareLogMultiClientReport.wantsWithMsUpdates());
-			panelSWInfo.setWithMsUpdates2(showSoftwareLogMultiClientReport.wantsWithMsUpdates2());
-
-			panelSWInfo.setAskForOverwrite(showSoftwareLogMultiClientReport.wantsAskForOverwrite());
-
-			panelSWInfo.setKindOfExport(showSoftwareLogMultiClientReport.wantsKindOfExport());
-
-			List<String> clientsWithoutScan = new ArrayList<>();
-
-			for (String client : configedMain.getSelectedClients()) {
-				Map<String, Map<String, Object>> tableData = configedMain.getPersistenceController()
-						.retrieveSoftwareAuditData(client);
-				if (tableData == null || tableData.isEmpty()) {
-					clientsWithoutScan.add(client);
-				}
-			}
-
-			Logging.info(this, "clientsWithoutScan " + clientsWithoutScan);
-
-			for (String client : configedMain.getSelectedClients()) {
-				panelSWInfo.setHost(client);
-
-				panelSWInfo.updateModel();
-
-				String scandate = configedMain.getPersistenceController().getLastSoftwareAuditModification(client);
-				if (scandate != null) {
-					int timePos = scandate.indexOf(' ');
-					if (timePos >= 0) {
-						scandate = scandate.substring(0, timePos);
-					} else {
-						scandate = "__";
-					}
-				}
-
-				String filepath = filepathStart + client + "__scan_" + scandate + extension;
-				Logging.debug(this, "actionPerformed, write to " + filepath);
-				panelSWInfo.setWriteToFile(filepath);
-
-				panelSWInfo.export();
-			}
-
-			Logging.info(this, "clientsWithoutScan " + clientsWithoutScan);
-		}
 	}
 
 	public void setSoftwareAudit() {
@@ -3734,8 +3652,8 @@ public class MainFrame extends JFrame
 		ipAddressField.setEditable(b1);
 
 		// multi host editing allowed
-		cbUefiBoot.setEnabled(gb && configedMain.getPersistenceController().isWithUEFI());
-		cbWANConfig.setEnabled(gb && configedMain.getPersistenceController().isWithWAN());
+		cbUefiBoot.setEnabled(gb && persistenceController.isWithUEFI());
+		cbWANConfig.setEnabled(gb && persistenceController.isWithWAN());
 		cbInstallByShutdown.setEnabled(gb);
 
 		jTextFieldHostKey.setMultiValue(!singleClient);

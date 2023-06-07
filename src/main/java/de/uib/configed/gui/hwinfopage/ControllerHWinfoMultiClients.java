@@ -50,36 +50,7 @@ public class ControllerHWinfoMultiClients {
 
 	private SecondaryFrame fTable;
 
-	private TableModelFilterCondition filterConditionHwForSelectedHosts = new TableModelFilterCondition() {
-		private Set<Object> filter;
-
-		@Override
-		public void setFilter(Set<Object> filter) {
-			this.filter = filter;
-		}
-
-		@Override
-		public boolean test(List<Object> row) {
-			if (filter == null || row == null || KEY_COL >= row.size()) {
-				return true;
-			}
-
-			return filter.contains(row.get(KEY_COL));
-
-		}
-
-		@Override
-		public String toString() {
-			String result = "TableModelFilterCondition: filterConditionHwForSelectedHosts, filter == null "
-					+ (filter == null);
-			if (filter != null) {
-				result = result + " size " + filter.size();
-			}
-
-			return result;
-		}
-
-	};
+	private TableModelFilterCondition filterConditionHwForSelectedHosts = new FilterConditionHwForSelectedHosts();
 
 	public ControllerHWinfoMultiClients(ConfigedMain main) {
 		this.main = main;
@@ -119,7 +90,6 @@ public class ControllerHWinfoMultiClients {
 				persistenceController.client2HwRowsRequestRefresh();
 
 				super.reload();
-
 			}
 
 			@Override
@@ -214,7 +184,7 @@ public class ControllerHWinfoMultiClients {
 			rebuildModel();
 		});
 
-		buttonConfigureColumns.addActionListener(actionEvent -> configureColumns(actionEvent));
+		buttonConfigureColumns.addActionListener(this::configureColumns);
 
 		JButton buttonCopySelection = new JButton("", Globals.createImageIcon("images/memorize_selection.png", ""));
 		buttonCopySelection.setPreferredSize(Globals.smallButtonDimension);
@@ -262,5 +232,37 @@ public class ControllerHWinfoMultiClients {
 		fTable.centerOnParent();
 
 		fTable.setVisible(true);
+	}
+
+	private static final class FilterConditionHwForSelectedHosts implements TableModelFilterCondition {
+		private Set<Object> filter;
+
+		private FilterConditionHwForSelectedHosts() {
+		}
+
+		@Override
+		public void setFilter(Set<Object> filter) {
+			this.filter = filter;
+		}
+
+		@Override
+		public boolean test(List<Object> row) {
+			if (filter == null || row == null || KEY_COL >= row.size()) {
+				return true;
+			}
+
+			return filter.contains(row.get(KEY_COL));
+		}
+
+		@Override
+		public String toString() {
+			String result = "TableModelFilterCondition: filterConditionHwForSelectedHosts, filter == null "
+					+ (filter == null);
+			if (filter != null) {
+				result = result + " size " + filter.size();
+			}
+
+			return result;
+		}
 	}
 }

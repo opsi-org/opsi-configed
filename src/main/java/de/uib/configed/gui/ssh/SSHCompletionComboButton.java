@@ -46,7 +46,8 @@ public class SSHCompletionComboButton {
 	// will be overwritten with config
 	private String opsiRepo = "/";
 
-	private OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public SSHCompletionComboButton() {
 		this(null, null, null);
@@ -94,7 +95,7 @@ public class SSHCompletionComboButton {
 	}
 
 	private void init(List<String> defvalues) {
-		if (persist == null) {
+		if (persistenceController == null) {
 			Logging.info(this, "init PersistenceController null");
 		} else {
 			opsiRepo = OpsiserviceNOMPersistenceController.configedWorkbenchDefaultValue;
@@ -239,27 +240,24 @@ public class SSHCompletionComboButton {
 		new Thread() {
 			@Override
 			public void run() {
-				try {
-					EmptyCommand getDirectories = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
-							.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
-						/** Sets the command specific error text **/
-						@Override
-						public String getErrorText() {
-							return ROOT_DIRECTORY;
-						}
-					};
 
-					SSHConnectExec ssh = new SSHConnectExec();
-					String result = ssh.exec(getDirectories, false);
-					if (result == null || result.isEmpty()) {
-						result = HOME_DIRECTORY;
+				EmptyCommand getDirectories = new EmptyCommand(SSHCommandFactory.STRING_COMMAND_GET_DIRECTORIES
+						.replace(SSHCommandFactory.STRING_REPLACEMENT_DIRECTORY, curdir)) {
+					/** Sets the command specific error text **/
+					@Override
+					public String getErrorText() {
+						return ROOT_DIRECTORY;
 					}
+				};
 
-					setItems(result, curdir);
-					enableComponents(true);
-				} catch (Exception e) {
-					Logging.error("getDirectoriesIn failed", e);
+				SSHConnectExec ssh = new SSHConnectExec();
+				String result = ssh.exec(getDirectories, false);
+				if (result == null || result.isEmpty()) {
+					result = HOME_DIRECTORY;
 				}
+
+				setItems(result, curdir);
+				enableComponents(true);
 			}
 		}.start();
 	}

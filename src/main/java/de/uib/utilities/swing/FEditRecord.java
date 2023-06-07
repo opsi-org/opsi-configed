@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * FEditRecord.java
- *
- * (c) uib 2012
- * GPL-licensed
- * author Rupert Röder
- */
-
 package de.uib.utilities.swing;
 
 import java.awt.BorderLayout;
@@ -30,6 +22,8 @@ public class FEditRecord extends FEdit {
 					commit();
 				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 					cancel();
+				} else {
+					// We want to do nothing on other keys
 				}
 			}
 

@@ -16,21 +16,20 @@ import de.uib.configed.clientselection.Client;
 import de.uib.configed.clientselection.ExecutableOperation;
 import de.uib.configed.clientselection.backends.opsidatamodel.OpsiDataClient;
 import de.uib.configed.clientselection.operations.SoftwareOperation;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class OpsiDataSoftwareOperation extends SoftwareOperation implements ExecutableOperation {
 	private Map<String, Map<String, String>> productDefaultStates;
 	private Set<String> productsWithDefaultValues;
-	private de.uib.opsidatamodel.OpsiserviceNOMPersistenceController controller;
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public OpsiDataSoftwareOperation(AbstractSelectOperation operation) {
 		super(operation);
-		controller = PersistenceControllerFactory.getPersistenceController();
-		if (controller == null) {
-			Logging.warning(this, "Warning, controller is null!");
-		}
-		productDefaultStates = controller.getProductDefaultStates();
+
+		productDefaultStates = persistenceController.getProductDefaultStates();
 		productsWithDefaultValues = new TreeSet<>(productDefaultStates.keySet());
 	}
 

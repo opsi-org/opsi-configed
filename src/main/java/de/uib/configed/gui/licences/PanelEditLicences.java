@@ -22,9 +22,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.Globals;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 
-/**
- * @author roeder
- */
 public class PanelEditLicences extends MultiTablePanel {
 	public PanelGenEditTable panelKeys;
 	public PanelGenEditTable panelSoftwarelicences;

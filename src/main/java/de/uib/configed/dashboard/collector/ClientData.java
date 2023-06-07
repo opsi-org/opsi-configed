@@ -31,7 +31,7 @@ public final class ClientData {
 
 	private static String selectedDepot;
 
-	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+	private static OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private ClientData() {
@@ -52,9 +52,10 @@ public final class ClientData {
 
 		clients.clear();
 
-		Map<String, HostInfo> mapOfAllPCInfoMaps = persist.getHostInfoCollections().getMapOfAllPCInfoMaps();
+		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
+				.getMapOfAllPCInfoMaps();
 
-		List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());
+		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 
 		for (String depot : depots) {
 			List<Client> clientsList = new ArrayList<>();
@@ -102,12 +103,13 @@ public final class ClientData {
 		activeClients.clear();
 		inactiveClients.clear();
 
-		Map<String, Object> reachableInfo = persist.reachableInfo(null);
-		List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());
+		Map<String, Object> reachableInfo = persistenceController.reachableInfo(null);
+		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 
 		for (String depot : depots) {
-			List<String> clients = persist.getHostInfoCollections().getMapOfAllPCInfoMaps().values().stream()
-					.filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
+			List<String> clients = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
+					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName)
+					.collect(Collectors.toList());
 
 			List<String> activeClientsList = new ArrayList<>();
 			List<String> inactiveClientsList = new ArrayList<>();
@@ -153,8 +155,9 @@ public final class ClientData {
 		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		final LocalDate current = LocalDate.now();
 
-		Map<String, HostInfo> mapOfAllPCInfoMaps = persist.getHostInfoCollections().getMapOfAllPCInfoMaps();
-		List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());
+		Map<String, HostInfo> mapOfAllPCInfoMaps = persistenceController.getHostInfoCollections()
+				.getMapOfAllPCInfoMaps();
+		List<String> depots = new ArrayList<>(persistenceController.getHostInfoCollections().getAllDepots().keySet());
 
 		for (String depot : depots) {
 			final Map<String, Integer> lastSeenData = new HashMap<>();

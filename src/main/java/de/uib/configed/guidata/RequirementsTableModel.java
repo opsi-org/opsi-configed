@@ -173,14 +173,7 @@ public class RequirementsTableModel extends AbstractTableModel {
 		} else {
 			switch (col) {
 			case 1:
-				if (rowTypeIndex == 1) {
-					if (requMap != null) {
-						result = requMap.get(myKey);
-					}
-				} else if (rowTypeIndex == 2 && requDeinstallMap != null) {
-					result = requDeinstallMap.get(myKey);
-				}
-				break;
+				return getValueForCol1(myKey, rowTypeIndex);
 
 			case 2:
 				// otherwise, result will remain null
@@ -206,7 +199,18 @@ public class RequirementsTableModel extends AbstractTableModel {
 			}
 
 		}
+
 		return result;
+	}
+
+	private String getValueForCol1(String myKey, int rowTypeIndex) {
+		if (rowTypeIndex == 1 && requMap != null) {
+			return requMap.get(myKey);
+		} else if (rowTypeIndex == 2 && requDeinstallMap != null) {
+			return requDeinstallMap.get(myKey);
+		} else {
+			return null;
+		}
 	}
 
 	public MyTableCellRenderer getTableCellRenderer() {

@@ -124,6 +124,8 @@ public class FShowList extends FTextArea {
 			jButton1.requestFocus();
 		} else if (e.getKeyCode() == KeyEvent.VK_TAB && shiftPressed && e.getSource() == jButton1) {
 			jTextArea1.requestFocus();
+		} else {
+			// Do nothing on other key events
 		}
 	}
 

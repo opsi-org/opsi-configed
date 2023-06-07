@@ -31,7 +31,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -48,7 +47,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.RowSorterEvent;
 import javax.swing.event.RowSorterListener;
 import javax.swing.table.TableCellRenderer;
@@ -199,33 +197,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		tableProducts.setGridColor(Globals.PANEL_PRODUCT_SETTINGS_TABLE_GRID_COLOR);
 		tableProducts.setRowHeight(Globals.TABLE_ROW_HEIGHT);
 
-		tableProducts.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-
-				// Ignore extra messages.
-				if (e.getValueIsAdjusting()) {
-					return;
-				}
-
-				clearEditing();
-
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-				if (lsm.isSelectionEmpty()) {
-					Logging.debug(this, "no rows selected");
-				} else {
-					int selectedRow = lsm.getMinSelectionIndex();
-					if (selectedRow == lsm.getMaxSelectionIndex()) {
-						Logging.debug(this, "selected " + selectedRow);
-						Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
-						Logging.debug(this, "selected  value at "
-								+ tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
-						mainController.setProductEdited(
-								(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
-					}
-				}
-			}
-		});
+		tableProducts.getSelectionModel().addListSelectionListener(this::applyChangedValue);
 
 		tableProducts.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
@@ -397,6 +369,8 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 					} else if (val.startsWith(
 							ActionResult.getLabel2DisplayLabel().get(ActionResult.getLabel(ActionResult.SUCCESSFUL)))) {
 						c.setForeground(Globals.OK_COLOR);
+					} else {
+						// Don't set foreground if no special result
 					}
 				}
 
@@ -459,45 +433,6 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.addMouseListener(new utils.PopupMouseListener(popup));
 		tableProducts.addMouseListener(new utils.PopupMouseListener(popup));
 
-	}
-
-	private static class ActionProgressTableCellRenderer extends ColoredTableCellRendererByIndex {
-		ActionProgressTableCellRenderer(Map<String, String> mapOfStringValues, String imagesBase, boolean showOnlyIcon,
-				String tooltipPrefix) {
-			super(mapOfStringValues, imagesBase, showOnlyIcon, tooltipPrefix);
-		}
-
-		// overwrite the renderer in order to get the behaviour:
-		// - if the cell value is not empty or null, display the installing gif
-		// - write the cell value text as tooltip
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
-
-			Component result = null;
-			if (value != null && !"".equals(value) && !"null".equals(value.toString())
-					&& !"none".equalsIgnoreCase(value.toString())
-					&& !value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
-				result = super.getTableCellRendererComponent(table, "installing", isSelected, hasFocus, row, column);
-
-				((JLabel) result)
-						.setToolTipText(Globals.fillStringToLength(tooltipPrefix + " " + value + " ", FILL_LENGTH));
-
-			} else if (value != null && value.toString().equalsIgnoreCase(Globals.CONFLICT_STATE_STRING)) {
-				result = super.getTableCellRendererComponent(table, Globals.CONFLICT_STATE_STRING, isSelected, hasFocus,
-						row, column);
-
-				((JLabel) result).setToolTipText(Globals
-						.fillStringToLength(tooltipPrefix + " " + Globals.CONFLICT_STATE_STRING + " ", FILL_LENGTH));
-			} else {
-				result = super.getTableCellRendererComponent(table, "none", isSelected, hasFocus, row, column);
-
-				((JLabel) result).setToolTipText(Globals.fillStringToLength(
-						tooltipPrefix + " " + ActionProgress.getDisplayLabel(ActionProgress.NONE) + " ", FILL_LENGTH));
-			}
-
-			return result;
-		}
 	}
 
 	public void initAllProperties() {
@@ -650,6 +585,29 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			});
 
 			sub.add(item);
+		}
+	}
+
+	private void applyChangedValue(ListSelectionEvent listSelectionEvent) {
+		if (listSelectionEvent.getValueIsAdjusting()) {
+			return;
+		}
+
+		clearEditing();
+
+		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
+		if (lsm.isSelectionEmpty()) {
+			Logging.debug(this, "no rows selected");
+		} else {
+			int selectedRow = lsm.getMinSelectionIndex();
+			if (selectedRow == lsm.getMaxSelectionIndex()) {
+				Logging.debug(this, "selected " + selectedRow);
+				Logging.debug(this, "selected modelIndex " + convertRowIndexToModel(selectedRow));
+				Logging.debug(this, "selected  value at "
+						+ tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
+				mainController.setProductEdited(
+						(String) tableProducts.getModel().getValueAt(convertRowIndexToModel(selectedRow), 0));
+			}
 		}
 	}
 

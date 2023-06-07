@@ -19,6 +19,7 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.swing.SwingUtilities;
 
@@ -40,7 +41,8 @@ import de.uib.utilities.savedstates.SavedStates;
 
 public final class Configed {
 
-	private static final String LOCALIZATION_FILENAME_REGEX = Messages.APPNAME + "_...*\\.properties";
+	private static final String LOCALIZATION_FILENAME_REGEX = "configed_...*\\.properties";
+	private static final Pattern localizationFilenameRegex = Pattern.compile(LOCALIZATION_FILENAME_REGEX);
 
 	public static boolean sshConnectOnStart;
 
@@ -113,10 +115,10 @@ public final class Configed {
 			Logging.debug("imageHandled failed: " + ex.toString());
 		}
 
-		startWithLocale();
+		startConfiged();
 	}
 
-	public static void startWithLocale() {
+	public static void startConfiged() {
 		Logging.notice("system information: ");
 
 		Logging.notice(" configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") " + Globals.VERHASHTAG);
@@ -143,6 +145,15 @@ public final class Configed {
 			Logging.info(" run " + ie);
 			Thread.currentThread().interrupt();
 		}
+	}
+
+	public static void restartConfiged() {
+		new Thread() {
+			@Override
+			public void run() {
+				Configed.startConfiged();
+			}
+		}.start();
 	}
 
 	private static void setStartSettings(ConfigedMain configedMain) {
@@ -235,8 +246,7 @@ public final class Configed {
 		}
 	}
 
-	private static void processArgs(CommandLine cmd) {
-
+	private static void processLoginOptions(CommandLine cmd) {
 		if (cmd.hasOption("h")) {
 			host = cmd.getOptionValue("h");
 		}
@@ -248,7 +258,9 @@ public final class Configed {
 		if (cmd.hasOption("p")) {
 			password = cmd.getOptionValue("p");
 		}
+	}
 
+	private static void processGuiOptions(CommandLine cmd) {
 		if (cmd.hasOption("c")) {
 			client = cmd.getOptionValue("c");
 		}
@@ -267,6 +279,89 @@ public final class Configed {
 				Main.endApp(Main.ERROR_INVALID_OPTION);
 			}
 		}
+	}
+
+	private static void processSSHOptions(CommandLine cmd) {
+		if (cmd.hasOption("ssh-immediate-connect")) {
+			String sshImmediateConnectString = cmd.getOptionValue("ssh-immediate-connect");
+
+			if ("Y".equalsIgnoreCase(sshImmediateConnectString)) {
+				sshConnectOnStart = true;
+			} else if ("N".equalsIgnoreCase(sshImmediateConnectString)) {
+				sshConnectOnStart = false;
+			} else {
+				Main.showHelp();
+				Main.endApp(Main.ERROR_INVALID_OPTION);
+			}
+		}
+
+		if (cmd.hasOption("ssh-key")) {
+			sshKey = cmd.getOptionValue("ssh-key");
+		}
+
+		if (cmd.hasOption("ssh-passphrase")) {
+			sshKeyPass = cmd.getOptionValue("ssh-passphrase");
+		}
+	}
+
+	private static void processNonGUIOptions(CommandLine cmd) {
+		if (cmd.hasOption("qs")) {
+			optionCLIQuerySearch = true;
+			savedSearch = cmd.getOptionValue("qs");
+		}
+
+		if (cmd.hasOption("qg")) {
+			optionCLIDefineGroupBySearch = true;
+			String[] values = cmd.getOptionValues("qg");
+			savedSearch = values[0];
+			group = values[1];
+		}
+
+		if (cmd.hasOption("initUserRoles")) {
+			optionCLIuserConfigProducing = true;
+		}
+
+		if (cmd.hasOption("swaudit-pdf")) {
+			optionCLISwAuditPDF = true;
+			String[] values = cmd.getOptionValues("swaudit-pdf");
+			clientsFile = values[0];
+			outDir = values[1];
+		}
+
+		if (cmd.hasOption("swaudit-csv")) {
+			optionCLISwAuditCSV = true;
+			String[] values = cmd.getOptionValues("swaudit-pdf");
+			clientsFile = values[0];
+			outDir = values[1];
+		}
+	}
+
+	private static void processLocalizationOptions(CommandLine cmd) {
+		if (cmd.hasOption("localizationfile")) {
+			String extraLocalizationFileName = cmd.getOptionValue("localizationfile");
+			boolean success = loadLocalizationFile(extraLocalizationFileName);
+
+			if (!success) {
+				Main.endApp(Main.ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
+			}
+		}
+
+		if (cmd.hasOption("localizationstrings")) {
+			showLocalizationStrings = true;
+		}
+	}
+
+	private static void processArgs(CommandLine cmd) {
+
+		processLoginOptions(cmd);
+
+		processGuiOptions(cmd);
+
+		processSSHOptions(cmd);
+
+		processNonGUIOptions(cmd);
+
+		processLocalizationOptions(cmd);
 
 		if (cmd.hasOption("s")) {
 			savedStatesLocationName = cmd.getOptionValue("s");
@@ -294,43 +389,6 @@ public final class Configed {
 			}
 		}
 
-		if (cmd.hasOption("ssh-immediate-connect")) {
-			String sshImmediateConnectString = cmd.getOptionValue("ssh-immediate-connect");
-
-			if ("Y".equalsIgnoreCase(sshImmediateConnectString)) {
-				sshConnectOnStart = true;
-			} else if ("N".equalsIgnoreCase(sshImmediateConnectString)) {
-				sshConnectOnStart = false;
-			} else {
-				Main.showHelp();
-				Main.endApp(Main.ERROR_INVALID_OPTION);
-			}
-		}
-
-		if (cmd.hasOption("ssh-key")) {
-			sshKey = cmd.getOptionValue("ssh-key");
-		}
-
-		if (cmd.hasOption("ssh-passphrase")) {
-			sshKeyPass = cmd.getOptionValue("ssh-passphrase");
-		}
-
-		if (cmd.hasOption("qs")) {
-			optionCLIQuerySearch = true;
-			savedSearch = cmd.getOptionValue("qs");
-		}
-
-		if (cmd.hasOption("qg")) {
-			optionCLIDefineGroupBySearch = true;
-			String[] values = cmd.getOptionValues("qg");
-			savedSearch = values[0];
-			group = values[1];
-		}
-
-		if (cmd.hasOption("initUserRoles")) {
-			optionCLIuserConfigProducing = true;
-		}
-
 		if (cmd.hasOption("collect_queries_until_no")) {
 			String no = cmd.getOptionValue("collect_queries_until_no");
 
@@ -343,44 +401,8 @@ public final class Configed {
 			}
 		}
 
-		if (cmd.hasOption("localizationfile")) {
-			String extraLocalizationFileName = cmd.getOptionValue("localizationfile");
-			boolean success = loadLocalizationFile(extraLocalizationFileName);
-
-			if (!success) {
-				Main.endApp(Main.ERROR_CANNOT_READ_EXTRA_LOCALIZATION);
-			}
-		}
-
-		if (cmd.hasOption("localizationstrings")) {
-			showLocalizationStrings = true;
-		}
-
-		if (cmd.hasOption("swaudit-pdf")) {
-			optionCLISwAuditPDF = true;
-			String[] values = cmd.getOptionValues("swaudit-pdf");
-			clientsFile = values[0];
-			outDir = values[1];
-		}
-
-		if (cmd.hasOption("swaudit-csv")) {
-			optionCLISwAuditCSV = true;
-			String[] values = cmd.getOptionValues("swaudit-pdf");
-			clientsFile = values[0];
-			outDir = values[1];
-		}
-
 		if (cmd.hasOption("disable-certificate-verification")) {
 			Globals.disableCertificateVerification = true;
-		}
-
-		Logging.debug("configed: args recognized");
-
-		Logging.setLogfileMarker(host);
-		Logging.init();
-		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
-		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
-			Logging.setSuppressConsole();
 		}
 	}
 
@@ -395,18 +417,17 @@ public final class Configed {
 			Logging.debug("File not readable " + extraLocalizationFileName);
 		} else {
 			Logging.debug(" ok " + LOCALIZATION_FILENAME_REGEX + "? "
-					+ extraLocalizationFileName.matches("configed_...*\\.properties") + " --  "
-					+ extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX));
+					+ localizationFilenameRegex.matcher(extraLocalizationFileName).matches());
 
 			parts = extraLocalizationFileName.split("_");
 
 			Logging.debug(" . " + parts[1] + " .. " + Arrays.toString(parts[1].split("\\.")));
 
-			if (!extraLocalizationFileName.matches(LOCALIZATION_FILENAME_REGEX)) {
+			if (localizationFilenameRegex.matcher(extraLocalizationFileName).matches()) {
+				return loadExtraLocalization(extraLocalizationFile);
+			} else {
 				Logging.debug("localization file does not have the expected format " + Messages.APPNAME
 						+ "_LOCALE.properties");
-			} else {
-				return loadExtraLocalization(extraLocalizationFile);
 			}
 		}
 
@@ -427,6 +448,16 @@ public final class Configed {
 		return true;
 	}
 
+	private static void initLogging() {
+
+		Logging.setLogfileMarker(host);
+		Logging.init();
+		Logging.essential("Configed version " + Globals.VERSION + " (" + Globals.VERDATE + ") starting");
+		if (optionCLIQuerySearch || optionCLIDefineGroupBySearch) {
+			Logging.setSuppressConsole();
+		}
+	}
+
 	/**
 	 * main-Methode
 	 */
@@ -434,29 +465,28 @@ public final class Configed {
 
 		processArgs(cmd);
 
-		startConfiged();
+		Logging.debug("configed: args recognized");
+
+		initLogging();
+
+		checkArgsAndStart();
 	}
 
-	private static void startConfiged() {
+	private static void checkArgsAndStart() {
 		Logging.debug("initiating configed");
 
 		if (optionCLIQuerySearch) {
 
 			Logging.debug("optionCLIQuerySearch");
-			SavedSearchQuery query = new SavedSearchQuery();
-
-			query.setArgs(host, user, password, savedSearch);
-			query.addMissingArgs();
+			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
 
 			query.runSearch(true);
 			Main.endApp(Main.NO_ERROR);
 		} else if (optionCLIDefineGroupBySearch) {
 			Logging.debug("optionCLIDefineGroupBySearch");
 
-			SavedSearchQuery query = new SavedSearchQuery();
+			SavedSearchQuery query = new SavedSearchQuery(host, user, password, savedSearch);
 
-			query.setArgs(host, user, password, savedSearch);
-			query.addMissingArgs();
 			List<String> newGroupMembers = query.runSearch(false);
 
 			query.populateHostGroup(newGroupMembers, group);
@@ -496,6 +526,8 @@ public final class Configed {
 			Logging.debug("UserConfigProducing: newData " + newData);
 
 			Main.endApp(Main.NO_ERROR);
+		} else {
+			Logging.info("start configed gui since no options for CLI-mode were chosen");
 		}
 
 		try {

@@ -4,13 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- *
- * (c) uib, www.uib.de, 2013
- *
- * author Rupert Röder
- */
-
 package de.uib.utilities.datapanel;
 
 import java.util.ArrayList;
@@ -24,7 +17,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.swing.GroupLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -58,7 +50,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 
 	private JSplitPane splitPane;
 	protected XTree tree;
-	private JPanel rightPane;
+	private JPanel emptyRightPane;
 	private SimpleTreeModel treemodel;
 
 	private NavigableMap<String, String> givenClasses;
@@ -119,6 +111,8 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 					reload();
 				} else if (p == PopupMenuTrait.POPUP_SAVE) {
 					actor.saveData();
+				} else {
+					Logging.warning(this, "unexpected action " + p);
 				}
 			}
 		};
@@ -277,14 +271,10 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		JScrollPane jScrollPaneTree = new JScrollPane(tree);
 		jScrollPaneTree.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		rightPane = new JPanel();
-
-		// TODO why empty label?
-		JLabel labelForRightPane = new JLabel("");
-		rightPane.add(labelForRightPane);
+		emptyRightPane = new JPanel();
 
 		splitPane.setLeftComponent(jScrollPaneTree);
-		splitPane.setRightComponent(rightPane);
+		splitPane.setRightComponent(emptyRightPane);
 		splitPane.setDividerLocation(INITIAL_DIVIDER_LOCATION);
 
 		GroupLayout layout = new GroupLayout(this);
@@ -419,7 +409,7 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		int divLoc = splitPane.getDividerLocation();
 
 		if (p == null) {
-			splitPane.setRightComponent(rightPane);
+			splitPane.setRightComponent(emptyRightPane);
 			splitPane.setDividerLocation(divLoc);
 			return;
 		}
@@ -427,13 +417,13 @@ public class EditMapPanelGrouped extends DefaultEditMapPanel implements TreeSele
 		boolean isRoot = p.getPathCount() == 1;
 
 		if (isRoot) {
-			splitPane.setRightComponent(rightPane);
+			splitPane.setRightComponent(emptyRightPane);
 		} else {
 			// we start at 1 since we eliminate the root node
 			String key = SimpleTreePath.dottedString(1, p);
 
 			if (partialPanels.get(key) == null) {
-				splitPane.setRightComponent(rightPane);
+				splitPane.setRightComponent(emptyRightPane);
 			} else {
 				splitPane.setRightComponent(partialPanels.get(key));
 			}

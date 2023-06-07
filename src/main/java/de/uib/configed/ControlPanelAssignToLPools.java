@@ -21,7 +21,6 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
 import de.uib.Main;
@@ -47,7 +46,6 @@ import de.uib.utilities.table.updates.AbstractSelectionMemorizerUpdateController
 import de.uib.utilities.table.updates.MapBasedUpdater;
 import de.uib.utilities.table.updates.MapItemsUpdateController;
 import de.uib.utilities.table.updates.MapTableUpdateItemFactory;
-import de.uib.utilities.table.updates.StrList2BooleanFunction;
 import de.uib.utilities.table.updates.TableEditItem;
 
 public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
@@ -455,39 +453,12 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				new MapItemsUpdateController(thePanel.panelLicencepools, modelLicencepools, new MapBasedUpdater() {
 					@Override
 					public String sendUpdate(Map<String, Object> rowmap) {
-						// hack for avoiding unvoluntary reuse of a licence pool id
-						boolean existsNewRow = mainController.licencePoolTableProvider.getRows()
-								.size() < modelLicencepools.getRowCount();
-
-						if (existsNewRow
-								&& persistenceController.getLicencepools().containsKey(rowmap.get("licensePoolId"))) {
-							// but we leave it until the service methods reflect the situation more
-							// accurately
-
-							String info = Configed.getResourceValue("PanelAssignToLPools.licencePoolIdAlreadyExists")
-									+ " \n(\"" + rowmap.get("licensePoolId") + "\" ?)";
-
-							String title = Configed
-									.getResourceValue("PanelAssignToLPools.licencePoolIdAlreadyExists.title");
-
-							JOptionPane.showMessageDialog(thePanel, info, title, JOptionPane.INFORMATION_MESSAGE);
-
-							return null;
-						}
-
-						if (existsNewRow) {
-							modelLicencepools.requestReload();
-						}
-
-						return persistenceController.editLicencePool(
-								(String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY),
-								(String) rowmap.get(LicencepoolEntry.DESCRIPTION_KEY));
+						return updateLicencepool(rowmap);
 					}
 
 					@Override
 					public boolean sendDelete(Map<String, Object> rowmap) {
-						modelLicencepools.requestReload();
-						return persistenceController.deleteLicencePool((String) rowmap.get("licensePoolId"));
+						return deleteLicencepool(rowmap);
 					}
 				}, updateCollection));
 
@@ -656,16 +627,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 			setSWAssignments();
 		});
 
-		thePanel.panelRegisteredSoftware.setFiltermarkActionListener((ActionEvent e) -> {
-			if (softwareShow == SoftwareShowMode.ALL) {
-				softwareShow = SoftwareShowMode.ASSIGNED;
-				setSWAssignments();
-			} else if (softwareShow == SoftwareShowMode.ASSIGNED) {
-				softwareShow = SoftwareShowMode.ALL;
-				setSWAssignments();
-			}
-
-		});
+		thePanel.panelRegisteredSoftware
+				.setFiltermarkActionListener(actionEvent -> registeredSoftwareFiltermarkAction());
 
 		JMenuItemFormatted menuItemSoftwareShowAll = new JMenuItemFormatted(
 				Configed.getResourceValue("ConfigedMain.Licences.PopupWindowsSoftwareShowAll"));
@@ -704,84 +667,14 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 
 		// updates
 		thePanel.panelRegisteredSoftware.setUpdateController(new AbstractSelectionMemorizerUpdateController(
-				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, new StrList2BooleanFunction() {
-					@Override
-					public boolean sendUpdate(String poolId, List<String> softwareIds) {
-
-						Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
-						Logging.info(this,
-								"sendUpdate poolId, removeKeysFromOtherLicencePool " + removeKeysFromOtherLicencePool);
-
-						boolean result = true;
-
-						if (removeKeysFromOtherLicencePool != null) {
-							for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicencePool
-									.entrySet()) {
-								if (result && !otherStringPoolEntry.getValue().isEmpty()) {
-									result = persistenceController.removeAssociations(otherStringPoolEntry.getKey(),
-											otherStringPoolEntry.getValue());
-									if (result) {
-										removeKeysFromOtherLicencePool.remove(otherStringPoolEntry.getKey());
-									}
-								}
-							}
-						}
-
-						if (!result) {
-							return false;
-						}
-
-						// cleanup assignments to other pools since an update would not change them
-						// (redmine #3282)
-						if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
-							result = persistenceController.setWindowsSoftwareIds2LPool(poolId, softwareIds);
-						} else {
-							result = persistenceController.addWindowsSoftwareIds2LPool(poolId, softwareIds);
-						}
-
-						Logging.info(this, "sendUpdate, setSoftwareIdsFromLicencePool poolId " + poolId);
-						setSoftwareIdsFromLicencePool(poolId);
-
-						// doing it locally for fSoftware2LicencePool
-						Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
-						Logging.info(this, "sendUpdate, we have software ids " + softwareIds.size());
-						Logging.info(this,
-								"sendUpdate, we have software ids "
-										+ persistenceController.getSoftwareListByLicencePool(poolId).size()
-										+ " they are " + persistenceController.getSoftwareListByLicencePool(poolId));
-
-						List<String> oldSWListForPool = persistenceController.getSoftwareListByLicencePool(poolId);
-
-						// remove all old assignements
-						for (String swId : oldSWListForPool) {
-							Logging.info(this, "sendUpdate remove " + swId + " from Software2LicencePool ");
-							persistenceController.getFSoftware2LicencePool().remove(swId);
-						}
-						// set the current ones
-						for (String ident : softwareIds) {
-							persistenceController.setFSoftware2LicencePool(ident, poolId);
-						}
-
-						if (thePanel.fSoftwarename2LicencePool != null) {
-							thePanel.fSoftwarename2LicencePool.panelSWnames.requestReload();
-						}
-
-						if (thePanel.fSoftwarename2LicencePool != null) {
-							thePanel.fSoftwarename2LicencePool.panelSWxLicencepool.requestReload();
-						}
-
-						return result;
-					}
-				}) {
+				thePanel.panelLicencepools, 0, thePanel.panelRegisteredSoftware, this::updateLicencepool) {
 
 			@Override
 			public boolean cancelChanges() {
 				setSoftwareIdsFromLicencePool(null);
 				return true;
 			}
-		}
-
-		);
+		});
 
 		// -- Softwarename --> LicencePool
 
@@ -794,81 +687,190 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 		thePanel.fSoftwarename2LicencePool.setButtonsEnabled(true);
 
 		// combine
-		thePanel.panelLicencepools.getListSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				// Ignore extra messages.
-				if (e.getValueIsAdjusting()) {
-					return;
-				}
-
-				String selectedLicencePool = null;
-
-				// clear selection
-				thePanel.panelProductId2LPool.setSelectedValues(null, 0);
-
-				ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-
-				if (lsm.isSelectionEmpty()) {
-					Logging.debug(this, "no rows selected");
-				} else {
-					selectedLicencePool = getSelectedLicencePool();
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-					thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
-				}
-
-				setSoftwareIdsFromLicencePool(selectedLicencePool);
-
-				if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
-					thePanel.panelRegisteredSoftware.setDataChanged(gotNewSWKeysForLicencePool(selectedLicencePool));
-				}
-
-			}
-		});
+		thePanel.panelLicencepools.getListSelectionModel().addListSelectionListener(this::licencePoolValueChanged);
 
 		setSoftwareIdsFromLicencePool(null);
 		initializeVisualSettings();
+	}
+
+	private void registeredSoftwareFiltermarkAction() {
+		if (softwareShow == SoftwareShowMode.ALL) {
+			softwareShow = SoftwareShowMode.ASSIGNED;
+			setSWAssignments();
+		} else if (softwareShow == SoftwareShowMode.ASSIGNED) {
+			softwareShow = SoftwareShowMode.ALL;
+			setSWAssignments();
+		} else {
+			// Should not happen because SoftwareShowMode has only two elements
+			Logging.warning(this,
+					"softwareShow has Value " + softwareShow + " that does not exist in SoftwareShowMode");
+		}
+	}
+
+	private String updateLicencepool(Map<String, Object> rowmap) {
+		// hack for avoiding unvoluntary reuse of a licence pool id
+		boolean existsNewRow = mainController.licencePoolTableProvider.getRows().size() < modelLicencepools
+				.getRowCount();
+
+		if (existsNewRow && persistenceController.getLicencepools().containsKey(rowmap.get("licensePoolId"))) {
+			// but we leave it until the service methods reflect the situation more
+			// accurately
+
+			String info = Configed.getResourceValue("PanelAssignToLPools.licencePoolIdAlreadyExists") + " \n(\""
+					+ rowmap.get("licensePoolId") + "\" ?)";
+
+			String title = Configed.getResourceValue("PanelAssignToLPools.licencePoolIdAlreadyExists.title");
+
+			JOptionPane.showMessageDialog(thePanel, info, title, JOptionPane.INFORMATION_MESSAGE);
+
+			return null;
+		}
+
+		if (existsNewRow) {
+			modelLicencepools.requestReload();
+		}
+
+		return persistenceController.editLicencePool((String) rowmap.get(LicencepoolEntry.ID_SERVICE_KEY),
+				(String) rowmap.get(LicencepoolEntry.DESCRIPTION_KEY));
+	}
+
+	private boolean updateLicencepool(String poolId, List<String> softwareIds) {
+
+		Logging.info(this, "sendUpdate poolId, softwareIds: " + poolId + ", " + softwareIds);
+		Logging.info(this, "sendUpdate poolId, removeKeysFromOtherLicencePool " + removeKeysFromOtherLicencePool);
+
+		boolean result = true;
+
+		if (removeKeysFromOtherLicencePool != null) {
+			for (Entry<String, List<String>> otherStringPoolEntry : removeKeysFromOtherLicencePool.entrySet()) {
+				if (result && !otherStringPoolEntry.getValue().isEmpty()) {
+					result = persistenceController.removeAssociations(otherStringPoolEntry.getKey(),
+							otherStringPoolEntry.getValue());
+					if (result) {
+						removeKeysFromOtherLicencePool.remove(otherStringPoolEntry.getKey());
+					}
+				}
+			}
+		}
+
+		if (!result) {
+			return false;
+		}
+
+		// cleanup assignments to other pools since an update would not change them
+		// (redmine #3282)
+		if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.POOL2SOFTWARE) {
+			result = persistenceController.setWindowsSoftwareIds2LPool(poolId, softwareIds);
+		} else {
+			result = persistenceController.addWindowsSoftwareIds2LPool(poolId, softwareIds);
+		}
+
+		Logging.info(this, "sendUpdate, setSoftwareIdsFromLicencePool poolId " + poolId);
+		setSoftwareIdsFromLicencePool(poolId);
+
+		// doing it locally for fSoftware2LicencePool
+		Logging.info(this, "sendUpdate, adapt Softwarename2LicencePool");
+		Logging.info(this, "sendUpdate, we have software ids " + softwareIds.size());
+		Logging.info(this,
+				"sendUpdate, we have software ids " + persistenceController.getSoftwareListByLicencePool(poolId).size()
+						+ " they are " + persistenceController.getSoftwareListByLicencePool(poolId));
+
+		List<String> oldSWListForPool = persistenceController.getSoftwareListByLicencePool(poolId);
+
+		// remove all old assignements
+		for (String swId : oldSWListForPool) {
+			Logging.info(this, "sendUpdate remove " + swId + " from Software2LicencePool ");
+			persistenceController.getFSoftware2LicencePool().remove(swId);
+		}
+		// set the current ones
+		for (String ident : softwareIds) {
+			persistenceController.setFSoftware2LicencePool(ident, poolId);
+		}
+
+		if (thePanel.fSoftwarename2LicencePool != null) {
+			thePanel.fSoftwarename2LicencePool.panelSWnames.requestReload();
+		}
+
+		if (thePanel.fSoftwarename2LicencePool != null) {
+			thePanel.fSoftwarename2LicencePool.panelSWxLicencepool.requestReload();
+		}
+
+		return result;
+	}
+
+	private boolean deleteLicencepool(Map<String, Object> rowmap) {
+		modelLicencepools.requestReload();
+		return persistenceController.deleteLicencePool((String) rowmap.get("licensePoolId"));
+	}
+
+	private void licencePoolValueChanged(ListSelectionEvent listSelectionEvent) {
+		// Ignore extra messages.
+		if (listSelectionEvent.getValueIsAdjusting()) {
+			return;
+		}
+
+		String selectedLicencePool = null;
+
+		// clear selection
+		thePanel.panelProductId2LPool.setSelectedValues(null, 0);
+
+		ListSelectionModel lsm = (ListSelectionModel) listSelectionEvent.getSource();
+
+		if (lsm.isSelectionEmpty()) {
+			Logging.debug(this, "no rows selected");
+		} else {
+			selectedLicencePool = getSelectedLicencePool();
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+			thePanel.panelProductId2LPool.moveToValue(selectedLicencePool, 0);
+		}
+
+		setSoftwareIdsFromLicencePool(selectedLicencePool);
+
+		if (softwareDirectionOfAssignment == SoftwareDirectionOfAssignment.SOFTWARE2POOL) {
+			thePanel.panelRegisteredSoftware.setDataChanged(gotNewSWKeysForLicencePool(selectedLicencePool));
+		}
+
 	}
 
 	private void setVisualSelection(List<String> keys) {
@@ -986,6 +988,8 @@ public class ControlPanelAssignToLPools extends AbstractControlMultiTablePanel {
 				thePanel.panelRegisteredSoftware.getTheSearchpane().showFilterIcon(false);
 				resetCounters(null);
 				thePanel.fieldCountAssignedInEditing.setText("");
+			} else {
+				// Should not happen because enum SoftwareDirectionOfAssignment has only two values
 			}
 
 			Logging.info(this, "switched to " + direction);

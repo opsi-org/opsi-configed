@@ -34,11 +34,12 @@ public final class ProductData {
 	private static int totalWindowsInstallations;
 	private static int totalMacOSInstallations;
 
-	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+	private static OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private static String selectedDepot;
-	private static List<String> depots = new ArrayList<>(persist.getHostInfoCollections().getAllDepots().keySet());
+	private static List<String> depots = new ArrayList<>(
+			persistenceController.getHostInfoCollections().getAllDepots().keySet());
 
 	private ProductData() {
 	}
@@ -60,14 +61,14 @@ public final class ProductData {
 			if (products.containsKey(Configed.getResourceValue("Dashboard.selection.allDepots"))) {
 				List<String> allDepotProducts = products
 						.get(Configed.getResourceValue("Dashboard.selection.allDepots"));
-				allDepotProducts.addAll(persist.getAllProductNames(depot));
+				allDepotProducts.addAll(persistenceController.getAllProductNames(depot));
 				products.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allDepotProducts);
 			} else {
 				products.put(Configed.getResourceValue("Dashboard.selection.allDepots"),
-						persist.getAllProductNames(depot));
+						persistenceController.getAllProductNames(depot));
 			}
 
-			products.put(depot, persist.getAllProductNames(depot));
+			products.put(depot, persistenceController.getAllProductNames(depot));
 		}
 	}
 
@@ -85,7 +86,7 @@ public final class ProductData {
 		}
 
 		for (String depot : depots) {
-			List<String> netbootProductsList = persist.getProvidedNetbootProducts(depot);
+			List<String> netbootProductsList = persistenceController.getProvidedNetbootProducts(depot);
 			netbootProducts.put(depot, netbootProductsList);
 		}
 
@@ -107,7 +108,7 @@ public final class ProductData {
 		}
 
 		for (String depot : depots) {
-			List<String> localbootProductsList = persist.getProvidedLocalbootProducts(depot);
+			List<String> localbootProductsList = persistenceController.getProvidedLocalbootProducts(depot);
 			localbootProducts.put(depot, localbootProductsList);
 		}
 
@@ -149,16 +150,17 @@ public final class ProductData {
 		unusedProducts.clear();
 
 		for (String depot : depots) {
-			List<String> allUnusedProducts = persist.getAllProductNames(depot);
+			List<String> allUnusedProducts = persistenceController.getAllProductNames(depot);
 			Map<Product, Product> installedProductsList = new HashMap<>();
 			Map<Product, Product> failedProductsList = new HashMap<>();
 			Map<Product, Product> unusedProductsList = new HashMap<>();
 			Map<String, List<String>> clientUnusedProducts = new HashMap<>();
 
-			List<String> clientsMap = persist.getHostInfoCollections().getMapOfAllPCInfoMaps().values().stream()
-					.filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName).collect(Collectors.toList());
+			List<String> clientsMap = persistenceController.getHostInfoCollections().getMapOfAllPCInfoMaps().values()
+					.stream().filter(v -> depot.equals(v.getInDepot())).map(HostInfo::getName)
+					.collect(Collectors.toList());
 			String[] clientIds = clientsMap.toArray(new String[0]);
-			Map<String, List<Map<String, String>>> productsStatesAndActions = persist
+			Map<String, List<Map<String, String>>> productsStatesAndActions = persistenceController
 					.getMapOfProductStatesAndActions(clientIds);
 
 			if (!productsStatesAndActions.isEmpty()) {
@@ -214,6 +216,8 @@ public final class ProductData {
 							}
 
 							allUnusedProducts.remove(productId);
+						} else {
+							// Do nothing when product not installed or installation failed
 						}
 					}
 
@@ -226,11 +230,8 @@ public final class ProductData {
 					if (installedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))
 							&& failedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))
 							&& unusedProductsList.keySet().stream().noneMatch(p -> p.getId().equals(productId))) {
-						Product product = new Product();
-						product.setId(productId);
-						product.setDepot(depot);
-						product.setStatus(Configed.getResourceValue("Dashboard.products.unused"));
-						product.setClients(new ArrayList<>());
+
+						Product product = createProduct(productId, depot);
 
 						unusedProductsList.put(product, product);
 					}
@@ -249,6 +250,17 @@ public final class ProductData {
 		installedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allInstalledProducts);
 		failedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allFailedProducts);
 		unusedProducts.put(Configed.getResourceValue("Dashboard.selection.allDepots"), allUnusedProducts);
+	}
+
+	private static Product createProduct(String productId, String depot) {
+
+		Product product = new Product();
+		product.setId(productId);
+		product.setDepot(depot);
+		product.setStatus(Configed.getResourceValue("Dashboard.products.unused"));
+		product.setClients(new ArrayList<>());
+
+		return product;
 	}
 
 	public static void retrieveUnusedProducts() {
@@ -322,7 +334,7 @@ public final class ProductData {
 			return;
 		}
 
-		Map<String, Integer> installedOSs = persist.getInstalledOsOverview();
+		Map<String, Integer> installedOSs = persistenceController.getInstalledOsOverview();
 
 		if (installedOSs.isEmpty()) {
 			return;

@@ -43,6 +43,8 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.csv.CSVFormat;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedDocument;
 import de.uib.utilities.swing.LabelChecked;
@@ -52,7 +54,7 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	private static NewClientDialog instance;
 
-	private ConfigedMain main;
+	private ConfigedMain configedMain;
 	private JTextField jTextHostname;
 
 	private JComboBox<String> jComboDomain;
@@ -82,6 +84,9 @@ public final class NewClientDialog extends FGeneralDialog {
 
 	private int wLeftLabel = Globals.BUTTON_WIDTH + 20;
 
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
+
 	private NewClientDialog(ConfigedMain main, List<String> depots) {
 		super(ConfigedMain.getMainFrame(),
 				Configed.getResourceValue("NewClientDialog.title") + " (" + Globals.APPNAME + ")", false,
@@ -89,7 +94,7 @@ public final class NewClientDialog extends FGeneralDialog {
 						Configed.getResourceValue("NewClientDialog.buttonCreate") },
 				700, 680);
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-		this.main = main;
+		this.configedMain = main;
 
 		jButton2.addMouseListener(this);
 		jButton2.addKeyListener(this);
@@ -343,7 +348,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
 
-		if (!main.getPersistenceController().isWithUEFI()) {
+		if (!persistenceController.isWithUEFI()) {
 			labelUefiDefault.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			labelUefiDefault.setEnabled(false);
 
@@ -356,7 +361,7 @@ public final class NewClientDialog extends FGeneralDialog {
 		jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype") + " "
 				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
 
-		if (!main.getPersistenceController().isWithUEFI()) {
+		if (!persistenceController.isWithUEFI()) {
 			jCheckUefi.setText(Configed.getResourceValue("NewClientDialog.boottype_not_activated"));
 			jCheckUefi.setEnabled(false);
 		}
@@ -365,14 +370,14 @@ public final class NewClientDialog extends FGeneralDialog {
 		labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ Configed.getResourceValue("NewClientDialog.serverDefault"));
 
-		if (!main.getPersistenceController().isWithWAN()) {
+		if (!persistenceController.isWithWAN()) {
 			labelWanDefault.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 		}
 
 		jCheckWan = new JCheckBox();
 		jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wanConfig") + " "
 				+ Configed.getResourceValue("NewClientDialog.clientspecific"));
-		if (!main.getPersistenceController().isWithWAN()) {
+		if (!persistenceController.isWithWAN()) {
 			jCheckWan.setText(Configed.getResourceValue("NewClientDialog.wan_not_activated"));
 			jCheckWan.setEnabled(false);
 		}
@@ -644,7 +649,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			}
 		}
 
-		main.createClients(modifiedClients);
+		configedMain.createClients(modifiedClients);
 	}
 
 	private static boolean isBoolean(String bool) {
@@ -658,7 +663,7 @@ public final class NewClientDialog extends FGeneralDialog {
 			final boolean wanConfig, final String group, final String netbootProduct, final String localbootProduct) {
 
 		if (checkClientCorrectness(hostname, selectedDomain)) {
-			main.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
+			configedMain.createClient(hostname, selectedDomain, depotID, description, inventorynumber, notes, ipaddress,
 					systemUUID, macaddress, shutdownInstall, uefiboot, wanConfig, group, netbootProduct,
 					localbootProduct);
 
@@ -688,11 +693,11 @@ public final class NewClientDialog extends FGeneralDialog {
 		}
 
 		Logging.debug(this, "createClient editableDomains " + editableDomains);
-		main.setEditableDomains(editableDomains);
+		configedMain.setEditableDomains(editableDomains);
 		setDomains(editableDomains);
 
 		Logging.debug(this, "createClient saveDomains " + saveDomains);
-		main.getPersistenceController().writeDomains(saveDomains);
+		persistenceController.writeDomains(saveDomains);
 	}
 
 	private boolean checkClientCorrectness(String hostname, String selectedDomain) {
@@ -944,14 +949,14 @@ public final class NewClientDialog extends FGeneralDialog {
 		String netbootProduct = (String) jComboNetboot.getSelectedItem();
 		String localbootProduct = (String) jComboLocalboot.getSelectedItem();
 
-		if (main.getPersistenceController().isWithUEFI()) {
+		if (persistenceController.isWithUEFI()) {
 			uefiboot = false;
 			if (jCheckUefi.getSelectedObjects() != null) {
 				uefiboot = true;
 			}
 		}
 
-		if (main.getPersistenceController().isWithWAN()) {
+		if (persistenceController.isWithWAN()) {
 			wanConfig = false;
 			if (jCheckWan.getSelectedObjects() != null) {
 				wanConfig = true;

@@ -208,8 +208,9 @@ public class HealthCheckDialog extends FGeneralDialog {
 			return;
 		}
 
-		OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory.getPersistenceController();
-		JSONObject jo = new JSONObject(persist.getDiagnosticData());
+		OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+				.getPersistenceController();
+		JSONObject jo = new JSONObject(persistenceController.getDiagnosticData());
 		writeToFile(diagnosticDataFile, ByteBuffer.wrap(jo.toString(2).getBytes(StandardCharsets.UTF_8)));
 	}
 

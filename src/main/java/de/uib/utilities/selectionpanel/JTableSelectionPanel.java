@@ -35,7 +35,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -63,13 +62,13 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.JComboBoxToolTip;
 import de.uib.utilities.swing.JMenuItemFormatted;
-import de.uib.utilities.swing.MissingDataPanel;
 import de.uib.utilities.table.gui.ColorHeaderCellRenderer;
 import de.uib.utilities.table.gui.StandardTableCellRenderer;
 import de.uib.utilities.table.gui.TablesearchPane;
 
-public class JTableSelectionPanel extends JPanel
-		implements DocumentListener, KeyListener, MissingDataPanel, ActionListener {
+public class JTableSelectionPanel extends JPanel implements DocumentListener, KeyListener, ActionListener {
+
+	private static final Pattern sPlusPattern = Pattern.compile("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
 
 	private static final int MIN_HEIGHT = 200;
 
@@ -322,7 +321,6 @@ public class JTableSelectionPanel extends JPanel
 	}
 
 	// interface MissingDataPanel
-	@Override
 	public void setMissingDataPanel(boolean b) {
 		if (b) {
 			JLabel missingData0 = new JLabel(Globals.createImageIcon("images/opsi-logo.png", ""));
@@ -358,15 +356,6 @@ public class JTableSelectionPanel extends JPanel
 			scrollpane.getViewport().setView(mdPanel);
 		} else {
 			scrollpane.getViewport().setView(table);
-		}
-	}
-
-	@Override
-	public void setMissingDataPanel(boolean b, JComponent c) {
-		if (b) {
-			scrollpane.getViewport().add(c);
-		} else {
-			scrollpane.getViewport().add(table);
 		}
 	}
 
@@ -602,9 +591,6 @@ public class JTableSelectionPanel extends JPanel
 
 		tm.addTableModelListener(table);
 
-		Logging.info(this, "setModel all hosts size "
-				+ main.getPersistenceController().getHostInfoCollections().getMapOfAllPCInfoMaps().size());
-
 		table.setModel(tm);
 	}
 
@@ -695,7 +681,7 @@ public class JTableSelectionPanel extends JPanel
 
 	private static List<String> getWords(String line) {
 		List<String> result = new ArrayList<>();
-		String[] splitted = line.split("\\s+", Pattern.UNICODE_CHARACTER_CLASS);
+		String[] splitted = sPlusPattern.split(line);
 		for (String s : splitted) {
 			if (!" ".equals(s)) {
 				result.add(s);
@@ -731,11 +717,11 @@ public class JTableSelectionPanel extends JPanel
 		// get pattern for regex search mode if needed
 		Pattern pattern = null;
 		if (searchMode == TablesearchPane.SearchMode.REGEX_SEARCHING) {
-			try {
-				if (fulltext) {
-					val = ".*" + val + ".*";
-				}
 
+			if (fulltext) {
+				val = ".*" + val + ".*";
+			}
+			try {
 				pattern = Pattern.compile(val);
 			} catch (java.util.regex.PatternSyntaxException ex) {
 				Logging.error(this, "pattern problem " + ex);
@@ -769,16 +755,15 @@ public class JTableSelectionPanel extends JPanel
 					switch (searchMode) {
 					case REGEX_SEARCHING:
 
-						found = pattern.matcher(compareVal).matches();
+						if (pattern != null) {
+							found = pattern.matcher(compareVal).matches();
+						}
+
 						break;
 
 					case FULL_TEXT_SEARCHING_WITH_ALTERNATIVES:
-						for (String word : alternativeWords) {
-
-							found = compareVal.indexOf(word) >= 0;
-							if (found) {
-								break;
-							}
+						if (fullTextSearchingWithAlternatives(alternativeWords, compareVal)) {
+							found = true;
 						}
 						break;
 
@@ -808,6 +793,16 @@ public class JTableSelectionPanel extends JPanel
 		}
 
 		return -1;
+	}
+
+	private static boolean fullTextSearchingWithAlternatives(List<String> alternativeWords, String compareVal) {
+		for (String word : alternativeWords) {
+
+			if (compareVal.indexOf(word) >= 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean moveToValue(Object value, int col) {
@@ -1012,6 +1007,8 @@ public class JTableSelectionPanel extends JPanel
 			}
 		} else if (e.getKeyCode() == KeyEvent.VK_I && e.isControlDown()) {
 			main.invertClientselection();
+		} else {
+			// Do nothing on other keyPress events
 		}
 	}
 

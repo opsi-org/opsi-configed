@@ -23,10 +23,11 @@ import org.jdesktop.swingx.JXPanel;
 
 import de.uib.Main;
 import de.uib.configed.Configed;
-import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.type.OpsiPackage;
 import de.uib.configed.type.OpsiProductInfo;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.DataChangedObserver;
 import de.uib.utilities.logging.Logging;
 
@@ -54,19 +55,14 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 	private String productName = "";
 	private Map<String, Boolean> specificPropertiesExisting;
 
-	private ConfigedMain mainController;
-
-	/** Creates new ProductInfoPane */
-	public ProductInfoPane(ConfigedMain mainController, AbstractPanelEditProperties panelEditProperties) {
-		super(JSplitPane.VERTICAL_SPLIT);
-		this.mainController = mainController;
-		this.panelEditProperties = panelEditProperties;
-		initComponents();
-	}
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	/** Creates new ProductInfoPane */
 	public ProductInfoPane(AbstractPanelEditProperties panelEditProperties) {
-		this(null, panelEditProperties);
+		super(JSplitPane.VERTICAL_SPLIT);
+		this.panelEditProperties = panelEditProperties;
+		initComponents();
 	}
 
 	private void initComponents() {
@@ -84,7 +80,7 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		dependenciesActivateButton = new JButton();
 		dependenciesTextLabel = new JLabel();
 		depotForDependenciesLabel = new JLabel();
-		panelProductDependencies = new PanelProductDependencies(mainController, depotForDependenciesLabel);
+		panelProductDependencies = new PanelProductDependencies(depotForDependenciesLabel);
 
 		propertiesActivateButton = new JButton();
 
@@ -297,6 +293,8 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 
 			panelEditProperties.setVisible(isPanelEditPropertiesVisible);
 			panelEditProperties.setTitlePanelActivated(isPanelEditPropertiesVisible);
+		} else {
+			Logging.warning(this, "unexpected action performed on source " + event.getSource());
 		}
 	}
 
@@ -370,17 +368,14 @@ public class ProductInfoPane extends JSplitPane implements DataChangedObserver, 
 		setProductId(productId);
 		setProductVersion(productVersion + "-" + packageVersion);
 
-		if (mainController != null) {
-			String versionInfo = OpsiPackage.produceVersionInfo(productVersion, packageVersion);
-			OpsiProductInfo info = mainController.getPersistenceController().getProduct2versionInfo2infos()
-					.get(productId).get(versionInfo);
-			Logging.info(this,
-					"got product infos  productId, versionInfo:  " + productId + ", " + versionInfo + ": " + info);
+		String versionInfo = OpsiPackage.produceVersionInfo(productVersion, packageVersion);
+		OpsiProductInfo info = persistenceController.getProduct2versionInfo2infos().get(productId).get(versionInfo);
+		Logging.info(this,
+				"got product infos  productId, versionInfo:  " + productId + ", " + versionInfo + ": " + info);
 
-			setProductName(info.getProductName());
-			setProductInfo(info.getDescription());
-			setProductAdvice(info.getAdvice());
-		}
+		setProductName(info.getProductName());
+		setProductInfo(info.getDescription());
+		setProductAdvice(info.getAdvice());
 
 		panelProductDependencies.setEditValues(productId, depotId);
 	}

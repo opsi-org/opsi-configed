@@ -16,13 +16,6 @@ import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.thread.WaitingCycle;
 
-/**
- * Creates a button with an icon <br>
- * <br>
- * 
- * @version 1.0
- * @author Anna Sucher
- */
 public class IconButton extends JButton {
 	/** The status if button is active */
 	private boolean activated;

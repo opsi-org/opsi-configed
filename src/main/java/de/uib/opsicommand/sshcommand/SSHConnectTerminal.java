@@ -166,7 +166,7 @@ public class SSHConnectTerminal extends SSHConnect {
 				Logging.info(this, "exec text " + text);
 				if (out != null && text.trim().length() >= 0) {
 					SSHCommand command = new EmptyCommand(text);
-					String ntext = SSHCommandFactory.getInstance(main).getParameterHandler()
+					String ntext = SSHCommandFactory.getInstance(configedMain).getParameterHandler()
 							.parseParameterToString(command, this);
 					out.write(ntext.getBytes(StandardCharsets.UTF_8));
 					Logging.debug(this, " exec getPrivateStatus " + dialog.hasPrivateStatus());
@@ -283,6 +283,8 @@ public class SSHConnectTerminal extends SSHConnect {
 				} else if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_KP_DOWN) {
 					dialog.getInputField().setText(dialog.getPrevCommandDown());
 					((Component) textField).requestFocusInWindow();
+				} else {
+					// Do nothing with other keys
 				}
 			}
 		};

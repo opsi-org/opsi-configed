@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/*
- * FPanel.java
- *
- * By uib, www.uib.de, 2018
- * Author: Rupert Röder
- * 
- */
-
 package de.uib.utilities.swing;
 
 import java.awt.Dimension;

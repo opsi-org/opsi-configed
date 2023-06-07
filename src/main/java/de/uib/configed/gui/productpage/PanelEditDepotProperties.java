@@ -41,6 +41,8 @@ import de.uib.configed.Globals;
 import de.uib.configed.gui.IconButton;
 import de.uib.configed.guidata.ListMerger;
 import de.uib.configed.type.ConfigName2ConfigValue;
+import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
+import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.opsidatamodel.datachanges.ProductpropertiesUpdateCollection;
 import de.uib.utilities.datapanel.DefaultEditMapPanel;
 import de.uib.utilities.logging.Logging;
@@ -59,6 +61,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 	private JPanel titlePanel;
 
 	private final Map<String, Object> emptyVisualData = new HashMap<>();
+
+	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
+			.getPersistenceController();
 
 	public PanelEditDepotProperties(ConfigedMain mainController, DefaultEditMapPanel productPropertiesPanel) {
 		super(mainController, productPropertiesPanel);
@@ -216,8 +221,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		Map<String, Object> visualData = mergeProperties(
-				mainController.getPersistenceController().getDepot2product2properties(),
+		Map<String, Object> visualData = mergeProperties(persistenceController.getDepot2product2properties(),
 				listDepots.getSelectedValuesList(), productEdited);
 
 		// no properties
@@ -231,13 +235,13 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 
 					visualData,
 
-					mainController.getPersistenceController()
-							.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0), productEdited));
+					persistenceController.getProductPropertyOptionsMap(listDepots.getSelectedValuesList().get(0),
+							productEdited));
 
 			// list of all property maps
 			List<Map<String, Object>> storableProperties = new ArrayList<>();
 			for (String depot : listDepots.getSelectedValuesList()) {
-				Map<String, ConfigName2ConfigValue> product2properties = mainController.getPersistenceController()
+				Map<String, ConfigName2ConfigValue> product2properties = persistenceController
 						.getDepot2product2properties().get(depot);
 
 				if (product2properties == null) {
@@ -254,7 +258,7 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			ProductpropertiesUpdateCollection depotProductpropertiesUpdateCollection = new ProductpropertiesUpdateCollection(
 					listDepots.getSelectedValuesList(), productEdited);
 			productPropertiesPanel.setUpdateCollection(depotProductpropertiesUpdateCollection);
-			mainController.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
+			configedMain.addToGlobalUpdateCollection(depotProductpropertiesUpdateCollection);
 		}
 	}
 
@@ -416,8 +420,9 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 		} else if (e.getSource() == buttonSelectAll) {
 			listDepots.setSelectionInterval(0, listDepots.getModel().getSize() - 1);
 			saveSelectedDepots();
+		} else {
+			Logging.warning(this, "unexpected action event on source " + e.getSource());
 		}
-
 	}
 
 	private void selectDepotsWithEqualProperties() {
@@ -427,8 +432,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 			return;
 		}
 
-		ConfigName2ConfigValue properties0 = mainController.getPersistenceController()
-				.getDefaultProductProperties(selectedDepot0).get(productEdited);
+		ConfigName2ConfigValue properties0 = persistenceController.getDefaultProductProperties(selectedDepot0)
+				.get(productEdited);
 
 		int startDepotIndex = listDepots.getSelectedIndex();
 		listDepots.setSelectionInterval(startDepotIndex, startDepotIndex);
@@ -440,8 +445,8 @@ public class PanelEditDepotProperties extends AbstractPanelEditProperties
 				continue;
 			}
 
-			ConfigName2ConfigValue compareProperties = mainController.getPersistenceController()
-					.getDefaultProductProperties(compareDepot).get(productEdited);
+			ConfigName2ConfigValue compareProperties = persistenceController.getDefaultProductProperties(compareDepot)
+					.get(productEdited);
 
 			// True if both objects are equal or both null
 			if (Objects.equals(properties0, compareProperties)) {

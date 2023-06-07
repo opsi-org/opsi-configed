@@ -22,7 +22,7 @@ public final class LicenseData {
 	private static List<String> activeLicenses = new ArrayList<>();
 	private static List<String> expiredLicenses = new ArrayList<>();
 
-	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+	private static OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private LicenseData() {
@@ -37,7 +37,7 @@ public final class LicenseData {
 			return;
 		}
 
-		Map<String, LicenceContractEntry> licenceContracts = persist.getLicenceContracts();
+		Map<String, LicenceContractEntry> licenceContracts = persistenceController.getLicenceContracts();
 
 		if (licenceContracts.isEmpty()) {
 			return;
@@ -76,7 +76,8 @@ public final class LicenseData {
 
 		expiredLicenses.clear();
 
-		NavigableMap<String, NavigableSet<String>> expiredLicenceContracts = persist.getLicenceContractsExpired();
+		NavigableMap<String, NavigableSet<String>> expiredLicenceContracts = persistenceController
+				.getLicenceContractsExpired();
 
 		if (expiredLicenceContracts.isEmpty()) {
 			return;

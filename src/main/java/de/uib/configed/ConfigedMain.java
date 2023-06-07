@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
@@ -130,6 +131,10 @@ import de.uib.utilities.table.provider.TableProvider;
 import de.uib.utilities.thread.WaitCursor;
 
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
+	private static final Pattern backslashPattern = Pattern.compile("\\[|\\]|\\s");
+
+	private static final boolean MULTI_HW_PANEL_ACTIVATED = false;
+
 	public static final int VIEW_CLIENTS = 0;
 	public static final int VIEW_LOCALBOOT_PRODUCTS = 1;
 	public static final int VIEW_NETBOOT_PRODUCTS = 2;
@@ -673,21 +678,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		String productType = data.get("productType");
 
 		// get the data for the updated client
-		try {
-			Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
 
-			int selectedView = getViewIndex();
+		Map<String, String> productInfo = persistenceController.getProductInfos(productId, clientId);
 
-			if (selectedView == VIEW_LOCALBOOT_PRODUCTS
-					&& productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)) {
-				istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
-			} else if (selectedView == VIEW_NETBOOT_PRODUCTS
-					&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)) {
-				istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
-			}
-		} catch (NullPointerException ex) {
-			// Can happen if this function is triggered by messagebus event during configed startup
-			Logging.warning(this, "Failed to update product (failed to get product info)");
+		int selectedView = getViewIndex();
+
+		if (selectedView == VIEW_LOCALBOOT_PRODUCTS && productType.equals(OpsiPackage.LOCALBOOT_PRODUCT_SERVER_STRING)
+				&& istmForSelectedClientsLocalboot != null) {
+			istmForSelectedClientsLocalboot.updateTable(clientId, productId, productInfo);
+		} else if (selectedView == VIEW_NETBOOT_PRODUCTS
+				&& productType.equals(OpsiPackage.NETBOOT_PRODUCT_SERVER_STRING)
+				&& istmForSelectedClientsNetboot != null) {
+			istmForSelectedClientsNetboot.updateTable(clientId, productId, productInfo);
+		} else {
+			Logging.info(this, "in updateProduct nothing to update because Tab for productType " + productType
+					+ "not open or configed not yet initialized");
 		}
 	}
 
@@ -717,8 +722,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		Logging.info(this, "call initData");
 		initData();
 		initSavedStates();
-		oldSelectedDepots = Configed.savedStates.getProperty("selectedDepots", "").replaceAll("\\[|\\]|\\s", "")
-				.split(",");
+
+		oldSelectedDepots = backslashPattern.matcher(Configed.savedStates.getProperty("selectedDepots", ""))
+				.replaceAll("").split(",");
 
 		// too early, raises a NPE, if the user entry does not exist
 
@@ -1105,65 +1111,75 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// what else to do:
 		switch (t) {
 		case CLIENTS:
-			Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
-
-			mainFrame.setConfigPanesEnabled(true);
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
-			mainFrame.setVisualViewIndex(saveClientsViewIndex);
-
-			Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
-
-			if (!reachableUpdater.isInterrupted()) {
-				reachableUpdater.interrupt();
-			}
-
-			if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
-				setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
-			}
-
+			setEditingClients();
 			break;
 		case DEPOTS:
-			Logging.info(this, "setEditingTarget  DEPOTS");
-
-			if (!reachableUpdater.isInterrupted()) {
-				reachableUpdater.interrupt();
-			}
-
-			initServer();
-			mainFrame.setConfigPanesEnabled(false);
-
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
-
-			Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
-					+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
-
-			mainFrame.setVisualViewIndex(saveDepotsViewIndex);
-
+			setEditingDepots();
 			break;
 		case SERVER:
-			if (!reachableUpdater.isInterrupted()) {
-				reachableUpdater.interrupt();
-			}
-
-			initServer();
-			mainFrame.setConfigPanesEnabled(false);
-
-			mainFrame.setConfigPaneEnabled(
-					mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
-
-			mainFrame.setVisualViewIndex(saveServerViewIndex);
+			setEditingServer();
 			break;
 		default:
 			break;
 		}
 
 		resetView(viewIndex);
+	}
+
+	private void setEditingClients() {
+		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+
+		mainFrame.setConfigPanesEnabled(true);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), false);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), false);
+		mainFrame.setVisualViewIndex(saveClientsViewIndex);
+
+		Logging.debug(this, "setEditingTarget preSaveSelectedClients " + preSaveSelectedClients);
+
+		if (!reachableUpdater.isInterrupted()) {
+			reachableUpdater.interrupt();
+		}
+
+		if (preSaveSelectedClients != null && !preSaveSelectedClients.isEmpty()) {
+			setSelectedClientsOnPanel(preSaveSelectedClients.toArray(new String[] {}));
+		}
+	}
+
+	private void setEditingDepots() {
+		Logging.info(this, "setEditingTarget  DEPOTS");
+
+		if (!reachableUpdater.isInterrupted()) {
+			reachableUpdater.interrupt();
+		}
+
+		initServer();
+		mainFrame.setConfigPanesEnabled(false);
+
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_HostProperties")), true);
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")), true);
+
+		Logging.info(this, "setEditingTarget  call setVisualIndex  saved " + saveDepotsViewIndex + " resp. "
+				+ mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.panel_ProductGlobalProperties")));
+
+		mainFrame.setVisualViewIndex(saveDepotsViewIndex);
+	}
+
+	private void setEditingServer() {
+		if (!reachableUpdater.isInterrupted()) {
+			reachableUpdater.interrupt();
+		}
+
+		initServer();
+		mainFrame.setConfigPanesEnabled(false);
+
+		mainFrame.setConfigPaneEnabled(
+				mainFrame.getTabIndex(Configed.getResourceValue("MainFrame.jPanel_NetworkConfig")), true);
+
+		mainFrame.setVisualViewIndex(saveServerViewIndex);
 	}
 
 	private void actOnListSelection() {
@@ -1279,7 +1295,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		myServer = persistenceController.getHostInfoCollections().getConfigServer();
 
 		// create depotsList
-		depotsList = new DepotsList(persistenceController);
+		depotsList = new DepotsList();
 
 		if (depotsListSelectionListener == null) {
 			Logging.info(this, "create depotsListSelectionListener");
@@ -1349,6 +1365,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				} else if (e.getKeyCode() == KeyEvent.VK_F10) {
 					Logging.debug(this, "keypressed: f10");
 					mainFrame.showPopupClients();
+				} else {
+					// Nothing to do for all the other keys
 				}
 			}
 
@@ -1572,10 +1590,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	public OpsiserviceNOMPersistenceController getPersistenceController() {
-		return persistenceController;
-	}
-
 	public void setPersistenceController(OpsiserviceNOMPersistenceController persis) {
 		persistenceController = persis;
 	}
@@ -1690,7 +1704,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (allowedClients != null) {
 			unfilteredList = produceClientListForDepots(getSelectedDepots(), allowedClients);
 
-			Logging.info(this, " unfilteredList " + unfilteredList.size());
+			if (unfilteredList == null) {
+				Logging.error(this, "unfilteredList is null in buildClientlistTableModel");
+			} else {
+				Logging.info(this, " unfilteredList " + unfilteredList.size());
+			}
 
 			buildPclistTableModelCounter++;
 			Logging.info(this, "buildPclistTableModel, counter " + buildPclistTableModelCounter + "   rebuildTree  "
@@ -2822,34 +2840,30 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 						getLocalbootProductDisplayFieldsList(), localbootProductsSavedStateObjTag);
 			}
 
-			try {
-				int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
-				mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
-				mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
+			int[] columnWidths = getTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts);
+			mainFrame.panelLocalbootProductSettings.setTableModel(istmForSelectedClientsLocalboot);
+			mainFrame.panelLocalbootProductSettings.setSortKeys(currentSortKeysLocalbootProducts);
 
-				Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(localbootProductsSavedStateObjTag
-						+ "." + InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
+			Logging.info(this, "resetFilter " + Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+					+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY));
 
-				Set<String> savedFilter = null;
+			Set<String> savedFilter = null;
 
-				if (Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
-						+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
-					savedFilter = new HashSet<>(Arrays.asList(Configed.savedStates
-							.getProperty(localbootProductsSavedStateObjTag + "."
-									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY)
-							.replaceAll("\\[|\\]|\\s", "").split(",")));
-				}
-				mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
-				mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
-
-				Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
-				mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
-				mainFrame.panelLocalbootProductSettings.setSearchFields(
-						InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
-				setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
-			} catch (Exception ex) {
-				Logging.warning("setLocalbootInstallationStateTableModel, exception occurred: " + ex.getMessage(), ex);
+			if (Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+					+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
+				savedFilter = new HashSet<>(Arrays.asList(backslashPattern
+						.matcher(Configed.savedStates.getProperty(localbootProductsSavedStateObjTag + "."
+								+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY))
+						.replaceAll("").split(",")));
 			}
+			mainFrame.panelLocalbootProductSettings.setGroupsData(productGroups, productGroupMembers);
+			mainFrame.panelLocalbootProductSettings.reduceToSet(savedFilter);
+
+			Logging.info(this, "setLocalbootProductsPage oldProductSelection: " + oldProductSelection);
+			mainFrame.panelLocalbootProductSettings.setSelection(oldProductSelection);
+			mainFrame.panelLocalbootProductSettings.setSearchFields(
+					InstallationStateTableModel.localizeColumns(getLocalbootProductDisplayFieldsList()));
+			setTableColumnWidths(mainFrame.panelLocalbootProductSettings.tableProducts, columnWidths);
 
 			return true;
 		} catch (Exception ex) {
@@ -2921,10 +2935,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 				if (Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
 						+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY) != null) {
-					savedFilter = new HashSet<>(Arrays.asList(Configed.savedStates
-							.getProperty(netbootProductsSavedStateObjTag + "."
-									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, "")
-							.replaceAll("\\[|\\]|\\s", "").split(",")));
+					savedFilter = new HashSet<>(Arrays.asList(backslashPattern
+							.matcher(Configed.savedStates.getProperty(netbootProductsSavedStateObjTag + "."
+									+ InstallationStateTableModelFiltered.STATE_TABLE_FILTERS_PROPERTY, ""))
+							.replaceAll("").split(",")));
 				}
 
 				mainFrame.panelNetbootProductSettings.setGroupsData(productGroups, productGroupMembers);
@@ -3177,9 +3191,14 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		try {
 			if (firstSelectedClient == null || getSelectedClients().length == 0) {
-				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.noClientSelected1"), null);
+				mainFrame.setHardwareInfoNotPossible(Configed.getResourceValue("MainFrame.noClientSelected1"));
 			} else if (getSelectedClients().length > 1) {
-				mainFrame.setHardwareInfoMultiClients(getSelectedClients());
+				if (!MULTI_HW_PANEL_ACTIVATED) {
+					mainFrame.setHardwareInfoNotPossible(
+							Configed.getResourceValue("MainFrame.hardwareInfoMultiClientsNotAvailable"));
+				} else {
+					mainFrame.setHardwareInfoMultiClients(getSelectedClients());
+				}
 			} else {
 				checkHwInfo();
 				Map<String, List<Map<String, Object>>> hwInfo = hwInfoClientmap.get(firstSelectedClient);
@@ -3368,9 +3387,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// we will only leave view 0 if a PC is selected
 
 		// check if change of view index to the value of visualViewIndex can be allowed
-		if (visualViewIndex != VIEW_CLIENTS
-				&& !((visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER)
-						|| (visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS))) {
+		if (isVisualIndexAllowed(visualViewIndex)) {
 
 			Logging.debug(this, " selected clients " + Arrays.toString(getSelectedClients()));
 
@@ -3437,6 +3454,21 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			}
 			// dont keep product editing across views
 		}
+	}
+
+	private static boolean isVisualIndexAllowed(int visualViewIndex) {
+
+		// We cannot change to clients
+		if (visualViewIndex == VIEW_CLIENTS) {
+			return false;
+		}
+
+		// We cannot change to network configuration if the server is edited
+		if (visualViewIndex == VIEW_NETWORK_CONFIGURATION && editingTarget == EditingTarget.SERVER) {
+			return false;
+		}
+
+		return !(visualViewIndex == VIEW_HOST_PROPERTIES && editingTarget == EditingTarget.DEPOTS);
 	}
 
 	private void updateLocalbootProductStates() {
@@ -3940,8 +3972,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				Logging.info(this, "save for clients " + getSelectedClients().length);
 
 				for (String client : getSelectedClients()) {
-					hostInfo.showAndSaveInternally(selectionPanel, mainFrame, persistenceController, client,
-							(Map<?, ?>) source.get(client));
+					hostInfo.showAndSaveInternally(selectionPanel, mainFrame, client, (Map<?, ?>) source.get(client));
 				}
 				persistenceController.updateHosts();
 
@@ -4123,6 +4154,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 										model.fireTableRowsUpdated(row, row);
 										// if ordered by col the order does not change although the value changes
 										// is necessary
+									} else {
+										Logging.warning(this, "Reachability of client " + clientId + " with new value "
+												+ newInfo + " could not be updated");
 									}
 								}
 							}
@@ -4371,7 +4405,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			return;
 		}
 
-		String confirmInfo = "";
+		String confirmInfo;
 
 		if (resetLocalbootProducts && resetNetbootProducts) {
 			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetProducts.question");
@@ -4379,6 +4413,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetLocalbootProducts.question");
 		} else if (resetNetbootProducts) {
 			confirmInfo = Configed.getResourceValue("ConfigedMain.confirmResetNetbootProducts.question");
+		} else {
+			Logging.warning(this, "cannot reset products because they're neither localboot nor netboot");
+			return;
 		}
 
 		if (!confirmActionForSelectedClients(confirmInfo)) {
@@ -4455,23 +4492,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				String newID = getText();
 
 				if (persistenceController.getHostInfoCollections().getOpsiHostNames().contains(newID)) {
-					FTextArea fHostExistsInfo = new FTextArea(
-							getMainFrame(), Configed.getResourceValue("FGeneralDialog.title.information") + " ("
-									+ Globals.APPNAME + ") ",
-							true, new String[] { Configed.getResourceValue("FGeneralDialog.ok") });
-
-					StringBuilder message = new StringBuilder();
-					message.append(Configed.getResourceValue("ConfigedMain.hostExists"));
-					message.append(" \"");
-					message.append(newID);
-					message.append("\" \n");
-
-					fHostExistsInfo.setMessage(message.toString());
-					fHostExistsInfo.setLocationRelativeTo(getMainFrame());
-					fHostExistsInfo.setAlwaysOnTop(true);
-					fHostExistsInfo.setVisible(true);
-
-					return;
+					showInformationHostExistsAlready(newID);
 				}
 
 				Logging.debug(this, "new name " + newID);
@@ -4490,6 +4511,23 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		fEdit.setModal(true);
 		fEdit.setAlwaysOnTop(true);
 		fEdit.setVisible(true);
+	}
+
+	private static void showInformationHostExistsAlready(String clientId) {
+		FTextArea fHostExistsInfo = new FTextArea(getMainFrame(),
+				Configed.getResourceValue("FGeneralDialog.title.information") + " (" + Globals.APPNAME + ") ", true,
+				new String[] { Configed.getResourceValue("FGeneralDialog.ok") });
+
+		StringBuilder message = new StringBuilder();
+		message.append(Configed.getResourceValue("ConfigedMain.hostExists"));
+		message.append(" \"");
+		message.append(clientId);
+		message.append("\" \n");
+
+		fHostExistsInfo.setMessage(message.toString());
+		fHostExistsInfo.setLocationRelativeTo(getMainFrame());
+		fHostExistsInfo.setAlwaysOnTop(true);
+		fHostExistsInfo.setVisible(true);
 	}
 
 	public void callChangeDepotDialog() {
@@ -4742,42 +4780,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private void initSavedSearchesDialog() {
 		if (savedSearchesDialog == null) {
 			Logging.debug(this, "create SavedSearchesDialog");
-			savedSearchesDialog = new SavedSearchesDialog() {
-				@Override
-				protected void commit() {
-					super.commit();
-					List<String> result = (List<String>) super.getValue();
-					Logging.info(this, "commit result == null " + (result == null));
-					if (result != null) {
-						Logging.info(this, "result size " + result.size());
-						selectionPanel.setSelectedValues(result);
-					}
-				}
-
-				@Override
-				protected void removeSavedSearch(String name) {
-					persistenceController.deleteSavedSearch(name);
-					super.removeSavedSearch(name);
-				}
-
-				@Override
-				protected void reloadAction() {
-					persistenceController.configOptionsRequestRefresh();
-					persistenceController.auditHardwareOnHostRequestRefresh();
-					resetModel();
-				}
-
-				@Override
-				protected void addElement() {
-					callClientSelectionDialog();
-				}
-
-				@Override
-				protected void editSearch(String name) {
-					callClientSelectionDialog();
-					clientSelectionDialog.loadSearch(name);
-				}
-			};
+			savedSearchesDialog = new SavedSearchesDialog(selectionPanel, this);
 			savedSearchesDialog.init(new Dimension(300, 400));
 		}
 		savedSearchesDialog.start();
@@ -5068,6 +5071,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		clientSelectionDialog.setLocationRelativeTo(ConfigedMain.getMainFrame());
 		clientSelectionDialog.setVisible(true);
+	}
+
+	public void loadSearch(String name) {
+		clientSelectionDialog.loadSearch(name);
 	}
 
 	public void clearSelectionOnPanel() {

@@ -167,61 +167,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		}
 	}
 
-	private static class Leafname2AllItsPaths {
-		Map<String, ArrayList<SimpleTreePath>> invertedSimpleClientPaths = new HashMap<>();
-
-		Leafname2AllItsPaths() {
-			invertedSimpleClientPaths = new HashMap<>();
-
-		}
-
-		public Set<String> keySet() {
-			return invertedSimpleClientPaths.keySet();
-		}
-
-		public List<SimpleTreePath> get(String k) {
-			return invertedSimpleClientPaths.get(k);
-		}
-
-		public void clear() {
-			invertedSimpleClientPaths.clear();
-		}
-
-		public void rebuildFromTree(DefaultMutableTreeNode node) {
-			clear();
-
-			Enumeration<TreeNode> e = node.breadthFirstEnumeration();
-
-			while (e.hasMoreElements()) {
-				DefaultMutableTreeNode element = (DefaultMutableTreeNode) e.nextElement();
-
-				if (!element.getAllowsChildren()) {
-					String nodeinfo = (String) element.getUserObject();
-					add(nodeinfo, new SimpleTreePath(element.getPath()));
-				}
-			}
-		}
-
-		public List<SimpleTreePath> getSimpleTreePaths(String leafname) {
-			return invertedSimpleClientPaths.get(leafname);
-		}
-
-		public void add(String leafname, SimpleTreePath simpleTreePath) {
-			invertedSimpleClientPaths.computeIfAbsent(leafname, arg -> new ArrayList<>()).add(simpleTreePath);
-		}
-
-		public void add(String leafname, TreePath clientPath) {
-
-			add(leafname, new SimpleTreePath(clientPath.getPath()));
-		}
-
-		public void remove(String leafname, SimpleTreePath clientPath) {
-			if (invertedSimpleClientPaths.get(leafname) != null) {
-				invertedSimpleClientPaths.get(leafname).remove(clientPath);
-			}
-		}
-	}
-
 	private void init() {
 		// do not expand tree nodes when clicking the node name, default is 2, meaning
 		// double click expands
@@ -342,6 +287,8 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 		} else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
 			// don't go backwards by this key
 			e.consume();
+		} else {
+			// Do nothing on other key events
 		}
 	}
 

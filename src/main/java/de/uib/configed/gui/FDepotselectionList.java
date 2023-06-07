@@ -14,7 +14,6 @@ import javax.swing.ListSelectionModel;
 
 import de.uib.configed.Configed;
 import de.uib.configed.Globals;
-import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 
 public class FDepotselectionList extends FGeneralDialog {
@@ -23,13 +22,11 @@ public class FDepotselectionList extends FGeneralDialog {
 	private Window masterWindow;
 
 	public FDepotselectionList(JDialog masterWindow) {
-		super(
-
-				masterWindow, Configed.getResourceValue("FDepotselectionList.title"),
+		super(masterWindow, Configed.getResourceValue("FDepotselectionList.title"),
 				new String[] { Configed.getResourceValue("FDepotselectionList.buttonclose"),
 						Configed.getResourceValue("FDepotselectionList.buttontake") },
 				500, 300);
-		depotsList = new DepotsList(PersistenceControllerFactory.getPersistenceController());
+		depotsList = new DepotsList();
 		depotsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		init();
 		this.masterWindow = masterWindow;

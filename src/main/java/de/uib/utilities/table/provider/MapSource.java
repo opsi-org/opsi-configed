@@ -4,14 +4,6 @@
  * This file is part of opsi - https://www.opsi.org
  */
 
-/* 
- *
- * 	uib, www.uib.de, 2009-2015, 2017
- * 
- *	author Rupert Röder 
- *
- */
-
 package de.uib.utilities.table.provider;
 
 import java.util.ArrayList;
@@ -22,13 +14,12 @@ import java.util.Map.Entry;
 
 import de.uib.utilities.logging.Logging;
 
-// based on a regular map (rows indexed by a String key)
-// of maps (representing the rows as pairs columnname - value)
-
-// columns may represent null values)
-// column 0 of the table is the key of the outer map (therefore the first
-// classname
-// has to be String)
+/**
+ * based on a regular map (rows indexed by a String key) of maps (representing
+ * the rows as pairs columnname - value) columns may represent null values)
+ * column 0 of the table is the key of the outer map (therefore the first
+ * classname has to be String)
+ */
 public class MapSource implements TableSource {
 	private static final String ROW_COUNTER_NAME = "rowcounter";
 

@@ -218,6 +218,8 @@ public class ValueSelectorList extends JPanel implements ActionListener {
 				valueList.addToSelection(depotsWithEqualStock);
 
 			}
+		} else {
+			Logging.warning(this, "unexpected action on source " + e.getSource());
 		}
 	}
 }

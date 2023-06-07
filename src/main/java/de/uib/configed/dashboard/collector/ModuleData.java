@@ -18,7 +18,7 @@ public final class ModuleData {
 	private static List<String> activeModules = new ArrayList<>();
 	private static List<String> expiredModules = new ArrayList<>();
 
-	private static OpsiserviceNOMPersistenceController persist = PersistenceControllerFactory
+	private static OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
 	private ModuleData() {
@@ -35,7 +35,7 @@ public final class ModuleData {
 
 		modules.clear();
 
-		for (Map<String, Object> moduleInfo : persist.getModules()) {
+		for (Map<String, Object> moduleInfo : persistenceController.getModules()) {
 			modules.add(moduleInfo.get("module_id").toString());
 		}
 	}
@@ -56,7 +56,7 @@ public final class ModuleData {
 		activeModules.clear();
 		expiredModules.clear();
 
-		List<Map<String, Object>> modules = persist.getModules();
+		List<Map<String, Object>> modules = persistenceController.getModules();
 
 		for (Map<String, Object> moduleInfo : modules) {
 			String moduleId = moduleInfo.get("module_id").toString();

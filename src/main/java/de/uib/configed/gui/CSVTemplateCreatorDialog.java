@@ -6,11 +6,8 @@
 
 package de.uib.configed.gui;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,8 +20,6 @@ import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
@@ -35,14 +30,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListModel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -273,26 +262,7 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 
 		DefaultListModel<JCheckBox> model = new DefaultListModel<>();
 		headerButtons = new ArrayList<>();
-		columnNames.forEach((String header) -> {
-			JCheckBox headerBox = new JCheckBox(header);
-			headerBox.setActionCommand(header);
-
-			if ("hostname".equals(header)) {
-				headerBox.setSelected(true);
-			}
-			if ("selectedDomain".equals(header)) {
-				headerBox.setSelected(true);
-			}
-			if ("depotID".equals(header)) {
-				headerBox.setSelected(true);
-			}
-			if ("macaddress".equals(header)) {
-				headerBox.setSelected(true);
-			}
-
-			model.addElement(headerBox);
-			headerButtons.add(headerBox);
-		});
+		columnNames.forEach(header -> setSelectedColumn(header, model));
 
 		HeaderOptionsPanel headerOptionsPanel = new HeaderOptionsPanel(model);
 
@@ -376,76 +346,25 @@ public class CSVTemplateCreatorDialog extends FGeneralDialog {
 		return centerPanel;
 	}
 
-	private static class HeaderOptionsPanel extends JPanel {
-		public HeaderOptionsPanel(ListModel<JCheckBox> model) {
-			init(model);
+	private void setSelectedColumn(String header, DefaultListModel<JCheckBox> model) {
+		JCheckBox headerBox = new JCheckBox(header);
+		headerBox.setActionCommand(header);
+
+		if ("hostname".equals(header)) {
+			headerBox.setSelected(true);
+		}
+		if ("selectedDomain".equals(header)) {
+			headerBox.setSelected(true);
+		}
+		if ("depotID".equals(header)) {
+			headerBox.setSelected(true);
+		}
+		if ("macaddress".equals(header)) {
+			headerBox.setSelected(true);
 		}
 
-		private void init(ListModel<JCheckBox> model) {
-			if (!Main.THEMES) {
-				setBackground(Globals.CSV_CREATE_CLIENT_PANEL_BACKGROUND_COLOR);
-			}
-
-			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
-			CheckBoxList list = new CheckBoxList(model);
-			list.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-			list.setVisibleRowCount(-1);
-
-			JScrollPane scroll = new JScrollPane(list);
-			scroll.setAlignmentX(LEFT_ALIGNMENT);
-
-			add(Box.createRigidArea(new Dimension(0, 1)));
-			add(scroll);
-		}
-
-		private static class CheckBoxList extends JList<JCheckBox> {
-			private Border noFocusBorder = new EmptyBorder(1, 1, 1, 1);
-
-			public CheckBoxList() {
-				super.setCellRenderer(new CellRenderer());
-
-				super.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mousePressed(MouseEvent e) {
-						int index = locationToIndex(e.getPoint());
-
-						if (index != -1) {
-							JCheckBox checkbox = getModel().getElementAt(index);
-							checkbox.setSelected(!checkbox.isSelected());
-							repaint();
-						}
-					}
-				});
-			}
-
-			public CheckBoxList(ListModel<JCheckBox> model) {
-				this();
-				super.setModel(model);
-			}
-
-			private class CellRenderer implements ListCellRenderer<JCheckBox> {
-				@Override
-				public Component getListCellRendererComponent(JList<? extends JCheckBox> list, JCheckBox checkbox,
-						int index, boolean isSelected, boolean cellHasFocus) {
-
-					if (!Main.THEMES) {
-						checkbox.setBackground(isSelected ? getSelectionBackground() : getBackground());
-						checkbox.setForeground(isSelected ? getSelectionForeground() : getForeground());
-					}
-
-					checkbox.setEnabled(isEnabled());
-					if (!Main.FONT) {
-						checkbox.setFont(getFont());
-					}
-					checkbox.setFocusPainted(false);
-					checkbox.setBorderPainted(true);
-					checkbox.setBorder(noFocusBorder);
-
-					return checkbox;
-				}
-			}
-		}
+		model.addElement(headerBox);
+		headerButtons.add(headerBox);
 	}
 
 	private static class InputListener implements DocumentListener {

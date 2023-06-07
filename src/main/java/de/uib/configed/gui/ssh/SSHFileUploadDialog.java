@@ -369,14 +369,16 @@ public class SSHFileUploadDialog extends FGeneralDialog {
 		if (jRadioButtonLocal.isSelected()) {
 			if (jTextFieldLocalPath.getText().isEmpty()) {
 				Logging.warning(this, "Please select local file.");
-				return;
 			}
 		} else if (jRadioButtonFromServer.isSelected()
 				&& (jTextFieldURL.getText().isEmpty() || jTextFieldURL.getText().equals(wgetDefText))) {
 			Logging.warning(this, "Please enter url to file.");
-			return;
+		} else {
+			uploadNoOptionSelected();
 		}
+	}
 
+	private void uploadNoOptionSelected() {
 		String modulesServerPath = doAction1AdditionalSetPath();
 		try {
 			SSHCommandTemplate fullcommand = new SSHCommandTemplate();

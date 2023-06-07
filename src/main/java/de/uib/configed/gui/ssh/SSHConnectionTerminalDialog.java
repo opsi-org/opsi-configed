@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -310,20 +309,7 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		jComboBoxPrivat = new JCheckBox(Configed.getResourceValue("SSHConnection.passwordButtonText"));
 		jComboBoxPrivat.setPreferredSize(jButtonDimension);
 		if (!(Globals.isGlobalReadOnly())) {
-			jComboBoxPrivat.addItemListener((ItemEvent itemEvent) -> {
-				if (passwordMode) {
-					changeEchoChar('*');
-					removeAutocompleteListener();
-					passwordMode = false;
-				} else {
-					changeEchoChar((char) 0);
-					if (terminal.commandsCompgen != null) {
-						setAutocompleteList(terminal.commandsCompgen);
-					}
-					passwordMode = true;
-				}
-				setCLfocus();
-			});
+			jComboBoxPrivat.addItemListener(itemEvent -> applyPrivate());
 		}
 
 		changeEchoChar((char) 0);
@@ -364,6 +350,21 @@ public class SSHConnectionTerminalDialog extends SSHConnectionOutputDialog {
 		setCLfocus();
 
 		setCenterLayout();
+	}
+
+	private void applyPrivate() {
+		if (passwordMode) {
+			changeEchoChar('*');
+			removeAutocompleteListener();
+			passwordMode = false;
+		} else {
+			changeEchoChar((char) 0);
+			if (terminal.commandsCompgen != null) {
+				setAutocompleteList(terminal.commandsCompgen);
+			}
+			passwordMode = true;
+		}
+		setCLfocus();
 	}
 
 	public void setAutocompleteList(List<String> list) {
