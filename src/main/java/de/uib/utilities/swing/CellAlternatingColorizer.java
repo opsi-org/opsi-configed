@@ -11,6 +11,7 @@ import java.awt.Component;
 
 import de.uib.Main;
 import de.uib.configed.Globals;
+import de.uib.utilities.table.gui.StandardTableCellRenderer;
 
 public final class CellAlternatingColorizer {
 
@@ -49,6 +50,8 @@ public final class CellAlternatingColorizer {
 					cell.setBackground(unselectedUnevenColor);
 				}
 			}
+		} else {
+			StandardTableCellRenderer.colorizeTableCellTheme(cell, isSelected, isEven);
 		}
 	}
 
@@ -84,6 +87,8 @@ public final class CellAlternatingColorizer {
 					cell.setBackground(Globals.defaultTableCellBgColor11);
 				}
 			}
+		} else {
+			StandardTableCellRenderer.colorizeTableCellTheme(cell, isSelected, rowEven);
 		}
 	}
 }

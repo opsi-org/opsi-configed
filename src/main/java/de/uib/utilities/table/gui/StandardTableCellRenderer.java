@@ -15,7 +15,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import com.formdev.flatlaf.FlatLaf;
 
-import de.uib.Main;
 import de.uib.configed.Globals;
 import de.uib.utilities.swing.CellAlternatingColorizer;
 
@@ -57,10 +56,6 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 			((JLabel) jc).setToolTipText(tooltipText);
 		}
 
-		if (Main.THEMES) {
-			colorizeTableCellTheme(jc, isSelected, row % 2 == 0);
-		}
-
 		return jc;
 	}
 
@@ -73,12 +68,13 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	}
 
 	public static void colorizeTableCellThemeDark(Component component, boolean isSelected, boolean isRowEven) {
+		component.setForeground(Globals.opsiForegroundDark);
 
 		if (!isSelected) {
 			if (isRowEven) {
-				component.setBackground(Globals.opsiDarkGrey);
+				component.setBackground(Globals.opsiBackgroundDark);
 			} else {
-				component.setBackground(Globals.opsiDarkGrey2);
+				component.setBackground(Globals.opsiDarkGrey);
 			}
 		} else {
 			if (isRowEven) {
@@ -90,18 +86,19 @@ public class StandardTableCellRenderer extends DefaultTableCellRenderer {
 	}
 
 	public static void colorizeTableCellThemeLight(Component component, boolean isSelected, boolean isRowEven) {
+		component.setForeground(Globals.opsiForegroundLight);
 
 		if (!isSelected) {
 			if (isRowEven) {
-				component.setBackground(Globals.opsiGrey);
-			} else {
 				component.setBackground(Globals.opsiLightGrey);
+			} else {
+				component.setBackground(Globals.opsiBackgroundLight);
 			}
 		} else {
 			if (isRowEven) {
-				component.setBackground(Globals.opsiDarkBlue);
+				component.setBackground(Globals.opsiLightBlue);
 			} else {
-				component.setBackground(Globals.opsiBlue);
+				component.setBackground(Globals.opsiLighterBlue);
 			}
 		}
 	}
