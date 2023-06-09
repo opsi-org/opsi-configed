@@ -475,57 +475,6 @@ public final class Globals {
 		info.setVisible(true);
 	}
 
-	public static boolean interpretAsBoolean(Object value) {
-
-		if (value == null) {
-			return false;
-		}
-
-		if (value instanceof Boolean) {
-			return (Boolean) value;
-		}
-
-		if (value instanceof Integer) {
-			int val = (Integer) value;
-			if (val == 1) {
-				return true;
-			} else if (val == 0) {
-				return false;
-			} else {
-				throw new IllegalArgumentException("" + value + " cannot be interpreted as boolean");
-			}
-		}
-
-		if (value instanceof String) {
-
-			String val = ((String) value).toLowerCase(Locale.ROOT);
-
-			if (val.isEmpty()) {
-				return false;
-			}
-
-			if ("true".equals(val)) {
-				return true;
-			}
-
-			if ("false".equals(val)) {
-				return false;
-			}
-
-			if ("1".equals(val)) {
-				return true;
-			}
-
-			if ("0".equals(val)) {
-				return false;
-			}
-
-			throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
-		}
-
-		throw new IllegalArgumentException(" " + value + " cannot be interpreted as boolean");
-	}
-
 	public static int getMaxLogSize(int index) {
 		if (index < 0 || index >= maxLogSizes.length) {
 			Logging.warning("error with index for maxLogSizes");

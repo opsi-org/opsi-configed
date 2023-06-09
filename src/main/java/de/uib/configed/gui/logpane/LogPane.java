@@ -112,20 +112,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 	public LogPane(String defaultText, boolean withPopup) {
 		super(new BorderLayout());
+
+		// Set variables
 		Logging.info(this, "initializing");
 		title = "";
 		info = "";
-
-		scrollpane = new JScrollPane();
-		jTextPane = new JTextPane() {
-			@Override
-			public Dimension getPreferredSize() {
-				return getUI().getMinimumSize(this);
-			}
-		};
-
-		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
-		jTextPane.getCaret().setBlinkRate(0);
 
 		styleContext = new StyleContext() {
 			@Override
@@ -135,6 +126,18 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		};
 
 		logLevelStyles = new Style[10];
+		setLoglevelStyles();
+
+		initComponents(defaultText);
+
+		setLayout();
+
+		if (withPopup) {
+			initPopupMenu();
+		}
+	}
+
+	private void setLoglevelStyles() {
 
 		logLevelStyles[1] = styleContext.addStyle("loglevel essential", null);
 		StyleConstants.setForeground(logLevelStyles[1], Globals.logColorEssential);
@@ -169,6 +172,19 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 
 		logLevelStyles[9] = styleContext.addStyle("loglevel confidential", null);
 		StyleConstants.setForeground(logLevelStyles[9], Globals.logColorSecret);
+	}
+
+	private void initComponents(String defaultText) {
+		scrollpane = new JScrollPane();
+		jTextPane = new JTextPane() {
+			@Override
+			public Dimension getPreferredSize() {
+				return getUI().getMinimumSize(this);
+			}
+		};
+
+		jTextPane.setCaretColor(Globals.LOG_PANE_CARET_COLOR);
+		jTextPane.getCaret().setBlinkRate(0);
 
 		searcher = new WordSearcher(jTextPane);
 		searcher.setCaseSensitivity(false);
@@ -247,7 +263,9 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		comboType.setEditable(false);
 
 		comboType.addActionListener(actionEvent -> applyType());
+	}
 
+	private void setLayout() {
 		commandpane = new JPanel();
 		GroupLayout layoutCommandpane = new GroupLayout(commandpane);
 		commandpane.setLayout(layoutCommandpane);
@@ -302,10 +320,6 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 				).addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2));
 
 		super.add(commandpane, BorderLayout.SOUTH);
-
-		if (withPopup) {
-			initPopupMenu();
-		}
 	}
 
 	private void applyType() {
@@ -651,9 +665,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 			} catch (BadLocationException e) {
 				Logging.warning(this, "BadLocationException for setting caret in LotPane: " + e);
 			}
-
 		}
-
 	}
 
 	private Style getStyleByLevelNo(int lev) {
