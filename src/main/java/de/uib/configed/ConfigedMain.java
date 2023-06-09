@@ -1294,6 +1294,34 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		myServer = persistenceController.getHostInfoCollections().getConfigServer();
 
+		initDepots();
+
+		// create client selection panel
+		selectionPanel = new JTableSelectionPanel(this) {
+
+			@Override
+			protected void keyPressedOnTable(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+					startRemoteControlForSelectedClients();
+				} else if (e.getKeyCode() == KeyEvent.VK_F10) {
+					Logging.debug(this, "keypressed: f10");
+					mainFrame.showPopupClients();
+				} else {
+					// Nothing to do for all the other keys
+				}
+			}
+
+		};
+
+		selectionPanel.setModel(buildClientListTableModel(true));
+		setSelectionPanelCols();
+
+		selectionPanel.initSortKeys();
+
+		startMainFrame(this, selectionPanel, depotsList, treeClients, multiDepot);
+	}
+
+	private void initDepots() {
 		// create depotsList
 		depotsList = new DepotsList();
 
@@ -1324,29 +1352,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (oldSelectedDepots.length == 0) {
 			depotsList.setSelectedValue(myServer, true);
 		} else {
-			ArrayList<Integer> savedSelectedDepots = new ArrayList<>();
-			// we collect the indices of the old depots in the current list
-
-			for (int i = 0; i < oldSelectedDepots.length; i++) {
-				for (int j = 0; j < depotsList.getModel().getSize(); j++) {
-					if (depotsList.getModel().getElementAt(j).equals(oldSelectedDepots[i])) {
-						savedSelectedDepots.add(j);
-					}
-				}
-			}
-
-			if (!savedSelectedDepots.isEmpty()) {
-				int[] depotsToSelect = new int[savedSelectedDepots.size()];
-				for (int j = 0; j < depotsToSelect.length; j++) {
-					// conversion to int
-					depotsToSelect[j] = savedSelectedDepots.get(j);
-				}
-
-				depotsList.setSelectedIndices(depotsToSelect);
-			} else {
-				// if none of the old selected depots is in the list we select the config server
-				depotsList.setSelectedValue(myServer, true);
-			}
+			selectOldSelectedDepots();
 		}
 
 		// we correct the result of the first selection
@@ -1355,29 +1361,37 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			depotsList.setBackground(Globals.SECONDARY_BACKGROUND_COLOR);
 		}
 
-		// create client selection panel
-		selectionPanel = new JTableSelectionPanel(this) {
+	}
 
-			@Override
-			protected void keyPressedOnTable(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					startRemoteControlForSelectedClients();
-				} else if (e.getKeyCode() == KeyEvent.VK_F10) {
-					Logging.debug(this, "keypressed: f10");
-					mainFrame.showPopupClients();
-				} else {
-					// Nothing to do for all the other keys
+	private void selectOldSelectedDepots() {
+		ArrayList<Integer> savedSelectedDepots = new ArrayList<>();
+		// we collect the indices of the old depots in the current list
+
+		for (int i = 0; i < oldSelectedDepots.length; i++) {
+			for (int j = 0; j < depotsList.getModel().getSize(); j++) {
+				if (depotsList.getModel().getElementAt(j).equals(oldSelectedDepots[i])) {
+					savedSelectedDepots.add(j);
 				}
 			}
+		}
 
-		};
+		if (!savedSelectedDepots.isEmpty()) {
+			int[] depotsToSelect = new int[savedSelectedDepots.size()];
+			for (int j = 0; j < depotsToSelect.length; j++) {
+				// conversion to int
+				depotsToSelect[j] = savedSelectedDepots.get(j);
+			}
 
-		selectionPanel.setModel(buildClientListTableModel(true));
-		setSelectionPanelCols();
+			depotsList.setSelectedIndices(depotsToSelect);
+		} else {
+			// if none of the old selected depots is in the list we select the config server
+			depotsList.setSelectedValue(myServer, true);
+		}
+	}
 
-		selectionPanel.initSortKeys();
-
-		mainFrame = new MainFrame(this, selectionPanel, depotsList, treeClients, multiDepot);
+	private static void startMainFrame(ConfigedMain configedMain, JTableSelectionPanel selectionPanel,
+			DepotsList depotsList, ClientTree treeClients, boolean multiDepot) {
+		mainFrame = new MainFrame(configedMain, selectionPanel, depotsList, treeClients, multiDepot);
 
 		// setting the similar global values as well
 
@@ -1393,14 +1407,15 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		locateAndDisplay();
 
 		// init visual states
-		Logging.debug(this, "mainframe nearly initialized");
+		Logging.debug(configedMain, "mainframe nearly initialized");
+
 	}
 
-	private void locateAndDisplay() {
+	private static void locateAndDisplay() {
 		Rectangle screenRectangle = dPassword.getGraphicsConfiguration().getBounds();
 		int distance = Math.min(screenRectangle.width, screenRectangle.height) / 10;
 
-		Logging.info(this, "set size and location of mainFrame");
+		Logging.info("set size and location of mainFrame");
 
 		// weird formula for size
 		mainFrame.setSize(screenRectangle.width - distance, screenRectangle.height - distance);
@@ -1409,7 +1424,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.setLocation((int) (screenRectangle.getCenterX() - mainFrame.getSize().getWidth() / 2),
 				(int) (screenRectangle.getCenterY() - mainFrame.getSize().getHeight() / 2));
 
-		Logging.info(this, "setting mainframe visible");
+		Logging.info("setting mainframe visible");
 		mainFrame.setVisible(true);
 	}
 
