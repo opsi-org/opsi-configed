@@ -187,6 +187,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		if (!Main.FONT) {
 			jTextPane.setFont(Globals.defaultFont);
 		}
+
 		jTextPane.addKeyListener(this);
 
 		scrollpane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -882,6 +883,7 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		Logging.debug(this, "KeyEvent " + e);
+
 		if (e.getSource() == buttonSearch) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				search();
@@ -889,11 +891,11 @@ public class LogPane extends JPanel implements KeyListener, ActionListener {
 		} else if (e.getSource() == jComboBoxSearch || e.getSource() == jTextPane) {
 			if (e.getKeyCode() == KeyEvent.VK_F3 || e.getKeyCode() == KeyEvent.VK_ENTER) {
 				search();
-			} else if (e.getSource() == jTextPane && e.getKeyChar() == '+'
+			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_PLUS
 					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Plus");
 				increaseFontSize();
-			} else if (e.getSource() == jTextPane && e.getKeyChar() == '-'
+			} else if (e.getSource() == jTextPane && e.getKeyCode() == KeyEvent.VK_MINUS
 					&& (e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
 				Logging.info(this, "Ctrl-Minus");
 				reduceFontSize();
