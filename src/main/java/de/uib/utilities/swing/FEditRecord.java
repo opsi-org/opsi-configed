@@ -10,31 +10,15 @@ import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 
+import javax.swing.event.DocumentEvent;
+
 public class FEditRecord extends FEdit {
 	private AbstractRecordPane recordPane;
 
 	public FEditRecord(String hint) {
 		super("", hint);
-		recordPane = new AbstractRecordPane() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					commit();
-				} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					cancel();
-				} else {
-					// We want to do nothing on other keys
-				}
-			}
 
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				/* Not needed */}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				/* Not needed */}
-		};
+		recordPane = new RecordPane();
 	}
 
 	public void setRecord(Map<String, String> data, Map<String, String> labels, Map<String, String> hints,
@@ -46,5 +30,35 @@ public class FEditRecord extends FEdit {
 
 	public Map<String, String> getData() {
 		return recordPane.getData();
+	}
+
+	private class RecordPane extends AbstractRecordPane {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				commit();
+			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				cancel();
+			} else {
+				// We want to do nothing on other keys
+			}
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent document) {
+			setDataChanged(true);
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent document) {
+			setDataChanged(true);
+
+		}
+
+		@Override
+		public void changedUpdate(DocumentEvent document) {
+			setDataChanged(true);
+
+		}
 	}
 }
