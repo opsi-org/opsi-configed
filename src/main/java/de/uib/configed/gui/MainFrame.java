@@ -3371,6 +3371,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		} else {
 			licenseDisplayer.display();
 		}
+
 	}
 
 	public void enableAfterLoading() {
