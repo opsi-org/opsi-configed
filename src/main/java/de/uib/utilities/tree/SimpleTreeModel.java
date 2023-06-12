@@ -53,7 +53,6 @@ public class SimpleTreeModel extends DefaultTreeModel {
 
 	private void generateFrom(Set<String> dottedKeys) {
 		allPathes = new TreeSet<>();
-		Map<SimpleTreePath, SimpleIconNode> path2Node = new TreeMap<>();
 
 		if (dottedKeys != null) {
 			for (String key : dottedKeys) {
@@ -80,7 +79,13 @@ public class SimpleTreeModel extends DefaultTreeModel {
 			}
 		}
 
+		generateAllPaths();
+	}
+
+	private void generateAllPaths() {
 		Logging.debug(this, "generateFrom allPathes " + allPathes);
+
+		Map<SimpleTreePath, SimpleIconNode> path2Node = new TreeMap<>();
 
 		for (SimpleTreePath path : allPathes) {
 			SimpleIconNode parent = rootNode;
@@ -94,20 +99,7 @@ public class SimpleTreeModel extends DefaultTreeModel {
 				SimpleIconNode node = path2Node.get(partialPath);
 
 				if (node == null) {
-					// node must be created
-					node = new SimpleIconNode(path.get(i - 1));
-					node.setIcon(Globals.createImageIcon("images/opentable_small.png", "open table"));
-					node.setNonSelectedIcon(Globals.createImageIcon("images/closedtable_small.png", "closed table"));
-
-					if (tooltips != null) {
-						String key = partialPath.dottedString(0, partialPath.size());
-						String description = tooltips.get(key);
-						if (description == null || description.trim().isEmpty()) {
-							node.setToolTipText(key);
-						} else {
-							node.setToolTipText(description);
-						}
-					}
+					node = createNode(path, partialPath, i);
 
 					path2Node.put(path.subList(0, i), node);
 					parent.add(node);
@@ -116,5 +108,24 @@ public class SimpleTreeModel extends DefaultTreeModel {
 		}
 
 		Logging.debug(this, "generateFrom allPathes ready");
+	}
+
+	private SimpleIconNode createNode(SimpleTreePath path, SimpleTreePath partialPath, int i) {
+		// node must be created
+		SimpleIconNode node = new SimpleIconNode(path.get(i - 1));
+		node.setIcon(Globals.createImageIcon("images/opentable_small.png", "open table"));
+		node.setNonSelectedIcon(Globals.createImageIcon("images/closedtable_small.png", "closed table"));
+
+		if (tooltips != null) {
+			String key = partialPath.dottedString(0, partialPath.size());
+			String description = tooltips.get(key);
+			if (description == null || description.trim().isEmpty()) {
+				node.setToolTipText(key);
+			} else {
+				node.setToolTipText(description);
+			}
+		}
+
+		return node;
 	}
 }

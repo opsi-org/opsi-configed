@@ -170,28 +170,9 @@ public final class Logging {
 			logFilename = logDirectory.getAbsolutePath() + File.separator + logfileDelimiter + logfileMarker
 					+ extension;
 			logFilename = new File(logFilename).getAbsolutePath();
-			File logFile = new File(logFilename);
 
 			if (numberOfKeptLogFiles > 0) {
-				String[] logFilenames = new String[numberOfKeptLogFiles];
-				File[] logFiles = new File[numberOfKeptLogFiles];
-
-				for (int i = 0; i < numberOfKeptLogFiles; i++) {
-					logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + logfileDelimiter + logfileMarker
-							+ "___" + i + extension;
-					logFiles[i] = new File(logFilenames[i]);
-				}
-
-				for (int i = numberOfKeptLogFiles - 1; i > 0; i--) {
-					if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i])) {
-						Logging.warning("renaming logfile failed for file: " + logFiles[i - 1]);
-					}
-
-				}
-
-				if (logFile.exists() && !logFile.renameTo(logFiles[0])) {
-					Logging.warning("renaming logfile failed for file: " + logFiles[0]);
-				}
+				treatOtherLogFiles(logFilename, logDirectory);
 			}
 
 			logFileWriter = new PrintWriter(new FileOutputStream(logFilename), false, StandardCharsets.UTF_8);
@@ -199,6 +180,30 @@ public final class Logging {
 		} catch (IOException ex) {
 			Logging.error("file " + logFilename + " or directory " + logDirectoryName + " not found...", ex);
 			logFilenameInUse = Configed.getResourceValue("logging.noFileLogging");
+		}
+	}
+
+	// Renames the other existing logfiles
+	private static void treatOtherLogFiles(String logFilename, File logDirectory) {
+		File logFile = new File(logFilename);
+		String[] logFilenames = new String[numberOfKeptLogFiles];
+		File[] logFiles = new File[numberOfKeptLogFiles];
+
+		for (int i = 0; i < numberOfKeptLogFiles; i++) {
+			logFilenames[i] = logDirectory.getAbsolutePath() + File.separator + logfileDelimiter + logfileMarker + "___"
+					+ i + extension;
+			logFiles[i] = new File(logFilenames[i]);
+		}
+
+		for (int i = numberOfKeptLogFiles - 1; i > 0; i--) {
+			if (logFiles[i - 1].exists() && !logFiles[i - 1].renameTo(logFiles[i])) {
+				Logging.warning("renaming logfile failed for file: " + logFiles[i - 1]);
+			}
+
+		}
+
+		if (logFile.exists() && !logFile.renameTo(logFiles[0])) {
+			Logging.warning("renaming logfile failed for file: " + logFiles[0]);
 		}
 	}
 
