@@ -150,8 +150,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	static final String TEST_ACCESS_RESTRICTED_HOST_GROUP = null;
 
-	static final String TEMPGROUPNAME = "";
-
 	private static GuiStrategyForLoadingData strategyForLoadingData;
 
 	private static MainFrame mainFrame;
@@ -207,13 +205,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private String clientInDepot;
 	private HostInfo hostInfo = new HostInfo();
 
-	// tells if a group of client is loaded via GroupManager (and not by direct
-	// selection)
-	protected boolean groupLoading;
-
 	protected boolean changeListByToggleShowSelection;
 	protected boolean hostgroupChanged;
-	protected String groupname = TEMPGROUPNAME;
 	private String appTitle = Globals.APPNAME;
 
 	private FTextArea fAskSaveChangedText;
@@ -881,10 +874,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		dataReady = true;
 		waitCursor.stop();
 		mainFrame.enableAfterLoading();
-	}
-
-	public void setGroupLoading(boolean b) {
-		groupLoading = b;
 	}
 
 	public void toggleColumnIPAddress() {
@@ -3284,23 +3273,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		mainFrame.setLogfilePanel(new HashMap<>());
 	}
 
-	public boolean updateLogPage(String logtype) {
-
-		try {
-			Logging.debug(this, "updatelogpage");
-
-			if (!checkOneClientSelected()) {
-				return false;
-			}
-
-			persistenceController.getLogfiles(firstSelectedClient, logtype);
-		} catch (Exception ex) {
-			Logging.error("Error in updateLogPage: " + ex, ex);
-			return false;
-		}
-		return true;
-	}
-
 	public boolean logfileExists(String logtype) {
 		return logfiles != null && logfiles.get(logtype) != null && !logfiles.get(logtype).isEmpty()
 				&& !logfiles.get(logtype).equals(Configed.getResourceValue("MainFrame.TabActiveForSingleClient"));
@@ -3608,36 +3580,12 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		return selectedDepots;
 	}
 
-	public List<String> getSelectedDepotsV() {
-		return selectedDepotsV;
-	}
-
 	public Set<String> getAllowedClients() {
 		return allowedClients;
 	}
 
-	public List<String> getAccessedDepots() {
-		List<String> accessedDepots = new ArrayList<>();
-		for (String depot : selectedDepotsV) {
-			if (persistenceController.hasDepotPermission(depot)) {
-				accessedDepots.add(depot);
-			}
-		}
-
-		return accessedDepots;
-	}
-
 	public List<String> getProductNames() {
 		return localbootProductnames;
-	}
-
-	public List<String> getAllProductNames() {
-		List<String> productnames = new ArrayList<>(localbootProductnames);
-		productnames.addAll(netbootProductnames);
-
-		Logging.info(this, "productnames " + productnames);
-
-		return productnames;
 	}
 
 	protected String[] getDepotArray() {
@@ -5171,14 +5119,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		fAskOverwriteExsitingHost.setVisible(true);
 
 		return fAskOverwriteExsitingHost.getResult() == 2;
-	}
-
-	public void setGroupname(String name) {
-		if (name == null || name.isEmpty()) {
-			groupname = TEMPGROUPNAME;
-		} else {
-			groupname = name;
-		}
 	}
 
 	public void callNewClientSelectionDialog() {
