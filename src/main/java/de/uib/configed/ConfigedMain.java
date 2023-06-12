@@ -4665,25 +4665,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		}
 	}
 
-	protected void refreshClientList(String[] selectClients) {
-		Logging.info(this, "refreshClientList " + selectClients);
-		refreshClientListActivateALL();
-
-		if (selectClients != null) {
-			Logging.debug(this, "set client refreshClientList");
-			setClients(selectClients);
-		}
-	}
-
-	protected void refreshClientList(boolean resetSelection) {
-		Logging.info(this, "refreshClientList  resetSelecton " + resetSelection);
-		refreshClientListActivateALL();
-
-		if (resetSelection) {
-			setClientGroup();
-		}
-	}
-
 	public void reloadHosts() {
 		persistenceController.getHostInfoCollections().opsiHostsRequestRefresh();
 		persistenceController.hostConfigsRequestRefresh();
@@ -4794,10 +4775,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				result.act(clients, delaySecs);
 			}
 		}.start();
-	}
-
-	public void wakeSelectedClientsWithDelay(final int delaySecs) {
-		wakeUpWithDelay(delaySecs, getSelectedClients(), "");
 	}
 
 	public void deletePackageCachesOfSelectedClients() {
@@ -4940,10 +4917,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	 */
 	public void startSSHConfigDialog() {
 		SSHConfigDialog.getInstance(this);
-	}
-
-	public SSHConfigDialog getSSHConfigDialog() {
-		return SSHConfigDialog.getInstance(this);
 	}
 
 	/** Starts the control dialog */
@@ -5259,38 +5232,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		Logging.info(this, "selected: " + result);
 		setSelectedClientsCollectionOnPanel(result, true);
-	}
-
-	public void setClientGroup() {
-		boolean wasFiltered = false;
-
-		// no group selection on the filtered list
-		if (filterClientList) {
-			setFilterClientList(false);
-			wasFiltered = true;
-		}
-
-		selectionPanel.clearSelection();
-
-		Map<String, Boolean> clientList = produceClientListForDepots(getSelectedDepots(), null);
-		Logging.debug(this, "setClientGroup pclist " + clientList);
-
-		if (clientList != null) {
-			TreeSet<String> selectedList = new TreeSet<>();
-			for (Entry<String, Boolean> ob : clientList.entrySet()) {
-				if (Boolean.TRUE.equals(ob.getValue())) {
-					selectedList.add(ob.getKey());
-				}
-			}
-
-			Logging.debug(this, "set selected values in setClientGroup " + selectedList);
-			setSelectedClientsCollectionOnPanel(selectedList, true);
-		}
-
-		if (wasFiltered) {
-			filterClientList = true;
-			setRebuiltClientListTableModel();
-		}
 	}
 
 	// interface LogEventObserver
