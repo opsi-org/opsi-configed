@@ -129,7 +129,6 @@ import de.uib.utilities.table.provider.ExternalSource;
 import de.uib.utilities.table.provider.RetrieverMapSource;
 import de.uib.utilities.table.provider.RowsProvider;
 import de.uib.utilities.table.provider.TableProvider;
-import de.uib.utilities.thread.WaitCursor;
 
 public class ConfigedMain implements ListSelectionListener, TabController, LogEventObserver {
 	private static final Pattern backslashPattern = Pattern.compile("[\\[\\]\\s]", Pattern.UNICODE_CHARACTER_CLASS);
@@ -1086,9 +1085,8 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (persistenceController.isWithLicenceManagement()) {
 			toggleLicencesFrame();
 		} else {
-			de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText
+			FOpsiLicenseMissingText
 					.callInstanceWith(Configed.getResourceValue("ConfigedMain.LicencemanagementNotActive"));
-
 		}
 	}
 
@@ -1434,7 +1432,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private void initLicencesFrame() {
 		long startmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicencesFrame start ");
-		WaitCursor waitCursor = new WaitCursor(mainFrame.getContentPane(), mainFrame.getCursor(), "initLicencesFrame");
+
+		// TODO why does the pane not work?
+		mainFrame.activateLoadingPane();
+
 		// general
 
 		licencesFrame = new TabbedFrame(this);
@@ -1560,7 +1561,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// Center on mainFrame
 		licencesFrame.setLocationRelativeTo(mainFrame);
 
-		waitCursor.stop();
+		mainFrame.disactivateLoadingPane();
 
 		long endmillis = System.currentTimeMillis();
 		Logging.info(this, "initLicencesFrame  diff " + (endmillis - startmillis));
@@ -3287,9 +3288,10 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 			try {
 
-				WaitCursor waitCursor = new WaitCursor(ConfigedMain.getMainFrame(), "getLogfilesUpdating");
+				// TODO is called twice when clicking on another client
+				mainFrame.activateLoadingPane();
 				logfiles = persistenceController.getLogfiles(firstSelectedClient, logtypeToUpdate);
-				waitCursor.stop();
+				mainFrame.disactivateLoadingPane();
 
 				Logging.debug(this, "log pages set");
 			} catch (Exception ex) {
@@ -3712,9 +3714,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		int saveViewIndex = getViewIndex();
 
 		Logging.info(this, " reloadData saveViewIndex " + saveViewIndex);
-
-		// stop all old waiting threads if there should be any left
-		WaitCursor.stopAll();
 
 		List<String> selValuesList = selectionPanel.getSelectedValues();
 

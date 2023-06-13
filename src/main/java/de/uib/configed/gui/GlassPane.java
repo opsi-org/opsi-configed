@@ -20,6 +20,10 @@ import javax.swing.JComponent;
 
 import org.jdesktop.swingx.JXBusyLabel;
 
+import com.formdev.flatlaf.FlatLaf;
+
+import de.uib.Main;
+
 public class GlassPane extends JComponent implements KeyListener {
 
 	private static final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
@@ -44,7 +48,13 @@ public class GlassPane extends JComponent implements KeyListener {
 	}
 
 	private static Color initBackground() {
-		Color base = Color.WHITE;
+		Color base;
+
+		if (Main.THEMES && FlatLaf.isLafDark()) {
+			base = Color.BLACK;
+		} else {
+			base = Color.WHITE;
+		}
 
 		return new Color(base.getRed(), base.getGreen(), base.getBlue(), 128);
 	}

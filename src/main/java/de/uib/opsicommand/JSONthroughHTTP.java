@@ -6,7 +6,6 @@
 
 package de.uib.opsicommand;
 
-import java.awt.Cursor;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -44,7 +43,6 @@ import de.uib.configed.gui.FTextArea;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.swing.FEditRecord;
-import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
 
 public class JSONthroughHTTP extends AbstractPOJOExecutioner {
@@ -186,10 +184,10 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		boolean background = false;
 		Logging.info(this, "retrieveResponse started");
-		WaitCursor waitCursor = null;
+		//WaitCursor waitCursor = null;
 
 		if (omc != null && !omc.isBackgroundDefault()) {
-			waitCursor = new WaitCursor(null, new Cursor(Cursor.DEFAULT_CURSOR), this.getClass().getName());
+			//waitCursor = new WaitCursor(null, new Cursor(Cursor.DEFAULT_CURSOR), this.getClass().getName());
 		} else {
 			background = true;
 		}
@@ -260,10 +258,10 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 		} catch (SSLException ex) {
 			Logging.debug(this, "SSLException encountered: " + ex);
 			if (!background) {
-				if (waitCursor != null) {
-					waitCursor.stop();
-				}
-				WaitCursor.stopAll();
+				//if (waitCursor != null) {
+				//	waitCursor.stop();
+				//}
+				//WaitCursor.stopAll();
 			}
 
 			if (conStat.getState() == ConnectionState.INTERRUPTED) {
@@ -339,10 +337,10 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 			return null;
 		} catch (IOException ex) {
 			if (!background) {
-				if (waitCursor != null) {
-					waitCursor.stop();
-				}
-				WaitCursor.stopAll();
+				//if (waitCursor != null) {
+				//	waitCursor.stop();
+				//}
+				//WaitCursor.stopAll();
 			}
 
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
@@ -384,10 +382,10 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 							+ Globals.isMultiFactorAuthenticationEnabled);
 					if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
 						if (!background) {
-							if (waitCursor != null) {
-								waitCursor.stop();
-							}
-							WaitCursor.stopAll();
+							//	if (waitCursor != null) {
+							//		waitCursor.stop();
+							//	}
+							//	WaitCursor.stopAll();
 						}
 						if (showNewPasswordDialog()) {
 							return retrieveResponse(omc);
@@ -465,19 +463,19 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 					}
 				}
 			} catch (Exception ex) {
-				if (waitCursor != null) {
-					waitCursor.stop();
-				}
-				WaitCursor.stopAll();
+				//if (waitCursor != null) {
+				//	waitCursor.stop();
+				//}
+				//WaitCursor.stopAll();
 				Logging.error(this, "Exception while data reading", ex);
 			}
 		}
 
 		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
 		Logging.info(this, "retrieveResponse ready");
-		if (waitCursor != null) {
-			waitCursor.stop();
-		}
+		//if (waitCursor != null) {
+		//	waitCursor.stop();
+		//}
 		return result;
 	}
 }
