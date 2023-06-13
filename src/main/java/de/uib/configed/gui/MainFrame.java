@@ -426,6 +426,8 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	private JTextEditorField jTextFieldOneTimePassword;
 	private JTextHideField jTextFieldHostKey;
 
+	private GlassPane glassPane;
+
 	private boolean multidepot;
 
 	private DepotListPresenter depotListPresenter;
@@ -2600,6 +2602,9 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			statusPane.setBackground(Globals.BACKGROUND_COLOR_7);
 		}
 
+		glassPane = new GlassPane();
+		setGlassPane(glassPane);
+
 		pack();
 	}
 
@@ -2806,7 +2811,16 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void reloadAction() {
+		activateLoadingPane();
 		configedMain.reload();
+	}
+
+	public void activateLoadingPane() {
+		glassPane.activate(true);
+	}
+
+	public void disactivateLoadingPane() {
+		glassPane.activate(false);
 	}
 
 	public void reloadLicensesAction() {

@@ -23,7 +23,6 @@ import de.uib.configed.Globals;
 import de.uib.configed.HostsStatusInfo;
 import de.uib.messagebus.MessagebusListener;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.ActivityPanel;
 import de.uib.utilities.swing.Containership;
 
 public class HostsStatusPanel extends JPanel implements HostsStatusInfo, MessagebusListener {
@@ -188,11 +187,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 
 		connectionStateLabel = new JLabel();
 
-		ActivityPanel activity = new ActivityPanel();
-		activity.setToolTipText("activity indicator");
-
-		new Thread(activity).start();
-
 		initializeValues();
 
 		layoutStatusPane.setHorizontalGroup(layoutStatusPane.createSequentialGroup()
@@ -220,7 +214,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 				.addComponent(labelInvolvedDepots, 2, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE)
 				.addComponent(fieldInvolvedDepots, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
 						Short.MAX_VALUE)
-				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(activity)
 				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE).addComponent(connectionStateLabel)
 				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE));
 
@@ -248,8 +241,6 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 										Globals.LINE_HEIGHT)
 								.addComponent(fieldInvolvedDepots, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT,
 										Globals.LINE_HEIGHT)
-								.addGroup(layoutStatusPane.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-										.addComponent(activity).addGap(0, 0, Short.MAX_VALUE))
 								.addComponent(connectionStateLabel))
 						.addGap(Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2, Globals.VGAP_SIZE / 2)));
 
