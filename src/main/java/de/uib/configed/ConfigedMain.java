@@ -420,6 +420,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		initMainFrame();
 
+		SwingUtilities.invokeLater(() -> {
+			initialTreeActivation();
+			if (strategyForLoadingData != null) {
+				strategyForLoadingData.actAfterWaiting();
+			}
+		});
+
 		Logging.info(this, "Is messagebus null? " + (messagebus == null));
 
 		if (messagebus != null) {
@@ -440,8 +447,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		anyDataChanged = false;
 
-		mainFrame.activateLoadingPane();
-
 		preloadData();
 
 		// restrict visibility of clients to some group
@@ -450,13 +455,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// \u0009 is tab
 		Logging.debug(this, "initialTreeActivation\u0009");
-
-		SwingUtilities.invokeLater(() -> {
-			initialTreeActivation();
-			if (strategyForLoadingData != null) {
-				strategyForLoadingData.actAfterWaiting();
-			}
-		});
 
 		reachableUpdater.setInterval(Configed.getRefreshMinutes());
 
@@ -1424,6 +1422,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// Center mainFrame on screen of configed.fProgress
 		mainFrame.setLocation((int) (screenRectangle.getCenterX() - mainFrame.getSize().getWidth() / 2),
 				(int) (screenRectangle.getCenterY() - mainFrame.getSize().getHeight() / 2));
+
+		// always loading on start
+		mainFrame.activateLoadingPane();
 
 		Logging.info("setting mainframe visible");
 		mainFrame.setVisible(true);
