@@ -14,6 +14,7 @@ import de.uib.Main;
 import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
+import de.uib.configed.gui.GlassPane;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.SecondaryFrame;
@@ -21,6 +22,8 @@ import de.uib.utilities.swing.SecondaryFrame;
 public class FDriverUpload extends SecondaryFrame {
 
 	private PanelDriverUpload panelDriverUpload;
+
+	private GlassPane glassPane;
 
 	private ConfigedMain main;
 
@@ -56,6 +59,17 @@ public class FDriverUpload extends SecondaryFrame {
 			containerShipAll.doForAllContainedCompisOfClass("setBackground",
 					new Object[] { Globals.BACKGROUND_COLOR_3 }, JTextComponent.class);
 		}
+
+		glassPane = new GlassPane();
+		setGlassPane(glassPane);
+	}
+
+	public void activateLoadingPane() {
+		glassPane.activate(true);
+	}
+
+	public void disactivateLoadingPane() {
+		glassPane.activate(false);
 	}
 
 	public void setUploadParameters(String byAuditPath) {
