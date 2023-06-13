@@ -16,7 +16,6 @@ import javax.swing.SwingUtilities;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.swing.ActivityPanel;
 
 public class WaitCursor {
 
@@ -68,7 +67,7 @@ public class WaitCursor {
 			new Thread() {
 				@Override
 				public void run() {
-					ActivityPanel.setActing(true);
+					//ActivityPanel.setActing(true);
 
 					while (!ready && !allStopped) {
 						Globals.threadSleep(this, 200);
@@ -77,7 +76,7 @@ public class WaitCursor {
 			}.start();
 		} else {
 			SwingUtilities.invokeLater(() -> {
-				ActivityPanel.setActing(true);
+				//ActivityPanel.setActing(true);
 
 				while (!ready && !allStopped) {
 					Globals.threadSleep(this, 200);
@@ -105,7 +104,7 @@ public class WaitCursor {
 			if (objectCounting.get() <= 0) {
 
 				Logging.info(this, "seemed to be last living instance");
-				ActivityPanel.setActing(false);
+				//ActivityPanel.setActing(false);
 			} else {
 				Logging.debug(this, " stopped wait cursor " + " instance " + objectNo + ", " + " still active  "
 						+ objectCounting + " the stopped cursor was initiated from " + callLocation);
