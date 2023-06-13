@@ -46,7 +46,6 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.Containership;
 import de.uib.utilities.swing.PanelLinedComponents;
 import de.uib.utilities.swing.ProgressBarPainter;
-import de.uib.utilities.thread.WaitCursor;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
@@ -64,7 +63,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	private ConfigedMain configedMain;
 	private OpsiserviceNOMPersistenceController persistenceController;
 
-	private WaitCursor waitCursor;
+	private GlassPane glassPane;
 
 	private WaitingWorker waitingWorker;
 
@@ -111,6 +110,14 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		this.configedMain = main;
 
 		guiInit();
+
+		initGlassPane();
+	}
+
+	private void initGlassPane() {
+		glassPane = new GlassPane();
+
+		setGlassPane(glassPane);
 	}
 
 	public void setHost(String host) {
@@ -212,11 +219,11 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		jProgressBar.setVisible(false);
 
 		jButtonCancel.setText(Configed.getResourceValue("DPassword.jButtonCancel"));
-		jButtonCancel.addActionListener(this::jButtonCancelActionPerformed);
+		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
 
 		jButtonCommit.setText(Configed.getResourceValue("DPassword.jButtonCommit"));
 		jButtonCommit.setSelected(true);
-		jButtonCommit.addActionListener(this::jButtonCommitActionPerformed);
+		jButtonCommit.addActionListener((ActionEvent e) -> okAction());
 
 		GroupLayout groupLayout = new GroupLayout(panel);
 
@@ -335,7 +342,6 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 	@Override
 	public void actAfterWaiting() {
-		waitCursor.stop();
 
 		if (PersistenceControllerFactory.getConnectionState().getState() == ConnectionState.CONNECTED) {
 			// we can finish
@@ -428,15 +434,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	private void okAction() {
 		Logging.info(this, "ok_action");
 
-		// we make first a waitCursor and a waitInfo window
-
-		if (waitCursor != null) {
-			// we want only one running instance
-			waitCursor.stop();
-		}
-
 		// correctly
-
 		tryConnecting();
 	}
 
@@ -444,7 +442,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		Logging.info(this, "started  tryConnecting");
 		setActivated(false);
 
-		waitCursor = new WaitCursor(this, "ok_action");
+		glassPane.activate(true);
 
 		ConfigedMain.host = (String) fieldHost.getSelectedItem();
 		ConfigedMain.user = fieldUser.getText();
@@ -508,19 +506,8 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
 
-	private void jButtonCommitActionPerformed(ActionEvent e) {
-		okAction();
-	}
-
 	private void endProgram() {
 		configedMain.finishApp(false, 0);
-	}
-
-	private void jButtonCancelActionPerformed(ActionEvent e) {
-		if (waitCursor != null) {
-			waitCursor.stop();
-		}
-		endProgram();
 	}
 
 	@Override

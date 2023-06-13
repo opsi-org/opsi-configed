@@ -135,7 +135,6 @@ import de.uib.utilities.swing.VerticalPositioner;
 import de.uib.utilities.table.AbstractExportTable;
 import de.uib.utilities.table.ExporterToCSV;
 import de.uib.utilities.table.ExporterToPDF;
-import de.uib.utilities.thread.WaitCursor;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import utils.PopupMouseListener;
@@ -3715,7 +3714,6 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 			super.paint(g);
 		} catch (ClassCastException ex) {
 			Logging.warning(this, "the ugly well known exception " + ex);
-			WaitCursor.stopAll();
 		}
 	}
 }
