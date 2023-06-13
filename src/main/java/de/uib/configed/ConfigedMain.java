@@ -76,6 +76,7 @@ import de.uib.configed.gui.HostsStatusPanel;
 import de.uib.configed.gui.MainFrame;
 import de.uib.configed.gui.NewClientDialog;
 import de.uib.configed.gui.SavedSearchesDialog;
+import de.uib.configed.gui.licences.LicencesFrame;
 import de.uib.configed.gui.ssh.SSHCommandControlDialog;
 import de.uib.configed.gui.ssh.SSHConfigDialog;
 import de.uib.configed.guidata.DependenciesModel;
@@ -120,7 +121,6 @@ import de.uib.utilities.swing.FEditText;
 import de.uib.utilities.swing.list.ListCellRendererByIndex;
 import de.uib.utilities.swing.tabbedpane.TabClient;
 import de.uib.utilities.swing.tabbedpane.TabController;
-import de.uib.utilities.swing.tabbedpane.TabbedFrame;
 import de.uib.utilities.table.gui.BooleanIconTableCellRenderer;
 import de.uib.utilities.table.gui.ConnectionStatusTableCellRenderer;
 import de.uib.utilities.table.gui.PanelGenEditTable;
@@ -282,7 +282,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	private List<JFrame> allFrames;
 
-	public TabbedFrame licencesFrame;
+	public LicencesFrame licencesFrame;
 
 	private FGroupActions groupActionFrame;
 	private FProductActions productActionFrame;
@@ -1438,7 +1438,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// general
 
-		licencesFrame = new TabbedFrame(this);
+		licencesFrame = new LicencesFrame(this);
 
 		Globals.frame1 = licencesFrame;
 
