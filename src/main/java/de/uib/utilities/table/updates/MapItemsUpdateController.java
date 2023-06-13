@@ -15,7 +15,7 @@ import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.thread.WaitCursor;
 
-public class MapItemsUpdateController implements de.uib.utilities.table.updates.UpdateController {
+public class MapItemsUpdateController implements UpdateController {
 	private GenTableModel tablemodel;
 	private PanelGenEditTable panel;
 	private MapBasedUpdater updater;

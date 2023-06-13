@@ -12,7 +12,6 @@ import java.awt.Image;
 import java.util.Map;
 
 import de.uib.configed.ConfigedMain.LicencesTabStatus;
-import de.uib.configed.gui.GlassPane;
 import de.uib.utilities.swing.SecondaryFrame;
 import de.uib.utilities.swing.tabbedpane.TabController;
 import de.uib.utilities.swing.tabbedpane.TabbedPaneX;
@@ -20,8 +19,6 @@ import de.uib.utilities.swing.tabbedpane.TabbedPaneX;
 public class LicencesFrame extends SecondaryFrame {
 
 	private TabbedPaneX panel;
-
-	private GlassPane glassPane;
 
 	public LicencesFrame(TabController controller) {
 		super();
@@ -39,18 +36,7 @@ public class LicencesFrame extends SecondaryFrame {
 	private void init() {
 		add(panel);
 
-		glassPane = new GlassPane();
-		setGlassPane(glassPane);
-
 		pack();
-	}
-
-	public void activateLoadingPane() {
-		glassPane.activate(true);
-	}
-
-	public void disactivateLoadingPane() {
-		glassPane.activate(false);
 	}
 
 	@Override

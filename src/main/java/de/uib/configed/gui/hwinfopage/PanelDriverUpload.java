@@ -46,6 +46,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.CheckedLabel;
 import de.uib.utilities.swing.FLoadingWaiter;
 import de.uib.utilities.swing.JTextShowField;
+import de.uib.utilities.swing.SecondaryFrame;
 
 public class PanelDriverUpload extends JPanel implements de.uib.utilities.NameProducer {
 	private static final String[] DIRECTORY_DRIVERS = new String[] { "drivers", "drivers" };
@@ -178,9 +179,9 @@ public class PanelDriverUpload extends JPanel implements de.uib.utilities.NamePr
 			.getPersistenceController();
 	private ConfigedMain main;
 	private String server;
-	private FDriverUpload rootFrame;
+	private SecondaryFrame rootFrame;
 
-	public PanelDriverUpload(ConfigedMain main, FDriverUpload root) {
+	public PanelDriverUpload(ConfigedMain main, SecondaryFrame root) {
 		this.main = main;
 		this.rootFrame = root;
 		server = main.getConfigserver();

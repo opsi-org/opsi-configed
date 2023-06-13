@@ -31,6 +31,7 @@ import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FDepotselectionList;
 import de.uib.configed.gui.FShowList;
+import de.uib.configed.gui.GlassPane;
 import de.uib.configed.gui.IconAsButton;
 import de.uib.opsicommand.sshcommand.CommandOpsiPackageManagerUninstall;
 import de.uib.opsicommand.sshcommand.SSHConnectExec;
@@ -38,7 +39,6 @@ import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.JComboBoxSimpleToolTip;
-import de.uib.utilities.thread.WaitCursor;
 
 public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManagerParameterDialog {
 
@@ -60,6 +60,8 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 
 	private JButton jButtonDepotSelection;
 
+	private GlassPane glassPane;
+
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 
@@ -75,8 +77,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		frameWidth = 850;
 		frameHeight = 350;
 
-		WaitCursor waitCursor = new WaitCursor(this.getContentPane());
-		main = m;
+		configedMain = m;
 
 		fDepotList = new FDepotselectionList(this) {
 			@Override
@@ -108,7 +109,7 @@ public class SSHPackageManagerUninstallParameterDialog extends SSHPackageManager
 		super.setSize(frameWidth, frameHeight);
 		super.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setComponentsEnabled(!Globals.isGlobalReadOnly());
-		waitCursor.stop();
+
 		super.setVisible(true);
 	}
 

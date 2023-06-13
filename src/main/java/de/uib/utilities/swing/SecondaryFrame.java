@@ -16,11 +16,14 @@ import java.util.Map;
 import javax.swing.JFrame;
 
 import de.uib.configed.ConfigedMain;
+import de.uib.configed.gui.GlassPane;
 import de.uib.utilities.logging.Logging;
 
 public class SecondaryFrame extends JFrame implements WindowListener {
 
 	protected Container masterFrame;
+
+	private GlassPane glassPane;
 
 	public SecondaryFrame() {
 		this.masterFrame = ConfigedMain.getMainFrame();
@@ -29,6 +32,9 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 		}
 
 		super.addWindowListener(this);
+
+		glassPane = new GlassPane();
+		super.setGlassPane(glassPane);
 	}
 
 	public void setGlobals(Map<String, Object> globals) {
@@ -50,6 +56,14 @@ public class SecondaryFrame extends JFrame implements WindowListener {
 	// for overriding
 	private void callExit() {
 		setVisible(false);
+	}
+
+	public void activateLoadingPane() {
+		glassPane.activate(true);
+	}
+
+	public void disactivateLoadingPane() {
+		glassPane.activate(false);
 	}
 
 	@Override

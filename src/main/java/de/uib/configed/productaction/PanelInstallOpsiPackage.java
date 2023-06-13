@@ -9,6 +9,7 @@ package de.uib.configed.productaction;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.swing.DefaultComboBoxModel;
@@ -16,7 +17,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -35,7 +35,7 @@ import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.thread.WaitCursor;
+import de.uib.utilities.swing.SecondaryFrame;
 
 public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
@@ -66,23 +66,22 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain main;
-	private JFrame rootFrame;
+	private SecondaryFrame rootFrame;
 
-	public PanelInstallOpsiPackage(ConfigedMain main, JFrame root) {
+	public PanelInstallOpsiPackage(ConfigedMain main, SecondaryFrame rootFrame) {
 		this.main = main;
-		this.rootFrame = root;
+		this.rootFrame = rootFrame;
 
 		isWindows = Globals.isWindows();
 
 		initComponents();
 
-		panelMountShare = new PanelMountShare(this, root);
+		panelMountShare = new PanelMountShare(this, rootFrame);
 
 		defineLayout();
 	}
 
 	private boolean installProductFromWorkbench() {
-		WaitCursor waitCursor = null;
 
 		String opsiPackageOnWorkbenchS = null;
 		opsiPackageNameS = null;
@@ -119,7 +118,7 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 				} else {
 					// it is not there and we have to copy it
 
-					waitCursor = new WaitCursor(rootFrame);
+					rootFrame.activateLoadingPane();
 
 					try {
 						opsiWorkBenchDirectory = new File(fieldServerPath.getText());
@@ -132,17 +131,15 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 					Logging.debug(this,
 							"getProductToWorkbench copy " + opsiPackagePathToHandle + ", " + opsiWorkBenchDirectory);
 					FileUtils.copyFileToDirectory(opsiPackagePathToHandle, opsiWorkBenchDirectory);
-					waitCursor.stop();
+					rootFrame.disactivateLoadingPane();
 					return true;
 				}
 			}
 
-		} catch (Exception ex) {
-			if (waitCursor != null) {
-				waitCursor.stop();
-			}
+		} catch (IOException ex) {
+			rootFrame.disactivateLoadingPane();
 
-			Logging.error("library missing or path problem " + ex, ex);
+			Logging.error("path problem ", ex);
 		}
 
 		return false;
@@ -187,10 +184,10 @@ public class PanelInstallOpsiPackage extends JPanel implements NameProducer {
 
 		if (installProductFromWorkbench()) {
 			produceServerPath();
-			WaitCursor waitCursor = new WaitCursor(rootFrame);
+			rootFrame.activateLoadingPane();
 			persistenceController.setRights(opsiPackageServerPathS);
 			boolean result = persistenceController.installPackage(opsiPackageServerPathS);
-			waitCursor.stop();
+			rootFrame.disactivateLoadingPane();
 
 			Logging.info(this, "installPackage wrongly reporesult " + result);
 

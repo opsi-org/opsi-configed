@@ -19,7 +19,6 @@ import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -41,7 +40,7 @@ import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.NameProducer;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.observer.DataRefreshedObserver;
-import de.uib.utilities.thread.WaitCursor;
+import de.uib.utilities.swing.SecondaryFrame;
 
 public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObserver, NameProducer {
 
@@ -77,11 +76,11 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 	private OpsiserviceNOMPersistenceController persistenceController = PersistenceControllerFactory
 			.getPersistenceController();
 	private ConfigedMain configedMain;
-	private JFrame rootFrame;
+	private SecondaryFrame rootFrame;
 
-	public PanelCompleteWinProducts(ConfigedMain main, JFrame root) {
+	public PanelCompleteWinProducts(ConfigedMain main, SecondaryFrame rootFrame) {
 		this.configedMain = main;
-		this.rootFrame = root;
+		this.rootFrame = rootFrame;
 		server = main.getConfigserver();
 
 		defineChoosers();
@@ -90,7 +89,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 		selectedDepot = "" + comboChooseDepot.getSelectedItem();
 		depotProductDirectory = SmbConnect.getInstance().buildSambaTarget(selectedDepot, SmbConnect.PRODUCT_SHARE_RW);
 
-		panelMountShare = new PanelMountShare(this, root) {
+		panelMountShare = new PanelMountShare(this, rootFrame) {
 			@Override
 			protected boolean checkConnectionToShare() {
 				boolean connected = super.checkConnectionToShare();
@@ -309,7 +308,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 
 	private void execute() {
 
-		WaitCursor waitCursor = new WaitCursor(rootFrame);
+		rootFrame.activateLoadingPane();
 
 		try {
 			File targetDirectory = null;
@@ -334,7 +333,7 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 					+ "/" + SmbConnect.DIRECTORY_PE);
 			persistenceController.setRights("/" + SmbConnect.unixPath(SmbConnect.directoryProducts) + "/" + winProduct
 					+ "/" + SmbConnect.DIRECTORY_INSTALL_FILES);
-			waitCursor.stop();
+			rootFrame.disactivateLoadingPane();
 
 			JOptionPane.showMessageDialog(rootFrame, "Ready", // resultMessage,
 					Configed.getResourceValue("CompleteWinProduct.reportTitle"), JOptionPane.INFORMATION_MESSAGE);
@@ -371,16 +370,16 @@ public class PanelCompleteWinProducts extends JPanel implements DataRefreshedObs
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 				if (returnedOption == JOptionPane.YES_OPTION) {
-					waitCursor = new WaitCursor(rootFrame);
+					rootFrame.activateLoadingPane();
 					Logging.info(this, "setCommonProductPropertyValue " + depots + ", " + winProduct + ", " + values);
 					persistenceController.setCommonProductPropertyValue(depots, winProduct, "productkey", values);
 
-					waitCursor.stop();
+					rootFrame.disactivateLoadingPane();
 				}
 			}
 
 		} catch (Exception ex) {
-			waitCursor.stop();
+			rootFrame.disactivateLoadingPane();
 			Logging.error("copy error:\n" + ex, ex);
 		}
 	}

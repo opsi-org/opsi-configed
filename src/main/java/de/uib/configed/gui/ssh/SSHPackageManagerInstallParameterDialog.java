@@ -55,7 +55,7 @@ public class SSHPackageManagerInstallParameterDialog extends SSHPackageManagerPa
 				+ Configed.getResourceValue("SSHConnection.ParameterDialog.opsipackagemanager_install.title"));
 
 		WaitCursor waitCursor = new WaitCursor(this.getContentPane());
-		main = m;
+		configedMain = m;
 		fromMakeProductfile = fullPathToPackage;
 		super.initButtons(this);
 		installLocalPanel = new SSHPMInstallLocalPanel();
