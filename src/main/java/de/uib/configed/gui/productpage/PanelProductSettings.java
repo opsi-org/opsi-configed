@@ -203,36 +203,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 
 		standardListCellRenderer = new StandardListCellRenderer();
 
-		productNameTableCellRenderer = new StandardTableCellRenderer("") {
-			@Override
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-					boolean hasFocus, int row, int column) {
-
-				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-				// Will be done if c==null is true since instanceof
-				// returns false if null
-				if (!(c instanceof JComponent)) {
-					return c;
-				}
-
-				JComponent jc = (JComponent) c;
-
-				String stateChange = ((IFInstallationStateTableModel) (table.getModel()))
-						.getLastStateChange(convertRowIndexToModel(row));
-
-				if (stateChange == null) {
-					stateChange = "";
-				}
-
-				stateChange = table.getValueAt(row, column).toString() + ", "
-						+ Configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange;
-
-				jc.setToolTipText(stateChange);
-
-				return jc;
-			}
-		};
+		productNameTableCellRenderer = new ProductNameTableCellRenderer("");
 
 		productCompleteNameTableCellRenderer = new StandardTableCellRenderer("");
 
@@ -433,6 +404,42 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 		paneProducts.addMouseListener(new PopupMouseListener(popup));
 		tableProducts.addMouseListener(new PopupMouseListener(popup));
 
+	}
+
+	private class ProductNameTableCellRenderer extends StandardTableCellRenderer {
+
+		public ProductNameTableCellRenderer(String tooltipPrefix) {
+			super(tooltipPrefix);
+		}
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			// Will be done if c==null is true since instanceof
+			// returns false if null
+			if (!(c instanceof JComponent)) {
+				return c;
+			}
+
+			JComponent jc = (JComponent) c;
+
+			String stateChange = ((IFInstallationStateTableModel) (table.getModel()))
+					.getLastStateChange(convertRowIndexToModel(row));
+
+			if (stateChange == null) {
+				stateChange = "";
+			}
+
+			stateChange = table.getValueAt(row, column).toString() + ", "
+					+ Configed.getResourceValue("InstallationStateTableModel.lastStateChange") + ": " + stateChange;
+
+			jc.setToolTipText(stateChange);
+
+			return jc;
+		}
 	}
 
 	public void initAllProperties() {

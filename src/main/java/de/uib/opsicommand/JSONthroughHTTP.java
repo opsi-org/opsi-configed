@@ -250,6 +250,7 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 						BufferedWriter out = new BufferedWriter(writer)) {
 					String json = produceJSONstring(omc);
 					Logging.debug(this, "(POST) sending: " + json);
+
 					out.write(json);
 					out.flush();
 				} catch (IOException iox) {
