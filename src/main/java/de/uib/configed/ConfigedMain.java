@@ -266,8 +266,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	private List<String> editableDomains;
 	private boolean multiDepot;
 
-	private WaitCursor waitCursorInitGui;
-
 	private JTableSelectionPanel selectionPanel;
 
 	private ClientTree treeClients;
@@ -443,7 +441,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		anyDataChanged = false;
 
-		waitCursorInitGui = new WaitCursor(mainFrame.getContentPane(), mainFrame.getCursor(), "initGui");
+		mainFrame.activateLoadingPane();
 
 		preloadData();
 
@@ -746,14 +744,13 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			public void run() {
 				initGui();
 
-				waitCursorInitGui.stop();
 				checkErrorList();
 
 				strategyForLoadingData.setReady();
 				strategyForLoadingData.actAfterWaiting();
 
 				mainFrame.toFront();
-
+				mainFrame.disactivateLoadingPane();
 			}
 		}.start();
 	}
@@ -822,7 +819,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 	// sets dataReady = true when finished
 	private void preloadData() {
-		WaitCursor waitCursor = new WaitCursor(mainFrame.getContentPane(), "preloadData");
 
 		persistenceController.retrieveOpsiModules();
 
@@ -873,7 +869,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		persistenceController.getInstalledSoftwareInformation();
 
 		dataReady = true;
-		waitCursor.stop();
 		mainFrame.enableAfterLoading();
 	}
 
@@ -3732,120 +3727,114 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		// dont do anything if we did not finish another thread for this
 		if (dataReady) {
-			new Thread() {
-				@Override
-				public void run() {
-					allowedClients = null;
 
-					FOpsiLicenseMissingText.reset();
+			allowedClients = null;
 
-					persistenceController.requestReloadOpsiDefaultDomain();
-					persistenceController.userConfigurationRequestReload();
-					persistenceController.checkConfiguration();
+			FOpsiLicenseMissingText.reset();
 
-					persistenceController.opsiInformationRequestRefresh();
-					persistenceController.hwAuditConfRequestRefresh();
-					persistenceController.client2HwRowsRequestRefresh();
+			persistenceController.requestReloadOpsiDefaultDomain();
+			persistenceController.userConfigurationRequestReload();
+			persistenceController.checkConfiguration();
 
-					Logging.info(this, "call installedSoftwareInformationRequestRefresh()");
-					persistenceController.installedSoftwareInformationRequestRefresh();
-					persistenceController.softwareAuditOnClientsRequestRefresh();
+			persistenceController.opsiInformationRequestRefresh();
+			persistenceController.hwAuditConfRequestRefresh();
+			persistenceController.client2HwRowsRequestRefresh();
 
-					persistenceController.productDataRequestRefresh();
+			Logging.info(this, "call installedSoftwareInformationRequestRefresh()");
+			persistenceController.installedSoftwareInformationRequestRefresh();
+			persistenceController.softwareAuditOnClientsRequestRefresh();
 
-					Logging.info(this, "reloadData _1");
+			persistenceController.productDataRequestRefresh();
 
-					// calls again persist.productDataRequestRefresh()
-					mainFrame.panelProductProperties.paneProducts.reload();
-					Logging.info(this, "reloadData _2");
+			Logging.info(this, "reloadData _1");
 
-					// if variable modelDataValid in GenTableModel has no function , the following
-					// statement is sufficient:
+			// calls again persist.productDataRequestRefresh()
+			mainFrame.panelProductProperties.paneProducts.reload();
+			Logging.info(this, "reloadData _2");
 
-					// only for licenses, will be handled in another method
+			// if variable modelDataValid in GenTableModel has no function , the following
+			// statement is sufficient:
 
-					persistenceController.configOptionsRequestRefresh();
+			// only for licenses, will be handled in another method
 
-					if (mainFrame.fDialogOpsiLicensingInfo != null) {
-						mainFrame.fDialogOpsiLicensingInfo.thePanel.reload();
+			persistenceController.configOptionsRequestRefresh();
+
+			if (mainFrame.fDialogOpsiLicensingInfo != null) {
+				mainFrame.fDialogOpsiLicensingInfo.thePanel.reload();
+			}
+
+			requestRefreshDataForClientSelection();
+
+			reloadHosts();
+
+			persistenceController.fProductGroup2MembersRequestRefresh();
+			persistenceController.auditHardwareOnHostRequestRefresh();
+
+			// clearing softwareMap in OpsiDataBackend
+			OpsiDataBackend.getInstance().setReloadRequested();
+
+			clearSwInfo();
+			clearHwInfo();
+
+			// sets dataReady
+			preloadData();
+
+			Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
+
+			setRebuiltClientListTableModel();
+
+			if (mainFrame.controllerHWinfoMultiClients != null) {
+				mainFrame.controllerHWinfoMultiClients.rebuildModel();
+			}
+
+			fetchDepots();
+
+			// configuratio
+			persistenceController.getHostInfoCollections().getAllDepots();
+
+			// we do this again since we reloaded the configuration
+			persistenceController.checkConfiguration();
+
+			// sets visual view index, therefore:
+			setEditingTarget(editingTarget);
+
+			// if depot selection changed, we adapt the clients
+			NavigableSet<String> clientsLeft = new TreeSet<>();
+
+			for (String client : savedSelectedValues) {
+				if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot().get(client) != null) {
+					String clientDepot = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
+							.get(client);
+
+					if (selectedDepotsV.contains(clientDepot)) {
+						clientsLeft.add(client);
 					}
-
-					requestRefreshDataForClientSelection();
-
-					reloadHosts();
-
-					persistenceController.fProductGroup2MembersRequestRefresh();
-					persistenceController.auditHardwareOnHostRequestRefresh();
-
-					// clearing softwareMap in OpsiDataBackend
-					OpsiDataBackend.getInstance().setReloadRequested();
-
-					clearSwInfo();
-					clearHwInfo();
-
-					// sets dataReady
-					preloadData();
-
-					Logging.info(this, " in reload, we are in thread " + Thread.currentThread());
-
-					setRebuiltClientListTableModel();
-
-					if (mainFrame.controllerHWinfoMultiClients != null) {
-						mainFrame.controllerHWinfoMultiClients.rebuildModel();
-					}
-
-					fetchDepots();
-
-					// configuratio
-					persistenceController.getHostInfoCollections().getAllDepots();
-
-					// we do this again since we reloaded the configuration
-					persistenceController.checkConfiguration();
-
-					// sets visual view index, therefore:
-					setEditingTarget(editingTarget);
-
-					// if depot selection changed, we adapt the clients
-					NavigableSet<String> clientsLeft = new TreeSet<>();
-
-					for (String client : savedSelectedValues) {
-						if (persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
-								.get(client) != null) {
-							String clientDepot = persistenceController.getHostInfoCollections().getMapPcBelongsToDepot()
-									.get(client);
-
-							if (selectedDepotsV.contains(clientDepot)) {
-								clientsLeft.add(client);
-							}
-						}
-					}
-
-					Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
-
-					// no action before gui initialized
-					if (selectionPanel != null) {
-						// reactivate selection listener
-
-						Logging.debug(this, " reset the values, particularly in list ");
-
-						selectionPanel.addListSelectionListener(ConfigedMain.this);
-						setSelectedClientsCollectionOnPanel(clientsLeft);
-
-						// no list select item is provided
-						if (clientsLeft.isEmpty()) {
-							selectionPanel.fireListSelectionEmpty(this);
-						}
-					}
-
-					Logging.info(this,
-							"reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
-
-					mainFrame.reloadServerMenu();
-
-					mainFrame.disactivateLoadingPane();
 				}
-			}.start();
+			}
+
+			Logging.info(this, "reloadData, selected clients now " + Logging.getSize(clientsLeft));
+
+			// no action before gui initialized
+			if (selectionPanel != null) {
+				// reactivate selection listener
+
+				Logging.debug(this, " reset the values, particularly in list ");
+
+				selectionPanel.addListSelectionListener(ConfigedMain.this);
+				setSelectedClientsCollectionOnPanel(clientsLeft);
+
+				// no list select item is provided
+				if (clientsLeft.isEmpty()) {
+					selectionPanel.fireListSelectionEmpty(this);
+				}
+			}
+
+			Logging.info(this, "reloadData, selected clients now, after resetting " + Logging.getSize(selectedClients));
+
+			mainFrame.reloadServerMenu();
 		}
+
+		mainFrame.disactivateLoadingPane();
 	}
 
 	public HostsStatusInfo getHostsStatusInfo() {
