@@ -25,7 +25,6 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.configed.gui.FShowList;
-import de.uib.utilities.thread.WaitCursor;
 
 public final class Logging {
 
@@ -429,7 +428,6 @@ public final class Logging {
 		}
 
 		if (fErrors == null) {
-			WaitCursor.stopAll();
 
 			fErrors = new FShowList(f, Globals.APPNAME + ": problems Occurred", false, new String[] { "ok" }, 400, 300);
 		}

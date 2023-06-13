@@ -38,10 +38,6 @@ public class WaitCursor {
 		this(componentCalling, new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
-	public WaitCursor(Component componentCalling, String callLocation) {
-		this(componentCalling, new Cursor(Cursor.DEFAULT_CURSOR), callLocation);
-	}
-
 	public WaitCursor(Component componentCalling, Cursor saveCursor) {
 		this(componentCalling, saveCursor, "(not specified)");
 	}
@@ -67,7 +63,6 @@ public class WaitCursor {
 			new Thread() {
 				@Override
 				public void run() {
-					//ActivityPanel.setActing(true);
 
 					while (!ready && !allStopped) {
 						Globals.threadSleep(this, 200);
@@ -76,7 +71,6 @@ public class WaitCursor {
 			}.start();
 		} else {
 			SwingUtilities.invokeLater(() -> {
-				//ActivityPanel.setActing(true);
 
 				while (!ready && !allStopped) {
 					Globals.threadSleep(this, 200);
@@ -104,7 +98,6 @@ public class WaitCursor {
 			if (objectCounting.get() <= 0) {
 
 				Logging.info(this, "seemed to be last living instance");
-				//ActivityPanel.setActing(false);
 			} else {
 				Logging.debug(this, " stopped wait cursor " + " instance " + objectNo + ", " + " still active  "
 						+ objectCounting + " the stopped cursor was initiated from " + callLocation);

@@ -54,7 +54,6 @@ import de.uib.utilities.datastructure.StringValuedRelationElement;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.swing.FEditList;
 import de.uib.utilities.swing.FEditRecord;
-import de.uib.utilities.thread.WaitCursor;
 import de.uib.utilities.tree.SimpleTreePath;
 
 public class ClientTree extends JTree implements TreeSelectionListener, MouseListener, KeyListener {
@@ -1429,7 +1428,6 @@ public class ClientTree extends JTree implements TreeSelectionListener, MouseLis
 			super.paint(g);
 		} catch (ClassCastException ex) {
 			Logging.warning(this, "the ugly well known exception " + ex);
-			WaitCursor.stopAll();
 		}
 	}
 

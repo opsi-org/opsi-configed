@@ -14,8 +14,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.gui.PanelGenEditTable;
 import de.uib.utilities.thread.WaitCursor;
 
-public abstract class AbstractSelectionMemorizerUpdateController
-		implements de.uib.utilities.table.updates.UpdateController {
+public abstract class AbstractSelectionMemorizerUpdateController implements UpdateController {
 	private PanelGenEditTable keysPanel;
 	private int keyCol;
 	private PanelGenEditTable panel;
