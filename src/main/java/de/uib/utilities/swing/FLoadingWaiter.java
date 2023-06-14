@@ -176,7 +176,6 @@ public class FLoadingWaiter extends JFrame implements DataLoadingObserver, Waiti
 
 		// produces strings with ascii null
 		return observingMesg + " ... ";
-
 	}
 
 }

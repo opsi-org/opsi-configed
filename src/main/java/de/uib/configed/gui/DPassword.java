@@ -82,7 +82,6 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	private JLabel jLabelHost = new JLabel();
 	private JComboBox<String> fieldHost = new JComboBox<>();
 
-	private JProgressBar jProgressBar = new JProgressBar();
 	private JLabel waitingLabel = new JLabel();
 
 	private JCheckBox checkTrySSH;
@@ -117,6 +116,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 	private void initGlassPane() {
 		glassPane = new GlassPane();
+		glassPane.add(waitingLabel);
 
 		setGlassPane(glassPane);
 	}
@@ -153,9 +153,6 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 	private void setActivated(boolean active) {
 		Logging.info(this, "activate");
-
-		jProgressBar.setVisible(!active);
-		jProgressBar.setValue(0);
 
 		if (active) {
 			waitingLabel.setText("");
@@ -216,8 +213,6 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		UIDefaults defaults = new UIDefaults();
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
 		defaults.put("ProgressBar[Enabled].backgroundPainter", new ProgressBarPainter(Globals.opsiLogoLightBlue));
-		jProgressBar.putClientProperty("Nimbus.Overrides", defaults);
-		jProgressBar.setVisible(false);
 
 		jButtonCancel.setText(Configed.getResourceValue("DPassword.jButtonCancel"));
 		jButtonCancel.addActionListener((ActionEvent e) -> endProgram());
@@ -255,12 +250,9 @@ public class DPassword extends JDialog implements WaitingSleeper {
 				.addComponent(jPanelParameters, (int) (1.2 * Globals.LINE_HEIGHT), (int) (1.2 * Globals.LINE_HEIGHT),
 						(int) (1.2 * Globals.LINE_HEIGHT))
 
-				.addGap(2).addComponent(waitingLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
+				.addGap(Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2, Globals.LINE_HEIGHT / 2)
 
-				.addComponent(jProgressBar, Globals.PROGRESS_BAR_HEIGHT, Globals.PROGRESS_BAR_HEIGHT,
-						Globals.PROGRESS_BAR_HEIGHT)
-
-				.addGap(Globals.LINE_HEIGHT / 2)
+				//.addGap(2).addComponent(waitingLabel, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT, Globals.LINE_HEIGHT)
 
 				.addGroup(groupLayout.createParallelGroup()
 						.addComponent(jButtonCancel, GroupLayout.PREFERRED_SIZE, GroupLayout.PREFERRED_SIZE,
@@ -298,10 +290,8 @@ public class DPassword extends JDialog implements WaitingSleeper {
 								Short.MAX_VALUE)
 						.addGap(Globals.VGAP_SIZE))
 
-				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
-						.addComponent(waitingLabel).addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))
-
-				.addComponent(jProgressBar)
+				/*.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE)
+						.addComponent(waitingLabel).addGap(Globals.HGAP_SIZE, 40, Short.MAX_VALUE))*/
 
 				.addGroup(groupLayout.createSequentialGroup().addGap(Globals.HGAP_SIZE)
 						.addComponent(jButtonCancel, 120, 120, 120).addGap(0, 0, Short.MAX_VALUE)
@@ -393,12 +383,12 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 	@Override
 	public JProgressBar getProgressBar() {
-		return jProgressBar;
+		return new JProgressBar();
 	}
 
 	@Override
 	public JLabel getLabel() {
-		return waitingLabel;
+		return glassPane.getJLabelInfo();
 	}
 
 	@Override

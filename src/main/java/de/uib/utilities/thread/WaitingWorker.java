@@ -102,9 +102,7 @@ public class WaitingWorker extends SwingWorker<Void, Long> {
 
 		long millis = listOfMillis.get(listOfMillis.size() - 1);
 
-		statusLabel.setText(
-
-				waitingSleeper.setLabellingStrategy(millis));
+		statusLabel.setText(waitingSleeper.setLabellingStrategy(millis));
 
 		int barLength = progressBar.getMaximum() - progressBar.getMinimum();
 

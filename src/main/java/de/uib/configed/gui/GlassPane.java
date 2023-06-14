@@ -9,32 +9,35 @@ package de.uib.configed.gui;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
 
-import javax.swing.JComponent;
+import javax.swing.GroupLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.jdesktop.swingx.JXBusyLabel;
 
 import com.formdev.flatlaf.FlatLaf;
 
 import de.uib.Main;
+import de.uib.configed.Globals;
 
-public class GlassPane extends JComponent implements KeyListener {
+public class GlassPane extends JPanel implements KeyListener {
 
 	private static final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
 
 	private JXBusyLabel wheel;
+	private JLabel jLabelInfo;
 
 	public GlassPane() {
 		super.setOpaque(false);
 		super.setLayout(new GridBagLayout());
 		super.setBackground(initBackground());
-		initWheel();
+		initLayout();
 		addEventCatchers();
 	}
 
@@ -59,10 +62,25 @@ public class GlassPane extends JComponent implements KeyListener {
 		return new Color(base.getRed(), base.getGreen(), base.getBlue(), 128);
 	}
 
-	private void initWheel() {
+	private void initLayout() {
 		wheel = new JXBusyLabel();
+		jLabelInfo = new JLabel();
 
-		add(wheel, new GridBagConstraints());
+		GroupLayout layout = new GroupLayout(this);
+		setLayout(layout);
+
+		layout.setVerticalGroup(layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(wheel)
+				.addGap(Globals.GAP_SIZE).addComponent(jLabelInfo).addGap(0, 0, Short.MAX_VALUE));
+
+		layout.setHorizontalGroup(layout.createParallelGroup()
+				.addGroup(layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(wheel).addGap(0, 0,
+						Short.MAX_VALUE))
+				.addGroup(layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE).addComponent(jLabelInfo)
+						.addGap(0, 0, Short.MAX_VALUE)));
+	}
+
+	public JLabel getJLabelInfo() {
+		return jLabelInfo;
 	}
 
 	/*
@@ -79,11 +97,12 @@ public class GlassPane extends JComponent implements KeyListener {
 	 *  Make the glass pane visible, start the wheel and change the cursor to the wait cursor
 	 */
 	public void activate(boolean toggle) {
+
 		wheel.setVisible(toggle);
 		wheel.setBusy(toggle);
-		super.setVisible(toggle);
+		setVisible(toggle);
 		setCursor(getCursor());
-		if (super.isVisible()) {
+		if (isVisible()) {
 			requestFocusInWindow();
 		}
 	}
@@ -108,7 +127,6 @@ public class GlassPane extends JComponent implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// Not needed
-	}
+		/* Not needed */}
 
 }
