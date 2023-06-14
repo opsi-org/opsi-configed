@@ -12,15 +12,14 @@ import javax.swing.SwingUtilities;
 
 import de.uib.configed.gui.DPassword;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.DataLoadingObserver;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-public class GuiStrategyForLoadingData implements DataLoadingObserver, WaitingSleeper {
+public class GuiStrategyForLoadingData implements WaitingSleeper {
 	private static final long WAITING_MILLIS_FOR_LOADING = 50000;
 	private static final long ESTIMATED_TOTAL_WAIT_MILLIS = 10000;
 
-	private Object observingMesg = Configed.getResourceValue("LoadingObserver.start");
+	private String observingMesg = Configed.getResourceValue("LoadingObserver.start");
 
 	private WaitingWorker worker;
 
@@ -81,13 +80,6 @@ public class GuiStrategyForLoadingData implements DataLoadingObserver, WaitingSl
 		Logging.debug(this, "setLabellingStrategy millis " + millisLevel);
 
 		// produces strings with ascii null
-		return "" + observingMesg + " ... ";
-
-	}
-
-	// DataLoadingObserver
-	@Override
-	public void gotNotification(Object mesg) {
-		observingMesg = mesg;
+		return observingMesg;
 	}
 }

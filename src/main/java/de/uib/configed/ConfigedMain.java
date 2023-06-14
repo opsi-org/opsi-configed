@@ -113,7 +113,6 @@ import de.uib.opsidatamodel.modulelicense.FOpsiLicenseMissingText;
 import de.uib.utilities.DataChangedKeeper;
 import de.uib.utilities.logging.LogEventObserver;
 import de.uib.utilities.logging.Logging;
-import de.uib.utilities.observer.DataLoadingObservable;
 import de.uib.utilities.savedstates.SavedStates;
 import de.uib.utilities.selectionpanel.JTableSelectionPanel;
 import de.uib.utilities.swing.CheckedDocument;
@@ -731,8 +730,6 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		// too early, raises a NPE, if the user entry does not exist
 
 		strategyForLoadingData = new GuiStrategyForLoadingData(dPassword);
-
-		((DataLoadingObservable) persistenceController).registerDataLoadingObserver(strategyForLoadingData);
 
 		strategyForLoadingData.startWaiting();
 
