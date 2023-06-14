@@ -209,7 +209,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		ConnectionHandler handler = new ConnectionHandler(makeURL(), produceGeneralRequestProperties());
 		HttpsURLConnection connection = handler.establishConnection(true);
 		conStat = handler.getConnectionState();
-		sendPOSTReqeust(connection, omc);
+		sendPOSTRequest(connection, omc);
 
 		if (connection == null) {
 			return null;
@@ -250,7 +250,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		return result;
 	}
 
-	private void sendPOSTReqeust(HttpsURLConnection connection, OpsiMethodCall omc) {
+	private void sendPOSTRequest(HttpsURLConnection connection, OpsiMethodCall omc) {
 		if (connection == null) {
 			return;
 		}
