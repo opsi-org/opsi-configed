@@ -40,6 +40,7 @@ import de.uib.configed.Configed;
 import de.uib.configed.ConfigedMain;
 import de.uib.configed.Globals;
 import de.uib.opsicommand.ConnectionState;
+import de.uib.opsicommand.sshcommand.SSHConnectionInfo;
 import de.uib.opsidatamodel.OpsiserviceNOMPersistenceController;
 import de.uib.opsidatamodel.PersistenceControllerFactory;
 import de.uib.utilities.logging.Logging;
@@ -458,52 +459,30 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 		Logging.info(this, "we are in EventDispatchThread " + SwingUtilities.isEventDispatchThread());
 		Logging.info(this, "  Thread.currentThread() " + Thread.currentThread());
-		boolean localApp = ("" + Thread.currentThread()).indexOf("main]") > -1;
-		Logging.info(this, "is local app  " + localApp);
-		if (localApp) {
-			Logging.info(this, "start WaitingWorker");
-			waitingWorker = new WaitingWorker(this);
-			waitingWorker.execute();
+		Logging.info(this, "start WaitingWorker");
+		waitingWorker = new WaitingWorker(this);
+		waitingWorker.execute();
 
-			new Thread() {
-				@Override
-				public void run() {
-					Logging.info(this, "get persis");
-					persistenceController = PersistenceControllerFactory.getNewPersistenceController(
-							(String) fieldHost.getSelectedItem(), fieldUser.getText(),
-							String.valueOf(passwordField.getPassword()));
+		new Thread() {
+			@Override
+			public void run() {
+				Logging.info(this, "get persis");
+				persistenceController = PersistenceControllerFactory.getNewPersistenceController(
+						(String) fieldHost.getSelectedItem(), fieldUser.getText(),
+						String.valueOf(passwordField.getPassword()));
 
-					Logging.info(this, "got persis, == null " + (persistenceController == null));
+				Logging.info(this, "got persis, == null " + (persistenceController == null));
 
-					Logging.info(this, "waitingTask can be set to ready");
-					waitingWorker.setReady();
+				Logging.info(this, "waitingTask can be set to ready");
+				waitingWorker.setReady();
 
-				}
-			}.start();
-		} else {
-			persistenceController = PersistenceControllerFactory.getNewPersistenceController(
-					(String) fieldHost.getSelectedItem(), fieldUser.getText(),
-					String.valueOf(passwordField.getPassword()));
-
-			long interval = 2000;
-			long waited = 0;
-
-			while (PersistenceControllerFactory.getConnectionState() == ConnectionState.ConnectionUndefined
-					&& waited < TIMEOUT_MS) {
-				Globals.threadSleep(this, interval);
-				waited = waited + interval;
 			}
+		}.start();
 
-			if (waited >= TIMEOUT_MS) {
-				Logging.error(" no connection");
-			}
-		}
+		SSHConnectionInfo.getInstance().setUser(fieldUser.getText());
 
-		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setUser(fieldUser.getText());
-
-		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance()
-				.setPassw(String.valueOf(passwordField.getPassword()));
-		de.uib.opsicommand.sshcommand.SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
+		SSHConnectionInfo.getInstance().setPassw(String.valueOf(passwordField.getPassword()));
+		SSHConnectionInfo.getInstance().setHost((String) fieldHost.getSelectedItem());
 	}
 
 	private void endProgram() {
