@@ -23,6 +23,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.InflaterInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -38,6 +39,7 @@ import de.uib.utilities.logging.Logging;
 import de.uib.utilities.logging.TimeCheck;
 import de.uib.utilities.thread.WaitCursor;
 import net.jpountz.lz4.LZ4FrameInputStream;
+import net.jpountz.lz4.LZ4FrameOutputStream;
 
 /**
  * Provides communication layer with the server for the
@@ -135,6 +137,12 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		requestProperties.put("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
 		requestProperties.put("Accept", "application/msgpack");
 
+		if (versionRetriever.isServerVersionAtLeast("4.2")) {
+			requestProperties.put("Content-Encoding", "lz4");
+		} else {
+			requestProperties.put("Content-Encoding", "gzip");
+		}
+
 		if (sessionId != null) {
 			requestProperties.put("Cookie", sessionId);
 		}
@@ -222,7 +230,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 					result = retrieveResponseBasedOnContentType(connection.getContentType(), stream);
 				}
-			} catch (Exception ex) {
+			} catch (IOException ex) {
 				if (waitCursor != null) {
 					waitCursor.stop();
 				}
@@ -244,14 +252,27 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			return;
 		}
 
-		try (OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), UTF8DEFAULT);
+		try (OutputStreamWriter writer = getOutputStreamWriterForConnection(connection);
 				BufferedWriter out = new BufferedWriter(writer)) {
 			String json = produceJSONstring(omc);
+
 			Logging.debug(this, "(POST) sending: " + json);
 			out.write(json);
 			out.flush();
 		} catch (IOException iox) {
 			Logging.info(this, "exception on writing json request " + iox);
+		}
+	}
+
+	private static OutputStreamWriter getOutputStreamWriterForConnection(HttpsURLConnection connection)
+			throws IOException {
+
+		if (versionRetriever.isServerVersionAtLeast("4.2")) {
+			LZ4FrameOutputStream lz4 = new LZ4FrameOutputStream(connection.getOutputStream());
+			return new OutputStreamWriter(lz4, UTF8DEFAULT);
+		} else {
+			GZIPOutputStream gzip = new GZIPOutputStream(connection.getOutputStream());
+			return new OutputStreamWriter(gzip, UTF8DEFAULT);
 		}
 	}
 
