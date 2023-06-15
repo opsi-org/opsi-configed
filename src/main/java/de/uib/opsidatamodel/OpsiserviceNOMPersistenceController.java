@@ -5648,8 +5648,8 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 			List<String> softwareIds = fLicencePool2SoftwareList.get(licencePoolKEY);
 			if (softwareIds.indexOf(swKEY) == -1) {
 				if (getInstalledSoftwareInformationForLicensing().get(swKEY) == null) {
-					/*Logging.warning(this, "license pool " + licencePoolKEY
-							+ " is assigned to a not listed software with ID " + swKEY + " data row " + row);*/
+					Logging.warning(this, "license pool " + licencePoolKEY
+							+ " is assigned to a not listed software with ID " + swKEY + " data row " + row);
 					// we serve the fLicencePool2UnknownSoftwareList only in case that a key is
 					// found
 					List<String> unknownSoftwareIds = fLicencePool2UnknownSoftwareList.get(licencePoolKEY);
