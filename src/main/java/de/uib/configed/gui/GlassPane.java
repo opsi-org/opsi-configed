@@ -83,6 +83,10 @@ public class GlassPane extends JPanel implements KeyListener {
 		return jLabelInfo;
 	}
 
+	public void setInfoText(String s) {
+		jLabelInfo.setText(s);
+	}
+
 	/*
 	 *  The component is transparent but we want to paint the background
 	 *  to give it the disabled look.
@@ -104,6 +108,8 @@ public class GlassPane extends JPanel implements KeyListener {
 		setCursor(getCursor());
 		if (isVisible()) {
 			requestFocusInWindow();
+		} else {
+			jLabelInfo.setText(null);
 		}
 	}
 

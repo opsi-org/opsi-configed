@@ -154,6 +154,8 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	private void setActivated(boolean active) {
 		Logging.info(this, "activate");
 
+		glassPane.activate(!active);
+
 		if (active) {
 			waitingLabel.setText("");
 		} else {
@@ -432,8 +434,6 @@ public class DPassword extends JDialog implements WaitingSleeper {
 	public void tryConnecting() {
 		Logging.info(this, "started  tryConnecting");
 		setActivated(false);
-
-		glassPane.activate(true);
 
 		ConfigedMain.host = (String) fieldHost.getSelectedItem();
 		ConfigedMain.user = fieldUser.getText();

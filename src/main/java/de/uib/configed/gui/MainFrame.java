@@ -2810,12 +2810,17 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void reloadAction() {
-		activateLoadingPane();
+		activateLoadingPane(Configed.getResourceValue("MainFrame.jMenuFileReload"));
 		configedMain.reload();
 	}
 
 	public void activateLoadingPane() {
 		glassPane.activate(true);
+	}
+
+	public void activateLoadingPane(String infoText) {
+		glassPane.activate(true);
+		glassPane.setInfoText(infoText);
 	}
 
 	public void disactivateLoadingPane() {

@@ -1421,7 +1421,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 				(int) (screenRectangle.getCenterY() - mainFrame.getSize().getHeight() / 2));
 
 		// always loading on start
-		mainFrame.activateLoadingPane();
+		mainFrame.activateLoadingPane(Configed.getResourceValue("LoadingObserver.start"));
 
 		Logging.info("setting mainframe visible");
 		mainFrame.setVisible(true);
