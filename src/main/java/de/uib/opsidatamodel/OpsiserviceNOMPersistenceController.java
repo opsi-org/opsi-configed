@@ -8187,11 +8187,15 @@ public class OpsiserviceNOMPersistenceController implements DataRefreshedObserva
 	}
 
 	public List<Map<String, Object>> checkHealth() {
-		if (healthData == null) {
+		if (!isHealthDataAlreadyLoaded()) {
 			healthData = dataStub.checkHealth();
 		}
 
 		return healthData;
+	}
+
+	public boolean isHealthDataAlreadyLoaded() {
+		return healthData != null;
 	}
 
 	public Map<String, Object> getDiagnosticData() {

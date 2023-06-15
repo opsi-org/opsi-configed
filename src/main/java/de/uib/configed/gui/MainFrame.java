@@ -1305,11 +1305,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuHelp.add(jMenuHelpLogfileLocation);
 
 		jMenuHelpCheckHealth.setText(Configed.getResourceValue("MainFrame.jMenuHelpCheckHealth"));
-		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> {
-			saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME,
-					ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes(StandardCharsets.UTF_8)));
-			showHealthDataAction();
-		});
+		jMenuHelpCheckHealth.addActionListener((ActionEvent e) -> showHealthDataAction());
 
 		if (JSONthroughHTTPS.isOpsi43()) {
 			jMenuHelp.add(jMenuHelpCheckHealth);
@@ -2998,10 +2994,26 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		info.setVisible(true);
 	}
 
-	private static void showHealthDataAction() {
-		HealthCheckDialog dialog = new HealthCheckDialog();
-		dialog.setupLayout();
-		dialog.setVisible(true);
+	private void showHealthDataAction() {
+
+		// Only show loading when health data are not yet loaded
+		if (!persistenceController.isHealthDataAlreadyLoaded()) {
+			activateLoadingPane(Configed.getResourceValue("HealthCheckDialog.loadData"));
+		}
+
+		new Thread() {
+			@Override
+			public void run() {
+				saveToFile(Globals.HEALTH_CHECK_LOG_FILE_NAME,
+						ByteBuffer.wrap(HealthInfo.getHealthData(true).getBytes(StandardCharsets.UTF_8)));
+
+				HealthCheckDialog dialog = new HealthCheckDialog();
+				dialog.setupLayout();
+				dialog.setVisible(true);
+
+				disactivateLoadingPane();
+			}
+		}.start();
 	}
 
 	private void saveToFile(String fileName, ByteBuffer data) {
