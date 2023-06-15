@@ -386,7 +386,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 									modelString = cv;
 
 								} else {
-									Logging.warning(this, "unexpected value for opsi: " + opsi);
+									// Not needed, since other values not used for Description on top
 								}
 							} else if (hwClass.equals(CLASS_BASE_BOARD)) {
 								if (opsi.equalsIgnoreCase(KEY_VENDOR)) {
@@ -395,7 +395,7 @@ public class PanelHWInfo extends JPanel implements TreeSelectionListener {
 								} else if (opsi.equalsIgnoreCase(KEY_PRODUCT)) {
 									productString = cv;
 								} else {
-									Logging.warning(this, "unexpected value for opsi: " + opsi);
+									// Not needed, since other values not used for Description on top
 								}
 							} else {
 								Logging.warning(this, "unexpected value for hwclass: " + hwClass);

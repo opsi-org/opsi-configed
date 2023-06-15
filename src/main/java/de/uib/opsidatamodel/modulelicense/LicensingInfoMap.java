@@ -560,7 +560,7 @@ public final class LicensingInfoMap {
 
 		classNames = new ArrayList<>();
 		classNames.add("java.lang.String");
-		classNames.add("java.lang.String");
+		classNames.add("java.lang.Boolean");
 
 		try {
 
