@@ -60,9 +60,6 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 
 	private static OpsiServerVersionRetriever versionRetriever;
 
-	private boolean gzipTransmission;
-	private boolean lz4Transmission;
-
 	private String host;
 	private String username;
 	private String password;
@@ -133,15 +130,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 		// has to be value between 1 and 43300 [sec]
 		requestProperties.put("X-opsi-session-lifetime", "900");
 
-		if (lz4Transmission) {
-			requestProperties.put("Accept-Encoding", "lz4");
-		} else if (gzipTransmission) {
-			requestProperties.put("Accept-Encoding", "gzip");
-		} else {
-			/* Theoretically this should never occur, since lz4Transmission and
-			   gzipTransmission cannot be both false at the same time */
-			Logging.info("no encoding is specified");
-		}
+		requestProperties.put("Accept-Encoding", "lz4, gzip");
 
 		requestProperties.put("User-Agent", Globals.APPNAME + " " + Globals.VERSION);
 		requestProperties.put("Accept", "application/msgpack");
@@ -275,13 +264,7 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			versionRetriever.checkServerVersion();
 		}
 
-		if (versionRetriever.isServerVersionAtLeast("4.2")) {
-			gzipTransmission = false;
-			lz4Transmission = true;
-		} else {
-			gzipTransmission = true;
-			lz4Transmission = false;
-
+		if (!versionRetriever.isServerVersionAtLeast("4.2")) {
 			// The way we check the certificate does not work before opsi server version 4.2
 			Globals.disableCertificateVerification = true;
 		}
@@ -373,7 +356,10 @@ public class ServerFacade extends AbstractPOJOExecutioner {
 			deflated = "deflate".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
 			Logging.debug(this, "deflated " + deflated);
 			lz4compressed = "lz4".equalsIgnoreCase(connection.getHeaderField("Content-Encoding"));
+
 			Logging.debug(this, "lz4compressed " + lz4compressed);
+		} else {
+			Logging.devel("no conteent-encodeing");
 		}
 
 		InputStream stream = null;

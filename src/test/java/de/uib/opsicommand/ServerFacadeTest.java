@@ -52,7 +52,7 @@ public class ServerFacadeTest {
 						.withHeaders(header("Authorization", "Basic " + authorization),
 								header("X-opsi-session-lifetime", "900"),
 								header("User-Agent", Globals.APPNAME + " " + Globals.VERSION),
-								header("Accept-Encoding", "lz4"), header("Accept", "application/msgpack"))
+								header("Accept-Encoding", "lz4, gzip"), header("Accept", "application/msgpack"))
 						.withBody("{\"method\":\"accessControl_authenticated\",\"id\":1,\"params\":[]}"))
 				.respond(response().withStatusCode(HttpStatusCode.ACCEPTED_202.code())
 						.withBody(json(
@@ -82,8 +82,8 @@ public class ServerFacadeTest {
 		clientServer.withSecure(true)
 				.when(request().withMethod("POST").withPath("/rpc").withHeaders(
 						header("Authorization", "Basic " + authorization), header("X-opsi-session-lifetime", "900"),
-						header("User-Agent", Globals.APPNAME + " " + Globals.VERSION), header("Accept-Encoding", "lz4"),
-						header("Accept", "application/msgpack")))
+						header("User-Agent", Globals.APPNAME + " " + Globals.VERSION),
+						header("Accept-Encoding", "lz4, gzip"), header("Accept", "application/msgpack")))
 				.respond(response().withStatusCode(HttpStatusCode.BAD_REQUEST_400.code()));
 
 		ServerFacade facade = new ServerFacade(Utils.HOST + ":" + Utils.PORT, Utils.USERNAME, Utils.PASSWORD);
@@ -109,7 +109,7 @@ public class ServerFacadeTest {
 						.withHeaders(header("Authorization", "Basic " + authorization),
 								header("X-opsi-session-lifetime", "900"),
 								header("User-Agent", Globals.APPNAME + " " + Globals.VERSION),
-								header("Accept-Encoding", "lz4"), header("Accept", "application/msgpack"))
+								header("Accept-Encoding", "lz4, gzip"), header("Accept", "application/msgpack"))
 						.withBody("{\"method\":\"non_existing_method\",\"id\":1,\"params\":[]}"))
 				.respond(response().withStatusCode(HttpStatusCode.BAD_REQUEST_400.code()));
 
