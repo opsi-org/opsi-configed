@@ -1630,7 +1630,11 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 		if (mainFrame != null) {
 			mainFrame.getHostsStatusInfo().updateValues(clientCount, null, null, null);
 
-			selectionPanel.setMissingDataPanel(persistenceController.getHostInfoCollections().getCountClients() == 0);
+			if (persistenceController.getHostInfoCollections().getCountClients() == 0) {
+				selectionPanel.setMissingDataPanel();
+			} else {
+				selectionPanel.setDataPanel();
+			}
 		}
 
 		return m;
