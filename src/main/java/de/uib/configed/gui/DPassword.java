@@ -81,6 +81,7 @@ public class DPassword extends JFrame implements WaitingSleeper {
 	private JProgressBar jProgressBar = new JProgressBar();
 	private JLabel waitingLabel = new JLabel();
 
+	private JPanel jPanelParameters;
 	private JCheckBox checkTrySSH;
 
 	private long timeOutMillis = TIMEOUT_MS;
@@ -102,11 +103,13 @@ public class DPassword extends JFrame implements WaitingSleeper {
 		}
 	};
 
-	public DPassword(ConfigedMain main) {
+	public DPassword(ConfigedMain configedMain) {
 		super();
-		this.configedMain = main;
+		this.configedMain = configedMain;
 
-		guiInit();
+		initGuiElements();
+		setupLayout();
+		finishAndMakeVisible();
 	}
 
 	public void setHost(String host) {
@@ -158,20 +161,13 @@ public class DPassword extends JFrame implements WaitingSleeper {
 		jButtonCommit.setEnabled(active);
 	}
 
-	private void guiInit() {
+	private void initGuiElements() {
 		MessageFormat messageFormatTitle = new MessageFormat(Configed.getResourceValue("DPassword.title"));
 		setTitle(messageFormatTitle.format(new Object[] { Globals.APPNAME }));
 
 		setIconImage(Globals.mainIcon);
 
-		JPanel panel = new JPanel();
-
-		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-		panel.setBorder(padding);
-
 		jLabelHost.setText(Configed.getResourceValue("DPassword.jLabelHost"));
-
-		containership = new Containership(panel);
 
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
@@ -192,7 +188,7 @@ public class DPassword extends JFrame implements WaitingSleeper {
 		Logging.info(this, "checkTrySSH  " + Configed.isSSHConnectionOnStart());
 		checkTrySSH.addItemListener(Configed.sshConnectOnStartListener);
 
-		JPanel jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
+		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
 
 		UIDefaults defaults = new UIDefaults();
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
@@ -210,6 +206,14 @@ public class DPassword extends JFrame implements WaitingSleeper {
 		jLabelTitle.setText(Globals.APPNAME);
 		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
 				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
+	}
+
+	private void setupLayout() {
+		JPanel panel = new JPanel();
+
+		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+		panel.setBorder(padding);
+		containership = new Containership(panel);
 
 		GroupLayout groupLayout = new GroupLayout(panel);
 
@@ -293,7 +297,9 @@ public class DPassword extends JFrame implements WaitingSleeper {
 						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.HGAP_SIZE)));
 
 		this.getContentPane().add(panel);
+	}
 
+	private void finishAndMakeVisible() {
 		if (!Main.THEMES) {
 			Containership csPanel = new Containership(getContentPane());
 
