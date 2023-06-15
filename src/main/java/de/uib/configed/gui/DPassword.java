@@ -23,7 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -49,7 +49,7 @@ import de.uib.utilities.thread.WaitCursor;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-public class DPassword extends JDialog implements WaitingSleeper {
+public class DPassword extends JFrame implements WaitingSleeper {
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 
 	// 5000 reproduceable error
