@@ -1000,7 +1000,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 			// editmappanelx
 			Map<String, ListCellOptions> productpropertyOptionsMap,
 			ProductpropertiesUpdateCollection updateCollection) {
-		infoPane.setGrey(false);
+		infoPane.setActive();
 		infoPane.setProductId(productID);
 		infoPane.setProductName(productTitle);
 		infoPane.setProductInfo(productInfo);
@@ -1029,7 +1029,7 @@ public class PanelProductSettings extends JSplitPane implements RowSorterListene
 	public void clearEditing() {
 
 		initEditing("", "", "", "", "", null, null, null, null);
-		infoPane.setGrey(true);
+		infoPane.setInactive();
 	}
 
 	// RowSorterListener for table row sorter
