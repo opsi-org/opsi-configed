@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.awt.Cursor;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -51,9 +50,6 @@ import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
 public class DPassword extends JDialog implements WaitingSleeper {
-	private static final String TESTSERVER = "";
-	private static final String TESTUSER = "";
-	private static final String TESTPASSWORD = "";
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 
 	// 5000 reproduceable error
@@ -183,25 +179,18 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 		jLabelUser.setText(Configed.getResourceValue("DPassword.jLabelUser"));
 
-		fieldUser.setText(TESTUSER);
 		fieldUser.addKeyListener(newKeyListener);
-
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
 		jLabelPassword.setText(Configed.getResourceValue("DPassword.jLabelPassword"));
 
-		passwordField.setText(TESTPASSWORD);
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
-		checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"), Configed.sshConnectOnStart);
-		Logging.info(this, "checkTrySSH  " + Configed.sshConnectOnStart);
-		checkTrySSH.addItemListener((ItemEvent e) -> {
-
-			Configed.sshConnectOnStart = e.getStateChange() == ItemEvent.SELECTED;
-
-			Logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
-		});
+		checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"),
+				Configed.isSSHConnectionOnStart());
+		Logging.info(this, "checkTrySSH  " + Configed.isSSHConnectionOnStart());
+		checkTrySSH.addItemListener(Configed.sshConnectOnStartListener);
 
 		JPanel jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
 
@@ -217,6 +206,10 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		jButtonCommit.setText(Configed.getResourceValue("DPassword.jButtonCommit"));
 		jButtonCommit.setSelected(true);
 		jButtonCommit.addActionListener(this::jButtonCommitActionPerformed);
+
+		jLabelTitle.setText(Globals.APPNAME);
+		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
+				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
 
 		GroupLayout groupLayout = new GroupLayout(panel);
 
@@ -308,23 +301,16 @@ public class DPassword extends JDialog implements WaitingSleeper {
 					JPanel.class);
 		}
 
-		jLabelTitle.setText(Globals.APPNAME);
-		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
-				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
-
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
 		Logging.notice(" OS " + strOS + "  Version " + osVersion);
-		String host = TESTSERVER; // ""
 
 		pack();
 
-		if (host.isEmpty()) {
-			setHost("localhost");
-			fieldHost.requestFocus();
-			((JTextField) fieldHost.getEditor().getEditorComponent())
-					.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
-		}
+		setHost("localhost");
+		fieldHost.requestFocus();
+		((JTextField) fieldHost.getEditor().getEditorComponent())
+				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 
 		// Sets the window on the main screen
 		setLocationRelativeTo(null);

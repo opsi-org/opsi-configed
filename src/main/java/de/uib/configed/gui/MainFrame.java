@@ -972,7 +972,7 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 		jMenuSSHConfig.addActionListener((ActionEvent e) -> startSSHConfigAction());
 
 		jMenuSSHConnection.setEnabled(false);
-		if (Configed.sshConnectOnStart) {
+		if (Configed.isSSHConnectionOnStart()) {
 			factory.testConnection(connectionInfo.getUser(), connectionInfo.getHost());
 		}
 
