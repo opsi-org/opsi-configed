@@ -97,7 +97,6 @@ import de.uib.configed.type.licences.LicenceEntry;
 import de.uib.configed.type.licences.LicenceUsageEntry;
 import de.uib.messagebus.Messagebus;
 import de.uib.messages.Messages;
-import de.uib.opsicommand.ConnectionState;
 import de.uib.opsicommand.JSONthroughHTTPS;
 import de.uib.opsicommand.sshcommand.SSHCommand;
 import de.uib.opsicommand.sshcommand.SSHCommandFactory;
@@ -763,7 +762,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 
 		List<String> savedServers = readLocallySavedServerNames();
 
-		login(savedServers);
+		setupLoginDialog(savedServers);
 	}
 
 	private void initData() {
@@ -1566,7 +1565,7 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 	}
 
 	// returns true if we have a PersistenceController and are connected
-	private void login(List<String> savedServers) {
+	private void setupLoginDialog(List<String> savedServers) {
 		Logging.debug(this, " create password dialog ");
 		dPassword = new DPassword(this);
 
@@ -1588,14 +1587,9 @@ public class ConfigedMain implements ListSelectionListener, TabController, LogEv
 			dPassword.setPassword(password);
 		}
 
-		if (persistenceController == null
-				|| persistenceController.getConnectionState().getState() != ConnectionState.CONNECTED) {
-			Logging.info(this, "become interactive");
+		Logging.info(this, "become interactive");
 
-			dPassword.setAlwaysOnTop(true);
-			dPassword.setVisible(true);
-			// dpass will give back control and call loadDataAndGo
-		}
+		dPassword.setVisible(true);
 
 		// This must be called last, so that loading frame for connection is called last
 		// and on top of the login-frame

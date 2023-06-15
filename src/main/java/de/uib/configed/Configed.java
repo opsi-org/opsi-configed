@@ -7,6 +7,8 @@
 package de.uib.configed;
 
 import java.awt.Toolkit;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -44,7 +46,12 @@ public final class Configed {
 	private static final String LOCALIZATION_FILENAME_REGEX = "configed_...*\\.properties";
 	private static final Pattern localizationFilenameRegex = Pattern.compile(LOCALIZATION_FILENAME_REGEX);
 
-	public static boolean sshConnectOnStart;
+	private static boolean sshConnectOnStart;
+
+	public static final ItemListener sshConnectOnStartListener = (ItemEvent e) -> {
+		Configed.sshConnectOnStart = e.getStateChange() == ItemEvent.SELECTED;
+		Logging.info("state changed of sshconnectionOnStart in itemListener");
+	};
 
 	public static final Charset serverCharset = StandardCharsets.UTF_8;
 	public static final String JAVA_VERSION = System.getProperty("java.version");
@@ -183,6 +190,10 @@ public final class Configed {
 		Configed.paramTab = paramTab;
 		Configed.paramClient = paramClient;
 		Configed.paramClientgroup = paramClientgroup;
+	}
+
+	public static boolean isSSHConnectionOnStart() {
+		return sshConnectOnStart;
 	}
 
 	public static Integer getRefreshMinutes() {

@@ -130,8 +130,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 	private JMenuItemFormatted menuItemSave;
 	private JMenuItemFormatted menuItemCancel;
 
-	private Comparator<?>[] comparators;
-
 	private JScrollPane scrollpane;
 	protected JTable theTable;
 	protected GenTableModel tableModel;
@@ -869,21 +867,12 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 			}
 		};
 
-		if (sorter instanceof DefaultRowSorter) {
-			// is always the case since TableRowSorter extends DefaultRowSorter
+		for (int j = 0; j < tableModel.getColumnCount(); j++) {
 
-			for (int j = 0; j < tableModel.getColumnCount(); j++) {
+			// TODO check if this is ever used
+			if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
 
-				if (comparators[j] != null) {
-					Logging.info(this, " set sorter for column " + j + " " + comparators[j]);
-					// restore previously explicitly assigned comparator
-					((DefaultRowSorter<?, ?>) sorter).setComparator(j, comparators[j]);
-				} else if ("java.lang.Integer".equals(tableModel.getClassNames().get(j))) {
-
-					((DefaultRowSorter<?, ?>) sorter).setComparator(j, new IntComparatorForStrings());
-				} else {
-					Logging.warning(this, "cannot set comparator...");
-				}
+				((DefaultRowSorter<?, ?>) sorter).setComparator(j, new IntComparatorForStrings());
 			}
 		}
 
@@ -904,8 +893,6 @@ public class PanelGenEditTable extends JPanel implements ActionListener, TableMo
 		theTable.setModel(m);
 		tableModel = m;
 		tableModel.addCursorrowObserver(this);
-
-		comparators = new Comparator[m.getColumnCount()];
 
 		setSorter();
 

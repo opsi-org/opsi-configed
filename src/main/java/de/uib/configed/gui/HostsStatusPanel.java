@@ -32,11 +32,19 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 	private static final String DISCONNECTED_TOOLTIP = Configed
 			.getResourceValue("HostsStatusPanel.DisconnectedTooltip");
 
+	private JLabel labelActivated;
+
 	private JLabel labelAllClientsCount;
 	private JTextField fieldGroupActivated;
+	private JLabel labelGroupActivated;
 
+	private JLabel labelSelectedClientsCount;
 	private JTextField fieldSelectedClientsNames;
+
+	private JLabel labelSelectedClientsNames;
 	private JTextField fieldActivatedClientsCount;
+
+	private JLabel labelInvolvedDepots;
 	private JTextField fieldInvolvedDepots;
 
 	private JLabel connectionStateLabel;
@@ -45,7 +53,9 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 
 	public HostsStatusPanel() {
 		super();
-		createGui();
+
+		initComponents();
+		setupLayout();
 	}
 
 	@Override
@@ -145,14 +155,11 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 		fieldActivatedClientsCount.setText(newS);
 	}
 
-	private void createGui() {
+	private void initComponents() {
 
-		GroupLayout layoutStatusPane = new GroupLayout(this);
-		this.setLayout(layoutStatusPane);
+		labelActivated = new JLabel(Configed.getResourceValue("MainFrame.activated"));
 
-		JLabel labelActivated = new JLabel(Configed.getResourceValue("MainFrame.activated"));
-
-		JLabel labelGroupActivated = new JLabel(Configed.getResourceValue("MainFrame.groupActivated"));
+		labelGroupActivated = new JLabel(Configed.getResourceValue("MainFrame.groupActivated"));
 
 		fieldGroupActivated = new JTextField("");
 
@@ -162,11 +169,11 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 		labelAllClientsCount = new JLabel("");
 		labelAllClientsCount.setPreferredSize(Globals.labelDimension);
 
-		JLabel labelSelectedClientsCount = new JLabel(Configed.getResourceValue("MainFrame.labelSelected"));
+		labelSelectedClientsCount = new JLabel(Configed.getResourceValue("MainFrame.labelSelected"));
 
-		JLabel labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelNames"));
+		labelSelectedClientsNames = new JLabel(Configed.getResourceValue("MainFrame.labelNames"));
 
-		JLabel labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
+		labelInvolvedDepots = new JLabel(Configed.getResourceValue("MainFrame.labelInDepot"));
 
 		fieldActivatedClientsCount = new JTextField("");
 		fieldActivatedClientsCount.setPreferredSize(Globals.counterfieldDimension);
@@ -188,6 +195,11 @@ public class HostsStatusPanel extends JPanel implements HostsStatusInfo, Message
 		connectionStateLabel = new JLabel();
 
 		initializeValues();
+	}
+
+	private void setupLayout() {
+		GroupLayout layoutStatusPane = new GroupLayout(this);
+		this.setLayout(layoutStatusPane);
 
 		layoutStatusPane.setHorizontalGroup(layoutStatusPane.createSequentialGroup()
 				.addGap(Globals.HGAP_SIZE, Globals.HGAP_SIZE, Globals.HGAP_SIZE)

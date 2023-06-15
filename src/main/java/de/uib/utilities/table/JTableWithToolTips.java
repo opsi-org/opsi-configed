@@ -43,6 +43,8 @@ public class JTableWithToolTips extends JTable {
 					valstr = " " + val;
 				} else if (val instanceof String) {
 					valstr = (String) val;
+				} else if (val instanceof Boolean) {
+					valstr = val.toString();
 				} else {
 					Logging.warning(this, "val has unexpected class " + val.getClass());
 				}

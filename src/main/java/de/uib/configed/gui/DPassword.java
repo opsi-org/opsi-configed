@@ -9,7 +9,6 @@ package de.uib.configed.gui;
 import java.awt.Cursor;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -24,7 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -50,10 +49,7 @@ import de.uib.utilities.swing.ProgressBarPainter;
 import de.uib.utilities.thread.WaitingSleeper;
 import de.uib.utilities.thread.WaitingWorker;
 
-public class DPassword extends JDialog implements WaitingSleeper {
-	private static final String TESTSERVER = "";
-	private static final String TESTUSER = "";
-	private static final String TESTPASSWORD = "";
+public class DPassword extends JFrame implements WaitingSleeper {
 	private static final int SECS_WAIT_FOR_CONNECTION = 100;
 
 	// 5000 reproduceable error
@@ -84,6 +80,7 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 	private JLabel waitingLabel = new JLabel();
 
+	private JPanel jPanelParameters;
 	private JCheckBox checkTrySSH;
 
 	private long timeOutMillis = TIMEOUT_MS;
@@ -105,11 +102,13 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		}
 	};
 
-	public DPassword(ConfigedMain main) {
+	public DPassword(ConfigedMain configedMain) {
 		super();
-		this.configedMain = main;
+		this.configedMain = configedMain;
 
-		guiInit();
+		initGuiElements();
+		setupLayout();
+		finishAndMakeVisible();
 
 		initGlassPane();
 	}
@@ -169,20 +168,13 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		jButtonCommit.setEnabled(active);
 	}
 
-	private void guiInit() {
+	private void initGuiElements() {
 		MessageFormat messageFormatTitle = new MessageFormat(Configed.getResourceValue("DPassword.title"));
 		setTitle(messageFormatTitle.format(new Object[] { Globals.APPNAME }));
 
 		setIconImage(Globals.mainIcon);
 
-		JPanel panel = new JPanel();
-
-		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-		panel.setBorder(padding);
-
 		jLabelHost.setText(Configed.getResourceValue("DPassword.jLabelHost"));
-
-		containership = new Containership(panel);
 
 		fieldHost.setEditable(true);
 		fieldHost.setSelectedItem("");
@@ -190,27 +182,20 @@ public class DPassword extends JDialog implements WaitingSleeper {
 
 		jLabelUser.setText(Configed.getResourceValue("DPassword.jLabelUser"));
 
-		fieldUser.setText(TESTUSER);
 		fieldUser.addKeyListener(newKeyListener);
-
 		fieldUser.setMargin(new Insets(0, 3, 0, 3));
 
 		jLabelPassword.setText(Configed.getResourceValue("DPassword.jLabelPassword"));
 
-		passwordField.setText(TESTPASSWORD);
 		passwordField.addKeyListener(newKeyListener);
 		passwordField.setMargin(new Insets(0, 3, 0, 3));
 
-		checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"), Configed.sshConnectOnStart);
-		Logging.info(this, "checkTrySSH  " + Configed.sshConnectOnStart);
-		checkTrySSH.addItemListener((ItemEvent e) -> {
+		checkTrySSH = new JCheckBox(Configed.getResourceValue("DPassword.checkTrySSH"),
+				Configed.isSSHConnectionOnStart());
+		Logging.info(this, "checkTrySSH  " + Configed.isSSHConnectionOnStart());
+		checkTrySSH.addItemListener(Configed.sshConnectOnStartListener);
 
-			Configed.sshConnectOnStart = e.getStateChange() == ItemEvent.SELECTED;
-
-			Logging.info(this, "checkTrySSH itemStateChanged " + checkTrySSH);
-		});
-
-		JPanel jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
+		jPanelParameters = new PanelLinedComponents(new JComponent[] { checkTrySSH });
 
 		UIDefaults defaults = new UIDefaults();
 		defaults.put("ProgressBar[Enabled].foregroundPainter", new ProgressBarPainter(Globals.opsiLogoBlue));
@@ -222,6 +207,18 @@ public class DPassword extends JDialog implements WaitingSleeper {
 		jButtonCommit.setText(Configed.getResourceValue("DPassword.jButtonCommit"));
 		jButtonCommit.setSelected(true);
 		jButtonCommit.addActionListener((ActionEvent e) -> okAction());
+
+		jLabelTitle.setText(Globals.APPNAME);
+		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
+				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
+	}
+
+	private void setupLayout() {
+		JPanel panel = new JPanel();
+
+		Border padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+		panel.setBorder(padding);
+		containership = new Containership(panel);
 
 		GroupLayout groupLayout = new GroupLayout(panel);
 
@@ -300,7 +297,9 @@ public class DPassword extends JDialog implements WaitingSleeper {
 						.addComponent(jButtonCommit, 120, 120, 120).addGap(Globals.HGAP_SIZE)));
 
 		this.getContentPane().add(panel);
+	}
 
+	private void finishAndMakeVisible() {
 		if (!Main.THEMES) {
 			Containership csPanel = new Containership(getContentPane());
 
@@ -308,23 +307,16 @@ public class DPassword extends JDialog implements WaitingSleeper {
 					JPanel.class);
 		}
 
-		jLabelTitle.setText(Globals.APPNAME);
-		jLabelVersion.setText(Configed.getResourceValue("DPassword.version") + "  " + Globals.VERSION + "  ("
-				+ Globals.VERDATE + ") " + Globals.VERHASHTAG);
-
 		String strOS = System.getProperty("os.name");
 		String osVersion = System.getProperty("os.version");
 		Logging.notice(" OS " + strOS + "  Version " + osVersion);
-		String host = TESTSERVER; // ""
 
 		pack();
 
-		if (host.isEmpty()) {
-			setHost("localhost");
-			fieldHost.requestFocus();
-			((JTextField) fieldHost.getEditor().getEditorComponent())
-					.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
-		}
+		setHost("localhost");
+		fieldHost.requestFocus();
+		((JTextField) fieldHost.getEditor().getEditorComponent())
+				.setCaretPosition(((String) (fieldHost.getSelectedItem())).length());
 
 		// Sets the window on the main screen
 		setLocationRelativeTo(null);
