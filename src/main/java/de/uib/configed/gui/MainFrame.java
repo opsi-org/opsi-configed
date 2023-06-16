@@ -2822,8 +2822,15 @@ public class MainFrame extends JFrame implements WindowListener, KeyListener, Mo
 	}
 
 	public void reloadLicensesAction() {
-		configedMain.reloadLicensesData();
-		configedMain.licencesFrame.setVisible(true);
+		activateLoadingPane(Configed.getResourceValue("MainFrame.iconButtonReloadLicensesData") + " ...");
+		new Thread() {
+			@Override
+			public void run() {
+				configedMain.reloadLicensesData();
+				configedMain.licencesFrame.setVisible(true);
+				disactivateLoadingPane();
+			}
+		}.start();
 	}
 
 	public void checkMenuItemsDisabling() {
