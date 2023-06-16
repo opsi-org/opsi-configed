@@ -13,7 +13,6 @@ import java.util.List;
 import de.uib.utilities.logging.Logging;
 import de.uib.utilities.table.GenTableModel;
 import de.uib.utilities.table.gui.PanelGenEditTable;
-import de.uib.utilities.thread.WaitCursor;
 
 public class MapItemsUpdateController implements UpdateController {
 	private GenTableModel tablemodel;
@@ -32,8 +31,6 @@ public class MapItemsUpdateController implements UpdateController {
 	@Override
 	public boolean saveChanges() {
 		Logging.debug(this, "saveChanges");
-
-		WaitCursor waitCursor = new WaitCursor();
 
 		// true until failure
 		boolean success = true;
@@ -88,8 +85,6 @@ public class MapItemsUpdateController implements UpdateController {
 
 			Logging.info(this, "saveChanges lastKeyValue " + lastKeyValue);
 			panel.moveToKeyValue(lastKeyValue);
-
-			waitCursor.stop();
 		} else {
 			if (!successfullInsertsWithNewKeys.isEmpty()) {
 				// we have to remove all update items ...
@@ -108,7 +103,6 @@ public class MapItemsUpdateController implements UpdateController {
 				success = true;
 			}
 
-			waitCursor.stop();
 			Logging.checkErrorList(null);
 
 		}

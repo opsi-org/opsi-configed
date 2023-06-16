@@ -184,11 +184,8 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 	public synchronized Map<String, Object> retrieveResponse(OpsiMethodCall omc) {
 		boolean background = false;
 		Logging.info(this, "retrieveResponse started");
-		//WaitCursor waitCursor = null;
 
-		if (omc != null && !omc.isBackgroundDefault()) {
-			//waitCursor = new WaitCursor(null, new Cursor(Cursor.DEFAULT_CURSOR), this.getClass().getName());
-		} else {
+		if (omc == null || !omc.isBackgroundDefault()) {
 			background = true;
 		}
 
@@ -257,12 +254,6 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 			}
 		} catch (SSLException ex) {
 			Logging.debug(this, "SSLException encountered: " + ex);
-			if (!background) {
-				//if (waitCursor != null) {
-				//	waitCursor.stop();
-				//}
-				//WaitCursor.stopAll();
-			}
 
 			if (conStat.getState() == ConnectionState.INTERRUPTED) {
 				return null;
@@ -336,12 +327,6 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 
 			return null;
 		} catch (IOException ex) {
-			if (!background) {
-				//if (waitCursor != null) {
-				//	waitCursor.stop();
-				//}
-				//WaitCursor.stopAll();
-			}
 
 			conStat = new ConnectionState(ConnectionState.ERROR, ex.toString());
 			Logging.error("Exception on connecting, ", ex);
@@ -381,12 +366,7 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 					Logging.debug("Unauthorized: background=" + background + ", " + sessionId + ", mfa="
 							+ Globals.isMultiFactorAuthenticationEnabled);
 					if (Globals.isMultiFactorAuthenticationEnabled && ConfigedMain.getMainFrame() != null) {
-						if (!background) {
-							//	if (waitCursor != null) {
-							//		waitCursor.stop();
-							//	}
-							//	WaitCursor.stopAll();
-						}
+
 						if (showNewPasswordDialog()) {
 							return retrieveResponse(omc);
 						}
@@ -463,19 +443,13 @@ public class JSONthroughHTTP extends AbstractPOJOExecutioner {
 					}
 				}
 			} catch (Exception ex) {
-				//if (waitCursor != null) {
-				//	waitCursor.stop();
-				//}
-				//WaitCursor.stopAll();
 				Logging.error(this, "Exception while data reading", ex);
 			}
 		}
 
 		timeCheck.stop("retrieveResponse " + (result == null ? "empty result" : "non empty result"));
 		Logging.info(this, "retrieveResponse ready");
-		//if (waitCursor != null) {
-		//	waitCursor.stop();
-		//}
+
 		return result;
 	}
 }
